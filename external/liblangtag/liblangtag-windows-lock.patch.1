@@ -1,0 +1,35 @@
+From f2fd6c0c6391b88d3b6c59dfbdcca5f554a410ca Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 9 Nov 2026 14:11:24 +0000
+Subject: [PATCH] use a static SRWLOCK for the Win32 lock
+
+LT_LOCK created a new mutex on every call and never waited on it, so the
+lock excluded nothing and leaked a handle each time it was taken.
+
+since:
+
+commit 5ee4d8750e9a6d80e12e3ace5dc490db769ee69d
+Date:   Sat Nov 24 17:02:41 2012 +0900
+
+    Use native mutex lock for Win32
+---
+ liblangtag/lt-lock.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/liblangtag/lt-lock.h b/liblangtag/lt-lock.h
+index 0194e1d..cb7ab00 100644
+--- a/liblangtag/lt-lock.h
++++ b/liblangtag/lt-lock.h
+@@ -38,9 +38,9 @@ LT_BEGIN_DECLS
+ #define LT_LOCK(v)			pthread_mutex_lock(&LT_LOCK_NAME (v))
+ #define LT_UNLOCK(v)			pthread_mutex_unlock(&LT_LOCK_NAME (v))
+ #elif _WIN32
+-#define LT_LOCK_DEFINE(v)		HANDLE LT_LOCK_NAME (v)
+-#define LT_LOCK(v)			LT_LOCK_NAME (v) = CreateMutex(NULL, FALSE, NULL)
+-#define LT_UNLOCK(v)			ReleaseMutex(LT_LOCK_NAME (v))
++#define LT_LOCK_DEFINE(v)		SRWLOCK LT_LOCK_NAME (v) = SRWLOCK_INIT
++#define LT_LOCK(v)			AcquireSRWLockExclusive(&LT_LOCK_NAME (v))
++#define LT_UNLOCK(v)			ReleaseSRWLockExclusive(&LT_LOCK_NAME (v))
+ #else
+ #error No Mutex Lock available
+ #endif

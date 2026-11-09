@@ -1,0 +1,124 @@
+From cea521c3535d01afa6544af40fb90d7b1e902e8c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 9 Nov 2026 14:12:00 +0000
+Subject: [PATCH] cast to unsigned char, not int, before calling ctype
+ functions
+
+where char is signed a byte above 0x7F becomes a negative int, and
+isalnum, tolower etc. are not defined for negative values other than EOF
+---
+ extensions/lt-ext-ldml-t.c |  2 +-
+ liblangtag/lt-ext-module.c |  6 +++---
+ liblangtag/lt-tag.c        | 10 +++++-----
+ liblangtag/lt-utils.c      | 10 +++++-----
+ 4 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/extensions/lt-ext-ldml-t.c b/extensions/lt-ext-ldml-t.c
+index 8635d6b..37bdeff 100644
+--- a/extensions/lt-ext-ldml-t.c
++++ b/extensions/lt-ext-ldml-t.c
+@@ -76,7 +76,7 @@ _lt_ext_ldml_t_lookup_type(lt_ext_ldml_t_data_t  *data,
+ 		size_t j, len = strlen(subtag);
+ 
+ 		for (j = 0; j < len; j++) {
+-			if (!isalnum((int)subtag[j])) {
++			if (!isalnum((unsigned char)subtag[j])) {
+ 				lt_error_set(error, LT_ERR_FAIL_ON_SCANNER,
+ 					     "subtag for -t-x0- has to be 3-8 alphanum characters but: %s", subtag);
+ 				goto bail;
+diff --git a/liblangtag/lt-ext-module.c b/liblangtag/lt-ext-module.c
+index 37b1fcb..ecd3cea 100644
+--- a/liblangtag/lt-ext-module.c
++++ b/liblangtag/lt-ext-module.c
+@@ -253,10 +253,10 @@ lt_ext_module_load(lt_ext_module_t *module)
+ 			p++;
+ 		}
+ 		s = p;
+-		while (*path && isspace((int)*path))
++		while (*path && isspace((unsigned char)*path))
+ 			path++;
+ 		len = strlen(path);
+-		while (len > 0 && isspace((int)path[len - 1]))
++		while (len > 0 && isspace((unsigned char)path[len - 1]))
+ 			len--;
+ 		path[len] = 0;
+ 		if (path[0] != 0) {
+@@ -353,7 +353,7 @@ lt_ext_module_singleton_char_to_int(char singleton_c)
+ 		retval = singleton_c - '0';
+ 	} else if ((singleton_c >= 'a' && singleton_c <= 'z') ||
+ 		   (singleton_c >= 'A' && singleton_c <= 'Z')) {
+-		retval = tolower((int)singleton_c) - 'a' + 10;
++		retval = tolower((unsigned char)singleton_c) - 'a' + 10;
+ 	} else if (singleton_c == ' ') {
+ 		retval = LT_MAX_EXT_MODULES - 2;
+ 	} else if (singleton_c == '*') {
+diff --git a/liblangtag/lt-tag.c b/liblangtag/lt-tag.c
+index c48a37e..77d336a 100644
+--- a/liblangtag/lt-tag.c
++++ b/liblangtag/lt-tag.c
+@@ -153,7 +153,7 @@ lt_tag_scanner_get_token(lt_tag_scanner_t  *scanner,
+ 					     (unsigned long)scanner->position - 1);
+ 				break;
+ 			}
+-		} else if (!isalnum((int)c) && c != '-' && c != 0) {
++		} else if (!isalnum((unsigned char)c) && c != '-' && c != 0) {
+ 			lt_error_set(&err, LT_ERR_FAIL_ON_SCANNER,
+ 				     "Invalid character for tag: '%c'", c);
+ 			break;
+@@ -553,9 +553,9 @@ lt_tag_parse_state(lt_tag_t    *tag,
+ 	    case STATE_REGION:
+ 		    if (length == 2 ||
+ 			(length == 3 &&
+-			 isdigit((int)token[0]) &&
+-			 isdigit((int)token[1]) &&
+-			 isdigit((int)token[2]))) {
++			 isdigit((unsigned char)token[0]) &&
++			 isdigit((unsigned char)token[1]) &&
++			 isdigit((unsigned char)token[2]))) {
+ 			    lt_region_db_t *regiondb = lt_db_get_region();
+ 
+ 			    lt_tag_set_region(tag, lt_region_db_lookup(regiondb, token));
+@@ -571,7 +571,7 @@ lt_tag_parse_state(lt_tag_t    *tag,
+ 		    /* Falls through. */
+ 	    case STATE_VARIANT:
+ 		    if ((length >=5 && length <= 8) ||
+-			(length == 4 && isdigit((int)token[0]))) {
++			(length == 4 && isdigit((unsigned char)token[0]))) {
+ 			    lt_variant_db_t *variantdb = lt_db_get_variant();
+ 			    lt_variant_t *variant;
+ 
+diff --git a/liblangtag/lt-utils.c b/liblangtag/lt-utils.c
+index 2a86f5a..b19391c 100644
+--- a/liblangtag/lt-utils.c
++++ b/liblangtag/lt-utils.c
+@@ -78,8 +78,8 @@ lt_strcasecmp(const char *s1,
+ 	lt_return_val_if_fail (s2 != NULL, 0);
+ 
+ 	while (*s1 && *s2) {
+-		c1 = tolower((int)*s1);
+-		c2 = tolower((int)*s2);
++		c1 = tolower((unsigned char)*s1);
++		c2 = tolower((unsigned char)*s2);
+ 		if (c1 != c2)
+ 			return (c1 - c2);
+ 		s1++;
+@@ -101,8 +101,8 @@ lt_strncasecmp(const char *s1,
+ 
+ 	while (len && *s1 && *s2) {
+ 		len--;
+-		c1 = tolower((int)*s1);
+-		c2 = tolower((int)*s2);
++		c1 = tolower((unsigned char)*s1);
++		c2 = tolower((unsigned char)*s2);
+ 		if (c1 != c2)
+ 			return (c1 - c2);
+ 		s1++;
+@@ -125,7 +125,7 @@ lt_strlower(char *string)
+ 
+ 	len = strlen(string);
+ 	while (len) {
+-		*p = tolower((int)*p);
++		*p = tolower((unsigned char)*p);
+ 		p++;
+ 		len--;
+ 	}

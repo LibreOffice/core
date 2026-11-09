@@ -30,6 +30,12 @@ endif
 $(eval $(call gb_UnpackedTarball_add_patches,liblangtag, \
 	$(if $(SYSTEM_LIBXML),,external/liblangtag/langtag-libtool-rpath.patch.0) \
     external/liblangtag/clang-cl.patch.0 \
+    external/liblangtag/liblangtag-windows-lock.patch.1 \
+    external/liblangtag/liblangtag-string-growth.patch.1 \
+    external/liblangtag/liblangtag-ctype-unsigned.patch.1 \
 ))
+
+# liblangtag-windows-lock, liblangtag-string-growth and liblangtag-ctype-unsigned are in
+# https://gitlab.com/tagoh/liblangtag/-/merge_requests/13
 
 # vim: set noet sw=4 ts=4:

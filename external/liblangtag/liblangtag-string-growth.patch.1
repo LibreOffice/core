@@ -1,0 +1,24 @@
+From a940b5c796aec666074d39914703c0daa1e1aff0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 9 Nov 2026 14:11:42 +0000
+Subject: [PATCH] grow lt_string by at least its current size when it is full
+
+instead of by a fixed 128 bytes, so that appending a long tag a byte
+at a time doesn't copy the buffer over and over
+---
+ liblangtag/lt-string.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/liblangtag/lt-string.c b/liblangtag/lt-string.c
+index 6a03bae..08d0402 100644
+--- a/liblangtag/lt-string.c
++++ b/liblangtag/lt-string.c
+@@ -50,7 +50,7 @@ _lt_string_expand(lt_string_t *string,
+ 	size_t n = string->allocated_len;
+ 	lt_bool_t retval = TRUE;
+ 
+-	n += LT_ALIGNED_TO_POINTER (size + LT_STRING_SIZE);
++	n += LT_ALIGNED_TO_POINTER (size + (n > LT_STRING_SIZE ? n : LT_STRING_SIZE));
+ 	lt_mem_remove_ref(&string->parent, string->string);
+ 	s = realloc(string->string, n);
+ 	if (s) {
