@@ -2566,8 +2566,9 @@ sal_Int32 findMasterPageIndex(SdDrawDocument& rDocument, const SdPage* pMasterPa
 }
 
 /// True when the master object is not painted behind a slide: a layout prototype such as the
-/// title or outline placeholder, or an empty presentation object with neither fill nor line.
-/// Both hold for every slide that uses the master.
+/// title or outline placeholder, a text placeholder of the master such as the subtitle of a
+/// layout, or an empty presentation object with neither fill nor line. All of these hold for
+/// every slide that uses the master.
 bool isHiddenBehindSlide(const SdrObject& rObject)
 {
     if (rObject.IsNotVisibleAsMaster())
@@ -2578,6 +2579,22 @@ bool isHiddenBehindSlide(const SdrObject& rObject)
         return true;
     if (rObject.IsEmptyPresObj() && !(rObject.HasFillStyle() || rObject.HasLineStyle()))
         return true;
+    // A text placeholder of the master holds its prompt text, which is shown only while the
+    // master is edited, the same as SdPage::checkVisibility does. The header, the footer, the
+    // date and the slide number are shown behind the slide as the slide's settings say.
+    if (rObject.GetObjInventor() == SdrInventor::Default
+        && rObject.GetObjIdentifier() == SdrObjKind::Text)
+    {
+        const SdPage* pPage = dynamic_cast<const SdPage*>(rObject.getSdrPageFromSdrObject());
+        if (pPage && pPage->IsMasterPage())
+        {
+            const PresObjKind eKind = pPage->GetPresObjKind(const_cast<SdrObject*>(&rObject));
+            if (eKind != PresObjKind::NONE && eKind != PresObjKind::Header
+                && eKind != PresObjKind::Footer && eKind != PresObjKind::DateTime
+                && eKind != PresObjKind::SlideNumber)
+                return true;
+        }
+    }
     // A member of a group that is hidden is hidden with it.
     const SdrObject* pParent = svx::vector::holderOf(rObject);
     return pParent && isHiddenBehindSlide(*pParent);

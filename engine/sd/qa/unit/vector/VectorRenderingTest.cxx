@@ -750,6 +750,32 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSlideNamesItsMaster)
     CPPUNIT_ASSERT_EQUAL(true, oFooter->getBool("slideDependent").value_or(false));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterTextPlaceholderIsHiddenBehindSlide)
+{
+    // A text placeholder of the master, such as the subtitle of a layout imported from PPTX,
+    // holds its prompt text. The prompt is for editing the master, so a slide does not show it.
+    // The footer is shown behind the slide as before.
+    createBlankDoc();
+    SdPage* pMasterPage = createMasterPlaceholders();
+    SdrObject* pSubtitle = pMasterPage->CreatePresObj(
+        PresObjKind::Text, false, tools::Rectangle(Point(1000, 5000), Size(8000, 2000)));
+    CPPUNIT_ASSERT(pSubtitle);
+    static_cast<SdrTextObj*>(pSubtitle)->SetText(u"Click to edit Master subtitle style"_ustr);
+    pSubtitle->SetEmptyPresObj(false);
+    SdrObject* pFooter = pMasterPage->GetPresObj(PresObjKind::Footer);
+    CPPUNIT_ASSERT(pFooter);
+
+    auto aMaster = getVectorPrimitives(u"testMasterTextPlaceholder", -1, 1);
+    const auto oSubtitle = findEntryOfObject(aMaster, pSubtitle->GetUniqueID());
+    CPPUNIT_ASSERT(oSubtitle.has_value());
+    // Without the accompanying fix in place, this test would have failed, as the placeholder
+    // holds text and so was drawn behind every slide.
+    CPPUNIT_ASSERT_EQUAL(true, oSubtitle->getBool("hiddenBehindSlide").value_or(false));
+    const auto oFooter = findEntryOfObject(aMaster, pFooter->GetUniqueID());
+    CPPUNIT_ASSERT(oFooter.has_value());
+    CPPUNIT_ASSERT(!oFooter->has("hiddenBehindSlide"));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewCarriesTheMasterObjects)
 {
     // In master view the master page is the page being shown, so its own
