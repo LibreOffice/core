@@ -44,19 +44,11 @@ namespace cairocanvas
     {
     }
 
-    void DeviceHelper::implInit( SurfaceProvider& rSurfaceProvider,
-                                 OutputDevice&    rRefDevice )
-    {
-        mpSurfaceProvider = &rSurfaceProvider;
-        mpRefDevice = &rRefDevice;
-
-        // no own surface, this is handled by derived classes
-    }
-
     void DeviceHelper::init( SurfaceProvider& rSurfaceProvider,
                              OutputDevice&    rRefDevice )
     {
-        implInit(rSurfaceProvider, rRefDevice);
+        mpSurfaceProvider = &rSurfaceProvider;
+        mpRefDevice = &rRefDevice;
 
         OutputDevice* pOutDev = getOutputDevice();
         mpSurface = pOutDev->CreateSurface(pOutDev->GetDeviceOriginX(),

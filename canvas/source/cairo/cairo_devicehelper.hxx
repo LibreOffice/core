@@ -86,17 +86,6 @@ namespace cairocanvas
         ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData const & rData, const Size& rSize );
 
     protected:
-        /** init helper
-
-            @param rCanvas
-            Owning canvas.
-
-            @param rRefDevice
-            Reference output device. Needed for resolution
-            calculations etc.
-         */
-        void implInit( SurfaceProvider& rSurfaceProvider,
-                       OutputDevice&    rRefDevice );
         void setSize( const ::basegfx::B2ISize& rSize );
 
     private:
