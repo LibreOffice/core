@@ -37,7 +37,11 @@ class JSDialogMessageRouter {
 				child.type = 'fixedtext';
 				hasMessage = true;
 			} else if (child.type === 'image') {
-				const asset = JSDialogMessageRouter.messageImages[child.id];
+				// On a small screen the message box opens as a panel whose title already names
+				// the kind of message, so the box shows no icon there.
+				const asset = window.mode.isSmallScreenDevice()
+					? undefined
+					: JSDialogMessageRouter.messageImages[child.id];
 				if (asset)
 					(child as ImageWidgetJSON).image = app.LOUtil.getImageURL(asset);
 				else child.id = '';

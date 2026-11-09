@@ -729,6 +729,15 @@ a.leaflet-control-zoom-in {
 	line-height: inherit;
 }
 
+/* The text of a message box is a paragraph, and the line breaks in it start new lines. */
+#mobile-wizard.messagebox .mobile-wizard.ui-text {
+	display: block;
+	border: none;
+	line-height: 1.4;
+	padding: var(--spacing-s) 0;
+	white-space: pre-line;
+}
+
 /* modal texts are lines of their own, the info modal title is a heading */
 #mobile-wizard [id^='mobile-wizard-content-modal-dialog-'] .mobile-wizard.ui-text {
 	display: block;

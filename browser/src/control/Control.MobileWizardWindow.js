@@ -45,6 +45,7 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		this.isPopup = false; // indicates that current window is a popup, uses different look
 		this.isSnackBar = false; // shows as little popup at the bottom
 		this.isBusyPopUp = false; // show a busy popup
+		this.isMessageBox = false; // shows a message with an icon and response buttons
 		this.isFunctionMenu = false; // shows full screen with list of calc functions
 		this.isHamburgerMenu = false; // shows full screen with items from menubar
 		this.isShapesWizard = false; // shows full screen shape type selector
@@ -87,6 +88,7 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		this.mobileWizard.removeClass('popup');
 		this.mobileWizard.removeClass('snackbar');
 		this.mobileWizard.removeClass('busypopup');
+		this.mobileWizard.removeClass('messagebox');
 	},
 
 	/// this applies special styling for different types of mobile-wizards
@@ -103,6 +105,8 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 			this.mobileWizard.addClass('snackbar');
 		if (this.isBusyPopUp)
 			this.mobileWizard.addClass('busypopup');
+		if (this.isMessageBox)
+			this.mobileWizard.addClass('messagebox');
 	},
 
 	/// resets all classes which can modify the look to the original values
@@ -506,6 +510,7 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 			var isAutofilter = isDocumentAreaPopup && isCalc;
 
 			var isPopupJson = (data.jsontype === 'popup' || data.type === 'modalpopup' || data.type === 'snackbar');
+			this.isMessageBox = data.type === 'messagebox';
 			// show autofilter as regular mobile wizard for compatibility with older version
 			var isPopup = !isAutofilter && isPopupJson;
 			var isSidebar = false;

@@ -55,6 +55,12 @@
 	max-width: 560px;
 }
 
+/* The text of a message box can hold line breaks, such as a list of rules, and
+   each break starts a new line. */
+.jsdialog-window.messagebox .ui-text {
+	white-space: pre-line;
+}
+
 /* A dialog that has a window of its own keeps its natural size in a narrow
    window, because that window is sized to the dialog. */
 @media (max-width: 480px) {
