@@ -208,6 +208,10 @@ namespace FileUtil
     /// Platform-dependent implementations.
     bool linkOrCopyFile(const std::string& source, const std::string& newPath);
 
+    /// Hard-links newPath to source. Returns false, with errno set, when no link was made.
+    /// Platform-dependent implementations.
+    bool linkFile(const std::string& source, const std::string& newPath);
+
     /// Changes the various envars used for the system temporary-files directory.
     /// Used to privatize the directory we use for temporary files,
     /// which some libraries use these envars to query.

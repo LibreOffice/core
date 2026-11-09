@@ -32,6 +32,9 @@
 
 class LockContext;
 
+/// The name of the person using an app, set by the app's shell. Null in the server.
+extern const char* user_name;
+
 /// Base class of all Storage abstractions.
 class StorageBase
 {

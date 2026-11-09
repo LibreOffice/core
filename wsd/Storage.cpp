@@ -23,7 +23,6 @@
 #include <net/HttpRequest.hpp>
 #include <wsd/wopi/WopiStorage.hpp>
 #include <wsd/Auth.hpp>
-#include <wsd/HostUtil.hpp>
 #include <wsd/ProofKey.hpp>
 
 #include <cassert>
@@ -43,6 +42,7 @@
 #include <net/NetUtil.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/Exceptions.hpp>
+#include <wsd/HostUtil.hpp>
 
 #include <Poco/Exception.h>
 #include <Poco/File.h>
@@ -54,27 +54,9 @@
 #include <memory>
 #include <string>
 
-#if MOBILEAPP
-#ifdef IOS
-#include <ios.h>
-#elif defined(MACOS)
-#include <macos.h>
-#elif defined(__ANDROID__)
-#include <androidapp.hpp>
-#elif defined(_WIN32)
-#include <windows.hpp>
-#elif defined(QTAPP)
-#include <qt.hpp>
-#elif WASMAPP
-#include <wasmapp.hpp>
-#endif
-#endif // MOBILEAPP
-
 #if ENABLE_LOCAL_FILESYSTEM
 bool StorageBase::FilesystemEnabled;
 #endif
-
-#if !MOBILEAPP
 
 namespace {
 
@@ -102,15 +84,17 @@ std::string StorageBase::getJailPresetsPath() const
     return getLocalJailPath(_localStorePath, JAILED_CONFIG_ROOT);
 }
 
-#endif
-
 void StorageBase::initialize()
 {
-#if !MOBILEAPP
-
 #if ENABLE_LOCAL_FILESYSTEM
-    FilesystemEnabled = ConfigUtil::getBool("storage.filesystem[@allow]", false);
+    FilesystemEnabled =
+        Util::isMobileApp() || ConfigUtil::getBool("storage.filesystem[@allow]", false);
 #endif
+
+#if !MOBILEAPP
+    // The apps open local files only.
+    if (Util::isMobileApp())
+        return;
 
     //parse wopi.storage.host only when there is no storage.wopi.alias_groups entry in config
     if (!ConfigUtil::has("storage.wopi.alias_groups"))
@@ -124,10 +108,7 @@ void StorageBase::initialize()
 
     const auto& app = Poco::Util::Application::instance();
     HostUtil::parseAliases(app.config());
-
-#else // MOBILEAPP
-    FilesystemEnabled = true;
-#endif // MOBILEAPP
+#endif
 }
 
 StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
@@ -293,7 +274,7 @@ std::unique_ptr<LocalStorage::LocalFileInfo> LocalStorage::getLocalFileInfo()
     const std::string userId = std::to_string(LastLocalStorageId++);
     std::string userNameString;
 
-#if MOBILEAPP && !WASMAPP
+#if !WASMAPP
     if (user_name != nullptr)
         userNameString = std::string(user_name);
 #endif
@@ -309,12 +290,15 @@ std::unique_ptr<LocalStorage::LocalFileInfo> LocalStorage::getLocalFileInfo()
     if (!_userCanWrite.has_value())
         _userCanWrite = FileUtil::isWritable(path.toString());
     const bool userCanWrite = *_userCanWrite;
-#else
+#elif MOBILEAPP
     // Fix issue #5887 by assuming that documents are writable on iOS and Android.
     // The iOS and Android app saves directly to local disk so, other than for
     // "view file extension" document types or other cases that I am missing, we
     // can assume the document is writable until a write failure occurs.
     const bool userCanWrite = true;
+#else
+    // A desktop app that links this server code checks the user's file as above.
+    const bool userCanWrite = !Util::isMobileApp() || FileUtil::isWritable(path.toString());
 #endif
 
     return std::make_unique<LocalStorage::LocalFileInfo>("LocalUser" + userId, userNameString,
@@ -324,10 +308,16 @@ std::unique_ptr<LocalStorage::LocalFileInfo> LocalStorage::getLocalFileInfo()
 std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth*/,
                                                      LockContext& /*lockCtx*/,
                                                      const std::string& /*templateUri*/,
-                                                     [[maybe_unused]]
                                                      AdditionalFilePaths& additionalFileLocalPaths)
 {
-#if !MOBILEAPP
+    if (Util::isMobileApp())
+    {
+        // The apps have no jail, so the document is opened where it is.
+        setRootFilePath(localFilePath());
+        setDownloaded(true);
+        return getRootFilePath();
+    }
+
     // /chroot/jailId/user/doc/childId/file.ext
     const std::string filename = Poco::Path(getUri().getPath()).getFileName();
     AdditionalFilePaths additionalFileFilenames;
@@ -401,7 +391,7 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
         LOG_INF("Linking " << Anonymizer::anonymizeUrl(publicFilePath) << " to "
                            << getRootFilePathAnonym());
         if (!Poco::File(getRootFilePath()).exists()
-            && link(publicFilePath.c_str(), getRootFilePath().c_str()) == -1)
+            && !FileUtil::linkFile(publicFilePath, getRootFilePath()))
         {
             // Failed
             LOG_INF_SYS("link(\"" << Anonymizer::anonymizeUrl(publicFilePath) << "\", \""
@@ -440,16 +430,6 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
             additionalFileLocalPaths[it.first] = Poco::Path(getJailPath(), it.second).toString();
         return Poco::Path(getJailPath(), filename).toString();
     }
-
-#else // MOBILEAPP
-
-    // In the mobile app we use no jail
-    setRootFilePath(localFilePath());
-    // Mark the document as downloaded
-    setDownloaded(true);
-
-    return getRootFilePath();
-#endif
 }
 
 std::size_t LocalStorage::uploadLocalFileToStorageAsync(

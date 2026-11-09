@@ -18,9 +18,6 @@
 
 #include <config.h>
 
-// HostUtil is only used in non-mobile apps.
-#if !MOBILEAPP
-
 #include <common/IpNetwork.hpp>
 
 #include <Poco/URI.h>
@@ -168,6 +165,5 @@ private:
 
     friend class HostUtilTests;
 };
-#endif // !MOBILEAPP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

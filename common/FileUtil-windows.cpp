@@ -11,6 +11,7 @@
 
 #include <config.h>
 
+#include <cerrno>
 #include <filesystem>
 #include <iostream>
 
@@ -87,6 +88,12 @@ namespace FileUtil
     bool linkOrCopyFile(const std::string& source, const std::string& newPath)
     {
         return FileUtil::copy(source, newPath, /*log=*/true, /*throw_on_error=*/false);
+    }
+
+    bool linkFile(const std::string& /*source*/, const std::string& /*newPath*/)
+    {
+        errno = ENOSYS;
+        return false;
     }
 
     std::string realpath(const char* path)

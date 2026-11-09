@@ -20,9 +20,14 @@
 
 #include <common/Globals.hpp>
 #include <common/Util.hpp>
+#include <wsd/Storage.hpp>
 
 const bool Util::MobileApp = Util::isMobileAppBuild();
 
 const bool Util::KitInProcess = Util::isFuzzing() || Util::isMobileAppBuild();
+
+#if !MOBILEAPP
+const char* user_name = nullptr;
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

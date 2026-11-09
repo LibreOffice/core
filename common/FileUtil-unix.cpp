@@ -56,6 +56,11 @@ namespace FileUtil
         return FileUtil::copy(source, newPath, /*log=*/true, /*throw_on_error=*/false);
     }
 
+    bool linkFile(const std::string& source, const std::string& newPath)
+    {
+        return link(source.c_str(), newPath.c_str()) == 0;
+    }
+
     std::optional<std::string> resolveRealpath(const char* path)
     {
         char* resolved = ::realpath(path, nullptr);

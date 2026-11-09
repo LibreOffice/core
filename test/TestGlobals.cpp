@@ -24,4 +24,6 @@ const bool Util::MobileApp = Util::isMobileAppBuild();
 
 const bool Util::KitInProcess = Util::isFuzzing() || Util::isMobileAppBuild();
 
+const char* user_name = nullptr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

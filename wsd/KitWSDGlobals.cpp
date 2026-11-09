@@ -26,4 +26,8 @@ const bool Util::MobileApp = Util::isMobileAppBuild();
 
 const bool Util::KitInProcess = true;
 
+#if !MOBILEAPP
+const char* user_name = nullptr;
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
