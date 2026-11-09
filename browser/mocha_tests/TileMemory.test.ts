@@ -231,6 +231,71 @@ describe('BitmapTileManager tile memory', function () {
 			assert.strictEqual(trims, 0);
 		});
 
+		describe('of the tile requests', function () {
+			let savedActiveDocument: any;
+			let savedSetInterval: any;
+			let savedClearInterval: any;
+			let intervals: number;
+			let clearedIntervals: number[];
+
+			beforeEach(function () {
+				// The pre-fetch reads the part and the modes, and repeats with setInterval, which
+				// the fake clock does not replace.
+				tileManager._docLayer = { getSelectedPart: () => 0 };
+				savedActiveDocument = app.activeDocument;
+				app.activeDocument = { activeModes: [0] } as any;
+				intervals = 0;
+				clearedIntervals = [];
+				savedSetInterval = globalThis.setInterval;
+				savedClearInterval = globalThis.clearInterval;
+				(globalThis as any).setInterval = () => {
+					++intervals;
+					return 42;
+				};
+				(globalThis as any).clearInterval = (id: number) =>
+					clearedIntervals.push(id);
+			});
+
+			afterEach(function () {
+				app.activeDocument = savedActiveDocument;
+				(globalThis as any).setInterval = savedSetInterval;
+				(globalThis as any).clearInterval = savedClearInterval;
+			});
+
+			it('does not start the pre-fetch after the cache is discarded', function () {
+				tileManager.resetPreFetching(true);
+
+				tileManager.discardAllCache();
+				advanceClock(10000);
+
+				assert.strictEqual(intervals, 0);
+			});
+
+			it('stops a pre-fetch that is running when the cache is discarded', function () {
+				tileManager.resetPreFetching(true);
+				advanceClock(10000);
+				assert.strictEqual(intervals, 1);
+
+				tileManager.discardAllCache();
+
+				assert.deepStrictEqual(clearedIntervals, [42]);
+			});
+
+			it('does not pre-fetch ahead of the view after the cache is discarded', function () {
+				let fetched = 0;
+				tileManager.updateProperties = () => {
+					++fetched;
+					return false;
+				};
+				tileManager.initPreFetchAdjacentTiles();
+
+				tileManager.discardAllCache();
+				advanceClock(10000);
+
+				assert.strictEqual(fetched, 0);
+			});
+		});
+
 		it('does not start before a document is loaded', function () {
 			const savedMap = app.map;
 			(app as any).map = null;

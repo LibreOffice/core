@@ -1567,6 +1567,21 @@ class BitmapTileManager extends RenderManagerBase {
 		}
 	}
 
+	/// Stop every timer that asks for tiles later: the pre-fetch around the view and ahead of it,
+	/// the pre-fetch of the next part, and the retry of skipped tiles.
+	private stopTileRequestTimers() {
+		this.clearPreFetchTimers();
+		this.clearSkippedTileRetry();
+		if (this._adjacentTilePreFetcher !== undefined) {
+			clearTimeout(this._adjacentTilePreFetcher);
+			this._adjacentTilePreFetcher = undefined;
+		}
+		if (this._partTilePreFetcher !== undefined) {
+			clearTimeout(this._partTilePreFetcher);
+			this._partTilePreFetcher = undefined;
+		}
+	}
+
 	public clearPreFetch() {
 		if (!this.checkDocLayer()) return;
 
@@ -2034,6 +2049,8 @@ class BitmapTileManager extends RenderManagerBase {
 
 	public discardAllCache() {
 		this.stopIdleTrim();
+		// A manager that another replaces would otherwise keep asking for tiles from its timers.
+		this.stopTileRequestTimers();
 
 		this.updateAllTileDistances();
 		this.garbageCollect(true);
