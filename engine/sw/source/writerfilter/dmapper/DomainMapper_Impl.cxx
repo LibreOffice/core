@@ -10338,8 +10338,6 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
     // either of these indicates numbering is not used, so do not return any numbering properties
     if (nListId < 0 || nNumberingLevel == 9)
         return nRet;
-    if ( !m_xTextDocument )
-        return nRet;
 
     try
     {
@@ -10348,14 +10346,11 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
 
         auto const pList(GetListTable()->GetList(nListId));
         assert(pList);
-        const OUString aListName = pList->GetStyleName();
-        const rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
-        rtl::Reference<SwXStyleFamily> xNumberingStyles = xStyleFamilies->GetNumberingStyles();
-        const rtl::Reference<SwXStyle> xStyle = dynamic_cast<SwXStyle*>(xNumberingStyles->getStyleByName(aListName).get());
-        const rtl::Reference<SwXNumberingRules> xNumberingRules = xStyle->getNumberingRules();
-        if (xNumberingRules.is())
+        const uno::Reference<container::XIndexAccess> xNumRules = pList->GetNumberingRules();
+        if (xNumRules.is() && nNumberingLevel < xNumRules->getCount())
         {
-            xNumberingRules->getPropertyByIndex(nNumberingLevel, aProp) >>= nRet;
+            const comphelper::SequenceAsHashMap aLevel(xNumRules->getByIndex(nNumberingLevel));
+            aLevel.getValue(aProp) >>= nRet;
         }
     }
     catch( const cpo::uno::Exception& )
