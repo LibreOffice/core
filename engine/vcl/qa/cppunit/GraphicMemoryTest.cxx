@@ -329,6 +329,36 @@ CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testEncodedDataBroughtInIsCountedAndCanG
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rManager.getTotalSize());
 }
 
+// Reading the link of a swapped out graphic gives its encoded data, and the graphic content stays
+// swapped out.
+CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testReadingTheLinkLeavesTheGraphicSwappedOut)
+{
+    KitModeScope aKitMode;
+
+    auto& rManager = vcl::graphic::MemoryManager::get();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rManager.getManagedObjects().size());
+
+    Graphic aGraphic = makeUnloadedGraphic(u"png", Size(300, 300));
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+
+    ImpGraphic* pImpGraphic = aGraphic.ImplGetImpGraphic();
+    CPPUNIT_ASSERT_EQUAL(true, pImpGraphic->swapOut());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rManager.getTotalSize());
+
+    const BinaryDataContainer& rContainer = aGraphic.GetSharedGfxLink()->getDataContainer();
+    GfxLink aLink = aGraphic.GetGfxLink();
+
+    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativePng, aLink.GetType());
+    CPPUNIT_ASSERT(aLink.GetDataSize() > 0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(rContainer.getSize()), aLink.GetDataSize());
+    CPPUNIT_ASSERT(aLink.GetData() != nullptr);
+
+    // Only the encoded data is in memory, and the running total counts it.
+    CPPUNIT_ASSERT_EQUAL(true, pImpGraphic->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(rContainer.getSize()), rManager.getTotalSize());
+}
+
 namespace
 {
 class TestManaged : public vcl::graphic::MemoryManaged

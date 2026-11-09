@@ -1869,9 +1869,13 @@ const std::shared_ptr<GfxLink> & ImpGraphic::getSharedGfxLink() const
 
 GfxLink ImpGraphic::getGfxLink() const
 {
-    ensureAvailable();
+    if (!mpGfxLink)
+        return GfxLink();
 
-    return( mpGfxLink ? *mpGfxLink : GfxLink() );
+    // A swapped out graphic keeps its link, so the encoded data comes back without decoding the
+    // graphic content.
+    ensureEncodedDataAvailable();
+    return *mpGfxLink;
 }
 
 bool ImpGraphic::isGfxLink() const
