@@ -5146,6 +5146,14 @@
         <value>1800</value>
       </prop>
     </group>
+    <group oor:name="HyperlinkTargetDialog">
+      <info>
+        <desc>Contains settings for the Hyperlink Target dialog</desc>
+      </info>
+      <prop oor:name="SortBookmarks" oor:type="xs:boolean" oor:nillable="false">
+        <value>false</value>
+      </prop>
+    </group>
     <group oor:name="Navigator">
       <info>
         <desc>Contains settings for the Navigator.</desc>

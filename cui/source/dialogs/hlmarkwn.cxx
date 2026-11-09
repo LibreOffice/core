@@ -50,6 +50,15 @@
 
 #include <stack>
 
+#include <vector>
+#include <i18nlangtag/languagetag.hxx>
+#include <comphelper/string.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <officecfg/Office/Writer.hxx>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -86,6 +95,7 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd(weld::Window* pParentDialog)
     mxBtApply->connect_clicked( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
     mxBtClose->connect_clicked( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
     mxLbTree->connect_item_activated(LINK(this, SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl));
+    mxLbTree->connect_command(LINK(this, SvxHlinkDlgMarkWnd, CommandHdl));
 
     // tdf#149935 - remember last used position and size
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
@@ -228,6 +238,8 @@ void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
     if (nPos != 0)
         aUStrURL = aStrURL;
 
+    maUStrURL = aUStrURL;
+
     if (!RefreshFromDoc(aUStrURL))
         ErrorChanged();
 
@@ -311,7 +323,26 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
     static constexpr OUStringLiteral aProp_LinkDisplayName( u"LinkDisplayName" );
     static constexpr OUStringLiteral aProp_LinkTarget( u"com.sun.star.document.LinkTarget" );
     static constexpr OUStringLiteral aProp_LinkDisplayBitmap( u"LinkDisplayBitmap" );
-    for (auto& aLink : xLinks->getElementNames())
+
+    auto aElementNames
+        = comphelper::sequenceToContainer<std::vector<OUString>>(xLinks->getElementNames());
+
+    if (pParentEntry)
+    {
+        OUString sContentType = mxLbTree->get_text(*pParentEntry);
+        if (sContentType == "Bookmarks"
+            && officecfg::Office::Writer::HyperlinkTargetDialog::SortBookmarks::get())
+        {
+            auto const sort = comphelper::string::NaturalStringSorter(
+                comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetUILanguageTag().getLocale());
+            std::sort(aElementNames.begin(), aElementNames.end(),
+                      [&sort](const OUString& rLHS, const OUString& rRHS)
+                      { return sort.compare(rLHS, rRHS) < 0; });
+        }
+    }
+
+    for (auto& aLink : aElementNames)
     {
         uno::Any aAny;
 
@@ -492,8 +523,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, weld::Button&, void)
     }
 }
 
-// Click on Close-Button
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
+void SvxHlinkDlgMarkWnd::SaveLastSelected()
 {
     if (std::unique_ptr<weld::TreeIter> xEntry = mxLbTree->get_cursor())
     {
@@ -512,18 +542,71 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
             bEntry = mxLbTree->iter_parent(*xEntry);
         }
 
-        uno::Sequence< beans::NamedValue > aSettings
-        {
+        uno::Sequence<beans::NamedValue> aSettings{
             { TG_SETTING_LASTMARK, css::uno::Any(sLastSelectedMark) },
-            { TG_SETTING_LASTPATH, css::uno::Any(comphelper::containerToSequence(aLastSelectedPath)) }
+            { TG_SETTING_LASTPATH,
+              css::uno::Any(comphelper::containerToSequence(aLastSelectedPath)) }
         };
 
         // write
-        SvtViewOptions aViewSettings( EViewType::Dialog, TG_SETTING_MANAGER );
-        aViewSettings.SetUserData( aSettings );
+        SvtViewOptions aViewSettings(EViewType::Dialog, TG_SETTING_MANAGER);
+        aViewSettings.SetUserData(aSettings);
     }
+}
+
+// Click on Close-Button
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
+{
+    SaveLastSelected();
 
     m_xDialog->response(RET_CANCEL);
+}
+
+IMPL_LINK(SvxHlinkDlgMarkWnd, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
+    if (rCEvt.IsMouseEvent())
+    {
+        if (std::unique_ptr<weld::TreeIter> xEntry
+            = mxLbTree->get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false))
+        {
+            if (!mxLbTree->is_selected(*xEntry))
+                mxLbTree->set_cursor(*xEntry);
+
+            OUString sContentType = mxLbTree->get_text(*xEntry);
+            if (sContentType == "Bookmarks")
+            {
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
+                    mxLbTree.get(), u"cui/ui/hyperlinkmarkdialogmenu.ui"_ustr));
+                std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu(u"menu"_ustr);
+
+                xPop->set_active(
+                    u"sortbookmarks"_ustr,
+                    officecfg::Office::Writer::HyperlinkTargetDialog::SortBookmarks::get());
+
+                OUString sCommand = xPop->popup_at_rect(
+                    mxLbTree.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
+                if (sCommand == "sortbookmarks")
+                {
+                    // toggle bookmark sorting
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                        comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Writer::HyperlinkTargetDialog::SortBookmarks::set(
+                        !officecfg::Office::Writer::HyperlinkTargetDialog::SortBookmarks::get(),
+                        batch);
+                    batch->commit();
+
+                    SaveLastSelected();
+
+                    RefreshTree(maUStrURL);
+                }
+            }
+        }
+    }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

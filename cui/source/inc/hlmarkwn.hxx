@@ -44,7 +44,10 @@ private:
 
     OUString            maSelectedMark;
 
+    OUString maUStrURL;
+
     void ErrorChanged();
+    void SaveLastSelected();
 
 protected:
     bool RefreshFromDoc( const OUString& aURL );
@@ -57,6 +60,7 @@ protected:
     DECL_LINK( ClickApplyHdl_Impl, weld::Button&, void );
     DECL_LINK(DoubleClickApplyHdl_Impl, const weld::TreeIter&, bool);
     DECL_LINK( ClickCloseHdl_Impl, weld::Button&, void );
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
 
 public:
     SvxHlinkDlgMarkWnd(weld::Window* pParentDialog);

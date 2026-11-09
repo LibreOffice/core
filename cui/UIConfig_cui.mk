@@ -96,6 +96,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/hatchpage \
 	cui/uiconfig/ui/hyperlinkdocpage \
 	cui/uiconfig/ui/hyperlinkmarkdialog \
+	cui/uiconfig/ui/hyperlinkmarkdialogmenu \
 	cui/uiconfig/ui/hyperlinknewdocpage \
 	cui/uiconfig/ui/hyperlinkdlg \
 	cui/uiconfig/ui/hyperlinkinternetpage \
