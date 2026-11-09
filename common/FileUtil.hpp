@@ -474,6 +474,11 @@ namespace FileUtil
     /// On Windows Poco::URI::getPath() returns a bogus path that starts with a slash followed by
     /// the drive letter. Fix that. On Unix just return the input.
     std::string fixPocoURIgetPathReturnValue(const std::string& path);
+
+    /// The local path of the file that a file: URI names, from the host and the path of the URI.
+    /// On Windows a host names a network share, and the path is //host/share/... then. Elsewhere
+    /// the host is left out, and the path is the path of the URI.
+    std::string localPathOfFileUri(const std::string& host, const std::string& uriPath);
 } // end namespace FileUtil
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

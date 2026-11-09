@@ -691,6 +691,9 @@ public:
     }
 
 private:
+    /// The local path of the file that the URI of this storage names.
+    std::string localFilePath() const;
+
     /// True if we the source file a temporary that we own.
     /// Typically for convert-to requests.
     [[maybe_unused]] const bool _isTemporaryFile;

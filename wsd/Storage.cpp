@@ -271,9 +271,14 @@ std::unique_ptr<StorageBase> StorageBase::create(const Poco::URI& uri, const std
 
 std::atomic<unsigned> LocalStorage::LastLocalStorageId;
 
+std::string LocalStorage::localFilePath() const
+{
+    return FileUtil::localPathOfFileUri(getUri().getHost(), getUri().getPath());
+}
+
 std::unique_ptr<LocalStorage::LocalFileInfo> LocalStorage::getLocalFileInfo()
 {
-    const Poco::Path path = FileUtil::fixPocoURIgetPathReturnValue(getUri().getPath());
+    const Poco::Path path = localFilePath();
     LOG_DBG("Getting info for local uri [" << Anonymizer::anonymizeUrl(getUri().toString())
                                            << "], path ["
                                            << Anonymizer::anonymizeUrl(path.toString()) << "].");
@@ -341,7 +346,7 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
     }
 
     // Despite the talk about URIs it seems that _uri is actually just a pathname here
-    const std::string publicFilePath = getUri().getPath();
+    const std::string publicFilePath = localFilePath();
     if (!Poco::File(publicFilePath).exists())
     {
         LOG_ERR("Local file URI [" << publicFilePath << "] invalid or doesn't exist.");
@@ -439,7 +444,7 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
 #else // MOBILEAPP
 
     // In the mobile app we use no jail
-    setRootFilePath(FileUtil::fixPocoURIgetPathReturnValue(getUri().getPath()));
+    setRootFilePath(localFilePath());
     // Mark the document as downloaded
     setDownloaded(true);
 
@@ -453,7 +458,7 @@ std::size_t LocalStorage::uploadLocalFileToStorageAsync(
     const std::shared_ptr<SocketPoll>&,
     const AsyncUploadCallback& asyncUploadCallback)
 {
-    const std::string path = getUri().getPath();
+    const std::string path = localFilePath();
 
     // Assume failure by default.
     UploadResult res(UploadResult::Result::FAILED, "Internal error");

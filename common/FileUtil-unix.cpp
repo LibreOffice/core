@@ -524,6 +524,11 @@ namespace FileUtil
     {
         return path;
     }
+
+    std::string localPathOfFileUri(const std::string& /*host*/, const std::string& uriPath)
+    {
+        return uriPath;
+    }
 } // namespace FileUtil
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

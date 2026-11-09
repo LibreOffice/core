@@ -234,6 +234,13 @@ namespace FileUtil
             return path.substr(1);
         return path;
     }
+
+    std::string localPathOfFileUri(const std::string& host, const std::string& uriPath)
+    {
+        if (!host.empty())
+            return "//" + host + uriPath;
+        return fixPocoURIgetPathReturnValue(uriPath);
+    }
 } // namespace FileUtil
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
