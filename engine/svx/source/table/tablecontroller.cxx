@@ -3482,6 +3482,14 @@ bool SvxTableController::setCursorLogicPosition(const Point& rPosition, bool bPo
                 setSelectedCells(aCellPos, maCursorLastPos);
             return true;
         }
+        else if (!bPoint)
+        {
+            // no selection yet and its start is set: it starts at this cell, so the end set next
+            // reaches from here and not from the cell of the last mouse press
+            StartSelection(aCellPos);
+            mrView.AdjustMarkHdl();
+            return true;
+        }
         else if (aCellPos != maMouseDownPos)
         {
             // No selection, but rPosition is at another cell: start table selection.

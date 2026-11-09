@@ -44,6 +44,7 @@
 #include <vcl/commandevent.hxx>
 #include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
 #include <WindowUpdater.hxx>
@@ -607,6 +608,18 @@ void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool
     if (SdrView* pSdrView = GetView())
     {
         rtl::Reference<sdr::SelectionController> xSelectionController(GetView()->getSelectionController());
+
+        // a reset ends a selection of table cells, the table itself stays selected
+        if (bClearMark && xSelectionController.is() && xSelectionController->hasSelectedCells())
+        {
+            if (auto pTableController
+                = dynamic_cast<sdr::table::SvxTableController*>(xSelectionController.get()))
+            {
+                pTableController->clearSelection();
+                return;
+            }
+        }
+
         if (!xSelectionController.is() || !xSelectionController->setCursorLogicPosition(rPosition, bPoint))
         {
             if (pSdrView->GetTextEditObject())
