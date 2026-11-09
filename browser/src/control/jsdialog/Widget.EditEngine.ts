@@ -60,6 +60,9 @@ const EDITENGINE_PARAGRAPH_CLASS = 'ui-editengine-paragraph';
 /// The name of the highlight that marks the selection while another element holds the focus.
 const EDITENGINE_MENU_HIGHLIGHT = 'editengine-menu-selection';
 
+/// The class of the container while the highlight marks its selection.
+const EDITENGINE_MARKED_CLASS = 'ui-editengine-selection-marked';
+
 let editEngineControlHolder: EditEngineContainer | null = null;
 let editEngineDocumentListenersAttached = false;
 
@@ -202,7 +205,8 @@ function editEngineSelectionRange(
 
 /// Marks the selection with a highlight, which shows without the focus and without a document
 /// selection, or removes the mark when the selection is null. Browsers without the CSS Custom
-/// Highlight API show no mark.
+/// Highlight API show no mark. While the mark is on, the document selection in the container has
+/// no fill, so the selected text has a single fill whether the document selection is there or not.
 function editEngineHighlightSelection(
 	container: HTMLElement,
 	selection: EditEngineSelection | null,
@@ -214,9 +218,10 @@ function editEngineHighlightSelection(
 	const range = selection
 		? editEngineSelectionRange(container, selection)
 		: null;
-	if (range && !range.collapsed)
-		highlights.set(EDITENGINE_MENU_HIGHLIGHT, new Highlight(range));
+	const marked = !!range && !range.collapsed;
+	if (marked) highlights.set(EDITENGINE_MENU_HIGHLIGHT, new Highlight(range));
 	else highlights.delete(EDITENGINE_MENU_HIGHLIGHT);
+	container.classList.toggle(EDITENGINE_MARKED_CLASS, marked);
 }
 
 /// Scrolls the widget by the least distance that shows the end of the selection, where the caret

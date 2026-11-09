@@ -600,7 +600,7 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(paragraph).should('have.text', 'X');
 	});
 
-	it('the selected notes text stays marked while its context menu is open', function () {
+	it('the selected notes text stays marked with a single fill while its context menu is open', function () {
 		var editEngine = '#notespanel-container .ui-editengine';
 		var paragraph = editEngine + ' .ui-editengine-paragraph';
 
@@ -609,6 +609,12 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 			var highlight = win.CSS.highlights.get('editengine-menu-selection');
 			if (!highlight) return null;
 			return Array.from(highlight.keys()).map(String).join('');
+		}
+
+		// The fill the browser draws for its own selection in the notes.
+		function selectionFill(element) {
+			var view = element.ownerDocument.defaultView;
+			return view.getComputedStyle(element, '::selection').backgroundColor;
 		}
 
 		openNotesPane();
@@ -629,11 +635,18 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.getFrameWindow().should(function (win) {
 			expect(markedText(win)).to.equal('Demo');
 		});
+		// The mark is the only fill, so the selected text does not get a second one.
+		cy.cGet(paragraph).should(function (element) {
+			expect(selectionFill(element[0])).to.equal('rgba(0, 0, 0, 0)');
+		});
 
 		cy.cGet('#jsd-context-menu-dropdown-overlay').click();
 		cy.cGet('#jsd-context-menu-dropdown-overlay').should('not.exist');
 		cy.getFrameWindow().should(function (win) {
 			expect(markedText(win)).to.equal(null);
+		});
+		cy.cGet(paragraph).should(function (element) {
+			expect(selectionFill(element[0])).to.not.equal('rgba(0, 0, 0, 0)');
 		});
 	});
 

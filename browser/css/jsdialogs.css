@@ -4429,6 +4429,13 @@ kbd,
 }
 /* stylelint-enable selector-pseudo-element-no-unknown -- turn the check back on */
 
+/* While the highlight above marks the selection, it is the only fill. The document selection can
+   still lie in the editor then, and keeps its place for when the editor gets the focus back. */
+.ui-editengine.ui-editengine-selection-marked::selection,
+.ui-editengine.ui-editengine-selection-marked *::selection {
+	background: transparent;
+}
+
 .ui-editengine .ui-editengine-paragraph {
 	min-height: 1.4em;
 	/* Each paragraph keeps the height of its text when the text is taller than the editor, and the
