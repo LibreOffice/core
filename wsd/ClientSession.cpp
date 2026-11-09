@@ -49,6 +49,7 @@
 #include <wsd/FileServer.hpp>
 #if !MOBILEAPP
 #include <wsd/HostUtil.hpp>
+#include <wsd/RemoteDocumentBroker.hpp>
 #endif
 #if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
 #include <wsd/AIChatSession.hpp>
@@ -1842,6 +1843,12 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 #if !MOBILEAPP
     else if (tokens.equals(0, "exportslides"))
     {
+        if (!RemoteDocumentBroker::isEnabled())
+        {
+            LOG_WRN("Refusing to write the pages of a document out: remote_links is disabled");
+            return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"disabled\"}");
+        }
+
         // Writing pages out puts the content of the document in a file of its own. A host
         // that allows no export, or that has what leaves the document watermarked, is
         // answered here, before any page is written. This holds for the session a browser
