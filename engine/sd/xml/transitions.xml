@@ -215,6 +215,15 @@
  <anim:par pres:preset-id="fade-smoothly">
   <anim:transitionFilter smil:type="fade" smil:subtype="crossfade"/>
  </anim:par>
+ <anim:par pres:preset-id="morph-objects">
+  <anim:transitionFilter smil:type="fade" smil:subtype="crossfade" coext:subtype="morph"/>
+ </anim:par>
+ <anim:par pres:preset-id="morph-words">
+  <anim:transitionFilter smil:type="fade" smil:subtype="crossfade" coext:subtype="morphByWord"/>
+ </anim:par>
+ <anim:par pres:preset-id="morph-characters">
+  <anim:transitionFilter smil:type="fade" smil:subtype="crossfade" coext:subtype="morphByCharacter"/>
+ </anim:par>
  <anim:par pres:preset-id="push-down">
   <anim:transitionFilter smil:type="pushWipe" smil:subtype="fromTop"/>
  </anim:par>

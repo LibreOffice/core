@@ -1485,6 +1485,14 @@
           <value xml:lang="en-US">Fade</value>
         </prop>
       </node>
+      <node oor:name="morph" oor:op="replace">
+        <prop oor:name="Group" oor:type="xs:string">
+          <value>subtle</value>
+        </prop>
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Morph</value>
+        </prop>
+      </node>
       <node oor:name="random-bars" oor:op="replace">
         <prop oor:name="Group" oor:type="xs:string">
           <value>subtle</value>
@@ -1681,6 +1689,21 @@
       <node oor:name="through-white" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Through White</value>
+        </prop>
+      </node>
+      <node oor:name="objects" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Objects</value>
+        </prop>
+      </node>
+      <node oor:name="words" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Words</value>
+        </prop>
+      </node>
+      <node oor:name="characters" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Characters</value>
         </prop>
       </node>
       <node oor:name="left-right" oor:op="replace">
@@ -2056,6 +2079,30 @@
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
           <value>through-white</value>
+        </prop>
+      </node>
+      <node oor:name="morph-objects" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>morph</value>
+        </prop>
+        <prop oor:name="Variant" oor:type="xs:string">
+          <value>objects</value>
+        </prop>
+      </node>
+      <node oor:name="morph-words" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>morph</value>
+        </prop>
+        <prop oor:name="Variant" oor:type="xs:string">
+          <value>words</value>
+        </prop>
+      </node>
+      <node oor:name="morph-characters" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>morph</value>
+        </prop>
+        <prop oor:name="Variant" oor:type="xs:string">
+          <value>characters</value>
         </prop>
       </node>
       <node oor:name="zoom-rotate-in" oor:op="replace">

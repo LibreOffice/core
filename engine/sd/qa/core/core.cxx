@@ -59,6 +59,43 @@ CPPUNIT_TEST_FIXTURE(Test, testAirplaneTransitionPreset)
     CPPUNIT_ASSERT_EQUAL(u"wipe"_ustr, pPreset->getSetId());
     CPPUNIT_ASSERT_EQUAL(u"Airplane"_ustr, pPreset->getVariantLabel());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testMorphTransitionPresets)
+{
+    // The COOL UI offers the three morph variants as one Morph transition, the options that a
+    // PPTX file has.
+    comphelper::COKit::setActive(true);
+    comphelper::ScopeGuard aGuard([] { comphelper::COKit::setActive(false); });
+    const sd::TransitionPresetList& rPresets = sd::TransitionPreset::getTransitionPresetList();
+
+    struct Variant
+    {
+        OUString maPresetId;
+        sal_Int16 mnSubtype;
+        OUString maLabel;
+    };
+    const Variant aVariants[] = {
+        { u"morph-objects"_ustr, animations::TransitionSubType::MORPH, u"Objects"_ustr },
+        { u"morph-words"_ustr, animations::TransitionSubType::MORPHBYWORD, u"Words"_ustr },
+        { u"morph-characters"_ustr, animations::TransitionSubType::MORPHBYCHARACTER,
+          u"Characters"_ustr },
+    };
+
+    for (const Variant& rVariant : aVariants)
+    {
+        auto aFound = std::find_if(rPresets.begin(), rPresets.end(),
+                                   [&rVariant](const sd::TransitionPresetPtr& pPreset)
+                                   { return pPreset->getPresetId() == rVariant.maPresetId; });
+
+        CPPUNIT_ASSERT_MESSAGE(rVariant.maPresetId.toUtf8().getStr(), aFound != rPresets.end());
+        const sd::TransitionPresetPtr& pPreset = *aFound;
+        CPPUNIT_ASSERT_EQUAL(animations::TransitionType::FADE, pPreset->getTransition());
+        CPPUNIT_ASSERT_EQUAL(rVariant.mnSubtype, pPreset->getSubtype());
+        CPPUNIT_ASSERT_EQUAL(u"morph"_ustr, pPreset->getSetId());
+        CPPUNIT_ASSERT_EQUAL(u"Morph"_ustr, pPreset->getSetLabel());
+        CPPUNIT_ASSERT_EQUAL(rVariant.maLabel, pPreset->getVariantLabel());
+    }
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

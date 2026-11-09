@@ -221,7 +221,10 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             TransitionSubType::FANOUTHORIZONTAL,
             TransitionSubType::HEART,
             TransitionSubType::ROTATEIN,
-            TransitionSubType::AIRPLANE
+            TransitionSubType::AIRPLANE,
+            TransitionSubType::MORPH,
+            TransitionSubType::MORPHBYWORD,
+            TransitionSubType::MORPHBYCHARACTER
     };
 
     try {
