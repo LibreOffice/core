@@ -418,6 +418,7 @@ window.L.TextInput = window.L.Layer.extend({
 		const controls = elements ? elements.contentControls : undefined;
 		const formats = elements ? elements.formats : undefined;
 		const changes = elements ? elements.changes : undefined;
+		const errors = elements ? elements.errors : undefined;
 		const nodes = [];
 		let pos = 0;
 		for (const link of links || []) {
@@ -426,31 +427,34 @@ window.L.TextInput = window.L.Layer.extend({
 			if (start < pos || end <= start || end > content.length)
 				continue;
 			nodes.push(...this._createCommentNodes(content, pos, start, images, comments, controls,
-				formats, changes));
+				formats, changes, errors));
 			const anchor = document.createElement('a');
 			anchor.setAttribute('href', window.sanitizeUrl(link.url));
 			anchor.append(...this._createCommentNodes(content, start, end, images, comments,
-				controls, formats, changes));
+				controls, formats, changes, errors));
 			nodes.push(anchor);
 			pos = end;
 		}
 		nodes.push(...this._createCommentNodes(content, pos, content.length, images, comments,
-			controls, formats, changes));
+			controls, formats, changes, errors));
 		return nodes;
 	},
 
-	// the text between start and end, with its commented ranges and its content controls; a
-	// comment's range ends after the U+FFFC of its anchor, and a comment without a range is that
-	// character alone
+	// the text between start and end, with its commented ranges, its content controls and its
+	// spelling and grammar errors; a comment's range ends after the U+FFFC of its anchor, and a
+	// comment without a range is that character alone
 	_createCommentNodes: function(content, start, end, images, comments, controls, formats,
-		changes) {
+		changes, errors) {
 		const commentRanges = (comments || []).map(function (comment) {
 			return { id: comment.id, start: parseInt(comment.start), end: parseInt(comment.end) };
 		});
 		const controlRanges = (controls || []).map(function (control) {
 			return { control: control, start: parseInt(control.start), end: parseInt(control.end) };
 		});
-		const ranges = commentRanges.concat(controlRanges).map(function (range) {
+		const errorRanges = (errors || []).map(function (error) {
+			return { error: error.kind, start: parseInt(error.start), end: parseInt(error.end) };
+		});
+		const ranges = commentRanges.concat(controlRanges, errorRanges).map(function (range) {
 			return Object.assign({}, range, { start: Math.max(start, range.start),
 				end: Math.min(end, range.end) });
 		}).filter(function (range) { return range.start < range.end; });
@@ -518,9 +522,13 @@ window.L.TextInput = window.L.Layer.extend({
 		return element;
 	},
 
-	// the element of a commented range or of a content control
+	// the element of a commented range, of a content control or of an error
 	_createRangeElement: function(range) {
 		const element = document.createElement('span');
+		if (range.error) {
+			element.setAttribute('aria-invalid', range.error === 'grammar' ? 'grammar' : 'spelling');
+			return element;
+		}
 		const control = range.control;
 		if (!control) {
 			element.setAttribute('role', 'mark');

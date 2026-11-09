@@ -684,7 +684,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		});
 		const root = document.createElement('ul');
 		const stack = [{ level: Math.min.apply(null, levels), element: root }];
-		items.forEach(function (item, index) {
+		items.forEach((item, index) => {
 			const level = levels[index];
 			while (stack.length > 1 && stack[stack.length - 1].level > level)
 				stack.pop();
@@ -696,7 +696,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				stack.push(top);
 			}
 			const li = document.createElement('li');
-			li.textContent = item.text;
+			li.append(...this._createLinkedNodes(item.text, { errors: item.errors }));
 			if (window.L.Browser.win)
 				li.tabIndex = -1;
 			if (typeof item.rect === 'string')
@@ -725,17 +725,17 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		element.setAttribute('role', 'table');
 		element.setAttribute('aria-rowcount', table.rowCount);
 		element.setAttribute('aria-colcount', table.colCount);
-		rows.forEach(function (row) {
+		rows.forEach((row) => {
 			const tr = document.createElement('tr');
 			tr.setAttribute('aria-rowindex', parseInt(row.row) + 1);
-			row.cells.forEach(function (cell) {
+			row.cells.forEach((cell) => {
 				const td = document.createElement('td');
 				td.setAttribute('aria-colindex', parseInt(cell.col) + 1);
 				if (cell.rowSpan !== undefined)
 					td.rowSpan = parseInt(cell.rowSpan);
 				if (cell.colSpan !== undefined)
 					td.colSpan = parseInt(cell.colSpan);
-				td.textContent = cell.text;
+				td.append(...this._createLinkedNodes(cell.text, { errors: cell.errors }));
 				if (window.L.Browser.win)
 					td.tabIndex = -1;
 				tr.appendChild(td);
@@ -890,6 +890,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			const images = sideElements.images;
 			const comments = sideElements.comments;
 			const controls = sideElements.contentControls;
+			const errors = sideElements.errors;
 			const texts = Array.isArray(paragraphs) ? paragraphs : [];
 			while (region.children.length > texts.length)
 				region.lastElementChild.remove();
@@ -930,15 +931,19 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				const spanControls = Array.isArray(controls) && Array.isArray(controls[index])
 					? controls[index] : [];
 				const controlsKey = JSON.stringify(spanControls);
+				const spanErrors = Array.isArray(errors) && Array.isArray(errors[index])
+					? errors[index] : [];
+				const errorsKey = JSON.stringify(spanErrors);
 				if (span.textContent !== text || (span.dataset.links || '[]') !== linksKey
 					|| (span.dataset.formats || '[]') !== formatsKey
 					|| (span.dataset.changes || '[]') !== changesKey
 					|| (span.dataset.images || '[]') !== imagesKey
 					|| (span.dataset.comments || '[]') !== commentsKey
-					|| (span.dataset.contentControls || '[]') !== controlsKey) {
+					|| (span.dataset.contentControls || '[]') !== controlsKey
+					|| (span.dataset.errors || '[]') !== errorsKey) {
 					span.replaceChildren(...this._createLinkedNodes(text, { links: spanLinks,
 						formats: spanFormats, changes: spanChanges, images: spanImages,
-						comments: spanComments, contentControls: spanControls }));
+						comments: spanComments, contentControls: spanControls, errors: spanErrors }));
 					// a reader still reaches them; Tab does not
 					for (const link of span.querySelectorAll('a'))
 						link.tabIndex = -1;
@@ -966,6 +971,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 						span.dataset.contentControls = controlsKey;
 					else
 						delete span.dataset.contentControls;
+					if (spanErrors.length)
+						span.dataset.errors = errorsKey;
+					else
+						delete span.dataset.errors;
 				}
 				if (span.getAttribute('role') !== role)
 					span.setAttribute('role', role);

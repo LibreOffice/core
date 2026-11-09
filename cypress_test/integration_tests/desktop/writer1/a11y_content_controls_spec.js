@@ -78,7 +78,7 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 	it('the text keeps no character marking the ends of a control', function () {
 		cy.cGet('#clipboard-area').should(function ($area) {
 			expect($area.text(), 'the paragraph text')
-				.to.contain('Agree: o, colour: red, name: Type a name, notes: Some notes.');
+				.to.contain('Agree: o, color: red, name: Type a name, notes: Some notes.');
 		});
 	});
 

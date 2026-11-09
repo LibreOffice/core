@@ -48,7 +48,7 @@ describe(['tagdesktop'], 'Writer readable content', { testIsolation: false }, fu
 
 	it('the readable content follows the caret between paragraphs', function () {
 		helper.typeIntoDocument('{ctrl}{home}');
-		helper.typeIntoDocument(FIRST + '{enter}' + SECOND);
+		helper.typeIntoDocument(FIRST + '{enter}' + SECOND + ' ');
 		cy.then(function () {
 			return helper.processToIdle(win);
 		});

@@ -81,6 +81,13 @@ namespace cool {
 		placeholder?: boolean | string; // the content is the placeholder text
 	}
 
+	// a range of the paragraph text the spell or grammar checker marked
+	export interface InlineError {
+		start: MessageNumber;
+		end: MessageNumber;
+		kind: 'spelling' | 'grammar';
+	}
+
 	// the elements of one paragraph, each kind in order
 	export interface InlineElements {
 		links?: InlineLink[];
@@ -89,6 +96,7 @@ namespace cool {
 		images?: InlineImage[];
 		comments?: InlineComment[];
 		contentControls?: InlineContentControl[];
+		errors?: InlineError[];
 	}
 
 	// one list per paragraph, an empty string for a paragraph without any or for no paragraphs
@@ -102,6 +110,7 @@ namespace cool {
 		images?: PerParagraph<InlineImage>;
 		comments?: PerParagraph<InlineComment>;
 		contentControls?: PerParagraph<InlineContentControl>;
+		errors?: PerParagraph<InlineError>;
 	}
 
 	export interface ParagraphInlineElements {
@@ -118,6 +127,7 @@ namespace cool {
 		images?: InlineImage[];
 		comments?: InlineComment[];
 		contentControls?: InlineContentControl[];
+		errors?: InlineError[];
 		beforeLinks?: PerParagraph<InlineLink>;
 		afterLinks?: PerParagraph<InlineLink>;
 		beforeFormats?: PerParagraph<InlineFormat>;
@@ -130,6 +140,8 @@ namespace cool {
 		afterComments?: PerParagraph<InlineComment>;
 		beforeContentControls?: PerParagraph<InlineContentControl>;
 		afterContentControls?: PerParagraph<InlineContentControl>;
+		beforeErrors?: PerParagraph<InlineError>;
+		afterErrors?: PerParagraph<InlineError>;
 	}
 
 	export function inlineElements(
@@ -143,6 +155,7 @@ namespace cool {
 				images: message.images,
 				comments: message.comments,
 				contentControls: message.contentControls,
+				errors: message.errors,
 			},
 			before: {
 				links: message.beforeLinks,
@@ -151,6 +164,7 @@ namespace cool {
 				images: message.beforeImages,
 				comments: message.beforeComments,
 				contentControls: message.beforeContentControls,
+				errors: message.beforeErrors,
 			},
 			after: {
 				links: message.afterLinks,
@@ -159,6 +173,7 @@ namespace cool {
 				images: message.afterImages,
 				comments: message.afterComments,
 				contentControls: message.afterContentControls,
+				errors: message.afterErrors,
 			},
 		};
 	}

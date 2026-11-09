@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach after expect require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -120,8 +120,24 @@ describe(['taga11ydisabled'], 'Editable area [a11y disabled]', { testIsolation: 
 
 describe(['taga11yenabled'], 'Editable area', { testIsolation: false }, function() {
 
+	function setAutoSpellCheck(enabled) {
+		const value = enabled ? 'true' : 'false';
+		cy.getFrameWindow().should((win) => {
+			expect(win.app.map['stateChangeHandler'].getItemValue('.uno:SpellOnline')).to.be.oneOf(['true', 'false']);
+		}).then((win) => {
+			if (win.app.map['stateChangeHandler'].getItemValue('.uno:SpellOnline') !== value)
+				win.app.map.sendUnoCommand('.uno:SpellOnline');
+		});
+		helper.waitForMapState('.uno:SpellOnline', value);
+	}
+
 	desktopHelper.shareDocumentAcrossTests('writer/undo_redo.odt', {
 		caretToDocumentStart: true,
+		setup: () => setAutoSpellCheck(false),
+	});
+
+	after(function () {
+		setAutoSpellCheck(true);
 	});
 
 	beforeEach(function () {
