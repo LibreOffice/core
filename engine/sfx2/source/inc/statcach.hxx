@@ -95,6 +95,9 @@ public:
 
     void                    SetState( SfxItemState, const SfxPoolItem*, bool bMaybeDirty=false );
     void                    SetCachedState(bool bAlways);
+    /// The next update sends the state to the COKit client, even if the client was sent it
+    /// already. The state is asked from the view again.
+    void                    ResendKitState();
     void                    Invalidate( bool bWithSlot );
     void                    SetVisibleState( bool bShow );
     void                    GetState( boost::property_tree::ptree& );

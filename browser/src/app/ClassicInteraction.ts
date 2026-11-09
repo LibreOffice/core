@@ -1202,10 +1202,29 @@ class ClassicFormulaContext extends ClassicInPlaceContext {
 	}
 }
 
+/*
+	A spreadsheet active in place, edited in its own view the engine keeps, as a formula is: a
+	press inside it and every key are the cells', so they go to the engine. A press outside leaves
+	it. Escape ends the edit of a cell in the engine first, and with no cell being edited leaves
+	the spreadsheet, which stays selected.
+*/
+class ClassicSpreadsheetContext extends ClassicFormulaContext {
+	public escape(): boolean {
+		if (app.file.textCursor.visible) return false;
+		return super.escape();
+	}
+
+	public arrowKey(_towards: cool.Point, _event: KeyboardEvent): boolean {
+		return false;
+	}
+}
+
 class ClassicInteractionSet implements InteractionSet {
 	public contextFor(place: InteractionPlace): InteractionContext {
 		switch (place.kind) {
 			case 'inPlace':
+				if (GraphicSelection.inPlaceCalc)
+					return new ClassicSpreadsheetContext();
 				return GraphicSelection.inPlaceMath
 					? new ClassicFormulaContext()
 					: new ClassicInPlaceContext();

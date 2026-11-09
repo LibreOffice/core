@@ -145,6 +145,8 @@ public:
 
     static sal_uInt16 IsChart( const SvGlobalName& rName );
     static sal_uInt16 IsMath( const SvGlobalName& rName );
+    /// Whether the class id is one of a spreadsheet, of any version.
+    static bool IsSpreadsheet( const SvGlobalName& rName );
 };
 
 #endif

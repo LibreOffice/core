@@ -912,6 +912,15 @@ std::string ScModelObj::getPrintRanges()
     return aJsonWriter.finishAndGetAsStdString();
 }
 
+drawinglayer::primitive2d::Primitive2DContainer ScModelObj::createInPlaceContent(Size& rSize)
+{
+    SolarMutexGuard aGuard;
+    rSize = Size();
+    if (!pDocShell)
+        return drawinglayer::primitive2d::Primitive2DContainer();
+    return sc::inPlaceContentOf(*pDocShell, rSize);
+}
+
 void ScModelObj::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;

@@ -521,6 +521,29 @@ struct ObjectContent
     }
 };
 
+/** A document embedded in another one that draws its own content while it is active in place, so
+    the vector view shows the document as it is being edited, not the picture it left when it was
+    last active.
+ */
+class SAL_DLLPUBLIC_RTTI SAL_NO_VTABLE SAL_LOPLUGIN_ANNOTATE("crosscast") InPlaceContent
+{
+public:
+    /** The content of the area of the document the object shows, in twips from the upper left
+        corner of that area. rSize is set to the size of the area, in twips.
+     */
+    virtual drawinglayer::primitive2d::Primitive2DContainer createInPlaceContent(Size& rSize) = 0;
+
+protected:
+    ~InPlaceContent() {}
+};
+
+/** The content of an embedded document active in place that draws its own, see InPlaceContent,
+    placed on the upright window of the object as the content of a chart is: the area the document
+    shows fills the window, cut off at its edges. Nothing for any other object.
+ */
+SVXCORE_DLLPUBLIC std::optional<drawinglayer::primitive2d::Primitive2DContainer>
+inPlaceContentOf(const SdrObject& rObject);
+
 /** The members of an object as the vector view takes them: those of a group, and nothing for any
     other object. A 3D scene holds its 3D objects as members but draws them as one picture of its
     own, so it is taken whole. A chart active in place has the objects of the page it draws on as

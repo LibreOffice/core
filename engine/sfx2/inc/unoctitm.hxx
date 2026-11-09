@@ -106,6 +106,7 @@ class SfxDispatchController_Impl final
 {
     css::util::URL              aDispatchURL;
     SfxDispatcher*              pDispatcher;
+    bool                        mbResendKitState = false;
     SfxBindings*                pBindings;
     const SfxPoolItem*          pLastState;
     SfxOfficeDispatch*          pDispatch;
@@ -132,6 +133,11 @@ public:
     static OUString getSlaveCommand( const css::util::URL& rURL );
 
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer const * pServ );
+    /// Whether a spreadsheet active in place in the view gives the state of the command to the
+    /// client instead of the view, which then keeps no state of its own.
+    bool                IsStateGivenByInPlace() const;
+    /// The next state change is sent to the client even if the state stays the same.
+    void                ResendKitState() { mbResendKitState = true; }
     virtual void        StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void                setMasterSlaveCommand( bool bSet );
     /// @throws cpo::uno::RuntimeException

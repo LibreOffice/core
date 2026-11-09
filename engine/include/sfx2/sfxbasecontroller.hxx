@@ -176,6 +176,7 @@ public:
 
 protected:
     void CopyKitViewCallbackFromFrameCreator();
+    SAL_DLLPRIVATE void ConnectInPlaceCalcKitViewCallback( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
 
 private:
     enum ConnectSfxFrame

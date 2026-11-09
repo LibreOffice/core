@@ -402,6 +402,24 @@ const LanguageTag& KitHelper::getLoadLanguage()
     return rLoadLanguage;
 }
 
+namespace
+{
+/// Gives the view of a spreadsheet that is active in place in the view the settings that the
+/// client gave the view, which the client does not know of the spreadsheet.
+void passSettingsToInPlaceSpreadsheet(const SfxViewShell& rViewShell)
+{
+    SfxViewShell* pCalcViewShell = KitCalcHelper(&rViewShell).GetCalcViewShell();
+    if (!pCalcViewShell)
+        return;
+    const bool bReadOnlyChanged
+        = pCalcViewShell->IsKitReadOnlyView() != rViewShell.IsKitReadOnlyView();
+    pCalcViewShell->TakeKitViewSettings(rViewShell);
+    // the commands that read-only disables change their states
+    if (bReadOnlyChanged)
+        pCalcViewShell->GetViewFrame().GetBindings().InvalidateAll(true);
+}
+}
+
 void KitHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
@@ -411,6 +429,7 @@ void KitHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
         bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
         if (bIsCurrShell)
             comphelper::COKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
+        passSettingsToInPlaceSpreadsheet(*pViewShell);
     }
 }
 
@@ -443,6 +462,7 @@ void KitHelper::setViewReadOnly(int nId, bool readOnly)
             if (!readOnly && pObjectShell && pObjectShell->Get_Impl()->m_bModifiedPending)
                 pObjectShell->SetModified(true);
         }
+        passSettingsToInPlaceSpreadsheet(*pViewShell);
     }
 }
 
@@ -452,6 +472,7 @@ void KitHelper::setAllowChangeComments(int nId, bool allow)
     {
         KIT_INFO("kit.readonlyview", "KitHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
         pViewShell->SetAllowChangeComments(allow);
+        passSettingsToInPlaceSpreadsheet(*pViewShell);
     }
 }
 
@@ -461,6 +482,7 @@ void KitHelper::setAllowManageRedlines(int nId, bool allow)
     {
         KIT_INFO("kit.readonlyview", "KitHelper::setAllowManageRedlines: view id: " << nId << ", allow: " << allow);
         pViewShell->SetAllowManageRedlines(allow);
+        passSettingsToInPlaceSpreadsheet(*pViewShell);
     }
 }
 
@@ -478,6 +500,7 @@ void KitHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
         pViewShell->SetKitLocale(rBcp47LanguageTag);
+        passSettingsToInPlaceSpreadsheet(*pViewShell);
         if (pViewShell->GetViewShellId() == ViewShellId(nId))
         {
             // sync also global getter if we are the current view
@@ -538,6 +561,7 @@ void KitHelper::setViewTimezone(int nId, bool isSet, const OUString& rTimezone)
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
         pViewShell->SetKitTimezone(isSet, rTimezone);
+        passSettingsToInPlaceSpreadsheet(*pViewShell);
     }
 }
 
@@ -649,6 +673,10 @@ void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackTyp
     if (!pThisView || DisableCallbacks::disabled())
         return;
 
+    // The other views know nothing of the sheet of a spreadsheet active in place.
+    if (KitCalcHelper::IsInPlaceView(*pThisView))
+        return;
+
     const OString aPayload = lcl_generateJSON(*pThisView, rFillPayload);
     const int nViewId = KitHelper::getView(*pThisView);
     forEachOtherView(pThisView, [&aPayload, nViewId, eType](const SfxViewShell* pOtherView) {
@@ -661,6 +689,10 @@ void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackTyp
 {
     assert(pThisView != nullptr && "pThisView must be valid");
     if (DisableCallbacks::disabled())
+        return;
+
+    // The other views know nothing of the sheet of a spreadsheet active in place.
+    if (KitCalcHelper::IsInPlaceView(*pThisView))
         return;
 
     // Cache the payload so we only have to generate it once, at most.
@@ -692,6 +724,10 @@ void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackTyp
 {
     assert(pThisView != nullptr && "pThisView must be valid");
     if (!pThisView || DisableCallbacks::disabled())
+        return;
+
+    // The other views know nothing of the sheet of a spreadsheet active in place.
+    if (KitCalcHelper::IsInPlaceView(*pThisView))
         return;
 
     // Cache the payload so we only have to generate it once, at most.
@@ -1336,6 +1372,10 @@ void KitHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView, C
     if (DisableCallbacks::disabled() || !pThisView)
         return;
 
+    // The other views know nothing of the sheet of a spreadsheet active in place.
+    if (KitCalcHelper::IsInPlaceView(*pThisView))
+        return;
+
     int viewId = KitHelper::getView(*pThisView);
     const ViewShellDocId nCurrentDocId = pThisView->GetDocId();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -1394,6 +1434,8 @@ namespace
         OUString maText;
         // Whether the mouse event can start or continue a drag-and-drop of the window's selection.
         bool mbKitDrag = false;
+        // Whether the window is of a spreadsheet active in place, whose view handles the event.
+        bool mbInPlaceCalc = false;
     };
 
     void KitPostAsyncEvent(void* pEv, void*)
@@ -1409,6 +1451,20 @@ namespace
             KitHelper::setView(pKitEv->mnView);
         }
 
+        // The view of a spreadsheet active in place is current only while it handles its event:
+        // the client knows the view of the container.
+        comphelper::ScopeGuard aRestoreView([nView, &pKitEv] {
+            if (!pKitEv->mbInPlaceCalc || nView < 0 || nView == pKitEv->mnView
+                || !KitHelper::getViewOfId(nView))
+                return;
+            // the states of the spreadsheet are given while its view is current, the event may
+            // have changed them; a move of the pointer changes none
+            SfxViewShell* pCalcViewShell = KitHelper::getViewOfId(pKitEv->mnView);
+            if (pCalcViewShell && pKitEv->mnEvent != VclEventId::WindowMouseMove)
+                pCalcViewShell->GetViewFrame().GetBindings().Update();
+            KitHelper::setView(nView);
+        });
+
         // The focus moves with keys and buttons only, so a pointer that passes over the window
         // leaves the focus where it is.
         const bool bMoveOnly = pKitEv->mnEvent == VclEventId::WindowMouseMove;
@@ -1419,7 +1475,10 @@ namespace
         }
 
         VclPtr<vcl::Window> pFocusWindow = pKitEv->mpWindow->GetFocusedWindow();
-        if (!pFocusWindow)
+        // The window of a spreadsheet active in place shares its frame with the container,
+        // whose window the frame may still take for the focused one.
+        if (!pFocusWindow
+            || (pKitEv->mbInPlaceCalc && !pKitEv->mpWindow->IsWindowOrChild(pFocusWindow, true)))
             pFocusWindow = pKitEv->mpWindow;
 
         if (pKitEv->mpWindow->isDisposed())
@@ -1509,7 +1568,14 @@ namespace
             return;
         }
 
-        pEvent->mnView = KitHelper::getCurrentView();
+        // A spreadsheet active in place handles its events in its own view.
+        if (const SfxViewShell* pCalcViewShell = KitCalcHelper::FindCalcViewShell(pEvent->mpWindow))
+        {
+            pEvent->mnView = KitHelper::getView(*pCalcViewShell);
+            pEvent->mbInPlaceCalc = true;
+        }
+        else
+            pEvent->mnView = KitHelper::getCurrentView();
         if (vcl::kit::isUnipoll())
         {
             if (!Application::IsMainThread())
@@ -1549,6 +1615,7 @@ void KitHelper::setBlockedCommandList(int nViewId, const char* blockedCommandLis
     if(pViewShell)
     {
         pViewShell->setBlockedCommandList(blockedCommandList);
+        passSettingsToInPlaceSpreadsheet(*pViewShell);
     }
 }
 
@@ -1651,11 +1718,18 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell,
         aMathHelper.postMouseEvent(eType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
         return true;
 
+    if (KitCalcHelper aCalcHelper(pViewShell);
+        aCalcHelper.postMouseEvent(eType, nX, nY, nCount, nButtons, nModifier))
+        return true;
+
     // check if the user hit a chart which is being edited by someone else
     // and, if so, skip current mouse event
     if (eType != COKitMouseEventType::MOVE)
     {
         if (KitChartHelper::HitAny({nX, nY}))
+            return true;
+        // the same for a spreadsheet that another view edits
+        if (pViewShell && KitCalcHelper::HitAny(*pViewShell, {nX, nY}))
             return true;
     }
 
@@ -1667,6 +1741,8 @@ VclPtr<vcl::Window> KitHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
     if (VclPtr<vcl::Window> pWindow = KitChartHelper(pViewShell).GetWindow())
         return pWindow;
     if (VclPtr<vcl::Window> pWindow = KitStarMathHelper(pViewShell).GetWidgetWindow())
+        return pWindow;
+    if (VclPtr<vcl::Window> pWindow = KitCalcHelper(pViewShell).GetWindow())
         return pWindow;
     return {};
 }

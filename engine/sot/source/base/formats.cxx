@@ -1548,4 +1548,14 @@ sal_uInt16 SotExchange::IsMath(  const SvGlobalName& rName )
     return nRet;
 }
 
+bool SotExchange::IsSpreadsheet( const SvGlobalName& rName )
+{
+    return rName == SvGlobalName( SO3_SC_CLASSID_60 )
+        || rName == SvGlobalName( SO3_SC_CLASSID_50 )
+        || rName == SvGlobalName( SO3_SC_CLASSID_40 )
+        || rName == SvGlobalName( SO3_SC_CLASSID_30 )
+        || rName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 )
+        || rName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

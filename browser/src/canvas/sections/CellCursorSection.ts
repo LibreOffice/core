@@ -64,10 +64,19 @@ class CellCursorSection extends CanvasSectionObject {
 		return defaultSizePos;
 	}
 
+	/// The rectangle of the cursor that is shown, or null when none is.
+	protected shownRectangle(): cool.SimpleRectangle | null {
+		if (!app.calc.cellCursorVisible) return null;
+		return (
+			app.calc.cellCursorRectangle ?? new cool.SimpleRectangle(0, 0, 0, 0)
+		).clone();
+	}
+
 	public onDraw() {
 		if (!this.sectionProperties.visualsReady) return;
 
-		if (app.calc.cellCursorVisible) {
+		const cursorRect = this.shownRectangle();
+		if (cursorRect) {
 			Util.ensureValue(app.activeDocument);
 
 			this.context.save();
@@ -78,8 +87,6 @@ class CellCursorSection extends CanvasSectionObject {
 			this.context.lineWidth = 1;
 
 			this.context.strokeStyle = this.sectionProperties.color;
-
-			const cursorRect: cool.SimpleRectangle = (app.calc.cellCursorRectangle?? new cool.SimpleRectangle(0, 0, 0, 0)).clone();
 
 			for (let i: number = 0; i < this.sectionProperties.weight; i++) {
 				// Slighyly modify rectangle in each cycle, for thickness.
@@ -102,5 +109,34 @@ class CellCursorSection extends CanvasSectionObject {
 
 			this.context.restore();
 		}
+	}
+}
+
+/*
+	The cell cursor of a spreadsheet active in place in another document. The engine reports it in
+	the coordinates of that document, and it shows only while the spreadsheet is active.
+*/
+class InPlaceCellCursorSection extends CellCursorSection {
+	private rectangle: cool.SimpleRectangle | null = null;
+
+	constructor(color: string, weight: number) {
+		super(color, weight, 0);
+	}
+
+	/// Takes the rectangle of the cursor, in twips, or null for no cursor.
+	public setRectangle(rectangle: cool.SimpleRectangle | null): void {
+		this.rectangle = rectangle;
+		// a section is drawn where it lies, so it lies on the cursor
+		if (rectangle) {
+			this.size[0] = rectangle.pWidth;
+			this.size[1] = rectangle.pHeight;
+			this.setPosition(rectangle.pX1, rectangle.pY1);
+		}
+		this.containerObject?.requestReDraw();
+	}
+
+	protected shownRectangle(): cool.SimpleRectangle | null {
+		if (!this.rectangle || !GraphicSelection.inPlaceCalc) return null;
+		return this.rectangle.clone();
 	}
 }

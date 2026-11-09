@@ -496,6 +496,16 @@ SfxStateCache* SfxBindings::GetStateCache
 }
 
 
+void SfxBindings::ResendKitStates()
+{
+    for (std::unique_ptr<SfxStateCache>& pCache : pImpl->pCaches)
+        pCache->ResendKitState();
+    // The shells that serve the commands are looked up again: while an object was active in
+    // place, the view served only the commands of the container.
+    InvalidateAll(true);
+    Update();
+}
+
 void SfxBindings::InvalidateAll
 (
     bool  bWithMsg  /* true   Mark Slot Server as invalid

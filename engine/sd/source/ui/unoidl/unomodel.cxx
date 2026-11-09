@@ -256,6 +256,12 @@
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <svx/VectorObjectContent.hxx>
+#include <svx/svdoole2.hxx>
+#include <Client.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <vcl/canvastools.hxx>
@@ -6105,6 +6111,43 @@ DrawViewShell* SdXImpressDocument::GetViewShell()
     return pViewSh;
 }
 
+namespace
+{
+/// Draws the embedded documents active in place on the page that draw their own content, as they
+/// are being edited, in every view of the document on that page. The tiles show the window of an
+/// object active in place as empty otherwise. rTile is the area of the tile, in 1/100 mm.
+void paintInPlaceContents(VirtualDevice& rDevice, const sd::DrawViewShell& rViewShell,
+                          const tools::Rectangle& rTile)
+{
+    const SfxViewShell* pThisView = rViewShell.GetViewShell();
+    if (!pThisView)
+        return;
+
+    drawinglayer::geometry::ViewInformation2D aViewInformation;
+    aViewInformation.setViewTransformation(rDevice.GetViewTransformation());
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor;
+    for (SfxViewShell* pView = SfxViewShell::GetFirst(); pView;
+         pView = SfxViewShell::GetNext(*pView))
+    {
+        if (pView->GetDocId() != pThisView->GetDocId() || pView->getPart() != pThisView->getPart())
+            continue;
+        const sd::Client* pClient = dynamic_cast<const sd::Client*>(pView->GetIPClient());
+        const SdrOle2Obj* pObject = pClient ? pClient->GetSdrOle2Obj() : nullptr;
+        // the content is built only for a tile that shows the object
+        if (!pObject || !pObject->GetCurrentBoundRect().Overlaps(rTile))
+            continue;
+        std::optional<drawinglayer::primitive2d::Primitive2DContainer> oContent
+            = svx::vector::inPlaceContentOf(*pObject);
+        if (!oContent)
+            continue;
+        if (!pProcessor)
+            pProcessor = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                rDevice, aViewInformation);
+        pProcessor->process(*oContent);
+    }
+}
+}
+
 void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
                             int nOutputWidth, int nOutputHeight,
                             int nTilePosX, int nTilePosY,
@@ -6179,6 +6222,11 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
 
     if (comphelper::COKit::isActive())
         pView->SetPaintTextEdit(true);
+
+    paintInPlaceContents(rDevice, *pViewSh,
+                         o3tl::convert(tools::Rectangle(Point(nTilePosX, nTilePosY),
+                                                        Size(nTileWidth, nTileHeight)),
+                                       o3tl::Length::twip, o3tl::Length::mm100));
 
     KitChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);

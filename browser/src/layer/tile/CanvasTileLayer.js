@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret DropCaretSection ClassicTableContext */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection InPlaceCellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret DropCaretSection ClassicTableContext */
 
 function clamp(num, min, max)
 {
@@ -802,10 +802,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			}
 		}
 		else if (textMsg.startsWith('cellselectionarea:')) {
-			this._onCellSelectionAreaMsg(textMsg);
+			// a spreadsheet active in place in another document shows its selection as text does
+			if (this.isCalc())
+				this._onCellSelectionAreaMsg(textMsg);
 		}
 		else if (textMsg.startsWith('cellautofillarea:')) {
-			this._onCellAutoFillAreaMsg(textMsg);
+			if (this.isCalc())
+				this._onCellAutoFillAreaMsg(textMsg);
 		}
 		else if (textMsg.startsWith('complexselection:')) {
 			if (this._map._clip)
@@ -1709,7 +1712,36 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			cellfillMarkerSection.calculatePositionViaCellCursor(null);
 	},
 
+	// The cell cursor of a spreadsheet active in place in another document, in the coordinates
+	// of that document.
+	_onInPlaceCellCursorMsg: function (textMsg) {
+		let rectangle = null;
+		if (!textMsg.match('EMPTY')) {
+			// an object can reach past the left or upper edge of a slide
+			const strTwips = textMsg.match(/-?\d+/g);
+			if (strTwips && strTwips.length >= 4)
+				rectangle = new cool.SimpleRectangle(parseInt(strTwips[0]), parseInt(strTwips[1]),
+					parseInt(strTwips[2]), parseInt(strTwips[3]));
+		}
+
+		if (!this._inPlaceCellCursorSection) {
+			if (!rectangle)
+				return;
+			const cursorStyle = new CStyleData(this._cursorDataDiv);
+			const weight = cursorStyle.getFloatPropWithoutUnit('border-top-width') * app.dpiScale;
+			const color = cursorStyle.getPropValue('border-top-color');
+			this._inPlaceCellCursorSection = new InPlaceCellCursorSection(color, weight);
+			app.sectionContainer.addSection(this._inPlaceCellCursorSection);
+		}
+		this._inPlaceCellCursorSection.setRectangle(rectangle);
+	},
+
 	_onCellCursorMsg: function (textMsg) {
+		if (!this.isCalc()) {
+			this._onInPlaceCellCursorMsg(textMsg);
+			return;
+		}
+
 		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 
 		var oldCursorAddress = app.calc.cellAddress.clone();

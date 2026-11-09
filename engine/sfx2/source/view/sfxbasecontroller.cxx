@@ -38,10 +38,14 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/kit/callback.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/kit/unocommandlist.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
@@ -62,6 +66,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 #include <tools/svborder.hxx>
@@ -359,6 +364,8 @@ struct IMPL_SfxBaseController_DataContainer
     bool                                    m_bSuspendState         ;
     rtl::Reference< ::framework::TitleHelper > m_xTitleHelper          ;
     Sequence< PropertyValue >               m_aCreationArgs         ;
+    /// The callback of the view while its spreadsheet is active in place in another document.
+    std::unique_ptr< CoKitCallbackInterface > m_pInPlaceKitCallback ;
 
     IMPL_SfxBaseController_DataContainer(   ::osl::Mutex&              aMutex      ,
                                             SfxViewShell*       pViewShell  ,
@@ -524,6 +531,7 @@ void SfxBaseController::attachFrame( const Reference< frame::XFrame >& xFrame )
     if ( m_pData->m_pViewShell )
     {
         ConnectSfxFrame_Impl( E_CONNECT );
+        ConnectInPlaceCalcKitViewCallback( xFrame );
 
         // attaching the frame to the controller is the last step in the creation of a new view, so notify this
         SfxViewEventHint aHint( SfxEventHintId::ViewCreated, GlobalEventConfig::GetEventName( GlobalEventId::VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), Reference< frame::XController2 >( this ) );
@@ -863,6 +871,11 @@ void SfxBaseController::dispose()
     if ( !m_pData->m_pViewShell )
         return;
 
+    if ( m_pData->m_pInPlaceKitCallback
+         && m_pData->m_pViewShell->getCOKitViewCallback() == m_pData->m_pInPlaceKitCallback.get() )
+        m_pData->m_pViewShell->setCOKitViewCallback( nullptr );
+    m_pData->m_pInPlaceKitCallback.reset();
+
     SfxViewFrame& rFrame = m_pData->m_pViewShell->GetViewFrame() ;
     if (rFrame.GetViewShell() == m_pData->m_pViewShell )
         rFrame.GetFrame().SetIsClosing_Impl();
@@ -947,6 +960,34 @@ void SfxBaseController::ReleaseShell_Impl()
 
     Reference < frame::XFrame > aXFrame;
     attachFrame( aXFrame );
+}
+
+void SfxBaseController::ConnectInPlaceCalcKitViewCallback( const Reference< frame::XFrame >& xFrame )
+{
+    // A spreadsheet that is active in place in a text document, a presentation or a drawing
+    // reports to the client of that document, in its coordinates, and has the settings that the
+    // client gave the view of that document.
+    if ( !comphelper::COKit::isActive() || m_pData->m_pViewShell->getCOKitViewCallback() )
+        return;
+    Reference< frame::XFrame > xCreator( xFrame->getCreator() );
+    SfxViewShell* pContainer = xCreator ? SfxViewShell::Get( xCreator->getController() ) : nullptr;
+    if ( !pContainer || !pContainer->getCOKitViewCallback() )
+        return;
+    Reference< lang::XServiceInfo > xModel( getModel(), uno::UNO_QUERY );
+    if ( !xModel || !xModel->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
+        return;
+    Reference< lang::XServiceInfo > xContainerModel( xCreator->getController()->getModel(),
+                                                     uno::UNO_QUERY );
+    if ( !xContainerModel
+         || xContainerModel->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
+        return;
+
+    SfxViewShell& rViewShell = *m_pData->m_pViewShell;
+    rViewShell.TakeKitViewSettings( *pContainer );
+    m_pData->m_pInPlaceKitCallback = KitCalcHelper::CreateViewCallback( rViewShell, xFrame );
+    rViewShell.setCOKitViewCallback( m_pData->m_pInPlaceKitCallback.get() );
+    // the client shows the commands of the spreadsheet while it is active, with their states
+    InitializeKitStatusUpdates( rViewShell.GetViewFrame() );
 }
 
 void SfxBaseController::CopyKitViewCallbackFromFrameCreator()

@@ -99,6 +99,8 @@ public:
     int m_nSlideLinksChanged = 0;
     /// The last clicked hyperlink this view was sent.
     OString m_aHyperlinkClicked;
+    /// Every callback this view was sent, with its payload, in the order they arrived.
+    std::vector<std::pair<COKitCallbackType, OString>> m_aCallbacks;
     TestKitCallbackWrapper m_callbackWrapper;
     bool invalidatedAll;
     int editModeOfInvalidation;

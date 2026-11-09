@@ -12,6 +12,8 @@
 #pragma once
 
 #include <address.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <tools/color.hxx>
 #include <scdllapi.h>
 #include <cpo/uno/Reference.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
@@ -50,6 +52,29 @@ namespace sc
 class ChartModifyListener;
 class SheetListener;
 struct CellPrimitiveLayers;
+
+/// The text a view types into a cell, with the cells it covers and the fill behind it.
+struct CellEditContent
+{
+    SCCOL mnStartColumn;
+    SCROW mnStartRow;
+    SCCOL mnEndColumn;
+    SCROW mnEndRow;
+    /// The text, in twips from the upper left corner of the start cell.
+    drawinglayer::primitive2d::Primitive2DContainer maContent;
+    Color maBackground;
+};
+
+/// The text rViewShell types into a cell of the sheet nTab, if it edits one there.
+std::optional<CellEditContent> cellEditContentOf(ScTabViewShell& rViewShell, SCTAB nTab);
+
+/** The content of the area of the sheet an embedded spreadsheet shows, for the container to draw
+    while the spreadsheet is active in place: the page, the grid, the cells and the text a view
+    types into one, in twips from the upper left corner of the area. rSize is set to the size of
+    the area, in twips.
+ */
+drawinglayer::primitive2d::Primitive2DContainer inPlaceContentOf(ScDocShell& rDocShell,
+                                                                 Size& rSize);
 
 /** The content of the sheets of one document as JSON primitives, for clients that draw it
     themselves.

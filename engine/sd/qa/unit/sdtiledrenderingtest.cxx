@@ -228,6 +228,7 @@ void SdTestViewCallback::callback(COKitCallbackType eType, const char* pPayload,
 
 void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
+    m_aCallbacks.emplace_back(eType, OString(pPayload));
     switch (eType)
     {
         case COKitCallbackType::INVALIDATE_TILES:

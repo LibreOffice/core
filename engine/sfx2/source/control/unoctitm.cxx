@@ -53,7 +53,9 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <sfx2/bindings.hxx>
+#include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
@@ -70,6 +72,7 @@
 #include <sal/log.hxx>
 #include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -800,6 +803,28 @@ void SfxDispatchController_Impl::sendStatusChanged(const OUString& rURL, const c
     pDispatch->sendStatusChanged(rURL, rEvent);
 }
 
+namespace
+{
+/// Whether a spreadsheet active in place in the view of the frame gives the state of the command
+/// to the client: the commands go to the spreadsheet while it is active, except the ones of the
+/// document as a whole.
+bool stateGivenByInPlaceSpreadsheet(SfxViewFrame& rViewFrame, std::u16string_view rCommand)
+{
+    if (!comphelper::COKit::isActive() || !KitCalcHelper::AnyInPlaceView()
+        || rCommand == u"ModifiedStatus" || rCommand == u"Save")
+        return false;
+    const SfxViewShell* pViewShell = rViewFrame.GetViewShell();
+    return pViewShell && pViewShell->GetIPClient()
+           && KitCalcHelper(pViewShell).GetCalcViewShell() != nullptr;
+}
+}
+
+bool SfxDispatchController_Impl::IsStateGivenByInPlace() const
+{
+    return pDispatcher && pDispatcher->GetFrame()
+           && stateGivenByInPlaceSpreadsheet(*pDispatcher->GetFrame(), aDispatchURL.Path);
+}
+
 void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer const * pSlotServ )
 {
     if ( !pDispatch )
@@ -829,6 +854,12 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         if ( pLastState && !IsInvalidItem( pLastState ) )
             delete pLastState;
         pLastState = pState;
+    }
+
+    if (mbResendKitState)
+    {
+        mbResendKitState = false;
+        bNotify = true;
     }
 
     if (!bNotify)
@@ -871,7 +902,9 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     aEvent.Requery = false;
     aEvent.State = std::move(aState);
 
-    if (pDispatcher && pDispatcher->GetFrame())
+    // The view keeps following the states that a spreadsheet active in place gives, but does not
+    // send them; it sends all its states again once the spreadsheet is left.
+    if (pDispatcher && pDispatcher->GetFrame() && !IsStateGivenByInPlace())
     {
         InterceptKitStateChangeEvent(nSID, pDispatcher->GetFrame(), aEvent, pState);
     }
@@ -1535,6 +1568,25 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"RunMacro", { PayloadType::None, true } },
     };
     return aUnoCommandList;
+}
+
+void InitializeKitStatusUpdates(SfxViewFrame& rViewFrame)
+{
+    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(&rViewFrame);
+    Reference<XURLTransformer> xParser(
+        URLTransformer::create(comphelper::getProcessComponentContext()));
+    util::URL aCommandURL;
+    for (const auto& rUnoCommand : GetKitUnoCommandList())
+    {
+        if (!rUnoCommand.second.initializeForStatusUpdates)
+            continue;
+        aCommandURL.Complete = u".uno:"_ustr + rUnoCommand.first;
+        xParser->parseStrict(aCommandURL);
+        // a command that the document does not have, as Calc has no .uno:DefaultBullet, has no
+        // slot
+        if (const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path))
+            rViewFrame.GetBindings().GetDispatch(pSlot, aCommandURL, false);
+    }
 }
 
 static void InterceptKitStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)

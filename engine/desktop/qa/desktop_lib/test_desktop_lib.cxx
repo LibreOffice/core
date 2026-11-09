@@ -23,6 +23,8 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -278,6 +280,8 @@ public:
     void testPaintTileOmitInvalidate();
     void testCreateViewOmitInvalidate();
     void testInput();
+    void testInputInPlaceSpreadsheet();
+    void testCommandInPlaceSpreadsheet();
     void testRedlineWriter();
     void testRedlineCalc();
     void testPaintPartTile();
@@ -408,6 +412,8 @@ public:
     CPPUNIT_TEST(testPaintTileOmitInvalidate);
     CPPUNIT_TEST(testCreateViewOmitInvalidate);
     CPPUNIT_TEST(testInput);
+    CPPUNIT_TEST(testInputInPlaceSpreadsheet);
+    CPPUNIT_TEST(testCommandInPlaceSpreadsheet);
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
@@ -2923,6 +2929,8 @@ public:
     bool m_bZeroCursor;
     bool m_stateBold;
     tools::Rectangle m_aOwnCursor;
+    /// The character offset of the own cursor in its paragraph, -1 before any.
+    int m_nOwnCursorIndex = -1;
     boost::property_tree::ptree m_aCommentCallbackResult;
     int m_nComments = 0;
     int m_nDocSizeChanged = 0;
@@ -2980,6 +2988,7 @@ public:
 
             if (aRectangle == "EMPTY")
                 return;
+            m_nOwnCursorIndex = aTree.get<int>("index", -1);
             cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRectangle));
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
@@ -3128,6 +3137,76 @@ public:
     }
 };
 
+}
+
+void DesktopKitTest::testInputInPlaceSpreadsheet()
+{
+    // Given a slide with a spreadsheet active in place, its B2 at (3037, 2473) twips on the slide,
+    // with 777 typed into B2:
+    COKitDocumentImpl* pDocument = loadDocUrl(
+        m_directories.getURLFromSrc(u"sd/qa/unit/tiledrendering/data/embedded-spreadsheet.odp"),
+        COKitDocumentType::PRESENTATION);
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+    const int nX = 3037;
+    const int nY = 2473;
+    for (int nCount : { 1, 2, 1 })
+    {
+        pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, nCount, MOUSE_LEFT, 0);
+        pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, nCount, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+    for (char c : { '7', '7', '7' })
+    {
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, c, 0);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, c, 0);
+    }
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(3, aView.m_nOwnCursorIndex);
+
+    // When the last character is taken away, as the client does for backspace:
+    pDocument->removeTextContext(0, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the cursor is after the second character. Without the fix, the spreadsheet did not
+    // take the backspace, and the cell kept its three characters.
+    CPPUNIT_ASSERT_EQUAL(2, aView.m_nOwnCursorIndex);
+}
+
+void DesktopKitTest::testCommandInPlaceSpreadsheet()
+{
+    // Given a slide with a spreadsheet active in place, its B2 at (3037, 2473) twips on the slide,
+    // with the cell cursor on B2:
+    COKitDocumentImpl* pDocument = loadDocUrl(
+        m_directories.getURLFromSrc(u"sd/qa/unit/tiledrendering/data/embedded-spreadsheet.odp"),
+        COKitDocumentType::PRESENTATION);
+    // the states of the commands are sent, as for a client
+    pDocument->initializeForRendering("{}");
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+    for (int nCount : { 1, 2, 1 })
+    {
+        pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 3037, 2473, nCount, MOUSE_LEFT,
+                                  0);
+        pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 3037, 2473, nCount, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+    aView.m_stateBold = false;
+
+    // When the client asks for bold:
+    pDocument->postUnoCommand(".uno:Bold", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the cell is bold, and the spreadsheet says so. Without the fix, the command went to the
+    // slide, which has no text selected to make bold.
+    CPPUNIT_ASSERT(aView.m_stateBold);
+
+    // And once the spreadsheet is left by a press on the slide below it, the slide gives the state
+    // again, though its own did not change while the spreadsheet was active.
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 8000, 8300, 1, MOUSE_LEFT, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 8000, 8300, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView.m_stateBold);
 }
 
 void DesktopKitTest::testPaintPartTile()

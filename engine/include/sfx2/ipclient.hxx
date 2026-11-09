@@ -55,6 +55,9 @@ friend class SfxInPlaceClient_Impl;
     SAL_DLLPRIVATE virtual void ViewChanged();
 
 public:
+    // the content that the object active in place draws changed, while its size stayed the same
+    virtual void        ObjectContentChanged();
+
                         SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect );
     virtual             ~SfxInPlaceClient();
 

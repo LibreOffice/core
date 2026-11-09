@@ -291,6 +291,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/view/frame2 \
     sfx2/source/view/frmload \
     sfx2/source/view/ipclient \
+    sfx2/source/kit/calchelper \
     sfx2/source/kit/charthelper \
     sfx2/source/kit/starmathhelper \
     sfx2/source/view/kithelper \

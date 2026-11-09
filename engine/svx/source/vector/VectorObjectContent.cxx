@@ -17,6 +17,7 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -31,6 +32,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
@@ -1041,6 +1043,40 @@ sal_uInt64 idOf(const SdrObject& rObject)
     return partIdsOf(rObject.getSdrPageFromSdrObject())[aName].getID();
 }
 
+std::optional<drawinglayer::primitive2d::Primitive2DContainer>
+inPlaceContentOf(const SdrObject& rObject)
+{
+    const SdrOle2Obj* pObject = dynamic_cast<const SdrOle2Obj*>(&rObject);
+    if (!pObject || pObject->IsChart() || !activeInPlace(*pObject))
+        return std::nullopt;
+    const cpo::uno::Reference<css::frame::XModel> xModel(pObject->getXModel());
+    InPlaceContent* pDocument = dynamic_cast<InPlaceContent*>(xModel.get());
+    if (!pDocument)
+        return std::nullopt;
+
+    Size aSize;
+    drawinglayer::primitive2d::Primitive2DContainer aContent(
+        pDocument->createInPlaceContent(aSize));
+    if (aSize.IsEmpty())
+        return std::nullopt;
+
+    tools::Rectangle aWindow(pObject->GetLogicRect());
+    aWindow.SetPos(pObject->GetSnapRect().Center()
+                   - Point(aWindow.GetWidth() / 2, aWindow.GetHeight() / 2));
+    basegfx::B2DHomMatrix aMapping(basegfx::utils::createScaleB2DHomMatrix(
+        double(aWindow.GetWidth()) / aSize.Width(), double(aWindow.GetHeight()) / aSize.Height()));
+    aMapping = basegfx::utils::createTranslateB2DHomMatrix(aWindow.Left(), aWindow.Top())
+               * aMapping;
+    const basegfx::B2DPolyPolygon aClip(basegfx::utils::createPolygonFromRect(
+        vcl::unotools::b2DRectangleFromRectangle(aWindow)));
+    return drawinglayer::primitive2d::Primitive2DContainer{
+        new drawinglayer::primitive2d::MaskPrimitive2D(
+            aClip, drawinglayer::primitive2d::Primitive2DContainer{
+                       new drawinglayer::primitive2d::TransformPrimitive2D(
+                           aMapping, std::move(aContent)) })
+    };
+}
+
 const SdrObjList* membersOf(const SdrObject& rObject)
 {
     if (DynCastE3dScene(&rObject))
@@ -1148,7 +1184,13 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     {
         if (rContent.maPrimitives.empty())
         {
-            rObject.GetViewContact().getViewIndependentPrimitive2DContainer(rContent.maPrimitives);
+            // an embedded document active in place shows itself as it is being edited
+            if (std::optional<drawinglayer::primitive2d::Primitive2DContainer> oInPlace
+                = inPlaceContentOf(rObject))
+                rContent.maPrimitives = std::move(*oInPlace);
+            else
+                rObject.GetViewContact().getViewIndependentPrimitive2DContainer(
+                    rContent.maPrimitives);
 
             // an object of a chart active in place is drawn where the chart's window is
             if (const Embedding* pEmbedding = embeddingOf(rObject);

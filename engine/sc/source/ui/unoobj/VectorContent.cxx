@@ -46,7 +46,11 @@
 #include <cppuhelper/implbase.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <editeng/StripPortionsHelper.hxx>
 #include <editeng/editeng.hxx>
@@ -1609,9 +1613,205 @@ bool VectorContent::anyShapeTextEditOn(SCTAB nTab) const
     return false;
 }
 
+std::optional<CellEditContent> cellEditContentOf(ScTabViewShell& rViewShell, SCTAB nTab)
+{
+    ScViewData& rViewData = rViewShell.GetViewData();
+    ScDocument& rDocument = rViewData.GetDocument();
+    const ScSplitPos eWhich = rViewData.GetEditActivePart();
+    if (!rViewData.HasEditView(eWhich) || rViewData.GetRefTabNo() != nTab)
+        return {};
+    EditView* pEditView = rViewData.GetEditView(eWhich);
+    ScGridWindow* pWindow = rViewData.GetActiveWin();
+    if (!pEditView || !pWindow)
+        return {};
+
+    const SCCOL nStartColumn = rViewData.GetEditStartCol();
+    const SCROW nStartRow = rViewData.GetEditStartRow();
+    const SCCOL nEndColumn = rViewData.GetEditEndCol();
+    const SCROW nEndRow = rViewData.GetEditEndRow();
+
+    TextHierarchyBreakup aHelper;
+    pEditView->getEditEngine().StripPortions(aHelper);
+    primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
+
+    // The edit view lays out in 1/100 mm, the logic units of its window, and its output
+    // area is in the logic mode with the origin at zero. Placing the text at the output
+    // area relative to the cell corner keeps it in the cell however cells are rounded.
+    const MapMode& rLogicMode = rViewData.GetLogicMode();
+    const Point aCellPixel = rViewData.GetScrPos(nStartColumn, nStartRow, eWhich, true);
+    const Point aCellLogic = pWindow->PixelToLogic(aCellPixel, rLogicMode);
+    const tools::Rectangle aOutputArea = pEditView->GetOutputArea();
+    const tools::Rectangle aVisibleArea = pEditView->GetVisArea();
+    const double fOffsetX = aOutputArea.Left() - aCellLogic.X() - aVisibleArea.Left();
+    const double fOffsetY = aOutputArea.Top() - aCellLogic.Y() - aVisibleArea.Top();
+
+    primitive2d::Primitive2DContainer aPlaced;
+    if (!aContent.empty())
+    {
+        basegfx::B2DHomMatrix aTransform
+            = basegfx::utils::createTranslateB2DHomMatrix(fOffsetX, fOffsetY);
+        aTransform *= basegfx::utils::createScaleB2DHomMatrix(constTwipsPerMm100,
+                                                              constTwipsPerMm100);
+        aPlaced.push_back(
+            new primitive2d::TransformPrimitive2D(aTransform, std::move(aContent)));
+    }
+
+    Color aBackground = rDocument.GetCellBackgroundColor(nStartColumn, nStartRow, nTab);
+    if (aBackground.IsTransparent())
+        aBackground = rViewShell.GetViewRenderingData().GetDocColor();
+
+    return CellEditContent{ nStartColumn, nStartRow, nEndColumn, nEndRow, std::move(aPlaced),
+                        aBackground };
+}
+
+primitive2d::Primitive2DContainer inPlaceContentOf(ScDocShell& rDocShell, Size& rSize)
+{
+    rSize = Size();
+    ScDocument& rDocument = rDocShell.GetDocument();
+    const tools::Rectangle aVisArea = rDocShell.GetVisArea(ASPECT_CONTENT);
+    if (aVisArea.IsEmpty())
+        return primitive2d::Primitive2DContainer();
+
+    const SCTAB nTab = rDocument.GetVisibleTab();
+    const ScRange aRange = rDocument.GetRange(nTab, aVisArea);
+    const SCCOL nStartColumn = aRange.aStart.Col();
+    const SCROW nStartRow = aRange.aStart.Row();
+    const SCCOL nEndColumn = aRange.aEnd.Col();
+    const SCROW nEndRow = aRange.aEnd.Row();
+
+    // The document snaps its visible area to the corners of cells. Where it does not, the cells
+    // move by the rest.
+    const tools::Rectangle aStartCell
+        = rDocument.GetMMRect(nStartColumn, nStartRow, nStartColumn, nStartRow, nTab);
+    const double fShiftX = (aVisArea.Left() - aStartCell.Left()) * constTwipsPerMm100;
+    const double fShiftY = (aVisArea.Top() - aStartCell.Top()) * constTwipsPerMm100;
+    rSize = Size(std::round(aVisArea.GetWidth() * constTwipsPerMm100),
+                 std::round(aVisArea.GetHeight() * constTwipsPerMm100));
+
+    // The text a view types into a cell shows in place of the cell.
+    std::optional<CellEditContent> oEdit;
+    for (SfxViewShell* pShell = SfxViewShell::GetFirst(false); pShell && !oEdit;
+         pShell = SfxViewShell::GetNext(*pShell, false))
+    {
+        if (pShell->GetObjectShell() != &rDocShell)
+            continue;
+        if (ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pShell))
+            oEdit = cellEditContentOf(*pTabViewShell, nTab);
+    }
+
+    const ScViewOptions& rOptions = rDocument.GetViewOptions();
+    const svtools::ColorConfig& rColors = ScModule::get()->GetColorConfig();
+    CellPrimitiveSettings aSettings;
+    aSettings.mbShowFormulas = rOptions.GetOption(sc::ViewOption::FORMULAS);
+    aSettings.mbShowNullValues = rOptions.GetOption(sc::ViewOption::NULLVALS);
+    aSettings.mbFormulaMarks = rOptions.GetOption(sc::ViewOption::FORMULAS_MARKS);
+    aSettings.mbFormulaErrorMarks = true;
+    aSettings.mbClipMarks = rColors.GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible;
+    aSettings.mbButtons = true;
+    // Text that overflows from a cell left of the area is seen in it.
+    aSettings.mbTextFromOutside = true;
+    // The container draws the content as it is, so the colors are chosen here.
+    aSettings.mbAutomaticColors = false;
+    aSettings.mfPixelSize = constPixelTwips;
+    aSettings.maDocumentColor = rColors.GetColorValue(svtools::DOCCOLOR).nColor;
+    aSettings.maFontColor = rColors.GetColorValue(svtools::FONTCOLOR).nColor;
+    aSettings.maClipMarkColor = rColors.GetColorValue(svtools::CALCTEXTOVERFLOW).nColor;
+    if (oEdit)
+        aSettings.moSkipCell = ScAddress(oEdit->mnStartColumn, oEdit->mnStartRow, nTab);
+    const Color aDocumentColor = aSettings.maDocumentColor;
+
+    const CellGeometry aGeometry(rDocument, nTab, nStartColumn, nStartRow);
+    CellPrimitiveBuilder aBuilder(rDocument, nTab, aGeometry, std::move(aSettings));
+    CellPrimitiveLayers aLayers = aBuilder.build(nStartColumn, nStartRow, nEndColumn, nEndRow);
+    const basegfx::B2DRange aCells
+        = aGeometry.getRange(nStartColumn, nStartRow, nEndColumn, nEndRow);
+
+    // The drawing objects of the sheet are in 1/100 mm from its corner, the cells in twips from the
+    // start cell.
+    const basegfx::B2DHomMatrix aObjectMapping
+        = basegfx::utils::createScaleB2DHomMatrix(constTwipsPerMm100, constTwipsPerMm100)
+          * basegfx::utils::createTranslateB2DHomMatrix(-aStartCell.Left(), -aStartCell.Top());
+    primitive2d::Primitive2DContainer aBackObjects;
+    primitive2d::Primitive2DContainer aFrontObjects;
+    if (ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer())
+    {
+        if (SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab)))
+        {
+            for (const rtl::Reference<SdrObject>& pObject : *pPage)
+            {
+                const SdrLayerID nLayer = pObject->GetLayer();
+                if (nLayer == SC_LAYER_HIDDEN || nLayer == SC_LAYER_INTERN
+                    || !pObject->IsVisible())
+                    continue;
+                primitive2d::Primitive2DContainer aObject;
+                pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aObject);
+                (nLayer == SC_LAYER_BACK ? aBackObjects : aFrontObjects).append(std::move(aObject));
+            }
+        }
+    }
+
+    primitive2d::Primitive2DContainer aContent;
+    // The page behind the cells, as the sheet shows it while it is edited.
+    aContent.push_back(new primitive2d::PolyPolygonColorPrimitive2D(
+        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
+            basegfx::B2DRange(fShiftX, fShiftY, fShiftX + rSize.Width(),
+                              fShiftY + rSize.Height()))),
+        aDocumentColor.getBColor()));
+    if (!aBackObjects.empty())
+        aContent.push_back(
+            new primitive2d::TransformPrimitive2D(aObjectMapping, std::move(aBackObjects)));
+    // The grid goes under the fills of the cells, which hide it.
+    if (rOptions.GetOption(sc::ViewOption::GRID))
+    {
+        const basegfx::BColor aGridColor = rOptions.GetGridColor().getBColor();
+        basegfx::B2DPolyPolygon aGrid;
+        for (SCCOL nColumn = nStartColumn; nColumn <= nEndColumn + 1; ++nColumn)
+        {
+            const double fX = aGeometry.getColumnStart(nColumn);
+            basegfx::B2DPolygon aLine;
+            aLine.append(basegfx::B2DPoint(fX, aCells.getMinY()));
+            aLine.append(basegfx::B2DPoint(fX, aCells.getMaxY()));
+            aGrid.append(aLine);
+        }
+        for (SCROW nRow = nStartRow; nRow <= nEndRow + 1; ++nRow)
+        {
+            const double fY = aGeometry.getRowStart(nRow);
+            basegfx::B2DPolygon aLine;
+            aLine.append(basegfx::B2DPoint(aCells.getMinX(), fY));
+            aLine.append(basegfx::B2DPoint(aCells.getMaxX(), fY));
+            aGrid.append(aLine);
+        }
+        aContent.push_back(
+            new primitive2d::PolyPolygonHairlinePrimitive2D(std::move(aGrid), aGridColor));
+    }
+    aContent.append(std::move(aLayers.maBackground));
+    aContent.append(std::move(aLayers.maBorders));
+    aContent.append(std::move(aLayers.maText));
+    aContent.append(std::move(aLayers.maExtras));
+    aContent.append(std::move(aLayers.maMarks));
+    if (!aFrontObjects.empty())
+        aContent.push_back(
+            new primitive2d::TransformPrimitive2D(aObjectMapping, std::move(aFrontObjects)));
+    if (oEdit)
+    {
+        const basegfx::B2DRange aEditCells = aGeometry.getRange(
+            oEdit->mnStartColumn, oEdit->mnStartRow, oEdit->mnEndColumn, oEdit->mnEndRow);
+        aContent.push_back(new primitive2d::PolyPolygonColorPrimitive2D(
+            basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aEditCells)),
+            oEdit->maBackground.getBColor()));
+        aContent.push_back(new primitive2d::TransformPrimitive2D(
+            basegfx::utils::createTranslateB2DHomMatrix(aEditCells.getMinX(),
+                                                        aEditCells.getMinY()),
+            std::move(oEdit->maContent)));
+    }
+
+    // The upper left corner of the visible area is the origin.
+    return primitive2d::Primitive2DContainer{ new primitive2d::TransformPrimitive2D(
+        basegfx::utils::createTranslateB2DHomMatrix(-fShiftX, -fShiftY), std::move(aContent)) };
+}
+
 OString VectorContent::writeTextEdits(SCTAB nTab)
 {
-    ScDocument& rDocument = mrDocShell.GetDocument();
     tools::JsonWriter aWriter;
     {
         auto aArray = aWriter.startArray("edits");
@@ -1640,58 +1840,19 @@ OString VectorContent::writeTextEdits(SCTAB nTab)
                 continue;
             }
 
-            ScViewData& rViewData = pTabViewShell->GetViewData();
-            const ScSplitPos eWhich = rViewData.GetEditActivePart();
-            if (!rViewData.HasEditView(eWhich) || rViewData.GetRefTabNo() != nTab)
+            std::optional<CellEditContent> oEdit = cellEditContentOf(*pTabViewShell, nTab);
+            if (!oEdit)
                 continue;
-            EditView* pEditView = rViewData.GetEditView(eWhich);
-            ScGridWindow* pWindow = rViewData.GetActiveWin();
-            if (!pEditView || !pWindow)
-                continue;
-
-            const SCCOL nStartColumn = rViewData.GetEditStartCol();
-            const SCROW nStartRow = rViewData.GetEditStartRow();
-            const SCCOL nEndColumn = rViewData.GetEditEndCol();
-            const SCROW nEndRow = rViewData.GetEditEndRow();
-
-            TextHierarchyBreakup aHelper;
-            pEditView->getEditEngine().StripPortions(aHelper);
-            primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
-
-            // The edit view lays out in 1/100 mm, the logic units of its window, and its output
-            // area is in the logic mode with the origin at zero. Placing the text at the output
-            // area relative to the cell corner keeps it in the cell however cells are rounded.
-            const MapMode& rLogicMode = rViewData.GetLogicMode();
-            const Point aCellPixel = rViewData.GetScrPos(nStartColumn, nStartRow, eWhich, true);
-            const Point aCellLogic = pWindow->PixelToLogic(aCellPixel, rLogicMode);
-            const tools::Rectangle aOutputArea = pEditView->GetOutputArea();
-            const tools::Rectangle aVisibleArea = pEditView->GetVisArea();
-            const double fOffsetX = aOutputArea.Left() - aCellLogic.X() - aVisibleArea.Left();
-            const double fOffsetY = aOutputArea.Top() - aCellLogic.Y() - aVisibleArea.Top();
-
-            primitive2d::Primitive2DContainer aPlaced;
-            if (!aContent.empty())
-            {
-                basegfx::B2DHomMatrix aTransform
-                    = basegfx::utils::createTranslateB2DHomMatrix(fOffsetX, fOffsetY);
-                aTransform *= basegfx::utils::createScaleB2DHomMatrix(constTwipsPerMm100,
-                                                                      constTwipsPerMm100);
-                aPlaced.push_back(
-                    new primitive2d::TransformPrimitive2D(aTransform, std::move(aContent)));
-            }
-
-            Color aBackground = rDocument.GetCellBackgroundColor(nStartColumn, nStartRow, nTab);
-            if (aBackground.IsTransparent())
-                aBackground = pTabViewShell->GetViewRenderingData().GetDocColor();
+            const primitive2d::Primitive2DContainer& aPlaced = oEdit->maContent;
 
             auto aEntry = aWriter.startStruct();
             aWriter.put("kind", "texteditoverlay");
             aWriter.put("viewId", sal_Int32(pShell->GetViewShellId().get()));
-            aWriter.put("column", sal_Int32(nStartColumn));
-            aWriter.put("row", sal_Int32(nStartRow));
-            aWriter.put("endColumn", sal_Int32(nEndColumn));
-            aWriter.put("endRow", sal_Int32(nEndRow));
-            aWriter.put("background", colorToHex(aBackground));
+            aWriter.put("column", sal_Int32(oEdit->mnStartColumn));
+            aWriter.put("row", sal_Int32(oEdit->mnStartRow));
+            aWriter.put("endColumn", sal_Int32(oEdit->mnEndColumn));
+            aWriter.put("endRow", sal_Int32(oEdit->mnEndRow));
+            aWriter.put("background", colorToHex(oEdit->maBackground));
 
             Primitive2dJsonProcessor aProcessor(aWriter);
             aProcessor.setScaleFactor(1.0);

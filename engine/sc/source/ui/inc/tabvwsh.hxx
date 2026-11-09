@@ -495,6 +495,8 @@ public:
     void afterCallbackRegistered() override;
     /// See SfxViewShell::textEditContentChanged().
     void textEditContentChanged() override;
+    /// See SfxViewShell::getKitPayload().
+    std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const override;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     /// See SfxViewShell::GetColorConfigColor().

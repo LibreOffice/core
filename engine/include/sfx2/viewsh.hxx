@@ -618,6 +618,10 @@ public:
 
     // Blocked Command view settings
     void setBlockedCommandList(const char* blockedCommandList);
+    /// Takes the settings that a COKit client gives a view from rViewShell: the language, the
+    /// locale, the timezone, read-only, whether comments and tracked changes may be changed, and
+    /// the blocked commands.
+    void TakeKitViewSettings(const SfxViewShell& rViewShell);
     bool isBlockedCommand(const OUString & command) const;
     /// Returns the blocked list entry that blocks the command, or an empty string. A listed
     /// command name blocks the command with any arguments after '?', and a listed command with

@@ -128,6 +128,9 @@ public:
     void             Invalidate( sal_uInt16 nId );
     void             Invalidate( const sal_uInt16* pIds );
     void             InvalidateShell( const SfxShell &rSh, bool bDeep = false );
+    /// Sends the states of all the commands to the COKit client again, as the view has them now,
+    /// after a spreadsheet active in place in the view gave them.
+    SAL_DLLPRIVATE void ResendKitStates();
     void             InvalidateAll( bool bWithMsg );
     void             SetState( const SfxItemSet &rSet );
     void             SetState( const SfxPoolItem &rItem );

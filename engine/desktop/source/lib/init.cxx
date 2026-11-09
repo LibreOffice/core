@@ -4058,7 +4058,6 @@ static void doc_iniUnoCommands ()
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    util::URL aCommandURL;
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SfxViewFrame* pViewFrame = pViewShell ? &pViewShell->GetViewFrame() : nullptr;
 
@@ -4093,27 +4092,7 @@ static void doc_iniUnoCommands ()
     }
 #endif
 
-    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
-    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
-
-    const std::map<std::u16string_view, KitUnoCommand>& rUnoCommandList = GetKitUnoCommandList();
-    for (const auto& aUnoCommand : rUnoCommandList)
-    {
-        if (aUnoCommand.second.initializeForStatusUpdates)
-        {
-            aCommandURL.Complete = u".uno:"_ustr + aUnoCommand.first;
-            xParser->parseStrict(aCommandURL);
-
-            // when null, this command is not supported by the given component
-            // (like eg. Calc does not have ".uno:DefaultBullet" etc.)
-            if (const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path))
-            {
-                // Initialize slot to dispatch .uno: Command.
-                pViewFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false);
-            }
-
-        }
-    }
+    InitializeKitStatusUpdates(*pViewFrame);
 }
 
 static COKitDocumentType doc_getDocumentType (COKitDocument* pThis)
@@ -5254,6 +5233,8 @@ void COKitDocumentImpl::removeTextContext(unsigned nKitWindowId, int nCharBefore
     // Annoyingly - backspace and delete are handled in the apps via an accelerator
     // which are PostMessage'd by SfxViewShell::ExecKey_Impl so to stay in the same
     // order we do this synchronously here, unless we're in a dialog.
+    // A spreadsheet active in place edits its cells in its own view.
+    KitCalcHelper::ViewGuard aViewGuard(nKitWindowId == 0 ? pWindow.get() : nullptr);
     if (nCharBefore > 0)
     {
         // backspace
@@ -6438,6 +6419,20 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
                     aCommand, comphelper::containerToSequence(aPropertyValuesVector),
                     cpo::uno::Reference<css::frame::XDispatchResultListener>(xMathListener)))
                 giveFailedResult(xMathListener, "Failed to dispatch " + aCommand);
+            return;
+        }
+        if (KitCalcHelper aCalcHelper(SfxViewShell::Current()); aCalcHelper.GetCalcViewShell())
+        {
+            // the spreadsheet tells when it is done where that is asked, as the formula does
+            rtl::Reference<DispatchResultListener> xCalcListener;
+            if (bNotifyWhenFinished && mpCallbackFlushHandlers.count(nView))
+                xCalcListener = new DispatchResultListener(
+                    pCommand, mpCallbackFlushHandlers[nView], pDocSh && pDocSh->IsModified(),
+                    mxComponent);
+            if (!aCalcHelper.Dispatch(
+                    aCommand, comphelper::containerToSequence(aPropertyValuesVector),
+                    cpo::uno::Reference<css::frame::XDispatchResultListener>(xCalcListener)))
+                giveFailedResult(xCalcListener, "Failed to dispatch " + aCommand);
             return;
         }
     }

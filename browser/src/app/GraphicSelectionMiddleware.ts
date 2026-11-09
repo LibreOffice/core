@@ -33,6 +33,9 @@ class GraphicSelection {
 	public static tileTwipsOffset: number[] = [0, 0];
 	public static inPlaceArea: number[] | null = null;
 	public static inPlaceMath: boolean = false;
+	/// Whether the object active in place is a spreadsheet, which takes presses and keys inside
+	/// it as cells do.
+	public static inPlaceCalc: boolean = false;
 	/// The object active in place, as the selection named it when it became active. Undefined
 	/// where none is.
 	public static inPlaceObject: number | undefined = undefined;
@@ -53,6 +56,7 @@ class GraphicSelection {
 		this.inPlaceActive = false;
 		this.inPlaceArea = null;
 		this.inPlaceMath = false;
+		this.inPlaceCalc = false;
 		this.inPlaceObject = undefined;
 		this.leftInPlace = undefined;
 		this.pressedOutside = undefined;
@@ -1409,7 +1413,7 @@ class GraphicSelection {
 			id: 'inplace',
 			handles: { kinds: { rectangle: rectangle } },
 			isDraggable: true,
-			isResizable: !this.inPlaceMath,
+			isResizable: !this.inPlaceMath && !this.inPlaceCalc,
 			isRotatable: false,
 			isMathObject: this.inPlaceMath,
 		};
@@ -1421,6 +1425,10 @@ class GraphicSelection {
 
 	static isMathSelection(msgData: any[]): boolean {
 		return msgData.length > 5 && msgData[5]?.isMathObject === true;
+	}
+
+	static isCalcSelection(msgData: any[]): boolean {
+		return msgData.length > 5 && msgData[5]?.isCalcObject === true;
 	}
 
 	// Core mirrors a left edge in a right-to-left sheet, and mirroring it again undoes that.
@@ -1960,6 +1968,7 @@ class GraphicSelection {
 			this.inPlaceActive = false;
 			this.inPlaceArea = null;
 			this.inPlaceMath = false;
+			this.inPlaceCalc = false;
 			this.leftInPlace = this.inPlaceObject;
 			this.inPlaceObject = undefined;
 			// the handles come back once the object is no longer active in place
@@ -1981,6 +1990,7 @@ class GraphicSelection {
 					this.extractAndSetGraphicSelection(msgData.slice(0, 4));
 				} else if (msgData.length > 1) {
 					this.inPlaceMath = isMathObject;
+					this.inPlaceCalc = this.isCalcSelection(msgData);
 					if (isMathObject) this.followTheFormula();
 					this.inPlaceArea = msgData.slice(0, 4);
 					// the object that was selected is the one now active, and no press has left it
@@ -2038,7 +2048,7 @@ class GraphicSelection {
 				}
 			}
 			this.showInPlaceFrame();
-			if (!window.ThisIsTheiOSApp && !this.inPlaceMath)
+			if (!window.ThisIsTheiOSApp && !this.inPlaceMath && !this.inPlaceCalc)
 				app.socket.sendMessage('rendershapeselection mimetype=image/svg+xml');
 		} else {
 			msgData = this.parseMessage(textMsg);

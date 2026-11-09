@@ -28,6 +28,7 @@
 #include <inputhdl.hxx>
 
 #include <tabvwsh.hxx>
+#include <gridwin.hxx>
 #include <sc.hrc>
 #include <scres.hrc>
 #include <global.hxx>
@@ -526,6 +527,17 @@ void ScTabViewShell::afterCallbackRegistered()
         std::set<Color> aDocumentColors = pDocShell->GetDocColors();
         svx::theme::notifyKit(pThemeColors, aDocumentColors);
     }
+}
+
+std::optional<OString> ScTabViewShell::getKitPayload(COKitCallbackType eType, int nViewId) const
+{
+    if (eType == COKitCallbackType::CELL_CURSOR)
+    {
+        if (const ScGridWindow* pGridWindow = GetViewData().GetActiveWin())
+            return pGridWindow->getCellCursor();
+        return {};
+    }
+    return SfxViewShell::getKitPayload(eType, nViewId);
 }
 
 void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const

@@ -477,6 +477,19 @@ void SfxStateCache::SetCachedState( bool bAlways )
 }
 
 
+void SfxStateCache::ResendKitState()
+{
+    if ( !pInternalController )
+        return;
+    SfxDispatchController_Impl* pDispatchController
+        = static_cast<SfxDispatchController_Impl*>( pInternalController );
+    pDispatchController->ResendKitState();
+    // The next update asks the view for the state and sends it, changed or not. The last state
+    // can be one from while the view was locked.
+    bItemDirty = true;
+}
+
+
 cpo::uno::Reference< css::frame::XDispatch >  SfxStateCache::GetDispatch() const
 {
     if ( mxDispatch.is() )

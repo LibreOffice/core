@@ -39,6 +39,8 @@ public:
     Client(SdrOle2Obj* pObj, ViewShell& rSdViewShell, vcl::Window* pWindow);
     virtual ~Client() override;
 
+    virtual void ObjectContentChanged() override;
+
     SdrOle2Obj* GetSdrOle2Obj() const { return pSdrOle2Obj; }
 };
 

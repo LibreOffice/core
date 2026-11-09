@@ -11,6 +11,7 @@
 #include <unotools/tempfile.hxx>
 #include <sdtiledrenderingtest.hxx>
 
+#include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svx/svxids.hrc>
@@ -25,6 +26,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/editobj.hxx>
@@ -44,6 +46,18 @@
 #include <svl/style.hxx>
 #include <svl/undo.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdoole2.hxx>
+#include <sfx2/ipclient.hxx>
+#include <com/sun/star/embed/EmbedVerbs.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/table/XCell.hpp>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/string.hxx>
+#include <boost/property_tree/json_parser.hpp>
+#include <sstream>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <svx/svdotext.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -2431,6 +2445,341 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOpenHyperlinkOnlyOrdinaryProtocol
     insertLinkAtCursor(pView, u"https://www.example.com/"_ustr);
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OPEN_HYPERLINK, SfxCallMode::SYNCHRON);
     CPPUNIT_ASSERT_EQUAL("https://www.example.com/"_ostr, aView.m_aHyperlinkClicked);
+}
+
+namespace
+{
+/// The spreadsheet object of embedded-spreadsheet.odp that holds the revenue table.
+SdrOle2Obj* revenueSheetOf(sd::ViewShell& rViewShell)
+{
+    SdrOle2Obj* pSheet = nullptr;
+    for (const rtl::Reference<SdrObject>& pObject : *rViewShell.getCurrentPage())
+    {
+        SdrOle2Obj* pOle = dynamic_cast<SdrOle2Obj*>(pObject.get());
+        // the larger of the two sheets holds the table
+        if (pOle && (!pSheet || pOle->GetLogicRect().GetWidth() > pSheet->GetLogicRect().GetWidth()))
+            pSheet = pOle;
+    }
+    CPPUNIT_ASSERT(pSheet);
+    return pSheet;
+}
+
+/// The spreadsheet object of embedded-spreadsheet.odp that holds the revenue table, active in
+/// place in the view after this.
+SdrOle2Obj* activateRevenueSheet(sd::ViewShell& rViewShell)
+{
+    SdrOle2Obj* pSheet = revenueSheetOf(rViewShell);
+    rViewShell.ActivateObject(pSheet, embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
+    Scheduler::ProcessEventsToIdle();
+    return pSheet;
+}
+
+/// The rectangle of the last payload of the type that the view was sent, empty for none.
+tools::Rectangle lastRectangleOf(const SdTestViewCallback& rView, COKitCallbackType eType)
+{
+    for (auto it = rView.m_aCallbacks.rbegin(); it != rView.m_aCallbacks.rend(); ++it)
+    {
+        if (it->first != eType || it->second == "EMPTY")
+            continue;
+        cpo::uno::Sequence<OUString> aFields
+            = comphelper::string::convertCommaSeparated(OUString::fromUtf8(it->second));
+        CPPUNIT_ASSERT(aFields.getLength() >= 4);
+        return tools::Rectangle(Point(aFields[0].toInt32(), aFields[1].toInt32()),
+                                Size(aFields[2].toInt32(), aFields[3].toInt32()));
+    }
+    return {};
+}
+
+uno::Reference<table::XCellRange> firstSheetOf(const SdrOle2Obj& rSheet)
+{
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(rSheet.getXModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocument.is());
+    uno::Reference<container::XIndexAccess> xSheets(xDocument->getSheets(), uno::UNO_QUERY);
+    return uno::Reference<table::XCellRange>(xSheets->getByIndex(0), uno::UNO_QUERY);
+}
+
+void typeText(SdXImpressDocument& rDocument, std::string_view aText)
+{
+    for (char c : aText)
+    {
+        rDocument.postKeyEvent(COKitKeyEventType::DOWN, c, 0);
+        rDocument.postKeyEvent(COKitKeyEventType::UP, c, 0);
+    }
+    Scheduler::ProcessEventsToIdle();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmbeddedSpreadsheetEditInPlace)
+{
+    // Given a slide with a spreadsheet that shows A1:J21 of its sheet, active in place:
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    comphelper::ScopeGuard aResetFlags([] { comphelper::COKit::resetCompatFlag(); });
+    SdXImpressDocument* pXImpressDocument = createDoc("embedded-spreadsheet.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrOle2Obj* pSheet = activateRevenueSheet(*pViewShell);
+    SfxInPlaceClient* pIPClient = pViewShell->GetViewShell()->GetIPClient();
+    CPPUNIT_ASSERT(pIPClient);
+    comphelper::ScopeGuard aLeave([pIPClient] {
+        pIPClient->DeactivateObject();
+        Scheduler::ProcessEventsToIdle();
+    });
+    // The cell cursor shows on A1, at the corner of the object.
+    const Point aCorner = o3tl::convert(pIPClient->GetObjArea().TopLeft(), o3tl::Length::mm100,
+                                        o3tl::Length::twip);
+    tools::Rectangle aCursor = lastRectangleOf(aView, COKitCallbackType::CELL_CURSOR);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.X()), double(aCursor.Left()), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.Y()), double(aCursor.Top()), 1.0);
+
+    // When B2 is clicked, in the middle of its 1280 x 256 twips, and 777 is typed into it:
+    aView.m_aCallbacks.clear();
+    const Point aB2(aCorner.X() + 1280 + 640, aCorner.Y() + 256 + 128);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aB2.X(), aB2.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aB2.X(), aB2.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the cell cursor goes to B2, in the coordinates of the slide. Without the fix, the
+    // click went to the slide and the spreadsheet reported nothing.
+    aCursor = lastRectangleOf(aView, COKitCallbackType::CELL_CURSOR);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.X() + 1280), double(aCursor.Left()), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.Y() + 256), double(aCursor.Top()), 1.0);
+
+    typeText(*pXImpressDocument, "777");
+    // The caret of the cell shows in the coordinates of the slide too, inside B2.
+    bool bCaretInB2 = false;
+    for (const std::pair<COKitCallbackType, OString>& rCallback : aView.m_aCallbacks)
+    {
+        if (rCallback.first != COKitCallbackType::INVALIDATE_VISIBLE_CURSOR)
+            continue;
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream((std::string(rCallback.second)));
+        boost::property_tree::read_json(aStream, aTree);
+        cpo::uno::Sequence<OUString> aFields = comphelper::string::convertCommaSeparated(
+            OUString::fromUtf8(aTree.get<std::string>("rectangle")));
+        const Point aCaret(aFields[0].toInt32(), aFields[1].toInt32());
+        // the edit area of the cell reaches a little over its edges
+        tools::Rectangle aB2Area(aCursor.TopLeft(), Size(1280, 256));
+        aB2Area.expand(15);
+        bCaretInB2 = aB2Area.Contains(aCaret);
+        // the caret is given in the document alone, not relative to a point of the sheet
+        CPPUNIT_ASSERT(!aTree.get_optional<std::string>("refpoint"));
+    }
+    CPPUNIT_ASSERT(bCaretInB2);
+
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // And Enter puts 777 into B2 and goes on to B3.
+    CPPUNIT_ASSERT_EQUAL(u"777"_ustr, firstSheetOf(*pSheet)->getCellByPosition(1, 1)->getFormula());
+    aCursor = lastRectangleOf(aView, COKitCallbackType::CELL_CURSOR);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.Y() + 512), double(aCursor.Top()), 1.0);
+
+    // The cursor of the view of the spreadsheet is no cursor of another view of the slide.
+    for (const std::pair<COKitCallbackType, OString>& rCallback : aView.m_aCallbacks)
+        CPPUNIT_ASSERT(rCallback.first != COKitCallbackType::CELL_VIEW_CURSOR);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmbeddedSpreadsheetVectorContentFollowsTyping)
+{
+    // Given a view that draws the slide from its objects, with the revenue spreadsheet active in
+    // place and B2 selected:
+    SdXImpressDocument* pXImpressDocument = createDoc("embedded-spreadsheet.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShell()->setDrawsFromObjects(true);
+    const OString aPartId = pViewShell->getCurrentPage()->GetGuid().getString();
+    {
+        // the client holds the slide
+        tools::JsonWriter aWriter;
+        const OString aCommand = ".uno:VectorPrimitives?partid=" + aPartId + "&mode=0";
+        pXImpressDocument->getCommandValues(aWriter, std::string_view(aCommand));
+        aWriter.finishAndGetAsOString();
+    }
+    SdrOle2Obj* pSheet = activateRevenueSheet(*pViewShell);
+    SfxInPlaceClient* pIPClient = pViewShell->GetViewShell()->GetIPClient();
+    CPPUNIT_ASSERT(pIPClient);
+    comphelper::ScopeGuard aLeave([pIPClient] {
+        pIPClient->DeactivateObject();
+        Scheduler::ProcessEventsToIdle();
+    });
+    const Point aCorner = o3tl::convert(pIPClient->GetObjArea().TopLeft(), o3tl::Length::mm100,
+                                        o3tl::Length::twip);
+    const Point aB2(aCorner.X() + 1280 + 640, aCorner.Y() + 256 + 128);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aB2.X(), aB2.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aB2.X(), aB2.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    {
+        tools::JsonWriter aWriter;
+        pXImpressDocument->pushVectorPrimitivesDelta(aWriter, std::string_view(aPartId), 0);
+        aWriter.finishAndGetAsOString();
+    }
+
+    // When 777 is typed into the cell, which is not put into the cell yet:
+    typeText(*pXImpressDocument, "777");
+    CPPUNIT_ASSERT_EQUAL(u"245000"_ustr,
+                         firstSheetOf(*pSheet)->getCellByPosition(1, 1)->getFormula());
+
+    // Then the slide sends the spreadsheet again, with the text being typed and the cells around
+    // it. Without the fix, the slide kept the picture of the spreadsheet from before it was
+    // active.
+    tools::JsonWriter aWriter;
+    pXImpressDocument->pushVectorPrimitivesDelta(aWriter, std::string_view(aPartId), 0);
+    const OString aDelta = aWriter.finishAndGetAsOString();
+    const OString aId = OString::number(sal_Int64(pSheet->GetUniqueID()));
+    CPPUNIT_ASSERT(aDelta.indexOf(rtl::Concat2View("\"id\": " + aId)) >= 0);
+    CPPUNIT_ASSERT(aDelta.indexOf("\"text\": \"777\"") >= 0);
+    CPPUNIT_ASSERT(aDelta.indexOf("\"text\": \"Revenue\"") >= 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmbeddedSpreadsheetSecondView)
+{
+    // Given a slide shown in two views, with the spreadsheet active in place in the first one:
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    comphelper::ScopeGuard aResetFlags([] { comphelper::COKit::resetCompatFlag(); });
+    SdXImpressDocument* pXImpressDocument = createDoc("embedded-spreadsheet.odp");
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    const int nView1 = KitHelper::getCurrentView();
+    SdTestViewCallback aView1;
+    const int nView2 = KitHelper::createView();
+    SfxViewShell* pViewShell2 = SfxViewShell::Current();
+    SdTestViewCallback aView2;
+    KitHelper::setView(nView1);
+    activateRevenueSheet(*pViewShell1);
+    SfxInPlaceClient* pIPClient = pViewShell1->GetViewShell()->GetIPClient();
+    CPPUNIT_ASSERT(pIPClient);
+    comphelper::ScopeGuard aLeave([pIPClient, nView1] {
+        KitHelper::setView(nView1);
+        pIPClient->DeactivateObject();
+        Scheduler::ProcessEventsToIdle();
+    });
+    const tools::Rectangle aObject = o3tl::convert(pIPClient->GetObjArea(), o3tl::Length::mm100,
+                                                   o3tl::Length::twip);
+    const Point aB2(aObject.Left() + 1280 + 640, aObject.Top() + 256 + 128);
+
+    // When the first view types into B2, its view current as for any event of its client:
+    KitHelper::setView(nView1);
+    aView2.m_aCallbacks.clear();
+    aView2.m_aInvalidations.clear();
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aB2.X(), aB2.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aB2.X(), aB2.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aObject.Left() + 1280),
+                                 double(lastRectangleOf(aView1, COKitCallbackType::CELL_CURSOR).Left()),
+                                 1.0);
+    typeText(*pXImpressDocument, "7");
+
+    // Then the second view is told to paint the area of the spreadsheet again, as its tiles show
+    // the spreadsheet as it is being edited. Without the fix, only the first view was told.
+    bool bInvalidated = false;
+    for (const tools::Rectangle& rInvalidation : aView2.m_aInvalidations)
+        bInvalidated = bInvalidated || rInvalidation.Overlaps(aObject);
+    CPPUNIT_ASSERT(bInvalidated);
+    // And the cell cursor of the first view is not one of the second view.
+    for (const std::pair<COKitCallbackType, OString>& rCallback : aView2.m_aCallbacks)
+        CPPUNIT_ASSERT(rCallback.first != COKitCallbackType::CELL_CURSOR);
+
+    // When the second view double-clicks the spreadsheet that the first view edits:
+    KitHelper::setView(nView2);
+    aView2.m_aCallbacks.clear();
+    for (int nCount : { 1, 2 })
+    {
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aB2.X(), aB2.Y(),
+                                          nCount, MOUSE_LEFT, 0);
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aB2.X(), aB2.Y(),
+                                          nCount, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Then the second view does not select the spreadsheet, which stays with the first view, as a
+    // chart that another view edits does.
+    for (const std::pair<COKitCallbackType, OString>& rCallback : aView2.m_aCallbacks)
+        CPPUNIT_ASSERT(rCallback.first != COKitCallbackType::GRAPHIC_SELECTION
+                       || rCallback.second == "EMPTY");
+    CPPUNIT_ASSERT(!pViewShell2->GetIPClient());
+    CPPUNIT_ASSERT(pIPClient->IsObjectInPlaceActive());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmbeddedSpreadsheetTakesViewSettings)
+{
+    // Given a view of a slide that the client gave a timezone and blocked commands:
+    SdXImpressDocument* pXImpressDocument = createDoc("embedded-spreadsheet.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
+    const int nView = KitHelper::getCurrentView();
+    SdTestViewCallback aView;
+    KitHelper::setViewTimezone(nView, true, u"Europe/Budapest"_ustr);
+    KitHelper::setBlockedCommandList(nView, ".uno:Bold");
+
+    // When the spreadsheet is active in place in that view:
+    activateRevenueSheet(*pViewShell);
+    SfxInPlaceClient* pIPClient = pSfxViewShell->GetIPClient();
+    CPPUNIT_ASSERT(pIPClient);
+    comphelper::ScopeGuard aLeave([pIPClient] {
+        pIPClient->DeactivateObject();
+        Scheduler::ProcessEventsToIdle();
+    });
+    SfxViewShell* pCalcViewShell = KitCalcHelper(pSfxViewShell).GetCalcViewShell();
+    CPPUNIT_ASSERT(pCalcViewShell);
+
+    // Then the view of the spreadsheet has the same settings. Without the fix, it had only the
+    // language and the locale.
+    CPPUNIT_ASSERT_EQUAL(u"Europe/Budapest"_ustr, pCalcViewShell->GetKitTimezone().second);
+    CPPUNIT_ASSERT(pCalcViewShell->isBlockedCommand(u".uno:Bold"_ustr));
+    CPPUNIT_ASSERT(!pCalcViewShell->IsKitReadOnlyView());
+
+    // And a setting the client changes while the spreadsheet is active reaches it too.
+    KitHelper::setViewReadOnly(nView, true);
+    CPPUNIT_ASSERT(pCalcViewShell->IsKitReadOnlyView());
+    KitHelper::setAllowChangeComments(nView, true);
+    CPPUNIT_ASSERT(pCalcViewShell->IsAllowChangeComments());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmbeddedSpreadsheetStretched)
+{
+    // Given a spreadsheet object that is drawn twice as wide as the area of the sheet it shows,
+    // active in place:
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    comphelper::ScopeGuard aResetFlags([] { comphelper::COKit::resetCompatFlag(); });
+    SdXImpressDocument* pXImpressDocument = createDoc("embedded-spreadsheet.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrOle2Obj* pSheet = revenueSheetOf(*pViewShell);
+    tools::Rectangle aWide(pSheet->GetLogicRect());
+    aWide.setWidth(aWide.GetWidth() * 2);
+    pSheet->SetLogicRect(aWide);
+    pViewShell->ActivateObject(pSheet, embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
+    Scheduler::ProcessEventsToIdle();
+    SfxInPlaceClient* pIPClient = pViewShell->GetViewShell()->GetIPClient();
+    CPPUNIT_ASSERT(pIPClient);
+    comphelper::ScopeGuard aLeave([pIPClient] {
+        pIPClient->DeactivateObject();
+        Scheduler::ProcessEventsToIdle();
+    });
+    const double fScaleX = pIPClient->GetScaleWidth();
+    CPPUNIT_ASSERT(std::abs(fScaleX - 1.0) > 0.1);
+
+    // When B2 is clicked in its middle, where the object draws it:
+    const Point aCorner = o3tl::convert(pIPClient->GetObjArea().TopLeft(), o3tl::Length::mm100,
+                                        o3tl::Length::twip);
+    const Point aB2(aCorner.X() + std::round((1280 + 640) * fScaleX), aCorner.Y() + 256 + 128);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aB2.X(), aB2.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aB2.X(), aB2.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the cell cursor is on B2, drawn as wide as the object draws the cell. The cursor of a
+    // cell is a twip narrower than its column.
+    const tools::Rectangle aCursor = lastRectangleOf(aView, COKitCallbackType::CELL_CURSOR);
+    CPPUNIT_ASSERT(aCursor.Contains(aB2));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1279 * fScaleX, double(aCursor.GetWidth()), 2.0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -54,6 +54,7 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <svl/itemprop.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <svx/VectorObjectContent.hxx>
 
 class ScDocShell;
 class ScAnnotationObj;
@@ -74,6 +75,7 @@ namespace sc { class VectorContent; }
 
 class SAL_DLLPUBLIC_RTTI ScModelObj : public SfxBaseModel,
                     public vcl::ITiledRenderable,
+                    public svx::vector::InPlaceContent,
                     public css::sheet::XSpreadsheetDocument,
                     public css::document::XActionLockable,
                     public css::sheet::XCalculatable,
@@ -345,6 +347,9 @@ public:
 
     /// @see vcl::ITiledRenderable::getDocWindow().
     virtual VclPtr<vcl::Window> getDocWindow() override;
+
+    /// The visible area of the sheet the object shows, for svx::vector::InPlaceContent.
+    virtual drawinglayer::primitive2d::Primitive2DContainer createInPlaceContent(Size& rSize) override;
 
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;

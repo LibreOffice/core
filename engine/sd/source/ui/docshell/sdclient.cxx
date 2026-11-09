@@ -186,6 +186,13 @@ void Client::ViewChanged()
         pSdrOle2Obj->ActionChanged();
 }
 
+void Client::ObjectContentChanged()
+{
+    // a view that draws from the objects shows the content of an object active in place itself
+    if (mrViewShell.GetViewShell() && mrViewShell.GetViewShell()->drawsFromObjects())
+        pSdrOle2Obj->BroadcastObjectChange();
+}
+
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

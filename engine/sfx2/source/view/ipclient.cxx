@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -46,6 +47,7 @@
 #include <vcl/unohelp.hxx>
 
 #include <sfx2/ipclient.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
@@ -147,6 +149,7 @@ public:
     /// The area the object holds, in the twips a COKit client works in.
     tools::Rectangle inPlaceSelectionArea() const;
     bool isMathObject() const;
+    bool isCalcObject() const;
     void sendInPlaceSelection();
     /// Negotiates an area with the container and takes the result, in container units.
     void applyNewObjectArea(tools::Rectangle aNewLogicRect);
@@ -375,6 +378,15 @@ bool SfxInPlaceClient_Impl::isMathObject() const
 }
 
 
+bool SfxInPlaceClient_Impl::isCalcObject() const
+{
+    if ( !m_xObject.is() )
+        return false;
+    uno::Reference< lang::XServiceInfo > xComp( m_xObject->getComponent(), uno::UNO_QUERY );
+    return xComp.is() && xComp->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr );
+}
+
+
 void SfxInPlaceClient_Impl::sendInPlaceSelection()
 {
     if ( !comphelper::COKit::isActive() )
@@ -385,7 +397,13 @@ void SfxInPlaceClient_Impl::sendInPlaceSelection()
         OString str = inPlaceSelectionArea().toString() + ", \"INPLACE\"";
         if ( isMathObject() )
             str += ", { \"isMathObject\": true }";
+        else if ( isCalcObject() )
+            str += ", { \"isCalcObject\": true }";
         pViewShell->viewCallback( COKitCallbackType::GRAPHIC_SELECTION, str );
+
+        // the cell cursor follows the spreadsheet
+        if ( SfxViewShell* pCalcViewShell = KitCalcHelper( pViewShell ).GetCalcViewShell() )
+            KitCalcHelper::SendCursor( *pCalcViewShell );
     }
 }
 
@@ -411,6 +429,23 @@ void SfxInPlaceClient_Impl::activatingUI()
 }
 
 
+namespace
+{
+void ResendStatesOfView( void* pData, void* )
+{
+    // the view may be gone by now
+    for ( SfxViewShell* pViewShell = SfxViewShell::GetFirst( false ); pViewShell;
+          pViewShell = SfxViewShell::GetNext( *pViewShell, false ) )
+    {
+        if ( pViewShell == pData )
+        {
+            pViewShell->GetViewFrame().GetBindings().ResendKitStates();
+            return;
+        }
+    }
+}
+}
+
 void SfxInPlaceClient_Impl::deactivatedInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
@@ -420,6 +455,11 @@ void SfxInPlaceClient_Impl::deactivatedInplace()
 
     if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() ) {
         pViewShell->viewCallback( COKitCallbackType::GRAPHIC_SELECTION, "INPLACE EXIT"_ostr );
+
+        // the spreadsheet gave the states of the commands while it was active; the view gives
+        // its own again, all of them, once the object is no longer active
+        if ( comphelper::COKit::isActive() && isCalcObject() )
+            Application::PostUserEvent( LINK_NONMEMBER( pViewShell, ResendStatesOfView ) );
     }
 }
 
@@ -967,6 +1007,16 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
     SfxErrorContext aEc(ERRCTX_SO_DOVERB, m_pViewSh->GetFrameWeld(), RID_SO_ERRCTX);
     ErrCodeMsg nError = ERRCODE_NONE;
 
+    // COKit edits a spreadsheet in place in its own view. A linked spreadsheet shows the file it
+    // links to, and stays as it is.
+    if ( comphelper::COKit::isActive() && m_xImp->m_xObject.is()
+         && SotExchange::IsSpreadsheet( SvGlobalName( m_xImp->m_xObject->getClassID() ) ) )
+    {
+        uno::Reference< embed::XLinkageSupport > xLink( m_xImp->m_xObject, uno::UNO_QUERY );
+        if ( xLink.is() && xLink->isLink() )
+            return nError;
+    }
+
     if ( m_xImp->m_xObject.is() )
     {
         bool bSaveCopyAs = false;
@@ -1095,6 +1145,20 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
 
     if( nError )
         ErrorHandler::HandleError( nError );
+    else if ( comphelper::COKit::isActive() && m_pViewSh )
+    {
+        // the cell cursor of a spreadsheet shows from the start; the view of the spreadsheet
+        // reported it before the object was active
+        if ( SfxViewShell* pCalcViewShell = KitCalcHelper( m_pViewSh ).GetCalcViewShell() )
+        {
+            KitCalcHelper::SendCursor( *pCalcViewShell );
+            // the client shows the commands of the spreadsheet from now on, so it gets all their
+            // states, also the ones the spreadsheet gave before it was active
+            pCalcViewShell->GetViewFrame().GetBindings().ResendKitStates();
+            // the container draws the spreadsheet as it is edited from now on
+            ObjectContentChanged();
+        }
+    }
 
     return nError;
 }
@@ -1122,6 +1186,11 @@ void SfxInPlaceClient::ViewChanged()
 }
 
 void SfxInPlaceClient::FormatChanged()
+{
+    // dummy implementation
+}
+
+void SfxInPlaceClient::ObjectContentChanged()
 {
     // dummy implementation
 }

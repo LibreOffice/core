@@ -45,13 +45,19 @@ struct KitUnoCommand
     // (if != None) --> function used by viewCallback in
     // unoctitm.cxx.
     PayloadType payloadType;
-    // (if == true) --> command is listened to for status updates. This is used
-    // by doc_iniUnoCommands in init.cxx.
+    // (if == true) --> command is listened to for status updates, so the client is
+    // sent its state as it changes.
     bool initializeForStatusUpdates;
 };
 
 // Get list of uno commands that are safe enough to be allowed to use in some cases
 // Parameters:
 SFX2_DLLPUBLIC const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList();
+
+class SfxViewFrame;
+
+/// Listens to the commands of GetKitUnoCommandList that are listened to for status updates in the
+/// view frame, so the client is sent their states as they change.
+SFX2_DLLPUBLIC void InitializeKitStatusUpdates(SfxViewFrame& rViewFrame);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

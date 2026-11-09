@@ -6034,6 +6034,18 @@ void SfxViewShell::setBlockedCommandList(const char* blockedCommandList)
     }
 }
 
+void SfxViewShell::TakeKitViewSettings(const SfxViewShell& rViewShell)
+{
+    SetKitLanguageTag(rViewShell.GetKitLanguageTag().getBcp47());
+    SetKitLocale(rViewShell.GetKitLocale().getBcp47());
+    const std::pair<bool, OUString> aTimezone = rViewShell.GetKitTimezone();
+    SetKitTimezone(aTimezone.first, aTimezone.second);
+    SetKitReadOnlyView(rViewShell.IsKitReadOnlyView());
+    SetAllowChangeComments(rViewShell.IsAllowChangeComments());
+    SetAllowManageRedlines(rViewShell.IsAllowManageRedlines());
+    mvLOKBlockedCommandList = rViewShell.mvLOKBlockedCommandList;
+}
+
 bool SfxViewShell::isBlockedCommand(const OUString & command) const
 {
     return !getBlockedCommand(command).isEmpty();
