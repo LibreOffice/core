@@ -69,6 +69,21 @@ class UIManager extends window.L.Control {
 	// Live OS light/dark tracking in the browser (see the constructor and
 	// followSystemDarkMode); null on native apps, which own dark mode.
 	private colorSchemeQuery: MediaQueryList | null = null;
+	private readonly HOME_TAB_ID = 'Home-tab-label';
+	/// The layouting task that changes the notebookbar for an object active in place, while it
+	/// waits to run. Null when none waits.
+	private inPlaceNotebookbarTask: TaskId | null = null;
+	/// The notebookbars of the kinds of document that can be active in place in the document, by
+	/// document type, made the first time one of them is active.
+	private inPlaceNotebookbars: Map<string, NotebookbarBase> = new Map();
+	/// The notebookbar of the document and the tab it had selected, while the notebookbar of the
+	/// kind of document active in place, docType, shows instead. Null while the notebookbar of the
+	/// document shows.
+	private documentNotebookbar: {
+		notebookbar: NotebookbarBase;
+		selectedTab: string;
+		docType: string;
+	} | null = null;
 
 	/**
 	 * Called when the UIManager control is added to the map.
@@ -1581,8 +1596,20 @@ class UIManager extends window.L.Control {
 	 * @param docType - Document type (e.g. 'spreadsheet', 'presentation', etc.)
 	 */
 	createNotebookbarControl(docType: string, showUI: boolean): void {
+		this.notebookbar = this.makeNotebookbar(docType);
+		JSDialog.MessageRouter.flushPending('notebookbar');
+		if (showUI)
+			this.showNotebookbarControl();
+	}
+
+	/**
+	 * Makes the notebookbar of a document type, which is not shown yet.
+	 * @param docType - Document type (e.g. 'spreadsheet', 'presentation', etc.)
+	 */
+	private makeNotebookbar(docType: string): NotebookbarBase {
+		let notebookbar;
 		if (docType === 'spreadsheet') {
-			var notebookbar = window.L.control.notebookbarCalc();
+			notebookbar = window.L.control.notebookbarCalc();
 		} else if (docType === 'presentation') {
 			notebookbar = window.L.control.notebookbarImpress();
 		} else if (docType === 'drawing') {
@@ -1590,15 +1617,129 @@ class UIManager extends window.L.Control {
 		} else {
 			notebookbar = window.L.control.notebookbarWriter();
 		}
+		return JSDialog.NotebookbarBase(this.map, notebookbar);
+	}
 
-		this.notebookbar = JSDialog.NotebookbarBase(this.map, notebookbar);
-		JSDialog.MessageRouter.flushPending('notebookbar');
-		if (showUI)
-			this.showNotebookbarControl();
+	/**
+	 * Shows the notebookbar of the kind of document that is active in place in the document, as
+	 * the notebookbar of a spreadsheet for a spreadsheet in a text document, or the notebookbar
+	 * of the document again. An object of the kind of the document keeps the notebookbar of the
+	 * document. The notebookbar changes in a layouting task, and the last request wins.
+	 * @param docType - Document type of the object active in place, null when none is.
+	 */
+	showInPlaceNotebookbar(docType: string | null): void {
+		if (this.inPlaceNotebookbarTask !== null)
+			app.layoutingService.cancelLayoutingTask(this.inPlaceNotebookbarTask);
+		this.inPlaceNotebookbarTask = app.layoutingService.appendLayoutingTask(() => {
+			this.inPlaceNotebookbarTask = null;
+			this.swapInPlaceNotebookbar(docType);
+		});
+	}
+
+	/**
+	 * Puts the notebookbar of the kind of document active in place in the place of the
+	 * notebookbar of the document, or the notebookbar of the document back. The notebookbar on
+	 * the screen stays collapsed when it was.
+	 * @param docType - Document type of the object active in place, null when none is.
+	 */
+	private swapInPlaceNotebookbar(docType: string | null): void {
+		if (docType === this.map.getDocType())
+			docType = null;
+		const shownType = this.documentNotebookbar ? this.documentNotebookbar.docType : null;
+		if (docType === shownType || !this.notebookbar || window.mode.isSmallScreenDevice())
+			return;
+
+		const shown = this.isNotebookbarShown();
+		const collapsed = shown && this.isNotebookbarCollapsed();
+		let selectedTab = shown ? this.selectedNotebookbarTab() : this.HOME_TAB_ID;
+		if (shown)
+			this.removeNotebookbarUI();
+
+		if (this.documentNotebookbar) {
+			this.notebookbar = this.documentNotebookbar.notebookbar;
+			selectedTab = this.documentNotebookbar.selectedTab;
+			this.documentNotebookbar = null;
+		}
+		if (docType) {
+			this.documentNotebookbar = {
+				notebookbar: this.notebookbar,
+				selectedTab: selectedTab,
+				docType: docType,
+			};
+			this.notebookbar = this.inPlaceNotebookbarOf(docType);
+			selectedTab = this.HOME_TAB_ID;
+		}
+
+		if (shown) {
+			this.showNotebookbarUI(selectedTab);
+			if (collapsed)
+				this.collapseNotebookbar();
+		}
+	}
+
+	/**
+	 * Builds every notebookbar again from its tab definitions, the one on the screen and the ones
+	 * that wait for an object active in place to come or go.
+	 */
+	refreshNotebookbarLayouts(): void {
+		const notebookbars: NotebookbarBase[] = [];
+		if (this.notebookbar)
+			notebookbars.push(this.notebookbar);
+		if (this.documentNotebookbar)
+			notebookbars.push(this.documentNotebookbar.notebookbar);
+		this.inPlaceNotebookbars.forEach((notebookbar) => {
+			if (notebookbars.indexOf(notebookbar) < 0)
+				notebookbars.push(notebookbar);
+		});
+		notebookbars.forEach((notebookbar) => notebookbar.impl?.refresh());
+	}
+
+	/**
+	 * Gives the notebookbar the color of a document type, or the color of the document again. The
+	 * color follows the data-docType attribute of the nearest element that has one.
+	 * @param docType - Document type whose color the notebookbar shows, null for the document's.
+	 */
+	private showDocTypeColor(docType: string | null): void {
+		document.querySelectorAll('.main-nav, #toolbar-wrapper').forEach((element) => {
+			if (docType)
+				element.setAttribute('data-docType', docType);
+			else
+				element.removeAttribute('data-docType');
+		});
+	}
+
+	/**
+	 * The notebookbar of a kind of document active in place, made the first time one is.
+	 * @param docType - Document type of the object active in place.
+	 */
+	private inPlaceNotebookbarOf(docType: string): NotebookbarBase {
+		let notebookbar = this.inPlaceNotebookbars.get(docType);
+		if (!notebookbar) {
+			notebookbar = this.makeNotebookbar(docType);
+			// the widget updates of the engine are for the notebookbar of the document
+			notebookbar.ignoreCoreUpdates();
+			this.inPlaceNotebookbars.set(docType, notebookbar);
+		}
+		return notebookbar;
+	}
+
+	/**
+	 * Whether the notebookbar is on the screen, in the notebookbar mode.
+	 */
+	private isNotebookbarShown(): boolean {
+		return !!this.notebookbar?.impl?.container;
+	}
+
+	/**
+	 * The id of the tab of the notebookbar that is selected, the Home tab when none is.
+	 */
+	private selectedNotebookbarTab(): string {
+		return $('.ui-tab.notebookbar[aria-selected="true"]').attr('id') || this.HOME_TAB_ID;
 	}
 
 	showNotebookbarControl(): void {
 		this.notebookbar.onAdd();
+		this.showDocTypeColor(this.documentNotebookbar ? this.documentNotebookbar.docType : null);
 		this.map.fire('a11ystatechanged');
 		app.UI.notebookbarAccessibility.initialize();
 	}
@@ -1619,8 +1760,16 @@ class UIManager extends window.L.Control {
 	 * Refreshes the notebookbar. WARNING: if we got core updates for JSDialog widgets, they will be lost.
 	 */
 	refreshNotebookbar(): void {
-			var selectedTab = $('.ui-tab.notebookbar[aria-selected="true"]').attr('id') || 'Home-tab-label';
+			const selectedTab = this.selectedNotebookbarTab();
 			this.removeNotebookbarUI();
+			this.showNotebookbarUI(selectedTab);
+	}
+
+	/**
+	 * Shows the notebookbar that is not on the screen, on the tab of the id.
+	 * @param selectedTab - The id of the tab to select.
+	 */
+	private showNotebookbarUI(selectedTab: string): void {
 			this.showNotebookbarControl();
 			if (this._map._permission === 'edit') {
 				$('.main-nav').removeClass('readonly');
@@ -1668,6 +1817,7 @@ class UIManager extends window.L.Control {
 	 */
 	removeNotebookbarUI(): void {
 		this.notebookbar.onRemove();
+		this.showDocTypeColor(null);
 		$('#map').removeClass('notebookbar-opened');
 	}
 

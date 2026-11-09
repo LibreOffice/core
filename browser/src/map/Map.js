@@ -340,14 +340,12 @@ window.L.Map = window.L.Evented.extend({
 					// The notebookbar builds before this flag arrives (defaulting to
 					// Properties alone). Rebuild it so the stacked Properties + Security
 					// label layout appears when supported, and Properties reclaims the
-					// column when not. Use the impl's refresh(), which re-runs the tab
+					// column when not. Use refreshNotebookbarLayouts(), which re-runs the tab
 					// builders (getFullJSON); refreshNotebookbar() only re-renders the
 					// snapshot built at construction, so it would not pick up the flag.
 					// Only when the layout actually changes.
-					if (this.uiManager.notebookbar && this.uiManager.notebookbar.impl &&
-					    wasSupported !== supported) {
-						this.uiManager.notebookbar.impl.refresh();
-					}
+					if (wasSupported !== supported)
+						this.uiManager.refreshNotebookbarLayouts();
 				}
 			}
 		});

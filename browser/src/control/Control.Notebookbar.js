@@ -88,7 +88,10 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 
 		this.onContextChange = this.onContextChange.bind(this);
 		app.events.on('contextchange', this.onContextChange);
-		app.events.on('updatepermission', this.onUpdatePermission.bind(this));
+		// one listener per notebookbar, however often it is shown
+		if (!this._onUpdatePermissionBound)
+			this._onUpdatePermissionBound = this.onUpdatePermission.bind(this);
+		app.events.on('updatepermission', this._onUpdatePermissionBound);
 		this.map.on('darkmodechanged', this.onDarkModeToggleChange, this);
 		this.map.on('showannotationschanged', this.onShowAnnotationsChange, this);
 		this.map.on('a11ystatechanged', this.onAccessibilityToggleChange, this);
@@ -138,6 +141,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 
 	onRemove: function() {
 		app.events.off('contextchange', this.onContextChange);
+		app.events.off('updatepermission', this._onUpdatePermissionBound);
 		$('.main-nav #document-header').remove();
 		$('.main-nav').removeClass('hasnotebookbar');
 		$('#toolbar-wrapper').removeClass('hasnotebookbar');

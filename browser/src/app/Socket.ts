@@ -1190,6 +1190,10 @@ class Socket {
 			// A reattached view keeps its mode, notebookbar, sidebar and dialogs
 			// in the kit, so only a new view needs them set up again.
 			if (!command.reattached) {
+				// The new view has no object active in place, so the notebookbar of the
+				// document comes back too.
+				if (GraphicSelection.inPlaceArea) GraphicSelection.leaveInPlace();
+
 				const darkTheme = window.prefs.getBoolean('darkTheme');
 				this._map.uiManager.activateDarkModeInCore(darkTheme);
 				this._map.uiManager.applyInvert();

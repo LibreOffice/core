@@ -189,16 +189,9 @@ class ServerConnectionService {
 					// app.map._extensions; refresh whichever is in use so the
 					// just-discovered list shows up.
 					if (app.map.menubar) app.map.menubar.refresh();
-					// uiManager.notebookbar is the NotebookbarBase wrapper;
-					// the JS notebookbar that holds the model + loadTab is on
-					// its .impl field (see Control.NotebookbarBase.ts).
-					if (
-						app.map.uiManager &&
-						app.map.uiManager.notebookbar &&
-						app.map.uiManager.notebookbar.impl
-					) {
-						app.map.uiManager.notebookbar.impl.refresh();
-					}
+					// Every notebookbar is built again, also the one that waits for an
+					// object active in place to come or go.
+					if (app.map.uiManager) app.map.uiManager.refreshNotebookbarLayouts();
 					if (app.map.contextToolbar) app.map.contextToolbar.refresh();
 					// KeyboardShortcuts' class lives in a @ts-strict-ignore'd file, so
 					// its methods are not visible to the strict compile of this file.

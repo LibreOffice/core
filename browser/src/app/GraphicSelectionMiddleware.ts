@@ -60,6 +60,15 @@ class GraphicSelection {
 		this.inPlaceObject = undefined;
 		this.leftInPlace = undefined;
 		this.pressedOutside = undefined;
+		this.showInPlaceNotebookbar();
+	}
+
+	/// The notebookbar is the one of a spreadsheet while a spreadsheet is active in place, and the
+	/// one of the document otherwise.
+	private static showInPlaceNotebookbar(): void {
+		app.map.uiManager?.showInPlaceNotebookbar(
+			this.inPlaceCalc ? 'spreadsheet' : null,
+		);
 	}
 
 	/// What the last left press while an object was active in place met of the page: an object,
@@ -1971,6 +1980,7 @@ class GraphicSelection {
 			this.inPlaceCalc = false;
 			this.leftInPlace = this.inPlaceObject;
 			this.inPlaceObject = undefined;
+			this.showInPlaceNotebookbar();
 			// the handles come back once the object is no longer active in place
 			if (RenderManager.isVectorRendering()) this.updateSelectionSection();
 		} else if (textMsg.match('INPLACE')) {
@@ -1991,6 +2001,7 @@ class GraphicSelection {
 				} else if (msgData.length > 1) {
 					this.inPlaceMath = isMathObject;
 					this.inPlaceCalc = this.isCalcSelection(msgData);
+					this.showInPlaceNotebookbar();
 					if (isMathObject) this.followTheFormula();
 					this.inPlaceArea = msgData.slice(0, 4);
 					// the object that was selected is the one now active, and no press has left it

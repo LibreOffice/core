@@ -34,6 +34,17 @@ class NotebookbarBase extends JSDialogComponent {
 		this.registerMessageHandlers();
 	}
 
+	/// Whether the notebookbar takes the widget data of the engine. The notebookbar of a kind of
+	/// document active in place in the document has no notebookbar in the engine.
+	private followsCore: boolean = true;
+
+	/// Leaves the widget data of the engine to the notebookbar of the document. The items of this
+	/// one are still shown and hidden, which the client asks for with actions of its own.
+	public ignoreCoreUpdates() {
+		this.followsCore = false;
+		this.map.off('jsdialogupdate', this.onJSUpdate, this);
+	}
+
 	// when we show the UI
 	public onAdd() {
 		this.setupContainer(undefined);
@@ -45,12 +56,17 @@ class NotebookbarBase extends JSDialogComponent {
 				this.builder,
 			);
 		}
+		if (!this.followsCore) {
+			this.map.on('commandstatechanged', this.onFontStateChanged, this);
+			this.showFontStates();
+		}
 
 		this.dpiListener.start();
 	}
 
 	// when we hide the UI
 	public onRemove() {
+		this.map.off('commandstatechanged', this.onFontStateChanged, this);
 		if (this.builder) {
 			this.map.off(
 				'commandstatechanged',
@@ -71,6 +87,8 @@ class NotebookbarBase extends JSDialogComponent {
 		data: any,
 		builder: JSBuilder,
 	) {
+		if (!this.followsCore && this.applyFontCommand(eventType, object, data))
+			return;
 		if (this.impl && this.impl.onCallback) {
 			const consumed = this.impl.onCallback(
 				objectType,
@@ -88,6 +106,51 @@ class NotebookbarBase extends JSDialogComponent {
 			data,
 			builder,
 		);
+	}
+
+	/// The font boxes of a notebookbar without widget data from the engine show the font name and
+	/// size that the commands of the document active in place report.
+	private onFontStateChanged(e: { commandName: string; state: string }) {
+		if (e.commandName === '.uno:CharFontName')
+			this.setFontBoxText('fontnamecombobox', e.state);
+		else if (e.commandName === '.uno:FontHeight')
+			this.setFontBoxText('fontsizecombobox', e.state === '0' ? '' : e.state);
+	}
+
+	/// Fills the font boxes with the fonts of the document and the last font name and size that
+	/// the commands reported.
+	private showFontStates() {
+		const fontNameBox: any = this.container?.querySelector('#fontnamecombobox');
+		const fonts = (this.map as any).getToolbarCommandValues?.(
+			'.uno:CharFontName',
+		);
+		if (fontNameBox?.updateEntries && fonts && typeof fonts === 'object')
+			fontNameBox.updateEntries(Object.keys(fonts));
+		for (const command of ['.uno:CharFontName', '.uno:FontHeight']) {
+			const state = this.map.stateChangeHandler.getItemValue(command);
+			if (state !== undefined && state !== null)
+				this.onFontStateChanged({ commandName: command, state: String(state) });
+		}
+	}
+
+	private setFontBoxText(id: string, text: string) {
+		const box: any = this.container?.querySelector('#' + id);
+		if (box?.onSetText) box.onSetText(text);
+	}
+
+	/// Applies a font name or size picked in a font box with a command, which reaches the document
+	/// active in place. Answers whether the event was the pick of a font box.
+	private applyFontCommand(eventType: string, object: any, data: any): boolean {
+		const isFontName = object?.id === 'fontnamecombobox';
+		if (!isFontName && object?.id !== 'fontsizecombobox') return false;
+		let value: string;
+		if (eventType === 'selected') value = data.substr(data.indexOf(';') + 1);
+		else if (eventType === 'change') value = data;
+		else return false;
+		if (isFontName) (this.map as any).applyFont(value);
+		else (this.map as any).applyFontSize(value);
+		this.map.focus();
+		return true;
 	}
 
 	protected createBuilder() {
@@ -143,6 +206,9 @@ class NotebookbarBase extends JSDialogComponent {
 	}
 
 	protected onJSAction(e: { data: ActionData }) {
+		const actionType = e.data?.data?.action_type;
+		if (!this.followsCore && actionType !== 'show' && actionType !== 'hide')
+			return false;
 		if (super.onJSAction(e)) {
 			this.impl?.setInitialized(true);
 			return true;
