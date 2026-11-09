@@ -438,14 +438,14 @@ void writeMacOSPreferencesXcu(CFDictionaryRef prefs, CFSetRef forcedKeys, TempFi
     std::vector<std::tuple<OUString, CFStringRef, CFTypeRef>> aEntries;
     for (CFIndex i = 0; i < nCount; ++i)
     {
-        CFTypeRef pKey = static_cast<CFTypeRef>(aKeys[i]);
+        CFTypeRef pKey = aKeys[i];
         if (pKey == nullptr || CFGetTypeID(pKey) != CFStringGetTypeID())
             continue;
         CFStringRef pKeyString = static_cast<CFStringRef>(pKey);
         OUString aKey(toOUString(pKeyString));
         if (!aKey.startsWith("/"))
             continue;
-        aEntries.emplace_back(aKey, pKeyString, static_cast<CFTypeRef>(aValues[i]));
+        aEntries.emplace_back(aKey, pKeyString, aValues[i]);
     }
     std::sort(aEntries.begin(), aEntries.end(),
               [](auto const& a, auto const& b) { return std::get<0>(a) < std::get<0>(b); });
