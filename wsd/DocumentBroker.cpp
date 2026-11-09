@@ -5371,6 +5371,19 @@ std::string DocumentBroker::findFileInJail(std::string kitPath) const
 }
 #endif
 
+#if !MOBILEAPP
+std::string DocumentBroker::moveFileIntoJail(const std::string& localPath,
+                                             const std::string& jailPath) const
+{
+    std::string moved = FileUtil::moveFileIntoJail(COOLWSD::EnableMountNamespaces, getJailRoot(),
+                                                   jailPath, localPath);
+    // Without capabilities there is no chroot, so the kit names the file by its local path.
+    if (moved.empty() || COOLWSD::NoCapsForKit)
+        return moved;
+    return jailPath;
+}
+#endif
+
 std::string DocumentBroker::getJailRoot() const
 {
     if (!Util::isMobileApp())
@@ -7699,11 +7712,12 @@ std::shared_ptr<ClientSession> DocumentBroker::getSessionFromClipboardTag(const 
 
 void DocumentBroker::handleClipboardRequest(ClipboardRequest type, const std::shared_ptr<StreamSocket> &socket,
                                             const std::string &viewId, const std::string &tag,
-                                            const std::string &clipFile)
+                                            const std::string &clipFile,
+                                            const std::shared_ptr<FileUtil::OwnedFile>& stagedClipFile)
 {
     if (std::shared_ptr<ClientSession> session = getSessionFromClipboardTag(viewId, tag))
     {
-        session->handleClipboardRequest(type, socket, tag, clipFile);
+        session->handleClipboardRequest(type, socket, tag, clipFile, stagedClipFile);
         return;
     }
 

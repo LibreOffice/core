@@ -444,11 +444,13 @@ public:
                           const std::shared_ptr<DocumentBroker>& docBroker);
 #endif // !MOBILEAPP
 
-    /// Handle a clipboard fetch / put request.
+    /// Handle a clipboard fetch / put request. stagedClipFile owns clipFile when it was staged
+    /// outside the jail, and is null otherwise.
     void handleClipboardRequest(DocumentBroker::ClipboardRequest     type,
                                 const std::shared_ptr<StreamSocket> &socket,
                                 const std::string                   &tag,
-                                const std::string                   &clipFile);
+                                const std::string                   &clipFile,
+                                const std::shared_ptr<FileUtil::OwnedFile>& stagedClipFile);
 
     /// Create URI for transient clipboard content.
     std::string getClipboardURI(bool encode = true);
@@ -597,6 +599,10 @@ public:
     void setRemoteDocumentConnection() { _isRemoteDocumentConnection = true; }
 
 private:
+    /// Puts the set clipboard content in clipFile where the kit can read it, and tells the kit to
+    /// use it. False when it cannot be put there.
+    bool forwardSetClipboard(DocumentBroker& docBroker, const std::string& clipFile);
+
     /// The value of one AI setting: the user's view setting, else their user private info, which is
     /// then copied into the view settings, else the coolwsd.xml value.
     std::string resolveAISetting(Poco::JSON::Object::Ptr& viewSettings,

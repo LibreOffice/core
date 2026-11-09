@@ -72,6 +72,10 @@ class TileCache;
 class PreviewSession;
 class Message;
 class SlideLayerCacheMap;
+namespace FileUtil
+{
+struct OwnedFile;
+}
 
 namespace Poco {
     namespace JSON {
@@ -531,6 +535,11 @@ public:
     /// which are then under the jail root.
     std::string findFileInJail(std::string kitPath) const;
 
+    /// Moves the file at localPath to jailPath in this document's jail, as
+    /// FileUtil::moveFileIntoJail moves it. Returns the path the kit names the file by, or an
+    /// empty string on failure.
+    std::string moveFileIntoJail(const std::string& localPath, const std::string& jailPath) const;
+
     /// Moves an uploaded file into the staging area of this document's jail for the view whose
     /// access_token or access_header is the given credential. Returns the name it was staged
     /// under, which is empty when no live view that can edit holds that credential, or when the
@@ -738,9 +747,11 @@ public:
 
     std::shared_ptr<ClientSession> getSessionFromClipboardTag(const std::string &viewId, const std::string &tag);
 
+    /// stagedClipFile owns clipFile when it was staged outside the jail, and is null otherwise.
     void handleClipboardRequest(ClipboardRequest type,  const std::shared_ptr<StreamSocket> &socket,
                                 const std::string &viewId, const std::string &tag,
-                                const std::string &clipFile);
+                                const std::string &clipFile,
+                                const std::shared_ptr<FileUtil::OwnedFile>& stagedClipFile);
     static bool handlePersistentClipboardRequest(ClipboardRequest type,
                                                  const std::shared_ptr<StreamSocket> &socket,
                                                  const std::string &tag, bool sendError = false);

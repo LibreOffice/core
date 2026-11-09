@@ -372,22 +372,11 @@ bool ClientSession::matchesClipboardKeys(const std::string &/*viewId*/, const st
     return _clipboardKeys.matches(tag);
 }
 
-// Rewrite path to be visible to the outside world
-static std::string getLocalPathToJail(std::string filePath, const DocumentBroker& docBroker)
-{
-#if !MOBILEAPP
-    // Blank for failure.
-    filePath = docBroker.findFileInJail(std::move(filePath));
-#else
-    (void)docBroker;
-#endif
-    return filePath;
-}
-
 void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     type,
                                            const std::shared_ptr<StreamSocket> &socket,
                                            const std::string                   &tag,
-                                           const std::string                   &clipFile)
+                                           const std::string                   &clipFile,
+                                           const std::shared_ptr<FileUtil::OwnedFile>& stagedClipFile)
 {
     // Move the socket into our DocBroker.
     auto docBroker = getDocumentBroker();
@@ -441,12 +430,14 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
     else // REQUEST_SET
     {
         LOG_TRC("Session [" << getId() << "] sending setclipboard");
-        std::string jailClipFile = getLocalPathToJail(clipFile, *docBroker);
-        if (!jailClipFile.empty())
+#if MOBILEAPP
+        (void)stagedClipFile;
+#endif
+        if (!clipFile.empty())
         {
-            std::string preProcessedClipFile = jailClipFile + ".preproc";
+            std::string preProcessedClipFile = clipFile + ".preproc";
             std::ofstream ofs(preProcessedClipFile, std::ofstream::out);
-            std::ifstream ifs(jailClipFile, std::ifstream::in);
+            std::ifstream ifs(clipFile, std::ifstream::in);
             bool preProcesed = preProcessSetClipboardPayload(ifs, ofs);
             ifs.close();
             ofs.close();
@@ -455,18 +446,19 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
                 FileUtil::removeFile(preProcessedClipFile);
             else
             {
-                if (::rename(preProcessedClipFile.c_str(), jailClipFile.c_str()) < 0)
+                if (::rename(preProcessedClipFile.c_str(), clipFile.c_str()) < 0)
                 {
-                    LOG_SYS("Failed to rename [" << preProcessedClipFile << "] to [" << jailClipFile << ']');
+                    LOG_SYS("Failed to rename [" << preProcessedClipFile << "] to [" << clipFile << ']');
+                    FileUtil::removeFile(preProcessedClipFile);
                 }
                 else
                 {
-                    LOG_TRC("Renamed [" << preProcessedClipFile << "] to [" << jailClipFile << ']');
+                    LOG_TRC("Renamed [" << preProcessedClipFile << "] to [" << clipFile << ']');
                 }
             }
 
 #if !MOBILEAPP
-            ifs.open(jailClipFile, std::ifstream::in);
+            ifs.open(clipFile, std::ifstream::in);
             if (ifs.get() == '{')
             {
                 ifs.seekg(0, std::ios_base::beg);
@@ -482,7 +474,7 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
                 }
                 catch (const Poco::JSON::JSONException& exception)
                 {
-                    LOG_WRN("parseJSON: failed to parse '" << jailClipFile << "': '" << exception.what() << "'");
+                    LOG_WRN("parseJSON: failed to parse '" << clipFile << "': '" << exception.what() << "'");
                 }
 
                 ifs.close();
@@ -495,7 +487,7 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
                     JsonUtil::findJSONValue(json, "commandName", commandName);
                     http::Session::FinishedCallback finishedCallback =
                         [selfWeak = weak_from_this(), this, commandName=std::move(commandName),
-                         docBroker, jailClipFile, clipFile](const std::shared_ptr<http::Session>& session)
+                         docBroker, clipFile, tag, stagedClipFile](const std::shared_ptr<http::Session>& session)
                     {
                         std::shared_ptr<MessageHandlerInterface> selfLifecycle = selfWeak.lock();
                         if (!selfLifecycle)
@@ -522,13 +514,15 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
                             return;
                         }
 
-                        std::ifstream stream(jailClipFile, std::ifstream::in);
+                        std::ifstream stream(clipFile, std::ifstream::in);
                         const bool ownFormat = ClipboardData::isOwnFormat(stream);
                         stream.close();
                         if (ownFormat)
                         {
-                            docBroker->forwardToChild(client_from_this(), "setclipboard name=" + clipFile, true);
-                            docBroker->forwardToChild(client_from_this(), "uno " + commandName);
+                            if (forwardSetClipboard(*docBroker, clipFile))
+                                docBroker->forwardToChild(client_from_this(), "uno " + commandName);
+                            else
+                                LOG_ERR("Downloaded clipboard [" << tag << "] could not be passed on");
                         }
                         else
                         {
@@ -570,7 +564,7 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
                                 UnitWSD::get().onClipboardDownloadRequest(httpSession);
 
                             const std::shared_ptr<http::Response> httpResponse = httpSession->response();
-                            httpResponse->saveBodyToFile(jailClipFile);
+                            httpResponse->saveBodyToFile(clipFile);
                         }
                         else
                         {
@@ -588,7 +582,11 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
 #endif
             {
                 // List of mimetype-size-data tuples, pass that over as-is.
-                docBroker->forwardToChild(client_from_this(), "setclipboard name=" + clipFile, true);
+                if (!forwardSetClipboard(*docBroker, clipFile))
+                {
+                    HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError, socket);
+                    return;
+                }
             }
 
             // FIXME: work harder for error detection ?
@@ -605,6 +603,21 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
                 HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
         }
     }
+}
+
+bool ClientSession::forwardSetClipboard(DocumentBroker& docBroker, const std::string& clipFile)
+{
+#if !MOBILEAPP
+    const std::string kitClipFile = docBroker.moveFileIntoJail(
+        clipFile, JAILED_DOCUMENT_ROOT + std::string("clipboards/") +
+                      Poco::Path(clipFile).getFileName());
+    if (kitClipFile.empty())
+        return false;
+#else
+    const std::string& kitClipFile = clipFile;
+#endif
+    docBroker.forwardToChild(client_from_this(), "setclipboard name=" + kitClipFile, true);
+    return true;
 }
 
 bool ClientSession::removeTileOnFly(TileWireId wireId)
@@ -4733,7 +4746,7 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
 
         LOG_TRC("clipboardcontent path: " << clipFile);
 
-        std::string jailClipFile = getLocalPathToJail(clipFile, *docBroker);
+        std::string jailClipFile = docBroker->findFileInJail(clipFile);
         if (jailClipFile.empty())
             LOG_DBG("clipboardcontent produced no output in '" << clipFile << "'");
 

@@ -2150,7 +2150,8 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
     // we simply go to the fallback below.
     if (docBroker && docBroker->isAlive())
     {
-        std::string jailClipFile, clipFile;
+        std::string clipFile;
+        std::shared_ptr<FileUtil::OwnedFile> stagedClipFile;
         if (type == DocumentBroker::CLIP_REQUEST_SET)
         {
             if (!docBroker->getSessionFromClipboardTag(viewId, tag))
@@ -2161,27 +2162,37 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
                 return true;
             }
 
-            std::string clipName = "setclipboard." + tag;
+            const std::string clipName = "setclipboard." + tag + '.' + Util::rng::getFilename(16);
 
+#if !MOBILEAPP
+            // Kept outside the jail until it is processed, then moved in.
+            clipFile = COOLWSD::ChildRoot + JailUtil::CHILDROOT_TMP_INCOMING_PATH + '/' + clipName;
+            const std::string localClipFile = clipFile;
+#else
             std::string jailId = docBroker->getJailId();
 
             auto [clipDir, jailDir] = FileUtil::buildPathsToJail(COOLWSD::EnableMountNamespaces, COOLWSD::NoCapsForKit,
                                                                  COOLWSD::ChildRoot + jailId,
                                                                  JAILED_DOCUMENT_ROOT + std::string("clipboards"));
 
-            clipFile = clipDir + '/' + clipName;
-            jailClipFile = jailDir + '/' + clipName;
+            const std::string localClipFile = clipDir + '/' + clipName;
+            clipFile = jailDir + '/' + clipName;
+#endif
 
-            ClipboardPartHandler handler(clipFile);
+            ClipboardPartHandler handler(localClipFile);
             Poco::Net::HTMLForm form(request, message, handler);
-            if (FileUtil::Stat(clipFile).size())
+            if (FileUtil::Stat(localClipFile).size())
+            {
                 handler.takeFile();
+#if !MOBILEAPP
+                stagedClipFile = std::make_shared<FileUtil::OwnedFile>(clipFile);
+#endif
+            }
             else
             {
                 LOG_ERR_S("Invalid zero size set clipboard content with tag ["
                           << tag << "] on docKey [" << docKey << ']');
                 clipFile.clear();
-                jailClipFile.clear();
             }
         }
 
@@ -2192,10 +2203,12 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
         docBroker->setupTransfer(
             disposition,
             [docBroker, type, viewId=std::move(viewId),
-             tag=std::move(tag), jailClipFile=std::move(jailClipFile)](const std::shared_ptr<Socket>& moveSocket)
+             tag=std::move(tag), clipFile=std::move(clipFile),
+             stagedClipFile=std::move(stagedClipFile)](const std::shared_ptr<Socket>& moveSocket)
             {
                 auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
-                docBroker->handleClipboardRequest(type, streamSocket, viewId, tag, jailClipFile);
+                docBroker->handleClipboardRequest(type, streamSocket, viewId, tag, clipFile,
+                                                  stagedClipFile);
             });
         LOG_TRC_S("queued clipboard command " << type << " on docBroker fetch");
     }

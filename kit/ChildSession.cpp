@@ -3107,6 +3107,9 @@ bool ChildSession::setClipboard(const StringVector& tokens)
         return false;
     }
 
+    // Each set clipboard request has its own file.
+    const FileUtil::OwnedFile clipFileOwner(clipFile);
+
     try {
         ClipboardData data;
         std::ifstream stream(clipFile);
