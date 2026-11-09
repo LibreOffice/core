@@ -8,6 +8,7 @@
  */
 
 #include "rtftokenizer.hxx"
+#include <algorithm>
 #include <o3tl/string_view.hxx>
 #include <o3tl/numeric.hxx>
 #include <oox/token/namespaces.hxx>
@@ -49,6 +50,8 @@ struct RTFSymbol
     RTFControlType controlType;
     RTFKeyword index;
     int defValue = 0; ///< Most of the control words default to 0.
+    /// True if the parameter is a 32-bit value. Otherwise it is a 16-bit value, signed or unsigned.
+    bool is32Bit = false;
 };
 
 constexpr std::pair<const OString, RTFSymbol> controlWords[]{
@@ -169,7 +172,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "bgfdiag"_ostr, { RTFControlType::FLAG, RTFKeyword::BGFDIAG } },
     { "bghoriz"_ostr, { RTFControlType::FLAG, RTFKeyword::BGHORIZ } },
     { "bgvert"_ostr, { RTFControlType::FLAG, RTFKeyword::BGVERT } },
-    { "bin"_ostr, { RTFControlType::VALUE, RTFKeyword::BIN } },
+    { "bin"_ostr, { RTFControlType::VALUE, RTFKeyword::BIN, 0, true } },
     { "binfsxn"_ostr, { RTFControlType::VALUE, RTFKeyword::BINFSXN } },
     { "binsxn"_ostr, { RTFControlType::VALUE, RTFKeyword::BINSXN } },
     { "bkmkcolf"_ostr, { RTFControlType::VALUE, RTFKeyword::BKMKCOLF } },
@@ -177,7 +180,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "bkmkend"_ostr, { RTFControlType::DESTINATION, RTFKeyword::BKMKEND } },
     { "bkmkpub"_ostr, { RTFControlType::FLAG, RTFKeyword::BKMKPUB } },
     { "bkmkstart"_ostr, { RTFControlType::DESTINATION, RTFKeyword::BKMKSTART } },
-    { "bliptag"_ostr, { RTFControlType::VALUE, RTFKeyword::BLIPTAG } },
+    { "bliptag"_ostr, { RTFControlType::VALUE, RTFKeyword::BLIPTAG, 0, true } },
     { "blipuid"_ostr, { RTFControlType::DESTINATION, RTFKeyword::BLIPUID } },
     { "blipupi"_ostr, { RTFControlType::VALUE, RTFKeyword::BLIPUPI } },
     { "blue"_ostr, { RTFControlType::VALUE, RTFKeyword::BLUE } },
@@ -250,7 +253,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "cfollowedhyperlink"_ostr, { RTFControlType::FLAG, RTFKeyword::CFOLLOWEDHYPERLINK } },
     { "cfpat"_ostr, { RTFControlType::VALUE, RTFKeyword::CFPAT } },
     { "cgrid"_ostr, { RTFControlType::VALUE, RTFKeyword::CGRID } },
-    { "charrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::CHARRSID } },
+    { "charrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::CHARRSID, 0, true } },
     { "charscalex"_ostr, { RTFControlType::VALUE, RTFKeyword::CHARSCALEX, 100 } },
     { "chatn"_ostr, { RTFControlType::SYMBOL, RTFKeyword::CHATN } },
     { "chbgbdiag"_ostr, { RTFControlType::FLAG, RTFKeyword::CHBGBDIAG } },
@@ -367,7 +370,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "contextualspace"_ostr, { RTFControlType::FLAG, RTFKeyword::CONTEXTUALSPACE } },
     { "cpg"_ostr, { RTFControlType::VALUE, RTFKeyword::CPG } },
     { "crauth"_ostr, { RTFControlType::VALUE, RTFKeyword::CRAUTH } },
-    { "crdate"_ostr, { RTFControlType::VALUE, RTFKeyword::CRDATE } },
+    { "crdate"_ostr, { RTFControlType::VALUE, RTFKeyword::CRDATE, 0, true } },
     { "creatim"_ostr, { RTFControlType::DESTINATION, RTFKeyword::CREATIM } },
     { "cs"_ostr, { RTFControlType::VALUE, RTFKeyword::CS } },
     { "cshade"_ostr, { RTFControlType::VALUE, RTFKeyword::CSHADE } },
@@ -393,9 +396,9 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "defshp"_ostr, { RTFControlType::FLAG, RTFKeyword::DEFSHP } },
     { "deftab"_ostr, { RTFControlType::VALUE, RTFKeyword::DEFTAB, 720 } },
     { "deleted"_ostr, { RTFControlType::TOGGLE, RTFKeyword::DELETED, 1 } },
-    { "delrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::DELRSID } },
+    { "delrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::DELRSID, 0, true } },
     { "dfrauth"_ostr, { RTFControlType::VALUE, RTFKeyword::DFRAUTH } },
-    { "dfrdate"_ostr, { RTFControlType::VALUE, RTFKeyword::DFRDATE } },
+    { "dfrdate"_ostr, { RTFControlType::VALUE, RTFKeyword::DFRDATE, 0, true } },
     { "dfrmtxtx"_ostr, { RTFControlType::VALUE, RTFKeyword::DFRMTXTX } },
     { "dfrmtxty"_ostr, { RTFControlType::VALUE, RTFKeyword::DFRMTXTY } },
     { "dfrstart"_ostr, { RTFControlType::VALUE, RTFKeyword::DFRSTART } },
@@ -424,7 +427,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "doctemp"_ostr, { RTFControlType::FLAG, RTFKeyword::DOCTEMP } },
     { "doctype"_ostr, { RTFControlType::VALUE, RTFKeyword::DOCTYPE } },
     { "docvar"_ostr, { RTFControlType::DESTINATION, RTFKeyword::DOCVAR } },
-    { "dodhgt"_ostr, { RTFControlType::VALUE, RTFKeyword::DODHGT } },
+    { "dodhgt"_ostr, { RTFControlType::VALUE, RTFKeyword::DODHGT, 0, true } },
     { "dolock"_ostr, { RTFControlType::FLAG, RTFKeyword::DOLOCK } },
     { "donotembedlingdata"_ostr, { RTFControlType::VALUE, RTFKeyword::DONOTEMBEDLINGDATA } },
     { "donotembedsysfont"_ostr, { RTFControlType::VALUE, RTFKeyword::DONOTEMBEDSYSFONT } },
@@ -718,7 +721,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "indmirror"_ostr, { RTFControlType::FLAG, RTFKeyword::INDMIRROR } },
     { "indrlsweleven"_ostr, { RTFControlType::FLAG, RTFKeyword::INDRLSWELEVEN } },
     { "info"_ostr, { RTFControlType::DESTINATION, RTFKeyword::INFO } },
-    { "insrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::INSRSID } },
+    { "insrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::INSRSID, 0, true } },
     { "intbl"_ostr, { RTFControlType::FLAG, RTFKeyword::INTBL } },
     { "ipgp"_ostr, { RTFControlType::VALUE, RTFKeyword::IPGP } },
     { "irowband"_ostr, { RTFControlType::VALUE, RTFKeyword::IROWBAND } },
@@ -765,7 +768,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "levelprevspace"_ostr, { RTFControlType::VALUE, RTFKeyword::LEVELPREVSPACE } },
     { "levelspace"_ostr, { RTFControlType::VALUE, RTFKeyword::LEVELSPACE } },
     { "levelstartat"_ostr, { RTFControlType::VALUE, RTFKeyword::LEVELSTARTAT } },
-    { "leveltemplateid"_ostr, { RTFControlType::VALUE, RTFKeyword::LEVELTEMPLATEID } },
+    { "leveltemplateid"_ostr, { RTFControlType::VALUE, RTFKeyword::LEVELTEMPLATEID, 0, true } },
     { "leveltext"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LEVELTEXT } },
     { "lfolevel"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LFOLEVEL } },
     { "li"_ostr, { RTFControlType::VALUE, RTFKeyword::LI } },
@@ -786,7 +789,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "lisb"_ostr, { RTFControlType::VALUE, RTFKeyword::LISB } },
     { "list"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LIST } },
     { "listhybrid"_ostr, { RTFControlType::FLAG, RTFKeyword::LISTHYBRID } },
-    { "listid"_ostr, { RTFControlType::VALUE, RTFKeyword::LISTID } },
+    { "listid"_ostr, { RTFControlType::VALUE, RTFKeyword::LISTID, 0, true } },
     { "listlevel"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LISTLEVEL } },
     { "listname"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LISTNAME } },
     { "listoverride"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LISTOVERRIDE } },
@@ -800,7 +803,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "liststyleid"_ostr, { RTFControlType::VALUE, RTFKeyword::LISTSTYLEID } },
     { "liststylename"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LISTSTYLENAME } },
     { "listtable"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LISTTABLE } },
-    { "listtemplateid"_ostr, { RTFControlType::VALUE, RTFKeyword::LISTTEMPLATEID } },
+    { "listtemplateid"_ostr, { RTFControlType::VALUE, RTFKeyword::LISTTEMPLATEID, 0, true } },
     { "listtext"_ostr, { RTFControlType::DESTINATION, RTFKeyword::LISTTEXT } },
     { "lnbrkrule"_ostr, { RTFControlType::FLAG, RTFKeyword::LNBRKRULE } },
     { "lndscpsxn"_ostr, { RTFControlType::FLAG, RTFKeyword::LNDSCPSXN } },
@@ -1059,11 +1062,11 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "nocwrap"_ostr, { RTFControlType::FLAG, RTFKeyword::NOCWRAP } },
     { "nocxsptable"_ostr, { RTFControlType::FLAG, RTFKeyword::NOCXSPTABLE } },
     { "noextrasprl"_ostr, { RTFControlType::FLAG, RTFKeyword::NOEXTRASPRL } },
-    { "nofchars"_ostr, { RTFControlType::VALUE, RTFKeyword::NOFCHARS } },
-    { "nofcharsws"_ostr, { RTFControlType::VALUE, RTFKeyword::NOFCHARSWS } },
+    { "nofchars"_ostr, { RTFControlType::VALUE, RTFKeyword::NOFCHARS, 0, true } },
+    { "nofcharsws"_ostr, { RTFControlType::VALUE, RTFKeyword::NOFCHARSWS, 0, true } },
     { "nofeaturethrottle"_ostr, { RTFControlType::FLAG, RTFKeyword::NOFEATURETHROTTLE } },
     { "nofpages"_ostr, { RTFControlType::VALUE, RTFKeyword::NOFPAGES } },
-    { "nofwords"_ostr, { RTFControlType::VALUE, RTFKeyword::NOFWORDS } },
+    { "nofwords"_ostr, { RTFControlType::VALUE, RTFKeyword::NOFWORDS, 0, true } },
     { "nogrowautofit"_ostr, { RTFControlType::FLAG, RTFKeyword::NOGROWAUTOFIT } },
     { "noindnmbrts"_ostr, { RTFControlType::FLAG, RTFKeyword::NOINDNMBRTS } },
     { "nojkernpunct"_ostr, { RTFControlType::FLAG, RTFKeyword::NOJKERNPUNCT } },
@@ -1137,7 +1140,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "paperh"_ostr, { RTFControlType::VALUE, RTFKeyword::PAPERH, 15840 } },
     { "paperw"_ostr, { RTFControlType::VALUE, RTFKeyword::PAPERW, 12240 } },
     { "par"_ostr, { RTFControlType::SYMBOL, RTFKeyword::PAR } },
-    { "pararsid"_ostr, { RTFControlType::VALUE, RTFKeyword::PARARSID } },
+    { "pararsid"_ostr, { RTFControlType::VALUE, RTFKeyword::PARARSID, 0, true } },
     { "pard"_ostr, { RTFControlType::FLAG, RTFKeyword::PARD } },
     { "password"_ostr, { RTFControlType::DESTINATION, RTFKeyword::PASSWORD } },
     { "passwordhash"_ostr, { RTFControlType::DESTINATION, RTFKeyword::PASSWORDHASH } },
@@ -1207,16 +1210,16 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "piccropl"_ostr, { RTFControlType::VALUE, RTFKeyword::PICCROPL } },
     { "piccropr"_ostr, { RTFControlType::VALUE, RTFKeyword::PICCROPR } },
     { "piccropt"_ostr, { RTFControlType::VALUE, RTFKeyword::PICCROPT } },
-    { "pich"_ostr, { RTFControlType::VALUE, RTFKeyword::PICH } },
-    { "pichgoal"_ostr, { RTFControlType::VALUE, RTFKeyword::PICHGOAL } },
+    { "pich"_ostr, { RTFControlType::VALUE, RTFKeyword::PICH, 0, true } },
+    { "pichgoal"_ostr, { RTFControlType::VALUE, RTFKeyword::PICHGOAL, 0, true } },
     { "pichGoal"_ostr, { RTFControlType::VALUE, RTFKeyword::PICHGOAL } },
     { "picprop"_ostr, { RTFControlType::DESTINATION, RTFKeyword::PICPROP } },
     { "picscaled"_ostr, { RTFControlType::FLAG, RTFKeyword::PICSCALED } },
     { "picscalex"_ostr, { RTFControlType::VALUE, RTFKeyword::PICSCALEX, 100 } },
     { "picscaley"_ostr, { RTFControlType::VALUE, RTFKeyword::PICSCALEY, 100 } },
     { "pict"_ostr, { RTFControlType::DESTINATION, RTFKeyword::PICT } },
-    { "picw"_ostr, { RTFControlType::VALUE, RTFKeyword::PICW } },
-    { "picwgoal"_ostr, { RTFControlType::VALUE, RTFKeyword::PICWGOAL } },
+    { "picw"_ostr, { RTFControlType::VALUE, RTFKeyword::PICW, 0, true } },
+    { "picwgoal"_ostr, { RTFControlType::VALUE, RTFKeyword::PICWGOAL, 0, true } },
     { "picwGoal"_ostr, { RTFControlType::VALUE, RTFKeyword::PICWGOAL } },
     { "pindtabqc"_ostr, { RTFControlType::FLAG, RTFKeyword::PINDTABQC } },
     { "pindtabql"_ostr, { RTFControlType::FLAG, RTFKeyword::PINDTABQL } },
@@ -1379,8 +1382,8 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "revauth"_ostr, { RTFControlType::VALUE, RTFKeyword::REVAUTH } },
     { "revauthdel"_ostr, { RTFControlType::VALUE, RTFKeyword::REVAUTHDEL } },
     { "revbar"_ostr, { RTFControlType::VALUE, RTFKeyword::REVBAR, 3 } },
-    { "revdttm"_ostr, { RTFControlType::VALUE, RTFKeyword::REVDTTM } },
-    { "revdttmdel"_ostr, { RTFControlType::VALUE, RTFKeyword::REVDTTMDEL } },
+    { "revdttm"_ostr, { RTFControlType::VALUE, RTFKeyword::REVDTTM, 0, true } },
+    { "revdttmdel"_ostr, { RTFControlType::VALUE, RTFKeyword::REVDTTMDEL, 0, true } },
     { "revised"_ostr, { RTFControlType::TOGGLE, RTFKeyword::REVISED, 1 } },
     { "revisions"_ostr, { RTFControlType::FLAG, RTFKeyword::REVISIONS } },
     { "revprop"_ostr, { RTFControlType::VALUE, RTFKeyword::REVPROP, 3 } },
@@ -1391,8 +1394,8 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "rin"_ostr, { RTFControlType::VALUE, RTFKeyword::RIN } },
     { "row"_ostr, { RTFControlType::SYMBOL, RTFKeyword::ROW } },
     { "rquote"_ostr, { RTFControlType::SYMBOL, RTFKeyword::RQUOTE } },
-    { "rsid"_ostr, { RTFControlType::VALUE, RTFKeyword::RSID } },
-    { "rsidroot"_ostr, { RTFControlType::VALUE, RTFKeyword::RSIDROOT } },
+    { "rsid"_ostr, { RTFControlType::VALUE, RTFKeyword::RSID, 0, true } },
+    { "rsidroot"_ostr, { RTFControlType::VALUE, RTFKeyword::RSIDROOT, 0, true } },
     { "rsidtbl"_ostr, { RTFControlType::DESTINATION, RTFKeyword::RSIDTBL } },
     { "rsltbmp"_ostr, { RTFControlType::FLAG, RTFKeyword::RSLTBMP } },
     { "rslthtml"_ostr, { RTFControlType::FLAG, RTFKeyword::RSLTHTML } },
@@ -1457,7 +1460,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "sectexpand"_ostr, { RTFControlType::VALUE, RTFKeyword::SECTEXPAND } },
     { "sectlinegrid"_ostr, { RTFControlType::VALUE, RTFKeyword::SECTLINEGRID } },
     { "sectnum"_ostr, { RTFControlType::SYMBOL, RTFKeyword::SECTNUM } },
-    { "sectrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::SECTRSID } },
+    { "sectrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::SECTRSID, 0, true } },
     { "sectspecifycl"_ostr, { RTFControlType::FLAG, RTFKeyword::SECTSPECIFYCL } },
     { "sectspecifygenN"_ostr, { RTFControlType::FLAG, RTFKeyword::SECTSPECIFYGENN } },
     { "sectspecifyl"_ostr, { RTFControlType::FLAG, RTFKeyword::SECTSPECIFYL } },
@@ -1562,7 +1565,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "stylelocktheme"_ostr, { RTFControlType::FLAG, RTFKeyword::STYLELOCKTHEME } },
     { "stylesheet"_ostr, { RTFControlType::DESTINATION, RTFKeyword::STYLESHEET } },
     { "stylesortmethod"_ostr, { RTFControlType::VALUE, RTFKeyword::STYLESORTMETHOD, 1 } },
-    { "styrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::STYRSID } },
+    { "styrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::STYRSID, 0, true } },
     { "sub"_ostr, { RTFControlType::FLAG, RTFKeyword::SUB } },
     { "subdocument"_ostr, { RTFControlType::VALUE, RTFKeyword::SUBDOCUMENT } },
     { "subfontbysize"_ostr, { RTFControlType::FLAG, RTFKeyword::SUBFONTBYSIZE } },
@@ -1589,7 +1592,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "tbllknocolband"_ostr, { RTFControlType::FLAG, RTFKeyword::TBLLKNOCOLBAND } },
     { "tbllknorowband"_ostr, { RTFControlType::FLAG, RTFKeyword::TBLLKNOROWBAND } },
     { "tbllkshading"_ostr, { RTFControlType::FLAG, RTFKeyword::TBLLKSHADING } },
-    { "tblrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::TBLRSID } },
+    { "tblrsid"_ostr, { RTFControlType::VALUE, RTFKeyword::TBLRSID, 0, true } },
     { "tc"_ostr, { RTFControlType::DESTINATION, RTFKeyword::TC } },
     { "tcelld"_ostr, { RTFControlType::FLAG, RTFKeyword::TCELLD } },
     { "tcf"_ostr, { RTFControlType::VALUE, RTFKeyword::TCF, 67 } },
@@ -1812,7 +1815,7 @@ constexpr std::pair<const OString, RTFSymbol> controlWords[]{
     { "utinl"_ostr, { RTFControlType::FLAG, RTFKeyword::UTINL } },
     { "v"_ostr, { RTFControlType::TOGGLE, RTFKeyword::V, 1 } },
     { "validatexml"_ostr, { RTFControlType::VALUE, RTFKeyword::VALIDATEXML } },
-    { "vern"_ostr, { RTFControlType::VALUE, RTFKeyword::VERN } },
+    { "vern"_ostr, { RTFControlType::VALUE, RTFKeyword::VERN, 0, true } },
     { "version"_ostr, { RTFControlType::VALUE, RTFKeyword::VERSION } },
     { "vertal"_ostr, { RTFControlType::FLAG, RTFKeyword::VERTAL } },
     { "vertalb"_ostr, { RTFControlType::FLAG, RTFKeyword::VERTALB } },
@@ -2174,6 +2177,17 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
         RTFSkipDestination aSkip(m_rImport);
         aSkip.setParsed(false);
         return RTFError::OK;
+    }
+
+    // Accept both signed and unsigned 16-bit values, for example \u values
+    // are typically unsigned.
+    if (bParam && !pSymbol->is32Bit
+        && (nParam < std::numeric_limits<sal_Int16>::min() || std::numeric_limits<sal_uInt16>::max() < nParam))
+    {
+        SAL_WARN("writerfilter.rtf", __func__ << ": keyword '\\" << rKeyword << nParam
+                                              << "' parameter is outside 16-bit range");
+        nParam = std::clamp<int>(nParam, std::numeric_limits<sal_Int16>::min(),
+                std::numeric_limits<sal_uInt16>::max());
     }
 
     RTFError ret;
