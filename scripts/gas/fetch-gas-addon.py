@@ -22,6 +22,7 @@
 
 Usage:
     fetch-gas-addon.py <source> [--id ID] [--dest PATH] [--subpath PATH] [--use-clasp] [--force]
+                       [--library LIBRARY-ID=PATH]...
                        [--external-icon PATH-OR-URL] [--internal-icon PATH]
 
 <source> is either
@@ -62,7 +63,16 @@ _cool-gas.json at the top of an add-on, which also lists the add-on's code files
 under "scripts".)  A library declared with "developmentMode": true is fetched
 in its current state, into a HEAD directory.  The Google login is the one that
 run-gas-test.py uses (see gas_auth.py), and a library can only be fetched by
-an account that may read it, which for a public library is anyone.
+an account that may view its project, which an account that only uses the
+library need not.
+
+--library LIBRARY-ID=PATH, which can be given more than once, takes the library
+with that libraryId from the directory PATH instead of through the Apps Script
+API, e.g. when the add-on's repository also holds the library's source.  PATH is
+relative to the root of the fetched source (for an add-on already in place, to
+the current directory).  Its code files (.gs and .js, listed in _cool-gas.json
+in the order of their names), its .html files and its appsscript.json are
+copied into the library's directory as for a fetched library.
 
 A <source> that is a directory directly in <dest> is an add-on already in place,
 for which only the libraries are fetched.  A library already in place is kept
@@ -131,7 +141,31 @@ def write_library(content, target):
     partial.rename(target)
 
 
-def fetch_library(script, library, root, force, done):
+# The files of a library from a local directory, in the layout of write_library:
+def copy_library(source, target):
+    if not (source / "appsscript.json").is_file():
+        sys.exit(f"library directory {source} has no appsscript.json")
+    partial = target.with_name(target.name + ".partial")
+    if partial.exists():
+        shutil.rmtree(partial)
+    scripts = []
+    for path in sorted(source.rglob("*")):
+        if not path.is_file() or path.is_symlink():
+            continue
+        name = path.relative_to(source).as_posix()
+        if path.suffix in (".gs", ".js"):
+            scripts.append(name)
+        elif path.suffix != ".html" and name != "appsscript.json":
+            continue
+        (partial / name).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(path, partial / name)
+    (partial / "_cool-gas.json").write_text(json.dumps({"scripts": scripts}, indent=2) + "\n")
+    if target.exists():
+        shutil.rmtree(target)
+    partial.rename(target)
+
+
+def fetch_library(script, library, root, force, done, local):
     library_id = library["libraryId"]
     version = "HEAD" if library.get("developmentMode") else str(library["version"])
     if (library_id, version) in done:
@@ -140,28 +174,58 @@ def fetch_library(script, library, root, force, done):
     target = root / library_id / version
     if target.exists() and not force:
         print("have  " + library.get("userSymbol", "?") + " " + library_id + " " + version)
+    elif library_id in local:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        copy_library(local[library_id], target)
+        print("copied " + library.get("userSymbol", "?") + " " + library_id + " " + version
+              + " from " + str(local[library_id]))
     else:
         target.parent.mkdir(parents=True, exist_ok=True)
-        request = script.projects().getContent(scriptId=library_id)
+        request = script().projects().getContent(scriptId=library_id)
         if version != "HEAD":
-            request = script.projects().getContent(scriptId=library_id, versionNumber=int(version))
+            request = script().projects().getContent(
+                scriptId=library_id, versionNumber=int(version))
         write_library(request.execute(), target)
         print("fetched " + library.get("userSymbol", "?") + " " + library_id + " " + version)
     manifest_path = target / "appsscript.json"
     if manifest_path.exists():
         for dependency in declared_libraries(json.loads(manifest_path.read_text())):
-            fetch_library(script, dependency, root, force, done)
+            fetch_library(script, dependency, root, force, done, local)
 
 
-def fetch_libraries(add_on, force, state_dir):
+# The Apps Script API is only connected (and the Google login only asked for) when a library is
+# fetched through it:
+def fetch_libraries(add_on, force, state_dir, local):
     libraries = declared_libraries(json.loads((add_on / "appsscript.json").read_text()))
     if not libraries:
         return
-    script = build("script", "v1", credentials=get_credentials(state_dir), cache_discovery=False)
+    service = []
+
+    def script():
+        if not service:
+            service.append(
+                build("script", "v1", credentials=get_credentials(state_dir),
+                      cache_discovery=False))
+        return service[0]
+
     root = add_on / "_cool-gas-libraries"
     done = set()
     for library in libraries:
-        fetch_library(script, library, root, force, done)
+        fetch_library(script, library, root, force, done, local)
+
+
+# The local library directories that the --library arguments name, by libraryId:
+def local_libraries(arguments, base):
+    local = {}
+    for argument in arguments:
+        library_id, separator, path = argument.partition("=")
+        if not separator or not library_id or not path:
+            sys.exit(f"--library {argument!r} is not of the form LIBRARY-ID=PATH")
+        directory = (base / path).resolve()
+        if not directory.is_dir():
+            sys.exit(f"--library {argument!r} names no directory")
+        local[library_id] = directory
+    return local
 
 
 def is_clone_url(source):
@@ -331,6 +395,9 @@ def main():
     ap.add_argument(
         "--force", action="store_true", help="fetch libraries again that are already in place")
     ap.add_argument(
+        "--library", action="append", default=[], metavar="LIBRARY-ID=PATH",
+        help="take the library with that libraryId from the directory PATH of the source")
+    ap.add_argument(
         "--external-icon",
         help="icon file outside the add-on, or URL serving it, to copy into it and record")
     ap.add_argument(
@@ -344,7 +411,8 @@ def main():
 
     in_place = Path(args.source).resolve()
     if in_place.is_dir() and in_place.parent == Path(args.dest).resolve():
-        fetch_libraries(in_place, args.force, args.state_dir)
+        fetch_libraries(
+            in_place, args.force, args.state_dir, local_libraries(args.library, Path.cwd()))
         if external or args.internal_icon:
             record_icon(in_place, external, args.internal_icon)
         return
@@ -389,9 +457,11 @@ def main():
         add_on = fetch(source, subpath, work)
         copy_into_dest(add_on, dest)
         ensure_appsscript_json(dest, args.use_clasp)
-    if external or args.internal_icon:
-        record_icon(dest, external, args.internal_icon)
-    fetch_libraries(dest, args.force, args.state_dir)
+        if external or args.internal_icon:
+            record_icon(dest, external, args.internal_icon)
+        source_root = Path(source).resolve() if Path(source).is_dir() else work / "src"
+        fetch_libraries(
+            dest, args.force, args.state_dir, local_libraries(args.library, source_root))
 
     print(f"fetched as {ext_id} to {dest}")
 
