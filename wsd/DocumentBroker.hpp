@@ -594,8 +594,8 @@ public:
 
     /// Records the given remote links and gives their access tokens to the view that holds the
     /// given one-time token, or to every view that opened the document with the given access
-    /// token, coming from POST /cool/links. The one-time token is consumed once for all of
-    /// them. False when no view matches either.
+    /// token, coming from POST /cool/links. Only a view that may change the document matches.
+    /// The one-time token is consumed once for all of them. False when no view matches.
     bool registerRemoteDocumentLinks(const std::string& oneTimeToken,
                                      const std::string& documentAccessToken,
                                      const std::vector<RemoteLinkRegistration>& links);

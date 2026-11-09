@@ -1572,7 +1572,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     else if (tokens.equals(0, "setviewreadonly"))
     {
         // only if the session has WOPI write permission
-        if (!isWritable() || isReadOnly())
+        if (!canChangeDocument())
             return false;
 
         std::string value;
@@ -1595,9 +1595,8 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     else if (tokens.equals(0, "allowlinkupdate"))
     {
         // The browser only hides the prompt, this is the enforcement that only
-        // editors can update links. isWritable() is also true for comment-only
-        // sessions, so require !isReadOnly() too.
-        if (!isWritable() || isReadOnly())
+        // editors can update links.
+        if (!canChangeDocument())
             return false;
         return forwardToChild(firstLine, docBroker);
     }
@@ -1807,6 +1806,14 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             encodedSource.empty())
         {
             sendTextFrameAndLogError("error: cmd=remotelinkremove kind=syntax");
+            return false;
+        }
+
+        // The list of remote links is the same for every view, so only a view that may change
+        // the document may change it.
+        if (!canChangeDocument())
+        {
+            sendTextFrameAndLogError("error: cmd=remotelinkremove kind=readonly");
             return false;
         }
 

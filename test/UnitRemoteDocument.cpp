@@ -2089,6 +2089,157 @@ public:
     }
 };
 
+/// A document (file 1) has an editing view and a read-only view, and the editing view's storage
+/// registered a remote document (file 2). The read-only view can neither bind the persistent
+/// link to another document over POST /cool/links nor drop it with remotelinkremove, so the
+/// editing view still reaches file 2 under it afterwards.
+class UnitLinkReadOnlyView : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitFirstLoad, LoadSecond, WaitSecondView, WaitPostRefused,
+               WaitRemoveRefused, WaitConnected, Done)
+    _phase;
+
+    /// The read-only view of the same document.
+    std::unique_ptr<UnitWebSocket> _secondWs;
+
+    std::string fileWopiSrc(int fileId) const
+    {
+        return getWopiHostURI() + "/wopi/files/" + std::to_string(fileId);
+    }
+
+public:
+    UnitLinkReadOnlyView()
+        : WopiTestServer("UnitLinkReadOnlyView")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        if (request.getURI().find("access_token=secondtoken") != std::string::npos)
+            fileInfo->set("UserCanWrite", "false");
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitFirstLoad)
+        {
+            registerRemoteLink(socketPoll(), fileWopiSrc(1), "firsttoken", fileWopiSrc(2),
+                               "remotetoken",
+                               [this](unsigned status)
+                               {
+                                   LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                                    status);
+                                   TRANSITION_STATE(_phase, Phase::LoadSecond);
+                               });
+        }
+
+        return true;
+    }
+
+    bool onViewLoaded(const std::string& message) override
+    {
+        TST_LOG("onViewLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitSecondView)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitPostRefused);
+
+            // The read-only view's storage binds the persistent link of file 2 to file 3.
+            registerRemoteLink(
+                socketPoll(), fileWopiSrc(1), "secondtoken", fileWopiSrc(3), "othertoken",
+                [this](unsigned status)
+                {
+                    LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
+                                     status);
+                    TRANSITION_STATE(_phase, Phase::WaitRemoveRefused);
+                    helpers::sendTextFrame(_secondWs->getWebSocket(),
+                                           "remotelinkremove source=" +
+                                               Uri::encode(fileWopiSrc(2)),
+                                           getTestname());
+                },
+                std::string(), fileWopiSrc(2));
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("error: cmd=remotelinkremove"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            LOK_ASSERT_MESSAGE("Unexpected remotelinkremove error",
+                               _phase == Phase::WaitRemoveRefused);
+            LOK_ASSERT_MESSAGE("Expected a read-only rejection",
+                               message.find("kind=readonly") != std::string_view::npos);
+
+            TRANSITION_STATE(_phase, Phase::WaitConnected);
+            WSD_CMD("remotedocsubscribe source=" + Uri::encode(fileWopiSrc(2)));
+        }
+
+        return false;
+    }
+
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+
+        if (_phase != Phase::WaitConnected)
+            return;
+
+        LOK_ASSERT_MESSAGE("Expected no remote document error",
+                           message.find("event=error") == std::string::npos);
+        if (message.find("event=connected") != std::string::npos)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The read-only view left the remote link as the editing view set it");
+        }
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstLoad);
+
+                initWebsocket("/wopi/files/1?access_token=firsttoken");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::LoadSecond:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSecondView);
+
+                const std::string secondWopiSrc =
+                    Uri::encode(fileWopiSrc(1) + "?access_token=secondtoken");
+                _secondWs = std::make_unique<UnitWebSocket>(
+                    socketPoll(), "/cool/" + secondWopiSrc + "/ws", getTestname());
+                helpers::sendTextFrame(_secondWs->getWebSocket(), "load url=" + secondWopiSrc,
+                                       getTestname());
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+};
+
 /// A document (file 1) subscribes to a remote document (file 2). When another
 /// user saves the remote document to storage, the subscriber's remote
 /// links list picks up the source's new last-modified time and the client
@@ -3828,7 +3979,8 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitLinkPostBatch(), new UnitLinkDelete(),
             new UnitRemoteDocumentMutual(), new UnitRemoteDocumentCommand(),
             new UnitRemoteDocumentMissing(), new UnitRemoteDocumentRetry(),
-            new UnitRemoteDocumentIsolation(), new UnitRemoteDocumentSaved(),
+            new UnitRemoteDocumentIsolation(), new UnitLinkReadOnlyView(),
+            new UnitRemoteDocumentSaved(),
             new UnitRemoteDocumentChain(), new UnitLinkPostPersistentLink(),
             new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(),
             new UnitLinkAccessBatch(), new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(),

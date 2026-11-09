@@ -6173,7 +6173,9 @@ bool DocumentBroker::registerRemoteDocumentLinks(const std::string& oneTimeToken
         // The same user may hold several views, each of them gets the tokens.
         const bool byAccessToken = !byOneTimeToken && !documentAccessToken.empty() &&
                                    it.second->getAuthorization().matchesToken(documentAccessToken);
-        if (!byOneTimeToken && !byAccessToken)
+        // The remote links are the same for every view, so only a view that may change the
+        // document records them.
+        if ((!byOneTimeToken && !byAccessToken) || !it.second->canChangeDocument())
             continue;
 
         // The token is recorded first, so the list this view gets for the new source names

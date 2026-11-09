@@ -136,6 +136,9 @@ public:
                (!isReadOnly() || isAllowChangeComments() || isAllowManageRedlines());
     }
 
+    /// True iff the session can write in the Storage and is not read-only.
+    bool canChangeDocument() const { return isWritable() && !isReadOnly(); }
+
     /// if certification verification was disabled for the wopi server
     bool isDisableVerifyHost() const { return _disableVerifyHost; }
 
