@@ -50,8 +50,7 @@ namespace {
             break;
             case text::TextMarkupType::PROOFREADING:
             {
-                // support not implemented yet
-                return nullptr;
+                return &SwTextNode::GetGrammarCheck;
             }
             break;
             case text::TextMarkupType::SMARTTAG:
