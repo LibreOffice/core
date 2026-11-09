@@ -31,6 +31,7 @@ describe('Collaboration notices in a document window', function () {
 			() => !page.window.document.getElementById('collab-choice-title'),
 			'the notice to close',
 		);
+		nodeassert.deepEqual(page.errors, [], 'the page reported no errors');
 	});
 
 	// The notice on screen: its title, and the heading of each choice.
@@ -82,9 +83,5 @@ describe('Collaboration notices in a document window', function () {
 			'Edit locally',
 			'Collaborative editing',
 		]);
-	});
-
-	it('the page reported no errors', function () {
-		nodeassert.deepEqual(page.errors, []);
 	});
 });

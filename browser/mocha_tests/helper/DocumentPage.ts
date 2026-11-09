@@ -293,6 +293,9 @@ async function openDocumentPage(docType: string): Promise<DocumentPage> {
 		if (/Not implemented/.test(error.message)) return;
 		errors.push(error.message);
 	});
+	virtualConsole.on('error', (...args: any[]) => {
+		errors.push(args.map(String).join(' '));
+	});
 
 	const dom = new jsdom.JSDOM(documentPageHtml(dist), {
 		url: 'http://localhost:9980/browser/dist/cool.html?file_path=/test/document&lang=en-US',
@@ -324,6 +327,11 @@ async function openDocumentPage(docType: string): Promise<DocumentPage> {
 		await new Promise((resolve) =>
 			pageWindow.addEventListener('load', resolve),
 		);
+		// The page reports an exception in a message handler through app.console.error.
+		// Each such report goes into errors.
+		pageWindow.app.console.error = (...args: any[]) => {
+			errors.push(args.map(String).join(' '));
+		};
 		await documentPageWait(() => socket, 'the page to open its socket');
 
 		const serverSays = (message: string) => socket.onmessage({ data: message });

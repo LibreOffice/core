@@ -42,9 +42,13 @@ built page itself, rather than build a stand-in for the map:
     after(function () {
         page?.close();
     });
+    afterEach(function () {
+        nodeassert.deepEqual(page.errors, []);
+    });
 
 openDocumentPage() loads dist/cool.html with all its scripts and plays the server's side of a
 document load, so page.map is the real map with a real document layer. page.serverSays() sends
-a message from the server, and page.sent holds what the page sent. A page takes a second or two
+a message from the server, and page.sent holds what the page sent. page.errors holds the errors
+the page reported, such as an exception in a message handler. A page takes a second or two
 to load, so a suite loads one in before() and shares it between its tests.
 CollabNotices.test.ts is an example. It needs a built dist, which "make check" builds first.
