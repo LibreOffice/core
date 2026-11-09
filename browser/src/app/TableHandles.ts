@@ -175,15 +175,17 @@ class TableHandles extends HandleGroup {
 					markerReach,
 				);
 		});
-		table.rows.forEach((y: number, at: number) =>
-			add(
-				'rowBorder.' + at,
-				TableHandles.rowBorder,
-				table.left - border,
-				y,
-				markerReach,
-			),
-		);
+		// the top border of the rows moves with the table, as in the tiled view
+		table.rows.forEach((y: number, at: number) => {
+			if (at > 0)
+				add(
+					'rowBorder.' + at,
+					TableHandles.rowBorder,
+					table.left - border,
+					y,
+					markerReach,
+				);
+		});
 
 		const insert = TableHandles.insertOut();
 		add(
@@ -275,12 +277,52 @@ class TableHandles extends HandleGroup {
 			app.socket.sendMessage('uno .uno:InsertRowsAfter');
 	}
 
+	/*
+		The arrow keys along a border marker move its border a step, as a drag does, kept between
+		the borders beside it: left and right for a border between columns, up and down for one
+		between rows. Answers where the marker lands.
+	*/
+	private moveBorderByKey(
+		handle: SelectionHandle,
+		towards: cool.Point,
+		event: KeyboardEvent,
+	): cool.Point | null {
+		const data = this.data();
+		if (!data) return null;
+		const columns = handle.kind === TableHandles.columnBorder;
+		const along = columns ? towards.x : towards.y;
+		if (!along) return null;
+
+		const table = ClassicTableContext.layout(data);
+		const lines = columns ? table.columns : table.rows;
+		const at = Number(handle.name.split('.')[2]);
+		const limits = TableBorderDrag.limits(lines, at);
+		const place = Math.min(
+			limits.high,
+			Math.max(limits.low, lines[at] + along * HandleTravel.stepFor(event)),
+		);
+		TableBorderDrag.moveBorder(
+			columns,
+			at,
+			at === lines.length - 1,
+			Math.round(place - lines[at]),
+		);
+		return columns
+			? new cool.Point(place, handle.point.y)
+			: new cool.Point(handle.point.x, place);
+	}
+
 	/// The arrow keys on the anchor move the table, as they move a selection.
 	public moveByKey(
 		handle: SelectionHandle,
 		towards: cool.Point,
 		event: KeyboardEvent,
 	): cool.Point | null {
+		if (
+			handle.kind === TableHandles.columnBorder ||
+			handle.kind === TableHandles.rowBorder
+		)
+			return this.moveBorderByKey(handle, towards, event);
 		if (handle.kind !== TableHandles.anchor) return null;
 		this.selection.moveByKey(towards, event);
 		const step = HandleTravel.stepFor(event);
@@ -290,11 +332,25 @@ class TableHandles extends HandleGroup {
 		);
 	}
 
-	/// A drag of the anchor moves the table, as a drag of the table itself does.
+	/// A drag of the anchor moves the table, as a drag of the table itself does; a drag of a
+	/// border marker moves that border.
 	public interactionFor(
 		handle: SelectionHandle,
 		at: cool.SimplePoint,
 	): SelectionInteraction | null {
+		if (
+			handle.kind === TableHandles.columnBorder ||
+			handle.kind === TableHandles.rowBorder
+		) {
+			const data = this.data();
+			return data
+				? new TableBorderDrag(
+						this.selection,
+						handle,
+						ClassicTableContext.layout(data),
+					)
+				: null;
+		}
 		if (
 			handle.kind !== TableHandles.anchor ||
 			!ObjectHandles.canBeMoved(this.selection.selectedObjects())
@@ -365,6 +421,24 @@ class TableHandles extends HandleGroup {
 
 		context.save();
 		context.setTransform(1, 0, 0, 1, 0, 0);
+
+		// the border being dragged, across the table where it would go, as the tiled view
+		// shows it
+		const dragged = TableBorderDrag.running;
+		if (dragged) {
+			const from = dragged.columns
+				? corner(dragged.place, table.top)
+				: corner(table.left, dragged.place);
+			const to = dragged.columns
+				? corner(dragged.place, table.bottom)
+				: corner(table.right, dragged.place);
+			context.strokeStyle = '#3388FF';
+			context.lineWidth = 2 * app.dpiScale;
+			context.beginPath();
+			context.moveTo(from.vX, from.vY);
+			context.lineTo(to.vX, to.vY);
+			context.stroke();
+		}
 
 		context.strokeStyle = 'lightgray';
 		context.lineWidth = app.dpiScale;

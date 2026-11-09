@@ -443,6 +443,29 @@ class TableMiddleware {
 			: undefined;
 	}
 
+	/*
+		Lays a border moved by this view on the rows and columns at once, so the markers stand
+		where it went before the server reports the table again, and what it reports then counts:
+		the border at that place in the list of borders, the outer ones included, moved by that
+		much in twips. An inner border between columns moves alone, as the column beside it gives
+		the room; an inner border between rows takes the rows below along; the outer one at the
+		end makes the table larger or smaller.
+	*/
+	public moveBorderLocally(columns: boolean, at: number, offset: number): void {
+		const data = this.tableData();
+		if (!data || !offset) return;
+		const lines = columns ? data.columns : data.rows;
+		const inner = lines.entries.length;
+		if (at === inner + 1) lines.right += offset;
+		else if (columns) lines.entries[at - 1].position += offset;
+		else {
+			for (let entry = at - 1; entry < inner; ++entry)
+				lines.entries[entry].position += offset;
+			lines.right += offset;
+		}
+		GraphicSelection.refreshLocalHandles();
+	}
+
 	private updateMoveMarkerVisibility() {
 		if (
 			!RenderManager.isVectorRendering() &&

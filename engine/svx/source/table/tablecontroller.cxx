@@ -3122,6 +3122,11 @@ IMPL_LINK_NOARG(SvxTableController, UpdateHdl, void*, void)
 
     updateSelectionOverlay();
     mbHasJustMerged = false;
+
+    // the kit reports the borders of a table with the handles of its selection, so a change of
+    // the table reports them anew, also one that keeps the table's box, as a moved inner border
+    if (comphelper::COKit::isActive() && !mrView.IsTextEdit())
+        mrView.AdjustMarkHdl();
 }
 
 namespace

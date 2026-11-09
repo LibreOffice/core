@@ -657,6 +657,7 @@ COOL_JS_LST =\
 	src/canvas/sections/InvalidationRectangleSection.ts \
 	src/canvas/sections/ShapeHandlesSection.ts \
 	src/canvas/sections/SelectionInteraction.ts \
+	src/canvas/sections/TableBorderDrag.ts \
 	src/canvas/sections/ScalingInteraction.ts \
 	src/canvas/sections/CropInteraction.ts \
 	src/canvas/sections/CropPanInteraction.ts \
