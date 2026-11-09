@@ -107,6 +107,7 @@ public class LOActivity extends AppCompatActivity {
 
     private static final String ASSETS_EXTRACTED_GIT_COMMIT = "ASSETS_EXTRACTED_GIT_COMMIT";
     private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 777;
+    private static final long CLOSE_TIMEOUT_MS = 30 * 1000;
     private static final String KEY_ENABLE_SHOW_DEBUG_INFO = "ENABLE_SHOW_DEBUG_INFO";
     private static final String KEY_ALL_FILES_ACCESS_DECLINED = "ALL_FILES_ACCESS_DECLINED";
 
@@ -146,6 +147,10 @@ public class LOActivity extends AppCompatActivity {
     private volatile boolean documentLoaded = false;
     /** What to do once the engine has dropped the document that is closing. */
     private final AtomicReference<Runnable> mWhenDocumentClosed = new AtomicReference<>();
+    /** Ends the wait for the engine's CLOSED report when that report does not come in time. */
+    private final AtomicReference<Runnable> mCloseTimeout = new AtomicReference<>();
+    /** The URI the closing document was opened from. */
+    private volatile String mClosingUri = null;
 
     private Bundle savedInstanceState;
 
@@ -424,7 +429,7 @@ public class LOActivity extends AppCompatActivity {
     private void init() {
         if (sPrefs.getString(ASSETS_EXTRACTED_GIT_COMMIT, "").equals(BuildConfig.GIT_COMMIT)) {
             // all is fine, we have already copied the assets
-            initUI();
+            initUIWhenDocumentFree();
             return;
         }
 
@@ -442,9 +447,25 @@ public class LOActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                initUI();
+                initUIWhenDocumentFree();
             }
         }.execute();
+    }
+
+    private void initUIWhenDocumentFree() {
+        final String uri = intentUri();
+        if (uri == null || !DocumentCloseService.isPending(uri)) {
+            initUI();
+            return;
+        }
+
+        mProgressDialog.indeterminate(R.string.loading);
+        DocumentCloseService.whenNotPending(uri, CLOSE_TIMEOUT_MS, () -> {
+            if (isFinishing() || isDestroyed())
+                return;
+
+            initUI();
+        });
     }
 
     /** Actual initialization of the UI. */
@@ -1099,12 +1120,10 @@ public class LOActivity extends AppCompatActivity {
             mMobileSocket = null;
         }
 
-        // The system can destroy the activity while the document is still open. Nothing can
-        // wait for the close here, so the document unloads in the background.
-        if (documentLoaded) {
-            documentLoaded = false;
-            closeDocumentNative();
-        }
+        // Destroyed with the document still open: it unloads in the background, and a content:
+        // URI permission that came with the intent is gone, so only a file: URL is written back.
+        if (documentLoaded)
+            closeDocument();
 
         // The copies of the files the document links to go with it.
         linkedFilesExecutor.execute(this::removeLinkedFileCopies);
@@ -1334,26 +1353,84 @@ public class LOActivity extends AppCompatActivity {
      * until the native side reports CLOSED.
      */
     private void closeDocumentThen(Runnable whenClosed) {
-        if (!documentLoaded) {
-            runOnUiThread(whenClosed);
-            return;
+        if (documentLoaded) {
+            mProgressDialog.indeterminate(R.string.exiting);
+            closeDocument();
         }
 
+        if (!runAfterPendingClose(whenClosed, false))
+            runOnUiThread(whenClosed);
+    }
+
+    /**
+     * Queue the work behind the running close, or in place of what is queued there. Returns
+     * false when no close is running.
+     */
+    private boolean runAfterPendingClose(Runnable work, boolean replace) {
+        if (mCloseTimeout.get() == null)
+            return false;
+
+        Runnable pending;
+        Runnable combined;
+        do {
+            pending = mWhenDocumentClosed.get();
+            if (pending == null || replace) {
+                combined = work;
+            } else {
+                final Runnable earlier = pending;
+                combined = () -> {
+                    earlier.run();
+                    work.run();
+                };
+            }
+        } while (!mWhenDocumentClosed.compareAndSet(pending, combined));
+
+        // The close may have ended while the work was queued.
+        if (mCloseTimeout.get() == null) {
+            final Runnable left = mWhenDocumentClosed.getAndSet(null);
+            if (left != null)
+                runOnUiThread(left);
+        }
+        return true;
+    }
+
+    private String intentUri() {
+        final Uri uri = getIntent().getData();
+        return uri != null ? uri.toString() : null;
+    }
+
+    /** The server saves and unloads the document in the background. */
+    private void closeDocument() {
+        final Runnable timeout = this::documentClosed;
+        if (!documentLoaded)
+            return;
+
         documentLoaded = false;
-        mProgressDialog.indeterminate(R.string.exiting);
-        mWhenDocumentClosed.set(whenClosed);
+        // The timeout marks a close in progress.
+        mCloseTimeout.set(timeout);
+        final String uri = intentUri();
+        mClosingUri = uri;
+        DocumentCloseService.pendingStarted(getApplicationContext(), uri);
+        getMainHandler().postDelayed(timeout, CLOSE_TIMEOUT_MS);
         if (!closeDocumentNative())
             documentClosed();
     }
 
-    /** The engine has dropped the document, or there was no loaded document to wait for. */
+    /**
+     * The close is over: the engine dropped the document, the wait gave up, or nothing was loaded.
+     */
     private void documentClosed() {
-        final Runnable whenClosed = mWhenDocumentClosed.getAndSet(null);
-        if (whenClosed == null)
-            return;
+        final Runnable timeout = mCloseTimeout.getAndSet(null);
+        if (timeout != null) {
+            getMainHandler().removeCallbacks(timeout);
+            DocumentCloseService.pendingFinished(getApplicationContext(), mClosingUri);
+            mClosingUri = null;
+            mProgressDialog.dismiss();
+        }
 
-        mProgressDialog.dismiss();
-        runOnUiThread(whenClosed);
+        final Runnable whenClosed = mWhenDocumentClosed.getAndSet(null);
+        if (whenClosed != null)
+            runOnUiThread(whenClosed);
     }
 
     private void closeDocumentAndFinish() {
@@ -1408,6 +1485,7 @@ public class LOActivity extends AppCompatActivity {
         mWebView.loadUrl(finalUrlToLoad);
 
         documentLoaded = true;
+        DocumentCloseService.documentOpened(getApplicationContext());
     }
 
     private boolean isDarkMode() {

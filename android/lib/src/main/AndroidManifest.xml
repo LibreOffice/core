@@ -5,5 +5,8 @@
             android:authorities="${applicationId}.clipboard"
             android:exported="false"
             android:grantUriPermissions="true" />
+        <service
+            android:name="org.libreoffice.androidlib.DocumentCloseService"
+            android:exported="false" />
     </application>
 </manifest>
