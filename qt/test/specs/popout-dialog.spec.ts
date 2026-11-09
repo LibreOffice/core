@@ -51,6 +51,27 @@ async function closeOpenDialogs() {
 	);
 }
 
+// Runs open in the document window and switches to the dialog window it opens. The shell shows a
+// dialog window only once its styles have loaded and the window has the size of the dialog, so
+// once the page is visible the dialog in it can be measured.
+async function openDialogWindow(open: () => void): Promise<string> {
+	const beforeHandles = await browser.webEngine.getWindowHandles();
+
+	await browser.webEngine.switchToWindow(documentHandle);
+	await browser.webEngine.execute(open);
+	const dialogHandle = await webview.switchToNewWebView(
+		browser.webEngine,
+		beforeHandles,
+	);
+	await browser.webEngine.waitForCondition(
+		() =>
+			document.visibilityState === 'visible' &&
+			document.querySelector('.jsdialog-container') !== null,
+		{ timeout: 10000, timeoutMsg: 'No dialog shown in a window of its own' },
+	);
+	return dialogHandle;
+}
+
 describe('Popped-out jsdialogs', () => {
 	before(async function () {
 		this.timeout(60000);
@@ -124,18 +145,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('opens a dialog in its own window', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
-
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
-		);
 
 		// The main document window holds no dialog DOM.
 		await browser.webEngine.switchToWindow(documentHandle);
@@ -148,11 +160,9 @@ describe('Popped-out jsdialogs', () => {
 	it('closes the child window when the dialog is closed', async function () {
 		const handlesBefore = await browser.webEngine.getWindowHandles();
 
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, handlesBefore);
 
 		await browser.webEngine.switchToWindow(documentHandle);
 		await browser.webEngine.execute(() => {
@@ -180,17 +190,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('shows the dialog as a native dialog window with a title', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
-		);
 
 		// The window is sized to the dialog, not to the 800x600 document
 		// window minimum.
@@ -209,17 +211,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('draws the dialog with the styles the page uses', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
-		);
 
 		// An unstyled dialog falls back to the browser's own serif font and
 		// leaves its buttons at the platform default look, so the font the
@@ -246,17 +240,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('leaves room in the dialog window for the whole dialog', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
-		);
 
 		const fit = await browser.webEngine.execute(() => {
 			const content = document.querySelector(
@@ -285,13 +271,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('grows the dialog with its window and gives the extra room to the content', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
 		await browser.webEngine.waitForCondition(
 			() => document.querySelector('.jsdialog-vexpand') !== null,
 			{
@@ -357,17 +339,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('opens a dropdown from a popped-out Find and Replace dialog inside the dialog window', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:SearchDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
-		);
 
 		await browser.webEngine.execute(() => {
 			const arrow = document.querySelector(
@@ -390,17 +364,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('closes only the dropdown, not the dialog, when Escape is pressed inside it', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:SearchDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
-		);
 
 		// Search once so the term lands in the combobox history: the dropdown
 		// only carries its filter field when it has entries to list, and the
@@ -509,17 +475,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('tells the server when the user closes the dialog window', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
-		);
 
 		// Closing the child window over the dialog's own head takes the same
 		// teardown path as the native title-bar close button: the page goes
@@ -545,22 +503,13 @@ describe('Popped-out jsdialogs', () => {
 
 		// The same dialog opens again cleanly, so the server-side dialog
 		// was really torn down rather than left in a half-closed state.
-		const handlesNow = await browser.webEngine.getWindowHandles();
-		await browser.webEngine.execute(() => {
+		await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, handlesNow);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'Dialog did not reopen' },
-		);
 	});
 
 	it('pops out a modal message box and its button closes it', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		const modalHandle = await openDialogWindow(() => {
 			// A page-generated modal message box takes the same popout path
 			// as a server-driven dialog: showInfoModal builds a modalpopup,
 			// and JSDialog.canPopout admits modal popups as well as message
@@ -573,15 +522,6 @@ describe('Popped-out jsdialogs', () => {
 				'OK',
 			);
 		});
-
-		const modalHandle = await webview.switchToNewWebView(
-			browser.webEngine,
-			beforeHandles,
-		);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No modal container in child window' },
-		);
 
 		// The response button's id is the button id plus a '-button' suffix
 		// that the pushbutton widget appends to its wrapper element. The click
@@ -615,20 +555,9 @@ describe('Popped-out jsdialogs', () => {
 	});
 
 	it('closes dialog windows when all dialogs are closed', async function () {
-		const beforeHandles = await browser.webEngine.getWindowHandles();
-
-		await browser.webEngine.switchToWindow(documentHandle);
-		await browser.webEngine.execute(() => {
+		const dialogHandle = await openDialogWindow(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		const dialogHandle = await webview.switchToNewWebView(
-			browser.webEngine,
-			beforeHandles,
-		);
-		await browser.webEngine.waitForCondition(
-			() => document.querySelector('.jsdialog-container') !== null,
-			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
-		);
 
 		await browser.webEngine.switchToWindow(documentHandle);
 		await browser.webEngine.execute(() => {
