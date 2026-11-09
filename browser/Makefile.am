@@ -1709,7 +1709,7 @@ $(ADMIN_TEMPLATE_FOLDER)/%: $(srcdir)/admin/%
 # shares browser/dist with the server its page loads only its own script, branding-app.js.
 $(BRANDING_OUT)/branding.css: $(BRANDING_SRC) $(COOL_IMAGES_DST) $(COOL_IMAGES_CUSTOM_DST) node_modules
 	@echo "Applying the $(BRANDING_THEME) theme from browser/branding"
-	@SASS="$(abs_builddir)/node_modules/.bin/sass" SASS_FLAGS=--quiet \
+	@PATH="$(dir $(NODE)):$$PATH" SASS="$(abs_builddir)/node_modules/.bin/sass" SASS_FLAGS=--quiet \
 		$(srcdir)/branding/brand.sh $(BRANDING_OUT) $(BRANDING_THEME)
 if ENABLE_BRANDING_APP_JS
 	@cp $(srcdir)/branding/themes/CODA/branding.js $(DIST_FOLDER)/branding-app.js
