@@ -85,7 +85,7 @@ const std::map<std::string, std::string>& typeOfDocumentExtension()
 
 std::string lowerCaseExtension(const std::string& fileName)
 {
-    std::string extension = filesystem::path(fileName).extension().string();
+    std::string extension = filesystem::path(fileName).extension().string<char>();
     return extension.empty() ? extension : Util::toLower(extension.substr(1));
 }
 
@@ -127,14 +127,15 @@ void extractPreview(const filesystem::path& templatePath, const filesystem::path
         out.close();
         if (!out)
         {
-            LOG_DBG("UserTemplates: could not write the preview '" << target.string() << '\'');
+            LOG_DBG(
+                "UserTemplates: could not write the preview '" << target.string<char>() << '\'');
             std::error_code error;
             filesystem::remove(target, error);
         }
     }
     catch (const std::exception& exception)
     {
-        LOG_DBG("UserTemplates: no preview in '" << templatePath.string()
+        LOG_DBG("UserTemplates: no preview in '" << templatePath.string<char>()
                                                  << "': " << exception.what());
     }
 }
@@ -159,7 +160,7 @@ std::vector<UserTemplates::Entry> UserTemplates::list() const
     std::error_code error;
     for (const filesystem::directory_entry& item : filesystem::directory_iterator(_folder, error))
     {
-        if (!isPlainId(item.path().filename().string()) || item.is_symlink(error) ||
+        if (!isPlainId(item.path().filename().string<char>()) || item.is_symlink(error) ||
             !item.is_directory(error))
             continue;
         if (std::optional<Entry> entry = entryInFolder(item.path()))
@@ -195,16 +196,18 @@ std::optional<UserTemplates::Entry> UserTemplates::addFile(const std::string& so
     filesystem::create_directories(folder, error);
     if (error)
     {
-        LOG_ERR("UserTemplates: could not create '" << folder.string() << "': " << error.message());
+        LOG_ERR(
+            "UserTemplates: could not create '" << folder.string<char>() << "': "
+            << error.message());
         return std::nullopt;
     }
 
     const filesystem::path target =
-        folder / (stem + filesystem::path(sourcePath).extension().string());
+        folder / (stem + filesystem::path(sourcePath).extension().string<char>());
     filesystem::copy_file(sourcePath, target, error);
     if (error)
     {
-        LOG_ERR("UserTemplates: could not copy '" << sourcePath << "' to '" << target.string()
+        LOG_ERR("UserTemplates: could not copy '" << sourcePath << "' to '" << target.string<char>()
                                                   << "': " << error.message());
         filesystem::remove_all(folder, error);
         return std::nullopt;
@@ -228,10 +231,10 @@ std::optional<UserTemplates::Entry> UserTemplates::rename(const std::string& id,
 
     const filesystem::path oldPath(entry->path);
     std::error_code error;
-    filesystem::rename(oldPath, *folder / (stem + oldPath.extension().string()), error);
+    filesystem::rename(oldPath, *folder / (stem + oldPath.extension().string<char>()), error);
     if (error)
     {
-        LOG_ERR("UserTemplates: could not rename '" << oldPath.string()
+        LOG_ERR("UserTemplates: could not rename '" << oldPath.string<char>()
                                                     << "': " << error.message());
         return std::nullopt;
     }
@@ -248,7 +251,7 @@ bool UserTemplates::remove(const std::string& id)
     std::error_code error;
     filesystem::remove_all(*folder, error);
     if (error)
-        LOG_ERR("UserTemplates: could not remove '" << folder->string()
+        LOG_ERR("UserTemplates: could not remove '" << folder->string<char>()
                                                     << "': " << error.message());
     return !error;
 }
@@ -294,18 +297,18 @@ UserTemplates::entryInFolder(const filesystem::path& templateFolder) const
             continue;
 
         const filesystem::path& path = item.path();
-        const std::string type = documentTypeOfFile(path.filename().string());
+        const std::string type = documentTypeOfFile(path.filename().string<char>());
         if (type.empty())
             continue;
 
-        Entry entry{ templateFolder.filename().string(),
-                     path.stem().string(),
+        Entry entry{ templateFolder.filename().string<char>(),
+                     path.stem().string<char>(),
                      type,
-                     path.string(),
+                     path.string<char>(),
                      std::string() };
         const filesystem::path preview = templateFolder / previewFileName;
         if (!filesystem::is_symlink(preview, error) && filesystem::is_regular_file(preview, error))
-            entry.previewPath = preview.string();
+            entry.previewPath = preview.string<char>();
         return entry;
     }
     return std::nullopt;
@@ -323,7 +326,7 @@ std::optional<filesystem::path> UserTemplates::templateFolder(const std::string&
     if (filesystem::is_symlink(folder, error) || !filesystem::is_directory(folder, error) ||
         filesystem::canonical(folder, error) != filesystem::canonical(_folder, error) / id)
     {
-        LOG_ERR("UserTemplates: '" << folder.string() << "' is not a template folder");
+        LOG_ERR("UserTemplates: '" << folder.string<char>() << "' is not a template folder");
         return std::nullopt;
     }
     return folder;

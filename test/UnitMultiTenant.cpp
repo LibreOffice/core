@@ -393,7 +393,7 @@ public:
                 TRANSITION_STATE(_phase, Phase::Done);
                 for (const auto& entry : std::filesystem::directory_iterator("/proc"))
                 {
-                    const std::string name = entry.path().filename().string();
+                    const std::string name = entry.path().filename().string<char>();
                     if (name.find_first_not_of("0123456789") != std::string::npos)
                         continue;
 

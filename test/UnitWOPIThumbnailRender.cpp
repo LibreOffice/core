@@ -90,7 +90,7 @@ public:
         for (const auto& entry : std::filesystem::recursive_directory_iterator(docsDir))
         {
             if (entry.is_regular_file() && entry.path().filename() == name)
-                return entry.path().string();
+                return entry.path().string<char>();
         }
 
         return std::string();
