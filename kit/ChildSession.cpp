@@ -3315,15 +3315,12 @@ std::string localPathOfFileUrl(const std::string& url)
         const Poco::URI uri(url);
         if (uri.getScheme() != "file")
             return std::string();
-
-        const std::string path = FileUtil::fixPocoURIgetPathReturnValue(uri.getPath());
-        if (uri.getHost().empty())
-            return path;
-#ifdef _WIN32
-        return "//" + uri.getHost() + path;
-#else
-        return std::string();
+#ifndef _WIN32
+        if (!uri.getHost().empty())
+            return std::string();
 #endif
+
+        return FileUtil::localPathOfFileUri(uri.getHost(), uri.getPath());
     }
     catch (const std::exception&)
     {
