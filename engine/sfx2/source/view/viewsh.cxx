@@ -1327,6 +1327,45 @@ paragraphInWindow(const uno::Reference<accessibility::XAccessible>& xParent, sal
     return {};
 }
 
+struct WindowArea
+{
+    uno::Reference<accessibility::XAccessible> xParent;
+    css::awt::Point aParentOnScreen;
+    css::awt::Point aOriginOnScreen;
+    bool bByArea = false;
+    tools::Rectangle aVisiblePx;
+    sal_Int32 nShift = 0;
+    sal_Int32 nTop = 0;
+    sal_Int32 nBottom = 0;
+};
+
+bool getWindowArea(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+                   const tools::Rectangle& rVisibleTwips, WindowArea& rArea)
+{
+    rArea.xParent = textRoot(xContext);
+    if (!rArea.xParent.is())
+        return false;
+
+    uno::Reference<accessibility::XAccessibleComponent> xParentComponent(
+        rArea.xParent->getAccessibleContext(), uno::UNO_QUERY);
+    uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
+
+    rArea.aParentOnScreen
+        = xParentComponent.is() ? xParentComponent->getLocationOnScreen() : css::awt::Point();
+    rArea.aOriginOnScreen = getTextDocumentOnScreen(rArea.xParent, rArea.aParentOnScreen);
+    rArea.bByArea = !rVisibleTwips.IsEmpty() && xParentComponent.is() && xComponent.is();
+    if (!rArea.bByArea)
+        return true;
+
+    rArea.aVisiblePx = o3tl::convert(rVisibleTwips, o3tl::Length::twip, o3tl::Length::px);
+    const sal_Int32 nMargin = rArea.aVisiblePx.GetHeight();
+    // in the coordinates of the parent, e.g. a table cell
+    rArea.nShift = rArea.aParentOnScreen.Y - rArea.aOriginOnScreen.Y;
+    rArea.nTop = rArea.aVisiblePx.Top() - nMargin - rArea.nShift;
+    rArea.nBottom = rArea.aVisiblePx.Bottom() + nMargin - rArea.nShift;
+    return true;
+}
+
 void collectParagraphWindow(
     const SfxViewShell* pViewShell,
     const uno::Reference<css::accessibility::XAccessibleText>& xAccText, sal_Int32 nRadius,
@@ -1338,22 +1377,14 @@ void collectParagraphWindow(
     rAfter.clear();
 
     uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
-    if (!xContext.is())
+    WindowArea aArea;
+    if (!xContext.is() || !getWindowArea(xContext, rVisibleTwips, aArea))
         return;
 
-    uno::Reference<accessibility::XAccessible> xParent = textRoot(xContext);
-    if (!xParent.is())
-        return;
-
-    uno::Reference<accessibility::XAccessibleComponent> xParentComponent(
-        xParent->getAccessibleContext(), uno::UNO_QUERY);
-    uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
-
-    const css::awt::Point aParentOnScreen
-        = xParentComponent.is() ? xParentComponent->getLocationOnScreen() : css::awt::Point();
-    const css::awt::Point aOriginOnScreen = getTextDocumentOnScreen(xParent, aParentOnScreen);
-    const bool bByArea = !rVisibleTwips.IsEmpty() && xParentComponent.is() && xComponent.is();
-    if (!bByArea)
+    const uno::Reference<accessibility::XAccessible>& xParent = aArea.xParent;
+    const css::awt::Point& aParentOnScreen = aArea.aParentOnScreen;
+    const css::awt::Point& aOriginOnScreen = aArea.aOriginOnScreen;
+    if (!aArea.bByArea)
     {
         walkParagraphFlow(pViewShell, xContext, true, xParent, aParentOnScreen, aOriginOnScreen,
                           false, 0, 0, nRadius, rSkip, rBefore);
@@ -1362,13 +1393,10 @@ void collectParagraphWindow(
         return;
     }
 
-    const tools::Rectangle aVisiblePx
-        = o3tl::convert(rVisibleTwips, o3tl::Length::twip, o3tl::Length::px);
-    const sal_Int32 nMargin = aVisiblePx.GetHeight();
-    // in the coordinates of the parent, e.g. a table cell
-    const sal_Int32 nShift = aParentOnScreen.Y - aOriginOnScreen.Y;
-    const sal_Int32 nTop = aVisiblePx.Top() - nMargin - nShift;
-    const sal_Int32 nBottom = aVisiblePx.Bottom() + nMargin - nShift;
+    const tools::Rectangle& aVisiblePx = aArea.aVisiblePx;
+    const sal_Int32 nShift = aArea.nShift;
+    const sal_Int32 nTop = aArea.nTop;
+    const sal_Int32 nBottom = aArea.nBottom;
 
     const WindowSide eCaretSide = windowSide(xContext, aParentOnScreen, nTop, nBottom);
     if (eCaretSide != WindowSide::Above && eCaretSide != WindowSide::Below)
@@ -1380,6 +1408,7 @@ void collectParagraphWindow(
         return;
     }
 
+    uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
     const css::awt::Rectangle aCaretBounds = xComponent->getBounds();
     uno::Reference<accessibility::XAccessibleContext> xAnchor
         = paragraphInWindow(xParent, aCaretBounds.X + aCaretBounds.Width / 2,
@@ -1407,6 +1436,63 @@ void collectParagraphWindow(
         aFollowing.erase(aFollowing.begin());
     }
     rOut.insert(rOut.end(), aFollowing.begin(), aFollowing.end());
+}
+
+// A caret cell that changed size moves only what follows its table, so walk again from there.
+bool refreshParagraphsAfter(
+    const SfxViewShell* pViewShell,
+    const uno::Reference<css::accessibility::XAccessibleText>& xAccText, sal_Int32 nRadius,
+    const tools::Rectangle& rVisibleTwips,
+    const uno::Reference<accessibility::XAccessibleContext>& xLastPiece,
+    const std::vector<uno::Reference<accessibility::XAccessibleContext>>& rSkip,
+    std::vector<ContextParagraph>& rAfter)
+{
+    uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
+    WindowArea aArea;
+    if (!xContext.is() || !getWindowArea(xContext, rVisibleTwips, aArea))
+        return false;
+    if (aArea.bByArea)
+    {
+        const WindowSide eCaretSide
+            = windowSide(xContext, aArea.aParentOnScreen, aArea.nTop, aArea.nBottom);
+        if (eCaretSide == WindowSide::Above || eCaretSide == WindowSide::Below)
+            return false;
+    }
+    uno::Reference<accessibility::XAccessibleContext> xStart;
+    try
+    {
+        if (rAfter.empty())
+        {
+            if (!aArea.bByArea)
+                return true;
+            // what follows a nested table comes after the table holding it
+            uno::Reference<accessibility::XAccessible> xPieceParent
+                = xLastPiece.is() ? xLastPiece->getAccessibleParent() : nullptr;
+            if (!xPieceParent.is()
+                || xPieceParent->getAccessibleContext() != aArea.xParent->getAccessibleContext())
+                return false;
+            // a cell that shrank can bring the end of the table, and what follows it, into the window
+            uno::Reference<accessibility::XAccessibleComponent> xPiece(xLastPiece, uno::UNO_QUERY);
+            return xPiece.is()
+                   && xPiece->getLocationOnScreen().Y - aArea.aParentOnScreen.Y
+                              + xPiece->getSize().Height
+                          > aArea.nBottom;
+        }
+        xStart = flowNeighbour(rAfter.front().xContext,
+                               accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM);
+    }
+    catch (const lang::DisposedException&)
+    {
+        return false;
+    }
+    if (!xStart.is())
+        return false;
+
+    rAfter.clear();
+    walkParagraphFlow(pViewShell, xStart, false, aArea.xParent, aArea.aParentOnScreen,
+                      aArea.aOriginOnScreen, aArea.bByArea, aArea.nTop, aArea.nBottom, nRadius,
+                      rSkip, rAfter);
+    return true;
 }
 
 // Writer reports a level only for a paragraph that carries a bullet or a number.
@@ -2332,23 +2418,33 @@ void KitDocumentFocusListener::collectContextWindow(
 {
     m_aList = ListWindow();
     bool bCaretCellRefreshed = false;
+    bool bCaretCellResized = false;
     if (!isText(m_nDocumentType))
         m_aTable = TableWindow();
     else
     {
+        const uno::Reference<accessibility::XAccessible> xLastCaretCell = m_aTable.xCaretCell;
         bCaretCellRefreshed = refreshCaretCell(xAccText, m_aTable);
         if (!bCaretCellRefreshed)
+        {
             collectTableWindow(xAccText, TABLE_ROW_WINDOW, m_aTable);
+            bCaretCellResized = xLastCaretCell.is() && m_aTable.xCaretCell == xLastCaretCell;
+        }
         if (m_aTable.aRows.empty())
             collectListWindow(xAccText, LIST_ITEM_WINDOW, m_aList);
     }
     const tools::Rectangle aVisibleArea = visibleArea();
-    if (bCaretCellRefreshed && aVisibleArea == m_aContextVisibleArea)
-        return;
+    const bool bSameArea = aVisibleArea == m_aContextVisibleArea;
     m_aContextVisibleArea = aVisibleArea;
+    if (bCaretCellRefreshed && bSameArea)
+        return;
     std::vector<uno::Reference<accessibility::XAccessibleContext>> aSkip = m_aList.aParagraphs;
     aSkip.insert(aSkip.end(), m_aTable.aParagraphs.begin(), m_aTable.aParagraphs.end());
     aSkip.insert(aSkip.end(), m_aTable.aPieces.begin(), m_aTable.aPieces.end());
+    if (bCaretCellResized && bSameArea
+        && refreshParagraphsAfter(m_pViewShell, xAccText, PARAGRAPH_WINDOW, aVisibleArea,
+                                  m_aTable.aPieces.back(), aSkip, m_aParagraphsAfter))
+        return;
     collectParagraphWindow(m_pViewShell, xAccText, PARAGRAPH_WINDOW, aVisibleArea, aSkip,
                            m_aParagraphsBefore, m_aParagraphsAfter);
 }

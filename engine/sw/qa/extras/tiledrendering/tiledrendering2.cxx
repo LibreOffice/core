@@ -2078,7 +2078,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextParagraphInCell)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextTableTyping)
 {
     // Given the cursor in the first cell of a table:
-    createDoc("a11y-table-typing.fodt");
+    SwXTextDocument* pXTextDocument = createDoc("a11y-table-typing.fodt");
+    pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 12240, 15840));
     SwTestViewCallback aView;
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
@@ -2090,6 +2091,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextTableTyping)
             for (const auto& rCell : rRow.second.get_child("cells"))
                 aTexts += rCell.second.get<std::string>("text") + "|";
         return aTexts;
+    };
+    auto aAfterTop = [&aView]() {
+        const std::string aRect
+            = aView.m_aA11yFocusedParagraph.get_child("afterRects").begin()->second.data();
+        return std::stoi(aRect.substr(aRect.find(',') + 1));
     };
 
     // When typing in that cell:
@@ -2103,12 +2109,23 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextTableTyping)
         std::string("Before the table."),
         aView.m_aA11yFocusedParagraph.get_child("before").begin()->second.get_value<std::string>());
 
+    const int nAfterTop = aAfterTop();
+
     // And when the cell gains a paragraph:
     pWrtShell->SplitNode();
     Scheduler::ProcessEventsToIdle();
 
     // Then the table given has both:
     CPPUNIT_ASSERT_EQUAL(std::string("X\nOne|Two|Three|Four|"), aCellTexts());
+    // And the paragraph before the table is still given, and the one after it where the taller
+    // cell moved it:
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("Before the table."),
+        aView.m_aA11yFocusedParagraph.get_child("before").begin()->second.get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("After the table."),
+        aView.m_aA11yFocusedParagraph.get_child("after").begin()->second.get_value<std::string>());
+    CPPUNIT_ASSERT_GREATER(nAfterTop, aAfterTop());
 
     // And when a row is added below, the caret staying in the cell, and typing there:
     pWrtShell->InsertRow(1, /*bBehind=*/true);
