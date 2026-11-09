@@ -17,6 +17,13 @@ $(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
     external/libnumbertext/MSVCNonBMPBug.patch \
     external/libnumbertext/WinUnicodePath.patch \
     external/libnumbertext/deprecated.patch.0 \
+    external/libnumbertext/libnumbertext-call-limit.patch.1 \
+    external/libnumbertext/libnumbertext-depth-abort.patch.1 \
+    external/libnumbertext/libnumbertext-input-check.patch.1 \
+    external/libnumbertext/libnumbertext-catch-exceptions.patch.1 \
+    external/libnumbertext/libnumbertext-module-cache.patch.1 \
 ))
+
+# the libnumbertext-*.patch.1 patches are in https://github.com/Numbertext/libnumbertext/pull/142
 
 # vim: set noet sw=4 ts=4:

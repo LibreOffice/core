@@ -1,0 +1,30 @@
+From e8e05dd2e2cb61ce0541c92de7a77a3b61342231 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 9 Nov 2026 15:33:41 +0000
+Subject: [PATCH 2/5] return at once from Soros::run when the depth limit trips
+
+otherwise the caller kept looping and decremented level below -1, so
+later calls ran again with a fresh depth allowance
+---
+ src/Soros.cxx | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/Soros.cxx b/src/Soros.cxx
+index 8c2cde2..617c545 100644
+--- a/src/Soros.cxx
++++ b/src/Soros.cxx
+@@ -189,6 +189,11 @@ void Soros::run(std::wstring& input, int& level, int& calls, bool begin, bool en
+             }
+             std::wstring piece = n[2].str();
+             run(piece, level, calls, b, e);
++            if (level == -1)
++            {
++                input = L"";
++                return;
++            }
+             input.replace(n.position(1), n[1].length(), piece);
+         }
+         level--;
+-- 
+2.56.0
+

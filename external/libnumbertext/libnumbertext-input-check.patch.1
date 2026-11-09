@@ -1,0 +1,54 @@
+From c2fbbe8e9166531b6b8aabe1b1accb039bc5c37e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 9 Nov 2026 15:38:38 +0000
+Subject: [PATCH 3/5] reject over-long input and input with the program marker
+ characters
+
+std::regex in libstdc++ recurses once per character, so 1024 characters
+is plenty for any real number and keeps the match depth bounded.
+
+The Soros programs use U+E000..U+E00A as their own call markers, so
+those characters in the input are not meaningful.
+---
+ src/Numbertext.cxx | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/Numbertext.cxx b/src/Numbertext.cxx
+index 5f05b48..d0b5129 100644
+--- a/src/Numbertext.cxx
++++ b/src/Numbertext.cxx
+@@ -5,6 +5,7 @@
+ #if defined __GNUC__
+ #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+ #endif
++#include <algorithm>
+ #include <codecvt>
+ #include <locale>
+ #include <sstream>
+@@ -19,6 +20,13 @@
+ #define MODULE_DIR ""
+ #define SOROS_EXT ".sor"
+ #define LANG_PATTERN_NO "n[bn]([-_]NO)\?"
++#define MAX_INPUT_LENGTH 1024
++
++// U+E000..U+E00A are the internal markers of the Soros programs
++static bool is_marker(wchar_t c)
++{
++    return c >= 0xE000 && c <= 0xE00A;
++}
+ 
+ bool readfile(const std::string& filename, std::wstring& result)
+ {
+@@ -71,6 +79,9 @@ bool Numbertext::load(std::string lang, std::string filename)
+ 
+ bool Numbertext::numbertext(std::wstring& number, const std::string& lang)
+ {
++    if (number.length() > MAX_INPUT_LENGTH
++        || std::any_of(number.begin(), number.end(), is_marker))
++        return false;
+     auto module = modules.find(lang);
+     if (module == modules.end())
+     {
+-- 
+2.56.0
+
