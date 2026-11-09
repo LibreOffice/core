@@ -84,7 +84,7 @@
 	height: 32px;
 	line-height: 0em;
 }
-*:not(.modalpopup) > .lokdialog_container.ui-dialog.ui-widget-content, .autofilter-container {
+*:not(.modalpopup) > .lokdialog_container.ui-dialog.ui-widget-content {
 	border: 1px solid base.get-cssvar(color-border-dark);
 	border-radius: base.get-cssvar(border-radius);
 }

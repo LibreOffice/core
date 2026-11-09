@@ -472,7 +472,7 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	text-transform: none;
 }
 
-*:not(.modalpopup) > .lokdialog_container.ui-dialog.ui-widget-content, .autofilter-container {
+*:not(.modalpopup) > .lokdialog_container.ui-dialog.ui-widget-content {
 	border: 1px solid var(--color-border-darker);
 	box-shadow: 0 0 3px var(--color-border-darker);
 	border-radius: var(--border-radius);
@@ -2587,20 +2587,6 @@ img.ui-combobox-value-preview {
 
 /* Autofilter dropdown */
 
-.autofilter-container {
-	background-color: var(--color-main-background);
-	border: 1px solid var(--color-border);
-	position: absolute;
-	z-index: 1105;
-	padding: 0;
-	font-family: var(--cool-font);
-}
-
-.autofilter-container > .root-container {
-	margin: 0;
-	padding: 0;
-}
-
 /* start: layouting has less cost when we have thousands of entries */
 /* A row the search box filters out carries the hidden class. Leaving such a row
    out here lets its display: none win, as both declarations are important and
@@ -2614,84 +2600,20 @@ img.ui-combobox-value-preview {
 }
 /* end: layouting optimization */
 
-.autofilter-container .ui-treeview {
-	border: none;
-}
-
-.autofilter-container #menu.ui-treeview {
-	height: auto;
-	width: 100%;
-	padding: 8px 1px;
-}
-
-.autofilter-container #toggle_all.checkbutton {
-	display: flex;
-}
-
-.autofilter-container #menu + #search_edit {
-	display: block;
-}
-
-#mobile-wizard #toggle_all.checkbutton + #select_current,
-.autofilter-container #select_current {
+#mobile-wizard #toggle_all.checkbutton + #select_current {
 	background: url('images/lc_checkbox.svg') no-repeat center;
 }
 
-[data-theme='dark'] #mobile-wizard #toggle_all.checkbutton + #select_current,
-.autofilter-container #select_current {
+[data-theme='dark'] #mobile-wizard #toggle_all.checkbutton + #select_current {
 	background: url('images/dark/lc_checkbox.svg') no-repeat center;
 }
 
-.autofilter-container #select_current {
-	/* Same size as #toggle_all.checkbutton > input */
-	height: 18px;
-	width: 18px;
-	margin: var(--spacing-m);
-	border: none;
-}
-
-#mobile-wizard #toggle_all.checkbutton + #select_current + #unselect_current,
-.autofilter-container #unselect_current {
+#mobile-wizard #toggle_all.checkbutton + #select_current + #unselect_current {
 	background: url('images/lc_checkboxoff.svg') no-repeat center;
 }
 
-[data-theme='dark'] #mobile-wizard #toggle_all.checkbutton + #select_current + #unselect_current,
-.autofilter-container #unselect_current {
+[data-theme='dark'] #mobile-wizard #toggle_all.checkbutton + #select_current + #unselect_current {
 	background: url('images/dark/lc_checkboxoff.svg') no-repeat center;
-}
-
-.autofilter-container #unselect_current {
-	/* Same size as #toggle_all.checkbutton > input */
-	height: 18px;
-	width: 18px;
-	margin: 8px 8px 8px 0px;
-	border: none;
-}
-
-.autofilter-container #unselect_current img,
-.autofilter-container #select_current img {
-	display: none;
-}
-
-.autofilter-container #toggle_all.checkbutton > label,
-.autofilter-container #toggle_all.checkbutton > input {
-	height: 18px;
-	line-height: normal;
-}
-
-.autofilter-container #check_tree_box.ui-treeview,
-.autofilter-container #check_list_box.ui-treeview {
-	width: 100%;
-	min-width: 200px;
-	max-height: 150px;
-}
-
-.autofilter-container-submenu > .autofilter-container {
-	padding: 0px;
-}
-
-.autofilter-container-submenu .autofilter.root-container .ui-treeview {
-	border-color: transparent;
 }
 
 /* Make the autofilter popup user-resizable. Selectors avoid :has() and deep
