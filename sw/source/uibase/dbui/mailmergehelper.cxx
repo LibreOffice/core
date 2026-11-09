@@ -22,6 +22,7 @@
 #include <mmconfigitem.hxx>
 #include <docsh.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -97,35 +98,70 @@ ConnectToSmtpServer(SwMailMergeConfigItem const& rConfigItem,
                     weld::Window* pDialogParentWindow)
 {
     uno::Reference<mail::XSmtpService> xSmtpServer;
+    rxInMailService.clear();
     const uno::Reference<uno::XComponentContext>& xContext
         = ::comphelper::getProcessComponentContext();
+
+    bool bInConnectionAttempted = false;
+    bool bSmtpConnectionAttempted = false;
+    bool bConnectionSucceeded = false;
+
+    auto lclDisconnect
+        = [](uno::Reference<mail::XMailService> const& xService, bool bConnectionAttempted) {
+              if (!bConnectionAttempted || !xService.is())
+                  return;
+
+              try
+              {
+                  xService->disconnect();
+              }
+              catch (const uno::Exception&)
+              {
+                  TOOLS_WARN_EXCEPTION("sw", "Disconnect failed");
+              }
+          };
+
+    comphelper::ScopeGuard aCleanup([&]() {
+        if (bConnectionSucceeded)
+            return;
+
+        lclDisconnect(xSmtpServer, bSmtpConnectionAttempted);
+        lclDisconnect(rxInMailService, bInConnectionAttempted);
+
+        rxInMailService.clear();
+    });
+
     try
     {
         uno::Reference<mail::XMailServiceProvider> xMailServiceProvider(
             mail::MailServiceProvider::create(xContext));
         xSmtpServer.set(xMailServiceProvider->create(mail::MailServiceType_SMTP), uno::UNO_QUERY);
-
         uno::Reference<mail::XConnectionListener> xConnectionListener(new SwConnectionListener);
 
         if (rConfigItem.IsAuthentication() && rConfigItem.IsSMTPAfterPOP())
         {
-            uno::Reference<mail::XMailService> xInMailService = xMailServiceProvider->create(
-                rConfigItem.IsInServerPOP() ? mail::MailServiceType_POP3
-                                            : mail::MailServiceType_IMAP);
+            rxInMailService = xMailServiceProvider->create(rConfigItem.IsInServerPOP()
+                                                               ? mail::MailServiceType_POP3
+                                                               : mail::MailServiceType_IMAP);
+
             //authenticate at the POP or IMAP server first
             OUString sPasswd = rConfigItem.GetInServerPassword();
             if (!rInMailServerPassword.isEmpty())
                 sPasswd = rInMailServerPassword;
+
             uno::Reference<mail::XAuthenticator> xAuthenticator = new SwAuthenticator(
                 rConfigItem.GetInServerUserName(), sPasswd, pDialogParentWindow);
 
-            xInMailService->addConnectionListener(xConnectionListener);
+            rxInMailService->addConnectionListener(xConnectionListener);
+
             //check connection
             uno::Reference<uno::XCurrentContext> xConnectionContext = new SwConnectionContext(
                 rConfigItem.GetInServerName(), rConfigItem.GetInServerPort(), u"Insecure"_ustr);
-            xInMailService->connect(xConnectionContext, xAuthenticator);
-            rxInMailService = std::move(xInMailService);
+
+            bInConnectionAttempted = true;
+            rxInMailService->connect(xConnectionContext, xAuthenticator);
         }
+
         rtl::Reference<SwAuthenticator> xAuthenticator;
         if (rConfigItem.IsAuthentication() && !rConfigItem.IsSMTPAfterPOP()
             && !rConfigItem.GetMailUserName().isEmpty())
@@ -138,15 +174,21 @@ ConnectToSmtpServer(SwMailMergeConfigItem const& rConfigItem,
         }
         else
             xAuthenticator = new SwAuthenticator();
+
         //just to check if the server exists
         xSmtpServer->getSupportedConnectionTypes();
-        //check connection
 
+        //check connection
         uno::Reference<uno::XCurrentContext> xConnectionContext = new SwConnectionContext(
             rConfigItem.GetMailServer(), rConfigItem.GetMailPort(),
             rConfigItem.IsSecureConnection() ? u"Ssl"_ustr : u"Insecure"_ustr);
+
+        xSmtpServer->addConnectionListener(xConnectionListener);
+
+        bSmtpConnectionAttempted = true;
         xSmtpServer->connect(xConnectionContext, xAuthenticator);
-        rxInMailService = xSmtpServer;
+
+        bConnectionSucceeded = true;
     }
     catch (const uno::Exception&)
     {
