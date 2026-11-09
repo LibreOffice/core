@@ -205,6 +205,64 @@ function documentPageWait<T>(
 	});
 }
 
+/// The status of a loaded document with one page, sheet or slide, with the fields the kit sends
+/// for that document type.
+function documentPageStatus(docType: string): any {
+	const status: any = {
+		type: docType,
+		partscount: 1,
+		selectedpart: '0',
+		width: 12240,
+		height: 15840,
+		viewid: 1,
+		readonly: false,
+		mode: 0,
+		partHasComments: false,
+	};
+	if (docType === 'text') {
+		status.pagerectangles = [[0, 0, 12240, 15840]];
+	} else if (docType === 'spreadsheet') {
+		status.lastcolumn = 0;
+		status.lastrow = 0;
+		status.parts = [
+			{
+				visible: 1,
+				rtllayout: 0,
+				protected: 0,
+				selected: 1,
+				name: 'Sheet1',
+				hash: '0',
+				lastcolumn: 0,
+				lastrow: 0,
+			},
+		];
+	} else {
+		// A slide is named by its part identifier, both in selectedpart and in its own part
+		// info.
+		status.selectedpart = 'slide-1';
+		status.parts = [
+			{
+				masterPageCount: 1,
+				mode: 0,
+				gridSnapEnabled: false,
+				gridVisible: false,
+				visible: 1,
+				selected: 1,
+				width: 12240,
+				height: 15840,
+				leftBorder: 0,
+				rightBorder: 0,
+				upperBorder: 0,
+				lowerBorder: 0,
+				name: 'Slide 1',
+				realName: '',
+				part: 'slide-1',
+			},
+		];
+	}
+	return status;
+}
+
 /// Loads the page for a document of the given type, as getDocType() names it, and plays the
 /// server's side of the load. Resolves once the map has its document layer.
 async function openDocumentPage(docType: string): Promise<DocumentPage> {
@@ -262,19 +320,9 @@ async function openDocumentPage(docType: string): Promise<DocumentPage> {
 		serverSays(
 			'lokitversion {"ProductName":"test","ProductVersion":"0","ProductExtension":"","BuildId":"0"}',
 		);
+		serverSays('status: ' + JSON.stringify(documentPageStatus(docType)));
 		serverSays(
-			'status: ' +
-				JSON.stringify({
-					type: docType,
-					parts: 1,
-					selectedPart: 0,
-					width: 12240,
-					height: 15840,
-					viewid: 0,
-					partHasComments: false,
-					readonly: 0,
-					mode: 0,
-				}),
+			'viewinfo: [{"id":1,"userid":"test","username":"Test User","readonly":"0","parked":"false","color":0}]',
 		);
 		await documentPageWait(
 			() => pageWindow.app.map._docLayer,
