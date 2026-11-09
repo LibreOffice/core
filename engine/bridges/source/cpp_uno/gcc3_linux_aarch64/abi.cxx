@@ -73,6 +73,29 @@ OUString toUnoName(char const * name) {
     return b.makeStringAndClear();
 }
 
+// Itanium C++ ABI __cxxabiv1::__class_type_info layout, see
+// <https://mentorembedded.github.io/cxx-abi/abi.html>, libstdc++-v3/libsupc++/cxxabi.h:
+struct Fake_class_type_info {
+    void const * vtable;
+    char const * name;
+};
+
+// Itanium C++ ABI __cxxabiv1::__si_class_type_info layout, see
+// <https://mentorembedded.github.io/cxx-abi/abi.html>, libstdc++-v3/libsupc++/cxxabi.h:
+struct Fake_si_class_type_info {
+    void const * vtable;
+    char const * name;
+    std::type_info const * base;
+};
+
+// The compiler emits the typeinfo of these as a __class_type_info and a __si_class_type_info:
+struct Base {};
+struct Derived: Base {};
+
+void const * getVtable(std::type_info const & rtti) {
+    return *reinterpret_cast<void const * const *>(&rtti);
+}
+
 class Rtti {
 public:
     Rtti(): app_(dlopen(nullptr, RTLD_LAZY)) {}
@@ -123,13 +146,13 @@ std::type_info * Rtti::getRtti(typelib_TypeDescription const & type) {
                 = reinterpret_cast<typelib_CompoundTypeDescription const &>(
                     type);
             if (ctd.pBaseTypeDescription == nullptr) {
-                rtti = new __cxxabiv1::__class_type_info(rttiName);
+                rtti = reinterpret_cast<std::type_info *>(
+                    new Fake_class_type_info{getVtable(typeid(Base)), rttiName});
             } else {
                 std::type_info * base = getRtti(
                     ctd.pBaseTypeDescription->aBase);
-                rtti = new __cxxabiv1::__si_class_type_info(
-                    rttiName,
-                    static_cast<__cxxabiv1::__class_type_info *>(base));
+                rtti = reinterpret_cast<std::type_info *>(
+                    new Fake_si_class_type_info{getVtable(typeid(Derived)), rttiName, base});
             }
         }
         i = map_.insert(Map::value_type(unoName, rtti)).first;
