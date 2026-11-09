@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_vector_rendering, \
     sot \
     svl \
     svt \
+    svx \
     svxcore \
     sc \
     scui \

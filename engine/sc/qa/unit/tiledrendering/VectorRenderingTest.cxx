@@ -16,7 +16,13 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <attrib.hxx>
 #include <cellmergeoption.hxx>
@@ -46,6 +52,8 @@
 #include <editeng/justifyitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
+#include <svx/rotmodit.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdpage.hxx>
@@ -977,6 +985,102 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellPositionsFill)
     const std::pair<int, double> aTop = cellPosition(aEdge->second);
     CPPUNIT_ASSERT_EQUAL(1, aTop.first);
     CPPUNIT_ASSERT_EQUAL(0.0, aTop.second);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellFillLeans)
+{
+    // The fill of a cell with rotated text leans with the text, as the tile painter draws it:
+    // standing on the bottom of the cell, its top edge moves sideways by the slant of the text.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    setCellString(*pDocShell, 1, 1, u"Rotated"_ustr);
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(SvxBrushItem(COL_LIGHTRED, ATTR_BACKGROUND));
+    aPattern.ItemSetPut(ScRotateValueItem(Degree100(4500)));
+    aPattern.ItemSetPut(SvxRotateModeItem(SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE));
+    applyToCell(*pDocShell, 1, 1, aPattern);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    std::vector<std::string> aPaths;
+    for (const auto& rRow : blockRows(aResponse))
+    {
+        if (rRow.get<int>("row") != 1)
+            continue;
+        if (auto oBackground = rRow.get_child_optional("content.layers.background"))
+        {
+            for (const auto& rFill : *oBackground)
+                aPaths.push_back(rFill.second.get<std::string>("path", std::string()));
+        }
+    }
+    // The neighbor to the left has no fill, so only the leaning fill is there.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPaths.size());
+
+    // The path starts at the top-left corner and ends at the bottom-left one: the top one is
+    // further right in column B, the bottom one at the start of column B.
+    const std::string& rPath = aPaths[0];
+    const std::string aTopLeft = rPath.substr(1, rPath.find(',') - 1);
+    const size_t nLastLine = rPath.rfind('L');
+    const std::string aBottomLeft
+        = rPath.substr(nLastLine + 1, rPath.find(',', nLastLine) - nLastLine - 1);
+    CPPUNIT_ASSERT_EQUAL(std::string("1:0"), aBottomLeft);
+    CPPUNIT_ASSERT_EQUAL(std::string("1:"), aTopLeft.substr(0, 2));
+    CPPUNIT_ASSERT_GREATER(0.0, std::stod(aTopLeft.substr(2)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVector3DSceneIsOneObject)
+{
+    // A 3D scene draws its 3D objects itself, so it is one drawing object, and a change of one of
+    // its 3D objects writes the scene again.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    pDocShell->GetDocument().InitDrawLayer(pDocShell);
+
+    cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> xFactory(
+        mxComponent, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<com::sun::star::drawing::XDrawPagesSupplier> xPagesSupplier(
+        xFactory, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<com::sun::star::drawing::XShapes> xPage(
+        xPagesSupplier->getDrawPages()->getByIndex(0), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<com::sun::star::drawing::XShape> xScene(
+        xFactory->createInstance(u"com.sun.star.drawing.Shape3DSceneObject"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    xPage->add(xScene);
+    xScene->setPosition(com::sun::star::awt::Point(1000, 1000));
+    xScene->setSize(com::sun::star::awt::Size(3000, 3000));
+    cpo::uno::Reference<com::sun::star::drawing::XShape> xCube(
+        xFactory->createInstance(u"com.sun.star.drawing.Shape3DCubeObject"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<com::sun::star::drawing::XShapes> xSceneShapes(xScene,
+                                                                      cpo::uno::UNO_QUERY_THROW);
+    xSceneShapes->add(xCube);
+    Scheduler::ProcessEventsToIdle();
+
+    const SdrObject* pScene = SdrObject::getSdrObjectFromXShape(xScene);
+    const SdrObject* pCube = SdrObject::getSdrObjectFromXShape(xCube);
+    CPPUNIT_ASSERT(pScene);
+    CPPUNIT_ASSERT(pCube);
+
+    const boost::property_tree::ptree aFirst
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    CPPUNIT_ASSERT(drawingEntry(aFirst, pScene->GetUniqueID()));
+    CPPUNIT_ASSERT(!drawingEntry(aFirst, pCube->GetUniqueID()));
+
+    // A new color of the cube is a change of the scene.
+    const std::string aEpoch = aFirst.get<std::string>("epoch");
+    const sal_Int64 nVersion = blockVersion(aFirst);
+    cpo::uno::Reference<com::sun::star::beans::XPropertySet> xCubeProperties(
+        xCube, cpo::uno::UNO_QUERY_THROW);
+    xCubeProperties->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(sal_Int32(0x00ff00)));
+    Scheduler::ProcessEventsToIdle();
+
+    const boost::property_tree::ptree aSecond = requestVectorPrimitives(
+        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=0:0:" + std::to_string(nVersion));
+    CPPUNIT_ASSERT(drawingEntry(aSecond, pScene->GetUniqueID()));
+    CPPUNIT_ASSERT(!drawingEntry(aSecond, pCube->GetUniqueID()));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellPositionsTextOrigin)
