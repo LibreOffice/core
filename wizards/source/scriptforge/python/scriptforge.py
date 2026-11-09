@@ -135,7 +135,7 @@ class ScriptForge(object, metaclass = _Singleton):
     Version = '27.2'  # Version number of the LibreOffice release containing the actual file
     #
     # Basic dispatcher for Python scripts (@scope#library.module.function)
-    basicdispatcher = '@application#ScriptForge.SF_PythonHelper._PythonDispatcher'
+    basicdispatcher = '@application#ScriptForge.SF_Python._PythonDispatcher'
     # Python helper functions module
     pythonhelpermodule = 'ScriptForgeHelper.py'     # Preset in production mode,
     #                                                 might be changed (by devs only) in test mode
@@ -153,12 +153,13 @@ class ScriptForge(object, metaclass = _Singleton):
                             ('ScriptForge.Exception', 1),
                             ('ScriptForge.FileSystem', 2),
                             ('ScriptForge.Platform', 3),
-                            ('ScriptForge.Region', 4),
-                            ('ScriptForge.Services', 5),
-                            ('ScriptForge.Session', 6),
-                            ('ScriptForge.SharedMemory', 7),
-                            ('ScriptForge.String', 8),
-                            ('ScriptForge.UI', 9)])
+                            ('ScriptForge.Python', 4),
+                            ('ScriptForge.Region', 5),
+                            ('ScriptForge.Services', 6),
+                            ('ScriptForge.Session', 7),
+                            ('ScriptForge.SharedMemory', 8),
+                            ('ScriptForge.String', 9),
+                            ('ScriptForge.UI', 10)])
     # The default pipe name to connect to when debugging user scripts from external IDE's
     defaultpipe = 'PIPE2LIBREOFFICE'
 
@@ -328,7 +329,7 @@ class ScriptForge(object, metaclass = _Singleton):
                 Substitute dictionary arguments by sets of UNO property values
                 Execute the given Basic method on a class instance
                 Interpret its result
-            This method has as counterpart the ScriptForge.SF_PythonHelper._PythonDispatcher() Basic method
+            This method has as counterpart the ScriptForge.SF_Python._PythonDispatcher() Basic method
             :param basicobject: a SFServices subclass instance
                 The real object is cached in a Basic Global variable and identified by its reference
             :param flags: see the vb* and flg* constants in the SFServices class
@@ -762,7 +763,7 @@ class SFScriptForge:
         servicename = 'ScriptForge.Basic'
         servicesynonyms = ('basic', 'scriptforge.basic')
         # Basic helper functions invocation
-        module = 'SF_PythonHelper'
+        module = 'SF_Python'
         # Message box constants
         MB_ABORTRETRYIGNORE, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON3 = 2, 128, 256, 512
         MB_ICONEXCLAMATION, MB_ICONINFORMATION, MB_ICONQUESTION, MB_ICONSTOP = 48, 64, 32, 16

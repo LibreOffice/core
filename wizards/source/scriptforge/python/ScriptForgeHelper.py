@@ -37,6 +37,7 @@ import pathlib
 import zipfile
 import webbrowser
 import json
+import traceback
 
 
 class _Singleton(type):
@@ -309,6 +310,103 @@ class Platform(object, metaclass = _Singleton):
 
     @property  # Python major.minor.patchlevel
     def PythonVersion(self): return 'Python ' + platform.python_version()
+
+
+# #################################################################
+# Python service
+# #################################################################
+
+def _SF_Python__ExecuteUDF(mode: str,                    # expression, formula or function
+                           expression: str,              # python code
+                           preload: str = '',            # preloaded assignments and/or imports
+                           function: str = '',           # function to execute (mode = function)
+                           result: str = '',             # name of var holding the returned value (mode = formula)
+                           secure: bool = True,          # block malicious code ?
+                           verboseerror: bool = False,   # verbose error tracking ?
+                           args: tuple = (),             # arguments: only (tuples of) strings and numbers
+                                  ):
+    # Used by SF_Python.ExecuteExpression(), ExecuteFormula() and ExecuteFunction() Basic methods
+    """
+        Execute the python expression given as a string
+        Assign preliminary constants, import modules and force security checks
+        Modes = expression | formula | function
+        """
+    try:
+        builtins, tempbuiltins, globalvars = globals()['__builtins__'], {}, {}
+
+        def SecureExec():
+            # Strip out unsecure statements to prevent malicious code
+            # Return - a new __builtins__ without the stripped out functions
+            #        - a dictionary of stripped out functions to restore later in __builtins__
+            nonlocal builtins, tempbuiltins
+            stripped = '__import__', 'open', 'breakpoint', 'input',    # eval() and exec() cannot be deleted
+            for statement in stripped:
+                tempbuiltins[statement] = builtins[statement]
+                del builtins[statement]
+            # When eval, remove exec or vice-versa
+            evalexec = ('exec' if mode == 'expression' else 'eval')
+            tempbuiltins[evalexec] = builtins[evalexec]
+            builtins[evalexec] = None
+
+        if len(preload) > 0:
+            # Homogenize line breaks
+            preload = '\n'.join(preload.splitlines()).rstrip()
+            # Store in globalvars the list of preloaded identifiers
+            exec(preload, {}, globalvars)
+
+        if secure:
+            SecureExec()
+        localvars = {'__builtins__': builtins}
+
+        # Homogenize line breaks
+        expression = '\n'.join(expression.splitlines()).rstrip()
+
+        if mode == 'expression':
+            # Evaluate the expression - no arguments are passed
+            returnvalue = eval(expression, globalvars, localvars)
+
+        elif mode == 'formula':
+            # Evaluate multiple statements - arguments and returned value are passed as a dictionary
+            # The code is precompiled and executed for each row passed in args[1]. Keys are in args[0]
+            if len(args[0]) == 0:      # No names, no values
+                localvars[result] = None
+                exec(expression, globalvars, localvars)
+                returnvalue = localvars[result]
+            else:
+                array = isinstance(args[1][0], (tuple, list))
+                objexpr = compile(expression, '<string>', 'exec')
+                arguments = (args[1] if array else (args[1],))
+                formularesult = []
+                for arg in arguments:
+                    params = dict(zip(args[0], arg))
+                    localvars.update(params)
+                    localvars[result] = None
+                    exec(objexpr, globalvars, localvars)
+                    formularesult.append(localvars[result])
+                returnvalue = (tuple(formularesult) if array else formularesult[0])
+
+        elif mode == 'function':
+            # expression contains only a def - inner defs are allowed, outer defs are ignored
+            # args are passed to the def as usual.
+            returned = 'SFRESULT'
+            localvars[returned] = None
+            expr = expression + '\n' + returned + ' = ' + function + '('
+            for arg in args:
+                expr += repr(arg) + ',\n'
+            expr += ')'
+            exec(expr, globalvars, localvars)
+            returnvalue = localvars[returned]
+
+        else:
+            pass
+
+    except Exception as e:
+        returnvalue = 'ERROR ' + (str(e) if verboseerror is False else traceback.format_exc())
+
+    finally:
+        # Restore stripped out builtins
+        builtins.update(tempbuiltins)
+        return returnvalue
 
 
 # #################################################################

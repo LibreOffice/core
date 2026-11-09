@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="SF_PythonHelper" script:language="StarBasic" script:moduleType="normal">REM =======================================================================================================================
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="SF_Python" script:language="StarBasic" script:moduleType="normal">REM =======================================================================================================================
 REM ===			The ScriptForge library and its associated libraries are part of the LibreOffice project.				===
 REM ===					Full documentation is available on https://help.libreoffice.org/								===
 REM =======================================================================================================================
@@ -9,10 +9,10 @@ Option Compatible
 Option Explicit
 
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
-&apos;&apos;&apos;	SF_PythonHelper (aka Basic)
-&apos;&apos;&apos;	===============
-&apos;&apos;&apos;		Singleton class implementing the &quot;ScriptForge.Basic&quot; service
-&apos;&apos;&apos;		Implemented as a usual Basic module
+&apos;&apos;&apos;	SF_Python (aka Basic !!)
+&apos;&apos;&apos;	=========
+&apos;&apos;&apos;		Singleton class implementing the &quot;ScriptForge.Python&quot; and the &quot;ScriptForge.Basic&quot; services;.
+&apos;&apos;&apos;		Implemented as a usual Basic module.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The &quot;Basic&quot; service must be called ONLY from a PYTHON script
 &apos;&apos;&apos;		Service invocations: Next Python code lines are equivalent:
@@ -24,9 +24,22 @@ Option Explicit
 &apos;&apos;&apos;		Typical example:
 &apos;&apos;&apos;			bas.MsgBox(&apos;This has to be displayed in a message box&apos;)
 &apos;&apos;&apos;
-&apos;&apos;&apos;		The service includes also an agnostic &quot;Python Dispatcher&quot; function.
+&apos;&apos;&apos;		The service includes also an agnostic &quot;_PythonDispatcher()&quot; function.
 &apos;&apos;&apos;		It dispatches Python script requests to execute Basic services to the
 &apos;&apos;&apos;		appropriate properties and methods via dynamic call techniques
+&apos;&apos;&apos;
+&apos;&apos;&apos;		----------------------------------------------------------------------------
+&apos;&apos;&apos;
+&apos;&apos;&apos;		The &quot;Python&quot; service must be called ONLY from a BASIC script
+&apos;&apos;&apos;		Service invocations: Next Basic code lines are equivalent:
+&apos;&apos;&apos;			py = CreateScriptService(&quot;ScriptForge.Python&quot;)
+&apos;&apos;&apos;			py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;
+&apos;&apos;&apos;		The service proposes a set of methods to execute dynamically Python scripts
+&apos;&apos;&apos;		passed from Basic code as strings. Such methods are typically a part
+&apos;&apos;&apos;		of generic user-defined Calc functions
+&apos;&apos;&apos;
+&apos;&apos;&apos;		For all properties, the set value is preserved until it is explicitly set again.
 &apos;&apos;&apos;
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
@@ -39,23 +52,425 @@ REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
 	Set Dispose = Nothing
-End Function	&apos;	ScriptForge.SF_PythonHelper Explicit destructor
+End Function	&apos;	ScriptForge.SF_Python Explicit destructor
 
 REM ================================================================== PROPERTIES
 
 REM -----------------------------------------------------------------------------
+Property Get CalcMode() As Variant
+&apos;&apos;&apos;	Indicates whether the service is used from Calc user-defined functions (default)
+&apos;&apos;&apos;	or not. In array formulas, result arrays have an orientation (vertical or horizontal).
+&apos;&apos;&apos;	When False, the arguments and the results are passed without filter.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		MsgBox py.CalcMode
+	CalcMode = _PropertyGet(&quot;CalcMode&quot;)
+End Property	&apos;	ScriptForge.SF_Python.CalcMode (get)
+
+REM -----------------------------------------------------------------------------
+Property Let CalcMode(ByVal pvCalcMode As Variant)
+&apos;&apos;&apos;	Set to False when run from usual Basic scripts, not from Calc user-defined functions.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		py.CalcMode = False
+	_PropertySet &quot;CalcMode&quot;, pvCalcMode
+End Property	&apos;	ScriptForge.SF_Python.CalcMode (let)
+
+REM -----------------------------------------------------------------------------
 Property Get ObjectType As String
 &apos;&apos;&apos;	Only to enable object representation
-	ObjectType = &quot;SF_PythonHelper&quot;
-End Property	&apos;	ScriptForge.SF_PythonHelper.ObjectType
+	ObjectType = &quot;SF_Python&quot;
+End Property	&apos;	ScriptForge.SF_Python.ObjectType
+
+REM -----------------------------------------------------------------------------
+Property Get Preload() As Variant
+&apos;&apos;&apos;	Contains an initial list of assignments and/or imports and/or defs and/or classes
+&apos;&apos;&apos;	executed before each code execution
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		MsgBox py.Preload
+	Preload = _PropertyGet(&quot;Preload&quot;)
+End Property	&apos;	ScriptForge.SF_Python.Preload (get)
+
+REM -----------------------------------------------------------------------------
+Property Let Preload(ByVal pvPreload As Variant)
+&apos;&apos;&apos;	Contains a list of assignments and/or imports executed before each code execution
+&apos;&apos;&apos;	Use newlines or &quot;\n&quot; to separate statements from each other.
+&apos;&apos;&apos;	When Security is NONE or MEDIUM, the set value is preserved until it is explicitly set again.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		py.Preload = &quot;import math\nimport numpy as np&quot;
+	_PropertySet &quot;Preload&quot;, pvPreload
+End Property	&apos;	ScriptForge.SF_Python.Preload (let)
+
+REM -----------------------------------------------------------------------------
+Property Get ReportScriptErrors() As Variant
+&apos;&apos;&apos;	Indicates whether script errors are displayed in a message box when they occur
+&apos;&apos;&apos;	The default value = False
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		MsgBox py.ReportScriptErrors
+	ReportScriptErrors = _PropertyGet(&quot;ReportScriptErrors&quot;)
+End Property	&apos;	ScriptForge.SF_Python.ReportScriptErrors (get)
+
+REM -----------------------------------------------------------------------------
+Property Let ReportScriptErrors(ByVal pvReportScriptErrors As Variant)
+&apos;&apos;&apos;	When set to False, an error occur silently. Useful f.i. in Calc user-defined functions.
+&apos;&apos;&apos;	The set value is preserved until it is explicitly set again.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		py.ReportScriptErrors = False
+	_PropertySet &quot;ReportScriptErrors&quot;, pvReportScriptErrors
+End Property	&apos;	ScriptForge.SF_Python.ReportScriptErrors (let)
+
+REM -----------------------------------------------------------------------------
+Property Get Security() As Variant
+&apos;&apos;&apos;	Indicates the level of protection set against malicious code
+&apos;&apos;&apos;	When &gt;= SECURITYMEDIUM, dangerous statements are forbidden: import, open, ...
+&apos;&apos;&apos;	The default value = SECURITYMEDIUM
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		MsgBox py.Security
+	Security = _PropertyGet(&quot;Security&quot;)
+End Property	&apos;	ScriptForge.SF_Python.Security (get)
+
+REM -----------------------------------------------------------------------------
+Property Let Security(ByVal pvSecurity As Variant)
+&apos;&apos;&apos;	When set to:
+&apos;&apos;&apos;		SECURITYNONE	No protection
+&apos;&apos;&apos;		SECURITYMEDIUM	Some statements (import, open, breakpoint, inputà are prohibited
+&apos;&apos;&apos;		SECURITYHIGH	Idem + once set Security and Preload properties cannot
+&apos;&apos;&apos;						be modified anymore until the LibreOffoce session ends
+&apos;&apos;&apos;	When NONE or MEDIUM, the set value is preserved until it is explicitly set again.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		py.Security = False
+	_PropertySet &quot;Security&quot;, pvSecurity
+End Property	&apos;	ScriptForge.SF_Python.Security (let)
+
+REM -----------------------------------------------------------------------------
+Property Get SECURITYNONE() As Integer		&apos;	Constant values possible used from external scripts
+	SECURITYNONE = 0
+End Property	&apos;	ScriptForge.SF_Python.SECURITYNONE (get)
+REM -----------------------------------------------------------------------------
+Property Get SECURITYMEDIUM() As Integer
+	SECURITYMEDIUM = 1
+End Property	&apos;	ScriptForge.SF_Python.SECURITYMEDIUM (get)
+REM -----------------------------------------------------------------------------
+Property Get SECURITYHIGH() As Integer
+	SECURITYHIGH = 2
+End Property	&apos;	ScriptForge.SF_Python.SECURITYHIGH (get)
+
+REM -----------------------------------------------------------------------------
+Property Get VerboseErrors() As Variant
+&apos;&apos;&apos;	Indicates whether returned script errors are a full Traceback or not
+&apos;&apos;&apos;	The default value = False
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		MsgBox py.VerboseErrors
+	VerboseErrors = _PropertyGet(&quot;VerboseErrors&quot;)
+End Property	&apos;	ScriptForge.SF_Python.VerboseErrors (get)
+
+REM -----------------------------------------------------------------------------
+Property Let VerboseErrors(ByVal pvVerboseErrors As Variant)
+&apos;&apos;&apos;	When set to True, the full TraceBack is returned as a string
+&apos;&apos;&apos;	The set value is preserved until it is explicitly set again.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		py = CreateScriptService(&quot;Python&quot;)
+&apos;&apos;&apos;		py.VerboseErrors = True
+	_PropertySet &quot;VerboseErrors&quot;, pvVerboseErrors
+End Property	&apos;	ScriptForge.SF_Python.VerboseErrors (let)
 
 REM -----------------------------------------------------------------------------
 Property Get ServiceName As String
 &apos;&apos;&apos;	Internal use
-	ServiceName = &quot;ScriptForge.Basic&quot;
-End Property	&apos;	ScriptForge.SF_PythonHelper.ServiceName
+	ServiceName = &quot;ScriptForge.Python&quot;
+End Property	&apos;	ScriptForge.SF_Python.ServiceName
 
 REM ============================================================== PUBLIC METHODS
+
+REM -----------------------------------------------------------------------------
+Public Function ExecuteExpression(Optional ByVal PyExpression As Variant) As Variant
+&apos;&apos;&apos;	Execute the Python expression given as a string and return its value.
+&apos;&apos;&apos;	The Preload string of import or assignment statements is executed beforehand.
+&apos;&apos;&apos;	The method is assumed to be invoked from a Calc user-defined function.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PyExpression: a syntactically valid Python expression
+&apos;&apos;&apos;		Imports: a comma-separated list of modules to import
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The value(s) returned by the execution to the expression. If &gt;1 values, enclosed in an array.
+&apos;&apos;&apos;		If the execution failed, an error message is returned.
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		py.Preload = &quot;import math\nunit=&apos;km&apos;&quot;
+&apos;&apos;&apos;		py.ExecuteExpression(&quot;str(math.sin(math.pi / 2.0)) + unit&quot;, &quot;math&quot;)		&apos;	1.0km
+
+Dim vReturn As Variant			&apos;	Returned value
+
+Const cstThisSub = &quot;Python.ExecuteExpression&quot;
+Const cstSubArgs = &quot;PyExpression&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vReturn = Empty
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PyExpression, &quot;PyExpression&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	vReturn = SF_Python._ExecuteUDF(&quot;expression&quot;, PyExpression, &quot;&quot;, &quot;&quot;)
+
+Finally:
+	ExecuteExpression = vReturn
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	On Local Error GoTo 0
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Python.ExecuteExpression
+
+REM -----------------------------------------------------------------------------
+Public Function ExecuteFormula(Optional ByVal PyFormula As Variant _
+										, Optional ByRef Names As Variant _
+										, Optional ByRef Values As Variant _
+										, Optional ByVal Result As Variant _
+										) As Variant
+&apos;&apos;&apos;	Execute the Python &quot;formula&quot; given as a string and return the value hold in a given variable name.
+&apos;&apos;&apos;	Each variable in Names is initialized with its counterpart in Values.
+&apos;&apos;&apos;	The Preload string of import or assignment statements is executed beforehand.
+&apos;&apos;&apos;	A formula in this context is a set of statements not located inside a def.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	The method is assumed to be invoked from a Calc user-defined function.
+&apos;&apos;&apos;	The function may be executed as a usual formula or as an array formula.
+&apos;&apos;&apos;	In this case, the method identivies the orientation of the Names table (horizontal or vertical).
+&apos;&apos;&apos;	The orientation of the Values table is assumed to be perpendicular to the Names orientation.
+&apos;&apos;&apos;	The Calc cell formula may revert the orientation with the Transpose() Calc function.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PyFormula: a syntactically valid Python formula. Use newlines or &quot;\n&quot; to separate statements.
+&apos;&apos;&apos;		Names: A single variable name or an array of variable names
+&apos;&apos;&apos;		Values: a scalar, or a 1D or 2D array of numeric and string values.
+&apos;&apos;&apos;			Each name in Names will be initialized with a value from Values
+&apos;&apos;&apos;			When 2D, the execution will run as many times as the array has rows (columns),
+&apos;&apos;&apos;			each time with the set of values stored in the respective row (column).
+&apos;&apos;&apos;			The number of items (1D) or the number of columns (rows) (2D) in Values
+&apos;&apos;&apos;			must be equal to the number of items in Names.
+&apos;&apos;&apos;		Result: the name of the variable holding the resulting value. Default = &quot;result&quot;.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The value(s) returned by the execution to the formula.
+&apos;&apos;&apos;		If Values is a 2D array, the results are enclosed in an array.
+&apos;&apos;&apos;		If the execution failed, an error message is returned.
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Formula = &quot;discount = 0.1\n&quot; _
+&apos;&apos;&apos;				&amp; &quot;price = unitprice * quantity * (1.0 - discount)&quot;
+&apos;&apos;&apos;		py.ExecuteFormula(Formula, &quot;price&quot;, Array(&quot;unitprice&quot;, &quot;quantity&quot;), Array(90.0, 5))	&apos;	405.0
+
+Dim vReturn As Variant			&apos;	Returned value
+Dim vNames As Variant			&apos;	Alias of Names
+Dim vValues As Variant			&apos;	Alias of Values
+Dim bVertical As Boolean		&apos;	When True, data table is vertical
+
+Const cstThisSub = &quot;Python.ExecuteFormula&quot;
+Const cstSubArgs = &quot;PyFormula, [Names=Array()], [Values=Array()], [Result=&quot;&quot;result&quot;&quot;]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vReturn = Empty
+
+Check:
+	If IsMissing(Names) Or IsEmpty(Names) Or IsError(Names) Then Names = Array()
+	If IsMissing(Values) Or IsEmpty(Values) Or IsError(Values) Then Values = Array()
+	If IsMissing(Result) Or IsEmpty(Result) Or IsError(Result) Then Result = &quot;result&quot;
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PyFormula, &quot;PyFormula&quot;, V_STRING) Then GoTo Finally
+		If IsArray(Names) Then vNames = Names Else vNames = Array(Names)
+		If Not SF_Utils._ValidateArray(vNames, &quot;Names&quot;, , V_STRING) Then GoTo Finally
+		If IsArray(Values) Then vValues = Values Else vValues = Array(Values)
+		If Not SF_Utils._ValidateArray(vValues, &quot;Values&quot;) Then GoTo Finally
+		If Not SF_Utils._Validate(Result, &quot;Result&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Names are passed as a scalar, a vector of names or a matrix when the origin is a selection of cells
+	&apos;	Determine the direction (horizontal or vertical) and extract the meaningful column or row.
+	&apos;	When the direction is horizontal, the data matrix must be transposed.
+	If CalcMode And (SF_Array.CountDims(vNames) &gt; 1) Then
+		If UBound(vNames, 1) = LBound(vNames, 1) Then		&apos;	A single row
+			bVertical = True
+			vNames = SF_Array.ExtractRow(vNames, LBound(vNames, 1))
+		Else												&apos;	A single column
+			bVertical = False
+			vNames = SF_Array.ExtractColumn(vNames, LBound(vNames, 2))
+			vValues = SF_Array.Transpose(vValues)
+		End If
+	End If
+
+	vReturn = SF_Python._ExecuteUDF(&quot;formula&quot;, PyFormula, &quot;&quot;, Result, vNames, vValues)
+
+	&apos;	When the returned value is a vector, the method is presumed called from an array formula
+	&apos;	Its orientation is orthogonal to the Names vector
+	If IsArray(vReturn) Then
+		If CalcMode And (SF_Array.CountDims(vReturn) = 1) Then
+			If bVertical Then
+				vReturn = SF_Array.AppendColumn(Array(), vReturn)
+			Else
+				vReturn = SF_Array.AppendRow(Array(), vReturn)
+			End If
+		End If
+	End If
+
+Finally:
+	ExecuteFormula = vReturn
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	On Local Error GoTo 0
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Python.ExecuteFormula
+
+REM -----------------------------------------------------------------------------
+Public Function ExecuteFunction(Optional ByVal PyDef As Variant _
+										, ParamArray Args As Variant _
+										) As Variant
+&apos;&apos;&apos;	Execute a Python script encapsulated in a &quot;def&quot; and return its returned value.
+&apos;&apos;&apos;	The Preload string of import or assignment statements is executed beforehand.
+&apos;&apos;&apos;	A Function in this context is a def statement. It must be the first executable statement in PyDef.
+&apos;&apos;&apos;	Only the inner defs or classes are considered. Outer statements are ignored.
+&apos;&apos;&apos;	The method is assumed to be invoked from a Calc user-defined function.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PyDef: a syntactically valid Python def function.
+&apos;&apos;&apos;		Use newlines or &quot;\n&quot; to separate statements. Use tab characters, &quot;\t&quot; or spaces to indent the code.
+&apos;&apos;&apos;		Args: a list of string or numeric arguments, or of vectors with such types.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The value(s) returned by the execution to the function. They may be enclosed in an array.
+&apos;&apos;&apos;		If the execution failed, an error message is returned.
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		def = &quot;def add(a, b):\n&quot; _
+&apos;&apos;&apos;				&amp; &quot;\treturn a + b&quot;
+&apos;&apos;&apos;		py.ExecuteFunction(def, 25, 50)		&apos;	75.0
+
+Dim vReturn As Variant			&apos;	Returned value
+Dim sDef As String				&apos;	Name of the def to execute
+Dim sDefinition As String		&apos;	Result of regex search
+Dim vLines As Variant			&apos;	PyDef split line by line
+Dim sLine As String				&apos;	One single item from vLines
+Dim vArgs As Variant			&apos;	Alias of Args
+Dim vArg As Variant				&apos;	A single vArg
+Dim i As Long
+
+Const cstThisSub = &quot;Python.ExecuteFunction&quot;
+Const cstSubArgs = &quot;PyDef, [Arg0, ...]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vReturn = Empty
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PyDef, &quot;PyDef&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Manage newlines and tabs in the function
+	
+	&apos;	Determine the name of the def
+	With SF_String
+		vLines = .SplitLines(Replace(PyDef, &quot;\n&quot;, .sfNEWLINE))
+		For Each sLine In vLines
+			sDef = .FindRegex(sLine, &quot;^def +\w+ *\(&quot;, 1, CaseSensitive := True)
+			If Len(sDef) &gt; 5 Then
+				sDef = Trim(Mid(sDef, 5, Len(sDef) - 5))
+				Exit For
+			End If
+		Next sLine
+	End With
+
+	&apos;	Manage cascading ParamArrays arguments when method called from user-defined function
+	If UBound(Args, 1) = 0 Then vArgs = Args(0) Else vArgs = Args
+
+	&apos;	Arguments are passed as scalars or vectors when the origin is a selection of cells
+	&apos;	Extract in each argument the meaningful column or row.
+	For i = 0 To UBound(vArgs, 1)
+		vArg = vArgs(i)
+		If CalcMode And (SF_Array.CountDims(vArg) &gt; 1) Then
+			If UBound(vArg, 1) = LBound(vArg, 1) Then		&apos;	A single row
+				vArgs(i) = SF_Array.ExtractRow(vArg, LBound(vArg, 1))
+			Else											&apos;	A single column
+				vArgs(i) = SF_Array.ExtractColumn(vArg, LBound(vArg, 2))
+			End If
+		End If
+	Next i
+
+	If Len(sDef) &gt; 0 Then vReturn = SF_Python._ExecuteUDF(&quot;function&quot;, PyDef, sDef, &quot;&quot;, vArgs)
+
+	&apos;	When the returned value is a vector, the method is presumed called from a vertical array formula
+	If IsArray(vReturn) Then
+		If CalcMode And (SF_Array.CountDims(vReturn) = 1) Then vReturn = SF_Array.AppendColumn(Array(), vReturn)
+	End If
+
+Finally:
+	ExecuteFunction = vReturn
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	On Local Error GoTo 0
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Python.ExecuteFunction
+
+REM -----------------------------------------------------------------------------
+Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
+&apos;&apos;&apos;	Return the actual value of the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The actual value of the property
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
+
+Const cstThisSub = &quot;Python.GetProperty&quot;
+Const cstSubArgs = &quot;PropertyName&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	GetProperty = Null
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	GetProperty = _PropertyGet(PropertyName)
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Python.GetProperty
+
+REM -----------------------------------------------------------------------------
+Public Function Methods() As Variant
+&apos;&apos;&apos;	Return the list of public methods of the Python service as an array
+
+	Methods = Array( _
+					&quot;ExecuteExpression&quot; _
+					, &quot;ExecuteFormula&quot; _
+					, &quot;ExecuteFunction&quot; _
+					)		&apos;	PyXxx() methods are not included
+
+End Function	&apos;	ScriptForge.SF_Python.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function Properties() As Variant
+&apos;&apos;&apos;	Return the list or properties of the Python class as an array
+
+	Properties = Array( _
+					&quot;CalcMode&quot; _
+					, &quot;Preload&quot; _
+					, &quot;ReportScriptErrors&quot; _
+					, &quot;Security&quot; _
+					, &quot;VerboseErrors&quot; _
+					)
+
+End Function	&apos;	ScriptForge.SF_Python.Properties
 
 REM -----------------------------------------------------------------------------
 Public Function PyCDate(ByVal DateArg As Variant) As Variant
@@ -88,7 +503,7 @@ Finally:
 Catch:
 	On Local Error GoTo 0
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyCDate
+End Function	&apos;	ScriptForge.SF_Python.PyCDate
 
 REM -----------------------------------------------------------------------------
 Public Function PyConvertFromUrl(ByVal FileName As Variant) As String
@@ -119,7 +534,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyConvertFromUrl
+End Function	&apos;	ScriptForge.SF_Python.PyConvertFromUrl
 
 REM -----------------------------------------------------------------------------
 Public Function PyConvertToUrl(ByVal FileName As Variant) As String
@@ -150,7 +565,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyConvertToUrl
+End Function	&apos;	ScriptForge.SF_Python.PyConvertToUrl
 
 REM -----------------------------------------------------------------------------
 Public Function PyCreateUnoService(ByVal UnoService As Variant) As Variant
@@ -181,7 +596,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyCreateUnoService
+End Function	&apos;	ScriptForge.SF_Python.PyCreateUnoService
 
 REM -----------------------------------------------------------------------------
 Public Function PyDateAdd(ByVal Add As Variant _
@@ -223,7 +638,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyDateAdd
+End Function	&apos;	ScriptForge.SF_Python.PyDateAdd
 
 REM -----------------------------------------------------------------------------
 Public Function PyDateDiff(ByVal Add As Variant _
@@ -275,7 +690,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyDateDiff
+End Function	&apos;	ScriptForge.SF_Python.PyDateDiff
 
 REM -----------------------------------------------------------------------------
 Public Function PyDatePart(ByVal Add As Variant _
@@ -320,7 +735,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyDatePart
+End Function	&apos;	ScriptForge.SF_Python.PyDatePart
 
 REM -----------------------------------------------------------------------------
 Public Function PyDateValue(ByVal DateArg As Variant) As Variant
@@ -351,7 +766,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyDateValue
+End Function	&apos;	ScriptForge.SF_Python.PyDateValue
 
 REM -----------------------------------------------------------------------------
 Public Function PyFormat(ByVal Value As Variant _
@@ -388,7 +803,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyFormat
+End Function	&apos;	ScriptForge.SF_Python.PyFormat
 
 REM -----------------------------------------------------------------------------
 Public Function PyGetGuiType() As Integer
@@ -412,7 +827,7 @@ Try:
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyGetGuiType
+End Function	&apos;	ScriptForge.SF_Python.PyGetGuiType
 
 REM -----------------------------------------------------------------------------
 Public Function PyGetSystemTicks() As Long
@@ -436,7 +851,7 @@ Try:
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyGetSystemTicks
+End Function	&apos;	ScriptForge.SF_Python.PyGetSystemTicks
 
 REM -----------------------------------------------------------------------------
 Public Function PyGlobalScope(ByVal Library As Variant) As Object
@@ -466,7 +881,7 @@ Try:
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyGlobalScope
+End Function	&apos;	ScriptForge.SF_Python.PyGlobalScope
 
 REM -----------------------------------------------------------------------------
 Public Function PyInputBox(ByVal Msg As Variant _
@@ -513,7 +928,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyInputBox
+End Function	&apos;	ScriptForge.SF_Python.PyInputBox
 
 REM -----------------------------------------------------------------------------
 Public Function PyMsgBox(ByVal Text As Variant _
@@ -549,7 +964,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper.PyMsgBox
+End Function	&apos;	ScriptForge.SF_Python.PyMsgBox
 
 REM -----------------------------------------------------------------------------
 Public Sub PyWait(ByVal Millisec As Variant)
@@ -582,9 +997,185 @@ Finally:
 	Exit Sub
 Catch:
 	GoTo Finally
-End Sub	&apos;	ScriptForge.SF_PythonHelper.PyWait
+End Sub	&apos;	ScriptForge.SF_Python.PyWait
+
+REM -----------------------------------------------------------------------------
+Public Function SetProperty(Optional ByVal PropertyName As Variant _
+								, Optional ByRef Value As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set a new value to the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;		Value: its new value
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
+
+Const cstThisSub = &quot;Python.SetProperty&quot;
+Const cstSubArgs = &quot;PropertyName, Value&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	SetProperty = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	SetProperty = _PropertySet(PropertyName, Value)
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Python.SetProperty
 
 REM ============================================================= PRIVATE METHODS
+
+REM -----------------------------------------------------------------------------
+Private Function _ExecuteUDF(ByVal psMode As String _
+										, ByVal psCode As String _
+										, ByVal psPyDef As String _
+										, ByVal psResult As String _
+										, ParamArray pvArgs As Variant _
+										) As Variant
+&apos;&apos;&apos;	Prepare the execution of the given Python Code.by the Python interpreter.
+&apos;&apos;&apos;	Depending on the Mode, arguments may be passed. More to read in the calling routines:
+&apos;&apos;&apos;		ExecuteExpression()
+&apos;&apos;&apos;		ExecuteFormula()
+&apos;&apos;&apos;		ExecuteFunction()
+&apos;&apos;&apos;	The contents of code and its arguments are not checked.
+&apos;&apos;&apos;	Arguments are vectorized when they are matrixes of 1 row or 1 column.
+&apos;&apos;&apos;	When Python eturns an error, the execution is never halted.
+&apos;&apos;&apos;	When the code fails, the error message is returned to the caller.
+&apos;&apos;&apos;	The method is assumed to be invoked (not directly) from a Calc user-defined function.
+
+Dim bReportScriptErrors As Boolean	&apos;	Usually True, set to False here and reset before leaving
+Dim sScope As String				&apos;	Location of the script
+Dim sScript As String				&apos;	Python script that executes the code
+Dim oScript As Object				&apos;	Script to be invoked
+Dim sCode As String					&apos;	Alias of psCode
+Dim vArgs As Variant				&apos;	Arguments
+Dim vReturn As Variant				&apos;	Returned value
+Dim i As Long
+
+	vReturn = Empty
+
+Check:
+	On Local Error GoTo Catch
+
+Try:
+	&apos;	Determine the script object
+	With _SF_
+		&apos;	Is the script cached ?
+		If Not IsNull(.PythonUDF) And Len(.PythonHelper2) = 0 Then
+			Set oScript = .PythonUDF
+		Else
+			sScope = SCRIPTISSHARED
+			sScript = .PythonHelper &amp; &quot;$_SF_Python__ExecuteUDF&quot;
+			If Len(.PythonHelper2) &gt; 0 Then		&apos;	Test mode
+				sScope = SCRIPTISPERSONAL
+				sScript = .PythonHelper2 &amp; Mid(sScript, Len(.PythonHelper) + 1)
+			End If
+			Set oScript = SF_Python._GetScript(&quot;Python&quot;, sScope, sScript)
+			Set .PythonUDF = oScript	&apos;	Cache script object to anticipate multiple calls
+		End If
+	End With
+
+	&apos;	Run the code
+	sCode = SF_String.ExpandTabs(SF_String.Unescape(psCode), TabSize := 4)
+	If LCase(psMode) = &quot;function&quot; Then vArgs = pvArgs(0) Else vArgs = pvArgs
+	vReturn = oScript.invoke(Array(LCase(psMode), sCode _
+								, Preload, psPyDef, psResult _
+								, ( Security &gt; SECURITYNONE ), VerboseErrors, vArgs) _
+								, Array(), Array())
+ 
+Finally:
+	_ExecuteUDF = vReturn
+	Exit Function
+Catch:
+	On Local Error GoTo 0
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Python._ExecuteUDF
+
+REM -----------------------------------------------------------------------------
+Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
+&apos;&apos;&apos;	Return the value of the named property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psProperty: the name of the property
+
+Dim cstThisSub As String
+Const cstSubArgs = &quot;&quot;
+
+	cstThisSub = &quot;SF_Python.get&quot; &amp; psProperty
+
+	Select Case UCase(psProperty)
+		Case UCase(&quot;CalcMode&quot;)
+			_PropertyGet = _SF_.PythonCalcMode
+		Case UCase(&quot;Preload&quot;)
+			_PropertyGet = _SF_.PythonPreload
+		Case UCase(&quot;ReportScriptErrors&quot;)
+			_PropertyGet = _SF_.PythonReportErrors
+		Case UCase(&quot;Security&quot;)
+			_PropertyGet = _SF_.PythonSecurity
+		Case UCase(&quot;VerboseErrors&quot;)
+			_PropertyGet = _SF_.PythonVerboseErrors
+		Case Else
+			_PropertyGet = Null
+	End Select
+
+Finally:
+	Exit Function
+End Function	&apos;	ScriptForge.SF_Python._PropertyGet
+
+REM -----------------------------------------------------------------------------
+Private Function _PropertySet(Optional ByVal psProperty As String _
+								, Optional ByVal pvValue As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set a new value to the named property
+&apos;&apos;&apos;	Applicable only to user defined errors
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psProperty: the name of the property
+&apos;&apos;&apos;		pvValue: the new value
+
+Dim cstThisSub As String
+Const cstSubArgs = &quot;&quot;
+
+	cstThisSub = &quot;SF_Python.set&quot; &amp; psProperty
+	_PropertySet = False
+
+	Select Case UCase(psProperty)
+		Case UCase(&quot;CalcMode&quot;)
+			If Not SF_Utils._Validate(pvValue, psProperty, V_BOOLEAN) Then GoTo Catch
+			_SF_.PythonCalcMode = pvValue
+		Case UCase(&quot;Preload&quot;)
+			If _SF_.PythonSecurity &lt; SECURITYHIGH Then
+				If Not SF_Utils._Validate(pvValue, psProperty, V_STRING) Then GoTo Catch
+				_SF_.PythonPreload = SF_String.ExpandTabs(SF_String.Unescape(pvValue), TabSize := 4)
+			End If
+		Case UCase(&quot;ReportScriptErrors&quot;)
+			If Not SF_Utils._Validate(pvValue, psProperty, V_BOOLEAN) Then GoTo Catch
+			_SF_.PythonReportErrors = pvValue
+		Case UCase(&quot;Security&quot;)
+			If _SF_.PythonSecurity &lt; SECURITYHIGH Then
+				If Not SF_Utils._Validate(pvValue, psProperty, V_NUMERIC) Then GoTo Catch
+				_SF_.PythonSecurity = pvValue
+			End If
+		Case UCase(&quot;VerboseErrors&quot;)
+			If Not SF_Utils._Validate(pvValue, psProperty, V_BOOLEAN) Then GoTo Catch
+			_SF_.PythonVerboseErrors = pvValue
+		Case Else
+			GoTo Finally
+	End Select
+	
+	_PropertySet = True
+
+Finally:
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Python._PropertySet
 
 REM -----------------------------------------------------------------------------
 Public Function _PythonDispatcher(ByRef BasicObject As Variant _
@@ -596,7 +1187,6 @@ Public Function _PythonDispatcher(ByRef BasicObject As Variant _
 &apos;&apos;&apos;	The method calls the method Script associated with the BasicObject class or module
 &apos;&apos;&apos;	with the given arguments
 &apos;&apos;&apos;	The invocation of the method can be a Property Get, Property Let or a usual call
-&apos;&apos;&apos;	NB: arguments and return values must not be 2D arrays
 &apos;&apos;&apos;	The implementation intends to be as AGNOSTIC as possible in terms of objects nature and methods called
 &apos;&apos;&apos;	The method returns the value effectively returned by the called component,
 &apos;&apos;&apos;	completed with additional metadata. The whole is packaged in a 1D array.
@@ -938,7 +1528,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScriptForge.SF_PythonHelper._PythonDispatcher
+End Function	&apos;	ScriptForge.SF_Python._PythonDispatcher
 
-REM ================================================= END OF SCRIPTFORGE.SF_PythonHelper
+REM ================================================= END OF SCRIPTFORGE.SF_PYTHON
 </script:module>

@@ -7,7 +7,6 @@
  <library:element library:name="SF_TextStream"/>
  <library:element library:name="SF_Array"/>
  <library:element library:name="SF_Platform"/>
- <library:element library:name="SF_PythonHelper"/>
  <library:element library:name="SF_Timer"/>
  <library:element library:name="SF_FileSystem"/>
  <library:element library:name="SF_Region"/>
@@ -21,4 +20,5 @@
  <library:element library:name="SF_Exception"/>
  <library:element library:name="SF_UI"/>
  <library:element library:name="SF_Services"/>
+ <library:element library:name="SF_Python"/>
 </library:library>

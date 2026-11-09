@@ -19,11 +19,11 @@ Option Explicit
 &apos;&apos;&apos;			- UNO introspection utilities
 &apos;&apos;&apos;			- clipboard management
 &apos;&apos;&apos;			- invocation of external scripts or programs
-&apos;&apos;&apos;			- access to the content of Calc files
+&apos;&apos;&apos;			- rapud access to the content of Calc files
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation example:
 &apos;&apos;&apos;			Dim session As Variant
-&apos;&apos;&apos;			session = CreateScriptService(&quot;Session&quot;)
+&apos;&apos;&apos;			Set session = CreateScriptService(&quot;Session&quot;)
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
 &apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_session.html?DbPAR=BASIC
@@ -315,7 +315,7 @@ Try:
 	&apos;	Execute script
 	If Not IsNull(oScript) Then
 		On Local Error GoTo CatchExec
-		vReturn = oScript.Invoke(pvArgs(), Array(), Array())
+		vReturn = oScript.invoke(pvArgs(), Array(), Array())
 		&apos;	Remove surrounding array when single returned value
 		If IsArray(vReturn) Then
 			If UBound(vReturn) = 0 Then vReturn = vReturn(0)
