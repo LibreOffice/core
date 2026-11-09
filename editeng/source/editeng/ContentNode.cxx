@@ -301,13 +301,20 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         }
         else if ( pAttrib->GetEnd() == nCut )
         {
+            const sal_uInt16 nWhich = pAttrib->GetItem()->Which();
             // must be copied as an empty attributes.
-            if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !maCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 )
-                && pAttrib->GetItem()->Which() != EE_CHAR_ESCAPEMENT )
+            if (bKeepEndingAttribs && !pAttrib->IsFeature() && nWhich != EE_CHAR_ESCAPEMENT)
             {
-                EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
-                assert(pNewAttrib);
-                maCharAttribList.InsertAttrib( pNewAttrib );
+                EditCharAttrib* pStartAttrib = maCharAttribList.FindAttrib(nWhich, 0);
+                // tdf#37685 - an empty attribute at the cut overrides the ending one copied before
+                if (!pStartAttrib || (pStartAttrib->IsEmpty() && pAttrib->IsEmpty()))
+                {
+                    if (pStartAttrib)
+                        maCharAttribList.Remove(pStartAttrib);
+                    EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
+                    assert(pNewAttrib);
+                    maCharAttribList.InsertAttrib( pNewAttrib );
+                }
             }
             nAttr++;
         }

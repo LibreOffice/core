@@ -2462,6 +2462,46 @@ CPPUNIT_TEST_FIXTURE(Test, testEscapementNotPreservedOnParaBreak)
     CPPUNIT_ASSERT_MESSAGE("Escapement attribute should NOT be included.", !pEscAttr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf37685EmptyAttribAtParaBreak)
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+
+    OUString aParaText = u"aaabbb"_ustr;
+    aEditEngine.SetText(aParaText);
+    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(sal_Int32(0)));
+
+    {
+        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
+        SvxWeightItem aBold(FontWeight::WEIGHT_BOLD, EE_CHAR_WEIGHT);
+        pSet->Put(aBold);
+        aEditEngine.QuickSetAttribs(*pSet, ESelection(0, 3, 0, 6));
+    }
+
+    // Turn bold off at the end of the text without any selection
+    ContentNode* pNode = &rDoc.GetObject(0);
+    rDoc.InsertAttrib(pNode, 6, 6, SvxWeightItem(FontWeight::WEIGHT_NORMAL, EE_CHAR_WEIGHT));
+
+    // New para break at the end of the text (cf. pressing enter)
+    EditPaM aEndPaM(pNode, pNode->Len());
+    rDoc.InsertParaBreak(aEndPaM, true /* bKeepEndingAttribs */);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rDoc.Count());
+    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(sal_Int32(0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetParaAsString(sal_Int32(1)));
+
+    // Check new para's character attributes
+    pNode = &rDoc.GetObject(1);
+    const EditCharAttrib* pWeightAttr = pNode->GetCharAttribs().FindEmptyAttrib(EE_CHAR_WEIGHT, 0);
+    CPPUNIT_ASSERT(pWeightAttr);
+    // Without the fix in place, this test would have failed with
+    // - Expected: 5 (FontWeight::WEIGHT_NORMAL)
+    // - Actual  : 8 (FontWeight::WEIGHT_BOLD)
+    // i.e. the new paragraph was bold even though bold was switched off before pressing enter
+    CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL,
+                         static_cast<const SvxWeightItem*>(pWeightAttr->GetItem())->GetWeight());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testAutoDirNotPreservedOnParaBreak)
 {
     EditEngine aEditEngine(mpItemPool.get());
