@@ -62,6 +62,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 					NSPR_CFLAGS="-I$(gb_UnpackedTarball_workdir)/nss/dist/out/include" NSPR_LIBS="-L$(gb_UnpackedTarball_workdir)/nss/dist/out/lib -lnspr4" \
 					NSS_CFLAGS="-I$(gb_UnpackedTarball_workdir)/nss/dist/public/nss" NSS_LIBS="-L$(gb_UnpackedTarball_workdir)/nss/dist/out/lib -lsmime3 -lnss3 -lnssutil3" \
 				), \
+				--without-nss \
 				$(if $(ENABLE_OPENSSL), \
 					$(if $(SYSTEM_OPENSSL),, \
 						OPENSSL_CFLAGS="-I$(gb_UnpackedTarball_workdir)/openssl/include" \
