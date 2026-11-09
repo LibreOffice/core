@@ -1529,13 +1529,16 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
     }
     else if( aParam.startsWith( "playFrom" ) )
     {
-        const std::u16string_view aMediaTime( aParam.subView( 9, aParam.getLength() - 10 ) );
-        rtl_math_ConversionStatus eStatus;
-        double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
-        if( eStatus == rtl_math_ConversionStatus_Ok )
+        if (aParam.getLength() >= 10)
         {
-            aParamValue.Name = u"MediaTime"_ustr;
-            aParamValue.Value <<= fMediaTime;
+            const std::u16string_view aMediaTime( aParam.subView( 9, aParam.getLength() - 10 ) );
+            rtl_math_ConversionStatus eStatus;
+            double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
+            if( eStatus == rtl_math_ConversionStatus_Ok )
+            {
+                aParamValue.Name = u"MediaTime"_ustr;
+                aParamValue.Value <<= fMediaTime;
+            }
         }
         nCommand = EffectCommands::PLAY;
     }
