@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf174337_lvl9)
     CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1482), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
     // Without the fix, this was 6985 (the numbering's IndentAt)
-    // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)

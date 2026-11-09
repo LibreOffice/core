@@ -10474,7 +10474,8 @@ void DomainMapper_Impl::processDeferredCharacterProperties(bool bCharContext)
 sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_Int32 nNumberingLevel, const OUString& aProp)
 {
     sal_Int32 nRet = 0;
-    if ( nListId < 0 )
+    // either of these indicates numbering is not used, so do not return any numbering properties
+    if (nListId < 0 || nNumberingLevel == 9)
         return nRet;
     if ( !m_xTextDocument )
         return nRet;
