@@ -186,12 +186,31 @@ std::unique_ptr<SfxTabPage> SvxAppearanceTabPage::Create(weld::Container* pPage,
 OUString SvxAppearanceTabPage::GetAllStrings()
 {
     OUStringBuffer sAllStrings;
-    OUString labels[] = { u"libreofficethemeslb"_ustr, u"optionslb"_ustr, u"appearancelb"_ustr,
-                          u"itemslb"_ustr, u"colorlb"_ustr };
+
+    OUString labels[] = { u"libreofficethemeslb"_ustr, u"customizationslb"_ustr, u"iconslbl"_ustr,
+                          u"lbDialogs"_ustr,           u"lbTabPosition"_ustr,    u"lbToolbar"_ustr,
+                          u"lbSidebar"_ustr,           u"lbNotebookbar"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
+            sAllStrings.append(pString->get_label() + " ");
+    }
+
+    OUString checkButton[] = { u"enableapptheming"_ustr, u"useonlywhitedocbackground"_ustr,
+                               u"usebmpforappback"_ustr, u"showindocumentchkbtn"_ustr };
+
+    for (const auto& check : checkButton)
+    {
+        if (const auto pString = m_xBuilder->weld_check_button(check))
+            sAllStrings.append(pString->get_label() + " ");
+    }
+
+    OUString radioButton[] = { u"rbVertical"_ustr, u"rbHorizontal"_ustr };
+
+    for (const auto& radio : radioButton)
+    {
+        if (const auto pString = m_xBuilder->weld_radio_button(radio))
             sAllStrings.append(pString->get_label() + " ");
     }
 
