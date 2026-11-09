@@ -59,7 +59,9 @@ namespace canvas
     the CanvasHelper type, and some examples.
  */
 template <class Base, class CanvasHelper, class Mutex = ::osl::MutexGuard>
-class BitmapCanvasBase : public CanvasBase<Base, CanvasHelper, Mutex>
+requires std::derived_from<Base, cppu::OWeakObject>&&
+    std::derived_from<Base, com::sun::star::rendering::XBitmap> class BitmapCanvasBase
+    : public CanvasBase<Base, CanvasHelper, Mutex>
 {
 public:
     typedef CanvasBase<Base, CanvasHelper, Mutex> BaseType;
@@ -84,7 +86,10 @@ public:
 };
 
 template <class Base, class CanvasHelper, class Mutex = ::osl::MutexGuard>
-class BitmapCanvasBase2 : public BitmapCanvasBase<Base, CanvasHelper, Mutex>
+requires std::derived_from<Base, cppu::OWeakObject>&&
+    std::derived_from<Base, com::sun::star::rendering::XBitmap>&&
+        std::derived_from<Base, com::sun::star::rendering::XBitmapCanvas> class BitmapCanvasBase2
+    : public BitmapCanvasBase<Base, CanvasHelper, Mutex>
 {
     typedef BitmapCanvasBase<Base, CanvasHelper, Mutex> BaseType;
 

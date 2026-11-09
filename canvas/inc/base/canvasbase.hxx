@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/TextDirection.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -105,9 +106,10 @@ namespace canvas
     the sole parameter, and destroyed again when the method scope
     is left.
 */
-template <std::derived_from<cppu::OWeakObject> BaseType, class CanvasHelper,
-          class Mutex = ::osl::MutexGuard>
-class CanvasBase : public BaseType
+template <class BaseType, class CanvasHelper, class Mutex = ::osl::MutexGuard>
+requires std::derived_from<BaseType, cppu::OWeakObject>&&
+    std::derived_from<BaseType, com::sun::star::rendering::XCanvas> class CanvasBase
+    : public BaseType
 {
 public:
     typedef Mutex MutexType;
