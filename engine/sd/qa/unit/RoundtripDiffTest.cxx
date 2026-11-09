@@ -30,6 +30,10 @@
  *   SD_RT_REPORT   report file, appended to and resumable (default sd-roundtrip.log)
  *   SD_RT_LIMIT    stop after that many documents
  *   SD_RT_DUMPDIR  if set, write the A, B and C dumps of every document there
+ *   SD_RT_LAYOUT   also lay every page out and keep what it draws: where every piece of text
+ *                  and every shape, picture and fill lands, how large it is and in what colour.
+ *                  This finds what the model holds correctly but the page no longer draws the
+ *                  same way
  */
 
 #include <sal/config.h>
@@ -62,10 +66,19 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
+
 #include <comphelper/anytostring.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <osl/file.hxx>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/virdev.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -75,11 +88,42 @@ namespace
 /** Longest value we keep; a few properties (bitmaps, geometry) are enormous. */
 constexpr sal_Int32 MAX_VALUE_LEN = 400;
 
-/** Two numbers this close count as the same value. */
-bool numbersEqual(double fLeft, double fRight)
+/** How many drawn things a page may hold and still have each of them written down. A page that
+    draws more than this, such as one carrying a map or another large drawing, is counted by kind
+    instead, because naming every piece of it says no more than the count does. */
+constexpr size_t MAX_DRAWN_PER_PAGE = 400;
+
+/** How many pieces drawn one after another are taken to be one fill painted in many pieces
+    rather than that many things of their own. */
+constexpr size_t MIN_REPEATED_PIECES = 16;
+
+/** Two numbers this close count as the same value. The slack is the larger of a part of the
+    value and a floor the caller gives, which is what lets a length be compared more loosely than
+    a count. */
+bool numbersEqual(double fLeft, double fRight, double fFloor)
 {
     const double fMagnitude = std::max(std::abs(fLeft), std::abs(fRight));
-    return std::abs(fLeft - fRight) <= std::max(1.0, 0.002 * fMagnitude);
+    return std::abs(fLeft - fRight) <= std::max(fFloor, 0.002 * fMagnitude);
+}
+
+/** The floor in hundredths of a millimetre below which a difference in a length of a laid out
+    page says nothing. Saving a document rounds every coordinate once, and a tenth of a
+    millimetre is finer than anything a reader can see. */
+constexpr double LAYOUT_SLACK = 10.0;
+
+/** The slack a value at this key is compared with. */
+double slackOf(std::string_view rKey)
+{
+    if (!rKey.starts_with("layout/"))
+        return 1.0;
+    const size_t nAt = rKey.rfind('@');
+    if (nAt == std::string_view::npos)
+        return 1.0;
+    const std::string_view aProperty = rKey.substr(nAt + 1);
+    if (aProperty == "position" || aProperty == "size" || aProperty == "width"
+        || aProperty == "height")
+        return LAYOUT_SLACK;
+    return 1.0;
 }
 
 /** Properties that differ between two saves of the same model for reasons that
@@ -348,6 +392,530 @@ private:
     }
 };
 
+/** The name under which drawing operations of one kind are counted, or nothing for a kind that
+    says little about the page. */
+const char* operationGroup(MetaActionType eType)
+{
+    switch (eType)
+    {
+        case MetaActionType::TEXT:
+        case MetaActionType::TEXTARRAY:
+        case MetaActionType::STRETCHTEXT:
+            return "text";
+        case MetaActionType::POLYLINE:
+        case MetaActionType::POLYGON:
+        case MetaActionType::POLYPOLYGON:
+        case MetaActionType::Transparent:
+            return "polygon";
+        case MetaActionType::RECT:
+        case MetaActionType::ROUNDRECT:
+            return "rectangle";
+        case MetaActionType::ELLIPSE:
+            return "ellipse";
+        case MetaActionType::ARC:
+        case MetaActionType::PIE:
+        case MetaActionType::CHORD:
+            return "arc";
+        case MetaActionType::LINE:
+            return "line";
+        case MetaActionType::BMP:
+        case MetaActionType::BMPSCALE:
+        case MetaActionType::BMPSCALEPART:
+        case MetaActionType::BMPEX:
+        case MetaActionType::BMPEXSCALE:
+        case MetaActionType::BMPEXSCALEPART:
+        case MetaActionType::MASK:
+        case MetaActionType::MASKSCALE:
+        case MetaActionType::MASKSCALEPART:
+            return "image";
+        case MetaActionType::GRADIENT:
+        case MetaActionType::GRADIENTEX:
+            return "gradient";
+        case MetaActionType::HATCH:
+            return "hatch";
+        case MetaActionType::FLOATTRANSPARENT:
+            return "transparency";
+        default:
+            return nullptr;
+    }
+}
+
+/** One drawn thing held back until the things after it say whether it stands on its own or is
+    one piece of a fill painted in many pieces. A plain fill is a shape that carries a colour and
+    no outline, which is what the bands of a gradient are. */
+struct PendingDraw
+{
+    const char* pGroup;
+    tools::Rectangle aArea;
+    OUString aFill;
+    OUString aLine;
+    bool bPlainFill;
+};
+
+/** The colours and the font size drawing operations are carried out with at one point of a
+    metafile. The whole of it is kept where a push is met and given back at the matching pop,
+    which is coarser than the groups a push names and is the same on both sides of a comparison.
+    A colour counts as in force only where the operation that set it was switching it on. */
+struct PaintState
+{
+    Color aLineColour = COL_BLACK;
+    Color aFillColour = COL_WHITE;
+    Color aTextColour = COL_BLACK;
+    bool bLineInForce = false;
+    bool bFillInForce = false;
+    tools::Long nFontHeight = 0;
+};
+
+/** A colour as it can stand in a value, in the usual six hexadecimal digits. */
+OUString colourText(const Color& rColour) { return "#" + rColour.AsRGBHexString(); }
+
+/** A length rounded to the half millimetre, so that the rounding a save puts on a coordinate
+    leaves a drawn thing the same name it had before. */
+tools::Long roundedLength(tools::Long nLength)
+{
+    return (nLength + (nLength < 0 ? -25 : 25)) / 50 * 50;
+}
+
+/** The rectangle a drawing operation covers, for an operation that covers an area of the page.
+    Gives false for one that leaves no area of its own, among them the operations that only
+    change the state the next ones are carried out in. */
+bool operationArea(MetaAction& rAction, const OutputDevice& rDevice, tools::Rectangle& rArea)
+{
+    auto fromPointAndSize = [&rArea](const Point& rPoint, const Size& rSize) {
+        rArea = tools::Rectangle(rPoint, rSize);
+        rArea.Normalize();
+        return true;
+    };
+
+    switch (rAction.GetType())
+    {
+        case MetaActionType::RECT:
+            rArea = static_cast<MetaRectAction&>(rAction).GetRect();
+            return true;
+        case MetaActionType::ROUNDRECT:
+            rArea = static_cast<MetaRoundRectAction&>(rAction).GetRect();
+            return true;
+        case MetaActionType::ELLIPSE:
+            rArea = static_cast<MetaEllipseAction&>(rAction).GetRect();
+            return true;
+        case MetaActionType::ARC:
+            rArea = static_cast<MetaArcAction&>(rAction).GetRect();
+            return true;
+        case MetaActionType::PIE:
+            rArea = static_cast<MetaPieAction&>(rAction).GetRect();
+            return true;
+        case MetaActionType::CHORD:
+            rArea = static_cast<MetaChordAction&>(rAction).GetRect();
+            return true;
+        case MetaActionType::LINE:
+        {
+            auto& rLine = static_cast<MetaLineAction&>(rAction);
+            rArea = tools::Rectangle(rLine.GetStartPoint(), rLine.GetEndPoint());
+            rArea.Normalize();
+            return true;
+        }
+        case MetaActionType::POLYLINE:
+            rArea = static_cast<MetaPolyLineAction&>(rAction).GetPolygon().GetBoundRect();
+            return true;
+        case MetaActionType::POLYGON:
+            rArea = static_cast<MetaPolygonAction&>(rAction).GetPolygon().GetBoundRect();
+            return true;
+        case MetaActionType::POLYPOLYGON:
+            rArea = static_cast<MetaPolyPolygonAction&>(rAction).GetPolyPolygon().GetBoundRect();
+            return true;
+        case MetaActionType::Transparent:
+            rArea = static_cast<MetaTransparentAction&>(rAction).GetPolyPolygon().GetBoundRect();
+            return true;
+        case MetaActionType::HATCH:
+            rArea = static_cast<MetaHatchAction&>(rAction).GetPolyPolygon().GetBoundRect();
+            return true;
+        case MetaActionType::GRADIENT:
+            rArea = static_cast<MetaGradientAction&>(rAction).GetRect();
+            return true;
+        case MetaActionType::GRADIENTEX:
+            rArea = static_cast<MetaGradientExAction&>(rAction).GetPolyPolygon().GetBoundRect();
+            return true;
+        case MetaActionType::FLOATTRANSPARENT:
+        {
+            auto& rFloat = static_cast<MetaFloatTransparentAction&>(rAction);
+            return fromPointAndSize(rFloat.GetPoint(), rFloat.GetSize());
+        }
+        case MetaActionType::BMP:
+        {
+            auto& rBitmap = static_cast<MetaBmpAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetPoint(),
+                                    rDevice.PixelToLogic(rBitmap.GetBitmap().GetSizePixel()));
+        }
+        case MetaActionType::BMPEX:
+        {
+            auto& rBitmap = static_cast<MetaBmpExAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetPoint(),
+                                    rDevice.PixelToLogic(rBitmap.GetBitmap().GetSizePixel()));
+        }
+        case MetaActionType::MASK:
+        {
+            auto& rBitmap = static_cast<MetaMaskAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetPoint(),
+                                    rDevice.PixelToLogic(rBitmap.GetBitmap().GetSizePixel()));
+        }
+        case MetaActionType::BMPSCALE:
+        {
+            auto& rBitmap = static_cast<MetaBmpScaleAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetPoint(), rBitmap.GetSize());
+        }
+        case MetaActionType::BMPEXSCALE:
+        {
+            auto& rBitmap = static_cast<MetaBmpExScaleAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetPoint(), rBitmap.GetSize());
+        }
+        case MetaActionType::MASKSCALE:
+        {
+            auto& rBitmap = static_cast<MetaMaskScaleAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetPoint(), rBitmap.GetSize());
+        }
+        case MetaActionType::BMPSCALEPART:
+        {
+            auto& rBitmap = static_cast<MetaBmpScalePartAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetDestPoint(), rBitmap.GetDestSize());
+        }
+        case MetaActionType::BMPEXSCALEPART:
+        {
+            auto& rBitmap = static_cast<MetaBmpExScalePartAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetDestPoint(), rBitmap.GetDestSize());
+        }
+        case MetaActionType::MASKSCALEPART:
+        {
+            auto& rBitmap = static_cast<MetaMaskScalePartAction&>(rAction);
+            return fromPointAndSize(rBitmap.GetDestPoint(), rBitmap.GetDestSize());
+        }
+        default:
+            return false;
+    }
+}
+
+/** Whether a drawing operation paints a picture of its own, so that the colours in force around
+    it say nothing about what it looks like. */
+bool paintsItsOwnPicture(MetaActionType eType)
+{
+    switch (eType)
+    {
+        case MetaActionType::BMP:
+        case MetaActionType::BMPSCALE:
+        case MetaActionType::BMPSCALEPART:
+        case MetaActionType::BMPEX:
+        case MetaActionType::BMPEXSCALE:
+        case MetaActionType::BMPEXSCALEPART:
+        case MetaActionType::MASK:
+        case MetaActionType::MASKSCALE:
+        case MetaActionType::MASKSCALEPART:
+        case MetaActionType::FLOATTRANSPARENT:
+            return true;
+        default:
+            return false;
+    }
+}
+
+/** What fills the area a drawing operation covers, or nothing where the operation paints a
+    picture of its own. A gradient carries the two colours it runs between. */
+OUString fillOfOperation(MetaAction& rAction, const PaintState& rState)
+{
+    if (paintsItsOwnPicture(rAction.GetType()))
+        return OUString();
+
+    switch (rAction.GetType())
+    {
+        case MetaActionType::GRADIENT:
+        {
+            const Gradient& rGradient = static_cast<MetaGradientAction&>(rAction).GetGradient();
+            return colourText(rGradient.GetStartColor()) + " to "
+                   + colourText(rGradient.GetEndColor());
+        }
+        case MetaActionType::GRADIENTEX:
+        {
+            const Gradient& rGradient = static_cast<MetaGradientExAction&>(rAction).GetGradient();
+            return colourText(rGradient.GetStartColor()) + " to "
+                   + colourText(rGradient.GetEndColor());
+        }
+        default:
+            return rState.bFillInForce ? colourText(rState.aFillColour) : u"none"_ustr;
+    }
+}
+
+/** A piece of text as it can stand in a key: one line, printable, and short. */
+OString keyText(const OUString& rText)
+{
+    OUStringBuffer aBuffer(rText.getLength());
+    for (sal_Int32 i = 0; i < rText.getLength() && aBuffer.getLength() < 40; ++i)
+    {
+        const sal_Unicode c = rText[i];
+        aBuffer.append(c < 0x20 || c == 0x7f || c == '\t' ? u' ' : c);
+    }
+    return OUStringToOString(o3tl::trim(aBuffer.makeStringAndClear()), RTL_TEXTENCODING_UTF8);
+}
+
+/** Writes what every page draws once it has been laid out.
+
+    Each page is drawn into a metafile, which holds the drawing operations in the order they are
+    carried out. A piece of text is keyed by the text itself and anything else by its kind and its
+    size, so that a page whose content shifts reads as a move rather than as one thing lost and
+    another gained. Each one keeps where it landed, what colour it was drawn in and how large it
+    is. Beside them is the number of things of each kind, which is what shows a shape that stopped
+    being drawn even though the model still holds it. A fill painted in many pieces counts once,
+    as the one thing it is. */
+void dumpLayout(std::map<OString, OUString>& rValues,
+                const uno::Reference<lang::XComponent>& xComponent)
+{
+    uno::Reference<view::XRenderable> xRenderable(xComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(xComponent, uno::UNO_QUERY);
+    if (!xRenderable.is() || !xModel.is())
+        return;
+
+    const uno::Any aSelection(xModel);
+    const uno::Sequence<beans::PropertyValue> aNoOptions;
+    sal_Int32 nPages = 0;
+    try
+    {
+        nPages = xRenderable->getRendererCount(aSelection, aNoOptions);
+    }
+    catch (const uno::Exception&)
+    {
+        return;
+    }
+
+    for (sal_Int32 nPage = 0; nPage < nPages; ++nPage)
+    {
+        ScopedVclPtrInstance<VirtualDevice> pDevice;
+        pDevice->EnableOutput(false);
+        pDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
+
+        GDIMetaFile aMetaFile;
+        aMetaFile.SetPrefMapMode(pDevice->GetMapMode());
+        aMetaFile.Record(pDevice);
+
+        rtl::Reference<VCLXDevice> xDevice(new VCLXDevice);
+        xDevice->SetOutputDevice(pDevice);
+        const uno::Sequence<beans::PropertyValue> aOptions{ comphelper::makePropertyValue(
+            u"RenderDevice"_ustr, uno::Reference<awt::XDevice>(xDevice)) };
+
+        try
+        {
+            xRenderable->render(nPage, aSelection, aOptions);
+        }
+        catch (const uno::Exception&)
+        {
+        }
+        aMetaFile.Stop();
+
+        const OString aPagePath = "layout/page[" + OString::number(nPage) + "]";
+        std::map<OString, sal_Int32> aSeen;
+        std::map<OString, sal_Int32> aCounts;
+        PaintState aState;
+        std::vector<PaintState> aStateStack;
+        std::vector<PendingDraw> aRun;
+        std::map<OString, OUString> aDrawnValues;
+        size_t nDrawn = 0;
+
+        // Writes one drawn thing. Its name is its kind and its size rounded to the half
+        // millimetre, which is what lets the same thing be found again on the other side of a
+        // round trip once it has moved.
+        auto recordDrawn = [&](std::string_view rGroup, const tools::Rectangle& rArea,
+                               const OUString& rFill, const OUString& rLine) {
+            ++aCounts[OString(rGroup)];
+            ++nDrawn;
+            if (nDrawn > MAX_DRAWN_PER_PAGE)
+                return;
+
+            const OString aSubject = OString::Concat(rGroup) + "["
+                                     + OString::number(roundedLength(rArea.GetWidth())) + "x"
+                                     + OString::number(roundedLength(rArea.GetHeight())) + "]";
+            const OString aPath
+                = aPagePath + "/" + aSubject + "[" + OString::number(aSeen[aSubject]++) + "]";
+            aDrawnValues[aPath + "@position"]
+                = OUString::number(rArea.Left()) + "," + OUString::number(rArea.Top());
+            aDrawnValues[aPath + "@size"]
+                = OUString::number(rArea.GetWidth()) + "x" + OUString::number(rArea.GetHeight());
+            if (!rFill.isEmpty())
+                aDrawnValues[aPath + "@fill"] = rFill;
+            if (!rLine.isEmpty())
+                aDrawnValues[aPath + "@line"] = rLine;
+        };
+
+        // Writes the things held back so far. A long enough run of plain fills in changing
+        // colours is the bands one gradient is painted in, and a long enough run of pieces all
+        // of one size is one fill laid out as a pattern. Either goes down as the area the whole
+        // run covers and how many pieces it took.
+        auto flushRun = [&]() {
+            if (aRun.empty())
+                return;
+
+            const bool bLongEnough = aRun.size() >= MIN_REPEATED_PIECES;
+            bool bAllPlainFills = bLongEnough;
+            bool bAllOneSize = bLongEnough;
+            for (const auto& rPiece : aRun)
+            {
+                bAllPlainFills = bAllPlainFills && rPiece.bPlainFill;
+                bAllOneSize = bAllOneSize
+                              && roundedLength(rPiece.aArea.GetWidth())
+                                     == roundedLength(aRun.front().aArea.GetWidth())
+                              && roundedLength(rPiece.aArea.GetHeight())
+                                     == roundedLength(aRun.front().aArea.GetHeight());
+            }
+            const bool bBands = bAllPlainFills && aRun.front().aFill != aRun.back().aFill;
+
+            if (bBands || bAllOneSize)
+            {
+                tools::Rectangle aWhole = aRun.front().aArea;
+                for (const auto& rPiece : aRun)
+                    aWhole.Union(rPiece.aArea);
+
+                OString aGroup("gradient band"_ostr);
+                if (!bBands)
+                    aGroup = OString::Concat("repeated ") + aRun.front().pGroup;
+                const OUString aFill
+                    = aRun.front().aFill == aRun.back().aFill
+                          ? aRun.front().aFill
+                          : aRun.front().aFill + " to " + aRun.back().aFill;
+                recordDrawn(aGroup, aWhole, aFill, aRun.front().aLine);
+            }
+            else
+            {
+                for (const auto& rPiece : aRun)
+                    recordDrawn(rPiece.pGroup, rPiece.aArea, rPiece.aFill, rPiece.aLine);
+            }
+            aRun.clear();
+        };
+
+        for (size_t nAction = 0; nAction < aMetaFile.GetActionSize(); ++nAction)
+        {
+            MetaAction* pAction = aMetaFile.GetAction(nAction);
+            if (!pAction)
+                continue;
+
+            switch (pAction->GetType())
+            {
+                case MetaActionType::PUSH:
+                    aStateStack.push_back(aState);
+                    continue;
+                case MetaActionType::POP:
+                    if (!aStateStack.empty())
+                    {
+                        aState = aStateStack.back();
+                        aStateStack.pop_back();
+                    }
+                    continue;
+                case MetaActionType::LINECOLOR:
+                {
+                    auto* pColour = static_cast<MetaLineColorAction*>(pAction);
+                    aState.bLineInForce = pColour->IsSetting();
+                    aState.aLineColour = pColour->GetColor();
+                    continue;
+                }
+                case MetaActionType::FILLCOLOR:
+                {
+                    auto* pColour = static_cast<MetaFillColorAction*>(pAction);
+                    aState.bFillInForce = pColour->IsSetting();
+                    aState.aFillColour = pColour->GetColor();
+                    continue;
+                }
+                case MetaActionType::TEXTCOLOR:
+                    aState.aTextColour = static_cast<MetaTextColorAction*>(pAction)->GetColor();
+                    continue;
+                case MetaActionType::FONT:
+                    aState.nFontHeight
+                        = static_cast<MetaFontAction*>(pAction)->GetFont().GetFontHeight();
+                    continue;
+                default:
+                    break;
+            }
+
+            const char* pGroup = operationGroup(pAction->GetType());
+            if (!pGroup)
+                continue;
+            if (std::string_view(pGroup) == "text")
+                ++aCounts["text"_ostr];
+
+            OUString aText;
+            Point aPoint;
+            double fWidth = -1;
+            switch (pAction->GetType())
+            {
+                case MetaActionType::TEXT:
+                {
+                    auto* pText = static_cast<MetaTextAction*>(pAction);
+                    aText = pText->GetText().copy(pText->GetIndex(), pText->GetLen());
+                    aPoint = pText->GetPoint();
+                    break;
+                }
+                case MetaActionType::TEXTARRAY:
+                {
+                    auto* pText = static_cast<MetaTextArrayAction*>(pAction);
+                    aText = pText->GetText().copy(pText->GetIndex(), pText->GetLen());
+                    aPoint = pText->GetPoint();
+                    if (!pText->GetDXArray().empty())
+                        fWidth = pText->GetDXArray().back();
+                    break;
+                }
+                case MetaActionType::STRETCHTEXT:
+                {
+                    auto* pText = static_cast<MetaStretchTextAction*>(pAction);
+                    aText = pText->GetText().copy(pText->GetIndex(), pText->GetLen());
+                    aPoint = pText->GetPoint();
+                    fWidth = pText->GetWidth();
+                    break;
+                }
+                default:
+                {
+                    tools::Rectangle aArea;
+                    if (!operationArea(*pAction, *pDevice, aArea))
+                    {
+                        flushRun();
+                        continue;
+                    }
+
+                    if (!aRun.empty() && std::string_view(aRun.front().pGroup) != pGroup)
+                        flushRun();
+
+                    OUString aLine;
+                    if (!paintsItsOwnPicture(pAction->GetType()))
+                        aLine = aState.bLineInForce ? colourText(aState.aLineColour)
+                                                    : u"none"_ustr;
+                    const bool bPlainFill
+                        = aState.bFillInForce && !aState.bLineInForce
+                          && (pAction->GetType() == MetaActionType::POLYGON
+                              || pAction->GetType() == MetaActionType::POLYPOLYGON);
+                    aRun.push_back({ pGroup, aArea, fillOfOperation(*pAction, aState), aLine,
+                                     bPlainFill });
+                    continue;
+                }
+            }
+
+            flushRun();
+
+            const OString aKey = keyText(aText);
+            if (aKey.isEmpty())
+                continue;
+            const OString aSubject = "text[" + aKey + "]";
+            const OString aPath
+                = aPagePath + "/" + aSubject + "[" + OString::number(aSeen[aSubject]++) + "]";
+            rValues[aPath + "@position"]
+                = OUString::number(aPoint.X()) + "," + OUString::number(aPoint.Y());
+            rValues[aPath + "@colour"] = colourText(aState.aTextColour);
+            rValues[aPath + "@height"] = OUString::number(aState.nFontHeight);
+            if (fWidth >= 0)
+                rValues[aPath + "@width"] = OUString::number(static_cast<sal_Int32>(fWidth));
+        }
+
+        flushRun();
+
+        if (nDrawn <= MAX_DRAWN_PER_PAGE)
+            rValues.insert(aDrawnValues.begin(), aDrawnValues.end());
+
+        for (const auto& rCount : aCounts)
+            rValues[aPagePath + "@count[" + rCount.first + "]"]
+                = OUString::number(rCount.second);
+    }
+}
+
 enum class DiffKind
 {
     Lost,
@@ -365,7 +933,7 @@ struct Diff
 
 /** Compares two values number aware, so that a position expressed in EMU and
     converted back through 1/100 mm does not show up as a difference. */
-bool valuesEqual(const OUString& rLeft, const OUString& rRight)
+bool valuesEqual(const OUString& rLeft, const OUString& rRight, double fFloor)
 {
     if (rLeft == rRight)
         return true;
@@ -396,7 +964,7 @@ bool valuesEqual(const OUString& rLeft, const OUString& rRight)
         {
             double fLeft = readNumber(rLeft, nLeft);
             double fRight = readNumber(rRight, nRight);
-            if (!numbersEqual(fLeft, fRight))
+            if (!numbersEqual(fLeft, fRight, fFloor))
                 return false;
         }
         else if (rLeft[nLeft] == rRight[nRight])
@@ -483,7 +1051,7 @@ std::vector<Diff> compare(const std::map<OString, OUString>& rBefore,
         auto it = rAfter.find(rEntry.first);
         if (it == rAfter.end())
             aDiffs.push_back({ DiffKind::Lost, rEntry.first, rEntry.second, OUString() });
-        else if (!valuesEqual(rEntry.second, it->second))
+        else if (!valuesEqual(rEntry.second, it->second, slackOf(rEntry.first)))
             aDiffs.push_back({ DiffKind::Changed, rEntry.first, rEntry.second, it->second });
     }
     for (const auto& rEntry : rAfter)
@@ -605,6 +1173,7 @@ void SdRoundtripDiffTest::testCorpus()
     const OString aReportPath = environment("SD_RT_REPORT", "sd-roundtrip.log");
     const OString aDumpDirectory = environment("SD_RT_DUMPDIR", "");
     const sal_Int32 nLimit = environment("SD_RT_LIMIT", "0").toInt32();
+    const bool bLayout = std::getenv("SD_RT_LAYOUT") != nullptr;
 
     // Resume: anything already reported on is not done again, so that the run
     // can be restarted after a document takes the process down with it.
@@ -653,10 +1222,16 @@ void SdRoundtripDiffTest::testCorpus()
 
             loadFromURL(rUrl);
             aFirst.dump(mxComponent);
+            if (bLayout)
+                dumpLayout(aFirst.maValues, mxComponent);
             saveAndReload(eFilter);
             aSecond.dump(mxComponent);
+            if (bLayout)
+                dumpLayout(aSecond.maValues, mxComponent);
             saveAndReload(eFilter);
             aThird.dump(mxComponent);
+            if (bLayout)
+                dumpLayout(aThird.maValues, mxComponent);
         }
         catch (const std::exception& rException)
         {
