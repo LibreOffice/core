@@ -112,19 +112,6 @@ class SlideVideos {
 		return videoRenderers.map((videoRenderer) => videoRenderer.infoId);
 	}
 
-	/// Draw the video of the shape, as look says, or as it comes.
-	public renderVideo(
-		slideHash: string,
-		shapeId: number,
-		look?: AnimatedContentLook,
-	): void {
-		const videoRenderers = this.renderers.get(slideHash);
-		if (!videoRenderers) return;
-
-		for (const videoRenderer of videoRenderers)
-			if (videoRenderer.infoId === shapeId) videoRenderer.render(look);
-	}
-
 	public pause(slideHash: string): void {
 		const videoRenderers = this.renderers.get(slideHash);
 		if (!videoRenderers) return;
