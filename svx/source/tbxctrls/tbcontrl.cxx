@@ -3081,7 +3081,10 @@ com_sun_star_comp_svx_StyleToolBoxControl_get_implementation(
 void SAL_CALL SvxStyleToolBoxControl::update()
 {
     for (rtl::Reference<SfxStyleControllerItem_Impl>& pBoundItem : m_xBoundItems)
-        pBoundItem->ReBind();
+    {
+        if (pBoundItem)
+            pBoundItem->ReBind();
+    }
     bindListener();
 }
 
