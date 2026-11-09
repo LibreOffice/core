@@ -42,6 +42,15 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <COKit/COKit.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <svx/VectorObjectContent.hxx>
+#include <vcl/canvastools.hxx>
 #include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -3383,6 +3392,60 @@ void SwXTextDocument::removePasteEventListener(
         m_pDocShell->GetWrtShell()->GetPasteListeners().removeInterface(xListener);
 }
 
+namespace
+{
+/// Draws the spreadsheets active in place in the views of the document as they are being edited,
+/// over the picture each one left when it was last active. The device is in twips of the document.
+void paintInPlaceSpreadsheets(VirtualDevice& rDevice, ViewShellDocId nDocId,
+                              const tools::Rectangle& rTile)
+{
+    drawinglayer::geometry::ViewInformation2D aViewInformation;
+    aViewInformation.setViewTransformation(rDevice.GetViewTransformation());
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor;
+    for (SfxViewShell* pView = SfxViewShell::GetFirst(); pView;
+         pView = SfxViewShell::GetNext(*pView))
+    {
+        if (pView->GetDocId() != nDocId)
+            continue;
+        const KitCalcHelper aHelper(pView);
+        SfxViewShell* pCalcViewShell = aHelper.GetCalcViewShell();
+        if (!pCalcViewShell)
+            continue;
+        const tools::Rectangle aWindow(aHelper.GetBoundingBox());
+        if (aWindow.IsEmpty() || !aWindow.Overlaps(rTile))
+            continue;
+        cpo::uno::Reference<frame::XModel> xModel(pCalcViewShell->GetCurrentDocument());
+        svx::vector::InPlaceContent* pInPlaceContent
+            = dynamic_cast<svx::vector::InPlaceContent*>(xModel.get());
+        if (!pInPlaceContent)
+            continue;
+        Size aSize;
+        drawinglayer::primitive2d::Primitive2DContainer aContent(
+            pInPlaceContent->createInPlaceContent(aSize));
+        if (aSize.IsEmpty())
+            continue;
+
+        // The area of the sheet the object shows fills the window of the object, cut off at its
+        // edges.
+        const basegfx::B2DHomMatrix aMapping(basegfx::utils::createScaleTranslateB2DHomMatrix(
+            double(aWindow.GetWidth()) / aSize.Width(), double(aWindow.GetHeight()) / aSize.Height(),
+            aWindow.Left(), aWindow.Top()));
+        const basegfx::B2DPolyPolygon aClip(basegfx::utils::createPolygonFromRect(
+            vcl::unotools::b2DRectangleFromRectangle(aWindow)));
+        const drawinglayer::primitive2d::Primitive2DContainer aPlaced{
+            new drawinglayer::primitive2d::MaskPrimitive2D(
+                aClip, drawinglayer::primitive2d::Primitive2DContainer{
+                           new drawinglayer::primitive2d::TransformPrimitive2D(
+                               aMapping, std::move(aContent)) })
+        };
+        if (!pProcessor)
+            pProcessor = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                rDevice, aViewInformation);
+        pProcessor->process(aPlaced);
+    }
+}
+}
+
 void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                  int nOutputWidth, int nOutputHeight,
                                  int nTilePosX, int nTilePosY,
@@ -3396,11 +3459,16 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
     pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,
                           nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
+    // The device is still in the twips of the document that the text was painted in.
+    SwView* pView = m_pDocShell->GetView();
+    paintInPlaceSpreadsheets(rDevice, pView->GetDocId(),
+                             tools::Rectangle(Point(nTilePosX, nTilePosY),
+                                              Size(nTileWidth, nTileHeight)));
+
     KitChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
     // Draw Form controls
-    SwView* pView = m_pDocShell->GetView();
     comphelper::COKit::TiledPaintingGuard aTiledPaintingGuard(pView->GetDocId());
     SwDrawModel* pDrawLayer = GetDocOrThrow().getIDocumentDrawModelAccess().GetDrawModel();
     SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(0));

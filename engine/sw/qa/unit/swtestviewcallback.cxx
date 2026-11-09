@@ -159,6 +159,12 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
         case COKitCallbackType::GRAPHIC_SELECTION:
         {
             m_bGraphicSelection = aPayload != "EMPTY";
+            m_aGraphicSelection = aPayload;
+        }
+        break;
+        case COKitCallbackType::CELL_CURSOR:
+        {
+            m_aCellCursor = aPayload;
         }
         break;
         case COKitCallbackType::VIEW_LOCK:

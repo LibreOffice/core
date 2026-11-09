@@ -52,6 +52,10 @@ public:
     bool m_bViewCursorVisible;
     bool m_bGraphicViewSelection;
     bool m_bGraphicSelection;
+    /// The payload of the last graphic selection of this view.
+    OString m_aGraphicSelection;
+    /// The payload of the last cell cursor of this view, empty before any.
+    OString m_aCellCursor;
     bool m_bViewLock;
     OString m_aDocColor;
     /// Set if any callback was invoked.

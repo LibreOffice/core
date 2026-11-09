@@ -57,6 +57,11 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <comphelper/string.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svx/fillbitmaplink.hxx>
 #include <svx/xbtmpit.hxx>
@@ -4919,6 +4924,141 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormulaEditKeepingSizeRepaints)
     // Then the area of the formula is painted again, so the view shows the a. Without the fix,
     // the view kept showing the t until the formula was left.
     CPPUNIT_ASSERT(aView.m_bTilesInvalidated);
+}
+
+namespace
+{
+/// The rectangle at the start of a payload of "x, y, w, h[, more]", empty for none.
+tools::Rectangle rectangleOf(std::string_view rPayload)
+{
+    if (rPayload.empty() || rPayload == "EMPTY")
+        return {};
+    cpo::uno::Sequence<OUString> aFields
+        = comphelper::string::convertCommaSeparated(OUString::fromUtf8(rPayload));
+    CPPUNIT_ASSERT(aFields.getLength() >= 4);
+    return tools::Rectangle(Point(aFields[0].toInt32(), aFields[1].toInt32()),
+                            Size(aFields[2].toInt32(), aFields[3].toInt32()));
+}
+
+/// The number of dark pixels in a tile of the area of the document, in twips, that starts at its
+/// upper left corner and is a whole number of pixels.
+int countDarkPixels(SwXTextDocument& rDocument, const tools::Rectangle& rArea)
+{
+    // a pixel is 15 twips, as on the screen at 100%
+    const int nWidth = rArea.GetWidth() / 15;
+    const int nHeight = rArea.GetHeight() / 15;
+    std::vector<unsigned char> aBuffer(nWidth * nHeight * 4);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nWidth, nHeight), 1.0, Point(),
+                                                       aBuffer.data());
+    rDocument.paintTile(*pDevice, nWidth, nHeight, rArea.Left(), rArea.Top(), nWidth * 15,
+                        nHeight * 15);
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nWidth, nHeight));
+    BitmapScopedReadAccess pAccess(aBitmap);
+    int nDark = 0;
+    for (int nY = 0; nY < nHeight; ++nY)
+        for (int nX = 0; nX < nWidth; ++nX)
+            if (Color(pAccess->GetPixel(nY, nX)).GetLuminance() < 100)
+                ++nDark;
+    return nDark;
+}
+
+void clickAt(SwXTextDocument& rDocument, const Point& rPosition)
+{
+    rDocument.postMouseEvent(COKitMouseEventType::BUTTONDOWN, rPosition.X(), rPosition.Y(), 1,
+                             MOUSE_LEFT, 0);
+    rDocument.postMouseEvent(COKitMouseEventType::BUTTONUP, rPosition.X(), rPosition.Y(), 1,
+                             MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testEmbeddedSpreadsheetEditInPlace)
+{
+    // Given a document with a spreadsheet object that shows A1:D5 of its sheet, its cells 1280 x
+    // 256 twips:
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    comphelper::ScopeGuard aResetFlags([] { comphelper::COKit::resetCompatFlag(); });
+    SwXTextDocument* pXTextDocument = createDoc("embedded-spreadsheet.odt");
+    SwTestViewCallback aView;
+    // the states of the commands are sent, as for a client
+    pXTextDocument->initializeForTiledRendering({});
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // When the object is selected and activated, as a double click does:
+    CPPUNIT_ASSERT(pWrtShell->GotoFly(UIName(u"Sheet"_ustr), FLYCNTTYPE_OLE, true));
+    aView.m_aStateChanges.clear();
+    pWrtShell->LaunchOLEObj();
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the spreadsheet is active in place, and the view is told it is a spreadsheet. Without
+    // the fix, only charts and formulas were activated.
+    SfxInPlaceClient* pIPClient = getSwDocShell()->GetView()->GetIPClient();
+    CPPUNIT_ASSERT(pIPClient);
+    CPPUNIT_ASSERT(pIPClient->IsObjectInPlaceActive());
+    // Leave the spreadsheet at the end, so that its view closes before the callback it reports to.
+    comphelper::ScopeGuard aLeave([pIPClient] {
+        pIPClient->DeactivateObject();
+        Scheduler::ProcessEventsToIdle();
+    });
+    CPPUNIT_ASSERT(aView.m_aGraphicSelection.indexOf("isCalcObject") >= 0);
+    // The client is sent the states of the commands of the spreadsheet from the start, such as
+    // the one of wrapping the text of a cell, which a text document does not have.
+    bool bWrapTextState = false;
+    for (const OString& rState : aView.m_aStateChanges)
+        bWrapTextState = bWrapTextState || rState.startsWith(".uno:WrapText=");
+    CPPUNIT_ASSERT(bWrapTextState);
+    // The cell cursor shows on A1, at the corner of the object, in the twips of the document.
+    const Point aCorner = pIPClient->GetObjArea().TopLeft();
+    tools::Rectangle aCursor = rectangleOf(aView.m_aCellCursor);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.X()), double(aCursor.Left()), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.Y()), double(aCursor.Top()), 1.0);
+
+    // When B2 is clicked, in its middle, and 777 is typed into it:
+    clickAt(*pXTextDocument, Point(aCorner.X() + 1280 + 640, aCorner.Y() + 256 + 128));
+    aCursor = rectangleOf(aView.m_aCellCursor);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.X() + 1280), double(aCursor.Left()), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCorner.Y() + 256), double(aCursor.Top()), 1.0);
+    const tools::Rectangle aB2(Point(aCorner.X() + 1280, aCorner.Y() + 256), Size(1280, 256));
+    CPPUNIT_ASSERT_EQUAL(0, countDarkPixels(*pXTextDocument, aB2));
+    aView.m_bTilesInvalidated = false;
+    for (char cDigit : { '7', '7', '7' })
+    {
+        pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, cDigit, 0);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::UP, cDigit, 0);
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the view is told to paint the tiles again, and they show the text being typed in B2.
+    // Without the fix, they showed the picture the object had before it was active, with an
+    // empty B2.
+    CPPUNIT_ASSERT(aView.m_bTilesInvalidated);
+    CPPUNIT_ASSERT(countDarkPixels(*pXTextDocument, aB2) > 0);
+
+    // And once Enter ends the edit, the cell holds the number.
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+    uno::Reference<sheet::XSpreadsheetDocument> xSpreadsheet(
+        pIPClient->GetObject()->getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSheets(xSpreadsheet->getSheets(),
+                                                    uno::UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xSheet(xSheets->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(777.0, xSheet->getCellByPosition(1, 1)->getValue());
+
+    // And once a click in the text below leaves the spreadsheet, the view is told the document is
+    // modified. Without the fix, it was told the state the view had while the spreadsheet was
+    // active, which says unmodified, and a save skipped the document.
+    aView.m_aStateChanges.clear();
+    clickAt(*pXTextDocument, Point(aCorner.X() + 640, aCorner.Y() + 4000));
+    CPPUNIT_ASSERT(!pIPClient->IsObjectInPlaceActive());
+    aLeave.dismiss();
+    OString aModified;
+    for (const OString& rState : aView.m_aStateChanges)
+        if (rState.startsWith(".uno:ModifiedStatus="))
+            aModified = rState;
+    CPPUNIT_ASSERT_EQUAL(".uno:ModifiedStatus=true"_ostr, aModified);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

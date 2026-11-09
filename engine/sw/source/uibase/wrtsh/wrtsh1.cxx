@@ -29,6 +29,7 @@
 
 #include <hintids.hxx>
 #include <sot/exchange.hxx>
+#include <tools/globname.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/hdft.hxx>
 #include <svx/svdview.hxx>
@@ -723,13 +724,13 @@ void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
     svt::EmbeddedObjectRef& xRef = GetOLEObject();
     OSL_ENSURE( xRef.is(), "OLE not found" );
 
-    // COKit: we don't want to handle any other embedded objects than
-    // charts, there are too many problems with eg. embedded spreadsheets
-    // (like it creates a separate view for the calc sheet)
+    // COKit edits charts, formulas and spreadsheets in place. A spreadsheet has a view of its own,
+    // which reports to the view of the document while it is active.
     if (comphelper::COKit::isActive())
     {
-        const auto classId = xRef->getClassID();
-        if (!SotExchange::IsChart(classId) && !SotExchange::IsMath(classId))
+        const SvGlobalName aClassId(xRef->getClassID());
+        if (!SotExchange::IsChart(aClassId) && !SotExchange::IsMath(aClassId)
+            && !SotExchange::IsSpreadsheet(aClassId))
             return;
     }
 
