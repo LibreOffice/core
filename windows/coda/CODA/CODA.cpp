@@ -7080,9 +7080,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 return;
             }
 
+            // The paths are UTF-8, and a narrow path names a file in the ANSI code page on Windows,
+            // so the file calls get the paths as wide strings.
             const std::string srcPath = fileUriToWindowsPath(fileUrl);
+            const std::wstring wideSrcPath = Util::string_to_wide_string(srcPath);
 
-            if (!std::filesystem::exists(srcPath))
+            if (!std::filesystem::exists(wideSrcPath))
             {
                 LOG_ERR("exportfile: source file not found: " << srcPath);
                 return;
@@ -7102,7 +7105,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             {
                 const std::string destPath = fileUriToWindowsPath(filenameAndUri.uri);
                 std::error_code ec;
-                std::filesystem::copy_file(srcPath, destPath,
+                std::filesystem::copy_file(wideSrcPath, Util::string_to_wide_string(destPath),
                                            std::filesystem::copy_options::overwrite_existing, ec);
                 if (ec)
                     LOG_ERR("exportfile: failed to copy to '" << destPath << "': " << ec.message());
@@ -7158,7 +7161,8 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             if (filenameAndUri.filename != "")
             {
                 const std::string destPath = fileUriToWindowsPath(filenameAndUri.uri);
-                std::ofstream out(destPath, std::ios::binary | std::ios::trunc);
+                std::ofstream out;
+                FileUtil::openFileToOFStream(destPath, out, std::ios::out | std::ios::trunc);
                 if (!out || !out.write(reinterpret_cast<const char*>(bytes.data()), bytes.size()))
                     LOG_ERR("extensionsavefile: failed to write '" << destPath << "'");
                 else
