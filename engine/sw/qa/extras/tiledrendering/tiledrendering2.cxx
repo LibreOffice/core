@@ -2251,6 +2251,41 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinks)
                          aLink.get<std::string>("url"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11ySplitTableWithRowAcrossPages)
+{
+    // Given a table whose second row is split across two pages:
+    createDoc("a11y-split-row.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pWrtShell->GetPageCnt());
+
+    // When the cursor goes to the row after it:
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    for (int i = 0; i < 8; ++i)
+        pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the reader is given that row once, and the row count of the whole table:
+    CPPUNIT_ASSERT_EQUAL(std::string("Row 3"),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content"));
+    CPPUNIT_ASSERT_EQUAL(2, aView.m_aA11yFocusedCell.get<int>("row"));
+    CPPUNIT_ASSERT_EQUAL(10, aView.m_aA11yFocusedCell.get<int>("paragraph.table.rowCount"));
+    // And the split row once, with the text of both of its parts:
+    int nSplitRows = 0;
+    for (const auto& rRow : aView.m_aA11yFocusedCell.get_child("paragraph.table.rows"))
+    {
+        if (rRow.second.get<int>("row") != 1)
+            continue;
+        ++nSplitRows;
+        const std::string aText
+            = rRow.second.get_child("cells").begin()->second.get<std::string>("text");
+        CPPUNIT_ASSERT(aText.starts_with("Tall 1\n"));
+        CPPUNIT_ASSERT(aText.ends_with("\nTall 60"));
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nSplitRows);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11ySplitTableWithPageHeaderAndFooter)
 {
     // Given a table split across two pages that have a header and a footer:

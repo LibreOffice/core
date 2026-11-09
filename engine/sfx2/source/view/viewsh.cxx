@@ -1601,6 +1601,9 @@ struct TableCellText
     tools::Rectangle aTwips;
     uno::Reference<accessibility::XAccessible> xCell;
     std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
+    // the rest of the cell on the next page, when its row is split across the page break
+    uno::Reference<accessibility::XAccessible> xRestCell;
+    tools::Rectangle aRestTwips;
 };
 
 struct TableRowText
@@ -1674,6 +1677,24 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
     return aText.makeStringAndClear();
 }
 
+OUString
+getSplitCellText(const uno::Reference<accessibility::XAccessible>& xCell,
+                 const uno::Reference<accessibility::XAccessible>& xRestCell,
+                 std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs)
+{
+    OUString sText = getCellText(xCell, rParagraphs);
+    const OUString sRest = xRestCell.is() ? getCellText(xRestCell, rParagraphs) : OUString();
+    if (sRest.isEmpty())
+        return sText;
+    return sText.isEmpty() ? sRest : sText + "\n" + sRest;
+}
+
+tools::Rectangle cellTwips(const uno::Reference<accessibility::XAccessible>& xCell,
+                           const css::awt::Point& rOriginOnScreen)
+{
+    return paragraphTwips(xCell.is() ? xCell->getAccessibleContext() : nullptr, rOriginOnScreen);
+}
+
 sal_Int32 repeatedHeadingRows(const uno::Reference<accessibility::XAccessibleTable>& xPiece)
 {
     uno::Reference<accessibility::XAccessibleExtendedAttributes> xAttributes(xPiece,
@@ -1686,11 +1707,20 @@ sal_Int32 repeatedHeadingRows(const uno::Reference<accessibility::XAccessibleTab
     return nAt < 0 ? 0 : o3tl::toInt32(sAttributes.subView(nAt + sKey.size()));
 }
 
+bool continuesRow(const uno::Reference<accessibility::XAccessibleTable>& xPiece)
+{
+    uno::Reference<accessibility::XAccessibleExtendedAttributes> xAttributes(xPiece,
+                                                                             uno::UNO_QUERY);
+    return xAttributes.is()
+           && xAttributes->getExtendedAttributes().indexOf(u"continued-row:true;") >= 0;
+}
+
 struct TablePiece
 {
     uno::Reference<accessibility::XAccessibleTable> xTable;
     sal_Int32 nRepeated; // heading rows the piece repeats from the page before
     sal_Int32 nFirstRow; // row of the whole table that the piece's first own row is
+    sal_Int32 nContinued; // 1 when that row is the rest of the page before's last row
 };
 
 // The pages' pieces of the table xTable belongs to, in order, and which one xTable is.
@@ -1704,7 +1734,7 @@ getTablePieces(const uno::Reference<accessibility::XAccessibleTable>& xTable, si
         = xParent.is() ? xParent->getAccessibleContext() : nullptr;
     rCaretPiece = 0;
     if (!xParentContext.is())
-        return { { xTable, 0, 0 } };
+        return { { xTable, 0, 0, 0 } };
 
     auto tableAt = [&xParentContext](sal_Int64 i) {
         uno::Reference<accessibility::XAccessible> xChild = xParentContext->getAccessibleChild(i);
@@ -1751,10 +1781,11 @@ getTablePieces(const uno::Reference<accessibility::XAccessibleTable>& xTable, si
         if (!xPiece.is() || (i > nFirst && !continues(xPiece)))
             break;
         const sal_Int32 nRepeated = i > nFirst ? repeatedHeadingRows(xPiece) : 0;
+        const sal_Int32 nContinued = i > nFirst && continuesRow(xPiece) ? 1 : 0;
         if (i == nIndex)
             rCaretPiece = aPieces.size();
-        aPieces.push_back({ xPiece, nRepeated, nRow });
-        nRow += xPiece->getAccessibleRowCount() - nRepeated;
+        aPieces.push_back({ xPiece, nRepeated, nRow - nContinued, nContinued });
+        nRow += xPiece->getAccessibleRowCount() - nRepeated - nContinued;
     }
     return aPieces;
 }
@@ -1832,11 +1863,17 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
         size_t nPiece = 0;
         for (sal_Int32 nRow = nFirst; nRow <= nLast; ++nRow)
         {
-            while (nPiece + 1 < aPieces.size() && aPieces[nPiece + 1].nFirstRow <= nRow)
+            while (nPiece + 1 < aPieces.size()
+                   && aPieces[nPiece + 1].nFirstRow + aPieces[nPiece + 1].nContinued <= nRow)
                 ++nPiece;
             const uno::Reference<accessibility::XAccessibleTable>& xPiece = aPieces[nPiece].xTable;
             const sal_Int32 nPieceRow
                 = nRow - aPieces[nPiece].nFirstRow + aPieces[nPiece].nRepeated;
+            // a row split across the page break is given once, with the text of both parts
+            const TablePiece* pRest = nPiece + 1 < aPieces.size() && aPieces[nPiece + 1].nContinued
+                                              && aPieces[nPiece + 1].nFirstRow == nRow
+                                          ? &aPieces[nPiece + 1]
+                                          : nullptr;
 
             TableRowText aRow{ nRow, {} };
             for (sal_Int32 nCol = 0; nCol < xPiece->getAccessibleColumnCount(); ++nCol)
@@ -1848,16 +1885,19 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
                     continue;
                 const uno::Reference<accessibility::XAccessible> xCell
                     = xPiece->getAccessibleCellAt(nPieceRow, nCol);
+                const uno::Reference<accessibility::XAccessible> xRestCell
+                    = pRest && nCol < pRest->xTable->getAccessibleColumnCount()
+                          ? pRest->xTable->getAccessibleCellAt(pRest->nRepeated, nCol)
+                          : nullptr;
                 std::vector<uno::Reference<accessibility::XAccessibleContext>> aCellParagraphs;
-                OUString sText = getCellText(xCell, aCellParagraphs);
+                OUString sText = getSplitCellText(xCell, xRestCell, aCellParagraphs);
                 rTable.aParagraphs.insert(rTable.aParagraphs.end(), aCellParagraphs.begin(),
                                           aCellParagraphs.end());
-                aRow.aCells.push_back(
-                    { nCol, xPiece->getAccessibleRowExtentAt(nPieceRow, nCol),
-                      xPiece->getAccessibleColumnExtentAt(nPieceRow, nCol), std::move(sText),
-                      paragraphTwips(xCell.is() ? xCell->getAccessibleContext() : nullptr,
-                                     aOriginOnScreen),
-                      xCell, std::move(aCellParagraphs) });
+                aRow.aCells.push_back({ nCol, xPiece->getAccessibleRowExtentAt(nPieceRow, nCol),
+                                        xPiece->getAccessibleColumnExtentAt(nPieceRow, nCol),
+                                        std::move(sText), cellTwips(xCell, aOriginOnScreen), xCell,
+                                        std::move(aCellParagraphs), xRestCell,
+                                        cellTwips(xRestCell, aOriginOnScreen) });
             }
             rTable.aRows.push_back(std::move(aRow));
         }
@@ -1882,7 +1922,7 @@ bool refreshCaretCell(const uno::Reference<css::accessibility::XAccessibleText>&
     {
         for (TableCellText& rCell : rRow.aCells)
         {
-            if (rCell.xCell != rTable.xCaretCell)
+            if (rCell.xCell != rTable.xCaretCell && rCell.xRestCell != rTable.xCaretCell)
                 continue;
 
             uno::Reference<accessibility::XAccessible> xParent = textRoot(xContext);
@@ -1891,12 +1931,12 @@ bool refreshCaretCell(const uno::Reference<css::accessibility::XAccessibleText>&
             const css::awt::Point aOriginOnScreen = getTextDocumentOnScreen(
                 xParent, xParentComponent.is() ? xParentComponent->getLocationOnScreen()
                                                : css::awt::Point());
-            if (paragraphTwips(rCell.xCell->getAccessibleContext(), aOriginOnScreen)
-                != rCell.aTwips)
+            if (cellTwips(rCell.xCell, aOriginOnScreen) != rCell.aTwips
+                || cellTwips(rCell.xRestCell, aOriginOnScreen) != rCell.aRestTwips)
                 return false;
 
             std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
-            OUString sText = getCellText(rCell.xCell, aParagraphs);
+            OUString sText = getSplitCellText(rCell.xCell, rCell.xRestCell, aParagraphs);
             if (aParagraphs != rCell.aParagraphs)
                 return false;
             rCell.sText = std::move(sText);

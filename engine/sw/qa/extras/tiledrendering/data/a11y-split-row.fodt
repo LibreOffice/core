@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <table:table table:name="T1">
+    <table:table-column/>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 1</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Tall 1</text:p><text:p>Tall 2</text:p><text:p>Tall 3</text:p><text:p>Tall 4</text:p><text:p>Tall 5</text:p><text:p>Tall 6</text:p><text:p>Tall 7</text:p><text:p>Tall 8</text:p><text:p>Tall 9</text:p><text:p>Tall 10</text:p><text:p>Tall 11</text:p><text:p>Tall 12</text:p><text:p>Tall 13</text:p><text:p>Tall 14</text:p><text:p>Tall 15</text:p><text:p>Tall 16</text:p><text:p>Tall 17</text:p><text:p>Tall 18</text:p><text:p>Tall 19</text:p><text:p>Tall 20</text:p><text:p>Tall 21</text:p><text:p>Tall 22</text:p><text:p>Tall 23</text:p><text:p>Tall 24</text:p><text:p>Tall 25</text:p><text:p>Tall 26</text:p><text:p>Tall 27</text:p><text:p>Tall 28</text:p><text:p>Tall 29</text:p><text:p>Tall 30</text:p><text:p>Tall 31</text:p><text:p>Tall 32</text:p><text:p>Tall 33</text:p><text:p>Tall 34</text:p><text:p>Tall 35</text:p><text:p>Tall 36</text:p><text:p>Tall 37</text:p><text:p>Tall 38</text:p><text:p>Tall 39</text:p><text:p>Tall 40</text:p><text:p>Tall 41</text:p><text:p>Tall 42</text:p><text:p>Tall 43</text:p><text:p>Tall 44</text:p><text:p>Tall 45</text:p><text:p>Tall 46</text:p><text:p>Tall 47</text:p><text:p>Tall 48</text:p><text:p>Tall 49</text:p><text:p>Tall 50</text:p><text:p>Tall 51</text:p><text:p>Tall 52</text:p><text:p>Tall 53</text:p><text:p>Tall 54</text:p><text:p>Tall 55</text:p><text:p>Tall 56</text:p><text:p>Tall 57</text:p><text:p>Tall 58</text:p><text:p>Tall 59</text:p><text:p>Tall 60</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 3</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 4</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 5</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 6</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 7</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 8</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 9</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 10</text:p></table:table-cell></table:table-row>
+   </table:table>
+   <text:p>End.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
