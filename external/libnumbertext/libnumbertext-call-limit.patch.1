@@ -1,0 +1,71 @@
+From 76b46f842c56a343351f6f66968080d0d0bc965c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 9 Nov 2026 15:26:13 +0000
+Subject: [PATCH 1/5] limit the total number of calls in Soros::run as well as
+ their depth
+
+ITERATION_LIMIT only bounds the depth, so a rule that calls itself
+several times can make exponentially many calls. Stop after 10000
+calls in total, the largest legitimate input needs about 130.
+---
+ src/Soros.cxx | 10 ++++++----
+ src/Soros.hxx |  2 +-
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/src/Soros.cxx b/src/Soros.cxx
+index f1c651b..8c2cde2 100644
+--- a/src/Soros.cxx
++++ b/src/Soros.cxx
+@@ -11,6 +11,7 @@
+ #endif
+ 
+ #define ITERATION_LIMIT 250
++#define CALL_LIMIT 10000
+ #define SEP L"\uE00A"
+ 
+ #ifdef NUMBERTEXT_BOOST
+@@ -142,15 +143,16 @@ Soros::Soros(std::wstring program, std::wstring filtered_lang):
+ int Soros::run(std::wstring& input)
+ {
+     int level = 0;
+-    run(input, level);
++    int calls = 0;
++    run(input, level, calls);
+     return level;
+ }
+ 
+-void Soros::run(std::wstring& input, int& level, bool begin, bool end)
++void Soros::run(std::wstring& input, int& level, int& calls, bool begin, bool end)
+ {
+     if (level == -1)
+         return;
+-    if (++level > ITERATION_LIMIT)
++    if (++level > ITERATION_LIMIT || ++calls > CALL_LIMIT)
+     {
+         std::wcout << "Soros: iteration limit exceeded at the input \"" << input << "\"" << std::endl;
+         input = L"";
+@@ -186,7 +188,7 @@ void Soros::run(std::wstring& input, int& level, bool begin, bool end)
+                 e = end;
+             }
+             std::wstring piece = n[2].str();
+-            run(piece, level, b, e);
++            run(piece, level, calls, b, e);
+             input.replace(n.position(1), n[1].length(), piece);
+         }
+         level--;
+diff --git a/src/Soros.hxx b/src/Soros.hxx
+index 0ff0b82..9905156 100644
+--- a/src/Soros.hxx
++++ b/src/Soros.hxx
+@@ -25,7 +25,7 @@ public:
+     static std::wstring translate(std::wstring s,
+                 std::wstring chars, const std::wstring& chars2, const std::wstring& delim);
+ private:
+-    void run(std::wstring& input, int& level, bool begin = true, bool end = true);
++    void run(std::wstring& input, int& level, int& calls, bool begin = true, bool end = true);
+     static void replace(std::wstring& s, const std::wstring& search,
+                 const std::wstring& replace);
+ 
+-- 
+2.56.0
+
