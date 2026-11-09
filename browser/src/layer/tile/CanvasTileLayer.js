@@ -2509,7 +2509,16 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_onTextSelectionMsg: function (textMsg) {
 		textMsg = textMsg.replace('textselection:', '').trim();
-		this.showTextSelection(this._getRawRectangles(textMsg));
+		const rawRectangles = this._getRawRectangles(textMsg);
+		// Core selects text in the document for a search match there, and leaves the document with
+		// no selected text for a match in a comment. So text selected in the document ends the
+		// match that an earlier search selected in a comment.
+		if (rawRectangles.length > 0) {
+			const commentList = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
+			if (commentList)
+				commentList.clearCommentSearchHit();
+		}
+		this.showTextSelection(rawRectangles);
 	},
 
 	// Draws the selected text from its rectangles, each as [x, y, width, height] in twips, or

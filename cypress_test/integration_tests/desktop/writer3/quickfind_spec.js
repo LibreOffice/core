@@ -170,9 +170,13 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments via 
             expect(content.contains(selection.anchorNode)).to.equal(true);
         });
 
-        // Picking the match in the document text selects it in the document again.
+        // Picking the match in the document text selects it in the document again, and the
+        // comment no longer shows the earlier match selected.
         cy.cGet('#QuickFindPanel #searchfinds div:nth-child(2)').click();
         helper.textSelectionShouldExist();
+        cy.getFrameWindow().should(function(win) {
+            expect(win.getSelection().toString()).to.equal('');
+        });
     });
 
     it('A match inside a comment is still selected after the comment is edited', function() {
@@ -249,6 +253,58 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments via 
 
         writerHelper.searchInQuickFind('green');
         cy.cGet('#numberofsearchfinds').should('have.text', 'One match found.');
+    });
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments via the find and replace dialog', function() {
+
+    beforeEach(function() {
+        // Wide enough for the comments to be shown next to the page.
+        cy.viewport(1400, 600);
+        helper.setupAndLoadDocument('writer/quickfind_comments.fodt');
+        cy.getFrameWindow().then(function(win) {
+            this.win = win;
+            return writerHelper.waitForCommentListLoad(win);
+        }.bind(this));
+    });
+
+    function findNext(win) {
+        cy.cGet('.jsdialog-window #search button').should('not.be.disabled').click();
+        helper.processToIdle(win);
+    }
+
+    it('A match in the document text after a match in a comment leaves the comment unselected', function() {
+        cy.getFrameWindow().then(function(win) {
+            win.app.map.sendUnoCommand('.uno:SearchDialog');
+        });
+        cy.cGet('.jsdialog-window #searchterm input').should('be.visible');
+        cy.cGet('.jsdialog-window #OptionsExpander > .ui-expander .ui-expander-btn').click();
+        cy.cGet('.jsdialog-window #OptionsExpander > .ui-expander .ui-expander-btn').should('have.attr', 'aria-expanded', 'true');
+        cy.cGet('.jsdialog-window #notes input').should('be.visible').check();
+        cy.cGet('.jsdialog-window #notes input').should('be.checked');
+        cy.cGet('.jsdialog-window #searchterm input').type('{selectall}{backspace}apple');
+        helper.processToIdle(this.win);
+
+        // The first match is in the document text.
+        findNext(this.win);
+        helper.textSelectionShouldExist();
+
+        // The next match is in the comment, which shows it selected.
+        findNext(this.win);
+        cy.getFrameWindow().should(function(win) {
+            const selection = win.getSelection();
+            expect(selection.toString()).to.equal('apple');
+            const content = win.document.querySelector('.cool-annotation-content');
+            expect(content.contains(selection.anchorNode)).to.equal(true);
+        });
+
+        // The search wraps to the match in the document text, and the comment no longer shows
+        // the earlier match selected.
+        findNext(this.win);
+        helper.textSelectionShouldExist();
+        cy.getFrameWindow().should(function(win) {
+            expect(win.getSelection().toString()).to.equal('');
+        });
     });
 });
 

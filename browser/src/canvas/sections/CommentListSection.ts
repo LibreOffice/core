@@ -317,6 +317,9 @@ export class CommentSection extends CanvasSectionObject {
 	private cardPressedToSelect: { card: HTMLElement, top: number } = null;
 	// The boxes that the layout pass in progress has placed, by page index.
 	private pageScrollersInUse = new Set<number>();
+	// The comment whose text the last search found and selected. It is null
+	// when the search found no text in a comment.
+	private commentWithSearchHit: Comment = null;
 
 	public get cursorMovedByRemove (): boolean {
 		return this.endCursorMovedByRemove !== null;
@@ -529,6 +532,19 @@ export class CommentSection extends CanvasSectionObject {
 			}
 		}
 		return -1;
+	}
+
+	// Drops the selection that the last search put in a comment.
+	public clearCommentSearchHit (): void {
+		if (this.commentWithSearchHit)
+			this.commentWithSearchHit.clearSearchSelection();
+		this.commentWithSearchHit = null;
+	}
+
+	// Forgets the search match of a comment that is removed from the list.
+	public forgetCommentSearchHit (comment: Comment): void {
+		if (this.commentWithSearchHit === comment)
+			this.commentWithSearchHit = null;
 	}
 
 	public onAnnotationScrollDown (): void {
@@ -2557,6 +2573,8 @@ export class CommentSection extends CanvasSectionObject {
 			id = obj[dataroot].id;
 			const comment = this.getComment(id);
 			if (comment) {
+				this.clearCommentSearchHit();
+				this.commentWithSearchHit = comment;
 				const selection = obj[dataroot].searchSelection.split(",");
 				comment.selectText(parseInt(selection[0]), parseInt(selection[1]), parseInt(selection[2]), parseInt(selection[3]),
 					obj[dataroot].searchText, obj[dataroot].searchOccurrence);

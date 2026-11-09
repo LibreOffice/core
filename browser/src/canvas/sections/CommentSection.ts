@@ -2353,6 +2353,7 @@ export class Comment extends CanvasSectionObject {
 
 		if (this.sectionProperties.commentListSection.sectionProperties.selectedComment === this)
 			this.sectionProperties.commentListSection.sectionProperties.selectedComment = null;
+		this.sectionProperties.commentListSection.forgetCommentSearchHit(this);
 
 		this.sectionProperties.commentListSection.hideArrow();
 		var container = this.sectionProperties.container;
@@ -2596,6 +2597,16 @@ export class Comment extends CanvasSectionObject {
 		this.searchSelectionPending = false;
 
 		this.scrollDocumentToShow(selection.getRangeAt(0).getBoundingClientRect());
+	}
+
+	// Drops the text that selectText selected, when it is still selected.
+	public clearSearchSelection(): void {
+		this.searchSelectionPending = false;
+
+		const selection = window.getSelection();
+		if (selection && selection.rangeCount
+			&& this.sectionProperties.contentText.contains(selection.anchorNode))
+			selection.removeAllRanges();
 	}
 
 	public autoCompleteMention(username: string, profileLink: string, replacement: string): void {
