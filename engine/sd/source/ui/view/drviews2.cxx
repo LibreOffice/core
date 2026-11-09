@@ -2859,8 +2859,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     mpDrawView->SdrEndTextEdit();
                 }
-                sal_uInt16 nPage = maTabControl->GetCurPagePos();
-                mpActualPage = GetDoc()->GetSdPage(nPage, mePageKind);
+                // The tab control lists the slides in page mode and the master slides in master
+                // view. In master view the actual page stays the slide the view came from.
+                if (meEditMode == EditMode::Page)
+                {
+                    sal_uInt16 nPage = maTabControl->GetCurPagePos();
+                    mpActualPage = GetDoc()->GetSdPage(nPage, mePageKind);
+                }
                 ::sd::ViewShell::mpImpl->ProcessModifyPageSlot (
                     rReq,
                     mpActualPage,

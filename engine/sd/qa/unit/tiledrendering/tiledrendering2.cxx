@@ -2308,6 +2308,35 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLayoutKeepsOtherSlidesOfItsM
     CPPUNIT_ASSERT_EQUAL(""_ostr, wholePartInvalidationsInMode(aView, 2));
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlidePropertiesInMasterViewKeepsActualSlide)
+{
+    // Given a presentation of 8 slides and 9 masters, shown in master view on the last master:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pDoc->GetSdPageCount(PageKind::Standard));
+    uno::Reference<drawing::XMasterPagesSupplier> xMastersSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasters = xMastersSupplier->getMasterPages();
+    while (xMasters->getCount() < 9)
+        xMasters->insertNewByIndex(xMasters->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(9), pDoc->GetMasterSdPageCount(PageKind::Standard));
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pFirstSlide = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(pFirstSlide, pViewShell->GetActualPage());
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getEditMode());
+    pXImpressDocument->setPart(8);
+
+    // When the Slide Properties sidebar is toggled:
+    dispatchCommand(mxComponent, u".uno:ModifyPage"_ustr, {});
+
+    // Then the view still sits on the slide it came from. Without the accompanying fix in place,
+    // this test would have failed: the position of the master in the master list was read as a
+    // slide position, and with no ninth slide the view was left without a page, so the next
+    // status bar update crashed.
+    CPPUNIT_ASSERT_EQUAL(pFirstSlide, pViewShell->GetActualPage());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yNumberedParagraphPrefix)
 {
     // Given a text box whose first paragraph is "1. plain BOLD end", with screen reader support on:
