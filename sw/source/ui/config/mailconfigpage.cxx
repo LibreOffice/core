@@ -32,7 +32,9 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/WaitObject.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <com/sun/star/mail/MailServiceType.hpp>
 #include <com/sun/star/mail/XMailService.hpp>
 #include <com/sun/star/mail/MailServiceProvider.hpp>
@@ -339,72 +341,116 @@ void SwTestAccountSettingsDialog::Test()
 
     bool bIsLoggedIn = false;
     bool bIsServer = false;
-    try
-    {
-        uno::Reference<mail::XMailService> xInMailService;
-        uno::Reference<mail::XMailServiceProvider> xMailServiceProvider(
-            mail::MailServiceProvider::create(xContext));
-        uno::Reference<mail::XMailService> xMailService
-            = xMailServiceProvider->create(mail::MailServiceType_SMTP);
-        if (m_bStop)
-            return;
-        uno::Reference<XConnectionListener> xConnectionListener(new SwConnectionListener);
 
-        if (m_pParent->m_pConfigItem->IsAuthentication()
-            && m_pParent->m_pConfigItem->IsSMTPAfterPOP())
+    uno::Reference<mail::XMailService> xInMailService;
+    uno::Reference<mail::XMailService> xMailService;
+
+    bool bInConnectionAttempted = false;
+    bool bSmtpConnectionAttempted = false;
+
+    {
+        auto lclDisconnect
+            = [](uno::Reference<mail::XMailService> const& xService, bool bConnectionAttempted) {
+                  if (!bConnectionAttempted || !xService.is())
+                      return;
+
+                  try
+                  {
+                      xService->disconnect();
+                  }
+                  catch (const uno::Exception&)
+                  {
+                      TOOLS_WARN_EXCEPTION("sw", "Disconnect failed");
+                  }
+              };
+
+        comphelper::ScopeGuard aCleanup([&]() {
+            lclDisconnect(xInMailService, bInConnectionAttempted);
+            lclDisconnect(xMailService, bSmtpConnectionAttempted);
+        });
+
+        try
         {
-            xInMailService = xMailServiceProvider->create(m_pParent->m_pConfigItem->IsInServerPOP()
-                                                              ? mail::MailServiceType_POP3
-                                                              : mail::MailServiceType_IMAP);
+            uno::Reference<mail::XMailServiceProvider> xMailServiceProvider(
+                mail::MailServiceProvider::create(xContext));
+
+            xMailService = xMailServiceProvider->create(mail::MailServiceType_SMTP);
+
             if (m_bStop)
                 return;
+
+            uno::Reference<XConnectionListener> xConnectionListener(new SwConnectionListener);
+
             //authenticate at the POP or IMAP server first
-            uno::Reference<XAuthenticator> xAuthenticator = new SwAuthenticator(
-                m_pParent->m_pConfigItem->GetInServerUserName(),
-                m_pParent->m_pConfigItem->GetInServerPassword(), m_xDialog.get());
+            if (m_pParent->m_pConfigItem->IsAuthentication()
+                && m_pParent->m_pConfigItem->IsSMTPAfterPOP())
+            {
+                xInMailService = xMailServiceProvider->create(
+                    m_pParent->m_pConfigItem->IsInServerPOP() ? mail::MailServiceType_POP3
+                                                              : mail::MailServiceType_IMAP);
 
-            xInMailService->addConnectionListener(xConnectionListener);
-            //check connection
+                if (m_bStop)
+                    return;
+
+                uno::Reference<XAuthenticator> xAuthenticator = new SwAuthenticator(
+                    m_pParent->m_pConfigItem->GetInServerUserName(),
+                    m_pParent->m_pConfigItem->GetInServerPassword(), m_xDialog.get());
+
+                xInMailService->addConnectionListener(xConnectionListener);
+
+                uno::Reference<uno::XCurrentContext> xConnectionContext = new SwConnectionContext(
+                    m_pParent->m_pConfigItem->GetInServerName(),
+                    m_pParent->m_pConfigItem->GetInServerPort(), u"Insecure"_ustr);
+
+                bInConnectionAttempted = true;
+                xInMailService->connect(xConnectionContext, xAuthenticator);
+            }
+
+            if (m_bStop)
+                return;
+
+            rtl::Reference<SwAuthenticator> xAuthenticator;
+
+            if (m_pParent->m_pConfigItem->IsAuthentication()
+                && !m_pParent->m_pConfigItem->IsSMTPAfterPOP()
+                && !m_pParent->m_pConfigItem->GetMailUserName().isEmpty())
+            {
+                xAuthenticator = new SwAuthenticator(m_pParent->m_pConfigItem->GetMailUserName(),
+                                                     m_pParent->m_pConfigItem->GetMailPassword(),
+                                                     m_xDialog.get());
+            }
+            else
+                xAuthenticator = new SwAuthenticator();
+
+            xMailService->addConnectionListener(xConnectionListener);
+
+            if (m_bStop)
+                return;
+
+            // Just to check if the server exists.
+            xMailService->getSupportedConnectionTypes();
+
+            if (m_bStop)
+                return;
+
+            bIsServer = true;
+
             uno::Reference<uno::XCurrentContext> xConnectionContext = new SwConnectionContext(
-                m_pParent->m_pConfigItem->GetInServerName(),
-                m_pParent->m_pConfigItem->GetInServerPort(), u"Insecure"_ustr);
-            xInMailService->connect(xConnectionContext, xAuthenticator);
-        }
-        if (m_bStop)
-            return;
-        rtl::Reference<SwAuthenticator> xAuthenticator;
-        if (m_pParent->m_pConfigItem->IsAuthentication()
-            && !m_pParent->m_pConfigItem->IsSMTPAfterPOP()
-            && !m_pParent->m_pConfigItem->GetMailUserName().isEmpty())
-            xAuthenticator
-                = new SwAuthenticator(m_pParent->m_pConfigItem->GetMailUserName(),
-                                      m_pParent->m_pConfigItem->GetMailPassword(), m_xDialog.get());
-        else
-            xAuthenticator = new SwAuthenticator();
+                m_pParent->m_xServerED->get_text(), m_pParent->m_xPortNF->get_value(),
+                m_pParent->m_xSecureCB->get_active() ? u"Ssl"_ustr : u"Insecure"_ustr);
 
-        xMailService->addConnectionListener(xConnectionListener);
-        if (m_bStop)
-            return;
-        //just to check if the server exists
-        xMailService->getSupportedConnectionTypes();
-        if (m_bStop)
-            return;
-        bIsServer = true;
-        //check connection
-        uno::Reference<uno::XCurrentContext> xConnectionContext = new SwConnectionContext(
-            m_pParent->m_xServerED->get_text(), m_pParent->m_xPortNF->get_value(),
-            m_pParent->m_xSecureCB->get_active() ? u"Ssl"_ustr : u"Insecure"_ustr);
-        xMailService->connect(xConnectionContext, xAuthenticator);
-        bIsLoggedIn = xMailService->isConnected();
-        if (xInMailService.is())
-            xInMailService->disconnect();
-        if (xMailService->isConnected())
-            xMailService->disconnect();
-    }
-    catch (const uno::Exception& e)
-    {
-        sException = e.Message;
-    }
+            bSmtpConnectionAttempted = true;
+            xMailService->connect(xConnectionContext, xAuthenticator);
+            bIsLoggedIn = xMailService->isConnected();
+        }
+        catch (const uno::Exception& e)
+        {
+            sException = e.Message;
+        }
+    } // aCleanup disconnects the services here.
+
+    if (m_bStop)
+        return;
 
     m_xResult1->set_label(bIsServer ? m_sCompleted : m_sFailed);
     m_xImage1->set_visible(!bIsServer);
