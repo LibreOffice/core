@@ -739,8 +739,7 @@ rtl::Reference<SdrObject> SwMSDffManager::ProcessObj(SvStream& rSt,
             bool bVerticalText = false;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
-                MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>(GetPropertyValue(
-                    DFF_Prop_txflTextFlow, 0) & 0xFFFF);
+                auto eTextFlow = GetPropertyValue(DFF_Prop_txflTextFlow, 0) & 0xFFFF;
                 switch( eTextFlow )
                 {
                     case mso_txflBtoT:
@@ -843,7 +842,7 @@ rtl::Reference<SdrObject> SwMSDffManager::ProcessObj(SvStream& rSt,
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
             }
 
-            switch ( static_cast<MSO_WrapMode>(GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare )) )
+            switch ( GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
             {
                 case mso_wrapNone :
                     aSet.Put( makeSdrTextAutoGrowWidthItem( true ) );
