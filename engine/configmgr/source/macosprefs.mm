@@ -167,8 +167,8 @@ bool scalarToText(CFTypeRef pValue, OUString& rText)
         OUStringBuffer aBuffer(nLength * 2);
         for (CFIndex i = 0; i < nLength; ++i)
         {
-            aBuffer.append(static_cast<sal_Unicode>(aDigits[pBytes[i] >> 4]));
-            aBuffer.append(static_cast<sal_Unicode>(aDigits[pBytes[i] & 0xF]));
+            aBuffer.append(
+                OUStringChar(aDigits[pBytes[i] >> 4]) + OUStringChar(aDigits[pBytes[i] & 0xF]));
         }
         rText = aBuffer.makeStringAndClear();
         return true;
