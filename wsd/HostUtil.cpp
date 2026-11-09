@@ -146,6 +146,19 @@ bool HostUtil::allowedWopiHost(const std::string& host, int port)
     return WopiEnabled && WopiHosts.match(host, port);
 }
 
+bool HostUtil::allowedWopiUrl(const std::string& url)
+{
+    try
+    {
+        const Poco::URI uri(url);
+        return allowedWopiHost(uri.getHost(), uri.getPort());
+    }
+    catch (const std::exception&)
+    {
+        return false;
+    }
+}
+
 std::string HostUtil::parseAlias(const std::string& aliasPattern)
 {
     int port = 0;

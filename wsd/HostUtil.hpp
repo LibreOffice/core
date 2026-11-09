@@ -114,6 +114,9 @@ public:
     /// written with this port.
     [[nodiscard]] static bool allowedWopiHost(const std::string& host, int port);
 
+    /// Whether the URL parses and its host is allowed on its port.
+    [[nodiscard]] static bool allowedWopiUrl(const std::string& url);
+
     static bool isWopiEnabled() { return WopiEnabled; }
 
     static bool isGroupsModeWithoutGroup() { return GroupsModeWithoutGroup; }

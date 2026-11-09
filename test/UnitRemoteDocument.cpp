@@ -860,8 +860,9 @@ public:
 /// A POST to /cool/links may carry, instead of a view's one-time token, the access token
 /// the view opened the document with, which the storage that issued it knows. Verifies that a
 /// token no view opened the document with is refused, that a body naming neither a nonce nor
-/// an access token is refused, that the view's own access token registers the link, that the
-/// access token is not consumed, and that the registered token serves the view's subscription.
+/// an access token is refused, that a link on a host that is not allowed is refused, that the
+/// view's own access token registers the link, that the access token is not consumed, and that
+/// the registered token serves the view's subscription.
 class UnitLinkPostAccessToken : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoaded, Posting, WaitConnected, Done) _phase;
@@ -879,14 +880,16 @@ class UnitLinkPostAccessToken : public WopiTestServer
     }
 
     /// POSTs the registration with the given body fields before Link, and returns the response
-    /// status.
-    unsigned postLink(const std::string& authorizationFields)
+    /// status. The link names the given document, or file 2 when none is given.
+    unsigned postLink(const std::string& authorizationFields,
+                      const std::string& linkWopiSrc = std::string())
     {
+        const std::string wopiSrc = linkWopiSrc.empty() ? remoteWopiSrc() : linkWopiSrc;
         http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()),
                               http::Request::VERB_POST);
-        request.setBody("{" + authorizationFields + "\"Link\":{\"WOPISrc\":\"" +
-                            remoteWopiSrc() + "\",\"AccessToken\":\"remotetoken\"" +
-                            ",\"PersistentLink\":\"" + remoteWopiSrc() + "\"" +
+        request.setBody("{" + authorizationFields + "\"Link\":{\"WOPISrc\":\"" + wopiSrc +
+                            "\",\"AccessToken\":\"remotetoken\"" +
+                            ",\"PersistentLink\":\"" + wopiSrc + "\"" +
                             ",\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"}}",
                         "application/json");
 
@@ -918,6 +921,10 @@ public:
     {
         WopiTestServer::configure(config);
         config.setBool("remote_links.enable", true);
+        // The WOPI host that serves the documents is the only one allowed.
+        config.setString("storage.wopi.alias_groups[@mode]", "groups");
+        config.setString("storage.wopi.alias_groups.group[0].host", "127.0.0.1");
+        config.setBool("storage.wopi.alias_groups.group[0].host[@allow]", true);
     }
 
     bool onDocumentLoaded(const std::string& message) override
@@ -938,6 +945,11 @@ public:
                 // A body naming neither a nonce nor an access token is refused.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::BadRequest),
                                  postLink(std::string()));
+
+                // A link on a host that is not allowed is refused.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::BadRequest),
+                                 postLink("\"AccessToken\":\"firsttoken\",",
+                                          "http://links.invalid/wopi/files/2"));
 
                 // The access token the view opened the document with registers the link.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),

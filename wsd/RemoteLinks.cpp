@@ -598,13 +598,13 @@ void RemoteLinks::addLinkFromStorage(DocumentBroker& docBroker, const std::strin
 std::string RemoteLinks::linkProblem(const DocumentBroker& docBroker,
                                      const RemoteLinkRegistration& link)
 {
+    if (!HostUtil::allowedWopiUrl(link.wopiSrc))
+        return "names a document on a host that is not allowed";
+
     try
     {
-        const Poco::URI wopiSrcUri(link.wopiSrc);
         if (RequestDetails::getDocKey(link.wopiSrc) == docBroker.getDocKey())
             return "names this document itself";
-        if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost(), wopiSrcUri.getPort()))
-            return "names a document on a host that is not allowed";
     }
     catch (const std::exception& exc)
     {
@@ -647,25 +647,12 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
     const std::string remoteDocKey = itEntry->first;
     const std::string wopiSrc = itEntry->second.wopiSrc;
 
-    if (subscribe)
+    if (subscribe && !HostUtil::allowedWopiUrl(wopiSrc))
     {
-        try
-        {
-            const Poco::URI wopiSrcUri(wopiSrc);
-            if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost(), wopiSrcUri.getPort()))
-            {
-                LOG_WRN("Remote document [" << Anonymizer::anonymizeUrl(wopiSrc)
-                                            << "] is not on an allowed WOPI host");
-                sendError(docBroker, tag, persistentLink, "hostnotallowed");
-                return;
-            }
-        }
-        catch (const std::exception& exc)
-        {
-            LOG_ERR("Invalid remote document WOPISrc: " << exc.what());
-            sendError(docBroker, tag, persistentLink, "syntax");
-            return;
-        }
+        LOG_WRN("Remote document [" << Anonymizer::anonymizeUrl(wopiSrc)
+                                    << "] is not on an allowed WOPI host");
+        sendError(docBroker, tag, persistentLink, "hostnotallowed");
+        return;
     }
 
     View& view = _views[tag];

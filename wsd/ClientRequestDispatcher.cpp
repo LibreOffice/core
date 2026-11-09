@@ -2670,6 +2670,15 @@ bool ClientRequestDispatcher::handleLinksRequest(
                 return;
             }
 
+            if (!HostUtil::allowedWopiUrl(registration.wopiSrc))
+            {
+                LOG_ERR_S("Links request for ["
+                          << Anonymizer::anonymizeUrl(request.getURI())
+                          << "] names a link on a host that is not allowed");
+                incomplete = true;
+                return;
+            }
+
             links.push_back(std::move(registration));
         };
 
@@ -2691,8 +2700,8 @@ bool ClientRequestDispatcher::handleLinksRequest(
             readLink(object->getObject("Link"));
     }
 
-    // A request that names no view, no link, a link that cannot be reached, or both
-    // Link and Links registers nothing.
+    // A request that names no view, no link, a link that cannot be reached, a link on a host
+    // that is not allowed, or both Link and Links registers nothing.
     if ((oneTimeToken.empty() && documentAccessToken.empty()) || links.empty() || incomplete)
     {
         LOG_ERR_S("Links request rejected: incomplete body (have Nonce: "
