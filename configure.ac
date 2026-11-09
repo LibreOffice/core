@@ -2239,6 +2239,9 @@ elif test "$mobile_app" = "true"; then
     ENABLE_SERVER=false
     server_msg="not applicable (app build)"
 fi
+if test "$ENABLE_QTAPP" = "true" -a "$ENABLE_SERVER" = "true" -a "$ENABLE_DEBUG" != "true"; then
+    AC_MSG_ERROR([--enable-qtapp with the server needs --enable-debug. Building both from one tree is for development. A release build of the Qt app uses --disable-server])
+fi
 AC_SUBST(ENABLE_SERVER)
 AM_CONDITIONAL([ENABLE_SERVER], [test "$ENABLE_SERVER" = "true"])
 
