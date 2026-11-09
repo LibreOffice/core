@@ -320,6 +320,11 @@ public:
     static void ViewCallback(COKitCallbackType eType, const char* p, void* data);
 
 private:
+    /// Point the process-wide COKit callback at this document.
+    void registerGlobalCallback();
+    /// Clear the process-wide COKit callback if it points at this document.
+    void unregisterGlobalCallback();
+
     /// Helper method to broadcast callback and its payload to all clients
     void broadcastCallbackToClients(const COKitCallbackType type, const std::string& payload)
     {

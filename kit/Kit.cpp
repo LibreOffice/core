@@ -846,6 +846,11 @@ namespace
     }
 #endif // __FreeBSD__
 #endif // !MOBILEAPP
+
+// The document the process-wide COKit callback points at. Documents that share a process each
+// run on their own thread.
+std::mutex GlobalCallbackMutex;
+Document* GlobalCallbackDocument = nullptr;
 } // namespace
 
 Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailId,
@@ -906,6 +911,8 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
 
 Document::~Document()
 {
+    unregisterGlobalCallback();
+
     LOG_INF("~Document dtor for [" << _docKey <<
             "] url [" << anonymizeUrl(_url) << "] on child [" << _jailId <<
             "] and id [" << _docId << "]. There are " <<
@@ -1342,6 +1349,22 @@ void Document::trimAfterInactivity()
     self->broadcastCallbackToClients(eType, payload);
 }
 
+void Document::registerGlobalCallback()
+{
+    std::lock_guard<std::mutex> lock(GlobalCallbackMutex);
+    _loKit->registerCallback(GlobalCallback, this);
+    GlobalCallbackDocument = this;
+}
+
+void Document::unregisterGlobalCallback()
+{
+    std::lock_guard<std::mutex> lock(GlobalCallbackMutex);
+    if (GlobalCallbackDocument != this)
+        return;
+    _loKit->registerCallback(nullptr, nullptr);
+    GlobalCallbackDocument = nullptr;
+}
+
 /* static */ void Document::ViewCallback(COKitCallbackType eType, const char* p, void* data)
 {
     if (SigUtil::getTerminationFlag())
@@ -1549,7 +1572,7 @@ void Document::onUnload(ChildSession& session)
 
     _loKitDocument->registerCallback(nullptr, nullptr);
     if (_loKitDocument->getViewsCount() <= 1)
-        _loKit->registerCallback(nullptr, nullptr);
+        unregisterGlobalCallback();
 
     // The engine keeps a document while it has a view, so this last one holds the document
     // open until the next session arrives.
@@ -2580,7 +2603,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         // This is the first time we are loading the document
         LOG_INF("Loading new document from URI: [" << uriAnonym << "] for session [" << sessionId << "].");
 
-        _loKit->registerCallback(GlobalCallback, this);
+        registerGlobalCallback();
 
         const COKitOptionalFeatures flags
             = COKitOptionalFeatures::DOCUMENT_PASSWORD
@@ -2801,7 +2824,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
 
         // The process-wide callback carries the progress indicator. It returns with the
         // session.
-        _loKit->registerCallback(GlobalCallback, this);
+        registerGlobalCallback();
     }
 
     _sessionUserInfo[viewId] = UserInfo(session->getViewUserId(), session->getViewUserName(),
