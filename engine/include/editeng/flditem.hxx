@@ -282,8 +282,8 @@ class EDITENG_DLLPUBLIC SvxExtTimeField final : public SvxFieldData
 {
 private:
     sal_Int64               m_nFixTime;
-    SvxTimeType             eType;
-    SvxTimeFormat           eFormat;
+    SvxTimeType             m_eType;
+    SvxTimeFormat           m_eFormat;
 
 public:
     static constexpr auto CLASS_ID = css::text::textfield::Type::EXTENDED_TIME;
@@ -296,11 +296,11 @@ public:
     sal_Int64               GetFixTime() const { return m_nFixTime; }
     void                    SetFixTime( const tools::Time& rTime ) { m_nFixTime = rTime.GetTime(); }
 
-    SvxTimeType             GetType() const { return eType; }
-    void                    SetType( SvxTimeType eTp ) { eType = eTp; }
+    SvxTimeType             GetType() const { return m_eType; }
+    void                    SetType( SvxTimeType eTp ) { m_eType = eTp; }
 
-    SvxTimeFormat           GetFormat() const { return eFormat; }
-    void                    SetFormat( SvxTimeFormat eFmt ) { eFormat = eFmt; }
+    SvxTimeFormat           GetFormat() const { return m_eFormat; }
+    void                    SetFormat( SvxTimeFormat eFmt ) { m_eFormat = eFmt; }
 
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.

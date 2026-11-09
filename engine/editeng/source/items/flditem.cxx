@@ -618,16 +618,16 @@ bool SvxTableField::operator==( const SvxFieldData& rCmp ) const
 SvxExtTimeField::SvxExtTimeField()
     : m_nFixTime( tools::Time(tools::Time::SYSTEM).GetTime() )
 {
-    eType = SvxTimeType::Var;
-    eFormat = SvxTimeFormat::Standard;
+    m_eType = SvxTimeType::Var;
+    m_eFormat = SvxTimeFormat::Standard;
 }
 
 
 SvxExtTimeField::SvxExtTimeField( const tools::Time& rTime, SvxTimeType eT, SvxTimeFormat eF )
     : m_nFixTime( rTime.GetTime() )
 {
-    eType = eT;
-    eFormat = eF;
+    m_eType = eT;
+    m_eFormat = eF;
 }
 
 
@@ -644,16 +644,16 @@ bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 
     const SvxExtTimeField& rOtherFld = static_cast<const SvxExtTimeField&>(rOther);
     return ((m_nFixTime == rOtherFld.m_nFixTime) &&
-                ( eType == rOtherFld.eType ) &&
-                ( eFormat == rOtherFld.eFormat ) );
+                ( m_eType == rOtherFld.m_eType ) &&
+                ( m_eFormat == rOtherFld.m_eFormat ) );
 }
 
 
 OUString SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
-    tools::Time aTime(eType == SvxTimeType::Fix ? tools::Time::fromEncodedTime(m_nFixTime)
+    tools::Time aTime(m_eType == SvxTimeType::Fix ? tools::Time::fromEncodedTime(m_nFixTime)
                                                 : tools::Time(tools::Time::SYSTEM)); // current time
-    return GetFormatted( aTime, eFormat, rFormatter, eLang );
+    return GetFormatted( aTime, m_eFormat, rFormatter, eLang );
 }
 
 OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
