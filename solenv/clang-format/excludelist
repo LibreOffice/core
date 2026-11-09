@@ -419,7 +419,6 @@ bridges/source/jni_uno/jni_java2uno.cxx
 bridges/source/jni_uno/jni_uno2java.cxx
 bridges/source/jni_uno/jniunoenvironmentdata.hxx
 bridges/source/jni_uno/nativethreadpool.cxx
-canvas/inc/base/basemutexhelper.hxx
 canvas/inc/base/cachedprimitivebase.hxx
 canvas/inc/base/canvascustomspritebase.hxx
 canvas/inc/base/canvascustomspritehelper.hxx

@@ -27,37 +27,36 @@
 
 namespace canvas
 {
-    /** Base class, initializing its own baseclass with m_aMutex.
+/** Base class, initializing its own baseclass with m_aMutex.
 
-        This is necessary to make the CanvasBase, GraphicDeviceBase,
-        etc. classes freely combinable - letting them perform this
-        initialization would prohibit deriving e.g. CanvasBase from
-        GraphicDeviceBase.
+    This is necessary to make the CanvasBase, GraphicDeviceBase,
+    etc. classes freely combinable - letting them perform this
+    initialization would prohibit deriving e.g. CanvasBase from
+    GraphicDeviceBase.
+ */
+template <class Base> class BaseMutexHelper : public Base
+{
+protected:
+    /** Construct BaseMutexHelper
+
+        This method is the whole purpose of this template:
+        initializing a base class with the provided m_aMutex
+        member (the WeakComponentImplHelper templates need that,
+        as they require the lifetime of the mutex to extend
+        theirs).
      */
-    template< class Base > class BaseMutexHelper : public Base
+    BaseMutexHelper()
+        : Base(m_aMutex)
     {
-    protected:
-        /** Construct BaseMutexHelper
+    }
 
-            This method is the whole purpose of this template:
-            initializing a base class with the provided m_aMutex
-            member (the WeakComponentImplHelper templates need that,
-            as they require the lifetime of the mutex to extend
-            theirs).
-         */
-        BaseMutexHelper() :
-            Base( m_aMutex )
-        {
-        }
+    virtual void disposeThis() {}
 
-        virtual void disposeThis() {}
+    mutable osl::Mutex m_aMutex;
 
-        mutable osl::Mutex m_aMutex;
-
-    private:
-        virtual void SAL_CALL disposing() override
-        { disposeThis(); }
-    };
+private:
+    virtual void SAL_CALL disposing() override { disposeThis(); }
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
