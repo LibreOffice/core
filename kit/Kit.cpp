@@ -4304,7 +4304,7 @@ void KitSocketPoll::kitWakeup() {
  *
  * The LOKit main loop will use/call these callbacks inside VCL's Yield(), see SvpSalInstance::ImplYield().
  */
-static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit, const std::shared_ptr<KitSocketPoll>& mainKit) {
+static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit, void* pollData) {
 #if MOBILEAPP
     // The server sets loKitPtr in globalPreinit(); MOBILEAPP has no ForKit, so publish the
     // engine handle here, before the poll loop runs, so kitPoll's reentry guard can reach
@@ -4314,7 +4314,7 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
     (void) kit;
 #endif
 
-    loKit->registerAnyInputCallback(anyInputCallback, mainKit.get());
+    loKit->registerAnyInputCallback(anyInputCallback, pollData);
 #if defined(_WIN32)
     loKit->registerFileSaveDialogCallback(output_file_dialog_from_core);
 #else
@@ -4357,7 +4357,7 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
 
     LOG_INF("Kit unipoll loop run");
 
-    loKit->runLoop(pollCallback, wakeCallback, mainKit.get());
+    loKit->runLoop(pollCallback, wakeCallback, pollData);
 
     LOG_INF("Kit unipoll loop run terminated.");
 }
@@ -4423,12 +4423,12 @@ static void copyCertificateDatabaseToTmp(Poco::Path const& jailPath)
 // note: at this point in time, it is unclear (to quwex) if cok_init_2 not being in the "main"
 // thread will disrupt other things :-) if that is the case maybe we could also ReleaseYieldMutex()
 // manually?
-std::future<COKit*> initKitRunLoopThread(const std::shared_ptr<KitSocketPoll>& mainKit)
+std::future<COKit*> initKitRunLoopThread()
 {
         std::promise<COKit*> promise;
         std::future<COKit*> future = promise.get_future();
         std::thread(
-            [p = std::move(promise), mainKit]() mutable
+            [p = std::move(promise)]() mutable
             {
                 ProcUtil::setThreadName("lokit_runloop");
                 setupKitEnvironment("notebookbar");
@@ -4449,7 +4449,10 @@ std::future<COKit*> initKitRunLoopThread(const std::shared_ptr<KitSocketPoll>& m
 
                 std::shared_ptr<COKit> loKit(kit);
 
-                startMainLoop(kit, loKit, mainKit);
+                // The run loop reaches every KitSocketPoll through KSPolls. The callbacks only
+                // need a pointer that is not null, as on iOS.
+                int dummy;
+                startMainLoop(kit, loKit, &dummy);
 
                 // Should never return
                 std::abort();
@@ -5269,7 +5272,7 @@ void lokit_main(
         static COKit *kit = lo_kit;
 #elif defined(QTAPP) || defined(MACOS) || defined(_WIN32)
         // For macOS, this is the MOBILEAPP case
-        static COKit* kit = initKitRunLoopThread(mainKit).get();
+        static COKit* kit = initKitRunLoopThread().get();
 #else
         // FIXME: I wonder for which platform this is supposed to be? Android?
         static COKit *kit = cok_init_2(nullptr, nullptr);
@@ -5347,7 +5350,7 @@ void lokit_main(
 #endif
 
 #if !DOCS_SHARE_PROCESS
-        startMainLoop(kit, coKit, mainKit);
+        startMainLoop(kit, coKit, mainKit.get());
 
         // Trap the signal handler, if invoked,
         // to prevent exiting.
