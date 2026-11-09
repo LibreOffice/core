@@ -38,6 +38,10 @@ NODE_PATH_SEP = $(if $(MSYSTEM),;,:)
 
 export NODE_PATH=$(call node_module_dir,$(abs_builddir)/node_modules)
 
+# The browser targets in package.json are fixed version floors, so the age of the vendored
+# caniuse-lite data does not change the output. browserslist stays quiet about that age.
+export BROWSERSLIST_IGNORE_OLD_DATA=1
+
 L10N_JSON =
 
 if ENABLE_SERVER
