@@ -1258,7 +1258,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
                 css::uno::Reference<css::beans::XPropertySet> xProps(pObj->getUnoShape(), css::uno::UNO_QUERY);
 
                 // do we have XPropertySet from target object?
-                if (xProps)
+                if (xProps && xProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
                 {
                     css::uno::Sequence<css::beans::PropertyValue> aGrabBag(0);
                     xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
