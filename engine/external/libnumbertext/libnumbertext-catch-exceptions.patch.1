@@ -1,0 +1,37 @@
+From 98285dd516cd3bea897fa98b5d5204a433888544 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 9 Nov 2026 16:18:28 +0000
+Subject: [PATCH 4/5] return false from numbertext if the conversion throws
+
+the regex matching can throw, regex_error when the MSVC matcher hits
+its complexity or stack limits, or bad_alloc, so catch it here and
+leave the input unchanged rather than let it escape to the caller
+---
+ src/Numbertext.cxx | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/src/Numbertext.cxx b/src/Numbertext.cxx
+index d0b5129..e7ebc8f 100644
+--- a/src/Numbertext.cxx
++++ b/src/Numbertext.cxx
+@@ -89,7 +89,16 @@ bool Numbertext::numbertext(std::wstring& number, const std::string& lang)
+             return false;
+         module = modules.find(lang);
+     }
+-    module->second.run(number);
++    std::wstring result(number);
++    try
++    {
++        module->second.run(result);
++    }
++    catch (const std::exception&)
++    {
++        return false;
++    }
++    number = std::move(result);
+     return true;
+ }
+ 
+-- 
+2.56.0
+
