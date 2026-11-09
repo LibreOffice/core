@@ -44,6 +44,7 @@
 /// <reference path="../src/app/EditSteps.ts" />
 /// <reference path="../src/app/InteractionContext.ts" />
 /// <reference path="../src/app/ClassicInteraction.ts" />
+/// <reference path="../src/app/TableContext.ts" />
 /// <reference path="../src/app/HandleTravel.ts" />
 /// <reference path="../src/app/GraphicSelectionMiddleware.ts" />
 /// <reference path="../src/app/TextSelectionMiddleware.ts" />

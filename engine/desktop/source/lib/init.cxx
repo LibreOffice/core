@@ -30,6 +30,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/svdotable.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <com/sun/star/awt/XCheckBox.hpp>
@@ -8614,6 +8616,65 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
     {
         TOOLS_WARN_EXCEPTION("kit", "formControlAction");
     }
+}
+
+void COKitDocumentImpl::selectTableCells(unsigned long long nObjectId, int nFirstColumn,
+                                         int nFirstRow, int nLastColumn, int nLastRow)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::selectTableCells");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
+    const SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
+    if (!pPage)
+    {
+        SAL_WARN("kit", "selectTableCells: the view shows no page");
+        SetLastExceptionMsg(u"The view shows no page with a table"_ustr);
+        return;
+    }
+
+    sdr::table::SdrTableObj* pTable
+        = dynamic_cast<sdr::table::SdrTableObj*>(pPage->FindObjectByUniqueID(nObjectId));
+    if (!pTable)
+    {
+        SAL_WARN("kit", "selectTableCells: no table " << nObjectId << " on the page");
+        SetLastExceptionMsg(u"No table of that id is on the page"_ustr);
+        return;
+    }
+
+    // the cells are selected through the controller of the selected table
+    if (!pView->IsObjMarked(pTable))
+    {
+        pView->UnmarkAllObj(pPageView);
+        pView->MarkObj(pTable, pPageView);
+    }
+    rtl::Reference<sdr::table::SvxTableController> xController(
+        dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get()));
+    if (!xController.is())
+    {
+        SAL_WARN("kit", "selectTableCells: the table has no controller");
+        SetLastExceptionMsg(u"The table has no controller"_ustr);
+        return;
+    }
+
+    if (nFirstColumn < 0)
+    {
+        xController->clearSelection();
+        return;
+    }
+
+    const auto within = [](int nAt, sal_Int32 nCount) {
+        return std::clamp<sal_Int32>(nAt, 0, std::max<sal_Int32>(nCount - 1, 0));
+    };
+    const sal_Int32 nColumns(pTable->getColumnCount());
+    const sal_Int32 nRows(pTable->getRowCount());
+    xController->setSelectedCells(
+        sdr::table::CellPos(within(nFirstColumn, nColumns), within(nFirstRow, nRows)),
+        sdr::table::CellPos(within(nLastColumn, nColumns), within(nLastRow, nRows)));
 }
 
 /** Moves one handle of an object to where it was let go, by naming the object and the handle

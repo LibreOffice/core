@@ -170,9 +170,11 @@ namespace cool {
 			const edited =
 				place.kind === 'group' || place.kind === 'diagram'
 					? { objectId: place.group, paleOutside: true }
-					: place.kind === 'inPlace'
-						? { objectId: place.object, paleOutside: false }
-						: undefined;
+					: place.kind === 'table' && place.group
+						? { objectId: place.group, paleOutside: true }
+						: place.kind === 'inPlace'
+							? { objectId: place.object, paleOutside: false }
+							: undefined;
 
 			// An object active in place covers the upright window its parts are drawn into.
 			const activeInPlace =

@@ -482,6 +482,8 @@ namespace desktop {
                         int nLowerRightX, int nLowerRightY) override;
         void formControlAction(unsigned long long nObjectId, const char* pAction,
                                const char* pValue) override;
+        void selectTableCells(unsigned long long nObjectId, int nFirstColumn, int nFirstRow,
+                              int nLastColumn, int nLastRow) override;
     };
 
     struct DESKTOP_DLLPUBLIC COKitImpl : public COKit

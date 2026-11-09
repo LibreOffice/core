@@ -695,6 +695,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setobjecthandle") ||
                tokens.equals(0, "cropobject") ||
                tokens.equals(0, "formcontrol") ||
+               tokens.equals(0, "selectcells") ||
                tokens.equals(0, "downloadas") ||
                tokens.equals(0, "getchildid") ||
                tokens.equals(0, "gettextselection") ||
@@ -852,6 +853,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "formcontrol"))
         {
             return formControl(tokens);
+        }
+        else if (tokens.equals(0, "selectcells"))
+        {
+            return selectCells(tokens);
         }
         else if (tokens.equals(0, "downloadas"))
         {
@@ -2403,6 +2408,31 @@ bool ChildSession::formControl(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->formControlAction(std::strtoull(objectId.c_str(), nullptr, 10),
                                           action.c_str(), Uri::decode(value).c_str());
+
+    return true;
+}
+
+bool ChildSession::selectCells(const StringVector& tokens)
+{
+    std::string objectId;
+    int firstColumn = -1;
+    int firstRow = -1;
+    int lastColumn = -1;
+    int lastRow = -1;
+
+    if (!hasTokens(tokens, 6) || !getTokenString(tokens[1], "id", objectId)
+        || !getTokenInteger(tokens[2], "firstcolumn", firstColumn)
+        || !getTokenInteger(tokens[3], "firstrow", firstRow)
+        || !getTokenInteger(tokens[4], "lastcolumn", lastColumn)
+        || !getTokenInteger(tokens[5], "lastrow", lastRow))
+    {
+        sendTextFrameAndLogError("error: cmd=selectcells kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->selectTableCells(std::strtoull(objectId.c_str(), nullptr, 10),
+                                         firstColumn, firstRow, lastColumn, lastRow);
 
     return true;
 }

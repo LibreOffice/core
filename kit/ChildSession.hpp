@@ -291,6 +291,8 @@ private:
     /// selects the entries of a list, moves a scroll bar or a spin button, spins a field, sets
     /// a date.
     bool formControl(const StringVector& tokens);
+    /// Selects a range of cells of a table, or no cell where the first column is below 0.
+    bool selectCells(const StringVector& tokens);
     bool downloadAs(const StringVector& tokens);
     /// Whether core will put a question to the person while writing the document out in
     /// this format.

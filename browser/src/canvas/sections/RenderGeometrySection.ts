@@ -372,6 +372,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 	private static editedPart(): number | undefined {
 		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
 		if (place.kind === 'group' || place.kind === 'diagram') return place.group;
+		if (place.kind === 'table') return place.group;
 		if (place.kind === 'inPlace') return place.object;
 		return undefined;
 	}

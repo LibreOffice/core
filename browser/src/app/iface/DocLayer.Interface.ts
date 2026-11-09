@@ -81,7 +81,8 @@ interface DocLayerInterface {
 	};
 
 	sheetGeometry?: cool.SheetGeometry;
-	_cellSelectionArea?: cool.SimpleRectangle;
+	_cellSelectionArea?: cool.SimpleRectangle | null;
+	showTextSelection(rawRectangles: number[][]): void;
 	// True while the selection of the edited formula is the reference last picked into it.
 	isPickingFormulaReference(): boolean;
 	// The references of the edited formula on the shown sheet, the rectangle in tile twips. The

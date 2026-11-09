@@ -1211,6 +1211,8 @@ class ClassicInteractionSet implements InteractionSet {
 					: new ClassicInPlaceContext();
 			case 'group':
 				return new ClassicGroupContext(place.group);
+			case 'table':
+				return new ClassicTableContext(place.table, place.group);
 			case 'diagram':
 				return new ClassicDiagramContext(place.diagram);
 			default:

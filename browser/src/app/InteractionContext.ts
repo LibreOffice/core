@@ -34,7 +34,9 @@ type InteractionPlace =
 	| { kind: 'page' }
 	| { kind: 'group'; group: number }
 	| { kind: 'diagram'; group: number; diagram: number }
-	| { kind: 'inPlace'; object: number };
+	| { kind: 'inPlace'; object: number }
+	// one table selected, standing on the page or in that group
+	| { kind: 'table'; table: number; group: number | undefined };
 
 /// What one context answers. Each action answers whether it was taken here; one that is not goes
 /// on to the engine.
@@ -182,6 +184,9 @@ class Interaction {
 		...Interaction.commandsByKind,
 	];
 
+	// the objectKind of a table
+	private static readonly tableKind = 35;
+
 	/// The set in use. It is the classic one for now; which set to use is to become a setting.
 	private static setInUse: InteractionSet | null = null;
 
@@ -210,6 +215,15 @@ class Interaction {
 		const first = selected[0];
 		const parent =
 			first === undefined ? undefined : RenderGeometrySection.parentOf(first);
+
+		// one table selected is a place of its own, for its cells
+		if (
+			selected.length === 1 &&
+			RenderGeometrySection.objectOf(first)?.objectKind ===
+				Interaction.tableKind
+		)
+			return { kind: 'table', table: first, group: parent || undefined };
+
 		if (!parent) return { kind: 'page' };
 
 		for (

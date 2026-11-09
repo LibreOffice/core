@@ -3186,6 +3186,21 @@ struct COKitDocument
                                    const char* pValue)
         = 0;
 
+    /**
+     * Selects a range of cells of a table on the page the view shows, from one cell to another,
+     * both counted from 0, or no cell where the first column is below 0. The table is selected
+     * as an object first where it is not.
+     *
+     * @param nObjectId the unique id of the table
+     * @param nFirstColumn the column of the cell the range starts at, below 0 for no cell
+     * @param nFirstRow the row of that cell
+     * @param nLastColumn the column of the cell the range ends at
+     * @param nLastRow the row of that cell
+     */
+    virtual void selectTableCells(unsigned long long nObjectId, int nFirstColumn, int nFirstRow,
+                                  int nLastColumn, int nLastRow)
+        = 0;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
