@@ -401,10 +401,13 @@ define start_coolwsd_instance
 # The AI settings block in the settings dialog needs ai.enabled and
 # ai.allow_user_settings on. The central endpoint is pinned empty so a run does not pick
 # up whatever credentials a developer put in their generated coolwsd.xml.
+# The documents load from the file system, so the kit may fetch from this server, for example an
+# image in pasted HTML, only when lok_allow names localhost.
 	ulimit -n 1024; ../coolwsd --o:sys_template_path="@SYSTEMPLATE_PATH@" \
 			--o:child_root_path="@JAILS_PATH@" \
 			--o:cache_files.path="@CACHE_PATH@" \
 			--o:storage.filesystem[@allow]=true \
+			--o:net.lok_allow.host=localhost \
 			--disable-ssl --forcecaching \
 			--o:ssl.cert_file_path="$(abs_top_srcdir)/etc/cert.pem" \
 			--o:ssl.key_file_path="$(abs_top_srcdir)/etc/key.pem" \
