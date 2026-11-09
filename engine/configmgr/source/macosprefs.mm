@@ -11,6 +11,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <cstddef>
 #include <string_view>
 #include <tuple>
 #include <vector>
@@ -233,12 +234,16 @@ std::vector<OUString> splitPath(std::u16string_view aPath)
     return aSegments;
 }
 
-// Position of the '#' that separates a node operation from the node name, or -1.
-sal_Int32 operationSeparator(OUString const& rSegment)
+// Position of the '#' that separates a node operation from the node name, or npos.
+std::size_t operationSeparator(std::u16string_view rSegment)
 {
-    sal_Int32 nHash = rSegment.lastIndexOf('#');
-    if (nHash != -1 && nHash < rSegment.lastIndexOf(']'))
-        return -1; // part of a set-member name
+    std::size_t nHash = rSegment.rfind('#');
+    std::size_t bracket = rSegment.rfind(']');
+    if (nHash != std::u16string_view::npos && bracket != std::u16string_view::npos
+        && nHash < bracket)
+    {
+        return std::u16string_view::npos; // part of a set-member name
+    }
     return nHash;
 }
 
@@ -259,9 +264,10 @@ void writeItem(OUString const& rKey, CFTypeRef pValue, bool bForced, TempFile& r
     for (std::size_t i = 0; i < aSegments.size(); ++i)
     {
         OUString const& rSegment = aSegments[i];
-        sal_Int32 nHash = i + 1 < aSegments.size() ? operationSeparator(rSegment) : -1;
+        std::size_t nHash = i + 1 < aSegments.size()
+            ? operationSeparator(rSegment) : std::u16string_view::npos;
         if (rSegment.isEmpty() || nHash == 0
-            || (nHash != -1 && !isOperation(rSegment.subView(nHash + 1))))
+            || (nHash != std::u16string_view::npos && !isOperation(rSegment.subView(nHash + 1))))
         {
             SAL_WARN("configmgr", "macosprefs: ignoring \"" << rKey << "\": bad path segment \""
                                                             << rSegment << "\"");
@@ -355,13 +361,13 @@ void writeItem(OUString const& rKey, CFTypeRef pValue, bool bForced, TempFile& r
     for (std::size_t i = 0; i + 1 < aSegments.size(); ++i)
     {
         OUString const& rSegment = aSegments[i];
-        sal_Int32 nHash = operationSeparator(rSegment);
-        if (nHash != -1 || bHasNode)
+        std::size_t nHash = operationSeparator(rSegment);
+        if (nHash != std::u16string_view::npos || bHasNode)
         {
             bHasNode = true;
             ++nCloseNode;
             rOut.writeString("\"><node oor:name=\"");
-            if (nHash != -1)
+            if (nHash != std::u16string_view::npos)
             {
                 writeAttributeValue(rOut, rSegment.subView(0, nHash));
                 rOut.writeString("\" oor:op=\"");
