@@ -1079,6 +1079,38 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
     }
 }
 
+/** Gives every notes page of a presentation the size the presentation states for them.
+
+    A presentation states one size for all of its notes pages. Every page has a notes page,
+    while a document carries one only for the pages that have something written on them, so the
+    size is given to all of them rather than to the few the document spells out. */
+static void applyNotesPageSize(const Reference<frame::XModel>& xModel, const awt::Size& rSize)
+{
+    if (rSize.Width <= 0 || rSize.Height <= 0)
+        return;
+
+    try
+    {
+        Reference<XDrawPagesSupplier> xSupplier(xModel, UNO_QUERY_THROW);
+        Reference<XDrawPages> xDrawPages(xSupplier->getDrawPages(), UNO_SET_THROW);
+        for (sal_Int32 nPage = 0; nPage < xDrawPages->getCount(); ++nPage)
+        {
+            Reference<XPresentationPage> xSlide(xDrawPages->getByIndex(nPage), UNO_QUERY);
+            if (!xSlide.is())
+                continue;
+            Reference<XPropertySet> xNotes(xSlide->getNotesPage(), UNO_QUERY);
+            if (!xNotes.is())
+                continue;
+            xNotes->setPropertyValue(u"Width"_ustr, Any(rSize.Width));
+            xNotes->setPropertyValue(u"Height"_ustr, Any(rSize.Height));
+        }
+    }
+    catch (const Exception&)
+    {
+        SAL_WARN("oox.ppt", "applyNotesPageSize: failed to give the notes pages their size");
+    }
+}
+
 void PresentationFragmentHandler::finalizeImport()
 {
     PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
@@ -1125,6 +1157,7 @@ void PresentationFragmentHandler::finalizeImport()
                 importCustomSlideShow(maCustomShowList);
 
             saveSections();
+            applyNotesPageSize(rFilter.getModel(), maNotesSize);
         }
         catch( cpo::uno::Exception& )
         {

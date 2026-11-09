@@ -838,6 +838,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testRunKeepsBothOfItsLanguages)
     CPPUNIT_ASSERT_EQUAL(u"ja"_ustr, aEastern.Language);
 }
 
+// The notes pages of a presentation keep the size it states for them.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testNotesPagesKeepTheirSize)
+{
+    // Given a presentation that states a size for its notes pages, carries notes for its second
+    // page only, and lays its first page out on a layout of its own:
+    createSdImpressDoc("pptx/notes-size-on-another-layout.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the size reached only the notes pages the document carries, so
+    // the first page kept the size a new notes page is made with, and the save read the stated
+    // size off that page.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:presentation/p:notesSz", "cx", u"6797675");
+    assertXPath(pXmlDoc, "/p:presentation/p:notesSz", "cy", u"9926638");
+}
+
 // A notes page states the number of the slide it belongs to.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testNotesPageStatesItsSlideNumber)
 {
