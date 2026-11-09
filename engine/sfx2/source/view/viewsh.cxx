@@ -63,6 +63,8 @@
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -1227,6 +1229,73 @@ boost::property_tree::ptree makeImagesTree(const std::vector<ParagraphImage>& rI
     return aImages;
 }
 
+// A deleted paragraph outlives its frame, and Writer reads its markup through
+// the frame without checking.
+bool isDefunct(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
+    if (!xContext.is())
+        return true;
+    try
+    {
+        return (xContext->getAccessibleStateSet() & accessibility::AccessibleStateType::DEFUNC)
+               != 0;
+    }
+    catch (const lang::DisposedException&)
+    {
+        return true;
+    }
+}
+
+struct ParagraphError
+{
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+    bool bGrammar;
+
+    bool operator==(const ParagraphError&) const = default;
+};
+
+// Only Writer paragraphs answer XAccessibleTextMarkup.
+std::vector<ParagraphError>
+collectErrors(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    const auto xMarkup = xAccText.query<accessibility::XAccessibleTextMarkup>();
+    if (!xMarkup.is() || isDefunct(xAccText))
+        return {};
+
+    std::vector<ParagraphError> aErrors;
+    for (const sal_Int32 nType :
+         { text::TextMarkupType::SPELLCHECK, text::TextMarkupType::PROOFREADING })
+    {
+        const sal_Int32 nCount = xMarkup->getTextMarkupCount(nType);
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            const accessibility::TextSegment aSegment = xMarkup->getTextMarkup(i, nType);
+            if (aSegment.SegmentEnd > aSegment.SegmentStart)
+                aErrors.push_back({ .nStart = aSegment.SegmentStart,
+                                    .nEnd = aSegment.SegmentEnd,
+                                    .bGrammar = nType == text::TextMarkupType::PROOFREADING });
+        }
+    }
+    std::ranges::stable_sort(aErrors, {}, &ParagraphError::nStart);
+    return aErrors;
+}
+
+boost::property_tree::ptree makeErrorsTree(const std::vector<ParagraphError>& rErrors)
+{
+    boost::property_tree::ptree aErrors;
+    for (const ParagraphError& rError : rErrors)
+    {
+        boost::property_tree::ptree aError;
+        aError.put("start", rError.nStart);
+        aError.put("end", rError.nEnd);
+        aError.put("kind", rError.bGrammar ? "grammar" : "spelling");
+        aErrors.push_back(std::make_pair("", aError));
+    }
+    return aErrors;
+}
+
 struct ContextParagraph
 {
     uno::Reference<accessibility::XAccessibleContext> xContext;
@@ -1239,6 +1308,7 @@ struct ContextParagraph
     std::vector<ParagraphImage> aImages;
     std::vector<SfxParagraphComment> aComments;
     std::vector<SfxParagraphContentControl> aContentControls;
+    std::vector<ParagraphError> aErrors;
 };
 
 tools::Rectangle paragraphTwips(const uno::Reference<accessibility::XAccessibleContext>& xContext,
@@ -1270,6 +1340,7 @@ ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
         aParagraph.aFormats = collectFormats(xText);
         aParagraph.aChanges = collectChanges(xText);
         aParagraph.aImages = collectImages(xText);
+        aParagraph.aErrors = collectErrors(xText);
         if (pViewShell)
         {
             aParagraph.aComments = pViewShell->getKitParagraphComments(xText);
@@ -1305,6 +1376,12 @@ void appendPiece(ContextParagraph& rParagraph, ContextParagraph&& rPiece)
         rComment.nStart += nShift;
         rComment.nEnd += nShift;
         rParagraph.aComments.push_back(std::move(rComment));
+    }
+    for (ParagraphError& rError : rPiece.aErrors)
+    {
+        rError.nStart += nShift;
+        rError.nEnd += nShift;
+        rParagraph.aErrors.push_back(rError);
     }
     rParagraph.aText += rPiece.aText;
     rParagraph.aTwips.Union(rPiece.aTwips);
@@ -1656,6 +1733,7 @@ struct ListItemText
     sal_Int16 nLevel;
     OUString sText;
     tools::Rectangle aTwips;
+    std::vector<ParagraphError> aErrors;
 };
 
 struct ListWindow
@@ -1701,8 +1779,8 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
             const sal_Int16 nLevel = getListLevel(xText);
             if (nLevel < 0)
                 break;
-            rOut.aItems.push_back(
-                { nLevel, xText->getText(), paragraphTwips(xNext, aOriginOnScreen) });
+            rOut.aItems.push_back({ nLevel, xText->getText(),
+                                    paragraphTwips(xNext, aOriginOnScreen), collectErrors(xText) });
             rOut.aParagraphs.push_back(xNext);
         }
     };
@@ -1713,8 +1791,8 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
                         std::make_move_iterator(aBefore.aItems.rend()));
     rList.aParagraphs.assign(aBefore.aParagraphs.rbegin(), aBefore.aParagraphs.rend());
 
-    rList.aItems.push_back(
-        { nCaretLevel, xAccText->getText(), paragraphTwips(xContext, aOriginOnScreen) });
+    rList.aItems.push_back({ nCaretLevel, xAccText->getText(),
+                             paragraphTwips(xContext, aOriginOnScreen), collectErrors(xAccText) });
     rList.aParagraphs.push_back(xContext);
 
     ListWindow aAfter;
@@ -1736,6 +1814,7 @@ struct TableCellText
     // the rest of the cell on the next page, when its row is split across the page break
     uno::Reference<accessibility::XAccessible> xRestCell;
     tools::Rectangle aRestTwips;
+    std::vector<ParagraphError> aErrors;
 };
 
 struct TableRowText
@@ -1753,9 +1832,19 @@ struct TableWindow
     uno::Reference<accessibility::XAccessible> xCaretCell;
 };
 
+void appendErrors(std::vector<ParagraphError>& rErrors, const std::vector<ParagraphError>& rMore,
+                  sal_Int32 nShift)
+{
+    for (const ParagraphError& rError : rMore)
+        rErrors.push_back({ .nStart = rError.nStart + nShift,
+                            .nEnd = rError.nEnd + nShift,
+                            .bGrammar = rError.bGrammar });
+}
+
 // A table in the cell is given as its cells' text, one cell per line.
 OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
-                     std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs)
+                     std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs,
+                     std::vector<ParagraphError>& rErrors)
 {
     uno::Reference<accessibility::XAccessibleContext> xCellContext
         = xCell.is() ? xCell->getAccessibleContext() : nullptr;
@@ -1773,6 +1862,7 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
             continue;
 
         OUString sChildText;
+        std::vector<ParagraphError> aChildErrors;
         const sal_Int16 nRole = xChildContext->getAccessibleRole();
         if (nRole == accessibility::AccessibleRole::TABLE)
         {
@@ -1780,12 +1870,14 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
             const sal_Int64 nCells = xChildContext->getAccessibleChildCount();
             for (sal_Int64 nCell = 0; nCell < nCells; ++nCell)
             {
-                const OUString sCell
-                    = getCellText(xChildContext->getAccessibleChild(nCell), rParagraphs);
+                std::vector<ParagraphError> aCellErrors;
+                const OUString sCell = getCellText(xChildContext->getAccessibleChild(nCell),
+                                                   rParagraphs, aCellErrors);
                 if (sCell.isEmpty())
                     continue;
                 if (!aNested.isEmpty())
                     aNested.append('\n');
+                appendErrors(aChildErrors, aCellErrors, aNested.getLength());
                 aNested.append(sCell);
             }
             sChildText = aNested.makeStringAndClear();
@@ -1796,6 +1888,7 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
             if (!xChildText.is())
                 continue;
             sChildText = xChildText->getText();
+            aChildErrors = collectErrors(xChildText);
             rParagraphs.push_back(xChildContext);
         }
         else
@@ -1803,6 +1896,7 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
 
         if (!aText.isEmpty())
             aText.append('\n');
+        appendErrors(rErrors, aChildErrors, aText.getLength());
         aText.append(sChildText);
     }
     return aText.makeStringAndClear();
@@ -1811,13 +1905,22 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
 OUString
 getSplitCellText(const uno::Reference<accessibility::XAccessible>& xCell,
                  const uno::Reference<accessibility::XAccessible>& xRestCell,
-                 std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs)
+                 std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs,
+                 std::vector<ParagraphError>& rErrors)
 {
-    OUString sText = getCellText(xCell, rParagraphs);
-    const OUString sRest = xRestCell.is() ? getCellText(xRestCell, rParagraphs) : OUString();
+    OUString sText = getCellText(xCell, rParagraphs, rErrors);
+    std::vector<ParagraphError> aRestErrors;
+    const OUString sRest
+        = xRestCell.is() ? getCellText(xRestCell, rParagraphs, aRestErrors) : OUString();
     if (sRest.isEmpty())
         return sText;
-    return sText.isEmpty() ? sRest : sText + "\n" + sRest;
+    if (sText.isEmpty())
+    {
+        rErrors = std::move(aRestErrors);
+        return sRest;
+    }
+    appendErrors(rErrors, aRestErrors, sText.getLength() + 1);
+    return sText + "\n" + sRest;
 }
 
 tools::Rectangle cellTwips(const uno::Reference<accessibility::XAccessible>& xCell,
@@ -2021,12 +2124,13 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
                           ? pRest->xTable->getAccessibleCellAt(pRest->nRepeated, nCol)
                           : nullptr;
                 std::vector<uno::Reference<accessibility::XAccessibleContext>> aCellParagraphs;
-                OUString sText = getSplitCellText(xCell, xRestCell, aCellParagraphs);
-                aRow.aCells.push_back({ nCol, xPiece->getAccessibleRowExtentAt(nPieceRow, nCol),
-                                        xPiece->getAccessibleColumnExtentAt(nPieceRow, nCol),
-                                        std::move(sText), cellTwips(xCell, aOriginOnScreen), xCell,
-                                        std::move(aCellParagraphs), xRestCell,
-                                        cellTwips(xRestCell, aOriginOnScreen) });
+                std::vector<ParagraphError> aCellErrors;
+                OUString sText = getSplitCellText(xCell, xRestCell, aCellParagraphs, aCellErrors);
+                aRow.aCells.push_back(
+                    { nCol, xPiece->getAccessibleRowExtentAt(nPieceRow, nCol),
+                      xPiece->getAccessibleColumnExtentAt(nPieceRow, nCol), std::move(sText),
+                      cellTwips(xCell, aOriginOnScreen), xCell, std::move(aCellParagraphs),
+                      xRestCell, cellTwips(xRestCell, aOriginOnScreen), std::move(aCellErrors) });
             }
             rTable.aRows.push_back(std::move(aRow));
         }
@@ -2065,32 +2169,16 @@ bool refreshCaretCell(const uno::Reference<css::accessibility::XAccessibleText>&
                 return false;
 
             std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
-            OUString sText = getSplitCellText(rCell.xCell, rCell.xRestCell, aParagraphs);
+            std::vector<ParagraphError> aErrors;
+            OUString sText = getSplitCellText(rCell.xCell, rCell.xRestCell, aParagraphs, aErrors);
             if (aParagraphs != rCell.aParagraphs)
                 return false;
             rCell.sText = std::move(sText);
+            rCell.aErrors = std::move(aErrors);
             return true;
         }
     }
     return false;
-}
-
-// A deleted paragraph outlives its frame, and Writer reads its markup through
-// the frame without checking.
-bool isDefunct(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
-{
-    uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
-    if (!xContext.is())
-        return true;
-    try
-    {
-        return (xContext->getAccessibleStateSet() & accessibility::AccessibleStateType::DEFUNC)
-               != 0;
-    }
-    catch (const lang::DisposedException&)
-    {
-        return true;
-    }
 }
 
 sal_Int32 getListPrefixSize(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
@@ -2312,6 +2400,7 @@ class KitDocumentFocusListener :
     std::vector<ParagraphImage> m_aFocusedImages;
     std::vector<SfxParagraphComment> m_aFocusedComments;
     std::vector<SfxParagraphContentControl> m_aFocusedContentControls;
+    std::vector<ParagraphError> m_aFocusedErrors;
     mutable std::vector<ContextParagraph> m_aParagraphsBefore;
     mutable std::vector<ContextParagraph> m_aParagraphsAfter;
     mutable ListWindow m_aList;
@@ -2468,6 +2557,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
     if (!m_aFocusedContentControls.empty())
         aPayloadTree.add_child("contentControls",
                                makeContentControlsTree(m_aFocusedContentControls));
+    if (!m_aFocusedErrors.empty())
+        aPayloadTree.add_child("errors", makeErrorsTree(m_aFocusedErrors));
     if (!m_aParagraphsBefore.empty() || !m_aParagraphsAfter.empty())
     {
         auto toArray = [](const std::vector<ContextParagraph>& rParagraphs, auto aValue) {
@@ -2527,6 +2618,9 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
                     &ContextParagraph::aContentControls, makeContentControlsTree);
         addElements("afterContentControls", m_aParagraphsAfter, &ContextParagraph::aContentControls,
                     makeContentControlsTree);
+        addElements("beforeErrors", m_aParagraphsBefore, &ContextParagraph::aErrors,
+                    makeErrorsTree);
+        addElements("afterErrors", m_aParagraphsAfter, &ContextParagraph::aErrors, makeErrorsTree);
     }
     if (!m_aList.aItems.empty())
     {
@@ -2537,6 +2631,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
             aNode.put("level", rItem.nLevel);
             aNode.put("text", rItem.sText.toUtf8().getStr());
             aNode.put("rect", rItem.aTwips.toString());
+            if (!rItem.aErrors.empty())
+                aNode.add_child("errors", makeErrorsTree(rItem.aErrors));
             aItems.push_back(std::make_pair("", aNode));
         }
         boost::property_tree::ptree aList;
@@ -2554,6 +2650,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
                 boost::property_tree::ptree aCell;
                 aCell.put("col", rCell.nCol);
                 aCell.put("text", rCell.sText.toUtf8().getStr());
+                if (!rCell.aErrors.empty())
+                    aCell.add_child("errors", makeErrorsTree(rCell.aErrors));
                 if (rCell.nRowSpan > 1)
                     aCell.put("rowSpan", rCell.nRowSpan);
                 if (rCell.nColSpan > 1)
@@ -3077,10 +3175,12 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         std::vector<SfxParagraphContentControl> aContentControls
             = m_pViewShell ? m_pViewShell->getKitParagraphContentControls(xAccText)
                            : std::vector<SfxParagraphContentControl>();
+        std::vector<ParagraphError> aErrors = collectErrors(xAccText);
         if (m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel || m_eArea != eArea
             || m_aFocusedLinks != aLinks || m_aFocusedImages != aImages
             || m_aFocusedComments != aComments || m_aFocusedContentControls != aContentControls
-            || m_aFocusedFormats != aFormats || m_aFocusedChanges != aChanges)
+            || m_aFocusedFormats != aFormats || m_aFocusedChanges != aChanges
+            || m_aFocusedErrors != aErrors)
         {
             m_sFocusedParagraph = sText;
             m_nHeadingLevel = nHeadingLevel;
@@ -3091,6 +3191,7 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
             m_aFocusedImages = std::move(aImages);
             m_aFocusedComments = std::move(aComments);
             m_aFocusedContentControls = std::move(aContentControls);
+            m_aFocusedErrors = std::move(aErrors);
             collectAndAttachContextWindow(xAccText);
             bNotify = true;
         }
@@ -3132,6 +3233,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_aFocusedImages.clear();
     m_aFocusedComments.clear();
     m_aFocusedContentControls.clear();
+    m_aFocusedErrors.clear();
     m_aParagraphsBefore.clear();
     m_aParagraphsAfter.clear();
     m_aList = ListWindow();
@@ -3501,7 +3603,8 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
             }
             case AccessibleEventId::TEXT_ATTRIBUTE_CHANGED:
             {
-                // Writer raises this when a heading moves to another level.
+                // Writer raises this when a heading moves to another level, and when the spell
+                // or grammar checker marks a word.
                 uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
                 updateAndNotifyParagraph(xAccText, false, "TEXT_ATTRIBUTE_CHANGED");
 
