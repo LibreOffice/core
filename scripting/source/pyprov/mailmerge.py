@@ -55,6 +55,20 @@ g_ImplementationHelper = unohelper.ImplementationHelper()
 g_providerImplName = "org.openoffice.pyuno.MailServiceProvider"
 g_messageImplName = "org.openoffice.pyuno.MailMessage"
 
+def encode_idn_address(address):
+    """Convert an internationalized domain name to its ASCII representation."""
+    _, addr = parseaddr(address)
+
+    if "@" not in addr:
+        return address
+
+    localpart, domain = addr.rsplit("@", 1)
+
+    if not domain.isascii():
+        domain = domain.encode("idna").decode("ascii")
+
+    return localpart + "@" + domain
+
 
 def prepareTLSContext(xComponent, xContext, isTLSRequested):
     xConfigProvider = xContext.ServiceManager.createInstance(
@@ -319,13 +333,13 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 
         uniquer = {}
         for key in recipients:
-            uniquer[key] = True
+            uniquer[encode_idn_address(key)] = True
         if len(ccrecipients):
             for key in ccrecipients:
-                uniquer[key] = True
+                uniquer[encode_idn_address(key)] = True
         if len(bccrecipients):
             for key in bccrecipients:
-                uniquer[key] = True
+                uniquer[encode_idn_address(key)] = True
         truerecipients = uniquer.keys()
 
         if dbg:
@@ -333,7 +347,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
                 ("PyMailSMTPService recipients are: ", truerecipients), file=sys.stderr
             )
 
-        self.server.sendmail(sendermail, truerecipients, msg.as_string())
+        self.server.sendmail(encode_idn_address(sendermail), truerecipients, msg.as_string())
 
 
 class PyMailIMAPService(unohelper.Base, XMailService):
