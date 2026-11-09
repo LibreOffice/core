@@ -7405,6 +7405,7 @@ void SdXImpressDocument::postMouseEvent(COKitMouseEventType eType, int nX, int n
 
     KitMouseEventData aMouseEventData(eType, aPointHMM, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
+    aMouseEventData.mbKitDrag = true;
     KitHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), aMouseEventData);
 }
 

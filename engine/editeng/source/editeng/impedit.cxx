@@ -2531,6 +2531,11 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     sal_Int8 nActions = IsReadOnly() ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
+    // A kit process has no system drag-and-drop loop. The kit mouse handling turns the following
+    // mouse moves into drag-over events and the button release into the drop.
+    if (comphelper::COKit::isActive() && GetWindow())
+        GetWindow()->LocalStartDrag();
+
     rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, xData, mxDnDListener );
     // If Drag&Move in an Engine, then Copy&Del has to be optional!
     GetCursor()->Hide();

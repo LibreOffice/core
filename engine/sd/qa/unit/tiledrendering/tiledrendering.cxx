@@ -1238,6 +1238,51 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testBulletClickSelectsSubItems)
     }
 }
 
+/// Returns the position of the left edge of a character of the text being edited, at the vertical
+/// middle of the character, in twips.
+static Point getCharacterPosition(const OutlinerView& rOutlinerView, sal_Int32 nPara,
+                                  sal_Int32 nIndex)
+{
+    const EditView& rEditView = rOutlinerView.GetEditView();
+    ::tools::Rectangle aBounds
+        = rEditView.getEditEngine().GetCharacterBounds(EPaM(nPara, nIndex));
+    Point aPosition(aBounds.Left() + 1, aBounds.Center().Y());
+    aPosition += rEditView.GetOutputArea().TopLeft() - rEditView.GetVisArea().TopLeft();
+    return o3tl::convert(aPosition, o3tl::Length::mm100, o3tl::Length::twip);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDragTextSelection)
+{
+    // Given a text being edited, with "Para" of its first paragraph selected:
+    SdXImpressDocument* pXImpressDocument = createDoc("empty-paragraph-click.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    beginTextEditByEnter(pXImpressDocument);
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    pOutlinerView->SetSelection(ESelection(0, 0, 0, 4));
+
+    // When the selection is dragged to the start of the third paragraph:
+    const Point aStart = getCharacterPosition(*pOutlinerView, 0, 1);
+    const Point aEnd = getCharacterPosition(*pOutlinerView, 2, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aStart.X(), aStart.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOVE, aEnd.X(), aEnd.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOVE, aEnd.X(), aEnd.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aEnd.X(), aEnd.Y(), 1,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the selected text moves there. Without the fix in place, the text stayed where it was,
+    // because the drag never ended with a drop.
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditEngine& rEditEngine = pView->GetTextEditOutlinerView()->GetEditView().getEditEngine();
+    CPPUNIT_ASSERT_EQUAL(u"graph1"_ustr, rEditEngine.GetText(sal_Int32(0)));
+    CPPUNIT_ASSERT_EQUAL(u"ParaParagraph3"_ustr, rEditEngine.GetText(sal_Int32(2)));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
 {
     // Create the first view.
