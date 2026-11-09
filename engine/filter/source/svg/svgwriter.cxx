@@ -43,8 +43,12 @@
 #include <basegfx/utils/bgradient.hxx>
 #include <tools/vcompat.hxx>
 
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -2928,10 +2932,24 @@ void GetGraphicFromXShape(const cpo::uno::Reference<css::drawing::XShape>* pShap
         return;
     }
 
+    uno::Reference<beans::XPropertySetInfo> xInfo = xPropertySet->getPropertySetInfo();
     uno::Reference<graphic::XGraphic> xGraphic;
-    if (xPropertySet->getPropertySetInfo()->hasPropertyByName(u"Graphic"_ustr))
+    if (xInfo->hasPropertyByName(u"Graphic"_ustr))
     {
         xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+    }
+    else if (xInfo->hasPropertyByName(u"FillStyle"_ustr)
+             && xInfo->hasPropertyByName(u"FillBitmap"_ustr))
+    {
+        // A shape filled with a picture gives that picture, with its original file data.
+        drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+        xPropertySet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
+        if (eFillStyle == drawing::FillStyle_BITMAP)
+        {
+            uno::Reference<awt::XBitmap> xBitmap;
+            xPropertySet->getPropertyValue(u"FillBitmap"_ustr) >>= xBitmap;
+            xGraphic.set(xBitmap, uno::UNO_QUERY);
+        }
     }
     rGraphic= Graphic(xGraphic);
 }

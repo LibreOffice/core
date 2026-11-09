@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <draw:fill-image draw:name="Photo">
+   <office:binary-data>
+/9j/4AAQSkZJRgABAQIAIwAjAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkI
+CQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/wAALCABAAEABAREA/8QAGQABAQEBAQEA
+AAAAAAAAAAAAAAYKCQEI/8QAMRAAAAQDBQcDAwUAAAAAAAAAAAECAwQFBwYIETd2CRIZV5S01CEx
+QRMiMxQjMkNE/9oACAEBAAA/AOVQ69U52OV3+2NPbMWumFSKhMxU8k0FMn22YiCJtDjzCHFJTjDG
+e6RqMixMzw+RQ8E67nzOqP1MD4wcE67nzOqP1MD4w+bb6myqmFCrFFU2hs4nlrZFK2lLn8DMEtrj
+oRsvX9U39JCCcZIv5lu7yMN77k725z2AAGnChmSdPtKyntGhcAPFJStJoWklJUWBkZYkZDkRtINm
+8qxipneAu/yM1WeUa4u0VnYRvE5afuuKhkF/R7mtsvx+qk/ZiTfM8AGnChmSdPtKyntGhcAA8UlK
+0mhaSUlRYGRliRkOQ+0g2b6rFHM7wNAJIarPGa4u0VnYVvE5Z8rioZBf5/c1tl+P1UX7eJN80AGn
+ChmSdPtKyntGhcAACHrnknUHSs27R0ZjwGnChmSdPtKyntGhcAACHrnknUHSs27R0ZjwGnChmSdP
+tKyntGhcAACHrnknUHSs27R0ZjwGnChmSdPtKyntGhcAACHrnknUHSs27R0ZjwHXqnO2Nu/2Op7Z
+iyMwpvUJ6Kkcmgpa+4zDwRtrcZYQ2pScYkj3TNJmWJEeHwKHjY3c+WNR+mgfJDjY3c+WNR+mgfJD
+jY3c+WNR+mgfJDjY3c+WNR+mgfJE9UbbG3f7Y09tPZGX03qEzFTyTRstYceh4Im0OPMLbSpWESZ7
+pGojPAjPD4HIUf/Z
+   </office:binary-data>
+  </draw:fill-image>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Photo" style:repeat="stretch"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PM1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:master-page-name="Default">
+    <draw:rect draw:style-name="gr1" svg:width="10cm" svg:height="8cm" svg:x="2cm" svg:y="2cm"/>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

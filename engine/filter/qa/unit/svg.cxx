@@ -11,13 +11,20 @@
 
 #include <test/unoapixml_test.hxx>
 
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/base64.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -39,6 +46,7 @@ class SvgFilterTest : public UnoApiXmlTest
 public:
     SvgFilterTest();
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
+    uno::Reference<beans::XPropertySet> selectFirstShape();
 };
 
 SvgFilterTest::SvgFilterTest()
@@ -49,6 +57,19 @@ SvgFilterTest::SvgFilterTest()
 void SvgFilterTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("svg"), BAD_CAST("http://www.w3.org/2000/svg"));
+}
+
+uno::Reference<beans::XPropertySet> SvgFilterTest::selectFirstShape()
+{
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    const uno::Any aShape = xPage->getByIndex(0);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xSelection(xModel->getCurrentController(),
+                                                        uno::UNO_QUERY);
+    xSelection->select(aShape);
+    return uno::Reference<beans::XPropertySet>(aShape, uno::UNO_QUERY);
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
@@ -104,6 +125,60 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreviewDownscalesJpg)
     // i.e. the preview carried the original JPEG at full size.
     CPPUNIT_ASSERT_EQUAL(Size(960, 720), aGraphic.GetSizePixel());
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreviewKeepsJpgFill)
+{
+    // A rectangle filled with a 64x64 pixel JPEG picture, small enough to go into the preview as
+    // it is.
+    loadFromFile(u"preview-jpg-fill.fodp");
+    selectFirstShape();
+
+    save(TestFilter::SVG_IMPRESS, { comphelper::makePropertyValue(u"SelectionOnly"_ustr, true),
+                                    comphelper::makePropertyValue(u"IsPreview"_ustr, true) });
+
+    // The preview carries the fill as a JPEG, as it does for a picture object.
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    OUString aHref = getXPath(pXmlDoc, "//svg:image", "href");
+    // Without the accompanying fix in place, this test would have failed, the fill was encoded
+    // as PNG.
+    CPPUNIT_ASSERT(aHref.startsWith("data:image/jpeg"));
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreviewDownscalesJpgFill)
+{
+    // Take the 2560x1920 pixel JPEG of the picture document and fill the rectangle with it.
+    loadFromFile(u"preview-large-jpg.fodt");
+    uno::Reference<text::XTextGraphicObjectsSupplier> xGraphicObjectsSupplier(mxComponent,
+                                                                              uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGraphicObjects(
+        xGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphicObject(xGraphicObjects->getByIndex(0),
+                                                       uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xGraphicObject->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+    loadFromFile(u"preview-jpg-fill.fodp");
+    uno::Reference<beans::XPropertySet> xShape = selectFirstShape();
+    xShape->setPropertyValue(u"FillBitmap"_ustr,
+                             uno::Any(uno::Reference<awt::XBitmap>(xGraphic, uno::UNO_QUERY)));
+
+    save(TestFilter::SVG_IMPRESS, { comphelper::makePropertyValue(u"SelectionOnly"_ustr, true),
+                                    comphelper::makePropertyValue(u"IsPreview"_ustr, true) });
+
+    // The preview holds the fill as a JPEG scaled down to fit 1280x720 pixels.
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    OUString aHref = getXPath(pXmlDoc, "//svg:image", "href");
+    static constexpr OUString aPrefix(u"data:image/jpeg;base64,"_ustr);
+    // Without the accompanying fix in place, this test would have failed, the fill was encoded
+    // as PNG.
+    CPPUNIT_ASSERT(aHref.startsWith(aPrefix));
+    uno::Sequence<sal_Int8> aData;
+    comphelper::Base64::decode(aData, aHref.subView(aPrefix.getLength()));
+    SvMemoryStream aStream(aData.getArray(), aData.getLength(), StreamMode::READ);
+    Graphic aGraphic;
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
+                         GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, u"", aStream));
+    CPPUNIT_ASSERT_EQUAL(Size(960, 720), aGraphic.GetSizePixel());
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
