@@ -2467,8 +2467,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		for a selection of several, which is framed by a box and not by a mapping.
 	*/
 	private framingPlacesOfTheObject():
-		| { [where: string]: cool.SimplePoint }
-		| undefined {
+		{ [where: string]: cool.SimplePoint } | undefined {
 		const objects = this.selectedObjects();
 		if (objects.length !== 1) return undefined;
 

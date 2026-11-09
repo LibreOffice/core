@@ -382,8 +382,7 @@ abstract class RenderManagerBase {
 	textColorOf(
 		_data: cool.VectorPrimitivesData,
 		primitive:
-			| cool.TextSimplePortionPrimitive
-			| cool.TextDecoratedPortionPrimitive,
+			cool.TextSimplePortionPrimitive | cool.TextDecoratedPortionPrimitive,
 	): string {
 		return primitive.fontcolor;
 	}

@@ -19,8 +19,7 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 	public documentRectangles = Array<cool.SimpleRectangle>();
 	private viewRectangles = Array<cool.SimpleRectangle>();
 	private pendingZoomAnchor:
-		| { point: cool.SimplePoint; pivot: number[] }
-		| undefined;
+		{ point: cool.SimplePoint; pivot: number[] } | undefined;
 
 	constructor() {
 		super();

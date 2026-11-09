@@ -108,12 +108,7 @@ type SlideLinkRefresh = SlideLinkPagesRefresh | SlideLinkSectionRefresh;
 // changed since the last read, 'connected' or 'disconnected' as the live link
 // to the source stands, and 'linked' otherwise.
 type SlideLinkState =
-	| ''
-	| 'broken'
-	| 'outdated'
-	| 'connected'
-	| 'disconnected'
-	| 'linked';
+	'' | 'broken' | 'outdated' | 'connected' | 'disconnected' | 'linked';
 
 class SlideLinks {
 	private map: any;

@@ -78,8 +78,7 @@ JSDialog.CreateDropdownEntriesId = function (id: string) {
 JSDialog.OpenDropdown = function (
 	id: string,
 	popupParent:
-		| string
-		| (HTMLElement & { _onDropDown: (open: boolean) => void }),
+		string | (HTMLElement & { _onDropDown: (open: boolean) => void }),
 	entries: Array<ComboBoxEntry>,
 	innerCallback: JSDialogMenuCallback,
 	popupAnchor: string,

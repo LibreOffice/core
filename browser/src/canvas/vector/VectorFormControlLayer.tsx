@@ -450,8 +450,7 @@ namespace cool {
     // closes the part open under the control, answering whether there was one
     private static _closeOpenPart(element: HTMLElement): boolean {
       const open = element.querySelector('.vector-form-open-part') as
-        | (HTMLElement & { closePart?: () => void })
-        | null;
+        (HTMLElement & { closePart?: () => void }) | null;
       open?.closePart?.();
       return !!open;
     }

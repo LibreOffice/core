@@ -215,7 +215,7 @@ namespace cool {
 		// Whether the chunk, which ends at 't', has a row copy ('c'). Spans ('d')
 		// are skipped by their length.
 		private static hasRowCopy(delta: Uint8Array): boolean {
-			for (let i = 0; i < delta.length; ) {
+			for (let i = 0; i < delta.length;) {
 				if (delta[i] === 99) return true;
 				if (delta[i] !== 100) return false;
 				i += 4 + delta[i + 3] * 4;
@@ -253,7 +253,7 @@ namespace cool {
 
 			// Apply delta.
 			let i = 0;
-			for (let stop = false; i < delta.length && !stop; ) {
+			for (let stop = false; i < delta.length && !stop;) {
 				switch (delta[i]) {
 					case 99: {
 						// 'c': // copy row

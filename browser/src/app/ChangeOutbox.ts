@@ -114,11 +114,7 @@ interface RemoveEntry {
 	what one key press made, which is one step of the undo: nothing after it is merged into it.
 */
 type OutboxEntry =
-	| TransformEntry
-	| UndoEntry
-	| OtherEntry
-	| TextEntry
-	| RemoveEntry;
+	TransformEntry | UndoEntry | OtherEntry | TextEntry | RemoveEntry;
 
 class ChangeOutbox {
 	/// How long a change may go unanswered before the next one goes out anyway, in milliseconds.

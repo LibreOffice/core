@@ -29,8 +29,7 @@ interface TableStyleGallerySeparator {
 }
 
 type TableStyleGalleryListItem =
-	| TableStyleGalleryEntry
-	| TableStyleGallerySeparator;
+	TableStyleGalleryEntry | TableStyleGallerySeparator;
 
 class TableStyleGalleryService {
 	// The styles alone, in list order; the row index of a gallery entry indexes this array.

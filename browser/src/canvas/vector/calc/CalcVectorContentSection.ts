@@ -160,8 +160,7 @@ namespace cool {
 			const manager = RenderManager.calcVectorManager();
 			const name = app.CSections.CalcVectorContent.name;
 			const section = app.sectionContainer.getSectionWithName(name) as
-				| CalcVectorContentSection
-				| undefined;
+				CalcVectorContentSection | undefined;
 			if (section ? section._manager === manager : !manager) return;
 			if (section) app.sectionContainer.removeSection(name);
 			if (manager)

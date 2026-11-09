@@ -302,7 +302,7 @@ describe('CanvasTileUtils', function () {
 					continue;
 				}
 				lastCopy = -1;
-				for (let x = 0; x < size; ) {
+				for (let x = 0; x < size;) {
 					while (x < size && samePixel((y * size + x) * 4)) ++x;
 					const pixels: number[][] = [];
 					while (

@@ -18,12 +18,7 @@ interface WSDServerInfo {
 }
 
 type MessageInterface =
-	| string
-	| ArrayBuffer
-	| Blob
-	| Uint8Array
-	| Int8Array
-	| DataView;
+	string | ArrayBuffer | Blob | Uint8Array | Int8Array | DataView;
 
 interface DelayedMessageInterface {
 	msg: string;

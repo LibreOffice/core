@@ -153,12 +153,7 @@ namespace cool {
 
 		private readonly TONE_PRESETS: {
 			id:
-				| 'natural'
-				| 'formal'
-				| 'short'
-				| 'friendly'
-				| 'professional'
-				| 'casual';
+				'natural' | 'formal' | 'short' | 'friendly' | 'professional' | 'casual';
 			label: string;
 			icon: string;
 		}[] = [

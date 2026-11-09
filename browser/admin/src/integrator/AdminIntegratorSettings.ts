@@ -4171,9 +4171,7 @@ class SettingIframe {
 
 		const setValue = (selector: string, value: string) => {
 			const field = root.querySelector(selector) as
-				| HTMLInputElement
-				| HTMLSelectElement
-				| null;
+				HTMLInputElement | HTMLSelectElement | null;
 			if (field) field.value = value;
 		};
 		if (url) setValue('#aiImageProvider', this.getProviderIdFromUrl(url));

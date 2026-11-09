@@ -41,7 +41,7 @@ class ScrollProperties {
 	horizontalScrollStep: number = 0;
 
 	usableThickness: number = 20 * app.roundedDpiScale;
-	horizontalScrollRightOffset: number = 20 /*usableThickness*/; // To prevent overlapping of the scroll bars.
+	horizontalScrollRightOffset: number = 20; /*usableThickness*/ // To prevent overlapping of the scroll bars.
 	scrollBarThickness: number = 6 * app.roundedDpiScale;
 	edgeOffset: number = 0;
 }

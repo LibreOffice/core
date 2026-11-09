@@ -28,13 +28,7 @@
  */
 
 type JSXChild =
-	| Node
-	| string
-	| number
-	| boolean
-	| null
-	| undefined
-	| JSXChild[];
+	Node | string | number | boolean | null | undefined | JSXChild[];
 
 type JSXProps = Record<string, any> | null;
 

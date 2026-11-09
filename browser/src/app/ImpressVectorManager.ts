@@ -120,8 +120,7 @@ class ImpressVectorManager extends VectorManagerBase {
 	/// reported it or before there is a document at all.
 	private get _ownViewId(): number | undefined {
 		const docLayer = app.map?._docLayer as unknown as
-			| cool.CanvasTileLayerInterface
-			| undefined;
+			cool.CanvasTileLayerInterface | undefined;
 		return docLayer?._viewId;
 	}
 
@@ -300,8 +299,7 @@ class ImpressVectorManager extends VectorManagerBase {
 	textColorOf(
 		data: cool.VectorPrimitivesData,
 		primitive:
-			| cool.TextSimplePortionPrimitive
-			| cool.TextDecoratedPortionPrimitive,
+			cool.TextSimplePortionPrimitive | cool.TextDecoratedPortionPrimitive,
 	): string {
 		this._setUpColors(data);
 		return this._renderer.ownTextColor(primitive);

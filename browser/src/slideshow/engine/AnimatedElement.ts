@@ -1320,8 +1320,7 @@ class AnimatedElement {
 	/// The last transition filter on the element and the time it reached,
 	/// 0 to 1, or undefined.
 	getTransitionFilterFrame():
-		| { info: TransitionFilterInfo; time: number }
-		| undefined {
+		{ info: TransitionFilterInfo; time: number } | undefined {
 		const frame = this.transitionFiltersManager.getLastFrame();
 		if (!frame) return undefined;
 		return {

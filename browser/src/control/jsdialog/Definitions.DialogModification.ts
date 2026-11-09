@@ -26,8 +26,7 @@ dialogModifications.set('FindReplaceDialog', function (instance: any) {
 
 	// Pre-fill the search field when another component (e.g. Navigator) stored a term.
 	const pendingTerm = JSDialog.pendingFindReplaceSearchTerm as
-		| string
-		| undefined;
+		string | undefined;
 	if (pendingTerm) {
 		JSDialog.pendingFindReplaceSearchTerm = undefined;
 		// The searchterm widget id is defined in srchdlg.cxx. Its DOM input

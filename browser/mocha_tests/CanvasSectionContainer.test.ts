@@ -92,8 +92,7 @@ describe('CanvasSectionContainer', function () {
 
 			let rightSection = new CanvasSectionObject('RightSection');
 			rightSection.anchor = ['top', ['LeftSection', 'right', 'left']] as
-				| string[]
-				| Array<Array<string>>;
+				string[] | Array<Array<string>>;
 			rightSection.position = [originX, originY];
 			rightSection.size = [1, 1];
 			rightSection.expand = ['bottom', 'right'];
@@ -167,8 +166,7 @@ describe('CanvasSectionContainer', function () {
 
 			let bottomSection = new CanvasSectionObject('BottomSection');
 			bottomSection.anchor = [['TopSection', 'bottom', 'top'], 'left'] as
-				| string[]
-				| Array<Array<string>>;
+				string[] | Array<Array<string>>;
 			bottomSection.position = [originX, originY];
 			bottomSection.size = [1, 1];
 			bottomSection.expand = ['bottom', 'right'];
@@ -243,8 +241,7 @@ describe('CanvasSectionContainer', function () {
 
 			let leftSection = new CanvasSectionObject('LeftSection');
 			leftSection.anchor = ['top', ['RightSection', '-left', 'right']] as
-				| string[]
-				| Array<Array<string>>; // Attach LeftSection's right to left of RightSection.
+				string[] | Array<Array<string>>; // Attach LeftSection's right to left of RightSection.
 			leftSection.position = [originX, originY];
 			leftSection.size = [1, 1];
 			leftSection.expand = ['bottom', 'left'];

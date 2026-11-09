@@ -25,10 +25,7 @@ declare var makeHttpUrl: any;
 declare var coolParams: any;
 
 type LayerContentType =
-	| ImageInfo
-	| PlaceholderInfo
-	| AnimatedShapeInfo
-	| TextFieldInfo;
+	ImageInfo | PlaceholderInfo | AnimatedShapeInfo | TextFieldInfo;
 
 type TextFieldsType = 'SlideNumber' | 'Footer' | 'DateTime';
 
