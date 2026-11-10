@@ -2683,8 +2683,17 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
         {
             const ProcessData& rProcessData=static_cast<const ProcessData&>(rClientData);
             if(rProcessData.pPage.page)
-                static_cast<SdPage *>(rProcessData.pPage.page)->InsertPresObj(
-                    pObj.get(), PresObjKind::Page );
+            {
+                SdPage* pSdPage = static_cast<SdPage*>(rProcessData.pPage.page);
+                pSdPage->InsertPresObj( pObj.get(), PresObjKind::Page );
+
+                // The picture a notes page shows of its slide holds nothing of its own, and it
+                // belongs to the page the way the one a layout makes does: it keeps the place
+                // and the size the page gives it, and is not there to be filled.
+                pObj->SetUserCall( pSdPage );
+                pObj->SetEmptyPresObj( true );
+                pObj->SetResizeProtect( true );
+            }
         }
 
         DffRecordHeader aMasterShapeHd;

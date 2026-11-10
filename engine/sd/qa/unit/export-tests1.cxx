@@ -12,6 +12,7 @@
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
+#include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <sdtiledrenderingtest.hxx>
 
 #include <comphelper/scopeguard.hxx>
@@ -584,6 +585,29 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testCool16078_placeholderOutlineToODF)
 }
 
 // A slide that plays no sound keeps advancing the way it did.
+// The picture a notes page shows of its slide belongs to the page.
+CPPUNIT_TEST_FIXTURE(SdExportTest1, testNotesPictureStaysThePageOwn)
+{
+    // Given a presentation with a notes page for every slide:
+    createSdImpressDoc("ppt/FillPatterns.ppt");
+
+    saveAndReload(TestFilter::PPT);
+
+    uno::Reference<presentation::XPresentationPage> xSlide(getPage(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xNotes(xSlide->getNotesPage(), uno::UNO_SET_THROW);
+    uno::Reference<beans::XPropertySet> xPicture(xNotes->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(
+        u"com.sun.star.presentation.PageShape"_ustr,
+        uno::Reference<drawing::XShape>(xPicture, uno::UNO_QUERY_THROW)->getShapeType());
+
+    // The picture keeps the place and the size the page gives it and is not there to be filled.
+    // Without the fix in place it came back as a shape of its own, free to be moved, resized
+    // and written into.
+    CPPUNIT_ASSERT(xPicture->getPropertyValue(u"IsEmptyPresentationObject"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xPicture->getPropertyValue(u"IsPlaceholderDependent"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xPicture->getPropertyValue(u"SizeProtect"_ustr).get<bool>());
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest1, testSilentSlideKeepsItsAdvance)
 {
     // Given a presentation whose slide states no transition, no sound and no time to wait:
