@@ -39,8 +39,6 @@ namespace vclcanvas
         /// Dispose all internal references
         void disposing();
 
-        css::uno::Any isAccelerated() const;
-        css::uno::Any getDeviceHandle() const;
         css::uno::Any getSurfaceHandle() const;
 
         void dumpScreenContent() const;

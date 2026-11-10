@@ -55,16 +55,6 @@ namespace vclcanvas
         DeviceHelper::disposing();
     }
 
-    uno::Any SpriteDeviceHelper::isAccelerated() const
-    {
-        return DeviceHelper::isAccelerated();
-    }
-
-    uno::Any SpriteDeviceHelper::getDeviceHandle() const
-    {
-        return DeviceHelper::getDeviceHandle();
-    }
-
     uno::Any SpriteDeviceHelper::getSurfaceHandle() const
     {
         if( !mpBackBuffer )
