@@ -18,8 +18,6 @@
  */
 
 
-#include <com/sun/star/rendering/RepaintResult.hpp>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -59,8 +57,7 @@ namespace cppcanvas::internal
                 (!mbOnlyRedrawWithSameTransform ||
                  maLastTransformation == aTotalTransform) )
             {
-                if( mxCachedPrimitive->redraw( aViewState ) ==
-                    rendering::RepaintResult::REDRAWN )
+                if (mxCachedPrimitive->redraw(aViewState))
                 {
                     // cached repaint succeeded, done.
                     return true;

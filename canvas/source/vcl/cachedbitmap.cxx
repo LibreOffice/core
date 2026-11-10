@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -55,10 +54,10 @@ namespace vclcanvas
         CachedPrimitiveBase::disposing(rGuard);
     }
 
-    ::sal_Int8 CachedBitmap::doRedraw( const rendering::ViewState&                  rNewState,
-                                       const rendering::ViewState&                  rOldState,
-                                       const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
-                                       bool                                         bSameViewTransform )
+    bool CachedBitmap::doRedraw(const rendering::ViewState& rNewState,
+                                const rendering::ViewState& rOldState,
+                                const uno::Reference<rendering::XCanvas>& rTargetCanvas,
+                                bool bSameViewTransform)
     {
         ENSURE_OR_THROW( bSameViewTransform,
                          "CachedBitmap::doRedraw(): base called with changed view transform "
@@ -66,7 +65,7 @@ namespace vclcanvas
 
         // TODO(P1): Could adapt to modified clips as well
         if( rNewState.Clip != rOldState.Clip )
-            return rendering::RepaintResult::FAILED;
+            return false;
 
         RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
 
@@ -81,10 +80,10 @@ namespace vclcanvas
                                maAttributes ) )
         {
             // target failed to repaint
-            return rendering::RepaintResult::FAILED;
+            return false;
         }
 
-        return rendering::RepaintResult::REDRAWN;
+        return true;
     }
 }
 

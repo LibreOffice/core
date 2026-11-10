@@ -38,13 +38,12 @@ interface XCachedPrimitive : ::com::sun::star::uno::XInterface
         view state is of course permitted to differ from the one used
         for initial rendering.
 
-        @return a value of type RepaintResult, denoting
-        the result of this operation.
+        @return whether the operation succeeded
 
         @throws com::sun::star::lang::IllegalArgumentException
         if the view transformation matrix is singular.
      */
-    byte redraw( [in] ViewState aState )
+    boolean redraw( [in] ViewState aState )
         raises (com::sun::star::lang::IllegalArgumentException);
 };
 

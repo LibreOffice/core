@@ -65,7 +65,6 @@
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/RenderingIntent.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>

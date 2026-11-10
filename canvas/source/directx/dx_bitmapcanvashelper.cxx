@@ -28,7 +28,6 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>

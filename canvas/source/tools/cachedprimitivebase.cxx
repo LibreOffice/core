@@ -21,7 +21,6 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <com/sun/star/rendering/RepaintResult.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <base/cachedprimitivebase.hxx>
@@ -49,7 +48,7 @@ namespace canvas
         mxTarget.clear();
     }
 
-    sal_Int8 SAL_CALL CachedPrimitiveBase::redraw( const rendering::ViewState& aState )
+    sal_Bool SAL_CALL CachedPrimitiveBase::redraw(const rendering::ViewState& aState)
     {
         ::basegfx::B2DHomMatrix aUsedTransformation;
         ::basegfx::B2DHomMatrix aNewTransformation;
@@ -65,7 +64,7 @@ namespace canvas
         {
             // differing transformations, don't try to draft the
             // output, just plain fail here.
-            return rendering::RepaintResult::FAILED;
+            return false;
         }
 
         return doRedraw( aState,

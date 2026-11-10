@@ -59,7 +59,7 @@ namespace canvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XCachedPrimitive
-        virtual ::sal_Int8 SAL_CALL redraw( const css::rendering::ViewState& aState ) override;
+        virtual sal_Bool SAL_CALL redraw(const css::rendering::ViewState& aState) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -90,10 +90,10 @@ namespace canvas
             @param bSameViewTransform
             When true, rNewState and rOldState have the same transformation.
          */
-        virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,
-                                     const css::rendering::ViewState&  rOldState,
-                                     const css::uno::Reference< css::rendering::XCanvas >&    rTargetCanvas,
-                                     bool                              bSameViewTransform ) = 0;
+        virtual bool doRedraw(const css::rendering::ViewState& rNewState,
+                              const css::rendering::ViewState& rOldState,
+                              const css::uno::Reference<css::rendering::XCanvas>& rTargetCanvas,
+                              bool bSameViewTransform) = 0;
 
         css::rendering::ViewState                         maUsedViewState;
         css::uno::Reference< css::rendering::XCanvas >    mxTarget;

@@ -43,12 +43,10 @@ namespace cairocanvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     private:
-        virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,
-                                     const css::rendering::ViewState&  rOldState,
-                                     const css::uno::Reference<
-                                     css::rendering::XCanvas >&        rTargetCanvas,
-                                     bool                                           bSameViewTransform ) override;
-
+        virtual bool doRedraw(const css::rendering::ViewState& rNewState,
+                              const css::rendering::ViewState& rOldState,
+                              const css::uno::Reference<css::rendering::XCanvas>& rTargetCanvas,
+                              bool bSameViewTransform) override;
 
         ::cairo::SurfaceSharedPtr mpSurface;
         const css::rendering::RenderState maRenderState;
