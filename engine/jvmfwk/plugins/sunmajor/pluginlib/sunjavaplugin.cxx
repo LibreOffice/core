@@ -617,8 +617,16 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     javaPluginError errorcode = javaPluginError::NONE;
 #ifdef MACOSX
     rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath( pInfo->sLocation );
-    if ( !aVendorInfo.is() || aVendorInfo->compareVersions( pInfo->sVersion ) < 0 )
+    try {
+        if ( !aVendorInfo.is() || aVendorInfo->compareVersions( pInfo->sVersion ) < 0 )
+            return javaPluginError::VmCreationFailed;
+    } catch (MalformedVersionException &) {
+        SAL_INFO(
+            "jfw",
+            "[Java framework] sunjavaplugin does not know version " << pInfo->sVersion
+                << " for vendor " << aVendorInfo->getVendor());
         return javaPluginError::VmCreationFailed;
+    }
 #endif
     OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
 #if defined MACOSX && defined __x86_64__
