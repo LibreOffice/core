@@ -3386,6 +3386,30 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testSlideDatePlainTextIsFixedDate)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xPage->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testSlideFooterAtInheritedPositionIsFooterText)
+{
+    createSdImpressDoc("pptx/slide-footer-own-position.pptx");
+
+    // The footer of the first slide states the position it inherits from the layout, so it is
+    // the footer text of the slide and the slide keeps no shape of its own.
+    uno::Reference<drawing::XDrawPage> xFirstPage(getPage(0));
+    uno::Reference<beans::XPropertySet> xFirstPageProperties(xFirstPage, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(
+        true, xFirstPageProperties->getPropertyValue(u"IsFooterVisible"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(
+        u"Footer at the layout position"_ustr,
+        xFirstPageProperties->getPropertyValue(u"FooterText"_ustr).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xFirstPage->getCount());
+
+    // The footer of the second slide is moved to the top, a place the footer text of the slide
+    // cannot reach, so the slide keeps it as a shape of its own.
+    uno::Reference<drawing::XDrawPage> xSecondPage(getPage(1));
+    uno::Reference<beans::XPropertySet> xSecondPageProperties(xSecondPage, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(
+        false, xSecondPageProperties->getPropertyValue(u"IsFooterVisible"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSecondPage->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,6 +71,7 @@ PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const OUString
 , meShapeLocation( eShapeLocation )
 , mbReferenced( false )
 , mbHasNoninheritedShapeProperties( false )
+, mbHasOwnTransform( false )
 {
 }
 
@@ -157,6 +158,14 @@ bool PPTShape::IsPlaceHolderCandidate(const SlidePersist& rSlidePersist) const
     if (rParagraphs.size() != 1)
         return false;
     if (rParagraphs.front()->getRuns().size() != 1)
+        return false;
+    // A position of its own keeps the placeholder on the slide, unless it is the position the
+    // placeholder inherits.
+    if (mbHasOwnTransform
+        && (!mpPlaceholder || getPosition() != mpPlaceholder->getPosition()
+            || getSize() != mpPlaceholder->getSize()
+            || getRotation() != mpPlaceholder->getRotation()
+            || getFlipH() != mpPlaceholder->getFlipH() || getFlipV() != mpPlaceholder->getFlipV()))
         return false;
     // If the placeholder has a shape other than rectangle,
     // we have to place it in the slide as a CustomShape.

@@ -36,16 +36,18 @@ PPTShapePropertiesContext::PPTShapePropertiesContext( ContextHandler2Helper cons
 ContextHandlerRef PPTShapePropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     PPTShape* pPPTShape = dynamic_cast<PPTShape*>(&mrShape);
-    if (pPPTShape)
-        pPPTShape->setHasNoninheritedShapeProperties();
 
     switch( aElementToken )
     {
         case A_TOKEN( xfrm ):
+            if (pPPTShape)
+                pPPTShape->setHasOwnTransform();
             mrShape.getShapeProperties().setProperty( PROP_IsPlaceholderDependent, false);
             return ShapePropertiesContext::onCreateContext( aElementToken, rAttribs );
 
         default:
+            if (pPPTShape)
+                pPPTShape->setHasNoninheritedShapeProperties();
             return ShapePropertiesContext::onCreateContext( aElementToken, rAttribs );
     }
 }

@@ -49,8 +49,10 @@ class PPTShape final : public oox::drawingml::Shape
     bool                        mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
                                                         // placeholdershapes on Slide are displayed always
     oox::drawingml::ShapePtr mpPlaceholder;
-    /// Set if spPr tag is non empty for the shape
+    /// Set if the spPr tag of the shape has a child other than xfrm
     bool mbHasNoninheritedShapeProperties;
+    /// Set if the spPr tag of the shape has an xfrm child
+    bool mbHasOwnTransform;
 
     bool IsPlaceHolderCandidate(const SlidePersist& rSlidePersist) const;
 
@@ -84,9 +86,11 @@ public:
     void setPlaceholder(const oox::drawingml::ShapePtr& pPlaceholder) { mpPlaceholder = pPlaceholder; }
     void setModelId( const OUString& rId ) { msModelId = rId; }
 
-    /// Flags shape as having a non-empty spPr tag
+    /// Flags shape as having a child other than xfrm in its spPr tag
     void setHasNoninheritedShapeProperties() { mbHasNoninheritedShapeProperties = true; }
-    /// Returns whether or not the shape had a non-empty spPr tag
+    /// Flags shape as having an xfrm child in its spPr tag
+    void setHasOwnTransform() { mbHasOwnTransform = true; }
+    /// Returns whether or not the shape had a child other than xfrm in its spPr tag
     bool hasNonInheritedShapeProperties() const { return mbHasNoninheritedShapeProperties; }
 
     static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nFirstSubType,
