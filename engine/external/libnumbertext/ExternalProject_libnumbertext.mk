@@ -20,6 +20,11 @@ libnumbertext_CXXFLAGS=$(CXXFLAGS) $(CXXFLAGS_CXX11)
 
 libnumbertext_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG) $(gb_EMSCRIPTEN_CPPFLAGS)
 
+# src/Numbertext.cxx uses std::codecvt_utf8 and std::wstring_convert, which libc++ provides in
+# C++26 only on request (and passing these unconditionally should be safe):
+libnumbertext_CPPFLAGS += \
+    -D_LIBCPP_ENABLE_CXX26_REMOVED_CODECVT -D_LIBCPP_ENABLE_CXX26_REMOVED_WSTRING_CONVERT
+
 $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 	$(call gb_Trace_StartRange,libnumbertext,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
