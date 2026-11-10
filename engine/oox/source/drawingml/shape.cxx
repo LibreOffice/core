@@ -3124,6 +3124,14 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                             rFilter.importFragment(aThemeOverrideFragmentPath), uno::UNO_QUERY_THROW);
                     pTheme = pPowerPointImport->getActualSlidePersist()->getTheme();
                     auto pThemeOverride = std::make_shared<Theme>(*pTheme);
+
+                    // A copy of a theme keeps pointing at the one set of colours it was made
+                    // from, so the chart is given a set of its own to override. The page and the
+                    // master it belongs to keep the colours they had.
+                    if (pTheme->getTheme())
+                        pThemeOverride->setTheme(
+                            std::make_shared<model::Theme>(*pTheme->getTheme()));
+
                     rFilter.importFragment(
                         new ThemeOverrideFragmentHandler(rFilter, aThemeOverrideFragmentPath, *pThemeOverride, *pThemeOverride->getTheme()),
                         xDoc);

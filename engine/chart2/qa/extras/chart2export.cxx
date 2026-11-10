@@ -659,6 +659,20 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPPTXEmbeddingsSpreadsheetWithClashing
                 u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartLeavesThePageItsOwnColors)
+{
+    // A chart that carries a colour scheme of its own uses it for itself alone. The page the
+    // chart sits on, and the master behind it, keep the scheme they had.
+    loadFromFile(u"pptx/tdf105517.pptx");
+    save(TestFilter::PPTX);
+
+    // Without the fix: the scheme of the chart took the place of the one the page goes by, so
+    // every colour the page states by name changed.
+    xmlDocUniquePtr pXmlDocTheme = parseExport(u"ppt/theme/theme1.xml"_ustr);
+    assertXPath(pXmlDocTheme, "/a:theme/a:themeElements/a:clrScheme/a:accent1/a:srgbClr", "val",
+                u"4F81BD");
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf115558_footnote_chart)
 {
     // For now Linux and Windows behavior is different, Writer on Linux
