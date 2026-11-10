@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include <qt/RemoteOpen.hpp>
+#include <common/CODAConfig.hpp>
 #include <common/EditorFrameMessages.hpp>
 #include <common/Log.hpp>
 #include <net/FakeSocket.hpp>
@@ -608,6 +609,8 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
     QJsonObject settings;
     for (const auto& [name, value] : coda::pageSettings(/*forDocument=*/true))
         settings[QString::fromStdString(name)] = QString::fromStdString(value);
+    if (CODAConfig::instance().startsInEditMode())
+        settings["startreadonly"] = "false";
     config["settings"] = settings;
 
     const QByteArray configJson = QJsonDocument(config).toJson(QJsonDocument::Compact);
