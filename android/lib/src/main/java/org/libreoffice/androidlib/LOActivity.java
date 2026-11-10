@@ -138,6 +138,7 @@ public class LOActivity extends AppCompatActivity {
     // activity is destroyed.
     private volatile COWebView mWebView = null;
     private volatile MobileSocket mMobileSocket = null;
+    private COWebViewClient mWebViewClient = null;
     private SharedPreferences sPrefs;
     private Handler mMainHandler = null;
     private RateAppController rateAppController;
@@ -151,6 +152,9 @@ public class LOActivity extends AppCompatActivity {
     private final AtomicReference<Runnable> mCloseTimeout = new AtomicReference<>();
     /** The URI the closing document was opened from. */
     private volatile String mClosingUri = null;
+
+    /// The number the native side knows this activity's document by, 0 before it is opened.
+    private volatile int mDocumentId = 0;
 
     private Bundle savedInstanceState;
 
@@ -571,7 +575,8 @@ public class LOActivity extends AppCompatActivity {
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightNavigationBars(lightMode);
             }
 
-            mMobileSocket = mWebView.getWebViewClient().getMobileSocket();
+            mWebViewClient = mWebView.getWebViewClient();
+            mMobileSocket = mWebViewClient.getMobileSocket();
 
             WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
@@ -1100,7 +1105,7 @@ public class LOActivity extends AppCompatActivity {
     protected void onPause() {
         // A Save similar to an autosave
         if (documentLoaded)
-            postMobileMessageNative("save dontTerminateEdit=1 dontSaveIfUnmodified=1");
+            postMobileMessageNative(mDocumentId, "save dontTerminateEdit=1 dontSaveIfUnmodified=1");
 
         super.onPause();
         Log.d(TAG, "onPause() - hinting to save, we might need to return to the doc");
@@ -1412,7 +1417,7 @@ public class LOActivity extends AppCompatActivity {
         mClosingUri = uri;
         DocumentCloseService.pendingStarted(getApplicationContext(), uri);
         getMainHandler().postDelayed(timeout, CLOSE_TIMEOUT_MS);
-        if (!closeDocumentNative())
+        if (!closeDocumentNative(mDocumentId))
             documentClosed();
     }
 
@@ -1450,7 +1455,10 @@ public class LOActivity extends AppCompatActivity {
         AssetManager assetManager = getResources().getAssets();
         String uiMode = (isLargeScreen() && !isChromeOS()) ? "notebookbar" : "classic";
         String userName = getPrefs().getString(USER_NAME_KEY, "Guest User");
-        createCOOLWSD(dataDir, cacheDir, apkFile, assetManager, urlToLoad, uiMode, userName);
+        initializeEngine(dataDir, cacheDir, apkFile, assetManager, uiMode, userName);
+
+        mDocumentId = openDocument(urlToLoad);
+        mWebViewClient.setDocumentId(mDocumentId);
 
         // trigger the load of the document
         String finalUrlToLoad = "file:///android_asset/dist/cool.html?file_path=" +
@@ -1519,9 +1527,19 @@ public class LOActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize the COOLWSD to load 'loadFileURL'.
+     * Start the engine and the COOLWSD server. They serve every document of the process, so only
+     * the first call does anything.
      */
-    public native void createCOOLWSD(String dataDir, String cacheDir, String apkFile, AssetManager assetManager, String loadFileURL, String uiMode, String userName);
+    private native void initializeEngine(String dataDir, String cacheDir, String apkFile, AssetManager assetManager, String uiMode, String userName);
+
+    /** Returns the number the native side knows the document by. */
+    private native int openDocument(String loadFileURL);
+
+    /**
+     * Returns the number of the document the page is connected to, a new one when the page
+     * started again without closing the old document first.
+     */
+    private native int connectDocument(int documentId);
 
     /**
      * Passing messages from JS (instead of the websocket communication).
@@ -1538,7 +1556,7 @@ public class LOActivity extends AppCompatActivity {
         String[] messageAndParameterArray= message.split(" ", 2); // the command and the rest (that can potentially contain spaces too)
 
         if (beforeMessageFromWebView(messageAndParameterArray)) {
-            postMobileMessageNative(message);
+            postMobileMessageNative(mDocumentId, message);
         }
     }
 
@@ -1547,24 +1565,27 @@ public class LOActivity extends AppCompatActivity {
     void postNativeMessage(String message) {
         Log.d(TAG, "postNativeMessage: " + message);
 
-        if (message.equals("CLOSED")) {
-            documentClosed();
+        final String[] messageAndParameter = message.split(" ", 2);
+        if (messageAndParameter[0].equals("CLOSED")) {
+            // An earlier document of this activity, replaced when the page started again, reports
+            // its close too.
+            if (messageAndParameter.length > 1
+                    && Integer.parseInt(messageAndParameter[1]) == mDocumentId)
+                documentClosed();
             return;
         }
 
-        beforeMessageFromWebView(message.split(" ", 2));
+        beforeMessageFromWebView(messageAndParameter);
     }
 
-    /**
-     * Call the post method form C++
-     */
-    public native void postMobileMessageNative(String message);
+    private native void postMobileMessageNative(int documentId, String message);
 
     /**
      * Close the document on the native side. Returns true when the engine still holds a loaded
-     * document, in which case postNativeMessage gets CLOSED once the engine has dropped it.
+     * document, in which case postNativeMessage gets "CLOSED <documentId>" once the engine has
+     * dropped it.
      */
-    private native boolean closeDocumentNative();
+    private native boolean closeDocumentNative(int documentId);
 
     /**
      * Passing messages from JS (instead of the websocket communication).
@@ -1737,7 +1758,7 @@ public class LOActivity extends AppCompatActivity {
             if (isFinishing() || isDestroyed() || !document.equals(getIntent().getData()))
                 return;
             for (String message : messages)
-                postMobileMessageNative(message);
+                postMobileMessageNative(mDocumentId, message);
         });
     }
 
@@ -1871,6 +1892,10 @@ public class LOActivity extends AppCompatActivity {
      */
     private boolean beforeMessageFromWebView(String[] messageAndParam) {
         switch (messageAndParam[0]) {
+            case "HULLO":
+                mDocumentId = connectDocument(mDocumentId);
+                mWebViewClient.setDocumentId(mDocumentId);
+                return false;
             case "BYE":
                 closeDocumentAndFinish();
                 return false;
@@ -2241,9 +2266,17 @@ public class LOActivity extends AppCompatActivity {
         intent.putExtra(LO_ACTION_DATA, data);
     }
 
-    public native void saveAs(String fileUri, String format, String options);
+    public void saveAs(String fileUri, String format, String options) {
+        saveAsNative(mDocumentId, fileUri, format, options);
+    }
 
-    public native void postUnoCommand(String command, String arguments, boolean bNotifyWhenFinished);
+    public void postUnoCommand(String command, String arguments, boolean bNotifyWhenFinished) {
+        postUnoCommandNative(mDocumentId, command, arguments, bNotifyWhenFinished);
+    }
+
+    private native void saveAsNative(int documentId, String fileUri, String format, String options);
+
+    private native void postUnoCommandNative(int documentId, String command, String arguments, boolean bNotifyWhenFinished);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -30,6 +30,9 @@ import java.util.Objects;
 public class COWebViewClient extends WebViewClient {
     private MobileSocket mobileSocket;
 
+    /** The number of the document the page shows, 0 before the document is opened. */
+    private volatile int mDocumentId = 0;
+
     public COWebViewClient() {
         super();
         mobileSocket = new MobileSocket();
@@ -88,7 +91,7 @@ public class COWebViewClient extends WebViewClient {
             return response(404, "Not Found");
         }
 
-        String mediaPath = getEmbeddedMediaPath(tag);
+        String mediaPath = getEmbeddedMediaPath(mDocumentId, tag);
 
         if (mediaPath.isEmpty()) {
             return response(404, "Not Found");
@@ -130,5 +133,9 @@ public class COWebViewClient extends WebViewClient {
         return mobileSocket;
     }
 
-    private native String getEmbeddedMediaPath(String tag);
+    public void setDocumentId(int documentId) {
+        mDocumentId = documentId;
+    }
+
+    private native String getEmbeddedMediaPath(int documentId, String tag);
 }
