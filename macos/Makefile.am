@@ -33,6 +33,7 @@ LANGS = $(basename $(notdir $(PO_FILES)))
 ## This runs as part of "make all"
 all-local: macos-localized-strings
 
+.PHONY: macos-localized-strings
 macos-localized-strings: $(BASE_STRINGS) $(PO_FILES)
 	@echo "Generating localized Main.strings from PO files"
 	@set -e; \
@@ -76,9 +77,18 @@ l10n: pot
 ## Cleanup helpers
 ## ------------------------------------------------------------
 
+## Icon sets that macos/coda/generate-document-icons.sh, an Xcode build-phase script, creates from
+## scratch under Assets.xcassets when Xcode builds the app:
+DOCUMENT_ICON_SETS = DocumentIcon SpreadsheetIcon PresentationIcon DrawingIcon
+
 clean-local:
 	@echo "Cleaning generated .strings files"
 	@set -e; \
 	for lang in $(LANGS); do \
-	    rm -f "$(CODA_DIR)/$$lang.lproj/Main.strings"; \
+	    rm -rf "$(CODA_DIR)/$$lang.lproj"; \
+	done
+	rm -rf "$(srcdir)/coda/coda.xcodeproj/project.xcworkspace" "$(srcdir)/coda/coda.xcodeproj/xcuserdata"
+	@set -e; \
+	for iconset in $(DOCUMENT_ICON_SETS); do \
+	    rm -rf "$(CODA_DIR)/Assets.xcassets/$$iconset.imageset"; \
 	done
