@@ -66,6 +66,27 @@ CPPUNIT_TEST_FIXTURE(Test, testFontFallbackSerif)
     CPPUNIT_ASSERT_EQUAL(sResolvedSerif, sPlexFallback);
 }
 
+// A font that a document brought with it stands in for nothing once it is gone.
+CPPUNIT_TEST_FIXTURE(Test, testFontTakenAwayAgainStandsInForNothing)
+{
+    // Given a name that no font on this machine answers to, and so stands in for another:
+    vcl::Font aFont(u"TestMetricsB"_ustr, Size(12, 12));
+    const OUString aBefore = GetFallbackFont(aFont);
+    CPPUNIT_ASSERT(!aBefore.isEmpty());
+
+    // When a font of that name is handed over and taken away again, the way a document that
+    // carries its own fonts does as it is opened and closed:
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    const OUString aUrl = createFileURL(u"carried-font.ttf");
+    CPPUNIT_ASSERT(!rMgr.addFontFile(aUrl).empty());
+    rMgr.removeFontFile(aUrl);
+
+    // Then the name stands in for what it stood in for before. Without the fix in place, the
+    // face of the font that was gone stayed among the ones the matching is made against, so the
+    // name matched itself and was left standing for a font no longer there.
+    CPPUNIT_ASSERT_EQUAL(aBefore, GetFallbackFont(aFont));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFontFallbackCaching)
 {
     // Given a vcl-level text layout, created for the serif Verdana:

@@ -176,6 +176,8 @@ public:
     static void release();
 
     void addFontSet( FcSetName );
+    void addFacesOfFile(std::string_view aFileName);
+    void dropFacesOfFile(std::string_view aFileName);
 
     FcFontSet* getFontSet();
     void replaceFontSet(FcFontSet* pFilteredFontSet);
@@ -213,6 +215,44 @@ FontCfgWrapper::FontCfgWrapper()
 #define FC_FONT_WRAPPER "fontwrapper"
 #endif
 
+namespace
+{
+/** Tells whether a face the configuration holds is one text can be laid out with.
+
+    Scalable fonts are usually outline fonts, but some bitmap fonts (like Noto Color Emoji) are
+    scalable as well. Type 1 faces and faces in a wrapper other than SFNT, among them WOFF and
+    WOFF2, are left out. */
+bool isFaceToLayOutWith(FcPattern* pPattern)
+{
+    // #i115131#
+    FcBool bScalable = FcFalse;
+    FcResult eScalableRes = FcPatternGetBool(pPattern, FC_SCALABLE, 0, &bScalable);
+    if ((eScalableRes != FcResultMatch) || (bScalable == FcFalse))
+        return false;
+
+    FcChar8* pFormat = nullptr;
+    FcResult eFormatRes = FcPatternGetString(pPattern, FC_FONTFORMAT, 0, &pFormat);
+    if ((eFormatRes == FcResultMatch) && (strcmp(reinterpret_cast<char*>(pFormat), "Type 1") == 0))
+        return false;
+
+    FcChar8* pWrapper = nullptr;
+    FcResult eWrapperRes = FcPatternGetString(pPattern, FC_FONT_WRAPPER, 0, &pWrapper);
+    if ((eWrapperRes == FcResultMatch) && (strcmp(reinterpret_cast<char*>(pWrapper), "SFNT") != 0))
+        return false;
+
+    return true;
+}
+
+/** Gives the path of the file a face comes from, empty where it states none. */
+std::string_view fileOfFace(FcPattern* pPattern)
+{
+    FcChar8* pFile = nullptr;
+    if (FcPatternGetString(pPattern, FC_FILE, 0, &pFile) != FcResultMatch)
+        return {};
+    return reinterpret_cast<char*>(pFile);
+}
+}
+
 void FontCfgWrapper::addFontSet( FcSetName eSetName )
 {
     // Add only acceptable fonts to our config, for future fontconfig use.
@@ -224,24 +264,7 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
     for( int i = 0; i < pOrig->nfont; ++i )
     {
         FcPattern* pPattern = pOrig->fonts[i];
-        // #i115131# ignore non-scalable fonts
-        // Scalable fonts are usually outline fonts, but some bitmaps fonts
-        // (like Noto Color Emoji) are also scalable.
-        FcBool bScalable = FcFalse;
-        FcResult eScalableRes = FcPatternGetBool(pPattern, FC_SCALABLE, 0, &bScalable);
-        if ((eScalableRes != FcResultMatch) || (bScalable == FcFalse))
-            continue;
-
-        // Ignore Type 1 fonts, too.
-        FcChar8* pFormat = nullptr;
-        FcResult eFormatRes = FcPatternGetString(pPattern, FC_FONTFORMAT, 0, &pFormat);
-        if ((eFormatRes == FcResultMatch) && (strcmp(reinterpret_cast<char*>(pFormat), "Type 1") == 0))
-            continue;
-
-        // Ignore any other non-SFNT wrapper format, including WOFF and WOFF2, too.
-        FcChar8* pWrapper = nullptr;
-        FcResult eWrapperRes = FcPatternGetString(pPattern, FC_FONT_WRAPPER, 0, &pWrapper);
-        if ((eWrapperRes == FcResultMatch) && (strcmp(reinterpret_cast<char*>(pWrapper), "SFNT") != 0))
+        if (!isFaceToLayOutWith(pPattern))
             continue;
 
         FcPatternReference( pPattern );
@@ -336,6 +359,51 @@ namespace
 
         return bIsDup;
     }
+}
+
+void FontCfgWrapper::addFacesOfFile(std::string_view aFileName)
+{
+    // Where there is no list yet it is built on first use, with this file among the others.
+    if (!m_pFontSet)
+        return;
+
+    FcFontSet* pApplication = FcConfigGetFonts(FcConfigGetCurrent(), FcSetApplication);
+    if (!pApplication)
+        return;
+
+    bool bAdded = false;
+    for (int i = 0; i < pApplication->nfont; ++i)
+    {
+        FcPattern* pPattern = pApplication->fonts[i];
+        if (fileOfFace(pPattern) != aFileName || !isFaceToLayOutWith(pPattern))
+            continue;
+
+        FcPatternReference(pPattern);
+        FcFontSetAdd(m_pFontSet, pPattern);
+        bAdded = true;
+    }
+
+    if (bAdded)
+        std::stable_sort(m_pFontSet->fonts, m_pFontSet->fonts + m_pFontSet->nfont, SortFont());
+}
+
+void FontCfgWrapper::dropFacesOfFile(std::string_view aFileName)
+{
+    if (!m_pFontSet)
+        return;
+
+    FcFontSet* pKept = FcFontSetCreate();
+    for (int i = 0; i < m_pFontSet->nfont; ++i)
+    {
+        FcPattern* pPattern = m_pFontSet->fonts[i];
+        if (fileOfFace(pPattern) == aFileName)
+            continue;
+
+        FcPatternReference(pPattern);
+        FcFontSetAdd(pKept, pPattern);
+    }
+
+    replaceFontSet(pKept);
 }
 
 FcFontSet* FontCfgWrapper::getFontSet()
@@ -838,10 +906,9 @@ void PrintFontManager::addFontconfigFile( const OString& rFileName )
     if( !bFileOk )
         return;
 
-    // FIXME: we want to add only the newly added font not re-add the whole
-    // application font set.
-    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    rWrapper.addFontSet( FcSetApplication );
+    // The list of faces kept beside the configuration gains the faces of this file, in the
+    // order the list is held in.
+    FontCfgWrapper::get().addFacesOfFile(rFileName);
 }
 
 void PrintFontManager::removeFontconfigFile(std::string_view aFileName)
@@ -873,8 +940,9 @@ void PrintFontManager::removeFontconfigFile(std::string_view aFileName)
                                reinterpret_cast<FcChar8 const*>(thisFilename.getStr()));
     }
 
-    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    rWrapper.addFontSet( FcSetApplication );
+    // The list of faces kept beside the configuration loses the faces of this file, so that it
+    // holds the same faces as the configuration itself.
+    FontCfgWrapper::get().dropFacesOfFile(aFileName);
 }
 
 static void addtopattern(FcPattern *pPattern,
