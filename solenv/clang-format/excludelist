@@ -5999,7 +5999,6 @@ include/vcl/bitmap.hxx
 include/vcl/builder.hxx
 include/vcl/builderfactory.hxx
 include/vcl/cairo.hxx
-include/vcl/canvastools.hxx
 include/vcl/checksum.hxx
 include/vcl/commandevent.hxx
 include/vcl/commandinfoprovider.hxx
@@ -14483,7 +14482,6 @@ vcl/source/graphic/UnoGraphicDescriptor.cxx
 vcl/source/graphic/UnoGraphicObject.cxx
 vcl/source/graphic/UnoGraphicProvider.cxx
 vcl/source/helper/canvasbitmap.cxx
-vcl/source/helper/canvastools.cxx
 vcl/source/helper/commandinfoprovider.cxx
 vcl/source/helper/displayconnectiondispatch.cxx
 vcl/source/helper/evntpost.cxx

@@ -27,142 +27,146 @@
 
 class Point;
 class Size;
-namespace tools { class Rectangle; }
+namespace tools
+{
+class Rectangle;
+}
 class Bitmap;
 class Color;
 
 namespace basegfx
 {
-    class B2DVector;
-    class B2DPoint;
-    class B2DRange;
-    class B2IPoint;
-    class B2IRange;
-    class B2DSize;
+class B2DVector;
+class B2DPoint;
+class B2DRange;
+class B2IPoint;
+class B2IRange;
+class B2DSize;
 }
 
 namespace com::sun::star::geometry
 {
-    struct RealSize2D;
-    struct IntegerPoint2D;
-    struct IntegerSize2D;
-    struct IntegerRectangle2D;
+struct RealSize2D;
+struct IntegerPoint2D;
+struct IntegerSize2D;
+struct IntegerRectangle2D;
 }
 
 namespace com::sun::star::rendering
 {
-    class  XBitmap;
-    class  XIntegerReadOnlyBitmap;
+class XBitmap;
+class XIntegerReadOnlyBitmap;
 }
 
-namespace com::sun::star::rendering { class XColorSpace; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::rendering
+{
+class XColorSpace;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
 
 namespace vcl::unotools
 {
-        // Bitmap conversions
+// Bitmap conversions
 
+/** Create an XBitmap from VCL Bitmap(
+ */
+css::uno::Reference<css::rendering::XBitmap>
+    VCL_DLLPUBLIC xBitmapFromBitmap(const ::Bitmap& inputBitmap);
 
-        /** Create an XBitmap from VCL Bitmap(
+/** Create a Bitmap from an XBitmap
          */
-        css::uno::Reference< css::rendering::XBitmap >
-            VCL_DLLPUBLIC xBitmapFromBitmap( const ::Bitmap& inputBitmap );
+::Bitmap VCL_DLLPUBLIC
+bitmapFromXBitmap(const css::uno::Reference<css::rendering::XIntegerReadOnlyBitmap>& xInputBitmap);
 
-        /** Create a Bitmap from an XBitmap
-         */
-        ::Bitmap VCL_DLLPUBLIC bitmapFromXBitmap( const css::uno::Reference< css::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
+// Color conversions (vcl/tools Color <-> canvas standard color space)
 
-        // Color conversions (vcl/tools Color <-> canvas standard color space)
+/** Create a device-specific color sequence from VCL/Tools color
 
+    Note that this method assumes a color space equivalent to
+    the one returned from createStandardColorSpace()
+ */
+css::uno::Sequence<double> VCL_DLLPUBLIC colorToStdColorSpaceSequence(const Color& rColor);
 
-        /** Create a device-specific color sequence from VCL/Tools color
+/** Convert color to device color sequence
 
-            Note that this method assumes a color space equivalent to
-            the one returned from createStandardColorSpace()
-         */
-        css::uno::Sequence< double >
-            VCL_DLLPUBLIC colorToStdColorSpaceSequence( const Color& rColor );
+    @param rColor
+    Color to convert
 
-        /** Convert color to device color sequence
+    @param xColorSpace
+    Color space to convert into
+ */
+css::uno::Sequence<double> VCL_DLLPUBLIC colorToDoubleSequence(
+    const Color& rColor, const css::uno::Reference<css::rendering::XColorSpace>& xColorSpace);
 
-            @param rColor
-            Color to convert
+/** Convert from standard device color space to VCL/Tools color
 
-            @param xColorSpace
-            Color space to convert into
-         */
-        css::uno::Sequence< double >
-        VCL_DLLPUBLIC colorToDoubleSequence( const Color&                                              rColor,
-                                             const css::uno::Reference< css::rendering::XColorSpace >& xColorSpace );
+    Note that this method assumes a color space equivalent to
+    the one returned from createStandardColorSpace()
+ */
+Color VCL_DLLPUBLIC stdColorSpaceSequenceToColor(const css::uno::Sequence<double>& rColor);
 
-        /** Convert from standard device color space to VCL/Tools color
+/** Convert color to device color sequence
 
-            Note that this method assumes a color space equivalent to
-            the one returned from createStandardColorSpace()
-         */
-        Color VCL_DLLPUBLIC stdColorSpaceSequenceToColor(
-            const css::uno::Sequence< double >& rColor );
+    @param rColor
+    Color sequence to convert from
 
-        /** Convert color to device color sequence
+    @param xColorSpace
+    Color space to convert from
+ */
+Color VCL_DLLPUBLIC
+doubleSequenceToColor(const css::uno::Sequence<double>& rColor,
+                      const css::uno::Reference<css::rendering::XColorSpace>& xColorSpace);
 
-            @param rColor
-            Color sequence to convert from
+/// Convert [0,1] double value to [0,255] int
+inline sal_Int8 toByteColor(double val)
+{
+    return sal::static_int_cast<sal_Int8>(basegfx::fround(val * 255.0));
+}
 
-            @param xColorSpace
-            Color space to convert from
-         */
-        Color VCL_DLLPUBLIC doubleSequenceToColor( const css::uno::Sequence< double >& rColor,
-                                                   const css::uno::Reference< css::rendering::XColorSpace >& xColorSpace );
+/// Convert [0,255] int value to [0,1] double value
+inline double toDoubleColor(sal_uInt8 val) { return val / 255.0; }
 
-        /// Convert [0,1] double value to [0,255] int
-        inline sal_Int8 toByteColor( double val )
-        {
-            return sal::static_int_cast<sal_Int8>(
-                basegfx::fround(val*255.0));
-        }
+/// Create a standard color space suitable for VCL RGB color
+css::uno::Reference<css::rendering::XColorSpace> VCL_DLLPUBLIC createStandardColorSpace();
 
-        /// Convert [0,255] int value to [0,1] double value
-        inline double toDoubleColor( sal_uInt8 val )
-        {
-            return val / 255.0;
-        }
+// Geometry conversions (vcl/tools <-> x)
 
-        /// Create a standard color space suitable for VCL RGB color
-        css::uno::Reference< css::rendering::XColorSpace> VCL_DLLPUBLIC createStandardColorSpace();
+// geometry::Real
+css::geometry::RealSize2D VCL_DLLPUBLIC size2DFromSize(const Size&);
 
-        // Geometry conversions (vcl/tools <-> x)
+Size VCL_DLLPUBLIC sizeFromRealSize2D(const css::geometry::RealSize2D&);
 
+// geometry::Integer
+css::geometry::IntegerSize2D VCL_DLLPUBLIC integerSize2DFromSize(const Size&);
 
-        // geometry::Real
-        css::geometry::RealSize2D          VCL_DLLPUBLIC size2DFromSize( const Size& );
+Size VCL_DLLPUBLIC sizeFromIntegerSize2D(const css::geometry::IntegerSize2D&);
+Point VCL_DLLPUBLIC pointFromIntegerPoint2D(const css::geometry::IntegerPoint2D&);
+tools::Rectangle VCL_DLLPUBLIC
+rectangleFromIntegerRectangle2D(const css::geometry::IntegerRectangle2D&);
 
-        Size                               VCL_DLLPUBLIC sizeFromRealSize2D( const css::geometry::RealSize2D& );
+// basegfx::B2D
+Size VCL_DLLPUBLIC sizeFromB2DSize(const basegfx::B2DVector&);
+Point VCL_DLLPUBLIC pointFromB2DPoint(const basegfx::B2DPoint&);
+tools::Rectangle VCL_DLLPUBLIC rectangleFromB2DRectangle(const basegfx::B2DRange&);
 
-        // geometry::Integer
-        css::geometry::IntegerSize2D       VCL_DLLPUBLIC integerSize2DFromSize( const Size& );
+VCL_DLLPUBLIC basegfx::B2DSize b2DSizeFromSize(const Size& rSize);
+VCL_DLLPUBLIC basegfx::B2DVector b2DVectorFromSize(const Size& rSize);
+basegfx::B2DPoint VCL_DLLPUBLIC b2DPointFromPoint(const Point&);
+basegfx::B2DRange VCL_DLLPUBLIC b2DRectangleFromRectangle(const tools::Rectangle&);
 
-        Size                               VCL_DLLPUBLIC sizeFromIntegerSize2D( const css::geometry::IntegerSize2D& );
-        Point                              VCL_DLLPUBLIC pointFromIntegerPoint2D( const css::geometry::IntegerPoint2D& );
-        tools::Rectangle                          VCL_DLLPUBLIC rectangleFromIntegerRectangle2D( const css::geometry::IntegerRectangle2D& );
-
-        // basegfx::B2D
-        Size                        VCL_DLLPUBLIC sizeFromB2DSize( const basegfx::B2DVector& );
-        Point                       VCL_DLLPUBLIC pointFromB2DPoint( const basegfx::B2DPoint& );
-        tools::Rectangle                   VCL_DLLPUBLIC rectangleFromB2DRectangle( const basegfx::B2DRange& );
-
-        VCL_DLLPUBLIC basegfx::B2DSize b2DSizeFromSize(const Size& rSize);
-        VCL_DLLPUBLIC basegfx::B2DVector b2DVectorFromSize(const Size& rSize);
-        basegfx::B2DPoint           VCL_DLLPUBLIC b2DPointFromPoint( const Point& );
-        basegfx::B2DRange           VCL_DLLPUBLIC b2DRectangleFromRectangle( const tools::Rectangle& );
-
-        // basegfx::B2I
-        Point                       VCL_DLLPUBLIC pointFromB2IPoint( const basegfx::B2IPoint& );
-        tools::Rectangle                   VCL_DLLPUBLIC rectangleFromB2IRectangle( const basegfx::B2IRange& );
-        basegfx::B2IPoint           VCL_DLLPUBLIC b2IPointFromPoint(const Point&);
-        basegfx::B2IRectangle       VCL_DLLPUBLIC b2IRectangleFromRectangle(const tools::Rectangle&);
-        basegfx::B2IRectangle       VCL_DLLPUBLIC b2IRectangleFromClosedRectangle(const tools::Rectangle&);
-
+// basegfx::B2I
+Point VCL_DLLPUBLIC pointFromB2IPoint(const basegfx::B2IPoint&);
+tools::Rectangle VCL_DLLPUBLIC rectangleFromB2IRectangle(const basegfx::B2IRange&);
+basegfx::B2IPoint VCL_DLLPUBLIC b2IPointFromPoint(const Point&);
+basegfx::B2IRectangle VCL_DLLPUBLIC b2IRectangleFromRectangle(const tools::Rectangle&);
+basegfx::B2IRectangle VCL_DLLPUBLIC b2IRectangleFromClosedRectangle(const tools::Rectangle&);
 }
 
 #endif // INCLUDED_VCL_CANVASTOOLS_HXX
