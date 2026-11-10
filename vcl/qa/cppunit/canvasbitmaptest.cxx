@@ -401,12 +401,6 @@ private:
         return maComponentTags;
     }
 
-    virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties() override
-    {
-        CPPUNIT_ASSERT_MESSAGE("getProperties: method not implemented", false );
-        return uno::Sequence< ::beans::PropertyValue >();
-    }
-
     virtual uno::Sequence< double > SAL_CALL convertColorSpace( const uno::Sequence< double >&,
                                                                 const uno::Reference< rendering::XColorSpace >& ) override
     {

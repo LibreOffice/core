@@ -62,18 +62,6 @@ interface XColorSpace
      */
     sequence<byte>           getComponentTags();
 
-    /** Query various optional properties from the color space.<p>
-
-        If this color space has an ICC color profile, the sequence
-        contains an element named ICCProfile. Some color spaces also
-        have properties Gamma, Whitepoint and Blackpoint. Background
-        information for these is available <a
-        href="http://en.wikipedia.org/wiki/Color_temperature">here</a>.
-     */
-    sequence< ::com::sun::star::beans::PropertyValue > getProperties();
-
-
-
     /** Convert to color of another color space.<p>
 
         @param deviceColor Sequence of device color components. Is

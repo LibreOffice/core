@@ -377,10 +377,6 @@ private:
     {
         return m_aComponentTags;
     }
-    virtual uno::Sequence<beans::PropertyValue> SAL_CALL getProperties() override
-    {
-        return uno::Sequence<beans::PropertyValue>();
-    }
     virtual uno::Sequence<double> SAL_CALL
     convertColorSpace(const uno::Sequence<double>& deviceColor,
                       const uno::Reference<rendering::XColorSpace>& targetColorSpace) override

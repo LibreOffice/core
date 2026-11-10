@@ -568,11 +568,6 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::getComponentTags(  )
     return m_aComponentTags;
 }
 
-uno::Sequence< ::beans::PropertyValue > SAL_CALL VclCanvasBitmap::getProperties(  )
-{
-    return uno::Sequence< ::beans::PropertyValue >();
-}
-
 uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertColorSpace( const uno::Sequence< double >& deviceColor,
                                                                      const uno::Reference< ::rendering::XColorSpace >& targetColorSpace )
 {

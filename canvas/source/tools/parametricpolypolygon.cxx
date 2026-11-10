@@ -24,6 +24,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
 #include <parametricpolypolygon.hxx>
