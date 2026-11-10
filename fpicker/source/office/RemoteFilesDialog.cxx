@@ -312,6 +312,8 @@ int RemoteFilesDialog::GetSelectedServicePos()
     int i = -1;
 
     int nSelected = m_xServices_lb->get_active();
+    if(nSelected == -1)
+        return -1;
 
     int nServices = static_cast<int>(m_aServices.size());
     while( nPos < nServices )
