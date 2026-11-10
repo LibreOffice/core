@@ -269,7 +269,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         {
             if( pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
             {
-                SfxPrinter *pTempPrinter = pDocShell->GetPrinter( true );
+                // tdf#42673 - do not create the possibly unreachable printer for the default value
+                SfxPrinter* pTempPrinter = pDocShell->GetPrinter(bPreferPrinterPapersize);
                 if (pTempPrinter)
                     pTempPrinter->SetPrinterSettingsPreferred( bPreferPrinterPapersize );
             }
