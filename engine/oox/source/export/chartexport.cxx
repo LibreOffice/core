@@ -25,6 +25,7 @@
 #include <oox/export/chartgeographyexport.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/token/relationship.hxx>
+#include <oox/token/tokenmap.hxx>
 #include <oox/export/utils.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
 #include <oox/drawingml/chart/datasourcemodel.hxx>
@@ -105,6 +106,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/util/XTheme.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
@@ -134,6 +136,8 @@
 #include <docmodel/uno/UnoChartStyle.hxx>
 #include <docmodel/styles/ChartColorStyle.hxx>
 #include <docmodel/uno/UnoChartColorStyle.hxx>
+#include <docmodel/theme/Theme.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 
 #include <oox/export/ThemeExport.hxx>
 #include <sax/fastattribs.hxx>
@@ -1120,6 +1124,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     }
 
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
+    readChartExtras(xShapeProps);
 
     pFS->startElementNS(mnXmlNamespace, XML_graphicFrame);
     if (GetDocumentType() != DOCUMENT_DOCX)
@@ -1436,7 +1441,70 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     pColorStyle->endDocument();
 
+    writeThemeOverride(pChartFS, sFullPath, nChartCount);
+
     pChart->endDocument();
+}
+
+void ChartExport::readChartExtras(const Reference<XPropertySet>& xShapeProps)
+{
+    mxThemeOverride.clear();
+    maColorMapOverride = Sequence<PropertyValue>();
+
+    if (!GetProperty(xShapeProps, u"InteropGrabBag"_ustr))
+        return;
+
+    Sequence<PropertyValue> aGrabBag;
+    mAny >>= aGrabBag;
+
+    for (const PropertyValue& rProperty : aGrabBag)
+    {
+        if (rProperty.Name == "ChartThemeOverride")
+            rProperty.Value >>= mxThemeOverride;
+        else if (rProperty.Name == "ChartColorMapOverride")
+            rProperty.Value >>= maColorMapOverride;
+    }
+}
+
+void ChartExport::writeColorMapOverride()
+{
+    if (!maColorMapOverride.hasElements())
+        return;
+
+    auto pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+    for (const PropertyValue& rEntry : maColorMapOverride)
+    {
+        OUString aSlot;
+        rEntry.Value >>= aSlot;
+        pAttrList->add(TokenMap::getTokenFromUnicode(rEntry.Name), aSlot);
+    }
+
+    GetFS()->singleElementNS(XML_c, XML_clrMapOvr, pAttrList);
+}
+
+void ChartExport::writeThemeOverride(const FSHelperPtr& pChartFS, const char* pChartFolder,
+                                     sal_Int32 nChartCount)
+{
+    auto* pUnoTheme = dynamic_cast<UnoTheme*>(mxThemeOverride.get());
+    if (!pUnoTheme || !pUnoTheme->getTheme())
+        return;
+
+    // The part sits beside the theme of the document, and the chart points at it by a
+    // relationship of its own.
+    const OUString aNumber = OUString::number(nChartCount);
+    const OUString aFullStream
+        = OUString::createFromAscii(pChartFolder).replaceAll(u"charts/", u"theme/")
+          + "themeOverride" + aNumber + ".xml";
+    const OUString aRelativeStream = "../theme/themeOverride" + aNumber + ".xml";
+
+    OUString aId;
+    FSHelperPtr pThemeOverride = CreateOutputStream(
+        aFullStream, aRelativeStream, pChartFS->getOutputStream(),
+        u"application/vnd.openxmlformats-officedocument.themeOverride+xml"_ustr,
+        oox::getRelationship(Relationship::THEMEOVERRIDE), &aId);
+
+    ThemeExport aThemeExport(mpFB, GetDocumentType(), pThemeOverride);
+    aThemeExport.writeOverride(*pUnoTheme->getTheme());
 }
 
 void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XChartDocument > & xChartDoc )
@@ -1578,6 +1646,8 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
             pFS->singleElement(FSNS(XML_c, XML_style), XML_val,
                     OUString::number(nStyleIdx));
         }
+
+        writeColorMapOverride();
     }
 
     //XML_chart

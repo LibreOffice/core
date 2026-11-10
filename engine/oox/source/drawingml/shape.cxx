@@ -59,6 +59,7 @@
 #include <oox/mathml/imexport.hxx>
 #include <oox/mathml/importutils.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/tokenmap.hxx>
 #include "diagram/datamodel_oox.hxx"
 #include <oox/drawingml/diagram/diagramhelper_oox.hxx>
 
@@ -136,6 +137,7 @@
 #include <svx/sdtfsitm.hxx>
 #include <oox/drawingml/diagram/diagram.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/uno/UnoBlurEffect.hxx>
 #include <docmodel/uno/UnoGlowEffect.hxx>
 #include <docmodel/uno/UnoInnerShadowEffect.hxx>
@@ -667,6 +669,33 @@ void Shape::applyShapeReference(const Shape& rReferencedShape, ReferencedShapeTe
 }
 
 namespace {
+
+/** The name a chart gives a colour, paired with the slot of the theme the name stands for while
+    the chart says nothing else about it. */
+constexpr std::pair<sal_Int32, sal_Int32> constColorMapNames[] = {
+    { XML_bg1, XML_lt1 },         { XML_tx1, XML_dk1 },         { XML_bg2, XML_lt2 },
+    { XML_tx2, XML_dk2 },         { XML_accent1, XML_accent1 }, { XML_accent2, XML_accent2 },
+    { XML_accent3, XML_accent3 }, { XML_accent4, XML_accent4 }, { XML_accent5, XML_accent5 },
+    { XML_accent6, XML_accent6 }, { XML_hlink, XML_hlink },     { XML_folHlink, XML_folHlink }
+};
+
+/** Writes a colour map down as the name of each colour beside the name of the slot it stands
+    for. */
+Sequence<PropertyValue> lcl_colorMapToProperties(ClrMap& rColorMap)
+{
+    Sequence<PropertyValue> aProperties(std::size(constColorMapNames));
+    PropertyValue* pProperty = aProperties.getArray();
+    for (const auto& rName : constColorMapNames)
+    {
+        sal_Int32 nSlot = rName.first;
+        if (!rColorMap.getColorMap(nSlot))
+            nSlot = rName.second;
+        pProperty->Name = TokenMap::getUnicodeTokenName(rName.first);
+        pProperty->Value <<= TokenMap::getUnicodeTokenName(nSlot);
+        ++pProperty;
+    }
+    return aProperties;
+}
 
 struct ActionLockGuard
 {
@@ -3136,6 +3165,13 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         new ThemeOverrideFragmentHandler(rFilter, aThemeOverrideFragmentPath, *pThemeOverride, *pThemeOverride->getTheme()),
                         xDoc);
                     pPowerPointImport->getActualSlidePersist()->setTheme(pThemeOverride);
+
+                    // The colour scheme a chart carries of its own is kept beside the chart, so
+                    // that a colour the chart states by name resolves against the same scheme
+                    // after the document is written out again.
+                    putPropertyToGrabBag(
+                        u"ChartThemeOverride"_ustr,
+                        Any(model::theme::createXTheme(pThemeOverride->getTheme())));
                 }
 
                 // convert imported chart model to chart document
@@ -3179,6 +3215,15 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         // Restore the original theme.
                         pPowerPointImport->getActualSlidePersist()->setTheme(pTheme);
                     }
+
+                    // The chart states the colours it uses by name, and maps each name to a slot
+                    // of the theme its own way. The map is kept beside the chart, so that the
+                    // same names stand for the same slots once the document has been written out
+                    // again.
+                    if (aModel.mpClrMap)
+                        putPropertyToGrabBag(u"ChartColorMapOverride"_ustr,
+                                             Any(lcl_colorMapToProperties(*aModel.mpClrMap)));
+
                     // Restore the original color map
                     pPowerPointImport->getActualSlidePersist()->setClrMap(std::move(pClrMap));
                 }

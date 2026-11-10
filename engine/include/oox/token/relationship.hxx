@@ -76,6 +76,7 @@ enum class Relationship
     STYLES,
     TABLESTYLES,
     THEME,
+    THEMEOVERRIDE,
     VBAPROJECT,
     VIDEO,
     AUDIO,

@@ -25,7 +25,9 @@
 
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
+#include <com/sun/star/util/XTheme.hpp>
 #include <oox/dllapi.h>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
@@ -160,6 +162,14 @@ private:
     cpo::uno::Reference< css::chart::XDiagram > mxDiagram;
     cpo::uno::Reference< css::chart2::XDiagram > mxNewDiagram;
     std::shared_ptr<URLTransformer> mpURLTransformer;
+
+    /** The colour scheme the chart carries of its own, or an empty reference when it goes by
+        the one of the document. */
+    cpo::uno::Reference< css::util::XTheme > mxThemeOverride;
+
+    /** The name of each colour the chart states beside the name of the slot of the theme it
+        stands for, or nothing when the chart leaves that to the page it sits on. */
+    cpo::uno::Sequence< css::beans::PropertyValue > maColorMapOverride;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
     bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
@@ -333,6 +343,11 @@ private:
 
     static void writeChartDim(const ::sax_fastparser::FSHelperPtr& pFS, const ChartDimInfo& rInfo,
             bool *bIsCat /* output var: is this category data? */);
+
+    void readChartExtras(const cpo::uno::Reference<css::beans::XPropertySet>& xShapeProps);
+    void writeColorMapOverride();
+    void writeThemeOverride(const ::sax_fastparser::FSHelperPtr& pChartFS,
+            const char* pChartFolder, sal_Int32 nChartCount);
 public:
 
     OOX_DLLPUBLIC ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, cpo::uno::Reference< css::frame::XModel > const & xModel,

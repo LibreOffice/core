@@ -44,9 +44,11 @@ public:
                 sax_fastparser::FSHelperPtr pFS = nullptr);
 
     void write(OUString const& rPath, model::Theme const& rTheme);
+    void writeOverride(model::Theme const& rTheme);
     void writeComplexColor(model::ComplexColor const& rComplexColor);
 
 private:
+    void writeThemeElements(model::Theme const& rTheme);
     bool writeColorSet(model::Theme const& rTheme);
     bool writeFontScheme(model::FontScheme const& rFontScheme);
     bool writeFormatScheme(model::FormatScheme const& rFormatScheme);

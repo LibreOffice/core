@@ -673,6 +673,32 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartLeavesThePageItsOwnColors)
                 u"4F81BD");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartKeepsItsOwnColorScheme)
+{
+    // A chart can carry a colour scheme of its own and give the slots of that scheme names of
+    // its own choosing. Both come back after a save.
+    loadFromFile(u"pptx/tdf105517.pptx");
+    save(TestFilter::PPTX);
+
+    // Without the fix: the scheme of the chart was written nowhere, so the colours the chart
+    // states by name were resolved against the scheme of the page.
+    xmlDocUniquePtr pXmlDocOverride = parseExport(u"ppt/theme/themeOverride1.xml"_ustr);
+    assertXPath(pXmlDocOverride, "/a:themeOverride/a:clrScheme/a:accent1/a:srgbClr", "val",
+                u"F0AB00");
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/charts/_rels/chart1.xml.rels"_ustr);
+    assertXPath(
+        pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='../theme/themeOverride1.xml']",
+        "Type",
+        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/themeOverride");
+
+    // Without the fix: the names went out unmapped, so each of them stood for the slot the page
+    // gives it rather than the one the chart gives it.
+    xmlDocUniquePtr pXmlDocChart = parseExport(u"ppt/charts/chart1.xml"_ustr);
+    assertXPath(pXmlDocChart, "/c:chartSpace/c:clrMapOvr", "bg1", u"lt1");
+    assertXPath(pXmlDocChart, "/c:chartSpace/c:clrMapOvr", "tx2", u"dk2");
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf115558_footnote_chart)
 {
     // For now Linux and Windows behavior is different, Writer on Linux

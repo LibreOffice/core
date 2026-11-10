@@ -71,7 +71,27 @@ void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
                          mpFilterBase->getNamespaceURL(OOX_NS(officeRel)), XML_name, aThemeName);
 
     mpFS->startElementNS(XML_a, XML_themeElements);
+    writeThemeElements(rTheme);
+    mpFS->endElementNS(XML_a, XML_themeElements);
+    mpFS->endElementNS(XML_a, XML_theme);
 
+    mpFS->endDocument();
+}
+
+void ThemeExport::writeOverride(model::Theme const& rTheme)
+{
+    mpFS->startElementNS(XML_a, XML_themeOverride, FSNS(XML_xmlns, XML_a),
+                         mpFilterBase->getNamespaceURL(OOX_NS(dml)));
+
+    writeThemeElements(rTheme);
+
+    mpFS->endElementNS(XML_a, XML_themeOverride);
+
+    mpFS->endDocument();
+}
+
+void ThemeExport::writeThemeElements(model::Theme const& rTheme)
+{
     const auto& pColorSet = rTheme.getColorSet();
 
     mpFS->startElementNS(XML_a, XML_clrScheme, XML_name,
@@ -88,11 +108,6 @@ void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
     mpFS->startElementNS(XML_a, XML_fmtScheme);
     writeFormatScheme(rFormatScheme);
     mpFS->endElementNS(XML_a, XML_fmtScheme);
-
-    mpFS->endElementNS(XML_a, XML_themeElements);
-    mpFS->endElementNS(XML_a, XML_theme);
-
-    mpFS->endDocument();
 }
 
 namespace
