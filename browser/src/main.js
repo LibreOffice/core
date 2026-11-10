@@ -352,6 +352,14 @@ if (window.ThisIsTheEmscriptenApp) {
 					if (!result.fileInfo.UserCanWrite)
 						app.setPermission('readonly');
 					map.fire('wopiprops', result.fileInfo);
+				} else {
+					// coolwsd sends the file properties since I8848669273ed6b50d8869b25fa32f9ef654c1b8f.
+					map.once('docloaded', function() {
+						const text = _('This server is too old for %APP, so some features may not work.');
+						const advice = _('Please ask the administrator to update it.');
+						const message = text.replace('%APP', window.brandProductName) + ' ' + advice;
+						map.uiManager.showSnackbar(message, null, null, -1, false, true);
+					});
 				}
 				initUI();
 				window.app.console.log('CODA: fetch URL: ' + result.url);
