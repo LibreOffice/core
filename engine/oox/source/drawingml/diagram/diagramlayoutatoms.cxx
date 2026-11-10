@@ -10175,8 +10175,19 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             const double fStep(bWholeRing || nPlaces < 2
                                    ? static_cast<double>(nSpanAngle) / nPlaces
                                    : static_cast<double>(nSpanAngle) / (nPlaces - 1));
+            // a connector between two nodes stands inside the ring, so only the nodes reach out
+            std::vector<bool> aConnectorAt;
+            if (!bMiddleCounts)
+                for (const auto& rCycleChild : aCycleChildren)
+                    if (!aSpansTheCircle(rCycleChild))
+                        aConnectorAt.push_back(rCycleChild->getSubType() == XML_conn);
+            const bool bNodeOnRing(std::find(aConnectorAt.begin(), aConnectorAt.end(), false)
+                                   != aConnectorAt.end());
             for (sal_Int32 nPlace = 0; nPlace < nPlaces; ++nPlace)
             {
+                if (bNodeOnRing && nPlace < static_cast<sal_Int32>(aConnectorAt.size())
+                    && aConnectorAt[nPlace])
+                    continue;
                 const double fAt(basegfx::deg2rad(nPlace * fStep + nStartAngle));
                 fLeast = std::min(fLeast, sin(fAt));
                 fMost = std::max(fMost, sin(fAt));
@@ -10818,6 +10829,15 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         nPlainHeight = static_cast<sal_Int32>(fWidth * fHeightOfWidth);
                         aChildSize = aLargestChild();
                         fRadius = fRingOfWidth * fWidth;
+                        // the sibSp is the least the nodes stand apart: two nodes on one line
+                        // across the side that settles their size move apart until the room is
+                        // full the other way too
+                        if (fReachY < 0.01 && fReachX > 0.01)
+                            fRadius = std::max(
+                                fRadius, (rShape->getSize().Width - aChildSize.Width) / fReachX);
+                        else if (fReachX < 0.01 && fReachY > 0.01)
+                            fRadius = std::max(
+                                fRadius, (rShape->getSize().Height - aChildSize.Height) / fReachY);
                         if (bBoxes)
                             fBoxRingSibling = fSiblingPart;
                     }
@@ -11367,6 +11387,61 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             break;
                         }
                         nCurrRadius = nConnectorRadius;
+                        // with radial ends, begPts and endPts radial, the connector on a ring of
+                        // other nodes than boxes runs between where its two nodes cross the
+                        // ring, Basic_Cycle with two nodes: their chord is further out than the
+                        // one between the nodes' middles
+                        const AlgAtom* pConnectorAlg(nullptr);
+                        {
+                            const auto& rRingNodes(layoutNodesBelow(rDgm, mrLayoutNode));
+                            const auto aNode = rRingNodes.find(aCurrShape->getInternalName());
+                            rtl::Reference<svx::diagram::Point> xConnectorPoint;
+                            for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                                if (rEntry.second == aCurrShape)
+                                {
+                                    xConnectorPoint = rEntry.first;
+                                    break;
+                                }
+                            if (aNode != rRingNodes.end() && aNode->second)
+                                pConnectorAlg
+                                    = algorithmOf(rDgm, *aNode->second, xConnectorPoint);
+                        }
+                        const auto aPointsOf = [pConnectorAlg](sal_Int32 nType) {
+                            const auto aFound = pConnectorAlg->getMap().find(nType);
+                            return aFound == pConnectorAlg->getMap().end() ? 0 : aFound->second;
+                        };
+                        const auto aRingNode = std::find_if(
+                            aCycleChildren.begin(), aCycleChildren.end(),
+                            [&aSpansTheCircle](const oox::drawingml::ShapePtr& rChild) {
+                                return rChild->getSubType() != XML_conn
+                                       && !aSpansTheCircle(rChild);
+                            });
+                        if (fBoxRingSibling <= 0.0 && pConnectorAlg
+                            && pConnectorAlg->getType() == XML_conn
+                            && aPointsOf(XML_begPts) == XML_radial
+                            && aPointsOf(XML_endPts) == XML_radial
+                            && aRingNode != aCycleChildren.end() && nRadius > 0)
+                        {
+                            const awt::Size aNode(aSizeOfChild((*aRingNode)->getInternalName(),
+                                                               nPlainWidth, nPlainHeight));
+                            const double fEdge(aEdgeAlong(*aRingNode, aNode, 0.0));
+                            // the turn from a node's middle to where it crosses the ring
+                            const double fCross(
+                                2.0 * std::asin(std::min(1.0, fEdge / (2.0 * nRadius))));
+                            const double fHalf(basegfx::deg2rad(std::abs(fStep)) - fCross);
+                            if (fHalf > 0.0)
+                            {
+                                nCurrRadius = static_cast<sal_Int32>(nRadius * cos(fHalf));
+                                if (!aPadsStated.count(aCurrShape->getInternalName()))
+                                {
+                                    aCurrSize.Width = static_cast<sal_Int32>(
+                                        2.0 * nRadius * sin(fHalf) * (1.0 - 0.47));
+                                    const_cast<SmartArtDiagram&>(rDgm)
+                                        .getLaidOutSideways()
+                                        .insert(aCurrShape.get());
+                                }
+                            }
+                        }
                     }
                     const awt::Point aCurrPos(
                         aArrowMiddle ? aArrowMiddle->Width - aCurrSize.Width / 2

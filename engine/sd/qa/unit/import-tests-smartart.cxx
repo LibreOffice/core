@@ -3162,6 +3162,55 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeSizeByPointTypeShrinksWithThe
     CPPUNIT_ASSERT_LESS(0.8 * xDiagram->getSize().Height, double(aNode.Height));
 }
 
+// the shapes of a Diagram drawn with the given geometry, by their drawn boxes
+static std::vector<tools::Rectangle> drawnBoxesOf(const uno::Reference<drawing::XShape>& xDiagram,
+                                                  const OUString& rGeometry)
+{
+    std::vector<uno::Reference<drawing::XShape>> aShapes;
+    collectShapesWithGeometry(xDiagram, rGeometry, aShapes);
+    std::vector<tools::Rectangle> aBoxes;
+    for (const auto& xShape : aShapes)
+        aBoxes.push_back(SdrObject::getSdrObjectFromXShape(xShape)->GetSnapRect());
+    return aBoxes;
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRingOfThreeStandsInItsWideFrame)
+{
+    // the connectors between the three nodes stand inside the ring, so the ring reaches down
+    // only half way below its middle and fills the height of the frame from its top
+    createSdImpressDoc("pptx/smartart-ring-of-three-in-a-wide-frame.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    const tools::Rectangle aFrame(drawnBoxesOf(xDiagram, u"ooxml-rect"_ustr).at(0));
+    const std::vector<tools::Rectangle> aNodes(drawnBoxesOf(xDiagram, u"ooxml-ellipse"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aNodes.size());
+    for (const tools::Rectangle& rNode : aNodes)
+    {
+        CPPUNIT_ASSERT_GREATEREQUAL(aFrame.Top() - 10, rNode.Top());
+        CPPUNIT_ASSERT_LESSEQUAL(aFrame.Bottom() + 10, rNode.Bottom());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRingOfTwoWithRadialEnds)
+{
+    // two nodes on a line across the frame stand apart as far as the frame lets them, and the
+    // arrows with radial ends run between where the nodes cross the ring, above and below
+    createSdImpressDoc("pptx/smartart-ring-of-two-radial-ends.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    const tools::Rectangle aFrame(drawnBoxesOf(xDiagram, u"ooxml-rect"_ustr).at(0));
+    const std::vector<tools::Rectangle> aNodes(drawnBoxesOf(xDiagram, u"ooxml-ellipse"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aNodes.size());
+    CPPUNIT_ASSERT_LESS(tools::Long(20), std::abs(std::min(aNodes[0].Left(), aNodes[1].Left())
+                                                  - aFrame.Left()));
+    CPPUNIT_ASSERT_LESS(tools::Long(20), std::abs(std::max(aNodes[0].Right(), aNodes[1].Right())
+                                                  - aFrame.Right()));
+    const std::vector<tools::Rectangle> aArrows(
+        drawnBoxesOf(xDiagram, u"ooxml-rightArrow"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aArrows.size());
+    // the drawing has their middles 0.97 of the frame's height apart
+    CPPUNIT_ASSERT_GREATER(tools::Long(0.9 * aFrame.GetHeight()),
+                           std::abs(aArrows[0].Center().Y() - aArrows[1].Center().Y()));
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAsWideAsItsWordKeepsItsFont)
 {
     // the box of "Three" is as wide as its one word, and the word fits it at the font the other
