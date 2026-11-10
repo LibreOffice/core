@@ -435,8 +435,9 @@ AC_ARG_WITH([lo-builddir],
             AS_HELP_STRING([--with-lo-builddir=<path>],
                            [Path to the CollaboraOffice (engine) build tree.
                             For desktop/server builds, sets --with-lokit-path
-                            (to <path>/include) and --with-lo-path (to <path>/instdir)
-                            unless those are given explicitly.
+                            (to <path>/include) and --with-lo-path (to <path>/instdir, or
+                            for the macOS app to the app bundle inside it) unless those
+                            are given explicitly.
                             For mobile/CODA builds, this is the path to the build directory of
                             the CollaboraOffice core source tree you want to use.
                             In case of macOS, you MUST manually edit the ios/Mobile.xcodeproj/project.pbxproj
@@ -1210,7 +1211,13 @@ if test "$enable_iosapp" != yes -a "$enable_windowsapp" != yes -a "$enable_andro
       with_lokit_path="$with_lo_builddir/include"
    fi
    if test -z "$with_lo_path"; then
-      with_lo_path="$with_lo_builddir/instdir"
+      if test "$enable_macosapp" = "yes"; then
+         # The macOS engine installs into an app bundle inside instdir, named after the
+         # product. The config_host.mk of the engine build records the path of that bundle.
+         with_lo_path=`sed -n 's/^export INSTROOTBASE=//p' "$with_lo_builddir/config_host.mk"`
+      else
+         with_lo_path="$with_lo_builddir/instdir"
+      fi
    fi
 
    LOKIT_PATH=`readlink -f $with_lokit_path`

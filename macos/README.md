@@ -98,16 +98,16 @@ Run this from the top of the monorepo (one level up from `engine/`):
     --enable-experimental \
     --with-app-name="Collabora Office" \
     --with-app-package-name=com.yourpackage.name \
-    --with-vendor="Your Name" \
-    --with-lo-path=engine/instdir/CollaboraOffice.app
+    --with-vendor="Your Name"
 
 POCO, zstd and libpng are built as part of the engine and taken from its
 workdir, so they no longer need to be installed (via Homebrew or otherwise) or
 passed on the configure line.
 
-With the `CPMacOS-LOKit` distro above, the engine produces
-`CollaboraOffice.app`. If you change the branding/product name, adjust the
-bundle name in `--with-lo-path` to match what ends up in `engine/instdir/`.
+The engine you built in `engine/` is found by default, together with the app
+bundle it produced in `engine/instdir/` (`CollaboraOffice.app` with the
+`CPMacOS-LOKit` distro above). Add `--with-lo-builddir=/path/to/engine/builddir`
+only when the engine was built in another directory.
 
 ### Build the JavaScript bits
 
