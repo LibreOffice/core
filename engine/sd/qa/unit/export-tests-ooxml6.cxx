@@ -492,6 +492,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterTextStylesStateEveryValue)
     }
 }
 
+// A line that counts itself keeps its number where its level shows a picture instead.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testNumberedLinesKeepTheirNumbers)
+{
+    // Given an outline level whose bullet is a picture, holding two lines that count themselves:
+    createSdImpressDoc("pptx/numbered-lines-under-a-picture-bullet.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the saved file gave both lines the picture of their level and
+    // said nothing of the counting, so the numbers were gone when the file was read back.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[1]/a:pPr/a:buAutoNum", "type", u"arabicPeriod");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[2]/a:pPr/a:buAutoNum", "type", u"arabicPeriod");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:pPr/a:buBlip", 0);
+}
+
 // A subtitle comes back from a PPTX file with the paragraph spacing of its own style. A reader
 // takes the values of a subtitle from the body level of the master's text styles otherwise.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testSubtitleKeepsItsParagraphSpacing)

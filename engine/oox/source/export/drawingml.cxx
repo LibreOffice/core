@@ -3560,8 +3560,11 @@ bool DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     if (nNumberingType == SVX_NUM_NUMBER_NONE)
         return false;
 
+    // A level states what its bullet is, and carries a picture beside that. The picture is the
+    // bullet only where the level says so, because a level that counts its lines keeps a picture
+    // of the level it was made from.
     Graphic aGraphic(xGraphic);
-    if (xGraphic.is() && aGraphic.GetType() != GraphicType::NONE)
+    if (nNumberingType == SVX_NUM_BITMAP && xGraphic.is() && aGraphic.GetType() != GraphicType::NONE)
     {
         tools::Long nFirstCharHeightMm = TransformMetric(fFirstCharHeight * 100.f, FieldUnit::POINT, FieldUnit::MM);
         float fBulletSizeRel = aGraphicSize.Height / static_cast<float>(nFirstCharHeightMm) / OOX_BULLET_LIST_SCALE_FACTOR;
