@@ -349,6 +349,8 @@ if (window.ThisIsTheEmscriptenApp) {
 				// The file properties come before initUI, so controls such as Share follow them.
 				if (result.fileInfo) {
 					window.codaRemoteFileInfo = result.fileInfo;
+					if (!result.fileInfo.UserCanWrite)
+						app.setPermission('readonly');
 					map.fire('wopiprops', result.fileInfo);
 				}
 				initUI();
