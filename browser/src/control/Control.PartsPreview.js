@@ -13,7 +13,7 @@
  */
 
 /* global _ _n app $ Hammer _UNO cool JSDialog buildSlideSectionHeader buildSlideDragGhost
-   buildSlideLinkPanel buildSlidePresentationsRow */
+   buildSlideLinkPanel buildSlidePresentationsRow DPIChangeListener */
 
 // Drag data type that marks a drag as carrying slides to import from another
 // presentation, with a payload of {slides:[...]} source slide indices. A drag
@@ -155,6 +155,19 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		map.on('updateviewparked', this._updateViewAvatars, this);
 
 		window.addEventListener('resize', window.L.bind(this._resize, this));
+
+		// Browser zoom, and moving the window to a screen with another scale, change the device
+		// pixel ratio, and the thumbnails are fetched again at the new one. The fetch runs as a
+		// layouting task, so it comes after the canvas has taken the new ratio into app.dpiScale,
+		// which sets the size of the requests.
+		this._dpiListener = new DPIChangeListener(() => {
+			app.layoutingService.appendLayoutingTask(() => this._onDevicePixelRatioChange());
+		});
+		this._dpiListener.start();
+	},
+
+	onRemove: function () {
+		this._dpiListener.stop();
 	},
 
 	createScrollbar: function () {
@@ -2892,17 +2905,37 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	// The vector content the previews were drawn from may be behind the
-	// document. Every preview counts as not fetched, so the ones in view are
-	// asked for now and the rest once scrolling reaches them. Each keeps its
-	// image until the new one arrives.
+	// document, so every preview is fetched again.
 	_onVectorContentStale: function () {
+		this._refetchPreviews();
+	},
+
+	// Every preview counts as not fetched, so the ones in view are asked for
+	// now and the rest once scrolling reaches them. Each keeps its image until
+	// the new one arrives.
+	_refetchPreviews: function () {
+		this._markPreviewsUnfetched();
+		this._ensureVisiblePreviews();
+	},
+
+	_markPreviewsUnfetched: function () {
 		if (!this._previewTiles)
 			return;
 		for (let part = 0; part < this._previewTiles.length; ++part) {
 			if (this._previewTiles[part])
 				this._previewTiles[part].fetched = false;
 		}
-		this._ensureVisiblePreviews();
+	},
+
+	// A hidden slide pane has an empty box, and its previews are marked as not fetched without a
+	// request. They are fetched at the new ratio by the next scroll, resize or slide change that
+	// loads the visible previews.
+	_onDevicePixelRatioChange: function () {
+		const sorterRect = document.getElementById('slide-sorter').getBoundingClientRect();
+		if (sorterRect.width > 0 && sorterRect.height > 0)
+			this._refetchPreviews();
+		else
+			this._markPreviewsUnfetched();
 	},
 
 	// Whether the preview of the given slide overlaps the container that scrolls it: the deck

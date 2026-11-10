@@ -326,6 +326,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			this._onSlideSectionsCommandState,
 			this,
 		);
+		this._preview.onRemove(this._map);
 	},
 
 	_openMobileWizard: function (data) {
