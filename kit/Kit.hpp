@@ -640,10 +640,6 @@ private:
     std::string _jailedUrl;
 
     std::shared_ptr<COKitDocument> _loKitDocument;
-#ifdef __ANDROID__
-    static std::shared_ptr<COKitDocument> _loKitDocumentForAndroidOnly;
-    static std::weak_ptr<DocumentBroker> _documentBrokerForAndroidOnly;
-#endif
     std::unique_ptr<KitQueue> _queue;
 
     // Connection to the coolwsd process
@@ -724,10 +720,6 @@ private:
     std::map<int, int> _speedCount;
     /// For showing disconnected user info in the doc repair dialog.
     std::map<int, UserInfo> _sessionUserInfo;
-#ifdef __ANDROID__
-    friend std::shared_ptr<COKitDocument> getLOKDocumentForAndroidOnly();
-    friend std::shared_ptr<DocumentBroker> getDocumentBrokerForAndroidOnly();
-#endif
 
     const unsigned _mobileAppDocId;
     int _duringLoad;
@@ -768,12 +760,6 @@ int getCurrentThreadCount();
 
 /// Fetch the latest monotonically incrementing wire-id
 TileWireId getCurrentWireId(bool increment = false);
-
-#ifdef __ANDROID__
-/// For the Android app, for now, we need access to the one and only document open to perform eg. saveAs() for printing.
-std::shared_ptr<COKitDocument> getLOKDocumentForAndroidOnly();
-std::shared_ptr<DocumentBroker> getDocumentBrokerForAndroidOnly();
-#endif
 
 extern COKit* loKitPtr;
 

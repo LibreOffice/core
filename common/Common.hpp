@@ -18,9 +18,9 @@
 // Default values and other shared data between processes.
 
 // One kit process hosts several open documents at once, each identified by its
-// mobileAppDocId. True for iOS and the CODA desktop apps.
-// The plain server and Android instead run one document per process.
-#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+// mobileAppDocId. True for the iOS and Android apps and the CODA desktop apps.
+// The plain server instead runs one document per process.
+#if defined(IOS) || defined(__ANDROID__) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
 #define DOCS_SHARE_PROCESS true
 #else
 #define DOCS_SHARE_PROCESS false

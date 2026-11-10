@@ -10,12 +10,21 @@
 #include <jni.h>
 #include <android/log.h>
 
+#include <atomic>
 #include <chrono>
+#include <cstdlib>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <optional>
 #include <thread>
+#include <vector>
 
+#include <DocumentBroker.hpp>
 #include <FakeSocket.hpp>
 #include <Kit.hpp>
 #include <common/Log.hpp>
+#include <common/MobileApp.hpp>
 #include <COOLWSD.hpp>
 #include <Protocol.hpp>
 #include <SetupKitEnvironment.hpp>
@@ -34,15 +43,18 @@ int coolwsd_server_socket_fd = -1;
 const char* user_name;
 
 static std::string fileURL;
-static int fakeClientFd;
-static int closeNotificationPipeForForwardingThread[2] = {-1, -1};
+static std::atomic<int> fakeClientFd(-1);
+static std::atomic<unsigned> appDocIdCounter(1);
+static std::atomic<unsigned> appDocId(0);
+static std::atomic<int> closeNotificationFd(-1);
 static JavaVM* javaVM = nullptr;
 static bool lokInitialized = false;
-static std::mutex coolwsdRunningMutex;
 
-// Remember the reference to the LOActivity
-jclass g_loActivityClz = nullptr;
-jobject g_loActivityObj = nullptr;
+// The activity of each document the server may still report on, by document number. The save
+// that follows a close is reported after the page has let go of the document, so an entry stays
+// until the kit has dropped the document.
+static std::mutex documentActivitiesMutex;
+static std::map<unsigned, jobject> documentActivities;
 
 extern "C" JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM* vm, void*) {
@@ -107,7 +119,63 @@ JNIThreadContext::~JNIThreadContext()
         javaVM->DetachCurrentThread();
 }
 
-static void send2JS(const JNIThreadContext &jctx, const std::vector<char>& buffer)
+static void forgetDocumentActivity(JNIEnv* env, unsigned documentId)
+{
+    jobject activity = nullptr;
+    {
+        const std::lock_guard<std::mutex> lock(documentActivitiesMutex);
+        const auto it = documentActivities.find(documentId);
+        if (it != documentActivities.end())
+        {
+            activity = it->second;
+            documentActivities.erase(it);
+        }
+    }
+    if (activity)
+        env->DeleteGlobalRef(activity);
+}
+
+/// Let go of the documents below this number that never reached the engine, since
+/// documentClosed() never reports those. The one just closed may still get its broker.
+static void forgetDocumentsWithoutEngine(JNIEnv* env, unsigned belowDocumentId)
+{
+    std::vector<unsigned> remembered;
+    {
+        const std::lock_guard<std::mutex> lock(documentActivitiesMutex);
+        for (const auto& entry : documentActivities)
+            if (entry.first < belowDocumentId)
+                remembered.push_back(entry.first);
+    }
+
+    for (const unsigned id : remembered)
+    {
+        const std::optional<DocumentData> data = DocumentData::getCopy(id);
+        if (data && data->loKitDocument)
+            continue;
+        if (findBrokerByMobileAppDocId(id))
+            continue;
+
+        DocumentData::deallocate(id);
+        forgetDocumentActivity(env, id);
+    }
+}
+
+static void rememberDocumentActivity(JNIEnv* env, unsigned documentId, jobject activity)
+{
+    const std::lock_guard<std::mutex> lock(documentActivitiesMutex);
+    documentActivities[documentId] = env->NewGlobalRef(activity);
+}
+
+static jmethodID fakeWebsocketMethod(JNIEnv* env, jobject activity)
+{
+    jclass activityClass = env->GetObjectClass(activity);
+    jmethodID method = env->GetMethodID(activityClass, "rawCallFakeWebsocketOnMessage", "([B)V");
+    env->DeleteLocalRef(activityClass);
+    return method;
+}
+
+static void send2JS(const JNIThreadContext &jctx, jobject activity, jmethodID callFakeWebsocket,
+                    const std::vector<char>& buffer)
 {
     LOG_DBG("Send to JS: " << COOLProtocol::getAbbreviatedMessage(buffer.data(), buffer.size()));
 
@@ -119,43 +187,93 @@ static void send2JS(const JNIThreadContext &jctx, const std::vector<char>& buffe
     env->SetByteArrayRegion(jmessage, 0, buffer.size(),
                             reinterpret_cast<const jbyte *>(buffer.data()));
 
-    jmethodID callFakeWebsocket = env->GetMethodID(g_loActivityClz, "rawCallFakeWebsocketOnMessage", "([B)V");
-    env->CallVoidMethod(g_loActivityObj, callFakeWebsocket, jmessage);
+    env->CallVoidMethod(activity, callFakeWebsocket, jmessage);
     env->DeleteLocalRef(jmessage);
 
     if (env->ExceptionCheck())
         env->ExceptionDescribe();
 }
 
-void postDirectMessage(std::string message)
+void postDirectMessage(unsigned documentId, const std::string& message)
 {
     JNIThreadContext ctx;
     JNIEnv *env = ctx.getEnv();
     if (!env)
         return;
 
+    jobject activity = nullptr;
+    {
+        const std::lock_guard<std::mutex> lock(documentActivitiesMutex);
+        const auto it = documentActivities.find(documentId);
+        if (it != documentActivities.end())
+            activity = env->NewLocalRef(it->second);
+    }
+    if (!activity)
+    {
+        LOG_WRN("No activity for document " << documentId << ", dropping: " << message);
+        return;
+    }
+
     jstring jstr = env->NewStringUTF(message.c_str());
-    jmethodID callPostMobileMessage = env->GetMethodID(g_loActivityClz, "postMobileMessage", "(Ljava/lang/String;)V");
-    env->CallVoidMethod(g_loActivityObj, callPostMobileMessage, jstr);
+    jclass activityClass = env->GetObjectClass(activity);
+    jmethodID callPostNativeMessage =
+        env->GetMethodID(activityClass, "postNativeMessage", "(Ljava/lang/String;)V");
+    env->CallVoidMethod(activity, callPostNativeMessage, jstr);
     env->DeleteLocalRef(jstr);
+    env->DeleteLocalRef(activityClass);
+    env->DeleteLocalRef(activity);
 
     if (env->ExceptionCheck())
         env->ExceptionDescribe();
 }
 
-/// Close the document.
-void closeDocument()
+static COKitDocument* currentDocument()
 {
+    const std::optional<DocumentData> data = DocumentData::getCopy(appDocId);
+    return data ? data->loKitDocument : nullptr;
+}
+
+/// Returns true when the engine holds a loaded document, which documentClosed() reports once the
+/// engine has dropped it.
+static bool closeDocument()
+{
+    const int notificationFd = closeNotificationFd.exchange(-1);
+    if (notificationFd == -1)
+        return false;
+
+    const bool loaded = currentDocument() != nullptr;
+
     // Close one end of the socket pair, that will wake up the forwarding thread that was constructed in HULLO
-    fakeSocketClose(closeNotificationPipeForForwardingThread[0]);
-    LOG_DBG("Waiting for COOLWSD to finish...");
-    std::unique_lock<std::mutex> coolwsdLock(coolwsdRunningMutex);
-    LOG_DBG("COOLWSD has finished.");
+    fakeSocketClose(notificationFd);
+    return loaded;
+}
+
+void documentClosed(unsigned documentId)
+{
+    JNIThreadContext ctx;
+    postDirectMessage(documentId, "CLOSED");
+    forgetDocumentActivity(ctx.getEnv(), documentId);
+}
+
+/// Wait, for a bounded time, until the broker of the document with this number has ended. The
+/// broker is keyed by the path of the document, so a document opened again from the same path
+/// would otherwise join the one on its way out.
+static void waitForDocumentBroker(unsigned documentId)
+{
+    for (int i = 0; i < 300; ++i)
+    {
+        const std::shared_ptr<DocumentBroker> broker = findBrokerByMobileAppDocId(documentId);
+        if (!broker || !broker->isAlive())
+            return;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    LOG_WRN("The broker of document " << documentId << " is still alive");
 }
 
 /// Handle a message from JavaScript.
 extern "C" JNIEXPORT void JNICALL
-Java_org_libreoffice_androidlib_LOActivity_postMobileMessageNative(JNIEnv *env, jobject, jstring message)
+Java_org_libreoffice_androidlib_LOActivity_postMobileMessageNative(JNIEnv* env, jobject instance,
+                                                                    jstring message)
 {
     const char *string_value = env->GetStringUTFChars(message, nullptr);
 
@@ -163,13 +281,22 @@ Java_org_libreoffice_androidlib_LOActivity_postMobileMessageNative(JNIEnv *env, 
     {
         LOG_DBG("From JS: cool: " << string_value);
 
-        // we need a copy, because we can get a new one while we are still
-        // taking down the old one
-        const int currentFakeClientFd = fakeClientFd;
-
         if (strcmp(string_value, "HULLO") == 0)
         {
             // Now we know that the JS has started completely
+
+            // A page that starts again without a BYE still has its old document open.
+            const unsigned previousDocId = appDocId;
+            closeDocument();
+            waitForDocumentBroker(previousDocId);
+            forgetDocumentsWithoutEngine(env, previousDocId);
+
+            appDocId = appDocIdCounter++;
+            DocumentData::allocate(appDocId);
+            rememberDocumentActivity(env, appDocId, instance);
+
+            const int currentFakeClientFd = fakeSocketSocket();
+            fakeClientFd = currentFakeClientFd;
 
             // Contact the permanently (during app lifetime) listening COOLWSD server
             // "public" socket
@@ -179,98 +306,107 @@ Java_org_libreoffice_androidlib_LOActivity_postMobileMessageNative(JNIEnv *env, 
             assert(rc != -1);
 
             // Create a socket pair to notify the below thread when the document has been closed
-            fakeSocketPipe2(closeNotificationPipeForForwardingThread);
+            int notificationPipe[2];
+            fakeSocketPipe2(notificationPipe);
+            closeNotificationFd = notificationPipe[0];
+            const int threadNotificationFd = notificationPipe[1];
+
+            // The thread below delivers to the activity this document was opened in, whatever
+            // activity is current by then.
+            jobject threadActivity = env->NewGlobalRef(instance);
 
             // Start another thread to read responses and forward them to the JavaScript
-            std::thread([currentFakeClientFd]
+            std::thread([currentFakeClientFd, threadNotificationFd, threadActivity]
                         {
                             ProcUtil::setThreadName("app2js");
                             JNIThreadContext ctx;
+                            const jmethodID callFakeWebsocket =
+                                fakeWebsocketMethod(ctx.getEnv(), threadActivity);
                             while (true)
                             {
                                struct pollfd pollfd[2];
                                pollfd[0].fd = currentFakeClientFd;
                                pollfd[0].events = POLLIN;
-                               pollfd[1].fd = closeNotificationPipeForForwardingThread[1];
+                               pollfd[1].fd = threadNotificationFd;
                                pollfd[1].events = POLLIN;
                                if (fakeSocketPoll(pollfd, 2, -1) > 0)
                                {
                                    if (pollfd[1].revents == POLLIN)
                                    {
+                                       // The other end of the notification pipe has been
+                                       // closed: the document is closing.
                                        LOG_DBG("app2js: closing the sockets");
-                                       // The code below handling the "BYE" fake Websocket
-                                       // message has closed the other end of the
-                                       // closeNotificationPipeForForwardingThread. Let's close
-                                       // the other end too just for cleanliness, even if a
-                                       // FakeSocket as such is not a system resource so nothing
-                                       // is saved by closing it.
-                                       fakeSocketClose(closeNotificationPipeForForwardingThread[1]);
-
-                                       // Close our end of the fake socket connection to the
-                                       // ClientSession thread, so that it terminates
-                                       fakeSocketClose(currentFakeClientFd);
-
-                                       return;
+                                       break;
                                    }
                                    if (pollfd[0].revents == POLLIN)
                                    {
                                        int n = fakeSocketAvailableDataLength(currentFakeClientFd);
                                        if (n == 0)
-                                           return;
+                                       {
+                                           // The server has closed its end.
+                                           LOG_DBG("app2js: the server closed the connection");
+                                           break;
+                                       }
                                        std::vector<char> buf(n);
                                        n = fakeSocketRead(currentFakeClientFd, buf.data(), n);
-                                       send2JS(ctx, buf);
+                                       send2JS(ctx, threadActivity, callFakeWebsocket, buf);
                                    }
                                }
                                else
+                               {
+                                   assert(false);
                                    break;
+                               }
                            }
-                           assert(false);
+
+                           // Close this end of the notification pipe and our end of the fake
+                           // socket connection to the ClientSession, so that the session
+                           // terminates. A fake socket is not a system resource, but each open
+                           // one keeps its slot in the fake socket table.
+                           fakeSocketClose(threadNotificationFd);
+                           fakeSocketClose(currentFakeClientFd);
+                           ctx.getEnv()->DeleteGlobalRef(threadActivity);
                         }).detach();
 
-            // First we simply send it the URL. This corresponds to the GET request with Upgrade to
-            // WebSocket.
-            LOG_DBG("Actually sending to Online:" << fileURL);
+            // First we simply send it the URL and the document number. This corresponds to the
+            // GET request with Upgrade to WebSocket.
+            const std::string handshake(fileURL + " " + std::to_string(appDocId.load()));
+            LOG_DBG("Actually sending to Online:" << handshake);
 
             // Send the document URL to COOLWSD to setup the docBroker URL
-            fakeSocketWriteQueue(currentFakeClientFd, fileURL.c_str(), fileURL.size());
-        }
-        else if (strcmp(string_value, "BYE") == 0)
-        {
-            LOG_DBG("Document window terminating on JavaScript side. Closing our end of the socket.");
-
-            closeDocument();
+            fakeSocketWriteQueue(currentFakeClientFd, handshake.c_str(), handshake.size());
         }
         else
         {
             // Send the message to COOLWSD
-            fakeSocketWriteQueue(currentFakeClientFd, string_value, strlen(string_value));
+            fakeSocketWriteQueue(fakeClientFd, string_value, strlen(string_value));
         }
     }
     else
         LOG_DBG("From JS: cool: some object");
 }
 
+extern "C" JNIEXPORT jboolean JNICALL
+Java_org_libreoffice_androidlib_LOActivity_closeDocumentNative(JNIEnv*, jobject)
+{
+    return closeDocument() ? JNI_TRUE : JNI_FALSE;
+}
+
 extern "C" jboolean cokit_initialize(JNIEnv* env, jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager);
 
 /// Create the COOLWSD instance.
 extern "C" JNIEXPORT void JNICALL
-Java_org_libreoffice_androidlib_LOActivity_createCOOLWSD(JNIEnv *env, jobject instance, jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager, jstring loadFileURL, jstring uiMode, jstring userName)
+Java_org_libreoffice_androidlib_LOActivity_createCOOLWSD(JNIEnv* env, jobject, jstring dataDir,
+                                                         jstring cacheDir, jstring apkFile,
+                                                         jobject assetManager,
+                                                         jstring loadFileURL, jstring uiMode,
+                                                         jstring userName)
 {
     fileURL = std::string(env->GetStringUTFChars(loadFileURL, nullptr));
-
-    // remember the LOActivity class and object to be able to call back
-    env->DeleteGlobalRef(g_loActivityClz);
-    env->DeleteGlobalRef(g_loActivityObj);
-
-    jclass clz = env->GetObjectClass(instance);
-    g_loActivityClz = (jclass) env->NewGlobalRef(clz);
-    g_loActivityObj = env->NewGlobalRef(instance);
 
     // already initialized?
     if (lokInitialized)
     {
-        // close the previous document so that we can wait for the new HULLO
         closeDocument();
         return;
     }
@@ -294,19 +430,13 @@ Java_org_libreoffice_androidlib_LOActivity_createCOOLWSD(JNIEnv *env, jobject in
                     argv[0] = strdup("mobile");
                     argv[1] = nullptr;
                     ProcUtil::setThreadName("app");
-                    while (true)
-                    {
-                        LOG_DBG("Creating COOLWSD");
-                        {
-                            std::unique_lock<std::mutex> lock(coolwsdRunningMutex);
-                            fakeClientFd = fakeSocketSocket();
-                            LOG_DBG("createCOOLWSD created fakeClientFd: " << fakeClientFd);
-                            std::unique_ptr<COOLWSD> coolwsd = std::make_unique<COOLWSD>();
-                            coolwsd->run(1, argv);
-                        }
-                        LOG_DBG("One run of COOLWSD completed");
-                        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                    }
+                    // One COOLWSD serves every document for the whole life of the app.
+                    LOG_DBG("Creating COOLWSD");
+                    auto coolwsd = std::make_unique<COOLWSD>();
+                    coolwsd->run(1, argv);
+
+                    LOG_FTL("COOLWSD::run() returned");
+                    std::abort();
                 }).detach();
 }
 
@@ -321,7 +451,8 @@ Java_org_libreoffice_androidlib_LOActivity_saveAs(JNIEnv *env, jobject,
     if (options_ != nullptr)
         options = env->GetStringUTFChars(options_, 0);
 
-    getLOKDocumentForAndroidOnly()->saveAs(fileUri, format, options);
+    if (COKitDocument* document = currentDocument())
+        document->saveAs(fileUri, format, options);
 
     env->ReleaseStringUTFChars(fileUri_, fileUri);
     env->ReleaseStringUTFChars(format_, format);
@@ -339,7 +470,8 @@ Java_org_libreoffice_androidlib_LOActivity_postUnoCommand(JNIEnv* pEnv, jobject,
     if (arguments != nullptr)
         pArguments = pEnv->GetStringUTFChars(arguments, nullptr);
 
-    getLOKDocumentForAndroidOnly()->postUnoCommand(pCommand, pArguments, bNotifyWhenFinished);
+    if (COKitDocument* document = currentDocument())
+        document->postUnoCommand(pCommand, pArguments, bNotifyWhenFinished);
 
     pEnv->ReleaseStringUTFChars(command, pCommand);
     if (arguments != nullptr)
@@ -367,7 +499,12 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_org_libreoffice_androidlib_COWebViewClient_getEmbeddedMediaPath(JNIEnv *env, jobject, jstring inTag) {
     std::string tag = copyJavaString(env, inTag);
-    std::string mediaPath = getDocumentBrokerForAndroidOnly()->getEmbeddedMediaPath(tag);
+    std::string mediaPath;
+    if (const std::optional<DocumentData> data = DocumentData::getCopy(appDocId))
+    {
+        if (std::shared_ptr<DocumentBroker> docBroker = data->docBroker.lock())
+            mediaPath = docBroker->getEmbeddedMediaPath(tag);
+    }
     return env->NewStringUTF(mediaPath.c_str());
 }
 

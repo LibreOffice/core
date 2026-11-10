@@ -31,7 +31,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
@@ -83,6 +82,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -133,19 +133,20 @@ public class LOActivity extends AppCompatActivity {
     private URI documentUri;
 
     private String urlToLoad;
-    private COWebView mWebView = null;
-    private MobileSocket mMobileSocket = null;
+    // Both are read from the thread that forwards the server's messages and cleared when the
+    // activity is destroyed.
+    private volatile COWebView mWebView = null;
+    private volatile MobileSocket mMobileSocket = null;
     private SharedPreferences sPrefs;
     private Handler mMainHandler = null;
     private RateAppController rateAppController;
 
     private boolean isDocEditable = false;
     private boolean isDocDebuggable = BuildConfig.DEBUG;
-    private boolean documentLoaded = false;
+    private volatile boolean documentLoaded = false;
+    /** What to do once the engine has dropped the document that is closing. */
+    private final AtomicReference<Runnable> mWhenDocumentClosed = new AtomicReference<>();
 
-    private Thread nativeMsgThread;
-    private Handler nativeHandler;
-    private Looper nativeLooper;
     private Bundle savedInstanceState;
 
     private ProgressDialog mProgressDialog = null;
@@ -389,7 +390,7 @@ public class LOActivity extends AppCompatActivity {
                     return;
                 }
 
-                finishWithProgress();
+                closeDocumentAndFinish();
             }
         });
 
@@ -567,16 +568,6 @@ public class LOActivity extends AppCompatActivity {
             getMainHandler();
 
             SystemClipboard.initialize(this);
-            nativeMsgThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Looper.prepare();
-                    nativeLooper = Looper.myLooper();
-                    nativeHandler = new Handler(nativeLooper);
-                    Looper.loop();
-                }
-            });
-            nativeMsgThread.start();
 
             mWebView.setWebChromeClient(new WebChromeClient() {
                 @Override
@@ -850,34 +841,14 @@ public class LOActivity extends AppCompatActivity {
 
         Log.i(TAG, "onNewIntent");
 
-        if (documentLoaded) {
-            postMobileMessageNative("save dontTerminateEdit=1 dontSaveIfUnmodified=1");
-        }
-
         super.onNewIntent(intent);
 
-        if (documentLoaded) {
-            mProgressDialog.indeterminate(R.string.exiting);
-        }
-
-        // Closing a document ends the process, so the system holds the intent and opens the picked
-        // document in a fresh activity. Finishing first sends the start to a new instance.
+        // The picked document opens in a fresh activity once this one has let go of its own.
         final Intent reopenIntent = new Intent(intent);
         reopenIntent.setClass(this, LOActivity.class);
-        finish();
-        startActivity(reopenIntent);
-
-        if (!documentLoaded) {
-            return;
-        }
-
-        getMainHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                documentLoaded = false;
-                postMobileMessageNative("BYE");
-                //copyTempBackToIntent();
-            }
+        closeDocumentThen(() -> {
+            finish();
+            startActivity(reopenIntent);
         });
     }
 
@@ -1118,25 +1089,22 @@ public class LOActivity extends AppCompatActivity {
     protected void onDestroy() {
         stopWatchingForHardwareKeyboard();
 
-        if (!documentLoaded) {
-            super.onDestroy();
-            return;
+        if (mWebView != null) {
+            // Remove the webview from the hierarchy & destroy
+            final ViewGroup viewGroup = (ViewGroup) mWebView.getParent();
+            if (viewGroup != null)
+                viewGroup.removeView(mWebView);
+            mWebView.destroy();
+            mWebView = null;
+            mMobileSocket = null;
         }
-        nativeLooper.quit();
 
-        // Remove the webview from the hierarchy & destroy
-        final ViewGroup viewGroup = (ViewGroup) mWebView.getParent();
-        if (viewGroup != null)
-            viewGroup.removeView(mWebView);
-        mWebView.destroy();
-        mWebView = null;
-        mMobileSocket = null;
-
-        // Most probably the native part has already got a 'BYE' from
-        // finishWithProgress(), but it is actually better to send it twice
-        // than never, so let's call it from here too anyway
-        documentLoaded = false;
-        postMobileMessageNative("BYE");
+        // The system can destroy the activity while the document is still open. Nothing can
+        // wait for the close here, so the document unloads in the background.
+        if (documentLoaded) {
+            documentLoaded = false;
+            closeDocumentNative();
+        }
 
         // The copies of the files the document links to go with it.
         linkedFilesExecutor.execute(this::removeLinkedFileCopies);
@@ -1361,24 +1329,35 @@ public class LOActivity extends AppCompatActivity {
         return null;
     }
 
-    /** Show the Saving progress and finish the app. */
-    private void finishWithProgress() {
+    /**
+     * The write-back to a content: URI needs this activity's permission, so the activity stays
+     * until the native side reports CLOSED.
+     */
+    private void closeDocumentThen(Runnable whenClosed) {
         if (!documentLoaded) {
-            finishAndRemoveTask();
+            runOnUiThread(whenClosed);
             return;
         }
-        mProgressDialog.indeterminate(R.string.exiting);
+
         documentLoaded = false;
+        mProgressDialog.indeterminate(R.string.exiting);
+        mWhenDocumentClosed.set(whenClosed);
+        if (!closeDocumentNative())
+            documentClosed();
+    }
 
-        // The 'BYE' blocks until the document has closed, so it runs off the UI thread and the
-        // progress dialog keeps drawing.
-        nativeHandler.post(() -> {
-            postMobileMessageNative("BYE");
-            //copyTempBackToIntent();
+    /** The engine has dropped the document, or there was no loaded document to wait for. */
+    private void documentClosed() {
+        final Runnable whenClosed = mWhenDocumentClosed.getAndSet(null);
+        if (whenClosed == null)
+            return;
 
-            mProgressDialog.dismiss();
-            runOnUiThread(this::finishAndRemoveTask);
-        });
+        mProgressDialog.dismiss();
+        runOnUiThread(whenClosed);
+    }
+
+    private void closeDocumentAndFinish() {
+        closeDocumentThen(this::finishAndRemoveTask);
     }
 
     private void loadDocument() {
@@ -1470,9 +1449,13 @@ public class LOActivity extends AppCompatActivity {
      * Passing messages from JS (instead of the websocket communication).
      */
     @JavascriptInterface
-    @UsedByNative // androidapp.cpp postDirectMessage()
     public void postMobileMessage(String message) {
         Log.d(TAG, "postMobileMessage: " + message);
+
+        // The page outlives the document. Anything it sends after the close would reach the
+        // next document.
+        if (!documentLoaded)
+            return;
 
         String[] messageAndParameterArray= message.split(" ", 2); // the command and the rest (that can potentially contain spaces too)
 
@@ -1481,10 +1464,29 @@ public class LOActivity extends AppCompatActivity {
         }
     }
 
+    /** Messages from the native side, which keep arriving after the close, like SAVE and CLOSED. */
+    @UsedByNative // androidapp.cpp postDirectMessage()
+    void postNativeMessage(String message) {
+        Log.d(TAG, "postNativeMessage: " + message);
+
+        if (message.equals("CLOSED")) {
+            documentClosed();
+            return;
+        }
+
+        beforeMessageFromWebView(message.split(" ", 2));
+    }
+
     /**
      * Call the post method form C++
      */
     public native void postMobileMessageNative(String message);
+
+    /**
+     * Close the document on the native side. Returns true when the engine still holds a loaded
+     * document, in which case postNativeMessage gets CLOSED once the engine has dropped it.
+     */
+    private native boolean closeDocumentNative();
 
     /**
      * Passing messages from JS (instead of the websocket communication).
@@ -1535,10 +1537,16 @@ public class LOActivity extends AppCompatActivity {
      */
     @UsedByNative // androidapp.cpp send2JS
     void rawCallFakeWebsocketOnMessage(final byte[] message) {
+        // A late message from the server can arrive after the webview is gone.
+        final MobileSocket mobileSocket = mMobileSocket;
+        final COWebView webView = mWebView;
+        if (mobileSocket == null || webView == null)
+            return;
+
         try {
-            mMobileSocket.queueSend(message, () -> {
-                mWebView.post(() -> {
-                    mWebView.loadUrl("javascript:window.socket.doSend();");
+            mobileSocket.queueSend(message, () -> {
+                webView.post(() -> {
+                    webView.loadUrl("javascript:window.socket.doSend();");
                 });
             });
         } catch (InterruptedException e) {
@@ -1786,7 +1794,7 @@ public class LOActivity extends AppCompatActivity {
     private boolean beforeMessageFromWebView(String[] messageAndParam) {
         switch (messageAndParam[0]) {
             case "BYE":
-                finishWithProgress();
+                closeDocumentAndFinish();
                 return false;
             case "PRINT":
                 getMainHandler().post(new Runnable() {

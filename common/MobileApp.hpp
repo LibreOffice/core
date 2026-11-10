@@ -15,6 +15,9 @@
 
 #include <wsd/Storage.hpp>
 
+#include <memory>
+#include <optional>
+
 #ifdef IOS
 #import "CODocument.h"
 #import <set>
@@ -29,7 +32,8 @@
 // We pass around a numeric ever-increasing document identifier that gets bumped for each document
 // the system asks the app to open.
 
-// For iOS, it is the static std::atomic<unsigned> appDocIdCounter in CODocument.mm.
+// On iOS the counter is the static std::atomic<unsigned> appDocIdCounter in CODocument.mm,
+// on Android it is the static appDocIdCounter in androidapp.cpp.
 
 // In practice it will probably be equivalent to the DocumentBroker::DocBrokerId or the number that
 // the core SfxViewShell::GetDocId() returns, but there might be situations where multi-threading
@@ -50,12 +54,15 @@ public:
     {
     }
 
+    /// The engine document, null until the kit's load has returned it and after a failed load.
     COKitDocument *loKitDocument;
 
     static DocumentData &allocate(unsigned docId);
     static DocumentData &get(unsigned docId);
     static DocumentData *getIfExists(unsigned docId);
     static COKitDocument *loadedKitDocument(unsigned docId);
+    /// A copy of this document's entry, or nothing. The copy outlives the entry.
+    static std::optional<DocumentData> getCopy(unsigned docId);
     static void deallocate(unsigned docId);
     static int count();
 

@@ -4704,7 +4704,9 @@ void COOLWSD::innerMain()
     remoteConfigThread->start();
 #endif
 
-#if !DOCS_SHARE_PROCESS
+// The Android app sets the locale too: its C library has C.UTF-8, and the locale decides how
+// file names with non-ASCII characters are converted.
+#if !DOCS_SHARE_PROCESS || defined(__ANDROID__)
     // Force a uniform UTF-8 locale for ourselves & our children.
     char* locale = std::setlocale(LC_ALL, "C.UTF-8");
     if (!locale)
@@ -4720,7 +4722,7 @@ void COOLWSD::innerMain()
         LOG_INF("Locale is set to " << std::string(locale));
         ::setenv("LC_ALL", locale, 1);
     }
-#endif // !DOCS_SHARE_PROCESS
+#endif // !DOCS_SHARE_PROCESS || __ANDROID__
 
 #if !MOBILEAPP
     // We use the same option set for both parent and child coolwsd,

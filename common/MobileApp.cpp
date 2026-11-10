@@ -60,6 +60,15 @@ COKitDocument * DocumentData::loadedKitDocument(unsigned docId)
     return document ? document->loKitDocument : nullptr;
 }
 
+std::optional<DocumentData> DocumentData::getCopy(unsigned docId)
+{
+    const std::lock_guard<std::mutex> lock(idToDocDataMapMutex);
+    auto it = idToDocDataMap.find(docId);
+    if (it == idToDocDataMap.end())
+        return std::nullopt;
+    return *it->second;
+}
+
 void DocumentData::deallocate(unsigned docId)
 {
     const std::lock_guard<std::mutex> lock(idToDocDataMapMutex);

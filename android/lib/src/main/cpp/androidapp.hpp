@@ -5,6 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#pragma once
+
 #include <jni.h>
 
 #include <string>
@@ -15,8 +17,12 @@ extern int coolwsd_server_socket_fd;
 
 extern const char* user_name;
 
-/** Equivalent of postMobileMessage(), but called directly from the native code. */
-void postDirectMessage(std::string message);
+/** Deliver a message from the native code to the activity of the document with this number. */
+void postDirectMessage(unsigned documentId, const std::string& message);
+
+/** Report to the activity of the document with this number that the engine has dropped the
+    document, and let go of that activity. */
+void documentClosed(unsigned documentId);
 
 /**
  * The JNIEnv of the current thread for one scope. The engine attaches the kit thread while a

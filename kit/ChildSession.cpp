@@ -7520,7 +7520,7 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
                           }
                         }];
 #elif defined(__ANDROID__)
-                    postDirectMessage("SAVE " + payload);
+                    postDirectMessage(_docManager->getMobileAppDocId(), "SAVE " + payload);
 #endif
                 }
             }

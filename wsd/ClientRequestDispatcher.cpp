@@ -885,10 +885,8 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
     // -[DocumentViewController userContentController:didReceiveScriptMessage:] when it gets the
     // HULLO message from the JavaScript in global.js.
 
-    // In other mobile apps and in CODA, it is done in some similar place.
-
-    // It's currently relevant only for iOS, macOS, and Windows, so fallback if it is not found
-    // (Android?).
+    // The Android app and the CODA apps do it in some similar place. All of them send the
+    // appDocId after the URL. The branch without one below is a fallback.
 
     // Unwrap what StreamSocket::readIncomingData() did
     ssize_t len;

@@ -134,6 +134,9 @@ Util::LoadTimings KitLoadTimings;
 #include <macos.h>
 #include <wsd/DocumentBroker.hpp>
 #endif
+#ifdef __ANDROID__
+#include <androidapp.hpp>
+#endif
 
 #ifdef _WIN32
 #include "windows.hpp"
@@ -946,7 +949,9 @@ Document::~Document()
 #if DOCS_SHARE_PROCESS
     DocumentData::deallocate(_mobileAppDocId);
 #endif
-
+#ifdef __ANDROID__
+    documentClosed(_mobileAppDocId);
+#endif
 }
 
 /// Post the message - in the unipoll world we're in the right thread anyway
@@ -2795,15 +2800,6 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         LOG_DBG("Calling lokit::documentLoad(" << anonymizeUrl(url) << ", \"" << options << "\")");
         const auto start = std::chrono::steady_clock::now();
         _loKitDocument.reset(_loKit->documentLoadWithOptions(url, options.c_str()));
-#ifdef __ANDROID__
-        _loKitDocumentForAndroidOnly = _loKitDocument;
-        {
-            std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex);
-            auto docBrokerIt = DocBrokers.find(_docKey);
-            assert(docBrokerIt != DocBrokers.end());
-            _documentBrokerForAndroidOnly = docBrokerIt->second;
-        }
-#endif
         const auto duration = std::chrono::steady_clock::now() - start;
         const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
         LOG_DBG("Returned lokit::documentLoad(" << anonymizeUrl(url) << ") in " << elapsed);
@@ -3839,23 +3835,6 @@ void flushTraceEventRecordings()
 
 #endif
 
-#ifdef __ANDROID__
-
-std::shared_ptr<COKitDocument> Document::_loKitDocumentForAndroidOnly = std::shared_ptr<COKitDocument>();
-std::weak_ptr<DocumentBroker> Document::_documentBrokerForAndroidOnly;
-
-std::shared_ptr<COKitDocument> getLOKDocumentForAndroidOnly()
-{
-    return Document::_loKitDocumentForAndroidOnly;
-}
-
-std::shared_ptr<DocumentBroker> getDocumentBrokerForAndroidOnly()
-{
-    return Document::_documentBrokerForAndroidOnly.lock();
-}
-
-#endif
-
 #if MOBILEAPP
 /// The engine the app runs, which lives as long as the process; set once
 /// lokit_main() has created it, and read from the wsd thread at exit.
@@ -4419,9 +4398,11 @@ static void copyCertificateDatabaseToTmp(Poco::Path const& jailPath)
 
 #endif
 
-#if defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#if defined(QTAPP) || defined(MACOS) || defined(_WIN32) || defined(__ANDROID__)
 
+#if defined(QTAPP) || defined(MACOS) || defined(_WIN32)
 #include <SettingsStorage.hpp> // Desktop::getConfigPath()
+#endif
 
 // with "unipoll" thread that calls cok_init_2 ends up holding the yield mutex in InitVCL()
 // COKit::runLoop then spawned in another thread ends up stuck. To prevent that call cok_init_2
@@ -4437,6 +4418,10 @@ std::future<COKit*> initKitRunLoopThread()
             [p = std::move(promise)]() mutable
             {
                 ProcUtil::setThreadName("lokit_runloop");
+#if defined(__ANDROID__)
+                // setupKitEnvironment() has already run with the mode of the device
+                COKit* kit = cok_init_2(nullptr, nullptr);
+#else
                 setupKitEnvironment("notebookbar");
                 // Put the engine's user profile under our config directory (like
                 // macOS does) instead of letting it default to a separate
@@ -4450,6 +4435,7 @@ std::future<COKit*> initKitRunLoopThread()
 #elif defined(_WIN32)
                     cok_init_2(app_installation_path.c_str(),
                                Poco::URI(Desktop::getConfigPath()).toString().c_str());
+#endif
 #endif
                 p.set_value(kit);
 
@@ -4465,7 +4451,7 @@ std::future<COKit*> initKitRunLoopThread()
             }).detach();
         return future;
 }
-#endif // QTAPP
+#endif // QTAPP || MACOS || _WIN32 || __ANDROID__
 void lokit_main(
 #if !MOBILEAPP
                 const std::string& childRoot,
@@ -5276,12 +5262,12 @@ void lokit_main(
         COKit *kit = cok_init_2(LO_PATH "/program", userInstallationURI.toString().c_str());
 #elif defined(IOS) // In the iOS app we call cok_init_2() just once, when the app starts
         static COKit *kit = lo_kit;
-#elif defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#elif defined(QTAPP) || defined(MACOS) || defined(_WIN32) || defined(__ANDROID__)
         // For macOS, this is the MOBILEAPP case
         static COKit* kit = initKitRunLoopThread().get();
-#else
-        // FIXME: I wonder for which platform this is supposed to be? Android?
-        static COKit *kit = cok_init_2(nullptr, nullptr);
+#elif defined(__EMSCRIPTEN__)
+        // The WASM app has no run loop thread and no install directory to point the engine at.
+        static COKit* kit = cok_init_2(nullptr, nullptr);
 #endif
 
         assert(kit);
