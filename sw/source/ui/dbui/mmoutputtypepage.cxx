@@ -25,6 +25,7 @@
 #include <swtypes.hxx>
 
 #include <osl/diagnose.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <vcl/idle.hxx>
@@ -88,6 +89,7 @@ struct SwSendMailDialog_Impl
     ::rtl::Reference<MailDispatcher> xMailDispatcher;
     ::rtl::Reference<IMailDispatcherListener> xMailListener;
     uno::Reference<mail::XMailService> xConnectedInMailService;
+    uno::Reference<mail::XSmtpService> xConnectedSmtpService;
     Idle aRemoveIdle;
 
     SwSendMailDialog_Impl()
@@ -255,27 +257,51 @@ SwSendMailDialog::SwSendMailDialog(weld::Window* pParent, SwMailMergeConfigItem&
 
 SwSendMailDialog::~SwSendMailDialog()
 {
-    if (!m_pImpl->xMailDispatcher.is())
-        return;
+    if (m_pImpl->xMailDispatcher.is())
+    {
+        try
+        {
+            if (m_pImpl->xMailDispatcher->isStarted())
+                m_pImpl->xMailDispatcher->stop();
+
+            uno::Reference<mail::XMailMessage> xMessage
+                = m_pImpl->xMailDispatcher->dequeueMailMessage();
+
+            while (xMessage.is())
+            {
+                SwMailDispatcherListener_Impl::DeleteAttachments(xMessage);
+                xMessage = m_pImpl->xMailDispatcher->dequeueMailMessage();
+            }
+        }
+        catch (const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sw", "Mail dispatcher cleanup failed");
+        }
+    }
 
     try
     {
-        if (m_pImpl->xMailDispatcher->isStarted())
-            m_pImpl->xMailDispatcher->stop();
-        if (m_pImpl->xConnectedInMailService.is()
-            && m_pImpl->xConnectedInMailService->isConnected())
-            m_pImpl->xConnectedInMailService->disconnect();
-
-        uno::Reference<mail::XMailMessage> xMessage
-            = m_pImpl->xMailDispatcher->dequeueMailMessage();
-        while (xMessage.is())
+        if (m_pImpl->xConnectedSmtpService.is() && m_pImpl->xConnectedSmtpService->isConnected())
         {
-            SwMailDispatcherListener_Impl::DeleteAttachments(xMessage);
-            xMessage = m_pImpl->xMailDispatcher->dequeueMailMessage();
+            m_pImpl->xConnectedSmtpService->disconnect();
         }
     }
     catch (const uno::Exception&)
     {
+        TOOLS_WARN_EXCEPTION("sw", "SMTP disconnect failed");
+    }
+
+    try
+    {
+        if (m_pImpl->xConnectedInMailService.is()
+            && m_pImpl->xConnectedInMailService->isConnected())
+        {
+            m_pImpl->xConnectedInMailService->disconnect();
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sw", "POP/IMAP disconnect failed");
     }
 }
 
@@ -314,13 +340,8 @@ IMPL_LINK_NOARG(SwSendMailDialog, CancelHdl_Impl, weld::Button&, void)
 {
     m_xDialog->hide();
 
-    if (m_bDestructionEnabled)
-        m_xDialog->response(RET_CANCEL);
-    else
-    {
-        m_pImpl->aRemoveIdle.SetInvokeHandler(LINK(this, SwSendMailDialog, RemoveThis));
-        m_pImpl->aRemoveIdle.Start();
-    }
+    m_pImpl->aRemoveIdle.SetInvokeHandler(LINK(this, SwSendMailDialog, RemoveThis));
+    m_pImpl->aRemoveIdle.Start();
 }
 
 IMPL_STATIC_LINK(SwSendMailDialog, StartSendMails, void*, pDialog, void)
@@ -369,16 +390,18 @@ void SwSendMailDialog::SendMails()
     }
     auto xWait(std::make_unique<weld::WaitObject>(m_xDialog.get()));
     //get a mail server connection
-    uno::Reference<mail::XSmtpService> xSmtpServer = SwMailMergeHelper::ConnectToSmtpServer(
+    m_pImpl->xConnectedSmtpService = SwMailMergeHelper::ConnectToSmtpServer(
         *m_pConfigItem, m_pImpl->xConnectedInMailService, OUString(), OUString(), m_xDialog.get());
-    bool bIsLoggedIn = xSmtpServer.is() && xSmtpServer->isConnected();
+
+    bool bIsLoggedIn
+        = m_pImpl->xConnectedSmtpService.is() && m_pImpl->xConnectedSmtpService->isConnected();
     xWait.reset();
     if (!bIsLoggedIn)
     {
         OSL_FAIL("create error message");
         return;
     }
-    m_pImpl->xMailDispatcher.set(new MailDispatcher(xSmtpServer));
+    m_pImpl->xMailDispatcher.set(new MailDispatcher(m_pImpl->xConnectedSmtpService));
     IterateMails();
     m_pImpl->xMailListener = new SwMailDispatcherListener_Impl(*this);
     m_pImpl->xMailDispatcher->addListener(m_pImpl->xMailListener);
@@ -525,7 +548,9 @@ void SwSendMailDialog::AllMailsSent()
         if (m_nErrorCount == 0)
         {
             m_xDialog->hide();
-            m_xDialog->response(RET_CANCEL);
+
+            m_pImpl->aRemoveIdle.SetInvokeHandler(LINK(this, SwSendMailDialog, RemoveThis));
+            m_pImpl->aRemoveIdle.Start();
         }
     }
 }
