@@ -3039,6 +3039,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (!this._map._docLoaded)
 			return;
 
+		if (type === 'buttondown')
+			ClassicTableContext.noteInputSent();
+
 		if (this._map.calcInputBarHasFocus() && type === 'move') {
 			// When the Formula-bar has the focus, sending
 			// mouse move with the document coordinates
@@ -3140,6 +3143,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	postKeyboardEvent: function(type, charCode, unoKeyCode) {
 		if (!this._map._docLoaded)
 			return;
+
+		if (type === 'input')
+			ClassicTableContext.noteInputSent();
 
 		this._mousePressedDuringCellEdit = false;
 

@@ -60,13 +60,13 @@ class TableStatesOnTheWay<State> {
 		if (this.asked.length > TableStatesOnTheWay.most) this.asked.shift();
 	}
 
-	/*
-		Whether a report of the engine names an older state than the newest one asked, or is a
-		passing one of no state while the newest one is on its way: such a report is left aside.
-		The older ones stay until the newest is done with, as the engine may report one of them
-		again on its way.
-	*/
-	public outdated(reported: State | null): boolean {
+	/// Notes a state behind the ones asked before it, where any of them waits for its report.
+	public noteWhileWaiting(state: State): void {
+		if (this.waits()) this.note(state);
+	}
+
+	/// Whether a state waits for its report still, forgetting them all where none does.
+	private waits(): boolean {
 		const now = performance.now();
 		const newest = this.asked[this.asked.length - 1];
 		if (
@@ -78,6 +78,19 @@ class TableStatesOnTheWay<State> {
 			this.asked = [];
 			return false;
 		}
+		return true;
+	}
+
+	/*
+		Whether a report of the engine names an older state than the newest one asked, or is a
+		passing one of no state while the newest one is on its way: such a report is left aside.
+		The older ones stay until the newest is done with, as the engine may report one of them
+		again on its way.
+	*/
+	public outdated(reported: State | null): boolean {
+		if (!this.waits()) return false;
+		const now = performance.now();
+		const newest = this.asked[this.asked.length - 1];
 
 		// the last that matches, as a state asked again counts as the newer one
 		let at = this.asked.length - 1;
@@ -375,6 +388,14 @@ class ClassicTableContext extends ClassicContext {
 	*/
 	public static outdatedCellReport(reported: number[] | null): boolean {
 		return ClassicTableContext.cellsOnTheWay.outdated(reported);
+	}
+
+	/*
+		Notes a press or a key sent to the engine while cell ranges are on their way: the engine
+		reports no cells for it, or a range of its own, which counts as one made elsewhere.
+	*/
+	public static noteInputSent(): void {
+		ClassicTableContext.cellsOnTheWay.noteWhileWaiting(null);
 	}
 
 	/*
