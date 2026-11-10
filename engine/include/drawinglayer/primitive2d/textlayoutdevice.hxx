@@ -108,6 +108,12 @@ public:
     basegfx::B2DRange getTextBoundRect(const OUString& rText, sal_uInt32 nIndex,
                                        sal_uInt32 nLength) const;
 
+    /// The bounds of the glyphs placed at the given advances, where they are drawn. Without
+    /// advances the glyphs are placed as the font lays them out.
+    basegfx::B2DRange getTextBoundRect(const OUString& rText, sal_uInt32 nIndex,
+                                       sal_uInt32 nLength, const ::std::vector<double>& rDXArray,
+                                       const boost::container::vector<bool>& rKashidaArray) const;
+
     double getFontAscent() const;
     double getFontDescent() const;
 

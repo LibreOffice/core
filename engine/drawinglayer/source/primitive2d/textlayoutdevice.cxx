@@ -297,6 +297,14 @@ void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPoly
 basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const OUString& rText, sal_uInt32 nIndex,
                                                        sal_uInt32 nLength) const
 {
+    return getTextBoundRect(rText, nIndex, nLength, {}, {});
+}
+
+basegfx::B2DRange
+TextLayouterDevice::getTextBoundRect(const OUString& rText, sal_uInt32 nIndex, sal_uInt32 nLength,
+                                     const std::vector<double>& rDXArray,
+                                     const boost::container::vector<bool>& rKashidaArray) const
+{
     sal_uInt32 nTextLength(nLength);
     const sal_uInt32 nStringLength(rText.getLength());
 
@@ -308,7 +316,11 @@ basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const OUString& rText, sa
     if (nTextLength)
     {
         basegfx::B2DRange aRect;
-        mrDevice.GetTextBoundRect(aRect, rText, nIndex, nIndex, nLength);
+        if (!rDXArray.empty())
+            mrDevice.GetTextBoundRect(aRect, rText, nIndex, nIndex, nLength, 0, rDXArray,
+                                      rKashidaArray);
+        else
+            mrDevice.GetTextBoundRect(aRect, rText, nIndex, nIndex, nLength);
         if (!rtl_math_approxEqual(mnFontScalingFixY, 1.0)
             || !rtl_math_approxEqual(mnFontScalingFixX, 1.0))
         {

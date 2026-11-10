@@ -859,21 +859,15 @@ namespace cool {
 			};
 		}
 
-		// The x past each UTF-16 unit of the visible text, in the parent space:
-		// the running sum of the advances. Null when the run has no advances,
-		// too few for the text, or is right-to-left, which needs the browser's
-		// ordering and shaping.
+		// The distance past each UTF-16 unit of the visible text, in the parent
+		// space: the running sum of the advances, in logical order. Null when the
+		// run has no advances or too few for the text.
 		private static _advanceDistances(
 			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
 			text: string,
 		): number[] | null {
 			const steps = primitive.advances;
-			if (
-				!steps ||
-				steps.length < text.length ||
-				text.length === 0 ||
-				primitive.rtl
-			)
+			if (!steps || steps.length < text.length || text.length === 0)
 				return null;
 
 			const distances: number[] = [];
@@ -1047,9 +1041,10 @@ namespace cool {
 		// Draws the run in one call when it has no usable advances or the
 		// browser width already matches them. Otherwise each word is drawn at
 		// the sum of the advances before it, and stretched to its advance width
-		// when the browser measures it differently. Spaces draw nothing and are
-		// skipped. The browser still shapes inside a word, so ligatures, marks
-		// and joined letters stay whole.
+		// when the browser measures it differently. A right-to-left run starts
+		// at its right end, so its words are placed from there. Spaces draw
+		// nothing and are skipped. The browser still shapes inside a word, so
+		// ligatures, marks and joined letters stay whole.
 		private _drawTextRun(
 			context: CanvasRenderingContext2D,
 			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
@@ -1058,7 +1053,19 @@ namespace cool {
 			const draw = (text: string, x: number, y: number): void =>
 				context.fillText(text, x, y);
 
+			// A difference under half a device pixel is invisible. The context
+			// transform scales drawing units to device pixels.
+			const transform = context.getTransform();
+			const pixelsPerUnit = Math.hypot(transform.a, transform.b) || 1;
+			const tolerance = 0.5 / pixelsPerUnit;
+
 			const text = frame.text;
+			// The browser orders right-to-left text from a right-to-left base, as
+			// the engine does, so brackets and other neutral characters come out in
+			// the same order. The alignment stays left, so a word still starts at
+			// its x. The caller restores the context.
+			if (primitive.rtl) context.direction = 'rtl';
+
 			const distances = VectorPrimitiveRenderer._advanceDistances(
 				primitive,
 				text,
@@ -1072,12 +1079,6 @@ namespace cool {
 			const startOf = (k: number): number =>
 				k === 0 ? 0 : distances[k - 1] * frame.advanceScale;
 
-			// A difference under half a device pixel is invisible. The context
-			// transform scales drawing units to device pixels.
-			const transform = context.getTransform();
-			const pixelsPerUnit = Math.hypot(transform.a, transform.b) || 1;
-			const tolerance = 0.5 / pixelsPerUnit;
-
 			if (
 				Math.abs(this._measuredWidth(context, text) - startOf(text.length)) <=
 				tolerance
@@ -1086,20 +1087,37 @@ namespace cool {
 				return;
 			}
 
-			for (const [from, to] of VectorPrimitiveRenderer._words(text)) {
-				const word = text.substring(from, to);
-				const x = frame.x + startOf(from);
-				const width = startOf(to) - startOf(from);
-				const measured = this._measuredWidth(context, word);
-				if (measured > 0 && Math.abs(measured - width) > tolerance) {
-					context.save();
-					context.translate(x, frame.y);
-					context.scale(width / measured, 1);
-					draw(word, 0, 0);
-					context.restore();
-				} else {
-					draw(word, x, frame.y);
-				}
+			const end = startOf(text.length);
+			for (const [from, to] of VectorPrimitiveRenderer._words(text))
+				this._drawStretched(
+					context,
+					text.substring(from, to),
+					frame.x + (primitive.rtl ? end - startOf(to) : startOf(from)),
+					frame.y,
+					startOf(to) - startOf(from),
+					tolerance,
+				);
+		}
+
+		// Draws the text at x, stretched to the width when the browser measures
+		// it differently by more than the tolerance.
+		private _drawStretched(
+			context: CanvasRenderingContext2D,
+			text: string,
+			x: number,
+			y: number,
+			width: number,
+			tolerance: number,
+		): void {
+			const measured = this._measuredWidth(context, text);
+			if (measured > 0 && Math.abs(measured - width) > tolerance) {
+				context.save();
+				context.translate(x, y);
+				context.scale(width / measured, 1);
+				context.fillText(text, 0, 0);
+				context.restore();
+			} else {
+				context.fillText(text, x, y);
 			}
 		}
 

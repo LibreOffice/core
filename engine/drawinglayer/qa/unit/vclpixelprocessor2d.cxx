@@ -19,8 +19,11 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/utils/bgradient.hxx>
+#include <com/sun/star/lang/Locale.hpp>
 
 using namespace drawinglayer;
 
@@ -127,8 +130,22 @@ public:
                             access->GetColor(Point(0, 199)).GetColorError(COL_BLACK));
     }
 
+    // The advances put "b" at 5000, far past where the font puts it.
+    void testTextRangeReachesItsAdvances()
+    {
+        const rtl::Reference<primitive2d::TextSimplePortionPrimitive2D> pText(
+            new primitive2d::TextSimplePortionPrimitive2D(
+                basegfx::utils::createScaleB2DHomMatrix(1000, 1000), u"ab"_ustr, 0, 2,
+                { 5000, 5600 }, {},
+                attribute::FontAttribute(u"Liberation Sans"_ustr, OUString(), 400),
+                css::lang::Locale(), basegfx::BColor()));
+        CPPUNIT_ASSERT_GREATER(5000.0,
+                               pText->getB2DRange(geometry::ViewInformation2D()).getMaxX());
+    }
+
     CPPUNIT_TEST_SUITE(VclPixelProcessor2DTest);
     CPPUNIT_TEST(tdf139000_draw_clipped_gradient);
+    CPPUNIT_TEST(testTextRangeReachesItsAdvances);
     CPPUNIT_TEST_SUITE_END();
 };
 

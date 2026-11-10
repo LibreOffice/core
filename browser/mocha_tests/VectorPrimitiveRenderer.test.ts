@@ -178,9 +178,9 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.deepStrictEqual(drawn, [accented, pair]);
 		});
 
-		it('draws a right-to-left run as the browser lays it out', function () {
-			// The browser orders and shapes right-to-left text, so the run is
-			// drawn in one call.
+		it('stretches a right-to-left word to its advances', function () {
+			// The browser orders and shapes right-to-left text. The engine ends
+			// the word after its advances, 70 wide, and the browser measures 20.
 			const recorder = drawRun({
 				rtl: true,
 				advances: [30, 40],
@@ -188,7 +188,46 @@ describe('VectorPrimitiveRenderer', function () {
 
 			const fills = recorder.callsOf('fillText');
 			nodeassert.strictEqual(fills.length, 1);
+			nodeassert.deepStrictEqual(fills[0].args, ['ab', 0, 0]);
+			// Brackets and other neutral characters are ordered from the right.
+			nodeassert.strictEqual(fills[0].properties.direction, 'rtl');
+			nodeassert.deepStrictEqual(
+				recorder.callsOf('translate')[0].args,
+				[50, 100],
+			);
+			nodeassert.deepStrictEqual(recorder.callsOf('scale')[0].args, [3.5, 1]);
+		});
+
+		it('places the words of a right-to-left run from its right end', function () {
+			// The space steps 40, as on a justified line, so the run ends at
+			// 50 + 80. The first word is at the right end, 20 wide, and the
+			// second one at the left.
+			const recorder = drawRun({
+				text: 'ab cd',
+				rtl: true,
+				advances: [10, 10, 40, 10, 10],
+			});
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.deepStrictEqual(
+				fills.map((call: any) => call.args),
+				[
+					['ab', 110, 100],
+					['cd', 50, 100],
+				],
+			);
+			nodeassert.ok(
+				fills.every((call: any) => call.properties.direction === 'rtl'),
+			);
+		});
+
+		it('draws a right-to-left run without advances as the browser lays it out', function () {
+			const recorder = drawRun({ rtl: true });
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 1);
 			nodeassert.deepStrictEqual(fills[0].args, ['ab', 50, 100]);
+			nodeassert.strictEqual(recorder.callsOf('scale').length, 0);
 		});
 
 		it('places words by their advances in a transformed run', function () {
@@ -212,6 +251,19 @@ describe('VectorPrimitiveRenderer', function () {
 			const recorder = drawRun({
 				type: 'textDecoratedPortion',
 				underline: true,
+				advances: [30, 40],
+			});
+
+			const lines = recorder.callsOf('lineTo');
+			nodeassert.strictEqual(lines.length, 1);
+			nodeassert.strictEqual(lines[0].args[0], 50 + 70);
+		});
+
+		it('spans the decorations of a right-to-left run over its advances', function () {
+			const recorder = drawRun({
+				type: 'textDecoratedPortion',
+				underline: true,
+				rtl: true,
 				advances: [30, 40],
 			});
 

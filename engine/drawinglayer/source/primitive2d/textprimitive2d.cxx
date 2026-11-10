@@ -83,6 +83,22 @@ basegfx::B2DVector getCorrectedScaleAndFontScale(basegfx::B2DVector& rScale)
 
     return aFontScale;
 }
+
+/// The advances in the units of the text layouter. A text that is stretched keeps the stretch in
+/// its transformation, which applies it after the layouter, so its advances are taken back by it.
+/// Without a stretch, the advances are used as they are, and rScaled stays empty.
+const std::vector<double>& layouterDXArray(const std::vector<double>& rDXArray, double fScaleX,
+                                           std::vector<double>& rScaled)
+{
+    if (rDXArray.empty() || basegfx::fTools::equal(fScaleX, 1.0))
+        return rDXArray;
+
+    rScaled = rDXArray;
+    const double fDXArrayScale(1.0 / fScaleX);
+    for (double& a : rScaled)
+        a *= fDXArrayScale;
+    return rScaled;
+}
 } // end of anonymous namespace
 
 void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
@@ -120,29 +136,10 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
     aTextLayouter.setFontAttribute(getFontAttribute(), aFontScale.getX(), aFontScale.getY(),
                                    getLocale());
 
-    // When getting outlines from stretched text (aScale.getX() != 1.0) it
-    // is necessary to inverse-scale the DXArray (if used) to not get the
-    // outlines already aligned to given, but wrong DXArray
-    if (!getDXArray().empty() && !basegfx::fTools::equal(aScale.getX(), 1.0))
-    {
-        std::vector<double> aScaledDXArray = getDXArray();
-        const double fDXArrayScale(1.0 / aScale.getX());
-
-        for (double& a : aScaledDXArray)
-        {
-            a *= fDXArrayScale;
-        }
-
-        // get the text outlines
-        aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
-                                      aScaledDXArray, getKashidaArray());
-    }
-    else
-    {
-        // get the text outlines
-        aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
-                                      getDXArray(), getKashidaArray());
-    }
+    std::vector<double> aScaledDXArray;
+    aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
+                                  layouterDXArray(getDXArray(), aScale.getX(), aScaledDXArray),
+                                  getKashidaArray());
 
     // create primitives for the outlines
     const sal_uInt32 nCount(rTarget.size());
@@ -312,9 +309,13 @@ basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(
 
             if (getTextLength())
             {
-                // get basic text range from glyphs
-                aNewRange
-                    = aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength());
+                // The advances can be wider than the font lays the glyphs out, as with the
+                // metrics of a reference device.
+                std::vector<double> aScaledDXArray;
+                aNewRange = aTextLayouter.getTextBoundRect(
+                    getText(), getTextPosition(), getTextLength(),
+                    layouterDXArray(getDXArray(), aScale.getX(), aScaledDXArray),
+                    getKashidaArray());
             }
             else
             {

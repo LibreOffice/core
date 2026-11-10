@@ -93,6 +93,7 @@ class CanvasRecorder {
 		'font',
 		'textAlign',
 		'textBaseline',
+		'direction',
 		'shadowBlur',
 		'shadowColor',
 		'shadowOffsetX',

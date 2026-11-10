@@ -2101,17 +2101,18 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
 
 CPPUNIT_TEST_FIXTURE(Test, testAlignRtlReading)
 {
-    // EMF file with the TA_RTLREADING alignment flag
+    // EMF file with the TA_RTLREADING alignment flag. The text ends inside the picture at its
+    // advances, so it is not clipped.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestAlignRtlReading.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 4);
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "rtl", u"true");
-    assertXPathNoAttribute(pDocument, aXPathPrefix + "mask/textsimpleportion[2]", "rtl");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[3]", "rtl", u"true");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion", 4);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "rtl", u"true");
+    assertXPathNoAttribute(pDocument, aXPathPrefix + "textsimpleportion[2]", "rtl");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[3]", "rtl", u"true");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSmallTextOut)
