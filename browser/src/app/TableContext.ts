@@ -206,6 +206,12 @@ class ClassicTableContext extends ClassicContext {
 				: [0, lines.from, table.columns.length - 2, lines.to],
 		);
 		app.map.sendUnoCommand(columns ? '.uno:DeleteColumns' : '.uno:DeleteRows');
+		// the markers go at once, so a next Delete counts on the lines that are left
+		app.activeDocument?.tableMiddleware?.deleteLinesLocally(
+			columns,
+			lines.from,
+			lines.to,
+		);
 
 		// the cells selected for it are gone with them, and their selection too
 		const docLayer = app.map._docLayer;

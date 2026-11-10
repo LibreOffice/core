@@ -470,6 +470,33 @@ class TableMiddleware {
 		GraphicSelection.refreshLocalHandles();
 	}
 
+	/*
+		Takes the columns, or the rows, from the first to the last out of the rows and columns at
+		once, as deleting them does, so the markers stand where the lines are left before the
+		server reports the table again: the ones after them move up by what was taken out, and the
+		table shrinks by it. Deleting all of them deletes the table, which the server reports.
+	*/
+	public deleteLinesLocally(columns: boolean, from: number, to: number): void {
+		const data = this.tableData();
+		if (!data) return;
+		const lines = columns ? data.columns : data.rows;
+		const borders = [lines.left]
+			.concat(lines.entries.map((entry: any) => entry.position))
+			.concat([lines.right]);
+		if (from <= 0 && to >= borders.length - 2) return;
+
+		const taken = borders[to + 1] - borders[from];
+		const left = borders
+			.slice(0, from + 1)
+			.concat(borders.slice(to + 2).map((at: number) => at - taken));
+		lines.entries = left.slice(1, -1).map((at: number, index: number) => ({
+			...lines.entries[index],
+			position: at,
+		}));
+		lines.right = left[left.length - 1];
+		GraphicSelection.refreshLocalHandles();
+	}
+
 	private updateMoveMarkerVisibility() {
 		if (
 			!RenderManager.isVectorRendering() &&
