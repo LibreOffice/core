@@ -32,6 +32,7 @@ import sys
 
 FATAL = re.compile(r'^kit-(\d+)-\d+ \S+ \S+ \[ (\S+) \] SIG +Fatal signal received: (\w+)')
 LOAD_DOC = re.compile(r'load doc: \S*/([^/\s]+)$')
+BACKTRACE = re.compile(r'^Backtrace (\d+) ')
 TREE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 GDB_SECONDS = 600
 
@@ -39,19 +40,27 @@ GDB_SECONDS = 600
 def kit_crashes(log):
     """(pid, stage, signal, file name) for each fatal signal in a kit. The kit names its
     document a few lines after the signal, and its background save process runs in a thread
-    whose name starts with kitbgsv."""
+    whose name starts with kitbgsv. The kit's dump ends at "Backtrace <pid>". Two kits that
+    crash together can interleave their dumps, so the file name is None when another kit's
+    signal or backtrace comes first, or when more than one document is named."""
     crashes, lines = [], open(log, errors='replace').readlines()
     for n, line in enumerate(lines):
         match = FATAL.match(line)
         if not match:
             continue
         pid, thread, signal = match.groups()
-        name = None
-        for following in lines[n + 1:n + 20]:
+        names = set()
+        for following in lines[n + 1:n + 40]:
+            backtrace = BACKTRACE.match(following)
+            if backtrace and int(backtrace.group(1)) == int(pid):
+                break
+            if backtrace or FATAL.match(following):
+                names.clear()
+                break
             found = LOAD_DOC.search(following.strip())
             if found:
-                name = found.group(1)
-                break
+                names.add(found.group(1))
+        name = names.pop() if len(names) == 1 else None
         crashes.append((pid, 'save' if thread.startswith('kitbgsv') else 'load', signal, name))
     return crashes
 
