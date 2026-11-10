@@ -346,6 +346,7 @@ void RemoteFilesDialog::OpenURL( OUString const & sURL )
         return;
 
     DisableControls();
+    m_bIsConnected = false;
 
     auto xWait = std::make_unique<weld::WaitObject>(m_xDialog.get());
 
