@@ -143,18 +143,17 @@ namespace vclcanvas
         return css::uno::Any(false);
     }
 
-    uno::Any DeviceHelper::getDeviceHandle() const
+    const OutputDevice* DeviceHelper::getDeviceHandle() const
     {
         if( !mpOutDev )
-            return uno::Any();
+            return nullptr;
 
-        return uno::Any(
-            reinterpret_cast< sal_Int64 >(&mpOutDev->getOutDev()) );
+        return &mpOutDev->getOutDev();
     }
 
     uno::Any DeviceHelper::getSurfaceHandle() const
     {
-        return getDeviceHandle();
+        return uno::Any(reinterpret_cast<sal_Int64>(getDeviceHandle()));
     }
 
     namespace

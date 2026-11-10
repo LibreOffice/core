@@ -12,6 +12,7 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 
 #include <rtl/ref.hxx>
+#include <vcl/outdev.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
@@ -66,7 +67,7 @@ namespace oglcanvas
         bool  showBuffer( bool bIsVisible, bool bUpdateAll );
 
         css::uno::Any isAccelerated() const;
-        css::uno::Any getDeviceHandle() const;
+        const OutputDevice* getDeviceHandle() const;
         css::uno::Any getSurfaceHandle() const;
         css::uno::Reference<
             css::rendering::XColorSpace > getColorSpace() const;

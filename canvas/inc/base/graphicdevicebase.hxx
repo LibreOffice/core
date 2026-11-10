@@ -111,7 +111,7 @@ namespace canvas
                     {"HardwareAcceleration",
                         { [this] () { return this->maDeviceHelper.isAccelerated(); }, {} } },
                     {"DeviceHandle",
-                        { [this] () { return this->maDeviceHelper.getDeviceHandle(); }, {} } },
+                        { [this] () { return css::uno::Any(reinterpret_cast<sal_Int64>(this->maDeviceHelper.getDeviceHandle())); }, {} } },
                     {"SurfaceHandle",
                         { [this] () { return this->maDeviceHelper.getSurfaceHandle(); }, {} } },
                     {"DumpScreenContent",

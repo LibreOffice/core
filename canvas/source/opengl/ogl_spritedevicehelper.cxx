@@ -318,11 +318,11 @@ namespace oglcanvas
         return css::uno::Any(false);
     }
 
-    uno::Any SpriteDeviceHelper::getDeviceHandle() const
+    const OutputDevice* SpriteDeviceHelper::getDeviceHandle() const
     {
         const SystemChildWindow* pChildWindow = mxContext->getChildWindow();
         const OutputDevice* pDevice = pChildWindow ? pChildWindow->GetOutDev() : nullptr;
-        return uno::Any(reinterpret_cast<sal_Int64>(pDevice));
+        return pDevice;
     }
 
     uno::Any SpriteDeviceHelper::getSurfaceHandle() const

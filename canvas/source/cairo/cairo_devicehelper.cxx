@@ -178,10 +178,7 @@ namespace cairocanvas
         return css::uno::Any(false);
     }
 
-    uno::Any DeviceHelper::getDeviceHandle() const
-    {
-        return uno::Any( reinterpret_cast< sal_Int64 >(mpRefDevice.get()) );
-    }
+    const OutputDevice* DeviceHelper::getDeviceHandle() const { return mpRefDevice.get(); }
 
     uno::Any DeviceHelper::getSurfaceHandle() const
     {

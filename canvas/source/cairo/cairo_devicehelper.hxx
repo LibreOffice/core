@@ -70,7 +70,7 @@ namespace cairocanvas
             const css::geometry::IntegerSize2D&                                        size );
 
         css::uno::Any isAccelerated() const;
-        css::uno::Any getDeviceHandle() const;
+        const OutputDevice* getDeviceHandle() const;
         css::uno::Any getSurfaceHandle() const;
         css::uno::Reference<
             css::rendering::XColorSpace > const & getColorSpace() const;
