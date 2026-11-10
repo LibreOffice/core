@@ -2347,21 +2347,24 @@ define gb_LinkTarget__use_coinmp
 $(call gb_LinkTarget_use_package,$(1),coinmp)
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/coinmp/CoinMP/MSVisualStudio/v9/$(wnt_arch_subdir_optional)$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/CoinMP.lib \
+	$(foreach lib,libCbcSolver libCbc libCgl libOsiClp libClp libOsi libCoinUtils,\
+		$(gb_UnpackedTarball_workdir)/coinmp/Cbc/MSVisualStudio/v17/$(wnt_arch_subdir_optional)$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/$(lib).lib) \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(gb_UnpackedTarball_workdir)/coinmp/Cbc/src/.libs -lCbc -lCbcSolver \
+	-L$(gb_UnpackedTarball_workdir)/coinmp/Cbc/src/.libs -lCbcSolver -lCbc \
 	-L$(gb_UnpackedTarball_workdir)/coinmp/Cgl/src/.libs -lCgl \
-	-L$(gb_UnpackedTarball_workdir)/coinmp/Clp/src/.libs -lClp \
 	-L$(gb_UnpackedTarball_workdir)/coinmp/Clp/src/OsiClp/.libs -lOsiClp \
-	-L$(gb_UnpackedTarball_workdir)/coinmp/CoinMP/src/.libs -lCoinMP \
-	-L$(gb_UnpackedTarball_workdir)/coinmp/CoinUtils/src/.libs -lCoinUtils \
+	-L$(gb_UnpackedTarball_workdir)/coinmp/Clp/src/.libs -lClpSolver -lClp \
 	-L$(gb_UnpackedTarball_workdir)/coinmp/Osi/src/Osi/.libs -lOsi \
+	-L$(gb_UnpackedTarball_workdir)/coinmp/CoinUtils/src/.libs -lCoinUtils \
 )
 endif
 $(call gb_LinkTarget_set_include,$(1),\
-   -I$(gb_UnpackedTarball_workdir)/coinmp/CoinMP/src \
+   -I$(gb_UnpackedTarball_workdir)/coinmp/Cbc/src \
+   -I$(gb_UnpackedTarball_workdir)/coinmp/Clp/src \
+   -I$(gb_UnpackedTarball_workdir)/coinmp/Clp/src/OsiClp \
+   -I$(gb_UnpackedTarball_workdir)/coinmp/Osi/src/Osi \
    -I$(gb_UnpackedTarball_workdir)/coinmp/CoinUtils/src \
    $$(INCLUDE) \
 )

@@ -1,0 +1,10 @@
+--- CoinUtils/src/CoinSearchTree.hpp
++++ CoinUtils/src/CoinSearchTree.hpp
+@@ -27,7 +27,6 @@
+ public:
+   BitVector128();
+   BitVector128(unsigned int bits[4]);
+-  ~BitVector128() {}
+   void set(unsigned int bits[4]);
+   void setBit(int i);
+   void clearBit(int i);

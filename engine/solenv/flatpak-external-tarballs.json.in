@@ -98,11 +98,39 @@
         "dest-filename": "@CLUCENE_TARBALL@"
     },
     {
-        "url": "https://gerrit.collaboraoffice.com/src/@COINMP_TARBALL@",
-        "sha256": "@COINMP_SHA256SUM@",
+        "url": "https://gerrit.collaboraoffice.com/src/@COINOR_CBC_TARBALL@",
+        "sha256": "@COINOR_CBC_SHA256SUM@",
         "type": "file",
         "dest": "external/tarballs",
-        "dest-filename": "@COINMP_TARBALL@"
+        "dest-filename": "@COINOR_CBC_TARBALL@"
+    },
+    {
+        "url": "https://gerrit.collaboraoffice.com/src/@COINOR_CGL_TARBALL@",
+        "sha256": "@COINOR_CGL_SHA256SUM@",
+        "type": "file",
+        "dest": "external/tarballs",
+        "dest-filename": "@COINOR_CGL_TARBALL@"
+    },
+    {
+        "url": "https://gerrit.collaboraoffice.com/src/@COINOR_CLP_TARBALL@",
+        "sha256": "@COINOR_CLP_SHA256SUM@",
+        "type": "file",
+        "dest": "external/tarballs",
+        "dest-filename": "@COINOR_CLP_TARBALL@"
+    },
+    {
+        "url": "https://gerrit.collaboraoffice.com/src/@COINOR_COINUTILS_TARBALL@",
+        "sha256": "@COINOR_COINUTILS_SHA256SUM@",
+        "type": "file",
+        "dest": "external/tarballs",
+        "dest-filename": "@COINOR_COINUTILS_TARBALL@"
+    },
+    {
+        "url": "https://gerrit.collaboraoffice.com/src/@COINOR_OSI_TARBALL@",
+        "sha256": "@COINOR_OSI_SHA256SUM@",
+        "type": "file",
+        "dest": "external/tarballs",
+        "dest-filename": "@COINOR_OSI_TARBALL@"
     },
     {
         "url": "https://gerrit.collaboraoffice.com/src/@CPPUNIT_TARBALL@",

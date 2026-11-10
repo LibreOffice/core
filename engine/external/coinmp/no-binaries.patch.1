@@ -1,7 +1,7 @@
 # -*- Mode: Diff -*-
 # Patch to avoid building any programs for CoinMP
 #
---- coinmp/Clp/src/Makefile.in
+--- coinmp.orig/Clp/src/Makefile.in
 +++ coinmp/Clp/src/Makefile.in
 @@ -95,7 +95,7 @@
  @COIN_HAS_AMD_FALSE@@COIN_HAS_CHOLMOD_FALSE@@COIN_HAS_GLPK_TRUE@am__append_4 = ClpCholeskyUfl.cpp ClpCholeskyUfl.hpp
@@ -12,7 +12,7 @@
  @COIN_HAS_CHOLMOD_TRUE@am__append_7 = -I`$(CYGPATH_W) $(CHOLMODINCDIR)`
  @COIN_HAS_AMD_TRUE@am__append_8 = -I`$(CYGPATH_W) $(AMDINCDIR)`
  @COIN_HAS_ABC_TRUE@am__append_9 = AbcSimplex.hpp CoinAbcCommon.hpp AbcCommon.hpp AbcNonLinearCost.hpp
---- coinmp/Cbc/src/Makefile.in
+--- coinmp.orig/Cbc/src/Makefile.in
 +++ coinmp/Cbc/src/Makefile.in
 @@ -44,7 +44,7 @@
  POST_UNINSTALL = :

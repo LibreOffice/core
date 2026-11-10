@@ -1,0 +1,162 @@
+--- CoinUtils/src/CoinHelperFunctions.hpp
++++ CoinUtils/src/CoinHelperFunctions.hpp
+@@ -169,18 +169,25 @@
+   switch (size % 8) {
+   case 7:
+     to[6] = from[6];
++    [[fallthrough]];
+   case 6:
+     to[5] = from[5];
++    [[fallthrough]];
+   case 5:
+     to[4] = from[4];
++    [[fallthrough]];
+   case 4:
+     to[3] = from[3];
++    [[fallthrough]];
+   case 3:
+     to[2] = from[2];
++    [[fallthrough]];
+   case 2:
+     to[1] = from[1];
++    [[fallthrough]];
+   case 1:
+     to[0] = from[0];
++    [[fallthrough]];
+   case 0:
+     break;
+   }
+@@ -341,18 +348,25 @@
+   switch (size % 8) {
+   case 7:
+     to[6] = from[6];
++    [[fallthrough]];
+   case 6:
+     to[5] = from[5];
++    [[fallthrough]];
+   case 5:
+     to[4] = from[4];
++    [[fallthrough]];
+   case 4:
+     to[3] = from[3];
++    [[fallthrough]];
+   case 3:
+     to[2] = from[2];
++    [[fallthrough]];
+   case 2:
+     to[1] = from[1];
++    [[fallthrough]];
+   case 1:
+     to[0] = from[0];
++    [[fallthrough]];
+   case 0:
+     break;
+   }
+@@ -426,24 +440,31 @@
+   case 7:
+     to[6] = value;
+     // fall through
++    [[fallthrough]];
+   case 6:
+     to[5] = value;
+     // fall through
++    [[fallthrough]];
+   case 5:
+     to[4] = value;
+     // fall through
++    [[fallthrough]];
+   case 4:
+     to[3] = value;
+     // fall through
++    [[fallthrough]];
+   case 3:
+     to[2] = value;
+     // fall through
++    [[fallthrough]];
+   case 2:
+     to[1] = value;
+     // fall through
++    [[fallthrough]];
+   case 1:
+     to[0] = value;
+     // fall through
++    [[fallthrough]];
+   case 0:
+     break;
+   }
+@@ -452,6 +473,7 @@
+   CoinBigIndex n = (size + 7) / 8;
+   --to;
+   switch (size % 8) {
++    [[fallthrough]];
+   case 0:
+     do {
+       *++to = value;
+@@ -530,18 +552,25 @@
+   switch (size % 8) {
+   case 7:
+     to[6] = 0;
++    [[fallthrough]];
+   case 6:
+     to[5] = 0;
++    [[fallthrough]];
+   case 5:
+     to[4] = 0;
++    [[fallthrough]];
+   case 4:
+     to[3] = 0;
++    [[fallthrough]];
+   case 3:
+     to[2] = 0;
++    [[fallthrough]];
+   case 2:
+     to[1] = 0;
++    [[fallthrough]];
+   case 1:
+     to[0] = 0;
++    [[fallthrough]];
+   case 0:
+     break;
+   }
+@@ -550,6 +579,7 @@
+   CoinBigIndex n = (size + 7) / 8;
+   --to;
+   switch (size % 8) {
++    [[fallthrough]];
+   case 0:
+     do {
+       *++to = 0;
+@@ -780,18 +810,25 @@
+   switch (size % 8) {
+   case 7:
+     first[6] = init + 6;
++    [[fallthrough]];
+   case 6:
+     first[5] = init + 5;
++    [[fallthrough]];
+   case 5:
+     first[4] = init + 4;
++    [[fallthrough]];
+   case 4:
+     first[3] = init + 3;
++    [[fallthrough]];
+   case 3:
+     first[2] = init + 2;
++    [[fallthrough]];
+   case 2:
+     first[1] = init + 1;
++    [[fallthrough]];
+   case 1:
+     first[0] = init;
++    [[fallthrough]];
+   case 0:
+     break;
+   }
+@@ -801,6 +838,7 @@
+   --first;
+   --init;
+   switch (size % 8) {
++    [[fallthrough]];
+   case 0:
+     do {
+       *++first = ++init;

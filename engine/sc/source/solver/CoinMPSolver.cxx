@@ -182,12 +182,12 @@ void CoinMPSolver::solve()
     }
     else
     {
-        if (aSolveResult.nStatus == 1)
+        if (aSolveResult.eStatus == CoinMpSolveStatus::Infeasible)
             maStatus = ScResId( RID_ERROR_INFEASIBLE );
-        else if (aSolveResult.nStatus == 2)
+        else if (aSolveResult.eStatus == CoinMpSolveStatus::Unbounded)
             maStatus = ScResId( RID_ERROR_UNBOUNDED );
-        // TODO: detect timeout condition and report as RID_ERROR_TIMEOUT
-        // (currently reported as infeasible)
+        else if (aSolveResult.eStatus == CoinMpSolveStatus::TimeLimit)
+            maStatus = ScResId( RID_ERROR_TIMEOUT );
     }
 }
 

@@ -107,7 +107,11 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,CLUCENE,CLUCENE_TARBALL) \
 	$(call fetch_Optional,DRAGONBOX,DRAGONBOX_TARBALL) \
 	$(call fetch_Optional,FAST_FLOAT,FAST_FLOAT_TARBALL) \
-	$(call fetch_Optional,COINMP,COINMP_TARBALL) \
+	$(call fetch_Optional,COINMP,COINOR_CBC_TARBALL) \
+	$(call fetch_Optional,COINMP,COINOR_CGL_TARBALL) \
+	$(call fetch_Optional,COINMP,COINOR_CLP_TARBALL) \
+	$(call fetch_Optional,COINMP,COINOR_COINUTILS_TARBALL) \
+	$(call fetch_Optional,COINMP,COINOR_OSI_TARBALL) \
 	$(call fetch_Optional,CPPUNIT,CPPUNIT_TARBALL) \
 	$(call fetch_Optional,CURL,CURL_TARBALL) \
 	$(call fetch_Optional,COFFICEOTRON,ECMA376_OPC_TARBALL) \

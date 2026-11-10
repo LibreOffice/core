@@ -80,7 +80,7 @@ The engine is configured with `--with-distro=CPFreeBSDQt`, which takes these
 libraries from ports instead of building the bundled copies:
 
 ```bash
-sudo pkg install CoinMP abseil boost-libs clucene curl expat fast_float \
+sudo pkg install abseil boost-libs cbc clucene curl expat fast_float \
     fontconfig freetype2 frozen glm graphite2 harfbuzz harfbuzz-icu hunspell \
     hyphen icu lcms2 libabw libcdr01 libcmis libe-book libepubgen libetonyek01 \
     libexttextcat libfreehand liblangtag libmspub01 libmwaw03 libnumbertext \

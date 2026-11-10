@@ -53,8 +53,28 @@ FAST_FLOAT_TARBALL := fast_float-8.2.10.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-COINMP_SHA256SUM := 3459fb0ccbdd39342744684338984ac4cc153fb0434f4cae8cf74bd67490a38d
-COINMP_TARBALL := CoinMP-1.8.4.tgz
+COINOR_CBC_SHA256SUM := 62fde44dcf6f3d05c5cd291d7435cdd1b7e8acd3c78ec481dd39fe49cbc40399
+COINOR_CBC_TARBALL := Cbc-releases-2.10.13.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+COINOR_CGL_SHA256SUM := 41b7ac9402db883d9c487eb7101e59eb513cefd726e6e7a669dc94664d9385e6
+COINOR_CGL_TARBALL := Cgl-releases-0.60.10.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+COINOR_CLP_SHA256SUM := 2c078e174dc1a7a308e091b6256fb34b4017897fc140ea707ba207b2913ea46d
+COINOR_CLP_TARBALL := Clp-releases-1.17.11.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+COINOR_COINUTILS_SHA256SUM := ddfea48e10209215748bc9f90a8c04abbb912b662c1aefaf280018d0a181ef79
+COINOR_COINUTILS_TARBALL := CoinUtils-releases-2.11.13.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+COINOR_OSI_SHA256SUM := 1d80d0b4275f2e1ceefc6dda66b8616e3a8c8b07a926ef4456db4a0d55249333
+COINOR_OSI_TARBALL := Osi-releases-0.108.12.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

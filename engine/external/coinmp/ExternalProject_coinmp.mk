@@ -17,19 +17,22 @@ ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,coinmp,build) :
 	$(call gb_Trace_StartRange,coinmp,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		$(gb_MSBUILD_CCACHE_ENV) MSBuild.exe CoinMP.sln /t:Build $(gb_MSBUILD_DEPENDENCY_TRACKING) $(gb_MSBUILD_DEBUGINFO) $(gb_MSBUILD_CCACHE) \
+		$(gb_MSBUILD_CCACHE_ENV) MSBuild.exe Cbc.sln \
+			/t:libCbc$(COMMA)libCbcSolver$(COMMA)libCgl$(COMMA)libClp$(COMMA)libOsi$(COMMA)libOsiClp$(COMMA)libCoinUtils \
+			$(gb_MSBUILD_DEPENDENCY_TRACKING) $(gb_MSBUILD_DEBUGINFO) $(gb_MSBUILD_CCACHE) \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+			/p:WholeProgramOptimization=false \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
-	,CoinMP/MSVisualStudio/v9)
+	,Cbc/MSVisualStudio/v17)
 	$(call gb_Trace_EndRange,coinmp,EXTERNAL)
 
 else
 $(call gb_ExternalProject_get_state_target,coinmp,build) :
 	$(call gb_Trace_StartRange,coinmp,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
-		$(gb_RUN_CONFIGURE) ./configure COIN_SKIP_PROJECTS="Data/Sample" \
+		$(gb_RUN_CONFIGURE) ./configure \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(DISABLE_DYNLOADING),--disable-shared) \
@@ -43,15 +46,14 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			$(EXTERNAL_WORKDIR)/Cbc/src/.libs/libCbc.3.9.10.dylib \
-			$(EXTERNAL_WORKDIR)/Cbc/src/.libs/libCbcSolver.3.9.10.dylib \
-			$(EXTERNAL_WORKDIR)/Cgl/src/.libs/libCgl.1.9.11.dylib \
-			$(EXTERNAL_WORKDIR)/Clp/src/.libs/libClp.1.13.12.dylib \
-			$(EXTERNAL_WORKDIR)/Clp/src/.libs/libClpSolver.1.13.12.dylib \
-			$(EXTERNAL_WORKDIR)/Clp/src/OsiClp/.libs/libOsiClp.1.13.12.dylib \
-			$(EXTERNAL_WORKDIR)/CoinMP/src/.libs/libCoinMP.1.8.4.dylib \
-			$(EXTERNAL_WORKDIR)/CoinUtils/src/.libs/libCoinUtils.3.10.15.dylib \
-			$(EXTERNAL_WORKDIR)/Osi/src/Osi/.libs/libOsi.1.12.10.dylib) \
+			$(EXTERNAL_WORKDIR)/Cbc/src/.libs/libCbc.3.10.13.dylib \
+			$(EXTERNAL_WORKDIR)/Cbc/src/.libs/libCbcSolver.3.10.13.dylib \
+			$(EXTERNAL_WORKDIR)/Cgl/src/.libs/libCgl.1.10.10.dylib \
+			$(EXTERNAL_WORKDIR)/Clp/src/.libs/libClp.1.14.11.dylib \
+			$(EXTERNAL_WORKDIR)/Clp/src/.libs/libClpSolver.1.14.11.dylib \
+			$(EXTERNAL_WORKDIR)/Clp/src/OsiClp/.libs/libOsiClp.1.14.11.dylib \
+			$(EXTERNAL_WORKDIR)/CoinUtils/src/.libs/libCoinUtils.3.11.13.dylib \
+			$(EXTERNAL_WORKDIR)/Osi/src/Osi/.libs/libOsi.1.13.12.dylib) \
 	)
 	$(call gb_Trace_EndRange,coinmp,EXTERNAL)
 

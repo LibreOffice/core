@@ -8,15 +8,90 @@
  *
  */
 
-#include <CoinMP.h>
+#if defined _MSC_VER
+#pragma warning(push, 0)
+#endif
+#include <CbcModel.hpp>
+#include <CbcSolver.hpp>
+#include <ClpSimplex.hpp>
 #include <CoinError.hpp>
+#include <CoinFinite.hpp>
+#include <OsiClpSolverInterface.hpp>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include "CoinMPModel.hxx"
 
+#include <iterator>
 #include <memory>
 #include <stdexcept>
 
 using namespace com::sun::star;
+
+namespace
+{
+int noCallBack(CbcModel*, int) { return 0; }
+
+// Clp's simplex method solves a problem without integer columns.
+void solveContinuous(OsiClpSolverInterface& rSolver, size_t nVariables, double fTimeoutSeconds,
+                     CoinMpSolveResult& rResult)
+{
+    ClpSimplex* pSimplex = rSolver.getModelPtr();
+    pSimplex->setLogLevel(0);
+    pSimplex->setMaximumSeconds(fTimeoutSeconds);
+    pSimplex->initialSolve();
+
+    if (pSimplex->isProvenOptimal())
+        rResult.eStatus = CoinMpSolveStatus::Optimal;
+    else if (pSimplex->isProvenPrimalInfeasible())
+        rResult.eStatus = CoinMpSolveStatus::Infeasible;
+    else if (pSimplex->isProvenDualInfeasible())
+        rResult.eStatus = CoinMpSolveStatus::Unbounded;
+    else if (pSimplex->hitMaximumIterations())
+        rResult.eStatus = CoinMpSolveStatus::TimeLimit;
+
+    rResult.bSuccess = rResult.eStatus == CoinMpSolveStatus::Optimal;
+    if (rResult.bSuccess)
+    {
+        const double* pSolution = pSimplex->primalColumnSolution();
+        rResult.aSolution.assign(pSolution, pSolution + nVariables);
+        rResult.fObjective = pSimplex->objectiveValue();
+    }
+}
+
+// Cbc's standalone solver runs branch and bound with its default cut generators and heuristics.
+void solveInteger(const OsiClpSolverInterface& rSolver, size_t nVariables, double fTimeoutSeconds,
+                  CoinMpSolveResult& rResult)
+{
+    CbcModel aModel(rSolver);
+    CbcSolverUsefulData aSolverData;
+    CbcMain0(aModel, aSolverData);
+    aModel.setMaximumSeconds(fTimeoutSeconds);
+    const char* aArguments[] = { "calc", "-log", "0", "-solve", "-quit" };
+    CbcMain1(std::size(aArguments), aArguments, aModel, noCallBack, aSolverData);
+
+    if (aModel.isProvenOptimal())
+        rResult.eStatus = CoinMpSolveStatus::Optimal;
+    else if (aModel.isProvenInfeasible())
+        rResult.eStatus = CoinMpSolveStatus::Infeasible;
+    else if (aModel.isContinuousUnbounded())
+        rResult.eStatus = CoinMpSolveStatus::Unbounded;
+    else if (aModel.isSecondsLimitReached())
+        rResult.eStatus = CoinMpSolveStatus::TimeLimit;
+
+    // At the time limit the best solution found so far is the result.
+    const double* pSolution = aModel.bestSolution();
+    rResult.bSuccess = pSolution
+                       && (rResult.eStatus == CoinMpSolveStatus::Optimal
+                           || rResult.eStatus == CoinMpSolveStatus::TimeLimit);
+    if (rResult.bSuccess)
+    {
+        rResult.aSolution.assign(pSolution, pSolution + nVariables);
+        rResult.fObjective = aModel.getObjValue();
+    }
+}
+}
 
 CoinMpSolveResult
 coinmpSolveLinearModel(const cpo::uno::Sequence<table::CellAddress>& rVariables,
@@ -45,13 +120,9 @@ coinmpSolveLinearModel(const cpo::uno::Sequence<table::CellAddress>& rVariables,
     for (size_t i = 0; i < nDenseSize; i++)
         pDenseMatrix[i] = 0.0;
 
-    std::unique_ptr<double[]> pRHS(new double[nRows]);
-    std::unique_ptr<char[]> pRowType(new char[nRows]);
-    for (size_t i = 0; i < nRows; i++)
-    {
-        pRHS[i] = 0.0;
-        pRowType[i] = 'N';
-    }
+    // a row without a comparison operator is free
+    std::vector<double> aRowLower(nRows, -COIN_DBL_MAX);
+    std::vector<double> aRowUpper(nRows, COIN_DBL_MAX);
 
     for (sal_Int32 nConstraintPosition = 0; nConstraintPosition < rConstraints.getLength();
          ++nConstraintPosition)
@@ -92,33 +163,21 @@ coinmpSolveLinearModel(const cpo::uno::Sequence<table::CellAddress>& rVariables,
             else
                 fRightValue += fDirectValue;
 
-            switch (eOperator)
-            {
-                case sheet::SolverConstraintOperator_LESS_EQUAL:
-                    pRowType[nConstraintPosition] = 'L';
-                    break;
-                case sheet::SolverConstraintOperator_GREATER_EQUAL:
-                    pRowType[nConstraintPosition] = 'G';
-                    break;
-                case sheet::SolverConstraintOperator_EQUAL:
-                    pRowType[nConstraintPosition] = 'E';
-                    break;
-                default:
-                    break;
-            }
-            pRHS[nConstraintPosition] = fRightValue;
+            if (eOperator != sheet::SolverConstraintOperator_LESS_EQUAL)
+                aRowLower[nConstraintPosition] = fRightValue;
+            if (eOperator != sheet::SolverConstraintOperator_GREATER_EQUAL)
+                aRowUpper[nConstraintPosition] = fRightValue;
         }
     }
 
-    // turn the row-wise matrix into the column-wise form CoinMP wants
+    // turn the row-wise matrix into the column-wise form the solver wants
     std::unique_ptr<int[]> pMatrixBegin(new int[nVariables + 1]);
-    std::unique_ptr<int[]> pMatrixCount(new int[nVariables]);
     std::unique_ptr<double[]> pMatrix(new double[nDenseSize]);
     std::unique_ptr<int[]> pMatrixIndex(new int[nDenseSize]);
     int nMatrixPosition = 0;
     for (nVar = 0; nVar < nVariables; nVar++)
     {
-        int nBegin = nMatrixPosition;
+        pMatrixBegin[nVar] = nMatrixPosition;
         for (size_t nRow = 0; nRow < nRows; nRow++)
         {
             double fCoefficient = pDenseMatrix[nRow * nVariables + nVar];
@@ -129,76 +188,46 @@ coinmpSolveLinearModel(const cpo::uno::Sequence<table::CellAddress>& rVariables,
                 ++nMatrixPosition;
             }
         }
-        pMatrixBegin[nVar] = nBegin;
-        pMatrixCount[nVar] = nMatrixPosition - nBegin;
     }
     pMatrixBegin[nVariables] = nMatrixPosition;
     pDenseMatrix.reset();
 
-    std::unique_ptr<double[]> pLowerBounds(new double[nVariables]);
-    std::unique_ptr<double[]> pUpperBounds(new double[nVariables]);
-    std::unique_ptr<char[]> pColumnType(new char[nVariables]);
-    for (nVar = 0; nVar < nVariables; nVar++)
+    try
     {
-        pLowerBounds[nVar] = rLowerBounds[nVar];
-        pUpperBounds[nVar] = rUpperBounds[nVar];
-        pColumnType[nVar] = rColumnType[nVar];
+        OsiClpSolverInterface aSolver;
+        aSolver.messageHandler()->setLogLevel(0);
+        aSolver.loadProblem(nVariables, nRows, pMatrixBegin.get(), pMatrixIndex.get(),
+                            pMatrix.get(), rLowerBounds.data(), rUpperBounds.data(),
+                            pObjectCoefficients.get(), aRowLower.data(), aRowUpper.data());
+        aSolver.setObjSense(bMaximize ? -1.0 : 1.0);
+
+        bool bInteger = false;
+        for (nVar = 0; nVar < nVariables; nVar++)
+        {
+            if (rColumnType[nVar] == 'I' || rColumnType[nVar] == 'B')
+            {
+                aSolver.setInteger(nVar);
+                bInteger = true;
+            }
+        }
+
+        pMatrixIndex.reset();
+        pMatrix.reset();
+        pMatrixBegin.reset();
+        pObjectCoefficients.reset();
+
+        if (bInteger)
+            solveInteger(aSolver, nVariables, fTimeoutSeconds, aResult);
+        else
+            solveContinuous(aSolver, nVariables, fTimeoutSeconds, aResult);
+    }
+    catch (const CoinError& rError)
+    {
+        throw std::runtime_error(rError.message());
     }
 
-    int nObjectSense = bMaximize ? SOLV_OBJSENS_MAX : SOLV_OBJSENS_MIN;
-
-    HPROB hProblem = CoinCreateProblem("");
-    int nResult = CoinLoadProblem(hProblem, nVariables, nRows, nMatrixPosition, 0, nObjectSense,
-                                  fObjectConstant, pObjectCoefficients.get(), pLowerBounds.get(),
-                                  pUpperBounds.get(), pRowType.get(), pRHS.get(), nullptr,
-                                  pMatrixBegin.get(), pMatrixCount.get(), pMatrixIndex.get(),
-                                  pMatrix.get(), nullptr, nullptr, nullptr);
-    if (nResult == SOLV_CALL_SUCCESS)
-        nResult = CoinLoadInteger(hProblem, pColumnType.get());
-
-    pColumnType.reset();
-    pMatrixIndex.reset();
-    pMatrix.reset();
-    pMatrixCount.reset();
-    pMatrixBegin.reset();
-    pUpperBounds.reset();
-    pLowerBounds.reset();
-    pRowType.reset();
-    pRHS.reset();
-    pObjectCoefficients.reset();
-
-    CoinSetRealOption(hProblem, COIN_REAL_MAXSECONDS, fTimeoutSeconds);
-    CoinSetRealOption(hProblem, COIN_REAL_MIPMAXSEC, fTimeoutSeconds);
-
-    if (nResult == SOLV_CALL_SUCCESS)
-        nResult = CoinCheckProblem(hProblem);
-
-    if (nResult == SOLV_CALL_SUCCESS)
-    {
-        try
-        {
-            nResult = CoinOptimizeProblem(hProblem, 0);
-        }
-        catch (const CoinError& rError)
-        {
-            CoinUnloadProblem(hProblem);
-            throw std::runtime_error(rError.message());
-        }
-    }
-
-    aResult.bSuccess = (nResult == SOLV_CALL_SUCCESS);
     if (aResult.bSuccess)
-    {
-        aResult.aSolution.resize(nVariables);
-        CoinGetSolutionValues(hProblem, aResult.aSolution.data(), nullptr, nullptr, nullptr);
-        aResult.fObjective = CoinGetObjectValue(hProblem);
-    }
-    else
-    {
-        aResult.nStatus = CoinGetSolutionStatus(hProblem);
-    }
-
-    CoinUnloadProblem(hProblem);
+        aResult.fObjective += fObjectConstant;
 
     return aResult;
 }

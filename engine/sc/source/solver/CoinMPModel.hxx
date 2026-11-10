@@ -18,19 +18,28 @@
 
 #include <vector>
 
-// Result of solving one linear problem with CoinMP.
+enum class CoinMpSolveStatus
+{
+    Optimal,
+    Infeasible,
+    Unbounded,
+    TimeLimit,
+    Other
+};
+
+// Result of solving one linear problem with Cbc.
 struct CoinMpSolveResult
 {
+    // aSolution and fObjective hold either the optimum or, at the time limit, the best solution
+    // found so far.
     bool bSuccess = false;
-    // CoinGetSolutionStatus when the solve did not succeed: 1 infeasible,
-    // 2 unbounded, other values for the remaining cases.
-    int nStatus = 0;
+    CoinMpSolveStatus eStatus = CoinMpSolveStatus::Other;
     std::vector<double> aSolution;
     double fObjective = 0.0;
 };
 
 // Build a linear problem from already sampled coefficients and solve it with
-// CoinMP. For the objective and for each constraint cell, rCells holds a vector
+// Cbc. For the objective and for each constraint cell, rCells holds a vector
 // whose first entry is the value of an affine model of that cell at the origin
 // (all variables zero) and whose remaining entries are the slope of each
 // variable. The caller supplies the variable bounds and column types (which

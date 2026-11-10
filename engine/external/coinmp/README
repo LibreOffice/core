@@ -1,5 +1,7 @@
-CoinMP is a C-API library that supports most of the functionality of CLP (Coin LP),
-CBC (Coin Branch-and-Cut), and CGL (Cut Generation Library) projects.
+Cbc (Coin Branch-and-Cut) solves linear and mixed integer programming problems.
+It is built together with the COIN-OR projects it uses: Cgl (Cut Generation
+Library), Clp (Coin LP), Osi (Open Solver Interface) and CoinUtils.
 
-Info [https://projects.coin-or.org/CoinMP].
-From [http://www.coin-or.org/download/source/CoinMP/].
+Info [https://github.com/coin-or/Cbc].
+From [https://github.com/coin-or/Cbc/releases] and the matching releases of
+Cgl, Clp, Osi and CoinUtils.

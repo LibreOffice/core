@@ -9,56 +9,50 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,coinmp))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,coinmp,$(COINMP_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,coinmp,$(COINOR_CBC_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_fix_end_of_line,coinmp,\
-	CoinMP/MSVisualStudio/v9/CoinMP.sln \
+# Cbc's top-level configure builds each COIN-OR project whose directory sits beside Cbc's. The
+# Visual Studio projects expect each project one level deeper, as in CoinUtils/CoinUtils/src.
+$(eval $(call gb_UnpackedTarball_set_pre_action,coinmp,\
+	$(foreach tarball,$(COINOR_COINUTILS_TARBALL) $(COINOR_OSI_TARBALL) $(COINOR_CLP_TARBALL) $(COINOR_CGL_TARBALL),\
+		$(GNUTAR) -x -z --no-same-owner --strip-components=1 \
+			-f $(call gb_Helper_cyg_path,$(gb_UnpackedTarget_TARFILE_LOCATION)/$(tarball)) \
+			$(patsubst %.tar.gz,%,$(tarball))/$(firstword $(subst -, ,$(tarball))) && ) \
+	$(if $(filter MSC,$(COM)),\
+		find . -path '*/MSVisualStudio/v17/*' \
+			\( -name '*.sln' -o -name '*.vcxproj' -o -name '*.vcxproj.filters' \) \
+			-exec sed -i -E -f $(call gb_Helper_cyg_path,$(SRCDIR)/external/coinmp/vs-project-paths.sed) {} + &&) \
+	true \
 ))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,coinmp,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,coinmp))
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,coinmp,\
-	BuildTools \
 	Cbc \
 	Cgl \
 	Clp \
-	CoinMP \
 	CoinUtils \
-	Data/Sample \
 	Osi \
 ))
 
 ifneq ($(MSYSTEM),)
-# use binary flag so patch from git-bash won't choke on mixed line-endings in patches
 $(eval $(call gb_UnpackedTarball_set_patchflags,coinmp,--binary))
 endif
 
-# * external/coinmp/Wnon-c-typedef-for-linkage.patch upstream at
-#   <https://list.coin-or.org/pipermail/coin-discuss/2020-February/003972.html> "[Coin-discuss]
-#   Small patch to fix Clang -Wnon-c-typedef-for-linkage in Clp":
-# * external/coinmp/const.patch.1 upstream at
-#   <https://github.com/coin-or/CoinMP/pull/26> and
-#   <https://github.com/coin-or/Clp/pull/315>
 $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/no-binaries.patch.1 \
 	external/coinmp/werror-undef.patch.0 \
-	external/coinmp/coinmp-msvc-disable-sse2.patch.1 \
-	$(if $(filter MSC,$(COM)),external/coinmp/windows.build.patch.1) \
+	external/coinmp/deprecated-copy.patch.0 \
+	external/coinmp/implicit-fallthrough.patch.0 \
 	external/coinmp/ubsan.patch.0 \
 	external/coinmp/rpath.patch \
 	external/coinmp/libtool.patch \
 	external/coinmp/Wnon-c-typedef-for-linkage.patch \
-	external/coinmp/register.patch \
-	external/coinmp/configure-exit.patch \
-	external/coinmp/pedantic-errors.patch \
-	external/coinmp/bind2nd.patch.1 \
-	external/coinmp/clang-with-path.patch \
 	external/coinmp/odr.patch \
 	external/coinmp/const.patch.1 \
 	external/coinmp/const2.patch.1 \
 	external/coinmp/const3.patch.1 \
-	external/coinmp/nullptr.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

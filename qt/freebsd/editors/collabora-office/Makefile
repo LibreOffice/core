@@ -48,8 +48,7 @@ BUILD_DEPENDS=	${LOCALBASE}/include/glm/glm.hpp:math/glm \
 		npm:www/npm \
 		rsync:net/rsync \
 		zip:archivers/zip
-# CoinMP links the rest of the COIN-OR stack, and the engine's solver
-# library ends up linked against each of them directly.
+# The engine's solver library links the COIN-OR libraries directly.
 LIB_DEPENDS=	libabsl_strings.so:devel/abseil \
 		libabw-0.1.so:textproc/libabw \
 		libboost_date_time.so:devel/boost-libs \
@@ -61,7 +60,6 @@ LIB_DEPENDS=	libabsl_strings.so:devel/abseil \
 		libClpSolver.so:math/clp \
 		libcmis-0.6.so:net/libcmis \
 		libcoinasl.so:math/asl \
-		libCoinMP.so:math/coinmp \
 		libcoinmumps.so:math/coin-or-mumps \
 		libCoinUtils.so:math/coinutils \
 		libcurl.so:ftp/curl \

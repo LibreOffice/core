@@ -32,6 +32,8 @@ class LpSolverTest: public test::BootstrapFixture
 
 #ifdef ENABLE_COINMP
     void testCoinMPSolver();
+    void testCoinMPSolverInfeasible();
+    void testCoinMPSolverUnbounded();
     void testSLPSolver();
     void testSLPSolverNonlinear();
     void testSLPSolverNonlinearConstraint();
@@ -40,6 +42,9 @@ class LpSolverTest: public test::BootstrapFixture
 
 #ifdef ENABLE_COINMP
     void testSolver(OUString const & rName);
+    uno::Reference<sheet::XSolver>
+    solveSingleVariable(const cpo::uno::Sequence<sheet::SolverConstraint>& rConstraints,
+                        bool bMaximize);
 #endif
 
 public:
@@ -49,6 +54,8 @@ public:
     CPPUNIT_TEST_SUITE(LpSolverTest);
 #ifdef ENABLE_COINMP
     CPPUNIT_TEST(testCoinMPSolver);
+    CPPUNIT_TEST(testCoinMPSolverInfeasible);
+    CPPUNIT_TEST(testCoinMPSolverUnbounded);
     CPPUNIT_TEST(testSLPSolver);
     CPPUNIT_TEST(testSLPSolverNonlinear);
     CPPUNIT_TEST(testSLPSolverNonlinearConstraint);
@@ -78,6 +85,54 @@ void LpSolverTest::tearDown()
 void LpSolverTest::testCoinMPSolver()
 {
     testSolver(u"com.sun.star.comp.Calc.CoinMPSolver"_ustr);
+}
+
+// Optimize B1 = A1 with the linear solver, under the given constraints on A1.
+uno::Reference<sheet::XSolver>
+LpSolverTest::solveSingleVariable(const cpo::uno::Sequence<sheet::SolverConstraint>& rConstraints,
+                                  bool bMaximize)
+{
+    uno::Reference<container::XIndexAccess> xSheets(m_xDocument->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByIndex(0), uno::UNO_QUERY_THROW);
+    xSheet->getCellByPosition(1, 0)->setFormula(u"=A1"_ustr);
+
+    uno::Reference<sheet::XSolver> xSolver(
+        m_xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.comp.Calc.CoinMPSolver"_ustr, m_xContext),
+        uno::UNO_QUERY_THROW);
+    xSolver->setDocument(m_xDocument);
+    xSolver->setObjective(table::CellAddress(0, 1, 0));
+    xSolver->setVariables({ table::CellAddress(0, 0, 0) });
+    xSolver->setConstraints(rConstraints);
+    xSolver->setMaximize(bMaximize);
+    xSolver->solve();
+    return xSolver;
+}
+
+// A model with no feasible point is reported as a failure with a reason, not as a solution.
+void LpSolverTest::testCoinMPSolverInfeasible()
+{
+    uno::Reference<sheet::XSolver> xSolver = solveSingleVariable(
+        { { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
+            cpo::uno::Any(2.0) },
+          { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
+            cpo::uno::Any(1.0) } },
+        false);
+    CPPUNIT_ASSERT(!xSolver->getSuccess());
+    uno::Reference<sheet::XSolverDescription> xDescription(xSolver, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xDescription->getStatusDescription().isEmpty());
+}
+
+// A model whose objective grows without limit is reported as a failure with a reason.
+void LpSolverTest::testCoinMPSolverUnbounded()
+{
+    uno::Reference<sheet::XSolver> xSolver = solveSingleVariable(
+        { { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
+            cpo::uno::Any(1.0) } },
+        true);
+    CPPUNIT_ASSERT(!xSolver->getSuccess());
+    uno::Reference<sheet::XSolverDescription> xDescription(xSolver, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xDescription->getStatusDescription().isEmpty());
 }
 
 // The sequential linear solver must also handle a plain linear model.
