@@ -39,6 +39,8 @@
 #include <limits>
 #include <memory>
 
+class StyleSettings;
+
 class SVXCORE_DLLPUBLIC XColorEntry final : public XPropertyEntry
 {
 private:
@@ -168,6 +170,9 @@ protected:
 
     bool                mbListDirty;
     bool                mbEmbedInDocument;
+    /// The style settings the cached thumbnails of the entries were painted with, or empty when
+    /// no thumbnail was painted yet.
+    mutable std::unique_ptr<StyleSettings> mpUiBitmapStyleSettings;
 
     XPropertyList(XPropertyListType t, OUString aPath, OUString aReferer);
     bool isValidIdx(tools::Long nIndex) const;

@@ -32,6 +32,8 @@
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
 #include <tools/debug.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <stack>
 
 using namespace com::sun::star;
@@ -249,6 +251,16 @@ Bitmap XPropertyList::GetUiBitmap( tools::Long nIndex ) const
     Bitmap aRetval;
     if (!isValidIdx(nIndex))
         return aRetval;
+
+    // The thumbnails are painted with the colors, the size and the contrast mode of the style
+    // settings, so a change of the settings drops all of them.
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    if (!mpUiBitmapStyleSettings || !(*mpUiBitmapStyleSettings == rStyleSettings))
+    {
+        for (const std::unique_ptr<XPropertyEntry>& pListEntry : maList)
+            pListEntry->SetUiBitmap(Bitmap());
+        mpUiBitmapStyleSettings = std::make_unique<StyleSettings>(rStyleSettings);
+    }
 
     XPropertyEntry* pEntry = maList[nIndex].get();
     aRetval = pEntry->GetUiBitmap();
