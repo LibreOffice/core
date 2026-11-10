@@ -23,7 +23,6 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>

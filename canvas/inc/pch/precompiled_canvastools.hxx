@@ -77,7 +77,6 @@
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>

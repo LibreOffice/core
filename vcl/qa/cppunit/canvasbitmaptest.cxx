@@ -23,7 +23,6 @@
 #include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>

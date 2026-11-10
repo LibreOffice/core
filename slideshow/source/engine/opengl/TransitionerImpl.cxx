@@ -34,7 +34,6 @@
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #undef IN

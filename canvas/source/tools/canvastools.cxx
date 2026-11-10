@@ -44,7 +44,6 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XColorSpace.hpp>
