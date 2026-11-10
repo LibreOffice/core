@@ -2338,9 +2338,13 @@ Connection:
 server -> client messages on /co/collab
 ---------------------------------------
 
-{"type":"authenticated"}
+{"type":"authenticated","fileInfo":{...}}
 
-    Sent once the wopiSrc + access_token pair has been accepted.
+    Sent once the wopiSrc + access_token pair has been accepted.  "fileInfo" holds the file
+    properties of the wopi: message to a /cool/ws session, such as "UserCanWrite", "EnableShare"
+    and the "Hide..." and "Disable..." options.  It leaves out "FileUrl", as the document comes
+    through fetch, and the values that only a /cool/ws session has: "TemplateSource" and the AI
+    settings.
 
 {"type":"user_list","users":[<user>,...],"editingActive":<bool>}
 

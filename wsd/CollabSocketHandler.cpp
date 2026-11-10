@@ -240,7 +240,29 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                     << ", username: " << Anonymizer::anonymize(_username)
                     << ", canWrite: " << _userCanWrite
                     << ", cleanExport: " << _allowsCleanExport);
-            sendTextMessage("{\"type\":\"authenticated\"}");
+
+            Poco::JSON::Object::Ptr authenticated = new Poco::JSON::Object();
+            authenticated->set("type", "authenticated");
+            const std::unique_ptr<WopiStorage::WOPIFileInfo> fileInfo = cfi.wopiFileInfo(cfi.url());
+            if (fileInfo)
+            {
+                const std::string baseFileName = fileInfo->getFilename();
+                const std::string watermarkText = fileInfo->getWatermarkText();
+                const bool isOwner = fileInfo->getUserId() == fileInfo->getOwnerId();
+
+                Poco::JSON::Object::Ptr properties =
+                    DocumentBroker::makeEditorFileInfo(*fileInfo, baseFileName, watermarkText);
+
+                properties->set("UserCanWrite", fileInfo->getUserCanWrite());
+                properties->set("IsOwner", isOwner);
+
+                // FileUrl downloads the document from the host. Fetch gives the document
+                // only when the host allows export and copy and sets no watermark.
+                properties->remove("FileUrl");
+                authenticated->set("fileInfo", properties);
+            }
+
+            sendTextMessage(JsonUtil::jsonToString(authenticated));
             break;
         }
         case CheckFileInfo::State::Unauthorized:
