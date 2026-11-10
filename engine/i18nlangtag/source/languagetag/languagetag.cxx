@@ -20,7 +20,6 @@
 #include <rtl/locale.h>
 #include <o3tl/string_view.hxx>
 #include <algorithm>
-#include <atomic>
 #include <map>
 #include <mutex>
 #include <optional>
@@ -761,12 +760,6 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 
     ImplPtr pImpl;
 
-#if OSL_DEBUG_LEVEL > 0
-    static std::atomic_int nCalls = 0;
-    ++nCalls;
-    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCalls << " calls");
-#endif
-
     // Do not register unresolved system locale, also force LangID if system
     // and take the system locale shortcut if possible.
     if (mbSystemLocale)
@@ -774,11 +767,6 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         pImpl = theSystemLocale();
         if (pImpl)
         {
-#if OSL_DEBUG_LEVEL > 0
-            static size_t nCallsSystem = 0;
-            ++nCallsSystem;
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsSystem << " system calls");
-#endif
             return pImpl;
         }
         if (!mbInitializedLangID)
@@ -800,11 +788,6 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             if (!theDontKnow)
                 theDontKnow = std::make_shared<LanguageTagImpl>( *this);
             pImpl = theDontKnow;
-#if OSL_DEBUG_LEVEL > 0
-            static size_t nCallsDontKnow = 0;
-            ++nCallsDontKnow;
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsDontKnow << " DontKnow calls");
-#endif
             return pImpl;
         }
         else
@@ -813,12 +796,6 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             pImpl = theSystemLocale();
             if (pImpl && pImpl->mnLangID == mnLangID)
             {
-#if OSL_DEBUG_LEVEL > 0
-                static size_t nCallsSystemEqual = 0;
-                ++nCallsSystemEqual;
-                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsSystemEqual
-                        << " system equal LangID calls");
-#endif
                 return pImpl;
             }
         }
@@ -844,20 +821,9 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         pImpl = theSystemLocale();
         if (pImpl && pImpl->maBcp47 == maBcp47)
         {
-#if OSL_DEBUG_LEVEL > 0
-            static size_t nCallsSystemEqual = 0;
-            ++nCallsSystemEqual;
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsSystemEqual << " system equal BCP47 calls");
-#endif
             return pImpl;
         }
     }
-
-#if OSL_DEBUG_LEVEL > 0
-    static size_t nCallsNonSystem = 0;
-    ++nCallsNonSystem;
-    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsNonSystem << " non-system calls");
-#endif
 
     std::unique_lock aGuard( theMutex());
 
@@ -878,7 +844,6 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         MapLangID::const_iterator it( rMap.find( mnLangID));
         if (it != rMap.end())
         {
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: found impl for 0x" << ::std::hex << mnLangID);
             pImpl = (*it).second;
         }
         else
@@ -921,7 +886,6 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         MapBcp47::const_iterator it( rMap.find( maBcp47));
         if (it != rMap.end())
         {
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: found impl for '" << maBcp47 << "'");
             pImpl = (*it).second;
         }
         else
