@@ -20,6 +20,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_filter_eppt, \
     sd/qa/filter/eppt/eppt \
 ))
 
+$(eval $(call gb_CppunitTest_set_include,sd_filter_eppt,\
+    -I$(SRCDIR)/sd/source/filter/ppt \
+    -I$(SRCDIR)/sd/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,sd_filter_eppt, \
     comphelper \
     cppu \

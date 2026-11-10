@@ -192,6 +192,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/filter/eppt/pptx-text \
 	sd/source/filter/ppt/ppt97animations \
 	sd/source/filter/ppt/pptatom \
+	sd/source/filter/ppt/pptcrypt \
 	sd/source/filter/ppt/pptin \
 	sd/source/filter/ppt/pptinanimations \
 	sd/source/filter/ppt/propread \

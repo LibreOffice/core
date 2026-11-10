@@ -19,10 +19,55 @@
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 
+#include <pptcrypt.hxx>
+
+#include <vector>
+
 using namespace ::com::sun::star;
 
 namespace
 {
+struct PptCryptTestData
+{
+    std::vector<sal_uInt8> aSalt;
+    std::vector<sal_uInt8> aEncryptedVerifier;
+    std::vector<sal_uInt8> aEncryptedHash;
+    sal_uInt32 nKeyBits;
+};
+
+bool verifyPptPassword(const OUString& rPassword, const PptCryptTestData& rData)
+{
+    return PptCrypt::verifyPassword(rPassword, rData.aSalt, rData.aEncryptedVerifier,
+                                    rData.aEncryptedHash, rData.nKeyBits);
+}
+
+const PptCryptTestData aPptCrypt40Bits
+    = { { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+          0x0f },
+        { 0xd9, 0xdf, 0xcb, 0xaa, 0x50, 0x88, 0x16, 0xba, 0xf4, 0xe2, 0x43, 0x24, 0xdb, 0x19, 0xdf,
+          0x56 },
+        { 0x37, 0x83, 0x84, 0x93, 0x3d, 0x6b, 0xc7, 0x79, 0x62, 0x29,
+          0xad, 0x52, 0x39, 0x63, 0x99, 0xeb, 0x02, 0x21, 0x6f, 0x01 },
+        40 };
+
+const PptCryptTestData aPptCrypt56Bits
+    = { { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+          0x0f },
+        { 0xcb, 0xa2, 0x65, 0xac, 0xd0, 0x11, 0x96, 0x74, 0x7e, 0xc2, 0x74, 0xff, 0x91, 0xb6, 0x66,
+          0xf3 },
+        { 0x92, 0x17, 0xd7, 0x41, 0xdb, 0xd4, 0x91, 0x87, 0x6e, 0x89,
+          0x79, 0x2c, 0x4f, 0xd9, 0x19, 0xeb, 0x72, 0xb3, 0xc2, 0xed },
+        56 };
+
+const PptCryptTestData aPptCrypt128Bits
+    = { { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+          0x0f },
+        { 0x1b, 0x6c, 0x92, 0x22, 0xe7, 0xb6, 0x9a, 0x25, 0xfb, 0x3c, 0xe4, 0xa6, 0x49, 0x90, 0x8a,
+          0xa4 },
+        { 0x1a, 0x4e, 0x78, 0x6e, 0xd5, 0xc6, 0xe7, 0xd6, 0x0c, 0x74,
+          0x7b, 0xb6, 0xce, 0x51, 0x31, 0xdd, 0x5a, 0x3c, 0xb3, 0xa2 },
+        128 };
+
 /// Covers sd/source/filter/eppt/ fixes.
 class Test : public UnoApiTest
 {
@@ -127,6 +172,47 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
     // - In <>, XPath '//p:cMediaNode/p:cTn' number of nodes is incorrect
     // i.e. the media node was lost on export, the video no longer looped.
     assertXPath(pXmlDoc, "//p:cMediaNode/p:cTn", "repeatCount", u"indefinite");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPptCryptAcceptsCorrectPassword)
+{
+    CPPUNIT_ASSERT(verifyPptPassword(u"LibreOffice-PPT-Test"_ustr, aPptCrypt40Bits));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPptCryptRejectsWrongPassword)
+{
+    CPPUNIT_ASSERT(!verifyPptPassword(u"WrongPassword"_ustr, aPptCrypt40Bits));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPptCryptAcceptsZeroKeySizeAs40Bits)
+{
+    PptCryptTestData aData = aPptCrypt40Bits;
+    aData.nKeyBits = 0;
+
+    CPPUNIT_ASSERT(verifyPptPassword(u"LibreOffice-PPT-Test"_ustr, aData));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPptCryptAcceptsCorrectPassword56Bits)
+{
+    CPPUNIT_ASSERT(verifyPptPassword(u"LibreOffice-PPT-Test"_ustr, aPptCrypt56Bits));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPptCryptRejectsWrongPassword56Bits)
+{
+    CPPUNIT_ASSERT(!verifyPptPassword(u"WrongPassword"_ustr, aPptCrypt56Bits));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPptCryptAcceptsCorrectPassword128Bits)
+{
+    CPPUNIT_ASSERT(verifyPptPassword(u"LibreOffice-PPT-Test"_ustr, aPptCrypt128Bits));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPptCryptRejectsUnsupportedKeySize)
+{
+    PptCryptTestData aData = aPptCrypt40Bits;
+    aData.nKeyBits = 64;
+
+    CPPUNIT_ASSERT(!verifyPptPassword(u"LibreOffice-PPT-Test"_ustr, aData));
 }
 }
 
