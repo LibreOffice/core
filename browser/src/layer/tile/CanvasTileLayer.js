@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret DropCaretSection */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret DropCaretSection ClassicTableContext */
 
 function clamp(num, min, max)
 {
@@ -2510,6 +2510,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_onTextSelectionMsg: function (textMsg) {
 		textMsg = textMsg.replace('textselection:', '').trim();
 		const rawRectangles = this._getRawRectangles(textMsg);
+		// a report of table cells asked before the newest is passed over
+		if (ClassicTableContext.outdatedCellReport(
+			rawRectangles.length === 1 ? rawRectangles[0] : rawRectangles.length ? [-1] : null))
+			return;
 		// Core selects text in the document for a search match there, and leaves the document with
 		// no selected text for a match in a comment. So text selected in the document ends the
 		// match that an earlier search selected in a comment.
@@ -2876,6 +2880,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_onCellSelectionAreaMsg: function (textMsg) {
 		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 		var strTwips = textMsg.match(/\d+/g);
+		// a report of table cells asked before the newest is passed over
+		if (ClassicTableContext.outdatedCellReport(
+			strTwips ? strTwips.slice(0, 4).map(function (value) { return parseInt(value); }) : null))
+			return;
 		if (strTwips != null) {
 			var topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));
 			var offset = new cool.Point(parseInt(strTwips[2]), parseInt(strTwips[3]));

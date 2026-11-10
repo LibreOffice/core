@@ -66,6 +66,9 @@ class TableMiddleware {
 		// Parse the message
 		txtMessage = txtMessage.substring('tableselected:'.length + 1);
 		const message = JSON.parse(txtMessage);
+		// a report of rows and columns older than the newest laid on them here is passed over
+		if (this.layoutsOnTheWay.outdated(TableMiddleware.bordersOf(message)))
+			return;
 		this.currentTableMarkerJson = txtMessage;
 		this.currentTableData = message;
 		// the numbers come as strings; they are numbers from here on, also where the same table
@@ -447,6 +450,40 @@ class TableMiddleware {
 			: undefined;
 	}
 
+	/// The rows and columns laid on the table here that the server has not reported yet.
+	private layoutsOnTheWay = new TableStatesOnTheWay<number[] | null>(
+		(one: number[] | null, other: number[] | null) =>
+			ClassicTableContext.near(one ?? [], other ?? []),
+		false,
+	);
+
+	/*
+		The borders of the columns and then of the rows of a table, in twips and the offsets
+		included, from the data the server sends, where numbers may still be strings; nothing
+		for no table.
+	*/
+	private static bordersOf(data: any): number[] | null {
+		if (!data || !data.columns || !data.rows) return null;
+		const borders = (lines: any) =>
+			[lines.left]
+				.concat(
+					Array.isArray(lines.entries)
+						? lines.entries.map((entry: any) => entry.position)
+						: [],
+				)
+				.concat([lines.right])
+				.map((at: any) => Number(lines.tableOffset) + Number(at));
+		const columns = borders(data.columns);
+		// the count of columns parts the two lists, so a column more is no row less; it is made
+		// large, as the places are compared with room for rounding
+		return [columns.length * 1000000].concat(columns, borders(data.rows));
+	}
+
+	/// Notes the rows and columns as they now are here, to be reported by the server.
+	private noteTheLayout(): void {
+		this.layoutsOnTheWay.note(TableMiddleware.bordersOf(this.tableData()));
+	}
+
 	/*
 		Lays a border moved by this view on the rows and columns at once, so the markers stand
 		where it went before the server reports the table again, and what it reports then counts:
@@ -467,6 +504,7 @@ class TableMiddleware {
 				lines.entries[entry].position += offset;
 			lines.right += offset;
 		}
+		this.noteTheLayout();
 		GraphicSelection.refreshLocalHandles();
 	}
 
@@ -494,6 +532,7 @@ class TableMiddleware {
 			position: at,
 		}));
 		lines.right = left[left.length - 1];
+		this.noteTheLayout();
 		GraphicSelection.refreshLocalHandles();
 	}
 

@@ -21,6 +21,87 @@ interface TableLayout {
 }
 
 /*
+	The states of a table the client laid on it itself and asked the engine for, oldest first,
+	which the engine has not moved on from. The engine reports each of them back in the order
+	it was asked, late on a slow connection, so a report of one that is older than the newest
+	tells where the engine stood before it came to the newer ones, and is left aside. A report
+	that matches none of them is a change made elsewhere, by an undo or another user, and it
+	counts. The newest stays a short while once it is reported, as the engine reports it in a
+	few messages one after the other.
+*/
+class TableStatesOnTheWay<State> {
+	private asked: { state: State; askedAt: number; reportedAt: number }[] = [];
+
+	// how long a state waits for its report, and how long the newest stays once reported, in ms
+	private static readonly longest = 10000;
+	private static readonly afterReport = 200;
+
+	// the most states that wait; a longer row loses its oldest
+	private static readonly most = 16;
+
+	/*
+		The test whether two states are the same, and whether the engine reports no state on its
+		way from one asked state to the next, as it does for cells.
+	*/
+	constructor(
+		private same: (one: State, other: State) => boolean,
+		private passesThroughNone: boolean,
+	) {}
+
+	/// Notes a state asked of the engine, behind the ones asked before it.
+	public note(state: State): void {
+		const last = this.asked[this.asked.length - 1];
+		if (last && this.same(last.state, state) && !last.reportedAt) return;
+		this.asked.push({
+			state: state,
+			askedAt: performance.now(),
+			reportedAt: 0,
+		});
+		if (this.asked.length > TableStatesOnTheWay.most) this.asked.shift();
+	}
+
+	/*
+		Whether a report of the engine names an older state than the newest one asked, or is a
+		passing one of no state while the newest one is on its way: such a report is left aside.
+		The older ones stay until the newest is done with, as the engine may report one of them
+		again on its way.
+	*/
+	public outdated(reported: State | null): boolean {
+		const now = performance.now();
+		const newest = this.asked[this.asked.length - 1];
+		if (
+			!newest ||
+			now - newest.askedAt > TableStatesOnTheWay.longest ||
+			(newest.reportedAt &&
+				now - newest.reportedAt > TableStatesOnTheWay.afterReport)
+		) {
+			this.asked = [];
+			return false;
+		}
+
+		// the last that matches, as a state asked again counts as the newer one
+		let at = this.asked.length - 1;
+		while (
+			at >= 0 &&
+			!(this.asked[at].state === null || reported === null
+				? this.asked[at].state === reported
+				: this.same(this.asked[at].state, reported))
+		)
+			--at;
+		if (at < 0) {
+			if (this.passesThroughNone && reported === null && newest.state !== null)
+				return true;
+			this.asked = [];
+			return false;
+		}
+
+		if (at < this.asked.length - 1) return true;
+		if (!newest.reportedAt) newest.reportedAt = now;
+		return false;
+	}
+}
+
+/*
 	A table one stands at: one table selected, as an object or with some of its cells. For
 	everything else it acts as the place the table stands at does, the page or the group holding
 	it. It holds what is done with the cells: which of them are selected, and selecting whole
@@ -217,6 +298,7 @@ class ClassicTableContext extends ClassicContext {
 		const docLayer = app.map._docLayer;
 		docLayer._cellSelectionArea = null;
 		docLayer.showTextSelection([]);
+		ClassicTableContext.cellsOnTheWay.note(null);
 	}
 
 	/*
@@ -265,6 +347,36 @@ class ClassicTableContext extends ClassicContext {
 		]);
 	}
 
+	/// The cell ranges asked of the engine that it has not reported yet, each as [x, y, width,
+	/// height] in twips, or null for no cells.
+	private static cellsOnTheWay = new TableStatesOnTheWay<number[] | null>(
+		(one: number[] | null, other: number[] | null) =>
+			ClassicTableContext.near(one ?? [], other ?? []),
+		true,
+	);
+
+	/// Whether two lists of places in twips are the same, but for how the engine rounds them.
+	public static near(one: number[], other: number[]): boolean {
+		// how far a place the engine reports may lie from the one asked for, in twips
+		const near = 20;
+		return (
+			one.length === other.length &&
+			one.every(
+				(value: number, index: number) =>
+					Math.abs(value - other[index]) <= near,
+			)
+		);
+	}
+
+	/*
+		Whether a report of the selected cells, as [x, y, width, height] in twips or null for
+		none, is one of a range asked before the newest, which the engine reports on its way to
+		the newest, and is to be left aside.
+	*/
+	public static outdatedCellReport(reported: number[] | null): boolean {
+		return ClassicTableContext.cellsOnTheWay.outdated(reported);
+	}
+
 	/*
 		Selects the cells from the first to the last, as [first column, first row, last column,
 		last row], or none: it shows the selection at once, as the engine reports one, and tells
@@ -275,6 +387,7 @@ class ClassicTableContext extends ClassicContext {
 		if (!cells) {
 			docLayer._cellSelectionArea = null;
 			docLayer.showTextSelection([]);
+			ClassicTableContext.cellsOnTheWay.note(null);
 		} else {
 			const [firstColumn, firstRow, lastColumn, lastRow] = cells;
 			const x = table.columns[firstColumn];
@@ -288,6 +401,7 @@ class ClassicTableContext extends ClassicContext {
 				height,
 			);
 			docLayer.showTextSelection([[x, y, width, height]]);
+			ClassicTableContext.cellsOnTheWay.note([x, y, width, height]);
 		}
 
 		const [firstColumn, firstRow, lastColumn, lastRow] = cells ?? [
