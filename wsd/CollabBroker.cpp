@@ -112,6 +112,7 @@ void CollabBroker::removeHandler(const std::shared_ptr<CollabSocketHandler>& han
             // bypass the grace period so cleanupCollabBrokers reaps
             // the broker on its next pass.
             _editingStarted = false;
+            _editingUserIds.clear();
             _gracefulClose = true;
         }
         // Otherwise (accidental disconnect): keep _editingStarted
@@ -197,6 +198,18 @@ void CollabBroker::broadcastExcluding(const std::string& message,
         auto h = weakHandler.lock();
         if (h && h.get() != exclude.get())
         {
+            h->sendTextMessage(message);
+        }
+    }
+}
+
+void CollabBroker::sendToEditingUsers(
+    std::string const & message, std::shared_ptr<CollabSocketHandler> const & exclude)
+{
+    std::scoped_lock const lock(_mutex);
+    for (auto const & weakHandler: _handlers) {
+        auto const h = weakHandler.lock();
+        if (h && h.get() != exclude.get() && _editingUserIds.contains(h->getUserId())) {
             h->sendTextMessage(message);
         }
     }
@@ -347,6 +360,7 @@ void CollabBroker::notifyEditingStarted(const std::shared_ptr<CollabSocketHandle
     // Send to all handlers except the one that started editing
     std::lock_guard<std::mutex> lock(_mutex);
     _editingStarted = true;
+    _editingUserIds.insert(handler->getUserId());
     for (auto& weakHandler : _handlers)
     {
         auto h = weakHandler.lock();

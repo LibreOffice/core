@@ -19,6 +19,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -84,6 +85,10 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
     /// empty within cleanupCollabBrokers' grace window) so a reconnect
     /// resumes editing; gets reset only when the broker is reclaimed.
     bool _editingStarted = false;
+
+    /// The users (by ID) who sent editing_started and so edit a local copy (kept and reset along
+    /// with _editingStarted):
+    std::set<std::string> _editingUserIds;
 
     /// When the broker last became idle (no handlers).  Used by
     /// cleanupCollabBrokers() to keep an idle broker alive for a
@@ -170,6 +175,11 @@ public:
     /// Broadcast a message to all handlers except the specified one.
     void broadcastExcluding(const std::string& message,
                             const std::shared_ptr<CollabSocketHandler>& exclude);
+
+    /// Send a message to the handlers of the users who sent editing_started, except the specified
+    /// one:
+    void sendToEditingUsers(
+        std::string const & message, std::shared_ptr<CollabSocketHandler> const & exclude);
 
     /// Get JSON array of current users (excluding the specified handler)
     /// Returns JSON like: {"users": [{"id": "...", "name": "...", "canWrite": true}, ...]}

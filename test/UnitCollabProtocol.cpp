@@ -65,6 +65,7 @@ startCollabConnection(const std::shared_ptr<SocketPoll>& socketPoll,
 /// Tests the /co/collab WebSocket protocol:
 /// 1. editing_started is broadcast to other connected users
 /// 2. editingActive flag is set in user_list for late joiners
+/// 3. switch_to_collab reaches the users who edit a local copy, and not a user who only views
 class UnitCollabProtocol : public WopiTestServer
 {
     // Plain enum class because STATE_ENUM supports at most 15 values.
@@ -75,15 +76,17 @@ class UnitCollabProtocol : public WopiTestServer
         // Test 2: editingActive on late join
         T2_Connect1, T2_WaitAuth1, T2_StartEditing,
         T2_WaitDisconnect, T2_Connect2, T2_WaitAuth2,
-        // Test 3: switch_to_collab broadcast
+        // Test 3: switch_to_collab goes to the editing users only
         T3_Connect1, T3_WaitAuth1, T3_Connect2, T3_WaitAuth2,
-        T3_SendSwitch, T3_WaitSwitch,
+        T3_Connect3, T3_WaitAuth3, T3_SendEditing, T3_WaitEditing,
+        T3_SendSwitch, T3_WaitSwitch, T3_WaitViewer,
         Done,
     } _phase;
 
     std::size_t _checkFileInfoCount;
     std::shared_ptr<http::WebSocketSession> _ws1;
     std::shared_ptr<http::WebSocketSession> _ws2;
+    std::shared_ptr<http::WebSocketSession> _ws3;
     std::string _wopiSrc;
 
 public:
@@ -270,7 +273,7 @@ public:
                 break;
             }
 
-            // -- Test 3: switch_to_collab broadcast --
+            // -- Test 3: switch_to_collab goes to the editing users only --
 
             case Phase::T3_Connect1:
             {
@@ -309,6 +312,36 @@ public:
                 if (!userList)
                     break;
 
+                PHASE_TRANSITION(T3_Connect3);
+                break;
+            }
+            case Phase::T3_Connect3:
+            {
+                PHASE_TRANSITION(T3_WaitAuth3);
+                _ws3 = startCollabConnection(socketPoll(), _wopiSrc, "anything");
+                break;
+            }
+            case Phase::T3_WaitAuth3:
+            {
+                auto userList = pollCollabMessage(_ws3, "user_list");
+                if (!userList) {
+                    break;
+                }
+                PHASE_TRANSITION(T3_SendEditing);
+                break;
+            }
+            case Phase::T3_SendEditing:
+            {
+                PHASE_TRANSITION(T3_WaitEditing);
+                _ws1->sendMessage("{\"type\":\"editing_started\"}");
+                break;
+            }
+            case Phase::T3_WaitEditing:
+            {
+                auto msg = pollCollabMessage(_ws2, "editing_started");
+                if (!msg) {
+                    break;
+                }
                 PHASE_TRANSITION(T3_SendSwitch);
                 break;
             }
@@ -317,6 +350,7 @@ public:
                 PHASE_TRANSITION(T3_WaitSwitch);
 
                 _ws2->sendMessage("{\"type\":\"switch_to_collab\"}");
+                _ws2->sendMessage("{\"type\":\"saved_and_switching\"}");
                 break;
             }
             case Phase::T3_WaitSwitch:
@@ -328,12 +362,31 @@ public:
                 LOK_ASSERT_MESSAGE("Should have user object",
                                    msg->has("user"));
 
-                TST_LOG("Test 3 passed: switch_to_collab broadcast");
+                PHASE_TRANSITION(T3_WaitViewer);
+                break;
+            }
+            case Phase::T3_WaitViewer:
+            {
+                // The viewer's messages come in order, so the saved_and_switching sent after the
+                // switch_to_collab comes first when the viewer did not get the switch_to_collab:
+                auto const response = _ws3->waitForMessageAny(
+                    { "{\"type\":\"switch_to_collab\"", "{\"type\":\"saved_and_switching\"" },
+                    std::chrono::milliseconds(1), "collab");
+                if (response.empty()) {
+                    break;
+                }
+                LOK_ASSERT_MESSAGE(
+                    "A user who only views should not get switch_to_collab",
+                    std::string(response.data(), response.size())
+                        .starts_with("{\"type\":\"saved_and_switching\""));
+                TST_LOG("Test 3 passed: switch_to_collab goes to the editing users only");
 
                 _ws1->asyncShutdown();
                 _ws2->asyncShutdown();
+                _ws3->asyncShutdown();
                 _ws1.reset();
                 _ws2.reset();
+                _ws3.reset();
 
                 PHASE_TRANSITION(Done);
                 passTest("All collab protocol tests passed");

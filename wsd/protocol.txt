@@ -2312,6 +2312,7 @@ server -> client messages on /co/collab
     Sent during a local-to-server transition: a CODA peer that owned the document locally has
     decided to hand it off to the server.  "saved_and_switching" follows the matching incoming
     message from the same peer once its save back to the integrator has completed.
+    "switch_to_collab" only reaches a peer whose user sent {"type":"editing_started"}.
 
 {"type":"fetch_url","stream":"<name>","requestId":"<id>","url":"<url>","filename":"<name>"}
 
@@ -2359,8 +2360,9 @@ client -> server messages on /co/collab
 
     Drive the local-to-server transition: a CODA peer that owned the document locally asks the
     server to take over.  "switch_to_collab" is sent first; "saved_and_switching" follows once the
-    page-JS save back to the integrator has completed.  Both are forwarded to all other peers
-    verbatim.
+    page-JS save back to the integrator has completed.  "switch_to_collab" is forwarded to the
+    other peers whose users sent {"type":"editing_started"}, and "saved_and_switching" to all other
+    peers, both with the sender's user object added.
 
 {"type":"bye"}
 

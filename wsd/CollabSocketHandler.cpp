@@ -352,7 +352,7 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
     }
     else if (type == "switch_to_collab" || type == "saved_and_switching")
     {
-        // Broadcast to other handlers as-is, adding the sender's identity.
+        // Forward to other handlers as-is, adding the sender's identity.
         auto broker = _broker.lock();
         if (broker)
         {
@@ -367,10 +367,15 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
                        "}}";
                 const std::string message = oss.str();
 
-                LOG_INF("Collab: broadcasting " << type << " from "
+                LOG_INF("Collab: forwarding " << type << " from "
                         << Anonymizer::anonymize(_username));
 
-                broker->broadcastExcluding(message, self);
+                // A switch_to_collab is for the users who edit a local copy:
+                if (type == "switch_to_collab") {
+                    broker->sendToEditingUsers(message, self);
+                } else {
+                    broker->broadcastExcluding(message, self);
+                }
             }
         }
     }
