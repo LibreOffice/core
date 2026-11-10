@@ -42,20 +42,37 @@ class ClassicTableContext extends ClassicContext {
 		return app.activeDocument?.tableMiddleware?.tableData();
 	}
 
+	/*
+		How far the table stands from where the server last reported it, in twips: a move made
+		here is laid on the table at once, before the server reports the table again, so the
+		borders go along by that much. Nought once the report has come.
+	*/
+	private static shiftSinceReported(data: any): cool.Point {
+		const selected = GraphicSelection.selectedObjectIDs;
+		const transform =
+			selected.length === 1
+				? RenderGeometrySection.objectOf(selected[0])?.transform
+				: undefined;
+		const reported = data.rectangle;
+		if (!transform || !reported) return new cool.Point(0, 0);
+		return new cool.Point(transform[4] - reported.x, transform[5] - reported.y);
+	}
+
 	/// Where the borders of the table lie, from its rows and columns.
 	public static layout(data: any): TableLayout {
 		const across = data.columns;
 		const down = data.rows;
+		const shift = ClassicTableContext.shiftSinceReported(data);
 		const inner = (lines: any): any[] =>
 			Array.isArray(lines.entries) ? lines.entries : [];
 		const columns = [across.left]
 			.concat(inner(across).map((entry: any) => entry.position))
 			.concat([across.right])
-			.map((at: number) => across.tableOffset + at);
+			.map((at: number) => across.tableOffset + at + shift.x);
 		const rows = [down.left]
 			.concat(inner(down).map((entry: any) => entry.position))
 			.concat([down.right])
-			.map((at: number) => down.tableOffset + at);
+			.map((at: number) => down.tableOffset + at + shift.y);
 		return {
 			left: columns[0],
 			right: columns[columns.length - 1],
@@ -166,6 +183,34 @@ class ClassicTableContext extends ClassicContext {
 			cursor.rectangle.x1 + cursor.rectangle.width * 0.5,
 			cursor.rectangle.y1 + cursor.rectangle.height * 0.5,
 		);
+	}
+
+	/*
+		Deletes that column, or that row, of the table; where it is one of several whole columns or
+		rows selected, all of them, as the office deletes what is selected. They are selected
+		first, so the engine deletes what the client says.
+	*/
+	public deleteLines(columns: boolean, at: number): void {
+		const data = ClassicTableContext.data();
+		if (!data) return;
+		const table = ClassicTableContext.layout(data);
+		const standing = ClassicTableContext.selectedLines(columns, table);
+		const lines =
+			standing && at >= standing.from && at <= standing.to
+				? standing
+				: { from: at, to: at };
+		this.selectCells(
+			table,
+			columns
+				? [lines.from, 0, lines.to, table.rows.length - 2]
+				: [0, lines.from, table.columns.length - 2, lines.to],
+		);
+		app.map.sendUnoCommand(columns ? '.uno:DeleteColumns' : '.uno:DeleteRows');
+
+		// the cells selected for it are gone with them, and their selection too
+		const docLayer = app.map._docLayer;
+		docLayer._cellSelectionArea = null;
+		docLayer.showTextSelection([]);
 	}
 
 	/*

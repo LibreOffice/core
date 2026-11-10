@@ -276,8 +276,19 @@ class TableHandles extends HandleGroup {
 		this.act(handle, event?.shiftKey === true);
 	}
 
-	/// Return and Space do what a click does.
+	/// Return and Space do what a click does; Delete on a select square deletes its column or
+	/// row, with the others selected beside it.
 	public pressByKey(handle: SelectionHandle, event: KeyboardEvent): boolean {
+		const columns = handle.kind === TableHandles.columnSelect;
+		if (
+			event.key === 'Delete' &&
+			(columns || handle.kind === TableHandles.rowSelect)
+		) {
+			const context = Interaction.context();
+			if (!(context instanceof ClassicTableContext)) return false;
+			context.deleteLines(columns, Number(handle.name.split('.')[2]));
+			return true;
+		}
 		if (event.key !== 'Enter' && event.key !== ' ') return false;
 		this.act(handle, event.shiftKey);
 		return true;
@@ -343,7 +354,8 @@ class TableHandles extends HandleGroup {
 			: new cool.Point(handle.point.x, place);
 	}
 
-	/// The arrow keys on the anchor move the table, as they move a selection.
+	/// The arrow keys on the anchor, a select square or a bar move the table, as they move a
+	/// selection; on a border marker they move the border.
 	public moveByKey(
 		handle: SelectionHandle,
 		towards: cool.Point,
@@ -354,7 +366,7 @@ class TableHandles extends HandleGroup {
 			handle.kind === TableHandles.rowBorder
 		)
 			return this.moveBorderByKey(handle, towards, event);
-		if (handle.kind !== TableHandles.anchor) return null;
+		// the other markers move the table, as the anchor does
 		this.selection.moveByKey(towards, event);
 		const step = HandleTravel.stepFor(event);
 		return new cool.Point(

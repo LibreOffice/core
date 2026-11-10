@@ -265,7 +265,10 @@ class HandleTravel {
 		if (event.key === 'Escape') return this.leave();
 
 		if (
-			(event.key === 'Enter' || event.key === ' ' || event.key === '0') &&
+			(event.key === 'Enter' ||
+				event.key === ' ' ||
+				event.key === '0' ||
+				event.key === 'Delete') &&
 			!event.ctrlKey &&
 			!event.altKey &&
 			!event.metaKey

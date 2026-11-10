@@ -3421,11 +3421,21 @@ abstract class SelectionSection extends CanvasSectionObject {
 				this.interaction = null;
 				this.followTheOtherMode(this.pressedHandle);
 			} else if (this.pressedHandle?.name) {
-				this.travel.goTo(this.pressedHandle.name);
-				this.groupOf(this.pressedHandle)?.letGoWhereItWasPressed(
-					this.pressedHandle,
-					e,
-				);
+				// a handle answers a click only where the mouse is let go on it, as a button does
+				const onCanvas = [
+					this.myTopLeft[0] + point.pX,
+					this.myTopLeft[1] + point.pY,
+				];
+				if (
+					this.handleAt(onCanvas[0], onCanvas[1])?.name ===
+					this.pressedHandle.name
+				) {
+					this.travel.goTo(this.pressedHandle.name);
+					this.groupOf(this.pressedHandle)?.letGoWhereItWasPressed(
+						this.pressedHandle,
+						e,
+					);
+				}
 			} else if (this.pressedGroup && this.keyboardIsOnAPoint()) {
 				// A click on the object, off the handles, takes the keyboard off the point.
 				this.travel.leave();
