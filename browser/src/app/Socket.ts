@@ -2825,7 +2825,7 @@ class Socket {
 							'collab-conflict-wait',
 							'',
 							_(
-								'Your changes are saved. %USERS has unsaved changes in this document and is deciding which version to keep.',
+								'Waiting for %USERS to decide which version of this document to keep. The document opens here once they decide.',
 							).replace('%USERS', decodeURIComponent(command.username || '')),
 							null,
 							_('Close'),
