@@ -321,9 +321,9 @@ namespace slideshow::internal
                         }
 
                         // create visible object
-                        uno::Sequence< uno::Any > aDeviceParams;
+                        uno::Sequence<uno::Any> aDeviceParams = canvastools::getDeviceInfo(xCanvas);
 
-                        if( ::canvastools::getDeviceInfo( xCanvas, aDeviceParams ).getLength() > 1 )
+                        if (aDeviceParams.getLength() > 1)
                         {
                             implInitializePlayerWindow( rBounds, aDeviceParams );
                         }

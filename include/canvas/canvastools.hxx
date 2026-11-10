@@ -303,14 +303,10 @@ namespace canvastools
             Input parameter, the canvas representation for which the device information
             is to be retrieved
 
-            @param o_rxParams
-            Output parameter, the sequence of Anys that hold the device parameters. Layout is as described above
-
-            @return A reference to the resulting sequence of parameters
+            @return The resulting sequence of device parameters. Layout is as described above.
         */
-        CANVASTOOLS_DLLPUBLIC css::uno::Sequence< css::uno::Any >& getDeviceInfo(
-            const css::uno::Reference< css::rendering::XCanvas >& i_rxCanvas,
-            css::uno::Sequence< css::uno::Any >& o_rxParams );
+        CANVASTOOLS_DLLPUBLIC css::uno::Sequence<css::uno::Any>
+        getDeviceInfo(const css::uno::Reference<css::rendering::XCanvas>& i_rxCanvas);
 
         /** Return a color space for a default RGBA integer format
 

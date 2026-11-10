@@ -991,13 +991,10 @@ namespace canvastools
                                             ::basegfx::fround( rRange.getHeight() ) ) );
         }
 
-        uno::Sequence< uno::Any >& getDeviceInfo( const uno::Reference< rendering::XCanvas >& i_rxCanvas,
-                                                  uno::Sequence< uno::Any >&                  o_rxParams )
+        uno::Sequence<uno::Any> getDeviceInfo(const uno::Reference<rendering::XCanvas>& i_rxCanvas)
         {
-            o_rxParams.realloc( 0 );
-
             if( !i_rxCanvas.is() )
-                return o_rxParams;
+                return {};
 
             try
             {
@@ -1009,15 +1006,15 @@ namespace canvastools
                 uno::Reference< beans::XPropertySet > xPropSet( xDevice,
                                                                 uno::UNO_QUERY_THROW );
 
-                o_rxParams = { uno::Any(xServiceInfo->getImplementationName()),
-                               xPropSet->getPropertyValue( u"DeviceHandle"_ustr ) };
+                return { uno::Any(xServiceInfo->getImplementationName()),
+                         xPropSet->getPropertyValue(u"DeviceHandle"_ustr) };
             }
             catch( const uno::Exception& )
             {
                 // ignore, but return empty sequence
             }
 
-            return o_rxParams;
+            return {};
         }
 
         awt::Rectangle getAbsoluteWindowRect( const awt::Rectangle&                  rRect,
