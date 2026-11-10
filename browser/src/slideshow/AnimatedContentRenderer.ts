@@ -87,6 +87,11 @@ abstract class AnimatedContentRenderInfo {
 		// Content ignores clicks.
 	}
 
+	// The number of frames shown so far. It only grows, and still content stays at 0.
+	public getPresentedFrames(): number {
+		return 0;
+	}
+
 	public deleteResources(context: RenderContext) {
 		this.replaceTexture(context, null);
 		this.replaceVao(context, null);
@@ -179,6 +184,10 @@ abstract class AnimatedContentRenderer {
 
 	public handleClick(): void {
 		if (this.info) this.info.handleClick();
+	}
+
+	public getPresentedFrames(): number {
+		return this.info ? this.info.getPresentedFrames() : 0;
 	}
 
 	public deleteResources(): void {

@@ -149,6 +149,9 @@ abstract class SlideCompositor {
 	// Whether the slide shows a playing video on its master page.
 	public abstract hasMasterVideos(slideIndex: number): boolean;
 
+	// The number of frames shown so far by the videos on the master page of the slide.
+	public abstract getMasterVideoFrames(slideIndex: number): number;
+
 	public abstract notifyTransitionStart(slideHash: string): void;
 
 	public abstract notifyTransitionEnd(slideHash: string): void;

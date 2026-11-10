@@ -191,6 +191,10 @@ class LayersCompositor extends SlideCompositor {
 		return this.layerDrawing.hasMasterVideos(slideIndex);
 	}
 
+	public getMasterVideoFrames(slideIndex: number): number {
+		return this.layerDrawing.getMasterVideoFrames(slideIndex);
+	}
+
 	public notifyTransitionStart(slideHash: string) {
 		this.layerDrawing.notifyTransitionStart(slideHash);
 	}

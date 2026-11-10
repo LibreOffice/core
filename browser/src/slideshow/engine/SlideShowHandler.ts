@@ -1281,23 +1281,45 @@ class SlideShowHandler {
 			this.slideCompositor.hasMasterVideos(nNewSlide);
 		if (isLeavingSlideMoving || isEnteringSlideMoving) {
 			const isMipMapEnable = this.isMipMapsEnableFor(transitionFilterInfo);
+			let leavingSlideFrames = -1;
+			let enteringSlideFrames = -1;
 			transitionParameters.refreshSlides = () => {
 				if (isLeavingSlideMoving)
-					this.slideRenderer.refreshSlideTexture(
+					leavingSlideFrames = this.refreshSlideTexture(
 						leavingSlideTexture,
 						nOldSlide,
+						leavingSlideFrames,
 						isMipMapEnable,
 					);
 				if (isEnteringSlideMoving)
-					this.slideRenderer.refreshSlideTexture(
+					enteringSlideFrames = this.refreshSlideTexture(
 						enteringSlideTexture,
 						nNewSlide,
+						enteringSlideFrames,
 						isMipMapEnable,
 					);
 			};
 		}
 
 		return transitionParameters;
+	}
+
+	// Draw the slide as it is now into texture, if its videos have shown a new frame since
+	// drawnFrames. Returns the frame count the texture now shows.
+	private refreshSlideTexture(
+		texture: WebGLTexture | ImageBitmap,
+		nSlideIndex: number,
+		drawnFrames: number,
+		isMipMapEnable: boolean,
+	): number {
+		const frames = this.slideCompositor.getMasterVideoFrames(nSlideIndex);
+		if (frames !== drawnFrames)
+			this.slideRenderer.refreshSlideTexture(
+				texture,
+				nSlideIndex,
+				isMipMapEnable,
+			);
+		return frames;
 	}
 
 	public notifyFirstAutoEffectStarted() {

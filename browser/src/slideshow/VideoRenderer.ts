@@ -22,6 +22,9 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 	private readonly restoreSoundHandler = this.restoreSound.bind(this);
 	// The click or key press that last gave the sound back.
 	private soundRestoringEvent: Event = null;
+	private presentedFrames = 0;
+	// The handle of the frame callback asked for last, or null when none is waiting.
+	private frameCallback: number = null;
 
 	private sId: string;
 	private slideRenderer: SlideRenderer;
@@ -71,6 +74,23 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 
 		video.src = videoInfo.url;
 		this.videoElement = video;
+		this.watchFrames();
+	}
+
+	private watchFrames(): void {
+		if (!this.videoElement.requestVideoFrameCallback) return;
+		this.frameCallback = this.videoElement.requestVideoFrameCallback(
+			(_now, metadata) => {
+				this.presentedFrames = metadata.presentedFrames;
+				this.watchFrames();
+			},
+		);
+	}
+
+	// A browser that cannot report video frames gives a new count on every call.
+	public getPresentedFrames(): number {
+		if (!this.videoElement.requestVideoFrameCallback) ++this.presentedFrames;
+		return this.presentedFrames;
 	}
 
 	public load(): void {
@@ -146,6 +166,9 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 
 	// Dropping the source stops the download and frees the buffer.
 	public deleteResources(context: RenderContext) {
+		if (this.frameCallback !== null)
+			this.videoElement.cancelVideoFrameCallback(this.frameCallback);
+		this.frameCallback = null;
 		this.pause();
 		this.videoElement.removeAttribute('src');
 		this.videoElement.load();

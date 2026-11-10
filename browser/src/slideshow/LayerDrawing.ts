@@ -312,6 +312,18 @@ class LayerDrawing {
 		);
 	}
 
+	// The number of frames shown so far by all the videos on the master page of the slide.
+	public getMasterVideoFrames(slideIndex: number): number {
+		const slideHash = this.helper.getSlideHash(slideIndex);
+		const videoRenderers = this.masterVideoRenderers.get(
+			this.getSlideInfo(slideHash).masterPage,
+		);
+		let frames = 0;
+		for (const videoRenderer of videoRenderers ?? [])
+			frames += videoRenderer.getPresentedFrames();
+		return frames;
+	}
+
 	private drawMasterVideoWithLayer(slideHash: string, videoId: number) {
 		const videoRenderers = this.masterVideoRenderers.get(
 			this.getSlideInfo(slideHash).masterPage,
