@@ -1245,9 +1245,8 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     coolHtmlPath.append("cool-qt.html");
     Poco::URI urlAndQuery(coolHtmlPath);
     urlAndQuery.setScheme("file");
-    std::string uiLanguage = getUILanguage();
-    urlAndQuery.addQueryParameter("lang", uiLanguage);
-    urlAndQuery.addQueryParameter("dir", LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "");
+    for (const auto& [name, value] : coda::pageSettings(!isStarterMode))
+        urlAndQuery.addQueryParameter(name, value);
 
     if (isStarterMode)
     {
@@ -1260,17 +1259,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
             "permission", CODAConfig::instance().isForcedReadOnly() ? "readonly" : "edit");
         urlAndQuery.addQueryParameter("appdocid", std::to_string(_document._appDocId));
         urlAndQuery.addQueryParameter("userinterfacemode", "notebookbar");
-        if (CODAConfig::instance().wantsVector())
-            urlAndQuery.addQueryParameter("vector", "true");
-        if (CODAConfig::instance().messageDelay() > 0)
-            urlAndQuery.addQueryParameter(
-                "messagedelay", std::to_string(CODAConfig::instance().messageDelay()));
     }
-
-    // Dark mode: the user's saved choice wins, otherwise follow the system theme.
-    const bool darkMode =
-        Desktop::getDarkMode().value_or(portalPrefersDark().value_or(false));
-    urlAndQuery.addQueryParameter("darkTheme", darkMode ? "true" : "false");
 
     if (!isStarterMode)
     {
@@ -1298,6 +1287,28 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     }
 
     _webView->load(QUrl(QString::fromStdString(urlAndQueryStr)));
+}
+
+Poco::URI::QueryParameters coda::pageSettings(bool forDocument)
+{
+    const std::string uiLanguage = getUILanguage();
+    Poco::URI::QueryParameters settings = {
+        { "lang", uiLanguage },
+        { "dir", LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "" },
+    };
+
+    if (forDocument && CODAConfig::instance().wantsVector())
+        settings.emplace_back("vector", "true");
+
+    const int messageDelay = CODAConfig::instance().messageDelay();
+    if (forDocument && messageDelay > 0)
+        settings.emplace_back("messagedelay", std::to_string(messageDelay));
+
+    // Dark mode: the user's saved choice wins, otherwise follow the system theme.
+    const bool darkMode = Desktop::getDarkMode().value_or(portalPrefersDark().value_or(false));
+    settings.emplace_back("darkTheme", darkMode ? "true" : "false");
+
+    return settings;
 }
 
 QString WebView::createNewDocumentFile(const std::string& templateType, const std::string& templatePath, const std::string& basename)
