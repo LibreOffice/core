@@ -602,7 +602,11 @@ class VectorCompositor extends SlideCompositor {
 
 	// --- transitions and lifecycle ----------------------------------
 
-	public notifyTransitionStart(): void {
+	public hasMasterVideos(_slideIndex: number): boolean {
+		return false;
+	}
+
+	public notifyTransitionStart(_slideHash: string): void {
 		// The primitive trees are already cached, so there is nothing to
 		// hold back while a transition runs.
 	}

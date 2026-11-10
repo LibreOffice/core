@@ -537,7 +537,9 @@ class SlideShowHandler {
 				aAnimatedElement.notifySlideStart(this._context);
 			});
 		}
-		this.slideCompositor.notifyTransitionStart();
+		this.slideCompositor.notifyTransitionStart(
+			this.theMetaPres.getSlideHash(nNewSlideIndex),
+		);
 		this.presenter._map.fire('transitionstart', { slide: nNewSlideIndex });
 
 		// The transition of a slide is the one played to get onto it, so it is
@@ -1202,15 +1204,7 @@ class SlideShowHandler {
 		nSlideIndex: number,
 		transitionFilterInfo?: TransitionFilterInfo,
 	): WebGLTexture | ImageBitmap | null {
-		// added check for mipmap texture
-		let isMipMapEnable = false;
-		if (
-			transitionFilterInfo &&
-			transitionFilterInfo.transitionType &&
-			transitionFilterInfo.transitionSubtype
-		) {
-			isMipMapEnable = this.isMipMapsEnable(transitionFilterInfo);
-		}
+		const isMipMapEnable = this.isMipMapsEnableFor(transitionFilterInfo);
 
 		// A texture drawn on the GPU leaves the compositor ready to draw the frames of the
 		// slide that follow.
@@ -1226,6 +1220,15 @@ class SlideShowHandler {
 			return null;
 		}
 		return this.slideRenderer.createTexture(slideImage, isMipMapEnable);
+	}
+
+	private isMipMapsEnableFor(transitionFilterInfo?: TransitionFilterInfo) {
+		return (
+			!!transitionFilterInfo &&
+			!!transitionFilterInfo.transitionType &&
+			!!transitionFilterInfo.transitionSubtype &&
+			this.isMipMapsEnable(transitionFilterInfo)
+		);
 	}
 
 	private presentSlide(nSlideIndex: number) {
@@ -1247,7 +1250,7 @@ class SlideShowHandler {
 		nNewSlide: number,
 		nOldSlide: number,
 	): TransitionParameters {
-		let leavingSlideTexture = null;
+		let leavingSlideTexture: WebGLTexture | ImageBitmap = null;
 		const transitionFilterInfo = TransitionFilterInfo.fromSlideInfo(
 			this.getSlideInfo(nNewSlide),
 		);
@@ -1269,6 +1272,30 @@ class SlideShowHandler {
 		transitionParameters.current = leavingSlideTexture;
 		transitionParameters.next = enteringSlideTexture;
 		transitionParameters.transitionFilterInfo = transitionFilterInfo;
+
+		const isLeavingSlideMoving =
+			!this.isStarting &&
+			nOldSlide !== undefined &&
+			this.slideCompositor.hasMasterVideos(nOldSlide);
+		const isEnteringSlideMoving =
+			this.slideCompositor.hasMasterVideos(nNewSlide);
+		if (isLeavingSlideMoving || isEnteringSlideMoving) {
+			const isMipMapEnable = this.isMipMapsEnableFor(transitionFilterInfo);
+			transitionParameters.refreshSlides = () => {
+				if (isLeavingSlideMoving)
+					this.slideRenderer.refreshSlideTexture(
+						leavingSlideTexture,
+						nOldSlide,
+						isMipMapEnable,
+					);
+				if (isEnteringSlideMoving)
+					this.slideRenderer.refreshSlideTexture(
+						enteringSlideTexture,
+						nNewSlide,
+						isMipMapEnable,
+					);
+			};
+		}
 
 		return transitionParameters;
 	}

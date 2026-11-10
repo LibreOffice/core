@@ -56,7 +56,11 @@ function SlideChangeTemplate<T extends AGConstructor<any>>(BaseType: T) {
 		public perform(nT: number, _last: boolean = false): void {
 			if (this.isFinished) return;
 			this.time = nT;
-			if (nT > 0.0) this.render(nT);
+			if (nT > 0.0) {
+				if (this.transitionParameters.refreshSlides)
+					this.transitionParameters.refreshSlides();
+				this.render(nT);
+			}
 		}
 
 		public renderFrame(

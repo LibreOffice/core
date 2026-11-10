@@ -187,8 +187,12 @@ class LayersCompositor extends SlideCompositor {
 		this.layerDrawing.pauseVideos(slideHash);
 	}
 
-	public notifyTransitionStart() {
-		this.layerDrawing.notifyTransitionStart();
+	public hasMasterVideos(slideIndex: number): boolean {
+		return this.layerDrawing.hasMasterVideos(slideIndex);
+	}
+
+	public notifyTransitionStart(slideHash: string) {
+		this.layerDrawing.notifyTransitionStart(slideHash);
 	}
 
 	public notifyTransitionEnd(slideHash: string) {

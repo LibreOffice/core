@@ -146,7 +146,10 @@ abstract class SlideCompositor {
 
 	public abstract pauseVideos(slideHash: string): void;
 
-	public abstract notifyTransitionStart(): void;
+	// Whether the slide shows a playing video on its master page.
+	public abstract hasMasterVideos(slideIndex: number): boolean;
+
+	public abstract notifyTransitionStart(slideHash: string): void;
 
 	public abstract notifyTransitionEnd(slideHash: string): void;
 }

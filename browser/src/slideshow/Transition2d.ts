@@ -19,6 +19,8 @@ class TransitionParameters {
 	public next: WebGLTexture | ImageBitmap = null;
 	public transitionFilterInfo: TransitionFilterInfo = null;
 	public callback: VoidFunction = null;
+	// Draws the latest video frames into current and next, or null when both stay still.
+	public refreshSlides: VoidFunction = null;
 }
 
 abstract class TransitionBase extends SlideChangeGl {

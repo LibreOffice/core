@@ -121,6 +121,16 @@ abstract class SlideRenderer {
 		return null;
 	}
 
+	/// Draw the slide as it is now, with the current frames of its videos, into a texture made
+	/// by createSlideTexture or createTexture, replacing what it held.
+	public refreshSlideTexture(
+		_texture: WebGLTexture | ImageBitmap,
+		_slideIndex: number,
+		_isMipMapEnable: boolean,
+	): void {
+		return;
+	}
+
 	public notifyAnimationStarted(sId: string) {
 		this._activeLayers.add(sId);
 		this.requestRender();
@@ -363,6 +373,30 @@ class SlideRendererGl extends SlideRenderer {
 			return texture;
 		gl.deleteTexture(texture);
 		return null;
+	}
+
+	public refreshSlideTexture(
+		texture: WebGLTexture,
+		slideIndex: number,
+		isMipMapEnable: boolean,
+	): void {
+		if (this.isDisposed()) return;
+		const presenter: SlideShowPresenter = app.map.slideShowPresenter;
+		if (
+			presenter._slideCompositor.drawFrameInto(
+				this._context as RenderContextGl,
+				slideIndex,
+				texture,
+			)
+		)
+			return;
+		const slideImage = presenter._slideCompositor.getAnimatedSlide(slideIndex);
+		this.updateTexture(texture, slideImage);
+		slideImage.close();
+		if (isMipMapEnable) {
+			const gl = this._context.getGl();
+			gl.generateMipmap(gl.TEXTURE_2D);
+		}
 	}
 
 	public deleteCurrentSlideTexture(): void {
