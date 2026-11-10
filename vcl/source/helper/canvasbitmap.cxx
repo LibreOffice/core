@@ -569,11 +569,6 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::getComponentTags(  )
     return m_aComponentTags;
 }
 
-sal_Int8 SAL_CALL VclCanvasBitmap::getRenderingIntent(  )
-{
-    return rendering::RenderingIntent::PERCEPTUAL;
-}
-
 uno::Sequence< ::beans::PropertyValue > SAL_CALL VclCanvasBitmap::getProperties(  )
 {
     return uno::Sequence< ::beans::PropertyValue >();

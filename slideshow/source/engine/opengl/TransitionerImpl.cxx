@@ -478,10 +478,6 @@ private:
     {
         return maComponentTags;
     }
-    virtual sal_Int8 SAL_CALL getRenderingIntent(  ) override
-    {
-        return rendering::RenderingIntent::PERCEPTUAL;
-    }
     virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) override
     {
         return uno::Sequence< beans::PropertyValue >();

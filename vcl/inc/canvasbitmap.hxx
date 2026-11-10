@@ -77,7 +77,6 @@ namespace vcl::unotools
         // XIntegerBitmapColorSpace
         virtual ::sal_Int8 SAL_CALL getType(  ) override;
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) override;
-        virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) override;
         virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getProperties(  ) override;
         virtual css::uno::Sequence< double > SAL_CALL convertColorSpace( const css::uno::Sequence< double >& deviceColor, const css::uno::Reference< css::rendering::XColorSpace >& targetColorSpace ) override;
         virtual css::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertToRGB( const css::uno::Sequence< double >& deviceColor ) override;

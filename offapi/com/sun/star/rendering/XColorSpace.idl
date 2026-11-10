@@ -62,13 +62,6 @@ interface XColorSpace
      */
     sequence<byte>           getComponentTags();
 
-    /** Query rendering intent of this color space.<p>
-
-        @return a value from the RenderingIntent constant
-        group.
-     */
-    byte                     getRenderingIntent();
-
     /** Query various optional properties from the color space.<p>
 
         If this color space has an ICC color profile, the sequence

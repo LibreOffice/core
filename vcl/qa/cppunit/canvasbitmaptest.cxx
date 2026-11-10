@@ -402,11 +402,6 @@ private:
         return maComponentTags;
     }
 
-    virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) override
-    {
-        return rendering::RenderingIntent::PERCEPTUAL;
-    }
-
     virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties() override
     {
         CPPUNIT_ASSERT_MESSAGE("getProperties: method not implemented", false );
