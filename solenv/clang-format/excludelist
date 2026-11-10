@@ -12538,7 +12538,6 @@ sw/source/ui/dbui/mmdocselectpage.cxx
 sw/source/ui/dbui/mmgreetingspage.cxx
 sw/source/ui/dbui/mmlayoutpage.cxx
 sw/source/ui/dbui/mmlayoutpage.hxx
-sw/source/ui/dbui/mmoutputtypepage.cxx
 sw/source/ui/dbui/mmresultdialogs.cxx
 sw/source/ui/dbui/selectdbtabledialog.hxx
 sw/source/ui/dialog/ascfldlg.cxx
