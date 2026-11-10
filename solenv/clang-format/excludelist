@@ -533,7 +533,6 @@ canvas/source/opengl/ogl_texturecache.hxx
 canvas/source/opengl/ogl_tools.hxx
 canvas/source/tools/cachedprimitivebase.cxx
 canvas/source/tools/canvascustomspritehelper.cxx
-canvas/source/tools/canvastools.cxx
 canvas/source/tools/elapsedtime.cxx
 canvas/source/tools/page.cxx
 canvas/source/tools/page.hxx
@@ -4578,7 +4577,6 @@ include/basic/sbxmeth.hxx
 include/basic/sbxobj.hxx
 include/basic/sbxvar.hxx
 include/basic/vbahelper.hxx
-include/canvas/canvastools.hxx
 include/canvas/elapsedtime.hxx
 include/codemaker/commoncpp.hxx
 include/codemaker/commonjava.hxx
