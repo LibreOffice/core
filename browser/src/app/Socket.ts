@@ -2297,6 +2297,9 @@ class Socket {
 	private _onWopiMsg(textMsg: string): void {
 		// Handle WOPI related messages
 		const wopiInfo = JSON.parse(textMsg.substring(textMsg.indexOf('{')));
+		if (window.ThisIsAMobileApp)
+			Object.assign(wopiInfo, window.codaRemoteFileInfo);
+
 		this._map.fire('wopiprops', wopiInfo);
 	}
 

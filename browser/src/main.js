@@ -347,8 +347,10 @@ if (window.ThisIsTheEmscriptenApp) {
 			window.app.console.log('CODA: remote doc, wopiSrc=' + info.wopiSrc);
 			global.collabFetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {
 				// The file properties come before initUI, so controls such as Share follow them.
-				if (result.fileInfo)
+				if (result.fileInfo) {
+					window.codaRemoteFileInfo = result.fileInfo;
 					map.fire('wopiprops', result.fileInfo);
+				}
 				initUI();
 				window.app.console.log('CODA: fetch URL: ' + result.url);
 				if (result.filename) {
