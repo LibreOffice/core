@@ -178,6 +178,40 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.deepStrictEqual(drawn, [accented, pair]);
 		});
 
+		it('stands the upright characters of a vertical run upright', function () {
+			// The run goes down the page at font size 10, so it draws under a
+			// transform from its start. The stub canvas reports no font box, so
+			// the middle of the line is 0.38 of the font size above the baseline.
+			const recorder = drawRun({
+				text: 'A\u65e5\u672cB',
+				matrix: [0, 10, -10, 0, 50, 100],
+				advances: [10, 10, 10, 10],
+				upright: [[1, 3]],
+			});
+
+			const middle = -(10 * 0.38);
+			nodeassert.deepStrictEqual(
+				recorder.callsOf('fillText').map((call: any) => call.args),
+				[
+					['A', 0, 0],
+					['\u65e5', 0, 0],
+					['\u672c', 0, 0],
+					['B', 30, 0],
+				],
+			);
+			nodeassert.deepStrictEqual(
+				recorder.callsOf('translate').map((call: any) => call.args),
+				[
+					[15, middle],
+					[25, middle],
+				],
+			);
+			nodeassert.deepStrictEqual(
+				recorder.callsOf('rotate').map((call: any) => call.args),
+				[[-Math.PI / 2], [-Math.PI / 2]],
+			);
+		});
+
 		it('stretches a right-to-left word to its advances', function () {
 			// The browser orders and shapes right-to-left text. The engine ends
 			// the word after its advances, 70 wide, and the browser measures 20.

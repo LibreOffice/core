@@ -486,6 +486,7 @@ describe('calcPlacedFields', function () {
 			'textPosition',
 			'underline',
 			'underlineAbove',
+			'upright',
 			'weight',
 			'wordLineMode',
 		],

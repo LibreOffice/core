@@ -26,6 +26,8 @@ $(eval $(call gb_Library_use_sdk_api,drawinglayer))
 
 $(eval $(call gb_Library_use_externals,drawinglayer,\
 	boost_headers \
+	icu_headers \
+	icuuc \
 	libxml2 \
 	$(if $(USE_HEADLESS_CODE), cairo) \
 ))

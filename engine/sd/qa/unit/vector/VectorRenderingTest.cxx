@@ -77,12 +77,14 @@
 #include <osl/file.hxx>
 #include <boost/property_tree/ptree.hpp>
 
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <optional>
 #include <set>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 using namespace css;
@@ -945,6 +947,75 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextEditEntryNamesItsView)
     // Below zero, where no object and no page can reach.
     CPPUNIT_ASSERT_EQUAL(sal_Int64(-2 - nViewId), oEntry->getInt("id").value_or(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pObject->GetUniqueID()), oEntry->getInt("parent").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testVerticalTextListsUprightCharacters)
+{
+    // In vertical text the CJK characters stand upright, while Latin letters and the corner
+    // brackets lie on their side along the turned baseline. A browser cannot tell the two apart,
+    // so a portion of vertical text lists the characters that stand upright.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), u"日本ABC"_ustr);
+    addTextBox(tools::Rectangle(Point(1000, 5000), Size(3000, 9000)),
+               u"日本ABC\u300c語\u300d"_ustr);
+    SdrObject* pAcross = page(1)->GetObj(0);
+    auto* pDown = DynCastSdrTextObj(page(1)->GetObj(1));
+    CPPUNIT_ASSERT(pDown);
+    pDown->SetVerticalWriting(true);
+
+    auto aJson = getVectorPrimitives(u"testVerticalTextUpright");
+
+    // The characters of the object that a portion lists as upright, and the others, each sorted,
+    // whichever portions the text is cut into.
+    auto aStandingOf = [&aJson](const SdrObject& rObject) {
+        const auto oEntry = findEntryOfObject(aJson, rObject.GetUniqueID());
+        CPPUNIT_ASSERT(oEntry);
+        std::vector<tools::JsonPath> aPortions;
+        collectNodesOfType(*oEntry, "textSimplePortion"_ostr, aPortions);
+        collectNodesOfType(*oEntry, "textDecoratedPortion"_ostr, aPortions);
+        std::u16string aUpright;
+        std::u16string aOthers;
+        for (const tools::JsonPath& rPortion : aPortions)
+        {
+            const OUString aText = OStringToOUString(
+                rPortion.getString("text").value_or(OString()), RTL_TEXTENCODING_UTF8);
+            const sal_Int32 nPosition = rPortion.getInt("textPosition").value_or(0);
+            const sal_Int32 nLength
+                = rPortion.getInt("textLength").value_or(aText.getLength() - nPosition);
+            const OUString aVisible = aText.copy(nPosition, nLength);
+            std::vector<bool> aStands(aVisible.getLength(), false);
+            if (const auto oUpright = rPortion.at("upright"))
+            {
+                for (const auto& rRange : oUpright->tree())
+                {
+                    std::vector<sal_Int64> aEnds;
+                    for (const auto& rEnd : rRange.second)
+                        aEnds.push_back(rEnd.second.get_value<sal_Int64>());
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), aEnds.size());
+                    const sal_Int64 nFrom = aEnds[0];
+                    const sal_Int64 nTo = aEnds[1];
+                    CPPUNIT_ASSERT(0 <= nFrom);
+                    CPPUNIT_ASSERT(nFrom < nTo);
+                    CPPUNIT_ASSERT(nTo <= aVisible.getLength());
+                    std::fill(aStands.begin() + nFrom, aStands.begin() + nTo, true);
+                }
+            }
+            for (sal_Int32 nIndex = 0; nIndex < aVisible.getLength(); ++nIndex)
+                (aStands[nIndex] ? aUpright : aOthers).push_back(aVisible[nIndex]);
+        }
+        std::sort(aUpright.begin(), aUpright.end());
+        std::sort(aOthers.begin(), aOthers.end());
+        return std::make_pair(OUString(aUpright), OUString(aOthers));
+    };
+
+    // Across, no portion lists a character.
+    const auto [aAcrossUpright, aAcrossOthers] = aStandingOf(*pAcross);
+    CPPUNIT_ASSERT_EQUAL(OUString(), aAcrossUpright);
+    CPPUNIT_ASSERT_EQUAL(u"ABC日本"_ustr, aAcrossOthers);
+    // Down, the ideographs stand upright, and the letters and the brackets lie on their side.
+    const auto [aDownUpright, aDownSideways] = aStandingOf(*pDown);
+    CPPUNIT_ASSERT_EQUAL(u"日本語"_ustr, aDownUpright);
+    CPPUNIT_ASSERT_EQUAL(u"ABC\u300c\u300d"_ustr, aDownSideways);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterTextEditIsServedInMasterView)

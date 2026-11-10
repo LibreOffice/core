@@ -12,8 +12,13 @@
 #include <rtl/string.hxx>
 #include <tools/json_writer.hxx>
 
+#include <algorithm>
 #include <cmath>
 #include <optional>
+#include <utility>
+#include <vector>
+
+#include <unicode/uchar.h>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -289,6 +294,53 @@ bool hasCorner(const basegfx::B2DPolyPolygon& rPolyPolygon)
             return true;
     }
     return false;
+}
+
+// The characters of a vertical run that stand upright, as [from, to) ranges of UTF-16 units
+// counted from the text position. Unicode orients a character upright (U) or upright in a
+// changed form (Tu), and VCL turns the fullwidth colon and semicolon and the Bopomofo tone marks
+// of Chinese upright too. The other characters lie on their side along the baseline. VCL stands
+// a character upright in a changed form (Tr) when the font has a vertical form for it, which a
+// browser cannot draw, and that character looks closer to its vertical form on its side.
+std::vector<std::pair<sal_Int32, sal_Int32>>
+uprightRanges(const TextSimplePortionPrimitive2D& rPrimitive)
+{
+    std::vector<std::pair<sal_Int32, sal_Int32>> aRanges;
+    const OUString& rText = rPrimitive.getText();
+    const sal_Int32 nStart = std::clamp<sal_Int32>(rPrimitive.getTextPosition(), 0,
+                                                   rText.getLength());
+    const sal_Int32 nEnd
+        = std::clamp<sal_Int32>(nStart + rPrimitive.getTextLength(), nStart, rText.getLength());
+    const bool bChinese = rPrimitive.getLocale().Language == "zh";
+    bool bUpright = false;
+    sal_Int32 nIndex = nStart;
+    while (nIndex < nEnd)
+    {
+        const sal_Int32 nFrom = nIndex;
+        const sal_UCS4 cChar = rText.iterateCodePoints(&nIndex);
+        const sal_Int32 nTo = std::min(nIndex, nEnd);
+        // A mark or a variation selector stands the way the character before it stands.
+        const int8_t nType = u_charType(cChar);
+        const bool bFollows = nFrom != nStart
+                              && (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK
+                                  || u_hasBinaryProperty(cChar, UCHAR_VARIATION_SELECTOR));
+        if (!bFollows)
+        {
+            int32_t nOrientation = u_getIntPropertyValue(cChar, UCHAR_VERTICAL_ORIENTATION);
+            if (bChinese
+                && (cChar == 0xff1a || cChar == 0xff1b || cChar == 0x2ca || cChar == 0x2cb
+                    || cChar == 0x2c7 || cChar == 0x2d9))
+                nOrientation = U_VO_TRANSFORMED_UPRIGHT;
+            bUpright = nOrientation == U_VO_UPRIGHT || nOrientation == U_VO_TRANSFORMED_UPRIGHT;
+        }
+        if (!bUpright)
+            continue;
+        if (!aRanges.empty() && aRanges.back().second == nFrom - nStart)
+            aRanges.back().second = nTo - nStart;
+        else
+            aRanges.emplace_back(nFrom - nStart, nTo - nStart);
+    }
+    return aRanges;
 }
 } // end anonymous namespace
 
@@ -911,6 +963,21 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
             const sal_Int64 nDistance = std::llround(fValue * mfScaleFactor);
             mrWriter.putSimpleValue(nDistance - nPreviousDistance);
             nPreviousDistance = nDistance;
+        }
+    }
+
+    if (rPrimitive.getFontAttribute().getVertical())
+    {
+        const std::vector<std::pair<sal_Int32, sal_Int32>> aUpright = uprightRanges(rPrimitive);
+        if (!aUpright.empty())
+        {
+            auto aUprightArray = mrWriter.startArray("upright");
+            for (const auto& [nFrom, nTo] : aUpright)
+            {
+                auto aRange = mrWriter.startAnonArray();
+                mrWriter.putSimpleValue(nFrom);
+                mrWriter.putSimpleValue(nTo);
+            }
         }
     }
 

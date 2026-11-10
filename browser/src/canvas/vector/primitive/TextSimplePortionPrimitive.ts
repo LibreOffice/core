@@ -56,6 +56,10 @@ namespace cool {
 		/// Adding them up from zero gives each glyph's distance from the
 		/// start of the run.
 		advances?: number[];
+		/// In vertical text, the characters that stand upright, as [from, to)
+		/// ranges of UTF-16 units of the visible text. The others lie on their
+		/// side along the turned baseline.
+		upright?: number[][];
 		fontId?: string;
 		/// Set when the face is not itself bold or italic, so the reader adds it.
 		syntheticBold?: boolean;

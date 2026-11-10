@@ -1079,6 +1079,17 @@ namespace cool {
 			const startOf = (k: number): number =>
 				k === 0 ? 0 : distances[k - 1] * frame.advanceScale;
 
+			if (primitive.upright?.length) {
+				this._drawVerticalRun(
+					context,
+					primitive.upright,
+					frame,
+					startOf,
+					tolerance,
+				);
+				return;
+			}
+
 			if (
 				Math.abs(this._measuredWidth(context, text) - startOf(text.length)) <=
 				tolerance
@@ -1087,16 +1098,44 @@ namespace cool {
 				return;
 			}
 
-			const end = startOf(text.length);
-			for (const [from, to] of VectorPrimitiveRenderer._words(text))
+			this._drawWords(
+				context,
+				frame,
+				0,
+				text.length,
+				startOf,
+				tolerance,
+				!!primitive.rtl,
+			);
+		}
+
+		// Draws the words of the text between from and to, each at the sum of
+		// the advances before it, stretched to its advance width when the
+		// browser measures it differently. A right-to-left run starts at its
+		// right end, so its words are placed from there.
+		private _drawWords(
+			context: CanvasRenderingContext2D,
+			frame: TextFrame,
+			from: number,
+			to: number,
+			startOf: (k: number) => number,
+			tolerance: number,
+			rtl = false,
+		): void {
+			const end = startOf(frame.text.length);
+			const part = frame.text.substring(from, to);
+			for (const [start, stop] of VectorPrimitiveRenderer._words(part)) {
+				const first = from + start;
+				const last = from + stop;
 				this._drawStretched(
 					context,
-					text.substring(from, to),
-					frame.x + (primitive.rtl ? end - startOf(to) : startOf(from)),
+					part.substring(start, stop),
+					frame.x + (rtl ? end - startOf(last) : startOf(first)),
 					frame.y,
-					startOf(to) - startOf(from),
+					startOf(last) - startOf(first),
 					tolerance,
 				);
+			}
 		}
 
 		// Draws the text at x, stretched to the width when the browser measures
@@ -1119,6 +1158,82 @@ namespace cool {
 			} else {
 				context.fillText(text, x, y);
 			}
+		}
+
+		// Draws a run of vertical text, which lies along a turned baseline. The
+		// characters in the upright ranges stand upright, each one turned back
+		// over its advance on the middle of the line. The others lie on their
+		// side along the baseline, as in any turned run.
+		private _drawVerticalRun(
+			context: CanvasRenderingContext2D,
+			upright: number[][],
+			frame: TextFrame,
+			startOf: (k: number) => number,
+			tolerance: number,
+		): void {
+			const text = frame.text;
+			const middle = frame.y - this._lineMiddle(context, frame.fontSize);
+			let sideways = 0;
+			for (const range of upright) {
+				const from = Math.max(sideways, Math.min(range[0], text.length));
+				const to = Math.max(from, Math.min(range[1], text.length));
+				if (from > sideways)
+					this._drawWords(context, frame, sideways, from, startOf, tolerance);
+				for (let k = from; k < to;) {
+					const next = Math.min(
+						to,
+						k + String.fromCodePoint(text.codePointAt(k) ?? 0).length,
+					);
+					context.save();
+					context.translate(frame.x + (startOf(k) + startOf(next)) / 2, middle);
+					context.rotate(-Math.PI / 2);
+					context.textAlign = 'center';
+					context.textBaseline = 'middle';
+					context.fillText(text.substring(k, next), 0, 0);
+					context.restore();
+					k = next;
+				}
+				sideways = to;
+			}
+			if (sideways < text.length)
+				this._drawWords(
+					context,
+					frame,
+					sideways,
+					text.length,
+					startOf,
+					tolerance,
+				);
+		}
+
+		// How far the middle of the line is above the baseline, in drawing
+		// units: halfway between the ascent and the descent of the font, where
+		// the engine puts the middle of an upright character. One measurement
+		// per font, cleared when more fonts were measured than a page shows.
+		private _lineMiddles: Map<string, number> = new Map();
+		private static readonly _LINE_MIDDLES_LIMIT = 256;
+
+		private _lineMiddle(
+			context: CanvasRenderingContext2D,
+			fontSize: number,
+		): number {
+			const font = context.font;
+			let middle = this._lineMiddles.get(font);
+			if (middle === undefined) {
+				const metrics = context.measureText('\u6c34');
+				const ascent = metrics.fontBoundingBoxAscent;
+				const descent = metrics.fontBoundingBoxDescent;
+				// A font that the browser reports no box for gets the usual
+				// share of a CJK face, an ascent of 0.88 and a descent of 0.12.
+				middle =
+					ascent > 0 || descent > 0 ? (ascent - descent) / 2 : fontSize * 0.38;
+				if (
+					this._lineMiddles.size >= VectorPrimitiveRenderer._LINE_MIDDLES_LIMIT
+				)
+					this._lineMiddles.clear();
+				this._lineMiddles.set(font, middle);
+			}
+			return middle;
 		}
 
 		// The words of a text as [from, to) ranges of UTF-16 units, split at
