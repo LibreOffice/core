@@ -3075,7 +3075,8 @@ function showWelcomeSVG() {
 				type: 'upload',
 				stream: 'contents',
 				requestId: 'wasm-save',
-				// Without it, the upload replaces whatever is in storage:
+				// Storage refuses this upload (409) if the file in storage is no longer this version.
+				// Overwrite sets force, which sends no version, so storage accepts the upload unchecked.
 				lastModifiedTime: force ? undefined : global._collabLastModifiedTime
 			}));
 		});
