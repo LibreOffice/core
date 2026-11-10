@@ -157,7 +157,6 @@ EditViewCallbacks::~EditViewCallbacks()
 EditView::EditView(EditEngine& rEditEngine, vcl::Window* pWindow)
     : mpImpEditView(new ImpEditView(this, rEditEngine, pWindow))
 {
-    getImpl().mbReadOnly = getImpl().mbReadOnly || SfxViewShell::IsCurrentKitViewReadOnly();
 }
 
 EditView::~EditView()
@@ -282,12 +281,12 @@ void EditView::Invalidate()
 
 void EditView::SetReadOnly( bool bReadOnly )
 {
-    getImpl().mbReadOnly = bReadOnly || SfxViewShell::IsCurrentKitViewReadOnly();
+    getImpl().mbReadOnly = bReadOnly;
 }
 
 bool EditView::IsReadOnly() const
 {
-    return getImpl().mbReadOnly;
+    return getImpl().IsReadOnly();
 }
 
 void EditView::SetSelection( const ESelection& rESel )

@@ -1496,6 +1496,38 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeAfterReadOnlyView)
     CPPUNIT_ASSERT(pView->IsMoveAllowed());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTypeAfterReadOnlyView)
+{
+    // A text edit started in viewing mode accepts typing only once the view can edit.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    int nView = KitHelper::getCurrentView();
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+
+    KitHelper::setViewReadOnly(nView, true);
+    const ::tools::Rectangle aRect = pObject->GetCurrentBoundRect();
+    const auto nX = o3tl::toTwips(aRect.Center().X(), o3tl::Length::mm100);
+    const auto nY = o3tl::toTwips(aRect.Center().Y(), o3tl::Length::mm100);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditEngine& rEditEngine = pView->GetTextEditOutlinerView()->GetEditView().getEditEngine();
+
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'y', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'y', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString(), rEditEngine.GetText());
+
+    KitHelper::setViewReadOnly(nView, false);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, rEditEngine.GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoLimiting)
 {
     // Create the first view.

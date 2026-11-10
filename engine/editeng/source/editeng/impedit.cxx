@@ -1824,7 +1824,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
         {
             case KeyFuncType::CUT:
             {
-                if (!mbReadOnly)
+                if (!IsReadOnly())
                 {
                     uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
                     CutCopy( aClipBoard, true );
@@ -1841,7 +1841,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
             break;
             case KeyFuncType::PASTE:
             {
-                if (!mbReadOnly && IsPasteEnabled())
+                if (!IsReadOnly() && IsPasteEnabled())
                 {
                     getImpEditEngine().UndoActionStart( EDITUNDO_PASTE );
                     uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
@@ -1871,7 +1871,7 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     maExtraCursorFlags.bEndOfLine = bWasEndOfLine;
     mbClickedInSelection = false;
 
-    if ( rMouseEvent.IsMiddle() && !mbReadOnly &&
+    if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
          Application::GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
     {
         uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetSystemPrimarySelection());
@@ -1915,6 +1915,11 @@ bool ImpEditView::Command(const CommandEvent& rCEvt)
     return getImpEditEngine().Command(rCEvt, GetEditViewPtr());
 }
 
+
+bool ImpEditView::IsReadOnly() const
+{
+    return mbReadOnly || SfxViewShell::IsCurrentKitViewReadOnly();
+}
 
 void ImpEditView::SetInsertMode( bool bInsert )
 {
@@ -2524,7 +2529,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     uno::Reference<datatransfer::XTransferable> xData = getEditEngine().CreateTransferable(aCopySel);
 
-    sal_Int8 nActions = mbReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
+    sal_Int8 nActions = IsReadOnly() ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
     rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, xData, mxDnDListener );
     // If Drag&Move in an Engine, then Copy&Del has to be optional!
@@ -2541,7 +2546,7 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
     if (!mpDragAndDropInfo)
         return;
 
-    if (!mbReadOnly && rDSDE.DropSuccess && !mpDragAndDropInfo->bOutlinerMode && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
+    if (!IsReadOnly() && rDSDE.DropSuccess && !mpDragAndDropInfo->bOutlinerMode && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
     {
         if (mpDragAndDropInfo->bStarterOfDD && mpDragAndDropInfo->bDroppedInMe )
         {
@@ -2740,7 +2745,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
 
     bool bAccept = false;
 
-    if (GetOutputArea().Contains( aMousePos ) && !mbReadOnly)
+    if (GetOutputArea().Contains( aMousePos ) && !IsReadOnly())
     {
         if (mpDragAndDropInfo && mpDragAndDropInfo->bHasValidData)
         {

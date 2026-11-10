@@ -504,6 +504,8 @@ public:
 
     bool IsPasteEnabled() const { return bool(mnControl & EVControlBits::ENABLEPASTE); }
 
+    bool IsReadOnly() const;
+
     bool DoSingleLinePaste() const { return bool(mnControl & EVControlBits::SINGLELINEPASTE); }
     bool DoAutoScroll() const { return bool(mnControl & EVControlBits::AUTOSCROLL); }
     bool DoAutoSize() const { return bool(mnControl & EVControlBits::AUTOSIZE); }
