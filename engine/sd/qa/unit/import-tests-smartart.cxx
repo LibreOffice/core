@@ -3149,6 +3149,19 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNegativeStartAngleIsTheSameOnTheT
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeSizeByPointTypeShrinksWithTheRow)
+{
+    // the row states its nodes "w for ch ptType node refType h fact 0.2" and "h ... fact 0.8",
+    // five of them and four arcs are too wide for it, so the nodes shrink and keep their ratio
+    createSdImpressDoc("pptx/smartart-node-size-by-point-type.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xNode(findChildShapeByText(xDiagram, u"1"_ustr));
+    CPPUNIT_ASSERT(xNode.is());
+    const awt::Size aNode(xNode->getSize());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4.0 * aNode.Width, double(aNode.Height), 4.0);
+    CPPUNIT_ASSERT_LESS(0.8 * xDiagram->getSize().Height, double(aNode.Height));
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAsWideAsItsWordKeepsItsFont)
 {
     // the box of "Three" is as wide as its one word, and the word fits it at the font the other

@@ -14370,26 +14370,38 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     std::optional<double> oAlongOfUnit;
                     std::optional<double> oAcrossOfUnit;
                     sal_Int32 nUnit(0);
-                    for (const Constraint& rConstraint : rConstraints)
+                    // or stated for every node by its point type, "w for ch ptType node refType h
+                    // fact 0.2" and "h ... fact 0.8": a statement by name comes first
+                    for (const bool bByName : { true, false })
                     {
-                        const bool bOwnAcross(rConstraint.mnRefType == nCrossType
-                                              && rConstraint.mnRefFor == XML_self
-                                              && rConstraint.msRefForName.isEmpty());
-                        if (rConstraint.mnFor != XML_ch
-                            || rConstraint.msForName != aCurrShape->getInternalName()
-                            || (!isUserVariable(rConstraint.mnRefType) && !bOwnAcross)
-                            || (nUnit && nUnit != rConstraint.mnRefType))
-                            continue;
-                        const double fFactor(rConstraint.mfFactor);
-                        if (rConstraint.mnType == nAxisType && fFactor > 0.0)
+                        for (const Constraint& rConstraint : rConstraints)
                         {
-                            oAlongOfUnit = fFactor;
-                            nUnit = rConstraint.mnRefType;
-                        }
-                        else if (rConstraint.mnType == nCrossType && fFactor > 0.0)
-                        {
-                            oAcrossOfUnit = fFactor;
-                            nUnit = rConstraint.mnRefType;
+                            const bool bOwnAcross(rConstraint.mnRefType == nCrossType
+                                                  && rConstraint.mnRefFor == XML_self
+                                                  && rConstraint.msRefForName.isEmpty());
+                            const bool bFor(
+                                bByName
+                                    ? rConstraint.msForName == aCurrShape->getInternalName()
+                                    : (rConstraint.msForName.isEmpty()
+                                       && rConstraint.mnPointType == XML_node
+                                       && aCurrShape->getDataNodeType() == XML_node));
+                            if (rConstraint.mnFor != XML_ch || !bFor
+                                || (!isUserVariable(rConstraint.mnRefType) && !bOwnAcross)
+                                || (nUnit && nUnit != rConstraint.mnRefType))
+                                continue;
+                            const double fFactor(rConstraint.mfFactor);
+                            if (rConstraint.mnType == nAxisType && fFactor > 0.0
+                                && (bByName || !oAlongOfUnit))
+                            {
+                                oAlongOfUnit = fFactor;
+                                nUnit = rConstraint.mnRefType;
+                            }
+                            else if (rConstraint.mnType == nCrossType && fFactor > 0.0
+                                     && (bByName || !oAcrossOfUnit))
+                            {
+                                oAcrossOfUnit = fFactor;
+                                nUnit = rConstraint.mnRefType;
+                            }
                         }
                     }
                     if (oAlongOfUnit && oAcrossOfUnit)
