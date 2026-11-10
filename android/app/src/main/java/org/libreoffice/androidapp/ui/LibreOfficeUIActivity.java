@@ -152,8 +152,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     /** Recent files list vs. grid switch. */
     private ImageView mRecentFilesListOrGrid;
 
-    /** Request code to evaluate that we are returning from the LOActivity. */
-    private static final int LO_ACTIVITY_REQUEST_CODE = 42;
     private static final int OPEN_FILE_REQUEST_CODE = 43;
     private static final int CREATE_DOCUMENT_REQUEST_CODE = 44;
     private static final int CREATE_SPREADSHEET_REQUEST_CODE = 45;
@@ -611,8 +609,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         addDocumentToRecents(uri);
 
-        Intent i = getIntentToEdit(uri);
-        startActivityForResult(i, LO_ACTIVITY_REQUEST_CODE);
+        // The document opens in a task of its own, so no result comes back from it.
+        startActivity(getIntentToEdit(uri));
     }
 
     /** Opens an Input dialog to get the name of new file. */
@@ -965,11 +963,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case LO_ACTIVITY_REQUEST_CODE: {
-                // TODO probably kill this, we don't need to do anything here any more
-                Log.d(LOGTAG, "LOActivity has finished.");
-                break;
-            }
             case OPEN_FILE_REQUEST_CODE: {
                 Log.d(LOGTAG, "File open chooser has finished, starting the LOActivity.");
                 if (resultCode != RESULT_OK || data == null)

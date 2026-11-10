@@ -869,13 +869,22 @@ public class LOActivity extends AppCompatActivity {
 
         super.onNewIntent(intent);
 
-        // The picked document opens in a fresh activity once this one has let go of its own.
+        // Every document has a task of its own, so this intent is for the document on screen.
+        // While that document is closing, the file opens again in a fresh instance once the
+        // engine has dropped it.
         final Intent reopenIntent = new Intent(intent);
         reopenIntent.setClass(this, LOActivity.class);
-        closeDocumentThen(() -> {
+        final Runnable reopen = () -> {
             finish();
             startActivity(reopenIntent);
-        });
+        };
+        if (runAfterPendingClose(reopen, true))
+            return;
+
+        // After "edit a copy" this activity shows another file than the one its task is matched
+        // by, so the requested file opens once the copy has closed.
+        if (!Objects.equals(intent.getData(), getIntent().getData()))
+            closeDocumentThen(reopen);
     }
 
     @Override

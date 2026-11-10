@@ -50,7 +50,7 @@
         <activity
             android:name="org.libreoffice.androidlib.LOActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|uiMode"
-            android:launchMode="singleTask"
+            android:documentLaunchMode="intoExisting"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
