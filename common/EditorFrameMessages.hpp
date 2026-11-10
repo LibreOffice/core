@@ -43,8 +43,8 @@ inline constexpr std::string_view REFUSED_COMMANDS[] = {
 /// Bridge calls the editor page makes, by name.
 /// TODO: Qt's CloudAccountPage::callBridge handles these by name; let it use this list too.
 inline constexpr std::string_view ALLOWED_BRIDGE_CALLS[] = {
-    "checkFileInfo", "getAllPrefs", "getBundledFile",     "readLocalDocBytes",
-    "saveCompleted", "setPref",     "writeRemoteDocFile",
+    "getAllPrefs",   "getBundledFile", "readLocalDocBytes",
+    "saveCompleted", "setPref",        "writeRemoteDocFile",
 };
 
 /// URL schemes that name a local or network file, or a file of the engine itself.
