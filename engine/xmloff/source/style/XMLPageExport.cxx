@@ -251,7 +251,7 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
 
         if( xFamilies->hasByName( aPageStyleName ) )
         {
-            m_xPageStyles.set(xFamilies->getStyleFamilyByName( aPageStyleName ),uno::UNO_QUERY);
+            m_xPageStyles = xFamilies->getStyleFamilyByName( aPageStyleName );
 
             SAL_WARN_IF( !m_xPageStyles.is(), "xmloff",
                         "Page Styles not found for export!" );

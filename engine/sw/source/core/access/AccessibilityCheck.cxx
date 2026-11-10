@@ -915,8 +915,8 @@ private:
                         pDocShell->GetModel(), uno::UNO_QUERY);
                     uno::Reference<style::XStyleFamilies> xCont
                         = xStyleFamiliesSupplier->getStyleFamilies();
-                    uno::Reference<container::XNameAccess> xStyleFamily(
-                        xCont->getStyleFamilyByName(u"CharacterStyles"_ustr), uno::UNO_QUERY);
+                    uno::Reference<style::XStyleFamily> xStyleFamily(
+                        xCont->getStyleFamilyByName(u"CharacterStyles"_ustr));
                     uno::Reference<beans::XPropertySet> xInfo(
                         xStyleFamily->getByName(sCharStyleName), uno::UNO_QUERY);
                     xInfo->getPropertyValue(u"CharBackColor"_ustr) >>= nCharStyleBackColor;

@@ -70,8 +70,8 @@ public:
     SwXStyleFamilies(SwDocShell& rDocShell);
 
     //XStyleFamilies
-    SW_DLLPUBLIC virtual cpo::uno::Any getStyleFamilyByName(const OUString& Name) override;
-    virtual cpo::uno::Any getStyleFamilyByIndex(sal_Int32 nIndex) override;
+    SW_DLLPUBLIC virtual cpo::uno::Reference<css::style::XStyleFamily> getStyleFamilyByName(const OUString& Name) override;
+    virtual cpo::uno::Reference<css::style::XStyleFamily> getStyleFamilyByIndex(sal_Int32 nIndex) override;
 
     //XNameAccess
     SW_DLLPUBLIC virtual cpo::uno::Any getByName(const OUString& Name) override;
@@ -406,9 +406,8 @@ class SwXTextCellStyle final : public cppu::ImplInheritanceHelper
 
 class SW_DLLPUBLIC SwXStyleFamily final : public cppu::WeakImplHelper
 <
-    css::container::XNameContainer,
+    css::style::XStyleFamily,
     css::lang::XServiceInfo,
-    css::container::XIndexAccess,
     css::beans::XPropertySet
 >
 , public SfxListener

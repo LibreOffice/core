@@ -33,6 +33,7 @@ namespace com::sun::star
     namespace style
     {
         class XStyle;
+        class XStyleFamily;
     }
     namespace beans
     {
@@ -63,7 +64,7 @@ protected:
         const cpo::uno::Reference< css::style::XStyle > & rStyle,
         const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
-        const cpo::uno::Reference< css::container::XNameAccess > & xStyles,
+        const cpo::uno::Reference< css::style::XStyleFamily > & xStyles,
         const OUString* pPrefix );
 
     virtual void exportStyleAttributes(

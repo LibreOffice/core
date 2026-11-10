@@ -48,9 +48,9 @@ uno::Reference<beans::XPropertySet> getActivePageStyle(ScTabViewShell& rViewShel
         return {};
 
     uno::Reference<style::XStyleFamilies> xFamilies(xSupplier->getStyleFamilies());
-    uno::Reference<container::XNameAccess> xPageStyles;
+    uno::Reference<style::XStyleFamily> xPageStyles;
     if (xFamilies.is())
-        xFamilies->getStyleFamilyByName(u"PageStyles"_ustr) >>= xPageStyles;
+        xPageStyles = xFamilies->getStyleFamilyByName(u"PageStyles"_ustr);
 
     uno::Reference<beans::XPropertySet> xPageStyle;
     if (xPageStyles.is() && xPageStyles->hasByName(sStyle))

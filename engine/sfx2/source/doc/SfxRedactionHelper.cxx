@@ -331,8 +331,8 @@ SfxRedactionHelper::getPageMarginsForWriter(const cpo::uno::Reference<css::frame
     if (!xStyleFamilies.is())
         return aPageMargins;
 
-    uno::Reference<container::XNameAccess> xPageStyles(
-        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xPageStyles(
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
 
     if (!xPageStyles.is())
         return aPageMargins;
@@ -388,8 +388,8 @@ SfxRedactionHelper::getPageMarginsForCalc(const cpo::uno::Reference<css::frame::
     if (!xStyleFamilies.is())
         return aPageMargins;
 
-    uno::Reference<container::XNameAccess> xPageStyles(
-        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xPageStyles(
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
 
     if (!xPageStyles.is())
         return aPageMargins;

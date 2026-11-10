@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 
 #include <algorithm>
 
@@ -153,7 +154,7 @@ void XMLIndexTemplateContext::endFastElement(sal_Int32 )
             XmlStyleFamily::TEXT_PARAGRAPH,
             sStyleName );
     // #i50288#: Check if style exists
-    const Reference < css::container::XNameContainer > & rStyles =
+    const Reference < css::style::XStyleFamily > & rStyles =
         GetImport().GetTextImport()->GetParaStyles();
     if( rStyles.is() &&
         rStyles->hasByName( sDisplayStyleName ) )

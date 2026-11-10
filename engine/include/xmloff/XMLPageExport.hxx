@@ -30,6 +30,7 @@
 
 namespace com::sun::star {
     namespace style { class XStyle; }
+    namespace style { class XStyleFamily; }
     namespace container { class XNameAccess;}
     namespace beans { class XPropertySet; }
 }
@@ -52,7 +53,7 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
 {
     SvXMLExport& m_rExport;
 
-    cpo::uno::Reference< css::container::XNameAccess > m_xPageStyles;
+    cpo::uno::Reference< css::style::XStyleFamily > m_xPageStyles;
 
     ::std::vector< XMLPageExportNameEntry > m_aNameVector;
 

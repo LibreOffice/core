@@ -809,11 +809,11 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed, bool bExportChapterNumbering
 
     static constexpr OUString aNumberStyleName( u"NumberingStyles"_ustr );
 
-    Reference< XIndexAccess > xStyles;
+    Reference< XStyleFamily > xStyles;
     if( !xFamilies->hasByName( aNumberStyleName ) )
         return;
 
-    xFamilies->getStyleFamilyByName( aNumberStyleName ) >>= xStyles;
+    xStyles = xFamilies->getStyleFamilyByName( aNumberStyleName );
 
     SAL_WARN_IF( !xStyles.is(), "xmloff", "Style not found for export!" );
 

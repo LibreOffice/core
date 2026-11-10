@@ -1110,8 +1110,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
     uno::Reference<container::XNamed> xStyleN(xStyle, uno::UNO_QUERY);
     xStyle->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(COL_LIGHTRED));
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameContainer> xStyles(
-        xSFS->getStyleFamilies()->getStyleFamilyByName(u"CharacterStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyles(
+        xSFS->getStyleFamilies()->getStyleFamilyByName(u"CharacterStyles"_ustr));
     xStyles->insertByName(u"red"_ustr, cpo::uno::Any(xStyle));
 
     uno::Reference<text::XChapterNumberingSupplier> xCNS(mxComponent, uno::UNO_QUERY);
@@ -1581,8 +1581,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
         //change list style name
         //auto xModel = mxComponent.queryThrow<frame::XModel>();
         uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XNameContainer> xListStyles(
-            xSFS->getStyleFamilies()->getStyleFamilyByName(u"NumberingStyles"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyleFamily> xListStyles(
+            xSFS->getStyleFamilies()->getStyleFamilyByName(u"NumberingStyles"_ustr));
         uno::Reference<container::XNamed> xListStyle(xListStyles->getByName(u"NewListStyle"_ustr),
                                                      uno::UNO_QUERY);
         xListStyle->setName(sChangedListStyle);
@@ -1596,15 +1596,15 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
         saveAndReload(TestFilter::ODT);
 
         uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XNameContainer> xListStyles(
-            xSFS->getStyleFamilies()->getStyleFamilyByName(u"NumberingStyles"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyleFamily> xListStyles(
+            xSFS->getStyleFamilies()->getStyleFamilyByName(u"NumberingStyles"_ustr));
         uno::Reference<container::XNamed> xNewListStyle(
             xListStyles->getByName(u"ChangedListStyle"_ustr), uno::UNO_QUERY);
 
         CPPUNIT_ASSERT_EQUAL(xNewListStyle->getName(), sChangedListStyle);
 
-        uno::Reference<container::XNameContainer> xParaStyles(
-            xSFS->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyleFamily> xParaStyles(
+            xSFS->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr));
         uno::Reference<beans::XPropertySet> xBodyTextStyle(xParaStyles->getByName(u"Text body"_ustr),
                                                            uno::UNO_QUERY);
 

@@ -225,8 +225,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStylePaste)
                                                                          uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(
+        xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr));
     // Without the accompanying fix in place, this test would have failed, 'Default Drawing Style'
     // was imported, even if no pasted content referenced it.
     CPPUNIT_ASSERT(!xStyleFamily->hasByName(u"Default Drawing Style"_ustr));
@@ -288,8 +288,8 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
                                                                          uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
     uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
     bool bNoFirstHeader = {};
@@ -323,8 +323,8 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
                                                                          uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
     uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
     bool bNoFirstHeader = {};

@@ -466,8 +466,8 @@ lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, StyleSheetC
 void
 lcl_removeUnusedTableStyles(SdStyleSheetPool* const pStyleSheetPool, XStyleVector const & rStyles)
 {
-    cpo::uno::Reference<css::container::XNameContainer> xTableFamily(
-        pStyleSheetPool->getStyleFamilyByName(u"table"_ustr), cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::style::XStyleFamily> xTableFamily(
+        pStyleSheetPool->getStyleFamilyByName(u"table"_ustr));
     if (!xTableFamily)
         return;
 

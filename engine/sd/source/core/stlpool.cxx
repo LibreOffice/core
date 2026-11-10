@@ -540,8 +540,8 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
 
 void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool, XStyleVector& rCreatedSheets)
 {
-    Reference< XIndexAccess > xSource( rSourcePool.mxTableFamily, UNO_QUERY );
-    Reference< XNameContainer > xTarget( mxTableFamily, UNO_QUERY );
+    Reference< XStyleFamily > xSource( rSourcePool.mxTableFamily );
+    Reference< XStyleFamily > xTarget( mxTableFamily );
     Reference< XSingleServiceFactory > xFactory( mxTableFamily, UNO_QUERY );
 
     if( !xSource || !xFactory )
@@ -1198,39 +1198,39 @@ Sequence< OUString > SdStyleSheetPool::getSupportedServiceNames()
 
 // XStyleFamilies
 
-Any SdStyleSheetPool::getStyleFamilyByName( const OUString& aName )
+cpo::uno::Reference<style::XStyleFamily> SdStyleSheetPool::getStyleFamilyByName( const OUString& aName )
 {
     throwIfDisposed();
 
     if( mxGraphicFamily->getName() == aName )
-        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxGraphicFamily.get() ) ) );
+        return mxGraphicFamily;
 
     if( mxCellFamily->getName() == aName )
-        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxCellFamily.get() ) ) );
+        return mxCellFamily;
 
     if( msTableFamilyName == aName )
-        return Any( mxTableFamily );
+        return mxTableFamily;
 
     auto iter = std::find_if(maStyleFamilyMap.begin(), maStyleFamilyMap.end(),
             [&aName](const SdStyleFamilyMap::value_type& rEntry) { return rEntry.second->getName() == aName; });
     if (iter != maStyleFamilyMap.end())
-        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
+        return (*iter).second;
 
     throw NoSuchElementException();
 }
 
-Any SdStyleSheetPool::getStyleFamilyByIndex( sal_Int32 Index )
+cpo::uno::Reference<style::XStyleFamily> SdStyleSheetPool::getStyleFamilyByIndex( sal_Int32 Index )
 {
     switch( Index )
     {
     case 0:
-        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxGraphicFamily.get() ) ) );
+        return mxGraphicFamily;
 
     case 1:
-        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxCellFamily.get() ) ) );
+        return mxCellFamily;
 
     case 2:
-        return Any( mxTableFamily );
+        return mxTableFamily;
 
     default:
         {
@@ -1240,7 +1240,7 @@ Any SdStyleSheetPool::getStyleFamilyByIndex( sal_Int32 Index )
             SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() );
             std::advance(iter, Index);
 
-            return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
+            return (*iter).second;
         }
     }
 }
@@ -1248,7 +1248,7 @@ Any SdStyleSheetPool::getStyleFamilyByIndex( sal_Int32 Index )
 // XNameAccess
 Any SdStyleSheetPool::getByName( const OUString& aName )
 {
-    return getStyleFamilyByName(aName);
+    return Any(getStyleFamilyByName(aName));
 }
 
 Sequence< OUString > SdStyleSheetPool::getElementNames()
@@ -1312,7 +1312,7 @@ sal_Int32 SdStyleSheetPool::getCount()
 
 Any SdStyleSheetPool::getByIndex( sal_Int32 Index )
 {
-    return getStyleFamilyByIndex(Index);
+    return Any(getStyleFamilyByIndex(Index));
 }
 
 // XComponent

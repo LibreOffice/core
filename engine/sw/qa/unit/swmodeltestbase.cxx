@@ -153,14 +153,13 @@ OUString SwModelTestBase::getBodyText() const
     return aBuf.makeStringAndClear();
 }
 
-uno::Reference<container::XNameAccess> SwModelTestBase::getStyles(const OUString& aFamily)
+uno::Reference<style::XStyleFamily> SwModelTestBase::getStyles(const OUString& aFamily)
 {
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(aFamily),
-                                                        uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(xStyleFamilies->getStyleFamilyByName(aFamily));
     return xStyleFamily;
 }
 

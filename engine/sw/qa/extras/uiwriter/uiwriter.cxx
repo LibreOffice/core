@@ -831,7 +831,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo70807)
     createSwDoc("fdo70807.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
-    uno::Reference<container::XIndexAccess> xStylesIter(getStyles(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStylesIter(getStyles(u"PageStyles"_ustr));
 
     for (sal_Int32 i = 0; i < xStylesIter->getCount(); ++i)
     {

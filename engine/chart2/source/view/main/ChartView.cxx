@@ -375,7 +375,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                 }
                 else
                 {
-                    uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getStyleFamilyByName( u"PageStyles"_ustr ), uno::UNO_QUERY );
+                    uno::Reference< style::XStyleFamily > xPageStyles( xStylesFamilies->getStyleFamilyByName( u"PageStyles"_ustr ) );
                     if( xPageStyles.is() )
                     {
                         OUString aPageStyle;

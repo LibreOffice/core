@@ -145,7 +145,14 @@ typedef std::vector< Reference< XStyle > > TableDesignStyleVector;
 
 namespace {
 
-class TableDesignFamily : public ::cppu::WeakImplHelper< XNameContainer, XNamed, XIndexAccess, XSingleServiceFactory,  XServiceInfo, XComponent, XPropertySet, form::XReset >
+class TableDesignFamily : public ::cppu::WeakImplHelper<
+            XStyleFamily,
+            XNamed,
+            XSingleServiceFactory,
+            XServiceInfo,
+            XComponent,
+            XPropertySet,
+            form::XReset >
 {
 public:
     // XServiceInfo
@@ -829,7 +836,7 @@ void TableDesignFamily::removeResetListener( const Reference<form::XResetListene
 {
 }
 
-Reference< XNameAccess > CreateTableDesignFamily()
+Reference< style::XStyleFamily > CreateTableDesignFamily()
 {
     return new TableDesignFamily;
 }

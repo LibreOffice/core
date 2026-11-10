@@ -38,29 +38,7 @@ published service StyleFamily
                 the style) are not supported (and are unstable across
                 releases anyway).
      */
-    interface com::sun::star::container::XNameAccess;
-
-    /** This optional interface makes it possible to add and
-                remove the style sheets within this family by name.
-
-                <p>The elements in this container support the service
-                Style and are accessed via an XStyle.
-
-                <p>Note that for built-in styles, only the built-in
-                programmatic names can be used; the localized names of
-                built-in styles (available via "DisplayName" property on
-                the style) are not supported (and are unstable across
-                releases anyway).
-     */
-    [optional] interface com::sun::star::container::XNameContainer;
-    /** This optional interface makes it possible to access the style sheets
-                within this family by index.
-
-                <p>The elements in this container support the service
-                Style and are accessed via an XStyle.
-     */
-    [optional] interface com::sun::star::container::XIndexAccess;
-
+    interface com::sun::star::style::XStyleFamily;
 };
 
 

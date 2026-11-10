@@ -122,7 +122,7 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport ) :
     // (hence referencing it actually makes no sense except for hyperlinks
     // which default to something other than "Default")
     OUString const sDefault(SwResId(STR_POOLCHR_STANDARD));
-    uno::Reference<container::XNameContainer> const& xStyles(
+    uno::Reference<style::XStyleFamily> const& xStyles(
             rImport.GetTextImport()->GetTextStyles());
     if (!xStyles->hasByName(u"Default"_ustr))
     {   // this old name was used before LO 4.0

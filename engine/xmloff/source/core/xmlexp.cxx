@@ -1858,7 +1858,7 @@ void SvXMLExport::collectDataStyles(bool bFromUsedStyles)
     if (!xStylesFamilies.is())
         return;
 
-    Reference<container::XIndexAccess> xCellStyles(xStylesFamilies->getStyleFamilyByName(u"CellStyles"_ustr), uno::UNO_QUERY);
+    Reference<style::XStyleFamily> xCellStyles(xStylesFamilies->getStyleFamilyByName(u"CellStyles"_ustr));
     if (!xCellStyles.is())
         return;
 

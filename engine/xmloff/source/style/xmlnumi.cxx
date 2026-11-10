@@ -33,6 +33,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <o3tl/any.hxx>
@@ -942,7 +943,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             return;
         }
 
-        const Reference < XNameContainer >& rNumStyles =
+        const Reference < XStyleFamily >& rNumStyles =
                 GetImport().GetTextImport()->GetNumberingStyles();
         if( !rNumStyles.is() )
         {

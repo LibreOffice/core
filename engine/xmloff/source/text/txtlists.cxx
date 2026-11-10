@@ -33,6 +33,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include "txtparai.hxx"
@@ -415,7 +416,7 @@ XMLTextListsHelper::MakeNumRule(
         const OUString sDisplayStyleName(
             i_rImport.GetStyleDisplayName( XmlStyleFamily::TEXT_LIST,
                                              i_StyleName) );
-        const uno::Reference < container::XNameContainer >& rNumStyles(
+        const uno::Reference < style::XStyleFamily >& rNumStyles(
                             i_rImport.GetTextImport()->GetNumberingStyles() );
         if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
         {

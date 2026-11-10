@@ -34,6 +34,7 @@ class SvXMLImportPropertyMapper;
 namespace com::sun::star {
 namespace container { class XNameContainer; }
 namespace style { class XAutoStyleFamily; }
+namespace style { class XStyleFamily; }
 }
 
 class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
@@ -124,9 +125,9 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     std::unique_ptr<SvXMLStylesContext_Impl> mpImpl;
 
 
-    cpo::uno::Reference< css::container::XNameContainer > mxParaStyles;
+    cpo::uno::Reference< css::style::XStyleFamily > mxParaStyles;
 
-    cpo::uno::Reference< css::container::XNameContainer > mxTextStyles;
+    cpo::uno::Reference< css::style::XStyleFamily > mxTextStyles;
 
     cpo::uno::Reference< css::style::XAutoStyleFamily > mxParaAutoStyles;
 
@@ -186,7 +187,7 @@ public:
     virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const;
 
-    virtual cpo::uno::Reference< css::container::XNameContainer >
+    virtual cpo::uno::Reference< css::style::XStyleFamily >
         GetStylesContainer( XmlStyleFamily nFamily ) const;
     virtual OUString GetServiceName( XmlStyleFamily nFamily ) const;
 

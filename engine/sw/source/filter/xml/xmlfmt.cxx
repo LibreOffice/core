@@ -722,7 +722,7 @@ protected:
     virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
         XmlStyleFamily nFamily ) const override;
 
-    virtual uno::Reference < container::XNameContainer >
+    virtual uno::Reference < css::style::XStyleFamily >
         GetStylesContainer( XmlStyleFamily nFamily ) const override;
     virtual OUString GetServiceName( XmlStyleFamily nFamily ) const override;
     // HACK
@@ -914,10 +914,10 @@ SvXMLImportPropertyMapper* SwXMLStylesContext_Impl::GetImportPropertyMapper(
     return pMapper;
 }
 
-uno::Reference < container::XNameContainer > SwXMLStylesContext_Impl::GetStylesContainer(
+uno::Reference < css::style::XStyleFamily > SwXMLStylesContext_Impl::GetStylesContainer(
                                                 XmlStyleFamily nFamily ) const
 {
-    uno::Reference < container::XNameContainer > xStyles;
+    uno::Reference < style::XStyleFamily > xStyles;
     if( XmlStyleFamily::SD_GRAPHICS_ID == nFamily )
         xStyles = const_cast<SvXMLImport *>(&GetImport())->GetTextImport()->GetFrameStyles();
     else if( XmlStyleFamily::TABLE_CELL == nFamily )

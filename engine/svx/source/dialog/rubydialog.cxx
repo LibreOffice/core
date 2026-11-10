@@ -546,16 +546,13 @@ void SvxRubyDialog::Activate()
             try
             {
                 Reference<XStyleFamilies> xFam = xSupplier->getStyleFamilies();
-                Any aChar = xFam->getStyleFamilyByName(u"CharacterStyles"_ustr);
-                Reference<XNameContainer> xChar;
-                aChar >>= xChar;
-                Reference<XIndexAccess> xCharIdx(xChar, UNO_QUERY);
-                if (xCharIdx.is())
+                Reference<XStyleFamily> xChar = xFam->getStyleFamilyByName(u"CharacterStyles"_ustr);
+                if (xChar.is())
                 {
                     OUString sUIName(u"DisplayName"_ustr);
-                    for (sal_Int32 nStyle = 0; nStyle < xCharIdx->getCount(); nStyle++)
+                    for (sal_Int32 nStyle = 0; nStyle < xChar->getCount(); nStyle++)
                     {
-                        Any aStyle = xCharIdx->getByIndex(nStyle);
+                        Any aStyle = xChar->getByIndex(nStyle);
                         Reference<XStyle> xStyle;
                         aStyle >>= xStyle;
                         Reference<XPropertySet> xPrSet(xStyle, UNO_QUERY);

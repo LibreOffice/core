@@ -22,7 +22,7 @@
 
 #include <svx/svxdllapi.h>
 
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 
 namespace sdr::table
 {
@@ -38,7 +38,7 @@ const sal_Int32 body_style = 8;
 const sal_Int32 background_style = 9;
 const sal_Int32 style_count = 10;
 
-extern SVX_DLLPUBLIC cpo::uno::Reference<css::container::XNameAccess> CreateTableDesignFamily();
+extern SVX_DLLPUBLIC cpo::uno::Reference<css::style::XStyleFamily> CreateTableDesignFamily();
 }
 
 #endif

@@ -3437,10 +3437,7 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
     if (!xFamilies.is() || !xFamilies->hasByName(xMaster->getName()))
         return;
 
-    uno::Reference<container::XNameAccess> xStyles(xFamilies->getStyleFamilyByName(xMaster->getName()),
-                                                   uno::UNO_QUERY);
-    if (!xStyles.is())
-        return;
+    uno::Reference<style::XStyleFamily> xStyles(xFamilies->getStyleFamilyByName(xMaster->getName()));
 
     PowerPointShapeExport aDML(pFS, &maShapeMap, this);
 

@@ -155,7 +155,7 @@ bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
         const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
-        const Reference< XNameAccess >& xStyles,
+        const Reference< XStyleFamily >& xStyles,
         const OUString* pPrefix )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
@@ -461,11 +461,11 @@ void XMLStyleExport::exportStyleFamily(
     if( !xFamiliesSupp.is() )
         return; // family not available in current model
 
-    Reference< XNameAccess > xStyleCont;
+    Reference< XStyleFamily > xStyleCont;
 
     Reference< XStyleFamilies > xFamilies( xFamiliesSupp->getStyleFamilies() );
     if( xFamilies->hasByName( rFamily ) )
-        xFamilies->getStyleFamilyByName( rFamily ) >>= xStyleCont;
+        xStyleCont = xFamilies->getStyleFamilyByName( rFamily );
 
     if( !xStyleCont.is() )
         return;

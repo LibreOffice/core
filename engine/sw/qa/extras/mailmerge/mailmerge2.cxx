@@ -349,7 +349,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabel
     SwDoc* pDocMM = mxSwTextDocument->GetDocShell()->GetDoc();
     rtl::Reference<SwXTextDocument> xModel = mxSwTextDocument->GetDocShell()->GetBaseModel();
     uno::Reference<style::XStyleFamilies> xStyleFamilies = xModel->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
 
     // All odd pages have no header, all even pages should have header with text "Page 2 of 2"
     const SwRootFrame* pLayout = pDocMM->getIDocumentLayoutAccess().GetCurrentLayout();

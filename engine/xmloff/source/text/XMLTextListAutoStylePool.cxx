@@ -163,10 +163,10 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
         return;
 
     Reference<XStyleFamilies> xFamilies = xFamiliesSupp->getStyleFamilies();
-    Reference<XIndexAccess> xStyles;
+    Reference<XStyleFamily> xStyles;
     static constexpr OUString aNumberStyleName(u"NumberingStyles"_ustr);
     if (xFamilies.is() && xFamilies->hasByName(aNumberStyleName))
-        xFamilies->getStyleFamilyByName(aNumberStyleName) >>= xStyles;
+        xStyles = xFamilies->getStyleFamilyByName(aNumberStyleName);
 
     const sal_Int32 nStyles = xStyles.is() ? xStyles->getCount() : 0;
     for (sal_Int32 i = 0; i < nStyles; i++)

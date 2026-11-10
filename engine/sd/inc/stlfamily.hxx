@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 
 #include <rtl/ref.hxx>
 
@@ -39,7 +40,13 @@ class SdStyleSheet;
 class SdPage;
 struct SdStyleFamilyImpl;
 
-class SdStyleFamily final : public ::cppu::WeakImplHelper< css::container::XNameContainer, css::container::XNamed, css::container::XIndexAccess, css::lang::XSingleServiceFactory,  css::lang::XServiceInfo, css::lang::XComponent, css::beans::XPropertySet >
+class SdStyleFamily final : public ::cppu::WeakImplHelper<
+        css::style::XStyleFamily,
+        css::container::XNamed,
+        css::lang::XSingleServiceFactory,
+        css::lang::XServiceInfo,
+        css::lang::XComponent,
+        css::beans::XPropertySet >
 {
 public:
     /// creates the style family for the given SfxStyleFamily

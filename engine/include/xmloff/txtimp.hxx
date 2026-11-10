@@ -47,6 +47,7 @@ namespace xmloff {
 }
 
 namespace com::sun::star {
+namespace style { class XStyleFamily; }
 namespace text {
     class XText;
     class XTextCursor;
@@ -228,18 +229,18 @@ public:
 
     XMLPropStyleContext* FindDrawingPage(OUString const& rName) const;
 
-    const cpo::uno::Reference< css::container::XNameContainer> & GetParaStyles() const;
+    const cpo::uno::Reference< css::style::XStyleFamily> & GetParaStyles() const;
 
-    const cpo::uno::Reference< css::container::XNameContainer> & GetTextStyles() const;
+    const cpo::uno::Reference< css::style::XStyleFamily> & GetTextStyles() const;
 
-    const cpo::uno::Reference< css::container::XNameContainer> &
+    const cpo::uno::Reference< css::style::XStyleFamily> &
         GetNumberingStyles() const;
 
-    const cpo::uno::Reference< css::container::XNameContainer> & GetFrameStyles() const;
+    const cpo::uno::Reference< css::style::XStyleFamily> & GetFrameStyles() const;
 
-    const cpo::uno::Reference< css::container::XNameContainer> & GetPageStyles() const;
+    const cpo::uno::Reference< css::style::XStyleFamily> & GetPageStyles() const;
 
-    const cpo::uno::Reference< css::container::XNameContainer> & GetCellStyles() const;
+    const cpo::uno::Reference< css::style::XStyleFamily> & GetCellStyles() const;
 
     const cpo::uno::Reference< css::container::XIndexReplace > &
         GetChapterNumbering() const;

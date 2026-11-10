@@ -314,8 +314,8 @@ CPPUNIT_TEST_FIXTURE(Test, testMarginalStyleRef)
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameContainer> xParagraphStylesContainer(
-        xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xParagraphStylesContainer(
+        xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"PageStyles"_ustr));
 
     uno::Reference<beans::XPropertySet> xPagePropertySet(
         xParagraphStylesContainer->getByName(u"Standard"_ustr), uno::UNO_QUERY);

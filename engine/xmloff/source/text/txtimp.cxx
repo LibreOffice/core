@@ -135,12 +135,12 @@ struct XMLTextImportHelper::Impl
     uno::Reference<text::XText> m_xText;
     uno::Reference<text::XTextCursor> m_xCursor;
     uno::Reference<text::XTextRange> m_xCursorAsRange;
-    uno::Reference<container::XNameContainer> m_xParaStyles;
-    uno::Reference<container::XNameContainer> m_xTextStyles;
-    uno::Reference<container::XNameContainer> m_xNumStyles;
-    uno::Reference<container::XNameContainer> m_xFrameStyles;
-    uno::Reference<container::XNameContainer> m_xPageStyles;
-    uno::Reference<container::XNameContainer> m_xCellStyles;
+    uno::Reference<style::XStyleFamily> m_xParaStyles;
+    uno::Reference<style::XStyleFamily> m_xTextStyles;
+    uno::Reference<style::XStyleFamily> m_xNumStyles;
+    uno::Reference<style::XStyleFamily> m_xFrameStyles;
+    uno::Reference<style::XStyleFamily> m_xPageStyles;
+    uno::Reference<style::XStyleFamily> m_xCellStyles;
     uno::Reference<container::XIndexReplace> m_xChapterNumbering;
     uno::Reference<container::XNameAccess> m_xTextFrames;
     uno::Reference<container::XNameAccess> m_xGraphics;
@@ -256,37 +256,37 @@ bool XMLTextImportHelper::IsProgress() const
     return m_xImpl->m_bProgress;
 }
 
-uno::Reference<container::XNameContainer> const&
+uno::Reference<style::XStyleFamily> const&
 XMLTextImportHelper::GetParaStyles() const
 {
     return m_xImpl->m_xParaStyles;
 }
 
-uno::Reference<container::XNameContainer> const&
+uno::Reference<style::XStyleFamily> const&
 XMLTextImportHelper::GetTextStyles() const
 {
     return m_xImpl->m_xTextStyles;
 }
 
-uno::Reference<container::XNameContainer> const&
+uno::Reference<style::XStyleFamily> const&
 XMLTextImportHelper::GetNumberingStyles() const
 {
     return m_xImpl->m_xNumStyles;
 }
 
-uno::Reference<container::XNameContainer> const&
+uno::Reference<style::XStyleFamily> const&
 XMLTextImportHelper::GetFrameStyles() const
 {
     return m_xImpl->m_xFrameStyles;
 }
 
-uno::Reference<container::XNameContainer> const&
+uno::Reference<style::XStyleFamily> const&
 XMLTextImportHelper::GetPageStyles() const
 {
     return m_xImpl->m_xPageStyles;
 }
 
-uno::Reference<container::XNameContainer> const&
+uno::Reference<style::XStyleFamily> const&
 XMLTextImportHelper::GetCellStyles() const
 {
     return m_xImpl->m_xCellStyles;
@@ -467,43 +467,37 @@ XMLTextImportHelper::XMLTextImportHelper(
         static constexpr OUString aParaStyles(u"ParagraphStyles"_ustr);
         if( xFamilies->hasByName( aParaStyles ) )
         {
-            m_xImpl->m_xParaStyles.set(xFamilies->getStyleFamilyByName(aParaStyles),
-                UNO_QUERY);
+            m_xImpl->m_xParaStyles = xFamilies->getStyleFamilyByName(aParaStyles);
         }
 
         static constexpr OUString aCharStyles(u"CharacterStyles"_ustr);
         if( xFamilies->hasByName( aCharStyles ) )
         {
-            m_xImpl->m_xTextStyles.set(xFamilies->getStyleFamilyByName(aCharStyles),
-                UNO_QUERY);
+            m_xImpl->m_xTextStyles = xFamilies->getStyleFamilyByName(aCharStyles);
         }
 
         static constexpr OUString aNumStyles(u"NumberingStyles"_ustr);
         if( xFamilies->hasByName( aNumStyles ) )
         {
-            m_xImpl->m_xNumStyles.set(xFamilies->getStyleFamilyByName(aNumStyles),
-                UNO_QUERY);
+            m_xImpl->m_xNumStyles = xFamilies->getStyleFamilyByName(aNumStyles);
         }
 
         static constexpr OUString aFrameStyles(u"FrameStyles"_ustr);
         if( xFamilies->hasByName( aFrameStyles ) )
         {
-            m_xImpl->m_xFrameStyles.set(xFamilies->getStyleFamilyByName(aFrameStyles),
-                UNO_QUERY);
+            m_xImpl->m_xFrameStyles = xFamilies->getStyleFamilyByName(aFrameStyles);
         }
 
         static constexpr OUString aPageStyles(u"PageStyles"_ustr);
         if( xFamilies->hasByName( aPageStyles ) )
         {
-            m_xImpl->m_xPageStyles.set(xFamilies->getStyleFamilyByName(aPageStyles),
-                UNO_QUERY);
+            m_xImpl->m_xPageStyles = xFamilies->getStyleFamilyByName(aPageStyles);
         }
 
         static constexpr OUString aCellStyles(u"CellStyles"_ustr);
         if( xFamilies->hasByName( aCellStyles ) )
         {
-            m_xImpl->m_xCellStyles.set(xFamilies->getStyleFamilyByName(aCellStyles),
-                UNO_QUERY);
+            m_xImpl->m_xCellStyles = xFamilies->getStyleFamilyByName(aCellStyles);
         }
     }
 
@@ -906,7 +900,7 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
    to the found list styles of the parent styles. (#i73973#)
 */
 static bool lcl_HasListStyle( const OUString& sStyleName,
-                              const Reference < XNameContainer >& xParaStyles,
+                              const Reference < XStyleFamily >& xParaStyles,
                               SvXMLImport const & rImport,
                               const OUString& sNumberingStyleName,
                               std::u16string_view sOutlineStyleName )
@@ -1066,7 +1060,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     {
         sStyleName = rImport.GetStyleDisplayName( nFamily, sStyleName );
         const OUString rPropName = bPara ? u"ParaStyleName"_ustr : u"CharStyleName"_ustr;
-        const Reference < XNameContainer > & rStyles = bPara
+        const Reference < XStyleFamily > & rStyles = bPara
             ? m_xImpl->m_xParaStyles
             : m_xImpl->m_xTextStyles;
         if( rStyles.is() &&

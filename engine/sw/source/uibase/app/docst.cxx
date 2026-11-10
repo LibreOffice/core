@@ -449,9 +449,9 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     OUString aUIName;
                     try
                     {
-                        uno::Reference< container::XNameAccess > xStyles;
                         uno::Reference< style::XStyleFamilies > xCont = xModel->getStyleFamilies();
-                        xCont->getStyleFamilyByName(pFamilyItem->GetValue()) >>= xStyles;
+                        uno::Reference< style::XStyleFamily > xStyles
+                            = xCont->getStyleFamilyByName(pFamilyItem->GetValue());
                         uno::Reference< beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                         xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
@@ -779,8 +779,7 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
     if (!xStyleFamilies.is())
         return;
 
-    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr),
-                                                       uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xPageStyles(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
 
     if (!xPageStyles.is())
         return;

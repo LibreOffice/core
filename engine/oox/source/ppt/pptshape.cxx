@@ -184,8 +184,8 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
         if (!aXNameAccess->hasByName(aFamily))
             return;
 
-        Reference< container::XNameAccess > xFamilies;
-        if (aXNameAccess->getStyleFamilyByName(aFamily) >>= xFamilies)
+        Reference< style::XStyleFamily > xFamilies = aXNameAccess->getStyleFamilyByName(aFamily);
+        if (xFamilies)
         {
             OUString aStyle;
             if (sType == u"com.sun.star.presentation.TitleTextShape") // title style

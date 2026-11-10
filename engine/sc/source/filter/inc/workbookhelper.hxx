@@ -37,6 +37,7 @@ namespace com::sun::star {
     namespace sheet { class XDatabaseRange; }
     namespace sheet { class XSpreadsheet; }
     namespace style { class XStyle; }
+    namespace style { class XStyleFamily; }
     namespace table { class XCellRange; }
 }
 
@@ -205,7 +206,7 @@ public:
                         getCellRangeFromDoc( const ScRange& rRange ) const;
 
     /** Returns the cell styles container from the Calc document. */
-    cpo::uno::Reference< css::container::XNameContainer >
+    cpo::uno::Reference< css::style::XStyleFamily >
                         getCellStyleFamily() const;
     /** Returns the specified cell or page style from the Calc document. */
     cpo::uno::Reference< css::style::XStyle >

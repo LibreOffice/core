@@ -27,6 +27,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -311,7 +312,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                     if( !sParent.isEmpty() )
                     {
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
-                        Reference < XNameContainer > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
+                        Reference < XStyleFamily > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
                         if(xFamilies.is() && xFamilies->hasByName( sParent ) )
                         {
                             cpo::uno::Reference< css::style::XStyle > xStyle;
@@ -352,7 +353,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         if( rName.isEmpty() || IsDefaultStyle() )
             return;
 
-        Reference < XNameContainer > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
+        Reference < XStyleFamily > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
         if( !xFamilies.is() )
         {
             SAL_WARN("xmloff", "no styles container for family " << static_cast<int>(GetFamily()));
@@ -448,7 +449,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
         return;
 
     // The families container must exist
-    Reference < XNameContainer > xFamilies = mxStyles->GetStylesContainer( GetFamily() );
+    Reference < XStyleFamily > xFamilies = mxStyles->GetStylesContainer( GetFamily() );
     SAL_WARN_IF( !xFamilies.is(), "xmloff", "Families lost" );
     if( !xFamilies.is() )
         return;

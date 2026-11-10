@@ -291,8 +291,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPTab)
                                                                          uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                uno::UNO_QUERY);
     auto xFooter
@@ -556,8 +556,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleLostNumbering)
     // Also make sure the paragraph style has a numbering associated with it:
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(
+        xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr));
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Signature"_ustr),
                                                uno::UNO_QUERY);
     OUString aNumberingStyleName;

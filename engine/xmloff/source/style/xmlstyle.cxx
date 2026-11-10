@@ -664,14 +664,14 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( XmlStyleFamily
     return xAutoStyles;
 }
 
-Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
+Reference < XStyleFamily > SvXMLStylesContext::GetStylesContainer(
                                                 XmlStyleFamily nFamily ) const
 {
-    Reference < XNameContainer > xStyles;
+    Reference < XStyleFamily > xStyles;
     if (XmlStyleFamily::TEXT_TEXT == nFamily || XmlStyleFamily::TEXT_PARAGRAPH == nFamily)
     {
         bool bPara = XmlStyleFamily::TEXT_PARAGRAPH == nFamily;
-        const Reference<XNameContainer>& rxStyles = bPara ? mxParaStyles : mxTextStyles;
+        const Reference<XStyleFamily>& rxStyles = bPara ? mxParaStyles : mxTextStyles;
         if (!rxStyles)
         {
             OUString sName(bPara ? gsParagraphStyles : gsCharacterStyles);
@@ -681,8 +681,7 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
                 Reference<XStyleFamilies> xFamilies = xFamiliesSupp->getStyleFamilies();
                 if (xFamilies->hasByName(sName))
                 {
-                    Any aAny = xFamilies->getStyleFamilyByName(sName);
-                    aAny >>= const_cast<Reference<XNameContainer>&>(rxStyles);
+                    const_cast<Reference<XStyleFamily>&>(rxStyles) = xFamilies->getStyleFamilyByName(sName);
                 }
             }
         }

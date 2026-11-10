@@ -22,6 +22,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -70,7 +71,7 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(const sax_fastparser::F
                 sMainEntryStyleName = aIter.toString();
                 OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                     XmlStyleFamily::TEXT_TEXT, sMainEntryStyleName );
-                const Reference < css::container::XNameContainer >&
+                const Reference < css::style::XStyleFamily >&
                     rStyles = GetImport().GetTextImport()->GetTextStyles();
                 bMainEntryStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
             }

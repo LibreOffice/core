@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 
 using ::com::sun::star::beans::PropertyValue;
 using ::cpo::uno::Reference;
@@ -66,7 +67,7 @@ void XMLIndexSimpleEntryContext::startFastElement(
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                 XmlStyleFamily::TEXT_TEXT, m_sCharStyleName );
             // #142494#: Check if style exists
-            const Reference < css::container::XNameContainer > & rStyles =
+            const Reference < css::style::XStyleFamily > & rStyles =
                 GetImport().GetTextImport()->GetTextStyles();
             if( rStyles.is() && rStyles->hasByName( sDisplayStyleName ) )
                 m_bCharStyleNameOK = true;

@@ -106,8 +106,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo79738, "fdo79738.docx")
 {
     uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( mxComponent, uno::UNO_QUERY_THROW );
     uno::Reference< style::XStyleFamilies > xStyleFamilies = xStylesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameContainer> xStyles;
-    xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr) >>= xStyles;
+    uno::Reference<style::XStyleFamily> xStyles
+        = xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr);
     uno::Reference<beans::XPropertySet> xPropertySetHeader( xStyles->getByName(u"Header"_ustr), uno::UNO_QUERY );
     CPPUNIT_ASSERT_EQUAL(false, xPropertySetHeader->getPropertyValue(u"ParaLineNumberCount"_ustr).get<bool>());
     uno::Reference<beans::XPropertySet> xPropertySetFooter( xStyles->getByName(u"Footer"_ustr), uno::UNO_QUERY );

@@ -255,12 +255,11 @@ void XSpreadsheets2::testImportCellStyle()
 
     uno::Reference< style::XStyleFamiliesSupplier > xFamiliesSupplier (xDestDoc, UNO_QUERY_THROW);
     uno::Reference< style::XStyleFamilies > xFamiliesNameAccess (xFamiliesSupplier->getStyleFamilies(), UNO_SET_THROW);
-    cpo::uno::Any aCellStylesFamily = xFamiliesNameAccess->getStyleFamilyByName(u"CellStyles"_ustr);
-    uno::Reference< container::XNameContainer > xCellStylesFamilyNameAccess (aCellStylesFamily, UNO_QUERY_THROW);
+    uno::Reference< style::XStyleFamily > xCellStylesFamily(xFamiliesNameAccess->getStyleFamilyByName(u"CellStyles"_ustr), UNO_SET_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("New cell style not present", xCellStylesFamilyNameAccess->hasByName(aDestStyleName));
+    CPPUNIT_ASSERT_MESSAGE("New cell style not present", xCellStylesFamily->hasByName(aDestStyleName));
 
-    cpo::uno::Any aCellStyle = xCellStylesFamilyNameAccess->getByName(aDestStyleName);
+    cpo::uno::Any aCellStyle = xCellStylesFamily->getByName(aDestStyleName);
     uno::Reference< beans::XPropertySet > xCellStyleProp (aCellStyle, UNO_QUERY_THROW);
     sal_Int32 aVertJustify = 0;
     CPPUNIT_ASSERT(xCellStyleProp->getPropertyValue(u"VertJustify"_ustr) >>= aVertJustify);

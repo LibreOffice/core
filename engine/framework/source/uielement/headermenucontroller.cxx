@@ -99,8 +99,8 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
     }
     try
     {
-        Reference< XNameContainer > xNameContainer;
-        if ( xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr) >>= xNameContainer )
+        Reference< XStyleFamily > xNameContainer = xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr);
+        if ( xNameContainer )
         {
             Sequence< OUString > aSeqNames = xNameContainer->getElementNames();
 

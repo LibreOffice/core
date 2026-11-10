@@ -3420,11 +3420,15 @@ module com {
     };
    };
    module style {
+    published interface XStyleFamily {
+     interface ::com::sun::star::container::XNameContainer;
+     interface ::com::sun::star::container::XIndexAccess;
+    };
     published interface XStyleFamilies {
      interface ::com::sun::star::container::XNameAccess;
      interface ::com::sun::star::container::XIndexAccess;
-     any getStyleFamilyByName( [in] string aName ) raises( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException );
-     any getStyleFamilyByIndex( [in] long Index ) raises( com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::lang::WrappedTargetException );
+     XStyleFamily getStyleFamilyByName( [in] string aName ) raises( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException );
+     XStyleFamily getStyleFamilyByIndex( [in] long Index ) raises( com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::lang::WrappedTargetException );
     };
     published interface XStyleFamiliesSupplier {
      interface ::cpo::uno::XInterface;
@@ -12790,9 +12794,7 @@ module com {
      interface ::com::sun::star::style::XStyleFamilies;
     };
     published service StyleFamily {
-     interface ::com::sun::star::container::XNameAccess;
-     [optional] interface ::com::sun::star::container::XNameContainer;
-     [optional] interface ::com::sun::star::container::XIndexAccess;
+     interface ::com::sun::star::style::XStyleFamily;
     };
     published interface XStyleLoader {
      interface ::cpo::uno::XInterface;

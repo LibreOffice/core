@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
@@ -60,7 +61,7 @@ void XMLIndexTitleTemplateContext::startFastElement(
             sStyleName = aIter.toString();
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                 XmlStyleFamily::TEXT_PARAGRAPH, sStyleName );
-            const Reference < css::container::XNameContainer >&
+            const Reference < css::style::XStyleFamily >&
                 rStyles = GetImport().GetTextImport()->GetParaStyles();
             bStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
         }

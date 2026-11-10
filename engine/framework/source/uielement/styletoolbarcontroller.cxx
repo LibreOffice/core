@@ -58,8 +58,8 @@ OUString GetDisplayFromInternalName( const cpo::uno::Reference< css::frame::XFra
         cpo::uno::Reference< css::style::XStyleFamilies > xFamilies(
             xStylesSupplier->getStyleFamilies(), cpo::uno::UNO_SET_THROW );
 
-        cpo::uno::Reference< css::container::XNameAccess > xStyleSet;
-        xFamilies->getStyleFamilyByName( rFamilyName ) >>= xStyleSet;
+        cpo::uno::Reference< css::style::XStyleFamily > xStyleSet
+            = xFamilies->getStyleFamilyByName( rFamilyName );
         cpo::uno::Reference< css::beans::XPropertySet > xStyle;
         xStyleSet->getByName( rStyleName ) >>= xStyle;
 

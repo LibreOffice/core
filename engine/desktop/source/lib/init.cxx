@@ -10362,7 +10362,7 @@ static std::string getComponentStyles(const cpo::uno::Reference<css::lang::XComp
             continue;
 
         boost::property_tree::ptree aChildren;
-        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(sStyleFam), uno::UNO_QUERY);
+        uno::Reference<style::XStyleFamily> xStyleFamily(xStyleFamilies->getStyleFamilyByName(sStyleFam));
 
         // Writer provides a huge number of styles, we have a list of 7 "default" styles which
         // should be shown in the normal dropdown, which we should add to the start of the list
@@ -10402,10 +10402,11 @@ static std::string getComponentStyles(const cpo::uno::Reference<css::lang::XComp
         boost::property_tree::ptree aChildren;
         static constexpr OUString sPageStyles(u"PageStyles"_ustr);
         uno::Reference<beans::XPropertySet> xProperty;
-        uno::Reference<container::XNameContainer> xContainer;
 
-        if (xStyleFamilies->hasByName(sPageStyles) && (xStyleFamilies->getStyleFamilyByName(sPageStyles) >>= xContainer))
+        if (xStyleFamilies->hasByName(sPageStyles))
         {
+            uno::Reference<style::XStyleFamily> xContainer
+                = xStyleFamilies->getStyleFamilyByName(sPageStyles);
             const cpo::uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
             for (OUString const & sName : aSeqNames)
             {

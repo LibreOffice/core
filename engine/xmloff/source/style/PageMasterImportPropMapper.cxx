@@ -23,6 +23,7 @@
 #include <xmloff/maptype.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -67,7 +68,7 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
     {
         OUString sDisplayName( rImport.GetStyleDisplayName(
                     XmlStyleFamily::TEXT_PARAGRAPH, rValue ) );
-        Reference < XNameContainer > xParaStyles =
+        Reference < style::XStyleFamily > xParaStyles =
             rImport.GetTextImport()->GetParaStyles();
         if( xParaStyles.is() && xParaStyles->hasByName( sDisplayName ) )
         {

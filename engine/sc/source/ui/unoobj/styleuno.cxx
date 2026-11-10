@@ -497,24 +497,24 @@ rtl::Reference<ScStyleFamilyObj> ScStyleFamiliesObj::GetObjectByName_Impl(std::u
 
 // style::XStyleFamilies
 
-cpo::uno::Any ScStyleFamiliesObj::getStyleFamilyByName( const OUString& aName )
+uno::Reference<style::XStyleFamily> ScStyleFamiliesObj::getStyleFamilyByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScStyleFamilyObj >  xFamily(GetObjectByName_Impl(aName));
     if (!xFamily.is())
         throw container::NoSuchElementException();
 
-    return cpo::uno::Any(uno::Reference< container::XNameContainer >(xFamily));
+    return xFamily;
 }
 
-cpo::uno::Any ScStyleFamiliesObj::getStyleFamilyByIndex( sal_Int32 nIndex )
+uno::Reference<style::XStyleFamily> ScStyleFamiliesObj::getStyleFamilyByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScStyleFamilyObj >  xFamily(GetObjectByIndex_Impl(nIndex));
     if (!xFamily.is())
         throw lang::IndexOutOfBoundsException();
 
-    return cpo::uno::Any(uno::Reference< container::XNameContainer >(xFamily));
+    return xFamily;
 }
 
 // container::XIndexAccess
@@ -526,7 +526,7 @@ sal_Int32 ScStyleFamiliesObj::getCount()
 
 cpo::uno::Any ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
 {
-    return getStyleFamilyByIndex(nIndex);
+    return cpo::uno::Any(getStyleFamilyByIndex(nIndex));
 }
 
 cpo::uno::Type ScStyleFamiliesObj::getElementType()
@@ -544,7 +544,7 @@ bool ScStyleFamiliesObj::hasElements()
 
 cpo::uno::Any ScStyleFamiliesObj::getByName( const OUString& aName )
 {
-    return getStyleFamilyByName(aName);
+    return cpo::uno::Any(getStyleFamilyByName(aName));
 }
 
 cpo::uno::Sequence<OUString> ScStyleFamiliesObj::getElementNames()

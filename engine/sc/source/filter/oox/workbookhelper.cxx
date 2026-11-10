@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
@@ -155,7 +156,7 @@ public:
     /** Returns a reference to the source/target spreadsheet document model. */
     const rtl::Reference< ScModelObj >& getDocument() const { return mxDoc; }
     /** Returns the cell or page styles container from the Calc document. */
-    Reference< XNameContainer > getStyleFamily( bool bPageStyles ) const;
+    Reference< XStyleFamily > getStyleFamily( bool bPageStyles ) const;
     /** Returns the specified cell or page style from the Calc document. */
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
@@ -342,13 +343,13 @@ ScDocumentImport& WorkbookGlobals::getDocImport()
     return *mxDocImport;
 }
 
-Reference< XNameContainer > WorkbookGlobals::getStyleFamily( bool bPageStyles ) const
+Reference< css::style::XStyleFamily > WorkbookGlobals::getStyleFamily( bool bPageStyles ) const
 {
-    Reference< XNameContainer > xStylesNC;
+    Reference< css::style::XStyleFamily > xStylesNC;
     try
     {
-        Reference< XStyleFamilies > xFamiliesNA( mxDoc->getStyleFamilies(), UNO_SET_THROW );
-        xStylesNC.set( xFamiliesNA->getStyleFamilyByName( bPageStyles ? maPageStyles : maCellStyles ), UNO_QUERY );
+        Reference< css::style::XStyleFamilies > xFamiliesNA( mxDoc->getStyleFamilies(), UNO_SET_THROW );
+        xStylesNC = xFamiliesNA->getStyleFamilyByName( bPageStyles ? maPageStyles : maCellStyles );
     }
     catch( cpo::uno::Exception& )
     {
@@ -896,7 +897,7 @@ Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const ScRange& rRan
     return xRange;
 }
 
-Reference< XNameContainer > WorkbookHelper::getCellStyleFamily() const
+Reference< XStyleFamily > WorkbookHelper::getCellStyleFamily() const
 {
     return mrBookGlob.getStyleFamily( false/*bPageStyles*/ );
 }

@@ -811,11 +811,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLinkedStyleDelete)
         xFactory->createInstance(u"com.sun.star.style.ParagraphStyle"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xCharStyle(
         xFactory->createInstance(u"com.sun.star.style.CharacterStyle"_ustr), uno::UNO_QUERY);
-    uno::Reference<container::XNameContainer> xParaStyles(getStyles(u"ParagraphStyles"_ustr),
-                                                          uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
     xParaStyles->insertByName(u"myparastyle"_ustr, cpo::uno::Any(xParaStyle));
-    uno::Reference<container::XNameContainer> xCharStyles(getStyles(u"CharacterStyles"_ustr),
-                                                          uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xCharStyles(getStyles(u"CharacterStyles"_ustr));
     xCharStyles->insertByName(u"mycharstyle"_ustr, cpo::uno::Any(xCharStyle));
     xParaStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"mycharstyle"_ustr));
     xCharStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"myparastyle"_ustr));

@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "XMLTextListItemContext.hxx"
@@ -65,7 +66,7 @@ XMLTextListItemContext::XMLTextListItemContext(
                 OUString sDisplayStyleName(
                         GetImport().GetStyleDisplayName( XmlStyleFamily::TEXT_LIST,
                                                          sListStyleOverrideName ) );
-                const Reference < container::XNameContainer >& rNumStyles =
+                const Reference < style::XStyleFamily >& rNumStyles =
                                                     rTxtImp.GetNumberingStyles();
                 if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
                 {

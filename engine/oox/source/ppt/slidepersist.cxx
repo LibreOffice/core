@@ -350,10 +350,11 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                         break;
                     }
                 }
-                Reference< container::XNameAccess > xFamilies;
+                Reference< style::XStyleFamily > xFamilies;
                 if ( aXNameAccess->hasByName( aFamily ) )
                 {
-                    if( aXNameAccess->getStyleFamilyByName( aFamily ) >>= xFamilies )
+                    xFamilies = aXNameAccess->getStyleFamilyByName( aFamily );
+                    if( xFamilies )
                     {
                         if ( xFamilies->hasByName( aStyle ) )
                         {

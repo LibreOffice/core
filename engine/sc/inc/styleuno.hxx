@@ -62,8 +62,8 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XStyleFamilies
-    virtual cpo::uno::Any getStyleFamilyByName( const OUString& aName ) override;
-    virtual cpo::uno::Any getStyleFamilyByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Reference<css::style::XStyleFamily> getStyleFamilyByName( const OUString& aName ) override;
+    virtual cpo::uno::Reference<css::style::XStyleFamily> getStyleFamilyByIndex( sal_Int32 Index ) override;
 
                             // XIndexAccess
     virtual sal_Int32 getCount() override;
@@ -99,8 +99,7 @@ private:
 };
 
 class ScStyleFamilyObj final : public ::cppu::WeakImplHelper<
-                            css::container::XNameContainer,
-                            css::container::XIndexAccess,
+                            css::style::XStyleFamily,
                             css::beans::XPropertySet,
                             css::lang::XServiceInfo >,
                         public SfxListener

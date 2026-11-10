@@ -542,8 +542,7 @@ void dropStaleThemeColorsOfDocument(const uno::Reference<frame::XModel>& xModel)
     uno::Reference<style::XStyleFamilies> xFamilies = xFamiliesSupplier->getStyleFamilies();
     for (const OUString& rFamilyName : xFamilies->getElementNames())
     {
-        uno::Reference<container::XNameAccess> xFamily(xFamilies->getStyleFamilyByName(rFamilyName),
-                                                       uno::UNO_QUERY);
+        uno::Reference<style::XStyleFamily> xFamily(xFamilies->getStyleFamilyByName(rFamilyName));
         if (!xFamily.is())
             continue;
         for (const OUString& rStyleName : xFamily->getElementNames())

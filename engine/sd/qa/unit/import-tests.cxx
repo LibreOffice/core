@@ -1256,8 +1256,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf97808)
                                                                          uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"graphics"_ustr),
-                                                        uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"graphics"_ustr));
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"objectwithoutfill"_ustr),
                                                uno::UNO_QUERY);
     OUString lineend;
@@ -2181,8 +2180,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
         = xStyleFamiliesSupplier->getStyleFamilies();
 
     // 1st slide
-    uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getStyleFamilyByName(u"Title Slide"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyleFamily(
+        xStyleFamilies->getStyleFamilyByName(u"Title Slide"_ustr));
     {
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),
                                              uno::UNO_QUERY);
@@ -2202,7 +2201,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
                              xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
     }
     // 2nd slide
-    xStyleFamily.set(xStyleFamilies->getStyleFamilyByName(u"simple text placeholder"_ustr), uno::UNO_QUERY);
+    xStyleFamily = xStyleFamilies->getStyleFamilyByName(u"simple text placeholder"_ustr);
     {
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"outline1"_ustr),
                                              uno::UNO_QUERY);

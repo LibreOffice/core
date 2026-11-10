@@ -748,10 +748,10 @@ SvXMLImportPropertyMapper*
     return pMapper;
 }
 
-uno::Reference < XNameContainer >
+uno::Reference < XStyleFamily >
         XMLTableStylesContext::GetStylesContainer( XmlStyleFamily nFamily ) const
 {
-    uno::Reference < XNameContainer > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
+    uno::Reference < XStyleFamily > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
     if (!xStyles.is())
     {
         OUString sName;
@@ -806,7 +806,7 @@ uno::Reference < XNameContainer >
 
             try
             {
-                xStyles.set(xFamilies->getStyleFamilyByName( sName ), uno::UNO_QUERY);
+                xStyles = xFamilies->getStyleFamilyByName( sName );
             }
             catch ( cpo::uno::Exception& )
             {

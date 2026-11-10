@@ -16,6 +16,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -97,7 +98,7 @@ protected:
     OUString getBodyText() const;
 
     /// Get a family of styles, see com.sun.star.style.StyleFamilies for possible values.
-    cpo::uno::Reference<css::container::XNameAccess> getStyles(const OUString& aFamily);
+    cpo::uno::Reference<css::style::XStyleFamily> getStyles(const OUString& aFamily);
 
     /// Get a family of auto styles, see com.sun.star.style.StyleFamilies for possible values.
     cpo::uno::Reference<css::style::XAutoStyleFamily> getAutoStyles(const OUString& aFamily);

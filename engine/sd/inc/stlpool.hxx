@@ -100,8 +100,8 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XStyleFamilies
-    virtual cpo::uno::Any getStyleFamilyByName( const OUString& aName ) override;
-    virtual cpo::uno::Any getStyleFamilyByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Reference<css::style::XStyleFamily> getStyleFamilyByName( const OUString& aName ) override;
+    virtual cpo::uno::Reference<css::style::XStyleFamily> getStyleFamilyByIndex( sal_Int32 Index ) override;
 
     // XNameAccess
     virtual cpo::uno::Any getByName( const OUString& aName ) override;
@@ -140,7 +140,7 @@ private:
     SdStyleFamilyRef        mxGraphicFamily;
     SdStyleFamilyRef        mxCellFamily;
     SdStyleFamilyMap        maStyleFamilyMap;
-    cpo::uno::Reference< css::container::XNameAccess > mxTableFamily;
+    cpo::uno::Reference< css::style::XStyleFamily > mxTableFamily;
     OUString                msTableFamilyName;
 };
 

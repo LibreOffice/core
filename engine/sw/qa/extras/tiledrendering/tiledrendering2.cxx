@@ -1279,8 +1279,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphStyleDeleteReleasesBackg
                            !rLinkMgr.GetLinks().empty());
 
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameContainer> xParaStyles(
-        xSupplier->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xParaStyles(
+        xSupplier->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr));
     xParaStyles->removeByName(u"LinkBackground"_ustr);
 
     CPPUNIT_ASSERT_MESSAGE("deleting the style should release its link",

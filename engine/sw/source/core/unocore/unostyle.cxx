@@ -709,9 +709,9 @@ cpo::uno::Any SwXStyleFamilies::getByName(const OUString& Name)
     return cpo::uno::Any(uno::Reference(static_cast<css::container::XNameContainer*>(GetStylesByName(Name).get())));
 }
 
-cpo::uno::Any SwXStyleFamilies::getStyleFamilyByName(const OUString& Name)
+cpo::uno::Reference<style::XStyleFamily> SwXStyleFamilies::getStyleFamilyByName(const OUString& Name)
 {
-    return cpo::uno::Any(uno::Reference(static_cast<css::container::XNameContainer*>(GetStylesByName(Name).get())));
+    return GetStylesByName(Name);
 }
 
 rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetStylesByName(const OUString& Name)
@@ -768,9 +768,9 @@ sal_Int32 SwXStyleFamilies::getCount()
     return lcl_GetStyleFamilyEntries().size();
 }
 
-cpo::uno::Any SwXStyleFamilies::getStyleFamilyByIndex(sal_Int32 nIndex)
+uno::Reference<style::XStyleFamily> SwXStyleFamilies::getStyleFamilyByIndex(sal_Int32 nIndex)
 {
-    return cpo::uno::Any(uno::Reference(static_cast<css::container::XNameContainer*>(GetStylesByIndex(nIndex).get())));
+    return GetStylesByIndex(nIndex);
 }
 
 cpo::uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)

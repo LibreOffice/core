@@ -115,11 +115,11 @@ private:
 
 class XMLTableStylesContext : public SvXMLStylesContext
 {
-    cpo::uno::Reference< css::container::XNameContainer > xCellStyles;
-    cpo::uno::Reference< css::container::XNameContainer > xColumnStyles;
-    cpo::uno::Reference< css::container::XNameContainer > xRowStyles;
-    cpo::uno::Reference< css::container::XNameContainer > xTableStyles;
-    cpo::uno::Reference< css::container::XNameContainer > xGraphicStyles;
+    cpo::uno::Reference< css::style::XStyleFamily > xCellStyles;
+    cpo::uno::Reference< css::style::XStyleFamily > xColumnStyles;
+    cpo::uno::Reference< css::style::XStyleFamily > xRowStyles;
+    cpo::uno::Reference< css::style::XStyleFamily > xTableStyles;
+    cpo::uno::Reference< css::style::XStyleFamily > xGraphicStyles;
     sal_Int32 nNumberFormatIndex;
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;
@@ -157,7 +157,7 @@ public:
 
     virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const override;
-    virtual cpo::uno::Reference< css::container::XNameContainer >
+    virtual cpo::uno::Reference< css::style::XStyleFamily >
         GetStylesContainer( XmlStyleFamily nFamily ) const override;
     virtual OUString GetServiceName( XmlStyleFamily nFamily ) const override;
 

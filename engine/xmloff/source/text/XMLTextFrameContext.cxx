@@ -37,6 +37,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <sax/tools/converter.hxx>
@@ -571,7 +572,7 @@ void XMLTextFrameContext_Impl::Create()
     {
         OUString sDisplayStyleName( GetImport().GetStyleDisplayName(
                             XmlStyleFamily::SD_GRAPHICS_ID, sStyleName ) );
-        const Reference < XNameContainer > & rStyles =
+        const Reference < style::XStyleFamily > & rStyles =
             xTextImportHelper->GetFrameStyles();
         if( rStyles.is() &&
             rStyles->hasByName( sDisplayStyleName ) )

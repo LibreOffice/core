@@ -3069,9 +3069,8 @@ struct SvxStyleToolBoxControl::Impl
             bSpecModeWriter = xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr);
             if(bSpecModeWriter)
             {
-                Reference<container::XNameAccess> xParaStyles;
-                xStylesSupplier->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr) >>=
-                    xParaStyles;
+                Reference<style::XStyleFamily> xParaStyles
+                    = xStylesSupplier->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr);
                 static constexpr OUString aWriterStyles[]
                 {
                     u"Standard"_ustr,
@@ -3116,8 +3115,8 @@ struct SvxStyleToolBoxControl::Impl
                     u"Heading 2"_ustr,
                     u"Result"_ustr
                 };
-                Reference<container::XNameAccess> xCellStyles;
-                xStylesSupplier->getStyleFamilies()->getStyleFamilyByName(u"CellStyles"_ustr) >>= xCellStyles;
+                Reference<style::XStyleFamily> xCellStyles
+                    = xStylesSupplier->getStyleFamilies()->getStyleFamilyByName(u"CellStyles"_ustr);
                 for(const OUString & sStyleName : aCalcStyles)
                 {
                     try

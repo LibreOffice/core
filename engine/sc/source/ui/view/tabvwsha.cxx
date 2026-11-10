@@ -1128,9 +1128,9 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
             {
                 try
                 {
-                    cpo::uno::Reference< css::container::XNameAccess > xStyles;
                     cpo::uno::Reference< css::style::XStyleFamilies > xCont = pDocSh->GetModel()->getStyleFamilies();
-                    xCont->getStyleFamilyByName(pFamilyItem->GetValue()) >>= xStyles;
+                    cpo::uno::Reference< css::style::XStyleFamily > xStyles
+                        = xCont->getStyleFamilyByName(pFamilyItem->GetValue());
                     cpo::uno::Reference< css::beans::XPropertySet > xInfo;
                     xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                     OUString aUIName;

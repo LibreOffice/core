@@ -464,10 +464,10 @@ private:
             return;
         for (const char* pFamily : { "PageStyles", "ParagraphStyles" })
         {
-            uno::Reference<container::XNameAccess> xStyles;
+            uno::Reference<style::XStyleFamily> xStyles;
             try
             {
-                xFamilies->getStyleFamilyByName(OUString::createFromAscii(pFamily)) >>= xStyles;
+                xStyles = xFamilies->getStyleFamilyByName(OUString::createFromAscii(pFamily));
             }
             catch (...)
             {

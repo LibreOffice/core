@@ -671,7 +671,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                         if( xFamilies.is() )
                         {
 
-                            uno::Reference< container::XNameAccess > xFamily;
+                            uno::Reference< style::XStyleFamily > xFamily;
 
                             if( XmlStyleFamily::SD_PRESENTATION_ID == mnStyleFamily )
                             {
@@ -684,7 +684,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                                     OUString aFamily( aStyleName.copy( 0, nPos ) );
 
                                     if( xFamilies->hasByName( aFamily ) )
-                                        xFamilies->getStyleFamilyByName( aFamily ) >>= xFamily;
+                                        xFamily = xFamilies->getStyleFamilyByName( aFamily );
                                     aStyleName = aStyleName.copy( nPos + 1 );
                                 }
                             }
@@ -692,9 +692,9 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                             {
                                 // get graphics family
                                 if (xFamilies->hasByName(u"graphics"_ustr))
-                                    xFamilies->getStyleFamilyByName(u"graphics"_ustr) >>= xFamily;
+                                    xFamily = xFamilies->getStyleFamilyByName(u"graphics"_ustr);
                                 else
-                                    xFamilies->getStyleFamilyByName(u"GraphicStyles"_ustr) >>= xFamily;
+                                    xFamily = xFamilies->getStyleFamilyByName(u"GraphicStyles"_ustr);
 
                                 aStyleName = GetImport().GetStyleDisplayName(
                                     XmlStyleFamily::SD_GRAPHICS_ID,

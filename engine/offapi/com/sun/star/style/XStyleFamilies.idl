@@ -42,7 +42,7 @@ published interface XStyleFamilies
             then wrap these in a com::sun::star::lang::WrappedTargetException
             exception.
      */
-    any getStyleFamilyByName( [in] string aName )
+    XStyleFamily getStyleFamilyByName( [in] string aName )
             raises( com::sun::star::container::NoSuchElementException,
                     com::sun::star::lang::WrappedTargetException );
 
@@ -60,7 +60,7 @@ published interface XStyleFamilies
             then wrap these in a com::sun::star::lang::WrappedTargetException
             exception.
      */
-    any getStyleFamilyByIndex( [in] long Index )
+    XStyleFamily getStyleFamilyByIndex( [in] long Index )
             raises( com::sun::star::lang::IndexOutOfBoundsException,
                     com::sun::star::lang::WrappedTargetException );
 };

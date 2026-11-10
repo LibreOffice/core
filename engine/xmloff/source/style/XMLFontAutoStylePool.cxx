@@ -305,8 +305,8 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
         const cpo::uno::Sequence<OUString> aFamilyNames = xFamilies->getElementNames();
         for (OUString const & sFamilyName : aFamilyNames)
         {
-            uno::Reference<container::XNameAccess> xStyleContainer;
-            xFamilies->getStyleFamilyByName(sFamilyName) >>= xStyleContainer;
+            uno::Reference<style::XStyleFamily> xStyleContainer
+                = xFamilies->getStyleFamilyByName(sFamilyName);
 
             if (xStyleContainer.is())
             {

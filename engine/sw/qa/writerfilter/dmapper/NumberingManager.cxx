@@ -41,8 +41,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteBulletListStyleName)
                                                                          uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameContainer> xStyles;
-    xStyleFamilies->getStyleFamilyByName(u"NumberingStyles"_ustr) >>= xStyles;
+    uno::Reference<style::XStyleFamily> xStyles
+        = xStyleFamilies->getStyleFamilyByName(u"NumberingStyles"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<cpo::uno::XInterface> xStyle
         = xFactory->createInstance(u"com.sun.star.style.NumberingStyle"_ustr);

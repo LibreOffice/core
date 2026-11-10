@@ -55,14 +55,14 @@ bool getBool(const uno::Reference<beans::XPropertySet>& xPageStyle, const OUStri
     return bValue;
 }
 
-// The document's page styles (XNameAccess), or an empty reference.
-uno::Reference<container::XNameAccess> getPageStyles(const uno::Reference<frame::XModel>& xModel)
+// The document's page styles, or an empty reference.
+uno::Reference<style::XStyleFamily> getPageStyles(const uno::Reference<frame::XModel>& xModel)
 {
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(xModel, uno::UNO_QUERY);
     if (!xSupplier.is())
         return {};
-    uno::Reference<container::XNameAccess> xPageStyles;
-    xSupplier->getStyleFamilies()->getStyleFamilyByName(u"PageStyles"_ustr) >>= xPageStyles;
+    uno::Reference<style::XStyleFamily> xPageStyles
+        = xSupplier->getStyleFamilies()->getStyleFamilyByName(u"PageStyles"_ustr);
     return xPageStyles;
 }
 
@@ -73,8 +73,8 @@ void ensureMarkingStyle(const uno::Reference<frame::XModel>& xModel)
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(xModel, uno::UNO_QUERY);
     if (!xSupplier.is())
         return;
-    uno::Reference<container::XNameContainer> xCharStyles;
-    xSupplier->getStyleFamilies()->getStyleFamilyByName(u"CharacterStyles"_ustr) >>= xCharStyles;
+    uno::Reference<style::XStyleFamily> xCharStyles
+        = xSupplier->getStyleFamilies()->getStyleFamilyByName(u"CharacterStyles"_ustr);
     if (!xCharStyles.is() || xCharStyles->hasByName(MARKING_STYLE))
         return;
     uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, uno::UNO_QUERY);

@@ -21,6 +21,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -131,7 +132,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     if( sDisplayName.isEmpty() )
         return;
 
-    Reference < XNameContainer > xPageStyles =
+    Reference < XStyleFamily > xPageStyles =
             GetImport().GetTextImport()->GetPageStyles();
     if( !xPageStyles.is() )
         return;
@@ -278,7 +279,7 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
         pDrawingPageStyle->FillPropertySet(xPropSet);
     }
 
-    Reference < XNameContainer > xPageStyles =
+    Reference < XStyleFamily > xPageStyles =
         GetImport().GetTextImport()->GetPageStyles();
     if( !xPageStyles.is() )
         return;

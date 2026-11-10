@@ -1157,8 +1157,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     // Get the style families
     uno::Reference < style::XStyleFamilies > xFamilies = xModel->getStyleFamilies();
     // Get the Frame family (and keep it for later)
-    const ::cpo::uno::Any aAny = xFamilies->getStyleFamilyByName (u"FrameStyles"_ustr);
-    aAny >>= mxStyleFamily;
+    mxStyleFamily = xFamilies->getStyleFamilyByName (u"FrameStyles"_ustr);
     // In the derived class, we'll ask mxStyleFamily for the relevant default style
     // mxStyleFamily is initialised in the SwXFrame constructor
     switch(m_eType)

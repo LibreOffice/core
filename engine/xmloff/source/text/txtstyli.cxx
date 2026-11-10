@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 
 #include <o3tl/any.hxx>
 
@@ -318,7 +319,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
                     GetImport().GetStyleDisplayName(XmlStyleFamily::TEXT_LIST,
                                                   m_sListStyleName));
                 // The families container must exist
-                const Reference < XNameContainer >& rNumStyles =
+                const Reference < XStyleFamily >& rNumStyles =
                     GetImport().GetTextImport()->GetNumberingStyles();
     //            if( rNumStyles.is() && rNumStyles->hasByName( sDisplayListStyleName ) &&
     //                xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
@@ -343,7 +344,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
             GetImport().GetStyleDisplayName( XmlStyleFamily::TEXT_TEXT,
                                           m_sDropCapTextStyleName));
         // The families container must exist
-        const Reference < XNameContainer >& rTextStyles =
+        const Reference < XStyleFamily >& rTextStyles =
             GetImport().GetTextImport()->GetTextStyles();
         if( rTextStyles.is() &&
             rTextStyles->hasByName( sDisplayDropCapTextStyleName ) &&
@@ -360,7 +361,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         GetImport().GetStyleDisplayName(
                         XmlStyleFamily::MASTER_PAGE, m_sMasterPageName));
     // The families container must exist
-    const Reference < XNameContainer >& rPageStyles =
+    const Reference < XStyleFamily >& rPageStyles =
         GetImport().GetTextImport()->GetPageStyles();
 
     static constexpr OUString sPageDescName(u"PageDescName"_ustr);
