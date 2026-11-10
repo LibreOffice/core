@@ -45,9 +45,6 @@ class ImpressVectorManager extends VectorManagerBase {
 	private _pendingPreviews: Map<cool.VectorPartGuid, cool.PendingPreview[]> =
 		new Map();
 
-	// Pages a JSON primitive tree request is in flight for, keyed by page id.
-	private _inFlightParts: Set<cool.VectorPartGuid> = new Set();
-
 	// Cached pages that may be behind the document, because the client was
 	// away while they could change. A stale page is still drawn from the
 	// cache, and its next draw asks for what changed since the version held.
@@ -58,12 +55,14 @@ class ImpressVectorManager extends VectorManagerBase {
 	// of a page it answers, so the pages ask a few at a time.
 	private static readonly revalidationsAtATime = 2;
 
-	// Stale pages drawn while as many were asking as may at a time, in the order they
-	// were drawn. Each asks once an answer lands.
-	private _revalidationsWaiting: cool.VectorPartGuid[] = [];
-
-	// Stale pages that asked for what changed and wait for the answer.
-	private _revalidating: Set<cool.VectorPartGuid> = new Set();
+	// The pages a JSON primitive tree request is out for, by page id, each with the mode it
+	// was asked for in. A stale page that asks for what changed is a limited request, so a
+	// few ask at a time and the rest wait in the order they were drawn.
+	private _pageRequests = new cool.RequestTracker<cool.VectorPartGuid, number>({
+		limit: ImpressVectorManager.revalidationsAtATime,
+		timeout: ImpressVectorManager.requestTimeout,
+		expired: (requests) => this._pageRequestsExpired(requests),
+	});
 
 	// Pages the document said it does not hold. Asking again is pointless
 	// until the page list is replaced.
@@ -199,49 +198,60 @@ class ImpressVectorManager extends VectorManagerBase {
 		return undefined;
 	}
 
-	/// Ask for what changed on a stale page since the version held. A request
-	/// already in flight brings the current content too, so it is not sent
-	/// twice.
-	private _revalidateIfStale(held: cool.VectorPrimitivesData): void {
-		const partId = held.partId;
-		if (!this._staleParts.has(partId) || this._inFlightParts.has(partId))
-			return;
-		if (this._revalidating.size >= ImpressVectorManager.revalidationsAtATime) {
-			if (!this._revalidationsWaiting.includes(partId))
-				this._revalidationsWaiting.push(partId);
-			return;
-		}
-		this._staleParts.delete(partId);
-		this._inFlightParts.add(partId);
-		this._revalidating.add(partId);
-		this._sendVectorPrimitivesRequest(partId, held.mode, held);
-	}
-
-	/// An answer for a page that asked what changed lets the next page waiting to ask do
-	/// so. A waiting page that is no longer stale, no longer cached, or already has a request
-	/// out, is passed over. The request out brings the current page.
-	private _revalidationAnswered(partId: cool.VectorPartGuid): void {
-		if (!this._revalidating.delete(partId)) return;
-		while (this._revalidationsWaiting.length > 0) {
-			const next = this._revalidationsWaiting.shift();
-			const held = next === undefined ? undefined : this._cache.get(next);
-			if (
-				held &&
-				this._staleParts.has(held.partId) &&
-				!this._inFlightParts.has(held.partId)
-			) {
-				this._revalidateIfStale(held);
-				return;
-			}
-		}
+	/// Ask for what changed on a stale page since the version held. A request already out
+	/// brings the current content too, so it is not sent twice. Only a few stale pages ask
+	/// at a time, and a page whose turn comes when it is no longer stale or no longer cached
+	/// asks for nothing.
+	private _revalidateIfStale(stale: cool.VectorPrimitivesData): void {
+		const partId = stale.partId;
+		if (!this._staleParts.has(partId)) return;
+		this._pageRequests.request(
+			partId,
+			() => {
+				// The page may have changed while it waited its turn.
+				const held = this._cache.get(partId);
+				if (!held) return;
+				this._staleParts.delete(partId);
+				this._sendVectorPrimitivesRequest(partId, held.mode, held);
+			},
+			{
+				limited: true,
+				needed: () => this._cache.has(partId) && this._staleParts.has(partId),
+				data: stale.mode,
+			},
+		);
 	}
 
 	/// Send for a page unless a request for it is already out.
 	private _request(partId: cool.VectorPartGuid, mode: number): void {
-		if (this._inFlightParts.has(partId) || this._missingParts.has(partId))
-			return;
-		this._inFlightParts.add(partId);
-		this._sendVectorPrimitivesRequest(partId, mode);
+		if (this._missingParts.has(partId)) return;
+		this._pageRequests.request(
+			partId,
+			() => this._sendVectorPrimitivesRequest(partId, mode),
+			{ data: mode },
+		);
+	}
+
+	// The requests got no answer in time. A page that is held asks again for what changed
+	// when it is next drawn. A page that is not held is asked for again now, as a preview may
+	// wait for it.
+	private _pageRequestsExpired(
+		requests: cool.RequestOut<cool.VectorPartGuid, number>[],
+	): void {
+		let stale = false;
+		for (const request of requests) {
+			for (const partId of request.keys) {
+				if (this._cache.has(partId)) {
+					this._staleParts.add(partId);
+					stale = true;
+				} else if (request.data !== undefined) {
+					this._request(partId, request.data);
+				}
+			}
+		}
+		if (!stale) return;
+		this._fireChanged([]);
+		app.map.fire('vectorcontentstale');
 	}
 
 	/// Listen for the layers this view hides. The engine reports them as a
@@ -891,8 +901,7 @@ class ImpressVectorManager extends VectorManagerBase {
 		// Every request names its page by id, and the answer names it back.
 		const partId = values.partId;
 		if (partId === undefined) return;
-		this._inFlightParts.delete(partId);
-		this._revalidationAnswered(partId);
+		this._pageRequests.answered(partId);
 
 		// A response with no objects names a part the document does not
 		// hold. It happens while the page list is catching up with a mode
@@ -1003,8 +1012,7 @@ class ImpressVectorManager extends VectorManagerBase {
 
 		// A delta is also what answers a request that said which version the
 		// client holds, and only a client that holds the page says that.
-		this._inFlightParts.delete(partId);
-		this._revalidationAnswered(partId);
+		this._pageRequests.answered(partId);
 
 		// A delta from another epoch counts its versions from another start, so
 		// it says nothing about what is cached and the part is fetched whole.
@@ -1700,8 +1708,14 @@ class ImpressVectorManager extends VectorManagerBase {
 		this._typedEdits.forget(ImpressVectorManager._ofPart(partId));
 		const data = this._cache.get(partId);
 		if (!data) return;
-		this._inFlightParts.add(partId);
-		this._sendVectorPrimitivesRequest(partId, data.mode);
+		// A request out for the page is answered with a delta, so the full one goes out
+		// beside it.
+		this._pageRequests.forget(partId);
+		this._pageRequests.request(
+			partId,
+			() => this._sendVectorPrimitivesRequest(partId, data.mode),
+			{ data: data.mode },
+		);
 	}
 
 	// Record an edit for replay until its message is answered. An edit without an object id
@@ -1909,23 +1923,12 @@ class ImpressVectorManager extends VectorManagerBase {
 		app.map.fire('vectorcontentstale');
 	}
 
-	/// Forget the requests in flight. A request sent before the connection dropped gets no
-	/// answer, so the next draw or revalidation asks for the page, and for the images and
-	/// fonts it names, again.
-	forgetRequestsInFlight(): void {
-		this._inFlightParts.clear();
-		this._revalidating.clear();
-		this._revalidationsWaiting = [];
-		this._resources.forgetRequests();
-	}
-
 	/// Drop cached data for a page and any in-flight state, and the bitmaps
 	/// no other cached page uses. The predicted edits stay pending.
 	clearCachedPart(partId: cool.VectorPartGuid): void {
 		this._cache.delete(partId);
 		this._staleParts.delete(partId);
-		this._inFlightParts.delete(partId);
-		this._revalidationAnswered(partId);
+		this._pageRequests.forget(partId);
 		this._bitmaps.releasePart(partId);
 		this._fonts.forgetPart(partId);
 		this._fireChanged();
@@ -1938,9 +1941,7 @@ class ImpressVectorManager extends VectorManagerBase {
 	clearAllParts(): void {
 		this._cache.clear();
 		this._staleParts.clear();
-		this._inFlightParts.clear();
-		this._revalidating.clear();
-		this._revalidationsWaiting = [];
+		this._pageRequests.forgetAll();
 		this._resources.forgetOwners();
 		this._fireChanged();
 	}
@@ -1954,7 +1955,7 @@ class ImpressVectorManager extends VectorManagerBase {
 		this._resources.forgetOwners();
 		this._cache.clear();
 		this._staleParts.clear();
-		this._inFlightParts.clear();
+		this._pageRequests.forgetAll();
 		this._fireChanged();
 	}
 
@@ -1963,7 +1964,7 @@ class ImpressVectorManager extends VectorManagerBase {
 		LocalCaret.forget();
 		this._cache.clear();
 		this._staleParts.clear();
-		this._inFlightParts.clear();
+		this._pageRequests.forgetAll();
 		this._pendingPreviews.clear();
 		this._typedEdits.forget();
 		this._resources.discard();

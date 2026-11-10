@@ -10,12 +10,19 @@
  */
 
 /// Bookkeeping for one kind of content-addressed resource fetched on
-/// demand: the loaded values, the ids in flight, the ids that turned
+/// demand: the loaded values, the ids asked for, the ids that turned
 /// out unavailable, and which parts use which id. A part is named by its
 /// cool.VectorPartGuid, so the same index in two modes is tracked apart.
 class VectorResourceTracker<K, V> {
+	/// How long a request waits for its answer, in milliseconds. After that the id is asked for
+	/// again while a part uses it.
+	private static readonly requestTimeout = 10000;
+
 	private _cache: Map<K, V> = new Map();
-	private _inFlight: Set<K> = new Set();
+	private _requests = new cool.RequestTracker<K>({
+		timeout: VectorResourceTracker.requestTimeout,
+		expired: (requests) => this._requestAgain(requests),
+	});
 	private _unavailable: Set<K> = new Set();
 	private _idToParts: Map<K, Set<cool.VectorPartGuid>> = new Map();
 
@@ -93,50 +100,54 @@ class VectorResourceTracker<K, V> {
 		this._idToParts.clear();
 	}
 
-	/// Request every id that is neither loaded, nor in flight, nor
+	/// Request every id that is neither loaded, nor asked for, nor
 	/// unavailable.
 	requestMissing(ids: Set<K>): void {
 		for (const id of ids) {
 			if (this._cache.has(id)) continue;
-			if (this._inFlight.has(id)) continue;
 			if (this._unavailable.has(id)) continue;
-			this._inFlight.add(id);
-			app.socket.sendMessage(this._requestMessage(id));
+			this._requests.request(id, () =>
+				app.socket.sendMessage(this._requestMessage(id)),
+			);
 		}
 	}
 
-	/// Store a loaded value and clear the in-flight mark.
+	// The requests got no answer in time. Their ids that a part still uses are asked for again.
+	private _requestAgain(requests: cool.RequestOut<K, undefined>[]): void {
+		const ids = new Set<K>();
+		for (const request of requests)
+			for (const id of request.keys) if (this._idToParts.has(id)) ids.add(id);
+		this.requestMissing(ids);
+	}
+
+	/// Store a loaded value, which answers the request for the id.
 	setLoaded(id: K, value: V): void {
 		this._cache.set(id, value);
-		this._inFlight.delete(id);
+		this._requests.answered(id);
 	}
 
 	/// Record an id no usable data could be obtained for, so it is not
 	/// requested again.
 	setUnavailable(id: K): void {
 		this._unavailable.add(id);
-		this._inFlight.delete(id);
+		this._requests.answered(id);
 	}
 
+	/// The request for the id is answered without a value, so the id can be asked for again.
 	clearInFlight(id: K): void {
-		this._inFlight.delete(id);
-	}
-
-	/// Forget the requests in flight, so a missing id is requested again.
-	forgetRequests(): void {
-		this._inFlight.clear();
+		this._requests.answered(id);
 	}
 
 	/// Drop the loaded values, keeping which parts use which id. A dropped id is requested
 	/// again as any missing one.
 	dropValues(): void {
 		this._cache.clear();
-		this._inFlight.clear();
+		this._requests.forgetAll();
 	}
 
 	clear(): void {
 		this._cache.clear();
-		this._inFlight.clear();
+		this._requests.forgetAll();
 		this._unavailable.clear();
 		this._idToParts.clear();
 	}

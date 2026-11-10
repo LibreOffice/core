@@ -78,12 +78,6 @@ class VectorResourceLoader {
 		this.fonts.forgetPart(owner);
 	}
 
-	/// Forget the requests in flight for images and fonts, so a missing one is asked for again.
-	forgetRequests(): void {
-		this.images.forgetRequests();
-		this.fonts.forgetRequests();
-	}
-
 	/// Forget what every owner uses, keeping the images and fonts loaded.
 	forgetOwners(): void {
 		this.images.forgetAllParts();

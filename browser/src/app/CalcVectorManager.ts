@@ -49,10 +49,6 @@ class CalcVectorManager extends VectorManagerBase {
 	private static readonly refreshBlockRows = 3;
 	private static readonly refreshBlockColumns = 1;
 
-	/// How long a request waits for its answer, in milliseconds. After that it is dropped and its
-	/// blocks can be asked for again.
-	private static readonly requestTimeout = 10000;
-
 	constructor() {
 		super();
 		// The document state names the manager, for the tests.
@@ -1270,9 +1266,9 @@ class CalcVectorManager extends VectorManagerBase {
 	/// Answers to requests sent before a reconnect never come, so their blocks are asked for
 	/// again when they are drawn.
 	forgetRequestsInFlight(): void {
+		super.forgetRequestsInFlight();
 		this._inFlight.clear();
 		this._requests.clear();
-		this._resources.forgetRequests();
 		this._disarmExpiry();
 		this._queue = null;
 		this._sheetRequested.clear();

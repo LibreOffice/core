@@ -582,6 +582,48 @@ describe('ImpressVectorManager', function () {
 		nodeassert.strictEqual(afterReconnect.sent.length, 1);
 	});
 
+	// Move the time every page request was sent back past the timeout.
+	const agePageRequests = (manager: ImpressVectorManager): void => {
+		for (const request of (manager as any)._pageRequests.requests())
+			request.sent -= 2 * (ImpressVectorManager as any).requestTimeout;
+	};
+
+	// A request that gets no answer is given up after a while. No draw asks for a page that
+	// is not held, so it is asked for again by itself.
+	it('asks again for a page whose request got no answer in time', function () {
+		const manager = new ImpressVectorManager();
+
+		const sent = SocketRecorder.during(() => {
+			manager.requestPartById('M0', cool.VectorMode.MasterPages);
+			agePageRequests(manager);
+			(manager as any)._pageRequests.expire();
+		});
+
+		nodeassert.strictEqual(sent.length, 2);
+		nodeassert.strictEqual(sent[1], sent[0]);
+	});
+
+	// A cached page whose question for what changed got no answer is stale again, and the
+	// views draw again, so the page asks again.
+	it('asks again what changed on a page whose request got no answer in time', function () {
+		const manager = new ImpressVectorManager();
+		manager.handleVectorPrimitivesResponse(cachedSlide(0));
+		let draws = 0;
+		manager.onVectorChanged(() => draws++);
+
+		const { sent } = recording(() => {
+			manager.revalidateCachedParts();
+			manager.requestPart(0, cool.VectorMode.Slides);
+			agePageRequests(manager);
+			(manager as any)._pageRequests.expire();
+			manager.requestPart(0, cool.VectorMode.Slides);
+		});
+
+		nodeassert.strictEqual(sent.length, 2);
+		// One draw for the pages marked stale, and one for the request given up.
+		nodeassert.strictEqual(draws, 2);
+	});
+
 	// A slide that shows one image.
 	const slideWithImage = (): cool.VectorPrimitivesResponse => {
 		const bitmap = {
@@ -612,6 +654,23 @@ describe('ImpressVectorManager', function () {
 		nodeassert.strictEqual(imageRequests(draw), 0);
 		manager.forgetRequestsInFlight();
 		nodeassert.strictEqual(imageRequests(draw), 1);
+	});
+
+	// A request for an image that gets no answer is given up after a while, and the image
+	// is asked for again by itself while a page uses it.
+	it('asks again for an image whose request got no answer in time', function () {
+		const manager = new ImpressVectorManager();
+		imageRequests(() =>
+			manager.handleVectorPrimitivesResponse(slideWithImage()),
+		);
+		const requests = (manager as any)._resources.images._requests;
+		for (const request of requests.requests())
+			request.sent -= 2 * (VectorResourceTracker as any).requestTimeout;
+
+		nodeassert.strictEqual(
+			imageRequests(() => requests.expire()),
+			1,
+		);
 	});
 
 	// A page removed while the client was away is answered with the header

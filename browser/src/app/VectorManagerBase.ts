@@ -16,6 +16,10 @@
  */
 
 abstract class VectorManagerBase extends RenderManagerBase {
+	/// How long a request waits for its answer, in milliseconds. After that it is given up, and
+	/// what it asked for can be asked for again.
+	protected static readonly requestTimeout = 10000;
+
 	/// The images and fonts the content names, each kept for the owners that name it.
 	protected _resources = new VectorResourceLoader(
 		(owners) => this._resourcesLoaded(owners),
@@ -82,6 +86,13 @@ abstract class VectorManagerBase extends RenderManagerBase {
 		values: cool.VectorRenderingFontResponse,
 	): void {
 		this._resources.handleFont(values);
+	}
+
+	/// Forget the requests that wait for an answer, whichever tracker holds them. An answer to
+	/// a request sent before the connection dropped never comes, and every request went over
+	/// that connection.
+	forgetRequestsInFlight(): void {
+		cool.RequestTracker.forgetEverywhere();
 	}
 
 	/// Release the decoded images and what the renderer keeps between draws. What is still
