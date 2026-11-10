@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -19803,7 +19803,7 @@
+ # Check the argument type of the gperf hash/lookup function
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking The type of len parameter of gperf hash/lookup function" >&5
+ printf %s "checking The type of len parameter of gperf hash/lookup function... " >&6; }
+-fc_gperf_test="$(echo 'foo' | gperf -L ANSI-C)"
++fc_gperf_test="$(echo 'foo' | $GPERF -L ANSI-C)"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
