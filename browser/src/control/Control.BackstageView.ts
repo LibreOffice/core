@@ -715,7 +715,9 @@ class BackstageView extends window.L.Class {
 			this.map.uiManager.showInfoModal(
 				'cloud-account-in-use',
 				_('Account in use'),
-				_('Close the documents of this account before you remove it.'),
+				_(
+					'Close the windows and documents of this account before you remove it.',
+				),
 				'',
 				_('OK'),
 			);
