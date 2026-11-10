@@ -69,7 +69,6 @@
 #include <vcl/kit.hxx>
 #include <vcl/menu.hxx>
 
-#include <sfxtypes.hxx>
 #include <slotserv.hxx>
 #include <workwin.hxx>
 
@@ -216,8 +215,6 @@ bool SfxDispatcher::IsAppDispatcher() const
 */
 void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq)
 {
-    SFX_STACK(SfxDispatcher::Call_Impl);
-
     // The slot may be called (meaning enabled)
     if ( !rSlot.IsMode(SfxSlotMode::FASTCALL) && !rShell.CanExecuteSlot_Impl(rSlot) && !rShell.IsConditionalFastCall(rReq) )
         return;
@@ -453,8 +450,6 @@ IMPL_LINK_NOARG( SfxDispatcher, EventHdl_Impl, Timer *, void )
 */
 bool SfxDispatcher::CheckVirtualStack(const SfxShell& rShell)
 {
-    SFX_STACK(SfxDispatcher::CheckVirtualStack);
-
     SfxShellStack_Impl aStack( xImp->aStack );
     for(std::deque<SfxToDo_Impl>::reverse_iterator i = xImp->aToDoStack.rbegin(); i != xImp->aToDoStack.rend(); ++i)
     {
@@ -492,7 +487,6 @@ bool SfxDispatcher::CheckVirtualStack(const SfxShell& rShell)
 */
 sal_uInt16 SfxDispatcher::GetShellLevel(const SfxShell& rShell)
 {
-    SFX_STACK(SfxDispatcher::GetShellLevel);
     Flush();
 
     for ( size_t n = 0; n < xImp->aStack.size(); ++n )
@@ -555,7 +549,6 @@ SfxViewFrame* SfxDispatcher::GetFrame() const
 */
 void SfxDispatcher::DoActivate_Impl(bool bMDI)
 {
-    SFX_STACK(SfxDispatcher::DoActivate);
     if ( bMDI )
     {
         SAL_INFO("sfx.control", "Activate Dispatcher " << reinterpret_cast<sal_Int64>(this));
@@ -606,8 +599,6 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
 */
 void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame const * pNew)
 {
-    SFX_STACK(SfxDispatcher::DoDeactivate);
-
     SfxApplication *pSfxApp = SfxGetpApp();
 
     if ( bMDI )
@@ -679,8 +670,6 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame const * pNew)
 bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
         const SfxSlot** ppSlot, bool bOwnShellsOnly, bool bRealSlot)
 {
-    SFX_STACK(SfxDispatcher::GetShellAndSlot_Impl);
-
     Flush();
     SfxSlotServer aSvr;
     if ( FindServer_(nSlot, aSvr) )
@@ -709,7 +698,6 @@ bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
 void SfxDispatcher::Execute_(SfxShell& rShell, const SfxSlot& rSlot,
         SfxRequest& rReq, SfxCallMode eCallMode)
 {
-    SFX_STACK(SfxDispatcher::Execute_);
     DBG_ASSERT( !xImp->bFlushing, "recursive call to dispatcher" );
     DBG_ASSERT( xImp->aToDoStack.empty(), "unprepared InPlace _Execute" );
 
@@ -948,7 +936,6 @@ SfxPoolItemHolder SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCall
 void SfxDispatcher::PostMsgHandler(std::unique_ptr<SfxRequest> pReq)
 {
     DBG_ASSERT( !xImp->bFlushing, "recursive call to dispatcher" );
-    SFX_STACK(SfxDispatcher::PostMsgHandler);
 
     // Has also the Pool not yet died?
     if ( pReq->IsCancelled() )
@@ -1015,8 +1002,6 @@ void SfxDispatcher::SetMenu_Impl()
 
 void SfxDispatcher::Update_Impl( bool bForce )
 {
-    SFX_STACK(SfxDispatcher::Update_Impl);
-
     Flush();
 
     if ( !xImp->pFrame )
@@ -1271,8 +1256,6 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
 */
 void SfxDispatcher::FlushImpl()
 {
-    SFX_STACK(SfxDispatcher::FlushImpl);
-
     SAL_INFO("sfx.control", "Flushing dispatcher!");
 
     xImp->aIdle.Stop();
@@ -1566,8 +1549,6 @@ static bool IsCommandAllowedInKitReadOnlyViewMode(std::u16string_view commandNam
 */
 bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 {
-    SFX_STACK(SfxDispatcher::FindServer_);
-
     // Dispatcher locked? (nevertheless let SID_HELP_PI through)
     if ( IsLocked() )
     {
@@ -1703,8 +1684,6 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
         const SfxSlot* pRealSlot)
 {
-    SFX_STACK(SfxDispatcher::FillState_);
-
     const SfxSlot *pSlot = rSvr.GetSlot();
     if ( pSlot && IsLocked() )
     {

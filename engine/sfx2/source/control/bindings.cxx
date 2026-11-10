@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <iomanip>
 
 #include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
@@ -1325,15 +1324,8 @@ bool SfxBindings::NextJob_Impl(Timer const * pTimer)
 }
 
 
-sal_uInt16 SfxBindings::EnterRegistrations(std::string_view pFile, int nLine)
+sal_uInt16 SfxBindings::EnterRegistrations()
 {
-    SAL_INFO(
-        "sfx.control",
-        std::setw(std::min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
-            << " Level = " << nRegLevel << " SfxBindings::EnterRegistrations "
-            << (!pFile.empty()
-                ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));
-
     // When bindings are locked, also lock sub bindings.
     if ( pImpl->pSubBindings )
     {
@@ -1366,7 +1358,7 @@ sal_uInt16 SfxBindings::EnterRegistrations(std::string_view pFile, int nLine)
 }
 
 
-void SfxBindings::LeaveRegistrations(  std::string_view pFile, int nLine )
+void SfxBindings::LeaveRegistrations()
 {
     DBG_ASSERT( nRegLevel, "Leave without Enter" );
 
@@ -1422,13 +1414,6 @@ void SfxBindings::LeaveRegistrations(  std::string_view pFile, int nLine )
             pImpl->aAutoTimer.Start();
         }
     }
-
-    SAL_INFO(
-        "sfx.control",
-        std::setw(std::min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
-            << " Level = " << nRegLevel << " SfxBindings::LeaveRegistrations "
-            << (!pFile.empty()
-                ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));
 }
 
 

@@ -167,8 +167,8 @@ public:
     void             SetActiveFrame( const cpo::uno::Reference< css::frame::XFrame > & rFrame );
     cpo::uno::Reference< css::frame::XFrame > GetActiveFrame() const;
                      // Reconfig
-    sal_uInt16       EnterRegistrations( std::string_view pFile = {}, int nLine = 0);
-    void             LeaveRegistrations( std::string_view pFile = {}, int nLine = 0 );
+    sal_uInt16       EnterRegistrations();
+    void             LeaveRegistrations();
     void             Register( SfxControllerItem& rBinding );
     void             Release( SfxControllerItem& rBinding );
     SfxDispatcher*   GetDispatcher() const
@@ -190,19 +190,10 @@ public:
     Timer& GetTimer();
 };
 
-#ifdef DBG_UTIL
-#define ENTERREGISTRATIONS() EnterRegistrations(__FILE__, __LINE__)
-#define LEAVEREGISTRATIONS() LeaveRegistrations(__FILE__, __LINE__)
-#define DENTERREGISTRATIONS() \
-        EnterRegistrations( Concat2View(OString::Concat(__FILE__) + "(" + OString::number(reinterpret_cast<sal_Int64>(this)) + ")"), __LINE__ )
-#define DLEAVEREGISTRATIONS(  ) \
-        LeaveRegistrations( Concat2View(OString::Concat(__FILE__) + "(" + OString::number(reinterpret_cast<sal_Int64>(this)) + ")"), __LINE__ )
-#else
 #define ENTERREGISTRATIONS() EnterRegistrations()
 #define LEAVEREGISTRATIONS() LeaveRegistrations()
 #define DENTERREGISTRATIONS() EnterRegistrations()
 #define DLEAVEREGISTRATIONS() LeaveRegistrations()
-#endif
 
 
 #endif

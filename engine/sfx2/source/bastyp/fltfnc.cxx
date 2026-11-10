@@ -53,7 +53,6 @@
 
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
@@ -64,10 +63,6 @@
 
 #include <vector>
 #include <memory>
-
-#if defined(DBG_UTIL)
-unsigned SfxStack::nLevel = 0;
-#endif
 
 using namespace com::sun::star;
 using namespace ::cpo;

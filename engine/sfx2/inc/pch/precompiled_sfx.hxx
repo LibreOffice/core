@@ -468,7 +468,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfxpicklist.hxx>
-#include <sfxtypes.hxx>
 #include <sfxurlrelocator.hxx>
 #include <splitwin.hxx>
 #include <statcach.hxx>

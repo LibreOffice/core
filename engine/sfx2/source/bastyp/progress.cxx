@@ -32,7 +32,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <workwin.hxx>
@@ -333,7 +332,6 @@ void SfxProgress::Reschedule()
 */
 
 {
-    SFX_STACK(SfxProgress::Reschedule);
 }
 
 

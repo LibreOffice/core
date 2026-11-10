@@ -314,7 +314,6 @@ public:
             "SfxObjectShellLock",
             "SfxProgress",
             "SfxSaveGuard",
-            "SfxStack",
             "ShellMoveCursor",
             "SkAutoCanvasRestore",
             "SolarMutexGuard",
