@@ -36,9 +36,6 @@ struct Panose
     /// PanoseStrokeVariation
     byte    StrokeVariation;
 
-    /// PanoseArmStyle
-    byte    ArmStyle;
-
     /// PanoseLetterForm
     byte    Letterform;
 
