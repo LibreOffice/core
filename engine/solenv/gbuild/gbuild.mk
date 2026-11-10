@@ -274,6 +274,10 @@ gb_TEST_ENV_VARS += SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
 ifeq (,$(SAL_USE_VCLPLUGIN))
 gb_TEST_ENV_VARS += SAL_USE_VCLPLUGIN=svp
 endif
+# The bundled fontconfig on macOS finds the bundled configuration only through FONTCONFIG_PATH:
+ifeq ($(OS)-$(USE_HEADLESS_CODE)-$(filter FONTCONFIG,$(BUILD_TYPE)),MACOSX-TRUE-FONTCONFIG)
+gb_TEST_ENV_VARS += FONTCONFIG_PATH=$(INSTROOT)/$(LIBO_SHARE_FOLDER)/fontconfig
+endif
 
 include $(GBUILDDIR)/Deliver.mk
 
