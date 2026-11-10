@@ -116,6 +116,7 @@ Just run `make` from the terminal.
 ### Build the Desktop Edition
 
 Open the `macos/coda/coda.xcodeproj` project in Xcode and choose `Build and Run current scheme`.
+(Or run `make -C macos app`.)
 
 That's it!
 

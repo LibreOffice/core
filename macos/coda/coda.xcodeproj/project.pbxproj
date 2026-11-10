@@ -983,7 +983,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Make sure the JS bits are up-to-date: run make in the login shell (so that Homebrew etc. is set up)\nset -e\n\"${SHELL:-/bin/zsh}\" -lic 'make -C \"$SRCROOT/../..\" all'\n";
+			shellScript = "# Make sure the JS bits are up-to-date. Run make directly when already\n# called from make (the environment is already set up); otherwise run it\n# in a login shell, so shell profile files can set it up (e.g. Homebrew).\nset -e\nif [ -n \"$MAKELEVEL\" ]; then\n    make -C \"$SRCROOT/../..\" all\nelse\n    \"${SHELL:-/bin/zsh}\" -lic 'make -C \"$SRCROOT/../..\" all'\nfi\n";
 		};
 		BEE076602CDA3024004111EF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

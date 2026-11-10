@@ -73,6 +73,14 @@ l10n: pot
 	    msgmerge --quiet --update $$po $(POT_FILE); \
 	done
 
+.PHONY: app
+app:
+	xcodebuild -project $(srcdir)/coda/coda.xcodeproj -scheme coda -configuration Debug \
+            -derivedDataPath coda.derived archive -archivePath coda.xcarchive ARCHS="$$(uname -m)" \
+            CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM= \
+            MARKETING_VERSION=$(COOLWSD_VERSION_MAJOR)$(COOLWSD_VERSION_MINOR).$(COOLWSD_VERSION_MICRO).$(COOLWSD_VERSION_NANO) \
+            COMPILER_INDEX_STORE_ENABLE=NO
+
 ## ------------------------------------------------------------
 ## Cleanup helpers
 ## ------------------------------------------------------------
@@ -87,6 +95,7 @@ clean-local:
 	for lang in $(LANGS); do \
 	    rm -rf "$(CODA_DIR)/$$lang.lproj"; \
 	done
+	rm -rf coda.derived coda.xcarchive
 	rm -rf "$(srcdir)/coda/coda.xcodeproj/project.xcworkspace" "$(srcdir)/coda/coda.xcodeproj/xcuserdata"
 	@set -e; \
 	for iconset in $(DOCUMENT_ICON_SETS); do \

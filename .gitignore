@@ -22,6 +22,7 @@ coolwsd.spec
 coolwsd.xml
 aclocal.m4
 autom4te.cache
+coda.derived
 coda.xcarchive
 config.h
 config_unused.h
