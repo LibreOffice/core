@@ -390,12 +390,14 @@ void CloudAccountPage::releaseParkedClose() {
 /// Whether the window can close now, or else first asks the editor frame's page to save its
 /// document (and the window closes again once the page is done):
 bool CloudAccountPage::readyToClose() {
-    if (!_bridge || _bridge->isReadyToClose()) {
-        if (_bridge) {
-            _bridge->sendCollabBye();
-        }
+    if (!_bridge)
+        return true;
+
+    if (_bridge->isReadyToClose()) {
+        _bridge->sendCollabBye();
         return true;
     }
+
     if (_bridge->isSaveInFlight()) {
         // The save that is under way decides, as it does for a document tab:
         QPointer<QWidget> window = QWebEngineView::forPage(this)->window();
