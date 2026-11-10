@@ -19,7 +19,6 @@
 #include "TabManager.hpp"
 #include "WindowUtils.hpp"
 
-#include <QUrlQuery>
 
 #include <qt/bridge.hpp>
 #include <qt/CODocumentBroker.hpp>
@@ -1299,81 +1298,6 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     }
 
     _webView->load(QUrl(QString::fromStdString(urlAndQueryStr)));
-}
-
-Bridge* coda::attachRemoteBridge(QWebEnginePage* page,
-                                 coda::DocumentData& document,
-                                 WebView* owner,
-                                 QWebEngineView* webView)
-{
-    QWebChannel* channel = new QWebChannel(page);
-    Bridge* bridge = new Bridge(channel, owner, document, webView);
-    channel->registerObject("bridge", bridge);
-    page->setWebChannel(channel);
-    return bridge;
-}
-
-void coda::addRemoteCoolParams(QUrl& url,
-                               const coda::DocumentData& document)
-{
-    QUrlQuery q(url);
-    std::string uiLanguage = getUILanguage();
-    q.addQueryItem("lang", QString::fromStdString(uiLanguage));
-    q.addQueryItem("dir",
-        LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "");
-    // file_path is intentionally NOT set here: for a remote document
-    // the local temp file does not exist yet at this point - the
-    // page-JS does the /co/collab fetch, asks Bridge::writeRemoteDocFile
-    // to materialise the bytes, and uses the returned path to drive
-    // the standard load flow.
-    q.addQueryItem("permission", "edit");
-    q.addQueryItem("startreadonly", "true");
-    q.addQueryItem("appdocid",
-        QString::number(document._appDocId));
-    q.addQueryItem("userinterfacemode", "notebookbar");
-    if (CODAConfig::instance().wantsVector())
-        q.addQueryItem("vector", "true");
-    if (CODAConfig::instance().messageDelay() > 0)
-        q.addQueryItem("messagedelay", QString::number(CODAConfig::instance().messageDelay()));
-    if (portalPrefersDark())
-        q.addQueryItem("darkTheme", "true");
-    url.setQuery(q);
-}
-
-void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
-{
-    _document = {
-        ._fileURL = Poco::URI(),
-        ._fakeClientFd = fakeSocketSocket(),
-        ._appDocId = coda::generateNewAppDocId(),
-        ._remoteInfo = std::move(remoteInfo),
-    };
-    // The document type is unknown until the page-JS resolves the file;
-    // the tab falls back to the generic icon.
-    _docType = QStringLiteral("other");
-
-    LOG_INF("load remote into webview with appDocId " << _document._appDocId << ", client fd "
-                                                      << _document._fakeClientFd);
-
-    assert(_bridge == nullptr);
-    _bridge = coda::attachRemoteBridge(
-        _webView->page(), _document, this, _webView.get());
-
-    Poco::Path coolHtmlPath(getBrowserDistDir());
-    coolHtmlPath.append("cool-qt.html");
-    QUrl urlAndQuery = QUrl::fromLocalFile(
-        QString::fromStdString(coolHtmlPath.toString()));
-    coda::addRemoteCoolParams(urlAndQuery, _document);
-
-    LOG_TRC("Open remote URL: " << urlAndQuery.toString().toStdString());
-    _loadedUrl = urlAndQuery.toString();
-
-    // Tab/window title is a generic "<APP_NAME>" until the page-JS
-    // resolves the actual filename via /co/collab/fetch - at which
-    // point Permission.js or similar can update the title.
-    updateTitle(QString());
-
-    _webView->load(urlAndQuery);
 }
 
 QString WebView::createNewDocumentFile(const std::string& templateType, const std::string& templatePath, const std::string& basename)
