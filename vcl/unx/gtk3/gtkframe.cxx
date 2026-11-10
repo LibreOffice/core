@@ -1734,6 +1734,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 #endif
         if( nStyle & SalFrameStyleFlags::INTRO )
         {
+            gtk_window_set_decorated(GTK_WINDOW(m_pWindow), false);
 #if !GTK_CHECK_VERSION(4,0,0)
             gtk_window_set_role( GTK_WINDOW(m_pWindow), "splashscreen" );
             eType = GDK_WINDOW_TYPE_HINT_SPLASHSCREEN;
