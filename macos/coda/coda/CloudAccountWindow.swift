@@ -205,7 +205,16 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     }
 
     // comes from WKScriptMessageHandlerWithReply
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage,
+                               replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) {
+        if let reply = handleScriptMessage(message, replyHandler: replyHandler) {
+            replyHandler(reply.0, reply.1)
+        }
+    }
+
+    // A nil result means that the reply comes later, through replyHandler:
+    private func handleScriptMessage(_ message: WKScriptMessage,
+                                     replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) -> (Any?, String?)? {
         if !isEditorFrame(message.frameInfo) {
             COWrapper.LOG_DBG("A message was dropped: it is not from the editor frame")
             return (nil, nil)
@@ -273,7 +282,11 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return (nil, nil)
         }
 
-        if let result = await ViewController.handleDocumentMessage(body, document: remoteDocument) {
+        if ViewController.handleFetchAIModels(body, replyHandler: replyHandler) {
+            return nil
+        }
+
+        if let result = ViewController.handleDocumentMessage(body, document: remoteDocument) {
             return result
         }
 

@@ -325,10 +325,18 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         }
     }
 
-    /**
-     * Receive message from JavaScript, with the possibility to reply
-     */
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+    // WebKit calls this variant for each message in turn, so the messages are handled in the order
+    // the page posted them:
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage,
+                               replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) {
+        if let reply = handleScriptMessage(message, replyHandler: replyHandler) {
+            replyHandler(reply.0, reply.1)
+        }
+    }
+
+    // A nil result means that the reply comes later, through replyHandler:
+    private func handleScriptMessage(_ message: WKScriptMessage,
+                                     replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) -> (Any?, String?)? {
         if ViewController.handleDiagnosticMessage(message) {
             return (nil, nil)
         }
@@ -354,7 +362,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     return (nil, nil)
                 }
 
-                if let result = await ViewController.handleDocumentMessage(body, document: document) {
+                if ViewController.handleFetchAIModels(body, replyHandler: replyHandler) {
+                    return nil
+                }
+
+                if let result = ViewController.handleDocumentMessage(body, document: document) {
                     return result
                 }
 
@@ -384,7 +396,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         return (nil, nil)
     }
 
-    static func handleDocumentMessage(_ body: String, document: Document) async -> (Any?, String?)? {
+    static func handleDocumentMessage(_ body: String, document: Document) -> (Any?, String?)? {
         if body == "HULLO" {
             // Now we know that the JS has started completely
             COWrapper.handleHULLO(with: document)
@@ -474,12 +486,6 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         else if body.hasPrefix("SETDARKMODE ") {
             COWrapper.setDarkMode(body == "SETDARKMODE true")
             return (nil, nil)
-        }
-        // Options dialog: AI model listing performs a network request, so
-        // handle it asynchronously rather than via handleSettingsMessage.
-        else if body.hasPrefix("FETCHAIMODELS ") {
-            let payload = String(body.dropFirst("FETCHAIMODELS ".count))
-            return (await ViewController.fetchAIModels(payload), nil)
         }
         // Other Options dialog native backend, shared with the Backstage
         // web view (see handleSettingsMessage).
@@ -809,8 +815,21 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             return (nil, nil)
         }
         // FETCHAIMODELS is handled separately (asynchronously) by the message
-        // handlers, since it performs a network request; see fetchAIModels().
+        // handlers, since it performs a network request; see handleFetchAIModels().
         return nil
+    }
+
+    // The model list comes from a network request, so the reply follows once the request is done:
+    static func handleFetchAIModels(_ body: String, replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) -> Bool {
+        guard body.hasPrefix("FETCHAIMODELS ") else {
+            return false
+        }
+
+        let payload = String(body.dropFirst("FETCHAIMODELS ".count))
+        Task {
+            replyHandler(await fetchAIModels(payload), nil)
+        }
+        return true
     }
 
     /**

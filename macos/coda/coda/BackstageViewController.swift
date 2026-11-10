@@ -90,18 +90,24 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
     /**
      * Receives “lok” messages from cool.html buttons and handles them.
      */
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage,
+                               replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) {
+        if let reply = handleScriptMessage(message, replyHandler: replyHandler) {
+            replyHandler(reply.0, reply.1)
+        }
+    }
+
+    // A nil result means that the reply comes later, through replyHandler:
+    private func handleScriptMessage(_ message: WKScriptMessage,
+                                     replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) -> (Any?, String?)? {
         if ViewController.handleDiagnosticMessage(message) {
             return (nil, nil)
         }
 
         guard message.name == "lok", let body = message.body as? String else { return (nil, nil) }
 
-        // Options dialog: AI model listing performs a network request, so handle
-        // it asynchronously (handleBackstageMessage/handleSettingsMessage are sync).
-        if body.hasPrefix("FETCHAIMODELS ") {
-            let payload = String(body.dropFirst("FETCHAIMODELS ".count))
-            return (await ViewController.fetchAIModels(payload), nil)
+        if ViewController.handleFetchAIModels(body, replyHandler: replyHandler) {
+            return nil
         }
 
         // Handle, and potentially close the window with the Backstage
