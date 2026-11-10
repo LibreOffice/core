@@ -1077,8 +1077,25 @@ class UIManager extends window.L.Control {
 		if (docType !== 'spreadsheet') this.initializeComments();
 
 		this.map.on('changeuimode', this.onChangeUIMode, this);
-		window.addEventListener('browsersettingchanged', () => {
+		const applyBrowserSetting = () => {
 			this.onChangeUIMode({ mode: this.getCurrentMode(), force: true });
+		};
+		const applyBrowserSettingOnceLoaded = (e: { status: boolean }) => {
+			if (!e.status) {
+				return;
+			}
+			this.map.off('docloaded', applyBrowserSettingOnceLoaded);
+			applyBrowserSetting();
+		};
+		window.addEventListener('browsersettingchanged', () => {
+			// Settings that a connection gets before its document is loaded (as a reconnect does)
+			// apply once it is loaded, as the UI then sends its commands to the engine:
+			if (this.map._docLoaded) {
+				applyBrowserSetting();
+			} else {
+				this.map.off('docloaded', applyBrowserSettingOnceLoaded);
+				this.map.on('docloaded', applyBrowserSettingOnceLoaded);
+			}
 		});
 		this.map.on('backstagehide', () => {
 			setTimeout(() => {
