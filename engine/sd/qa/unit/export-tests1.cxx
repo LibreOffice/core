@@ -541,6 +541,32 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testTdf97630)
                 1);
 }
 
+// A shape keeps the place its text sits in even while it holds no text.
+CPPUNIT_TEST_FIXTURE(SdExportTest1, testEmptyShapeKeepsWhereItsTextSits)
+{
+    // Given a presentation whose notes frames hold no notes and keep their text at the top:
+    createSdImpressDoc("ppt/FillPatterns.ppt");
+
+    auto aNotesFrame = [this]() -> uno::Reference<beans::XPropertySet> {
+        uno::Reference<presentation::XPresentationPage> xSlide(getPage(0), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xNotes(xSlide->getNotesPage(), uno::UNO_SET_THROW);
+        return uno::Reference<beans::XPropertySet>(xNotes->getByIndex(1), uno::UNO_QUERY_THROW);
+    };
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP,
+                         aNotesFrame()
+                             ->getPropertyValue(u"TextVerticalAdjust"_ustr)
+                             .get<drawing::TextVerticalAdjust>());
+
+    saveAndReload(TestFilter::PPT);
+
+    // Without the fix in place, the saved file left the text of a frame that holds none in the
+    // middle, so notes written into it afterwards would have started halfway down.
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP,
+                         aNotesFrame()
+                             ->getPropertyValue(u"TextVerticalAdjust"_ustr)
+                             .get<drawing::TextVerticalAdjust>());
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest1, testImpressPasswordExport)
 {
     std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPTX };

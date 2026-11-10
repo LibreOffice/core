@@ -1600,6 +1600,19 @@ void PPTWriter::ImplCreateShape( sal_uInt32 nType, ShapeFlag nFlags, EscherSolve
     rSolver.AddShape( mXShape, nId );
 }
 
+void PPTWriter::ImplWriteTextAnchor( EscherPropertyContainer& rPropOpt,
+                                    const bool bIsCustomShape, const bool bIsTextFrame )
+{
+    // A shape states where in it its text sits whether it holds any text or not, because the
+    // shape keeps that setting and shows it as soon as something is written into it. The fill
+    // properties of a shape leave the text in the middle until the text properties state it.
+    EscherPropertyContainer aTextOnly;
+    aTextOnly.CreateTextProperties( mXPropSet, 0, bIsCustomShape, bIsTextFrame );
+    sal_uInt32 nAnchor = 0;
+    if ( aTextOnly.GetOpt( ESCHER_Prop_AnchorText, nAnchor ) )
+        rPropOpt.AddOpt( ESCHER_Prop_AnchorText, nAnchor );
+}
+
 void PPTWriter::ImplCreateTextShape( EscherPropertyContainer& rPropOpt, EscherSolverContainer& rSolver, bool bFill )
 {
     mnTextStyle = EPP_TEXTSTYLE_TEXT;
@@ -1607,11 +1620,14 @@ void PPTWriter::ImplCreateTextShape( EscherPropertyContainer& rPropOpt, EscherSo
     ImplCreateShape( ESCHER_ShpInst_TextBox, ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty, rSolver );
     if ( bFill )
         rPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
+
     if ( ImplGetText() )
     {
         mnTxId += 0x60;
         rPropOpt.CreateTextProperties( mXPropSet, mnTxId );
     }
+    else
+        ImplWriteTextAnchor( rPropOpt );
 }
 
 void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& aSolverContainer, PageType ePageType, bool bMasterPage, int nPageNumber )
@@ -1801,14 +1817,13 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                      aSolverContainer );
                     aPropOpt.CreateCustomShapeProperties( eShapeType, mXShape, bOOXML );
                     aPropOpt.CreateFillProperties( mXPropSet, true, mXShape);
-                    if ( ImplGetText() )
+                    if ( ImplGetText() && !aPropOpt.IsFontWork() )
                     {
-                        if ( !aPropOpt.IsFontWork() )
-                        {
-                            mnTxId += 0x60;
-                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId, true );
-                        }
+                        mnTxId += 0x60;
+                        aPropOpt.CreateTextProperties( mXPropSet, mnTxId, true );
                     }
+                    else
+                        ImplWriteTextAnchor( aPropOpt, true );
                 }
             }
             else if ( mType == "drawing.Rectangle" )
@@ -1852,6 +1867,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mnTxId += 0x60;
                     aPropOpt.CreateTextProperties( mXPropSet, mnTxId, false, false );
                 }
+                else
+                    ImplWriteTextAnchor( aPropOpt, false, false );
             }
             else if ( mType == "drawing.Ellipse" )
             {
@@ -1895,6 +1912,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         mnTxId += 0x60;
                         aPropOpt.CreateTextProperties( mXPropSet, mnTxId, false, false );
                     }
+                    else
+                        ImplWriteTextAnchor( aPropOpt, false, false );
                 }
                 else
                 {
@@ -1965,6 +1984,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         mnTxId += 0x60;
                         aPropOpt.CreateTextProperties( mXPropSet, mnTxId, false, false );
                     }
+                    else
+                        ImplWriteTextAnchor( aPropOpt, false, false );
                 }
             }
             else if ( mType == "drawing.Control" )
@@ -2259,6 +2280,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 mnTxId += 0x60;
                                 aPropOpt.CreateTextProperties( mXPropSet, mnTxId, false, false );
                             }
+                            else
+                                ImplWriteTextAnchor( aPropOpt, false, false );
                         }
                     }
                     else

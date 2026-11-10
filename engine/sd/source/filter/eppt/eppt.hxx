@@ -199,6 +199,9 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
                                 TextRuleEntry* pTextRule, SvStream& rExtBu, EscherPropertyContainer* );
         void                ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropertyContainer& rPropOpt );
         void                ImplCreateShape( sal_uInt32 nType, ShapeFlag nFlags, EscherSolverContainer& );
+        void                ImplWriteTextAnchor( EscherPropertyContainer&,
+                                                 const bool bIsCustomShape = false,
+                                                 const bool bIsTextFrame = true );
         void                ImplCreateTextShape( EscherPropertyContainer&, EscherSolverContainer&, bool bFill );
 
         void                ImplWritePage( const PHLayout& rLayout,
