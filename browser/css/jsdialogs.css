@@ -1479,24 +1479,11 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 
 .context-menu-item.context-menu-submenu::before {
 	content: '';
-}
-
-.context-menu-item.context-menu-submenu::before,
-.context-menu-icon-spacer,
-img.context-menu-icon {
 	width: 1rem;
 	height: 1rem;
 	margin-right: 8px;
 	vertical-align: middle;
 	display: inline-block;
-}
-
-/*
-* Hide the spacer icon if the entire context menu list does not contain any <img>.
-* This prevents unnecessary visual gaps when no icons are present.
-*/
-.context-menu-list:not(:has(img)) .context-menu-icon-spacer {
-	display: none;
 }
 
 /*

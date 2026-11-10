@@ -52,42 +52,42 @@ export class ColumnHeader extends Header {
 		this._headerMenuID = 'col-header-menu';
 		this._menuItem = {
 			'.uno:InsertColumnsBefore': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:InsertColumnsBefore', 'spreadsheet', true), 'InsertColumnsBefore'),
+				name: _UNO('.uno:InsertColumnsBefore', 'spreadsheet', true),
 				isHtmlName: true,
 				callback: (this._insertColBefore).bind(this)
 			},
 			'.uno:InsertColumnsAfter': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:InsertColumnsAfter', 'spreadsheet', true), 'InsertColumnsAfter'),
+				name: _UNO('.uno:InsertColumnsAfter', 'spreadsheet', true),
 				isHtmlName: true,
 				callback: (this._insertColAfter).bind(this)
 			},
 			'.uno:DeleteColumns': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:DeleteColumns', 'spreadsheet', true), 'DeleteColumns'),
+				name: _UNO('.uno:DeleteColumns', 'spreadsheet', true),
 				isHtmlName: true,
 				callback: (this._deleteSelectedCol).bind(this)
 			},
 			'.uno:ColumnWidth': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:ColumnWidth', 'spreadsheet', true), 'ColumnWidth'),
+				name: _UNO('.uno:ColumnWidth', 'spreadsheet', true),
 				isHtmlName: true,
 				callback: (this._columnWidth).bind(this)
 			},
 			'.uno:SetOptimalColumnWidth': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:SetOptimalColumnWidth', 'spreadsheet', true), 'SetOptimalColumnWidth'),
+				name: _UNO('.uno:SetOptimalColumnWidth', 'spreadsheet', true),
 				isHtmlName: true,
 				callback: (this._optimalWidth).bind(this)
 			},
 			'.uno:HideColumn': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:HideColumn', 'spreadsheet', true), 'HideColumn'),
+				name: _UNO('.uno:HideColumn', 'spreadsheet', true),
 				isHtmlName: true,
 				callback: (this._hideColumn).bind(this)
 			},
 			'.uno:ShowColumn': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:ShowColumn', 'spreadsheet', true), 'ShowColumn'),
+				name: _UNO('.uno:ShowColumn', 'spreadsheet', true),
 				isHtmlName: true,
 				callback: (this._showColumn).bind(this)
 			},
 			'.uno:FreezePanes': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:FreezePanes', 'spreadsheet', true), 'FreezePanes'),
+				name: _UNO('.uno:FreezePanes', 'spreadsheet', true),
 				isHtmlName: true,
 				callback: (this._freezePanes).bind(this)
 			}

@@ -493,7 +493,6 @@ COOL_JS_LST =\
 	src/app/Rectangle.ts \
 	src/app/Util.ts \
 	src/app/LOUtil.ts \
-	src/app/IconUtil.ts \
 	src/app/SlideAvatars.ts \
 	src/app/iface/DocLayer.Interface.ts \
 	src/app/iface/Map.Interface.ts \
@@ -1797,7 +1796,6 @@ pot:
 		src/app/ExportFormats.ts \
 		src/app/HandleGroups.ts \
 		src/app/TableHandles.ts \
-		src/app/IconUtil.ts \
 		src/app/SlideAvatars.ts \
 		src/app/LOUtil.ts \
 		src/app/TableStylesService.ts \

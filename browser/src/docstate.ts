@@ -90,7 +90,6 @@
 	map: null, // Make map object a part of this.
 	util: null, // Attach the Util class.
 	LOUtil: null, // Attach the LOUtil class.
-	IconUtil: null, // Attach the IconUtil class.
 	Evented: null, // Attach the Evented class.
 	Log: null, // Attach Logger instance.
 	DebugManager: null, // Attach DebugManager class.

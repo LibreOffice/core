@@ -73,7 +73,6 @@
 /// <reference path="../src/app/Rectangle.ts" />
 /// <reference path="../src/app/Util.ts" />
 /// <reference path="../src/app/LOUtil.ts" />
-/// <reference path="../src/app/IconUtil.ts" />
 /// <reference path="../src/app/iface/DocLayer.Interface.ts" />
 /// <reference path="../src/app/iface/Map.Interface.ts" />
 /// <reference path="../src/app/iface/Control.Interface.ts" />

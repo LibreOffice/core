@@ -2051,6 +2051,16 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			icon = window.L.DomUtil.create('img', '', iconSpan);
 			app.LOUtil.setImage(icon, iconName, builder.map);
 			icon.alt = '';
+		} else if (data.icon) {
+			// An entry whose command has no icon of its own, e.g. .uno:None or an extension
+			// command, shows the icon that the entry names.
+			var namedIconSpan = window.L.DomUtil.create('span', 'menu-entry-icon', menuEntry);
+			icon = window.L.DomUtil.create('img', '', namedIconSpan);
+			if (builder._isStringCloseToURL(data.icon))
+				icon.src = data.icon;
+			else
+				app.LOUtil.setImage(icon, app.LOUtil.getIconNameOfCommand(data.icon), builder.map);
+			icon.alt = '';
 		}
 		if (data.checked && data.checked === true) {
 			window.L.DomUtil.addClass(menuEntry, 'menu-entry-checked');
@@ -2808,9 +2818,13 @@ window.L.Control.JSDialogBuilder.getMenuStructureForMobileWizard = function(menu
 		menuStructure['callback'] = menu.callback;
 	if (menu.isHtmlName)
 		menuStructure['hyperlink'] = true;
-	// The _image field holds the name of a command that has an icon file.
-	if (menu._image && app.IconUtil.commandsWithIcons.includes(menu._image))
+	// The _image field holds the name of the command whose icon the entry shows.
+	if (menu._image)
 		menuStructure['iconCommand'] = menu._image;
+	// The icon field holds an icon theme name such as 'lc_lightproof.svg', or the URL of an
+	// image.
+	if (menu.icon)
+		menuStructure['icon'] = menu.icon;
 
 	if (mainMenu) {
 		for (var menuItem in menu) {

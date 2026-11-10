@@ -249,7 +249,6 @@ interface AppInterface {
 		compareDocumentOldFileName: string | null;
 		savedViewMode: string | null; // 'multipage' | 'normal' | null
 	};
-	IconUtil: typeof IconUtil;
 	Evented: typeof Evented;
 	Log: Logger;
 	DebugManager: typeof DebugManager;
