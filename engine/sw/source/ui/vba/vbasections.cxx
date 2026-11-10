@@ -75,7 +75,7 @@ public:
       mxModel(std::move( xModel ))
     {
         rtl::Reference< SwXStyleFamilies > xSytleFamNames( mxModel->getSwStyleFamilies() );
-        uno::Reference< container::XIndexAccess > xPageStyles( xSytleFamNames->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xPageStyles( xSytleFamNames->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
         sal_Int32 nCount = xPageStyles->getCount();
         for( sal_Int32 index = 0; index < nCount; ++index )
         {

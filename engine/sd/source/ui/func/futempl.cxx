@@ -137,8 +137,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 try
                 {
                     Reference< XStyleFamiliesSupplier > xModel(mrDoc.GetDocSh()->GetModel(), UNO_QUERY_THROW );
-                    Reference< XNameAccess > xCont( xModel->getStyleFamilies() );
-                    Reference< XNameAccess > xStyles( xCont->getByName(pFamilyItem->GetValue()), UNO_QUERY_THROW );
+                    Reference< XStyleFamilies > xCont( xModel->getStyleFamilies() );
+                    Reference< XNameAccess > xStyles( xCont->getStyleFamilyByName(pFamilyItem->GetValue()), UNO_QUERY_THROW );
                     Reference< XPropertySet > xInfo( xStyles->getByName( pNameItem->GetValue() ), UNO_QUERY_THROW );
 
                     OUString aUIName;

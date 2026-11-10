@@ -88,9 +88,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRecursiveHeaderRels)
 
     // given an essentially corrupt document, which parses styles.xml multiple times,
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies = xSupplier->getStyleFamilies();
+    uno::Reference<style::XStyleFamilies> xStyleFamilies = xSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW);
+        xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xStandard(xStyleFamily->getByName(u"Standard"_ustr),
                                                   uno::UNO_QUERY_THROW);
     style::LineSpacing aLineSpacing;

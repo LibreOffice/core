@@ -1328,8 +1328,8 @@ DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
     // Table styles basic graphic test.
     // Doesn't cover all attributes.
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());
-    uno::Reference<container::XNameAccess> xCellFamily(xFamilies->getByName(u"CellStyles"_ustr),
+    uno::Reference<style::XStyleFamilies> xFamilies(XFamiliesSupplier->getStyleFamilies());
+    uno::Reference<container::XNameAccess> xCellFamily(xFamilies->getStyleFamilyByName(u"CellStyles"_ustr),
                                                        uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xCell1Style;
     xCellFamily->getByName(u"Test style.1"_ustr) >>= xCell1Style;
@@ -1369,8 +1369,8 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     // Doesn't cover all attributes.
     // Problem: underline for table autoformat doesn't work.
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());
-    uno::Reference<container::XNameAccess> xTableFamily(xFamilies->getByName(u"TableStyles"_ustr),
+    uno::Reference<style::XStyleFamilies> xFamilies(XFamiliesSupplier->getStyleFamilies());
+    uno::Reference<container::XNameAccess> xTableFamily(xFamilies->getStyleFamilyByName(u"TableStyles"_ustr),
                                                         uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTableStyle(xTableFamily->getByName(u"Test style2"_ustr),
                                                        uno::UNO_QUERY);
@@ -1748,8 +1748,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
     createSwDoc("table_styles_4.odt");
     // Test if loaded styles overwrite existing styles
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());
-    uno::Reference<container::XNameAccess> xTableFamily(xFamilies->getByName(u"TableStyles"_ustr),
+    uno::Reference<style::XStyleFamilies> xFamilies(XFamiliesSupplier->getStyleFamilies());
+    uno::Reference<container::XNameAccess> xTableFamily(xFamilies->getStyleFamilyByName(u"TableStyles"_ustr),
                                                         uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTableStyle(xTableFamily->getByName(u"Green"_ustr),
                                                        uno::UNO_QUERY);

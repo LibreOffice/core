@@ -3070,7 +3070,7 @@ struct SvxStyleToolBoxControl::Impl
             if(bSpecModeWriter)
             {
                 Reference<container::XNameAccess> xParaStyles;
-                xStylesSupplier->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr) >>=
+                xStylesSupplier->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr) >>=
                     xParaStyles;
                 static constexpr OUString aWriterStyles[]
                 {
@@ -3117,7 +3117,7 @@ struct SvxStyleToolBoxControl::Impl
                     u"Result"_ustr
                 };
                 Reference<container::XNameAccess> xCellStyles;
-                xStylesSupplier->getStyleFamilies()->getByName(u"CellStyles"_ustr) >>= xCellStyles;
+                xStylesSupplier->getStyleFamilies()->getStyleFamilyByName(u"CellStyles"_ustr) >>= xCellStyles;
                 for(const OUString & sStyleName : aCalcStyles)
                 {
                     try

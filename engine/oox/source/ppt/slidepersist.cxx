@@ -299,7 +299,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
     try
     {
         Reference< style::XStyleFamiliesSupplier > aXStyleFamiliesSupplier( rFilterBase.getModel(), UNO_QUERY_THROW );
-        Reference< container::XNameAccess > aXNameAccess( aXStyleFamiliesSupplier->getStyleFamilies() );
+        Reference< style::XStyleFamilies > aXNameAccess( aXStyleFamiliesSupplier->getStyleFamilies() );
         Reference< container::XNamed > aXNamed( mxPage, UNO_QUERY_THROW );
 
         if ( aXNameAccess.is() )
@@ -353,7 +353,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                 Reference< container::XNameAccess > xFamilies;
                 if ( aXNameAccess->hasByName( aFamily ) )
                 {
-                    if( aXNameAccess->getByName( aFamily ) >>= xFamilies )
+                    if( aXNameAccess->getStyleFamilyByName( aFamily ) >>= xFamilies )
                     {
                         if ( xFamilies->hasByName( aStyle ) )
                         {

@@ -2310,7 +2310,7 @@ cpo::uno::Reference< ::css::chart2::data::XDataProvider > ScModelObj::createData
 
 // XStyleFamiliesSupplier
 
-uno::Reference<container::XNameAccess> ScModelObj::getStyleFamilies()
+uno::Reference<style::XStyleFamilies> ScModelObj::getStyleFamilies()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)

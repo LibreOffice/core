@@ -1345,7 +1345,7 @@ rtl::Reference< SwXTextFrames >  SwXTextDocument::getSwTextFrames()
     return mxXTextFrames;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getStyleFamilies()
+Reference< style::XStyleFamilies >  SwXTextDocument::getStyleFamilies()
 {
     return getSwStyleFamilies();
 }

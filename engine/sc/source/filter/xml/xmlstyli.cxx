@@ -802,11 +802,11 @@ uno::Reference < XNameContainer >
         if( !xStyles.is() && !sName.isEmpty() && GetScImport().GetModel().is() )
         {
             ScModelObj* xFamiliesSupp( GetScImport().GetScModel() );
-            uno::Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
+            uno::Reference< XStyleFamilies > xFamilies(xFamiliesSupp->getStyleFamilies());
 
             try
             {
-                xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
+                xStyles.set(xFamilies->getStyleFamilyByName( sName ), uno::UNO_QUERY);
             }
             catch ( cpo::uno::Exception& )
             {

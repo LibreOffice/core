@@ -242,7 +242,7 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
     if( !xFamiliesSupp.is() )
         return;
 
-    Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+    Reference< XStyleFamilies > xFamilies( xFamiliesSupp->getStyleFamilies() );
     SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff",
                 "getStyleFamilies() from XModel failed for export!" );
     if( xFamilies.is() )
@@ -251,7 +251,7 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
 
         if( xFamilies->hasByName( aPageStyleName ) )
         {
-            m_xPageStyles.set(xFamilies->getByName( aPageStyleName ),uno::UNO_QUERY);
+            m_xPageStyles.set(xFamilies->getStyleFamilyByName( aPageStyleName ),uno::UNO_QUERY);
 
             SAL_WARN_IF( !m_xPageStyles.is(), "xmloff",
                         "Page Styles not found for export!" );

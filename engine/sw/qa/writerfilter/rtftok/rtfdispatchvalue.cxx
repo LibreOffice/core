@@ -10,6 +10,7 @@
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 
@@ -36,10 +37,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowStyle)
     // Then make sure we set the follow of the para style correctly:
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Heading 1"_ustr),
                                                uno::UNO_QUERY);
     OUString aFollowStyle;
@@ -60,10 +61,10 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     // position:
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                uno::UNO_QUERY);
     auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();

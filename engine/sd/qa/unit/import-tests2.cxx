@@ -3061,7 +3061,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testMasterOutlineLevelIndents)
     createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
 
     uno::Reference<container::XNameAccess> xStyles(
-        mxComponent.queryThrow<style::XStyleFamiliesSupplier>()->getStyleFamilies()->getByName(
+        mxComponent.queryThrow<style::XStyleFamiliesSupplier>()->getStyleFamilies()->getStyleFamilyByName(
             u"Title and Content"_ustr),
         uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xOutline1(xStyles->getByName(u"outline1"_ustr),

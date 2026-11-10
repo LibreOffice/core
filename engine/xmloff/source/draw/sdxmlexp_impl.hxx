@@ -22,6 +22,7 @@
 #include <xmloff/xmlexp.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/style/XStyleFamilies.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <o3tl/sorted_vector.hxx>
@@ -71,7 +72,7 @@ struct DateTimeDeclImpl
 
 class SdXMLExport : public SvXMLExport
 {
-    cpo::uno::Reference< css::container::XNameAccess > mxDocStyleFamilies;
+    cpo::uno::Reference< css::style::XStyleFamilies > mxDocStyleFamilies;
     cpo::uno::Reference< css::container::XIndexAccess > mxDocMasterPages;
     cpo::uno::Reference< css::container::XIndexAccess > mxDocDrawPages;
     sal_Int32                   mnDocMasterPageCount;

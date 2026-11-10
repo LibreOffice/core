@@ -429,7 +429,7 @@ public:
     virtual cpo::uno::Reference< css::container::XNameAccess > getLinks(  ) override;
 
     // XStyleFamiliesSupplier
-    virtual cpo::uno::Reference< css::container::XNameAccess > getStyleFamilies(  ) override;
+    virtual cpo::uno::Reference< css::style::XStyleFamilies > getStyleFamilies(  ) override;
 
     // XAnyCompareFactory
     virtual cpo::uno::Reference< css::ucb::XAnyCompare > createAnyCompareByName( const OUString& PropertyName ) override;

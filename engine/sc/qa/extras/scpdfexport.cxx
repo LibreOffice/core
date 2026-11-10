@@ -478,10 +478,10 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
 
     // set fit to page: width=1 page, height=0 (automatic)
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamSupp(xDoc, UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xStyleFamiliesNames(xStyleFamSupp->getStyleFamilies(),
+    uno::Reference<style::XStyleFamilies> xStyleFamiliesNames(xStyleFamSupp->getStyleFamilies(),
                                                                UNO_SET_THROW);
     uno::Reference<container::XNameAccess> xPageStyles(
-        xStyleFamiliesNames->getByName(u"PageStyles"_ustr), UNO_QUERY_THROW);
+        xStyleFamiliesNames->getStyleFamilyByName(u"PageStyles"_ustr), UNO_QUERY_THROW);
     cpo::uno::Any aDefaultStyle = xPageStyles->getByName(u"Default"_ustr);
     uno::Reference<beans::XPropertySet> xProp(aDefaultStyle, UNO_QUERY_THROW);
 

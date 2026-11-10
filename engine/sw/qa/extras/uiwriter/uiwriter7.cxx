@@ -141,9 +141,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77340)
     uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY_THROW);
     xPropSet->setPropertyValue(u"ParaBackColor"_ustr, cpo::uno::Any(sal_Int32(0xFF00FF)));
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xNameAccess(xSupplier->getStyleFamilies());
+    uno::Reference<style::XStyleFamilies> xNameAccess(xSupplier->getStyleFamilies());
     uno::Reference<container::XNameContainer> xNameCont;
-    xNameAccess->getByName(u"ParagraphStyles"_ustr) >>= xNameCont;
+    xNameAccess->getStyleFamilyByName(u"ParagraphStyles"_ustr) >>= xNameCont;
     xNameCont->insertByName(u"myStyle"_ustr, cpo::uno::Any(xStyle));
     CPPUNIT_ASSERT_EQUAL(u"myStyle"_ustr, xStyle->getName());
     //Setting the properties with proper values

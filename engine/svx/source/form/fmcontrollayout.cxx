@@ -202,7 +202,7 @@ namespace svxform
     {
         // the style family collection
         Reference< XStyleFamiliesSupplier > xSuppStyleFamilies( getTypedModelNode< XStyleFamiliesSupplier >( _rxModel ), UNO_SET_THROW );
-        Reference< XNameAccess > xStyleFamilies( xSuppStyleFamilies->getStyleFamilies(), UNO_SET_THROW );
+        Reference< css::style::XStyleFamilies > xStyleFamilies( xSuppStyleFamilies->getStyleFamilies(), UNO_SET_THROW );
 
         // the names of the family, and the style - depends on the document type we live in
         OUString sFamilyName, sStyleName;
@@ -210,7 +210,7 @@ namespace svxform
             throw RuntimeException(u"unknown document type!"_ustr);
 
         // the concrete style
-        Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xStyleFamily( xStyleFamilies->getStyleFamilyByName( sFamilyName ), UNO_QUERY_THROW );
         return Reference< XPropertySet >( xStyleFamily->getByName( sStyleName ), UNO_QUERY_THROW );
     }
 

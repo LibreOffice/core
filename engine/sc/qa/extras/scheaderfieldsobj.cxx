@@ -78,8 +78,8 @@ uno::Reference<cpo::uno::XInterface> ScHeaderFieldsObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_SET_THROW);
-    uno::Reference<container::XNameAccess> xNA1(xNA->getByName(u"PageStyles"_ustr),
+    uno::Reference<style::XStyleFamilies> xNA(xSFS->getStyleFamilies(), uno::UNO_SET_THROW);
+    uno::Reference<container::XNameAccess> xNA1(xNA->getStyleFamilyByName(u"PageStyles"_ustr),
                                                 uno::UNO_QUERY_THROW);
     uno::Reference<style::XStyle> xStyle(xNA1->getByName(u"Default"_ustr), uno::UNO_QUERY_THROW);
 

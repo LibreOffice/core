@@ -157,10 +157,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
     // Then make sure the page style's RtlGutter property is true.
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStandard(xStyleFamily->getByName(u"Standard"_ustr),
                                                   uno::UNO_QUERY);
     bool bRtlGutter{};

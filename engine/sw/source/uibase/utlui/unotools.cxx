@@ -363,8 +363,8 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         OUString sPageStyle;
         aPageStyle >>= sPageStyle;
 
-        uno::Reference< container::XNameAccess >  xStyles = m_xModel->getStyleFamilies();
-        cpo::uno::Any aPFamily = xStyles->getByName( u"PageStyles"_ustr );
+        uno::Reference< style::XStyleFamilies >  xStyles = m_xModel->getStyleFamilies();
+        cpo::uno::Any aPFamily = xStyles->getStyleFamilyByName( u"PageStyles"_ustr );
         uno::Reference< container::XNameContainer >  xPFamily;
 
         if( EX_SHOW_DEFAULT_PAGE != m_nStyleFlags

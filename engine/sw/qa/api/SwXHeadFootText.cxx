@@ -85,9 +85,9 @@ Reference<XInterface> SwXHeadFootText::init()
     Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
 
     Reference<style::XStyleFamiliesSupplier> xStyleFam(xTextDocument, UNO_QUERY_THROW);
-    Reference<container::XNameAccess> xStyleFamNames = xStyleFam->getStyleFamilies();
+    Reference<style::XStyleFamilies> xStyleFamNames = xStyleFam->getStyleFamilies();
 
-    Reference<container::XNameAccess> xPageStyles(xStyleFamNames->getByName(u"PageStyles"_ustr),
+    Reference<container::XNameAccess> xPageStyles(xStyleFamNames->getStyleFamilyByName(u"PageStyles"_ustr),
                                                   UNO_QUERY_THROW);
     Reference<style::XStyle> xStyle(xPageStyles->getByName(u"Standard"_ustr), UNO_QUERY_THROW);
 

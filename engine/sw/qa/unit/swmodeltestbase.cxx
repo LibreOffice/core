@@ -157,9 +157,9 @@ uno::Reference<container::XNameAccess> SwModelTestBase::getStyles(const OUString
 {
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(aFamily),
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(aFamily),
                                                         uno::UNO_QUERY);
     return xStyleFamily;
 }

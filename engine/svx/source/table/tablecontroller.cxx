@@ -551,8 +551,8 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                 try
                 {
                     Reference< XStyleFamiliesSupplier > xSFS( rModel.getUnoModel(), UNO_QUERY_THROW );
-                    Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_SET_THROW );
-                    Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( u"table"_ustr ), UNO_QUERY_THROW );
+                    Reference< XStyleFamilies > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_SET_THROW );
+                    Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getStyleFamilyByName( u"table"_ustr ), UNO_QUERY_THROW );
 
                     bool bIsPageDark = false;
                     if( SdrPage* pPage = rTableObj.getSdrPageFromSdrObject() )
@@ -1260,8 +1260,8 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
     try
     {
         Reference< XStyleFamiliesSupplier > xSFS( rModel.getUnoModel(), UNO_QUERY_THROW );
-        Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_SET_THROW );
-        Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( u"table"_ustr ), UNO_QUERY_THROW );
+        Reference< XStyleFamilies > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_SET_THROW );
+        Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getStyleFamilyByName( u"table"_ustr ), UNO_QUERY_THROW );
 
         if( xTableFamilyAccess->hasByName( pArg->GetValue() ) )
         {

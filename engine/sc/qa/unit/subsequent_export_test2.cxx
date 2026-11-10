@@ -332,10 +332,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testHeaderImageODS)
     saveAndReload(TestFilter::ODS);
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xPageStyles(
-        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName(u"Default"_ustr),
                                                uno::UNO_QUERY);
 
@@ -350,10 +350,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testHeaderFooterContentODS)
     saveAndReload(TestFilter::ODS);
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xPageStyles(
-        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName(u"Default"_ustr),
                                                uno::UNO_QUERY);
 

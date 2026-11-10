@@ -660,7 +660,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testUserTableStyles)
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamiliesSupplier->getStyleFamilies()->getByName(u"table"_ustr), uno::UNO_QUERY);
+        xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"table"_ustr), uno::UNO_QUERY);
 
     uno::Reference<style::XStyle> xTableStyle(xStyleFamily->getByName(u"default"_ustr),
                                               uno::UNO_QUERY);

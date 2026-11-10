@@ -867,7 +867,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testShapeStyles)
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                              uno::UNO_QUERY_THROW);
         uno::Reference<container::XNameContainer> xGraphicStyles(
-            xStyleFamiliesSupplier->getStyleFamilies()->getByName(u"GraphicStyles"_ustr),
+            xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"GraphicStyles"_ustr),
             uno::UNO_QUERY_THROW);
 
         // create styles

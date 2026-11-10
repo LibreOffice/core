@@ -162,11 +162,11 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     if (!xFamiliesSupp.is())
         return;
 
-    Reference<XNameAccess> xFamilies = xFamiliesSupp->getStyleFamilies();
+    Reference<XStyleFamilies> xFamilies = xFamiliesSupp->getStyleFamilies();
     Reference<XIndexAccess> xStyles;
     static constexpr OUString aNumberStyleName(u"NumberingStyles"_ustr);
     if (xFamilies.is() && xFamilies->hasByName(aNumberStyleName))
-        xFamilies->getByName(aNumberStyleName) >>= xStyles;
+        xFamilies->getStyleFamilyByName(aNumberStyleName) >>= xStyles;
 
     const sal_Int32 nStyles = xStyles.is() ? xStyles->getCount() : 0;
     for (sal_Int32 i = 0; i < nStyles; i++)

@@ -514,7 +514,7 @@ bool PPTWriterBase::GetStyleSheets()
         Reference< XNamed >
             aXNamed;
 
-        Reference< XNameAccess >
+        Reference< style::XStyleFamilies >
             aXNameAccess;
 
         sal_uInt16 nDefaultTab = ( mXModel.is() && ImplGetPropertyValue( mXModel, u"TabStop"_ustr ) )
@@ -570,7 +570,7 @@ bool PPTWriterBase::GetStyleSheets()
                         Reference< XNameAccess >xNameAccess;
                         if ( aXNameAccess->hasByName( aFamily ) )
                         {
-                            Any aAny( aXNameAccess->getByName( aFamily ) );
+                            Any aAny( aXNameAccess->getStyleFamilyByName( aFamily ) );
                             xNameAccess.set(aAny, cpo::uno::UNO_QUERY);
                             if( xNameAccess.is() )
                             {

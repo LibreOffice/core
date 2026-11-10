@@ -1061,7 +1061,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
         SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+        uno::Reference<style::XStyleFamilies> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
 
         // 1. Add additional page breaks
         for (int j = 0; j < aAdditionalPagesCount[i]; ++j)

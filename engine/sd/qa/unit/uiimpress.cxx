@@ -7188,9 +7188,9 @@ void lcl_SetOutlineStyleBulletCharacter(const uno::Reference<lang::XComponent>& 
                                         const OUString& rStyleName, const OUString& rBullet)
 {
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(xComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xFamilies(xSupplier->getStyleFamilies(),
+    uno::Reference<style::XStyleFamilies> xFamilies(xSupplier->getStyleFamilies(),
                                                      uno::UNO_SET_THROW);
-    uno::Reference<container::XNameAccess> xFamily(xFamilies->getByName(u"Default"_ustr),
+    uno::Reference<container::XNameAccess> xFamily(xFamilies->getStyleFamilyByName(u"Default"_ustr),
                                                    uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xStyle(xFamily->getByName(rStyleName),
                                                uno::UNO_QUERY_THROW);

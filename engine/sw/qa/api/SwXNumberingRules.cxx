@@ -76,9 +76,9 @@ public:
 
         try
         {
-            Reference<container::XNameAccess> xStyleFamNames = xStyleFam->getStyleFamilies();
+            Reference<style::XStyleFamilies> xStyleFamNames = xStyleFam->getStyleFamilies();
             Reference<container::XNameContainer> xNumStyles(
-                xStyleFamNames->getByName(u"NumberingStyles"_ustr), UNO_QUERY_THROW);
+                xStyleFamNames->getStyleFamilyByName(u"NumberingStyles"_ustr), UNO_QUERY_THROW);
             xIndexAccess = Reference<container::XIndexAccess>(xNumStyles, UNO_QUERY_THROW);
         }
         catch (lang::WrappedTargetException&)

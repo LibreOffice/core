@@ -325,14 +325,14 @@ SfxRedactionHelper::getPageMarginsForWriter(const cpo::uno::Reference<css::frame
         SAL_WARN("sfx.doc", "Ref to xStyleFamiliesSupplier is null in setPageMargins().");
         return aPageMargins;
     }
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
 
     if (!xStyleFamilies.is())
         return aPageMargins;
 
     uno::Reference<container::XNameAccess> xPageStyles(
-        xStyleFamilies->getByName(u"PageStyles"_ustr), UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), UNO_QUERY);
 
     if (!xPageStyles.is())
         return aPageMargins;
@@ -382,14 +382,14 @@ SfxRedactionHelper::getPageMarginsForCalc(const cpo::uno::Reference<css::frame::
         SAL_WARN("sfx.doc", "Ref to xStyleFamiliesSupplier is null in getPageMarginsForCalc().");
         return aPageMargins;
     }
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
 
     if (!xStyleFamilies.is())
         return aPageMargins;
 
     uno::Reference<container::XNameAccess> xPageStyles(
-        xStyleFamilies->getByName(u"PageStyles"_ustr), UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), UNO_QUERY);
 
     if (!xPageStyles.is())
         return aPageMargins;

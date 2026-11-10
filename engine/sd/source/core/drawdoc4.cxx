@@ -719,7 +719,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
         pSheet = pSSPool->Next();
     }
 
-    Reference<form::XReset> xReset(pSSPool->getByName(u"table"_ustr), UNO_QUERY);
+    Reference<form::XReset> xReset(pSSPool->getStyleFamilyByName(u"table"_ustr), UNO_QUERY);
     if (xReset)
         xReset->reset();
 }

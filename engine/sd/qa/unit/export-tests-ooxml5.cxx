@@ -282,11 +282,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresObjTextStyles)
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     // 1st slide
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName(u"Title Slide"_ustr), uno::UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"Title Slide"_ustr), uno::UNO_QUERY);
     {
         // Title style
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),
@@ -299,7 +299,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresObjTextStyles)
                              xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
     }
     // 2nd slide
-    xStyleFamily.set(xStyleFamilies->getByName(u"Title and Content"_ustr), uno::UNO_QUERY);
+    xStyleFamily.set(xStyleFamilies->getStyleFamilyByName(u"Title and Content"_ustr), uno::UNO_QUERY);
     {
         // Title style
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),

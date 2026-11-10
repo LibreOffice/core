@@ -87,9 +87,9 @@ void XStyleLoader::checkStyleProperties(
     uno::Reference<style::XStyleFamiliesSupplier> const& xFamilySupplier)
 {
     // check if targetDocument has myStyle
-    uno::Reference<container::XNameAccess> xFamilies(xFamilySupplier->getStyleFamilies(),
+    uno::Reference<style::XStyleFamilies> xFamilies(xFamilySupplier->getStyleFamilies(),
                                                      UNO_SET_THROW);
-    uno::Reference<container::XNameContainer> xCellStyles(xFamilies->getByName(u"CellStyles"_ustr),
+    uno::Reference<container::XNameContainer> xCellStyles(xFamilies->getStyleFamilyByName(u"CellStyles"_ustr),
                                                           UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("Style not imported", xCellStyles->hasByName(u"myStyle"_ustr));
@@ -106,7 +106,7 @@ void XStyleLoader::checkStyleProperties(
 
     // test default pageStyle
 
-    uno::Reference<container::XNameContainer> xPageStyles(xFamilies->getByName(u"PageStyles"_ustr),
+    uno::Reference<container::XNameContainer> xPageStyles(xFamilies->getStyleFamilyByName(u"PageStyles"_ustr),
                                                           UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPagePropSet(xPageStyles->getByName(u"Default"_ustr),
                                                      UNO_QUERY_THROW);

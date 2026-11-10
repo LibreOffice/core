@@ -1254,9 +1254,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf97808)
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"graphics"_ustr),
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"graphics"_ustr),
                                                         uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"objectwithoutfill"_ustr),
                                                uno::UNO_QUERY);
@@ -2177,12 +2177,12 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies
+    uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
 
     // 1st slide
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName(u"Title Slide"_ustr), uno::UNO_QUERY);
+        xStyleFamilies->getStyleFamilyByName(u"Title Slide"_ustr), uno::UNO_QUERY);
     {
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),
                                              uno::UNO_QUERY);
@@ -2202,7 +2202,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
                              xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
     }
     // 2nd slide
-    xStyleFamily.set(xStyleFamilies->getByName(u"simple text placeholder"_ustr), uno::UNO_QUERY);
+    xStyleFamily.set(xStyleFamilies->getStyleFamilyByName(u"simple text placeholder"_ustr), uno::UNO_QUERY);
     {
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"outline1"_ustr),
                                              uno::UNO_QUERY);

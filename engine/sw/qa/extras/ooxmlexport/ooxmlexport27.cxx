@@ -80,9 +80,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf38575_fullWidthLine, "tdf38575_fullWidthLine.doc
 DECLARE_OOXMLEXPORT_TEST(testTdf79738_footerLineNumbering, "tdf79738_footerLineNumbering.docx")
 {
     uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
+    uno::Reference<style::XStyleFamilies> xStyleFamilies = xStylesSupplier->getStyleFamilies();
     uno::Reference<container::XNameContainer> xStyles;
-    xStyleFamilies->getByName(u"ParagraphStyles"_ustr) >>= xStyles;
+    xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr) >>= xStyles;
     uno::Reference<beans::XPropertySet> xHeader(xStyles->getByName(u"Header"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, xHeader->getPropertyValue(u"ParaLineNumberCount"_ustr).get<bool>());
     uno::Reference<beans::XPropertySet> xFooter(xStyles->getByName(u"Footer"_ustr), uno::UNO_QUERY);

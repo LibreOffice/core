@@ -61,8 +61,8 @@ ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
     aValue >>= aStyleName;
 
     uno::Reference< style::XStyleFamiliesSupplier > xStyleFamiliesSup( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xStyleFamilies = xStyleFamiliesSup->getStyleFamilies();
-    uno::Reference< container::XNameAccess > xPageStyle( xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
+    uno::Reference< style::XStyleFamilies > xStyleFamilies = xStyleFamiliesSup->getStyleFamilies();
+    uno::Reference< container::XNameAccess > xPageStyle( xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
     mxPageProps.set( xPageStyle->getByName(aStyleName), uno::UNO_QUERY_THROW );
     mnOrientLandscape = excel::XlPageOrientation::xlLandscape;
     mnOrientPortrait = excel::XlPageOrientation::xlPortrait;

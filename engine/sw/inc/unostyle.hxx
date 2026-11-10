@@ -24,6 +24,7 @@
 #include "unocoll.hxx"
 #include "tblafmt.hxx"
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamilies.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -54,8 +55,7 @@ class SwXAutoStyleFamily;
 
 class SAL_DLLPUBLIC_RTTI SwXStyleFamilies final : public cppu::WeakImplHelper
 <
-    css::container::XIndexAccess,
-    css::container::XNameAccess,
+    css::style::XStyleFamilies,
     css::lang::XServiceInfo,
     css::style::XStyleLoader
 >,
@@ -68,6 +68,10 @@ class SAL_DLLPUBLIC_RTTI SwXStyleFamilies final : public cppu::WeakImplHelper
     virtual ~SwXStyleFamilies() override;
 public:
     SwXStyleFamilies(SwDocShell& rDocShell);
+
+    //XStyleFamilies
+    SW_DLLPUBLIC virtual cpo::uno::Any getStyleFamilyByName(const OUString& Name) override;
+    virtual cpo::uno::Any getStyleFamilyByIndex(sal_Int32 nIndex) override;
 
     //XNameAccess
     SW_DLLPUBLIC virtual cpo::uno::Any getByName(const OUString& Name) override;

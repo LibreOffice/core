@@ -4660,7 +4660,7 @@ private:
         }
         cpo::uno::Reference<css::container::XNameAccess> const styles(
             cpo::uno::Reference<css::style::XStyleFamiliesSupplier>(
-                model_->uno(), cpo::uno::UNO_QUERY_THROW)->getStyleFamilies()->getByName(
+                model_->uno(), cpo::uno::UNO_QUERY_THROW)->getStyleFamilies()->getStyleFamilyByName(
                     u"PageStyles"_ustr),
             cpo::uno::UNO_QUERY_THROW);
         sal_Int32 size = 0;

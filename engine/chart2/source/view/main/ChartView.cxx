@@ -359,7 +359,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
         uno::Reference< style::XStyleFamiliesSupplier > xStyleFamiliesSupplier( xParentProps, uno::UNO_QUERY );
         if( xStyleFamiliesSupplier.is() )
         {
-            uno::Reference< container::XNameAccess > xStylesFamilies( xStyleFamiliesSupplier->getStyleFamilies() );
+            uno::Reference< style::XStyleFamilies > xStylesFamilies( xStyleFamiliesSupplier->getStyleFamilies() );
             if( xStylesFamilies.is() )
             {
                 if( !xStylesFamilies->hasByName( u"PageStyles"_ustr ) )
@@ -375,7 +375,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                 }
                 else
                 {
-                    uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getByName( u"PageStyles"_ustr ), uno::UNO_QUERY );
+                    uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getStyleFamilyByName( u"PageStyles"_ustr ), uno::UNO_QUERY );
                     if( xPageStyles.is() )
                     {
                         OUString aPageStyle;

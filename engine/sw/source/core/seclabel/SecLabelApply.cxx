@@ -62,7 +62,7 @@ uno::Reference<container::XNameAccess> getPageStyles(const uno::Reference<frame:
     if (!xSupplier.is())
         return {};
     uno::Reference<container::XNameAccess> xPageStyles;
-    xSupplier->getStyleFamilies()->getByName(u"PageStyles"_ustr) >>= xPageStyles;
+    xSupplier->getStyleFamilies()->getStyleFamilyByName(u"PageStyles"_ustr) >>= xPageStyles;
     return xPageStyles;
 }
 
@@ -74,7 +74,7 @@ void ensureMarkingStyle(const uno::Reference<frame::XModel>& xModel)
     if (!xSupplier.is())
         return;
     uno::Reference<container::XNameContainer> xCharStyles;
-    xSupplier->getStyleFamilies()->getByName(u"CharacterStyles"_ustr) >>= xCharStyles;
+    xSupplier->getStyleFamilies()->getStyleFamilyByName(u"CharacterStyles"_ustr) >>= xCharStyles;
     if (!xCharStyles.is() || xCharStyles->hasByName(MARKING_STYLE))
         return;
     uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, uno::UNO_QUERY);

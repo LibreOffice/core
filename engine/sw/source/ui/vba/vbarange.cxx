@@ -298,7 +298,7 @@ SwVbaRange::getStyle()
     OUString aStyleName;
     OUString aStyleType;
     GetStyleInfo( aStyleName, aStyleType );
-    uno::Reference< container::XNameAccess > xStylesAccess( mxTextDocument->getStyleFamilies()->getByName( aStyleType ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xStylesAccess( mxTextDocument->getStyleFamilies()->getStyleFamilyByName( aStyleType ), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xStyleProps( xStylesAccess->getByName( aStyleName ), uno::UNO_QUERY_THROW );
     return cpo::uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxTextDocument, xStyleProps ) ) );
 }
@@ -349,7 +349,7 @@ SwVbaRange::PageSetup( )
     OUString aPageStyleName;
     xParaProps->getPropertyValue(u"PageStyleName"_ustr) >>= aPageStyleName;
     rtl::Reference< SwXStyleFamilies > xSytleFamNames( mxTextDocument->getSwStyleFamilies() );
-    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyles->getByName( aPageStyleName ), uno::UNO_QUERY_THROW );
     return cpo::uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxTextDocument, xPageProps ) ) );
 }

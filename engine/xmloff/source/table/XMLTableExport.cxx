@@ -609,14 +609,14 @@ void XMLTableExport::exportTableTemplates()
     try
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrExport.GetModel(), UNO_QUERY_THROW );
-        Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+        Reference< XStyleFamilies > xFamilies( xFamiliesSupp->getStyleFamilies() );
         OUString sFamilyName;
         if (mbWriter)
             sFamilyName = u"TableStyles"_ustr;
         else
             sFamilyName = u"table"_ustr;
 
-        Reference< XIndexAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xTableFamily( xFamilies->getStyleFamilyByName( sFamilyName ), UNO_QUERY_THROW );
 
         for( sal_Int32 nIndex = 0; nIndex < xTableFamily->getCount(); nIndex++ ) try
         {

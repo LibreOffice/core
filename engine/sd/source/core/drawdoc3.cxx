@@ -467,7 +467,7 @@ void
 lcl_removeUnusedTableStyles(SdStyleSheetPool* const pStyleSheetPool, XStyleVector const & rStyles)
 {
     cpo::uno::Reference<css::container::XNameContainer> xTableFamily(
-        pStyleSheetPool->getByName(u"table"_ustr), cpo::uno::UNO_QUERY);
+        pStyleSheetPool->getStyleFamilyByName(u"table"_ustr), cpo::uno::UNO_QUERY);
     if (!xTableFamily)
         return;
 

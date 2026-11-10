@@ -358,7 +358,7 @@ public:
     virtual cpo::uno::Reference< css::container::XNameAccess >  getTextFrames() override;
 
     //XStyleFamiliesSupplier
-    virtual cpo::uno::Reference< css::container::XNameAccess >  getStyleFamilies() override;
+    virtual cpo::uno::Reference< css::style::XStyleFamilies >  getStyleFamilies() override;
 
     //XAutoStylesSupplier
     virtual cpo::uno::Reference< css::style::XAutoStyles > getAutoStyles(  ) override;

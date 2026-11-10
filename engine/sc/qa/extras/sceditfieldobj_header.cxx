@@ -123,10 +123,10 @@ uno::Reference<cpo::uno::XInterface> ScEditFieldObj_Header::init()
                     uno::UNO_QUERY_THROW);
 
         uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<container::XNameAccess> xStyleFamilies(xSFS->getStyleFamilies(),
+        uno::Reference<style::XStyleFamilies> xStyleFamilies(xSFS->getStyleFamilies(),
                                                               uno::UNO_SET_THROW);
         uno::Reference<container::XNameAccess> xPageStyles(
-            xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
+            xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropSet(xPageStyles->getByName(u"Default"_ustr),
                                                      uno::UNO_QUERY_THROW);
 

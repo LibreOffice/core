@@ -887,7 +887,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
 
     auto xStyleFamilies(
         mxComponent.queryThrow<style::XStyleFamiliesSupplier>()->getStyleFamilies());
-    auto xParaStyles(xStyleFamilies->getByName(u"ParagraphStyles"_ustr));
+    auto xParaStyles(xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr));
     auto xStyle(xParaStyles.queryThrow<container::XNameAccess>()->getByName(u"Heading"_ustr));
     CPPUNIT_ASSERT_EQUAL(getProperty<float>(xStyle, u"CharHeight"_ustr),
                          getProperty<float>(xCommentText, u"CharHeight"_ustr));

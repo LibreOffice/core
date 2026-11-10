@@ -158,9 +158,9 @@ uno::Reference< css::ucb::XAnyCompare > SvxSimpleUnoModel::createAnyCompareByNam
 }
 
 // XStyleFamiliesSupplier
-uno::Reference< container::XNameAccess > SvxSimpleUnoModel::getStyleFamilies(  )
+uno::Reference< style::XStyleFamilies > SvxSimpleUnoModel::getStyleFamilies(  )
 {
-    uno::Reference< container::XNameAccess > xStyles;
+    uno::Reference< style::XStyleFamilies > xStyles;
     return xStyles;
 }
 

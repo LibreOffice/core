@@ -21,7 +21,7 @@
 
 #include <config_options.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/style/XStyleFamilies.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -43,8 +43,7 @@ typedef std::map< const SdPage*, SdStyleFamilyRef > SdStyleFamilyMap;
 
 typedef ::cppu::ImplInheritanceHelper< SfxStyleSheetPool,
                                         css::lang::XServiceInfo,
-                                        css::container::XIndexAccess,
-                                        css::container::XNameAccess,
+                                        css::style::XStyleFamilies,
                                         css::lang::XComponent > SdStyleSheetPoolBase;
 
 class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SdStyleSheetPool final : public SdStyleSheetPoolBase, public SfxListener
@@ -99,6 +98,10 @@ public:
     virtual OUString getImplementationName() override;
     virtual bool supportsService( const OUString& ServiceName ) override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
+
+    // XStyleFamilies
+    virtual cpo::uno::Any getStyleFamilyByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getStyleFamilyByIndex( sal_Int32 Index ) override;
 
     // XNameAccess
     virtual cpo::uno::Any getByName( const OUString& aName ) override;

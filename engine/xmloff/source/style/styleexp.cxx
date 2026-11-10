@@ -463,9 +463,9 @@ void XMLStyleExport::exportStyleFamily(
 
     Reference< XNameAccess > xStyleCont;
 
-    Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+    Reference< XStyleFamilies > xFamilies( xFamiliesSupp->getStyleFamilies() );
     if( xFamilies->hasByName( rFamily ) )
-        xFamilies->getByName( rFamily ) >>= xStyleCont;
+        xFamilies->getStyleFamilyByName( rFamily ) >>= xStyleCont;
 
     if( !xStyleCont.is() )
         return;

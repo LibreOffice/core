@@ -801,7 +801,7 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed, bool bExportChapterNumbering
     if( !xFamiliesSupp.is() )
         return;
 
-    Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+    Reference< XStyleFamilies > xFamilies( xFamiliesSupp->getStyleFamilies() );
     SAL_WARN_IF( !xFamilies.is(), "xmloff", "getStyleFamilies() from XModel failed for export!" );
 
     if( !xFamilies.is() )
@@ -813,7 +813,7 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed, bool bExportChapterNumbering
     if( !xFamilies->hasByName( aNumberStyleName ) )
         return;
 
-    xFamilies->getByName( aNumberStyleName ) >>= xStyles;
+    xFamilies->getStyleFamilyByName( aNumberStyleName ) >>= xStyles;
 
     SAL_WARN_IF( !xStyles.is(), "xmloff", "Style not found for export!" );
 

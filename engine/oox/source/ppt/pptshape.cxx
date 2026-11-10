@@ -173,7 +173,7 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
     try
     {
         Reference< style::XStyleFamiliesSupplier > aXStyleFamiliesSupplier(rFilterBase.getModel(), UNO_QUERY_THROW);
-        Reference< container::XNameAccess > aXNameAccess(aXStyleFamiliesSupplier->getStyleFamilies());
+        Reference< style::XStyleFamilies > aXNameAccess(aXStyleFamiliesSupplier->getStyleFamilies());
 
         if (!aXNameAccess.is())
             return;
@@ -185,7 +185,7 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
             return;
 
         Reference< container::XNameAccess > xFamilies;
-        if (aXNameAccess->getByName(aFamily) >>= xFamilies)
+        if (aXNameAccess->getStyleFamilyByName(aFamily) >>= xFamilies)
         {
             OUString aStyle;
             if (sType == u"com.sun.star.presentation.TitleTextShape") // title style

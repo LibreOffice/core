@@ -294,12 +294,12 @@ void XMLTableImport::finishStyles()
     try
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrImport.GetModel(), UNO_QUERY_THROW );
-        Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+        Reference< XStyleFamilies > xFamilies( xFamiliesSupp->getStyleFamilies() );
 
         const OUString aTableFamily(mbWriter ? u"TableStyles" : u"table");
         const OUString aCellFamily(mbWriter ? u"CellStyles" : u"cell");
-        Reference< XNameContainer > xTableFamily( xFamilies->getByName( aTableFamily ), UNO_QUERY_THROW );
-        Reference< XNameAccess > xCellFamily( xFamilies->getByName( aCellFamily ), UNO_QUERY_THROW );
+        Reference< XNameContainer > xTableFamily( xFamilies->getStyleFamilyByName( aTableFamily ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xCellFamily( xFamilies->getStyleFamilyByName( aCellFamily ), UNO_QUERY_THROW );
 
         Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY );
         assert(xFactory.is() != mbWriter);

@@ -709,6 +709,11 @@ cpo::uno::Any SwXStyleFamilies::getByName(const OUString& Name)
     return cpo::uno::Any(uno::Reference(static_cast<css::container::XNameContainer*>(GetStylesByName(Name).get())));
 }
 
+cpo::uno::Any SwXStyleFamilies::getStyleFamilyByName(const OUString& Name)
+{
+    return cpo::uno::Any(uno::Reference(static_cast<css::container::XNameContainer*>(GetStylesByName(Name).get())));
+}
+
 rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetStylesByName(const OUString& Name)
 {
     SolarMutexGuard aGuard;
@@ -761,6 +766,11 @@ bool SwXStyleFamilies::hasByName(const OUString& Name)
 sal_Int32 SwXStyleFamilies::getCount()
 {
     return lcl_GetStyleFamilyEntries().size();
+}
+
+cpo::uno::Any SwXStyleFamilies::getStyleFamilyByIndex(sal_Int32 nIndex)
+{
+    return cpo::uno::Any(uno::Reference(static_cast<css::container::XNameContainer*>(GetStylesByIndex(nIndex).get())));
 }
 
 cpo::uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)

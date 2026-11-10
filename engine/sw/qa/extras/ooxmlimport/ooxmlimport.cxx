@@ -332,9 +332,9 @@ xray ThisComponent.StyleFamilies.PageStyles.Default.Width
     awt::Point pos;
     xPropertySet->getPropertyValue(u"AnchorPosition"_ustr) >>= pos;
     uno::Reference<style::XStyleFamiliesSupplier> styleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> styleFamilies = styleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<style::XStyleFamilies> styleFamilies = styleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> pageStyles;
-    styleFamilies->getByName(u"PageStyles"_ustr) >>= pageStyles;
+    styleFamilies->getStyleFamilyByName(u"PageStyles"_ustr) >>= pageStyles;
     uno::Reference<cpo::uno::XInterface> defaultStyle;
     pageStyles->getByName(u"Standard"_ustr) >>= defaultStyle;
     uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
@@ -742,8 +742,8 @@ CPPUNIT_TEST_FIXTURE(Test, testN820504)
 {
     createSwDoc("n820504.docx");
     uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xFamiliesAccess = xFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStylesAccess(xFamiliesAccess->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamilies> xFamiliesAccess = xFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStylesAccess(xFamiliesAccess->getStyleFamilyByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     // The problem was that the CharColor was set to AUTO (-1) even if we have some default char color set
     CPPUNIT_ASSERT_EQUAL(Color(0x3da7bb), getProperty<Color>(xStyle, u"CharColor"_ustr));

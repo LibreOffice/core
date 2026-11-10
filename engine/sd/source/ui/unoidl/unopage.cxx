@@ -2843,8 +2843,8 @@ void SdMasterPage::setBackground( const Any& rValue )
     {
         if( GetModel() && IsImpressDocument() )
         {
-            Reference< container::XNameAccess >  xFamilies( GetModel()->getStyleFamilies(), UNO_SET_THROW );
-            Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW ) ;
+            Reference< style::XStyleFamilies >  xFamilies( GetModel()->getStyleFamilies(), UNO_SET_THROW );
+            Reference< container::XNameAccess > xFamily( xFamilies->getStyleFamilyByName( getName() ), UNO_QUERY_THROW ) ;
 
             Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( sUNO_PseudoSheet_Background ), UNO_QUERY_THROW );
 
@@ -2934,8 +2934,8 @@ void SdMasterPage::getBackground( Any& rValue )
     {
         if( IsImpressDocument() )
         {
-            Reference< container::XNameAccess > xFamilies( GetModel()->getStyleFamilies(), UNO_SET_THROW );
-            Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW );
+            Reference< style::XStyleFamilies > xFamilies( GetModel()->getStyleFamilies(), UNO_SET_THROW );
+            Reference< container::XNameAccess > xFamily( xFamilies->getStyleFamilyByName( getName() ), UNO_QUERY_THROW );
 
             rValue <<= Reference< beans::XPropertySet >( xFamily->getByName( sUNO_PseudoSheet_Background ), UNO_QUERY_THROW );
         }

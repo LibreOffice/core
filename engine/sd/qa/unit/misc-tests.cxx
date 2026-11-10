@@ -1102,10 +1102,10 @@ void SdMiscTest::testEncodedTableStyles()
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                              uno::UNO_QUERY_THROW);
         uno::Reference<css::lang::XSingleServiceFactory> xTableStyleFamily(
-            xStyleFamiliesSupplier->getStyleFamilies()->getByName(u"table"_ustr),
+            xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"table"_ustr),
             uno::UNO_QUERY_THROW);
         uno::Reference<css::lang::XSingleServiceFactory> xCellStyleFamily(
-            xStyleFamiliesSupplier->getStyleFamilies()->getByName(u"cell"_ustr),
+            xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"cell"_ustr),
             uno::UNO_QUERY_THROW);
 
         uno::Reference<style::XStyle> xTableStyle(xTableStyleFamily->createInstance(),
@@ -1127,7 +1127,7 @@ void SdMiscTest::testEncodedTableStyles()
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                              uno::UNO_QUERY_THROW);
         uno::Reference<container::XNameAccess> xTableStyleFamily(
-            xStyleFamiliesSupplier->getStyleFamilies()->getByName(u"table"_ustr),
+            xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"table"_ustr),
             uno::UNO_QUERY_THROW);
         // Such style used to be exported as "table_5f_1" instead.
         CPPUNIT_ASSERT(xTableStyleFamily->hasByName(u"table_1"_ustr));

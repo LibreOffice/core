@@ -2738,7 +2738,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf171366)
     pPrinter->SetUsePrintDialogSetting(false);
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xPageStyles(
-        xSupplier->getStyleFamilies()->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
+        xSupplier->getStyleFamilies()->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getByName(u"Default"_ustr),
                                                    uno::UNO_QUERY_THROW);
     xPageStyle->setPropertyValue(u"IsLandscape"_ustr, cpo::uno::Any(true));

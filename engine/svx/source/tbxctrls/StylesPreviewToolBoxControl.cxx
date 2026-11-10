@@ -62,7 +62,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
         if (xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr))
         {
             cpo::uno::Reference<css::container::XNameAccess> xParaStyles;
-            xStylesSupplier->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr) >>= xParaStyles;
+            xStylesSupplier->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr) >>= xParaStyles;
             static constexpr OUString aWriterStyles[]{
                 u"Standard"_ustr,   u"Text body"_ustr,        u"Heading 1"_ustr, u"Heading 2"_ustr,
                 u"Heading 3"_ustr,  u"Heading 4"_ustr,        u"Title"_ustr,     u"Subtitle"_ustr,
@@ -95,7 +95,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                                                      u"Heading 1"_ustr, u"Heading 2"_ustr,
                                                      u"Result"_ustr };
             cpo::uno::Reference<css::container::XNameAccess> xCellStyles;
-            xStylesSupplier->getStyleFamilies()->getByName(u"CellStyles"_ustr) >>= xCellStyles;
+            xStylesSupplier->getStyleFamilies()->getStyleFamilyByName(u"CellStyles"_ustr) >>= xCellStyles;
             for (const OUString& sStyleName : aCalcStyles)
             {
                 try

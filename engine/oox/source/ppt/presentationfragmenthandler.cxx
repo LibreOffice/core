@@ -261,10 +261,10 @@ void lcl_applyThemeToDrawingStyles(const Reference<frame::XModel>& xModel,
     Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(xModel, UNO_QUERY);
     if (!xFamiliesSupplier.is())
         return;
-    Reference<container::XNameAccess> xFamilies = xFamiliesSupplier->getStyleFamilies();
+    Reference<style::XStyleFamilies> xFamilies = xFamiliesSupplier->getStyleFamilies();
     if (!xFamilies->hasByName(u"graphics"_ustr))
         return;
-    Reference<container::XNameAccess> xStyles(xFamilies->getByName(u"graphics"_ustr),
+    Reference<container::XNameAccess> xStyles(xFamilies->getStyleFamilyByName(u"graphics"_ustr),
                                               UNO_QUERY_THROW);
     for (const OUString& rStyleName : xStyles->getElementNames())
     {

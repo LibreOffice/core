@@ -180,7 +180,7 @@ public:
                             createDataProvider() override;
 
                             /// XStyleFamiliesSupplier
-    virtual cpo::uno::Reference< css::container::XNameAccess >
+    virtual cpo::uno::Reference< css::style::XStyleFamilies >
                             getStyleFamilies() override;
 
                             /// XRenderable

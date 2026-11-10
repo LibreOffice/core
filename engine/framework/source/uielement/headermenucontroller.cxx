@@ -88,7 +88,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
     if (!xStyleFamiliesSupplier.is())
         return;
 
-    Reference< XNameAccess > xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    Reference< XStyleFamilies > xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
 
     OUString aCmd( u".uno:InsertPageHeader"_ustr );
     OUString aHeaderFooterIsOnStr( u"HeaderIsOn"_ustr );
@@ -100,7 +100,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
     try
     {
         Reference< XNameContainer > xNameContainer;
-        if ( xStyleFamilies->getByName(u"PageStyles"_ustr) >>= xNameContainer )
+        if ( xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr) >>= xNameContainer )
         {
             Sequence< OUString > aSeqNames = xNameContainer->getElementNames();
 

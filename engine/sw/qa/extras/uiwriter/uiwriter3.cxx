@@ -172,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPasteStyleOverride)
     // style sets it to bold
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xStyles(
-        xSFS->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+        xSFS->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStandard(xStyles->getByName(u"Standard"_ustr),
                                                   uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextbody(xStyles->getByName(u"Text body"_ustr),

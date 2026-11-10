@@ -296,7 +296,7 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
         return aReturnSet;
 
     // Check styles first
-    uno::Reference<container::XNameAccess> xFamilies(xFamiliesSupp->getStyleFamilies());
+    uno::Reference<style::XStyleFamilies> xFamilies(xFamiliesSupp->getStyleFamilies());
     if (xFamilies.is())
     {
         const bool bEmbedLatinScript = getEmbedLatinScript();
@@ -306,7 +306,7 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
         for (OUString const & sFamilyName : aFamilyNames)
         {
             uno::Reference<container::XNameAccess> xStyleContainer;
-            xFamilies->getByName(sFamilyName) >>= xStyleContainer;
+            xFamilies->getStyleFamilyByName(sFamilyName) >>= xStyleContainer;
 
             if (xStyleContainer.is())
             {

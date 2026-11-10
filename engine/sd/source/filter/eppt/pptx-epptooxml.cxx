@@ -3433,11 +3433,11 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
     if (!xMaster.is() || !mXModel.is())
         return;
 
-    uno::Reference<container::XNameAccess> xFamilies(mXModel->getStyleFamilies());
+    uno::Reference<style::XStyleFamilies> xFamilies(mXModel->getStyleFamilies());
     if (!xFamilies.is() || !xFamilies->hasByName(xMaster->getName()))
         return;
 
-    uno::Reference<container::XNameAccess> xStyles(xFamilies->getByName(xMaster->getName()),
+    uno::Reference<container::XNameAccess> xStyles(xFamilies->getStyleFamilyByName(xMaster->getName()),
                                                    uno::UNO_QUERY);
     if (!xStyles.is())
         return;

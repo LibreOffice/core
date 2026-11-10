@@ -545,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf170671CopyFooterWithFlyAcrossDocumen
     xSourceText->getText()->insertTextContent(xSourceText->getText()->getStart(), xFrame, false);
     uno::Reference<style::XStyleFamiliesSupplier> xFamilies(xSource, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xPageStyles(
-        xFamilies->getStyleFamilies()->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
+        xFamilies->getStyleFamilies()->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getByName(u"Untitled1"_ustr),
                                                    uno::UNO_QUERY_THROW);
     uno::Reference<text::XText> xFooter;

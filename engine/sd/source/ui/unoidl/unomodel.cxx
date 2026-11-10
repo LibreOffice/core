@@ -5297,15 +5297,14 @@ uno::Reference< container::XNameAccess > SdXImpressDocument::getLinks()
 }
 
 // XStyleFamiliesSupplier
-uno::Reference< container::XNameAccess > SdXImpressDocument::getStyleFamilies(  )
+uno::Reference< style::XStyleFamilies > SdXImpressDocument::getStyleFamilies(  )
 {
     ::SolarMutexGuard aGuard;
 
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< container::XNameAccess > xStyles( static_cast< OWeakObject* >( mpDoc->GetStyleSheetPool() ), cpo::uno::UNO_QUERY );
-    return xStyles;
+    return static_cast<SdStyleSheetPool*>(mpDoc->GetStyleSheetPool());
 }
 
 // XAnyCompareFactory

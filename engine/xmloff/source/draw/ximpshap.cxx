@@ -667,7 +667,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
                     if( xFamiliesSupplier.is() )
                     {
-                        uno::Reference< container::XNameAccess > xFamilies( xFamiliesSupplier->getStyleFamilies() );
+                        uno::Reference< style::XStyleFamilies > xFamilies( xFamiliesSupplier->getStyleFamilies() );
                         if( xFamilies.is() )
                         {
 
@@ -684,7 +684,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                                     OUString aFamily( aStyleName.copy( 0, nPos ) );
 
                                     if( xFamilies->hasByName( aFamily ) )
-                                        xFamilies->getByName( aFamily ) >>= xFamily;
+                                        xFamilies->getStyleFamilyByName( aFamily ) >>= xFamily;
                                     aStyleName = aStyleName.copy( nPos + 1 );
                                 }
                             }
@@ -692,9 +692,9 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                             {
                                 // get graphics family
                                 if (xFamilies->hasByName(u"graphics"_ustr))
-                                    xFamilies->getByName(u"graphics"_ustr) >>= xFamily;
+                                    xFamilies->getStyleFamilyByName(u"graphics"_ustr) >>= xFamily;
                                 else
-                                    xFamilies->getByName(u"GraphicStyles"_ustr) >>= xFamily;
+                                    xFamilies->getStyleFamilyByName(u"GraphicStyles"_ustr) >>= xFamily;
 
                                 aStyleName = GetImport().GetStyleDisplayName(
                                     XmlStyleFamily::SD_GRAPHICS_ID,
@@ -3893,8 +3893,8 @@ void SdXMLTableShapeContext::startFastElement (sal_Int32 nElement,
         if( !msTemplateStyleName.isEmpty() ) try
         {
             Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetImport().GetModel(), UNO_QUERY_THROW );
-            Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-            Reference< XNameAccess > xTableFamily( xFamilies->getByName( u"table"_ustr ), UNO_QUERY_THROW );
+            Reference< XStyleFamilies > xFamilies( xFamiliesSupp->getStyleFamilies() );
+            Reference< XNameAccess > xTableFamily( xFamilies->getStyleFamilyByName( u"table"_ustr ), UNO_QUERY_THROW );
             Reference< XStyle > xTableStyle( xTableFamily->getByName( msTemplateStyleName ), UNO_QUERY_THROW );
             xProps->setPropertyValue(u"TableTemplate"_ustr, Any( xTableStyle ) );
         }

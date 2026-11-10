@@ -97,11 +97,9 @@ uno::Reference<cpo::uno::XInterface> ScStyleObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xNA_StyleFamilies(xSFS->getStyleFamilies(),
+    uno::Reference<style::XStyleFamilies> xNA_StyleFamilies(xSFS->getStyleFamilies(),
                                                              uno::UNO_SET_THROW);
-    uno::Reference<container::XIndexAccess> xIA_StyleFamilies(xNA_StyleFamilies,
-                                                              uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xNA_StyleFamily(xIA_StyleFamilies->getByIndex(0),
+    uno::Reference<container::XNameAccess> xNA_StyleFamily(xNA_StyleFamilies->getStyleFamilyByIndex(0),
                                                            uno::UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);

@@ -1854,11 +1854,11 @@ void SvXMLExport::collectDataStyles(bool bFromUsedStyles)
     if (!xStyleFamiliesSupplier.is())
         return;
 
-    Reference<container::XNameAccess> xStylesFamilies(xStyleFamiliesSupplier->getStyleFamilies());
+    Reference<style::XStyleFamilies> xStylesFamilies(xStyleFamiliesSupplier->getStyleFamilies());
     if (!xStylesFamilies.is())
         return;
 
-    Reference<container::XIndexAccess> xCellStyles(xStylesFamilies->getByName(u"CellStyles"_ustr), uno::UNO_QUERY);
+    Reference<container::XIndexAccess> xCellStyles(xStylesFamilies->getStyleFamilyByName(u"CellStyles"_ustr), uno::UNO_QUERY);
     if (!xCellStyles.is())
         return;
 

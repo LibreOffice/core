@@ -678,10 +678,10 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
             Reference<XStyleFamiliesSupplier> xFamiliesSupp(GetImport().GetModel(), UNO_QUERY);
             if (xFamiliesSupp.is())
             {
-                Reference<XNameAccess> xFamilies = xFamiliesSupp->getStyleFamilies();
+                Reference<XStyleFamilies> xFamilies = xFamiliesSupp->getStyleFamilies();
                 if (xFamilies->hasByName(sName))
                 {
-                    Any aAny = xFamilies->getByName(sName);
+                    Any aAny = xFamilies->getStyleFamilyByName(sName);
                     aAny >>= const_cast<Reference<XNameContainer>&>(rxStyles);
                 }
             }

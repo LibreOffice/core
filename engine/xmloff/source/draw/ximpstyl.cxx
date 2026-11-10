@@ -1155,7 +1155,7 @@ void SdXMLStylesContext::endFastElement(sal_Int32 )
 
 void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext const & rMaster) const
 {
-    const uno::Reference<container::XNameAccess>& rStyleFamilies =
+    const uno::Reference<style::XStyleFamilies>& rStyleFamilies =
         GetSdImport().GetLocalDocStyleFamilies();
 
     if (!rStyleFamilies.is())
@@ -1166,7 +1166,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext const & rMas
 
     try
     {
-        uno::Reference< container::XNameAccess > xMasterPageStyles( rStyleFamilies->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xMasterPageStyles( rStyleFamilies->getStyleFamilyByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
         OUString sPrefix(rMaster.GetDisplayName() + "-");
         ImpSetGraphicStyles(xMasterPageStyles, XmlStyleFamily::SD_PRESENTATION_ID, sPrefix);
     }
@@ -1183,7 +1183,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(u"graphics"_ustr), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getStyleFamilyByName(u"graphics"_ustr), uno::UNO_QUERY_THROW );
 
         ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::SD_GRAPHICS_ID, u""_ustr);
     }
@@ -1197,7 +1197,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(u"cell"_ustr), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getStyleFamilyByName(u"cell"_ustr), uno::UNO_QUERY_THROW );
 
         ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::TABLE_CELL, u""_ustr);
     }

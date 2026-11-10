@@ -795,8 +795,8 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         return;
 
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-    uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamilies> xStyleFamilies = xModel->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
 
     uno::Reference<document::XDocumentProperties> xDocumentProperties = pObjSh->getDocProperties();
 
@@ -972,8 +972,8 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
 
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-    uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamilies> xStyleFamilies = xModel->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
 
     std::vector<ProgName> aPageStyles = lcl_getUsedPageStyles(this);
     const ProgName& aPageStyleString = aPageStyles.back();
@@ -1104,8 +1104,8 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
         return;
 
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-    uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamilies> xStyleFamilies = xModel->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     const cpo::uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
     for (const OUString& rPageStyleName : aStyles)
@@ -1396,8 +1396,8 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
         return SfxWatermarkItem();
 
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-    uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamilies> xStyleFamilies = xModel->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     std::vector<ProgName> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const ProgName& rPageStyleName : aUsedPageStyles)
     {
@@ -1622,8 +1622,8 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     const bool bNoWatermark = rWatermark.GetText().isEmpty();
 
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-    uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamilies> xStyleFamilies = xModel->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     const cpo::uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
     for (const OUString& rPageStyleName : aStyles)

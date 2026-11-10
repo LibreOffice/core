@@ -459,7 +459,7 @@ private:
         uno::Reference<style::XStyleFamiliesSupplier> xSupplier(xComponent, uno::UNO_QUERY);
         if (!xSupplier.is())
             return;
-        uno::Reference<container::XNameAccess> xFamilies(xSupplier->getStyleFamilies());
+        uno::Reference<style::XStyleFamilies> xFamilies(xSupplier->getStyleFamilies());
         if (!xFamilies.is())
             return;
         for (const char* pFamily : { "PageStyles", "ParagraphStyles" })
@@ -467,7 +467,7 @@ private:
             uno::Reference<container::XNameAccess> xStyles;
             try
             {
-                xFamilies->getByName(OUString::createFromAscii(pFamily)) >>= xStyles;
+                xFamilies->getStyleFamilyByName(OUString::createFromAscii(pFamily)) >>= xStyles;
             }
             catch (...)
             {

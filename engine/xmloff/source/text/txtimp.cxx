@@ -462,47 +462,47 @@ XMLTextImportHelper::XMLTextImportHelper(
 
     if( xFamiliesSupp.is() )
     {
-        Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
+        Reference< XStyleFamilies > xFamilies(xFamiliesSupp->getStyleFamilies());
 
         static constexpr OUString aParaStyles(u"ParagraphStyles"_ustr);
         if( xFamilies->hasByName( aParaStyles ) )
         {
-            m_xImpl->m_xParaStyles.set(xFamilies->getByName(aParaStyles),
+            m_xImpl->m_xParaStyles.set(xFamilies->getStyleFamilyByName(aParaStyles),
                 UNO_QUERY);
         }
 
         static constexpr OUString aCharStyles(u"CharacterStyles"_ustr);
         if( xFamilies->hasByName( aCharStyles ) )
         {
-            m_xImpl->m_xTextStyles.set(xFamilies->getByName(aCharStyles),
+            m_xImpl->m_xTextStyles.set(xFamilies->getStyleFamilyByName(aCharStyles),
                 UNO_QUERY);
         }
 
         static constexpr OUString aNumStyles(u"NumberingStyles"_ustr);
         if( xFamilies->hasByName( aNumStyles ) )
         {
-            m_xImpl->m_xNumStyles.set(xFamilies->getByName(aNumStyles),
+            m_xImpl->m_xNumStyles.set(xFamilies->getStyleFamilyByName(aNumStyles),
                 UNO_QUERY);
         }
 
         static constexpr OUString aFrameStyles(u"FrameStyles"_ustr);
         if( xFamilies->hasByName( aFrameStyles ) )
         {
-            m_xImpl->m_xFrameStyles.set(xFamilies->getByName(aFrameStyles),
+            m_xImpl->m_xFrameStyles.set(xFamilies->getStyleFamilyByName(aFrameStyles),
                 UNO_QUERY);
         }
 
         static constexpr OUString aPageStyles(u"PageStyles"_ustr);
         if( xFamilies->hasByName( aPageStyles ) )
         {
-            m_xImpl->m_xPageStyles.set(xFamilies->getByName(aPageStyles),
+            m_xImpl->m_xPageStyles.set(xFamilies->getStyleFamilyByName(aPageStyles),
                 UNO_QUERY);
         }
 
         static constexpr OUString aCellStyles(u"CellStyles"_ustr);
         if( xFamilies->hasByName( aCellStyles ) )
         {
-            m_xImpl->m_xCellStyles.set(xFamilies->getByName(aCellStyles),
+            m_xImpl->m_xCellStyles.set(xFamilies->getStyleFamilyByName(aCellStyles),
                 UNO_QUERY);
         }
     }

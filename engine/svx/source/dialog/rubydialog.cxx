@@ -545,8 +545,8 @@ void SvxRubyDialog::Activate()
         {
             try
             {
-                Reference<XNameAccess> xFam = xSupplier->getStyleFamilies();
-                Any aChar = xFam->getByName(u"CharacterStyles"_ustr);
+                Reference<XStyleFamilies> xFam = xSupplier->getStyleFamilies();
+                Any aChar = xFam->getStyleFamilyByName(u"CharacterStyles"_ustr);
                 Reference<XNameContainer> xChar;
                 aChar >>= xChar;
                 Reference<XIndexAccess> xCharIdx(xChar, UNO_QUERY);

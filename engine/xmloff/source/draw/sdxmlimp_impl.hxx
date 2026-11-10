@@ -24,6 +24,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/style/XStyleFamilies.hpp>
 
 #include <map>
 #include <memory>
@@ -48,7 +49,7 @@ typedef std::map<OUString, DateTimeDeclContextImpl> DateTimeDeclMap;
 
 class SdXMLImport: public SvXMLImport
 {
-    cpo::uno::Reference< css::container::XNameAccess > mxDocStyleFamilies;
+    cpo::uno::Reference< css::style::XStyleFamilies > mxDocStyleFamilies;
     cpo::uno::Reference< css::drawing::XDrawPages2 > mxDocMasterPages;
     cpo::uno::Reference< css::container::XIndexAccess > mxDocDrawPages;
     cpo::uno::Reference< css::container::XNameAccess > mxPageLayouts;
@@ -112,7 +113,7 @@ public:
     SvXMLImportContext *CreateFontDeclsContext();
 
     // export local parameters concerning page access and similar
-    const cpo::uno::Reference< css::container::XNameAccess >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
+    const cpo::uno::Reference< css::style::XStyleFamilies >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
     const cpo::uno::Reference< css::drawing::XDrawPages2 >& GetLocalMasterPages() const { return mxDocMasterPages; }
     const cpo::uno::Reference< css::container::XIndexAccess >& GetLocalDrawPages() const { return mxDocDrawPages; }
 

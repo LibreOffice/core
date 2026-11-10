@@ -2309,8 +2309,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsKeepPositionAfterCellStyleCha
     // A bigger font in the default cell style makes every row with content taller.
     const sal_uInt16 nOldHeight = rDoc.GetRowHeight(nRow, 0);
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xFamilies = xSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xCellStyles(xFamilies->getByName(u"CellStyles"_ustr),
+    uno::Reference<style::XStyleFamilies> xFamilies = xSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xCellStyles(xFamilies->getStyleFamilyByName(u"CellStyles"_ustr),
                                                       uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xStyle(xCellStyles->getByName(u"Default"_ustr),
                                                uno::UNO_QUERY_THROW);

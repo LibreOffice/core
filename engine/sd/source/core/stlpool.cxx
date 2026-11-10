@@ -1195,8 +1195,10 @@ Sequence< OUString > SdStyleSheetPool::getSupportedServiceNames()
     return { u"com.sun.star.style.StyleFamilies"_ustr };
 }
 
-// XNameAccess
-Any SdStyleSheetPool::getByName( const OUString& aName )
+
+// XStyleFamilies
+
+Any SdStyleSheetPool::getStyleFamilyByName( const OUString& aName )
 {
     throwIfDisposed();
 
@@ -1215,6 +1217,38 @@ Any SdStyleSheetPool::getByName( const OUString& aName )
         return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
 
     throw NoSuchElementException();
+}
+
+Any SdStyleSheetPool::getStyleFamilyByIndex( sal_Int32 Index )
+{
+    switch( Index )
+    {
+    case 0:
+        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxGraphicFamily.get() ) ) );
+
+    case 1:
+        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxCellFamily.get() ) ) );
+
+    case 2:
+        return Any( mxTableFamily );
+
+    default:
+        {
+            Index -= 3;
+            if( (Index < 0) || (Index >= sal::static_int_cast<sal_Int32>(maStyleFamilyMap.size())) )
+                throw IndexOutOfBoundsException();
+            SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() );
+            std::advance(iter, Index);
+
+            return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
+        }
+    }
+}
+
+// XNameAccess
+Any SdStyleSheetPool::getByName( const OUString& aName )
+{
+    return getStyleFamilyByName(aName);
 }
 
 Sequence< OUString > SdStyleSheetPool::getElementNames()
@@ -1278,28 +1312,7 @@ sal_Int32 SdStyleSheetPool::getCount()
 
 Any SdStyleSheetPool::getByIndex( sal_Int32 Index )
 {
-    switch( Index )
-    {
-    case 0:
-        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxGraphicFamily.get() ) ) );
-
-    case 1:
-        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxCellFamily.get() ) ) );
-
-    case 2:
-        return Any( mxTableFamily );
-
-    default:
-        {
-            Index -= 3;
-            if( (Index < 0) || (Index >= sal::static_int_cast<sal_Int32>(maStyleFamilyMap.size())) )
-                throw IndexOutOfBoundsException();
-            SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() );
-            std::advance(iter, Index);
-
-            return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
-        }
-    }
+    return getStyleFamilyByIndex(Index);
 }
 
 // XComponent
