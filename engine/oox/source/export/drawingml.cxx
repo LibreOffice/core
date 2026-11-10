@@ -3896,6 +3896,13 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     if (nParaRightMargin > nMaxMarginVal)
         nParaRightMargin = 0;
 
+    // The numbering rule of a level reserves room to the left of the text and hangs the bullet
+    // into that room, so the bullet stands at the margin plus the offset, never left of the text
+    // area. A level that reserves no room draws its bullet right in front of the text, which the
+    // pair of two zeros states.
+    if (nLineIndentation < -nLeftMargin)
+        nLineIndentation = -nLeftMargin;
+
     // A paragraph with a left margin of its own writes that margin, otherwise marL and indent
     // come from the numbering rule of its level, which is where the indent of a bulleted level
     // is kept. Levels of a list style are written the same way.
@@ -4001,6 +4008,8 @@ void DrawingML::WriteListStyleLevelProperties(const Reference<XPropertySet>& rXS
             mAny >>= nFirstLineOffset;
     }
     nLeftMargin = std::max<sal_Int32>(nLeftMargin, 0);
+    if (nLevel >= 0 && nFirstLineOffset < -nLeftMargin)
+        nFirstLineOffset = -nLeftMargin;
 
     sal_Int16 nAdjust = sal_Int16(style::ParagraphAdjust_LEFT);
     if (GetProperty(rXStyle, u"ParaAdjust"_ustr))

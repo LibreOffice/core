@@ -791,6 +791,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphKeepsItsRightIndent)
     assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:pPr", "marR", u"914400");
 }
 
+// The text of a bulleted paragraph begins where its bullet ends.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testBulletedTextBeginsWhereItsBulletEnds)
+{
+    // Given a paragraph that carries a bullet and keeps no room for it to the left of the text:
+    createSdImpressDoc("pptx/bullet-without-room-of-its-own.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the saved file said the bullet hangs six millimetres to the left
+    // of a text that begins at the edge of its frame, and reading that back moved the text six
+    // millimetres to the right to make the room.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc, "//p:sp/p:txBody/a:p/a:pPr", "indent");
+}
+
 // Text that stands upright stays upright where the level it belongs to leans.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testUprightTextStaysUpright)
 {
