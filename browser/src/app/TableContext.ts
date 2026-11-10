@@ -136,6 +136,82 @@ class ClassicTableContext extends ClassicContext {
 		);
 	}
 
+	/// The cell at that point of the page, in twips, as its column and row; nothing outside the
+	/// table.
+	public static cellAt(
+		table: TableLayout,
+		x: number,
+		y: number,
+	): { column: number; row: number } | null {
+		const within = (lines: number[], at: number) => {
+			for (let line = 0; line + 1 < lines.length; ++line)
+				if (at >= lines[line] && at <= lines[line + 1]) return line;
+			return -1;
+		};
+		const column = within(table.columns, x);
+		const row = within(table.rows, y);
+		return column < 0 || row < 0 ? null : { column: column, row: row };
+	}
+
+	/// The cell the text cursor stands in, where a cell of the table is being edited.
+	public static editedCell(
+		table: TableLayout,
+	): { column: number; row: number } | null {
+		const cursor = app.file.textCursor;
+		if (!cursor.visible || !cursor.rectangle) return null;
+		return ClassicTableContext.cellAt(
+			table,
+			cursor.rectangle.x1 + cursor.rectangle.width * 0.5,
+			cursor.rectangle.y1 + cursor.rectangle.height * 0.5,
+		);
+	}
+
+	/*
+		Extends the selection of cells to the cell at that point, in twips: from the cell being
+		edited, or from the cell the selection started at. Answers whether it did, which it does
+		not inside the edited cell, where Shift selects text.
+	*/
+	public extendCellsTo(x: number, y: number): boolean {
+		const data = ClassicTableContext.data();
+		if (!data) return false;
+		const table = ClassicTableContext.layout(data);
+		const to = ClassicTableContext.cellAt(table, x, y);
+		const edited = ClassicTableContext.editedCell(table);
+		const from =
+			edited ??
+			(app.map._docLayer._cellSelectionArea
+				? ClassicTableContext.anchor
+				: null);
+		if (!from || !to) return false;
+		if (edited && edited.column === to.column && edited.row === to.row)
+			return false;
+		this.selectCellRange(from, to);
+		return true;
+	}
+
+	/*
+		The cell a selection of cells by the mouse started at, which Shift and a click extend it
+		from; nothing while no such selection stands.
+	*/
+	public static anchor: { column: number; row: number } | null = null;
+
+	/// Selects the cells from one cell to another, whichever way round they lie; the first is
+	/// where it is extended from with Shift.
+	public selectCellRange(
+		from: { column: number; row: number },
+		to: { column: number; row: number },
+	): void {
+		const data = ClassicTableContext.data();
+		if (!data) return;
+		ClassicTableContext.anchor = from;
+		this.selectCells(ClassicTableContext.layout(data), [
+			Math.min(from.column, to.column),
+			Math.min(from.row, to.row),
+			Math.max(from.column, to.column),
+			Math.max(from.row, to.row),
+		]);
+	}
+
 	/*
 		Selects the cells from the first to the last, as [first column, first row, last column,
 		last row], or none: it shows the selection at once, as the engine reports one, and tells

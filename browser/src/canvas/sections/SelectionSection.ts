@@ -3488,6 +3488,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 		*/
 		if (this.pressedAHandle) return;
 
+		// The group that took the press may answer the click itself, as the cells of a table
+		// answer Shift and a click.
+		if (
+			this.pressedGroup?.answersTheClick(
+				this.inTheDocument(point),
+				MouseControl.readModifier(e),
+			)
+		)
+			return;
+
 		// The group that took the press says whether the engine hears of it: a press on the line
 		// of a connector is the connector itself, and it stays selected.
 		if (this.pressedGroup && !this.pressedGroup.passesTheClickOn()) return;

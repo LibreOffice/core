@@ -35,6 +35,10 @@ class MouseControl extends CanvasSectionObject {
 
 	/// True while a drag selects text here, without the server.
 	private selectingText: boolean = false;
+	// the cell of a table a drag that selects cells started in, and the one it reached last;
+	// null while no such drag runs
+	private cellsFrom: { column: number; row: number } | null = null;
+	private cellsTo: { column: number; row: number } | null = null;
 
 	// A press inside the selection drags the selection, which only a clear drag does: the pointer
 	// moves further than selectionDragDistance CSS pixels, or the button is held still for
@@ -485,6 +489,17 @@ class MouseControl extends CanvasSectionObject {
 				if (!this.mouseDownSent && !this.isClearSelectionDrag(dragDistance))
 					return;
 			}
+			// A drag in the edited cell of a table that reaches another cell selects cells.
+			else if (this.selectCellsByDrag()) {
+				point.pX += this.position[0];
+				point.pY += this.position[1];
+				app.map.fire('handleautoscroll', {
+					pos: { x: point.cX, y: point.cY },
+					map: app.map,
+				});
+				app.idleHandler.notifyActive();
+				return;
+			}
 			// A drag that starts in the text being edited selects the text here.
 			else if (this.selectingText || this.startSelectingText()) {
 				point.pX += this.position[0];
@@ -707,6 +722,8 @@ class MouseControl extends CanvasSectionObject {
 		DropCaretSection.hide();
 		this.stopCarrying(false);
 		this.stopTheFrame(false);
+		this.cellsFrom = null;
+		this.cellsTo = null;
 		this.hideShapeDragPreview();
 		this.stopSelectingText();
 		this.mouseDownSent = false;
@@ -786,6 +803,8 @@ class MouseControl extends CanvasSectionObject {
 		this.stopCarrying(true);
 		this.stopTheFrame(true);
 		this.stopSelectingText();
+		this.cellsFrom = null;
+		this.cellsTo = null;
 
 		this.hideShapeDragPreview();
 		DropCaretSection.hide();
@@ -949,6 +968,82 @@ class MouseControl extends CanvasSectionObject {
 		return this.selectingText;
 	}
 
+	/*
+		Selects cells of a table by a drag, in the table context: a drag that selects text in the
+		edited cell turns into one that selects cells once it reaches another cell, from the cell
+		it started in to the one under the mouse, as in the office. Answers whether the drag
+		selects cells.
+	*/
+	private selectCellsByDrag(): boolean {
+		const press = this.positionOnMouseDown;
+		if (!press) return false;
+		const context = Interaction.context();
+		if (!(context instanceof ClassicTableContext)) return false;
+		const data = ClassicTableContext.data();
+		if (!data) return false;
+		const table = ClassicTableContext.layout(data);
+		const now = ClassicTableContext.cellAt(
+			table,
+			this.currentPosition.x,
+			this.currentPosition.y,
+		);
+
+		if (!this.cellsFrom) {
+			if (!this.selectingText || !now) return false;
+			const from = ClassicTableContext.cellAt(table, press.x, press.y);
+			if (!from || (from.column === now.column && from.row === now.row))
+				return false;
+			this.stopSelectingText();
+			this.cellsFrom = from;
+		}
+
+		if (
+			now &&
+			(!this.cellsTo ||
+				now.column !== this.cellsTo.column ||
+				now.row !== this.cellsTo.row)
+		) {
+			this.cellsTo = now;
+			context.selectCellRange(this.cellsFrom, now);
+		}
+		return true;
+	}
+
+	/*
+		Selects cells of a table by Shift and a click on a cell, in the table context: from the
+		cell being edited, or from the cell a selection of cells started at, to the clicked one.
+		Answers whether the click was taken so.
+	*/
+	private selectCellsByShiftClick(
+		point: cool.SimplePoint,
+		buttons: number,
+		modifier: number,
+	): boolean {
+		if (buttons !== app.LOButtons.left || modifier !== app.UNOModifier.SHIFT)
+			return false;
+		const context = Interaction.context();
+		if (!(context instanceof ClassicTableContext)) return false;
+		const data = ClassicTableContext.data();
+		if (!data) return false;
+		const table = ClassicTableContext.layout(data);
+		const to = ClassicTableContext.cellAt(table, point.x, point.y);
+		const from = MouseControl.editsTextHere()
+			? ClassicTableContext.editedCell(table)
+			: app.map._docLayer._cellSelectionArea
+				? ClassicTableContext.anchor
+				: null;
+		if (!from || !to) return false;
+		// within the edited cell Shift selects text, which the engine does
+		if (
+			MouseControl.editsTextHere() &&
+			from.column === to.column &&
+			from.row === to.row
+		)
+			return false;
+		context.selectCellRange(from, to);
+		return true;
+	}
+
 	private stopSelectingText(): void {
 		if (!this.selectingText) return;
 		this.selectingText = false;
@@ -1102,6 +1197,7 @@ class MouseControl extends CanvasSectionObject {
 			// the object or places the caret itself. A second click within the timer
 			// counts with it, and is answered here or sent when the timer runs out.
 			if (
+				!this.selectCellsByShiftClick(sendingPosition, buttons, modifier) &&
 				!this.selectObjectAt(sendingPosition, buttons, modifier) &&
 				!this.placeCaretAt(sendingPosition, buttons, modifier)
 			)

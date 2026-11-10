@@ -226,9 +226,40 @@ class TableHandles extends HandleGroup {
 		return true;
 	}
 
-	/// A click on a marker is its own, the engine is not asked what lies under it.
-	public passesTheClickOn(): boolean {
-		return false;
+	/*
+		A press inside the cells is the table's, a little inside its edge, as the edge moves the
+		table: it selects cells by a drag, and a click goes on to the engine, which edits the
+		cell. A press on a marker is taken before as one on a handle.
+	*/
+	public takesAPress(x: number, y: number): boolean {
+		const data = this.data();
+		if (!data || !this.isShown()) return false;
+		const table = ClassicTableContext.layout(data);
+		const edge = TableHandles.twips(TableHandles.gap);
+		const from = new cool.SimplePoint(table.left + edge, table.top + edge);
+		const to = new cool.SimplePoint(table.right - edge, table.bottom - edge);
+		// the point comes in the pixels of the view, as the handles are hit
+		return x >= from.vX && x <= to.vX && y >= from.vY && y <= to.vY;
+	}
+
+	/// A drag that starts in the cells selects cells, once it reaches another cell.
+	public interactionForThePlace(
+		at: cool.SimplePoint,
+	): SelectionInteraction | null {
+		const context = Interaction.context();
+		return context instanceof ClassicTableContext
+			? new TableCellsDrag(this.selection, at, context)
+			: null;
+	}
+
+	/// Shift and a click in the cells extend the selection of cells to the clicked one.
+	public answersTheClick(at: cool.SimplePoint, modifier: number): boolean {
+		if (modifier !== app.UNOModifier.SHIFT) return false;
+		const context = Interaction.context();
+		return (
+			context instanceof ClassicTableContext &&
+			context.extendCellsTo(at.x, at.y)
+		);
 	}
 
 	/*

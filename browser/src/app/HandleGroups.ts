@@ -233,6 +233,12 @@ abstract class HandleGroup {
 		// Most groups do nothing more.
 	}
 
+	/// Whether it answers a click that took no handle itself, at that place and with those
+	/// modifiers, before the selection does what such a click does. No for most groups.
+	public answersTheClick(_at: cool.SimplePoint, _modifier: number): boolean {
+		return false;
+	}
+
 	/// Whether its handles belong inside the band of a group the selection stands in, so the band
 	/// grows round them. No for most groups, whose handles stand at what is selected.
 	public extendsTheBand(): boolean {
