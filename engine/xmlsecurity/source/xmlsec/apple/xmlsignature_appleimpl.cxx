@@ -253,6 +253,9 @@ XMLSignature_AppleImpl::generate(const uno::Reference<XXMLSignatureTemplate>& aT
     // Several asserts inside libxmlsec want the intended operation set for digests/transforms.
     pDsigCtx->operation = xmlSecTransformOperationSign;
 
+    // Allow ODF/OOXML references to resolve:
+    pDsigCtx->enabledReferenceUris = xmlSecTransformUriTypeAny;
+
     xmlNodePtr pSignedInfo = FindChild(pNode, xmlSecNodeSignedInfo);
     if (!pSignedInfo)
     {
