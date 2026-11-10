@@ -5386,6 +5386,43 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowMasterPageVideo)
     CPPUNIT_ASSERT_EQUAL(1, nVideoLayers);
 }
 
+// An animated GIF is drawn at its place in the stacking order of the slide, so its shape has a
+// layer of its own, which names the image.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayerOfAnimatedGif)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("animated-gif.fodp");
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aInfo;
+    readJSON(aInfo, pXImpressDocument->getPresentationInfo());
+    const std::string aGifId
+        = child_at(child_at(aInfo, "slides", 0), "gifs", 0).get<std::string>("id");
+
+    sal_Int32 nViewWidth = 2000;
+    sal_Int32 nViewHeight = 2000;
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(
+        OString(GetSlideHash(pXImpressDocument, 0)), 0, nViewWidth, nViewHeight, true, true));
+
+    int nGifLayers = 0;
+    bool bDone = false;
+    while (!bDone)
+    {
+        std::vector<sal_uInt8> aBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        double fScale = 1.0;
+        std::string aJson;
+        bDone = pXImpressDocument->renderNextSlideLayer(aBuffer.data(), bIsBitmapLayer, fScale,
+                                                        aJson);
+        if (aJson.empty())
+            continue;
+        boost::property_tree::ptree aLayer;
+        readJSON(aLayer, aJson);
+        if (aLayer.get<std::string>("gifId", "") == aGifId)
+            ++nGifLayers;
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nGifLayers);
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
 {
     // Check rendering of slideshow layers (as in the document):

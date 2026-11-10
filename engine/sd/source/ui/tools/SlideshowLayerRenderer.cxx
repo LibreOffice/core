@@ -15,6 +15,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
@@ -436,6 +437,15 @@ private:
                || (mrRenderState.mbDateTimeEnabled && svType == u"DateTime");
     }
 
+    static bool isAnimatedGraphic(const SdrObject* pObject)
+    {
+        if (pObject->GetObjIdentifier() != SdrObjKind::Graphic)
+            return false;
+        const Graphic& rGraphic = static_cast<const SdrGrafObj*>(pObject)->GetGraphic();
+        return rGraphic.IsAnimated() && rGraphic.IsGfxLink()
+               && rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeGif;
+    }
+
     SdrObject* getAnimatedAncestor(SdrObject* pObject) const
     {
         SdrObject* pAncestor = pObject;
@@ -611,15 +621,18 @@ public:
                 closeRenderPass();
             }
         }
-        // A video in an animated group is drawn with its group.
-        else if (pObject->GetObjIdentifier() == SdrObjKind::Media
+        // A video or an animated image in an animated group is drawn with its group.
+        else if ((pObject->GetObjIdentifier() == SdrObjKind::Media || isAnimatedGraphic(pObject))
                  && !getAnimatedAncestor(pObject))
         {
             closeRenderPass();
             mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
             mpCurrentRenderPass->meStage = eCurrentStage;
             mpCurrentRenderPass->mpObject = pObject;
-            mpCurrentRenderPass->mbVideo = true;
+            if (pObject->GetObjIdentifier() == SdrObjKind::Media)
+                mpCurrentRenderPass->mbVideo = true;
+            else
+                mpCurrentRenderPass->mbAnimatedGraphic = true;
             closeRenderPass();
         }
         else
@@ -1085,6 +1098,8 @@ void SlideshowLayerRenderer::writeJSON(std::string& rJsonMsg, RenderPass const& 
             aJsonWriter.put("type", "bitmap");
             if (rRenderPass.mbVideo)
                 aJsonWriter.put("videoId", pObject->GetUniqueID());
+            if (rRenderPass.mbAnimatedGraphic)
+                aJsonWriter.put("gifId", pObject->GetUniqueID());
             writeContentNode(aJsonWriter);
         }
     }

@@ -72,6 +72,8 @@ interface LayerInfo {
 	isField?: boolean;
 	// The id of the video that the media shape in this layer plays.
 	videoId?: number;
+	// The id of the animated image that the graphic shape in this layer plays.
+	gifId?: number;
 }
 
 interface LayerEntry {
@@ -80,6 +82,8 @@ interface LayerEntry {
 	isField?: boolean;
 	// The id of the video that the media shape in this layer plays.
 	videoId?: number;
+	// The id of the animated image that the graphic shape in this layer plays.
+	gifId?: number;
 }
 
 class LayerDrawing {
@@ -115,6 +119,7 @@ class LayerDrawing {
 	private masterVideosHash: string = null;
 	private masterVideoRenderers: Array<AnimatedContentRenderer> = [];
 	private gifRenderers: Map<string, Array<AnimatedContentRenderer>> = new Map();
+	private gifsDrawnWithLayer: Set<number> = new Set();
 	private isTransitionActive: boolean = false;
 	private queuedLayers: any[] = [];
 	private isDecompressing: boolean = false;
@@ -216,13 +221,14 @@ class LayerDrawing {
 		if (this.isDisposed()) return;
 
 		this.videosDrawnWithLayer.clear();
+		this.gifsDrawnWithLayer.clear();
 		this.drawBackground(slideHash);
 		this.drawMasterPage(slideHash);
 		this.drawTextField(slideHash);
 		this.drawDrawPage(slideHash);
 		this.videos.render(
 			slideHash,
-			(shapeId) => this.videoLook(slideHash, shapeId),
+			(shapeId) => this.shapeLook(slideHash, shapeId),
 			this.videosDrawnWithLayer,
 		);
 		this.drawGifs(slideHash);
@@ -233,10 +239,22 @@ class LayerDrawing {
 			this.videos.renderVideo(
 				slideHash,
 				videoId,
-				this.videoLook(slideHash, videoId),
+				this.shapeLook(slideHash, videoId),
 			)
 		)
 			this.videosDrawnWithLayer.add(videoId);
+	}
+
+	private drawGifWithLayer(slideHash: string, gifId: number) {
+		const gifRenderers = this.gifRenderers.get(slideHash);
+		if (!gifRenderers) return;
+
+		for (const gifRenderer of gifRenderers) {
+			if (gifRenderer.infoId !== gifId) continue;
+			gifRenderer.render(this.shapeLook(slideHash, gifId));
+			this.gifsDrawnWithLayer.add(gifId);
+			return;
+		}
 	}
 
 	// A video on the master page is a background, which starts when the first slide with that
@@ -334,7 +352,8 @@ class LayerDrawing {
 		if (!gifRenderers) return;
 
 		for (const gifRenderer of gifRenderers) {
-			gifRenderer.render();
+			if (this.gifsDrawnWithLayer.has(gifRenderer.infoId)) continue;
+			gifRenderer.render(this.shapeLook(slideHash, gifRenderer.infoId));
 		}
 	}
 
@@ -712,6 +731,7 @@ class LayerDrawing {
 			type: info.type,
 			content: info.content,
 			videoId: info.videoId,
+			gifId: info.gifId,
 		};
 		if (info.type === 'bitmap') {
 			if (!this.checkAndAttachImageData(layerEntry.content as ImageInfo, img))
@@ -850,9 +870,10 @@ class LayerDrawing {
 		return true;
 	}
 
-	// How the video of the shape is drawn: in the state of the shape's
-	// animated element. Undefined where no animation targets the shape.
-	private videoLook(
+	// How the video or animated image of the shape is drawn: in the state of
+	// the shape's animated element. Undefined where no animation targets the
+	// shape.
+	private shapeLook(
 		slideHash: string,
 		shapeId: number,
 	): AnimatedContentLook | undefined {
@@ -872,6 +893,7 @@ class LayerDrawing {
 		if (layer.type === 'bitmap') {
 			this.drawBitmap(layer.content as ImageInfo);
 			if (layer.videoId) this.drawVideoWithLayer(slideHash, layer.videoId);
+			if (layer.gifId) this.drawGifWithLayer(slideHash, layer.gifId);
 		} else if (layer.type === 'animated') {
 			const content = layer.content as AnimatedShapeInfo;
 			if (content.type === 'bitmap') {

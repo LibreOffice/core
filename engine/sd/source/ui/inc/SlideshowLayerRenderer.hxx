@@ -99,6 +99,9 @@ struct RenderPass
     OUString maFieldType;
     // The pass holds one media shape, whose video plays at this place in the stacking order.
     bool mbVideo = false;
+    // The pass holds one graphic shape with an animated image, which plays at this place in the
+    // stacking order.
+    bool mbAnimatedGraphic = false;
 
     Color maFontColor = COL_AUTO;
 
