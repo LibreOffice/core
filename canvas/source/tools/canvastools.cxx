@@ -991,7 +991,7 @@ namespace canvastools
                                             ::basegfx::fround( rRange.getHeight() ) ) );
         }
 
-        uno::Sequence<uno::Any> getDeviceInfo(const uno::Reference<rendering::XCanvas>& i_rxCanvas)
+        std::optional<uno::Any> getDeviceInfo(const uno::Reference<rendering::XCanvas>& i_rxCanvas)
         {
             if( !i_rxCanvas.is() )
                 return {};
@@ -1001,13 +1001,10 @@ namespace canvastools
                 uno::Reference< rendering::XGraphicDevice > xDevice( i_rxCanvas->getDevice(),
                                                                      uno::UNO_SET_THROW );
 
-                uno::Reference< lang::XServiceInfo >  xServiceInfo( xDevice,
-                                                                    uno::UNO_QUERY_THROW );
                 uno::Reference< beans::XPropertySet > xPropSet( xDevice,
                                                                 uno::UNO_QUERY_THROW );
 
-                return { uno::Any(xServiceInfo->getImplementationName()),
-                         xPropSet->getPropertyValue(u"DeviceHandle"_ustr) };
+                return xPropSet->getPropertyValue(u"DeviceHandle"_ustr);
             }
             catch( const uno::Exception& )
             {

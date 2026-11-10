@@ -306,10 +306,10 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     /// take the XSlideShowView and extract the parent window from it. see viewmediashape.cxx
     uno::Reference< rendering::XCanvas > xCanvas(mxView->getCanvas(), uno::UNO_QUERY_THROW);
-    uno::Sequence<uno::Any> aDeviceParams = canvastools::getDeviceInfo(xCanvas);
+    std::optional<uno::Any> oDeviceParam = canvastools::getDeviceInfo(xCanvas);
 
     sal_Int64 aVal = 0;
-    aDeviceParams[1] >>= aVal;
+    *oDeviceParam >>= aVal;
 
     mpContext = OpenGLContext::Create();
 

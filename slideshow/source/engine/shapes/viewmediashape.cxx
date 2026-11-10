@@ -321,11 +321,11 @@ namespace slideshow::internal
                         }
 
                         // create visible object
-                        uno::Sequence<uno::Any> aDeviceParams = canvastools::getDeviceInfo(xCanvas);
+                        std::optional<uno::Any> oDeviceParam = canvastools::getDeviceInfo(xCanvas);
 
-                        if (aDeviceParams.getLength() > 1)
+                        if (oDeviceParam.has_value())
                         {
-                            implInitializePlayerWindow( rBounds, aDeviceParams );
+                            implInitializePlayerWindow(rBounds, *oDeviceParam);
                         }
 
                         // set player properties
@@ -412,9 +412,8 @@ namespace slideshow::internal
 #endif
         }
 
-
-        void ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
-                                                                 const uno::Sequence< uno::Any >& rVCLDeviceParams )
+        void ViewMediaShape::implInitializePlayerWindow(const ::basegfx::B2DRectangle& rBounds,
+                                                        const css::uno::Any& rVCLDeviceParam)
         {
 #if !HAVE_FEATURE_AVMEDIA
             (void) rBounds;
@@ -428,7 +427,7 @@ namespace slideshow::internal
             {
                 sal_Int64 aVal=0;
 
-                rVCLDeviceParams[ 1 ] >>= aVal;
+                rVCLDeviceParam >>= aVal;
 
                 OutputDevice* pDevice = reinterpret_cast<OutputDevice*>(aVal);
                 vcl::Window* pWindow = pDevice ? pDevice->GetOwnerWindow() : nullptr;

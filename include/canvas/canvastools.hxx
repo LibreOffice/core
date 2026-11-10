@@ -290,22 +290,20 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
 
-        /** Retrieve various internal properties of the actual canvas implementation.
+        /** Retrieve internal property of the actual canvas implementation.
 
-            This method retrieves a bunch of internal, implementation-
-            and platform-dependent values from the canvas
-            implementation. Among them are for example operating
-            system window handles. The actual layout and content of
-            the returned sequence is dependent on the component
-            implementation, undocumented and subject to change.
+            This method retrieves an internal, implementation-
+            and platform-dependent value from the canvas
+            implementation. The content of the returned Any is dependent
+            on the component implementation, undocumented and subject to change.
 
             @param i_rxCanvas
             Input parameter, the canvas representation for which the device information
             is to be retrieved
 
-            @return The resulting sequence of device parameters. Layout is as described above.
+            @return The device parameter. Value is as described above.
         */
-        CANVASTOOLS_DLLPUBLIC css::uno::Sequence<css::uno::Any>
+        CANVASTOOLS_DLLPUBLIC std::optional<css::uno::Any>
         getDeviceInfo(const css::uno::Reference<css::rendering::XCanvas>& i_rxCanvas);
 
         /** Return a color space for a default RGBA integer format
