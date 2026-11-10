@@ -300,12 +300,14 @@ window.L.Map.include({
 				// rendered. An index no part holds names nothing to render.
 				const partNumber = docLayer.getPartFromIndex(part);
 				if (!partNumber) return {width: maxWidth, height: maxHeight};
+				// The bitmap is the preview's CSS size times the exact device pixel ratio, so at
+				// a ratio such as 1.25 it maps one to one onto the screen pixels.
 				this._addPreviewToQueue(part, id, 'tile ' +
 								'nviewid=0' + ' ' +
 								'part=' + String(partNumber) + ' ' +
 								'mode=' + String(mode) + ' ' +
-								'width=' + String(maxWidth * app.roundedDpiScale) + ' ' +
-								'height=' + String(maxHeight * app.roundedDpiScale) + ' ' +
+								'width=' + String(Math.round(maxWidth * app.dpiScale)) + ' ' +
+								'height=' + String(Math.round(maxHeight * app.dpiScale)) + ' ' +
 								'tileposx=' + '0 ' +
 								'tileposy=' + '0 ' +
 								'tilewidth=' + String(tileWidth) + ' ' +
@@ -339,8 +341,8 @@ window.L.Map.include({
 							'nviewid=0' + ' ' +
 							'part=' + partNumber + ' ' +
 							((mode !== 0) ? ('mode=' + mode + ' ') : '') +
-							'width=' + width * app.roundedDpiScale + ' ' +
-							'height=' + height * app.roundedDpiScale + ' ' +
+							'width=' + Math.round(width * app.dpiScale) + ' ' +
+							'height=' + Math.round(height * app.dpiScale) + ' ' +
 							'tileposx=' + tilePosX + ' ' +
 							'tileposy=' + tilePosY + ' ' +
 							'tilewidth=' + tileWidth + ' ' +

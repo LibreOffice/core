@@ -660,7 +660,9 @@ class SlideImportPane {
       1,
       Math.round((targetWidth * source.docHeight) / source.docWidth),
     );
-    const scale = app.roundedDpiScale || 1;
+    // The bitmap is the thumbnail size times the exact device pixel ratio, so at a ratio such as
+    // 1.25 it keeps one bitmap pixel per screen pixel.
+    const scale = app.dpiScale || 1;
 
     for (let slot = 0; slot < source.slideParts.length; ++slot) {
       // The request names the slide by its part identifier, which the source

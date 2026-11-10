@@ -2026,8 +2026,10 @@ class ImpressVectorManager extends VectorManagerBase {
 			maxHeight: maxHeight,
 		});
 
-		const pxW = Math.max(1, Math.round(maxWidth * app.roundedDpiScale));
-		const pxH = Math.max(1, Math.round(maxHeight * app.roundedDpiScale));
+		// The canvas is the preview's CSS size times the exact device pixel ratio, so at a ratio
+		// such as 1.25 the thumbnail maps one to one onto the screen pixels.
+		const pxW = Math.max(1, Math.round(maxWidth * app.dpiScale));
+		const pxH = Math.max(1, Math.round(maxHeight * app.dpiScale));
 
 		const canvas = document.createElement('canvas');
 		canvas.width = pxW;
