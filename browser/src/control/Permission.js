@@ -810,13 +810,17 @@ window.L.Map.include({
 			avatar);
 	},
 
-	// from read-only to edit mode
-	_switchToEditMode: function () {
-		// Notify the collab broker that editing is starting so that
-		// users who join later are informed.
+	// Notify the collab broker that editing is starting so that
+	// users who join later are informed.
+	_sendEditingStarted: function () {
 		if (window.ThisIsTheEmscriptenApp || window.mode.isCODesktop()) {
 			window.collabSendMessage({type: 'editing_started'});
 		}
+	},
+
+	// from read-only to edit mode
+	_switchToEditMode: function () {
+		this._sendEditingStarted();
 
 		// With other collab users present, offer the choice between
 		// local and collaborative editing.
