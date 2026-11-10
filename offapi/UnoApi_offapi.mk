@@ -2940,7 +2940,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	InterpolationMode \
 	Panose \
 	PanoseArmStyle \
-	PanoseContrast \
 	PanoseFamilyTypes \
 	PanoseLetterForm \
 	PanoseMidline \

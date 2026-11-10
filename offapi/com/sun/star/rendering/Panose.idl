@@ -33,9 +33,6 @@ struct Panose
     /// PanoseProportion
     byte    Proportion;
 
-    /// PanoseContrast
-    byte    Contrast;
-
     /// PanoseStrokeVariation
     byte    StrokeVariation;
 
