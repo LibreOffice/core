@@ -254,11 +254,11 @@ window.L.Map.include({
 		var dialogId = this.uiManager.generateModalId(id);
 		// The same dialog again (as when a user joins and starts editing at once) keeps the one
 		// that is shown or still being built (as a second build would replace its wired cards):
-		this._twoCardDialogsBuilding = this._twoCardDialogsBuilding || new Set();
-		if (document.getElementById(dialogId) || this._twoCardDialogsBuilding.has(dialogId)) {
+		if (document.getElementById(dialogId)
+			|| (this.jsdialog && this.jsdialog.dialogs[dialogId]))
+		{
 			return;
 		}
-		this._twoCardDialogsBuilding.add(dialogId);
 		var that = this;
 
 		var titleChildren = [];
@@ -376,12 +376,18 @@ window.L.Map.include({
 		};
 
 		this.uiManager.showModal(json, []);
+		// The cards are wired only while this build is the dialog registered under its ID (a close
+		// before it rendered, or a later build after such a close, ends the wait):
+		const registered = this.jsdialog && this.jsdialog.dialogs[dialogId];
 
 		// The jsdialog builder renders the dialog asynchronously, so the card containers (and
 		// the avatar <img>, if any) only exist some short time after showModal returns; poll
 		// briefly for them and wire up the click and image-error handlers once present.
 		var tries = 0;
 		var wire = function () {
+			if (that.jsdialog && that.jsdialog.dialogs[dialogId] !== registered) {
+				return;
+			}
 			var anyMissing = false;
 			cards.forEach(function (c) {
 				var card = document.getElementById(c.id + '-card');
@@ -418,8 +424,6 @@ window.L.Map.include({
 			}
 			if (anyMissing && ++tries < 50) {
 				setTimeout(wire, 50);
-			} else {
-				that._twoCardDialogsBuilding.delete(dialogId);
 			}
 		};
 		setTimeout(wire, 0);
