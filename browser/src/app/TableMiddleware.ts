@@ -68,6 +68,10 @@ class TableMiddleware {
 		const message = JSON.parse(txtMessage);
 		this.currentTableMarkerJson = txtMessage;
 		this.currentTableData = message;
+		// the numbers come as strings; they are numbers from here on, also where the same table
+		// setup comes again and no marker is made anew
+		if (this.currentTableData.columns && this.currentTableData.rows)
+			this.ensureDataIntegrity();
 
 		app.map.fire('resettopbottompagespacing', {
 			disableMarker: this.hasTableSelection(),
@@ -589,6 +593,14 @@ class TableMiddleware {
 	}
 
 	private ensureDataIntegrity() {
+		// a table of one column or one row comes with an empty string for its borders between
+		// columns or rows, which are no borders at all
+		for (const lines of [
+			this.currentTableData.columns,
+			this.currentTableData.rows,
+		])
+			if (!Array.isArray(lines.entries)) lines.entries = [];
+
 		// Core Impress sends the integer data in string type.
 		this.currentTableData.columns.tableOffset = parseInt(
 			this.currentTableData.columns.tableOffset,

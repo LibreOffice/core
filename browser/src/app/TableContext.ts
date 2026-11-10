@@ -46,12 +46,14 @@ class ClassicTableContext extends ClassicContext {
 	public static layout(data: any): TableLayout {
 		const across = data.columns;
 		const down = data.rows;
+		const inner = (lines: any): any[] =>
+			Array.isArray(lines.entries) ? lines.entries : [];
 		const columns = [across.left]
-			.concat(across.entries.map((entry: any) => entry.position))
+			.concat(inner(across).map((entry: any) => entry.position))
 			.concat([across.right])
 			.map((at: number) => across.tableOffset + at);
 		const rows = [down.left]
-			.concat(down.entries.map((entry: any) => entry.position))
+			.concat(inner(down).map((entry: any) => entry.position))
 			.concat([down.right])
 			.map((at: number) => down.tableOffset + at);
 		return {
