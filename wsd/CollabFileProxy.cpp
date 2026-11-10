@@ -15,6 +15,7 @@
 
 #include <Anonymizer.hpp>
 #include <wsd/COOLWSD.hpp>
+#include <wsd/ClientRequestDispatcher.hpp>
 #include <Common.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <HttpHelper.hpp>
@@ -274,6 +275,11 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
         const std::string corsHeader = "Access-Control-Allow-Origin: *\r\n";
         if (statusCode == http::StatusCode::OK)
         {
+            // The CheckFileInfo kept for this document's editor form still has the version from
+            // before this upload, and a session that used it would get 409 on every save.
+            ClientRequestDispatcher::DropRequestVettingStations(
+                RequestDetails::getDocKey(_wopiSrc));
+
             // Update any existing DocumentBroker's stored timestamp
             // so it matches the new version we just uploaded.  Without
             // this, a subsequent CheckFileInfo (when another user joins)

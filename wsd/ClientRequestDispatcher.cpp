@@ -3539,6 +3539,14 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
 #endif
 }
 
+void ClientRequestDispatcher::DropRequestVettingStations(const std::string& docKey)
+{
+    const std::size_t dropped = std::erase_if(RequestVettingStations, [&docKey](const auto& pair)
+                                              { return pair.second->docKey() == docKey; });
+    if (dropped)
+        LOG_DBG_S("Dropped " << dropped << " RequestVettingStations of a document");
+}
+
 void ClientRequestDispatcher::CleanupRequestVettingStations()
 {
     if (RequestVettingStations.size() >= NextRvsCleanupSize)

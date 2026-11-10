@@ -72,6 +72,8 @@ public:
         NextConnectionId = 1;
     }
 
+    static void DropRequestVettingStations(const std::string& docKey);
+
 private:
     // NB: these names are part of the published API, and should not be renamed or altered but can be expanded
     STATE_ENUM(CheckStatus, Ok, NotHttpSuccess, HostNotFound, WopiHostNotAllowed, UnspecifiedError,
