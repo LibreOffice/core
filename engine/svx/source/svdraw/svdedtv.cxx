@@ -661,9 +661,10 @@ void SdrEditView::CheckPossibilities()
     }
     ImpCheckToTopBtmPossible();
     static_cast<SdrPolyEditView*>(this)->ImpCheckPolyPossibilities();
-    m_bPossibilitiesDirty=false;
+    const bool bKitReadOnly = SfxViewShell::IsCurrentKitViewReadOnly();
+    m_bPossibilitiesDirty = bKitReadOnly;
 
-    if (m_bReadOnly || SfxViewShell::IsCurrentKitViewReadOnly() ) {
+    if (m_bReadOnly || bKitReadOnly) {
         bool bTemp=m_bGrpEnterPossible;
         ImpResetPossibilityFlags();
         m_bReadOnly=true;

@@ -1472,6 +1472,23 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTextEditCommandsNeedTheirShapeAnd
     CPPUNIT_ASSERT(!pView2->IsTextEdit());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeAfterReadOnlyView)
+{
+    // A placeholder selected in viewing mode can be resized and moved once the view can edit.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    int nView = KitHelper::getCurrentView();
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+
+    KitHelper::setViewReadOnly(nView, true);
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    CPPUNIT_ASSERT(!pView->IsResizeAllowed());
+    KitHelper::setViewReadOnly(nView, false);
+    CPPUNIT_ASSERT(pView->IsResizeAllowed());
+    CPPUNIT_ASSERT(pView->IsMoveAllowed());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoLimiting)
 {
     // Create the first view.
