@@ -249,11 +249,21 @@ private:
 /// The pages with an editor frame, by the session of the frame.
 std::map<QString, CloudAccountPage*> PagesBySession;
 
-/// The scheme, host and port of url.
+/// The scheme, host and port of url. Chromium leaves out the scheme's default port, so we do too.
 QUrl originOf(const QUrl& url)
 {
-    return url.adjusted(QUrl::RemoveUserInfo | QUrl::RemovePath | QUrl::RemoveQuery
-                        | QUrl::RemoveFragment);
+    const QUrl::FormattingOptions originOnly = QUrl::RemoveUserInfo
+                                               | QUrl::RemovePath
+                                               | QUrl::RemoveQuery
+                                               | QUrl::RemoveFragment;
+
+    QUrl origin = url.adjusted(originOnly);
+    const bool isDefaultHttpsPort = origin.scheme() == "https" && origin.port() == 443;
+    const bool isDefaultHttpPort = origin.scheme() == "http" && origin.port() == 80;
+
+    if (isDefaultHttpsPort || isDefaultHttpPort)
+        origin.setPort(-1);
+    return origin;
 }
 
 /// Other schemes would open other apps, so only web addresses go to the system browser.
