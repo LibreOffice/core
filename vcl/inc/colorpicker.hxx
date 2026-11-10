@@ -65,14 +65,14 @@ enum class ColorComponent
     Key,
 };
 
-enum ColorMode
+enum class ColorMode
 {
-    HUE,
-    SATURATION,
-    BRIGHTNESS,
-    RED,
-    GREEN,
-    BLUE
+    Hue,
+    Saturation,
+    Brightness,
+    Red,
+    Green,
+    Blue
 };
 
 class ColorFieldControl : public weld::CustomWidgetController
