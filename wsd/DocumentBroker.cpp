@@ -6016,11 +6016,11 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
                 for (std::string const & name: userNames) {
                     names += (names.empty() ? "" : ", ") + name;
                 }
-                std::string const msg(
-                    "error: cmd=load kind=docunloading:collabconflict username="
-                    + Uri::encode(names));
+                static constexpr std::string_view reason(
+                    "error: cmd=load kind=docunloading:collabconflict");
+                std::string const msg(std::string(reason) + " username=" + Uri::encode(names));
                 ws->sendTextMessage(msg);
-                ws->shutdown(true, msg);
+                ws->shutdown(true, reason);
             }
 
             return nullptr;
