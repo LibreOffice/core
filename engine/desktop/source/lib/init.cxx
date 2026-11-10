@@ -284,6 +284,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
+#include <unotools/fontdefs.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/abstdlg.hxx>
@@ -1086,6 +1087,82 @@ void hideSidebar()
 }
 
 }  // end anonymous namespace
+
+namespace
+{
+/// Returns the family part of a font name of the form "Family" or "Family/Style".
+std::u16string_view fontFamilyOf(std::u16string_view rName)
+{
+    return o3tl::trim(rName.substr(0, rName.find(u'/')));
+}
+
+/// Returns true for the generic font families of CSS. Any installed font of that kind satisfies
+/// such a family.
+bool isGenericFontFamily(std::u16string_view rFamily)
+{
+    for (std::u16string_view aGeneric :
+         { u"serif", u"sans-serif", u"monospace", u"cursive", u"fantasy", u"system-ui" })
+        if (o3tl::equalsIgnoreAsciiCase(rFamily, aGeneric))
+            return true;
+    return false;
+}
+
+/// Returns true when rUsedFamily is a free font with the same metrics as the proprietary font
+/// rRequestedFamily. The list covers only some well-known pairs. Symbol and OpenSymbol are not
+/// metric-compatible, but OpenSymbol has the glyphs that documents take from Symbol.
+bool isMetricCompatible(std::u16string_view rRequestedFamily, std::u16string_view rUsedFamily)
+{
+    static constexpr std::pair<std::u16string_view, std::u16string_view> aPairs[] = {
+        { u"Arial", u"Liberation Sans" },
+        { u"Times New Roman", u"Liberation Serif" },
+        { u"Courier New", u"Liberation Mono" },
+        { u"Arial Narrow", u"Liberation Sans Narrow" },
+        { u"Cambria", u"Caladea" },
+        { u"Calibri", u"Carlito" },
+        { u"Palatino Linotype", u"P052" },
+        { u"Symbol", u"OpenSymbol" },
+    };
+    for (const auto& [aRequested, aUsed] : aPairs)
+        if (o3tl::equalsIgnoreAsciiCase(rRequestedFamily, aRequested)
+            && o3tl::equalsIgnoreAsciiCase(rUsedFamily, aUsed))
+            return true;
+    return false;
+}
+}
+
+bool desktop::isFontPresent(std::u16string_view rOriginalFont,
+                            const std::vector<OUString>& rUsedFonts)
+{
+    // The requested name can be a list of families separated by ";" or ",", as in a CSS
+    // font-family value. The text uses the first family of the list that is installed, so the
+    // font counts as present when any family of the list matches a font that was used. Families
+    // are compared without their style, because the style of the requested font and the style
+    // of the used face are often named differently, or one of them is empty.
+    sal_Int32 nIndex = 0;
+    do
+    {
+        std::u16string_view aToken = o3tl::trim(GetNextFontToken(rOriginalFont, nIndex));
+        if (aToken.size() >= 2 && (aToken.front() == '"' || aToken.front() == '\'')
+            && aToken.back() == aToken.front())
+            aToken = aToken.substr(1, aToken.size() - 2);
+
+        std::u16string_view aFamily = fontFamilyOf(aToken);
+        if (aFamily.empty())
+            continue;
+        if (isGenericFontFamily(aFamily))
+            return true;
+
+        for (const OUString& rUsedFont : rUsedFonts)
+        {
+            std::u16string_view aUsedFamily = fontFamilyOf(rUsedFont);
+            if (o3tl::equalsIgnoreAsciiCase(aFamily, aUsedFamily)
+                || isMetricCompatible(aFamily, aUsedFamily))
+                return true;
+        }
+    } while (nIndex != -1);
+
+    return false;
+}
 
 // Could be anonymous in principle, but for the unit testing purposes, we
 // declare it in init.hxx.
@@ -3058,71 +3135,11 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             }
         }
 
-        // Filter out font substitutions that actually aren't any substitutions, like "Liberation
-        // Serif" -> "Liberation Serif/Regular". If even one of the "substitutions" of a font is to
-        // the same font, don't count that as a missing font.
-
-        std::erase_if
-            (aFontMappingUseData,
-                            [](OutputDevice::FontMappingUseItem x)
-                            {
-                                // If the original font had an empty style and one of its
-                                // replacement fonts has the same family name, we assume the font is
-                                // present. The root problem here is that the code that collects
-                                // font substitutions tends to get just empty styles for the font
-                                // that is being substituted, as vcl::Font::GetStyleName() tends to
-                                // return an empty string. (Italicness is instead indicated by what
-                                // vcl::Font::GetItalic() returns and boldness by what
-                                // vcl::Font::GetWeight() returns.)
-
-                                if (x.mOriginalFont.indexOf('/') == -1)
-                                    for (const auto &j : x.mUsedFonts)
-                                        if (j == x.mOriginalFont ||
-                                            j.startsWith(Concat2View(x.mOriginalFont + "/")))
-                                            return true;
-
-                                return false;
-                            });
-
-        // Filter out substitutions where a proprietary font has been substituted by a
-        // metric-compatible one. Obviously this is just a heuristic and implemented only for some
-        // well-known cases.
-
-        std::erase_if
-            (aFontMappingUseData,
-                            [](OutputDevice::FontMappingUseItem x)
-                            {
-                                // Again, handle only cases where the original font does not include
-                                // a style. Unclear whether there ever will be a style part included
-                                // in the mOriginalFont.
-
-                                if (x.mOriginalFont.indexOf('/') == -1)
-                                    for (const auto &j : x.mUsedFonts)
-                                        if ((x.mOriginalFont == "Arial" &&
-                                             j.startsWith("Liberation Sans/")) ||
-                                            (x.mOriginalFont == "Times New Roman" &&
-                                             j.startsWith("Liberation Serif/")) ||
-                                            (x.mOriginalFont == "Courier New" &&
-                                             j.startsWith("Liberation Mono/")) ||
-                                            (x.mOriginalFont == "Arial Narrow" &&
-                                             j.startsWith("Liberation Sans Narrow/")) ||
-                                            (x.mOriginalFont == "Cambria" &&
-                                             j.startsWith("Caladea/")) ||
-                                            (x.mOriginalFont == "Calibri" &&
-                                             j.startsWith("Carlito/")) ||
-                                            (x.mOriginalFont == "Palatino Linotype" &&
-                                             j.startsWith("P052/")) ||
-                                            // Perhaps a risky heuristic? If some glyphs from Symbol
-                                            // have been mapped to ones in OpenSymbol, don't warn
-                                            // that Symbol is missing.
-                                            (x.mOriginalFont == "Symbol" &&
-                                             j.startsWith("OpenSymbol/")))
-                                        {
-                                            return true;
-                                        }
-
-                                return false;
-                            });
+        // Drop the requested fonts that are actually present, so that only the missing ones are
+        // left.
+        std::erase_if(aFontMappingUseData,
+                      [](const OutputDevice::FontMappingUseItem& rItem)
+                      { return desktop::isFontPresent(rItem.mOriginalFont, rItem.mUsedFonts); });
 
         if (aFontMappingUseData.size() > 0)
         {
@@ -3137,7 +3154,8 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         for (std::size_t i = 0; i < aFontMappingUseData.size(); ++i)
         {
-            pDocument->maFontsMissing.insert(aFontMappingUseData[i].mOriginalFont);
+            pDocument->maFontsMissing.insert(
+                OUString(fontFamilyOf(aFontMappingUseData[i].mOriginalFont)));
         }
 
         SAL_INFO("kit", "lo_documentLoadWithOptions: finished @ " << osl_getGlobalTimer());

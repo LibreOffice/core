@@ -312,6 +312,7 @@ namespace desktop {
         // document type queries.
         COKitDocumentType meDocumentType;
         WaitUntilIdle maIdleHelper;
+        /// Family names of the requested fonts that text layout replaced by unrelated fonts.
         std::set<OUString> maFontsMissing;
         // Canonical main URL this document's original-document-URL mapping was
         // keyed by at load (empty if none); used to clear it at destroy without
@@ -567,6 +568,16 @@ namespace desktop {
     /// Helper function to convert JSON to a vector of PropertyValues.
     /// Public to be unit-test-able.
     DESKTOP_DLLPUBLIC std::vector<css::beans::PropertyValue> jsonToPropertyValuesVector(const char* pJSON);
+
+    /// Returns true when rUsedFonts, the fonts that text layout used for the requested font
+    /// rOriginalFont, include that font or a known stand-in for it. Each name has the form
+    /// "Family" or "Family/Style". Only the families are compared, ignoring ASCII case, so a
+    /// face of the same family with another style counts as the requested font. rOriginalFont can
+    /// also be a list of families separated by ";" or ",", which counts as present when any of
+    /// its families was used or when any of them is a generic CSS family such as sans-serif.
+    /// Public to be unit-test-able.
+    DESKTOP_DLLPUBLIC bool isFontPresent(std::u16string_view rOriginalFont,
+                                         const std::vector<OUString>& rUsedFonts);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

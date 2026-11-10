@@ -303,6 +303,7 @@ public:
     void testCalcValidityDropdownInReadonlyMode();
     void testRunMacro();
     void testExtractParameter();
+    void testMissingFontsReportsOnlyAbsentFonts();
     void testGetSignatureState_NonSigned();
     void testGetSignatureState_Signed();
 #if 0 // broken with system nss on RHEL 7
@@ -431,6 +432,7 @@ public:
     CPPUNIT_TEST(testCalcValidityDropdownInReadonlyMode);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
+    CPPUNIT_TEST(testMissingFontsReportsOnlyAbsentFonts);
     CPPUNIT_TEST(testGetSignatureState_Signed);
     CPPUNIT_TEST(testGetSignatureState_NonSigned);
 #if !MPL_HAVE_SUBSET
@@ -5174,6 +5176,36 @@ void DesktopKitTest::testRunMacro()
     // framework doesn't easily support.
     bNonExistentMacro = aOffice.runMacro("macro:///I.Am.Not(There)");
     CPPUNIT_ASSERT(!bNonExistentMacro);
+}
+
+void DesktopKitTest::testMissingFontsReportsOnlyAbsentFonts()
+{
+    // An installed font is present, whether or not the requested name or the used face names a
+    // style.
+    CPPUNIT_ASSERT(isFontPresent(u"Noto Sans", { u"Noto Sans/Regular"_ustr }));
+    CPPUNIT_ASSERT(isFontPresent(u"Noto Sans/Bold", { u"Noto Sans/Bold"_ustr }));
+    CPPUNIT_ASSERT(isFontPresent(u"Noto Sans/Regular", { u"Noto Sans"_ustr }));
+    CPPUNIT_ASSERT(isFontPresent(u"Noto Sans/Bold", { u"Noto Sans/Regular"_ustr }));
+
+    // A metric-compatible stand-in counts as present, also when a style is named.
+    CPPUNIT_ASSERT(isFontPresent(u"Calibri", { u"Carlito/Regular"_ustr }));
+    CPPUNIT_ASSERT(isFontPresent(u"Arial/Bold", { u"Liberation Sans/Bold"_ustr }));
+
+    // A list of families, as in a CSS font-family value, is present when any one of them was
+    // used, or when any of them is a generic family.
+    CPPUNIT_ASSERT(isFontPresent(u"Foo;Noto Sans;Bar", { u"Noto Sans/Regular"_ustr }));
+    CPPUNIT_ASSERT(isFontPresent(u"Foo, Arial", { u"Liberation Sans/Regular"_ustr }));
+    CPPUNIT_ASSERT(isFontPresent(u"'Helvetica Neue';Helvetica", { u"Helvetica Neue/Roman"_ustr }));
+    CPPUNIT_ASSERT(isFontPresent(
+        u"apple-system;BlinkMacSystemFont;open sanslight;Helvetica Neue;Helvetica;Arial;sans-serif",
+        { u"DejaVu Sans/Book"_ustr }));
+
+    // A font that was replaced by an unrelated one is missing.
+    CPPUNIT_ASSERT(!isFontPresent(u"Noto Sans/Bold", { u"DejaVu Sans/Bold"_ustr }));
+    CPPUNIT_ASSERT(!isFontPresent(u"Noto Sans Mono", { u"Noto Sans/Regular"_ustr }));
+    CPPUNIT_ASSERT(!isFontPresent(u"Calibri", { u"Liberation Sans/Regular"_ustr }));
+    CPPUNIT_ASSERT(!isFontPresent(u"Foo;Bar", { u"DejaVu Sans/Book"_ustr }));
+    CPPUNIT_ASSERT(!isFontPresent(u"Foo", {}));
 }
 
 void DesktopKitTest::testExtractParameter()
