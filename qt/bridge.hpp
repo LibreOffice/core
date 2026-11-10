@@ -73,6 +73,9 @@ class Bridge : public QObject
     // true when this bridge goes away while the document stays loaded under its appDocId.
     bool _keepDocumentLoaded = false;
 
+    // The temporary copy of a remote document. It is removed with this bridge.
+    QString _remoteCopyPath;
+
     // true while the document was opened from a template and has not yet been
     // saved to a real file. While set, a save is turned into a Save As so the
     // template working copy is never written back as if it were the document.
