@@ -135,6 +135,28 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testExportEmbeddedFontsPPTX)
 #endif
 }
 
+// A presentation names among the fonts it carries only the ones it really carries.
+CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testFontWithNothingBehindItIsNotNamed)
+{
+    // Given a presentation whose text is set in a face this machine does not hold, saved with
+    // the fonts it uses travelling along:
+    createSdImpressDoc("pptx/text-in-a-font-nobody-has.pptx");
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProps(
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, cpo::uno::Any(true));
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the saved file named that face among the ones it carries and
+    // carried nothing for it, leaving a reader a name and nothing to load.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:presentation/p:embeddedFontLst/p:embeddedFont[count(*)=1]", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testTdf167214)
 {
     auto verify = [this]() {

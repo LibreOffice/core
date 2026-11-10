@@ -1401,9 +1401,20 @@ void PowerPointExport::WriteEmbeddedFontList()
                 aInfo.aBoldItalicRelID = uRelID;
         }
 
-        aEmbeddedFontInfo.push_back(aInfo);
         aFontFamilyNameSet.insert(sFamilyName);
+
+        // A font joins the list the presentation carries only once one of its styles has been
+        // written. A font whose styles are all missing from this machine leaves a name with
+        // nothing behind it, and a reader given that name has nothing to load.
+        if (aInfo.aRegularRelID.isEmpty() && aInfo.aBoldRelID.isEmpty()
+            && aInfo.aItalicRelID.isEmpty() && aInfo.aBoldItalicRelID.isEmpty())
+            continue;
+
+        aEmbeddedFontInfo.push_back(aInfo);
     }
+
+    if (aEmbeddedFontInfo.empty())
+        return;
 
     // if there are fonts to embed and font embedding enabled
     mPresentationFS->startElementNS(XML_p, XML_embeddedFontLst);
