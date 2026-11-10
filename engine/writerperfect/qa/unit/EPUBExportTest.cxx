@@ -288,11 +288,11 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMeta)
                        u"2017-09-27T09:51:19Z");
 
     // Make sure that cover image next to the source document is picked up.
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']",
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/cover0001.png']",
                 "properties", u"cover-image");
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']",
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/cover0001.png']",
                 "media-type", u"image/png");
-    CPPUNIT_ASSERT(mxZipFile->hasByName(u"OEBPS/images/image0001.png"_ustr));
+    CPPUNIT_ASSERT(mxZipFile->hasByName(u"OEBPS/images/cover0001.png"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMetaXMP)
@@ -343,11 +343,11 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testCoverImage)
 
     // Make sure that the explicitly set cover image is used.
     // This failed, as the image was not part of the package.
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']",
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/cover0001.png']",
                 "properties", u"cover-image");
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']",
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/cover0001.png']",
                 "media-type", u"image/png");
-    CPPUNIT_ASSERT(mxZipFile->hasByName(u"OEBPS/images/image0001.png"_ustr));
+    CPPUNIT_ASSERT(mxZipFile->hasByName(u"OEBPS/images/cover0001.png"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testParaNamedstyle)
