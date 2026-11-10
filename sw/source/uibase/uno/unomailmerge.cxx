@@ -30,6 +30,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/timer.hxx>
@@ -680,6 +681,29 @@ uno::Any SAL_CALL SwXMailMerge::execute(const uno::Sequence<beans::NamedValue>& 
 
     std::unique_ptr<SwMailMergeConfigItem> pMMConfigItem;
     uno::Reference<mail::XMailService> xInService;
+
+    comphelper::ScopeGuard aCleanup([&]() {
+        // 2 try/catches so if SMTP deconnection fails, perhaps the POP/IMAP one won't
+        try
+        {
+            if (aMergeDesc.xSmtpServer.is() && aMergeDesc.xSmtpServer->isConnected())
+                aMergeDesc.xSmtpServer->disconnect();
+        }
+        catch (const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sw", "SMTP disconnect failed");
+        }
+        try
+        {
+            if (xInService.is() && xInService->isConnected())
+                xInService->disconnect();
+        }
+        catch (const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sw", "POP/IMAP disconnect failed");
+        }
+    });
+
     switch (nCurOutputType)
     {
         case MailMergeType::PRINTER:
@@ -813,12 +837,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(const uno::Sequence<beans::NamedValue>& 
     if (!bSucc)
         throw Exception(u"Mail merge failed. Sorry, no further information available."_ustr,
                         getXWeak());
-
-    //de-initialize services
-    if (xInService.is() && xInService->isConnected())
-        xInService->disconnect();
-    if (aMergeDesc.xSmtpServer.is() && aMergeDesc.xSmtpServer->isConnected())
-        aMergeDesc.xSmtpServer->disconnect();
 
     if (DBManagerOptions::MailMergeShell == eMergeType)
     {
