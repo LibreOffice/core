@@ -16,6 +16,7 @@
 #include <common/Log.hpp>
 #include <net/FakeSocket.hpp>
 #include <qt/CoolLocalSchemeHandler.hpp>
+#include <qt/WebView.hpp>
 #include <qt/bridge.hpp>
 
 #include <QApplication>
@@ -70,7 +71,11 @@ const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
     if (window.codaRemotePage)
         return;
 
-    window.codaRemotePage = { base: config.base, messageUrl: config.messageUrl };
+    window.codaRemotePage = {
+        base: config.base,
+        messageUrl: config.messageUrl,
+        settings: config.settings,
+    };
 
     const text = (response) => {
         if (!response.ok)
@@ -599,6 +604,12 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
     config["formBody"] = QString::fromLatin1(_form);
     config["base"] = COOLLOCAL_BUNDLED_URL;
     config["messageUrl"] = COOLLOCAL_MESSAGE_URL + "?session=" + _session;
+
+    QJsonObject settings;
+    for (const auto& [name, value] : coda::pageSettings(/*forDocument=*/true))
+        settings[QString::fromStdString(name)] = QString::fromStdString(value);
+    config["settings"] = settings;
+
     const QByteArray configJson = QJsonDocument(config).toJson(QJsonDocument::Compact);
     const QString putPageIn = QString::fromUtf8(PUT_CODA_PAGE_IN_SCRIPT);
     const QString script = '(' + putPageIn + ")(" + QString::fromUtf8(configJson) + ')';

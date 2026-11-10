@@ -378,6 +378,12 @@ class InitializerBase {
 
 		window.coolParams = coolParams;
 
+		// The remote document's editor frame has the integrator's address, without CODA's settings.
+		if (window.codaRemotePage) {
+			for (const [name, value] of Object.entries(window.codaRemotePage.settings || {}))
+				coolParams.set(name, value);
+		}
+
 		// Returns true if the simulateError param matches the check
 		window.simulateError = function(name) {
 			return coolParams.get('simulateError') === name;
