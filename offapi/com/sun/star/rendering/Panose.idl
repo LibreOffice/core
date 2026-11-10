@@ -35,9 +35,6 @@ struct Panose
 
     /// PanoseLetterForm
     byte    Letterform;
-
-    /// PanoseMidline
-    byte    Midline;
 };
 
 }; }; }; };
