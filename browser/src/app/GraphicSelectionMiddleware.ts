@@ -694,6 +694,9 @@ class GraphicSelection {
 		marked, not the ones they hold, so it would move a group whose member is held fast.
 	*/
 	public static handleKeyboard(event: KeyboardEvent): boolean {
+		// Escape puts the freeform line tool away, with the line being drawn.
+		if (event.key === 'Escape' && FreeformLineSection.drop()) return true;
+
 		// While text is being edited every key belongs to the text.
 		if (this.textIsBeingEdited()) return false;
 

@@ -75,6 +75,7 @@
 /// <reference path="./RequestTracker.test.ts" />
 /// <reference path="./Point.test.ts" />
 /// <reference path="./Range2D.test.ts" />
+/// <reference path="./FreeformStroke.test.ts" />
 /// <reference path="./VectorGradientFrame.test.ts" />
 /// <reference path="./VectorColorModifiers.test.ts" />
 /// <reference path="./VectorColorFilters.test.ts" />

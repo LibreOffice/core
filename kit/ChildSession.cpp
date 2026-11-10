@@ -684,6 +684,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "splitobjectpath") ||
                tokens.equals(0, "setobjectpathclosed") ||
                tokens.equals(0, "simplifyobjectpath") ||
+               tokens.equals(0, "insertpolygonobject") ||
                tokens.equals(0, "setobjectgluepoint") ||
                tokens.equals(0, "insertobjectgluepoint") ||
                tokens.equals(0, "deleteobjectgluepoint") ||
@@ -809,6 +810,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "simplifyobjectpath"))
         {
             return simplifyObjectPath(tokens);
+        }
+        else if (tokens.equals(0, "insertpolygonobject"))
+        {
+            return insertPolygonObject(tokens);
         }
         else if (tokens.equals(0, "setobjectgluepoint"))
         {
@@ -2141,6 +2146,31 @@ bool ChildSession::simplifyObjectPath(const StringVector& tokens)
         return false;
 
     getLOKitDocument()->simplifyObjectPath(objectId, points == "true");
+    return true;
+}
+
+bool ChildSession::insertPolygonObject(const StringVector& tokens)
+{
+    std::string closed;
+    std::string points;
+
+    if (!hasTokens(tokens, 3) || !getTokenString(tokens[1], "closed", closed)
+        || (closed != "true" && closed != "false") || !getTokenString(tokens[2], "points", points))
+    {
+        sendTextFrameAndLogError("error: cmd=insertpolygonobject kind=syntax");
+        return false;
+    }
+
+    // Adding an object changes the document, which a read-only view may not do.
+    if (isReadOnly())
+    {
+        sendTextFrameAndLogError("error: cmd=insertpolygonobject kind=failure");
+        return false;
+    }
+
+    // The points are on the page, in twips.
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->insertPolygonObject(points.c_str(), closed == "true");
     return true;
 }
 

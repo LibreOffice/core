@@ -256,6 +256,7 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
 #include <svtools/ctrltool.hxx>
@@ -7444,6 +7445,87 @@ void COKitDocumentImpl::simplifyObjectPath(unsigned long long nObjectId, bool bP
         aSimpler.append(bPointsOnALine ? lcl_withoutPointsOnALine(rPolygon) : rPolygon);
     if (aSimpler != pPathObject->GetPathPoly())
         lcl_changePath(*pPathObject, STR_EditSimplifyPath, aSimpler);
+}
+
+/*
+    Adds an object drawn along the points to the page the current view shows, as the mouse draws
+    one: it goes on the layer the view draws on, takes the attributes the view gives new objects,
+    and is selected. The points are "x,y" in twips, separated by ";". An open path becomes a
+    polyline and a closed one a polygon.
+*/
+void COKitDocumentImpl::insertPolygonObject(const char* pPoints, bool bClosed)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::insertPolygonObject");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
+    if (!pPageView)
+    {
+        SetLastExceptionMsg(u"The view shows no page to add an object to"_ustr);
+        return;
+    }
+
+    // The points arrive in twips and the model holds them in its own unit.
+    SdrModel& rModel(pView->GetModel());
+    const double fToModel(
+        o3tl::convert(1.0, o3tl::Length::twip, MapToO3tlLength(rModel.GetScaleUnit())));
+
+    basegfx::B2DPolygon aPolygon;
+    const OString aPoints(pPoints ? pPoints : "");
+    for (sal_Int32 nAt = 0; nAt >= 0;)
+    {
+        const OString aPoint(aPoints.getToken(0, ';', nAt));
+        sal_Int32 nField = 0;
+        const double fX(o3tl::toDouble(o3tl::getToken(aPoint, 0, ',', nField)));
+        if (nField < 0)
+            continue;
+
+        const double fY(o3tl::toDouble(o3tl::getToken(aPoint, 0, ',', nField)));
+        const basegfx::B2DPoint aPlace(fX * fToModel, fY * fToModel);
+
+        // The bounds of the object are kept in whole numbers of 32 bits, so a place stays well
+        // inside that range, and every place has to be a number.
+        constexpr double fFarthest(SAL_MAX_INT32 / 2);
+        if (!(std::abs(aPlace.getX()) <= fFarthest && std::abs(aPlace.getY()) <= fFarthest))
+        {
+            SetLastExceptionMsg(u"A point lies too far away to draw an object along"_ustr);
+            return;
+        }
+
+        if (aPolygon.count() && aPolygon.getB2DPoint(aPolygon.count() - 1).equal(aPlace))
+            continue;
+
+        aPolygon.append(aPlace);
+    }
+
+    if (aPolygon.count() < (bClosed ? 3u : 2u))
+    {
+        SetLastExceptionMsg(u"Too few points to draw an object along"_ustr);
+        return;
+    }
+
+    // SdrPathObj numbers the points of a path with sal_uInt16.
+    if (aPolygon.count() > SAL_MAX_UINT16)
+    {
+        SetLastExceptionMsg(u"Too many points to draw an object along"_ustr);
+        return;
+    }
+
+    aPolygon.setClosed(bClosed);
+    rtl::Reference<SdrPathObj> pObject(new SdrPathObj(
+        rModel, bClosed ? SdrObjKind::Polygon : SdrObjKind::PolyLine,
+        basegfx::B2DPolyPolygon(aPolygon)));
+
+    if (!pView->InsertObjectAtView(pObject.get(), *pPageView,
+                                   SdrInsertFlags::SETDEFLAYER | SdrInsertFlags::SETDEFATTR))
+        SetLastExceptionMsg(u"The layer new objects go on is locked or hidden"_ustr);
 }
 
 /*

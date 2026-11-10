@@ -3020,6 +3020,19 @@ struct COKitDocument
     virtual void simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine) = 0;
 
     /**
+     * Adds a drawing object drawn along the given points to the page the current view shows.
+     * The object goes on the layer the view draws new objects on and takes the attributes the
+     * view gives them, as an object drawn with the mouse does. It is selected afterwards, and
+     * adding it is one undo step.
+     *
+     * @param pPoints the points in twips on the page, each as "x,y", separated by ";". A point
+     *        equal to the one before it is left out. An open path needs two points at least and
+     *        a closed one three.
+     * @param bClosed true for a closed polygon, false for an open polyline.
+     */
+    virtual void insertPolygonObject(const char* pPoints, bool bClosed) = 0;
+
+    /**
      * Moves one of the points a drawing object was given for a connector to tie itself to.
      *
      * The place is given on the object rather than on the page: 0 and 0 is its upper left corner

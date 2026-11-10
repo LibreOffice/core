@@ -78,6 +78,7 @@ app.CSections.TooltipAnchorLeft =     { name: 'tooltip anchor left' , zIndex: 11
 app.CSections.TooltipAnchorRight =    { name: 'tooltip anchor right' };
 app.CSections.CalcValidityDropDown =  { name: 'calc validity dropdown', zIndex: 11 };
 app.CSections.FormulaErrorHelpButton = { name: 'formula error help button', zIndex: 11 };
+app.CSections.FreeformLine =          { name: 'freeform line', zIndex: 11 };
 
 app.CSections.Scroll =				{ name: 'scroll'			, zIndex: 13 };
 app.CSections.ZoomControl =		{ name: 'zoom control'	, zIndex: 13 };
@@ -175,10 +176,12 @@ app.CSections.DefaultForDocumentObjects.drawingOrder = 10;
 app.CSections.ContentControl.processingOrder =		1; // Writer.
 app.CSections.TooltipAnchorLeft.processingOrder =	2; // Writer.
 app.CSections.HeaderFooterBoundary.processingOrder =	3; // Writer.
+app.CSections.FreeformLine.processingOrder =		4; // Impress.
 
 app.CSections.ContentControl.drawingOrder =			1; // Writer.
 app.CSections.TooltipAnchorLeft.drawingOrder =		2; // Writer.
 app.CSections.HeaderFooterBoundary.drawingOrder =	3; // Writer.
+app.CSections.FreeformLine.drawingOrder =			4; // Impress.
 
 /* zIndex = 13 */
 app.CSections.Scroll.processingOrder = 				1; // Writer & Impress & Calc.

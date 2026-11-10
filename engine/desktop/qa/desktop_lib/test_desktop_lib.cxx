@@ -68,6 +68,7 @@
 #include <osl/file.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/undo.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/datetime.hxx>
@@ -335,6 +336,7 @@ public:
     void testObjectCommandsLeaveAReadOnlyViewAlone();
     void testObjectCommandsKeepTheObjectsProtection();
     void testObjectPathCommands();
+    void testInsertPolygonObject();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -464,6 +466,7 @@ public:
     CPPUNIT_TEST(testObjectCommandsLeaveAReadOnlyViewAlone);
     CPPUNIT_TEST(testObjectCommandsKeepTheObjectsProtection);
     CPPUNIT_TEST(testObjectPathCommands);
+    CPPUNIT_TEST(testInsertPolygonObject);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -6347,6 +6350,79 @@ void DesktopKitTest::testObjectPathCommands()
     pDocument->deleteObjectPoint(nId, 0, 0);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aPolygon().count());
     KitHelper::setViewReadOnly(pDocument->getView(), false);
+}
+
+void DesktopKitTest::testInsertPolygonObject()
+{
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+    SdrPageView* pPageView = nullptr;
+    firstObjectOfThePage(pPageView);
+    SdrPage* pPage = pPageView->GetPage();
+    const size_t nObjects = pPage->GetObjCount();
+    const auto aTwips = [](sal_Int32 nMm100) -> OString {
+        return OString::number(o3tl::convert(nMm100, o3tl::Length::mm100, o3tl::Length::twip));
+    };
+    const auto aPlace = [&aTwips](sal_Int32 nX, sal_Int32 nY) -> OString {
+        return aTwips(nX) + "," + aTwips(nY);
+    };
+
+    // An open path of three points becomes a polyline through them, and it is selected. The
+    // second point is given twice and is kept once.
+    const OString aOpen(aPlace(1000, 1000) + ";" + aPlace(5000, 1000) + ";" + aPlace(5000, 1000)
+                        + ";" + aPlace(5000, 3000));
+    pDocument->insertPolygonObject(aOpen.getStr(), false);
+    CPPUNIT_ASSERT_EQUAL(nObjects + 1, pPage->GetObjCount());
+    SdrPathObj* pLine = dynamic_cast<SdrPathObj*>(pPage->GetObj(nObjects));
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::PolyLine, pLine->GetObjIdentifier());
+    CPPUNIT_ASSERT(!pLine->IsClosed());
+    const basegfx::B2DPolygon aLine(pLine->GetPathPoly().getB2DPolygon(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aLine.count());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, aLine.getB2DPoint(0).getX(), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, aLine.getB2DPoint(0).getY(), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5000.0, aLine.getB2DPoint(2).getX(), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3000.0, aLine.getB2DPoint(2).getY(), 2.0);
+    const SdrMarkList& rMarked = SfxViewShell::Current()->GetDrawView()->GetMarkedObjectList();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rMarked.GetMarkCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pLine), rMarked.GetMark(0)->GetMarkedSdrObj());
+
+    // A closed path becomes a polygon.
+    const OString aClosed(aPlace(1000, 4000) + ";" + aPlace(5000, 4000) + ";"
+                          + aPlace(3000, 6000));
+    pDocument->insertPolygonObject(aClosed.getStr(), true);
+    CPPUNIT_ASSERT_EQUAL(nObjects + 2, pPage->GetObjCount());
+    SdrPathObj* pPolygon = dynamic_cast<SdrPathObj*>(pPage->GetObj(nObjects + 1));
+    CPPUNIT_ASSERT(pPolygon);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Polygon, pPolygon->GetObjIdentifier());
+    CPPUNIT_ASSERT(pPolygon->IsClosed());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), pPolygon->GetPathPoly().getB2DPolygon(0).count());
+
+    // One point draws no line, and two points draw no polygon.
+    pDocument->insertPolygonObject(aPlace(1000, 1000).getStr(), false);
+    const OString aTwo(aPlace(1000, 1000) + ";" + aPlace(5000, 1000));
+    pDocument->insertPolygonObject(aTwo.getStr(), true);
+    CPPUNIT_ASSERT_EQUAL(nObjects + 2, pPage->GetObjCount());
+
+    // A point too far away to be held adds nothing.
+    pDocument->insertPolygonObject("1e300,0;0,0", false);
+    CPPUNIT_ASSERT_EQUAL(nObjects + 2, pPage->GetObjCount());
+
+    // A read-only view adds nothing.
+    KitHelper::setViewReadOnly(pDocument->getView(), true);
+    pDocument->insertPolygonObject(aTwo.getStr(), false);
+    CPPUNIT_ASSERT_EQUAL(nObjects + 2, pPage->GetObjCount());
+    KitHelper::setViewReadOnly(pDocument->getView(), false);
+
+    // Adding an object is one step to undo, and undoing it takes the object away.
+    SfxUndoManager* pUndoManager = SfxViewShell::Current()->GetObjectShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+    const size_t nSteps = pUndoManager->GetUndoActionCount();
+    pDocument->insertPolygonObject(aTwo.getStr(), false);
+    CPPUNIT_ASSERT_EQUAL(nObjects + 3, pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(nSteps + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nObjects + 2, pPage->GetObjCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);

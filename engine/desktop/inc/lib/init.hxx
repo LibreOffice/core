@@ -464,6 +464,7 @@ namespace desktop {
         void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint) override;
         void setObjectPathClosed(unsigned long long nObjectId, bool bClosed) override;
         void simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine) override;
+        void insertPolygonObject(const char* pPoints, bool bClosed) override;
         void setObjectGluePoint(unsigned long long nObjectId, int nAt, double fX,
                                 double fY) override;
         void insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY) override;

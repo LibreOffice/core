@@ -1239,6 +1239,11 @@ class Dispatcher {
 			GraphicSelection.selectionSection?.startAddingATiePoint();
 		};
 
+		// Chooses the freeform line tool, so the next press draws a line, or puts it away again.
+		this.actionsMap[FreeformLineSection.command] = () => {
+			FreeformLineSection.choose();
+		};
+
 		// Shows the points of the path of the selected object for editing, or hides them again.
 		this.actionsMap[SelectionSection.pathPointsCommand] = () => {
 			GraphicSelection.selectionSection?.switchThePathPoints();

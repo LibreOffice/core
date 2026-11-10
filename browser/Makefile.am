@@ -441,6 +441,7 @@ COOL_JS_LST =\
 	src/app/HandleScaling.ts \
 	src/app/SelectionHandles.ts \
 	src/app/PolyPolygonEditor.ts \
+	src/app/FreeformStroke.ts \
 	src/app/HandleGroups.ts \
 	src/app/TableHandles.ts \
 	src/app/ConnectorRouter.ts \
@@ -650,6 +651,7 @@ COOL_JS_LST =\
 	src/canvas/sections/CellRangeHandleSection.ts \
 	src/canvas/sections/OverviewPreviewsSection.ts \
 	src/canvas/sections/PreviewEditSection.ts \
+	src/canvas/sections/FreeformLineSection.ts \
 	src/canvas/sections/TableResizeMarkerSection.ts \
 	src/canvas/sections/TableSelectMarkerSection.ts \
 	src/canvas/sections/FocusCellSection.ts \

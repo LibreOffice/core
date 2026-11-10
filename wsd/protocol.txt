@@ -894,6 +894,15 @@ simplifyobjectpath id=<id> points=<points>
     straight when its weights lie on the line between its ends. With 'true', the same step also
     deletes the points that lie on a straight line between their neighbours.
 
+insertpolygonobject closed=<closed> points=<points>
+
+    <closed> is 'true' or 'false'. <points> is a list of places on the page, in twips, each as
+    'x,y', separated by ';'. Adds a drawing object drawn along those places to the page the view
+    shows, as one undo step: an open polyline for 'false' and a closed polygon for 'true'. The
+    object goes on the layer the view draws new objects on, takes the attributes the view gives
+    them, and is selected. A place equal to the one before it is left out. An open path needs
+    two places at least and a closed one three, or nothing is added.
+
 reportmousepointer wanted=<wanted>
 
     <wanted> is 'true' or 'false'. Says whether this view wants to be told the mouse pointer the

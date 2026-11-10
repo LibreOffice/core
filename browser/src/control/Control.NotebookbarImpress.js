@@ -1738,7 +1738,21 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 										'accessibility': { focusBack: true, combination: 'CR', de: null }
 									}
 								]
-							}
+							},
+							// The freeform line is drawn on the canvas the client draws itself.
+							cool.VectorRenderingConfig.isEnabled() ? {
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'insert-freeform-line',
+										'type': 'customtoolitem',
+										'text': _UNO('.uno:Freeline_Unfilled', 'presentation'),
+										'command': 'freeformline',
+										'icon': 'lc_freeline_unfilled.svg',
+										'accessibility': { focusBack: true, combination: 'FF', de: null }
+									}
+								]
+							} : {}
 						],
 						'vertical': 'true'
 					}

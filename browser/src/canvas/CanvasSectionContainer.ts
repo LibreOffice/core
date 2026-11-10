@@ -548,6 +548,18 @@ class CanvasSectionContainer {
 		this.requestReDraw();
 	}
 
+	/*
+		Ends a press whose button is still down, whether or not it became a drag. A drag is called
+		off as cancelDragging does it. The release and the click of a press that did not become a
+		drag reach no section.
+	*/
+	public cancelPress (): void {
+		if (this.draggingSomething)
+			this.cancelDragging();
+		else
+			this.clearMousePositions();
+	}
+
 	// Capture/release can throw if the pointer is gone or was never captured;
 	// we ignore that and carry on.
 	public capturePointerForDrag(): void {
