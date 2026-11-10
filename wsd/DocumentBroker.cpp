@@ -1688,7 +1688,8 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
               Poco::Path(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
                                                         getJailRoot(), localPath))
                   .toString();
-    std::ifstream istr(localFilePath, std::ios::binary);
+    std::ifstream istr;
+    FileUtil::openFileToIFStream(localFilePath, istr, std::ios::in | std::ios::binary);
     Poco::SHA1Engine sha1;
     Poco::DigestOutputStream dos(sha1);
     Poco::StreamCopier::copyStream(istr, dos);
@@ -6892,7 +6893,8 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
             // the thread every session of this document shares.
             if (!filePath.empty() && FileUtil::extractFileExtension(decoded) == "svg")
             {
-                std::ifstream ifs(filePath);
+                std::ifstream ifs;
+                FileUtil::openFileToIFStream(filePath, ifs);
                 const std::string svg((std::istreambuf_iterator<char>(ifs)),
                                     (std::istreambuf_iterator<char>()));
                 ifs.close();
@@ -6900,7 +6902,8 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
                 const auto it = _sessions.find(clientId);
                 if (it != _sessions.end())
                 {
-                    std::ofstream ofs(filePath);
+                    std::ofstream ofs;
+                    FileUtil::openFileToOFStream(filePath, ofs);
                     ofs << it->second->processSVGContent(svg);
                 }
             }
