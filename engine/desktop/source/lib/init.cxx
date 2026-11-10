@@ -2151,24 +2151,11 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
              " [" << type << "]: [" << aCallbackData.getPayload() << "] to have " << m_queue1.size() << " entries.");
 
 #ifdef DBG_UTIL
-    {
-        // Dump the queue state and validate cached data.
-        int i = 1;
-        std::ostringstream oss;
-        if (m_queue1.empty())
-            oss << "Empty";
-        else
-            oss << m_queue1.size() << " items\n";
-        auto it1 = m_queue1.begin();
-        auto it2 = m_queue2.begin();
-        for (; it1 != m_queue1.end(); ++it1, ++it2)
-            oss << i++ << ": [" << *it1 << "] [" << it2->getPayload() << "].\n";
-        SAL_INFO("kit", "Current Queue: " << oss.str());
-        assert(
-            std::all_of(
-                m_queue2.begin(), m_queue2.end(),
-                [](const CallbackData& c) { return c.validate(); }));
-    }
+    // Validate the cached data of the whole queue.
+    assert(
+        std::all_of(
+            m_queue2.begin(), m_queue2.end(),
+            [](const CallbackData& c) { return c.validate(); }));
 #endif
 
     lock.unlock();
