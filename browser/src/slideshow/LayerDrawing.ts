@@ -114,6 +114,14 @@ class LayerDrawing {
 	private videos = new SlideVideos();
 	// The ids of the videos that were drawn with their layer in the current composition.
 	private videosDrawnWithLayer: Set<number> = new Set();
+	// The parts of the slide being split at its master page videos, or null when the slide is
+	// drawn whole.
+	private slideParts: SlidePart[] | null = null;
+	// Each grows when the layers it counts change: all of them dropped, the layers of a slide by
+	// slide hash, and the layers of a master page by master page hash.
+	private allLayersVersion = 0;
+	private slideLayersVersions = new Map<string, number>();
+	private masterLayersVersions = new Map<string, number>();
 	// The players of the master page videos, by master page hash. They keep playing while the
 	// slides that are shown share that master page. During a transition the master page of the
 	// slide being left keeps its players beside those of the slide coming in.
@@ -216,6 +224,43 @@ class LayerDrawing {
 		const slideHash = this.helper.getSlideHash(slideIndex);
 		this.composeLayers(slideHash);
 		return this.offscreenCanvas.transferToImageBitmap();
+	}
+
+	/// The slide split at the videos of its master page, in stacking order.
+	public getSlideParts(slideIndex: number): SlidePart[] {
+		const slideHash = this.helper.getSlideHash(slideIndex);
+		this.slideParts = [];
+		this.composeLayers(slideHash);
+		const slideParts = this.slideParts;
+		this.slideParts = null;
+		slideParts.push({ image: this.offscreenCanvas.transferToImageBitmap() });
+		return slideParts;
+	}
+
+	/// A number that grows whenever a layer the slide shows changes.
+	public getLayersVersion(slideHash: string): number {
+		return (
+			this.allLayersVersion +
+			(this.slideLayersVersions.get(slideHash) ?? 0) +
+			(this.masterLayersVersions.get(this.getSlideInfo(slideHash).masterPage) ??
+				0)
+		);
+	}
+
+	// A background counts for the master page, which every slide with that master shows.
+	private countLayerChange(info: LayerInfo) {
+		if (info.group === 'MasterPage' || info.group === 'Background') {
+			const masterHash = this.getSlideInfo(info.slideHash).masterPage;
+			this.masterLayersVersions.set(
+				masterHash,
+				(this.masterLayersVersions.get(masterHash) ?? 0) + 1,
+			);
+		} else {
+			this.slideLayersVersions.set(
+				info.slideHash,
+				(this.slideLayersVersions.get(info.slideHash) ?? 0) + 1,
+			);
+		}
 	}
 
 	public composeLayers(slideHash: string): void {
@@ -331,9 +376,27 @@ class LayerDrawing {
 		if (!videoRenderers) return;
 		for (const videoRenderer of videoRenderers) {
 			if (videoRenderer.infoId !== videoId) continue;
-			videoRenderer.render();
+			if (this.slideParts) this.splitAtVideo(videoRenderer);
+			else videoRenderer.render();
 			this.videosDrawnWithLayer.add(videoId);
 		}
+	}
+
+	// Taking the picture leaves the canvas transparent, so the layers above the video are drawn
+	// on a clear canvas.
+	private splitAtVideo(video: AnimatedContentRenderer) {
+		this.slideParts.push({
+			image: this.offscreenCanvas.transferToImageBitmap(),
+		});
+		this.slideParts.push({ video });
+	}
+
+	/// Whether sId names a player of a master page video.
+	public isMasterVideo(sId: string): boolean {
+		for (const videoRenderers of this.masterVideoRenderers.values())
+			if (videoRenderers.some((videoRenderer) => videoRenderer.getId() === sId))
+				return true;
+		return false;
 	}
 
 	public pauseVideos(slideHash: string) {
@@ -444,6 +507,7 @@ class LayerDrawing {
 	}
 
 	public invalidateAll(): void {
+		++this.allLayersVersion;
 		this.slideCache.invalidateAll();
 		this.slideTextFieldsMap.clear();
 		this.cachedTextFields.clear();
@@ -672,6 +736,7 @@ class LayerDrawing {
 	}
 
 	handleMsg(info: LayerInfo, img: any) {
+		this.countLayerChange(info);
 		switch (info.group) {
 			case 'Background':
 				this.handleBackgroundMsg(info, img);

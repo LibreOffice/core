@@ -190,6 +190,10 @@ abstract class AnimatedContentRenderer {
 		return this.info ? this.info.getPresentedFrames() : 0;
 	}
 
+	public getId(): string {
+		return this.sId;
+	}
+
 	public deleteResources(): void {
 		if (this.info) this.info.deleteResources(this._context);
 	}

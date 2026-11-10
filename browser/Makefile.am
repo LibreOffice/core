@@ -1021,6 +1021,7 @@ COOL_JS_LST =\
     src/slideshow/TransitionsInfo.ts \
     src/slideshow/ShapeTransitionMask.ts \
     src/slideshow/SlideQuads.ts \
+    src/slideshow/SlidePartsGl.ts \
     src/slideshow/VectorSlideLayers.ts \
     src/slideshow/Transition2d.ts \
     src/slideshow/Transition3d.ts \

@@ -17,6 +17,14 @@
 
 declare var SlideShow: any;
 
+// One part of a slide, in stacking order. The slide is split at each video on its master page:
+// image holds the layers between two such videos, over the whole slide, with the area outside
+// them transparent, and video is the video that plays between them.
+interface SlidePart {
+	image?: ImageBitmap;
+	video?: AnimatedContentRenderer;
+}
+
 abstract class SlideCompositor {
 	_slideShowPresenter: SlideShowPresenter = null;
 	protected _metaPresentation: MetaPresentation = null;

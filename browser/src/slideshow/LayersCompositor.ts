@@ -19,6 +19,12 @@ declare var SlideShow: any;
 
 class LayersCompositor extends SlideCompositor {
 	private layerDrawing: LayerDrawing; // setup in constructor
+	// For each WebGL context drawn into, its quads and the slides split at their master page
+	// videos, at most two, the slide being left and the slide coming in.
+	private slidePartsByContext = new Map<
+		RenderContextGl,
+		{ quads: SlideQuadsGl; slides: SlidePartsGl[] }
+	>();
 
 	constructor(slideShowPresenter: SlideShowPresenter) {
 		super(slideShowPresenter);
@@ -180,7 +186,90 @@ class LayersCompositor extends SlideCompositor {
 	}
 
 	public deleteResources() {
+		this.slidePartsByContext.forEach((entry) => {
+			for (const slide of entry.slides) slide.dispose();
+			entry.quads.dispose();
+		});
+		this.slidePartsByContext.clear();
 		this.layerDrawing.deleteResources();
+	}
+
+	/// A slide whose only moving parts are the videos of its master page is drawn from its still
+	/// parts and the current video frames. Anything else that moves changes the stills, so the
+	/// slide is then composed whole and the stills are taken anew afterwards.
+	public drawFrameInto(
+		context: RenderContextGl,
+		slideIndex: number,
+		texture?: WebGLTexture | null,
+	): boolean {
+		if (context.isDisposed() || !this.layerDrawing.hasMasterVideos(slideIndex))
+			return false;
+		const slideRenderer = this._slideShowPresenter._slideRenderer;
+		if (
+			!slideRenderer.isOnlyMoving((videoId) =>
+				this.layerDrawing.isMasterVideo(videoId),
+			)
+		) {
+			this.deleteSlideParts();
+			return false;
+		}
+
+		const width = context.canvas.width;
+		const height = context.canvas.height;
+		if (width <= 0 || height <= 0) return false;
+		const slideParts = this.getSlideParts(context, slideIndex);
+		if (!slideParts.quads.begin(width, height, texture)) return false;
+		slideParts.slide.draw(slideParts.quads);
+		slideParts.quads.end();
+		return true;
+	}
+
+	private getSlideParts(
+		context: RenderContextGl,
+		slideIndex: number,
+	): { quads: SlideQuadsGl; slide: SlidePartsGl } {
+		this.slidePartsByContext.forEach((entry, owner) => {
+			if (!owner.isDisposed()) return;
+			for (const slide of entry.slides) slide.dispose();
+			entry.quads.dispose();
+			this.slidePartsByContext.delete(owner);
+		});
+		let entry = this.slidePartsByContext.get(context);
+		if (!entry) {
+			entry = { quads: new SlideQuadsGl(context), slides: [] };
+			this.slidePartsByContext.set(context, entry);
+		}
+
+		// An animation that starts changes the stills, also one that ends at once, as when an
+		// effect is undone. Both counts only grow, so their sum changes with either.
+		const slideHash = this.getSlideHash(slideIndex);
+		const version =
+			this.layerDrawing.getLayersVersion(slideHash) +
+			this._slideShowPresenter._slideRenderer.animationStarts;
+		let slide = entry.slides.find((held) => held.slideHash === slideHash);
+		if (slide && slide.version !== version) {
+			slide.dispose();
+			entry.slides = entry.slides.filter((held) => held !== slide);
+			slide = null;
+		}
+		if (!slide) {
+			slide = new SlidePartsGl(
+				context,
+				slideHash,
+				version,
+				this.layerDrawing.getSlideParts(slideIndex),
+			);
+			entry.slides.push(slide);
+			if (entry.slides.length > 2) entry.slides.shift().dispose();
+		}
+		return { quads: entry.quads, slide };
+	}
+
+	private deleteSlideParts() {
+		this.slidePartsByContext.forEach((entry) => {
+			for (const slide of entry.slides) slide.dispose();
+			entry.slides = [];
+		});
 	}
 
 	public pauseVideos(slideHash: string) {

@@ -21,6 +21,8 @@ abstract class SlideRenderer {
 	protected _requestAnimationFrameId: number = null;
 	private readonly renderFrameHandler = this.renderFrame.bind(this);
 	private _activeLayers: Set<string> = new Set();
+	// Grows each time an animation starts, also one that ends at once.
+	private _animationStarts = 0;
 	private _playingVideos: Set<string> = new Set();
 	private _playingGifs: Set<string> = new Set();
 	// True while a slide transition draws into the canvas, until the next slide is rendered.
@@ -132,6 +134,7 @@ abstract class SlideRenderer {
 	}
 
 	public notifyAnimationStarted(sId: string) {
+		++this._animationStarts;
 		this._activeLayers.add(sId);
 		this.requestRender();
 	}
@@ -168,6 +171,18 @@ abstract class SlideRenderer {
 
 	public get isAnyGifPlaying(): boolean {
 		return this._playingGifs.size > 0;
+	}
+
+	public get animationStarts(): number {
+		return this._animationStarts;
+	}
+
+	/// Whether the only things that move on the slide are videos that isDrawn accepts.
+	public isOnlyMoving(isDrawn: (videoId: string) => boolean): boolean {
+		if (this.isAnyLayerActive() || this.isAnyGifPlaying) return false;
+		for (const videoId of this._playingVideos)
+			if (!isDrawn(videoId)) return false;
+		return true;
 	}
 
 	public isAnyAnimationPlaying(): boolean {

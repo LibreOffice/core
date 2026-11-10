@@ -229,6 +229,14 @@ class VideoRendererGl extends AnimatedContentRendererGl {
 		const video = new VideoRenderInfo();
 		video.setup(this.sId, this._slideRenderer, videoInfo);
 		video.replaceTexture(this._context, this.initTexture());
+		video.pos2d = this.getDocumentPositions(
+			videoInfo.x,
+			videoInfo.y,
+			videoInfo.width,
+			videoInfo.height,
+			docWidth,
+			docHeight,
+		);
 		video.replaceVao(
 			this._context,
 			this.setupRectangleInDocumentPositions(
@@ -255,6 +263,14 @@ class VideoRendererGl extends AnimatedContentRendererGl {
 		// instead of the slide's own still image showing through underneath.
 		if (video.videoElement.currentTime <= 0) return null;
 		return this.getOrientedFrame(video.videoElement);
+	}
+
+	public currentFrame(): ContentFrame | null {
+		const video = this.info as VideoRenderInfo;
+		if (!video) return null;
+		const source = this.getDrawable();
+		if (!source) return null;
+		return { source, edges: video.pos2d, mirror: video.mirror };
 	}
 
 	private getOrientedFrame(video: HTMLVideoElement): HTMLCanvasElement {
