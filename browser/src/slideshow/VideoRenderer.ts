@@ -164,7 +164,9 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 		}
 	}
 
-	// Dropping the source stops the download and frees the buffer.
+	// Dropping the source stops the download and frees the buffer. It also drops the pause
+	// event still waiting to be sent, so the slide renderer is told here that the video
+	// stopped.
 	public deleteResources(context: RenderContext) {
 		if (this.frameCallback !== null)
 			this.videoElement.cancelVideoFrameCallback(this.frameCallback);
@@ -172,6 +174,8 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 		this.pause();
 		this.videoElement.removeAttribute('src');
 		this.videoElement.load();
+		this.playing = false;
+		this.slideRenderer.notifyVideoEnded(this.sId);
 		this.restoreSound();
 		super.deleteResources(context);
 	}
