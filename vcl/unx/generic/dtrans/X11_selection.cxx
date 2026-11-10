@@ -3748,9 +3748,14 @@ void SelectionManager::run( void* pThis )
     timeval aLast;
     gettimeofday( &aLast, nullptr );
 
-    const css::uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-    This->m_xDesktop.set( Desktop::create(xContext) );
-    This->m_xDesktop->addTerminateListener(This);
+    {
+        SolarMutexGuard g;
+
+        const css::uno::Reference<XComponentContext>& xContext(
+            ::comphelper::getProcessComponentContext());
+        This->m_xDesktop.set(Desktop::create(xContext));
+        This->m_xDesktop->addTerminateListener(This);
+    }
 
     // if end thread pipe properly initialized, allow infinite wait in poll
     // otherwise, fallback on 1 sec timeout
