@@ -122,6 +122,11 @@ class VectorResourceTracker<K, V> {
 		this._inFlight.delete(id);
 	}
 
+	/// Forget the requests in flight, so a missing id is requested again.
+	forgetRequests(): void {
+		this._inFlight.clear();
+	}
+
 	/// Drop the loaded values, keeping which parts use which id. A dropped id is requested
 	/// again as any missing one.
 	dropValues(): void {

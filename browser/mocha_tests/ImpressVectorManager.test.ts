@@ -582,6 +582,38 @@ describe('ImpressVectorManager', function () {
 		nodeassert.strictEqual(afterReconnect.sent.length, 1);
 	});
 
+	// A slide that shows one image.
+	const slideWithImage = (): cool.VectorPrimitivesResponse => {
+		const bitmap = {
+			type: 'bitmap',
+			checksum: 7,
+			matrix: [10, 0, 0, 10, 0, 0],
+		};
+		return { partId: 'S0', objects: [{ id: 11, primitives: [bitmap] }] };
+	};
+
+	// How many requests for that image the steps send.
+	const imageRequests = (steps: () => void): number =>
+		SocketRecorder.during(steps).filter(
+			(message) => message.indexOf('VectorRenderingGraphics?checksum=7') >= 0,
+		).length;
+
+	// The request for an image sent before the connection dropped gets no answer either, so
+	// a draw after the reconnect asks for the image again.
+	it('asks again for an image once its request is forgotten', function () {
+		const manager = new ImpressVectorManager();
+		const asked = imageRequests(() =>
+			manager.handleVectorPrimitivesResponse(slideWithImage()),
+		);
+		nodeassert.strictEqual(asked, 1);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
+		const draw = () => manager.renderInto(new CanvasRecorder() as any, data);
+
+		nodeassert.strictEqual(imageRequests(draw), 0);
+		manager.forgetRequestsInFlight();
+		nodeassert.strictEqual(imageRequests(draw), 1);
+	});
+
 	// A page removed while the client was away is answered with the header
 	// alone, and its cache entry is dropped.
 	it('drops a cached part when the answer says the page is gone', function () {

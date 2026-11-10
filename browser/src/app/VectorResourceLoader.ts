@@ -78,6 +78,12 @@ class VectorResourceLoader {
 		this.fonts.forgetPart(owner);
 	}
 
+	/// Forget the requests in flight for images and fonts, so a missing one is asked for again.
+	forgetRequests(): void {
+		this.images.forgetRequests();
+		this.fonts.forgetRequests();
+	}
+
 	/// Forget what every owner uses, keeping the images and fonts loaded.
 	forgetOwners(): void {
 		this.images.forgetAllParts();
@@ -91,6 +97,15 @@ class VectorResourceLoader {
 		if (!image && this.images.partsFor(checksum))
 			this.images.requestMissing(new Set([checksum]));
 		return image;
+	}
+
+	/// Whether the font is loaded. A font that an owner uses and that is not held is asked for
+	/// again.
+	hasFont(fontId: string): boolean {
+		const loaded = this.fonts.has(fontId);
+		if (!loaded && this.fonts.partsFor(fontId))
+			this.fonts.requestMissing(new Set([fontId]));
+		return loaded;
 	}
 
 	/// Drop the decoded images, keeping which owners use them. The fonts stay registered, since

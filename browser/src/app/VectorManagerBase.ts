@@ -25,7 +25,7 @@ abstract class VectorManagerBase extends RenderManagerBase {
 	protected readonly _renderer: cool.VectorPrimitiveRenderer =
 		new cool.VectorPrimitiveRenderer(
 			(checksum) => this._imageFor(checksum),
-			(fontId) => this._resources.fonts.has(fontId),
+			(fontId) => this._resources.hasFont(fontId),
 			// a picture the client made of a form control is drawn once it has loaded
 			() => this._onPictureReady(),
 		);
@@ -95,9 +95,7 @@ abstract class VectorManagerBase extends RenderManagerBase {
 	/// The width of a string as the renderer draws the run, so predicted widths match the
 	/// screen.
 	protected _textMeasure(): cool.TextRunMeasure {
-		return cool.canvasTextMeasure((fontId) =>
-			this._resources.fonts.has(fontId),
-		);
+		return cool.canvasTextMeasure((fontId) => this._resources.hasFont(fontId));
 	}
 
 	/// The image the renderer draws for the checksum, or undefined while it is not decoded.

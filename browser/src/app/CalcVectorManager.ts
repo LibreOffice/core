@@ -1272,6 +1272,7 @@ class CalcVectorManager extends VectorManagerBase {
 	forgetRequestsInFlight(): void {
 		this._inFlight.clear();
 		this._requests.clear();
+		this._resources.forgetRequests();
 		this._disarmExpiry();
 		this._queue = null;
 		this._sheetRequested.clear();

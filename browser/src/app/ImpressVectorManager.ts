@@ -71,7 +71,7 @@ class ImpressVectorManager extends VectorManagerBase {
 
 	/// A decoded bitmap, or the one drawn in its place until it is decoded.
 	protected _imageFor(checksum: number): HTMLImageElement | undefined {
-		return this._bitmaps.get(checksum) ?? this._standInFor(checksum);
+		return super._imageFor(checksum) ?? this._standInFor(checksum);
 	}
 
 	/// The parts that use a loaded image or font draw again.
@@ -1910,11 +1910,13 @@ class ImpressVectorManager extends VectorManagerBase {
 	}
 
 	/// Forget the requests in flight. A request sent before the connection dropped gets no
-	/// answer, so the next draw or revalidation asks for the page again.
+	/// answer, so the next draw or revalidation asks for the page, and for the images and
+	/// fonts it names, again.
 	forgetRequestsInFlight(): void {
 		this._inFlightParts.clear();
 		this._revalidating.clear();
 		this._revalidationsWaiting = [];
+		this._resources.forgetRequests();
 	}
 
 	/// Drop cached data for a page and any in-flight state, and the bitmaps
