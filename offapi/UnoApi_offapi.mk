@@ -2956,7 +2956,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	RGBColor \
 	RenderState \
 	RenderingIntent \
-	RepaintResult \
 	StringContext \
 	StrokeAttributes \
 	TextDirection \
