@@ -480,7 +480,7 @@ private:
                 uno::Reference<beans::XPropertySet> xStyle;
                 try
                 {
-                    xStyles->getByName(rName) >>= xStyle;
+                    xStyle.set(xStyles->getStyleByName(rName), uno::UNO_QUERY);
                 }
                 catch (...)
                 {

@@ -487,7 +487,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166141_linkedStyles, "tdf166141_linkedStyles.doc
     // but there was 200 twips of below spacing.
 
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     // Since the "template" to update the styles from doesn't exist, make no changes
     // This was being forced to 200 twips by linkedStyles...
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
@@ -500,7 +500,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166141_linkedStyles2, "tdf166141_linkedStyles2.d
     // Since no "template" was provided to update the styles from,
     // the styles must be updated using the application defaults.
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     // This must be 200 twips / 0.35cm.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
 }

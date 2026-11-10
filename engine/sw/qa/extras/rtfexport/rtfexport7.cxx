@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingFont)
 {
     auto verify = [this]() {
         uno::Reference<beans::XPropertySet> xStyle(
-            getStyles(u"CharacterStyles"_ustr)->getByName(u"ListLabel 1"_ustr), uno::UNO_QUERY);
+            getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"ListLabel 1"_ustr), uno::UNO_QUERY);
         // This was Liberation Serif, i.e. custom font of the numbering itself ("1.\t") was lost on import.
         CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr, getProperty<OUString>(xStyle, u"CharFontName"_ustr));
         CPPUNIT_ASSERT_EQUAL(72.f, getProperty<float>(xStyle, u"CharHeight"_ustr));
@@ -209,7 +209,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNumOverrideStart)
         // The numbering on the second level was "3.1", not "1.3".
         uno::Reference<container::XIndexAccess> xRules
             = getProperty<uno::Reference<container::XIndexAccess>>(
-                getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr),
+                getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr),
                 u"NumberingRules"_ustr);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(1),
                              comphelper::SequenceAsHashMap(xRules->getByIndex(0))[u"StartWith"_ustr]
@@ -274,7 +274,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMargmirror)
     auto verify = [this]() {
         // \margmirror was not handled, this was PageStyleLayout_ALL.
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(
             style::PageStyleLayout_MIRRORED,
             getProperty<style::PageStyleLayout>(xPageStyle, u"PageStyleLayout"_ustr));
@@ -290,10 +290,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSautoupd)
     auto verify = [this]() {
         // \sautoupd was ignored during import and export.
         uno::Reference<beans::XPropertySet> xHeading1(
-            getStyles(u"ParagraphStyles"_ustr)->getByName(u"Heading 1"_ustr), uno::UNO_QUERY);
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xHeading1, u"IsAutoUpdate"_ustr));
         uno::Reference<beans::XPropertySet> xHeading2(
-            getStyles(u"ParagraphStyles"_ustr)->getByName(u"Heading 2"_ustr), uno::UNO_QUERY);
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 2"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xHeading2, u"IsAutoUpdate"_ustr));
     };
     createSwDoc("sautoupd.rtf");
@@ -473,7 +473,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBackground)
     auto verify = [this]() {
         // The problem was that \background was ignored.
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getProperty<Color>(xPageStyle, u"BackColor"_ustr));
     };
     createSwDoc("page-background.rtf");
@@ -562,7 +562,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomDocProps)
 CPPUNIT_TEST_FIXTURE(Test, testTdf65642)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
+        uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
             xModel->getCurrentController(), uno::UNO_QUERY);
@@ -573,7 +573,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf65642)
         // The second page's numbering type: this was style::NumberingType::ARABIC.
         CPPUNIT_ASSERT_EQUAL(
             style::NumberingType::CHARS_UPPER_LETTER_N,
-            getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), u"NumberingType"_ustr));
+            getProperty<sal_Int16>(xPageStyles->getStyleByName(pageStyleName), u"NumberingType"_ustr));
         // The second page's restart value: this was 0.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
                              getProperty<sal_Int32>(getParagraph(2), u"PageNumberOffset"_ustr));
@@ -587,7 +587,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf65642)
 CPPUNIT_TEST_FIXTURE(Test, testPgnlcltr)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
+        uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
             xModel->getCurrentController(), uno::UNO_QUERY);
@@ -598,7 +598,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnlcltr)
         // The second page's numbering type: this was style::NumberingType::ARABIC.
         CPPUNIT_ASSERT_EQUAL(
             style::NumberingType::CHARS_LOWER_LETTER_N,
-            getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), u"NumberingType"_ustr));
+            getProperty<sal_Int16>(xPageStyles->getStyleByName(pageStyleName), u"NumberingType"_ustr));
     };
     createSwDoc("pgnlcltr.rtf");
     verify();
@@ -609,7 +609,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnlcltr)
 CPPUNIT_TEST_FIXTURE(Test, testPgnucrm)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
+        uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
             xModel->getCurrentController(), uno::UNO_QUERY);
@@ -620,7 +620,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnucrm)
         // The second page's numbering type: this was style::NumberingType::ARABIC.
         CPPUNIT_ASSERT_EQUAL(
             style::NumberingType::ROMAN_UPPER,
-            getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), u"NumberingType"_ustr));
+            getProperty<sal_Int16>(xPageStyles->getStyleByName(pageStyleName), u"NumberingType"_ustr));
     };
     createSwDoc("pgnucrm.rtf");
     verify();
@@ -631,7 +631,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnucrm)
 CPPUNIT_TEST_FIXTURE(Test, testPgnlcrm)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
+        uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
             xModel->getCurrentController(), uno::UNO_QUERY);
@@ -642,7 +642,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnlcrm)
         // The second page's numbering type: this was style::NumberingType::ARABIC.
         CPPUNIT_ASSERT_EQUAL(
             style::NumberingType::ROMAN_LOWER,
-            getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), u"NumberingType"_ustr));
+            getProperty<sal_Int16>(xPageStyles->getStyleByName(pageStyleName), u"NumberingType"_ustr));
     };
     createSwDoc("pgnlcrm.rtf");
     verify();
@@ -653,7 +653,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnlcrm)
 CPPUNIT_TEST_FIXTURE(Test, testPgndec)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
+        uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
             xModel->getCurrentController(), uno::UNO_QUERY);
@@ -664,7 +664,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgndec)
         // The second page's numbering type: this was style::NumberingType::ROMAN_LOWER.
         CPPUNIT_ASSERT_EQUAL(
             style::NumberingType::ARABIC,
-            getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), u"NumberingType"_ustr));
+            getProperty<sal_Int16>(xPageStyles->getStyleByName(pageStyleName), u"NumberingType"_ustr));
 
         // tdf#82111 ensure a paragraph exists before a section break.
         // This was only two paragraphs, and both page number fields were in one para on page 2 ("11").
@@ -1205,7 +1205,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112211)
     auto verify = [this]() {
         // This was 0, \fi in a list level definition was not imported.
         auto xRules = getProperty<uno::Reference<container::XIndexAccess>>(
-            getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), u"NumberingRules"_ustr);
+            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), u"NumberingRules"_ustr);
         comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-635),
                              aRule[u"FirstLineIndent"_ustr].get<sal_Int32>());

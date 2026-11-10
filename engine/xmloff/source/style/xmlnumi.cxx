@@ -954,8 +954,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
         bool bNew = false;
         if( rNumStyles->hasByName( rName ) )
         {
-            Any aAny = rNumStyles->getByName( rName );
-            aAny >>= xStyle;
+            xStyle = rNumStyles->getStyleByName( rName );
         }
         else
         {

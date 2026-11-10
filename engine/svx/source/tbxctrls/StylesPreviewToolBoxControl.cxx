@@ -72,8 +72,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
             {
                 try
                 {
-                    cpo::uno::Reference<css::beans::XPropertySet> xStyle;
-                    xParaStyles->getByName(rStyle) >>= xStyle;
+                    cpo::uno::Reference<css::beans::XPropertySet> xStyle(xParaStyles->getStyleByName(rStyle), cpo::uno::UNO_QUERY);
                     OUString sTranslatedName;
                     xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sTranslatedName;
                     if (!sTranslatedName.isEmpty())
@@ -103,7 +102,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                     if (xCellStyles->hasByName(sStyleName))
                     {
                         cpo::uno::Reference<css::beans::XPropertySet> xStyle(
-                            xCellStyles->getByName(sStyleName), cpo::uno::UNO_QUERY);
+                            xCellStyles->getStyleByName(sStyleName), cpo::uno::UNO_QUERY);
                         if (xStyle)
                         {
                             OUString sTranslatedName;

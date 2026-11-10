@@ -1140,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146248)
     createSwDoc("tdf146248.docx");
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1165,7 +1165,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf161741)
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     // sanity checks: verify baseline status
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
@@ -1285,7 +1285,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141613)
         u".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=true"_ustr, {});
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Test"_ustr, getParagraph(1)->getString());
 
@@ -1311,7 +1311,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107494)
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
 
@@ -1358,7 +1358,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateSkipsFooter)
     pWrtSh->Insert(u"Body text"_ustr);
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xFooter(
         getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterText"_ustr));
@@ -1563,7 +1563,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateEndToEnd)
     pWrtSh->Insert(u"Body text"_ustr);
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xFooter(
         getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterText"_ustr));
@@ -1603,7 +1603,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateHeaderFooterFrame)
     SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
     pWrtSh->Insert(u"Body text"_ustr);
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
     xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xHeader(
@@ -4439,7 +4439,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf156560)
     createSwDoc("tdf156560.docx");
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 
     SwXTextDocument* pTextDoc = getSwTextDoc();

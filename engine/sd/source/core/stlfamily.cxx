@@ -217,9 +217,14 @@ void SdStyleFamily::setName( const OUString& )
 
 Any SdStyleFamily::getByName( const OUString& rName )
 {
+   return Any(getStyleByName(rName));
+}
+
+Reference< XStyle > SdStyleFamily::getStyleByName( const OUString& rName )
+{
     SolarMutexGuard aGuard;
     throwIfDisposed();
-    return Any( Reference< XStyle >( static_cast<SfxUnoStyleSheet*>(GetSheetByName( rName )) ) );
+    return GetSheetByName( rName );
 }
 
 Sequence< OUString > SdStyleFamily::getElementNames()
@@ -347,6 +352,11 @@ sal_Int32 SdStyleFamily::getCount()
 
 Any SdStyleFamily::getByIndex( sal_Int32 Index )
 {
+    return Any(getStyleByIndex(Index));
+}
+
+cpo::uno::Reference<XStyle> SdStyleFamily::getStyleByIndex( sal_Int32 Index )
+{
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
@@ -359,7 +369,7 @@ Any SdStyleFamily::getByIndex( sal_Int32 Index )
             {
                 PresStyleMap::iterator iter( rStyleSheets.begin() );
                 std::advance(iter, Index);
-                return Any( Reference< XStyle >( (*iter).second ) );
+                return (*iter).second;
             }
         }
         else
@@ -372,7 +382,7 @@ Any SdStyleFamily::getByIndex( sal_Int32 Index )
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
                 if( Index-- == 0 )
                 {
-                    return Any( Reference< XStyle >( pSdStyle ) );
+                    return pSdStyle;
                 }
             }
         }

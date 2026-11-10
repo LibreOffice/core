@@ -853,10 +853,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingInde
     CPPUNIT_ASSERT_MESSAGE("Paragraph has numbering style", !sName.isEmpty());
 
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Revision"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Revision"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                          getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
-    xPropertySet.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Body Note"_ustr),
+    xPropertySet.set(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Body Note"_ustr),
                      uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                          getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
@@ -1042,7 +1042,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
     createSwDoc("tdf94628.docx");
     saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -1198,7 +1198,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118521_marginsLR, "tdf118521_marginsLR.docx")
     // lost the other unset margins coming from paragraph style, getting a bad margin from the default style instead
 
     uno::Reference<beans::XPropertySet> xMyStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"MyStyle"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"MyStyle"_ustr), uno::UNO_QUERY);
     // from paragraph style - this is what direct formatting should equal
     sal_Int32 nMargin = getProperty<sal_Int32>(xMyStyle, u"ParaLeftMargin"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nMargin);

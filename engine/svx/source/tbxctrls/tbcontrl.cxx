@@ -3088,8 +3088,7 @@ struct SvxStyleToolBoxControl::Impl
                 {
                     try
                     {
-                        Reference< beans::XPropertySet > xStyle;
-                        xParaStyles->getByName( aStyle ) >>= xStyle;
+                        Reference< beans::XPropertySet > xStyle(xParaStyles->getStyleByName( aStyle ), UNO_QUERY);
                         OUString sName;
                         xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
                         if( !sName.isEmpty() )
@@ -3123,7 +3122,7 @@ struct SvxStyleToolBoxControl::Impl
                     {
                         if( xCellStyles->hasByName( sStyleName ) )
                         {
-                            Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
+                            Reference< beans::XPropertySet > xStyle( xCellStyles->getStyleByName( sStyleName), UNO_QUERY_THROW );
                             OUString sName;
                             xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
                             if( !sName.isEmpty() )

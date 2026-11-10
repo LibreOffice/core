@@ -358,8 +358,8 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                     {
                         if ( xFamilies->hasByName( aStyle ) )
                         {
-                            Reference< style::XStyle > aXStyle;
-                            if ( xFamilies->getByName( aStyle ) >>= aXStyle )
+                            Reference< style::XStyle > aXStyle
+                                = xFamilies->getStyleByName( aStyle );
                             {
                                 Reference< beans::XPropertySet > xPropSet( aXStyle, UNO_QUERY_THROW );
                                 setTextStyle( xPropSet, rFilterBase, maDefaultTextStylePtr, 0 );
@@ -374,7 +374,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                                             OUString sOutlineStyle( OUString::createFromAscii( pOutline ) );
                                             if ( xFamilies->hasByName( sOutlineStyle ) )
                                             {
-                                                xFamilies->getByName( sOutlineStyle ) >>= aXStyle;
+                                                aXStyle = xFamilies->getStyleByName( sOutlineStyle );
                                                 if( aXStyle.is() )
                                                     xPropSet.set( aXStyle, UNO_QUERY_THROW );
                                             }

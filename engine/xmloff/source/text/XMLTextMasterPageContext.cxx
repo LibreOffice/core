@@ -141,8 +141,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     bool bNew = false;
     if( xPageStyles->hasByName( sDisplayName ) )
     {
-        aAny = xPageStyles->getByName( sDisplayName );
-        aAny >>= m_xStyle;
+        m_xStyle = xPageStyles->getStyleByName( sDisplayName );
     }
     else
     {

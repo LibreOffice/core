@@ -69,7 +69,7 @@ rtl::Reference< SwXBaseStyle > getCurrentPageStyle( const rtl::Reference< SwXTex
     xProps->getPropertyValue(u"PageStyleName"_ustr) >>= aPageStyleName;
     rtl::Reference< SwXStyleFamilies > xStyleFamNames( xModel->getSwStyleFamilies() );
     rtl::Reference< SwXStyleFamily > xPageStyles( xStyleFamNames->GetPageStyles() );
-    return xPageStyles->getStyleByName( aPageStyleName );
+    return xPageStyles->getSwStyleByName( aPageStyleName );
 }
 
 sal_Int32 getPageCount( const rtl::Reference<SwXTextDocument>& xModel )
@@ -83,7 +83,7 @@ rtl::Reference< SwXBaseStyle > getDefaultParagraphStyle( const rtl::Reference< S
 {
     rtl::Reference< SwXStyleFamilies > xStyleFamNames( xModel->getSwStyleFamilies() );
     rtl::Reference< SwXStyleFamily > xParaStyles( xStyleFamNames->GetParagraphStyles() );
-    rtl::Reference< SwXBaseStyle > xStyle( xParaStyles->getStyleByName(u"Standard"_ustr) );
+    rtl::Reference< SwXBaseStyle > xStyle( xParaStyles->getSwStyleByName(u"Standard"_ustr) );
 
     return xStyle;
 }

@@ -293,7 +293,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPTab)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
                                                uno::UNO_QUERY);
     auto xFooter
         = xStyle->getPropertyValue(u"FooterText"_ustr).get<uno::Reference<text::XTextRange>>();
@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleLostNumbering)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Signature"_ustr),
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Signature"_ustr),
                                                uno::UNO_QUERY);
     OUString aNumberingStyleName;
     // Without the accompanying fix in place, this test would have failed, the WWNum14 list was set

@@ -599,9 +599,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf111550)
 CPPUNIT_TEST_FIXTURE(Test, testTdf117843)
 {
     createSwDoc("tdf117843.docx");
-    uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(u"Standard"_ustr),
-                                             uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getStyleByName(u"Standard"_ustr));
     uno::Reference<text::XText> xHeaderText
         = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr);
     // This was 4025, increased top paragraph margin was unexpected.
@@ -654,7 +653,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextCopy)
     }
     auto aPageStyleName = getProperty<OUString>(xPara, u"PageStyleName"_ustr);
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(aPageStyleName), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(aPageStyleName), uno::UNO_QUERY);
     auto xHeaderText = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr);
     uno::Reference<text::XTextRange> xHeaderPara = getParagraphOfText(1, xHeaderText);
     auto aTextPortionType = getProperty<OUString>(getRun(xHeaderPara, 1), u"TextPortionType"_ustr);
@@ -719,7 +718,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104167)
 {
     createSwDoc("tdf104167.docx");
     // Make sure that heading 1 paragraphs start on a new page.
-    cpo::uno::Any xStyle = getStyles(u"ParagraphStyles"_ustr)->getByName(u"Heading 1"_ustr);
+    Reference<style::XStyle> xStyle = getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4
     // - Actual  : 0
@@ -914,7 +913,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103345)
 {
     createSwDoc("numbering-circle.docx");
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;

@@ -295,7 +295,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137742, "tdf137742.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicHebrewNumbering.docx")
 {
     // The page's numbering type: instead of Hebrew, this was default style::NumberingType::ARABIC (4).
-    auto nActual = getProperty<sal_Int16>(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"NumberingType"_ustr);
+    auto nActual = getProperty<sal_Int16>(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"NumberingType"_ustr);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HEBREW, nActual);
 
     // The footnote numbering type: instead of arabicAbjad, this was the default style::NumberingType::ARABIC.
@@ -424,8 +424,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132752, "tdf132752.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle;
-    getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr) >>= xPageStyle;
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), UNO_QUERY);
     sal_Int32 nGutterMargin{};
     xPageStyle->getPropertyValue(u"GutterMargin"_ustr) >>= nGutterMargin;
     // Without the accompanying fix in place, this test would have failed with:
@@ -544,7 +544,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
     OUString aCharStyleName = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "CharStyleName"; })->Value.get<OUString>();
 
     // Make sure that the blue bullet's font size is 72 points, not 12 points.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getByName(aCharStyleName), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(aCharStyleName), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(72.f, getProperty<float>(xStyle, u"CharHeight"_ustr));
 }
 
@@ -583,7 +583,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Before the fix, the background from a style was exported to dis-inheriting paragraphs/styles.
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), getProperty<sal_uInt32>(getParagraph(1), u"ParaBackColor"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"CanclledBackground"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"CanclledBackground"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
 
     // sanity check: backgroundColor paragraph style has a golden color(FF7F50), which para2 inherits
@@ -761,7 +761,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 {
     // Given a document with RTL gutter:
     createSwDoc("rtl-gutter.docx");
-    uno::Reference<beans::XPropertySet> xStandard(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
+    uno::Reference<beans::XPropertySet> xStandard(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr),
             uno::UNO_QUERY);
     CPPUNIT_ASSERT(getProperty<bool>(xStandard, u"RtlGutter"_ustr));
 

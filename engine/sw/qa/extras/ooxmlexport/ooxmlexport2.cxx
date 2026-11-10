@@ -53,7 +53,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageGraphicBackground)
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
     // color shouldn't be black.
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPageStyle, u"BackColor"_ustr));
 }
 
@@ -206,9 +206,9 @@ CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
-    uno::Reference< container::XNameAccess > paragraphStyles = getStyles( u"ParagraphStyles"_ustr );
+    uno::Reference< style::XStyleFamily > paragraphStyles = getStyles( u"ParagraphStyles"_ustr );
     cpo::uno::Sequence< style::TabStop > stops = getProperty< cpo::uno::Sequence< style::TabStop > >(
-        paragraphStyles->getByName( u"Standard"_ustr ), u"ParaTabStops"_ustr );
+        paragraphStyles->getStyleByName( u"Standard"_ustr ), u"ParaTabStops"_ustr );
 // There actually be one tab stop, but it will be the default.
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(1), stops.getLength());
     CPPUNIT_ASSERT_EQUAL( style::TabAlign_DEFAULT, stops[ 0 ].Alignment );
@@ -942,7 +942,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48557)
 DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
 {
     // w:numPicBullet was ignored, leading to missing graphic bullet in numbering.
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
@@ -976,7 +976,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo64826)
 DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
 {
     // 'Document Background' wasn't exported.
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getProperty<Color>(xPageStyle, u"BackColor"_ustr));
 }
 
@@ -1230,7 +1230,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
 {
     // The problem was that bullets with level=0 were shown in LO as normal bullets,
     // and when saved back to DOCX were saved with level=1 (so hidden bullets became visible)
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
@@ -1284,7 +1284,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65718, "fdo65718.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo64350, "fdo64350.docx")
 {
     // The problem was that page border shadows were not exported
-    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"ShadowFormat"_ustr);
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"ShadowFormat"_ustr);
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
 }
 
@@ -1304,7 +1304,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67013, "fdo67013.docx")
      * xFooterFirstParagraph = xFooterEnum.nextElement()
      * xFooterTopBorder = xFooterFirstParagraph.TopBorder
      */
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderText"_ustr);
     uno::Reference< text::XTextRange > xHeaderParagraph = getParagraphOfText( 1, xHeaderText );
     table::BorderLine2 aHeaderBottomBorder = getProperty<table::BorderLine2>(xHeaderParagraph, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL(Color(0x622423), Color(ColorTransparency, aHeaderBottomBorder.Color));
@@ -1314,7 +1314,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67013, "fdo67013.docx")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(159), aHeaderBottomBorder.LineWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(26), aHeaderBottomBorder.OuterLineWidth);
 
-    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterText"_ustr);
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"FooterText"_ustr);
     uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
     table::BorderLine2 aFooterTopBorder = getProperty<table::BorderLine2>(xFooterParagraph, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL(Color(0x622423), Color(ColorTransparency, aFooterTopBorder.Color));

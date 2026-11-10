@@ -126,6 +126,10 @@ public:
     virtual void   replaceByName( const OUString& aName,
                                 const cpo::uno::Any& aElement ) override;
 
+                            // XStyleFamily
+    virtual cpo::uno::Reference<css::style::XStyle> getStyleByName( const OUString& aName ) override;
+    virtual cpo::uno::Reference<css::style::XStyle> getStyleByIndex( sal_Int32 Index ) override;
+
                             // XNameAccess
     virtual cpo::uno::Any getByName( const OUString& aName ) override;
     virtual cpo::uno::Sequence< OUString > getElementNames() override;

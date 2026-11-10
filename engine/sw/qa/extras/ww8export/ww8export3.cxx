@@ -63,7 +63,7 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of Sections", sal_Int32(0), xSections->getCount());
 
     // tdf#127862: page fill color (in this case white) was lost
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
 
     // tdf#136983
@@ -181,8 +181,8 @@ DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderT
 
 DECLARE_WW8EXPORT_TEST(testGutterLeft, "gutter-left.doc")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle;
-    getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr) >>= xPageStyle;
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), UNO_QUERY);
     sal_Int32 nGutterMargin{};
     xPageStyle->getPropertyValue(u"GutterMargin"_ustr) >>= nGutterMargin;
     // Without the accompanying fix in place, this test would have failed with:
@@ -338,8 +338,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138302_restartNumbering)
 
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
 {
-    uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> pageStyles = getStyles(u"PageStyles"_ustr);
+    uno::Reference<style::XStyle> pageStyle(pageStyles->getStyleByName(u"Standard"_ustr));
     bool headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(headerIsOn);
 }
@@ -349,8 +349,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122460_header)
     createSwDoc("tdf122460_header.odt");
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> pageStyles = getStyles(u"PageStyles"_ustr);
+    uno::Reference<style::XStyle> pageStyle(pageStyles->getStyleByName(u"Standard"_ustr));
     bool headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(headerIsOn);
 }
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121111_fillStyleNone)
 {
     createSwDoc("tdf121111_fillStyleNone.docx");
     saveAndReload(TestFilter::DOC);
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Numbering - First level"_ustr),
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Numbering - First level"_ustr),
                                                      uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(Color(0xb8cce4), getProperty<Color>(xStyle, u"ParaBackColor"_ustr));//R:184 G:204 B:228
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
@@ -651,7 +651,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127862_pageFillStyle)
     createSwDoc("tdf127862_pageFillStyle.odt");
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(6, getPages());
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
 }
 
@@ -691,7 +691,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94009_zeroPgMargin)
     createSwDoc("tdf94009_zeroPgMargin.odt");
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> defaultStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
+    uno::Reference<beans::XPropertySet> defaultStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr),
                                                      uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(defaultStyle, u"TopMargin"_ustr));
 }
@@ -716,22 +716,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
     createSwDoc("tdf129522_removeShadowStyle.odt");
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference< container::XNameAccess > paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
-    uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName(u"Shadow"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference< style::XStyleFamily > paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
+    uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getStyleByName(u"Shadow"_ustr), uno::UNO_QUERY_THROW);
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xStyleProps, u"ParaShadowFormat"_ustr);
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
 
     // Shadows were inherited regardless of whether the style disabled them.
-    xStyleProps.set(paragraphStyles->getByName(u"Shadow-removed"_ustr), uno::UNO_QUERY_THROW);
+    xStyleProps.set(paragraphStyles->getStyleByName(u"Shadow-removed"_ustr), uno::UNO_QUERY_THROW);
     aShadow = getProperty<table::ShadowFormat>(xStyleProps, u"ParaShadowFormat"_ustr);
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 
-    uno::Reference< container::XNameAccess > characterStyles = getStyles(u"CharacterStyles"_ustr);
-    xStyleProps.set(characterStyles->getByName(u"CharShadow"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference< style::XStyleFamily > characterStyles = getStyles(u"CharacterStyles"_ustr);
+    xStyleProps.set(characterStyles->getStyleByName(u"CharShadow"_ustr), uno::UNO_QUERY_THROW);
     aShadow = getProperty<table::ShadowFormat>(xStyleProps, u"CharShadowFormat"_ustr);
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
 
-    xStyleProps.set(characterStyles->getByName(u"CharShadow-removed"_ustr), uno::UNO_QUERY_THROW);
+    xStyleProps.set(characterStyles->getStyleByName(u"CharShadow-removed"_ustr), uno::UNO_QUERY_THROW);
     aShadow = getProperty<table::ShadowFormat>(xStyleProps, u"CharShadowFormat"_ustr);
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
@@ -882,7 +882,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 {
     auto verify = [this]() {
         uno::Reference<beans::XPropertySet> xStandard(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT(getProperty<bool>(xStandard, u"RtlGutter"_ustr));
     };
 
@@ -1077,7 +1077,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136814)
     createSwDoc("tdf136814.odt");
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     sal_Int32 nBorderDistance = static_cast<sal_Int32>(106);
 
     CPPUNIT_ASSERT_EQUAL(nBorderDistance, getProperty<sal_Int32>(xStyle, u"TopBorderDistance"_ustr));

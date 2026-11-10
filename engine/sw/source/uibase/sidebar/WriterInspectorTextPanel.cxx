@@ -619,7 +619,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
     if (!sCurrentCharStyle.isEmpty())
     {
         rtl::Reference<SwXBaseStyle> xPropertiesSet
-            = xStyleFamily->getStyleByName(sCurrentCharStyle);
+            = xStyleFamily->getSwStyleByName(sCurrentCharStyle);
         xPropertiesSet->getPropertyValue(u"DisplayName"_ustr) >>= sDisplayName;
         svx::sidebar::TreeNode aCurrentChild;
         aCurrentChild.sNodeName = sDisplayName;

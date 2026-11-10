@@ -3446,7 +3446,7 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
                                         sal_Int16 nOutlineLevel) {
         if (!xStyles->hasByName(rStyleName))
             return;
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(rStyleName), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(rStyleName), uno::UNO_QUERY);
         if (!xStyle.is())
             return;
 

@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testHeaderImageODS)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xPageStyles(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName(u"Default"_ustr),
+    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getStyleByName(u"Default"_ustr),
                                                uno::UNO_QUERY);
 
     uno::Reference<graphic::XGraphic> xGraphic;
@@ -354,7 +354,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testHeaderFooterContentODS)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xPageStyles(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName(u"Default"_ustr),
+    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getStyleByName(u"Default"_ustr),
                                                uno::UNO_QUERY);
 
     uno::Reference<css::sheet::XHeaderFooterContent> xContent;

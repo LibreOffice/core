@@ -324,7 +324,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     uno::Reference<beans::XPropertySet> xStandard(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage = pLayout->GetLower();
     tools::Long nOldLeft = pPage->getFramePrintArea().Left();
@@ -354,7 +354,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     xSettings->setPropertyValue(u"GutterAtTop"_ustr, cpo::uno::Any(true));
     uno::Reference<beans::XPropertySet> xStandard(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage = pLayout->GetLower();
     tools::Long nOldTop = pPage->getFramePrintArea().Top();
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
     tools::Long nOldRight = pPage2->getFramePrintArea().Right();
 
     uno::Reference<beans::XPropertySet> xStandard(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     xStandard->setPropertyValue(u"PageStyleLayout"_ustr,
                                 cpo::uno::Any(style::PageStyleLayout_MIRRORED));
     sal_Int32 nGutterMm100 = 2000;
@@ -410,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testRtlGutterMargin)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     uno::Reference<beans::XPropertySet> xStandard(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage = pLayout->GetLower();
     tools::Long nOldRight = pPage->getFramePrintArea().Right();
@@ -439,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
     // Given a document with a non-0 gutter margin.
     createSwDoc();
     uno::Reference<beans::XPropertySet> xStandard(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     sal_Int32 nGutterMm100 = 2000;
     xStandard->setPropertyValue(u"GutterMargin"_ustr, cpo::uno::Any(nGutterMm100));
 
@@ -863,7 +863,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorder)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"test"_ustr);
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     xPageStyle->setPropertyValue(u"TopMargin"_ustr,
                                  cpo::uno::Any(static_cast<sal_Int32>(501))); // 284 twips
     table::BorderLine2 aBorder;
@@ -905,7 +905,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"test"_ustr);
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     xPageStyle->setPropertyValue(u"TopMargin"_ustr,
                                  cpo::uno::Any(static_cast<sal_Int32>(0))); // 0 twips
     table::BorderLine2 aBorder;

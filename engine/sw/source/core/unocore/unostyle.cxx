@@ -927,7 +927,12 @@ rtl::Reference<SwXTextCellStyle> SwXStyleFamilies::CreateStyleCell(SwDoc& rDoc)
 uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyleCondParagraph(SwDoc& rDoc)
     { return new SwXStyle(&rDoc, SfxStyleFamily::Para, true); };
 
-cpo::uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
+Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
+{
+    return Any(getStyleByIndex(nIndex));
+}
+
+uno::Reference<css::style::XStyle> SwXStyleFamily::getStyleByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if(nIndex < 0)
@@ -941,7 +946,7 @@ cpo::uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
         SwStyleNameMapper::FillProgName(m_rEntry.translateIndex(nIndex), sStyleProgName);
     } catch(...) {}
     if (!sStyleProgName.isEmpty())
-        return getByName(sStyleProgName.toString());
+        return getStyleByName(sStyleProgName.toString());
 
     UIName sStyleUIName;
     GetCountOrName(&sStyleUIName, nIndex);
@@ -949,17 +954,22 @@ cpo::uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleUIName.toString(), m_rEntry.family());
-    return cpo::uno::Any(uno::Reference<style::XStyle>(getStyle(pBase, sStyleUIName)));
+    return getStyle(pBase, sStyleUIName);
 }
 
 cpo::uno::Any SwXStyleFamily::getByName(const OUString& rName)
 {
-    return cpo::uno::Any(uno::Reference<style::XStyle>(getStyleByName(rName)));
+    return cpo::uno::Any(getStyleByName(rName));
+}
+
+Reference<style::XStyle> SwXStyleFamily::getStyleByName(const OUString& rName)
+{
+    return getSwStyleByName(rName);
 }
 
 rtl::Reference<SwXPageStyle> SwXStyleFamily::getPageStyleByName(const OUString& rName)
 {
-    rtl::Reference<SwXBaseStyle> xStyle = getStyleByName(rName);
+    rtl::Reference<SwXBaseStyle> xStyle = getSwStyleByName(rName);
     rtl::Reference<SwXPageStyle> xPageStyle = dynamic_cast<SwXPageStyle*>(xStyle.get());
     assert(bool(xStyle) == bool(xPageStyle));
     return xPageStyle;
@@ -967,7 +977,7 @@ rtl::Reference<SwXPageStyle> SwXStyleFamily::getPageStyleByName(const OUString& 
 
 rtl::Reference<SwXStyle> SwXStyleFamily::getCharacterStyleByName(const OUString& rName)
 {
-    rtl::Reference<SwXBaseStyle> xStyle = getStyleByName(rName);
+    rtl::Reference<SwXBaseStyle> xStyle = getSwStyleByName(rName);
     rtl::Reference<SwXStyle> xCharStyle = dynamic_cast<SwXStyle*>(xStyle.get());
     assert(bool(xStyle) == bool(xCharStyle));
     return xCharStyle;
@@ -975,13 +985,13 @@ rtl::Reference<SwXStyle> SwXStyleFamily::getCharacterStyleByName(const OUString&
 
 rtl::Reference<SwXStyle> SwXStyleFamily::getParagraphStyleByName(const OUString& rName)
 {
-    rtl::Reference<SwXBaseStyle> xStyle = getStyleByName(rName);
+    rtl::Reference<SwXBaseStyle> xStyle = getSwStyleByName(rName);
     rtl::Reference<SwXStyle> xCharStyle = dynamic_cast<SwXStyle*>(xStyle.get());
     assert(bool(xStyle) == bool(xCharStyle));
     return xCharStyle;
 }
 
-rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rProgName)
+rtl::Reference<SwXBaseStyle> SwXStyleFamily::getSwStyleByName(const OUString& rProgName)
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)

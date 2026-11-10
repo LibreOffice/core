@@ -341,7 +341,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89702, "tdf89702.docx")
 
     // Make sure that the font name is Arial, this was Verdana.
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"CharacterStyles"_ustr)->getByName(aCharStyleName), uno::UNO_QUERY);
+        getStyles(u"CharacterStyles"_ustr)->getStyleByName(aCharStyleName), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Arial"_ustr, getProperty<OUString>(xStyle, u"CharFontName"_ustr));
 }
 
@@ -459,7 +459,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95376, "tdf95376.docx")
 
     //tdf#131321 - paragraph styles lost their numbering. Bullet+space inherits WWNum1 from Bullet
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Bullet+space"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Bullet+space"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(!(getProperty<OUString>(xStyle, u"NumberingStyleName"_ustr)).isEmpty());
 }
 
@@ -639,7 +639,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95213, "tdf95213.docx")
                                   })
                          ->Value.get<OUString>();
 
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getByName(aName),
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(aName),
                                                uno::UNO_QUERY);
     // This was awt::FontWeight::BOLD.
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xStyle, u"CharWeight"_ustr));
@@ -873,7 +873,7 @@ DECLARE_OOXMLEXPORT_TEST(testTablePosition15, "table-position-15.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf107359, "tdf107359-char-pitch.docx")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     bool bGridSnapToChars;
     xPropertySet->getPropertyValue(u"GridSnapToChars"_ustr) >>= bGridSnapToChars;
@@ -1325,8 +1325,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148952_2010)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153196, "A019_min.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle;
-    getStyles(u"PageStyles"_ustr)->getByName(u"Converted1"_ustr) >>= xPageStyle;
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Converted1"_ustr), UNO_QUERY);
     sal_Int32 nLeftMargin{};
     xPageStyle->getPropertyValue(u"LeftMargin"_ustr) >>= nLeftMargin;
     // Without the accompanying fix in place, this test would have failed with:

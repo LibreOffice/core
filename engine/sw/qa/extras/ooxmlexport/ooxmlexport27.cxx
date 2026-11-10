@@ -83,9 +83,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79738_footerLineNumbering, "tdf79738_footerLineN
     uno::Reference<style::XStyleFamilies> xStyleFamilies = xStylesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyles
         = xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xHeader(xStyles->getByName(u"Header"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xHeader(xStyles->getStyleByName(u"Header"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, xHeader->getPropertyValue(u"ParaLineNumberCount"_ustr).get<bool>());
-    uno::Reference<beans::XPropertySet> xFooter(xStyles->getByName(u"Footer"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFooter(xStyles->getStyleByName(u"Footer"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, xFooter->getPropertyValue(u"ParaLineNumberCount"_ustr).get<bool>());
 }
 
@@ -303,7 +303,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCharStyleShadingPattern)
     // Without the fix a named character style had nowhere to keep the pattern, so the style
     // held only the color that the pattern and the fill blend into.
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"CharacterStyles"_ustr)->getByName(u"Message Header Char"_ustr),
+        getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Message Header Char"_ustr),
         uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(drawing::ShadingPattern::PCT20),
                          getProperty<sal_Int32>(xStyle, u"CharShadingValue"_ustr));
@@ -727,7 +727,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyphenationSettingsWithoutHyphenatedText)
     createSwDoc("effect-extent-line-width.docx");
 
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(425), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
     CPPUNIT_ASSERT(getProperty<bool>(xStyle, u"ParaHyphenationKeep"_ustr));
     CPPUNIT_ASSERT(getProperty<bool>(xStyle, u"ParaHyphenationKeepLine"_ustr));
@@ -735,7 +735,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyphenationSettingsWithoutHyphenatedText)
     saveAndReload(TestFilter::DOCX);
 
     uno::Reference<beans::XPropertySet> xReloaded(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(425),
                          getProperty<sal_Int16>(xReloaded, u"ParaHyphenationZone"_ustr));
     CPPUNIT_ASSERT(getProperty<bool>(xReloaded, u"ParaHyphenationKeep"_ustr));
@@ -814,14 +814,14 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionKeepsUnstatedDirectionOnARightToLeftPage)
     createSwDoc("default-sect-break-cols.docx");
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
     xPageStyle->setPropertyValue(u"WritingMode"_ustr,
                                  uno::Any(sal_Int16(text::WritingMode2::RL_TB)));
 
     saveAndReload(TestFilter::DOCX);
 
     uno::Reference<beans::XPropertySet> xSavedPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::RL_TB),
                          getProperty<sal_Int16>(xSavedPageStyle, u"WritingMode"_ustr));
 

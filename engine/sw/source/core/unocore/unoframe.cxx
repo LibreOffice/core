@@ -1164,22 +1164,19 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     {
         case FLYCNTTYPE_FRM:
         {
-            cpo::uno::Any aAny2 = mxStyleFamily->getByName (u"Frame"_ustr);
-            aAny2 >>= mxStyleData;
+            mxStyleData.set(mxStyleFamily->getStyleByName (u"Frame"_ustr), uno::UNO_QUERY);
             m_pProps.reset(new SwFrameProperties_Impl);
         }
         break;
         case FLYCNTTYPE_GRF:
         {
-            cpo::uno::Any aAny2 = mxStyleFamily->getByName (u"Graphics"_ustr);
-            aAny2 >>= mxStyleData;
+            mxStyleData.set(mxStyleFamily->getStyleByName (u"Graphics"_ustr), uno::UNO_QUERY);
             m_pProps.reset(new SwGraphicProperties_Impl);
         }
         break;
         case FLYCNTTYPE_OLE:
         {
-            cpo::uno::Any aAny2 = mxStyleFamily->getByName (u"OLE"_ustr);
-            aAny2 >>= mxStyleData;
+            mxStyleData.set(mxStyleFamily->getStyleByName (u"OLE"_ustr), uno::UNO_QUERY);
             m_pProps.reset(new SwOLEProperties_Impl);
         }
         break;
@@ -1896,8 +1893,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::cpo::uno:
             aValue >>= sStyleName;
             try
             {
-                cpo::uno::Any aAny = mxStyleFamily->getByName ( sStyleName );
-                aAny >>= mxStyleData;
+                mxStyleData.set( mxStyleFamily->getStyleByName ( sStyleName ), uno::UNO_QUERY );
             }
             catch ( container::NoSuchElementException const & )
             {

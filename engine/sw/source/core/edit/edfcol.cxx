@@ -804,7 +804,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
     const std::vector<ProgName> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const ProgName& rPageStyleName : aUsedPageStyles)
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName.toString()), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(rPageStyleName.toString()), uno::UNO_QUERY);
 
         // HEADER
         bool bHeaderIsOn = false;
@@ -850,7 +850,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
     for (const ProgName& rPageStyleName : aUsedPageStyles)
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName.toString()), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(rPageStyleName.toString()), uno::UNO_QUERY);
 
         // HEADER
         bool bHeaderIsOn = false;
@@ -977,7 +977,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
 
     std::vector<ProgName> aPageStyles = lcl_getUsedPageStyles(this);
     const ProgName& aPageStyleString = aPageStyles.back();
-    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(aPageStyleString.toString()), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(aPageStyleString.toString()), uno::UNO_QUERY);
 
     bool bHeaderIsOn = false;
     xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
@@ -1110,7 +1110,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 
     for (const OUString& rPageStyleName : aStyles)
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(rPageStyleName), uno::UNO_QUERY);
 
         if (bHeaderIsNeeded || bWatermarkIsNeeded || bHadWatermark)
         {
@@ -1401,7 +1401,7 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
     std::vector<ProgName> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const ProgName& rPageStyleName : aUsedPageStyles)
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName.toString()), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(rPageStyleName.toString()), uno::UNO_QUERY);
 
         bool bHeaderIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
@@ -1628,7 +1628,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
 
     for (const OUString& rPageStyleName : aStyles)
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(rPageStyleName), uno::UNO_QUERY);
 
         // If the header is off, turn it on.
         bool bHeaderIsOn = false;

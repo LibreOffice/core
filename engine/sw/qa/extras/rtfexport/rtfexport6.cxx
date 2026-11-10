@@ -332,9 +332,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151370)
 CPPUNIT_TEST_FIXTURE(Test, testTdf108416)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xCharacterStyles(getStyles(u"CharacterStyles"_ustr));
+        uno::Reference<style::XStyleFamily> xCharacterStyles(getStyles(u"CharacterStyles"_ustr));
         uno::Reference<beans::XPropertySet> xListLabel(
-            xCharacterStyles->getByName(u"ListLabel 1"_ustr), uno::UNO_QUERY);
+            xCharacterStyles->getStyleByName(u"ListLabel 1"_ustr), uno::UNO_QUERY);
         // This was awt::FontWeight::BOLD, list numbering got an unexpected bold formatting.
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
                              getProperty<float>(xListLabel, u"CharWeight"_ustr));
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLandscape)
         CPPUNIT_ASSERT_EQUAL(3, getPages());
 
         // All pages should have flag orientation
-        uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
+        uno::Reference<style::XStyleFamily> pageStyles = getStyles(u"PageStyles"_ustr);
 
         // get a page cursor
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -467,20 +467,19 @@ CPPUNIT_TEST_FIXTURE(Test, testLandscape)
         // check that the first page has landscape flag
         xCursor->jumpToFirstPage();
         OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        uno::Reference<style::XStyle> xStylePage(pageStyles->getByName(pageStyleName),
-                                                 uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStylePage(pageStyles->getStyleByName(pageStyleName));
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, u"IsLandscape"_ustr));
 
         // check that the second page has landscape flag
         xCursor->jumpToPage(2);
         pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        xStylePage = pageStyles->getStyleByName(pageStyleName);
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, u"IsLandscape"_ustr));
 
         // check that the last page has landscape flag
         xCursor->jumpToLastPage();
         pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        xStylePage.set(pageStyles->getStyleByName(pageStyleName));
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, u"IsLandscape"_ustr));
     };
     createSwDoc("landscape.rtf");
@@ -715,7 +714,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104744)
 {
     auto verify = [this]() {
         auto xRules = getProperty<uno::Reference<container::XIndexAccess>>(
-            getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), u"NumberingRules"_ustr);
+            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), u"NumberingRules"_ustr);
         comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
         // This was 0.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270),

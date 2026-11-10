@@ -662,8 +662,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testUserTableStyles)
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"table"_ustr));
 
-    uno::Reference<style::XStyle> xTableStyle(xStyleFamily->getByName(u"default"_ustr),
-                                              uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xTableStyle(xStyleFamily->getStyleByName(u"default"_ustr));
     CPPUNIT_ASSERT(!xTableStyle->isUserDefined());
 
     uno::Reference<container::XNameAccess> xNameAccess(xTableStyle, uno::UNO_QUERY);
@@ -673,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testUserTableStyles)
     CPPUNIT_ASSERT_EQUAL(u"userdefined"_ustr, xCellStyle->getName());
 
     CPPUNIT_ASSERT(xStyleFamily->hasByName(u"userdefined"_ustr));
-    xTableStyle.set(xStyleFamily->getByName(u"userdefined"_ustr), uno::UNO_QUERY);
+    xTableStyle = xStyleFamily->getStyleByName(u"userdefined"_ustr);
     CPPUNIT_ASSERT(xTableStyle->isUserDefined());
 }
 

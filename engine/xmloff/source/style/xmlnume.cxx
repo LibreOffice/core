@@ -824,8 +824,7 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed, bool bExportChapterNumbering
 
     for( sal_Int32 i=0; i < nStyles; i++ )
     {
-        Reference< XStyle > xStyle;
-        xStyles->getByIndex( i ) >>= xStyle;
+        Reference< XStyle > xStyle = xStyles->getStyleByIndex( i );
 
         if( !bUsed || xStyle->isInUse() )
             exportStyle( xStyle );

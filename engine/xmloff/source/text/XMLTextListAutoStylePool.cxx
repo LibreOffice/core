@@ -174,7 +174,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
         Reference<XStyle> xStyle;
         try
         {
-            xStyles->getByIndex(i) >>= xStyle;
+            xStyle = xStyles->getStyleByIndex(i);
         }
         catch (const container::NoSuchElementException&)
         {

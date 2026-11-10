@@ -903,7 +903,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
                 // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
                 if (pStyleSheetProperties->props().GetListId() > -1)
                 {
-                    rtl::Reference< SwXBaseStyle > xStyle = xParaStyles->getStyleByName(
+                    rtl::Reference< SwXBaseStyle > xStyle = xParaStyles->getSwStyleByName(
                         ConvertStyleName(pEntry->m_sStyleName, pEntry->m_nStyleTypeCode).first);
 
                     if ( !xStyle.is() )
@@ -956,7 +956,7 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
             if (!pParent || !pParent->m_bAssignedAsChapterNumbering)
                 continue;
 
-            rtl::Reference< SwXBaseStyle > xStyle = xParaStyles->getStyleByName(pEntry->m_sConvertedStyleName);
+            rtl::Reference< SwXBaseStyle > xStyle = xParaStyles->getSwStyleByName(pEntry->m_sConvertedStyleName);
             if (!xStyle.is())
                 continue;
 
@@ -1132,7 +1132,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                         {
                             continue;
                         }
-                        xStyle = xStyles->getStyleByName( sConvertedStyleName );
+                        xStyle = xStyles->getSwStyleByName( sConvertedStyleName );
 
                         {
                             SetPropertiesToDefault(xStyle);
@@ -1162,7 +1162,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                         if (bListStyle)
                         {
                             xStyles->insertStyleByName( sConvertedStyleName, static_cast<SwXStyle*>(xStyle.get()) );
-                            xStyle = xStyles->getStyleByName(sConvertedStyleName);
+                            xStyle = xStyles->getSwStyleByName(sConvertedStyleName);
 
                             StyleSheetPropertyMap* pPropertyMap = pEntry->m_pProperties.get();
                             if (pPropertyMap && pPropertyMap->props().GetListId() == -1)
@@ -1483,9 +1483,9 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             {
                                 rtl::Reference< SwXBaseStyle > xCopyStyle;
                                 if( pEntry->m_sStyleName.equalsIgnoreAsciiCase("footnote reference") )
-                                    xCopyStyle = xStyles->getStyleByName( u"Footnote anchor"_ustr );
+                                    xCopyStyle = xStyles->getSwStyleByName( u"Footnote anchor"_ustr );
                                 else
-                                    xCopyStyle = xStyles->getStyleByName( u"Endnote anchor"_ustr );
+                                    xCopyStyle = xStyles->getSwStyleByName( u"Endnote anchor"_ustr );
 
                                 xMultiPropertySet.set( static_cast<cppu::OWeakObject*>(xCopyStyle.get()), uno::UNO_QUERY_THROW);
                                 xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
@@ -2235,7 +2235,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
             rtl::Reference<SwXStyleFamily> xParagraphStyles = xStyleFamilies->GetParagraphStyles();
             // This is the built-in default style that every style inherits from
-            rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getStyleByName(u"Paragraph style"_ustr);
+            rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getSwStyleByName(u"Paragraph style"_ustr);
 
             const std::vector< beans::PropertyValue >& rPropValues = m_pDefaultParaProps->GetPropertyValues();
             for( const auto& rPropValue : rPropValues )

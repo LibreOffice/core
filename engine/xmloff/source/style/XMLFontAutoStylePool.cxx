@@ -313,8 +313,7 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
                 const cpo::uno::Sequence<OUString> aStyleNames = xStyleContainer->getElementNames();
                 for (OUString const & rName : aStyleNames)
                 {
-                    uno::Reference<style::XStyle> xStyle;
-                    xStyleContainer->getByName(rName) >>= xStyle;
+                    uno::Reference<style::XStyle> xStyle = xStyleContainer->getStyleByName(rName);
                     if (xStyle->isInUse())
                     {
                         uno::Reference<beans::XPropertySet> xPropertySet(xStyle, UNO_QUERY);

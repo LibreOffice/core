@@ -290,7 +290,7 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
+    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
     bool bNoFirstHeader = {};
     bool bShareFirstHeader = {};
@@ -325,7 +325,7 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
+    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
     bool bNoFirstHeader = {};
     bool bShareFirstHeader = {};

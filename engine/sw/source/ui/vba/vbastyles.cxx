@@ -210,7 +210,7 @@ public:
                 OUString sStyleName = OUString::createFromAscii( pTable->pOOoStyleName );
                 if( mxParaStyles->hasByName( sStyleName ) )
                 {
-                    m_cachePos = mxParaStyles->getByName( sStyleName );
+                    m_cachePos <<= mxParaStyles->getStyleByName( sStyleName );
                     return true;
                 }
                 return false;
@@ -219,7 +219,7 @@ public:
 
         if( mxParaStyles->hasByName( aName ) )
         {
-            m_cachePos = mxParaStyles->getByName( aName );
+            m_cachePos <<= mxParaStyles->getStyleByName( aName );
             return true;
         }
         else
@@ -229,7 +229,7 @@ public:
                 [&aName](const OUString& rStyleName) { return rStyleName.equalsIgnoreAsciiCase( aName ); });
             if (pStyleName != sElementNames.end())
             {
-                m_cachePos = mxParaStyles->getByName( *pStyleName );
+                m_cachePos <<= mxParaStyles->getStyleByName( *pStyleName );
                 return true;
             }
         }
@@ -246,7 +246,7 @@ public:
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
 
-        return mxParaStyles->getByIndex( Index );
+        return uno::Any(mxParaStyles->getStyleByIndex( Index ));
     }
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > createEnumeration(  ) override
@@ -341,7 +341,7 @@ SwVbaStyles::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& Index2 )
                             DebugHelper::basicexception( ERRCODE_BASIC_INTERNAL_ERROR, {} );
                     }
                     rtl::Reference< SwXStyleFamily > xStylesAccess( mxModel->getSwStyleFamilies()->GetStylesByName( aStyleType ) );
-                    rtl::Reference< SwXBaseStyle > xStyleProps( xStylesAccess->getStyleByName( aStyleName ) );
+                    rtl::Reference< SwXBaseStyle > xStyleProps( xStylesAccess->getSwStyleByName( aStyleName ) );
                     // set the property "NumberingStyleName" if it is a listbullet
                     if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
                     {

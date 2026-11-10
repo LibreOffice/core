@@ -289,8 +289,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresObjTextStyles)
         xStyleFamilies->getStyleFamilyByName(u"Title Slide"_ustr));
     {
         // Title style
-        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),
-                                             uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"title"_ustr));
         uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(60.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
@@ -302,8 +301,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresObjTextStyles)
     xStyleFamily = xStyleFamilies->getStyleFamilyByName(u"Title and Content"_ustr);
     {
         // Title style
-        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),
-                                             uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"title"_ustr));
         uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(44.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
@@ -312,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresObjTextStyles)
                              xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
 
         // outline1 style
-        xStyle.set(xStyleFamily->getByName(u"outline1"_ustr), uno::UNO_QUERY);
+        xStyle.set(xStyleFamily->getStyleByName(u"outline1"_ustr));
         xPropSet.set(xStyle, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(28.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
@@ -321,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresObjTextStyles)
                              xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
 
         // outline2 style
-        xStyle.set(xStyleFamily->getByName(u"outline2"_ustr), uno::UNO_QUERY);
+        xStyle.set(xStyleFamily->getStyleByName(u"outline2"_ustr));
         xPropSet.set(xStyle, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(24.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
@@ -330,7 +328,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresObjTextStyles)
                              xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
 
         // outline5 style
-        xStyle.set(xStyleFamily->getByName(u"outline5"_ustr), uno::UNO_QUERY);
+        xStyle.set(xStyleFamily->getStyleByName(u"outline5"_ustr));
         xPropSet.set(xStyle, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(18.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),

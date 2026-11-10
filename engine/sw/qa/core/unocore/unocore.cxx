@@ -130,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testRtlGutter)
 {
     createSwDoc();
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // - Unknown property: RtlGutter
     auto bRtlGutter = getProperty<bool>(xPageStyle, u"RtlGutter"_ustr);
@@ -180,8 +180,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLinkedStyles)
     createSwDoc();
 
     // When defining a linked style for a para style:
-    uno::Reference<container::XNameAccess> xParaStyles = getStyles(u"ParagraphStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xParaStyle(xParaStyles->getByName(u"Caption"_ustr),
+    uno::Reference<style::XStyleFamily> xParaStyles = getStyles(u"ParagraphStyles"_ustr);
+    uno::Reference<beans::XPropertySet> xParaStyle(xParaStyles->getStyleByName(u"Caption"_ustr),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xParaStyle, u"LinkStyle"_ustr));
     xParaStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"Emphasis"_ustr));
@@ -189,8 +189,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLinkedStyles)
     CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xParaStyle, u"LinkStyle"_ustr));
 
     // When defining a linked style for a char style:
-    uno::Reference<container::XNameAccess> xCharStyles = getStyles(u"CharacterStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xCharStyle(xCharStyles->getByName(u"Emphasis"_ustr),
+    uno::Reference<style::XStyleFamily> xCharStyles = getStyles(u"CharacterStyles"_ustr);
+    uno::Reference<beans::XPropertySet> xCharStyle(xCharStyles->getStyleByName(u"Emphasis"_ustr),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xCharStyle, u"LinkStyle"_ustr));
     xCharStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"Caption"_ustr));
@@ -1046,7 +1046,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf149555)
     xCursor->jumpToFirstPage();
     OUString sPageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(sPageStyleName), u"HeaderText"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(sPageStyleName), u"HeaderText"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"HEADER 1"_ustr, xHeaderText->getString());
 
     // Without the fix in place, this test would have failed with
@@ -1055,19 +1055,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf149555)
     xCursor->jumpToPage(2);
     sPageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(sPageStyleName), u"HeaderText"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(sPageStyleName), u"HeaderText"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"HEADER 2"_ustr, xHeaderText->getString());
 
     xCursor->jumpToPage(3);
     sPageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(sPageStyleName), u"HeaderText"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(sPageStyleName), u"HeaderText"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"HEADER 2"_ustr, xHeaderText->getString());
 
     xCursor->jumpToPage(4);
     sPageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(sPageStyleName), u"HeaderText"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(sPageStyleName), u"HeaderText"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"HEADER 2"_ustr, xHeaderText->getString());
 }
 
@@ -1112,7 +1112,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testEmptyHeader)
         = { comphelper::makePropertyValue(u"PageStyle"_ustr, SwResId(STR_POOLPAGE_STANDARD)) };
     dispatchCommand(mxComponent, u".uno:InsertPageHeader"_ustr, aInsertArgs);
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xHeaderText(
         xPageStyle->getPropertyValue(u"HeaderText"_ustr), uno::UNO_QUERY);
     bool bIsContentEmpty = false;

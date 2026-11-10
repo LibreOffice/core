@@ -200,8 +200,8 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
             if (!xFamilies->hasByName(aStyle))
                 return;
 
-            Reference< style::XStyle > aXStyle;
-            if (xFamilies->getByName(aStyle) >>= aXStyle)
+            Reference< style::XStyle > aXStyle = xFamilies->getStyleByName(aStyle);
+            if (aXStyle)
             {
                 TextCharacterProperties aCharStyleProperties;
                 getTextBody()->ApplyMasterTextStyle(rFilterBase, aXStyle, aCharStyleProperties,
@@ -218,7 +218,7 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
                             if (aXStyle.is())
                                 aXStyle.clear();
 
-                            xFamilies->getByName(sOutlineStyle) >>= aXStyle;
+                            aXStyle = xFamilies->getStyleByName(sOutlineStyle);
                             if (aXStyle.is())
                             {
                                 TextCharacterProperties aCharStyleLvlProps;
@@ -229,7 +229,7 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
 
                     // The numbering rules of all nine levels belong to outline1, and the other
                     // outline styles hold none of their own, the indent of each level goes there
-                    Reference<XPropertySet> xOutline1(xFamilies->getByName(aStyle), UNO_QUERY);
+                    Reference<XPropertySet> xOutline1(xFamilies->getStyleByName(aStyle), UNO_QUERY);
                     Reference<container::XIndexReplace> xNumRules;
                     if (xOutline1.is()
                         && (xOutline1->getPropertyValue(u"NumberingRules"_ustr) >>= xNumRules)

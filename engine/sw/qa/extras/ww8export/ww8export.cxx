@@ -253,14 +253,14 @@ DECLARE_WW8EXPORT_TEST(testN816603, "n816603.doc")
 DECLARE_WW8EXPORT_TEST(testPageBorder, "page-border.doc")
 {
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
-    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"TopBorder"_ustr);
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"TopBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(convertTwipToMm100(6 * 20)), aBorder.LineWidth);
 }
 
 DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 {
     // Character height was 10pt instead of 7.5pt in the header.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, u"HeaderTextFirst"_ustr)->getText();
     uno::Reference<text::XTextRange> xHeaderParagraph = getParagraphOfText(1, xText, u""_ustr);
     CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(xHeaderParagraph, u"CharHeight"_ustr));
@@ -317,7 +317,7 @@ DECLARE_WW8EXPORT_TEST(testHeaderApoTable, "ooo92948-1.doc")
 DECLARE_WW8EXPORT_TEST(testBnc821208, "bnc821208.doc")
 {
     // WW8Num1z0 earned a Symbol font, turning numbers into rectangles.
-    uno::Reference<beans::XPropertyState> xPropertyState(getStyles(u"CharacterStyles"_ustr)->getByName(u"WW8Num1z0"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertyState> xPropertyState(getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"WW8Num1z0"_ustr), uno::UNO_QUERY);
     beans::PropertyState ePropertyState = xPropertyState->getPropertyState(u"CharFontName"_ustr);
     // This was beans::PropertyState_DIRECT_VALUE.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
@@ -380,7 +380,7 @@ DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
     // Page border
     OUString pageStyleName = getProperty<OUString>(anchor, u"PageStyleName"_ustr);
     uno::Reference<style::XStyle> pageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(pageStyleName), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(pageStyleName));
     border = getProperty<table::BorderLine2>(pageStyle, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
     border = getProperty<table::BorderLine2>(pageStyle, u"LeftBorder"_ustr);
@@ -486,7 +486,7 @@ DECLARE_WW8EXPORT_TEST(testTdf95321, "tdf95321.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo77844, "fdo77844.doc")
 {
-    uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
+    uno::Reference<style::XStyleFamily> pageStyles = getStyles(u"PageStyles"_ustr);
 
     // get a page cursor
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -498,24 +498,21 @@ DECLARE_WW8EXPORT_TEST(testFdo77844, "fdo77844.doc")
     // check that the first page has no header
     xCursor->jumpToFirstPage();
     OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    uno::Reference<style::XStyle> pageStyle(
-        pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> pageStyle = pageStyles->getStyleByName(pageStyleName);
     bool headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(!headerIsOn);
 
     // check that the second page has a header
     xCursor->jumpToPage(2);
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    pageStyle.set(
-        pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    pageStyle = pageStyles->getStyleByName(pageStyleName);
     headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(headerIsOn);
 
     // check that the third page has a header
     xCursor->jumpToPage(3);
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    pageStyle.set(
-        pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    pageStyle = pageStyles->getStyleByName(pageStyleName);
     headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(headerIsOn);
 
@@ -548,7 +545,7 @@ DECLARE_WW8EXPORT_TEST(testFdo81102, "fdo81102.doc")
         textDocument->getText()->getStart();
     OUString pageStyleName = getProperty<OUString>(start, u"PageStyleName"_ustr);
     uno::Reference<style::XStyle> pageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(pageStyleName), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(pageStyleName));
 
     // check that left and right pages do not share the same header
     bool headerIsShared = getProperty<bool>(pageStyle, u"HeaderIsShared"_ustr);
@@ -602,7 +599,7 @@ DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf99100, "tdf99100.doc")
 {
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderText"_ustr);
     auto xField = getProperty< uno::Reference<lang::XServiceInfo> >(getRun(getParagraphOfText(1, xHeaderText), 2), u"TextField"_ustr);
     // This failed: the second text portion wasn't a field.
     CPPUNIT_ASSERT(xField.is());
@@ -715,7 +712,7 @@ DECLARE_WW8EXPORT_TEST(testTdf106291, "tdf106291.doc")
 DECLARE_WW8EXPORT_TEST(testTransparentText, "transparent-text.doc")
 {
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderText"_ustr);
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(3, xHeaderText);
     // Without the accompanying fix in place, this test would have failed: transparency was set to
     // 100%, so the text was not readable.
@@ -951,7 +948,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo42144)
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Footer wasn't disabled -- instead empty footer was exported.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, u"FooterIsOn"_ustr));
 }
 
@@ -1131,8 +1128,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBorderColoursExport)
 
     // Page border
     OUString pageStyleName = getProperty<OUString>(anchor, u"PageStyleName"_ustr);
-    uno::Reference<style::XStyle> pageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(pageStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> pageStyle
+        = getStyles(u"PageStyles"_ustr)->getStyleByName(pageStyleName);
     border = getProperty<table::BorderLine2>(pageStyle, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
     border = getProperty<table::BorderLine2>(pageStyle, u"LeftBorder"_ustr);
@@ -1523,11 +1520,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
     OUString lastPageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     CPPUNIT_ASSERT(firstPageStyleName != lastPageStyleName);
 
-    uno::Reference<beans::XPropertySet> xFirstPropertySet(getStyles(u"PageStyles"_ustr)->getByName(firstPageStyleName), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFirstPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(firstPageStyleName), uno::UNO_QUERY);
     awt::Size fSize;
     xFirstPropertySet->getPropertyValue(u"Size"_ustr) >>= fSize;
 
-    uno::Reference<beans::XPropertySet> xNextPropertySet(getStyles(u"PageStyles"_ustr)->getByName(lastPageStyleName), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xNextPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(lastPageStyleName), uno::UNO_QUERY);
     awt::Size lSize;
     xNextPropertySet->getPropertyValue(u"Size"_ustr) >>= lSize;
 
@@ -1560,7 +1557,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
     }
     CPPUNIT_ASSERT(charStyleName.getLength());
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"CharacterStyles"_ustr)->getByName(charStyleName),
+        getStyles(u"CharacterStyles"_ustr)->getStyleByName(charStyleName),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xStyle, u"CharColor"_ustr));
 }

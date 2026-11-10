@@ -311,8 +311,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testTdf80020)
             = xStyleFamiliesSupplier->getStyleFamilies();
         uno::Reference<style::XStyleFamily> xStyleFamily(
             xStyleFamilies->getStyleFamilyByName(u"graphics"_ustr));
-        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"Test Style"_ustr),
-                                             uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Test Style"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"text"_ustr, xStyle->getParentStyle());
         saveAndReload(TestFilter::ODP);
     }
@@ -321,8 +320,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testTdf80020)
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"graphics"_ustr));
-    uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"Test Style"_ustr),
-                                         uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Test Style"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"text"_ustr, xStyle->getParentStyle());
 }
 
@@ -336,8 +334,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testTdf128985)
             = xStyleFamiliesSupplier->getStyleFamilies();
         uno::Reference<style::XStyleFamily> xStyleFamily(
             xStyleFamilies->getStyleFamilyByName(u"LushGreen"_ustr));
-        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"outline1"_ustr),
-                                             uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"outline1"_ustr));
         uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
         sal_Int16 nWritingMode = 0;
@@ -354,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testTdf128985)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"LushGreen"_ustr));
-    uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"outline1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"outline1"_ustr));
     uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
     sal_Int16 nWritingMode = 0;

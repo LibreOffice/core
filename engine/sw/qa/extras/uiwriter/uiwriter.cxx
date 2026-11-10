@@ -835,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo70807)
 
     for (sal_Int32 i = 0; i < xStylesIter->getCount(); ++i)
     {
-        uno::Reference<style::XStyle> xStyle(xStylesIter->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStylesIter->getStyleByIndex(i));
 
         bool expectedUsedStyle = false;
         bool expectedUserDefined = false;
@@ -1886,7 +1886,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextCursorInvalidation)
 {
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPageStyle.is());
     xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xHeader(getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr));

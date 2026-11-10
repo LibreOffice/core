@@ -1273,7 +1273,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
     else if (rDM_Impl.m_bCopyStandardPageStyleFill) // complex fill: graphics/gradients/patterns
     {
         rtl::Reference<SwXBaseStyle> xDefaultPageStyle =
-                    rDM_Impl.GetPageStyles()->getStyleByName(u"Standard"_ustr);
+                    rDM_Impl.GetPageStyles()->getSwStyleByName(u"Standard"_ustr);
         if (!m_aPageStyle)
         {
             SAL_WARN( "writerfilter", "No Page Style!" );
@@ -1318,7 +1318,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
                 xParagraphStyles = xStyleFamilies->GetParagraphStyles();
             rtl::Reference<SwXBaseStyle> xStandard;
             if ( xParagraphStyles.is() )
-                xStandard = xParagraphStyles->getStyleByName(u"Standard"_ustr) ;
+                xStandard = xParagraphStyles->getSwStyleByName(u"Standard"_ustr) ;
             if ( xStandard.is() )
             {
                 sal_Int16 aWritingMode(0);
@@ -1880,7 +1880,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                             OUString aPageDescName;
                             if ((xPropertySet->getPropertyValue(u"PageDescName"_ustr) >>= aPageDescName) && !aPageDescName.isEmpty())
                             {
-                                rtl::Reference<SwXBaseStyle> xPageStyle(rDM_Impl.GetPageStyles()->getStyleByName(aPageDescName));
+                                rtl::Reference<SwXBaseStyle> xPageStyle(rDM_Impl.GetPageStyles()->getSwStyleByName(aPageDescName));
                                 xPageStyle->setPropertyValue(u"FollowStyle"_ustr, cpo::uno::Any(m_sPageStyleName));
                                 m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), cpo::uno::Any(true));
                             }

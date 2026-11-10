@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFdo64238_a)
     // 'Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
     // In this case the imported footer in LO was supposed to be blank, but instead was the 'even' footer
     uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterText"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"FooterText"_ustr);
     uno::Reference<text::XTextRange> xFooterParagraph = getParagraphOfText(1, xFooterText);
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
@@ -228,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFdo64238_b)
     // 'Non-Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
     // In this case the imported footer in LO was supposed to be just the odd footer, but instead was the 'odd' and 'even' footers concatenated
     uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterText"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"FooterText"_ustr);
     uno::Reference<text::XTextRange> xFooterParagraph = getParagraphOfText(1, xFooterText);
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
@@ -375,7 +375,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFdo65655)
 
     auto verify = [this]() {
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
         {
             bool bValue = false;
             xPropertySet->getPropertyValue(u"HeaderIsShared"_ustr) >>= bValue;
@@ -426,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testImageInFooter)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf112694)
 {
     auto verify = [this]() {
-        cpo::uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
+        Reference<style::XStyle> aPageStyle = getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr);
         // Header was on when header for file was for explicit first pages only
         // but <w:titlePg> was missing.
         CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, u"HeaderIsOn"_ustr));
@@ -533,8 +533,8 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Import)
 
     // get LO page style for the first page (even page #2)
     OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getStyleByName(pageStyleName));
 
     xCursor->jumpToFirstPage(); // Even/Left page #2
     uno::Reference<text::XText> xFooter
@@ -543,13 +543,13 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Import)
 
     xCursor->jumpToNextPage();
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xPageStyle = xPageStyles->getStyleByName(pageStyleName);
     xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"odd page - first footer"_ustr, xFooter->getString());
 
     xCursor->jumpToNextPage();
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xPageStyle.set(xPageStyles->getStyleByName(pageStyleName));
     xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"even page"_ustr, xFooter->getString());
 
@@ -573,8 +573,8 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Roundtrip)
 
     // get LO page style for the first page (even page #2)
     OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getStyleByName(pageStyleName));
 
     xCursor->jumpToFirstPage(); // Even/Left page #2
     uno::Reference<text::XText> xFooter
@@ -583,13 +583,13 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Roundtrip)
 
     xCursor->jumpToNextPage();
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xPageStyle.set(xPageStyles->getStyleByName(pageStyleName));
     xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"odd page - first footer"_ustr, xFooter->getString());
 
     xCursor->jumpToNextPage();
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xPageStyle = xPageStyles->getStyleByName(pageStyleName);
     xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"even page"_ustr, xFooter->getString());
 
@@ -673,12 +673,12 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
         auto xStyles = getStyles(u"PageStyles"_ustr);
         uno::Reference<beans::XPropertySet> xStyle;
         {
-            xStyle.set(xStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            xStyle.set(xStyles->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
             auto aPageLayout = xStyle->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_ALL), aPageLayout);
         }
         {
-            xStyle.set(xStyles->getByName(u"First Page"_ustr), uno::UNO_QUERY);
+            xStyle.set(xStyles->getStyleByName(u"First Page"_ustr), uno::UNO_QUERY);
             auto aPageLayout = xStyle->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_ALL), aPageLayout);
         }
@@ -688,7 +688,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
             auto xPara = getParagraph(1);
             CPPUNIT_ASSERT_EQUAL(u"This is the first page."_ustr, xPara->getString());
             OUString page1StyleName = getProperty<OUString>(xPara, u"PageDescName"_ustr);
-            page1Style.set(xStyles->getByName(page1StyleName), uno::UNO_QUERY);
+            page1Style.set(xStyles->getStyleByName(page1StyleName), uno::UNO_QUERY);
             auto aPageLayout = page1Style->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_RIGHT), aPageLayout);
 
@@ -705,7 +705,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
             auto aFollowStyleName = getProperty<OUString>(page1Style, u"FollowStyle"_ustr);
 
             uno::Reference<beans::XPropertySet> page2Style;
-            page2Style.set(xStyles->getByName(aFollowStyleName), uno::UNO_QUERY);
+            page2Style.set(xStyles->getStyleByName(aFollowStyleName), uno::UNO_QUERY);
             auto aPage2Layout = page2Style->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_ALL), aPage2Layout);
 
@@ -735,7 +735,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
                 xPara->getString());
 
             OUString page5StyleName = getProperty<OUString>(xPara, u"PageDescName"_ustr);
-            uno::Reference<beans::XPropertySet> page5Style(xStyles->getByName(page5StyleName),
+            uno::Reference<beans::XPropertySet> page5Style(xStyles->getStyleByName(page5StyleName),
                                                            uno::UNO_QUERY);
             auto aPageLayout = page5Style->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_RIGHT), aPageLayout);
@@ -809,7 +809,7 @@ protected:
 CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
+        uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
 
         // get a page cursor
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -821,8 +821,7 @@ CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
         // get LO page style for page 1, corresponding to docx section 1 first page
         xCursor->jumpToFirstPage();
         OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName),
-                                                 uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(xPageStyles->getStyleByName(pageStyleName));
         // check page 1 header & footer text
         CPPUNIT_ASSERT_EQUAL(u"First page header for all sections"_ustr,
                              getHFText(xPageStyle, u"HeaderTextFirst"_ustr));
@@ -832,7 +831,7 @@ CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
         // get LO page style for page 2, corresponding to docx section 1
         xCursor->jumpToPage(2);
         pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        xPageStyle = xPageStyles->getStyleByName(pageStyleName);
         // check header & footer text
         CPPUNIT_ASSERT_EQUAL(u"Even page header for section 1 only"_ustr,
                              getHFText(xPageStyle, u"HeaderTextLeft"_ustr));
@@ -846,7 +845,7 @@ CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
         // get LO page style for page 4, corresponding to docx section 2 first page
         xCursor->jumpToPage(4);
         pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        xPageStyle = xPageStyles->getStyleByName(pageStyleName);
         // check header & footer text
         CPPUNIT_ASSERT_EQUAL(u"First page header for all sections"_ustr,
                              getHFText(xPageStyle, u"HeaderTextFirst"_ustr));
@@ -856,7 +855,7 @@ CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
         // get LO page style for page 5, corresponding to docx section 2
         xCursor->jumpToPage(5);
         pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        xPageStyle = xPageStyles->getStyleByName(pageStyleName);
         // check header & footer text
         CPPUNIT_ASSERT_EQUAL(u"Even page header for sections 2 and 3 only"_ustr,
                              getHFText(xPageStyle, u"HeaderTextLeft"_ustr));
@@ -870,7 +869,7 @@ CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
         // get LO page style for page 7, corresponding to docx section 3 first page
         xCursor->jumpToPage(7);
         pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        xPageStyle = xPageStyles->getStyleByName(pageStyleName);
         // check header & footer text
         CPPUNIT_ASSERT_EQUAL(u"First page header for all sections"_ustr,
                              getHFText(xPageStyle, u"HeaderTextFirst"_ustr));
@@ -880,7 +879,7 @@ CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
         // get LO page style for page 8, corresponding to docx section 3
         xCursor->jumpToPage(8);
         pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-        xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        xPageStyle = xPageStyles->getStyleByName(pageStyleName);
         // check header & footer text
         CPPUNIT_ASSERT_EQUAL(u"Even page header for sections 2 and 3 only"_ustr,
                              getHFText(xPageStyle, u"HeaderTextLeft"_ustr));
@@ -906,7 +905,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testN750935)
         // The problem was that the header and footer was not shared.
         // xray ThisComponent.StyleFamilies.PageStyles.Default.FooterIsShared
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
         bool bValue = false;
         xPropertySet->getPropertyValue(u"HeaderIsShared"_ustr) >>= bValue;
         CPPUNIT_ASSERT_EQUAL(true, bValue);
@@ -1003,7 +1002,7 @@ void HeaderFooterTest::checkFirstRestHeaderPageStyles()
     // Check Default Style
     {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
         bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeader);
@@ -1052,7 +1051,7 @@ void HeaderFooterTest::checkLeftRightHeaderPageStyles()
     // Check Default Style
     {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
         bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeader);
@@ -1104,7 +1103,7 @@ void HeaderFooterTest::checkFirstLeftRightHeaderPageStyles()
 
     // Check Default Style
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, bHeader);
@@ -1182,7 +1181,7 @@ void HeaderFooterTest::checkDoubleFirstLeftRightHeaderPageStyles(
     // Check Default Style
     {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
         bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeader);
@@ -1226,7 +1225,7 @@ void HeaderFooterTest::checkDoubleFirstLeftRightHeaderPageStyles(
 
     {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getByName(rCustomPageStyleName), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(rCustomPageStyleName), uno::UNO_QUERY);
 
         bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeader);
@@ -1285,7 +1284,7 @@ void HeaderFooterTest::checkShapeInFirstPageHeader()
 {
     // Check Default Style
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, bHeader);

@@ -192,8 +192,8 @@ CPPUNIT_TEST_FIXTURE(Test, test150269)
 CPPUNIT_TEST_FIXTURE(Test, test129758)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xStyles(getStyles(u"ParagraphStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(u"Border"_ustr),
+        uno::Reference<style::XStyleFamily> xStyles(getStyles(u"ParagraphStyles"_ustr));
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(u"Border"_ustr),
                                                    uno::UNO_QUERY);
         // style has borders
         table::BorderLine2 border;
@@ -250,8 +250,8 @@ CPPUNIT_TEST_FIXTURE(Test, test129758)
 CPPUNIT_TEST_FIXTURE(Test, test150382)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xStyles(getStyles(u"ParagraphStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(u"Normal,Bordered"_ustr),
+        uno::Reference<style::XStyleFamily> xStyles(getStyles(u"ParagraphStyles"_ustr));
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(u"Normal,Bordered"_ustr),
                                                    uno::UNO_QUERY);
         // style has borders
         table::BorderLine2 border;
@@ -595,8 +595,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129578_lostBI)
 CPPUNIT_TEST_FIXTURE(Test, testTdf129631_lostBorders)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
-        uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getByName(u"Border"_ustr),
+        uno::Reference<style::XStyleFamily> paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
+        uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getStyleByName(u"Border"_ustr),
                                                         uno::UNO_QUERY_THROW);
         table::BorderLine2 aBorderLine
             = getProperty<table::BorderLine2>(xStyleProps, u"RightBorder"_ustr);
@@ -622,24 +622,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
 {
     auto verify = [this](bool bIsExport = false) {
         CPPUNIT_ASSERT_EQUAL(1, getPages());
-        uno::Reference<container::XNameAccess> paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
-        uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getByName(u"Shadow"_ustr),
+        uno::Reference<style::XStyleFamily> paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
+        uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getStyleByName(u"Shadow"_ustr),
                                                         uno::UNO_QUERY_THROW);
         table::ShadowFormat aShadow
             = getProperty<table::ShadowFormat>(xStyleProps, u"ParaShadowFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
 
         // Shadows were inherited regardless of whether the style disabled them.
-        xStyleProps.set(paragraphStyles->getByName(u"Shadow-removed"_ustr), uno::UNO_QUERY_THROW);
+        xStyleProps.set(paragraphStyles->getStyleByName(u"Shadow-removed"_ustr), uno::UNO_QUERY_THROW);
         aShadow = getProperty<table::ShadowFormat>(xStyleProps, u"ParaShadowFormat"_ustr);
         //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 
-        uno::Reference<container::XNameAccess> characterStyles = getStyles(u"CharacterStyles"_ustr);
-        xStyleProps.set(characterStyles->getByName(u"CharShadow"_ustr), uno::UNO_QUERY_THROW);
+        uno::Reference<style::XStyleFamily> characterStyles = getStyles(u"CharacterStyles"_ustr);
+        xStyleProps.set(characterStyles->getStyleByName(u"CharShadow"_ustr), uno::UNO_QUERY_THROW);
         aShadow = getProperty<table::ShadowFormat>(xStyleProps, u"CharShadowFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
 
-        xStyleProps.set(characterStyles->getByName(u"CharShadow-removed"_ustr),
+        xStyleProps.set(characterStyles->getStyleByName(u"CharShadow-removed"_ustr),
                         uno::UNO_QUERY_THROW);
         aShadow = getProperty<table::ShadowFormat>(xStyleProps, u"CharShadowFormat"_ustr);
         //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
@@ -678,14 +678,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136587_noStyleName)
 {
     auto verify = [this]() {
         // An exception stopped all style definitions.
-        uno::Reference<container::XNameAccess> paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
-        uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getByName(u"Style15"_ustr),
+        uno::Reference<style::XStyleFamily> paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
+        uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getStyleByName(u"Style15"_ustr),
                                                         uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
                              getProperty<sal_Int16>(xStyleProps, u"ParaAdjust"_ustr));
 
         // The problem was that the default style wasn't imported at all, so the fontsize was only 12.
-        xStyleProps.set(paragraphStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
+        xStyleProps.set(paragraphStyles->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(32.0f, getProperty<float>(xStyleProps, u"CharHeight"_ustr));
     };
     createSwDoc("tdf136587_noStyleName.rtf");
@@ -698,7 +698,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBorder)
 {
     createSwDoc("page-border.rtf");
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     auto aTopBorder = getProperty<table::BorderLine2>(xPageStyle, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(18), aTopBorder.LineWidth);
 
@@ -716,7 +716,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTbrlPage)
 {
     auto verify = [this]() {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
         auto nActual = getProperty<sal_Int16>(xPageStyle, u"WritingMode"_ustr);
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: 2
@@ -764,8 +764,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
 {
     createSwDoc("gutter-left.rtf");
     saveAndReload(TestFilter::RTF);
-    uno::Reference<beans::XPropertySet> xPageStyle;
-    getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr) >>= xPageStyle;
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     sal_Int32 nGutterMargin{};
     xPageStyle->getPropertyValue(u"GutterMargin"_ustr) >>= nGutterMargin;
     // Without the accompanying fix in place, this test would have failed with:

@@ -77,8 +77,8 @@ DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
 DECLARE_ODFEXPORT_TEST(testTdf77961, "tdf77961.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<container::XNameAccess> xStyles(getStyles(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamily> xStyles(getStyles(u"PageStyles"_ustr));
+    uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, u"GridDisplay"_ustr));
     CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, u"GridPrint"_ustr));
 }
@@ -602,8 +602,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf128504)
 DECLARE_ODFEXPORT_TEST(tdf121658, "tdf121658.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
+    uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
+    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getStyleByName(
             u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle1, u"ParaHyphenationNoCaps"_ustr));
 }

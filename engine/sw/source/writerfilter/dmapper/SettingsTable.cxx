@@ -763,7 +763,7 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
 
     rtl::Reference<SwXStyleFamilies> xStyleFamilies = xDoc->getSwStyleFamilies();
     rtl::Reference<SwXStyleFamily> xParagraphStyles = xStyleFamilies->GetParagraphStyles();
-    rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getStyleByName(u"Standard"_ustr);
+    rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getSwStyleByName(u"Standard"_ustr);
     uno::Reference<beans::XPropertyState> xPropertyState(static_cast<cppu::OWeakObject*>(xDefault.get()), uno::UNO_QUERY);
     if (m_bAutoHyphenation && lcl_isDefault(xPropertyState, u"ParaIsHyphenation"_ustr))
     {

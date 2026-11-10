@@ -289,7 +289,7 @@ void XMLPageExport::exportStyles( bool bUsed, bool bAutoStyles )
         const cpo::uno::Sequence< OUString> aSeq = m_xPageStyles->getElementNames();
         for(const auto& rName : aSeq)
         {
-            Reference< XStyle > xStyle(m_xPageStyles->getByName( rName ),uno::UNO_QUERY);
+            Reference< XStyle > xStyle(m_xPageStyles->getStyleByName( rName ));
             if( !bUsed || xStyle->isInUse() )
                 exportStyle( xStyle, bAutoStyles );
         }

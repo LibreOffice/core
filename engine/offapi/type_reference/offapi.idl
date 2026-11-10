@@ -3423,6 +3423,8 @@ module com {
     published interface XStyleFamily {
      interface ::com::sun::star::container::XNameContainer;
      interface ::com::sun::star::container::XIndexAccess;
+     XStyle getStyleByName( [in] string aName ) raises( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException );
+     XStyle getStyleByIndex( [in] long Index ) raises( com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::lang::WrappedTargetException );
     };
     published interface XStyleFamilies {
      interface ::com::sun::star::container::XNameAccess;

@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -82,7 +83,7 @@ private:
     sal_Int64                       m_nVisibleAreaHeight;
     cpo::uno::Reference<SwXText> m_xParentText;
     cpo::uno::Reference< css::beans::XPropertySet > mxStyleData;
-    cpo::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
+    cpo::uno::Reference< css::style::XStyleFamily >  mxStyleFamily;
 
     void DisposeInternal();
 

@@ -315,9 +315,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                         Reference < XStyleFamily > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
                         if(xFamilies.is() && xFamilies->hasByName( sParent ) )
                         {
-                            cpo::uno::Reference< css::style::XStyle > xStyle;
-                            Any aAny = xFamilies->getByName( sParent );
-                            aAny >>= xStyle;
+                            cpo::uno::Reference< css::style::XStyle > xStyle = xFamilies->getStyleByName( sParent );
                             sParent = xStyle->getName() ;
                         }
                     }
@@ -363,8 +361,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         bool bNew = false;
         if( xFamilies->hasByName( rName ) )
         {
-            Any aAny = xFamilies->getByName( rName );
-            aAny >>= mxStyle;
+            mxStyle = xFamilies->getStyleByName( rName );
         }
         else
         {

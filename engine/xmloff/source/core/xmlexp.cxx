@@ -1865,7 +1865,7 @@ void SvXMLExport::collectDataStyles(bool bFromUsedStyles)
     sal_Int32 nCount(xCellStyles->getCount());
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        Reference<style::XStyle> xStyle(xCellStyles->getByIndex(i), uno::UNO_QUERY);
+        Reference<style::XStyle> xStyle(xCellStyles->getStyleByIndex(i));
         if (bFromUsedStyles && !xStyle->isInUse())
             continue;
 

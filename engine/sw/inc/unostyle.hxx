@@ -423,6 +423,10 @@ class SW_DLLPUBLIC SwXStyleFamily final : public cppu::WeakImplHelper
 public:
     SwXStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily);
 
+    //XStyleFamily
+    virtual cpo::uno::Reference<css::style::XStyle> getStyleByName(const OUString& Name) override;
+    virtual cpo::uno::Reference<css::style::XStyle> getStyleByIndex(sal_Int32 nIndex) override;
+
     //XIndexAccess
     virtual sal_Int32 getCount() override;
     virtual cpo::uno::Any getByIndex(sal_Int32 nIndex) override;
@@ -458,7 +462,7 @@ public:
     virtual bool supportsService(const OUString& rServiceName) override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
-    rtl::Reference<SwXBaseStyle> getStyleByName(const OUString& rName);
+    rtl::Reference<SwXBaseStyle> getSwStyleByName(const OUString& rName);
     rtl::Reference<SwXPageStyle> getPageStyleByName(const OUString& rName);
     rtl::Reference<SwXStyle> getCharacterStyleByName(const OUString& rName);
     rtl::Reference<SwXStyle> getParagraphStyleByName(const OUString& rName);

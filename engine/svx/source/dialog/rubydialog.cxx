@@ -552,9 +552,7 @@ void SvxRubyDialog::Activate()
                     OUString sUIName(u"DisplayName"_ustr);
                     for (sal_Int32 nStyle = 0; nStyle < xChar->getCount(); nStyle++)
                     {
-                        Any aStyle = xChar->getByIndex(nStyle);
-                        Reference<XStyle> xStyle;
-                        aStyle >>= xStyle;
+                        Reference<XStyle> xStyle = xChar->getStyleByIndex(nStyle);
                         Reference<XPropertySet> xPrSet(xStyle, UNO_QUERY);
                         OUString sName, sCoreName;
                         if (xPrSet.is())

@@ -918,7 +918,7 @@ private:
                     uno::Reference<style::XStyleFamily> xStyleFamily(
                         xCont->getStyleFamilyByName(u"CharacterStyles"_ustr));
                     uno::Reference<beans::XPropertySet> xInfo(
-                        xStyleFamily->getByName(sCharStyleName), uno::UNO_QUERY);
+                        xStyleFamily->getStyleByName(sCharStyleName), uno::UNO_QUERY);
                     xInfo->getPropertyValue(u"CharBackColor"_ustr) >>= nCharStyleBackColor;
                 }
                 catch (const cpo::uno::Exception&)
@@ -2641,7 +2641,7 @@ public:
         for (const OUString& rStyleFamilyName : xStyleFamilyNames)
         {
             rtl::Reference<SwXBaseStyle> xPropertySet(
-                xStyleFamily->getStyleByName(rStyleFamilyName));
+                xStyleFamily->getSwStyleByName(rStyleFamilyName));
             if (!xPropertySet.is())
                 continue;
             auto aFillStyleContainer = xPropertySet->getPropertyValue(u"FillStyle"_ustr);

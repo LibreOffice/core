@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo80742)
 {
     createSwDoc("fdo80742.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Heading 2"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 2"_ustr), uno::UNO_QUERY);
     // This was 0, outline level was body text.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xPropertySet, u"OutlineLevel"_ustr));
 }
@@ -131,11 +131,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82114)
 {
     createSwDoc("fdo82114.rtf");
     uno::Reference<text::XText> xHeaderTextPage1 = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderTextFirst"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderTextFirst"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"First page header, section 1"_ustr, xHeaderTextPage1->getString());
 
     uno::Reference<text::XText> xHeaderTextPage2 = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Converted1"_ustr), u"HeaderTextFirst"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Converted1"_ustr), u"HeaderTextFirst"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"First page header, section 2"_ustr, xHeaderTextPage2->getString());
 }
 
@@ -448,7 +448,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLndscpsxn)
     // Check landscape flag.
     CPPUNIT_ASSERT_EQUAL(4, getPages());
 
-    uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
+    uno::Reference<style::XStyleFamily> pageStyles = getStyles(u"PageStyles"_ustr);
 
     // get a page cursor
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -460,25 +460,25 @@ CPPUNIT_TEST_FIXTURE(Test, testLndscpsxn)
     // check that the first page has landscape flag
     xCursor->jumpToFirstPage();
     OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    uno::Reference<style::XStyle> xStylePage(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStylePage(pageStyles->getStyleByName(pageStyleName));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, u"IsLandscape"_ustr));
 
     // check that the second page has no landscape flag
     xCursor->jumpToPage(2);
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xStylePage = pageStyles->getStyleByName(pageStyleName);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStylePage, u"IsLandscape"_ustr));
 
     // check that the third page has landscape flag
     xCursor->jumpToPage(3);
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xStylePage.set(pageStyles->getStyleByName(pageStyleName));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, u"IsLandscape"_ustr));
 
     // check that the last page has no landscape flag
     xCursor->jumpToLastPage();
     pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
-    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xStylePage.set(pageStyles->getStyleByName(pageStyleName));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStylePage, u"IsLandscape"_ustr));
 }
 
@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
 {
     createSwDoc("tdf78506.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -633,32 +633,32 @@ CPPUNIT_TEST_FIXTURE(Test, testImportHeaderFooter)
 
     //Check if Headers/Footers only contain what they should in this document
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderTextFirst"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderTextFirst"_ustr);
     OUString aActual = xHeaderText->getString();
     CPPUNIT_ASSERT_EQUAL(u"First Page Header"_ustr, aActual);
 
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderTextLeft"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderTextLeft"_ustr);
     aActual = xHeaderTextLeft->getString();
     CPPUNIT_ASSERT_EQUAL(u"Header even"_ustr, aActual);
 
     uno::Reference<text::XText> xHeaderTextRight = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderTextRight"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderTextRight"_ustr);
     aActual = xHeaderTextRight->getString();
     CPPUNIT_ASSERT_EQUAL(u"Header uneven"_ustr, aActual);
 
     uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterTextFirst"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"FooterTextFirst"_ustr);
     aActual = xFooterText->getString();
     CPPUNIT_ASSERT_EQUAL(u"First Page Footer"_ustr, aActual);
 
     uno::Reference<text::XText> xFooterTextLeft = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterTextLeft"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"FooterTextLeft"_ustr);
     aActual = xFooterTextLeft->getString();
     CPPUNIT_ASSERT_EQUAL(u"Footer even"_ustr, aActual);
 
     uno::Reference<text::XText> xFooterTextRight = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterTextRight"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"FooterTextRight"_ustr);
     aActual = xFooterTextRight->getString();
     CPPUNIT_ASSERT_EQUAL(u"Footer uneven"_ustr, aActual);
 }
@@ -668,14 +668,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
     createSwDoc("tdf108947.rtf");
     //Check if Headers/Footers contain what they should in this document
     uno::Reference<text::XText> xHeaderTextRight = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderTextRight"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderTextRight"_ustr);
     OUString aActual = xHeaderTextRight->getString();
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aActual);
 
     //Document is very fragile, hence we need this guard.
 #if HAVE_MORE_FONTS
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderTextLeft"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderTextLeft"_ustr);
     aActual = xHeaderTextLeft->getString();
     CPPUNIT_ASSERT_EQUAL(u"" SAL_NEWLINE_STRING "Header Page 2 ?"_ustr, aActual);
 #endif
@@ -868,7 +868,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin)
 {
     createSwDoc("para-style-bottom-margin.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                          getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(
@@ -883,7 +883,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin)
     // as "set style N and for every attribute of that style,
     // set an attribute with default value on the style"
     uno::Reference<beans::XPropertySet> xPropertySet1(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Contents 1"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Contents 1"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                          getProperty<sal_Int32>(xPropertySet1, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(
@@ -988,8 +988,8 @@ CPPUNIT_TEST_FIXTURE(Test, test148544Tdf)
 CPPUNIT_TEST_FIXTURE(Test, testTdf163003)
 {
     createSwDoc("tdf163003.rtf");
-    uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(u"Standard"_ustr),
+    uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
+    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getStyleByName(u"Standard"_ustr),
                                                 uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle1, u"ParaHyphenationNoCaps"_ustr));
 
@@ -1071,7 +1071,7 @@ CPPUNIT_TEST_FIXTURE(Test, test165483Tdf)
     uno::Reference<text::XTextRange> const xRun1(
         getRun(uno::Reference<text::XTextRange>(getParagraphOrTable(1), uno::UNO_QUERY), 1));
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Based On Table Normal Copy"_ustr),
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Based On Table Normal Copy"_ustr),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun1, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));

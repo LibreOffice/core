@@ -199,8 +199,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf151100)
 DECLARE_ODFEXPORT_TEST(testGutterLeft, "gutter-left.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xPageStyle;
-    getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr) >>= xPageStyle;
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), UNO_QUERY);
     sal_Int32 nGutterMargin{};
     xPageStyle->getPropertyValue(u"GutterMargin"_ustr) >>= nGutterMargin;
     // Without the accompanying fix in place, this test would have failed with:
@@ -519,16 +519,16 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
     createSwDoc("style-link.fodt");
 
     // Then make sure the char style links the para one:
-    cpo::uno::Any aCharStyle
-        = getStyles(u"CharacterStyles"_ustr)->getByName(u"List Paragraph Char"_ustr);
+    Reference<style::XStyle> aCharStyle
+        = getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"List Paragraph Char"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: List Paragraph
     // - Actual  :
     // i.e. the linked style was lost on import.
     CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
                          getProperty<OUString>(aCharStyle, u"LinkStyle"_ustr));
-    cpo::uno::Any aParaStyle
-        = getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr);
+    Reference<style::XStyle> aParaStyle
+        = getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"List Paragraph"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: List Paragraph Char
     // - Actual  :
@@ -1217,7 +1217,7 @@ DECLARE_ODFEXPORT_TEST(testTdf160877, "tdf160877.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     uno::Reference<text::XText> xHeaderTextPage1 = getProperty<uno::Reference<text::XText>>(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderTextFirst"_ustr);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderTextFirst"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Classification: General Business"_ustr, xHeaderTextPage1->getString());
 
     // Without the fix in place, this test would have failed with

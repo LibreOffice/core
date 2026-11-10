@@ -365,7 +365,7 @@ bool XMLStyleExport::exportStyle(
                 }
                 else
                 {
-                    xPropState.set( xStyles->getByName( aParentStyle ), UNO_QUERY );
+                    xPropState.set( xStyles->getStyleByName( aParentStyle ), UNO_QUERY );
                     if ( !xPropState.is() )
                     {
                         break;
@@ -482,7 +482,7 @@ void XMLStyleExport::exportStyleFamily(
         Reference< XStyle > xStyle;
         try
         {
-            xStyleCont->getByName( rName ) >>= xStyle;
+            xStyle = xStyleCont->getStyleByName( rName );
         }
         catch(const lang::IndexOutOfBoundsException&)
         {
@@ -535,8 +535,7 @@ void XMLStyleExport::exportStyleFamily(
     // unused and that for, haven't been exported in the first loop.
     for(const auto& rName : aSeq)
     {
-        Reference< XStyle > xStyle;
-        xStyleCont->getByName( rName ) >>= xStyle;
+        Reference< XStyle > xStyle = xStyleCont->getStyleByName( rName );
 
         assert(xStyle.is());
 
@@ -567,7 +566,7 @@ void XMLStyleExport::exportStyleFamily(
         if (xStyle->getName() != sNextName &&
             0 == xExportedStyles->count( sTmp ))
         {
-            xStyleCont->getByName( sNextName ) >>= xStyle;
+            xStyle = xStyleCont->getStyleByName( sNextName );
             assert(xStyle.is());
 
             if (exportStyle(xStyle, rXMLFamily, rPropMapper, xStyleCont, pPrefix))

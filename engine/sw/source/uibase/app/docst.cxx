@@ -452,8 +452,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         uno::Reference< style::XStyleFamilies > xCont = xModel->getStyleFamilies();
                         uno::Reference< style::XStyleFamily > xStyles
                             = xCont->getStyleFamilyByName(pFamilyItem->GetValue());
-                        uno::Reference< beans::XPropertySet > xInfo;
-                        xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
+                        uno::Reference< beans::XPropertySet > xInfo(
+                            xStyles->getStyleByName( pNameItem->GetValue() ), uno::UNO_QUERY);
                         xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
                     }
                     catch (const cpo::uno::Exception&)
@@ -784,23 +784,21 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
     if (!xPageStyles.is())
         return;
 
-    uno::Reference<css::style::XStyle> xEndnotePageStyle(xPageStyles->getByName(u"Endnote"_ustr),
-                                                  uno::UNO_QUERY);
+    uno::Reference<css::style::XStyle> xEndnotePageStyle(xPageStyles->getStyleByName(u"Endnote"_ustr));
 
     if (!xEndnotePageStyle.is())
         return;
 
     // Language-independent name of the "Default Style" is "Standard"
-    uno::Reference<css::style::XStyle> xDefaultPageStyle(xPageStyles->getByName(u"Standard"_ustr),
-                                                  uno::UNO_QUERY);
+    uno::Reference<css::style::XStyle> xDefaultPageStyle(xPageStyles->getStyleByName(u"Standard"_ustr));
     if (!xDefaultPageStyle.is())
         return;
 
     if (xEndnotePageStyle->isUserDefined() || !xEndnotePageStyle->isInUse())
         return;
 
-    uno::Reference<beans::XPropertySet> xEndnotePagePropSet(xPageStyles->getByName(u"Endnote"_ustr), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDefaultPagePropSet(xPageStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xEndnotePagePropSet(xPageStyles->getStyleByName(u"Endnote"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDefaultPagePropSet(xPageStyles->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     if (!xEndnotePagePropSet.is() || !xDefaultPagePropSet.is())
     {

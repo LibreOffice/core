@@ -1583,8 +1583,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
         uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
         uno::Reference<style::XStyleFamily> xListStyles(
             xSFS->getStyleFamilies()->getStyleFamilyByName(u"NumberingStyles"_ustr));
-        uno::Reference<container::XNamed> xListStyle(xListStyles->getByName(u"NewListStyle"_ustr),
-                                                     uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xListStyle(xListStyles->getStyleByName(u"NewListStyle"_ustr));
         xListStyle->setName(sChangedListStyle);
 
         comphelper::SequenceAsHashMap aMediaDescriptor;
@@ -1598,14 +1597,14 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
         uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
         uno::Reference<style::XStyleFamily> xListStyles(
             xSFS->getStyleFamilies()->getStyleFamilyByName(u"NumberingStyles"_ustr));
-        uno::Reference<container::XNamed> xNewListStyle(
-            xListStyles->getByName(u"ChangedListStyle"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xNewListStyle(
+            xListStyles->getStyleByName(u"ChangedListStyle"_ustr));
 
         CPPUNIT_ASSERT_EQUAL(xNewListStyle->getName(), sChangedListStyle);
 
         uno::Reference<style::XStyleFamily> xParaStyles(
             xSFS->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xBodyTextStyle(xParaStyles->getByName(u"Text body"_ustr),
+        uno::Reference<beans::XPropertySet> xBodyTextStyle(xParaStyles->getStyleByName(u"Text body"_ustr),
                                                            uno::UNO_QUERY);
 
         rtl::OUString sListStyleName;

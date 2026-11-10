@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo63023)
 {
     auto verify = [this]() {
         uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderText"_ustr);
         // Back color was black (0) in the header, due to missing color table in the substream.
         CPPUNIT_ASSERT_EQUAL(Color(0xFFFF99),
                              getProperty<Color>(getRun(getParagraphOfText(1, xHeaderText), 1),
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo62044)
     paste(u"rtfexport/data/fdo62044-paste.rtf", u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Heading 1"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
         10.f, getProperty<float>(xPropertySet,
                                  u"CharHeight"_ustr)); // Was 18, i.e. reset back to original value.
@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo70578)
     auto verify = [this]() {
         // Style without explicit \s0 was not imported as the default style
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"ParagraphStyles"_ustr)->getByName(u"Subtitle"_ustr), uno::UNO_QUERY);
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Subtitle"_ustr), uno::UNO_QUERY);
         uno::Reference<style::XStyle> xStyle(xPropertySet, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, xStyle->getParentStyle());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
@@ -284,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106953)
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270),
                              getProperty<sal_Int32>(getParagraph(1), u"ParaLeftMargin"_ustr));
         auto xRules = getProperty<uno::Reference<container::XIndexAccess>>(
-            getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), u"NumberingRules"_ustr);
+            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), u"NumberingRules"_ustr);
         comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                              aRule[u"FirstLineIndent"_ustr].get<sal_Int32>());
@@ -312,7 +312,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaBottomMargin)
 {
     auto verify = [this]() {
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                              getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
 
@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin2)
 {
     createSwDoc("para-style-bottom-margin-2.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                          getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(
@@ -348,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin2)
 
     // the derived style contains \sa200, as does its parent
     uno::Reference<beans::XPropertySet> xPropertySet1(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                          getProperty<sal_Int32>(xPropertySet1, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(
@@ -399,11 +399,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77996)
 {
     auto verify = [this]() {
         // all styles were imported as name "0"
-        uno::Reference<container::XNameAccess> xChars(getStyles(u"CharacterStyles"_ustr));
+        uno::Reference<style::XStyleFamily> xChars(getStyles(u"CharacterStyles"_ustr));
         CPPUNIT_ASSERT(!xChars->hasByName(u"0"_ustr));
         CPPUNIT_ASSERT(xChars->hasByName(u"strong"_ustr));
         CPPUNIT_ASSERT(xChars->hasByName(u"author"_ustr));
-        uno::Reference<container::XNameAccess> xParas(getStyles(u"ParagraphStyles"_ustr));
+        uno::Reference<style::XStyleFamily> xParas(getStyles(u"ParagraphStyles"_ustr));
         CPPUNIT_ASSERT(!xParas->hasByName(u"0"_ustr));
         CPPUNIT_ASSERT(xParas->hasByName(u"extract2"_ustr));
         // some document properties were lost
@@ -507,7 +507,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo67498)
         // Left margin of the default page style wasn't set (was 2000).
         CPPUNIT_ASSERT_EQUAL(
             sal_Int32(convertTwipToMm100(5954)),
-            getProperty<sal_Int32>(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
+            getProperty<sal_Int32>(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr),
                                    u"LeftMargin"_ustr));
     };
     createSwDoc("fdo67498.rtf");
@@ -650,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFooterPara)
     auto verify = [this]() {
         // check that paragraph properties in footer are imported
         uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterTextFirst"_ustr);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"FooterTextFirst"_ustr);
         uno::Reference<text::XTextContent> xParagraph = getParagraphOrTable(1, xFooterText);
         CPPUNIT_ASSERT_EQUAL(
             u"All Rights Reserved."_ustr,
@@ -828,7 +828,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLevelfollow)
     auto verify = [this]() {
         uno::Reference<container::XIndexAccess> xNum1Levels
             = getProperty<uno::Reference<container::XIndexAccess>>(
-                getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr),
+                getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr),
                 u"NumberingRules"_ustr);
         CPPUNIT_ASSERT_EQUAL(
             sal_Int16(SvxNumberFormat::LISTTAB),
@@ -837,7 +837,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLevelfollow)
 
         uno::Reference<container::XIndexAccess> xNum2Levels
             = getProperty<uno::Reference<container::XIndexAccess>>(
-                getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum2"_ustr),
+                getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum2"_ustr),
                 u"NumberingRules"_ustr);
         CPPUNIT_ASSERT_EQUAL(
             sal_Int16(SvxNumberFormat::SPACE),
@@ -846,7 +846,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLevelfollow)
 
         uno::Reference<container::XIndexAccess> xNum3Levels
             = getProperty<uno::Reference<container::XIndexAccess>>(
-                getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum3"_ustr),
+                getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum3"_ustr),
                 u"NumberingRules"_ustr);
         CPPUNIT_ASSERT_EQUAL(
             sal_Int16(SvxNumberFormat::NOTHING),
@@ -926,7 +926,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76628)
         getParagraph(1, u"\u041E\u0411\u0420\u0410\u0417\u0415\u0426"_ustr);
 
         uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderText"_ustr);
         // Should be 'prepared' in Russian, was garbage.
         getParagraphOfText(
             1, xHeaderText,

@@ -368,9 +368,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
 
         if( EX_SHOW_DEFAULT_PAGE != m_nStyleFlags && xPFamily && !sPageStyle.isEmpty() )
         {
-            cpo::uno::Any aPStyle = xPFamily->getByName( sPageStyle );
-            uno::Reference< style::XStyle >  xPStyle;
-            aPStyle >>= xPStyle;
+            uno::Reference< style::XStyle >  xPStyle = xPFamily->getStyleByName( sPageStyle );
             uno::Reference< beans::XPropertySet >  xPProp(xPStyle, uno::UNO_QUERY);
             cpo::uno::Any aSize = xPProp->getPropertyValue(UNO_NAME_SIZE);
             awt::Size aPSize;

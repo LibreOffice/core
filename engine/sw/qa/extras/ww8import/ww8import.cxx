@@ -236,7 +236,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
     }
 
     //tdf#139495: without the fix, a negative number was converted into a uInt16, overflowing to 115501
-    auto nDist = getProperty<sal_uInt32>(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderBodyDistance"_ustr);
+    auto nDist = getProperty<sal_uInt32>(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), u"HeaderBodyDistance"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nDist);
 }
 

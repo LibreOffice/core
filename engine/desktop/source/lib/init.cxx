@@ -10284,13 +10284,13 @@ static std::string getFontSubset (std::string_view aFontName)
 // localized display name (so the client toolbar/notebookbar can show it directly
 // without re-translating) and id is the programmatic name used to apply the style.
 static void addStyleEntry(boost::property_tree::ptree& rChildren,
-                          const uno::Reference<container::XNameAccess>& xStyleFamily,
+                          const uno::Reference<style::XStyleFamily>& xStyleFamily,
                           const OUString& rStyle)
 {
     OUString aDisplayName = rStyle;
     try
     {
-        uno::Reference<beans::XPropertySet> xProperty(xStyleFamily->getByName(rStyle), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xProperty(xStyleFamily->getStyleByName(rStyle), uno::UNO_QUERY);
         OUString aName;
         if (xProperty.is()
             && (xProperty->getPropertyValue(u"DisplayName"_ustr) >>= aName)
@@ -10411,7 +10411,7 @@ static std::string getComponentStyles(const cpo::uno::Reference<css::lang::XComp
             for (OUString const & sName : aSeqNames)
             {
                 bool bIsPhysical;
-                xProperty.set(xContainer->getByName(sName), uno::UNO_QUERY);
+                xProperty.set(xContainer->getStyleByName(sName), uno::UNO_QUERY);
                 if (xProperty.is() && (xProperty->getPropertyValue(u"IsPhysical"_ustr) >>= bIsPhysical) && bIsPhysical)
                 {
                     OUString displayName;

@@ -549,7 +549,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool, XSt
 
     for( sal_Int32 nIndex = 0; nIndex < xSource->getCount(); nIndex++ ) try
     {
-        Reference< XNameAccess > xSourceTableStyle( xSource->getByIndex( nIndex ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xSourceTableStyle( xSource->getStyleByIndex( nIndex ), UNO_QUERY_THROW );
         Reference< XNameReplace > xNewTableStyle( xFactory->createInstance(), UNO_QUERY_THROW );
 
         const Sequence< OUString > aStyleNames( xSourceTableStyle->getElementNames() );
@@ -559,7 +559,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool, XSt
             Reference< XStyle > xTargetStyle;
             if( xSourceStyle.is() ) try
             {
-                mxCellFamily->getByName( xSourceStyle->getName() ) >>= xTargetStyle;
+                xTargetStyle = mxCellFamily->getStyleByName( xSourceStyle->getName() );
             }
             catch( cpo::uno::Exception& )
             {

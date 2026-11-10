@@ -363,8 +363,8 @@ Reference< XStyle > WorkbookGlobals::getStyleObject( const OUString& rStyleName,
     Reference< XStyle > xStyle;
     try
     {
-        Reference< XNameContainer > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
-        xStyle.set( xStylesNC->getByName( rStyleName ), UNO_QUERY );
+        Reference< XStyleFamily > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
+        xStyle = xStylesNC->getStyleByName( rStyleName );
     }
     catch( cpo::uno::Exception& )
     {
@@ -522,7 +522,7 @@ Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, b
     Reference< XStyle > xStyle;
     try
     {
-        Reference< XNameContainer > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
+        Reference< XStyleFamily > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
         xStyle.set( mrBaseFilter.getModelFactory()->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
         orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ) );
     }

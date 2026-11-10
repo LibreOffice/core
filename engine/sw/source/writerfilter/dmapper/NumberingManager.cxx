@@ -576,7 +576,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             }
         }
 
-        rtl::Reference<SwXBaseStyle> xStyle = xStyles->getStyleByName(GetStyleName());
+        rtl::Reference<SwXBaseStyle> xStyle = xStyles->getSwStyleByName(GetStyleName());
 
         // Get the default OOo Numbering style rules
         cpo::uno::Any aRules = xStyle->getPropertyValue( getPropertyName( PROP_NUMBERING_RULES ) );

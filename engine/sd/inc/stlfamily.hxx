@@ -66,6 +66,10 @@ public:
     virtual OUString getName(  ) override;
     virtual void setName( const OUString& aName ) override;
 
+    // XStyleFamily
+    virtual cpo::uno::Reference<css::style::XStyle> getStyleByName( const OUString& aName ) override;
+    virtual cpo::uno::Reference<css::style::XStyle> getStyleByIndex( sal_Int32 Index ) override;
+
     // XNameAccess
     virtual cpo::uno::Any getByName( const OUString& aName ) override;
     virtual cpo::uno::Sequence< OUString > getElementNames() override;

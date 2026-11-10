@@ -913,7 +913,7 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
         return true;
     }
 
-    Reference< XPropertyState > xPropState( xParaStyles->getByName( sStyleName ),
+    Reference< XPropertyState > xPropState( xParaStyles->getStyleByName( sStyleName ),
                                             UNO_QUERY );
     if ( !xPropState.is() )
     {
@@ -963,7 +963,7 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
             }
             else
             {
-                xPropState.set( xParaStyles->getByName( aParentStyle ),
+                xPropState.set( xParaStyles->getStyleByName( aParentStyle ),
                                 UNO_QUERY );
                 if ( !xPropState.is() )
                 {

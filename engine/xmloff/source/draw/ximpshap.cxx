@@ -704,7 +704,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                             // A shape may name a style the file never defines, and then it
                             // keeps the one it was made with.
                             if( xFamily.is() && xFamily->hasByName( aStyleName ) )
-                                xFamily->getByName( aStyleName ) >>= xStyle;
+                                xStyle = xFamily->getStyleByName( aStyleName );
                         }
                     }
                 }

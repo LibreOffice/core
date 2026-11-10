@@ -60,12 +60,12 @@ OUString GetDisplayFromInternalName( const cpo::uno::Reference< css::frame::XFra
 
         cpo::uno::Reference< css::style::XStyleFamily > xStyleSet
             = xFamilies->getStyleFamilyByName( rFamilyName );
-        cpo::uno::Reference< css::beans::XPropertySet > xStyle;
-        xStyleSet->getByName( rStyleName ) >>= xStyle;
+        cpo::uno::Reference< css::style::XStyle > xStyle
+            = xStyleSet->getStyleByName( rStyleName );
 
         OUString aDisplayName;
         if ( xStyle.is() )
-            xStyle->getPropertyValue( u"DisplayName"_ustr ) >>= aDisplayName;
+            cpo::uno::Reference<css::beans::XPropertySet>(xStyle, cpo::uno::UNO_QUERY_THROW)->getPropertyValue( u"DisplayName"_ustr ) >>= aDisplayName;
         return aDisplayName;
     }
     catch ( const cpo::uno::Exception& )

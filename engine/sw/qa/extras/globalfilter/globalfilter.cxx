@@ -554,8 +554,8 @@ void Test::testCharStyleHighlight()
         // Export the document and import again for a check
         saveAndReload(eFilterName);
 
-        uno::Reference<beans::XPropertySet> xCharStyle;
-        getStyles(u"CharacterStyles"_ustr)->getByName(u"charBackground"_ustr) >>= xCharStyle;
+        uno::Reference<beans::XPropertySet> xCharStyle(
+            getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"charBackground"_ustr), UNO_QUERY);
         const Color nBackColor(0xFFDBB6); //orange-y
 
         // Always export character style's background colour as shading, never as highlighting.
@@ -944,8 +944,8 @@ void Test::testNestedFieldmark()
 auto Test::verifyText13(char const*const pTestName) -> void
 {
     // OFFICE-3789 style:header-first/style:footer-first
-    uno::Reference<beans::XPropertySet> xPageStyle;
-    getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr) >>= xPageStyle;
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), UNO_QUERY);
     uno::Reference<text::XText> xHF(getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextFirst"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, u"Header first"_ustr, xHF->getString());
     uno::Reference<text::XText> xFF(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr));
@@ -1731,7 +1731,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(2), u"Decorative"_ustr));
     {
         // tdf#153925 not imported - check default and set it to test ODF filters
-        uno::Reference<beans::XPropertySet> const xStyle(getStyles(u"FrameStyles"_ustr)->getByName(u"Formula"_ustr), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> const xStyle(getStyles(u"FrameStyles"_ustr)->getStyleByName(u"Formula"_ustr), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, u"Decorative"_ustr));
         xStyle->setPropertyValue(u"Decorative"_ustr, cpo::uno::Any(true));
     }
@@ -1739,7 +1739,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), u"Decorative"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(2), u"Decorative"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getStyles(u"FrameStyles"_ustr)->getByName(u"Formula"_ustr), u"Decorative"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getStyles(u"FrameStyles"_ustr)->getStyleByName(u"Formula"_ustr), u"Decorative"_ustr));
 
     // check PDF export
     comphelper::SequenceAsHashMap aMediaDescriptor;

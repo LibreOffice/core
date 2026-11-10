@@ -1257,7 +1257,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf97808)
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"graphics"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"objectwithoutfill"_ustr),
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"objectwithoutfill"_ustr),
                                                uno::UNO_QUERY);
     OUString lineend;
     CPPUNIT_ASSERT(xStyle->getPropertyValue(u"LineEndName"_ustr) >>= lineend);
@@ -2183,8 +2183,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"Title Slide"_ustr));
     {
-        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),
-                                             uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"title"_ustr));
         uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
         CPPUNIT_ASSERT_EQUAL(44.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
@@ -2192,8 +2191,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
                              xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
     }
     {
-        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"subtitle"_ustr),
-                                             uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"subtitle"_ustr));
         uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
         CPPUNIT_ASSERT_EQUAL(32.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
@@ -2203,8 +2201,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
     // 2nd slide
     xStyleFamily = xStyleFamilies->getStyleFamilyByName(u"simple text placeholder"_ustr);
     {
-        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"outline1"_ustr),
-                                             uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"outline1"_ustr));
         uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
         float nCharHeight = xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>();

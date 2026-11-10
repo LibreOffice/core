@@ -457,7 +457,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                         }
                         if( nWritingMode == -1 || nWritingMode == text::WritingMode2::PAGE )
                         {
-                            uno::Reference< beans::XPropertySet > xPageStyle( xPageStyles->getByName( aPageStyle ), uno::UNO_QUERY );
+                            uno::Reference< beans::XPropertySet > xPageStyle( xPageStyles->getStyleByName( aPageStyle ), uno::UNO_QUERY );
                             Reference< css::beans::XPropertySetInfo > xInfo = xPageStyle->getPropertySetInfo();
                             if (xInfo->hasPropertyByName(u"WritingMode"_ustr))
                             {

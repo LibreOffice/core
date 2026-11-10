@@ -164,6 +164,10 @@ public:
     virtual OUString getName(  ) override;
     virtual void setName( const OUString& aName ) override;
 
+    // XStyleFamily
+    virtual cpo::uno::Reference<XStyle> getStyleByName( const OUString& aName ) override;
+    virtual cpo::uno::Reference<XStyle> getStyleByIndex( sal_Int32 Index ) override;
+
     // XNameAccess
     virtual Any getByName( const OUString& aName ) override;
     virtual Sequence< OUString > getElementNames() override;
@@ -578,17 +582,33 @@ void TableDesignFamily::setName( const OUString& )
 {
 }
 
-// XNameAccess
-Any TableDesignFamily::getByName( const OUString& rName )
+// XStyleFamily
+Reference<XStyle> TableDesignFamily::getStyleByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
 
     auto iter = std::find_if(maDesigns.begin(), maDesigns.end(),
         [&rName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == rName; });
     if (iter != maDesigns.end())
-        return Any( (*iter) );
+        return *iter;
 
     throw NoSuchElementException();
+}
+
+Reference<XStyle> TableDesignFamily::getStyleByIndex( sal_Int32 Index )
+{
+    SolarMutexGuard aGuard;
+
+    if( (Index >= 0) && (Index < sal::static_int_cast< sal_Int32 >( maDesigns.size() ) ) )
+        return maDesigns[Index];
+
+    throw IndexOutOfBoundsException();
+}
+
+// XNameAccess
+Any TableDesignFamily::getByName( const OUString& rName )
+{
+    return Any(getStyleByName(rName));
 }
 
 
@@ -645,12 +665,7 @@ sal_Int32 TableDesignFamily::getCount()
 
 Any TableDesignFamily::getByIndex( sal_Int32 Index )
 {
-    SolarMutexGuard aGuard;
-
-    if( (Index >= 0) && (Index < sal::static_int_cast< sal_Int32 >( maDesigns.size() ) ) )
-        return Any( maDesigns[Index] );
-
-    throw IndexOutOfBoundsException();
+    return Any(getStyleByIndex(Index));
 }
 
 

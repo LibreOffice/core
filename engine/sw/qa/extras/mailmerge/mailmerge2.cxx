@@ -360,7 +360,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabel
         const bool bIsEvenPage = ((nPageNum % 2) == 0);
 
         const UIName& sPageStyle = pPageFrm->GetPageDesc()->GetName();
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(sPageStyle.toString()), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(sPageStyle.toString()), uno::UNO_QUERY);
 
         bool bHeaderIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;

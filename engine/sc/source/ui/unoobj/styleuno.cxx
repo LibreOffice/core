@@ -838,14 +838,19 @@ sal_Int32 ScStyleFamilyObj::getCount()
     return 0;
 }
 
-cpo::uno::Any ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
+uno::Any ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
+{
+    return uno::Any(getStyleByIndex(nIndex));
+}
+
+uno::Reference< style::XStyle > ScStyleFamilyObj::getStyleByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScStyleObj >  xObj(GetObjectByIndex_Impl(nIndex));
     if (!xObj.is())
         throw lang::IndexOutOfBoundsException();
 
-    return cpo::uno::Any(uno::Reference< style::XStyle >(xObj));
+    return xObj;
 }
 
 cpo::uno::Type ScStyleFamilyObj::getElementType()
@@ -861,7 +866,12 @@ bool ScStyleFamilyObj::hasElements()
 
 // container::XNameAccess
 
-cpo::uno::Any ScStyleFamilyObj::getByName( const OUString& aName )
+uno::Any ScStyleFamilyObj::getByName( const OUString& aName )
+{
+    return uno::Any(getStyleByName(aName));
+}
+
+uno::Reference< style::XStyle > ScStyleFamilyObj::getStyleByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScStyleObj > xObj(
@@ -869,7 +879,7 @@ cpo::uno::Any ScStyleFamilyObj::getByName( const OUString& aName )
     if (!xObj.is())
         throw container::NoSuchElementException();
 
-    return cpo::uno::Any(uno::Reference< style::XStyle >(xObj));
+    return xObj;
 }
 
 cpo::uno::Sequence<OUString> ScStyleFamilyObj::getElementNames()

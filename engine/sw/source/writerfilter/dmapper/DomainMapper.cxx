@@ -1713,7 +1713,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 const uno::Reference<beans::XPropertySetInfo> xFillInfo
                     = xFillPropertySet->getPropertySetInfo();
                 rtl::Reference<SwXBaseStyle> xPS =
-                    m_pImpl->GetPageStyles()->getStyleByName(u"Standard"_ustr);
+                    m_pImpl->GetPageStyles()->getSwStyleByName(u"Standard"_ustr);
                 for (const beans::Property& rProp : xPS->getPropertySetInfo()->getProperties())
                 {
                     if (rProp.Name == "FillComplexColor" || rProp.Name == "FillGradientName"

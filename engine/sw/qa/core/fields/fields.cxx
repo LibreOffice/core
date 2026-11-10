@@ -318,7 +318,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMarginalStyleRef)
         xStyleFamiliesSupplier->getStyleFamilies()->getStyleFamilyByName(u"PageStyles"_ustr));
 
     uno::Reference<beans::XPropertySet> xPagePropertySet(
-        xParagraphStylesContainer->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        xParagraphStylesContainer->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     xPagePropertySet->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xFooterText(xPagePropertySet->getPropertyValue(u"FooterText"_ustr),

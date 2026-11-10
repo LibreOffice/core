@@ -2875,7 +2875,7 @@ void CellStyleBuffer::finalizeImport()
         Reference< XStyleFamily > xStyleFamilyIA( getCellStyleFamily(), UNO_SET_THROW );
         for( sal_Int32 nIndex = 0, nCount = xStyleFamilyIA->getCount(); nIndex < nCount; ++nIndex )
         {
-            Reference< XStyle > xStyle( xStyleFamilyIA->getByIndex( nIndex ), UNO_QUERY_THROW );
+            Reference< XStyle > xStyle( xStyleFamilyIA->getStyleByIndex( nIndex ), UNO_SET_THROW );
             if( !xStyle->isUserDefined() )
             {
                 // create an empty entry by using ::std::map<>::operator[]

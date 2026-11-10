@@ -174,7 +174,7 @@ static void lcl_disableStyleLineNumbering(const rtl::Reference<SwXStyleFamily>& 
 
     try
     {
-        rtl::Reference<SwXBaseStyle> xStyle = xStyles->getStyleByName(rProgName);
+        rtl::Reference<SwXBaseStyle> xStyle = xStyles->getSwStyleByName(rProgName);
         if (!xStyle.is())
             return;
 
@@ -7834,7 +7834,7 @@ void DomainMapper_Impl::handleToc
                 {
                     OUString style;
                     xTOC->getPropertyValue("ParaStyleLevel" + OUString::number(nLevel)) >>= style;
-                    rtl::Reference<SwXBaseStyle> xStyle = xStyles->getStyleByName(style);
+                    rtl::Reference<SwXBaseStyle> xStyle = xStyles->getSwStyleByName(style);
                     if (xStyle)
                     {
                         if (uno::Reference<beans::XPropertyState> xPropState{ static_cast<cppu::OWeakObject*>(xStyle.get()),

@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImagesPageAndParagraph)
     // get the pageStyle where the PageBackgroundFill is defined. Caution: for
     // HTML mode this is *not* called 'Default Style', but 'HTML'. Name is empty
     // due to being loaded embedded. BitmapMode is repeat.
-    uno::Reference<beans::XPropertySet> xPageProperties1(getStyles(u"PageStyles"_ustr)->getByName(u"HTML"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageProperties1(getStyles(u"PageStyles"_ustr)->getStyleByName(u"HTML"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPageProperties1, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPageProperties1, u"FillBitmapName"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xPageProperties1, u"FillBitmapMode"_ustr));

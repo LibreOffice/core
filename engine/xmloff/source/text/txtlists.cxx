@@ -420,13 +420,11 @@ XMLTextListsHelper::MakeNumRule(
                             i_rImport.GetTextImport()->GetNumberingStyles() );
         if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
         {
-            uno::Reference < style::XStyle > xStyle;
-            cpo::uno::Any any = rNumStyles->getByName( sDisplayStyleName );
-            any >>= xStyle;
+            uno::Reference < style::XStyle > xStyle = rNumStyles->getStyleByName( sDisplayStyleName );
 
             uno::Reference< beans::XPropertySet > xPropSet( xStyle,
                 uno::UNO_QUERY );
-            any = xPropSet->getPropertyValue(u"NumberingRules"_ustr);
+            uno::Any any = xPropSet->getPropertyValue(u"NumberingRules"_ustr);
             any >>= xNumRules;
         }
         else

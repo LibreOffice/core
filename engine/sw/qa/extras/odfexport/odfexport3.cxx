@@ -629,8 +629,8 @@ DECLARE_ODFEXPORT_TEST(testOdtBorderTypes, "border_types.odt")
 DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<container::XNameAccess> xStyles(getStyles(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(u"Standard"_ustr),
+    uno::Reference<style::XStyleFamily> xStyles(getStyles(u"PageStyles"_ustr));
+    uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(u"Standard"_ustr),
                                                uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH,
                          getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
@@ -1330,8 +1330,8 @@ DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xFamilies(XFamiliesSupplier->getStyleFamilies());
     uno::Reference<style::XStyleFamily> xCellFamily(xFamilies->getStyleFamilyByName(u"CellStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xCell1Style;
-    xCellFamily->getByName(u"Test style.1"_ustr) >>= xCell1Style;
+    uno::Reference<beans::XPropertySet> xCell1Style(
+        xCellFamily->getStyleByName(u"Test style.1"_ustr), UNO_QUERY);
 
     sal_Int32 nInt32 = 0xF0F0F0;
     table::BorderLine2 oBorder;
@@ -1370,7 +1370,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xFamilies(XFamiliesSupplier->getStyleFamilies());
     uno::Reference<style::XStyleFamily> xTableFamily(xFamilies->getStyleFamilyByName(u"TableStyles"_ustr));
-    uno::Reference<container::XNameAccess> xTableStyle(xTableFamily->getByName(u"Test style2"_ustr),
+    uno::Reference<container::XNameAccess> xTableStyle(xTableFamily->getStyleByName(u"Test style2"_ustr),
                                                        uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xCell1Style;
 
@@ -1748,7 +1748,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xFamilies(XFamiliesSupplier->getStyleFamilies());
     uno::Reference<style::XStyleFamily> xTableFamily(xFamilies->getStyleFamilyByName(u"TableStyles"_ustr));
-    uno::Reference<container::XNameAccess> xTableStyle(xTableFamily->getByName(u"Green"_ustr),
+    uno::Reference<container::XNameAccess> xTableStyle(xTableFamily->getStyleByName(u"Green"_ustr),
                                                        uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xCell1Style;
 
@@ -1856,7 +1856,7 @@ DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test that number format of cell styles can be imported and exported.
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"CellStyles"_ustr)->getByName(u"Test Style.11"_ustr), uno::UNO_QUERY);
+        getStyles(u"CellStyles"_ustr)->getStyleByName(u"Test Style.11"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(10104), getProperty<sal_uInt32>(xStyle, u"NumberFormat"_ustr));
 }
 
@@ -1865,8 +1865,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129568)
     createSwDoc("tdf129568.fodt");
     saveAndReload(TestFilter::ODT);
     // Test that export doesn't fail, and that style is imported and in use.
-    uno::Reference<style::XStyle> xStyle(
-        getStyles(u"CellStyles"_ustr)->getByName(u"Default Style.1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle
+        = getStyles(u"CellStyles"_ustr)->getStyleByName(u"Default Style.1"_ustr);
     CPPUNIT_ASSERT(xStyle->isInUse());
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(xStyle, u"BackColor"_ustr));
 }
@@ -1877,7 +1877,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129568ui)
     saveAndReload(TestFilter::ODT);
     // Same as above, but styles referenced by UI name.
     uno::Reference<style::XStyle> xStyle(
-        getStyles(u"CellStyles"_ustr)->getByName(u"Default Style.1"_ustr), uno::UNO_QUERY);
+        getStyles(u"CellStyles"_ustr)->getStyleByName(u"Default Style.1"_ustr));
     CPPUNIT_ASSERT(xStyle->isInUse());
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(xStyle, u"BackColor"_ustr));
 }

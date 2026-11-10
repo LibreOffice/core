@@ -68,8 +68,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderDocImport)
 
     // Then make sure we map that to a negative border distance (move border from the edge of body
     // frame towards the center of the page, not towards the edge of the page):
-    uno::Reference<container::XNameAccess> xStyleFamily = getStyles(u"PageStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+    uno::Reference<style::XStyleFamily> xStyleFamily = getStyles(u"PageStyles"_ustr);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
                                                uno::UNO_QUERY);
     auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     // Without the accompanying fix in place, this test would have failed with:

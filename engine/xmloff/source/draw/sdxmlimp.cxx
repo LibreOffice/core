@@ -547,7 +547,7 @@ void dropStaleThemeColorsOfDocument(const uno::Reference<frame::XModel>& xModel)
             continue;
         for (const OUString& rStyleName : xFamily->getElementNames())
         {
-            uno::Reference<beans::XPropertySet> xStyle(xFamily->getByName(rStyleName),
+            uno::Reference<beans::XPropertySet> xStyle(xFamily->getStyleByName(rStyleName),
                                                        uno::UNO_QUERY);
             if (xStyle.is())
                 dropStaleThemeColors(xStyle, aAllThemes);

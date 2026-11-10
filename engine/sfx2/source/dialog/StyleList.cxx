@@ -1216,9 +1216,8 @@ OUString StyleList::getDefaultStyleName(const SfxStyleFamily eFam)
     {
         uno::Reference<style::XStyleFamilies> xCont = xModel->getStyleFamilies();
         uno::Reference<style::XStyleFamily> xStyles = xCont->getStyleFamilyByName(aFamilyName);
-        uno::Reference<beans::XPropertySet> xInfo;
-        xStyles->getByName(sDefaultStyle) >>= xInfo;
-        xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
+        uno::Reference<style::XStyle> xInfo = xStyles->getStyleByName(sDefaultStyle);
+        uno::Reference<XPropertySet>(xInfo, UNO_QUERY_THROW)->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
     }
     catch (const cpo::uno::Exception&)
     {

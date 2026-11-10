@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
     createSwDoc("tdf121374_sectionHF.odt");
 
     saveAndReload(TestFilter::DOCX);
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"FooterText"_ustr);
     CPPUNIT_ASSERT_EQUAL( u"footer"_ustr, xFooterText->getString() );
 
@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF2)
 {
     createSwDoc("tdf121374_sectionHF2.doc");
     saveAndReload(TestFilter::DOCX);
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xHeaderText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"HeaderText"_ustr);
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
 }
@@ -344,7 +344,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126723, "tdf126723.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xHeaderText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"HeaderText"_ustr);
     CPPUNIT_ASSERT_EQUAL( u"General header"_ustr, xHeaderText->getString());
 
@@ -434,10 +434,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99602_charStyleSubscript2)
     // *_In styles_*, don't let the proportionality/escapement affect the fontsize - otherwise it starts doubling up,
     // so instead just throw away the values and use the default settings instead - meaning fontsize is unaffected.
     // subscript custom: Proportional size is 80%, lower by 25%.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getByName(u"subscript custom"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"subscript custom"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("CharStyle has 12pt font size", 12.f, getProperty<float>(xStyle, u"CharHeight"_ustr));
     // subscript larger font: Proportional size is 80%, lowered by DFLT_ESC_AUTO_SUB
-    xStyle.set(getStyles(u"CharacterStyles"_ustr)->getByName(u"subscript larger font"_ustr), uno::UNO_QUERY);
+    xStyle.set(getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"subscript larger font"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Auto CharStyle has 12pt font size", 12.f, getProperty<float>(xStyle, u"CharHeight"_ustr));
 }
 
@@ -1389,7 +1389,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSize)
     // Verify that original page size is imported as is, since Writer can handle
     // large page sizes
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Width (mm) ", sal_Int32(1594),
                                  getProperty<sal_Int32>(xPageStyle, u"Width"_ustr) / 100);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Height (mm)", sal_Int32(1841),

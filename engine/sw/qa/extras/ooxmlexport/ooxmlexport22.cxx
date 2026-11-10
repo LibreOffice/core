@@ -336,7 +336,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits, "tdf167721_chUnits.docx")
 
     // Test the style #############################################################################
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Inherited List Paragraph"_ustr),
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Inherited List Paragraph"_ustr),
         uno::UNO_QUERY);
 
     auto aFirstCh
@@ -381,7 +381,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits2)
 
     // Test the parent style ######################################################################
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
 
     // auto aFirstCh
     //     = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaFirstLineIndentUnit"_ustr);
@@ -395,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits2)
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
 
     // Test the style #############################################################################
-    xStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Inherited List Paragraph"_ustr),
+    xStyle.set(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Inherited List Paragraph"_ustr),
                uno::UNO_QUERY);
 
     auto aFirstCh
@@ -434,7 +434,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits3, "tdf167721_chUnits3.docx")
 
     // Test the parent style ######################################################################
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
 
     // auto aFirstCh
     //     = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaFirstLineIndentUnit"_ustr);
@@ -445,7 +445,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits3, "tdf167721_chUnits3.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xStyle, u"ParaRightMargin"_ustr));
 
     // Test the style #############################################################################
-    xStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Inherited List Paragraph"_ustr),
+    xStyle.set(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Inherited List Paragraph"_ustr),
                uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2540),
@@ -482,7 +482,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits4, "tdf167721_chUnits4.docx")
 
     // Test the style #############################################################################
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Inherited List Paragraph"_ustr),
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Inherited List Paragraph"_ustr),
         uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(xStyle, u"ParaLeftMargin"_ustr));
@@ -622,7 +622,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatDocxExport)
 DECLARE_OOXMLEXPORT_TEST(testTdf139418, "tdf139418.docx")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     sal_Int32 nBaseWidth;
     xPropertySet->getPropertyValue(u"GridBaseWidth"_ustr) >>= nBaseWidth;

@@ -259,8 +259,7 @@ void XSpreadsheets2::testImportCellStyle()
 
     CPPUNIT_ASSERT_MESSAGE("New cell style not present", xCellStylesFamily->hasByName(aDestStyleName));
 
-    cpo::uno::Any aCellStyle = xCellStylesFamily->getByName(aDestStyleName);
-    uno::Reference< beans::XPropertySet > xCellStyleProp (aCellStyle, UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xCellStyleProp (xCellStylesFamily->getStyleByName(aDestStyleName), UNO_QUERY_THROW);
     sal_Int32 aVertJustify = 0;
     CPPUNIT_ASSERT(xCellStyleProp->getPropertyValue(u"VertJustify"_ustr) >>= aVertJustify);
 

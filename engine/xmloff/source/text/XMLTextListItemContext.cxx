@@ -70,12 +70,10 @@ XMLTextListItemContext::XMLTextListItemContext(
                                                     rTxtImp.GetNumberingStyles();
                 if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
                 {
-                    Reference < style::XStyle > xStyle;
-                    Any aAny = rNumStyles->getByName( sDisplayStyleName );
-                    aAny >>= xStyle;
+                    Reference < style::XStyle > xStyle = rNumStyles->getStyleByName( sDisplayStyleName );
 
                     uno::Reference< beans::XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                    aAny = xPropSet->getPropertyValue(u"NumberingRules"_ustr);
+                    Any aAny = xPropSet->getPropertyValue(u"NumberingRules"_ustr);
                     aAny >>= mxNumRulesOverride;
                 }
                 else
