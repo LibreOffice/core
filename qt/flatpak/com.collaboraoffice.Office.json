@@ -940,11 +940,11 @@
           "dest-filename": "frozen-1.2.0.tar.gz"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/zxcvbn-c-2.6.tar.gz",
-          "sha256": "11e39f6776f9c82c68b2acb94336e32697d4ab6cdb4ac16f9583ccbdd735113a",
+          "url": "https://gerrit.collaboraoffice.com/src/zxcvbn-c-2.7.tar.gz",
+          "sha256": "0548647d8cda5c0d52e6e00cd6896005f2813869f9ed93c245536129e3bd3f4b",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "zxcvbn-c-2.6.tar.gz"
+          "dest-filename": "zxcvbn-c-2.7.tar.gz"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/phc-winner-argon2-20190702.tar.gz",

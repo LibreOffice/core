@@ -174,7 +174,7 @@ ENGINE_SRC_TARBALLS=	afdko-5.0.1.tar.gz antlr4-cpp-runtime-4.13.2-source.zip \
 			libjpeg-turbo-3.1.3.tar.gz meson-1.8.3.tar.gz \
 			pdfium-7988.tar.bz2 phc-winner-argon2-20190702.tar.gz \
 			pixman-0.46.4.tar.xz quickjs-v0.14.0.tar.gz \
-			zxcvbn-c-2.6.tar.gz
+			zxcvbn-c-2.7.tar.gz
 
 do-configure:
 	cd ${ENGINE_WRKSRC} && ${SETENV} ${MAKE_ENV} ./autogen.sh ${ENGINE_CONFIGURE_ARGS}
