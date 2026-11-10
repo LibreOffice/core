@@ -41,8 +41,10 @@
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #ifndef _WIN32
+#include <sys/stat.h>
 #include <unistd.h>
 #endif
 
@@ -78,6 +80,40 @@ namespace FileUtil
         }
         return size;
     }
+
+    /// Reads fromFd to its end and writes what it reads to toFd. Returns the number of bytes
+    /// copied, and throws on failure. The paths are only for messages.
+    off_t copyContents(int fromFd, int toFd, const std::string& fromPath,
+                       const std::string& toPath)
+    {
+        char buffer[64 * 1024];
+
+        off_t bytesIn = 0;
+        do
+        {
+            ssize_t n;
+            while ((n = readFromFD(fromFd, buffer, sizeof(buffer))) < 0 && errno == EINTR)
+                LOG_TRC("EINTR reading from " << Anonymizer::anonymizeUrl(fromPath));
+            if (n < 0)
+                throw std::runtime_error("Failed to read from " +
+                                         Anonymizer::anonymizeUrl(fromPath) + " at " +
+                                         std::to_string(bytesIn) + " bytes in");
+
+            bytesIn += n;
+            if (n == 0) // EOF
+                break;
+            assert (off_t(sizeof (buffer)) >= n);
+
+            if (writeBuffer(toFd, buffer, n, toPath) < 0)
+            {
+                throw std::runtime_error("Failed to write " + std::to_string(n) + " bytes to " +
+                                         Anonymizer::anonymizeUrl(toPath) + " at " +
+                                         std::to_string(bytesIn) + " bytes into " +
+                                         Anonymizer::anonymizeUrl(fromPath));
+            }
+        } while (true);
+        return bytesIn;
+    }
     } // namespace
 
     bool copy(const std::string& fromPath, const std::string& toPath, bool log, bool throw_on_error,
@@ -106,32 +142,7 @@ namespace FileUtil
                                    << Anonymizer::anonymizeUrl(fromPath) << " to "
                                    << Anonymizer::anonymizeUrl(toPath));
 
-            char buffer[64 * 1024];
-
-            off_t bytesIn = 0;
-            do
-            {
-                ssize_t n;
-                while ((n = readFromFD(from, buffer, sizeof(buffer))) < 0 && errno == EINTR)
-                    LOG_TRC("EINTR reading from " << Anonymizer::anonymizeUrl(fromPath));
-                if (n < 0)
-                    throw std::runtime_error("Failed to read from " +
-                                             Anonymizer::anonymizeUrl(fromPath) + " at " +
-                                             std::to_string(bytesIn) + " bytes in");
-
-                bytesIn += n;
-                if (n == 0) // EOF
-                    break;
-                assert (off_t(sizeof (buffer)) >= n);
-
-                if (writeBuffer(to, buffer, n, toPath) < 0)
-                {
-                    throw std::runtime_error("Failed to write " + std::to_string(n) + " bytes to " +
-                                             Anonymizer::anonymizeUrl(toPath) + " at " +
-                                             std::to_string(bytesIn) + " bytes into " +
-                                             Anonymizer::anonymizeUrl(fromPath));
-                }
-            } while (true);
+            const off_t bytesIn = copyContents(from, to, fromPath, toPath);
             if (bytesIn != st.st_size)
             {
                 LOG_WRN("Unusual: file " << Anonymizer::anonymizeUrl(fromPath)
@@ -418,6 +429,168 @@ namespace FileUtil
 
         return localPath;
     }
+
+#ifndef _WIN32
+    namespace
+    {
+    /// Opens the directory localDir. With mount namespaces and no bind mounts, localDir is a link
+    /// to the jail's /tmp, and that /tmp is opened from the jail root through no further link.
+    int openJailDirectory(std::string localDir)
+    {
+        while (localDir.size() > 1 && localDir.ends_with('/'))
+            localDir.pop_back();
+        const int fd = ::open(localDir.c_str(), O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
+        if (fd >= 0)
+            return fd;
+
+        // With O_DIRECTORY a link fails with ENOTDIR rather than ELOOP, so ask readlink instead.
+        const int openErrno = errno;
+        char buffer[PATH_MAX];
+        const ssize_t length = ::readlink(localDir.c_str(), buffer, sizeof(buffer));
+        if (length <= 0 || length == static_cast<ssize_t>(sizeof(buffer)))
+        {
+            errno = openErrno;
+            return -1;
+        }
+        std::string target(buffer, length);
+        if (!target.starts_with('/'))
+            target = localDir.substr(0, localDir.find_last_of('/') + 1) + target;
+        while (target.size() > 1 && target.ends_with('/'))
+            target.pop_back();
+        const std::string::size_type slash = target.find_last_of('/');
+        if (slash == 0 || slash == std::string::npos)
+            return -1;
+
+        const int rootFd =
+            ::open(target.substr(0, slash).c_str(), O_RDONLY | O_DIRECTORY | O_CLOEXEC);
+        if (rootFd < 0)
+            return -1;
+        const int tmpFd = ::openat(rootFd, target.substr(slash + 1).c_str(),
+                                   O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
+        const int tmpOpenErrno = errno;
+        ::close(rootFd);
+        errno = tmpOpenErrno;
+        return tmpFd;
+    }
+
+    /// Opens each directory the components name below localDir in turn, making the missing
+    /// ones. Returns the last one, or -1.
+    int openDirectoriesBelow(const std::string& localDir,
+                             const std::vector<std::string>& components)
+    {
+        int dirFd = openJailDirectory(localDir);
+        if (dirFd < 0)
+        {
+            LOG_SYS("Failed to open directory [" << Anonymizer::anonymizeUrl(localDir) << ']');
+            return -1;
+        }
+
+        for (const std::string& component : components)
+        {
+            if (::mkdirat(dirFd, component.c_str(), 0777) < 0 && errno != EEXIST)
+            {
+                LOG_SYS("Failed to make directory [" << Anonymizer::anonymizeUrl(component)
+                                                     << "] below ["
+                                                     << Anonymizer::anonymizeUrl(localDir) << ']');
+                ::close(dirFd);
+                return -1;
+            }
+            const int nextFd = ::openat(dirFd, component.c_str(),
+                                        O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
+            if (nextFd < 0)
+                LOG_SYS("Directory [" << Anonymizer::anonymizeUrl(component) << "] below ["
+                                      << Anonymizer::anonymizeUrl(localDir)
+                                      << "] is not a real directory");
+            ::close(dirFd);
+            if (nextFd < 0)
+                return -1;
+            dirFd = nextFd;
+        }
+
+        return dirFd;
+    }
+
+    /// Copies the file at localPath to a new file fileName in the directory dirFd.
+    bool copyIntoDirectory(const std::string& localPath, int dirFd, const std::string& fileName)
+    {
+        const int from = ::open(localPath.c_str(), O_RDONLY | O_CLOEXEC);
+        if (from < 0)
+        {
+            LOG_SYS("Failed to open [" << Anonymizer::anonymizeUrl(localPath) << ']');
+            return false;
+        }
+
+        // A link at the name is removed itself, not what it points to.
+        ::unlinkat(dirFd, fileName.c_str(), 0);
+        const int to = ::openat(dirFd, fileName.c_str(),
+                                O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC, 0666);
+        bool copied = to >= 0;
+        if (!copied)
+            LOG_SYS("Failed to create [" << Anonymizer::anonymizeUrl(fileName) << ']');
+        else
+        {
+            try
+            {
+                copyContents(from, to, localPath, fileName);
+            }
+            catch (const std::exception& exception)
+            {
+                LOG_ERR(exception.what());
+                copied = false;
+            }
+        }
+
+        ::close(from);
+        // A write error can be reported only when the file is closed.
+        if (to >= 0 && ::close(to) != 0 && copied)
+        {
+            LOG_SYS("Failed to write [" << Anonymizer::anonymizeUrl(fileName) << ']');
+            copied = false;
+        }
+        if (!copied && to >= 0)
+            ::unlinkat(dirFd, fileName.c_str(), 0);
+        return copied;
+    }
+    } // namespace
+
+    std::string moveFileIntoJail(bool usingMountNamespaces, std::string localJailRoot,
+                                 std::string jailPath, const std::string& localPath)
+    {
+        const auto [localDir, destination] =
+            localPathToJail(usingMountNamespaces, std::move(localJailRoot), std::move(jailPath));
+
+        bool moved = false;
+        if (destination.size() > localDir.size() && destination.starts_with(localDir) &&
+            !destination.ends_with('/'))
+        {
+            // localPathToJail has already resolved any "." and "..".
+            std::vector<std::string> components =
+                Util::splitStringToVector(destination.substr(localDir.size()), '/');
+            const std::string fileName = std::move(components.back());
+            components.pop_back();
+            const int dirFd = openDirectoriesBelow(localDir, components);
+            if (dirFd >= 0)
+            {
+                moved = ::renameat(AT_FDCWD, localPath.c_str(), dirFd, fileName.c_str()) == 0;
+                // A staged file on another file system, such as a tmpfs /tmp, is copied instead.
+                if (!moved && errno == EXDEV)
+                {
+                    moved = copyIntoDirectory(localPath, dirFd, fileName);
+                    if (moved)
+                        removeFile(localPath);
+                }
+                else if (!moved)
+                    LOG_SYS("Failed to rename [" << Anonymizer::anonymizeUrl(localPath) << ']');
+                ::close(dirFd);
+            }
+        }
+
+        if (!moved)
+            LOG_ERR("Failed to move [" << Anonymizer::anonymizeUrl(localPath) << "] to ["
+                                       << Anonymizer::anonymizeUrl(destination) << ']');
+        return moved ? destination : std::string();
+    }
+#endif
 
     std::pair<std::string, std::string> buildPathsToJail(bool usingMountNamespaces, bool noCapsForKit,
                                                          std::string localJailRoot, std::string jailDir)

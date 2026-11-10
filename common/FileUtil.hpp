@@ -134,6 +134,14 @@ namespace FileUtil
     std::string findFileInJail(bool usingMountNamespaces, std::string localJailRoot,
                                std::string jailPath);
 
+#ifndef _WIN32
+    /// Moves localPath to jailPath in the jail under localJailRoot, mapped as buildLocalPathToJail
+    /// maps it, replacing any file there and making missing directories, but never through a link.
+    /// Returns the local path of the moved file, or an empty string with localPath left in place.
+    std::string moveFileIntoJail(bool usingMountNamespaces, std::string localJailRoot,
+                                 std::string jailPath, const std::string& localPath);
+#endif
+
     // returns two strings
     //   the first is the local path to the jailPath under localJailRoot as seen outside the jail
     //   the second is that path as seen inside the jail, taking into account if capabilities are available.

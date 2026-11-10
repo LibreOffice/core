@@ -85,6 +85,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testBuildLocalPathToJail);
     CPPUNIT_TEST(testResolveRealpath);
     CPPUNIT_TEST(testFindFileInJail);
+    CPPUNIT_TEST(testMoveFileIntoJail);
     CPPUNIT_TEST(testStringCompare);
     CPPUNIT_TEST(testJsonUtilEscapeJSONValue);
     CPPUNIT_TEST(testStateEnum);
@@ -128,6 +129,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testBuildLocalPathToJail();
     void testResolveRealpath();
     void testFindFileInJail();
+    void testMoveFileIntoJail();
     void testStringCompare();
     void testJsonUtilEscapeJSONValue();
     void testStateEnum();
@@ -1289,6 +1291,121 @@ void WhiteBoxTests::testFindFileInJail()
     LOK_ASSERT_EQUAL(0, symlink((dir + "/outside.odt").c_str(),
                                 (dir + "/jails/tmp/cool-jailid/outside.mp4").c_str()));
     LOK_ASSERT_EQUAL(std::string(), FileUtil::findFileInJail(true, jailRoot, "tmp/outside.mp4"));
+}
+
+namespace
+{
+/// A new file in dir with the given content.
+std::string stagedFile(const std::string& dir, const std::string& content)
+{
+    const std::string path = dir + "/staged-" + Util::rng::getFilename(8);
+    std::ofstream(path) << content;
+    return path;
+}
+
+/// The first line of the file at path.
+std::string fileContents(const std::string& path)
+{
+    std::string line;
+    std::getline(std::ifstream(path), line);
+    return line;
+}
+} // namespace
+
+void WhiteBoxTests::testMoveFileIntoJail()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+    const std::string jailRoot = dir + "/jails/jailid";
+    const std::string outside = dir + "/outside";
+    Poco::File(jailRoot).createDirectories();
+    Poco::File(outside).createDirectories();
+    std::ofstream(outside + "/target.txt") << "untouched";
+
+    // The directories on the way are made, and the file is moved in.
+    std::string from = stagedFile(dir, "pasted");
+    LOK_ASSERT(!FileUtil::moveFileIntoJail(false, jailRoot, "/user/docs/clipboards/clip.txt", from)
+                    .empty());
+    LOK_ASSERT(!FileUtil::Stat(from).exists());
+    LOK_ASSERT_EQUAL(std::string("pasted"), fileContents(jailRoot + "/user/docs/clipboards/clip.txt"));
+
+    // A directory on the way that is a link is not opened, and the staged file stays.
+    LOK_ASSERT_EQUAL(0, symlink(outside.c_str(), (jailRoot + "/user/docs/linked").c_str()));
+    from = stagedFile(dir, "pasted");
+    LOK_ASSERT(FileUtil::moveFileIntoJail(false, jailRoot, "/user/docs/linked/new.txt", from)
+                   .empty());
+    LOK_ASSERT(!FileUtil::Stat(outside + "/new.txt").exists());
+    LOK_ASSERT_EQUAL(std::string("pasted"), fileContents(from));
+
+    // A link at the file's own name is replaced by the file.
+    LOK_ASSERT_EQUAL(0, symlink((outside + "/target.txt").c_str(),
+                                (jailRoot + "/user/docs/clipboards/target.txt").c_str()));
+    LOK_ASSERT(!FileUtil::moveFileIntoJail(false, jailRoot, "/user/docs/clipboards/target.txt",
+                                           stagedFile(dir, "pasted"))
+                    .empty());
+    LOK_ASSERT_EQUAL(std::string("untouched"), fileContents(outside + "/target.txt"));
+    LOK_ASSERT(!FileUtil::Stat(jailRoot + "/user/docs/clipboards/target.txt", /*link=*/true)
+                    .isLink());
+    LOK_ASSERT_EQUAL(std::string("pasted"),
+                     fileContents(jailRoot + "/user/docs/clipboards/target.txt"));
+
+    // A path with ".." above the jail root moves nothing.
+    LOK_ASSERT(FileUtil::moveFileIntoJail(false, jailRoot, "../../outside/climb.txt",
+                                          stagedFile(dir, "pasted"))
+                   .empty());
+    LOK_ASSERT(!FileUtil::Stat(outside + "/climb.txt").exists());
+
+    // With mount namespaces, the jail's /tmp is where /tmp is mounted from.
+    Poco::File(dir + "/jails/tmp/cool-jailid").createDirectories();
+    LOK_ASSERT(!FileUtil::moveFileIntoJail(true, jailRoot, "/tmp/user/docs/clipboards/clip.txt",
+                                           stagedFile(dir, "pasted"))
+                    .empty());
+    LOK_ASSERT_EQUAL(std::string("pasted"),
+                     fileContents(dir + "/jails/tmp/cool-jailid/user/docs/clipboards/clip.txt"));
+
+    // Without bind mounts, where /tmp is mounted from is a link to the jail's own /tmp.
+    const std::string linkedJailRoot = dir + "/jails/linkedid";
+    Poco::File(linkedJailRoot + "/tmp").createDirectories();
+    LOK_ASSERT_EQUAL(0, symlink((linkedJailRoot + "/tmp").c_str(),
+                                (dir + "/jails/tmp/cool-linkedid").c_str()));
+    LOK_ASSERT(!FileUtil::moveFileIntoJail(true, linkedJailRoot, "/tmp/clip.txt",
+                                           stagedFile(dir, "pasted"))
+                    .empty());
+    LOK_ASSERT_EQUAL(std::string("pasted"), fileContents(linkedJailRoot + "/tmp/clip.txt"));
+
+    // A jail /tmp that is itself a link is not followed.
+    const std::string linkTmpJailRoot = dir + "/jails/linktmpid";
+    Poco::File(linkTmpJailRoot).createDirectories();
+    LOK_ASSERT_EQUAL(0, symlink(outside.c_str(), (linkTmpJailRoot + "/tmp").c_str()));
+    LOK_ASSERT_EQUAL(0, symlink((linkTmpJailRoot + "/tmp").c_str(),
+                                (dir + "/jails/tmp/cool-linktmpid").c_str()));
+    LOK_ASSERT(FileUtil::moveFileIntoJail(true, linkTmpJailRoot, "/tmp/moved.txt",
+                                          stagedFile(dir, "pasted"))
+                   .empty());
+    LOK_ASSERT(!FileUtil::Stat(outside + "/moved.txt").exists());
+
+    // From another file system the file is copied in, and the staged one is still gone.
+    // createRandomTmpDir returns its root when it cannot make a directory there.
+    const std::string otherDir = FileUtil::Stat("/dev/shm").isDirectory()
+                                     ? FileUtil::createRandomTmpDir("/dev/shm")
+                                     : std::string();
+    if (otherDir.starts_with("/dev/shm/") &&
+        FileUtil::Stat(otherDir).sb().st_dev != FileUtil::Stat(jailRoot).sb().st_dev)
+    {
+        FileUtil::OwnedFile otherCleanup(otherDir, /*recursive=*/true);
+        from = otherDir + "/staged";
+        std::ofstream(from) << "copied";
+        LOK_ASSERT(!FileUtil::moveFileIntoJail(false, jailRoot, "/user/docs/clipboards/copied.txt",
+                                               from)
+                        .empty());
+        LOK_ASSERT_EQUAL(std::string("copied"),
+                         fileContents(jailRoot + "/user/docs/clipboards/copied.txt"));
+        LOK_ASSERT(!FileUtil::Stat(from).exists());
+    }
+    else
+        TST_LOG("No second file system in /dev/shm, so the copy between file systems is untested");
 }
 
 void WhiteBoxTests::testStringCompare()
