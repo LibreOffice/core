@@ -30,6 +30,7 @@
 /// <reference path="./helper/canvasContainerSetup.ts" />
 /// <reference path="./helper/matchMediaMock.ts" />
 /// <reference path="./helper/fakeClock.ts" />
+/// <reference path="./helper/requestCleanup.ts" />
 /// <reference path="./helper/SocketRecorder.ts" />
 /// <reference path="./helper/rectUtil.ts" />
 /// <reference path="./helper/Events.ts"/>
@@ -71,6 +72,7 @@
 /// <reference path="./VectorPrimitiveRenderer.test.ts" />
 /// <reference path="./Matrix2D.test.ts" />
 /// <reference path="./InputSequence.test.ts" />
+/// <reference path="./RequestTracker.test.ts" />
 /// <reference path="./Point.test.ts" />
 /// <reference path="./Range2D.test.ts" />
 /// <reference path="./VectorGradientFrame.test.ts" />

@@ -462,6 +462,7 @@ COOL_JS_LST =\
 	src/app/ViewLayoutVector.ts \
 	src/app/MessageParser.ts \
 	src/app/InputSequence.ts \
+	src/app/RequestTracker.ts \
 	src/app/ChangeOutbox.ts \
 	src/app/LocalCaret.ts \
 	src/app/ViewLayoutWriter.ts \
