@@ -979,7 +979,9 @@ void OleComponent::RunObject()
 
         if ( FAILED( hr ) )
         {
-            OUString error = comphelper::WindowsErrorStringFromHRESULT(hr);
+            // This is the message of the exception, which a user can see, so it is the text of the
+            // system, with the name of the error in parentheses.
+            OUString error = comphelper::WindowsErrorMessageFromHRESULT(hr);
             if ( hr == REGDB_E_CLASSNOTREG )
             {
                 if (auto pOleObj = m_pNativeImpl->m_pObj.QueryInterface<IOleObject>())
