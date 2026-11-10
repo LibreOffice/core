@@ -55,6 +55,9 @@ interface SlideImportPaneSource {
   // Why the server reports the source failed or missing: the kind it
   // named, such as cycledetected, or empty.
   error: string;
+  // The time storage last reports for the source's file, which changes each
+  // time the source is saved. Empty while the view cannot read the source.
+  lastModifiedTime: string;
   // Whether the source's slides are on show under its expander.
   expanded: boolean;
   // Whether the source has been asked for its slides since it connected.
@@ -69,6 +72,8 @@ interface SlideImportPaneSource {
   // its pages by these identifiers, not by their position, so a tile request
   // has to carry the identifier of the slide it wants.
   slideParts: string[];
+  // Whether the source's file was saved since the source last answered about its slides.
+  outdated: boolean;
   slides: SlideImportSlide[];
   sections: SlideImportSection[];
   thumbnails: Map<number, SlideImportThumbnail>;
@@ -268,12 +273,14 @@ class SlideImportPane {
           access: doc.access || '',
           state: doc.state,
           error: doc.error || '',
+          lastModifiedTime: doc.lastModifiedTime || '',
           expanded: false,
           asked: false,
           opening: false,
           docWidth: 0,
           docHeight: 0,
           slideParts: [],
+          outdated: false,
           slides: [],
           sections: [],
           thumbnails: new Map(),
@@ -287,7 +294,21 @@ class SlideImportPane {
       // The source answered, so it is not opening any more.
       if (source.state !== 'available' && source.state !== 'disconnected')
         source.opening = false;
-      if (source.state !== 'connected' && source.asked) this.forget(source);
+      if (source.state !== 'connected' && (source.asked || source.outdated))
+        this.forget(source);
+      // doc.lastModifiedTime is actual last modified time, source.lastModifiedTime is last time we updated our source.
+      const lastModifiedTime = doc.lastModifiedTime || '';
+      if (
+        source.asked &&
+        source.lastModifiedTime &&
+        lastModifiedTime !== source.lastModifiedTime
+      ) {
+        // The slides of the earlier save stay on show, and the picks stay on them, until the
+        // source answers with the slides it holds now.
+        source.asked = false;
+        source.outdated = true;
+      }
+      source.lastModifiedTime = lastModifiedTime;
       kept.push(source);
     }
 
@@ -331,12 +352,15 @@ class SlideImportPane {
   private forget(source: SlideImportPaneSource): void {
     source.asked = false;
     source.opening = false;
+    source.outdated = false;
     source.docWidth = 0;
     source.docHeight = 0;
     source.slideParts = [];
     source.slides = [];
     source.sections = [];
     source.thumbnails.clear();
+
+    if (this.picks.has(source.key)) this.picks.delete(source.key);
   }
 
   // Asks an open source for its slides: a source that is not connected yet is
@@ -378,7 +402,7 @@ class SlideImportPane {
     this.askSource(source);
     // A source that answered before it was opened has its slides already,
     // and askSource answers once, so the pictures are asked for here.
-    this.requestRemoteThumbnails(source);
+    this.loadMissingThumbnails(source);
   }
 
   private toggleSource(source: SlideImportPaneSource): void {
@@ -593,14 +617,23 @@ class SlideImportPane {
     source: SlideImportPaneSource,
     json: string,
   ): void {
+    let slidesChanged = false;
     try {
       const info = JSON.parse(json);
-      source.docWidth = info.docWidth || 0;
-      source.docHeight = info.docHeight || 0;
+      const docWidth = info.docWidth || 0;
+      const docHeight = info.docHeight || 0;
       const slides = Array.isArray(info.slides) ? info.slides : [];
-      source.slideParts = slides.map((s: any) =>
+      const slideParts: string[] = slides.map((s: any) =>
         typeof s.part === 'string' ? s.part : '',
       );
+      slidesChanged =
+        docWidth !== source.docWidth ||
+        docHeight !== source.docHeight ||
+        slideParts.join(' ') !== source.slideParts.join(' ');
+      if (slidesChanged) this.movePicks(source, slideParts);
+      source.docWidth = docWidth;
+      source.docHeight = docHeight;
+      source.slideParts = slideParts;
       source.slides = slides.map((s: any, index: number) => ({
         index: index,
         name: typeof s.name === 'string' ? s.name : '',
@@ -619,8 +652,36 @@ class SlideImportPane {
       this.session.slidesShown();
     }
 
-    this.requestRemoteThumbnails(source);
+    // don't rerequest thumbnails if the content hasn't changed. A save can change what a slide
+    // looks like without changing the list, so an outdated source asks for them all too.
+    if (slidesChanged || source.outdated) this.refreshAllThumbnails(source);
+    source.outdated = false;
     if (this.visible) this.render();
+  }
+
+  // Move slide selections/picks after source is updated
+  private movePicks(
+    source: SlideImportPaneSource,
+    newSlideParts: string[],
+  ): void {
+    const move = (oldIndices: Set<number>): number[] => {
+      const newIndices: number[] = [];
+      for (const oldIndex of oldIndices) {
+        const part = source.slideParts[oldIndex];
+        if (!part) continue;
+
+        const newIndex = newSlideParts.indexOf(part);
+        if (newIndex < 0) continue;
+
+        newIndices.push(newIndex);
+      }
+      return newIndices;
+    };
+
+    if (this.isActive(source))
+      this.session.setSelection(move(this.session.selection));
+    else if (this.picks.has(source.key))
+      this.picks.set(source.key, new Set(move(this.picks.get(source.key))));
   }
 
   private onRemoteSlideSections(
@@ -645,9 +706,27 @@ class SlideImportPane {
     if (this.visible) this.render();
   }
 
-  // Asks a source for a picture of every slide, fitted to the pane width,
-  // keyed by slot so each reply lands in its frame.
-  private requestRemoteThumbnails(source: SlideImportPaneSource): void {
+  // Asks a source for a thumbnail of every slide
+  private refreshAllThumbnails(source: SlideImportPaneSource): void {
+    this.sendThumbnailRequests(source, Array.from(source.slideParts.keys()));
+  }
+
+  // Asks a source for thumbnail of each slide that doesn't already have one
+  private loadMissingThumbnails(source: SlideImportPaneSource): void {
+    this.sendThumbnailRequests(
+      source,
+      Array.from(source.slideParts.keys()).filter(
+        (slot) => !source.thumbnails.has(slot),
+      ),
+    );
+  }
+
+  // Asks a source for a picture of each of the given slots, fitted to the
+  // pane width, keyed by slot so each reply lands in its frame.
+  private sendThumbnailRequests(
+    source: SlideImportPaneSource,
+    slots: number[],
+  ): void {
     if (
       source.slideParts.length <= 0 ||
       source.docWidth <= 0 ||
@@ -664,7 +743,7 @@ class SlideImportPane {
     // 1.25 it keeps one bitmap pixel per screen pixel.
     const scale = app.dpiScale || 1;
 
-    for (let slot = 0; slot < source.slideParts.length; ++slot) {
+    for (const slot of slots) {
       // The request names the slide by its part identifier, which the source
       // resolves to the page it paints. The slot index rides along as the
       // preview id: it is a non-negative integer, so the source treats the
@@ -1257,7 +1336,7 @@ class SlideImportPane {
     this.render();
     if (open)
       for (const source of this.sources)
-        if (source.expanded) this.requestRemoteThumbnails(source);
+        if (source.expanded) this.loadMissingThumbnails(source);
   }
 
   private paneExpanded(): boolean {
