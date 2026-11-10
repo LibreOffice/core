@@ -66,6 +66,7 @@ window.L.Map.include({
 			else {
 				// Edit mode has no use for the button.
 				button.hide();
+				this._sendEditingStarted();
 				this._enterEditMode(perm);
 			}
 		}
