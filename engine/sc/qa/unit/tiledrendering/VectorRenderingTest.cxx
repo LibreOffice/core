@@ -1229,6 +1229,67 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorAsianVerticalCellIsVertical
     CPPUNIT_ASSERT_EQUAL(OUString(), aUprightOf(2));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorAsianVerticalCellEditIsInItsCell)
+{
+    // The edit of an Asian vertical cell starts at the top-right corner of its output area, and
+    // its columns go to the left. It was placed from the top-left corner like text across, so its
+    // text was drawn left of the cell, and in the first column under the row headers.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(ScVerticalStackCell(true));
+    aPattern.ItemSetPut(SfxBoolItem(ATTR_VERTICAL_ASIAN, true));
+    applyToCell(*pDocShell, 1, 5, aPattern);
+    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+
+    typeCharsInCell("ab", 1, 5, pView, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
+    tools::JsonWriter aPushWriter;
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0",
+                                         sc::VectorContent::constCellPositionsMode);
+    const boost::property_tree::ptree aPush = parseJson(aPushWriter.finishAndGetAsOString());
+    const auto oEdits = aPush.get_child_optional("textEdits");
+    CPPUNIT_ASSERT(oEdits);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), oEdits->size());
+    const boost::property_tree::ptree& rEdit = oEdits->front().second;
+
+    // The edit is in twips from the corner of its cell: a transformation that places the text of
+    // the engine, and the runs of that text, each with the start of its baseline.
+    auto aMatrixOf = [](const boost::property_tree::ptree& rNode) {
+        std::vector<double> aValues;
+        for (const auto& rValue : rNode.get_child("matrix"))
+            aValues.push_back(rValue.second.get_value<double>());
+        CPPUNIT_ASSERT_EQUAL(size_t(6), aValues.size());
+        return aValues;
+    };
+    const boost::property_tree::ptree& rPlaced = rEdit.get_child("primitives").front().second;
+    CPPUNIT_ASSERT_EQUAL(std::string("transform"), rPlaced.get<std::string>("type"));
+    const std::vector<double> aPlace = aMatrixOf(rPlaced);
+    std::vector<boost::property_tree::ptree> aRuns;
+    std::function<void(const boost::property_tree::ptree&)> aCollect
+        = [&](const boost::property_tree::ptree& rNode) {
+              const std::string aType = rNode.get<std::string>("type", "");
+              if (aType == "textSimplePortion" || aType == "textDecoratedPortion")
+                  aRuns.push_back(rNode);
+              for (const auto& rChild : rNode)
+                  aCollect(rChild.second);
+          };
+    aCollect(rPlaced.get_child("children"));
+    CPPUNIT_ASSERT(!aRuns.empty());
+
+    const double fCellWidth = rDocument.GetColWidth(1, 0);
+    for (const boost::property_tree::ptree& rRun : aRuns)
+    {
+        const std::vector<double> aRun = aMatrixOf(rRun);
+        const double fX = aPlace[0] * aRun[4] + aPlace[2] * aRun[5] + aPlace[4];
+        CPPUNIT_ASSERT_GREATER(0.0, fX);
+        CPPUNIT_ASSERT_LESS(fCellWidth, fX);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellEditGrowsOutsideASmallWindow)
 {
     // Painting a tile makes the window of the view as large as the document, which the cell editing

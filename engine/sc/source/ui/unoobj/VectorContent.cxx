@@ -1642,8 +1642,17 @@ std::optional<CellEditContent> cellEditContentOf(ScTabViewShell& rViewShell, SCT
     const Point aCellLogic = pWindow->PixelToLogic(aCellPixel, rLogicMode);
     const tools::Rectangle aOutputArea = pEditView->GetOutputArea();
     const tools::Rectangle aVisibleArea = pEditView->GetVisArea();
-    const double fOffsetX = aOutputArea.Left() - aCellLogic.X() - aVisibleArea.Left();
-    const double fOffsetY = aOutputArea.Top() - aCellLogic.Y() - aVisibleArea.Top();
+    // The text starts at the start of the document, which the edit view shows at the top-left
+    // corner of its output area. Vertical text runs from top to bottom in a cell, and its document
+    // starts at the top-right corner, with the lines going to the left, as ImpEditView::GetWindowPos
+    // maps it.
+    const bool bVertical = pEditView->getEditEngine().IsEffectivelyVertical();
+    const double fOffsetX = bVertical
+                                ? aOutputArea.Right() - aCellLogic.X() + aVisibleArea.Top()
+                                : aOutputArea.Left() - aCellLogic.X() - aVisibleArea.Left();
+    const double fOffsetY = bVertical
+                                ? aOutputArea.Top() - aCellLogic.Y() - aVisibleArea.Left()
+                                : aOutputArea.Top() - aCellLogic.Y() - aVisibleArea.Top();
 
     primitive2d::Primitive2DContainer aPlaced;
     if (!aContent.empty())
