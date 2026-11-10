@@ -650,9 +650,9 @@ class MobileAppInitializer extends InitializerBase {
 		window.enableAccessibility = true;
 		window.enableExperimentalFeatures = element.dataset.enableExperimentalFeatures === 'true';
 
-		// A remote page starts read-only like an existing local document (its address is the
-		// integrator's, which does not ask for that):
-		if (window.codaRemotePage) {
+		// A remote page starts read-only like an existing local document, unless the app's settings
+		// for the page say otherwise (its address is the integrator's, which does not ask for that):
+		if (window.codaRemotePage && window.coolParams.get('startreadonly') === '') {
 			window.coolParams.set('startreadonly', 'true');
 		}
 	}
