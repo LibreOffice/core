@@ -3045,12 +3045,20 @@ function showWelcomeSVG() {
 						body: fileBytes,
 						headers: { 'Content-Type': 'application/octet-stream' }
 					}).then(function(response) {
-						if (response.ok) return response.json();
+						if (response.ok) return response.text();
 						const error = new Error('Upload failed with status '
 							+ response.status);
 						error.status = response.status;
 						throw error;
-					}).then((result) => {
+					}).then((text) => {
+						// WOPI does not require a body in the response to a PutFile.
+						let result = null;
+						try {
+							result = JSON.parse(text);
+						} catch (e) {
+							global.app.console.log('Collab upload: the response is not JSON');
+						}
+
 						global._collabLastModifiedTime = result && result.LastModifiedTime;
 						return result;
 					}).then(resolve).catch(reject);
