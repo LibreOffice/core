@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 
 #include <memory>
+#include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <viewlayer.hxx>
@@ -148,7 +149,7 @@ namespace slideshow::internal
             void implSetMediaProperties( const css::uno::Reference< css::beans::XPropertySet >& rxProps );
             void implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType );
             void implInitializePlayerWindow(const ::basegfx::B2DRectangle& rBounds,
-                                            const css::uno::Any& rVCLDeviceParam);
+                                            const OutputDevice* pDevice);
             ViewLayerSharedPtr                    mpViewLayer;
             VclPtr< SystemChildWindow >           mpMediaWindow;
             mutable css::awt::Point               maWindowOffset;

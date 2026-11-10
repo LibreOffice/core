@@ -321,12 +321,7 @@ namespace slideshow::internal
                         }
 
                         // create visible object
-                        std::optional<uno::Any> oDeviceParam = canvastools::getDeviceInfo(xCanvas);
-
-                        if (oDeviceParam.has_value())
-                        {
-                            implInitializePlayerWindow(rBounds, *oDeviceParam);
-                        }
+                        implInitializePlayerWindow(rBounds, canvastools::getDeviceInfo(xCanvas));
 
                         // set player properties
                         implSetMediaProperties( xPropSet );
@@ -413,7 +408,7 @@ namespace slideshow::internal
         }
 
         void ViewMediaShape::implInitializePlayerWindow(const ::basegfx::B2DRectangle& rBounds,
-                                                        const css::uno::Any& rVCLDeviceParam)
+                                                        const OutputDevice* pDevice)
         {
 #if !HAVE_FEATURE_AVMEDIA
             (void) rBounds;
@@ -425,11 +420,6 @@ namespace slideshow::internal
 
             try
             {
-                sal_Int64 aVal=0;
-
-                rVCLDeviceParam >>= aVal;
-
-                OutputDevice* pDevice = reinterpret_cast<OutputDevice*>(aVal);
                 vcl::Window* pWindow = pDevice ? pDevice->GetOwnerWindow() : nullptr;
 
                 if( pWindow )

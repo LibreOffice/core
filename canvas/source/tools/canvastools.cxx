@@ -991,10 +991,10 @@ namespace canvastools
                                             ::basegfx::fround( rRange.getHeight() ) ) );
         }
 
-        std::optional<uno::Any> getDeviceInfo(const uno::Reference<rendering::XCanvas>& i_rxCanvas)
+        const OutputDevice* getDeviceInfo(const uno::Reference<rendering::XCanvas>& i_rxCanvas)
         {
             if( !i_rxCanvas.is() )
-                return {};
+                return nullptr;
 
             try
             {
@@ -1004,14 +1004,18 @@ namespace canvastools
                 uno::Reference< beans::XPropertySet > xPropSet( xDevice,
                                                                 uno::UNO_QUERY_THROW );
 
-                return xPropSet->getPropertyValue(u"DeviceHandle"_ustr);
+                css::uno::Any aDeviceHandle = xPropSet->getPropertyValue(u"DeviceHandle"_ustr);
+                sal_Int64 nVal = 0;
+                aDeviceHandle >>= nVal;
+
+                return reinterpret_cast<OutputDevice*>(nVal);
             }
             catch( const uno::Exception& )
             {
                 // ignore, but return empty sequence
             }
 
-            return {};
+            return nullptr;
         }
 
         awt::Rectangle getAbsoluteWindowRect( const awt::Rectangle&                  rRect,
