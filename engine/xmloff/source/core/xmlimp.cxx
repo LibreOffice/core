@@ -2436,6 +2436,11 @@ void SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
 
 void SvXMLLegacyToFastDocHandler::endElement( const OUString& rName )
 {
+    if (maDefaultNamespaces.empty())
+    {
+        SAL_WARN("xmloff.core", "SvXMLLegacyToFastDocHandler::endElement: no element to end");
+        return;
+    }
     OUString aLocalName;
     sal_uInt16 nPrefix = mrImport->mxNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
     sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::getTokenFromName(aLocalName);
