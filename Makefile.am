@@ -39,6 +39,7 @@ $(top_builddir)/autogen-input.mk: $(if $(autogen_input_goals),$(wildcard $(top_b
 	@echo '# Marks the autogen.input that the build tree was configured from.' > $@
 
 DISTCLEANFILES = autogen-input.mk
+CLEANFILES = clang/plugin.o clang/plugin.so
 
 build-samples:
 	$(QUIET_MKDIRP) mkdir -p $(abs_top_builddir)/test/samples
@@ -157,8 +158,6 @@ nginxconfig_DATA = etc/nginx/coolwsd.conf
 endif ENABLE_SERVER
 
 ACLOCAL_AMFLAGS = -I m4
-
-CLEANFILES = clang/plugin.o clang/plugin.so
 
 # quick and easy for now.
 include_paths = -I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/wsd -I${top_srcdir}/kit ${ZLIB_CFLAGS} ${ZSTD_CFLAGS} ${PNG_CFLAGS}
