@@ -1888,6 +1888,8 @@ class GraphicSelection {
 
 			this.handlesSection.refreshInfo(this.extraInfo);
 			this.handlesSection.setShowSection(editMode);
+			if (app.file.textCursor.visible)
+				app.events.fire('TextCursorVisibility', { visible: true });
 			GraphicSelection.updateSelectionSection();
 			this.selectionSection?.setShowSection(editMode);
 			app.sectionContainer.requestReDraw();
