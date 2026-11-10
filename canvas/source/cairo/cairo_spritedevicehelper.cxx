@@ -64,16 +64,6 @@ namespace cairocanvas
         return css::uno::Any(true);
     }
 
-    uno::Any SpriteDeviceHelper::getDeviceHandle() const
-    {
-        return DeviceHelper::getDeviceHandle();
-    }
-
-    uno::Any SpriteDeviceHelper::getSurfaceHandle() const
-    {
-        return DeviceHelper::getSurfaceHandle();
-    }
-
     void SpriteDeviceHelper::setSize( const ::basegfx::B2ISize& rSize )
     {
         SAL_INFO(

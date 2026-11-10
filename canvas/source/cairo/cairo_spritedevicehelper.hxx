@@ -46,8 +46,6 @@ namespace cairocanvas
         void disposing();
 
         css::uno::Any isAccelerated() const;
-        css::uno::Any getDeviceHandle() const;
-        css::uno::Any getSurfaceHandle() const;
 
         void notifySizeUpdate( const css::awt::Rectangle& rBounds );
         void setSize( const ::basegfx::B2ISize& rSize );
