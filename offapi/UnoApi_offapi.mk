@@ -2948,7 +2948,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	PanoseSerifStyle \
 	PanoseStrokeVariation \
 	PanoseWeight \
-	PanoseXHeight \
 	PathCapType \
 	PathJoinType \
 	RGBColor \

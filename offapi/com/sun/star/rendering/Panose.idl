@@ -47,9 +47,6 @@ struct Panose
 
     /// PanoseMidline
     byte    Midline;
-
-    /// PanoseXHeight
-    byte    XHeight;
 };
 
 }; }; }; };
