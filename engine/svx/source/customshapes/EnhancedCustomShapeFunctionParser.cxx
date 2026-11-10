@@ -87,6 +87,8 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
 ExpressionNode::~ExpressionNode()
 {}
 
+ParseError::~ParseError() = default;
+
 namespace
 {
 

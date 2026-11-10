@@ -180,9 +180,11 @@ public:
 /** This exception is thrown, when the arithmetic expression
     parser failed to parse a string.
     */
-struct ParseError
+struct SVXCORE_DLLPUBLIC ParseError
 {
     ParseError( const char* ) {}
+
+    virtual ~ParseError();
 };
 
 class FunctionParser
