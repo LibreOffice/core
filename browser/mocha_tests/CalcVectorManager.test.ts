@@ -21,7 +21,6 @@ describe('CalcVectorManager requests', function () {
 		manager.onVectorChanged(() => changes++);
 	});
 	afterEach(function () {
-		(manager as any)._disarmExpiry();
 		recorder.restore();
 	});
 
@@ -103,7 +102,7 @@ describe('CalcVectorManager requests', function () {
 
 	// Move the time every request was sent back past the timeout.
 	function ageRequests(): void {
-		for (const request of (manager as any)._requests.values())
+		for (const request of (manager as any)._requests.requests())
 			request.sent -= 2 * (CalcVectorManager as any).requestTimeout;
 	}
 
@@ -135,7 +134,7 @@ describe('CalcVectorManager requests', function () {
 		manager.requestBlocks(0, [[0, 0]]);
 		const late = requestIds()[0];
 		ageRequests();
-		(manager as any)._retireExpired();
+		(manager as any)._requests.expire();
 
 		manager.handleVectorPrimitives(answer(0, late, [wholeBlock(0, 0)]));
 
@@ -160,7 +159,7 @@ describe('CalcVectorManager requests', function () {
 		]);
 		ageRequests();
 		const before = changes;
-		(manager as any)._retireExpired();
+		(manager as any)._requests.expire();
 
 		// The waiting block takes the freed place, and the view asks to redraw.
 		nodeassert.deepStrictEqual(blocksAsked(), ['0:0', '0:1', '1:0']);
@@ -603,7 +602,6 @@ describe('CalcVectorManager eviction', function () {
 		manager = new CalcVectorManager();
 	});
 	afterEach(function () {
-		(manager as any)._disarmExpiry();
 		recorder.restore();
 	});
 

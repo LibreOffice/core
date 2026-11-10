@@ -73,9 +73,6 @@ class CalcVectorManager extends VectorManagerBase {
 	// The epoch the held versions count in.
 	private _epoch: number | undefined = undefined;
 
-	// Blocks a request is in flight for, keyed by sheet and block.
-	private _inFlight: Set<string> = new Set();
-
 	// Sheets that were asked for at least once.
 	private _sheetRequested: Set<string> = new Set();
 
@@ -87,12 +84,17 @@ class CalcVectorManager extends VectorManagerBase {
 	// even when it asks for no block.
 	private _sheetsBehind: Set<string> = new Set();
 
-	// The blocks of each request in flight, keyed by request id.
-	private _requests: Map<
-		number,
-		{ sheetKey: string; blocks: string[]; sent: number }
-	> = new Map();
-	private _nextRequestId = 1;
+	// The requests in flight. Each asks for blocks, keyed by sheet and block, and carries the
+	// key of its sheet. A request that got no answer in time is given up, so its blocks can be
+	// asked for again. The listeners are told then, so the view draws again, and the next
+	// blocks queued are asked for.
+	private _requests = new cool.RequestTracker<string, string>({
+		timeout: CalcVectorManager.requestTimeout,
+		expired: () => {
+			this._fireChanged([]);
+			this._sendQueued();
+		},
+	});
 
 	// The block rows and columns the view spans, from the last draw. They set how many blocks go
 	// in one request and how far around the view stale blocks are refreshed.
@@ -691,7 +693,7 @@ class CalcVectorManager extends VectorManagerBase {
 		sheetKey: string,
 		key: string,
 	): boolean {
-		if (this._inFlight.has(sheetKey + '/' + key)) return false;
+		if (this._requests.isOut(sheetKey + '/' + key)) return false;
 		return !sheet.blocks.has(key) || sheet.staleBlocks.has(key);
 	}
 
@@ -706,7 +708,8 @@ class CalcVectorManager extends VectorManagerBase {
 			this._queue = null;
 			return;
 		}
-		this._expireRequests();
+		// A request that got no answer in time gives its place up.
+		this._requests.dropLate();
 		// A view that shows many blocks, as at a low zoom, asks for more blocks in one request.
 		const shown = this._view.rows * this._view.columns;
 		const missingPerRequest = Math.min(
@@ -729,7 +732,7 @@ class CalcVectorManager extends VectorManagerBase {
 				? CalcVectorManager.maxRequestsInFlight - 1
 				: CalcVectorManager.maxRequestsInFlight;
 			if (
-				this._requests.size >= limit &&
+				this._requests.requestCount >= limit &&
 				!this._forgetRequestOfOtherSheet(sheetKey)
 			)
 				break;
@@ -752,65 +755,12 @@ class CalcVectorManager extends VectorManagerBase {
 
 	// Forget the oldest request for another sheet. True when there was one.
 	private _forgetRequestOfOtherSheet(sheetKey: string): boolean {
-		for (const [requestId, request] of this._requests) {
-			if (request.sheetKey === sheetKey) continue;
-			this._forgetRequest(requestId, request);
+		for (const request of this._requests.requests()) {
+			if (request.data === sheetKey) continue;
+			this._requests.takeRequest(request.id);
 			return true;
 		}
 		return false;
-	}
-
-	/// Drop timed out requests so their blocks can be asked for again. A late answer is still
-	/// taken. True when a request was dropped.
-	private _expireRequests(): boolean {
-		const now = performance.now();
-		let expired = false;
-		for (const [requestId, request] of Array.from(this._requests.entries())) {
-			if (now - request.sent < CalcVectorManager.requestTimeout) continue;
-			this._forgetRequest(requestId, request);
-			expired = true;
-		}
-		return expired;
-	}
-
-	private _forgetRequest(
-		requestId: number,
-		request: { sheetKey: string; blocks: string[] },
-	): void {
-		this._requests.delete(requestId);
-		for (const key of request.blocks)
-			this._inFlight.delete(request.sheetKey + '/' + key);
-	}
-
-	// The timer that runs when the oldest request waiting reaches its time.
-	private _expiryTimer: ReturnType<typeof setTimeout> | undefined = undefined;
-
-	/// Arm the timer for the oldest waiting request, so the next blocks are asked for even when the
-	/// view is not drawn meanwhile.
-	private _armExpiry(): void {
-		if (this._expiryTimer !== undefined || this._requests.size === 0) return;
-		let oldest = Infinity;
-		for (const request of this._requests.values())
-			oldest = Math.min(oldest, request.sent);
-		const wait = Math.max(
-			0,
-			oldest + CalcVectorManager.requestTimeout - performance.now(),
-		);
-		this._expiryTimer = setTimeout(() => this._retireExpired(), wait + 1);
-	}
-
-	private _disarmExpiry(): void {
-		if (this._expiryTimer === undefined) return;
-		clearTimeout(this._expiryTimer);
-		this._expiryTimer = undefined;
-	}
-
-	// Drawing again asks anew for the blocks of the timed out requests.
-	private _retireExpired(): void {
-		this._expiryTimer = undefined;
-		if (this._expireRequests()) this._fireChanged([]);
-		this._sendQueued();
-		this._armExpiry();
 	}
 
 	/// Ask for blocks of a sheet, and for changes to its objects and settings.
@@ -819,7 +769,6 @@ class CalcVectorManager extends VectorManagerBase {
 		const sheetKey = CalcVectorManager._sheetKey(part);
 		const names: string[] = [];
 		for (const key of keys) {
-			this._inFlight.add(sheetKey + '/' + key);
 			const held = sheet.blocks.get(key);
 			// A held block is answered with the parts changed after its version.
 			names.push(held ? key + ':' + String(held.current) : key);
@@ -827,26 +776,29 @@ class CalcVectorManager extends VectorManagerBase {
 		this._sheetRequested.add(sheetKey);
 		this._sheetsBehind.delete(sheetKey);
 
-		const requestId = this._nextRequestId++;
-		this._requests.set(requestId, {
-			sheetKey: sheetKey,
-			blocks: keys,
-			sent: performance.now(),
-		});
-		this._armExpiry();
-
-		app.socket.sendMessage(
-			cool.vectorPrimitivesRequest({
-				partId: String(part),
-				mode: CalcVectorManager.contentMode,
-				requestId: requestId,
-				blocks: names,
-				epoch: this._epoch,
-				// Only a complete sheet asks for changes since its version. A sheet
-				// filled only by pushes asks for its drawing objects whole.
-				since: sheet.complete ? sheet.version : undefined,
-			}),
+		this._requests.requestKeys(
+			keys.map((key) => sheetKey + '/' + key),
+			sheetKey,
+			(requestId) =>
+				app.socket.sendMessage(
+					cool.vectorPrimitivesRequest({
+						partId: String(part),
+						mode: CalcVectorManager.contentMode,
+						requestId: requestId,
+						blocks: names,
+						epoch: this._epoch,
+						// Only a complete sheet asks for changes since its version. A sheet
+						// filled only by pushes asks for its drawing objects whole.
+						since: sheet.complete ? sheet.version : undefined,
+					}),
+				),
 		);
+	}
+
+	// The blocks that a request asked for, without the key of the sheet.
+	private static _blocksOf(request: cool.RequestOut<string, string>): string[] {
+		const sheetKeyLength = (request.data ?? '').length;
+		return request.keys.map((key) => key.substring(sheetKeyLength + 1));
 	}
 
 	/// Drop blocks out of view once a sheet holds too many. Once a block in view is held, also drop
@@ -905,12 +857,8 @@ class CalcVectorManager extends VectorManagerBase {
 		this._sheetRequested.delete(sheetKey);
 		this._staleFrom.delete(sheetKey);
 		this._sheetsBehind.delete(sheetKey);
-		for (const flightKey of Array.from(this._inFlight))
-			if (flightKey.startsWith(sheetKey + '/'))
-				this._inFlight.delete(flightKey);
 		// A later answer for the sheet finds no request and is dropped.
-		for (const [requestId, request] of Array.from(this._requests.entries()))
-			if (request.sheetKey === sheetKey) this._requests.delete(requestId);
+		this._requests.forgetWhere((request) => request.data === sheetKey);
 		if (
 			this._queue &&
 			CalcVectorManager._sheetKey(this._queue.part) === sheetKey
@@ -933,10 +881,10 @@ class CalcVectorManager extends VectorManagerBase {
 	// already sent leave the marks in place.
 	private _markSheetStale(sheetKey: string, sheet: cool.CalcSheetData): void {
 		for (const key of sheet.blocks.keys()) sheet.staleBlocks.add(key);
-		for (const flightKey of this._inFlight)
+		for (const flightKey of this._requests.outKeys())
 			if (flightKey.startsWith(sheetKey + '/'))
 				sheet.staleBlocks.add(flightKey.substring(sheetKey.length + 1));
-		this._staleFrom.set(sheetKey, this._nextRequestId);
+		this._staleFrom.set(sheetKey, this._requests.nextRequestId);
 	}
 
 	/// Forget all content and the fonts and images it named, and take the fonts off the
@@ -954,9 +902,7 @@ class CalcVectorManager extends VectorManagerBase {
 		this._placedBlocks.clear();
 		this._objectViews.clear();
 		this._viewCounts.clear();
-		this._inFlight.clear();
-		this._requests.clear();
-		this._disarmExpiry();
+		this._requests.forgetAll();
 		this._queue = null;
 		this._sheetRequested.clear();
 		this._staleFrom.clear();
@@ -973,9 +919,9 @@ class CalcVectorManager extends VectorManagerBase {
 		const sheetKey = CalcVectorManager._sheetKey(part);
 		const requestId = values.requestId;
 		const request =
-			requestId !== undefined ? this._requests.get(requestId) : undefined;
-		if (request && requestId !== undefined)
-			this._forgetRequest(requestId, request);
+			requestId !== undefined
+				? this._requests.takeRequest(requestId)
+				: undefined;
 
 		// A new epoch makes the held versions invalid. The answer that brings it was built in the
 		// new epoch, so it is kept and the rest is asked for again.
@@ -999,7 +945,8 @@ class CalcVectorManager extends VectorManagerBase {
 		if (values.type === 'vectorprimitives') sheet.complete = true;
 		// The answer names the blocks asked for and carries those that changed, so all of them are
 		// current, even when the request was forgotten before the answer came.
-		const asked = values.blocks ?? request?.blocks ?? [];
+		const asked =
+			values.blocks ?? (request ? CalcVectorManager._blocksOf(request) : []);
 		// An answer to a request sent before the sheet was marked stale leaves the marks.
 		const clearsStale =
 			requestId === undefined ||
@@ -1267,9 +1214,6 @@ class CalcVectorManager extends VectorManagerBase {
 	/// again when they are drawn.
 	forgetRequestsInFlight(): void {
 		super.forgetRequestsInFlight();
-		this._inFlight.clear();
-		this._requests.clear();
-		this._disarmExpiry();
 		this._queue = null;
 		this._sheetRequested.clear();
 	}
