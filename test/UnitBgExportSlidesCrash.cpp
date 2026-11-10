@@ -48,6 +48,12 @@ public:
         setHasKitHooks();
     }
 
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        UnitWSDClient::configure(config);
+        // The server writes slides out only with remote links enabled:
+        config.setBool("remote_links.enable", true);
+    }
+
     bool onDocumentLoaded(const std::string& message) override
     {
         TST_LOG("Got: [" << message << ']');
