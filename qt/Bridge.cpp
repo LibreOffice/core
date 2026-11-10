@@ -814,6 +814,11 @@ QVariant Bridge::cool(const QString& messageStr)
 
     if (tokens.equals(0, "HULLO"))
     {
+        // A HULLO while the connection is still up comes from a reload of the page, which then
+        // rejoins the document as after a renderer crash:
+        if (_app2js.joinable()) {
+            detachFromView();
+        }
         if (_detached)
         {
             // The connection was released when the renderer died, and the appDocId
