@@ -11,6 +11,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <config_vclplug.h>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
@@ -266,7 +267,7 @@ void BitmapTest::testConvert()
     {
         BitmapScopedReadAccess pReadAccess(aBitmap);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
-#if defined MACOSX || defined IOS
+#if (defined MACOSX || defined IOS) && !USE_HEADLESS_CODE
         if (SkiaHelper::isVCLSkiaEnabled())
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(12), pReadAccess->GetScanlineSize());
         else
@@ -293,7 +294,7 @@ void BitmapTest::testConvert()
         if (SkiaHelper::isVCLSkiaEnabled()) // aligned to 4 bytes
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
         else
-#if defined LINUX || defined FREEBSD
+#if defined LINUX || defined FREEBSD || USE_HEADLESS_CODE
         {
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
         }

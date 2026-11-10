@@ -31,7 +31,7 @@
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
-#if defined MACOSX || defined _WIN32
+#if (defined MACOSX || defined _WIN32) && !USE_HEADLESS_CODE
 #include <set>
 namespace rtl
 {
@@ -44,7 +44,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::set<rtl::OStri
 using namespace ::com::sun::star;
 using namespace ::cpo;
 
-#if defined MACOSX || defined _WIN32
+#if (defined MACOSX || defined _WIN32) && !USE_HEADLESS_CODE
 namespace rtl
 {
 static std::ostream& operator<<(std::ostream& rStream, const std::set<OString>& rSet)
@@ -2165,7 +2165,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName1)
 {
 // Embedding variable fonts does not work with fontconfig, only the default instance is enumerated
 // https://bugs.documentfoundation.org/show_bug.cgi?id=155853
-#if defined MACOSX || (defined _WIN32 && !USE_HEADLESS_CODE)
+#if (defined MACOSX || defined _WIN32) && !USE_HEADLESS_CODE
     loadFromFile(u"variable-font-psname-1.odt");
     save(TestFilter::PDF_WRITER);
 
@@ -2205,7 +2205,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName2)
 {
 // Embedding variable fonts does not work with fontconfig, only the default instance is enumerated
 // https://bugs.documentfoundation.org/show_bug.cgi?id=155853
-#if defined MACOSX || (defined _WIN32 && !USE_HEADLESS_CODE)
+#if (defined MACOSX || defined _WIN32) && !USE_HEADLESS_CODE
     loadFromFile(u"variable-font-psname-2.odt");
     save(TestFilter::PDF_WRITER);
 
@@ -2247,7 +2247,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testOpticalSizing)
 {
 // Embedding variable fonts does not work with fontconfig, only the default instance is enumerated
 // https://bugs.documentfoundation.org/show_bug.cgi?id=155853
-#if defined MACOSX || (defined _WIN32 && !USE_HEADLESS_CODE)
+#if (defined MACOSX || defined _WIN32) && !USE_HEADLESS_CODE
     loadFromFile(u"testOpticalSizing.odt");
     save(TestFilter::PDF_WRITER);
 

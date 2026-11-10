@@ -5528,7 +5528,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
         }
     }
 
-#ifdef MACOSX
+#if defined MACOSX && !USE_HEADLESS_CODE
     // There must be two fonts
     std::set<OString> aExpected{ "Cantarell-Regular"_ostr, "Cantarell-Bold"_ostr };
 #else
