@@ -26,9 +26,6 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     /// window.bridge calls that native code does not answer yet. They are not engine messages.
     private static let unansweredBridgeCalls: Set<Substring> = [
-        // TODO: coolwsd should send the file info along with the "authenticated" message. The
-        // native code need not query the integrator for it.
-        "checkFileInfo",
         "getAllPrefs",
         "setPref"
     ]
