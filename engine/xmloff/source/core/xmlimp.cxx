@@ -912,7 +912,6 @@ void SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >
 void SvXMLImport::startFastElement (sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    SAL_INFO("xmloff.core", "startFastElement " << SvXMLImport::getNameFromToken( Element ));
     if ( Attribs.is() && !mpImpl->mxODFVersion)
     {
         sax_fastparser::FastAttributeList& rAttribList =
@@ -943,7 +942,6 @@ void SvXMLImport::startFastElement (sal_Int32 Element,
     if (!maContexts.empty())
     {
         const SvXMLImportContextRef & pHandler = maContexts.top();
-        SAL_INFO("xmloff.core", "calling createFastChildContext on " << typeid(*pHandler.get()).name());
         auto tmp = pHandler->createFastChildContext( Element, Attribs );
         xContext = static_cast<SvXMLImportContext*>(tmp.get());
         assert((tmp && xContext) || (!tmp && !xContext));
@@ -1011,7 +1009,6 @@ void SvXMLImport::startUnknownElement (const OUString & rNamespace, const OUStri
 
 void SvXMLImport::endFastElement (sal_Int32 Element)
 {
-    SAL_INFO("xmloff.core", "endFastElement " << SvXMLImport::getNameFromToken( Element ));
     if (maContexts.empty())
     {
         SAL_WARN("xmloff.core", "SvXMLImport::endFastElement: no context left");
