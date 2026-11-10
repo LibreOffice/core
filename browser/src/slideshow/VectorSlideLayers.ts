@@ -43,12 +43,6 @@ interface SlideLayer {
 	look: string;
 }
 
-/// A framebuffer with the texture as its color and a stencil buffer of the same size.
-interface TextureTarget {
-	framebuffer: WebGLFramebuffer | null;
-	stencil: WebGLRenderbuffer | null;
-}
-
 // The margin around a layer's rectangle, in pixels, for the antialiased edge.
 const layerMargin = 2;
 // The share of a paragraph's height its layer reaches above and below it, for accents,
@@ -59,9 +53,8 @@ const circleSegments = 64;
 
 class VectorSlideLayers {
 	public readonly context: RenderContextGl;
-	private readonly quadProgram: WebGLProgram;
+	private readonly quads: SlideQuadsGl;
 	private readonly stencilProgram: WebGLProgram;
-	private readonly quadArray: WebGLVertexArrayObject | null;
 	private readonly stencilArray: WebGLVertexArrayObject | null;
 	private readonly stencilBuffer: WebGLBuffer | null;
 
@@ -74,26 +67,12 @@ class VectorSlideLayers {
 	// Canvas pixels per twip.
 	private scaleX = 1;
 	private scaleY = 1;
-	// 1 while a frame goes into the canvas, -1 while it goes into a texture.
-	private yDirection = 1;
-	// Whether this context can draw into a texture with a stencil buffer, null until the first
-	// texture target is made.
-	private targetsComplete: boolean | null = null;
-	// The texture of the current frame of each video, by the object id of its shape.
-	private videoTextures = new Map<number, WebGLTexture | null>();
 
 	constructor(context: RenderContextGl) {
 		this.context = context;
 		const gl = context.getGl();
 
-		this.quadProgram = context.createProgram(
-			context.createVertexShader(
-				SlideshowShaders['VectorSlideLayersQuad.vert.glsl'],
-			),
-			context.createFragmentShader(
-				SlideshowShaders['VectorSlideLayersQuad.frag.glsl'],
-			),
-		);
+		this.quads = new SlideQuadsGl(context);
 		this.stencilProgram = context.createProgram(
 			context.createVertexShader(
 				SlideshowShaders['VectorSlideLayersStencil.vert.glsl'],
@@ -102,19 +81,6 @@ class VectorSlideLayers {
 				SlideshowShaders['VectorSlideLayersStencil.frag.glsl'],
 			),
 		);
-
-		this.quadArray = gl.createVertexArray();
-		gl.bindVertexArray(this.quadArray);
-		const quadBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
-		gl.bufferData(
-			gl.ARRAY_BUFFER,
-			new Float32Array([0, 0, 1, 0, 0, 1, 1, 1]),
-			gl.STATIC_DRAW,
-		);
-		const unitLocation = gl.getAttribLocation(this.quadProgram, 'a_unit');
-		gl.enableVertexAttribArray(unitLocation);
-		gl.vertexAttribPointer(unitLocation, 2, gl.FLOAT, false, 0, 0);
 
 		this.stencilArray = gl.createVertexArray();
 		gl.bindVertexArray(this.stencilArray);
@@ -226,26 +192,8 @@ class VectorSlideLayers {
 	): boolean {
 		const data = this.data;
 		if (this.context.isDisposed() || !data) return false;
-		const gl = this.context.getGl();
-
-		const target = texture ? this._targetTexture(texture) : null;
-		if (texture && !target) return false;
-		// A texture holds the top row first, like an uploaded image. The canvas shows its first
-		// row at the bottom.
-		this.yDirection = target ? -1 : 1;
-		if (target) gl.viewport(0, 0, this.canvasWidth, this.canvasHeight);
-		else
-			gl.viewport(0, 0, this.context.canvas.width, this.context.canvas.height);
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
-		gl.clear(gl.COLOR_BUFFER_BIT);
-		// The layers are flat quads in paint order, and a flipped one faces away, so every quad
-		// is drawn whole. A 3D transition turns depth testing and face culling on in the same
-		// context.
-		gl.disable(gl.DEPTH_TEST);
-		gl.disable(gl.CULL_FACE);
-		// The textures hold premultiplied colors.
-		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+		if (!this.quads.begin(this.canvasWidth, this.canvasHeight, texture))
+			return false;
 
 		for (const layer of this.layers) {
 			const state = this._stateOf(layer, states);
@@ -272,87 +220,8 @@ class VectorSlideLayers {
 				this._drawVideos(layer, data, videos, state);
 		}
 
-		gl.disable(gl.BLEND);
-		gl.bindVertexArray(null);
-		if (texture && target) this._releaseTarget(texture, target);
+		this.quads.end();
 		return true;
-	}
-
-	// Size the texture to the canvas and make it the draw target, with a stencil buffer for the
-	// clips. Null when the texture cannot be drawn into.
-	private _targetTexture(texture: WebGLTexture): TextureTarget | null {
-		if (this.targetsComplete === false) return null;
-		const gl = this.context.getGl();
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(
-			gl.TEXTURE_2D,
-			0,
-			gl.RGBA,
-			this.canvasWidth,
-			this.canvasHeight,
-			0,
-			gl.RGBA,
-			gl.UNSIGNED_BYTE,
-			null,
-		);
-		gl.bindTexture(gl.TEXTURE_2D, null);
-
-		const stencil = gl.createRenderbuffer();
-		gl.bindRenderbuffer(gl.RENDERBUFFER, stencil);
-		gl.renderbufferStorage(
-			gl.RENDERBUFFER,
-			gl.STENCIL_INDEX8,
-			this.canvasWidth,
-			this.canvasHeight,
-		);
-		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
-
-		const framebuffer = gl.createFramebuffer();
-		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-		gl.framebufferTexture2D(
-			gl.FRAMEBUFFER,
-			gl.COLOR_ATTACHMENT0,
-			gl.TEXTURE_2D,
-			texture,
-			0,
-		);
-		gl.framebufferRenderbuffer(
-			gl.FRAMEBUFFER,
-			gl.STENCIL_ATTACHMENT,
-			gl.RENDERBUFFER,
-			stencil,
-		);
-		const target = { framebuffer, stencil };
-		// The status check waits for the GPU process. Every target has the same formats, so only
-		// the first is checked.
-		if (this.targetsComplete === null)
-			this.targetsComplete =
-				gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
-		if (!this.targetsComplete) {
-			this._releaseTarget(null, target);
-			return null;
-		}
-		return target;
-	}
-
-	// Draw into the canvas again. A texture that samples between mipmap levels gets them made
-	// anew from the frame.
-	private _releaseTarget(
-		texture: WebGLTexture | null,
-		target: TextureTarget,
-	): void {
-		const gl = this.context.getGl();
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-		gl.deleteFramebuffer(target.framebuffer);
-		gl.deleteRenderbuffer(target.stencil);
-		gl.viewport(0, 0, this.context.canvas.width, this.context.canvas.height);
-		this.yDirection = 1;
-		if (!texture) return;
-
-		if (!this.context.isMipMapped(texture)) return;
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.generateMipmap(gl.TEXTURE_2D);
-		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
 
 	/// Forget the layers, so the next frame draws them anew.
@@ -365,9 +234,8 @@ class VectorSlideLayers {
 		this.clear();
 		if (this.context.isDisposed()) return;
 		const gl = this.context.getGl();
-		gl.deleteProgram(this.quadProgram);
+		this.quads.dispose();
 		gl.deleteProgram(this.stencilProgram);
-		gl.deleteVertexArray(this.quadArray);
 		gl.deleteVertexArray(this.stencilArray);
 		gl.deleteBuffer(this.stencilBuffer);
 	}
@@ -376,9 +244,8 @@ class VectorSlideLayers {
 		if (!this.context.isDisposed()) {
 			const gl = this.context.getGl();
 			for (const layer of this.layers) gl.deleteTexture(layer.texture);
-			this.videoTextures.forEach((texture) => gl.deleteTexture(texture));
 		}
-		this.videoTextures.clear();
+		this.quads.clearFrames();
 		this.layers = [];
 		this.slideHash = null;
 		this.data = null;
@@ -632,48 +499,12 @@ class VectorSlideLayers {
 			const objectId = data.order[position];
 			const frame = videos.get(objectId);
 			if (!frame) continue;
-
-			const [left, right, top, bottom] = frame.edges;
-			let x = left * this.canvasWidth;
-			let y = top * this.canvasHeight;
-			let width = (right - left) * this.canvasWidth;
-			let height = (bottom - top) * this.canvasHeight;
-			// A flipped frame covers the same rectangle from its other edge.
-			if (frame.mirror & 1) {
-				x += width;
-				width = -width;
-			}
-			if (frame.mirror & 2) {
-				y += height;
-				height = -height;
-			}
 			this._drawQuad(
-				this._videoTexture(objectId, frame.source),
-				[x, y, width, height],
+				this.quads.frameTexture(objectId, frame.source),
+				this.quads.frameRectangle(frame),
 				state,
 			);
 		}
-	}
-
-	// The video texture of the object, holding the frame given.
-	private _videoTexture(
-		objectId: number,
-		source: TexImageSource,
-	): WebGLTexture | null {
-		const gl = this.context.getGl();
-		let texture = this.videoTextures.get(objectId);
-		if (!texture) {
-			texture = gl.createTexture();
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-			this.videoTextures.set(objectId, texture);
-		}
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
-		return texture;
 	}
 
 	// Draw the texture over the rectangle, in canvas pixels, in the state given.
@@ -688,37 +519,7 @@ class VectorSlideLayers {
 		const clip = state?.clip;
 		if (clip) this._stencilClip(clip, transform);
 
-		gl.useProgram(this.quadProgram);
-		gl.bindVertexArray(this.quadArray);
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(gl.getUniformLocation(this.quadProgram, 'u_texture'), 0);
-		gl.uniform1f(
-			gl.getUniformLocation(this.quadProgram, 'u_alpha'),
-			state?.alpha ?? 1,
-		);
-		gl.uniform4f(
-			gl.getUniformLocation(this.quadProgram, 'u_rect'),
-			rectangle[0],
-			rectangle[1],
-			rectangle[2],
-			rectangle[3],
-		);
-		gl.uniformMatrix3fv(
-			gl.getUniformLocation(this.quadProgram, 'u_transform'),
-			false,
-			transform,
-		);
-		gl.uniform2f(
-			gl.getUniformLocation(this.quadProgram, 'u_canvas'),
-			this.canvasWidth,
-			this.canvasHeight,
-		);
-		gl.uniform1f(
-			gl.getUniformLocation(this.quadProgram, 'u_yDirection'),
-			this.yDirection,
-		);
-		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+		this.quads.drawQuad(texture, rectangle, state?.alpha ?? 1, transform);
 
 		if (clip) {
 			gl.disable(gl.STENCIL_TEST);
@@ -778,7 +579,7 @@ class VectorSlideLayers {
 		);
 		gl.uniform1f(
 			gl.getUniformLocation(this.stencilProgram, 'u_yDirection'),
-			this.yDirection,
+			this.quads.yDirection,
 		);
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.stencilBuffer);
 

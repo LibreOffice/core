@@ -263,8 +263,8 @@ SLIDESHOW_SHADER_NAMES = \
 	VortexTransition.vert.glsl \
 	HoneycombTransition.vert.glsl \
 	HoneycombTransition.frag.glsl \
-	VectorSlideLayersQuad.vert.glsl \
-	VectorSlideLayersQuad.frag.glsl \
+	SlideQuad.vert.glsl \
+	SlideQuad.frag.glsl \
 	VectorSlideLayersStencil.vert.glsl \
 	VectorSlideLayersStencil.frag.glsl
 
@@ -1020,6 +1020,7 @@ COOL_JS_LST =\
     src/slideshow/engine/AnimatedElementVector.ts \
     src/slideshow/TransitionsInfo.ts \
     src/slideshow/ShapeTransitionMask.ts \
+    src/slideshow/SlideQuads.ts \
     src/slideshow/VectorSlideLayers.ts \
     src/slideshow/Transition2d.ts \
     src/slideshow/Transition3d.ts \
