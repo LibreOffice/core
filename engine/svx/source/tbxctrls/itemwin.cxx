@@ -170,6 +170,34 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     InterimItemWindow::DataChanged( rDCEvt );
 }
 
+namespace
+{
+// Appends each entry of the list with its name and its thumbnail, or with its name only when it
+// has no thumbnail.
+void FillWithThumbnails(weld::ComboBox& rBox, const XPropertyList& rList)
+{
+    const tools::Long nCount = rList.Count();
+    ScopedVclPtrInstance<VirtualDevice> pVD;
+    rBox.freeze();
+
+    for (tools::Long i = 0; i < nCount; i++)
+    {
+        const OUString& rName = rList.Get(i)->GetName();
+        const Bitmap aBitmap = rList.GetUiBitmap(i);
+        if (!aBitmap.IsEmpty())
+        {
+            pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
+            pVD->DrawBitmap(Point(), aBitmap);
+            rBox.append(u""_ustr, rName, *pVD);
+        }
+        else
+            rBox.append_text(rName);
+    }
+
+    rBox.thaw();
+}
+}
+
 void SvxFillTypeBox::Fill(weld::ComboBox& rListBox)
 {
     rListBox.freeze();
@@ -246,26 +274,7 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XHatchListRef &pList)
     if( !pList.is() )
         return;
 
-    tools::Long nCount = pList->Count();
-    ScopedVclPtrInstance< VirtualDevice > pVD;
-    rBox.freeze();
-
-    for( tools::Long i = 0; i < nCount; i++ )
-    {
-        const XHatchEntry* pEntry = pList->GetHatch(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-        {
-            const Size aBmpSize(aBitmap.GetSizePixel());
-            pVD->SetOutputSizePixel(aBmpSize, false);
-            pVD->DrawBitmap(Point(), aBitmap);
-            rBox.append(u""_ustr, pEntry->GetName(), *pVD);
-        }
-        else
-            rBox.append_text(pEntry->GetName());
-    }
-
-    rBox.thaw();
+    FillWithThumbnails(rBox, *pList);
 }
 
 void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XGradientListRef &pList)
@@ -273,26 +282,7 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XGradientListRef &pList)
     if( !pList.is() )
         return;
 
-    tools::Long nCount = pList->Count();
-    ScopedVclPtrInstance< VirtualDevice > pVD;
-    rBox.freeze();
-
-    for( tools::Long i = 0; i < nCount; i++ )
-    {
-        const XGradientEntry* pEntry = pList->GetGradient(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-        {
-            const Size aBmpSize(aBitmap.GetSizePixel());
-            pVD->SetOutputSizePixel(aBmpSize, false);
-            pVD->DrawBitmap(Point(), aBitmap);
-            rBox.append(u""_ustr, pEntry->GetName(), *pVD);
-        }
-        else
-            rBox.append_text(pEntry->GetName());
-    }
-
-    rBox.thaw();
+    FillWithThumbnails(rBox, *pList);
 }
 
 void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XBitmapListRef &pList)
