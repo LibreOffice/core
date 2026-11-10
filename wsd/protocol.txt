@@ -1799,8 +1799,8 @@ a11yfocuschanged: <payload>
     - when the view starts with screen reader support on;
     - when the accessibility focus goes to another paragraph, or the
       paragraph that has it changes, and its text, headingLevel, area,
-      links, formats, images, comments or contentControls differ from
-      what was last sent;
+      links, formats, changes, images, comments or contentControls differ
+      from what was last sent;
     - when editing the text of a selected shape or a spreadsheet cell
       starts, and when editing a cell ends;
     - when text is selected in a formula being edited, such as a cell
@@ -1830,6 +1830,8 @@ a11yfocuschanged: <payload>
     formats: [{"start", "end", ...}], the runs of character formatting,
         with "bold", "italic", "underline" and "strikethrough" as "true"
         where set, and "escapement" as "super" or "sub".
+    changes: [{"start", "end", "type"}], the tracked changes shown; type
+        is "insertion", "deletion" or "attributes".
     images: [{"position", "name", "description", "kind", "shapeType"}],
         the objects anchored as characters; position is the offset of the
         object character, kind is "shape", "frame", "formula", "chart" or
@@ -1854,10 +1856,11 @@ a11yfocuschanged: <payload>
     beforeLevels, afterLevels: their heading levels, 0 for a paragraph
         that is no heading, both present where a paragraph of either side
         is a heading.
-    beforeLinks, afterLinks, beforeFormats, afterFormats, beforeImages,
-        afterImages, beforeComments, afterComments, beforeContentControls,
-        afterContentControls: one array per paragraph of that side, as for
-        this one, present where a paragraph of that side has such elements.
+    beforeLinks, afterLinks, beforeFormats, afterFormats, beforeChanges,
+        afterChanges, beforeImages, afterImages, beforeComments,
+        afterComments, beforeContentControls, afterContentControls: one
+        array per paragraph of that side, as for this one, present where a
+        paragraph of that side has such elements.
     list: {"items": [{"level", "text", "rect"}]}, for a Writer paragraph
         with a bullet or a number outside tables: the run of list
         paragraphs including this one, up to 25 on each side, with the list

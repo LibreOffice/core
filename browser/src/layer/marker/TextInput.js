@@ -420,6 +420,7 @@ window.L.TextInput = window.L.Layer.extend({
 		const comments = elements ? elements.comments : undefined;
 		const controls = elements ? elements.contentControls : undefined;
 		const formats = elements ? elements.formats : undefined;
+		const changes = elements ? elements.changes : undefined;
 		const nodes = [];
 		let pos = 0;
 		for (const link of links || []) {
@@ -428,23 +429,24 @@ window.L.TextInput = window.L.Layer.extend({
 			if (start < pos || end <= start || end > content.length)
 				continue;
 			nodes.push(...this._createCommentNodes(content, pos, start, images, comments, controls,
-				formats));
+				formats, changes));
 			const anchor = document.createElement('a');
 			anchor.setAttribute('href', window.sanitizeUrl(link.url));
 			anchor.append(...this._createCommentNodes(content, start, end, images, comments,
-				controls, formats));
+				controls, formats, changes));
 			nodes.push(anchor);
 			pos = end;
 		}
 		nodes.push(...this._createCommentNodes(content, pos, content.length, images, comments,
-			controls, formats));
+			controls, formats, changes));
 		return nodes;
 	},
 
 	// the text between start and end, with its commented ranges and its content controls; a
 	// comment's range ends after the U+FFFC of its anchor, and a comment without a range is that
 	// character alone
-	_createCommentNodes: function(content, start, end, images, comments, controls, formats) {
+	_createCommentNodes: function(content, start, end, images, comments, controls, formats,
+		changes) {
 		const commentRanges = (comments || []).map(function (comment) {
 			return { id: comment.id, start: parseInt(comment.start), end: parseInt(comment.end) };
 		});
@@ -455,12 +457,12 @@ window.L.TextInput = window.L.Layer.extend({
 			return Object.assign({}, range, { start: Math.max(start, range.start),
 				end: Math.min(end, range.end) });
 		}).filter(function (range) { return range.start < range.end; });
-		return this._createMarkNodes(content, start, end, images, ranges, formats);
+		return this._createMarkNodes(content, start, end, images, ranges, formats, changes);
 	},
 
 	// a range inside another one, e.g. a reply repeating the range of its comment, is a mark in its
 	// mark; one partly inside is split at the end of the outer mark
-	_createMarkNodes: function(content, start, end, images, ranges, formats) {
+	_createMarkNodes: function(content, start, end, images, ranges, formats, changes) {
 		ranges.sort(function (a, b) { return a.start - b.start || b.end - a.end; });
 		const nodes = [];
 		let pos = start;
@@ -475,15 +477,48 @@ window.L.TextInput = window.L.Layer.extend({
 				}
 				inner.push(Object.assign({}, next, { end: Math.min(next.end, range.end) }));
 			}
-			nodes.push(...this._createImageNodes(content, pos, range.start, images, formats));
+			nodes.push(...this._createChangeNodes(content, pos, range.start, images, formats,
+				changes));
 			const mark = this._createRangeElement(range);
 			mark.append(...this._createMarkNodes(content, range.start, range.end, images, inner,
-				formats));
+				formats, changes));
 			nodes.push(mark);
 			pos = range.end;
 		}
-		nodes.push(...this._createImageNodes(content, pos, end, images, formats));
+		nodes.push(...this._createChangeNodes(content, pos, end, images, formats, changes));
 		return nodes;
+	},
+
+	// the text between start and end, with its tracked changes; split where a link or mark ends
+	_createChangeNodes: function(content, start, end, images, formats, changes) {
+		const nodes = [];
+		let pos = start;
+		for (const change of changes || []) {
+			const from = Math.max(pos, parseInt(change.start));
+			const to = Math.min(end, parseInt(change.end));
+			if (!(to > from))
+				continue;
+			if (from > pos)
+				nodes.push(...this._createImageNodes(content, pos, from, images, formats));
+			const element = this._createChangeElement(change);
+			element.append(...this._createImageNodes(content, from, to, images, formats));
+			nodes.push(element);
+			pos = to;
+		}
+		if (pos < end)
+			nodes.push(...this._createImageNodes(content, pos, end, images, formats));
+		return nodes;
+	},
+
+	_createChangeElement: function(change) {
+		if (change.type === 'insertion')
+			return document.createElement('ins');
+		if (change.type === 'deletion')
+			return document.createElement('del');
+		// a formatting change has no HTML element or ARIA role
+		const element = document.createElement('span');
+		element.setAttribute('aria-description', _('Formatting changed'));
+		return element;
 	},
 
 	// the element of a commented range or of a content control

@@ -3269,6 +3269,112 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphFormatsTracke
     CPPUNIT_ASSERT(!rBold.get_optional<std::string>("underline"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphChanges)
+{
+    // Given a paragraph after the first one with an insertion, a deletion and an attribute change:
+    createDoc("a11y-tracked-changes.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the caret moves into that paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then each change is reported by its range and type, the deleted text in the content:
+    CPPUNIT_ASSERT_EQUAL(std::string("Keep fresh and lazy then warm end."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+    // Without the fix, there was no "changes" node.
+    CPPUNIT_ASSERT(aView.m_aA11yFocusedParagraph.get_child_optional("changes"));
+    auto check
+        = [](const boost::property_tree::ptree& rChange, int nStart, int nEnd, const char* pType) {
+              CPPUNIT_ASSERT_EQUAL(nStart, rChange.get<int>("start"));
+              CPPUNIT_ASSERT_EQUAL(nEnd, rChange.get<int>("end"));
+              CPPUNIT_ASSERT_EQUAL(std::string(pType), rChange.get<std::string>("type"));
+          };
+    {
+        const boost::property_tree::ptree& rChanges
+            = aView.m_aA11yFocusedParagraph.get_child("changes");
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rChanges.size());
+        auto it = rChanges.begin();
+        check((it++)->second, 5, 10, "insertion");
+        check((it++)->second, 15, 20, "deletion");
+        check(it->second, 25, 29, "attributes");
+    }
+
+    // And when the insertion is accepted, the text staying the same:
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:AcceptTrackedChange"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the paragraph is reported again, without it:
+    {
+        const boost::property_tree::ptree& rChanges
+            = aView.m_aA11yFocusedParagraph.get_child("changes");
+        CPPUNIT_ASSERT_EQUAL(size_t(2), rChanges.size());
+        check(rChanges.begin()->second, 15, 20, "deletion");
+    }
+
+    // And when the caret moves back up, the changes are reported for the paragraph after it:
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(2), aView.m_aA11yFocusedParagraph.get_child("afterChanges").begin()->second.size());
+    CPPUNIT_ASSERT(!aView.m_aA11yFocusedParagraph.get_child_optional("changes"));
+
+    // And a paragraph inserted whole is reported as one insertion, from its start to its end:
+    pWrtShell->Down(/*bSelect=*/false, 2);
+    Scheduler::ProcessEventsToIdle();
+    {
+        const boost::property_tree::ptree& rChanges
+            = aView.m_aA11yFocusedParagraph.get_child("changes");
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rChanges.size());
+        check(rChanges.begin()->second, 0, 13, "insertion");
+    }
+    pWrtShell->Up(/*bSelect=*/false, 2);
+
+    // And when the changes are hidden, none is reported, nor the deleted text:
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::string("Keep fresh and then warm end."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+    CPPUNIT_ASSERT(!aView.m_aA11yFocusedParagraph.get_child_optional("changes"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphStackedChanges)
+{
+    // Given the paragraph with changes, and changes recorded:
+    createDoc("a11y-tracked-changes.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr,
+                    { comphelper::makePropertyValue(u"TrackChanges"_ustr, true) });
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the inserted and the deleted text are made bold:
+    auto makeBold = [&](sal_uInt16 nStart, sal_uInt16 nLength) {
+        pWrtShell->SttPara(/*bSelect=*/false);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, nStart, /*bBasicCall=*/false);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, nLength,
+                         /*bBasicCall=*/false);
+        dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+    };
+    makeBold(5, 5);
+    makeBold(15, 5);
+
+    // Then they are still reported as inserted and deleted, not as attribute changes:
+    std::map<int, std::string> aTypes;
+    for (const auto& rChange : aView.m_aA11yFocusedParagraph.get_child("changes"))
+        aTypes[rChange.second.get<int>("start")] = rChange.second.get<std::string>("type");
+    CPPUNIT_ASSERT_EQUAL(std::string("insertion"), aTypes[5]);
+    CPPUNIT_ASSERT_EQUAL(std::string("deletion"), aTypes[15]);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextWithoutElements)
 {
     // Given formatted paragraphs without links, images, comments or content controls:

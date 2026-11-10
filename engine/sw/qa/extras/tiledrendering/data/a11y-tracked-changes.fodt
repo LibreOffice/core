@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Bold" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:tracked-changes>
+    <text:changed-region xml:id="ct1" text:id="ct1">
+     <text:insertion><office:change-info><dc:creator>Ann</dc:creator><dc:date>2026-01-02T10:00:00</dc:date></office:change-info></text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2" text:id="ct2">
+     <text:deletion><office:change-info><dc:creator>Ben</dc:creator><dc:date>2026-01-03T11:00:00</dc:date></office:change-info><text:p>lazy </text:p></text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct3" text:id="ct3">
+     <text:format-change><office:change-info><dc:creator>Ann</dc:creator><dc:date>2026-01-04T12:00:00</dc:date></office:change-info></text:format-change>
+    </text:changed-region>
+    <text:changed-region xml:id="ct4" text:id="ct4">
+     <text:insertion><office:change-info><dc:creator>Ben</dc:creator><dc:date>2026-01-05T13:00:00</dc:date></office:change-info></text:insertion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:p>First paragraph</text:p>
+   <text:p>Keep <text:change-start text:change-id="ct1"/>fresh<text:change-end text:change-id="ct1"/> and <text:change text:change-id="ct2"/>then <text:change-start text:change-id="ct3"/><text:span text:style-name="Bold">warm</text:span><text:change-end text:change-id="ct3"/> end.</text:p>
+   <text:p><text:change-start text:change-id="ct4"/>Another verse<text:change-end text:change-id="ct4"/></text:p>
+   <text:p>Last paragraph</text:p>
+  </office:text>
+ </office:body>
+</office:document>

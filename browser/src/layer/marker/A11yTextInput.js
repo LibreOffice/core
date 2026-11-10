@@ -815,6 +815,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		const fillContextRegion = (region, paragraphs, rects, levels, sideElements) => {
 			const links = sideElements.links;
 			const formats = sideElements.formats;
+			const changes = sideElements.changes;
 			const images = sideElements.images;
 			const comments = sideElements.comments;
 			const controls = sideElements.contentControls;
@@ -846,6 +847,9 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				const spanFormats = Array.isArray(formats) && Array.isArray(formats[index])
 					? formats[index] : [];
 				const formatsKey = JSON.stringify(spanFormats);
+				const spanChanges = Array.isArray(changes) && Array.isArray(changes[index])
+					? changes[index] : [];
+				const changesKey = JSON.stringify(spanChanges);
 				const spanImages = Array.isArray(images) && Array.isArray(images[index])
 					? images[index] : [];
 				const imagesKey = JSON.stringify(spanImages);
@@ -857,12 +861,13 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				const controlsKey = JSON.stringify(spanControls);
 				if (span.textContent !== text || (span.dataset.links || '[]') !== linksKey
 					|| (span.dataset.formats || '[]') !== formatsKey
+					|| (span.dataset.changes || '[]') !== changesKey
 					|| (span.dataset.images || '[]') !== imagesKey
 					|| (span.dataset.comments || '[]') !== commentsKey
 					|| (span.dataset.contentControls || '[]') !== controlsKey) {
 					span.replaceChildren(...this._createLinkedNodes(text, { links: spanLinks,
-						formats: spanFormats, images: spanImages, comments: spanComments,
-						contentControls: spanControls }));
+						formats: spanFormats, changes: spanChanges, images: spanImages,
+						comments: spanComments, contentControls: spanControls }));
 					// a reader still reaches them; Tab does not
 					for (const link of span.querySelectorAll('a'))
 						link.tabIndex = -1;
@@ -874,6 +879,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 						span.dataset.formats = formatsKey;
 					else
 						delete span.dataset.formats;
+					if (spanChanges.length)
+						span.dataset.changes = changesKey;
+					else
+						delete span.dataset.changes;
 					if (spanImages.length)
 						span.dataset.images = imagesKey;
 					else

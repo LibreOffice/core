@@ -37,6 +37,14 @@ namespace cool {
 		escapement?: 'super' | 'sub';
 	}
 
+	// a range of the paragraph text inserted, deleted or with its attributes changed while
+	// changes were recorded
+	export interface InlineChange {
+		start: MessageNumber;
+		end: MessageNumber;
+		type: 'insertion' | 'deletion' | 'attributes';
+	}
+
 	// a U+FFFC (OBJECT REPLACEMENT CHARACTER) standing for an image, or a shape, an object or a
 	// text frame read like one
 	export interface InlineImage {
@@ -77,6 +85,7 @@ namespace cool {
 	export interface InlineElements {
 		links?: InlineLink[];
 		formats?: InlineFormat[];
+		changes?: InlineChange[];
 		images?: InlineImage[];
 		comments?: InlineComment[];
 		contentControls?: InlineContentControl[];
@@ -89,6 +98,7 @@ namespace cool {
 	export interface ContextInlineElements {
 		links?: PerParagraph<InlineLink>;
 		formats?: PerParagraph<InlineFormat>;
+		changes?: PerParagraph<InlineChange>;
 		images?: PerParagraph<InlineImage>;
 		comments?: PerParagraph<InlineComment>;
 		contentControls?: PerParagraph<InlineContentControl>;
@@ -104,6 +114,7 @@ namespace cool {
 	export interface InlineElementsMessage {
 		links?: InlineLink[];
 		formats?: InlineFormat[];
+		changes?: InlineChange[];
 		images?: InlineImage[];
 		comments?: InlineComment[];
 		contentControls?: InlineContentControl[];
@@ -111,6 +122,8 @@ namespace cool {
 		afterLinks?: PerParagraph<InlineLink>;
 		beforeFormats?: PerParagraph<InlineFormat>;
 		afterFormats?: PerParagraph<InlineFormat>;
+		beforeChanges?: PerParagraph<InlineChange>;
+		afterChanges?: PerParagraph<InlineChange>;
 		beforeImages?: PerParagraph<InlineImage>;
 		afterImages?: PerParagraph<InlineImage>;
 		beforeComments?: PerParagraph<InlineComment>;
@@ -126,6 +139,7 @@ namespace cool {
 			paragraph: {
 				links: message.links,
 				formats: message.formats,
+				changes: message.changes,
 				images: message.images,
 				comments: message.comments,
 				contentControls: message.contentControls,
@@ -133,6 +147,7 @@ namespace cool {
 			before: {
 				links: message.beforeLinks,
 				formats: message.beforeFormats,
+				changes: message.beforeChanges,
 				images: message.beforeImages,
 				comments: message.beforeComments,
 				contentControls: message.beforeContentControls,
@@ -140,6 +155,7 @@ namespace cool {
 			after: {
 				links: message.afterLinks,
 				formats: message.afterFormats,
+				changes: message.afterChanges,
 				images: message.afterImages,
 				comments: message.afterComments,
 				contentControls: message.afterContentControls,

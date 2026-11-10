@@ -74,12 +74,14 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
 
 #include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -938,6 +940,68 @@ boost::property_tree::ptree makeFormatsTree(const std::vector<ParagraphFormat>& 
     return aFormats;
 }
 
+// A tracked change, by its range in the accessible text of the paragraph
+struct ParagraphChange
+{
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd = 0;
+    sal_Int32 nType = 0; // a text::TextMarkupType::TRACK_CHANGE_*
+
+    bool operator==(const ParagraphChange&) const = default;
+};
+
+// The insertions, deletions and attribute changes recorded in a paragraph, in text order
+std::vector<ParagraphChange>
+collectChanges(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    const auto xMarkup = xAccText.query<accessibility::XAccessibleTextMarkup>();
+    const sal_Int32 nLength = xAccText->getCharacterCount();
+    if (!xMarkup.is() || nLength <= 0)
+        return {};
+    std::vector<ParagraphChange> aChanges;
+    for (const sal_Int32 nType : { text::TextMarkupType::TRACK_CHANGE_INSERTION,
+                                   text::TextMarkupType::TRACK_CHANGE_DELETION,
+                                   text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE })
+    {
+        const sal_Int32 nCount = xMarkup->getTextMarkupCount(nType);
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            const accessibility::TextSegment aSegment = xMarkup->getTextMarkup(i, nType);
+            const sal_Int32 nStart = std::max(aSegment.SegmentStart, sal_Int32(0));
+            const sal_Int32 nEnd = std::min(aSegment.SegmentEnd, nLength);
+            if (nStart < nEnd)
+                aChanges.push_back({ .nStart = nStart, .nEnd = nEnd, .nType = nType });
+        }
+    }
+    std::ranges::stable_sort(aChanges, {}, &ParagraphChange::nStart);
+    return aChanges;
+}
+
+boost::property_tree::ptree makeChangesTree(const std::vector<ParagraphChange>& rChanges)
+{
+    boost::property_tree::ptree aChanges;
+    for (const ParagraphChange& rChange : rChanges)
+    {
+        boost::property_tree::ptree aChange;
+        aChange.put("start", rChange.nStart);
+        aChange.put("end", rChange.nEnd);
+        switch (rChange.nType)
+        {
+            case text::TextMarkupType::TRACK_CHANGE_INSERTION:
+                aChange.put("type", "insertion");
+                break;
+            case text::TextMarkupType::TRACK_CHANGE_DELETION:
+                aChange.put("type", "deletion");
+                break;
+            default:
+                aChange.put("type", "attributes");
+                break;
+        }
+        aChanges.push_back(std::make_pair("", aChange));
+    }
+    return aChanges;
+}
+
 // An image, a shape, an embedded object or a text frame anchored as a character, by its position
 // in the paragraph text
 struct ParagraphImage
@@ -1171,6 +1235,7 @@ struct ContextParagraph
     sal_Int32 nLevel = 0;
     std::vector<ParagraphLink> aLinks;
     std::vector<ParagraphFormat> aFormats;
+    std::vector<ParagraphChange> aChanges;
     std::vector<ParagraphImage> aImages;
     std::vector<SfxParagraphComment> aComments;
     std::vector<SfxParagraphContentControl> aContentControls;
@@ -1203,6 +1268,7 @@ ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
         aParagraph.nLevel = getHeadingLevel(xText);
         aParagraph.aLinks = collectLinks(xText);
         aParagraph.aFormats = collectFormats(xText);
+        aParagraph.aChanges = collectChanges(xText);
         aParagraph.aImages = collectImages(xText);
         if (pViewShell)
         {
@@ -1222,6 +1288,12 @@ void appendPiece(ContextParagraph& rParagraph, ContextParagraph&& rPiece)
         rLink.nStart += nShift;
         rLink.nEnd += nShift;
         rParagraph.aLinks.push_back(std::move(rLink));
+    }
+    for (ParagraphChange& rChange : rPiece.aChanges)
+    {
+        rChange.nStart += nShift;
+        rChange.nEnd += nShift;
+        rParagraph.aChanges.push_back(rChange);
     }
     for (ParagraphImage& rImage : rPiece.aImages)
     {
@@ -2236,6 +2308,7 @@ class KitDocumentFocusListener :
     SfxParagraphArea m_eArea;
     std::vector<ParagraphLink> m_aFocusedLinks;
     std::vector<ParagraphFormat> m_aFocusedFormats;
+    std::vector<ParagraphChange> m_aFocusedChanges;
     std::vector<ParagraphImage> m_aFocusedImages;
     std::vector<SfxParagraphComment> m_aFocusedComments;
     std::vector<SfxParagraphContentControl> m_aFocusedContentControls;
@@ -2386,6 +2459,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.add_child("links", makeLinksTree(m_aFocusedLinks));
     if (!m_aFocusedFormats.empty())
         aPayloadTree.add_child("formats", makeFormatsTree(m_aFocusedFormats));
+    if (!m_aFocusedChanges.empty())
+        aPayloadTree.add_child("changes", makeChangesTree(m_aFocusedChanges));
     if (!m_aFocusedImages.empty())
         aPayloadTree.add_child("images", makeImagesTree(m_aFocusedImages));
     if (!m_aFocusedComments.empty())
@@ -2437,6 +2512,10 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
                     makeFormatsTree);
         addElements("afterFormats", m_aParagraphsAfter, &ContextParagraph::aFormats,
                     makeFormatsTree);
+        addElements("beforeChanges", m_aParagraphsBefore, &ContextParagraph::aChanges,
+                    makeChangesTree);
+        addElements("afterChanges", m_aParagraphsAfter, &ContextParagraph::aChanges,
+                    makeChangesTree);
         addElements("beforeImages", m_aParagraphsBefore, &ContextParagraph::aImages,
                     makeImagesTree);
         addElements("afterImages", m_aParagraphsAfter, &ContextParagraph::aImages, makeImagesTree);
@@ -2990,6 +3069,7 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         // In case only caret position or text selection are different we can rely on specific events.
         std::vector<ParagraphLink> aLinks = collectLinks(xAccText);
         std::vector<ParagraphFormat> aFormats = collectFormats(xAccText);
+        std::vector<ParagraphChange> aChanges = collectChanges(xAccText);
         std::vector<ParagraphImage> aImages = collectImages(xAccText);
         std::vector<SfxParagraphComment> aComments
             = m_pViewShell ? m_pViewShell->getKitParagraphComments(xAccText)
@@ -3000,13 +3080,14 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         if (m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel || m_eArea != eArea
             || m_aFocusedLinks != aLinks || m_aFocusedImages != aImages
             || m_aFocusedComments != aComments || m_aFocusedContentControls != aContentControls
-            || m_aFocusedFormats != aFormats)
+            || m_aFocusedFormats != aFormats || m_aFocusedChanges != aChanges)
         {
             m_sFocusedParagraph = sText;
             m_nHeadingLevel = nHeadingLevel;
             m_eArea = eArea;
             m_aFocusedLinks = std::move(aLinks);
             m_aFocusedFormats = std::move(aFormats);
+            m_aFocusedChanges = std::move(aChanges);
             m_aFocusedImages = std::move(aImages);
             m_aFocusedComments = std::move(aComments);
             m_aFocusedContentControls = std::move(aContentControls);
@@ -3047,6 +3128,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_eArea = SfxParagraphArea::Body;
     m_aFocusedLinks.clear();
     m_aFocusedFormats.clear();
+    m_aFocusedChanges.clear();
     m_aFocusedImages.clear();
     m_aFocusedComments.clear();
     m_aFocusedContentControls.clear();
