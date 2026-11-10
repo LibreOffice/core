@@ -120,8 +120,38 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		});
 		cy.cGet('[id^="test-div-AnimatedGif-"]').should('not.exist');
 
+		// Back in the normal view nothing is selected, so the image stands
+		// still until it is selected again.
 		cy.then(function () {
 			win.app.map.sendUnoCommand('.uno:CloseMasterView');
+		});
+		helper.processToIdle(win);
+		cy.cGet('[id^="test-div-AnimatedGif-"]').should('not.exist');
+		cy.then(function () {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+		});
+		cy.cGet('[id^="test-div-AnimatedGif-"]').should('exist');
+	});
+
+	it('Animated GIF plays only while it is selected', function () {
+		var win = this.win;
+		helper.processToIdle(win);
+
+		cy.cGet('#Insert-tab-label').click();
+		cy.cGet('#Insert-container .inline.insertmultimedia').click();
+		cy.cGet('#insertmultimedia[type=file]').attachFile(
+			'/desktop/impress/animated_to_insert.gif'
+		);
+
+		// The inserted image is selected, so it plays as an overlay section.
+		cy.cGet('[id^="test-div-AnimatedGif-"]').should('exist');
+
+		// Once deselected the tiles show its first frame and the overlay goes.
+		helper.typeIntoDocument('{esc}');
+		cy.cGet('[id^="test-div-AnimatedGif-"]').should('not.exist');
+
+		cy.then(function () {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
 		});
 		cy.cGet('[id^="test-div-AnimatedGif-"]').should('exist');
 	});

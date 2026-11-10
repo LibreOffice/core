@@ -331,6 +331,7 @@ class GraphicSelection {
 	*/
 	public static selectObjects(objectIds: number[]) {
 		this.selectedObjectIDs = objectIds.slice();
+		this.announceSelection();
 		SelectionSection.selectedHere(objectIds);
 		// Nothing selected by asking for it is where one meant to be; nothing is to follow.
 		this.rememberWhereItStands(objectIds);
@@ -350,6 +351,19 @@ class GraphicSelection {
 
 	/// The most selections that wait for their report; a longer row loses its oldest.
 	private static readonly mostAsked: number = 16;
+
+	/// The objects the last graphicselectionchanged event named.
+	private static announcedObjectIDs: number[] = [];
+
+	/// Says which objects the selection has now, by their unique ids, once for each change
+	private static announceSelection(): void {
+		if (this.sameObjects(this.announcedObjectIDs, this.selectedObjectIDs))
+			return;
+		this.announcedObjectIDs = this.selectedObjectIDs.slice();
+		app.events.fire('graphicselectionchanged', {
+			objectIds: this.selectedObjectIDs.slice(),
+		});
+	}
 
 	/// Whether the two lists name the same objects in the same order.
 	private static sameObjects(one: number[], other: number[]): boolean {
@@ -491,6 +505,7 @@ class GraphicSelection {
 		if (changed) GraphicSelection.travel()?.leave();
 
 		this.selectedObjectIDs = objectIds.slice();
+		this.announceSelection();
 		this.selectionCameFromElsewhere = changed;
 		this.rememberWhereItStands(objectIds);
 		this.tellTheStates();

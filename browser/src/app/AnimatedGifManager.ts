@@ -11,8 +11,10 @@
  */
 
 /*
- * AnimatedGifManager plays animated images (for example animated GIFs) over the
- * document while editing or viewing.
+ * AnimatedGifManager plays the selected animated images (for example animated
+ * GIFs) over the document while editing. The tiles show the first frame of
+ * every animated image, so the ones not selected stand still at it, in their
+ * place in the stacking order.
  */
 
 class AnimatedGifManager {
@@ -28,6 +30,10 @@ class AnimatedGifManager {
 		map.on('updateparts', this._onUpdateParts, this);
 		map.on('zoomend', this._onZoomEnd, this);
 		app.events.on('contextchange', this._onContextChange.bind(this));
+		app.events.on(
+			'graphicselectionchanged',
+			this._onGraphicSelectionChanged.bind(this),
+		);
 	}
 
 	// Ask for the presentation info on load so animated images already in the
@@ -55,8 +61,12 @@ class AnimatedGifManager {
 		this._reconcileCurrentPart();
 	}
 
-	// Picks the gifs of the part on screen out of the stored presentation info
-	// and brings the overlays in line with them.
+	private _onGraphicSelectionChanged() {
+		this._reconcileCurrentPart();
+	}
+
+	// Picks the selected gifs of the part on screen out of the stored
+	// presentation info and brings the overlays in line with them.
 	private _reconcileCurrentPart() {
 		if (!this._presentationInfo || !this._presentationInfo.slides) return;
 		const docLayer = this._map._docLayer;
@@ -67,7 +77,8 @@ class AnimatedGifManager {
 			!app.activeDocument || app.activeDocument.isModeActive(0);
 		const slide = normalView ? this._presentationInfo.slides[part] : null;
 		const gifs: GifInfo[] = (slide && slide.gifs) || [];
-		this._reconcile(gifs);
+		const selected = GraphicSelection.selectedObjectIDs;
+		this._reconcile(gifs.filter((gif) => selected.includes(gif.id)));
 	}
 
 	// Brings the overlay sections in line with the given list: repositions the
