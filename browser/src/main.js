@@ -332,20 +332,7 @@ if (window.ThisIsTheEmscriptenApp) {
 			window.bridge.getRemoteInfo(resolve);
 		});
 
-		// The integrator's file properties arrive before the user interface is built, so its
-		// controls, such as Share, follow them. Only a remote page in an editor frame has them.
-		const fileInfo = new Promise(function(resolve) {
-			if (window.bridge.checkFileInfo)
-				window.bridge.checkFileInfo(resolve);
-			else
-				resolve('');
-		});
-
-		Promise.all([remoteInfo, fileInfo]).then(function(infos) {
-			const infoJson = infos[0];
-			if (infos[1])
-				map.fire('wopiprops', JSON.parse(infos[1]));
-
+		remoteInfo.then(function(infoJson) {
 			if (!infoJson) {
 				// Local-only document: standard path.
 				initUI();
@@ -358,8 +345,11 @@ if (window.ThisIsTheEmscriptenApp) {
 			// values.
 			window._codaRemoteInfo = info;
 			window.app.console.log('CODA: remote doc, wopiSrc=' + info.wopiSrc);
-			initUI();
 			global.collabFetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {
+				// The file properties come before initUI, so controls such as Share follow them.
+				if (result.fileInfo)
+					map.fire('wopiprops', result.fileInfo);
+				initUI();
 				window.app.console.log('CODA: fetch URL: ' + result.url);
 				if (result.filename) {
 					map['wopi'].BaseFileName = result.filename;

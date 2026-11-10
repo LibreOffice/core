@@ -511,8 +511,6 @@ class InitializerBase {
 			writeRemoteDocFile: (name, base64, callback) =>
 				call('writeRemoteDocFile', [name, base64], callback),
 			readLocalDocBytes: (callback) => call('readLocalDocBytes', [], callback),
-			checkFileInfo: (callback) =>
-				call('checkFileInfo', [window.codaRemotePage.serverVariables.accessToken], callback),
 			getAllPrefs: (callback) => call('getAllPrefs', [], callback),
 			setPref: (key, value) => call('setPref', [key, value]),
 			saveCompleted: () => call('saveCompleted', []),
@@ -2845,7 +2843,7 @@ function showWelcomeSVG() {
 	// also rebased onto this origin if the server returns them as
 	// site-absolute paths (e.g. "/co/collab/fetch?token=...").
 	global.collabFetchFile = function(wopiSrc, accessToken, coolServer) {
-		return global.collabConnect(wopiSrc, accessToken, coolServer).then(function() {
+		return global.collabConnect(wopiSrc, accessToken, coolServer).then(function(fileInfo) {
 			return new Promise(function(resolve, reject) {
 
 				const listener = function(msg) {
@@ -2865,7 +2863,7 @@ function showWelcomeSVG() {
 							global.app.console.log('Collab fetch URL: ' + url);
 							// The version in storage that the uploads of this page replace:
 							global._collabLastModifiedTime = msg.lastModifiedTime;
-							resolve({url: url, filename: msg.filename});
+							resolve({url: url, filename: msg.filename, fileInfo: fileInfo});
 						} else {
 							global.collabWs.close();
 							reject(new Error('Collab fetch response missing URL'));
@@ -2902,6 +2900,7 @@ function showWelcomeSVG() {
 
 	// Open the /co/collab WebSocket and sign in with accessToken.
 	// The arguments are as for collabFetchFile above.
+	// It resolves with the file properties that coolwsd sends with authenticated, if any.
 	global.collabConnect = function(wopiSrc, accessToken, coolServer) {
 		// Stash for collabUploadFile so it can rebase upload_url
 		// against the same cool server.  Cleared on socket close.
@@ -2959,7 +2958,7 @@ function showWelcomeSVG() {
 							global.collabWs = null;
 							global._collabCoolServer = '';
 						};
-						resolve();
+						resolve(msg.fileInfo);
 					} else if (msg.type === 'error') {
 						clearTimeout(timeoutId);
 						global.collabWs.close();
