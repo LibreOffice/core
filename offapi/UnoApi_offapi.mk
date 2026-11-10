@@ -2933,7 +2933,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	CompositeOperation \
 	EmphasisMark \
 	FillRule \
-	FloatingPointBitmapFormat \
 	FontInfo \
 	FontMetrics \
 	FontRequest \
