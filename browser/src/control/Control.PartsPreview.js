@@ -39,6 +39,21 @@ function readSlideImportDrag(e) {
 	}
 }
 
+// The size in CSS pixels at which the slide previews are requested, from the custom properties
+// that the stylesheets set on the root element. The slide list holds a thumbnail inside its
+// largest size, and a thumbnail in the grid view is square.
+function previewSize(gridMode) {
+	const style = getComputedStyle(document.documentElement);
+	if (gridMode) {
+		const size = parseFloat(style.getPropertyValue('--preview-img-grid-size'));
+		return { width: size, height: size };
+	}
+	return {
+		width: parseFloat(style.getPropertyValue('--preview-img-max-width')),
+		height: parseFloat(style.getPropertyValue('--preview-img-max-height')),
+	};
+}
+
 window.L.Control.PartsPreview = window.L.Control.extend({
 	options: {
 		fetchThumbnail: true,
@@ -46,9 +61,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		imageClass: '',
 		frameClass: '',
 		axis: '',
-		allowOrientation: true,
-		maxWidth: window.mode.isDesktop() ? 180: (window.mode.isTablet() ? 120: 60),
-		maxHeight: window.mode.isDesktop() ? 180: (window.mode.isTablet() ? 120: 60)
+		allowOrientation: true
 	},
 	partsFocused: false,
 
@@ -92,6 +105,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	onAdd: function (map) {
 		this._previewInitialized = false;
 		this._gridMode = false;
+		const size = previewSize(false);
+		this.options.maxWidth = size.width;
+		this.options.maxHeight = size.height;
 		this._previewTiles = [];
 		this._sectionHeaders = []; // Section header DOM elements
 		this._collapsedSections = new Set(); // Names of sections collapsed by the user
@@ -2735,9 +2751,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				window.L.DomUtil.removeClass(wrapper, 'parts-preview-grid');
 		}
 
-		var listSize = window.mode.isDesktop() ? 180 : (window.mode.isTablet() ? 120 : 60);
-		this.options.maxWidth = enabled ? 256 : listSize;
-		this.options.maxHeight = this.options.maxWidth;
+		const size = previewSize(enabled);
+		this.options.maxWidth = size.width;
+		this.options.maxHeight = size.height;
 
 		if (this._previewInitialized)
 			this._invalidateParts();

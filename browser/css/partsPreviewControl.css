@@ -1,3 +1,13 @@
+/* The largest size of a thumbnail in the slide list, and the size of a thumbnail in the grid
+ * view. The slide previews are requested at these sizes, so a bitmap is shown at its own size.
+ * The values sit on the root element because the frames of a linked presentation move from the
+ * sorter into a panel beside it. */
+:root {
+	--preview-img-max-width: 158px;
+	--preview-img-max-height: 174px;
+	--preview-img-grid-size: 256px;
+}
+
 #slide-sorter {
 	white-space: nowrap;
 	overflow-x: hidden;
@@ -47,16 +57,21 @@
 	vertical-align: middle;
 }
 
+/* The inline width and height set on a thumbnail are the size of its bitmap, and the border
+ * sits outside them, so the picture is shown at its own size. A narrow Draw page still takes a
+ * frame almost as wide as a slide, to line up with the document's left edge, and keeps its
+ * proportions centred inside it. */
 .preview-img {
-	/* In draw docs, the width of previews are small, but we want a min of 160px to align it with document's left edge */
-	min-width: 160px;
+	min-width: calc(var(--preview-img-max-width) - 4px);
 	vertical-align: middle;
-	max-width: 164px;
+	max-width: var(--preview-img-max-width);
+	max-height: var(--preview-img-max-height);
+	object-fit: contain;
 	cursor: pointer;
 	border: 3px solid transparent !important;
 	border-radius: var(--border-radius);
 	outline: 3px solid var(--color-border);
-	box-sizing: border-box;
+	box-sizing: content-box;
 	margin-left: 10px;
 	margin-right: 10px;
 }
@@ -550,8 +565,10 @@
  * in the grid the cell decides the size, so these override that inline rule
  * to make each thumbnail fill its column while keeping the slide ratio. */
 .parts-preview-grid .preview-img {
+	box-sizing: border-box;
 	min-width: 0;
 	max-width: none;
+	max-height: none;
 	width: 100% !important;
 	height: auto !important;
 	margin: 0;

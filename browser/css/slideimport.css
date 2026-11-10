@@ -735,8 +735,10 @@
 }
 
 .slide-import-list .preview-img {
+	box-sizing: border-box;
 	min-width: 0;
 	max-width: none;
+	max-height: none;
 	width: 100%;
 	height: auto;
 	margin: 0;

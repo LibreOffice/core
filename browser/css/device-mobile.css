@@ -343,9 +343,16 @@ body > #formulabar-row {
 	line-height: 60px;
 }
 
+/* Phones request the slide previews at this size. */
+:root {
+	--preview-img-max-width: 60px;
+	--preview-img-max-height: 60px;
+}
+
 #slide-sorter.portrait .preview-img {
+	box-sizing: border-box;
 	min-width: 37px;
-	max-width: 60px;
+	max-width: var(--preview-img-max-width);
 	max-height: 45px;
 	margin: 0;
 }
@@ -375,8 +382,10 @@ body > #formulabar-row {
 }
 
 #slide-sorter.landscape .preview-img {
+	box-sizing: border-box;
 	min-width: 20px;
-	max-width: 60px;
+	max-width: var(--preview-img-max-width);
+	max-height: none;
 	margin: 0 6px 0 0;
 }
 
