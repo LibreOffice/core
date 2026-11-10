@@ -82,6 +82,12 @@ public:
                              const std::string& sslVerifyResult);
 #endif
 
+    std::string docKey() const
+    {
+        return RequestDetails::getDocKey(
+            RequestDetails::sanitizeURI(_requestDetails.getDocumentURI()));
+    }
+
     /// Returns true iff we are older than the given age.
     template <typename T>
     bool aged(T minAge,
