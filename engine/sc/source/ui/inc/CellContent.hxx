@@ -196,6 +196,8 @@ struct CellEditText
     SvxCellVerJustify meVerJust;
     SvxCellOrientation meOrient;
     Degree100 mnRotate;
+    /// Asian vertical text, laid out top to bottom in columns from right to left.
+    bool mbAsianVertical;
     /// The text wraps into lines.
     bool mbBreak;
     /// Wrapped text taller than the cell starts at the top of the cell.

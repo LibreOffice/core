@@ -1564,6 +1564,16 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         eOrient = SvxCellOrientation::Standard;
         nRotate = 0_deg100;
     }
+    // A vertical engine lays out an Asian vertical cell instead of one character per line, as
+    // ScOutputData::DrawEditAsianVertical does, and the cell aligns at the top right by default.
+    const bool bAsianVertical = eOrient == SvxCellOrientation::Stacked && nRotate == 0_deg100
+                                && rPattern.GetItem(ATTR_VERTICAL_ASIAN, pCondSet).GetValue();
+    if (bAsianVertical)
+    {
+        eOrient = SvxCellOrientation::Standard;
+        if (eVerJust == SvxCellVerJustify::Standard)
+            eVerJust = SvxCellVerJustify::Top;
+    }
     const bool bStacked = eOrient == SvxCellOrientation::Stacked;
     const bool bVertical
         = eOrient == SvxCellOrientation::TopBottom || eOrient == SvxCellOrientation::BottomUp;
@@ -1594,9 +1604,12 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         bBreak = false;
 
     const OUString aCellString = mrDocument.GetString(nColumn, nRow, mnTab);
-    const SvxCellHorJustify eHorJustContext = getAlignmentFromContext(
-        eHorJustAttr, bCellIsValue, false, aCellString, rPattern, pCondSet, mrDocument, mnTab,
-        isNumberFormatText(mrDocument, nColumn, nRow, mnTab));
+    const SvxCellHorJustify eHorJustContext
+        = bAsianVertical && eHorJustAttr == SvxCellHorJustify::Standard
+              ? SvxCellHorJustify::Right
+              : getAlignmentFromContext(eHorJustAttr, bCellIsValue, false, aCellString, rPattern,
+                                        pCondSet, mrDocument, mnTab,
+                                        isNumberFormatText(mrDocument, nColumn, nRow, mnTab));
     const SvxCellHorJustify eHorJust
         = eHorJustAttr == SvxCellHorJustify::Block ? SvxCellHorJustify::Block : eHorJustContext;
 
@@ -1635,11 +1648,19 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
                 break;
         }
     }
-    rEngine.SetDefaultItem(SvxAdjustItem(eAdjust, EE_PARA_JUST));
-    rEngine.SetDefaultItem(SvxJustifyMethodItem(eHorJustMethod, EE_PARA_JUST_METHOD));
-    if (eVerJust == SvxCellVerJustify::Block)
-        rEngine.SetDefaultItem(SvxVerJustifyItem(SvxCellVerJustify::Block, EE_PARA_VER_JUST));
-    rEngine.SetVertical(false);
+    if (bAsianVertical)
+    {
+        sc::setVerticalTextAlignment(
+            rEngine, true, eVerJust, rPattern.GetItem(ATTR_VER_JUSTIFY_METHOD, pCondSet).GetValue(),
+            eHorJust);
+    }
+    else
+    {
+        rEngine.SetDefaultItem(SvxAdjustItem(eAdjust, EE_PARA_JUST));
+        rEngine.SetDefaultItem(SvxJustifyMethodItem(eHorJustMethod, EE_PARA_JUST_METHOD));
+        if (eVerJust == SvxCellVerJustify::Block)
+            rEngine.SetDefaultItem(SvxVerJustifyItem(SvxCellVerJustify::Block, EE_PARA_VER_JUST));
+    }
 
     const SvxMarginItem& rMargin = rPattern.GetItem(ATTR_MARGIN, pCondSet);
     sal_uInt16 nIndent = 0;
@@ -1663,7 +1684,14 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     Size aPaperSize(1000000, 1000000);
     // Vertical text breaks at the height of the cell.
     const double fLineLength = std::max(0.0, bVertical ? fInnerHeight : fInnerWidth);
-    if (bBreak)
+    if (bAsianVertical)
+    {
+        const double fColumnLength
+            = fInnerHeight - sc::constAsianVerticalBottomGap * maSettings.mfPixelSize;
+        aPaperSize = Size(tools::Long(std::max(0.0, fInnerWidth) * constMm100PerTwip),
+                          tools::Long(std::max(0.0, fColumnLength) * constMm100PerTwip));
+    }
+    else if (bBreak)
         aPaperSize.setWidth(tools::Long(fLineLength * constMm100PerTwip));
     rEngine.SetPaperSize(aPaperSize);
 
@@ -1675,7 +1703,7 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
             return;
         rEngine.SetTextCurrentDefaults(*pData);
         // Fields do not wrap, so a wrapped cell with a field is clipped to the cell.
-        if (bBreak && pData->HasField())
+        if (bBreak && !bAsianVertical && pData->HasField())
             bWrapFields = true;
     }
     else
@@ -1692,12 +1720,15 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         }
     }
 
+    // Setting a text object takes the direction of the object, which is across.
+    rEngine.SetVertical(bAsianVertical);
     rEngine.SetUpdateLayout(true);
 
-    // Wrapped lines take the width of the page, other text the width of its longest line.
+    // Wrapped lines take the width of the page, other text the width of its longest line. Asian
+    // vertical text takes the width of its columns.
     auto engineWidth = [&]()
     {
-        if (bBreak && !bStacked)
+        if (bBreak && !bStacked && !bAsianVertical)
             return fLineLength;
         return double(rEngine.CalcTextWidth()) * constTwipsPerMm100;
     };
@@ -1722,15 +1753,18 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     // A number, a text that shrinks to fit and vertical or rotated text stay inside their cell.
     const bool bNoOverflow = bCellIsValue || bShrink || bVertical || nRotate != 0_deg100;
     // Wrapped lines take no width of their own, the way the engine size of the window counts them.
-    const double fNeededWidth = (bBreak && !bStacked ? 0.0 : fExtentX) + fLeftMargin + fRightMargin;
+    const double fNeededWidth
+        = (bBreak && !bStacked && !bAsianVertical ? 0.0 : fExtentX) + fLeftMargin + fRightMargin;
     CellTextArea aArea
         = decideTextArea(rSource, fNeededWidth, eHorJustContext, bNoOverflow, bBreak, aSizes);
 
     if (bShrink && (aArea.mbLeftClip || aArea.mbRightClip || fExtentY > fInnerHeight))
     {
         // The fonts shrink until the text fits, after the first step at most 7 times by 10%.
-        const double fAvailable = bVertical ? fInnerHeight : fInnerWidth;
-        const double fNeeded = bVertical ? fExtentY : fExtentX;
+        // Text that runs down the cell has to fit its height.
+        const bool bAlongHeight = bVertical || bAsianVertical;
+        const double fAvailable = bAlongHeight ? fInnerHeight : fInnerWidth;
+        const double fNeeded = bAlongHeight ? fExtentY : fExtentX;
         if (fAvailable > 0 && fNeeded > fAvailable)
         {
             double fScale = fAvailable / fNeeded;
@@ -1741,7 +1775,7 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
                 fEngineHeight = engineHeight();
                 fExtentX = bVertical ? fEngineHeight : fEngineWidth;
                 fExtentY = bVertical ? fEngineWidth : fEngineHeight;
-                return bVertical ? fExtentY : fExtentX;
+                return bAlongHeight ? fExtentY : fExtentX;
             };
             if (shrinkToFit(fAvailable, applyScale,
                             [&]()
@@ -1785,7 +1819,7 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         bClipRightMark = aArea.mbRightClip;
     }
 
-    if (!bBreak && !bVertical && !bStacked
+    if (!bBreak && !bVertical && !bStacked && !bAsianVertical
         && (eHorJustContext == SvxCellHorJustify::Right
             || eHorJustContext == SvxCellHorJustify::Center))
     {
@@ -1809,7 +1843,8 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     if (aArea.mbRightClip)
         eFlags |= CellTextFlags::ClippedRight;
     const bool bClipHorizontally
-        = aArea.mbLeftClip || aArea.mbRightClip || bWrapFields || (bBreak && !bVertical);
+        = aArea.mbLeftClip || aArea.mbRightClip || bWrapFields
+          || (bBreak && !bVertical && !bAsianVertical);
 
     // The engine lays out from (0, 0) in 1/100 mm.
     TextHierarchyBreakup aHelper;
@@ -1829,6 +1864,7 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
                                                   eVerJust,
                                                   eOrient,
                                                   nRotate,
+                                                  bAsianVertical,
                                                   bBreak,
                                                   bStartAtTop,
                                                   bClipHorizontally,
@@ -1863,7 +1899,7 @@ void CellPrimitiveBuilder::Impl::placeEditText(const CellEditText& rText)
 
     // The box the text takes in the cell.
     double fBoxLeft = aAlign.getMinX() + rText.mfLeftMargin;
-    if (!rText.mbBreak || bVertical)
+    if (!rText.mbBreak || bVertical || rText.mbAsianVertical)
     {
         if (rText.meBoxHorJust == SvxCellHorJustify::Right)
             fBoxLeft = aAlign.getMaxX() - rText.mfRightMargin - rText.mfExtentX;
@@ -1894,6 +1930,14 @@ void CellPrimitiveBuilder::Impl::placeEditText(const CellEditText& rText)
         aTransform *= basegfx::utils::createRotateB2DHomMatrix(M_PI / 2);
         aTransform
             *= basegfx::utils::createTranslateB2DHomMatrix(fBoxLeft + rText.mfExtentX, fBoxTop);
+    }
+    else if (rText.mbAsianVertical)
+    {
+        // A vertical engine lays out from the top-right corner of its text, and the columns grow to
+        // the left. The engine aligns the text vertically within its page, which starts at the top
+        // of the cell.
+        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(
+            fBoxLeft + rText.mfExtentX, aAlign.getMinY() + rText.mfTopMargin);
     }
     else if (rText.mnRotate != 0_deg100)
     {

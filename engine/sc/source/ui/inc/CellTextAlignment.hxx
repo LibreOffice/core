@@ -14,10 +14,12 @@
 #include <address.hxx>
 #include <editeng/svxenum.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <string_view>
 
 class ScDocument;
+class ScEditEngineDefaulter;
 class ScPatternAttr;
 class SfxItemSet;
 
@@ -40,6 +42,18 @@ bool isNumberFormatText(const ScDocument& rDocument, SCCOL nColumn, SCROW nRow, 
     a repeat character, because it is the thousands separator of some number formats.
  */
 bool hasEditCharacters(std::u16string_view rText, bool bHasRepeatCharacter);
+
+/** Set the paragraph alignment of text whose lines run down the cell: text turned to read from top
+    to bottom (bTopToBottom) or from bottom to top, and Asian vertical text, which reads from top
+    to bottom. The vertical alignment of the cell places the lines.
+ */
+void setVerticalTextAlignment(ScEditEngineDefaulter& rEngine, bool bTopToBottom,
+                              SvxCellVerJustify eVerJust, SvxCellJustifyMethod eVerJustMethod,
+                              SvxCellHorJustify eHorJust);
+
+/// Asian vertical text breaks its columns this many pixels above the bottom of the cell, or the
+/// text would reach out of the cell. The value is a heuristic.
+constexpr tools::Long constAsianVerticalBottomGap = 5;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

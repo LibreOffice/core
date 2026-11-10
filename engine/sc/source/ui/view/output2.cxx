@@ -2500,10 +2500,7 @@ void ScOutputData::DrawEditParam::calcPaperSize(
     if (mbAsianVertical)
     {
         rPaperSize.setHeight( rAlignRect.GetHeight() - nTopM - nBottomM );
-        // Subtract some extra value from the height or else the text would go
-        // outside the cell area.  The value of 5 is arbitrary, and is based
-        // entirely on heuristics.
-        rPaperSize.AdjustHeight( -5 );
+        rPaperSize.AdjustHeight( -sc::constAsianVerticalBottomGap );
     }
 }
 
@@ -2577,31 +2574,9 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
 {
     if (isVerticallyOriented() || mbAsianVertical)
     {
-        SvxAdjust eSvxAdjust = SvxAdjust::Left;
-        switch (meVerJust)
-        {
-            case SvxCellVerJustify::Top:
-                eSvxAdjust = (meOrient == SvxCellOrientation::TopBottom || mbAsianVertical) ?
-                            SvxAdjust::Left : SvxAdjust::Right;
-                break;
-            case SvxCellVerJustify::Center:
-                eSvxAdjust = SvxAdjust::Center;
-                break;
-            case SvxCellVerJustify::Bottom:
-            case SvxCellVerJustify::Standard:
-                eSvxAdjust = (meOrient == SvxCellOrientation::TopBottom || mbAsianVertical) ?
-                            SvxAdjust::Right : SvxAdjust::Left;
-                break;
-            case SvxCellVerJustify::Block:
-                eSvxAdjust = SvxAdjust::Block;
-                break;
-        }
-
-        mpEngine->SetDefaultItem( SvxAdjustItem(eSvxAdjust, EE_PARA_JUST) );
-        mpEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
-
-        if (meHorJustResult == SvxCellHorJustify::Block)
-            mpEngine->SetDefaultItem( SvxVerJustifyItem(SvxCellVerJustify::Block, EE_PARA_VER_JUST) );
+        sc::setVerticalTextAlignment(*mpEngine,
+                                 meOrient == SvxCellOrientation::TopBottom || mbAsianVertical,
+                                 meVerJust, meVerJustMethod, meHorJustResult);
     }
     else
     {

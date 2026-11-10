@@ -1170,6 +1170,65 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCompletedCellEditIsPushedAg
     CPPUNIT_ASSERT(parseJson(aPush).get_child_optional("textEdits"));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorAsianVerticalCellIsVertical)
+{
+    // An Asian vertical cell is laid out top to bottom like in the window, where the ideographs
+    // stand upright and the Latin letters lie on their side. It was laid out one character per
+    // line instead, all of them upright, like a stacked cell that is not Asian.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    setCellString(*pDocShell, 1, 1, u"日本ABC"_ustr);
+    setCellString(*pDocShell, 2, 1, u"日本ABC"_ustr);
+    ScPatternAttr aStacked(rDocument.getCellAttributeHelper());
+    aStacked.ItemSetPut(ScVerticalStackCell(true));
+    applyToCell(*pDocShell, 2, 1, aStacked);
+    aStacked.ItemSetPut(SfxBoolItem(ATTR_VERTICAL_ASIAN, true));
+    applyToCell(*pDocShell, 1, 1, aStacked);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+
+    // The characters of the cell that a text portion lists as upright, in their order.
+    auto aUprightOf = [&aResponse](int nColumn) {
+        const auto oText = cellTextAt(aResponse, nColumn, 1);
+        CPPUNIT_ASSERT(oText);
+        OUString aUpright;
+        std::function<void(const boost::property_tree::ptree&)> aWalk
+            = [&](const boost::property_tree::ptree& rNode) {
+                  const std::string aType = rNode.get<std::string>("type", "");
+                  if (aType == "textSimplePortion" || aType == "textDecoratedPortion")
+                  {
+                      const OUString aText = OUString::fromUtf8(rNode.get<std::string>("text"));
+                      const sal_Int32 nPosition = rNode.get<sal_Int32>("textPosition", 0);
+                      const OUString aVisible = aText.copy(
+                          nPosition,
+                          rNode.get<sal_Int32>("textLength", aText.getLength() - nPosition));
+                      if (const auto oRanges = rNode.get_child_optional("upright"))
+                      {
+                          for (const auto& rRange : *oRanges)
+                          {
+                              std::vector<sal_Int32> aEnds;
+                              for (const auto& rEnd : rRange.second)
+                                  aEnds.push_back(rEnd.second.get_value<sal_Int32>());
+                              CPPUNIT_ASSERT_EQUAL(size_t(2), aEnds.size());
+                              aUpright += aVisible.subView(aEnds[0], aEnds[1] - aEnds[0]);
+                          }
+                      }
+                  }
+                  for (const auto& rChild : rNode)
+                      aWalk(rChild.second);
+              };
+        aWalk(*oText);
+        return aUpright;
+    };
+
+    CPPUNIT_ASSERT_EQUAL(u"日本"_ustr, aUprightOf(1));
+    // A stacked cell that is not Asian still has one character per line, and no vertical text.
+    CPPUNIT_ASSERT_EQUAL(OUString(), aUprightOf(2));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellEditGrowsOutsideASmallWindow)
 {
     // Painting a tile makes the window of the view as large as the document, which the cell editing

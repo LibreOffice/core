@@ -13,12 +13,16 @@
 
 #include <attrib.hxx>
 #include <document.hxx>
+#include <editutil.hxx>
 #include <global.hxx>
 #include <patattr.hxx>
 #include <scitems.hxx>
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <editeng/adjustitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/numformat.hxx>
 #include <unotools/charclass.hxx>
 
@@ -128,6 +132,35 @@ bool hasEditCharacters(std::u16string_view rText, bool bHasRepeatCharacter)
         }
     }
     return false;
+}
+
+void setVerticalTextAlignment(ScEditEngineDefaulter& rEngine, bool bTopToBottom,
+                              SvxCellVerJustify eVerJust, SvxCellJustifyMethod eVerJustMethod,
+                              SvxCellHorJustify eHorJust)
+{
+    SvxAdjust eSvxAdjust = SvxAdjust::Left;
+    switch (eVerJust)
+    {
+        case SvxCellVerJustify::Top:
+            eSvxAdjust = bTopToBottom ? SvxAdjust::Left : SvxAdjust::Right;
+            break;
+        case SvxCellVerJustify::Center:
+            eSvxAdjust = SvxAdjust::Center;
+            break;
+        case SvxCellVerJustify::Bottom:
+        case SvxCellVerJustify::Standard:
+            eSvxAdjust = bTopToBottom ? SvxAdjust::Right : SvxAdjust::Left;
+            break;
+        case SvxCellVerJustify::Block:
+            eSvxAdjust = SvxAdjust::Block;
+            break;
+    }
+
+    rEngine.SetDefaultItem(SvxAdjustItem(eSvxAdjust, EE_PARA_JUST));
+    rEngine.SetDefaultItem(SvxJustifyMethodItem(eVerJustMethod, EE_PARA_JUST_METHOD));
+
+    if (eHorJust == SvxCellHorJustify::Block)
+        rEngine.SetDefaultItem(SvxVerJustifyItem(SvxCellVerJustify::Block, EE_PARA_VER_JUST));
 }
 }
 
