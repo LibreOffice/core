@@ -227,6 +227,8 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
             << pParentShape->getSize().Width << "x" << pParentShape->getSize().Height);
 
     pParentShape->setChildSize(pParentShape->getSize());
+    maLayoutNodesBelow.clear();
+    moConnectorEnds.reset();
     // we lay out in the room itself, its corner at 0,0, and the room goes back to where it
     // stands afterwards
     const awt::Point aRoomPosition(pParentShape->getPosition());

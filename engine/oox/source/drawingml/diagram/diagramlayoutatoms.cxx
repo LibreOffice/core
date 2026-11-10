@@ -227,6 +227,8 @@ void gatherDecidedConstraints(const SmartArtDiagram& rDgm, const LayoutAtom& rAt
 
 static void gatherLayoutNodes(const LayoutAtom& rAtom,
                               std::map<OUString, const LayoutNode*>& rOut);
+static const std::map<OUString, const LayoutNode*>&
+layoutNodesBelow(const SmartArtDiagram& rDgm, const LayoutAtom& rAtom);
 
 namespace
 {
@@ -2317,9 +2319,11 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
 {
     if (pPart)
         *pPart = 1.0;
-    std::map<OUString, const LayoutNode*> aNodes;
-    if (rDgm.getLayout() && rDgm.getLayout()->getNode())
-        gatherLayoutNodes(*rDgm.getLayout()->getNode(), aNodes);
+    static const std::map<OUString, const LayoutNode*> aNoNodes;
+    const std::map<OUString, const LayoutNode*>& aNodes(
+        rDgm.getLayout() && rDgm.getLayout()->getNode()
+            ? layoutNodesBelow(rDgm, *rDgm.getLayout()->getNode())
+            : aNoNodes);
     OUString aFollow(rName);
     for (int nStep = 0; nStep < 6; ++nStep)
     {
@@ -2423,8 +2427,8 @@ static std::map<OUString, double> fontAtMostAsOf(const SmartArtDiagram& rDgm,
     std::map<OUString, double> aNames;
     if (!rDgm.getLayout() || !rDgm.getLayout()->getNode() || !rDgm.getData())
         return aNames;
-    std::map<OUString, const LayoutNode*> aNodes;
-    gatherLayoutNodes(*rDgm.getLayout()->getNode(), aNodes);
+    const std::map<OUString, const LayoutNode*>& aNodes(
+        layoutNodesBelow(rDgm, *rDgm.getLayout()->getNode()));
     // the point a layout node is laid out for, where it is one; the choices of a node laid out
     // for several are all walked
     const auto aPointOf = [&rDgm](const LayoutNode& rNode) {
@@ -2971,8 +2975,8 @@ static std::vector<OUString> textParagraphsOf(const SmartArtDiagram& rDgm, const
                 break;
         }
         {
-            std::map<OUString, const LayoutNode*> aNodes;
-            gatherLayoutNodes(*rDgm.getLayout()->getNode(), aNodes);
+            const std::map<OUString, const LayoutNode*>& aNodes(
+                layoutNodesBelow(rDgm, *rDgm.getLayout()->getNode()));
             const auto aNode
                 = aNodes.find(rEntry.first->getPresentation().msPresentationLayoutName);
             if (aNode != aNodes.end() && aNode->second)
@@ -3237,8 +3241,8 @@ static std::vector<sal_Int32> textParagraphLevelsOf(const SmartArtDiagram& rDgm,
             // 1; without it they count from the shallowest node shown, Numbered_List's
             // descendants all at level 0 in the drawing.
             {
-                std::map<OUString, const LayoutNode*> aNodes;
-                gatherLayoutNodes(*rDgm.getLayout()->getNode(), aNodes);
+                const std::map<OUString, const LayoutNode*>& aNodes(
+                    layoutNodesBelow(rDgm, *rDgm.getLayout()->getNode()));
                 const auto aNode
                     = aNodes.find(rEntry.first->getPresentation().msPresentationLayoutName);
                 if (aNode != aNodes.end() && aNode->second)
@@ -3291,6 +3295,20 @@ static void gatherLayoutNodes(const LayoutAtom& rAtom, std::map<OUString, const 
             rOut[pNode->getName()] = pNode;
         gatherLayoutNodes(*pChild, rOut);
     }
+}
+
+// the layout nodes below rAtom, gathered once in a layout of the Diagram: the layout tree stays
+// as it is while the Diagram is laid out
+static const std::map<OUString, const LayoutNode*>&
+layoutNodesBelow(const SmartArtDiagram& rDgm, const LayoutAtom& rAtom)
+{
+    auto& rKept(const_cast<SmartArtDiagram&>(rDgm).getLayoutNodesBelow());
+    const auto aKept = rKept.find(&rAtom);
+    if (aKept != rKept.end())
+        return aKept->second;
+    std::map<OUString, const LayoutNode*>& rNodes(rKept[&rAtom]);
+    gatherLayoutNodes(rAtom, rNodes);
+    return rNodes;
 }
 
 // The bounds a layout node states for its children, "op=lte" and "op=gte": no more than, no less
@@ -3635,8 +3653,8 @@ void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAl
         // width, and the composite centres the two in its room. A text wider than its box or
         // higher than the composite tells the Diagram so, and the next pass is a point smaller.
         {
-            std::map<OUString, const LayoutNode*> aLayoutNodes;
-            gatherLayoutNodes(rAlg.getLayoutNode(), aLayoutNodes);
+            const std::map<OUString, const LayoutNode*>& aLayoutNodes(
+                layoutNodesBelow(rDgm, rAlg.getLayoutNode()));
             const auto aChildNode = aLayoutNodes.find(aCurrShape->getInternalName());
             auto aOwn = aProperties.find(aCurrShape->getInternalName());
             // A shape turned by a quarter keeps its text upright, so the text runs along the
@@ -3751,8 +3769,8 @@ void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAl
         // child texts are 4939 wide beside their circles, not the rest of the row, and Vertical_
         // Circle_List's composite shrinks to its texts.
         {
-            std::map<OUString, const LayoutNode*> aLayoutNodes;
-            gatherLayoutNodes(rAlg.getLayoutNode(), aLayoutNodes);
+            const std::map<OUString, const LayoutNode*>& aLayoutNodes(
+                layoutNodesBelow(rDgm, rAlg.getLayoutNode()));
             const auto aChildNode = aLayoutNodes.find(aCurrShape->getInternalName());
             auto aOwn = aProperties.find(aCurrShape->getInternalName());
             if (aChildNode != aLayoutNodes.end() && aChildNode->second && aOwn != aProperties.end()
@@ -3794,8 +3812,8 @@ void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAl
         // at 29, which is the drawing's 28.
         if (!oTextNeed)
         {
-            std::map<OUString, const LayoutNode*> aLayoutNodes;
-            gatherLayoutNodes(rAlg.getLayoutNode(), aLayoutNodes);
+            const std::map<OUString, const LayoutNode*>& aLayoutNodes(
+                layoutNodesBelow(rDgm, rAlg.getLayoutNode()));
             const auto aChildNode = aLayoutNodes.find(aCurrShape->getInternalName());
             const auto aOwn = aProperties.find(aCurrShape->getInternalName());
             if (aChildNode != aLayoutNodes.end() && aChildNode->second
@@ -3827,8 +3845,8 @@ void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAl
         // it. The bound is read from the child's own constraints, the branch of a choose decided
         // by its point, and what it caps is what the children after it read.
         {
-            std::map<OUString, const LayoutNode*> aLayoutNodes;
-            gatherLayoutNodes(rAlg.getLayoutNode(), aLayoutNodes);
+            const std::map<OUString, const LayoutNode*>& aLayoutNodes(
+                layoutNodesBelow(rDgm, rAlg.getLayoutNode()));
             const auto aChildNode = aLayoutNodes.find(aCurrShape->getInternalName());
             const auto aOwn = aProperties.find(aCurrShape->getInternalName());
             if (aChildNode != aLayoutNodes.end() && aChildNode->second
@@ -9608,9 +9626,16 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
     // out where its constraints put it, so that the connector finds the place it is to join.
     if (mnType != XML_lin && mnType != XML_cycle && mnType != XML_snake)
     {
-        std::set<OUString> aConnectorEnds;
-        if (rDgm.getLayout() && rDgm.getLayout()->getNode())
-            gatherConnectorEnds(*rDgm.getLayout()->getNode(), aConnectorEnds);
+        // the same for the whole layout, so gathered once
+        std::optional<std::set<OUString>>& rKept(
+            const_cast<SmartArtDiagram&>(rDgm).getConnectorEnds());
+        if (!rKept)
+        {
+            rKept.emplace();
+            if (rDgm.getLayout() && rDgm.getLayout()->getNode())
+                gatherConnectorEnds(*rDgm.getLayout()->getNode(), *rKept);
+        }
+        const std::set<OUString>& aConnectorEnds(*rKept);
         std::erase_if(rShape->getChildren(), [&aConnectorEnds](const ShapePtr& aChild) {
             return aChild->getServiceName() == "com.sun.star.drawing.GroupShape"
                    && aChild->getChildren().empty()

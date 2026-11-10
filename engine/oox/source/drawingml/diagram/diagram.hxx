@@ -263,6 +263,16 @@ public:
         return maWidthOfDescendantSizes;
     }
 
+    /// the layout nodes below a layout atom by their names, for each atom asked for so far in
+    /// this layout of the Diagram; empty when the layout starts
+    std::map<const LayoutAtom*, std::map<OUString, const LayoutNode*>>& getLayoutNodesBelow()
+    {
+        return maLayoutNodesBelow;
+    }
+    /// the names of the layout nodes a connector of the layout runs from or to, once this layout
+    /// of the Diagram has asked for them; none when the layout starts
+    std::optional<std::set<OUString>>& getConnectorEnds() { return moConnectorEnds; }
+
     /// A spacer in a row whose extent along the row is a part of a shape that a hierarchy
     /// beside it lays out, and so is not known while the row is placed: the row, the spacer
     /// and its place among the row's children when the row was read, the name of that shape
@@ -318,6 +328,8 @@ private:
     std::set<const Shape*> maLaidOutSideways;
     std::set<const Shape*> maTurnedAlongPath;
     std::map<const Shape*, sal_Int32> maWidthOfDescendantSizes;
+    std::map<const LayoutAtom*, std::map<OUString, const LayoutNode*>> maLayoutNodesBelow;
+    std::optional<std::set<OUString>> moConnectorEnds;
     std::map<sal_Int32, DeferredUserVariable> maDeferredUserVariables;
     std::vector<DeferredSpacer> maDeferredSpacers;
 
