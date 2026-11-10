@@ -3432,7 +3432,12 @@ DocumentBroker::NeedToUpload DocumentBroker::needToUploadToStorage() const
             // A conflict found any other way - a peer joining a document whose
             // timestamp moved, say - leaves our uploads working: giving up on
             // them would mean the next edit is silently never stored.
-            LOG_TRC("Not uploading: our last upload was refused and the conflict is unresolved");
+            LOG_TRC(
+                "Not uploading: "
+                << (_documentChangedInStorageByCollab
+                    ? "a /co/collab client uploaded its own version"
+                    : "our last upload was refused")
+                << " and the conflict is unresolved");
             return NeedToUpload::No;
         }
 
