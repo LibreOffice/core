@@ -40,7 +40,6 @@
 #include <oox/token/namespaces.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <cmath>
 #include <basegfx/numeric/ftools.hxx>
 #include <svx/svdpage.hxx>
 #include <oox/ppt/pptimport.hxx>
