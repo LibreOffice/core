@@ -22,6 +22,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/numitem.hxx>
 #include <osl/process.h>
 #include <unotools/saveopt.hxx>
 
@@ -577,6 +578,28 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testImpressPasswordExport)
 
         saveAndReload(vFormat[i], /*pPassword*/ "test");
     }
+}
+
+// A list counted in Hebrew letters keeps its numbers.
+CPPUNIT_TEST_FIXTURE(SdExportTest1, testHebrewNumberedListKeepsItsNumbers)
+{
+    // Given a presentation whose lines are counted in Hebrew letters, each followed by a minus:
+    createSdImpressDoc("ppt/tdf77747.ppt");
+
+    saveAndReload(TestFilter::PPT);
+
+    SdrTextObj* pText = DynCastSdrTextObj(GetPage(1)->GetObj(0));
+    CPPUNIT_ASSERT(pText);
+    const SvxNumBulletItem* pNumbering
+        = pText->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(
+            EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT(pNumbering);
+
+    // Without the fix in place, the saved file said nothing of the way the lines are counted,
+    // so they came back with a bullet in front of them instead of a letter.
+    CPPUNIT_ASSERT_EQUAL(SVX_NUM_NUMBER_HEBREW,
+                         pNumbering->GetNumRule().GetLevel(0).GetNumberingType());
+    CPPUNIT_ASSERT_EQUAL(u"-"_ustr, pNumbering->GetNumRule().GetLevel(0).GetSuffix());
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest1, testDrawPasswordExport)

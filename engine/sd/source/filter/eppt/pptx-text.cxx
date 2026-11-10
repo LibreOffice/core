@@ -920,6 +920,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     case SVX_NUM_NUMBER_UPPER_ZH_TW:
                     case SVX_NUM_NUMBER_LOWER_ZH:
                     case SVX_NUM_FULL_WIDTH_ARABIC:
+                    case SVX_NUM_NUMBER_HEBREW:
                     {
                         if ( nNumberingType != SVX_NUM_CHAR_SPECIAL )
                         {
@@ -1042,6 +1043,11 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                                         nMappedNumType = 0x1D0001;   // Double-byte Arabic numbers with double-byte period.
                                     else
                                         nMappedNumType = 0x1C0001;   // Double-byte Arabic numbers.
+                                }
+                                break;
+                                case SVX_NUM_NUMBER_HEBREW :
+                                {
+                                    nMappedNumType = 0x190001;   // Hebrew letters read right to left, with a minus.
                                 }
                                 break;
                                 default:
