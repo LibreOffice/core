@@ -326,7 +326,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
 
     nRet = lcl_ApplyCjkHeightAdjustment(nRet, pSh, rRefDev);
 
-#if !defined(MACOSX) // #i89844# extleading is below the line for Mac
+#if !defined(MACOSX) || USE_HEADLESS_CODE // #i89844# extleading is below the line for Mac Quartz
     // TODO: move extleading below the line for all platforms too
     nRet += GetFontLeading( pSh, rRefDev );
 #endif
