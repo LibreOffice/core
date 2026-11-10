@@ -27,7 +27,7 @@
 #include <osl/module.h>
 
 // the address book driver's version
-constexpr const OUStringLiteral MACAB_DRIVER_VERSION = u"0.1";
+constexpr const OUString MACAB_DRIVER_VERSION = u"0.1"_ustr;
 constexpr int MACAB_DRIVER_VERSION_MAJOR = 0;
 constexpr int MACAB_DRIVER_VERSION_MINOR = 1;
 
