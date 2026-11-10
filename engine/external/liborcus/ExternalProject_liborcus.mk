@@ -59,6 +59,11 @@ endif
 #
 liborcus_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
+# src/parser/stream.cpp uses std::codecvt_utf8_utf16 and std::wstring_convert, which libc++
+# provides in C++26 only on request (and passing these unconditionally should be safe):
+liborcus_CPPFLAGS += \
+    -D_LIBCPP_ENABLE_CXX26_REMOVED_CODECVT -D_LIBCPP_ENABLE_CXX26_REMOVED_WSTRING_CONVERT
+
 liborcus_CXXFLAGS=$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(CXXFLAGS_CXX11) -DBOOST_SYSTEM_NO_DEPRECATED
 liborcus_LDFLAGS=$(call gb_ExternalProject_get_link_flags,liborcus) $(gb_LTOFLAGS)
 liborcus_CXXFLAGS+=$(call gb_ExternalProject_get_build_flags,liborcus)
