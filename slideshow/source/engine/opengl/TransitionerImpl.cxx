@@ -308,9 +308,6 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     uno::Reference< rendering::XCanvas > xCanvas(mxView->getCanvas(), uno::UNO_QUERY_THROW);
     uno::Sequence<uno::Any> aDeviceParams = canvastools::getDeviceInfo(xCanvas);
 
-    OUString aImplName;
-    aDeviceParams[ 0 ] >>= aImplName;
-
     sal_Int64 aVal = 0;
     aDeviceParams[1] >>= aVal;
 
