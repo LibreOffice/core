@@ -4151,6 +4151,11 @@ void ScInputHandler::CancelHandler()
 
     ImplCreateEditEngine();
 
+    // A save writes the input of an open edit to the file. The document counts as modified
+    // after the input is dropped, so the next save writes the cell as it is.
+    if (bModified)
+        SetModified();
+
     bModified = false;
     mbPartialPrefix = false;
     mbEditingExistingContent = false;
@@ -5227,6 +5232,38 @@ const OUString& ScInputHandler::GetEditString()
     }
 
     return aCurrentText;
+}
+
+void ScInputHandler::PutInputIntoCell( ScDocument& rDoc )
+{
+    const OUString aText = GetEditText(mpEditEngine.get());
+    ScEditAttrTester aTester(mpEditEngine.get());
+
+    // A formula is entered as a formula, whatever attributes its text has.
+    if (aTester.NeedsObject() && !aText.startsWith("="))
+    {
+        // The paragraph attributes of the engine carry the cell format, and the text of a cell
+        // holds none. Those that differ from the cell format become character attributes. This
+        // happens in a copy with the same defaults, so the engine of the open edit stays as it is.
+        ScEditEngineDefaulter aEngine(*mpEditEngine);
+        aEngine.SetDefaults(mpEditEngine->GetDefaults());
+        aEngine.SetText(mpEditEngine->CreateTextObject());
+        aEngine.RemoveParaAttribs();
+        rDoc.SetEditText(aCursorPos, aEngine.CreateTextObject());
+        return;
+    }
+
+    rDoc.SetString(aCursorPos, aText);
+    if (!aTester.NeedsCellAttr())
+        return;
+
+    // Attributes that cover the whole text become the format of the cell.
+    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
+    aPattern.GetFromEditItemSet(&aTester.GetAttribs());
+    aPattern.DeleteUnchanged(rDoc.GetPattern(aCursorPos));
+    aPattern.ItemSetClearItem(ATTR_HOR_JUSTIFY);
+    if (aPattern.GetItemSet().Count() > 0)
+        rDoc.ApplyPattern(aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aPattern);
 }
 
 Size ScInputHandler::GetTextSize()

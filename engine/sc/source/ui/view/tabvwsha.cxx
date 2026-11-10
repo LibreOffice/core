@@ -880,6 +880,49 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
         pHdl->UpdateCellAdjust( eJust );
 }
 
+namespace
+{
+/// Holds the text of a cell edit that is still open in the document for the time of a save. The
+/// cell is put back as it was afterwards, so the edit goes on as before.
+class ScOpenCellEditInSave
+{
+    ScDocument& mrDoc;
+    ScAddress maPos;
+    ScCellValue maOldCell;
+    CellAttributeHolder maOldPattern;
+    bool mbTextInDocument = false;
+
+public:
+    ScOpenCellEditInSave(ScDocument& rDoc, ScInputHandler* pInputHandler)
+        : mrDoc(rDoc)
+    {
+        if (!pInputHandler || !pInputHandler->IsInputMode() || !pInputHandler->IsModified())
+            return;
+
+        // A protected cell and a cell of an array formula keep their content.
+        maPos = pInputHandler->GetCursorPos();
+        if (!mrDoc.IsBlockEditable(maPos.Tab(), maPos.Col(), maPos.Row(), maPos.Col(), maPos.Row(),
+                                   nullptr, /*bNoMatrixAtAll*/ true))
+            return;
+
+        // An entry can also change the format of the cell, so the pattern is kept with the cell.
+        maOldCell.assign(mrDoc, maPos);
+        maOldPattern = CellAttributeHolder(mrDoc.GetPattern(maPos));
+        pInputHandler->PutInputIntoCell(mrDoc);
+        mbTextInDocument = true;
+    }
+
+    ~ScOpenCellEditInSave()
+    {
+        if (!mbTextInDocument)
+            return;
+
+        maOldCell.release(mrDoc, maPos);
+        mrDoc.SetPattern(maPos, maOldPattern);
+    }
+};
+}
+
 void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {
     // only SID_SAVEDOC / SID_SAVEASDOC
@@ -927,6 +970,11 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     {
         GetViewData().GetDocShell()->SetDocumentModified();
     }
+
+    // A save that keeps the cell edit open writes the text typed so far too.
+    std::optional<ScOpenCellEditInSave> oOpenCellEdit;
+    if (!bCommitChanges)
+        oOpenCellEdit.emplace(GetViewData().GetDocument(), ScModule::get()->GetInputHdl(this));
 
     // otherwise as normal
     GetViewData().GetDocShell()->ExecuteSlot( rReq );

@@ -59,6 +59,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/datetime.hxx>
@@ -4677,6 +4678,155 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellingSuggestionInCellEditModif
     pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"xyz"_ustr, rViewData.GetDocument().GetString(ScAddress(0, 0, 0)));
+}
+
+// A save that keeps the cell edit open writes the text typed so far, and the edit goes on.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSaveWritesOpenCellEdit)
+{
+    createTempCopy(u"empty.ods");
+    loadFromURL(maTempFile.GetURL());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocShell* pDocSh = pView->GetViewData().GetDocShell();
+    const ScAddress aA1(0, 0, 0);
+
+    typeCharsInCell("abc", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ false);
+    CPPUNIT_ASSERT(pDocSh->IsModified());
+
+    dispatchCommand(mxComponent, u".uno:Save"_ustr,
+                    { comphelper::makePropertyValue(u"DontTerminateEdit"_ustr, true) });
+
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    assertXPathContent(pContent,
+                       "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                       "table:table-row[1]/table:table-cell[1]/text:p",
+                       u"abc");
+
+    // The document holds the cell as it was before the edit, and the edit is still open.
+    CPPUNIT_ASSERT(pDocSh->GetDocument().GetString(aA1).isEmpty());
+    CPPUNIT_ASSERT(!pDocSh->IsModified());
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pEditView->getEditEngine().GetText());
+
+    // Once the edit is cancelled, the file holds text that the cell does not have.
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDocSh->IsModified());
+}
+
+// Formatting made on a part of the text of an open cell edit is in the saved file too.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSaveWritesFormattingOfOpenCellEdit)
+{
+    createTempCopy(u"empty.ods");
+    loadFromURL(maTempFile.GetURL());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    typeCharsInCell("abc", 0, 0, pView, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    pEditView->SetSelection(ESelection(0, 1, 0, 3));
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:Save"_ustr,
+                    { comphelper::makePropertyValue(u"DontTerminateEdit"_ustr, true) });
+
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    const OString aCell = "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                          "table:table-row[1]/table:table-cell[1]"_ostr;
+    assertXPathContent(pContent, aCell + "/text:p", u"abc");
+    assertXPathContent(pContent, aCell + "/text:p/text:span", u"bc");
+    const OUString aSpanStyle = getXPath(pContent, aCell + "/text:p/text:span", "style-name");
+    assertXPath(pContent,
+                "//style:style[@style:name='" + aSpanStyle.toUtf8() + "']/style:text-properties",
+                "font-weight", u"bold");
+}
+
+// Formatting made on the whole text of an open cell edit is saved as the format of the cell, and
+// the cell in the document keeps the format it had.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSaveWritesCellFormatOfOpenCellEdit)
+{
+    createTempCopy(u"empty.ods");
+    loadFromURL(maTempFile.GetURL());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument& rDoc = pView->GetViewData().GetDocument();
+    const ScAddress aA1(0, 0, 0);
+
+    typeCharsInCell("abc", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ false);
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    pEditView->SetSelection(ESelection(0, 0, 0, 3));
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:Save"_ustr,
+                    { comphelper::makePropertyValue(u"DontTerminateEdit"_ustr, true) });
+
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    const OString aCell = "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                          "table:table-row[1]/table:table-cell[1]"_ostr;
+    assertXPathContent(pContent, aCell + "/text:p", u"abc");
+    // The cell is the only one in use, so its format is stored as the default of the column.
+    assertXPath(pContent, "//style:style[@style:family='table-cell']/style:text-properties",
+                "font-weight", u"bold");
+
+    const SvxWeightItem& rWeight = rDoc.GetPattern(aA1)->GetItem(ATTR_FONT_WEIGHT);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, rWeight.GetWeight());
+}
+
+// Formatting that a paragraph of an open cell edit carries, as pasted text can, is saved too.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSaveWritesParagraphFormatOfOpenCellEdit)
+{
+    createTempCopy(u"empty.ods");
+    loadFromURL(maTempFile.GetURL());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    // Two paragraphs in one cell, of which the second one is bold as a whole.
+    typeCharsInCell("a", 0, 0, pView, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::RETURN | KEY_MOD1);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    typeCharsInCell("b", 0, 0, pView, pModelObj, /*bInEdit*/ true, /*bCommit*/ false);
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    EditEngine& rEngine = pEditView->getEditEngine();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rEngine.GetParagraphCount());
+    SfxItemSet aBold(rEngine.GetParaAttribs(1));
+    aBold.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+    rEngine.SetParaAttribs(1, aBold);
+
+    dispatchCommand(mxComponent, u".uno:Save"_ustr,
+                    { comphelper::makePropertyValue(u"DontTerminateEdit"_ustr, true) });
+
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    const OString aCell = "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                          "table:table-row[1]/table:table-cell[1]"_ostr;
+    assertXPathContent(pContent, aCell + "/text:p[2]/text:span", u"b");
+    const OUString aSpanStyle = getXPath(pContent, aCell + "/text:p[2]/text:span", "style-name");
+    assertXPath(pContent,
+                "//style:style[@style:name='" + aSpanStyle.toUtf8() + "']/style:text-properties",
+                "font-weight", u"bold");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

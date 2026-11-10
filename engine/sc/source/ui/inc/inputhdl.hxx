@@ -225,6 +225,10 @@ public:
     const OUString& GetEditString();
     const OUString& GetFormString() const { return aFormText; }
 
+    /// Puts what the open edit holds into its cell in rDoc, with the formatting, as an entry
+    /// does. The edit stays open and unchanged.
+    void            PutInputIntoCell( ScDocument& rDoc );
+
     const ScAddress& GetCursorPos() const   { return aCursorPos; }
 
     bool            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
@@ -281,6 +285,7 @@ public:
     bool            TakesReturn() const     { return ( nTipVisible != nullptr ); }
 
     void            SetModified();
+    bool            IsModified() const  { return bModified; }
 
     bool            GetSelIsRef() const     { return bSelIsRef; }
     void            SetSelIsRef(bool bSet)  { bSelIsRef = bSet; }
