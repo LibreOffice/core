@@ -233,6 +233,12 @@ abstract class HandleGroup {
 		// Most groups do nothing more.
 	}
 
+	/// Whether that handle of it is dragged, or only clicked, as a button is. Dragged for most
+	/// groups.
+	public dragsTheHandle(_handle: SelectionHandle): boolean {
+		return true;
+	}
+
 	/// Whether it answers a click that took no handle itself, at that place and with those
 	/// modifiers, before the selection does what such a click does. No for most groups.
 	public answersTheClick(_at: cool.SimplePoint, _modifier: number): boolean {
@@ -2124,6 +2130,11 @@ class TiePointHandles extends HandleGroup {
 		return this.canBeMoved(handle)
 			? new ShapingInteraction(this.selection, handle)
 			: null;
+	}
+
+	/// A point the shape makes is only clicked, for its menu.
+	public dragsTheHandle(handle: SelectionHandle): boolean {
+		return this.canBeMoved(handle);
 	}
 
 	/// Whether that handle stands for a point the object holds and may be moved by a drag or a key.

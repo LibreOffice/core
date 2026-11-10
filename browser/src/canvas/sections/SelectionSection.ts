@@ -2477,7 +2477,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 				'url(' + app.LOUtil.getURL('images/cursors/crop.svg') + ') 8 8, auto'
 			);
 
-		if (handle.group !== 'framing') return SelectionSection.grabPointer();
+		if (handle.group !== 'framing')
+			return this.groupOf(handle)?.dragsTheHandle(handle) === false
+				? 'pointer'
+				: SelectionSection.grabPointer();
 
 		if (!ObjectHandles.canBeResized(this.selectedObjects()))
 			return 'not-allowed';

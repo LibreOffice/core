@@ -242,6 +242,16 @@ class TableHandles extends HandleGroup {
 		return x >= from.vX && x <= to.vX && y >= from.vY && y <= to.vY;
 	}
 
+	/// The border markers and the anchor are dragged, the select squares and the insert bars are
+	/// clicked.
+	public dragsTheHandle(handle: SelectionHandle): boolean {
+		return (
+			handle.kind === TableHandles.columnBorder ||
+			handle.kind === TableHandles.rowBorder ||
+			handle.kind === TableHandles.anchor
+		);
+	}
+
 	/// A drag that starts in the cells selects cells, once it reaches another cell.
 	public interactionForThePlace(
 		at: cool.SimplePoint,
