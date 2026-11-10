@@ -647,6 +647,27 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupTextBoxesInTOC)
     }
     CPPUNIT_ASSERT_EQUAL(2, nTextFrames);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentInFootnote)
+{
+    // Given a document with a footnote that holds a comment, then a comment and a tracked insertion
+    // in the body text:
+    // When importing that document:
+    uno::Reference<lang::XComponent> xComponent;
+    try
+    {
+        xComponent = mxDesktop->loadComponentFromURL(createFileURL(u"comment-in-footnote.docx"),
+                                                     u"_default"_ustr, 0, {});
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    // Then make sure the import ends, with or without a document. Without the accompanying fix in
+    // place, this test would have crashed on the tracked insertion.
+    if (xComponent.is())
+        xComponent->dispose();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

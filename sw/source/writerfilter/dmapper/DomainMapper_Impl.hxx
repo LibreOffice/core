@@ -1272,6 +1272,8 @@ public:
     SmartTagHandler& getSmartTagHandler() { return m_aSmartTagHandler; }
 
     void substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t const& ref);
+    void UnwindSubstream(size_t nTableManagerDepth, size_t nStreamStateDepth,
+                         size_t nTextAppendDepth, size_t nRedlineDepth);
 
     /// If the document needs to split paragraph.
     bool m_bIsSplitPara;

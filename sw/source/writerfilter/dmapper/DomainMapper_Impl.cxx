@@ -10609,6 +10609,11 @@ void DomainMapper_Impl::substream(Id rName,
     CheckUnregisteredFrameConversion();
     ExecuteFrameConversion();
 
+    const size_t nTableManagerDepth = m_aTableManagers.size();
+    const size_t nStreamStateDepth = m_StreamStateStack.size();
+    const size_t nTextAppendDepth = m_aTextAppendStack.size();
+    const size_t nRedlineDepth = m_aRedlines.size();
+
     appendTableManager();
     // Appending a TableManager resets its TableHandler, so we need to append
     // that as well, or tables won't be imported properly in headers/footers.
@@ -10662,6 +10667,12 @@ void DomainMapper_Impl::substream(Id rName,
     catch (xml::sax::SAXException const&)
     {
         m_bSaxError = true;
+        UnwindSubstream(nTableManagerDepth, nStreamStateDepth, nTextAppendDepth, nRedlineDepth);
+        throw;
+    }
+    catch (uno::Exception const&)
+    {
+        UnwindSubstream(nTableManagerDepth, nStreamStateDepth, nTextAppendDepth, nRedlineDepth);
         throw;
     }
 
@@ -10717,6 +10728,21 @@ void DomainMapper_Impl::substream(Id rName,
     for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
         assert(m_aPropertyStacks[i].size() == propSize[i]);
     }
+}
+
+// The parser of the enclosing stream runs on after an exception from a substream, so the stacks go
+// back to their depth before the substream.
+void DomainMapper_Impl::UnwindSubstream(size_t nTableManagerDepth, size_t nStreamStateDepth,
+                                        size_t nTextAppendDepth, size_t nRedlineDepth)
+{
+    while (m_aTextAppendStack.size() > nTextAppendDepth)
+        m_aTextAppendStack.pop();
+    while (m_aRedlines.size() > nRedlineDepth)
+        m_aRedlines.pop();
+    while (m_StreamStateStack.size() > nStreamStateDepth)
+        m_StreamStateStack.pop();
+    while (m_aTableManagers.size() > nTableManagerDepth)
+        m_aTableManagers.pop();
 }
 
 void DomainMapper_Impl::commentProps(const OUString& sId, const CommentProperties& rProps)
