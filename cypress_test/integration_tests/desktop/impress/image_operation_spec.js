@@ -100,6 +100,32 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		cy.cGet('#document-container svg foreignObject video').should('not.exist');
 	});
 
+	it('Animated GIF overlays stay off the master view', function () {
+		var win = this.win;
+		helper.processToIdle(win);
+
+		cy.cGet('#Insert-tab-label').click();
+		cy.cGet('#Insert-container .inline.insertmultimedia').click();
+		cy.cGet('#insertmultimedia[type=file]').attachFile(
+			'/desktop/impress/animated_to_insert.gif'
+		);
+
+		// The animated image plays as an overlay section over the slide.
+		cy.cGet('[id^="test-div-AnimatedGif-"]').should('exist');
+
+		// The master view shows the master page under the same part number,
+		// which carries no animated image of its own.
+		cy.then(function () {
+			win.app.map.sendUnoCommand('.uno:SlideMasterPage');
+		});
+		cy.cGet('[id^="test-div-AnimatedGif-"]').should('not.exist');
+
+		cy.then(function () {
+			win.app.map.sendUnoCommand('.uno:CloseMasterView');
+		});
+		cy.cGet('[id^="test-div-AnimatedGif-"]').should('exist');
+	});
+
 	it('Insert multimedia from WOPI URL shows progress feedback', function () {
 		// Inserting a remote video shows a busy popup while the kit
 		// downloads it, and the popup is cleared once the insert finishes.

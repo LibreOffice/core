@@ -27,6 +27,7 @@ class AnimatedGifManager {
 		map.on('presentationinfo', this._onPresentationInfo, this);
 		map.on('updateparts', this._onUpdateParts, this);
 		map.on('zoomend', this._onZoomEnd, this);
+		app.events.on('contextchange', this._onContextChange.bind(this));
 	}
 
 	// Ask for the presentation info on load so animated images already in the
@@ -50,13 +51,21 @@ class AnimatedGifManager {
 		this._reconcileCurrentPart();
 	}
 
+	private _onContextChange() {
+		this._reconcileCurrentPart();
+	}
+
 	// Picks the gifs of the part on screen out of the stored presentation info
 	// and brings the overlays in line with them.
 	private _reconcileCurrentPart() {
 		if (!this._presentationInfo || !this._presentationInfo.slides) return;
 		const docLayer = this._map._docLayer;
 		const part = docLayer ? docLayer._selectedPart : 0;
-		const slide = this._presentationInfo.slides[part];
+		// The presentation info lists the slides of the normal view.
+		// The master and notes views show other pages under the same part numbers
+		const normalView =
+			!app.activeDocument || app.activeDocument.isModeActive(0);
+		const slide = normalView ? this._presentationInfo.slides[part] : null;
 		const gifs: GifInfo[] = (slide && slide.gifs) || [];
 		this._reconcile(gifs);
 	}
@@ -65,6 +74,7 @@ class AnimatedGifManager {
 	// ones still present, adds the new ones, and removes the rest.
 	private _reconcile(gifs: GifInfo[]) {
 		const wanted = new Set<number>();
+		let changed = false;
 
 		for (const gif of gifs) {
 			wanted.add(gif.id);
@@ -73,8 +83,17 @@ class AnimatedGifManager {
 			const existing = this._sections.get(gif.id);
 
 			if (existing && existing.getUrl() === gif.url) {
-				existing.mirror = mirror;
-				existing.updateTwipRectangle(rectangle);
+				if (
+					existing.mirror !== mirror ||
+					!this._sameRectangle(
+						existing.sectionProperties.twipRectangle,
+						rectangle,
+					)
+				) {
+					existing.mirror = mirror;
+					existing.updateTwipRectangle(rectangle);
+					changed = true;
+				}
 			} else {
 				if (existing) {
 					app.sectionContainer.removeSection(existing.name);
@@ -88,6 +107,7 @@ class AnimatedGifManager {
 				section.mirror = mirror;
 				this._sections.set(gif.id, section);
 				app.sectionContainer.addSection(section);
+				changed = true;
 			}
 		}
 
@@ -95,10 +115,15 @@ class AnimatedGifManager {
 			if (!wanted.has(id)) {
 				app.sectionContainer.removeSection(section.name);
 				this._sections.delete(id);
+				changed = true;
 			}
 		}
 
-		app.sectionContainer.requestReDraw();
+		if (changed) app.sectionContainer.requestReDraw();
+	}
+
+	private _sameRectangle(a: number[], b: number[]): boolean {
+		return a.length === b.length && a.every((value, i) => value === b[i]);
 	}
 
 	// The twip-to-pixel scale changes with zoom, so recompute every overlay's
