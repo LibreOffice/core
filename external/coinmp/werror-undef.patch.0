@@ -1,11 +1,73 @@
---- CoinUtils/src/config_coinutils_default.h	2014-06-06 14:28:06.872113540 +0100
-+++ CoinUtils/src/config_coinutils_default.h	2014-06-06 14:28:29.400294129 +0100
+--- CoinUtils/src/config_coinutils_default.h
++++ CoinUtils/src/config_coinutils_default.h
 @@ -26,7 +26,7 @@
    all of this inside the guard for MSC_VER >= 1200. If you're reading this
    and have been developing in MSVS long enough to know, fix it.  -- lh, 100915 --
  */
 -#if _MSC_VER >= 1200
 +#if defined _MSC_VER && _MSC_VER >= 1200
- # include <BaseTsd.h>
- # define COIN_INT64_T INT64
- # define COIN_UINT64_T UINT64
+ #include <BaseTsd.h>
+ #define COIN_INT64_T INT64
+ #define COIN_UINT64_T UINT64
+--- Cbc/src/CbcSolver.hpp
++++ Cbc/src/CbcSolver.hpp
+@@ -22,7 +22,7 @@
+ #include "CoinMessageHandler.hpp"
+ #include "OsiClpSolverInterface.hpp"
+ 
+-#if CBC_OTHER_SOLVER == 1
++#if defined CBC_OTHER_SOLVER && CBC_OTHER_SOLVER == 1
+ #include "OsiCpxSolverInterface.hpp"
+ #endif
+ 
+--- Clp/src/ClpPackedMatrix.hpp
++++ Clp/src/ClpPackedMatrix.hpp
+@@ -677,7 +677,7 @@
+   int numberColumns_;
+   /// Number of columns including gaps
+   int numberColumnsWithGaps_;
+-#if ABOCA_LITE
++#if defined ABOCA_LITE && ABOCA_LITE
+   /// Number of chunks
+   int numberChunks_;
+ #endif
+@@ -695,7 +695,7 @@
+   double *element_;
+   /// Temporary work area (aligned)
+   CoinDoubleArrayWithLength *temporary_;
+-#if ABOCA_LITE
++#if defined ABOCA_LITE && ABOCA_LITE
+   /// Chunk ends (could have more than cpus)
+   int endChunk_[2 * ABOCA_LITE + 1];
+ #endif
+--- Clp/src/ClpSimplex.hpp
++++ Clp/src/ClpSimplex.hpp
+@@ -52,7 +52,7 @@
+ #include "CoinAbcCommon.hpp"
+ #endif
+ #ifndef ABC_INHERIT
+-#if ABOCA_LITE
++#if defined ABOCA_LITE && ABOCA_LITE
+ #ifndef FAKE_CILK
+ #include <cilk/cilk.h>
+ #else
+@@ -2092,7 +2092,7 @@
+   int numberColumns;
+ } clpTempInfo;
+ #ifndef ABC_INHERIT
+-#if ABOCA_LITE
++#if defined ABOCA_LITE && ABOCA_LITE
+ void moveAndZero(clpTempInfo *info, int type, void *extra);
+ // 2 is owner of abcState_
+ #ifdef ABCSTATE_LITE
+--- Clp/src/ClpSolve.hpp
++++ Clp/src/ClpSolve.hpp
+@@ -463,7 +463,7 @@
+ };
+ 
+ #include "ClpConfig.h"
+-#if CLP_HAS_ABC
++#if defined CLP_HAS_ABC && CLP_HAS_ABC
+ #include "AbcCommon.hpp"
+ /// For saving extra information to see if looping.
+ class AbcSimplexProgress : public ClpSimplexProgress {

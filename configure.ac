@@ -1720,7 +1720,7 @@ libo_FUZZ_ARG_ENABLE(ext-wiki-publisher,
 
 libo_FUZZ_ARG_ENABLE(coinmp,
     AS_HELP_STRING([--disable-coinmp],
-        [Disable compilation of the CoinMP solver ])
+        [Disable compilation of the Cbc linear and integer programming solver])
 )
 
 libo_FUZZ_ARG_ENABLE(pdfimport,
@@ -2907,7 +2907,7 @@ AC_ARG_WITH(system-altlinuxhyph,
 
 AC_ARG_WITH(system-coinmp,
     AS_HELP_STRING([--with-system-coinmp],
-        [Use CoinMP already on system.]),,
+        [Use the Cbc solver libraries already on system.]),,
     [with_system_coinmp="$with_system_libs"])
 
 AC_ARG_WITH(system-liblangtag,
@@ -12447,13 +12447,13 @@ dnl How should we build the linear programming solver ?
 dnl ===================================================================
 
 ENABLE_COINMP=
-AC_MSG_CHECKING([whether to build with CoinMP])
+AC_MSG_CHECKING([whether to build with the Cbc solver])
 if test "$enable_coinmp" != "no"; then
     ENABLE_COINMP=TRUE
     AC_MSG_RESULT([yes])
     if test "$with_system_coinmp" = "yes"; then
         SYSTEM_COINMP=TRUE
-        PKG_CHECK_MODULES(COINMP, coinmp coinutils)
+        PKG_CHECK_MODULES(COINMP, cbc)
         FilterLibs "${COINMP_LIBS}"
         COINMP_LIBS="${filteredlibs}"
     else
