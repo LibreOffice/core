@@ -138,7 +138,7 @@ std::vector<std::string> expandPattern(const std::string& argument)
         if ((name.native()[0] == '.' && pattern[0] != '.') || !entry.is_regular_file(error) ||
             !std::regex_match(name.native(), expression))
             continue;
-        matches.push_back((hasDirectory ? entry.path() : name).string());
+        matches.push_back((hasDirectory ? entry.path() : name).string<char>());
     }
     std::sort(matches.begin(), matches.end());
     return matches;
@@ -185,7 +185,7 @@ std::vector<Conversion> planConversions(const std::vector<std::string>& inputs,
         std::filesystem::path outputPath =
             std::filesystem::path(options.outputDirectory) / std::filesystem::path(input).stem();
         outputPath += "." + options.format;
-        const std::string output = outputPath.string();
+        const std::string output = outputPath.string<char>();
 
         std::error_code error;
         if (std::filesystem::exists(outputPath, error) &&
@@ -367,7 +367,7 @@ int main(int argc, char** argv)
 #endif
 
     const std::string programName
-        = argc > 0 ? std::filesystem::path(argv[0]).filename().string() : "coconvert";
+        = argc > 0 ? std::filesystem::path(argv[0]).filename().string<char>() : "coconvert";
     ConversionOptions options;
     bool hasFormatArgument = false;
     std::vector<std::string> inputs;
