@@ -1826,6 +1826,82 @@ static void applySharedServerPrivateInfo(const std::shared_ptr<ClientSession>& s
     session->uploadServerPrivateInfoToWopiHost();
 }
 
+Poco::JSON::Object::Ptr
+DocumentBroker::makeEditorFileInfo(WopiStorage::WOPIFileInfo& wopiFileInfo,
+                                   const std::string& baseFileName,
+                                   const std::string& watermarkText)
+{
+    Object::Ptr wopiInfo = new Object();
+    if (!wopiFileInfo.getPostMessageOrigin().empty())
+    {
+        wopiInfo->set("PostMessageOrigin", wopiFileInfo.getPostMessageOrigin());
+    }
+
+    // If print, export are disabled, order client to hide these options in the UI
+    if (wopiFileInfo.getDisablePrint())
+        wopiFileInfo.setHidePrintOption(true);
+    if (wopiFileInfo.getDisableExport())
+        wopiFileInfo.setHideExportOption(true);
+
+    wopiInfo->set("BaseFileName", baseFileName);
+    if (wopiFileInfo.getBreadcrumbDocName().size())
+        wopiInfo->set("BreadcrumbDocName", wopiFileInfo.getBreadcrumbDocName());
+
+    if (!wopiFileInfo.getTemplateSaveAs().empty())
+        wopiInfo->set("TemplateSaveAs", wopiFileInfo.getTemplateSaveAs());
+
+    wopiInfo->set("HidePrintOption", wopiFileInfo.getHidePrintOption());
+    wopiInfo->set("HideSaveOption", wopiFileInfo.getHideSaveOption());
+    wopiInfo->set("HideExportOption", wopiFileInfo.getHideExportOption());
+    wopiInfo->set("HideRepairOption", wopiFileInfo.getHideRepairOption());
+    wopiInfo->set("DisablePrint", wopiFileInfo.getDisablePrint());
+    wopiInfo->set("DisableExport", wopiFileInfo.getDisableExport());
+    wopiInfo->set("DisableCopy", wopiFileInfo.getDisableCopy());
+    wopiInfo->set("DisableInactiveMessages", wopiFileInfo.getDisableInactiveMessages());
+    wopiInfo->set("DownloadAsPostMessage", wopiFileInfo.getDownloadAsPostMessage());
+    wopiInfo->set("UserCanNotWriteRelative", wopiFileInfo.getUserCanNotWriteRelative());
+    wopiInfo->set("EnableInsertRemoteImage", wopiFileInfo.getEnableInsertRemoteImage());
+    wopiInfo->set("EnableInsertRemoteFile", wopiFileInfo.getEnableInsertRemoteFile());
+    wopiInfo->set("DisableInsertLocalImage", wopiFileInfo.getDisableInsertLocalImage());
+    wopiInfo->set("EnableRemoteLinkPicker", wopiFileInfo.getEnableRemoteLinkPicker());
+    wopiInfo->set("SupportsLinkAccess", wopiFileInfo.getSupportsLinkAccess());
+    wopiInfo->set("EnableRemoteAIContent", wopiFileInfo.getEnableRemoteAIContent());
+    wopiInfo->set("DisableAISettings",
+                  !ConfigUtil::getConfigValue<bool>("ai.enabled", false) ||
+                      !ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true) ||
+                      wopiFileInfo.getDisableAISettings());
+    // An anonymous user cannot configure or use AI, so the client hides the
+    // AI entry points for them.
+    wopiInfo->set("IsAnonymousUser", wopiFileInfo.getIsAnonymousUser());
+    wopiInfo->set("EnableShare", wopiFileInfo.getEnableShare());
+    wopiInfo->set("HideUserList", wopiFileInfo.getHideUserList());
+    wopiInfo->set("SupportsRename", wopiFileInfo.getSupportsRename());
+    wopiInfo->set("UserCanRename", wopiFileInfo.getUserCanRename());
+    wopiInfo->set("UserCanChangeSecurityLabel", wopiFileInfo.getUserCanChangeSecurityLabel());
+    wopiInfo->set("FileUrl", wopiFileInfo.getFileUrl());
+    if (wopiFileInfo.getHideChangeTrackingControls() != WopiStorage::WOPIFileInfo::TriState::Unset)
+        wopiInfo->set("HideChangeTrackingControls", wopiFileInfo.getHideChangeTrackingControls() ==
+                                                        WopiStorage::WOPIFileInfo::TriState::True);
+
+    if (!wopiFileInfo.getPresentationLeader().empty())
+        wopiInfo->set("PresentationLeader", wopiFileInfo.getPresentationLeader());
+
+    bool disablePresentation = wopiFileInfo.getDisableExport() || wopiFileInfo.getHideExportOption();
+    // the new slideshow supports watermarking, anyway it's still an experimental features
+    disablePresentation = disablePresentation || (!ConfigUtil::getBool("canvas_slideshow_enabled", true) && !watermarkText.empty());
+    wopiInfo->set("DisablePresentation", disablePresentation);
+
+    const std::string commentAvatarUrl = ConfigUtil::getString("comment_avatar", "");
+    if (!commentAvatarUrl.empty())
+        wopiInfo->set("CommentAvatarUrl", commentAvatarUrl);
+
+    if (!wopiFileInfo.getWopiHostName().empty()) {
+        wopiInfo->set("HostName", wopiFileInfo.getWopiHostName());
+    }
+
+    return wopiInfo;
+}
+
 std::string
 DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& session,
                                           WopiStorage* wopiStorage,
@@ -1926,51 +2002,13 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     session->sendFileMode(session->isReadOnly(), session->isAllowChangeComments(), session->isAllowManageRedlines());
 
     // Construct a JSON containing relevant WOPI host properties
-    Object::Ptr wopiInfo = new Object();
-    if (!wopiFileInfo->getPostMessageOrigin().empty())
-    {
-        wopiInfo->set("PostMessageOrigin", wopiFileInfo->getPostMessageOrigin());
-    }
-
-    // If print, export are disabled, order client to hide these options in the UI
-    if (wopiFileInfo->getDisablePrint())
-        wopiFileInfo->setHidePrintOption(true);
-    if (wopiFileInfo->getDisableExport())
-        wopiFileInfo->setHideExportOption(true);
-
-    wopiInfo->set("BaseFileName", wopiStorage->getFileInfo().getFilename());
-    if (wopiFileInfo->getBreadcrumbDocName().size())
-        wopiInfo->set("BreadcrumbDocName", wopiFileInfo->getBreadcrumbDocName());
-
-    if (!wopiFileInfo->getTemplateSaveAs().empty())
-        wopiInfo->set("TemplateSaveAs", wopiFileInfo->getTemplateSaveAs());
-
+    Object::Ptr wopiInfo =
+        makeEditorFileInfo(*wopiFileInfo, wopiStorage->getFileInfo().getFilename(), watermarkText);
     if (!templateSource.empty())
         wopiInfo->set("TemplateSource", templateSource);
 
-    wopiInfo->set("HidePrintOption", wopiFileInfo->getHidePrintOption());
-    wopiInfo->set("HideSaveOption", wopiFileInfo->getHideSaveOption());
-    wopiInfo->set("HideExportOption", wopiFileInfo->getHideExportOption());
-    wopiInfo->set("HideRepairOption", wopiFileInfo->getHideRepairOption());
-    wopiInfo->set("DisablePrint", wopiFileInfo->getDisablePrint());
-    wopiInfo->set("DisableExport", wopiFileInfo->getDisableExport());
-    wopiInfo->set("DisableCopy", wopiFileInfo->getDisableCopy());
-    wopiInfo->set("DisableInactiveMessages", wopiFileInfo->getDisableInactiveMessages());
-    wopiInfo->set("DownloadAsPostMessage", wopiFileInfo->getDownloadAsPostMessage());
-    wopiInfo->set("UserCanNotWriteRelative", wopiFileInfo->getUserCanNotWriteRelative());
-    wopiInfo->set("EnableInsertRemoteImage", wopiFileInfo->getEnableInsertRemoteImage());
-    wopiInfo->set("EnableInsertRemoteFile", wopiFileInfo->getEnableInsertRemoteFile());
-    wopiInfo->set("DisableInsertLocalImage", wopiFileInfo->getDisableInsertLocalImage());
-    wopiInfo->set("EnableRemoteLinkPicker", wopiFileInfo->getEnableRemoteLinkPicker());
-    wopiInfo->set("SupportsLinkAccess", wopiFileInfo->getSupportsLinkAccess());
-    wopiInfo->set("EnableRemoteAIContent", wopiFileInfo->getEnableRemoteAIContent());
-    wopiInfo->set("DisableAISettings",
-                  !ConfigUtil::getConfigValue<bool>("ai.enabled", false) ||
-                      !ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true) ||
-                      wopiFileInfo->getDisableAISettings());
-    // An anonymous user cannot configure or use AI, so the client hides the
-    // AI entry points for them.
-    wopiInfo->set("IsAnonymousUser", wopiFileInfo->getIsAnonymousUser());
+    wopiInfo->set("UserCanWrite", wopiFileInfo->getUserCanWrite() && !session->isReadOnly());
+    wopiInfo->set("IsOwner", session->isDocumentOwner());
 
     // The AI credential resolution below refuses AI for an anonymous user, so
     // set that flag before it runs rather than only in the block at the end of
@@ -1997,33 +2035,6 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     if (aiConfigured)
         wopiInfo->set("AIModelName", resolvedAIModel);
     wopiInfo->set("AIEthicalRating", resolvedAIRating);
-    wopiInfo->set("EnableShare", wopiFileInfo->getEnableShare());
-    wopiInfo->set("HideUserList", wopiFileInfo->getHideUserList());
-    wopiInfo->set("SupportsRename", wopiFileInfo->getSupportsRename());
-    wopiInfo->set("UserCanRename", wopiFileInfo->getUserCanRename());
-    wopiInfo->set("UserCanChangeSecurityLabel", wopiFileInfo->getUserCanChangeSecurityLabel());
-    wopiInfo->set("FileUrl", wopiFileInfo->getFileUrl());
-    wopiInfo->set("UserCanWrite", wopiFileInfo->getUserCanWrite() && !session->isReadOnly());
-    if (wopiFileInfo->getHideChangeTrackingControls() != WopiStorage::WOPIFileInfo::TriState::Unset)
-        wopiInfo->set("HideChangeTrackingControls", wopiFileInfo->getHideChangeTrackingControls() ==
-                                                        WopiStorage::WOPIFileInfo::TriState::True);
-    wopiInfo->set("IsOwner", session->isDocumentOwner());
-
-    if (!wopiFileInfo->getPresentationLeader().empty())
-        wopiInfo->set("PresentationLeader", wopiFileInfo->getPresentationLeader());
-
-    bool disablePresentation = wopiFileInfo->getDisableExport() || wopiFileInfo->getHideExportOption();
-    // the new slideshow supports watermarking, anyway it's still an experimental features
-    disablePresentation = disablePresentation || (!ConfigUtil::getBool("canvas_slideshow_enabled", true) && !watermarkText.empty());
-    wopiInfo->set("DisablePresentation", disablePresentation);
-
-    const std::string commentAvatarUrl = ConfigUtil::getString("comment_avatar", "");
-    if (!commentAvatarUrl.empty())
-        wopiInfo->set("CommentAvatarUrl", commentAvatarUrl);
-
-    if (!wopiFileInfo->getWopiHostName().empty()) {
-        wopiInfo->set("HostName", wopiFileInfo->getWopiHostName());
-    }
 
     std::ostringstream ossWopiInfo;
     wopiInfo->stringify(ossWopiInfo);

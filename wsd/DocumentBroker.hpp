@@ -934,6 +934,11 @@ public:
 
     static Poco::URI getPresetUploadBaseUrl(const Poco::URI& uri);
 
+    /// The file properties an editor gets from CheckFileInfo, without those of one session.
+    static Poco::JSON::Object::Ptr makeEditorFileInfo(WopiStorage::WOPIFileInfo& wopiFileInfo,
+                                                      const std::string& baseFileName,
+                                                      const std::string& watermarkText);
+
     static std::shared_ptr<const http::Response> sendHttpSyncRequest(const std::string& url,
                                                                      const std::string& logContext);
 
