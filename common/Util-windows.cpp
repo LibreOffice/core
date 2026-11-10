@@ -14,8 +14,11 @@
 #include <random>
 
 #include <process.h>
+#include <Windows.h>
 
 #include <common/Util.hpp>
+
+#include <cstdio>
 
 namespace Util
 {
@@ -85,6 +88,101 @@ namespace Util
 
         return result;
     }
+
+#define CODA_ERROR_NAME(code)                                                                      \
+    case code:                                                                                     \
+        return #code
+
+    std::string win32ErrorName(unsigned long error)
+    {
+        // There is no call that gives the symbolic name of an error code, only FormatMessage(),
+        // which gives a localized text. These are the codes that the failures we log can have:
+        // file access, process creation, windows, the clipboard, base64 conversion, and the
+        // general ones that any call can set.
+        switch (error)
+        {
+            CODA_ERROR_NAME(ERROR_SUCCESS);
+            CODA_ERROR_NAME(ERROR_INVALID_FUNCTION);
+            CODA_ERROR_NAME(ERROR_FILE_NOT_FOUND);
+            CODA_ERROR_NAME(ERROR_PATH_NOT_FOUND);
+            CODA_ERROR_NAME(ERROR_TOO_MANY_OPEN_FILES);
+            CODA_ERROR_NAME(ERROR_ACCESS_DENIED);
+            CODA_ERROR_NAME(ERROR_INVALID_HANDLE);
+            CODA_ERROR_NAME(ERROR_NOT_ENOUGH_MEMORY);
+            CODA_ERROR_NAME(ERROR_INVALID_DATA);
+            CODA_ERROR_NAME(ERROR_OUTOFMEMORY);
+            CODA_ERROR_NAME(ERROR_INVALID_DRIVE);
+            CODA_ERROR_NAME(ERROR_WRITE_PROTECT);
+            CODA_ERROR_NAME(ERROR_NOT_READY);
+            CODA_ERROR_NAME(ERROR_SHARING_VIOLATION);
+            CODA_ERROR_NAME(ERROR_LOCK_VIOLATION);
+            CODA_ERROR_NAME(ERROR_NOT_SUPPORTED);
+            CODA_ERROR_NAME(ERROR_BAD_NETPATH);
+            CODA_ERROR_NAME(ERROR_NETWORK_ACCESS_DENIED);
+            CODA_ERROR_NAME(ERROR_BAD_NET_NAME);
+            CODA_ERROR_NAME(ERROR_FILE_EXISTS);
+            CODA_ERROR_NAME(ERROR_INVALID_PARAMETER);
+            CODA_ERROR_NAME(ERROR_DISK_FULL);
+            CODA_ERROR_NAME(ERROR_INSUFFICIENT_BUFFER);
+            CODA_ERROR_NAME(ERROR_INVALID_NAME);
+            CODA_ERROR_NAME(ERROR_ALREADY_EXISTS);
+            CODA_ERROR_NAME(ERROR_FILENAME_EXCED_RANGE);
+            CODA_ERROR_NAME(ERROR_BAD_EXE_FORMAT);
+            CODA_ERROR_NAME(ERROR_MORE_DATA);
+            CODA_ERROR_NAME(ERROR_DIRECTORY);
+            CODA_ERROR_NAME(ERROR_ELEVATION_REQUIRED);
+            CODA_ERROR_NAME(ERROR_INVALID_WINDOW_HANDLE);
+            CODA_ERROR_NAME(ERROR_INVALID_MENU_HANDLE);
+            CODA_ERROR_NAME(ERROR_CLASS_DOES_NOT_EXIST);
+            CODA_ERROR_NAME(ERROR_CANNOT_FIND_WND_CLASS);
+            CODA_ERROR_NAME(ERROR_TLW_WITH_WSCHILD);
+            CODA_ERROR_NAME(ERROR_CLIPBOARD_NOT_OPEN);
+            CODA_ERROR_NAME(ERROR_NO_SYSTEM_RESOURCES);
+            CODA_ERROR_NAME(ERROR_NOT_ENOUGH_QUOTA);
+            CODA_ERROR_NAME(ERROR_TIMEOUT);
+            CODA_ERROR_NAME(ERROR_LOGON_FAILURE);
+            CODA_ERROR_NAME(ERROR_INVALID_STATE);
+            CODA_ERROR_NAME(ERROR_INVALID_WINDOW_STYLE);
+            default:
+                return std::to_string(error);
+        }
+    }
+
+    std::string hresultName(long result)
+    {
+        switch (result)
+        {
+            CODA_ERROR_NAME(S_OK);
+            CODA_ERROR_NAME(S_FALSE);
+            CODA_ERROR_NAME(E_NOTIMPL);
+            CODA_ERROR_NAME(E_NOINTERFACE);
+            CODA_ERROR_NAME(E_POINTER);
+            CODA_ERROR_NAME(E_ABORT);
+            CODA_ERROR_NAME(E_FAIL);
+            CODA_ERROR_NAME(E_UNEXPECTED);
+            CODA_ERROR_NAME(E_ACCESSDENIED);
+            CODA_ERROR_NAME(E_HANDLE);
+            CODA_ERROR_NAME(E_OUTOFMEMORY);
+            CODA_ERROR_NAME(E_INVALIDARG);
+            CODA_ERROR_NAME(E_PENDING);
+            CODA_ERROR_NAME(CO_E_NOTINITIALIZED);
+            CODA_ERROR_NAME(RPC_E_DISCONNECTED);
+            CODA_ERROR_NAME(RPC_E_WRONG_THREAD);
+            CODA_ERROR_NAME(DRAGDROP_E_INVALIDHWND);
+            CODA_ERROR_NAME(DRAGDROP_E_ALREADYREGISTERED);
+            default:
+                break;
+        }
+
+        if (HRESULT_FACILITY(result) == FACILITY_WIN32)
+            return "HRESULT_FROM_WIN32(" + win32ErrorName(HRESULT_CODE(result)) + ')';
+
+        char hex[16];
+        std::snprintf(hex, sizeof(hex), "0x%08lX", static_cast<unsigned long>(result));
+        return hex;
+    }
+
+#undef CODA_ERROR_NAME
 } // namespace Util
 
 namespace ProcUtil

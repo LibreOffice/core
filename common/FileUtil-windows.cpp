@@ -223,7 +223,7 @@ namespace FileUtil
         // LOG_INF calls the system before it reads its arguments, and that
         // resets the last error.
         const DWORD error = GetLastError();
-        LOG_INF("No write access to path [" << path << "]: Win32 error " << error);
+        LOG_INF("No write access to path [" << path << "]: " << Util::win32ErrorName(error));
         return false;
     }
 

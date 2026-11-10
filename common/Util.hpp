@@ -1308,6 +1308,15 @@ int main(int argc, char**argv)
 #ifdef _WIN32
     std::wstring string_to_wide_string(std::string_view string);
     std::string wide_string_to_string(const std::wstring& wide_string);
+
+    /// The symbolic name of a Win32 error code, like "ERROR_ACCESS_DENIED", for the codes that the
+    /// calls whose failures we log are known to return. Any other code is given as a number.
+    std::string win32ErrorName(unsigned long error);
+
+    /// The symbolic name of an HRESULT, like "E_INVALIDARG", for the codes that the calls whose
+    /// failures we log are known to return. An HRESULT that holds a Win32 error code is given as
+    /// "HRESULT_FROM_WIN32(" and the name of that code. Any other value is given in hex.
+    std::string hresultName(long result);
 #endif
 } // end namespace Util
 

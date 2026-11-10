@@ -610,7 +610,8 @@ static void send2JS(const DocumentTab& tab, const char* buffer, int length)
     if (!CryptBinaryToStringA((BYTE*)buffer, length, CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF,
                               base64.data(), &base64len))
     {
-        LOG_ERR("CryptBinaryToStringA failed: " << GetLastError());
+        const DWORD error = GetLastError();
+        LOG_ERR("CryptBinaryToStringA failed: " << Util::win32ErrorName(error));
         return;
     }
 
@@ -910,7 +911,10 @@ static void do_print(int appDocId)
             Util::string_to_wide_string(app_installation_path + "..\\PrintPDFAndDelete.exe").c_str(),
             Util::string_to_wide_string("PrintPDFAndDelete " + tempFileUri).data(), NULL, NULL,
             TRUE, 0, NULL, NULL, &startupInfo, &processInformation))
-        LOG_ERR("CreateProcess failed: " << GetLastError());
+    {
+        const DWORD error = GetLastError();
+        LOG_ERR("CreateProcess failed: " << Util::win32ErrorName(error));
+    }
 }
 
 static void do_other_message_handling_things(const DocumentTab& data, const char* message)
@@ -959,7 +963,8 @@ static BOOL try_open_clipboard(HWND hWnd)
             return TRUE;
         Sleep(5);
     }
-    LOG_ERR("OpenClipboard() failed repeatedly, last error: " << GetLastError());
+    const DWORD error = GetLastError();
+    LOG_ERR("OpenClipboard() failed repeatedly, last error: " << Util::win32ErrorName(error));
     return FALSE;
 }
 
@@ -1613,7 +1618,7 @@ static void insertDroppedFile(HWND hWnd, int tabId, const std::string& path,
                               &base64Length))
     {
         const auto error = GetLastError();
-        LOG_ERR("CryptBinaryToStringA failed: " << error);
+        LOG_ERR("CryptBinaryToStringA failed: " << Util::win32ErrorName(error));
         return;
     }
 
@@ -1828,11 +1833,9 @@ static void showDropOverlay(WindowState& data)
         if (!data.hOverlayWnd)
         {
             const auto error = GetLastError();
-            LOG_ERR("CreateWindowExW() for the drop overlay failed: " << error
-                                                                      << ", owner window "
-                                                                      << data.hWnd << ", size "
-                                                                      << width << "x"
-                                                                      << height);
+            LOG_ERR("CreateWindowExW() for the drop overlay failed: "
+                    << Util::win32ErrorName(error) << ", owner window " << data.hWnd << ", size "
+                    << width << "x" << height);
             return;
         }
 
@@ -1841,14 +1844,15 @@ static void showDropOverlay(WindowState& data)
         if (!SetLayeredWindowAttributes(data.hOverlayWnd, 0, 1, LWA_ALPHA))
         {
             const auto error = GetLastError();
-            LOG_ERR("SetLayeredWindowAttributes() for the drop overlay failed: " << error);
+            LOG_ERR("SetLayeredWindowAttributes() for the drop overlay failed: "
+                    << Util::win32ErrorName(error));
         }
 
         data.dropTarget = new FileDropTarget(data.hWnd);
         const HRESULT hr = RegisterDragDrop(data.hOverlayWnd, data.dropTarget);
         if (hr != S_OK)
         {
-            LOG_ERR("RegisterDragDrop() failed: " << hr);
+            LOG_ERR("RegisterDragDrop() failed: " << Util::hresultName(hr));
             data.dropTarget->Release();
             data.dropTarget = nullptr;
             DestroyWindow(data.hOverlayWnd);
@@ -2472,7 +2476,7 @@ static void applyTitleBarTheme(HWND hWnd)
         DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &darkMode, sizeof(darkMode));
     if (!SUCCEEDED(hr))
     {
-        LOG_DBG("DwmSetWindowAttribute() for a dark title bar failed: " << hr);
+        LOG_DBG("DwmSetWindowAttribute() for a dark title bar failed: " << Util::hresultName(hr));
         return;
     }
 
@@ -4262,8 +4266,8 @@ static void requestCloseTab(HWND hWnd, int tabId)
                     SUCCEEDED(errorCode) && result && std::wstring_view(result) == L"true";
                 if (asked)
                     return S_OK;
-                LOG_WRN("No CODA page in tab " << tabId << ", closing it: " << std::hex
-                                               << errorCode);
+                LOG_WRN("No CODA page in tab " << tabId
+                                               << ", closing it: " << Util::hresultName(errorCode));
                 if (DocumentTab* closing = findTab(tabId))
                 {
                     closing->readyToClose = true;
@@ -7138,14 +7142,17 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             if (!CryptStringToBinaryA(base64.c_str(), static_cast<DWORD>(base64.size()),
                                       CRYPT_STRING_BASE64, nullptr, &cbBinary, nullptr, nullptr))
             {
-                LOG_ERR("extensionsavefile: base64 decode sizing failed: " << GetLastError());
+                const DWORD error = GetLastError();
+                LOG_ERR("extensionsavefile: base64 decode sizing failed: "
+                        << Util::win32ErrorName(error));
                 return;
             }
             std::vector<BYTE> bytes(cbBinary);
             if (!CryptStringToBinaryA(base64.c_str(), static_cast<DWORD>(base64.size()),
                                       CRYPT_STRING_BASE64, bytes.data(), &cbBinary, nullptr, nullptr))
             {
-                LOG_ERR("extensionsavefile: base64 decode failed: " << GetLastError());
+                const DWORD error = GetLastError();
+                LOG_ERR("extensionsavefile: base64 decode failed: " << Util::win32ErrorName(error));
                 return;
             }
 
