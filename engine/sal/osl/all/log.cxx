@@ -426,8 +426,29 @@ void sal_detail_logFormat(
         std::abort();
 }
 
+#ifdef _WIN32
+namespace {
+
+// Puts the last error of the thread back to what it was when the guard was made.
+class LastErrorGuard
+{
+    DWORD mnLastError = GetLastError();
+
+public:
+    ~LastErrorGuard() { SetLastError(mnLastError); }
+};
+
+}
+#endif
+
 unsigned char sal_detail_log_report(sal_detail_LogLevel level, char const * area)
 {
+#ifdef _WIN32
+    // A log line often holds the GetLastError() of a failed call, and the log macros read their
+    // arguments only after this function returns. The first call of this function looks for
+    // logging.ini, and that sets the last error.
+    LastErrorGuard aLastErrorGuard;
+#endif
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
         return SAL_DETAIL_LOG_ACTION_LOG;
     }
