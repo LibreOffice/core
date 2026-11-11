@@ -29,7 +29,6 @@
 #include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
 #include <cstddef>
-#include <sstream>
 
 namespace
 {
@@ -290,12 +289,8 @@ OUString toISO8601(const css::util::DateTime& rDateTime)
         if ( rDateTime.NanoSeconds > 0)
         {
             OSL_ENSURE(rDateTime.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
-            rBuffer.append(',');
-            std::ostringstream ostr;
-            ostr.fill('0');
-            ostr.width(9);
-            ostr << rDateTime.NanoSeconds;
-            rBuffer.appendAscii(ostr.str().c_str());
+            auto aNano = OUString::number(rDateTime.NanoSeconds);
+            rBuffer.append("," + RepeatedUChar('0', 9 - aNano.length) + aNano);
         }
     }
     return rBuffer.makeStringAndClear();
