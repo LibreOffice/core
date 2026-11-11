@@ -334,18 +334,6 @@ namespace canvastools
 #endif
             }
 
-            if( texture.NumberOfHatchPolygons < 0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): textures' NumberOfHatchPolygons is negative",
-                    xIf, nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
             if( texture.RepeatModeX < rendering::TexturingMode::NONE ||
                 texture.RepeatModeX > rendering::TexturingMode::REPEAT )
             {

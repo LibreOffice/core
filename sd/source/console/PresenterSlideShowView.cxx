@@ -651,7 +651,6 @@ void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox
             {
                 geometry::AffineMatrix2D( aBitmapSize.Width,0,0, 0,aBitmapSize.Height,0),
                 1,
-                0,
                 xBackgroundBitmap,
                 nullptr,
                 nullptr,
