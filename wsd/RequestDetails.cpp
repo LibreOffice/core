@@ -248,15 +248,15 @@ void RequestDetails::processURI()
     // Poco::SyntaxException is thrown when the syntax is invalid.
     _params = getParams(_uriString);
 
-    // First tokenize by '/' then by '?'.
+    // The path segments are the parts between '/' up to the start of the query.
     std::vector<StringToken> tokens;
-    const auto len = _uriString.size();
+    const auto len = std::min(_uriString.find('?'), _uriString.size());
     if (len > 0)
     {
         std::size_t i, start;
         for (i = start = 0; i < len; ++i)
         {
-            if (_uriString[i] == '/' || _uriString[i] == '?')
+            if (_uriString[i] == '/')
             {
                 if (i - start > 0) // ignore empty
                     tokens.emplace_back(start, i - start);

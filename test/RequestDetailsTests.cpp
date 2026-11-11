@@ -164,17 +164,13 @@ void RequestDetailsTests::testCoolURI()
 
     LOK_ASSERT_EQUAL(wopiSrc, details.getField(RequestDetails::Field::WOPISrc));
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(4), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
     LOK_ASSERT_EQUAL_STR("browser", details[0]);
     LOK_ASSERT_EQUAL_STR("browser", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "browser"));
     LOK_ASSERT(details.equals(0, "browser"));
     LOK_ASSERT_EQUAL_STR("49c225146", details[1]);
     LOK_ASSERT_EQUAL_STR("cool.html", details[2]);
-    LOK_ASSERT_EQUAL(std::string("WOPISrc=http%3A%2F%2Flocalhost%2Fnextcloud%2Findex.php%"
-                                 "2Fapps%2Frichdocuments%2Fwopi%2Ffiles%2F593_ocqiesh0cngs&"
-                                 "title=empty.odt&lang=en-us&closebutton=1&revisionhistory=1"),
-                     details[3]);
 
     http::Request request2(URI);
     request2.set("Host", Root);
@@ -611,7 +607,7 @@ void RequestDetailsTests::testRequestDetailsProxyClose()
 
     LOK_ASSERT_EQUAL(wopiSrc, details.getField(RequestDetails::Field::WOPISrc));
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(8), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
@@ -628,13 +624,6 @@ void RequestDetailsTests::testRequestDetailsProxyClose()
             "253DXCookieValue%253ASuperCookieName%253DBAZINGA"),
         details[1]);
     LOK_ASSERT_EQUAL_STR("ws", details[2]);
-    LOK_ASSERT_EQUAL_STR("WOPISrc=http%3A%2F%2Flocalhost%2Fnextcloud%2Findex.php%2Fapps%"
-                         "2Frichdocuments%2Fwopi%2Ffiles%2F593_ocqiesh0cngs&compat=",
-                         details[3]);
-    LOK_ASSERT_EQUAL_STR("ws", details[4]);
-    LOK_ASSERT_EQUAL_STR("b26112ab1b6f2ed98ce1329f0f344791", details[5]);
-    LOK_ASSERT_EQUAL_STR("close", details[6]);
-    LOK_ASSERT_EQUAL_STR("31", details[7]);
 
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
@@ -700,7 +689,7 @@ void RequestDetailsTests::testRequestDetailsProxyWrite()
 
     LOK_ASSERT_EQUAL(wopiSrc, details.getField(RequestDetails::Field::WOPISrc));
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(8), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT(details.equals(0, "cool"));
     LOK_ASSERT_EQUAL_STR(
@@ -710,13 +699,6 @@ void RequestDetailsTests::testRequestDetailsProxyWrite()
         "253DBAZINGA",
         details[1]);
     LOK_ASSERT_EQUAL_STR("ws", details[2]);
-    LOK_ASSERT_EQUAL_STR("WOPISrc=http%3A%2F%2Flocalhost%2Fowncloud%2Findex.php%2Fapps%"
-                         "2Frichdocuments%2Fwopi%2Ffiles%2F165_ocgdpzbkm39u&compat=",
-                         details[3]);
-    LOK_ASSERT_EQUAL_STR("ws", details[4]);
-    LOK_ASSERT_EQUAL_STR("1c99a7bcdbf3209782d7eb38512e6564", details[5]);
-    LOK_ASSERT_EQUAL_STR("write", details[6]);
-    LOK_ASSERT_EQUAL_STR("2", details[7]);
 
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
@@ -827,7 +809,7 @@ void RequestDetailsTests::testRequestDetailsClipboard()
 
     LOK_ASSERT_EQUAL(docUri, details.getDocumentURI());
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT(details.equals(0, "cool"));
     LOK_ASSERT_EQUAL_STR("clipboard", details[1]);
@@ -912,7 +894,7 @@ void RequestDetailsTests::testRequestDetailsAccessHeader()
     const std::string permission = "edit";
     LOK_ASSERT_EQUAL(permission, it != params.end() ? it->second : "");
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(5), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT(details.equals(0, "cool"));
 
@@ -1024,22 +1006,12 @@ void RequestDetailsTests::testCoolWsClose()
 
     LOK_ASSERT_EQUAL(wopiSrc, details.getField(RequestDetails::Field::WOPISrc));
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
     LOK_ASSERT(details.equals(0, "cool"));
     LOK_ASSERT_EQUAL_STR("ws", details[1]);
-    LOK_ASSERT_EQUAL_STR(
-        "WOPISrc=http%3A%2F%2Flocalhost%2Fnextcloud%2Findex.php%2Fapps%2Frichdocuments%"
-        "2Fwopi%2Ffiles%2F593_ocqiesh0cngs&access_token=MN0KXXDv9GJ1wCCLnQcjVQT2T7WrfYpA&"
-        "access_token_ttl=0&reuse_cookies=oc_sessionPassphrase%"
-        "3D8nFRqycbs7bP97yxCuJviBbVKdCXmuiXp6ZYH0DfUoy5UZDCTQgLwluvbgRbKrdKodJteG3uNE19KNUAoE5t"
-        "ypf4oBGwJdFY%252F5W9RNST8wEHWkUVIjZy7vmY0ZX38PlS%3Anc_sameSiteCookielax%3Dtrue%3Anc_"
-        "sameSiteCookiestrict%3Dtrue%3Aocqiesh0cngs%3Dr5ujg4tpvgu9paaf5bguiokgjl%3AXCookieName%"
-        "3DXCookieValue%3ASuperCookieName%3DBAZINGA&compat=b26112ab1b6f2ed98ce1329f0f344791%"
-        "2Fclose%2F31",
-        details[2]);
 
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
@@ -1106,7 +1078,7 @@ void RequestDetailsTests::testCoolWsUpgrade()
 
     LOK_ASSERT_EQUAL(wopiSrc, details.getField(RequestDetails::Field::WOPISrc));
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
@@ -1114,11 +1086,6 @@ void RequestDetailsTests::testCoolWsUpgrade()
     LOK_ASSERT(details.equals(1, "ws"));
 
     LOK_ASSERT_EQUAL_STR("ws", details[1]);
-    LOK_ASSERT_EQUAL_STR(
-        "WOPISrc=http%3A%2F%2Flocalhost%2Fnextcloud%2Findex.php%2Fapps%2Frichdocuments%"
-        "2Fwopi%2Ffiles%2F6734_ocqiesh0cngs&access_token%3DO87cwh0WlwIawoDkafkqOtVNTygxbiBN%"
-        "26access_token_ttl%3D0%26no_a",
-        details[2]);
 
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
@@ -1184,7 +1151,7 @@ void RequestDetailsTests::testCoolWsLegacy()
 
     LOK_ASSERT_EQUAL(wopiSrc, details.getField(RequestDetails::Field::WOPISrc));
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(8), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT(details.equals(0, "cool"));
     LOK_ASSERT_EQUAL_STR(
@@ -1194,13 +1161,6 @@ void RequestDetailsTests::testCoolWsLegacy()
         "253DBAZINGA",
         details[1]);
     LOK_ASSERT_EQUAL_STR("ws", details[2]);
-    LOK_ASSERT_EQUAL_STR("WOPISrc=http%3A%2F%2Flocalhost%2Fowncloud%2Findex.php%2Fapps%"
-                         "2Frichdocuments%2Fwopi%2Ffiles%2F165_ocgdpzbkm39u&compat=",
-                         details[3]);
-    LOK_ASSERT_EQUAL_STR("ws", details[4]);
-    LOK_ASSERT_EQUAL_STR("1c99a7bcdbf3209782d7eb38512e6564", details[5]);
-    LOK_ASSERT_EQUAL_STR("write", details[6]);
-    LOK_ASSERT_EQUAL_STR("2", details[7]);
 
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
@@ -1311,7 +1271,7 @@ void RequestDetailsTests::testCoolWsClipboard()
 
     LOK_ASSERT_EQUAL(docUri, details.getDocumentURI());
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT(details.equals(0, "cool"));
     LOK_ASSERT_EQUAL_STR("clipboard", details[1]);
@@ -1391,21 +1351,11 @@ void RequestDetailsTests::testCoolWsAccessHeader()
     const std::string permission = "edit";
     LOK_ASSERT_EQUAL(permission, it != params.end() ? it->second : "");
 
-    LOK_ASSERT_EQUAL(static_cast<std::size_t>(4), details.size());
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), details.size());
     LOK_ASSERT_EQUAL_STR("cool", details[0]);
     LOK_ASSERT(details.equals(0, "cool"));
     LOK_ASSERT_EQUAL_STR("ws", details[1]);
     LOK_ASSERT(details.equals(1, "ws"));
-
-    const std::string encodedDocUri =
-        "WOPISrc=https%3A%2F%2Fexample.com%3A8443%2Frest%2Ffiles%2Fwopi%2Ffiles%"
-        "2F8ac75551de4d89e60002&access_header=Authorization%3A%2520Bearer%2520poiuytrewq%250D%"
-        "250A%250D%250AX-Requested-With%3A%2520XMLHttpRequest&reuse_cookies=lang%3Den-us%3A_ga_"
-        "LMX4TVJ02K%3DGS1.1%3AToken%3DeyJhbGciOiJIUzUxMiJ9.vajknfkfajksdljfiwjek-W90fmgVb3C-00-"
-        "eSkJBDqDNSYA%3APublicToken%3Dabc%3AZNPCQ003-32383700%3De9c71c3b%3AJSESSIONID%3Dnode0."
-        "node0&permission=edit&compat=";
-
-    LOK_ASSERT_EQUAL(encodedDocUri, details[2]);
 
     LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
     LOK_ASSERT(details.equals(RequestDetails::Field::Type, "cool"));
