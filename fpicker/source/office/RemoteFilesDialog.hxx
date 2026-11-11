@@ -45,12 +45,12 @@ enum SvtRemoteDlgType
     REMOTEDLG_TYPE_PATHDLG = 1
 };
 
-typedef std::shared_ptr< Place > ServicePtr;
+typedef std::shared_ptr<Place> ServicePtr;
 
 class RemoteFilesDialog : public SvtFileDialog_Base
 {
 public:
-    RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits );
+    RemoteFilesDialog(weld::Window* pParent, PickerFlags nBits);
     virtual ~RemoteFilesDialog() override;
 
     virtual short run() override;
@@ -59,46 +59,48 @@ public:
 
     virtual SvtFileView* GetView() override;
 
-    virtual void SetHasFilename( bool ) override;
-    virtual void SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) override;
-    virtual const css::uno::Sequence< OUString >& GetDenyList() const override;
-    virtual void SetPath( const OUString& rNewURL ) override;
+    virtual void SetHasFilename(bool) override;
+    virtual void SetDenyList(const css::uno::Sequence<OUString>& rDenyList) override;
+    virtual const css::uno::Sequence<OUString>& GetDenyList() const override;
+    virtual void SetPath(const OUString& rNewURL) override;
     virtual const OUString& GetPath() override;
     virtual std::vector<OUString> GetPathList() const override;
-    virtual bool ContentIsFolder( const OUString& rURL ) override;
+    virtual bool ContentIsFolder(const OUString& rURL) override;
     bool ContentIsDocument(const OUString& rURL);
 
     virtual OUString getCurrentFileText() const override;
-    virtual void setCurrentFileText( const OUString& rText, bool bSelectAll = false ) override;
+    virtual void setCurrentFileText(const OUString& rText, bool bSelectAll = false) override;
 
-    virtual void AddFilter( const OUString& rFilter, const OUString& rType ) override;
-    virtual void AddFilterGroup( const OUString& _rFilter,
-                                const css::uno::Sequence< css::beans::StringPair >& rFilters ) override;
+    virtual void AddFilter(const OUString& rFilter, const OUString& rType) override;
+    virtual void
+    AddFilterGroup(const OUString& _rFilter,
+                   const css::uno::Sequence<css::beans::StringPair>& rFilters) override;
     virtual OUString GetCurFilter() const override;
-    virtual void SetCurFilter( const OUString& rFilter ) override;
+    virtual void SetCurFilter(const OUString& rFilter) override;
     virtual void FilterSelect() override;
 
-    virtual void SetFileCallback( ::svt::IFilePickerListener *pNotifier ) override;
+    virtual void SetFileCallback(::svt::IFilePickerListener* pNotifier) override;
     virtual void onAsyncOperationStarted() override;
     virtual void onAsyncOperationFinished() override;
-    virtual void UpdateControls( const OUString& rURL ) override;
+    virtual void UpdateControls(const OUString& rURL) override;
 
-    virtual void EnableAutocompletion( bool = true) override;
+    virtual void EnableAutocompletion(bool = true) override;
 
     virtual sal_Int32 getAvailableWidth() override;
     virtual sal_Int32 getAvailableHeight() override;
 
-    virtual void setImage( const css::uno::Any& rImage ) override;
+    virtual void setImage(const css::uno::Any& rImage) override;
 
     virtual bool getShowState() override;
 
-    virtual weld::Widget* getControl( sal_Int16 nControlId, bool bLabelControl = false ) const override;
-    virtual void enableControl( sal_Int16 nControlId, bool bEnable ) override;
-    virtual OUString getCurFilter( ) const override;
+    virtual weld::Widget* getControl(sal_Int16 nControlId,
+                                     bool bLabelControl = false) const override;
+    virtual void enableControl(sal_Int16 nControlId, bool bEnable) override;
+    virtual OUString getCurFilter() const override;
 
 private:
-    Reference< XComponentContext > m_xContext;
-    Reference< XPasswordContainer2 > m_xMasterPasswd;
+    Reference<XComponentContext> m_xContext;
+    Reference<XPasswordContainer2> m_xMasterPasswd;
 
     SvtRemoteDlgMode m_eMode;
     SvtRemoteDlgType m_eType;
@@ -115,9 +117,9 @@ private:
     OUString m_sLastServiceUrl;
     int m_nCurrentFilter;
 
-    ::rtl::Reference< ::svt::AsyncPickerAction > m_pCurrentAsyncAction;
+    ::rtl::Reference<::svt::AsyncPickerAction> m_pCurrentAsyncAction;
 
-    css::uno::Sequence< OUString > m_aDenyList;
+    css::uno::Sequence<OUString> m_aDenyList;
 
     std::unique_ptr<weld::Button> m_xOk_btn;
     std::unique_ptr<weld::Button> m_xCancel_btn;
@@ -134,8 +136,8 @@ private:
     std::unique_ptr<weld::ComboBox> m_xFilter_lb;
     std::unique_ptr<AutocompleteEdit> m_xName_ed;
 
-    std::vector< ServicePtr > m_aServices;
-    std::vector< std::pair< OUString, OUString > > m_aFilters;
+    std::vector<ServicePtr> m_aServices;
+    std::vector<std::pair<OUString, OUString>> m_aFilters;
 
     void InitSize();
 
@@ -144,7 +146,7 @@ private:
     /* If failure returns < 0 */
     int GetSelectedServicePos();
 
-    void OpenURL( OUString const & sURL );
+    void OpenURL(OUString const& sURL);
 
     OUString AddFileExtension(const OUString& rFileName);
 
@@ -152,34 +154,35 @@ private:
     void EnableControls();
     void DisableControls();
 
-    void SavePassword(const OUString& rURL, const OUString& rUser,
-                      const OUString& rPassword, bool bPersistent);
+    void SavePassword(const OUString& rURL, const OUString& rUser, const OUString& rPassword,
+                      bool bPersistent);
 
     void AddService();
 
-    UrlRecord FindPersistentPassword(std::u16string_view aUrl, const Reference<XInteractionHandler>& rHandler) const;
+    UrlRecord FindPersistentPassword(std::u16string_view aUrl,
+                                     const Reference<XInteractionHandler>& rHandler) const;
 
-    DECL_LINK ( SelectServiceHdl, weld::ComboBox&, void );
-    DECL_LINK ( EditServiceMenuHdl, const OUString&, void );
+    DECL_LINK(SelectServiceHdl, weld::ComboBox&, void);
+    DECL_LINK(EditServiceMenuHdl, const OUString&, void);
 
-    DECL_LINK( DoubleClickHdl, SvtFileView*, bool );
-    DECL_LINK( SelectHdl, SvtFileView*, void );
+    DECL_LINK(DoubleClickHdl, SvtFileView*, bool);
+    DECL_LINK(SelectHdl, SvtFileView*, void);
 
-    DECL_LINK( FileNameGetFocusHdl, weld::Widget&, void );
-    DECL_LINK( FileNameModifyHdl, weld::Entry&, void );
+    DECL_LINK(FileNameGetFocusHdl, weld::Widget&, void);
+    DECL_LINK(FileNameModifyHdl, weld::Entry&, void);
 
-    DECL_LINK( SelectFilterHdl, weld::ComboBox&, void );
+    DECL_LINK(SelectFilterHdl, weld::ComboBox&, void);
 
     DECL_LINK(TreeSelectHdl, weld::ItemView&, void);
 
-    DECL_LINK( SelectBreadcrumbHdl, Breadcrumb*, bool );
+    DECL_LINK(SelectBreadcrumbHdl, Breadcrumb*, bool);
 
-    DECL_LINK( NewFolderHdl, weld::Button&, void );
-    DECL_LINK( IconViewHdl, weld::Button&, void );
-    DECL_LINK( ListViewHdl, weld::Button&, void );
+    DECL_LINK(NewFolderHdl, weld::Button&, void);
+    DECL_LINK(IconViewHdl, weld::Button&, void);
+    DECL_LINK(ListViewHdl, weld::Button&, void);
 
-    DECL_LINK( OkHdl, weld::Button&, void );
-    DECL_LINK( CancelHdl, weld::Button&, void );
+    DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(CancelHdl, weld::Button&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3956,8 +3956,6 @@ fpicker/source/office/OfficeFolderPicker.cxx
 fpicker/source/office/OfficeFolderPicker.hxx
 fpicker/source/office/PlacesListBox.cxx
 fpicker/source/office/PlacesListBox.hxx
-fpicker/source/office/RemoteFilesDialog.cxx
-fpicker/source/office/RemoteFilesDialog.hxx
 fpicker/source/office/asyncfilepicker.cxx
 fpicker/source/office/asyncfilepicker.hxx
 fpicker/source/office/autocmpledit.cxx
