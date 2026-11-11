@@ -23,10 +23,4 @@ css::uno::Sequence<double> SAL_CALL CanvasFontBase::getAvailableSizes()
     return {};
 }
 
-css::uno::Sequence<css::beans::PropertyValue> SAL_CALL CanvasFontBase::getExtraFontProperties()
-{
-    // TODO
-    return {};
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

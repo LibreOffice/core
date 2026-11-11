@@ -80,11 +80,6 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
     sequence< double >                                  getAvailableSizes();
 
 
-    /** Query the list of additional font properties.<p>
-     */
-    sequence< ::com::sun::star::beans::PropertyValue >  getExtraFontProperties();
-
-
 };
 
 }; }; }; };

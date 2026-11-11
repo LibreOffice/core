@@ -65,7 +65,6 @@ namespace dxcanvas
         virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) override;
         virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) override;
         virtual css::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;

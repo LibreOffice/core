@@ -13,6 +13,7 @@
 
 #include <comphelper/compbase.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 

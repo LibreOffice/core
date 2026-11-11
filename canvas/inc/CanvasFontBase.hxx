@@ -22,8 +22,6 @@ class CANVASTOOLS_DLLPUBLIC CanvasFontBase
 public:
     virtual css::rendering::FontMetrics SAL_CALL getFontMetrics() override;
     virtual css::uno::Sequence<double> SAL_CALL getAvailableSizes() override;
-    virtual css::uno::Sequence<css::beans::PropertyValue>
-        SAL_CALL getExtraFontProperties() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
