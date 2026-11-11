@@ -191,11 +191,14 @@ struct CellEditText
     CellTextArea maArea;
     /// The alignment the text shows, which can be justified.
     SvxCellHorJustify meHorJust;
-    /// The alignment the box of the text takes in the cell, left, right or centered.
+    /// The alignment the box of the text takes in the cell, left, right or centered. Rotated text
+    /// keeps the alignment of its cell, which is centered by default.
     SvxCellHorJustify meBoxHorJust;
     SvxCellVerJustify meVerJust;
     SvxCellOrientation meOrient;
     Degree100 mnRotate;
+    /// How rotated text leans with its cell.
+    SvxRotateMode meRotateMode;
     /// Asian vertical text, laid out top to bottom in columns from right to left.
     bool mbAsianVertical;
     /// The text wraps into lines.

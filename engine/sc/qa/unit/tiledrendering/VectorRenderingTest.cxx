@@ -1338,6 +1338,47 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorStackedCellTakesItsAlignmen
     CPPUNIT_ASSERT_GREATER(2000.0, aStartOf(3));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)
+{
+    // Rotated text is centered in its cell by default and takes the alignment of the cell, as in
+    // the window. It started at the left of every cell.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    const SvxCellHorJustify aJustify[] = { SvxCellHorJustify::Standard, SvxCellHorJustify::Left };
+    for (SCCOL nColumn = 1; nColumn <= 2; ++nColumn)
+    {
+        setColumnWidth(*pDocShell, nColumn, 3000);
+        setCellString(*pDocShell, nColumn, 1, u"lean"_ustr);
+        ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+        aPattern.ItemSetPut(ScRotateValueItem(Degree100(4500)));
+        aPattern.ItemSetPut(SvxHorJustifyItem(aJustify[nColumn - 1], ATTR_HOR_JUSTIFY));
+        applyToCell(*pDocShell, nColumn, 1, aPattern);
+    }
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    // Where the text starts, in twips from the start of its column: the place of the transform
+    // that turns the text around its start.
+    auto aStartOf = [&aResponse](int nColumn) {
+        const auto oText = cellTextAt(aResponse, nColumn, 1);
+        CPPUNIT_ASSERT(oText);
+        const boost::property_tree::ptree& rPlaced = oText->get_child("children").front().second;
+        CPPUNIT_ASSERT_EQUAL(std::string("transform"), rPlaced.get<std::string>("type"));
+        std::vector<boost::property_tree::ptree> aMatrix;
+        for (const auto& rValue : rPlaced.get_child("matrix"))
+            aMatrix.push_back(rValue.second);
+        CPPUNIT_ASSERT_EQUAL(size_t(6), aMatrix.size());
+        const auto [nStartColumn, fOffset] = cellPosition(aMatrix[4]);
+        CPPUNIT_ASSERT_EQUAL(nColumn, nStartColumn);
+        return fOffset;
+    };
+
+    CPPUNIT_ASSERT_GREATER(1000.0, aStartOf(1));
+    CPPUNIT_ASSERT_LESS(500.0, aStartOf(2));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellEditGrowsOutsideASmallWindow)
 {
     // Painting a tile makes the window of the view as large as the document, which the cell editing

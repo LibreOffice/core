@@ -80,6 +80,7 @@
 #include <comphelper/string.hxx>
 
 #include <memory>
+#include <tuple>
 #include <vector>
 
 #include <math.h>
@@ -4680,36 +4681,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if ( nAttrRotate )
                                 {
                                     eRotMode = pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
-
-                                    // tdf#143377 To use the same limits to avoid too big Skew
-                                    // with TextOrientation in Calc, use 1/2 degree here, too.
-                                    // This equals '50' in the notation here (100th degree)
-                                    static const sal_Int32 nMinRad(50);
-
-                                    // bring nAttrRotate to the range [0..36000[
-                                    nAttrRotate = Degree100(((nAttrRotate.get() % 36000) + 36000) % 36000);
-
-                                    // check for to be avoided extreme values and correct
-                                    if (nAttrRotate < Degree100(nMinRad))
-                                    {
-                                        // range [0..50]
-                                        nAttrRotate = Degree100(nMinRad);
-                                        eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow
-                                    }
-                                    else if (nAttrRotate > Degree100(36000 - nMinRad))
-                                    {
-                                        // range [35950..36000[
-                                        nAttrRotate = Degree100(36000 - nMinRad);
-                                        eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow
-                                    }
-                                    else if (nAttrRotate > Degree100(18000 - nMinRad) && (nAttrRotate < Degree100(18000 + nMinRad)))
-                                    {
-                                        // range 50 around 18000, [17950..18050]
-                                        nAttrRotate = (nAttrRotate > Degree100(18000))
-                                            ? Degree100(18000 + nMinRad)
-                                            : Degree100(18000 - nMinRad);
-                                        eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow
-                                    }
+                                    sc::normalizeTextRotation(nAttrRotate, eRotMode);
 
                                     if ( mbLayoutRTL )
                                     {
@@ -4845,18 +4817,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             // when rotated, adjust size
                             if (nAttrRotate)
                             {
-                                double nAbsCos = fabs( nCos );
-                                double nAbsSin = fabs( nSin );
-
-                                if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
-                                    nEngineWidth = static_cast<tools::Long>( nRealWidth * nAbsCos +
-                                                            nRealHeight * nAbsSin );
-                                else
-                                    nEngineWidth = static_cast<tools::Long>( nRealHeight / nAbsSin );
-                                //! limit !!!
-
-                                nEngineHeight = static_cast<tools::Long>( nRealHeight * nAbsCos +
-                                                         nRealWidth * nAbsSin );
+                                std::tie(nEngineWidth, nEngineHeight) = sc::rotatedTextExtent(
+                                    nRealWidth, nRealHeight, nSin, nCos, eRotMode);
                             }
 
                             if (!nAttrRotate)           //  only rotated text here
@@ -5026,12 +4988,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     }
                                     else
                                     {
-                                        // rotated text is centered by default
-                                        if (eHorJust==SvxCellHorJustify::Right)
-                                            aLogicStart.AdjustX(nAvailWidth - nEngineWidth );
-                                        else if (eHorJust==SvxCellHorJustify::Center ||
-                                                 eHorJust==SvxCellHorJustify::Standard)
-                                            aLogicStart.AdjustX((nAvailWidth - nEngineWidth) / 2 );
+                                        aLogicStart.AdjustX(sc::rotatedTextAlignX(
+                                            eHorJust, nAvailWidth, nEngineWidth));
                                     }
                                 }
 
@@ -5047,28 +5005,22 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if ( eOrient==SvxCellOrientation::Standard ||
                                      eOrient==SvxCellOrientation::Stacked || !bBreak )
                                 {
-                                    if (eVerJust==SvxCellVerJustify::Bottom ||
-                                        eVerJust==SvxCellVerJustify::Standard)
+                                    // on the screen the cells are whole pixels, and so is
+                                    // the alignment
+                                    if (bPixelToLogic)
                                     {
-                                        if (bPixelToLogic)
-                                            aLogicStart.AdjustY(mpRefDevice->PixelToLogic( Size(0,
-                                                            mpRefDevice->LogicToPixel(aCellSize).Height() -
-                                                            mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
-                                                            )).Height() );
-                                        else
-                                            aLogicStart.AdjustY(aCellSize.Height() - nEngineHeight );
+                                        const tools::Long nCellPixel
+                                            = mpRefDevice->LogicToPixel(aCellSize).Height();
+                                        const tools::Long nEnginePixel
+                                            = mpRefDevice->LogicToPixel(Size(0, nEngineHeight))
+                                                  .Height();
+                                        aLogicStart.AdjustY(mpRefDevice->PixelToLogic(Size(0,
+                                            sc::rotatedTextAlignY(eVerJust, nCellPixel,
+                                                                  nEnginePixel))).Height());
                                     }
-
-                                    else if (eVerJust==SvxCellVerJustify::Center)
-                                    {
-                                        if (bPixelToLogic)
-                                            aLogicStart.AdjustY(mpRefDevice->PixelToLogic( Size(0,(
-                                                            mpRefDevice->LogicToPixel(aCellSize).Height() -
-                                                            mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height())
-                                                            / 2)).Height() );
-                                        else
-                                            aLogicStart.AdjustY((aCellSize.Height() - nEngineHeight) / 2 );
-                                    }
+                                    else
+                                        aLogicStart.AdjustY(sc::rotatedTextAlignY(
+                                            eVerJust, aCellSize.Height(), nEngineHeight));
                                 }
 
                                 // TOPBOTTOM and BOTTOMTOP are handled in DrawStrings/DrawEdit
@@ -5081,50 +5033,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     // attribute is 1/100, Font 1/10 degrees
                                     nOriVal = to<Degree10>(nAttrRotate);
 
-                                    double nAddX = 0.0;
-                                    double nAddY = 0.0;
-                                    if ( nCos > 0.0 && eRotMode != SVX_ROTATE_MODE_STANDARD )
-                                    {
-                                        //! limit !!!
-                                        double nH = nRealHeight * nCos;
-                                        nAddX += nH * ( nCos / fabs(nSin) );
-                                    }
-                                    if ( nCos < 0.0 && eRotMode == SVX_ROTATE_MODE_STANDARD )
-                                        nAddX -= nRealWidth * nCos;
-                                    if ( nSin < 0.0 )
-                                        nAddX -= nRealHeight * nSin;
-                                    if ( nSin > 0.0 )
-                                        nAddY += nRealWidth * nSin;
-                                    if ( nCos < 0.0 )
-                                        nAddY -= nRealHeight * nCos;
-
-                                    if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
-                                    {
-                                        //! limit !!!
-                                        double nSkew = nTotalHeight * nCos / fabs(nSin);
-                                        if ( eRotMode == SVX_ROTATE_MODE_CENTER )
-                                            nAddX -= nSkew * 0.5;
-                                        if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nSin > 0.0 ) ||
-                                             ( eRotMode == SVX_ROTATE_MODE_BOTTOM && nSin < 0.0 ) )
-                                            nAddX -= nSkew;
-
-                                        tools::Long nUp = 0;
-                                        if ( eVerJust == SvxCellVerJustify::Center )
-                                            nUp = ( aCellSize.Height() - nEngineHeight ) / 2;
-                                        else if ( eVerJust == SvxCellVerJustify::Top )
-                                        {
-                                            if ( nSin > 0.0 )
-                                                nUp = aCellSize.Height() - nEngineHeight;
-                                        }
-                                        else    // BOTTOM / STANDARD
-                                        {
-                                            if ( nSin < 0.0 )
-                                                nUp = aCellSize.Height() - nEngineHeight;
-                                        }
-                                        if ( nUp )
-                                            nAddX += ( nUp * nCos / fabs(nSin) );
-                                    }
-
+                                    const auto [nAddX, nAddY] = sc::rotatedTextOffset(
+                                        nRealWidth, nRealHeight, nSin, nCos, eRotMode, eVerJust,
+                                        aCellSize.Height(), nEngineHeight, nTotalHeight);
                                     aLogicStart.AdjustX(static_cast<tools::Long>(nAddX) );
                                     aLogicStart.AdjustY(static_cast<tools::Long>(nAddY) );
                                 }

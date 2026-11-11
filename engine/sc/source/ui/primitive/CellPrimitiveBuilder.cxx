@@ -1564,6 +1564,9 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         eOrient = SvxCellOrientation::Standard;
         nRotate = 0_deg100;
     }
+    SvxRotateMode eRotateMode = rPattern.GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
+    if (nRotate != 0_deg100)
+        sc::normalizeTextRotation(nRotate, eRotateMode);
     // A vertical engine lays out an Asian vertical cell instead of one character per line, as
     // ScOutputData::DrawEditAsianVertical does, and the cell aligns at the top right by default.
     const bool bAsianVertical = eOrient == SvxCellOrientation::Stacked && nRotate == 0_deg100
@@ -1866,11 +1869,13 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
                                                   SCROW(nRow + rSource.mnMergeRows - 1),
                                                   aArea,
                                                   eHorJust,
-                                                  bStackedWraps ? SvxCellHorJustify::Left
-                                                                : eHorJustContext,
+                                                  nRotate != 0_deg100 ? eHorJustAttr
+                                                  : bStackedWraps     ? SvxCellHorJustify::Left
+                                                                      : eHorJustContext,
                                                   eVerJust,
                                                   eOrient,
                                                   nRotate,
+                                                  eRotateMode,
                                                   bAsianVertical,
                                                   bBreak,
                                                   bStartAtTop,
@@ -1956,18 +1961,25 @@ void CellPrimitiveBuilder::Impl::placeEditText(const CellEditText& rText)
     }
     else if (rText.mnRotate != 0_deg100)
     {
-        // Rising text starts at the bottom-left of the cell and falling text at the top-left. Both
-        // overflow the cell like rotated text in the window.
+        // The text turns around its start, which takes the alignment of the cell and the lean of
+        // the rotate mode as in the window.
         const double fAngle = toRadians(rText.mnRotate);
+        const double fSin = std::sin(fAngle);
+        const double fCos = std::cos(fAngle);
+        const auto [fExtentWidth, fExtentHeight] = sc::rotatedTextExtent(
+            rText.mfEngineWidth, rText.mfEngineHeight, fSin, fCos, rText.meRotateMode);
+        double fStartX = aAlign.getMinX() + rText.mfLeftMargin;
+        if (!rText.mbBreak)
+            fStartX += sc::rotatedTextAlignX(rText.meBoxHorJust, fAlignInnerWidth, fExtentWidth);
+        const double fStartY
+            = aAlign.getMinY() + rText.mfTopMargin
+              + sc::rotatedTextAlignY(rText.meVerJust, fAlignInnerHeight, fExtentHeight);
+        const auto [fAddX, fAddY] = sc::rotatedTextOffset(
+            rText.mfEngineWidth, rText.mfEngineHeight, fSin, fCos, rText.meRotateMode,
+            rText.meVerJust, fAlignInnerHeight, fExtentHeight, aAlign.getHeight());
         aTransform *= basegfx::utils::createRotateB2DHomMatrix(-fAngle);
-        const bool bRising = std::sin(fAngle) > 0;
-        const double fStartY = bRising ? aAlign.getMaxY() - rText.mfBottomMargin
-                                             - rText.mfEngineHeight * std::cos(fAngle)
-                                       : aAlign.getMinY() + rText.mfTopMargin;
-        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(
-            aAlign.getMinX() + rText.mfLeftMargin
-                + std::max(0.0, -std::sin(fAngle) * rText.mfEngineHeight),
-            fStartY);
+        aTransform
+            *= basegfx::utils::createTranslateB2DHomMatrix(fStartX + fAddX, fStartY + fAddY);
     }
     else
         aTransform *= basegfx::utils::createTranslateB2DHomMatrix(fBoxLeft, fBoxTop);

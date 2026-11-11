@@ -162,6 +162,38 @@ void setVerticalTextAlignment(ScEditEngineDefaulter& rEngine, bool bTopToBottom,
     if (eHorJust == SvxCellHorJustify::Block)
         rEngine.SetDefaultItem(SvxVerJustifyItem(SvxCellVerJustify::Block, EE_PARA_VER_JUST));
 }
+
+void normalizeTextRotation(Degree100& rRotate, SvxRotateMode& rRotateMode)
+{
+    // tdf#143377 To use the same limits to avoid too big Skew
+    // with TextOrientation in Calc, use 1/2 degree here, too.
+    // This equals '50' in the notation here (100th degree)
+    static const sal_Int32 nMinRad(50);
+
+    // bring the rotation to the range [0..36000[
+    rRotate = Degree100(((rRotate.get() % 36000) + 36000) % 36000);
+
+    // check for to be avoided extreme values and correct
+    if (rRotate < Degree100(nMinRad))
+    {
+        // range [0..50]
+        rRotate = Degree100(nMinRad);
+        rRotateMode = SVX_ROTATE_MODE_STANDARD; // no overflow
+    }
+    else if (rRotate > Degree100(36000 - nMinRad))
+    {
+        // range [35950..36000[
+        rRotate = Degree100(36000 - nMinRad);
+        rRotateMode = SVX_ROTATE_MODE_STANDARD; // no overflow
+    }
+    else if (rRotate > Degree100(18000 - nMinRad) && (rRotate < Degree100(18000 + nMinRad)))
+    {
+        // range 50 around 18000, [17950..18050]
+        rRotate = (rRotate > Degree100(18000)) ? Degree100(18000 + nMinRad)
+                                               : Degree100(18000 - nMinRad);
+        rRotateMode = SVX_ROTATE_MODE_STANDARD; // no overflow
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
