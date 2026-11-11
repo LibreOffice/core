@@ -460,7 +460,7 @@ void DocumentBroker::pollThread()
 #if ENABLE_DEBUG
         // paused waiting for a debugger to attach
         // ignore load time out
-        std::getenv("PAUSEFORDEBUGGER") ? std::chrono::seconds::max() :
+        std::getenv("PAUSEFORDEBUGGER") ? std::chrono::seconds::zero() :
 #endif
                                         getLimitLoadSecs();
 
