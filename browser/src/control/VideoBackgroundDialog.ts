@@ -131,7 +131,11 @@ class VideoBackgroundDialog {
 			const response = await fetch(
 				app.LOUtil.getURL('videobackgrounds/' + fileName),
 			);
-			if (!response.ok) throw new Error(response.statusText);
+			// WebKit answers a file: URL it has read with status 0.
+			const isRead =
+				response.ok ||
+				(response.status === 0 && response.url.startsWith('file:'));
+			if (!isRead) throw new Error(response.statusText);
 			const blob = await response.blob();
 			app.map.fire('videobackground', {
 				file: new File([blob], fileName, { type: 'video/webm' }),
