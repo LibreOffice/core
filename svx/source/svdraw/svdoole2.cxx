@@ -1149,6 +1149,11 @@ bool SdrOle2Obj::HasDeferredLink() const
     return mpImpl->maDeferredMediaDescriptor.hasElements();
 }
 
+const OUString& SdrOle2Obj::GetLinkURL() const
+{
+    return mpImpl->maLinkURL;
+}
+
 void SdrOle2Obj::Connect_Impl(SvxOle2Shape* pCreator)
 {
     if(mpImpl->aPersistName.isEmpty() )
