@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <swdllapi.h>
 #include <swrect.hxx>
@@ -182,6 +184,14 @@ private:
     /// The area the entries are limited to, in document twips. None for the whole page.
     std::optional<SwRect> moArea;
 };
+
+/// The range of rArea, which is in document twips, relative to rOrigin.
+basegfx::B2DRange rangeRelativeTo(const SwRect& rArea, const Point& rOrigin);
+
+/// Adds a fill of rArea in rColor to rTarget, with the transparency of the color. An empty area
+/// and a fully transparent color add nothing.
+void addColorFill(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                  basegfx::B2DPolyPolygon&& rArea, const Color& rColor);
 
 /// The frame the object is anchored in and moves with, or none when that frame is the page.
 std::optional<sal_uInt64> anchorOf(const SwAnchoredObject& rObject);

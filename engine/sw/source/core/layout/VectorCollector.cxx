@@ -10,6 +10,7 @@
  */
 
 #include <VectorCollector.hxx>
+#include <VectorText.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 #include <anchoredobject.hxx>
@@ -33,8 +34,8 @@
 #include <rootfrm.hxx>
 #include <tools/color.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/VectorObjectContent.hxx>
@@ -234,6 +235,29 @@ void Collector::closeBorderLayer()
     maBorderLayers.pop_back();
 }
 
+basegfx::B2DRange rangeRelativeTo(const SwRect& rArea, const Point& rOrigin)
+{
+    return basegfx::B2DRange(rArea.Left() - rOrigin.X(), rArea.Top() - rOrigin.Y(),
+                             rArea.Left() + rArea.Width() - rOrigin.X(),
+                             rArea.Top() + rArea.Height() - rOrigin.Y());
+}
+
+void addColorFill(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                  basegfx::B2DPolyPolygon&& rArea, const Color& rColor)
+{
+    if (!rArea.count() || rColor.IsFullyTransparent())
+        return;
+
+    drawinglayer::primitive2d::Primitive2DReference xFill(
+        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(std::move(rArea),
+                                                                   rColor.getBColor()));
+    if (rColor.IsTransparent())
+        xFill = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+            drawinglayer::primitive2d::Primitive2DContainer{ xFill },
+            1.0 - rColor.GetAlpha() / 255.0);
+    rTarget.push_back(xFill);
+}
+
 std::optional<sal_uInt64> anchorOf(const SwAnchoredObject& rObject)
 {
     const SwFrame* pAnchor = rObject.GetAnchorFrame();
@@ -267,12 +291,10 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
     // A rule is cropped rather than shrunk, so a rule made of a picture keeps its scale.
     if (oClip)
     {
-        const basegfx::B2DRange aClip(oClip->Left(), oClip->Top(), oClip->Right(),
-                                      oClip->Bottom());
+        // The primitives of the object are in document twips, so the mask has no origin to move
+        // by.
         drawinglayer::primitive2d::Primitive2DReference xMask(
-            new drawinglayer::primitive2d::MaskPrimitive2D(
-                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClip)),
-                std::move(aPrimitives)));
+            createMask(*oClip, Point(), std::move(aPrimitives)));
         aPrimitives = drawinglayer::primitive2d::Primitive2DContainer{ xMask };
     }
 
@@ -466,15 +488,6 @@ bool& tilesFromPrimitivesFlag()
     }();
     return bFromPrimitives;
 }
-
-drawinglayer::primitive2d::Primitive2DReference colorFill(const SwRect& rArea, const Color& rColor)
-{
-    const basegfx::B2DRange aRange(rArea.Left(), rArea.Top(), rArea.Left() + rArea.Width(),
-                                   rArea.Top() + rArea.Height());
-    return new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange)),
-        rColor.getBColor());
-}
 }
 
 bool tilesFromPrimitives() { return tilesFromPrimitivesFlag(); }
@@ -490,7 +503,11 @@ createAreaPrimitives(const SwRootFrame& rLayout, const SwRect& rArea, const Colo
         if (!pFrame->IsPageFrame() || !pFrame->getFrameArea().Overlaps(rArea))
             continue;
 
-        aPrimitives.push_back(colorFill(pFrame->getFrameArea(), rPaper));
+        // The paper is opaque, whatever transparency its color names.
+        addColorFill(aPrimitives,
+                     basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
+                         rangeRelativeTo(pFrame->getFrameArea(), Point()))),
+                     rPaper.GetRGBColor());
         // Every tile builds what it shows anew, so it builds only the frames and the objects
         // that reach into its area.
         Collector aCollector(/*bForView=*/true);

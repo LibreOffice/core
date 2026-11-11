@@ -128,6 +128,8 @@ Primitive2DReference createTextPrimitiveFromFont(const basegfx::B2DPoint& rStart
             || rFont.IsShadow()
             || bWordLineMode);
 
+        rtl::Reference<TextSimplePortionPrimitive2D> pPortion;
+
         if(bDecoratedIsNeeded)
         {
             // prepare overline, underline and strikeout data
@@ -177,7 +179,7 @@ Primitive2DReference createTextPrimitiveFromFont(const basegfx::B2DPoint& rStart
             const bool bShadow(rFont.IsShadow());
 
             // TextDecoratedPortionPrimitive2D is needed, create one
-            pResult = new TextDecoratedPortionPrimitive2D(
+            pPortion = new TextDecoratedPortionPrimitive2D(
 
                 // attributes for TextSimplePortionPrimitive2D
                 aTextTransform,
@@ -211,7 +213,7 @@ Primitive2DReference createTextPrimitiveFromFont(const basegfx::B2DPoint& rStart
         else
         {
             // TextSimplePortionPrimitive2D is enough
-            pResult = new TextSimplePortionPrimitive2D(
+            pPortion = new TextSimplePortionPrimitive2D(
                 aTextTransform,
                 rText,
                 nTextStart,
@@ -226,6 +228,10 @@ Primitive2DReference createTextPrimitiveFromFont(const basegfx::B2DPoint& rStart
                 100, 0,
                 rFont.GetOpticalSizing());
         }
+
+        if (rState.moLayout)
+            pPortion->setLayout(*rState.moLayout);
+        pResult = pPortion.get();
     }
 
     if(pResult && rState.moTextFillColor)

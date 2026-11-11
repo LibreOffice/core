@@ -5016,6 +5016,8 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
     if (IsLayoutFrame())
     {
         const SwLayoutFrame& rLayout = static_cast<const SwLayoutFrame&>(*this);
+        // The frame is kept alive over the walk of its lowers.
+        SwFrameDeleteGuard aDeleteGuard(const_cast<SwFrame*>(this));
         // When the document paints the objects behind the text over the header and the footer,
         // the page draws its header and footer first, then those objects, then the body.
         const bool bHeaderFooterFirst

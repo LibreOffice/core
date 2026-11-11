@@ -21,6 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
 
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -52,12 +53,16 @@ struct TextDrawState
     std::optional<basegfx::BColor> moTextFillColor;
     vcl::text::ComplexTextLayoutFlags meLayoutMode = vcl::text::ComplexTextLayoutFlags::Default;
     LanguageType meLanguage = LANGUAGE_SYSTEM;
+    /// Where the text lies in the text it was laid out in, or none for text that is not part of
+    /// laid-out paragraph text.
+    std::optional<TextPortionLayout> moLayout;
 };
 
 /** The primitive of a text drawn at rStart in rFont with the advances in rDXArray: a plain text
     portion, a decorated one when the font has lines, emphasis marks, relief or a shadow or draws
     its lines under the words only, and a group with the fill behind the text when the state names
-    a fill color. Empty for an empty range.
+    a fill color. The text portion carries the layout that the state names. Empty for an empty
+    range.
  */
 DRAWINGLAYER_DLLPUBLIC Primitive2DReference createTextPrimitiveFromFont(
     const basegfx::B2DPoint& rStart, const OUString& rText, sal_Int32 nTextStart,

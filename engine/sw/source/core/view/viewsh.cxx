@@ -747,7 +747,8 @@ OString lcl_DocumentSizePayload(const SwViewShell& rShell)
 
 /// Marks the pages that a vector client holds and that lie under rAreas as changed, and tells
 /// every view of the document that each of them changed. When the page ids changed, every view
-/// is also told the document size, without a tile invalidation.
+/// is also told the document size, without a tile invalidation. A page with a deferred push is
+/// announced as changed whether or not rAreas holds an area.
 void lcl_NotifyVectorParts(const SwViewShell& rShell, const SwRegionRects& rAreas)
 {
     SwDocShell* pDocShell = rShell.GetDoc()->GetDocShell();
@@ -758,6 +759,13 @@ void lcl_NotifyVectorParts(const SwViewShell& rShell, const SwRegionRects& rArea
     const rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
     sw::vector::PartStore* pParts = xModel.is() ? xModel->getVectorParts() : nullptr;
     if (!pParts)
+        return;
+
+    // A part whose push wrote nothing while the layout was busy is announced again.
+    for (const OString& rPartId : pParts->takeDeferredPushes(*pLayout))
+        KitHelper::notifyVectorPartChanged(pDocShell, rPartId, sw::vector::constModePrintLayout);
+
+    if (rAreas.empty())
         return;
 
     for (const OString& rPartId : pParts->invalidate(*pLayout, rAreas))
@@ -788,12 +796,13 @@ void SwViewShell::FlushPendingKitInvalidateTiles()
         rects.insert( rects.end(), tmpRects.begin(), tmpRects.end());
     }
     rects.Compress( SwRegionRects::CompressFuzzy );
-    if(rects.empty())
-        return;
 
     // The model change reaches the views that draw from primitives here, whether or not they
-    // paint tiles.
+    // paint tiles. A deferred push is announced without a changed area too.
     lcl_NotifyVectorParts(*this, rects);
+
+    if (rects.empty())
+        return;
 
     // This is basically the loop from SwViewShell::InvalidateWindows().
     for(SwViewShell& rSh : GetRingContainer())

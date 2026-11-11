@@ -27,6 +27,7 @@
 class GraphicObject;
 class OutputDevice;
 class SwDrawTextInfo;
+class SwViewOption;
 
 namespace sw::vector
 {
@@ -155,6 +156,10 @@ private:
 drawinglayer::primitive2d::Primitive2DReference
 createMask(const SwRect& rArea, const Point& rOrigin,
            drawinglayer::primitive2d::Primitive2DContainer&& rPrimitives);
+
+/// The view options of text drawn for any client. They are the same for every document and every
+/// view, and no setting of a view changes them.
+const SwViewOption& optionsForAnyView();
 
 /// Draws a text with its advances into the primitive sink of rInfo, or onto its device without one.
 void drawTextArray(SwDrawTextInfo& rInfo, const Point& rPosition, const OUString& rText,

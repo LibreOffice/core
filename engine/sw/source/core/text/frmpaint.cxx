@@ -466,7 +466,11 @@ void SwTextFrame::DrawExtraData( const SwRect &rRect, sw::vector::TextSink* pSin
 
         tools::Long nBottom = rRect.Bottom();
 
-        const bool bIsShowChangesInMargin = pSh->GetViewOptions()->IsShowChangesInMargin();
+        // The marks drawn for any client take the same options whichever view is the current one.
+        const SwViewOption& rOptions = pSink && !pSink->isForView()
+                                           ? sw::vector::optionsForAnyView()
+                                           : *pSh->GetViewOptions();
+        const bool bIsShowChangesInMargin = rOptions.IsShowChangesInMargin();
         do
         {
             // A comment from SwTextFormatter::CalcRealHeight:

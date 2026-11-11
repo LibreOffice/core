@@ -66,6 +66,9 @@ public:
         when nothing changed after it, or when no client holds the part. For a page the layout
         does not hold, a pull and a push of a part that was served write the header alone, and
         the part is dropped.
+
+        While a view of the document runs an action, formats the layout, paints or has its paint
+        locked, nothing is written. A push of a served part is then kept as a deferred push.
      */
     void write(tools::JsonWriter& rWriter, const SwRootFrame& rLayout, std::string_view rPartId,
                sal_Int64 nSinceVersion, bool bPush);
@@ -82,8 +85,12 @@ public:
     /// client. Its versions go on counting, and the next request for the part serves it whole.
     void forget(std::string_view rPartId);
 
-    /// Records the part ids of the pages of rLayout in page order, and returns true when they
-    /// differ from the ones recorded before.
+    /// The part ids whose push wrote nothing because the layout was busy, once the layout is
+    /// idle. The store holds none of them afterwards. Empty while the layout is busy.
+    std::vector<OString> takeDeferredPushes(const SwRootFrame& rLayout);
+
+    /// Records the pages of rLayout in page order, and returns true when they differ from the
+    /// ones recorded before.
     bool recordPageIds(const SwRootFrame& rLayout);
 
     drawinglayer::VectorResourceCache& getResources() { return maResources; }
@@ -112,9 +119,6 @@ private:
         svx::vector::PartVersions maVersions;
         /// True while the page may differ from what was compared last.
         bool mbDirty = true;
-        /// While mbDirty is true, the areas in document twips where the page may differ from what
-        /// was compared last. Empty for the whole page.
-        std::vector<SwRect> maDirtyAreas;
         /// The ids of the entries in paint order, the page entry first.
         std::vector<sal_uInt64> maOrder;
         /// The ids of the entries the part holds.
@@ -122,9 +126,8 @@ private:
     };
 
     /// Compares the page with its record and counts the part's version up when something
-    /// differs. Where each entry lies is always compared. What an entry draws is compared when
-    /// bWhole is true, when the entry moved, or when its box overlaps the dirty areas of the part.
-    void refresh(PartState& rState, const SwPageFrame& rPage, bool bWhole);
+    /// differs. Where each entry lies and what it draws are compared for every entry of the page.
+    void refresh(PartState& rState, const SwPageFrame& rPage);
 
     static void writeEntry(tools::JsonWriter& rWriter, const RecordedEntry& rRecord,
                            bool bDrawing,
@@ -132,8 +135,10 @@ private:
 
     std::unordered_map<OString, PartState> maParts;
     std::unordered_map<sal_uInt64, RecordedEntry> maEntries;
-    /// The part ids of the pages in page order, as they were last recorded.
-    std::vector<OString> maPageIds;
+    /// The frame ids of the pages in page order, as they were last recorded.
+    std::vector<sal_uInt32> maPageIds;
+    /// The part ids whose push wrote nothing because the layout was busy.
+    std::vector<OString> maDeferredPushes;
     drawinglayer::VectorResourceCache maResources;
 };
 }

@@ -19,6 +19,8 @@
 #include <paratr.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
+#include <VectorCollector.hxx>
+#include <viewopt.hxx>
 #include <viewsh.hxx>
 #include "inftxt.hxx"
 #include "itrpaint.hxx"
@@ -27,11 +29,9 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/fonttextprimitive.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
@@ -50,33 +50,6 @@ namespace sw::vector
 {
 namespace
 {
-/// Tags a text portion, or the portion inside the group that puts a fill behind it, with the
-/// line and the text area it is laid out in.
-void tagPortion(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive,
-                const drawinglayer::primitive2d::TextPortionLayout& rLayout)
-{
-    if (auto* pPortion
-        = dynamic_cast<drawinglayer::primitive2d::TextSimplePortionPrimitive2D*>(pPrimitive))
-    {
-        pPortion->setLayout(rLayout);
-        return;
-    }
-
-    if (auto* pGroup = dynamic_cast<drawinglayer::primitive2d::GroupPrimitive2D*>(pPrimitive))
-    {
-        for (const drawinglayer::primitive2d::Primitive2DReference& rChild : pGroup->getChildren())
-            tagPortion(rChild.get(), rLayout);
-    }
-}
-
-/// The range of rArea, which is in document twips, relative to rOrigin.
-basegfx::B2DRange rangeOf(const SwRect& rArea, const Point& rOrigin)
-{
-    return basegfx::B2DRange(rArea.Left() - rOrigin.X(), rArea.Top() - rOrigin.Y(),
-                             rArea.Left() + rArea.Width() - rOrigin.X(),
-                             rArea.Top() + rArea.Height() - rOrigin.Y());
-}
-
 /// Hairlines in rColor along rLines, which are in document twips, relative to rOrigin.
 drawinglayer::primitive2d::Primitive2DReference
 createHairlines(const basegfx::B2DPolyPolygon& rLines, const Color& rColor, const Point& rOrigin)
@@ -95,8 +68,18 @@ createMask(const SwRect& rArea, const Point& rOrigin,
            drawinglayer::primitive2d::Primitive2DContainer&& rPrimitives)
 {
     return new drawinglayer::primitive2d::MaskPrimitive2D(
-        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(rangeOf(rArea, rOrigin))),
+        basegfx::B2DPolyPolygon(
+            basegfx::utils::createPolygonFromRect(rangeRelativeTo(rArea, rOrigin))),
         std::move(rPrimitives));
+}
+
+const SwViewOption& optionsForAnyView()
+{
+    // The options as they are constructed, with no setting of a view applied: the changes are
+    // drawn in the text in the standard way and none of them in the margin, the placeholder fields
+    // are shown, and no formatting mark is. The colors are the ones the application started with.
+    static const SwViewOption aOptions;
+    return aOptions;
 }
 
 TextSink::TextSink(const Point& rOrigin, const SwRect& rTextArea,
@@ -168,6 +151,8 @@ void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, cons
         aState.moTextLineColor = rDevice.GetTextLineColor().getBColor();
     aState.meLayoutMode = rDevice.GetLayoutMode();
     aState.meLanguage = rDevice.GetFont().GetLanguage();
+    if (mbParagraph)
+        aState.moLayout = maLayout;
 
     // The device puts the right end of a right-to-left run at rPosition unless the layout mode
     // asks for the left end. A text primitive starts at the left end, so the start moves back
@@ -193,8 +178,6 @@ void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, cons
     if (!xText)
         return;
 
-    if (mbParagraph)
-        tagPortion(xText.get(), maLayout);
     const Color aFontColor(rDevice.GetFont().GetColor());
     if (aFontColor != COL_AUTO && aFontColor.IsTransparent())
         maLine.push_back(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
@@ -206,19 +189,13 @@ void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, cons
 
 void TextSink::addFill(const SwRect& rArea, const Color& rColor)
 {
-    if (!rArea.HasArea() || rColor.IsFullyTransparent())
+    if (!rArea.HasArea())
         return;
 
-    drawinglayer::primitive2d::Primitive2DReference xFill(
-        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-            basegfx::B2DPolyPolygon(
-                basegfx::utils::createPolygonFromRect(rangeOf(rArea, maOrigin))),
-            rColor.getBColor()));
-    if (rColor.IsTransparent())
-        xFill = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-            drawinglayer::primitive2d::Primitive2DContainer{ xFill },
-            1.0 - rColor.GetAlpha() / 255.0);
-    maLine.push_back(xFill);
+    addColorFill(maLine,
+                 basegfx::B2DPolyPolygon(
+                     basegfx::utils::createPolygonFromRect(rangeRelativeTo(rArea, maOrigin))),
+                 rColor);
 }
 
 void TextSink::addLines(const basegfx::B2DPolyPolygon& rLines, const Color& rColor)

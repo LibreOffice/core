@@ -577,6 +577,9 @@ SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint,
 {
     CtorInitTextPaintInfo( &pFrame->getRootFrame()->GetCurrShell()->GetRefDev(), pFrame, rPaint );
     m_pPrimitiveSink = &rSink;
+    // Text drawn for any client takes the same options whichever view is the current one.
+    if (!rSink.isForView())
+        m_pOpt = &sw::vector::optionsForAnyView();
     SetOnWin( false );
 }
 

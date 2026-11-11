@@ -119,6 +119,8 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <VectorCollector.hxx>
+#include <VectorText.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
@@ -8492,30 +8494,6 @@ Graphic SwDrawFrameFormat::MakeGraphic( ImageMap*, const sal_uInt32 nMaximumQuad
 
 namespace
 {
-basegfx::B2DRange lcl_RangeRelativeTo(const SwRect& rRect, const Point& rOrigin)
-{
-    return basegfx::B2DRange(rRect.Left() - rOrigin.X(), rRect.Top() - rOrigin.Y(),
-                             rRect.Left() + rRect.Width() - rOrigin.X(),
-                             rRect.Top() + rRect.Height() - rOrigin.Y());
-}
-
-/// Adds a fill of rArea in rColor, with the color's transparency.
-void lcl_AddColorFill(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                      basegfx::B2DPolyPolygon&& rArea, const Color& rColor)
-{
-    if (!rArea.count() || rColor.IsFullyTransparent())
-        return;
-
-    drawinglayer::primitive2d::Primitive2DReference xFill(
-        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(std::move(rArea),
-                                                                   rColor.getBColor()));
-    if (rColor.IsTransparent())
-        xFill = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-            drawinglayer::primitive2d::Primitive2DContainer{ xFill },
-            1.0 - rColor.GetAlpha() / 255.0);
-    rTarget.push_back(xFill);
-}
-
 /// Adds the shadow of rFrame around rOutRect to rTarget, relative to rOrigin, and shrinks
 /// rOutRect by the space the shadow takes. The shadow color is opaque, as in the paint.
 void lcl_AddShadow(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
@@ -8531,10 +8509,11 @@ void lcl_AddShadow(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     for (const SwRect& rShadowRect : aRegion)
     {
         if (rShadowRect.HasArea())
-            aShadowArea.append(
-                basegfx::utils::createPolygonFromRect(lcl_RangeRelativeTo(rShadowRect, rOrigin)));
+            aShadowArea.append(basegfx::utils::createPolygonFromRect(
+                sw::vector::rangeRelativeTo(rShadowRect, rOrigin)));
     }
-    lcl_AddColorFill(rTarget, std::move(aShadowArea), aSides.maShadow.GetColor().GetRGBColor());
+    sw::vector::addColorFill(rTarget, std::move(aShadowArea),
+                             aSides.maShadow.GetColor().GetRGBColor());
 }
 
 /// The graphic of a background brush, relative to rOrigin and cut to rArea. rOrigArea is the frame
@@ -8551,8 +8530,8 @@ void lcl_AddBrushGraphic(drawinglayer::primitive2d::Primitive2DContainer& rTarge
     if (!pGraphicObject || pGraphicObject->GetType() == GraphicType::NONE)
         return;
 
-    const basegfx::B2DRange aArea(lcl_RangeRelativeTo(rArea, rOrigin));
-    const basegfx::B2DRange aOrigArea(lcl_RangeRelativeTo(rOrigArea, rOrigin));
+    const basegfx::B2DRange aArea(sw::vector::rangeRelativeTo(rArea, rOrigin));
+    const basegfx::B2DRange aOrigArea(sw::vector::rangeRelativeTo(rOrigArea, rOrigin));
     const GraphicAttr& rAttr = pGraphicObject->GetAttr();
 
     SwRect aGraphic(rOrigArea);
@@ -8597,7 +8576,7 @@ void lcl_AddBrushGraphic(drawinglayer::primitive2d::Primitive2DContainer& rTarge
         aGraphic.SSize(aSize);
     }
 
-    const basegfx::B2DRange aGraphicRange(lcl_RangeRelativeTo(aGraphic, rOrigin));
+    const basegfx::B2DRange aGraphicRange(sw::vector::rangeRelativeTo(aGraphic, rOrigin));
     drawinglayer::primitive2d::Primitive2DReference xGraphic(
         new drawinglayer::primitive2d::GraphicPrimitive2D(
             basegfx::utils::createScaleTranslateB2DHomMatrix(
@@ -8605,9 +8584,8 @@ void lcl_AddBrushGraphic(drawinglayer::primitive2d::Primitive2DContainer& rTarge
                 aGraphicRange.getMinY()),
             *pGraphicObject, rAttr));
     if (!rArea.Contains(aGraphic))
-        xGraphic = new drawinglayer::primitive2d::MaskPrimitive2D(
-            basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aArea)),
-            drawinglayer::primitive2d::Primitive2DContainer{ xGraphic });
+        xGraphic = sw::vector::createMask(
+            rArea, rOrigin, drawinglayer::primitive2d::Primitive2DContainer{ xGraphic });
     rTarget.push_back(xGraphic);
 }
 
@@ -8616,7 +8594,7 @@ drawinglayer::primitive2d::Primitive2DReference
 lcl_CreateLinePrimitive(const SwRect& rLineRect, const Point& rOrigin, const Color& rColor,
                         SvxBorderLineStyle eStyle)
 {
-    const basegfx::B2DRange aRange(lcl_RangeRelativeTo(rLineRect, rOrigin));
+    const basegfx::B2DRange aRange(sw::vector::rangeRelativeTo(rLineRect, rOrigin));
     const bool bHorizontal = aRange.getWidth() >= aRange.getHeight();
     const double fWidth = bHorizontal ? aRange.getHeight() : aRange.getWidth();
 
@@ -8690,10 +8668,10 @@ SwFrame::CreateBackgroundPrimitives(const Point& rOrigin) const
 
     if (!bBackground)
     {
-        lcl_AddColorFill(aPrimitives,
-                         basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
-                             lcl_RangeRelativeTo(aRect, rOrigin))),
-                         COL_WHITE);
+        sw::vector::addColorFill(aPrimitives,
+                                 basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
+                                     sw::vector::rangeRelativeTo(aRect, rOrigin))),
+                                 COL_WHITE);
         return aPrimitives;
     }
 
@@ -8703,7 +8681,8 @@ SwFrame::CreateBackgroundPrimitives(const Point& rOrigin) const
     if (aFillAttributes && aFillAttributes->isUsed())
     {
         aPrimitives = aFillAttributes->getPrimitive2DSequence(
-            lcl_RangeRelativeTo(aRect, rOrigin), lcl_RangeRelativeTo(aOrigBackRect, rOrigin));
+            sw::vector::rangeRelativeTo(aRect, rOrigin),
+            sw::vector::rangeRelativeTo(aOrigBackRect, rOrigin));
         return aPrimitives;
     }
 
@@ -8712,8 +8691,8 @@ SwFrame::CreateBackgroundPrimitives(const Point& rOrigin) const
     if (pBrush)
     {
         basegfx::B2DPolyPolygon aArea(
-            basegfx::utils::createPolygonFromRect(lcl_RangeRelativeTo(aRect, rOrigin)));
-        lcl_AddColorFill(aPrimitives, std::move(aArea), pBrush->GetColor());
+            basegfx::utils::createPolygonFromRect(sw::vector::rangeRelativeTo(aRect, rOrigin)));
+        sw::vector::addColorFill(aPrimitives, std::move(aArea), pBrush->GetColor());
 
         const SwViewShell* pShell = getRootFrame()->GetCurrShell();
         lcl_AddBrushGraphic(aPrimitives, *pBrush,
