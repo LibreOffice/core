@@ -1197,7 +1197,12 @@ bool DocumentBroker::isAlive() const
 
 void DocumentBroker::timeoutNotLoaded(std::chrono::steady_clock::time_point now)
 {
-    if (!_stop && !_poll->isAlive() && !isLoaded() && now - _createTime > getLimitLoadSecs())
+    // Broker may be pre-created for a client that never connects.
+    std::chrono::seconds limitLoadSecs = getLimitLoadSecs();
+    if (limitLoadSecs == std::chrono::seconds::zero())
+        limitLoadSecs = std::chrono::seconds(100);
+
+    if (!_stop && !_poll->isAlive() && !isLoaded() && now - _createTime > limitLoadSecs)
         stop("neverloaded");
 }
 
