@@ -499,7 +499,8 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
 
     if (nDiffFlags & SfxPrinterChangeFlags::PRINTER)
     {
-        if ( m_pDocument->GetPrinter() != pNewPrinter )
+        // tdf#42673 - do not create the possibly unreachable printer only to compare it
+        if (pOld != pNewPrinter)
         {
             m_pDocument->SetPrinter( pNewPrinter );
             m_pDocument->SetPrintOptions();

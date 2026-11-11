@@ -251,7 +251,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
                         SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS>( *rDoc.GetPool()));
 
-                SfxPrinter* pPrinter = pDocShell->GetPrinter();
+                // tdf#42673 - do not create the possibly unreachable printer only to read a flag
+                SfxPrinter* pPrinter = pDocShell->GetPrinter(false);
                 bool bPreferPrinterPapersize = false;
                 if ( pPrinter )
                     bPreferPrinterPapersize = pPrinter->GetPrinterSettingsPreferred();
