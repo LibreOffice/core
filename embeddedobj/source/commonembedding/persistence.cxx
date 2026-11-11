@@ -550,7 +550,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     uno::Reference< document::XStorageBasedDocument > xDoc( xDocument, uno::UNO_QUERY );
     if ( !xDoc.is() && !xLoadable.is() )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(u"OCommonEmbeddedObject::LoadDocumentFromStorage_Impl: document is not available or can not be loaded"_ustr, getXWeak());
 
     ::comphelper::NamedValueCollection aLoadArgs;
     FillDefaultLoadArgs_Impl( xSourceStorage, aLoadArgs );
@@ -560,7 +560,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     {
         xTempInpStream = createTempInpStreamFromStor( xSourceStorage, m_xContext );
         if ( !xTempInpStream.is() )
-            throw uno::RuntimeException();
+            throw uno::RuntimeException(u"OCommonEmbeddedObject::LoadDocumentFromStorage_Impl: temporary input stream not available"_ustr, getXWeak());
 
         OUString aTempFileURL;
         try
@@ -805,7 +805,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
     SAL_WARN_IF( !xStorage.is(), "embeddedobj.common", "No storage is provided for storing!" );
 
     if ( !xStorage.is() )
-        throw uno::RuntimeException(); // TODO:
+        throw uno::RuntimeException(u"OCommonEmbeddedObject::StoreDocToStorage_Impl: no storage available"_ustr, getXWeak()); // TODO:
 
     uno::Reference< document::XStorageBasedDocument > xDoc;
     {
@@ -1283,7 +1283,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                 xStorage->openStorageElement( sEntName, embed::ElementModes::READWRITE );
 
     if ( !xSubStorage.is() )
-        throw uno::RuntimeException(); //TODO
+        throw uno::RuntimeException(u"OCommonEmbeddedObject::storeToEntry: could not open storage element"_ustr, getXWeak()); //TODO
 
     aGuard.clear();
     // TODO/LATER: support hierarchical name for embedded objects in embedded objects
@@ -1419,7 +1419,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                 xStorage->openStorageElement( sEntName, embed::ElementModes::READWRITE );
 
     if ( !xSubStorage.is() )
-        throw uno::RuntimeException(); //TODO
+        throw uno::RuntimeException(u"OCommonEmbeddedObject::storeAsEntry: could not open sub storage element"_ustr, getXWeak()); //TODO
 
     if ( m_nObjectState != embed::EmbedStates::LOADED )
     {
@@ -1480,7 +1480,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     OSL_ENSURE( m_xNewObjectStorage.is() && m_xNewParentStorage.is() , "Internal object information is broken!" );
     if ( !m_xNewObjectStorage.is() || !m_xNewParentStorage.is() )
-        throw uno::RuntimeException(); // TODO: broken internal information
+        throw uno::RuntimeException(u"OCommonEmbeddedObject::saveCompleted: The new object storage or the new parent storage is not available."_ustr, getXWeak()); // TODO: broken internal information
 
     if ( bUseNew )
     {
@@ -1594,7 +1594,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 
     SAL_WARN_IF( !m_xDocHolder->GetComponent().is(), "embeddedobj.common", "If an object is activated or in running state it must have a document!" );
     if ( !m_xDocHolder->GetComponent().is() )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(u"OCommonEmbeddedObject::storeOwn: object does not have a document"_ustr, getXWeak());
 
     if ( m_bIsLinkURL )
     {
