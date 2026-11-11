@@ -569,31 +569,6 @@ namespace canvastools
                 throw lang::IllegalArgumentException();
 #endif
             }
-
-            if( !std::isfinite( fontRequest.ReferenceAdvancement ) )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): font request's ReferenceAdvancement value contains infinite or NAN",
-                    xIf, nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( fontRequest.CellSize != 0.0 &&
-                fontRequest.ReferenceAdvancement != 0.0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): font request's CellSize and ReferenceAdvancement are mutually exclusive, one of them must be 0.0",
-                    xIf, nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
         }
 
         void verifyIndexRange( const geometry::IntegerRectangle2D&  rect,

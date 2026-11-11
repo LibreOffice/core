@@ -119,7 +119,7 @@ class DemoRenderer
             aFontInfo.StyleName = "SansSerif";
             geometry::Matrix2D aFontMatrix( 1, 0,
                                             0, 1 );
-            rendering::FontRequest aFontRequest( aFontInfo, 12.0, 0.0, aLocale );
+            rendering::FontRequest aFontRequest(aFontInfo, 12.0, aLocale);
             uno::Sequence< beans::PropertyValue > aExtraFontProperties;
             mxDefaultFont = xCanvas->createFont( aFontRequest, aExtraFontProperties, aFontMatrix );
             if( !mxDefaultFont.is() )

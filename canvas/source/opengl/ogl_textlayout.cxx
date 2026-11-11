@@ -96,8 +96,7 @@ namespace oglcanvas
         // fake text bounds by either taking the advancement values,
         // or assuming square glyph boxes (width similar to height)
         const rendering::FontRequest aFontRequest( mpFont->getFontRequest() );
-        const double nFontSize( std::max( aFontRequest.CellSize,
-                                            aFontRequest.ReferenceAdvancement ) );
+        const double nFontSize(std::max(aFontRequest.CellSize, 0.0));
         if( maLogicalAdvancements.hasElements() )
         {
             return geometry::RealRectangle2D( 0, -nFontSize/2,

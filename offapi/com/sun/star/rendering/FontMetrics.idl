@@ -29,7 +29,7 @@ module com { module sun { module star { module rendering {
     size. That means, the referenceCharWidth and/or
     ascent+descent+internalLeading will approximately (rounded to
     integer device resolution, or exactly, if fractional font
-    rendering is enabled) match the referenceAdvancement/cellSize
+    rendering is enabled) match the cellSize
     members of the FontRequest for which the XCanvasFont was
     queried. Please be aware that the values returned in this
     structure only map one-to-one to device pixel, if the combined

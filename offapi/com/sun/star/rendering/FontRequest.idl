@@ -55,10 +55,6 @@ struct FontRequest
         the character size of the font. If this value is positive,
         it's taken as the cell size of the font.<p>
 
-        This member and the referenceAdvancement member are mutually
-        exclusive, one of them has to be set to 0 (which means don't
-        care).<p>
-
         For distorted fonts, the render transformation must be
         used. That is, the size specified here corresponds to device
         pixel only if the combined render transformation during text
@@ -67,20 +63,6 @@ struct FontRequest
         XTextLayout.<p>
     */
     double                          CellSize;
-
-
-    /** This value specifies the size of the font in the writing
-        direction (i.e. width for horizontal writing, and height for
-        vertical writing).<p>
-
-        It is equivalent to the referenceCharSize of the FontMetrics
-        structure.<p>
-
-        This member and the cellSize member are mutually exclusive,
-        one of them has to be set to 0 (which means don't care). For
-        distorted fonts, the font matrix must be used.<p>
-     */
-    double                          ReferenceAdvancement;
 
 
     /** The locale this font should be able to render.<p>
