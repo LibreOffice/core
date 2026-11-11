@@ -384,10 +384,9 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCachedPrimitive = mpCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
-                                                                                mpCanvas->getViewState(),
-                                                                                aLocalState,
-                                                                                maStrokeAttributes );
+                mpCanvas->getUNOCanvas()->strokePolyPolygon(mxPolyPoly, mpCanvas->getViewState(),
+                                                            aLocalState, maStrokeAttributes);
+                rCachedPrimitive.clear();
                 return true;
             }
 

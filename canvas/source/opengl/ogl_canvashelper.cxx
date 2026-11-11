@@ -453,11 +453,12 @@ namespace oglcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
-                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                                                                   const rendering::ViewState&                          viewState,
-                                                                                   const rendering::RenderState&                        renderState,
-                                                                                   const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
+    void
+    CanvasHelper::strokePolyPolygon(const rendering::XCanvas* /*pCanvas*/,
+                                    const uno::Reference<rendering::XPolyPolygon2D>& xPolyPolygon,
+                                    const rendering::ViewState& viewState,
+                                    const rendering::RenderState& renderState,
+                                    const rendering::StrokeAttributes& /*strokeAttributes*/)
     {
         ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::strokePolyPolygon: polygon is NULL");
@@ -474,9 +475,6 @@ namespace oglcanvas
             // TODO(F3): fallback to drawPolyPolygon currently
             rAct.maFunction = &lcl_drawPolyPolygon;
         }
-
-        // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,

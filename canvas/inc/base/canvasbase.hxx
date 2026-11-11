@@ -199,7 +199,7 @@ public:
         maCanvasHelper.drawPolyPolygon(this, xPolyPolygon, viewState, renderState);
     }
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL strokePolyPolygon(
+    virtual void SAL_CALL strokePolyPolygon(
         const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
         const css::rendering::ViewState& viewState, const css::rendering::RenderState& renderState,
         const css::rendering::StrokeAttributes& strokeAttributes) override
@@ -211,8 +211,8 @@ public:
 
         mbSurfaceDirty = true;
 
-        return maCanvasHelper.strokePolyPolygon(this, xPolyPolygon, viewState, renderState,
-                                                strokeAttributes);
+        maCanvasHelper.strokePolyPolygon(this, xPolyPolygon, viewState, renderState,
+                                         strokeAttributes);
     }
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL

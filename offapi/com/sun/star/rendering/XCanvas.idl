@@ -209,13 +209,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aStrokeAttributes
         Further attributes used to parameterize the stroking.
 
-        @return a handle to the cached rendering output.
-
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    strokePolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
+    void strokePolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Fill the given poly-polygon.<p>
