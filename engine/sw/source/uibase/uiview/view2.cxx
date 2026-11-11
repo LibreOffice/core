@@ -1258,6 +1258,14 @@ void SwView::Execute(SfxRequest &rReq)
         }
         break;
 
+        case SID_NEXT_POSTIT:
+        case SID_PREVIOUS_POSTIT:
+        {
+            const SwFieldType* pFieldType = m_pWrtShell->GetFieldType(0, SwFieldIds::Postit);
+            m_pWrtShell->MoveFieldType(pFieldType, nSlot == SID_NEXT_POSTIT);
+        }
+        break;
+
         case SID_DOCUMENT_COMPARE:
         case SID_DOCUMENT_MERGE:
             {

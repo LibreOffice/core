@@ -235,6 +235,14 @@ interface BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
+    SID_NEXT_POSTIT
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_PREVIOUS_POSTIT
+    [
+        ExecMethod = Execute ;
+    ]
     FN_REDLINE_ACCEPT_TONEXT
     [
         ExecMethod = Execute;

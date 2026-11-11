@@ -1179,6 +1179,12 @@ void SwAnnotationShell::NoteExec(SfxRequest const &rReq)
             if ( pPostItMgr->HasActiveSidebarWin() )
                 pPostItMgr->GetActiveSidebarWin()->ExecuteCommand(nSlot);
             break;
+        case SID_NEXT_POSTIT:
+        case SID_PREVIOUS_POSTIT:
+            if (pPostItMgr->HasActiveSidebarWin())
+                pPostItMgr->GetActiveSidebarWin()->SwitchToPostIt(
+                    nSlot == SID_NEXT_POSTIT ? KEY_PAGEDOWN : KEY_PAGEUP);
+            break;
         case FN_DELETE_ALL_NOTES:
             pPostItMgr->Delete();
             break;

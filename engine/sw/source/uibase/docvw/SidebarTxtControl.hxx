@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <svtools/acceleratorexecute.hxx>
 #include <svx/weldeditview.hxx>
 
 class SwView;
@@ -34,8 +35,10 @@ class SidebarTextControl : public WeldEditView
         SwView& mrDocView;
         SwPostItMgr& mrPostItMgr;
         bool mbMouseDownGainingFocus;
+        std::unique_ptr<svt::AcceleratorExecute> mpAcceleratorExecute;
 
         void MakeVisible();
+        bool IsCommentJump(const vcl::KeyCode& rKeyCode);
 
     protected:
         virtual bool Command(const CommandEvent& rCEvt) override;

@@ -1596,6 +1596,41 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testOpenCommentKey)
                          aView.m_aComment.get_child("id").get_value<sal_uInt32>());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentJumpKeys)
+{
+    // Given a comment by Alice, then one by Bob, after the first paragraph:
+    SwXTextDocument* pXTextDocument = createDoc("a11y-comment.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    auto pressKey = [pXTextDocument](int nKey) {
+        pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, nKey);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, nKey);
+        Scheduler::ProcessEventsToIdle();
+    };
+    auto getAuthor = [pWrtShell]() {
+        auto pPostIt = dynamic_cast<const SwPostItField*>(pWrtShell->GetCurField());
+        return pPostIt ? pPostIt->GetPar1() : OUString();
+    };
+
+    // When pressing Ctrl+Alt+PageDown:
+    pressKey(KEY_PAGEDOWN | KEY_MOD1 | KEY_MOD2);
+
+    // Then the caret goes to the first comment:
+    CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, getAuthor());
+
+    // And when pressing Ctrl+Alt+Shift+PageDown:
+    pressKey(KEY_PAGEDOWN | KEY_MOD1 | KEY_MOD2 | KEY_SHIFT);
+
+    // Then the caret stays:
+    // Without the fix, it went to the next comment, as for Ctrl+Alt+PageDown.
+    CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, getAuthor());
+
+    // And Ctrl+Alt+PageDown and Ctrl+Alt+PageUp go to the next and the previous comment:
+    pressKey(KEY_PAGEDOWN | KEY_MOD1 | KEY_MOD2);
+    CPPUNIT_ASSERT_EQUAL(u"Bob"_ustr, getAuthor());
+    pressKey(KEY_PAGEUP | KEY_MOD1 | KEY_MOD2);
+    CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, getAuthor());
+}
+
 // The comment field of the single comment the document is expected to have.
 const SwPostItField* getOnlyPostItField(SwPostItMgr& rPostItMgr)
 {

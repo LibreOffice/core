@@ -95,6 +95,14 @@ interface _Annotation
         ExecMethod = NoteExec ;
         StateMethod = GetNoteState ;
     ]
+    SID_NEXT_POSTIT
+    [
+        ExecMethod = NoteExec ;
+    ]
+    SID_PREVIOUS_POSTIT
+    [
+        ExecMethod = NoteExec ;
+    ]
     FN_ESCAPE // api:
     [
         ExecMethod = NoteExec ;

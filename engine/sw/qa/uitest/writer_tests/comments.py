@@ -61,6 +61,56 @@ class Comments(UITestCase):
             self.assertTrue("Comment1" not in xMainWindow.getChildren())
 
 
+    def test_comment_jump_keys(self):
+
+        with self.ui_test.create_doc_in_start_center("writer"):
+
+            xMainWindow = self.xUITest.getTopFocusWindow()
+            xwriter_edit = xMainWindow.getChild("writer_edit")
+
+            # Given two comments, with the second one being edited:
+            xwriter_edit.executeAction("TYPE", mkPropertyValues({"TEXT": "Line 1"}))
+            self.xUITest.executeCommand(".uno:InsertAnnotation")
+            xComment1 = self.ui_test.wait_until_child_is_available('Comment1')
+            xEditView1 = xComment1.getChild("editview")
+            xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": "First"}))
+            xComment1.executeAction("LEAVE", mkPropertyValues({}))
+            xwriter_edit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            xwriter_edit.executeAction("TYPE", mkPropertyValues({"TEXT": "Line 2"}))
+            self.xUITest.executeCommand(".uno:InsertAnnotation")
+            xComment2 = self.ui_test.wait_until_child_is_available('Comment2')
+            xEditView2 = xComment2.getChild("editview")
+            xEditView2.executeAction("TYPE", mkPropertyValues({"TEXT": "Second"}))
+            self.ui_test.wait_until_property_is_updated(xComment2, "HasFocus", "true")
+
+            # When pressing Ctrl+Alt+PageUp in it:
+            xEditView2.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+ALT+PAGEUP"}))
+
+            # Then the previous comment is being edited:
+            self.ui_test.wait_until_property_is_updated(xComment1, "HasFocus", "true")
+            self.assertEqual("true", get_state_as_dict(xComment1)["HasFocus"])
+
+            # And when pressing Ctrl+Alt+Shift+PageDown:
+            xEditView1.executeAction("TYPE",
+                                     mkPropertyValues({"KEYCODE": "CTRL+ALT+SHIFT+PAGEDOWN"}))
+
+            # Then that comment is still being edited:
+            # Without the fix, the next comment got the focus, as for Ctrl+Alt+PageDown.
+            self.assertEqual("true", get_state_as_dict(xComment1)["HasFocus"])
+
+            # And Ctrl+Shift+PageUp from its end selects in it:
+            # Without the fix, it went back to the comment's anchor, as for Ctrl+PageUp.
+            xEditView1.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+END"}))
+            xEditView1.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+SHIFT+PAGEUP"}))
+            self.assertEqual("true", get_state_as_dict(xComment1)["HasFocus"])
+            self.assertEqual("First", get_state_as_dict(xComment1)["SelectedText"])
+
+            # And Ctrl+Alt+PageDown goes to the next comment:
+            xEditView1.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+ALT+PAGEDOWN"}))
+            self.ui_test.wait_until_property_is_updated(xComment2, "HasFocus", "true")
+            self.assertEqual("true", get_state_as_dict(xComment2)["HasFocus"])
+
+
     def test_multi_comments(self):
 
         with self.ui_test.create_doc_in_start_center("writer"):

@@ -29,10 +29,12 @@
 #include <cmdid.h>
 #include <strings.hrc>
 
+#include <comphelper/processfactory.hxx>
 #include <o3tl/test_info.hxx>
 #include <unotools/securityoptions.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -321,6 +323,19 @@ void SidebarTextControl::MakeVisible()
     mrPostItMgr.MakeVisible(&mrSidebarWin);
 }
 
+bool SidebarTextControl::IsCommentJump(const vcl::KeyCode& rKeyCode)
+{
+    if (!mpAcceleratorExecute)
+    {
+        mpAcceleratorExecute = svt::AcceleratorExecute::createAcceleratorHelper();
+        mpAcceleratorExecute->init(comphelper::getProcessComponentContext(),
+                                   mrDocView.GetViewFrame().GetFrame().GetFrameInterface());
+    }
+    const OUString aCommand
+        = mpAcceleratorExecute->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode));
+    return aCommand == ".uno:NextAnnotation" || aCommand == ".uno:PreviousAnnotation";
+}
+
 bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 {
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
@@ -336,14 +351,13 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 
     bool bDone = false;
 
-    if ( ( rKeyCode.IsMod1() && rKeyCode.IsMod2() ) &&
-         ( (nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN) ) )
+    if (IsCommentJump(rKeyCode))
     {
-        mrSidebarWin.SwitchToPostIt(nKey);
-        bDone = true;
+        // before the edit view, which may take the key without a move
+        bDone = mrDocView.KeyInput(rKeyEvt);
     }
     else if ( nKey == KEY_ESCAPE ||
-              ( rKeyCode.IsMod1() &&
+              ( rKeyCode.GetModifier() == KEY_MOD1 &&
                 ( nKey == KEY_PAGEUP ||
                   nKey == KEY_PAGEDOWN ) ) )
     {
