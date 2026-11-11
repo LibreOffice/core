@@ -5061,6 +5061,53 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testEmbeddedSpreadsheetEditInPlace)
     CPPUNIT_ASSERT_EQUAL(".uno:ModifiedStatus=true"_ostr, aModified);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testManageChangesListIgnoresOtherViewsCursor)
+{
+    // Given a document with two tracked insertions in separate paragraphs, a first view with its
+    // cursor in the first change and its Manage Changes dialog open, and a second view:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nView1 = KitHelper::getCurrentView();
+    SwTestViewCallback aView1;
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    pWrtShell1->Insert(u"First"_ustr);
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    pWrtShell1->SplitNode();
+    pWrtShell1->Insert(u"Plain"_ustr);
+    pWrtShell1->SplitNode();
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    pWrtShell1->Insert(u"Second"_ustr);
+    Scheduler::ProcessEventsToIdle();
+    const SwRect aSecondArea = pWrtShell1->GetCurrFrame()->getFrameArea();
+    pWrtShell1->StartOfSection();
+    dispatchCommand(mxComponent, u".uno:AcceptTrackedChanges"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    KitHelper::createView();
+    pXTextDocument->initializeForTiledRendering({});
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_aJSDialogs.clear();
+
+    // When the second view clicks into the second change:
+    // A tenth of a centimetre into the line is inside the word.
+    constexpr tools::Long INTO_TEXT = 567 / 10;
+    const Point aInSecond(aSecondArea.Left() + INTO_TEXT, aSecondArea.Center().Y());
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aInSecond.getX(),
+                                   aInSecond.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aInSecond.getX(),
+                                   aInSecond.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the list of the first view keeps its selection, because it follows the cursor of the
+    // first view only.
+    // Without the fix in place, this test would have failed, because the list of the first view
+    // selected the change the second view clicked into.
+    for (const OString& rDialog : aView1.m_aJSDialogs)
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rDialog.getStr(), sal_Int32(-1),
+                                     rDialog.indexOf("writerchanges"));
+    KitHelper::setView(nView1);
+    pWrtShell1->GetView().GetViewFrame().SetChildWindow(FN_REDLINE_ACCEPT, false);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

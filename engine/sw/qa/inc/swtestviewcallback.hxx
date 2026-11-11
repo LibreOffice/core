@@ -77,6 +77,8 @@ public:
     boost::property_tree::ptree m_aA11ySelection;
     int m_nA11ySelectionCallbackCount = 0;
     std::vector<OString> m_aStateChanges;
+    /// The payloads of the dialog and sidebar widget messages sent to this view, in order.
+    std::vector<OString> m_aJSDialogs;
     /// The view ids named by each notice that recording was turned on for all views, in order.
     std::vector<int> m_aRecordingForAllViewsBy;
     TestKitCallbackWrapper m_callbackWrapper;

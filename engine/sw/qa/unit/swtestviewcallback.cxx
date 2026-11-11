@@ -68,6 +68,11 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aStateChanges.push_back(OString(pPayload));
             break;
         }
+        case COKitCallbackType::JSDIALOG:
+        {
+            m_aJSDialogs.push_back(OString(pPayload));
+            break;
+        }
         case COKitCallbackType::TOOLTIP:
         {
             std::stringstream aStream(pPayload);

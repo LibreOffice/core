@@ -23,6 +23,8 @@
 
 #include <redlndlg.hxx>
 #include <swmodalredlineacceptdlg.hxx>
+#include <view.hxx>
+#include <swmodule.hxx>
 
 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(weld::Window *pParent)
     : SfxDialogController(pParent, u"svx/ui/acceptrejectchangesdialog.ui"_ustr,
@@ -31,7 +33,8 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(weld::Window *pParent)
 {
     m_xDialog->set_modal(true);
 
-    m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, m_xBuilder.get(), m_xContentArea.get(), true));
+    m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, SwModule::get()->GetView(), m_xBuilder.get(),
+                                            m_xContentArea.get(), true));
 
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())

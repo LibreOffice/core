@@ -169,7 +169,7 @@ Reference<ui::XUIElement> SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/ManageChangesPanel"))
     {
-        auto xPanel = std::make_unique<SwRedlineAcceptPanel>(pParent);
+        auto xPanel = std::make_unique<SwRedlineAcceptPanel>(pParent, *pBindings);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,

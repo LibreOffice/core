@@ -25,6 +25,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/lstner.hxx>
+#include <svl/undo.hxx>
 #include <svx/ctredlin.hxx>
 #include <o3tl/sorted_vector.hxx>
 
@@ -51,6 +52,8 @@ struct SwRedlineDataParent
 
 class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to > {};
 class SwView;
+class SfxBindings;
+class SfxViewShell;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
 {
@@ -85,6 +88,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
 
     bool m_bInitialSelect = true;
 
+    /// The view whose cursor the selection of the list follows, or -1 when there is none.
+    ViewShellId m_nViewShellId;
+
     DECL_DLLPRIVATE_LINK(SortByComboBoxChangedHdl, SvxTPView*, void);
 
     DECL_DLLPRIVATE_LINK( AcceptHdl,     SvxTPView*, void );
@@ -112,7 +118,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
     SwRedlineAcceptDlg& operator=(SwRedlineAcceptDlg const&) = delete;
 
 public:
-    SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, weld::Builder *pBuilder, weld::Container *pContentArea, bool bAutoFormat = false);
+    SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, const SfxViewShell* pViewShell,
+                       weld::Builder* pBuilder, weld::Container* pContentArea,
+                       bool bAutoFormat = false);
     ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, SvxTPFilter*, void );
@@ -164,7 +172,7 @@ class SwRedlineAcceptPanel final : public PanelLayout, public SfxListener
     std::unique_ptr<SwRedlineAcceptDlg> mpImplDlg;
     std::unique_ptr<weld::Container> mxContentArea;
 public:
-    SwRedlineAcceptPanel(weld::Widget* pParent);
+    SwRedlineAcceptPanel(weld::Widget* pParent, const SfxBindings& rBindings);
     virtual ~SwRedlineAcceptPanel() override;
 
     /// We need to be a SfxListener to be able to update the list of changes when we get SfxHintId::DocChanged.

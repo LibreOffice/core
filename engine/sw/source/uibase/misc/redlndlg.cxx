@@ -21,6 +21,7 @@
 #include <tools/datetime.hxx>
 #include <tools/lineend.hxx>
 #include <svl/eitem.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
@@ -59,6 +60,16 @@
 
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(SwRedlineAcceptChild, FN_REDLINE_ACCEPT)
 
+namespace
+{
+const SfxViewShell* lcl_GetViewShell(const SfxBindings& rBindings)
+{
+    SfxDispatcher* pDispatcher = rBindings.GetDispatcher();
+    SfxViewFrame* pViewFrame = pDispatcher ? pDispatcher->GetFrame() : nullptr;
+    return pViewFrame ? pViewFrame->GetViewShell() : nullptr;
+}
+}
+
 SwRedlineAcceptChild::SwRedlineAcceptChild(vcl::Window* _pParent,
                                            sal_uInt16 nId,
                                            SfxBindings* pBindings,
@@ -77,7 +88,8 @@ SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
     , m_xContentArea(m_xBuilder->weld_container(u"container"_ustr))
     , m_pChildWin(pChild)
 {
-    m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, m_xBuilder.get(), m_xContentArea.get()));
+    m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, lcl_GetViewShell(*_pBindings),
+                                            m_xBuilder.get(), m_xContentArea.get()));
 }
 
 void SwModelessRedlineAcceptDlg::Activate()
@@ -178,8 +190,9 @@ void lcl_reselect(weld::TreeView& rTreeView, const SwRedlineData* pSelectedEntry
 }
 }
 
-SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, weld::Builder *pBuilder,
-                                       weld::Container *pContentArea, bool bAutoFormat)
+SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent,
+                                       const SfxViewShell* pViewShell, weld::Builder* pBuilder,
+                                       weld::Container* pContentArea, bool bAutoFormat)
     : m_xParentDlg(std::move(xParent))
     , m_aSelectTimer("SwRedlineAcceptDlg m_aSelectTimer")
     , m_sInserted(SwResId(STR_REDLINE_INSERTED))
@@ -194,6 +207,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     , m_xTabPagesCTRL(new SvxAcceptChgCtr(pContentArea))
     , m_xPopup(pBuilder->weld_menu(u"writermenu"_ustr))
     , m_xSortMenu(pBuilder->weld_menu(u"writersortmenu"_ustr))
+    , m_nViewShellId(pViewShell ? pViewShell->GetViewShellId() : ViewShellId(-1))
 {
     m_pTPView = m_xTabPagesCTRL->GetViewPage();
 
@@ -580,8 +594,9 @@ void SwRedlineAcceptDlg::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::SwRedlineContentAtPos)
     {
+        // The hint comes from the current view, and the list follows the cursor of its own view.
         SwView* pView = GetActiveView();
-        if (!pView)
+        if (!pView || pView->GetViewShellId() != m_nViewShellId)
             return;
 
         SwWrtShell* pSh = pView->GetWrtShellPtr();
@@ -1641,11 +1656,12 @@ void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
     rExtraData += ")";
 }
 
-SwRedlineAcceptPanel::SwRedlineAcceptPanel(weld::Widget* pParent)
+SwRedlineAcceptPanel::SwRedlineAcceptPanel(weld::Widget* pParent, const SfxBindings& rBindings)
     : PanelLayout(pParent, u"ManageChangesPanel"_ustr, u"modules/swriter/ui/managechangessidebar.ui"_ustr)
     , mxContentArea(m_xBuilder->weld_container(u"content_area"_ustr))
 {
-    mpImplDlg.reset(new SwRedlineAcceptDlg(nullptr, m_xBuilder.get(), mxContentArea.get()));
+    mpImplDlg.reset(new SwRedlineAcceptDlg(nullptr, lcl_GetViewShell(rBindings), m_xBuilder.get(),
+                                           mxContentArea.get()));
 
     mpImplDlg->Init();
 
