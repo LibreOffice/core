@@ -435,9 +435,6 @@ namespace canvastools
             for (auto const& aStrokeAttribute : strokeAttributes.DashArray)
                 aVerifyDashValue( aStrokeAttribute );
 
-            for (auto const& aStrokeAttribute : strokeAttributes.LineArray)
-                aVerifyDashValue( aStrokeAttribute );
-
             if( strokeAttributes.StartCapType < rendering::PathCapType::BUTT ||
                 strokeAttributes.StartCapType > rendering::PathCapType::SQUARE )
             {

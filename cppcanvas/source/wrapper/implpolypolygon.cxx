@@ -42,7 +42,6 @@ namespace cppcanvas::internal
             maStrokeAttributes(1.0,
                                10.0,
                                uno::Sequence< double >(),
-                               uno::Sequence< double >(),
                                rendering::PathCapType::ROUND,
                                rendering::PathCapType::ROUND,
                                rendering::PathJoinType::ROUND ),

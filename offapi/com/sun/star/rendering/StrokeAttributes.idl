@@ -69,25 +69,6 @@ struct StrokeAttributes
     sequence<double>    DashArray;
 
 
-    /** Array of line widths and spacings for multiple-line
-        strokes.<p>
-
-        The entries here are relative to the
-        StrokeAttributes::StrokeWidth attribute
-        above, i.e. the total width of all lines and spacings will
-        always equal
-        StrokeAttributes::StrokeWidth. The first
-        element specifies the width of the rightmost line, when
-        traveling from the start point of the path to the end
-        point. The second element specifies the space between the
-        first line and the second line, and so forth. If the array
-        ends with a spacing, this spacing is included in the total
-        width of the multiple-line stroke. That is, the stroke becomes
-        asymmetric.<p>
-     */
-    sequence<double>    LineArray;
-
-
     /** The start shape of the stroke.<p>
 
         The start point is the first point of every polygon of the

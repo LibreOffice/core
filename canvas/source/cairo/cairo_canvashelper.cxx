@@ -909,8 +909,6 @@ void CanvasHelper::strokePolyPolygon(const rendering::XCanvas*,
             cairo_set_dash(mpCairo.get(), aDashArray.data(), aDashArray.size(), 0);
         }
 
-        // TODO(rodo) use LineArray of strokeAttributes
-
         doPolyPolygonPath(xPolyPolygon, Operation::Stroke, bNoLineJoin);
 
         cairo_restore(mpCairo.get());
