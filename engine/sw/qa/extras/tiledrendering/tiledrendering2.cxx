@@ -1632,6 +1632,37 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentJumpKeys)
     CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, getAuthor());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackedChangeJumpKeys)
+{
+    // Given "Keep fresh and lazy then warm end." after the first paragraph, with three changes:
+    SwXTextDocument* pXTextDocument = createDoc("a11y-tracked-changes.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    auto pressKey = [pXTextDocument](int nKey) {
+        pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, nKey);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, nKey);
+        Scheduler::ProcessEventsToIdle();
+    };
+    // the selected range of the paragraph, as "start-end"
+    auto getSelection = [pWrtShell]() -> OUString {
+        const SwPaM* pCursor = pWrtShell->GetCursor();
+        return OUString::number(pCursor->Start()->GetContentIndex()) + "-"
+               + OUString::number(pCursor->End()->GetContentIndex());
+    };
+
+    // When pressing Ctrl+Alt+Shift+PageDown:
+    pressKey(KEY_PAGEDOWN | KEY_MOD1 | KEY_MOD2 | KEY_SHIFT);
+
+    // Then the first change, the insertion of "fresh", is selected:
+    // Without the fix, the key had no binding.
+    CPPUNIT_ASSERT_EQUAL(u"5-10"_ustr, getSelection());
+
+    // And Ctrl+Alt+Shift+PageDown and Ctrl+Alt+Shift+PageUp go to the next and the previous change:
+    pressKey(KEY_PAGEDOWN | KEY_MOD1 | KEY_MOD2 | KEY_SHIFT);
+    CPPUNIT_ASSERT_EQUAL(u"15-20"_ustr, getSelection());
+    pressKey(KEY_PAGEUP | KEY_MOD1 | KEY_MOD2 | KEY_SHIFT);
+    CPPUNIT_ASSERT_EQUAL(u"5-10"_ustr, getSelection());
+}
+
 // The comment field of the single comment the document is expected to have.
 const SwPostItField* getOnlyPostItField(SwPostItMgr& rPostItMgr)
 {

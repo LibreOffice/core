@@ -1288,8 +1288,9 @@ void CallbackFlushHandler::invoke()
                 const auto stateIt = m_lastStateChange.find(key);
                 if (stateIt != m_lastStateChange.end())
                 {
-                    // If the value didn't change, it's safe to ignore.
-                    if (stateIt->second == value)
+                    // If the value didn't change, it's safe to ignore; but this one reports a
+                    // move to a tracked change, also to the same one again.
+                    if (stateIt->second == value && key != ".uno:CurrentTrackedChangeId")
                     {
                         SAL_INFO("kit", "Skipping new state duplicate: [" << type << "]: [" << payload << "].");
                         continue;

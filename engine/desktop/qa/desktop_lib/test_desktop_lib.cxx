@@ -288,6 +288,7 @@ public:
     void testContextMenuCalc();
     void testContextMenuWriter();
     void testNotificationCompression();
+    void testTrackedChangeMoveNotification();
     void testPaintedAreaOutlivesTheLastView();
     void testVectorDeltaPushCoalescing();
     void testWriterVectorDeltaPush();
@@ -428,6 +429,7 @@ public:
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
     CPPUNIT_TEST(testNotificationCompression);
+    CPPUNIT_TEST(testTrackedChangeMoveNotification);
     CPPUNIT_TEST(testPaintedAreaOutlivesTheLastView);
     CPPUNIT_TEST(testVectorDeltaPushCoalescing);
     CPPUNIT_TEST(testWriterVectorDeltaPush);
@@ -2613,6 +2615,32 @@ void DesktopKitTest::testNotificationCompression()
 
     CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:AssignLayout=1"), std::get<1>(notifs[i++]));
+}
+
+void DesktopKitTest::testTrackedChangeMoveNotification()
+{
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    std::vector<std::tuple<int, std::string>> notifs;
+    std::unique_ptr<CallbackFlushHandler> handler(
+        new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+    handler->setViewId(KitHelper::getCurrentView());
+
+    // When a move reaches the same tracked change twice, and a state is set to the same value
+    // twice, each in a flush of its own:
+    for (const OString& rPayload : { ".uno:CurrentTrackedChangeId=1"_ostr, ".uno:Bold=true"_ostr })
+    {
+        handler->queue(COKitCallbackType::STATE_CHANGED, rPayload);
+        Scheduler::ProcessEventsToIdle();
+        handler->queue(COKitCallbackType::STATE_CHANGED, rPayload);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Then both moves are reported, and the state once:
+    // Without the fix, the second move was dropped as a state with the same value.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), notifs.size());
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:CurrentTrackedChangeId=1"), std::get<1>(notifs[0]));
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:CurrentTrackedChangeId=1"), std::get<1>(notifs[1]));
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold=true"), std::get<1>(notifs[2]));
 }
 
 void DesktopKitTest::testPaintedAreaOutlivesTheLastView()

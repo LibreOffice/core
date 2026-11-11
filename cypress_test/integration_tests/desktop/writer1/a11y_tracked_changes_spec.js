@@ -130,6 +130,39 @@ describe(['tagdesktop'], 'Tracked changes for the reader', { testIsolation: fals
 		});
 	});
 
+	it('a move to the next or the previous change announces the change reached', function () {
+		helper.typeIntoDocument('{ctrl}{home}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		const expectStatus = function (pattern) {
+			cy.cGet('#a11y-jump-status').should(function ($status) {
+				expect($status.text(), 'the status message').to.match(pattern);
+			});
+		};
+		helper.typeIntoDocument('{ctrl}{alt}{shift}{pagedown}');
+		expectStatus(/^Insertion, Ann, .*2026.*: fresh$/);
+		helper.typeIntoDocument('{ctrl}{alt}{shift}{pagedown}');
+		expectStatus(/^Deletion, Ben, .*2026.*: lazy $/);
+		helper.typeIntoDocument('{ctrl}{alt}{shift}{pageup}');
+		expectStatus(/^Insertion, Ann, .*2026.*: fresh$/);
+
+		// the same change reached again
+		cy.then(function () {
+			win.document.getElementById('a11y-jump-status').textContent = '';
+		});
+		helper.typeIntoDocument('{home}');
+		helper.typeIntoDocument('{ctrl}{alt}{shift}{pagedown}');
+		expectStatus(/^Insertion, Ann, .*2026.*: fresh$/);
+
+		// a change in the next paragraph
+		helper.typeIntoDocument('{ctrl}{alt}{shift}{pagedown}');
+		helper.typeIntoDocument('{ctrl}{alt}{shift}{pagedown}');
+		expectStatus(/^Formatting changed, Ann, .*2026.*: warm$/);
+		helper.typeIntoDocument('{ctrl}{alt}{shift}{pagedown}');
+		expectStatus(/^Insertion, Ben, .*2026.*: Another verse$/);
+	});
+
 	it('an empty paragraph reached by Down keeps a line for the caret', function () {
 		helper.typeIntoDocument('{ctrl}{home}');
 		helper.typeIntoDocument('{downarrow}{downarrow}');

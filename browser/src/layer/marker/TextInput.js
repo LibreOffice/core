@@ -528,12 +528,16 @@ window.L.TextInput = window.L.Layer.extend({
 		return element;
 	},
 
+	_getChangeType: function(change) {
+		return change.type === 'insertion' ? _('Insertion')
+			: change.type === 'deletion' ? _('Deletion') : _('Formatting changed');
+	},
+
 	// the type, the author and the time of a change, as a reader reads them on demand
 	_getChangeDetails: function(change) {
 		if (!change.author && !change.dateTime)
 			return '';
-		const parts = [change.type === 'insertion' ? _('Insertion')
-			: change.type === 'deletion' ? _('Deletion') : _('Formatting changed')];
+		const parts = [this._getChangeType(change)];
 		if (change.author)
 			parts.push(change.author);
 		// with no zone, read as a local time

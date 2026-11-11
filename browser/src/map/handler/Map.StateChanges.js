@@ -67,6 +67,8 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 			const annotations = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
 			if (annotations) annotations.selectById(redlineId);
 			else console.error('_onStateChanged: section "CommentList" missing');
+			// sent on a move to the next or the previous change
+			this._map.fire('trackedchangereached');
 		}
 
 		// the form controls are objects in design mode and controls out of it, so a switch of the

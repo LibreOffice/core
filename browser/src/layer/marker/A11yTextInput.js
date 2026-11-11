@@ -59,7 +59,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._updateA11yEditableStateBound = this._updateA11yEditableState.bind(this);
 		this._onStrayKeyDownBound = this._onStrayKeyDown.bind(this);
 		// for a jump that moved nothing
-		this._endCommentJumpBound = () => { this._commentJump = false; };
+		this._endCommentJumpBound = () => {
+			this._commentJump = false;
+			this._changeJump = false;
+		};
 	},
 
 	onAdd: function() {
@@ -69,6 +72,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._map.on('doclayerinit', this._bindCanvasFocusGuard, this);
 		this._map.on('doclayerinit', this._updateA11yEditableState, this);
 		this._map.on('updateparts', this._onA11yPartChanged, this);
+		this._map.on('trackedchangereached', this._onTrackedChangeReached, this);
 		app.events.on('updatepermission', this._updateA11yEditableStateBound);
 		document.addEventListener('keydown', this._onStrayKeyDownBound, true);
 		for (const type of ['pointerdown', 'keydown', 'wheel'])
@@ -81,6 +85,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._map.off('doclayerinit', this._bindCanvasFocusGuard, this);
 		this._map.off('doclayerinit', this._updateA11yEditableState, this);
 		this._map.off('updateparts', this._onA11yPartChanged, this);
+		this._map.off('trackedchangereached', this._onTrackedChangeReached, this);
 		app.events.off('updatepermission', this._updateA11yEditableStateBound);
 		document.removeEventListener('keydown', this._onStrayKeyDownBound, true);
 		for (const type of ['pointerdown', 'keydown', 'wheel'])
@@ -323,16 +328,50 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		const comments = (this._focusedComments || []).filter((c) => parseInt(c.end) - 1 === pos);
 		// a range continuing past this paragraph ends here too, without its anchor here
 		const comment = comments.find((c) => parseInt(c.start) === pos) || comments[0];
-		if (!comment || !this._commentStatus)
+		if (!comment)
+			return;
+		// functions, as the text may hold "$&" and the like
+		this._announceJump(_('Comment by {0}: {1}').replace('{0}', () => comment.author)
+			.replace('{1}', () => comment.text));
+	},
+
+	// No speech identifies the change Next or Previous Tracked Change selected, so a status
+	// message gives it. The selection may come before the state the move sends, or after it.
+	_onTrackedChangeReached: function() {
+		this._changeJump = true;
+		this._announceChangeReached(/*onSelection=*/false);
+	},
+
+	// onSelection: on a selection update, the last chance for this move
+	_announceChangeReached: function(onSelection) {
+		// the paragraph refill to come carries the selection; with the focus elsewhere, such as in
+		// a menu, the selection here is the one before the move
+		if (!this._changeJump || this._pendingFocusedParagraph || !this.hasFocus())
+			return;
+		const start = Math.min(this._lastSelectionStart, this._lastSelectionEnd);
+		const end = Math.max(this._lastSelectionStart, this._lastSelectionEnd);
+		const change = this._hasSelection && start < end ? (this._focusedChanges || []).find(
+			(c) => parseInt(c.start) <= start && start < parseInt(c.end)) : undefined;
+		if (!change && !onSelection)
+			return;
+		this._changeJump = false;
+		if (!change)
+			return;
+		const details = this._getChangeDetails(change) || this._getChangeType(change);
+		const text = this.getPlainTextContent().slice(start, end);
+		// TRANSLATORS: {0} is the type, the author and the time of a tracked change, {1} its text
+		this._announceJump(_('{0}: {1}').replace('{0}', () => details).replace('{1}', () => text));
+	},
+
+	_announceJump: function(message) {
+		if (!this._commentStatus)
 			return;
 		const status = this._commentStatus;
 		// a live region is announced on a change, so empty it for a repeated message
 		status.textContent = '';
 		clearTimeout(this._commentStatusTimer);
 		this._commentStatusTimer = setTimeout(() => {
-			// functions, as the text may hold "$&" and the like
-			status.textContent = _('Comment by {0}: {1}').replace('{0}', () => comment.author)
-				.replace('{1}', () => comment.text);
+			status.textContent = message;
 			// kept out of a later reading of the page
 			this._commentStatusTimer = setTimeout(() => { status.textContent = ''; }, 5000);
 		}, 100);
@@ -359,6 +398,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			}
 		}
 		this._setSelectionFlag(hasSelection);
+		this._announceChangeReached(/*onSelection=*/true);
 	},
 
 	_setSelectionFlag: function(flag) {
@@ -406,6 +446,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	_fillFocusedParagraph: function(content, pos, start, end, elements, kept) {
 		this._focusedComments = Array.isArray(elements.comments) ? elements.comments : [];
+		this._focusedChanges = Array.isArray(elements.changes) ? elements.changes : [];
 		this._focusedControls = Array.isArray(elements.contentControls)
 			? elements.contentControls : [];
 		if (content !== this.getPlainTextContent())
