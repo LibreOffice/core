@@ -18,6 +18,7 @@
 #include <drawinglayer/processor2d/VectorResourceCache.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
+#include <sal/types.h>
 #include <svl/lstner.hxx>
 #include <svx/VectorPart.hxx>
 #include <tools/gen.hxx>
@@ -69,7 +70,7 @@ struct CellPrimitiveLayers;
     newest version of its parts. Versions count up from zero per sheet in the document epoch. A
     change that leaves the JSON as it was keeps the version, so a client gets only changed parts.
  */
-class VectorContent final : public SfxListener
+class SAL_DLLPUBLIC_RTTI VectorContent final : public SfxListener
 {
 public:
     /// The number of rows in a block of cells.
