@@ -2524,7 +2524,8 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         return false;
     }
-    OUStringBuffer sBuff(64);
+    // Assigned whole on the number paths; the date and time paths reserve room themselves.
+    OUStringBuffer sBuff(0);
     if (eType & SvNumFormatType::TEXT)
     {
         ImpGetOutputStandard(fNumber, sBuff, rNatNum, rCurrentLang);
@@ -3129,6 +3130,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
                                       OUStringBuffer& sBuff) const
 {
     using namespace ::com::sun::star::i18n;
+    sBuff.ensureCapacity(16);
     bool bCalendarSet = false;
     const double fNumberOrig = fNumber;
     bool bRes = false;
@@ -3766,6 +3768,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
         sBuff = ImpSvNumberformatScan::sErrStr;
         return false;
     }
+    sBuff.ensureCapacity(16);
     rCal.setLocalDateTime( fNumber );
     int nUseMonthCase = 0; // Not decided yet
     OUString aOrgCalendar; // empty => not changed yet
@@ -4039,6 +4042,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         sBuff = ImpSvNumberformatScan::sErrStr;
         return false;
     }
+    sBuff.ensureCapacity(16);
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     bool bInputLine;
