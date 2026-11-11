@@ -277,6 +277,8 @@ abstract class AnimatedContentRenderer2d extends AnimatedContentRenderer {
 // shader source.
 abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 	private _program: WebGLProgram | null = null;
+	// True once the browser refused to upload a picture of the content.
+	private isRefused = false;
 
 	protected abstract getDrawable(): TexImageSource | null;
 
@@ -441,25 +443,12 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 		);
 	}
 
-	private updateTexture(texture: WebGLTexture, drawable: TexImageSource) {
-		const gl = this._context.getGl();
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(
-			gl.TEXTURE_2D,
-			0,
-			gl.RGBA,
-			gl.RGBA,
-			gl.UNSIGNED_BYTE,
-			drawable,
-		);
-	}
-
 	// The shape's state gives the frame its opacity and transform. The context has no stencil
 	// buffer, so a clip leaves the frame whole.
 	public render(look?: AnimatedContentLook) {
 		if (this.isDisposed()) return;
 		if (!this.info) return;
-		if (look?.state.hidden) return;
+		if (look?.state.hidden || this.isRefused) return;
 
 		if (!this._program) {
 			app.console.log('AnimatedContentRenderer: program is not valid');
@@ -475,7 +464,10 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 
 		gl.bindVertexArray(this.info.getVao());
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		this.updateTexture(this.info.getTexture(), drawable);
+		gl.bindTexture(gl.TEXTURE_2D, this.info.getTexture());
+		this.isRefused = !RenderContextGl.uploadPicture(gl, drawable);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+		if (this.isRefused) return;
 
 		const alpha = look?.state.alpha ?? 1;
 		gl.uniform1f(gl.getUniformLocation(this._program, 'u_alpha'), alpha);
@@ -489,7 +481,6 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
 	}
 
 	// The slide unit transform of the state as a clip space matrix in GLSL column order. Clip

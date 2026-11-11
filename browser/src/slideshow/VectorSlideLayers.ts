@@ -499,11 +499,9 @@ class VectorSlideLayers {
 			const objectId = data.order[position];
 			const frame = videos.get(objectId);
 			if (!frame) continue;
-			this._drawQuad(
-				this.quads.frameTexture(objectId, frame.source),
-				this.quads.frameRectangle(frame),
-				state,
-			);
+			const texture = this.quads.frameTexture(objectId, frame.source);
+			if (texture)
+				this._drawQuad(texture, this.quads.frameRectangle(frame), state);
 		}
 	}
 

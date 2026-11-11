@@ -53,7 +53,7 @@ class SlidePartsGl {
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
 	}
 
-	/// Draw the slide into the frame quads has begun. A video without a frame yet leaves the
+	/// Draw the slide into the frame quads has begun. A video with no frame to draw leaves the
 	/// still below it showing.
 	public draw(quads: SlideQuadsGl): void {
 		const whole = [0, 0, quads.frameWidth, quads.frameHeight];
@@ -64,10 +64,8 @@ class SlidePartsGl {
 			}
 			const frame = part.video.currentFrame();
 			if (!frame) return;
-			quads.drawQuad(
-				quads.frameTexture(index, frame.source),
-				quads.frameRectangle(frame),
-			);
+			const texture = quads.frameTexture(index, frame.source);
+			if (texture) quads.drawQuad(texture, quads.frameRectangle(frame));
 		});
 	}
 

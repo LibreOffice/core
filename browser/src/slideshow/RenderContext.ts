@@ -173,6 +173,30 @@ class RenderContextGl extends RenderContext {
 		gl.deleteTexture(texture);
 	}
 
+	/// Upload the picture of source into the texture bound in gl. Returns false when the browser
+	/// refuses to hand the picture over.
+	public static uploadPicture(
+		gl: WebGL2RenderingContext,
+		source: TexImageSource,
+	): boolean {
+		try {
+			gl.texImage2D(
+				gl.TEXTURE_2D,
+				0,
+				gl.RGBA,
+				gl.RGBA,
+				gl.UNSIGNED_BYTE,
+				source,
+			);
+		} catch (error) {
+			// WebKit treats a WebM video as cross-origin even when its CORS check passed, and
+			// throws SecurityError for each of its frames.
+			app.console.warn('slideshow: picture refused: ' + error);
+			return false;
+		}
+		return true;
+	}
+
 	public deleteVertexArray(vao: WebGLVertexArrayObject): void {
 		if (this.isDisposed()) return;
 

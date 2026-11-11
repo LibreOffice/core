@@ -42,6 +42,8 @@ class SlideQuadsGl {
 	private targetsComplete: boolean | null = null;
 	// The texture of the current frame of each video, by a key its owner gives.
 	private frameTextures = new Map<number, WebGLTexture | null>();
+	// Sources whose pictures the browser refused to upload.
+	private refusedSources = new WeakSet<TexImageSource>();
 
 	constructor(context: RenderContextGl) {
 		this.context = context;
@@ -182,11 +184,13 @@ class SlideQuadsGl {
 		return [x, y, width, height];
 	}
 
-	/// The texture of key with the picture of source uploaded into it.
+	/// The texture of key with the picture of source uploaded into it, or null when the browser
+	/// refuses to hand over the pictures of source.
 	public frameTexture(
 		key: number,
 		source: TexImageSource,
 	): WebGLTexture | null {
+		if (this.refusedSources.has(source)) return null;
 		const gl = this.context.getGl();
 		let texture = this.frameTextures.get(key);
 		if (!texture) {
@@ -199,7 +203,10 @@ class SlideQuadsGl {
 			this.frameTextures.set(key, texture);
 		}
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+		if (!RenderContextGl.uploadPicture(gl, source)) {
+			this.refusedSources.add(source);
+			return null;
+		}
 		return texture;
 	}
 
