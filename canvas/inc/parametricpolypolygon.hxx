@@ -94,7 +94,6 @@ namespace canvas
         virtual void disposing(std::unique_lock<std::mutex>&) override;
 
         // XParametricPolyPolygon2D
-        virtual css::uno::Sequence< double > SAL_CALL getColor( double t ) override;
         virtual css::uno::Sequence< double > SAL_CALL getPointColor( const css::geometry::RealPoint2D& point ) override;
         virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace() override;
 
