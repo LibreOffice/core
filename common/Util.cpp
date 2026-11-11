@@ -788,7 +788,19 @@ std::ostream& operator<<(std::ostream& os, const Poco::Net::HTTPRequest& request
     os << request.getMethod() << ' ' << request.getVersion() << ' ' << request.getURI()
        << ", content-length: " << request.getContentLength64()
        << ", chunked: " << request.getChunkedTransferEncoding() << ", ";
-    Util::joinPair(os, request, " / ");
+
+    // The headers are written one after another, two of them with a placeholder for the value.
+    const char* delimiter = "";
+    for (const auto& header : request)
+    {
+        os << delimiter << header.first << ": ";
+        if (Util::iequal(header.first, "Authorization") ||
+            Util::iequal(header.first, "Proxy-Authorization"))
+            os << "<hidden>";
+        else
+            os << header.second;
+        delimiter = " / ";
+    }
     return os;
 }
 

@@ -40,6 +40,7 @@
 #include <test/testlog.hpp>
 
 #include <Poco/File.h>
+#include <Poco/Net/HTTPRequest.h>
 #include <Poco/Path.h>
 
 #include <cppunit/TestAssert.h>
@@ -95,6 +96,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testStateEnum);
     CPPUNIT_TEST(testFindInVector);
     CPPUNIT_TEST(testJoinPair);
+    CPPUNIT_TEST(testLoggedRequestHeaders);
     CPPUNIT_TEST(testThreadPool);
     CPPUNIT_TEST(testLogCaptureCaller);
     CPPUNIT_TEST(testIsIso8601);
@@ -142,6 +144,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testStateEnum();
     void testFindInVector();
     void testJoinPair();
+    void testLoggedRequestHeaders();
     void testThreadPool();
     void testLogCaptureCaller();
     void testIsIso8601();
@@ -1591,6 +1594,26 @@ void WhiteBoxTests::testFindInVector()
     ret = Util::findInVector(v, "blah");
     expected = std::string::npos;
     LOK_ASSERT_EQUAL(expected, ret);
+}
+
+void WhiteBoxTests::testLoggedRequestHeaders()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A logged request shows its headers, two of them with a placeholder for the value.
+    Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_POST, "/cool/convert-to",
+                                   Poco::Net::HTTPMessage::HTTP_1_1);
+    request.set("Authorization", "Bearer one-two");
+    request.set("Proxy-Authorization", "Basic three-four");
+    request.set("Accept", "application/json");
+
+    std::ostringstream stream;
+    stream << request;
+    const std::string logged = stream.str();
+    LOK_ASSERT(logged.find("one-two") == std::string::npos);
+    LOK_ASSERT(logged.find("three-four") == std::string::npos);
+    LOK_ASSERT(logged.find("Authorization: <hidden>") != std::string::npos);
+    LOK_ASSERT(logged.find("Accept: application/json") != std::string::npos);
 }
 
 void WhiteBoxTests::testJoinPair()
