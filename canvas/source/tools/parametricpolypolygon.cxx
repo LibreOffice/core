@@ -120,21 +120,6 @@ uno::Reference<rendering::XColorSpace> SAL_CALL ParametricPolyPolygon::getColorS
                          : uno::Reference<rendering::XColorSpace>();
 }
 
-OUString SAL_CALL ParametricPolyPolygon::getImplementationName()
-{
-    return u"Canvas::ParametricPolyPolygon"_ustr;
-}
-
-sal_Bool SAL_CALL ParametricPolyPolygon::supportsService(const OUString& ServiceName)
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
-uno::Sequence<OUString> SAL_CALL ParametricPolyPolygon::getSupportedServiceNames()
-{
-    return { u"com.sun.star.rendering.ParametricPolyPolygon"_ustr };
-}
-
 ParametricPolyPolygon::~ParametricPolyPolygon() {}
 
 ParametricPolyPolygon::ParametricPolyPolygon(uno::Reference<rendering::XGraphicDevice> xDevice,

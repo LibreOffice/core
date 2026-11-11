@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
 #include <comphelper/compbase.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -37,11 +36,8 @@ class XGraphicDevice;
 
 namespace canvas
 {
-typedef comphelper::WeakComponentImplHelper<css::rendering::XParametricPolyPolygon2D,
-                                            css::lang::XServiceInfo>
-    ParametricPolyPolygon_Base;
-
-class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon final : public ParametricPolyPolygon_Base
+class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon final
+    : public comphelper::WeakComponentImplHelper<css::rendering::XParametricPolyPolygon2D>
 {
 public:
     enum class GradientType
@@ -155,11 +151,6 @@ public:
 
     // XParametricPolyPolygon2D
     virtual css::uno::Reference<css::rendering::XColorSpace> SAL_CALL getColorSpace() override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /// Query all defining values of this object atomically
     const Values& getValues() const;
