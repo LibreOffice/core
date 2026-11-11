@@ -2861,6 +2861,51 @@ const SwRangeRedline* SwCursorShell::GotoRedline( SwRedlineTable::size_type nArr
     return pFnd;
 }
 
+const SwRangeRedline* SwCursorShell::GetRedlineAtChangeBar(const Point& rDocPos,
+                                                           SwRedlineTable::size_type& rPos) const
+{
+    // About 7 pixels at 100% zoom, and less than the gap between the bar and the text.
+    constexpr SwTwips CHANGE_BAR_HIT_TOLERANCE = 100;
+
+    const IDocumentRedlineAccess& rIDRA = GetDoc()->getIDocumentRedlineAccess();
+    const SwRedlineTable& rTable = rIDRA.GetRedlineTable();
+    if (rTable.empty())
+        return nullptr;
+
+    SwPosition aPos(GetDoc()->GetNodes());
+    Point aPoint(rDocPos);
+    if (!GetLayout()->GetModelPositionForViewPoint(&aPos, aPoint))
+        return nullptr;
+
+    const SwTextNode* pTextNode = aPos.GetNode().GetTextNode();
+    if (!pTextNode)
+        return nullptr;
+
+    std::pair<Point, bool> const aViewPosition(rDocPos, false);
+    const SwTextFrame* pFrame = static_cast<const SwTextFrame*>(
+        pTextNode->getLayoutFrame(GetLayout(), &aPos, &aViewPosition));
+    SwPosition aLineStart(aPos);
+    SwPosition aLineEnd(aPos);
+    if (!pFrame
+        || !pFrame->GetChangeBarLine(rDocPos, CHANGE_BAR_HIT_TOLERANCE, aLineStart, aLineEnd))
+        return nullptr;
+
+    SwRedlineTable::size_type n = rIDRA.GetRedlinePos(aLineStart.GetNode(), RedlineType::Any);
+    for (; n < rTable.size(); ++n)
+    {
+        auto [pStart, pEnd] = rTable[n]->StartEnd();
+        if (*pStart > aLineEnd)
+            break;
+        // A change that ends where the line starts belongs to the line above.
+        if (*pEnd > aLineStart || *pStart == aLineStart)
+        {
+            rPos = n;
+            return rTable[n];
+        }
+    }
+    return nullptr;
+}
+
 bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
 {
     SwNodes& rNds = GetDoc()->GetNodes();

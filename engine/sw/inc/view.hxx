@@ -681,6 +681,10 @@ public:
 
     void ExecuteScan( SfxRequest& rReq );
 
+    /// Selects the tracked change at the cursor in the Manage Changes dialog, opening the dialog
+    /// when it is not open.
+    void ShowRedlineInManageChanges();
+
     SwPostItMgr* GetPostItMgr() { return m_pPostItMgr.get();}
     const SwPostItMgr* GetPostItMgr() const { return m_pPostItMgr.get();}
 

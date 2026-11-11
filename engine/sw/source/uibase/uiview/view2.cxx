@@ -2627,6 +2627,15 @@ void SwView::InsFrameMode(sal_uInt16 nCols)
         GetEditWin().InsFrame(nCols);
 }
 
+void SwView::ShowRedlineInManageChanges()
+{
+    // A newly created dialog selects the change at the cursor by itself. The hint makes an
+    // already open dialog follow the cursor.
+    GetViewFrame().ShowChildWindow(FN_REDLINE_ACCEPT);
+    if (SwDocShell* pDocShell = GetDocShell())
+        pDocShell->Broadcast(SfxHint(SfxHintId::SwRedlineContentAtPos));
+}
+
 /// show "edit link" dialog
 void SwView::EditLinkDlg()
 {

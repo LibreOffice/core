@@ -448,6 +448,12 @@ public:
             { return GetModelPositionForViewPoint_( pPos, rPoint, false ); }
 
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
+    /**
+     * Finds the line whose change bar is at rPoint, within nTolerance horizontally.
+     * On success rStart and rEnd are the model positions where that line starts and ends.
+     */
+    bool GetChangeBarLine(const Point& rPoint, SwTwips nTolerance, SwPosition& rStart,
+                          SwPosition& rEnd) const;
     SwRect GetPaintSwRect();
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL ) const override;
     virtual void CreatePrimitives( sw::vector::Collector& rCollector ) const override;

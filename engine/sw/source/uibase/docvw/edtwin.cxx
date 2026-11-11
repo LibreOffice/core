@@ -610,6 +610,12 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                     }
                 }
             }
+            else if (!nModifier)
+            {
+                SwRedlineTable::size_type nRedline;
+                if (rSh.GetRedlineAtChangeBar(rLPt, nRedline))
+                    eStyle = PointerStyle::RefHand;
+            }
         }
 
         // which kind of text pointer have we to show - horz / vert - ?
@@ -3194,6 +3200,19 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     SwTab nMouseTabCol = SwTab::COL_NONE;
     const bool bTmp = !rSh.IsDrawCreate() && !m_pApplyTempl && !rSh.IsInSelect()
                       && aMEvt.GetClicks() == 1 && MOUSE_LEFT == aMEvt.GetButtons();
+
+    // A click on a change bar selects its tracked change and shows it in Manage Changes.
+    if (bTmp && !aMEvt.GetModifier() && !rSh.IsSelFrameMode())
+    {
+        SwRedlineTable::size_type nRedline;
+        if (rSh.GetRedlineAtChangeBar(aDocPos, nRedline))
+        {
+            rSh.EnterStdMode();
+            if (rSh.GotoRedline(nRedline, true))
+                m_rView.ShowRedlineInManageChanges();
+            return;
+        }
+    }
 
     if (  bTmp &&
          SwTab::COL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&

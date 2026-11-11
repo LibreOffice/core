@@ -6509,6 +6509,42 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUpDownKeepsColumnOverSave)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pWrtShell->GetCursor()->GetPoint()->GetContentIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testChangeBarClickShowsManageChanges)
+{
+    // Given a document with a plain paragraph, then a paragraph that is a tracked insertion, and
+    // the cursor in the plain paragraph:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"Plain"_ustr);
+    pWrtShell->SplitNode();
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    pWrtShell->Insert(u"Inserted"_ustr);
+    Scheduler::ProcessEventsToIdle();
+    // The change bar is in the left margin, a quarter of a centimetre from the paragraph.
+    constexpr tools::Long CHANGE_BAR_DISTANCE = 567 / 4;
+    const SwRect aInsertedArea = pWrtShell->GetCurrFrame()->getFrameArea();
+    const Point aChangeBar(aInsertedArea.Left() - CHANGE_BAR_DISTANCE, aInsertedArea.Center().Y());
+    pWrtShell->StartOfSection();
+
+    // When clicking the change bar:
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aChangeBar.getX(),
+                                   aChangeBar.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aChangeBar.getX(),
+                                   aChangeBar.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the tracked change is selected.
+    // Without the fix in place, this test would have failed with:
+    // - Expected: Inserted
+    // - Actual  :
+    // because the click only moved the cursor to the start of the line.
+    CPPUNIT_ASSERT_EQUAL(u"Inserted"_ustr, pWrtShell->GetSelText());
+    // And the Manage Changes dialog is open.
+    SfxViewFrame& rViewFrame = pWrtShell->GetView().GetViewFrame();
+    CPPUNIT_ASSERT(rViewFrame.GetChildWindow(FN_REDLINE_ACCEPT));
+    rViewFrame.SetChildWindow(FN_REDLINE_ACCEPT, false);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

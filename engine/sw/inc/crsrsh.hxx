@@ -898,6 +898,12 @@ public:
     const SwRangeRedline* SelNextRedline();
     const SwRangeRedline* SelPrevRedline();
     SW_DLLPUBLIC const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect );
+    /**
+     * The first tracked change on the line whose change bar is at rDocPos, or nullptr when
+     * there is no change bar there. rPos is its index in the redline table.
+     */
+    const SwRangeRedline* GetRedlineAtChangeBar(const Point& rDocPos,
+                                                SwRedlineTable::size_type& rPos) const;
 
     bool GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote);
 

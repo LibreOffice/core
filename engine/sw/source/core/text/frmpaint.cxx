@@ -66,6 +66,37 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+/// The X position of the change bar of rFrame, for a mark position eHor other than NONE.
+SwTwips lcl_GetChangeBarX(const SwTextFrame& rFrame, sal_Int16 eHor,
+                          std::optional<bool> oIsRightPage)
+{
+    if (text::HoriOrientation::INSIDE == eHor || text::HoriOrientation::OUTSIDE == eHor)
+    {
+        if (!oIsRightPage.has_value())
+            oIsRightPage = rFrame.FindPageFrame()->OnRightPage();
+        if (*oIsRightPage)
+            eHor = eHor == text::HoriOrientation::INSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
+        else
+            eHor = eHor == text::HoriOrientation::OUTSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
+    }
+    const SwFrame* pTmpFrame = rFrame.FindTabFrame();
+    if (!pTmpFrame)
+        pTmpFrame = &rFrame;
+    return text::HoriOrientation::LEFT == eHor ? pTmpFrame->getFrameArea().Left() - REDLINE_DISTANCE
+                                               : pTmpFrame->getFrameArea().Right() + REDLINE_DISTANCE;
+}
+
+/// Change bars are hidden when changes are not shown or the layout hides them.
+bool lcl_AreChangeBarsHidden(const SwTextFrame& rFrame)
+{
+    const IDocumentRedlineAccess& rIDRA = rFrame.GetDoc().getIDocumentRedlineAccess();
+    return !IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
+           || rFrame.getRootFrame()->IsHideRedlines();
+}
+}
+
 static bool bInitFont = true;
 
 namespace {
@@ -194,20 +225,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
     if( eHor == text::HoriOrientation::NONE )
         return;
 
-    if( text::HoriOrientation::INSIDE == eHor || text::HoriOrientation::OUTSIDE == eHor )
-    {
-        if (!oIsRightPage.has_value())
-            oIsRightPage = pFrame->FindPageFrame()->OnRightPage();
-        if (*oIsRightPage)
-            eHor = eHor == text::HoriOrientation::INSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
-        else
-            eHor = eHor == text::HoriOrientation::OUTSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
-    }
-    const SwFrame* pTmpFrame = pFrame->FindTabFrame();
-    if( !pTmpFrame )
-        pTmpFrame = pFrame;
-    m_nRedX = text::HoriOrientation::LEFT == eHor ? pTmpFrame->getFrameArea().Left() - REDLINE_DISTANCE :
-        pTmpFrame->getFrameArea().Right() + REDLINE_DISTANCE;
+    m_nRedX = lcl_GetChangeBarX(*pFrame, eHor, oIsRightPage);
 }
 
 void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax, bool bRed, const OUString* pRedlineText )
@@ -408,8 +426,7 @@ void SwTextFrame::DrawExtraData( const SwRect &rRect, sw::vector::TextSink* pSin
         && pSh->GetViewOptions()->IsViewMetaChars();
     if (eHor != text::HoriOrientation::NONE
         && !bWordSpacingIndicator
-        && (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
-            || getRootFrame()->IsHideRedlines()))
+        && lcl_AreChangeBarsHidden(*this))
     {
         eHor = text::HoriOrientation::NONE;
     }
@@ -550,6 +567,49 @@ bool SwTextFrame::IsCutByUpper() const
     const SwRect aReach(UnionFrame());
     return aRectFnSet.XDiff(aRectFnSet.GetLeft(aPaintArea), aRectFnSet.GetLeft(aReach)) > 0
            || aRectFnSet.XDiff(aRectFnSet.GetRight(aReach), aRectFnSet.GetRight(aPaintArea)) > 0;
+}
+
+bool SwTextFrame::GetChangeBarLine(const Point& rPoint, SwTwips nTolerance, SwPosition& rStart,
+                                   SwPosition& rEnd) const
+{
+    const sal_Int16 eHor = static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos());
+    if (eHor == text::HoriOrientation::NONE || lcl_AreChangeBarsHidden(*this))
+        return false;
+
+    if (IsLocked() || IsHiddenNow() || !getFramePrintArea().Height())
+        return false;
+
+    const_cast<SwTextFrame*>(this)->GetFormatted();
+
+    SwSwapIfNotSwapped swap(const_cast<SwTextFrame*>(this));
+    Point aPoint(rPoint);
+    if (IsVertical())
+        SwitchVerticalToHorizontal(aPoint);
+
+    if (std::abs(aPoint.X() - lcl_GetChangeBarX(*this, eHor, std::nullopt)) > nTolerance)
+        return false;
+
+    if (!HasPara())
+    {
+        // A frame without lines has one bar over its whole print area.
+        const SwTwips nTop = getFrameArea().Top() + getFramePrintArea().Top();
+        if (aPoint.Y() < nTop || aPoint.Y() > nTop + getFramePrintArea().Height())
+            return false;
+        rStart = MapViewToModelPos(TextFrameIndex(0));
+        rEnd = rStart;
+        return true;
+    }
+
+    SwTextSizeInfo aInf(const_cast<SwTextFrame*>(this));
+    SwTextCursor aLine(const_cast<SwTextFrame*>(this), &aInf);
+    aLine.TwipsToLine(aPoint.Y());
+    if (aPoint.Y() < aLine.Y() || aPoint.Y() > aLine.Y() + aLine.GetLineHeight()
+        || !aLine.GetCurr()->HasRedline())
+        return false;
+
+    rStart = MapViewToModelPos(aLine.GetStart());
+    rEnd = MapViewToModelPos(aLine.GetEnd());
+    return true;
 }
 
 SwRect SwTextFrame::GetPaintSwRect()
