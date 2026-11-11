@@ -289,28 +289,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
                     [in] boolean bExcludeLigatures )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    /** This method generates a highlight polygon.<p>
-
-        This method generates a highlighting polygon from two
-        insertion indices. This polygon will be visually continuous,
-        i.e. will not have non-highlighted text in between.<p>
-
-        @param nStartIndex
-        Start of the selection range.
-
-        @param nEndIndex
-        End of the selection range.
-
-        @return the highlight polygon in the font coordinate space.
-
-        @throws com::sun::star::lang::IndexOutOfBoundsException
-        if nStartIndex or nEndIndex are outside the permissible
-        range.
-     */
-    XPolyPolygon2D queryVisualHighlighting( [in] long nStartIndex,
-                                            [in] long nEndIndex )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
-
 
     /** This method returns the main writing direction.<p>
 

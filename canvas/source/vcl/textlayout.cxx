@@ -248,12 +248,6 @@ namespace vclcanvas
         return rendering::Caret();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32, sal_Int32 )
-    {
-        // TODO(F1)
-        return uno::Reference< rendering::XPolyPolygon2D >();
-    }
-
     sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  )
     {
         return mnTextDirection;

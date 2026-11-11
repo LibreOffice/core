@@ -207,13 +207,6 @@ namespace cairocanvas
         return rendering::Caret();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/,
-                                                                                              sal_Int32 /*nEndIndex*/ )
-    {
-        // TODO
-        return uno::Reference< rendering::XPolyPolygon2D >();
-    }
-
     sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  )
     {
         return mnTextDirection;
