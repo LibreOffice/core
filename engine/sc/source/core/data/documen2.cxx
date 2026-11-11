@@ -1572,8 +1572,8 @@ SfxItemSet* ScDocument::GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab )
     SfxItemSet* pRet = nullptr;
     if ( pPreviewFont )
     {
-        ScMarkData aSel = GetPreviewSelection();
-        if ( aSel.IsCellMarked( nCol, nRow ) && aSel.GetFirstSelected() == nTab )
+        const ScMarkData& rSel = GetPreviewSelection();
+        if ( rSel.IsCellMarked( nCol, nRow ) && rSel.GetFirstSelected() == nTab )
             pRet = pPreviewFont.get();
     }
     return pRet;
@@ -1582,8 +1582,8 @@ SfxItemSet* ScDocument::GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab )
 ScStyleSheet* ScDocument::GetPreviewCellStyle( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     ScStyleSheet* pRet = nullptr;
-    ScMarkData aSel = GetPreviewSelection();
-    if ( pPreviewCellStyle && aSel.IsCellMarked( nCol, nRow ) && aSel.GetFirstSelected() == nTab  )
+    const ScMarkData& rSel = GetPreviewSelection();
+    if ( pPreviewCellStyle && rSel.IsCellMarked( nCol, nRow ) && rSel.GetFirstSelected() == nTab  )
         pRet = pPreviewCellStyle;
     return pRet;
 }
