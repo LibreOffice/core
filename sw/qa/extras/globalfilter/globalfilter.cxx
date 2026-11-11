@@ -217,6 +217,31 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkedGraphicRT_DOCX)
     testLinkedGraphicRT(TestFilter::DOCX);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLinkedGraphicReRead)
+{
+    createSwDoc("document_with_linked_graphic.odt");
+    getSwDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+
+    SwGrfNode* pGrfNode = nullptr;
+    SwNodes& rNodes = getSwDoc()->GetNodes();
+    for (SwNodeOffset nIndex(0); nIndex < rNodes.Count(); ++nIndex)
+    {
+        if (rNodes[nIndex]->IsGrfNode())
+        {
+            pGrfNode = rNodes[nIndex]->GetGrfNode();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pGrfNode);
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pGrfNode->GetGrfObj(true).GetGraphic().GetType());
+
+    const OUString sNewURL = m_directories.getURLFromSrc(u"/sw/qa/core/text/data/image.png");
+    SwPaM aGrfPaM(*pGrfNode);
+    getSwDoc()->getIDocumentContentOperations().ReRead(aGrfPaM, sNewURL, OUString(), nullptr);
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pGrfNode->GetGrfObj(true).GetGraphic().GetType());
+}
+
 void Test::testImageWithSpecialID(TestFilter eFilterName)
 {
     // Check how LO handles when the imported graphic's ID is different from that one
