@@ -266,9 +266,6 @@ void CanvasHelper::drawBezier(const rendering::XCanvas*,
     cairo_restore(mpCairo.get());
 }
 
-constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME
-    = u"Canvas::ParametricPolyPolygon";
-
 /** surfaceFromXBitmap Create a surface from XBitmap
      * @param xBitmap bitmap image that will be used for the surface
      * @param bHasAlpha will be set to true if resulting surface has alpha
@@ -510,22 +507,14 @@ static void doOperation(Operation aOperation, cairo_t* pCairo,
                 }
                 else if (aTexture.Gradient.is())
                 {
-                    uno::Reference<lang::XServiceInfo> xRef(aTexture.Gradient, uno::UNO_QUERY);
-
                     SAL_INFO("canvas.cairo", "gradient fill");
-                    if (xRef.is()
-                        && xRef->getImplementationName()
-                               == PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME)
+                    if (canvas::ParametricPolyPolygon* pPolyImpl
+                        = dynamic_cast<::canvas::ParametricPolyPolygon*>(aTexture.Gradient.get()))
                     {
-                        // TODO(Q1): Maybe use dynamic_cast here
-
                         // TODO(E1): Return value
                         // TODO(F1): FillRule
                         SAL_INFO("canvas.cairo", "known implementation");
 
-                        ::canvas::ParametricPolyPolygon* pPolyImpl
-                            = static_cast<::canvas::ParametricPolyPolygon*>(
-                                aTexture.Gradient.get());
                         css::geometry::AffineMatrix2D aTransform(aTexture.AffineTransform);
                         cairo_matrix_t aTextureMatrix;
 
