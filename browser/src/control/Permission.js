@@ -485,11 +485,11 @@ window.L.Map.include({
 					heading: _('Join collaborative editing'),
 					description: _('Edit together in real-time'),
 					onClick: function () {
-						if (window.collabEditingActive) {
+						if (window.collab.editingActive) {
 							// Someone is editing locally - ask them to
 							// save and switch, then wait.
 							that._waitForCollabSave();
-							window.collabSendMessage({type: 'switch_to_collab'});
+							window.collab.sendMessage({type: 'switch_to_collab'});
 						} else {
 							// No active editor - just switch directly.
 							window.switchToServerMode();
@@ -539,7 +539,7 @@ window.L.Map.include({
 	// If no other collab users remain, switch now.
 	_onCollabUserLeft: function () {
 		if (this._waitingForCollabSwitch
-			&& window.collabUsers && window.collabUsers.length === 0) {
+			&& window.collab.users && window.collab.users.length === 0) {
 			this._finishCollabSwitch();
 		}
 	},
@@ -547,7 +547,7 @@ window.L.Map.include({
 	// Save any local-edit changes and then switch to server mode.
 	// If the document has been modified, .uno:Save triggers the
 	// per-platform upload path (collabSaveToServer for COWASM, the
-	// commandresult-driven collabUploadFile in main.js for CODA),
+	// commandresult-driven collab.uploadFile in main.js for CODA),
 	// and the _switchToServerAfterSave flag causes switchToServerMode
 	// to be called after the upload completes.  If there are no
 	// modifications, .uno:Save is a no-op and we switch immediately.
@@ -557,7 +557,7 @@ window.L.Map.include({
 			this.save(true /* dontTerminateEdit */,
 				false /* dontSaveIfUnmodified */);
 		} else {
-			window.collabSendMessage({type: 'saved_and_switching'});
+			window.collab.sendMessage({type: 'saved_and_switching'});
 			window.switchToServerMode();
 		}
 	},
@@ -677,7 +677,7 @@ window.L.Map.include({
 			{
 				id: 'collab-conflict-discard',
 				func_: () => {
-					window.collabSendMessage({type: 'saved_and_switching'});
+					window.collab.sendMessage({type: 'saved_and_switching'});
 					window.switchToServerMode();
 				},
 			},
@@ -815,7 +815,7 @@ window.L.Map.include({
 	// users who join later are informed.
 	_sendEditingStarted: function () {
 		if (window.ThisIsTheEmscriptenApp || window.mode.isCODesktop()) {
-			window.collabSendMessage({type: 'editing_started'});
+			window.collab.sendMessage({type: 'editing_started'});
 		}
 	},
 
@@ -826,7 +826,7 @@ window.L.Map.include({
 		// With other collab users present, offer the choice between
 		// local and collaborative editing.
 		if ((window.ThisIsTheEmscriptenApp || window.mode.isCODesktop())
-			&& window.collabUsers && window.collabUsers.length > 0) {
+			&& window.collab.users && window.collab.users.length > 0) {
 			this._showCollabEditChoiceDialog(
 				_('How would you like to edit?'),
 				_('Other users are viewing this document. Choose how you\'d like to continue:'),

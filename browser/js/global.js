@@ -2837,6 +2837,9 @@ function showWelcomeSVG() {
 		}
 	}
 
+	// The state and functions of the /co/collab WebSocket.
+	global.collab = {};
+
 	// Fetch file using the /co/collab WebSocket endpoint.
 	// Returns a Promise that resolves to the download URL.
 	// Used by WASM and CODA builds to download documents via the
@@ -2848,36 +2851,36 @@ function showWelcomeSVG() {
 	// When set, the resolved fetch_url and upload_url responses are
 	// also rebased onto this origin if the server returns them as
 	// site-absolute paths (e.g. "/co/collab/fetch?token=...").
-	global.collabFetchFile = function(wopiSrc, accessToken, coolServer) {
-		return global.collabConnect(wopiSrc, accessToken, coolServer).then(function(fileInfo) {
+	global.collab.fetchFile = function(wopiSrc, accessToken, coolServer) {
+		return global.collab.connect(wopiSrc, accessToken, coolServer).then(function(fileInfo) {
 			return new Promise(function(resolve, reject) {
 
 				const listener = function(msg) {
 					if (msg.type === 'fetch_url' && msg.requestId === 'wasm-init') {
 						clearTimeout(timeoutId);
-						global.removeCollabNotificationListener(listener);
+						global.collab.removeNotificationListener(listener);
 						if (msg.url) {
 							var url = msg.url;
 							// CollabSocketHandler returns site-absolute
 							// URLs (e.g. /co/collab/fetch?token=...).
 							// When cool.html is hosted on a different
 							// origin than the cool server, rebase onto
-							// _collabCoolServer so fetch() hits the
+							// collab.coolServer so fetch() hits the
 							// right host.
-							if (url.startsWith('/') && global._collabCoolServer)
-								url = global._collabCoolServer + url;
+							if (url.startsWith('/') && global.collab.coolServer)
+								url = global.collab.coolServer + url;
 							global.app.console.log('Collab fetch URL: ' + url);
 							// The version in storage that the uploads of this page replace:
-							global._collabLastModifiedTime = msg.lastModifiedTime;
+							global.collab.lastModifiedTime = msg.lastModifiedTime;
 							resolve({url: url, filename: msg.filename, fileInfo: fileInfo});
 						} else {
-							global.collabWs.close();
+							global.collab.ws.close();
 							reject(new Error('Collab fetch response missing URL'));
 						}
 					} else if (msg.type === 'fetch_error') {
 						clearTimeout(timeoutId);
-						global.removeCollabNotificationListener(listener);
-						global.collabWs.close();
+						global.collab.removeNotificationListener(listener);
+						global.collab.ws.close();
 						const error = new Error('Collab fetch error: ' + (msg.error || 'Unknown error'));
 						error.cleanExport = msg.cleanExport;
 						reject(error);
@@ -2885,17 +2888,17 @@ function showWelcomeSVG() {
 				};
 
 				const onTimeout = function() {
-					global.removeCollabNotificationListener(listener);
-					if (global.collabWs)
-						global.collabWs.close();
+					global.collab.removeNotificationListener(listener);
+					if (global.collab.ws)
+						global.collab.ws.close();
 					reject(new Error('Collab fetch timeout'));
 				};
 
 				const timeoutId = setTimeout(onTimeout, 30000);
-				global.addCollabNotificationListener(listener);
+				global.collab.addNotificationListener(listener);
 
 				// Request file contents
-				global.collabWs.send(JSON.stringify({
+				global.collab.ws.send(JSON.stringify({
 					type: 'fetch',
 					stream: 'contents',
 					requestId: 'wasm-init'
@@ -2905,12 +2908,12 @@ function showWelcomeSVG() {
 	};
 
 	// Open the /co/collab WebSocket and sign in with accessToken.
-	// The arguments are as for collabFetchFile above.
+	// The arguments are as for collab.fetchFile above.
 	// It resolves with the file properties that coolwsd sends with authenticated, if any.
-	global.collabConnect = function(wopiSrc, accessToken, coolServer) {
-		// Stash for collabUploadFile so it can rebase upload_url
+	global.collab.connect = function(wopiSrc, accessToken, coolServer) {
+		// Stash for collab.uploadFile so it can rebase upload_url
 		// against the same cool server.  Cleared on socket close.
-		global._collabCoolServer = coolServer || '';
+		global.collab.coolServer = coolServer || '';
 		return new Promise(function(resolve, reject) {
 			var wsUrl;
 			if (coolServer) {
@@ -2926,25 +2929,25 @@ function showWelcomeSVG() {
 			global.app.console.log('Connecting to collab endpoint: ' + wsUrl);
 
 			try {
-				global.collabWs = new WebSocket(wsUrl);
+				global.collab.ws = new WebSocket(wsUrl);
 			} catch (err) {
 				reject(new Error('Failed to create WebSocket: ' + err.message));
 				return;
 			}
 
 			var timeoutId = setTimeout(function() {
-				if (global.collabWs.readyState !== WebSocket.CLOSED) {
-					global.collabWs.close();
+				if (global.collab.ws.readyState !== WebSocket.CLOSED) {
+					global.collab.ws.close();
 				}
 				reject(new Error('Collab fetch timeout'));
 			}, 30000); // 30 second timeout
 
-			global.collabWs.onopen = function() {
+			global.collab.ws.onopen = function() {
 				global.app.console.log('Collab WebSocket connected, sending access_token');
-				global.collabWs.send('access_token ' + accessToken);
+				global.collab.ws.send('access_token ' + accessToken);
 			};
 
-			global.collabWs.onmessage = function(event) {
+			global.collab.ws.onmessage = function(event) {
 				var data = event.data;
 				global.app.console.log('Collab message received: ' + data.substring(0, 100));
 
@@ -2955,43 +2958,43 @@ function showWelcomeSVG() {
 						clearTimeout(timeoutId);
 
 						// Switch to notification handler for ongoing messages
-						global.collabWs.onmessage = global._collabNotificationHandler;
-						global.collabWs.onerror = function() {
+						global.collab.ws.onmessage = global.collab.notificationHandler;
+						global.collab.ws.onerror = function() {
 							global.app.console.log('Collab notification WebSocket error');
 						};
-						global.collabWs.onclose = function() {
+						global.collab.ws.onclose = function() {
 							global.app.console.log('Collab notification WebSocket closed');
-							global.collabWs = null;
-							global._collabCoolServer = '';
+							global.collab.ws = null;
+							global.collab.coolServer = '';
 						};
 						resolve(msg.fileInfo);
 					} else if (msg.type === 'error') {
 						clearTimeout(timeoutId);
-						global.collabWs.close();
+						global.collab.ws.close();
 						reject(new Error('Collab error: ' + (msg.message || msg.error || 'Unknown error')));
 					} else {
 						// Dispatch other messages (user_list, user_joined,
 						// user_left, editing_started) through the
 						// notification handler even before sign-in
 						// finishes, so they are not lost.
-						global._collabNotificationHandler(event);
+						global.collab.notificationHandler(event);
 					}
 				} catch (e) {
 					// Not JSON, might be a text message
 					if (data.startsWith('error:')) {
 						clearTimeout(timeoutId);
-						global.collabWs.close();
+						global.collab.ws.close();
 						reject(new Error('Collab error: ' + data));
 					}
 				}
 			};
 
-			global.collabWs.onerror = function() {
+			global.collab.ws.onerror = function() {
 				clearTimeout(timeoutId);
 				reject(new Error('Collab WebSocket error'));
 			};
 
-			global.collabWs.onclose = function() {
+			global.collab.ws.onclose = function() {
 				clearTimeout(timeoutId);
 				reject(new Error('Collab WebSocket closed before authentication'));
 			};
@@ -3001,15 +3004,15 @@ function showWelcomeSVG() {
 	// Upload a file using the /co/collab WebSocket endpoint (token-based).
 	// Used by WASM builds for saving documents back to the WOPI host.
 	//
-	// Reuses the existing main collab socket (global.collabWs) rather than
+	// Reuses the existing main collab socket (global.collab.ws) rather than
 	// opening a transient one.  A short-lived socket gets added to the
 	// broker's handler list on connect and removed on close, producing
 	// spurious user_joined/user_left notifications that confuse peers -
-	// e.g., a peer's collabUsers filter (by userId) would drop the main
+	// e.g., a peer's collab.users filter (by userId) would drop the main
 	// socket's entry too, making them think all users left.
-	global.collabUploadFile = function(fileBytes, force) {
+	global.collab.uploadFile = function(fileBytes, force) {
 		return new Promise(function(resolve, reject) {
-			var ws = global.collabWs;
+			var ws = global.collab.ws;
 			if (!ws || ws.readyState !== WebSocket.OPEN) {
 				reject(new Error('Collab WebSocket not open'));
 				return;
@@ -3017,7 +3020,7 @@ function showWelcomeSVG() {
 
 			var listener;
 			var timeoutId = setTimeout(function() {
-				global.removeCollabNotificationListener(listener);
+				global.collab.removeNotificationListener(listener);
 				reject(new Error('Collab upload timeout'));
 			}, 30000);
 
@@ -3027,7 +3030,7 @@ function showWelcomeSVG() {
 
 				if (msg.type === 'upload_url') {
 					clearTimeout(timeoutId);
-					global.removeCollabNotificationListener(listener);
+					global.collab.removeNotificationListener(listener);
 					if (!msg.url) {
 						reject(new Error('Collab upload response missing URL'));
 						return;
@@ -3036,9 +3039,9 @@ function showWelcomeSVG() {
 					// Site-absolute upload_url from CollabSocketHandler;
 					// rebase if cool.html lives on a different origin
 					// than the cool server (CODA case).  See the parallel
-					// rebase for fetch_url in collabFetchFile above.
-					if (url.startsWith('/') && global._collabCoolServer)
-						url = global._collabCoolServer + url;
+					// rebase for fetch_url in collab.fetchFile above.
+					if (url.startsWith('/') && global.collab.coolServer)
+						url = global.collab.coolServer + url;
 					global.app.console.log('Collab upload URL: ' + url);
 					fetch(url, {
 						method: 'POST',
@@ -3059,17 +3062,17 @@ function showWelcomeSVG() {
 							global.app.console.log('Collab upload: the response is not JSON');
 						}
 
-						global._collabLastModifiedTime = result && result.LastModifiedTime;
+						global.collab.lastModifiedTime = result && result.LastModifiedTime;
 						return result;
 					}).then(resolve).catch(reject);
 				} else if (msg.type === 'upload_error') {
 					clearTimeout(timeoutId);
-					global.removeCollabNotificationListener(listener);
+					global.collab.removeNotificationListener(listener);
 					reject(new Error('Collab upload error: '
 						+ (msg.error || 'Unknown error')));
 				}
 			};
-			global.addCollabNotificationListener(listener);
+			global.collab.addNotificationListener(listener);
 
 			ws.send(JSON.stringify({
 				type: 'upload',
@@ -3077,19 +3080,19 @@ function showWelcomeSVG() {
 				requestId: 'wasm-save',
 				// Storage refuses this upload (409) if the file in storage is no longer this version.
 				// Overwrite sets force, which sends no version, so storage accepts the upload unchecked.
-				lastModifiedTime: force ? undefined : global._collabLastModifiedTime
+				lastModifiedTime: force ? undefined : global.collab.lastModifiedTime
 			}));
 		});
 	};
 
 	// Track other collab users known via the collab WebSocket.
 	// Each entry: {id: string, name: string, canWrite: bool}
-	global.collabUsers = [];
+	global.collab.users = [];
 
 	// Handler for ongoing collab WebSocket notifications.
 	// Dispatches to registered callbacks.
-	global._collabNotificationCallbacks = [];
-	global._collabNotificationHandler = function(event) {
+	global.collab.notificationCallbacks = [];
+	global.collab.notificationHandler = function(event) {
 		var data = event.data;
 		try {
 			var msg = JSON.parse(data);
@@ -3104,13 +3107,13 @@ function showWelcomeSVG() {
 		// cool.html is hosted on the cool server itself (COWASM),
 		// but for CODA (page on file://) the relative URL would
 		// resolve against the page's origin and 404, so prepend
-		// _collabCoolServer when set.  Applies to every
+		// collab.coolServer when set.  Applies to every
 		// user-bearing message shape the broker emits.
 		var rebaseAvatar = function(user) {
 			if (user && typeof user.avatar === 'string'
 				&& user.avatar.startsWith('/')
-				&& global._collabCoolServer) {
-				user.avatar = global._collabCoolServer + user.avatar;
+				&& global.collab.coolServer) {
+				user.avatar = global.collab.coolServer + user.avatar;
 			}
 		};
 		if (msg.user) {
@@ -3122,36 +3125,36 @@ function showWelcomeSVG() {
 		}
 
 		if (msg.type === 'user_list' && Array.isArray(msg.users)) {
-			global.collabUsers = msg.users;
-			global.collabEditingActive = !!msg.editingActive;
+			global.collab.users = msg.users;
+			global.collab.editingActive = !!msg.editingActive;
 		} else if (msg.type === 'user_joined' && msg.user) {
-			global.collabUsers.push(msg.user);
+			global.collab.users.push(msg.user);
 		} else if (msg.type === 'user_left' && msg.user) {
-			global.collabUsers = global.collabUsers.filter(function(u) {
+			global.collab.users = global.collab.users.filter(function(u) {
 				return u.id !== msg.user.id;
 			});
 		}
 
-		for (var i = 0; i < global._collabNotificationCallbacks.length; i++) {
-			global._collabNotificationCallbacks[i](msg);
+		for (var i = 0; i < global.collab.notificationCallbacks.length; i++) {
+			global.collab.notificationCallbacks[i](msg);
 		}
 	};
 
 	// Register a callback for collab notifications.
-	global.addCollabNotificationListener = function(callback) {
-		global._collabNotificationCallbacks.push(callback);
+	global.collab.addNotificationListener = function(callback) {
+		global.collab.notificationCallbacks.push(callback);
 	};
 
-	global.removeCollabNotificationListener = function(callback) {
-		global._collabNotificationCallbacks =
-			global._collabNotificationCallbacks.filter(
+	global.collab.removeNotificationListener = function(callback) {
+		global.collab.notificationCallbacks =
+			global.collab.notificationCallbacks.filter(
 				function(c) { return c !== callback; });
 	};
 
 	// Send a message on the collab WebSocket (if open).
-	global.collabSendMessage = function(msg) {
-		if (global.collabWs && global.collabWs.readyState === WebSocket.OPEN) {
-			global.collabWs.send(typeof msg === 'string' ? msg : JSON.stringify(msg));
+	global.collab.sendMessage = function(msg) {
+		if (global.collab.ws && global.collab.ws.readyState === WebSocket.OPEN) {
+			global.collab.ws.send(typeof msg === 'string' ? msg : JSON.stringify(msg));
 		}
 	};
 
@@ -3178,14 +3181,14 @@ function showWelcomeSVG() {
 		// in both flavours: the broker recognises the orderly close
 		// and reclaims itself immediately rather than waiting out its
 		// idle grace period for a reconnect that is not coming.
-		if (global.collabWs) {
-			if (global.collabWs.readyState === WebSocket.OPEN) {
-				try { global.collabWs.send('{"type":"bye"}'); }
+		if (global.collab.ws) {
+			if (global.collab.ws.readyState === WebSocket.OPEN) {
+				try { global.collab.ws.send('{"type":"bye"}'); }
 				catch (e) { /* already closed */ }
 			}
-			try { global.collabWs.close(); }
+			try { global.collab.ws.close(); }
 			catch (e) { /* already closed */ }
-			global.collabWs = null;
+			global.collab.ws = null;
 		}
 
 		// CODA-only: ask the bridge to drop its FakeSocket-to-in-

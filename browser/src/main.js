@@ -145,16 +145,16 @@ var initUI = function() {
 };
 
 const _codaUpload = function(fileBytes, force) {
-	const ws = global.collabWs;
+	const ws = global.collab.ws;
 	const info = window._codaRemoteInfo;
 	if (!info || (ws && ws.readyState !== WebSocket.CLOSED))
-		return global.collabUploadFile(fileBytes, force);
+		return global.collab.uploadFile(fileBytes, force);
 
-	return global.collabConnect(info.wopiSrc, info.accessToken, info.coolServer).then(function() {
+	return global.collab.connect(info.wopiSrc, info.accessToken, info.coolServer).then(function() {
 		// A restarted coolwsd no longer knows that we are editing.
-		if (!global.collabEditingActive)
-			window.collabSendMessage({type: 'editing_started'}); 
-		return global.collabUploadFile(fileBytes, force);
+		if (!global.collab.editingActive)
+			window.collab.sendMessage({type: 'editing_started'}); 
+		return global.collab.uploadFile(fileBytes, force);
 	});
 };
 
@@ -171,7 +171,7 @@ var _codaUploadOnSave = function(fileBytes, tag, force) {
 		if (window._switchToServerAfterSave) {
 			window._switchToServerAfterSave = false;
 			window.app.console.log(tag + ': switching to server mode after save');
-			window.collabSendMessage({type: 'saved_and_switching'});
+			window.collab.sendMessage({type: 'saved_and_switching'});
 			window.switchToServerMode();
 		}
 	}).catch(function(err) {
@@ -192,7 +192,7 @@ var _codaWireCollabNotifications = function() {
 	// new user whether they want to join.  Defer to the next tick
 	// after updatepermission, because _enterReadOnlyMode fires
 	// closealldialogs right after updatepermission.
-	if (global.collabEditingActive) {
+	if (global.collab.editingActive) {
 		var showCollabDialog = function () {
 			app.events.off('updatepermission', showCollabDialog);
 			setTimeout(function () {
@@ -202,7 +202,7 @@ var _codaWireCollabNotifications = function() {
 		app.events.on('updatepermission', showCollabDialog);
 	}
 
-	global.addCollabNotificationListener(function(msg) {
+	global.collab.addNotificationListener(function(msg) {
 		if (msg.type === 'editing_started' && msg.user) {
 			map._onOtherUserEditingStarted(
 				msg.user.name || msg.user.id,
@@ -237,8 +237,8 @@ if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp || window.codaRemotePage
 		if (
 			unmodified ||
 			!window.bridge ||
-			!global.collabWs ||
-			global.collabWs.readyState !== WebSocket.OPEN
+			!global.collab.ws ||
+			global.collab.ws.readyState !== WebSocket.OPEN
 		) {
 			done();
 			return;
@@ -293,7 +293,7 @@ if (window.ThisIsTheEmscriptenApp) {
 			_codaUploadOnSave(fileBytes, 'WASM').catch(() => {});
 		};
 
-		global.collabFetchFile(fullDocUrl, accessToken).then(function(result) {
+		global.collab.fetchFile(fullDocUrl, accessToken).then(function(result) {
 			window.app.console.log('WASM: Using collab fetch URL: ' + result.url);
 			if (result.filename) {
 				map['wopi'].BaseFileName = result.filename;
@@ -345,7 +345,7 @@ if (window.ThisIsTheEmscriptenApp) {
 			// values.
 			window._codaRemoteInfo = info;
 			window.app.console.log('CODA: remote doc, wopiSrc=' + info.wopiSrc);
-			global.collabFetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {
+			global.collab.fetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {
 				// The file properties come before initUI, so controls such as Share follow them.
 				if (result.fileInfo) {
 					window.codaRemoteFileInfo = result.fileInfo;

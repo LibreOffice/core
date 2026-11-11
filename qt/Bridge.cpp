@@ -181,8 +181,8 @@ void Bridge::sendCollabBye()
     if (!_document._remoteInfo)
         return;
     evalJS(
-        "if (window.collabWs && window.collabWs.readyState === 1)"
-        "  window.collabWs.send('{\"type\":\"bye\"}');");
+        "if (window.collab?.ws?.readyState === 1)"
+        "  window.collab.ws.send('{\"type\":\"bye\"}');");
 }
 
 void Bridge::createAndStartMessagePumpThread()
@@ -1545,7 +1545,7 @@ QVariant Bridge::cool(const QString& messageStr)
     else if (tokens.equals(0, "SAVECOMPLETED"))
     {
         // Page-JS finished the save (and, for remote docs, the
-        // subsequent integrator upload via collabUploadFile).
+        // subsequent integrator upload via collab.uploadFile).
         // Clear _saveInFlight and release any close that has been
         // waiting on us.
         saveCompleted();

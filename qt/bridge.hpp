@@ -49,7 +49,7 @@ class Bridge : public QObject
     int _docUnloadingRetries = 0;
     // true from JS-side SAVESTARTED until the JS-side SAVECOMPLETED:
     // that brackets both the .uno:Save round-trip and (for remote
-    // docs) the JS-driven collabUploadFile POST that pushes the
+    // docs) the JS-driven collab.uploadFile POST that pushes the
     // just-saved bytes to the integrator.  Watched by close-handlers
     // so they don't prompt about "unsaved changes" during the window
     // where core's status indicator has already gone away but the
