@@ -500,6 +500,13 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
 
     if (aRet.xStorage.is())
     {
+        if (SvXMLGraphicHelperMode::Read == meCreateMode && rPictureStorageName.isEmpty()
+            && !aRet.xStorage->hasByName(rPictureStreamName))
+        {
+            // tdf#157556: a malformed external path can look like a missing root stream.
+            // Keep the graphic unavailable instead of aborting document import.
+            return aRet;
+        }
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
     }
     else if (rPictureStorageName.indexOf('/') != -1)

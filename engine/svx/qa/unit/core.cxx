@@ -97,6 +97,25 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicObjectResolver)
         CPPUNIT_ASSERT_EQUAL(false, xGraphic.is());
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testGraphicObjectResolverMissingRootStream)
+{
+    OUString aURL = createFileURL(u"GraphicObjectResolverTest.zip");
+    uno::Reference<embed::XStorage> xStorage
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
+                                                                embed::ElementModes::READ);
+    CPPUNIT_ASSERT(xStorage.is());
+
+    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper
+        = SvXMLGraphicHelper::Create(xStorage, SvXMLGraphicHelperMode::Read);
+    CPPUNIT_ASSERT(xGraphicHelper.is());
+
+    // This is the package URL produced when a malformed Windows image path is saved.
+    // It must be reported as an unavailable image rather than aborting ODT import.
+    uno::Reference<graphic::XGraphic> xGraphic
+        = xGraphicHelper->loadGraphic(u"./C:%5CLO_bug_erroneous_image_link%5Capples.gif"_ustr);
+    CPPUNIT_ASSERT(!xGraphic.is());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
