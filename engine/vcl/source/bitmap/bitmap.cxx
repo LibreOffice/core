@@ -1413,10 +1413,26 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
 
     if (mxSalBmp && mxSalBmp->ScalingSupported())
     {
-        // implementation specific scaling
-        std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-        if (xImpBmp->Create(*mxSalBmp) && xImpBmp->Scale(rScaleX, rScaleY, nScaleFlag))
+        // implementation specific scaling, of the pixels of this Bitmap when no other Bitmap
+        // shares them, else of a copy
+        std::shared_ptr<SalBitmap> xImpBmp;
+        if (mxSalBmp.use_count() == 1)
         {
+            // The data buffered for drawing, such as a cairo surface on the pixels, describes the
+            // pixels before scaling, which the scaling frees.
+            mxSalBmp->clearSystemDependentData();
+            xImpBmp = mxSalBmp;
+        }
+        else
+        {
+            xImpBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+            if (!xImpBmp->Create(*mxSalBmp))
+                xImpBmp.reset();
+        }
+        if (xImpBmp && xImpBmp->Scale(rScaleX, rScaleY, nScaleFlag))
+        {
+            // the checksum of the pixels before scaling no longer holds
+            xImpBmp->InvalidateChecksum();
             ImplSetSalBitmap(xImpBmp);
             SAL_INFO( "vcl", "Ref count: " << mxSalBmp.use_count() );
             maPrefMapMode = MapMode( MapUnit::MapPixel );

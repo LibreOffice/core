@@ -120,6 +120,10 @@ namespace basegfx
 
         void addOrReplaceSystemDependentData(SystemDependentData_SharedPtr& rData);
         SystemDependentData_SharedPtr getSystemDependentData(SDD_Type aType) const;
+
+        // Drops every buffered representation of the content of the holder, whose content has
+        // changed so that none of them holds any more.
+        void clearSystemDependentData();
     };
 } // end of namespace basegfx
 

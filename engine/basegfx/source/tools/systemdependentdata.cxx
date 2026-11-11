@@ -104,6 +104,11 @@ namespace basegfx
 
     SystemDependentDataHolder::~SystemDependentDataHolder()
     {
+        clearSystemDependentData();
+    }
+
+    void SystemDependentDataHolder::clearSystemDependentData()
+    {
         for(const auto& candidate : maSystemDependentReferences)
         {
             basegfx::SystemDependentData_SharedPtr aData(candidate.second.lock());
@@ -113,6 +118,8 @@ namespace basegfx
                 aData->getSystemDependentDataManager().endUsage(aData);
             }
         }
+
+        maSystemDependentReferences.clear();
     }
 
     void SystemDependentDataHolder::addOrReplaceSystemDependentData(basegfx::SystemDependentData_SharedPtr& rData)

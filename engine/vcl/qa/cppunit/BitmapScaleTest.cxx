@@ -12,6 +12,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <vcl/bitmap.hxx>
+#include <vcl/virdev.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -52,6 +53,8 @@ class BitmapScaleTest : public CppUnit::TestFixture
     void testLargeReductionIncludesEdgePixels();
     void testMirrorOnlyKeepsPixels();
     void testScaleSymmetry();
+    void testScaleLeavesSharingCopy();
+    void testScaleAfterDrawDrawsScaledPixels();
     void benchmarkScale();
 
     CPPUNIT_TEST_SUITE(BitmapScaleTest);
@@ -66,6 +69,8 @@ class BitmapScaleTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testLargeReductionIncludesEdgePixels);
     CPPUNIT_TEST(testMirrorOnlyKeepsPixels);
     CPPUNIT_TEST(testScaleSymmetry);
+    CPPUNIT_TEST(testScaleLeavesSharingCopy);
+    CPPUNIT_TEST(testScaleAfterDrawDrawsScaledPixels);
     CPPUNIT_TEST(benchmarkScale);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -549,6 +554,57 @@ void BitmapScaleTest::testScaleSymmetry()
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(aBitmap24Bit, aStream);
     }
+}
+
+void BitmapScaleTest::testScaleLeavesSharingCopy()
+{
+    // Scaling one of two copies of a bitmap leaves the other copy as it was.
+    Bitmap aBitmap(Size(100, 100), vcl::PixelFormat::N32_BPP);
+    aBitmap.Erase(COL_LIGHTRED);
+    Bitmap aCopy(aBitmap);
+
+    CPPUNIT_ASSERT(aCopy.Scale(Size(10, 10), BmpScaleFlag::BestQuality));
+
+    CPPUNIT_ASSERT_EQUAL(Size(10, 10), aCopy.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Size(100, 100), aBitmap.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(99, 99));
+}
+
+void BitmapScaleTest::testScaleAfterDrawDrawsScaledPixels()
+{
+    // A bitmap drawn once, then scaled down and painted over, is drawn with its new pixels. Drawing
+    // buffers a bitmap larger than 64 x 64 pixels, before and after the scaling here; the old
+    // pixels are still a picture of the bitmap after scaling, so they are painted over to tell
+    // them from the new ones.
+    Bitmap aBitmap(Size(100, 100), vcl::PixelFormat::N32_BPP);
+    aBitmap.Erase(COL_LIGHTBLUE);
+    {
+        BitmapScopedWriteAccess pAccess(aBitmap);
+        pAccess->SetFillColor(COL_LIGHTRED);
+        pAccess->FillRect(tools::Rectangle(Point(0, 0), Size(50, 100)));
+    }
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice;
+    pDevice->SetOutputSizePixel(Size(300, 300));
+    pDevice->SetBackground(Wallpaper(COL_WHITE));
+    pDevice->Erase();
+    pDevice->DrawBitmap(Point(0, 0), aBitmap);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pDevice->GetPixel(Point(20, 50)));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, pDevice->GetPixel(Point(80, 50)));
+
+    CPPUNIT_ASSERT(aBitmap.Scale(Size(80, 80), BmpScaleFlag::Fast));
+    CPPUNIT_ASSERT_EQUAL(Size(80, 80), aBitmap.GetSizePixel());
+    {
+        BitmapScopedWriteAccess pAccess(aBitmap);
+        pAccess->SetFillColor(COL_LIGHTGREEN);
+        pAccess->FillRect(tools::Rectangle(Point(0, 0), Size(80, 80)));
+    }
+    pDevice->DrawBitmap(Point(150, 150), aBitmap);
+
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, pDevice->GetPixel(Point(160, 190)));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, pDevice->GetPixel(Point(220, 190)));
+    // where the bitmap reached before it was scaled
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pDevice->GetPixel(Point(240, 240)));
 }
 
 } // namespace
