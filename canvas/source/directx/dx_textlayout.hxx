@@ -55,7 +55,6 @@ namespace dxcanvas
         virtual void SAL_CALL disposing() override;
 
         // XTextLayout
-        virtual css::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > SAL_CALL queryTextShapes(  ) override;
         virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryInkMeasures(  ) override;
         virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryMeasures(  ) override;
         virtual css::uno::Sequence< double > SAL_CALL queryLogicalAdvancements(  ) override;

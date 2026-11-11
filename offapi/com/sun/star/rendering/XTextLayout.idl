@@ -50,17 +50,6 @@ interface XPolyPolygon2D;
  */
 interface XTextLayout : ::com::sun::star::uno::XInterface
 {
-    /** Extract the polygonal shapes of the layouted text.<p>
-
-        Each glyph is represented by a separate
-        XPolyPolygon2D in the returned sequence.<p>
-
-        @returns a sequence of XPolyPolygon2D in font
-        coordinate space, one for every glyph.
-     */
-    sequence<XPolyPolygon2D>    queryTextShapes();
-
-
     /** Query the ink bounding boxes for every glyph in the layouted
         text.<p>
 

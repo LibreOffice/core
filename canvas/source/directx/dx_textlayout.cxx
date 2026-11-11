@@ -54,11 +54,6 @@ namespace dxcanvas
     }
 
     // XTextLayout
-    uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  )
-    {
-        // TODO
-        return uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > >();
-    }
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryInkMeasures(  )
     {
