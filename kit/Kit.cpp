@@ -4869,9 +4869,10 @@ void lokit_main(
                 Util::forcedExit(EX_SOFTWARE);
             }
 
-            if (chdir("/") == -1)
+            // The working directory is the jail's writable tmp, as in the jail without capabilities.
+            if (chdir("/tmp") == -1)
             {
-                LOG_SFL("chdir(\"/\") in jail failed");
+                LOG_SFL("chdir(\"/tmp\") in jail failed");
                 Util::forcedExit(EX_SOFTWARE);
             }
 
@@ -4929,6 +4930,12 @@ void lokit_main(
             FileUtil::setSysTempDirectoryPath(tmpPath);
             allowedPaths.emplace_back(tmpPath, Landlock::Access::ReadWriteDir);
             LOG_DBG("Using tmpdir [" << tmpPath << "]");
+            // As in the chroot jail, the working directory is the jail's writable tmp.
+            if (chdir(tmpPath.c_str()) == -1)
+            {
+                LOG_SFL("chdir(\"" << tmpPath << "\") failed");
+                Util::forcedExit(EX_SOFTWARE);
+            }
 
 #if ENABLE_DEBUG
             // The developer's own font directories, taken while HOME still names the real home.
