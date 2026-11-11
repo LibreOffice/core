@@ -102,33 +102,35 @@ void setStateColor(MetaActionType* pAct, bool& rIsColorSet, uno::Sequence<double
         aColor, rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
 }
 
-void setupStrokeAttributes(rendering::StrokeAttributes& o_rStrokeAttributes,
-                           const ::cppcanvas::internal::ActionFactoryParameters& rParms,
-                           const LineInfo& rLineInfo)
+rendering::StrokeAttributes
+getStrokeAttributes(const ::cppcanvas::internal::ActionFactoryParameters& rParms,
+                    const LineInfo& rLineInfo)
 {
+    rendering::StrokeAttributes aStrokeAttributes;
+
     const ::basegfx::B2DSize aWidth(rLineInfo.GetWidth(), 0);
-    o_rStrokeAttributes.StrokeWidth
+    aStrokeAttributes.StrokeWidth
         = (rParms.mrStates.getState().mapModeTransform * aWidth).getLength();
 
     // setup reasonable defaults
-    o_rStrokeAttributes.MiterLimit
-        = 15.0; // 1.0 was no good default; GDI+'s limit is 10.0, our's is 15.0
-    o_rStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
-    o_rStrokeAttributes.EndCapType = rendering::PathCapType::BUTT;
+    // 1.0 was no good default; GDI+'s limit is 10.0, our's is 15.0
+    aStrokeAttributes.MiterLimit = 15.0;
+    aStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
+    aStrokeAttributes.EndCapType = rendering::PathCapType::BUTT;
 
     switch (rLineInfo.GetLineJoin())
     {
         case basegfx::B2DLineJoin::NONE:
-            o_rStrokeAttributes.JoinType = rendering::PathJoinType::NONE;
+            aStrokeAttributes.JoinType = rendering::PathJoinType::NONE;
             break;
         case basegfx::B2DLineJoin::Bevel:
-            o_rStrokeAttributes.JoinType = rendering::PathJoinType::BEVEL;
+            aStrokeAttributes.JoinType = rendering::PathJoinType::BEVEL;
             break;
         case basegfx::B2DLineJoin::Miter:
-            o_rStrokeAttributes.JoinType = rendering::PathJoinType::MITER;
+            aStrokeAttributes.JoinType = rendering::PathJoinType::MITER;
             break;
         case basegfx::B2DLineJoin::Round:
-            o_rStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
+            aStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
             break;
     }
 
@@ -136,26 +138,26 @@ void setupStrokeAttributes(rendering::StrokeAttributes& o_rStrokeAttributes,
     {
         default: /* css::drawing::LineCap_BUTT */
         {
-            o_rStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
-            o_rStrokeAttributes.EndCapType = rendering::PathCapType::BUTT;
+            aStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
+            aStrokeAttributes.EndCapType = rendering::PathCapType::BUTT;
             break;
         }
         case css::drawing::LineCap_ROUND:
         {
-            o_rStrokeAttributes.StartCapType = rendering::PathCapType::ROUND;
-            o_rStrokeAttributes.EndCapType = rendering::PathCapType::ROUND;
+            aStrokeAttributes.StartCapType = rendering::PathCapType::ROUND;
+            aStrokeAttributes.EndCapType = rendering::PathCapType::ROUND;
             break;
         }
         case css::drawing::LineCap_SQUARE:
         {
-            o_rStrokeAttributes.StartCapType = rendering::PathCapType::SQUARE;
-            o_rStrokeAttributes.EndCapType = rendering::PathCapType::SQUARE;
+            aStrokeAttributes.StartCapType = rendering::PathCapType::SQUARE;
+            aStrokeAttributes.EndCapType = rendering::PathCapType::SQUARE;
             break;
         }
     }
 
     if (LineStyle::Dash != rLineInfo.GetStyle())
-        return;
+        return aStrokeAttributes;
 
     const ::cppcanvas::internal::OutDevState& rState(rParms.mrStates.getState());
 
@@ -174,8 +176,8 @@ void setupStrokeAttributes(rendering::StrokeAttributes& o_rStrokeAttributes,
 
     const sal_Int32 nNumArryEntries(2 * rLineInfo.GetDashCount() + 2 * rLineInfo.GetDotCount());
 
-    o_rStrokeAttributes.DashArray.realloc(nNumArryEntries);
-    double* pDashArray = o_rStrokeAttributes.DashArray.getArray();
+    aStrokeAttributes.DashArray.realloc(nNumArryEntries);
+    double* pDashArray = aStrokeAttributes.DashArray.getArray();
 
     // iteratively fill dash array, first with dashes, then
     // with dots.
@@ -192,6 +194,8 @@ void setupStrokeAttributes(rendering::StrokeAttributes& o_rStrokeAttributes,
         pDashArray[nCurrEntry++] = nDotLen;
         pDashArray[nCurrEntry++] = nDistance;
     }
+
+    return aStrokeAttributes;
 }
 
 /** Create masked Bitmap, where the white areas of rBitmap are
@@ -1715,9 +1719,8 @@ void ImplRenderer::createActions(GDIMetaFile& rMtf, const ActionFactoryParameter
                     else if (LineStyle::NONE != rLineInfo.GetStyle())
                     {
                         // 'thick' line
-                        rendering::StrokeAttributes aStrokeAttributes;
-
-                        setupStrokeAttributes(aStrokeAttributes, rFactoryParms, rLineInfo);
+                        rendering::StrokeAttributes aStrokeAttributes
+                            = getStrokeAttributes(rFactoryParms, rLineInfo);
 
                         // XCanvas can only stroke polygons,
                         // not simple lines - thus, handle
@@ -1882,9 +1885,8 @@ void ImplRenderer::createActions(GDIMetaFile& rMtf, const ActionFactoryParameter
                     else if (LineStyle::NONE != rLineInfo.GetStyle())
                     {
                         // 'thick' line polygon
-                        rendering::StrokeAttributes aStrokeAttributes;
-
-                        setupStrokeAttributes(aStrokeAttributes, rFactoryParms, rLineInfo);
+                        rendering::StrokeAttributes aStrokeAttributes
+                            = getStrokeAttributes(rFactoryParms, rLineInfo);
 
                         pLineAction = internal::PolyPolyActionFactory::createPolyPolyAction(
                             ::basegfx::B2DPolyPolygon(aPoly), rCanvas, rState, aStrokeAttributes);
