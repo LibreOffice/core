@@ -4,10 +4,10 @@
 	/* Backstage accent color: the document type color, or purple when no document is open. */
 	--doc-type-color: rgb(var(--doc-type));
 	--color-on-primary: #ffffff;
-	/* A page preview is 126x176. A landscape preview is at most 150px wide. */
+	/* A page preview is 126x176. A landscape preview is at most 170px wide. */
 	--template-preview-height: 176px;
 	--template-page-preview-width: 126px;
-	--template-preview-max-width: 150px;
+	--template-preview-max-width: 170px;
 	--template-card-width: calc(var(--template-preview-max-width) + 2 * var(--spacing-s));
 	--color-primary-text: #ffffff;
 	--color-accent-background: var(--color-background-lighter);
