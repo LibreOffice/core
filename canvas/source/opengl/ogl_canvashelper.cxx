@@ -18,6 +18,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <canvas/parametricpolypolygon.hxx>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <rtl/crc.h>
 #include <rtl/math.hxx>

@@ -49,7 +49,6 @@ namespace dxcanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvas,
                                              css::rendering::XGraphicDevice,
-                                             css::lang::XMultiServiceFactory,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
@@ -104,7 +103,6 @@ namespace dxcanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,
                                              css::rendering::XGraphicDevice,
-                                             css::lang::XMultiServiceFactory,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,

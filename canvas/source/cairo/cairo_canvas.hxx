@@ -45,8 +45,8 @@ namespace cairocanvas
 {
 typedef ::cppu::WeakComponentImplHelper<
     css::rendering::XBitmapCanvas, css::rendering::XIntegerBitmap, css::rendering::XGraphicDevice,
-    css::lang::XMultiServiceFactory, css::util::XUpdatable, css::beans::XPropertySet,
-    css::lang::XServiceName, css::lang::XServiceInfo>
+    css::util::XUpdatable, css::beans::XPropertySet, css::lang::XServiceName,
+    css::lang::XServiceInfo>
     GraphicDeviceBase_Base;
 typedef ::canvas::GraphicDeviceBase<::canvas::BaseMutexHelper<GraphicDeviceBase_Base>, DeviceHelper,
                                     ::osl::MutexGuard>

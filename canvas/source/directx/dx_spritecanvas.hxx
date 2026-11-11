@@ -52,7 +52,6 @@ namespace dxcanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
                                              css::rendering::XIntegerBitmap,
                                              css::rendering::XGraphicDevice,
-                                             css::lang::XMultiServiceFactory,
                                              css::awt::XWindowListener,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,

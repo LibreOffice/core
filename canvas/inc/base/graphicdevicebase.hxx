@@ -19,12 +19,11 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 
-#include <canvas/parametricpolypolygon.hxx>
+#include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 
 #include <propertysethelper.hxx>
@@ -186,27 +185,6 @@ namespace canvas
 
             return maDeviceHelper.createCompatibleAlphaBitmap( this, size );
         }
-
-        // XMultiServiceFactory
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override
-        {
-            return createInstanceWithArguments(aServiceSpecifier,
-                                               css::uno::Sequence<css::uno::Any>());
-        }
-
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override
-        {
-            return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
-                ParametricPolyPolygon::create(this,
-                                              aServiceSpecifier,
-                                              Arguments));
-        }
-
-        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override
-        {
-            return ParametricPolyPolygon::getAvailableServiceNames();
-        }
-
 
         // XUpdatable
         virtual void SAL_CALL update() override
