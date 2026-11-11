@@ -16,10 +16,13 @@ usage: report.py [--cores DIR] <chunk directory>
 
 Reads list.tsv, results.tsv and coolwsd.log in the chunk directory and writes there:
 - crashlog.txt: "Crash:<path>" for each pass whose kit crashed. The path is the source document
-  for the first pass and the export for a reload.
+  for the first pass and the export for a reload. A kit the debug build aborted for an access
+  outside its sandbox is not a crash here, but a line of sandbox.tsv.
 - exportCrash.txt: for each crash in the background save process, the path of the source
   document with the extension of the export.
 - crashes.tsv: task, pid, stage (load or save), signal, document, pass, path.
+- sandbox.tsv: task, pid, stage, document, pass, path, access (r, w or x), and the path the
+  access resolved to, for each kit aborted for an access outside its sandbox.
 - backtraces/task<N>-core.<pid>.backtrace.txt: gdb's "thread apply all backtrace full" for each
   crash whose core can be found, in DIR or else through coredumpctl.
 """
@@ -30,7 +33,9 @@ import re
 import subprocess
 import sys
 
-FATAL = re.compile(r'^kit-(\d+)-\d+ \S+ \S+ \[ (\S+) \] SIG +Fatal signal received: (\w+)')
+FATAL = re.compile(r'^kit-(\d+)-\d+ \S+ \S+ \[ (\S+) \] SIG +Fatal signal received: (SIG[A-Z]+)?')
+FORBIDDEN = re.compile(r'warn:sal\.osl:(\d+):\d+:\S+: access outside sandbox to ([rwx]):.* '
+                       r'which is really (.*) forbidden')
 LOAD_DOC = re.compile(r'load doc: \S*/([^/\s]+)$')
 BACKTRACE = re.compile(r'^Backtrace (\d+) ')
 TREE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -38,17 +43,26 @@ GDB_SECONDS = 600
 
 
 def kit_crashes(log):
-    """(pid, stage, signal, file name) for each fatal signal in a kit. The kit names its
+    """(pid, stage, signal, file name, forbidden access) for each fatal signal in a kit. The
+    signal is "?" when another process's output split its name. The forbidden access is
+    (access, path) when the kit aborted on an access outside its sandbox, which it logs with its
+    pid just before the signal, and None otherwise. The kit names its
     document a few lines after the signal, and its background save process runs in a thread
     whose name starts with kitbgsv. The kit's dump ends at "Backtrace <pid>". Two kits that
     crash together can interleave their dumps, so the file name is None when another kit's
     signal or backtrace comes first, or when more than one document is named."""
     crashes, lines = [], open(log, errors='replace').readlines()
+    forbidden = {}
     for n, line in enumerate(lines):
+        access = FORBIDDEN.search(line)
+        if access:
+            forbidden[access.group(1)] = (access.group(2), access.group(3))
         match = FATAL.match(line)
         if not match:
             continue
         pid, thread, signal = match.groups()
+        signal = signal or '?'
+        sandbox = forbidden.pop(pid, None) if signal in ('SIGABRT', '?') else None
         names = set()
         for following in lines[n + 1:n + 40]:
             backtrace = BACKTRACE.match(following)
@@ -61,7 +75,8 @@ def kit_crashes(log):
             if found:
                 names.add(found.group(1))
         name = names.pop() if len(names) == 1 else None
-        crashes.append((pid, 'save' if thread.startswith('kitbgsv') else 'load', signal, name))
+        crashes.append((pid, 'save' if thread.startswith('kitbgsv') else 'load', signal, name,
+                        sandbox))
     return crashes
 
 
@@ -93,9 +108,21 @@ def write_backtrace(core, target):
             out.write(f'\ngdb did not finish in {GDB_SECONDS} seconds\n')
 
 
+def write_backtrace_of(pid, task, cores, chunk, backtraces):
+    """Writes the backtrace of the core of pid into backtraces, when its core can be found."""
+    os.makedirs(backtraces, exist_ok=True)
+    core, copy = find_core(pid, cores, chunk)
+    if core:
+        write_backtrace(core, os.path.join(backtraces, f'{task}-core.{pid}.backtrace.txt'))
+        if copy:
+            os.remove(core)
+    else:
+        print(f'pid {pid}: no core found', file=sys.stderr)
+
+
 def report(chunk, cores=None, backtraces=None):
     """Writes the report files of the chunk directory, and the backtraces into backtraces or else
-    chunk/backtraces. Returns the number of kit crashes."""
+    chunk/backtraces. Returns the number of kit crashes and of sandbox aborts."""
     task_of = {}
     for line in open(os.path.join(chunk, 'list.tsv')):
         task, path = line.rstrip('\n').split('\t', 1)
@@ -114,32 +141,35 @@ def report(chunk, cores=None, backtraces=None):
     backtraces = backtraces or os.path.join(chunk, 'backtraces')
     with open(os.path.join(chunk, 'crashlog.txt'), 'w') as crashlog, \
             open(os.path.join(chunk, 'exportCrash.txt'), 'w') as export_crash, \
-            open(os.path.join(chunk, 'crashes.tsv'), 'w') as table:
-        for pid, stage, signal, name in crashes:
+            open(os.path.join(chunk, 'crashes.tsv'), 'w') as table, \
+            open(os.path.join(chunk, 'sandbox.tsv'), 'w') as sandbox_table:
+        for pid, stage, signal, name, sandbox in crashes:
             # A crash fails its pass, so the candidates are the failed passes of that file name.
             matches = [r for r in rows if os.path.basename(r[1]) == name and r[3] != 'ok']
             if len(matches) != 1:
                 print(f'pid {pid}: {len(matches)} failed passes match {name}', file=sys.stderr)
-                table.write('\t'.join(('?', pid, stage, signal, '', '', name or '')) + '\n')
+                if sandbox:
+                    sandbox_table.write('\t'.join(('?', pid, stage, '', '', name or '') + sandbox)
+                                        + '\n')
+                else:
+                    table.write('\t'.join(('?', pid, stage, signal, '', '', name or '')) + '\n')
                 continue
             source, path, which, _, detail = matches[0]
             task = 'task' + task_of.get(source, '?')
+            if sandbox:
+                sandbox_table.write('\t'.join((task, pid, stage, source, which, path) + sandbox)
+                                    + '\n')
+                write_backtrace_of(pid, task, cores, chunk, backtraces)
+                continue
             crashlog.write('Crash:' + path + '\n')
             if stage == 'save':
                 # The detail of a failed save starts with the format of the export.
                 fmt = detail.split(' ', 1)[0]
                 export_crash.write(os.path.splitext(source)[0] + '.' + fmt + '\n')
             table.write('\t'.join((task, pid, stage, signal, source, which, path)) + '\n')
-            os.makedirs(backtraces, exist_ok=True)
-            core, copy = find_core(pid, cores, chunk)
-            if core:
-                write_backtrace(core, os.path.join(backtraces,
-                                                   f'{task}-core.{pid}.backtrace.txt'))
-                if copy:
-                    os.remove(core)
-            else:
-                print(f'pid {pid}: no core found', file=sys.stderr)
-    return len(crashes)
+            write_backtrace_of(pid, task, cores, chunk, backtraces)
+    aborts = sum(1 for crash in crashes if crash[4])
+    return len(crashes) - aborts, aborts
 
 
 def main():
@@ -147,7 +177,8 @@ def main():
     parser.add_argument('--cores', help='directory that core_pattern writes cores into')
     parser.add_argument('chunk', help='chunk directory')
     args = parser.parse_args()
-    print(report(args.chunk, args.cores), 'kit crashes')
+    crashes, aborts = report(args.chunk, args.cores)
+    print(f'{crashes} kit crashes, {aborts} sandbox aborts')
 
 
 if __name__ == '__main__':
