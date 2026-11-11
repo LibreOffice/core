@@ -125,6 +125,13 @@ std::vector<TileDesc>& KitQueue::ensureTileQueue(CanonicalViewId viewid)
 
 namespace {
 
+bool isViewCursorCallback(COKitCallbackType type)
+{
+    return type == COKitCallbackType::INVALIDATE_VIEW_CURSOR ||
+           type == COKitCallbackType::CELL_VIEW_CURSOR ||
+           type == COKitCallbackType::VIEW_CURSOR_VISIBLE;
+}
+
 /// Read the viewId from the payload.
 std::string extractViewId(const std::string& payload)
 {
@@ -176,11 +183,52 @@ bool extractRectangle(const StringVector& tokens, int& x, int& y, int& w, int& h
 
 void KitQueue::putCallback(int view, COKitCallbackType type, const std::string &payload)
 {
-    if (!elideDuplicateCallback(view, type, payload))
-        _callbacks.emplace_back(view, type, payload);
+    std::string viewId = isViewCursorCallback(type) ? extractViewId(payload) : std::string();
+    if (!elideDuplicateCallback(view, type, payload, viewId))
+        appendCallback(view, type, payload, std::move(viewId));
 }
 
-bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const std::string &payload)
+void KitQueue::appendCallback(int view, COKitCallbackType type, std::string payload,
+                              std::string viewId)
+{
+    Callback& callback = _callbacks.emplace_back(view, type, std::move(payload), std::move(viewId));
+    callback._seq = _nextCallbackSeq++;
+    if (isViewCursorCallback(type))
+        _viewCursorSeqs[ViewCursorKey(view, type, callback._viewId)] = callback._seq;
+}
+
+void KitQueue::forgetViewCursor(const Callback& callback)
+{
+    if (!isViewCursorCallback(callback._type))
+        return;
+
+    const auto found =
+        _viewCursorSeqs.find(ViewCursorKey(callback._view, callback._type, callback._viewId));
+    if (found != _viewCursorSeqs.end() && found->second == callback._seq)
+        _viewCursorSeqs.erase(found);
+}
+
+KitQueue::Callback KitQueue::getCallback()
+{
+    assert(_callbacks.size() > 0);
+    Callback front = std::move(_callbacks.front());
+    _callbacks.erase(_callbacks.begin());
+    forgetViewCursor(front);
+    return front;
+}
+
+bool KitQueue::getCallback(Callback& callback)
+{
+    if (_callbacks.empty())
+        return false;
+    callback = std::move(_callbacks.front());
+    _callbacks.erase(_callbacks.begin());
+    forgetViewCursor(callback);
+    return true;
+}
+
+bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const std::string &payload,
+                                      const std::string& viewId)
 {
     const auto callbackType = type;
 
@@ -299,7 +347,7 @@ bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const st
 
                 LOG_TRC("Merge result: " << newPayload);
 
-                _callbacks.emplace_back(view, type, newPayload);
+                appendCallback(view, type, std::move(newPayload), std::string());
                 return true; // elide the original - use this instead
             }
         }
@@ -353,12 +401,26 @@ bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const st
         case COKitCallbackType::CELL_VIEW_CURSOR: // the view cell cursor has moved
         case COKitCallbackType::VIEW_CURSOR_VISIBLE: // the view cursor visibility has changed
         {
-            const bool isViewCallback = (callbackType == COKitCallbackType::INVALIDATE_VIEW_CURSOR ||
-                                         callbackType == COKitCallbackType::CELL_VIEW_CURSOR ||
-                                         callbackType == COKitCallbackType::VIEW_CURSOR_VISIBLE);
+            if (isViewCursorCallback(callbackType))
+            {
+                // Sequence numbers increase along the queue.
+                const auto found = _viewCursorSeqs.find(ViewCursorKey(view, type, viewId));
+                if (found == _viewCursorSeqs.end())
+                    break;
 
-            const std::string viewId
-                = (isViewCallback ? extractViewId(payload) : std::string());
+                const auto queued =
+                    std::lower_bound(_callbacks.begin(), _callbacks.end(), found->second,
+                                     [](const Callback& callback, std::uint64_t seq)
+                                     { return callback._seq < seq; });
+                if (queued != _callbacks.end() && queued->_seq == found->second)
+                {
+                    LOG_TRC("Remove obsolete view callback: " << *queued << " -> "
+                            << Callback::toString(view, type, payload));
+                    _callbacks.erase(queued);
+                }
+                _viewCursorSeqs.erase(found);
+                break;
+            }
 
             for (std::size_t i = 0; i < _callbacks.size(); ++i)
             {
@@ -367,27 +429,10 @@ bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const st
                 if (it._type != type || it._view != view)
                     continue;
 
-                if (!isViewCallback)
-                {
-                    LOG_TRC("Remove obsolete callback: " << it <<  " -> "
-                            << Callback::toString(view, type, payload));
-                    _callbacks.erase(_callbacks.begin() + i);
-                    break;
-                }
-                else if (isViewCallback)
-                {
-                    // we additionally need to ensure that the payload is about
-                    // the same viewid (otherwise we'd merge them all views into
-                    // one)
-                    const std::string queuedViewId = extractViewId(it._payload);
-                    if (viewId == queuedViewId)
-                    {
-                        LOG_TRC("Remove obsolete view callback: " << it << " -> "
-                                << Callback::toString(view, type, payload));
-                        _callbacks.erase(_callbacks.begin() + i);
-                        break;
-                    }
-                }
+                LOG_TRC("Remove obsolete callback: " << it <<  " -> "
+                        << Callback::toString(view, type, payload));
+                _callbacks.erase(_callbacks.begin() + i);
+                break;
             }
         }
         break;
@@ -923,7 +968,14 @@ void KitQueue::dumpState(std::ostream& oss)
     oss << "\tCallbacks size: " << _callbacks.size() << "\n";
     i = 0;
     for (const auto &it : _callbacks)
-        oss << "\t\t" << i++ << ": " << it << "\n";
+    {
+        oss << "\t\t" << i++ << ": " << it << " seq: " << it._seq;
+        if (!it._viewId.empty())
+            oss << " viewId: " << it._viewId;
+        oss << "\n";
+    }
+    oss << "\tNext callback seq: " << _nextCallbackSeq << "\n";
+    oss << "\tView cursor callbacks: " << _viewCursorSeqs.size() << "\n";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

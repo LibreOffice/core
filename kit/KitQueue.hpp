@@ -14,8 +14,11 @@
 #include <common/TilePrioritizer.hpp>
 #include <wsd/TileDesc.hpp>
 
+#include <cstdint>
 #include <deque>
+#include <map>
 #include <string>
+#include <tuple>
 #include <vector>
 
 /// Queue for handling the Kit's messaging needs
@@ -47,16 +50,20 @@ public:
         int _view; // -1 for all
         COKitCallbackType _type;
         std::string _payload;
+        std::string _viewId; // of a view cursor callback, else empty
+        std::uint64_t _seq = 0; // order of queuing, increasing from the front of the queue
 
         Callback() : _view(-1), _type(COKitCallbackType::INVALIDATE_TILES) { }
         Callback(const Callback&) = default;
         Callback(Callback&&) = default;
         Callback& operator=(const Callback&) = default;
         Callback& operator=(Callback&&) = default;
-        Callback(int view, COKitCallbackType type, std::string payload)
+        Callback(int view, COKitCallbackType type, std::string payload,
+                 std::string viewId = std::string())
             : _view(view)
             , _type(type)
             , _payload(std::move(payload))
+            , _viewId(std::move(viewId))
         {
         }
 
@@ -67,7 +74,8 @@ public:
     void putCallback(int view, COKitCallbackType type, const std::string &message);
 
     /// Work back over the queue to simplify & return false if we should not queue.
-    bool elideDuplicateCallback(int view, COKitCallbackType type, const std::string &message);
+    bool elideDuplicateCallback(int view, COKitCallbackType type, const std::string &message,
+                                const std::string& viewId);
 
     /// Obtain the next message.
     /// timeoutMs can be 0 to signify infinity.
@@ -98,22 +106,9 @@ public:
     }
 
     /// Obtain the next callback
-    [[nodiscard]] Callback getCallback()
-    {
-        assert(_callbacks.size() > 0);
-        Callback front = _callbacks.front();
-        _callbacks.erase(_callbacks.begin());
-        return front;
-    }
+    [[nodiscard]] Callback getCallback();
 
-    [[nodiscard]] bool getCallback(Callback& callback)
-    {
-        if (_callbacks.empty())
-            return false;
-        callback = std::move(_callbacks.front());
-        _callbacks.erase(_callbacks.begin());
-        return true;
-    }
+    [[nodiscard]] bool getCallback(Callback& callback);
 
     /// Anything in the queue ?
     bool isEmpty()
@@ -136,6 +131,7 @@ public:
     {
         _queue.clear();
         _callbacks.clear();
+        _viewCursorSeqs.clear();
     }
 
     void dumpState(std::ostream& oss);
@@ -165,6 +161,10 @@ private:
     /// @return New message to put into the queue.  If empty, use what was in callbackMsg.
     std::string removeCallbackDuplicate(const std::string& callbackMsg);
 
+    void appendCallback(int view, COKitCallbackType type, std::string payload, std::string viewId);
+
+    void forgetViewCursor(const Callback& callback);
+
     std::vector<TileDesc>& ensureTileQueue(CanonicalViewId viewid);
     TileCombined popTileQueue(std::vector<TileDesc>& tileQueue, TilePrioritizer::Priority &priority);
 
@@ -181,6 +181,12 @@ private:
 
     /// Queue of callbacks from Kit to send out to coolwsd
     std::deque<Callback> _callbacks;
+
+    std::uint64_t _nextCallbackSeq = 0;
+
+    /// Sequence number of the queued view cursor callback for each view, type and viewId.
+    using ViewCursorKey = std::tuple<int, COKitCallbackType, std::string>;
+    std::map<ViewCursorKey, std::uint64_t> _viewCursorSeqs;
 };
 
 inline std::ostream& operator<<(std::ostream& os, const KitQueue::Callback &c)

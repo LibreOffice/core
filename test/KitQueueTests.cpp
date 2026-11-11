@@ -85,6 +85,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCallbackInvalidationDifferentModes);
     CPPUNIT_TEST(testCallbackCursorDedup);
     CPPUNIT_TEST(testCallbackViewCursorDedup);
+    CPPUNIT_TEST(testCallbackViewCursorManyViews);
     CPPUNIT_TEST(testPreviewTilesNoCombine);
     CPPUNIT_TEST(testTileDeduplicationOnPush);
     CPPUNIT_TEST(testMultiViewTileQueues);
@@ -144,6 +145,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testCallbackInvalidationDifferentModes();
     void testCallbackCursorDedup();
     void testCallbackViewCursorDedup();
+    void testCallbackViewCursorManyViews();
     void testPreviewTilesNoCombine();
     void testTileDeduplicationOnPush();
     void testMultiViewTileQueues();
@@ -1755,6 +1757,62 @@ void KitQueueTests::testCallbackViewCursorDedup()
     putCallback(queue, "callback all 26 { \"viewId\": \"2\", \"rectangle\": \"200, 200, 100, 100\" }");
 
     LOK_ASSERT_EQUAL(static_cast<size_t>(2), queue.callbackSize());
+}
+
+void KitQueueTests::testCallbackViewCursorManyViews()
+{
+    constexpr std::string_view testname = __func__;
+
+    TilePrioritizer dummy;
+    KitQueue queue(dummy);
+
+    const auto cursor = [](int viewId, int x)
+    {
+        return "{ \"viewId\": \"" + std::to_string(viewId) + "\", \"rectangle\": \"" +
+               std::to_string(x) + ", 1418, 0, 298\", \"part\": \"0\" }";
+    };
+
+    // View 0 has the cursors of five other views queued.
+    for (int viewId = 1; viewId <= 5; ++viewId)
+        queue.putCallback(0, COKitCallbackType::INVALIDATE_VIEW_CURSOR, cursor(viewId, 100));
+
+    // The same viewId for another view, and another type for the same view, are kept.
+    queue.putCallback(1, COKitCallbackType::INVALIDATE_VIEW_CURSOR, cursor(3, 100));
+    queue.putCallback(0, COKitCallbackType::VIEW_CURSOR_VISIBLE,
+                      "{ \"viewId\": \"3\", \"visible\": \"true\" }");
+    LOK_ASSERT_EQUAL(static_cast<size_t>(7), queue.callbackSize());
+
+    // A newer cursor of view 3 for view 0 replaces only the queued one of view 3 for view 0,
+    // whatever the order of the keys and the spaces in its JSON.
+    const std::string moved =
+        "{\"part\":\"0\",\"rectangle\":\"900, 1418, 0, 298\",\"viewId\":\"3\"}";
+    queue.putCallback(0, COKitCallbackType::INVALIDATE_VIEW_CURSOR, moved);
+    LOK_ASSERT_EQUAL(static_cast<size_t>(7), queue.callbackSize());
+
+    std::vector<std::string> expected = {
+        "0 " + cursor(1, 100), "0 " + cursor(2, 100), "0 " + cursor(4, 100),
+        "0 " + cursor(5, 100), "1 " + cursor(3, 100),
+        "0 { \"viewId\": \"3\", \"visible\": \"true\" }", "0 " + moved
+    };
+    for (const std::string& want : expected)
+    {
+        KitQueue::Callback item = queue.getCallback();
+        LOK_ASSERT_EQUAL_STR(want, std::to_string(item._view) + ' ' + item._payload);
+    }
+    LOK_ASSERT_EQUAL(static_cast<size_t>(0), queue.callbackSize());
+
+    // A cursor still replaces the queued one after an invalidation merge appended behind it.
+    queue.putCallback(0, COKitCallbackType::INVALIDATE_VIEW_CURSOR, cursor(1, 100));
+    putCallback(queue, "callback 0 0 284, 1418, 11105, 275, 0");
+    putCallback(queue, "callback 0 0 4299, 1418, 7090, 275, 0");
+    queue.putCallback(0, COKitCallbackType::INVALIDATE_VIEW_CURSOR, cursor(1, 200));
+    LOK_ASSERT_EQUAL(static_cast<size_t>(2), queue.callbackSize());
+    LOK_ASSERT_EQUAL(static_cast<int>(COKitCallbackType::INVALIDATE_TILES),
+                     static_cast<int>(queue.getCallback()._type));
+    LOK_ASSERT_EQUAL_STR(cursor(1, 200), queue.getCallback()._payload);
+
+    // Once the cursors are sent, the queue keeps nothing about them.
+    LOK_ASSERT(queue._viewCursorSeqs.empty());
 }
 
 void KitQueueTests::testPreviewTilesNoCombine()
