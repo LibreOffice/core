@@ -46,6 +46,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <canvas/canvastools.hxx>
+#include <canvas/parametricpolypolygon.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
@@ -472,168 +473,160 @@ void ImplRenderer::createGradientAction(const ::tools::PolyPolygon& rPoly,
         // discernible difference should be visible.
         nSteps > 64)
     {
-        uno::Reference<lang::XMultiServiceFactory> xFactory(
-            rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory());
+        rendering::Texture aTexture;
 
-        if (xFactory.is())
+        aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
+        aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
+        aTexture.Alpha = 1.0;
+
+        // setup start/end color values
+
+        // scale color coefficients with gradient intensities
+        const sal_uInt16 nStartIntensity(rGradient.GetStartIntensity());
+        ::Color aVCLStartColor(rGradient.GetStartColor());
+        aVCLStartColor.SetRed(
+            static_cast<sal_uInt8>(aVCLStartColor.GetRed() * nStartIntensity / 100));
+        aVCLStartColor.SetGreen(
+            static_cast<sal_uInt8>(aVCLStartColor.GetGreen() * nStartIntensity / 100));
+        aVCLStartColor.SetBlue(
+            static_cast<sal_uInt8>(aVCLStartColor.GetBlue() * nStartIntensity / 100));
+
+        const sal_uInt16 nEndIntensity(rGradient.GetEndIntensity());
+        ::Color aVCLEndColor(rGradient.GetEndColor());
+        aVCLEndColor.SetRed(static_cast<sal_uInt8>(aVCLEndColor.GetRed() * nEndIntensity / 100));
+        aVCLEndColor.SetGreen(
+            static_cast<sal_uInt8>(aVCLEndColor.GetGreen() * nEndIntensity / 100));
+        aVCLEndColor.SetBlue(static_cast<sal_uInt8>(aVCLEndColor.GetBlue() * nEndIntensity / 100));
+
+        uno::Reference<rendering::XColorSpace> xColorSpace(
+            rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
+        const uno::Sequence<double> aStartColor(
+            vcl::unotools::colorToDoubleSequence(aVCLStartColor, xColorSpace));
+        const uno::Sequence<double> aEndColor(
+            vcl::unotools::colorToDoubleSequence(aVCLEndColor, xColorSpace));
+
+        uno::Sequence<uno::Sequence<double>> aColors;
+        uno::Sequence<double> aStops;
+
+        if (rGradient.GetStyle() == css::awt::GradientStyle_AXIAL)
         {
-            rendering::Texture aTexture;
+            aStops = { 0.0, 0.5, 1.0 };
+            aColors = { aEndColor, aStartColor, aEndColor };
+        }
+        else
+        {
+            aStops = { 0.0, 1.0 };
+            aColors = { aStartColor, aEndColor };
+        }
 
-            aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
-            aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
-            aTexture.Alpha = 1.0;
+        const ::basegfx::B2DRectangle aBounds(aDevicePoly.getB2DRange());
+        const ::basegfx::B2DVector aOffset(rGradient.GetOfsX() / 100.0,
+                                           rGradient.GetOfsY() / 100.0);
+        double fRotation = toRadians(rGradient.GetAngle());
+        const double fBorder(rGradient.GetBorder() / 100.0);
 
-            // setup start/end color values
+        basegfx::B2DHomMatrix aRot90;
+        aRot90.rotate(M_PI_2);
 
-            // scale color coefficients with gradient intensities
-            const sal_uInt16 nStartIntensity(rGradient.GetStartIntensity());
-            ::Color aVCLStartColor(rGradient.GetStartColor());
-            aVCLStartColor.SetRed(
-                static_cast<sal_uInt8>(aVCLStartColor.GetRed() * nStartIntensity / 100));
-            aVCLStartColor.SetGreen(
-                static_cast<sal_uInt8>(aVCLStartColor.GetGreen() * nStartIntensity / 100));
-            aVCLStartColor.SetBlue(
-                static_cast<sal_uInt8>(aVCLStartColor.GetBlue() * nStartIntensity / 100));
+        basegfx::ODFGradientInfo aGradInfo;
+        OUString aGradientService;
+        switch (rGradient.GetStyle())
+        {
+            case css::awt::GradientStyle_LINEAR:
+                aGradInfo = basegfx::utils::createLinearODFGradientInfo(aBounds, nSteps, fBorder,
+                                                                        fRotation);
+                // map ODF to svg gradient orientation - x
+                // instead of y direction
+                aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aRot90);
+                aGradientService = "LinearGradient";
+                break;
 
-            const sal_uInt16 nEndIntensity(rGradient.GetEndIntensity());
-            ::Color aVCLEndColor(rGradient.GetEndColor());
-            aVCLEndColor.SetRed(
-                static_cast<sal_uInt8>(aVCLEndColor.GetRed() * nEndIntensity / 100));
-            aVCLEndColor.SetGreen(
-                static_cast<sal_uInt8>(aVCLEndColor.GetGreen() * nEndIntensity / 100));
-            aVCLEndColor.SetBlue(
-                static_cast<sal_uInt8>(aVCLEndColor.GetBlue() * nEndIntensity / 100));
-
-            uno::Reference<rendering::XColorSpace> xColorSpace(
-                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
-            const uno::Sequence<double> aStartColor(
-                vcl::unotools::colorToDoubleSequence(aVCLStartColor, xColorSpace));
-            const uno::Sequence<double> aEndColor(
-                vcl::unotools::colorToDoubleSequence(aVCLEndColor, xColorSpace));
-
-            uno::Sequence<uno::Sequence<double>> aColors;
-            uno::Sequence<double> aStops;
-
-            if (rGradient.GetStyle() == css::awt::GradientStyle_AXIAL)
+            case css::awt::GradientStyle_AXIAL:
             {
-                aStops = { 0.0, 0.5, 1.0 };
-                aColors = { aEndColor, aStartColor, aEndColor };
-            }
-            else
-            {
-                aStops = { 0.0, 1.0 };
-                aColors = { aStartColor, aEndColor };
-            }
+                // Adapt the border so that it is suitable
+                // for the axial gradient.  An axial
+                // gradient consists of two linear
+                // gradients.  Each of those covers half
+                // of the total size.  In order to
+                // compensate for the condensed display of
+                // the linear gradients, we have to
+                // enlarge the area taken up by the actual
+                // gradient (1-fBorder).  After that we
+                // have to turn the result back into a
+                // border value, hence the second (left
+                // most 1-...
+                const double fAxialBorder(1 - 2 * (1 - fBorder));
+                aGradInfo = basegfx::utils::createAxialODFGradientInfo(aBounds, nSteps,
+                                                                       fAxialBorder, fRotation);
+                // map ODF to svg gradient orientation - x
+                // instead of y direction
+                aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aRot90);
 
-            const ::basegfx::B2DRectangle aBounds(aDevicePoly.getB2DRange());
-            const ::basegfx::B2DVector aOffset(rGradient.GetOfsX() / 100.0,
-                                               rGradient.GetOfsY() / 100.0);
-            double fRotation = toRadians(rGradient.GetAngle());
-            const double fBorder(rGradient.GetBorder() / 100.0);
+                // map ODF axial gradient to 3-stop linear
+                // gradient - shift left by 0.5
+                basegfx::B2DHomMatrix aShift;
 
-            basegfx::B2DHomMatrix aRot90;
-            aRot90.rotate(M_PI_2);
-
-            basegfx::ODFGradientInfo aGradInfo;
-            OUString aGradientService;
-            switch (rGradient.GetStyle())
-            {
-                case css::awt::GradientStyle_LINEAR:
-                    aGradInfo = basegfx::utils::createLinearODFGradientInfo(aBounds, nSteps,
-                                                                            fBorder, fRotation);
-                    // map ODF to svg gradient orientation - x
-                    // instead of y direction
-                    aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aRot90);
-                    aGradientService = "LinearGradient";
-                    break;
-
-                case css::awt::GradientStyle_AXIAL:
-                {
-                    // Adapt the border so that it is suitable
-                    // for the axial gradient.  An axial
-                    // gradient consists of two linear
-                    // gradients.  Each of those covers half
-                    // of the total size.  In order to
-                    // compensate for the condensed display of
-                    // the linear gradients, we have to
-                    // enlarge the area taken up by the actual
-                    // gradient (1-fBorder).  After that we
-                    // have to turn the result back into a
-                    // border value, hence the second (left
-                    // most 1-...
-                    const double fAxialBorder(1 - 2 * (1 - fBorder));
-                    aGradInfo = basegfx::utils::createAxialODFGradientInfo(aBounds, nSteps,
-                                                                           fAxialBorder, fRotation);
-                    // map ODF to svg gradient orientation - x
-                    // instead of y direction
-                    aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aRot90);
-
-                    // map ODF axial gradient to 3-stop linear
-                    // gradient - shift left by 0.5
-                    basegfx::B2DHomMatrix aShift;
-
-                    aShift.translate(-0.5, 0);
-                    aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aShift);
-                    aGradientService = "LinearGradient";
-                    break;
-                }
-
-                case css::awt::GradientStyle_RADIAL:
-                    aGradInfo = basegfx::utils::createRadialODFGradientInfo(aBounds, aOffset,
-                                                                            nSteps, fBorder);
-                    aGradientService = "EllipticalGradient";
-                    break;
-
-                case css::awt::GradientStyle_ELLIPTICAL:
-                    aGradInfo = basegfx::utils::createEllipticalODFGradientInfo(
-                        aBounds, aOffset, nSteps, fBorder, fRotation);
-                    aGradientService = "EllipticalGradient";
-                    break;
-
-                case css::awt::GradientStyle_SQUARE:
-                    aGradInfo = basegfx::utils::createSquareODFGradientInfo(
-                        aBounds, aOffset, nSteps, fBorder, fRotation);
-                    aGradientService = "RectangularGradient";
-                    break;
-
-                case css::awt::GradientStyle_RECT:
-                    aGradInfo = basegfx::utils::createRectangularODFGradientInfo(
-                        aBounds, aOffset, nSteps, fBorder, fRotation);
-                    aGradientService = "RectangularGradient";
-                    break;
-
-                default:
-                    ENSURE_OR_THROW(
-                        false, "ImplRenderer::createGradientAction(): Unexpected gradient type");
-                    break;
+                aShift.translate(-0.5, 0);
+                aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aShift);
+                aGradientService = "LinearGradient";
+                break;
             }
 
-            ::basegfx::unotools::affineMatrixFromHomMatrix(aTexture.AffineTransform,
-                                                           aGradInfo.getTextureTransform());
+            case css::awt::GradientStyle_RADIAL:
+                aGradInfo = basegfx::utils::createRadialODFGradientInfo(aBounds, aOffset, nSteps,
+                                                                        fBorder);
+                aGradientService = "EllipticalGradient";
+                break;
 
-            uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence({
-                { "Colors", uno::Any(aColors) },
-                { "Stops", uno::Any(aStops) },
-                { "AspectRatio", uno::Any(aGradInfo.getAspectRatio()) },
-            }));
-            aTexture.Gradient.set(xFactory->createInstanceWithArguments(aGradientService, args),
-                                  uno::UNO_QUERY);
-            if (aTexture.Gradient.is())
+            case css::awt::GradientStyle_ELLIPTICAL:
+                aGradInfo = basegfx::utils::createEllipticalODFGradientInfo(
+                    aBounds, aOffset, nSteps, fBorder, fRotation);
+                aGradientService = "EllipticalGradient";
+                break;
+
+            case css::awt::GradientStyle_SQUARE:
+                aGradInfo = basegfx::utils::createSquareODFGradientInfo(aBounds, aOffset, nSteps,
+                                                                        fBorder, fRotation);
+                aGradientService = "RectangularGradient";
+                break;
+
+            case css::awt::GradientStyle_RECT:
+                aGradInfo = basegfx::utils::createRectangularODFGradientInfo(
+                    aBounds, aOffset, nSteps, fBorder, fRotation);
+                aGradientService = "RectangularGradient";
+                break;
+
+            default:
+                ENSURE_OR_THROW(false,
+                                "ImplRenderer::createGradientAction(): Unexpected gradient type");
+                break;
+        }
+
+        ::basegfx::unotools::affineMatrixFromHomMatrix(aTexture.AffineTransform,
+                                                       aGradInfo.getTextureTransform());
+
+        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence({
+            { "Colors", uno::Any(aColors) },
+            { "Stops", uno::Any(aStops) },
+            { "AspectRatio", uno::Any(aGradInfo.getAspectRatio()) },
+        }));
+        aTexture.Gradient.set(canvas::ParametricPolyPolygon::create(
+            rParms.mrCanvas->getUNOCanvas()->getDevice(), aGradientService, args));
+        if (aTexture.Gradient.is())
+        {
+            std::shared_ptr<Action> pPolyAction(
+                internal::PolyPolyActionFactory::createPolyPolyAction(
+                    aDevicePoly, rParms.mrCanvas, rParms.mrStates.getState(), aTexture));
+
+            if (pPolyAction)
             {
-                std::shared_ptr<Action> pPolyAction(
-                    internal::PolyPolyActionFactory::createPolyPolyAction(
-                        aDevicePoly, rParms.mrCanvas, rParms.mrStates.getState(), aTexture));
+                maActions.emplace_back(pPolyAction, rParms.mrCurrActionIndex);
 
-                if (pPolyAction)
-                {
-                    maActions.emplace_back(pPolyAction, rParms.mrCurrActionIndex);
-
-                    rParms.mrCurrActionIndex += pPolyAction->getActionCount() - 1;
-                }
-
-                // done, using native gradients
-                return;
+                rParms.mrCurrActionIndex += pPolyAction->getActionCount() - 1;
             }
+
+            // done, using native gradients
+            return;
         }
     }
 
