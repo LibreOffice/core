@@ -3252,6 +3252,17 @@ AS_IF([test "$ENABLE_IOSAPP" = "true"],
              AC_MSG_RESULT([${with_iosapp_appicon:-default} embedded icon])
           fi
 
+          rm -rf ios/Mobile/Assets.xcassets/*_launch.imageset
+          for name in ${IOSAPP_ICON_NAME:-AppIcon_snapshot AppIcon_release}; do
+             if test -d ios/Mobile/$name.icon; then
+                launch_icon=ios/Mobile/$name.icon
+             elif test -d ios/Mobile/Assets.xcassets/$name.appiconset; then
+                launch_icon=ios/Mobile/Assets.xcassets/$name.appiconset
+             fi
+             $PYTHON ios/make_launch_image.py $launch_icon ios/Mobile/Assets.xcassets/${name}_launch.imageset ||
+                AC_MSG_ERROR([could not draw the launch screen from $launch_icon])
+          done
+
           # The thumbnail extension draws the document icons of the icon theme. A custom icon
           # theme supplies the icon when it has the file. The stock image is linked otherwise.
           for icon in x-office-document x-office-spreadsheet x-office-presentation \

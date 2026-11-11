@@ -64,7 +64,6 @@
 		BE8D77322136762500AC58EA /* DocumentViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE8D77312136762500AC58EA /* DocumentViewController.mm */; };
 		BE8D77352136762500AC58EA /* CODocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE8D77342136762500AC58EA /* CODocument.mm */; };
 		BE8D77382136762500AC58EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8D77362136762500AC58EA /* Main.storyboard */; };
-		BE8D773D2136762600AC58EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8D773B2136762600AC58EA /* LaunchScreen.storyboard */; };
 		BE8D77402136762600AC58EA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8D773F2136762600AC58EA /* main.m */; };
 		BE8D85CA214055F3009F1860 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BE8D85BC214055F2009F1860 /* offapi.rdb */; };
 		BE8D85CB214055F3009F1860 /* share in Resources */ = {isa = PBXBuildFile; fileRef = BE8D85BD214055F2009F1860 /* share */; };
@@ -952,7 +951,6 @@
 		BE8D77332136762500AC58EA /* CODocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODocument.h; sourceTree = "<group>"; };
 		BE8D77342136762500AC58EA /* CODocument.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objcpp; path = CODocument.mm; sourceTree = "<group>"; };
 		BE8D77372136762500AC58EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		BE8D773C2136762600AC58EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BE8D773E2136762600AC58EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE8D773F2136762600AC58EA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BE8D85BC214055F2009F1860 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = "../../../lobuilddir-symlink/workdir/CustomTarget/ios/resources/offapi.rdb"; sourceTree = "<group>"; };
@@ -2818,7 +2816,6 @@
 				BE80E45621B68F5000859C97 /* TemplateCollectionViewController.h */,
 				BE80E45721B68F5700859C97 /* TemplateCollectionViewController.mm */,
 				BE8D77362136762500AC58EA /* Main.storyboard */,
-				BE8D773B2136762600AC58EA /* LaunchScreen.storyboard */,
 				C7C0F1A02F5B00010000A001 /* Config.xcconfig */,
 				BE8D773E2136762600AC58EA /* Info.plist */,
 				BE8D773F2136762600AC58EA /* main.m */,
@@ -3873,7 +3870,6 @@
 				BE5EB5DC2140480B00E0826C /* ICU.dat in Resources */,
 				BE8D85CE214055F3009F1860 /* oovbaapi.rdb in Resources */,
 				BE00F8A721396585001CE2D4 /* cool-help.html in Resources */,
-				BE8D773D2136762600AC58EA /* LaunchScreen.storyboard in Resources */,
 				C74FE3C93090A8D900643C6B /* AppIcon_snapshot.icon in Resources */,
 				C74FE3CA3090A8D900643C6B /* AppIcon_release.icon in Resources */,
 				BE00F8A121396585001CE2D4 /* bundle.css in Resources */,
@@ -4062,14 +4058,6 @@
 				BE8D77372136762500AC58EA /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		BE8D773B2136762600AC58EA /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BE8D773C2136762600AC58EA /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

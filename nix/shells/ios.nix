@@ -37,6 +37,22 @@ let
     exec /usr/bin/rsync "$@"
   ''; # xcodebuild -exportArchive uses rsync --extended-attributes, which is only available on the system rsync
 
+  sips = pkgs.writeShellScriptBin "sips" ''
+    if [ ! -x /usr/bin/sips ]; then
+      echo "nix/shells/ios.nix: /usr/bin/sips not found" >&2
+      exit 1
+    fi
+    exec /usr/bin/sips "$@"
+  ''; # MacOS has sips (a tiny image editor) - nixpkgs doesn't, and I wasn't able to find something that was in both to replace it
+
+  ictool = pkgs.writeShellScriptBin "ictool" ''
+    if [ ! -x "${developerDir}/../Applications/Icon Composer.App/Contents/Executables/ictool" ]; then
+      echo "nix/shells/ios.nix: ${developerDir}/../Applications/Icon Composer.App/Contents/Executables/ictool not found" >&2
+      exit 1
+    fi
+    exec "${developerDir}/../Applications/Icon Composer.App/Contents/Executables/ictool" "$@"
+  ''; # Used by make_launch_image.py
+
   xcodebuild = pkgs.writeShellScriptBin "xcodebuild" ''
     if [ ! -x /usr/bin/xcodebuild ]; then
       echo "nix/shells/ios.nix: /usr/bin/xcodebuild not found; please install XCode (and the iPhoneOS SDK)" >&2
@@ -63,6 +79,7 @@ pkgs.mkShell {
     flex
     git
     gperf
+    ictool
     libtool
     libxml2
     libxslt
@@ -71,8 +88,10 @@ pkgs.mkShell {
     perl
     pkg-config
     pkgconf
+    python3
     python3Packages.lxml
     python3Packages.polib
+    sips
     unzip
     zip
   ];
@@ -80,6 +99,8 @@ pkgs.mkShell {
   # configure swaps CC for `xcrun` clang when the env CC is empty, so setting these keeps our nix compiler rather than the host system one
   CC_FOR_BUILD = "cc -isysroot ${pkgs.apple-sdk.sdkroot}";
   CXX_FOR_BUILD = "c++ -isysroot ${pkgs.apple-sdk.sdkroot}";
+
+  ICTOOL="${ictool}/bin/ictool"; # prevents ios/make_launch_image.py doing its usual search for ictool...
 
   shellHook = ''
     export DEVELOPER_DIR=${developerDir}
