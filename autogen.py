@@ -31,7 +31,6 @@ def main():
             # like the shell does.
             line = re.sub(r"\$[A-Za-z_][A-Za-z0-9_]*", "", line)
             cmdline.append(line)
-    cmdline.append("--enable-option-checking=fatal")
     print("Running '{}'".format("' '".join(cmdline)))
     subprocess.run(cmdline, check=True)
 
