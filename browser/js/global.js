@@ -3202,6 +3202,51 @@ function showWelcomeSVG() {
 		}
 	}
 
+	// The /cool/ws address of a CODA page, which also points the page at the COOL server.
+	function codaServerSocketUrl(ri) {
+		// CODA: target ri.coolServer with access_token as a
+		// top-level URL parameter (rather than encoded inside
+		// the WOPISrc value), because the cool-server's WOPI-
+		// token cross-origin upgrade bypass keys on
+		// RequestDetails::getParamByName, which only sees top-
+		// level params.  Overwrite map.options.doc, which was
+		// the local temp-file path during local-edit mode, with
+		// the integrator's WOPI URL.
+		global.app.map.options.doc = ri.wopiSrc;
+		global.app.map.options.docParams = {
+			access_token: ri.accessToken,
+			access_token_ttl: '0',
+			permission: 'edit',
+		};
+		global.app.map.options.wopi = true;
+		global.app.map.options.wopiSrc = ri.wopiSrc;
+		window.wopiSrc = ri.wopiSrc;
+
+		var coolWsScheme = ri.coolServer.startsWith('https:')
+			? 'wss:' : 'ws:';
+		var coolHost = ri.coolServer.replace(/^https?:/, '');
+
+		var wsURI = coolWsScheme + coolHost + '/cool/ws?WOPISrc='
+			+ encodeURIComponent(ri.wopiSrc)
+			+ '&access_token='
+			+ encodeURIComponent(ri.accessToken)
+			+ '&access_token_ttl=0&permission=edit&compat=/ws';
+
+		// Repoint global.host (and the derived global.webserver) at the COOL server
+		// so subsequent Socket.ts reconnects via getWebSocketBaseURI build their
+		// URLs there. Until then, global.host names the page's file:// address.
+		global.host = coolWsScheme + coolHost;
+		global.webserver = ri.coolServer.replace(/\/*$/, ''); // Remove trailing slash.
+
+		// Static asset URLs, icons included, carry the server's version hash between
+		// /browser/ and the asset path, and the server only maps such a path onto its dist
+		// directory when that segment is present.
+		var versionMatch = (ri.coolPath || '').match(/\/browser\/([0-9a-f]+)\//);
+		global.versionPath = versionMatch ? versionMatch[1] : 'dist';
+
+		return wsURI;
+	}
+
 	// Switch from local (WASM or LOKit-via-Bridge) editing to traditional
 	// server-based collaborative editing without reloading cool.html:
 	// tear down the local-edit plumbing, then point app.socket at a real
@@ -3245,41 +3290,7 @@ function showWelcomeSVG() {
 		var ri = window._codaRemoteInfo;
 		var wsURI;
 		if (ri) {
-			// CODA: target ri.coolServer with access_token as a
-			// top-level URL parameter (rather than encoded inside
-			// the WOPISrc value), because the cool-server's WOPI-
-			// token cross-origin upgrade bypass keys on
-			// RequestDetails::getParamByName, which only sees top-
-			// level params.  Overwrite map.options.doc, which was
-			// the local temp-file path during local-edit mode, with
-			// the integrator's WOPI URL.
-			global.app.map.options.doc = ri.wopiSrc;
-			global.app.map.options.docParams = {
-				access_token: ri.accessToken,
-				access_token_ttl: '0',
-				permission: 'edit',
-			};
-			global.app.map.options.wopi = true;
-			global.app.map.options.wopiSrc = ri.wopiSrc;
-			window.wopiSrc = ri.wopiSrc;
-			var coolWsScheme = ri.coolServer.startsWith('https:')
-				? 'wss:' : 'ws:';
-			var coolHost = ri.coolServer.replace(/^https?:/, '');
-			wsURI = coolWsScheme + coolHost + '/cool/ws?WOPISrc='
-				+ encodeURIComponent(ri.wopiSrc)
-				+ '&access_token='
-				+ encodeURIComponent(ri.accessToken)
-				+ '&access_token_ttl=0&permission=edit&compat=/ws';
-			// Repoint global.host (and the derived global.webserver) at the COOL server
-			// so subsequent Socket.ts reconnects via getWebSocketBaseURI build their
-			// URLs there. Until then, global.host names the page's file:// address.
-			global.host = coolWsScheme + coolHost;
-			global.webserver = ri.coolServer.replace(/\/*$/, ''); // Remove trailing slash.
-			// Static asset URLs, icons included, carry the server's version hash between
-			// /browser/ and the asset path, and the server only maps such a path onto its dist
-			// directory when that segment is present.
-			var versionMatch = (ri.coolPath || '').match(/\/browser\/([0-9a-f]+)\//);
-			global.versionPath = versionMatch ? versionMatch[1] : 'dist';
+			wsURI = codaServerSocketUrl(ri);
 		} else {
 			// COWASM: cool.html is hosted on the cool server, so a
 			// same-origin upgrade against location.host is fine.
