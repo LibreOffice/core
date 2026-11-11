@@ -525,6 +525,13 @@ public:
 
     std::string getJailRoot() const;
 
+    /// A new path to write a file at before moveToInsertFile puts it in this document's jail.
+    std::string newStagingPath() const;
+
+    /// Moves the file at localPath into the staging area of this document's jail as name.
+    /// Returns false when it cannot, and then the file at localPath is left in place.
+    bool moveToInsertFile(const std::string& localPath, const std::string& name) const;
+
 #if !MOBILEAPP
     /// The path in the staging area of this document's jail that a file staged under
     /// the given name sits at. Empty when the jail cannot be reached.

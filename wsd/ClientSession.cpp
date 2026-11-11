@@ -825,16 +825,8 @@ void ClientSession::downloadCompareDocument(const Poco::URI& uri, int redirectLi
         return;
 
     const std::string stagedName = "compare-" + Util::rng::getHexString(16);
-    const std::string stagedPath = docBroker->jailStagingPath(stagedName);
-    if (stagedPath.empty())
-    {
-        sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
-        return;
-    }
-
-    const std::string stagedDirectory = Poco::Path(stagedPath).parent().toString();
-    Poco::File(stagedDirectory).createDirectories();
-    if (!FileUtil::checkDiskSpace(stagedDirectory))
+    const std::string stagedPath = docBroker->newStagingPath();
+    if (!FileUtil::checkDiskSpace(Poco::Path(stagedPath).parent().toString()))
     {
         LOG_ERR("Low disk space to download the document to compare against");
         sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
@@ -912,15 +904,12 @@ void ClientSession::downloadCompareDocument(const Poco::URI& uri, int redirectLi
         }
 
         // The engine detects the type of the file from its extension as well as its content.
-        std::string fileName = stagedName;
-        const std::string extension = downloadedFileExtension(*httpResponse, uri);
-        if (!extension.empty())
+        const std::string fileName = stagedName + downloadedFileExtension(*httpResponse, uri);
+        if (!broker->moveToInsertFile(stagedPath, fileName))
         {
-            if (std::rename(stagedPath.c_str(), (stagedPath + extension).c_str()) == 0)
-                fileName += extension;
-            else
-                LOG_WRN_SYS("Failed to give the document to compare against the extension ["
-                            << extension << ']');
+            FileUtil::removeFile(stagedPath);
+            sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
+            return;
         }
 
         forwardToChild("insertfile name=" + fileName + " type=comparedocuments", broker);

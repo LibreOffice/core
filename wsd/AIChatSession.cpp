@@ -3153,27 +3153,17 @@ void AIChatSession::processTransformImageGenerations(
     // Copy the placeholder image to the jail insertfile directory
     if (!_toolLoop->pendingImageGens.empty())
     {
-        const std::string jailId = docBroker->getJailId();
-        const std::string dirPath = FileUtil::buildLocalPathToJail(
-            COOLWSD::EnableMountNamespaces, COOLWSD::ChildRoot + jailId,
-            std::string(JAILED_DOCUMENT_ROOT) + "insertfile");
-        Poco::File(dirPath).createDirectories();
-
         const std::string srcPath = COOLWSD::FileServerRoot
             + "/browser/dist/images/ai-loading-placeholder.png";
-        const std::string dstPath = dirPath + "/ai-loading-placeholder.png";
+        const std::string stagingPath = docBroker->newStagingPath();
 
-        try
+        if (!FileUtil::Stat(srcPath).exists())
+            LOG_WRN("TransformImageGen: placeholder not found at " << srcPath);
+        else if (!FileUtil::copy(srcPath, stagingPath, /*log=*/false, /*throw_on_error=*/false) ||
+                 !docBroker->moveToInsertFile(stagingPath, "ai-loading-placeholder.png"))
         {
-            Poco::File src(srcPath);
-            if (src.exists())
-                src.copyTo(dstPath);
-            else
-                LOG_WRN("TransformImageGen: placeholder not found at " << srcPath);
-        }
-        catch (const std::exception& ex)
-        {
-            LOG_WRN("TransformImageGen: failed to copy placeholder: " << ex.what());
+            LOG_WRN("TransformImageGen: failed to copy placeholder");
+            FileUtil::removeFile(stagingPath);
         }
     }
 
@@ -3259,27 +3249,18 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
             std::string binaryData;
             macaron::Base64::Decode(res.b64Json, binaryData);
 
-            const std::string jailId = docBroker->getJailId();
-            const std::string dirPath = FileUtil::buildLocalPathToJail(
-                COOLWSD::EnableMountNamespaces, COOLWSD::ChildRoot + jailId,
-                std::string(JAILED_DOCUMENT_ROOT) + "insertfile");
-
-            Poco::File(dirPath).createDirectories();
-
             const std::string fileName =
                 "ai_" + Util::rng::getHexString(8) + "_" + std::to_string(idx) + ".png";
-            std::string filePath = dirPath;
-            filePath += '/';
-            filePath += fileName;
+            const std::string stagingPath = docBroker->newStagingPath();
 
-            std::ofstream fileStream(filePath, std::ios::out | std::ios::binary);
+            std::ofstream fileStream(stagingPath, std::ios::out | std::ios::binary);
             fileStream.write(binaryData.data(), binaryData.size());
             fileStream.close();
 
-            if (!fileStream.good())
+            if (!fileStream.good() || !docBroker->moveToInsertFile(stagingPath, fileName))
             {
-                LOG_WRN_S("TransformImageGen: failed to write image to " << filePath);
-                FileUtil::removeFile(filePath);
+                LOG_WRN_S("TransformImageGen: failed to stage image " << fileName);
+                FileUtil::removeFile(stagingPath);
                 onImageFail();
                 return;
             }
@@ -3289,7 +3270,7 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
                 "file://" + std::string(JAILED_DOCUMENT_ROOT) + "insertfile/" + fileName;
             self->_toolLoop->pendingImageGens[idx].filePath = jailFileUrl;
 
-            LOG_DBG_S("TransformImageGen: wrote image " << (idx + 1) << " to " << filePath);
+            LOG_DBG_S("TransformImageGen: wrote image " << (idx + 1) << " as " << fileName);
 
             // Send a transform to replace the loading placeholder with the real
             // image on the correct slide. When the image carries alt text the

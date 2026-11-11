@@ -5399,6 +5399,47 @@ std::string DocumentBroker::getJailRoot() const
     return std::string();
 }
 
+#if MOBILEAPP
+static std::string localStagingDirectory(const std::string& jailId)
+{
+    return FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
+                                          COOLWSD::ChildRoot + jailId,
+                                          JAILED_DOCUMENT_ROOT + std::string("insertfile"));
+}
+#endif
+
+std::string DocumentBroker::newStagingPath() const
+{
+#if !MOBILEAPP
+    return COOLWSD::ChildRoot + JailUtil::CHILDROOT_TMP_INCOMING_PATH + '/' +
+           Util::rng::getFilename(16);
+#else
+    // There is no kit process to keep the file from, so it is written in place.
+    const std::string directory = localStagingDirectory(getJailId());
+    Poco::File(directory).createDirectories();
+    return directory + '/' + Util::rng::getFilename(16);
+#endif
+}
+
+bool DocumentBroker::moveToInsertFile(const std::string& localPath, const std::string& name) const
+{
+#if !MOBILEAPP
+    return !moveFileIntoJail(localPath, JAILED_DOCUMENT_ROOT + std::string("insertfile/") + name)
+                .empty();
+#else
+    try
+    {
+        Poco::File(localPath).renameTo(localStagingDirectory(getJailId()) + '/' + name);
+        return true;
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("Failed to stage [" << name << "]: " << exc.displayText());
+        return false;
+    }
+#endif
+}
+
 void DocumentBroker::sendDocumentSettingsLive()
 {
     ASSERT_CORRECT_THREAD();
@@ -7082,20 +7123,18 @@ std::string DocumentBroker::stageExportedSlides(const std::string_view answer)
     }
 
     const std::string stagedName = "sourceslides-" + Util::rng::getHexString(8) + ".odp";
-    const std::string stagedPath = jailStagingPath(stagedName);
-    if (stagedPath.empty())
-        return std::string();
+    const std::string stagingPath = newStagingPath();
 
     const std::size_t size = answer.size() - header - 1;
-    std::ofstream staged(stagedPath, std::ios::binary);
+    std::ofstream staged(stagingPath, std::ios::binary);
     staged.write(answer.data() + header + 1, size);
     staged.close();
 
-    if (!staged || size == 0)
+    if (!staged || size == 0 || !moveToInsertFile(stagingPath, stagedName))
     {
         LOG_ERR("Failed to stage the " << size << " bytes of pages a source of [" << _docKey
                                        << "] wrote");
-        FileUtil::removeFile(stagedPath);
+        FileUtil::removeFile(stagingPath);
         return std::string();
     }
 
@@ -7131,18 +7170,9 @@ std::string DocumentBroker::stageUpload(const std::string& credential,
     // name the file was uploaded under.
     const std::string stagedName =
         Util::rng::getHexString(16) + '-' + Poco::Path(uploadedPath).getFileName();
-    const std::string stagedPath = jailStagingPath(stagedName);
-    if (stagedPath.empty())
-        return std::string();
-
-    try
+    if (!moveToInsertFile(uploadedPath, stagedName))
     {
-        Poco::File(Poco::Path(stagedPath).parent()).createDirectories();
-        Poco::File(uploadedPath).moveTo(stagedPath);
-    }
-    catch (const Poco::Exception& exc)
-    {
-        LOG_ERR("Failed to stage an upload to [" << _docKey << "]: " << exc.displayText());
+        LOG_ERR("Failed to stage an upload to [" << _docKey << ']');
         return std::string();
     }
 
