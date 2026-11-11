@@ -50,13 +50,10 @@ namespace canvas
 
     sal_Bool SAL_CALL CachedPrimitiveBase::redraw(const rendering::ViewState& aState)
     {
-        ::basegfx::B2DHomMatrix aUsedTransformation;
-        ::basegfx::B2DHomMatrix aNewTransformation;
-
-        ::basegfx::unotools::homMatrixFromAffineMatrix( aUsedTransformation,
-                                                        maUsedViewState.AffineTransform );
-        ::basegfx::unotools::homMatrixFromAffineMatrix( aNewTransformation,
-                                                        aState.AffineTransform );
+        ::basegfx::B2DHomMatrix aUsedTransformation
+            = ::basegfx::unotools::homMatrixFromAffineMatrix(maUsedViewState.AffineTransform);
+        ::basegfx::B2DHomMatrix aNewTransformation
+            = ::basegfx::unotools::homMatrixFromAffineMatrix(aState.AffineTransform);
 
         const bool bSameViewTransforms( aUsedTransformation == aNewTransformation );
 

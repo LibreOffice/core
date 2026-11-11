@@ -269,9 +269,8 @@ namespace canvas
     void CanvasCustomSpriteHelper::transform( const Sprite::Reference&          rSprite,
                                               const geometry::AffineMatrix2D&   aTransformation )
     {
-        ::basegfx::B2DHomMatrix aMatrix;
-        ::basegfx::unotools::homMatrixFromAffineMatrix(aMatrix,
-                                                       aTransformation);
+        ::basegfx::B2DHomMatrix aMatrix
+            = ::basegfx::unotools::homMatrixFromAffineMatrix(aTransformation);
 
         if( maTransform == aMatrix )
             return;

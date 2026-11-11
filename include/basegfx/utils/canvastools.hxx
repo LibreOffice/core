@@ -111,9 +111,8 @@ namespace basegfx::unotools
             css::geometry::AffineMatrix3D& matrix,
             const ::basegfx::B3DHomMatrix& transform);
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2DHomMatrix&
-            homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                transform,
-                                       const css::geometry::AffineMatrix2D&    matrix );
+        BASEGFX_DLLPUBLIC ::basegfx::B2DHomMatrix
+        homMatrixFromAffineMatrix(const css::geometry::AffineMatrix2D& matrix);
 
         BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const css::geometry::AffineMatrix3D& matrix );
 

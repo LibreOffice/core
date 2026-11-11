@@ -301,9 +301,9 @@ namespace basegfx::unotools
             }
         }
 
-        ::basegfx::B2DHomMatrix& homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&        output,
-                                                            const geometry::AffineMatrix2D& input )
+        ::basegfx::B2DHomMatrix homMatrixFromAffineMatrix(const geometry::AffineMatrix2D& input)
         {
+            ::basegfx::B2DHomMatrix output;
             // ensure last row is [0,0,1] (and optimized away)
             output.identity();
 

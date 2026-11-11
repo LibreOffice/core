@@ -777,8 +777,7 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
         canvastools::setIdentityAffineMatrix2D(aViewTransform);
     }
 
-    basegfx::unotools::homMatrixFromAffineMatrix(
-        maViewTransform, aViewTransform );
+    maViewTransform = basegfx::unotools::homMatrixFromAffineMatrix(aViewTransform);
 
     // once and forever: set fixed prio to this 'layer' (we're always
     // the background layer)
@@ -1062,10 +1061,8 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
     }
 
     // view transformation really changed?
-    basegfx::B2DHomMatrix aNewTransform;
-    basegfx::unotools::homMatrixFromAffineMatrix(
-        aNewTransform,
-        aViewTransform );
+    basegfx::B2DHomMatrix aNewTransform
+        = basegfx::unotools::homMatrixFromAffineMatrix(aViewTransform);
 
     if( aNewTransform == maViewTransform )
         return; // No change, nothing to do

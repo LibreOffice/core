@@ -152,9 +152,8 @@ namespace
 
         virtual void setTransformation( const geometry::AffineMatrix2D& rMatrix ) override
         {
-            basegfx::unotools::homMatrixFromAffineMatrix(
-                getCurrentContext().Transformation,
-                rMatrix );
+            getCurrentContext().Transformation
+                = basegfx::unotools::homMatrixFromAffineMatrix(rMatrix);
         }
 
         virtual void setLineDash( const uno::Sequence<double>& dashes,

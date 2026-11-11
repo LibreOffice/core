@@ -103,9 +103,8 @@ void PDFIProcessor::setFlatness( double value )
 
 void PDFIProcessor::setTransformation( const geometry::AffineMatrix2D& rMatrix )
 {
-    basegfx::unotools::homMatrixFromAffineMatrix(
-        getCurrentContext().Transformation,
-        rMatrix );
+    getCurrentContext().Transformation = basegfx::unotools::homMatrixFromAffineMatrix(
+        rMatrix);
 }
 
 void PDFIProcessor::setLineDash( const uno::Sequence<double>& dashes,

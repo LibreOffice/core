@@ -90,8 +90,7 @@ rendering::ViewState& initViewState(rendering::ViewState& viewState)
 
 ::basegfx::B2DHomMatrix getViewStateTransform(const rendering::ViewState& viewState)
 {
-    ::basegfx::B2DHomMatrix aTransform;
-    return ::basegfx::unotools::homMatrixFromAffineMatrix(aTransform, viewState.AffineTransform);
+    return ::basegfx::unotools::homMatrixFromAffineMatrix(viewState.AffineTransform);
 }
 
 rendering::ViewState& setViewStateTransform(rendering::ViewState& viewState,
@@ -104,8 +103,7 @@ rendering::ViewState& setViewStateTransform(rendering::ViewState& viewState,
 
 ::basegfx::B2DHomMatrix getRenderStateTransform(const rendering::RenderState& renderState)
 {
-    ::basegfx::B2DHomMatrix aTransform;
-    return ::basegfx::unotools::homMatrixFromAffineMatrix(aTransform, renderState.AffineTransform);
+    return ::basegfx::unotools::homMatrixFromAffineMatrix(renderState.AffineTransform);
 }
 
 rendering::RenderState& setRenderStateTransform(rendering::RenderState& renderState,
@@ -134,10 +132,9 @@ rendering::RenderState& prependToRenderState(rendering::RenderState& renderState
                                                      const rendering::ViewState& viewState,
                                                      const rendering::RenderState& renderState)
 {
-    ::basegfx::B2DHomMatrix viewTransform;
-
-    ::basegfx::unotools::homMatrixFromAffineMatrix(combinedTransform, renderState.AffineTransform);
-    ::basegfx::unotools::homMatrixFromAffineMatrix(viewTransform, viewState.AffineTransform);
+    combinedTransform = ::basegfx::unotools::homMatrixFromAffineMatrix(renderState.AffineTransform);
+    ::basegfx::B2DHomMatrix viewTransform
+        = ::basegfx::unotools::homMatrixFromAffineMatrix(viewState.AffineTransform);
 
     // this statement performs combinedTransform = viewTransform * combinedTransform
     combinedTransform *= viewTransform;
@@ -1024,7 +1021,7 @@ int calcGradientStepCount(::basegfx::B2DHomMatrix& rTotalTransform,
     // texture to device space).
     ::basegfx::B2DHomMatrix aMatrix;
 
-    ::basegfx::unotools::homMatrixFromAffineMatrix(rTotalTransform, texture.AffineTransform);
+    rTotalTransform = ::basegfx::unotools::homMatrixFromAffineMatrix(texture.AffineTransform);
     mergeViewAndRenderTransform(aMatrix, viewState, renderState);
     rTotalTransform *= aMatrix; // prepend total view/render transformation
 
@@ -1068,9 +1065,9 @@ void clipOutDev(const rendering::ViewState& viewState, const rendering::RenderSt
         if (aClipPoly.count())
         {
             // setup non-empty clipping
-            ::basegfx::B2DHomMatrix aMatrix;
-            aClipPoly.transform(
-                ::basegfx::unotools::homMatrixFromAffineMatrix(aMatrix, viewState.AffineTransform));
+            ::basegfx::B2DHomMatrix aMatrix
+                = ::basegfx::unotools::homMatrixFromAffineMatrix(viewState.AffineTransform);
+            aClipPoly.transform(aMatrix);
 
             aClipRegion = vcl::Region::GetRegionFromPolyPolygon(::tools::PolyPolygon(aClipPoly));
         }

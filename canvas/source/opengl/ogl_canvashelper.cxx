@@ -158,9 +158,8 @@ namespace oglcanvas
 
             // convert to weird canvas textur coordinate system (not
             // [0,1]^2, but path coordinate system)
-            ::basegfx::B2DHomMatrix aTextureTransform;
-            ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                            rTexture.AffineTransform );
+            ::basegfx::B2DHomMatrix aTextureTransform
+                = ::basegfx::unotools::homMatrixFromAffineMatrix(rTexture.AffineTransform);
             ::basegfx::B2DRange aBounds;
             for( const auto& rPoly : rPolyPolygons )
                 aBounds.expand( rPoly.getB2DRange() );
@@ -302,9 +301,8 @@ namespace oglcanvas
 
             // convert to weird canvas textur coordinate system (not
             // [0,1]^2, but path coordinate system)
-            ::basegfx::B2DHomMatrix aTextureTransform;
-            ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                            rTexture.AffineTransform );
+            ::basegfx::B2DHomMatrix aTextureTransform
+                = ::basegfx::unotools::homMatrixFromAffineMatrix(rTexture.AffineTransform);
             ::basegfx::B2DRange aBounds;
             for( const auto& rPolyPolygon : rPolyPolygons )
                 aBounds.expand( rPolyPolygon.getB2DRange() );

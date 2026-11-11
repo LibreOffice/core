@@ -505,10 +505,8 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
     // Calculate the inverted view state transformation to cancel out a
     // later transformation of the local clip polygon with the view state
     // transformation.
-    ::basegfx::B2DHomMatrix aInvertedViewStateTransformation;
-    ::basegfx::unotools::homMatrixFromAffineMatrix(
-        aInvertedViewStateTransformation,
-        rViewTransform);
+    ::basegfx::B2DHomMatrix aInvertedViewStateTransformation
+        = ::basegfx::unotools::homMatrixFromAffineMatrix(rViewTransform);
     if (aInvertedViewStateTransformation.invert())
     {
         // Cancel out the later multiplication with the view state

@@ -472,16 +472,16 @@ createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rVi
         {
             css::geometry::AffineMatrix2D aAffineMatrix2D;
             rPropertyValue.Value >>= aAffineMatrix2D;
-            basegfx::B2DHomMatrix aTransformation;
-            basegfx::unotools::homMatrixFromAffineMatrix(aTransformation, aAffineMatrix2D);
+            basegfx::B2DHomMatrix aTransformation
+                = basegfx::unotools::homMatrixFromAffineMatrix(aAffineMatrix2D);
             aRetval.setObjectTransformation(aTransformation);
         }
         else if (rPropertyValue.Name == g_PropertyName_ViewTransformation)
         {
             css::geometry::AffineMatrix2D aAffineMatrix2D;
             rPropertyValue.Value >>= aAffineMatrix2D;
-            basegfx::B2DHomMatrix aTransformation;
-            basegfx::unotools::homMatrixFromAffineMatrix(aTransformation, aAffineMatrix2D);
+            basegfx::B2DHomMatrix aTransformation
+                = basegfx::unotools::homMatrixFromAffineMatrix(aAffineMatrix2D);
             aRetval.setViewTransformation(aTransformation);
         }
         else if (rPropertyValue.Name == g_PropertyName_Viewport)

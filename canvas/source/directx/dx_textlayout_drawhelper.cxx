@@ -165,8 +165,8 @@ namespace dxcanvas
             if(rViewState.Clip.is())
             {
                 ::basegfx::B2DPolyPolygon aClipPoly(dxcanvastools::polyPolygonFromXPolyPolygon2D(rViewState.Clip));
-                ::basegfx::B2DHomMatrix aMatrix;
-                ::basegfx::unotools::homMatrixFromAffineMatrix(aMatrix, rViewState.AffineTransform );
+                ::basegfx::B2DHomMatrix aMatrix
+                    = ::basegfx::unotools::homMatrixFromAffineMatrix(rViewState.AffineTransform);
 
                 if(!rOutputOffset.equalZero())
                 {

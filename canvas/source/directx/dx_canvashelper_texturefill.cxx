@@ -87,9 +87,8 @@ namespace dxcanvas
             // calculate parallelogram of gradient in object space, extend
             // top and bottom of it such that they cover the whole fill
             // path bound area
-            ::basegfx::B2DHomMatrix aTextureTransform;
-            ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                            texture.AffineTransform );
+            ::basegfx::B2DHomMatrix aTextureTransform
+                = ::basegfx::unotools::homMatrixFromAffineMatrix(texture.AffineTransform);
 
             ::basegfx::B2DPoint aLeftTop( 0.0, 0.0 );
             ::basegfx::B2DPoint aLeftBottom( 0.0, 1.0 );
@@ -264,9 +263,8 @@ namespace dxcanvas
                                                            texture,
                                                            nColorSteps);
 
-                ::basegfx::B2DHomMatrix aTextureTransform;
-                ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                                texture.AffineTransform );
+                ::basegfx::B2DHomMatrix aTextureTransform
+                    = ::basegfx::unotools::homMatrixFromAffineMatrix(texture.AffineTransform);
                 // determine overall transformation for inner polygon (might
                 // have to be prefixed by anisotropic scaling)
                 ::basegfx::B2DHomMatrix aInnerPolygonTransformMatrix;

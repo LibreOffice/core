@@ -693,9 +693,8 @@ namespace vclcanvas
                 ::canvastools::mergeViewAndRenderTransform(aTotalTransform,
                                                              viewState,
                                                              renderState);
-                ::basegfx::B2DHomMatrix aTextureTransform;
-                ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                                textures[0].AffineTransform );
+                ::basegfx::B2DHomMatrix aTextureTransform
+                    = ::basegfx::unotools::homMatrixFromAffineMatrix(textures[0].AffineTransform);
 
                 aTotalTransform *= aTextureTransform;
 
