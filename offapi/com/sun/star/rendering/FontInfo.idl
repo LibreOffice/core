@@ -51,33 +51,6 @@ struct FontInfo
     string                              StyleName;
 
 
-    /** This value specifies which Unicode ranges are supported by
-        this font.<p>
-
-        This is to be interpreted as a split-up 128-bit value, see <a
-        href=http://partners.adobe.com/asn/tech/type/opentype/os2.jsp#ur>Adobe's
-        OpenType specification</a> for the specific meaning of each
-        bit. UnicodeRanges0 contains the least significant bits,
-        UnicodeRanges3 the most significant ones.<p>
-
-        const int128       UNICODE_RANGE_BASIC_LATIN = 1;
-        const int128       UNICODE_RANGE_LATIN_SUPPLEMENT = 2;
-        const int128       UNICODE_RANGE_LATIN_EXTENDED_A = 4;
-        const int128       UNICODE_RANGE_LATIN_EXTENDED_B = 4;
-        ...
-        const int128       UNICODE_RANGE_MASK_LATIN = 1;
-        const int128       UNICODE_RANGE_MASK_CJK   = (31<<48) + (3<<55) +
-        (1<<59);
-        const int128       UNICODE_RANGE_MASK_CTL   = (1<<11) + (1<<13) +
-        (0x3FFF<<15) + (0x0FFF<<70);
-
-     */
-    long                                UnicodeRanges0;
-    long                                UnicodeRanges1;
-    long                                UnicodeRanges2;
-    long                                UnicodeRanges3;
-
-
     /** Specifies whether the font is a symbol font.<p>
 
         This refers solely to a font using the Microsoft SYMBOL_CHARSET
