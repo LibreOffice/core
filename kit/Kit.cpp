@@ -3652,10 +3652,16 @@ void Document::flushAndExit(int code)
 #if !MOBILEAPP
     _deltaPool.stop();
 #endif
+#if DOCS_SHARE_PROCESS
+    // The apps that share one process between documents keep the server and the engine
+    // running after a document is gone.
+    (void)code;
+#else
     if (!Util::isKitInProcess())
         Util::forcedExit(code);
     else
         SigUtil::setTerminationFlag();
+#endif
 }
 
 void Document::dumpState(std::ostream& oss)
