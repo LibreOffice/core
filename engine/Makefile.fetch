@@ -38,10 +38,10 @@ endif
 # fetch__Download_item url tarball-name sha256sum
 define fetch__Download_item
 $(if $(wildcard $(TARFILE_LOCATION)/$2),, \
-cd $(TARFILE_LOCATION)/tmp \
+fetch_dir=`mktemp -d $(TARFILE_LOCATION)/tmp/XXXXXX` && cd $$fetch_dir \
 $(call fetch_Download__wget_command,$1,$2) \
 $(if $3,$(call fetch_Download__checksum_command,$2,$3)) \
-&& mv $2 ../ \
+&& mv $2 $(TARFILE_LOCATION)/ && cd $(TARFILE_LOCATION) && rmdir $$fetch_dir \
 )
 
 endef
