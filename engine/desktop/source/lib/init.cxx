@@ -41,6 +41,11 @@
 #include <com/sun/star/awt/XScrollBar.hpp>
 #include <com/sun/star/awt/XSpinField.hpp>
 #include <com/sun/star/awt/XDateField.hpp>
+#include <com/sun/star/awt/XTimeField.hpp>
+#include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/awt/XMouseListener.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -251,9 +256,11 @@
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/GestureEventPan.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
+#include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/json_writer.hxx>
@@ -7224,8 +7231,39 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
     const std::string_view aAction(pAction ? pAction : "");
     const std::string_view aValue(pValue ? pValue : "");
 
+    // The number the digits at that place of the value write, or -1 where the value is too short
+    // or holds another character there.
+    const auto numberAt = [&aValue](size_t nStart, size_t nLength) -> sal_Int32 {
+        if (aValue.size() < nStart + nLength)
+            return -1;
+        const std::string_view aDigits(aValue.substr(nStart, nLength));
+        if (!std::all_of(aDigits.begin(), aDigits.end(),
+                         [](char cDigit) { return cDigit >= '0' && cDigit <= '9'; }))
+            return -1;
+        return o3tl::toInt32(aDigits);
+    };
+
     try
     {
+        // a control that is read-only or disabled shows its value and takes no change of it
+        cpo::uno::Reference<css::beans::XPropertySet> xControlModel(xControl->getModel(),
+                                                                    cpo::uno::UNO_QUERY);
+        cpo::uno::Reference<css::beans::XPropertySetInfo> xControlInfo(
+            xControlModel.is() ? xControlModel->getPropertySetInfo() : nullptr);
+        bool bReadOnly(false);
+        bool bEnabled(true);
+        if (xControlInfo.is() && xControlInfo->hasPropertyByName(u"ReadOnly"_ustr))
+            xControlModel->getPropertyValue(u"ReadOnly"_ustr) >>= bReadOnly;
+        if (xControlInfo.is() && xControlInfo->hasPropertyByName(u"Enabled"_ustr))
+            xControlModel->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
+        if (bReadOnly || !bEnabled)
+        {
+            SAL_WARN("kit", "formControlAction: the control " << nObjectId
+                                                               << " takes no change");
+            SetLastExceptionMsg(u"The control is read-only or disabled"_ustr);
+            return;
+        }
+
         if (aAction == "press")
         {
             // the action of the accessible part of a button's window is its click, a toggle
@@ -7255,10 +7293,23 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
         }
         else if (aAction == "text")
         {
-            // the field reads the text as typed, as its own format says
+            // The field takes the text as typed, then formats it as it does when the focus leaves
+            // it, so it shows and holds a value of its kind. A number field keeps its last number
+            // when the text holds none.
             cpo::uno::Reference<css::awt::XTextComponent> xText(xPeer, cpo::uno::UNO_QUERY);
-            if (xText.is())
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xPeer);
+            if (xText.is() && pWindow)
+            {
                 xText->setText(OUString::fromUtf8(aValue));
+                const OUString aTyped(xText->getText());
+                NotifyEvent aLoseFocus(NotifyEventType::LOSEFOCUS, pWindow);
+                pWindow->EventNotify(aLoseFocus);
+                // A formatted field reports its formatted text to its control. The other fields
+                // format their text without a report, and setting the text again reports it.
+                if (pWindow->GetType() != WindowType::FORMATTEDFIELD
+                    && xText->getText() != aTyped)
+                    xText->setText(xText->getText());
+            }
             else
                 SetLastExceptionMsg(u"The control holds no text"_ustr);
         }
@@ -7295,14 +7346,19 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
             // a scroll bar scrolls there as after a move of its thumb, which calls its listeners;
             // a spin button takes its value from the model, as it calls none for a value set
             cpo::uno::Reference<css::awt::XScrollBar> xScrollBar(xPeer, cpo::uno::UNO_QUERY);
-            cpo::uno::Reference<css::beans::XPropertySet> xModel(
-                xControl->getModel(), cpo::uno::UNO_QUERY);
             if (xScrollBar.is())
                 xScrollBar->setValue(o3tl::toInt32(aValue));
-            else if (xModel.is()
-                     && xModel->getPropertySetInfo()->hasPropertyByName(u"SpinValue"_ustr))
-                xModel->setPropertyValue(u"SpinValue"_ustr,
-                                         cpo::uno::Any(o3tl::toInt32(aValue)));
+            else if (xControlInfo.is() && xControlInfo->hasPropertyByName(u"SpinValue"_ustr))
+            {
+                // the value stays between the button's minimum and maximum
+                sal_Int32 nValue(o3tl::toInt32(aValue));
+                sal_Int32 nLimit(0);
+                if (xControlModel->getPropertyValue(u"SpinValueMin"_ustr) >>= nLimit)
+                    nValue = std::max(nValue, nLimit);
+                if (xControlModel->getPropertyValue(u"SpinValueMax"_ustr) >>= nLimit)
+                    nValue = std::min(nValue, nLimit);
+                xControlModel->setPropertyValue(u"SpinValue"_ustr, cpo::uno::Any(nValue));
+            }
             else
                 SetLastExceptionMsg(u"The control holds no value"_ustr);
         }
@@ -7319,14 +7375,31 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
         }
         else if (aAction == "date")
         {
-            // the date picked in the calendar of a date field, as year-month-day
+            // the date picked in the calendar of a date field, as YYYY-MM-DD
             cpo::uno::Reference<css::awt::XDateField> xDateField(xPeer, cpo::uno::UNO_QUERY);
-            if (xDateField.is() && aValue.size() == 10)
-                xDateField->setDate(css::util::Date(o3tl::toInt32(aValue.substr(8, 2)),
-                                                    o3tl::toInt32(aValue.substr(5, 2)),
-                                                    o3tl::toInt32(aValue.substr(0, 4))));
+            const sal_Int32 nYear(numberAt(0, 4));
+            const sal_Int32 nMonth(numberAt(5, 2));
+            const sal_Int32 nDay(numberAt(8, 2));
+            if (xDateField.is() && aValue.size() == 10 && aValue[4] == '-' && aValue[7] == '-'
+                && nYear >= 0 && nMonth >= 0 && nDay >= 0
+                && ::Date(nDay, nMonth, nYear).IsValidDate())
+                xDateField->setDate(css::util::Date(nDay, nMonth, nYear));
             else
-                SetLastExceptionMsg(u"The control takes no date"_ustr);
+                SetLastExceptionMsg(u"The control takes no such date"_ustr);
+        }
+        else if (aAction == "time")
+        {
+            // the time picked in the picker of a time field, as HH:MM:SS
+            cpo::uno::Reference<css::awt::XTimeField> xTimeField(xPeer, cpo::uno::UNO_QUERY);
+            const sal_Int32 nHours(numberAt(0, 2));
+            const sal_Int32 nMinutes(numberAt(3, 2));
+            const sal_Int32 nSeconds(numberAt(6, 2));
+            if (xTimeField.is() && aValue.size() == 8 && aValue[2] == ':' && aValue[5] == ':'
+                && nHours >= 0 && nHours < 24 && nMinutes >= 0 && nMinutes < 60
+                && nSeconds >= 0 && nSeconds < 60)
+                xTimeField->setTime(css::util::Time(0, nSeconds, nMinutes, nHours, false));
+            else
+                SetLastExceptionMsg(u"The control takes no such time"_ustr);
         }
         else if (aAction == "check")
         {
@@ -7335,6 +7408,32 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
                 xRadioButton->setState(true);
             else
                 SetLastExceptionMsg(u"The control is no option button"_ustr);
+        }
+        else if (aAction == "image")
+        {
+            // "pick" asks for a picture file as a double click on the control does, and "clear"
+            // takes the picture away
+            cpo::uno::Reference<css::awt::XMouseListener> xMouseListener(xControl,
+                                                                         cpo::uno::UNO_QUERY);
+            sal_Int16 nClassId(0);
+            if (xControlInfo.is() && xControlInfo->hasPropertyByName(u"ClassId"_ustr))
+                xControlModel->getPropertyValue(u"ClassId"_ustr) >>= nClassId;
+            if (!xMouseListener.is() || nClassId != css::form::FormComponentType::IMAGECONTROL)
+                SetLastExceptionMsg(u"The control is no image control"_ustr);
+            else if (aValue == "pick")
+            {
+                css::awt::MouseEvent aDoubleClick;
+                aDoubleClick.Source = xControl;
+                aDoubleClick.Buttons = css::awt::MouseButton::LEFT;
+                aDoubleClick.ClickCount = 2;
+                xMouseListener->mousePressed(aDoubleClick);
+            }
+            else if (aValue == "clear")
+                xControlModel->setPropertyValue(
+                    u"Graphic"_ustr,
+                    cpo::uno::Any(cpo::uno::Reference<css::graphic::XGraphic>()));
+            else
+                SetLastExceptionMsg(u"The control takes no such picture action"_ustr);
         }
         else
             SetLastExceptionMsg(u"Unknown action for a form control"_ustr);

@@ -50,9 +50,32 @@ namespace cool {
 		text?: string;
 		/// The date of a date field as YYYY-MM-DD, where it holds one.
 		date?: string;
+		/// The time of a time field as HH:MM:SS, where it holds one.
+		time?: string;
+		/// Whether the format of a time field shows the seconds.
+		seconds?: boolean;
+		/// Whether a time field holds a span of time, which can pass 24 hours.
+		duration?: boolean;
+		/// The edit mask of a pattern field, one character class per position: L a fixed
+		/// character, a a letter, A a letter in upper case, c a letter or a digit, C the same in
+		/// upper case, N a digit, n a digit or a space, x any character, X the same in upper case.
+		editMask?: string;
+		/// What each position of a pattern field shows while it is empty, and the fixed
+		/// characters at the L positions of the edit mask.
+		literalMask?: string;
+		/// Whether a field takes only what its mask or format allows.
+		strictFormat?: boolean;
+		/// The checksum of the picture of an image control or an image button, which comes
+		/// from the bitmap cache.
+		checksum?: number;
+		/// How the picture fits the control: 0 at its own size, 1 as large as fits with its
+		/// proportions kept, 2 stretched over the whole control.
+		scaleMode?: number;
 		/// 0 not checked, 1 checked, 2 neither.
 		state?: number;
 		disabled?: boolean;
+		/// A control that shows its value as an enabled one does and takes no change of it.
+		readOnly?: boolean;
 		defaultButton?: boolean;
 		/// 0 left, 1 centred, 2 right.
 		align?: number;
@@ -88,5 +111,12 @@ namespace cool {
 
 	export namespace FormControlPrimitive {
 		export const type = 'formControl';
+
+		/// How the picture of an image control or an image button fits the control, as the
+		/// scaleMode values say. Where the model names no way, an image control stretches the
+		/// picture, as its model starts out doing, and an image button shows it at its own size.
+		export function imageScaleMode(primitive: FormControlPrimitive): number {
+			return primitive.scaleMode ?? (primitive.kind === 'imageControl' ? 2 : 0);
+		}
 	}
 }

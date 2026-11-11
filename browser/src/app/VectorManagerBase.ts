@@ -111,6 +111,10 @@ abstract class VectorManagerBase extends RenderManagerBase {
 
 	/// The image the renderer draws for the checksum, or undefined while it is not decoded.
 	protected _imageFor(checksum: number): HTMLImageElement | undefined {
+		return this.imageFor(checksum);
+	}
+
+	imageFor(checksum: number): HTMLImageElement | undefined {
 		return this._resources.image(checksum);
 	}
 

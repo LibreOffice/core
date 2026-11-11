@@ -435,14 +435,20 @@ class RenderGeometrySection extends CanvasSectionObject {
 	/// none is drawn.
 	public static dragSelect: DragSelect | null = null;
 
-	/// The ones of those objects that can be selected: out of design mode a form control works as
-	/// a control and is no object to select.
+	/// The ones of those objects that can be selected: a form control is an object to select only
+	/// once the office has said that the form controls are in design mode.
 	public static theSelectable(objectIds: number[]): number[] {
-		if (app.map.isFormControlDesignMode()) return objectIds;
+		if (app.map.areFormControlsObjects()) return objectIds;
 		return objectIds.filter(
-			(id: number) =>
-				RenderGeometrySection.objectOf(id)?.objectKind !==
-				RenderGeometrySection.formControlKind,
+			(id: number) => !RenderGeometrySection.isFormControl(id),
+		);
+	}
+
+	/// Whether that object is a form control.
+	public static isFormControl(objectId: number): boolean {
+		return (
+			RenderGeometrySection.objectOf(objectId)?.objectKind ===
+			RenderGeometrySection.formControlKind
 		);
 	}
 
@@ -453,7 +459,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		RenderGeometrySection._lastHit = undefined;
 		RenderGeometrySection._drawnHitKey = '';
 
-		if (!app.map.isFormControlDesignMode()) {
+		if (!app.map.areFormControlsObjects()) {
 			const selected = GraphicSelection.selectedObjectIDs;
 			const kept = RenderGeometrySection.theSelectable(selected);
 			if (kept.length !== selected.length) GraphicSelection.selectObjects(kept);
@@ -475,12 +481,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 		);
 	}
 
-	/// Whether the object is a form control that works as a control, which it does out of design
-	/// mode: it is not selected and covers what lies behind it.
+	/// Whether the object is a form control that works as a control, which it does until the office
+	/// has said that the form controls are in design mode: it is not selected and covers what lies
+	/// behind it.
 	private static worksAsAControl(object: cool.SlideObject): boolean {
 		return (
 			object.objectKind === RenderGeometrySection.formControlKind &&
-			!app.map.isFormControlDesignMode()
+			!app.map.areFormControlsObjects()
 		);
 	}
 

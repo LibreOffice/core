@@ -276,7 +276,7 @@ SfxBoolItem AutoControlFocus SID_FM_AUTOCONTROLFOCUS
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = TRUE,
     Container = FALSE,
     Asynchron;
@@ -5509,7 +5509,7 @@ SfxBoolItem OpenReadOnly SID_FM_OPEN_READONLY
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     ViewerApp = FALSE,
     Toggle = TRUE,
     Container = FALSE,

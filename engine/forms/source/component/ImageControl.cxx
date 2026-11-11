@@ -26,7 +26,11 @@
 #include <componenttools.hxx>
 
 #include <svtools/imageresourceaccess.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/opengrf.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/viewsh.hxx>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -44,6 +48,8 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/property.hxx>
@@ -690,6 +696,18 @@ OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _
 }
 
 
+OImageControlControl::~OImageControlControl()
+{
+    // A control that was disposed has let go of its picker already. One that was not lets go
+    // of it here, on the main loop, as the picker belongs to it.
+    if (m_xAppPicker)
+    {
+        SolarMutexGuard aGuard;
+        m_xAppPicker.reset();
+    }
+}
+
+
 Any OImageControlControl::queryAggregation(const Type& _rType)
 {
     Any aReturn = OBoundControl::queryAggregation( _rType );
@@ -730,6 +748,12 @@ void OImageControlControl::removeModifyListener( const Reference< XModifyListene
 
 void OImageControlControl::disposing()
 {
+    // a picture picked after this goes nowhere
+    {
+        SolarMutexGuard aGuard;
+        m_xAppPicker.reset();
+    }
+
     EventObject aEvent( *this );
     m_aModifyListeners.disposeAndClear( aEvent );
 
@@ -771,6 +795,13 @@ bool OImageControlControl::implInsertGraphics()
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
     if ( !xSet.is() )
         return false;
+
+    // The picker of a COKit app answers later, and the picture is set once it answers.
+    if (sfx2::COKitFilePicker::isAvailable())
+    {
+        implInsertGraphicsFromApp();
+        return false;
+    }
 
     OUString sTitle = ResourceManager::loadString(RID_STR_IMPORT_GRAPHIC);
     // build some arguments for the upcoming dialog
@@ -835,6 +866,84 @@ bool OImageControlControl::implInsertGraphics()
 }
 
 
+void OImageControlControl::implInsertGraphicsFromApp()
+{
+    try
+    {
+        Reference<XWindow> xWindow(static_cast<::cppu::OWeakObject*>(this), UNO_QUERY);
+        m_xAppPicker = std::make_unique<::sfx2::FileDialogHelper>(
+            TemplateDescription::FILEOPEN_PREVIEW, FileDialogFlags::Graphic,
+            Application::GetFrameWeld(xWindow));
+        m_xAppPicker->SetContext(sfx2::FileDialogHelper::FormsInsertImage);
+        m_xAppPicker->SetTitle(ResourceManager::loadString(RID_STR_IMPORT_GRAPHIC));
+        m_xAppPicker->StartExecuteModal(LINK(this, OImageControlControl, OnAppPickerClosed));
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("forms.component",
+                             "OImageControlControl::implInsertGraphicsFromApp");
+    }
+}
+
+
+IMPL_LINK(OImageControlControl, OnAppPickerClosed, sfx2::FileDialogHelper*, pPicker, void)
+{
+    SolarMutexGuard aGuard;
+    // a change of the model can make the view let go of the control while this runs
+    Reference<XInterface> xKeepAlive(static_cast<::cppu::OWeakObject*>(this));
+
+    if (pPicker->GetError() != ERRCODE_NONE)
+        return;
+    const OUString aURL(pPicker->GetPath());
+    if (aURL.isEmpty())
+        return;
+
+    try
+    {
+        Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
+        if (!xSet.is())
+            return;
+
+        // The control can have become read-only or disabled, its view gone into design mode, or
+        // the view of the user who asked become read-only, while the picker was open. The
+        // picker answers in the view that asked.
+        bool bReadOnly = false;
+        bool bEnabled = true;
+        xSet->getPropertyValue(PROPERTY_READONLY) >>= bReadOnly;
+        xSet->getPropertyValue(PROPERTY_ENABLED) >>= bEnabled;
+        if (bReadOnly || !bEnabled || isDesignMode() || SfxViewShell::IsCurrentKitViewReadOnly())
+            return;
+
+        // The file is read by its content, so only a file that holds a picture in a format the
+        // office reads becomes the picture of the control, whatever its name says.
+        Graphic aGraphic;
+        const ErrCode nError = GraphicFilter::LoadGraphic(aURL, OUString(), aGraphic,
+                                                          &GraphicFilter::GetGraphicFilter());
+        if (nError != ERRCODE_NONE || aGraphic.IsNone())
+        {
+            Reference<XWindow> xWindow(static_cast<::cppu::OWeakObject*>(this), UNO_QUERY);
+            std::shared_ptr<weld::MessageDialog> xWarning(Application::CreateMessageDialog(
+                Application::GetFrameWeld(xWindow), VclMessageType::Warning, VclButtonsType::Ok,
+                SfxResId(SvxOpenGraphicDialog::SvxOpenGrfErr2ResId(nError))));
+            xWarning->runAsync(xWarning, [](sal_Int32) {});
+            return;
+        }
+
+        // The picture is kept in the document, as the file the app's picker gives is a copy in a
+        // temporary place that goes away with the session.
+        implClearGraphics(false);
+        xSet->setPropertyValue(PROPERTY_GRAPHIC, Any(aGraphic.GetXGraphic()));
+
+        EventObject aEvent(*this);
+        m_aModifyListeners.notifyEach(&XModifyListener::modified, aEvent);
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("forms.component", "OImageControlControl::OnAppPickerClosed");
+    }
+}
+
+
 bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
 {
     bool bIsEmpty = true;
@@ -867,6 +976,14 @@ void OImageControlControl::mousePressed(const css::awt::MouseEvent& e)
     // is this a request for a context menu?
     if ( e.PopupTrigger )
     {
+        // a read-only control keeps its picture, so it offers no menu to change it
+        Reference<XPropertySet> xModelProps(getModel(), UNO_QUERY);
+        bool bReadOnly = false;
+        if (xModelProps.is())
+            xModelProps->getPropertyValue(PROPERTY_READONLY) >>= bReadOnly;
+        if (bReadOnly)
+            return;
+
         rtl::Reference< VCLXPopupMenu > xMenu( new VCLXPopupMenu() );
 
         Reference< XWindowPeer > xWindowPeer = getPeer();
@@ -900,8 +1017,7 @@ void OImageControlControl::mousePressed(const css::awt::MouseEvent& e)
             switch ( nResult )
             {
             case ID_OPEN_GRAPHICS:
-                implInsertGraphics();
-                bModified = true;
+                bModified = implInsertGraphics();
                 break;
 
             case ID_CLEAR_GRAPHICS:

@@ -60,9 +60,11 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
@@ -1296,6 +1298,10 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
     aValueOf(u"Enabled"_ustr) >>= bEnabled;
     if (!bEnabled)
         mrWriter.put("disabled", true);
+    // a read-only control shows its value as an enabled one does and takes no change of it
+    bool bReadOnly(false);
+    if ((aValueOf(u"ReadOnly"_ustr) >>= bReadOnly) && bReadOnly)
+        mrWriter.put("readOnly", true);
     bool bDefault(false);
     aValueOf(u"DefaultButton"_ustr) >>= bDefault;
     if (bDefault)
@@ -1344,7 +1350,53 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
                                               + (aDate.Day < 10 ? "-0" : "-")
                                               + OString::number(aDate.Day)));
 
+    // the time of a time field, as hours:minutes:seconds, where it holds one
+    css::util::Time aTime;
+    if (aValueOf(u"Time"_ustr) >>= aTime)
+        mrWriter.put("time", rtl::Concat2View((aTime.Hours < 10 ? "0" : "")
+                                              + OString::number(aTime.Hours)
+                                              + (aTime.Minutes < 10 ? ":0" : ":")
+                                              + OString::number(aTime.Minutes)
+                                              + (aTime.Seconds < 10 ? ":0" : ":")
+                                              + OString::number(aTime.Seconds)));
+    // the long formats of a time field show the seconds, and the duration formats a span of
+    // time that can pass 24 hours
+    sal_Int16 nTimeFormat(0);
+    if (aValueOf(u"TimeFormat"_ustr) >>= nTimeFormat)
+    {
+        const auto eFormat(static_cast<ExtTimeFieldFormat>(nTimeFormat));
+        if (eFormat == ExtTimeFieldFormat::Long24H || eFormat == ExtTimeFieldFormat::Long12H
+            || eFormat == ExtTimeFieldFormat::LongDuration)
+            mrWriter.put("seconds", true);
+        if (eFormat == ExtTimeFieldFormat::ShortDuration
+            || eFormat == ExtTimeFieldFormat::LongDuration)
+            mrWriter.put("duration", true);
+    }
+
+    // The picture of an image control or an image button, and how it fits the control: 0 at its
+    // own size, 1 as large as fits with its proportions kept, 2 stretched over the whole control.
+    if (nClassId == css::form::FormComponentType::IMAGECONTROL
+        || nClassId == css::form::FormComponentType::IMAGEBUTTON)
+    {
+        cpo::uno::Reference<css::graphic::XGraphic> xGraphic;
+        if ((aValueOf(u"Graphic"_ustr) >>= xGraphic) && xGraphic.is())
+            writeGraphicData(Graphic(xGraphic));
+        sal_Int16 nScaleMode(0);
+        if (aValueOf(u"ScaleMode"_ustr) >>= nScaleMode)
+            mrWriter.put("scaleMode", sal_Int32(nScaleMode));
+    }
+
+    // the masks of a pattern field: the edit mask gives one character class per position, where
+    // L is a fixed character, and the literal mask gives what each position shows while empty
+    OUString aMask;
+    if ((aValueOf(u"EditMask"_ustr) >>= aMask) && !aMask.isEmpty())
+        mrWriter.put("editMask", aMask);
+    if ((aValueOf(u"LiteralMask"_ustr) >>= aMask) && !aMask.isEmpty())
+        mrWriter.put("literalMask", aMask);
+
     bool bFlag(false);
+    if ((aValueOf(u"StrictFormat"_ustr) >>= bFlag) && bFlag)
+        mrWriter.put("strictFormat", true);
     if ((aValueOf(u"Dropdown"_ustr) >>= bFlag) && bFlag)
         mrWriter.put("dropdown", true);
     if ((aValueOf(u"Spin"_ustr) >>= bFlag) && bFlag)

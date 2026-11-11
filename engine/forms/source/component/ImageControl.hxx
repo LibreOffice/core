@@ -28,6 +28,11 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ref.hxx>
+#include <tools/link.hxx>
+
+#include <memory>
+
+namespace sfx2 { class FileDialogHelper; }
 
 
 namespace frm
@@ -147,12 +152,16 @@ class OImageControlControl  : public OBoundControl
 {
 private:
     ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aModifyListeners;
+    // The picker of the app that asks for a picture file. It lives until the next request or
+    // until the control goes away, so the answer that comes later still finds it.
+    std::unique_ptr<sfx2::FileDialogHelper> m_xAppPicker;
 
     // XTypeProvider
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     explicit OImageControlControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    virtual ~OImageControlControl() override;
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl )
@@ -183,6 +192,8 @@ public:
 private:
     void    implClearGraphics( bool _bForce );
     bool    implInsertGraphics();
+    void    implInsertGraphicsFromApp();
+    DECL_LINK(OnAppPickerClosed, sfx2::FileDialogHelper*, void);
 
     /** determines whether the control does currently have an empty graphic set
     */

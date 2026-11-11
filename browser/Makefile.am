@@ -940,6 +940,7 @@ COOL_JS_LST =\
 	src/control/Control.Sidebar.ts \
 	src/control/Notebookbar.CalcTableTab.ts \
 	src/control/Notebookbar.ImpressAnimationTab.ts \
+	src/control/Notebookbar.ImpressFormTab.ts \
 	src/control/Notebookbar.ImpressTableDesignTab.ts \
 	src/control/Notebookbar.ImpressTransitionTab.ts \
 	src/control/Sidebar.FromNotebookbarPanel.ts \
@@ -1883,6 +1884,7 @@ pot:
 		src/control/Notebookbar.AIAssistantTab.ts \
 		src/control/Notebookbar.CalcTableTab.ts \
 		src/control/Notebookbar.ImpressAnimationTab.ts \
+		src/control/Notebookbar.ImpressFormTab.ts \
 		src/control/Notebookbar.ImpressTableDesignTab.ts \
 		src/control/Notebookbar.ImpressTransitionTab.ts \
 		src/control/Notebookbar.TableDesignTabBase.ts \

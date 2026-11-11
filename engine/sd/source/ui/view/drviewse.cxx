@@ -496,6 +496,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         case SID_FM_CREATE_CONTROL:
         {
+            // Direct mode inserts the control in the middle of the slide, as for shapes.
+            bCreateDirectly = comphelper::COKit::isActive();
             SetCurrentFunction( FuConstructUnoControl::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
@@ -978,6 +980,12 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         nDefaultObjectSizeWidth *= 0.5;
         nDefaultObjectSizeHeight *= 0.5;
     }
+    else if (nSId == SID_FM_CREATE_CONTROL)
+    {
+        // A form control starts 3 cm wide and 1 cm high, the size of one line of a form.
+        nDefaultObjectSizeWidth = 3000;
+        nDefaultObjectSizeHeight = 1000;
+    }
 
     // calc position and size
     ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
@@ -997,6 +1005,18 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     if(!pPageView)
         return;
+
+    if (nSId == SID_FM_CREATE_CONTROL)
+    {
+        // The control is created as a drag over the rectangle creates it, so the control model
+        // gets the starting values of its kind.
+        mpDrawView->BegCreateObj(aNewObjectRectangle.TopLeft());
+        mpDrawView->MovCreateObj(aNewObjectRectangle.BottomRight());
+        mpDrawView->EndCreateObj(SdrCreateCmd::ForceEnd);
+        if (!bPermanent)
+            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+        return;
+    }
 
     // the object made first is the new one, so it takes the id the client gave it
     UniqueID::giveNext(nGivenId);

@@ -824,6 +824,13 @@ window.L.Map = window.L.Evented.extend({
 		}
 	},
 
+	// true only when the office has said that the form controls of this view are in design mode,
+	// false when it has said they are not and while it has not said yet
+	areFormControlsObjects: function() {
+		const state = this['stateChangeHandler'].getItemValue('.uno:SwitchControlDesignMode');
+		return state === true || state === 'true';
+	},
+
 	// switches the form controls of this view in the office into or out of design mode
 	setFormControlDesignMode: function(designMode) {
 		this.sendUnoCommand('.uno:SwitchControlDesignMode', {

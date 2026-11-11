@@ -189,6 +189,11 @@ def extractToolbarCommands(path):
         if line.find("_UNO(") >= 0:
             commands += commandFromMenuLine(line)
 
+    f = open(path + '/browser/src/control/Notebookbar.ImpressFormTab.ts', 'r', encoding='utf-8')
+    for line in f:
+        if line.find("_UNO(") >= 0:
+            commands += commandFromMenuLine(line)
+
     f = open(path + '/browser/src/control/Control.NotebookbarDraw.js', 'r', encoding='utf-8')
     for line in f:
         if line.find("_UNO(") >= 0:

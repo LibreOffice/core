@@ -398,6 +398,14 @@ namespace svxform
                 }
                 break;
 
+                case FormComponentType::DATEFIELD:
+                {
+                    // a date field opens a calendar to pick the date from
+                    if ( xPSI->hasPropertyByName( FM_PROP_DROPDOWN ) )
+                        _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, Any( true ) );
+                }
+                break;
+
                 case FormComponentType::TEXTFIELD:
                 {
                     initializeTextFieldLineEnds( _rxControlModel );

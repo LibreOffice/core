@@ -123,6 +123,9 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'name': 'Format',
 				'accessibility': { focusBack: false, combination: 'O', de: null }
 			},
+			// the form controls work as controls only on the canvas the client draws itself
+			cool.VectorRenderingConfig.isEnabled()
+				? JSDialog.ImpressFormTab.getEntry() : null,
 			JSDialog.ImpressTableDesignTab.getEntry(),
 			{
 				'id': 'Table-tab-label',
@@ -201,6 +204,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			this.getSlideshowTab(),
 			this.getReviewTab(),
 			this.getFormatTab(),
+			this.getFormTab(),
 			this.getTableDesignTab(),
 			this.getTableTab(),
 			this.getShapeTab(),
@@ -516,6 +520,13 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 
 	getTransitionTab: function() {
 		const tab = JSDialog.ImpressTransitionTab;
+		return this.getTabPage(tab.getName(), tab.getContent());
+	},
+
+	getFormTab: function() {
+		if (!cool.VectorRenderingConfig.isEnabled())
+			return null;
+		const tab = JSDialog.ImpressFormTab;
 		return this.getTabPage(tab.getName(), tab.getContent());
 	},
 
@@ -1967,17 +1978,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 					}
 				],
 				'vertical': 'true'
-			},
-			{ type: 'separator', id: 'insert-designmode-break', orientation: 'vertical', visible: this.map.offersFormControlDesignMode() },
-			// temporary, until we have a final place for it: the icon is taken from the engine's
-			// theme and does not match the others yet
-			{
-				'id': 'insert-switch-control-design-mode',
-				'visible': this.map.offersFormControlDesignMode(),
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:SwitchControlDesignMode'),
-				'command': '.uno:SwitchControlDesignMode',
-				'accessibility': { focusBack: true, combination: 'KD', de: null }
 			},
 		];
 

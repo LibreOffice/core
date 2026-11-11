@@ -1040,12 +1040,13 @@ class TurningHandle extends HandleGroup {
 	public readonly name: string = 'turning';
 
 	/// The handle is hidden while the points to tie a connector to, the points of the path or the
-	/// crop marks are shown.
+	/// crop marks are shown, and for a selection that holds a form control.
 	public isShown(): boolean {
 		return (
 			!this.selection.tiePointsAreShown() &&
 			!this.selection.pathPointsAreShown() &&
-			!CropHandles.areShownFor(this.selection)
+			!CropHandles.areShownFor(this.selection) &&
+			!ObjectHandles.holdsAFormControl(this.selection.selectedObjects())
 		);
 	}
 

@@ -468,6 +468,12 @@ abstract class RenderManagerBase {
 		return true;
 	}
 
+	/// The decoded image of that checksum, or undefined where the content draws no images or
+	/// the image is not decoded yet.
+	imageFor(_checksum: number): HTMLImageElement | undefined {
+		return undefined;
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	onVectorChanged(_callback: VectorChangeListener): void {}
 

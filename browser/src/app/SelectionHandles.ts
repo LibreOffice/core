@@ -311,6 +311,13 @@ class ObjectHandles implements HandleSource {
 		);
 	}
 
+	/// Whether a form control is among those objects. A form control is never turned or sheared.
+	public static holdsAFormControl(objectIds: number[]): boolean {
+		return ObjectHandles.allOfThem(objectIds).some((objectId: number) =>
+			RenderGeometrySection.isFormControl(objectId),
+		);
+	}
+
 	public static canBeTurned(objectIds: number[]): boolean {
 		return ObjectHandles.allOfThem(objectIds).every(
 			(objectId: number) =>

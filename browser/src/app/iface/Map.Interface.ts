@@ -60,6 +60,7 @@ interface MapInterface extends Evented {
 	isFormControlDesignMode(): boolean;
 	offersFormControlDesignMode(): boolean;
 	showFormControlDesignModeSwitch(): void;
+	areFormControlsObjects(): boolean;
 	setFormControlDesignMode(designMode: boolean): void;
 
 	getDocType(): 'text' | 'presentation' | 'spreadsheet' | 'drawing';

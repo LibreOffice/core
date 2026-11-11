@@ -619,6 +619,11 @@ class RenderManager {
 		return RenderManager.ensureInstance().isLayerVisible(layer);
 	}
 
+	/// The decoded image of that checksum, or undefined while there is none.
+	static imageFor(checksum: number): HTMLImageElement | undefined {
+		return RenderManager.ensureInstance().imageFor(checksum);
+	}
+
 	static onVectorChanged(callback: VectorChangeListener): void {
 		RenderManager._vectorListeners.push(callback);
 		RenderManager.ensureInstance().onVectorChanged(callback);

@@ -8,6 +8,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+/* global RenderManager */
 
 namespace cool {
   /*
@@ -86,6 +87,60 @@ namespace cool {
       context.save();
       matrix.applyTo(context);
       context.drawImage(picture, 0, 0, 1, 1);
+      this._drawImageOf(context, primitive, matrix);
+      context.restore();
+    }
+
+    /*
+      Draws the picture of an image control or an image button into the control's unit square,
+      once it has arrived from the bitmap cache. At its own size the picture is centred and one
+      of its pixels is one CSS pixel, as large as fits it keeps its proportions and is centred,
+      and stretched it fills the square.
+    */
+    private _drawImageOf(
+      context: CanvasRenderingContext2D,
+      primitive: FormControlPrimitive,
+      matrix: Matrix2D,
+    ): void {
+      if (primitive.kind !== 'imageControl' && primitive.kind !== 'imageButton')
+        return;
+      if (primitive.checksum === undefined) return;
+      // the decoded picture alone, as the element over the control shows it
+      const image = RenderManager.imageFor(primitive.checksum);
+      if (!image || !image.complete || !image.naturalWidth) return;
+
+      const scaleMode = FormControlPrimitive.imageScaleMode(primitive);
+      // the size of the control in twips, which the unit square stands for
+      const width = Math.hypot(matrix.a, matrix.b);
+      const height = Math.hypot(matrix.c, matrix.d);
+      if (!width || !height) return;
+
+      let imageWidth = 1;
+      let imageHeight = 1;
+      if (scaleMode === 0) {
+        const twipsPerPixel = VectorFormControlRenderer.twipsPerPixel;
+        imageWidth = (image.naturalWidth * twipsPerPixel) / width;
+        imageHeight = (image.naturalHeight * twipsPerPixel) / height;
+      } else if (scaleMode === 1) {
+        const fit = Math.min(
+          width / image.naturalWidth,
+          height / image.naturalHeight,
+        );
+        imageWidth = (image.naturalWidth * fit) / width;
+        imageHeight = (image.naturalHeight * fit) / height;
+      }
+
+      context.save();
+      context.beginPath();
+      context.rect(0, 0, 1, 1);
+      context.clip();
+      context.drawImage(
+        image,
+        (1 - imageWidth) / 2,
+        (1 - imageHeight) / 2,
+        imageWidth,
+        imageHeight,
+      );
       context.restore();
     }
 
@@ -542,8 +597,18 @@ namespace cool {
           label.style.textAlign = align;
           // a small gap after the box, as in the office
           label.style.padding = '0 0 0 4px';
+          // a label longer than the control is cut at the control's edge
+          label.style.minWidth = '0';
+          label.style.overflow = 'hidden';
         });
       }
+      // the box keeps its size however long the label is
+      if (primitive.kind === 'checkBox' || primitive.kind === 'optionButton')
+        element
+          .querySelectorAll<HTMLElement>('input')
+          .forEach((box: HTMLElement) => {
+            box.style.flexShrink = '0';
+          });
       const font = primitive.font;
       // an SVG image gets no system-ui, so the family ends in a generic one it has
       style.fontFamily =
