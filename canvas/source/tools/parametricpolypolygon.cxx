@@ -154,12 +154,6 @@ namespace canvas
         mxDevice.clear();
     }
 
-    uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getPointColor( const geometry::RealPoint2D& /*point*/ )
-    {
-        // TODO(F1): point color NYI
-        return uno::Sequence< double >();
-    }
-
     uno::Reference< rendering::XColorSpace > SAL_CALL ParametricPolyPolygon::getColorSpace()
     {
         std::unique_lock aGuard( m_aMutex );
