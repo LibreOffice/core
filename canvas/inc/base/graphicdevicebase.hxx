@@ -195,10 +195,8 @@ namespace canvas
         // XMultiServiceFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override
         {
-            return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
-                ParametricPolyPolygon::create(this,
-                                              aServiceSpecifier,
-                                              css::uno::Sequence< css::uno::Any >()));
+            return createInstanceWithArguments(aServiceSpecifier,
+                                               css::uno::Sequence<css::uno::Any>());
         }
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override
