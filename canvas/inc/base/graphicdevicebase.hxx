@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
@@ -30,7 +31,6 @@
 #include <verifyinput.hxx>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::rendering { class XColorSpace; }
 
 
@@ -185,11 +185,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.createCompatibleAlphaBitmap( this, size );
-        }
-
-        virtual css::uno::Reference< css::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) override
-        {
-            return this;
         }
 
         // XMultiServiceFactory
