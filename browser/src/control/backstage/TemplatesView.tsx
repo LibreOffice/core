@@ -69,16 +69,28 @@ namespace BackstageTemplates {
       const next = fallbacks.shift();
       if (next) (ev.target as HTMLImageElement).src = next;
     };
+    const fitPreviewFrame = (ev: Event) => {
+      const img = ev.target as HTMLImageElement;
+      if (img.classList.contains('is-type-icon')) return;
+      const landscape = img.naturalWidth >= img.naturalHeight;
+      if (img.classList.contains('is-landscape') === landscape) return;
+      img.classList.toggle('is-landscape', landscape);
+      img.classList.toggle('is-page', !landscape);
+    };
+    let frameClass = 'is-type-icon';
+    if (template.preview)
+      frameClass = template.type === 'writer' ? 'is-page' : 'is-landscape';
 
     return (
       <div class={cls} id={template.id} onClick={onClick}>
         <div class="template-thumbnail">
           <div class="template-preview-frame">
             <img
-              class={template.preview ? null : 'is-type-icon'}
+              class={frameClass}
               alt={template.name}
               src={template.preview || defaultPreview(template.type)}
               onError={nextPreview}
+              onLoad={fitPreviewFrame}
             />
             {options.favorite ? favoriteButton(options.favorite) : null}
           </div>

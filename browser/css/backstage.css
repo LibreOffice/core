@@ -4,10 +4,11 @@
 	/* Backstage accent color: the document type color, or purple when no document is open. */
 	--doc-type-color: rgb(var(--doc-type));
 	--color-on-primary: #ffffff;
-	/* A page preview is 126x176. A landscape preview is at most 170px wide. */
+	/* A page preview is 126x176, a landscape preview is 170x128. */
 	--template-preview-height: 176px;
 	--template-page-preview-width: 126px;
 	--template-preview-max-width: 170px;
+	--template-landscape-preview-height: 128px;
 	--template-card-width: calc(var(--template-preview-max-width) + 2 * var(--spacing-s));
 	--color-primary-text: #ffffff;
 	--color-accent-background: var(--color-background-lighter);
@@ -530,6 +531,27 @@ body:not([data-doctype]) .backstage-view {
 	display: block;
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius-medium);
+}
+
+.template-thumbnail img.is-page,
+.template-thumbnail img.is-landscape {
+	object-fit: cover;
+	object-position: top;
+}
+
+.template-thumbnail img.is-page {
+	width: var(--template-page-preview-width);
+	height: var(--template-preview-height);
+}
+
+.template-thumbnail img.is-landscape {
+	width: var(--template-preview-max-width);
+	height: var(--template-landscape-preview-height);
+	object-position: left top;
+}
+
+[dir='rtl'] .template-thumbnail img.is-landscape {
+	object-position: right top;
 }
 
 /* The icon of the document type stands in for a missing preview, on a box of page size. */
