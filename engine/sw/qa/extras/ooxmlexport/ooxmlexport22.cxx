@@ -532,6 +532,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf174337_lvl9)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf174337)
+{
+    createSwDoc("tdf174337_styleIndent.docx");
+
+    auto fnVerify = [this] {
+        auto pXmlDoc = parseLayoutDump();
+
+        // a very large left margin defined before numbering in para style (was 0 without the patch)
+        assertXPath(pXmlDoc, "//body/txt[2]/infos/prtBounds", "left", u"2040");
+        // no let margin (since large margin defined after numbering in para style)
+        assertXPath(pXmlDoc, "//body/txt[3]/infos/prtBounds", "left", u"0");
+    };
+
+    fnVerify();
+    saveAndReload(TestFilter::DOCX);
+    fnVerify();
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
 {
     createSwDoc("tdf83844.fodt");
