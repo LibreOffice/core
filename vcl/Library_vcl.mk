@@ -657,6 +657,7 @@ vcl_headless_code= \
         vcl/headless/svpgdi \
         vcl/headless/SvpGraphicsBackend \
         vcl/headless/CairoCommon \
+        vcl/headless/cairohelper \
         vcl/headless/BitmapHelper \
     ) \
     vcl/headless/svpdummies \

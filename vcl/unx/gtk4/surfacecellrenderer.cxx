@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <headless/cairohelper.hxx>
+
 #include <vcl/svapp.hxx>
 #include "surfacecellrenderer.hxx"
 #include <cairo/cairo-gobject.h>
@@ -165,43 +167,31 @@ GtkCellRenderer* surface_cell_renderer_new()
     return GTK_CELL_RENDERER(g_object_new(SURFACE_TYPE_CELL_RENDERER, nullptr));
 }
 
-static void get_surface_size(cairo_surface_t* pSurface, int& rWidth, int& rHeight)
-{
-    double x1, x2, y1, y2;
-    cairo_t* cr = cairo_create(pSurface);
-    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-    cairo_destroy(cr);
-
-    rWidth = x2 - x1;
-    rHeight = y2 - y1;
-}
-
 bool surface_cell_renderer_get_preferred_size(GtkCellRenderer* cell, GtkOrientation orientation,
                                               gint* minimum_size, gint* natural_size)
 {
     SurfaceCellRenderer* cellsurface = SURFACE_CELL_RENDERER(cell);
 
-    int nWidth = 0;
-    int nHeight = 0;
+    Size aSize;
 
     if (cellsurface->surface)
-        get_surface_size(cellsurface->surface, nWidth, nHeight);
+        aSize = cairohelper::get_surface_size(cellsurface->surface);
 
     if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
         if (minimum_size)
-            *minimum_size = nWidth;
+            *minimum_size = aSize.Width();
 
         if (natural_size)
-            *natural_size = nWidth;
+            *natural_size = aSize.Width();
     }
     else
     {
         if (minimum_size)
-            *minimum_size = nHeight;
+            *minimum_size = aSize.Height();
 
         if (natural_size)
-            *natural_size = nHeight;
+            *natural_size = aSize.Height();
     }
 
     return true;
@@ -215,10 +205,9 @@ void surface_cell_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget*
     if (!cellsurface->surface)
         return;
 
-    int nWidth, nHeight;
-    get_surface_size(cellsurface->surface, nWidth, nHeight);
-    int nXOffset = (cell_area->width - nWidth) / 2;
-    int nYOffset = (cell_area->height - nHeight) / 2;
+    const Size aSize = cairohelper::get_surface_size(cellsurface->surface);
+    int nXOffset = (cell_area->width - aSize.Width()) / 2;
+    int nYOffset = (cell_area->height - aSize.Height()) / 2;
 
     cairo_set_source_surface(cr, cellsurface->surface, cell_area->x + nXOffset,
                              cell_area->y + nYOffset);

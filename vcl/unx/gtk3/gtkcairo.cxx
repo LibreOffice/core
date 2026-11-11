@@ -13,19 +13,8 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 
+#include <headless/cairohelper.hxx>
 #include <unx/gtk/gtkgdi.hxx>
-
-namespace
-{
-    Size get_surface_size(cairo_surface_t *surface)
-    {
-        cairo_t *cr = cairo_create(surface);
-        double x1, x2, y1, y2;
-        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        cairo_destroy(cr);
-        return Size(x2 - x1, y2 - y1);
-    }
-}
 
 namespace cairo
 {
@@ -121,8 +110,8 @@ namespace cairo
         aSystemGraphicsData.pSurface = mpSurface.get();
 
         return VclPtr<VirtualDevice>::Create(aSystemGraphicsData,
-                              get_surface_size(mpSurface.get()),
-                              DeviceFormat::WITHOUT_ALPHA);
+                                             cairohelper::get_surface_size(mpSurface.get()),
+                                             DeviceFormat::WITHOUT_ALPHA);
     }
 }
 

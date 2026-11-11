@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <headless/cairohelper.hxx>
 #include <QtSvpGraphics.hxx>
 #include <QtSvpSurface.hxx>
 
@@ -16,18 +17,6 @@
 #include <vcl/virdev.hxx>
 
 #include <utility>
-
-namespace
-{
-Size get_surface_size(cairo_surface_t* surface)
-{
-    cairo_t* cr = cairo_create(surface);
-    double x1, x2, y1, y2;
-    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-    cairo_destroy(cr);
-    return Size(x2 - x1, y2 - y1);
-}
-}
 
 namespace cairo
 {
@@ -80,7 +69,8 @@ VclPtr<VirtualDevice> QtSvpSurface::createVirtualDevice() const
     aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
     aSystemGraphicsData.pSurface = m_pSurface.get();
 
-    return VclPtr<VirtualDevice>::Create(aSystemGraphicsData, get_surface_size(m_pSurface.get()),
+    return VclPtr<VirtualDevice>::Create(aSystemGraphicsData,
+                                         cairohelper::get_surface_size(m_pSurface.get()),
                                          DeviceFormat::WITHOUT_ALPHA);
 }
 
