@@ -44,7 +44,7 @@
 #include <vcl/gradient.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <parametricpolypolygon.hxx>
+#include <canvas/parametricpolypolygon.hxx>
 
 #include "canvashelper.hxx"
 #include "impltools.hxx"

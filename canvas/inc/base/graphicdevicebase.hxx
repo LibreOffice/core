@@ -23,9 +23,9 @@
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 
+#include <canvas/parametricpolypolygon.hxx>
 #include <rtl/ref.hxx>
 
-#include <parametricpolypolygon.hxx>
 #include <propertysethelper.hxx>
 #include <verifyinput.hxx>
 

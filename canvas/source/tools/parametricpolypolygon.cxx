@@ -22,12 +22,12 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <canvas/parametricpolypolygon.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
-#include <parametricpolypolygon.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;

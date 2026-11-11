@@ -48,7 +48,7 @@
 #include <vcl/virdev.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <parametricpolypolygon.hxx>
+#include <canvas/parametricpolypolygon.hxx>
 #include <cairo.h>
 
 #include "cairo_cachedbitmap.hxx"

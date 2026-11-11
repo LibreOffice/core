@@ -99,7 +99,7 @@
 #if PCH_LEVEL >= 4
 #include <canvas/canvastools.hxx>
 #include <canvas/elapsedtime.hxx>
-#include <parametricpolypolygon.hxx>
+#include <canvas/parametricpolypolygon.hxx>
 #include <propertysethelper.hxx>
 #include <spriteredrawmanager.hxx>
 #include <verifyinput.hxx>

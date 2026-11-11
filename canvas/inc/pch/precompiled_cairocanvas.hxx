@@ -79,7 +79,7 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <canvas/canvastools.hxx>
-#include <parametricpolypolygon.hxx>
+#include <canvas/parametricpolypolygon.hxx>
 #include <verifyinput.hxx>
 #endif // PCH_LEVEL >= 4
 
