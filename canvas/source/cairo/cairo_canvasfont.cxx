@@ -100,7 +100,9 @@ namespace cairocanvas
         rGuard.lock();
     }
 
-    uno::Reference< rendering::XTextLayout > SAL_CALL  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed )
+    uno::Reference<rendering::XTextLayout>
+        SAL_CALL CanvasFont::createTextLayout(const rendering::StringContext& aText,
+                                              sal_Int8 nDirection, sal_Int64)
     {
         SolarMutexGuard aGuard;
 
@@ -109,7 +111,6 @@ namespace cairocanvas
 
         return new TextLayout( aText,
                                nDirection,
-                               nRandomSeed,
                                Reference( this ),
                                mpRefDevice );
     }

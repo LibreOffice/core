@@ -47,7 +47,6 @@ namespace cairocanvas
 
         TextLayout( css::rendering::StringContext               aText,
                     sal_Int8                                    nDirection,
-                    sal_Int64                                   nRandomSeed,
                     CanvasFont::Reference                       rFont,
                     SurfaceProviderRef                          rRefDevice );
 

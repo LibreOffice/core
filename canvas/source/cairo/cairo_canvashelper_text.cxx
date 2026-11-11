@@ -233,7 +233,7 @@ CanvasHelper::drawText(const rendering::XCanvas* pOwner, const rendering::String
         mpVirtualDevice->SetLayoutMode(nLayoutMode);
 
         rtl::Reference pTextLayout(new TextLayout(
-            text, textDirection, 0, CanvasFont::Reference(dynamic_cast<CanvasFont*>(xFont.get())),
+            text, textDirection, CanvasFont::Reference(dynamic_cast<CanvasFont*>(xFont.get())),
             mpSurfaceProvider));
         pTextLayout->draw(*mpVirtualDevice, aOutpos, viewState, renderState);
     }
