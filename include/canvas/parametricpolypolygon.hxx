@@ -147,9 +147,6 @@ public:
     /// Dispose all internal references
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XParametricPolyPolygon2D
-    virtual css::uno::Reference<css::rendering::XColorSpace> SAL_CALL getColorSpace() override;
-
     /// Query all defining values of this object atomically
     const Values& getValues() const;
 

@@ -107,14 +107,6 @@ rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createRectangularGr
 
 void ParametricPolyPolygon::disposing(std::unique_lock<std::mutex>&) { mxDevice.clear(); }
 
-uno::Reference<rendering::XColorSpace> SAL_CALL ParametricPolyPolygon::getColorSpace()
-{
-    std::unique_lock aGuard(m_aMutex);
-
-    return mxDevice.is() ? mxDevice->getDeviceColorSpace()
-                         : uno::Reference<rendering::XColorSpace>();
-}
-
 ParametricPolyPolygon::~ParametricPolyPolygon() {}
 
 ParametricPolyPolygon::ParametricPolyPolygon(uno::Reference<rendering::XGraphicDevice> xDevice,
