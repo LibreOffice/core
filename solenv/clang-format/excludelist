@@ -2005,14 +2005,12 @@ connectivity/workben/little/main.cxx
 connectivity/workben/skeleton/SResultSet.hxx
 cppcanvas/source/inc/action.hxx
 cppcanvas/source/inc/canvasgraphichelper.hxx
-cppcanvas/source/inc/implrenderer.hxx
 cppcanvas/source/inc/outdevstate.hxx
 cppcanvas/source/inc/tools.hxx
 cppcanvas/source/mtfrenderer/bitmapaction.cxx
 cppcanvas/source/mtfrenderer/bitmapaction.hxx
 cppcanvas/source/mtfrenderer/cachedprimitivebase.cxx
 cppcanvas/source/mtfrenderer/cachedprimitivebase.hxx
-cppcanvas/source/mtfrenderer/implrenderer.cxx
 cppcanvas/source/mtfrenderer/lineaction.cxx
 cppcanvas/source/mtfrenderer/lineaction.hxx
 cppcanvas/source/mtfrenderer/mtftools.cxx

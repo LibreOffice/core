@@ -42,204 +42,197 @@
 class GDIMetaFile;
 class VirtualDevice;
 class Gradient;
-namespace tools { class Rectangle; }
-namespace vcl { class Font; }
-namespace tools { class PolyPolygon; }
+namespace tools
+{
+class Rectangle;
+}
+namespace vcl
+{
+class Font;
+}
+namespace tools
+{
+class PolyPolygon;
+}
 class Point;
 
-namespace basegfx {
-    class B2DPolyPolygon;
-    class B2DPolygon;
+namespace basegfx
+{
+class B2DPolyPolygon;
+class B2DPolygon;
 }
 
 namespace cppcanvas::internal
+{
+struct ActionFactoryParameters;
+
+// state stack of OutputDevice, to correctly handle
+// push/pop actions
+class VectorOfOutDevStates
+{
+public:
+    OutDevState& getState();
+    const OutDevState& getState() const;
+    void pushState(vcl::PushFlags nFlags);
+    void popState();
+    void clearStateStack();
+
+private:
+    std::vector<OutDevState> m_aStates;
+};
+
+// EMF+
+// Transformation matrix (used for Affine Transformation)
+//      [ eM11, eM12, eDx ]
+//      [ eM21, eM22, eDy ]
+//      [ 0,    0,    1   ]
+// that consists of a linear map (eM11, eM12, eM21, eM22)
+// More info: https://en.wikipedia.org/wiki/Linear_map
+// followed by a translation (eDx, eDy)
+
+struct XForm
+{
+    float
+        eM11; // M1,1 value in the matrix. Increases or decreases the size of the pixels horizontally.
+    float eM12; // M1,2 value in the matrix. This effectively angles the X axis up or down.
+    float eM21; // M2,1 value in the matrix. This effectively angles the Y axis left or right.
+    float
+        eM22; // M2,2 value in the matrix. Increases or decreases the size of the pixels vertically.
+    float eDx; // Delta x (Dx) value in the matrix. Moves the whole coordinate system horizontally.
+    float eDy; // Delta y (Dy) value in the matrix. Moves the whole coordinate system vertically.
+    XForm() { SetIdentity(); }
+
+    void SetIdentity()
     {
-        struct ActionFactoryParameters;
+        eM11 = eM22 = 1.0f;
+        eDx = eDy = eM12 = eM21 = 0.0f;
+    }
 
-        // state stack of OutputDevice, to correctly handle
-        // push/pop actions
-        class VectorOfOutDevStates
+    friend SvStream& ReadXForm(SvStream& rIn, XForm& rXForm)
+    {
+        if (sizeof(float) != 4)
         {
-        public:
-            OutDevState& getState();
-            const OutDevState& getState() const;
-            void pushState(vcl::PushFlags nFlags);
-            void popState();
-            void clearStateStack();
-        private:
-            std::vector< OutDevState > m_aStates;
-        };
-
-        // EMF+
-        // Transformation matrix (used for Affine Transformation)
-        //      [ eM11, eM12, eDx ]
-        //      [ eM21, eM22, eDy ]
-        //      [ 0,    0,    1   ]
-        // that consists of a linear map (eM11, eM12, eM21, eM22)
-        // More info: https://en.wikipedia.org/wiki/Linear_map
-        // followed by a translation (eDx, eDy)
-
-        struct XForm
+            OSL_FAIL("EnhWMFReader::sizeof( float ) != 4");
+            rXForm = XForm();
+        }
+        else
         {
-            float   eM11; // M1,1 value in the matrix. Increases or decreases the size of the pixels horizontally.
-            float   eM12; // M1,2 value in the matrix. This effectively angles the X axis up or down.
-            float   eM21; // M2,1 value in the matrix. This effectively angles the Y axis left or right.
-            float   eM22; // M2,2 value in the matrix. Increases or decreases the size of the pixels vertically.
-            float   eDx;  // Delta x (Dx) value in the matrix. Moves the whole coordinate system horizontally.
-            float   eDy;  // Delta y (Dy) value in the matrix. Moves the whole coordinate system vertically.
-            XForm()
-            {
-                SetIdentity ();
-            }
+            rIn.ReadFloat(rXForm.eM11)
+                .ReadFloat(rXForm.eM12)
+                .ReadFloat(rXForm.eM21)
+                .ReadFloat(rXForm.eM22)
+                .ReadFloat(rXForm.eDx)
+                .ReadFloat(rXForm.eDy);
+        }
+        return rIn;
+    }
+};
 
-            void SetIdentity ()
-            {
-                eM11 =  eM22 = 1.0f;
-                eDx = eDy = eM12 = eM21 = 0.0f;
-            }
+// EMF+
 
-            friend SvStream& ReadXForm( SvStream& rIn, XForm& rXForm )
-            {
-                if ( sizeof( float ) != 4 )
-                {
-                    OSL_FAIL( "EnhWMFReader::sizeof( float ) != 4" );
-                    rXForm = XForm();
-                }
-                else
-                {
-                    rIn.ReadFloat( rXForm.eM11 ).ReadFloat( rXForm.eM12 ).ReadFloat( rXForm.eM21 ).ReadFloat( rXForm.eM22 )
-                       .ReadFloat( rXForm.eDx ).ReadFloat( rXForm.eDy );
-                }
-                return rIn;
-            }
-        };
+class ImplRenderer : public virtual Renderer, protected CanvasGraphicHelper
+{
+public:
+    ImplRenderer(const CanvasSharedPtr& rCanvas, const GDIMetaFile& rMtf, const Parameters& rParms);
 
-        // EMF+
+    virtual ~ImplRenderer() override;
 
-        class ImplRenderer : public virtual Renderer, protected CanvasGraphicHelper
+    virtual bool draw() const override;
+    virtual bool drawSubset(sal_Int32 nStartIndex, sal_Int32 nEndIndex) const override;
+    virtual ::basegfx::B2DRange getSubsetArea(sal_Int32 nStartIndex,
+                                              sal_Int32 nEndIndex) const override;
+
+    // element of the Renderer's action vector. Need to be
+    // public, since some functors need it, too.
+    struct MtfAction
+    {
+        MtfAction(std::shared_ptr<Action> xAction, sal_Int32 nOrigIndex)
+            : mpAction(std::move(xAction))
+            , mnOrigIndex(nOrigIndex)
         {
-        public:
-            ImplRenderer( const CanvasSharedPtr&    rCanvas,
-                          const GDIMetaFile&        rMtf,
-                          const Parameters&         rParms );
+        }
 
-            virtual ~ImplRenderer() override;
+        std::shared_ptr<Action> mpAction;
+        sal_Int32 mnOrigIndex;
+    };
 
-            virtual bool                draw() const override;
-            virtual bool                drawSubset( sal_Int32   nStartIndex,
-                                                    sal_Int32   nEndIndex ) const override;
-            virtual ::basegfx::B2DRange getSubsetArea( sal_Int32    nStartIndex,
-                                                       sal_Int32    nEndIndex ) const override;
+    // prefetched and prepared canvas actions
+    // (externally not visible)
+    typedef std::vector<MtfAction> ActionVector;
 
+private:
+    ImplRenderer(const ImplRenderer&) = delete;
+    ImplRenderer& operator=(const ImplRenderer&) = delete;
 
-            // element of the Renderer's action vector. Need to be
-            // public, since some functors need it, too.
-            struct MtfAction
-            {
-                MtfAction( std::shared_ptr<Action>  xAction,
-                           sal_Int32                nOrigIndex ) :
-                    mpAction(std::move( xAction )),
-                    mnOrigIndex( nOrigIndex )
-                {
-                }
+    static void updateClipping(const ::basegfx::B2DPolyPolygon& rClipPoly,
+                               const ActionFactoryParameters& rParms, bool bIntersect);
 
-                std::shared_ptr<Action> mpAction;
-                sal_Int32       mnOrigIndex;
-            };
+    static void updateClipping(const ::tools::Rectangle& rClipRect,
+                               const ActionFactoryParameters& rParms, bool bIntersect);
 
-            // prefetched and prepared canvas actions
-            // (externally not visible)
-            typedef std::vector< MtfAction >      ActionVector;
+    static css::uno::Reference<css::rendering::XCanvasFont>
+    createFont(double& o_rFontRotation, const vcl::Font& rFont,
+               const ActionFactoryParameters& rParms);
+    void createActions(GDIMetaFile& rMtf, const ActionFactoryParameters& rParms,
+                       bool bSubsettableActions);
+    bool createFillAndStroke(const ::basegfx::B2DPolyPolygon& rPolyPoly,
+                             const ActionFactoryParameters& rParms);
+    bool createFillAndStroke(const ::basegfx::B2DPolygon& rPoly,
+                             const ActionFactoryParameters& rParms);
+    static void skipContent(GDIMetaFile& rMtf, const char* pCommentString,
+                            sal_Int32& io_rCurrActionIndex);
 
-        private:
-            ImplRenderer(const ImplRenderer&) = delete;
-            ImplRenderer& operator=( const ImplRenderer& ) = delete;
+    static bool isActionContained(GDIMetaFile& rMtf, const char* pCommentString,
+                                  MetaActionType nType);
 
-            static void updateClipping( const ::basegfx::B2DPolyPolygon&   rClipPoly,
-                                 const ActionFactoryParameters&     rParms,
-                                 bool                               bIntersect );
+    void createGradientAction(const ::tools::PolyPolygon& rPoly, const ::Gradient& rGradient,
+                              const ActionFactoryParameters& rParms, bool bIsPolygonRectangle,
+                              bool bSubsettableActions);
 
-            static void updateClipping( const ::tools::Rectangle&                 rClipRect,
-                                 const ActionFactoryParameters&     rParms,
-                                 bool                               bIntersect );
+    void createTextAction(const ::Point& rStartPoint, const OUString& rString, int nIndex,
+                          int nLength, KernArraySpan pCharWidths,
+                          std::span<const sal_Bool> pKashidaArray,
+                          const ActionFactoryParameters& rParms, bool bSubsettable);
 
-            static css::uno::Reference<
-                css::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
-                                                          const vcl::Font&                rFont,
-                                                          const ActionFactoryParameters&  rParms );
-            void createActions( GDIMetaFile&                    rMtf,
-                                const ActionFactoryParameters&  rParms,
-                                bool                            bSubsettableActions );
-            bool createFillAndStroke( const ::basegfx::B2DPolyPolygon& rPolyPoly,
-                                      const ActionFactoryParameters&   rParms );
-            bool createFillAndStroke( const ::basegfx::B2DPolygon&   rPoly,
-                                      const ActionFactoryParameters& rParms );
-            static void skipContent( GDIMetaFile& rMtf,
-                              const char*  pCommentString,
-                              sal_Int32&   io_rCurrActionIndex );
+    bool getSubsetIndices(sal_Int32& io_rStartIndex, sal_Int32& io_rEndIndex,
+                          ActionVector::const_iterator& o_rRangeBegin,
+                          ActionVector::const_iterator& o_rRangeEnd) const;
 
-            static bool isActionContained( GDIMetaFile& rMtf,
-                                    const char*     pCommentString,
-                                    MetaActionType  nType );
+    ActionVector maActions;
 
-            void createGradientAction( const ::tools::PolyPolygon&    rPoly,
-                                       const ::Gradient&              rGradient,
-                                       const ActionFactoryParameters& rParms,
-                                       bool                           bIsPolygonRectangle,
-                                       bool                           bSubsettableActions );
+    /* EMF+ */
+    XForm aBaseTransform;
+    /* EMF+ emf header info */
+    sal_Int32 nFrameLeft;
+    sal_Int32 nFrameTop;
+    sal_Int32 nFrameRight;
+    sal_Int32 nFrameBottom;
+    sal_Int32 nPixX;
+    sal_Int32 nPixY;
+    sal_Int32 nMmX;
+    sal_Int32 nMmY;
+};
 
-            void createTextAction( const ::Point&                 rStartPoint,
-                                   const OUString&                rString,
-                                   int                            nIndex,
-                                   int                            nLength,
-                                   KernArraySpan                pCharWidths,
-                                   std::span<const sal_Bool>     pKashidaArray,
-                                   const ActionFactoryParameters& rParms,
-                                   bool                           bSubsettable );
+/// Common parameters when creating actions
+struct ActionFactoryParameters
+{
+    ActionFactoryParameters(VectorOfOutDevStates& rStates, const CanvasSharedPtr& rCanvas,
+                            ::VirtualDevice& rVDev, const Renderer::Parameters& rParms,
+                            sal_Int32& io_rCurrActionIndex)
+        : mrStates(rStates)
+        , mrCanvas(rCanvas)
+        , mrVDev(rVDev)
+        , mrParms(rParms)
+        , mrCurrActionIndex(io_rCurrActionIndex)
+    {
+    }
 
-            bool getSubsetIndices( sal_Int32&                    io_rStartIndex,
-                                   sal_Int32&                    io_rEndIndex,
-                                   ActionVector::const_iterator& o_rRangeBegin,
-                                   ActionVector::const_iterator& o_rRangeEnd ) const;
-
-            ActionVector maActions;
-
-            /* EMF+ */
-            XForm           aBaseTransform;
-            /* EMF+ emf header info */
-            sal_Int32       nFrameLeft;
-            sal_Int32       nFrameTop;
-            sal_Int32       nFrameRight;
-            sal_Int32       nFrameBottom;
-            sal_Int32       nPixX;
-            sal_Int32       nPixY;
-            sal_Int32       nMmX;
-            sal_Int32       nMmY;
-        };
-
-
-        /// Common parameters when creating actions
-        struct ActionFactoryParameters
-        {
-            ActionFactoryParameters( VectorOfOutDevStates&       rStates,
-                                     const CanvasSharedPtr&      rCanvas,
-                                     ::VirtualDevice&            rVDev,
-                                     const Renderer::Parameters& rParms,
-                                     sal_Int32&                  io_rCurrActionIndex ) :
-                mrStates(rStates),
-                mrCanvas(rCanvas),
-                mrVDev(rVDev),
-                mrParms(rParms),
-                mrCurrActionIndex(io_rCurrActionIndex)
-            {}
-
-            VectorOfOutDevStates&       mrStates;
-            const CanvasSharedPtr&      mrCanvas;
-            ::VirtualDevice&            mrVDev;
-            const Renderer::Parameters& mrParms;
-            sal_Int32&                  mrCurrActionIndex;
-        };
-
+    VectorOfOutDevStates& mrStates;
+    const CanvasSharedPtr& mrCanvas;
+    ::VirtualDevice& mrVDev;
+    const Renderer::Parameters& mrParms;
+    sal_Int32& mrCurrActionIndex;
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
