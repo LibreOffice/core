@@ -25,6 +25,7 @@
 #include <Socket.hpp>
 #include <Util.hpp>
 #include <wsd/wopi/StorageConnectionManager.hpp>
+#include <wsd/wopi/WopiStorage.hpp>
 
 #include <common/Uri.hpp>
 
@@ -158,7 +159,13 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
             {
                 _userId = _wopiInfo->optValue<std::string>("UserId", std::string());
                 _username = _wopiInfo->optValue<std::string>("UserFriendlyName", std::string());
-                _userCanWrite = _wopiInfo->optValue<bool>("UserCanWrite", false);
+
+                const std::unique_ptr<WopiStorage::WOPIFileInfo> fileInfo =
+                    cfi.wopiFileInfo(cfi.url());
+                _userCanWrite = fileInfo && fileInfo->getUserCanWrite() &&
+                                !fileInfo->getUserCanOnlyComment() &&
+                                !fileInfo->getUserCanOnlyManageRedlines();
+                _allowsCleanExport = fileInfo && fileInfo->allowsCleanExport();
 
                 // WOPI's UserExtraInfo.avatar is a URL to the user's
                 // avatar image, forwarded to collab peers via user
@@ -231,7 +238,8 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                     << ", docKey: " << _docKey
                     << ", userId: " << Anonymizer::anonymize(_userId)
                     << ", username: " << Anonymizer::anonymize(_username)
-                    << ", canWrite: " << _userCanWrite);
+                    << ", canWrite: " << _userCanWrite
+                    << ", cleanExport: " << _allowsCleanExport);
             sendTextMessage("{\"type\":\"authenticated\"}");
             break;
         }
@@ -410,7 +418,12 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
 
     // Build the URL for the requested stream
     std::string url;
-    if (stream == "contents")
+    if ((stream == "contents" || stream == "fileUrl" || stream == "templateSource") &&
+        !_allowsCleanExport)
+    {
+        LOG_WRN("Collab: refusing " << stream << " fetch, the host allows no clean export");
+    }
+    else if (stream == "contents")
     {
         // Use FileUrl if available, otherwise construct /contents URL
         if (_wopiInfo)
@@ -521,14 +534,19 @@ void CollabSocketHandler::handleUpload(const std::string& stream, const std::str
         return;
     }
 
+    std::string error;
     if (stream != "contents")
+        error = "Upload only supported for contents stream";
+    else if (!_userCanWrite)
+        error = "The host allows this user no writes";
+    if (!error.empty())
     {
-        LOG_WRN("Collab: upload only supported for 'contents' stream, got: " << stream);
+        LOG_WRN("Collab: refusing upload of stream " << stream << ": " << error);
         std::ostringstream oss;
         oss << "{\"type\":\"upload_error\",\"stream\":\"" << JsonUtil::escapeJSONValue(stream) << "\"";
         if (!requestId.empty())
             oss << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"";
-        oss << ",\"error\":\"Upload only supported for contents stream\"}";
+        oss << ",\"error\":\"" << error << "\"}";
         sendTextMessage(oss.str());
         return;
     }

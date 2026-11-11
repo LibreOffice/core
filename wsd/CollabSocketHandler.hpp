@@ -50,6 +50,7 @@ class CollabSocketHandler : public WebSocketHandler
     std::string _username;
     std::string _avatar;
     bool _userCanWrite = false;
+    bool _allowsCleanExport = false;
     Poco::JSON::Object::Ptr _wopiInfo;
 
     /// The CollabBroker managing this handler (set after authentication)
