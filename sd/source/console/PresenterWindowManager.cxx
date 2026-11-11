@@ -908,8 +908,6 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
                 1,
                 mxScaledBackgroundBitmap,
                 nullptr,
-                nullptr,
-                rendering::StrokeAttributes(),
                 rendering::TexturingMode::REPEAT,
                 rendering::TexturingMode::REPEAT
             }

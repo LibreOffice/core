@@ -61,37 +61,21 @@ struct Texture
 
     /** Texture bitmap.<p>
 
-        This member can be used together with gradient and hatching.<p>
+        This member can be used together with gradient.<p>
 
         The bitmap is scaled to a one-by-one rectangle, to cover the
-        same area as both the gradient and the hatching.<p>
+        same area as the gradient.<p>
     */
     XBitmap                                     Bitmap;
 
 
     /** Texture gradient.<p>
 
-        This member can be used together with bitmap and hatching. The
+        This member can be used together with bitmap. The
         parametric polygons color value is used to fill the returned
         polygonal outlines.<p>
      */
     XParametricPolyPolygon2D                    Gradient;
-
-
-    /** Texture hatching.<p>
-
-        This member can be used together with bitmap and gradient. The
-        parametric polygons color value is used to stroke the returned
-        polygonal outlines.<p>
-     */
-    XParametricPolyPolygon2D                    Hatching;
-
-
-    /** Specifies the stroke attributes used for hatching.<p>
-
-        Use 0.0 as the strokeWidth here to indicate hair lines.<p>
-     */
-    StrokeAttributes                            HatchAttributes;
 
 
     /** Repeat mode of the texture, x direction.<p>

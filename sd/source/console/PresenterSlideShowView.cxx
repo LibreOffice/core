@@ -653,8 +653,6 @@ void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox
                 1,
                 xBackgroundBitmap,
                 nullptr,
-                nullptr,
-                rendering::StrokeAttributes(),
                 rendering::TexturingMode::REPEAT,
                 rendering::TexturingMode::REPEAT
             }
