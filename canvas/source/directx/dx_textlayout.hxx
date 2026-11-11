@@ -67,7 +67,6 @@ namespace dxcanvas
         virtual css::rendering::TextHit SAL_CALL getTextHit( const css::geometry::RealPoint2D& aHitPoint ) override;
         virtual css::rendering::Caret SAL_CALL getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) override;
         virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
         virtual double SAL_CALL getBaselineOffset(  ) override;
         virtual sal_Int8 SAL_CALL getMainTextDirection(  ) override;
         virtual css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL getFont(  ) override;

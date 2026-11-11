@@ -312,31 +312,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
 
-    /** This method generates a highlight polygon.<p>
-
-        This method generates a highlighting polygon from two
-        insertion indices. This polygon will not always be visually
-        continuous, if e.g. the text direction changes in the middle
-        of the selection, the might be parts visually between start
-        and end position that are not selected.<p>
-
-        @param nStartIndex
-        Start of the selection range.
-
-        @param nEndIndex
-        End of the selection range.
-
-        @return the highlight polygon in the font coordinate space.
-
-        @throws com::sun::star::lang::IndexOutOfBoundsException
-        if nStartIndex or nEndIndex are outside the permissible
-        range.
-     */
-    XPolyPolygon2D queryLogicalHighlighting( [in] long nStartIndex,
-                                             [in] long nEndIndex )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
-
-
     /** This method yields the baseline offset.<p>
 
         This method returns the baseline offset for this layout
