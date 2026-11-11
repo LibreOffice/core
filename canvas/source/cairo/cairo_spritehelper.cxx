@@ -73,11 +73,6 @@ namespace cairocanvas
                                bool&                      /*io_bSurfacesDirty*/,
                                bool                       /*bBufferedUpdate*/ ) const
     {
-#ifdef CAIRO_CANVAS_PERF_TRACE
-        struct timespec aTimer;
-        mxDevice->startPerfTrace( &aTimer );
-#endif
-
         const double fAlpha( getAlpha() );
         const ::basegfx::B2DHomMatrix aTransform( getTransformation() );
 
@@ -180,10 +175,6 @@ namespace cairocanvas
             cairo_paint_with_alpha( pCairo.get(), fAlpha );
 
         cairo_restore( pCairo.get() );
-
-#ifdef CAIRO_CANVAS_PERF_TRACE
-        mxDevice->stopPerfTrace( &aTimer, "sprite redraw" );
-#endif
     }
 
     ::basegfx::B2DPolyPolygon SpriteHelper::polyPolygonFromXPolyPolygon2D( uno::Reference< rendering::XPolyPolygon2D >& xPoly ) const

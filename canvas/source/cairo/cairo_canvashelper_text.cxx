@@ -190,11 +190,6 @@ void CanvasHelper::drawText(const rendering::XCanvas* pOwner, const rendering::S
                             const rendering::ViewState& viewState,
                             const rendering::RenderState& renderState, sal_Int8 textDirection)
 {
-#ifdef CAIRO_CANVAS_PERF_TRACE
-    struct timespec aTimer;
-    mxDevice->startPerfTrace(&aTimer);
-#endif
-
     ENSURE_ARG_OR_THROW(xFont.is(), "CanvasHelper::drawText(): font is NULL");
 
     if (!mpVirtualDevice)
