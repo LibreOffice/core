@@ -327,13 +327,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         i.e. the left edge for left-to-right and the right edge for
         right-to-left text.
 
-        @return a handle to the cached rendering output.
-
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
+    void drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 

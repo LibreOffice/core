@@ -223,17 +223,15 @@ css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
         aFontRequest, aExtraFontProperties, aFontMatrix);
 }
 
-css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        PresenterCanvas::drawText(
-            const css::rendering::StringContext& aText,
-            const css::uno::Reference< css::rendering::XCanvasFont >& xFont,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState,
-            ::sal_Int8 nTextDirection)
+void SAL_CALL PresenterCanvas::drawText(
+    const css::rendering::StringContext& aText,
+    const css::uno::Reference<css::rendering::XCanvasFont>& xFont,
+    const css::rendering::ViewState& aViewState, const css::rendering::RenderState& aRenderState,
+    ::sal_Int8 nTextDirection)
 {
     ThrowIfDisposed();
-    return mxSharedCanvas->drawText(
-        aText, xFont, MergeViewState(aViewState), aRenderState, nTextDirection);
+    mxSharedCanvas->drawText(aText, xFont, MergeViewState(aViewState), aRenderState,
+                             nTextDirection);
 }
 
 void SAL_CALL PresenterCanvas::drawTextLayout(

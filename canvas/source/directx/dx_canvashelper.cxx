@@ -454,12 +454,12 @@ namespace dxcanvas
         return uno::Reference< rendering::XCanvasFont >();
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         /*pCanvas*/,
-                                                                          const rendering::StringContext&                   text,
-                                                                          const uno::Reference< rendering::XCanvasFont >&   xFont,
-                                                                          const rendering::ViewState&                       viewState,
-                                                                          const rendering::RenderState&                     renderState,
-                                                                          sal_Int8                                          /*textDirection*/ )
+    void CanvasHelper::drawText(const rendering::XCanvas* /*pCanvas*/,
+                                const rendering::StringContext& text,
+                                const uno::Reference<rendering::XCanvasFont>& xFont,
+                                const rendering::ViewState& viewState,
+                                const rendering::RenderState& renderState,
+                                sal_Int8 /*textDirection*/)
     {
         ENSURE_OR_THROW( xFont.is(),
                           "CanvasHelper::drawText: font is NULL");
@@ -500,8 +500,6 @@ namespace dxcanvas
                                                       &aBrush ),
                 "CanvasHelper::drawText(): GDI+ call failed" );
         }
-
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     void CanvasHelper::drawTextLayout(const rendering::XCanvas* /*pCanvas*/,

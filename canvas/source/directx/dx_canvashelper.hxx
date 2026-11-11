@@ -139,14 +139,11 @@ namespace dxcanvas
                                 css::beans::PropertyValue >&       extraFontProperties,
                         const css::geometry::Matrix2D&             fontMatrix );
 
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            drawText( const css::rendering::XCanvas*           pCanvas,
-                      const css::rendering::StringContext&     text,
-                      const css::uno::Reference<
-                              css::rendering::XCanvasFont >&   xFont,
-                      const css::rendering::ViewState&         viewState,
-                      const css::rendering::RenderState&       renderState,
-                      sal_Int8                                              textDirection );
+        void drawText(const css::rendering::XCanvas* pCanvas,
+                      const css::rendering::StringContext& text,
+                      const css::uno::Reference<css::rendering::XCanvasFont>& xFont,
+                      const css::rendering::ViewState& viewState,
+                      const css::rendering::RenderState& renderState, sal_Int8 textDirection);
 
         void drawTextLayout(const css::rendering::XCanvas* pCanvas,
                             const css::uno::Reference<css::rendering::XTextLayout>& laidOutText,

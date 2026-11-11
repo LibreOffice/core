@@ -261,12 +261,11 @@ public:
         return maCanvasHelper.createFont(this, fontRequest, extraFontProperties, fontMatrix);
     }
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive>
-        SAL_CALL drawText(const css::rendering::StringContext& text,
-                          const css::uno::Reference<css::rendering::XCanvasFont>& xFont,
-                          const css::rendering::ViewState& viewState,
-                          const css::rendering::RenderState& renderState,
-                          sal_Int8 textDirection) override
+    void SAL_CALL drawText(const css::rendering::StringContext& text,
+                           const css::uno::Reference<css::rendering::XCanvasFont>& xFont,
+                           const css::rendering::ViewState& viewState,
+                           const css::rendering::RenderState& renderState,
+                           sal_Int8 textDirection) override
     {
         canvastools::verifyArgs(xFont, viewState, renderState, __func__,
                                 static_cast<cppu::OWeakObject*>(this));
@@ -277,7 +276,7 @@ public:
 
         mbSurfaceDirty = true;
 
-        return maCanvasHelper.drawText(this, text, xFont, viewState, renderState, textDirection);
+        maCanvasHelper.drawText(this, text, xFont, viewState, renderState, textDirection);
     }
 
     virtual void SAL_CALL

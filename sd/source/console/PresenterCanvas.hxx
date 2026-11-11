@@ -164,13 +164,11 @@ public:
             const css::uno::Sequence< css::beans::PropertyValue >& aExtraFontProperties,
             const css::geometry::Matrix2D& aFontMatrix) override;
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        drawText(
-            const css::rendering::StringContext& aText,
-            const css::uno::Reference< css::rendering::XCanvasFont >& xFont,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState,
-            ::sal_Int8 nTextDirection) override;
+    virtual void SAL_CALL drawText(const css::rendering::StringContext& aText,
+                                   const css::uno::Reference<css::rendering::XCanvasFont>& xFont,
+                                   const css::rendering::ViewState& aViewState,
+                                   const css::rendering::RenderState& aRenderState,
+                                   ::sal_Int8 nTextDirection) override;
 
     void SAL_CALL
     drawTextLayout(const css::uno::Reference<css::rendering::XTextLayout>& xLayoutetText,

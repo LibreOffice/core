@@ -468,11 +468,10 @@ CanvasHelper::createFont(const rendering::XCanvas*, const rendering::FontRequest
     return uno::Reference<rendering::XCanvasFont>();
 }
 
-uno::Reference<rendering::XCachedPrimitive>
-CanvasHelper::drawText(const rendering::XCanvas*, const rendering::StringContext& text,
-                       const uno::Reference<rendering::XCanvasFont>& xFont,
-                       const rendering::ViewState& viewState,
-                       const rendering::RenderState& renderState, sal_Int8 textDirection)
+void CanvasHelper::drawText(const rendering::XCanvas*, const rendering::StringContext& text,
+                            const uno::Reference<rendering::XCanvasFont>& xFont,
+                            const rendering::ViewState& viewState,
+                            const rendering::RenderState& renderState, sal_Int8 textDirection)
 {
     ENSURE_ARG_OR_THROW(xFont.is(), "font is NULL");
 
@@ -482,7 +481,7 @@ CanvasHelper::drawText(const rendering::XCanvas*, const rendering::StringContext
 
         ::Point aOutpos;
         if (!setupTextOutput(aOutpos, viewState, renderState, xFont))
-            return uno::Reference<rendering::XCachedPrimitive>(nullptr); // no output necessary
+            return;
 
         // change text direction and layout mode
         vcl::text::ComplexTextLayoutFlags nLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
@@ -518,8 +517,6 @@ CanvasHelper::drawText(const rendering::XCanvas*, const rendering::StringContext
                 ::canvastools::numeric_cast<sal_uInt16>(text.Length));
         }
     }
-
-    return uno::Reference<rendering::XCachedPrimitive>(nullptr);
 }
 
 void CanvasHelper::drawTextLayout(const rendering::XCanvas*,
