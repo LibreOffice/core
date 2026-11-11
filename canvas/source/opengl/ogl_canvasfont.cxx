@@ -30,13 +30,13 @@ namespace oglcanvas
         ::canvastools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
     }
 
-    uno::Reference< rendering::XTextLayout > SAL_CALL CanvasFont::createTextLayout( const rendering::StringContext& aText,
-                                                                                    sal_Int8                        nDirection,
-                                                                                    sal_Int64                       nRandomSeed )
+    uno::Reference<rendering::XTextLayout>
+        SAL_CALL CanvasFont::createTextLayout(const rendering::StringContext& aText,
+                                              sal_Int8 nDirection, sal_Int64)
     {
         std::unique_lock aGuard( m_aMutex );
 
-        return new TextLayout(aText, nDirection, nRandomSeed, rtl::Reference<CanvasFont>(this));
+        return new TextLayout(aText, nDirection, rtl::Reference<CanvasFont>(this));
     }
 
     rendering::FontRequest SAL_CALL CanvasFont::getFontRequest(  )

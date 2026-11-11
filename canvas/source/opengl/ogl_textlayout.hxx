@@ -27,7 +27,6 @@ namespace oglcanvas
     public:
         TextLayout( css::rendering::StringContext               aText,
                     sal_Int8                                    nDirection,
-                    sal_Int64                                   nRandomSeed,
                     rtl::Reference<CanvasFont> rFont);
 
         /// make noncopyable
