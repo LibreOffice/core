@@ -606,8 +606,7 @@ void ImplRenderer::createGradientAction(const ::tools::PolyPolygon& rPoly,
                                                        aGradInfo.getTextureTransform());
 
         aTexture.Gradient.set(canvas::ParametricPolyPolygon::create(
-            rParms.mrCanvas->getUNOCanvas()->getDevice(), aGradientService, aColors, aStops,
-            aGradInfo.getAspectRatio()));
+            aGradientService, aColors, aStops, aGradInfo.getAspectRatio()));
         if (aTexture.Gradient.is())
         {
             std::shared_ptr<Action> pPolyAction(

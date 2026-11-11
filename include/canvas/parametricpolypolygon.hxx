@@ -27,11 +27,6 @@
 #include <rtl/ref.hxx>
 #include <utility>
 
-namespace com::sun::star::rendering
-{
-class XGraphicDevice;
-}
-
 /* Definition of ParametricPolyPolygon class */
 
 namespace canvas
@@ -139,8 +134,7 @@ public:
             directions.
      */
     static rtl::Reference<ParametricPolyPolygon>
-    create(const css::uno::Reference<css::rendering::XGraphicDevice>& rDevice,
-           std::u16string_view rServiceName,
+    create(std::u16string_view rServiceName,
            const css::uno::Sequence<css::uno::Sequence<double>>& rColorSequence,
            const css::uno::Sequence<double>& rColorStops, double fAspectRatio);
 
@@ -156,30 +150,23 @@ private:
     ParametricPolyPolygon(const ParametricPolyPolygon&) = delete;
     ParametricPolyPolygon& operator=(const ParametricPolyPolygon&) = delete;
 
-    static rtl::Reference<ParametricPolyPolygon> createLinearHorizontalGradient(
-        const css::uno::Reference<css::rendering::XGraphicDevice>& rDevice,
-        const css::uno::Sequence<css::uno::Sequence<double>>& colors,
-        const css::uno::Sequence<double>& stops);
     static rtl::Reference<ParametricPolyPolygon>
-    createEllipticalGradient(const css::uno::Reference<css::rendering::XGraphicDevice>& rDevice,
-                             const css::uno::Sequence<css::uno::Sequence<double>>& colors,
+    createLinearHorizontalGradient(const css::uno::Sequence<css::uno::Sequence<double>>& colors,
+                                   const css::uno::Sequence<double>& stops);
+    static rtl::Reference<ParametricPolyPolygon>
+    createEllipticalGradient(const css::uno::Sequence<css::uno::Sequence<double>>& colors,
                              const css::uno::Sequence<double>& stops, double fAspect);
     static rtl::Reference<ParametricPolyPolygon>
-    createRectangularGradient(const css::uno::Reference<css::rendering::XGraphicDevice>& rDevice,
-                              const css::uno::Sequence<css::uno::Sequence<double>>& colors,
+    createRectangularGradient(const css::uno::Sequence<css::uno::Sequence<double>>& colors,
                               const css::uno::Sequence<double>& stops, double fAspect);
 
     /// Private, because objects can only be created from the static factories
-    ParametricPolyPolygon(css::uno::Reference<css::rendering::XGraphicDevice> xDevice,
-                          const ::basegfx::B2DPolygon& rGradientPoly, GradientType eType,
+    ParametricPolyPolygon(const ::basegfx::B2DPolygon& rGradientPoly, GradientType eType,
                           const css::uno::Sequence<css::uno::Sequence<double>>& colors,
                           const css::uno::Sequence<double>& stops, double nAspectRatio);
-    ParametricPolyPolygon(css::uno::Reference<css::rendering::XGraphicDevice> xDevice,
-                          GradientType eType,
+    ParametricPolyPolygon(GradientType eType,
                           const css::uno::Sequence<css::uno::Sequence<double>>& colors,
                           const css::uno::Sequence<double>& stops);
-
-    css::uno::Reference<css::rendering::XGraphicDevice> mxDevice;
 
     /// All defining values of this object
     const Values maValues;

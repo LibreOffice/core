@@ -23,34 +23,29 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <canvas/parametricpolypolygon.hxx>
-#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
-
-#include <utility>
 
 using namespace ::com::sun::star;
 
 namespace canvas
 {
 rtl::Reference<ParametricPolyPolygon>
-ParametricPolyPolygon::create(const uno::Reference<rendering::XGraphicDevice>& rDevice,
-                              std::u16string_view rServiceName,
+ParametricPolyPolygon::create(std::u16string_view rServiceName,
                               const uno::Sequence<uno::Sequence<double>>& rColorSequence,
                               const uno::Sequence<double>& rColorStops, double fAspectRatio)
 {
     if (rServiceName == u"LinearGradient")
     {
-        return createLinearHorizontalGradient(rDevice, rColorSequence, rColorStops);
+        return createLinearHorizontalGradient(rColorSequence, rColorStops);
     }
     else if (rServiceName == u"EllipticalGradient")
     {
-        return createEllipticalGradient(rDevice, rColorSequence, rColorStops, fAspectRatio);
+        return createEllipticalGradient(rColorSequence, rColorStops, fAspectRatio);
     }
     else if (rServiceName == u"RectangularGradient")
     {
-        return createRectangularGradient(rDevice, rColorSequence, rColorStops, fAspectRatio);
+        return createRectangularGradient(rColorSequence, rColorStops, fAspectRatio);
     }
     else if (rServiceName == u"VerticalLineHatch")
     {
@@ -73,59 +68,54 @@ ParametricPolyPolygon::create(const uno::Reference<rendering::XGraphicDevice>& r
 }
 
 rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createLinearHorizontalGradient(
-    const uno::Reference<rendering::XGraphicDevice>& rDevice,
     const uno::Sequence<uno::Sequence<double>>& colors, const uno::Sequence<double>& stops)
 {
     // TODO(P2): hold gradient brush statically, and only setup
     // the colors
-    return new ParametricPolyPolygon(rDevice, GradientType::Linear, colors, stops);
+    return new ParametricPolyPolygon(GradientType::Linear, colors, stops);
 }
 
-rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createEllipticalGradient(
-    const uno::Reference<rendering::XGraphicDevice>& rDevice,
-    const uno::Sequence<uno::Sequence<double>>& colors, const uno::Sequence<double>& stops,
-    double fAspectRatio)
+rtl::Reference<ParametricPolyPolygon>
+ParametricPolyPolygon::createEllipticalGradient(const uno::Sequence<uno::Sequence<double>>& colors,
+                                                const uno::Sequence<double>& stops,
+                                                double fAspectRatio)
 {
     // TODO(P2): hold gradient polygon statically, and only setup
     // the colors
     return new ParametricPolyPolygon(
-        rDevice, ::basegfx::utils::createPolygonFromCircle(::basegfx::B2DPoint(0, 0), 1),
+        ::basegfx::utils::createPolygonFromCircle(::basegfx::B2DPoint(0, 0), 1),
         GradientType::Elliptical, colors, stops, fAspectRatio);
 }
 
-rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createRectangularGradient(
-    const uno::Reference<rendering::XGraphicDevice>& rDevice,
-    const uno::Sequence<uno::Sequence<double>>& colors, const uno::Sequence<double>& stops,
-    double fAspectRatio)
+rtl::Reference<ParametricPolyPolygon>
+ParametricPolyPolygon::createRectangularGradient(const uno::Sequence<uno::Sequence<double>>& colors,
+                                                 const uno::Sequence<double>& stops,
+                                                 double fAspectRatio)
 {
     // TODO(P2): hold gradient polygon statically, and only setup
     // the colors
     return new ParametricPolyPolygon(
-        rDevice, ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(-1, -1, 1, 1)),
+        ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(-1, -1, 1, 1)),
         GradientType::Rectangular, colors, stops, fAspectRatio);
 }
 
-void ParametricPolyPolygon::disposing(std::unique_lock<std::mutex>&) { mxDevice.clear(); }
+void ParametricPolyPolygon::disposing(std::unique_lock<std::mutex>&) {}
 
 ParametricPolyPolygon::~ParametricPolyPolygon() {}
 
-ParametricPolyPolygon::ParametricPolyPolygon(uno::Reference<rendering::XGraphicDevice> xDevice,
-                                             const ::basegfx::B2DPolygon& rGradientPoly,
+ParametricPolyPolygon::ParametricPolyPolygon(const ::basegfx::B2DPolygon& rGradientPoly,
                                              GradientType eType,
                                              const uno::Sequence<uno::Sequence<double>>& rColors,
                                              const uno::Sequence<double>& rStops,
                                              double nAspectRatio)
-    : mxDevice(std::move(xDevice))
-    , maValues(rGradientPoly, rColors, rStops, nAspectRatio, eType)
+    : maValues(rGradientPoly, rColors, rStops, nAspectRatio, eType)
 {
 }
 
-ParametricPolyPolygon::ParametricPolyPolygon(uno::Reference<rendering::XGraphicDevice> xDevice,
-                                             GradientType eType,
+ParametricPolyPolygon::ParametricPolyPolygon(GradientType eType,
                                              const uno::Sequence<uno::Sequence<double>>& rColors,
                                              const uno::Sequence<double>& rStops)
-    : mxDevice(std::move(xDevice))
-    , maValues(::basegfx::B2DPolygon(), rColors, rStops, 1.0, eType)
+    : maValues(::basegfx::B2DPolygon(), rColors, rStops, 1.0, eType)
 {
 }
 
