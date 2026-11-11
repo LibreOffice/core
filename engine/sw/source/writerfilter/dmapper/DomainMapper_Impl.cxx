@@ -2390,9 +2390,11 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                 pParaContext->Insert(PROP_PARA_LEFT_MARGIN, oProperty->second, /*bOverwrite=*/false);
 
             // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
-            if (auto oProperty = getOptProperty(PROP_PARA_RIGHT_MARGIN, true);
-                oProperty && oProperty->second.get<sal_Int32>() != 0)
+            uno::Any aRightMargin = GetPropertyFromParaStyleSheet(PROP_PARA_RIGHT_MARGIN);
+            if (aRightMargin != uno::Any())
             {
+                pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, aRightMargin, /*bOverwrite=*/false);
+
                 // If we're setting the right margin, we should set the first / left margin as well from the numbering style.
                 const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, u"FirstLineIndent"_ustr);
                 const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, nListLevel, u"IndentAt"_ustr);
@@ -2400,8 +2402,6 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                     pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, cpo::uno::Any(nFirstLineIndent), /*bOverwrite=*/false);
                 if (nParaLeftMargin != 0)
                     pParaContext->Insert(PROP_PARA_LEFT_MARGIN, cpo::uno::Any(nParaLeftMargin), /*bOverwrite=*/false);
-
-                pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, oProperty->second, /*bOverwrite=*/false);
             }
         }
         // Paragraph style based right paragraph indentation affects not paragraph style based lists in DOCX.
