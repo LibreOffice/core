@@ -948,9 +948,10 @@ void CanvasHelper::strokePolyPolygon(const rendering::XCanvas*,
 #endif
 }
 
-uno::Reference<rendering::XCachedPrimitive> CanvasHelper::fillPolyPolygon(
-    const rendering::XCanvas*, const uno::Reference<rendering::XPolyPolygon2D>& xPolyPolygon,
-    const rendering::ViewState& viewState, const rendering::RenderState& renderState)
+void CanvasHelper::fillPolyPolygon(const rendering::XCanvas*,
+                                   const uno::Reference<rendering::XPolyPolygon2D>& xPolyPolygon,
+                                   const rendering::ViewState& viewState,
+                                   const rendering::RenderState& renderState)
 {
 #ifdef CAIRO_CANVAS_PERF_TRACE
     struct timespec aTimer;
@@ -972,8 +973,6 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::fillPolyPolygon(
 #ifdef CAIRO_CANVAS_PERF_TRACE
     mxDevice->stopPerfTrace(&aTimer, "fillPolyPolygon");
 #endif
-
-    return uno::Reference<rendering::XCachedPrimitive>(nullptr);
 }
 
 uno::Reference<rendering::XCachedPrimitive> CanvasHelper::fillTexturedPolyPolygon(

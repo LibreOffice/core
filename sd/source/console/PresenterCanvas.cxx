@@ -186,15 +186,12 @@ void SAL_CALL PresenterCanvas::strokePolyPolygon(
                                       aStrokeAttributes);
 }
 
-css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        PresenterCanvas::fillPolyPolygon(
-            const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState)
+void SAL_CALL PresenterCanvas::fillPolyPolygon(
+    const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
+    const css::rendering::ViewState& aViewState, const css::rendering::RenderState& aRenderState)
 {
     ThrowIfDisposed();
-    return mxSharedCanvas->fillPolyPolygon(
-        xPolyPolygon, MergeViewState(aViewState), aRenderState);
+    mxSharedCanvas->fillPolyPolygon(xPolyPolygon, MergeViewState(aViewState), aRenderState);
 }
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL

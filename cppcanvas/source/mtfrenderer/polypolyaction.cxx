@@ -155,9 +155,9 @@ namespace cppcanvas::internal
                     uno::Sequence<double> aTmpColor( aLocalState.DeviceColor );
                     aLocalState.DeviceColor = maFillColor;
 
-                    rCachedPrimitive = mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
-                                                                                  mpCanvas->getViewState(),
-                                                                                  aLocalState );
+                    mpCanvas->getUNOCanvas()->fillPolyPolygon(mxPolyPoly, mpCanvas->getViewState(),
+                                                              aLocalState);
+                    rCachedPrimitive.clear();
 
                     aLocalState.DeviceColor = std::move(aTmpColor);
                 }

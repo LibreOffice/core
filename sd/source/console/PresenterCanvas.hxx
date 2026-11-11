@@ -145,11 +145,10 @@ public:
                       const css::rendering::RenderState& aRenderState,
                       const css::rendering::StrokeAttributes& aStrokeAttributes) override;
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        fillPolyPolygon(
-            const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState) override;
+    void SAL_CALL
+    fillPolyPolygon(const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
+                    const css::rendering::ViewState& aViewState,
+                    const css::rendering::RenderState& aRenderState) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         fillTexturedPolyPolygon(

@@ -401,9 +401,10 @@ void CanvasHelper::strokePolyPolygon(const rendering::XCanvas*,
     }
 }
 
-uno::Reference<rendering::XCachedPrimitive> CanvasHelper::fillPolyPolygon(
-    const rendering::XCanvas*, const uno::Reference<rendering::XPolyPolygon2D>& xPolyPolygon,
-    const rendering::ViewState& viewState, const rendering::RenderState& renderState)
+void CanvasHelper::fillPolyPolygon(const rendering::XCanvas*,
+                                   const uno::Reference<rendering::XPolyPolygon2D>& xPolyPolygon,
+                                   const rendering::ViewState& viewState,
+                                   const rendering::RenderState& renderState)
 {
     ENSURE_ARG_OR_THROW(xPolyPolygon.is(), "polygon is NULL");
 
@@ -444,9 +445,6 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::fillPolyPolygon(
             }
         }
     }
-
-    // TODO(P1): Provide caching here.
-    return uno::Reference<rendering::XCachedPrimitive>(nullptr);
 }
 
 uno::Reference<rendering::XCanvasFont>

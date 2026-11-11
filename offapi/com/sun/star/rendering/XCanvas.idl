@@ -231,13 +231,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when filling this polygon.
 
-        @return a handle to the cached rendering output.
-
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
+    void fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 

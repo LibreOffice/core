@@ -477,10 +477,11 @@ namespace oglcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
-                                                                                 const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                 const rendering::ViewState&                        viewState,
-                                                                                 const rendering::RenderState&                      renderState )
+    void
+    CanvasHelper::fillPolyPolygon(const rendering::XCanvas* /*pCanvas*/,
+                                  const uno::Reference<rendering::XPolyPolygon2D>& xPolyPolygon,
+                                  const rendering::ViewState& viewState,
+                                  const rendering::RenderState& renderState)
     {
         ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::fillPolyPolygon: polygon is NULL");
@@ -496,9 +497,6 @@ namespace oglcanvas
 
             rAct.maFunction = &lcl_fillPolyPolygon;
         }
-
-        // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,

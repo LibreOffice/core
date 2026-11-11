@@ -103,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
         // words fail me to describe the sheer beauty of allocating a UNO
         // object to represent a polygon, and manually handling the ViewState
         // and there being no public helper for this - to render ... a rectangle.
-        XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
+        void fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
 #endif
     }
 }
