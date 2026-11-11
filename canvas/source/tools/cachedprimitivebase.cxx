@@ -21,7 +21,6 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <cppuhelper/supportsservice.hxx>
 
 #include <base/cachedprimitivebase.hxx>
 #include <utility>
@@ -68,21 +67,6 @@ namespace canvas
                          maUsedViewState,
                          mxTarget,
                          bSameViewTransforms );
-    }
-
-    OUString SAL_CALL CachedPrimitiveBase::getImplementationName(  )
-    {
-        return u"canvas::CachedPrimitiveBase"_ustr;
-    }
-
-    sal_Bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName )
-    {
-        return cppu::supportsService(this, ServiceName);
-    }
-
-    uno::Sequence< OUString > SAL_CALL CachedPrimitiveBase::getSupportedServiceNames(  )
-    {
-        return { u"com.sun.star.rendering.CachedBitmap"_ustr };
     }
 }
 

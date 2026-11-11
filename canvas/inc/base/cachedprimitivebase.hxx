@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <comphelper/compbase.hxx>
@@ -33,14 +32,11 @@ namespace com::sun::star::rendering { class XCanvas; }
 
 namespace canvas
 {
-    typedef comphelper::WeakComponentImplHelper< css::rendering::XCachedPrimitive,
-                                           css::lang::XServiceInfo > CachedPrimitiveBase_Base;
-
     /** Base class, providing common functionality for implementers of
         the XCachedPrimitive interface.
      */
-    class CANVASTOOLS_DLLPUBLIC CachedPrimitiveBase:
-        public CachedPrimitiveBase_Base
+    class CANVASTOOLS_DLLPUBLIC CachedPrimitiveBase
+        : public comphelper::WeakComponentImplHelper<css::rendering::XCachedPrimitive>
     {
     public:
 
@@ -60,11 +56,6 @@ namespace canvas
 
         // XCachedPrimitive
         virtual sal_Bool SAL_CALL redraw(const css::rendering::ViewState& aState) override;
-
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     protected:
         virtual ~CachedPrimitiveBase() override; // we're a ref-counted UNO class. _We_ destroy ourselves.
