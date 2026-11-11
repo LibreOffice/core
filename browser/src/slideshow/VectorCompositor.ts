@@ -22,7 +22,8 @@
  *
  * A shape effect redraws the slide from the primitive tree on every frame,
  * each target in the state its element holds. The videos of a slide draw
- * over it once its transition has ended.
+ * over it once its transition has ended. The videos of its master page
+ * play from the start of the transition onto it.
  */
 
 /* global app RenderManager */
@@ -35,6 +36,7 @@ class VectorCompositor extends SlideCompositor {
 	// The 2d render context over the offscreen canvas.
 	private renderContext: RenderContext2d = null;
 	private videos = new SlideVideos();
+	private masterVideos = new MasterVideos();
 	private canvasWidth = 0;
 	private canvasHeight = 0;
 
@@ -73,6 +75,7 @@ class VectorCompositor extends SlideCompositor {
 		// The videos drew into the old canvas. Entering the slide makes them anew.
 		this.videos.deleteResources();
 		this.videos.clear();
+		this.masterVideos.deleteResources();
 
 		[this.canvasWidth, this.canvasHeight] = this._computeCanvasSize();
 		this.offscreenCanvas = new OffscreenCanvas(
@@ -228,8 +231,9 @@ class VectorCompositor extends SlideCompositor {
 		return this.offscreenCanvas.transferToImageBitmap();
 	}
 
-	// What draws the video of each shape that holds one, by shape id. A video is placed on the
-	// canvas in pixels, so the context goes back to pixels while it is drawn.
+	// What draws the video of each shape that holds one, by shape id. The shapes of the master
+	// page are included. A video is placed on the canvas in pixels, so the context goes back to
+	// pixels while it is drawn.
 	private _videosOverShapes(
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
@@ -251,7 +255,23 @@ class VectorCompositor extends SlideCompositor {
 				context.restore();
 			});
 		}
+		for (const videoRenderer of this._masterVideoRenderers(slideHash)) {
+			overShapes.set(videoRenderer.infoId, (context) => {
+				context.save();
+				context.setTransform(1, 0, 0, 1, 0, 0);
+				videoRenderer.render();
+				context.restore();
+			});
+		}
 		return overShapes;
+	}
+
+	private _masterVideoRenderers(
+		slideHash: string,
+	): Array<AnimatedContentRenderer> {
+		const masterHash =
+			this._metaPresentation.getSlideInfo(slideHash)?.masterPage;
+		return masterHash ? this.masterVideos.get(masterHash) : [];
 	}
 
 	// How the video of the shape is drawn: in the state of the shape.
@@ -303,8 +323,9 @@ class VectorCompositor extends SlideCompositor {
 		return targets;
 	}
 
-	// The frame each video shows now, by the object id of its shape. A video
-	// without a frame yet leaves its placeholder showing.
+	// The frame each video shows now, by the object id of its shape. The
+	// shapes of the master page are included. A video without a frame yet
+	// leaves its placeholder showing.
 	private _videoFrames(
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
@@ -315,6 +336,10 @@ class VectorCompositor extends SlideCompositor {
 			if (!data.objects.has(video.id)) continue;
 			const frame = this.videos.get(slideHash, video)?.currentFrame();
 			if (frame) frames.set(video.id, frame);
+		}
+		for (const videoRenderer of this._masterVideoRenderers(slideHash)) {
+			const frame = videoRenderer.currentFrame();
+			if (frame) frames.set(videoRenderer.infoId, frame);
 		}
 		return frames;
 	}
@@ -350,14 +375,29 @@ class VectorCompositor extends SlideCompositor {
 		const width = context.canvas.width;
 		const height = context.canvas.height;
 		if (width <= 0 || height <= 0) return false;
-		if (!layers.holds(slideHash, data, width, height))
+		const master =
+			data.masterPartId !== undefined
+				? (RenderManager.requestPartById(
+						data.masterPartId,
+						cool.VectorMode.MasterPages,
+					) ?? null)
+				: null;
+		if (!layers.holds(slideHash, data, master, width, height)) {
+			const masterVideoIds = new Set<number>(
+				(
+					this._metaPresentation.getSlideInfo(slideHash)?.masterVideos ?? []
+				).map((video) => video.id),
+			);
 			layers.build(
 				slideHash,
 				data,
 				this._animatedTargets(slideHash, data),
 				width,
 				height,
+				master,
+				masterVideoIds,
 			);
+		}
 		return layers.draw(
 			this._drawStates(slideHash, data),
 			texture,
@@ -602,32 +642,42 @@ class VectorCompositor extends SlideCompositor {
 
 	// --- transitions and lifecycle ----------------------------------
 
-	public hasMasterVideos(_slideIndex: number): boolean {
-		return false;
+	public hasMasterVideos(slideIndex: number): boolean {
+		const slideHash = this._metaPresentation.getSlideHash(slideIndex);
+		return this._masterVideoRenderers(slideHash).length > 0;
 	}
 
-	public getMasterVideoFrames(_slideIndex: number): number {
-		return 0;
+	public getMasterVideoFrames(slideIndex: number): number {
+		const slideHash = this._metaPresentation.getSlideHash(slideIndex);
+		const masterHash =
+			this._metaPresentation.getSlideInfo(slideHash)?.masterPage;
+		return masterHash ? this.masterVideos.presentedFrames(masterHash) : 0;
 	}
 
-	public notifyTransitionStart(_slideHash: string): void {
-		// The primitive trees are already cached, so there is nothing to
-		// hold back while a transition runs.
+	// The primitive trees are already cached before a transition starts. The background video of
+	// the slide coming in plays from the start of the transition.
+	public notifyTransitionStart(slideHash: string): void {
+		if (this.disposed || !this.renderContext) return;
+		this.masterVideos.start(
+			this._metaPresentation.getSlideInfo(slideHash),
+			this.renderContext,
+		);
 	}
 
 	public notifyTransitionEnd(slideHash: string): void {
 		if (this.disposed || !this.renderContext) return;
-		this.videos.enterSlide(
-			slideHash,
-			this._metaPresentation.getSlideInfo(slideHash),
-			this.renderContext,
-		);
+		const slideInfo = this._metaPresentation.getSlideInfo(slideHash);
+		this.masterVideos.start(slideInfo, this.renderContext);
+		if (slideInfo) this.masterVideos.keepOnly(slideInfo.masterPage);
+		else this.masterVideos.deleteResources();
+		this.videos.enterSlide(slideHash, slideInfo, this.renderContext);
 	}
 
 	public deleteResources(): void {
 		this.disposed = true;
 		this.videos.deleteResources();
 		this.videos.clear();
+		this.masterVideos.deleteResources();
 		this.offscreenCanvas = null;
 		this.offscreenContext = null;
 		this.renderContext = null;

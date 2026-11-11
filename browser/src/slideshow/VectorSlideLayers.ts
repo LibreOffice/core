@@ -16,7 +16,9 @@
  * and a layer per paragraph that an animation moves on its own. Each layer is drawn once into a
  * texture over the rectangle it covers, and again only when its stand-in colors or text look
  * change. A frame draws the textures as quads in the state the animation gives them. The current
- * frame of a video is uploaded on every frame and drawn over the layer that holds its shape.
+ * frame of a video is uploaded on every frame and drawn over the layer that holds its shape. The
+ * page, which draws its master with it, is split after each video of the master, so the master
+ * objects above a video are drawn over its frame.
  *
  * Canvas positions are in pixels of the slideshow canvas, with the slide filling it.
  */
@@ -28,6 +30,9 @@ interface PaintRun {
 	start: number;
 	end: number;
 	owner?: number;
+	// The positions in the paint order of the master that the page draws, from start up to, not
+	// including, end. Absent where the run does not hold the page or the page draws all of it.
+	master?: { start: number; end: number };
 }
 
 interface SlideLayer {
@@ -62,6 +67,8 @@ class VectorSlideLayers {
 	// The slide and tree the layers are drawn from, null while there are none.
 	private slideHash: string | null = null;
 	private data: cool.VectorPrimitivesData | null = null;
+	// The tree of the master of the slide, null where there is none.
+	private master: cool.VectorPrimitivesData | null = null;
 	private canvasWidth = 0;
 	private canvasHeight = 0;
 	// Canvas pixels per twip.
@@ -112,6 +119,44 @@ class VectorSlideLayers {
 		return runs;
 	}
 
+	/// Split the run that starts with the page after each master object in videoIds, so the
+	/// frame of the video is drawn over the master objects below it and under those above it.
+	/// Each piece but the last holds only the page. The last piece also holds the rest of the run.
+	public static splitAtMasterVideos(
+		runs: PaintRun[],
+		master: cool.VectorPrimitivesData | null,
+		videoIds: Set<number>,
+	): PaintRun[] {
+		const first = runs[0];
+		if (
+			!master ||
+			videoIds.size === 0 ||
+			!first ||
+			first.start !== 0 ||
+			first.owner !== undefined
+		)
+			return runs;
+
+		const pieces: PaintRun[] = [];
+		let from = 0;
+		for (let position = 0; position < master.order.length; ++position) {
+			if (!videoIds.has(master.order[position])) continue;
+			pieces.push({
+				start: 0,
+				end: 1,
+				owner: undefined,
+				master: { start: from, end: position + 1 },
+			});
+			from = position + 1;
+		}
+		if (pieces.length === 0) return runs;
+		pieces.push({
+			...first,
+			master: { start: from, end: master.order.length },
+		});
+		return pieces.concat(runs.slice(1));
+	}
+
 	// The nearest animation target among the object and the groups above it, since an effect
 	// on a group moves every member.
 	private static ownerOf(
@@ -129,39 +174,50 @@ class VectorSlideLayers {
 		return undefined;
 	}
 
-	/// True when the layers hold the slide drawn from the tree at the canvas size.
+	/// True when the layers hold the slide drawn from the tree and the master tree at the canvas
+	/// size.
 	public holds(
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
+		master: cool.VectorPrimitivesData | null,
 		canvasWidth: number,
 		canvasHeight: number,
 	): boolean {
 		return (
 			this.slideHash === slideHash &&
 			this.data === data &&
+			this.master === master &&
 			this.canvasWidth === canvasWidth &&
 			this.canvasHeight === canvasHeight
 		);
 	}
 
 	/// Draw the layers anew. targets maps each animation target's object id to the paragraphs
-	/// that an animation moves on their own.
+	/// that an animation moves on their own. master is the tree of the master of the slide and
+	/// masterVideoIds the ids of its objects that hold a video.
 	public build(
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
 		targets: Map<number, number[]>,
 		canvasWidth: number,
 		canvasHeight: number,
+		master: cool.VectorPrimitivesData | null = null,
+		masterVideoIds: Set<number> = new Set(),
 	): void {
 		this.clear();
 		this.slideHash = slideHash;
 		this.data = data;
+		this.master = master;
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 		this.scaleX = canvasWidth / data.slideWidth;
 		this.scaleY = canvasHeight / data.slideHeight;
 
-		const runs = VectorSlideLayers.paintRuns(data, new Set(targets.keys()));
+		const runs = VectorSlideLayers.splitAtMasterVideos(
+			VectorSlideLayers.paintRuns(data, new Set(targets.keys())),
+			master,
+			masterVideoIds,
+		);
 		for (const run of runs) {
 			const pixels = this._runPixels(data, run);
 			if (!pixels) continue;
@@ -249,6 +305,7 @@ class VectorSlideLayers {
 		this.layers = [];
 		this.slideHash = null;
 		this.data = null;
+		this.master = null;
 	}
 
 	// A paragraph layer takes its paragraph's state. A run takes its owner's, which the
@@ -263,7 +320,7 @@ class VectorSlideLayers {
 		return ownerState?.paragraphs?.get(layer.paragraph);
 	}
 
-	// The canvas rectangle of a run: all of it for the run that starts with the page, else the
+	// The canvas rectangle of a run: all of it for a run that starts with the page, else the
 	// rectangles its objects paint, line width and shadow included. A run that never moves is
 	// cut to the canvas. Null for a run that paints nothing.
 	private _runPixels(
@@ -428,7 +485,8 @@ class VectorSlideLayers {
 
 	// Draw the layer with the primitive renderer and upload it into its texture. A run is drawn
 	// with the colors and text look of the state given, without the paragraphs that have layers
-	// of their own. The run that starts with the page is drawn over white.
+	// of their own. The run that starts with the page and the bottom of its master is drawn over
+	// white.
 	private _paint(
 		layer: SlideLayer,
 		data: cool.VectorPrimitivesData,
@@ -442,7 +500,11 @@ class VectorSlideLayers {
 			'2d',
 		) as OffscreenCanvasRenderingContext2D | null;
 		if (!context) return;
-		if (layer.run.start === 0 && layer.run.owner === undefined) {
+		if (
+			layer.run.start === 0 &&
+			layer.run.owner === undefined &&
+			(layer.run.master?.start ?? 0) === 0
+		) {
 			context.fillStyle = '#FFFFFF';
 			context.fillRect(0, 0, width, height);
 		}
@@ -455,6 +517,7 @@ class VectorSlideLayers {
 			RenderManager.renderInto(target, data, {
 				authoredColors: true,
 				paintRange: { start: layer.run.start, end: layer.run.end },
+				masterRange: layer.run.master,
 			});
 		} else if (layer.paragraph !== undefined) {
 			RenderManager.renderObjectParagraph(
@@ -487,22 +550,36 @@ class VectorSlideLayers {
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
 	}
 
-	// Draw the current frame of each video whose shape is in the layer's run, over the layer in
-	// its state.
+	// Draw the current frame of each video whose shape is in the layer's run, or in the part of
+	// the master the run draws, over the layer in its state.
 	private _drawVideos(
 		layer: SlideLayer,
 		data: cool.VectorPrimitivesData,
 		videos: Map<number, ContentFrame>,
 		state: cool.DrawState | undefined,
 	): void {
-		for (let position = layer.run.start; position < layer.run.end; ++position) {
-			const objectId = data.order[position];
-			const frame = videos.get(objectId);
-			if (!frame) continue;
-			const texture = this.quads.frameTexture(objectId, frame.source);
-			if (texture)
-				this._drawQuad(texture, this.quads.frameRectangle(frame), state);
-		}
+		const masterRange = layer.run.master;
+		if (masterRange && this.master)
+			for (
+				let position = masterRange.start;
+				position < masterRange.end;
+				++position
+			)
+				this._drawVideo(this.master.order[position], videos, state);
+		for (let position = layer.run.start; position < layer.run.end; ++position)
+			this._drawVideo(data.order[position], videos, state);
+	}
+
+	private _drawVideo(
+		objectId: number,
+		videos: Map<number, ContentFrame>,
+		state: cool.DrawState | undefined,
+	): void {
+		const frame = videos.get(objectId);
+		if (!frame) return;
+		const texture = this.quads.frameTexture(objectId, frame.source);
+		if (texture)
+			this._drawQuad(texture, this.quads.frameRectangle(frame), state);
 	}
 
 	// Draw the texture over the rectangle, in canvas pixels, in the state given.

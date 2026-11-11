@@ -83,6 +83,9 @@ namespace cool {
 		/// start up to but not including end. The page entry is at position
 		/// 0, and the master draws with it. Absent where the whole order is.
 		paintRange?: { start: number; end: number };
+		/// The positions in the paint order of the master that are drawn, from start up to but not
+		/// including end. Absent where the whole master is.
+		masterRange?: { start: number; end: number };
 		/// True when the form controls of the page are left out of the render. False or absent
 		/// when they are drawn.
 		withoutFormControls?: boolean;

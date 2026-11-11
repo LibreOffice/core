@@ -65,4 +65,50 @@ describe('VectorSlideLayers', function () {
 			{ start: 0, end: 3, owner: undefined },
 		]);
 	});
+
+	it('draws a master video over the master objects below it and under those above it', function () {
+		const data = part([[0], [11], [22]]);
+		const master = part([[0], [5], [6], [7]]);
+
+		nodeassert.deepStrictEqual(
+			VectorSlideLayers.splitAtMasterVideos(
+				VectorSlideLayers.paintRuns(data, new Set()),
+				master,
+				new Set([6]),
+			),
+			[
+				{ start: 0, end: 1, owner: undefined, master: { start: 0, end: 3 } },
+				{ start: 0, end: 3, owner: undefined, master: { start: 3, end: 4 } },
+			],
+		);
+	});
+
+	it('keeps the runs after the page when the master holds a video', function () {
+		const data = part([[0], [11], [22]]);
+		const master = part([[0], [5], [6]]);
+
+		nodeassert.deepStrictEqual(
+			VectorSlideLayers.splitAtMasterVideos(
+				VectorSlideLayers.paintRuns(data, new Set([22])),
+				master,
+				new Set([5]),
+			),
+			[
+				{ start: 0, end: 1, owner: undefined, master: { start: 0, end: 2 } },
+				{ start: 0, end: 2, owner: undefined, master: { start: 2, end: 3 } },
+				{ start: 2, end: 3, owner: 22 },
+			],
+		);
+	});
+
+	it('draws the page whole when its master holds no video', function () {
+		const data = part([[0], [11]]);
+		const master = part([[0], [5]]);
+		const runs = VectorSlideLayers.paintRuns(data, new Set());
+
+		nodeassert.deepStrictEqual(
+			VectorSlideLayers.splitAtMasterVideos(runs, master, new Set([99])),
+			runs,
+		);
+	});
 });

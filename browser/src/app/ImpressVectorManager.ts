@@ -414,7 +414,11 @@ class ImpressVectorManager extends VectorManagerBase {
 				continue;
 			const state = ImpressVectorManager.stateOf(data, id, options?.states);
 			if (state?.hidden) continue;
-			if (obj.primitives) {
+			// A page entry that draws only the upper part of its master leaves out its own
+			// background, which the part below has drawn.
+			const isUpperMaster =
+				obj.kind === 'page' && (options?.masterRange?.start ?? 0) > 0;
+			if (obj.primitives && !isUpperMaster) {
 				const outside =
 					edited !== undefined &&
 					obj.kind === undefined &&
@@ -432,7 +436,7 @@ class ImpressVectorManager extends VectorManagerBase {
 					}
 			}
 			// The master lies between the page's own background and its objects.
-			if (obj.kind === 'page') this._renderMaster(context, data);
+			if (obj.kind === 'page') this._renderMaster(context, data, options);
 			options?.drawOver?.get(id)?.(context);
 		}
 	}
@@ -734,17 +738,26 @@ class ImpressVectorManager extends VectorManagerBase {
 	/// own copy, if it has one. An object on a layer the page hides is left
 	/// out. The master's page entry is skipped, since the page draws its own
 	/// background. A text edit on a master object is drawn from its edit
-	/// entry, since the object hides its text during the edit.
+	/// entry, since the object hides its text during the edit. Only the
+	/// positions of the master range of the options are drawn, and what the
+	/// options give to draw over an object is drawn right after it.
 	private _renderMaster(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
+		options?: cool.VectorRenderOptions,
 	): void {
 		if (data.masterPartId === undefined) return;
 		const master = this._cache.get(data.masterPartId);
 		if (!master) return;
 
 		const textEdits = this._textEditEntriesToDraw(master);
-		for (const id of master.order) {
+		const start = options?.masterRange?.start ?? 0;
+		const end = Math.min(
+			options?.masterRange?.end ?? master.order.length,
+			master.order.length,
+		);
+		for (let position = start; position < end; ++position) {
+			const id = master.order[position];
 			const obj = master.objects.get(id);
 			if (!obj || obj.hiddenBehindSlide) continue;
 			if (obj.kind !== undefined) {
@@ -757,10 +770,10 @@ class ImpressVectorManager extends VectorManagerBase {
 			if (obj.layer !== undefined && data.masterHiddenLayers?.has(obj.layer))
 				continue;
 			const drawn = obj.slideDependent ? data.objects.get(id) : obj;
-			if (!drawn?.primitives) continue;
-			for (const primitive of drawn.primitives) {
+			for (const primitive of drawn?.primitives ?? []) {
 				this._renderer.renderPrimitive(context, primitive);
 			}
+			options?.drawOver?.get(id)?.(context);
 		}
 	}
 

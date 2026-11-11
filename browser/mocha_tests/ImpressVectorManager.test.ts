@@ -1246,6 +1246,96 @@ describe('ImpressVectorManager', function () {
 		);
 	});
 
+	// A slide with a master of three objects, each drawn as its own hairline, under a page whose
+	// background is a hairline too.
+	function slideOverThreeMasterObjects(manager: ImpressVectorManager): any {
+		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
+		manager.handleVectorPrimitivesResponse({
+			partId: 'M0',
+			mode: cool.VectorMode.MasterPages,
+			version: 1,
+			objects: [
+				{ id: 0, kind: 'page', width: 100, height: 100, primitives: [] },
+				{ id: 1, primitives: [hairline('M0 0 L1 1')] },
+				{ id: 2, primitives: [hairline('M0 0 L2 2')] },
+				{ id: 3, primitives: [hairline('M0 0 L3 3')] },
+			],
+		});
+		manager.handleVectorPrimitivesResponse({
+			partId: 'S0',
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [
+				{
+					id: 0,
+					kind: 'page',
+					width: 100,
+					height: 100,
+					masterPartId: 'M0',
+					primitives: [hairline('M0 0 L6 6')],
+				},
+			],
+		});
+		return manager.requestPart(0, cool.VectorMode.Slides);
+	}
+
+	function strokedPaths(recorder: CanvasRecorder): string[] {
+		return recorder.calls
+			.filter((call: any) => call.method === 'stroke')
+			.map((call: any) => (call.args[0] as any).path);
+	}
+
+	// A slide can be drawn in parts split inside its master. The lowest part draws the page
+	// background and the master objects below the split. The part above draws only the master
+	// objects above the split, and lies over the part below.
+	it('draws the master objects a range names, and the page background only from the first', function () {
+		const manager = new ImpressVectorManager();
+		const slide = slideOverThreeMasterObjects(manager);
+
+		const lower = new CanvasRecorder();
+		manager.renderInto(lower as any, slide, {
+			masterRange: { start: 0, end: 3 },
+		});
+		nodeassert.deepStrictEqual(strokedPaths(lower), [
+			'M0 0 L6 6',
+			'M0 0 L1 1',
+			'M0 0 L2 2',
+		]);
+
+		const upper = new CanvasRecorder();
+		manager.renderInto(upper as any, slide, {
+			masterRange: { start: 3, end: 4 },
+		});
+		nodeassert.deepStrictEqual(strokedPaths(upper), ['M0 0 L3 3']);
+	});
+
+	// What an option names to draw over a master object, such as the frame of a background
+	// video, is drawn right after that object, so the master objects above it cover it.
+	it('draws what is named over a master object before the master objects after it', function () {
+		const manager = new ImpressVectorManager();
+		const slide = slideOverThreeMasterObjects(manager);
+
+		const recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, slide, {
+			drawOver: new Map([
+				[
+					2,
+					(context: CanvasRenderingContext2D) => context.fillRect(0, 0, 1, 1),
+				],
+			]),
+		});
+		const order = recorder.calls
+			.map((call) => call.method)
+			.filter((method) => method === 'stroke' || method === 'fillRect');
+		nodeassert.deepStrictEqual(order, [
+			'stroke',
+			'stroke',
+			'stroke',
+			'fillRect',
+			'stroke',
+		]);
+	});
+
 	// An edit running on a master object hides the object's own text, and the
 	// entry that carries what is typed is on the master part. A slide drawing
 	// under that master draws the entry, so the typed text shows on the slide.
