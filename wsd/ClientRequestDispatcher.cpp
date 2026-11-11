@@ -175,6 +175,29 @@ findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
 
             return std::make_pair(nullptr, "error: cmd=load kind=docunloading");
         }
+
+#if DOCS_SHARE_PROCESS
+        // Each opening of a document in the app has its own mobileAppDocId. A broker with the
+        // same key under another id belongs to an earlier opening of the same file. While that
+        // one is on its way out, the client waits and asks again, as it does for any unloading
+        // document, and the new opening then gets a broker and a kit document of its own.
+        if (docBroker->getMobileAppDocId() != mobileAppDocId && docBroker->isUnloading())
+        {
+            LOG_WRN("DocBroker [" << docKey << "] of appDocId [" << docBroker->getMobileAppDocId()
+                                  << "] is unloading. Rejecting client request to load session ["
+                                  << id << "] of appDocId [" << mobileAppDocId << ']');
+
+            return std::make_pair(nullptr, "error: cmd=load kind=docunloading");
+        }
+        if (docBroker->getMobileAppDocId() != mobileAppDocId)
+        {
+            // The app gives each opening its own id, so this session joins a document that
+            // another opening still has loaded.
+            LOG_WRN("DocBroker [" << docKey << "] of appDocId [" << docBroker->getMobileAppDocId()
+                                  << "] takes session [" << id << "] of appDocId ["
+                                  << mobileAppDocId << ']');
+        }
+#endif
     }
     else
     {
