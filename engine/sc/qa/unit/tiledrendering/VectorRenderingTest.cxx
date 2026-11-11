@@ -1290,6 +1290,54 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorAsianVerticalCellEditIsInIt
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorStackedCellTakesItsAlignment)
+{
+    // Stacked text stands as a whole at the left, in the middle or at the right of its cell, as
+    // the cell is aligned, like in the window. It stood in the middle of every cell.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    const SvxCellHorJustify aJustify[]
+        = { SvxCellHorJustify::Left, SvxCellHorJustify::Center, SvxCellHorJustify::Right };
+    for (SCCOL nColumn = 1; nColumn <= 3; ++nColumn)
+    {
+        setColumnWidth(*pDocShell, nColumn, 3000);
+        setCellString(*pDocShell, nColumn, 1, u"ABC"_ustr);
+        ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+        aPattern.ItemSetPut(ScVerticalStackCell(true));
+        aPattern.ItemSetPut(SvxHorJustifyItem(aJustify[nColumn - 1], ATTR_HOR_JUSTIFY));
+        applyToCell(*pDocShell, nColumn, 1, aPattern);
+    }
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    // Where the first line of the cell starts, in twips from the start of its column.
+    auto aStartOf = [&aResponse](int nColumn) {
+        const auto oText = cellTextAt(aResponse, nColumn, 1);
+        CPPUNIT_ASSERT(oText);
+        std::optional<boost::property_tree::ptree> oStart;
+        std::function<void(const boost::property_tree::ptree&)> aFind
+            = [&](const boost::property_tree::ptree& rNode) {
+                  if (!oStart && rNode.get<std::string>("type", "") == "textSimplePortion")
+                      if (const auto oX = rNode.get_child_optional("x"))
+                          oStart = *oX;
+                  for (const auto& rChild : rNode)
+                      aFind(rChild.second);
+              };
+        aFind(*oText);
+        CPPUNIT_ASSERT(oStart);
+        const auto [nCellColumn, fOffset] = cellPosition(*oStart);
+        CPPUNIT_ASSERT_EQUAL(nColumn, nCellColumn);
+        return fOffset;
+    };
+
+    CPPUNIT_ASSERT_LESS(1000.0, aStartOf(1));
+    CPPUNIT_ASSERT_GREATER(1000.0, aStartOf(2));
+    CPPUNIT_ASSERT_LESS(2000.0, aStartOf(2));
+    CPPUNIT_ASSERT_GREATER(2000.0, aStartOf(3));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellEditGrowsOutsideASmallWindow)
 {
     // Painting a tile makes the window of the view as large as the document, which the cell editing

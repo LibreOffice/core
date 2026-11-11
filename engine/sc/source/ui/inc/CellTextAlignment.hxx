@@ -54,6 +54,23 @@ void setVerticalTextAlignment(ScEditEngineDefaulter& rEngine, bool bTopToBottom,
 /// Asian vertical text breaks its columns this many pixels above the bottom of the cell, or the
 /// text would reach out of the cell. The value is a heuristic.
 constexpr tools::Long constAsianVerticalBottomGap = 5;
+
+/** Where stacked text starts across its cell, in the units of the arguments. Stacked text that
+    wraps starts at the left margin. Otherwise the text, nNeeded wide with both margins, moves by
+    the alignment of the cell. nOnePixel is the size of a device pixel.
+ */
+template <typename T>
+T stackedTextStartX(T nAlignLeft, T nCellWidth, T nNeeded, T nLeftMargin, T nRightMargin,
+                    SvxCellHorJustify eHorJust, bool bBreak, T nOnePixel)
+{
+    if (bBreak)
+        return nAlignLeft + nLeftMargin;
+    if (eHorJust == SvxCellHorJustify::Right)
+        return nAlignLeft - (nNeeded - nCellWidth + nRightMargin + nOnePixel);
+    if (eHorJust == SvxCellHorJustify::Center)
+        return nAlignLeft - (nNeeded - nCellWidth + nRightMargin + nOnePixel - nLeftMargin) / 2;
+    return nAlignLeft + nLeftMargin;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

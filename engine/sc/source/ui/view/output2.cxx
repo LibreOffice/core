@@ -3857,29 +3857,14 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         }
     }
 
-    tools::Long nStartX = aAreaParam.maAlignRect.Left();
     tools::Long nStartY = aAreaParam.maAlignRect.Top();
     tools::Long nCellWidth = aAreaParam.maAlignRect.GetWidth();
     tools::Long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
     tools::Long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
 
-    if (rParam.mbBreak)
-    {
-        //  text with automatic breaks is aligned only within the
-        //  edit engine's paper size, the output of the whole area
-        //  is always left-aligned
-
-        nStartX += nLeftM;
-    }
-    else
-    {
-        if ( eOutHorJust == SvxCellHorJustify::Right )
-            nStartX -= nNeededPixel - nCellWidth + nRightM + 1;
-        else if ( eOutHorJust == SvxCellHorJustify::Center )
-            nStartX -= ( nNeededPixel - nCellWidth + nRightM + 1 - nLeftM ) / 2;
-        else
-            nStartX += nLeftM;
-    }
+    tools::Long nStartX = sc::stackedTextStartX<tools::Long>(
+        aAreaParam.maAlignRect.Left(), nCellWidth, nNeededPixel, nLeftM, nRightM, eOutHorJust,
+        rParam.mbBreak, 1);
 
     bool bOutside = (aAreaParam.maClipRect.Right() < mnScrX || aAreaParam.maClipRect.Left() >= mnScrX + mnScrW);
     if (bOutside)

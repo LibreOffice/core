@@ -1577,6 +1577,7 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     const bool bStacked = eOrient == SvxCellOrientation::Stacked;
     const bool bVertical
         = eOrient == SvxCellOrientation::TopBottom || eOrient == SvxCellOrientation::BottomUp;
+    const bool bStackedWraps = bStacked && bBreak;
     if (bStacked)
         bBreak = true;
 
@@ -1737,7 +1738,12 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     double fEngineWidth = engineWidth();
     double fEngineHeight = engineHeight();
     if (bStacked)
+    {
         fEngineWidth = fEngineWidth * 11 / 10;
+        // The characters stand centered on each other within the width of the text.
+        rEngine.SetPaperSize(
+            Size(tools::Long(fEngineWidth * constMm100PerTwip) + 1, aPaperSize.Height()));
+    }
 
     // The extent of the text in the cell, which is turned for vertical text.
     double fExtentX = bVertical ? fEngineHeight : fEngineWidth;
@@ -1860,7 +1866,8 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
                                                   SCROW(nRow + rSource.mnMergeRows - 1),
                                                   aArea,
                                                   eHorJust,
-                                                  eHorJustContext,
+                                                  bStackedWraps ? SvxCellHorJustify::Left
+                                                                : eHorJustContext,
                                                   eVerJust,
                                                   eOrient,
                                                   nRotate,
@@ -1899,7 +1906,15 @@ void CellPrimitiveBuilder::Impl::placeEditText(const CellEditText& rText)
 
     // The box the text takes in the cell.
     double fBoxLeft = aAlign.getMinX() + rText.mfLeftMargin;
-    if (!rText.mbBreak || bVertical || rText.mbAsianVertical)
+    if (rText.meOrient == SvxCellOrientation::Stacked)
+    {
+        // Stacked text starts where the window places it.
+        fBoxLeft = sc::stackedTextStartX(
+            aAlign.getMinX(), aAlign.getWidth(),
+            rText.mfExtentX + rText.mfLeftMargin + rText.mfRightMargin, rText.mfLeftMargin,
+            rText.mfRightMargin, rText.meBoxHorJust, false, maSettings.mfPixelSize);
+    }
+    else if (!rText.mbBreak || bVertical || rText.mbAsianVertical)
     {
         if (rText.meBoxHorJust == SvxCellHorJustify::Right)
             fBoxLeft = aAlign.getMaxX() - rText.mfRightMargin - rText.mfExtentX;
