@@ -176,10 +176,66 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	},
 
 	// elements: cool.InlineElements of content
-	setHTML: function(content, elements) {
+	// kept: elements of the old content, from the paragraph down, left empty after the new one
+	setHTML: function(content, elements, kept) {
+		if (!kept) {
+			// Orca keeps focus mode on a line, as the content under its caret goes away
+			const lineBreak = content.length === 0 && this._lineNavigation
+				&& !window.L.Browser.win && this._textArea.childNodes.length > 2;
+			// eslint-disable-next-line no-restricted-syntax -- markup around escaped text
+			this._textArea.innerHTML = lineBreak ? this._preSpaceChar + '<br>' + this._postSpaceChar
+				: this._wrapContent(content, elements);
+			this._keptElements = null;
+			this._linkCommentDetails();
+			return;
+		}
+		for (const [index, element] of [this._textArea, ...kept].entries()) {
+			for (const child of [...element.childNodes]) {
+				if (child !== kept[index])
+					child.remove();
+			}
+		}
+		kept[0].removeAttribute('id'); // the new paragraph has it
+		for (const element of kept) {
+			delete element.dataset.commentId;
+			element.removeAttribute('aria-details');
+		}
+		const template = document.createElement('template');
 		// eslint-disable-next-line no-restricted-syntax -- markup around escaped text
-		this._textArea.innerHTML = this._wrapContent(content, elements);
+		template.innerHTML = this._wrapContent(content, elements);
+		kept[0].before(template.content); // the offsets of the new text stay
+		kept[0].after(kept[0].previousSibling); // the post-space stays last
+		this._keptElements = kept;
 		this._linkCommentDetails();
+	},
+
+	_hasLineBreakOnly: function() {
+		const children = this._textArea.childNodes;
+		return children.length === 3 && this._hasPreSpace() && this._hasPostSpace()
+			&& children[1].nodeName === 'BR';
+	},
+
+	_removeKeptElements: function() {
+		if (this._keptElements)
+			this._keptElements[0].remove();
+		this._keptElements = null;
+	},
+
+	// the elements from the paragraph wrapper down to the one holding the caret, when they start
+	// with the first element of the paragraph, else none
+	_getCaretElements: function() {
+		const node = window.getSelection().focusNode;
+		if (!node || !this._textArea.contains(node))
+			return [];
+		const elements = [];
+		for (let parent = node; parent !== this._textArea; parent = parent.parentNode) {
+			if (parent.nodeType === Node.ELEMENT_NODE)
+				elements.unshift(parent);
+		}
+		// the wrapper has no accessible object
+		const isFirst = elements.length > 1 && elements[0].id === 'readable-content'
+			&& !elements[1].previousElementSibling;
+		return isFirst ? elements : [];
 	},
 
 	_prependSpace: function() {
@@ -328,6 +384,13 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			return;
 		}
 
+		// Orca leaves focus mode when the element with the caret goes away on Up or Down
+		const kept = this._getCaretElements();
+		if (kept.length) {
+			this._fillFocusedParagraph(content, pos, start, end, elements, kept);
+			return;
+		}
+
 		// Emptied first so Orca hears the new paragraph whole; NVDA would catch the editable empty.
 		const pending = { content: content, pos: pos, start: start, end: end, elements: elements };
 		this._pendingFocusedParagraph = pending;
@@ -338,15 +401,22 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}));
 	},
 
-	_fillFocusedParagraph: function(content, pos, start, end, elements) {
+	_fillFocusedParagraph: function(content, pos, start, end, elements, kept) {
 		this._focusedComments = Array.isArray(elements.comments) ? elements.comments : [];
 		this._focusedControls = Array.isArray(elements.contentControls)
 			? elements.contentControls : [];
 		if (content !== this.getPlainTextContent())
 			this._lastArrow = null; // another paragraph
-		this.setHTML(content, elements);
+		this.setHTML(content, elements, kept);
 		this.updateLastContent();
 		this._updateSelection(pos, start, end, true);
+		if (kept) {
+			// once the caret move has been reported
+			requestAnimationFrame(() => requestAnimationFrame(() => {
+				if (this._keptElements === kept)
+					this._removeKeptElements();
+			}));
+		}
 		this._placeContextRegions();
 	},
 
@@ -361,6 +431,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	_onKeyDown: function(ev) {
 		this._flushFocusedParagraph();
+		this._removeKeptElements();
 		this._lineNavigation = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(ev.key)
 			|| ((ev.key === 'Home' || ev.key === 'End') && ev.ctrlKey);
 		// Ctrl or, on a Mac, Cmd: the modifier sent as Ctrl to the document
@@ -1570,6 +1641,11 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			return;
 		this._statusLog('_onBeforeInput [');
 		this._ignoreNextBackspace = false;
+		// edits go to the plain spacers, as in any empty paragraph
+		if (this._hasLineBreakOnly()) {
+			this._textArea.childNodes[1].remove();
+			this._setCursorPosition(0);
+		}
 		if (!this._isSelectionValid()) {
 			this._setCursorPosition(this._getLastCursorPosition());
 		}

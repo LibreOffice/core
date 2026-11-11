@@ -1849,6 +1849,12 @@ window.L.TextInput = window.L.Layer.extend({
 			range.setStart(...outsideImage(lastNode, lastNode.textContent.length));
 		if (!endContainer && lastNode)
 			range.setEnd(...outsideImage(lastNode, lastNode.textContent.length));
+		// no text node: after the pre-space, as at the start
+		if (!startContainer && !lastNode) {
+			const offset = Math.min(1, this._textArea.childNodes.length);
+			range.setStart(this._textArea, offset);
+			range.setEnd(this._textArea, offset);
+		}
 
 		// Get the selection object and add the range to it
 		if (backward) // the caret at the start

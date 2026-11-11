@@ -61,4 +61,76 @@ describe(['tagdesktop'], 'Tracked changes for the reader', { testIsolation: fals
 				.to.equal('Another verse');
 		});
 	});
+
+	it('the element with the caret stays until the caret is in the new paragraph', function () {
+		helper.typeIntoDocument('{downarrow}{downarrow}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		// Orca, when the element with the caret goes away on Up, moves out of the editable
+		const early = [];
+		let removed = 0;
+		let observer;
+		cy.cGet('#clipboard-area ins').should('have.text', 'Another verse').then(function ($ins) {
+			const area = win.document.getElementById('clipboard-area');
+			let shown = false;
+			observer = new win.MutationObserver(function () {
+				if (!shown && area.textContent.includes('Keep fresh')) {
+					shown = true;
+					if (!$ins[0].isConnected)
+						early.push('removed before the new paragraph was shown');
+				}
+				if ($ins[0].isConnected || removed)
+					return;
+				++removed;
+				const caret = win.getSelection().focusNode;
+				if (!area.textContent.includes('Keep fresh and lazy then warm end.')
+					|| !area.contains(caret))
+					early.push(area.textContent);
+			});
+			observer.observe(area, { childList: true, subtree: true });
+		});
+		// the spacer stays last while it is kept
+		let spacerObserver;
+		cy.cGet('#clipboard-area').then(function ($area) {
+			const area = $area[0];
+			spacerObserver = new win.MutationObserver(function () {
+				if (area.lastChild && area.lastChild.id !== 'post-space')
+					early.push('after the post-space: ' + area.lastChild.nodeName);
+			});
+			spacerObserver.observe(area, { childList: true });
+		});
+
+		helper.typeIntoDocument('{uparrow}');
+		cy.wrap(null).should(function () {
+			expect(removed, 'the old insertion removed').to.be.greaterThan(0);
+		});
+		cy.then(function () {
+			observer.disconnect();
+			spacerObserver.disconnect();
+			expect(early, 'removed before the caret was in the new paragraph').to.be.empty;
+		});
+	});
+
+	it('an empty paragraph reached by Down keeps a line for the caret', function () {
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{downarrow}{downarrow}');
+		cy.cGet('#clipboard-area ins').should('have.text', 'Another verse');
+
+		// Orca, with no line in the editable, leaves focus mode as the insertion goes away
+		helper.typeIntoDocument('{downarrow}');
+		cy.cGet('#clipboard-area').should(function ($area) {
+			expect($area.text(), 'the empty paragraph').to.equal('');
+			// Without the fix, there were only the two spacers.
+			expect($area.children('br'), 'the line').to.have.length(1);
+			const selection = win.getSelection();
+			expect(selection.focusNode, 'the caret in the editable').to.equal($area[0]);
+			expect(selection.focusOffset, 'before the line').to.equal(1);
+		});
+
+		// And Delete joins the next paragraph, as in any empty paragraph
+		helper.typeIntoDocument('{del}');
+		cy.cGet('#clipboard-area').should('have.text', 'Last paragraph');
+	});
 });

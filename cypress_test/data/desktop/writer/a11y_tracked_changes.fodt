@@ -30,6 +30,7 @@
    <text:p>First paragraph</text:p>
    <text:p>Keep <text:change-start text:change-id="ct1"/>fresh<text:change-end text:change-id="ct1"/> and <text:change text:change-id="ct2"/>then <text:change-start text:change-id="ct3"/><text:span text:style-name="Bold">warm</text:span><text:change-end text:change-id="ct3"/> end.</text:p>
    <text:p><text:change-start text:change-id="ct4"/>Another verse<text:change-end text:change-id="ct4"/></text:p>
+   <text:p/>
    <text:p>Last paragraph</text:p>
   </office:text>
  </office:body>
