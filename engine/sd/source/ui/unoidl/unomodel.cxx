@@ -3481,31 +3481,16 @@ private:
         return dynamic_cast<const SdPage*>(&pPage->TRG_GetMasterPage());
     }
 
-    /// True for a page that hides the background layer of its master, which "Display Master
-    /// Background" toggles. The page fill, its own or the one of its master, is painted on that
-    /// layer. A page without a master page hides nothing.
-    static bool hidesBackgroundLayer(const SdPage* pPage)
-    {
-        if (!pPage->TRG_HasMasterPage())
-            return false;
-        const SdrLayerID nBackgroundLayer
-            = pPage->getSdrModelFromSdrPage().GetLayerAdmin().GetLayerID(sUNO_LayerName_background);
-        return !pPage->TRG_GetMasterPageVisibleLayers().IsSet(nBackgroundLayer);
-    }
-
     /// The fill the page holds behind its objects, as one color with its transparency kept
     /// apart. For a page with a master it is the fill the page carries, or the one of its
-    /// master when the page carries none, and nothing while the page hides the background
-    /// layer of its master. A master page holds its own fill only when it has a style sheet,
-    /// and the handout master, master page 0, holds none. Empty when no fill is painted.
+    /// master when the page carries none and shows the background layer of its master. A
+    /// master page holds its own fill only when it has a style sheet, and the handout master,
+    /// master page 0, holds none. Empty when no fill is painted.
     static std::optional<DraftFill> pageSurface(const SdPage* pPage)
     {
         const SdrPageProperties* pProperties = nullptr;
         if (pPage->TRG_HasMasterPage())
-        {
-            if (!hidesBackgroundLayer(pPage))
-                pProperties = pPage->getCorrectSdrPageProperties();
-        }
+            pProperties = pPage->getCorrectSdrPageProperties();
         else if (pPage->IsMasterPage() && pPage->GetPageNum() != 0
                  && pPage->getSdrPageProperties().GetStyleSheet())
             pProperties = &pPage->getSdrPageProperties();
@@ -3530,12 +3515,10 @@ private:
         rContent.push_back(
             new drawinglayer::primitive2d::BackgroundColorPrimitive2D(COL_AUTO.getBColor()));
 
-        // Child 3 paints the fill the page or its master page carries, and on a master page
-        // the fill of the master itself. It is drawn only while the page shows the background
-        // layer of its master.
-        if (!hidesBackgroundLayer(pPage))
-            pPage->GetViewContact().GetViewContact(3).getViewIndependentPrimitive2DContainer(
-                rContent);
+        // Child 3 paints the fill the page carries, or the fill of its master page while the
+        // page shows the background layer of its master. On a master page it paints the fill of
+        // the master itself.
+        pPage->GetViewContact().GetViewContact(3).getViewIndependentPrimitive2DContainer(rContent);
     }
 
     /// What lies behind the objects of a page, in paint order: the document background of the
@@ -7889,17 +7872,16 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
 
                 bool bBackgroundVisibility = true; // default visible
                 pSlide->getPropertyValue(u"IsBackgroundVisible"_ustr)  >>= bBackgroundVisibility;
-                if (bBackgroundVisibility)
+                SlideBackgroundInfo aSlideBackgroundInfo(pSlide, static_cast<SvxDrawPage*>(pMasterPage));
+                // The slide's own background shows even while the master background is hidden.
+                if (aSlideBackgroundInfo.hasBackground()
+                    && (bBackgroundVisibility || aSlideBackgroundInfo.slideHasOwnBackground()))
                 {
-                    SlideBackgroundInfo aSlideBackgroundInfo(pSlide, static_cast<SvxDrawPage*>(pMasterPage));
-                    if (aSlideBackgroundInfo.hasBackground())
+                    auto aBackgroundNode = aJsonWriter.startNode("background");
+                    aJsonWriter.put("isCustom", aSlideBackgroundInfo.slideHasOwnBackground());
+                    if (aSlideBackgroundInfo.isSolidColor())
                     {
-                        auto aBackgroundNode = aJsonWriter.startNode("background");
-                        aJsonWriter.put("isCustom", aSlideBackgroundInfo.slideHasOwnBackground());
-                        if (aSlideBackgroundInfo.isSolidColor())
-                        {
-                            aJsonWriter.put("fillColor", aSlideBackgroundInfo.getFillColorAsRGBA());
-                        }
+                        aJsonWriter.put("fillColor", aSlideBackgroundInfo.getFillColorAsRGBA());
                     }
                 }
 

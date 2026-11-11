@@ -5113,6 +5113,67 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoLoop)
     CPPUNIT_ASSERT(!rVideo.get<bool>("mute"));
 }
 
+// A slide shows its own fill whether the master background is shown or not, and the blue master
+// fill only while it is shown.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterBackgroundVisibility)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("master-background-visibility.fodp");
+    SdDrawDocument* pDocument = pXImpressDocument->GetDocShell()->GetDoc();
+    const Color aExpected[] = { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTRED, COL_WHITE };
+    for (sal_uInt16 nPart = 0; nPart < 4; ++nPart)
+    {
+        pXImpressDocument->setPart(nPart);
+        Scheduler::ProcessEventsToIdle();
+        assertTilePixelColor(pXImpressDocument, 100, 100, aExpected[nPart]);
+        CPPUNIT_ASSERT_EQUAL(aExpected[nPart], pDocument->GetSdPage(nPart, PageKind::Standard)
+                                                   ->GetPageBackgroundColor(COL_WHITE));
+    }
+}
+
+// Hiding the master background in the editor keeps a slide fill and removes the master fill.
+// Showing it again brings the master fill back.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterBackgroundToggle)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("master-background-visibility.fodp");
+
+    pXImpressDocument->setPart(1);
+    dispatchCommand(mxComponent, u".uno:DisplayMasterBackground"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    assertTilePixelColor(pXImpressDocument, 100, 100, COL_LIGHTRED);
+
+    pXImpressDocument->setPart(0);
+    dispatchCommand(mxComponent, u".uno:DisplayMasterBackground"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    assertTilePixelColor(pXImpressDocument, 100, 100, COL_WHITE);
+
+    dispatchCommand(mxComponent, u".uno:DisplayMasterBackground"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    assertTilePixelColor(pXImpressDocument, 100, 100, COL_LIGHTBLUE);
+}
+
+// The slideshow gets the background of a slide that hides the master background but has a fill
+// of its own, and no background for one that has none.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoMasterBackgroundHidden)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("master-background-visibility.fodp");
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+
+    const boost::property_tree::ptree& rOwnFill = child_at(aTree, "slides", 2);
+    CPPUNIT_ASSERT(rOwnFill.get<bool>("background.isCustom"));
+    CPPUNIT_ASSERT_EQUAL(std::string("FF0000FF"),
+                         rOwnFill.get<std::string>("background.fillColor"));
+
+    CPPUNIT_ASSERT(!child_at(aTree, "slides", 3).get_child_optional("background"));
+
+    // A gradient fill of the slide is named as its own background, without a single color.
+    const boost::property_tree::ptree& rOwnGradient = child_at(aTree, "slides", 4);
+    CPPUNIT_ASSERT(rOwnGradient.get<bool>("background.isCustom"));
+    CPPUNIT_ASSERT(!rOwnGradient.get_child_optional("background.fillColor"));
+}
+
 // The node of an effect that plays letter by letter names its target and the title of the target,
 // and gives the delay between the letters in seconds.
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoIterate)

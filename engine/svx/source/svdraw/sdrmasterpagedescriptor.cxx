@@ -82,7 +82,10 @@ namespace sdr
         const SdrPage* pCorrectPage = &GetOwnerPage();
         const SdrPageProperties* pCorrectProperties = &pCorrectPage->getSdrPageProperties();
 
-        if(drawing::FillStyle_NONE == pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE).GetValue())
+        // The master fill shows through only while the background layer, layer 1, is visible.
+        if(drawing::FillStyle_NONE
+                == pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE).GetValue()
+            && maVisibleLayers.IsSet(SdrLayerID(1)))
         {
             pCorrectPage = &GetUsedPage();
             pCorrectProperties = &pCorrectPage->getSdrPageProperties();

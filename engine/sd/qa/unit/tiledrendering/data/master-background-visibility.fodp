@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <draw:gradient draw:name="RedYellow" draw:style="linear" draw:start-color="#ff0000" draw:end-color="#ffff00" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0deg" draw:border="0%"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:style style:name="Mdp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="solid" draw:fill-color="#0000ff" draw:background-size="full"/>
+  </style:style>
+  <style:style style:name="dpOnNone" style:family="drawing-page">
+   <style:drawing-page-properties presentation:background-visible="true" presentation:background-objects-visible="true"/>
+  </style:style>
+  <style:style style:name="dpOnRed" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="solid" draw:fill-color="#ff0000" presentation:background-visible="true" presentation:background-objects-visible="true"/>
+  </style:style>
+  <style:style style:name="dpOffRed" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="solid" draw:fill-color="#ff0000" presentation:background-visible="false" presentation:background-objects-visible="true"/>
+  </style:style>
+  <style:style style:name="dpOffNone" style:family="drawing-page">
+   <style:drawing-page-properties presentation:background-visible="false" presentation:background-objects-visible="true"/>
+  </style:style>
+  <style:style style:name="dpOffGradient" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="gradient" draw:fill-gradient-name="RedYellow" presentation:background-visible="false" presentation:background-objects-visible="true"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PM1" draw:style-name="Mdp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="OnNone" draw:style-name="dpOnNone" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" svg:x="2cm" svg:y="2cm" svg:width="20cm" svg:height="2cm"><draw:text-box><text:p>1 master on, slide none: expect blue</text:p></draw:text-box></draw:frame>
+   </draw:page>
+   <draw:page draw:name="OnRed" draw:style-name="dpOnRed" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" svg:x="2cm" svg:y="2cm" svg:width="20cm" svg:height="2cm"><draw:text-box><text:p>2 master on, slide red: expect red</text:p></draw:text-box></draw:frame>
+   </draw:page>
+   <draw:page draw:name="OffRed" draw:style-name="dpOffRed" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" svg:x="2cm" svg:y="2cm" svg:width="20cm" svg:height="2cm"><draw:text-box><text:p>3 master off, slide red: expect red</text:p></draw:text-box></draw:frame>
+   </draw:page>
+   <draw:page draw:name="OffNone" draw:style-name="dpOffNone" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" svg:x="2cm" svg:y="2cm" svg:width="20cm" svg:height="2cm"><draw:text-box><text:p>4 master off, slide none: expect white</text:p></draw:text-box></draw:frame>
+   </draw:page>
+   <draw:page draw:name="OffGradient" draw:style-name="dpOffGradient" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" svg:x="2cm" svg:y="2cm" svg:width="20cm" svg:height="2cm"><draw:text-box><text:p>5 master off, slide gradient: expect the gradient</text:p></draw:text-box></draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

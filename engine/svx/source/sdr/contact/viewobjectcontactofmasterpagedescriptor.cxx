@@ -82,8 +82,9 @@ namespace sdr::contact
             rDisplayInfo.SetSubContentActive(true);
             const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
             bool bHideBackground = pSdrPageView ? pSdrPageView->GetView().getHideBackground() : false;
-            // check layer visibility (traditionally was member of layer 1)
-            if(aPreprocessedLayers.IsSet(SdrLayerID(1)))
+            // check layer visibility (traditionally was member of layer 1). The fill of the page
+            // itself shows even while the master hides layer 1, and the master fill does not.
+            if(aRememberedLayers.IsSet(SdrLayerID(1)))
             {
                 // hide PageBackground for special DrawModes; historical reasons
                 if (!bHideBackground && !GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())

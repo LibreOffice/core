@@ -2152,11 +2152,10 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAutoColorFollowsPageBackground)
     assertJsonPath(aDark, "/objects/0/backdrop", "#000000");
 }
 
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testHiddenBackgroundLayerNamesNoBackdrop)
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testHiddenBackgroundLayerKeepsOwnBackdrop)
 {
-    // A page that hides the background layer of its master paints neither the master's fill nor
-    // its own, so the page entry names no surface and the automatic text is chosen against the
-    // document background. Showing the layer again brings the fill back with the page entry.
+    // A page that hides the background layer of its master still paints its own fill, so the
+    // page entry goes on naming it as the surface.
     createBlankDoc();
     SdPage* pSlide = static_cast<SdPage*>(page(1));
     SdrPageProperties& rProperties = pSlide->getSdrPageProperties();
@@ -2177,7 +2176,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testHiddenBackgroundLayerNamesNoBackdr
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
     const auto oPage = findEntryOfKind(aDelta, "page"_ostr);
     CPPUNIT_ASSERT(oPage.has_value());
-    CPPUNIT_ASSERT(!oPage->has("backdrop"));
+    assertJsonPath(*oPage, "backdrop", "#000000");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTransparentPageFillKeepsItsTransparency)
