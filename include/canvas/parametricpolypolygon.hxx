@@ -81,8 +81,6 @@ public:
         const GradientType meType;
     };
 
-    static css::uno::Sequence<OUString> getAvailableServiceNames();
-
     /** Create a parametric polypolygon.
 
         Available services:
