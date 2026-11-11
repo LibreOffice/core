@@ -304,6 +304,7 @@ void CairoTextRender::ImplDrawTextLayout(cairo_t* cr, const Color& rTextColor, c
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;
     cairo_glyphs.reserve( 256 );
+    glyph_extrarotation.reserve( 256 );
 
     double nSnapToSubPixelDiff = 0.0;
     double nXScale, nYScale;
