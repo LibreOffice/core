@@ -1358,6 +1358,9 @@ textcursor object=<objectId> paragraph=<paragraph> index=<index> [anchorparagrap
     not there any more, the view sends invalidatecursor with the caret where
     it is, also when that is the caret it sent last.
 
+    The caret is placed with this message only. A "uno .uno:SetTextCursor"
+    message is answered with "error: cmd=uno kind=syntax".
+
 browsersetting action=update [upload=false] json=<JSON>
 
     Changes the user's browser settings. The server keeps a copy of the

@@ -86,6 +86,7 @@ class UnitVectorPrimitives : public UnitWSD
     TestResult testRequestForPrimitivesHasTheWholeCommandName();
     TestResult testSessionHoldsThePartsTheDocumentServed();
     TestResult testDrawingFromTilesForgetsTheParts();
+    TestResult testTextCaretIsPlacedByItsOwnMessage();
 
 public:
     UnitVectorPrimitives();
@@ -523,6 +524,27 @@ UnitBase::TestResult UnitVectorPrimitives::testDrawingFromTilesForgetsTheParts()
     return TestResult::Ok;
 }
 
+// The caret of a text edit is placed by the textcursor message. The command of the same name is
+// not a message of a client, and is answered with a syntax error.
+UnitBase::TestResult UnitVectorPrimitives::testTextCaretIsPlacedByItsOwnMessage()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("TextCaretPoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> session = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(session, "uno .uno:SetTextCursor?object=1&paragraph=0&index=0",
+                           testname);
+    const std::string error = helpers::getResponseString(session, "error:", testname);
+    LOK_ASSERT_EQUAL(std::string("error: cmd=uno kind=syntax"), error);
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
 
 void UnitVectorPrimitives::invokeWSDTest()
 {
@@ -559,6 +581,10 @@ void UnitVectorPrimitives::invokeWSDTest()
         exitTest(result);
 
     result = testDrawingFromTilesForgetsTheParts();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testTextCaretIsPlacedByItsOwnMessage();
     if (result != TestResult::Ok)
         exitTest(result);
 

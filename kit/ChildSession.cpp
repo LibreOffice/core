@@ -5358,6 +5358,13 @@ bool ChildSession::unoCommand(const StringVector& tokens)
         return false;
     }
 
+    // The caret is placed through the 'textcursor' message only.
+    if (COOLProtocol::splitCommand(tokens[1]).name == ".uno:SetTextCursor")
+    {
+        sendTextFrameAndLogError("error: cmd=uno kind=syntax");
+        return false;
+    }
+
     SigUtil::addActivity(getId(), formatUnoCommandInfo(tokens[1]));
 
     // we need to get COKitCallbackType::UNO_COMMAND_RESULT callback when saving
