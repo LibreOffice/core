@@ -71,6 +71,17 @@ namespace cool {
 		toleranceY: number;
 	}
 
+	/// An entry of a part whose box holds an asked point.
+	export interface EntryAtPoint {
+		id: number;
+		entry: SlideObject;
+		/// The box of the entry, in the coordinates the primitives of the entry are written in.
+		range: Range2D;
+		/// The asked point and its tolerance, in the coordinates the primitives of the entry
+		/// are written in.
+		position: HitPosition;
+	}
+
 	/** Tells whether a point hits what a JSON primitive tree paints.
 	 *
 	 * Each type of primitive is answered the way the document engine answers it: an outline is hit
@@ -95,6 +106,65 @@ namespace cool {
 					.getContext('2d');
 
 			return VectorHitTest._context;
+		}
+
+		/** The topmost entry of the part that takes the point, or nothing when none does.
+		 *
+		 * The position is in the twips of the part. The entries are walked from the front to
+		 * the back. An entry that accept turns down is passed over, and so is one whose box,
+		 * widened by the tolerance, does not hold the point. originOf gives the place in the
+		 * part where the primitives of an entry start, or null for an entry with no known
+		 * place, which is passed over. takes is asked for each entry that is left, and the walk
+		 * ends at the first entry it answers true for.
+		 */
+		public static topmostEntryAt(
+			data: VectorPrimitivesData,
+			position: HitPosition,
+			accept: (entry: SlideObject, id: number) => boolean,
+			originOf: (entry: SlideObject) => { x: number; y: number } | null,
+			takes: (at: EntryAtPoint) => boolean,
+		): EntryAtPoint | undefined {
+			for (let index = data.order.length - 1; index >= 0; --index) {
+				const id = data.order[index];
+				const entry = data.objects.get(id);
+				if (!entry || !accept(entry, id)) continue;
+
+				// The box an entry paints into is upright and comes with the entry, so a point
+				// outside it, and outside the tolerance around it, is rejected without building
+				// a path. Most entries of a part are rejected by this check.
+				const minX = entry.x ?? 0;
+				const minY = entry.y ?? 0;
+				const maxX = minX + (entry.width ?? 0);
+				const maxY = minY + (entry.height ?? 0);
+				if (
+					position.x < minX - position.toleranceX ||
+					position.x > maxX + position.toleranceX ||
+					position.y < minY - position.toleranceY ||
+					position.y > maxY + position.toleranceY
+				)
+					continue;
+
+				const origin = originOf(entry);
+				if (!origin) continue;
+				const at: EntryAtPoint = {
+					id,
+					entry,
+					range: new Range2D(
+						minX - origin.x,
+						minY - origin.y,
+						maxX - origin.x,
+						maxY - origin.y,
+					),
+					position: {
+						x: position.x - origin.x,
+						y: position.y - origin.y,
+						toleranceX: position.toleranceX,
+						toleranceY: position.toleranceY,
+					},
+				};
+				if (takes(at)) return at;
+			}
+			return undefined;
 		}
 
 		/** What the point hits among the primitives, or nothing when it hits none of them.

@@ -13,6 +13,9 @@
  * WriterVectorManager - Draws the pages of a text document from vector primitives. Once the
  * cache holds more pages than its budget, it drops the pages that are not wanted now, the ones
  * wanted longest ago first.
+ *
+ * The caret names the text frame it is in, on whichever cached page holds that frame, and a
+ * press puts the caret into any text frame.
  */
 
 class WriterVectorManager extends VectorPartManagerBase {
@@ -35,6 +38,12 @@ class WriterVectorManager extends VectorPartManagerBase {
 
 	kind(): RenderManagerKind {
 		return 'text';
+	}
+
+	/// The deltas of a page answer the text edits that show here. The server handles the
+	/// objects, the undos and the redos.
+	heldBackChanges(): HeldBackChanges {
+		return 'shownText';
 	}
 
 	/// The rectangle of each page in document twips, as [x, y, width, height], in page order.
@@ -111,8 +120,8 @@ class WriterVectorManager extends VectorPartManagerBase {
 		);
 	}
 
-	/// Draw the entries of a text document page in paint order. The primitives of each entry
-	/// are relative to the top left of its box, so each is moved onto its box.
+	/// Draw the entries of a text document page in paint order, each where its primitives
+	/// start on the page.
 	renderTextPage(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
@@ -121,10 +130,12 @@ class WriterVectorManager extends VectorPartManagerBase {
 		for (const id of data.order) {
 			const entry = data.objects.get(id);
 			if (!entry?.primitives) continue;
+			const origin = VectorPartManagerBase.entryOrigin(data, entry);
+			if (!origin) continue;
 			// The context comes back as it was, also when a primitive throws.
 			context.save();
 			try {
-				context.translate(entry.x ?? 0, entry.y ?? 0);
+				context.translate(origin.x, origin.y);
 				for (const primitive of entry.primitives)
 					this._renderer.renderPrimitive(context, primitive);
 			} finally {
@@ -182,9 +193,9 @@ class WriterVectorManager extends VectorPartManagerBase {
 		super.partListChanged();
 	}
 
-	// The caret of a text document lies in the text frame that the caret message names, which
-	// the logical caret alone finds a place in. The text of a drawing object, which the caret
-	// message names by the id of its entry, waits for the engine.
+	/// The caret of a text document lies in the text frame that the caret message names, on the
+	/// cached page that holds the frame. The text of a drawing object, which the caret message
+	/// names by the id of its entry, waits for the engine.
 	protected _caretTarget(): EditTarget | null {
 		const cursor = app.file.textCursor;
 		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
@@ -199,6 +210,13 @@ class WriterVectorManager extends VectorPartManagerBase {
 			logical: cursor.logical,
 			entryId,
 		};
+	}
+
+	/// The logical caret finds its place in the text frame that the target names.
+	protected _caretPositionIn(target: EditTarget): cool.CaretPosition | null {
+		return target.entryId !== undefined && target.logical
+			? target.tree.caretIn(target.entryId, target.logical)
+			: null;
 	}
 
 	/// Each paragraph is a text frame, and the frames after it stay where the server placed
@@ -222,11 +240,6 @@ class WriterVectorManager extends VectorPartManagerBase {
 		return true;
 	}
 
-	/// A text document has no page in the edit view. The caret's text frame names its page.
-	protected _selectedPartId(): cool.VectorPartGuid | undefined {
-		return undefined;
-	}
-
 	/// Apply a pushed delta. A caret placed here, while the engine has not answered it, stays on
 	/// its text frame when the delta moves the frame.
 	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
@@ -245,20 +258,12 @@ class WriterVectorManager extends VectorPartManagerBase {
 		app.sectionContainer?.onCursorPositionChanged();
 	}
 
-	/// Where the twips of an entry start in document twips: the entry lies at its x and y on the
-	/// page, and the page at its rectangle in the document. Null when the page or the entry is
-	/// not known.
-	protected _entryOrigin(
-		data: cool.VectorPrimitivesData,
-		entryId: number | undefined,
+	/// A page lies at its rectangle in the document. Null when the page list does not hold the
+	/// page.
+	protected _partOrigin(
+		partId: cool.VectorPartGuid,
 	): { x: number; y: number } | null {
-		const entry = entryId === undefined ? undefined : data.objects.get(entryId);
-		const pageOrigin = this._pageOriginOf(data.partId);
-		if (!entry || !pageOrigin) return null;
-		return {
-			x: pageOrigin.x + (entry.x ?? 0),
-			y: pageOrigin.y + (entry.y ?? 0),
-		};
+		return this._pageOriginOf(partId);
 	}
 
 	/// The text frame on top at (x, y), in document twips, on a cached page. Undefined off the
@@ -269,52 +274,33 @@ class WriterVectorManager extends VectorPartManagerBase {
 		// A field, a content control, a form field and a numbering label take a click of their
 		// own in the engine, as a box that toggles, a list that opens or a field that is
 		// selected whole.
-		const hit = cool.VectorHitTest.hit(top.entry.primitives, {
-			x: top.x - (top.entry.x ?? 0),
-			y: top.y - (top.entry.y ?? 0),
-			toleranceX: 0,
-			toleranceY: 0,
-		});
+		const hit = cool.VectorHitTest.hit(top.entry.primitives, top.position);
 		return hit?.field ? undefined : top.id;
 	}
 
-	// The text frame whose box is on top at (x, y), in document twips, on a cached page, with
-	// the point in the twips of the page. Undefined off the pages, and where the box of a
-	// picture, a fly or a shape covers the text.
-	private _textFrameBoxAt(
-		x: number,
-		y: number,
-	): { id: number; entry: cool.SlideObject; x: number; y: number } | undefined {
+	// The text frame whose box is on top at (x, y), in document twips, on a cached page.
+	// Undefined off the pages, and where the box of a picture, a fly or a shape covers the text.
+	private _textFrameBoxAt(x: number, y: number): cool.EntryAtPoint | undefined {
 		const page = this._pageIndexAt(x, y);
 		const partId = this.partIdAt(page);
 		const data = partId === undefined ? undefined : this._cache.get(partId);
 		const origin = partId === undefined ? null : this._pageOriginOf(partId);
 		if (!data || !origin) return undefined;
-		const pageX = x - origin.x;
-		const pageY = y - origin.y;
-		let found: number | undefined;
-		let foundKind: string | undefined;
-		for (const id of data.order) {
-			const entry = data.objects.get(id);
-			if (
-				entry?.kind !== undefined &&
+		// The entry on top is the first whose box holds the point, whatever it draws there.
+		const top = cool.VectorHitTest.topmostEntryAt(
+			data,
+			{ x: x - origin.x, y: y - origin.y, toleranceX: 0, toleranceY: 0 },
+			(entry) =>
+				entry.kind !== undefined &&
 				WriterVectorManager.drawnOverText.has(entry.kind) &&
 				entry.x !== undefined &&
 				entry.y !== undefined &&
 				entry.width !== undefined &&
-				entry.height !== undefined &&
-				pageX >= entry.x &&
-				pageX <= entry.x + entry.width &&
-				pageY >= entry.y &&
-				pageY <= entry.y + entry.height
-			) {
-				found = id;
-				foundKind = entry.kind;
-			}
-		}
-		if (foundKind !== 'textframe' || found === undefined) return undefined;
-		const entry = data.objects.get(found);
-		return entry ? { id: found, entry, x: pageX, y: pageY } : undefined;
+				entry.height !== undefined,
+			(entry) => VectorPartManagerBase.entryOrigin(data, entry),
+			() => true,
+		);
+		return top?.entry.kind === 'textframe' ? top : undefined;
 	}
 
 	// The kinds of page entries that draw content of their own over a point, rather than
@@ -331,35 +317,27 @@ class WriterVectorManager extends VectorPartManagerBase {
 		return this._typedEdits.newest()?.partId;
 	}
 
-	// Any text frame on a page takes the caret where it is pressed, as the edit goes on there.
-	protected _pressAt(
-		x: number,
-		y: number,
+	/// Any text frame on a cached page takes the caret where it is pressed, as the edit goes on
+	/// there.
+	protected _pressedEntry(
+		_x: number,
+		_y: number,
 		hitId: number | undefined,
-	): CaretPress | null {
+	): PressedEntry | null {
 		if (hitId === undefined) return null;
 		const partId = this._textPageHolding(hitId);
 		const data = partId === undefined ? undefined : this._cache.get(partId);
-		const origin = data ? this._entryOrigin(data, hitId) : null;
-		if (!data || !origin) return null;
-		const tree = this._treeOf(data);
-		const logical = this._textOf(tree, hitId)?.caretAtPoint(
-			x - origin.x,
-			y - origin.y,
-		);
 		const cursor = app.file.textCursor;
-		return logical && cursor.rectangle
-			? {
-					target: {
-						tree,
-						caret: cursor.rectangle,
-						logical: cursor.logical,
-						entryId: hitId,
-					},
-					entryId: hitId,
-					logical,
-				}
-			: null;
+		if (!data || !cursor.rectangle) return null;
+		return {
+			target: {
+				tree: this._treeOf(data),
+				caret: cursor.rectangle,
+				logical: cursor.logical,
+				entryId: hitId,
+			},
+			entryId: hitId,
+		};
 	}
 
 	/// Each paragraph of a text document is a text frame of its own, so a drag that selects

@@ -212,13 +212,15 @@ class ChangeOutbox {
 	public static take(message: string, tickets?: cool.InputTicket[]): boolean {
 		// What the outbox sends itself comes through here too, and is not a new offer.
 		if (ChangeOutbox.sending) return false;
-		// The deltas of a view drawn from vector primitives answer what is in flight.
-		if (!RenderManager.drawsFromPrimitives()) return false;
+		// The manager says which changes wait for the deltas that answer what is in flight.
+		const heldBack = RenderManager.heldBackChanges();
+		if (heldBack === 'none') return false;
 
 		const entry = ChangeOutbox.entryOf(message);
 		if (!entry) return false;
+		// A text edit shows here when its number went to a ticket.
 		if (
-			!RenderManager.isVectorRendering() &&
+			heldBack === 'shownText' &&
 			((entry.kind !== 'text' && entry.kind !== 'remove') ||
 				!cool.InputSequence.hasTickets(message))
 		)

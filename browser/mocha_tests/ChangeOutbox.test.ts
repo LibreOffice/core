@@ -401,8 +401,7 @@ describe('ChangeOutbox typed text', function () {
 	it('lets the typed text of a view drawn from bitmap tiles go out on its own', function () {
 		// A sheet whose cell edit shows the typing before the engine answers.
 		(RenderManager as any)._instance = {
-			drawsFromPrimitives: () => false,
-			isVectorRendering: () => false,
+			heldBackChanges: () => 'none',
 		};
 
 		nodeassert.strictEqual(

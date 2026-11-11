@@ -22,6 +22,10 @@ namespace cool {
 		/// in the engine, so versions carrying two different epochs describe two different
 		/// documents and mean nothing to each other.
 		epoch?: number;
+		/// Where the primitives of the entries are placed: "entry" when the primitives of each
+		/// entry start at the top left of the box of that entry. Without a value they are in
+		/// the twips of the page.
+		coordinates?: string;
 		/// The version the part is at once everything in this response is applied.
 		version?: number;
 		/// The newest input of this view that the content reflects, when

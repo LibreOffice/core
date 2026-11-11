@@ -3794,6 +3794,7 @@ describe('ImpressVectorManager', function () {
 			const manager = new WriterTestManager();
 			manager.handleVectorPrimitivesResponse({
 				partId: '7',
+				coordinates: 'entry',
 				version: 1,
 				objects: [page, frame(text)],
 			});
@@ -3851,6 +3852,7 @@ describe('ImpressVectorManager', function () {
 			narrow.primitives[0].textAreaWidth = 1100;
 			manager.handleVectorPrimitivesResponse({
 				partId: '7',
+				coordinates: 'entry',
 				version: 1,
 				objects: [page, narrow],
 			});
@@ -3866,6 +3868,7 @@ describe('ImpressVectorManager', function () {
 			const shapeId = 4294967296 + 96;
 			manager.handleVectorPrimitivesResponse({
 				partId: '7',
+				coordinates: 'entry',
 				version: 1,
 				objects: [
 					page,
@@ -3927,6 +3930,7 @@ describe('ImpressVectorManager', function () {
 			// The whole page shows the text as the engine has it.
 			manager.handleVectorPrimitivesResponse({
 				partId: '7',
+				coordinates: 'entry',
 				version: 3,
 				objects: [page, frame('Hello')],
 			});
@@ -3939,6 +3943,7 @@ describe('ImpressVectorManager', function () {
 			manager.requestTextPage('7');
 			manager.handleVectorPrimitivesResponse({
 				partId: '7',
+				coordinates: 'entry',
 				version: 1,
 				objects: [page, frame(text)],
 			});
@@ -4032,6 +4037,7 @@ describe('ImpressVectorManager', function () {
 
 			manager.handleVectorPrimitivesResponse({
 				partId: '7',
+				coordinates: 'entry',
 				version: 2,
 				objects: [page, frame('Hello')],
 			});
@@ -4064,6 +4070,7 @@ describe('ImpressVectorManager', function () {
 			const next = SocketRecorder.during(() =>
 				manager.handleVectorPrimitivesResponse({
 					partId: '11',
+					coordinates: 'entry',
 					version: 1,
 					objects: [page, frame('Hello')],
 				}),
@@ -4097,6 +4104,7 @@ describe('ImpressVectorManager', function () {
 			const next = SocketRecorder.during(() =>
 				manager.handleVectorPrimitivesResponse({
 					partId: '11',
+					coordinates: 'entry',
 					version: 1,
 					objects: [page, frame('Hello')],
 				}),
@@ -4219,6 +4227,7 @@ describe('ImpressVectorManager', function () {
 				};
 				manager.handleVectorPrimitivesResponse({
 					partId: '7',
+					coordinates: 'entry',
 					version: 1,
 					objects: [page, frame('Hello'), picture],
 				});

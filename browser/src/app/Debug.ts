@@ -426,9 +426,7 @@ class DebugManager {
 
 		// A document drawn from vector primitives has no tiles, so the switches that watch or
 		// steer the tiles are left out of its panel.
-		const tilesDrawn =
-			!RenderManager.drawsFromPrimitives() &&
-			!RenderManager.calcVectorManager();
+		const tilesDrawn = RenderManager.kind() === 'tiles';
 
 		this._addDebugTool({
 			name: 'Data Overlay',

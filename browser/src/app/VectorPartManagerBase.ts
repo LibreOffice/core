@@ -15,9 +15,9 @@
  *
  * It owns the vector data of each part. A part is fetched and decoded only once, kept up to date
  * by deltas, and the change listeners hear of each change. The typing, caret moves and
- * selections done here before the engine answers work on the cached primitives. A
- * vector-rendered document has no bitmap tile grid, so the tile methods stay the no-ops of
- * RenderManagerBase.
+ * selections done here before the engine answers work on the cached primitives. The subclass
+ * says where the caret is and which entry a press lands in. A vector-rendered document has no
+ * bitmap tile grid, so the tile methods stay the no-ops of RenderManagerBase.
  */
 
 /// A predicted edit the server has not acknowledged yet.
@@ -39,9 +39,8 @@ interface EditTarget {
 	tree: cool.PredictionTree;
 	caret: cool.SimpleRectangle;
 	logical: cool.LogicalCaret | null;
-	/// The text frame on a text document page that holds the caret, which the logical caret
-	/// alone finds a place in. Undefined on a slide, where the caret's rectangle picks the
-	/// object.
+	/// The id of the entry that holds the caret, where the caret names its entry. Undefined
+	/// where the rectangle of the caret finds the entry.
 	entryId?: number;
 }
 
@@ -51,6 +50,12 @@ interface DeletedHere {
 	partId: cool.VectorPartGuid;
 	objectIds: Set<number>;
 	timer: ReturnType<typeof setTimeout>;
+}
+
+/// The entry a press lands in, with the edit target the caret is put in.
+interface PressedEntry {
+	target: EditTarget;
+	entryId: number;
 }
 
 abstract class VectorPartManagerBase extends VectorManagerBase {
@@ -424,6 +429,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			mode: mode,
 			epoch: values.epoch,
 			version: values.version,
+			coordinates: values.coordinates === 'entry' ? 'entry' : 'page',
 			slideWidth: nWidth,
 			slideHeight: nHeight,
 			objects: objects,
@@ -821,10 +827,8 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	}
 
 	/// True when the text after each paragraph lies where the server placed it, so an edit here
-	/// keeps a paragraph to the lines it has. The text of a slide grows inside its object.
-	protected _paragraphsKeepTheirLines(): boolean {
-		return false;
-	}
+	/// keeps a paragraph to the lines it has. False when the text grows inside its object.
+	protected abstract _paragraphsKeepTheirLines(): boolean;
 
 	// The measured text of the last entry pointed at, reused while the tree still holds it and
 	// nothing changed it here.
@@ -844,24 +848,6 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		const text = cool.ObjectText.collectFrom(tree, entryId);
 		this._objectText = text ? { entryId, text } : null;
 		return text;
-	}
-
-	/// The id of the page in the edit view, or undefined while no page is named as the one in
-	/// the edit view.
-	protected abstract _selectedPartId(): cool.VectorPartGuid | undefined;
-
-	/// The tree with the entries of other views' running text edits left out of
-	/// the order. Every view that edits an object has its own entry for it.
-	private _asThisViewEditsIt(
-		data: cool.VectorPrimitivesData,
-	): cool.VectorPrimitivesData {
-		const ownViewId = this._ownViewId;
-		if (ownViewId === undefined) return data;
-		const order = data.order.filter((id) => {
-			const object = data.objects.get(id);
-			return object?.kind !== 'texteditoverlay' || object.viewId === ownViewId;
-		});
-		return order.length === data.order.length ? data : { ...data, order };
 	}
 
 	// The cached tree and caret of the edited part, or null when no caret is visible, the part
@@ -889,28 +875,70 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			: null;
 	}
 
-	// The cached tree and caret of the edited part, with text selected or not, or null when no
-	// caret is visible or the part is not cached.
-	protected _caretTarget(): EditTarget | null {
-		const cursor = app.file.textCursor;
-		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
-		const partId = this._selectedPartId();
-		const data = partId === undefined ? undefined : this._cache.get(partId);
-		if (!data) return null;
-		return {
-			tree: this._treeOf(this._asThisViewEditsIt(data)),
-			caret: cursor.rectangle,
-			logical: cursor.logical ?? null,
-		};
+	/// The cached tree and caret of the part the caret is in, with text selected or not, or null
+	/// when no caret is visible, the part is not cached or the text of the caret is edited at
+	/// the server alone.
+	protected abstract _caretTarget(): EditTarget | null;
+
+	/// The caret position in the edit target, read from the tree as it is now, or null when
+	/// the tree shows no such place.
+	protected abstract _caretPositionIn(
+		target: EditTarget,
+	): cool.CaretPosition | null;
+
+	/// The entry that takes the caret for a press at (x, y), in document twips, with the edit
+	/// target of that entry. hitId is the entry at the point, if any. Null when the press is
+	/// for the server.
+	protected abstract _pressedEntry(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): PressedEntry | null;
+
+	/// The part that the predicted edits lie on, or undefined when no part is named.
+	protected abstract _editedPartId(): cool.VectorPartGuid | undefined;
+
+	/// The object that is edited through the entry. It is the entry itself, unless the entry
+	/// stands for a running edit of another object.
+	protected _editedObjectOf(
+		_partId: cool.VectorPartGuid,
+		entryId: number,
+	): number {
+		return entryId;
 	}
 
-	/// Where the twips of an entry start in document twips, or null when the entry is not known.
-	/// The twips of a slide are document twips already.
-	protected _entryOrigin(
-		_data: cool.VectorPrimitivesData,
-		_entryId: number | undefined,
+	/// Where the primitives of an entry start in the twips of its part: at zero for data in page
+	/// coordinates, and at the top left of the box of the entry for data in entry coordinates.
+	/// Null when the data is in entry coordinates and the entry is not known.
+	static entryOrigin(
+		data: cool.VectorPrimitivesData,
+		entry: cool.SlideObject | undefined,
+	): { x: number; y: number } | null {
+		if (data.coordinates !== 'entry') return { x: 0, y: 0 };
+		return entry ? { x: entry.x ?? 0, y: entry.y ?? 0 } : null;
+	}
+
+	/// Where the twips of a part start in document twips, or null when the place of the part
+	/// in the document is not known. The twips of a slide are document twips already.
+	protected _partOrigin(
+		_partId: cool.VectorPartGuid,
 	): { x: number; y: number } | null {
 		return { x: 0, y: 0 };
+	}
+
+	/// Where the primitives of an entry start in document twips, or null when the part or the
+	/// entry is not known.
+	protected _entryOrigin(
+		data: cool.VectorPrimitivesData,
+		entryId: number | undefined,
+	): { x: number; y: number } | null {
+		const partOrigin = this._partOrigin(data.partId);
+		const origin = VectorPartManagerBase.entryOrigin(
+			data,
+			entryId === undefined ? undefined : data.objects.get(entryId),
+		);
+		if (!partOrigin || !origin) return null;
+		return { x: partOrigin.x + origin.x, y: partOrigin.y + origin.y };
 	}
 
 	// A caret in the twips of the entry, moved to document twips, or null.
@@ -928,25 +956,11 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		};
 	}
 
-	// The caret position in the edit target, or null.
-	private _lookUpCaret(target: EditTarget): cool.CaretPosition | null {
-		if (target.entryId !== undefined)
-			return target.logical
-				? target.tree.caretIn(target.entryId, target.logical)
-				: null;
-		return target.tree.caretAt(
-			target.caret.x1,
-			target.caret.y1,
-			target.caret.y2,
-			target.logical ?? undefined,
-		);
-	}
-
 	/// True when a keystroke at the caret can be predicted. The tree stays
 	/// unchanged.
 	canPredictAtCaret(): boolean {
 		const target = this._editTarget();
-		return target !== null && this._lookUpCaret(target) !== null;
+		return target !== null && this._caretPositionIn(target) !== null;
 	}
 
 	/// Insert typed text into the cached tree so it shows before the server re-renders. It
@@ -1029,7 +1043,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		if (!target || !target.logical) return null;
 		const anchor = this._anchorForMove(target.logical, extend);
 		if (anchor === undefined) return null;
-		const position = this._lookUpCaret(target);
+		const position = this._caretPositionIn(target);
 		const entryId = position?.objectId;
 		if (!position || entryId === undefined) return null;
 		return { target, logical: target.logical, anchor, position, entryId };
@@ -1064,38 +1078,16 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	// The x kept over moves by line, and the caret the last of them left.
 	private _travelX: { x: number; logical: cool.LogicalCaret } | null = null;
 
-	// The entry that holds the caret for a press at (x, y) on the object hitId, or undefined
-	// when the press is for the server.
-	private _pressedEntry(
-		target: EditTarget,
-		hitId: number | undefined,
-		x: number,
-		y: number,
-	): number | undefined {
-		const entryId = this._lookUpCaret(target)?.objectId;
-		if (entryId === undefined) return undefined;
-		const partId = target.tree.data.partId;
-		// A press off the edited object ends the edit, so it is for the engine.
-		if (
-			hitId === undefined ||
-			(hitId !== entryId && hitId !== this._editedObjectOf(partId, entryId)) ||
-			!this._mayHoldTheCaret(partId, entryId, hitId, x, y)
-		)
-			return undefined;
-		return entryId;
-	}
-
 	// The edited part, the entry and the caret where a press at (x, y) on the object hitId
 	// lands, or null when the press is for the server.
-	protected _pressAt(
+	private _pressAt(
 		x: number,
 		y: number,
 		hitId: number | undefined,
 	): CaretPress | null {
-		const target = this._caretTarget();
-		if (!target) return null;
-		const entryId = this._pressedEntry(target, hitId, x, y);
-		if (entryId === undefined) return null;
+		const pressed = this._pressedEntry(x, y, hitId);
+		if (!pressed) return null;
+		const { target, entryId } = pressed;
 		const origin = this._entryOrigin(target.tree.data, entryId);
 		if (!origin) return null;
 		const logical = this._textOf(target.tree, entryId)?.caretAtPoint(
@@ -1103,40 +1095,6 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			y - origin.y,
 		);
 		return logical ? { target, entryId, logical } : null;
-	}
-
-	// The objectKind of a table.
-	private static readonly tableKind: number = 35;
-
-	// True when a press at (x, y) on the object hitId may land in the entry's text. A table
-	// edits one cell at a time, so there the press has to be inside that cell's text.
-	private _mayHoldTheCaret(
-		partId: cool.VectorPartGuid,
-		entryId: number,
-		hitId: number,
-		x: number,
-		y: number,
-	): boolean {
-		const objects = this._cache.get(partId)?.objects;
-		if (
-			!objects ||
-			objects.get(hitId)?.objectKind !== VectorPartManagerBase.tableKind
-		)
-			return true;
-		const text = objects.get(entryId);
-		if (
-			text?.x === undefined ||
-			text.y === undefined ||
-			text.width === undefined ||
-			text.height === undefined
-		)
-			return false;
-		return (
-			x >= text.x &&
-			x <= text.x + text.width &&
-			y >= text.y &&
-			y <= text.y + text.height
-		);
 	}
 
 	/// Put the caret where a click at (x, y), in document twips, lands in the edited text, and
@@ -1251,7 +1209,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		return true;
 	}
 
-	/// The caret moved here into the entry. On a slide the edited object stays the same.
+	/// The caret moved here into the entry.
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	protected _caretMovedTo(_entryId: number): void {}
 
@@ -1316,7 +1274,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		LocalCaret.tell();
 		const target = this._editTarget(true);
 		if (!target) return false;
-		const position = this._lookUpCaret(target);
+		const position = this._caretPositionIn(target);
 		if (!position) return false;
 		const anchor = this._selectionAnchorInParagraph();
 		const selected = anchor ? cool.selectedAround(position, anchor) : null;
@@ -1358,7 +1316,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	// the caret before the edit, which finds the edited object in the new tree.
 	protected _placeCaret(target: EditTarget, fallbackShift: number): void {
 		if (target.logical) {
-			const local = this._lookUpCaret(target)?.geometry();
+			const local = this._caretPositionIn(target)?.geometry();
 			const geometry = local
 				? this._inDocument(target.tree.data, target.entryId, local)
 				: null;
@@ -1503,9 +1461,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// True when the delta that answers an applied edit always carries the new content of the
 	/// entry the edit went into. An answered edit whose entry came without new content was then
 	/// not applied by the engine.
-	protected _answerCarriesEditedEntries(): boolean {
-		return false;
-	}
+	protected abstract _answerCarriesEditedEntries(): boolean;
 
 	// Apply a recorded edit. Returns true when the tree changed.
 	private _replayEdit(
@@ -1525,11 +1481,6 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 				edit,
 			) !== null
 		);
-	}
-
-	/// The part that the predicted edits lie on: the part of a slide that is selected.
-	protected _editedPartId(): cool.VectorPartGuid | undefined {
-		return this._selectedPartId();
 	}
 
 	/// True when the update is older than the newest edit, so the local caret
@@ -1561,17 +1512,6 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		if (verdict === cool.CaretUpdateVerdict.Elsewhere)
 			this._abandonEdits(partId);
 		return verdict === cool.CaretUpdateVerdict.Older;
-	}
-
-	// The edited object: a running edit entry's parent, or the entry itself.
-	private _editedObjectOf(
-		partId: cool.VectorPartGuid,
-		objectId: number,
-	): number {
-		const entry = this._cache.get(partId)?.objects.get(objectId);
-		return entry?.kind === 'texteditoverlay' && entry.parent !== undefined
-			? entry.parent
-			: objectId;
 	}
 
 	/// Draw again what shows the parts, once a picture or a font that they use has loaded. The

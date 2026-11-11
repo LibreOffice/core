@@ -563,62 +563,56 @@ class RenderGeometrySection extends CanvasSectionObject {
 			toleranceY: tolerance,
 		};
 
-		for (let index = data.order.length - 1; index >= 0; --index) {
-			const id = data.order[index];
-			const object = data.objects.get(id);
-			if (!object || !RenderGeometrySection.standsOnTheSlide(object)) continue;
+		cool.VectorHitTest.topmostEntryAt(
+			data,
+			position,
+			RenderGeometrySection.standsOnTheSlide,
+			(object) => VectorPartManagerBase.entryOrigin(data, object),
+			(at) => {
+				const object = at.entry;
+				/*
+					The object's own square settles a point outside it, where the object paints
+					inside that square. An object that paints beyond it - a measurement, whose
+					square is the measured line and whose lines and text stand beside it - is asked
+					by what it paints alone.
+				*/
+				const square = cool.Matrix2D.fromArray(object.transform);
+				if (
+					RenderGeometrySection.paintsInsideItsSquare(
+						square,
+						at.range,
+						tolerance,
+					) &&
+					!cool.VectorHitTest.isInUnitSquare(square, at.position)
+				)
+					return false;
 
-			// The box the object paints into is upright and comes with the entry, so a point
-			// outside it, and outside the tolerance around it, is settled without building a
-			// path. Most objects of a page are settled here.
-			const range = new cool.Range2D(
-				object.x ?? 0,
-				object.y ?? 0,
-				(object.x ?? 0) + (object.width ?? 0),
-				(object.y ?? 0) + (object.height ?? 0),
-			);
-			if (
-				x < range.minX - tolerance ||
-				x > range.maxX + tolerance ||
-				y < range.minY - tolerance ||
-				y > range.maxY + tolerance
-			)
-				continue;
+				// The first object of a diagram covers the whole diagram. A point anywhere
+				// inside it hits the object, also where nothing is drawn.
+				const hit =
+					cool.VectorHitTest.hit(
+						object.primitives ?? [],
+						at.position,
+						at.range,
+					) ??
+					(RenderGeometrySection.spansADiagram(data, at.id)
+						? {
+								kind: 'fill' as const,
+								hidden: true,
+								editView: false,
+								edge: false,
+								link: false,
+								field: false,
+							}
+						: undefined);
+				if (!hit) return false;
 
-			/*
-				The object's own square settles a point outside it, where the object paints inside
-				that square. An object that paints beyond it - a measurement, whose square is the
-				measured line and whose lines and text stand beside it - is asked by what it paints
-				alone.
-			*/
-			const square = cool.Matrix2D.fromArray(object.transform);
-			if (
-				RenderGeometrySection.paintsInsideItsSquare(square, range, tolerance) &&
-				!cool.VectorHitTest.isInUnitSquare(square, position)
-			)
-				continue;
+				if (RenderGeometrySection.worksAsAControl(object)) return true;
 
-			// The first object of a diagram spans the whole of it and is met wherever the point
-			// lies inside it, drawn there or not, as a fill held only to be hit.
-			const hit =
-				cool.VectorHitTest.hit(object.primitives ?? [], position, range) ??
-				(RenderGeometrySection.spansADiagram(data, id)
-					? {
-							kind: 'fill' as const,
-							hidden: true,
-							editView: false,
-							edge: false,
-							link: false,
-							field: false,
-						}
-					: undefined);
-			if (!hit) continue;
-
-			if (RenderGeometrySection.worksAsAControl(object)) break;
-
-			hits.push({ id: id, hit: hit });
-			if (!everyOne) break;
-		}
+				hits.push({ id: at.id, hit: hit });
+				return !everyOne;
+			},
+		);
 
 		return hits;
 	}

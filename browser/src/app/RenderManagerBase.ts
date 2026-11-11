@@ -46,6 +46,11 @@ namespace cool {
 /// document or the cells of a spreadsheet from vector primitives, or bitmap tiles.
 type RenderManagerKind = 'slides' | 'text' | 'sheet' | 'tiles';
 
+/// Which changes made here wait for the answers to the changes in flight before they go to the
+/// engine: 'none' of them, 'shownText' for only the typed text and the deletions that already
+/// show here, or 'all' for these and the changes of objects, the undos and the redos.
+type HeldBackChanges = 'none' | 'shownText' | 'all';
+
 abstract class RenderManagerBase {
 	/// What the manager draws.
 	abstract kind(): RenderManagerKind;
@@ -236,6 +241,11 @@ abstract class RenderManagerBase {
 	/// and moves them itself.
 	drawsFromObjects(): boolean {
 		return this.isVectorRendering();
+	}
+
+	/// Which changes made here wait for the answers to the changes in flight.
+	heldBackChanges(): HeldBackChanges {
+		return 'none';
 	}
 
 	/// The message with object positions in the engine's placement.

@@ -10,6 +10,11 @@
  */
 
 namespace cool {
+	/// Where the primitives of the entries of a part are placed. In 'page' they are in the
+	/// twips of the page. In 'entry' the primitives of each entry start at the top left of the
+	/// box of that entry.
+	export type VectorCoordinates = 'page' | 'entry';
+
 	/// Vector representation of a slide.
 	export interface VectorPrimitivesData {
 		/// The id of the page this is the content of.
@@ -25,6 +30,9 @@ namespace cool {
 		/// up each time the part changes, so two trees with the same
 		/// version describe the same content.
 		version?: number;
+		/// Where the primitives of the entries are placed. Without a value they are in the
+		/// twips of the page.
+		coordinates?: VectorCoordinates;
 		/// The page rectangle in twips, taken from the entry that stands
 		/// for the page.
 		slideWidth: number;

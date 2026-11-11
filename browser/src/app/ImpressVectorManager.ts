@@ -16,6 +16,9 @@
  * Next to what VectorPartManagerBase holds, it maps slide numbers to parts, draws a slide over its
  * master page and in the states an animation gives its objects, draws the ghosts and aids of
  * objects being edited, keeps the hidden layers of the view, and draws the previews of slides.
+ *
+ * The text that is edited lies on the selected slide. The rectangle of the caret finds the
+ * object it is in, and a press moves the caret only inside that object.
  */
 
 class ImpressVectorManager extends VectorPartManagerBase {
@@ -27,10 +30,137 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		return true;
 	}
 
+	/// The deltas of a slide answer every change made here, so each change waits until the
+	/// changes before it are answered.
+	heldBackChanges(): HeldBackChanges {
+		return 'all';
+	}
+
 	/// The id of the slide in the edit view, or undefined while the slide list does not name it.
-	protected _selectedPartId(): cool.VectorPartGuid | undefined {
+	private _selectedPartId(): cool.VectorPartGuid | undefined {
 		const entry = app.impress?.partList?.[this._docLayer._selectedPart];
 		return typeof entry?.part === 'string' ? entry.part : undefined;
+	}
+
+	/// The predicted edits lie on the slide in the edit view.
+	protected _editedPartId(): cool.VectorPartGuid | undefined {
+		return this._selectedPartId();
+	}
+
+	/// The text of a slide grows inside its object.
+	protected _paragraphsKeepTheirLines(): boolean {
+		return false;
+	}
+
+	/// A delta that answers an edit of a slide can leave the edited entry out.
+	protected _answerCarriesEditedEntries(): boolean {
+		return false;
+	}
+
+	/// The tree with the entries of other views' running text edits left out of
+	/// the order. Every view that edits an object has its own entry for it.
+	private _asThisViewEditsIt(
+		data: cool.VectorPrimitivesData,
+	): cool.VectorPrimitivesData {
+		const ownViewId = this._ownViewId;
+		if (ownViewId === undefined) return data;
+		const order = data.order.filter((id) => {
+			const object = data.objects.get(id);
+			return object?.kind !== 'texteditoverlay' || object.viewId === ownViewId;
+		});
+		return order.length === data.order.length ? data : { ...data, order };
+	}
+
+	/// The cached tree of the slide in the edit view and the caret, or null when no caret is
+	/// visible or the slide is not cached.
+	protected _caretTarget(): EditTarget | null {
+		const cursor = app.file.textCursor;
+		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
+		const partId = this._selectedPartId();
+		const data = partId === undefined ? undefined : this._cache.get(partId);
+		if (!data) return null;
+		return {
+			tree: this._treeOf(this._asThisViewEditsIt(data)),
+			caret: cursor.rectangle,
+			logical: cursor.logical ?? null,
+		};
+	}
+
+	/// The rectangle of the caret finds the object the caret is in, and the logical caret the
+	/// place in its text.
+	protected _caretPositionIn(target: EditTarget): cool.CaretPosition | null {
+		return target.tree.caretAt(
+			target.caret.x1,
+			target.caret.y1,
+			target.caret.y2,
+			target.logical ?? undefined,
+		);
+	}
+
+	/// A press takes the caret only inside the object that is edited. A press off that object
+	/// ends the edit, so it is for the engine.
+	protected _pressedEntry(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): PressedEntry | null {
+		const target = this._caretTarget();
+		if (!target) return null;
+		const entryId = this._caretPositionIn(target)?.objectId;
+		if (entryId === undefined) return null;
+		const partId = target.tree.data.partId;
+		if (
+			hitId === undefined ||
+			(hitId !== entryId && hitId !== this._editedObjectOf(partId, entryId)) ||
+			!this._mayHoldTheCaret(partId, entryId, hitId, x, y)
+		)
+			return null;
+		return { target, entryId };
+	}
+
+	// The objectKind of a table.
+	private static readonly tableKind: number = 35;
+
+	// True when a press at (x, y) on the object hitId may land in the entry's text. A table
+	// edits one cell at a time, so there the press has to be inside that cell's text.
+	private _mayHoldTheCaret(
+		partId: cool.VectorPartGuid,
+		entryId: number,
+		hitId: number,
+		x: number,
+		y: number,
+	): boolean {
+		const objects = this._cache.get(partId)?.objects;
+		if (
+			!objects ||
+			objects.get(hitId)?.objectKind !== ImpressVectorManager.tableKind
+		)
+			return true;
+		const text = objects.get(entryId);
+		if (
+			text?.x === undefined ||
+			text.y === undefined ||
+			text.width === undefined ||
+			text.height === undefined
+		)
+			return false;
+		return (
+			x >= text.x &&
+			x <= text.x + text.width &&
+			y >= text.y &&
+			y <= text.y + text.height
+		);
+	}
+
+	/// The edited object: the parent of the entry of a running edit, or the entry itself.
+	protected _editedObjectOf(
+		partId: cool.VectorPartGuid,
+		objectId: number,
+	): number {
+		const entry = this._cache.get(partId)?.objects.get(objectId);
+		return entry?.kind === 'texteditoverlay' && entry.parent !== undefined
+			? entry.parent
+			: objectId;
 	}
 
 	// Previews waiting for a JSON primitive tree response, keyed by page id.

@@ -374,6 +374,10 @@ class RenderManager {
 		return RenderManager.ensureInstance().kind();
 	}
 
+	static heldBackChanges(): HeldBackChanges {
+		return RenderManager.ensureInstance().heldBackChanges();
+	}
+
 	static toEngine(message: string): string {
 		return RenderManager.ensureInstance().toEngine(message);
 	}

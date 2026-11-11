@@ -995,8 +995,7 @@ class MouseControl extends CanvasSectionObject {
 	// presses go to the engine.
 	private static drawsTextPages(): boolean {
 		return (
-			RenderManager.drawsFromPrimitives() &&
-			!RenderManager.isVectorRendering() &&
+			RenderManager.kind() === 'text' &&
 			!MouseControl.appliedOnRelease.some(
 				(command) =>
 					app.map.stateChangeHandler?.getItemValue(command) === 'true',
