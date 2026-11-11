@@ -46,7 +46,6 @@ namespace dxcanvas
     public:
         TextLayout( const css::rendering::StringContext& aText,
                     sal_Int8                                                  nDirection,
-                    sal_Int64                                                 nRandomSeed,
                     const rtl::Reference<CanvasFont>& rFont);
         /// make noncopyable
         TextLayout(const TextLayout&) = delete;

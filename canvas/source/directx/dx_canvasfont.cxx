@@ -83,11 +83,11 @@ namespace dxcanvas
 
     uno::Reference< rendering::XTextLayout > SAL_CALL CanvasFont::createTextLayout( const rendering::StringContext& aText,
                                                                                     sal_Int8                        nDirection,
-                                                                                    sal_Int64                       nRandomSeed )
+                                                                                    sal_Int64)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        return new TextLayout(aText, nDirection, nRandomSeed, rtl::Reference<CanvasFont>(this));
+        return new TextLayout(aText, nDirection, rtl::Reference<CanvasFont>(this));
     }
 
     uno::Sequence< double > SAL_CALL CanvasFont::getAvailableSizes(  )
