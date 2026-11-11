@@ -2715,7 +2715,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         fNumber = -fNumber;
     }
 
-    sStr = ::rtl::math::doubleToUString( fNumber,
+    ::rtl::math::doubleToUStringBuffer( sStr, fNumber,
                                          rtl_math_StringFormat_E,
                                          rInfo.nCntPre + rInfo.nCntPost - 1, '.' );
     OUStringBuffer ExpStr;
@@ -2759,7 +2759,8 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
             ExpStr = OUString::number( nExp );
             const sal_Unicode cFirstDigit = sStr[0];
             // rescale mantissa
-            sStr = ::rtl::math::doubleToUString( fNumber,
+            sStr.setLength(0);
+            ::rtl::math::doubleToUStringBuffer( sStr, fNumber,
                                          rtl_math_StringFormat_E,
                                          nRescale + rInfo.nCntPost, '.' );
 
@@ -3097,8 +3098,8 @@ sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString( OUStringBuffer& rBuf, d
 
     // nFractionDecimals+1 to not round up what Time::GetClock() carefully
     // truncated.
-    rBuf.append( rtl::math::doubleToUString( fFractionOfSecond, rtl_math_StringFormat_F,
-                (bAddOneRoundingDecimal ? nFractionDecimals + 1 : nFractionDecimals), '.'));
+    rtl::math::doubleToUStringBuffer( rBuf, fFractionOfSecond, rtl_math_StringFormat_F,
+                (bAddOneRoundingDecimal ? nFractionDecimals + 1 : nFractionDecimals), '.');
     rBuf.stripStart('0');
     rBuf.stripStart('.');
     if (bAddOneRoundingDecimal && rBuf.getLength() > nFractionDecimals)
@@ -4470,7 +4471,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         {
             if ((rInfo.nCntPost + nPrecExp) > 15 && nPrecExp < 15)
             {
-                sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, 15-nPrecExp, '.');
+                ::rtl::math::doubleToUStringBuffer( sStr, fNumber, rtl_math_StringFormat_F, 15-nPrecExp, '.');
                 for (tools::Long l = 15-nPrecExp; l < static_cast<tools::Long>(rInfo.nCntPost); l++)
                 {
                     sStr.append('0');
@@ -4478,7 +4479,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             }
             else
             {
-                sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, rInfo.nCntPost, '.' );
+                ::rtl::math::doubleToUStringBuffer( sStr, fNumber, rtl_math_StringFormat_F, rInfo.nCntPost, '.' );
             }
             sStr.stripStart('0'); // Strip leading zeros
         }
@@ -4489,7 +4490,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
         else // Integer
         {
-            sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, 0, '.');
+            ::rtl::math::doubleToUStringBuffer( sStr, fNumber, rtl_math_StringFormat_F, 0, '.');
             sStr.stripStart('0'); // Strip leading zeros
         }
         nDecPos = sStr.indexOf('.' );
@@ -5235,7 +5236,7 @@ const Color* SvNumberformat::GetColor( sal_uInt16 nNumFor ) const
     return NumFor[nNumFor].GetColor();
 }
 
-static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
+static void lcl_SvNumberformat_AddLimitStringImpl( OUStringBuffer& rStr,
                                                    SvNumberformatLimitOps eOp,
                                                    double fLimit, std::u16string_view rDecSep )
 {
@@ -5266,10 +5267,10 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
         SAL_WARN( "svl.numbers", "unsupported number format" );
         break;
     }
-    rStr +=  ::rtl::math::doubleToUString( fLimit,
+    ::rtl::math::doubleToUStringBuffer( rStr, fLimit,
                                            rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                                            rDecSep[0], true);
-    rStr += "]";
+    rStr.append("]");
 }
 
 static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPosInsertLCID, bool bDBNumInserted, sal_Int32 nPosCurrencyClose, bool bHaveLCID )
@@ -5380,7 +5381,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         {
             nSem++;
         }
-        OUString aPrefix;
+        OUStringBuffer aPrefix;
 
         if ( !bDefaults )
         {
@@ -5404,7 +5405,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             const std::vector<Color>& rColors = ImpSvNumberformatScan::GetStandardColors();
             const auto it = std::find(rColors.begin(), rColors.end(), *pColor);
             if (it != rColors.end())
-                aPrefix += "[" + rKeywords[NF_KEY_FIRSTCOLOR + (it - rColors.begin())] + "]";
+                aPrefix.append("[" + rKeywords[NF_KEY_FIRSTCOLOR + (it - rColors.begin())] + "]");
         }
 
         SvNumberNatNum aNatNum = NumFor[n].GetNatNum();
@@ -5415,7 +5416,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 aNatNum.SetLang( nOriginalLang );
             if ( aNatNum.GetDBNum() > 0 )
             {
-                aPrefix += "[DBNum" + OUString::number( aNatNum.GetDBNum() ) + "]";
+                aPrefix.append("[DBNum" + OUString::number( aNatNum.GetDBNum() ) + "]");
                 bDBNumInserted = true;
             }
         }
