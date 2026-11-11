@@ -184,7 +184,7 @@ public:
         maCanvasHelper.drawBezier(this, aBezierSegment, aEndPoint, viewState, renderState);
     }
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+    virtual void SAL_CALL
     drawPolyPolygon(const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
                     const css::rendering::ViewState& viewState,
                     const css::rendering::RenderState& renderState) override
@@ -196,7 +196,7 @@ public:
 
         mbSurfaceDirty = true;
 
-        return maCanvasHelper.drawPolyPolygon(this, xPolyPolygon, viewState, renderState);
+        maCanvasHelper.drawPolyPolygon(this, xPolyPolygon, viewState, renderState);
     }
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL strokePolyPolygon(

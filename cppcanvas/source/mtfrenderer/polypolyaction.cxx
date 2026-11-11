@@ -164,9 +164,9 @@ namespace cppcanvas::internal
 
                 if( aLocalState.DeviceColor.hasElements() )
                 {
-                    rCachedPrimitive = mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
-                                                                                  mpCanvas->getViewState(),
-                                                                                  aLocalState );
+                    mpCanvas->getUNOCanvas()->drawPolyPolygon(mxPolyPoly, mpCanvas->getViewState(),
+                                                              aLocalState);
+                    rCachedPrimitive.clear();
                 }
 
                 return true;

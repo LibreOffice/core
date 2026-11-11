@@ -834,9 +834,10 @@ void CanvasHelper::doPolyPolygonPath(const uno::Reference<rendering::XPolyPolygo
     }
 }
 
-uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawPolyPolygon(
-    const rendering::XCanvas*, const uno::Reference<rendering::XPolyPolygon2D>& xPolyPolygon,
-    const rendering::ViewState& viewState, const rendering::RenderState& renderState)
+void CanvasHelper::drawPolyPolygon(const rendering::XCanvas*,
+                                   const uno::Reference<rendering::XPolyPolygon2D>& xPolyPolygon,
+                                   const rendering::ViewState& viewState,
+                                   const rendering::RenderState& renderState)
 {
 #ifdef CAIRO_CANVAS_PERF_TRACE
     struct timespec aTimer;
@@ -860,8 +861,6 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawPolyPolygon(
 #ifdef CAIRO_CANVAS_PERF_TRACE
     mxDevice->stopPerfTrace(&aTimer, "drawPolyPolygon");
 #endif
-
-    return uno::Reference<rendering::XCachedPrimitive>(nullptr);
 }
 
 uno::Reference<rendering::XCachedPrimitive> CanvasHelper::strokePolyPolygon(

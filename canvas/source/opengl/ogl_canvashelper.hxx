@@ -64,12 +64,11 @@ namespace oglcanvas
                          const css::geometry::RealPoint2D&         rEndPoint,
                          const css::rendering::ViewState&          viewState,
                          const css::rendering::RenderState&        renderState );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            drawPolyPolygon( const css::rendering::XCanvas*            pCanvas,
-                             const css::uno::Reference<
-                                    css::rendering::XPolyPolygon2D >&  xPolyPolygon,
-                             const css::rendering::ViewState&          viewState,
-                             const css::rendering::RenderState&        renderState );
+        void
+        drawPolyPolygon(const css::rendering::XCanvas* pCanvas,
+                        const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
+                        const css::rendering::ViewState& viewState,
+                        const css::rendering::RenderState& renderState);
         css::uno::Reference< css::rendering::XCachedPrimitive >
             strokePolyPolygon( const css::rendering::XCanvas*          pCanvas,
                                const css::uno::Reference<

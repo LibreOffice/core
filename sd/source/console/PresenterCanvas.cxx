@@ -168,14 +168,12 @@ void SAL_CALL PresenterCanvas::drawBezier (
     mxSharedCanvas->drawBezier(aBezierSegment,aEndPoint,MergeViewState(aViewState),aRenderState);
 }
 
-css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::drawPolyPolygon (
-        const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
-        const css::rendering::ViewState& aViewState,
-        const css::rendering::RenderState& aRenderState)
+void SAL_CALL PresenterCanvas::drawPolyPolygon(
+    const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
+    const css::rendering::ViewState& aViewState, const css::rendering::RenderState& aRenderState)
 {
     ThrowIfDisposed();
-    return mxSharedCanvas->drawPolyPolygon(
-        xPolyPolygon, MergeViewState(aViewState), aRenderState);
+    mxSharedCanvas->drawPolyPolygon(xPolyPolygon, MergeViewState(aViewState), aRenderState);
 }
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::strokePolyPolygon (
