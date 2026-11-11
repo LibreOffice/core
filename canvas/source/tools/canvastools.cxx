@@ -1024,7 +1024,6 @@ int calcGradientStepCount(::basegfx::B2DHomMatrix& rTotalTransform,
     // texture to device space).
     ::basegfx::B2DHomMatrix aMatrix;
 
-    rTotalTransform.identity();
     ::basegfx::unotools::homMatrixFromAffineMatrix(rTotalTransform, texture.AffineTransform);
     mergeViewAndRenderTransform(aMatrix, viewState, renderState);
     rTotalTransform *= aMatrix; // prepend total view/render transformation
