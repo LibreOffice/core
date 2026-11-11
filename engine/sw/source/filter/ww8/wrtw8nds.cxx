@@ -2430,7 +2430,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             const SwTableBox* pBox = rNode.GetTableBox();
 
             // export formula cell as formula field instead of only its cell content in DOCX
-            if ( pBox->IsFormulaOrValueBox() == RES_BOXATR_FORMULA &&
+            if ( pBox && pBox->IsFormulaOrValueBox() == RES_BOXATR_FORMULA &&
                  GetExportFormat() == MSWordExportBase::ExportFormat::DOCX )
             {
                 std::unique_ptr<SwTableBoxFormula> pFormula(pBox->GetFrameFormat()->GetTableBoxFormula().Clone());
