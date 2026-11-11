@@ -539,6 +539,17 @@ void RequestDetailsTests::testLocalHexified()
         http::RequestParser reqParser(request2);
         LOK_ASSERT_EQUAL(details, RequestDetails(reqParser, ""));
     }
+
+    // A hex part that ends the address is read in the same way.
+    {
+        Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_POST, "/cool/0x6d6370",
+                                       Poco::Net::HTTPMessage::HTTP_1_1);
+        request.setHost(Root);
+        RequestDetails details(request, "");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), details.size());
+        LOK_ASSERT_EQUAL_STR("cool", details[0]);
+        LOK_ASSERT_EQUAL_STR("mcp", details[1]);
+    }
 }
 
 void RequestDetailsTests::testRequestDetailsProxyClose()

@@ -237,7 +237,9 @@ void RequestDetails::dehexify()
         HexUtil::dataFromHexString(encoded, decoded);
         res += decoded;
 
-        res += _uriString.substr(end); // Concatenate the remainder.
+        // The remainder follows the hex part, which may end the address.
+        if (end != std::string::npos)
+            res += _uriString.substr(end);
 
         _uriString = std::move(res); // Replace the original uri with the decoded one.
     }
