@@ -84,7 +84,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/filter/PngImageReader.hxx>
-#include <comphelper/hash.hxx>
 #include <vcl/pdf/PDFNote.hxx>
 
 #include <svdata.hxx>
@@ -450,7 +449,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_aContext(rContext),
         m_aFile(m_aContext.URL),
         m_bOpen(false),
-        m_DocDigest(::comphelper::HashType::MD5),
         m_rOuterFace( i_rOuterFace )
 {
     m_aStructure.emplace_back( );
@@ -724,8 +722,6 @@ bool PDFWriterImpl::writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes )
         }
 
         const void* pWriteBuffer = bStreamEncryption ? m_vEncryptionBuffer.data() : pBuffer;
-        m_DocDigest.update(pWriteBuffer, sal_uInt32(nActualSize));
-
 
         if (m_aFile.write(pWriteBuffer, nActualSize, nWritten) != osl::File::E_None)
             nWritten = 0;
@@ -846,11 +842,7 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
 
 bool PDFWriterImpl::useObjectStreams() const
 {
-    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5)
-        return false;
-    // sdext reads the embedded original document out of a trailer, and a cross-reference
-    // stream leaves none
-    return m_aDocumentAttachedFiles.empty();
+    return m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_5;
 }
 
 std::shared_ptr<pdf::IPDFEncryptor> PDFWriterImpl::getStringEncryptor(sal_Int32 nObject)
@@ -5597,11 +5589,6 @@ bool PDFWriterImpl::emitTrailer()
         }
     }
 
-    // prepare document checksum
-    OStringBuffer aDocChecksum( 2*RTL_DIGEST_LENGTH_MD5+1 );
-    ::std::vector<unsigned char> const nMD5Sum(m_DocDigest.finalize());
-    for (sal_uInt8 i : nMD5Sum)
-        COSWriter::appendHex( i, aDocChecksum );
     // document id set in setDocInfo method
     // emit trailer
     aLine.setLength( 0 );
@@ -5635,39 +5622,6 @@ bool PDFWriterImpl::emitTrailer()
         }
         aLine.append( "> ]\n" );
     }
-
-    // Writes the /DocChecksum - hash of the PDF stream
-    // This entry is not defined in the standard, so don't write it if we
-    // are using PDF/UA or PDF/A as the compliance checkers will complain.
-    // Actually we shouldn't write it at all...
-    if (!aDocChecksum.isEmpty() && !m_bIsPDF_UA && m_nPDFA_Version == 0)
-    {
-        aLine.append( "/DocChecksum /" );
-        aLine.append( aDocChecksum );
-        aLine.append( "\n" );
-    }
-
-    // Writes the /AdditionalStreams - writes the embedded / attached files into the PDF
-    // This entry is not defined in the standard, so don't write it if we
-    // are using PDF/UA or PDF/A as the compliance checkers will complain.
-    if (!m_aDocumentAttachedFiles.empty() && !m_bIsPDF_UA && m_nPDFA_Version == 0)
-    {
-        aLine.append( "/AdditionalStreams [" );
-        for (auto const& rAttachedFile : m_aDocumentAttachedFiles)
-        {
-            aLine.append( "/" );
-            COSWriter::appendName(rAttachedFile.maMimeType, aLine);
-            aLine.append(" ");
-            appendObjectReference(rAttachedFile.mnEmbeddedFileObjectId, aLine);
-            aLine.append("\n");
-        }
-        aLine.append( "]\n" );
-    }
-
-    // After calling m_DocDigest.finalize(), we need to initialize the hash again,
-    // otherwise, m_DocDigest.update() inside writeBuffer will fail with
-    // Assertion failure: rv == SECSuccess, at sechash.c:140
-    m_DocDigest.initialize();
 
     if (bXRefStream)
         return emitXRefStream(aLine);

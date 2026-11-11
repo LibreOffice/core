@@ -55,7 +55,6 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/lru_map.hxx>
-#include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/pdf/PDFNote.hxx>
@@ -903,8 +902,6 @@ private:
     std::unique_ptr<SvMemoryStream>         m_pMemStream;
 
     std::set< pdf::PDFWriter::ErrorCode >   m_aErrors;
-
-    ::comphelper::Hash                      m_DocDigest;
 
     std::unordered_map<std::string_view, sal_Int32> m_aNamespacesMap;
 

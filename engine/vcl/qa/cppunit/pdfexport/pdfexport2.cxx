@@ -6918,12 +6918,17 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testObjectStreams)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aArchive.indexOf("/Type/ObjStm"));
     CPPUNIT_ASSERT(aArchive.indexOf("\ntrailer\n") != -1);
 
-    // sdext finds the embedded original document through the trailer, so a hybrid file keeps one
+    // A hybrid file carries the original document as a standard attachment only, so it is
+    // compressed like any other file and has no non-standard trailer entries.
     const OString aHybrid(aExport({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
                                     comphelper::makePropertyValue(u"IsAddStream"_ustr, true) }));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aHybrid.indexOf("/Type/ObjStm"));
-    CPPUNIT_ASSERT(aHybrid.indexOf("/AdditionalStreams ") != -1);
-    CPPUNIT_ASSERT(aHybrid.indexOf("\ntrailer\n") != -1);
+    CPPUNIT_ASSERT(aHybrid.indexOf("/Type/ObjStm") != -1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aHybrid.indexOf("/AdditionalStreams"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aHybrid.indexOf("/DocChecksum"));
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getAttachmentCount());
+    CPPUNIT_ASSERT_EQUAL(u"Original.odt"_ustr, pPdfDocument->getAttachment(0)->getName());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFAttachmentsWithEncryptedFile)
