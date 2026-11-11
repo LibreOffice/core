@@ -133,8 +133,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                     uno::UNO_QUERY);
 
-                Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
+                xShape->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                 ::awt::Size aPageSize;
 
@@ -206,8 +205,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
-                    Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
+                    xShape->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -250,8 +248,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
-                    Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
+                    xShape->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -325,8 +322,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
-                    Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
+                    xShape->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -368,8 +364,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
-                    Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
+                    xShape->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -411,8 +406,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
-                    Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
+                    xShape->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -454,8 +448,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
-                    Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
+                    xShape->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 

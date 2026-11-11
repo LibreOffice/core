@@ -776,11 +776,9 @@ DECLARE_WW8EXPORT_TEST(testTdf118375export, "tdf118375_240degClockwise.doc")
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
     uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
     sal_Int32 nPosX = {}, nPosY = {};
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"HoriOrientPosition"_ustr) >>= nPosX);
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"VertOrientPosition"_ustr) >>= nPosY);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"HoriOrientPosition"_ustr) >>= nPosX);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"VertOrientPosition"_ustr) >>= nPosY);
     // Allow some tolerance because rounding errors through integer arithmetic
     // in rotation.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5200.0, static_cast<double>(nPosX), 1.0);
@@ -835,7 +833,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
     // Without the accompanying fix in place, this test would have failed with a
     // beans.UnknownPropertyException, as the writing direction was lost, so the default direction
     // resulted in a conversion to a Writer text frame.
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9000), getProperty<sal_Int32>(xFrame, u"RotateAngle"_ustr));
 }
 

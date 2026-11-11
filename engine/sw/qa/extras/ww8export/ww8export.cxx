@@ -184,15 +184,11 @@ have the same width (full page width, half page width).
 xray ThisComponent.DrawPage.getByIndex(0).BoundRect
 */
     uno::Reference<drawing::XShape> rule1 = getShape(1), rule2 = getShape(2), rule3 = getShape(3), rule4 = getShape(4);
-    uno::Reference<beans::XPropertySet> ruleProperties1(rule1, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> ruleProperties2(rule2, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> ruleProperties3(rule3, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> ruleProperties4(rule4, uno::UNO_QUERY);
     awt::Rectangle boundRect1, boundRect2, boundRect3, boundRect4;
-    ruleProperties1->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect1;
-    ruleProperties2->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect2;
-    ruleProperties3->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect3;
-    ruleProperties4->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect4;
+    rule1->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect1;
+    rule2->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect2;
+    rule3->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect3;
+    rule4->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect4;
     // compare, allow for < 5 differences because of rounding errors
     CPPUNIT_ASSERT( abs( boundRect1.Width - boundRect3.Width ) < 5 );
     CPPUNIT_ASSERT( abs( boundRect2.Width - boundRect4.Width ) < 5 );
@@ -463,9 +459,8 @@ DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
 DECLARE_WW8EXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
-    imageProperties->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
+    image->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
     Graphic vclGraphic(graphic);
     Bitmap bitmap(vclGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL( tools::Long(58), bitmap.GetSizePixel().Width());

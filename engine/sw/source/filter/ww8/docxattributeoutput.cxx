@@ -3970,19 +3970,18 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
         return;
 
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape());
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-    if( !xPropSet.is() )
+    if( !xShape.is() )
         return;
 
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShape->getPropertySetInfo();
     cpo::uno::Sequence< beans::PropertyValue > aGrabBag;
     if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
     {
-        xPropSet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
+        xShape->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
     }
     else if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
-        xPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+        xShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
     }
 
     auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
@@ -5946,8 +5945,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     cpo::uno::Reference<css::beans::XPropertySet> xShapePropSet;
     if (pSdrObj)
     {
-        cpo::uno::Reference<css::drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape());
-        xShapePropSet.set(xShape, cpo::uno::UNO_QUERY);
+        xShapePropSet = const_cast<SdrObject*>(pSdrObj)->getUnoShape();
         assert(xShapePropSet);
     }
 
@@ -6144,12 +6142,8 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
     if (!xShape.is())
         return false;
 
-    uno::Reference<beans::XPropertySet> const xPropSet(xShape, uno::UNO_QUERY);
-    if (!xPropSet.is())
-        return false;
-
     OUString clsid; // why is the property of type string, not sequence<byte>?
-    xPropSet->getPropertyValue(u"CLSID"_ustr) >>= clsid;
+    xShape->getPropertyValue(u"CLSID"_ustr) >>= clsid;
     assert(!clsid.isEmpty());
     SvGlobalName aClassID;
     bool const isValid(aClassID.MakeId(clsid));
@@ -6176,9 +6170,7 @@ void DocxAttributeOutput::WritePostponedChart()
         uno::Reference< drawing::XShape > xShape(const_cast<SdrObject*>(rChart.object)->getUnoShape());
         if( xShape.is() )
         {
-            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-            if( xPropSet.is() )
-                xChartDoc.set( xPropSet->getPropertyValue( u"Model"_ustr ), uno::UNO_QUERY );
+            xChartDoc.set( xShape->getPropertyValue( u"Model"_ustr ), uno::UNO_QUERY );
         }
 
         if( xChartDoc.is() )
@@ -6198,9 +6190,8 @@ void DocxAttributeOutput::WritePostponedChart()
                 sName = xNamed->getName();
 
             // tdf#153203  export a11y related properties
-            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            OUString const title(xShapeProps->getPropertyValue(u"Title"_ustr).get<OUString>());
-            OUString const descr(xShapeProps->getPropertyValue(u"Description"_ustr).get<OUString>());
+            OUString const title(xShape->getPropertyValue(u"Title"_ustr).get<OUString>());
+            OUString const descr(xShape->getPropertyValue(u"Description"_ustr).get<OUString>());
 
             /* If there is a scenario where a chart is followed by a shape
                which is being exported as an alternate content then, the
@@ -10914,9 +10905,8 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                 if (pSdrObj)
                 {
                     uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape() );
-                    uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
                     m_rDrawingML.SetFS(m_pSerializer);
-                    m_rDrawingML.WriteBlipFill(xPropertySet, u"BackGraphic"_ustr);
+                    m_rDrawingML.WriteBlipFill(xShape, u"BackGraphic"_ustr);
                 }
             }
         }

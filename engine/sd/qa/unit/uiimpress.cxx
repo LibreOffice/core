@@ -4271,7 +4271,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
 
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0));
 
     uno::Reference<text::XText> xText
         = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
@@ -5228,7 +5228,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
 
     for (int i = 0; i < 3; i++)
     {
-        uno::Reference<beans::XPropertySet> XPropSet(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> XPropSet(xDrawPage->getShapeByIndex(i));
         drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
         XPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
 
@@ -5346,7 +5346,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
     createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0));
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
                                                          uno::UNO_QUERY);
@@ -5503,7 +5503,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
 
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0));
 
     uno::Reference<text::XText> xText
         = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
@@ -5562,7 +5562,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
 
     // Then make sure the that fill color of the last shape is the accent1 color:
     sal_Int32 nShapeIndex = xDrawPage->getCount() - 1;
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(nShapeIndex), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(nShapeIndex));
     sal_Int32 nFillColor{};
     xShape->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
 
@@ -5582,7 +5582,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf168835)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
 
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0));
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
 
     CPPUNIT_ASSERT_EQUAL(u"Title of the second slide"_ustr, xParagraph->getString());
@@ -5620,7 +5620,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testNumToBullet)
     CPPUNIT_ASSERT(!pView->IsTextEdit());
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0));
     uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(1, xShape),
                                                    uno::UNO_QUERY);
     // Check that list level is 1 & level 1 numbering type is a bullet:
@@ -5669,7 +5669,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testBulletOffOn)
     CPPUNIT_ASSERT(!pView->IsTextEdit());
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0));
     // 5th, last paragraph.
     uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(4, xShape),
                                                    uno::UNO_QUERY);
@@ -7145,7 +7145,7 @@ void setCropShares(SdrGrafObj& rObject, double fLeft, double fTop, double fRight
         sal_Int32(aLogicSize.Height() * fTop), sal_Int32(aLogicSize.Height() * fBottom),
         sal_Int32(aLogicSize.Width() * fLeft), sal_Int32(aLogicSize.Width() * fRight));
 
-    uno::Reference<beans::XPropertySet> xShape(rObject.getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(rObject.getUnoShape());
     CPPUNIT_ASSERT(xShape.is());
     xShape->setPropertyValue(u"GraphicCrop"_ustr, cpo::uno::Any(aCrop));
 }

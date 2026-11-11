@@ -93,11 +93,10 @@ CPPUNIT_TEST_FIXTURE(AutoRedactionTest, testImageRedaction)
             uno::Reference<drawing::XShape> xShape = xDrawPage->getShapeByIndex(j);
             CPPUNIT_ASSERT(xShape.is());
 
-            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            if (!xShapeProps.is())
+            if (!xShape.is())
                 continue;
 
-            if (xShapeProps->getPropertyValue(u"Name"_ustr) == u"ImageRedactionShape"_ustr)
+            if (xShape->getPropertyValue(u"Name"_ustr) == u"ImageRedactionShape"_ustr)
             {
                 //                nRedactRect++;
                 awt::Point aPos = xShape->getPosition();

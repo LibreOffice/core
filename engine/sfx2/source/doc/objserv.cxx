@@ -829,18 +829,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         if (!xCurrShape.is())
                             continue;
 
-                        uno::Reference< beans::XPropertySet > xPropSet(xCurrShape, uno::UNO_QUERY);
-                        if (!xPropSet.is())
-                            continue;
-
-                        uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+                        uno::Reference< beans::XPropertySetInfo> xInfo = xCurrShape->getPropertySetInfo();
                         if (!xInfo.is())
                             continue;
 
                         OUString sShapeName;
                         if (xInfo->hasPropertyByName(u"Name"_ustr))
                         {
-                            cpo::uno::Any aAnyShapeName = xPropSet->getPropertyValue(u"Name"_ustr);
+                            cpo::uno::Any aAnyShapeName = xCurrShape->getPropertyValue(u"Name"_ustr);
                             aAnyShapeName >>= sShapeName;
                         }
                         else
@@ -850,32 +846,32 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         if (sShapeName == "RectangleRedactionShape"
                                 && xInfo->hasPropertyByName(u"FillTransparence"_ustr) && xInfo->hasPropertyByName(u"FillColor"_ustr))
                         {
-                            xPropSet->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int16>(0)));
+                            xCurrShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int16>(0)));
                             if (sRedactionStyle == "White")
                             {
-                                xPropSet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_WHITE));
-                                xPropSet->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(css::drawing::LineStyle::LineStyle_SOLID));
-                                xPropSet->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(COL_BLACK));
+                                xCurrShape->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_WHITE));
+                                xCurrShape->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(css::drawing::LineStyle::LineStyle_SOLID));
+                                xCurrShape->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(COL_BLACK));
                             }
                             else
                             {
-                                xPropSet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_BLACK));
-                                xPropSet->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
+                                xCurrShape->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_BLACK));
+                                xCurrShape->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
                             }
                         }
                         // Freeform redaction
                         else if (sShapeName == "FreeformRedactionShape"
                                  && xInfo->hasPropertyByName(u"LineTransparence"_ustr) && xInfo->hasPropertyByName(u"LineColor"_ustr))
                         {
-                            xPropSet->setPropertyValue(u"LineTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int16>(0)));
+                            xCurrShape->setPropertyValue(u"LineTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int16>(0)));
 
                             if (sRedactionStyle == "White")
                             {
-                                xPropSet->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(COL_WHITE));
+                                xCurrShape->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(COL_WHITE));
                             }
                             else
                             {
-                                xPropSet->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(COL_BLACK));
+                                xCurrShape->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(COL_BLACK));
                             }
                         }
                     }
@@ -1130,11 +1126,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             if (!xCurrShape.is())
                                 continue;
 
-                            uno::Reference< beans::XPropertySet > xPropSet(xCurrShape, uno::UNO_QUERY);
-                            if (!xPropSet.is())
-                                continue;
-
-                            uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+                            uno::Reference< beans::XPropertySetInfo> xInfo = xCurrShape->getPropertySetInfo();
                             if (!xInfo.is())
                                 continue;
 
@@ -1145,7 +1137,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             OUString sShapeName;
                             if (xInfo->hasPropertyByName(u"Name"_ustr))
                             {
-                                cpo::uno::Any aAnyShapeName = xPropSet->getPropertyValue(u"Name"_ustr);
+                                cpo::uno::Any aAnyShapeName = xCurrShape->getPropertyValue(u"Name"_ustr);
                                 aAnyShapeName >>= sShapeName;
                             }
                             else
@@ -1155,16 +1147,16 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             if (sShapeName == "RectangleRedactionShape"
                                     && xInfo->hasPropertyByName(u"FillTransparence"_ustr) && xInfo->hasPropertyByName(u"FillColor"_ustr))
                             {
-                                xPropSet->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int16>(50)));
-                                xPropSet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_GRAY7));
-                                xPropSet->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
+                                xCurrShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int16>(50)));
+                                xCurrShape->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_GRAY7));
+                                xCurrShape->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
 
                             }
                             // Freeform redaction
                             else if (sShapeName == "FreeformRedactionShape")
                             {
-                                xPropSet->setPropertyValue(u"LineTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int16>(50)));
-                                xPropSet->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(COL_GRAY7));
+                                xCurrShape->setPropertyValue(u"LineTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int16>(50)));
+                                xCurrShape->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(COL_GRAY7));
                             }
                         }
                     }

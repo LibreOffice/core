@@ -22,11 +22,11 @@
 
 #include <atomic>
 
-#include "cppuhelper/implbase_ex.hxx"
-#include "rtl/instance.hxx"
-#include "cppuhelper/weak.hxx"
-#include "cppuhelper/weakagg.hxx"
-#include "com/sun/star/lang/XTypeProvider.hpp"
+#include <cppuhelper/implbase_ex.hxx>
+#include <rtl/instance.hxx>
+#include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakagg.hxx>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 
 namespace cppu
 {

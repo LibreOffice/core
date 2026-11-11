@@ -79,8 +79,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81031, "fdo81031.docx")
     // the fragmentPath was not changed hence relationships were not resolved.
 
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> xImage(image, uno::UNO_QUERY);
-    uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, u"Graphic"_ustr);
+    uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(image, u"Graphic"_ustr);
     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(381), xBitmap->getSize().Width );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(148), xBitmap->getSize().Height );

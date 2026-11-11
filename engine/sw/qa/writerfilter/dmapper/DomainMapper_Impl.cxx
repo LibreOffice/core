@@ -114,9 +114,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xFrame0(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame1(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame2(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame0(xDrawPage->getShapeByIndex(0));
+    uno::Reference<beans::XPropertySet> xFrame1(xDrawPage->getShapeByIndex(1));
+    uno::Reference<beans::XPropertySet> xFrame2(xDrawPage->getShapeByIndex(2));
     // Without the accompanying fix in place, all of the following values would be text::WritingMode2::CONTEXT
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::CONTEXT,
                          xFrame0->getPropertyValue(u"WritingMode"_ustr).get<sal_Int16>());

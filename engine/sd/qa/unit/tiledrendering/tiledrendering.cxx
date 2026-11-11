@@ -7894,7 +7894,7 @@ void cropAwayThreeQuarters(SdrGrafObj& rObject)
 
     const text::GraphicCrop aCrop(0, aPictureSize.Height() / 2, 0, aPictureSize.Width() / 2);
 
-    uno::Reference<beans::XPropertySet> xShape(rObject.getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(rObject.getUnoShape());
     CPPUNIT_ASSERT(xShape.is());
     xShape->setPropertyValue(u"GraphicCrop"_ustr, cpo::uno::Any(aCrop));
 }

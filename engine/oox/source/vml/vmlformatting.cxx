@@ -1047,8 +1047,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
         xTextRange->setString(moString.value());
 
-        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        cpo::uno::Sequence<beans::PropertyValue> aGeomPropSeq = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr).get< cpo::uno::Sequence<beans::PropertyValue> >();
+        cpo::uno::Sequence<beans::PropertyValue> aGeomPropSeq = xShape->getPropertyValue(u"CustomShapeGeometry"_ustr).get< cpo::uno::Sequence<beans::PropertyValue> >();
         bool bFound = false;
         for (beans::PropertyValue& rProp : asNonConstRange(aGeomPropSeq))
         {
@@ -1068,11 +1067,10 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
     }
     if (!aStyleProps.empty() || bRotateLetters)
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
         for (const std::pair<OUString, cpo::uno::Any>& rProp : aStyleProps)
-            xPropertySet->setPropertyValue(rProp.first, rProp.second);
+            xShape->setPropertyValue(rProp.first, rProp.second);
         if (bRotateLetters)
-            xPropertySet->setPropertyValue(u"TextWritingMode"_ustr,
+            xShape->setPropertyValue(u"TextWritingMode"_ustr,
                                            cpo::uno::Any(text::WritingMode_TB_RL));
     }
     if (moTrim.has_value() && moTrim.value())

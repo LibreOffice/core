@@ -500,8 +500,8 @@ void dropStaleThemeColorsOfShapes(const uno::Reference<drawing::XShapes>& xShape
         uno::Reference< drawing::XShape > xShape = xShapes->getShapeByIndex(i);
         if (uno::Reference<drawing::XShapes> xGroup{ xShape, uno::UNO_QUERY })
             dropStaleThemeColorsOfShapes(xGroup, rThemes);
-        else if (uno::Reference<beans::XPropertySet> xShapeSet{ xShape, uno::UNO_QUERY })
-            dropStaleThemeColors(xShapeSet, rThemes);
+        else if (xShape)
+            dropStaleThemeColors(xShape, rThemes);
     }
 }
 
@@ -566,16 +566,12 @@ void SdXMLImport::endDocument()
         if (!rRef.mxShape.is())
             continue;
 
-        uno::Reference<beans::XPropertySet> xPropSet(rRef.mxShape, uno::UNO_QUERY);
-        if (!xPropSet.is())
-            continue;
-
-        if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"PageNumber"_ustr))
+        if (rRef.mxShape->getPropertySetInfo()->hasPropertyByName(u"PageNumber"_ustr))
         {
             sal_Int32 nPageNum = 0;
-            if ((xPropSet->getPropertyValue(u"PageNumber"_ustr) >>= nPageNum) && nPageNum == 0)
+            if ((rRef.mxShape->getPropertyValue(u"PageNumber"_ustr) >>= nPageNum) && nPageNum == 0)
             {
-                xPropSet->setPropertyValue(u"PageNumber"_ustr, cpo::uno::Any(rRef.mnPageNumber));
+                rRef.mxShape->setPropertyValue(u"PageNumber"_ustr, cpo::uno::Any(rRef.mnPageNumber));
             }
         }
     }

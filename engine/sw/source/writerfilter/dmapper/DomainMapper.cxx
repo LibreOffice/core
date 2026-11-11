@@ -1709,9 +1709,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if (m_pImpl->GetSettingsTable()->GetDisplayBackgroundShape())
             {
                 // apply the XATTR_FILL attributes to the default page style
-                const uno::Reference<beans::XPropertySet> xFillPropertySet(xFill, uno::UNO_QUERY);
                 const uno::Reference<beans::XPropertySetInfo> xFillInfo
-                    = xFillPropertySet->getPropertySetInfo();
+                    = xFill->getPropertySetInfo();
                 rtl::Reference<SwXBaseStyle> xPS =
                     m_pImpl->GetPageStyles()->getSwStyleByName(u"Standard"_ustr);
                 for (const beans::Property& rProp : xPS->getPropertySetInfo()->getProperties())
@@ -1732,7 +1731,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 
                     try
                     {
-                        const cpo::uno::Any aFillValue = xFillPropertySet->getPropertyValue(rProp.Name);
+                        const cpo::uno::Any aFillValue = xFill->getPropertyValue(rProp.Name);
                         xPS->setPropertyValue(rProp.Name, aFillValue);
                     }
                     catch (cpo::uno::Exception&)

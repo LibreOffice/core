@@ -1949,17 +1949,16 @@ void XMLParaContext::endFastElement(sal_Int32 )
                         if ( xShape.is() )
                         {
                             // determine anchor type
-                            Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
                             TextContentAnchorType eAnchorType =
                                             TextContentAnchorType_AT_PARAGRAPH;
                             {
-                                Any aAny = xPropSet->getPropertyValue( u"AnchorType"_ustr );
+                                Any aAny = xShape->getPropertyValue( u"AnchorType"_ustr );
                                 aAny >>= eAnchorType;
                             }
                             if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
                             {
                                 // set anchor position for at-character anchored objects
-                                xPropSet->setPropertyValue(u"TextRange"_ustr, Any(xAttrCursor));
+                                xShape->setPropertyValue(u"TextRange"_ustr, Any(xAttrCursor));
                             }
                         }
                     }
@@ -1977,16 +1976,15 @@ void XMLParaContext::endFastElement(sal_Int32 )
                     if ( xShape.is() )
                     {
                         // determine anchor type
-                        Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
                         TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
                         {
-                            Any aAny = xPropSet->getPropertyValue( u"AnchorType"_ustr );
+                            Any aAny = xShape->getPropertyValue( u"AnchorType"_ustr );
                             aAny >>= eAnchorType;
                         }
                         if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
                         {
                             // set anchor position for at-character anchored objects
-                            xPropSet->setPropertyValue(u"TextRange"_ustr, Any(xAttrCursor));
+                            xShape->setPropertyValue(u"TextRange"_ustr, Any(xAttrCursor));
                         }
                     }
                 }

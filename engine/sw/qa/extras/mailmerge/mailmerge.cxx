@@ -31,7 +31,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored
 
     for (sal_Int32 i = 0; i < xDraws->getCount(); i++)
     {
-        xPropertySet.set(xDraws->getShapeByIndex(i), uno::UNO_QUERY);
+        xPropertySet.set(xDraws->getShapeByIndex(i));
 
         text::TextContentAnchorType nAnchorType;
         CPPUNIT_ASSERT(xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_TYPE ) >>= nAnchorType);
@@ -49,7 +49,7 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     executeMailMerge();
     // The document was created by LO version which didn't write out the default value for line color
     // (see XMLGraphicsDefaultStyle::SetDefaults()).
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(5), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(5));
     // Lines do not have a line color.
     CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( u"LineColor"_ustr ));
     uno::Reference< lang::XMultiServiceFactory > xFact( mxComponent, uno::UNO_QUERY );
@@ -371,7 +371,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118113, "tdf118113.odt", "tdf118113.ods", "t
     uno::Reference<beans::XPropertySet> xPropertySet;
     for (sal_Int32 i = 0; i < xDraws->getCount(); i++)
     {
-        xPropertySet.set(xDraws->getShapeByIndex(i), uno::UNO_QUERY);
+        xPropertySet.set(xDraws->getShapeByIndex(i));
 
         text::TextContentAnchorType nAnchorType;
         CPPUNIT_ASSERT(xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_TYPE ) >>= nAnchorType);

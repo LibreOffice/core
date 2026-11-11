@@ -1914,7 +1914,7 @@ Any SdPageLinkTargets::getByName( const OUString& aName )
         SdrObject* pObj = FindObject( aName );
         if( pObj )
         {
-            Reference< beans::XPropertySet > aRef( pObj->getUnoShape(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > aRef( pObj->getUnoShape() );
             return Any( aRef );
         }
     }

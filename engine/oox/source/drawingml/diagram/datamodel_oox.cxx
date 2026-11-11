@@ -256,7 +256,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
                 if (u"bgShp"_ustr == rPoint->getPresentation().msPresentationLayoutStyleLabel)
                 {
                     // check for fill
-                    xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
+                    xProps = xAssociatedShape;
                     bWriteFill = xProps->getPropertyValue(u"FillStyle"_ustr) != drawing::FillStyle_NONE;
 
                     // check for line, BGShapes can have that
@@ -280,7 +280,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
 
                     // check for fill. This is the associated TextNode (phldrT="[Text]")
                     // and the fill is added here, *not* at the XShape/Model node
-                    xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
+                    xProps = xAssociatedShape;
                     bWriteFill = xProps->getPropertyValue(u"FillStyle"_ustr) != drawing::FillStyle_NONE;
 
                     // check for line.
@@ -370,8 +370,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
         if (xBgShape.is())
         {
             // use created temporary ShapeExport with correct DocumentType
-            uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
-            aShapeExport->WriteFill( xProps, xBgShape->getSize());
+            aShapeExport->WriteFill( xBgShape, xBgShape->getSize());
         }
 
         rTarget->endElementNS(XML_dgm, XML_bg);
@@ -379,13 +378,12 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
         bool bBGLineStyleWritten(false);
         if (xBgShape.is())
         {
-            uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
-            bBGLineStyleWritten = xProps->getPropertyValue(u"LineStyle"_ustr) != drawing::LineStyle_NONE;
+            bBGLineStyleWritten = xBgShape->getPropertyValue(u"LineStyle"_ustr) != drawing::LineStyle_NONE;
 
             if (bBGLineStyleWritten)
             {
                 rTarget->startElementNS(XML_dgm, XML_whole);
-                aShapeExport->WriteOutline( xProps );
+                aShapeExport->WriteOutline( xBgShape );
                 rTarget->endElementNS(XML_dgm, XML_whole);
             }
         }

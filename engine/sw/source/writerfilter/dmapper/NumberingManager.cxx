@@ -908,10 +908,9 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             }
             if (xShape.is())
             {
-                uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
                 try
                 {
-                    cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"Graphic"_ustr);
+                    cpo::uno::Any aAny = xShape->getPropertyValue(u"Graphic"_ustr);
                     if (aAny.has<uno::Reference<graphic::XGraphic>>() && pCurrentLevel)
                     {
                         auto xGraphic = aAny.get<uno::Reference<graphic::XGraphic>>();

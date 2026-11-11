@@ -3179,11 +3179,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testHatchFill)
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
     xShape->setPosition(awt::Point(1000, 1000));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_HATCH));
-    xShapeProps->setPropertyValue(u"FillHatchName"_ustr, cpo::uno::Any(u"Black 0 Degrees"_ustr));
-    xShapeProps->setPropertyValue(u"FillBackground"_ustr, cpo::uno::Any(false));
-    xShapeProps->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(sal_Int32(30)));
+    xShape->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_HATCH));
+    xShape->setPropertyValue(u"FillHatchName"_ustr, cpo::uno::Any(u"Black 0 Degrees"_ustr));
+    xShape->setPropertyValue(u"FillBackground"_ustr, cpo::uno::Any(false));
+    xShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(sal_Int32(30)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     xDrawPage->add(xShape);

@@ -1130,11 +1130,8 @@ void GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xC
             if (nullptr == SdrObject::getSdrObjectFromXShape(mxShape))
             {
                 // This is not a Draw shape, let's see if it's a Writer one.
-                uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-                if (!xPropertySet.is())
-                    break;
                 uno::Reference<graphic::XGraphic> xGraphic(
-                    xPropertySet->getPropertyValue(u"Graphic"_ustr), uno::UNO_QUERY);
+                    mxShape->getPropertyValue(u"Graphic"_ustr), uno::UNO_QUERY);
                 if (!xGraphic.is())
                     break;
 

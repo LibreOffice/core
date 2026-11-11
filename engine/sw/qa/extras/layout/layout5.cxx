@@ -72,8 +72,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf146272)
 {
     createSwDoc("tdf146272.odt");
 
-    uno::Reference<beans::XPropertySet> xPicture1(getShapeByName(u"graphics1"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDrawing1(getShapeByName(u"Shape2"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPicture1(getShapeByName(u"graphics1"));
+    uno::Reference<beans::XPropertySet> xDrawing1(getShapeByName(u"Shape2"));
     uno::Reference<beans::XPropertySet> xFrame1(xDrawing1->getPropertyValue(u"TextBoxContent"_ustr),
                                                 uno::UNO_QUERY);
 
@@ -90,8 +90,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf146272)
     CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nDrawing1Zorder < nFrame1Zorder);
     CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nFrame1Zorder < nPicture1Zorder);
 
-    uno::Reference<beans::XPropertySet> xPicture2(getShapeByName(u"Image423"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDrawing2(getShapeByName(u"Shape3"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPicture2(getShapeByName(u"Image423"));
+    uno::Reference<beans::XPropertySet> xDrawing2(getShapeByName(u"Shape3"));
     uno::Reference<beans::XPropertySet> xFrame2(xDrawing2->getPropertyValue(u"TextBoxContent"_ustr),
                                                 uno::UNO_QUERY);
 
@@ -494,7 +494,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf137819)
     createSwDoc("tdf137819.fodt");
 
     // Change the anchor if the textbox to As_char
-    uno::Reference<beans::XPropertySet> xShapePropSet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapePropSet(getShape(1));
     xShapePropSet->setPropertyValue(
         u"AnchorType"_ustr,
         cpo::uno::Any(text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER));

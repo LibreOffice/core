@@ -140,11 +140,10 @@ public:
         return pPage;
     }
 
-    cpo::uno::Reference<css::beans::XPropertySet>
+    cpo::uno::Reference<css::drawing::XShape>
     getShape(int nShape, cpo::uno::Reference<css::drawing::XDrawPage> const& xPage)
     {
-        cpo::uno::Reference<css::beans::XPropertySet> xShape(xPage->getShapeByIndex(nShape),
-                                                             cpo::uno::UNO_QUERY);
+        cpo::uno::Reference<css::drawing::XShape> xShape(xPage->getShapeByIndex(nShape));
         CPPUNIT_ASSERT_MESSAGE("Failed to load shape", xShape.is());
         return xShape;
     }

@@ -233,13 +233,12 @@ void removeMasterPage(cpo::uno::Reference<css::frame::XModel> const& model,
 // flag is set.
 bool isWordArt(cpo::uno::Reference<css::drawing::XShape> const& shape)
 {
-    cpo::uno::Reference<css::beans::XPropertySet> const props(shape, cpo::uno::UNO_QUERY);
-    if (!props.is())
+    if (!shape.is())
     {
         return false;
     }
     cpo::uno::Sequence<css::beans::PropertyValue> geometry;
-    props->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= geometry;
+    shape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= geometry;
     for (auto const& entry : geometry)
     {
         if (entry.Name != "TextPath")

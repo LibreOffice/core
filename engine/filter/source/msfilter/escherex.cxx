@@ -1306,7 +1306,7 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const uno::Reference<
 
 void EscherPropertyContainer::CreateShapeProperties( const uno::Reference<drawing::XShape> & rXShape )
 {
-    uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > aXPropSet( rXShape );
     if ( !aXPropSet.is() )
         return;
 
@@ -1357,7 +1357,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<drawi
     if ( !aUniqueId.isEmpty() )
     {
         AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-        uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > aXPropSet( rXShape );
 
         if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect && aXPropSet.is() )
         {
@@ -1797,7 +1797,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
 tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Reference< drawing::XShape > & rXShape )
 {
     tools::PolyPolygon aRetPolyPoly;
-    uno::Reference< beans::XPropertySet > aXPropSet(rXShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > aXPropSet(rXShape);
 
     if ( aXPropSet )
     {
@@ -2197,99 +2197,96 @@ bool EscherPropertyContainer::CreateConnectorProperties(
     if ( rXShape.is() )
     {
         uno::Reference<drawing::XShape> aShapeA, aShapeB;
-        uno::Reference<beans::XPropertySet> aXPropSet( rXShape, uno::UNO_QUERY );
-        if ( aXPropSet )
+        uno::Reference<beans::XPropertySet> aXPropSet( rXShape );
+        cpo::uno::Any aAny;
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeKind"_ustr, true ) )
         {
-            cpo::uno::Any aAny;
-            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeKind"_ustr, true ) )
+            drawing::ConnectorType eCt;
+            aAny >>= eCt;
+            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeStartPoint"_ustr ) )
             {
-                drawing::ConnectorType eCt;
-                aAny >>= eCt;
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeStartPoint"_ustr ) )
+                awt::Point aStartPoint = *o3tl::doAccess<awt::Point>(aAny);
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeEndPoint"_ustr ) )
                 {
-                    awt::Point aStartPoint = *o3tl::doAccess<awt::Point>(aAny);
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeEndPoint"_ustr ) )
+                    awt::Point aEndPoint = *o3tl::doAccess<awt::Point>(aAny);
+
+                    rShapeFlags = ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Connector;
+                    rGeoRect = awt::Rectangle( aStartPoint.X, aStartPoint.Y,
+                                                        ( aEndPoint.X - aStartPoint.X ) + 1, ( aEndPoint.Y - aStartPoint.Y ) + 1 );
+                    // set standard's FLIP in below code
+                    if ( eCt != drawing::ConnectorType_STANDARD)
                     {
-                        awt::Point aEndPoint = *o3tl::doAccess<awt::Point>(aAny);
-
-                        rShapeFlags = ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Connector;
-                        rGeoRect = awt::Rectangle( aStartPoint.X, aStartPoint.Y,
-                                                            ( aEndPoint.X - aStartPoint.X ) + 1, ( aEndPoint.Y - aStartPoint.Y ) + 1 );
-                        // set standard's FLIP in below code
-                        if ( eCt != drawing::ConnectorType_STANDARD)
+                        if ( rGeoRect.Height < 0 )          // justify
                         {
-                            if ( rGeoRect.Height < 0 )          // justify
-                            {
-                                rShapeFlags |= ShapeFlag::FlipV;
-                                rGeoRect.Y = aEndPoint.Y;
-                                rGeoRect.Height = -rGeoRect.Height;
-                            }
-                            if ( rGeoRect.Width < 0 )
-                            {
-                                rShapeFlags |= ShapeFlag::FlipH;
-                                rGeoRect.X = aEndPoint.X;
-                                rGeoRect.Width = -rGeoRect.Width;
-                            }
+                            rShapeFlags |= ShapeFlag::FlipV;
+                            rGeoRect.Y = aEndPoint.Y;
+                            rGeoRect.Height = -rGeoRect.Height;
                         }
-                        sal_uInt32 nAdjustValue1, nAdjustValue2;
-                        nAdjustValue1 = nAdjustValue2 = 0x2a30;
-
-                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeStartConnection"_ustr ) )
-                            aAny >>= aShapeA;
-                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeEndConnection"_ustr ) )
-                            aAny >>= aShapeB;
-                        rSolverContainer.AddConnector( rXShape, aStartPoint, aShapeA, aEndPoint, aShapeB );
-                        switch ( eCt )
+                        if ( rGeoRect.Width < 0 )
                         {
-                            case drawing::ConnectorType_CURVE :
-                            {
-                                rShapeType = ESCHER_ShpInst_CurvedConnector3;
-                                AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
-                                AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
-                                AddOpt( ESCHER_Prop_adjust2Value, -static_cast<sal_Int32>(nAdjustValue2) );
-                            }
-                            break;
+                            rShapeFlags |= ShapeFlag::FlipH;
+                            rGeoRect.X = aEndPoint.X;
+                            rGeoRect.Width = -rGeoRect.Width;
+                        }
+                    }
+                    sal_uInt32 nAdjustValue1, nAdjustValue2;
+                    nAdjustValue1 = nAdjustValue2 = 0x2a30;
 
-                            case drawing::ConnectorType_STANDARD :// Connector 2->5
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeStartConnection"_ustr ) )
+                        aAny >>= aShapeA;
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeEndConnection"_ustr ) )
+                        aAny >>= aShapeB;
+                    rSolverContainer.AddConnector( rXShape, aStartPoint, aShapeA, aEndPoint, aShapeB );
+                    switch ( eCt )
+                    {
+                        case drawing::ConnectorType_CURVE :
+                        {
+                            rShapeType = ESCHER_ShpInst_CurvedConnector3;
+                            AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
+                            AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
+                            AddOpt( ESCHER_Prop_adjust2Value, -static_cast<sal_Int32>(nAdjustValue2) );
+                        }
+                        break;
+
+                        case drawing::ConnectorType_STANDARD :// Connector 2->5
+                            {
+                                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"PolyPolygonBezier"_ustr ) )
                                 {
-                                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"PolyPolygonBezier"_ustr ) )
+                                    tools::PolyPolygon aPolyPolygon = GetPolyPolygon( aAny );
+                                    tools::Polygon aPoly;
+                                    if ( aPolyPolygon.Count() > 0 )
                                     {
-                                        tools::PolyPolygon aPolyPolygon = GetPolyPolygon( aAny );
-                                        tools::Polygon aPoly;
-                                        if ( aPolyPolygon.Count() > 0 )
-                                        {
-                                            AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
-                                            aPoly = aPolyPolygon[ 0 ];
-                                            sal_Int32 nAdjCount = lcl_GetAdjustValueCount( aPoly );
-                                            rShapeType = static_cast<sal_uInt16>( ESCHER_ShpInst_BentConnector2 + nAdjCount);
-                                            for ( sal_Int32 i = 0 ; i < nAdjCount; ++ i)
-                                                AddOpt( static_cast<sal_uInt16>( ESCHER_Prop_adjustValue+i) , lcl_GetConnectorAdjustValue( aPoly, i ) );
-                                        }
-                                        sal_Int32 nAngle=0;
-                                        if (lcl_GetAngle(aPoly,rShapeFlags,nAngle ))
-                                        {
-                                            AddOpt( ESCHER_Prop_Rotation, nAngle );
-                                        }
-                                    }
-                                    else
-                                    {
-                                        rShapeType = ESCHER_ShpInst_BentConnector3;
                                         AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
+                                        aPoly = aPolyPolygon[ 0 ];
+                                        sal_Int32 nAdjCount = lcl_GetAdjustValueCount( aPoly );
+                                        rShapeType = static_cast<sal_uInt16>( ESCHER_ShpInst_BentConnector2 + nAdjCount);
+                                        for ( sal_Int32 i = 0 ; i < nAdjCount; ++ i)
+                                            AddOpt( static_cast<sal_uInt16>( ESCHER_Prop_adjustValue+i) , lcl_GetConnectorAdjustValue( aPoly, i ) );
+                                    }
+                                    sal_Int32 nAngle=0;
+                                    if (lcl_GetAngle(aPoly,rShapeFlags,nAngle ))
+                                    {
+                                        AddOpt( ESCHER_Prop_Rotation, nAngle );
                                     }
                                 }
-                                break;
-                            default:
-                            case drawing::ConnectorType_LINE :
-                            case drawing::ConnectorType_LINES :   // Connector 2->5
-                            {
-                                rShapeType = ESCHER_ShpInst_StraightConnector1;
-                                AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
+                                else
+                                {
+                                    rShapeType = ESCHER_ShpInst_BentConnector3;
+                                    AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
+                                }
                             }
                             break;
+                        default:
+                        case drawing::ConnectorType_LINE :
+                        case drawing::ConnectorType_LINES :   // Connector 2->5
+                        {
+                            rShapeType = ESCHER_ShpInst_StraightConnector1;
+                            AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
                         }
-                        CreateLineProperties( aXPropSet, false );
-                        bRetValue = true;
+                        break;
                     }
+                    CreateLineProperties( aXPropSet, false );
+                    bRetValue = true;
                 }
             }
         }
@@ -2579,7 +2576,7 @@ bool EscherPropertyContainer::GetAdjustmentValue( const drawing::EnhancedCustomS
 
 void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeType, const uno::Reference< drawing::XShape > & rXShape, bool bOOXML )
 {
-    uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > aXPropSet( rXShape );
     if ( !aXPropSet.is() )
         return;
 
@@ -3703,12 +3700,11 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
 {
     MSO_SPT eShapeType = mso_sptNil;
     nMirrorFlags = ShapeFlag::NONE;
-    uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
-    if ( aXPropSet.is() )
+    if ( rXShape.is() )
     {
         try
         {
-            cpo::uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
+            cpo::uno::Any aGeoPropSet = rXShape->getPropertyValue( u"CustomShapeGeometry"_ustr );
             cpo::uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
@@ -4430,8 +4426,7 @@ sal_Int32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
     aBuf.remove(nPos, 5);
     OString aType = aBuf.makeStringAndClear();
 
-    uno::Reference<beans::XPropertySet>
-        aPropertySet( aXShape, uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> aPropertySet( aXShape );
 
     if ((aType == "drawing.PolyPolygon") || (aType == "drawing.PolyLine"))
     {
@@ -4462,8 +4457,7 @@ sal_Int32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
     else if ((aType == "drawing.OpenBezier") || (aType == "drawing.OpenFreeHand") || (aType == "drawing.PolyLinePath")
         || (aType == "drawing.ClosedBezier") || ( aType == "drawing.ClosedFreeHand") || (aType == "drawing.PolyPolygonPath") )
     {
-        uno::Reference<beans::XPropertySet>
-            aPropertySet2( aXShape, uno::UNO_QUERY );
+        uno::Reference<beans::XPropertySet> aPropertySet2( aXShape );
         if ( aPropertySet2.is() )
         {
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aPropertySet2, u"PolyPolygonBezier"_ustr ) )

@@ -414,7 +414,7 @@ private:
                 continue;
             const OString aPath = rPath + OString::Concat("/") + indexed("shape", i);
             add(aPath, "ShapeType", xShape->getShapeType());
-            dumpProperties(uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY), aPath);
+            dumpProperties(uno::Reference<beans::XPropertySet>(xShape), aPath);
         }
     }
 

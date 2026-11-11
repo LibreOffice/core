@@ -2224,16 +2224,12 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
 
                 // TODO: absSizeAnchor: we import both (absSizeAnchor and relSizeAnchor), but there is no essential difference between them.
                 pDrawing->startElement(FSNS(XML_cdr, XML_relSizeAnchor));
-                uno::Reference< beans::XPropertySet > xShapeProperties(xShape, uno::UNO_QUERY);
-                if( xShapeProperties.is() )
-                {
-                    Reference<embed::XVisualObject> xVisObject(mxChartModel, uno::UNO_QUERY);
-                    awt::Size aPageSize = xVisObject->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
-                    WriteFromTo( xShape, aPageSize, pDrawing );
+                Reference<embed::XVisualObject> xVisObject(mxChartModel, uno::UNO_QUERY);
+                awt::Size aPageSize = xVisObject->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
+                WriteFromTo( xShape, aPageSize, pDrawing );
 
-                    ShapeExport aExport(XML_cdr, pDrawing, nullptr, GetFB(), GetDocumentType(), nullptr, true);
-                    aExport.WriteShape(xShape);
-                }
+                ShapeExport aExport(XML_cdr, pDrawing, nullptr, GetFB(), GetDocumentType(), nullptr, true);
+                aExport.WriteShape(xShape);
                 pDrawing->endElement(FSNS(XML_cdr, XML_relSizeAnchor));
             }
             pDrawing->endElement(FSNS(XML_c, XML_userShapes));
@@ -2269,7 +2265,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     } // if( xDocPropSet.is())
 
     Sequence< uno::Reference< chart2::XFormattedString > > xFormattedSubTitle;
-    Reference< beans::XPropertySet > xPropSubTitle( xChartDoc->getSubTitle(), UNO_QUERY );
+    Reference< drawing::XShape > xPropSubTitle( xChartDoc->getSubTitle() );
     if( xPropSubTitle.is())
     {
         OUString aSubTitle;
@@ -2389,7 +2385,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
 {
     FSHelperPtr pFS = GetFS();
 
-    Reference< beans::XPropertySet > xProp( xChartDoc->getLegend(), uno::UNO_QUERY );
+    Reference< drawing::XShape > xProp( xChartDoc->getLegend() );
     if( xProp.is() )
     {
         if (!bIsChartex) {
@@ -2596,12 +2592,11 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
     const cpo::uno::Sequence< uno::Reference< css::chart2::XFormattedString > >& xFormattedSubTitle )
 {
     Sequence< uno::Reference< chart2::XFormattedString > > xFormattedTitle;
-    Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-    if( xPropSet.is())
+    if( xShape.is())
     {
         OUString aTitle;
-        if ((xPropSet->getPropertyValue(u"String"_ustr) >>= aTitle) && !aTitle.isEmpty())
-            xPropSet->getPropertyValue(u"FormattedStrings"_ustr) >>= xFormattedTitle;
+        if ((xShape->getPropertyValue(u"String"_ustr) >>= aTitle) && !aTitle.isEmpty())
+            xShape->getPropertyValue(u"FormattedStrings"_ustr) >>= xFormattedTitle;
     }
 
     // tdf#101322: add subtitle to title
@@ -2644,9 +2639,9 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
     if (bIsChartex) {
         // shape properties - only when the source had an explicit cx:spPr,
         // since the chartex schema makes spPr optional.
-        if (hasExplicitSpPr(xPropSet))
+        if (hasExplicitSpPr(xShape))
         {
-            exportShapeProps(xPropSet, XML_cx);
+            exportShapeProps(xShape, XML_cx);
         }
 
         pFS->startElement(FSNS(XML_cx, XML_txPr));
@@ -2655,12 +2650,12 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
     // TODO: bodyPr
     const char* sWritingMode = nullptr;
     bool bVertical = false;
-    xPropSet->getPropertyValue(u"StackedText"_ustr) >>= bVertical;
+    xShape->getPropertyValue(u"StackedText"_ustr) >>= bVertical;
     if( bVertical )
         sWritingMode = "wordArtVert";
 
     sal_Int32 nRotation = 0;
-    xPropSet->getPropertyValue(u"TextRotation"_ustr) >>= nRotation;
+    xShape->getPropertyValue(u"TextRotation"_ustr) >>= nRotation;
 
     pFS->singleElement( FSNS( XML_a, XML_bodyPr ),
             XML_vert, sWritingMode,
@@ -2675,7 +2670,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
         WriteRunInput aInput;
         aInput.bCheckDirect = true;
         aInput.bUseTextSchemeColors = true;
-        WriteRunProperties(xPropSet, XML_defRPr, aInput);
+        WriteRunProperties(xShape, XML_defRPr, aInput);
     }
 
     pFS->endElement( FSNS( XML_a, XML_pPr ) );
@@ -2713,7 +2708,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
             WriteRunInput aInput;
             aInput.bCheckDirect = true;
             aInput.bUseTextSchemeColors = true;
-            WriteRunProperties(xPropSet, XML_defRPr, aInput);
+            WriteRunProperties(xShape, XML_defRPr, aInput);
 
             pFS->endElement(FSNS(XML_a, XML_pPr));
         }
@@ -2728,7 +2723,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
         pFS->endElement( FSNS( XML_c, XML_tx ) );
     }
 
-    cpo::uno::Any aManualLayout = xPropSet->getPropertyValue(u"RelativePosition"_ustr);
+    cpo::uno::Any aManualLayout = xShape->getPropertyValue(u"RelativePosition"_ustr);
     if (aManualLayout.hasValue())
     {
         if (bIsChartex) {
@@ -2777,9 +2772,9 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
 
     if (!bIsChartex) {
         // shape properties
-        if( xPropSet.is() )
+        if( xShape.is() )
         {
-            exportShapeProps( xPropSet, XML_c );
+            exportShapeProps( xShape, XML_c );
         }
     }
 

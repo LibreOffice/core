@@ -5984,8 +5984,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
 {
     // the click action of the shape itself, a group has one too
     {
-        uno::Reference< beans::XPropertySet > xShapePropSet( xShape, uno::UNO_QUERY );
-        if( xShapePropSet.is() )
+        if( xShape.is() )
         {
             Size        aPageSize( rDoc.GetSdPage( 0, PageKind::Standard )->GetSize() );
             Point aPoint( 0, 0 );
@@ -5996,9 +5995,9 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             ::tools::Rectangle   aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
 
             OUString title;
-            xShapePropSet->getPropertyValue(u"Title"_ustr) >>= title;
+            xShape->getPropertyValue(u"Title"_ustr) >>= title;
             OUString description;
-            xShapePropSet->getPropertyValue(u"Description"_ustr) >>= description;
+            xShape->getPropertyValue(u"Description"_ustr) >>= description;
             OUString const altText(title.isEmpty()
                 ? description
                 : description.isEmpty()
@@ -6009,16 +6008,16 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape" || xShape->getShapeType() == "com.sun.star.presentation.MediaShape")
             {
                 OUString aMediaURL;
-                xShapePropSet->getPropertyValue(u"MediaURL"_ustr) >>= aMediaURL;
+                xShape->getPropertyValue(u"MediaURL"_ustr) >>= aMediaURL;
                 if (!aMediaURL.isEmpty())
                 {
                     SdrObject const*const pSdrObj(SdrObject::getSdrObjectFromXShape(xShape));
-                    OUString const mimeType(xShapePropSet->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
+                    OUString const mimeType(xShape->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
                     sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect, altText, mimeType, rPDFExtOutDevData.GetCurrentPageNumber(), pSdrObj);
                     if (aMediaURL.startsWith("vnd.sun.star.Package:"))
                     {
                         OUString aTempFileURL;
-                        xShapePropSet->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
+                        xShape->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
                         rPDFExtOutDevData.SetScreenStream(nScreenId, aTempFileURL);
                     }
                     else
@@ -6027,7 +6026,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             }
 
             presentation::ClickAction eCa;
-            cpo::uno::Any aAny( xShapePropSet->getPropertyValue( u"OnClick"_ustr ) );
+            cpo::uno::Any aAny( xShape->getPropertyValue( u"OnClick"_ustr ) );
             if ( aAny >>= eCa )
             {
                 // the link describes itself with the shape's alternative text, else with the action
@@ -6080,7 +6079,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                     case presentation::ClickAction_DOCUMENT :
                     {
                         OUString aBookmark;
-                        xShapePropSet->getPropertyValue( u"Bookmark"_ustr ) >>= aBookmark;
+                        xShape->getPropertyValue( u"Bookmark"_ustr ) >>= aBookmark;
                         if( !aBookmark.isEmpty() )
                         {
                             switch( eCa )
@@ -7733,22 +7732,21 @@ void SdXImpressDocument::getShapeClickAction(const uno::Reference<drawing::XShap
                                              ::tools::JsonWriter& rJsonWriter) const
 {
     bool bIsShapeVisible = true;
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    if (!xShapeProps)
+    if (!xShape)
         return;
 
-    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName( u"Visible"_ustr ))
+    if (!xShape->getPropertySetInfo()->hasPropertyByName( u"Visible"_ustr ))
         return;
-    xShapeProps->getPropertyValue(u"Visible"_ustr) >>= bIsShapeVisible;
+    xShape->getPropertyValue(u"Visible"_ustr) >>= bIsShapeVisible;
 
     if (!bIsShapeVisible)
         return;
 
-    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName( u"OnClick"_ustr ))
+    if (!xShape->getPropertySetInfo()->hasPropertyByName( u"OnClick"_ustr ))
         return;
 
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
-    xShapeProps->getPropertyValue(u"OnClick"_ustr) >>= eClickAction;
+    xShape->getPropertyValue(u"OnClick"_ustr) >>= eClickAction;
 
     if (eClickAction != presentation::ClickAction_NONE)
     {
@@ -7761,8 +7759,8 @@ void SdXImpressDocument::getShapeClickAction(const uno::Reference<drawing::XShap
         sal_Int32 nVerb = 0;
         OUString sBookmark;
 
-        if (xShapeProps->getPropertySetInfo()->hasPropertyByName( u"Bookmark"_ustr ))
-            xShapeProps->getPropertyValue(u"Bookmark"_ustr) >>= sBookmark;
+        if (xShape->getPropertySetInfo()->hasPropertyByName( u"Bookmark"_ustr ))
+            xShape->getPropertyValue(u"Bookmark"_ustr) >>= sBookmark;
 
         {
             auto const& rRectangle = pObject->GetLogicRect();
@@ -7831,7 +7829,7 @@ void SdXImpressDocument::getShapeClickAction(const uno::Reference<drawing::XShap
 
             case presentation::ClickAction_VERB:
                 rJsonWriter.put("action", "verb");
-                xShapeProps->getPropertyValue(u"Verb"_ustr) >>= nVerb;
+                xShape->getPropertyValue(u"Verb"_ustr) >>= nVerb;
                 rJsonWriter.put("verb", nVerb);
                 break;
 

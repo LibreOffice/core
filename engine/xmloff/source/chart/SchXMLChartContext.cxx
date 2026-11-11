@@ -793,13 +793,13 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
     {
         if( !maMainTitle.empty())
         {
-            uno::Reference< beans::XPropertySet > xTitleProp(xDoc->getTitle(), uno::UNO_QUERY);
+            uno::Reference< drawing::XShape > xTitleProp(xDoc->getTitle());
             SchXMLTools::importFormattedText(GetImport(), maMainTitle, xTitleProp);
         }
 
         if( !maSubTitle.empty())
         {
-            uno::Reference< beans::XPropertySet > xTitleProp(xDoc->getSubTitle(), uno::UNO_QUERY);
+            uno::Reference< drawing::XShape > xTitleProp(xDoc->getSubTitle());
             SchXMLTools::importFormattedText(GetImport(), maSubTitle, xTitleProp);
         }
     }
@@ -1281,8 +1281,7 @@ void SchXMLTitleContext::startFastElement( sal_Int32 /*nElement*/,
         if( bHasXPosition && bHasYPosition )
             mxTitleShape->setPosition( aPosition );
 
-        uno::Reference<beans::XPropertySet> xProp(mxTitleShape, uno::UNO_QUERY);
-        mrImportHelper.FillAutoStyle(msAutoStyleName, xProp);
+        mrImportHelper.FillAutoStyle(msAutoStyleName, mxTitleShape);
     }
 }
 

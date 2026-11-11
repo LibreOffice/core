@@ -266,15 +266,14 @@ void XMLAnimationsExporter::prepare( const Reference< XShape >& xShape )
                 return;
         }
 
-        Reference< XPropertySet > xProps( xShape, UNO_QUERY );
-        if( xProps.is() )
+        if( xShape.is() )
         {
             AnimationEffect eEffect;
-            xProps->getPropertyValue( AnimExpImpl::gsEffect ) >>= eEffect;
+            xShape->getPropertyValue( AnimExpImpl::gsEffect ) >>= eEffect;
             if( eEffect == AnimationEffect_PATH )
             {
                 Reference< XShape > xPath;
-                xProps->getPropertyValue( AnimExpImpl::gsAnimPath ) >>= xPath;
+                xShape->getPropertyValue( AnimExpImpl::gsAnimPath ) >>= xPath;
             }
         }
     }
@@ -296,23 +295,22 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
                 return;
         }
 
-        Reference< XPropertySet > xProps( xShape, UNO_QUERY );
-        if( xProps.is() )
+        if( xShape.is() )
         {
             XMLEffectHint aEffect;
 
-            if( any2bool( xProps->getPropertyValue( AnimExpImpl::gsSoundOn ) ) )
+            if( any2bool( xShape->getPropertyValue( AnimExpImpl::gsSoundOn ) ) )
             {
-                xProps->getPropertyValue( AnimExpImpl::gsSound ) >>= aEffect.maSoundURL;
-                xProps->getPropertyValue( AnimExpImpl::gsPlayFull ) >>= aEffect.mbPlayFull;
+                xShape->getPropertyValue( AnimExpImpl::gsSound ) >>= aEffect.maSoundURL;
+                xShape->getPropertyValue( AnimExpImpl::gsPlayFull ) >>= aEffect.mbPlayFull;
             }
 
-            xProps->getPropertyValue( AnimExpImpl::gsPresOrder ) >>= aEffect.mnPresId;
-            xProps->getPropertyValue( AnimExpImpl::gsSpeed ) >>= aEffect.meSpeed;
+            xShape->getPropertyValue( AnimExpImpl::gsPresOrder ) >>= aEffect.mnPresId;
+            xShape->getPropertyValue( AnimExpImpl::gsSpeed ) >>= aEffect.meSpeed;
 
 
             bool bIsAnimation = false;
-            xProps->getPropertyValue( AnimExpImpl::gsIsAnimation ) >>= bIsAnimation;
+            xShape->getPropertyValue( AnimExpImpl::gsIsAnimation ) >>= bIsAnimation;
             if( bIsAnimation )
             {
                 aEffect.meKind = XMLE_PLAY;
@@ -328,7 +326,7 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
 
             {
                 AnimationEffect eEffect;
-                xProps->getPropertyValue( AnimExpImpl::gsEffect ) >>= eEffect;
+                xShape->getPropertyValue( AnimExpImpl::gsEffect ) >>= eEffect;
                 if( eEffect != AnimationEffect_NONE )
                 {
                     bool bIn = true;
@@ -345,7 +343,7 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
                     if( eEffect == AnimationEffect_PATH )
                     {
                         Reference< XShape > xPath;
-                        xProps->getPropertyValue( AnimExpImpl::gsAnimPath ) >>= xPath;
+                        xShape->getPropertyValue( AnimExpImpl::gsAnimPath ) >>= xPath;
                         if( xPath.is() )
                         {
 // strip                    mpImpl->mxShapeExp->createShapeId( xPath );
@@ -357,7 +355,7 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
                     aEffect.maSoundURL.clear();
                 }
 
-                xProps->getPropertyValue( AnimExpImpl::gsTextEffect ) >>= eEffect;
+                xShape->getPropertyValue( AnimExpImpl::gsTextEffect ) >>= eEffect;
                 if( eEffect != AnimationEffect_NONE )
                 {
                     bool bIn = true;
@@ -378,8 +376,8 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
 
                 bool bDimPrev = false;
                 bool bDimHide = false;
-                xProps->getPropertyValue( AnimExpImpl::gsDimPrev ) >>= bDimPrev;
-                xProps->getPropertyValue( AnimExpImpl::gsDimHide ) >>= bDimHide;
+                xShape->getPropertyValue( AnimExpImpl::gsDimPrev ) >>= bDimPrev;
+                xShape->getPropertyValue( AnimExpImpl::gsDimHide ) >>= bDimHide;
                 if( bDimPrev || bDimHide )
                 {
                     aEffect.meKind = bDimPrev ? XMLE_DIM : XMLE_HIDE;
@@ -388,7 +386,7 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
                     aEffect.meSpeed = AnimationSpeed_MEDIUM;
                     if( bDimPrev )
                     {
-                        xProps->getPropertyValue( AnimExpImpl::gsDimColor )
+                        xShape->getPropertyValue( AnimExpImpl::gsDimColor )
                             >>= aEffect.maDimColor;
                     }
 

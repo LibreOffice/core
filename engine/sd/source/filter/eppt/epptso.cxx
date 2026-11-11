@@ -873,17 +873,12 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                         cpo::uno::Reference< css::drawing::XShape > aGroupedShape( GetCurrentGroupAccess()->getByIndex( GetCurrentGroupIndex() - 1 ), uno::UNO_QUERY );
                         if( aGroupedShape.is() )
                         {
-                            cpo::uno::Reference< css::beans::XPropertySet > aPropSetOfNextShape
-                                ( aGroupedShape, cpo::uno::UNO_QUERY );
-                            if ( aPropSetOfNextShape.is() )
+                            if ( PropValue::GetPropertyValue( aAny, aGroupedShape,
+                                                u"FillColor"_ustr, true ) )
                             {
-                                if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
-                                                    u"FillColor"_ustr, true ) )
+                                if ( nCharColor == EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(aAny) ) )
                                 {
-                                    if ( nCharColor == EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(aAny) ) )
-                                    {
-                                        nCharAttr |= 0x200;
-                                    }
+                                    nCharAttr |= 0x200;
                                 }
                             }
                         }

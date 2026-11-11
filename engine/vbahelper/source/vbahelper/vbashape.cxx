@@ -175,8 +175,7 @@ sal_Int32 ScVbaShape::getAutoShapeType(const cpo::uno::Reference< drawing::XShap
         return office::MsoAutoShapeType::msoShapeRectangle;
     else if ( sShapeType == "com.sun.star.drawing.CustomShape" )
     {
-        uno::Reference< beans::XPropertySet > aXPropSet( xShape, uno::UNO_QUERY );
-        cpo::uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
+        cpo::uno::Any aGeoPropSet = xShape->getPropertyValue( u"CustomShapeGeometry"_ustr );
         cpo::uno::Sequence< beans::PropertyValue > aGeoPropSeq;
         if ( aGeoPropSet >>= aGeoPropSeq )
         {

@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testGlowTextInShape)
     saveAndReload(TestFilter::ODP);
 
     uno::Reference<drawing::XDrawPage> xDP(getPage(0));
-    uno::Reference<beans::XPropertySet> xShape(xDP->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDP->getShapeByIndex(0));
 
     // Check glow text properties in shapes
     sal_Int32 nGlowEffectRad = 0;

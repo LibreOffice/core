@@ -542,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTbrlFrame)
     auto verify = [this]() {
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
         CPPUNIT_ASSERT_EQUAL(1, getPages());
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShape(1));
         auto nActual = getProperty<sal_Int16>(xShape, u"WritingMode"_ustr);
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: 2
@@ -561,7 +561,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
     auto verify = [this]() {
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
         CPPUNIT_ASSERT_EQUAL(1, getPages());
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShape(1));
         auto nActual = getProperty<sal_Int16>(xShape, u"WritingMode"_ustr);
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: 5

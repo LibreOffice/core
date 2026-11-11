@@ -728,8 +728,7 @@ void SdrUndoDiagramDomValues::apply(const DomValues& rDomValues, const GrabBag& 
 
     mxObj->getDiagramHelper()->setOOXDomValues(rDomValues);
 
-    cpo::uno::Reference<css::beans::XPropertySet> xGroupProperties(mxObj->getUnoShape(),
-                                                               cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::drawing::XShape> xGroupProperties(mxObj->getUnoShape());
     if (xGroupProperties.is()
         && xGroupProperties->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
         xGroupProperties->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(rGrabBag));

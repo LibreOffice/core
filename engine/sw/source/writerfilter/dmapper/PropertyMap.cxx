@@ -1415,13 +1415,9 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
             if (!xShape.is())
                 continue;
 
-            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-            if (!xPropertySet.is())
-                continue;
-
             // Ignore objects with no wrapping.
             text::WrapTextMode eWrap = text::WrapTextMode_THROUGH;
-            xPropertySet->getPropertyValue(u"Surround"_ustr) >>= eWrap;
+            xShape->getPropertyValue(u"Surround"_ustr) >>= eWrap;
             if (eWrap == text::WrapTextMode_THROUGH)
                 continue;
 
@@ -1429,7 +1425,7 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
             // one to 0.
             sal_Int32 nLeftMargin = rAnchored.m_nLeftMargin;
             sal_Int32 nRightMargin = 0;
-            xPropertySet->getPropertyValue(u"RightMargin"_ustr) >>= nRightMargin;
+            xShape->getPropertyValue(u"RightMargin"_ustr) >>= nRightMargin;
             nShapesWidth += xShape->getSize().Width + nLeftMargin + nRightMargin;
         }
 

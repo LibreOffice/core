@@ -360,7 +360,7 @@ DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTbrlTextbox, "tbrl-textbox.docx")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     // Without the accompanying fix in place, this test would have failed with 'Expected: -90;
     // Actual: 0', i.e. tbRl writing direction was imported as lrTb.
     // Note: Implementation was changed to use WritingMode property instead of TextPreRotateAngle.
@@ -950,7 +950,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121784, "tdf121784.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTbrlFrameVml)
 {
     createSwDoc("tbrl-frame-vml.docx");
-    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1));
     CPPUNIT_ASSERT(xTextFrame.is());
 
     // VML import: creates a TextFrame.
@@ -961,7 +961,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTbrlFrameVml)
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
 
     saveAndReload(TestFilter::DOCX);
-    xTextFrame.set(getShape(1), uno::UNO_QUERY);
+    xTextFrame.set(getShape(1));
     CPPUNIT_ASSERT(xTextFrame.is());
 
     // DML import: creates a TextBox, eaVert read back as TB_RL in TextWritingMode
@@ -1080,7 +1080,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     // Without the accompanying fix in place, this test would have failed with 'Expected:
     // -270; Actual: 0', i.e. the writing direction of the frame was lost.
     // Note: Implementation was changed to use WritingMode property instead of TextPreRotateAngle.
@@ -1216,7 +1216,7 @@ DECLARE_OOXMLEXPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx
 DECLARE_OOXMLEXPORT_TEST(tdf127085, "tdf127085.docx")
 {
     // Fill transparency was lost during export
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), getProperty<sal_Int16>(xShape, u"FillTransparence"_ustr));
 }
 
@@ -1429,19 +1429,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128304)
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     css::text::WritingMode eMode;
-    uno::Reference<beans::XPropertySet> xProps1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProps1(getShape(1));
     CPPUNIT_ASSERT(xProps1->getPropertyValue(u"TextWritingMode"_ustr) >>= eMode);
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 
-    uno::Reference<beans::XPropertySet> xProps2(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProps2(getShape(2));
     CPPUNIT_ASSERT(xProps2->getPropertyValue(u"TextWritingMode"_ustr) >>= eMode);
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 
-    uno::Reference<beans::XPropertySet> xProps3(getShape(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProps3(getShape(3));
     CPPUNIT_ASSERT(xProps3->getPropertyValue(u"TextWritingMode"_ustr) >>= eMode);
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 
-    uno::Reference<beans::XPropertySet> xProps4(getShape(4), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProps4(getShape(4));
     CPPUNIT_ASSERT(xProps4->getPropertyValue(u"TextWritingMode"_ustr) >>= eMode);
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 }

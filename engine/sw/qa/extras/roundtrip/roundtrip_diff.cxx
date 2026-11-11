@@ -625,7 +625,7 @@ private:
             // finding rather than one for every property it carries.
             add(aPath, "Present", u"yes"_ustr);
             add(aPath, "ShapeType", xShape->getShapeType());
-            dumpProperties(uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY), aPath);
+            dumpProperties(xShape, aPath);
             dropAnswersToQuestionsNotAsked(xShape, aPath);
         }
     }
@@ -655,14 +655,13 @@ private:
     void dropAnswersToQuestionsNotAsked(const uno::Reference<drawing::XShape>& xShape,
                                         std::string_view rPath)
     {
-        uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
-        if (!xProperties.is())
+        if (!xShape.is())
             return;
 
         text::WrapTextMode eSurround = text::WrapTextMode_PARALLEL;
         try
         {
-            if ((xProperties->getPropertyValue(u"Surround"_ustr) >>= eSurround)
+            if ((xShape->getPropertyValue(u"Surround"_ustr) >>= eSurround)
                 && eSurround == text::WrapTextMode_THROUGH)
             {
                 for (const char* pName :
@@ -675,10 +674,10 @@ private:
         }
 
         sal_Int16 nRelative = 0;
-        if (readNumber(xProperties, u"RelativeWidth"_ustr, nRelative) && nRelative == 0)
+        if (readNumber(xShape, u"RelativeWidth"_ustr, nRelative) && nRelative == 0)
             maValues.erase(OString::Concat(rPath) + "@RelativeWidthRelation");
         nRelative = 0;
-        if (readNumber(xProperties, u"RelativeHeight"_ustr, nRelative) && nRelative == 0)
+        if (readNumber(xShape, u"RelativeHeight"_ustr, nRelative) && nRelative == 0)
             maValues.erase(OString::Concat(rPath) + "@RelativeHeightRelation");
     }
 

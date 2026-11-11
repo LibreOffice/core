@@ -181,7 +181,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     // Also initialize the properties, which are not constant, but inherited from the shape's ones.
     syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, cpo::uno::Any(xShape->getSize()), pObject);
 
-    uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapePropertySet(xShape);
     syncProperty(pShape, RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW,
                  xShapePropertySet->getPropertyValue(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), pObject);
     syncProperty(pShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
@@ -279,7 +279,7 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     uno::Reference<drawing::XShape> xShape(pObj->getUnoShape());
     syncProperty(pShapeFormat, RES_FRM_SIZE, MID_FRMSIZE_SIZE, cpo::uno::Any(xShape->getSize()),
                  pObj);
-    uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapePropertySet(xShape);
     syncProperty(pShapeFormat, RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW,
                  xShapePropertySet->getPropertyValue(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), pObj);
     syncProperty(pShapeFormat, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
@@ -1257,7 +1257,6 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
     uno::Reference<drawing::XShape> xShape(pObj->getUnoShape());
     if (!xShape)
         return;
-    uno::Reference<beans::XPropertySet> const xPropertySet(xShape, uno::UNO_QUERY);
 
     auto pParentFormat = getOtherTextBoxFormat(getOtherTextBoxFormat(xShape), RES_FLYFRMFMT);
     if (!pParentFormat)
@@ -1265,24 +1264,24 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
 
     // Sync the padding
     syncProperty(pParentFormat, UNO_NAME_TEXT_LEFTDIST,
-                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_LEFTDIST), pObj);
+                 xShape->getPropertyValue(UNO_NAME_TEXT_LEFTDIST), pObj);
     syncProperty(pParentFormat, UNO_NAME_TEXT_RIGHTDIST,
-                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_RIGHTDIST), pObj);
+                 xShape->getPropertyValue(UNO_NAME_TEXT_RIGHTDIST), pObj);
     syncProperty(pParentFormat, UNO_NAME_TEXT_UPPERDIST,
-                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_UPPERDIST), pObj);
+                 xShape->getPropertyValue(UNO_NAME_TEXT_UPPERDIST), pObj);
     syncProperty(pParentFormat, UNO_NAME_TEXT_LOWERDIST,
-                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_LOWERDIST), pObj);
+                 xShape->getPropertyValue(UNO_NAME_TEXT_LOWERDIST), pObj);
 
     // Sync the text aligning
     syncProperty(pParentFormat, UNO_NAME_TEXT_VERTADJUST,
-                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_VERTADJUST), pObj);
+                 xShape->getPropertyValue(UNO_NAME_TEXT_VERTADJUST), pObj);
     syncProperty(pParentFormat, UNO_NAME_TEXT_HORZADJUST,
-                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_HORZADJUST), pObj);
+                 xShape->getPropertyValue(UNO_NAME_TEXT_HORZADJUST), pObj);
 
     // tdf137803: Sync autogrow:
     const bool bIsAutoGrow
-        = xPropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT).get<bool>();
-    const bool bIsAutoWrap = xPropertySet->getPropertyValue(UNO_NAME_TEXT_WORDWRAP).get<bool>();
+        = xShape->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT).get<bool>();
+    const bool bIsAutoWrap = xShape->getPropertyValue(UNO_NAME_TEXT_WORDWRAP).get<bool>();
 
     syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT,
                  cpo::uno::Any(bIsAutoGrow), pObj);
@@ -1841,7 +1840,7 @@ bool SwTextBoxHelper::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
     if (!pSdrObj)
         return false;
 
-    uno::Reference<beans::XPropertySet> xPropertySet(pSdrObj->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xPropertySet(pSdrObj->getUnoShape());
     if (!xPropertySet.is())
         return false;
 

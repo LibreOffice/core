@@ -1231,7 +1231,7 @@ static std::vector<OString> lcl_getShapeTypes()
 
 static bool lcl_isTextBox(const SdrObject* pSdrObject)
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xPropertySet(const_cast<SdrObject*>(pSdrObject)->getUnoShape());
     if (!xPropertySet.is())
         return false;
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
@@ -1247,7 +1247,7 @@ static OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
 {
     OUString aResult;
 
-    uno::Reference<beans::XPropertySet> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape());
     if (xShape->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
         comphelper::SequenceAsHashMap aInteropGrabBag(xShape->getPropertyValue(u"InteropGrabBag"_ustr));
@@ -1560,13 +1560,12 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     if (m_pTextExport && lcl_isTextBox(m_pSdrObject))
     {
         uno::Reference<drawing::XShape> xShape {const_cast<SdrObject*>(m_pSdrObject)->getUnoShape()};
-        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xShape->getPropertySetInfo();
         bool bBottomToTop = false;
         if (xPropertySetInfo->hasPropertyByName(u"CustomShapeGeometry"_ustr))
         {
             // In this case a DrawingML DOCX was imported.
-            auto aAny = xPropertySet->getPropertyValue(u"WritingMode"_ustr);
+            auto aAny = xShape->getPropertyValue(u"WritingMode"_ustr);
             sal_Int16 nWritingMode;
             if ((aAny >>= nWritingMode) && nWritingMode == text::WritingMode2::BT_LR)
                 bBottomToTop = true;
@@ -1600,7 +1599,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
             pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
         m_pSerializer->startElementNS(XML_v, XML_textbox, pTextboxAttrList);
 
-        m_pTextExport->WriteVMLTextBox(uno::Reference<drawing::XShape>(xPropertySet, uno::UNO_QUERY_THROW));
+        m_pTextExport->WriteVMLTextBox(xShape);
 
         m_pSerializer->endElementNS(XML_v, XML_textbox);
     }

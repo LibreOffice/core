@@ -2137,10 +2137,9 @@ void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
         //In this case, DFF_Prop_wzDescription will not be set in excel file.
         //So In the end of SvxMSDffManager::ImportShape, description will not be set. But actually in excel,
         //the alt text is the label value. So here set description as label text first which is called before ImportShape.
-        Reference< css::beans::XPropertySet > xPropset( mxShape, UNO_QUERY );
         try{
-        if(xPropset.is())
-            xPropset->setPropertyValue( u"Description"_ustr, Any(aLabel) );
+        if(mxShape.is())
+            mxShape->setPropertyValue( u"Description"_ustr, Any(aLabel) );
         }catch( ... )
         {
             SAL_WARN("sc.filter", "Can't set a default text for TBX Control ");

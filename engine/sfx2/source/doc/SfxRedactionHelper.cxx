@@ -245,10 +245,9 @@ void SfxRedactionHelper::addPagesToDraw(
         uno::Reference<drawing::XShape> xShape(
             xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
             uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
-        xShapeProperySet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraph));
-        xShapeProperySet->setPropertyValue(u"MoveProtect"_ustr, cpo::uno::Any(true));
-        xShapeProperySet->setPropertyValue(u"SizeProtect"_ustr, cpo::uno::Any(true));
+        xShape->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraph));
+        xShape->setPropertyValue(u"MoveProtect"_ustr, cpo::uno::Any(true));
+        xShape->setPropertyValue(u"SizeProtect"_ustr, cpo::uno::Any(true));
 
         // Set size
         xShape->setSize(
@@ -562,25 +561,24 @@ void SfxRedactionHelper::addRedactionRectToPage(
     {
         uno::Reference<drawing::XShape> xRectShape(
             xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xRectShapeProperySet(xRectShape, uno::UNO_QUERY);
 
         if (isImage)
         {
-            xRectShapeProperySet->setPropertyValue(u"Name"_ustr,
+            xRectShape->setPropertyValue(u"Name"_ustr,
                                                    cpo::uno::Any(u"ImageRedactionShape"_ustr));
-            xRectShapeProperySet->setPropertyValue(u"FillTransparence"_ustr,
+            xRectShape->setPropertyValue(u"FillTransparence"_ustr,
                                                    cpo::uno::Any(static_cast<sal_Int16>(0)));
-            xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_BLACK));
+            xRectShape->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_BLACK));
         }
         else
         {
-            xRectShapeProperySet->setPropertyValue(u"Name"_ustr,
+            xRectShape->setPropertyValue(u"Name"_ustr,
                                                    cpo::uno::Any(u"RectangleRedactionShape"_ustr));
-            xRectShapeProperySet->setPropertyValue(u"FillTransparence"_ustr,
+            xRectShape->setPropertyValue(u"FillTransparence"_ustr,
                                                    cpo::uno::Any(static_cast<sal_Int16>(50)));
-            xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_GRAY7));
+            xRectShape->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_GRAY7));
         }
-        xRectShapeProperySet->setPropertyValue(
+        xRectShape->setPropertyValue(
             u"LineStyle"_ustr, cpo::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
 
         xRectShape->setSize(awt::Size(aNewRectangle.GetWidth(), aNewRectangle.GetHeight()));

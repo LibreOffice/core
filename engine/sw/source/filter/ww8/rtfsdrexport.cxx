@@ -487,7 +487,6 @@ void RtfSdrExport::impl_writeGraphic()
     // Get the Graphic object from the Sdr one.
     uno::Reference<drawing::XShape> xShape
         = GetXShapeForSdrObject(const_cast<SdrObject*>(m_pSdrObject));
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
     uno::Reference<graphic::XGraphic> xGraphic;
 
@@ -495,7 +494,7 @@ void RtfSdrExport::impl_writeGraphic()
 
     try
     {
-        xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        xShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     }
     catch (beans::UnknownPropertyException const&)
     {

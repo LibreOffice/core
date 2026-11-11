@@ -655,7 +655,7 @@ void SmartArtDiagram::syncDiagramFontHeights()
         double fMinSpacingScale = 100.0;
         for (const auto& rShapePair : rShapePairs)
         {
-            uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xPropertySet(rShapePair.second);
             if (xPropertySet.is())
             {
                 double fFontScale = 0.0;
@@ -677,7 +677,7 @@ void SmartArtDiagram::syncDiagramFontHeights()
         {
             for (const auto& rShapePair : rShapePairs)
             {
-                uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
+                uno::Reference<drawing::XShape> xPropertySet(rShapePair.second);
                 if (xPropertySet.is())
                 {
                     xPropertySet->setPropertyValue(u"TextFitToSizeFontScale"_ustr, cpo::uno::Any(fMinFontScale));

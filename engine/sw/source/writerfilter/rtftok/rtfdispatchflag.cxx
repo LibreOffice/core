@@ -1116,8 +1116,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     uno::UNO_QUERY);
                 m_aStates.top().getDrawingObject().setShape(xShape);
             }
-            uno::Reference<beans::XPropertySet> xPropertySet(
-                m_aStates.top().getDrawingObject().getShape(), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xPropertySet(m_aStates.top().getDrawingObject().getShape());
             m_aStates.top().getDrawingObject().setPropertySet(xPropertySet);
             if (m_xDstDoc)
             {

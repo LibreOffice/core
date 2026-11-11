@@ -1009,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoDhgt)
 CPPUNIT_TEST_FIXTURE(Test, testDplinehollow)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
         table::BorderLine2 line(getProperty<table::BorderLine2>(xPropertySet, u"TopBorder"_ustr));
         CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, line.LineStyle);
     };
@@ -1329,16 +1329,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo60722)
 {
     auto verify = [this]() {
         // The problem was that the larger shape was over the smaller one, and not the other way around.
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShape(1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, u"ZOrder"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"larger"_ustr, getProperty<OUString>(xShape, u"Description"_ustr));
 
-        xShape.set(getShape(2), uno::UNO_QUERY);
+        xShape = getShape(2);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, u"ZOrder"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"smaller"_ustr, getProperty<OUString>(xShape, u"Description"_ustr));
 
         // Color of the line was blue, and it had zero width.
-        xShape.set(getShape(3), uno::UNO_QUERY);
+        xShape.set(getShape(3));
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<sal_uInt32>(xShape, u"LineWidth"_ustr));
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xShape, u"LineColor"_ustr));
     };

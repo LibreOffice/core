@@ -72,10 +72,9 @@ public:
 
         Reference<XShape> shape = firstPageShapes->getShapeByIndex(0);
         verifyShapeGeometry(shape, BIG_CIRCLE_SIZE, BIG_CIRCLE_SIZE);
-        Reference<XPropertySet> shapeProps(shape, UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "wrong circle type", CIRCLE_TYPE,
-            shapeProps->getPropertyValue(u"CircleKind"_ustr).get<CircleKind>());
+            shape->getPropertyValue(u"CircleKind"_ustr).get<CircleKind>());
         //assertEquals( "wrong circle fill color", FILL_COLOR, ((Integer)shapeProps.getPropertyValue( "FillColor" )).intValue() );
         // disable this particular check: A bug in the drawing layer API restores the FillColor to its
         // default value upon re-insertion. This is issue #i115080#

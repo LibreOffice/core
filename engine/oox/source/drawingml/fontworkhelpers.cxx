@@ -91,10 +91,6 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     if (!xDefaulter.is())
         return;
 
-    uno::Reference<beans::XPropertySet> xSet(xShape, uno::UNO_QUERY);
-    if (!xSet.is())
-        return;
-
     // The DrawingML shapes from the presetTextWarpDefinitions are mapped to the definitions
     // in svx/../EnhancedCustomShapeGeometry.cxx, which are used for WordArt shapes from
     // binary MS Office. Therefore all adjustment values need to be adapted.
@@ -157,7 +153,7 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     // Set attributes in CustomShapeGeometry
     xDefaulter->createCustomShapeDefaults(sFontworkType);
 
-    auto aGeomPropSeq = xSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
+    auto aGeomPropSeq = xShape->getPropertyValue(u"CustomShapeGeometry"_ustr)
                             .get<cpo::uno::Sequence<beans::PropertyValue>>();
     auto aGeomPropVec
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
@@ -198,7 +194,7 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
         aGeomPropVec.push_back(comphelper::makePropertyValue(sAdjustmentValues, aAdjustment));
     }
 
-    xSet->setPropertyValue(u"CustomShapeGeometry"_ustr,
+    xShape->setPropertyValue(u"CustomShapeGeometry"_ustr,
                            cpo::uno::Any(comphelper::containerToSequence(aGeomPropVec)));
 }
 

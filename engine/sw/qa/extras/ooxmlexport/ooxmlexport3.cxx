@@ -1166,10 +1166,9 @@ CPPUNIT_TEST_FIXTURE(Test, testPgMargin)
 DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     css::text::GraphicCrop aGraphicCropStruct;
 
-    imageProperties->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropStruct;
+    image->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropStruct;
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2955 ), aGraphicCropStruct.Left );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 5477 ), aGraphicCropStruct.Right );
@@ -1180,10 +1179,9 @@ DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf106974_int32Crop, "tdf106974_int32Crop.docx")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     css::text::GraphicCrop aGraphicCropStruct;
 
-    imageProperties->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropStruct;
+    image->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropStruct;
 
     // The crop is constructed in GraphicProperties::pushToPropMap, where
     // GraphicHelper::getOriginalSize tries to get graphic size in mm, then falls back to pixels,
@@ -1221,49 +1219,49 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 
     // Angle of frame#1 is 135 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame1(getShape(1));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame1, u"FillStyle"_ustr));
     awt::Gradient aGradient1 = getProperty<awt::Gradient>(xFrame1, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(135 * 10), aGradient1.Angle);
 
     // Angle of frame#2 is 180 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame2(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame2(getShape(2));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame2, u"FillStyle"_ustr));
     awt::Gradient aGradient2 = getProperty<awt::Gradient>(xFrame2, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(180 * 10), aGradient2.Angle);
 
     // Angle of frame#3 is  90 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame3(getShape(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame3(getShape(3));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame3, u"FillStyle"_ustr));
     awt::Gradient aGradient3 = getProperty<awt::Gradient>(xFrame3, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 90 * 10), aGradient3.Angle);
 
     // Angle of frame#4 is 225 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame4(getShape(4), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame4(getShape(4));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame4, u"FillStyle"_ustr));
     awt::Gradient aGradient4 = getProperty<awt::Gradient>(xFrame4, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(225 * 10), aGradient4.Angle);
 
     // Angle of frame#5 is 270 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame5(getShape(5), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame5(getShape(5));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame5, u"FillStyle"_ustr));
     awt::Gradient aGradient5 = getProperty<awt::Gradient>(xFrame5, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(270 * 10), aGradient5.Angle);
 
     // Angle of frame#6 is 315 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame6(getShape(6), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame6(getShape(6));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame6, u"FillStyle"_ustr));
     awt::Gradient aGradient6 = getProperty<awt::Gradient>(xFrame6, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(315 * 10), aGradient6.Angle);
 
     // Angle of frame#7 is   0 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame7(getShape(7), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame7(getShape(7));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame7, u"FillStyle"_ustr));
     awt::Gradient aGradient7 = getProperty<awt::Gradient>(xFrame7, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(  0 * 10), aGradient7.Angle);
 
     // Angle of frame#8 is  45 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame8(getShape(8), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame8(getShape(8));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame8, u"FillStyle"_ustr));
     awt::Gradient aGradient8 = getProperty<awt::Gradient>(xFrame8, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 45 * 10), aGradient8.Angle);
@@ -1312,10 +1310,9 @@ CPPUNIT_TEST_FIXTURE(Test, testParaAutoSpacing)
 DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     css::text::GraphicCrop aGraphicCropStruct;
 
-    imageProperties->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropStruct;
+    image->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropStruct;
 
     // The crop is constructed in GraphicProperties::pushToPropMap, where
     // GraphicHelper::getOriginalSize tries to get graphic size in mm, then falls back to pixels,
@@ -1337,10 +1334,9 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
      * Check for presence of cropping parameters in exported file.
      */
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     css::text::GraphicCrop aGraphicCropStruct;
 
-    imageProperties->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropStruct;
+    image->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropStruct;
 
     // The crop is constructed in GraphicProperties::pushToPropMap, where
     // GraphicHelper::getOriginalSize tries to get graphic size in mm, then falls back to pixels,

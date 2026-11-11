@@ -415,12 +415,11 @@ void SdtHelper::createControlShape(awt::Size aSize,
     xControlShape->setSize(aSize);
     xControlShape->setControl(xControlModel);
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue(u"VertOrient"_ustr,
+    xControlShape->setPropertyValue(u"VertOrient"_ustr,
                                    cpo::uno::Any(text::VertOrientation::CENTER));
 
     if (rGrabBag.hasElements())
-        xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, cpo::uno::Any(rGrabBag));
+        xControlShape->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, cpo::uno::Any(rGrabBag));
 
     uno::Reference<text::XTextContent> xTextContent(xControlShape, uno::UNO_QUERY);
     m_rDM_Impl.appendTextContent(xTextContent, cpo::uno::Sequence<beans::PropertyValue>());

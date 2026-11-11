@@ -747,19 +747,18 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 // no evaluation of attribute XML_rot, because Word ignores it, as of 2022-07.
 
                 uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
                 m_bFromWordArt = rAttribs.getBool(XML_fromWordArt, false);
                 sal_Int32 nVert = rAttribs.getToken(XML_vert, XML_horz);
                 if (nVert == XML_eaVert)
                 {
-                    xPropertySet->setPropertyValue(u"TextWritingMode"_ustr,
+                    mxShape->setPropertyValue(u"TextWritingMode"_ustr,
                                                    cpo::uno::Any(text::WritingMode_TB_RL));
-                    xPropertySet->setPropertyValue(u"WritingMode"_ustr,
+                    mxShape->setPropertyValue(u"WritingMode"_ustr,
                                                    cpo::uno::Any(text::WritingMode2::TB_RL));
                 }
                 else if (nVert == XML_mongolianVert)
                 {
-                    xPropertySet->setPropertyValue(u"WritingMode"_ustr,
+                    mxShape->setPropertyValue(u"WritingMode"_ustr,
                                                    cpo::uno::Any(text::WritingMode2::TB_LR));
                 }
                 else if (nVert == XML_wordArtVert || nVert == XML_wordArtVertRtl)
@@ -767,7 +766,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     // Multiline wordArtVert is not implemented yet.
                     // It will render all the text in 1 line.
                     // Map 'wordArtVertRtl' to 'wordArtVert', as they are the same now.
-                    xPropertySet->setPropertyValue(u"WritingMode"_ustr,
+                    mxShape->setPropertyValue(u"WritingMode"_ustr,
                                                    cpo::uno::Any(text::WritingMode2::STACKED));
                 }
                 else if (nVert != XML_horz) // cases XML_vert and XML_vert270
@@ -778,7 +777,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
 
                     // Need transformation matrix since RotateAngle does not contain flip.
                     drawing::HomogenMatrix3 aMatrix;
-                    xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
+                    mxShape->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
                     basegfx::B2DHomMatrix aTransformation;
                     aTransformation.set(0, 0, aMatrix.Line1.Column1);
                     aTransformation.set(0, 1, aMatrix.Line1.Column2);
@@ -799,31 +798,31 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     if ((nVert == XML_vert && nRotate == 270)
                         || (nVert == XML_vert270 && nRotate == 90))
                     {
-                        xPropertySet->setPropertyValue(u"WritingMode"_ustr,
+                        mxShape->setPropertyValue(u"WritingMode"_ustr,
                                                        cpo::uno::Any(text::WritingMode2::LR_TB));
                         // ToDo: Remember original vert value and remove hack on export.
                     }
                     else if (nVert == XML_vert)
-                        xPropertySet->setPropertyValue(u"WritingMode"_ustr,
+                        mxShape->setPropertyValue(u"WritingMode"_ustr,
                                                        cpo::uno::Any(text::WritingMode2::TB_RL90));
                     else // nVert == XML_vert270
-                        xPropertySet->setPropertyValue(u"WritingMode"_ustr,
+                        mxShape->setPropertyValue(u"WritingMode"_ustr,
                                                        cpo::uno::Any(text::WritingMode2::BT_LR));
                 }
 
                 if (bool bUpright = rAttribs.getBool(XML_upright, false))
                 {
                     cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
-                    xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+                    mxShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc(length + 1);
                     auto pGrabBag = aGrabBag.getArray();
                     pGrabBag[length].Name = u"Upright"_ustr;
                     pGrabBag[length].Value <<= bUpright;
-                    xPropertySet->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
+                    mxShape->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
                 }
 
-                auto xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                auto xPropertySetInfo = mxShape->getPropertySetInfo();
 
                 if (xServiceInfo.is())
                 {
@@ -848,7 +847,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         if (!oInsets[i])
                             continue;
                         if (xPropertySetInfo && xPropertySetInfo->hasPropertyByName(aShapeProps[i]))
-                            xPropertySet->setPropertyValue(aShapeProps[i],
+                            mxShape->setPropertyValue(aShapeProps[i],
                                                            cpo::uno::Any(*oInsets[i]));
                         else
                             SAL_WARN("oox", "Property: " << aShapeProps[i] << " not supported");
@@ -863,7 +862,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     {
                         drawing::TextVerticalAdjust eAdjust = drawingml::GetTextVerticalAdjust(
                             rAttribs.getToken(XML_anchor, XML_t));
-                        xPropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
+                        mxShape->setPropertyValue(u"TextVerticalAdjust"_ustr,
                                                        cpo::uno::Any(eAdjust));
                     }
                     else
@@ -874,7 +873,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
                 if (xText)
                 {
-                    cpo::uno::Any xCharColor = xPropertySet->getPropertyValue(u"CharColor"_ustr);
+                    cpo::uno::Any xCharColor = mxShape->getPropertyValue(u"CharColor"_ustr);
                     Color aColor = COL_AUTO;
                     if ((xCharColor >>= aColor) && aColor != COL_AUTO)
                     {
@@ -938,7 +937,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 if (xPropertySetInfo && xPropertySetInfo->hasPropertyByName(u"TextWordWrap"_ustr))
                 {
                     auto nWrappingType = rAttribs.getToken(XML_wrap, XML_square);
-                    xPropertySet->setPropertyValue(u"TextWordWrap"_ustr,
+                    mxShape->setPropertyValue(u"TextWordWrap"_ustr,
                                                    cpo::uno::Any(nWrappingType == XML_square));
                 }
                 else
@@ -990,20 +989,19 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             // We can't use oox::drawingml::TextBodyPropertiesContext here, as this
             // is a child context of bodyPr, so the shape is already sent: we need
             // to alter the XShape directly.
-            uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-            if (xPropertySet.is())
+            if (mxShape.is())
             {
                 if (xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
-                    xPropertySet->setPropertyValue(
+                    mxShape->setPropertyValue(
                         u"FrameIsAutomaticHeight"_ustr,
                         cpo::uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
                 else
                 {
-                    auto xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                    auto xPropertySetInfo = mxShape->getPropertySetInfo();
                     if (xPropertySetInfo
                         && xPropertySetInfo->hasPropertyByName(u"TextAutoGrowHeight"_ustr))
                     {
-                        xPropertySet->setPropertyValue(
+                        mxShape->setPropertyValue(
                             u"TextAutoGrowHeight"_ustr,
                             cpo::uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
                     }
@@ -1028,15 +1026,14 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         case XML_prstTxWarp:
             if (rAttribs.hasAttribute(XML_prst))
             {
-                uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-                if (xPropertySet.is())
+                if (mxShape.is())
                 {
                     std::optional<OUString> presetShapeName = rAttribs.getString(XML_prst);
                     const OUString& preset = presetShapeName.value();
                     comphelper::SequenceAsHashMap aCustomShapeGeometry(
-                        xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
+                        mxShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
                     aCustomShapeGeometry[u"PresetTextWarp"_ustr] <<= preset;
-                    xPropertySet->setPropertyValue(
+                    mxShape->setPropertyValue(
                         u"CustomShapeGeometry"_ustr,
                         cpo::uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
                 }
@@ -1100,9 +1097,6 @@ void WpsContext::onEndElement()
         = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(mxShape));
     if (!pCustomShape || !mpShapePtr || !mxShape.is())
         return;
-    uno::Reference<beans::XPropertySet> xShapePropertySet(mxShape, uno::UNO_QUERY);
-    if (!xShapePropertySet.is())
-        return;
     // This is the text in the frame, associated with the shape
     uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
     if (!xText.is())
@@ -1110,7 +1104,7 @@ void WpsContext::onEndElement()
 
     OUString sMSPresetType;
     comphelper::SequenceAsHashMap aCustomShapeGeometry(
-        xShapePropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
+        mxShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
     aCustomShapeGeometry[u"PresetTextWarp"_ustr] >>= sMSPresetType;
     if (sMSPresetType.isEmpty() || sMSPresetType == u"textNoShape")
         return;
@@ -1142,7 +1136,7 @@ void WpsContext::onEndElement()
     pCustomShape->NbcSetText(sFrameContent);
 
     // Setting the property "TextBox" to false includes removing the attached frame from the shape.
-    xShapePropertySet->setPropertyValue(u"TextBox"_ustr, cpo::uno::Any(false));
+    mxShape->setPropertyValue(u"TextBox"_ustr, cpo::uno::Any(false));
 
     // Set the shape into text path mode, so that the text is drawn as Fontwork; a WordArt of the
     // legacy kind (fromWordArt) keeps its text unscaled, as the export wrote it.
@@ -1151,8 +1145,8 @@ void WpsContext::onEndElement()
                                                     sMSPresetType, m_bFromWordArt);
 
     // Apply the text props to the fontwork shape
-    lcl_setTextPropsToShape(xShapePropertySet, aTextPropVec); // includes e.g. FontName
-    lcl_setTextAnchorFromTextProps(xShapePropertySet, aTextPropMap);
+    lcl_setTextPropsToShape(mxShape, aTextPropVec); // includes e.g. FontName
+    lcl_setTextAnchorFromTextProps(mxShape, aTextPropMap);
 
     // Fontwork in LO uses fill and stroke of the shape and cannot style text portions individually.
     // "abc Transform" in Word uses fill and outline of the characters.
@@ -1161,7 +1155,7 @@ void WpsContext::onEndElement()
     oox::drawingml::LineProperties aCreatedLineProperties
         = lcl_generateLinePropertiesFromTextProps(aTextPropMap);
     aCreatedLineProperties.pushToPropMap(aStrokeShapeProps, getFilter().getGraphicHelper());
-    lcl_applyShapePropsToShape(xShapePropertySet, aStrokeShapeProps);
+    lcl_applyShapePropsToShape(mxShape, aStrokeShapeProps);
 
     oox::drawingml::ShapePropertyMap aFillShapeProps(getFilter().getModelObjectHelper());
     oox::drawingml::FillProperties aCreatedFillProperties
@@ -1172,7 +1166,7 @@ void WpsContext::onEndElement()
                                          /*aShapeSize*/ css::awt::Size(0, 0), /*nPhClrTheme*/ -1,
                                          pCustomShape->IsMirroredX(), pCustomShape->IsMirroredY(),
                                          /*bIsCustomShape*/ true);
-    lcl_applyShapePropsToShape(xShapePropertySet, aFillShapeProps);
+    lcl_applyShapePropsToShape(mxShape, aFillShapeProps);
 
     // Copying the text content from frame to shape as string has lost the styles. Apply the used text
     // properties back to all runs in the text, then every portion gets its own back.
@@ -1194,7 +1188,7 @@ void WpsContext::onEndElement()
         // the rotation of the WordArt is on the created shape, in 1/100 degree counter-clockwise;
         // the helper takes it as the file writes it, in 1/60000 degree clockwise
         sal_Int32 nRotateAngle = 0;
-        xShapePropertySet->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle;
+        mxShape->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle;
         const sal_Int32 nMSORotation = ((36000 - nRotateAngle) % 36000) * 600;
         if (aScene3DHelper.setExtrusionProperties(m_aText3DProperties, nMSORotation, aExtrusionMap,
                                                   fRotZ, aExtrusionColor))
@@ -1207,24 +1201,24 @@ void WpsContext::onEndElement()
             const sal_Int32 nNewRotateAngle
                 = sal_Int32(oox::drawingml::MSORotateAngleToAPIAngle(nShapeRotateInclCamera));
             if (nNewRotateAngle != nRotateAngle)
-                xShapePropertySet->setPropertyValue(u"RotateAngle"_ustr,
+                mxShape->setPropertyValue(u"RotateAngle"_ustr,
                                                     cpo::uno::Any(nNewRotateAngle));
             comphelper::SequenceAsHashMap aGeometry(
-                xShapePropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
+                mxShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
             aGeometry[u"Extrusion"_ustr] <<= aExtrusionMap.makePropertyValueSequence();
-            xShapePropertySet->setPropertyValue(
+            mxShape->setPropertyValue(
                 u"CustomShapeGeometry"_ustr,
                 cpo::uno::Any(aGeometry.getAsConstPropertyValueList()));
             if (aExtrusionColor.isUsed())
-                xShapePropertySet->setPropertyValue(
+                mxShape->setPropertyValue(
                     u"FillColor2"_ustr,
                     cpo::uno::Any(aExtrusionColor.getColor(getFilter().getGraphicHelper())));
         }
     }
 
     // Fontwork stretches the text to the given path. So adapt shape size to text is nonsensical.
-    xShapePropertySet->setPropertyValue(u"TextAutoGrowHeight"_ustr, cpo::uno::Any(false));
-    xShapePropertySet->setPropertyValue(u"TextAutoGrowWidth"_ustr, cpo::uno::Any(false));
+    mxShape->setPropertyValue(u"TextAutoGrowHeight"_ustr, cpo::uno::Any(false));
+    mxShape->setPropertyValue(u"TextAutoGrowWidth"_ustr, cpo::uno::Any(false));
 }
 }
 

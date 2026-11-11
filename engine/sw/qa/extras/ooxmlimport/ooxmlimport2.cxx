@@ -692,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113182)
 CPPUNIT_TEST_FIXTURE(Test, testBtlrFrameVml)
 {
     createSwDoc("btlr-frame-vml.docx");
-    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1));
     CPPUNIT_ASSERT(xTextFrame.is());
 
     auto nActual = getProperty<sal_Int16>(xTextFrame, u"WritingMode"_ustr);

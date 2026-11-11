@@ -423,23 +423,23 @@ DECLARE_ODFEXPORT_TEST(testShapesHyperlink, "shapes-hyperlink.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(5, getShapes());
-    uno::Reference<beans::XPropertySet> const xPropSet1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xPropSet1(getShape(1));
     CPPUNIT_ASSERT_EQUAL(u"http://libreoffice.org/"_ustr,
                          getProperty<OUString>(xPropSet1, u"Hyperlink"_ustr));
 
-    uno::Reference<beans::XPropertySet> const xPropSet2(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xPropSet2(getShape(2));
     CPPUNIT_ASSERT_EQUAL(u"http://libreoffice2.org/"_ustr,
                          getProperty<OUString>(xPropSet2, u"Hyperlink"_ustr));
 
-    uno::Reference<beans::XPropertySet> const xPropSet3(getShape(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xPropSet3(getShape(3));
     CPPUNIT_ASSERT_EQUAL(u"http://libreoffice3.org/"_ustr,
                          getProperty<OUString>(xPropSet3, u"Hyperlink"_ustr));
 
-    uno::Reference<beans::XPropertySet> const xPropSet4(getShape(4), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xPropSet4(getShape(4));
     CPPUNIT_ASSERT_EQUAL(u"http://libreoffice4.org/"_ustr,
                          getProperty<OUString>(xPropSet4, u"Hyperlink"_ustr));
 
-    uno::Reference<beans::XPropertySet> const xPropSet5(getShape(5), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xPropSet5(getShape(5));
     CPPUNIT_ASSERT_EQUAL(u"http://libreoffice5.org/"_ustr,
                          getProperty<OUString>(xPropSet5, u"Hyperlink"_ustr));
 }

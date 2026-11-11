@@ -39,7 +39,6 @@ namespace accessibility
 {
 DescriptionGenerator::DescriptionGenerator(uno::Reference<drawing::XShape> xShape)
     : mxShape(std::move(xShape))
-    , mxSet(mxShape, uno::UNO_QUERY)
     , mbIsFirstProperty(true)
 {
 }
@@ -62,7 +61,7 @@ void DescriptionGenerator::Initialize(TranslateId pResourceId)
 void DescriptionGenerator::Initialize(std::u16string_view sPrefix)
 {
     msDescription = sPrefix;
-    if (!mxSet.is())
+    if (!mxShape.is())
         return;
 
     {
@@ -78,9 +77,9 @@ void DescriptionGenerator::Initialize(std::u16string_view sPrefix)
 
     try
     {
-        if (mxSet.is())
+        if (mxShape.is())
         {
-            cpo::uno::Any aValue = mxSet->getPropertyValue(u"Style"_ustr);
+            cpo::uno::Any aValue = mxShape->getPropertyValue(u"Style"_ustr);
             uno::Reference<container::XNamed> xStyle(aValue, uno::UNO_QUERY);
             if (xStyle.is())
                 msDescription.append(xStyle->getName());
@@ -107,7 +106,7 @@ void DescriptionGenerator::AddProperty(const OUString& sPropertyName, PropertyTy
         || xState->getPropertyState(sPropertyName) == beans::PropertyState_DEFAULT_VALUE)
         return;
 
-    if (!mxSet.is())
+    if (!mxShape.is())
         return;
 
     // Append a separator from previous Properties.
@@ -150,9 +149,9 @@ void DescriptionGenerator::AddColor(const OUString& sPropertyName)
     try
     {
         tools::Long nValue(0);
-        if (mxSet.is())
+        if (mxShape.is())
         {
-            cpo::uno::Any aValue = mxSet->getPropertyValue(sPropertyName);
+            cpo::uno::Any aValue = mxShape->getPropertyValue(sPropertyName);
             aValue >>= nValue;
         }
 
@@ -170,9 +169,9 @@ void DescriptionGenerator::AddInteger(const OUString& sPropertyName)
 
     try
     {
-        if (mxSet.is())
+        if (mxShape.is())
         {
-            cpo::uno::Any aValue = mxSet->getPropertyValue(sPropertyName);
+            cpo::uno::Any aValue = mxShape->getPropertyValue(sPropertyName);
             tools::Long nValue = 0;
             aValue >>= nValue;
             msDescription.append(nValue);

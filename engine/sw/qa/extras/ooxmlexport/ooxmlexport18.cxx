@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
         if (!bIsExport)
         {
             // Fill the frame with a red background. It should be transferred on export to the paragraph
-            uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xFrame(getShape(1));
             xFrame->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_RED));
             xFrame->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int32>(0)));
         }
@@ -608,7 +608,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
     // It should be WritingMode = 3 = TB_LR in both cases.
     const sal_Int16 eExpected(text::WritingMode2::TB_LR);
     CPPUNIT_ASSERT_EQUAL(eExpected, getProperty<sal_Int16>(getShape(1), u"WritingMode"_ustr));
-    uno::Reference<beans::XPropertySet> xShapeProps(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(getShape(1));
     uno::Reference<beans::XPropertySet> xFrameProps(xShapeProps->getPropertyValue(u"TextBoxContent"_ustr),
                                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(eExpected, getProperty<sal_Int16>(xFrameProps, u"WritingMode"_ustr));
@@ -977,8 +977,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155736, "tdf155736_PageNumbers_footer.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_duplicate, "tdf159158_zOrder_duplicate_compat15.docx")
 {
     // given a yellow star with relativeHeight 2, followed by an overlapping blue star also with 2
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // the zOrder of the stars should remain consistent between round-trips - last duplicate wins
@@ -990,8 +990,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_duplicate, "tdf159158_zOrder_dupli
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalA, "tdf159158_zOrder_1and0equalA.docx")
 {
     // given a yellow star with relativeHeight 1, followed by an overlapping blue star with 0
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // 0 is treated the same as 1 - the maximum value, so blue is duplicate - last duplicate wins
@@ -1003,8 +1003,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalB, "tdf159158_zOrder_1an
 {
     // given a yellow star with relativeHeight 0, followed by an overlapping blue star with 1
     // since they have the same zOrder value, last one wins, so same result as version A
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // 1 is treated the same as 0 - the maximum value, so blue is duplicate - last duplicate wins
@@ -1016,8 +1016,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0max, "tdf159158_zOrder_1and0m
 {
     // given a yellow star with maximum relativeHeight 503316479 (1DFF FFFF)
     // followed by an overlapping blue star with 0.
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // 0 is treated the same as the maximum value, last duplicate wins, so blue is on top
@@ -1029,8 +1029,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_maxLessOne, "tdf159158_zOrder_maxL
 {
     // given a yellow star with relativeHeight 503316479 (1DFF FFFF)
     // followed by a partially hidden blue star with lower relativeHeight 503316478 (1DFF FFFE)
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // since yellow is a higher value, it should be on top
@@ -1042,8 +1042,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_max, "tdf159158_zOrder_max.docx")
 {
     // given a yellow star with (one higher than maximum) relativeHeight 503316480 (1E00 0000)
     // followed by an overlapping blue star with maximum relativeHeight  503316479 (1DFF FFFF)
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // while yellow is a higher value, last duplicate wins, so lower value blue must be the maximum
@@ -1056,8 +1056,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexMax)
     auto verify = [this](bool bIsExport = false) {
         // given a yellow star with a heaven z-index of MAX_SAL_INT32
         // followed by overlapped blue star with a heaven z-index of MAX_SAL_INT32 - 1
-        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
         // there is no artificial maximum for z-index. All values are unique. Yellow is on top
@@ -1079,8 +1079,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexDuplicate_compat15)
     auto verify = [this](bool bIsExport = false) {
         // given a yellow star with a heaven z-index of MAX_SAL_INT32 - 1
         // followed by overlapping blue star with the same heaven z-index (last duplicate wins)
-        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
         // should be the same as relativeHeight - last duplicate wins so blue is on top.
@@ -1104,9 +1104,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexWins)
         // followed by an overlapping-everything textbox at z-index 0 (the lowest heaven-layer z-index)
         // followed by a partially overlapping blue star with a
         // seems-to-be-a-magic-number relativeHeight 251658240 (0F00 0000)
-        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
+        uno::Reference<beans::XPropertySet> zOrder2(getShape(3));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, u"ZOrder"_ustr)); // higher
@@ -1131,8 +1131,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_behindDocA)
     auto verify = [this](bool bIsExport = false) {
         // given a yellow star with lowest relativeHeight 2 but behindDoc
         // followed by an overlapping blue star with negative z-index -1644167168.
-        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
         // yellow is at the lowest hell-level possible for relativeHeight, so expected to be under blue
@@ -1152,8 +1152,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_behindDocB)
     auto verify = [this](bool bIsExport = false) {
         // given a yellow star with a high relativeHeight 503314431 (1DFF F7FF) but behindDoc
         // followed by an overlapping blue star with negative z-index -1644167168.
-        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
         // yellow is at the highest hell-level possible for relativeHeight,
@@ -1178,8 +1178,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_headerBehind)
         // given a blue star (not marked as behind text) anchored in the header
         // and an overlapping yellow rectangle anchored in the body text.
         // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
-        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
         CPPUNIT_ASSERT_EQUAL(u"RectangleInBody"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
@@ -1193,8 +1193,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_headerBehind)
         // given a blue star (not marked as behind text) anchored in the header
         // and an overlapping yellow rectangle anchored in the body text.
         // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
-        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
         CPPUNIT_ASSERT_EQUAL(u"StarInHeader"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
@@ -1208,8 +1208,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind2, "tdf159158_zOrder_h
 {
     // given a logo (marked as behind text) anchored in the header
     // and an overlapping blue rectangle anchored in the body text.
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1));
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     CPPUNIT_ASSERT_EQUAL(u"HeaderImage"_ustr,

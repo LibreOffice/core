@@ -1283,7 +1283,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAllowOverlap)
     xShape->setPosition(aPoint);
     xShape->setSize(aSize);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
     xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     xShapeProperties->setPropertyValue(u"AnchorType"_ustr,
                                        cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
@@ -1294,7 +1294,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAllowOverlap)
                uno::UNO_QUERY);
     xShape->setPosition(aPoint);
     xShape->setSize(aSize);
-    xShapeProperties.set(xShape, uno::UNO_QUERY);
+    xShapeProperties.set(xShape);
     xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     xShapeProperties->setPropertyValue(u"AnchorType"_ustr,
                                        cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
@@ -1337,7 +1337,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAllowOverlapWrap)
     xShape->setPosition(aPoint);
     xShape->setSize(aSize);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
     xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     xShapeProperties->setPropertyValue(u"AnchorType"_ustr,
                                        cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
@@ -1349,7 +1349,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAllowOverlapWrap)
                uno::UNO_QUERY);
     xShape->setPosition(aPoint);
     xShape->setSize(aSize);
-    xShapeProperties.set(xShape, uno::UNO_QUERY);
+    xShapeProperties.set(xShape);
     xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     xShapeProperties->setPropertyValue(u"AnchorType"_ustr,
                                        cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));

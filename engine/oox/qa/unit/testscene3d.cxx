@@ -113,9 +113,8 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_isometricRightUp)
     uno::Reference<drawing::XShape> xShape(getShape(1, 0)); // shape 1 on page 0
 
     // Prepare property maps
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    xShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
@@ -172,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_legacyObliqueBottomRight)
     uno::Reference<drawing::XShape> xShape(getShape(1, 0)); // shape 1 on page 0
 
     // Prepare property maps
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
@@ -227,9 +226,8 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_obliqueTopRight)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0)); // shape 0 on page 0
 
     // Prepare property maps
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    xShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
@@ -250,13 +248,13 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_obliqueTopRight)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-45.7369327638437, aParaPair.First.Value.get<double>(), 1E-12);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(24.9102537477636, aParaPair.Second.Value.get<double>(), 1E-12);
     sal_Int32 nZRotate; // unit 1/100 degree
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(34597), nZRotate);
 
     // The test uses BoundRect to verify position and size of the resulting scene.
     // The tolerance 10 is estimated and can be adjusted if required for HiDPI.
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8325, aBoundRect.Width, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7804, aBoundRect.Height, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8272, aBoundRect.X, 10);
@@ -272,9 +270,8 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_orthographicFront)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0)); // shape 0 on page 0
 
     // Make sure that in case extrusion properties exist, the extrusion is disabled.
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    xShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     if (aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq)
@@ -287,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_orthographicFront)
 
     // Make sure the shape is nevertheless rotated.
     sal_Int32 nZRotate; // unit 1/100 degree
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9000), nZRotate);
 }
 
@@ -299,9 +296,8 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_perspectiveContrastingLeft)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0)); // shape 0 on page 0
 
     // Prepare property maps
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    xShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
@@ -325,13 +321,13 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_perspectiveContrastingLeft)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-6.94093344831102, aParaPair.First.Value.get<double>(), 1E-12);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(44.4431265782766, aParaPair.Second.Value.get<double>(), 1E-12);
     sal_Int32 nZRotate; // unit 1/100 degree
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(35504), nZRotate);
 
     // Use BoundRect as workaround, because there is no easy way to test the rendered line geometry.
     // The tolerance 10 is estimated and can be adjusted if required for HiDPI.
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6614, aBoundRect.Width, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8577, aBoundRect.Height, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5725, aBoundRect.X, 10);
@@ -348,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_legacyPerspectiveTopRight)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0)); // shape 0 on page 0
 
     // Prepare property maps
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
@@ -567,9 +563,8 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_cropped_image)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0)); // shape 0 on page 0
 
     // Prepare property maps
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    xShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
@@ -596,7 +591,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_cropped_image)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-6.94093344831102, aParaPair.First.Value.get<double>(), 1E-12);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-44.4431265782766, aParaPair.Second.Value.get<double>(), 1E-12);
     sal_Int32 nZRotate; // unit 1/100 degree
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(496), nZRotate);
 
     // Check extrusion depth and color
@@ -604,7 +599,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_cropped_image)
     // 76200 EMU, the fraction of a hundredth of a millimetre kept
     CPPUNIT_ASSERT_DOUBLES_EQUAL(211.6667, aParaPair.First.Value.get<double>(), 0.001);
     Color nColor;
-    xShapeProps->getPropertyValue(UNO_NAME_FILLCOLOR_2) >>= nColor;
+    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_2) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x00b050), nColor);
 }
 
@@ -620,9 +615,8 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_pureImage)
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GraphicObjectShape"_ustr, xShape->getShapeType());
 
     // Make sure the image is rotated.
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     sal_Int32 nZRotate; // unit 1/100 degree
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(27000), nZRotate);
 }
 

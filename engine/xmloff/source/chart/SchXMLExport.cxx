@@ -1400,10 +1400,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     {
         // get property states for autostyles
         Reference< drawing::XShape > xShape = rChartDoc->getTitle();
-        Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-        if( mxExpPropMapper.is() && xPropSet.is())
+        if( mxExpPropMapper.is() && xShape.is())
         {
-            aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
+            aPropertyStates = mxExpPropMapper->Filter(mrExport, xShape);
         }
         if( bExportContent )
         {
@@ -1417,12 +1416,12 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             SvXMLElementExport aElTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, true, true );
 
             // content (text:p)
-            exportFormattedText(xPropSet);
+            exportFormattedText(xShape);
         }
         else    // autostyles
         {
             CollectAutoStyle( std::move(aPropertyStates) );
-            CollectAutoTextStyle( xPropSet );
+            CollectAutoTextStyle( xShape );
         }
         // remove property states for autostyles
         aPropertyStates.clear();
@@ -1433,10 +1432,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     {
         // get property states for autostyles
         Reference< drawing::XShape > xShape = rChartDoc->getSubTitle();
-        Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-        if( mxExpPropMapper.is() && xPropSet.is())
+        if( mxExpPropMapper.is() && xShape.is())
         {
-            aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
+            aPropertyStates = mxExpPropMapper->Filter(mrExport, xShape);
         }
 
         if( bExportContent )
@@ -1451,12 +1449,12 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             SvXMLElementExport aElSubTitle( mrExport, XML_NAMESPACE_CHART, XML_SUBTITLE, true, true );
 
             // content (text:p)
-            exportFormattedText(xPropSet);
+            exportFormattedText(xShape);
         }
         else    // autostyles
         {
             CollectAutoStyle( std::move(aPropertyStates) );
-            CollectAutoTextStyle(xPropSet);
+            CollectAutoTextStyle(xShape);
         }
         // remove property states for autostyles
         aPropertyStates.clear();
@@ -1468,20 +1466,20 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         // get property states for autostyles
         if( mxExpPropMapper.is())
         {
-            Reference< beans::XPropertySet > xPropSet( rChartDoc->getLegend(), uno::UNO_QUERY );
+            Reference< drawing::XShape > xPropSet( rChartDoc->getLegend() );
             if( xPropSet.is())
                 aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
         }
 
         if( bExportContent )
         {
-            Reference< beans::XPropertySet > xProp( rChartDoc->getLegend(), uno::UNO_QUERY );
-            if( xProp.is())
+            Reference< drawing::XShape > xLegendShape( rChartDoc->getLegend() );
+            if( xLegendShape.is())
             {
                 // export legend anchor position
                 try
                 {
-                    Any aAny( xProp->getPropertyValue(u"Alignment"_ustr));
+                    Any aAny( xLegendShape->getPropertyValue(u"Alignment"_ustr));
                     if( SchXMLEnumConverter::getLegendPositionConverter().exportXML( msString, aAny, mrExport.GetMM100UnitConverter() ) )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
                 }
@@ -1495,7 +1493,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 {
                     if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
                     {
-                        Any aAny( xProp->getPropertyValue(u"Overlay"_ustr));
+                        Any aAny( xLegendShape->getPropertyValue(u"Overlay"_ustr));
                         if(aAny.get<bool>())
                             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_OVERLAY, OUString::boolean(true));
                     }
@@ -1506,17 +1504,16 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 }
 
                 // export absolute legend position
-                Reference< drawing::XShape > xLegendShape( xProp, uno::UNO_QUERY );
                 addPosition( xLegendShape );
 
                 // export legend size
-                if (xLegendShape.is() && nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
+                if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
                 {
                     try
                     {
                         chart::ChartLegendExpansion nLegendExpansion = chart::ChartLegendExpansion_HIGH;
                         OUString aExpansionString;
-                        Any aAny( xProp->getPropertyValue(u"Expansion"_ustr));
+                        Any aAny( xLegendShape->getPropertyValue(u"Expansion"_ustr));
                         bool bHasExpansion = (aAny >>= nLegendExpansion);
                         if( bHasExpansion && SchXMLEnumConverter::getLegendExpansionConverter().exportXML( aExpansionString, aAny, mrExport.GetMM100UnitConverter() ) )
                         {
@@ -1997,7 +1994,6 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         return;
 
     // variables for autostyles
-    Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
 
     msStringBuffer.setLength( 0 );
@@ -2006,12 +2002,8 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
     std::unique_ptr<SvXMLElementExport> xElPlotArea;
     // get property states for autostyles
-    xPropSet = xDiagram;
-    if( xPropSet.is())
-    {
-        if( mxExpPropMapper.is())
-            aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
-    }
+    if( mxExpPropMapper.is())
+        aPropertyStates = mxExpPropMapper->Filter(mrExport, xDiagram);
     if( bExportContent )
     {
         rtl::Reference< XMLShapeExport > rShapeExport;
@@ -2072,21 +2064,21 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
         bool bIs3DChart = false;
 
-        if( xPropSet.is())
+        if( xDiagram.is())
         {
             Any aAny;
 
             // 3d attributes
             try
             {
-                aAny = xPropSet->getPropertyValue(u"Dim3D"_ustr);
+                aAny = xDiagram->getPropertyValue(u"Dim3D"_ustr);
                 aAny >>= bIs3DChart;
 
                 if( bIs3DChart )
                 {
                     rShapeExport = mrExport.GetShapeExport();
                     if( rShapeExport.is())
-                        rShapeExport->export3DSceneAttributes( xPropSet );
+                        rShapeExport->export3DSceneAttributes( xDiagram );
                 }
             }
             catch( const cpo::uno::Exception & )
@@ -2104,7 +2096,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         // light sources (inside plot area element)
         if( bIs3DChart &&
             rShapeExport.is())
-            rShapeExport->export3DLamps( xPropSet );
+            rShapeExport->export3DLamps( xDiagram );
     }
     else    // autostyles
     {

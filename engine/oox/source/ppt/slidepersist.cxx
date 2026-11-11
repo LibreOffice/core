@@ -458,15 +458,14 @@ static void lcl_SetEdgeLineValue(const uno::Reference<drawing::XShape>& rXConnec
     awt::Point aStartPt, aEndPt;
     tools::Rectangle aS, aE; // Start, End rectangle
     uno::Reference<drawing::XShape> xStartSp, xEndSp;
-    uno::Reference<beans::XPropertySet> xPropSet(rXConnector, uno::UNO_QUERY);
-    xPropSet->getPropertyValue(u"EdgeStartPoint"_ustr) >>= aStartPt;
-    xPropSet->getPropertyValue(u"EdgeEndPoint"_ustr) >>= aEndPt;
-    xPropSet->getPropertyValue(u"StartShape"_ustr) >>= xStartSp;
-    xPropSet->getPropertyValue(u"EndShape"_ustr) >>= xEndSp;
-    xPropSet->setPropertyValue(u"EdgeNode1HorzDist"_ustr, Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode1VertDist"_ustr, Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode2HorzDist"_ustr, Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode2VertDist"_ustr, Any(sal_Int32(0)));
+    rXConnector->getPropertyValue(u"EdgeStartPoint"_ustr) >>= aStartPt;
+    rXConnector->getPropertyValue(u"EdgeEndPoint"_ustr) >>= aEndPt;
+    rXConnector->getPropertyValue(u"StartShape"_ustr) >>= xStartSp;
+    rXConnector->getPropertyValue(u"EndShape"_ustr) >>= xEndSp;
+    rXConnector->setPropertyValue(u"EdgeNode1HorzDist"_ustr, Any(sal_Int32(0)));
+    rXConnector->setPropertyValue(u"EdgeNode1VertDist"_ustr, Any(sal_Int32(0)));
+    rXConnector->setPropertyValue(u"EdgeNode2HorzDist"_ustr, Any(sal_Int32(0)));
+    rXConnector->setPropertyValue(u"EdgeNode2VertDist"_ustr, Any(sal_Int32(0)));
 
     SdrObject* pStartObj = xStartSp.is() ? SdrObject::getSdrObjectFromXShape(xStartSp) : nullptr;
     SdrObject* pEndObj = xEndSp.is() ? SdrObject::getSdrObjectFromXShape(xEndSp) : nullptr;
@@ -534,7 +533,7 @@ static void lcl_SetEdgeLineValue(const uno::Reference<drawing::XShape>& rXConnec
                     nEdge += aConnSize.Height;
             }
         }
-        xPropSet->setPropertyValue(u"EdgeLine1Delta"_ustr, Any(nEdge / 2));
+        rXConnector->setPropertyValue(u"EdgeLine1Delta"_ustr, Any(nEdge / 2));
     }
 }
 
@@ -544,7 +543,6 @@ void SlidePersist::createConnectorShapeConnection(const oox::drawingml::ShapePtr
     oox::drawingml::ConnectorShapePropertiesList aConnectorShapeProperties
         = pConnector->getConnectorShapeProperties();
     uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
-    uno::Reference<beans::XPropertySet> xPropertySet(xConnector, uno::UNO_QUERY);
 
     if (xConnector.is())
     {
@@ -585,21 +583,21 @@ void SlidePersist::createConnectorShapeConnection(const oox::drawingml::ShapePtr
                 bool bStart = aConnectorShapeProperties[j].mbStartShape;
                 if (bStart)
                 {
-                    xPropertySet->setPropertyValue(u"StartShape"_ustr, cpo::uno::Any(xShape));
-                    xPropertySet->setPropertyValue(u"StartGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
+                    xConnector->setPropertyValue(u"StartShape"_ustr, cpo::uno::Any(xShape));
+                    xConnector->setPropertyValue(u"StartGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
                 }
                 else
                 {
-                    xPropertySet->setPropertyValue(u"EndShape"_ustr, cpo::uno::Any(xShape));
-                    xPropertySet->setPropertyValue(u"EndGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
+                    xConnector->setPropertyValue(u"EndShape"_ustr, cpo::uno::Any(xShape));
+                    xConnector->setPropertyValue(u"EndGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
                 }
             }
         }
-        uno::Reference<beans::XPropertySetInfo> xPropInfo = xPropertySet->getPropertySetInfo();
+        uno::Reference<beans::XPropertySetInfo> xPropInfo = xConnector->getPropertySetInfo();
         if (xPropInfo->hasPropertyByName(u"EdgeKind"_ustr))
         {
             ConnectorType aConnectorType;
-            xPropertySet->getPropertyValue(u"EdgeKind"_ustr) >>= aConnectorType;
+            xConnector->getPropertyValue(u"EdgeKind"_ustr) >>= aConnectorType;
             if (aConnectorType == ConnectorType_STANDARD)
                 lcl_SetEdgeLineValue(xConnector, pConnector);
         }

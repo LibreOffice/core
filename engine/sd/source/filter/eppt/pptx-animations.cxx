@@ -1104,10 +1104,9 @@ void PPTXAnimationExport::WriteAnimationNodeMedia(const sal_Int16 nParentNodeTyp
     {
         if (xAudio->getSource() >>= xShape)
         {
-            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
             bool bHasMediaURL
-                = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"MediaURL"_ustr);
-            if (bHasMediaURL && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sUrl))
+                = xShape->getPropertySetInfo()->hasPropertyByName(u"MediaURL"_ustr);
+            if (bHasMediaURL && (xShape->getPropertyValue(u"MediaURL"_ustr) >>= sUrl))
             {
                 bVideo = IsVideoURL(sUrl);
                 bValid = IsAudioURL(sUrl) || bVideo;

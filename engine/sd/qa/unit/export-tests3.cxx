@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testEmbeddedText)
     saveAndReload(TestFilter::ODG);
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
-    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0));
     uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xText.is());
 
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testTransparenText)
     saveAndReload(TestFilter::ODG);
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
-    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0));
     sal_Int16 nCharTransparence = 0;
     xShape->getPropertyValue(u"CharTransparence"_ustr) >>= nCharTransparence;
 

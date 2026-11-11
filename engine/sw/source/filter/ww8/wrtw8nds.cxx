@@ -763,20 +763,19 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
         const SdrObject* pSdrObj = aFrame.GetFrameFormat().FindRealSdrObject();
         if( pSdrObj )
             xShape = const_cast<SdrObject*>(pSdrObj)->getUnoShape();
-        uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo;
-        if( xPropertySet.is() )
-            xPropertySetInfo = xPropertySet->getPropertySetInfo();
+        if( xShape.is() )
+            xPropertySetInfo = xShape->getPropertySetInfo();
         if( xPropertySetInfo.is() )
         {
             MSWordExportBase::LinkedTextboxInfo aLinkedTextboxInfo;
 
-            const OUString sLinkChainName = lcl_getLinkChainName(xPropertySet, xPropertySetInfo);
+            const OUString sLinkChainName = lcl_getLinkChainName(xShape, xPropertySetInfo);
 
             if( xPropertySetInfo->hasPropertyByName(u"ChainNextName"_ustr) )
-                xPropertySet->getPropertyValue(u"ChainNextName"_ustr) >>= aLinkedTextboxInfo.sNextChain;
+                xShape->getPropertyValue(u"ChainNextName"_ustr) >>= aLinkedTextboxInfo.sNextChain;
             if( xPropertySetInfo->hasPropertyByName(u"ChainPrevName"_ustr) )
-                xPropertySet->getPropertyValue(u"ChainPrevName"_ustr) >>= aLinkedTextboxInfo.sPrevChain;
+                xShape->getPropertyValue(u"ChainPrevName"_ustr) >>= aLinkedTextboxInfo.sPrevChain;
 
             //collect a list of linked textboxes: those with a NEXT or PREVIOUS link
             if( !aLinkedTextboxInfo.sNextChain.isEmpty() || !aLinkedTextboxInfo.sPrevChain.isEmpty() )

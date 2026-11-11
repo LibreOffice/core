@@ -293,7 +293,7 @@ DECLARE_OOXMLEXPORT_TEST(testMceWpg, "mce-wpg.docx")
 DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
 {
     // Vertical position of the shape was incorrect due to incorrect nested mce handling.
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     // positionV's posOffset from the bugdoc, was 0.
     CPPUNIT_ASSERT(6879 <= getProperty<sal_Int32>(xShape, u"VertOrientPosition"_ustr));
     // This was -1 (default), make sure the background color is set.
@@ -507,7 +507,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
 {
     // At the start of the document, a picture which has a color specified with a color scheme, lost
     // it's color during import.
-    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xImage(getShape(1));
     uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, u"Graphic"_ustr);
     Graphic aVclGraphic(xGraphic);
     Bitmap aBitmap(aVclGraphic.GetBitmap());
@@ -745,9 +745,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
 DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
-    imageProperties->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
+    image->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
     Graphic aVclGraphic(graphic);
     Bitmap aBitmap(aVclGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL(tools::Long(58), aBitmap.GetSizePixel().Width());

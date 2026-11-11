@@ -786,7 +786,7 @@ Reference< beans::XPropertySet > ChartDocumentWrapper::getArea()
 {
     if( ! m_xArea.is())
     {
-        m_xArea.set( new AreaWrapper( m_spChart2ModelContact ) );
+        m_xArea.set( static_cast<WrappedPropertySet*>(new AreaWrapper( m_spChart2ModelContact )) );
     }
 
     return m_xArea;

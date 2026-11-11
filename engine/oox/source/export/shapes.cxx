@@ -451,7 +451,6 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     SAL_INFO("oox.shape", "size: " << size.Width << " x " << size.Height);
 #endif
 
-    Reference<XPropertySet> const xProps(xShape, UNO_QUERY);
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
@@ -459,9 +458,9 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
         pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                               XML_id, OString::number(GetNewShapeID(xShape)),
                               XML_name, GetShapeName(xShape),
-                              XML_descr, GetOptionalString(xProps, u"Description"_ustr),
-                              XML_title, GetOptionalString(xProps, u"Title"_ustr));
-        AddExtLst(pFS, xProps);
+                              XML_descr, GetOptionalString(xShape, u"Description"_ustr),
+                              XML_title, GetOptionalString(xShape, u"Title"_ustr));
+        AddExtLst(pFS, xShape);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     }
     pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
@@ -475,10 +474,10 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteTransformation( xShape, aRect, XML_a );
     WritePolyPolygon(xShape, bClosed);
-    if( xProps.is() ) {
+    if( xShape.is() ) {
         if( bClosed )
-            WriteFill(xProps, aSize);
-        WriteOutline( xProps );
+            WriteFill(xShape, aSize);
+        WriteOutline( xShape );
     }
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
@@ -800,10 +799,9 @@ static OUString lcl_GetTarget(const cpo::uno::Reference<css::frame::XModel>& xMo
 ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 {
     SAL_INFO("oox.shape", "write custom shape");
-    Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     // First check, if this is a Fontwork-shape. For DrawingML, such a shape is a
     // TextBox shape with body property prstTxWarp.
-    if (IsFontworkShape(rXPropSet))
+    if (IsFontworkShape(xShape))
     {
         ShapeExport::WriteTextShape(xShape); // qualifier to prevent PowerPointShapeExport
         return *this;
@@ -812,7 +810,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     bool bHasGeometrySeq(false);
     Sequence< PropertyValue > aGeometrySeq;
     OUString sShapeType(u"non-primitive"_ustr); // default in ODF
-    if (GetProperty(rXPropSet, u"CustomShapeGeometry"_ustr))
+    if (GetProperty(xShape, u"CustomShapeGeometry"_ustr))
     {
         SAL_INFO("oox.shape", "got custom shape geometry");
         if (mAny >>= aGeometrySeq)
@@ -883,10 +881,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     {
         // get InteropGrabBag to export attributes stored in the grabbag
         cpo::uno::Sequence<beans::PropertyValue> aGrabBagProps;
-        rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBagProps;
+        xShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBagProps;
 
         bool bUseBackground = false;
-        if (GetProperty(rXPropSet, u"FillUseSlideBackground"_ustr))
+        if (GetProperty(xShape, u"FillUseSlideBackground"_ustr))
             mAny >>= bUseBackground;
         if (bUseBackground)
             mpFS->startElementNS(mnXmlNamespace, XML_sp, XML_useBgFill, "1");
@@ -963,7 +961,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         }
 
         bool isVisible = true ;
-        if( GetProperty(rXPropSet, u"Visible"_ustr))
+        if( GetProperty(xShape, u"Visible"_ustr))
         {
             mAny >>= isVisible;
         }
@@ -971,12 +969,12 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 
         // export descr attribute of <cNvPr> element
         OUString sDescr;
-        if (GetProperty(rXPropSet, u"Description"_ustr))
+        if (GetProperty(xShape, u"Description"_ustr))
             mAny >>= sDescr;
 
         // export title attribute of <cNvPr> element
         OUString sTitle;
-        if (GetProperty(rXPropSet, u"Title"_ustr))
+        if (GetProperty(xShape, u"Title"_ustr))
             mAny >>= sTitle;
 
         // export <cNvPr> element
@@ -1003,7 +1001,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             }
         }
 
-        if( GetProperty(rXPropSet, u"URL"_ustr) )
+        if( GetProperty(xShape, u"URL"_ustr) )
         {
             OUString sURL;
             mAny >>= sURL;
@@ -1023,10 +1021,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         // mpFS->singleElementNS(XML_a, XML_hlinkClick, pAttrListHlinkClick);
 
         OUString sBookmark;
-        if (GetProperty(rXPropSet, u"Bookmark"_ustr))
+        if (GetProperty(xShape, u"Bookmark"_ustr))
             mAny >>= sBookmark;
 
-        if (GetProperty(rXPropSet, u"OnClick"_ustr))
+        if (GetProperty(xShape, u"OnClick"_ustr))
         {
             OUString sPPAction;
             presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
@@ -1081,7 +1079,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                     XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
                     sBookmark.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump");
         }
-        AddExtLst(pFS, rXPropSet);
+        AddExtLst(pFS, xShape);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
         pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
         WriteNonVisualProperties( xShape );
@@ -1097,7 +1095,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                                                                          : GetShapeID(xShape)),
                                 XML_name, GetShapeName(xShape));
 
-            if (GetProperty(rXPropSet, u"Hyperlink"_ustr))
+            if (GetProperty(xShape, u"Hyperlink"_ustr))
             {
                 OUString sURL;
                 mAny >>= sURL;
@@ -1111,7 +1109,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                     mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
                 }
             }
-            AddExtLst(pFS, rXPropSet);
+            AddExtLst(pFS, xShape);
             pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
         }
         pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
@@ -1298,35 +1296,35 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         else
             WritePresetShape( sPresetShape );
     }
-    if( rXPropSet.is() )
+    if( xShape.is() )
     {
-        WriteFill(rXPropSet, xShape->getSize());
-        WriteOutline( rXPropSet );
-        WriteShapeEffects( rXPropSet );
+        WriteFill(xShape, xShape->getSize());
+        WriteOutline( xShape );
+        WriteShapeEffects( xShape );
 
         // an extrusion the shape has is written from the shape; the 3D effects a file brought
         // along are replayed when the shape has none
-        if (!WriteExtrusion3D(rXPropSet, false))
+        if (!WriteExtrusion3D(xShape, false))
         {
             bool bHas3DEffectinShape = false;
             cpo::uno::Sequence<beans::PropertyValue> grabBag;
-            rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
+            xShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
 
             for (auto const& it : grabBag)
                 if (it.Name == "3DEffectProperties")
                     bHas3DEffectinShape = true;
 
             if( bHas3DEffectinShape)
-                Write3DEffects( rXPropSet, /*bIsText=*/false );
+                Write3DEffects( xShape, /*bIsText=*/false );
         }
     }
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
-    if (HasShapeStyle(rXPropSet))
+    if (HasShapeStyle(xShape))
     {
         pFS->startElementNS(mnXmlNamespace, XML_style);
-        WriteShapeStyle( rXPropSet );
+        WriteShapeStyle( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_style );
     }
 
@@ -1348,7 +1346,6 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
 
     // TODO: connector ?
 
-    Reference<XPropertySet> const xProps(xShape, UNO_QUERY);
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
@@ -1356,9 +1353,9 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
         pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                 XML_id, OString::number(GetNewShapeID(xShape)),
                 XML_name, GetShapeName(xShape),
-                XML_descr, GetOptionalString(xProps, u"Description"_ustr),
-                XML_title, GetOptionalString(xProps, u"Title"_ustr));
-        AddExtLst(pFS, xProps);
+                XML_descr, GetOptionalString(xShape, u"Description"_ustr),
+                XML_title, GetOptionalString(xShape, u"Title"_ustr));
+        AddExtLst(pFS, xShape);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
         WriteNonVisualProperties( xShape );
@@ -1368,8 +1365,8 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
         pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
 
     CircleKind  eCircleKind(CircleKind_FULL);
-    if (xProps.is())
-        xProps->getPropertyValue(u"CircleKind"_ustr ) >>= eCircleKind;
+    if (xShape.is())
+        xShape->getPropertyValue(u"CircleKind"_ustr ) >>= eCircleKind;
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr );
@@ -1381,10 +1378,10 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
     {
         sal_Int32 nStartAngleIntern(9000);
         sal_Int32 nEndAngleIntern(0);
-        if (xProps.is())
+        if (xShape.is())
         {
-           xProps->getPropertyValue(u"CircleStartAngle"_ustr ) >>= nStartAngleIntern;
-           xProps->getPropertyValue(u"CircleEndAngle"_ustr) >>= nEndAngleIntern;
+           xShape->getPropertyValue(u"CircleStartAngle"_ustr ) >>= nStartAngleIntern;
+           xShape->getPropertyValue(u"CircleEndAngle"_ustr) >>= nEndAngleIntern;
         }
         std::vector< std::pair<sal_Int32,sal_Int32>> aAvList;
         awt::Size aSize = xShape->getSize();
@@ -1412,7 +1409,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
             WritePresetShape("ellipse"_ostr);
         }
     }
-    if( xProps.is() )
+    if( xShape.is() )
     {
         if (CircleKind_ARC == eCircleKind)
         {
@@ -1422,10 +1419,10 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
             FillStyle eFillStyle(FillStyle_NONE);
             cpo::uno::Any aNewValue;
             aNewValue <<= eFillStyle;
-            xProps->setPropertyValue(u"FillStyle"_ustr, aNewValue);
+            xShape->setPropertyValue(u"FillStyle"_ustr, aNewValue);
         }
-        WriteFill( xProps );
-        WriteOutline( xProps );
+        WriteFill( xShape );
+        WriteOutline( xShape );
     }
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
@@ -1462,21 +1459,19 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     uno::Reference<graphic::XGraphic> xGraphic;
     OUString sMediaURL;
 
-    Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
-
     if (pGraphic)
     {
         xGraphic.set(pGraphic->GetXGraphic());
     }
-    else if (xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName(u"Graphic"_ustr))
+    else if (xShape.is() && xShape->getPropertySetInfo()->hasPropertyByName(u"Graphic"_ustr))
     {
-        xShapeProps->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        xShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     }
 
     // tdf#155903 Only for PPTX, Microsoft does not support this feature in Word and Excel.
-    bool bHasMediaURL = GetDocumentType() == DOCUMENT_PPTX && xShapeProps.is()
-                        && xShapeProps->getPropertySetInfo()->hasPropertyByName(u"MediaURL"_ustr)
-                        && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
+    bool bHasMediaURL = GetDocumentType() == DOCUMENT_PPTX && xShape.is()
+                        && xShape->getPropertySetInfo()->hasPropertyByName(u"MediaURL"_ustr)
+                        && (xShape->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
 
     if (!xGraphic.is() && !bHasMediaURL)
     {
@@ -1499,15 +1494,15 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     OUString sDescr, sURL, sBookmark, sPPAction;
     bool bVisible = true;
 
-    if ( GetProperty( xShapeProps, u"Description"_ustr ) )
+    if ( GetProperty( xShape, u"Description"_ustr ) )
         mAny >>= sDescr;
-    if ( GetProperty( xShapeProps, u"URL"_ustr ) )
+    if ( GetProperty( xShape, u"URL"_ustr ) )
         mAny >>= sURL;
-    if ( GetProperty( xShapeProps, u"Visible"_ustr ) )
+    if ( GetProperty( xShape, u"Visible"_ustr ) )
         mAny >>= bVisible;
-    if (GetProperty(xShapeProps, u"Bookmark"_ustr))
+    if (GetProperty(xShape, u"Bookmark"_ustr))
         mAny >>= sBookmark;
-    if (GetProperty(xShapeProps, u"OnClick"_ustr))
+    if (GetProperty(xShape, u"OnClick"_ustr))
         mAny >>= eClickAction;
 
     sal_Int32 nShapeId = GetShapeID(xShape) == -1 ? GetNewShapeID(xShape) : GetTmpShapeID();
@@ -1515,7 +1510,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     pFS->startElementNS(mnXmlNamespace, XML_cNvPr, XML_id, OString::number(nShapeId), XML_name,
                         GetShapeName(xShape), XML_descr,
                         sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()), XML_title,
-                        GetOptionalString(xShapeProps, u"Title"_ustr), XML_hidden,
+                        GetOptionalString(xShape, u"Title"_ustr), XML_hidden,
                         sax_fastparser::UseIf("1", !bVisible));
 
     if (eClickAction != presentation::ClickAction_NONE)
@@ -1579,11 +1574,11 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
                                   sBookmark.isEmpty() ? "ppaction://noaction"
                                                       : "ppaction://hlinksldjump");
     }
-    AddExtLst(pFS, xShapeProps);
+    AddExtLst(pFS, xShape);
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
     bool bNoChangeAspect = false;
-    if (GetProperty(xShapeProps, u"InteropGrabBag"_ustr))
+    if (GetProperty(xShape, u"InteropGrabBag"_ustr))
     {
         cpo::uno::Sequence<beans::PropertyValue> aGrabBagProps;
         mAny >>= aGrabBagProps;
@@ -1608,26 +1603,26 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     if (xGraphic.is())
     {
-        WriteXGraphicBlip(xShapeProps, xGraphic, mbUserShapes);
+        WriteXGraphicBlip(xShape, xGraphic, mbUserShapes);
     }
     else if (bHasMediaURL)
     {
         Reference<graphic::XGraphic> xFallbackGraphic;
-        if (xShapeProps->getPropertySetInfo()->hasPropertyByName(u"FallbackGraphic"_ustr))
-            xShapeProps->getPropertyValue(u"FallbackGraphic"_ustr) >>= xFallbackGraphic;
+        if (xShape->getPropertySetInfo()->hasPropertyByName(u"FallbackGraphic"_ustr))
+            xShape->getPropertyValue(u"FallbackGraphic"_ustr) >>= xFallbackGraphic;
 
-        WriteXGraphicBlip(xShapeProps, xFallbackGraphic, mbUserShapes);
+        WriteXGraphicBlip(xShape, xFallbackGraphic, mbUserShapes);
     }
 
     if (xGraphic.is())
     {
-        WriteSrcRectXGraphic(xShapeProps, xGraphic);
+        WriteSrcRectXGraphic(xShape, xGraphic);
     }
 
     // now we stretch always when we get pGraphic (when changing that
     // behavior, test n#780830 for regression, where the OLE sheet might get tiled
     bool bStretch = false;
-    if( !pGraphic && GetProperty( xShapeProps, u"FillBitmapStretch"_ustr ) )
+    if( !pGraphic && GetProperty( xShape, u"FillBitmapStretch"_ustr ) )
         mAny >>= bStretch;
 
     if ( pGraphic || bStretch )
@@ -1646,18 +1641,18 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     bool bFlipH = false;
-    if( xShapeProps->getPropertySetInfo()->hasPropertyByName(u"IsMirrored"_ustr) )
+    if( xShape->getPropertySetInfo()->hasPropertyByName(u"IsMirrored"_ustr) )
     {
-        xShapeProps->getPropertyValue(u"IsMirrored"_ustr) >>= bFlipH;
+        xShape->getPropertyValue(u"IsMirrored"_ustr) >>= bFlipH;
     }
     WriteShapeTransformation( xShape, XML_a, bFlipH, false, false, false, true );
     WritePresetShape( "rect"_ostr );
-    WriteFill(xShapeProps);
+    WriteFill(xShape);
     // graphic object can come with the frame (bnc#654525)
-    WriteOutline( xShapeProps );
+    WriteOutline( xShape );
 
-    WriteShapeEffects( xShapeProps );
-    Write3DEffects( xShapeProps, /*bIsText=*/false );
+    WriteShapeEffects( xShape );
+    Write3DEffects( xShape, /*bIsText=*/false );
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
@@ -1794,9 +1789,8 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, const t
                                         ConnectorType eConnectorType,
                                         std::vector<std::pair<sal_Int32, sal_Int32>>& rAvList)
 {
-    Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
     bool bIsOOXMLCurve(false);
-    xShapeProps->getPropertyValue(u"EdgeOOXMLCurve"_ustr) >>= bIsOOXMLCurve;
+    xShape->getPropertyValue(u"EdgeOOXMLCurve"_ustr) >>= bIsOOXMLCurve;
     sal_Int32 nAdjCount = 0;
     if (eConnectorType == ConnectorType_CURVE)
     {
@@ -1915,12 +1909,11 @@ static sal_Int32 lcl_GetGluePointId(const Reference<XShape>& xShape, sal_Int32 n
     {
         bool bFlipH = false;
         bool bFlipV = false;
-        Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
-        if (xShapeProps.is() && xShapeProps->getPropertySetInfo()
-                && xShapeProps->getPropertySetInfo()->hasPropertyByName(u"CustomShapeGeometry"_ustr))
+        if (xShape.is() && xShape->getPropertySetInfo()
+                && xShape->getPropertySetInfo()->hasPropertyByName(u"CustomShapeGeometry"_ustr))
         {
             Sequence<PropertyValue> aGeometrySeq;
-            xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeometrySeq;
+            xShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeometrySeq;
             for (int i = 0; i < aGeometrySeq.getLength(); i++)
             {
                 const PropertyValue& rProp = aGeometrySeq[i];
@@ -1959,13 +1952,12 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
 
     OUString sGeometry;
     std::vector<std::pair<sal_Int32, sal_Int32>> aAdjustValueList;
-    Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     Reference< XPropertyState > rXPropState( xShape, UNO_QUERY );
     awt::Point aStartPoint, aEndPoint;
     Reference< XShape > rXShapeA;
     Reference< XShape > rXShapeB;
     ConnectorType eConnectorType = ConnectorType_STANDARD;
-    if (GetProperty(rXPropSet, u"EdgeKind"_ustr))
+    if (GetProperty(xShape, u"EdgeKind"_ustr))
         mAny >>= eConnectorType;
 
     switch( eConnectorType ) {
@@ -1982,15 +1974,15 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
             break;
     }
 
-    if (GetDirectProperty( rXPropSet, rXPropState, u"EdgeStartPoint"_ustr ))
+    if (GetDirectProperty( xShape, rXPropState, u"EdgeStartPoint"_ustr ))
     {
         mAny >>= aStartPoint;
-        if (GetDirectProperty( rXPropSet, rXPropState, u"EdgeEndPoint"_ustr ))
+        if (GetDirectProperty( xShape, rXPropState, u"EdgeEndPoint"_ustr ))
             mAny >>= aEndPoint;
     }
-    if (GetProperty(rXPropSet, u"EdgeStartConnection"_ustr))
+    if (GetProperty(xShape, u"EdgeStartConnection"_ustr))
         mAny >>= rXShapeA;
-    if (GetProperty(rXPropSet, u"EdgeEndConnection"_ustr))
+    if (GetProperty(xShape, u"EdgeEndConnection"_ustr))
         mAny >>= rXShapeB;
 
     // Position is relative to group in Word, but relative to anchor of group in API.
@@ -2004,7 +1996,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     }
     EscherConnectorListEntry aConnectorEntry( xShape, aStartPoint, rXShapeA, aEndPoint, rXShapeB );
 
-    if (GetProperty(rXPropSet, u"StartGluePointIndex"_ustr))
+    if (GetProperty(xShape, u"StartGluePointIndex"_ustr))
     {
         mAny >>= nStartGlueId;
         nStartGlueId = (nStartGlueId != -1) ? lcl_GetGluePointId(rXShapeA, nStartGlueId)
@@ -2013,7 +2005,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
                                                    : -1);
     }
 
-    if (GetProperty(rXPropSet, u"EndGluePointIndex"_ustr))
+    if (GetProperty(xShape, u"EndGluePointIndex"_ustr))
     {
         mAny >>= nEndGlueId;
         nEndGlueId = (nEndGlueId != -1) ? lcl_GetGluePointId(rXShapeB, nEndGlueId)
@@ -2069,9 +2061,9 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     else
     {
         OUString sDescr, sTitle;
-        if (GetProperty(rXPropSet, u"Description"_ustr))
+        if (GetProperty(xShape, u"Description"_ustr))
             mAny >>= sDescr;
-        if (GetProperty(rXPropSet, u"Title"_ustr))
+        if (GetProperty(xShape, u"Title"_ustr))
             mAny >>= sTitle;
 
         // non visual shape properties
@@ -2081,7 +2073,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
             XML_name, GetShapeName(xShape),
             XML_descr, sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()),
             XML_title, sax_fastparser::UseIf(sTitle, !sTitle.isEmpty()));
-        AddExtLst(pFS, rXPropSet);
+        AddExtLst(pFS, xShape);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
         // non visual connector shape drawing properties
         pFS->startElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
@@ -2102,20 +2094,19 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     WriteTransformation( xShape, aRect, XML_a, bFlipH, bFlipV, nAngle );
     // TODO: write adjustments (ppt export doesn't work well there either)
     WritePresetShape( sGeometry.toUtf8(), aAdjustValueList);
-    Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
-    if( xShapeProps.is() )
-        WriteOutline( xShapeProps );
+    if( xShape.is() )
+        WriteOutline( xShape );
     // A connector states its effects the same way every other shape does. A connector without
     // any states an empty list, which is what keeps it from taking the effects of its style.
-    WriteShapeEffects( rXPropSet );
+    WriteShapeEffects( xShape );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     // A connector carries the style that names the theme its colors come from, the same way
     // every other shape does.
-    if (HasShapeStyle(rXPropSet))
+    if (HasShapeStyle(xShape))
     {
         pFS->startElementNS(mnXmlNamespace, XML_style);
-        WriteShapeStyle( rXPropSet );
+        WriteShapeStyle( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_style );
     }
 
@@ -2170,7 +2161,6 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
         bFlipV = ( rPoly[ 0 ].Y() > rPoly[ 1 ].Y() );
     }
 
-    Reference<XPropertySet> const xShapeProps(xShape, UNO_QUERY);
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
@@ -2178,9 +2168,9 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
         pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                               XML_id, OString::number(GetNewShapeID(xShape)),
                               XML_name, GetShapeName(xShape),
-                              XML_descr, GetOptionalString(xShapeProps, u"Description"_ustr),
-                              XML_title, GetOptionalString(xShapeProps, u"Title"_ustr));
-        AddExtLst(pFS, xShapeProps);
+                              XML_descr, GetOptionalString(xShape, u"Description"_ustr),
+                              XML_title, GetOptionalString(xShape, u"Title"_ustr));
+        AddExtLst(pFS, xShape);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     }
     pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
@@ -2194,15 +2184,15 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, true);
     WritePresetShape( "line"_ostr );
-    if( xShapeProps.is() )
-        WriteOutline( xShapeProps );
+    if( xShape.is() )
+        WriteOutline( xShape );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     //write style
-    if (HasShapeStyle(xShapeProps))
+    if (HasShapeStyle(xShape))
     {
         pFS->startElementNS(mnXmlNamespace, XML_style);
-        WriteShapeStyle( xShapeProps );
+        WriteShapeStyle( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_style );
     }
 
@@ -2218,11 +2208,10 @@ ShapeExport& ShapeExport::WriteNonVisualDrawingProperties( const Reference< XSha
 {
     FSHelperPtr pFS = GetFS();
 
-    Reference<XPropertySet> const xShapeProps(xShape, UNO_QUERY);
     pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                               XML_id, OString::number(GetNewShapeID(xShape)),
                               XML_name, pName );
-    AddExtLst(pFS, xShapeProps);
+    AddExtLst(pFS, xShape);
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
     return *this;
@@ -2244,10 +2233,9 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
 
     sal_Int32 nRadius = 0;
 
-    Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
-    if( xShapeProps.is() )
+    if( xShape.is() )
     {
-        xShapeProps->getPropertyValue( u"CornerRadius"_ustr ) >>= nRadius;
+        xShape->getPropertyValue( u"CornerRadius"_ustr ) >>= nRadius;
     }
 
     if( nRadius )
@@ -2264,9 +2252,9 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
     pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                           XML_id, OString::number(GetNewShapeID(xShape)),
                           XML_name, GetShapeName(xShape),
-                          XML_descr, GetOptionalString(xShapeProps, u"Description"_ustr),
-                          XML_title, GetOptionalString(xShapeProps, u"Title"_ustr));
-    AddExtLst(pFS, xShapeProps);
+                          XML_descr, GetOptionalString(xShape, u"Description"_ustr),
+                          XML_title, GetOptionalString(xShape, u"Title"_ustr));
+    AddExtLst(pFS, xShape);
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
     WriteNonVisualProperties( xShape );
@@ -2276,11 +2264,10 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( nRadius == 0 ? "rect"_ostr : "roundRect"_ostr );
-    Reference< XPropertySet > xProps( xShape, UNO_QUERY );
-    if( xProps.is() )
+    if( xShape.is() )
     {
-        WriteFill( xProps );
-        WriteOutline( xProps );
+        WriteFill( xShape );
+        WriteOutline( xShape );
     }
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
@@ -2359,20 +2346,19 @@ bool ShapeExport::IsValidShape(const Reference<XShape>& xShape, DocumentType eDo
         if (IsNonEmptySimpleText(xShape))
             return true;
 
-        Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
         Reference<XPropertySetInfo> xShapePropSetInfo
-            = xShapeProps.is() ? xShapeProps->getPropertySetInfo() : nullptr;
+            = xShape->getPropertySetInfo();
         if (!xShapePropSetInfo.is())
             return false;
 
         uno::Reference<graphic::XGraphic> xGraphic;
-        xShapeProps->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        xShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
 
         // tdf#155903 Only for PPTX. Microsoft does not support this feature in Word and Excel.
         OUString sMediaURL;
         bool bHasMediaURL = eDocumentType == DOCUMENT_PPTX
                             && xShapePropSetInfo->hasPropertyByName(u"MediaURL"_ustr)
-                            && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
+                            && (xShape->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
 
         if (!xGraphic.is() && !bHasMediaURL)
             return false;
@@ -2397,11 +2383,10 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 
     if (GetDocumentType() == DOCUMENT_PPTX)
     {
-        Reference< XPropertySet > xShapeProperties(xShape, UNO_QUERY);
-        if (xShapeProperties && xShapeProperties->getPropertySetInfo()
-            && xShapeProperties->getPropertySetInfo()->hasPropertyByName(u"IsPresentationObject"_ustr)
-            && xShapeProperties->getPropertyValue(u"IsPresentationObject"_ustr).hasValue())
-            mbPlaceholder = xShapeProperties->getPropertyValue(u"IsPresentationObject"_ustr).get<bool>();
+        if (xShape && xShape->getPropertySetInfo()
+            && xShape->getPropertySetInfo()->hasPropertyByName(u"IsPresentationObject"_ustr)
+            && xShape->getPropertyValue(u"IsPresentationObject"_ustr).hasValue())
+            mbPlaceholder = xShape->getPropertyValue(u"IsPresentationObject"_ustr).get<bool>();
     }
 
     (this->*(aConverterIterator->second))(xShape);
@@ -2489,18 +2474,17 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< cpo::uno::XInterface >&
 void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
 {
     Reference< XTable > xTable;
-    Reference< XPropertySet > xPropSet( rXShape, UNO_QUERY );
 
     mpFS->startElementNS(XML_a, XML_graphic);
     mpFS->startElementNS(XML_a, XML_graphicData,
                          XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/table");
 
-    if ( xPropSet.is() && ( xPropSet->getPropertyValue( u"Model"_ustr ) >>= xTable ) )
+    if ( rXShape.is() && ( rXShape->getPropertyValue( u"Model"_ustr ) >>= xTable ) )
     {
         mpFS->startElementNS(XML_a, XML_tbl);
 
-        auto flag = [&xPropSet](const OUString& rName) {
-            return sax_fastparser::UseIf("1", xPropSet->getPropertyValue(rName).get<bool>());
+        auto flag = [&rXShape](const OUString& rName) {
+            return sax_fastparser::UseIf("1", rXShape->getPropertyValue(rName).get<bool>());
         };
         mpFS->startElementNS(XML_a, XML_tblPr,
                              XML_firstRow, flag(u"UseFirstRowStyle"_ustr),
@@ -2509,12 +2493,12 @@ void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
                              XML_lastCol, flag(u"UseLastColumnStyle"_ustr),
                              XML_bandRow, flag(u"UseBandingRowStyle"_ustr),
                              XML_bandCol, flag(u"UseBandingColumnStyle"_ustr));
-        WriteShapeEffects(xPropSet);
+        WriteShapeEffects(rXShape);
 
         // The table is shown in the style the document named for it, so that name is stated again.
         OUString sStyleName;
-        if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"TableStyleName"_ustr))
-            xPropSet->getPropertyValue(u"TableStyleName"_ustr) >>= sStyleName;
+        if (rXShape->getPropertySetInfo()->hasPropertyByName(u"TableStyleName"_ustr))
+            rXShape->getPropertyValue(u"TableStyleName"_ustr) >>= sStyleName;
         if (!sStyleName.isEmpty())
         {
             mpFS->startElementNS(XML_a, XML_tableStyleId);
@@ -2850,13 +2834,12 @@ ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
 
     pFS->startElementNS(mnXmlNamespace, XML_nvGraphicFramePr);
 
-    Reference<XPropertySet> const xShapeProps(xShape, UNO_QUERY);
     pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                           XML_id, OString::number(GetNewShapeID(xShape)),
                           XML_name,   GetShapeName(xShape),
-                          XML_descr, GetOptionalString(xShapeProps, u"Description"_ustr),
-                          XML_title, GetOptionalString(xShapeProps, u"Title"_ustr));
-    AddExtLst(pFS, xShapeProps);
+                          XML_descr, GetOptionalString(xShape, u"Description"_ustr),
+                          XML_title, GetOptionalString(xShape, u"Title"_ustr));
+    AddExtLst(pFS, xShape);
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
     pFS->singleElementNS(mnXmlNamespace, XML_cNvGraphicFramePr);
@@ -2876,7 +2859,6 @@ ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
 ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
 {
     FSHelperPtr pFS = GetFS();
-    Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
 
     pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
 
@@ -2887,10 +2869,10 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
         pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                               XML_id, OString::number(GetNewShapeID(xShape)),
                               XML_name, GetShapeName(xShape),
-                              XML_descr, GetOptionalString(xShapeProps, u"Description"_ustr),
-                              XML_title, GetOptionalString(xShapeProps, u"Title"_ustr));
+                              XML_descr, GetOptionalString(xShape, u"Description"_ustr),
+                              XML_title, GetOptionalString(xShape, u"Title"_ustr));
         OUString sURL;
-        if (GetProperty(xShapeProps, u"URL"_ustr))
+        if (GetProperty(xShape, u"URL"_ustr))
             mAny >>= sURL;
 
         if (!sURL.isEmpty())
@@ -2902,7 +2884,7 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
 
             mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
         }
-        AddExtLst(pFS, xShapeProps);
+        AddExtLst(pFS, xShape);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     }
     pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1");
@@ -2916,12 +2898,11 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect"_ostr );
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, UNO_QUERY);
-    if (!IsFontworkShape(xShapeProps)) // Fontwork needs fill and outline in run properties instead.
+    if (!IsFontworkShape(xShape)) // Fontwork needs fill and outline in run properties instead.
     {
-        WriteBlipOrNormalFill(xPropertySet, u"Graphic"_ustr, xShape->getSize());
-        WriteOutline(xPropertySet);
-        WriteShapeEffects(xPropertySet);
+        WriteBlipOrNormalFill(xShape, u"Graphic"_ustr, xShape->getSize());
+        WriteOutline(xShape);
+        WriteShapeEffects(xShape);
     }
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
@@ -2934,10 +2915,9 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
 
 void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
 {
-    Reference<XPropertySet> const xPropSet(xShape, UNO_QUERY);
-    assert(xPropSet.is());
+    assert(xShape.is());
     Reference<XModel> xMathModel;
-    xPropSet->getPropertyValue(u"Model"_ustr) >>= xMathModel;
+    xShape->getPropertyValue(u"Model"_ustr) >>= xMathModel;
     assert(xMathModel.is());
     assert(GetDocumentType() != DOCUMENT_DOCX); // should be written in DocxAttributeOutput
     SAL_WARN_IF(GetDocumentType() == DOCUMENT_XLSX, "oox.shape", "Math export to XLSX isn't tested, should it happen here?");
@@ -2953,7 +2933,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->startElementNS(mnXmlNamespace, XML_sp);
     mpFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
     mpFS->startElementNS(mnXmlNamespace, XML_cNvPr, XML_id, cNvPr_id, XML_name, shapeName);
-    AddExtLst(mpFS, xPropSet);
+    AddExtLst(mpFS, xShape);
     mpFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     mpFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1");
     mpFS->singleElementNS(mnXmlNamespace, XML_nvPr);
@@ -2982,7 +2962,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->startElementNS(XML_mc, XML_Fallback);
 
     svt::EmbeddedObjectRef ref(
-        xPropSet->getPropertyValue(u"EmbeddedObject"_ustr).query<css::embed::XEmbeddedObject>(),
+        xShape->getPropertyValue(u"EmbeddedObject"_ustr).query<css::embed::XEmbeddedObject>(),
         embed::Aspects::MSOLE_CONTENT);
     if (auto* graphic = ref.GetGraphic(); graphic && graphic->GetType() != GraphicType::NONE)
     {
@@ -2991,7 +2971,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
             mpFS->startElementNS(mnXmlNamespace, XML_sp);
             mpFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
             mpFS->startElementNS(mnXmlNamespace, XML_cNvPr, XML_id, cNvPr_id, XML_name, shapeName);
-            AddExtLst(mpFS, xPropSet);
+            AddExtLst(mpFS, xShape);
             mpFS->endElementNS(mnXmlNamespace, XML_cNvPr);
             mpFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1");
             mpFS->singleElementNS(mnXmlNamespace, XML_nvPr);
@@ -3035,13 +3015,12 @@ static void WriteEmptyGraphic(FSHelperPtr const& pFS, sal_Int32 nGraphicId)
 
 ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 {
-    Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
-    if (!xPropSet.is())
+    if (!xShape.is())
         return *this;
 
     enum { CHART, MATH, OTHER } eType(OTHER);
     OUString clsid;
-    xPropSet->getPropertyValue(u"CLSID"_ustr) >>= clsid;
+    xShape->getPropertyValue(u"CLSID"_ustr) >>= clsid;
     if (!clsid.isEmpty())
     {
         SvGlobalName aClassID;
@@ -3056,7 +3035,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     if (CHART == eType)
     {
         Reference< XChartDocument > xChartDoc;
-        xPropSet->getPropertyValue(u"Model"_ustr) >>= xChartDoc;
+        xShape->getPropertyValue(u"Model"_ustr) >>= xChartDoc;
         assert(xChartDoc.is());
         //export the chart
 #if !ENABLE_WASM_STRIP_CHART
@@ -3077,7 +3056,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     }
 
     uno::Reference<embed::XEmbeddedObject> const xObj(
-        xPropSet->getPropertyValue(u"EmbeddedObject"_ustr), uno::UNO_QUERY);
+        xShape->getPropertyValue(u"EmbeddedObject"_ustr), uno::UNO_QUERY);
 
     if (!xObj.is())
     {
@@ -3164,7 +3143,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     OUString sRelId;
     if (!xInStream.is())
     {
-        xPropSet->getPropertyValue(u"LinkURL"_ustr) >>= sURL;
+        xShape->getPropertyValue(u"LinkURL"_ustr) >>= sURL;
         if (sURL.isEmpty())
             return *this;
 
@@ -3210,7 +3189,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     }
 
     sal_Int64 nAspect;
-    bool bShowAsIcon = (xPropSet->getPropertyValue(u"Aspect"_ustr) >>= nAspect)
+    bool bShowAsIcon = (xShape->getPropertyValue(u"Aspect"_ustr) >>= nAspect)
                        && nAspect == embed::Aspects::MSOLE_ICON;
 
     mpFS->startElementNS(mnXmlNamespace, XML_graphicFrame);
@@ -3220,7 +3199,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     mpFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                            XML_id,     OString::number(GetNewShapeID(xShape)),
                            XML_name,   GetShapeName(xShape));
-    AddExtLst(mpFS, xPropSet);
+    AddExtLst(mpFS, xShape);
     mpFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
     mpFS->singleElementNS(mnXmlNamespace, XML_cNvGraphicFramePr);
@@ -3322,12 +3301,10 @@ sal_Int32 ShapeExport::GetShapeID( const Reference< XShape >& rXShape, ShapeHash
 
 OUString ShapeExport::GetShapeName(const Reference<XShape>& xShape)
 {
-    Reference<XPropertySet> rXPropSet(xShape, UNO_QUERY);
-
     // Empty name keeps the object unnamed.
     OUString sName;
 
-    if (GetProperty(rXPropSet, u"Name"_ustr))
+    if (GetProperty(xShape, u"Name"_ustr))
         mAny >>= sName;
     return sName;
 }

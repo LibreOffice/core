@@ -57,16 +57,15 @@ cpo::uno::Sequence<beans::PropertyValue>
 lclGetProperty(const uno::Reference<drawing::XShape>& rShape, const OUString& rPropName)
 {
     cpo::uno::Sequence<beans::PropertyValue> aResult;
-    uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
 
-    if (!xPropertySet.is())
+    if (!rShape.is())
         return aResult;
 
-    xPropSetInfo = xPropertySet->getPropertySetInfo();
+    xPropSetInfo = rShape->getPropertySetInfo();
     if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(rPropName))
     {
-        xPropertySet->getPropertyValue(rPropName) >>= aResult;
+        rShape->getPropertyValue(rPropName) >>= aResult;
     }
     return aResult;
 }
@@ -873,9 +872,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         if (pObj)
         {
             uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape());
-            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            if (xShapeProps.is())
-                xShapeProps->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bLclInTabCell;
+            if (xShape.is())
+                xShape->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bLclInTabCell;
         }
 
         const SwFormatHoriOrient& rHoriOri(pFrameFormat->GetHoriOrient());
@@ -1600,12 +1598,11 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
         || xServiceInfo->supportsService(u"com.sun.star.drawing.PolyLineShape"_ustr))
         return false;
 
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     // For signature line shapes, we don't want DML, just the VML shape.
     if (xServiceInfo->supportsService(u"com.sun.star.drawing.GraphicObjectShape"_ustr))
     {
         bool bIsSignatureLineShape = false;
-        xShapeProperties->getPropertyValue(u"IsSignatureLine"_ustr) >>= bIsSignatureLineShape;
+        xShape->getPropertyValue(u"IsSignatureLine"_ustr) >>= bIsSignatureLineShape;
         if (bIsSignatureLineShape)
             return false;
     }
@@ -1618,7 +1615,7 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
         if (pCustomShape && pCustomShape->IsVerticalWriting())
             return false;
         css::drawing::FillStyle eFillStyle = css::drawing::FillStyle_SOLID;
-        xShapeProperties->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
+        xShape->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
         if (eFillStyle == css::drawing::FillStyle_BITMAP)
             return false;
     }
@@ -1828,16 +1825,15 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
     const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
     if (pSdrObj)
         xShape = const_cast<SdrObject*>(pSdrObj)->getUnoShape();
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
-    if (xPropertySet.is())
-        xPropSetInfo = xPropertySet->getPropertySetInfo();
+    if (xShape.is())
+        xPropSetInfo = xShape->getPropertySetInfo();
 
     m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList().get());
     {
         drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"TextVerticalAdjust"_ustr))
-            xPropertySet->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eAdjust;
+            xShape->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eAdjust;
         m_pImpl->getBodyPrAttrList()->add(XML_anchor,
                                           oox::drawingml::GetTextVerticalAdjust(eAdjust));
     }
@@ -1855,8 +1851,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);
 
         OUString sHyperlink;
-        if (xPropertySet.is())
-            xPropertySet->getPropertyValue(u"HyperLinkURL"_ustr) >>= sHyperlink;
+        if (xShape.is())
+            xShape->getPropertyValue(u"HyperLinkURL"_ustr) >>= sHyperlink;
         if (!sHyperlink.isEmpty())
         {
             OUString sRelId = m_pImpl->getExport().GetFilter().addRelation(
@@ -1882,7 +1878,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
         {
             cpo::uno::Sequence<beans::PropertyValue> propList;
-            xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
+            xShape->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
             auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
                                       [](const beans::PropertyValue& rProp) {
                                           return rProp.Name == "mso-rotation-angle";
@@ -1918,7 +1914,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
         {
             cpo::uno::Sequence<beans::PropertyValue> propList;
-            xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
+            xShape->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
             auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
                                       [](const beans::PropertyValue& rProp) {
                                           return rProp.Name == "mso-orig-shape-type";
@@ -1988,9 +1984,9 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
     if (xPropSetInfo.is())
     {
         if (xPropSetInfo->hasPropertyByName(u"LinkDisplayName"_ustr))
-            xPropertySet->getPropertyValue(u"LinkDisplayName"_ustr) >>= sLinkChainName;
+            xShape->getPropertyValue(u"LinkDisplayName"_ustr) >>= sLinkChainName;
         else if (xPropSetInfo->hasPropertyByName(u"ChainName"_ustr))
-            xPropertySet->getPropertyValue(u"ChainName"_ustr) >>= sLinkChainName;
+            xShape->getPropertyValue(u"ChainName"_ustr) >>= sLinkChainName;
     }
 
     // second, check if THIS textbox is linked and then decide whether to write the tag txbx or linkedTxbx
@@ -2153,10 +2149,9 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
             m_pImpl->getFlyAttrList()->addNS(XML_w14, XML_anchorId, sAnchorId);
 
         uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObject)->getUnoShape());
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         OUString sHyperlink;
-        if (xShapeProps.is())
-            xShapeProps->getPropertyValue(u"HyperLinkURL"_ustr) >>= sHyperlink;
+        if (xShape.is())
+            xShape->getPropertyValue(u"HyperLinkURL"_ustr) >>= sHyperlink;
         if (!sHyperlink.isEmpty())
             m_pImpl->getFlyAttrList()->add(XML_href, sHyperlink);
     }

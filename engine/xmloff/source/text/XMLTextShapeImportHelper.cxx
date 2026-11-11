@@ -112,10 +112,8 @@ void XMLTextShapeImportHelper::addShape(
         }
     }
 
-    Reference < XPropertySet > xPropSet( rShape, UNO_QUERY );
-
     // anchor type
-    xPropSet->setPropertyValue( u"AnchorType"_ustr, Any(eAnchorType) );
+    rShape->setPropertyValue( u"AnchorType"_ustr, Any(eAnchorType) );
 
     // page number must be set before the frame is inserted
     switch( eAnchorType )
@@ -124,7 +122,7 @@ void XMLTextShapeImportHelper::addShape(
         // only set positive page numbers
         if ( nPage > 0 )
         {
-            xPropSet->setPropertyValue( u"AnchorPageNo"_ustr, Any(nPage) );
+            rShape->setPropertyValue( u"AnchorPageNo"_ustr, Any(nPage) );
         }
         break;
     default:
@@ -137,7 +135,7 @@ void XMLTextShapeImportHelper::addShape(
     switch( eAnchorType )
     {
     case TextContentAnchorType_AS_CHARACTER:
-        xPropSet->setPropertyValue( u"VertOrientPosition"_ustr, Any(nY) );
+        rShape->setPropertyValue( u"VertOrientPosition"_ustr, Any(nY) );
         break;
     default:
         break;

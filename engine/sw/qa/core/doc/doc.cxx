@@ -700,9 +700,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testShapeZOrderOverTextBox)
     createSwDoc("textbox-shape-zorder.docx");
 
     // Then the shapes have to keep the order the document gives them.
-    uno::Reference<beans::XPropertySet> xBottom(getShapeByName(u"WithTextBox"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xMiddle(getShapeByName(u"Middle"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xTop(getShapeByName(u"Top"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xBottom(getShapeByName(u"WithTextBox"));
+    uno::Reference<beans::XPropertySet> xMiddle(getShapeByName(u"Middle"));
+    uno::Reference<beans::XPropertySet> xTop(getShapeByName(u"Top"));
     CPPUNIT_ASSERT(xBottom.is());
     CPPUNIT_ASSERT(xMiddle.is());
     CPPUNIT_ASSERT(xTop.is());
@@ -2080,7 +2080,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmbeddedDocumentsFollowOuterLinkUpdateDe
                                                uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(xChild, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0));
     uno::Reference<beans::XPropertySet> xGrandchild(xShape->getPropertyValue(u"Model"_ustr),
                                                     uno::UNO_QUERY_THROW);
 

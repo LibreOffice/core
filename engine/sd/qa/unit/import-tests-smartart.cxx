@@ -126,9 +126,8 @@ sal_Int32 countShapesByText(const uno::Reference<drawing::XShape>& xShape, const
 /// the size the first run of xShape is shown at, with the shape's autofit scale
 double shownTextSize(const uno::Reference<drawing::XShape>& xShape)
 {
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     double fScale = 0;
-    CPPUNIT_ASSERT(xShapeProperties->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fScale);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fScale);
     uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraphs(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraph(
@@ -840,7 +839,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAccentProcess)
     CPPUNIT_ASSERT_LESS(nFirstChildTop, nFirstParentTop);
 
     // Make sure that we have an arrow shape between the two pairs.
-    uno::Reference<beans::XPropertySet> xArrow(xGroup->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xArrow(xGroup->getShapeByIndex(2));
     CPPUNIT_ASSERT(xArrow.is());
     comphelper::SequenceAsHashMap aCustomShapeGeometry(
         xArrow->getPropertyValue(u"CustomShapeGeometry"_ustr));
@@ -1119,8 +1118,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPictureStrip)
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
 
-    uno::Reference<beans::XPropertySet> xFirstImage(getChildShape(getChildShape(xGroup, 1), 1),
-                                                    uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFirstImage(getChildShape(getChildShape(xGroup, 1), 1));
     CPPUNIT_ASSERT(xFirstImage.is());
     drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
     xFirstImage->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
@@ -1132,8 +1130,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPictureStrip)
     xFirstImage->getPropertyValue(u"FillBitmap"_ustr) >>= xGraphic;
     Graphic aFirstGraphic(xGraphic);
 
-    uno::Reference<beans::XPropertySet> xSecondImage(getChildShape(getChildShape(xGroup, 2), 1),
-                                                     uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSecondImage(getChildShape(getChildShape(xGroup, 2), 1));
     CPPUNIT_ASSERT(xSecondImage.is());
     eFillStyle = drawing::FillStyle_NONE;
     xSecondImage->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
@@ -1171,8 +1168,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPictureStrip)
                            xFirstPair->getPosition().Y);
 
     // Make sure that left margin is 60% of width (if you count width in points and margin in mms).
-    uno::Reference<beans::XPropertySet> xFirstText(getChildShape(getChildShape(xGroup, 1), 0),
-                                                   uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFirstText(getChildShape(getChildShape(xGroup, 1), 0));
     CPPUNIT_ASSERT(xFirstText.is());
     sal_Int32 nTextLeftDistance = 0;
     xFirstText->getPropertyValue(u"TextLeftDistance"_ustr) >>= nTextLeftDistance;
@@ -1310,7 +1306,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontSize)
     createSdImpressDoc("pptx/smartart-font-size.pptx");
 
     uno::Reference<drawing::XShapes> xGroup1(getShapeFromPage(0, 0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape1(xGroup1->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape1(xGroup1->getShapeByIndex(1));
     uno::Reference<text::XTextRange> xParagraph1(getParagraphFromShape(0, xShape1));
     uno::Reference<text::XTextRange> xRun1(getRunFromParagraph(0, xParagraph1));
     uno::Reference<beans::XPropertySet> xPropSet1(xRun1, uno::UNO_QUERY);
@@ -1318,7 +1314,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontSize)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(65.0, fFontSize1, 0.01);
 
     uno::Reference<drawing::XShapes> xGroup2(getShapeFromPage(1, 0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape2(xGroup2->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape2(xGroup2->getShapeByIndex(1));
     uno::Reference<text::XTextRange> xParagraph2(getParagraphFromShape(0, xShape2));
     uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
     uno::Reference<beans::XPropertySet> xPropSet2(xRun2, uno::UNO_QUERY);
@@ -1326,7 +1322,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontSize)
     CPPUNIT_ASSERT_EQUAL(32.0, fFontSize2);
 
     uno::Reference<drawing::XShapes> xGroup3(getShapeFromPage(2, 0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape3(xGroup3->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape3(xGroup3->getShapeByIndex(1));
     drawing::TextFitToSizeType eTextFitToSize = drawing::TextFitToSizeType_NONE;
     xShape3->getPropertyValue(u"TextFitToSize"_ustr) >>= eTextFitToSize;
     CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, eTextFitToSize);
@@ -1347,7 +1343,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testVerticalBlockList)
     CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xTextA->getString());
     CPPUNIT_ASSERT_EQUAL(u"b\nc"_ustr, xTextBC->getString());
 
-    uno::Reference<beans::XPropertySet> xPropSetBC(xShapeBC, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSetBC(xShapeBC);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(27000),
                          xPropSetBC->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
 
@@ -1704,7 +1700,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHierarchyConnectorsStartAtTheMidd
                                                                uno::UNO_QUERY));
                   return;
               }
-              uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+              uno::Reference<beans::XPropertySet> xProperties(xShape);
               comphelper::SequenceAsHashMap aGeometry(
                   xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
               const OUString aType(aGeometry[u"Type"_ustr].get<OUString>());
@@ -1765,8 +1761,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAutofitSync)
     // - Actual  : 3 (TextFitToSizeType_AUTOFIT)
     // i.e. the 3rd shape had font size as direct formatting, but its automatic text scale was not
     // disabled.
-    uno::Reference<beans::XPropertySet> xThirdInner(getChildShape(getChildShape(xMiddle, 4), 0),
-                                                    uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xThirdInner(getChildShape(getChildShape(xMiddle, 4), 0));
     drawing::TextFitToSizeType eType{};
     CPPUNIT_ASSERT(xThirdInner->getPropertyValue(u"TextFitToSize"_ustr) >>= eType);
     CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, eType);
@@ -2007,10 +2002,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddNodeTakesLookFromANode)
 
     // the shape that draws one of the nodes that were already there, and the one that draws the
     // node that was added
-    uno::Reference<beans::XPropertySet> xNode(findChildShapeByText(xGroup, u"A"_ustr),
-                                              uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xAdded(findChildShapeByText(xGroup, u"D"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xNode(findChildShapeByText(xGroup, u"A"_ustr));
+    uno::Reference<beans::XPropertySet> xAdded(findChildShapeByText(xGroup, u"D"_ustr));
     CPPUNIT_ASSERT(xNode.is());
     CPPUNIT_ASSERT(xAdded.is());
 
@@ -2019,7 +2012,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddNodeTakesLookFromANode)
                          xAdded->getPropertyValue(u"FillColor"_ustr));
 
     // that is not the look of the background arrow, which this layout draws the Diagram with
-    uno::Reference<beans::XPropertySet> xArrow(getChildShape(xGroup, 1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xArrow(getChildShape(xGroup, 1));
     CPPUNIT_ASSERT(xArrow.is());
     CPPUNIT_ASSERT_EQUAL(u"ooxml-rightArrow"_ustr, getShapeGeometryType(xArrow));
     CPPUNIT_ASSERT(xArrow->getPropertyValue(u"FillColor"_ustr)
@@ -2164,13 +2157,12 @@ void collectShapesWithGeometry(const uno::Reference<drawing::XShape>& xShape,
                                const OUString& rGeometry,
                                std::vector<uno::Reference<drawing::XShape>>& rShapes)
 {
-    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
-    if (xProperties.is()
-        && xProperties->getPropertySetInfo()->hasPropertyByName(u"CustomShapeGeometry"_ustr))
+    if (xShape.is()
+        && xShape->getPropertySetInfo()->hasPropertyByName(u"CustomShapeGeometry"_ustr))
     {
         // A shape drawn with no geometry at all names no type, and it is none that is looked for.
         comphelper::SequenceAsHashMap aGeometry(
-            xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+            xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
         const cpo::uno::Any aType(aGeometry[u"Type"_ustr]);
 
         if (aType.has<OUString>() && aType.get<OUString>() == rGeometry)
@@ -2417,18 +2409,17 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddedChildGetsTheSameConnectorLin
 
     for (const uno::Reference<drawing::XShape>& rElbow : aElbows)
     {
-        uno::Reference<beans::XPropertySet> xProperties(rElbow, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xProperties.is());
+        CPPUNIT_ASSERT(rElbow.is());
 
         drawing::LineStyle eLineStyle(drawing::LineStyle_NONE);
-        xProperties->getPropertyValue(u"LineStyle"_ustr) >>= eLineStyle;
+        rElbow->getPropertyValue(u"LineStyle"_ustr) >>= eLineStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, eLineStyle);
 
         CPPUNIT_ASSERT_EQUAL(aElbows.front()->getSize().Width, rElbow->getSize().Width);
-        CPPUNIT_ASSERT_EQUAL(xProperties->getPropertyValue(u"LineWidth"_ustr),
+        CPPUNIT_ASSERT_EQUAL(rElbow->getPropertyValue(u"LineWidth"_ustr),
                              uno::Reference<beans::XPropertySet>(aElbows.front(), uno::UNO_QUERY_THROW)
                                  ->getPropertyValue(u"LineWidth"_ustr));
-        CPPUNIT_ASSERT_EQUAL(xProperties->getPropertyValue(u"LineColor"_ustr),
+        CPPUNIT_ASSERT_EQUAL(rElbow->getPropertyValue(u"LineColor"_ustr),
                              uno::Reference<beans::XPropertySet>(aElbows.front(), uno::UNO_QUERY_THROW)
                                  ->getPropertyValue(u"LineColor"_ustr));
     }
@@ -2457,16 +2448,13 @@ BoxAndText readBoxAndText(const uno::Reference<drawing::XShape>& xDiagram, const
     uno::Reference<drawing::XShape> xShape(findChildShapeByText(xDiagram, rText));
     CPPUNIT_ASSERT(xShape.is());
 
-    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xProperties.is());
-
     BoxAndText aRetval;
     aRetval.mnHeight = xShape->getSize().Height;
-    xProperties->getPropertyValue(u"CharHeight"_ustr) >>= aRetval.mfCharHeight;
+    xShape->getPropertyValue(u"CharHeight"_ustr) >>= aRetval.mfCharHeight;
 
     // The text is shown at its size scaled by the shape's own fit to its box.
     double fFontScale(0.0);
-    xProperties->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fFontScale;
+    xShape->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fFontScale;
     if (fFontScale > 0.0)
         aRetval.mfCharHeight = static_cast<float>(aRetval.mfCharHeight * fFontScale / 100.0);
 
@@ -3172,7 +3160,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMarginOfTheSecondFontIsKept)
     uno::Reference<drawing::XShape> xChildren(
         findChildShapeByText(xDiagram, u"Twenty-one\nTwenty-two"_ustr));
     CPPUNIT_ASSERT(xChildren.is());
-    uno::Reference<beans::XPropertySet> xProperties(xChildren, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProperties(xChildren);
     const sal_Int32 nLeft(xProperties->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>());
     uno::Reference<container::XEnumerationAccess> xParagraphs(xChildren, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraph(
@@ -3223,10 +3211,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextMarginOfAnotherNodesWidth)
 
     // a point is 2540 / 72 hundredths of a millimetre
     const double fCircleMm(aCircles.front()->getSize().Width / 100.0);
-    uno::Reference<beans::XPropertySet> xProperties(xText, uno::UNO_QUERY);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
         1.8 * fCircleMm * 2540.0 / 72.0,
-        double(xProperties->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>()), 5.0);
+        double(xText->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>()), 5.0);
     CPPUNIT_ASSERT_GREATER(5.5, shownTextSize(xText));
 }
 
@@ -3549,9 +3536,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testConnectorKeepsItsTextOnReLayout)
     {
         uno::Reference<drawing::XShape> xConnector(findChildShapeByText(xDiagram, rText));
         CPPUNIT_ASSERT_MESSAGE(rText.toUtf8().getStr(), xConnector.is());
-        uno::Reference<beans::XPropertySet> xProperties(xConnector, uno::UNO_QUERY);
         comphelper::SequenceAsHashMap aGeometry(
-            xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+            xConnector->getPropertyValue(u"CustomShapeGeometry"_ustr));
         // the connectors are curved lines, dim 1D, connRout longCurve
         CPPUNIT_ASSERT_EQUAL(u"ooxml-arc"_ustr, aGeometry[u"Type"_ustr].get<OUString>());
     }

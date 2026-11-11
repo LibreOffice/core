@@ -399,7 +399,7 @@ Reference< beans::XPropertySet > AxisWrapper::getAxisTitle()
         }
         m_xAxisTitle = new TitleWrapper( eTitleType, m_spChart2ModelContact );
     }
-    return m_xAxisTitle;
+    return static_cast<WrappedPropertySet*>(m_xAxisTitle.get());
 }
 Reference< beans::XPropertySet > AxisWrapper::getMajorGrid()
 {

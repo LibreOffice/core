@@ -2057,7 +2057,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNewShapeTakesFileThemeColor)
     xPage->add(xShape);
     xShape->setSize(awt::Size(5000, 3000));
     xShape->setPosition(awt::Point(1000, 1000));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape);
     Color nFillColor;
     xShapeProps->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x05326E), nFillColor);

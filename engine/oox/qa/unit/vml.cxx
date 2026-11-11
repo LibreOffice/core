@@ -48,10 +48,9 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
     {
         // This tests a polyline shape which is not closed.
         uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
-        xShapeProps->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
+        xShape->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
         drawing::PointSequence aPolygon = aGeometry[0];
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6879), aPolygon[3].X, 1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(487), aPolygon[3].Y, 1);
@@ -60,15 +59,14 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1926), xShape->getSize().Height, 1);
         // After the fix the shape has still to be PolygonKind_PLIN
         drawing::PolygonKind ePolygonKind;
-        xShapeProps->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
+        xShape->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
         CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_PLIN, ePolygonKind);
     }
     {
         uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(1));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
-        xShapeProps->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
+        xShape->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
         drawing::PointSequence aPolygon = aGeometry[0];
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5062), aPolygon[2].X, 1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2247), aPolygon[2].Y, 1);
@@ -77,16 +75,15 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2247), xShape->getSize().Height, 1);
         // Without fix in place the shape was not closed, it had PolygonKind_PLIN
         drawing::PolygonKind ePolygonKind;
-        xShapeProps->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
+        xShape->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
         CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_POLY, ePolygonKind);
     }
     {
         // This tests a filled shape where v:polyline does not have attribute coordsize
         uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(2));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
-        xShapeProps->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
+        xShape->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
         drawing::PointSequence aPolygon = aGeometry[0];
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2095), aPolygon[3].X, 1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(608), aPolygon[3].Y, 1);
@@ -95,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2485), xShape->getSize().Height, 1);
         // Without fix in place the shape was not closed, it had PolygonKind_PLIN
         drawing::PolygonKind ePolygonKind;
-        xShapeProps->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
+        xShape->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
         CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_POLY, ePolygonKind);
     }
 }
@@ -109,9 +106,8 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf137314_vml_rotation_unit_fd)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
-    xShapeProps->getPropertyValue(u"PolyPolygonBezier"_ustr) >>= aPolyPolygonBezierCoords;
+    xShape->getPropertyValue(u"PolyPolygonBezier"_ustr) >>= aPolyPolygonBezierCoords;
     drawing::PointSequence aPolygon = aPolyPolygonBezierCoords.Coordinates[1];
     // Without fix in place, the vector was -1441|1490.
     // [1] and [2] are Bezier-curve control points.
@@ -190,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWatermark)
     // Then make sure the watermark effect is not lost on import:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0));
     drawing::ColorMode eMode{};
     xShape->getPropertyValue(u"GraphicColorMode"_ustr) >>= eMode;
     // Without the accompanying fix in place, this test would have failed with:
@@ -226,8 +222,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testVMLTextpathStyle)
 
     // Then the Fontwork shape carries those attributes
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0),
-                                               uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr, xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, xShape->getPropertyValue(u"CharWeight"_ustr).get<float>());
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,

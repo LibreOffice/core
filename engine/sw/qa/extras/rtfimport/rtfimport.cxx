@@ -585,7 +585,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf59699)
 {
     createSwDoc("tdf59699.rtf");
     // The INCLUDEPICTURE field is imported as a picture linked to the referenced file.
-    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xImage(getShape(1));
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xImage, u"Graphic"_ustr);
     CPPUNIT_ASSERT(xGraphic.is());
     CPPUNIT_ASSERT(Graphic(xGraphic).getOriginURL().endsWith("/libreoffice.png"));
@@ -1036,7 +1036,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo53556)
                          getProperty<drawing::FillStyle>(getShape(3), u"FillStyle"_ustr));
 
     // This was a com.sun.star.drawing.CustomShape, which resulted in lack of word wrapping in the bugdoc.
-    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1));
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, xShapeDescriptor->getShapeType());
 }

@@ -282,8 +282,7 @@ void SwMacrosTest::testControlShapeGrouping()
         xFactory->createInstance(u"com.sun.star.form.component.DateField"_ustr),
         UNO_QUERY);
     xDateShape->setControl(xDateControlModel);
-    uno::Reference<beans::XPropertySet> xDateShapeProps(xDateShape, UNO_QUERY);
-    xDateShapeProps->setPropertyValue(u"AnchorType"_ustr, Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xDateShape->setPropertyValue(u"AnchorType"_ustr, Any(text::TextContentAnchorType_AT_PARAGRAPH));
 
     uno::Reference<drawing::XControlShape> const xTimeShape(
         xFactory->createInstance(u"com.sun.star.drawing.ControlShape"_ustr),
@@ -292,8 +291,7 @@ void SwMacrosTest::testControlShapeGrouping()
         xFactory->createInstance(u"com.sun.star.form.component.TimeField"_ustr),
         UNO_QUERY);
     xTimeShape->setControl(xTimeControlModel);
-    uno::Reference<beans::XPropertySet> xTimeShapeProps(xTimeShape, UNO_QUERY);
-    xTimeShapeProps->setPropertyValue(u"AnchorType"_ustr, Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xTimeShape->setPropertyValue(u"AnchorType"_ustr, Any(text::TextContentAnchorType_AT_PARAGRAPH));
 
     xFormNC->insertByName(u"aDateCntrl"_ustr, Any(xDateControlModel));
     xDPShapes->add(xDateShape);

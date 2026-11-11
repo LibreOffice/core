@@ -162,7 +162,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedTableCell)
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
 {
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
     auto xBitmap = getProperty<uno::Reference<awt::XBitmap>>(xFrame, u"FillBitmap"_ustr);
     CPPUNIT_ASSERT(xBitmap.is());
@@ -520,7 +520,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedTextFrames)
 DECLARE_OOXMLEXPORT_TEST(testFloatingTablePosition, "floating-table-position.docx")
 {
     // Position of shape was wrong, because some conversion was missing.
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     // This was 3295.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5963), getProperty<sal_Int32>(xShape, u"HoriOrientPosition"_ustr));
     // This was 4611.
@@ -1211,7 +1211,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
 
     // check content of the first page
     {
-        uno::Reference<beans::XPropertySet> xFrame(getShapeByName(u"Marco1"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(getShapeByName(u"Marco1"));
 
         // no border
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xFrame, u"LineWidth"_ustr));

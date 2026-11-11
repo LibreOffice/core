@@ -265,12 +265,8 @@ static bool lcl_GetCaptionPoint( const uno::Reference< drawing::XShape >& xShape
     bool bCaptionShape( sType == "com.sun.star.drawing.CaptionShape" );
     if (bCaptionShape)
     {
-        uno::Reference < beans::XPropertySet > xShapeProp (xShape, uno::UNO_QUERY);
-        if (xShapeProp.is())
-        {
-            xShapeProp->getPropertyValue(u"CaptionPoint"_ustr) >>= rCaptionPoint;
-            bReturn = true;
-        }
+        xShape->getPropertyValue(u"CaptionPoint"_ustr) >>= rCaptionPoint;
+        bReturn = true;
     }
     return bReturn;
 }

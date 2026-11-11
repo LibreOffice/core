@@ -751,8 +751,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                         }
                         if ( bValidGluePoint )
                         {
-                            Reference< XPropertySet > xPropSet( aXConnector, UNO_QUERY );
-                            if ( xPropSet.is() )
+                            Reference< XPropertySet > xPropSet( aXConnector );
+                            if ( aXConnector.is() )
                             {
                                 if ( nN )
                                 {

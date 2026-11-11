@@ -25,8 +25,10 @@
 /** lets you do a basic transformation on a Shape and
     get its type.
  */
-published interface XShape: com::sun::star::drawing::XShapeDescriptor
+published interface XShape
 {
+    interface com::sun::star::drawing::XShapeDescriptor;
+    interface com::sun::star::beans::XPropertySet;
 
     /** gets the current position of this object.
 

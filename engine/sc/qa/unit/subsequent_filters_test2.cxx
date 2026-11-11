@@ -1367,9 +1367,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf83672XLSX)
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                              uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0), uno::UNO_SET_THROW);
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     sal_Int32 nRotate = 0;
-    xShapeProperties->getPropertyValue(u"RotateAngle"_ustr) >>= nRotate;
+    xShape->getPropertyValue(u"RotateAngle"_ustr) >>= nRotate;
     CPPUNIT_ASSERT(nRotate != 0);
 }
 

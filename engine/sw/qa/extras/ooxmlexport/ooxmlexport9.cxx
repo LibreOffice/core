@@ -746,7 +746,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // Image was lost because of the frame export
-    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xImage(getShape(1));
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, u"Graphic"_ustr);
     CPPUNIT_ASSERT(xGraphic.is());
 
@@ -777,14 +777,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf170767_verticalEscape, "tdf170767_verticalEscape
 DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")
 {
     // Relative positions to the left or right margin (MS Word naming) was not handled.
-    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1) );
     sal_Int16 nValue;
     xShapeProperties->getPropertyValue(u"HoriOrient"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally", text::HoriOrientation::CENTER, nValue);
     xShapeProperties->getPropertyValue(u"HoriOrientRelation"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally relatively to left page border", text::RelOrientation::PAGE_LEFT, nValue);
 
-    xShapeProperties.set( getShape(2), uno::UNO_QUERY );
+    xShapeProperties.set( getShape(2) );
     xShapeProperties->getPropertyValue(u"HoriOrient"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally", text::HoriOrientation::CENTER, nValue);
     xShapeProperties->getPropertyValue(u"HoriOrientRelation"_ustr) >>= nValue;
@@ -793,7 +793,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106132, "tdf106132.docx")
 {
-    uno::Reference<beans::XPropertySet> xShape(getShapeByName(u"Frame1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShapeByName(u"Frame1"));
     // This was 250, <wps:bodyPr ... rIns="0" ...> was ignored for an outer shape.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xShape, u"TextRightDistance"_ustr));
 }
@@ -822,7 +822,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103982)
     CPPUNIT_ASSERT(nDistB >= 0);
 
     // tdf#115670 the shadow should not be enabled (no on="t")
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     CPPUNIT_ASSERT(!getProperty<bool>(xPropertySet, u"Shadow"_ustr));
 }
 

@@ -758,7 +758,7 @@ void DiagramHelper_oox::TextInformationChange()
 
     const DiagramPRDomMap aDomValuesBefore(mpDiagramPtr->getOOXDomValues());
     uno::Sequence<beans::PropertyValue> aGrabBagBefore;
-    uno::Reference<beans::XPropertySet> xGroupProperties(accessRootShape(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGroupProperties(accessRootShape());
     const bool bHasGrabBag(xGroupProperties.is()
                            && xGroupProperties->getPropertySetInfo()->hasPropertyByName(
                                u"InteropGrabBag"_ustr));
@@ -1069,8 +1069,7 @@ void DiagramHelper_oox::applyTextFitToSizeToDiagramNodes(
 
         // set AutoGrowHeight and TextFitToSize, need to rescue
         // some stuff when doing this
-        uno::Reference<beans::XPropertySet> xShapeProperties(pCandidate->getUnoShape(),
-                                                             uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShapeProperties(pCandidate->getUnoShape());
         double fFontScale(0.0);
         double fSpacingScale(0.0);
 

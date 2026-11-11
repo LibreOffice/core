@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     xDrawPage->add(xShape);
 
     // Create a red shadow on it without touching its style.
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape);
     // Without the accompanying fix in place, this test would have failed with throwing a
     // beans.UnknownPropertyException, as shadow-as-direct-formatting on tables were not possible.
     xShapeProps->setPropertyValue(u"Shadow"_ustr, cpo::uno::Any(true));
@@ -304,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testFillThemeColorSetBeforePlainColor)
         { uno::Any(model::color::createXComplexColor(aThemeColor)), uno::Any(Color(0x123456)) });
 
     // Then the fill keeps the theme color:
-    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProperties(xShape);
     model::ComplexColor aFillColor = getComplexColor(xProperties, u"FillComplexColor"_ustr);
     // Without the fix in place, this test would have failed with:
     // - Expected: 4
@@ -344,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testGlowThemeColorTakesTheColorOfTheTheme)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<drawing::XShape> xShape = insertRectangle(mxComponent);
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape);
     xShapeProps->setPropertyValue(u"GlowEffectRadius"_ustr, uno::Any(sal_Int32(500)));
     xShapeProps->setPropertyValue(u"GlowEffectColor"_ustr, uno::Any(Color(0xff0000)));
 
@@ -386,7 +386,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testEffectJSONWithWrongValuesIsRejected)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testGlowEffectProperties)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent));
 
     // The single values of the glow are views of one glow.
     xShapeProps->setPropertyValue(u"GlowEffectRadius"_ustr, uno::Any(sal_Int32(500)));
@@ -411,7 +411,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testGlowEffectProperties)
         xShapeProps->getPropertyValue(u"GlowEffectTransparency"_ustr).get<sal_Int16>());
 
     // The whole glow set on another shape gives it the same single values.
-    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent));
     xOtherProps->setPropertyValue(u"GlowEffect"_ustr,
                                   xShapeProps->getPropertyValue(u"GlowEffect"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(500),
@@ -424,7 +424,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testGlowEffectProperties)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testSoftEdgeEffectProperties)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent));
 
     // The radius is a view of the whole soft edge.
     xShapeProps->setPropertyValue(u"SoftEdgeRadius"_ustr, uno::Any(sal_Int32(350)));
@@ -436,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testSoftEdgeEffectProperties)
     CPPUNIT_ASSERT_EQUAL(350_hmm, oSoftEdge->maRadius);
 
     // The whole soft edge set on another shape gives it the same radius.
-    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent));
     xOtherProps->setPropertyValue(u"SoftEdgeEffect"_ustr, uno::Any(xSoftEdge));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(350),
                          xOtherProps->getPropertyValue(u"SoftEdgeRadius"_ustr).get<sal_Int32>());
@@ -465,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testEffectJSONTurnsTheEffectOnAndOff)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionEffectObject)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent));
     xShapeProps->setPropertyValue(u"ReflectionEffectEnabled"_ustr, uno::Any(true));
     xShapeProps->setPropertyValue(u"ReflectionEffectDistance"_ustr, uno::Any(sal_Int32(250)));
 
@@ -482,7 +482,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionEffectObject)
 
     // The whole reflection set on another shape gives it the same values, without turning the
     // reflection on.
-    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent));
     xOtherProps->setPropertyValue(u"ReflectionEffect"_ustr, uno::Any(xReflection));
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(250),
@@ -493,7 +493,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionEffectObject)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testBlurEffectProperties)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent));
 
     // A new shape has no blur.
     CPPUNIT_ASSERT(!xShapeProps->getPropertyValue(u"BlurEffectEnabled"_ustr).get<bool>());
@@ -518,7 +518,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testBlurEffectProperties)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testInnerShadowEffectProperties)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent));
 
     // A new shape has no inner shadow.
     CPPUNIT_ASSERT(!xShapeProps->getPropertyValue(u"InnerShadowEffectEnabled"_ustr).get<bool>());
@@ -548,7 +548,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testInnerShadowEffectProperties)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testShadowTransformProperties)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent));
 
     // A new shape has a shadow without skew that does not turn with the shape.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
@@ -571,7 +571,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testShadowTransformProperties)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testShadowComplexColor)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent));
 
     // A theme color set as the shadow color reads back as the theme color.
     model::ComplexColor aThemeColor = model::ComplexColor::Theme(model::ThemeColorType::Accent2);
@@ -591,7 +591,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testShadowComplexColor)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent));
 
     // A new shape has no reflection, and the values it would have fade from opaque at the shape
     // to invisible at the far end.

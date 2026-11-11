@@ -142,11 +142,7 @@ void SdXML3DSceneShapeContext::endFastElement(sal_Int32 nElement)
     if(!mxShape.is())
         return;
 
-    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-    if(xPropSet.is())
-    {
-        setSceneAttributes( xPropSet );
-    }
+    setSceneAttributes( mxShape );
 
     if( mxChildren.is() )
         GetImport().GetShapeImport()->popGroupAndPostProcess();

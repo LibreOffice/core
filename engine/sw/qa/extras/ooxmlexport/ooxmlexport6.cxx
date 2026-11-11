@@ -153,11 +153,11 @@ DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
 {
     // Problem was that the transparency was not exported (a:alpha).
     // RGB color (a:srgbClr)
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(70), getProperty<sal_Int16>(xShape, u"FillTransparence"_ustr));
 
     // Theme color (a:schemeClr)
-    xShape.set(getShape(2), uno::UNO_QUERY);
+    xShape.set(getShape(2));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, u"FillTransparence"_ustr));
 }
 
@@ -166,19 +166,19 @@ CPPUNIT_TEST_FIXTURE(Test, testDMLTextFrameNoFill)
     createSwDoc("frame.fodt");
     saveAndReload(TestFilter::DOCX);
     // Problem is that default text frame background is white in Writer and transparent in Word
-    uno::Reference<beans::XPropertySet> xShape1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape1(getShape(1));
 // it is re-imported as solid
 //    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xShape1, "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape1, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape1, u"FillTransparence"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xShape1, u"FillColor"_ustr));
 
-    uno::Reference<beans::XPropertySet> xShape2(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape2(getShape(2));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape2, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape2, u"FillTransparence"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0xE8F2A1), getProperty<Color>(xShape2, u"FillColor"_ustr));
 
-    uno::Reference<beans::XPropertySet> xShape3(getShape(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape3(getShape(3));
 // it is re-imported as solid
 //    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xShape3, "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape3, u"FillStyle"_ustr));
@@ -262,13 +262,13 @@ DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameVertAdjust, "dml-textframe-vertadjust.d
     // TextVerticalAdjust attribute so far.
 
     // 1st frame's context is adjusted to the top
-    uno::Reference<beans::XPropertySet> xFrame(getShapeByName(u"Rectangle 1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShapeByName(u"Rectangle 1"));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xFrame, u"TextVerticalAdjust"_ustr));
     // 2nd frame's context is adjusted to the center
-    xFrame.set(getShapeByName(u"Rectangle 2"), uno::UNO_QUERY);
+    xFrame.set(getShapeByName(u"Rectangle 2"));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_CENTER, getProperty<drawing::TextVerticalAdjust>(xFrame, u"TextVerticalAdjust"_ustr));
     // 3rd frame's context is adjusted to the bottom
-    xFrame.set(getShapeByName(u"Rectangle 3"), uno::UNO_QUERY);
+    xFrame.set(getShapeByName(u"Rectangle 3"));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, u"TextVerticalAdjust"_ustr));
 }
 
@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableFloatingMargins)
 {
     auto verify = [this]() {
         // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
-        uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(getShape(1));
         sal_Int32 nHoriOrientPosition = getProperty<sal_Int32>(xFrame, u"HoriOrientPosition"_ustr);
         CPPUNIT_ASSERT(nHoriOrientPosition < sal_Int32(-495));
         // These were 0 as well, due to lack of import.
@@ -794,7 +794,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChangedShapeRotationIsSaved)
     // A shape rotated after loading is saved with its new angle, not with the angle of the file
     createSwDoc("fdo73247.docx");
     // rot="1969698" in the file loads as 32717, so this is the smallest possible change
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     xShape->setPropertyValue(u"RotateAngle"_ustr, uno::Any(sal_Int32(32716)));
 
     save(TestFilter::DOCX);
@@ -1099,7 +1099,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSyncedRelativePercent)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107119, "tdf107119.docx")
 {
-    uno::Reference<beans::XPropertySet> XPropsWrap(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> XPropsWrap(getShape(1));
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(XPropsWrap, u"Surround"_ustr));
 }
 

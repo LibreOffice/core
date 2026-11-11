@@ -780,20 +780,18 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
 
             if (xShape.is())
             {
-                Reference<css::beans::XPropertySet> xShapeProps(xShape, UNO_QUERY);
-                if (xShapeProps.is()
-                    && xShapeProps->getPropertySetInfo()->hasPropertyByName(
+                if (xShape->getPropertySetInfo()->hasPropertyByName(
                         u"InteropGrabBag"_ustr))
                 {
                     Sequence<css::beans::PropertyValue> aGrabBag;
-                    xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+                    xShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc(length + 1);
                     auto pGrabBag = aGrabBag.getArray();
                     pGrabBag[length].Name = u"VMLStroked"_ustr;
                     pGrabBag[length].Value
                         <<= rShape.getTypeModel().maStrokeModel.moStroked.value_or(true);
-                    xShapeProps->setPropertyValue(u"InteropGrabBag"_ustr, Any(aGrabBag));
+                    xShape->setPropertyValue(u"InteropGrabBag"_ustr, Any(aGrabBag));
                 }
             }
 

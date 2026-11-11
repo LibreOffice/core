@@ -86,7 +86,7 @@ using namespace cpo::uno;
         _rContext.xObjectShape->setSize(aControlShapeSize);
 
         // if we're working on a writer document, we need to anchor the shape
-        implAnchorShape(Reference< XPropertySet >(_rContext.xObjectShape, UNO_QUERY));
+        implAnchorShape(_rContext.xObjectShape);
 
         // shape collection (for grouping the shapes)
         Reference< XShapes > xButtonCollection( ShapeCollection::create(mxContext) );
@@ -136,10 +136,9 @@ using namespace cpo::uno;
             Reference< XControlShape > xRadioShape(
                     xDocFactory->createInstance(u"com.sun.star.drawing.ControlShape"_ustr),
                 UNO_QUERY);
-            Reference< XPropertySet > xShapeProperties(xRadioShape, UNO_QUERY);
 
             // if we're working on a writer document, we need to anchor the shape
-            implAnchorShape(xShapeProperties);
+            implAnchorShape(xRadioShape);
 
             // position it
             xRadioShape->setSize(aButtonSize);
@@ -155,8 +154,8 @@ using namespace cpo::uno;
             // Thus - just do no tset it. It is/stays part of the FormControl
             // data, so it will be shown in the FormControl dialogs. It is not
             // shown/used in SdrObject::Name dialog (e.g. context menu/Name...)
-            // if (xShapeProperties.is())
-            //     xShapeProperties->setPropertyValue("Name", makeAny(sElementsName));
+            // if (xRadioShape.is())
+            //     xRadioShape->setPropertyValue("Name", makeAny(sElementsName));
 
             // add to the page
             xPageShapes->add(xRadioShape);

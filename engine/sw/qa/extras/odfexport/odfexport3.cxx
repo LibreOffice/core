@@ -54,7 +54,7 @@ DECLARE_ODFEXPORT_TEST(testTdf111891_frameVertStyle, "tdf111891_frameVertStyle.o
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     CPPUNIT_ASSERT_EQUAL(
         drawing::TextVerticalAdjust_BOTTOM,
         getProperty<drawing::TextVerticalAdjust>(xFrame, u"TextVerticalAdjust"_ustr));
@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
         // Without the accompanying fix in place, this test would have failed, as
         // the btlr text direction in the text frame was lost on ODF import and
         // export.
-        uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xTextFrame(getShape(1));
         CPPUNIT_ASSERT(xTextFrame.is());
 
         auto nActual = getProperty<sal_Int16>(xTextFrame, u"WritingMode"_ustr);

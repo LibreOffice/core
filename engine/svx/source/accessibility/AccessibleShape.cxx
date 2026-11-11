@@ -185,13 +185,12 @@ void AccessibleShape::UpdateStates()
         case DRAWING_RECTANGLE:
         case DRAWING_TEXT:
         {
-            uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
-            if (xSet.is())
+            if (mxShape.is())
             {
                 try
                 {
                     drawing::FillStyle aFillStyle;
-                    bShapeIsOpaque =  ( xSet->getPropertyValue (u"FillStyle"_ustr) >>= aFillStyle)
+                    bShapeIsOpaque =  ( mxShape->getPropertyValue (u"FillStyle"_ustr) >>= aFillStyle)
                                         && aFillStyle == drawing::FillStyle_SOLID;
                 }
                 catch (css::beans::UnknownPropertyException&)
@@ -476,30 +475,25 @@ awt::Rectangle AccessibleShape::implGetBounds()
         // Get the shape's bounding box in internal coordinates (in 100th of
         // mm).  Use the property BoundRect.  Only if that is not supported ask
         // the shape for its position and size directly.
-        Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
-        Reference<beans::XPropertySetInfo> xSetInfo;
         bool bFoundBoundRect = false;
-        if (xSet.is())
+        Reference<beans::XPropertySetInfo> xSetInfo = mxShape->getPropertySetInfo ();
+        if (xSetInfo.is())
         {
-            xSetInfo = xSet->getPropertySetInfo ();
-            if (xSetInfo.is())
+            if (xSetInfo->hasPropertyByName (sBoundRectName))
             {
-                if (xSetInfo->hasPropertyByName (sBoundRectName))
+                try
                 {
-                    try
-                    {
-                        cpo::uno::Any aValue = xSet->getPropertyValue (sBoundRectName);
-                        aValue >>= aBoundingBox;
-                        bFoundBoundRect = true;
-                    }
-                    catch (beans::UnknownPropertyException const&)
-                    {
-                        // Handled below (bFoundBoundRect stays false).
-                    }
+                    cpo::uno::Any aValue = mxShape->getPropertyValue (sBoundRectName);
+                    aValue >>= aBoundingBox;
+                    bFoundBoundRect = true;
                 }
-                else
-                    SAL_WARN("svx", "no property BoundRect");
+                catch (beans::UnknownPropertyException const&)
+                {
+                    // Handled below (bFoundBoundRect stays false).
+                }
             }
+            else
+                SAL_WARN("svx", "no property BoundRect");
         }
 
         // Fallback when there is no BoundRect Property.
@@ -518,7 +512,7 @@ awt::Rectangle AccessibleShape::implGetBounds()
             {
                 if (xSetInfo->hasPropertyByName (sAnchorPositionName))
                 {
-                    cpo::uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
+                    cpo::uno::Any aPos = mxShape->getPropertyValue (sAnchorPositionName);
                     awt::Point aAnchorPosition;
                     aPos >>= aAnchorPosition;
                     aBoundingBox.X += aAnchorPosition.X;
@@ -578,11 +572,10 @@ sal_Int32 AccessibleShape::getForeground()
 
     try
     {
-        uno::Reference<beans::XPropertySet> aSet (mxShape, uno::UNO_QUERY);
-        if (aSet.is())
+        if (mxShape.is())
         {
             cpo::uno::Any aColor;
-            aColor = aSet->getPropertyValue (u"LineColor"_ustr);
+            aColor = mxShape->getPropertyValue (u"LineColor"_ustr);
             aColor >>= nColor;
         }
     }
@@ -601,13 +594,12 @@ sal_Int32 AccessibleShape::getBackground()
 
     try
     {
-        uno::Reference<beans::XPropertySet> aSet (mxShape, uno::UNO_QUERY);
-        if (aSet.is())
+        if (mxShape.is())
         {
             cpo::uno::Any aColor;
-            aColor = aSet->getPropertyValue (u"FillColor"_ustr);
+            aColor = mxShape->getPropertyValue (u"FillColor"_ustr);
             aColor >>= nColor;
-            aColor = aSet->getPropertyValue (u"FillTransparence"_ustr);
+            aColor = mxShape->getPropertyValue (u"FillTransparence"_ustr);
             short nTrans=0;
             aColor >>= nTrans;
             Color crBk(nColor);

@@ -656,7 +656,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", false, getProperty<bool>(getShape(1), u"Opaque"_ustr));
 
     // tdf#126533: gradient is purple foreground to white background (top-right to bottom-left)
-    uno::Reference<beans::XPropertySet> xRectangle(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xRectangle(getShape(1));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xRectangle, u"FillStyle"_ustr));
     awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xRectangle, u"FillGradient"_ustr);
 
@@ -717,7 +717,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108973_foregroundTextbox, "tdf108973_foregroundT
 DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
 {
     // Document contains a flowChartMultidocument preset shape, our date for that shape wasn't correct.
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
     comphelper::SequenceAsHashMap aPath(aCustomShapeGeometry[u"Path"_ustr]);
     cpo::uno::Sequence<awt::Size>      aSubViewSize((aPath[u"SubViewSize"_ustr]).get<cpo::uno::Sequence<awt::Size> >() );

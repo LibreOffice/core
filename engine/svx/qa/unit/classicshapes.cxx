@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
     {
         awt::Rectangle aFrameRect;
         uno::Reference<drawing::XShape> xShape(getShape(0, nPageIndex));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape);
         CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
     {
         awt::Rectangle aFrameRect;
         uno::Reference<drawing::XShape> xShape(getShape(0, nPageIndex));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape);
         CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
@@ -137,9 +137,8 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98583ShearHorizontal)
     {
         awt::Rectangle aFrameRect;
         uno::Reference<drawing::XShape> xShape(getShape(0, nPageIndex));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
-        xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
+        CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
+        xShape->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
 
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             OUString("Incorrect Left Position on page " + OUString::number(nPageIndex))
@@ -174,11 +173,9 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
     {
         double nAngle1(0.0), nAngle2(0.0);
         uno::Reference<drawing::XShape> xShape(getShape(1, nPageIndex));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xShape2(getShape(2, nPageIndex));
-        uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CircleStartAngle"_ustr) >>= nAngle1);
-        CPPUNIT_ASSERT(xShapeProps2->getPropertyValue(u"CircleStartAngle"_ustr) >>= nAngle2);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"CircleStartAngle"_ustr) >>= nAngle1);
+        CPPUNIT_ASSERT(xShape2->getPropertyValue(u"CircleStartAngle"_ustr) >>= nAngle2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Incorrect vertical flip starting angle on page "
                                               + OUString::number(nPageIndex))
                                          .toUtf8()
@@ -209,9 +206,8 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf139968ShearRotateArcFlip)
 
     // make sure start and end angle are correct.
     double fAngleS(0.0), fAngleE(0.0);
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CircleStartAngle"_ustr) >>= fAngleS);
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CircleEndAngle"_ustr) >>= fAngleE);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"CircleStartAngle"_ustr) >>= fAngleS);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"CircleEndAngle"_ustr) >>= fAngleE);
     // without fix, start angle was 19419, end angle was 18176. Tolerance for to ignore round errors.
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("StartAngle wrong", 22500.0, fAngleS, 2.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("EndAngle wrong", 18000.0, fAngleE, 2.0);

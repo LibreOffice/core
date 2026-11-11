@@ -1115,13 +1115,11 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
             xShapes->add(xShape);
     }
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-
-    if (xPropertySet.is())
+    if (xShape.is())
         // try..catch is for tdf#161359
         try
         {
-            xPropertySet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
+            xShape->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
         }
         catch (const cpo::uno::Exception&)
         {
@@ -1143,7 +1141,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         xShape->setSize(aSize);
 
         // Replacement graphic is inline by default, see oox::vml::SimpleShape::implConvertAndInsert().
-        xPropertySet->setPropertyValue(u"AnchorType"_ustr,
+        xShape->setPropertyValue(u"AnchorType"_ustr,
                                        cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
         auto pShapeValue = new RTFValue(xShape);

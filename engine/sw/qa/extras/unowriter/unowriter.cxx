@@ -1202,7 +1202,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // The property is on by default, turn it off & verify.
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
     xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     CPPUNIT_ASSERT(!getProperty<bool>(xShapeProperties, u"AllowOverlap"_ustr));
 

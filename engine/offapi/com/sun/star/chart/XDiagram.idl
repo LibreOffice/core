@@ -28,7 +28,6 @@
 published interface XDiagram
 {
     interface com::sun::star::drawing::XShape;
-    interface com::sun::star::beans::XPropertySet;
 
     /** @returns
             a string representing the diagram type. This string

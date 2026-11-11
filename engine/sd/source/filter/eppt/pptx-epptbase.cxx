@@ -700,7 +700,7 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
         if ( !mXShape.is() )
             break;
 
-        mXPropSet.set( mXShape, UNO_QUERY );
+        mXPropSet = mXShape;
 
         if ( !mXPropSet.is() )
             break;
@@ -724,7 +724,7 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
         if ( mbPresObj && ImplGetPropertyValue( u"IsEmptyPresentationObject"_ustr ) )
             mAny >>= mbEmptyPresObj;
 
-        Any aAny;
+        cpo::uno::Any aAny;
         mnAngle = ( PropValue::GetPropertyValue( aAny,
             mXPropSet, u"RotateAngle"_ustr, true ) )
                 ? *o3tl::doAccess<sal_Int32>(aAny)

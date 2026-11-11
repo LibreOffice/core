@@ -1028,8 +1028,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeRotationImport)
     {
         uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(ind), uno::UNO_SET_THROW);
 
-        uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-        cpo::uno::Any nRotProp = xShapeProperties->getPropertyValue(u"RotateAngle"_ustr);
+        cpo::uno::Any nRotProp = xShape->getPropertyValue(u"RotateAngle"_ustr);
         sal_Int32 nRot = nRotProp.get<sal_Int32>();
         const OString sNote = "RotateAngle = " + OString::number(nRot);
 

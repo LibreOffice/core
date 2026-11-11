@@ -3023,11 +3023,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(
                     uno::Reference<drawing::XShape> xShape(pObject->getUnoShape());
                     if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
                     {
-                        uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
                         OUString title;
-                        xShapePropSet->getPropertyValue(u"Title"_ustr) >>= title;
+                        xShape->getPropertyValue(u"Title"_ustr) >>= title;
                         OUString description;
-                        xShapePropSet->getPropertyValue(u"Description"_ustr) >>= description;
+                        xShape->getPropertyValue(u"Description"_ustr) >>= description;
                         OUString const altText(title.isEmpty()
                             ? description
                             : description.isEmpty()
@@ -3035,10 +3034,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(
                                 : OUString::Concat(title) + OUString::Concat("\n") + OUString::Concat(description));
 
                         OUString aMediaURL;
-                        xShapePropSet->getPropertyValue(u"MediaURL"_ustr) >>= aMediaURL;
+                        xShape->getPropertyValue(u"MediaURL"_ustr) >>= aMediaURL;
                         if (!aMediaURL.isEmpty())
                         {
-                            OUString const mimeType(xShapePropSet->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
+                            OUString const mimeType(xShape->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
                             const SwPageFrame* pCurrPage = mrSh.GetLayout()->GetPageAtPos(aSnapRect.Center());
                             tools::Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
                             for (sal_Int32 nScreenPageNum : aScreenPageNums)
@@ -3048,7 +3047,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(
                                 {
                                     // Embedded media.
                                     OUString aTempFileURL;
-                                    xShapePropSet->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
+                                    xShape->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
                                     pPDFExtOutDevData->SetScreenStream(nScreenId, aTempFileURL);
                                 }
                                 else

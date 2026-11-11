@@ -868,8 +868,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo68839)
     lcl_CheckShape(getShape(3), u"FrameY"_ustr);
     lcl_CheckShape(getShape(4), u"graphicsXXX"_ustr);
     // check prev/next chain
-    uno::Reference<beans::XPropertySet> xFrame1(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame2(getShape(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame1(getShape(1));
+    uno::Reference<beans::XPropertySet> xFrame2(getShape(3));
     CPPUNIT_ASSERT_EQUAL(OUString(),
             getProperty<OUString>(xFrame1, u"ChainPrevName"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"FrameY"_ustr,

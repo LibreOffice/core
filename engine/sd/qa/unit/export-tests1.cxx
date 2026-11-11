@@ -304,8 +304,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testDecorative)
             {
                 for (auto j = xShapes->getCount(); j != 0; --j)
                 {
-                    uno::Reference<beans::XPropertySet> xInnerShape(xShapes->getShapeByIndex(j - 1),
-                                                                    uno::UNO_QUERY);
+                    uno::Reference<drawing::XShape> xInnerShape(xShapes->getShapeByIndex(j - 1));
                     uno::Reference<container::XNamed> xInnerNamed(xInnerShape, uno::UNO_QUERY);
                     OString const innerName(
                         OUStringToOString(xInnerNamed->getName(), RTL_TEXTENCODING_UTF8));
@@ -474,24 +473,24 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testTdf97630)
 
         drawing::TextFitToSizeType tmp;
         // text shapes
-        uno::Reference<beans::XPropertySet> xShape0(xDP->getShapeByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape0(xDP->getShapeByIndex(0));
         xShape0->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
-        uno::Reference<beans::XPropertySet> xShape1(xDP->getShapeByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape1(xDP->getShapeByIndex(1));
         xShape1->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
-        uno::Reference<beans::XPropertySet> xShape2(xDP->getShapeByIndex(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape2(xDP->getShapeByIndex(2));
         xShape2->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
-        uno::Reference<beans::XPropertySet> xShape3(xDP->getShapeByIndex(3), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape3(xDP->getShapeByIndex(3));
         xShape3->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, tmp);
 
         // fontworks
-        uno::Reference<beans::XPropertySet> xShape4(xDP->getShapeByIndex(4), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape4(xDP->getShapeByIndex(4));
         xShape4->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
-        uno::Reference<beans::XPropertySet> xShape5(xDP->getShapeByIndex(5), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape5(xDP->getShapeByIndex(5));
         xShape5->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
     }
@@ -503,24 +502,24 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testTdf97630)
 
         drawing::TextFitToSizeType tmp;
         // text shapes
-        uno::Reference<beans::XPropertySet> xShape0(xDP->getShapeByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape0(xDP->getShapeByIndex(0));
         xShape0->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
-        uno::Reference<beans::XPropertySet> xShape1(xDP->getShapeByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape1(xDP->getShapeByIndex(1));
         xShape1->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
-        uno::Reference<beans::XPropertySet> xShape2(xDP->getShapeByIndex(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape2(xDP->getShapeByIndex(2));
         xShape2->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
-        uno::Reference<beans::XPropertySet> xShape3(xDP->getShapeByIndex(3), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape3(xDP->getShapeByIndex(3));
         xShape3->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, tmp);
 
         // fontworks
-        uno::Reference<beans::XPropertySet> xShape4(xDP->getShapeByIndex(4), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape4(xDP->getShapeByIndex(4));
         xShape4->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
-        uno::Reference<beans::XPropertySet> xShape5(xDP->getShapeByIndex(5), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape5(xDP->getShapeByIndex(5));
         xShape5->getPropertyValue(u"TextFitToSize"_ustr) >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
     }

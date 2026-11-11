@@ -959,8 +959,7 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
 
         rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(rModel, aGraphic, aRectangle);
         uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj.get());
-        uno::Reference< XPropertySet > xShapePropSet(xShape, UNO_QUERY);
-        xShapePropSet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(aGraphics[i]));
+        xShape->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(aGraphics[i]));
         maShapeSelection->add(xShape);
     }
 
@@ -1050,9 +1049,8 @@ bool SVGFilter::implExportDocument()
             Reference< css::drawing::XShape > xShapeCandidate = maShapeSelection->getShapeByIndex(a);
             if(xShapeCandidate.is())
             {
-                Reference< XPropertySet > xShapePropSet( xShapeCandidate, UNO_QUERY );
                 css::awt::Rectangle aBoundRect;
-                if( xShapePropSet.is() && ( xShapePropSet->getPropertyValue( u"BoundRect"_ustr ) >>= aBoundRect ))
+                if( xShapeCandidate->getPropertyValue( u"BoundRect"_ustr ) >>= aBoundRect )
                 {
                     aShapeRange.expand(basegfx::B2DTuple(aBoundRect.X, aBoundRect.Y));
                     aShapeRange.expand(basegfx::B2DTuple(aBoundRect.X + aBoundRect.Width,
@@ -2175,8 +2173,7 @@ bool SVGFilter::implExportShapes( const Reference< css::drawing::XShapes >& rxSh
 
 bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShape, bool bMaster )
 {
-    Reference< XPropertySet > xShapePropSet( rxShape, UNO_QUERY );
-    if( !xShapePropSet.is() )
+    if( !rxShape.is() )
         return false;
 
     const OUString aShapeType( rxShape->getShapeType() );
@@ -2184,7 +2181,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
 
     if( mbPresentation )
     {
-        xShapePropSet->getPropertyValue( u"IsEmptyPresentationObject"_ustr )  >>= bHideObj;
+        rxShape->getPropertyValue( u"IsEmptyPresentationObject"_ustr )  >>= bHideObj;
     }
 
     OUString aShapeClass = implGetClassFromShape( rxShape );
@@ -2222,7 +2219,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
     css::awt::Rectangle    aBoundRect;
     const GDIMetaFile&     rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
 
-    xShapePropSet->getPropertyValue( u"BoundRect"_ustr ) >>= aBoundRect;
+    rxShape->getPropertyValue( u"BoundRect"_ustr ) >>= aBoundRect;
 
     const Point aTopLeft( aBoundRect.X, aBoundRect.Y );
     const Size  aSize( aBoundRect.Width, aBoundRect.Height );
@@ -2253,7 +2250,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
         {
             sal_uInt16 nTextAdjust = sal_uInt16(ParagraphAdjust_LEFT);
             OUString sTextAdjust;
-            xShapePropSet->getPropertyValue( u"ParaAdjust"_ustr ) >>= nTextAdjust;
+            rxShape->getPropertyValue( u"ParaAdjust"_ustr ) >>= nTextAdjust;
 
             switch( static_cast<ParagraphAdjust>(nTextAdjust) )
             {
@@ -2278,7 +2275,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
     Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
     OUString aTitle;
-    xShapePropSet->getPropertyValue( u"Title"_ustr ) >>= aTitle;
+    rxShape->getPropertyValue( u"Title"_ustr ) >>= aTitle;
     if( !aTitle.isEmpty() )
     {
         SvXMLElementExport aExp2(*mpSVGExport, u"title"_ustr, true, true);
@@ -2286,7 +2283,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
     }
 
     OUString aDescription;
-    xShapePropSet->getPropertyValue( u"Description"_ustr ) >>= aDescription;
+    rxShape->getPropertyValue( u"Description"_ustr ) >>= aDescription;
     if( !aDescription.isEmpty() )
     {
         SvXMLElementExport aExp2(*mpSVGExport, u"desc"_ustr, true, true);
@@ -2306,10 +2303,10 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
     }
 
     OUString aBookmark;
-    Reference<XPropertySetInfo> xShapePropSetInfo = xShapePropSet->getPropertySetInfo();
+    Reference<XPropertySetInfo> xShapePropSetInfo = rxShape->getPropertySetInfo();
     if(xShapePropSetInfo->hasPropertyByName(u"Bookmark"_ustr))
     {
-        xShapePropSet->getPropertyValue( u"Bookmark"_ustr ) >>= aBookmark;
+        rxShape->getPropertyValue( u"Bookmark"_ustr ) >>= aBookmark;
     }
 
     SvXMLElementExport aExp2(*mpSVGExport, u"g"_ustr, true, true);
@@ -2460,9 +2457,8 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
             {
                 if (rxShape->getShapeType() == "com.sun.star.drawing.GraphicObjectShape")
                 {
-                    uno::Reference<beans::XPropertySet> xPropertySet(rxShape, uno::UNO_QUERY);
                     uno::Reference<graphic::XGraphic> xGraphic;
-                    xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+                    rxShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
 
                     if (!xGraphic.is())
                         return false;
@@ -2494,15 +2490,13 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
 
                         if( !mpSVGExport->IsUsePositionedCharacters() && bIsTextShape )
                         {
-                            Reference< XPropertySet >   xShapePropSet( rxShape, UNO_QUERY );
-
-                            if( xShapePropSet.is() )
+                            if( rxShape.is() )
                             {
                                 bool bHideObj = false;
 
                                 if( mbPresentation )
                                 {
-                                    xShapePropSet->getPropertyValue( u"IsEmptyPresentationObject"_ustr )  >>= bHideObj;
+                                    rxShape->getPropertyValue( u"IsEmptyPresentationObject"_ustr )  >>= bHideObj;
                                 }
 
                                 if( !bHideObj )

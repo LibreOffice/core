@@ -33,7 +33,7 @@ namespace chart::wrapper
 
 class Chart2ModelContact;
 
-class LegendWrapper : public ::cppu::ImplInheritanceHelper<
+class LegendWrapper final : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                     , css::drawing::XShape
                     , css::lang::XComponent
@@ -63,6 +63,22 @@ public:
 
     // ____ XShapeDescriptor (base of XShape) ____
     virtual OUString getShapeType() override;
+
+    // _____ XPropertySet_______
+    virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override
+    { return WrappedPropertySet::getPropertySetInfo(); }
+    virtual void setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override
+    { WrappedPropertySet::setPropertyValue(aPropertyName, aValue); }
+    virtual ::cpo::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) override
+    { return WrappedPropertySet::getPropertyValue(PropertyName); }
+    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override
+    { WrappedPropertySet::addPropertyChangeListener(aPropertyName, xListener); }
+    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override
+    { WrappedPropertySet::removePropertyChangeListener(aPropertyName, aListener); }
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override
+    { WrappedPropertySet::addVetoableChangeListener(PropertyName, aListener); }
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override
+    { WrappedPropertySet::removeVetoableChangeListener(PropertyName, aListener); }
 
     // ____ XComponent ____
     virtual void dispose() override;

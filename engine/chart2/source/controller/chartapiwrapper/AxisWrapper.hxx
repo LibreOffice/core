@@ -85,7 +85,7 @@ public:
     virtual cpo::uno::Reference< css::beans::XPropertySet > getMajorGrid(  ) override;
     virtual cpo::uno::Reference< css::beans::XPropertySet > getMinorGrid(  ) override;
 
-    // ____ XPropertySet (base of XAxis) ____
+    // ____ XPropertySet (base of XAxis and XShape) ____
     virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override;
     virtual void setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
     virtual ::cpo::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) override;

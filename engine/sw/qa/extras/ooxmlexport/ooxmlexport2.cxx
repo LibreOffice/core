@@ -844,7 +844,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
     else
     {
         // After export and import, the result is a shape.
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShape(1));
         CPPUNIT_ASSERT_EQUAL(Color(0xD99594), getProperty<Color>(xShape, u"FillColor"_ustr));
 
         CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), getProperty<Color>(xShape, u"LineColor"_ustr));
@@ -860,14 +860,14 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
     awt::Gradient2 aGradient(getProperty<awt::Gradient2>(xFrame, u"FillGradient"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), Color(ColorTransparency, aGradient.StartColor));
     CPPUNIT_ASSERT_EQUAL(Color(0xD99594), Color(ColorTransparency, aGradient.EndColor));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);;
 
-    xFrame.set(getShape(2), uno::UNO_QUERY);
+    xFrame.set(getShape(2));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
     aGradient = getProperty<awt::Gradient2>(xFrame, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aGradient.StartColor));
@@ -929,7 +929,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48557)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Inner margins of the textframe wasn't exported.
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, u"TextLeftDistance"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, u"TextRightDistance"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, u"TextUpperDistance"_ustr));
@@ -1122,7 +1122,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN822175)
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     // Was text::WrapTextMode_THROUGH, due to missing Surround handling in the exporter.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(xFrame, u"Surround"_ustr));
 }
@@ -1131,7 +1131,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66688, "fdo66688.docx")
 {
     // The problem was that TextFrame imported and exported the wrong value for transparency
     // (was stored as 'FillTransparence' instead of 'BackColorTransparency'
-    uno::Reference<beans::XPropertySet> xFrame(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(2));
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 80 ), getProperty< sal_Int32 >( xFrame, u"FillTransparence"_ustr ) );
 }
 
@@ -1163,7 +1163,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBnc581614)
 {
     createSwDoc("bnc581614.doc");
     saveAndReload(TestFilter::DOCX);
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
 }
 
@@ -1186,7 +1186,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66929, "fdo66929.docx")
     else
     {
         // drawingML import -> shape with TextBox
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShape(1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, u"TextLeftDistance"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(127), getProperty<sal_Int32>(xShape, u"TextUpperDistance"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(254), getProperty<sal_Int32>(xShape, u"TextRightDistance"_ustr));
@@ -1255,7 +1255,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo60990)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The shape had no background, no paragraph adjust and no font color.
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(Color(0x00CFE7F5), getProperty<Color>(xShape, u"FillColor"_ustr));
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
@@ -1267,7 +1267,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65718, "fdo65718.docx")
 {
     // The problem was that the exporter always exported values of "0" for an images distance from text.
     // the actual attributes where 'distT', 'distB', 'distL', 'distR'
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
 
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(0), getProperty<sal_Int32>(xPropertySet, u"TopMargin"_ustr) );
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(0), getProperty<sal_Int32>(xPropertySet, u"BottomMargin"_ustr) );
@@ -1357,7 +1357,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloating, "table-floating.docx")
     else
     {
         // After import, table is inside a TextFrame.
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShape(1));
         // This was 0, should be the opposite of (left margin + half of the border width).
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-200), getProperty<sal_Int32>(xShape, u"HoriOrientPosition"_ustr));
         // Was 0 as well, should be the right margin.

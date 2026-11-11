@@ -198,10 +198,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testTdf162571HorzAnchor)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(1, 0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
 
     drawing::TextHorizontalAdjust eHori;
-    CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
     CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust::TextHorizontalAdjust_LEFT, eHori);
 }
 
@@ -213,9 +212,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testTdf165261HorzAnchor)
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroupShape->getShapeByIndex(0));
 
-    uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
     drawing::TextHorizontalAdjust eHori;
-    CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
     CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust::TextHorizontalAdjust_CENTER, eHori);
 }
 

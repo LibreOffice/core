@@ -62,8 +62,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
     }
 
     uno::Reference< drawing::XShape > xLegendShape = xDoc->getLegend();
-    uno::Reference< beans::XPropertySet > xLegendProps( xLegendShape, uno::UNO_QUERY );
-    if( !xLegendShape.is() || !xLegendProps.is() )
+    if( !xLegendShape.is() )
     {
         SAL_INFO("xmloff.chart", "legend could not be created" );
         return;
@@ -91,7 +90,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
                 try
                 {
                     if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aIter.toString(), aAny, GetImport().GetMM100UnitConverter() ) )
-                        xLegendProps->setPropertyValue(u"Alignment"_ustr, aAny );
+                        xLegendShape->setPropertyValue(u"Alignment"_ustr, aAny );
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
@@ -102,7 +101,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
                 try
                 {
                     bOverlay = aIter.toBoolean();
-                    xLegendProps->setPropertyValue(u"Overlay"_ustr, cpo::uno::Any(bOverlay));
+                    xLegendShape->setPropertyValue(u"Overlay"_ustr, cpo::uno::Any(bOverlay));
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
@@ -151,7 +150,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
     }
 
     if( bHasExpansion && nLegendExpansion!= chart::ChartLegendExpansion_CUSTOM )
-        xLegendProps->setPropertyValue(u"Expansion"_ustr, cpo::uno::Any(nLegendExpansion) );
+        xLegendShape->setPropertyValue(u"Expansion"_ustr, cpo::uno::Any(nLegendExpansion) );
     else if( bHasHeight && bHasWidth )
         xLegendShape->setSize( aLegendSize );
 
@@ -159,10 +158,10 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
         xLegendShape->setPosition( aLegendPos );
 
     // the fill style has the default "none" in XML, but "solid" in the model.
-    xLegendProps->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any( drawing::FillStyle_NONE ));
+    xLegendShape->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any( drawing::FillStyle_NONE ));
 
     // set auto-styles for Legend
-    mrImportHelper.FillAutoStyle(sAutoStyleName, xLegendProps);
+    mrImportHelper.FillAutoStyle(sAutoStyleName, xLegendShape);
 }
 
 SchXMLLegendContext::~SchXMLLegendContext()

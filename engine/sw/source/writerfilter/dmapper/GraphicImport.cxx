@@ -878,8 +878,7 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                                    cpo::uno::Any( aSize.Width ) );
 
                             text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
-                            uno::Reference< beans::XPropertySet > xSourceGraphProps( xShape, uno::UNO_QUERY );
-                            cpo::uno::Any aAny = xSourceGraphProps->getPropertyValue(u"GraphicCrop"_ustr);
+                            cpo::uno::Any aAny = xShape->getPropertyValue(u"GraphicCrop"_ustr);
                             if (m_oCrop)
                             {   // RTF: RTFValue from resolvePict()
                                 m_xGraphicObject->setPropertyValue(u"GraphicCrop"_ustr,
@@ -1425,10 +1424,7 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                 {
                 case NS_ooxml::LN_ST_SizeRelFromH_margin:
                     if (m_xShape.is())
-                    {
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(u"RelativeWidthRelation"_ustr, cpo::uno::Any(text::RelOrientation::FRAME));
-                    }
+                        m_xShape->setPropertyValue(u"RelativeWidthRelation"_ustr, cpo::uno::Any(text::RelOrientation::FRAME));
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromH_leftMargin:
                 case NS_ooxml::LN_ST_SizeRelFromH_outsideMargin:
@@ -1437,8 +1433,7 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                         // Here we handle the relative size of the width of some shape.
                         // The size of the shape's width is going to be relative to the size of the left margin.
                         // E.g.: (left margin = 8 && relative size = 150%) -> width of some shape = 12.
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(u"RelativeWidthRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_LEFT));
+                        m_xShape->setPropertyValue(u"RelativeWidthRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_LEFT));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromH_rightMargin:
@@ -1446,16 +1441,12 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                     if (m_xShape.is())
                     {
                         // Same as the left margin above.
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(u"RelativeWidthRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_RIGHT));
+                        m_xShape->setPropertyValue(u"RelativeWidthRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_RIGHT));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromH_page:
                     if (m_xShape.is())
-                    {
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(u"RelativeWidthRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_FRAME));
-                    }
+                        m_xShape->setPropertyValue(u"RelativeWidthRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_FRAME));
                     break;
                 default:
                     SAL_WARN("writerfilter", "GraphicImport::lcl_attribute: unhandled NS_ooxml::LN_CT_SizeRelH_relativeFrom value: " << nIntValue);
@@ -1470,29 +1461,25 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                 case NS_ooxml::LN_ST_SizeRelFromV_margin:
                     if (m_xShape.is())
                     {
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(u"RelativeHeightRelation"_ustr, cpo::uno::Any(text::RelOrientation::FRAME));
+                        m_xShape->setPropertyValue(u"RelativeHeightRelation"_ustr, cpo::uno::Any(text::RelOrientation::FRAME));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromV_page:
                     if (m_xShape.is())
                     {
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(u"RelativeHeightRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_FRAME));
+                        m_xShape->setPropertyValue(u"RelativeHeightRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_FRAME));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromV_topMargin:
                     if (m_xShape.is())
                     {
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(u"RelativeHeightRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
+                        m_xShape->setPropertyValue(u"RelativeHeightRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromV_bottomMargin:
                     if (m_xShape.is())
                     {
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(u"RelativeHeightRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                        m_xShape->setPropertyValue(u"RelativeHeightRelation"_ustr, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
                     }
                     break;
                 default:
@@ -1673,15 +1660,14 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
 
                 if (nPositivePercentage)
                 {
-                    uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
                     OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? u"RelativeWidth"_ustr : u"RelativeHeight"_ustr;
 
                     sal_Int32 nTextPreRotateAngle = 0;
                     cpo::uno::Any aAny;
-                    if (xPropertySet->getPropertySetInfo()->hasPropertyByName(
+                    if (m_xShape->getPropertySetInfo()->hasPropertyByName(
                             u"CustomShapeGeometry"_ustr))
                     {
-                        aAny = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr);
+                        aAny = m_xShape->getPropertyValue(u"CustomShapeGeometry"_ustr);
                     }
                     comphelper::SequenceAsHashMap aCustomShapeGeometry(aAny);
                     auto it = aCustomShapeGeometry.find(u"TextPreRotateAngle"_ustr);
@@ -1691,7 +1677,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                     }
                     if (nTextPreRotateAngle == 0)
                     {
-                        xPropertySet->setPropertyValue(aProperty,
+                        m_xShape->setPropertyValue(aProperty,
                                                        cpo::uno::Any(nPositivePercentage));
                     }
                 }

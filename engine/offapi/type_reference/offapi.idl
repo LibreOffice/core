@@ -2589,6 +2589,7 @@ module com {
     };
     published interface XShape {
      interface ::com::sun::star::drawing::XShapeDescriptor;
+     interface ::com::sun::star::beans::XPropertySet;
      ::com::sun::star::awt::Point getPosition();
      void setPosition([in] ::com::sun::star::awt::Point aPosition);
      ::com::sun::star::awt::Size getSize();
@@ -2598,7 +2599,6 @@ module com {
    module chart {
     published interface XDiagram {
      interface ::com::sun::star::drawing::XShape;
-     interface ::com::sun::star::beans::XPropertySet;
      string getDiagramType();
      ::com::sun::star::beans::XPropertySet getDataRowProperties([in] long nRow) raises (::com::sun::star::lang::IndexOutOfBoundsException);
      ::com::sun::star::beans::XPropertySet getDataPointProperties([in] long nCol, [in] long nRow) raises (::com::sun::star::lang::IndexOutOfBoundsException);

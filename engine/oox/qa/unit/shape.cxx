@@ -109,14 +109,13 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testConnectorConnection)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     uno::Reference<drawing::XShape> xConnector(xDrawPage->getShapeByIndex(0));
-    uno::Reference<beans::XPropertySet> xConnectorProps(xConnector, uno::UNO_QUERY);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4
     // - Actual  : -1
     // i.e. the connector shape is not attaching to the shape
     sal_Int32 nStartGlueId;
-    xConnectorProps->getPropertyValue(u"StartGluePointIndex"_ustr) >>= nStartGlueId;
+    xConnector->getPropertyValue(u"StartGluePointIndex"_ustr) >>= nStartGlueId;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nStartGlueId);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -124,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testConnectorConnection)
     // - Actual  : -1
     // i.e. the connector shape is not attaching to the shape
     sal_Int32 nEndGlueId;
-    xConnectorProps->getPropertyValue(u"EndGluePointIndex"_ustr) >>= nEndGlueId;
+    xConnector->getPropertyValue(u"EndGluePointIndex"_ustr) >>= nEndGlueId;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nEndGlueId);
 }
 
@@ -137,13 +136,11 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testElbowConnectors)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     uno::Reference<drawing::XShape> xShape1(xDrawPage->getShapeByIndex(2));
-    uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
-    xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    xShape1->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2756), nEdgeLineDelta);
 
     uno::Reference<drawing::XShape> xShape2(xDrawPage->getShapeByIndex(5));
-    uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
-    xShapeProps2->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    xShape2->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-805), nEdgeLineDelta);
 }
 
@@ -203,17 +200,15 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCurvedConnectors)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     uno::Reference<drawing::XShape> xShape1(xDrawPage->getShapeByIndex(2));
-    uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
-    xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    xShape1->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2364), nEdgeLineDelta);
-    xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
+    xShape1->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4250), nEdgeLineDelta);
-    xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
+    xShape1->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2051), nEdgeLineDelta);
 
     uno::Reference<drawing::XShape> xShape2(xDrawPage->getShapeByIndex(5));
-    uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
-    xShapeProps2->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    xShape2->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3019), nEdgeLineDelta);
 }
 
@@ -240,17 +235,16 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsECMA)
     for (size_t i = 0; i < 10; i++)
     {
         uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(i));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        bool bConnector = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
+        bool bConnector = xShape->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
         if (bConnector)
         {
-            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+            xShape->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
             CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
             nCount++;
-            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
+            xShape->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
             CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
             nCount++;
-            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
+            xShape->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
             CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
             nCount++;
         }
@@ -278,17 +272,16 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsISO29500)
     for (size_t i = 0; i < 10; i++)
     {
         uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(i));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        bool bConnector = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
+        bool bConnector = xShape->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
         if (bConnector)
         {
-            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+            xShape->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
             CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
             nCount++;
-            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
+            xShape->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
             CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
             nCount++;
-            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
+            xShape->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
             CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
             nCount++;
         }
@@ -304,7 +297,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf164623)
 
     sal_Int32 nEdgeLineDelta;
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(2), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape);
     CPPUNIT_ASSERT(xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr));
 
     // This bentConnector3 is connected to a shape at its end only; its start is free and its adjust
@@ -343,17 +336,17 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xGroup(xDrawPage->getShapeByIndex(0));
     uno::Reference<drawing::XShape> xShape(getChildShape(xGroup, 0));
-    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+
     // Without the accompanying fix in place, this test would have failed in several properties.
 
     sal_Int32 nAngle;
-    xPropSet->getPropertyValue(u"ShearAngle"_ustr) >>= nAngle;
+    xShape->getPropertyValue(u"ShearAngle"_ustr) >>= nAngle;
     // Failed with - Expected: 0
     //             - Actual  : -810
     // i.e. the shape was sheared although shearing does not exist in oox
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAngle);
 
-    xPropSet->getPropertyValue(u"RotateAngle"_ustr) >>= nAngle;
+    xShape->getPropertyValue(u"RotateAngle"_ustr) >>= nAngle;
     // Failed with - Expected: 26000 (is in 1/100deg)
     //             - Actual  : 26481 (is in 1/100deg)
     // 100deg in PowerPoint UI = 360deg - 100deg in LO.
@@ -388,7 +381,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCustomshapePosition)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0));
 
     sal_Int32 nY{};
     xShape->getPropertyValue(u"VertOrientPosition"_ustr) >>= nY;
@@ -411,7 +404,6 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
-    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
     // BoundRect of Fontwork shape depends on dpi.
     if (IsDefaultDPI())
@@ -424,7 +416,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
     }
 
     drawing::TextVerticalAdjust eAdjust;
-    xPropSet->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eAdjust;
+    xShape->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eAdjust;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TextVerticalAdjust", drawing::TextVerticalAdjust_BOTTOM, eAdjust);
 }
 
@@ -455,8 +447,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151008VertAnchor)
     // without the fix horizontal and vertical anchor positions were exchanged
     for (size_t i = 0; i < 6; ++i)
     {
-        uno::Reference<beans::XPropertySet> xShape(getShapeByName(aExpected[i].sShapeName),
-                                                   uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShapeByName(aExpected[i].sShapeName));
         drawing::TextHorizontalAdjust eHori;
         CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
         drawing::TextVerticalAdjust eVert;
@@ -494,7 +485,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
         uno::Reference<drawing::XShapes> xDiagramShape(getShapeByName(aExpected[i].sShapeName),
                                                        uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xShapeProps(
-            xDiagramShape->getShapeByIndex(aExpected[i].nSubShapeIndex), uno::UNO_QUERY);
+            xDiagramShape->getShapeByIndex(aExpected[i].nSubShapeIndex));
         sal_Int32 nLower;
         sal_Int32 nUpper;
         CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"TextLowerDistance"_ustr) >>= nLower);
@@ -554,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0));
 
     // Is it a Fontwork?
     bool bTextBox = bool();
@@ -629,7 +620,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0));
 
     // Fill
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(4000)),
@@ -679,7 +670,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
 
     // linear gradient, MSO UI 21deg
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0));
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_GRADIENT),
                              xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
@@ -703,7 +694,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
 
     // radial gradient, centered
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(1));
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_GRADIENT),
                              xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
@@ -727,7 +718,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
 
     // rectangular gradient, focus right, bottom
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(2));
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_GRADIENT),
                              xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
@@ -764,28 +755,28 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkNonAccentColor)
     // was Black (=0).
 
     // background 1 = lt1 = ID 1
-    uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(1)),
                          xShape0Props->getPropertyValue(u"FillColorTheme"_ustr));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(255, 204, 153)),
                          xShape0Props->getPropertyValue(u"FillColor"_ustr));
 
     // text 1 = dk1 = ID 0
-    uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getShapeByIndex(1));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(0)),
                          xShape1Props->getPropertyValue(u"FillColorTheme"_ustr));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(COL_LIGHTRED),
                          xShape1Props->getPropertyValue(u"FillColor"_ustr));
 
     // background 2 = lt2 = ID 3
-    uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getShapeByIndex(2));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(3)),
                          xShape2Props->getPropertyValue(u"FillColorTheme"_ustr));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(235, 221, 195)),
                          xShape2Props->getPropertyValue(u"FillColor"_ustr));
 
     // text 2 = dk2 = ID 2
-    uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getShapeByIndex(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getShapeByIndex(3));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(2)),
                          xShape3Props->getPropertyValue(u"FillColorTheme"_ustr));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(119, 95, 85)),
@@ -803,16 +794,16 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
 
     // The ID for the theme colors is not yet in API, but defined in enum PredefinedClrSchemeID
     // in drawingml/clrscheme.hxx. Without fix the ID was -1 meaning no theme is used.
-    uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(3)),
                          xShape0Props->getPropertyValue(u"FillColorTheme"_ustr));
-    uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getShapeByIndex(1));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(1)),
                          xShape1Props->getPropertyValue(u"FillColorTheme"_ustr));
-    uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getShapeByIndex(2));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(0)),
                          xShape2Props->getPropertyValue(u"FillColorTheme"_ustr));
-    uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getShapeByIndex(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getShapeByIndex(3));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(2)),
                          xShape3Props->getPropertyValue(u"FillColorTheme"_ustr));
 }
@@ -828,7 +819,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkDarkenTransparency)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
-    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0));
     // Without the fix in place the test would have failed with
     // Expected: 13676402 (= 0xD0AF72 = rgb(208, 175, 114) => luminance 63.14%)
     // Actual: 11897660 (= 0xB58B3C = rgb(181, 139, 60) => luminance 47.25% )
@@ -848,7 +839,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
 
     // linear gradient, MSO UI 21deg, solid transparency on outline
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0));
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_GRADIENT),
                              xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
@@ -880,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
     // radial gradient, direct color with transparency, focus center, dotted outline
     // The stop color transparency is imported as transparency gradient with same geometry.
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(1));
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_GRADIENT),
                              xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
@@ -932,7 +923,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
     // FillProperties::pushToPropMap imports this currently (Mar 2023) as color gradient.
     // Thus no theme color is tested but direct color.
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(2));
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_GRADIENT),
                              xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
@@ -980,7 +971,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtBitmapFill)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_BITMAP),
                          xShapeProps->getPropertyValue(u"FillStyle"_ustr));
 
@@ -1013,7 +1004,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtDefaultColor)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_SOLID),
                          xShapeProps->getPropertyValue(u"FillStyle"_ustr));
 
@@ -1055,7 +1046,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_funnel)
     pSdrView->UnmarkAll();
 
     // Examine the geometry. The test compares relative values.
-    uno::Reference<beans::XPropertySet> xPropsPrst(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropsPrst(xDrawPage->getShapeByIndex(0));
     css::drawing::PolyPolygonBezierCoords aCurveGeometryPrst;
     xPropsPrst->getPropertyValue(u"Geometry"_ustr) >>= aCurveGeometryPrst;
     // PolyPolygonBezierCoords has Coordinates and Flags.
@@ -1072,7 +1063,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_funnel)
     dispatchCommand(mxComponent, u".uno:FormatUngroup"_ustr, {});
     pSdrView->UnmarkAll();
 
-    uno::Reference<beans::XPropertySet> xPropsCust(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropsCust(xDrawPage->getShapeByIndex(2));
     css::drawing::PolyPolygonBezierCoords aCurveGeometryCust;
     xPropsCust->getPropertyValue(u"Geometry"_ustr) >>= aCurveGeometryCust;
     css::awt::Point aPointCust = aCurveGeometryCust.Coordinates[0][22];
@@ -1115,7 +1106,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf170095SoftEdge3D)
     // Then make sure the shape has no soft edge:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0));
     sal_Int32 nSoftEdgeRad{};
     xShape->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nSoftEdgeRad;
     // Without the accompanying fix in place, this test would have failed with:
@@ -1187,7 +1178,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testReflectionImport)
 
     // The preset with a small blur: 6350 EMU of blur is 18 hundredths of a millimeter, and an end
     // alpha of 0.3% rounds to a fully transparent end.
-    uno::Reference<beans::XPropertySet> xTight(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTight(xDrawPage->getShapeByIndex(0));
     assertReflection({ 0, 18, 50, 0, 100, 35 }, xTight);
 
     // The same preset with a 4pt gap between the shape and the reflection.
@@ -1196,10 +1187,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testReflectionImport)
 
     // A reflection element without attributes fades from opaque to invisible over its full
     // height.
-    uno::Reference<beans::XPropertySet> xDefaults(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDefaults(xDrawPage->getShapeByIndex(2));
     assertReflection({ 0, 0, 0, 0, 100, 100 }, xDefaults);
 
-    uno::Reference<beans::XPropertySet> xNone(xDrawPage->getShapeByIndex(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xNone(xDrawPage->getShapeByIndex(3));
     CPPUNIT_ASSERT(!xNone->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
 
     // The reflection effect also has the attributes that have no shape property of their own,

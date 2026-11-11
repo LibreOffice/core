@@ -192,7 +192,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                        SfxObjectShell* pObjSh = SfxObjectShell::Current();
                        if ( pObjSh && SfxApplication::IsXScriptURL( pInfo->GetMacro() ) )
                        {
-                           uno::Reference< beans::XPropertySet > xProps( pObj->getUnoShape(), uno::UNO_QUERY );
+                           uno::Reference< drawing::XShape > xProps( pObj->getUnoShape() );
                            cpo::uno::Any aCaller;
                            if ( xProps.is() )
                            {

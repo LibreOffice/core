@@ -5028,7 +5028,7 @@ GetSelectedShapeOfView(const uno::Reference<frame::XController>& xController)
         return {};
     }
 
-    return uno::Reference<beans::XPropertySet>(xShapes->getShapeByIndex(0), uno::UNO_QUERY);
+    return xShapes->getShapeByIndex(0);
 }
 }
 

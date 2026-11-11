@@ -359,7 +359,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf86374, "tdf86374.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf87924, "tdf87924.docx")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     comphelper::SequenceAsHashMap aGeometry(
         xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
     // This was -270, the text rotation angle was set when it should not be rotated.
@@ -1284,7 +1284,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148952_2007)
     // Checks the number of images in the docx file
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xImage(getShape(1));
 
     // Check if alt title value is appended to description
     OUString descr;
@@ -1309,7 +1309,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148952_2010)
     // Checks the number of images in the docx file
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xImage(getShape(1));
 
     // Check if description field contains same value after export
     OUString descr;

@@ -1859,10 +1859,8 @@ DiagramDataState::DiagramDataState(const Connections& aConnections, const Points
             }
         }
 
-        uno::Reference<beans::XPropertySet> xGroupProperties(rRootShape, uno::UNO_QUERY);
-        if (xGroupProperties.is()
-            && xGroupProperties->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
-            xGroupProperties->getPropertyValue(u"InteropGrabBag"_ustr) >>= maGrabBag;
+        if (rRootShape->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            rRootShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= maGrabBag;
 
         SdrObjListIter aIter(*pSource, SdrIterMode::DeepNoGroups);
         while (aIter.IsMore())

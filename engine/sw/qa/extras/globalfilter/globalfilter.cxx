@@ -315,7 +315,7 @@ uno::Reference<drawing::XShape> lcl_getShape(const uno::Reference<lang::XCompone
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
     {
-        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getShapeByIndex(i));
         uno::Reference<graphic::XGraphic> xGraphic;
         xShapeProperties->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
         if (xGraphic.is())
@@ -370,12 +370,11 @@ void Test::testGraphicShape()
 
         uno::Reference<drawing::XShape> xImage = lcl_getShape(mxComponent, true);
         CPPUNIT_ASSERT_MESSAGE("Couldn't load the shape/image", xImage.is());
-        uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY );
         // First image is embedded
         // Check size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+            xImage->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
@@ -389,14 +388,13 @@ void Test::testGraphicShape()
 
         // Second image is a linked one
         xImage = lcl_getShape(mxComponent, false);
-        XPropSet.set(xImage, uno::UNO_QUERY);
         const OString sFailedImageLoad = OString::Concat("Couldn't load the shape/image for ") + TestFilterNames.at(eFilterName).toUtf8();
         CPPUNIT_ASSERT_MESSAGE(sFailedImageLoad.getStr(), xImage.is());
 
         // Check size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+            xImage->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
 
             Graphic aGraphic(xGraphic);
@@ -420,7 +418,7 @@ std::vector<uno::Reference<graphic::XGraphic>>
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
     {
-        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getShapeByIndex(i));
         uno::Reference<graphic::XGraphic> xGraphic;
         xShapeProperties->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
         if (xGraphic.is())
@@ -1746,8 +1744,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
         uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xShape(
             xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue(u"Decorative"_ustr, cpo::uno::Any(true));
+        xShape->setPropertyValue(u"Decorative"_ustr, cpo::uno::Any(true));
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
         xDrawPage->add(xShape);

@@ -954,7 +954,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testODSFormattedChartTitles)
     CPPUNIT_ASSERT(xChart2Doc.is());
     Reference< chart::XChartDocument > xChartDoc(xChart2Doc, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
-    uno::Reference< beans::XPropertySet > xTitleProp(xChartDoc->getTitle(), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xTitleProp(xChartDoc->getTitle());
     CPPUNIT_ASSERT(xTitleProp.is());
 
     checkCharacterProps(xTitleProp);

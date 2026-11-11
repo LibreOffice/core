@@ -72,6 +72,14 @@ public:
     virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
+    // XPropertySet
+    virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override
+    { return WrappedPropertySet::getPropertySetInfo(); }
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override
+    { WrappedPropertySet::addVetoableChangeListener(PropertyName, aListener); }
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override
+    { WrappedPropertySet::removeVetoableChangeListener(PropertyName, aListener); }
+
     // character properties have to be handled differently (via the XFormattedString elements)
     void getFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, cpo::uno::Any& rValue );
     /// @throws cpo::uno::Exception

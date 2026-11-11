@@ -1380,13 +1380,13 @@ DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
     // Test import/export of new frame attribute called TextVerticalAdjust
 
     // 1st frame's context is adjusted to the top
-    uno::Reference<beans::XPropertySet> xFrame(getTextFrameByName(u"Rectangle 1"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getTextFrameByName(u"Rectangle 1"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xFrame, u"TextVerticalAdjust"_ustr));
     // 2nd frame's context is adjusted to the center
-    xFrame.set(getTextFrameByName(u"Rectangle 2"_ustr), uno::UNO_QUERY);
+    xFrame.set(getTextFrameByName(u"Rectangle 2"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_CENTER, getProperty<drawing::TextVerticalAdjust>(xFrame, u"TextVerticalAdjust"_ustr));
     // 3rd frame's context is adjusted to the bottom
-    xFrame.set(getTextFrameByName(u"Rectangle 3"_ustr), uno::UNO_QUERY);
+    xFrame.set(getTextFrameByName(u"Rectangle 3"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, u"TextVerticalAdjust"_ustr));
 }
 

@@ -119,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfDecompositionSize)
     // Then make sure that its size is correct:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
     auto xGraphic
         = xShape->getPropertyValue(u"Graphic"_ustr).get<uno::Reference<graphic::XGraphic>>();
     CPPUNIT_ASSERT(xGraphic.is());

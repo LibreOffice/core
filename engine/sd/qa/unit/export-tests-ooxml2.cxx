@@ -796,7 +796,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92527)
     cpo::uno::Sequence<beans::PropertyValue> aShapeGeometry(comphelper::InitPropertySequence({
         { u"Type"_ustr, cpo::uno::Any(u"diamond"_ustr) },
     }));
-    uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet1(xShape1);
     xPropertySet1->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(aShapeGeometry));
 
     saveAndReload(TestFilter::PPTX);

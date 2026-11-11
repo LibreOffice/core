@@ -221,7 +221,7 @@ private:
                 continue;
             OString aPath = indexed(rPath, "shape", i);
             add(aPath, "ShapeType", xShape->getShapeType());
-            dumpProperties(uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY), aPath);
+            dumpProperties(uno::Reference<beans::XPropertySet>(xShape), aPath);
 
             uno::Reference<drawing::XShapes> xChildren(xShape, uno::UNO_QUERY);
             if (xChildren.is())
@@ -229,7 +229,7 @@ private:
             else
             {
                 dumpText(uno::Reference<text::XText>(xShape, uno::UNO_QUERY), aPath);
-                dumpTable(uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY), aPath);
+                dumpTable(uno::Reference<beans::XPropertySet>(xShape), aPath);
             }
         }
     }

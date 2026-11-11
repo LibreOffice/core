@@ -3866,7 +3866,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
         uno::Reference< graphic::XGraphic > xGraphic = pOLEHandler->getReplacement();
         xOLE->setPropertyValue(getPropertyName( PROP_GRAPHIC ),
                         cpo::uno::Any(xGraphic));
-        uno::Reference<beans::XPropertySet> xReplacementProperties(pOLEHandler->getShape(), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xReplacementProperties(pOLEHandler->getShape());
         if (xReplacementProperties.is())
         {
             table::BorderLine2 aBorderProps;
@@ -5224,9 +5224,8 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 }
             }
 
-            uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
             cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
-            xShapePropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+            xShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
 
             for (const auto& rProp : aGrabBag)
             {
@@ -5237,12 +5236,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
                     text::TextContentAnchorType nAnchorType
                         = text::TextContentAnchorType_AT_PARAGRAPH;
-                    xShapePropertySet->getPropertyValue(getPropertyName(PROP_ANCHOR_TYPE))
+                    xShape->getPropertyValue(getPropertyName(PROP_ANCHOR_TYPE))
                         >>= nAnchorType;
 
                     const cpo::uno::Any aOpaque(nAnchorType == text::TextContentAnchorType_AS_CHARACTER
                                            || (zOrder >= 0 && !IsInHeaderFooter()));
-                    xShapePropertySet->setPropertyValue(getPropertyName(PROP_OPAQUE), aOpaque);
+                    xShape->setPropertyValue(getPropertyName(PROP_OPAQUE), aOpaque);
                 }
             }
             // A GroupShape doesn't implement text::XTextRange, but appending
@@ -5259,11 +5258,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
             m_vAnchoredStack.push_back(AnchoredContext(xTextContent));
-            uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
 
             rtl::Reference<SwXTextEmbeddedObject> xEmbedded = m_xTextDocument->createTextEmbeddedObject();
             m_StreamStateStack.top().xEmbedded = xEmbedded;
-            xEmbedded->setPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT)));
+            xEmbedded->setPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT), xShape->getPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT)));
             xEmbedded->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
             // So that the original bitmap-only shape will be replaced by the embedded object.
             m_vAnchoredStack.back().bToRemove = true;
@@ -5424,12 +5422,11 @@ void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::
     awt::Size aSize = xShape->getSize( );
     xEmbedded->setPropertyValue(getPropertyName(PROP_WIDTH), cpo::uno::Any(sal_Int32(aSize.Width)));
     xEmbedded->setPropertyValue(getPropertyName(PROP_HEIGHT), cpo::uno::Any(sal_Int32(aSize.Height)));
-    uno::Reference<beans::XPropertySet> const xShapeProps(xShape, uno::UNO_QUERY);
     // tdf#130782 copy a11y related properties
     xEmbedded->setPropertyValue(getPropertyName(PROP_DESCRIPTION),
-        xShapeProps->getPropertyValue(getPropertyName(PROP_DESCRIPTION)));
+        xShape->getPropertyValue(getPropertyName(PROP_DESCRIPTION)));
     xEmbedded->setPropertyValue(getPropertyName(PROP_TITLE),
-        xShapeProps->getPropertyValue(getPropertyName(PROP_TITLE)));
+        xShape->getPropertyValue(getPropertyName(PROP_TITLE)));
     uno::Reference<container::XNamed> const xShapeName(xShape, uno::UNO_QUERY);
     OUString const name(xShapeName->getName());
     if (!name.isEmpty()) // setting empty name will throw
@@ -5505,10 +5502,9 @@ void DomainMapper_Impl::PopShapeContext()
     }
     if( aShapeSize.Width <= 2 )
     {
-        const uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
         SectionPropertyMap* pSectionContext = GetSectionContext();
         if ( pSectionContext && (!hasTableManager() || !getTableManager().isInTable()) &&
-             xShapePropertySet->getPropertySetInfo()->hasPropertyByName(getPropertyName(PROP_RELATIVE_WIDTH)) )
+             xShape->getPropertySetInfo()->hasPropertyByName(getPropertyName(PROP_RELATIVE_WIDTH)) )
         {
             pSectionContext->addRelativeWidthShape(xShape);
         }
@@ -6503,7 +6499,6 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const cpo::uno::Reference<cs
         return;
 
     uno::Reference< drawing::XShapes >xGroup(xShape, uno::UNO_QUERY);
-    uno::Reference< beans::XPropertySet >xProps(xShape, uno::UNO_QUERY);
 
     // If this is a group go inside
     if (xGroup)
@@ -6511,7 +6506,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const cpo::uno::Reference<cs
             AttachTextBoxContentToShape(xGroup->getShapeByIndex(i));
 
     // if this shape has to be a textbox, attach the frame
-    if (!xProps->getPropertyValue(u"TextBox"_ustr).get<bool>())
+    if (!xShape->getPropertyValue(u"TextBox"_ustr).get<bool>())
         return;
 
     // if this is a textbox there must be a waiting frame
@@ -6525,7 +6520,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const cpo::uno::Reference<cs
     // Attach the textbox to the shape
     try
     {
-        xProps->setPropertyValue(u"TextBoxContent"_ustr, cpo::uno::Any(uno::Reference< text::XTextFrame >(xTextBox)));
+        xShape->setPropertyValue(u"TextBoxContent"_ustr, cpo::uno::Any(uno::Reference< text::XTextFrame >(xTextBox)));
     }
     catch (const cpo::uno::Exception&)
     {
@@ -6543,8 +6538,8 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const cpo::uno::Reference<cs
 
         // Try to get the grabbag
         cpo::uno::Sequence<beans::PropertyValue> aOldGrabBagSeq;
-        if (xProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
-            xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aOldGrabBagSeq;
+        if (xShape->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            xShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= aOldGrabBagSeq;
 
         // If the grabbag successfully get...
         if (!aOldGrabBagSeq.hasElements())
@@ -6586,7 +6581,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const cpo::uno::Reference<cs
         // If the linking changed the grabbag, apply the modifications
         if (aNewGrabBagSeq.hasElements() && bSuccess)
         {
-            xProps->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aNewGrabBagSeq));
+            xShape->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aNewGrabBagSeq));
             m_vTextFramesForChaining.push_back(xShape);
         }
     }
@@ -10023,18 +10018,17 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
             rtl::Reference<SwXTextEmbeddedObject> const xEmbedded(m_StreamStateStack.top().xEmbedded);
             xEmbedded->setPropertyValue(u"AnchorType"_ustr, cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
             xEmbedded->setPropertyValue(u"IsFollowingTextFlow"_ustr, cpo::uno::Any(m_pGraphicImport->GetLayoutInCell()));
-            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            xEmbedded->setPropertyValue(u"HoriOrient"_ustr, xShapeProps->getPropertyValue(u"HoriOrient"_ustr));
-            xEmbedded->setPropertyValue(u"HoriOrientPositionEMU"_ustr, xShapeProps->getPropertyValue(u"HoriOrientPositionEMU"_ustr));
-            xEmbedded->setPropertyValue(u"HoriOrientRelation"_ustr, xShapeProps->getPropertyValue(u"HoriOrientRelation"_ustr));
-            xEmbedded->setPropertyValue(u"VertOrient"_ustr, xShapeProps->getPropertyValue(u"VertOrient"_ustr));
-            xEmbedded->setPropertyValue(u"VertOrientPositionEMU"_ustr, xShapeProps->getPropertyValue(u"VertOrientPositionEMU"_ustr));
-            xEmbedded->setPropertyValue(u"VertOrientRelation"_ustr, xShapeProps->getPropertyValue(u"VertOrientRelation"_ustr));
+            xEmbedded->setPropertyValue(u"HoriOrient"_ustr, xShape->getPropertyValue(u"HoriOrient"_ustr));
+            xEmbedded->setPropertyValue(u"HoriOrientPositionEMU"_ustr, xShape->getPropertyValue(u"HoriOrientPositionEMU"_ustr));
+            xEmbedded->setPropertyValue(u"HoriOrientRelation"_ustr, xShape->getPropertyValue(u"HoriOrientRelation"_ustr));
+            xEmbedded->setPropertyValue(u"VertOrient"_ustr, xShape->getPropertyValue(u"VertOrient"_ustr));
+            xEmbedded->setPropertyValue(u"VertOrientPositionEMU"_ustr, xShape->getPropertyValue(u"VertOrientPositionEMU"_ustr));
+            xEmbedded->setPropertyValue(u"VertOrientRelation"_ustr, xShape->getPropertyValue(u"VertOrientRelation"_ustr));
             //tdf123873 fix missing textwrap import
-            xEmbedded->setPropertyValue(u"TextWrap"_ustr, xShapeProps->getPropertyValue(u"TextWrap"_ustr));
+            xEmbedded->setPropertyValue(u"TextWrap"_ustr, xShape->getPropertyValue(u"TextWrap"_ustr));
 
             // GraphicZOrderHelper::findZOrder() was called already, so can just copy it over.
-            xEmbedded->setPropertyValue(u"ZOrder"_ustr, xShapeProps->getPropertyValue(u"ZOrder"_ustr));
+            xEmbedded->setPropertyValue(u"ZOrder"_ustr, xShape->getPropertyValue(u"ZOrder"_ustr));
         }
     }
     //insert it into the document at the current cursor position

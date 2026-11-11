@@ -845,8 +845,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
         uno::Reference<drawing::XShape> xShape(
             xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         xShape->setSize(awt::Size(5000, 5000));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+        xShape->setPropertyValue(u"AnchorType"_ustr,
                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
         uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
@@ -855,10 +854,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
         uno::Reference<drawing::XShape> xShape(
             xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         xShape->setSize(awt::Size(5000, 7500));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+        xShape->setPropertyValue(u"AnchorType"_ustr,
                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-        xShapeProps->setPropertyValue(u"HoriOrientPosition"_ustr, cpo::uno::Any(sal_Int32(10000)));
+        xShape->setPropertyValue(u"HoriOrientPosition"_ustr, cpo::uno::Any(sal_Int32(10000)));
         uno::Reference<text::XTextContent> xShapeContent2(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent2, /*bAbsorb=*/false);
     }
@@ -898,8 +896,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
         uno::Reference<drawing::XShape> xShape(
             xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         xShape->setSize(awt::Size(5000, 5000));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+        xShape->setPropertyValue(u"AnchorType"_ustr,
                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
         uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
@@ -940,8 +937,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
         uno::Reference<drawing::XShape> xShape(
             xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         xShape->setSize(awt::Size(5000, 5000));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+        xShape->setPropertyValue(u"AnchorType"_ustr,
                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
         uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);

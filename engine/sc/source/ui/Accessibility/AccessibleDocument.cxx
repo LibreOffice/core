@@ -107,15 +107,14 @@ ScAccessibleShapeData::ScAccessibleShapeData(cpo::uno::Reference< css::drawing::
     : xShape(std::move(xShape_)),
     bSelected(false), bSelectable(true)
 {
-    uno::Reference< beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
-    if (xProps.is())
+    if (xShape.is())
     {
-        cpo::uno::Any aAny = xProps->getPropertyValue(u"LayerID"_ustr);
+        cpo::uno::Any aAny = xShape->getPropertyValue(u"LayerID"_ustr);
         sal_Int16 nLayerID;
         if (aAny >>= nLayerID)
             mxLayerID = nLayerID;
         sal_Int32 nZOrder;
-        aAny = xProps->getPropertyValue(u"ZOrder"_ustr);
+        aAny = xShape->getPropertyValue(u"ZOrder"_ustr);
         if (aAny >>= nZOrder)
             mxZOrder = nZOrder;
     }
@@ -1090,8 +1089,7 @@ std::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawin
     if (mpViewShell)
     {
         SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(xShape);
-        uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
-        if (pSdrObj && xShapeProp.is())
+        if (pSdrObj && xShape.is())
         {
             if (ScDrawObjData *pAnchor = ScDrawLayer::GetOrCreateObjData(pSdrObj))
                 return std::optional<ScAddress>(pAnchor->maStart);
@@ -1154,18 +1152,14 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
     maShapesMap[xShape] = pShape;
     SetAnchor(xShape, pShape);
 
-    uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
-    if (xShapeProp.is())
+    cpo::uno::Any aPropAny = xShape->getPropertyValue(u"LayerID"_ustr);
+    sal_Int16 nLayerID = 0;
+    if( aPropAny >>= nLayerID )
     {
-        cpo::uno::Any aPropAny = xShapeProp->getPropertyValue(u"LayerID"_ustr);
-        sal_Int16 nLayerID = 0;
-        if( aPropAny >>= nLayerID )
-        {
-            if( (SdrLayerID(nLayerID) == SC_LAYER_INTERN) || (SdrLayerID(nLayerID) == SC_LAYER_HIDDEN) )
-                pShape->bSelectable = false;
-            else
-                pShape->bSelectable = true;
-        }
+        if( (SdrLayerID(nLayerID) == SC_LAYER_INTERN) || (SdrLayerID(nLayerID) == SC_LAYER_HIDDEN) )
+            pShape->bSelectable = false;
+        else
+            pShape->bSelectable = true;
     }
 
     if (!xSelectionSupplier.is())

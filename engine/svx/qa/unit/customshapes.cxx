@@ -341,10 +341,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145956_Origin_Relative_BoundRect)
 
     // The shape is extruded with 10cm. viewpoint="(0cm 0cm 25cm)", origin="0 0".
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xPropSet.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     sal_Int32 nActualTop = aBoundRect.Y;
 
     // Without the fix it would have failed with top = 9462.
@@ -363,12 +362,11 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterZ_odt)
     // The shape is extruded and tilt left 60deg. The rotation center is at -2000Hmm on the z-axis.
     // That is a position behind the back face of the extruded shape.
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xPropSet.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     awt::Point aAnchorPosition;
-    xPropSet->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
+    xShape->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
     sal_Int32 nActualLeft = aBoundRect.X - aAnchorPosition.X;
 
     // Without the fix it would have failed with left = 7731.
@@ -388,12 +386,11 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterY_odt)
     // center and bottom shape edge. The bottom edge of the projected solid has roughly the
     // y-coordinate of the rotation center.
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xPropSet.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     awt::Point aAnchorPosition;
-    xPropSet->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
+    xShape->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
     sal_Int32 nActualTop = aBoundRect.Y - aAnchorPosition.Y;
 
     // Without the fix it would have failed with top = 2252.
@@ -413,12 +410,11 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterY_doc)
     // center and bottom shape edge. The bottom edge of the projected solid has roughly the
     // y-coordinate of the center.
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xPropSet.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     awt::Point aAnchorPosition;
-    xPropSet->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
+    xShape->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
     sal_Int32 nActualTop = aBoundRect.Y - aAnchorPosition.Y;
 
     // Without the fix it would have failed with top = 2330
@@ -689,24 +685,22 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testViewBoxLeftTop)
     // Get the shape "leftright". Error was, that the identifier "left" was always set to zero, thus
     // the path was outside the frame rectangle for a viewBox having a positive "left" value.
     uno::Reference<drawing::XShape> xShapeLR(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeLRProps(xShapeLR, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape 'leftright' properties", xShapeLRProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape 'leftright' properties", xShapeLR.is());
     awt::Rectangle aFrameRectLR;
-    xShapeLRProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRectLR;
+    xShapeLR->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRectLR;
     awt::Rectangle aBoundRectLR;
-    xShapeLRProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectLR;
+    xShapeLR->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectLR;
     // difference should be zero, but allow some rounding errors
     CPPUNIT_ASSERT_LESS(sal_Int32(3), std::abs(aFrameRectLR.X - aBoundRectLR.X));
 
     // Get the shape "topbottom". Error was, that the identifier "top" was always set to zero, thus
     // the path was outside the frame rectangle for a viewBox having a positive "top" value.
     uno::Reference<drawing::XShape> xShapeTB(getShape(1));
-    uno::Reference<beans::XPropertySet> xShapeTBProps(xShapeTB, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape 'topbottom' properties", xShapeTBProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape 'topbottom' properties", xShapeTB.is());
     awt::Rectangle aFrameRectTB;
-    xShapeTBProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRectTB;
+    xShapeTB->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRectTB;
     awt::Rectangle aBoundRectTB;
-    xShapeTBProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectTB;
+    xShapeTB->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectTB;
     // difference should be zero, but allow some rounding errors
     CPPUNIT_ASSERT_LESS(sal_Int32(3), std::abs(aFrameRectTB.Y - aBoundRectTB.Y));
 }
@@ -721,10 +715,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testAccuracyCommandX)
     // was used, thus the segment height was obviously smaller than for a true circle.
     // Math: segment height approx 10000 * ( 1 - sqrt(0.5)) + line width
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     double fHeight = static_cast<double>(aBoundRect.Height);
     // The tolerance is a guess, might be smaller.
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("segment height out of tolerance", 2942.0, fHeight, 8.0);
@@ -741,10 +734,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testToggleCommandXY)
     // correctly, the bounding box height of the segments together is about twice the single
     // segment height. Math: segment height approx 10000 * ( 1 - sqrt(0.5)) + line width
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     double fHeight = static_cast<double>(aBoundRect.Height);
     // The tolerance is a guess, might be smaller.
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("segment height out of tolerance", 5871.0, fHeight, 16.0);
@@ -759,10 +751,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testMultipleMoveTo)
     // and so the generated path was empty, resulting in zero width and height of the
     // bounding box. It has to be treated same as "M 0 0 L 5 10 10 0 N".
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     bool bIsZero(aBoundRect.Height == 0 && aBoundRect.Width == 0);
     CPPUNIT_ASSERT_MESSAGE("Path is empty", !bIsZero);
 }
@@ -776,10 +767,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testWidthOrientationCommandU)
     // Error was, that the width and height of the ellipse was halved and that the ellipse
     // was not drawn clockwise but counter clockwise.
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     const double fWidth = static_cast<double>(aBoundRect.Width);
     // Need some tolerance for line width
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong width", 10000.0, fWidth, 40.0);
@@ -796,10 +786,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testHalfEllipseVML)
     loadFromFile(u"tdf121845_HalfEllipseVML.doc");
     // Error was, that a full circle instead of the half circle was draw.
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     const double fDiff2HmW = static_cast<double>(2 * aBoundRect.Height - aBoundRect.Width);
     // Need some tolerance for line width
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("not a half circle", 0.0, fDiff2HmW, 40.0);
@@ -813,10 +802,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testLargeSwingAngleVML)
     loadFromFile(u"tdf121845_start40_swing480.doc");
     // Error was, that only the 120 deg segment was drawn.
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     const double fDiffWmH = static_cast<double>(aBoundRect.Width - aBoundRect.Height);
     // Need some tolerance for line width
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Full circle plus segment expected", 0.0, fDiffWmH, 10.0);
@@ -872,10 +860,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124029_arc_position)
     loadFromFile(u"tdf124029_Arc_position.doc");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The visual wrong position is due to a wrong shape width.
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aFrameRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("shape width", static_cast<sal_uInt32>(1610),
                                  static_cast<sal_uInt32>(aFrameRect.Width));
 }
@@ -963,10 +950,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testQuadraticCurveTo)
     // point should produce a horizontal tangent in the start point.
     loadFromFile(u"tdf125782_QuadraticCurveTo.odg");
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     const double fHeight = static_cast<double>(aBoundRect.Height);
     //Add some tolerance
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("bad height of quadraticcurveto", 3004, fHeight, 10.0);
@@ -1026,10 +1012,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
     loadFromFile(u"tdf127785_Mirror.odp");
 
     uno::Reference<drawing::XShape> xShapeV(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeVProps(xShapeV, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeVProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeV.is());
     awt::Rectangle aBoundRectV;
-    xShapeVProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectV;
+    xShapeV->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectV;
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip vertical wrong size.", 8000.0, aBoundRectV.Height,
                                          10.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip vertical wrong size.", 8000.0, aBoundRectV.Width,
@@ -1040,10 +1025,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
                                          10.0);
 
     uno::Reference<drawing::XShape> xShapeH(getShape(1));
-    uno::Reference<beans::XPropertySet> xShapeHProps(xShapeH, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeHProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeH.is());
     awt::Rectangle aBoundRectH;
-    xShapeHProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectH;
+    xShapeH->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectH;
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip horizontal wrong size.", 8000.0, aBoundRectH.Height,
                                          10.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip horizontal wrong size.", 8000.0, aBoundRectH.Width,
@@ -1097,10 +1081,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
     loadFromFile(u"tdf127785_asymmetricTextBoxFlipV.odg");
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong left", 9000.0, aBoundRect.X, 10.0);
     const double nRight = aBoundRect.X + aBoundRect.Width - 1;
@@ -1120,10 +1103,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
     loadFromFile(u"tdf127785_TextRotateAngle.odp");
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong left", 2000.0, aBoundRect.X, 10.0);
     const double nRight = aBoundRect.X + aBoundRect.Width - 1;
@@ -1140,17 +1122,16 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf128413_tbrlOnOff)
 
     loadFromFile(u"tdf128413_tbrl_OnOff.odp");
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape.is());
     awt::Rectangle aOrigRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aOrigRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aOrigRect;
 
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     rSdrObjCustomShape.SetVerticalWriting(true);
 
     awt::Rectangle aObservedRect;
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aObservedRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aObservedRect;
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape has wrong width", aOrigRect.Width, aObservedRect.Width);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape has wrong height", aOrigRect.Height, aObservedRect.Height);
@@ -1168,16 +1149,14 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
     loadFromFile(u"tdf129532_MatrixFlipV.odg");
 
     uno::Reference<drawing::XShape> xShape0(getShape(0));
-    uno::Reference<beans::XPropertySet> xShape0Props(xShape0, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape0Props.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape0.is());
     awt::Rectangle aBoundRect0;
-    xShape0Props->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect0;
+    xShape0->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect0;
 
     uno::Reference<drawing::XShape> xShape1(getShape(1));
-    uno::Reference<beans::XPropertySet> xShape1Props(xShape1, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape1Props.is());
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape1.is());
     awt::Rectangle aBoundRect1;
-    xShape1Props->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect1;
+    xShape1->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect1;
 
     // The size of the two BoundRect rectangles are the same in case of correct
     // vertical mirroring.
@@ -1583,8 +1562,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testConvertRingToPolygonIsSingleObject)
     cpo::uno::Sequence<beans::PropertyValue> aShapeGeometry(comphelper::InitPropertySequence({
         { u"Type"_ustr, cpo::uno::Any(u"ring"_ustr) },
     }));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(aShapeGeometry));
+    xShape->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(aShapeGeometry));
 
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
     CPPUNIT_ASSERT(pObj);

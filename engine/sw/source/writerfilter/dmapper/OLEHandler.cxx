@@ -116,8 +116,7 @@ void OLEHandler::lcl_attribute(Id rName, const Value & rVal)
                 {
                     try
                     {
-                        uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
-                        xShapeProps->setPropertyValue(u"Opaque"_ustr, cpo::uno::Any(false));
+                        m_xShape->setPropertyValue(u"Opaque"_ustr, cpo::uno::Any(false));
                     }
                     catch( const cpo::uno::Exception& )
                     {
@@ -143,9 +142,8 @@ cpo::uno::Reference<css::graphic::XGraphic> OLEHandler::getReplacement() const
 {
     if (!m_xShape)
         return nullptr;
-    uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
     cpo::uno::Reference<css::graphic::XGraphic> xReplacement;
-    xShapeProps->getPropertyValue(getPropertyName(PROP_BITMAP)) >>= xReplacement;
+    m_xShape->getPropertyValue(getPropertyName(PROP_BITMAP)) >>= xReplacement;
     return xReplacement;
 }
 

@@ -122,7 +122,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135943_shapeWithText_L0c15,
     // LayoutInCell: The text must fit inside cell A1 //cell[1]/info/bounds/right = 4703
     //CPPUNIT_ASSERT(nTextRight < 4704);
 
-    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1));
     bool bValue;
     xShapeProperties->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bValue;
     CPPUNIT_ASSERT(bValue);
@@ -149,12 +149,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151704_thinColumnHeight, "tdf151704_thinColumnHe
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123622, "tdf123622.docx")
 {
-    uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> XPropsRight(getShape(1));
     sal_Int16 nRelativePosR = 0;
     XPropsRight->getPropertyValue(u"HoriOrientRelation"_ustr)>>=nRelativePosR;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(4), nRelativePosR);
 
-    uno::Reference<beans::XPropertySet> XPropsLeft(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> XPropsLeft(getShape(2));
     sal_Int16 nRelativePosL = 0;
     XPropsLeft->getPropertyValue(u"HoriOrientRelation"_ustr) >>= nRelativePosL;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(3), nRelativePosL);
@@ -282,7 +282,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
     //the o:allowincell attribute of the shape, and its position has
     //to be calculated from the page frame instead of the table:
 
-    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1));
     bool bValue;
     xShapeProperties->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf129888vml The line shape has bad place!",
@@ -296,7 +296,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
     //the layoutInCell attribute of the shape, and its position has
     //to be calculated from the page frame instead of the table:
 
-    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1));
     bool bValue;
     xShapeProperties->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf129888dml The shape has bad place!",
@@ -328,7 +328,7 @@ CPPUNIT_TEST_FIXTURE(Test, Tdf133030)
 DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
 {
     //the original tdf87569 sample has vml shapes...
-    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1));
     bool bValue;
     xShapeProperties->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_vml: The Shape is not in the table!",
@@ -464,7 +464,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListNotCountedIndent)
 DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
 {
     //if the original tdf87569 sample is upgraded it will have drawingml shapes...
-    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1));
     bool bValue;
     xShapeProperties->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_drawingml: The Shape is not in the table!",
@@ -639,7 +639,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123116_oversizedRowSplit)
 
 DECLARE_OOXMLEXPORT_TEST(testPageContentBottom, "page-content-bottom.docx")
 {
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 10 (PAGE_PRINT_AREA_BOTTOM)

@@ -792,9 +792,9 @@ DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
     uno::Reference<drawing::XShapes> xEmbedGroup(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
 
     // Get the properties of the shapes
-    uno::Reference<beans::XPropertySet> xOuterShape(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xMiddleShape(xEmbedGroup->getShapeByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xInnerShape(xEmbedGroup->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xOuterShape(xGroup->getShapeByIndex(0));
+    uno::Reference<beans::XPropertySet> xMiddleShape(xEmbedGroup->getShapeByIndex(0));
+    uno::Reference<beans::XPropertySet> xInnerShape(xEmbedGroup->getShapeByIndex(1));
 
     // Get the properties of the textboxes too
     uno::Reference<beans::XPropertySet> xOuterTextBox(

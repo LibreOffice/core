@@ -568,7 +568,7 @@ void SdMiscTest::testTdf120527()
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperySet(xShape);
     CPPUNIT_ASSERT(xShapeProperySet.is());
     xShapeProperySet->setPropertyValue(u"GraphicURL"_ustr, xBitmaps->getByName(u"test"_ustr));
 

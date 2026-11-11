@@ -156,7 +156,6 @@ void setShapeCertificate(SfxViewShell* pViewShell,
 
     // Remember the selected certificate.
     uno::Reference<drawing::XShape> xShape = pSignatureLine->getUnoShape();
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     pViewShell->SetSignPDFCertificate(rCertificateOrName);
 
     // Read svg and replace placeholder texts.
@@ -170,7 +169,7 @@ void setShapeCertificate(SfxViewShell* pViewShell,
     aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
 
     uno::Reference<graphic::XGraphic> xGraphic = svx::SignatureLineHelper::importSVG(aSvgImage);
-    xShapeProps->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
+    xShape->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
 }
 }
 

@@ -287,7 +287,7 @@ namespace
 void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape)
 {
     CPPUNIT_ASSERT(xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
     {
         uno::Reference<util::XComplexColor> xComplexColor;
         xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
@@ -398,7 +398,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
     {
         uno::Reference<drawing::XShape> xShape(getShape(0));
         CPPUNIT_ASSERT(xShape.is());
-        uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
         uno::Reference<util::XComplexColor> xComplexColor;
         xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
@@ -415,7 +415,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
     {
         uno::Reference<drawing::XShape> xShape(getShape(1));
         CPPUNIT_ASSERT(xShape.is());
-        uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
         uno::Reference<util::XComplexColor> xComplexColor;
         xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
@@ -432,7 +432,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
     {
         uno::Reference<drawing::XShape> xShape(getShape(2));
         CPPUNIT_ASSERT(xShape.is());
-        uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
         uno::Reference<util::XComplexColor> xComplexColor;
         xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
@@ -514,9 +514,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColor_ShapeFill)
     // check fill color theme
     uno::Reference<drawing::XShape> xShape(getShape(0));
     CPPUNIT_ASSERT(xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     uno::Reference<util::XComplexColor> xComplexColor;
-    xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
+    xShape->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
     CPPUNIT_ASSERT(xComplexColor.is());
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getThemeColorType());
@@ -554,9 +553,8 @@ void lcl_assertMetalProperties(std::string_view sInfo,
                                const uno::Reference<drawing::XShape>& rxShape,
                                sal_Int16 nExpectedMetalType)
 {
-    uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    rxShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
@@ -749,9 +747,8 @@ namespace
 void lcl_assertSpecularityProperty(std::string_view sInfo,
                                    const uno::Reference<drawing::XShape>& rxShape)
 {
-    uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    rxShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
@@ -912,13 +909,12 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
 
     // Add a TextRotateAngle attribute.
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeomSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeomSeq;
+    xShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeomSeq;
     auto aGeomVec(comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomSeq));
     aGeomVec.push_back(comphelper::makePropertyValue(u"TextRotateAngle"_ustr, sal_Int32(45)));
     aGeomSeq = comphelper::containerToSequence(aGeomVec);
-    xShapeProps->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(aGeomSeq));
+    xShape->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(aGeomSeq));
 
     // Save to ODF. Without the fix, a file format error was produced, because attribute
     // draw:text-rotate-angle was written twice, one from TextPreRotateAngle and the other from
@@ -1050,9 +1046,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161327_LatheEndAngle)
     {
         uno::Reference<container::XIndexAccess> xGroup(xSceneShape, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(i), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         sal_Int16 nEndAngle;
-        xShapeProps->getPropertyValue(u"D3DEndAngle"_ustr) >>= nEndAngle;
+        xShape->getPropertyValue(u"D3DEndAngle"_ustr) >>= nEndAngle;
         CPPUNIT_ASSERT_EQUAL(sal_Int16(1512), nEndAngle);
     }
 }
@@ -1072,14 +1067,13 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161327_HatchAngle)
     for (size_t i = 0; i < 4; ++i)
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         constexpr css::drawing::FillStyle eExpectedStyle = css::drawing::FillStyle_HATCH;
         css::drawing::FillStyle aActualStyle;
-        xShapeProps->getPropertyValue(u"FillStyle"_ustr) >>= aActualStyle;
+        xShape->getPropertyValue(u"FillStyle"_ustr) >>= aActualStyle;
         CPPUNIT_ASSERT_EQUAL(eExpectedStyle, aActualStyle);
         sal_Int32 nExpectedAngle = 585; // FillHatch.Angle has data type 'long'
         css::drawing::Hatch aActualHatch;
-        xShapeProps->getPropertyValue(u"FillHatch"_ustr) >>= aActualHatch;
+        xShape->getPropertyValue(u"FillHatch"_ustr) >>= aActualHatch;
         CPPUNIT_ASSERT_EQUAL(nExpectedAngle, aActualHatch.Angle);
     }
 }
@@ -1101,9 +1095,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161483_ShadowSlant)
     for (size_t i = 0; i < 4; ++i)
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         sal_Int16 nActualAngle;
-        xShapeProps->getPropertyValue(u"D3DSceneShadowSlant"_ustr) >>= nActualAngle;
+        xShape->getPropertyValue(u"D3DSceneShadowSlant"_ustr) >>= nActualAngle;
         CPPUNIT_ASSERT_EQUAL(nExpectedAngle, nActualAngle);
     }
 }
@@ -1126,12 +1119,11 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161483_CircleStartEndAngle)
     for (size_t i = 0; i < 4; ++i)
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         sal_Int32 nActualStartAngle;
-        xShapeProps->getPropertyValue(u"CircleStartAngle"_ustr) >>= nActualStartAngle;
+        xShape->getPropertyValue(u"CircleStartAngle"_ustr) >>= nActualStartAngle;
         CPPUNIT_ASSERT_EQUAL(nExpectedStartAngle, nActualStartAngle);
         sal_Int32 nActualEndAngle;
-        xShapeProps->getPropertyValue(u"CircleEndAngle"_ustr) >>= nActualEndAngle;
+        xShape->getPropertyValue(u"CircleEndAngle"_ustr) >>= nActualEndAngle;
         CPPUNIT_ASSERT_EQUAL(nExpectedEndAngle, nActualEndAngle);
     }
 }
@@ -1162,9 +1154,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
                                                      uno::UNO_SET_THROW);
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xImage.is());
-        uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
         uno::Reference<graphic::XGraphic> xGraphic;
-        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"Graphic"_ustr) >>= xGraphic);
+        CPPUNIT_ASSERT(xImage->getPropertyValue(u"Graphic"_ustr) >>= xGraphic);
 
         Graphic aGraphic(xGraphic);
         // Without the accompanying fix in place, this test would have failed with:

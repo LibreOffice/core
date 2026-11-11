@@ -388,38 +388,37 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
 DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.docx")
 {
     uno::Reference<drawing::XShape> xSignatureLineShape = getShape(1);
-    uno::Reference<beans::XPropertySet> xPropSet(xSignatureLineShape, uno::UNO_QUERY);
 
     bool bIsSignatureLine;
-    xPropSet->getPropertyValue(u"IsSignatureLine"_ustr) >>= bIsSignatureLine;
+    xSignatureLineShape->getPropertyValue(u"IsSignatureLine"_ustr) >>= bIsSignatureLine;
     CPPUNIT_ASSERT_EQUAL(true, bIsSignatureLine);
 
     bool bShowSignDate;
-    xPropSet->getPropertyValue(u"SignatureLineShowSignDate"_ustr) >>= bShowSignDate;
+    xSignatureLineShape->getPropertyValue(u"SignatureLineShowSignDate"_ustr) >>= bShowSignDate;
     CPPUNIT_ASSERT_EQUAL(true, bShowSignDate);
 
     bool bCanAddComment;
-    xPropSet->getPropertyValue(u"SignatureLineCanAddComment"_ustr) >>= bCanAddComment;
+    xSignatureLineShape->getPropertyValue(u"SignatureLineCanAddComment"_ustr) >>= bCanAddComment;
     CPPUNIT_ASSERT_EQUAL(true, bCanAddComment);
 
     OUString aSignatureLineId;
-    xPropSet->getPropertyValue(u"SignatureLineId"_ustr) >>= aSignatureLineId;
+    xSignatureLineShape->getPropertyValue(u"SignatureLineId"_ustr) >>= aSignatureLineId;
     CPPUNIT_ASSERT_EQUAL(u"{0EBE47D5-A1BD-4C9E-A52E-6256E5C345E9}"_ustr, aSignatureLineId);
 
     OUString aSuggestedSignerName;
-    xPropSet->getPropertyValue(u"SignatureLineSuggestedSignerName"_ustr) >>= aSuggestedSignerName;
+    xSignatureLineShape->getPropertyValue(u"SignatureLineSuggestedSignerName"_ustr) >>= aSuggestedSignerName;
     CPPUNIT_ASSERT_EQUAL(u"John Doe"_ustr, aSuggestedSignerName);
 
     OUString aSuggestedSignerTitle;
-    xPropSet->getPropertyValue(u"SignatureLineSuggestedSignerTitle"_ustr) >>= aSuggestedSignerTitle;
+    xSignatureLineShape->getPropertyValue(u"SignatureLineSuggestedSignerTitle"_ustr) >>= aSuggestedSignerTitle;
     CPPUNIT_ASSERT_EQUAL(u"Farmer"_ustr, aSuggestedSignerTitle);
 
     OUString aSuggestedSignerEmail;
-    xPropSet->getPropertyValue(u"SignatureLineSuggestedSignerEmail"_ustr) >>= aSuggestedSignerEmail;
+    xSignatureLineShape->getPropertyValue(u"SignatureLineSuggestedSignerEmail"_ustr) >>= aSuggestedSignerEmail;
     CPPUNIT_ASSERT_EQUAL(u"john@thefarmers.com"_ustr, aSuggestedSignerEmail);
 
     OUString aSigningInstructions;
-    xPropSet->getPropertyValue(u"SignatureLineSigningInstructions"_ustr) >>= aSigningInstructions;
+    xSignatureLineShape->getPropertyValue(u"SignatureLineSigningInstructions"_ustr) >>= aSigningInstructions;
     CPPUNIT_ASSERT_EQUAL(u"Check the machines!"_ustr, aSigningInstructions);
 }
 

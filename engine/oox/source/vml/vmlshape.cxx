@@ -431,8 +431,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
 
                 if (xSInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
                 {
-                    uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
-                    cpo::uno::Any aAny = propertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr);
+                    cpo::uno::Any aAny = xShape->getPropertyValue(u"FrameInteropGrabBag"_ustr);
                     auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< cpo::uno::Sequence<beans::PropertyValue> >());
 
                     aGrabBag.push_back(comphelper::makePropertyValue(u"VML-Z-ORDER"_ustr, maTypeModel.maZIndex.toInt32()));
@@ -450,15 +449,15 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
 
                     if(!maTypeModel.maRotation.isEmpty())
                         aGrabBag.push_back(comphelper::makePropertyValue(u"mso-rotation-angle"_ustr, ConversionHelper::decodeRotation(maTypeModel.maRotation).get()));
-                    propertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGrabBag)));
+                    xShape->setPropertyValue(u"FrameInteropGrabBag"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGrabBag)));
                     sal_Int32 backColorTransparency = 0;
-                    propertySet->getPropertyValue(u"BackColorTransparency"_ustr)
+                    xShape->getPropertyValue(u"BackColorTransparency"_ustr)
                         >>= backColorTransparency;
-                    if (propertySet->getPropertyValue(u"FillStyle"_ustr) == FillStyle_NONE &&
+                    if (xShape->getPropertyValue(u"FillStyle"_ustr) == FillStyle_NONE &&
                         backColorTransparency == 100)
                     {
                         // If there is no fill, the Word default is 100% transparency.
-                        propertySet->setPropertyValue(u"FillTransparence"_ustr, Any(sal_Int16(100)));
+                        xShape->setPropertyValue(u"FillTransparence"_ustr, Any(sal_Int16(100)));
                     }
                 }
                 else
@@ -466,8 +465,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     if( maTypeModel.maZIndex.toInt32() )
                     {
                         cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
-                        uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
-                        propertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+                        xShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                         sal_Int32 length;
 
                         length = aGrabBag.getLength();
@@ -499,7 +497,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                             pGrabBag[length+3].Name = u"LinkChainName"_ustr;
                             pGrabBag[length+3].Value <<= sLinkChainName;
                         }
-                        propertySet->setPropertyValue( u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag) );
+                        xShape->setPropertyValue( u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag) );
                     }
                 }
                 Reference< XControlShape > xControlShape( xShape, uno::UNO_QUERY );
@@ -585,13 +583,12 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
                 rGraphicHelper, maTypeModel.maStrokeModel.moWeight.value(), 0, false, false);
         if (aPropMap.hasProperty(PROP_LineColor))
         {
-            uno::Reference<beans::XPropertySet> xPropertySet(rxShape, uno::UNO_QUERY);
             static const sal_Int32 aBorders[] = {
                 PROP_TopBorder, PROP_LeftBorder, PROP_BottomBorder, PROP_RightBorder
             };
             for (sal_Int32 nBorder : aBorders)
             {
-                table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(nBorder)).get<table::BorderLine2>();
+                table::BorderLine2 aBorderLine = rxShape->getPropertyValue(PropertyMap::getPropertyName(nBorder)).get<table::BorderLine2>();
                 aBorderLine.Color = aPropMap.getProperty(PROP_LineColor).get<sal_Int32>();
                 if (oLineWidth)
                     aBorderLine.LineWidth = *oLineWidth;
@@ -1575,34 +1572,33 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         }
 
         // Store signature line properties
-        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"IsSignatureLine"_ustr, cpo::uno::Any(true));
-        xPropertySet->setPropertyValue(u"SignatureLineId"_ustr,
+        xShape->setPropertyValue(u"IsSignatureLine"_ustr, cpo::uno::Any(true));
+        xShape->setPropertyValue(u"SignatureLineId"_ustr,
                                         cpo::uno::Any(getShapeModel().maSignatureId));
-        xPropertySet->setPropertyValue(
+        xShape->setPropertyValue(
             u"SignatureLineSuggestedSignerName"_ustr,
             cpo::uno::Any(getShapeModel().maSignatureLineSuggestedSignerName));
-        xPropertySet->setPropertyValue(
+        xShape->setPropertyValue(
             u"SignatureLineSuggestedSignerTitle"_ustr,
             cpo::uno::Any(getShapeModel().maSignatureLineSuggestedSignerTitle));
-        xPropertySet->setPropertyValue(
+        xShape->setPropertyValue(
             u"SignatureLineSuggestedSignerEmail"_ustr,
             cpo::uno::Any(getShapeModel().maSignatureLineSuggestedSignerEmail));
-        xPropertySet->setPropertyValue(
+        xShape->setPropertyValue(
             u"SignatureLineSigningInstructions"_ustr,
             cpo::uno::Any(getShapeModel().maSignatureLineSigningInstructions));
-        xPropertySet->setPropertyValue(
+        xShape->setPropertyValue(
             u"SignatureLineShowSignDate"_ustr,
             cpo::uno::Any(getShapeModel().mbSignatureLineShowSignDate));
-        xPropertySet->setPropertyValue(
+        xShape->setPropertyValue(
             u"SignatureLineCanAddComment"_ustr,
             cpo::uno::Any(getShapeModel().mbSignatureLineCanAddComment));
-        xPropertySet->setPropertyValue(u"SignatureLineIsSigned"_ustr, cpo::uno::Any(bIsSigned));
+        xShape->setPropertyValue(u"SignatureLineIsSigned"_ustr, cpo::uno::Any(bIsSigned));
 
         if (!aGraphicPath.isEmpty())
         {
             xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
-            xPropertySet->setPropertyValue(u"SignatureLineUnsignedImage"_ustr, cpo::uno::Any(xGraphic));
+            xShape->setPropertyValue(u"SignatureLineUnsignedImage"_ustr, cpo::uno::Any(xGraphic));
         }
         return xShape;
     }
@@ -1681,17 +1677,14 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     {
     }
 
-    uno::Reference<beans::XPropertySet> xPropertySet;
-    if (!maTypeModel.maEditAs.isEmpty())
-        xPropertySet = uno::Reference<beans::XPropertySet>(xGroupShape, uno::UNO_QUERY);
-    if (xPropertySet.is())
+    if (!maTypeModel.maEditAs.isEmpty() && xGroupShape.is())
     {
         cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
-        xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+        xGroupShape->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
         sal_Int32 nLength = aGrabBag.getLength();
         aGrabBag.realloc(nLength + 1);
         aGrabBag.getArray()[nLength] = comphelper::makePropertyValue(u"mso-edit-as"_ustr, maTypeModel.maEditAs);
-        xPropertySet->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
+        xGroupShape->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
     }
     // Make sure group shapes are inline as well, unless there is an explicit different style.
     PropertySet aPropertySet(xGroupShape);

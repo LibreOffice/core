@@ -326,11 +326,10 @@ public:
 
 void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShape )
 {
-    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-    if( xShapeProp.is() )
+    if( xShape.is() )
     {
         sal_Int16 nLayerID = 0;
-        if( (xShapeProp->getPropertyValue( SC_LAYERID ) >>= nLayerID) && (SdrLayerID(nLayerID) == SC_LAYER_BACK) )
+        if( (xShape->getPropertyValue( SC_LAYERID ) >>= nLayerID) && (SdrLayerID(nLayerID) == SC_LAYER_BACK) )
             GetExport().AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
     }
 }
@@ -526,12 +525,8 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
             if (!xShape.is())
                 continue;
 
-            uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
-            if (!xShapeProp.is())
-                continue;
-
             sal_Int16 nLayerID = 0;
-            bool bExtracted = xShapeProp->getPropertyValue(SC_LAYERID) >>= nLayerID;
+            bool bExtracted = xShape->getPropertyValue(SC_LAYERID) >>= nLayerID;
             if (!bExtracted)
                 continue;
 
@@ -2393,7 +2388,7 @@ void ScXMLExport::collectAutoStyles()
                         {
                             SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
                             // all uno shapes are created anyway in CollectSharedData
-                            uno::Reference<beans::XPropertySet> xShapeProperties( pDrawObj->getUnoShape(), uno::UNO_QUERY );
+                            uno::Reference<drawing::XShape> xShapeProperties( pDrawObj->getUnoShape() );
                             if (xShapeProperties.is())
                             {
                                 if ( !rNoteEntry.maStyleName.isEmpty() )
@@ -3476,28 +3471,27 @@ void ScXMLExport::WriteMultiLineFormulaResult(const ScFormulaCell* pCell)
 
 void ScXMLExport::ExportShape(const ScDocument& rDoc, const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
 {
-    uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
     bool bIsChart( false );
-    if (xShapeProps.is())
+    if (xShape.is())
     {
         sal_Int32 nZOrder = 0;
-        if (xShapeProps->getPropertyValue(u"ZOrder"_ustr) >>= nZOrder)
+        if (xShape->getPropertyValue(u"ZOrder"_ustr) >>= nZOrder)
         {
             AddAttribute(XML_NAMESPACE_DRAW, XML_ZINDEX, OUString::number(nZOrder));
         }
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShapeProps->getPropertySetInfo();
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShape->getPropertySetInfo();
         OUString sPropCLSID (u"CLSID"_ustr);
         if( xPropSetInfo->hasPropertyByName( sPropCLSID ) )
         {
             OUString sCLSID;
-            if (xShapeProps->getPropertyValue( sPropCLSID ) >>= sCLSID)
+            if (xShape->getPropertyValue( sPropCLSID ) >>= sCLSID)
             {
                 if ( sCLSID.equalsIgnoreAsciiCase(GetChartExport()->getChartCLSID()) )
                 {
                     // we have a chart
                     OUString sRanges;
                     OUString aChartName;
-                    xShapeProps->getPropertyValue( u"PersistName"_ustr ) >>= aChartName;
+                    xShape->getPropertyValue( u"PersistName"_ustr ) >>= aChartName;
                     ScChartListenerCollection* pCollection = rDoc.GetChartListenerCollection();
                     if (pCollection)
                     {
@@ -3523,7 +3517,7 @@ void ScXMLExport::ExportShape(const ScDocument& rDoc, const uno::Reference < dra
                     if ( sRanges.isEmpty() )
                     {
                         uno::Reference< frame::XModel > xChartModel;
-                        if( ( xShapeProps->getPropertyValue( u"Model"_ustr ) >>= xChartModel ) &&
+                        if( ( xShape->getPropertyValue( u"Model"_ustr ) >>= xChartModel ) &&
                             xChartModel.is())
                         {
                             uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );

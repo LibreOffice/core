@@ -112,7 +112,7 @@ void lcl_setAutomaticSymbolSize( const uno::Reference< beans::XPropertySet >& xS
     if( xChartDoc.is() )
     {
         double fScale = 1;
-        uno::Reference< beans::XPropertySet > xLegendProp( xChartDoc->getLegend(), uno::UNO_QUERY );
+        uno::Reference< drawing::XShape > xLegendProp( xChartDoc->getLegend() );
         chart::ChartLegendPosition aLegendPosition = chart::ChartLegendPosition_NONE;
         if( xLegendProp.is() && (xLegendProp->getPropertyValue(u"Alignment"_ustr) >>= aLegendPosition)
             && chart::ChartLegendPosition_NONE != aLegendPosition )

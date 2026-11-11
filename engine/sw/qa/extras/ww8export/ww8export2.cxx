@@ -594,7 +594,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     CPPUNIT_ASSERT_EQUAL(u"Floating Checkbox"_ustr, getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
-    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape);
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,u"AnchorType"_ustr));
 
     // Second check box anchored inline / as character
@@ -607,7 +607,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     CPPUNIT_ASSERT_EQUAL(u"Inline Checkbox"_ustr, getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
-    xPropertySet2.set(xControlShape, uno::UNO_QUERY);
+    xPropertySet2 = xControlShape;
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,u"AnchorType"_ustr));
 }
 

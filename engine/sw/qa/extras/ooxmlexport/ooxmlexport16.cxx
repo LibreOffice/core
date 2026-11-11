@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123569_rotWriterImage)
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     // Error was, that position of logical rectangle was treated as position of snap rectangle.
     // Thus a wrong position was calculated.
     // Without fix this would have failed with expected 4798, actual 4860
@@ -202,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123569_rotWriterImage)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarginShadowLeft.docx")
 {
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1));
     // Error was, that the shadow distance appeared as additional margin.
     // Without fix this would have failed with expected 953, actual 2822
     // Margin is 36px (= 952.5Hmm) in Word.
@@ -459,7 +459,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
     int nCount = 0;
     for (int i = 1; i <= getShapes(); i++)
     {
-        uno::Reference<beans::XPropertySet> xProperties(getShape(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xProperties(getShape(i));
         if (!xProperties->getPropertySetInfo()->hasPropertyByName(u"CustomShapeGeometry"_ustr))
             continue;
         // Get the custom shape property
@@ -789,9 +789,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
     if (!IsDefaultDPI())
         return;
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
-    imageProperties->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
+    image->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
     Graphic vclGraphic(graphic);
     Bitmap bitmap(vclGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL( tools::Long(76), bitmap.GetSizePixel().Width());
@@ -859,8 +858,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153874, "image_through_shape.docx")
 {
-    uno::Reference<beans::XPropertySet> const xShape1(getShapeByName(u"Test1"),  uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> const xShape2(getShapeByName(u"Rectangle 1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xShape1(getShapeByName(u"Test1"));
+    uno::Reference<beans::XPropertySet> const xShape2(getShapeByName(u"Rectangle 1"));
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, xShape1->getPropertyValue(u"AnchorType"_ustr).get<text::TextContentAnchorType>());
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape2->getPropertyValue(u"AnchorType"_ustr).get<text::TextContentAnchorType>());
     CPPUNIT_ASSERT_LESS(xShape2->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>(), xShape1->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>());
@@ -878,13 +877,11 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxZOrder, "testTextBoxZOrder.docx")
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
         CPPUNIT_ASSERT(xShape);
-        uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xShapeProperties);
         uno::Reference<text::XTextFrame> xFrame = SwTextBoxHelper::getUnoTextFrame(xShape);
         CPPUNIT_ASSERT(xFrame.is());
         uno::Reference<beans::XPropertySet> const xFrameProperties(xFrame, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xFrameProperties);
-        ShapeZorders.push_back(xShapeProperties->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>());
+        ShapeZorders.push_back(xShape->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>());
         FrameZorders.push_back(xFrameProperties->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>());
     }
     // Check the z-order values.

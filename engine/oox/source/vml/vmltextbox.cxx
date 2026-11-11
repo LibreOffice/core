@@ -190,8 +190,6 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
     if ( maLayoutFlow != "vertical" )
         return;
 
-    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
-
     // VML has the text horizontally aligned to left (all the time),
     // v-text-anchor for vertical alignment, and vertical mode to swap the
     // two.  drawinglayer supports both horizontal and vertical alignment,
@@ -199,9 +197,9 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
     // As a result, we need to set horizontal adjustment here to 'right',
     // that will result in vertical 'top' after writing mode is applied,
     // which matches the VML behavior.
-    xProperties->setPropertyValue(u"TextHorizontalAdjust"_ustr, cpo::uno::Any(drawing::TextHorizontalAdjust_RIGHT));
+    xShape->setPropertyValue(u"TextHorizontalAdjust"_ustr, cpo::uno::Any(drawing::TextHorizontalAdjust_RIGHT));
 
-    xProperties->setPropertyValue( u"TextWritingMode"_ustr, cpo::uno::Any( text::WritingMode_TB_RL ) );
+    xShape->setPropertyValue( u"TextWritingMode"_ustr, cpo::uno::Any( text::WritingMode_TB_RL ) );
 }
 
 } // namespace oox::vml

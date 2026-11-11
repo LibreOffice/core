@@ -54,7 +54,7 @@
 
 #include <comphelper/servicehelper.hxx>
 
-#include <cppuhelper/implbase12.hxx>
+#include <cppuhelper/implbase11.hxx>
 
 class SfxItemSet;
 class SdrModel;
@@ -78,10 +78,9 @@ cpo::uno::Any SVXCORE_DLLPUBLIC SvxItemPropertySet_getPropertyValue( const SfxIt
 
 // WARNING: if you update the supported interfaces,
 //          also update SvxShape::_getTypes()
-typedef ::cppu::WeakAggImplHelper12<
+typedef ::cppu::WeakAggImplHelper11<
     css::drawing::XShape,
     css::lang::XComponent,
-    css::beans::XPropertySet,
     css::beans::XMultiPropertySet,
     css::beans::XPropertyState,
     css::lang::XUnoTunnel,
@@ -475,6 +474,22 @@ public:
     // XTypeProvider
     virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
+    // XPropertySet
+    virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override
+    { return SvxShapeGroupAnyD::getPropertySetInfo(); }
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override
+    { SvxShapeGroupAnyD::setPropertyValue(aPropertyName, aValue); }
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override
+    { return SvxShapeGroupAnyD::getPropertyValue(PropertyName); }
+    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override
+    { SvxShapeGroupAnyD::addPropertyChangeListener(aPropertyName, xListener); }
+    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override
+    { SvxShapeGroupAnyD::removePropertyChangeListener(aPropertyName, aListener); }
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override
+    { SvxShapeGroupAnyD::addVetoableChangeListener(PropertyName, aListener); }
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override
+    { SvxShapeGroupAnyD::removeVetoableChangeListener(PropertyName, aListener); }
+
     virtual void addShape(SvxShape& rShape) final override;
 
 protected:
@@ -521,6 +536,16 @@ public:
     // XPropertySet
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override
+    { return SvxShape::getPropertySetInfo(); }
+    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override
+    { SvxShape::addPropertyChangeListener(aPropertyName, xListener); }
+    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override
+    { SvxShape::removePropertyChangeListener(aPropertyName, aListener); }
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override
+    { SvxShape::addVetoableChangeListener(PropertyName, aListener); }
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override
+    { SvxShape::removeVetoableChangeListener(PropertyName, aListener); }
 
     // XPropertyState
     virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;

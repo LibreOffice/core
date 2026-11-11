@@ -568,7 +568,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165362ActiveXAltText)
 {
     // A form control with alternative text, set in design mode
     createSwDoc("activex_textbox.docx");
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1));
     xShape->setPropertyValue(u"Description"_ustr, uno::Any(u"Customer name"_ustr));
 
     saveAndReload(TestFilter::DOCX);
@@ -620,10 +620,9 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXCheckbox, "activex_checkbox.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPropertySet, u"State"_ustr));
 
     // Check anchor type
-    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
         text::TextContentAnchorType_AT_CHARACTER,
-        getProperty<text::TextContentAnchorType>(xPropertySet2, u"AnchorType"_ustr));
+        getProperty<text::TextContentAnchorType>(xControlShape, u"AnchorType"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
@@ -644,10 +643,9 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
                          getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
-    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
         text::TextContentAnchorType_AT_CHARACTER,
-        getProperty<text::TextContentAnchorType>(xPropertySet2, u"AnchorType"_ustr));
+        getProperty<text::TextContentAnchorType>(xControlShape, u"AnchorType"_ustr));
 
     // Also check position and size
     uno::Reference<drawing::XShape> xShape(xControlShape);
@@ -669,12 +667,11 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
                          getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
-    xPropertySet2.set(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
         text::TextContentAnchorType_AS_CHARACTER,
-        getProperty<text::TextContentAnchorType>(xPropertySet2, u"AnchorType"_ustr));
+        getProperty<text::TextContentAnchorType>(xControlShape, u"AnchorType"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(text::VertOrientation::TOP),
-                         getProperty<sal_Int32>(xPropertySet2, u"VertOrient"_ustr));
+                         getProperty<sal_Int32>(xControlShape, u"VertOrient"_ustr));
 
     // Also check position and size
     xShape = xControlShape;
@@ -732,14 +729,12 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 {
     uno::Reference<drawing::XShape> xShape1(getShape(1));
     CPPUNIT_ASSERT(xShape1.is());
-    uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
 
     uno::Reference<drawing::XShape> xShape2(getShape(2));
     CPPUNIT_ASSERT(xShape2.is());
-    uno::Reference<beans::XPropertySet> xPropertySet2(xShape2, uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(xPropertySet1->getPropertyValue(u"TextAutoGrowHeight"_ustr),
-                         xPropertySet2->getPropertyValue(u"TextAutoGrowHeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(xShape2->getPropertyValue(u"TextAutoGrowHeight"_ustr),
+                         xShape2->getPropertyValue(u"TextAutoGrowHeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAtRunEnd)
@@ -765,7 +760,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAtRunEnd)
                          getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
-    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape);
     CPPUNIT_ASSERT_EQUAL(
         text::TextContentAnchorType_AS_CHARACTER,
         getProperty<text::TextContentAnchorType>(xPropertySet2, u"AnchorType"_ustr));
@@ -782,7 +777,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAtRunEnd)
                          getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
-    xPropertySet2.set(xControlShape, uno::UNO_QUERY);
+    xPropertySet2.set(xControlShape);
     CPPUNIT_ASSERT_EQUAL(
         text::TextContentAnchorType_AT_CHARACTER,
         getProperty<text::TextContentAnchorType>(xPropertySet2, u"AnchorType"_ustr));

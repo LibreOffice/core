@@ -323,7 +323,7 @@ xray shape.AnchorType
 xray shape.AnchorPosition.X
 xray ThisComponent.StyleFamilies.PageStyles.Default.Width
 */
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     // The paragraph is right-aligned and the picture does not explicitly specify position,
     // so check it's anchored as character and in the right side of the document.
     text::TextContentAnchorType anchorType;
@@ -445,7 +445,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
      *
      * xray ThisComponent.DrawPage(0).Surround ' was 2, should be 1
      */
-    xPropertySet.set(getShape(1), uno::UNO_QUERY);
+    xPropertySet = getShape(1);
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue(u"Surround"_ustr) >>= eValue;
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, eValue);
@@ -455,13 +455,13 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
      *
      * xray ThisComponent.DrawPage(1).AnchorType ' was 1, should be 4
      */
-    xPropertySet.set(getShape(2), uno::UNO_QUERY);
+    xPropertySet.set(getShape(2));
     text::TextContentAnchorType eAnchorType;
     xPropertySet->getPropertyValue(u"AnchorType"_ustr) >>= eAnchorType;
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
 
     // 6th problem: xray ThisComponent.DrawPage(2).AnchorType ' was 2, should be 4
-    xPropertySet.set(getShape(3), uno::UNO_QUERY);
+    xPropertySet = getShape(3);
     xPropertySet->getPropertyValue(u"AnchorType"_ustr) >>= eAnchorType;
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
 }
@@ -593,7 +593,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN779627b)
      * Another problem tested with the original n779627.docx document (before removing its unnecessary
      * shape loading) is that the roundrect is centered vertically and horizontally.
      */
-    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1) );
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
     // If this goes wrong, probably the index of the shape is changed and the test should be adjusted.
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.RectangleShape"_ustr, xShapeDescriptor->getShapeType());
@@ -1046,7 +1046,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf75573)
     assertXPathContent(pXmlDoc, "/root/page[1]/body/section/txt/anchored/fly/txt[1]/text()", u"lorem ipsum");
 
     // the "Proprietary" style should set the vertical and horizontal anchors to the page
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xPropertySet, u"VertOrientRelation"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xPropertySet, u"HoriOrientRelation"_ustr));
 
@@ -1443,7 +1443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60351)
     createSwDoc("tdf60351.docx");
     // Get the first image in the document and check its contour polygon.
     // It should contain 6 points. Check their coordinates.
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     // test for TODO: if paragraph's background becomes bottommost [better yet: wraps around shape], then remove this hack
     CPPUNIT_ASSERT_EQUAL_MESSAGE("HACK ALERT: Shape is in foreground", true, getProperty<bool>(xPropertySet, u"Opaque"_ustr));
 
@@ -1768,7 +1768,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf87533_bidi)
 CPPUNIT_TEST_FIXTURE(Test, testVmlAdjustments)
 {
     createSwDoc("vml-adjustments.docx");
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
     cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues =
         aGeometry[u"AdjustmentValues"_ustr].get<cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>();

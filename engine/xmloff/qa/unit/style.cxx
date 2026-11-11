@@ -374,14 +374,13 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
     CPPUNIT_ASSERT(xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
 
     // The old properties need to be still available, as they might be used in macros.
     OUString sGradientName;
-    xShapeProperties->getPropertyValue(u"FillGradientName"_ustr) >>= sGradientName;
+    xShape->getPropertyValue(u"FillGradientName"_ustr) >>= sGradientName;
     CPPUNIT_ASSERT_EQUAL(u"red2yellow"_ustr, sGradientName);
     awt::Gradient2 aGradient;
-    xShapeProperties->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
+    xShape->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, aGradient.StartColor));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, Color(ColorTransparency, aGradient.EndColor));
 
@@ -433,11 +432,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
     CPPUNIT_ASSERT(xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
 
     // The old properties need to be still available, as they might be used in macros.
     awt::Gradient2 aGradient;
-    xShapeProperties->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aGradient;
+    xShape->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aGradient;
     CPPUNIT_ASSERT_EQUAL(Color(0xE5E5E5), Color(ColorTransparency, aGradient.StartColor));
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aGradient.EndColor));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(20), aGradient.Border);
@@ -496,7 +494,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
     CPPUNIT_ASSERT(xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
 
     // The old properties need to be still available, as they might be used in macros.
     OUString sGradientName;
@@ -620,11 +618,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialGradientCompatible)
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
     CPPUNIT_ASSERT_MESSAGE("No shape", xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
 
     // Without fix these would have failed with Style=0 (=LINEAR), StartColor=0xFFFF00 and Border=0.
     awt::Gradient2 aGradient;
-    xShapeProperties->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
+    xShape->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("gradient style", awt::GradientStyle_AXIAL, aGradient.Style);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("EndColor", sal_Int32(0xFFFF00), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StartColor", sal_Int32(0x1E90FF), aGradient.StartColor);
@@ -650,11 +647,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialTransparencyCompatible)
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
     CPPUNIT_ASSERT(xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
 
     // Without fix these would have failed with Style=LINEAR, StartColor=0xCCCCCC and wrong Border.
     awt::Gradient2 aTransGradient;
-    xShapeProperties->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aTransGradient;
+    xShape->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aTransGradient;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("gradient style", awt::GradientStyle_AXIAL, aTransGradient.Style);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("EndColor", sal_Int32(0xCCCCCC), aTransGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StartColor", sal_Int32(0x191919), aTransGradient.StartColor);

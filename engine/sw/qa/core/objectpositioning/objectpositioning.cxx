@@ -59,10 +59,10 @@ CPPUNIT_TEST_FIXTURE(Test, testOverlapCrash)
     createSwDoc("overlap-crash.odt");
 
     // Change their anchor type to to-char.
-    uno::Reference<beans::XPropertySet> xShape1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape1(getShape(1));
     xShape1->setPropertyValue(u"AnchorType"_ustr,
                               cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    uno::Reference<beans::XPropertySet> xShape2(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape2(getShape(1));
     xShape2->setPropertyValue(u"AnchorType"_ustr,
                               cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
@@ -77,9 +77,8 @@ CPPUNIT_TEST_FIXTURE(Test, testImgMoveCrash)
 {
     createSwDoc("tdf154863-img-move-crash.docx");
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Image26"));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(static_cast<sal_Int32>(0)));
-    xShapeProps->setPropertyValue(u"VertOrientPosition"_ustr,
+    xShape->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(static_cast<sal_Int32>(0)));
+    xShape->setPropertyValue(u"VertOrientPosition"_ustr,
                                   cpo::uno::Any(static_cast<sal_Int32>(3000)));
     Scheduler::ProcessEventsToIdle();
     // Crash expected before assert if bug exists
@@ -94,13 +93,12 @@ CPPUNIT_TEST_FIXTURE(Test, testVertPosFromBottom)
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+    xShape->setPropertyValue(u"AnchorType"_ustr,
                                   cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProps->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::NONE));
-    xShapeProps->setPropertyValue(u"VertOrientRelation"_ustr,
+    xShape->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::NONE));
+    xShape->setPropertyValue(u"VertOrientRelation"_ustr,
                                   cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
-    xShapeProps->setPropertyValue(u"VertOrientPosition"_ustr,
+    xShape->setPropertyValue(u"VertOrientPosition"_ustr,
                                   cpo::uno::Any(static_cast<sal_Int32>(-11000)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
@@ -129,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMargin)
     uno::Reference<drawing::XShape> xShapeBottom(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShapeBottom->setSize(awt::Size(500, 500));
-    uno::Reference<beans::XPropertySet> xShapePropsBottom(xShapeBottom, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapePropsBottom(xShapeBottom);
     xShapePropsBottom->setPropertyValue(u"AnchorType"_ustr,
                                         cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     xShapePropsBottom->setPropertyValue(u"VertOrient"_ustr,
@@ -143,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMargin)
     uno::Reference<drawing::XShape> xShapeCenter(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShapeCenter->setSize(awt::Size(500, 500));
-    uno::Reference<beans::XPropertySet> xShapePropsCenter(xShapeCenter, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapePropsCenter(xShapeCenter);
     xShapePropsCenter->setPropertyValue(u"AnchorType"_ustr,
                                         cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     xShapePropsCenter->setPropertyValue(u"VertOrient"_ustr,
@@ -157,11 +155,10 @@ CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMargin)
     uno::Reference<drawing::XShape> xShapeTop(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShapeTop->setSize(awt::Size(500, 500));
-    uno::Reference<beans::XPropertySet> xShapePropsTop(xShapeTop, uno::UNO_QUERY);
-    xShapePropsTop->setPropertyValue(u"AnchorType"_ustr,
+    xShapeTop->setPropertyValue(u"AnchorType"_ustr,
                                      cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapePropsTop->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::TOP));
-    xShapePropsTop->setPropertyValue(u"VertOrientRelation"_ustr,
+    xShapeTop->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::TOP));
+    xShapeTop->setPropertyValue(u"VertOrientRelation"_ustr,
                                      cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierTop(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplierTop->getDrawPage()->add(xShapeTop);
@@ -203,7 +200,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMarginWithFooter)
     uno::Reference<drawing::XShape> xShapeBottom(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShapeBottom->setSize(awt::Size(1000, 1000));
-    uno::Reference<beans::XPropertySet> xShapePropsBottom(xShapeBottom, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapePropsBottom(xShapeBottom);
     xShapePropsBottom->setPropertyValue(u"AnchorType"_ustr,
                                         cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     xShapePropsBottom->setPropertyValue(u"VertOrient"_ustr,
@@ -217,7 +214,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMarginWithFooter)
     uno::Reference<drawing::XShape> xShapeCenter(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShapeCenter->setSize(awt::Size(1000, 1000));
-    uno::Reference<beans::XPropertySet> xShapePropsCenter(xShapeCenter, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapePropsCenter(xShapeCenter);
     xShapePropsCenter->setPropertyValue(u"AnchorType"_ustr,
                                         cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     xShapePropsCenter->setPropertyValue(u"VertOrient"_ustr,
@@ -231,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMarginWithFooter)
     uno::Reference<drawing::XShape> xShapeTop(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShapeTop->setSize(awt::Size(1000, 1000));
-    uno::Reference<beans::XPropertySet> xShapePropsTop(xShapeTop, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapePropsTop(xShapeTop);
     xShapePropsTop->setPropertyValue(u"AnchorType"_ustr,
                                      cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     xShapePropsTop->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::TOP));
@@ -611,8 +608,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignedVmlShapesFlushAtCellEdges)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, u"LeftMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, u"RightMargin"_ustr));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0),
-                                               uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, u"LeftMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, u"RightMargin"_ustr));
 }
@@ -650,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRightAlignedShapeStaysInParagraphArea)
     // adds the fly offsets of the format, so the left shape pushes the text start of the
     // paragraph to the right.
     createSwDoc("right-aligned-shape-beside-fly-paragraph-area.fodt");
-    uno::Reference<beans::XPropertySet> xShape(getShapeByName(u"Right shape"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShapeByName(u"Right shape"));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME,
                          getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT,

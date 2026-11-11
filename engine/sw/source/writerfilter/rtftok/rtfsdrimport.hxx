@@ -80,12 +80,11 @@ public:
     bool isTextGraphicObject() const { return m_bTextGraphicObject; }
 
 private:
-    void createShape(const OUString& rService, cpo::uno::Reference<css::drawing::XShape>& xShape,
-                     cpo::uno::Reference<css::beans::XPropertySet>& xPropertySet);
+    void createShape(const OUString& rService, cpo::uno::Reference<css::drawing::XShape>& xShape);
     void applyProperty(cpo::uno::Reference<css::drawing::XShape> const& xShape,
                        std::u16string_view aKey, std::u16string_view aValue) const;
     int initShape(cpo::uno::Reference<css::drawing::XShape>& o_xShape,
-                  cpo::uno::Reference<css::beans::XPropertySet>& o_xPropSet, bool& o_rIsCustomShape,
+                  bool& o_rIsCustomShape,
                   RTFShape const& rShape, bool bClose, ShapeOrPict shapeOrPict);
 
     RTFDocumentImpl& m_rImport;

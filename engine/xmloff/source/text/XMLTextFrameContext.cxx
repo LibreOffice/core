@@ -1406,9 +1406,7 @@ void XMLTextFrameContext::endFastElement(sal_Int32 )
     Reference<XShape> xShape = GetShape();
     if (xShape.is() && m_pHyperlink)
     {
-        Reference<XPropertySet> xProps(xShape, UNO_QUERY);
-        if (xProps.is())
-            xProps->setPropertyValue(u"Hyperlink"_ustr, Any(m_pHyperlink->GetHRef()));
+        xShape->setPropertyValue(u"Hyperlink"_ustr, Any(m_pHyperlink->GetHRef()));
     }
 
     if( !pImpl )

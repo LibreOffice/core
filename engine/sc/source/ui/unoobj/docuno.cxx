@@ -3175,8 +3175,7 @@ static void lcl_SetMediaScreen(const uno::Reference<drawing::XShape>& xMediaShap
                                sal_Int32 nPageNumb)
 {
     OUString sMediaURL;
-    uno::Reference<beans::XPropertySet> xPropSet(xMediaShape, uno::UNO_QUERY);
-    xPropSet->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL;
+    xMediaShape->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL;
     if (sMediaURL.isEmpty())
         return;
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
@@ -3184,23 +3183,23 @@ static void lcl_SetMediaScreen(const uno::Reference<drawing::XShape>& xMediaShap
         return;
 
     OUString sTitle;
-    xPropSet->getPropertyValue(u"Title"_ustr) >>= sTitle;
+    xMediaShape->getPropertyValue(u"Title"_ustr) >>= sTitle;
     OUString sDescription;
-    xPropSet->getPropertyValue(u"Description"_ustr) >>= sDescription;
+    xMediaShape->getPropertyValue(u"Description"_ustr) >>= sDescription;
     OUString const altText(sTitle.isEmpty() ? sDescription
                            : sDescription.isEmpty()
                                ? sTitle
                                : OUString::Concat(sTitle) + OUString::Concat("\n")
                                      + OUString::Concat(sDescription));
 
-    OUString const mimeType(xPropSet->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
+    OUString const mimeType(xMediaShape->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
     SdrObject* pSdrObj(SdrObject::getSdrObjectFromXShape(xMediaShape));
     sal_Int32 nScreenId = pPDF->CreateScreen(aRect, altText, mimeType, nPageNumb, pSdrObj);
     if (sMediaURL.startsWith("vnd.sun.star.Package:"))
     {
         // Embedded media
         OUString aTempFileURL;
-        xPropSet->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
+        xMediaShape->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
         pPDF->SetScreenStream(nScreenId, aTempFileURL);
     }
     else // Linked media

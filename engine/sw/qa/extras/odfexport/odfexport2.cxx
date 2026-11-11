@@ -388,8 +388,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignatureLineProperties)
 
     // tdf#130917 This needs to be always set when importing a doc, ooxml export expects it.
     uno::Reference<graphic::XGraphic> xUnsignedGraphic;
-    uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
-    xProps->getPropertyValue(u"SignatureLineUnsignedImage"_ustr) >>= xUnsignedGraphic;
+    xShape->getPropertyValue(u"SignatureLineUnsignedImage"_ustr) >>= xUnsignedGraphic;
     CPPUNIT_ASSERT_EQUAL(true, xUnsignedGraphic.is());
 }
 
@@ -727,7 +726,7 @@ DECLARE_ODFEXPORT_TEST(testPageContentTop, "page-content-top.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_TOP;
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 }
@@ -736,7 +735,7 @@ DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 }

@@ -2472,12 +2472,11 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         }
 
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
-        uno::Reference<beans::XPropertySet> xPropertySet(rXShape, uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = rXShape->getPropertySetInfo();
         if (xPropertySetInfo->hasPropertyByName(u"RotateAngle"_ustr))
         {
             sal_Int32 nTmp;
-            if (xPropertySet->getPropertyValue(u"RotateAngle"_ustr) >>= nTmp)
+            if (rXShape->getPropertyValue(u"RotateAngle"_ustr) >>= nTmp)
                 nRotation = Degree100(nTmp);
         }
 
@@ -2486,7 +2485,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         if (xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         {
             cpo::uno::Sequence<beans::PropertyValue> aGrabBagProps;
-            xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBagProps;
+            rXShape->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBagProps;
             auto pMSORotation = std::find_if(
                 std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
                 [](const PropertyValue& rProp) { return rProp.Name == "mso-rotation-angle"; });
@@ -2498,7 +2497,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
                 [](const PropertyValue& rProp) { return rProp.Name == "3DEffectProperties"; });
             // Text 3D also contributes its camera turn to the model rotation.
             // Keep its camera and apply only later model rotation changes to xfrm.
-            if (p3DEffectProps == std::cend(aGrabBagProps) && IsFontworkShape(xPropertySet))
+            if (p3DEffectProps == std::cend(aGrabBagProps) && IsFontworkShape(rXShape))
             {
                 auto pText3DEffectProps = std::find_if(
                     std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
@@ -8455,15 +8454,13 @@ bool DrawingML::WriteCustomGeometry(
     const Reference< XShape >& rXShape,
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
-    cpo::uno::Any aAny;
-    uno::Reference< beans::XPropertySet > aXPropSet(rXShape, UNO_QUERY);
-
-    if ( !aXPropSet )
+    if ( !rXShape )
         return false;
 
+    cpo::uno::Any aAny;
     try
     {
-        aAny = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
+        aAny = rXShape->getPropertyValue( u"CustomShapeGeometry"_ustr );
         if ( !aAny.hasValue() )
             return false;
     }
@@ -9309,12 +9306,11 @@ void DrawingML::WritePolyPolygon(const cpo::uno::Reference<css::drawing::XShape>
 
     awt::Size aSize = rXShape->getSize();
     awt::Point aPos = rXShape->getPosition();
-    Reference<XPropertySet> xPropertySet(rXShape, UNO_QUERY);
-    uno::Reference<XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+    uno::Reference<XPropertySetInfo> xPropertySetInfo = rXShape->getPropertySetInfo();
     if (xPropertySetInfo->hasPropertyByName(u"AnchorPosition"_ustr))
     {
         awt::Point aAnchorPosition;
-        xPropertySet->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
+        rXShape->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
         aPos.X += aAnchorPosition.X;
         aPos.Y += aAnchorPosition.Y;
     }

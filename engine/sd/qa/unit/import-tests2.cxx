@@ -208,11 +208,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf165341)
 
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
-    uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
     drawing::TextHorizontalAdjust eHori;
-    CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
     drawing::TextVerticalAdjust eVert;
-    CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eVert);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eVert);
     CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust::TextHorizontalAdjust_CENTER, eHori);
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust::TextVerticalAdjust_TOP, eVert);
 }
@@ -1196,8 +1195,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf108926)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xNotesPage->getCount());
 
     // Second object should be imported as an empty presentation shape
-    uno::Reference<beans::XPropertySet> xPresentationShape(xNotesPage->getShapeByIndex(1),
-                                                           uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPresentationShape(xNotesPage->getShapeByIndex(1));
     CPPUNIT_ASSERT(xPresentationShape.is());
     bool bIsEmptyPresObject = false;
     xPresentationShape->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bIsEmptyPresObject;
@@ -1753,9 +1751,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf122899)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
     awt::Rectangle aFrameRect;
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
-    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
+    xShape->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
     // original width is 9cm, add some tolerance
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(9020), aFrameRect.Width);
 }
@@ -1794,7 +1790,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCropToShape)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShape->getShapeType());
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape);
     css::drawing::FillStyle fillStyle;
     xShapeProps->getPropertyValue(u"FillStyle"_ustr) >>= fillStyle;
     CPPUNIT_ASSERT_EQUAL(css::drawing::FillStyle_BITMAP, fillStyle);
@@ -1960,9 +1956,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testGroupShadowPPTXImport)
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShapes> xInnerGroup(xGroup->getShapeByIndex(1), uno::UNO_QUERY_THROW);
     const std::pair<const char*, uno::Reference<beans::XPropertySet>> aInGroup[] = {
-        { "In group", uno::Reference<beans::XPropertySet>(xGroup->getShapeByIndex(0), uno::UNO_QUERY) },
+        { "In group", uno::Reference<beans::XPropertySet>(xGroup->getShapeByIndex(0)) },
         { "In inner group",
-          uno::Reference<beans::XPropertySet>(xInnerGroup->getShapeByIndex(0), uno::UNO_QUERY) },
+          uno::Reference<beans::XPropertySet>(xInnerGroup->getShapeByIndex(0)) },
     };
     auto getShadowColor = [](const uno::Reference<beans::XPropertySet>& xShape) {
         Color aColor;

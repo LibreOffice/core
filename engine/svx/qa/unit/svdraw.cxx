@@ -264,7 +264,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
     xShapeText->getText()->setString(u"hello"_ustr);
 
-    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape);
     xShapeProperties->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(COL_RED));
     sal_Int16 nTransparence = 75;
     xShapeProperties->setPropertyValue(u"CharTransparence"_ustr, cpo::uno::Any(nTransparence));
@@ -298,7 +298,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
     // Set size and basic properties.
     xShape->setPosition(awt::Point(2512, 6062));
     xShape->setSize(awt::Size(112, 112));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape);
     xShapeProps->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_SOLID));
     xShapeProps->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(drawing::LineStyle_SOLID));
     xShapeProps->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(0)));
@@ -564,9 +564,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testUndoOfTypingGivesTheFrameItsSizeBack)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xFrame);
-    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY);
-    xFrameProperties->setPropertyValue(u"TextAutoGrowHeight"_ustr, uno::Any(true));
-    xFrameProperties->setPropertyValue(u"TextAutoGrowWidth"_ustr, uno::Any(false));
+    xFrame->setPropertyValue(u"TextAutoGrowHeight"_ustr, uno::Any(true));
+    xFrame->setPropertyValue(u"TextAutoGrowWidth"_ustr, uno::Any(false));
     xFrame->setPosition(awt::Point(1000, 1000));
     xFrame->setSize(awt::Size(6000, 1000));
     const sal_Int32 nHeightBeforeTyping = xFrame->getSize().Height;
@@ -602,7 +601,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testUndoOfTypingKeepsAMoveMadeMeanwhile)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xFrame);
-    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame);
     xFrameProperties->setPropertyValue(u"TextAutoGrowHeight"_ustr, uno::Any(true));
     xFrameProperties->setPropertyValue(u"TextAutoGrowWidth"_ustr, uno::Any(false));
     xFrameProperties->setPropertyValue(u"TextVerticalAdjust"_ustr,

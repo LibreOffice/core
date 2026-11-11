@@ -78,13 +78,12 @@ void SdXML3DObjectContext::startFastElement(
     sal_Int32 nElement,
     const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(mxShape.is())
     {
         // set parameters
         if(mbSetTransform)
         {
-            xPropSet->setPropertyValue(u"D3DTransformMatrix"_ustr, cpo::uno::Any(mxHomMat));
+            mxShape->setPropertyValue(u"D3DTransformMatrix"_ustr, cpo::uno::Any(mxHomMat));
         }
 
         // call parent
@@ -147,9 +146,6 @@ void SdXML3DCubeObjectShapeContext::startFastElement(
     SdXML3DObjectContext::startFastElement(nElement, xAttrList);
 
     // set local parameters on shape
-    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-    if(!xPropSet.is())
-        return;
 
     // set parameters
     drawing::Position3D aPosition3D;
@@ -166,8 +162,8 @@ void SdXML3DCubeObjectShapeContext::startFastElement(
     aDirection3D.DirectionY = maMaxEdge.getY();
     aDirection3D.DirectionZ = maMaxEdge.getZ();
 
-    xPropSet->setPropertyValue(u"D3DPosition"_ustr, cpo::uno::Any(aPosition3D));
-    xPropSet->setPropertyValue(u"D3DSize"_ustr, cpo::uno::Any(aDirection3D));
+    mxShape->setPropertyValue(u"D3DPosition"_ustr, cpo::uno::Any(aPosition3D));
+    mxShape->setPropertyValue(u"D3DSize"_ustr, cpo::uno::Any(aDirection3D));
 }
 
 SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
@@ -225,9 +221,6 @@ void SdXML3DSphereObjectShapeContext::startFastElement(
     SdXML3DObjectContext::startFastElement(nElement, xAttrList);
 
     // set local parameters on shape
-    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-    if(!xPropSet.is())
-        return;
 
     // set parameters
     drawing::Position3D aPosition3D;
@@ -241,8 +234,8 @@ void SdXML3DSphereObjectShapeContext::startFastElement(
     aDirection3D.DirectionY = maSphereSize.getY();
     aDirection3D.DirectionZ = maSphereSize.getZ();
 
-    xPropSet->setPropertyValue(u"D3DPosition"_ustr, cpo::uno::Any(aPosition3D));
-    xPropSet->setPropertyValue(u"D3DSize"_ustr, cpo::uno::Any(aDirection3D));
+    mxShape->setPropertyValue(u"D3DPosition"_ustr, cpo::uno::Any(aPosition3D));
+    mxShape->setPropertyValue(u"D3DSize"_ustr, cpo::uno::Any(aDirection3D));
 }
 
 SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
@@ -284,9 +277,7 @@ void SdXML3DPolygonBasedShapeContext::startFastElement(
     sal_Int32 nElement,
     const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-
-    if(!xPropSet.is())
+    if(!mxShape.is())
         return;
 
     // set parameters
@@ -309,7 +300,7 @@ void SdXML3DPolygonBasedShapeContext::startFastElement(
                 aPolyPolygon3D);
 
             // set polygon data
-            xPropSet->setPropertyValue(u"D3DPolyPolygon3D"_ustr, cpo::uno::Any(aPolyPolygon3D));
+            mxShape->setPropertyValue(u"D3DPolyPolygon3D"_ustr, cpo::uno::Any(aPolyPolygon3D));
         }
         else
         {

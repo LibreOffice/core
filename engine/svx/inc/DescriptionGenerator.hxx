@@ -115,9 +115,6 @@ private:
     /// Reference to the shape from which the properties are extracted.
     cpo::uno::Reference<css::drawing::XShape> mxShape;
 
-    /// Reference to the shape's property set.
-    cpo::uno::Reference<css::beans::XPropertySet> mxSet;
-
     /// The description string that is build.
     OUStringBuffer msDescription;
 

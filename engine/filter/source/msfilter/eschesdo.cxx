@@ -156,23 +156,19 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         uno::Reference< drawing::XShape> xShape = rObj.GetShapeRef();
         if (xShape.is())
         {
-            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-            if (xPropertySet.is())
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
+            uno::Reference< XPropertySetInfo > xPropInfo = xShape->getPropertySetInfo();
+            if ( xPropInfo.is() && xPropInfo->hasPropertyByName( u"InteropGrabBag"_ustr ) )
             {
-                cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
-                uno::Reference< XPropertySetInfo > xPropInfo = xPropertySet->getPropertySetInfo();
-                if ( xPropInfo.is() && xPropInfo->hasPropertyByName( u"InteropGrabBag"_ustr ) )
+                xShape->getPropertyValue( u"InteropGrabBag"_ustr ) >>= aGrabBag;
+                for (const beans::PropertyValue& rProp : aGrabBag)
                 {
-                    xPropertySet->getPropertyValue( u"InteropGrabBag"_ustr ) >>= aGrabBag;
-                    for (const beans::PropertyValue& rProp : aGrabBag)
+                    if (rProp.Name == "mso-edit-as")
                     {
-                        if (rProp.Name == "mso-edit-as")
-                        {
-                            OUString rEditAs;
-                            rProp.Value >>= rEditAs;
-                            mpEscherEx->SetEditAs(rEditAs);
-                            break;
-                        }
+                        OUString rEditAs;
+                        rProp.Value >>= rEditAs;
+                        mpEscherEx->SetEditAs(rEditAs);
+                        break;
                     }
                 }
             }
@@ -1061,65 +1057,60 @@ static basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& 
             else
             {
                 // iT#s a xShape, get its transformation
-                const Reference< XPropertySet > xPropSet(rxShape, UNO_QUERY);
+                const Any aAny = rxShape->getPropertyValue(u"Transformation"_ustr);
 
-                if(xPropSet.is())
+                if(aAny.hasValue())
                 {
-                    const Any aAny = xPropSet->getPropertyValue(u"Transformation"_ustr);
+                    HomogenMatrix3 aMatrix;
 
-                    if(aAny.hasValue())
+                    if(aAny >>= aMatrix)
                     {
-                        HomogenMatrix3 aMatrix;
+                        basegfx::B2DHomMatrix aHomogenMatrix;
 
-                        if(aAny >>= aMatrix)
+                        aHomogenMatrix.set(0, 0, aMatrix.Line1.Column1);
+                        aHomogenMatrix.set(0, 1, aMatrix.Line1.Column2);
+                        aHomogenMatrix.set(0, 2, aMatrix.Line1.Column3);
+                        aHomogenMatrix.set(1, 0, aMatrix.Line2.Column1);
+                        aHomogenMatrix.set(1, 1, aMatrix.Line2.Column2);
+                        aHomogenMatrix.set(1, 2, aMatrix.Line2.Column3);
+                        // For this to be a valid 2D transform matrix, the last row must be [0,0,1]
+                        assert( aMatrix.Line3.Column1 == 0 );
+                        assert( aMatrix.Line3.Column2 == 0 );
+                        assert( aMatrix.Line3.Column3 == 1 );
+
+                        basegfx::B2DVector aScale, aTranslate;
+                        double fRotate, fShearX;
+
+                        // decompose transformation
+                        aHomogenMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                        // check if rotation needs to be corrected
+                        if(!basegfx::fTools::equalZero(fRotate))
                         {
-                            basegfx::B2DHomMatrix aHomogenMatrix;
+                            // to correct, keep in mind that ppt graphics are rotated around their center
+                            const basegfx::B2DPoint aCenter(aHomogenMatrix * basegfx::B2DPoint(0.5, 0.5));
 
-                            aHomogenMatrix.set(0, 0, aMatrix.Line1.Column1);
-                            aHomogenMatrix.set(0, 1, aMatrix.Line1.Column2);
-                            aHomogenMatrix.set(0, 2, aMatrix.Line1.Column3);
-                            aHomogenMatrix.set(1, 0, aMatrix.Line2.Column1);
-                            aHomogenMatrix.set(1, 1, aMatrix.Line2.Column2);
-                            aHomogenMatrix.set(1, 2, aMatrix.Line2.Column3);
-                            // For this to be a valid 2D transform matrix, the last row must be [0,0,1]
-                            assert( aMatrix.Line3.Column1 == 0 );
-                            assert( aMatrix.Line3.Column2 == 0 );
-                            assert( aMatrix.Line3.Column3 == 1 );
-
-                            basegfx::B2DVector aScale, aTranslate;
-                            double fRotate, fShearX;
-
-                            // decompose transformation
-                            aHomogenMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                            // check if rotation needs to be corrected
-                            if(!basegfx::fTools::equalZero(fRotate))
-                            {
-                                // to correct, keep in mind that ppt graphics are rotated around their center
-                                const basegfx::B2DPoint aCenter(aHomogenMatrix * basegfx::B2DPoint(0.5, 0.5));
-
-                                aHomogenMatrix.translate(-aCenter.getX(), -aCenter.getY());
-                                aHomogenMatrix.rotate(-fRotate);
-                                aHomogenMatrix.translate(aCenter.getX(), aCenter.getY());
-                            }
-
-
-                            // check if shear needs to be corrected (always correct shear,
-                            // ppt does not know about it)
-                            if(!basegfx::fTools::equalZero(fShearX))
-                            {
-                                const basegfx::B2DPoint aMinimum(aHomogenMatrix * basegfx::B2DPoint(0.0, 0.0));
-
-                                aHomogenMatrix.translate(-aMinimum.getX(), -aMinimum.getY());
-                                aHomogenMatrix.shearX(-fShearX);
-                                aHomogenMatrix.translate(aMinimum.getX(), aMinimum.getY());
-                            }
-
-                            // create range. It's no longer rotated (or sheared), so use
-                            // minimum and maximum values
-                            aRetval.expand(aHomogenMatrix * basegfx::B2DPoint(0.0, 0.0));
-                            aRetval.expand(aHomogenMatrix * basegfx::B2DPoint(1.0, 1.0));
+                            aHomogenMatrix.translate(-aCenter.getX(), -aCenter.getY());
+                            aHomogenMatrix.rotate(-fRotate);
+                            aHomogenMatrix.translate(aCenter.getX(), aCenter.getY());
                         }
+
+
+                        // check if shear needs to be corrected (always correct shear,
+                        // ppt does not know about it)
+                        if(!basegfx::fTools::equalZero(fShearX))
+                        {
+                            const basegfx::B2DPoint aMinimum(aHomogenMatrix * basegfx::B2DPoint(0.0, 0.0));
+
+                            aHomogenMatrix.translate(-aMinimum.getX(), -aMinimum.getY());
+                            aHomogenMatrix.shearX(-fShearX);
+                            aHomogenMatrix.translate(aMinimum.getX(), aMinimum.getY());
+                        }
+
+                        // create range. It's no longer rotated (or sheared), so use
+                        // minimum and maximum values
+                        aRetval.expand(aHomogenMatrix * basegfx::B2DPoint(0.0, 0.0));
+                        aRetval.expand(aHomogenMatrix * basegfx::B2DPoint(1.0, 1.0));
                     }
                 }
             }
@@ -1134,7 +1125,7 @@ static basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& 
 
 void ImplEESdrObject::Init()
 {
-    mXPropSet.set( mXShape, UNO_QUERY );
+    mXPropSet = mXShape;
     if( !mXPropSet.is() )
         return;
 

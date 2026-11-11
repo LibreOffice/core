@@ -133,12 +133,11 @@ void ScMyOLEFixer::FixupOLEs()
 
         if (IsOLE(shape.xShape))
         {
-            uno::Reference < beans::XPropertySet > xShapeProps ( shape.xShape, uno::UNO_QUERY );
-            uno::Reference < beans::XPropertySetInfo > xShapeInfo(xShapeProps->getPropertySetInfo());
+            uno::Reference < beans::XPropertySetInfo > xShapeInfo(shape.xShape->getPropertySetInfo());
 
             OUString sName;
-            if (pDoc && xShapeProps.is() && xShapeInfo.is() && xShapeInfo->hasPropertyByName(sPersistName) &&
-                (xShapeProps->getPropertyValue(sPersistName) >>= sName))
+            if (pDoc && xShapeInfo.is() && xShapeInfo->hasPropertyByName(sPersistName) &&
+                (shape.xShape->getPropertyValue(sPersistName) >>= sName))
                 CreateChartListener(*pDoc, sName, shape.sRangeList);
         }
     }

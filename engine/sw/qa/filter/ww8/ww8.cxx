@@ -153,12 +153,11 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(5000, 5000));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+    xShape->setPropertyValue(u"AnchorType"_ustr,
                                   cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
-    xShapeProps->setPropertyValue(u"TextBox"_ustr, cpo::uno::Any(true));
+    xShape->setPropertyValue(u"TextBox"_ustr, cpo::uno::Any(true));
 
     // When saving this document to DOCX, then make sure we don't crash on export (due to an
     // assertion failure for not-well-formed XML output):
@@ -274,11 +273,10 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapThroughLayoutInCell)
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+    xShape->setPropertyValue(u"AnchorType"_ustr,
                                   cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProps->setPropertyValue(u"Surround"_ustr, cpo::uno::Any(text::WrapTextMode_THROUGH));
-    xShapeProps->setPropertyValue(u"HoriOrientRelation"_ustr,
+    xShape->setPropertyValue(u"Surround"_ustr, cpo::uno::Any(text::WrapTextMode_THROUGH));
+    xShape->setPropertyValue(u"HoriOrientRelation"_ustr,
                                   cpo::uno::Any(text::RelOrientation::FRAME));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);

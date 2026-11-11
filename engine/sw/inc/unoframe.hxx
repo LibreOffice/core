@@ -55,7 +55,6 @@ class BaseFrameProperties_Impl;
 class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") SwXFrame : public cppu::WeakImplHelper
 <
     css::lang::XServiceInfo,
-    css::beans::XPropertySet,
     css::beans::XPropertyState,
     css::drawing::XShape,
     css::container::XNamed,

@@ -452,12 +452,7 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
     {
         // add new shape to parent
         rShapes->add( rShape );
-
-        uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
-        if (xPropertySet.is())
-        {
-            xPropertySet->setPropertyValue(u"HandlePathObjScale"_ustr, cpo::uno::Any(true));
-        }
+        rShape->setPropertyValue(u"HandlePathObjScale"_ustr, cpo::uno::Any(true));
     }
 }
 
@@ -483,16 +478,15 @@ void XMLShapeImportHelper::finishShape(
        the shape position given in the OpenOffice.org file format to
        the one for the OASIS Open Office file format. (#i28749#, #i36248#)
     */
-    uno::Reference< beans::XPropertySet > xPropSet(rShape, uno::UNO_QUERY);
-    if ( xPropSet.is() )
+    if ( rShape.is() )
     {
         if ( mrImporter.IsShapePositionInHoriL2R() &&
-             xPropSet->getPropertySetInfo()->hasPropertyByName(
+             rShape->getPropertySetInfo()->hasPropertyByName(
                 u"PositionLayoutDir"_ustr) )
         {
             cpo::uno::Any aPosLayoutDir;
             aPosLayoutDir <<= text::PositionLayoutDir::PositionInHoriL2R;
-            xPropSet->setPropertyValue( u"PositionLayoutDir"_ustr, aPosLayoutDir );
+            rShape->setPropertyValue( u"PositionLayoutDir"_ustr, aPosLayoutDir );
         }
     }
 }
@@ -541,12 +535,11 @@ ShapeGroupContext::ShapeGroupContext( uno::Reference< drawing::XShapes > xShapes
 void ShapeGroupContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
 {
     uno::Reference<drawing::XShape> xShape( mxShapes->getShapeByIndex( nSourcePos ) );
-    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
 
-    if( !(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( u"ZOrder"_ustr )) )
+    if( !(xShape.is() && xShape->getPropertySetInfo()->hasPropertyByName( u"ZOrder"_ustr )) )
         return;
 
-    xPropSet->setPropertyValue( u"ZOrder"_ustr, cpo::uno::Any(nDestPos) );
+    xShape->setPropertyValue( u"ZOrder"_ustr, cpo::uno::Any(nDestPos) );
 
     for( ZOrderHint& rHint : maZOrderList )
     {
@@ -801,7 +794,7 @@ void XMLShapeImportHelper::restoreConnections()
     for( std::vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
     {
         ConnectionHint& rHint = mpImpl->maConnections[i];
-        uno::Reference< beans::XPropertySet > xConnector( rHint.mxConnector, uno::UNO_QUERY );
+        uno::Reference< drawing::XShape > xConnector( rHint.mxConnector );
         if( xConnector.is() )
         {
             // #86637# remember line deltas

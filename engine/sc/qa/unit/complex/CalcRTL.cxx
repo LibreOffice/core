@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(ScComplexTest, checkShapeProperties)
 {
     createScDoc();
 
-    Reference<XPropertySet> set(getInsertedShape(), UNO_QUERY);
+    Reference<XPropertySet> set(getInsertedShape());
 
     try
     {
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(ScComplexTest, checkInfluenceOfSpreadsheetChange)
 
     Reference<XShape> oShape = getInsertedShape();
     Reference<XPropertySet> sheetProps(getSpreadsheet(), UNO_QUERY);
-    Reference<XPropertySet> shapeProps(oShape, UNO_QUERY);
+    Reference<XPropertySet> shapeProps(oShape);
 
     std::array<Any, 4> previous = getShapeProps(shapeProps, oShape);
     CPPUNIT_ASSERT_MESSAGE(

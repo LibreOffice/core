@@ -312,20 +312,17 @@ void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnecto
     uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
     if (!xConnector.is())
         return;
-    uno::Reference<beans::XPropertySet> xPropSet(xConnector, uno::UNO_QUERY);
-    if (!xPropSet.is())
-        return;
 
     // MS Office allows route between shapes with small distance. LO default is 5mm.
-    xPropSet->setPropertyValue(u"EdgeNode1HorzDist"_ustr, cpo::uno::Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode1VertDist"_ustr, cpo::uno::Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode2HorzDist"_ustr, cpo::uno::Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode2VertDist"_ustr, cpo::uno::Any(sal_Int32(0)));
+    xConnector->setPropertyValue(u"EdgeNode1HorzDist"_ustr, cpo::uno::Any(sal_Int32(0)));
+    xConnector->setPropertyValue(u"EdgeNode1VertDist"_ustr, cpo::uno::Any(sal_Int32(0)));
+    xConnector->setPropertyValue(u"EdgeNode2HorzDist"_ustr, cpo::uno::Any(sal_Int32(0)));
+    xConnector->setPropertyValue(u"EdgeNode2VertDist"_ustr, cpo::uno::Any(sal_Int32(0)));
 
     // A OOXML curvedConnector uses a routing method which is basically incompatible with the
     // traditional way of LibreOffice. A compatible way was added and needs to be enabled before
     // connections are set, so that the method is used in the default routing.
-    xPropSet->setPropertyValue(u"EdgeOOXMLCurve"_ustr, cpo::uno::Any(true));
+    xConnector->setPropertyValue(u"EdgeOOXMLCurve"_ustr, cpo::uno::Any(true));
 
     oox::drawingml::ConnectorShapePropertiesList aConnectorShapeProperties
         = pConnector->getConnectorShapeProperties();
@@ -341,9 +338,9 @@ void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnecto
         {
             // Connect to the found shape.
             if (aIt.mbStartShape)
-                xPropSet->setPropertyValue(u"StartShape"_ustr, cpo::uno::Any(xShape));
+                xConnector->setPropertyValue(u"StartShape"_ustr, cpo::uno::Any(xShape));
             else
-                xPropSet->setPropertyValue(u"EndShape"_ustr, cpo::uno::Any(xShape));
+                xConnector->setPropertyValue(u"EndShape"_ustr, cpo::uno::Any(xShape));
 
             // The first four glue points are the default glue points, which are set by LibreOffice.
             // They do not belong to the preset geometry of the shape.
@@ -382,9 +379,9 @@ void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnecto
             }
 
             if (aIt.mbStartShape)
-                xPropSet->setPropertyValue(u"StartGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
+                xConnector->setPropertyValue(u"StartGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
             else
-                xPropSet->setPropertyValue(u"EndGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
+                xConnector->setPropertyValue(u"EndGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
         }
     }
 }
@@ -393,9 +390,6 @@ void ConnectorHelper::applyBentHandleAdjustments(oox::drawingml::ShapePtr pConne
 {
     uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
     if (!xConnector.is())
-        return;
-    uno::Reference<beans::XPropertySet> xPropSet(xConnector, uno::UNO_QUERY);
-    if (!xPropSet.is())
         return;
 
     // A connector that is glued to a shape at both ends has no independently stored path: its route
@@ -410,8 +404,8 @@ void ConnectorHelper::applyBentHandleAdjustments(oox::drawingml::ShapePtr pConne
     // directly (tdf#154074).
     uno::Reference<drawing::XShape> xStartShape;
     uno::Reference<drawing::XShape> xEndShape;
-    xPropSet->getPropertyValue(u"StartShape"_ustr) >>= xStartShape;
-    xPropSet->getPropertyValue(u"EndShape"_ustr) >>= xEndShape;
+    xConnector->getPropertyValue(u"StartShape"_ustr) >>= xStartShape;
+    xConnector->getPropertyValue(u"EndShape"_ustr) >>= xEndShape;
 
     if (xStartShape.is() && xEndShape.is())
     {
@@ -432,7 +426,7 @@ void ConnectorHelper::applyBentHandleAdjustments(oox::drawingml::ShapePtr pConne
                     nDiff = basegfx::fround(aDiff.getY());
                 else
                     nDiff = basegfx::fround(aDiff.getX());
-                xPropSet->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
+                xConnector->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
                                            cpo::uno::Any(nDiff));
             }
         }
@@ -467,9 +461,6 @@ void ConnectorHelper::applyCurvedHandleAdjustments(oox::drawingml::ShapePtr pCon
     uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
     if (!xConnector.is())
         return;
-    uno::Reference<beans::XPropertySet> xPropSet(xConnector, uno::UNO_QUERY);
-    if (!xPropSet.is())
-        return;
 
     std::vector<basegfx::B2DPoint> aOOXMLHandles;
     ConnectorHelper::getOOXHandlePositionsHmm(pConnector, aOOXMLHandles);
@@ -488,7 +479,7 @@ void ConnectorHelper::applyCurvedHandleAdjustments(oox::drawingml::ShapePtr pCon
                 nDiff = basegfx::fround(aDiff.getY());
             else
                 nDiff = basegfx::fround(aDiff.getX());
-            xPropSet->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
+            xConnector->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
                                        cpo::uno::Any(nDiff));
         }
     }

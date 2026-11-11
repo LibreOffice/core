@@ -303,9 +303,8 @@ cpo::uno::Sequence < OUString > ChartTest::getWriterChartColumnDescriptions()
     cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     cpo::uno::Reference<css::drawing::XShape> xShape(xDrawPage->getByIndex(0), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT( xShape.is() );
-    cpo::uno::Reference<css::beans::XPropertySet> xPropertySet(xShape, cpo::uno::UNO_QUERY);
     cpo::uno::Reference< css::chart2::XChartDocument > xChartDoc;
-    xChartDoc.set( xPropertySet->getPropertyValue( u"Model"_ustr ), cpo::uno::UNO_QUERY );
+    xChartDoc.set( xShape->getPropertyValue( u"Model"_ustr ), cpo::uno::UNO_QUERY );
     CPPUNIT_ASSERT( xChartDoc.is() );
     CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
     cpo::uno::Reference< css::chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), cpo::uno::UNO_QUERY_THROW );

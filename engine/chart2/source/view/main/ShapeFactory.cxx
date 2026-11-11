@@ -2386,13 +2386,12 @@ OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xS
 {
     OUString aRet;
 
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "shape offers no XPropertySet");
-    if( xProp.is())
+    OSL_ENSURE(xShape.is(), "shape offers no XPropertySet");
+    if( xShape.is())
     {
         try
         {
-            xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
+            xShape->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
         }
         catch( const cpo::uno::Exception& )
         {

@@ -53,9 +53,8 @@ DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
 
     m_xShape = std::move(xShape);
     m_bHasHandleValues = false;
-    uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<css::beans::PropertyValue> aCustomShapeGeometry
-        = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr)
+        = m_xShape->getPropertyValue(u"CustomShapeGeometry"_ustr)
               .get<cpo::uno::Sequence<beans::PropertyValue>>();
 
     for (auto const& rCustomShapeGeometryItem : aCustomShapeGeometry)

@@ -85,13 +85,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+    xShape->setPropertyValue(u"AnchorType"_ustr,
                                   cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProps->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::NONE));
-    xShapeProps->setPropertyValue(u"VertOrientRelation"_ustr,
+    xShape->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::NONE));
+    xShape->setPropertyValue(u"VertOrientRelation"_ustr,
                                   cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
-    xShapeProps->setPropertyValue(u"VertOrientPosition"_ustr,
+    xShape->setPropertyValue(u"VertOrientPosition"_ustr,
                                   cpo::uno::Any(static_cast<sal_Int32>(-11000)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);

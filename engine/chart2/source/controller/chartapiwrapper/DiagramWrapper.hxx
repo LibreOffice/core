@@ -94,7 +94,7 @@ public:
     virtual css::awt::Size getSize() override;
     virtual void setSize( const css::awt::Size& aSize ) override;
 
-    // ____ XPropertySet (base of XDiagram) ____
+    // ____ XPropertySet (base of XShape) ____
     virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override;
     virtual void setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
     virtual ::cpo::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) override;

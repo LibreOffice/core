@@ -1131,7 +1131,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDocxAttributeTableExport)
 
     // get the table frame, set new values and dismiss the references
     {
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShape(1));
 
         // change the properties
         // 8133 -> 8000
@@ -1150,7 +1150,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDocxAttributeTableExport)
     // save it to docx
     saveAndReload(TestFilter::DOCX);
 
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
 
     // test the new values
     sal_Int32 nValue = getProperty<sal_Int32>(xShape, u"VertOrientPosition"_ustr);
@@ -1519,7 +1519,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTrackImageDeletion)
     // this was 0 (missing recording of deletion of images)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
 
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1));
     // tdf#142701 this was AS_CHARACTER (convert AT_PARA to AT_CHAR to keep the layout)
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
                          getProperty<text::TextContentAnchorType>(xShape, u"AnchorType"_ustr));

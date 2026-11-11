@@ -1419,7 +1419,6 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
         {
             SfxWatermarkItem aItem;
             uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xPropertySet(xWatermark, uno::UNO_QUERY);
             Color nColor;
             sal_Int16 nTransparency;
             OUString aFont;
@@ -1427,13 +1426,13 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
 
             aItem.SetText(xTextRange->getString());
 
-            if (xPropertySet->getPropertyValue(UNO_NAME_CHAR_FONT_NAME) >>= aFont)
+            if (xWatermark->getPropertyValue(UNO_NAME_CHAR_FONT_NAME) >>= aFont)
                 aItem.SetFont(aFont);
-            if (xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor)
+            if (xWatermark->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor)
                 aItem.SetColor(nColor);
-            if (xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix)
+            if (xWatermark->getPropertyValue(u"Transformation"_ustr) >>= aMatrix)
                 aItem.SetAngle(lcl_GetAngle(aMatrix));
-            if (xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency)
+            if (xWatermark->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency)
                 aItem.SetTransparency(nTransparency);
 
             return aItem;
@@ -1464,11 +1463,10 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         sal_Int16 nAngle = 45;
         OUString aFont = u""_ustr;
 
-        uno::Reference<beans::XPropertySet> xPropertySet(xWatermark, uno::UNO_QUERY);
-        xPropertySet->getPropertyValue(UNO_NAME_CHAR_FONT_NAME) >>= aFont;
-        xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor;
-        xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency;
-        xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
+        xWatermark->getPropertyValue(UNO_NAME_CHAR_FONT_NAME) >>= aFont;
+        xWatermark->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor;
+        xWatermark->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency;
+        xWatermark->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
         nAngle = lcl_GetAngle(aMatrix);
 
         // If the header already contains a watermark, see if it its text is up to date.
@@ -1555,31 +1553,30 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     aMatrix.Line3.Column1 = 0;
     aMatrix.Line3.Column2 = 0;
     aMatrix.Line3.Column3 = 1;
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShape->setPropertyValue(UNO_NAME_ANCHOR_TYPE, cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
     xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, false);
 
     // The remaining properties have to be set after the shape is inserted: do that in one batch to avoid flickering.
     uno::Reference<document::XActionLockable> xLockable(xShape, uno::UNO_QUERY);
     xLockable->addActionLock();
-    xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, cpo::uno::Any(static_cast<sal_Int32>(nColor)));
-    xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, cpo::uno::Any(drawing::FillStyle_SOLID));
-    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, cpo::uno::Any(nTransparency));
-    xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, cpo::uno::Any(drawing::LineStyle_NONE));
-    xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, cpo::uno::Any(false));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, cpo::uno::Any(false));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, cpo::uno::Any(false));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, cpo::uno::Any(nHeight));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, cpo::uno::Any(nWidth));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, cpo::uno::Any(text::WrapTextMode_THROUGH));
-    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
-    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
-    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, cpo::uno::Any(sFont));
-    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_ASIAN, cpo::uno::Any(sFont));
-    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_COMPLEX, cpo::uno::Any(sFont));
-    xPropertySet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, cpo::uno::Any(WATERMARK_AUTO_SIZE));
-    xPropertySet->setPropertyValue(u"Transformation"_ustr, cpo::uno::Any(aMatrix));
+    xShape->setPropertyValue(UNO_NAME_FILLCOLOR, cpo::uno::Any(static_cast<sal_Int32>(nColor)));
+    xShape->setPropertyValue(UNO_NAME_FILLSTYLE, cpo::uno::Any(drawing::FillStyle_SOLID));
+    xShape->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, cpo::uno::Any(nTransparency));
+    xShape->setPropertyValue(UNO_NAME_LINESTYLE, cpo::uno::Any(drawing::LineStyle_NONE));
+    xShape->setPropertyValue(UNO_NAME_OPAQUE, cpo::uno::Any(false));
+    xShape->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, cpo::uno::Any(false));
+    xShape->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, cpo::uno::Any(false));
+    xShape->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, cpo::uno::Any(nHeight));
+    xShape->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, cpo::uno::Any(nWidth));
+    xShape->setPropertyValue(UNO_NAME_TEXT_WRAP, cpo::uno::Any(text::WrapTextMode_THROUGH));
+    xShape->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
+    xShape->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
+    xShape->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, cpo::uno::Any(sFont));
+    xShape->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_ASIAN, cpo::uno::Any(sFont));
+    xShape->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_COMPLEX, cpo::uno::Any(sFont));
+    xShape->setPropertyValue(UNO_NAME_CHAR_HEIGHT, cpo::uno::Any(WATERMARK_AUTO_SIZE));
+    xShape->setPropertyValue(u"Transformation"_ustr, cpo::uno::Any(aMatrix));
 
     uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
     xTextRange->setString(rWatermark.GetText());
@@ -1587,7 +1584,7 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
     xDefaulter->createCustomShapeDefaults(u"fontwork-plain-text"_ustr);
 
-    auto aGeomPropSeq = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr).get< cpo::uno::Sequence<beans::PropertyValue> >();
+    auto aGeomPropSeq = xShape->getPropertyValue(u"CustomShapeGeometry"_ustr).get< cpo::uno::Sequence<beans::PropertyValue> >();
     auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -1601,15 +1598,15 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         aGeomPropVec.push_back(comphelper::makePropertyValue(u"TextPath"_ustr, aPropertyValues));
     else
         it->Value <<= aPropertyValues;
-    xPropertySet->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGeomPropVec)));
+    xShape->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGeomPropVec)));
 
     // tdf#108494, tdf#109313 the header height was switched to height of a watermark
     // and shape was moved to the lower part of a page, force position update
-    xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
-    xPropertySet->setPropertyValue(u"Transformation"_ustr, cpo::uno::Any(aMatrix));
+    xShape->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
+    xShape->setPropertyValue(u"Transformation"_ustr, cpo::uno::Any(aMatrix));
 
-    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, cpo::uno::Any(text::HoriOrientation::CENTER));
-    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, cpo::uno::Any(text::VertOrientation::CENTER));
+    xShape->setPropertyValue(UNO_NAME_HORI_ORIENT, cpo::uno::Any(text::HoriOrientation::CENTER));
+    xShape->setPropertyValue(UNO_NAME_VERT_ORIENT, cpo::uno::Any(text::VertOrientation::CENTER));
 
     xLockable->removeActionLock();
 }

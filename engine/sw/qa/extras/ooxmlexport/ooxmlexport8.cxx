@@ -71,7 +71,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf48569)
 DECLARE_OOXMLEXPORT_TEST(testN751117, "n751117.docx")
 {
     // First shape: the end should be an arrow, should be rotated and should be flipped.
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     OUString aValue;
     xPropertySet->getPropertyValue(u"LineEndName"_ustr) >>= aValue;
     CPPUNIT_ASSERT(aValue.indexOf("Arrow") != -1);
@@ -127,14 +127,13 @@ xray image.AnchorType
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShapes> shapes(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> image = shapes->getShapeByIndex(0);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
-    imageProperties->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
+    image->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
     uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(120), bitmap->getSize().Width );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(106), bitmap->getSize().Height );
     text::TextContentAnchorType anchorType;
-    imageProperties->getPropertyValue( u"AnchorType"_ustr ) >>= anchorType;
+    image->getPropertyValue( u"AnchorType"_ustr ) >>= anchorType;
     CPPUNIT_ASSERT_EQUAL( text::TextContentAnchorType_AS_CHARACTER, anchorType );
 }
 
@@ -146,9 +145,8 @@ image = ThisComponent.DrawPage.getByIndex(0)
 xray image.FillColor
 */
     uno::Reference<drawing::XShape> image = getShape(1);
-    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     Color fillColor;
-    imageProperties->getPropertyValue( u"FillColor"_ustr ) >>= fillColor;
+    image->getPropertyValue( u"FillColor"_ustr ) >>= fillColor;
     CPPUNIT_ASSERT_EQUAL( Color( 0xc0504d ), fillColor );
 }
 
@@ -162,15 +160,12 @@ after they are loaded.
     uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2), image3 = getShape(3);
     sal_Int32 zOrder1, zOrder2, zOrder3;
     OUString descr1, descr2, descr3;
-    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
-    imageProperties1->getPropertyValue( u"ZOrder"_ustr ) >>= zOrder1;
-    imageProperties1->getPropertyValue( u"Description"_ustr ) >>= descr1;
-    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
-    imageProperties2->getPropertyValue( u"ZOrder"_ustr ) >>= zOrder2;
-    imageProperties2->getPropertyValue( u"Description"_ustr ) >>= descr2;
-    uno::Reference<beans::XPropertySet> imageProperties3(image3, uno::UNO_QUERY);
-    imageProperties3->getPropertyValue( u"ZOrder"_ustr ) >>= zOrder3;
-    imageProperties3->getPropertyValue( u"Description"_ustr ) >>= descr3;
+    image1->getPropertyValue( u"ZOrder"_ustr ) >>= zOrder1;
+    image1->getPropertyValue( u"Description"_ustr ) >>= descr1;
+    image2->getPropertyValue( u"ZOrder"_ustr ) >>= zOrder2;
+    image2->getPropertyValue( u"Description"_ustr ) >>= descr2;
+    image3->getPropertyValue( u"ZOrder"_ustr ) >>= zOrder3;
+    image3->getPropertyValue( u"Description"_ustr ) >>= descr3;
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), zOrder1 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), zOrder2 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2 ), zOrder3 );
@@ -222,7 +217,7 @@ xray para2.PageStyleName
 
 DECLARE_OOXMLEXPORT_TEST(testN764005, "n764005.docx")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
 
     // The picture in the header wasn't absolutely positioned and wasn't in the background.
     text::TextContentAnchorType eValue;
@@ -361,7 +356,7 @@ DECLARE_OOXMLEXPORT_TEST(testN775906, "n775906.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf59699, "tdf59699.docx")
 {
-    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xImage(getShape(1));
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, u"Graphic"_ustr);
     // This was false: the referenced graphic data wasn't imported.
     CPPUNIT_ASSERT(xGraphic.is());
@@ -421,7 +416,7 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91122, "tdf91122.docx")
      * OLE object shape: default vertical position is top in MSO, not bottom
      */
     {   // Check first shape
-        uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
+        uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1) );
         uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, xShapeDescriptor->getShapeType());
         sal_Int16 nValue;
@@ -430,7 +425,7 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91122, "tdf91122.docx")
     }
 
     {   // Check second shape
-        uno::Reference<beans::XPropertySet> xShapeProperties( getShape(2), uno::UNO_QUERY );
+        uno::Reference<beans::XPropertySet> xShapeProperties( getShape(2) );
         uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, xShapeDescriptor->getShapeType());
         sal_Int16 nValue;
@@ -444,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76803)
     createSwDoc("fdo76803.docx");
     saveAndReload(TestFilter::DOCX);
     // The ContourPolyPolygon was wrong
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
 
     drawing::PointSequenceSequence rContour = getProperty<drawing::PointSequenceSequence>(xPropertySet, u"ContourPolyPolygon"_ustr);
     basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(rContour));
@@ -564,7 +559,7 @@ DECLARE_OOXMLEXPORT_TEST(testShadow, "imgshadow.docx")
      * The problem was that drop shadows on inline images were not being
      * imported and applied.
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(2));
 
     bool bShadow = getProperty<bool>(xPropertySet, u"Shadow"_ustr);
     CPPUNIT_ASSERT(bShadow);
@@ -606,7 +601,7 @@ DECLARE_OOXMLEXPORT_TEST(testN779941, "n779941.docx")
 DECLARE_OOXMLEXPORT_TEST(testN783638, "n783638.docx")
 {
     // The problem was that the margins of inline images were not zero.
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, u"LeftMargin"_ustr));
 }
 
@@ -890,7 +885,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo63685, "fdo63685.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN592908_Frame, "n592908-frame.docx")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue(u"Surround"_ustr) >>= eValue;
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, eValue);
@@ -898,7 +893,7 @@ DECLARE_OOXMLEXPORT_TEST(testN592908_Frame, "n592908-frame.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN592908_Picture, "n592908-picture.docx")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue(u"Surround"_ustr) >>= eValue;
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, eValue);
@@ -1205,7 +1200,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
 {
     // The problem was that the mso-layout-flow-alt:bottom-to-top VML shape property wasn't handled for sw text frames.
     // Note: VML is no longer used on import. OOXML import uses WritingMode2::BT_LR now.
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::BT_LR), getProperty<sal_Int16>(xPropertySet, u"WritingMode"_ustr));
 }
 
@@ -1214,7 +1209,7 @@ DECLARE_OOXMLEXPORT_TEST(testChartProp, "chart-prop.docx")
     // The problem was that chart was not getting parsed in writer module.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(15240), getProperty<sal_Int32>(xPropertySet, u"Width"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8890), getProperty<sal_Int32>(xPropertySet, u"Height"_ustr));
 }
