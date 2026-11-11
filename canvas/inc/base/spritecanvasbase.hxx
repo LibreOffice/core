@@ -20,7 +20,6 @@
 #pragma once
 
 #include <rtl/ref.hxx>
-#include <com/sun/star/rendering/InterpolationMode.hpp>
 #include <cppuhelper/weak.hxx>
 #include <base/integerbitmapbase.hxx>
 #include <base/bitmapcanvasbase.hxx>

@@ -2935,7 +2935,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	FontMetrics \
 	FontRequest \
 	IntegerBitmapLayout \
-	InterpolationMode \
 	Panose \
 	PanoseLetterForm \
 	PanoseProportion \
