@@ -132,6 +132,22 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawObjectLinkDeferred)
                            pOLENode->HasDeferredLink());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDrawObjectLinkDeferredSave)
+{
+    // A linked object that was never updated keeps its link when the document is saved.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"draw-object-link.fodt", aParams);
+
+    save(TestFilter::ODT);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:frame/draw:object", "href", u"http://192.0.2.1:12345/probe");
+    assertXPath(pXmlDoc, "//draw:frame/draw:object-ole", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testLinkedOLEExport)
 {
     // Load a document with a linked OLE object whose target exists,

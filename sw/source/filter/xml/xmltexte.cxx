@@ -185,6 +185,12 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
         const Reference < XPropertySet > & rPropSet )
 {
     SwOLENode *pOLENd = GetNoTextNode( rPropSet )->GetOLENode();
+    if (pOLENd->HasDeferredLink())
+    {
+        Add(XmlStyleFamily::TEXT_FRAME, rPropSet);
+        return;
+    }
+
     svt::EmbeddedObjectRef& rObjRef = pOLENd->GetOLEObj().GetObject();
     if( !rObjRef.is() )
         return;
@@ -217,27 +223,31 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     SwOLENode *pOLENd = GetNoTextNode( rPropSet )->GetOLENode();
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
     svt::EmbeddedObjectRef& rObjRef = rOLEObj.GetObject();
-    if( !rObjRef.is() )
+    // A deferred link has no object yet and is written as a link to its URL.
+    const bool bDeferredLink = pOLENd->HasDeferredLink();
+    if (!bDeferredLink && !rObjRef.is())
         return;
 
-    SvGlobalName aClassId( rObjRef->getClassID() );
-
     SvEmbeddedObjectTypes nType = SV_EMBEDDED_OWN;
-    if( m_aPluginClassId == aClassId )
+    if (!bDeferredLink)
     {
-        nType = SV_EMBEDDED_PLUGIN;
-    }
-    else if( m_aAppletClassId == aClassId )
-    {
-        nType = SV_EMBEDDED_APPLET;
-    }
-    else if( m_aIFrameClassId == aClassId )
-    {
-        nType = SV_EMBEDDED_FRAME;
-    }
-    else if ( !SotExchange::IsInternal( aClassId ) )
-    {
-        nType = SV_EMBEDDED_OUTPLACE;
+        SvGlobalName aClassId( rObjRef->getClassID() );
+        if( m_aPluginClassId == aClassId )
+        {
+            nType = SV_EMBEDDED_PLUGIN;
+        }
+        else if( m_aAppletClassId == aClassId )
+        {
+            nType = SV_EMBEDDED_APPLET;
+        }
+        else if( m_aIFrameClassId == aClassId )
+        {
+            nType = SV_EMBEDDED_FRAME;
+        }
+        else if ( !SotExchange::IsInternal( aClassId ) )
+        {
+            nType = SV_EMBEDDED_OUTPLACE;
+        }
     }
 
     enum XMLTokenEnum eElementName = XML__UNKNOWN_;
@@ -268,8 +278,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         ;
     }
 
-    lcl_addAspect( rObjRef, aStates,
-        GetAutoFramePropMapper()->getPropertySetMapper() );
+    if (!bDeferredLink)
+        lcl_addAspect( rObjRef, aStates,
+            GetAutoFramePropMapper()->getPropertySetMapper() );
 
     const OUString sAutoStyle = Find( XmlStyleFamily::TEXT_FRAME,
                                       rPropSet, sStyle, aStates );
@@ -286,7 +297,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     {
     case SV_EMBEDDED_OUTPLACE:
     case SV_EMBEDDED_OWN:
-        if( !(rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED) )
+        if (bDeferredLink)
+        {
+            lcl_addURL(rXMLExport, GetExport().AddEmbeddedObject(pOLENd->GetLinkURL()), false);
+        }
+        else if( !(rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED) )
         {
             OUString sURL;
 
@@ -423,7 +438,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         switch( nType )
         {
         case SV_EMBEDDED_OWN:
-            if( rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED )
+            if (!bDeferredLink && (rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED))
             {
                 Reference < XEmbeddedObjectSupplier > xEOS( rPropSet, UNO_QUERY );
                 OSL_ENSURE( xEOS.is(), "no embedded object supplier for own object" );
@@ -498,7 +513,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             break;
         }
     }
-    if( SV_EMBEDDED_OUTPLACE==nType || SV_EMBEDDED_OWN==nType )
+    if (!bDeferredLink && (SV_EMBEDDED_OUTPLACE == nType || SV_EMBEDDED_OWN == nType))
     {
         OUString sURL = XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE + rOLEObj.GetCurrentPersistName();
         if( !(rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED) )

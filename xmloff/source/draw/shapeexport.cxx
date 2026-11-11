@@ -3180,6 +3180,9 @@ void XMLShapeExport::ImpExportOLE2Shape(
         OUString sURL;
         bool bInternal = false;
         xPropSet->getPropertyValue(u"IsInternal"_ustr) >>= bInternal;
+        // A link whose object is not loaded has no content to embed, so it is written as a link
+        // even when the export embeds objects.
+        bool bLinkWithoutObject = false;
 
         {
 
@@ -3188,6 +3191,12 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 // OOo internal links have no storage persistence, URL is stored in the XML file
                 // the result LinkURL is empty in case the object is not a link
                 xPropSet->getPropertyValue(u"LinkURL"_ustr) >>= sURL;
+                if (bExportEmbedded && !sURL.isEmpty())
+                {
+                    uno::Reference<lang::XComponent> xModel;
+                    xPropSet->getPropertyValue(u"Model"_ustr) >>= xModel;
+                    bLinkWithoutObject = !xModel.is();
+                }
             }
 
             xPropSet->getPropertyValue(u"PersistName"_ustr) >>= sPersistName;
@@ -3205,7 +3214,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             if( !sClassId.isEmpty() )
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
 
-            if(!bExportEmbedded)
+            if (!bExportEmbedded || bLinkWithoutObject)
             {
                 // xlink:href
                 if( !sURL.isEmpty() )
@@ -3278,7 +3287,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             ImpExportText( xShape, TextPNS::EXTENSION );
         }
 
-        if(bExportEmbedded && !bIsEmptyPresObj)
+        if (bExportEmbedded && !bIsEmptyPresObj && !bLinkWithoutObject)
         {
             if(bInternal)
             {
@@ -3301,7 +3310,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             }
         }
     }
-    if( !bIsEmptyPresObj )
+    if (!bIsEmptyPresObj && !sPersistName.isEmpty())
     {
         OUString sURL = XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE + sPersistName;
         if( !bExportEmbedded )

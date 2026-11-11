@@ -146,6 +146,23 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawObjectLinkDeferred)
                            pOleObj->HasDeferredLink());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawObjectLinkDeferredSave)
+{
+    // A linked object that was never updated keeps its link when the document is saved.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"draw-object-link.fods", aParams);
+
+    save(TestFilter::ODS);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:frame/draw:object", "href",
+                u"http://192.0.2.1:12345/remote-object");
+    assertXPath(pXmlDoc, "//draw:frame/draw:image", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawImageRemoteNotFetched)
 {
     // draw:image with a remote xlink:href must not fetch the URL during

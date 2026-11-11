@@ -1111,6 +1111,23 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testMasterPageStyleParent)
     CPPUNIT_ASSERT_EQUAL(16, parents);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawObjectLinkDeferredSave)
+{
+    // A linked object that was never updated keeps its link when the document is saved.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"draw-object-link.fodp", aParams);
+
+    save(TestFilter::ODP);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:frame/draw:object", "href",
+                u"http://192.0.2.1:12345/remote-object");
+    assertXPath(pXmlDoc, "//draw:frame/draw:image", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testLinkedOLEExport)
 {
     // Impress equivalent of Writer's testLinkedOLEExport: load a document
