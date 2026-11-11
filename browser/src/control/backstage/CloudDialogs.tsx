@@ -97,8 +97,24 @@ namespace BackstageTemplates {
     onDelete?: () => void;
   }
 
+  function isWebAddress(text: string): boolean {
+    let url: URL;
+    try {
+      url = new URL(text);
+    } catch {
+      return false;
+    }
+
+    const isWebScheme = url.protocol === 'https:' || url.protocol === 'http:';
+    const hasUserInfo = url.username !== '' || url.password !== '';
+    const isAscii = [...text].every((char) => char.charCodeAt(0) < 128);
+
+    return isWebScheme && !hasUserInfo && isAscii;
+  }
+
   export function addCloudDialog(props: AddCloudDialogProps): HTMLElement {
     let domainInput: HTMLInputElement;
+    let domainError: HTMLElement;
     let nameInput: HTMLInputElement;
     const dropdown = kindDropdown(
       props.initialKind,
@@ -113,6 +129,17 @@ namespace BackstageTemplates {
         domainInput.focus();
         return;
       }
+
+      if (!isWebAddress(domain)) {
+        const example = 'https://cloud.example.com';
+        const message = _('Enter a web address, such as %1.');
+        domainError.textContent = message.replace('%1', example);
+        domainInput.focus();
+        return;
+      }
+
+      domainError.textContent = '';
+
       if (!name) {
         nameInput.focus();
         return;
@@ -145,6 +172,13 @@ namespace BackstageTemplates {
               value={props.initialDomain}
               ref={(el: HTMLInputElement) => {
                 domainInput = el;
+              }}
+            />
+            <span
+              class="backstage-modal-error"
+              role="alert"
+              ref={(element: HTMLElement) => {
+                domainError = element;
               }}
             />
           </label>
