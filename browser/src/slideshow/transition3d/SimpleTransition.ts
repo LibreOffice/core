@@ -191,6 +191,10 @@ class SimpleTransition extends SlideShow.Transition3d {
 	public render(nT: number): void {
 		if (this.context.isDisposed()) return;
 
+		// The slide textures are drawn anew in the same context between two frames, with depth
+		// testing, face culling and blending set for drawing them, so each frame sets the flags
+		// of the transition again.
+		this.initWebglFlags();
 		this.gl.viewport(
 			0,
 			0,
