@@ -103,6 +103,7 @@ public:
     };
 
 private:
+    void shareFontMetric(CachedGlyphsKey& rKey) const;
     virtual OUString getCacheName() const override;
     virtual bool dropCaches() override;
     virtual void dumpState(rtl::OStringBuffer& rState) override;

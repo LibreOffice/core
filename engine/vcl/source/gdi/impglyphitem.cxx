@@ -342,7 +342,7 @@ const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
 {
     if (nLen == 0)
         return nullptr;
-    const CachedGlyphsKey key(outputDevice, text, nIndex, nLen, nLogicWidth);
+    CachedGlyphsKey key(outputDevice, text, nIndex, nLen, nLogicWidth);
     GlyphsCache::const_iterator it = mCachedGlyphs.find(key);
     if (it != mCachedGlyphs.end())
     {
@@ -477,6 +477,7 @@ const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
                 mLastTemporaryKey.reset();
                 return &mLastTemporaryGlyphs;
             }
+            shareFontMetric(key);
             mCachedGlyphs.insert(std::make_pair(key, std::move(glyphs)));
             assert(mCachedGlyphs.find(key)
                    == mCachedGlyphs.begin()); // newly inserted item is first
@@ -484,8 +485,17 @@ const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
         }
     }
     // Failure, cache it too as invalid glyphs.
+    shareFontMetric(key);
     mCachedGlyphs.insert(std::make_pair(key, SalLayoutGlyphs()));
     return nullptr;
+}
+
+void SalLayoutGlyphsCache::shareFontMetric(CachedGlyphsKey& rKey) const
+{
+    // A key with the same font metric as the most recently used entry takes the font metric of that
+    // entry, so that the two keys share one copy of the font.
+    if (!mCachedGlyphs.empty() && mCachedGlyphs.begin()->first.fontMetric == rKey.fontMetric)
+        rKey.fontMetric = mCachedGlyphs.begin()->first.fontMetric;
 }
 
 const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
