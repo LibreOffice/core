@@ -260,7 +260,7 @@ void typeConvert(const css::util::DateTime& _rDateTime, DateTime& _rOut)
     _rOut = DateTime(aDate, aTime);
 }
 
-OUString toISO8601(const css::util::DateTime& rDateTime)
+OUString toISO8601(const css::util::DateTime& rDateTime, bool bAlwaysTime)
 {
     OUStringBuffer rBuffer(32);
     rBuffer.append(OUString::number(static_cast<sal_Int32>(rDateTime.Year)) + "-");
@@ -271,10 +271,8 @@ OUString toISO8601(const css::util::DateTime& rDateTime)
         rBuffer.append('0');
     rBuffer.append(static_cast<sal_Int32>(rDateTime.Day));
 
-    if( rDateTime.NanoSeconds != 0 ||
-        rDateTime.Seconds     != 0 ||
-        rDateTime.Minutes     != 0 ||
-        rDateTime.Hours       != 0 )
+    if (bAlwaysTime || rDateTime.NanoSeconds != 0 || rDateTime.Seconds != 0
+        || rDateTime.Minutes != 0 || rDateTime.Hours != 0)
     {
         rBuffer.append('T');
         if( rDateTime.Hours < 10 )

@@ -85,6 +85,7 @@
 #include <txtfrm.hxx>
 #include <viscrs.hxx>
 #include <view.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -3790,6 +3791,87 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphChanges)
     CPPUNIT_ASSERT_EQUAL(std::string("Keep fresh and then warm end."),
                          aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
     CPPUNIT_ASSERT(!aView.m_aA11yFocusedParagraph.get_child_optional("changes"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphChangeAuthors)
+{
+    // Given a paragraph with an insertion by Ann, a deletion by Ben and an attribute change by Ann:
+    createDoc("a11y-tracked-changes.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the caret moves into that paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then each change is reported with its author and its time:
+    const boost::property_tree::ptree& rChanges
+        = aView.m_aA11yFocusedParagraph.get_child("changes");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rChanges.size());
+    auto check = [](const boost::property_tree::ptree& rChange, const char* pAuthor,
+                    const char* pDateTime) {
+        CPPUNIT_ASSERT_EQUAL(std::string(pAuthor), rChange.get<std::string>("author", ""));
+        CPPUNIT_ASSERT_EQUAL(std::string(pDateTime), rChange.get<std::string>("dateTime", ""));
+    };
+    auto it = rChanges.begin();
+    // Without the fix, a change had no author.
+    check((it++)->second, "Ann", "2026-01-02T10:00:00");
+    check((it++)->second, "Ben", "2026-01-03T11:00:00");
+    check(it->second, "Ann", "2026-01-04T12:00:00");
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphChangeTimes)
+{
+    // Given "Keep " with an insertion by Ann at midnight, then a paragraph starting with a
+    // formatting change by Ben at a time with a fraction of a second, then a deletion by Cid with
+    // no date (1970-01-01, which Writer reads as no date):
+    createDoc("a11y-tracked-change-times.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the paragraph with the insertion is joined with the next one, changes not being
+    // recorded, so that the formatting change starts where the insertion ends:
+    pWrtShell->Down(/*bSelect=*/false);
+    const SwTextNode* pNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    SwPaM aJoin(*pNode, pNode->Len(), *pNode->GetNodes()[pNode->GetIndex() + 1], 0);
+    getSwDoc()->getIDocumentContentOperations().DeleteAndJoin(aJoin);
+    // report the joined paragraph anew
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then each change has its own author, and its time with the time of day in whole seconds:
+    CPPUNIT_ASSERT_EQUAL(std::string("Keep freshheavy end."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+    const boost::property_tree::ptree& rChanges
+        = aView.m_aA11yFocusedParagraph.get_child("changes");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rChanges.size());
+    const boost::property_tree::ptree& rInsertion = rChanges.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(5, rInsertion.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(10, rInsertion.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Ann"), rInsertion.get<std::string>("author", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("2026-01-02T00:00:00"),
+                         rInsertion.get<std::string>("dateTime", ""));
+    const boost::property_tree::ptree& rFormatting = std::next(rChanges.begin())->second;
+    CPPUNIT_ASSERT_EQUAL(10, rFormatting.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(15, rFormatting.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("attributes"), rFormatting.get<std::string>("type"));
+    // not the author of the insertion before it
+    CPPUNIT_ASSERT_EQUAL(std::string("Ben"), rFormatting.get<std::string>("author", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("2026-01-03T11:00:00"),
+                         rFormatting.get<std::string>("dateTime", ""));
+
+    // And a change without a date has its author and no time:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    const boost::property_tree::ptree& rDeletion
+        = aView.m_aA11yFocusedParagraph.get_child("changes").begin()->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("Cid"), rDeletion.get<std::string>("author", ""));
+    CPPUNIT_ASSERT(!rDeletion.get_optional<std::string>("dateTime"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphStackedChanges)

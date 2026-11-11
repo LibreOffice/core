@@ -512,14 +512,37 @@ window.L.TextInput = window.L.Layer.extend({
 	},
 
 	_createChangeElement: function(change) {
-		if (change.type === 'insertion')
-			return document.createElement('ins');
-		if (change.type === 'deletion')
-			return document.createElement('del');
-		// a formatting change has no HTML element or ARIA role
-		const element = document.createElement('span');
-		element.setAttribute('aria-description', _('Formatting changed'));
+		let element;
+		if (change.type === 'insertion') {
+			element = document.createElement('ins');
+		} else if (change.type === 'deletion') {
+			element = document.createElement('del');
+		} else {
+			// a formatting change has no HTML element or ARIA role
+			element = document.createElement('span');
+			element.setAttribute('aria-description', _('Formatting changed'));
+		}
+		const details = this._getChangeDetails(change);
+		if (details)
+			element.dataset.changeDetails = details;
 		return element;
+	},
+
+	// the type, the author and the time of a change, as a reader reads them on demand
+	_getChangeDetails: function(change) {
+		if (!change.author && !change.dateTime)
+			return '';
+		const parts = [change.type === 'insertion' ? _('Insertion')
+			: change.type === 'deletion' ? _('Deletion') : _('Formatting changed')];
+		if (change.author)
+			parts.push(change.author);
+		// with no zone, read as a local time
+		const date = new Date(change.dateTime);
+		if (change.dateTime && !isNaN(date.getTime())) {
+			parts.push(date.toLocaleString(String.locale, { year: 'numeric', month: 'long',
+				day: 'numeric', hour: 'numeric', minute: 'numeric' }));
+		}
+		return parts.join(', ');
 	},
 
 	// the element of a commented range, of a content control or of an error

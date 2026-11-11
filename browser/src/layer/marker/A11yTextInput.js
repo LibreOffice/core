@@ -187,6 +187,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				: this._wrapContent(content, elements);
 			this._keptElements = null;
 			this._linkCommentDetails();
+			this._linkChangeDetails();
 			return;
 		}
 		for (const [index, element] of [this._textArea, ...kept].entries()) {
@@ -198,6 +199,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		kept[0].removeAttribute('id'); // the new paragraph has it
 		for (const element of kept) {
 			delete element.dataset.commentId;
+			delete element.dataset.changeDetails;
 			element.removeAttribute('aria-details');
 		}
 		const template = document.createElement('template');
@@ -207,6 +209,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		kept[0].after(kept[0].previousSibling); // the post-space stays last
 		this._keptElements = kept;
 		this._linkCommentDetails();
+		this._linkChangeDetails();
 	},
 
 	_hasLineBreakOnly: function() {
@@ -992,6 +995,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		fillContextRegion(this._contextBefore, before, beforeRects, beforeLevels, elements.before);
 		fillContextRegion(this._contextAfter, after, afterRects, afterLevels, elements.after);
 		this._linkCommentDetails();
+		this._linkChangeDetails();
 		this._fillHeadingRegions();
 		this._placeContextRegions();
 		this._endHeadingJump();
@@ -1074,6 +1078,38 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			text.textContent = comment.text;
 			copy.append(author, text);
 			this._commentCopies.appendChild(copy);
+		}
+	},
+
+	// aria-details gives the type, the author and the time of a tracked change on demand, as for a
+	// comment; changes with the same details share a target
+	_linkChangeDetails: function() {
+		if (!this._container)
+			return;
+		const targets = new Map(); // the details and the id of their target
+		for (const element of this._container.querySelectorAll('[data-change-details]')) {
+			const details = element.dataset.changeDetails;
+			if (!targets.has(details))
+				targets.set(details, 'a11y-change-' + targets.size);
+			const id = targets.get(details);
+			if (element.getAttribute('aria-details') !== id)
+				element.setAttribute('aria-details', id);
+		}
+		const key = JSON.stringify(Array.from(targets));
+		if (key === this._changeTargetsKey)
+			return;
+		this._changeTargetsKey = key;
+		if (!this._changeTargets) {
+			this._changeTargets = document.createElement('div');
+			this._changeTargets.className = 'visuallyhidden';
+			this._container.appendChild(this._changeTargets);
+		}
+		this._changeTargets.replaceChildren();
+		for (const [details, id] of targets) {
+			const target = document.createElement('div');
+			target.id = id;
+			target.textContent = details;
+			this._changeTargets.appendChild(target);
 		}
 	},
 

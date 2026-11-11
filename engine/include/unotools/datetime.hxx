@@ -47,7 +47,9 @@ namespace utl
     UNOTOOLS_DLLPUBLIC void typeConvert(const DateTime& _rDateTime, css::util::DateTime& _rOut);
     UNOTOOLS_DLLPUBLIC void typeConvert(const css::util::DateTime& _rDateTime, DateTime& _rOut);
 
-    UNOTOOLS_DLLPUBLIC OUString toISO8601(const css::util::DateTime& _rDateTime);
+    // without bAlwaysTime, a time of 00:00:00 is left out
+    UNOTOOLS_DLLPUBLIC OUString toISO8601(const css::util::DateTime& _rDateTime,
+                                          bool bAlwaysTime = false);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseDateTime(std::u16string_view i_rIn, css::util::DateTime& o_rDateTime);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseDate(std::u16string_view i_rIn, css::util::Date& o_rDate);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseTime(std::u16string_view i_rIn, css::util::Time& o_Time);

@@ -84,6 +84,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -91,6 +92,7 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/tempfile.hxx>
 #include <svtools/soerr.hxx>
 #include <tools/svborder.hxx>
@@ -948,11 +950,21 @@ struct ParagraphChange
     sal_Int32 nStart = 0;
     sal_Int32 nEnd = 0;
     sal_Int32 nType = 0; // a text::TextMarkupType::TRACK_CHANGE_*
+    OUString aAuthor;
+    OUString aDateTime; // ISO 8601
 
     bool operator==(const ParagraphChange&) const = default;
 };
 
-// The insertions, deletions and attribute changes recorded in a paragraph, in text order
+// whole seconds, always with the time of day, which a browser reads as a local time
+OUString formatChangeTime(util::DateTime aDateTime)
+{
+    aDateTime.NanoSeconds = 0;
+    return utl::toISO8601(aDateTime, /*bAlwaysTime=*/true);
+}
+
+// The insertions, deletions and attribute changes recorded in a paragraph, in text order, with
+// their authors and times where the attributes of their runs specify them
 std::vector<ParagraphChange>
 collectChanges(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
 {
@@ -960,6 +972,9 @@ collectChanges(const uno::Reference<css::accessibility::XAccessibleText>& xAccTe
     const sal_Int32 nLength = xAccText->getCharacterCount();
     if (!xMarkup.is() || nLength <= 0)
         return {};
+    const auto xAttributes = xAccText.query<accessibility::XAccessibleTextAttributes>();
+    static const uno::Sequence<OUString> aOriginNames{ u"RedlineAuthor"_ustr,
+                                                       u"RedlineDateTime"_ustr };
     std::vector<ParagraphChange> aChanges;
     for (const sal_Int32 nType : { text::TextMarkupType::TRACK_CHANGE_INSERTION,
                                    text::TextMarkupType::TRACK_CHANGE_DELETION,
@@ -971,8 +986,24 @@ collectChanges(const uno::Reference<css::accessibility::XAccessibleText>& xAccTe
             const accessibility::TextSegment aSegment = xMarkup->getTextMarkup(i, nType);
             const sal_Int32 nStart = std::max(aSegment.SegmentStart, sal_Int32(0));
             const sal_Int32 nEnd = std::min(aSegment.SegmentEnd, nLength);
-            if (nStart < nEnd)
-                aChanges.push_back({ .nStart = nStart, .nEnd = nEnd, .nType = nType });
+            if (nStart >= nEnd)
+                continue;
+            OUString aAuthor, aDateTime;
+            for (const beans::PropertyValue& rValue :
+                 xAttributes.is() ? xAttributes->getRunAttributes(nStart, aOriginNames)
+                                  : uno::Sequence<beans::PropertyValue>())
+            {
+                util::DateTime aTime;
+                if (rValue.Name == "RedlineAuthor")
+                    rValue.Value >>= aAuthor;
+                else if (rValue.Name == "RedlineDateTime" && (rValue.Value >>= aTime))
+                    aDateTime = formatChangeTime(aTime);
+            }
+            aChanges.push_back({ .nStart = nStart,
+                                 .nEnd = nEnd,
+                                 .nType = nType,
+                                 .aAuthor = std::move(aAuthor),
+                                 .aDateTime = std::move(aDateTime) });
         }
     }
     std::ranges::stable_sort(aChanges, {}, &ParagraphChange::nStart);
@@ -999,6 +1030,11 @@ boost::property_tree::ptree makeChangesTree(const std::vector<ParagraphChange>& 
                 aChange.put("type", "attributes");
                 break;
         }
+        if (!rChange.aAuthor.isEmpty())
+            aChange.put("author",
+                        OUStringToOString(rChange.aAuthor, RTL_TEXTENCODING_UTF8).getStr());
+        if (!rChange.aDateTime.isEmpty())
+            aChange.put("dateTime", rChange.aDateTime.toUtf8().getStr());
         aChanges.push_back(std::make_pair("", aChange));
     }
     return aChanges;

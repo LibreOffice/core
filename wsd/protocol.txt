@@ -2036,8 +2036,10 @@ a11yfocuschanged: <payload>
     formats: [{"start", "end", ...}], the runs of character formatting,
         with "bold", "italic", "underline" and "strikethrough" as "true"
         where set, and "escapement" as "super" or "sub".
-    changes: [{"start", "end", "type"}], the tracked changes shown; type
-        is "insertion", "deletion" or "attributes".
+    changes: [{"start", "end", "type", "author", "dateTime"}], the tracked
+        changes shown; type is "insertion", "deletion" or "attributes";
+        author and dateTime (ISO 8601 in whole seconds, always with the
+        time of day and with no zone) are present where known.
     images: [{"position", "name", "description", "kind", "shapeType"}],
         the objects anchored as characters; position is the offset of the
         object character, kind is "shape", "frame", "formula", "chart" or

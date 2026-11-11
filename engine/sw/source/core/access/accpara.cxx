@@ -63,6 +63,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <comphelper/accessibletexthelper.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <algorithm>
 #include <docufld.hxx>
 #include <txtfld.hxx>
@@ -987,6 +988,26 @@ cpo::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
 
 namespace {
 
+// The change holding the character at rPos; not the insertion that GetRedline() may take for a
+// formatting change starting where the insertion ends
+const SwRangeRedline* findRedlineAt(const SwPosition& rPos)
+{
+    const IDocumentRedlineAccess& rAccess = rPos.GetDoc().getIDocumentRedlineAccess();
+    const SwRedlineTable& rTable = rAccess.GetRedlineTable();
+    SwRedlineTable::size_type nPos = 0;
+    rAccess.GetRedline(rPos, &nPos);
+    // GetRedline() may have taken the entry after the one sought, too
+    for (nPos = nPos ? nPos - 1 : 0; nPos < rTable.size(); ++nPos)
+    {
+        const SwRangeRedline* pRedline = rTable[nPos];
+        if (rPos < *pRedline->Start())
+            break;
+        if (rPos < *pRedline->End())
+            return pRedline;
+    }
+    return nullptr;
+}
+
 // the type of a content control, as the client of the Kit reads it
 OUString lcl_GetContentControlType(SwContentControlType eType)
 {
@@ -1575,6 +1596,21 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
                         aRunAttrSeq[rPropVal.Name] = rPropVal;
                     }
                 }
+            }
+        }
+
+        const bool bProvideRedline
+            = !aRequestedAttributes.hasElements()
+              || comphelper::findValue(aRequestedAttributes, UNO_NAME_REDLINE_AUTHOR) != -1
+              || comphelper::findValue(aRequestedAttributes, UNO_NAME_REDLINE_DATE_TIME) != -1;
+        if (const SwRangeRedline* pRedline = bProvideRedline ? findRedlineAt(aModelPos) : nullptr)
+        {
+            aRunAttrSeq[UNO_NAME_REDLINE_AUTHOR] = comphelper::makePropertyValue(
+                UNO_NAME_REDLINE_AUTHOR, pRedline->GetAuthorString());
+            if (!pRedline->GetRedlineData().IsAnonymized())
+            {
+                aRunAttrSeq[UNO_NAME_REDLINE_DATE_TIME] = comphelper::makePropertyValue(
+                    UNO_NAME_REDLINE_DATE_TIME, pRedline->GetTimeStamp().GetUNODateTime());
             }
         }
 

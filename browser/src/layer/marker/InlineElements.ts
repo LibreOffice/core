@@ -43,6 +43,8 @@ namespace cool {
 		start: MessageNumber;
 		end: MessageNumber;
 		type: 'insertion' | 'deletion' | 'attributes';
+		author?: string;
+		dateTime?: string; // ISO 8601 with no zone, a local time
 	}
 
 	// a U+FFFC (OBJECT REPLACEMENT CHARACTER) standing for an image, or a shape, an object or a

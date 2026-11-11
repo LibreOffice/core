@@ -113,6 +113,23 @@ describe(['tagdesktop'], 'Tracked changes for the reader', { testIsolation: fals
 		});
 	});
 
+	it('the type, the author and the time of a change are its details', function () {
+		// back in the paragraph with the changes
+		cy.cGet('#clipboard-area').should(function ($area) {
+			const check = function (selector, start, author) {
+				const id = $area.find(selector).attr('aria-details');
+				expect(id, 'the details of ' + selector).to.match(/^a11y-change-/);
+				const target = win.document.getElementById(id);
+				expect(target, 'the target of ' + selector).to.exist;
+				expect(target.textContent, 'the details of ' + selector)
+					.to.match(new RegExp('^' + start + ', ' + author + ', .*2026'));
+			};
+			check('ins', 'Insertion', 'Ann');
+			check('del', 'Deletion', 'Ben');
+			check('span[aria-description="Formatting changed"]', 'Formatting changed', 'Ann');
+		});
+	});
+
 	it('an empty paragraph reached by Down keeps a line for the caret', function () {
 		helper.typeIntoDocument('{ctrl}{home}');
 		helper.typeIntoDocument('{downarrow}{downarrow}');
