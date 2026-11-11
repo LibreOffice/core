@@ -4788,6 +4788,8 @@ void lokit_main(
             // The landlock rules attach to the directory nodes themselves, so
             // the paths have to exist before the lock-down below.
             Poco::File(tmpPath + "/user").createDirectories();
+            // Nothing is mounted in this jail, so it is removed whole, like a copied one.
+            JailUtil::markJailCopied(jailPathStr);
             FileUtil::setSysTempDirectoryPath(tmpPath);
             allowedPaths.emplace_back(tmpPath, Landlock::Access::ReadWriteDir);
             LOG_DBG("Using tmpdir [" << tmpPath << "]");

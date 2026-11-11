@@ -374,6 +374,12 @@ bool isJailCopied(const std::string& root)
     FileUtil::Stat delFileStat(root + '/' + COPIED_JAIL_MARKER_FILE);
     return delFileStat.exists();
 }
+
+/// True if the jail holds the engine installation in its lo directory, mounted or copied.
+static bool hasJailInstallation(const std::string& root)
+{
+    return FileUtil::Stat(root + '/' + LO_JAIL_SUBPATH).exists();
+}
 #endif
 
 namespace
@@ -496,8 +502,9 @@ bool tryRemoveJail(const std::string& root)
 {
 #if ENABLE_CHILDROOTS
     const bool emptyJail = FileUtil::isEmptyDirectory(root);
-    if (!emptyJail && !FileUtil::Stat(root + '/' + LO_JAIL_SUBPATH).exists())
-        return false; // not a jail.
+    const bool isJail = emptyJail || hasJailInstallation(root) || isJailCopied(root);
+    if (!isJail)
+        return false;
 
     LOG_TRC("Do remove of jail [" << root << ']');
 
