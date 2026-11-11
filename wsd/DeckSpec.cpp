@@ -13,12 +13,14 @@
 
 #include "DeckSpec.hpp"
 
+#include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 
 #include <Poco/Dynamic/Var.h>
 #include <Poco/JSON/Array.h>
 
+#include <algorithm>
 #include <cstddef>
 #include <sstream>
 #include <string>
@@ -660,6 +662,59 @@ std::optional<std::string> checkPartFitsIntent(unsigned index, const std::string
 
 namespace DeckSpec
 {
+
+Budgets budgetsFromConfig()
+{
+    Budgets budgets;
+    const int maxSlides =
+        ConfigUtil::getConfigValue<int>("ai.deck_budgets.max_slides", budgets.maxSlides);
+    budgets.maxSlides = maxSlides < 1 ? 1 : maxSlides;
+    return budgets;
+}
+
+bool isSafeDesignName(const std::string& rName)
+{
+    if (rName.empty() || rName.size() > 64)
+        return false;
+    for (const char c : rName)
+    {
+        const bool bAllowed = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+                              || (c >= '0' && c <= '9') || c == ' ' || c == '-' || c == '_';
+        if (!bAllowed)
+            return false;
+    }
+    return true;
+}
+
+std::string sanitizeArtDirection(const std::string& raw)
+{
+    std::string out;
+    out.reserve(std::min<size_t>(raw.size(), 300));
+    bool previousSpace = false;
+    for (const char c : raw)
+    {
+        const unsigned char uc = static_cast<unsigned char>(c);
+        // The cap stops the copy on a character boundary: once it is reached,
+        // the continuation bytes of the character in progress still land, and
+        // the copy ends before the next character starts. The second bound
+        // holds even when malformed input never starts a new character.
+        if ((out.size() >= 300 && (uc & 0xC0) != 0x80) || out.size() >= 304)
+            break;
+        const char ch = (uc < 0x20 || uc == 0x7F) ? ' ' : c;
+        if (ch == ' ')
+        {
+            if (out.empty() || previousSpace)
+                continue;
+            previousSpace = true;
+        }
+        else
+            previousSpace = false;
+        out += ch;
+    }
+    while (!out.empty() && out.back() == ' ')
+        out.pop_back();
+    return out;
+}
 
 std::string limitsSentence(const Budgets& budgets)
 {

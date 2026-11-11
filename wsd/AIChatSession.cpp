@@ -566,75 +566,9 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
 
 namespace
 {
-// A template or master name reaches the system prompt, so the naming contract
-// is deliberately narrow: at most 64 bytes, each an ASCII letter, digit,
-// space, hyphen, or underscore. Every place a design name crosses the process
-// boundary checks this same contract, so a change here is a change of the
-// wire contract, not of one check. The checks use explicit ASCII ranges
-// rather than std::isalnum, which follows the current locale and could admit
-// non-ASCII letters.
-bool isSafeDesignName(const std::string& rName)
-{
-    if (rName.empty() || rName.size() > 64)
-        return false;
-    for (const char c : rName)
-    {
-        const bool bAllowed = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-                              || (c >= '0' && c <= '9') || c == ' ' || c == '-' || c == '_';
-        if (!bAllowed)
-            return false;
-    }
-    return true;
-}
-
-// Read the deck-spec slide cap from configuration. It defaults to the built-in
-// DeckSpec limit and is clamped to at least 1 so a misconfigured zero or
-// negative cannot make every deck fail validation. The other limits are the
-// built-in DeckSpec constants. A template manifest may lower these further;
-// that tightening is applied by the caller.
-DeckSpec::Budgets budgetsFromConfig()
-{
-    DeckSpec::Budgets budgets;
-    const int maxSlides =
-        ConfigUtil::getConfigValue<int>("ai.deck_budgets.max_slides", budgets.maxSlides);
-    budgets.maxSlides = maxSlides < 1 ? 1 : maxSlides;
-    return budgets;
-}
-
-// The art direction comes from a template file and only ever composes an image
-// prompt, so it must not smuggle control characters or unbounded length into it.
-// Turn every control character into a space, collapse runs of whitespace to one
-// space, trim the ends, and cap the result at 300 bytes, rounded up to the end
-// of the character in progress so no multi-byte character is cut in half.
-std::string sanitizeArtDirection(const std::string& raw)
-{
-    std::string out;
-    out.reserve(std::min<size_t>(raw.size(), 300));
-    bool previousSpace = false;
-    for (const char c : raw)
-    {
-        const unsigned char uc = static_cast<unsigned char>(c);
-        // The cap stops the copy on a character boundary: once it is reached,
-        // the continuation bytes of the character in progress still land, and
-        // the copy ends before the next character starts. The second bound
-        // holds even when malformed input never starts a new character.
-        if ((out.size() >= 300 && (uc & 0xC0) != 0x80) || out.size() >= 304)
-            break;
-        const char ch = (uc < 0x20 || uc == 0x7F) ? ' ' : c;
-        if (ch == ' ')
-        {
-            if (out.empty() || previousSpace)
-                continue;
-            previousSpace = true;
-        }
-        else
-            previousSpace = false;
-        out += ch;
-    }
-    while (!out.empty() && out.back() == ' ')
-        out.pop_back();
-    return out;
-}
+using DeckSpec::budgetsFromConfig;
+using DeckSpec::isSafeDesignName;
+using DeckSpec::sanitizeArtDirection;
 }
 
 bool AIChatSession::handleAction(const std::string& firstLine)
