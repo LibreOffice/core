@@ -564,8 +564,6 @@ canvas/source/vcl/canvascustomsprite.cxx
 canvas/source/vcl/canvascustomsprite.hxx
 canvas/source/vcl/canvasfont.cxx
 canvas/source/vcl/canvasfont.hxx
-canvas/source/vcl/canvashelper.cxx
-canvas/source/vcl/canvashelper.hxx
 canvas/source/vcl/canvashelper_texturefill.cxx
 canvas/source/vcl/devicehelper.cxx
 canvas/source/vcl/devicehelper.hxx
