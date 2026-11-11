@@ -154,12 +154,6 @@ namespace canvas
         mxDevice.clear();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL ParametricPolyPolygon::getOutline( double /*t*/ )
-    {
-        // TODO(F1): outline NYI
-        return uno::Reference< rendering::XPolyPolygon2D >();
-    }
-
     uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getColor( double /*t*/ )
     {
         // TODO(F1): color NYI
