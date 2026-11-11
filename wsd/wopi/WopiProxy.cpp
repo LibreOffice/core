@@ -171,6 +171,26 @@ void WopiProxy::checkFileInfo(const std::shared_ptr<TerminatingPoll>& poll, cons
 
             auto wopiInfo = std::make_unique<WopiStorage::WOPIFileInfo>(fileInfo, object, uri);
 
+            // The document's bytes go only to a user whose host allows a clean export, and new
+            // ones come only from a user who can write (the same rules as for /co/collab):
+            if (postBody) {
+                if (!wopiInfo->getUserCanWrite() || wopiInfo->getUserCanOnlyComment()
+                    || wopiInfo->getUserCanOnlyManageRedlines())
+                {
+                    LOG_WRN(
+                        "Refusing the upload to [" << uriAnonym
+                        << "], the host allows this user no writes");
+                    HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
+                    return;
+                }
+            } else if (!wopiInfo->allowsCleanExport()) {
+                LOG_WRN(
+                    "Refusing the download of [" << uriAnonym
+                    << "], the host allows no clean export");
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
+                return;
+            }
+
             std::string url = checkFileInfo.url().toString();
 
             // If FileUrl is set, we use it for GetFile.
