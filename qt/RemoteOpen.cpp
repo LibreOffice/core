@@ -31,6 +31,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QPointer>
 #include <QSize>
 #include <QTimer>
@@ -219,13 +220,15 @@ protected:
 
 private:
     void openNewWindow(QWebEngineNewWindowRequest& request);
+    void refuseRedirect(const QUrl& target);
     void insertEmptyCoolPageScript();
     void findEditorFrame();
     void putCodaPageIn(QWebEngineFrame& frame);
     std::optional<QByteArray> callBridge(const QString& method, const QString& argumentsJson);
     void releaseParkedClose();
 
-    QUrl _integratorOrigin; ///< The origin of the account address from the backstage view.
+    QUrl _integratorOrigin; ///< The origin of the account's first page.
+    bool _firstPageLoaded = false;
     QUrl _formUrl; ///< Where the kept form went, with the frame's id as the fragment.
     QByteArray _form;
     QTimer _editorCheck;
@@ -270,6 +273,13 @@ QUrl originOf(const QUrl& url)
     if (isDefaultHttpsPort || isDefaultHttpPort)
         origin.setPort(-1);
     return origin;
+}
+
+/// The host of url without a leading "www.".
+QString siteHost(const QUrl& url)
+{
+    const QString host = url.host();
+    return host.startsWith("www.") ? host.mid(4) : host;
 }
 
 /// Other schemes would open other apps, so only web addresses go to the system browser.
@@ -367,6 +377,7 @@ CloudAccountPage::CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* pr
 
     _editorCheck.setInterval(EDITOR_CHECK_INTERVAL);
     connect(&_editorCheck, &QTimer::timeout, this, &CloudAccountPage::findEditorFrame);
+    connect(this, &QWebEnginePage::loadFinished, this, [this](bool ok) { _firstPageLoaded |= ok; });
     connect(this, &QWebEnginePage::newWindowRequested, this, &CloudAccountPage::openNewWindow);
 }
 
@@ -432,6 +443,29 @@ bool CloudAccountPage::acceptNavigationRequest(const QUrl& url, NavigationType t
     if (!isMainFrame || !isOtherSite)
         return true;
 
+    // The account address can redirect within its site: from http to https, or to and from www.
+    if (type == NavigationTypeRedirect && !_firstPageLoaded)
+    {
+        const QUrl target = originOf(url);
+        const bool isSameHost = siteHost(target) == siteHost(_integratorOrigin);
+        const bool isSamePort = target.port() == _integratorOrigin.port();
+        const bool isSameScheme = target.scheme() == _integratorOrigin.scheme();
+        const bool isFromHttp = _integratorOrigin.scheme() == "http";
+        const bool isHttpToHttps = isFromHttp && target.scheme() == "https";
+        const bool isAllowedScheme = isSameScheme || isHttpToHttps;
+
+        if (!isSameHost || !isSamePort || !isAllowedScheme)
+        {
+            LOG_WRN("account window: refused: the account address redirects to another site");
+            QTimer::singleShot(0, this, [this, target]() { refuseRedirect(target); });
+            return false;
+        }
+
+        _integratorOrigin = target;
+        LOG_INF("account window: the account address redirects within its site");
+        return true;
+    }
+
     if (type != NavigationTypeLinkClicked)
     {
         LOG_WRN("account window: refused: the window would leave the integrator's site for "
@@ -444,6 +478,19 @@ bool CloudAccountPage::acceptNavigationRequest(const QUrl& url, NavigationType t
     // Qt WebEngine stops injecting the page's scripts after it refuses a link click.
     QTimer::singleShot(0, this, &CloudAccountPage::insertEmptyCoolPageScript);
     return false;
+}
+
+/// The window would stay empty, so it says why and closes.
+void CloudAccountPage::refuseRedirect(const QUrl& target)
+{
+    QWidget* window = QWebEngineView::forPage(this)->window();
+    const QString title = QObject::tr("Account not opened");
+    const QString text = QObject::tr("%1 redirected to %2, so the account was not opened. Only a "
+                                     "redirect within the same site is followed.");
+    const QString from = _integratorOrigin.toString();
+
+    QMessageBox::warning(window, title, text.arg(from, target.toString()));
+    window->close();
 }
 
 void CloudAccountPage::insertEmptyCoolPageScript()
