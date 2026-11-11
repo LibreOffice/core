@@ -234,12 +234,8 @@ if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp || window.codaRemotePage
 		var done = function() {
 			map._nativeSaveSucceeded(ev.isAutosave);
 		};
-		if (
-			unmodified ||
-			!window.bridge ||
-			!global.collab.ws ||
-			global.collab.ws.readyState !== WebSocket.OPEN
-		) {
+		const isLocalEdit = window._codaRemoteInfo && !global.collab.switchedToServer;
+		if (unmodified || !window.bridge || !isLocalEdit) {
 			done();
 			return;
 		}

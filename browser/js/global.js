@@ -3191,6 +3191,8 @@ function showWelcomeSVG() {
 			global.collab.ws = null;
 		}
 
+		global.collab.switchedToServer = true;
+
 		// CODA-only: ask the bridge to drop its FakeSocket-to-in-
 		// process-kit pipe.  postMobileMessage must still be live at
 		// this point; muted below.  In COWASM postMobileMessage routes
