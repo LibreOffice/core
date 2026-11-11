@@ -172,11 +172,10 @@ public:
             const css::rendering::RenderState& aRenderState,
             ::sal_Int8 nTextDirection) override;
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        drawTextLayout(
-            const css::uno::Reference< css::rendering::XTextLayout >& xLayoutetText,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState) override;
+    void SAL_CALL
+    drawTextLayout(const css::uno::Reference<css::rendering::XTextLayout>& xLayoutetText,
+                   const css::rendering::ViewState& aViewState,
+                   const css::rendering::RenderState& aRenderState) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawBitmap(

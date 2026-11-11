@@ -649,10 +649,10 @@ namespace oglcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       /*pCanvas*/,
-                                                                                const uno::Reference< rendering::XTextLayout >& xLayoutetText,
-                                                                                const rendering::ViewState&                     viewState,
-                                                                                const rendering::RenderState&                   renderState )
+    void CanvasHelper::drawTextLayout(const rendering::XCanvas* /*pCanvas*/,
+                                      const uno::Reference<rendering::XTextLayout>& xLayoutetText,
+                                      const rendering::ViewState& viewState,
+                                      const rendering::RenderState& renderState)
     {
         ENSURE_OR_THROW( xLayoutetText.is(),
                           "CanvasHelper::drawTextLayout: text is NULL");
@@ -739,9 +739,6 @@ namespace oglcanvas
                 rAct.maFunction = &lcl_fillPolyPolygon;
             }
         }
-
-        // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   /*pCanvas*/,

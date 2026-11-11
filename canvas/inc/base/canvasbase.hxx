@@ -280,10 +280,10 @@ public:
         return maCanvasHelper.drawText(this, text, xFont, viewState, renderState, textDirection);
     }
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive>
-        SAL_CALL drawTextLayout(const css::uno::Reference<css::rendering::XTextLayout>& laidOutText,
-                                const css::rendering::ViewState& viewState,
-                                const css::rendering::RenderState& renderState) override
+    virtual void SAL_CALL
+    drawTextLayout(const css::uno::Reference<css::rendering::XTextLayout>& laidOutText,
+                   const css::rendering::ViewState& viewState,
+                   const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(laidOutText, viewState, renderState, __func__,
                                 static_cast<cppu::OWeakObject*>(this));
@@ -292,7 +292,7 @@ public:
 
         mbSurfaceDirty = true;
 
-        return maCanvasHelper.drawTextLayout(this, laidOutText, viewState, renderState);
+        maCanvasHelper.drawTextLayout(this, laidOutText, viewState, renderState);
     }
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive>

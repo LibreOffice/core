@@ -236,15 +236,12 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         aText, xFont, MergeViewState(aViewState), aRenderState, nTextDirection);
 }
 
-css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        PresenterCanvas::drawTextLayout(
-            const css::uno::Reference< css::rendering::XTextLayout >& xLayoutetText,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState)
+void SAL_CALL PresenterCanvas::drawTextLayout(
+    const css::uno::Reference<css::rendering::XTextLayout>& xLayoutetText,
+    const css::rendering::ViewState& aViewState, const css::rendering::RenderState& aRenderState)
 {
     ThrowIfDisposed();
-    return mxSharedCanvas->drawTextLayout(
-        xLayoutetText, MergeViewState(aViewState), aRenderState);
+    mxSharedCanvas->drawTextLayout(xLayoutetText, MergeViewState(aViewState), aRenderState);
 }
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL

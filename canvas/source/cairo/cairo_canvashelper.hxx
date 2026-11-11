@@ -132,11 +132,10 @@ public:
              const css::rendering::ViewState& viewState,
              const css::rendering::RenderState& renderState, sal_Int8 textDirection);
 
-    css::uno::Reference<css::rendering::XCachedPrimitive>
-    drawTextLayout(const css::rendering::XCanvas* pCanvas,
-                   const css::uno::Reference<css::rendering::XTextLayout>& laidOutText,
-                   const css::rendering::ViewState& viewState,
-                   const css::rendering::RenderState& renderState);
+    void drawTextLayout(const css::rendering::XCanvas* pCanvas,
+                        const css::uno::Reference<css::rendering::XTextLayout>& laidOutText,
+                        const css::rendering::ViewState& viewState,
+                        const css::rendering::RenderState& renderState);
 
     css::uno::Reference<css::rendering::XCachedPrimitive>
     drawBitmap(const css::rendering::XCanvas* pCanvas,

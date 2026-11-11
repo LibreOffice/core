@@ -97,10 +97,11 @@ namespace dxcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > BitmapCanvasHelper::drawTextLayout( const rendering::XCanvas*                       /*pCanvas*/,
-                                                                                      const uno::Reference< rendering::XTextLayout >& xLayoutetText,
-                                                                                      const rendering::ViewState&                     viewState,
-                                                                                      const rendering::RenderState&                   renderState )
+    void
+    BitmapCanvasHelper::drawTextLayout(const rendering::XCanvas* /*pCanvas*/,
+                                       const uno::Reference<rendering::XTextLayout>& xLayoutetText,
+                                       const rendering::ViewState& viewState,
+                                       const rendering::RenderState& renderState)
     {
         ENSURE_OR_THROW( xLayoutetText.is(),
                           "BitmapCanvasHelper::drawTextLayout: layout is NULL");
@@ -120,8 +121,6 @@ namespace dxcanvas
                                mpDevice,
                                mpTarget->hasAlpha() );
         }
-
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     void BitmapCanvasHelper::copyRect( const rendering::XCanvas*                            /*pCanvas*/,

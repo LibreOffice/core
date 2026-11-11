@@ -241,9 +241,10 @@ CanvasHelper::drawText(const rendering::XCanvas* pOwner, const rendering::String
     return uno::Reference<rendering::XCachedPrimitive>(nullptr);
 }
 
-uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawTextLayout(
-    const rendering::XCanvas* pOwner, const uno::Reference<rendering::XTextLayout>& xLayoutedText,
-    const rendering::ViewState& viewState, const rendering::RenderState& renderState)
+void CanvasHelper::drawTextLayout(const rendering::XCanvas* pOwner,
+                                  const uno::Reference<rendering::XTextLayout>& xLayoutedText,
+                                  const rendering::ViewState& viewState,
+                                  const rendering::RenderState& renderState)
 {
     ENSURE_ARG_OR_THROW(xLayoutedText.is(), "CanvasHelper::drawTextLayout(): layout is NULL");
 
@@ -266,7 +267,7 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawTextLayout(
             ::Point aOutpos;
             if (!setupTextOutput(*mpVirtualDevice, pOwner, aOutpos, viewState, renderState,
                                  xLayoutedText->getFont()))
-                return uno::Reference<rendering::XCachedPrimitive>(nullptr); // no output necessary
+                return;
 
             // TODO(F2): What about the offset scalings?
             pTextLayout->draw(*mpVirtualDevice, aOutpos, viewState, renderState);
@@ -277,8 +278,6 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawTextLayout(
         ENSURE_ARG_OR_THROW(
             false, "CanvasHelper::drawTextLayout(): TextLayout not compatible with this canvas");
     }
-
-    return uno::Reference<rendering::XCachedPrimitive>(nullptr);
 }
 }
 

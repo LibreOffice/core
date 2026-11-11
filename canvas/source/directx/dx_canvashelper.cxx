@@ -504,10 +504,10 @@ namespace dxcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       /*pCanvas*/,
-                                                                                const uno::Reference< rendering::XTextLayout >& xLayoutetText,
-                                                                                const rendering::ViewState&                     viewState,
-                                                                                const rendering::RenderState&                   renderState )
+    void CanvasHelper::drawTextLayout(const rendering::XCanvas* /*pCanvas*/,
+                                      const uno::Reference<rendering::XTextLayout>& xLayoutetText,
+                                      const rendering::ViewState& viewState,
+                                      const rendering::RenderState& renderState)
     {
         ENSURE_OR_THROW( xLayoutetText.is(),
                           "CanvasHelper::drawTextLayout: layout is NULL");
@@ -527,8 +527,6 @@ namespace dxcanvas
                                mpDevice,
                                false );
         }
-
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   /*pCanvas*/,

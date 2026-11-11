@@ -522,9 +522,10 @@ CanvasHelper::drawText(const rendering::XCanvas*, const rendering::StringContext
     return uno::Reference<rendering::XCachedPrimitive>(nullptr);
 }
 
-uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawTextLayout(
-    const rendering::XCanvas*, const uno::Reference<rendering::XTextLayout>& xLayoutedText,
-    const rendering::ViewState& viewState, const rendering::RenderState& renderState)
+void CanvasHelper::drawTextLayout(const rendering::XCanvas*,
+                                  const uno::Reference<rendering::XTextLayout>& xLayoutedText,
+                                  const rendering::ViewState& viewState,
+                                  const rendering::RenderState& renderState)
 {
     ENSURE_ARG_OR_THROW(xLayoutedText.is(), "layout is NULL");
 
@@ -543,7 +544,7 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawTextLayout(
 
             ::Point aOutpos;
             if (!setupTextOutput(aOutpos, viewState, renderState, xLayoutedText->getFont()))
-                return uno::Reference<rendering::XCachedPrimitive>(nullptr); // no output necessary
+                return;
 
             // TODO(F2): What about the offset scalings?
             // TODO(F2): alpha
@@ -558,8 +559,6 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawTextLayout(
     {
         ENSURE_ARG_OR_THROW(false, "TextLayout not compatible with this canvas");
     }
-
-    return uno::Reference<rendering::XCachedPrimitive>(nullptr);
 }
 
 uno::Reference<rendering::XCachedPrimitive>
