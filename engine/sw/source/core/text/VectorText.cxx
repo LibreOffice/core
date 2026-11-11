@@ -83,10 +83,10 @@ const SwViewOption& optionsForAnyView()
 }
 
 TextSink::TextSink(const Point& rOrigin, const SwRect& rTextArea,
-                   drawinglayer::primitive2d::TextPortionAlign eAlign, bool bForView)
+                   drawinglayer::primitive2d::TextPortionAlign eAlign, const Context& rContext)
     : maOrigin(rOrigin)
     , maTextArea(rTextArea)
-    , mbForView(bForView)
+    , mrContext(rContext)
     , mbParagraph(true)
 {
     // A text frame shows a single paragraph.
@@ -96,9 +96,9 @@ TextSink::TextSink(const Point& rOrigin, const SwRect& rTextArea,
     maLayout.mfTextAreaHeight = rTextArea.Height();
 }
 
-TextSink::TextSink(const Point& rOrigin, bool bForView)
+TextSink::TextSink(const Point& rOrigin, const Context& rContext)
     : maOrigin(rOrigin)
-    , mbForView(bForView)
+    , mrContext(rContext)
     , mbParagraph(false)
 {
 }
@@ -140,7 +140,7 @@ void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, cons
     aState.maTextColor = rDevice.GetTextColor().getBColor();
     // Text left in the automatic color stays automatic, which means the color that reads on the
     // paper under it.
-    if (!mbForView && rDevice.GetFont().GetColor() == COL_AUTO)
+    if (!mrContext.isForView() && rDevice.GetFont().GetColor() == COL_AUTO)
     {
         aState.maTextColor = basegfx::BColor();
         aState.maTextColor.setAutomatic(true);

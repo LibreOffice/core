@@ -14,6 +14,7 @@
 
 #include <IDocumentDrawModelAccess.hxx>
 #include <anchoredobject.hxx>
+#include <dflyobj.hxx>
 #include <doc.hxx>
 #include <flyfrm.hxx>
 #include <fmtanchr.hxx>
@@ -42,7 +43,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstdlib>
 #include <string_view>
 
 namespace sw::vector
@@ -301,7 +301,7 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
     rCollector.open(entryIdOf(*pObject), EntryKind::Shape, aBox);
     rCollector.current().moAnchor = anchorOf(rObject);
     // A view draws the entries right away and compares nothing, so it needs no decomposition.
-    if (!rCollector.isForView())
+    if (!rCollector.context().isForView())
         svx::vector::decomposeForComparison(aPrimitives, rCollector.current().maDrawn,
                                             drawinglayer::geometry::ViewInformation2D());
     rCollector.add(new drawinglayer::primitive2d::TransformPrimitive2D(
@@ -321,32 +321,38 @@ ObjectPlace placeOf(SdrLayerID nLayer, const IDocumentDrawModelAccess& rAccess)
 }
 
 /// Whether the paint draws rObject, judged from the layout and the document alone. The object
-/// has to be visible and on a visible layer, and set to print unless bForView is set, since a
-/// view also shows what is not printed. A fly has to overlap its page, a drawing object needs a
+/// has to be visible and on a visible layer, and set to print unless rContext is for a view,
+/// since a view also shows what is not printed. The object that stands for all the frames of a
+/// fly format is never drawn, as each of those frames has an object of its own. Every object
+/// needs the frame it is anchored at. A fly has to overlap its page, a drawing object needs a
 /// valid position of the frame it is anchored at, and an object anchored in a fly is drawn only
 /// when that fly is.
 bool isDrawn(const SwAnchoredObject& rObject, const IDocumentDrawModelAccess& rAccess,
-             bool bForView)
+             const Context& rContext)
 {
     const SdrObject* pDrawObject = rObject.GetDrawObj();
     if (!pDrawObject || !rAccess.IsVisibleLayerId(pDrawObject->GetLayer())
         || !pDrawObject->IsVisible())
         return false;
-    if (!bForView && !rObject.GetFrameFormat()->GetPrint().GetValue())
+    if (!rContext.isForView() && !rObject.GetFrameFormat()->GetPrint().GetValue())
+        return false;
+    if (dynamic_cast<const SwFlyDrawObj*>(pDrawObject))
         return false;
 
     const SwFrame* pAnchor = rObject.GetAnchorFrame();
+    if (!pAnchor)
+        return false;
     if (const SwFlyFrame* pFly = rObject.DynCastFlyFrame())
     {
         const SwPageFrame* pPage = pFly->FindPageFrame();
         if (!pPage || !pPage->getFrameArea().Overlaps(pFly->getFrameArea()))
             return false;
     }
-    else if (!pAnchor || !pAnchor->isFrameAreaPositionValid())
+    else if (!pAnchor->isFrameAreaPositionValid())
         return false;
 
-    if (const SwFlyFrame* pAnchorFly = pAnchor ? pAnchor->FindFlyFrame() : nullptr)
-        return isDrawn(*pAnchorFly, rAccess, bForView);
+    if (const SwFlyFrame* pAnchorFly = pAnchor->FindFlyFrame())
+        return isDrawn(*pAnchorFly, rAccess, rContext);
     return true;
 }
 
@@ -358,7 +364,7 @@ void addObjects(Collector& rCollector, const SwSortedObjs& rObjects,
     std::vector<const SwAnchoredObject*> aObjects;
     for (const SwAnchoredObject* pObject : rObjects)
     {
-        if (!isDrawn(*pObject, rAccess, rCollector.isForView()))
+        if (!isDrawn(*pObject, rAccess, rCollector.context()))
             continue;
         if (bAsCharacter
             && pObject->GetFrameFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
@@ -475,55 +481,6 @@ std::vector<Entry> decomposePage(const SwPageFrame& rPage)
     Collector aCollector;
     rPage.CreatePrimitives(aCollector);
     return aCollector.take();
-}
-
-namespace
-{
-bool& tilesFromPrimitivesFlag()
-{
-    // An empty value and "0" leave the switch off, as when the variable is not set.
-    static bool bFromPrimitives = [] {
-        const char* pValue = std::getenv("SW_TILES_FROM_PRIMITIVES");
-        return pValue && *pValue && std::string_view(pValue) != "0";
-    }();
-    return bFromPrimitives;
-}
-}
-
-bool tilesFromPrimitives() { return tilesFromPrimitivesFlag(); }
-
-void setTilesFromPrimitives(bool bFromPrimitives) { tilesFromPrimitivesFlag() = bFromPrimitives; }
-
-drawinglayer::primitive2d::Primitive2DContainer
-createAreaPrimitives(const SwRootFrame& rLayout, const SwRect& rArea, const Color& rPaper)
-{
-    drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
-    for (const SwFrame* pFrame = rLayout.Lower(); pFrame; pFrame = pFrame->GetNext())
-    {
-        if (!pFrame->IsPageFrame() || !pFrame->getFrameArea().Overlaps(rArea))
-            continue;
-
-        // The paper is opaque, whatever transparency its color names.
-        addColorFill(aPrimitives,
-                     basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
-                         rangeRelativeTo(pFrame->getFrameArea(), Point()))),
-                     rPaper.GetRGBColor());
-        // Every tile builds what it shows anew, so it builds only the frames and the objects
-        // that reach into its area.
-        Collector aCollector(/*bForView=*/true);
-        aCollector.setArea(rArea);
-        pFrame->CreatePrimitives(aCollector);
-        for (Entry& rEntry : aCollector.take())
-        {
-            if (rEntry.maPrimitives.empty())
-                continue;
-            aPrimitives.push_back(new drawinglayer::primitive2d::TransformPrimitive2D(
-                basegfx::utils::createTranslateB2DHomMatrix(rEntry.maBox.Left(),
-                                                            rEntry.maBox.Top()),
-                std::move(rEntry.maPrimitives)));
-        }
-    }
-    return aPrimitives;
 }
 }
 

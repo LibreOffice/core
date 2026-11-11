@@ -57,6 +57,7 @@
 #include <sectfrm.hxx>
 #include <rootfrm.hxx>
 #include "inftxt.hxx"
+#include <VectorContext.hxx>
 #include <VectorText.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <noteurl.hxx>
@@ -578,8 +579,8 @@ SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint,
     CtorInitTextPaintInfo( &pFrame->getRootFrame()->GetCurrShell()->GetRefDev(), pFrame, rPaint );
     m_pPrimitiveSink = &rSink;
     // Text drawn for any client takes the same options whichever view is the current one.
-    if (!rSink.isForView())
-        m_pOpt = &sw::vector::optionsForAnyView();
+    if (!rSink.context().isForView())
+        m_pOpt = &rSink.context().options();
     SetOnWin( false );
 }
 

@@ -142,6 +142,7 @@ enum class RndStdIds;
 class SwMarkName;
 
 namespace sw::mark { class MarkManager; }
+namespace sw::vector { class PartStore; }
 namespace sw {
     enum class RedlineMode;
     enum class FieldmarkMode;
@@ -309,6 +310,10 @@ private:
 
     /// Redlines whose COKit notification waits for a settled layout, by redline id
     std::unordered_map<sal_uInt32, RedlineNotification> m_aPendingKitRedlineNotifications;
+
+    /// What the clients that draw the pages from vector primitives were served. Made when the
+    /// first such client asks.
+    std::unique_ptr<sw::vector::PartStore> m_pVectorParts;
 
     // other
 
@@ -502,6 +507,11 @@ public:
     void DropPendingKitRedlineNotification(sal_uInt32 nRedlineId);
     /// Sends what AddPendingKitRedlineNotification held back, the layout now being settled
     void FlushPendingKitRedlineNotifications();
+
+    /// The vector parts of the document, or nullptr while no client asked for one.
+    sw::vector::PartStore* GetVectorParts() const { return m_pVectorParts.get(); }
+    /// The vector parts of the document, made when there are none yet.
+    SW_DLLPUBLIC sw::vector::PartStore& EnsureVectorParts();
 
     // IDocumentUndoRedo
     SW_DLLPUBLIC IDocumentUndoRedo      & GetIDocumentUndoRedo();

@@ -17,6 +17,8 @@
 #include <swdllapi.h>
 #include <swrect.hxx>
 
+#include "VectorContext.hxx"
+
 #include <optional>
 #include <string_view>
 #include <vector>
@@ -120,23 +122,19 @@ struct SW_DLLPUBLIC Entry
 class SW_DLLPUBLIC Collector
 {
 public:
-    /// With bForView set, the entries are drawn for the view being painted only, and the
-    /// settings of that view decide the colors of the text. Otherwise the entries can go to any
-    /// client, and the text that has the automatic color keeps it.
-    explicit Collector(bool bForView = false)
-        : mbForView(bForView)
+    /// rContext says what the entries are for: any client, or one view. An area set on it limits
+    /// the entries to what reaches into that area. A frame whose paint area misses it is left out
+    /// with its lowers, as in the frame paint, and so is a drawing object whose bounds miss it.
+    explicit Collector(const Context& rContext = Context())
+        : maContext(rContext)
     {
     }
 
-    bool isForView() const { return mbForView; }
-
-    /// Limits the entries to what reaches into rArea, in document twips. A frame whose paint area
-    /// misses it is left out with its lowers, as in the frame paint, and so is a drawing object
-    /// whose bounds miss it.
-    void setArea(const SwRect& rArea) { moArea = rArea; }
+    /// What the entries are for.
+    const Context& context() const { return maContext; }
 
     /// Whether what is drawn within rBounds, in document twips, belongs to the entries.
-    bool wants(const SwRect& rBounds) const { return !moArea || moArea->Overlaps(rBounds); }
+    bool wants(const SwRect& rBounds) const { return maContext.wants(rBounds); }
 
     /// Opens the entry of rFrame inside the entry that is open now.
     void open(const SwFrame& rFrame);
@@ -173,7 +171,7 @@ public:
     void closeBorderLayer();
 
 private:
-    bool mbForView;
+    Context maContext;
     std::vector<Entry> maEntries;
     /// Indexes into maEntries of the entries open now, the innermost last.
     std::vector<size_t> maOpen;
@@ -181,8 +179,6 @@ private:
     std::vector<Entry> maBorders;
     /// Indexes into maBorders where the layers open now start, the innermost last.
     std::vector<size_t> maBorderLayers;
-    /// The area the entries are limited to, in document twips. None for the whole page.
-    std::optional<SwRect> moArea;
 };
 
 /// The range of rArea, which is in document twips, relative to rOrigin.
@@ -227,18 +223,6 @@ SW_DLLPUBLIC const SwFrame* frameOf(const SwRootFrame& rLayout, sal_uInt64 nId,
 
 /// The entries of rPage in paint order, the page first.
 SW_DLLPUBLIC std::vector<Entry> decomposePage(const SwPageFrame& rPage);
-
-/// Whether tiles are painted from the decomposition of the pages rather than by the paint code
-/// of the frames. Off unless the environment variable SW_TILES_FROM_PRIMITIVES is set to a value
-/// other than an empty one or "0".
-SW_DLLPUBLIC bool tilesFromPrimitives();
-SW_DLLPUBLIC void setTilesFromPrimitives(bool bFromPrimitives);
-
-/** What lies in rArea, in document twips: for each page that overlaps the area, its paper and the
-    entries that reach into the area, each placed on its box. Nothing is drawn between the pages.
- */
-SW_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer
-createAreaPrimitives(const SwRootFrame& rLayout, const SwRect& rArea, const Color& rPaper);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

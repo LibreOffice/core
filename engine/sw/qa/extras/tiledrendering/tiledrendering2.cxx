@@ -47,7 +47,6 @@
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <VectorCollector.hxx>
 #include <VectorPart.hxx>
 #include <itabenum.hxx>
 
@@ -5662,10 +5661,11 @@ namespace
 Bitmap paintOneTile(SwXTextDocument* pXTextDocument, bool bFromPrimitives, int nTilePosX,
                     int nTilePosY, tools::Long nTileSize)
 {
-    const bool bWasFromPrimitives = sw::vector::tilesFromPrimitives();
-    sw::vector::setTilesFromPrimitives(bFromPrimitives);
+    SwViewShell* pShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    const bool bWasFromPrimitives = pShell->IsTilesFromPrimitives();
+    pShell->SetTilesFromPrimitives(bFromPrimitives);
     comphelper::ScopeGuard aGuard(
-        [bWasFromPrimitives] { sw::vector::setTilesFromPrimitives(bWasFromPrimitives); });
+        [pShell, bWasFromPrimitives] { pShell->SetTilesFromPrimitives(bWasFromPrimitives); });
     const tools::Long nSize = 512;
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     std::vector<unsigned char> aPixmap(nSize * nSize * 4, 0);

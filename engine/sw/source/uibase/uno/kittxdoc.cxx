@@ -1508,33 +1508,42 @@ void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
 
     // The store holds the graphics and fonts of the pages it served, so it is made by the first
     // request for a page.
-    if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"sv) && !m_pVectorParts)
+    SwDoc* pDoc = m_pDocShell->GetDoc();
+    sw::vector::PartStore* pParts = pDoc->GetVectorParts();
+    if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"sv) && !pParts)
     {
-        m_pVectorParts = std::make_unique<sw::vector::PartStore>();
-        m_pVectorParts->recordPageIds(*pLayout);
+        pParts = &pDoc->EnsureVectorParts();
+        pParts->recordPageIds(*pLayout);
     }
-    if (!m_pVectorParts)
+    if (!pParts)
         return;
 
     svx::vector::answerPartCommand(
-        rJsonWriter, rCommand, m_pVectorParts->getResources(),
-        [this, &rJsonWriter, pLayout](const svx::vector::PartRequest& rRequest) {
-            m_pVectorParts->write(rJsonWriter, *pLayout, rRequest.maPartId,
-                                  rRequest.mnSinceVersion, /*bPush=*/false);
+        rJsonWriter, rCommand, pParts->getResources(),
+        [pParts, &rJsonWriter, pLayout](const svx::vector::PartRequest& rRequest) {
+            pParts->write(rJsonWriter, *pLayout, rRequest.maPartId, rRequest.mnSinceVersion,
+                          /*bPush=*/false);
         },
-        [this](std::string_view rPartId) { m_pVectorParts->forget(rPartId); });
+        [pParts](std::string_view rPartId) { pParts->forget(rPartId); });
+}
+
+sw::vector::PartStore* SwXTextDocument::getVectorParts() const
+{
+    const SwDoc* pDoc = m_pDocShell ? m_pDocShell->GetDoc() : nullptr;
+    return pDoc ? pDoc->GetVectorParts() : nullptr;
 }
 
 void SwXTextDocument::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
                                                 std::string_view rPartId, int nMode)
 {
-    if (!m_pVectorParts || nMode != sw::vector::constModePrintLayout)
+    sw::vector::PartStore* pParts = getVectorParts();
+    if (!pParts || nMode != sw::vector::constModePrintLayout)
         return;
     SwWrtShell* pShell = m_pDocShell ? m_pDocShell->GetWrtShell() : nullptr;
     const SwRootFrame* pLayout = pShell ? pShell->GetLayout() : nullptr;
     if (!pLayout)
         return;
-    m_pVectorParts->write(rJsonWriter, *pLayout, rPartId, /*nSinceVersion=*/-1, /*bPush=*/true);
+    pParts->write(rJsonWriter, *pLayout, rPartId, /*nSinceVersion=*/-1, /*bPush=*/true);
 }
 
 bool SwXTextDocument::setKitTextCursor(SfxViewShell& rViewShell, sal_uInt64 nObject,

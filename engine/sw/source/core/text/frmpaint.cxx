@@ -49,6 +49,7 @@
 #include <vcl/lineinfo.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <frmtool.hxx>
+#include <VectorContext.hxx>
 #include <VectorText.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -350,7 +351,8 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 }
 
 drawinglayer::primitive2d::Primitive2DContainer
-SwTextFrame::CreateExtraDataPrimitives(const Point& rOrigin, bool bForView) const
+SwTextFrame::CreateExtraDataPrimitives(const Point& rOrigin,
+                                       const sw::vector::Context& rContext) const
 {
     drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
     if ( !getRootFrame()->GetCurrShell() || !::IsExtraData( GetDoc() ) )
@@ -371,7 +373,7 @@ SwTextFrame::CreateExtraDataPrimitives(const Point& rOrigin, bool bForView) cons
     if ( const SwPageFrame* pPage = FindPageFrame() )
         aDrawArea.Union( pPage->getFrameArea() );
 
-    sw::vector::TextSink aSink(rOrigin, bForView);
+    sw::vector::TextSink aSink(rOrigin, rContext);
     DrawExtraData( aDrawArea, &aSink );
     return aSink.take();
 }
@@ -467,8 +469,8 @@ void SwTextFrame::DrawExtraData( const SwRect &rRect, sw::vector::TextSink* pSin
         tools::Long nBottom = rRect.Bottom();
 
         // The marks drawn for any client take the same options whichever view is the current one.
-        const SwViewOption& rOptions = pSink && !pSink->isForView()
-                                           ? sw::vector::optionsForAnyView()
+        const SwViewOption& rOptions = pSink && !pSink->context().isForView()
+                                           ? pSink->context().options()
                                            : *pSh->GetViewOptions();
         const bool bIsShowChangesInMargin = rOptions.IsShowChangesInMargin();
         do
@@ -921,7 +923,7 @@ drawinglayer::primitive2d::TextPortionAlign alignOf(const SwTextFrame& rFrame)
 
 drawinglayer::primitive2d::Primitive2DContainer
 SwTextFrame::CreateTextPrimitives(
-    const Point& rOrigin, bool bForView,
+    const Point& rOrigin, const sw::vector::Context& rContext,
     drawinglayer::primitive2d::Primitive2DContainer& rOverObjects) const
 {
     drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
@@ -974,7 +976,7 @@ SwTextFrame::CreateTextPrimitives(
         SwRect aTextArea(getFramePrintArea());
         aTextArea.Pos(aTextArea.Pos() + getFrameArea().Pos());
 
-        sw::vector::TextSink aSink(rOrigin, aTextArea, alignOf(*this), bForView);
+        sw::vector::TextSink aSink(rOrigin, aTextArea, alignOf(*this), rContext);
         SwTextPaintInfo aInfo(pThis, aDrawArea, aSink);
         aInfo.GetTextFly().SetTopRule();
 

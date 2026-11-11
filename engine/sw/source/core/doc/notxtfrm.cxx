@@ -1545,7 +1545,7 @@ void SwNoTextFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
 
     rCollector.open(*this);
     const Point aOrigin(rCollector.origin());
-    rCollector.add(CreateBackgroundPrimitives(aOrigin));
+    rCollector.add(CreateBackgroundPrimitives(aOrigin, rCollector.context()));
     rCollector.add(CreateContentPrimitives(aOrigin));
     rCollector.close();
 }
@@ -1600,6 +1600,8 @@ SwNoTextFrame::CreateContentPrimitives(const Point& rOrigin) const
             pGrfNd->SetFrameInPaint(false);
     });
 
+    // bPicture is true when the content is a picture that can be shown.
+    bool bPicture = false;
     if (pGrfNd)
     {
         const GraphicObject& rGraphicObject = pGrfNd->GetGrfObj();
@@ -1622,6 +1624,7 @@ SwNoTextFrame::CreateContentPrimitives(const Point& rOrigin) const
             pGrfNd->GetGraphicAttr(aGraphicAttr, this);
             aPrimitives.push_back(new drawinglayer::primitive2d::GraphicPrimitive2D(
                 aToLocal * getFrameAreaTransformation(), rGraphicObject, aGraphicAttr));
+            bPicture = true;
         }
     }
     // The embedded object loads its content and its replacement picture when asked for them,
@@ -1681,6 +1684,23 @@ SwNoTextFrame::CreateContentPrimitives(const Point& rOrigin) const
             new drawinglayer::primitive2d::MaskPrimitive2D(std::move(aMask),
                                                            std::move(aPrimitives))
         };
+    }
+
+    // A picture with a name, a title or a description carries them around its content, as when
+    // painted.
+    if (bPicture)
+    {
+        const OUString sName(pGrfNd->GetFlyFormat() ? pGrfNd->GetFlyFormat()->GetName().toString()
+                                                    : OUString());
+        const OUString sTitle(rNoTNd.GetTitle());
+        const OUString sDescription(rNoTNd.GetDescription());
+        if (!sName.isEmpty() || !sTitle.isEmpty() || !sDescription.isEmpty())
+        {
+            aPrimitives = drawinglayer::primitive2d::Primitive2DContainer{
+                new drawinglayer::primitive2d::ObjectInfoPrimitive2D(std::move(aPrimitives), sName,
+                                                                     sTitle, sDescription)
+            };
+        }
     }
     return aPrimitives;
 }

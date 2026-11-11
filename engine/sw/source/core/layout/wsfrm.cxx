@@ -4993,7 +4993,7 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
     const bool bBorderLayer = IsPageFrame() || IsFlyFrame();
     if (bBorderLayer)
         rCollector.openBorderLayer();
-    rCollector.add(CreateBackgroundPrimitives(aOrigin));
+    rCollector.add(CreateBackgroundPrimitives(aOrigin, rCollector.context()));
     drawinglayer::primitive2d::Primitive2DContainer aBorders;
     rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
     // The separator lines between the columns lie over the content of the columns, as the border

@@ -88,7 +88,12 @@
 #include <VectorPart.hxx>
 #include <VectorCollector.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
@@ -98,6 +103,9 @@
 
 #include <frameformats.hxx>
 #include <fmtcntnt.hxx>
+
+#include <cstdlib>
+#include <string_view>
 
 bool SwViewShell::sbLstAct = false;
 ShellResource *SwViewShell::spShellRes = nullptr;
@@ -756,8 +764,7 @@ void lcl_NotifyVectorParts(const SwViewShell& rShell, const SwRegionRects& rArea
     if (!pDocShell || !pLayout)
         return;
 
-    const rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-    sw::vector::PartStore* pParts = xModel.is() ? xModel->getVectorParts() : nullptr;
+    sw::vector::PartStore* pParts = rShell.GetDoc()->GetVectorParts();
     if (!pParts)
         return;
 
@@ -774,6 +781,9 @@ void lcl_NotifyVectorParts(const SwViewShell& rShell, const SwRegionRects& rArea
     // A new page frame can replace an old one and keep the document size. A change of the page ids
     // still goes out to every view as a document size change, with no tile invalidation.
     if (!pParts->recordPageIds(*pLayout))
+        return;
+    const rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
+    if (!xModel.is())
         return;
     const OString sPayload = lcl_DocumentSizePayload(rShell);
     for (SfxViewShell* pView = SfxViewShell::GetFirst(false); pView;
@@ -1962,6 +1972,57 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     }
 }
 
+bool SwViewShell::TilesFromPrimitivesByDefault()
+{
+    static const bool bFromPrimitives = [] {
+        const char* pValue = std::getenv("SW_TILES_FROM_PRIMITIVES");
+        return pValue && *pValue && std::string_view(pValue) != "0";
+    }();
+    return bFromPrimitives;
+}
+
+namespace
+{
+/// What the view of rShell shows in rArea, in document twips: for each page that overlaps the
+/// area, its paper in rPaper and the entries that reach into the area, each placed on its box.
+/// The area between the pages stays empty.
+drawinglayer::primitive2d::Primitive2DContainer
+lcl_CreateAreaPrimitives(const SwViewShell& rShell, const SwRootFrame& rLayout,
+                         const SwRect& rArea, const Color& rPaper)
+{
+    // Every tile builds what it shows again at each paint, so it builds only the frames and the
+    // objects that reach into its area.
+    sw::vector::Context aContext(rShell);
+    aContext.setArea(rArea);
+
+    drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+    for (const SwFrame* pFrame = rLayout.Lower(); pFrame; pFrame = pFrame->GetNext())
+    {
+        if (!pFrame->IsPageFrame() || !pFrame->getFrameArea().Overlaps(rArea))
+            continue;
+
+        // The paper is opaque, whatever transparency its color names.
+        sw::vector::addColorFill(
+            aPrimitives,
+            basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
+                sw::vector::rangeRelativeTo(pFrame->getFrameArea(), Point()))),
+            rPaper.GetRGBColor());
+        sw::vector::Collector aCollector(aContext);
+        pFrame->CreatePrimitives(aCollector);
+        for (sw::vector::Entry& rEntry : aCollector.take())
+        {
+            if (rEntry.maPrimitives.empty())
+                continue;
+            aPrimitives.push_back(new drawinglayer::primitive2d::TransformPrimitive2D(
+                basegfx::utils::createTranslateB2DHomMatrix(rEntry.maBox.Left(),
+                                                            rEntry.maBox.Top()),
+                std::move(rEntry.maPrimitives)));
+        }
+    }
+    return aPrimitives;
+}
+}
+
 void SwViewShell::PaintFromPrimitives(OutputDevice& rDevice, const tools::Rectangle& rRect)
 {
     const SwRootFrame* pLayout = GetLayout();
@@ -1987,7 +2048,7 @@ void SwViewShell::PaintFromPrimitives(OutputDevice& rDevice, const tools::Rectan
     // The tile holds only what the pages draw, and the area between the pages stays empty.
     const SwRect aArea(rRect);
     const drawinglayer::primitive2d::Primitive2DContainer aPrimitives
-        = sw::vector::createAreaPrimitives(*pLayout, aArea, GetViewOptions()->GetDocColor());
+        = lcl_CreateAreaPrimitives(*this, *pLayout, aArea, GetViewOptions()->GetDocColor());
 
     drawinglayer::geometry::ViewInformation2D aViewInformation;
     aViewInformation.setViewTransformation(rDevice.GetViewTransformation());
@@ -2058,7 +2119,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     CheckInvalidForPaint(SwRect(aOutRect));
 
     // draw - works in logic coordinates
-    if (sw::vector::tilesFromPrimitives())
+    if (mbTilesFromPrimitives)
         PaintFromPrimitives(rDevice, aOutRect);
     else
         Paint(rDevice, aOutRect);

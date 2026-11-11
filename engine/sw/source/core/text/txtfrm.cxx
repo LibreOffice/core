@@ -4377,12 +4377,12 @@ void SwTextFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
 
     rCollector.open(*this);
     const Point aOrigin(rCollector.origin());
-    rCollector.add(CreateBackgroundPrimitives(aOrigin));
+    rCollector.add(CreateBackgroundPrimitives(aOrigin, rCollector.context()));
     drawinglayer::primitive2d::Primitive2DContainer aBorders;
     rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
     drawinglayer::primitive2d::Primitive2DContainer aOverObjects;
-    rCollector.add(CreateTextPrimitives(aOrigin, rCollector.isForView(), aOverObjects));
-    rCollector.add(CreateExtraDataPrimitives(aOrigin, rCollector.isForView()));
+    rCollector.add(CreateTextPrimitives(aOrigin, rCollector.context(), aOverObjects));
+    rCollector.add(CreateExtraDataPrimitives(aOrigin, rCollector.context()));
     // The entry of the border lines comes after the objects anchored as a character, so it also
     // holds what lies over them.
     aBorders.append(std::move(aOverObjects));

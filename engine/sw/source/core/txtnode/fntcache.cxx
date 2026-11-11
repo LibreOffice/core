@@ -39,6 +39,7 @@
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <fntcache.hxx>
+#include <VectorContext.hxx>
 #include <VectorText.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <swfont.hxx>
@@ -2366,7 +2367,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
     bool bChgLineColor = false;
 
     // Primitives that go to any client keep the colors of the document, whatever the current view.
-    const bool bForAnyView = GetPrimitiveSink() && !GetPrimitiveSink()->isForView();
+    const bool bForAnyView = GetPrimitiveSink() && !GetPrimitiveSink()->context().isForView();
     const SwViewShell *pVSh = bForAnyView ? nullptr : GetShell();
     const bool bOutputToWindow(pVSh && (pVSh->GetWin() || pVSh->isOutputToWindow()));
 

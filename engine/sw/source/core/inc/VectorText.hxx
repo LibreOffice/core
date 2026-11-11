@@ -31,6 +31,8 @@ class SwViewOption;
 
 namespace sw::vector
 {
+class Context;
+
 /** Receives what the text of one text frame draws, as primitives relative to an origin, and
     groups them as one block holding one paragraph holding its lines.
 
@@ -42,15 +44,16 @@ class SW_DLLPUBLIC TextSink
 {
 public:
     /// rOrigin is the top left of the entry the text belongs to and rTextArea the area the lines
-    /// wrap in, both in document twips. With bForView set, the view being painted decides the
-    /// text colors. Otherwise the automatic text color stays automatic.
+    /// wrap in, both in document twips. rContext says what the text is drawn for, and it outlives
+    /// the sink. For a view, that view decides the text colors. For any client, the automatic
+    /// text color stays automatic.
     TextSink(const Point& rOrigin, const SwRect& rTextArea,
-             drawinglayer::primitive2d::TextPortionAlign eAlign, bool bForView);
+             drawinglayer::primitive2d::TextPortionAlign eAlign, const Context& rContext);
 
     /// A sink for text drawn beside the paragraph, like line numbers. Its text is not tagged with
-    /// a line, and take() gives the primitives as they were added. rOrigin and bForView are as in
+    /// a line, and take() gives the primitives as they were added. rOrigin and rContext are as in
     /// the other constructor.
-    TextSink(const Point& rOrigin, bool bForView);
+    TextSink(const Point& rOrigin, const Context& rContext);
 
     /// Starts the next line. nLeft is where the line starts before alignment and nWidth how far
     /// it reaches, both in document twips.
@@ -111,7 +114,8 @@ public:
 
     const Point& origin() const { return maOrigin; }
 
-    bool isForView() const { return mbForView; }
+    /// What the text is drawn for.
+    const Context& context() const { return mrContext; }
 
     /// The block with the paragraph and its lines, empty when nothing was drawn. The sink is
     /// empty afterwards.
@@ -126,7 +130,7 @@ private:
 
     Point maOrigin;
     SwRect maTextArea;
-    bool mbForView;
+    const Context& mrContext;
     /// Whether the text is the one of the paragraph, tagged with its lines and grouped in a block.
     bool mbParagraph;
 

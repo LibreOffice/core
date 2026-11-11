@@ -32,7 +32,7 @@ namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 namespace sw::mark { class MarkBase; }
 namespace sw { enum class ParagraphBreakMode; }
-namespace sw::vector { class TextSink; }
+namespace sw::vector { class Context; class TextSink; }
 class SwCharRange;
 class SwTextNode;
 class SwTextAttrEnd;
@@ -435,18 +435,19 @@ public:
     /// and column on the way up narrows that area, and the lines are cut at its edges.
     bool IsCutByUpper() const;
     /// The text of the frame as primitives relative to rOrigin: one block holding the paragraph
-    /// and its lines. Empty for a frame that shows no text. With bForView set, the view being
-    /// painted decides the text colors. Otherwise the automatic text color stays automatic.
+    /// and its lines. Empty for a frame that shows no text. rContext says what the text is drawn
+    /// for: for a view, that view decides the text colors, and for any client the automatic text
+    /// color stays automatic.
     /// rOverObjects receives what lies over the objects anchored as a character in the frame,
     /// like the cross over a deleted picture, relative to rOrigin too.
     drawinglayer::primitive2d::Primitive2DContainer
-    CreateTextPrimitives( const Point& rOrigin, bool bForView,
+    CreateTextPrimitives( const Point& rOrigin, const sw::vector::Context& rContext,
                           drawinglayer::primitive2d::Primitive2DContainer& rOverObjects ) const;
     /// The line numbers and the change bars beside the lines of the frame, as primitives relative
-    /// to rOrigin. Empty when the frame has neither. With bForView set, the view being painted
-    /// decides the text colors. Otherwise the automatic text color stays automatic.
+    /// to rOrigin. Empty when the frame has neither. rContext is as in CreateTextPrimitives.
     drawinglayer::primitive2d::Primitive2DContainer
-    CreateExtraDataPrimitives( const Point& rOrigin, bool bForView ) const;
+    CreateExtraDataPrimitives( const Point& rOrigin,
+                               const sw::vector::Context& rContext ) const;
 
     /**
      * Layout oriented cursor travelling:

@@ -37,7 +37,7 @@
 #include <optional>
 
 namespace drawinglayer::processor2d { class BaseProcessor2D; }
-namespace sw::vector { class Collector; }
+namespace sw::vector { class Collector; class Context; }
 
 class SwLayoutFrame;
 class SwRootFrame;
@@ -617,13 +617,15 @@ public:
         const SwFrame* pCellFrameForBottomBorderAttrs, const Point& rOrigin = Point(),
         bool bWithRedlineRenderMode = true) const;
 
-    /** The fill of the frame's own background, relative to rOrigin, without view shading or
-        tracked change colors. A text fly without a background takes the one of the frames it is
-        anchored in, or white. The current view still hides the page background when set to, and
+    /** The fill of the frame's own background, relative to rOrigin, without view shading. A text
+        fly without a background takes the one of the frames it is anchored in, or white. A table
+        row or a table cell that a tracked change inserted or deleted is filled with the color of
+        that change, while the layout shows the changes and the options of rContext draw them in
+        the standard way. The current view still hides the page background when set to, and
         aligns the area of a background graphic to its pixels during a paint or in browse mode.
      */
     drawinglayer::primitive2d::Primitive2DContainer
-    CreateBackgroundPrimitives(const Point& rOrigin) const;
+    CreateBackgroundPrimitives(const Point& rOrigin, const sw::vector::Context& rContext) const;
 
     /** The shadow of the frame, relative to rOrigin, or the separator line of a footnote
         container. The border lines go to rBorders, as they lie over the content of the frame.

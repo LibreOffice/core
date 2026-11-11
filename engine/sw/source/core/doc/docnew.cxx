@@ -120,6 +120,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/setitem.hxx>
 #include <unotxdoc.hxx>
+#include <VectorPart.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
@@ -429,6 +430,9 @@ SwDoc::~SwDoc()
 
     mpGrammarContact.reset();
     mpOnlineAccessibilityCheck.reset();
+    // The parts hold primitives of the drawing objects and of the graphics, so they go while the
+    // drawing model and the nodes are still alive.
+    m_pVectorParts.reset();
 
     getIDocumentTimerAccess().StopIdling();   // stop idle timer
 
@@ -627,6 +631,13 @@ SwDoc::~SwDoc()
     mpDfltFrameFormat.reset();
     mpLayoutCache.reset();
     mpAttrPool.clear();
+}
+
+sw::vector::PartStore& SwDoc::EnsureVectorParts()
+{
+    if (!m_pVectorParts)
+        m_pVectorParts = std::make_unique<sw::vector::PartStore>();
+    return *m_pVectorParts;
 }
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )

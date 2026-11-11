@@ -8618,7 +8618,8 @@ lcl_CreateLinePrimitive(const SwRect& rLineRect, const Point& rOrigin, const Col
 }
 
 drawinglayer::primitive2d::Primitive2DContainer
-SwFrame::CreateBackgroundPrimitives(const Point& rOrigin) const
+SwFrame::CreateBackgroundPrimitives(const Point& rOrigin,
+                                    const sw::vector::Context& rContext) const
 {
     drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
 
@@ -8640,6 +8641,32 @@ SwFrame::CreateBackgroundPrimitives(const Point& rOrigin) const
     if (!bBackground && bTextFly)
         bBackground = GetBackgroundBrush(aFillAttributes, pBrush, oViewColor, aOrigBackRect,
                                          /*bLowerMode=*/false, /*bConsiderTextBox=*/false);
+
+    // A table row or a table cell that a tracked change inserted or deleted takes the color of
+    // that change. The colors show while the layout shows the changes and the options draw them
+    // in the standard way.
+    std::optional<Color> oRedlineColor;
+    const bool bTableRedlines
+        = !getRootFrame()->IsHideRedlines()
+          && rContext.options().GetRedlineRenderMode() == SwRedlineRenderMode::Standard;
+    if (bTableRedlines && (IsRowFrame() || IsCellFrame()))
+    {
+        const RedlineType eType
+            = IsRowFrame() ? static_cast<const SwRowFrame*>(this)->GetTabLine()->GetRedlineType()
+                           : static_cast<const SwCellFrame*>(this)->GetTabBox()->GetRedlineType();
+        if (eType == RedlineType::Delete || eType == RedlineType::Insert)
+        {
+            oRedlineColor = eType == RedlineType::Delete ? COL_AUTHOR_TABLE_DEL
+                                                         : COL_AUTHOR_TABLE_INS;
+            bBackground = true;
+        }
+    }
+    // A cell in a row with a tracked change shows the color of the row.
+    if (bBackground && bTableRedlines && IsCellFrame()
+        && static_cast<const SwRowFrame*>(GetUpper())->GetTabLine()->GetRedlineType()
+               != RedlineType::None)
+        return aPrimitives;
+
     if (!bBackground && !bTextFly)
         return aPrimitives;
 
@@ -8672,6 +8699,15 @@ SwFrame::CreateBackgroundPrimitives(const Point& rOrigin) const
                                  basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
                                      sw::vector::rangeRelativeTo(aRect, rOrigin))),
                                  COL_WHITE);
+        return aPrimitives;
+    }
+
+    if (oRedlineColor)
+    {
+        sw::vector::addColorFill(aPrimitives,
+                                 basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
+                                     sw::vector::rangeRelativeTo(aRect, rOrigin))),
+                                 *oRedlineColor);
         return aPrimitives;
     }
 

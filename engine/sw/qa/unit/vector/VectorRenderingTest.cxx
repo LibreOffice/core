@@ -35,6 +35,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -839,15 +840,40 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorMovedParagraphKeepsItsText)
     CPPUNIT_ASSERT(pMoved->maPrimitives.operator==(pSecond->maPrimitives));
 }
 
-/// The picture among the primitives of the entry, or nullptr when the entry draws none.
+/// The picture among rPrimitives or inside the groups among them, or nullptr when there is none.
 static const drawinglayer::primitive2d::GraphicPrimitive2D*
-pictureOf(const sw::vector::Entry& rEntry)
+pictureIn(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives)
 {
-    for (const drawinglayer::primitive2d::Primitive2DReference& rPrimitive : rEntry.maPrimitives)
+    for (const drawinglayer::primitive2d::Primitive2DReference& rPrimitive : rPrimitives)
     {
         if (auto pPicture
             = dynamic_cast<const drawinglayer::primitive2d::GraphicPrimitive2D*>(rPrimitive.get()))
             return pPicture;
+        auto pGroup
+            = dynamic_cast<const drawinglayer::primitive2d::GroupPrimitive2D*>(rPrimitive.get());
+        if (auto pPicture = pGroup ? pictureIn(pGroup->getChildren()) : nullptr)
+            return pPicture;
+    }
+    return nullptr;
+}
+
+/// The picture among the primitives of the entry, or nullptr when the entry draws none.
+static const drawinglayer::primitive2d::GraphicPrimitive2D*
+pictureOf(const sw::vector::Entry& rEntry)
+{
+    return pictureIn(rEntry.maPrimitives);
+}
+
+/// The name, title and description around the content of the entry, or nullptr when the entry
+/// has none.
+static const drawinglayer::primitive2d::ObjectInfoPrimitive2D*
+objectInfoOf(const sw::vector::Entry& rEntry)
+{
+    for (const drawinglayer::primitive2d::Primitive2DReference& rPrimitive : rEntry.maPrimitives)
+    {
+        if (auto pInfo = dynamic_cast<const drawinglayer::primitive2d::ObjectInfoPrimitive2D*>(
+                rPrimitive.get()))
+            return pInfo;
     }
     return nullptr;
 }
@@ -880,6 +906,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPictureIsAFlyAnchoredInItsParagraph)
     uno::Reference<text::XText> xText = xTextDocument->getText();
     xText->insertTextContent(xText->createTextCursor(),
                              uno::Reference<text::XTextContent>(xGraphic, uno::UNO_QUERY), false);
+    xGraphic->setPropertyValue(u"Title"_ustr, uno::Any(u"a red square"_ustr));
     calcLayout();
 
     std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
@@ -894,6 +921,11 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPictureIsAFlyAnchoredInItsParagraph)
     CPPUNIT_ASSERT_EQUAL(pParagraph->mnId, *pFly->moAnchor);
     CPPUNIT_ASSERT(pPicture->moParent);
     CPPUNIT_ASSERT_EQUAL(pFly->mnId, *pPicture->moParent);
+
+    // The title of the picture is stored around its content.
+    const drawinglayer::primitive2d::ObjectInfoPrimitive2D* pInfo = objectInfoOf(*pPicture);
+    CPPUNIT_ASSERT(pInfo);
+    CPPUNIT_ASSERT_EQUAL(u"a red square"_ustr, pInfo->getTitle());
 
     // The picture covers the entry from its top left corner and keeps the crop and the mirroring.
     const drawinglayer::primitive2d::GraphicPrimitive2D* pGraphic = pictureOf(*pPicture);

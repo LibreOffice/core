@@ -220,10 +220,6 @@ private:
     std::unique_ptr<SwPrintUIOptions>               m_pPrintUIOptions;
     std::unique_ptr<SwRenderData>                   m_pRenderData;
 
-    /// What the clients that draw the pages from vector primitives were served. Made when the
-    /// first such client asks.
-    std::unique_ptr<sw::vector::PartStore> m_pVectorParts;
-
     void                    GetNumberFormatter();
 
     cpo::uno::Reference<cpo::uno::XInterface> create(
@@ -527,8 +523,9 @@ public:
     void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter, std::string_view rPartId,
                                    int nMode) override;
 
-    /// The vector parts of the document, or nullptr while no client asked for one.
-    sw::vector::PartStore* getVectorParts() const { return m_pVectorParts.get(); }
+    /// The vector parts of the document, or nullptr while no client asked for one. The document
+    /// owns them.
+    sw::vector::PartStore* getVectorParts() const;
 
     /// @see vcl::ITiledRenderable::getVectorPartIds(). The ids are the page ids.
     std::vector<OString> getVectorPartIds() override;

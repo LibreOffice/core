@@ -177,6 +177,14 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwViewShell : public sw::Ring<SwViewS
     /// tile canonical id (which would orphan the client's tiles).
     bool mbInViewOptionAdjust = false;
 
+    /// Whether the tiles of this view are painted from the primitive decomposition of the pages
+    /// rather than by the paint code of the frames.
+    bool mbTilesFromPrimitives = TilesFromPrimitivesByDefault();
+
+    /// The value mbTilesFromPrimitives starts with: true when the environment variable
+    /// SW_TILES_FROM_PRIMITIVES is set to a value other than an empty one or "0".
+    static bool TilesFromPrimitivesByDefault();
+
     SdrPaintWindow*         mpTargetPaintWindow;
     VclPtr<OutputDevice>    mpBufferedOut;
 
@@ -290,6 +298,11 @@ public:
     /// Paints the layout in rRect, in document twips, from the primitive decomposition of the
     /// pages.
     void PaintFromPrimitives(OutputDevice& rDevice, const tools::Rectangle& rRect);
+
+    /// Whether the tiles of this view are painted from the primitive decomposition of the pages
+    /// rather than by the paint code of the frames.
+    bool IsTilesFromPrimitives() const { return mbTilesFromPrimitives; }
+    void SetTilesFromPrimitives(bool bFromPrimitives) { mbTilesFromPrimitives = bFromPrimitives; }
 
     bool IsPaintInProgress() const { return mbPaintInProgress; }
     bool IsDrawingLayerPaintInProgress() const { return !mPrePostPaintRegions.empty(); }
