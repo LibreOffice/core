@@ -44,11 +44,8 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
         strong, i.e. that change affinity according to the current
         writing direction. Make sure that across text portions and
         lines, the direction is set consistently.
-
-        @param nRandomSeed
-        Optional random seed for OpenType glyph variations.
      */
-    XTextLayout                                         createTextLayout( [in] StringContext aText, [in] byte nDirection, [in] hyper nRandomSeed );
+    XTextLayout createTextLayout( [in] StringContext aText, [in] byte nDirection );
 
 
     /** Query the FontRequest that was used to generate this object.

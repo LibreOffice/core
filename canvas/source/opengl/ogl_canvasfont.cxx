@@ -30,9 +30,8 @@ namespace oglcanvas
         ::canvastools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
     }
 
-    uno::Reference<rendering::XTextLayout>
-        SAL_CALL CanvasFont::createTextLayout(const rendering::StringContext& aText,
-                                              sal_Int8 nDirection, sal_Int64)
+    uno::Reference<rendering::XTextLayout> SAL_CALL
+    CanvasFont::createTextLayout(const rendering::StringContext& aText, sal_Int8 nDirection)
     {
         std::unique_lock aGuard( m_aMutex );
 

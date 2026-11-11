@@ -494,8 +494,8 @@ void LineDescriptor::CalculateSize (
     OSL_ASSERT(rxFont.is());
 
     rendering::StringContext aContext (msLine, 0, msLine.getLength());
-    Reference<rendering::XTextLayout> xLayout (
-        rxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT, 0));
+    Reference<rendering::XTextLayout> xLayout(
+        rxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT));
     const geometry::RealRectangle2D aTextBBox (xLayout->queryTextBounds());
     maSize = css::geometry::RealSize2D(aTextBBox.X2 - aTextBBox.X1, aTextBBox.Y2 - aTextBBox.Y1);
     mnVerticalOffset = aTextBBox.Y2;
@@ -548,8 +548,8 @@ double LineDescriptorList::Paint(
         rRenderState.AffineTransform.m12 = nY + rLine.maSize.Height - rLine.mnVerticalOffset;
 
         const rendering::StringContext aContext (rLine.msLine, 0, rLine.msLine.getLength());
-        Reference<rendering::XTextLayout> xLayout (
-        rxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT, 0));
+        Reference<rendering::XTextLayout> xLayout(
+            rxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT));
         rxCanvas->drawTextLayout (
             xLayout,
             rViewState,

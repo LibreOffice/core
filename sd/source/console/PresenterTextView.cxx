@@ -1017,8 +1017,8 @@ void PresenterTextParagraph::SetupCellArray (
             nIndex));
 
         rendering::StringContext aContext (msParagraphText, nPosition, nNewPosition-nPosition);
-        Reference<rendering::XTextLayout> xLayout (
-            rpFont->mxFont->createTextLayout(aContext, nTextDirection, 0));
+        Reference<rendering::XTextLayout> xLayout(
+            rpFont->mxFont->createTextLayout(aContext, nTextDirection));
         css::geometry::RealRectangle2D aCharacterBox (xLayout->queryTextBounds());
 
         maCells.emplace_back(
@@ -1185,10 +1185,7 @@ void PresenterTextParagraph::Line::ProvideLayoutedLine (
             mnLineStartCharacterIndex,
             mnLineEndCharacterIndex - mnLineStartCharacterIndex);
 
-        mxLayoutedLine = rpFont->mxFont->createTextLayout(
-            aContext,
-            nTextDirection,
-            0);
+        mxLayoutedLine = rpFont->mxFont->createTextLayout(aContext, nTextDirection);
     }
 }
 

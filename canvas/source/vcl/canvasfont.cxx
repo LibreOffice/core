@@ -85,7 +85,8 @@ namespace vclcanvas
         rGuard.lock();
     }
 
-    uno::Reference< rendering::XTextLayout > SAL_CALL  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 )
+    uno::Reference<rendering::XTextLayout> SAL_CALL
+    CanvasFont::createTextLayout(const rendering::StringContext& aText, sal_Int8 nDirection)
     {
         SolarMutexGuard aGuard;
 

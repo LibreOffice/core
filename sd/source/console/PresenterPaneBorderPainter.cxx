@@ -383,10 +383,8 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
         rsTitle,
         0,
         rsTitle.getLength());
-    Reference<rendering::XTextLayout> xLayout (xFont->createTextLayout(
-        aContext,
-        rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-        0));
+    Reference<rendering::XTextLayout> xLayout(
+        xFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT));
     if ( ! xLayout.is())
         return;
 

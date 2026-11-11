@@ -318,8 +318,8 @@ void PresenterButton::RenderButton (
         return;
 
     const rendering::StringContext aContext (msText, 0, msText.getLength());
-    const Reference<rendering::XTextLayout> xLayout (
-        rpFont->mxFont->createTextLayout(aContext,rendering::TextDirection::WEAK_LEFT_TO_RIGHT,0));
+    const Reference<rendering::XTextLayout> xLayout(
+        rpFont->mxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT));
     const geometry::RealRectangle2D aTextBBox (xLayout->queryTextBounds());
 
     rendering::RenderState aRenderState (geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr,

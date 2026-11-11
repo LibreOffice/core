@@ -266,8 +266,8 @@ css::geometry::RealRectangle2D PresenterCanvasHelper::GetTextBoundingBox (
     if (rxFont.is() && !rsText.isEmpty())
     {
         rendering::StringContext aContext (rsText, 0, rsText.getLength());
-        Reference<rendering::XTextLayout> xLayout (
-            rxFont->createTextLayout(aContext, nTextDirection, 0));
+        Reference<rendering::XTextLayout> xLayout(
+            rxFont->createTextLayout(aContext, nTextDirection));
         return xLayout->queryTextBounds();
     }
     else

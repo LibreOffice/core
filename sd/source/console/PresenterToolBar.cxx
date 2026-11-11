@@ -1533,11 +1533,8 @@ void Text::Paint (
 
     rendering::StringContext aContext (msText, 0, msText.getLength());
 
-    Reference<rendering::XTextLayout> xLayout (
-        mpFont->mxFont->createTextLayout(
-            aContext,
-            rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-            0));
+    Reference<rendering::XTextLayout> xLayout(
+        mpFont->mxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT));
     geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
     const double nTextWidth = aBox.X2 - aBox.X1;
     const double nY = rBoundingBox.Y + rBoundingBox.Height - aBox.Y2;
@@ -1564,11 +1561,8 @@ geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanv
         if (mpFont->mxFont.is())
         {
             rendering::StringContext aContext (msText, 0, msText.getLength());
-            Reference<rendering::XTextLayout> xLayout (
-                mpFont->mxFont->createTextLayout(
-                    aContext,
-                    rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-                    0));
+            Reference<rendering::XTextLayout> xLayout(mpFont->mxFont->createTextLayout(
+                aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT));
             return xLayout->queryTextBounds();
         }
     }

@@ -1554,8 +1554,8 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
     {
 
         const rendering::StringContext aContext (sText, 0, sText.getLength());
-        const Reference<rendering::XTextLayout> xLayout (mpFont->mxFont->createTextLayout(
-            aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT,0));
+        const Reference<rendering::XTextLayout> xLayout(mpFont->mxFont->createTextLayout(
+            aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT));
         const geometry::RealRectangle2D aTextBBox (xLayout->queryTextBounds());
 
         const double nXOffset = (aLabelSize.Width - aTextBBox.X2 + aTextBBox.X1) / 2;

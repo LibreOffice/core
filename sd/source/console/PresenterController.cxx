@@ -1098,10 +1098,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
 
     const OUString sText (OUString::number(mnPendingSlideNumber));
     rendering::StringContext aContext (sText, 0, sText.getLength());
-    pFont->mxFont->createTextLayout(
-            aContext,
-            rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-            0);
+    pFont->mxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
 }
 
 void PresenterController::SwitchMonitors()

@@ -60,7 +60,8 @@ namespace dxcanvas
         virtual void SAL_CALL disposing() override;
 
         // XCanvasFont
-        virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
+        virtual css::uno::Reference<css::rendering::XTextLayout> SAL_CALL
+        createTextLayout(const css::rendering::StringContext& aText, sal_Int8 nDirection) override;
         virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) override;
         virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) override;
         virtual css::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) override;

@@ -57,7 +57,8 @@ namespace vclcanvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XCanvasFont
-        virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
+        virtual css::uno::Reference<css::rendering::XTextLayout> SAL_CALL
+        createTextLayout(const css::rendering::StringContext& aText, sal_Int8 nDirection) override;
         virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) override;
         virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) override;
 

@@ -248,9 +248,7 @@ namespace cppcanvas::internal
                     init( o_rRenderState, xFont, aLocalStartPoint, rState, rCanvas );
 
                 o_rTextLayout = xFont->createTextLayout(
-                    rendering::StringContext( rText, nStartPos, nLen ),
-                    rState.textDirection,
-                    0 );
+                    rendering::StringContext(rText, nStartPos, nLen), rState.textDirection);
 
                 ENSURE_OR_THROW( o_rTextLayout.is(),
                                   "::cppcanvas::internal::initArrayAction(): Invalid font" );
@@ -389,11 +387,10 @@ namespace cppcanvas::internal
                                                          nNewStartPos,
                                                          nNewLength );
 
-                uno::Reference< rendering::XTextLayout > xTextLayout(
-                    rOrigTextLayout->getFont()->createTextLayout( aContext,
-                                                                  rOrigTextLayout->getMainTextDirection(),
-                                                                  0 ),
-                    uno::UNO_SET_THROW );
+                uno::Reference<rendering::XTextLayout> xTextLayout(
+                    rOrigTextLayout->getFont()->createTextLayout(
+                        aContext, rOrigTextLayout->getMainTextDirection()),
+                    uno::UNO_SET_THROW);
 
                 return xTextLayout;
             }
@@ -709,11 +706,8 @@ namespace cppcanvas::internal
             {
                 // create XTextLayout, to have the
                 // XTextLayout::queryTextBounds() method available
-                uno::Reference< rendering::XTextLayout > xTextLayout(
-                    mxFont->createTextLayout(
-                        maStringContext,
-                        maTextDirection,
-                        0 ) );
+                uno::Reference<rendering::XTextLayout> xTextLayout(
+                    mxFont->createTextLayout(maStringContext, maTextDirection));
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
@@ -960,11 +954,8 @@ namespace cppcanvas::internal
             {
                 // create XTextLayout, to have the
                 // XTextLayout::queryTextBounds() method available
-                uno::Reference< rendering::XTextLayout > xTextLayout(
-                    mxFont->createTextLayout(
-                        maStringContext,
-                        maTextDirection,
-                        0 ) );
+                uno::Reference<rendering::XTextLayout> xTextLayout(
+                    mxFont->createTextLayout(maStringContext, maTextDirection));
 
                 return xTextLayout->queryTextBounds();
             }
@@ -2098,11 +2089,8 @@ namespace cppcanvas::internal
                 if (rTextFillColor != COL_AUTO)
                 {
                     rendering::StringContext aStringContext( rText, nStartPos, nLen );
-                    uno::Reference< rendering::XTextLayout > xTextLayout(
-                        rState.xFont->createTextLayout(
-                            aStringContext,
-                            rState.textDirection,
-                            0 ) );
+                    uno::Reference<rendering::XTextLayout> xTextLayout(
+                        rState.xFont->createTextLayout(aStringContext, rState.textDirection));
 
                     auto aTextBounds = xTextLayout->queryTextBounds();
                     auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
