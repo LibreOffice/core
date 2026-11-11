@@ -41,8 +41,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowStyle)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Heading 1"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Heading 1"_ustr));
     OUString aFollowStyle;
     xStyle->getPropertyValue(u"FollowStyle"_ustr) >>= aFollowStyle;
     // Without the accompanying fix in place, this test would have failed with:
@@ -65,8 +64,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
     auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
     auto aTopBorder = xStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();

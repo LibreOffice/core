@@ -335,13 +335,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testTdf128985)
         uno::Reference<style::XStyleFamily> xStyleFamily(
             xStyleFamilies->getStyleFamilyByName(u"LushGreen"_ustr));
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"outline1"_ustr));
-        uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
         sal_Int16 nWritingMode = 0;
-        xPropSet->getPropertyValue(u"WritingMode"_ustr) >>= nWritingMode;
+        xStyle->getPropertyValue(u"WritingMode"_ustr) >>= nWritingMode;
         CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nWritingMode);
 
-        xPropSet->setPropertyValue(u"WritingMode"_ustr, cpo::uno::Any(text::WritingMode2::LR_TB));
+        xStyle->setPropertyValue(u"WritingMode"_ustr, cpo::uno::Any(text::WritingMode2::LR_TB));
 
         saveAndReload(TestFilter::ODP);
     }
@@ -352,10 +351,9 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testTdf128985)
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"LushGreen"_ustr));
     uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"outline1"_ustr));
-    uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
     sal_Int16 nWritingMode = 0;
-    xPropSet->getPropertyValue(u"WritingMode"_ustr) >>= nWritingMode;
+    xStyle->getPropertyValue(u"WritingMode"_ustr) >>= nWritingMode;
 
     // Without the fix in place, this test would have failed with
     // - Expected: 0

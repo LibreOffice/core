@@ -369,18 +369,17 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         if( EX_SHOW_DEFAULT_PAGE != m_nStyleFlags && xPFamily && !sPageStyle.isEmpty() )
         {
             uno::Reference< style::XStyle >  xPStyle = xPFamily->getStyleByName( sPageStyle );
-            uno::Reference< beans::XPropertySet >  xPProp(xPStyle, uno::UNO_QUERY);
-            cpo::uno::Any aSize = xPProp->getPropertyValue(UNO_NAME_SIZE);
+            cpo::uno::Any aSize = xPStyle->getPropertyValue(UNO_NAME_SIZE);
             awt::Size aPSize;
             aSize >>= aPSize;
             //TODO: set page width to card width
             aPSize.Width = 10000;
             aSize <<= aPSize;
-            xPProp->setPropertyValue(UNO_NAME_SIZE, aSize);
+            xPStyle->setPropertyValue(UNO_NAME_SIZE, aSize);
 
             cpo::uno::Any aZero; aZero <<= sal_Int32(0);
-            xPProp->setPropertyValue(UNO_NAME_LEFT_MARGIN, aZero);
-            xPProp->setPropertyValue(UNO_NAME_RIGHT_MARGIN, aZero);
+            xPStyle->setPropertyValue(UNO_NAME_LEFT_MARGIN, aZero);
+            xPStyle->setPropertyValue(UNO_NAME_RIGHT_MARGIN, aZero);
         }
 
         uno::Reference<awt::XWindow> xWin = xFrame->getContainerWindow();

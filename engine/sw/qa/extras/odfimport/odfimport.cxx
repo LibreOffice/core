@@ -440,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
 CPPUNIT_TEST_FIXTURE(Test, testPageStyleLayoutDefault)
 {
     createSwDoc("hello.odt");
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was style::PageStyleLayout_MIRRORED.
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, u"PageStyleLayout"_ustr));
 }
@@ -666,7 +666,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf74524)
 CPPUNIT_TEST_FIXTURE(Test, testPageStyleLayoutRight)
 {
     createSwDoc("hello.odt");
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This caused a crash.
     xPropertySet->setPropertyValue(u"PageStyleLayout"_ustr, cpo::uno::Any(style::PageStyleLayout_RIGHT));
 }
@@ -698,7 +698,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo79269)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     // The problem was that the first-footer was shared.
-    uno::Reference<beans::XPropertySet> xPropSet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropSet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, u"FirstIsShared"_ustr));
 
     uno::Reference<text::XTextRange> xFooter1 = getProperty< uno::Reference<text::XTextRange> >(xPropSet, u"FooterTextFirst"_ustr);
@@ -712,7 +712,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo79269_header)
     createSwDoc("fdo79269_header.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
-    uno::Reference<beans::XPropertySet> xPropSet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropSet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, u"FirstIsShared"_ustr));
 
     uno::Reference<text::XTextRange> xFooter1 = getProperty< uno::Reference<text::XTextRange> >(xPropSet, u"HeaderTextFirst"_ustr);
@@ -724,13 +724,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo79269_header)
 CPPUNIT_TEST_FIXTURE(Test, testPageBackground)
 {
     createSwDoc("PageBackground.odt");
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // The background image was lost
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPropertySet, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xPropertySet, u"FillBitmapName"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xPropertySet, u"FillBitmapMode"_ustr));
 
-    uno::Reference<beans::XPropertySet> xPropertySetOld(getStyles(u"PageStyles"_ustr)->getStyleByName(u"OldStandard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySetOld(getStyles(u"PageStyles"_ustr)->getStyleByName(u"OldStandard"_ustr));
     // The background image was overridden by color
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPropertySetOld, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xPropertySetOld, u"FillBitmapName"_ustr));
@@ -1353,20 +1353,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159549)
 
     uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
 
-    uno::Reference<beans::XPropertySet> xStyleBuiltin(xParaStyles->getStyleByName(
-            u"Text body"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyleBuiltin(xParaStyles->getStyleByName(
+            u"Text body"_ustr));
     CPPUNIT_ASSERT_EQUAL(float(32), getProperty<float>(xStyleBuiltin, u"CharHeight"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, xStyleBuiltin.queryThrow<style::XStyle>()->getParentStyle());
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, xStyleBuiltin->getParentStyle());
 
-    uno::Reference<beans::XPropertySet> xStyleDerived(xParaStyles->getStyleByName(
-            u"DerivedFromTextBody"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyleDerived(xParaStyles->getStyleByName(
+            u"DerivedFromTextBody"_ustr));
     CPPUNIT_ASSERT_EQUAL(float(32), getProperty<float>(xStyleDerived, u"CharHeight"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Text body"_ustr, xStyleDerived.queryThrow<style::XStyle>()->getParentStyle());
+    CPPUNIT_ASSERT_EQUAL(u"Text body"_ustr, xStyleDerived->getParentStyle());
 
-    uno::Reference<beans::XPropertySet> xStyleCustom(xParaStyles->getStyleByName(
-            u"Body Text"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyleCustom(xParaStyles->getStyleByName(
+            u"Body Text"_ustr));
     CPPUNIT_ASSERT_EQUAL(float(16), getProperty<float>(xStyleCustom, u"CharHeight"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, xStyleCustom.queryThrow<style::XStyle>()->getParentStyle());
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, xStyleCustom->getParentStyle());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134971)
@@ -1385,8 +1385,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134971)
     // Arial in final doc:
     OUString sString;
     uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getStyleByName(
-            u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle1(xParaStyles->getStyleByName(
+            u"Standard"_ustr));
     xStyle1->getPropertyValue(u"CharFontName"_ustr) >>= sString;
     CPPUNIT_ASSERT_EQUAL(u"Arial"_ustr, sString);
 }
@@ -1826,8 +1826,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFillImageNameMissingDefinition)
     CPPUNIT_ASSERT(xBitmapTable->hasByName(u"TestBitmap"_ustr));
 
     // The page style must report FillStyle_BITMAP with a resolvable name
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
         getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"TestBitmap"_ustr,

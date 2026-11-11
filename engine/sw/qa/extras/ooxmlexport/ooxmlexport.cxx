@@ -332,7 +332,7 @@ DECLARE_OOXMLEXPORT_TEST(testPositionAndRotation, "position-and-rotation.docx")
 DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
 {
     // check that the original numrule font name is still Calibri
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"ListLabel 1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"ListLabel 1"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, getProperty<OUString>(xStyle, u"CharFontName"_ustr));
 
     uno::Reference<text::XTextRange> xPara = getParagraph(2);
@@ -376,7 +376,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106541_noinheritChapterNumbering)
 DECLARE_OOXMLEXPORT_TEST(testTdf53856_conflictingStyle, "tdf53856_conflictingStyle.docx")
 {
     // The "Text" style conflicted with builtin paragraph style Caption -> Text
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Text"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Text"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Times New Roman"_ustr, getProperty<OUString>(xStyle, u"CharFontName"_ustr));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xStyle, u"CharPosture"_ustr));
 }
@@ -384,11 +384,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf53856_conflictingStyle, "tdf53856_conflictingSty
 DECLARE_OOXMLEXPORT_TEST(testTdf104713_undefinedStyles, "tdf104713_undefinedStyles.docx")
 {
     // Normal paragraph style was not defined, so don't replace conflicting styles
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(212), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
 
     // tdf108765: once importing is finished, use default values for any styles not yet defined.
-    xStyle.set( getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Footnote"_ustr), uno::UNO_QUERY );
+    xStyle = getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Footnote"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyle, u"CharHeight"_ustr));
 }
 
@@ -561,7 +561,7 @@ DECLARE_OOXMLEXPORT_TEST(testEm, "em.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo77716, "fdo77716.docx")
 {
     // The problem was that there should be 200 twips spacing between the two paragraphs, but there wasn't any.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was 0.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(200)), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
 }
@@ -833,12 +833,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89791)
 
     createSwDoc("tdf89791.docx");
     //tdf#102619 - setting FollowStyle with a not-yet-created style was failing. (Titre is created before Corps de texte).
-    uno::Reference< beans::XPropertySet > properties(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Titre"_ustr), uno::UNO_QUERY);
+    uno::Reference< style::XStyle > properties(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Titre"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Corps de texte"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
     saveAndReload(TestFilter::DOCX);
 
-    properties.set(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Titre"_ustr), uno::UNO_QUERY);
+    properties = getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Titre"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Corps de texte"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
     uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -853,7 +853,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")
     properties->getPropertyValue(u"SnapToGrid"_ustr) >>= snapToGrid ;
     CPPUNIT_ASSERT_EQUAL(false, snapToGrid);
 
-    uno::Reference< beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference< style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     sal_Int16 nGridMode;
     xStyle->getPropertyValue(u"GridMode"_ustr) >>= nGridMode;
     CPPUNIT_ASSERT_EQUAL( sal_Int16(2), nGridMode);
@@ -866,7 +866,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")
 {
     // Numbering picture bullet was too large.
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level

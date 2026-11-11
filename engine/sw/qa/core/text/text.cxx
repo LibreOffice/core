@@ -933,8 +933,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    uno::Reference<beans::XPropertySet> xStandard(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStandard(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     xStandard->setPropertyValue(u"WritingMode"_ustr, cpo::uno::Any(text::WritingMode2::TB_RL));
     {
         uno::Reference<drawing::XShape> xShape(

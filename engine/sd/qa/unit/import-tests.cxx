@@ -1257,8 +1257,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf97808)
     uno::Reference<style::XStyleFamilies> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(xStyleFamilies->getStyleFamilyByName(u"graphics"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"objectwithoutfill"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"objectwithoutfill"_ustr));
     OUString lineend;
     CPPUNIT_ASSERT(xStyle->getPropertyValue(u"LineEndName"_ustr) >>= lineend);
     CPPUNIT_ASSERT_EQUAL(u"Arrow"_ustr, lineend);
@@ -1269,7 +1268,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf97808)
                                              uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xLine(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     //uno::Reference<style::XStyle> xParent;
-    uno::Reference<beans::XPropertySet> xParent;
+    uno::Reference<style::XStyle> xParent;
     CPPUNIT_ASSERT(xLine->getPropertyValue(u"Style"_ustr) >>= xParent);
     CPPUNIT_ASSERT_EQUAL(xStyle, xParent);
     CPPUNIT_ASSERT(xLine->getPropertyValue(u"LineEndName"_ustr) >>= lineend);
@@ -2184,30 +2183,27 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
         xStyleFamilies->getStyleFamilyByName(u"Title Slide"_ustr));
     {
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"title"_ustr));
-        uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
-        CPPUNIT_ASSERT_EQUAL(44.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(44.0f, xStyle->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
-                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+                             xStyle->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
     }
     {
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"subtitle"_ustr));
-        uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
-        CPPUNIT_ASSERT_EQUAL(32.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(32.0f, xStyle->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
-                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+                             xStyle->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
     }
     // 2nd slide
     xStyleFamily = xStyleFamilies->getStyleFamilyByName(u"simple text placeholder"_ustr);
     {
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"outline1"_ustr));
-        uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
 
-        float nCharHeight = xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>();
+        float nCharHeight = xStyle->getPropertyValue(u"CharHeight"_ustr).get<float>();
         CPPUNIT_ASSERT_EQUAL(60.0f, nCharHeight);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
-                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+                             xStyle->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
     }
 }
 

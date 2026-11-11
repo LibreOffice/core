@@ -448,7 +448,7 @@ Reference< XInterface > SdStyleFamily::createInstance()
         throw IllegalAccessException();
     }
     return Reference<XInterface>(
-        static_cast<XStyle*>(SdStyleSheet::CreateEmptyUserStyle(*mpImpl->mxPool, mpImpl->mnFamily).get()));
+        static_cast<cppu::OWeakObject*>(SdStyleSheet::CreateEmptyUserStyle(*mpImpl->mxPool, mpImpl->mnFamily).get()));
 }
 
 Reference< XInterface > SdStyleFamily::createInstanceWithArguments( const Sequence< Any >&  )

@@ -675,8 +675,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle, "tdf126533_axialAngle.docx")
 {
     // axial gradient is purple foreground/lime background in the middle (top-left to bottom-right)
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr),
-                                                   uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
     awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xPageStyle, u"FillGradient"_ustr);
 
@@ -690,8 +689,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle, "tdf126533_axialAngle.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle2, "tdf126533_axialAngle2.docx")
 {
     // axial gradient is purple foreground/lime background in the middle (top-right to bottom-left)
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr),
-                                                   uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
     awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xPageStyle, u"FillGradient"_ustr);
 

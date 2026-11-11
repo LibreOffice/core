@@ -44,7 +44,6 @@ class ModifyListenerForwarder;
 struct SfxItemPropertyMapEntry;
 
 typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,
-                                    css::beans::XPropertySet,
                                     css::beans::XMultiPropertySet,
                                     css::lang::XServiceInfo,
                                     css::beans::XPropertyState,

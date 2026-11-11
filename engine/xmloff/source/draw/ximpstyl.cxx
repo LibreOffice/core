@@ -1277,10 +1277,9 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                     xPageStyles->getByName(aStyleName) >>= xStyle;
 
                     // set properties of existing styles to default
-                    uno::Reference< beans::XPropertySet > xPropSet( xStyle, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-                    if( xPropSet.is() )
-                        xPropSetInfo = xPropSet->getPropertySetInfo();
+                    if( xStyle.is() )
+                        xPropSetInfo = xStyle->getPropertySetInfo();
 
                     uno::Reference< beans::XPropertyState > xPropState( xStyle, uno::UNO_QUERY );
 
@@ -1299,7 +1298,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                                 const OUString& rName = xPrMap->GetEntryAPIName( i );
                                 if( xPropSetInfo->hasPropertyByName( rName ) && beans::PropertyState_DIRECT_VALUE == xPropState->getPropertyState( rName ) )
                                 {
-                                    bool bCanSkipReset = canSkipReset(rName, pPropStyle, xPropSet, xPrMap);
+                                    bool bCanSkipReset = canSkipReset(rName, pPropStyle, xStyle, xPrMap);
                                     if (bCanSkipReset)
                                         continue;
                                     xPropState->setPropertyToDefault( rName );
@@ -1332,10 +1331,9 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                 if(xStyle.is())
                 {
                     // set properties at style
-                    uno::Reference< beans::XPropertySet > xPropSet(xStyle, uno::UNO_QUERY);
-                    if(xPropSet.is() && pPropStyle)
+                    if(pPropStyle)
                     {
-                        pPropStyle->FillPropertySet(xPropSet);
+                        pPropStyle->FillPropertySet(xStyle);
                         pPropStyle->SetStyle(xStyle);
                     }
                 }

@@ -110,8 +110,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128611)
 CPPUNIT_TEST_FIXTURE(Test, testFdo80742)
 {
     createSwDoc("fdo80742.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 2"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 2"_ustr));
     // This was 0, outline level was body text.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xPropertySet, u"OutlineLevel"_ustr));
 }
@@ -571,8 +571,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFlip)
 CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
 {
     createSwDoc("tdf78506.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -867,8 +867,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDefaultValues)
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin)
 {
     createSwDoc("para-style-bottom-margin.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                          getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(
@@ -882,8 +882,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin)
     // is that Word will actually interpret \basedonN
     // as "set style N and for every attribute of that style,
     // set an attribute with default value on the style"
-    uno::Reference<beans::XPropertySet> xPropertySet1(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Contents 1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet1(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Contents 1"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                          getProperty<sal_Int32>(xPropertySet1, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(
@@ -989,8 +989,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163003)
 {
     createSwDoc("tdf163003.rtf");
     uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getStyleByName(u"Standard"_ustr),
-                                                uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle1(xParaStyles->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle1, u"ParaHyphenationNoCaps"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(1)),
@@ -1070,9 +1069,8 @@ CPPUNIT_TEST_FIXTURE(Test, test165483Tdf)
     createSwDoc("165483.rtf");
     uno::Reference<text::XTextRange> const xRun1(
         getRun(uno::Reference<text::XTextRange>(getParagraphOrTable(1), uno::UNO_QUERY), 1));
-    uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Based On Table Normal Copy"_ustr),
-        uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Based On Table Normal Copy"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun1, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
 }

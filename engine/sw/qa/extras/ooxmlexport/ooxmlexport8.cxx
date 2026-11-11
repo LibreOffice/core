@@ -108,9 +108,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo79738, "fdo79738.docx")
     uno::Reference< style::XStyleFamilies > xStyleFamilies = xStylesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyles
         = xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xPropertySetHeader( xStyles->getStyleByName(u"Header"_ustr), uno::UNO_QUERY );
+    uno::Reference<style::XStyle> xPropertySetHeader( xStyles->getStyleByName(u"Header"_ustr) );
     CPPUNIT_ASSERT_EQUAL(false, xPropertySetHeader->getPropertyValue(u"ParaLineNumberCount"_ustr).get<bool>());
-    uno::Reference<beans::XPropertySet> xPropertySetFooter( xStyles->getStyleByName(u"Footer"_ustr), uno::UNO_QUERY );
+    uno::Reference<style::XStyle> xPropertySetFooter( xStyles->getStyleByName(u"Footer"_ustr) );
     CPPUNIT_ASSERT_EQUAL(false, xPropertySetFooter->getPropertyValue(u"ParaLineNumberCount"_ustr).get<bool>());
 }
 
@@ -289,7 +289,7 @@ DECLARE_OOXMLEXPORT_TEST(testN693238, "n693238.docx")
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin ' was 2000, should be 635
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue(u"LeftMargin"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nValue);
@@ -371,7 +371,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf59699, "tdf59699.docx")
 DECLARE_OOXMLEXPORT_TEST(testN777337, "n777337.docx")
 {
      // The problem was that the top and bottom margin on the first page was only 0.1cm instead of 1.7cm.
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, u"TopMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, u"BottomMargin"_ustr));
 }
@@ -528,7 +528,7 @@ DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     //tdf#102619 - I would have expected this to be "Standard", but MSO 2013/2010/2003 all give FollowStyle==Date
-    uno::Reference< beans::XPropertySet > properties(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Date"_ustr), uno::UNO_QUERY);
+    uno::Reference< style::XStyle > properties(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Date"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Date"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
     // tdf#170208: compatibilityMode12 document - emulate table placement
@@ -552,7 +552,7 @@ DECLARE_OOXMLEXPORT_TEST(testN780843b, "n780843b.docx")
     // Same document as testN780843 except there is more text before the continuous break. Now the opposite footer results should happen.
     uno::Reference< text::XTextRange > xPara = getParagraph(3);
     OUString aStyleName = getProperty<OUString>(xPara, u"PageStyleName"_ustr);
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(aStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(aStyleName));
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"FooterText"_ustr);
     CPPUNIT_ASSERT_EQUAL( u"hidden footer"_ustr, xFooterText->getString() );
 
@@ -782,7 +782,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59638, "fdo59638.docx")
 {
     // The problem was that w:lvlOverride inside w:num was ignores by dmapper.
 
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level

@@ -160,7 +160,6 @@ public:
 
 class ScStyleObj final : public ::cppu::WeakImplHelper<
                     css::style::XStyle,
-                    css::beans::XPropertySet,
                     css::beans::XMultiPropertySet,
                     css::beans::XPropertyState,
                     css::beans::XMultiPropertyStates,

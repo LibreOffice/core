@@ -151,9 +151,9 @@ DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNum
 CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 {
     auto verify = [this](bool bIsExport = false) {
-        uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Footnote"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Footnote"_ustr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
-        xPageStyle.set(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Endnote"_ustr), uno::UNO_QUERY);
+        xPageStyle = getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Endnote"_ustr);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
 
         SwDoc* pDoc = getSwDoc();
@@ -434,7 +434,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106174_rtlParaAlign)
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr));
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Another paragraph aligned to right"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Another paragraph aligned to right"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(xPropertySet, u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(4), u"ParaAdjust"_ustr));

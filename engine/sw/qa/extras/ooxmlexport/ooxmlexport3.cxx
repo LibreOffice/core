@@ -221,8 +221,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelHeaderVariants)
     createSwDoc();
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
     xPageStyle->setPropertyValue(u"HeaderIsShared"_ustr, cpo::uno::Any(false)); // left != right
     xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
@@ -293,8 +293,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelHeaderCoexist)
     createSwDoc();
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xHeader(xPageStyle->getPropertyValue(u"HeaderText"_ustr),
                                         uno::UNO_QUERY);
@@ -308,7 +308,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelHeaderCoexist)
 
     saveAndReload(TestFilter::DOCX);
     uno::Reference<frame::XModel> xReloaded(mxComponent, uno::UNO_QUERY);
-    xPageStyle.set(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle = getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr);
     xHeader.set(xPageStyle->getPropertyValue(u"HeaderText"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, getParagraphOfText(1, xHeader)->getString());
     CPPUNIT_ASSERT_EQUAL(u"My Header"_ustr, getParagraphOfText(2, xHeader)->getString());
@@ -326,8 +326,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelFooterCoexist)
     createSwDoc();
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xFooter(xPageStyle->getPropertyValue(u"FooterText"_ustr),
                                         uno::UNO_QUERY);
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelFooterCoexist)
 
     saveAndReload(TestFilter::DOCX);
     uno::Reference<frame::XModel> xReloaded(mxComponent, uno::UNO_QUERY);
-    xPageStyle.set(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle = getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr);
     xFooter.set(xPageStyle->getPropertyValue(u"FooterText"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"My Footer"_ustr, getParagraphOfText(1, xFooter)->getString());
     CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, getParagraphOfText(2, xFooter)->getString());
@@ -360,8 +360,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelFooterFieldCoexist)
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, uno::UNO_QUERY);
 
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xFooter(xPageStyle->getPropertyValue(u"FooterText"_ustr),
                                         uno::UNO_QUERY);
@@ -472,14 +472,14 @@ DECLARE_OOXMLEXPORT_TEST(testA4AndBorders, "a4andborders.docx")
      * was exported as a child of pgBorders, thus being ignored on reload.
      * We assert dimension against A4 size in mm (to avoid minor rounding errors)
      */
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect Page Width (mm)", sal_Int32(210), getProperty<sal_Int32>(xPageStyle, u"Width"_ustr) / 100);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect Page Height (mm)", sal_Int32(297), getProperty<sal_Int32>(xPageStyle, u"Height"_ustr) / 100);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68787, "fdo68787.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was 25, the 'lack of w:separator' <-> '0 line width' mapping was missing.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPageStyle, u"FootnoteLineRelativeWidth"_ustr));
 }
@@ -489,7 +489,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote doesn't restart every Page", FTNNUM_PAGE, pDoc->GetFootnoteInfo().m_eNum );
 
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, u"FootnoteLineRelativeWidth"_ustr));
 }
 
@@ -498,7 +498,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108944_footnoteSeparator2)
     createSwDoc("tdf108944_footnoteSeparator2.odt");
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     //This was zero. The comment was causing the bHasFtnSep flag to be reset to false, so the separator was missing.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, u"FootnoteLineRelativeWidth"_ustr));
 }
@@ -577,13 +577,13 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:next", "val", u"Normal");
     // And to be REALLY sure, check it on the API level too ;-)
     uno::Reference< style::XStyleFamily > paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
-    uno::Reference< beans::XPropertySet > properties(paragraphStyles->getStyleByName(u"Heading 1"_ustr), uno::UNO_QUERY);
+    uno::Reference< style::XStyle > properties(paragraphStyles->getStyleByName(u"Heading 1"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
     // This was 0, as export of w:outlineLvl was missing.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(properties, u"OutlineLevel"_ustr));
 
-    properties.set(paragraphStyles->getStyleByName(u"Heading 11"_ustr), uno::UNO_QUERY);
+    properties = paragraphStyles->getStyleByName(u"Heading 11"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
     // Make sure style #2 is Heading 1.
@@ -746,7 +746,7 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
 
     // tdf#132149 Despite specifying portrait, the page size's specified width is greater than its height.
     // Both Word and LO display it as landscape, so ensure that it round-trips with landscape dimensions.
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Width (mm) ", sal_Int32(148), getProperty<sal_Int32>(xPageStyle, u"Width"_ustr) / 100);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Height (mm)", sal_Int32(104), getProperty<sal_Int32>(xPageStyle, u"Height"_ustr) / 100);
 }
@@ -791,9 +791,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTcBorders)
     assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:space = 0]", 1);
     assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:color = 808080]", 1);
 
-    uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Code Featured Element"_ustr),
-        uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(
+        getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Code Featured Element"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", float(150), getProperty<float>(xStyle, u"CharWeight"_ustr));
 }
 

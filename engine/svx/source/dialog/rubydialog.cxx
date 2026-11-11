@@ -553,14 +553,13 @@ void SvxRubyDialog::Activate()
                     for (sal_Int32 nStyle = 0; nStyle < xChar->getCount(); nStyle++)
                     {
                         Reference<XStyle> xStyle = xChar->getStyleByIndex(nStyle);
-                        Reference<XPropertySet> xPrSet(xStyle, UNO_QUERY);
                         OUString sName, sCoreName;
-                        if (xPrSet.is())
+                        if (xStyle.is())
                         {
-                            Reference<XPropertySetInfo> xInfo = xPrSet->getPropertySetInfo();
+                            Reference<XPropertySetInfo> xInfo = xStyle->getPropertySetInfo();
                             if (xInfo->hasPropertyByName(sUIName))
                             {
-                                Any aName = xPrSet->getPropertyValue(sUIName);
+                                Any aName = xStyle->getPropertyValue(sUIName);
                                 aName >>= sName;
                             }
                         }

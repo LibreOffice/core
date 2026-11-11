@@ -49,13 +49,12 @@ using namespace ::xmloff::token;
 void XMLTextParagraphExport::exportStyleAttributes(
         const cpo::uno::Reference< css::style::XStyle > & rStyle )
 {
-    Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo(
-            xPropSet->getPropertySetInfo());
+            rStyle->getPropertySetInfo());
     if( xPropSetInfo->hasPropertyByName( gsCategory ) )
     {
         sal_Int16 nCategory = 0;
-        xPropSet->getPropertyValue( gsCategory ) >>= nCategory;
+        rStyle->getPropertyValue( gsCategory ) >>= nCategory;
         enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
         if( -1 != nCategory )
         {
@@ -86,12 +85,12 @@ void XMLTextParagraphExport::exportStyleAttributes(
     }
     if( xPropSetInfo->hasPropertyByName( gsPageDescName ) )
     {
-        Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+        Reference< XPropertyState > xPropState( rStyle, uno::UNO_QUERY );
         if( PropertyState_DIRECT_VALUE ==
                 xPropState->getPropertyState( gsPageDescName  ) )
         {
             OUString sName;
-            xPropSet->getPropertyValue( gsPageDescName ) >>= sName;
+            rStyle->getPropertyValue( gsPageDescName ) >>= sName;
             // fix for #i5551#  if( sName.getLength() > 0 )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_MASTER_PAGE_NAME,

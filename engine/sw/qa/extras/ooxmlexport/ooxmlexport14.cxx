@@ -478,17 +478,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130610)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // check character properties
     {
-        uno::Reference<beans::XPropertySet> xStyle(
-            getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"WollMuxRoemischeZiffer"_ustr),
-            uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(
+            getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"WollMuxRoemischeZiffer"_ustr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", awt::FontWeight::BOLD, getProperty<float>(xStyle, u"CharWeight"_ustr));
     }
 
     // check paragraph properties
     {
-        uno::Reference<beans::XPropertySet> xStyle(
-            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"WollMuxVerfuegungspunkt"_ustr),
-            uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"WollMuxVerfuegungspunkt"_ustr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", awt::FontWeight::BOLD, getProperty<float>(xStyle, u"CharWeight"_ustr));
     }
 
@@ -625,7 +623,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults.docx")
 {
     uno::Reference< style::XStyleFamily > paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
-    uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getStyleByName(u"NoParent"_ustr), uno::UNO_QUERY);
+    uno::Reference< style::XStyle > xStyleProps(paragraphStyles->getStyleByName(u"NoParent"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Times New Roman"_ustr, getProperty<OUString>(xStyleProps, u"CharFontName"_ustr));
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyleProps, "CharHeight"));
 }
@@ -733,7 +731,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121661)
     assertXPath(pXmlSettings, "/w:settings/w:hyphenationZone", "val", u"851");
 
     // tdf#149421
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was false
     CPPUNIT_ASSERT_GREATER( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 }
@@ -741,7 +739,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121661)
 CPPUNIT_TEST_FIXTURE(Test, testTdf149421)
 {
     auto verify = [this](bool bIsExport = false) {
-        uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         // This was false
         CPPUNIT_ASSERT_GREATER( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 
@@ -767,14 +765,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149421)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf149421_default, "tdf146171.docx")
 {
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was 0 (not the default OOXML hyphenationZone)
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(360), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf161628, "tdf132599_frames_on_right_pages_no_hyphenation.fodt")
 {
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was 360 after the second import (missing export of zero hyphenation zone)
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 }
@@ -930,7 +928,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlSettings, "/w:settings/w:consecutiveHyphenLimit", "val", u"1");
 
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was false (value 0)
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(1), getProperty<sal_Int16>(xStyle, u"ParaHyphenationMaxHyphens"_ustr));
 }

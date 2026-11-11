@@ -917,8 +917,8 @@ private:
                         = xStyleFamiliesSupplier->getStyleFamilies();
                     uno::Reference<style::XStyleFamily> xStyleFamily(
                         xCont->getStyleFamilyByName(u"CharacterStyles"_ustr));
-                    uno::Reference<beans::XPropertySet> xInfo(
-                        xStyleFamily->getStyleByName(sCharStyleName), uno::UNO_QUERY);
+                    uno::Reference<style::XStyle> xInfo(
+                        xStyleFamily->getStyleByName(sCharStyleName));
                     xInfo->getPropertyValue(u"CharBackColor"_ustr) >>= nCharStyleBackColor;
                 }
                 catch (const cpo::uno::Exception&)

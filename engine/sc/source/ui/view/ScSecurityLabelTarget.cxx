@@ -33,8 +33,8 @@ using namespace ::cpo;
 
 namespace
 {
-// The XPropertySet of the page style driving the active sheet, or empty.
-uno::Reference<beans::XPropertySet> getActivePageStyle(ScTabViewShell& rViewShell,
+// The page style driving the active sheet, or empty.
+uno::Reference<style::XStyle> getActivePageStyle(ScTabViewShell& rViewShell,
                                                        const uno::Reference<frame::XModel>& xModel)
 {
     if (!xModel.is())
@@ -52,9 +52,9 @@ uno::Reference<beans::XPropertySet> getActivePageStyle(ScTabViewShell& rViewShel
     if (xFamilies.is())
         xPageStyles = xFamilies->getStyleFamilyByName(u"PageStyles"_ustr);
 
-    uno::Reference<beans::XPropertySet> xPageStyle;
+    uno::Reference<style::XStyle> xPageStyle;
     if (xPageStyles.is() && xPageStyles->hasByName(sStyle))
-        xPageStyle.set(xPageStyles->getStyleByName(sStyle), uno::UNO_QUERY);
+        xPageStyle = xPageStyles->getStyleByName(sStyle);
     return xPageStyle;
 }
 

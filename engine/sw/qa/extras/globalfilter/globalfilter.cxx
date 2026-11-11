@@ -554,8 +554,8 @@ void Test::testCharStyleHighlight()
         // Export the document and import again for a check
         saveAndReload(eFilterName);
 
-        uno::Reference<beans::XPropertySet> xCharStyle(
-            getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"charBackground"_ustr), UNO_QUERY);
+        uno::Reference<style::XStyle> xCharStyle(
+            getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"charBackground"_ustr));
         const Color nBackColor(0xFFDBB6); //orange-y
 
         // Always export character style's background colour as shading, never as highlighting.
@@ -944,8 +944,8 @@ void Test::testNestedFieldmark()
 auto Test::verifyText13(char const*const pTestName) -> void
 {
     // OFFICE-3789 style:header-first/style:footer-first
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     uno::Reference<text::XText> xHF(getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextFirst"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, u"Header first"_ustr, xHF->getString());
     uno::Reference<text::XText> xFF(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr));

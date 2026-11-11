@@ -229,8 +229,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122589_firstSection)
 {
     auto verify = [this]() {
         CPPUNIT_ASSERT_EQUAL(1, getPages());
-        uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         uno::Reference<text::XTextRange> xHeaderText
             = getProperty<uno::Reference<text::XTextRange>>(xPageStyle, u"HeaderText"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"My header"_ustr, xHeaderText->getString());
@@ -380,8 +380,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117505)
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         uno::Reference<style::XStyleFamily> xPageStyles(getStyles(u"PageStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getStyleByName(u"First Page"_ustr),
-                                                       uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xFirstPage(xPageStyles->getStyleByName(u"First Page"_ustr));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1499),
                              getProperty<sal_Int32>(xFirstPage, u"HeaderHeight"_ustr));
     }
@@ -392,8 +391,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117505)
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         uno::Reference<style::XStyleFamily> xPageStyles(getStyles(u"PageStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getStyleByName(u"Standard"_ustr),
-                                                       uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xFirstPage(xPageStyles->getStyleByName(u"Standard"_ustr));
         // This was 499, small header height resulted in visible whitespace from
         // remaining top margin -> header content moved down.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1499),
@@ -674,8 +672,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
 CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xStandard(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStandard(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT(getProperty<bool>(xStandard, u"RtlGutter"_ustr));
     };
 
@@ -703,8 +701,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
         SwPaM aPaM(*pWrtShell->GetCursor()->GetPoint());
         SwFormatPageDesc aFormatPageDesc(pDesc);
         pDocShell->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM, aFormatPageDesc);
-        uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Left Page"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Left Page"_ustr));
         xPageStyle->setPropertyValue(u"TopMargin"_ustr, cpo::uno::Any(static_cast<sal_Int32>(501)));
         table::BorderLine2 aBorder;
         aBorder.LineWidth = 159;
@@ -723,8 +721,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     UIName aPageStyle = pWrtShell->GetCurPageStyle();
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(aPageStyle.toString()), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(aPageStyle.toString()));
     auto nTopMargin = xPageStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
     auto aTopBorder = xPageStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();

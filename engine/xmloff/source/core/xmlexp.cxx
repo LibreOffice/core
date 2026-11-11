@@ -1869,13 +1869,9 @@ void SvXMLExport::collectDataStyles(bool bFromUsedStyles)
         if (bFromUsedStyles && !xStyle->isInUse())
             continue;
 
-        Reference<beans::XPropertySet> xCellProperties(xStyle, uno::UNO_QUERY);
-        if (xCellProperties.is())
-        {
-            sal_Int32 nNumberFormat = 0;
-            if (xCellProperties->getPropertyValue(u"NumberFormat"_ustr) >>= nNumberFormat)
-                addDataStyle(nNumberFormat);
-        }
+        sal_Int32 nNumberFormat = 0;
+        if (xStyle->getPropertyValue(u"NumberFormat"_ustr) >>= nNumberFormat)
+            addDataStyle(nNumberFormat);
     }
 }
 

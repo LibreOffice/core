@@ -24,8 +24,10 @@
 
 /** specifies a template for a style (aka style sheet).
  */
-published interface XStyle: com::sun::star::container::XNamed
+published interface XStyle
 {
+    interface com::sun::star::container::XNamed;
+    interface com::sun::star::beans::XPropertySet;
 
     /** identifies a style as defined by the user.
      */

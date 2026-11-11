@@ -3088,7 +3088,7 @@ struct SvxStyleToolBoxControl::Impl
                 {
                     try
                     {
-                        Reference< beans::XPropertySet > xStyle(xParaStyles->getStyleByName( aStyle ), UNO_QUERY);
+                        Reference< style::XStyle > xStyle(xParaStyles->getStyleByName( aStyle ));
                         OUString sName;
                         xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
                         if( !sName.isEmpty() )

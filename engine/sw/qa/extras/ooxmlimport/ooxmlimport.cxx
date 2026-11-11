@@ -335,9 +335,8 @@ xray ThisComponent.StyleFamilies.PageStyles.Default.Width
     uno::Reference<style::XStyleFamilies> styleFamilies = styleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> pageStyles = styleFamilies->getStyleFamilyByName(u"PageStyles"_ustr);
     uno::Reference<style::XStyle> defaultStyle = pageStyles->getStyleByName(u"Standard"_ustr);
-    uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
     sal_Int32 width = 0;
-    styleProperties->getPropertyValue( u"Width"_ustr ) >>= width;
+    defaultStyle->getPropertyValue( u"Width"_ustr ) >>= width;
     CPPUNIT_ASSERT( pos.X > width / 2 );
 }
 
@@ -434,7 +433,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue(u"LeftMargin"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(847), nValue);
@@ -471,7 +470,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf74367_MarginsZeroed)
 {
     createSwDoc("tdf74367_MarginsZeroed.docx");
     // Do not import page borders with 'None' style, or else it will change the page margins.
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue(u"TopMargin"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2501), nValue);
@@ -742,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN820504)
     uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xFamiliesAccess = xFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStylesAccess(xFamiliesAccess->getStyleFamilyByName(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStylesAccess->getStyleByName(u"Standard"_ustr));
     // The problem was that the CharColor was set to AUTO (-1) even if we have some default char color set
     CPPUNIT_ASSERT_EQUAL(Color(0x3da7bb), getProperty<Color>(xStyle, u"CharColor"_ustr));
 
@@ -1594,7 +1593,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf101626)
 {
     createSwDoc("tdf101626.docx");
     // Transform soft-hyphen to hard-hyphen as list bulletChar to avoid missing symbols in export
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
@@ -1615,7 +1614,7 @@ CPPUNIT_TEST_FIXTURE(Test,  testTdf106606)
     createSwDoc("tdf106606.docx" );
     auto FindGraphicBitmapPropertyInNumStyle = [&]( OUString rStyleName )
     {
-        uno::Reference<beans::XPropertySet>     xPropertySet( getStyles( u"NumberingStyles"_ustr )->getStyleByName( rStyleName ), uno::UNO_QUERY );
+        uno::Reference<style::XStyle>     xPropertySet( getStyles( u"NumberingStyles"_ustr )->getStyleByName( rStyleName ) );
         uno::Reference<container::XIndexAccess> xLevels( xPropertySet->getPropertyValue( u"NumberingRules"_ustr ), uno::UNO_QUERY );
         cpo::uno::Sequence<beans::PropertyValue>     aProps;
         xLevels->getByIndex( 0 ) >>= aProps; // 1st level
@@ -1747,7 +1746,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf87533_bidi)
 
     // check: "Standard" master-style has RTL
     {
-        const uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        const uno::Reference<style::XStyle> xPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(text::WritingMode2::RL_TB), getProperty<sal_Int32>(xPropertySet, writingMode));
     }
 

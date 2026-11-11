@@ -1164,19 +1164,19 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     {
         case FLYCNTTYPE_FRM:
         {
-            mxStyleData.set(mxStyleFamily->getStyleByName (u"Frame"_ustr), uno::UNO_QUERY);
+            mxStyleData = mxStyleFamily->getStyleByName (u"Frame"_ustr);
             m_pProps.reset(new SwFrameProperties_Impl);
         }
         break;
         case FLYCNTTYPE_GRF:
         {
-            mxStyleData.set(mxStyleFamily->getStyleByName (u"Graphics"_ustr), uno::UNO_QUERY);
+            mxStyleData = mxStyleFamily->getStyleByName (u"Graphics"_ustr);
             m_pProps.reset(new SwGraphicProperties_Impl);
         }
         break;
         case FLYCNTTYPE_OLE:
         {
-            mxStyleData.set(mxStyleFamily->getStyleByName (u"OLE"_ustr), uno::UNO_QUERY);
+            mxStyleData = mxStyleFamily->getStyleByName (u"OLE"_ustr);
             m_pProps.reset(new SwOLEProperties_Impl);
         }
         break;
@@ -1893,7 +1893,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::cpo::uno:
             aValue >>= sStyleName;
             try
             {
-                mxStyleData.set( mxStyleFamily->getStyleByName ( sStyleName ), uno::UNO_QUERY );
+                mxStyleData = mxStyleFamily->getStyleByName ( sStyleName );
             }
             catch ( container::NoSuchElementException const & )
             {

@@ -129,8 +129,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testRtlGutter)
 {
     createSwDoc();
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // Without the accompanying fix in place, this test would have failed with:
     // - Unknown property: RtlGutter
     auto bRtlGutter = getProperty<bool>(xPageStyle, u"RtlGutter"_ustr);
@@ -181,8 +181,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLinkedStyles)
 
     // When defining a linked style for a para style:
     uno::Reference<style::XStyleFamily> xParaStyles = getStyles(u"ParagraphStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xParaStyle(xParaStyles->getStyleByName(u"Caption"_ustr),
-                                                   uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xParaStyle(xParaStyles->getStyleByName(u"Caption"_ustr));
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xParaStyle, u"LinkStyle"_ustr));
     xParaStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"Emphasis"_ustr));
     // Then make sure we get the linked char style back:
@@ -190,8 +189,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLinkedStyles)
 
     // When defining a linked style for a char style:
     uno::Reference<style::XStyleFamily> xCharStyles = getStyles(u"CharacterStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xCharStyle(xCharStyles->getStyleByName(u"Emphasis"_ustr),
-                                                   uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xCharStyle(xCharStyles->getStyleByName(u"Emphasis"_ustr));
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xCharStyle, u"LinkStyle"_ustr));
     xCharStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"Caption"_ustr));
     // Then make sure we get the linked para style back:
@@ -1111,8 +1109,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testEmptyHeader)
     cpo::uno::Sequence<beans::PropertyValue> aInsertArgs
         = { comphelper::makePropertyValue(u"PageStyle"_ustr, SwResId(STR_POOLPAGE_STANDARD)) };
     dispatchCommand(mxComponent, u".uno:InsertPageHeader"_ustr, aInsertArgs);
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     uno::Reference<beans::XPropertySet> xHeaderText(
         xPageStyle->getPropertyValue(u"HeaderText"_ustr), uno::UNO_QUERY);
     bool bIsContentEmpty = false;

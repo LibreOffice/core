@@ -502,8 +502,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"test"_ustr);
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr),
-                                                   uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     xPageStyle->setPropertyValue(u"TopMargin"_ustr, cpo::uno::Any(static_cast<sal_Int32>(501)));
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 159;
@@ -775,7 +774,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153082_comma, "custom-styles-TOC-comma.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
 {
     uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getStyleByName(u"Standard"_ustr));
     sal_Int16 nGridLines;
     xPageStyle->getPropertyValue(u"GridLines"_ustr) >>= nGridLines;
     CPPUNIT_ASSERT_EQUAL( sal_Int16(36), nGridLines);   // was 23, left large space before text.
@@ -1080,7 +1079,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
         OUString aCharStyleName = levelProps[u"CharStyleName"_ustr].get<OUString>();
         // Ensure that numbering in this paragraph is 24pt bold italic
         // Previously it got overridden by paragraph properties and became 6pt, no bold, no italic
-        uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(aCharStyleName), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(aCharStyleName));
         CPPUNIT_ASSERT_EQUAL(24.f, getProperty<float>(xStyle, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStyle, u"CharWeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(xStyle, u"CharPosture"_ustr));
@@ -1092,7 +1091,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
         comphelper::SequenceAsHashMap levelProps(xLevels->getByIndex(1));
         OUString aCharStyleName = levelProps[u"CharStyleName"_ustr].get<OUString>();
 
-        uno::Reference<beans::XPropertySet> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(aCharStyleName), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(getStyles(u"CharacterStyles"_ustr)->getStyleByName(aCharStyleName));
         CPPUNIT_ASSERT_EQUAL(24.f, getProperty<float>(xStyle, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStyle, u"CharWeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(xStyle, u"CharPosture"_ustr));
@@ -1183,7 +1182,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148273_sectionBulletFormatLeak, "tdf148273_secti
 DECLARE_OOXMLEXPORT_TEST(testTdf149089, "tdf149089.docx")
 {
     uno::Reference<style::XStyleFamily> xPageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getStyleByName(u"Standard"_ustr));
     sal_Int16 nGridMode;
     xPageStyle->getPropertyValue(u"GridMode"_ustr) >>= nGridMode;
     CPPUNIT_ASSERT_EQUAL( sal_Int16(text::TextGridMode::LINES), nGridMode);   // was LINES_AND_CHARS

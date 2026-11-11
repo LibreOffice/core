@@ -373,12 +373,11 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
             bNew = true;
         }
 
-        Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
         Reference< XPropertySetInfo > xPropSetInfo =
-                    xPropSet->getPropertySetInfo();
+                    mxStyle->getPropertySetInfo();
         if( !bNew && xPropSetInfo->hasPropertyByName( gsIsPhysical ) )
         {
-            Any aAny = xPropSet->getPropertyValue( gsIsPhysical );
+            Any aAny = mxStyle->getPropertyValue( gsIsPhysical );
             bNew = !*o3tl::doAccess<bool>(aAny);
         }
         SetNew( bNew );
@@ -393,7 +392,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                 xPrMap = pImpPrMap->getPropertySetMapper();
             if( xPrMap.is() )
             {
-                Reference < XMultiPropertyStates > xMultiStates( xPropSet,
+                Reference < XMultiPropertyStates > xMultiStates( mxStyle,
                                                                  UNO_QUERY );
                 if( xMultiStates.is() )
                 {
@@ -410,7 +409,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                         if( xPropSetInfo->hasPropertyByName( rPrName ) )
                             aNameSet.insert( rPrName );
                     }
-                    Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+                    Reference< XPropertyState > xPropState( mxStyle, uno::UNO_QUERY );
                     if (xPropState.is())
                     {
                         nCount = aNameSet.size();
@@ -431,7 +430,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
             if (mxStyle.is())
                 mxStyle->setParentStyle(OUString());
 
-            FillPropertySet( xPropSet );
+            FillPropertySet( mxStyle );
         }
         else
         {
@@ -492,17 +491,16 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
     if( sFollow.isEmpty() || !xFamilies->hasByName( sFollow ) )
         sFollow = mxStyle->getName();
 
-    Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
-        xPropSet->getPropertySetInfo();
+        mxStyle->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( gsFollowStyle ) )
     {
-        Any aAny = xPropSet->getPropertyValue( gsFollowStyle );
+        Any aAny = mxStyle->getPropertyValue( gsFollowStyle );
         OUString sCurrFollow;
         aAny >>= sCurrFollow;
         if( sCurrFollow != sFollow )
         {
-            xPropSet->setPropertyValue( gsFollowStyle, Any(sFollow) );
+            mxStyle->setPropertyValue( gsFollowStyle, Any(sFollow) );
         }
     }
 
@@ -521,18 +519,18 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
     }
     if (!aLinked.isEmpty() && xPropSetInfo->hasPropertyByName(u"LinkStyle"_ustr))
     {
-        cpo::uno::Any aAny = xPropSet->getPropertyValue(u"LinkStyle"_ustr);
+        cpo::uno::Any aAny = mxStyle->getPropertyValue(u"LinkStyle"_ustr);
         OUString aCurrentLinked;
         aAny >>= aCurrentLinked;
         if (aCurrentLinked != aLinked)
         {
-            xPropSet->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(aLinked));
+            mxStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(aLinked));
         }
     }
 
     if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
     {
-        xPropSet->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
+        mxStyle->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
     }
 
 }

@@ -976,7 +976,7 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             bContainsRightHeader = true;
     }
     if (!xPropSet.is())
-        xPropSet.set(GetStyle(), UNO_QUERY );
+        xPropSet = GetStyle();
     return new XMLTableHeaderFooterContext( GetImport(),
                                                 nElement,
                                                 xAttrList,
@@ -987,7 +987,7 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
 void ScMasterPageContext::ClearContent(const OUString& rContent)
 {
     if (!xPropSet.is())
-        xPropSet.set(GetStyle(), UNO_QUERY );
+        xPropSet = GetStyle();
 
     if (xPropSet.is())
     {

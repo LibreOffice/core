@@ -326,7 +326,7 @@ void clearAllPageStyles(const uno::Reference<frame::XModel>& xModel)
         return;
     for (const OUString& rName : xPageStyles->getElementNames())
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getStyleByName(rName), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(xPageStyles->getStyleByName(rName));
         if (!xPageStyle.is())
             continue;
         clearArea(xPageStyle, HEADER);
@@ -354,7 +354,7 @@ void applyMarking(const uno::Reference<frame::XModel>& xModel, const OUString& r
         const bool bMark = (xStyle.is() && xStyle->isInUse()) || rName == rPageStyleName;
         if (!bMark)
             continue;
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyle, uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(xStyle);
         if (!xPageStyle.is())
             continue;
         markArea(xModel, xPageStyle, HEADER, rMarking, nColor);

@@ -446,8 +446,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf49073)
                              getProperty<OUString>(getParagraph(1)->getStart(), u"RubyText"_ustr));
         OUString sStyle
             = getProperty<OUString>(getParagraph(1)->getStart(), u"RubyCharStyleName"_ustr);
-        uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"CharacterStyles"_ustr)->getStyleByName(sStyle), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPropertySet(
+            getStyles(u"CharacterStyles"_ustr)->getStyleByName(sStyle));
         CPPUNIT_ASSERT_EQUAL(5.f, getProperty<float>(xPropertySet, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(
             sal_Int16(text::RubyAdjust_CENTER),
@@ -665,8 +665,8 @@ CPPUNIT_TEST_FIXTURE(Test, testI120928)
 {
     auto verify = [this]() {
         // \listpicture and \levelpicture0 was ignored, leading to missing graphic bullet in numbering.
-        uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPropertySet(
+            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
         uno::Reference<container::XIndexAccess> xLevels(
             xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
         cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -883,8 +883,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTextframeTable)
 CPPUNIT_TEST_FIXTURE(Test, testFdo66682)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPropertySet(
+            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
         uno::Reference<container::XIndexAccess> xLevels(
             xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
         cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -988,7 +988,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo68787)
 {
     auto verify = [this]() {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         // This was 0, the 'lack of \chftnsep' <-> '0 line width' mapping was missing in the RTF tokenizer / exporter.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(25),
                              getProperty<sal_Int32>(xPageStyle, u"FootnoteLineRelativeWidth"_ustr));

@@ -566,8 +566,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82175_noStyleInheritance, "tdf82175_noStyleInher
 DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
 {
     // Header was lost on export when the document had multiple columns.
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 }
 
@@ -650,8 +650,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHeaderBorder)
 DECLARE_OOXMLEXPORT_TEST(testTablepprShape, "tblppr-shape.docx")
 {
     // Unhandled exception due to unexpected w:tblpPr resulted in not importing page size, either.
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was 2000, page width wasn't large enough.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2540),
                          getProperty<sal_Int32>(xPageStyle, u"LeftMargin"_ustr));

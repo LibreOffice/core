@@ -290,51 +290,46 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresObjTextStyles)
     {
         // Title style
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"title"_ustr));
-        uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(60.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(60.0f, xStyle->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
-                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+                             xStyle->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
         CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
-                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+                             xStyle->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
     }
     // 2nd slide
     xStyleFamily = xStyleFamilies->getStyleFamilyByName(u"Title and Content"_ustr);
     {
         // Title style
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"title"_ustr));
-        uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(44.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(44.0f, xStyle->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
-                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+                             xStyle->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
         CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
-                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+                             xStyle->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
 
         // outline1 style
         xStyle.set(xStyleFamily->getStyleByName(u"outline1"_ustr));
-        xPropSet.set(xStyle, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(28.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(28.0f, xStyle->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
-                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+                             xStyle->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
         CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
-                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+                             xStyle->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
 
         // outline2 style
         xStyle.set(xStyleFamily->getStyleByName(u"outline2"_ustr));
-        xPropSet.set(xStyle, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(24.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(24.0f, xStyle->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
-                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+                             xStyle->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
         CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
-                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+                             xStyle->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
 
         // outline5 style
         xStyle.set(xStyleFamily->getStyleByName(u"outline5"_ustr));
-        xPropSet.set(xStyle, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(18.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(18.0f, xStyle->getPropertyValue(u"CharHeight"_ustr).get<float>());
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
-                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+                             xStyle->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
         CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
-                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+                             xStyle->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
     }
 }
 

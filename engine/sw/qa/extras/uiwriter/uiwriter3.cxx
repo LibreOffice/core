@@ -173,10 +173,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPasteStyleOverride)
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
     uno::Reference<style::XStyleFamily> xStyles(
         xSFS->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStandard(xStyles->getStyleByName(u"Standard"_ustr),
-                                                  uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xTextbody(xStyles->getStyleByName(u"Text body"_ustr),
-                                                  uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStandard(xStyles->getStyleByName(u"Standard"_ustr));
+    uno::Reference<style::XStyle> xTextbody(xStyles->getStyleByName(u"Text body"_ustr));
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStandard, u"CharWeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xTextbody, u"CharWeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),

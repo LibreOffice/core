@@ -10290,7 +10290,7 @@ static void addStyleEntry(boost::property_tree::ptree& rChildren,
     OUString aDisplayName = rStyle;
     try
     {
-        uno::Reference<beans::XPropertySet> xProperty(xStyleFamily->getStyleByName(rStyle), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xProperty(xStyleFamily->getStyleByName(rStyle));
         OUString aName;
         if (xProperty.is()
             && (xProperty->getPropertyValue(u"DisplayName"_ustr) >>= aName)
@@ -10401,7 +10401,6 @@ static std::string getComponentStyles(const cpo::uno::Reference<css::lang::XComp
         boost::property_tree::ptree aChild;
         boost::property_tree::ptree aChildren;
         static constexpr OUString sPageStyles(u"PageStyles"_ustr);
-        uno::Reference<beans::XPropertySet> xProperty;
 
         if (xStyleFamilies->hasByName(sPageStyles))
         {
@@ -10411,7 +10410,7 @@ static std::string getComponentStyles(const cpo::uno::Reference<css::lang::XComp
             for (OUString const & sName : aSeqNames)
             {
                 bool bIsPhysical;
-                xProperty.set(xContainer->getStyleByName(sName), uno::UNO_QUERY);
+                uno::Reference<style::XStyle> xProperty = xContainer->getStyleByName(sName);
                 if (xProperty.is() && (xProperty->getPropertyValue(u"IsPhysical"_ustr) >>= bIsPhysical) && bIsPhysical)
                 {
                     OUString displayName;

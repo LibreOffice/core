@@ -333,8 +333,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108416)
 {
     auto verify = [this]() {
         uno::Reference<style::XStyleFamily> xCharacterStyles(getStyles(u"CharacterStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xListLabel(
-            xCharacterStyles->getStyleByName(u"ListLabel 1"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xListLabel(xCharacterStyles->getStyleByName(u"ListLabel 1"_ustr));
         // This was awt::FontWeight::BOLD, list numbering got an unexpected bold formatting.
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
                              getProperty<float>(xListLabel, u"CharWeight"_ustr));

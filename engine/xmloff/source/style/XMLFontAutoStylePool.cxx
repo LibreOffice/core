@@ -316,14 +316,13 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
                     uno::Reference<style::XStyle> xStyle = xStyleContainer->getStyleByName(rName);
                     if (xStyle->isInUse())
                     {
-                        uno::Reference<beans::XPropertySet> xPropertySet(xStyle, UNO_QUERY);
-                        uno::Reference<beans::XPropertySetInfo> xInfo(xPropertySet ? xPropertySet->getPropertySetInfo() : nullptr);
+                        uno::Reference<beans::XPropertySetInfo> xInfo(xStyle->getPropertySetInfo());
                         if (xInfo)
                         {
                             if (bEmbedLatinScript && xInfo->hasPropertyByName(u"CharFontName"_ustr))
                             {
                                 OUString sCharFontName;
-                                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontName"_ustr);
+                                Any aFontAny = xStyle->getPropertyValue(u"CharFontName"_ustr);
                                 aFontAny >>= sCharFontName;
                                 if (!sCharFontName.isEmpty())
                                     aReturnSet.insert(sCharFontName);
@@ -331,7 +330,7 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
                             if (bEmbedAsianScript && xInfo->hasPropertyByName(u"CharFontNameAsian"_ustr))
                             {
                                 OUString sCharFontNameAsian;
-                                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontNameAsian"_ustr);
+                                Any aFontAny = xStyle->getPropertyValue(u"CharFontNameAsian"_ustr);
                                 aFontAny >>= sCharFontNameAsian;
                                 if (!sCharFontNameAsian.isEmpty())
                                     aReturnSet.insert(sCharFontNameAsian);
@@ -339,7 +338,7 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
                             if (bEmbedComplexScript && xInfo->hasPropertyByName(u"CharFontNameComplex"_ustr))
                             {
                                 OUString sCharFontNameComplex;
-                                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontNameComplex"_ustr);
+                                Any aFontAny = xStyle->getPropertyValue(u"CharFontNameComplex"_ustr);
                                 aFontAny >>= sCharFontNameComplex;
                                 if (!sCharFontNameComplex.isEmpty())
                                     aReturnSet.insert(sCharFontNameComplex);

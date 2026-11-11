@@ -50,8 +50,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testAnchorTypeFromStyle)
 {
     // Given a document with aGraphics style with anchor type set to as-character:
     createSwDoc();
-    uno::Reference<beans::XPropertySet> xGraphics(
-        getStyles(u"FrameStyles"_ustr)->getStyleByName(u"Graphics"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xGraphics(
+        getStyles(u"FrameStyles"_ustr)->getStyleByName(u"Graphics"_ustr));
     xGraphics->setPropertyValue(u"AnchorType"_ustr,
                                 cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 

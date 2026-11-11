@@ -229,7 +229,7 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
 
                     // The numbering rules of all nine levels belong to outline1, and the other
                     // outline styles hold none of their own, the indent of each level goes there
-                    Reference<XPropertySet> xOutline1(xFamilies->getStyleByName(aStyle), UNO_QUERY);
+                    Reference<style::XStyle> xOutline1(xFamilies->getStyleByName(aStyle));
                     Reference<container::XIndexReplace> xNumRules;
                     if (xOutline1.is()
                         && (xOutline1->getPropertyValue(u"NumberingRules"_ustr) >>= xNumRules)

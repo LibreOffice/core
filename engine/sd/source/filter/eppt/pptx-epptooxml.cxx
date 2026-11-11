@@ -3446,9 +3446,7 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
                                         sal_Int16 nOutlineLevel) {
         if (!xStyles->hasByName(rStyleName))
             return;
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(rStyleName), uno::UNO_QUERY);
-        if (!xStyle.is())
-            return;
+        uno::Reference<style::XStyle> xStyle(xStyles->getStyleByName(rStyleName));
 
         // An outline level is indented by its entry in the numbering rules, which the outline
         // styles share.

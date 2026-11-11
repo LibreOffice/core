@@ -153,13 +153,12 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         bNew = true;
     }
 
-    Reference < XPropertySet > xPropSet( m_xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
-                xPropSet->getPropertySetInfo();
+                m_xStyle->getPropertySetInfo();
     OUString sIsPhysical( u"IsPhysical"_ustr );
     if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
-        aAny = xPropSet->getPropertyValue( sIsPhysical );
+        aAny = m_xStyle->getPropertyValue( sIsPhysical );
         bNew = !*o3tl::doAccess<bool>(aAny);
     }
     SetNew( bNew );
@@ -167,7 +166,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     if( !(bOverwrite || bNew) )
         return;
 
-    Reference < XMultiPropertyStates > xMultiStates( xPropSet,
+    Reference < XMultiPropertyStates > xMultiStates( m_xStyle,
                                                      UNO_QUERY );
     OSL_ENSURE( xMultiStates.is(),
                 "text page style does not support multi property set" );
@@ -175,10 +174,10 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         xMultiStates->setAllPropertiesToDefault();
 
     if ( xPropSetInfo->hasPropertyByName( u"GridDisplay"_ustr ) )
-        xPropSet->setPropertyValue( u"GridDisplay"_ustr, Any(false) );
+        m_xStyle->setPropertyValue( u"GridDisplay"_ustr, Any(false) );
 
     if ( xPropSetInfo->hasPropertyByName( u"GridPrint"_ustr ) )
-        xPropSet->setPropertyValue( u"GridPrint"_ustr, Any(false) );
+        m_xStyle->setPropertyValue( u"GridPrint"_ustr, Any(false) );
 
     m_bInsertHeader = m_bInsertFooter = true;
     m_bInsertHeaderLeft = m_bInsertFooterLeft = true;
@@ -248,8 +247,7 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
             const bool bLeft,
             const bool bFirst )
 {
-    Reference < XPropertySet > xPropSet( m_xStyle, UNO_QUERY );
-    return new XMLTextHeaderFooterContext( GetImport(), xPropSet, bFooter, bLeft, bFirst );
+    return new XMLTextHeaderFooterContext( GetImport(), m_xStyle, bFooter, bLeft, bFirst );
 }
 
 void XMLTextMasterPageContext::Finish( bool bOverwrite )
@@ -257,7 +255,6 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
     if( !(m_xStyle.is() && (IsNew() || bOverwrite)) )
         return;
 
-    Reference < XPropertySet > xPropSet( m_xStyle, UNO_QUERY );
     XMLPropStyleContext * pDrawingPageStyle(nullptr);
     if (!m_sDrawingPageStyle.isEmpty())
     {
@@ -270,12 +267,12 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
     }
     if (pPageLayout)
     {
-        pPageLayout->FillPropertySet_PageStyle(xPropSet, pDrawingPageStyle);
+        pPageLayout->FillPropertySet_PageStyle(m_xStyle, pDrawingPageStyle);
     }
     else if (pDrawingPageStyle)
     {
         // don't need to care about old background attributes in this case
-        pDrawingPageStyle->FillPropertySet(xPropSet);
+        pDrawingPageStyle->FillPropertySet(m_xStyle);
     }
 
     Reference < XStyleFamily > xPageStyles =
@@ -284,7 +281,7 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
         return;
 
     Reference< XPropertySetInfo > xPropSetInfo =
-        xPropSet->getPropertySetInfo();
+        m_xStyle->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( gsFollowStyle ) )
     {
         OUString sDisplayFollow(
@@ -294,30 +291,30 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
             !xPageStyles->hasByName( sDisplayFollow ) )
             sDisplayFollow = m_xStyle->getName();
 
-        Any aAny = xPropSet->getPropertyValue( gsFollowStyle );
+        Any aAny = m_xStyle->getPropertyValue( gsFollowStyle );
         OUString sCurrFollow;
         aAny >>= sCurrFollow;
         if( sCurrFollow != sDisplayFollow )
         {
-            xPropSet->setPropertyValue( gsFollowStyle, Any(sDisplayFollow) );
+            m_xStyle->setPropertyValue( gsFollowStyle, Any(sDisplayFollow) );
         }
     }
 
     if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
     {
-        xPropSet->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
+        m_xStyle->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
     }
     if (xPropSetInfo->hasPropertyByName(gsHeaderNoFirst))
     {
         if (IsXMLToken(m_sIsFirstPageHeaderEnabled, XML_FALSE))
         {
-            xPropSet->setPropertyValue( gsFirstShareContent, Any(false) );
-            xPropSet->setPropertyValue( gsHeaderNoFirst, Any(true) );
+            m_xStyle->setPropertyValue( gsFirstShareContent, Any(false) );
+            m_xStyle->setPropertyValue( gsHeaderNoFirst, Any(true) );
         }
         if (IsXMLToken(m_sIsFirstPageFooterEnabled, XML_FALSE))
         {
-            xPropSet->setPropertyValue( gsFirstShareContent, Any(false) );
-            xPropSet->setPropertyValue( gsFooterNoFirst, Any(true) );
+            m_xStyle->setPropertyValue( gsFirstShareContent, Any(false) );
+            m_xStyle->setPropertyValue( gsFooterNoFirst, Any(true) );
         }
     }
 }

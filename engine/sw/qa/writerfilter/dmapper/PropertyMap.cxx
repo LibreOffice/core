@@ -70,8 +70,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowPageTopMargin)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
     auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -85,8 +84,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageMarginsLargerThanPage)
 {
     // The page is 1000 twips tall, with top and bottom margins of 1080 twips each.
     loadFromFile(u"page-margins-larger-than-page.rtf");
-    uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     auto nHeight = xStyle->getPropertyValue(u"Height"_ustr).get<sal_Int32>();
     auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     auto nBottomMargin = xStyle->getPropertyValue(u"BottomMargin"_ustr).get<sal_Int32>();
@@ -124,8 +123,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
     auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
     auto aTopBorder = xStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();
@@ -151,8 +149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderNoMargin)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
     auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nTopMargin);
     auto aTopBorder = xStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();
@@ -175,8 +172,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderDisable)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
     xStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
 
     // When pasting RTF content:
@@ -211,8 +207,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderEmptied)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
 
     // When pasting RTF content:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

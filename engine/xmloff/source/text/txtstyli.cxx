@@ -195,14 +195,13 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
     if( !xStyle.is() || !(bOverwrite || IsNew()) )
         return;
 
-    Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
-                xPropSet->getPropertySetInfo();
+                xStyle->getPropertySetInfo();
 
     static constexpr OUString sIsAutoUpdate(u"IsAutoUpdate"_ustr);
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
-        xPropSet->setPropertyValue( sIsAutoUpdate, Any(m_isAutoUpdate) );
+        xStyle->setPropertyValue( sIsAutoUpdate, Any(m_isAutoUpdate) );
     }
 
     sal_uInt16 nCategory = ParagraphStyleCategory::TEXT;
@@ -211,7 +210,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
          xPropSetInfo->hasPropertyByName(u"Category"_ustr) &&
         SvXMLUnitConverter::convertEnum( nCategory, m_sCategoryVal, aCategoryMap))
     {
-        xPropSet->setPropertyValue(u"Category"_ustr, Any(static_cast<sal_Int16>(nCategory)));
+        xStyle->setPropertyValue(u"Category"_ustr, Any(static_cast<sal_Int16>(nCategory)));
     }
 
     // tell the style about it's events (if applicable)
@@ -262,16 +261,15 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
          !( bOverwrite || IsNew() ) )
         return;
 
-    Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
-                xPropSet->getPropertySetInfo();
+                xStyle->getPropertySetInfo();
 
     static constexpr OUString sOutlineLevel(u"OutlineLevel"_ustr);
     if( xPropSetInfo->hasPropertyByName( sOutlineLevel ))
     {
         if (m_nOutlineLevel >= 0)
         {
-            xPropSet->setPropertyValue( sOutlineLevel, Any(m_nOutlineLevel) );
+            xStyle->setPropertyValue( sOutlineLevel, Any(m_nOutlineLevel) );
         }
     }
 
@@ -310,7 +308,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         {
             if (m_sListStyleName.isEmpty())
             {
-                xPropSet->setPropertyValue(sNumberingStyleName, Any(m_sListStyleName)); /* empty string */
+                xStyle->setPropertyValue(sNumberingStyleName, Any(m_sListStyleName)); /* empty string */
             }
             else
             {
@@ -326,13 +324,13 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
                 if ( rNumStyles.is() &&
                      rNumStyles->hasByName( sDisplayListStyleName ) )
                 {
-                    xPropSet->setPropertyValue( sNumberingStyleName, Any(sDisplayListStyleName) );
+                    xStyle->setPropertyValue( sNumberingStyleName, Any(sDisplayListStyleName) );
                 }
             }
 
             if (m_aListLevel.has_value())
             {
-                xPropSet->setPropertyValue(u"NumberingLevel"_ustr, cpo::uno::Any(*m_aListLevel));
+                xStyle->setPropertyValue(u"NumberingLevel"_ustr, cpo::uno::Any(*m_aListLevel));
             }
         }
     }
@@ -350,7 +348,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
             rTextStyles->hasByName( sDisplayDropCapTextStyleName ) &&
             xPropSetInfo->hasPropertyByName(u"DropCapCharStyleName"_ustr))
         {
-            xPropSet->setPropertyValue(u"DropCapCharStyleName"_ustr, Any(sDisplayDropCapTextStyleName));
+            xStyle->setPropertyValue(u"DropCapCharStyleName"_ustr, Any(sDisplayDropCapTextStyleName));
         }
     }
 
@@ -370,7 +368,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
            rPageStyles->hasByName( sDisplayName )) ) &&
         xPropSetInfo->hasPropertyByName( sPageDescName ) )
     {
-        xPropSet->setPropertyValue( sPageDescName, Any(sDisplayName) );
+        xStyle->setPropertyValue( sPageDescName, Any(sDisplayName) );
     }
 }
 

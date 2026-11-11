@@ -187,7 +187,7 @@ public:
 
 class ScMasterPageContext : public XMLTextMasterPageContext
 {
-    cpo::uno::Reference<css::beans::XPropertySet> xPropSet;
+    cpo::uno::Reference<css::style::XStyle> xPropSet;
     bool                bContainsRightHeader;
     bool                bContainsRightFooter;
 

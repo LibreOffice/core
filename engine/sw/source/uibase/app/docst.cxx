@@ -452,8 +452,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         uno::Reference< style::XStyleFamilies > xCont = xModel->getStyleFamilies();
                         uno::Reference< style::XStyleFamily > xStyles
                             = xCont->getStyleFamilyByName(pFamilyItem->GetValue());
-                        uno::Reference< beans::XPropertySet > xInfo(
-                            xStyles->getStyleByName( pNameItem->GetValue() ), uno::UNO_QUERY);
+                        uno::Reference< style::XStyle > xInfo(
+                            xStyles->getStyleByName( pNameItem->GetValue() ));
                         xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
                     }
                     catch (const cpo::uno::Exception&)
@@ -797,8 +797,8 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
     if (xEndnotePageStyle->isUserDefined() || !xEndnotePageStyle->isInUse())
         return;
 
-    uno::Reference<beans::XPropertySet> xEndnotePagePropSet(xPageStyles->getStyleByName(u"Endnote"_ustr), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDefaultPagePropSet(xPageStyles->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xEndnotePagePropSet(xPageStyles->getStyleByName(u"Endnote"_ustr));
+    uno::Reference<style::XStyle> xDefaultPagePropSet(xPageStyles->getStyleByName(u"Standard"_ustr));
 
     if (!xEndnotePagePropSet.is() || !xDefaultPagePropSet.is())
     {

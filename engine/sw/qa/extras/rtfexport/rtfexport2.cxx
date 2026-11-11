@@ -572,8 +572,8 @@ CPPUNIT_TEST_FIXTURE(Test, testN757651)
 CPPUNIT_TEST_FIXTURE(Test, testFdo49501)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
 
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, u"IsLandscape"_ustr));
         sal_Int32 nExpected(convertTwipToMm100(567));
@@ -656,8 +656,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo46966)
          *
          * xray ThisComponent.StyleFamilies.PageStyles.Default.TopMargin
          */
-        uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPropertySet(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(720)),
                              getProperty<sal_Int32>(xPropertySet, u"TopMargin"_ustr));
     };
@@ -880,8 +880,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyPastePageStyle)
     paste(u"rtfexport/data/copypaste-pagestyle-paste.rtf",
           u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(21001),
         getProperty<sal_Int32>(xPropertySet, u"Width"_ustr)); // Was letter, i.e. 21590
@@ -922,8 +922,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69384)
         // Ensure non-default style is loaded
         getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Text body justified"_ustr);
         // Ensure default styles were modified, vs testFdo69384Inserted where it is not
-        uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Text body"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPropertySet(
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Text body"_ustr));
         CPPUNIT_ASSERT_EQUAL(68.f, getProperty<float>(xPropertySet, u"CharHeight"_ustr));
     };
     createSwDoc("fdo69384-paste.rtf");
@@ -942,8 +942,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69384Inserted)
 
     // During insert of the RTF document we do not change pre-existing styles
     // vs testFdo69384 where it is
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Text body"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Text body"_ustr));
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xPropertySet, u"CharHeight"_ustr));
 }
 
@@ -1125,8 +1125,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58076)
 {
     auto verify = [this]() {
         // An additional section was created, so the default page style didn't have the custom margins.
-        uno::Reference<beans::XPropertySet> xStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2251), getProperty<sal_Int32>(xStyle, u"LeftMargin"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1752), getProperty<sal_Int32>(xStyle, u"RightMargin"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, u"TopMargin"_ustr));
@@ -1301,8 +1301,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo59638)
     auto verify = [this]() {
         // The problem was that w:lvlOverride inside w:num was ignores by dmapper.
 
-        uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPropertySet(
+            getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
         uno::Reference<container::XIndexAccess> xLevels(
             xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
         cpo::uno::Sequence<beans::PropertyValue> aProps;

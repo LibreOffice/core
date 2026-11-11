@@ -290,8 +290,7 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                                   uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
     bool bNoFirstHeader = {};
     bool bShareFirstHeader = {};
     CPPUNIT_ASSERT(xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader);
@@ -325,8 +324,7 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                                   uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
     bool bNoFirstHeader = {};
     bool bShareFirstHeader = {};
     CPPUNIT_ASSERT(xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader);

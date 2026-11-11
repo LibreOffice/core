@@ -332,8 +332,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117246)
 CPPUNIT_TEST_FIXTURE(Test, testTdf108943)
 {
     createSwDoc("tdf108943.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -551,8 +551,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo85812)
 CPPUNIT_TEST_FIXTURE(Test, testFdo49692)
 {
     createSwDoc("fdo49692.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -797,9 +797,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo81944)
 {
     createSwDoc("fdo81944.rtf");
     // font properties in style were not imported
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
-    uno::Reference<style::XStyle> xStyle(xPropertySet, uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Segoe UI"_ustr, getProperty<OUString>(xStyle, u"CharFontName"_ustr));
     CPPUNIT_ASSERT_EQUAL(9.0f, getProperty<float>(xStyle, u"CharHeight"_ustr));
     // not sure if this should be set on Asian or Complex or both?
@@ -908,8 +907,8 @@ CPPUNIT_TEST_FIXTURE(Test, testN823655)
 CPPUNIT_TEST_FIXTURE(Test, testN823675)
 {
     createSwDoc("n823675.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -1202,8 +1201,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo74823)
 CPPUNIT_TEST_FIXTURE(Test, testFdo74599)
 {
     createSwDoc("fdo74599.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 3"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 3"_ustr));
     // Writer default styles weren't disabled, so the color was gray, not default (black).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
                          getProperty<sal_Int32>(xPropertySet, u"CharColor"_ustr));

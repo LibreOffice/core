@@ -701,8 +701,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
 
 void SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 {
-    Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    Reference< XPropertySetInfo > xPropSetInfo = rStyle->getPropertySetInfo();
 
     Any aAny;
 
@@ -710,12 +709,12 @@ void SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
     // case for StarOffice Writer's pool styles.
     if( xPropSetInfo->hasPropertyByName( gsIsPhysical ) )
     {
-        aAny = xPropSet->getPropertyValue( gsIsPhysical );
+        aAny = rStyle->getPropertyValue( gsIsPhysical );
         if( !*o3tl::doAccess<bool>(aAny) )
             return;
     }
 
-    aAny = xPropSet->getPropertyValue( u"NumberingRules"_ustr );
+    aAny = rStyle->getPropertyValue( u"NumberingRules"_ustr );
     Reference<XIndexReplace> xNumRule;
     aAny >>= xNumRule;
 
@@ -724,7 +723,7 @@ void SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
     bool bHidden = false;
     if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
     {
-        aAny = xPropSet->getPropertyValue( u"Hidden"_ustr );
+        aAny = rStyle->getPropertyValue( u"Hidden"_ustr );
         aAny >>= bHidden;
     }
 

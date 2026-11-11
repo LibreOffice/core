@@ -61,7 +61,7 @@ namespace sdr::table {
 
 typedef std::map< OUString, sal_Int32 > CellStyleNameMap;
 
-typedef ::comphelper::WeakComponentImplHelper< XStyle, XNameReplace, XServiceInfo, XIndexReplace, XModifiable, XModifyListener, XPropertySet > TableDesignStyleBase;
+typedef ::comphelper::WeakComponentImplHelper< XStyle, XNameReplace, XServiceInfo, XIndexReplace, XModifiable, XModifyListener > TableDesignStyleBase;
 
 namespace {
 
@@ -743,7 +743,7 @@ void TableDesignFamily::replaceByName( const OUString& rName, const Any& aElemen
 
 Reference< XInterface > TableDesignFamily::createInstance()
 {
-    return Reference< XInterface >( static_cast< XStyle* >( new TableDesignStyle ) );
+    return Reference< XInterface >( static_cast< cppu::OWeakObject* >( new TableDesignStyle ) );
 }
 
 

@@ -487,7 +487,7 @@ DECLARE_OOXMLEXPORT_TEST(testKern, "kern.docx")
     // This failed: kerning was also enabled for the second paragraph.
     CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(2), 1), u"CharAutoKerning"_ustr));
 
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     //tdf107801: kerning normally isn't enabled by default for .docx
     CPPUNIT_ASSERT_EQUAL_MESSAGE("AutoKern should be false", false, getProperty<bool>(xStyle, u"CharAutoKerning"_ustr));
 }
@@ -497,7 +497,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.d
     // the paragraph style should set table's text-flow break-before-page
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     //tdf107801: kerning info wasn't exported previously.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("AutoKern should be true", true, getProperty<bool>(xStyle, u"CharAutoKerning"_ustr));
 }
@@ -587,7 +587,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSecti
     CPPUNIT_ASSERT_MESSAGE("There should be two or three pages", getPages() <= 3 );
 
     //tdf#95114 - follow style is Text Body - DOCX test
-    uno::Reference< beans::XPropertySet > properties(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"annotation subject"_ustr), uno::UNO_QUERY);
+    uno::Reference< style::XStyle > properties(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"annotation subject"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Marginalia"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 }
 
@@ -613,7 +613,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf98700_keepWithNext)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Text Body style toggled off keep with next", false, getProperty<bool>(getParagraph(5), u"ParaKeepTogether"_ustr));
 
     //tdf#95114 - follow style is Text Body - ODT test
-    uno::Reference< beans::XPropertySet > properties(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr), uno::UNO_QUERY);
+    uno::Reference< style::XStyle > properties(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Text body"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 }
 

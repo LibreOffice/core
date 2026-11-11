@@ -3466,6 +3466,7 @@ module com {
    module style {
     published interface XStyle {
      interface ::com::sun::star::container::XNamed;
+     interface ::com::sun::star::beans::XPropertySet;
      boolean isUserDefined();
      boolean isInUse();
      string getParentStyle();

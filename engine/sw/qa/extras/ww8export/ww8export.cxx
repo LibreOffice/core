@@ -260,7 +260,7 @@ DECLARE_WW8EXPORT_TEST(testPageBorder, "page-border.doc")
 DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 {
     // Character height was 10pt instead of 7.5pt in the header.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, u"HeaderTextFirst"_ustr)->getText();
     uno::Reference<text::XTextRange> xHeaderParagraph = getParagraphOfText(1, xText, u""_ustr);
     CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(xHeaderParagraph, u"CharHeight"_ustr));
@@ -948,7 +948,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo42144)
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Footer wasn't disabled -- instead empty footer was exported.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, u"FooterIsOn"_ustr));
 }
 
@@ -1520,11 +1520,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
     OUString lastPageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     CPPUNIT_ASSERT(firstPageStyleName != lastPageStyleName);
 
-    uno::Reference<beans::XPropertySet> xFirstPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(firstPageStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xFirstPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(firstPageStyleName));
     awt::Size fSize;
     xFirstPropertySet->getPropertyValue(u"Size"_ustr) >>= fSize;
 
-    uno::Reference<beans::XPropertySet> xNextPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(lastPageStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xNextPropertySet(getStyles(u"PageStyles"_ustr)->getStyleByName(lastPageStyleName));
     awt::Size lSize;
     xNextPropertySet->getPropertyValue(u"Size"_ustr) >>= lSize;
 
@@ -1556,9 +1556,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
         }
     }
     CPPUNIT_ASSERT(charStyleName.getLength());
-    uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"CharacterStyles"_ustr)->getStyleByName(charStyleName),
-        uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(
+        getStyles(u"CharacterStyles"_ustr)->getStyleByName(charStyleName));
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xStyle, u"CharColor"_ustr));
 }
 

@@ -224,7 +224,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.doc
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr));
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Another paragraph aligned to right"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Another paragraph aligned to right"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(xPropertySet, u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(4), u"ParaAdjust"_ustr));
@@ -242,7 +242,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.doc
 
 DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_strict.docx")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
@@ -475,8 +475,8 @@ DECLARE_OOXMLEXPORT_TEST(testGraphicObjectFliph, "graphic-object-fliph.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf113547, "tdf113547.docx")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aProps(xLevels->getByIndex(0)); // 1st level
@@ -532,7 +532,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf49073, "tdf49073.docx")
     OUString sRuby(aRuby, SAL_N_ELEMENTS(aRuby));
     CPPUNIT_ASSERT_EQUAL(sRuby,getProperty<OUString>(getParagraph(1)->getStart(), u"RubyText"_ustr));
     OUString sStyle = getProperty<OUString>( getParagraph(1)->getStart(), u"RubyCharStyleName"_ustr);
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"CharacterStyles"_ustr)->getStyleByName(sStyle), uno::UNO_QUERY );
+    uno::Reference<style::XStyle> xPropertySet(getStyles(u"CharacterStyles"_ustr)->getStyleByName(sStyle));
     CPPUNIT_ASSERT_EQUAL(5.f, getProperty<float>(xPropertySet, u"CharHeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_CENTER) ,getProperty<sal_Int16>(getParagraph(2)->getStart(),u"RubyAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_BLOCK)  ,getProperty<sal_Int16>(getParagraph(3)->getStart(),u"RubyAdjust"_ustr));
@@ -879,7 +879,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104348_contextMargin, "tdf104348_contextMargin.d
 {
     // tdf#104348 shows that ContextMargin belongs with Top/Bottom handling
 
-    uno::Reference<beans::XPropertySet> xMyStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"MyStyle"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xMyStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"MyStyle"_ustr));
     // from paragraph style - this is what direct formatting should equal
     sal_Int32 nMargin = getProperty<sal_Int32>(xMyStyle, u"ParaBottomMargin"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nMargin);

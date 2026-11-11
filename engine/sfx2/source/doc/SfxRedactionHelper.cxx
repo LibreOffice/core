@@ -342,15 +342,10 @@ SfxRedactionHelper::getPageMarginsForWriter(const cpo::uno::Reference<css::frame
     if (!xPageStyle.is())
         return aPageMargins;
 
-    uno::Reference<beans::XPropertySet> xPageProperties(xPageStyle, uno::UNO_QUERY);
-
-    if (!xPageProperties.is())
-        return aPageMargins;
-
-    xPageProperties->getPropertyValue(u"LeftMargin"_ustr) >>= aPageMargins.nLeft;
-    xPageProperties->getPropertyValue(u"RightMargin"_ustr) >>= aPageMargins.nRight;
-    xPageProperties->getPropertyValue(u"TopMargin"_ustr) >>= aPageMargins.nTop;
-    xPageProperties->getPropertyValue(u"BottomMargin"_ustr) >>= aPageMargins.nBottom;
+    xPageStyle->getPropertyValue(u"LeftMargin"_ustr) >>= aPageMargins.nLeft;
+    xPageStyle->getPropertyValue(u"RightMargin"_ustr) >>= aPageMargins.nRight;
+    xPageStyle->getPropertyValue(u"TopMargin"_ustr) >>= aPageMargins.nTop;
+    xPageStyle->getPropertyValue(u"BottomMargin"_ustr) >>= aPageMargins.nBottom;
 
     return aPageMargins;
 }
@@ -398,15 +393,10 @@ SfxRedactionHelper::getPageMarginsForCalc(const cpo::uno::Reference<css::frame::
     if (!xPageStyle.is())
         return aPageMargins;
 
-    uno::Reference<beans::XPropertySet> xPageProperties(xPageStyle, uno::UNO_QUERY);
-
-    if (!xPageProperties.is())
-        return aPageMargins;
-
-    xPageProperties->getPropertyValue(u"LeftMargin"_ustr) >>= aPageMargins.nLeft;
-    xPageProperties->getPropertyValue(u"RightMargin"_ustr) >>= aPageMargins.nRight;
-    xPageProperties->getPropertyValue(u"TopMargin"_ustr) >>= aPageMargins.nTop;
-    xPageProperties->getPropertyValue(u"BottomMargin"_ustr) >>= aPageMargins.nBottom;
+    xPageStyle->getPropertyValue(u"LeftMargin"_ustr) >>= aPageMargins.nLeft;
+    xPageStyle->getPropertyValue(u"RightMargin"_ustr) >>= aPageMargins.nRight;
+    xPageStyle->getPropertyValue(u"TopMargin"_ustr) >>= aPageMargins.nTop;
+    xPageStyle->getPropertyValue(u"BottomMargin"_ustr) >>= aPageMargins.nBottom;
 
     return aPageMargins;
 }

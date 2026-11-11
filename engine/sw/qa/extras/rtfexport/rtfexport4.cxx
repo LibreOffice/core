@@ -193,8 +193,7 @@ CPPUNIT_TEST_FIXTURE(Test, test129758)
 {
     auto verify = [this]() {
         uno::Reference<style::XStyleFamily> xStyles(getStyles(u"ParagraphStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(u"Border"_ustr),
-                                                   uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyles->getStyleByName(u"Border"_ustr));
         // style has borders
         table::BorderLine2 border;
         border = getProperty<table::BorderLine2>(xStyle, u"RightBorder"_ustr);
@@ -251,8 +250,7 @@ CPPUNIT_TEST_FIXTURE(Test, test150382)
 {
     auto verify = [this]() {
         uno::Reference<style::XStyleFamily> xStyles(getStyles(u"ParagraphStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(u"Normal,Bordered"_ustr),
-                                                   uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyles->getStyleByName(u"Normal,Bordered"_ustr));
         // style has borders
         table::BorderLine2 border;
         border = getProperty<table::BorderLine2>(xStyle, u"RightBorder"_ustr);
@@ -697,8 +695,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136587_noStyleName)
 CPPUNIT_TEST_FIXTURE(Test, testPageBorder)
 {
     createSwDoc("page-border.rtf");
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     auto aTopBorder = getProperty<table::BorderLine2>(xPageStyle, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(18), aTopBorder.LineWidth);
 
@@ -715,8 +713,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBorder)
 CPPUNIT_TEST_FIXTURE(Test, testTbrlPage)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         auto nActual = getProperty<sal_Int16>(xPageStyle, u"WritingMode"_ustr);
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: 2
@@ -764,8 +762,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
 {
     createSwDoc("gutter-left.rtf");
     saveAndReload(TestFilter::RTF);
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     sal_Int32 nGutterMargin{};
     xPageStyle->getPropertyValue(u"GutterMargin"_ustr) >>= nGutterMargin;
     // Without the accompanying fix in place, this test would have failed with:

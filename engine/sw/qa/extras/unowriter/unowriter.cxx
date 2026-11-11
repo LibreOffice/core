@@ -1604,8 +1604,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
 
         uno::Reference<style::XStyleFamily> xParaStyles(
             xSFS->getStyleFamilies()->getStyleFamilyByName(u"ParagraphStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xBodyTextStyle(xParaStyles->getStyleByName(u"Text body"_ustr),
-                                                           uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xBodyTextStyle(xParaStyles->getStyleByName(u"Text body"_ustr));
 
         rtl::OUString sListStyleName;
         xBodyTextStyle->getPropertyValue(u"NumberingStyleName"_ustr) >>= sListStyleName;

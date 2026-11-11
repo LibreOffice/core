@@ -569,7 +569,7 @@ DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
     // FIXME: validation error in OOXML export: Errors: 4
     skipValidation();
 
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was only 127, pt suffix was ignored, so this got parsed as twips instead of points.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(72 * 20)), getProperty<sal_Int32>(xPageStyle, u"BottomMargin"_ustr));
     // This was only 1397, same issue
@@ -823,7 +823,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo79535, "fdo79535.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCaption, "caption.docx")
 {
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Caption"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Caption"_ustr));
     // This was awt::FontSlant_ITALIC: Writer default was used instead of what is in the document.
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xStyle, u"CharPosture"_ustr));
 }

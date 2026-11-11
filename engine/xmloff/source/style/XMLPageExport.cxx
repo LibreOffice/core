@@ -111,14 +111,13 @@ bool XMLPageExport::exportStyle(
             const Reference< XStyle >& rStyle,
             bool bAutoStyles )
 {
-    Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    Reference< XPropertySetInfo > xPropSetInfo = rStyle->getPropertySetInfo();
 
     // Don't export styles that aren't existing really. This may be the
     // case for StarOffice Writer's pool styles.
     if( xPropSetInfo->hasPropertyByName( gsIsPhysical ) )
     {
-        Any aAny = xPropSet->getPropertyValue( gsIsPhysical );
+        Any aAny = rStyle->getPropertyValue( gsIsPhysical );
         if( !*o3tl::doAccess<bool>(aAny) )
             return false;
     }
@@ -126,11 +125,11 @@ bool XMLPageExport::exportStyle(
     if( bAutoStyles )
     {
         XMLPageExportNameEntry aEntry;
-        collectPageMasterAutoStyle(xPropSet, aEntry);
+        collectPageMasterAutoStyle(rStyle, aEntry);
         aEntry.sStyleName = rStyle->getName();
         m_aNameVector.push_back( aEntry );
 
-        exportMasterPageContent( xPropSet, true );
+        exportMasterPageContent( rStyle, true );
     }
     else
     {
@@ -141,7 +140,7 @@ bool XMLPageExport::exportStyle(
 
         if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
         {
-            cpo::uno::Any aValue = xPropSet->getPropertyValue( u"Hidden"_ustr );
+            cpo::uno::Any aValue = rStyle->getPropertyValue( u"Hidden"_ustr );
             bool bHidden = false;
             if ((aValue >>= bHidden) && bHidden
                 && GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
@@ -165,11 +164,11 @@ bool XMLPageExport::exportStyle(
             }
         }
 
-        Reference<XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+        Reference<XPropertySetInfo> xInfo = rStyle->getPropertySetInfo();
         if ( xInfo.is() && xInfo->hasPropertyByName(gsFollowStyle) )
         {
             OUString sNextName;
-            xPropSet->getPropertyValue( gsFollowStyle ) >>= sNextName;
+            rStyle->getPropertyValue( gsFollowStyle ) >>= sNextName;
 
             if( sName != sNextName && !sNextName.isEmpty() )
             {
@@ -184,11 +183,11 @@ bool XMLPageExport::exportStyle(
             Any aAny;
             //same flag footer/header
             bool bFirstShared = false;
-            aAny = xPropSet->getPropertyValue( gsFirstShareContent );
+            aAny = rStyle->getPropertyValue( gsFirstShareContent );
             aAny >>= bFirstShared;
 
             bool bWithoutFirstHeader = false;
-            aAny = xPropSet->getPropertyValue( gsHeaderNoFirst );
+            aAny = rStyle->getPropertyValue( gsHeaderNoFirst );
             aAny >>= bWithoutFirstHeader;
             //TODO: version and odf extension ticket id
             if( GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
@@ -197,7 +196,7 @@ bool XMLPageExport::exportStyle(
                                                                                : XML_TRUE);
 
             bool bWithoutFirstFooter = false;
-            aAny = xPropSet->getPropertyValue( gsFooterNoFirst );
+            aAny = rStyle->getPropertyValue( gsFooterNoFirst );
             aAny >>= bWithoutFirstFooter;
             //TODO: version and odf extension ticket id
             if( GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
@@ -209,7 +208,7 @@ bool XMLPageExport::exportStyle(
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_MASTER_PAGE, true, true );
 
-        exportMasterPageContent( xPropSet, false );
+        exportMasterPageContent( rStyle, false );
     }
 
     return true;

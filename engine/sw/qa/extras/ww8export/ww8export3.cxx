@@ -63,7 +63,7 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of Sections", sal_Int32(0), xSections->getCount());
 
     // tdf#127862: page fill color (in this case white) was lost
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
 
     // tdf#136983
@@ -181,8 +181,8 @@ DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderT
 
 DECLARE_WW8EXPORT_TEST(testGutterLeft, "gutter-left.doc")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     sal_Int32 nGutterMargin{};
     xPageStyle->getPropertyValue(u"GutterMargin"_ustr) >>= nGutterMargin;
     // Without the accompanying fix in place, this test would have failed with:
@@ -586,8 +586,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121111_fillStyleNone)
 {
     createSwDoc("tdf121111_fillStyleNone.docx");
     saveAndReload(TestFilter::DOC);
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Numbering - First level"_ustr),
-                                                     uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Numbering - First level"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0xb8cce4), getProperty<Color>(xStyle, u"ParaBackColor"_ustr));//R:184 G:204 B:228
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
 
@@ -651,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127862_pageFillStyle)
     createSwDoc("tdf127862_pageFillStyle.odt");
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(6, getPages());
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
 }
 
@@ -691,8 +690,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94009_zeroPgMargin)
     createSwDoc("tdf94009_zeroPgMargin.odt");
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> defaultStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr),
-                                                     uno::UNO_QUERY);
+    uno::Reference<style::XStyle> defaultStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(defaultStyle, u"TopMargin"_ustr));
 }
 
@@ -881,8 +879,8 @@ DECLARE_WW8EXPORT_TEST(testPresetDash, "tdf127166_prstDash_Word97.doc")
 CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xStandard(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStandard(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT(getProperty<bool>(xStandard, u"RtlGutter"_ustr));
     };
 
@@ -1077,7 +1075,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136814)
     createSwDoc("tdf136814.odt");
     saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     sal_Int32 nBorderDistance = static_cast<sal_Int32>(106);
 
     CPPUNIT_ASSERT_EQUAL(nBorderDistance, getProperty<sal_Int32>(xStyle, u"TopBorderDistance"_ustr));

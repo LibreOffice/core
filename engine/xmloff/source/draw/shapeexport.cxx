@@ -374,17 +374,12 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             if(xStyle.is())
             {
                 // get family ID
-                uno::Reference< beans::XPropertySet > xStylePropSet(xStyle, uno::UNO_QUERY);
-                SAL_WARN_IF( !xStylePropSet.is(), "xmloff", "style without a XPropertySet?" );
                 try
                 {
-                    if(xStylePropSet.is())
-                    {
-                        OUString aFamilyName;
-                        xStylePropSet->getPropertyValue(u"Family"_ustr) >>= aFamilyName;
-                        if( !aFamilyName.isEmpty() && aFamilyName != "graphics" )
-                            aShapeInfo.mnFamily = XmlStyleFamily::SD_PRESENTATION_ID;
-                    }
+                    OUString aFamilyName;
+                    xStyle->getPropertyValue(u"Family"_ustr) >>= aFamilyName;
+                    if( !aFamilyName.isEmpty() && aFamilyName != "graphics" )
+                        aShapeInfo.mnFamily = XmlStyleFamily::SD_PRESENTATION_ID;
                 }
                 catch(const beans::UnknownPropertyException&)
                 {

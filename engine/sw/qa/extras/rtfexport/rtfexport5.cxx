@@ -234,8 +234,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo62044)
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste(u"rtfexport/data/fdo62044-paste.rtf", u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr));
     CPPUNIT_ASSERT_EQUAL(
         10.f, getProperty<float>(xPropertySet,
                                  u"CharHeight"_ustr)); // Was 18, i.e. reset back to original value.
@@ -245,14 +245,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo70578)
 {
     auto verify = [this]() {
         // Style without explicit \s0 was not imported as the default style
-        uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Subtitle"_ustr), uno::UNO_QUERY);
-        uno::Reference<style::XStyle> xStyle(xPropertySet, uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Subtitle"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, xStyle->getParentStyle());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                             getProperty<sal_Int32>(xPropertySet, u"ParaTopMargin"_ustr));
+                             getProperty<sal_Int32>(xStyle, u"ParaTopMargin"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                             getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
+                             getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
     };
     createSwDoc("fdo70578.rtf");
     verify();
@@ -311,8 +310,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112208)
 CPPUNIT_TEST_FIXTURE(Test, testParaBottomMargin)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPropertySet(
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                              getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
 
@@ -335,8 +334,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParaBottomMargin)
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin2)
 {
     createSwDoc("para-style-bottom-margin-2.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                          getProperty<sal_Int32>(xPropertySet, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(
@@ -347,8 +346,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin2)
         getProperty<style::LineSpacing>(xPropertySet, u"ParaLineSpacing"_ustr).Height);
 
     // the derived style contains \sa200, as does its parent
-    uno::Reference<beans::XPropertySet> xPropertySet1(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet1(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"List Paragraph"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
                          getProperty<sal_Int32>(xPropertySet1, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(

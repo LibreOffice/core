@@ -161,8 +161,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStandard(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                                  uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStandard(xStyleFamily->getStyleByName(u"Standard"_ustr));
     bool bRtlGutter{};
     xStandard->getPropertyValue(u"RtlGutter"_ustr) >>= bRtlGutter;
     // Without the accompanying fix in place, this test would have failed as

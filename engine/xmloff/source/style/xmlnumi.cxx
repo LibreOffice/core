@@ -975,28 +975,27 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             bNew = true;
         }
 
-        Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
         Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
+            xStyle->getPropertySetInfo();
         if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
         {
-            Any aAny = xPropSet->getPropertyValue( sIsPhysical );
+            Any aAny = xStyle->getPropertyValue( sIsPhysical );
             bNew = !*o3tl::doAccess<bool>(aAny);
         }
 
         if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
-            xPropSet->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
+            xStyle->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
 
         if( rName != GetName() )
             GetImport().AddStyleDisplayName( XmlStyleFamily::TEXT_LIST,
                                              GetName(), rName );
 
-        Any aAny = xPropSet->getPropertyValue( sNumberingRules );
+        Any aAny = xStyle->getPropertyValue( sNumberingRules );
         aAny >>= m_xNumRules;
         if( bOverwrite || bNew )
         {
             FillUnoNumRule(m_xNumRules);
-            xPropSet->setPropertyValue( sNumberingRules, Any(m_xNumRules) );
+            xStyle->setPropertyValue( sNumberingRules, Any(m_xNumRules) );
         }
         else
         {

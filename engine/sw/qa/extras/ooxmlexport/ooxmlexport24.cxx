@@ -135,14 +135,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.doc
         u"Footnote"_ustr,
         getProperty<OUString>(getParagraphOfText(1, xFootnoteText), u"ParaStyleName"_ustr));
 
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Footnote Symbol"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Footnote Symbol"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58),
                          getProperty<sal_Int32>(xPageStyle, u"CharEscapementHeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xPageStyle, u"CharColor"_ustr));
 
-    xPageStyle.set(getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Footnote anchor"_ustr),
-                   uno::UNO_QUERY);
+    xPageStyle = getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Footnote anchor"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58),
                          getProperty<sal_Int32>(xPageStyle, u"CharEscapementHeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xPageStyle, u"CharColor"_ustr));
@@ -172,14 +171,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
     CPPUNIT_ASSERT_EQUAL(Color(0x993300), getProperty<Color>(getParagraphOfText(1, xEndnoteText),
                                                              u"CharColor"_ustr));
 
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Endnote Symbol"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Endnote Symbol"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58),
                          getProperty<sal_Int32>(xPageStyle, u"CharEscapementHeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, getProperty<Color>(xPageStyle, u"CharColor"_ustr));
 
-    xPageStyle.set(getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Endnote anchor"_ustr),
-                   uno::UNO_QUERY);
+    xPageStyle = getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"Endnote anchor"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58),
                          getProperty<sal_Int32>(xPageStyle, u"CharEscapementHeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, getProperty<Color>(xPageStyle, u"CharColor"_ustr));
@@ -189,12 +187,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 {
     auto verify = [this](bool bIsExport = false) {
         CPPUNIT_ASSERT_EQUAL(4, getPages());
-        uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Footnote"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Footnote"_ustr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote style is rose color", Color(0xFF007F),
                                      getProperty<Color>(xPageStyle, u"CharColor"_ustr));
-        xPageStyle.set(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Endnote"_ustr),
-                       uno::UNO_QUERY);
+        xPageStyle = getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Endnote"_ustr);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Endnote style is cyan3 color", Color(0x2BD0D2),
                                      getProperty<Color>(xPageStyle, u"CharColor"_ustr));
 
@@ -280,8 +277,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104150, "tdf104150.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was 0xff0000, i.e. red: background shape wasn't ignored.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
                          getProperty<sal_Int32>(xPageStyle, u"BackColor"_ustr));
@@ -300,8 +297,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103976, "tdf103976.docx")
         getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), u"ParaBottomMargin"_ustr));
 
     // tdf#116549: heading 2 style should not have a bottom border.
-    uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 2"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 2"_ustr));
     table::BorderLine2 aBottomBorder
         = getProperty<table::BorderLine2>(xStyle, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aBottomBorder.LineWidth);
@@ -351,8 +348,8 @@ DECLARE_OOXMLEXPORT_TEST(testDefaultSectBreakCols, "default-sect-break-cols.docx
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
 
     // Second problem: the page style had two columns, while it shouldn't have any.
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xPageStyle, u"TextColumns"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
     // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
@@ -427,8 +424,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // This was 0: footnote separator was disabled even in case the document
     // had no footnotes.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25),
@@ -479,8 +476,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107618)
 
     saveAndReload(TestFilter::DOCX);
     // This was false, header was lost on export.
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 }
 

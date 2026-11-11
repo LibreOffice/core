@@ -308,7 +308,7 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
     {
         CommandStruct const*const pCommands = SwCondCollItem::GetCmds();
 
-        Reference< XPropertySet > xPropSet( GetStyle(), UNO_QUERY );
+        Reference< style::XStyle > xPropSet( GetStyle() );
 
         cpo::uno::Sequence< beans::NamedValue > aSeq( m_pConditions->size() );
         auto aSeqRange = asNonConstRange(aSeq);

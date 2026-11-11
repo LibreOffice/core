@@ -695,7 +695,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCurruption)
     assertXPath(pXmlDoc, "/w:hdr/w:tbl[1]/w:tr[1]/w:tc[1]",1);
 
     // tdf#116549: header paragraph should not have a bottom border.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT(xStyle.is());
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(xStyle, u"HeaderTextFirst"_ustr);
     CPPUNIT_ASSERT(xHeaderText.is());
@@ -812,7 +812,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf38778)
     assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[7]/w:rPr/w:szCs", "val", pszCs);
 
     // tdf#127862: page fill color (in this case white) was lost
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
 }
 
@@ -983,7 +983,7 @@ CPPUNIT_TEST_FIXTURE(Test, test_ClosingBrace)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[2]/m:dPr[1]/m:endChr[1]","val",u"");
 
     // tdf#154371 paragraph style Подзаголовок ур3 inherits from Heading 3 (includes list level and list id)
-    uno::Reference<beans::XPropertySet> xParaStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Подзаголовок ур3"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xParaStyle(getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Подзаголовок ур3"_ustr));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xParaStyle, u"NumberingLevel"_ustr));
     CPPUNIT_ASSERT(!getProperty<OUString>(xParaStyle, u"NumberingStyleName"_ustr).isEmpty());
 }
@@ -1244,13 +1244,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99090_pgbrkAfterTable)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf96750_landscapeFollow, "tdf96750_landscapeFollow.docx")
 {
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, u"IsLandscape"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf86926_A3, "tdf86926_A3.docx")
 {
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(42000), getProperty<sal_Int32>(xStyle, u"Height"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(29700), getProperty<sal_Int32>(xStyle, u"Width"_ustr));
 }
@@ -1323,7 +1323,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original, "tdf81345.docx")
 
     // tdf89297 Styles were being added before their base/parent/inherited-from style existed, and so were using default settings.
     uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xParaStyles->getStyleByName(u"Pull quote"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xParaStyles->getStyleByName(u"Pull quote"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6736947), getProperty<sal_Int32>(xStyle, u"CharColor"_ustr));
 }
 #endif

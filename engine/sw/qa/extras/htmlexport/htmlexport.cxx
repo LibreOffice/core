@@ -61,8 +61,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo81276)
 {
     auto verify = [this]() {
         uno::Reference<style::XStyleFamily> xPageStyles(getStyles(u"PageStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getStyleByName(u"HTML"_ustr),
-                                                   uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xPageStyles->getStyleByName(u"HTML"_ustr));
         // some rounding going on here?
         CPPUNIT_ASSERT(abs(sal_Int32(29700) - getProperty<sal_Int32>(xStyle, u"Width"_ustr)) < 10);
         CPPUNIT_ASSERT(abs(sal_Int32(21006) - getProperty<sal_Int32>(xStyle, u"Height"_ustr)) < 10);
@@ -95,8 +94,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo86857)
     auto verify = [this]() {
         // problem was that background color on page style was not exported
         uno::Reference<style::XStyleFamily> xPageStyles(getStyles(u"PageStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getStyleByName(u"HTML"_ustr),
-                                                   uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xPageStyles->getStyleByName(u"HTML"_ustr));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xStyle, u"BackColor"_ustr));
         // check that table background color works, which still uses RES_BACKGROUND
         uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -233,8 +231,8 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipHeaderFooterOmitsHeaderFooterConten
 
     // Build a doc with a page header and footer via the page style API.
     createSwDoc();
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
     xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xHeaderText;
@@ -1554,8 +1552,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteNoMargin)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     xText->insertString(xText->getEnd(), u"string"_ustr, /*bAbsorb=*/false);
-    uno::Reference<beans::XPropertySet> xQuotations(
-        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Quotations"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xQuotations(
+        getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Quotations"_ustr));
     xQuotations->setPropertyValue(u"ParaBottomMargin"_ustr,
                                   cpo::uno::Any(static_cast<sal_Int32>(0)));
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);

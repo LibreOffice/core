@@ -2652,8 +2652,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf112025)
 
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
-    uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, u"IsLandscape"_ustr));
 }
 

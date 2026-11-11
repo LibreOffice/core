@@ -113,7 +113,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
             for ( sal_Int32 n = 0; n < aSeqNames.getLength(); n++ )
             {
                 const OUString& aName = aSeqNames[n];
-                Reference< XPropertySet > xPropSet( xNameContainer->getStyleByName( aName ), UNO_QUERY );
+                Reference< XStyle > xPropSet( xNameContainer->getStyleByName( aName ) );
                 if ( xPropSet.is() )
                 {
                     bool bIsPhysical( false );

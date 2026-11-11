@@ -193,13 +193,12 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
     if( !xStyle.is() || !(bOverwrite || IsNew()) )
         return;
 
-    Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
-                xPropSet->getPropertySetInfo();
+                xStyle->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( gsIsAutoUpdate ) )
     {
         bool bTmp = m_bAutoUpdate;
-        xPropSet->setPropertyValue( gsIsAutoUpdate, Any(bTmp) );
+        xStyle->setPropertyValue( gsIsAutoUpdate, Any(bTmp) );
     }
 
     // tell the style about it's events (if applicable)

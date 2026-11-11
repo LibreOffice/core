@@ -201,8 +201,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"mystyle"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"mystyle"_ustr));
     sal_Int16 nNumberingLevel{};
     CPPUNIT_ASSERT(xStyle->getPropertyValue(u"NumberingLevel"_ustr) >>= nNumberingLevel);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), nNumberingLevel);
@@ -491,8 +490,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<style::XStyleFamily> xStyleFamily(
         xStyleFamilies->getStyleFamilyByName(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getStyleByName(u"Standard"_ustr));
     // Body frame width is 6cm (2+2cm margin).
     xStyle->setPropertyValue(u"Width"_ustr, cpo::uno::Any(static_cast<sal_Int32>(10000)));
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);

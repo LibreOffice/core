@@ -132,8 +132,8 @@ CPPUNIT_TEST_FIXTURE(Test, testEm)
 CPPUNIT_TEST_FIXTURE(Test, testNumberingFont)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xStyle(
-            getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"ListLabel 1"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(
+            getStyles(u"CharacterStyles"_ustr)->getStyleByName(u"ListLabel 1"_ustr));
         // This was Liberation Serif, i.e. custom font of the numbering itself ("1.\t") was lost on import.
         CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr, getProperty<OUString>(xStyle, u"CharFontName"_ustr));
         CPPUNIT_ASSERT_EQUAL(72.f, getProperty<float>(xStyle, u"CharHeight"_ustr));
@@ -273,8 +273,8 @@ CPPUNIT_TEST_FIXTURE(Test, testMargmirror)
 {
     auto verify = [this]() {
         // \margmirror was not handled, this was PageStyleLayout_ALL.
-        uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT_EQUAL(
             style::PageStyleLayout_MIRRORED,
             getProperty<style::PageStyleLayout>(xPageStyle, u"PageStyleLayout"_ustr));
@@ -289,11 +289,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSautoupd)
 {
     auto verify = [this]() {
         // \sautoupd was ignored during import and export.
-        uno::Reference<beans::XPropertySet> xHeading1(
-            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xHeading1(
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 1"_ustr));
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xHeading1, u"IsAutoUpdate"_ustr));
-        uno::Reference<beans::XPropertySet> xHeading2(
-            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 2"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xHeading2(
+            getStyles(u"ParagraphStyles"_ustr)->getStyleByName(u"Heading 2"_ustr));
         CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xHeading2, u"IsAutoUpdate"_ustr));
     };
     createSwDoc("sautoupd.rtf");
@@ -472,8 +472,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBackground)
 {
     auto verify = [this]() {
         // The problem was that \background was ignored.
-        uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getProperty<Color>(xPageStyle, u"BackColor"_ustr));
     };
     createSwDoc("page-background.rtf");

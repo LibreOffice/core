@@ -420,16 +420,16 @@ uno::Reference<cpo::uno::XInterface> ScServiceProvider::MakeInstance(
                 new ScEditFieldObj(xNullContent, nullptr, getFieldType(nType), ESelection())));
         }   break;
         case Type::CELLSTYLE:
-            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Para, OUString() )));
+            xRet.set(static_cast<cppu::OWeakObject*>(new ScStyleObj( nullptr, SfxStyleFamily::Para, OUString() )));
             break;
         case Type::PAGESTYLE:
-            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Page, OUString() )));
+            xRet.set(static_cast<cppu::OWeakObject*>(new ScStyleObj( nullptr, SfxStyleFamily::Page, OUString() )));
             break;
         case Type::GRAPHICSTYLE:
             if (pDocShell)
             {
                 pDocShell->MakeDrawLayer();
-                xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Frame, OUString() )));
+                xRet.set(static_cast<cppu::OWeakObject*>(new ScStyleObj( nullptr, SfxStyleFamily::Frame, OUString() )));
             }
             break;
         case Type::AUTOFORMAT:

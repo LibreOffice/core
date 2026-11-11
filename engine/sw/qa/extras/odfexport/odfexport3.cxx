@@ -630,8 +630,7 @@ DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<style::XStyleFamily> xStyles(getStyles(u"PageStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(u"Standard"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyles->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH,
                          getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Blue -45 Degrees"_ustr,
@@ -1330,8 +1329,8 @@ DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<style::XStyleFamilies> xFamilies(XFamiliesSupplier->getStyleFamilies());
     uno::Reference<style::XStyleFamily> xCellFamily(xFamilies->getStyleFamilyByName(u"CellStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xCell1Style(
-        xCellFamily->getStyleByName(u"Test style.1"_ustr), UNO_QUERY);
+    uno::Reference<style::XStyle> xCell1Style(
+        xCellFamily->getStyleByName(u"Test style.1"_ustr));
 
     sal_Int32 nInt32 = 0xF0F0F0;
     table::BorderLine2 oBorder;
@@ -1855,8 +1854,8 @@ DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test that number format of cell styles can be imported and exported.
-    uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"CellStyles"_ustr)->getStyleByName(u"Test Style.11"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(
+        getStyles(u"CellStyles"_ustr)->getStyleByName(u"Test Style.11"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(10104), getProperty<sal_uInt32>(xStyle, u"NumberFormat"_ustr));
 }
 

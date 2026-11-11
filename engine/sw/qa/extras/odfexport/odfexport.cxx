@@ -680,16 +680,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92379)
     auto verify = [this]() {
         // frame style fo:background-color was not imported
         uno::Reference<style::XStyleFamily> xStyles(getStyles(u"FrameStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getStyleByName(u"encarts"_ustr),
-                uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyles->getStyleByName(u"encarts"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), getProperty<Color>(xStyle, u"BackColorRGB"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, u"BackColorTransparency"_ustr));
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), getProperty<Color>(xStyle, u"FillColor"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, u"FillTransparence"_ustr));
 
-        uno::Reference<beans::XPropertySet> xFrameStyle2(xStyles->getStyleByName(u"Untitled1"_ustr),
-                uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xFrameStyle2(xStyles->getStyleByName(u"Untitled1"_ustr));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xFrameStyle2, u"BackColorRGB"_ustr));
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xFrameStyle2, u"BackTransparent"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xFrameStyle2, u"BackColorTransparency"_ustr));
@@ -701,8 +699,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92379)
         // paragraph style fo:background-color was wrongly inherited despite being
         // overridden in derived style
         uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
-        uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getStyleByName(
-                u"Titre Avis expert"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle1(xParaStyles->getStyleByName(
+                u"Titre Avis expert"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle1, u"ParaBackColor"_ustr));
         CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle1, u"ParaBackTransparent"_ustr));
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle1, u"FillStyle"_ustr));
@@ -710,8 +708,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92379)
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle1, u"FillTransparence"_ustr));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xStyle1, u"CharColor"_ustr));
 
-        uno::Reference<beans::XPropertySet> xStyle2(xParaStyles->getStyleByName(
-                u"Avis expert questions"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle2(xParaStyles->getStyleByName(
+                u"Avis expert questions"_ustr));
         CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xStyle2, u"ParaBackColor"_ustr));
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle2, u"ParaBackTransparent"_ustr));
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle2, u"FillStyle"_ustr));
@@ -720,8 +718,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92379)
     //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle2, "FillTransparence"));
         CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle2, u"CharColor"_ustr));
 
-        uno::Reference<beans::XPropertySet> xStyle31(xParaStyles->getStyleByName(
-                u"avis expert questions non cadres"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle31(xParaStyles->getStyleByName(
+                u"avis expert questions non cadres"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0x801900), getProperty<Color>(xStyle31, u"ParaBackColor"_ustr));
         CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle31, u"ParaBackTransparent"_ustr));
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle31, u"FillStyle"_ustr));
@@ -729,8 +727,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92379)
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle31, u"FillTransparence"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle31, u"CharColor"_ustr));
 
-        uno::Reference<beans::XPropertySet> xStyle32(xParaStyles->getStyleByName(
-                u"Avis expert rXponses"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle32(xParaStyles->getStyleByName(
+                u"Avis expert rXponses"_ustr));
         CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xStyle32, u"ParaBackColor"_ustr));
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle32, u"ParaBackTransparent"_ustr));
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle32, u"FillStyle"_ustr));
@@ -1025,11 +1023,11 @@ DECLARE_ODFEXPORT_TEST(testStylePageNumber, "ooo321_stylepagenumber.odt")
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xPara0->getPropertyValue(u"PageNumberOffset"_ustr));
 
     uno::Reference<style::XStyleFamily> xParaStyles = getStyles(u"ParagraphStyles"_ustr);
-    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getStyleByName(u"stylewithbreak1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle1(xParaStyles->getStyleByName(u"stylewithbreak1"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Right Page"_ustr, getProperty<OUString>(xStyle1, u"PageDescName"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xStyle1, u"PageNumberOffset"_ustr));
 
-    uno::Reference<beans::XPropertySet> xStyle0(xParaStyles->getStyleByName(u"stylewithbreak0"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle0(xParaStyles->getStyleByName(u"stylewithbreak0"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"First Page"_ustr, getProperty<OUString>(xStyle0, u"PageDescName"_ustr));
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xStyle0->getPropertyValue(u"PageNumberOffset"_ustr));
 }
@@ -1166,7 +1164,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
         // Check character style
         {
             uno::Reference< style::XStyleFamily > xStyleFamily = getStyles(u"CharacterStyles"_ustr);
-            uno::Reference < beans::XPropertySet > xStyleSet(xStyleFamily->getStyleByName(u"CharDiffBor"_ustr), uno::UNO_QUERY);
+            uno::Reference< style::XStyle > xStyleSet(xStyleFamily->getStyleByName(u"CharDiffBor"_ustr));
 
             // Top border
             CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[0], getProperty<table::BorderLine2>(xStyleSet,u"CharTopBorder"_ustr));
@@ -1263,8 +1261,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103091)
     saveAndReload(TestFilter::ODT);
     // check that all conditional paragraph style conditions are imported
     uno::Reference<style::XStyleFamily> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getStyleByName(
-            u"Text body"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle1(xParaStyles->getStyleByName(
+            u"Text body"_ustr));
     auto conditions(getProperty<cpo::uno::Sequence<beans::NamedValue>>(xStyle1, u"ParaStyleConditions"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(28), conditions.getLength());

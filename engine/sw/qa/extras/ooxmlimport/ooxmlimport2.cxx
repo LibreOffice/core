@@ -652,8 +652,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTextCopy)
         xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     }
     auto aPageStyleName = getProperty<OUString>(xPara, u"PageStyleName"_ustr);
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(aPageStyleName), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(aPageStyleName));
     auto xHeaderText = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr);
     uno::Reference<text::XTextRange> xHeaderPara = getParagraphOfText(1, xHeaderText);
     auto aTextPortionType = getProperty<OUString>(getRun(xHeaderPara, 1), u"TextPortionType"_ustr);
@@ -912,8 +912,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127825)
 CPPUNIT_TEST_FIXTURE(Test, testTdf103345)
 {
     createSwDoc("numbering-circle.docx");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPropertySet(
+        getStyles(u"NumberingStyles"_ustr)->getStyleByName(u"WWNum1"_ustr));
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aProps;

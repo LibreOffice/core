@@ -859,8 +859,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.docx")
 {
     // given a document with a v:background bitmap, but no w:background fillcolor
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     // the image (or any fill for that matter) should be ignored.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
                          getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
@@ -869,8 +869,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.doc
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageGradient, "fill.docx")
 {
     // given a document with a gradient page background
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
                          getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
 
@@ -888,8 +888,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126533_pageBitmap)
 {
     auto verify = [this]() {
         // given a document with a page background image
-        uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
                              getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
     };

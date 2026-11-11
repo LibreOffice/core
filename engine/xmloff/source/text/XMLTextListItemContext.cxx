@@ -72,8 +72,7 @@ XMLTextListItemContext::XMLTextListItemContext(
                 {
                     Reference < style::XStyle > xStyle = rNumStyles->getStyleByName( sDisplayStyleName );
 
-                    uno::Reference< beans::XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                    Any aAny = xPropSet->getPropertyValue(u"NumberingRules"_ustr);
+                    Any aAny = xStyle->getPropertyValue(u"NumberingRules"_ustr);
                     aAny >>= mxNumRulesOverride;
                 }
                 else

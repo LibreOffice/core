@@ -19,7 +19,7 @@
 #pragma once
 
 class SAL_DLLPUBLIC_RTTI SwXBaseStyle
-    : public cppu::WeakImplHelper<css::style::XStyle, css::beans::XPropertySet>
+    : public cppu::WeakImplHelper<css::style::XStyle>
 {
 };
 

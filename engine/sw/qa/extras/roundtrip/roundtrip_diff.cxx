@@ -477,10 +477,10 @@ private:
                 continue;
             for (const OUString& rName : xStyles->getElementNames())
             {
-                uno::Reference<beans::XPropertySet> xStyle;
+                uno::Reference<style::XStyle> xStyle;
                 try
                 {
-                    xStyle.set(xStyles->getStyleByName(rName), uno::UNO_QUERY);
+                    xStyle = xStyles->getStyleByName(rName);
                 }
                 catch (...)
                 {
@@ -488,7 +488,7 @@ private:
                 }
                 // A style nothing uses is written by neither side of a comparison and says
                 // nothing about what a document holds.
-                uno::Reference<style::XStyle> xInUse(xStyle, uno::UNO_QUERY);
+                uno::Reference<style::XStyle> xInUse(xStyle);
                 if (!xInUse.is() || !xInUse->isInUse())
                     continue;
                 const OString aPath
