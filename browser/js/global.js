@@ -3158,6 +3158,21 @@ function showWelcomeSVG() {
 		}
 	};
 
+	// Send bye on the collab WS and close it. The broker then reclaims itself
+	// at once, rather than waiting out its grace period for a reconnect.
+	global.collab.leave = function() {
+		if (!global.collab.ws)
+			return;
+
+		if (global.collab.ws.readyState === WebSocket.OPEN) {
+			try { global.collab.ws.send('{"type":"bye"}'); }
+			catch (e) { /* already closed */ }
+		}
+		try { global.collab.ws.close(); }
+		catch (e) { /* already closed */ }
+		global.collab.ws = null;
+	};
+
 	// Switch from local (WASM or LOKit-via-Bridge) editing to traditional
 	// server-based collaborative editing without reloading cool.html:
 	// tear down the local-edit plumbing, then point app.socket at a real
@@ -3177,20 +3192,7 @@ function showWelcomeSVG() {
 		if (window.bridge && window.bridge.saveCompleted)
 			window.bridge.saveCompleted();
 
-		// Send bye on the per-document collab WS and close it.  Same
-		// in both flavours: the broker recognises the orderly close
-		// and reclaims itself immediately rather than waiting out its
-		// idle grace period for a reconnect that is not coming.
-		if (global.collab.ws) {
-			if (global.collab.ws.readyState === WebSocket.OPEN) {
-				try { global.collab.ws.send('{"type":"bye"}'); }
-				catch (e) { /* already closed */ }
-			}
-			try { global.collab.ws.close(); }
-			catch (e) { /* already closed */ }
-			global.collab.ws = null;
-		}
-
+		global.collab.leave();
 		global.collab.switchedToServer = true;
 
 		// CODA-only: ask the bridge to drop its FakeSocket-to-in-
