@@ -27,9 +27,6 @@ struct Panose
     /// PanoseProportion
     byte    Proportion;
 
-    /// PanoseStrokeVariation
-    byte    StrokeVariation;
-
     /// PanoseLetterForm
     byte    Letterform;
 };
