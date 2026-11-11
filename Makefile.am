@@ -15,11 +15,13 @@ ETAGS=ctags -e
 # a full set of jobs at once. An explicit -j or -l wins. Without nproc, no
 # change. Only make 4.4 and later show -j and -l in MAKEFLAGS while parsing,
 # so older makes get no default. 4.4 also added the intcmp function, which
-# expands to y here and to nothing on an older make.
+# expands to y here and to nothing on an older make. Configure
+# --with-load-limit=N to use N as the load limit instead, or
+# --without-load-limit to drop it.
 NPROC := $(and $(intcmp 1,1,,y),$(shell nproc 2>/dev/null))
 MAKEFLAGS := $(MAKEFLAGS) \
 	$(if $(findstring j,$(MAKEFLAGS)),,$(if $(NPROC),-j$(NPROC))) \
-	$(if $(findstring l,$(MAKEFLAGS)),,$(if $(NPROC),-l$(NPROC)))
+	$(if $(findstring l,$(MAKEFLAGS)),,$(if $(filter no,$(LOADLIMIT)),,$(if $(intcmp 1,1,,y),$(addprefix -l,$(or $(LOADLIMIT),$(NPROC))))))
 
 # For `make run` skip the build-time unit test execution in test/.
 export COOL_SKIP_UNITTESTS ?= $(if $(filter run run-gdb run-proxy,$(MAKECMDGOALS)),1,)

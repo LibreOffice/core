@@ -595,6 +595,10 @@ AC_ARG_ENABLE([tests],
             AS_HELP_STRING([--disable-tests],
                            [Do not build and run unit tests.]))
 
+AC_ARG_WITH([load-limit],
+            AS_HELP_STRING([--with-load-limit=N],
+                           [Pass -l N to make, so that no new job starts while the system load average is at or above N. Defaults to the number of processors. Pass --without-load-limit to build without any load limit.]))
+
 AC_ARG_WITH([help-url],
             AS_HELP_STRING([--with-help-url=<url>],
                 [Set the base URL of the online help. By default help is disabled: the Help buttons of dialogs are hidden and no external help website is used. Pass e.g. --with-help-url=https://help.collaboraoffice.com/help.html? to enable it.]),,)
@@ -1463,6 +1467,13 @@ AS_IF([test "$MAX_DOCUMENTS" -lt "2"],
       [MAX_DOCUMENTS="2"])
 AC_DEFINE_UNQUOTED([MAX_DOCUMENTS],[$MAX_DOCUMENTS],[Limit the maximum number of open documents])
 AC_SUBST(MAX_DOCUMENTS)
+
+LOADLIMIT=
+AS_IF([test "$with_load_limit" = "no"],
+      [LOADLIMIT=no],
+      [test -n "$with_load_limit" && test "$with_load_limit" != "yes"],
+      [LOADLIMIT="$with_load_limit"])
+AC_SUBST(LOADLIMIT)
 
 FEEDBACK_URL=
 
