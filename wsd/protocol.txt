@@ -2354,7 +2354,10 @@ server -> client messages on /co/collab
 {"type":"fetch_error","stream":"<name>","requestId":"<id>","error":"<text>"}
 
     Reply to a client-sent {"type":"fetch"} or {"type":"upload"} that cannot be served (no current
-    download, session expired, server shutting down).
+    download, session expired, server shutting down).  A fetch of the document bytes ("contents",
+    "fileUrl" or "templateSource") by a user whose integrator disallows a clean copy (DisableExport,
+    DisableCopy or WatermarkText) carries "error":"Export not allowed" and "cleanExport":false; such a
+    user can open the document only through /cool/ws.
 
 {"type":"error","error":"<text>"}
 

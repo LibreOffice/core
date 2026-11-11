@@ -422,6 +422,14 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
         !_allowsCleanExport)
     {
         LOG_WRN("Collab: refusing " << stream << " fetch, the host allows no clean export");
+        std::ostringstream oss;
+        oss << "{\"type\":\"fetch_error\",\"stream\":\"" << JsonUtil::escapeJSONValue(stream) << "\"";
+        if (!requestId.empty()) {
+            oss << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"";
+        }
+        oss << ",\"error\":\"Export not allowed\",\"cleanExport\":false}";
+        sendTextMessage(oss.str());
+        return;
     }
     else if (stream == "contents")
     {

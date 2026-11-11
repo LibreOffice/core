@@ -2874,7 +2874,9 @@ function showWelcomeSVG() {
 						clearTimeout(timeoutId);
 						global.removeCollabNotificationListener(listener);
 						global.collabWs.close();
-						reject(new Error('Collab fetch error: ' + (msg.error || 'Unknown error')));
+						const error = new Error('Collab fetch error: ' + (msg.error || 'Unknown error'));
+						error.cleanExport = msg.cleanExport;
+						reject(error);
 					}
 				};
 

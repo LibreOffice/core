@@ -832,12 +832,112 @@ private:
     std::size_t _putFileCount;
 };
 
+/// A collab client whose host allows no export and no writes gets neither the document bytes nor an
+/// upload URL, and learns that it can only open the document through the server:
+class UnitCollabNoCleanExport: public WopiTestServer {
+public:
+    UnitCollabNoCleanExport():
+        WopiTestServer("UnitCollabNoCleanExport"), phase_(Phase::ConnectCollab) {}
+
+    void configCheckFileInfo(
+        Poco::Net::HTTPRequest const &, Poco::JSON::Object::Ptr & fileInfo) override
+    {
+        fileInfo->set("UserCanWrite", false);
+        fileInfo->set("DisableExport", true);
+        fileInfo->set("FileUrl", getWopiHostURI() + "/wopi/files/0/contents");
+        fileInfo->set("TemplateSource", getWopiHostURI() + "/wopi/files/0/contents");
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::ConnectCollab: {
+            TRANSITION_STATE(phase_, Phase::WaitCollabAuth);
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything"
+                  "&testname=UnitCollabNoCleanExport");
+            collabWs_ = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "anything");
+            break;
+        }
+        case Phase::WaitCollabAuth: {
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitContentsRefused);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        }
+        case Phase::WaitContentsRefused: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_error");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("f1"), msg->getValue<std::string>("requestId"));
+            LOK_ASSERT_EQUAL(
+                std::string("Export not allowed"), msg->getValue<std::string>("error"));
+            LOK_ASSERT_EQUAL(false, msg->getValue<bool>("cleanExport"));
+            TRANSITION_STATE(phase_, Phase::WaitFileUrlRefused);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"fileUrl","requestId":"f2"})");
+            break;
+        }
+        case Phase::WaitFileUrlRefused: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_error");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("f2"), msg->getValue<std::string>("requestId"));
+            LOK_ASSERT_EQUAL(false, msg->getValue<bool>("cleanExport"));
+            TRANSITION_STATE(phase_, Phase::WaitTemplateSourceRefused);
+            collabWs_->sendMessage(
+                R"({"type":"fetch","stream":"templateSource","requestId":"f3"})");
+            break;
+        }
+        case Phase::WaitTemplateSourceRefused: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_error");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("f3"), msg->getValue<std::string>("requestId"));
+            LOK_ASSERT_EQUAL(false, msg->getValue<bool>("cleanExport"));
+            TRANSITION_STATE(phase_, Phase::WaitUploadRefused);
+            collabWs_->sendMessage(R"({"type":"upload","stream":"contents","requestId":"u1"})");
+            break;
+        }
+        case Phase::WaitUploadRefused: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "upload_error");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("u1"), msg->getValue<std::string>("requestId"));
+            LOK_ASSERT_EQUAL(
+                std::string("The host allows this user no writes"),
+                msg->getValue<std::string>("error"));
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("A user without a clean export got no document bytes and no upload URL");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(
+        Phase, ConnectCollab, WaitCollabAuth, WaitContentsRefused, WaitFileUrlRefused,
+        WaitTemplateSourceRefused, WaitUploadRefused, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [6] { new UnitCollabProtocol(),
+    return new UnitBase* [7] { new UnitCollabProtocol(),
                                new UnitCollabCheckFileInfoTransient(),
                                new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
-                               new UnitCollabUploadConflictModified(), nullptr };
+                               new UnitCollabUploadConflictModified(),
+                               new UnitCollabNoCleanExport(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

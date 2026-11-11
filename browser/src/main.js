@@ -304,6 +304,12 @@ if (window.ThisIsTheEmscriptenApp) {
 			initEmscriptenModule('collab', result.url);
 			_codaWireCollabNotifications();
 		}).catch(function(err) {
+			if (err.cleanExport === false) {
+				window.app.console.log('WASM: no local copy allowed, opening through the server');
+				initUI();
+				window.switchToServerMode();
+				return;
+			}
 			window.app.console.error('WASM: Collab fetch failed: ' + err.message + ', falling back to direct fetch');
 			initUI();
 			// Fallback to old /wasm/ endpoint
@@ -398,6 +404,11 @@ if (window.ThisIsTheEmscriptenApp) {
 					_codaWireCollabNotifications();
 				});
 			}).catch(function(err) {
+				if (err && err.cleanExport === false) {
+					window.app.console.log('CODA: no local copy allowed, opening through the server');
+					window.switchToServerMode();
+					return;
+				}
 				var msg = err && err.message ? err.message : String(err);
 				window.app.console.error(
 					'CODA: remote bootstrap failed: ' + msg);
