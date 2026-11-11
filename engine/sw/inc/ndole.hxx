@@ -172,6 +172,7 @@ public:
                          const cpo::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
     bool CompleteDeferredLink();
     bool HasDeferredLink() const { return maDeferredMediaDescriptor.hasElements(); }
+    const OUString& GetLinkURL() const { return maLinkURL; }
 
     // #i99665#
     bool IsChart() const;

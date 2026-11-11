@@ -171,6 +171,7 @@ public:
                          const cpo::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
     bool CompleteDeferredLink();
     bool HasDeferredLink() const;
+    const OUString& GetLinkURL() const;
 
     void SyncObjVisualArea(const cpo::uno::Reference<css::embed::XEmbeddedObject>& xObj);
 

@@ -212,6 +212,12 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
 
     case OWN_ATTR_INTERNAL_OLE:
     {
+        SdrOle2Obj* pOle = dynamic_cast<SdrOle2Obj*>(GetSdrObject());
+        if (pOle && pOle->HasDeferredLink())
+        {
+            rValue <<= true;
+            break;
+        }
         OUString sCLSID;
         rValue <<= SotExchange::IsInternal( GetClassName_Impl(sCLSID) );
         break;
@@ -354,7 +360,11 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
         OUString    aLinkURL;
         SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( GetSdrObject() );
 
-        if( pOle )
+        if (pOle && pOle->HasDeferredLink())
+        {
+            aLinkURL = pOle->GetLinkURL();
+        }
+        else if( pOle )
         {
             uno::Reference< embed::XLinkageSupport > xLink( pOle->GetObjRef(), uno::UNO_QUERY );
             if ( xLink.is() && xLink->isLink() )
