@@ -3182,6 +3182,26 @@ function showWelcomeSVG() {
 		window.ThisIsTheQtApp = false;
 	}
 
+	function dropFakeSocket() {
+		// CODA-only: drop the bridge's FakeWebSocket so
+		// app.socket.connect below can take over cleanly with the
+		// real one.  Skipped in COWASM because wasm/wasmapp.cpp's
+		// send2JS keeps pushing tile/status messages via
+		// MAIN_THREAD_EM_ASM(globalThis.TheFakeWebSocket.onmessage(...))
+		// for a brief window after the swap; nulling it out from JS
+		// would land those calls on null and a stale error: message
+		// caught in flight could fire AlertDialog's
+		// "server encountered..." popup.  Leaving the COWASM
+		// FakeWebSocket alive is harmless: app.socket.connect detaches
+		// the old onerror/onclose handlers, and there's no real
+		// underlying socket to leak.
+		if (window.bridge && window.TheFakeWebSocket) {
+			try { window.TheFakeWebSocket.close(); }
+			catch (e) { /* already closed */ }
+			window.TheFakeWebSocket = null;
+		}
+	}
+
 	// Switch from local (WASM or LOKit-via-Bridge) editing to traditional
 	// server-based collaborative editing without reloading cool.html:
 	// tear down the local-edit plumbing, then point app.socket at a real
@@ -3214,24 +3234,7 @@ function showWelcomeSVG() {
 			window.postMobileMessage('switchToServerMode');
 
 		detachFromNativeApp();
-
-		// CODA-only: drop the bridge's FakeWebSocket so
-		// app.socket.connect below can take over cleanly with the
-		// real one.  Skipped in COWASM because wasm/wasmapp.cpp's
-		// send2JS keeps pushing tile/status messages via
-		// MAIN_THREAD_EM_ASM(globalThis.TheFakeWebSocket.onmessage(...))
-		// for a brief window after the swap; nulling it out from JS
-		// would land those calls on null and a stale error: message
-		// caught in flight could fire AlertDialog's
-		// "server encountered..." popup.  Leaving the COWASM
-		// FakeWebSocket alive is harmless: app.socket.connect detaches
-		// the old onerror/onclose handlers, and there's no real
-		// underlying socket to leak.
-		if (window.bridge && window.TheFakeWebSocket) {
-			try { window.TheFakeWebSocket.close(); }
-			catch (e) { /* already closed */ }
-			window.TheFakeWebSocket = null;
-		}
+		dropFakeSocket();
 
 		// Build the /cool/ws URL.  Two flavours depending on whether
 		// cool.html itself lives on the cool server (COWASM) or on a
