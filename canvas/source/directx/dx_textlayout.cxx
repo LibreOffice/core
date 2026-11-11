@@ -158,12 +158,6 @@ namespace dxcanvas
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    double SAL_CALL TextLayout::getBaselineOffset(  )
-    {
-        // TODO
-        return 0.0;
-    }
-
     sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );

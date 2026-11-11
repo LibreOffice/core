@@ -312,22 +312,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
 
-    /** This method yields the baseline offset.<p>
-
-        This method returns the baseline offset for this layout
-        object, either measured from the top or the left edge,
-        depending on the writing direction (horizontally or
-        vertically). Since rendering this layout via
-        XCanvas::drawTextLayout() outputs relative to
-        the layout object's baseline, this method can be used to
-        e.g. output relative to the left, top edge.<p>
-
-        @returns the distance of the main baseline from the top or the
-        left edge of this object, depending on the writing direction.
-     */
-    double getBaselineOffset();
-
-
     /** This method returns the main writing direction.<p>
 
         This method returns the main writing direction of this layout,
