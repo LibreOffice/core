@@ -391,11 +391,8 @@ void Bridge::retryLoadAfterUnloading()
         return;
     }
 
-    // A fresh client socket for the next attempt; the previous one was closed
-    // when the pump thread saw the server drop the connection.
-    _document._fakeClientFd = fakeSocketSocket();
-    LOG_INF("reconnecting appDocId " << _document._appDocId << " on new client fd "
-                                     << _document._fakeClientFd);
+    // The reloaded page opens the next socket, as the old page may still send until then.
+    _retryingLoad = true;
 
     // Quadratic back-off, the same shape the browser client uses when it
     // retries on a docunloading error.
@@ -1020,6 +1017,13 @@ QVariant Bridge::cool(const QString& messageStr)
             _detached = false;
             LOG_INF("reattaching appDocId " << _document._appDocId << " on new client fd "
                                             << _document._fakeClientFd);
+        }
+        else if (_retryingLoad)
+        {
+            _document._fakeClientFd = fakeSocketSocket();
+            _retryingLoad = false;
+            LOG_INF("reconnecting appDocId " << _document._appDocId << " on new client fd "
+                                             << _document._fakeClientFd);
         }
 
         // Skip for starter screen (no document connection needed)

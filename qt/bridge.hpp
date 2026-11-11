@@ -47,6 +47,8 @@ class Bridge : public QObject
     // How many times we have reloaded the page because the server was still
     // cleaning up the previous use of this document when we tried to load it.
     int _docUnloadingRetries = 0;
+    // true from a load retry until the reloaded page connects.
+    bool _retryingLoad = false;
     // true from JS-side SAVESTARTED until the JS-side SAVECOMPLETED:
     // that brackets both the .uno:Save round-trip and (for remote
     // docs) the JS-driven collab.uploadFile POST that pushes the
