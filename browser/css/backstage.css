@@ -329,7 +329,8 @@ body:not([data-doctype]) .backstage-view {
 .backstage-home-templates-row {
 	display: flex;
 	flex-wrap: nowrap;
-	gap: calc(var(--spacing-xl) + var(--spacing-s));
+	align-items: flex-end;
+	gap: calc(var(--spacing-xl) + var(--spacing-m));
 	margin-bottom: var(--spacing-m);
 	padding: 0 0 0.5rem;
 	justify-content: flex-start;
@@ -340,7 +341,6 @@ body:not([data-doctype]) .backstage-view {
 .backstage-home-templates-row .backstage-template-card {
 	flex: 0 0 auto;
 	box-sizing: border-box;
-	width: var(--template-card-width);
 }
 
 .backstage-home-more-templates {
@@ -408,8 +408,9 @@ body:not([data-doctype]) .backstage-view {
 }
 
 .backstage-templates-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, var(--template-card-width));
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
 	gap: calc(var(--spacing-xl) + var(--spacing-m));
 }
 
@@ -424,6 +425,8 @@ body:not([data-doctype]) .backstage-view {
 	flex-direction: column;
 	align-items: center;
 	box-sizing: border-box;
+	width: min-content;
+	max-width: var(--template-card-width);
 }
 
 
@@ -503,14 +506,13 @@ body:not([data-doctype]) .backstage-view {
 	animation: fade-out var(--duration-fast) var(--ease-in) forwards;
 }
 
-/* Page and landscape previews share one height and sit on its bottom, so the bottom edges and
-   the names of a row line up. */
+/* A row aligns its cards at the bottom, so the bottom edges of the previews and their names line
+   up while each card is only as tall as its preview. */
 .template-thumbnail {
 	padding: 0;
 	display: flex;
 	justify-content: center;
 	align-items: end;
-	height: var(--template-preview-height);
 	background: transparent;
 	flex: 0 0 auto;
 }
@@ -544,7 +546,8 @@ body:not([data-doctype]) .backstage-view {
 	color: var(--color-main-text);
 	font-weight: 500;
 	margin-top: var(--spacing-m);
-	width: 100%;
+	width: 0;
+	min-width: 100%;
 	white-space: normal;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -671,15 +674,16 @@ body:not([data-doctype]) .backstage-view {
 }
 
 .template-blank-row {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, var(--template-card-width));
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
 	gap: calc(var(--spacing-xl) + var(--spacing-m));
 	overflow-x: auto;
 	padding-block: var(--spacing-m);
 }
 
 .template-grid-empty {
-	grid-column: 1 / -1;
+	flex-basis: 100%;
 	text-align: center;
 	color: var(--color-text-light);
 	padding: 24px 0;
