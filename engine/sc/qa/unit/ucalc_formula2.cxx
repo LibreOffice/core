@@ -851,6 +851,34 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLEN)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFullColumnRefsInArrayContext)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Count"_ustr);
+
+    // The companies of each category, a company listed more than once.
+    const char* aData[][2] = { { "x", "c1" }, { "x", "c2" }, { "x", "c1" }, { "y", "c3" },
+                               { "y", "c1" }, { "x", "c3" }, { "z", "c4" } };
+    for (SCROW nRow = 0; nRow < SCROW(SAL_N_ELEMENTS(aData)); ++nRow)
+    {
+        m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aData[nRow][0]));
+        m_pDoc->SetString(1, nRow, 0, OUString::createFromAscii(aData[nRow][1]));
+    }
+
+    // The number of different companies of category x, over whole columns. MATCH() runs for the
+    // seven rows of data, not for each of the million rows of a whole column.
+    m_pDoc->SetString(0, 0, 1, u"x"_ustr);
+    m_pDoc->SetString(1, 0, 1,
+                      u"=SUM(SIGN(FREQUENCY(IFERROR(IF($Data.$A:$A=A1;"
+                      "MATCH($Data.$B:$B;$Data.$B:$B;0));\"\");"
+                      "ROW($Data.$A$1:$A$2000)-ROW($Data.$A$1)+1)))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1, 0, 1));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf161592)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
