@@ -117,6 +117,7 @@ all_la_unit_tests = \
 	unit-wopi-transient-connect-fault.la \
 	unit-password-protected.la \
 	unit-password-to-modify.la \
+	unit-hybrid-pdf.la \
 	unit-calc.la \
 	unit-prefork.la \
 	unit-landlock.la \
@@ -434,6 +435,8 @@ unit_password_protected_la_SOURCES = UnitPasswordProtected.cpp
 unit_password_protected_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_password_to_modify_la_SOURCES = UnitPasswordToModify.cpp
 unit_password_to_modify_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_hybrid_pdf_la_SOURCES = UnitHybridPDF.cpp
+unit_hybrid_pdf_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_render_search_result_la_SOURCES = UnitRenderSearchResult.cpp
 unit_render_search_result_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_render_shape_la_SOURCES = UnitRenderShape.cpp

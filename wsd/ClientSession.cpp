@@ -4357,6 +4357,9 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             _isTextDocument = statusJsonObject->get("type").toString() == "text";
         if (statusJsonObject->has("viewid"))
             _kitViewId = std::atoi(statusJsonObject->get("viewid").toString().c_str());
+        if (statusJsonObject->has("hybridpdf") &&
+            statusJsonObject->get("hybridpdf").toString() == "true")
+            docBroker->onHybridPDFLoaded(client_from_this());
 
         // Forward the status response to the client. The first one after a reconnect says that
         // the view is the one the browser had, so the browser keeps what it has set up for it.
@@ -5220,6 +5223,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tkit ViewId: " << _kitViewId
        << "\n\t\tour URL (un-trusted): " << _serverURL.getSubURLForEndpoint("")
        << "\n\t\tisTextDocument: " << _isTextDocument
+       << "\n\t\tisReadOnlyForViewFile: " << _isReadOnlyForViewFile
        << "\n\t\tisVectorRendering: " << _isVectorRendering
        << "\n\t\tclipboardKeys[0]: " << _clipboardKeys.getCurrent()
        << "\n\t\tclipboardKeys[1]: " << _clipboardKeys.getPrevious()

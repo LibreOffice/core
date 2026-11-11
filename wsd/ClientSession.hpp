@@ -377,6 +377,11 @@ public:
 
     bool isTextDocument() const { return _isTextDocument; }
 
+    /// True when the session is read-only only because the file has a view-only extension, such
+    /// as PDF, and it could edit the document otherwise.
+    bool isReadOnlyForViewFile() const { return _isReadOnlyForViewFile; }
+    void setReadOnlyForViewFile(bool value) { _isReadOnlyForViewFile = value; }
+
     void setThumbnailSession(const bool val) { _thumbnailSession = val; }
 
     void setThumbnailTarget(const std::string& target) { _thumbnailTarget = target; }
@@ -856,6 +861,9 @@ private:
 
     /// Client is using a text document?
     bool _isTextDocument;
+
+    /// The session is read-only only because the file has a view-only extension.
+    bool _isReadOnlyForViewFile = false;
 
     /// The client draws from vector primitives and gets no tiles until it sends .uno:DrawFromTiles.
     bool _isVectorRendering = false;

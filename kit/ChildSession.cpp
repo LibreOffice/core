@@ -1192,6 +1192,14 @@ bool ChildSession::_handleInput(const char *buffer, int length)
             if (_docManager->hasPasswordToModify() && !_isDocPasswordToModifyEntered)
                 readOnly = true;
 
+            // A value of false means that the session may edit. A session that was loaded
+            // read-only, such as one for a hybrid PDF, becomes editable here.
+            if (!readOnly && isReadOnly())
+            {
+                setReadOnly(false);
+                _docManager->setViewReadOnly(_viewId, false);
+            }
+
             if (getLOKitDocument())
             {
                 getLOKitDocument()->setView(_viewId);
@@ -5993,6 +6001,30 @@ bool ChildSession::resetSelection(const StringVector& tokens)
     return true;
 }
 
+namespace
+{
+/// Adds the request for a hybrid PDF, one that embeds the ODF document, to the filter options of
+/// a save as PDF. JSON options get an IsAddStream entry, other options get the AddStream keyword.
+void addHybridPDFOption(std::string& filterOptions)
+{
+    if (!filterOptions.empty() && filterOptions[0] == '{')
+    {
+        Poco::JSON::Object::Ptr object;
+        if (JsonUtil::parseJSON(filterOptions, object) && object)
+        {
+            Poco::JSON::Object::Ptr value = new Poco::JSON::Object();
+            value->set("type", "boolean");
+            value->set("value", "true");
+            object->set("IsAddStream", value);
+            filterOptions = JsonUtil::jsonToString(object);
+        }
+        return;
+    }
+
+    filterOptions = filterOptions.empty() ? "AddStream" : filterOptions + ",AddStream";
+}
+} // namespace
+
 bool ChildSession::saveAs(const StringVector& tokens)
 {
     std::string wopiFilename, url, format, filterOptions;
@@ -6055,6 +6087,13 @@ bool ChildSession::saveAs(const StringVector& tokens)
         // Opt-in to avoid linked images, those would not leave the chroot.
         filterOptions = "EmbedImages";
     }
+
+    // A document opened from a hybrid PDF stays hybrid when it is saved as PDF again, so the PDF
+    // keeps carrying the ODF document. The format comes from the file name when it is not given.
+    const std::string saveFormat =
+        format.empty() ? Util::toLower(Poco::Path(url).getExtension()) : format;
+    if (saveFormat == "pdf" && LOKitHelper::isHybridPDF(getLOKitDocument().get()))
+        addHybridPDFOption(filterOptions);
 
     if (_docManager->isDocPasswordProtected() && _docManager->haveDocPassword())
     {

@@ -162,6 +162,14 @@ namespace LOKitHelper
         return documentTypeToString(type);
     }
 
+    /// True when the document was loaded from a hybrid PDF, a PDF that carries the ODF document
+    /// it was exported from. Such a document is edited as that ODF document.
+    inline bool isHybridPDF(COKitDocument* loKitDocument)
+    {
+        const std::string value(loKitDocument->getCommandValues(".uno:HybridPDF"));
+        return value.find("true") != std::string::npos;
+    }
+
     inline std::string documentStatus(COKitDocument *loKitDocument, bool diffSizePages = false)
     {
         assert(loKitDocument && "null loKitDocument");
@@ -195,6 +203,9 @@ namespace LOKitHelper
             bool externalLinksDisabled = (externalLinks.find("true") != std::string::npos);
             resultInfo["externallinksdisabled"] = externalLinksDisabled ? "true": "false";
         }
+
+        if (isHybridPDF(loKitDocument))
+            resultInfo["hybridpdf"] = "true";
 
         std::string values(loKitDocument->getCommandValues(".uno:AllPageSize"));
         if (!values.empty())

@@ -38,8 +38,15 @@ window.L.Map.include({
 		// Fall back to the document URL which ends with the file name.
 		var fileName = this['wopi'].BaseFileName || this.options.doc || '';
 		var isPDF = fileName.toLowerCase().endsWith('.pdf');
+		// A hybrid PDF, which carries the document it was made from, opens read-only like any PDF
+		// until the server finds that document. The first edit permission after that is when the
+		// document really opens, so it gets the same start as any other document.
+		const hybridPDFOpens = app.file.isHybridPDF && perm === 'edit' && !this._hybridPDFOpened;
+		if (hybridPDFOpens)
+			this._hybridPDFOpened = true;
+		const viewOnlyPDF = isPDF && !app.file.isHybridPDF;
 		const mobileLayout = window.mode.isSmallScreenDevice() || window.mode.isTablet();
-		if (!isPDF && mobileLayout) {
+		if (!viewOnlyPDF && mobileLayout) {
 			button.css('display', 'flex');
 		} else {
 			button.hide();
@@ -49,7 +56,7 @@ window.L.Map.include({
 			// The opt-in gate applies when the doc is first opened. Later
 			// calls honor what was asked, except that on a mobile layout a
 			// view in the read-only stage stays there with its edit button.
-			const firstOpen = this._permission === undefined;
+			const firstOpen = this._permission === undefined || hybridPDFOpens;
 			const stayReadOnly = !firstOpen && this._permission === 'readonly' && mobileLayout;
 			if (this.options.canTryLock) {
 				// This is a success response to an attempt to lock using mobile-edit-button

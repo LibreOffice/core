@@ -282,6 +282,7 @@ interface AppInterface {
 		modified: boolean;
 		permission: string;
 		viewModeExtensions: string;
+		isHybridPDF: boolean;
 		disableSidebar: boolean;
 		inputSequence: number;
 		textCursor: {

@@ -1386,7 +1386,8 @@ bool DocumentBroker::download(
         }
 
         wopiStorage->handleWOPIFileInfo(*wopiFileInfo, *_lockCtx);
-        _isViewFileExtension = COOLWSD::IsViewFileExtension(wopiStorage->getFileExtension());
+        _isViewFileExtension =
+            !_isHybridPDF && COOLWSD::IsViewFileExtension(wopiStorage->getFileExtension());
 
         if (session)
         {
@@ -1405,12 +1406,20 @@ bool DocumentBroker::download(
             std::unique_ptr<LocalStorage::LocalFileInfo> localfileinfo =
                 localStorage->getLocalFileInfo();
 
-            _isViewFileExtension = COOLWSD::IsViewFileExtension(localStorage->getFileExtension());
+            _isViewFileExtension =
+                !_isHybridPDF && COOLWSD::IsViewFileExtension(localStorage->getFileExtension());
             if (session)
             {
+                // A view that joins a document already loaded as a hybrid PDF learns that before
+                // its permission.
+                if (_isHybridPDF)
+                    session->sendTextFrame("hybridpdf:");
+
                 if (_isViewFileExtension)
                 {
                     LOG_DBG("Setting session [" << sessionId << "] as readonly");
+                    if (!session->isReadOnly() && localfileinfo->getUserCanWrite())
+                        session->setReadOnlyForViewFile(true);
                     session->setReadOnly(true);
                     LOG_DBG("Allow session [" << sessionId
                                               << "] to change comments on document with extension ["
@@ -1938,6 +1947,11 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     // but this is more readily comprehensible and easier to reason about.
     session->setWritePermission(wopiFileInfo->getUserCanWrite());
 
+    // A view that joins a document already loaded as a hybrid PDF learns that before its
+    // permission.
+    if (_isHybridPDF)
+        session->sendTextFrame("hybridpdf:");
+
     if (wopiFileInfo->getUserCanOnlyComment())
     {
         LOG_DBG("Setting session ["
@@ -1980,6 +1994,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
                                     << "] and allowing comments");
         session->setWritable(true);
         session->setReadOnly(true);
+        session->setReadOnlyForViewFile(true);
         session->setAllowChangeComments(true);
     }
     else // Fully writable document, with comments.
@@ -4768,6 +4783,40 @@ void DocumentBroker::setInteractive(bool value)
         _docState.setInteractive(value);
         LOG_TRC("Document has interactive dialogs before load");
     }
+}
+
+void DocumentBroker::onHybridPDFLoaded(const std::shared_ptr<ClientSession>& session)
+{
+    if (!_isHybridPDF)
+    {
+        LOG_INF("Document [" << _docKey << "] is a hybrid PDF, it opens for editing");
+        _isHybridPDF = true;
+        _isViewFileExtension = false;
+    }
+
+    // The status comes again after every change of the document size, and the session changes
+    // only once.
+    if (!session || !session->isReadOnlyForViewFile())
+        return;
+
+    session->setReadOnlyForViewFile(false);
+    LOG_DBG("Setting session [" << session->getId() << "] of hybrid PDF to writable");
+    session->setReadOnly(false);
+    lockIfEditing(session);
+    if (!session->isWritable())
+    {
+        // The storage refused the lock, so the session stays read-only.
+        if (!session->isReadOnly())
+            session->setReadOnly(true);
+        session->sendTextFrame("hybridpdf:");
+        return;
+    }
+
+    // "hybridpdf: edit" says that the view, which opened read-only, may edit the document now.
+    session->sendTextFrame("hybridpdf: edit");
+    session->sendFileMode(session->isReadOnly(), session->isAllowChangeComments(),
+                          session->isAllowManageRedlines());
+    forwardToChild(session, "setviewreadonly value=false");
 }
 
 void DocumentBroker::onViewLoaded(const std::shared_ptr<ClientSession>& session)
@@ -8704,6 +8753,7 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  backgroundManualSave: " << (_backgroundManualSave?"true":"false");
     os << "\n  anySaveEverFailed: " << (_anySaveEverFailed?"true":"false");
     os << "\n  isViewFileExtension: " << _isViewFileExtension;
+    os << "\n  isHybridPDF: " << _isHybridPDF;
     os << "\n  Total PSS: " << ProcUtil::getProcessTreePss(ProcUtil::getProcessId()) << " KB";
     if (childPid)
         os << "\n  Doc PSS: " << ProcUtil::getProcessTreePss(childPid) << " KB";

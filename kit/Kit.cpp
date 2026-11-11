@@ -2082,6 +2082,20 @@ void Document::notifyViewInfo()
     }
 }
 
+void Document::setViewReadOnly(int viewId, bool readOnly)
+{
+    const auto it = _sessionUserInfo.find(viewId);
+    if (it == _sessionUserInfo.end())
+    {
+        LOG_WRN("No user info for view [" << viewId << "] to mark "
+                                          << (readOnly ? "read-only" : "editable"));
+        return;
+    }
+
+    it->second.setReadOnly(readOnly);
+    notifyViewInfo();
+}
+
 void Document::setViewParked(int viewId, bool parked)
 {
     const auto it = _sessionUserInfo.find(viewId);

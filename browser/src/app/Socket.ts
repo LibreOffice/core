@@ -1382,6 +1382,9 @@ class Socket {
 		} else if (textMsg.startsWith('legacyunoapinotice:')) {
 			this._map.fire('legacyunoapinotice');
 			return;
+		} else if (textMsg.startsWith('hybridpdf:')) {
+			this._onHybridPDFMsg(textMsg);
+			return;
 		} else if (textMsg.startsWith('perm:')) {
 			this._onPermMsg(textMsg);
 			return;
@@ -2231,6 +2234,18 @@ class Socket {
 	private _onClipboardKeyMsg(textMsg: string): void {
 		const key = textMsg.substring('clipboardkey: '.length);
 		if (this._map._clip) this._map._clip.setKey(key);
+	}
+
+	// 'hybridpdf:' message. The PDF carries the document it was made from. With 'edit', this view
+	// opened read-only only because the file is a PDF, and it may edit the document now. It
+	// becomes writable here, and the file mode message that follows switches it to edit.
+	private _onHybridPDFMsg(textMsg: string): void {
+		app.file.isHybridPDF = true;
+		if (textMsg.substring('hybridpdf:'.length).trim() !== 'edit') return;
+
+		if (this._map['wopi']) this._map['wopi'].UserCanWrite = true;
+		app.setPermission('edit');
+		app.file.disableSidebar = app.isReadOnly();
 	}
 
 	// 'perm:' message.

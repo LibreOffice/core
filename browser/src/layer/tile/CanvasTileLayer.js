@@ -2243,7 +2243,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	// The server parks a view whose connection dropped and holds it for the browser to come
-	// back to. That flag is the one thing that changes on a view that is already known.
+	// back to.
 	_updateViewParked: function(viewId, parked) {
 		const known = this._map._viewInfo[viewId];
 		if (known.parked === parked)
@@ -2251,6 +2251,16 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		known.parked = parked;
 		this._map.fire('updateviewparked', {viewId: viewId, parked: this._map.isViewParked(viewId)});
+	},
+
+	// A view that opened read-only becomes editable, for example in a hybrid PDF.
+	_updateViewReadOnly: function(viewId, readonly) {
+		const known = this._map._viewInfo[viewId];
+		if (known.readonly === readonly)
+			return;
+
+		known.readonly = readonly;
+		this._map.fire('updateviewreadonly', {viewId: viewId, readonly: this._map.isViewReadOnly(viewId)});
 	},
 
 	_onViewInfoMsg: function(textMsg) {
@@ -2266,6 +2276,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				this._addView(viewInfo[viewInfoIdx]);
 			} else {
 				this._updateViewParked(viewId, viewInfo[viewInfoIdx].parked);
+				this._updateViewReadOnly(viewId, viewInfo[viewInfoIdx].readonly);
 			}
 			viewIds.push(viewInfo[viewInfoIdx].id);
 		}

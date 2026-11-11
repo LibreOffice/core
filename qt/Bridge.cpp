@@ -1290,7 +1290,8 @@ QVariant Bridge::cool(const QString& messageStr)
                             QObject::tr("All Files (*);;"
                                         "Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;"
                                         "Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;"
-                                        "Presentations (*.odp *.otp *.ppt *.pptx)"));
+                                        "Presentations (*.odp *.otp *.ppt *.pptx);;"
+                                        "PDF Documents (*.pdf)"));
 
         dialog->setFileMode(QFileDialog::ExistingFiles);
         dialog->setAttribute(Qt::WA_DeleteOnClose);

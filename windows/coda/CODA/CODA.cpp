@@ -7132,7 +7132,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 data.hWnd,
                 L"",
                 { { L"",
-                    L"*.odt;*.fodt;*.docx;*.docm;*.doc;*.rtf;*.txt;*.md;*.ods;*.fods;*.xlsx;*.xlsm;*.xls;*.odp;*.fodp;*.pptx;*.pptm;*.ppsx;*.ppt" },
+                    L"*.odt;*.fodt;*.docx;*.docm;*.doc;*.rtf;*.txt;*.md;*.ods;*.fods;*.xlsx;*.xlsm;*.xls;*.odp;*.fodp;*.pptx;*.pptm;*.ppsx;*.ppt;*.pdf" },
                   { L"", L"*.*" } },
                 true);
             if (openResult.size() > 0)

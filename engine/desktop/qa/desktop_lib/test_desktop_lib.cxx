@@ -16,6 +16,7 @@
 #include <memory>
 #include <set>
 #include <string_view>
+#include <utility>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -56,6 +57,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <com/sun/star/document/XTypeDetection.hpp>
 #include <rtl/math.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -228,6 +231,8 @@ public:
     void testSaveAs();
     void testSaveFailedReportsReason();
     void testSaveFromReadOnlyView();
+    void testHybridPDFState();
+    void testSaveAsHybridPDF();
     void testExportDirectToPdfDottedName();
     void testSaveAsJsonOptions();
     void testSaveAsCalc();
@@ -360,6 +365,8 @@ public:
     CPPUNIT_TEST(testSaveAs);
     CPPUNIT_TEST(testSaveFailedReportsReason);
     CPPUNIT_TEST(testSaveFromReadOnlyView);
+    CPPUNIT_TEST(testHybridPDFState);
+    CPPUNIT_TEST(testSaveAsHybridPDF);
     CPPUNIT_TEST(testExportDirectToPdfDottedName);
     CPPUNIT_TEST(testSaveAsJsonOptions);
     CPPUNIT_TEST(testSaveAsCalc);
@@ -1690,6 +1697,69 @@ void DesktopKitTest::testSaveDispatchForwarding()
     CPPUNIT_ASSERT(!aTree.get_child_optional("success"));
     // The document was saved before that dispatch returned, so before the result was given.
     CPPUNIT_ASSERT(xInterceptor->isUnmodifiedOnReturn());
+}
+
+namespace
+{
+/// The import filter that type detection picks for the file at rURL.
+OUString detectFilterName(const OUString& rURL)
+{
+    uno::Reference<document::XTypeDetection> xDetection(
+        comphelper::getProcessServiceFactory()->createInstance(
+            u"com.sun.star.document.TypeDetection"_ustr),
+        uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aDescriptor{ comphelper::makePropertyValue(u"URL"_ustr,
+                                                                                   rURL) };
+    xDetection->queryTypeByDescriptor(aDescriptor, /*bAllowDeep=*/true);
+    OUString aFilterName;
+    for (const beans::PropertyValue& rProperty : std::as_const(aDescriptor))
+    {
+        if (rProperty.Name == "FilterName")
+            rProperty.Value >>= aFilterName;
+    }
+    return aFilterName;
+}
+}
+
+void DesktopKitTest::testHybridPDFState()
+{
+    // A Writer document opened from a hybrid PDF says that it came from one:
+    COKitDocumentImpl* pDocument = loadDocUrl(
+        m_directories.getURLFromSrc(u"filter/qa/unit/data/hybrid_writer.pdf"),
+        COKitDocumentType::TEXT);
+    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
+    std::string aValues = pDocument->getCommandValues(".uno:HybridPDF");
+    CPPUNIT_ASSERT(aValues.find("\"hybridpdf\":\"true\"") != std::string::npos);
+    closeDoc();
+
+    // A document opened from ODF does not:
+    pDocument = loadDoc("blank_text.odt");
+    aValues = pDocument->getCommandValues(".uno:HybridPDF");
+    CPPUNIT_ASSERT(aValues.find("\"hybridpdf\":\"false\"") != std::string::npos);
+}
+
+void DesktopKitTest::testSaveAsHybridPDF()
+{
+    // Given a Writer document opened from a hybrid PDF:
+    utl::TempFileNamed aTempFile(u"hybrid", true, u".pdf");
+    aTempFile.EnableKillingFile();
+    CPPUNIT_ASSERT_EQUAL(
+        osl::FileBase::E_None,
+        osl::File::copy(m_directories.getURLFromSrc(u"filter/qa/unit/data/hybrid_writer.pdf"),
+                        aTempFile.GetURL()));
+    COKitDocumentImpl* pDocument = loadDocUrl(aTempFile.GetURL(), COKitDocumentType::TEXT);
+
+    // When it is saved as PDF with the AddStream option, and once without it:
+    utl::TempFileNamed aHybrid(u"hybrid-out", true, u".pdf");
+    aHybrid.EnableKillingFile();
+    utl::TempFileNamed aPlain(u"plain-out", true, u".pdf");
+    aPlain.EnableKillingFile();
+    CPPUNIT_ASSERT(pDocument->saveAs(aHybrid.GetURL().toUtf8().getStr(), "pdf", "AddStream"));
+    CPPUNIT_ASSERT(pDocument->saveAs(aPlain.GetURL().toUtf8().getStr(), "pdf", nullptr));
+
+    // Then only the first one carries the ODF document:
+    CPPUNIT_ASSERT_EQUAL(u"writer_pdf_addstream_import"_ustr, detectFilterName(aHybrid.GetURL()));
+    CPPUNIT_ASSERT_EQUAL(u"draw_pdf_import"_ustr, detectFilterName(aPlain.GetURL()));
 }
 
 void DesktopKitTest::testWriterComments()

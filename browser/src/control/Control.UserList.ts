@@ -45,6 +45,11 @@ interface ViewParkedEvent {
 	parked: boolean;
 }
 
+interface ViewReadOnlyEvent {
+	viewId: number;
+	readonly: boolean;
+}
+
 class UserList extends window.L.Control {
 	options: {
 		userLimitHeader: number;
@@ -83,6 +88,7 @@ class UserList extends window.L.Control {
 		map.on('addview', this.onAddView, this);
 		map.on('removeview', this.onRemoveView, this);
 		map.on('updateviewparked', this.onUpdateViewParked, this);
+		map.on('updateviewreadonly', this.onUpdateViewReadOnly, this);
 		map.on('deselectuser', this.deselectUser, this);
 
 		const userListElement = document.getElementById('userListSummaryButton');
@@ -507,6 +513,17 @@ class UserList extends window.L.Control {
 		}
 
 		user.parked = e.parked;
+		this.renderAll();
+	}
+
+	// A view that opened read-only becomes editable, for example in a hybrid PDF.
+	onUpdateViewReadOnly(e: ViewReadOnlyEvent) {
+		const user = this.users.get(e.viewId);
+		if (user === undefined) {
+			return;
+		}
+
+		user.readonly = e.readonly;
 		this.renderAll();
 	}
 

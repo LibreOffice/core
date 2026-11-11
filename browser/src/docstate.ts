@@ -135,6 +135,9 @@
 			pageRectangleList: [], // Array of arrays: [x, y, w, h] (as usual) // twips only. Pixels will be calculated on the fly. Corresponding pixels may change too often.
 		},
 		viewModeExtensions: '',
+		// True when the file is a hybrid PDF, a PDF that carries the document it was made from.
+		// Such a file is edited as that document.
+		isHybridPDF: false,
 	},
 	following: {
 		// describes which cursor we follow with the view

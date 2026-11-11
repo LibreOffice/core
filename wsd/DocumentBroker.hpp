@@ -420,6 +420,11 @@ public:
     /// Called when a new view is loaded.
     void onViewLoaded(const std::shared_ptr<ClientSession>& session);
 
+    /// The kit loaded the document from a hybrid PDF, a PDF that carries the ODF document it was
+    /// exported from. The document is edited as that ODF document and saved as a hybrid PDF, so
+    /// the view-only rule of the PDF extension does not hold for it.
+    void onHybridPDFLoaded(const std::shared_ptr<ClientSession>& session);
+
     /// If not yet locked, try to lock
     bool attemptLock(ClientSession& session, std::string& failReason);
 
@@ -2400,6 +2405,10 @@ private:
     /// True for file that COOLWSD::IsViewFileExtension return true.
     /// These files, such as PDF, don't have a reliable ModifiedStatus.
     bool _isViewFileExtension;
+
+    /// True when the document was loaded from a hybrid PDF. The file has a view-only extension, but
+    /// the document is editable.
+    bool _isHybridPDF = false;
 
     bool _isViewSettingsUpdated;
 

@@ -121,6 +121,8 @@ struct UserInfo
 
     bool isReadOnly() const { return _readOnly; }
 
+    void setReadOnly(bool readOnly) { _readOnly = readOnly; }
+
     bool isConnected() const { return _connected; }
 
     void setDisconnected() { _connected = false; }
@@ -419,6 +421,9 @@ public:
 
     /// Record whether the view's browser is away but expected back, and tell every view.
     void setViewParked(int viewId, bool parked);
+
+    /// Record whether the view is read-only, and tell every view.
+    void setViewReadOnly(int viewId, bool readOnly);
 
     /// Tell the other views which part the given view switched to.
     void notifyViewPart(int viewId, const std::string& partId);

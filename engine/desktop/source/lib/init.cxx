@@ -3790,6 +3790,21 @@ static SfxObjectShell* getSfxObjectShell(COKitDocument* pThis)
     return pBaseModel->GetObjectShell();
 }
 
+/// True when the document was loaded from a hybrid PDF, that is a PDF that carries the ODF document
+/// it was exported from. The import filters for these end with "_pdf_addstream_import".
+static bool isHybridPDF(const SfxObjectShell* pObjectShell)
+{
+    if (!pObjectShell)
+        return false;
+
+    const SfxMedium* pMedium = pObjectShell->GetMedium();
+    if (!pMedium)
+        return false;
+
+    const std::shared_ptr<const SfxFilter>& pFilter = pMedium->GetFilter();
+    return pFilter && pFilter->GetFilterName().endsWith("_pdf_addstream_import");
+}
+
 /// The filter that writes this document out in the given format, empty when the document
 /// type has no filter for it.
 static OUString getFilterNameForFormat(COKitDocument* pThis, std::u16string_view rFormat)
@@ -3951,6 +3966,8 @@ static bool doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForm
         // which breaks CSV filter options where token position matters.)
         bool bTakeOwnership = false;
         bool bCreateFromTemplate = false;
+        // 'AddStream' embeds the ODF document in the PDF, which gives a hybrid PDF.
+        bool bAddStream = false;
         comphelper::SequenceAsHashMap aSaveMediaDescriptor;
         if (!aFilterOptions.startsWith("{"))
         {
@@ -3971,6 +3988,8 @@ static bool doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForm
                     aSaveMediaDescriptor[u"NoFileSync"_ustr] <<= true;
                 else if (aTrimmed == "FromTemplate")
                     bCreateFromTemplate = true;
+                else if (aTrimmed == "AddStream")
+                    bAddStream = true;
                 else
                 {
                     if (!bFirst)
@@ -4003,6 +4022,8 @@ static bool doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForm
         if (!aFilterOptions.startsWith("{"))
         {
             setFormatSpecificFilterData(sFormat, aFilterDataMap);
+            if (bAddStream && sFormat == u"pdf")
+                aFilterDataMap[u"IsAddStream"_ustr] <<= true;
         }
 
         if (!watermarkText.isEmpty())
@@ -6175,17 +6196,29 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
         if (pDocSh)
             pDocSh->SetLastStoreErrorMessage(OUString());
 
+        const bool bDontSaveIfUnmodified = extractDontSaveIfUnmodified(aPropertyValuesVector);
+
         // Check if saving a PDF file
         OUString aMimeType = lcl_getCurrentDocumentMimeType(this);
-        if (pDocSh && pDocSh->IsModified() && aMimeType == "application/pdf")
+        const bool bModified = pDocSh && pDocSh->IsModified();
+        const bool bHybridPDF = isHybridPDF(pDocSh);
+        if (aMimeType == "application/pdf"
+            && (bModified || (bHybridPDF && !bDontSaveIfUnmodified)))
         {
             // If we have a PDF file (for saving annotations for example), we need
             // to run save-as to the same file as the opened document. Plain save
-            // doesn't work as the PDF is not a "native" format.
+            // doesn't work as the PDF is not a "native" format. A hybrid PDF is
+            // written as a hybrid PDF again, so it keeps carrying its ODF document.
             uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
             OUString aURL = xStorable->getLocation();
             OString aURLUtf8 = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
-            bool bResult = doc_saveAs(this, aURLUtf8.getStr(), "pdf", nullptr);
+            bool bResult = doc_saveAs(this, aURLUtf8.getStr(), "pdf",
+                                      bHybridPDF ? "AddStream" : nullptr);
+
+            // The hybrid PDF now holds the document as it is, the same as after a save in an
+            // own format.
+            if (bResult && bHybridPDF)
+                pDocSh->SetModified(false);
 
             // Send the result of save
             tools::JsonWriter aJson;
@@ -6203,8 +6236,6 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
         aValue.Name = u"InteractionHandler"_ustr;
         aValue.Value <<= uno::Reference<task::XInteractionHandler2>(pInteraction);
         aPropertyValuesVector.push_back(aValue);
-
-        const bool bDontSaveIfUnmodified = extractDontSaveIfUnmodified(aPropertyValuesVector);
 
         // skip saving and tell the result via UNO_COMMAND_RESULT
         if (bDontSaveIfUnmodified && (!pDocSh || !pDocSh->IsModified()))
@@ -10056,6 +10087,21 @@ static std::string verifyDocPasswordToModify(COKitDocument* pThis, std::u16strin
     return aStream.str();
 }
 
+static std::string getHybridPDF(COKitDocument* pThis)
+{
+    SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
+    if (!pObjectShell)
+        return {};
+
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:HybridPDF");
+    aTree.put("hybridpdf", isHybridPDF(pObjectShell));
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
+    return aStream.str();
+}
+
 static std::string getExternalLinksDisabled(COKitDocument* pThis)
 {
     SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
@@ -10728,6 +10774,10 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
     else if (aCommand == ".uno:ExternalLinksDisabled")
     {
         return getExternalLinksDisabled(this);
+    }
+    else if (aCommand == ".uno:HybridPDF")
+    {
+        return getHybridPDF(this);
     }
     else if (aCommand == ".uno:LanguageStatus")
     {
