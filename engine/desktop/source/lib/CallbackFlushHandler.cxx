@@ -371,23 +371,41 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
     if (!pDocument)
         return;
 
-    for (const auto& [rPartId, nMode] : aParts)
+    // The handlers of the other views of the document. A view can close while a delta is computed,
+    // so each handler is held until the last part is done.
+    std::vector<std::shared_ptr<CallbackFlushHandler>> aOtherHandlers;
+    for (const auto& rEntry : static_cast<COKitDocumentImpl*>(m_pDocument)->mpCallbackFlushHandlers)
     {
+        if (rEntry.second && rEntry.second.get() != this)
+            aOtherHandlers.push_back(rEntry.second);
+    }
+
+    for (const std::pair<OString, int>& rPart : aParts)
+    {
+        const OString& rPartId = rPart.first;
+        const int nMode = rPart.second;
+
+        // One delta is written for a change of the part, so the part is taken from every other
+        // handler that still waits to push it. A change that lands while the delta is computed
+        // records the part on each handler again.
+        for (const std::shared_ptr<CallbackFlushHandler>& pOther : aOtherHandlers)
+            pOther->m_vectorDeltaParts.erase(rPart);
+
         // Computing the delta at delivery time reads the document after the change that triggered
         // the invalidation has fully landed. The document tracks the version the part was last
         // pushed at and writes the delta since it, so the mark advances only for a delta that is
         // handed out.
         //
         // The delta describes the part, not this view. So the first handler to flush a part writes
-        // the one delta for the change, and a handler that flushes the same part after that gets
-        // an empty delta.
+        // the one delta for the change.
         tools::JsonWriter aJsonWriter;
         pDocument->pushVectorPrimitivesDelta(
             aJsonWriter, std::string_view(rPartId.getStr(), rPartId.getLength()), nMode);
         const OString aDelta = aJsonWriter.finishAndGetAsOString();
 
-        // Nothing is written when the comparison found the part unchanged since it was last
-        // pushed. That leaves an empty document, which is not worth a frame of its own.
+        // Nothing is written when the part is unchanged since it was last pushed, or when no
+        // client holds it. The delta does not depend on the view, so no other handler would get
+        // more, and the empty document is not worth a frame of its own.
         if (aDelta == tools::JsonWriter::EMPTY_DOCUMENT)
             continue;
 
@@ -1315,14 +1333,16 @@ void CallbackFlushHandler::invoke()
         m_pCallback(type, payload.getStr(), m_pData);
     }
 
-    // The deltas of the changed vector parts follow the queued
-    // messages, so the client sees each invalidation before the delta
-    // that answers it.
-    flushVectorPrimitivesDeltas();
-
+    // Every queued message is sent by now, so the queue is emptied and the flush that was scheduled
+    // while sending is dropped.
     m_queue1.clear();
     m_queue2.clear();
     stop();
+
+    // The deltas of the changed vector parts follow the queued messages, so the client sees each
+    // invalidation before the delta that answers it. A message that computing a delta queues
+    // stays in the queue with a flush of its own.
+    flushVectorPrimitivesDeltas();
 }
 
 void CallbackFlushHandler::scheduleFlush()

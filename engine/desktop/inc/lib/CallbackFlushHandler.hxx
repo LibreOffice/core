@@ -219,7 +219,8 @@ namespace desktop {
         /// pushes nothing.
         std::set<int> m_aVectorRenderingModes;
         /// Parts whose vector-primitives delta is still to be pushed, collected between two
-        /// flushes, each as its part id and the mode it is served in.
+        /// flushes, each as its part id and the mode it is served in. The set is read and changed
+        /// only on the main thread under the SolarMutex, and m_mutex does not guard it.
         std::set<std::pair<OString, int>> m_vectorDeltaParts;
         COKitCallback m_pCallback;
         ImplSVEvent* m_pFlushEvent;
