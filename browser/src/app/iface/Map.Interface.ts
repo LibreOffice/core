@@ -157,6 +157,7 @@ interface MapInterface extends Evented {
 	_switchToEditMode(): void;
 	_proceedEditMode(): void;
 	_askForPasswordToModify(wrongPassword: boolean): void;
+	_saveAndClose(finishClose?: () => void): void;
 	_showSaveFailedPrompt(
 		errorDetail?: string,
 		fileName?: string,

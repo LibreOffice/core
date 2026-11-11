@@ -66,7 +66,14 @@ class Dispatcher {
 			};
 
 			if (window.ThisIsAMobileApp && !window.ThisIsTheEmscriptenApp) {
-				if ((window as any).codaRemotePage) postUICloseToIntegrator();
+				if ((window as any).codaRemotePage) {
+					app.map._saveAndClose(() => {
+						postUICloseToIntegrator();
+						window.postMobileMessage('BYE'); // Native code closes the local copy on BYE
+						if (!app.map._disableDefaultAction['UI_Close']) app.map.remove();
+					});
+					return;
+				}
 				window.postMobileMessage('BYE');
 			} else {
 				if (app.map) app.map.acceptPendingCellEdit();
