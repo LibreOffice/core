@@ -12,7 +12,9 @@
 #include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/RadioButton.hxx>
+#include <vcl/weld/Scale.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
 #include <svtools/colorcfg.hxx>
@@ -49,6 +51,8 @@ private:
     std::unique_ptr<weld::Widget> m_xDialogFrame;
     std::unique_ptr<weld::RadioButton> m_xVerticalToolbars;
     std::unique_ptr<weld::RadioButton> m_xHorizontalToolbars;
+    std::unique_ptr<weld::Scale> m_xNBTransparency;
+    std::unique_ptr<weld::Label> m_xNBTransLabel;
 
     sal_Int32 nInitialToolbarIconSizeSel;
     sal_Int32 nInitialSidebarIconSizeSel;
@@ -75,11 +79,13 @@ private:
     DECL_LINK(OnSidebarIconSizeChange, weld::ComboBox&, void);
     DECL_LINK(OnNotebookbarIconSizeChange, weld::ComboBox&, void);
     DECL_LINK(OnTabPosChange, weld::Toggleable&, void);
+    DECL_LINK(OnTransparencyChanged, weld::Scale&, void);
 
     void InitThemes();
     void InitCustomization();
     void InitIcons();
     void InitDialogs();
+    void InitNotebookbar();
 
     void LoadSchemeList();
 

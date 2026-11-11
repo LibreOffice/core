@@ -23,7 +23,6 @@
 #include <vcl/themecolors.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
-#include <vcl/weld/Label.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <map>
 
@@ -126,11 +125,14 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xDialogFrame(m_xBuilder->weld_widget(u"dialogs"_ustr))
     , m_xVerticalToolbars(m_xBuilder->weld_radio_button(u"rbVertical"_ustr))
     , m_xHorizontalToolbars(m_xBuilder->weld_radio_button(u"rbHorizontal"_ustr))
+    , m_xNBTransparency(m_xBuilder->weld_scale(u"scNBTransparency"_ustr))
+    , m_xNBTransLabel(m_xBuilder->weld_label(u"lbNBTransValue"_ustr))
 {
     InitThemes();
     InitCustomization();
     InitIcons();
     InitDialogs();
+    InitNotebookbar();
 }
 
 void SvxAppearanceTabPage::LoadSchemeList()
@@ -606,6 +608,30 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, OnTabPosChange, weld::Toggleable&, void)
         comphelper::ConfigurationChanges::create());
     bool bSet = m_xVerticalToolbars->get_active();
     officecfg::Office::Common::Misc::UseVerticalNotebookbar::set(bSet, xChanges);
+    xChanges->commit();
+}
+
+void SvxAppearanceTabPage::InitNotebookbar()
+{
+    int nTrans = officecfg::Office::Common::Misc::NotebookbarColorTransparency::get();
+    nTrans = std::trunc((static_cast<double>(nTrans) / 255) * 100);
+
+    m_xNBTransparency->set_value(nTrans);
+    m_xNBTransLabel->set_label(OUString::number(nTrans) + " %");
+
+    m_xNBTransparency->connect_value_changed(
+        LINK(this, SvxAppearanceTabPage, OnTransparencyChanged));
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, OnTransparencyChanged, weld::Scale&, void)
+{
+    int nTrans = m_xNBTransparency->get_value();
+    m_xNBTransLabel->set_label(OUString::number(nTrans) + " %");
+    nTrans = std::trunc((static_cast<double>(nTrans) / 100) * 255);
+
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::NotebookbarColorTransparency::set(nTrans, xChanges);
     xChanges->commit();
 }
 
