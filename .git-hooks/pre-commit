@@ -253,7 +253,7 @@ while (<FILES>)
         {
             next;
         }
-        if ($file =~ m{^browser/videobackgrounds/.*\.webm$}) # sample background videos
+        if ($file =~ m{^browser/videobackgrounds/.*\.mp4$}) # sample background videos
         {
             next;
         }

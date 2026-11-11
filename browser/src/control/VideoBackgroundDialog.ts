@@ -17,7 +17,7 @@
 class VideoBackgroundDialog {
 	private static readonly id = 'VideoBackgroundDialog';
 
-	// Each sample is videobackgrounds/<name>.webm, with its thumbnail at
+	// Each sample is videobackgrounds/<name>.mp4, with its thumbnail at
 	// images/videobackgrounds/<name>.png.
 	private static getSamples(): Array<{ name: string; text: string }> {
 		return [
@@ -126,7 +126,7 @@ class VideoBackgroundDialog {
 	// The sample goes in the same way as a video the user picks: the file is sent to the
 	// document.
 	private static async insertSample(name: string): Promise<void> {
-		const fileName = name + '.webm';
+		const fileName = name + '.mp4';
 		try {
 			const response = await fetch(
 				app.LOUtil.getURL('videobackgrounds/' + fileName),
@@ -138,7 +138,7 @@ class VideoBackgroundDialog {
 			if (!isRead) throw new Error(response.statusText);
 			const blob = await response.blob();
 			app.map.fire('videobackground', {
-				file: new File([blob], fileName, { type: 'video/webm' }),
+				file: new File([blob], fileName, { type: 'video/mp4' }),
 			});
 		} catch (error) {
 			window.app.console.error(

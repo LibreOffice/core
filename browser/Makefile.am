@@ -161,7 +161,7 @@ JQUERY_MINIFIED_DIST_IMAGES = $(patsubst $(JQUERY_MINIFIED_IMAGE_PATH)/%.png,$(D
 
 COOL_IMAGES_SRC = $(shell find $(srcdir)/images \( -name '*.png' -o -name '*.svg' -o -name '*.gif' \))
 COOL_IMAGES_DST = $(patsubst $(srcdir)/%,$(DIST_FOLDER)/%,$(COOL_IMAGES_SRC))
-COOL_VIDEO_BACKGROUNDS_SRC = $(wildcard $(srcdir)/videobackgrounds/*.webm)
+COOL_VIDEO_BACKGROUNDS_SRC = $(wildcard $(srcdir)/videobackgrounds/*.mp4)
 COOL_VIDEO_BACKGROUNDS_DST = $(patsubst $(srcdir)/%,$(DIST_FOLDER)/%,$(COOL_VIDEO_BACKGROUNDS_SRC))
 COOL_IMAGES_CUSTOM_SRC = $(shell if test -n "$(CUSTOM_ICONS_DIRECTORY)"; then find $(CUSTOM_ICONS_DIRECTORY) -name '*.*'; fi)
 COOL_IMAGES_CUSTOM_DST = $(patsubst $(CUSTOM_ICONS_DIRECTORY)/%,$(DIST_FOLDER)/images/%,$(COOL_IMAGES_CUSTOM_SRC))
