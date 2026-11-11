@@ -146,7 +146,9 @@ public:
      */
     static rtl::Reference<ParametricPolyPolygon>
     create(const css::uno::Reference<css::rendering::XGraphicDevice>& rDevice,
-           std::u16string_view rServiceName, const css::uno::Sequence<css::uno::Any>& rArgs);
+           std::u16string_view rServiceName,
+           const css::uno::Sequence<css::uno::Sequence<double>>& rColorSequence,
+           const css::uno::Sequence<double>& rColorStops, double fAspectRatio);
 
     /// Dispose all internal references
     virtual void disposing(std::unique_lock<std::mutex>&) override;

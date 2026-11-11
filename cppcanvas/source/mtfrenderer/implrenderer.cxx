@@ -605,13 +605,9 @@ void ImplRenderer::createGradientAction(const ::tools::PolyPolygon& rPoly,
         ::basegfx::unotools::affineMatrixFromHomMatrix(aTexture.AffineTransform,
                                                        aGradInfo.getTextureTransform());
 
-        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence({
-            { "Colors", uno::Any(aColors) },
-            { "Stops", uno::Any(aStops) },
-            { "AspectRatio", uno::Any(aGradInfo.getAspectRatio()) },
-        }));
         aTexture.Gradient.set(canvas::ParametricPolyPolygon::create(
-            rParms.mrCanvas->getUNOCanvas()->getDevice(), aGradientService, args));
+            rParms.mrCanvas->getUNOCanvas()->getDevice(), aGradientService, aColors, aStops,
+            aGradInfo.getAspectRatio()));
         if (aTexture.Gradient.is())
         {
             std::shared_ptr<Action> pPolyAction(
