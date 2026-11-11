@@ -289,38 +289,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
                     [in] boolean bExcludeLigatures )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-
-    /** This method calculates a new insertion index.<p>
-
-        This method calculates a new insertion index, given a start
-        index and the number of characters to skip. This is most
-        useful for caret traveling.<p>
-
-        @param nStartIndex
-        The insertion index to start from.
-
-        @param nCaretAdvancement
-        For values greater than 0, the caret is visually moved to the
-        right. For values smaller than 0, the caret is visually moved
-        to the left.
-
-        @param bExcludeLigatures
-        Set this to `TRUE` to skip the positions inside ligatures as
-        valid caret placements. For example, this would avoid setting
-        the caret between the "f" and the "i" in a "fi" ligature.
-
-        @returns the new insertion index.
-
-        @throws com::sun::star::lang::IndexOutOfBoundsException
-        if nStartIndex or nCaretAdvancement is outside the permissible
-        range.
-     */
-    long getNextInsertionIndex( [in] long nStartIndex,
-                                [in] long nCaretAdvancement,
-                                [in] boolean bExcludeLigatures )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
-
-
     /** This method generates a highlight polygon.<p>
 
         This method generates a highlighting polygon from two

@@ -151,14 +151,6 @@ namespace dxcanvas
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/,
-                                                          sal_Int32 /*nCaretAdvancement*/,
-                                                          sal_Bool /*bExcludeLigatures*/ )
-    {
-        // TODO
-        return 0;
-    }
-
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/,
                                                                                               sal_Int32 /*nEndIndex*/ )
     {

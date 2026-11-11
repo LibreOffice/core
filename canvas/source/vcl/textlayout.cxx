@@ -248,12 +248,6 @@ namespace vclcanvas
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32, sal_Int32, sal_Bool )
-    {
-        // TODO(F1)
-        return 0;
-    }
-
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32, sal_Int32 )
     {
         // TODO(F1)
