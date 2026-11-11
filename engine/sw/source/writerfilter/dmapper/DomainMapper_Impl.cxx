@@ -10371,7 +10371,8 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
     sal_Int32 nNumberingLevel = 0;
     if (pProp)
         pProp->second >>= nNumberingLevel;
-    if (xNumberingRules.is())
+    // Level 9 indicates no numbering is used, so do not return any numbering properties
+    if (xNumberingRules.is() && nNumberingLevel != 9)
     {
         cpo::uno::Sequence<beans::PropertyValue> aProps;
         xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;

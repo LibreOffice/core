@@ -510,6 +510,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_zeroCh)
     assertXPath(pXmlStyles, "//w:ind[@w:endChars='0']", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf174337_lvl9)
+{
+    // given a document with a disabled numbering, and the num-style specifies a huge left margin
+
+    createSwDoc("tdf174337_lvl9.docx");
+    saveAndReload(TestFilter::DOCX);
+
+    uno::Reference<text::XTextRange> xPara(getParagraph(2));
+    // unnumbered
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1482), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
+    // Without the fix, this was 6985 (the numbering's IndentAt)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
+
+    xPara.set(getParagraph(3));
+    // unnumbered
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1482), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
+    // Without the fix, this was 6985 (the numbering's IndentAt)
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
 {
     createSwDoc("tdf83844.fodt");
