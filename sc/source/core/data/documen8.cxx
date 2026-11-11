@@ -130,7 +130,14 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
         pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, officecfg::Office::Common::Print::Warning::NotFound::get() ) );
 
-        mpPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
+        if (mpPendingJobSetup)
+        {
+            // tdf#42673 - create the printer actually needed and stored in the file
+            mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pSet), *mpPendingJobSetup);
+            mpPendingJobSetup.reset();
+        }
+        else
+            mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pSet));
         mpPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
         UpdateDrawPrinter();
         mpPrinter->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
@@ -150,12 +157,18 @@ void ScDocument::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter )
     }
     else
     {
+        mpPendingJobSetup.reset();
         ScopedVclPtr<SfxPrinter> xKeepAlive( mpPrinter );
         mpPrinter = pNewPrinter;
         UpdateDrawPrinter();
         mpPrinter->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
     }
     InvalidateTextWidth(nullptr, nullptr, false);     // in both cases
+}
+
+void ScDocument::SetPendingJobSetup(const JobSetup& rJobSetup)
+{
+    mpPendingJobSetup = std::make_unique<JobSetup>(rJobSetup);
 }
 
 void ScDocument::SetPrintOptions()

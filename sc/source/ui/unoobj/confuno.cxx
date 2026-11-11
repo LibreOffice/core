@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <utility>
 
 #include <config_features.h>
@@ -46,6 +47,18 @@
 using namespace com::sun::star;
 
 constexpr OUString SCSAVEVERSION = u"SaveVersionOnClose"_ustr;
+
+namespace
+{
+// tdf#42673 - search the printer in the cached printer list without contacting the printer itself
+bool IsPrinterInstalled(const OUString& rPrinterName)
+{
+    const std::vector<OUString>& rQueues = Printer::GetPrinterQueues();
+    return std::any_of(rQueues.begin(), rQueues.end(), [&rPrinterName](const OUString& rName) {
+        return rName.equalsIgnoreAsciiCase(rPrinterName);
+    });
+}
+}
 
 static std::span<const SfxItemPropertyMapEntry> lcl_GetConfigPropertyMap()
 {
@@ -216,8 +229,14 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             throw lang::IllegalArgumentException();
 
         // #i75610# if the name is empty, do nothing (don't create any printer)
-        if ( !sPrinterName.isEmpty() && pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+        if (!sPrinterName.isEmpty() && pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED
+            && IsPrinterInstalled(sPrinterName))
         {
+            // tdf#42673 - the printer stored in the file is created when it is really needed
+            const JobSetup* pPendingJobSetup = rDoc.GetPendingJobSetup();
+            if (pPendingJobSetup && pPendingJobSetup->GetPrinterName() == sPrinterName)
+                return;
+
             SfxPrinter* pPrinter = pDocShell->GetPrinter();
             if (!pPrinter)
                 throw uno::RuntimeException();
@@ -245,20 +264,25 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             {
                 SvMemoryStream aStream (aSequence.getArray(), nSize, StreamMode::READ );
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                JobSetup aJobSetup;
+                ReadJobSetup(aStream, aJobSetup);
+
+                // tdf#42673 - create the printer stored in the file only when it is really needed
+                SfxPrinter* pPrinter = pDocShell->GetPrinter(false);
+                if (!pPrinter)
+                {
+                    rDoc.SetPendingJobSetup(aJobSetup);
+                    return;
+                }
+
                 auto pSet = std::make_unique<SfxItemSet>(SfxItemSet::makeFixedSfxItemSet
                         <SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                         SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
                         SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS>( *rDoc.GetPool()));
 
-                // tdf#42673 - do not create the possibly unreachable printer only to read a flag
-                SfxPrinter* pPrinter = pDocShell->GetPrinter(false);
-                bool bPreferPrinterPapersize = false;
-                if ( pPrinter )
-                    bPreferPrinterPapersize = pPrinter->GetPrinterSettingsPreferred();
-
-                VclPtr<SfxPrinter> pTempPrinter = SfxPrinter::Create( aStream, std::move(pSet) );
-                pTempPrinter->SetPrinterSettingsPreferred( bPreferPrinterPapersize );
+                auto pTempPrinter = VclPtr<SfxPrinter>::Create(std::move(pSet), aJobSetup);
+                pTempPrinter->SetPrinterSettingsPreferred(pPrinter->GetPrinterSettingsPreferred());
                 pDocShell->SetPrinter( pTempPrinter );
             }
         }
@@ -516,6 +540,9 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         SfxPrinter* pPrinter = rDoc.GetPrinter( false );
         if (pPrinter)
             aRet <<= pPrinter->GetName();
+        else if (const JobSetup* pPendingJobSetup = rDoc.GetPendingJobSetup())
+            // tdf#42673 - printer is not needed yet
+            aRet <<= pPendingJobSetup->GetPrinterName();
         else
             aRet <<= OUString();
     }
@@ -524,10 +551,15 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         // #i75610# don't create the printer, return empty sequence if no printer created yet
         // (as in SwXDocumentSettings)
         SfxPrinter* pPrinter = rDoc.GetPrinter( false );
-        if (pPrinter)
+        const JobSetup* pPendingJobSetup = rDoc.GetPendingJobSetup();
+        if (pPrinter || pPendingJobSetup)
         {
             SvMemoryStream aStream;
-            pPrinter->Store( aStream );
+            if (pPrinter)
+                pPrinter->Store(aStream);
+            else
+                // tdf#42673 - printer is not needed yet
+                WriteJobSetup(aStream, *pPendingJobSetup);
             aRet <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aStream.GetData() ),
                                                         aStream.TellEnd() );
         }

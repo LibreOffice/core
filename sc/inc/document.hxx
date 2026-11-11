@@ -134,6 +134,7 @@ class SfxBindings;
 class SfxPoolItem;
 class SfxItemPool;
 class SfxPrinter;
+class JobSetup;
 class SfxStyleSheetBase;
 class SvMemoryStream;
 class SvStream;
@@ -425,6 +426,8 @@ private:
     std::unique_ptr<ScNoteEditEngine>   mpNoteEngine;                   // uses pEditPool from xPoolHelper
     ScDocShell*     mpShell;
     VclPtr<SfxPrinter>  mpPrinter;
+    // tdf#42673 - printer job setup settings from the file
+    std::unique_ptr<JobSetup> mpPendingJobSetup;
     VclPtr<VirtualDevice> mpVirtualDevice_100th_mm;
     std::unique_ptr<ScDrawLayer> mpDrawLayer;           // SdrModel
     rtl::Reference<XColorList> pColorList;
@@ -2409,6 +2412,10 @@ public:
 
     SfxPrinter*                 GetPrinter( bool bCreateIfNotExist = true );
     void                        SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter );
+    /// tdf#42673 - remember the printer settings from the file until the printer is really needed
+    void SetPendingJobSetup(const JobSetup& rJobSetup);
+    const JobSetup* GetPendingJobSetup() const { return mpPendingJobSetup.get(); }
+
     VirtualDevice*              GetVirtualDevice_100th_mm();
     SC_DLLPUBLIC OutputDevice*  GetRefDevice(bool bForceVirtDev = false); // WYSIWYG: Printer, otherwise VirtualDevice...
 
