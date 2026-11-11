@@ -3247,6 +3247,41 @@ function showWelcomeSVG() {
 		return wsURI;
 	}
 
+	// The /cool/ws address of a COWASM page, which also adds the token to the document's parameters.
+	function wasmServerSocketUrl() {
+		// COWASM: cool.html is hosted on the cool server, so a
+		// same-origin upgrade against location.host is fine.
+		// Embed access_token inside the WOPISrc value (the
+		// historical form; same-origin doesn't trigger the
+		// cross-origin bypass that would require top-level
+		// params instead).
+		if (window.accessToken) {
+			global.app.map.options.docParams['access_token'] =
+				window.accessToken;
+			global.app.map.options.docParams['access_token_ttl'] =
+				window.accessTokenTTL || '0';
+		}
+
+		global.app.map.options.docParams['permission'] = 'edit';
+
+		var loc = window.location;
+		var pageWsScheme = loc.protocol === 'https:'
+			? 'wss://' : 'ws://';
+
+		var docUrl = global.app.map.options.doc;
+		var sep = docUrl.includes('?') ? '&' : '?';
+		var paramStr = Object.keys(global.app.map.options.docParams)
+			.map(function(k) {
+				return encodeURIComponent(k) + '='
+					+ encodeURIComponent(
+						global.app.map.options.docParams[k]);
+			}).join('&');
+
+		return pageWsScheme + loc.host + '/cool/ws?WOPISrc='
+			+ encodeURIComponent(docUrl + sep + paramStr)
+			+ '&compat=/ws';
+	}
+
 	// Switch from local (WASM or LOKit-via-Bridge) editing to traditional
 	// server-based collaborative editing without reloading cool.html:
 	// tear down the local-edit plumbing, then point app.socket at a real
@@ -3288,38 +3323,7 @@ function showWelcomeSVG() {
 		// slot (currently the QtApp branch via Bridge::getRemoteInfo),
 		// is the CODA signal.
 		var ri = window._codaRemoteInfo;
-		var wsURI;
-		if (ri) {
-			wsURI = codaServerSocketUrl(ri);
-		} else {
-			// COWASM: cool.html is hosted on the cool server, so a
-			// same-origin upgrade against location.host is fine.
-			// Embed access_token inside the WOPISrc value (the
-			// historical form; same-origin doesn't trigger the
-			// cross-origin bypass that would require top-level
-			// params instead).
-			if (window.accessToken) {
-				global.app.map.options.docParams['access_token'] =
-					window.accessToken;
-				global.app.map.options.docParams['access_token_ttl'] =
-					window.accessTokenTTL || '0';
-			}
-			global.app.map.options.docParams['permission'] = 'edit';
-			var loc = window.location;
-			var pageWsScheme = loc.protocol === 'https:'
-				? 'wss://' : 'ws://';
-			var docUrl = global.app.map.options.doc;
-			var sep = docUrl.includes('?') ? '&' : '?';
-			var paramStr = Object.keys(global.app.map.options.docParams)
-				.map(function(k) {
-					return encodeURIComponent(k) + '='
-						+ encodeURIComponent(
-							global.app.map.options.docParams[k]);
-				}).join('&');
-			wsURI = pageWsScheme + loc.host + '/cool/ws?WOPISrc='
-				+ encodeURIComponent(docUrl + sep + paramStr)
-				+ '&compat=/ws';
-		}
+		var wsURI = ri ? codaServerSocketUrl(ri) : wasmServerSocketUrl();
 
 		global.app.console.log('Switching to server mode: ' + wsURI);
 		var ws = new WebSocket(wsURI);
