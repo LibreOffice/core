@@ -3173,6 +3173,15 @@ function showWelcomeSVG() {
 		global.collab.ws = null;
 	};
 
+	function detachFromNativeApp() {
+		// From here on the page acts as a plain browser client.
+		window.postMobileMessage = function() {};
+		window.postMobileCall = function() {};
+		window.ThisIsAMobileApp = false;
+		window.ThisIsTheEmscriptenApp = false;
+		window.ThisIsTheQtApp = false;
+	}
+
 	// Switch from local (WASM or LOKit-via-Bridge) editing to traditional
 	// server-based collaborative editing without reloading cool.html:
 	// tear down the local-edit plumbing, then point app.socket at a real
@@ -3204,12 +3213,7 @@ function showWelcomeSVG() {
 		if (window.bridge)
 			window.postMobileMessage('switchToServerMode');
 
-		// From here on the page acts as a plain browser client.
-		window.postMobileMessage = function() {};
-		window.postMobileCall = function() {};
-		window.ThisIsAMobileApp = false;
-		window.ThisIsTheEmscriptenApp = false;
-		window.ThisIsTheQtApp = false;
+		detachFromNativeApp();
 
 		// CODA-only: drop the bridge's FakeWebSocket so
 		// app.socket.connect below can take over cleanly with the
