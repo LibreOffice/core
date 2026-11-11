@@ -68,6 +68,7 @@ class Dispatcher {
 			if (window.ThisIsAMobileApp && !window.ThisIsTheEmscriptenApp) {
 				if ((window as any).codaRemotePage) {
 					app.map._saveAndClose(() => {
+						(window as any).collab.leave();
 						postUICloseToIntegrator();
 						window.postMobileMessage('BYE'); // Native code closes the local copy on BYE
 						if (!app.map._disableDefaultAction['UI_Close']) app.map.remove();
