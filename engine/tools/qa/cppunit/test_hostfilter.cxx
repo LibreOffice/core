@@ -311,6 +311,16 @@ void TestHostFilter::testDocumentHost()
     HostFilter::setAllowedHosts(nullptr);
     CPPUNIT_ASSERT(!HostFilter::isForbidden(u"other.example"_ustr));
 
+    // An IPv6 document host is allowed in the bracketed form a URL gives it, and in any
+    // spelling of the same address.
+    HostFilter::setAllowedHosts("");
+    HostFilter::setDocumentHost(u"fd00::5"_ustr);
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"[fd00::5]"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"[FD00:0::5]"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"[fd00::6]"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"https://[fd00::5]/image.png"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"https://[fd00::6]/image.png"_ustr));
+
     HostFilter::setDocumentHost(OUString());
     HostFilter::setAllowedHosts("");
     CPPUNIT_ASSERT(HostFilter::isForbidden(u"wopi.example"_ustr));

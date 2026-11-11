@@ -190,12 +190,34 @@ static bool isAllowedHost(const OString& rHost)
     return false;
 }
 
+// An IP address host matches by value, so "[fd00::5]" from a URL matches "fd00::5".
+static bool isDocumentHost(const OUString& rHost)
+{
+    if (g_DocumentHost.isEmpty())
+        return false;
+
+    if (rHost.equalsIgnoreAsciiCase(g_DocumentHost))
+        return true;
+
+    const OString aHost = rHost.toUtf8();
+    const OString aDocumentHost = g_DocumentHost.toUtf8();
+    unsigned char aHostBytes[16];
+    unsigned char aDocumentHostBytes[16];
+    const int nLength
+        = parseAddress(std::string_view(aHost.getStr(), aHost.getLength()), aHostBytes);
+    return nLength != 0
+           && parseAddress(std::string_view(aDocumentHost.getStr(), aDocumentHost.getLength()),
+                           aDocumentHostBytes)
+                  == nLength
+           && std::memcmp(aHostBytes, aDocumentHostBytes, nLength) == 0;
+}
+
 bool HostFilter::isForbidden(const OUString& rHost)
 {
     if (!g_AllowlistConfigured)
         return false;
 
-    if (!g_DocumentHost.isEmpty() && rHost.equalsIgnoreAsciiCase(g_DocumentHost))
+    if (isDocumentHost(rHost))
         return false;
 
     return !isAllowedHost(rHost.toUtf8());
