@@ -49,10 +49,19 @@ class VectorCompositor extends SlideCompositor {
 	private pendingSlideNumber: number = null;
 	private pendingReady: VoidFunction = null;
 
-	// The layers of the slide on the GPU, for each WebGL context that frames are drawn straight
-	// into: the one of the slideshow canvas, and the ones of the canvases that show the frames in
-	// other windows.
-	private layers = new Map<RenderContextGl, VectorSlideLayers>();
+	// The layers of the most recently drawn slides on the GPU, the most recent first, for each
+	// WebGL context that frames are drawn straight into: the one of the slideshow canvas, and the
+	// ones of the canvases that show the frames in other windows. A context holds at most
+	// layerSetsPerContext of them.
+	private layers = new Map<RenderContextGl, VectorSlideLayers[]>();
+	// The slide a transition leaves and the one it enters. Each set holds full-canvas textures,
+	// so the count stays small.
+	private static readonly layerSetsPerContext = 2;
+	// Stops the idle callback that paints the layers of the next slide ahead. Null while none
+	// is waiting.
+	private cancelPaintingAhead: (() => void) | null = null;
+	// The slide that is shown once its transition has ended. Null while a transition runs.
+	private shownSlideHash: string | null = null;
 
 	constructor(slideShowPresenter: SlideShowPresenter) {
 		super(slideShowPresenter);
@@ -84,7 +93,9 @@ class VectorCompositor extends SlideCompositor {
 		);
 		this.offscreenContext = this.offscreenCanvas.getContext('2d');
 		this.renderContext = new RenderContext2d(this.offscreenCanvas);
-		this.layers.forEach((layers) => layers.invalidate());
+		this._stopPaintingAhead();
+		this.shownSlideHash = null;
+		this._invalidateLayers();
 		// A compositor whose slideshow was closed draws the next one.
 		this.disposed = false;
 
@@ -162,8 +173,9 @@ class VectorCompositor extends SlideCompositor {
 	private _onDataChanged(): void {
 		// A tree or an embedded bitmap that arrives can change what a layer
 		// of the slide shows.
-		this.layers.forEach((layers) => layers.invalidate());
+		this._invalidateLayers();
 		if (this.disposed) return;
+		if (this.shownSlideHash) this._paintNextSlideAhead(this.shownSlideHash);
 		this._refreshShownSlide();
 		if (this.pendingReady === null) return;
 
@@ -359,22 +371,45 @@ class VectorCompositor extends SlideCompositor {
 		const data = this._drawableData(slideHash);
 		if (!data) return false;
 
-		// The layers of a context that is gone are freed with it.
-		this.layers.forEach((layers, owner) => {
+		this._dropDisposedLayers();
+		const layers = this._slideLayers(context, slideHash, data);
+		if (!layers) return false;
+		return layers.draw(
+			this._drawStates(slideHash, data),
+			texture,
+			this._videoFrames(slideHash, data),
+		);
+	}
+
+	// The layers of a context that is gone are freed with it.
+	private _dropDisposedLayers(): void {
+		this.layers.forEach((sets, owner) => {
 			if (!owner.isDisposed()) return;
-			layers.dispose();
+			for (const layers of sets) layers.dispose();
 			this.layers.delete(owner);
 		});
-		let layers = this.layers.get(context);
-		if (!layers) {
-			layers = new VectorSlideLayers(context);
-			this.layers.set(context, layers);
-		}
+	}
+
+	private _invalidateLayers(): void {
+		this.layers.forEach((sets) =>
+			sets.forEach((layers) => layers.invalidate()),
+		);
+	}
+
+	// The layers of the slide in the context, made anew where the context holds none for it.
+	// A full context reuses the set of its least recently drawn slide. During a transition the
+	// slide it leaves and the one it enters are both drawn from layers painted before. Null while
+	// the canvas of the context has no size.
+	private _slideLayers(
+		context: RenderContextGl,
+		slideHash: string,
+		data: cool.VectorPrimitivesData,
+	): VectorSlideLayers | null {
 		// The layers are drawn at the size of the canvas of the context, so the text on a smaller
 		// canvas is drawn for its own size.
 		const width = context.canvas.width;
 		const height = context.canvas.height;
-		if (width <= 0 || height <= 0) return false;
+		if (width <= 0 || height <= 0) return null;
 		const master =
 			data.masterPartId !== undefined
 				? (RenderManager.requestPartById(
@@ -382,7 +417,23 @@ class VectorCompositor extends SlideCompositor {
 						cool.VectorMode.MasterPages,
 					) ?? null)
 				: null;
-		if (!layers.holds(slideHash, data, master, width, height)) {
+
+		let sets = this.layers.get(context);
+		if (!sets) {
+			sets = [];
+			this.layers.set(context, sets);
+		}
+		const index = sets.findIndex((layers) =>
+			layers.holds(slideHash, data, master, width, height),
+		);
+		let layers: VectorSlideLayers;
+		if (index >= 0) {
+			layers = sets.splice(index, 1)[0];
+		} else {
+			layers =
+				sets.length < VectorCompositor.layerSetsPerContext
+					? new VectorSlideLayers(context)
+					: sets.pop();
 			const masterVideoIds = new Set<number>(
 				(
 					this._metaPresentation.getSlideInfo(slideHash)?.masterVideos ?? []
@@ -398,11 +449,48 @@ class VectorCompositor extends SlideCompositor {
 				masterVideoIds,
 			);
 		}
-		return layers.draw(
-			this._drawStates(slideHash, data),
-			texture,
-			this._videoFrames(slideHash, data),
-		);
+		sets.unshift(layers);
+		return layers;
+	}
+
+	// Paint the layers of the slide after slideHash ahead of time, one layer per idle callback,
+	// in every context that frames are drawn into. A full-canvas layer takes about as long as a
+	// frame, so the frames between two callbacks go to the video.
+	private _paintNextSlideAhead(slideHash: string): void {
+		this._stopPaintingAhead();
+		const nextHash = this._metaPresentation.getSlideInfo(slideHash)?.next;
+		if (!nextHash) return;
+		const step = (): void => {
+			this.cancelPaintingAhead = null;
+			if (this.disposed) return;
+			const data = this._drawableData(nextHash);
+			if (!data) return;
+			this._dropDisposedLayers();
+			let isLayerLeft = false;
+			this.layers.forEach((_sets, context) => {
+				if (this._slideLayers(context, nextHash, data)?.paintNext())
+					isLayerLeft = true;
+			});
+			if (isLayerLeft) this._whenIdle(step);
+		};
+		this._whenIdle(step);
+	}
+
+	// Run callback once the browser is idle. The timeout runs it also while the frames of a
+	// video keep the browser busy. A browser without idle callbacks runs it after a short delay.
+	private _whenIdle(callback: () => void): void {
+		if (typeof window.requestIdleCallback === 'function') {
+			const id = window.requestIdleCallback(callback, { timeout: 1000 });
+			this.cancelPaintingAhead = () => window.cancelIdleCallback(id);
+		} else {
+			const id = setTimeout(callback, 50);
+			this.cancelPaintingAhead = () => clearTimeout(id);
+		}
+	}
+
+	private _stopPaintingAhead(): void {
+		this.cancelPaintingAhead?.();
+		this.cancelPaintingAhead = null;
 	}
 
 	/// The cached tree of the slide, or null until the slide and its master,
@@ -657,6 +745,10 @@ class VectorCompositor extends SlideCompositor {
 	// The primitive trees are already cached before a transition starts. The background video of
 	// the slide coming in plays from the start of the transition.
 	public notifyTransitionStart(slideHash: string): void {
+		// The context holds the layers of the slide the transition leaves and of the one it
+		// enters, so the painting ahead waits until the transition has ended.
+		this._stopPaintingAhead();
+		this.shownSlideHash = null;
 		if (this.disposed || !this.renderContext) return;
 		this.masterVideos.start(
 			this._metaPresentation.getSlideInfo(slideHash),
@@ -671,6 +763,8 @@ class VectorCompositor extends SlideCompositor {
 		if (slideInfo) this.masterVideos.keepOnly(slideInfo.masterPage);
 		else this.masterVideos.deleteResources();
 		this.videos.enterSlide(slideHash, slideInfo, this.renderContext);
+		this.shownSlideHash = slideHash;
+		this._paintNextSlideAhead(slideHash);
 	}
 
 	public deleteResources(): void {
@@ -681,7 +775,9 @@ class VectorCompositor extends SlideCompositor {
 		this.offscreenCanvas = null;
 		this.offscreenContext = null;
 		this.renderContext = null;
-		this.layers.forEach((layers) => layers.dispose());
+		this._stopPaintingAhead();
+		this.shownSlideHash = null;
+		this.layers.forEach((sets) => sets.forEach((layers) => layers.dispose()));
 		this.layers.clear();
 		this.pendingReady = null;
 		this.pendingSlideNumber = null;

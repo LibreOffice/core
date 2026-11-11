@@ -64,6 +64,8 @@ class VectorSlideLayers {
 	private readonly stencilBuffer: WebGLBuffer | null;
 
 	private layers: SlideLayer[] = [];
+	// The layers whose textures are not painted yet, in paint order.
+	private unpainted: SlideLayer[] = [];
 	// The slide and tree the layers are drawn from, null while there are none.
 	private slideHash: string | null = null;
 	private data: cool.VectorPrimitivesData | null = null;
@@ -192,9 +194,10 @@ class VectorSlideLayers {
 		);
 	}
 
-	/// Draw the layers anew. targets maps each animation target's object id to the paragraphs
+	/// Make the layers anew. targets maps each animation target's object id to the paragraphs
 	/// that an animation moves on their own. master is the tree of the master of the slide and
-	/// masterVideoIds the ids of its objects that hold a video.
+	/// masterVideoIds the ids of its objects that hold a video. The textures are painted by
+	/// paintNext, one layer at a time, and the next draw paints the ones still left.
 	public build(
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
@@ -235,7 +238,16 @@ class VectorSlideLayers {
 		}
 		// A run leaves out the paragraphs with layers of their own, so every layer is made
 		// before any is painted.
-		for (const layer of this.layers) this._paint(layer, data, undefined);
+		this.unpainted = this.layers.slice();
+	}
+
+	/// Paint the texture of the next layer that is not painted yet. True while layers are left
+	/// to paint.
+	public paintNext(): boolean {
+		const layer = this.unpainted.shift();
+		if (layer && this.data && !this.context.isDisposed())
+			this._paint(layer, this.data, undefined);
+		return this.unpainted.length > 0;
 	}
 
 	/// Draw a frame, each layer in the state states gives its target. The frame goes into
@@ -248,6 +260,7 @@ class VectorSlideLayers {
 	): boolean {
 		const data = this.data;
 		if (this.context.isDisposed() || !data) return false;
+		while (this.unpainted.length > 0) this.paintNext();
 		if (!this.quads.begin(this.canvasWidth, this.canvasHeight, texture))
 			return false;
 
@@ -303,6 +316,7 @@ class VectorSlideLayers {
 		}
 		this.quads.clearFrames();
 		this.layers = [];
+		this.unpainted = [];
 		this.slideHash = null;
 		this.data = null;
 		this.master = null;
