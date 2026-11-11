@@ -42,6 +42,11 @@ std::mutex CollabUploadRequestsMutex;
 namespace
 {
 std::atomic<uint64_t> HandlerIdCounter{0};
+
+/// Grace period before reclaiming an idle broker, so a transient
+/// client disconnect (network blip) can reconnect and re-find the
+/// same broker with its state intact.
+constexpr auto COLLAB_BROKER_GRACE = std::chrono::seconds(30);
 }
 
 CollabBroker::CollabBroker(const std::string& docKey, const std::string& wopiSrc)
@@ -514,8 +519,17 @@ std::shared_ptr<CollabBroker> findOrCreateCollabBroker(const std::string& docKey
     auto it = CollabBrokers.find(docKey);
     if (it != CollabBrokers.end() && it->second)
     {
-        LOG_DBG("Found existing CollabBroker for docKey [" << docKey << ']');
-        return it->second;
+        if (it->second->isReclaimable(COLLAB_BROKER_GRACE))
+        {
+            LOG_INF("Removing idle CollabBroker for docKey [" << docKey
+                                                             << "] after its grace period");
+            CollabBrokers.erase(it);
+        }
+        else
+        {
+            LOG_DBG("Found existing CollabBroker for docKey [" << docKey << ']');
+            return it->second;
+        }
     }
 
     // Create new broker
@@ -530,16 +544,11 @@ std::shared_ptr<CollabBroker> findOrCreateCollabBroker(const std::string& docKey
 
 void cleanupCollabBrokers()
 {
-    // Grace period before reclaiming an idle broker, so a transient
-    // client disconnect (network blip) can reconnect and re-find the
-    // same broker with its state intact.
-    static constexpr auto grace = std::chrono::seconds(30);
-
     std::lock_guard<std::mutex> lock(CollabBrokersMutex);
 
     for (auto it = CollabBrokers.begin(); it != CollabBrokers.end(); )
     {
-        if (it->second && it->second->isReclaimable(grace))
+        if (it->second && it->second->isReclaimable(COLLAB_BROKER_GRACE))
         {
             LOG_INF("Removing idle CollabBroker for docKey [" << it->first << ']');
             it = CollabBrokers.erase(it);
