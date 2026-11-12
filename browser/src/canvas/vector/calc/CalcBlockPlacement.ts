@@ -254,6 +254,16 @@ namespace cool {
 
 			this.shapes(source, placed, axes);
 
+			// A border line with a slanted end, as in a leaning cell, comes as a filled shape.
+			if (
+				borders &&
+				type === 'polyPolygonColor' &&
+				typeof placed.path === 'string'
+			) {
+				const line = this.thinBorderLine(placed.path, source.color, axes);
+				if (line) return line as unknown as Primitive;
+			}
+
 			// A border line is drawn whole pixels wide, at least one, as the tiles draw it.
 			const line = source.line as { width?: number } | undefined;
 			if (borders && strokeTypes.has(type) && line && line.width) {
@@ -286,6 +296,56 @@ namespace cool {
 				placed.highlight = placedHighlight;
 			}
 			return placed as unknown as Primitive;
+		}
+
+		/// A placed border shape of four corners as a line along its middle, one pixel wide, when it
+		/// is thinner than a pixel. Its thickness is its area divided by its longest side, which is
+		/// exact for the parallelogram of a sheared line. Null for another shape or a thicker one.
+		thinBorderLine(
+			path: string,
+			color: unknown,
+			axes: Axes,
+		): Record<string, unknown> | null {
+			// The path comes from path(): one M, then L and Z, as a shape of straight sides.
+			if (path.lastIndexOf('M') !== 0 || path.includes('C')) return null;
+			const numbers = (path.match(/-?[\d.]+(?:e[-+]?\d+)?/g) ?? []).map(Number);
+			const points: number[][] = [];
+			for (let k = 0; k + 1 < numbers.length; k += 2)
+				points.push([numbers[k], numbers[k + 1]]);
+			if (points.length !== 4) return null;
+
+			// The thickness is measured in tile twips, where the pixel is.
+			const scaleX = Math.abs(axes.a);
+			const scaleY = Math.abs(axes.d);
+			let area = 0;
+			let longest = 0;
+			let side = 0;
+			for (let k = 0; k < 4; k++) {
+				const [x1, y1] = points[k];
+				const [x2, y2] = points[(k + 1) % 4];
+				area += x1 * y2 - x2 * y1;
+				const length = Math.hypot((x2 - x1) * scaleX, (y2 - y1) * scaleY);
+				if (length > longest) {
+					longest = length;
+					side = k;
+				}
+			}
+			const thickness = (Math.abs(area) * scaleX * scaleY) / 2 / longest;
+			if (!(longest > 0) || thickness >= this.frame.pixel) return null;
+
+			// The line runs between the middles of the two sides next to the longest one.
+			const middle = (k: number): number[] => {
+				const [x1, y1] = points[k % 4];
+				const [x2, y2] = points[(k + 1) % 4];
+				return [(x1 + x2) / 2, (y1 + y2) / 2];
+			};
+			const [startX, startY] = middle(side + 3);
+			const [endX, endY] = middle(side + 1);
+			return {
+				type: 'polygonStroke',
+				path: `M${rounded(startX)} ${rounded(startY)}L${rounded(endX)} ${rounded(endY)}`,
+				line: { color, width: this.frame.pixel / scaleX },
+			};
 		}
 
 		/// Move the paths, rectangles, line ends and areas of the source into placed.

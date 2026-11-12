@@ -167,6 +167,69 @@ describe('calcPlacedLayers', function () {
 		nodeassert.strictEqual(layers.borders[1].line.width, 30);
 	});
 
+	it('draws a border of a leaning cell thinner than a pixel as a line one pixel wide', function () {
+		// A leaning cell shears its border lines, and the engine sends them as filled shapes. A
+		// hair border is one tile twip thick here. It becomes a line along its middle, one pixel
+		// wide, as a straight hair border is.
+		const border = placed({
+			borders: [
+				{
+					type: 'polyPolygonColor',
+					color: '#000000',
+					path: 'M1:100,8:0L1:600,8:0L1:599,8:1L1:99,8:1Z',
+				} as unknown as cool.Primitive,
+			],
+		}).borders[0];
+
+		nodeassert.strictEqual(border.type, 'polygonStroke');
+		nodeassert.strictEqual(border.path, 'M49.75 0.5L299.75 0.5');
+		nodeassert.deepStrictEqual(border.line, { color: '#000000', width: 10 });
+	});
+
+	it('draws a slanted border thinner than a pixel along its slant', function () {
+		// The side of a leaning cell: under a pixel thick across its slant.
+		const border = placed({
+			borders: [
+				{
+					type: 'polyPolygonColor',
+					color: '#000000',
+					path: 'M1:100,8:0L1:102,8:0L1:602,8:250L1:600,8:250Z',
+				} as unknown as cool.Primitive,
+			],
+		}).borders[0];
+
+		nodeassert.strictEqual(border.type, 'polygonStroke');
+		nodeassert.strictEqual(border.path, 'M50.5 0L300.5 250');
+	});
+
+	it('keeps a border shape of a pixel or more as it is', function () {
+		const border = placed({
+			borders: [
+				{
+					type: 'polyPolygonColor',
+					color: '#000000',
+					path: 'M1:100,8:0L1:600,8:0L1:590,8:20L1:90,8:20Z',
+				} as unknown as cool.Primitive,
+			],
+		}).borders[0];
+
+		nodeassert.strictEqual(border.type, 'polyPolygonColor');
+	});
+
+	it('keeps a thin fill that is not a border', function () {
+		const fill = placed({
+			background: [
+				{
+					type: 'polyPolygonColor',
+					color: '#000000',
+					path: 'M1:100,8:0L1:600,8:0L1:599,8:1L1:99,8:1Z',
+				} as unknown as cool.Primitive,
+			],
+		}).background[0];
+
+		nodeassert.strictEqual(fill.type, 'polyPolygonColor');
+	});
+
 	it('keeps the width of a line that is not a border', function () {
 		const layers = placed({
 			background: [
