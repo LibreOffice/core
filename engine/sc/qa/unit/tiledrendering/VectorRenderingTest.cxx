@@ -1422,6 +1422,59 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorStackedCellTakesItsAlignmen
     CPPUNIT_ASSERT_GREATER(2000.0, aStartOf(3));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedCellTextTakesItsVerticalAlignment)
+{
+    // The lines of text turned by 90 degrees run up the cell, so the vertical alignment of the cell
+    // aligns each line along it, as in the window: a short last line starts at the top of a cell
+    // aligned to the top, and at the bottom of one aligned to the bottom. Every cell aligned its
+    // lines by the horizontal alignment instead.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetRowHeight(1, 0, 1500);
+    rDocument.SetManualHeight(1, 1, 0, true);
+    const SvxCellVerJustify aJustify[]
+        = { SvxCellVerJustify::Top, SvxCellVerJustify::Center, SvxCellVerJustify::Bottom };
+    for (SCCOL nColumn = 1; nColumn <= 3; ++nColumn)
+    {
+        setCellString(*pDocShell, nColumn, 1,
+                      u"A long header text that wraps onto a shorter line"_ustr);
+        ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+        aPattern.ItemSetPut(ScRotateValueItem(Degree100(9000)));
+        aPattern.ItemSetPut(ScLineBreakCell(true));
+        aPattern.ItemSetPut(SvxVerJustifyItem(aJustify[nColumn - 1], ATTR_VER_JUSTIFY));
+        applyToCell(*pDocShell, nColumn, 1, aPattern);
+    }
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    // Where the last line starts along its line, in the coordinates of the turned text.
+    auto aLastLineStartOf = [&aResponse](int nColumn) {
+        const auto oText = cellTextAt(aResponse, nColumn, 1);
+        CPPUNIT_ASSERT(oText);
+        std::optional<double> oStart;
+        std::function<void(const boost::property_tree::ptree&)> aFind
+            = [&](const boost::property_tree::ptree& rNode) {
+                  if (rNode.get<std::string>("type", "") == "textSimplePortion")
+                      oStart = rNode.get<double>("x");
+                  for (const auto& rChild : rNode)
+                      aFind(rChild.second);
+              };
+        aFind(*oText);
+        CPPUNIT_ASSERT(oStart);
+        return *oStart;
+    };
+
+    // Text turned up the cell reads from the bottom: its line ends at the top of a cell aligned to
+    // the top, and starts at the bottom of one aligned to the bottom.
+    const double fTop = aLastLineStartOf(1);
+    const double fCenter = aLastLineStartOf(2);
+    const double fBottom = aLastLineStartOf(3);
+    CPPUNIT_ASSERT_GREATER(fCenter, fTop);
+    CPPUNIT_ASSERT_GREATER(fBottom, fCenter);
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)
 {
     // Rotated text is centered in its cell by default and takes the alignment of the cell, as in

@@ -1652,11 +1652,13 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
                 break;
         }
     }
-    if (bAsianVertical)
+    // The lines of turned and Asian vertical text run along the height of the cell, so its
+    // vertical alignment aligns them, as in ScOutputData::DrawEditParam::setAlignmentToEngine.
+    if (bVertical || bAsianVertical)
     {
         sc::setVerticalTextAlignment(
-            rEngine, true, eVerJust, rPattern.GetItem(ATTR_VER_JUSTIFY_METHOD, pCondSet).GetValue(),
-            eHorJust);
+            rEngine, eOrient == SvxCellOrientation::TopBottom || bAsianVertical, eVerJust,
+            rPattern.GetItem(ATTR_VER_JUSTIFY_METHOD, pCondSet).GetValue(), eHorJust);
     }
     else
     {
