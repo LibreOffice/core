@@ -1875,14 +1875,14 @@
       <object class="GtkMenuItem" id="MenuTable-InsertRowDialog">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="action-name">.uno:InsertRowDialog</property>
+        <property name="action-name">.uno:InsertRowDialogFullLabel</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuTable-InsertColumnDialog">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="action-name">.uno:InsertColumnDialog</property>
+        <property name="action-name">.uno:InsertColumnDialogFullLabel</property>
       </object>
     </child>
     <child>

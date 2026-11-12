@@ -1887,6 +1887,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertRowDialogFullLabel" oor:op="replace">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:InsertRowDialog</value>
+        </prop>
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert ~Rows...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertRowsBefore" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Rows Above</value>
@@ -1921,6 +1929,14 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertColumnDialogFullLabel" oor:op="replace">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:InsertColumnDialog</value>
+        </prop>
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert ~Columns...</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertColumnsBefore" oor:op="replace">
