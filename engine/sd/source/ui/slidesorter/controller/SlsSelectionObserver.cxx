@@ -23,8 +23,11 @@
 #include <controller/SlsSelectionObserver.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsFocusManager.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
 #include <sdpage.hxx>
 #include <osl/diagnose.h>
+
+#include <algorithm>
 
 namespace sd::slidesorter::controller
 {
@@ -131,7 +134,14 @@ void SelectionObserver::EndObservation()
         if (bSuccess)
             rSelector.SelectPage(rFocusManager.GetFocusedPageDescriptor());
         else
-            rSelector.SelectPage(0);
+        {
+            // The current slide is gone when the change removed it. The slide that moved up
+            // into its place is selected, so the selection stays where the user was working.
+            const sal_Int32 nIndex = std::clamp<sal_Int32>(
+                mrSlideSorter.GetController().GetCurrentSlideManager().GetCurrentSlideIndex(), 0,
+                rSelector.GetPageCount() - 1);
+            rSelector.SelectPage(nIndex);
+        }
     }
 }
 

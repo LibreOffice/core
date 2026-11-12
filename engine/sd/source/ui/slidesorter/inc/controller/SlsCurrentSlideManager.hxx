@@ -73,6 +73,12 @@ public:
     */
     const model::SharedPageDescriptor& GetCurrentSlide() const { return mpCurrentSlide; }
 
+    /** Return the index of the current slide, or -1 when there is none. The index stays
+        while a change to the model is under way, when the descriptor of the current slide
+        is already released.
+    */
+    sal_Int32 GetCurrentSlideIndex() const { return mnCurrentSlideIndex; }
+
     /** Release all references to model data.
     */
     void PrepareModelChange();

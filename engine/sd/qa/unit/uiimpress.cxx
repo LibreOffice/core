@@ -2437,6 +2437,40 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)
     CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRedoDeleteSlideKeepsPosition)
+{
+    // Redoing the deletion of a slide leaves the current slide where the deleted one was, as the
+    // deletion itself did, instead of going back to the first slide.
+    createSdImpressDoc();
+    for (int i = 0; i < 5; ++i)
+        dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+
+    // The slide sorter keeps its own selection in step with undo and redo.
+    getSlideSorterViewShell();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(6, pImpressDocument->getParts());
+    pImpressDocument->setPart(3);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(3, pImpressDocument->getPart());
+
+    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(5, pImpressDocument->getParts());
+    CPPUNIT_ASSERT_EQUAL(3, pImpressDocument->getPart());
+
+    // Undo brings the deleted slide back as the current slide.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(6, pImpressDocument->getParts());
+    CPPUNIT_ASSERT_EQUAL(3, pImpressDocument->getPart());
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(5, pImpressDocument->getParts());
+    CPPUNIT_ASSERT_EQUAL(3, pImpressDocument->getPart());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentCut)
 {
     // Test cutting slides and verifying the document state afterwards
