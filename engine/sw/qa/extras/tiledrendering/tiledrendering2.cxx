@@ -49,6 +49,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <VectorPart.hxx>
 #include <itabenum.hxx>
+#include <viewopt.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -5656,8 +5657,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testManageChangesListIgnoresOtherView
 
 namespace
 {
-/// A tile of 512 pixels that shows nTileSize twips from (nTilePosX, nTilePosY), painted by the
-/// paint code of the frames or from the primitive decomposition of the pages.
+/// The width and the height of a test tile in pixels.
+constexpr tools::Long nTilePixels = 512;
+
+/// A tile of nTilePixels pixels that shows nTileSize twips from (nTilePosX, nTilePosY), painted by
+/// the paint code of the frames or from the primitive decomposition of the pages.
 Bitmap paintOneTile(SwXTextDocument* pXTextDocument, bool bFromPrimitives, int nTilePosX,
                     int nTilePosY, tools::Long nTileSize)
 {
@@ -5666,7 +5670,7 @@ Bitmap paintOneTile(SwXTextDocument* pXTextDocument, bool bFromPrimitives, int n
     pShell->SetTilesFromPrimitives(bFromPrimitives);
     comphelper::ScopeGuard aGuard(
         [pShell, bWasFromPrimitives] { pShell->SetTilesFromPrimitives(bWasFromPrimitives); });
-    const tools::Long nSize = 512;
+    const tools::Long nSize = nTilePixels;
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     std::vector<unsigned char> aPixmap(nSize * nSize * 4, 0);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
@@ -5732,13 +5736,15 @@ double differingShare(const Bitmap& rOne, const Bitmap& rOther, tools::Long nRea
     return double(nDiffering) / (aSize.Width() * aSize.Height());
 }
 
-/// The number of pixels that are dark, as text on white paper is.
-tools::Long countDarkPixels(const Bitmap& rBitmap)
+/// The number of pixels in the rows from nFromY up to, but without, nToY that are dark, as text on
+/// white paper is.
+tools::Long countDarkPixels(const Bitmap& rBitmap, tools::Long nFromY, tools::Long nToY)
 {
     const Size aSize = rBitmap.GetSizePixel();
     BitmapScopedReadAccess pAccess(rBitmap);
     tools::Long nDark = 0;
-    for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
+    for (tools::Long nY = std::max<tools::Long>(nFromY, 0); nY < std::min(nToY, aSize.Height());
+         ++nY)
     {
         for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
         {
@@ -5748,6 +5754,65 @@ tools::Long countDarkPixels(const Bitmap& rBitmap)
     }
     return nDark;
 }
+
+/// The number of pixels of the whole tile that are dark.
+tools::Long countDarkPixels(const Bitmap& rBitmap)
+{
+    return countDarkPixels(rBitmap, 0, rBitmap.GetSizePixel().Height());
+}
+
+/// A run of dark pixels along a row or a column of a tile.
+struct DarkRun
+{
+    /// The first dark pixel of the run.
+    tools::Long mnFirst;
+    /// The last dark pixel of the run.
+    tools::Long mnLast;
+};
+
+/// The runs of dark pixels along the row nFixed of a tile, or along its column nFixed, between the
+/// pixels nFrom and nTo, without nTo. Color::IsDark takes a gray of up to about 158 of 255 as dark.
+/// A black line that is one pixel wide covers at least half of one pixel wherever it lies, which
+/// anti-aliasing turns into a gray of 128 at most, so every black line makes a run. Dark pixels
+/// with at most two light pixels between them belong to one run, so two lines that touch are one
+/// run in either tile.
+std::vector<DarkRun> darkRuns(const Bitmap& rBitmap, bool bAlongRow, tools::Long nFixed,
+                              tools::Long nFrom, tools::Long nTo)
+{
+    const Size aSize = rBitmap.GetSizePixel();
+    BitmapScopedReadAccess pAccess(rBitmap);
+    std::vector<DarkRun> aRuns;
+    const tools::Long nEnd = std::min(nTo, bAlongRow ? aSize.Width() : aSize.Height());
+    for (tools::Long nAlong = std::max<tools::Long>(nFrom, 0); nAlong < nEnd; ++nAlong)
+    {
+        const Color aColor(bAlongRow ? pAccess->GetPixel(nFixed, nAlong)
+                                     : pAccess->GetPixel(nAlong, nFixed));
+        if (!aColor.IsDark())
+            continue;
+        if (!aRuns.empty() && nAlong - aRuns.back().mnLast <= 3)
+            aRuns.back().mnLast = nAlong;
+        else
+            aRuns.push_back(DarkRun{ nAlong, nAlong });
+    }
+    return aRuns;
+}
+
+/// Asserts that two tiles have the same number of dark runs, and that each run starts and ends
+/// within nReach pixels of its counterpart. The paint code snaps a line to whole pixels of the
+/// screen at 100% and the primitives keep its exact position, which moves an edge by up to 15
+/// twips. nReach is the number of pixels of the tile that cover that.
+void assertSameDarkRuns(const std::vector<DarkRun>& rPainted,
+                        const std::vector<DarkRun>& rFromPrimitives, tools::Long nReach)
+{
+    CPPUNIT_ASSERT_EQUAL(rPainted.size(), rFromPrimitives.size());
+    for (size_t nRun = 0; nRun < rPainted.size(); ++nRun)
+    {
+        CPPUNIT_ASSERT_LESSEQUAL(nReach,
+                                 std::abs(rPainted[nRun].mnFirst - rFromPrimitives[nRun].mnFirst));
+        CPPUNIT_ASSERT_LESSEQUAL(nReach,
+                                 std::abs(rPainted[nRun].mnLast - rFromPrimitives[nRun].mnLast));
+    }
+}
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTileFromPrimitivesLooksLikeThePaintedTile)
@@ -5755,6 +5820,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTileFromPrimitivesLooksLikeThePai
     // Text, a paragraph border and a table are the parts the decomposition builds on its own.
     SwXTextDocument* pXTextDocument = createDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    // The tile from the primitives has no formatting marks, and an earlier test can leave them
+    // shown for new documents.
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetViewMetaChars(false);
+    pWrtShell->ApplyViewOptions(aViewOptions);
     pWrtShell->Insert(u"The decomposition draws this text like the paint code does."_ustr);
     table::BorderLine2 aBorder;
     aBorder.OuterLineWidth = 50;
@@ -5786,6 +5856,109 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTileFromPrimitivesLooksLikeThePai
     CPPUNIT_ASSERT_GREATER(tools::Long(100), countDarkPixels(aZoomedFromPrimitives));
     // At 200% a pixel is 7.5 twips, so the same content lies up to two pixels apart.
     CPPUNIT_ASSERT_LESS(0.002, differingShare(aPaintedZoomed, aZoomedFromPrimitives, /*nReach=*/2));
+
+    // The layout says where the text line, the paragraph border and the table lie on the page.
+    const SwRootFrame* pLayout = pWrtShell->getIDocumentLayoutAccess().GetCurrentLayout();
+    const SwPageFrame* pPage = static_cast<const SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage);
+    const SwLayoutFrame* pBody = pPage->FindBodyCont();
+    CPPUNIT_ASSERT(pBody);
+    const SwFrame* pTextFrame = pBody->Lower();
+    CPPUNIT_ASSERT(pTextFrame);
+    CPPUNIT_ASSERT(pTextFrame->IsTextFrame());
+    const SwFrame* pTableFrame = pTextFrame->GetNext();
+    CPPUNIT_ASSERT(pTableFrame);
+    CPPUNIT_ASSERT(pTableFrame->IsTabFrame());
+    const SwFrame* pFirstRowFrame = static_cast<const SwLayoutFrame*>(pTableFrame)->Lower();
+    CPPUNIT_ASSERT(pFirstRowFrame);
+    const SwRect aText = pTextFrame->getFrameArea();
+    const SwRect aTable = pTableFrame->getFrameArea();
+    const SwRect aFirstRow = pFirstRowFrame->getFrameArea();
+    // The text line fills the print area of its frame, and the bottom border lies under it.
+    const tools::Long nTextLineTop = aText.Top() + pTextFrame->getFramePrintArea().Top();
+    const tools::Long nTextLineBottom
+        = nTextLineTop + pTextFrame->getFramePrintArea().Height();
+
+    // A tile of 1440 twips is about 2.8 twips per pixel. The text line is about 100 pixels tall,
+    // the paragraph border about 10 pixels thick and a table line between 3 and 4 pixels thick.
+    const tools::Long nCloseSize = 1440;
+    const auto toPixels = [](tools::Long nTwips) { return nTwips * nTilePixels / nCloseSize; };
+    // The same content lies up to 15 twips apart in the two tiles, which is six pixels here. That
+    // is less than the distance between any two lines of the test document at this scale.
+    const tools::Long nCloseReach = toPixels(15) + 1;
+
+    // A tile that starts shortly before the text shows the first words of the text line.
+    const int nTextTileX = int(aText.Left()) - 120;
+    const int nTextTileY = int(aText.Top()) - 120;
+    const Bitmap aPaintedText = paintOneTile(pXTextDocument, /*bFromPrimitives=*/false,
+                                             nTextTileX, nTextTileY, nCloseSize);
+    const Bitmap aTextFromPrimitives = paintOneTile(pXTextDocument, /*bFromPrimitives=*/true,
+                                                    nTextTileX, nTextTileY, nCloseSize);
+    // The rows of the text line hold the glyphs alone, without the border and the table lines.
+    const tools::Long nPaintedInk = countDarkPixels(
+        aPaintedText, toPixels(nTextLineTop - nTextTileY), toPixels(nTextLineBottom - nTextTileY));
+    const tools::Long nInkFromPrimitives
+        = countDarkPixels(aTextFromPrimitives, toPixels(nTextLineTop - nTextTileY),
+                          toPixels(nTextLineBottom - nTextTileY));
+    // One stem of a letter is over 200 dark pixels at this scale, so 500 means several glyphs.
+    CPPUNIT_ASSERT_GREATER(tools::Long(500), nPaintedInk);
+    CPPUNIT_ASSERT_GREATER(tools::Long(500), nInkFromPrimitives);
+    // Both tiles have the same number of dark pixels within 15%, so the glyphs have the same size
+    // and weight and none is missing. Hinting and the pixel grid change the edge pixels of a glyph.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(nPaintedInk), double(nInkFromPrimitives),
+                                 0.15 * nPaintedInk);
+    // The limit is 0.2% of the tile. The part of the paragraph border in this tile is about 1.8%
+    // of it, and one letter is about 0.2% to 0.4%.
+    CPPUNIT_ASSERT_LESS(0.002, differingShare(aPaintedText, aTextFromPrimitives, nCloseReach));
+
+    // A tile around the top left corner of the table shows the end of the paragraph border above
+    // the table, the left line of the table and its horizontal lines.
+    const int nCornerTileX = int(aTable.Left()) - 240;
+    const int nCornerTileY = int(aTable.Top()) - 240;
+    const Bitmap aPaintedCorner = paintOneTile(pXTextDocument, /*bFromPrimitives=*/false,
+                                               nCornerTileX, nCornerTileY, nCloseSize);
+    const Bitmap aCornerFromPrimitives = paintOneTile(pXTextDocument, /*bFromPrimitives=*/true,
+                                                      nCornerTileX, nCornerTileY, nCloseSize);
+    // The limit is 0.2% of the tile. One horizontal table line is about 0.6% of this tile and the
+    // left line of the table about 0.4%.
+    CPPUNIT_ASSERT_LESS(0.002,
+                        differingShare(aPaintedCorner, aCornerFromPrimitives, nCloseReach));
+
+    // The row of pixels through the middle of the empty first table row crosses the left line of
+    // the table. Both tiles show that line, at the same place and with the same thickness.
+    const tools::Long nRowY = toPixels(aFirstRow.Top() + aFirstRow.Height() / 2 - nCornerTileY);
+    const std::vector<DarkRun> aPaintedVerticalLines
+        = darkRuns(aPaintedCorner, /*bAlongRow=*/true, nRowY, 0, nTilePixels);
+    CPPUNIT_ASSERT_GREATEREQUAL(size_t(1), aPaintedVerticalLines.size());
+    assertSameDarkRuns(aPaintedVerticalLines,
+                       darkRuns(aCornerFromPrimitives, /*bAlongRow=*/true, nRowY, 0, nTilePixels),
+                       nCloseReach);
+
+    // The column of pixels 600 twips inside the first cell, from the middle of the first table
+    // row to shortly under the table, crosses the line between the two rows and the bottom line
+    // of the table. Both tiles show these lines, at the same places and with the same thickness.
+    const tools::Long nColumnX = toPixels(aTable.Left() + 600 - nCornerTileX);
+    const tools::Long nUnderTable = toPixels(aTable.Top() + aTable.Height() + 100 - nCornerTileY);
+    const std::vector<DarkRun> aPaintedHorizontalLines
+        = darkRuns(aPaintedCorner, /*bAlongRow=*/false, nColumnX, nRowY, nUnderTable);
+    CPPUNIT_ASSERT_GREATEREQUAL(size_t(2), aPaintedHorizontalLines.size());
+    assertSameDarkRuns(aPaintedHorizontalLines,
+                       darkRuns(aCornerFromPrimitives, /*bAlongRow=*/false, nColumnX, nRowY,
+                                nUnderTable),
+                       nCloseReach);
+
+    // The same column from the first whole pixel under the text line to the middle of the first
+    // table row crosses the paragraph border and the top line of the table, which touch and make
+    // one run. Both tiles show that run with the same start and the same end, so the border and
+    // the top line have the same place and the same thickness in both.
+    const tools::Long nUnderText = toPixels(nTextLineBottom - nCornerTileY) + 1;
+    const std::vector<DarkRun> aPaintedBorder
+        = darkRuns(aPaintedCorner, /*bAlongRow=*/false, nColumnX, nUnderText, nRowY);
+    CPPUNIT_ASSERT_GREATEREQUAL(size_t(1), aPaintedBorder.size());
+    assertSameDarkRuns(aPaintedBorder,
+                       darkRuns(aCornerFromPrimitives, /*bAlongRow=*/false, nColumnX, nUnderText,
+                                nRowY),
+                       nCloseReach);
 }
 
 namespace
