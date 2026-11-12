@@ -481,8 +481,17 @@ window.L.TextInput = window.L.Layer.extend({
 			nodes.push(...this._createChangeNodes(content, pos, range.start, images, formats,
 				changes));
 			const mark = this._createRangeElement(range);
-			mark.append(...this._createMarkNodes(content, range.start, range.end, images, inner,
-				formats, changes));
+			const markNodes = this._createMarkNodes(content, range.start, range.end, images, inner,
+				formats, changes);
+			if (range.control && range.control.type === 'checkbox') {
+				// a reader presents the state, not the character drawn for it
+				const drawn = document.createElement('span');
+				drawn.setAttribute('aria-hidden', 'true');
+				drawn.append(...markNodes);
+				mark.append(drawn);
+			} else {
+				mark.append(...markNodes);
+			}
 			nodes.push(mark);
 			pos = range.end;
 		}
@@ -572,6 +581,9 @@ window.L.TextInput = window.L.Layer.extend({
 			element.setAttribute('contenteditable', 'false');
 			element.setAttribute('role', 'checkbox');
 			element.setAttribute('aria-checked', String(control.checked) === 'true' ? 'true' : 'false');
+			// in its line, Orca reads the label of a checkbox, and NVDA its description
+			if (description)
+				element.setAttribute('aria-label', description);
 			return element;
 		}
 		element.setAttribute('role', 'mark');

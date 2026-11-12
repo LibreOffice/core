@@ -46,9 +46,12 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 		cy.cGet('#clipboard-area [role="checkbox"]').should(function ($checkboxes) {
 			expect($checkboxes, 'the checkboxes').to.have.length(1);
 			expect($checkboxes.attr('aria-checked'), 'the state').to.equal('false');
+			expect($checkboxes.attr('aria-label'), 'the title').to.equal('Agreement');
 			expect($checkboxes.attr('aria-description'), 'the title').to.equal('Agreement');
 			expect($checkboxes.attr('contenteditable'), 'one unit for the caret').to.equal('false');
 			expect($checkboxes.text(), 'the character drawn').to.equal('o');
+			expect($checkboxes.children('[aria-hidden="true"]').text(), 'hidden from a reader')
+				.to.equal('o');
 		});
 		// the accessibility tree follows the DOM later
 		cy.waitUntil(function () {
@@ -56,7 +59,9 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 				const checkboxes = nodes.filter(function (node) {
 					return !node.ignored && node.role === 'checkbox';
 				});
-				return checkboxes.length === 1 && checkboxes[0].description === 'Agreement';
+				// the title, not the character drawn, is its name
+				return checkboxes.length === 1 && checkboxes[0].name === 'Agreement'
+					&& checkboxes[0].description === 'Agreement';
 			});
 		});
 	});
@@ -282,5 +287,28 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 		cy.cGet('#clipboard-area').should('have.attr', 'aria-description',
 			'Portrait, Placeholder, Image1 selected. ');
 		cy.realPress('Escape');
+	});
+
+	it('a checkbox without a title has no name rather than its character', function () {
+		// into the last paragraph, after the plain one
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{downarrow}'.repeat(5));
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		cy.cGet('#clipboard-area').should('contain.text', 'Untitled');
+		cy.cGet('#clipboard-area [role="checkbox"]').should(function ($checkbox) {
+			expect($checkbox.attr('aria-label'), 'no title').to.equal(undefined);
+			expect($checkbox.attr('aria-description'), 'no title').to.equal(undefined);
+			expect($checkbox.attr('aria-checked'), 'the state').to.equal('false');
+		});
+		cy.waitUntil(function () {
+			return a11yHelper.getAXNodesWithin('#clipboard-area').then(function (nodes) {
+				const checkboxes = nodes.filter(function (node) {
+					return !node.ignored && node.role === 'checkbox';
+				});
+				return checkboxes.length === 1 && checkboxes[0].name === '';
+			});
+		});
 	});
 });
