@@ -65,6 +65,13 @@ private:
 };
 
 FontAttributes DevFontFromCTFontDescriptor(CTFontDescriptorRef, bool*);
+// True for fonts that have an 'hvgl' but no 'glyf' table (the new PingFang
+// fonts in macOS 15+), which we cannot render, see tdf#163000.
+bool IsHvglOnlyFont(CTFontDescriptorRef);
+// True for fonts that can be used by VCL, i.e. that are in our font list: not a
+// private system font (family name starting with '.') and with a supported,
+// renderable format.
+bool IsFontUsableByVCL(CTFontDescriptorRef);
 std::unique_ptr<SystemFontList> GetCoretextFontList();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
