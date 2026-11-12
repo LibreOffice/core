@@ -1194,7 +1194,7 @@ void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >&
             uno::Any &anyChar = rRes.Value;
             Color crChar;
             anyChar >>= crChar;
-            if (COL_AUTO == crChar )
+            if (COL_AUTO == crChar && mpParent.is())
             {
                 if (mpParent->getAccessibleRole() == AccessibleRole::SHAPE
                     || mpParent->getAccessibleRole() == AccessibleRole::TABLE_CELL)
@@ -1221,7 +1221,7 @@ void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >&
             uno::Any &anyCharUnderLine = rRes.Value;
             Color crCharUnderLine;
             anyCharUnderLine >>= crCharUnderLine;
-            if (COL_AUTO == crCharUnderLine )
+            if (COL_AUTO == crCharUnderLine && mpParent.is())
             {
                 if (mpParent->getAccessibleRole() == AccessibleRole::SHAPE
                     || mpParent->getAccessibleRole() == AccessibleRole::TABLE_CELL)
