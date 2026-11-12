@@ -21,8 +21,8 @@ os.walk order, which stays the same from run to run on the same file system. The
 numbered into tasks of --task-size documents in that order, counted from 0. The documents run in chunks, each with a fresh coolwsd, in
 outdir/chunk-NNNN. A chunk with a "done" file is complete, so a rerun with the same arguments
 carries on where an earlier run stopped. At the end, outdir holds crashlog.txt, exportCrash.txt,
-crashes.tsv and sandbox.tsv for the whole list, and backtraces/ with one gdb backtrace per kit
-crash or sandbox abort whose core was found.
+crashes.tsv, sandbox.tsv and slowsave.tsv for the whole list, and backtraces/ with one gdb
+backtrace per kit crash, sandbox abort or slow save whose core was found.
 
 Build the tree with --enable-debug, so that a document which makes the kit reach outside its
 sandbox aborts it (SAL_ABORT_ON_FORBIDDEN). Cores need a core_pattern that writes to a
@@ -137,10 +137,11 @@ def run_chunk(chunk, tasks, args):
 
 def collect(outdir, chunks):
     """Joins the report files of the chunks into outdir."""
-    for name in ('crashlog.txt', 'exportCrash.txt', 'crashes.tsv', 'sandbox.tsv', 'results.tsv'):
+    for name in ('crashlog.txt', 'exportCrash.txt', 'crashes.tsv', 'sandbox.tsv', 'slowsave.tsv',
+                 'results.tsv'):
         with open(os.path.join(outdir, name), 'w') as out:
             for chunk in chunks:
-                # A chunk finished by an older report.py has no sandbox.tsv.
+                # A chunk finished by an older report.py has no sandbox.tsv or slowsave.tsv.
                 if os.path.exists(os.path.join(chunk, name)):
                     with open(os.path.join(chunk, name)) as part:
                         out.write(part.read())
@@ -182,9 +183,10 @@ def main():
             continue
         began = time.monotonic()
         part = tasks[start:start + args.chunk]
-        crashes, aborts = run_chunk(chunk, part, args)
+        crashes, sandbox, slow = run_chunk(chunk, part, args)
         print(f'{os.path.basename(chunk)}: {len(part)} documents, {crashes} kit crashes, '
-              f'{aborts} sandbox aborts, {time.monotonic() - began:.0f} seconds', flush=True)
+              f'{sandbox} sandbox aborts, {slow} slow saves, '
+              f'{time.monotonic() - began:.0f} seconds', flush=True)
     collect(args.outdir, chunks)
 
 
