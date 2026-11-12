@@ -87,8 +87,8 @@ CPPUNIT_TEST_FIXTURE(KitSearchTest, Search)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     setupCOKitViewCallback(pViewShell->GetViewShellBase());
-    uno::Reference<container::XIndexAccess> xDrawPage(
-        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(
+        pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
 
@@ -756,8 +756,8 @@ namespace
 {
 OUString getShapeText(SdXImpressDocument* pXImpressDocument, sal_uInt32 nPage, sal_uInt32 nShape)
 {
-    uno::Reference<container::XIndexAccess> xDrawPage;
-    xDrawPage.set(pXImpressDocument->getDrawPages()->getByIndex(nPage), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage
+        = pXImpressDocument->getDrawPages()->getDrawPageByIndex(nPage);
 
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(nShape), uno::UNO_QUERY);
     return xShape->getString();

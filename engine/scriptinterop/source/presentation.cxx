@@ -163,8 +163,7 @@ pageList(cpo::uno::Reference<css::drawing::XDrawPages> const& pages)
     auto const n = pages->getCount();
     for (sal_Int32 i = 0; i != n; ++i)
     {
-        cpo::uno::Reference<css::drawing::XDrawPage> page;
-        pages->getByIndex(i) >>= page;
+        cpo::uno::Reference<css::drawing::XDrawPage> page = pages->getDrawPageByIndex(i);
         if (page.is())
         {
             result.push_back(page);
@@ -2312,8 +2311,8 @@ public:
     // The notes master is the notes page of the first master page.
     cpo::uno::Reference<scriptinterop::XNotesMaster> getNotesMaster() override
     {
-        cpo::uno::Reference<css::drawing::XDrawPage> master;
-        masterPages(model_)->getByIndex(0) >>= master;
+        cpo::uno::Reference<css::drawing::XDrawPage> master
+            = masterPages(model_)->getDrawPageByIndex(0);
         return new NotesMasterImpl(model_, notesPageOf(master));
     }
 
@@ -2446,8 +2445,8 @@ private:
 
     cpo::uno::Reference<css::drawing::XDrawPage> firstSlide()
     {
-        cpo::uno::Reference<css::drawing::XDrawPage> page;
-        drawPages()->getByIndex(0) >>= page;
+        cpo::uno::Reference<css::drawing::XDrawPage> page
+            = drawPages()->getDrawPageByIndex(0);
         return page;
     }
 

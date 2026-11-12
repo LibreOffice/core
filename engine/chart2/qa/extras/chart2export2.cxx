@@ -1221,8 +1221,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf121189)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage->getCount());
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.OLE2Shape"_ustr, xShape->getShapeType());

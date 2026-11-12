@@ -645,8 +645,8 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testRemoveSingletonSlideDropsSection)
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSup(mxComponent,
                                                          uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xPages = xPagesSup->getDrawPages();
-    uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(4),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(4),
+                                             uno::UNO_SET_THROW);
     xPages->remove(xPage);
 
     // Section-2 (the singleton) must be dropped; the others remain with
@@ -677,8 +677,8 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRestoresDroppedSection)
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSup(mxComponent,
                                                          uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xPages = xPagesSup->getDrawPages();
-    uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(4),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(4),
+                                             uno::UNO_SET_THROW);
     xPages->remove(xPage);
 
     // Singleton Section-2 has been dropped.

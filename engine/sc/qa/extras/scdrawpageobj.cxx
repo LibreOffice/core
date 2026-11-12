@@ -85,7 +85,7 @@ uno::Reference<cpo::uno::XInterface> ScDrawPageObj::init()
     xDP->insertNewByIndex(0);
     xDP->insertNewByIndex(1);
 
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDP->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDP->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
 
     uno::Reference<drawing::XShape> xRectangle0(

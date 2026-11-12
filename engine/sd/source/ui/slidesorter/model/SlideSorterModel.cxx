@@ -175,7 +175,7 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
         {
             SdPage* pPage = GetPage(nPageIndex);
             pDescriptor = std::make_shared<PageDescriptor>(
-                Reference<drawing::XDrawPage>(mxSlides->getByIndex(nPageIndex),UNO_QUERY),
+                mxSlides->getDrawPageByIndex(nPageIndex),
                 pPage,
                 nPageIndex);
             maPageDescriptors[nPageIndex] = pDescriptor;
@@ -379,7 +379,7 @@ void SlideSorterModel::SynchronizeModelSelection()
 }
 
 void SlideSorterModel::SetDocumentSlides (
-    const Reference<container::XIndexAccess>& rxSlides)
+    const Reference<drawing::XDrawPages>& rxSlides)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -432,7 +432,7 @@ void SlideSorterModel::SetDocumentSlides (
     mrSlideSorter.GetController().GetSlotManager().NotifyEditModeChange();
 }
 
-Reference<container::XIndexAccess> SlideSorterModel::GetDocumentSlides() const
+Reference<drawing::XDrawPages> SlideSorterModel::GetDocumentSlides() const
 {
     ::osl::MutexGuard aGuard (maMutex);
     return mxSlides;
@@ -442,7 +442,7 @@ void SlideSorterModel::UpdatePageList()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    Reference<container::XIndexAccess> xPages;
+    Reference<drawing::XDrawPages> xPages;
 
     // Get the list of pages according to the edit mode.
     Reference<frame::XController> xController (mrSlideSorter.GetXController());
@@ -579,7 +579,7 @@ void SlideSorterModel::InsertSlide(SdPage* pPage, bool bMarkSelected)
     iter = maPageDescriptors.insert(
         iter,
         std::make_shared<PageDescriptor>(
-                Reference<drawing::XDrawPage>(mxSlides->getByIndex(nIndex),UNO_QUERY),
+                mxSlides->getDrawPageByIndex(nIndex),
                 pPage,
                 nIndex));
 

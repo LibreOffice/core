@@ -1051,8 +1051,7 @@ sal_Int32 SlideLinkManager::RefreshSection(const SlideLinkRecord& rRecord, SdDra
     rtl::Reference<SdDrawPagesAccess> xPages = xModel->getSdDrawPages();
     for (sal_Int32 nSlide = nEnd - 1; nSlide >= nStart; --nSlide)
     {
-        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getByIndex(nSlide),
-                                                           cpo::uno::UNO_QUERY);
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(nSlide));
         xPages->remove(xPage);
     }
 
@@ -1164,8 +1163,7 @@ sal_Int32 SlideLinkManager::RefreshPresentation(const SlideLinkRecord& rRecord,
     rtl::Reference<SdDrawPagesAccess> xPages = xModel->getSdDrawPages();
     for (sal_Int32 nSlide = nEnd - 1; nSlide >= nStart; --nSlide)
     {
-        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getByIndex(nSlide),
-                                                           cpo::uno::UNO_QUERY);
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(nSlide));
         xPages->remove(xPage);
     }
 

@@ -378,7 +378,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkTooltip)
     // Representation, which TextRun overwrites with the link's visible text
     loadFromURL(maTempFile.GetURL());
     auto xDoc = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
-    auto xPage = xDoc->getDrawPages()->getByIndex(0).queryThrow<drawing::XDrawPage>();
+    auto xPage = xDoc->getDrawPages()->getDrawPageByIndex(0);
     auto xShape = xPage->getByIndex(0).queryThrow<container::XEnumerationAccess>();
     auto xParagraphs = xShape->createEnumeration();
     auto xParagraph = xParagraphs->nextElement().queryThrow<container::XEnumerationAccess>();
@@ -421,7 +421,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf173709HyperlinkTitleTooltipXLSX)
     // And it is read back as the title:
     loadFromURL(maTempFile.GetURL());
     auto xDoc = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
-    auto xPage = xDoc->getDrawPages()->getByIndex(0).queryThrow<drawing::XDrawPage>();
+    auto xPage = xDoc->getDrawPages()->getDrawPageByIndex(0);
     auto xShape = xPage->getByIndex(0).queryThrow<container::XEnumerationAccess>();
     auto xParagraphs = xShape->createEnumeration();
     auto xParagraph = xParagraphs->nextElement().queryThrow<container::XEnumerationAccess>();
@@ -1181,8 +1181,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkAlignment)
     // and reading the file back gives the shapes their alignment and the stretch its fit
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     drawing::TextHorizontalAdjust eAdjust = drawing::TextHorizontalAdjust_CENTER;
     uno::Reference<beans::XPropertySet> xRight(xPage->getByIndex(2), uno::UNO_QUERY_THROW);
     xRight->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eAdjust;
@@ -1251,8 +1251,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkShapeAttributes)
     // and reading the file back gives the shape those attributes
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr,
                          xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
@@ -1520,8 +1520,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRunColours)
     // and reading the file back gives a red shape with a blue third portion
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000),
                          xShape->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>());
@@ -1573,8 +1573,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkGlowShadowRoundTrip)
     // Then reading the file back gives the shape its glow and shadow
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(300),
                          xShape->getPropertyValue(u"GlowEffectRadius"_ustr).get<sal_Int32>());
@@ -1742,8 +1742,8 @@ CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3d)
     // and reading the file back gives the rectangle and the Fontwork their extrusion
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xRectangle(xPage->getByIndex(1), uno::UNO_QUERY_THROW);
     assertExtrusionOfShape(xRectangle);
     comphelper::SequenceAsHashMap aRectangleGeometry(
@@ -1806,8 +1806,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkText3DRotationRoundTrip)
     loadFromFile(u"fontwork-camera-rotation.pptx");
     const auto getShape = [&] {
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                               uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                               uno::UNO_SET_THROW);
         return uno::Reference<beans::XPropertySet>(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     };
     const auto assertText3D = [&](const xmlDocUniquePtr& rXml) {
@@ -2424,8 +2424,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuides)
     // and reading the file back gives a shape that still has its adjustment value and equations
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
     uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustments;
@@ -2539,8 +2539,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuidesTrig)
     // and reading it back gives a handle that moves the angle again
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
     uno::Sequence<beans::PropertyValues> aHandles;
@@ -2709,8 +2709,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFreeHandleIsUnlimited)
     // and reading it back leaves the handle free to move
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
     uno::Sequence<beans::PropertyValues> aHandles;
@@ -2802,8 +2802,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeSinusWave)
     // and reading it back gives the shape its handles again
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
     uno::Sequence<beans::PropertyValues> aHandles;
@@ -2855,8 +2855,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundRectangleAdjustmentAxis)
 {
     loadFromFile(u"custGeom_roundRectTall.fodp");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                           uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                           uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
     const auto aOriginalGeometry = xProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
@@ -3204,7 +3204,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeLogicalSizeRoundTrip)
         else
         {
             uno::Reference<drawing::XDrawPagesSupplier> xPages(mxComponent, uno::UNO_QUERY_THROW);
-            xPage.set(xPages->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+            xPage.set(xPages->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
         }
         uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
         auto* pShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
@@ -3387,8 +3387,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsHandle)
     // and reading it back gives the handle bound to the adjustment again
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
     uno::Sequence<beans::PropertyValues> aHandles;
@@ -3406,8 +3406,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLDraggedHandle)
     // fraction of Office's units in the adjustment value:
     loadFromFile(u"custGeom_ooxmlHandle.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
     uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustments;

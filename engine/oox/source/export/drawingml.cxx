@@ -2579,8 +2579,7 @@ static OUString lcl_GetTarget(const cpo::uno::Reference<css::frame::XModel>& xMo
 
     for (sal_uInt32 i = 0; i < nPageCount; ++i)
     {
-        Reference<XDrawPage> xDrawPage;
-        xDrawPages->getByIndex(i) >>= xDrawPage;
+        Reference<XDrawPage> xDrawPage = xDrawPages->getDrawPageByIndex(i);
         Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY);
         if (!xNamed)
             continue;

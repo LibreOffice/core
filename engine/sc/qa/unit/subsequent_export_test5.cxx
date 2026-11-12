@@ -178,12 +178,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
     auto xDrawPages = xSupplier->getDrawPages();
 
     // No charts (or other objects) on the first sheet, and resp. first draw page
-    cpo::uno::Reference<css::drawing::XDrawPage> xPage(xDrawPages->getByIndex(0),
-                                                       cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPage> xPage(xDrawPages->getDrawPageByIndex(0),
+                                                       cpo::uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xPage->getCount());
 
     // 20 charts on the second sheet, and resp. second draw page
-    xPage.set(xDrawPages->getByIndex(1), cpo::uno::UNO_QUERY_THROW);
+    xPage.set(xDrawPages->getDrawPageByIndex(1), cpo::uno::UNO_SET_THROW);
     // Without the fix in place, this test would have failed with
     // - Expected: 20
     // - Actual : 0
@@ -213,7 +213,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
     }
 
     // 20 charts on the third sheet, and resp. third draw page
-    xPage.set(xDrawPages->getByIndex(2), cpo::uno::UNO_QUERY_THROW);
+    xPage.set(xDrawPages->getDrawPageByIndex(2), cpo::uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), xPage->getCount());
     for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
     {
@@ -246,8 +246,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf143929MultiColumnToODS)
     {
         cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(mxComponent,
                                                                         cpo::uno::UNO_QUERY_THROW);
-        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(0),
-                                                           cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getDrawPageByIndex(0),
+                                                           cpo::uno::UNO_SET_THROW);
         cpo::uno::Reference<css::container::XIndexAccess> xIndexAccess(xPage,
                                                                        cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::drawing::XShape> xShape(xIndexAccess->getByIndex(0),
@@ -265,8 +265,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf143929MultiColumnToODS)
     {
         cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(mxComponent,
                                                                         cpo::uno::UNO_QUERY_THROW);
-        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(0),
-                                                           cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getDrawPageByIndex(0),
+                                                           cpo::uno::UNO_SET_THROW);
         cpo::uno::Reference<css::container::XIndexAccess> xIndexAccess(xPage,
                                                                        cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::drawing::XShape> xShape(xIndexAccess->getByIndex(0),
@@ -894,8 +894,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testShapeStyles)
             uno::UNO_QUERY_THROW);
 
         uno::Reference<drawing::XDrawPagesSupplier> xDPS(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XShapes> xShapes(xDPS->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xShapes(xDPS->getDrawPages()->getDrawPageByIndex(0),
+                                                 uno::UNO_SET_THROW);
         xShapes->add(xShape);
         uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)
             ->setPropertyValue(u"Style"_ustr, Any(xStyle));
@@ -905,8 +905,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testShapeStyles)
 
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDPS(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XShapes> xShapes(xDPS->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShapes> xShapes(xDPS->getDrawPages()->getDrawPageByIndex(0),
+                                                 uno::UNO_SET_THROW);
         uno::Reference<beans::XPropertySet> xShape(xShapes->getByIndex(0), uno::UNO_QUERY_THROW);
 
         // check style hierarchy
@@ -1002,8 +1002,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf119565)
     saveAndReload(TestFilter::XLSX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -1842,8 +1842,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testDecorativeODF14)
     createScDoc("fods/decorative-odf14.fods");
     auto isDecorative = [this]() {
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                                 uno::UNO_SET_THROW);
         uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
         return xShape->getPropertyValue(u"Decorative"_ustr).get<bool>();
     };

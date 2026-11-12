@@ -725,7 +725,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName()
     Reference<drawing::XDrawPagesSupplier> xPagesSupplier (mxModel, UNO_QUERY);
     if (xPagesSupplier.is())
     {
-        Reference<container::XIndexAccess> xPages = xPagesSupplier->getDrawPages();
+        Reference<drawing::XDrawPages> xPages = xPagesSupplier->getDrawPages();
         if (xPages.is())
         {
             sNewName += " / " + OUString::number(xPages->getCount());

@@ -78,14 +78,13 @@ CPPUNIT_TEST_FIXTURE(AutoRedactionTest, testImageRedaction)
     uno::Reference<frame::XModel> xDrawingDoc = pDocSh->GetModel();
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xDrawingDoc, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
-    uno::Reference<container::XIndexAccess> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     CPPUNIT_ASSERT(xDrawPages.is());
 
     //    sal_Int32 nRedactRect = 0;
     for (sal_Int32 i = 0; i < xDrawPages->getCount(); i++)
     {
-        uno::Reference<drawing::XDrawPage> xDrawPage;
-        xDrawPages->getByIndex(i) >>= xDrawPage;
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPages->getDrawPageByIndex(i);
         CPPUNIT_ASSERT(xDrawPage.is());
 
         // Iterate through all shapes on this page

@@ -4977,12 +4977,17 @@ sal_Int32 ScDrawPagesObj::getCount()
 
 cpo::uno::Any ScDrawPagesObj::getByIndex( sal_Int32 nIndex )
 {
+    return cpo::uno::Any(getDrawPageByIndex(nIndex));
+}
+
+uno::Reference<drawing::XDrawPage> ScDrawPagesObj::getDrawPageByIndex( sal_Int32 nIndex )
+{
     SolarMutexGuard aGuard;
     uno::Reference<drawing::XDrawPage> xPage(GetObjectByIndex_Impl(nIndex));
     if (!xPage.is())
         throw lang::IndexOutOfBoundsException();
 
-    return cpo::uno::Any(xPage);
+    return xPage;
 }
 
 cpo::uno::Type ScDrawPagesObj::getElementType()

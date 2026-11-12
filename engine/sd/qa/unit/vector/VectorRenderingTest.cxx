@@ -1375,7 +1375,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartStateFollowsThePage)
     const sal_Int64 nEpoch = oFull->getInt("/epoch").value_or(-1);
 
     // Removing the first slide moves the slide with the rectangle to index 0.
-    uno::Reference<drawing::XDrawPage> xFirstSlide(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xFirstSlide(xPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     xPages->remove(xFirstSlide);
 
     // Named by its id, the page answers with the rectangle still on it.
@@ -1491,7 +1491,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGivingASlideAnotherMasterMovesItsV
 
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XMasterPageTarget> xTarget(
-        xPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+        xPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY_THROW);
     xTarget->setMasterPage(xNewMaster);
 
     auto aDelta = getVectorPrimitives(u"testMasterSwapDelta", nVersion);

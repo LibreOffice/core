@@ -81,8 +81,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testDeduplicateMasters)
     CPPUNIT_ASSERT(xDoc.is());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDoc->getMasterPages()->getCount());
 
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
     cpo::uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -92,8 +92,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testDeduplicateMasters)
     CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue(u"FillColor"_ustr) >>= nColor);
     CPPUNIT_ASSERT_EQUAL(Color(0x0E2841), nColor);
 
-    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getMasterPages()->getByIndex(1),
-                                              uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getMasterPages()->getDrawPageByIndex(1),
+                                              uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropSet1(xPage1, uno::UNO_QUERY);
     aAny = xPropSet1->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -489,7 +489,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testtdf169825_vertical_layouts_from_scr
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xPages = xDoc->getDrawPages();
-    uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xPageSet(xPage, uno::UNO_QUERY_THROW);
     xPageSet->setPropertyValue(
         u"Layout"_ustr,
@@ -554,8 +554,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testtdf170102_layout_type)
     // test roughly the same thing in document and in XML: no drawing object in master page/layout
     for (sal_Int32 i = 0; i < nMPCount; i++)
     {
-        uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(i),
-                                                 uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getDrawPageByIndex(i),
+                                                 uno::UNO_SET_THROW);
         sal_Int32 nObjCount = xPage->getCount();
         for (sal_Int32 j = 0; j < nObjCount; j++)
         {

@@ -338,7 +338,7 @@ void PresentationFragmentHandler::importSlideNames(const XmlFilterBase& rFilter,
                 Reference<XDrawPages> xDrawPages(xDPS->getDrawPages(), UNO_SET_THROW);
                 for (sal_Int32 i = 0; i < nPage; ++i)
                 {
-                    Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(i), UNO_QUERY);
+                    Reference<XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(i));
                     Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
                     std::u16string_view sRest;
                     if (o3tl::starts_with(xNamed->getName(), aTitleText, &sRest)
@@ -386,8 +386,7 @@ void PresentationFragmentHandler::importCustomSlideShow(std::vector<CustomShow>&
                 if (sCustomSlide.match(sSlide))
                     nPageNumber = o3tl::toInt32(sCustomSlide.subView(sSlide.getLength()));
 
-                Reference<XDrawPage> xPage;
-                xDrawPages->getByIndex(nPageNumber - 1) >>= xPage;
+                Reference<XDrawPage> xPage = xDrawPages->getDrawPageByIndex(nPageNumber - 1);
                 if (xPage.is())
                     xShow->insertByIndex(xShow->getCount(), Any(xPage));
             }
@@ -449,7 +448,7 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         if( rFilter.getMasterPages().empty() )
         {
             nIndex = 0;
-            xMasterPages->getByIndex( nIndex ) >>= xMasterPage;
+            xMasterPage = xMasterPages->getDrawPageByIndex( nIndex );
         }
         else
         {
@@ -761,8 +760,8 @@ void PresentationFragmentHandler::saveSections()
                     sal_Int32 nIndex = it->second;
                     if (nIndex < xDrawPages->getCount())
                     {
-                        uno::Reference<drawing::XDrawPage> xPage;
-                        xDrawPages->getByIndex(nIndex) >>= xPage;
+                        uno::Reference<drawing::XDrawPage> xPage
+                            = xDrawPages->getDrawPageByIndex(nIndex);
                         uno::Reference<container::XNamed> xNamed(xPage, uno::UNO_QUERY);
                         if (xNamed.is())
                             aSlideNames.push_back(xNamed->getName());
@@ -886,7 +885,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
 
         if( !nPagesImported )
         {
-            xDrawPages->getByIndex( 0 ) >>= xSlide;
+            xSlide = xDrawPages->getDrawPageByIndex( 0 );
             importMasterSlides();
         }
         else

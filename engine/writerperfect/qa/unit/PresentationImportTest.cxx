@@ -132,9 +132,8 @@ void PresentationImportTest::test()
     CPPUNIT_ASSERT(xDoc.is());
     uno::Reference<drawing::XDrawPages> xPages = xDoc->getDrawPages();
     CPPUNIT_ASSERT(xPages.is());
-    auto aPage = xPages->getByIndex(0);
-    uno::Reference<beans::XPropertySet> xPageProps;
-    CPPUNIT_ASSERT(aPage >>= xPageProps);
+    auto xPage = xPages->getDrawPageByIndex(0);
+    uno::Reference<beans::XPropertySet> xPageProps(xPage, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPageProps.is());
     sal_Int32 nProp = 0;
     CPPUNIT_ASSERT(xPageProps->getPropertyValue(u"Height"_ustr) >>= nProp);

@@ -40,6 +40,7 @@ class XIndexAccess;
 namespace com::sun::star::drawing
 {
 class XDrawPage;
+class XDrawPages;
 }
 
 namespace sd::slidesorter::model
@@ -168,11 +169,11 @@ public:
             necessarily the same as the ones of the XModel of the
             XController (although it typically is a subset).
     */
-    void SetDocumentSlides(const cpo::uno::Reference<css::container::XIndexAccess>& rxSlides);
+    void SetDocumentSlides(const cpo::uno::Reference<css::drawing::XDrawPages>& rxSlides);
 
     /** Return the set of pages that is currently displayed by the slide sorter.
     */
-    cpo::uno::Reference<css::container::XIndexAccess> GetDocumentSlides() const;
+    cpo::uno::Reference<css::drawing::XDrawPages> GetDocumentSlides() const;
 
     /** This method is called when the edit mode has changed.  It calls
         SetDocumentSlides() with the set of slides or master pages obtained
@@ -206,7 +207,7 @@ public:
 private:
     mutable ::osl::Mutex maMutex;
     SlideSorter& mrSlideSorter;
-    cpo::uno::Reference<css::container::XIndexAccess> mxSlides;
+    cpo::uno::Reference<css::drawing::XDrawPages> mxSlides;
     EditMode meEditMode;
     mutable ::std::vector<SharedPageDescriptor> maPageDescriptors;
 

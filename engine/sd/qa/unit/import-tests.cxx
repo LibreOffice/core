@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
         sal_Int32 nLength = xDrawPages->getCount();
         for (sal_Int32 j = 0; j < nLength; ++j)
         {
-            uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(j), uno::UNO_QUERY);
+            uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(j));
             CPPUNIT_ASSERT(xDrawPage.is());
             uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
             OUString aString = XShapeDumper::dump(xShapes);
@@ -394,7 +394,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf153466)
     createSdImpressDoc("pptx/tdf153466.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xPageSet(xPage, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xBackground(
         xPageSet->getPropertyValue(u"Background"_ustr).get<uno::Reference<beans::XPropertySet>>());
@@ -644,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf146223)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xSet(xPage1, uno::UNO_QUERY_THROW);
 
     bool bBackgroundObjectsVisible;
@@ -743,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf142645)
     createSdImpressDoc("pptx/tdf142645.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XNamed> xNamed1(xPage1, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, xNamed1->getName());
 }
@@ -1264,8 +1264,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf97808)
 
     // the draw:marker-end="" did not override the style
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xLine(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     //uno::Reference<style::XStyle> xParent;
     uno::Reference<style::XStyle> xParent;
@@ -1294,8 +1294,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo64512)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1),
                                  xDoc->getDrawPages()->getCount());
 
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly three shapes", static_cast<sal_Int32>(3),
                                  xPage->getCount());
 
@@ -1561,8 +1561,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc591147)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDoc->getDrawPages()->getCount());
 
     // First page has video file inserted
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage->getCount());
 
     //uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
@@ -1573,7 +1573,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc591147)
     CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
 
     // Second page has audio file inserted
-    xPage.set(xDoc->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW);
+    xPage.set(xDoc->getDrawPages()->getDrawPageByIndex(1), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage->getCount());
 
     xPropSet.set(getShape(0, xPage));
@@ -2145,7 +2145,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf152070)
     createSdImpressDoc("pptx/tdf152070.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xBackgroundProps(
         xPropSet->getPropertyValue(u"Background"_ustr).get<uno::Reference<beans::XPropertySet>>());

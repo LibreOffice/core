@@ -266,7 +266,7 @@ void SfxRedactionHelper::addPagesToDraw(
     }
 
     // Remove the extra page at the beginning
-    uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getDrawPageByIndex(0));
     xDrawPages->remove(xPage);
 }
 

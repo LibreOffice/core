@@ -3008,8 +3008,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
     insertStringToObject(0, u"Test", /*bUseEscape*/ false);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
 
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
@@ -3189,7 +3188,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, tdf139269_prevent_pasting_into_readonly_ma
                                                                        uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages());
     CPPUNIT_ASSERT(xMasterPages.is());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xMasterPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xMasterPages->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // Without the fix in place, this test would have failed with
@@ -3368,8 +3367,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf68320_hidden_pages_total_slide_coun
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(2),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(2));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // Without the fix in place, this test would have failed with
@@ -3385,8 +3383,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u""_ustr, xShape->getString());
 
@@ -3676,7 +3673,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageFillColorSaved)
         uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
                                                                            uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xMasterPage(
-            xMasterPagesSupplier->getMasterPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+            xMasterPagesSupplier->getMasterPages()->getDrawPageByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xBackground(
             xMasterPage->getPropertyValue(u"Background"_ustr), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(
@@ -3693,7 +3690,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageFillColorSaved)
     uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xMasterPage(
-        xMasterPagesSupplier->getMasterPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+        xMasterPagesSupplier->getMasterPages()->getDrawPageByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xBackground(
         xMasterPage->getPropertyValue(u"Background"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
@@ -3727,7 +3724,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageFillHatchSavedToPPTX)
     uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xMasterPage(
-        xMasterPagesSupplier->getMasterPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+        xMasterPagesSupplier->getMasterPages()->getDrawPageByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xBackground(
         xMasterPage->getPropertyValue(u"Background"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH,
@@ -3877,8 +3874,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
     dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 
     typeString(pImpressDocument, u"°");
@@ -3897,11 +3893,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf151417)
     CPPUNIT_ASSERT(pImpressDocument);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPagesSupplier->getDrawPages();
+    uno::Reference<drawing::XDrawPages> xDraws = xDrawPagesSupplier->getDrawPages();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDrawPage->getCount());
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
@@ -3925,8 +3920,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
     dispatchCommand(mxComponent, u".uno:Rect_Unfilled"_ustr, aArgs);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 
@@ -3982,8 +3976,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
     // Given an Impress document with a shape, with its text selected:
     createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     {
         uno::Reference<text::XSimpleText> xText = xShape->getText();
@@ -4050,8 +4043,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
     // Given an Impress document with a selected shape:
     createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
@@ -4146,8 +4138,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf153161)
     createSdImpressDoc("odp/tdf153161_FlushToSave.odp");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     OUString sOldText(xShape->getString());
     CPPUNIT_ASSERT(sOldText.startsWith(u"在没有版本控制系统的时期"));
@@ -4158,7 +4149,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf153161)
     saveAndReload(TestFilter::ODP);
 
     xDrawPagesSupplier.set(mxComponent, uno::UNO_QUERY);
-    xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    xDrawPage = xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0);
     xShape.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     OUString sExpectedText = sOldText + "Foo Bar";
     CPPUNIT_ASSERT_EQUAL(sExpectedText, xShape->getString());
@@ -4208,8 +4199,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
 
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
@@ -4238,8 +4228,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
     // Given a document with a theme, accent1 color is set to 0x000004:
     createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XMasterPageTarget> xMasterPageTarget(xDrawPage, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xMasterPageTarget->getMasterPage(),
                                                     uno::UNO_QUERY);
@@ -4289,8 +4278,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf168835)
     insertStringToObject(0, u"Title of the second slide", /*bUseEscape*/ true);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
 
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
@@ -4329,8 +4317,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testNumToBullet)
     // Then make sure we switch to a bullet and not toggle off the numbering:
     CPPUNIT_ASSERT(!pView->IsTextEdit());
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(1, xShape),
                                                    uno::UNO_QUERY);
@@ -4379,8 +4366,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testBulletOffOn)
     // Then make sure the result is Level 1 from the master page:
     CPPUNIT_ASSERT(!pView->IsTextEdit());
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // 5th, last paragraph.
     uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(4, xShape),
@@ -4752,8 +4738,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_imageFillsAPlaceholderHoldin
     // The shape type is what the page answers for the object, so it states the identity.
     auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                      ->getDrawPages()
-                     ->getByIndex(0)
-                     .queryThrow<drawing::XDrawPage>();
+                     ->getDrawPageByIndex(0);
     auto xShape = xPage->getByIndex(0).queryThrow<drawing::XShape>();
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.GraphicObjectShape"_ustr,
                          xShape->getShapeType());
@@ -4765,8 +4750,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_textGivenThroughTheApi)
     createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
     auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                      ->getDrawPages()
-                     ->getByIndex(0)
-                     .queryThrow<drawing::XDrawPage>();
+                     ->getDrawPageByIndex(0);
 
     // When text reaches it without any editing, which is the route a script takes:
     xPage->getByIndex(0).queryThrow<text::XTextRange>()->setString(
@@ -4804,8 +4788,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_theEditedObjectStaysWhileEdi
     // which marks the object as no longer empty while the edit is still open:
     auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                      ->getDrawPages()
-                     ->getByIndex(0)
-                     .queryThrow<drawing::XDrawPage>();
+                     ->getDrawPageByIndex(0);
     xPage->getByIndex(0).queryThrow<text::XTextRange>()->getString();
     Scheduler::ProcessEventsToIdle();
 
@@ -4838,8 +4821,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_anEditElsewhereIsLeftAlone)
     // When another view asks that object for its text, which writes the typing back and marks it
     // no longer empty while the edit is still open:
     auto xPages = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()->getDrawPages();
-    xPages->getByIndex(pEditedPage->GetPageNum() / 2)
-        .queryThrow<drawing::XShapes>()
+    xPages->getDrawPageByIndex(pEditedPage->GetPageNum() / 2)
         ->getByIndex(0)
         .queryThrow<text::XTextRange>()
         ->getString();
@@ -4849,7 +4831,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_anEditElsewhereIsLeftAlone)
     // that asked for it. That is what two views editing one document look like from here.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPages->getCount());
     const sal_Int32 nElsewhere = pEditedPage->GetPageNum() / 2 == 0 ? 1 : 0;
-    auto xElsewherePage = xPages->getByIndex(nElsewhere).queryThrow<drawing::XShapes>();
+    auto xElsewherePage = xPages->getDrawPageByIndex(nElsewhere);
     xElsewherePage->getByIndex(0)
         .queryThrow<text::XTextRange>()
         ->setString(u"Given elsewhere"_ustr);
@@ -6678,8 +6660,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testEditingAfterSlideSectionRename)
     insertStringToObject(0, u"Test", /*bUseEscape*/ true);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT_EQUAL(u"Test"_ustr,
                          xDrawPage->getByIndex(0).queryThrow<text::XTextRange>()->getString());
 }

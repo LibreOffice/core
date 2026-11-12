@@ -7538,7 +7538,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
         sal_Int32 nSlideCount = xDrawPages->getCount();
         for (sal_Int32 i = 0; i < nSlideCount; ++i)
         {
-            SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(i));
+            SdGenericDrawPage* pSlide(xDrawPages->getSdDrawPageByIndex(i));
             SdPage* pPage = SdPage::getImplementation(pSlide);
             if (!pPage)
             {
@@ -7853,7 +7853,7 @@ bool isRequestedSlideValid(SdDrawDocument* mpDoc, sal_Int32 nSlideNumber, const 
     {
         SdXImpressDocument* pDoc = mpDoc->getUnoModel();
         rtl::Reference<SdDrawPagesAccess> xDrawPages = pDoc->getSdDrawPages();
-        SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(nSlideNumber));
+        SdGenericDrawPage* pSlide(xDrawPages->getSdDrawPageByIndex(nSlideNumber));
         if (pSlide)
         {
             return slideHash == GetInterfaceHash(cppu::getXWeak(pSlide));
@@ -8357,11 +8357,15 @@ sal_Int32 SdDrawPagesAccess::getCount()
 
 cpo::uno::Any SdDrawPagesAccess::getByIndex( sal_Int32 Index )
 {
-    uno::Reference< drawing::XDrawPage > xDrawPage( getDrawPageByIndex(Index) );
-    return cpo::uno::Any(xDrawPage);
+    return cpo::uno::Any(getDrawPageByIndex(Index));
 }
 
-SdGenericDrawPage* SdDrawPagesAccess::getDrawPageByIndex( sal_Int32 Index )
+uno::Reference<drawing::XDrawPage> SdDrawPagesAccess::getDrawPageByIndex( sal_Int32 Index )
+{
+    return getSdDrawPageByIndex(Index);
+}
+
+SdGenericDrawPage* SdDrawPagesAccess::getSdDrawPageByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
 
@@ -8624,13 +8628,16 @@ sal_Int32 SdMasterPagesAccess::getCount()
  */
 cpo::uno::Any SdMasterPagesAccess::getByIndex( sal_Int32 Index )
 {
+    return cpo::uno::Any(getDrawPageByIndex(Index));
+}
+
+Reference<drawing::XDrawPage> SdMasterPagesAccess::getDrawPageByIndex( sal_Int32 Index )
+{
     ::SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SdMasterPagesAccess::getByIndex");
 
     if( nullptr == mpModel )
         throw lang::DisposedException();
-
-    cpo::uno::Any aAny;
 
     if( (Index < 0) || (Index >= mpModel->mpDoc->GetMasterSdPageCount( PageKind::Standard ) ) )
         throw lang::IndexOutOfBoundsException();
@@ -8638,11 +8645,10 @@ cpo::uno::Any SdMasterPagesAccess::getByIndex( sal_Int32 Index )
     SdPage* pPage = mpModel->mpDoc->GetMasterSdPage( static_cast<sal_uInt16>(Index), PageKind::Standard );
     if( pPage )
     {
-        uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage() );
-        aAny <<= xDrawPage;
+        return pPage->getUnoPage();
     }
 
-    return aAny;
+    return {};
 }
 
 // XElementAccess

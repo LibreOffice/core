@@ -188,8 +188,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShapes> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                               uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xShape);
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<text::XSimpleText> xShapeText(xShape, uno::UNO_QUERY);
@@ -306,8 +305,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShapes> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                               uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xShape);
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);

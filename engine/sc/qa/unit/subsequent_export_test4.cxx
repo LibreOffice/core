@@ -1226,8 +1226,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
 
     // reloaded document: make sure it still has a flat (non-3d) look
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<container::XIndexAccess> xIA_DrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xIA_DrawPage(
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), UNO_SET_THROW);
     uno::Reference<drawing::XControlShape> xControlShape(xIA_DrawPage->getByIndex(0),
                                                          UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
@@ -1318,8 +1318,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlFontXlsxExport)
 
     // reloaded document: the controls still carry the effects
     auto xDrawPagesSupplier = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
-    auto xIA_DrawPage
-        = xDrawPagesSupplier->getDrawPages()->getByIndex(0).queryThrow<container::XIndexAccess>();
+    auto xIA_DrawPage = xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0);
     auto xControlShape = xIA_DrawPage->getByIndex(0).queryThrow<drawing::XControlShape>();
     auto xPropertySet = xControlShape->getControl().queryThrow<beans::XPropertySet>();
 
@@ -1385,8 +1384,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlAlignXlsxExport)
 
     // reloaded document: the controls still carry the alignment
     auto xDrawPagesSupplier = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
-    auto xIA_DrawPage
-        = xDrawPagesSupplier->getDrawPages()->getByIndex(0).queryThrow<container::XIndexAccess>();
+    auto xIA_DrawPage = xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0);
 
     auto xFirstShape = xIA_DrawPage->getByIndex(0).queryThrow<drawing::XControlShape>();
     auto xFirst = xFirstShape->getControl().queryThrow<beans::XPropertySet>();

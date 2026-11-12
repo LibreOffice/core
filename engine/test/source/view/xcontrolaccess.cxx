@@ -6,7 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 #include <test/view/xcontrolaccess.hxx>
 #include <test/helper/form.hxx>
 
@@ -35,8 +34,8 @@ void XControlAccess::testGetControl()
 
     uno::Reference<lang::XComponent> xComponent(getXComponent(), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(xComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xDP(xDPS->getDrawPages()->getByIndex(0),
-                                           uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDP(xDPS->getDrawPages()->getDrawPageByIndex(0),
+                                           uno::UNO_SET_THROW);
 
     uno::Reference<drawing::XShapes> xShapes(xDP, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(

@@ -78,6 +78,7 @@ public:
     // XDrawPages
     virtual cpo::uno::Reference< css::drawing::XDrawPage > insertNewByIndex( sal_Int32 nIndex ) override;
     virtual void remove( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
+    virtual cpo::uno::Reference< css::drawing::XDrawPage > getDrawPageByIndex( sal_Int32 Index ) override;
 
     // XIndexAccess
     virtual sal_Int32 getCount() override ;
@@ -547,9 +548,12 @@ sal_Int32 SvxUnoDrawPagesAccess::getCount()
 
 cpo::uno::Any SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
 {
-    ::SolarMutexGuard aGuard;
+    return cpo::uno::Any(getDrawPageByIndex(Index));
+}
 
-    cpo::uno::Any aAny;
+uno::Reference<drawing::XDrawPage> SvxUnoDrawPagesAccess::getDrawPageByIndex( sal_Int32 Index )
+{
+    ::SolarMutexGuard aGuard;
 
     if( mrModel.mpDoc )
     {
@@ -567,10 +571,10 @@ cpo::uno::Any SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
                 pPage->mxUnoPage = xPage;
             }
 
-            aAny <<= uno::Reference< cpo::uno::XInterface >(cppu::getXWeak(xPage.get()));
+            return xPage;
         }
     }
-    return aAny;
+    return {};
 }
 
 // XElementAccess

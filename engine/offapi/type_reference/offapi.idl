@@ -5198,6 +5198,7 @@ module com {
      interface ::com::sun::star::container::XIndexAccess;
      ::com::sun::star::drawing::XDrawPage insertNewByIndex([in] long nIndex);
      void remove([in] ::com::sun::star::drawing::XDrawPage xPage);
+     XDrawPage getDrawPageByIndex( [in] long Index ) raises( com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::lang::WrappedTargetException );
     };
     published service DrawPages {
      interface ::com::sun::star::drawing::XDrawPages;

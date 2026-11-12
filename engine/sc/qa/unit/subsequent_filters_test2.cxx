@@ -1364,8 +1364,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf83672XLSX)
 {
     createScDoc("xlsx/tdf83672.xlsx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     sal_Int32 nRotate = 0;

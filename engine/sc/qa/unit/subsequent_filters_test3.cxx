@@ -563,7 +563,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testActiveXCheckboxXLSX)
     saveAndReload(TestFilter::XLSX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, UNO_QUERY_THROW);
-    xIA_DrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(0), UNO_QUERY_THROW);
+    xIA_DrawPage.set(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), UNO_SET_THROW);
     xControlShape.set(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
@@ -1004,8 +1004,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeRotationImport)
     // were extra or missing rotations. Hence, we check the sizes of these rectangles.
     createScDoc("xlsx/testShapeRotationImport.xlsx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
 
     // The expected values are in the map below. Note that some of the angles are outside of the set which contains
     // the value of the wrong angles. This is to check the border cases and one value on both sides.
@@ -1050,8 +1050,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeDisplacementOnRotationImport)
     createScDoc("xlsx/testShapeDisplacementOnRotationImport.xlsx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
@@ -1067,8 +1067,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyUpright)
     createScDoc("xlsx/tdf106197_import_upright.xlsx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
 
@@ -1110,8 +1110,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyRotateAngle)
     createScDoc("xlsx/tdf141644.xlsx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
 
@@ -1596,8 +1596,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
     // Get document and shape in SmartArt object
     createScDoc("xlsx/tdf151818_SmartartThemeFontColor.xlsx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<drawing::XShapes> xSmartArt(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     // shape 0 is the background shape without text
     uno::Reference<text::XTextRange> xShape(xSmartArt->getByIndex(1), uno::UNO_QUERY);

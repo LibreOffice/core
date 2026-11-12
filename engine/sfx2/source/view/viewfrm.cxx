@@ -893,7 +893,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                                                               uno::UNO_QUERY);
                         uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
                         uno::Reference<drawing::XDrawPage> xDrawPage(
-                            xDrawPages->getByIndex(pPageNumber->GetValue()), uno::UNO_QUERY);
+                            xDrawPages->getDrawPageByIndex(pPageNumber->GetValue()));
                         xController->setCurrentPage(xDrawPage);
                     }
 

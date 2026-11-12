@@ -2494,7 +2494,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterBackgroundInvalidatesItsSli
         = xMastersSupplier->getMasterPages()->insertNewByIndex(1);
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XMasterPageTarget> xThirdSlide(
-        xPagesSupplier->getDrawPages()->getByIndex(2), uno::UNO_QUERY_THROW);
+        xPagesSupplier->getDrawPages()->getDrawPageByIndex(2), uno::UNO_QUERY_THROW);
     xThirdSlide->setMasterPage(xOtherMaster);
     SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
 

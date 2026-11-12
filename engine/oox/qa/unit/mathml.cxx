@@ -34,8 +34,7 @@ CPPUNIT_TEST_FIXTURE(OoxMathmlTest, testImportMce)
 {
     loadFromFile(u"import-mce.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // Without the accompanying fix in place, this failed with:
     // - Expected: 1

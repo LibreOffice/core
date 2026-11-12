@@ -2169,8 +2169,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testXDrawPagesSupplier)
     CPPUNIT_ASSERT(xDrawPages.is());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There must be only a single DrawPage in Writer documents",
                                  sal_Int32(1), xDrawPages->getCount());
-    cpo::uno::Any aDrawPage = xDrawPages->getByIndex(0);
-    uno::Reference<drawing::XDrawPage> xDrawPageFromXDrawPages(aDrawPage, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPageFromXDrawPages = xDrawPages->getDrawPageByIndex(0);
     CPPUNIT_ASSERT(xDrawPageFromXDrawPages.is());
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

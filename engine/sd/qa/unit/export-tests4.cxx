@@ -254,8 +254,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testTdf152606)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 }
 
@@ -322,7 +321,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testMasterPageBackgroundFullSize)
     uno::Reference<drawing::XDrawPages> xMPs(xMPS->getMasterPages());
     Color nFillColor;
     {
-        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getDrawPageByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT(!xMP->getPropertyValue(u"BackgroundFullSize"_ustr).get<bool>());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
                              xMP->getPropertyValue(u"BorderTop"_ustr).get<sal_Int32>());
@@ -344,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testMasterPageBackgroundFullSize)
             xBackgroundProps->getPropertyValue(u"FillTransparence"_ustr).get<sal_Int16>());
     }
     {
-        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getDrawPageByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xMP->getPropertyValue(u"BackgroundFullSize"_ustr).get<bool>());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
                              xMP->getPropertyValue(u"BorderTop"_ustr).get<sal_Int32>());
@@ -366,7 +365,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testMasterPageBackgroundFullSize)
             xBackgroundProps->getPropertyValue(u"FillTransparence"_ustr).get<sal_Int16>());
     }
     {
-        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getDrawPageByIndex(2), uno::UNO_QUERY);
         CPPUNIT_ASSERT(!xMP->getPropertyValue(u"BackgroundFullSize"_ustr).get<bool>());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
                              xMP->getPropertyValue(u"BorderTop"_ustr).get<sal_Int32>());
@@ -389,7 +388,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testMasterPageBackgroundFullSize)
             xBackgroundProps->getPropertyValue(u"FillTransparence"_ustr).get<sal_Int16>());
     }
     {
-        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(3), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getDrawPageByIndex(3), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xMP->getPropertyValue(u"BackgroundFullSize"_ustr).get<bool>());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
                              xMP->getPropertyValue(u"BorderTop"_ustr).get<sal_Int32>());
@@ -417,7 +416,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testMasterPageBackgroundFullSize)
     xMPS.set(mxComponent, uno::UNO_QUERY);
     xMPs.set(xMPS->getMasterPages());
     {
-        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getDrawPageByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT(!xMP->getPropertyValue(u"BackgroundFullSize"_ustr).get<bool>());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
                              xMP->getPropertyValue(u"BorderTop"_ustr).get<sal_Int32>());
@@ -439,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testMasterPageBackgroundFullSize)
             xBackgroundProps->getPropertyValue(u"FillTransparence"_ustr).get<sal_Int16>());
     }
     {
-        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getDrawPageByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xMP->getPropertyValue(u"BackgroundFullSize"_ustr).get<bool>());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
                              xMP->getPropertyValue(u"BorderTop"_ustr).get<sal_Int32>());
@@ -461,7 +460,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testMasterPageBackgroundFullSize)
             xBackgroundProps->getPropertyValue(u"FillTransparence"_ustr).get<sal_Int16>());
     }
     {
-        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getDrawPageByIndex(2), uno::UNO_QUERY);
         CPPUNIT_ASSERT(!xMP->getPropertyValue(u"BackgroundFullSize"_ustr).get<bool>());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
                              xMP->getPropertyValue(u"BorderTop"_ustr).get<sal_Int32>());
@@ -484,7 +483,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testMasterPageBackgroundFullSize)
             xBackgroundProps->getPropertyValue(u"FillTransparence"_ustr).get<sal_Int16>());
     }
     {
-        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(3), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getDrawPageByIndex(3), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xMP->getPropertyValue(u"BackgroundFullSize"_ustr).get<bool>());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
                              xMP->getPropertyValue(u"BorderTop"_ustr).get<sal_Int32>());
@@ -546,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testColumnsODG)
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
-        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
         uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
@@ -570,7 +569,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testColumnsODG)
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
-        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
         uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
@@ -702,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testSvgImageSupport)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1),
                                      xDrawPagesSupplier->getDrawPages()->getCount());
         uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+            xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDrawPage.is());
 
         // Get the image
@@ -858,7 +857,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testPlaceholderPromptODFRoundTrip)
     sal_Int32 nPrompts = 0;
     for (sal_Int32 nPage = 0; nPage < xMPs->getCount(); ++nPage)
     {
-        auto xShapes = xMPs->getByIndex(nPage).queryThrow<drawing::XShapes>();
+        auto xShapes = xMPs->getDrawPageByIndex(nPage);
         for (sal_Int32 nShape = 0; nShape < xShapes->getCount(); ++nShape)
         {
             auto xProps = xShapes->getByIndex(nShape).queryThrow<beans::XPropertySet>();

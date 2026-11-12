@@ -1408,8 +1408,7 @@ void PowerPointExport::WriteCustomSlideShow()
 
                 for (sal_Int32 j = 0; j < nSlideCount; ++j)
                 {
-                    Reference<XDrawPage> xDrawPage;
-                    xDrawPages->getByIndex(j) >>= xDrawPage;
+                    Reference<XDrawPage> xDrawPage = xDrawPages->getDrawPageByIndex(j);
                     Reference<XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
                     OUString sSlideName = xNamed->getName();
 
@@ -1444,8 +1443,7 @@ void PowerPointExport::WriteSections()
     std::map<OUString, sal_Int32> aNameToIndex;
     for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
     {
-        Reference<XDrawPage> xPage;
-        xDrawPages->getByIndex(i) >>= xPage;
+        Reference<XDrawPage> xPage = xDrawPages->getDrawPageByIndex(i);
         Reference<XNamed> xNamed(xPage, UNO_QUERY);
         if (xNamed.is())
             aNameToIndex[xNamed->getName()] = i;
@@ -2197,8 +2195,7 @@ void PowerPointExport::WritePresentationProps()
         sal_Int32 nEndSlide = xDrawPages->getCount();
         for (sal_Int32 i = 0; i < nEndSlide; i++)
         {
-            Reference<drawing::XDrawPage> xDrawPage;
-            xDrawPages->getByIndex(i) >>= xDrawPage;
+            Reference<drawing::XDrawPage> xDrawPage = xDrawPages->getDrawPageByIndex(i);
             Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
             if (xNamed->getName() == sFirstPage)
             {
@@ -2776,9 +2773,7 @@ void PowerPointExport::FindEquivalentMasterPages()
     {
         if (i == mnCanvasMasterIndex)
             continue;
-        cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage;
-        cpo::uno::Any aAny(xDrawPages->getByIndex(i));
-        aAny >>= xDrawPage;
+        cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage = xDrawPages->getDrawPageByIndex(i);
         if (!xDrawPage.is())
             continue;
 

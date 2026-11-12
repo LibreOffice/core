@@ -98,7 +98,7 @@ uno::Reference<cpo::uno::XInterface> ScViewPaneObj::init()
     xDP->insertNewByIndex(1);
     xDP->insertNewByIndex(2);
 
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDP->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDP->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     xDrawPage->add(
         apitest::helper::form::createCommandButton(mxComponent, 15000, 10000, 3000, 4500));
 

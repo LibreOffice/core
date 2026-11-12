@@ -1418,9 +1418,14 @@ public:
 
     virtual cpo::uno::Any getByIndex(sal_Int32 Index) override
     {
+        return cpo::uno::Any(getDrawPageByIndex(Index));
+    }
+
+    virtual cpo::uno::Reference< css::drawing::XDrawPage > getDrawPageByIndex(sal_Int32 Index) override
+    {
         if (Index != 0)
             throw css::lang::IndexOutOfBoundsException(u"Writer documents have only one DrawPage!"_ustr);
-        return cpo::uno::Any(m_xDoc->getDrawPage());
+        return m_xDoc->getDrawPage();
     }
 
     // XElementAccess

@@ -98,8 +98,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
 
     // When setting the theme index of the shape's fill color:
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     // Set theme color
     {

@@ -63,8 +63,7 @@ void PresPropsFragmentHandler::finalizeImport()
         const sal_Int32 nFirstPage = m_sSt.toInt32() - 1;
         if (nFirstPage >= 0 && nFirstPage < xDrawPages->getCount())
         {
-            Reference<drawing::XDrawPage> xDrawPage;
-            xDrawPages->getByIndex(nFirstPage) >>= xDrawPage;
+            Reference<drawing::XDrawPage> xDrawPage = xDrawPages->getDrawPageByIndex(nFirstPage);
             Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
             xPresentationProps->setPropertyValue(u"FirstPage"_ustr,
                                                  cpo::uno::Any(xNamed->getName()));

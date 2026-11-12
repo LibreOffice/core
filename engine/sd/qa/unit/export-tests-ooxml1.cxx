@@ -349,8 +349,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf142648)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
-    uno::Reference<drawing::XDrawPage> xDrawPage;
-    xDrawPages->getByIndex(0) >>= xDrawPage;
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPages->getDrawPageByIndex(0);
     uno::Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
     xNamed->setName(u"#Slide 1"_ustr);
 
@@ -1333,7 +1332,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf94238)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xPage.is());
 
     uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
@@ -1376,7 +1375,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testPictureTransparency)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xPage.is());
 
     uno::Reference<beans::XPropertySet> xGraphicShape(getShape(0, xPage));
@@ -1407,8 +1406,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRoundtripOwnLineStyles)
     createSdImpressDoc("odp/LineStylesOwn.odp");
     uno::Reference<drawing::XDrawPagesSupplier> xDocodp(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocodp.is());
-    uno::Reference<drawing::XDrawPage> xPageodp(xDocodp->getDrawPages()->getByIndex(0),
-                                                uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPageodp(xDocodp->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xPageodp.is());
     drawing::LineDash aLineDashodp[10];
     for (sal_uInt16 i = 0; i < 10; i++)
@@ -1422,8 +1420,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRoundtripOwnLineStyles)
     saveAndReload(TestFilter::PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDocpptx(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocpptx.is());
-    uno::Reference<drawing::XDrawPage> xPagepptx(xDocpptx->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPagepptx(xDocpptx->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xPagepptx.is());
 
     for (sal_uInt16 i = 0; i < 10; i++)
@@ -1465,7 +1462,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRoundtripPrstDash)
     // Make sure Style is drawing::DashStyle_RECTRELATIVE
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xPage.is());
     for (sal_uInt16 i = 0; i < 10; i++)
     {

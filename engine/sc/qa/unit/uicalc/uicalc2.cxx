@@ -213,8 +213,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf119793)
     createScDoc("tdf119793.ods");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4984), xShape->getPosition().X);

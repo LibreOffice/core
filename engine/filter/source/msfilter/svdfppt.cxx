@@ -1765,9 +1765,7 @@ void PPTConvertOCXControls::GetDrawPage()
     }
     if ( xDrawPages.is() && xDrawPages->getCount() )
     {
-        xDrawPages->getCount();
-        cpo::uno::Any aAny( xDrawPages->getByIndex( xDrawPages->getCount() - 1 ) );
-        aAny >>= xDrawPage;
+        xDrawPage = xDrawPages->getDrawPageByIndex( xDrawPages->getCount() - 1 );
     }
 }
 

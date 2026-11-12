@@ -489,10 +489,9 @@ void SdXMLExport::setSourceDocument( const Reference< lang::XComponent >& xDoc )
         {
             for(sal_Int32 a(0); a < mnDocMasterPageCount; a++)
             {
-                Any aAny(mxDocMasterPages->getByIndex(a));
-                Reference< drawing::XShapes > xMasterPage;
+                uno::Reference<XDrawPage> xMasterPage(mxDocMasterPages->getDrawPageByIndex(a));
 
-                if((aAny >>= xMasterPage) && xMasterPage.is())
+                if(xMasterPage.is())
                 {
                     mnObjectCount += ImpRecursiveObjectCount(xMasterPage);
                 }
@@ -500,8 +499,8 @@ void SdXMLExport::setSourceDocument( const Reference< lang::XComponent >& xDoc )
                 if( IsImpress() )
                 {
                     // #91587# take notes pages from master pages into account
-                    Reference<presentation::XPresentationPage> xPresPage;
-                    if((aAny >>= xPresPage) && xPresPage.is())
+                    Reference<presentation::XPresentationPage> xPresPage(xMasterPage, UNO_QUERY);
+                    if(xPresPage.is())
                     {
                         Reference<XDrawPage> xNotesPage(xPresPage->getNotesPage());
                         if(xNotesPage.is() && xNotesPage->getCount())
@@ -515,10 +514,9 @@ void SdXMLExport::setSourceDocument( const Reference< lang::XComponent >& xDoc )
         {
             for(sal_Int32 a(0); a < mnDocDrawPageCount; a++)
             {
-                Any aAny(mxDocDrawPages->getByIndex(a));
-                Reference< drawing::XShapes > xPage;
+                uno::Reference<XDrawPage> xPage(mxDocDrawPages->getDrawPageByIndex(a));
 
-                if((aAny >>= xPage) && xPage.is())
+                if(xPage.is())
                 {
                     mnObjectCount += ImpRecursiveObjectCount(xPage);
                 }
@@ -526,8 +524,8 @@ void SdXMLExport::setSourceDocument( const Reference< lang::XComponent >& xDoc )
                 if( IsImpress() )
                 {
                     // #91587# take notes pages from draw pages into account
-                    Reference<presentation::XPresentationPage> xPresPage;
-                    if((aAny >>= xPresPage) && xPresPage.is())
+                    Reference<presentation::XPresentationPage> xPresPage(xPage, UNO_QUERY);
+                    if(xPresPage.is())
                     {
                         Reference<XDrawPage> xNotesPage(xPresPage->getNotesPage());
                         if(xNotesPage.is() && xNotesPage->getCount())
@@ -638,10 +636,8 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
     // prepare name creation
     for (sal_Int32 nCnt = 0; nCnt < mnDocDrawPageCount; nCnt++)
     {
-        Any aAny(mxDocDrawPages->getByIndex(nCnt));
-        Reference<XDrawPage> xDrawPage;
-
-        if((aAny >>= xDrawPage) && xDrawPage.is())
+        Reference<XDrawPage> xDrawPage = mxDocDrawPages->getDrawPageByIndex(nCnt);
+        if(xDrawPage.is())
         {
             if(ImpPrepAutoLayoutInfo(xDrawPage, aStr))
                 DrawPagesAutoLayoutNamesRange[nCnt+1] = aStr;
@@ -1187,7 +1183,7 @@ void SdXMLExport::ImpPrepPageMasterInfos()
     // look for needed page-masters, create these
     for (sal_Int32 nMPageId = 0; nMPageId < mnDocMasterPageCount; nMPageId++)
     {
-        Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
+        Reference< XDrawPage > xMasterPage( mxDocMasterPages->getDrawPageByIndex(nMPageId) );
         ImpXMLEXPPageMasterInfo* pNewInfo = nullptr;
 
         if(xMasterPage.is())
@@ -1304,8 +1300,7 @@ void SdXMLExport::ImpPrepDrawPageInfos()
     sal_Int32 nCnt;
     for(nCnt = 0; nCnt < mnDocDrawPageCount; nCnt++)
     {
-        Reference<XDrawPage> xDrawPage;
-        mxDocDrawPages->getByIndex(nCnt) >>= xDrawPage;
+        Reference<XDrawPage> xDrawPage = mxDocDrawPages->getDrawPageByIndex(nCnt);
         maDrawPagesStyleNames[nCnt] = ImpCreatePresPageStyleName( xDrawPage );
 
         Reference< presentation::XPresentationPage > xPresPage(xDrawPage, UNO_QUERY);
@@ -1555,8 +1550,7 @@ void SdXMLExport::ImpPrepMasterPageInfos()
     sal_Int32 nCnt;
     for( nCnt = 0; nCnt < mnDocMasterPageCount; nCnt++)
     {
-        Reference<XDrawPage> xDrawPage;
-        mxDocMasterPages->getByIndex(nCnt) >>= xDrawPage;
+        Reference<XDrawPage> xDrawPage = mxDocMasterPages->getDrawPageByIndex(nCnt);
         maMasterPagesStyleNames[nCnt] = ImpCreatePresPageStyleName( xDrawPage );
     }
 
@@ -1582,24 +1576,21 @@ void SdXMLExport::ImpWritePresentationStyles()
 
     for (sal_Int32 nCnt = 0; nCnt < mnDocMasterPageCount; nCnt++)
     {
-        Any aAny(mxDocMasterPages->getByIndex(nCnt));
-        Reference<container::XNamed> xNamed;
+        uno::Reference<XDrawPage> xDrawPage(mxDocMasterPages->getDrawPageByIndex(nCnt));
+        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY);
 
-        if(aAny >>= xNamed)
+        // write presentation styles (ONLY if presentation)
+        if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
         {
-            // write presentation styles (ONLY if presentation)
-            if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
-            {
-                rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(*this, GetAutoStylePool().get()));
-                const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
+            rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(*this, GetAutoStylePool().get()));
+            const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
-                OUString aPrefix( xNamed->getName() + "-" );
+            OUString aPrefix( xNamed->getName() + "-" );
 
-                aStEx->exportStyleFamily(xNamed->getName(),
-                    XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
-                    aMapperRef, false,
-                    XmlStyleFamily::SD_PRESENTATION_ID, &aPrefix);
-            }
+            aStEx->exportStyleFamily(xNamed->getName(),
+                XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
+                aMapperRef, false,
+                XmlStyleFamily::SD_PRESENTATION_ID, &aPrefix);
         }
     }
 }
@@ -1635,7 +1626,7 @@ void SdXMLExport::ExportContent_()
     // page export
     for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
     {
-        uno::Reference<drawing::XDrawPage> xDrawPage( mxDocDrawPages->getByIndex(nPageInd), uno::UNO_QUERY );
+        uno::Reference<drawing::XDrawPage> xDrawPage( mxDocDrawPages->getDrawPageByIndex(nPageInd) );
 
         // set progress view
         if(GetStatusIndicator().is())
@@ -2229,7 +2220,7 @@ void SdXMLExport::collectAutoStyles()
         // create auto style infos for objects on master pages
         for(sal_Int32 nMPageId(0); nMPageId < mnDocMasterPageCount; nMPageId++)
         {
-            Reference< XDrawPage > xMasterPage(mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
+            Reference< XDrawPage > xMasterPage(mxDocMasterPages->getDrawPageByIndex(nMPageId) );
 
             if( xMasterPage.is() )
             {
@@ -2285,7 +2276,7 @@ void SdXMLExport::collectAutoStyles()
         // create auto style infos for objects on pages
         for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
         {
-            Reference<XDrawPage> xDrawPage( mxDocDrawPages->getByIndex(nPageInd), UNO_QUERY );
+            Reference<XDrawPage> xDrawPage( mxDocDrawPages->getDrawPageByIndex(nPageInd) );
             if( xDrawPage.is() )
             {
                 // collect layer information
@@ -2421,7 +2412,7 @@ void SdXMLExport::ExportMasterStyles_()
     // export MasterPages in master-styles section
     for (sal_Int32 nMPageId = 0; nMPageId < mnDocMasterPageCount; nMPageId++)
     {
-        Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
+        Reference< XDrawPage > xMasterPage( mxDocMasterPages->getDrawPageByIndex(nMPageId) );
         if(xMasterPage.is())
         {
             // prepare masterpage attributes

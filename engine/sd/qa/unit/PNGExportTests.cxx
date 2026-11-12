@@ -55,8 +55,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
@@ -115,8 +114,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
@@ -185,8 +183,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
@@ -219,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157652)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -266,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -317,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf158743)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -374,7 +371,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157795)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -422,7 +419,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105362)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -469,7 +466,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -519,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -569,7 +566,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -619,7 +616,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -669,7 +666,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -716,7 +713,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -766,7 +763,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                            uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
@@ -823,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
         };
 
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+        uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                                uno::UNO_QUERY);
         CPPUNIT_ASSERT(xPage.is());
         xGraphicExporter->setSourceDocument(xPage);
@@ -861,7 +858,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
     CPPUNIT_ASSERT(xGraphicExporter);
 
     auto xSupplier = mxComponent.queryThrow<css::drawing::XDrawPagesSupplier>();
-    auto xPage = xSupplier->getDrawPages()->getByIndex(0).queryThrow<css::lang::XComponent>();
+    auto xPage = xSupplier->getDrawPages()->getDrawPageByIndex(0).queryThrow<css::lang::XComponent>();
     xGraphicExporter->setSourceDocument(xPage);
 
     // 1. AA disabled
@@ -945,7 +942,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testNoAntiAliasExport)
     CPPUNIT_ASSERT(xGraphicExporter);
 
     auto xSupplier = mxComponent.queryThrow<css::drawing::XDrawPagesSupplier>();
-    auto xPage = xSupplier->getDrawPages()->getByIndex(0).queryThrow<css::lang::XComponent>();
+    auto xPage = xSupplier->getDrawPages()->getDrawPageByIndex(0).queryThrow<css::lang::XComponent>();
     xGraphicExporter->setSourceDocument(xPage);
 
     // 101 x 151 is current width x height ratio of the loaded SVG. FIXME: it should be 100 x 150.
@@ -986,7 +983,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
     CPPUNIT_ASSERT(xGraphicExporter);
 
     auto xSupplier = mxComponent.queryThrow<css::drawing::XDrawPagesSupplier>();
-    auto xPage = xSupplier->getDrawPages()->getByIndex(0).queryThrow<css::lang::XComponent>();
+    auto xPage = xSupplier->getDrawPages()->getDrawPageByIndex(0).queryThrow<css::lang::XComponent>();
     xGraphicExporter->setSourceDocument(xPage);
 
     // 101 x 151 is current width x height ratio of the loaded SVG. FIXME: it should be 100 x 150.

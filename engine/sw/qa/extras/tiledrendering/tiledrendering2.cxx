@@ -3591,8 +3591,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteShapeFromPresentationAtCaret
     uno::Reference<frame::XModel> xPresentation(mxComponent2, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xPresentation,
                                                                    uno::UNO_QUERY_THROW);
-    uno::Reference<container::XIndexAccess> xSlide(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xSlide(
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<view::XSelectionSupplier> xSelection(xPresentation->getCurrentController(),
                                                          uno::UNO_QUERY_THROW);
     xSelection->select(xSlide->getByIndex(0));

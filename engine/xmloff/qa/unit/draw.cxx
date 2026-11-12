@@ -85,7 +85,7 @@ uno::Reference<drawing::XShape> XmloffDrawTest::getShape(sal_uInt8 nShapeIndex)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShapeIndex),
                                            uno::UNO_QUERY_THROW);
     return xShape;
@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
     auto pTheme = std::make_shared<model::Theme>(u"mytheme"_ustr);
@@ -216,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xDrawPage.is());
     auto pUnoPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     SdrPage* pSdrPage = pUnoPage->GetSdrPage();
@@ -259,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
     // Then make sure the doc model has a master page with a theme:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
     uno::Reference<util::XTheme> xTheme;
@@ -937,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
     // generate a theme to be sure we have got one and know the values
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPageProps(xDrawPage->getMasterPage(),
                                                          uno::UNO_QUERY);
 
@@ -993,7 +993,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)
     // First make sure the doc model has a master page with a theme:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
     uno::Reference<util::XTheme> xTheme;
@@ -1157,8 +1157,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
                                                                        uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xDrawPagesSupplier.is());
         uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(1),
-                                                     uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(1),
+                                                     uno::UNO_SET_THROW);
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xImage.is());
         uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
@@ -1195,7 +1195,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPageLayoutWithoutStyles)
     loadFromFile(u"page-layout-without-styles.fodp");
     auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                      ->getDrawPages()
-                     ->getByIndex(0)
+                     ->getDrawPageByIndex(0)
                      .queryThrow<beans::XPropertySet>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20000), xPage->getPropertyValue(u"Width"_ustr).get<sal_Int32>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10000), xPage->getPropertyValue(u"Height"_ustr).get<sal_Int32>());
@@ -1212,8 +1212,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testEmptyGraphicShapeOdf)
     xShape->setSize(awt::Size(5000, 4000));
     mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
         ->getDrawPages()
-        ->getByIndex(0)
-        .queryThrow<drawing::XDrawPage>()
+        ->getDrawPageByIndex(0)
         ->add(xShape);
 
     // Save and reload as ODG, which validates the saved XML against the ODF schema.

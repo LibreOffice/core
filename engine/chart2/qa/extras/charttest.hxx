@@ -406,7 +406,7 @@ cpo::uno::Reference<css::chart::XChartDocument> ChartTest::getChartDocFromDrawIm
         return xEmpty;
 
     cpo::uno::Reference<css::drawing::XDrawPage> xPage(
-        xPages->getDrawPages()->getByIndex(nPage), cpo::uno::UNO_QUERY_THROW);
+        xPages->getDrawPages()->getDrawPageByIndex(nPage), cpo::uno::UNO_SET_THROW);
 
     cpo::uno::Reference<css::beans::XPropertySet> xShapeProps(xPage->getByIndex(nShape), cpo::uno::UNO_QUERY);
     if (!xShapeProps.is())

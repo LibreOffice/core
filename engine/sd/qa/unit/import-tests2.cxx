@@ -268,8 +268,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf99030)
     createSdImpressDoc("pptx/tdf99030.pptx");
 
     uno::Reference<drawing::XMasterPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
 
     Color nFillColor;
@@ -288,8 +288,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf49561)
     createSdImpressDoc("ppt/tdf49561.ppt");
 
     uno::Reference<drawing::XMasterPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xPage->getCount());
 
     uno::Reference<beans::XPropertySet> xShape(getShape(3, xPage));
@@ -1504,8 +1504,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf116899)
     createSdImpressDoc("ppt/tdf116899.ppt");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<animations::XAnimationNodeSupplier> xAnimNodeSupplier(xPage,
                                                                          uno::UNO_QUERY_THROW);
     uno::Reference<animations::XAnimationNode> xRootNode(xAnimNodeSupplier->getAnimationNode());
@@ -1641,7 +1641,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf120028)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xPage.is());
 
     uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
@@ -1728,7 +1728,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf122899)
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
@@ -1769,7 +1769,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCropToShape)
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShape->getShapeType());
@@ -1845,7 +1845,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf128684)
     createSdImpressDoc("pptx/tdf128684.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xPage.is());
     uno::Reference<beans::XPropertySet> xShapeProperties(getShape(0, xPage));
     CPPUNIT_ASSERT(xShapeProperties.is());
@@ -2045,15 +2045,15 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103347)
     createSdImpressDoc("pptx/tdf103347.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XNamed> xNamed1(xPage1, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, xNamed1->getName());
 
-    uno::Reference<drawing::XDrawPage> xPage2(xDoc->getDrawPages()->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage2(xDoc->getDrawPages()->getDrawPageByIndex(1));
     uno::Reference<container::XNamed> xNamed2(xPage2, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"Hello (2)"_ustr, xNamed2->getName());
 
-    uno::Reference<drawing::XDrawPage> xPage3(xDoc->getDrawPages()->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage3(xDoc->getDrawPages()->getDrawPageByIndex(2));
     uno::Reference<container::XNamed> xNamed3(xPage3, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"Hello (3)"_ustr, xNamed3->getName());
 }
@@ -3050,7 +3050,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16080_masterPageOrder)
     {
         CPPUNIT_ASSERT_EQUAL(
             OUString(aExpected[i]),
-            xMasterPages->getByIndex(i).queryThrow<container::XNamed>()->getName());
+            xMasterPages->getDrawPageByIndex(i).queryThrow<container::XNamed>()->getName());
     }
 }
 
@@ -3177,7 +3177,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16279_LayoutPlaceholderKeepsMasterAu
 
     uno::Reference<drawing::XMasterPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
-    uno::Reference<drawing::XShapes> xLayout(xDoc->getMasterPages()->getByIndex(1),
+    uno::Reference<drawing::XShapes> xLayout(xDoc->getMasterPages()->getDrawPageByIndex(1),
                                              uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"Title and Content"_ustr,
                          xLayout.queryThrow<container::XNamed>()->getName());

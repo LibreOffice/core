@@ -816,7 +816,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 for (sal_Int32 nPageNum = 0; nPageNum < nPageCount; ++nPageNum)
                 {
                     // Get the page
-                    uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( nPageNum ), uno::UNO_QUERY );
+                    uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getDrawPageByIndex( nPageNum ) );
 
                     if (!xPage.is())
                         continue;
@@ -1117,7 +1117,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     for (sal_Int32 nPageNum = 0; nPageNum < nPageCount; ++nPageNum)
                     {
                         // Get the page
-                        uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( nPageNum ), uno::UNO_QUERY );
+                        uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getDrawPageByIndex( nPageNum ) );
 
                         if (!xPage.is())
                             continue;

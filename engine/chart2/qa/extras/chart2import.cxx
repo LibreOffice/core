@@ -967,7 +967,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc889755)
 
     //tdf#139940 - the title's gradient was lost and was filled with solid blue, instead of a "blue underline".
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
 
     // Shape "Title 3"
     // MCGR: Use the whole completely imported transparency gradient to check for correctness
@@ -2429,7 +2429,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPieChartPlotAreaMarginWithAutomaticLa
         uno::Reference<drawing::XDrawPagesSupplier> xPages(mxComponent, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xPages);
 
-        uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPages()->getDrawPageByIndex(0));
         CPPUNIT_ASSERT(xPage);
 
         uno::Reference<chart::XChartDocument> xChart;

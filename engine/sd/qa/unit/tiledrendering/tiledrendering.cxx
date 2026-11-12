@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostMouseEvent)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
     // Create a selection on the second word.
@@ -253,7 +253,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetTextSelection)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Shape"_ustr);
     // Create a selection on the shape text.
@@ -331,7 +331,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoShells)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResetSelection)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
     // Create a selection on the second word.
@@ -767,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideTransitionOtherView)
     const sd::TransitionPresetPtr& pPreset = rPresets.front();
 
     uno::Reference<beans::XPropertySet> xPage(
-        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        pXImpressDocument->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     xPage->setPropertyValue(u"TransitionType"_ustr, cpo::uno::Any(pPreset->getTransition()));
     xPage->setPropertyValue(u"TransitionSubtype"_ustr, cpo::uno::Any(pPreset->getSubtype()));
     xPage->setPropertyValue(u"TransitionDirection"_ustr, cpo::uno::Any(pPreset->getDirection()));
@@ -1832,8 +1832,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewRenderKeepsReportedTextSel
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     setupCOKitViewCallback(pViewShell->GetViewShellBase());
 
-    uno::Reference<container::XIndexAccess> xDrawPage(
-        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(
+        pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
 
@@ -1930,8 +1930,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReportedTextSelectionFollowsBoldC
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     setupCOKitViewCallback(pViewShell->GetViewShellBase());
 
-    uno::Reference<container::XIndexAccess> xDrawPage(
-        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(
+        pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
 
@@ -1960,8 +1960,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClickReportsCollapsedTextSelectio
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     setupCOKitViewCallback(pViewShell->GetViewShellBase());
 
-    uno::Reference<container::XIndexAccess> xDrawPage(
-        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(
+        pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
 
@@ -2224,8 +2224,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xPage->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Somethingxx"_ustr, xShape->getString());
 }
@@ -2760,8 +2759,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testLanguageAllText)
 
     // Assert that the shape text language was changed.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xRun(xShape, uno::UNO_QUERY_THROW);
     lang::Locale aLocale;
@@ -5178,7 +5176,7 @@ std::string GetSlideHash(SdXImpressDocument* pDoc, sal_Int32 nSlideNumber)
     try
     {
         rtl::Reference<SdDrawPagesAccess> xDrawPages = pDoc->getSdDrawPages();
-        SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(nSlideNumber));
+        SdGenericDrawPage* pSlide(xDrawPages->getSdDrawPageByIndex(nSlideNumber));
         if (pSlide)
         {
             return GetInterfaceHash(cppu::getXWeak(pSlide));

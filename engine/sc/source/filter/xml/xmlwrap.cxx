@@ -761,12 +761,12 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         rtl::Reference<ScModelObj> xModel(pObjSh->GetModel());
         // sorting wants to create undo actions
         assert(SfxObjectCreateMode::STANDARD != pObjSh->GetCreateMode() || rDoc.GetDrawLayer()->IsUndoEnabled());
-        uno::Reference<container::XIndexAccess> const xDPs(xModel->getDrawPages());
+        uno::Reference<drawing::XDrawPages> const xDPs(xModel->getDrawPages());
         assert(xDPs.is());
         for (auto i = xDPs->getCount(); 0 < i; )
         {
             --i;
-            uno::Reference<drawing::XShapes> const xDP(xDPs->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<drawing::XDrawPage> const xDP(xDPs->getDrawPageByIndex(i));
             assert(xDP.is());
             xmloff::FixZOrder(xDP,
                 [](uno::Reference<beans::XPropertySet> const& xShape)

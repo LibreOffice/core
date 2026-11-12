@@ -45,7 +45,7 @@ uno::Reference<drawing::XShape> XmloffStyleTest::getShape(sal_uInt8 nShapeIndex)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShapeIndex),
                                            uno::UNO_QUERY_THROW);
     return xShape;

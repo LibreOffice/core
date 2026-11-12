@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testSwappedOutImageExport)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
                                      xDrawPagesSupplier->getDrawPages()->getCount());
         uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+            xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
 
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
@@ -144,7 +144,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testSwappedOutImageExport)
         }
 
         // Second Image
-        xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW);
+        xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1), uno::UNO_SET_THROW);
         xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
         XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
@@ -488,7 +488,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testImageWithSpecialID)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
                                      xDrawPagesSupplier->getDrawPages()->getCount());
         uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+            xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
 
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
@@ -509,7 +509,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testImageWithSpecialID)
         }
 
         // Second Image
-        xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW);
+        xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1), uno::UNO_SET_THROW);
         xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
         XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
@@ -1098,8 +1098,8 @@ lcl_getPageAnimationNode(const cpo::uno::Reference<css::lang::XComponent>& xComp
 {
     cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(xComponent,
                                                                     cpo::uno::UNO_QUERY_THROW);
-    cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(nPage),
-                                                       cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getDrawPageByIndex(nPage),
+                                                       cpo::uno::UNO_SET_THROW);
     cpo::uno::Reference<css::animations::XAnimationNodeSupplier> xNodeSupplier(
         xPage, cpo::uno::UNO_QUERY_THROW);
     return xNodeSupplier->getAnimationNode();
@@ -1241,8 +1241,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testLegacyAnimationSoundNotFetched)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
+                                                 uno::UNO_SET_THROW);
     uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(

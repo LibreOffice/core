@@ -577,7 +577,7 @@ void SdMiscTest::testTdf120527()
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     CPPUNIT_ASSERT(xDrawPages.is());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xDrawPage.is());
     // This failed with a lang.IllegalArgumentException.
     xDrawPage->add(xShape);

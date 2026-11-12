@@ -80,7 +80,7 @@ CGMImpressOutAct::CGMImpressOutAct(CGM& rCGM, const uno::Reference< frame::XMode
             maXMultiServiceFactory.set( rModel, uno::UNO_QUERY);
             if( maXMultiServiceFactory.is() )
             {
-                maXDrawPage = *o3tl::doAccess<uno::Reference<drawing::XDrawPage>>(maXDrawPages->getByIndex( 0 ));
+                maXDrawPage = maXDrawPages->getDrawPageByIndex( 0 );
                 if ( ImplInitPage() )
                     bStatRet = true;
             }

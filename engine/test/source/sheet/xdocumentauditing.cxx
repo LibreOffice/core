@@ -89,8 +89,8 @@ void XDocumentAuditing::testRefreshArrows()
     uno::Reference<sheet::XSpreadsheet> xSheet2(xIA->getByIndex(1), UNO_QUERY_THROW);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDocumentAuditing, UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDPS->getDrawPages()->getByIndex(1),
-                                                 UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDPS->getDrawPages()->getDrawPageByIndex(1),
+                                                 UNO_SET_THROW);
 
     sal_Int32 nDrawPageElementCount = 0;
     if (xDrawPage->hasElements())

@@ -457,7 +457,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf126324)
     createSdImpressDoc("pptx/tdf126324.pptx");
     saveAndReload(TestFilter::PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xPage.is());
     uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
     CPPUNIT_ASSERT(xShape.is());
@@ -565,8 +565,8 @@ static bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> co
     CPPUNIT_ASSERT_MESSAGE("Slide/Page index out of range",
                            nSlideIndex < xDoc->getDrawPages()->getCount());
 
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(nSlideIndex),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(nSlideIndex),
+                                             uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
 
     sal_Int16 nTransitionType = 0;
@@ -802,8 +802,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92527)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc2(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getByIndex(0),
-                                              uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getDrawPageByIndex(0),
+                                              uno::UNO_SET_THROW);
     uno::Reference<drawing::XShape> xShape2(xPage2->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet2(xShape2, uno::UNO_QUERY_THROW);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
@@ -1605,7 +1605,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testCentredTitleStaysOnItsLayout)
     sal_Int32 nPlain = -1;
     for (sal_Int32 nPage = 0; nPage < xMasterPages->getCount(); ++nPage)
     {
-        uno::Reference<container::XNamed> xNamed(xMasterPages->getByIndex(nPage),
+        uno::Reference<container::XNamed> xNamed(xMasterPages->getDrawPageByIndex(nPage),
                                                  uno::UNO_QUERY_THROW);
         if (xNamed->getName() == "Title Slide")
             nCentred = nPage;
@@ -1614,9 +1614,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testCentredTitleStaysOnItsLayout)
     }
     CPPUNIT_ASSERT(nCentred >= 0);
     CPPUNIT_ASSERT(nPlain >= 0);
-    uno::Reference<container::XNamed>(xMasterPages->getByIndex(nCentred), uno::UNO_QUERY_THROW)
+    uno::Reference<container::XNamed>(xMasterPages->getDrawPageByIndex(nCentred), uno::UNO_QUERY_THROW)
         ->setName(u"Renamed"_ustr);
-    uno::Reference<container::XNamed>(xMasterPages->getByIndex(nPlain), uno::UNO_QUERY_THROW)
+    uno::Reference<container::XNamed>(xMasterPages->getDrawPageByIndex(nPlain), uno::UNO_QUERY_THROW)
         ->setName(u"Title Slide"_ustr);
 
     save(TestFilter::PPTX);

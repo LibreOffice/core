@@ -382,7 +382,7 @@ Reference<XShape> ScComplexTest::getInsertedShape()
         Reference<XSpreadsheetDocument> xSheetDoc(mxComponent, UNO_QUERY_THROW);
         Reference<XDrawPagesSupplier> oDPS(xSheetDoc, UNO_QUERY);
         Reference<XDrawPages> oDP = oDPS->getDrawPages();
-        Reference<XDrawPage> firstDrawPage(oDP->getByIndex(0), UNO_QUERY);
+        Reference<XDrawPage> firstDrawPage(oDP->getDrawPageByIndex(0));
 
         Reference<XComponent> xComp(xSheetDoc, UNO_QUERY);
         insertedShape = createShape(xComp, 5000, 3500, 700, 500, u"Rectangle"_ustr);

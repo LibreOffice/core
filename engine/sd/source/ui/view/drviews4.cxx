@@ -141,7 +141,7 @@ void DrawViewShell::DeletePages(const std::function<bool(SdPage*, sal_uInt16)>& 
             if (rIsToDelete(pPage, nPageIndex))
             {
                 EndTextEditOnPage(*GetDoc(), pPage->getPageId());
-                Reference< XDrawPage > xPage( xPages->getByIndex( nPageIndex ), UNO_QUERY_THROW );
+                Reference< XDrawPage > xPage( xPages->getDrawPageByIndex( nPageIndex ), UNO_SET_THROW );
                 pagesToDelete.push_back(xPage);
             }
         }

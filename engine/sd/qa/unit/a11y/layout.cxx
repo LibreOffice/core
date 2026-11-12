@@ -93,9 +93,9 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf150064)
     // Loop a couple times to make sure output is stable when loading and when switching pages
     for (int i = 0; i < 2; i++)
     {
-        uno::Reference<drawing::XDrawPage> xDrawPage;
-
-        CPPUNIT_ASSERT(xDrawPages->getByIndex(0) >>= xDrawPage);
+        uno::Reference<drawing::XDrawPage> xDrawPage
+            = xDrawPages->getDrawPageByIndex(0);
+        CPPUNIT_ASSERT(xDrawPage.is());
         xDrawView->setCurrentPage(xDrawPage);
         Scheduler::ProcessEventsToIdle();
 
@@ -143,7 +143,8 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf150064)
                              "</SHAPE>"_ustr,
                              collectText());
 
-        CPPUNIT_ASSERT(xDrawPages->getByIndex(1) >>= xDrawPage);
+        xDrawPage = xDrawPages->getDrawPageByIndex(1);
+        CPPUNIT_ASSERT(xDrawPage.is());
         xDrawView->setCurrentPage(xDrawPage);
         Scheduler::ProcessEventsToIdle();
 
@@ -257,8 +258,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, testBulletedParagraphEditing)
     Scheduler::ProcessEventsToIdle();
     const auto xPage = mxDocument.queryThrow<drawing::XDrawPagesSupplier>()
                            ->getDrawPages()
-                           ->getByIndex(0)
-                           .query<drawing::XDrawPage>();
+                           ->getDrawPageByIndex(0);
     const auto xController = mxDocument.queryThrow<frame::XModel>()->getCurrentController();
     xController.queryThrow<view::XSelectionSupplier>()->select(xPage->getByIndex(0));
     documentPostKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);

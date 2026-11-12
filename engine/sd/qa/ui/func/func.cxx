@@ -70,8 +70,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneToBullet)
     // Then make sure we switch to a bullet with reasonable defaults:
     CPPUNIT_ASSERT(!pView->IsTextEdit());
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(0, xShape),
                                                    uno::UNO_QUERY);
@@ -121,8 +120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneToLibraryBullet)
     // Then make sure we switch to a bullet with the correct character:
     CPPUNIT_ASSERT(!pView->IsTextEdit());
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(0, xShape),
                                                    uno::UNO_QUERY);

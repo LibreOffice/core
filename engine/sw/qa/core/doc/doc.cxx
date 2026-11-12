@@ -1925,8 +1925,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmbeddedDocumentsFollowOuterLinkUpdateDe
     uno::Reference<beans::XPropertySet> xChild(xChildSupplier->getEmbeddedObject(),
                                                uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(xChild, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xGrandchild(xShape->getPropertyValue(u"Model"_ustr),
                                                     uno::UNO_QUERY_THROW);
@@ -1954,8 +1953,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmbeddedDrawingLoadsLinkedImageOnceOuter
                                                                      uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(
         xChildSupplier->getEmbeddedObject(), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     auto pImage = dynamic_cast<SdrGrafObj*>(SdrObject::getSdrObjectFromXShape(xShape));
     CPPUNIT_ASSERT(pImage);

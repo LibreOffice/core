@@ -108,7 +108,7 @@ SdrPage* SvdrawTest::getFirstDrawPageWithAssert()
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xDrawPage.is());
 
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
@@ -254,8 +254,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     xShape->setPosition(awt::Point(1000, 1000));
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xShape);
 
     // Add semi-transparent text on the rectangle.
@@ -302,8 +301,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
     xShapeProps->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(0)));
     // Add it to the draw page.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xShape);
     // Set polygon coordinates.
     drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
@@ -378,8 +376,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
 
     // get DrawPage
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // get 1st object, this is the SA. Get as GroupObject
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -520,8 +517,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testUndoOfTypingGivesTheFrameItsSizeBack)
     uno::Reference<drawing::XShape> xFrame(
         xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xFrame);
     uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY);
     xFrameProperties->setPropertyValue(u"TextAutoGrowHeight"_ustr, uno::Any(true));
@@ -559,8 +555,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testUndoOfTypingKeepsAMoveMadeMeanwhile)
     uno::Reference<drawing::XShape> xFrame(
         xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xFrame);
     uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY);
     xFrameProperties->setPropertyValue(u"TextAutoGrowHeight"_ustr, uno::Any(true));
@@ -602,8 +597,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
     // Make sure the in-file shape height is kept, even if nominally the shape height is
     // automatic:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 6882
@@ -624,7 +618,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xDrawPage.is());
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
@@ -1269,7 +1263,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawView> xController(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0));
     xController->setCurrentPage(xDrawPage);
     xDrawPage->add(xShape);
     // Select it and assign a certificate.
@@ -1318,8 +1312,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testGraphicClipPolyPolygonRoundTrip)
     xShape->setSize(awt::Size(5000, 4000));
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
     xDrawPage->add(xShape);
     auto xShapeProps = xShape.queryThrow<beans::XPropertySet>();
 
@@ -1374,8 +1367,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testGraphicClipPolyPolygonODFRoundTrip)
     xShape->setSize(awt::Size(5000, 4000));
     mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
         ->getDrawPages()
-        ->getByIndex(0)
-        .queryThrow<drawing::XDrawPage>()
+        ->getDrawPageByIndex(0)
         ->add(xShape);
     // Two contours - an outer rectangle and a reverse-wound inner one - so that the
     // svg:d encoding of a second subpath after a close is exercised.
@@ -1395,8 +1387,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testGraphicClipPolyPolygonODFRoundTrip)
     saveAndReload(TestFilter::ODG);
     auto xReloadedShape = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                               ->getDrawPages()
-                              ->getByIndex(0)
-                              .queryThrow<drawing::XDrawPage>()
+                              ->getDrawPageByIndex(0)
                               ->getByIndex(0)
                               .queryThrow<drawing::XShape>();
     drawing::PolyPolygonBezierCoords aReloaded;
@@ -1427,8 +1418,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testValidOrganizationChartExport)
     // using the GrabBag. When the implementation is changed to always write our own data.xml,
     // this part can be removed from the test.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShapes> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // Get the 1st text shape. There is a BGShape in indices before.
     uno::Reference<drawing::XShape> xShape(xSmartArt->getByIndex(1), uno::UNO_QUERY);
@@ -1454,8 +1444,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testDiagramConnectorKeepsItsIdentifier)
     loadFromFile(u"diagram_with_connectors.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShapes> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSmartArt.is());
 

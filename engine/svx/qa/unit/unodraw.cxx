@@ -102,8 +102,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTdf93998)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
 
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     CPPUNIT_ASSERT(xDrawPage.is());
 
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -136,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0));
     xDrawPage->add(xShape);
 
     // Create a red shadow on it without touching its style.
@@ -187,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTitleShapeBullets)
     loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0));
     // A default document contains a title shape and a text shape on the first slide.
     uno::Reference<drawing::XShape> xTitleShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xTitleShapeInfo(xTitleShape, uno::UNO_QUERY);
@@ -218,8 +217,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testParagraphsAfterSetString)
     // Given a title shape whose text was set and then got a second paragraph:
     loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XText> xText(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xText->setString(u"foo"_ustr);
     uno::Reference<text::XParagraphAppend> xParagraphAppend(xText, uno::UNO_QUERY);
@@ -278,8 +276,7 @@ uno::Reference<drawing::XShape> insertRectangle(const uno::Reference<lang::XComp
     xShape->setPosition(awt::Point(1000, 1000));
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<drawing::XDrawPagesSupplier> xSupplier(xComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xSupplier->getDrawPages()->getDrawPageByIndex(0));
     xDrawPage->add(xShape);
     return xShape;
 }

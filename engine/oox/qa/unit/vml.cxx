@@ -44,8 +44,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
     // points were zero because of missing decode from length with unit.
     loadFromFile(u"tdf112450_vml_polyline.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     {
         // This tests a polyline shape which is not closed.
         uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -107,8 +106,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf137314_vml_rotation_unit_fd)
     // as 1966080fd. Error was, that the vml angle unit "fd" was not converted to Degree100.
     loadFromFile(u"tdf137314_vml_rotation_unit_fd.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -129,8 +127,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
     // (TextBox).
     loadFromFile(u"group-spt202.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
 
@@ -149,8 +146,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
     // that, so 5.3975 cm should be the shape width.
     loadFromFile(u"shape-non-autosize-with-text.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
@@ -164,8 +160,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testGraphicStroke)
 {
     loadFromFile(u"graphic-stroke.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
@@ -194,8 +189,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWatermark)
 
     // Then make sure the watermark effect is not lost on import:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     drawing::ColorMode eMode{};
     xShape->getPropertyValue(u"GraphicColorMode"_ustr) >>= eMode;

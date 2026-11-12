@@ -857,7 +857,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     else
     {
         // existing page, use it
-        xMasterPages->getByIndex(nNewMasterPageCount) >>= xNewMasterPage;
+        xNewMasterPage = xMasterPages->getDrawPageByIndex(nNewMasterPageCount);
         SetShapes(xNewMasterPage);
         if(!msDisplayName.isEmpty())
         {

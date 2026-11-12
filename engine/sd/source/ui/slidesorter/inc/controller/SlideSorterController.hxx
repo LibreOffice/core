@@ -36,6 +36,10 @@ namespace com::sun::star::container
 {
 class XIndexAccess;
 }
+namespace com::sun::star::drawing
+{
+class XDrawPages;
+}
 namespace cpo::uno
 {
 template <typename> class Reference;
@@ -236,7 +240,7 @@ public:
     /** Provide the set of pages to be displayed in the slide sorter.  The
         GetDocumentSlides() method can be found only in the SlideSorterModel.
     */
-    void SetDocumentSlides(const cpo::uno::Reference<css::container::XIndexAccess>& rxSlides);
+    void SetDocumentSlides(const cpo::uno::Reference<css::drawing::XDrawPages>& rxSlides);
 
     /** Return an Animator object.
     */

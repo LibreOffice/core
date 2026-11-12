@@ -423,8 +423,8 @@ void SlideSectionManager::RemoveSectionSlides(sal_Int32 nSectionIndex)
             if (xPages->getCount() <= 1)
                 break;
 
-            cpo::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getByIndex(i),
-                                                               cpo::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(i),
+                                                               cpo::uno::UNO_SET_THROW);
             xPages->remove(xPage);
         }
     }

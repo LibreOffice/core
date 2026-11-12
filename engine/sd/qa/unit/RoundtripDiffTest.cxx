@@ -143,7 +143,7 @@ private:
         for (sal_Int32 i = 0; i < xPages->getCount(); ++i)
         {
             OString aPath = indexed({}, pTag, i);
-            uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(i));
             if (!xPage.is())
                 continue;
             dumpProperties(uno::Reference<beans::XPropertySet>(xPage, uno::UNO_QUERY), aPath);

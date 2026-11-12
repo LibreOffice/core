@@ -49,8 +49,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
     loadWithParams(u"private:factory/simpress"_ustr, aArgs);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xModel, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     cpo::uno::Any aShape = xDrawPage->getByIndex(0);
     uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
                                                          uno::UNO_QUERY);

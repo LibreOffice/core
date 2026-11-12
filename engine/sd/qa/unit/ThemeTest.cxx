@@ -91,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     // The draw page also contains a group shape to make sure we don't crash on group shapes.
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);
 
     uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getByIndex(0), uno::UNO_QUERY);
@@ -142,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
 
     // When changing the master slide of slide 1 to use the theme of the second master slide:
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY);
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage2(xDrawPage2->getMasterPage(), uno::UNO_QUERY);
     cpo::uno::Any aTheme = xMasterPage2->getPropertyValue(u"Theme"_ustr);
 

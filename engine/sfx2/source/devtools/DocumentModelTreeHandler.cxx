@@ -465,7 +465,7 @@ public:
         uno::Reference<drawing::XDrawPages> xDrawPages(getMainObject(), uno::UNO_QUERY);
         for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
         {
-            uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getDrawPageByIndex(i));
             if (!xPage.is())
                 continue;
 
@@ -508,7 +508,7 @@ public:
         uno::Reference<drawing::XDrawPages> xDrawPages(getMainObject(), uno::UNO_QUERY);
         for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
         {
-            uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getDrawPageByIndex(i));
             if (!xPage.is())
                 continue;
 
@@ -552,7 +552,7 @@ public:
         uno::Reference<drawing::XDrawPages> xDrawPages(getMainObject(), uno::UNO_QUERY);
         for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
         {
-            uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getDrawPageByIndex(i));
             if (!xPage.is())
                 continue;
 

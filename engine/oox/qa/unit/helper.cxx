@@ -36,8 +36,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImportTifCrop)
 
     // Then make sure the result has the correct crop rectangle:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     text::GraphicCrop aCrop;
     xShape->getPropertyValue(u"GraphicCrop"_ustr) >>= aCrop;

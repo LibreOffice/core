@@ -566,9 +566,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPPTXEmbeddingsRemovalAndExport)
                                                                    uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xDrawPages->getCount());
-    uno::Reference<drawing::XDrawPage> xSlide4(xDrawPages->getByIndex(3), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xSlide4(xDrawPages->getDrawPageByIndex(3), uno::UNO_SET_THROW);
     xDrawPages->remove(xSlide4);
-    uno::Reference<drawing::XDrawPage> xSlide2(xDrawPages->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xSlide2(xDrawPages->getDrawPageByIndex(1), uno::UNO_SET_THROW);
     xDrawPages->remove(xSlide2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPages->getCount());
 

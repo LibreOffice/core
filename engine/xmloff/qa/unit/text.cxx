@@ -1229,8 +1229,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParagraphScopedTabDistance)
     loadFromFile(u"paragraph-tab-stop-distance.fodp");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
 
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XText> xText

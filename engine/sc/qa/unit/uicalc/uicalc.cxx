@@ -1149,8 +1149,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
     ScDocument* pDoc = getScDoc();
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
 
     // Select column A and B
@@ -1167,7 +1167,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
 
     CPPUNIT_ASSERT_EQUAL(u"x"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
 
-    xPage.set(pModelObj->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    xPage.set(pModelObj->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
 }
 
@@ -2324,8 +2324,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167386_copy_paste_textbox)
     createScDoc();
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xPage->getCount());
 
     // Insert a textbox
@@ -2424,8 +2424,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf166767)
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
 }
 
@@ -2455,8 +2455,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167901)
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(1),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getDrawPageByIndex(1),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
 }
 
@@ -2475,8 +2475,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf159174)
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xPage->getCount());
 }
 

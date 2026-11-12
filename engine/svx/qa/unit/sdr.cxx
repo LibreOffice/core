@@ -93,8 +93,7 @@ insertReflectedShape(const uno::Reference<lang::XComponent>& xComponent,
     xShape->setSize(awt::Size(5000, 4000));
     xComponent.queryThrow<drawing::XDrawPagesSupplier>()
         ->getDrawPages()
-        ->getByIndex(0)
-        .queryThrow<drawing::XShapes>()
+        ->getDrawPageByIndex(0)
         ->add(xShape);
 
     auto xProperties = xShape.queryThrow<beans::XPropertySet>();
@@ -142,8 +141,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     // Load a document containing a custom shape.
     loadFromFile(u"shadow-scale-origin.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
         = renderPageToPrimitives(xDrawPage);
 
@@ -169,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
     {
         // Page 1 contains 9 shapes with each shadow alignment
         uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+            xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
         drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
             = renderPageToPrimitives(xDrawPage);
 
@@ -212,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
     {
         // Page 2 contains a table with shadow alignment center
         uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY);
+            xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
         drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
             = renderPageToPrimitives(xDrawPage);
 
@@ -234,8 +232,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
     // Load a document containing a 0-width shape with text.
     loadFromFile(u"0-width-text-wrap.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
         = renderPageToPrimitives(xDrawPage);
 
@@ -254,8 +251,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
     // Given a document with a slide what has a linked background image:
     loadFromFile(u"slide-background.odp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // Allow link updates and resolve the linked background image via the
     // LinkManager before rendering, so createNewSdrFillGraphicAttribute
@@ -292,8 +288,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testMediaLinkNotFetchedWhenUpdatesDisallowed)
     // the media stored inside the document.
     loadFromFile(u"media-link.fodp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     auto* pSvxDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pSvxDrawPage);
     auto* pMedia = dynamic_cast<SdrMediaObj*>(pSvxDrawPage->GetSdrPage()->GetObj(0));
@@ -322,8 +317,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testMediaLinkPickedByUserIsFetched)
 {
     loadFromFile(u"media-link.fodp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     auto* pSvxDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pSvxDrawPage);
     auto* pMedia = dynamic_cast<SdrMediaObj*>(pSvxDrawPage->GetSdrPage()->GetObj(0));
@@ -346,8 +340,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testMediaSettingsKeptWithoutPlayer)
     // The media file does not exist, so no player can play it.
     loadFromFile(u"media-link.fodp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     auto* pSvxDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pSvxDrawPage);
     SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
@@ -384,7 +377,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, test3DRotatedText)
 
     // verify the camera rotation was imported correctly
     auto xDrawPages = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()->getDrawPages();
-    auto xDrawPage = xDrawPages->getByIndex(0).queryThrow<drawing::XDrawPage>();
+    auto xDrawPage = xDrawPages->getDrawPageByIndex(0);
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pDrawPage);
     auto* pSdrTextObj = static_cast<SdrTextObj*>(pDrawPage->GetSdrPage()->GetObj(0));
@@ -437,8 +430,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testGraphicClipPolyPolygonIsPainted)
     xShape->setSize(awt::Size(5000, 4000));
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
     xDrawPage.queryThrow<drawing::XShapes>()->add(xShape);
 
     drawing::PolyPolygonBezierCoords aClip;
@@ -480,8 +472,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testGraphicClipPolyPolygonFollowsAFlip)
     xShape->setSize(awt::Size(5000, 4000));
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
     xDrawPage.queryThrow<drawing::XShapes>()->add(xShape);
 
     drawing::PolyPolygonBezierCoords aClip;
@@ -516,8 +507,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfShape)
     uno::Reference<drawing::XShape> xShape = insertReflectedRectangle(mxComponent);
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
 
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
@@ -545,8 +535,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfShapeHasNoShadow)
     xShape.queryThrow<beans::XPropertySet>()->setPropertyValue(u"Shadow"_ustr, cpo::uno::Any(true));
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
 
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
@@ -563,8 +552,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfLegacyRectangle)
     insertReflectedShape(mxComponent, u"com.sun.star.drawing.RectangleShape"_ustr);
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
 
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
@@ -580,8 +568,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfLegacyEllipse)
     insertReflectedShape(mxComponent, u"com.sun.star.drawing.EllipseShape"_ustr);
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
 
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
@@ -597,8 +584,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfCopiedLegacyRectangle)
     insertReflectedShape(mxComponent, u"com.sun.star.drawing.RectangleShape"_ustr);
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pDrawPage);
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
@@ -626,8 +612,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testGlowAndSoftEdgeOfCustomShapeAreDrawnOnce)
     xShape->setSize(awt::Size(5000, 4000));
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
     xDrawPage->add(xShape);
 
     // The smiley is made of several parts: the face, the eyes and the mouth.
@@ -660,8 +645,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfCustomShapeIsDrawnOnce)
                                          { { u"Type"_ustr, cpo::uno::Any(u"smiley"_ustr) } })));
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
 
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
@@ -704,8 +688,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSignatureLineIsLightOnDarkView)
     xShape->setSize(awt::Size(10000, 10000));
     auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
                          ->getDrawPages()
-                         ->getByIndex(0)
-                         .queryThrow<drawing::XDrawPage>();
+                         ->getDrawPageByIndex(0);
     xDrawPage.queryThrow<drawing::XShapes>()->add(xShape);
     uno::Reference<graphic::XGraphic> xGraphic = svx::SignatureLineHelper::importSVG(
         u"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10mm\" height=\"10mm\" "

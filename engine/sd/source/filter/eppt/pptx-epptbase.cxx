@@ -297,8 +297,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
             }
             meLatestPageType = ePageType;
         }
-        Any aAny( mXDrawPages->getByIndex( nIndex ) );
-        aAny >>= mXDrawPage;
+        mXDrawPage = mXDrawPages->getDrawPageByIndex( nIndex );
         if ( !mXDrawPage.is() )
             break;
         if ( ePageType == NOTICE )
@@ -313,6 +312,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
         mXPagePropSet.set( mXDrawPage, UNO_QUERY );
         if ( !mXPagePropSet.is() )
             break;
+        Any aAny;
 
         // An automatic text colour becomes a concrete colour in the saved file, so it follows the
         // background the page itself carries. A page with no fill of its own counts as light here.

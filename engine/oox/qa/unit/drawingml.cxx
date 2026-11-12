@@ -87,8 +87,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraph(
         xShape->createEnumeration()->nextElement(), uno::UNO_QUERY);
@@ -110,8 +109,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testUnderlineFillOverridesInheritedFollow
     loadFromFile(u"underline-inherited-follow-text.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xShape->createEnumeration();
     uno::Reference<container::XEnumerationAccess> xParagraph;
@@ -140,8 +138,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> XPropSet(getChildShape(getChildShape(xShape, 0), 0),
@@ -160,8 +157,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
     loadFromFile(u"preset-adjust-value.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
@@ -182,8 +178,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
     loadFromFile(u"chart-data-label-char-color.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<chart2::XChartDocument> xModel(xShape->getPropertyValue(u"Model"_ustr),
                                                   uno::UNO_QUERY);
@@ -220,8 +215,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
 
     // Check the end transparency of the gradient.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Rectangle 4"_ustr, xShape->getName());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -255,8 +249,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
     loadFromFile(u"shape-text-alignment.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     sal_Int16 nParaAdjust = -1;
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"ParaAdjust"_ustr) >>= nParaAdjust);
@@ -273,8 +266,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
     loadFromFile(u"shape-text-adjust-left.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     drawing::TextHorizontalAdjust eAdjust;
     // Without the accompanying fix in place, this test would have failed with:
@@ -290,8 +282,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
     loadFromFile(u"camera-rotation-revolution.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XNamed> xShape0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xShape1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps0(xShape0, uno::UNO_QUERY);
@@ -314,8 +305,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf146534_CameraRotationRevolutionNon
     loadFromFile(u"camera-rotation-revolution-nonwps.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XNamed> xShape0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xShape1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps0(xShape0, uno::UNO_QUERY);
@@ -338,7 +328,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
     auto verify = [](const uno::Reference<lang::XComponent>& xComponent) {
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+            xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
         uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
         bool bShadow = false;
         CPPUNIT_ASSERT(xShape->getPropertyValue(u"Shadow"_ustr) >>= bShadow);
@@ -367,8 +357,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGroupShapeSmartArt)
 
     // Then make sure that the smartart is not just an empty group shape:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xSmartArt(xGroup->getByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed, because we lost all
@@ -385,8 +374,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    auto xPage = xDrawPagesSupplier->getDrawPages()->getByIndex(0);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xPage, uno::UNO_QUERY);
+    auto xDrawPage = xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0);
     uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -412,8 +400,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
 
     // Then make sure that the slide 2 shape's text color is blue, not red:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
@@ -438,7 +425,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     // Check the imported theme of the master page:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
     uno::Reference<util::XTheme> xTheme;
@@ -489,8 +476,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
     loadFromFile(u"testTdf132557_footerCustomShapes.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // Test if we were able to import the footer shapes with CustomShape service.
     uno::Reference<drawing::XShape> xShapeDateTime(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -512,8 +498,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_objPlaceholderCustomShape)
     loadFromFile(u"testTdf157019_objPlaceholderCustomShape.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // Test if we were able to import the outliner shape with CustomShape service.
     // Without the fix in place, this test would have failed with
@@ -529,8 +514,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
     loadFromFile(u"theme-tint.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCellRange> xTable;
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"Model"_ustr) >>= xTable);
@@ -573,8 +557,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
     // Then make sure that we only import theming info to the doc model if the effects are limited
     // to lum mod / off that we can handle (i.e. no tint/shade):
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // check line and fill theme color of shape1
     {
@@ -642,8 +625,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testVert270AndTextRot)
     loadFromFile(u"tdf149551_vert270AndTextRot.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
@@ -667,8 +649,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
     loadFromFile(u"tdf149551_TextRot.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
@@ -699,8 +680,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
 
     // Get ViewBox of shape
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
@@ -719,8 +699,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf139425PathWithoutGuideReferences)
     loadFromFile(u"tdf139425_pathWithoutGuideReferences.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
@@ -741,8 +720,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontTheme)
 
     // Get shape and its properties
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
 
@@ -764,8 +742,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontText)
 
     // Get shape and its properties
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
 
@@ -787,8 +764,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testToplevelLineHorOffsetDOCX)
 
     // When checking the transform and the points of the shape:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     drawing::HomogenMatrix3 aTransformation;
     xShape->getPropertyValue(u"Transformation"_ustr) >>= aTransformation;
@@ -837,8 +813,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testDOCXVerticalLineRotation)
 
     // Then make sure the vertical line shape has no rotation:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nRotateAngle{};
     xShape->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle;
@@ -858,8 +833,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyle)
     // Then make sure that the resulting shape has enough numbering rules, so adding a new paragraph
     // and increasing indent results in correct behavior of 1499 mm100 / 1.5cm indent:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xShapeText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xShapeText->createEnumeration();
@@ -885,7 +859,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyle)
     // Also check that the master slide's outliner has the correct numbering rules:
     uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xMasterPage(
-        xMasterPagesSupplier->getMasterPages()->getByIndex(0), uno::UNO_QUERY);
+        xMasterPagesSupplier->getMasterPages()->getDrawPageByIndex(0));
     // First would be the title shape.
     uno::Reference<text::XTextRange> xMasterShape(xMasterPage->getByIndex(1), uno::UNO_QUERY);
     xShapeText.set(xMasterShape->getText(), uno::UNO_QUERY);
@@ -914,8 +888,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testConnectorText)
 
     loadFromFile(u"cool15967_BasicProcess_ConnectorText.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     // Get SmartArt object, which is actually a group with 8 shapes.
     uno::Reference<drawing::XShape> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GroupShape"_ustr, xSmartArt->getShapeType());
@@ -956,8 +929,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_verticalArrow)
 
     // Make sure arrow in the diagram points down
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropSet(getChildShape(xShape, 2), uno::UNO_QUERY);
     sal_Int32 nAngle;
@@ -984,8 +956,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testUnderlineFillColorTypes)
     };
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
@@ -1029,8 +1000,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_spanColors)
     loadFromFile(u"cool16183_Funnel.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // The items are the shapes that carry the text. The expected colors are the ones the
@@ -1074,8 +1044,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_spanHueFallsToTheSmallerHue)
     loadFromFile(u"Accent2To3.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
                                                       uno::UNO_QUERY_THROW);
 
@@ -1119,8 +1088,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_hueNeverPassesRed)
     loadFromFile(u"cool16183_Cycle3Colors.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
                                                       uno::UNO_QUERY_THROW);
 
@@ -1166,8 +1134,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_cycleColors)
     loadFromFile(u"BasicCycleColorMethods.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
                                                       uno::UNO_QUERY_THROW);
 
@@ -1234,8 +1201,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_noLineWhereTheStyleGivesNone
     loadFromFile(u"BasicProcess.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
                                                       uno::UNO_QUERY_THROW);
 
@@ -1270,8 +1236,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_everyItemTakesItsOwnLineColo
     loadFromFile(u"VerticalChevronList.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
                                                       uno::UNO_QUERY_THROW);
 

@@ -89,7 +89,7 @@ uno::Reference<cpo::uno::XInterface> ScShapeObj::init()
 
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages = xDPS->getDrawPages();
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
     xShapes->add(xShape);
 

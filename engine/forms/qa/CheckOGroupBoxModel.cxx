@@ -99,8 +99,7 @@ Reference<XControlShape> createControlShape(const Reference<XComponent>& oDoc, s
 Reference<XDrawPage> getDrawPage(const Reference<XComponent>& aDoc, sal_Int32 nr)
 {
     Reference<XDrawPagesSupplier> oDPS(aDoc, UNO_QUERY);
-    Reference<XDrawPage> oDP;
-    oDPS->getDrawPages()->getByIndex(nr) >>= oDP;
+    Reference<XDrawPage> oDP = oDPS->getDrawPages()->getDrawPageByIndex(nr);
     return oDP;
 }
 

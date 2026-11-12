@@ -87,8 +87,8 @@ public:
         cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xDoc(mxComponent,
                                                                    cpo::uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDoc.is());
-        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(nPage),
-                                                           cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(nPage),
+                                                           cpo::uno::UNO_SET_THROW);
         return xPage;
     }
 

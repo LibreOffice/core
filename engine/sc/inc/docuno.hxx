@@ -469,6 +469,8 @@ public:
     virtual cpo::uno::Reference< css::drawing::XDrawPage >
                             insertNewByIndex( sal_Int32 nIndex ) override;
     virtual void   remove( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
+    virtual cpo::uno::Reference< css::drawing::XDrawPage >
+                            getDrawPageByIndex( sal_Int32 Index ) override;
 
                             /// XIndexAccess
     virtual sal_Int32 getCount() override;

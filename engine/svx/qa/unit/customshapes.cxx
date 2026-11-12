@@ -87,7 +87,7 @@ uno::Reference<drawing::XShape> CustomshapesTest::getShape(sal_uInt8 nShapeIndex
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShapeIndex), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
@@ -100,7 +100,7 @@ sal_uInt8 CustomshapesTest::countShapes()
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
     return xDrawPage->getCount();
 }
@@ -1572,8 +1572,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testConvertRingToPolygonIsSingleObject)
     mxComponent = loadFromDesktop(u"private:factory/sdraw"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
+                                             uno::UNO_SET_THROW);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.CustomShape"_ustr), uno::UNO_QUERY);
@@ -1636,7 +1636,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testExtrusionSlideBackgroundFill)
     // The shape follows a change of the slide background.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+    uno::Reference<beans::XPropertySet> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0),
                                               uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xBackground(

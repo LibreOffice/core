@@ -880,7 +880,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
         Any(sNewName));
 }
 
-void SlideSorterController::SetDocumentSlides (const Reference<container::XIndexAccess>& rxSlides)
+void SlideSorterController::SetDocumentSlides (const Reference<drawing::XDrawPages>& rxSlides)
 {
     if (mrModel.GetDocumentSlides() != rxSlides)
     {

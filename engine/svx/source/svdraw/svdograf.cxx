@@ -442,7 +442,7 @@ cpo::uno::Reference<css::lang::XComponent> SdrGrafObj::GetReplacementGraphicMode
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     if (!xDrawPages)
         return nullptr;
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0));
     SdrPage* pSdrPage = GetSdrPageFromXDrawPage(xDrawPage);
     if (!pSdrPage)
         return nullptr;

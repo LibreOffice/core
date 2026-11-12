@@ -260,7 +260,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
         }
 
         // get that DrawPage
-        uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex(0), uno::UNO_QUERY );
+        uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getDrawPageByIndex(0) );
 
         if(!xDrawPage.is())
         {
@@ -492,12 +492,12 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                     {
                         if (nPageToExport == i)
                         {
-                            uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
+                            uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getDrawPageByIndex( i ) );
                             mSelectedPages.push_back(xDrawPage);
                         }
                         else if (nPageToExport == -1)
                         {
-                            uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
+                            uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getDrawPageByIndex( i ) );
                             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
                             if (xPropSet.is())
                             {
@@ -587,7 +587,7 @@ bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor
     uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     mSelectedPages.resize( 1 );
-    mSelectedPages[0].set(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    mSelectedPages[0] = xDrawPages->getDrawPageByIndex(0);
 
     // A Writer image or embedded object, alone or several images together, is drawn from
     // its graphic. Any other selection is a collection of shapes.

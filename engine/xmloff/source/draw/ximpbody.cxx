@@ -164,8 +164,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
             for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
             {
-                cpo::uno::Any aAny(xMasterPages->getByIndex(a));
-                aAny >>= xMasterPage;
+                xMasterPage = xMasterPages->getDrawPageByIndex(a);
 
                 if(xMasterPage.is())
                 {
@@ -571,7 +570,7 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::crea
             {
                 // import this page
                 uno::Reference< drawing::XDrawPage > xNewDrawPage;
-                uno::Reference< drawing::XDrawPages > xDrawPages(GetSdImport().GetLocalDrawPages(), uno::UNO_QUERY);
+                uno::Reference< drawing::XDrawPages > xDrawPages(GetSdImport().GetLocalDrawPages());
 
                 if( !xDrawPages.is() )
                     break;
@@ -584,8 +583,7 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::crea
                 else
                 {
                     // existing page, use it
-                    cpo::uno::Any aAny(xDrawPages->getByIndex(GetSdImport().GetNewPageCount()));
-                    aAny >>= xNewDrawPage;
+                    xNewDrawPage = xDrawPages->getDrawPageByIndex(GetSdImport().GetNewPageCount());
                 }
 
                 // increment global import page counter

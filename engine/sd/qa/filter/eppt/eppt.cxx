@@ -63,7 +63,7 @@ void setMasterPageTheme(uno::Reference<lang::XComponent> const& xComponent,
 {
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
     xMasterPage->setPropertyValue(u"Theme"_ustr, cpo::uno::Any(model::theme::createXTheme(pTheme)));
 }
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
     // Check if the bitmap shape was lost.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: com.sun.star.drawing.GraphicObjectShape
@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+            xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
         uno::Reference<util::XTheme> xTheme(xMasterPage->getPropertyValue(u"Theme"_ustr),
                                             uno::UNO_QUERY);

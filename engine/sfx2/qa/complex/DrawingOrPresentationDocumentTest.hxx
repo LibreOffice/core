@@ -147,7 +147,7 @@ private:
     {
         Reference<XDrawPagesSupplier> suppPages(getDocument(), UNO_QUERY);
         Reference<XDrawPages> pages = suppPages->getDrawPages();
-        return Reference<XShapes>(pages->getByIndex(0), UNO_QUERY);
+        return pages->getDrawPageByIndex(0);
     }
 
     /**

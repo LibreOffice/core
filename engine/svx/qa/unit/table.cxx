@@ -95,8 +95,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
 
     // When rendering the table shadow to primitives:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
         = renderPageToPrimitives(xDrawPage);
 
@@ -135,8 +134,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCellAnswersForTheNamesOfItsText)
     loadFromFile(u"table-shadow-blur.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xTableShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCellRange> xTable(xTableShape->getPropertyValue(u"Model"_ustr),
                                              uno::UNO_QUERY);
@@ -168,8 +166,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165521_fixedCellHeight)
 
     // When rendering the table:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
         = renderPageToPrimitives(xDrawPage);
 
@@ -220,8 +217,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
             comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(2)) };
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pDrawPage);
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
@@ -249,8 +245,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoColorOnDarkBackground)
     // Create new presentation with a table and black page background
     loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pDrawPage);
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
@@ -335,8 +330,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableLayoutWaitsForUnlock)
             comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(2)) };
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pDrawPage);
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
@@ -376,8 +370,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyCellUsesCellFontSize)
 
     // When the document is loaded, then the empty row is as high as the row with text:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XColumnRowRange> xTable(xShape->getPropertyValue(u"Model"_ustr),
                                                   uno::UNO_QUERY_THROW);

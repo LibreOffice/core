@@ -602,6 +602,7 @@ public:
     // XDrawPages
     virtual cpo::uno::Reference< css::drawing::XDrawPage > insertNewByIndex( sal_Int32 nIndex ) override;
     virtual void remove( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
+    SD_DLLPUBLIC virtual cpo::uno::Reference< css::drawing::XDrawPage > getDrawPageByIndex( sal_Int32 Index ) override;
 
     // XNameAccess
     virtual cpo::uno::Any getByName( const OUString& aName ) override;
@@ -626,7 +627,7 @@ public:
     virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
-    SD_DLLPUBLIC SdGenericDrawPage* getDrawPageByIndex( sal_Int32 Index );
+    SD_DLLPUBLIC SdGenericDrawPage* getSdDrawPageByIndex( sal_Int32 Index );
 };
 
 /***********************************************************************
@@ -645,6 +646,7 @@ public:
     // XDrawPages
     virtual cpo::uno::Reference< css::drawing::XDrawPage > insertNewByIndex( sal_Int32 nIndex ) override;
     virtual void remove( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
+    virtual cpo::uno::Reference< css::drawing::XDrawPage > getDrawPageByIndex( sal_Int32 Index ) override;
 
     // XDrawPages2
     virtual cpo::uno::Reference< ::css::drawing::XDrawPage > insertNamedNewByIndex( sal_Int32 nIndex, const OUString& sName ) override;

@@ -51,7 +51,7 @@ class SdXMLImport: public SvXMLImport
 {
     cpo::uno::Reference< css::style::XStyleFamilies > mxDocStyleFamilies;
     cpo::uno::Reference< css::drawing::XDrawPages2 > mxDocMasterPages;
-    cpo::uno::Reference< css::container::XIndexAccess > mxDocDrawPages;
+    cpo::uno::Reference< css::drawing::XDrawPages > mxDocDrawPages;
     cpo::uno::Reference< css::container::XNameAccess > mxPageLayouts;
 
     // contexts for Style and AutoStyle import
@@ -115,7 +115,7 @@ public:
     // export local parameters concerning page access and similar
     const cpo::uno::Reference< css::style::XStyleFamilies >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
     const cpo::uno::Reference< css::drawing::XDrawPages2 >& GetLocalMasterPages() const { return mxDocMasterPages; }
-    const cpo::uno::Reference< css::container::XIndexAccess >& GetLocalDrawPages() const { return mxDocDrawPages; }
+    const cpo::uno::Reference< css::drawing::XDrawPages >& GetLocalDrawPages() const { return mxDocDrawPages; }
 
     sal_Int32 GetNewPageCount() const { return mnNewPageCount; }
     void IncrementNewPageCount() { mnNewPageCount++; }

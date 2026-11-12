@@ -210,7 +210,7 @@ static cpo::uno::Reference<css::drawing::XShape> GetPDFShape(const uno::Referenc
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
     if (!xDrawPages)
         return nullptr;
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0));
     if (!xDrawPage)
         return nullptr;
     return uno::Reference<drawing::XShape>(xDrawPage->getByIndex(0), uno::UNO_QUERY);

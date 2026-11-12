@@ -1043,8 +1043,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVector3DSceneIsOneObject)
         mxComponent, cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Reference<com::sun::star::drawing::XDrawPagesSupplier> xPagesSupplier(
         xFactory, cpo::uno::UNO_QUERY_THROW);
-    cpo::uno::Reference<com::sun::star::drawing::XShapes> xPage(
-        xPagesSupplier->getDrawPages()->getByIndex(0), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<com::sun::star::drawing::XDrawPage> xPage(
+        xPagesSupplier->getDrawPages()->getDrawPageByIndex(0), cpo::uno::UNO_SET_THROW);
     cpo::uno::Reference<com::sun::star::drawing::XShape> xScene(
         xFactory->createInstance(u"com.sun.star.drawing.Shape3DSceneObject"_ustr),
         cpo::uno::UNO_QUERY_THROW);

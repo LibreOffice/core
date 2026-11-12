@@ -362,8 +362,8 @@ void SdXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& x
 
     if( mxDocDrawPages.is() && mxDocDrawPages->getCount() > 0 )
     {
-        uno::Reference< form::XFormsSupplier > xFormsSupp;
-        mxDocDrawPages->getByIndex(0) >>= xFormsSupp;
+        uno::Reference< form::XFormsSupplier > xFormsSupp(
+            mxDocDrawPages->getDrawPageByIndex(0), uno::UNO_QUERY);
         mbIsFormsSupported = xFormsSupp.is();
     }
 
@@ -520,7 +520,7 @@ void dropStaleThemeColorsOfDocument(const uno::Reference<frame::XModel>& xModel)
     {
         for (sal_Int32 i = 0; i < xPages->getCount(); ++i)
         {
-            uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(i), uno::UNO_QUERY_THROW);
+            uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(i));
             // A shape takes the theme of its master page, or else the one of the document. A
             // master page is not a master page target, and its shapes take its own theme.
             uno::Reference<drawing::XMasterPageTarget> xTarget(xPage, uno::UNO_QUERY);

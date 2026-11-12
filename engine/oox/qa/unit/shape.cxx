@@ -87,8 +87,7 @@ uno::Reference<drawing::XShape> OoxShapeTest::getShapeByName(std::u16string_view
     uno::Reference<drawing::XShape> xRet;
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
     {
         uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
@@ -107,8 +106,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testConnectorConnection)
     loadFromFile(u"connectorConnection.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     uno::Reference<drawing::XShape> xConnector(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xConnectorProps(xConnector, uno::UNO_QUERY);
@@ -136,8 +134,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testElbowConnectors)
 
     sal_Int32 nEdgeLineDelta;
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     uno::Reference<drawing::XShape> xShape1(xDrawPage->getByIndex(2), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
@@ -160,8 +157,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf154074FreeConnector)
     loadFromFile(u"tdf154074_freeConnector.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // Assert that the connector's edge track is exactly the authored elbow. Checking the point
     // positions (not just the point count) is essential: for the both-ends-unconnected bentConnector3
@@ -205,8 +201,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCurvedConnectors)
 
     sal_Int32 nEdgeLineDelta;
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     uno::Reference<drawing::XShape> xShape1(xDrawPage->getByIndex(2), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
@@ -230,8 +225,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsECMA)
     loadFromFile(u"tdf165180_standardConnectorsECMA.potx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // The two bentConnector3 are not connected to a shape at either end, so their pre-authored path
     // is kept as-is (imposed directly) rather than re-routed, and no EdgeLine deltas are used
@@ -269,8 +263,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsISO29500)
     loadFromFile(u"tdf165180_standardConnectorsISO29500.potx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // The two bentConnector3 are not connected to a shape at either end, so their pre-authored path
     // is kept as-is (imposed directly) rather than re-routed, and no EdgeLine deltas are used
@@ -308,8 +301,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf164623)
     loadFromFile(u"tdf164623.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     sal_Int32 nEdgeLineDelta;
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(2), uno::UNO_QUERY);
@@ -349,8 +341,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
     loadFromFile(u"tdf141463_GroupTransform.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(getChildShape(xGroup, 0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
@@ -384,8 +375,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
     loadFromFile(u"multiple-group-shapes.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 1
@@ -398,8 +388,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCustomshapePosition)
     loadFromFile(u"customshape-position.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     sal_Int32 nY{};
@@ -421,8 +410,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
     loadFromFile(u"tdf125582_TextOnCircle.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
@@ -530,8 +518,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     // get SmartArt
     loadFromFile(u"tdf54095_SmartArtThemeTextColor.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<drawing::XShapes> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // shape 0 is the background shape without text
     uno::Reference<text::XTextRange> xShape(xSmartArt->getByIndex(1), uno::UNO_QUERY);
@@ -567,8 +554,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
     // This test covers some basic properties.
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // Is it a Fontwork?
@@ -643,8 +629,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
     // This test covers whether theme color properties are correctly converted on import.
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // Fill
@@ -691,8 +676,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
     // This test covers some aspects of import of gradient fill.
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // linear gradient, MSO UI 21deg
     {
@@ -774,8 +758,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkNonAccentColor)
     // and "Text 2".
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // The ID for the theme colors is not yet in API, but defined in enum PredefinedClrSchemeID
     // in drawingml/clrscheme.hxx. Without fix the ID was -1 meaning no theme is used, and the color
@@ -817,8 +800,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
     // order as fill color.
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // The ID for the theme colors is not yet in API, but defined in enum PredefinedClrSchemeID
     // in drawingml/clrscheme.hxx. Without fix the ID was -1 meaning no theme is used.
@@ -845,8 +827,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkDarkenTransparency)
     // the darkening was applied twice, once from w:color and the other time from w14:textFill.
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // Without the fix in place the test would have failed with
@@ -864,8 +845,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
     // This test covers several aspects of import of gradient fill.
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // linear gradient, MSO UI 21deg, solid transparency on outline
     {
@@ -1000,8 +980,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtBitmapFill)
     loadFromFile(u"tdf139618_WordArtBitmapFill.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_BITMAP),
                          xShapeProps->getPropertyValue(u"FillStyle"_ustr));
@@ -1034,8 +1013,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtDefaultColor)
     loadFromFile(u"tdf155327_WordArtDefaultColor.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(drawing::FillStyle_SOLID),
                          xShapeProps->getPropertyValue(u"FillStyle"_ustr));
@@ -1050,8 +1028,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGlowOnGroup)
     // Without the fix, the children of the group were not imported at all.
     loadFromFile(u"tdf156902_GlowOnGroup.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroup->getCount());
 }
@@ -1061,8 +1038,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_funnel)
     // OOXMl allows that a guide name starts with a digit. LO had interpreted this a number.
     loadFromFile(u"tdf144742_funnel.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
@@ -1113,8 +1089,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_mathEqual)
     // were outside the frame rect. The test shapes have handles that need to be clamped.
     loadFromFile(u"tdf144742_mathEqual_mathNotEqual.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // Verify that drawing height is clamped to frame height, here 10cm = 10000 of 1/100mm.
     // The values of the bounding rectangle vary slightly depending on the device.
@@ -1140,8 +1115,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf170095SoftEdge3D)
 
     // Then make sure the shape has no soft edge:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nSoftEdgeRad{};
     xShape->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nSoftEdgeRad;
@@ -1158,8 +1132,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testPieTextArea)
     // waiting for a fix by ISO.
     loadFromFile(u"tdf149918_pie_textarea.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     auto xShape = xDrawPage->getByIndex(0).query<drawing::XShape>();
     auto& rSdrCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
@@ -1211,8 +1184,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testReflectionImport)
 {
     loadFromFile(u"reflection.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // The preset with a small blur: 6350 EMU of blur is 18 hundredths of a millimeter, and an end
     // alpha of 0.3% rounds to a fully transparent end.

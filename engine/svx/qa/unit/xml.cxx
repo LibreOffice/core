@@ -36,8 +36,7 @@ CPPUNIT_TEST_FIXTURE(Test, test3DObjectFallback)
     // Load a document which has a 3D model we don't understand, but has a fallback PNG.
     loadFromFile(u"3d-object-fallback.odp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
     xShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
