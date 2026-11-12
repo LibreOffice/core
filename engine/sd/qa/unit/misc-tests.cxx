@@ -2113,6 +2113,34 @@ void SdMiscTest::testSlideLinkListKeepsOnlyReadableLinks()
     CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr, aLinks[0].maLastModifiedTime);
 }
 
+// The dump of a model says what a page is: the layout it follows and the places that layout
+// keeps for the title and for the text of a slide.
+CPPUNIT_TEST_FIXTURE(SdMiscTest, testModelDumpTellsWhatAPageIs)
+{
+    // Given a presentation whose page is laid out with a title and an outline:
+    createSdImpressDoc();
+    uno::Reference<drawing::XDrawPages> xPages(
+        uno::Reference<drawing::XDrawPagesSupplier>(mxComponent, uno::UNO_QUERY_THROW)
+            ->getDrawPages(),
+        uno::UNO_SET_THROW);
+    uno::Reference<beans::XPropertySet>(xPages->getByIndex(0), uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"Layout"_ustr, uno::Any(sal_Int16(AUTOLAYOUT_TITLE_CONTENT)));
+
+    xmlDocUniquePtr pXmlDoc = parseModelDump();
+
+    // Then the dump of the model names the layout of the page and the kind of place each of its
+    // shapes stands in.
+    static constexpr OString aSlide = "(//maPages/SdPage[@mePageKind='PageKind::Standard'])[1]"_ostr;
+    CPPUNIT_ASSERT(!getXPath(pXmlDoc, aSlide, "maLayoutName").isEmpty());
+    assertXPath(pXmlDoc, aSlide + "/maPresentationShapeList/presentationObject[@kind='title']", 1);
+    assertXPath(pXmlDoc, aSlide + "/maPresentationShapeList/presentationObject[@kind='outline']",
+                1);
+
+    // The page a slide keeps its notes on is in the dump as well, under what it is.
+    CPPUNIT_ASSERT_GREATER(
+        0, countXPathNodes(pXmlDoc, "//maPages/SdPage[@mePageKind='PageKind::Notes']"_ostr));
+}
+
 CPPUNIT_TEST_FIXTURE(SdMiscTest, testCanvasPreviewTransformRoundTrip)
 {
     createSdImpressDoc();

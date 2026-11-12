@@ -683,6 +683,34 @@ void SdPage::getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const
     }
 }
 
+/** The name a kind of presentation object goes by, for the dump of a page. */
+static const char* presObjKindName(PresObjKind eKind)
+{
+    switch (eKind)
+    {
+        case PresObjKind::NONE: return "none";
+        case PresObjKind::Title: return "title";
+        case PresObjKind::Outline: return "outline";
+        case PresObjKind::Text: return "text";
+        case PresObjKind::Graphic: return "graphic";
+        case PresObjKind::Object: return "object";
+        case PresObjKind::Chart: return "chart";
+        case PresObjKind::OrgChart: return "orgchart";
+        case PresObjKind::Table: return "table";
+        case PresObjKind::Page: return "page";
+        case PresObjKind::Handout: return "handout";
+        case PresObjKind::Notes: return "notes";
+        case PresObjKind::PagePreview: return "pagepreview";
+        case PresObjKind::Header: return "header";
+        case PresObjKind::Footer: return "footer";
+        case PresObjKind::DateTime: return "datetime";
+        case PresObjKind::SlideNumber: return "slidenumber";
+        case PresObjKind::Calc: return "calc";
+        case PresObjKind::Media: return "media";
+    }
+    return "unknown";
+}
+
 void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdPage"));
@@ -702,6 +730,29 @@ void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
     if (pPageKind)
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mePageKind"), BAD_CAST(pPageKind));
+
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"),
+                                      BAD_CAST(GetName().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maLayoutName"),
+                                      BAD_CAST(maLayoutName.toUtf8().getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("meAutoLayout"), "%d",
+                                            int(meAutoLayout));
+
+    // The shapes of the page that stand in a place the layout keeps for them, each under the
+    // kind of place it is, which is what tells a title from a footer.
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("maPresentationShapeList"));
+    for (SdrObject* pShape : maPresentationShapeList.getList())
+    {
+        if (!pShape)
+            continue;
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("presentationObject"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("kind"),
+                                          BAD_CAST(presObjKindName(GetPresObjKind(pShape))));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nOrdNum"), "%" SAL_PRIuUINT32,
+                                                pShape->GetOrdNumDirect());
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+    (void)xmlTextWriterEndElement(pWriter);
 
     FmFormPage::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);

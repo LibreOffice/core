@@ -10,6 +10,9 @@
 #pragma once
 
 #include <memory>
+
+#include <libxml/parser.h>
+#include <libxml/xmlwriter.h>
 #include <string_view>
 
 #include <test/unoapixml_test.hxx>
@@ -202,6 +205,26 @@ public:
         cpo::uno::Reference<css::text::XTextField> xField;
         xPropSet->getPropertyValue(u"TextField"_ustr) >>= xField;
         return xField;
+    }
+
+    /** The model of the document as its dump writes it, which is what lands in model.xml. */
+    xmlDocUniquePtr parseModelDump() const
+    {
+        SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pDocument);
+
+        xmlBufferPtr pBuffer = xmlBufferCreate();
+        xmlTextWriterPtr pWriter = xmlNewTextWriterMemory(pBuffer, 0);
+        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        pDocument->GetDoc()->dumpAsXml(pWriter);
+        (void)xmlTextWriterEndDocument(pWriter);
+        xmlFreeTextWriter(pWriter);
+
+        xmlDocUniquePtr pXmlDoc(xmlParseDoc(xmlBufferContent(pBuffer)));
+        xmlBufferFree(pBuffer);
+        CPPUNIT_ASSERT(pXmlDoc);
+
+        return pXmlDoc;
     }
 
     xmlDocUniquePtr parseLayout() const
