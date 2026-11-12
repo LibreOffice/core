@@ -34,7 +34,7 @@ class ContentControlDropdownSubSection extends HTMLObjectSection {
 		object: any,
 		data: any,
 		builder: any,
-	): void {
+	): boolean {
 		var fireEvent: string = 'jsdialog';
 		if ((<any>window).mode.isSmallScreenDevice()) {
 			fireEvent = 'mobilewizard';
@@ -54,7 +54,15 @@ class ContentControlDropdownSubSection extends HTMLObjectSection {
 				'contentcontrolevent type=drop-down selected=' + data,
 			);
 			app.map.fire(fireEvent, { data: closeDropdownJson, callback: undefined });
+		} else if (
+			eventType === 'keydown' &&
+			(object.key === 'Escape' || object.key === 'Tab')
+		) {
+			// back to the text, nothing chosen
+			app.map.fire(fireEvent, { data: closeDropdownJson, callback: undefined });
+			return true;
 		}
+		return false;
 	}
 
 	private showDatePicker(): void {
@@ -93,6 +101,7 @@ class ContentControlDropdownSubSection extends HTMLObjectSection {
 							text: '',
 							enabled: true,
 							singleclickactivate: true,
+							fireKeyEvents: true, // for Escape and Tab
 						},
 					],
 					vertical: true,

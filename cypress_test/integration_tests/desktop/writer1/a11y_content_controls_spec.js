@@ -116,9 +116,49 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 		});
 	});
 
+	// the list of the drop-down list starting the second paragraph, set to big by the Alt+Down test
+	function openSizeList() {
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{downarrow}{rightarrow}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		cy.realPress('Space');
+		cy.cGet('.jsdialog-window.modalpopup .ui-treeview-entry').should(function ($entries) {
+			// small would replace big if chosen
+			expect($entries[0].ownerDocument.activeElement, 'the focus on small')
+				.to.equal($entries[0]);
+		});
+	}
+
+	function checkClosedWithNothingChosen() {
+		cy.cGet('.jsdialog-window.modalpopup').should('not.exist');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		cy.cGet('#clipboard-area').should(function ($area) {
+			expect($area[0].ownerDocument.activeElement, 'the focus back in the text')
+				.to.equal($area[0]);
+			expect($area.text(), 'nothing chosen').to.contain('big size.');
+		});
+	}
+
+	it('Escape closes the list of a drop-down list opened by Space, without choosing', function () {
+		openSizeList();
+		cy.realPress('Escape');
+		checkClosedWithNothingChosen();
+	});
+
+	it('Tab closes the list of a drop-down list opened by Space, without choosing', function () {
+		openSizeList();
+		cy.realPress('Tab');
+		checkClosedWithNothingChosen();
+	});
+
 	it('Space toggles a checkbox entered after a drop-down list', function () {
-		// out of the drop-down list the previous test chose from, into the checkbox; Ctrl stays
-		// held for the rest of a typeIntoDocument()
+		// out of the drop-down list, into the checkbox; Ctrl stays held for the rest of a
+		// typeIntoDocument()
 		helper.typeIntoDocument('{ctrl}{home}');
 		helper.typeIntoDocument('{rightarrow}'.repeat(8));
 		cy.then(function () {
