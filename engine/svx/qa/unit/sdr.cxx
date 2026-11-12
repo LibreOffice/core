@@ -9,6 +9,9 @@
 
 #include <config_features.h>
 
+#include <libxml/parser.h>
+#include <libxml/xmlwriter.h>
+
 #include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -225,6 +228,50 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         assertXPathDoubleValue(pDocument, "//shadow/transform", "xy13", -5196.75, 0.001);
         assertXPathDoubleValue(pDocument, "//shadow/transform", "xy23", -2290.35, 0.001);
     }
+}
+
+/** The model of a document as its dump writes it, which is what lands in model.xml. */
+xmlDocUniquePtr dumpModelAsXml(const SdrModel& rModel)
+{
+    xmlBufferPtr pBuffer = xmlBufferCreate();
+    xmlTextWriterPtr pWriter = xmlNewTextWriterMemory(pBuffer, 0);
+    (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+    rModel.dumpAsXml(pWriter);
+    (void)xmlTextWriterEndDocument(pWriter);
+    xmlFreeTextWriter(pWriter);
+    xmlDocUniquePtr pXmlDoc(xmlParseDoc(xmlBufferContent(pBuffer)));
+    xmlBufferFree(pBuffer);
+    return pXmlDoc;
+}
+
+// A shape is drawn with the values of the style behind it as much as with the ones it holds
+// itself, and the dump of a model carries both.
+CPPUNIT_TEST_FIXTURE(SdrTest, testModelDumpCarriesWhatAStyleGives)
+{
+    // Given a document whose shapes stand on a style:
+    loadFromFile(u"0-width-text-wrap.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    CPPUNIT_ASSERT(pSdrPage);
+
+    xmlDocUniquePtr pXmlDoc = dumpModelAsXml(pSdrPage->getSdrModelFromSdrPage());
+
+    // Then the values the shapes are given by the styles behind them stand beside the ones they
+    // hold themselves, among them the colour a shadow is drawn in, which no shape here states.
+    CPPUNIT_ASSERT_GREATER(0,
+                           countXPathNodes(pXmlDoc, "//DefaultProperties/InheritedItemSet"_ostr));
+    CPPUNIT_ASSERT_GREATER(
+        0, countXPathNodes(
+               pXmlDoc, "//InheritedItemSet/XColorItem[@whichId='SDRATTR_SHADOWCOLOR']"_ostr));
+
+    // A page states what it is drawn with and how much of it is kept free.
+    CPPUNIT_ASSERT_GREATER(
+        0, countXPathNodes(pXmlDoc, "//SdrPageProperties/SfxItemSet/XFillStyleItem"_ostr));
+    assertXPath(pXmlDoc, "(//SdrPage)[1]/borders", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)

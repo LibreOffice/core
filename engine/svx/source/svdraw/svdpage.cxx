@@ -1405,6 +1405,10 @@ void SdrPageProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPageProperties"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
+    // What the page itself is drawn with, among it the fill behind every shape on the page.
+    maProperties.dumpAsXml(pWriter);
+    maProperties.dumpInheritedAsXml(pWriter);
+
     if (mpTheme)
     {
         mpTheme->dumpAsXml(pWriter);
@@ -1948,6 +1952,11 @@ void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPage"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maGuid"),
                                       BAD_CAST(maGuid.getString().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("isMasterPage"),
+                                      BAD_CAST(IsMasterPage() ? "true" : "false"));
+    if (TRG_HasMasterPage())
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("masterPage"), "%" SAL_PRIuUINT32,
+                                                sal_uInt32(TRG_GetMasterPage().GetPageNum()));
     SdrObjList::dumpAsXml(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("width"));
@@ -1957,6 +1966,18 @@ void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("height"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%s",
                                             BAD_CAST(OString::number(mnHeight).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    // The margins of the page, which is the area the text of a page is laid out in.
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("borders"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("left"), "%" SAL_PRIdINT32,
+                                            GetLeftBorder());
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("upper"), "%" SAL_PRIdINT32,
+                                            GetUpperBorder());
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("right"), "%" SAL_PRIdINT32,
+                                            GetRightBorder());
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("lower"), "%" SAL_PRIdINT32,
+                                            GetLowerBorder());
     (void)xmlTextWriterEndElement(pWriter);
 
     if (mpSdrPageProperties)

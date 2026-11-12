@@ -1383,6 +1383,27 @@ SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
                 : SfxItemSet(*GetPool(), GetRanges());
 }
 
+void SfxItemSet::dumpInheritedAsXml(xmlTextWriterPtr pWriter) const
+{
+    if (!GetParent())
+        return;
+
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("InheritedItemSet");
+    SfxWhichIter aIter(*this);
+    for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich != 0; nWhich = aIter.NextWhich())
+    {
+        if (aIter.GetItemState(false) == SfxItemState::SET)
+            continue;
+
+        const SfxPoolItem* pItem = nullptr;
+        if (aIter.GetItemState(true, &pItem) == SfxItemState::SET && pItem
+            && !IsInvalidItem(pItem))
+            pItem->dumpAsXml(pWriter);
+    }
+    aWriter.endElement();
+}
+
 void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     tools::XmlWriter aWriter(pWriter);

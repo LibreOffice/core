@@ -271,6 +271,11 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
+    /** Writes the items this set does not hold itself and takes from the set behind it, which is
+        where the values an object is given by its style are kept. Writes nothing where there is
+        no set behind this one. */
+    void dumpInheritedAsXml(xmlTextWriterPtr pWriter) const;
+
 private:
     // split version(s) of ClearSingleItemImpl for input type WhichID
     sal_uInt16 ClearSingleItem_ForWhichID( sal_uInt16 nWhich );

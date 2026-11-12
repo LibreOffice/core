@@ -244,6 +244,9 @@ namespace sdr::properties
             if (moItemSet)
             {
                 moItemSet->dumpAsXml(pWriter);
+                // The values the object does not hold itself and is given by the style behind it,
+                // which is where most of what a shape looks like is kept.
+                moItemSet->dumpInheritedAsXml(pWriter);
             }
             (void)xmlTextWriterEndElement(pWriter);
         }
