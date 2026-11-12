@@ -16,16 +16,20 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <basegfx/color/bcolormodifier.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -281,6 +285,55 @@ public:
                                aOutside.GetBlue() < 50);
     }
 
+    // An opaque bitmap whose colors are all replaced by one color, as the shadow of an opaque image
+    // is, paints that color over the whole area of the bitmap.
+    void testOpaqueBitmapReplacedColorFillsBitmapArea()
+    {
+        geometry::ViewInformation2D aView;
+        aView.setUseAntiAliasing(false);
+        std::unique_ptr<processor2d::BaseProcessor2D> pProcessor(
+            processor2d::createPixelProcessor2DFromScratch(aView, 100, 100, /*bUseRGBA=*/true));
+        if (!pProcessor)
+            return;
+
+        // A red bitmap without alpha.
+        Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+        aBitmap.Erase(COL_LIGHTRED);
+
+        // The bitmap covers (20, 20) - (80, 80) of the surface.
+        primitive2d::Primitive2DContainer aBitmapPrimitives{
+            rtl::Reference<primitive2d::BitmapPrimitive2D>(new primitive2d::BitmapPrimitive2D(
+                aBitmap, basegfx::utils::createScaleTranslateB2DHomMatrix(60.0, 60.0, 20.0, 20.0)))
+        };
+
+        primitive2d::Primitive2DContainer aPrimitives{
+            rtl::Reference<primitive2d::ModifiedColorPrimitive2D>(
+                new primitive2d::ModifiedColorPrimitive2D(
+                    std::move(aBitmapPrimitives),
+                    std::make_shared<basegfx::BColorModifier_replace>(COL_LIGHTBLUE.getBColor())))
+        };
+
+        pProcessor->process(aPrimitives);
+
+        Bitmap aResult(processor2d::extractBitmapFromBaseProcessor2D(pProcessor));
+        CPPUNIT_ASSERT(!aResult.IsEmpty());
+
+        BitmapScopedReadAccess aAccess(aResult);
+        CPPUNIT_ASSERT(aAccess);
+
+        // The middle of the bitmap area shows the replacement color.
+        const BitmapColor aCenter(aAccess->GetColor(Point(50, 50)));
+        CPPUNIT_ASSERT_MESSAGE("replaced bitmap: center pixel blue channel high",
+                               aCenter.GetBlue() > 200);
+        CPPUNIT_ASSERT_MESSAGE("replaced bitmap: center pixel red channel low",
+                               aCenter.GetRed() < 50);
+
+        // Outside the bitmap area the surface stays unpainted.
+        const BitmapColor aOutside(aAccess->GetColor(Point(10, 10)));
+        CPPUNIT_ASSERT_MESSAGE("replaced bitmap: outside pixel must remain unpainted",
+                               aOutside.GetBlue() < 50);
+    }
+
     // A graphic rotated by exactly 45 degrees lost its crop: the per-axis
     // object scale came from the transform applied to the vector (1, 1),
     // whose x component is zero at that angle.
@@ -346,6 +399,7 @@ public:
     CPPUNIT_TEST(testFarDownShapeFillPaints);
     CPPUNIT_TEST(testFarDownShapeStrokePaints);
     CPPUNIT_TEST(testFarDownShapeHairlinePaints);
+    CPPUNIT_TEST(testOpaqueBitmapReplacedColorFillsBitmapArea);
     CPPUNIT_TEST(testCropSurvivesRotation);
     CPPUNIT_TEST_SUITE_END();
 };
