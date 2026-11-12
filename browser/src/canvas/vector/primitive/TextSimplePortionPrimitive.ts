@@ -35,6 +35,12 @@ namespace cool {
 	export interface TextSimplePortionPrimitive extends Primitive {
 		type: typeof TextSimplePortionPrimitive.type;
 		text?: string;
+		/// The number of the text among the distinct texts of the entry, when the entry
+		/// carries each of them once.
+		textId?: number;
+		/// As received, the textId of the portion of the same entry that carries the text
+		/// of this one. This portion has the same text as that portion.
+		textRef?: number;
 		textPosition?: number;
 		textLength?: number;
 		matrix?: number[];

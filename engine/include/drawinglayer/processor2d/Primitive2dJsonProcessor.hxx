@@ -184,6 +184,16 @@ public:
     /// by its own id. nullptr writes every font by its own id.
     void setFontIds(const std::map<sal_uInt64, sal_uInt64>* pFontIds) { mpFontIds = pFontIds; }
 
+    /// Write each distinct string of the text portions once, among the portions written from
+    /// here on until the next call. The first portion with a string writes it as "text" and
+    /// gives it a number as "textId", counted from zero in the order the strings are written. A
+    /// later portion with an equal string writes that number as "textRef" in place of "text".
+    void startSharedTexts()
+    {
+        mbShareTexts = true;
+        maSharedTexts.clear();
+    }
+
 protected:
     tools::JsonWriter& getWriter() { return mrWriter; }
 
@@ -240,6 +250,9 @@ private:
     void writeGraphicColorModifiers(const GraphicAttr& rAttributes);
     void
     writeTextPortionScaled(const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rPrim);
+    /// Write the string of a text portion: as "text", or as the number of an equal string that
+    /// an earlier portion wrote.
+    void writeText(const OUString& rText);
     /// Write the font attributes of a portion: its size, colors, family, cut and face.
     void writeTextStyleFields(tools::JsonWriter& rWriter,
                               const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rPrim,
@@ -281,6 +294,11 @@ private:
     std::set<sal_Int32> maUsedTextStyles;
     ResourceUsage* mpResourceUsage = nullptr;
     const std::map<sal_uInt64, sal_uInt64>* mpFontIds = nullptr;
+    /// True when a portion names an equal string of an earlier portion by its number.
+    bool mbShareTexts = false;
+    /// The distinct strings of the portions written since the shared texts were last started.
+    /// The index of a string is the number it is named by.
+    std::vector<OUString> maSharedTexts;
 };
 
 } // namespace drawinglayer

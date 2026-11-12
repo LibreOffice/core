@@ -337,6 +337,8 @@ void PartStore::writeEntry(tools::JsonWriter& rWriter, const RecordedEntry& rRec
     // An entry that only moved goes without primitives, and the reader keeps the ones it has.
     if (bDrawing)
     {
+        // The portions of a paragraph show ranges of one string, which the entry writes once.
+        rProcessor.startSharedTexts();
         auto aPrimitives = rWriter.startArray("primitives");
         rProcessor.decomposeAndWrite(rEntry.maPrimitives);
     }

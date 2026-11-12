@@ -3883,6 +3883,118 @@ describe('ImpressVectorManager', function () {
 			nodeassert.strictEqual(textOf(manager), 'Hello');
 		});
 
+		// The text frame 96 with its paragraph as three portions. The first one carries the
+		// string and its number, and the other two name that number. The last one lies inside
+		// a group.
+		function frameWithSharedText(text: string): any {
+			const entry = frame(text);
+			const first = entry.primitives[0];
+			const third = text.length / 3;
+			entry.primitives = [
+				{ ...first, textId: 0, textLength: third },
+				{
+					...first,
+					text: undefined,
+					textRef: 0,
+					textPosition: third,
+					textLength: third,
+					weight: 7,
+				},
+				{
+					type: 'group',
+					children: [
+						{
+							...first,
+							text: undefined,
+							textRef: 0,
+							textPosition: 2 * third,
+							textLength: third,
+						},
+					],
+				},
+			];
+			return entry;
+		}
+
+		// The portions of the text frame 96, in the order they are drawn.
+		function portionsOf(manager: WriterVectorManager): any[] {
+			const data: any = manager.requestTextPage('7');
+			const primitives = data.objects.get(96).primitives;
+			return [primitives[0], primitives[1], primitives[2].children[0]];
+		}
+
+		it('gives every portion of a paragraph the string the page carries once', function () {
+			const manager = new WriterTestManager();
+			manager.handleVectorPrimitivesResponse({
+				partId: '7',
+				coordinates: 'entry',
+				version: 1,
+				objects: [page, frameWithSharedText('plain bold text')],
+			});
+
+			const portions = portionsOf(manager);
+			for (const portion of portions)
+				nodeassert.strictEqual(portion.text, 'plain bold text');
+			// Each portion keeps its own range of the string.
+			nodeassert.deepStrictEqual(
+				portions.map((portion) => portion.textPosition),
+				[0, 5, 10],
+			);
+		});
+
+		it('gives a portion its string when the portion that carries it comes later', function () {
+			const manager = new WriterTestManager();
+			const entry = frameWithSharedText('plain bold text');
+			entry.primitives.reverse();
+			manager.handleVectorPrimitivesResponse({
+				partId: '7',
+				coordinates: 'entry',
+				version: 1,
+				objects: [page, entry],
+			});
+
+			const data: any = manager.requestTextPage('7');
+			const primitives = data.objects.get(96).primitives;
+			nodeassert.strictEqual(primitives[0].children[0].text, 'plain bold text');
+			nodeassert.strictEqual(primitives[1].text, 'plain bold text');
+		});
+
+		it('gives the portions of an entry in a delta the string the entry carries once', function () {
+			const manager = managerWith('Hello');
+
+			manager.handleVectorPrimitivesDelta({
+				partId: '7',
+				version: 2,
+				objects: [frameWithSharedText('plain bold text')],
+			});
+
+			for (const portion of portionsOf(manager))
+				nodeassert.strictEqual(portion.text, 'plain bold text');
+		});
+
+		it('keeps the filled strings of an entry that a delta only moves', function () {
+			const manager = new WriterTestManager();
+			manager.handleVectorPrimitivesResponse({
+				partId: '7',
+				coordinates: 'entry',
+				version: 1,
+				objects: [page, frameWithSharedText('plain bold text')],
+			});
+
+			// An entry that only moved comes with its box and without primitives.
+			const moved = frame('');
+			delete moved.primitives;
+			moved.y = 2400;
+			manager.handleVectorPrimitivesDelta({
+				partId: '7',
+				version: 2,
+				objects: [moved],
+			});
+
+			for (const portion of portionsOf(manager))
+				nodeassert.strictEqual(portion.text, 'plain bold text');
+		});
+
 		it('keeps a typed character over a delta from before it, once', function () {
 			const manager = managerWith('Hello');
 			manager.predictTextInsert('!');

@@ -956,6 +956,31 @@ void Primitive2dJsonProcessor::writeTextStyleFields(tools::JsonWriter& rWriter,
     }
 }
 
+void Primitive2dJsonProcessor::writeText(const OUString& rText)
+{
+    if (!mbShareTexts)
+    {
+        mrWriter.put("text", rText);
+        return;
+    }
+
+    // The portions of a paragraph follow each other, so the search starts at the newest string.
+    // Two strings of the same length that share a buffer compare equal without a look at their
+    // characters.
+    for (size_t i = maSharedTexts.size(); i > 0; --i)
+    {
+        if (maSharedTexts[i - 1] == rText)
+        {
+            mrWriter.put("textRef", i - 1);
+            return;
+        }
+    }
+
+    mrWriter.put("text", rText);
+    mrWriter.put("textId", maSharedTexts.size());
+    maSharedTexts.push_back(rText);
+}
+
 void Primitive2dJsonProcessor::writeTextPortionScaled(
     const TextSimplePortionPrimitive2D& rPrimitive)
 {
@@ -980,7 +1005,7 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         else
             putMatrix("matrix", rMatrix, MatrixKind::Glyphs);
 
-        mrWriter.put("text", rText);
+        writeText(rText);
         if (rPrimitive.getTextPosition() != 0)
             mrWriter.put("textPosition", rPrimitive.getTextPosition());
         if (rPrimitive.getTextLength() != rText.getLength() - rPrimitive.getTextPosition())
@@ -989,7 +1014,7 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
     else
     {
         putMatrix("matrix", rMatrix, MatrixKind::Glyphs);
-        mrWriter.put("text", rText);
+        writeText(rText);
         mrWriter.put("textPosition", rPrimitive.getTextPosition());
         mrWriter.put("textLength", rPrimitive.getTextLength());
         writeTextStyleFields(mrWriter, rPrimitive, fFontScaleY);

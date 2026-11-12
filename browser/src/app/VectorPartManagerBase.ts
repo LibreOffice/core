@@ -418,6 +418,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		}
 
 		const received = values.objects;
+		VectorPartManagerBase._fillSharedTexts(received);
 		const objects = new Map<number, cool.SlideObject>();
 		const arrived: number[] = [];
 		for (const object of received) {
@@ -687,6 +688,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		}
 
 		const carried = values.objects || [];
+		VectorPartManagerBase._fillSharedTexts(carried);
 		// The order is the paint order, so an object it does not name has no
 		// place to be drawn. Without a new order the part is fetched whole.
 		if (!values.order) {
@@ -767,6 +769,45 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	private _standInFor(checksum: number): HTMLImageElement | undefined {
 		const standIn = this._standIns.get(checksum);
 		return standIn === undefined ? undefined : this._bitmaps.get(standIn);
+	}
+
+	/*
+		Gives every text portion its string. An entry carries each distinct string of its portions
+		once: the first portion with the string has it as text and its number as textId, and the
+		others name that number as textRef. Each of those gets the string of that number as its
+		text, so the portions of a paragraph hold one string value, with a range each.
+	*/
+	private static _fillSharedTexts(objects: cool.SlideObject[]): void {
+		for (const object of objects) {
+			if (!object.primitives) continue;
+			// The strings of the entry by their number, and the portions that name a number
+			// ahead of the portion that carries its string.
+			const texts: string[] = [];
+			const waiting: cool.TextSimplePortionPrimitive[] = [];
+			const walk = (list: cool.Primitive[]) => {
+				for (const primitive of list) {
+					const portion = primitive as cool.TextSimplePortionPrimitive;
+					if (typeof portion.textId === 'number' && portion.text !== undefined)
+						texts[portion.textId] = portion.text;
+					if (typeof portion.textRef === 'number') {
+						const text = texts[portion.textRef];
+						if (text !== undefined) portion.text = text;
+						else waiting.push(portion);
+					}
+					if (primitive.children) walk(primitive.children);
+					const transparence = (primitive as cool.TransparencePrimitive)
+						.transparence;
+					if (Array.isArray(transparence)) walk(transparence);
+					const decorated = primitive as cool.TextDecoratedPortionPrimitive;
+					if (decorated.decorations) walk(decorated.decorations);
+					if (decorated.decorationsInTextColor)
+						walk(decorated.decorationsInTextColor);
+				}
+			};
+			walk(object.primitives);
+			for (const portion of waiting)
+				portion.text = texts[portion.textRef as number];
+		}
 	}
 
 	// The bitmaps the primitives name, in the order they are drawn.

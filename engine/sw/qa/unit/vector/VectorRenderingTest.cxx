@@ -1365,6 +1365,59 @@ const boost::property_tree::ptree* objectOf(const boost::property_tree::ptree& r
     }
     return nullptr;
 }
+
+/// The text portions written under rNode, in the order they were written.
+void collectPortions(const boost::property_tree::ptree& rNode,
+                     std::vector<const boost::property_tree::ptree*>& rPortions)
+{
+    const std::string aType = rNode.get<std::string>("type", std::string());
+    if (aType == "textSimplePortion" || aType == "textDecoratedPortion")
+        rPortions.push_back(&rNode);
+    for (const auto& rChild : rNode)
+        collectPortions(rChild.second, rPortions);
+}
+}
+
+/// A paragraph drawn as several portions is served with its string once: the first portion
+/// carries the string and its number, and the other portions name that number.
+CPPUNIT_TEST_FIXTURE(Test, testVectorParagraphStringIsServedOnce)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"plain bold plain"_ustr);
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    uno::Reference<text::XTextCursor> xCursor
+        = xParagraph->getText()->createTextCursorByRange(xParagraph->getStart());
+    xCursor->goRight(6, false);
+    xCursor->goRight(4, true);
+    uno::Reference<beans::XPropertySet>(xCursor, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
+    calcLayout();
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+    const sw::vector::Entry* pText = findEntry(aEntries, sw::vector::EntryKind::TextFrame);
+    CPPUNIT_ASSERT(pText);
+
+    boost::property_tree::ptree aPayload = requestFirstPage();
+
+    const boost::property_tree::ptree* pObject = objectOf(aPayload, pText->mnId);
+    CPPUNIT_ASSERT(pObject);
+    std::vector<const boost::property_tree::ptree*> aPortions;
+    collectPortions(pObject->get_child("primitives"), aPortions);
+    CPPUNIT_ASSERT_GREATEREQUAL(size_t(3), aPortions.size());
+
+    // The first portion carries the string of the paragraph and the number it is named by.
+    CPPUNIT_ASSERT_EQUAL(std::string("plain bold plain"),
+                         aPortions[0]->get<std::string>("text"));
+    const sal_Int64 nTextId = aPortions[0]->get<sal_Int64>("textId");
+    CPPUNIT_ASSERT(!aPortions[0]->get_child_optional("textRef"));
+
+    // Every other portion names that number and carries no string of its own.
+    for (size_t i = 1; i < aPortions.size(); ++i)
+    {
+        CPPUNIT_ASSERT(!aPortions[i]->get_child_optional("text"));
+        CPPUNIT_ASSERT(!aPortions[i]->get_child_optional("textId"));
+        CPPUNIT_ASSERT_EQUAL(nTextId, aPortions[i]->get<sal_Int64>("textRef"));
+    }
 }
 
 /// The first request for a page answers the whole page, with the page entry first and the
