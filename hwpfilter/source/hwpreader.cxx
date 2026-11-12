@@ -2911,6 +2911,7 @@ void HwpReader::make_text_p3(HWPPara* para, bool bParaStart)
     bool pstart = bParaStart;
     bool tstart = false;
     bool infield = false;
+    bool bTableInserted = false;
 
     const auto STARTP = [this, para, &pstart]() {
         mxList->addAttribute(u"text:style-name"_ustr, u"CDATA"_ustr,
@@ -2981,7 +2982,9 @@ void HwpReader::make_text_p3(HWPPara* para, bool bParaStart)
             {
                 ENDT();
             }
-            if (!pstart)
+            // A table has already terminated this paragraph
+            // Do not generate an additional empty paragraph
+            if (!pstart && !bTableInserted)
             {
                 STARTP();
             }
@@ -3114,54 +3117,89 @@ void HwpReader::make_text_p3(HWPPara* para, bool bParaStart)
                     }
                     makeTab();
                     break;
-                case CH_TEXT_BOX: /* 10 - ordered by Table/text box/formula/button/hypertext */
+                case CH_TEXT_BOX:
                 {
-                    /* produce tables first, and treat formula as being in text:p. */
                     TxtBox* hbox = static_cast<TxtBox*>(box.get());
 
-                    if (hbox->style.anchor_type == 0)
+                    if (hbox->type == TBL_TYPE)
                     {
-                        if (!pstart)
+                        // Flush pending text before inserting the table.
+                        if (!str.empty())
                         {
-                            STARTP();
+                            if (!pstart)
+                                STARTP();
+                            if (!tstart)
+                                STARTT(n);
+                            makeChars(str);
                         }
-                        if (!tstart)
+
+                        // A table must be a sibling of text:p, not its child.
+                        if (tstart)
+                            ENDT();
+
+                        if (pstart)
+                            ENDP();
+
+                        // Caption above the table.
+                        if (hbox->style.cap_len > 0 && (hbox->cap_pos % 2)
+                            && !hbox->caption.empty())
                         {
-                            STARTT(n);
+                            parsePara(hbox->caption.front().get());
                         }
-                        makeChars(str);
+
+                        // Insert the actual table directly into the document flow.
+                        makeTable(hbox);
+
+                        // Caption below the table.
+                        if (hbox->style.cap_len > 0 && !(hbox->cap_pos % 2)
+                            && !hbox->caption.empty())
+                        {
+                            parsePara(hbox->caption.front().get());
+                        }
+
+                        bTableInserted = true;
                     }
                     else
                     {
-                        if (!pstart)
+                        // Keep the existing handling for text boxes and formulas.
+                        if (hbox->style.anchor_type == 0)
                         {
-                            STARTP();
-                        }
-                        if (!str.empty())
-                        {
+                            if (!pstart)
+                                STARTP();
                             if (!tstart)
-                            {
                                 STARTT(n);
-                            }
                             makeChars(str);
                         }
-                        if (tstart)
+                        else
                         {
-                            ENDT();
+                            if (!pstart)
+                                STARTP();
+
+                            if (!str.empty())
+                            {
+                                if (!tstart)
+                                    STARTT(n);
+                                makeChars(str);
+                            }
+
+                            if (tstart)
+                                ENDT();
+                        }
+
+                        switch (hbox->type)
+                        {
+                            case TXT_TYPE:
+                            case EQU_TYPE:
+                                makeTextBox(hbox);
+                                break;
+
+                            case BUTTON_TYPE:
+                            case HYPERTEXT_TYPE:
+                                makeHyperText(hbox);
+                                break;
                         }
                     }
-                    switch (hbox->type)
-                    {
-                        case TBL_TYPE: // table
-                        case TXT_TYPE: // text box
-                        case EQU_TYPE: // formula
-                            makeTextBox(hbox);
-                            break;
-                        case BUTTON_TYPE: // text button
-                        case HYPERTEXT_TYPE: // hypertext
-                            makeHyperText(hbox);
-                            break;
-                    }
+
                     break;
                 }
                 case CH_PICTURE: // 11
