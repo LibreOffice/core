@@ -28,6 +28,15 @@ namespace cool {
 		return code >= 0xdc00 && code <= 0xdfff;
 	}
 
+	// Characters of scripts written right to left, and the controls that change the direction.
+	const rightToLeft =
+		/[\u0590-\u08ff\ufb1d-\ufdff\ufe70-\ufefc\u200e\u200f\u202a-\u202e\u2066-\u2069]/;
+
+	// True when the text has a character written right to left or a direction control.
+	export function hasRightToLeft(text: string): boolean {
+		return rightToLeft.test(text);
+	}
+
 	// The start and the length in UTF-16 units of the part of its buffer a run shows.
 	export function textWindow(run: TextSimplePortionPrimitive): {
 		start: number;

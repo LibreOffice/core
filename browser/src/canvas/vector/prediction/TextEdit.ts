@@ -14,7 +14,7 @@
  *
  * Existing glyphs keep the server's advances, and typed text is measured. The line takes the
  * change in width as its alignment places it. A line that crosses its wrap width re-wraps the
- * paragraph. Rotated runs are left to the server.
+ * paragraph. Rotated runs, and text written right to left, are left to the server.
  */
 
 namespace cool {
@@ -117,7 +117,12 @@ namespace cool {
 		/// Inserts text and returns its width, or a width of 0 when nothing changed.
 		insert(text: string): PredictedInsertion {
 			const nothing: PredictedInsertion = { advance: 0, caretShift: 0 };
-			if (!canPredictText(text)) return nothing;
+			if (
+				!canPredictText(text) ||
+				hasRightToLeft(text) ||
+				hasRightToLeft(this.run.text)
+			)
+				return nothing;
 			const paragraph = Paragraph.at(this);
 
 			// Typed text is measured and scaled to the server's measure.
@@ -149,6 +154,7 @@ namespace cool {
 				removedBefore: 0,
 				caretShift: 0,
 			};
+			if (hasRightToLeft(this.run.text)) return nothing;
 			const paragraph = Paragraph.at(this);
 
 			// In a paragraph that can re-wrap, a deletion may leave the run, so a

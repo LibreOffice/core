@@ -19,10 +19,6 @@
  */
 
 namespace cool {
-	// Characters of scripts written right to left, and the controls that change the direction.
-	const rightToLeft =
-		/[\u0590-\u08ff\ufb1d-\ufdff\ufe70-\ufefc\u200e\u200f\u202a-\u202e\u2066-\u2069]/;
-
 	// The part of Intl.Segmenter that the caret moves use, typed here for older type libraries.
 	interface Segment {
 		index: number;
@@ -86,7 +82,7 @@ namespace cool {
 		if (runs.some((run) => run.paragraph === paragraph && run.rotated))
 			return null;
 		const textRuns = paragraphTextRuns(runs, paragraph);
-		if (!textRuns.length || rightToLeft.test(textRuns[0].text)) return null;
+		if (!textRuns.length || hasRightToLeft(textRuns[0].text)) return null;
 		return textRuns;
 	}
 
@@ -311,7 +307,7 @@ namespace cool {
 
 		const run = target.run;
 		const paragraph = run.paragraph;
-		if (paragraph === undefined || rightToLeft.test(run.text)) return null;
+		if (paragraph === undefined || hasRightToLeft(run.text)) return null;
 
 		let index = nearestGraphemeBoundary(run, target.positions, x);
 		// The end of a wrapped line is the start of the next line, where the engine

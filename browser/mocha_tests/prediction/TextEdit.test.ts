@@ -69,6 +69,50 @@ describe('text prediction text edits', function () {
 		nodeassert.strictEqual(runOf(data).text, 'Hi');
 	});
 
+	it('leaves text typed right to left to the server', function () {
+		const data = makeSlide('Hi');
+		const { advance } = predictionTest.predictTextInsert(
+			data,
+			1200,
+			1800,
+			2050,
+			'\u05d0',
+			measure,
+		);
+		nodeassert.strictEqual(advance, 0);
+		nodeassert.strictEqual(runOf(data).text, 'Hi');
+	});
+
+	it('leaves typing in a paragraph written right to left to the server', function () {
+		// The prediction places text from the left, and this paragraph runs from the right.
+		const data = makeSlide('ab \u05d0\u05d1');
+		const { advance } = predictionTest.predictTextInsert(
+			data,
+			1200,
+			1800,
+			2050,
+			'c',
+			measure,
+		);
+		nodeassert.strictEqual(advance, 0);
+		nodeassert.strictEqual(runOf(data).text, 'ab \u05d0\u05d1');
+	});
+
+	it('leaves deletions in a paragraph written right to left to the server', function () {
+		const data = makeSlide('ab \u05d0\u05d1');
+		const result = predictionTest.predictTextDelete(
+			data,
+			1500,
+			1800,
+			2050,
+			1,
+			0,
+			measure,
+		);
+		nodeassert.strictEqual(result.removed, 0);
+		nodeassert.strictEqual(runOf(data).text, 'ab \u05d0\u05d1');
+	});
+
 	it('inserts in the middle of a run', function () {
 		const data = makeSlide('Helo');
 		// "Helo" spans 1000..1400. A caret at 1300 is between 'l' and 'o'.
