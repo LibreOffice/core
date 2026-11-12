@@ -2098,12 +2098,12 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushCarriesOnlyTheChangesSinceTheF
     page(1)->GetObj(0)->BroadcastObjectChange();
     page(1)->GetObj(1)->BroadcastObjectChange();
 
-    // The pull gives the page and both objects. Comparing them for the first time is what
-    // counts the part's version up, and the response carries where that left it.
+    // The pull gives the page and both objects, and the response carries the version it left
+    // the part at.
     auto aFull = getVectorPrimitives(u"testPushMark");
     CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
     const sal_Int64 nServed = aFull.getInt("/version").value_or(-1);
-    CPPUNIT_ASSERT(nServed > 0);
+    CPPUNIT_ASSERT(nServed >= 0);
 
     // The payload says which version space its versions count in.
     const sal_Int64 nEpoch = aFull.getInt("/epoch").value_or(-1);
@@ -2131,6 +2131,74 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushCarriesOnlyTheChangesSinceTheF
     auto oAfter = pushVectorPrimitivesDelta();
     CPPUNIT_ASSERT(oAfter.has_value());
     CPPUNIT_ASSERT(!oAfter->has("/type"));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushWritesNothingForAForgottenPart)
+{
+    // A push goes to the clients that hold the part. Once the last of them let the part go, a
+    // change pushes nothing, and the next client to ask is given the whole slide as it is then.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
+    SdrObject* pObject = page(1)->GetObj(0);
+
+    auto aFull = getVectorPrimitives(u"testForgottenFull");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
+    const sal_Int64 nHeld = aFull.getInt("/version").value_or(-1);
+    CPPUNIT_ASSERT(nHeld >= 0);
+
+    requestVectorPrimitivesRaw(".uno:VectorForgetPart?partid=" + firstPartId());
+
+    moveObject(pObject, Size(500, 500));
+    auto oUnheld = pushVectorPrimitivesDelta();
+    CPPUNIT_ASSERT(oUnheld.has_value());
+    CPPUNIT_ASSERT(!oUnheld->has("/type"));
+    CPPUNIT_ASSERT(!oUnheld->has("/order"));
+    CPPUNIT_ASSERT(!oUnheld->has("/objects"));
+
+    // The version from before the part was forgotten names content the part no longer knows,
+    // so the answer is the whole slide, with the object where the move left it.
+    auto aAgain = getVectorPrimitives(u"testForgottenAgain", nHeld);
+    assertJsonPath(aAgain, "/type", "vectorprimitives");
+    CPPUNIT_ASSERT(!aAgain.has("/from"));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aAgain.getSize("/objects").value_or(0));
+    const sal_Int64 nServed = aAgain.getInt("/version").value_or(-1);
+    CPPUNIT_ASSERT_GREATER(nHeld, nServed);
+    const auto oEntry = findEntryOfObject(aAgain, pObject->GetUniqueID());
+    CPPUNIT_ASSERT(oEntry.has_value());
+    CPPUNIT_ASSERT_GREATER(size_t(0), oEntry->getSize("primitives").value_or(0));
+
+    // The part is held again, so a push right after has nothing to carry and a later change
+    // is a step from the version that pull served.
+    auto oQuiet = pushVectorPrimitivesDelta();
+    CPPUNIT_ASSERT(oQuiet.has_value());
+    CPPUNIT_ASSERT(!oQuiet->has("/type"));
+
+    moveObject(pObject, Size(500, 500));
+    auto oDelta = pushVectorPrimitivesDelta();
+    CPPUNIT_ASSERT(oDelta.has_value());
+    assertJsonPath(*oDelta, "/type", "vectorprimitivesdelta");
+    assertJsonPath(*oDelta, "/from", nServed);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), oDelta->getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT(carriesObject(*oDelta, pObject->GetUniqueID()));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushWritesNothingBeforeTheFirstServe)
+{
+    // Nothing holds a part before the first response serves it, so a change before that pushes
+    // nothing and the first pull carries the whole slide.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    moveObject(page(1)->GetObj(0), Size(500, 500));
+
+    auto oUnheld = pushVectorPrimitivesDelta();
+    CPPUNIT_ASSERT(oUnheld.has_value());
+    CPPUNIT_ASSERT(!oUnheld->has("/type"));
+    CPPUNIT_ASSERT(!oUnheld->has("/objects"));
+
+    auto aFull = getVectorPrimitives(u"testUnservedFull");
+    assertJsonPath(aFull, "/type", "vectorprimitives");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditedTextAppearsInPrimitives)

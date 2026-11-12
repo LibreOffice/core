@@ -1147,7 +1147,10 @@ const SdrObjList* membersOf(const SdrObject& rObject)
             return nullptr;
         }
         // working the chart's bounds out builds its content anew, which renews the shapes on
-        // its page, so we have that done before the shapes are handed out
+        // its page, so we have that done before the shapes are handed out. a chart that no
+        // listener watches yet may have changed unseen, so its bounds are worked out anew then
+        if (!embeddingFor(pPage))
+            const_cast<SdrOle2Obj*>(pChart)->SetBoundRectDirty();
         pChart->GetCurrentBoundRect();
         if (Embedding* pEmbedding = embeddingFor(pPage))
         {

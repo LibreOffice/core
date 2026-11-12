@@ -2798,6 +2798,20 @@ void keepVersionsOnly(SdXImpressDocument::VectorPartState& rState)
     rState = std::move(aKept);
 }
 
+/// The state of the part of rPage while a client may hold the part, and nullptr for a part that
+/// no answer served yet or that was forgotten since. The first answer for such a part carries
+/// the whole part and builds every entry from the document, so a change is recorded only for a
+/// part that is served.
+SdXImpressDocument::VectorPartState* servedPartOf(
+    std::unordered_map<tools::Guid, SdXImpressDocument::VectorPartState>& rVectorParts,
+    const SdrPage& rPage)
+{
+    const auto aIterator = rVectorParts.find(vectorPartKeyOf(rPage));
+    if (aIterator == rVectorParts.end() || !aIterator->second.maVersions.isServed())
+        return nullptr;
+    return &aIterator->second;
+}
+
 // A slide's presentation info changed, so tell every view of the document.
 // The payload names the reason and the changed part.
 void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell, sal_Int32 nPart)
@@ -2835,6 +2849,10 @@ void recordSlidePreviewChange(
     if (!pNotesPage || !pSlide)
         return;
 
+    SdXImpressDocument::VectorPartState* pState = servedPartOf(rVectorParts, *pNotesPage);
+    if (!pState)
+        return;
+
     // Every page object on the notes page that shows the slide, whether or not it is the one
     // the layout placed there.
     bool bShown = false;
@@ -2843,8 +2861,7 @@ void recordSlidePreviewChange(
         const auto* pPageObject = dynamic_cast<const SdrPageObj*>(pNotesPage->GetObj(i));
         if (!pPageObject || pPageObject->GetReferencedPage() != pSlide)
             continue;
-        rVectorParts[vectorPartKeyOf(*pNotesPage)].maDirtyObjects.insert(
-            pPageObject->GetUniqueID());
+        pState->maDirtyObjects.insert(pPageObject->GetUniqueID());
         bShown = true;
     }
     if (bShown)
@@ -2872,27 +2889,29 @@ void bumpMasterChangeForUsers(
         if (pUserPage && pUserPage->TRG_HasMasterPage()
             && &pUserPage->TRG_GetMasterPage() == pMasterPage)
         {
-            SdXImpressDocument::VectorPartState& rState
-                = rVectorParts[vectorPartKeyOf(*pUserPage)];
-            if (pChangedObject)
+            if (SdXImpressDocument::VectorPartState* pState
+                = servedPartOf(rVectorParts, *pUserPage))
             {
-                // A slide draws its master from the master part, so a changed master object
-                // reaches it through that part. What the slide carries of the master is its
-                // own copy of each placeholder that reads differently on each slide, so the
-                // changed object is looked at again on the slide and the version moves only
-                // when such a copy changed. A notes page still carries its master inline, so
-                // its version moves outright.
-                if (nMode != constVectorModeSlides)
-                    recordMasterChange(rState);
-                markSubtreeDirty(rState, pChangedObject);
+                if (pChangedObject)
+                {
+                    // A slide draws its master from the master part, so a changed master
+                    // object reaches it through that part. What the slide carries of the
+                    // master is its own copy of each placeholder that reads differently on
+                    // each slide, so the changed object is looked at again on the slide and
+                    // the version moves only when such a copy changed. A notes page still
+                    // carries its master inline, so its version moves outright.
+                    if (nMode != constVectorModeSlides)
+                        recordMasterChange(*pState);
+                    markSubtreeDirty(*pState, pChangedObject);
+                }
+                else
+                {
+                    // The master's own properties changed. Its background travels with the
+                    // page entry of every page that uses it.
+                    recordMasterChange(*pState);
+                }
+                notifyViewsVectorPartChanged(pDocShell, *pUserPage, nMode);
             }
-            else
-            {
-                // The master's own properties changed. Its background travels with the page
-                // entry of every page that uses it.
-                recordMasterChange(rState);
-            }
-            notifyViewsVectorPartChanged(pDocShell, *pUserPage, nMode);
             if (nMode == constVectorModeSlides)
                 recordSlidePreviewChange(rDocument, pDocShell, rVectorParts, nPage);
         }
@@ -3039,10 +3058,12 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                         if (pPage->GetPageKind() == PageKind::Standard)
                         {
-                            recordObjectChange(maVectorParts[vectorPartKeyOf(*pPage)], pObject,
-                                               eKind);
-                            notifyViewsVectorPartChanged(mpDocShell, *pPage,
-                                                         constVectorModeMasterPages);
+                            if (VectorPartState* pState = servedPartOf(maVectorParts, *pPage))
+                            {
+                                recordObjectChange(*pState, pObject, eKind);
+                                notifyViewsVectorPartChanged(mpDocShell, *pPage,
+                                                             constVectorModeMasterPages);
+                            }
                         }
                     }
                     else if (const auto oPart = partAndModeOfPage(pPage))
@@ -3052,8 +3073,11 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         if (oPart->mnMode == constVectorModeSlides)
                             sd::SlideLink::BreakOnEdit(*mpDoc, oPart->mnPart);
 
-                        recordObjectChange(maVectorParts[vectorPartKeyOf(*pPage)], pObject, eKind);
-                        notifyViewsVectorPartChanged(mpDocShell, *pPage, oPart->mnMode);
+                        if (VectorPartState* pState = servedPartOf(maVectorParts, *pPage))
+                        {
+                            recordObjectChange(*pState, pObject, eKind);
+                            notifyViewsVectorPartChanged(mpDocShell, *pPage, oPart->mnMode);
+                        }
 
                         // An animated image came, went or moved, so
                         // re-send the presentation info. A move arrives
@@ -3081,12 +3105,13 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     const SdPage* pPage
                         = dynamic_cast<const SdPage*>(pObject->getSdrPageFromSdrObject());
-                    if (const auto oPart = partAndModeOfPage(pPage))
+                    const auto oPart = partAndModeOfPage(pPage);
+                    VectorPartState* pState
+                        = oPart ? servedPartOf(maVectorParts, *pPage) : nullptr;
+                    if (pState)
                     {
-                        SdXImpressDocument::VectorPartState& rState
-                            = maVectorParts[vectorPartKeyOf(*pPage)];
-                        rState.maVersions.countUpOrder();
-                        recordObjectChange(rState, pObject, SdrHintKind::ObjectChange);
+                        pState->maVersions.countUpOrder();
+                        recordObjectChange(*pState, pObject, SdrHintKind::ObjectChange);
                         notifyViewsVectorPartChanged(mpDocShell, *pPage, oPart->mnMode);
                     }
                 }
@@ -3117,20 +3142,22 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // background is part of its own master-page content.
                     if (pPage->GetPageKind() == PageKind::Standard)
                     {
-                        SdXImpressDocument::VectorPartState& rState
-                            = maVectorParts[vectorPartKeyOf(*pPage)];
-                        recordMasterChange(rState);
-                        notifyViewsVectorPartChanged(mpDocShell, *pPage,
-                                                     constVectorModeMasterPages);
+                        if (VectorPartState* pState = servedPartOf(maVectorParts, *pPage))
+                        {
+                            recordMasterChange(*pState);
+                            notifyViewsVectorPartChanged(mpDocShell, *pPage,
+                                                         constVectorModeMasterPages);
+                        }
                     }
                 }
                 else if (const auto oPart = partAndModeOfPage(pPage))
                 {
                     // The background travels with the page entry.
-                    SdXImpressDocument::VectorPartState& rState
-                        = maVectorParts[vectorPartKeyOf(*pPage)];
-                    recordMasterChange(rState);
-                    notifyViewsVectorPartChanged(mpDocShell, *pPage, oPart->mnMode);
+                    if (VectorPartState* pState = servedPartOf(maVectorParts, *pPage))
+                    {
+                        recordMasterChange(*pState);
+                        notifyViewsVectorPartChanged(mpDocShell, *pPage, oPart->mnMode);
+                    }
                     if (oPart->mnMode == constVectorModeSlides)
                         recordSlidePreviewChange(*mpDoc, mpDocShell, maVectorParts, oPart->mnPart);
                 }
@@ -4575,11 +4602,23 @@ void SdXImpressDocument::writeVectorPrimitives(::tools::JsonWriter& rJsonWriter,
     if (bPush && !pPage)
         return;
 
-    // One delta is written for the part and every client that holds the part reads that same
-    // one, so a push steps from the mark of the part.
     if (pPage)
+    {
+        const auto aIterator = maVectorParts.find(vectorPartKeyOf(*pPage));
+        const bool bServed
+            = aIterator != maVectorParts.end() && aIterator->second.maVersions.isServed();
+
+        // A push goes to the clients that hold the part, so it writes nothing for a part that
+        // is not served.
+        if (bPush && !bServed)
+            return;
+
+        // One delta is written for the part and every client that holds the part reads that
+        // same one, so a push steps from the mark of the part. A pull of a part that is not
+        // served carries the whole part.
         nSinceVersion
-            = maVectorParts[vectorPartKeyOf(*pPage)].maVersions.stepFrom(nSinceVersion, bPush);
+            = bServed ? aIterator->second.maVersions.stepFrom(nSinceVersion, bPush) : -1;
+    }
 
     aContentWriter.setSinceVersion(nSinceVersion);
     aContentWriter.setPush(bPush);

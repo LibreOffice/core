@@ -31,8 +31,12 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -2615,6 +2619,21 @@ void DesktopKitTest::testVectorDeltaPushCoalescing()
     CPPUNIT_ASSERT(pTiledRenderable);
     const OString aPartId = pTiledRenderable->getPartId(0, 0);
     CPPUNIT_ASSERT(!aPartId.isEmpty());
+
+    // The slide is served first, and then gets a rectangle, so there is a change to push.
+    const OString aRequest = ".uno:VectorPrimitives?partid=" + aPartId;
+    pDocument->getCommandValues(aRequest.getStr());
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(pDocument->mxComponent,
+                                                               uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(pDocument->mxComponent,
+                                                        uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xRectangle(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr),
+        uno::UNO_QUERY_THROW);
+    xRectangle->setSize(awt::Size(2000, 1000));
+    xPage->add(xRectangle);
 
     tools::Rectangle aRectangle1(Point(10, 10), Size(20, 10));
     handler->viewInvalidateTilesCallback(&aRectangle1, 0, 0);

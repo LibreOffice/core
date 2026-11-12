@@ -30,7 +30,8 @@ describe('Integration: vector primitives of a slide', function () {
 	});
 
 	/// The first slide, named by the id the status gives it, is answered in full: the whole
-	/// slide at its current version, with the entry of the slide itself first.
+	/// slide at its current version, with the entry of the slide itself first. A slide that no
+	/// client asked for before keeps the version it started at, which is 0 in a fresh document.
 	it('answers the first slide in full', async function () {
 		const status = await client.status();
 		nodeassert.ok(
@@ -44,7 +45,10 @@ describe('Integration: vector primitives of a slide', function () {
 		nodeassert.strictEqual(answer.type, 'vectorprimitives');
 		nodeassert.strictEqual(answer.partId, partId);
 		nodeassert.strictEqual(answer.from, undefined);
-		nodeassert.ok(answer.version > 0, 'the version should be positive');
+		nodeassert.ok(
+			Number.isInteger(answer.version) && answer.version >= 0,
+			'the version should be a count from 0',
+		);
 		nodeassert.ok(
 			Array.isArray(answer.objects) && answer.objects.length > 0,
 			'the slide should have entries',
