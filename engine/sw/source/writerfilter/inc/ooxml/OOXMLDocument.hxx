@@ -163,8 +163,13 @@ class OOXMLDocument final : public writerfilter::Reference<Stream>
     rtl::Reference<oox::drawingml::ThemeFilterBase> mxThemeFilterBase;
 
     bool mbCommentsExtendedResolved = false;
+    /// The document of the main document part, which holds the comments part, or nullptr when this
+    /// is that document.
+    OOXMLDocument* mpMainDocument = nullptr;
 
 private:
+    OOXMLDocument* getMainDocument() { return mpMainDocument ? mpMainDocument : this; }
+
     void resolveFastSubStream(Stream & rStream,
                                       OOXMLStream::StreamType_t nType);
 
