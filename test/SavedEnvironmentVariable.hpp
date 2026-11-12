@@ -12,6 +12,7 @@
 #pragma once
 
 #include <cstdlib>
+#include <optional>
 #include <string>
 #include <utility>
 
@@ -20,16 +21,13 @@
 class SavedEnvironmentVariable
 {
     std::string _name;
-    std::string _value;
-    bool _set;
+    std::optional<std::string> _value;
 
 public:
     explicit SavedEnvironmentVariable(std::string name)
         : _name(std::move(name))
     {
-        const char* value = std::getenv(_name.c_str());
-        _set = value != nullptr;
-        if (_set)
+        if (const char* value = std::getenv(_name.c_str()))
             _value = value;
     }
 
@@ -38,8 +36,8 @@ public:
 
     ~SavedEnvironmentVariable()
     {
-        if (_set)
-            ::setenv(_name.c_str(), _value.c_str(), 1);
+        if (_value)
+            ::setenv(_name.c_str(), _value->c_str(), 1);
         else
             ::unsetenv(_name.c_str());
     }
