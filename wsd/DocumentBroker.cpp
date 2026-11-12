@@ -1688,14 +1688,18 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
               Poco::Path(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
                                                         getJailRoot(), localPath))
                   .toString();
-    std::ifstream istr;
-    FileUtil::openFileToIFStream(localFilePath, istr, std::ios::in | std::ios::binary);
-    Poco::SHA1Engine sha1;
-    Poco::DigestOutputStream dos(sha1);
-    Poco::StreamCopier::copyStream(istr, dos);
-    dos.close();
-    LOG_INF("SHA1 for DocKey [" << _docKey << "] of [" << Anonymizer::anonymizeUrl(localPath)
-                                << "]: " << Poco::DigestEngine::digestToHex(sha1.digest()));
+
+    if (Log::isEnabled(Log::Level::INF))
+    {
+        std::ifstream istr;
+        FileUtil::openFileToIFStream(localFilePath, istr, std::ios::in | std::ios::binary);
+        Poco::SHA1Engine sha1;
+        Poco::DigestOutputStream dos(sha1);
+        Poco::StreamCopier::copyStream(istr, dos);
+        dos.close();
+        LOG_INF("SHA1 for DocKey [" << _docKey << "] of [" << Anonymizer::anonymizeUrl(localPath)
+                                    << "]: " << Poco::DigestEngine::digestToHex(sha1.digest()));
+    }
 
     std::string localPathEncoded;
     Poco::URI::encode(localPath, "#?", localPathEncoded);
