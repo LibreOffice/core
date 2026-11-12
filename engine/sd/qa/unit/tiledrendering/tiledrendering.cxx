@@ -3192,22 +3192,29 @@ static Bitmap getTile(SdXImpressDocument* pXImpressDocument)
     return pDevice->GetBitmap(Point(0, 0), Size(nCanvasSize, nCanvasSize));
 }
 
+// Helper function to count the pixels of an area of a tile that are dark
+static int countDarkPixels(Bitmap aBitmap, const tools::Rectangle& rArea)
+{
+    BitmapScopedReadAccess pAccess(aBitmap);
+    int nCount = 0;
+    for (tools::Long y = rArea.Top(); y <= rArea.Bottom(); ++y)
+    {
+        for (tools::Long x = rArea.Left(); x <= rArea.Right(); ++x)
+        {
+            if (Color(pAccess->GetPixel(y, x)).IsDark())
+                ++nCount;
+        }
+    }
+    return nCount;
+}
+
 // Helper function to count the pixels of a tile that are light, so that text painted in a light
 // variant on a dark document background is counted and the background itself is not
 static int countLightPixels(Bitmap aBitmap)
 {
     const Size aSize = aBitmap.GetSizePixel();
-    BitmapScopedReadAccess pAccess(aBitmap);
-    int nCount = 0;
-    for (tools::Long y = 0; y < aSize.Height(); ++y)
-    {
-        for (tools::Long x = 0; x < aSize.Width(); ++x)
-        {
-            if (!Color(pAccess->GetPixel(y, x)).IsDark())
-                ++nCount;
-        }
-    }
-    return nCount;
+    return aSize.Width() * aSize.Height()
+           - countDarkPixels(aBitmap, tools::Rectangle(Point(), aSize));
 }
 
 // Helper function to get a tile to a bitmap and check the pixel color
@@ -3215,7 +3222,7 @@ static void assertTilePixelColor(SdXImpressDocument* pXImpressDocument, int nPix
 {
     Bitmap aBitmap = getTile(pXImpressDocument);
     BitmapScopedReadAccess pAccess(aBitmap);
-    Color aActualColor(pAccess->GetPixel(nPixelX, nPixelY));
+    Color aActualColor(pAccess->GetPixel(nPixelY, nPixelX));
     CPPUNIT_ASSERT_EQUAL(aColor, aActualColor);
 }
 
