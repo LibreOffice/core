@@ -248,7 +248,8 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
             {
                 const std::string baseFileName = fileInfo->getFilename();
                 const std::string watermarkText = fileInfo->getWatermarkText();
-                const bool isOwner = fileInfo->getUserId() == fileInfo->getOwnerId();
+                const bool isOwner = !fileInfo->getUserId().empty()
+                                     && fileInfo->getUserId() == fileInfo->getOwnerId();
 
                 Poco::JSON::Object::Ptr properties =
                     DocumentBroker::makeEditorFileInfo(*fileInfo, baseFileName, watermarkText);

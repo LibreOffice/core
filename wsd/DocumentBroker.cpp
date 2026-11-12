@@ -2007,7 +2007,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     }
 
     // Mark the session as 'Document owner' if WOPI hosts supports it
-    if (userId == _storage->getFileInfo().getOwnerId())
+    if (!userId.empty() && userId == _storage->getFileInfo().getOwnerId())
     {
         LOG_DBG("Session [" << sessionId << "] is the document owner");
         session->setDocumentOwner(true);
