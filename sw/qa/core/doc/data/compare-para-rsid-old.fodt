@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:ooo="http://openoffice.org/2004/office" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+<office:settings>
+<config:config-item-set config:name="ooo:configuration-settings">
+<config:config-item config:name="RsidRoot" config:type="int">1</config:config-item>
+</config:config-item-set>
+</office:settings>
+<office:automatic-styles>
+<style:style style:name="P1" style:family="paragraph"><style:text-properties officeooo:rsid="00000001" officeooo:paragraph-rsid="00000001"/></style:style>
+</office:automatic-styles>
+<office:body>
+<office:text>
+<text:p text:style-name="P1">Hello world</text:p>
+</office:text>
+</office:body>
+</office:document>
