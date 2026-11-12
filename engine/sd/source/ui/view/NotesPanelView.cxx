@@ -54,6 +54,14 @@ std::span<NotesPanelView* const> allNotesPanelViews()
         return {};
     return *pViews;
 }
+
+/// The page that holds pNotesTextObj, or null.
+const SdPage* getNotesPage(const SdrTextObj* pNotesTextObj)
+{
+    if (!pNotesTextObj)
+        return nullptr;
+    return dynamic_cast<const SdPage*>(pNotesTextObj->getSdrPageFromSdrObject());
+}
 }
 
 NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
@@ -102,7 +110,7 @@ NotesPanelView::~NotesPanelView()
     {
         mbInFocus = false;
         commitNotes();
-        refreshViews(getEditedNotesObj(), this);
+        refreshPageViews(getEditedNotesPage(), this);
     }
 
     mrNotesPanelViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener(
@@ -115,7 +123,7 @@ NotesPanelView::~NotesPanelView()
 
 void NotesPanelView::FillOutliner()
 {
-    SdrTextObj* pPreviousNotesObj = getEditedNotesObj();
+    SdPage* pPreviousNotesPage = getEditedNotesPage();
     const bool bWasInFocus = mbInFocus;
 
     if (mbInFocus)
@@ -127,13 +135,14 @@ void NotesPanelView::FillOutliner()
     ResetLinks();
     maOutliner.Clear();
     mxEditedNotesObj.clear();
+    mxEditedNotesPage = mrNotesPanelViewShell.getCurrentPage();
 
-    SdrTextObj* pNotesTextObj = getNotesTextObj();
-    if (!pNotesTextObj)
+    SdPage* pNotesPage = getEditedNotesPage();
+    if (!pNotesPage)
     {
         maOutlinerView.SetReadOnly(isViewReadOnly());
         if (bWasInFocus)
-            refreshViews(pPreviousNotesObj, this);
+            refreshPageViews(pPreviousNotesPage, this);
         return;
     }
 
@@ -155,21 +164,21 @@ void NotesPanelView::FillOutliner()
 
     // The other views that show the notes this view left, or the notes it now edits, show who
     // holds them now.
-    if (bWasInFocus && pPreviousNotesObj != pNotesTextObj)
-        refreshViews(pPreviousNotesObj, this);
+    if (bWasInFocus && pPreviousNotesPage != pNotesPage)
+        refreshPageViews(pPreviousNotesPage, this);
     if (mbInFocus)
-        refreshViews(pNotesTextObj, this);
+        refreshPageViews(pNotesPage, this);
 }
 
 NotesPanelView* NotesPanelView::getLockingView()
 {
-    SdrTextObj* pNotesTextObj = getEditedNotesObj();
-    if (!pNotesTextObj)
+    SdPage* pNotesPage = getEditedNotesPage();
+    if (!pNotesPage)
         return nullptr;
 
     for (NotesPanelView* pView : allNotesPanelViews())
     {
-        if (pView != this && pView->mbInFocus && pView->getEditedNotesObj() == pNotesTextObj)
+        if (pView != this && pView->mbInFocus && pView->getEditedNotesPage() == pNotesPage)
             return pView;
     }
     return nullptr;
@@ -211,40 +220,64 @@ sal_Int32 NotesPanelView::getLockingViewId()
 
 void NotesPanelView::refreshViews(const SdrTextObj* pNotesTextObj, const NotesPanelView* pExcept)
 {
-    if (!pNotesTextObj)
+    refreshPageViews(getNotesPage(pNotesTextObj), pExcept);
+}
+
+void NotesPanelView::refreshPageViews(const SdPage* pNotesPage, const NotesPanelView* pExcept)
+{
+    if (!pNotesPage)
         return;
 
     for (NotesPanelView* pView : allNotesPanelViews())
     {
-        if (pView != pExcept && !pView->mbInFocus && pView->getEditedNotesObj() == pNotesTextObj)
+        if (pView != pExcept && !pView->mbInFocus && pView->getEditedNotesPage() == pNotesPage)
             pView->FillOutliner();
     }
 }
 
 void NotesPanelView::releaseViews(const SdrTextObj* pNotesTextObj)
 {
-    if (!pNotesTextObj)
+    const SdPage* pNotesPage = getNotesPage(pNotesTextObj);
+    if (!pNotesPage)
         return;
 
     for (NotesPanelView* pView : allNotesPanelViews())
     {
-        if (pView->mbInFocus && pView->getEditedNotesObj() == pNotesTextObj)
+        if (pView->mbInFocus && pView->getEditedNotesPage() == pNotesPage)
             pView->onLoseFocus();
     }
 }
 
 SdrTextObj* NotesPanelView::getNotesTextObj()
 {
-    SdPage* pNotesPage = mrNotesPanelViewShell.getCurrentPage();
+    SdPage* pNotesPage = getEditedNotesPage();
     if (!pNotesPage)
         return nullptr;
 
-    SdrObject* pNotesObj = pNotesPage->GetPresObj(PresObjKind::Notes);
-    if (!pNotesObj)
+    return DynCastSdrTextObj(pNotesPage->GetPresObj(PresObjKind::Notes));
+}
+
+/// Gives the notes page a notes object at the place of the notes object of its master page.
+SdrTextObj* NotesPanelView::createNotesTextObj()
+{
+    SdPage* pNotesPage = getEditedNotesPage();
+    if (!pNotesPage)
         return nullptr;
 
-    return dynamic_cast<SdrTextObj*>(pNotesObj);
+    ::tools::Rectangle aRect;
+    if (pNotesPage->TRG_HasMasterPage())
+    {
+        auto& rMasterPage = static_cast<SdPage&>(pNotesPage->TRG_GetMasterPage());
+        if (SdrObject* pMasterNotesObj = rMasterPage.GetPresObj(PresObjKind::Notes))
+            aRect = pMasterNotesObj->GetLogicRect();
+    }
+    if (aRect.IsEmpty())
+        aRect = pNotesPage->GetLayoutRect();
+
+    return DynCastSdrTextObj(pNotesPage->CreatePresObj(PresObjKind::Notes, false, aRect));
 }
+
+SdPage* NotesPanelView::getEditedNotesPage() { return mxEditedNotesPage.get().get(); }
 
 SdrTextObj* NotesPanelView::getEditedNotesObj() { return mxEditedNotesObj.get().get(); }
 
@@ -257,17 +290,27 @@ void NotesPanelView::ResetLinks() { maOutliner.SetStatusEventHdl(Link<EditStatus
 
 void NotesPanelView::getNotesFromDoc()
 {
-    SdrTextObj* pNotesTextObj = getNotesTextObj();
-    if (!pNotesTextObj)
+    SdPage* pNotesPage = getEditedNotesPage();
+    if (!pNotesPage)
         return;
-
-    mxEditedNotesObj = pNotesTextObj;
 
     // Ignore notifications that will rebound from updating the text
     maOutliner.SetModifyHdl(Link<LinkParamNone*, void>());
 
-    if (OutlinerParaObject* pPara = pNotesTextObj->GetOutlinerParaObject())
-        maOutliner.SetText(*pPara);
+    if (SdrTextObj* pNotesTextObj = getNotesTextObj())
+    {
+        mxEditedNotesObj = pNotesTextObj;
+        if (OutlinerParaObject* pPara = pNotesTextObj->GetOutlinerParaObject())
+            maOutliner.SetText(*pPara);
+    }
+    else
+    {
+        // A notes page without a notes object shows the placeholder text of an empty one, in the
+        // notes style and in the text mode of a notes object.
+        maOutliner.Init(OutlinerMode::TextObject);
+        maOutliner.SetText(pNotesPage->GetPresObjText(PresObjKind::Notes), 0);
+        maOutliner.SetStyleSheet(0, pNotesPage->GetStyleSheetForPresObj(PresObjKind::Notes));
+    }
 
     maOutliner.SetModifyHdl(LINK(this, NotesPanelView, EditModifiedHdl));
 }
@@ -276,7 +319,18 @@ void NotesPanelView::setNotesToDoc()
 {
     SdrTextObj* pNotesTextObj = getEditedNotesObj();
     if (!pNotesTextObj)
-        return;
+    {
+        // The first text typed on a notes page without a notes object creates the object, unless
+        // another view gave the page one meanwhile.
+        if (!maOutliner.GetEditEngine().HasText() || isViewReadOnly())
+            return;
+        pNotesTextObj = getNotesTextObj();
+        if (!pNotesTextObj)
+            pNotesTextObj = createNotesTextObj();
+        if (!pNotesTextObj)
+            return;
+        mxEditedNotesObj = pNotesTextObj;
+    }
 
     std::optional<OutlinerParaObject> pNewText = maOutliner.CreateParaObject();
     pNotesTextObj->SetOutlinerParaObject(std::move(pNewText));
@@ -347,7 +401,10 @@ void NotesPanelView::onGrabFocus()
 
     // The notes object can change without this view being told, for example by an undo in
     // another view, so the copy here is read again when it differs.
-    if (SdrTextObj* pNotesTextObj = getEditedNotesObj())
+    SdrTextObj* pNotesTextObj = getEditedNotesObj();
+    if (pNotesTextObj != getNotesTextObj())
+        FillOutliner();
+    else if (pNotesTextObj)
     {
         const OutlinerParaObject* pDocText = pNotesTextObj->GetOutlinerParaObject();
         const std::optional<OutlinerParaObject> pPaneText = maOutliner.CreateParaObject();
@@ -358,7 +415,7 @@ void NotesPanelView::onGrabFocus()
 
     clearPlaceholder();
     invalidateUndoState();
-    refreshViews(getEditedNotesObj(), this);
+    refreshPageViews(getEditedNotesPage(), this);
 }
 
 void NotesPanelView::onLoseFocus()
@@ -374,7 +431,7 @@ void NotesPanelView::onLoseFocus()
         FillOutliner();
 
     invalidateUndoState();
-    refreshViews(getEditedNotesObj(), this);
+    refreshPageViews(getEditedNotesPage(), this);
 }
 
 /// While the notes have the focus, the Undo and Redo state comes from the notes history, so it
@@ -390,33 +447,38 @@ void NotesPanelView::invalidateUndoState()
     pViewFrame->GetBindings().Invalidate(aUndoSlots);
 }
 
-bool NotesPanelView::isShowingPlaceholder()
+/// Whether the document has no notes text here: the notes object is still empty, or the notes
+/// page has no notes object.
+bool NotesPanelView::hasEmptyNotes()
 {
-    SdrTextObj* pNotesTextObj = getEditedNotesObj();
-    return !mbInFocus && pNotesTextObj && pNotesTextObj->IsEmptyPresObj();
+    if (SdrTextObj* pNotesTextObj = getEditedNotesObj())
+        return pNotesTextObj->IsEmptyPresObj();
+    return getEditedNotesPage() != nullptr;
 }
+
+bool NotesPanelView::isShowingPlaceholder() { return !mbInFocus && hasEmptyNotes(); }
 
 void NotesPanelView::clearPlaceholder()
 {
-    SdrTextObj* pNotesTextObj = getEditedNotesObj();
-    if (pNotesTextObj && pNotesTextObj->IsEmptyPresObj())
+    if (hasEmptyNotes())
         maOutliner.SetToEmptyText();
 }
 
-/// Writes an edit still waiting for the modify timer back to the object the notes came from, or,
-/// when the notes were left empty, restores that object's placeholder text and state.
+/// Writes an edit still waiting for the modify timer back to the object the notes came from, or to
+/// a new one when the notes page has none. When the notes were left empty, restores that object's
+/// placeholder text and state.
 void NotesPanelView::commitNotes()
 {
     // Typing is saved when the modify timer fires, so only an edit still waiting for it is saved
     // here. Leaving the notes without an edit keeps them in the document as they are.
     const bool bUnsavedEdit = aModifyIdle.IsActive();
     aModifyIdle.Stop();
+    if (bUnsavedEdit)
+        setNotesToDoc();
+
     SdrTextObj* pNotesTextObj = getEditedNotesObj();
     if (!pNotesTextObj)
         return;
-
-    if (bUnsavedEdit)
-        setNotesToDoc();
 
     if (maOutliner.GetEditEngine().HasText())
         return;
@@ -440,7 +502,10 @@ IMPL_LINK_NOARG(NotesPanelView, EditModifiedHdl, LinkParamNone*, void)
     // EditEngine calls ModifyHdl many times in succession for some edits.
     // (e.g. when deleting multiple lines)
     // Debounce the rapid ModifyHdl calls using a timer.
-    aModifyIdle.Start();
+    // The placeholder text changes only with the document, for example with the notes style, so it
+    // stays out of the document.
+    if (!isShowingPlaceholder())
+        aModifyIdle.Start();
 
     invalidateUndoState();
     maContentChangedHdl.Call(nullptr);
@@ -453,7 +518,7 @@ IMPL_LINK_NOARG(NotesPanelView, ModifyTimerHdl, Timer*, void)
     aModifyIdle.Stop();
 
     // The other views that show these notes follow the typing.
-    refreshViews(getEditedNotesObj(), this);
+    refreshPageViews(getEditedNotesPage(), this);
 }
 
 IMPL_LINK(NotesPanelView, EventMultiplexerListener, sdtools::EventMultiplexerEvent&, rEvent, void)

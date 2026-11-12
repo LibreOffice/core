@@ -13,6 +13,7 @@
 #include <Outliner.hxx>
 #include <unotools/weakref.hxx>
 
+class SdPage;
 class SdrTextObj;
 
 namespace sdtools
@@ -43,18 +44,27 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
 
     bool mbInFocus = false;
 
-    /// The notes object the outliner was filled from.
+    /// The notes page the outliner was filled from. It may have no notes object.
+    ::unotools::WeakReference<SdPage> mxEditedNotesPage;
+    /// The notes object the outliner was filled from, or null when the notes page has none.
     ::unotools::WeakReference<SdrTextObj> mxEditedNotesObj;
 
     void getNotesFromDoc();
     void setNotesToDoc();
     SdrTextObj* getNotesTextObj();
+    SdrTextObj* createNotesTextObj();
+    SdPage* getEditedNotesPage();
     SdrTextObj* getEditedNotesObj();
+    bool hasEmptyNotes();
     void clearPlaceholder();
     void commitNotes();
     void invalidateUndoState();
     bool isLocked();
     bool isViewReadOnly();
+
+    /// Reloads the notes in every notes pane other than pExcept that shows pNotesPage and does not
+    /// edit it.
+    static void refreshPageViews(const SdPage* pNotesPage, const NotesPanelView* pExcept);
 
 public:
     NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
@@ -76,10 +86,12 @@ public:
     /// focus on them, or when it edits the notes object itself, as on the handout page.
     sal_Int32 getLockingViewId();
 
-    /// Reloads the notes in every notes pane other than pExcept that shows pNotesTextObj and does
-    /// not edit it, so those panes show its current text and whether another view holds it.
+    /// Reloads the notes in every notes pane other than pExcept that shows the notes page of
+    /// pNotesTextObj and does not edit it, so those panes show its current text and whether another
+    /// view holds it.
     static void refreshViews(const SdrTextObj* pNotesTextObj, const NotesPanelView* pExcept);
-    /// Makes every notes pane that holds pNotesTextObj write its text back and let the notes go.
+    /// Makes every notes pane that holds the notes page of pNotesTextObj write its text back and
+    /// let the notes go.
     static void releaseViews(const SdrTextObj* pNotesTextObj);
 
     OutlinerView* GetOutlinerView();

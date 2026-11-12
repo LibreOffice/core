@@ -359,6 +359,78 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelPasteSpecialUnformatted
     CPPUNIT_ASSERT_EQUAL(u"First slide"_ustr, pParaObject->GetTextObject().GetText(0));
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelTypingCreatesNotesObject)
+{
+    // Given a slide whose notes page has no notes object, and the notes pane open.
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pNotesPage = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Notes);
+    SdrObject* pOldNotes = pNotesPage->GetPresObj(PresObjKind::Notes);
+    CPPUNIT_ASSERT(pOldNotes);
+    SfxStyleSheet* pNotesStyle = pOldNotes->GetStyleSheet();
+    CPPUNIT_ASSERT(pNotesStyle);
+    SdrObjList* pNotesObjects = pNotesPage;
+    rtl::Reference<SdrObject> xOldNotes = pNotesObjects->RemoveObject(pOldNotes->GetOrdNum());
+    CPPUNIT_ASSERT(!pNotesPage->GetPresObj(PresObjKind::Notes));
+    dispatchCommand(mxComponent, u".uno:BottomPaneImpress"_ustr,
+                    { comphelper::makePropertyValue(u"BottomPaneImpress"_ustr, true) });
+    const OUString sNotesPanelId
+        = OUString::number(reinterpret_cast<sal_uInt64>(&pViewShell->GetViewShellBase()))
+          + "notespanel";
+    StringMap aFocus{ { u"type"_ustr, u"customwidget"_ustr },
+                      { u"cmd"_ustr, u"focus"_ustr },
+                      { u"data"_ustr, u"{}"_ustr } };
+    StringMap aBlur{ { u"type"_ustr, u"customwidget"_ustr },
+                     { u"cmd"_ustr, u"blur"_ustr },
+                     { u"data"_ustr, u"{}"_ustr } };
+    // The pane opens on a later update of the view configuration, which waits on a timer.
+    bool bFocused = false;
+    for (int i = 0; i < 100 && !bFocused; ++i)
+    {
+        Scheduler::ProcessEventsToIdle();
+        bFocused = jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aFocus);
+        if (!bFocused)
+            osl::Thread::wait(std::chrono::milliseconds(50));
+    }
+    CPPUNIT_ASSERT(bFocused);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the pane only gets and loses the focus, or the notes style changes while the pane shows
+    // the placeholder, the notes page stays as it is.
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aBlur));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pNotesPage->GetPresObj(PresObjKind::Notes));
+    pNotesStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pNotesPage->GetPresObj(PresObjKind::Notes));
+
+    // When text is typed in the pane.
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aFocus));
+    Scheduler::ProcessEventsToIdle();
+    StringMap aText{ { u"type"_ustr, u"customwidget"_ustr },
+                     { u"cmd"_ustr, u"text"_ustr },
+                     { u"data"_ustr, u"{\"text\":\"Speaker notes\"}"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aText));
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aBlur));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the notes page has a notes object again, where the master page has its own, and it
+    // holds the text as plain text. Without the accompanying fix in place, the typing was lost,
+    // because there was no object to keep it.
+    auto pNotes = dynamic_cast<SdrTextObj*>(pNotesPage->GetPresObj(PresObjKind::Notes));
+    CPPUNIT_ASSERT(pNotes);
+    CPPUNIT_ASSERT(!pNotes->IsEmptyPresObj());
+    SdrObject* pMasterNotes = static_cast<SdPage&>(pNotesPage->TRG_GetMasterPage())
+                                  .GetPresObj(PresObjKind::Notes);
+    CPPUNIT_ASSERT(pMasterNotes);
+    CPPUNIT_ASSERT_EQUAL(pMasterNotes->GetLogicRect(), pNotes->GetLogicRect());
+    const OutlinerParaObject* pParaObject = pNotes->GetOutlinerParaObject();
+    CPPUNIT_ASSERT(pParaObject);
+    CPPUNIT_ASSERT_EQUAL(OutlinerMode::TextObject, pParaObject->GetOutlinerMode());
+    CPPUNIT_ASSERT_EQUAL(u"Speaker notes"_ustr, pParaObject->GetTextObject().GetText(0));
+}
+
 #if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPdfiumLinks)
 {
