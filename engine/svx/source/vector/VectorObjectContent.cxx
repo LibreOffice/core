@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <map>
+#include <memory>
 #include <vector>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -25,6 +26,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -39,8 +41,11 @@
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <sfx2/ipclient.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/lstner.hxx>
 #include <svx/compatflags.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdmetitm.hxx>
@@ -611,6 +616,8 @@ struct Embedding
     basegfx::B2DHomMatrix maMapping;
     /// told of every change of the chart's content while it is active
     cpo::uno::Reference<css::util::XModifyListener> mxListener;
+    /// told when a text edit begins or ends on the chart's page
+    std::shared_ptr<SfxListener> mpEditListener;
     /// where the chart's keys go from each part, by id, read once and kept until the chart changes
     std::optional<std::map<sal_uInt64, ObjectContent::ChartKeys>> moKeys;
 };
@@ -648,6 +655,30 @@ public:
     }
 
     void disposing(const css::lang::EventObject&) override {}
+};
+
+/// marks the chart as changed when a text edit begins or ends on its page
+class ChartEditListener : public SfxListener
+{
+    unotools::WeakReference<SdrObject> mxChart;
+
+public:
+    ChartEditListener(SdrObject& rChart, SdrModel& rChartModel)
+        : mxChart(&rChart)
+    {
+        StartListening(rChartModel);
+    }
+
+    void Notify(SfxBroadcaster&, const SfxHint& rHint) override
+    {
+        if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+            return;
+        const SdrHintKind eKind(static_cast<const SdrHint&>(rHint).GetKind());
+        if (eKind != SdrHintKind::BeginEdit && eKind != SdrHintKind::EndEdit)
+            return;
+        if (const rtl::Reference<SdrObject> xChart(mxChart.get()); xChart.is())
+            xChart->BroadcastObjectChange();
+    }
 };
 
 cpo::uno::Reference<css::util::XModifyBroadcaster> broadcasterOf(const SdrOle2Obj& rChart)
@@ -1077,6 +1108,21 @@ inPlaceContentOf(const SdrObject& rObject)
     };
 }
 
+SdrObjEditView* inPlaceTextEditOf(const SfxViewShell& rViewShell)
+{
+    const SfxInPlaceClient* pClient(rViewShell.GetIPClient());
+    if (!pClient || !pClient->GetObject().is())
+        return nullptr;
+    const cpo::uno::Reference<css::frame::XModel> xModel(pClient->GetObject()->getComponent(),
+                                                         cpo::uno::UNO_QUERY);
+    if (!xModel.is())
+        return nullptr;
+    const cpo::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    InPlaceTextEdit* pTextEdit(dynamic_cast<InPlaceTextEdit*>(xController.get()));
+    SdrObjEditView* pView(pTextEdit ? pTextEdit->getInPlaceTextEditView() : nullptr);
+    return pView && pView->IsTextEdit() ? pView : nullptr;
+}
+
 const SdrObjList* membersOf(const SdrObject& rObject)
 {
     if (DynCastE3dScene(&rObject))
@@ -1114,11 +1160,13 @@ const SdrObjList* membersOf(const SdrObject& rObject)
                 new ChartChangeListener(const_cast<SdrOle2Obj&>(*pChart), *pPage));
             if (const auto xBroadcaster = broadcasterOf(*pChart); xBroadcaster.is())
                 xBroadcaster->addModifyListener(xListener);
-            embeddings().push_back(Embedding{ unotools::WeakReference<SdrPage>(pPage),
-                                              unotools::WeakReference<SdrObject>(
-                                                  const_cast<SdrOle2Obj*>(pChart)),
-                                              mappingOfTheChart(*pChart, *pPage),
-                                              xListener, std::nullopt });
+            embeddings().push_back(
+                Embedding{ unotools::WeakReference<SdrPage>(pPage),
+                           unotools::WeakReference<SdrObject>(const_cast<SdrOle2Obj*>(pChart)),
+                           mappingOfTheChart(*pChart, *pPage), xListener,
+                           std::make_shared<ChartEditListener>(const_cast<SdrOle2Obj&>(*pChart),
+                                                               pPage->getSdrModelFromSdrPage()),
+                           std::nullopt });
         }
         // the order of the chart's keys is read once its shapes are built, it holds until the
         // chart changes
@@ -1838,13 +1886,22 @@ ObjectContent textEditContentOf(const SdrObjEditView& rView,
 {
     ObjectContent aContent;
     aContent.maPrimitives = rView.getTextEditPrimitives();
+    const SdrObject* pEdited = rView.GetTextEditObject();
+    // an edit on the page of a chart active in place is drawn where the chart's window is, on the
+    // layer of the chart
+    const Embedding* pEmbedding(pEdited ? embeddingOf(*pEdited) : nullptr);
+    const rtl::Reference<SdrObject> xChart(pEmbedding ? pEmbedding->mxHolder.get() : nullptr);
+    if (pEmbedding && !aContent.maPrimitives.empty())
+        aContent.maPrimitives = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::TransformPrimitive2D(pEmbedding->maMapping,
+                                                                std::move(aContent.maPrimitives))
+        };
     aContent.maDrawn = aContent.maPrimitives;
     aContent.maPaintedBox = rangeInTwips(aContent.maPrimitives.getB2DRange(rViewInformation));
     aContent.maTransformation = boxTransformation(aContent.maPaintedBox);
-    const SdrObject* pEdited = rView.GetTextEditObject();
     aContent.mnParentId = pEdited ? idOf(*pEdited) : 0;
-    if (pEdited)
-        aContent.moLayer = sal_Int32(pEdited->GetLayer().get());
+    if (const SdrObject* pOnLayer = xChart.is() ? xChart.get() : pEdited)
+        aContent.moLayer = sal_Int32(pOnLayer->GetLayer().get());
     return aContent;
 }
 

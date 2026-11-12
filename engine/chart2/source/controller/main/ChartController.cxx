@@ -1797,6 +1797,8 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
     return m_pDrawViewWrapper.get();
 }
 
+SdrObjEditView* ChartController::getInPlaceTextEditView() { return m_pDrawViewWrapper.get(); }
+
 
 ChartWindow* ChartController::GetChartWindow() const
 {

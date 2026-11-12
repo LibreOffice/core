@@ -25,6 +25,7 @@
 #include "SelectionHelper.hxx"
 
 #include <svx/svdtypes.hxx>
+#include <svx/VectorObjectContent.hxx>
 #include <vcl/timer.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -98,6 +99,7 @@ class ChartController final : public ::cppu::WeakImplHelper <
         ,css::util::XModeChangeListener
         ,css::frame::XLayoutManagerListener
         >
+        , public svx::vector::InPlaceTextEdit
 {
 public:
     ChartController() = delete;
@@ -319,6 +321,8 @@ public:
     ViewElementListProvider getViewElementListProvider();
     DrawModelWrapper* GetDrawModelWrapper();
     DrawViewWrapper* GetDrawViewWrapper();
+    /// @see svx::vector::InPlaceTextEdit::getInPlaceTextEditView().
+    SdrObjEditView* getInPlaceTextEditView() override;
     ChartWindow* GetChartWindow() const;
     weld::Window* GetChartFrame();
     bool isAdditionalShapeSelected() const;

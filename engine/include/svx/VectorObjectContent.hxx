@@ -28,6 +28,7 @@
 class SdrObjEditView;
 class SdrObject;
 class SdrObjList;
+class SfxViewShell;
 
 namespace basegfx
 {
@@ -543,6 +544,25 @@ protected:
  */
 SVXCORE_DLLPUBLIC std::optional<drawinglayer::primitive2d::Primitive2DContainer>
 inPlaceContentOf(const SdrObject& rObject);
+
+/** The controller of a document embedded in another one that edits its text in a view of its
+    own while it is active in place, as a chart does.
+ */
+class SAL_DLLPUBLIC_RTTI SAL_NO_VTABLE SAL_LOPLUGIN_ANNOTATE("crosscast") InPlaceTextEdit
+{
+public:
+    /// The view the document runs its text edits in, or nullptr when it has none.
+    virtual SdrObjEditView* getInPlaceTextEditView() = 0;
+
+protected:
+    ~InPlaceTextEdit() {}
+};
+
+/** The view running a text edit inside the object that rViewShell holds active in place, see
+    InPlaceTextEdit. Nothing when no object is active in place there, or when no text edit runs
+    in it.
+ */
+SVXCORE_DLLPUBLIC SdrObjEditView* inPlaceTextEditOf(const SfxViewShell& rViewShell);
 
 /** The members of an object as the vector view takes them: those of a group, and nothing for any
     other object. A 3D scene holds its 3D objects as members but draws them as one picture of its

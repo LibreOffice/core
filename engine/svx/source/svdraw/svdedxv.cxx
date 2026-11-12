@@ -68,6 +68,7 @@
 #include <svx/sdrundomanager.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdviter.hxx>
+#include <svx/VectorObjectContent.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <textchain.hxx>
 #include <textchaincursor.hxx>
@@ -127,8 +128,11 @@ IMPL_LINK_NOARG(SdrObjEditView, ImpModifyHdl, LinkParamNone*, void)
 
     // A reader that draws the text of the edit from the model wants it as it is typed. The
     // timer above waits for a pause before it moves the model, which is the cadence the shapes
-    // want and far too slow for the text itself.
-    if (mxWeakTextEditObj.get()->getSdrModelFromSdrObject().IsDrawnFromModel())
+    // want and far too slow for the text itself. A part of a chart active in place is drawn from
+    // the model of the slide that holds the chart.
+    const rtl::Reference<SdrTextObj> xEdited(mxWeakTextEditObj.get());
+    if (xEdited->getSdrModelFromSdrObject().IsDrawnFromModel()
+        || svx::vector::chartMappingOf(*xEdited).has_value())
     {
         if (SfxViewShell* pViewShell = GetSfxViewShell())
             pViewShell->textEditContentChanged();
@@ -1407,7 +1411,7 @@ void SdrObjEditView::ImpSetKitTextObjectId(OutlinerView& rView) const
 {
     rtl::Reference<SdrTextObj> pEdited = mxWeakTextEditObj.get();
     if (pEdited.is())
-        rView.GetEditView().SetKitTextObjectId(pEdited->GetUniqueID());
+        rView.GetEditView().SetKitTextObjectId(svx::vector::idOf(*pEdited));
 }
 
 bool SdrObjEditView::SetKitTextCursor(sal_uInt64 nObjectId, sal_Int32 nParagraph, sal_Int32 nIndex,
@@ -1419,7 +1423,7 @@ bool SdrObjEditView::SetKitTextCursor(sal_uInt64 nObjectId, sal_Int32 nParagraph
 
     const EditEngine& rEditEngine = mpTextEditOutlinerView->GetOutliner().GetEditEngine();
     const sal_Int32 nParagraphCount = rEditEngine.GetParagraphCount();
-    if (pEdited->GetUniqueID() != nObjectId || nParagraph < 0 || nParagraph >= nParagraphCount
+    if (svx::vector::idOf(*pEdited) != nObjectId || nParagraph < 0 || nParagraph >= nParagraphCount
         || nIndex < 0 || nAnchorParagraph < 0 || nAnchorParagraph >= nParagraphCount
         || nAnchorIndex < 0)
     {
@@ -1741,10 +1745,12 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
             // IASS: start listening to ModelChanges of TextEdit. A reader that
             // draws from the model needs the same listening, its broadcast comes
-            // from the update timer this handler starts.
+            // from the update timer this handler starts. An edit on the page of
+            // a chart active in place reports each keystroke.
             if (isInteractiveSlideShow()
                 || pTextObj->GetViewContact().hasMultipleViewObjectContacts()
-                || pTextObj->getSdrModelFromSdrObject().IsDrawnFromModel())
+                || pTextObj->getSdrModelFromSdrObject().IsDrawnFromModel()
+                || svx::vector::chartMappingOf(*pTextObj).has_value())
                 mpTextEditOutliner->SetModifyHdl(LINK(this, SdrObjEditView, ImpModifyHdl));
 
             if (pTextObj->IsChainable())

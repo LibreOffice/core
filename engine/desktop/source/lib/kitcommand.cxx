@@ -18,6 +18,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svx/VectorObjectContent.hxx>
 #include <svx/svdview.hxx>
 
 namespace kitcommand
@@ -39,8 +40,15 @@ void setTextCursor(SfxViewShell& rViewShell, std::u16string_view aCommand)
     const bool bHasAnchor = aAnchorParagraphIterator != aParameters.end()
                             && aAnchorIndexIterator != aParameters.end();
 
+    // An object active in place, such as a chart, runs its text edit in a view of its own.
+    SdrObjEditView* pDrawView = rViewShell.GetDrawView();
+    if (!pDrawView || !pDrawView->IsTextEdit())
+    {
+        if (SdrObjEditView* pInPlaceView = svx::vector::inPlaceTextEditOf(rViewShell))
+            pDrawView = pInPlaceView;
+    }
+
     // The states that follow the caret, such as its font, are computed again.
-    SdrView* pDrawView = rViewShell.GetDrawView();
     if (pDrawView
         && pDrawView->SetKitTextCursor(
                aObjectIterator->second.toUInt64(), nParagraph, nIndex,

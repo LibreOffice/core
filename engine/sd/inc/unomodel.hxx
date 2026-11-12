@@ -189,6 +189,9 @@ public:
     /// Drops what was recorded for an object that is no longer on the part.
     void forgetVectorObject(const SdrPage& rPage, sal_uInt64 nObjectId);
 
+    /// Counts the part's version up as one at which the set of its entries changed.
+    void countUpVectorOrder(const SdrPage& rPage);
+
     /// The ids everything the part has recorded is keyed by, in no particular order.
     std::vector<sal_uInt64> getVectorRecordedIds(const SdrPage& rPage) const;
 

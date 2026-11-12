@@ -88,6 +88,7 @@
 #include <View.hxx>
 #include <svx/svdedxv.hxx>
 #include <svx/svdobjkind.hxx>
+#include <svx/VectorObjectContent.hxx>
 #include <svx/sidebar/SelectionAnalyzer.hxx>
 #include <vcl/EnumContext.hxx>
 #include <tools/svborder.hxx>
@@ -972,9 +973,12 @@ void ViewShellBase::textEditContentChanged()
         return;
 
     // The edit belongs to this view, so the object it runs on comes from here rather than from
-    // whichever view the document happens to call its current one.
+    // whichever view the document happens to call its current one. An object active in place,
+    // such as a chart, runs its text edit in a view of its own.
     std::shared_ptr<ViewShell> pViewShell = GetMainViewShell();
     const SdrObjEditView* pView = pViewShell ? pViewShell->GetView() : nullptr;
+    if (!pView || !pView->IsTextEdit())
+        pView = svx::vector::inPlaceTextEditOf(*this);
     const SdrObject* pEdited = pView && pView->IsTextEdit() ? pView->GetTextEditObject() : nullptr;
     if (!pEdited)
         return;

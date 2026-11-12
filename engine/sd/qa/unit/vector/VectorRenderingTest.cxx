@@ -20,19 +20,30 @@
 #include <SlideshowLayerRenderer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/FormattedString.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/embed/EmbedVerbs.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <comphelper/kit.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/kit.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
@@ -40,7 +51,10 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 
+#include <svx/VectorObjectContent.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdobjkind.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdopage.hxx>
@@ -66,6 +80,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/outliner.hxx>
+#include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>
 
 #include <DrawDocShell.hxx>
@@ -1134,6 +1149,101 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTypingMovesThePartVersionAtOnce)
     pView->SdrEndTextEdit();
 
     CPPUNIT_ASSERT_GREATER(nBefore, nAfter);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testChartTitleEditIsServedOnTheSlide)
+{
+    // A chart active in place edits its title in a view of its own.
+    createBlankDoc();
+    // In a kit session the chart becomes active in place without menus of its own.
+    comphelper::COKit::setActive(true);
+    comphelper::ScopeGuard aInactive([] { comphelper::COKit::setActive(false); });
+    dispatchCommand(mxComponent, u".uno:InsertObjectChart"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    SdrOle2Obj* pChart = dynamic_cast<SdrOle2Obj*>(page(1)->GetObj(0));
+    CPPUNIT_ASSERT(pChart);
+    getSdDocShell()->GetViewShell()->ActivateObject(pChart, embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
+    Scheduler::ProcessEventsToIdle();
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SfxInPlaceClient* pClient = pViewShell->GetIPClient();
+    CPPUNIT_ASSERT_MESSAGE("the inserted chart is not active in place", pClient);
+
+    uno::Reference<frame::XModel> xChartModel(pChart->getXModel());
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<chart2::XTitle> xTitle(xContext->getServiceManager()->createInstanceWithContext(
+                                              u"com.sun.star.chart2.Title"_ustr, xContext),
+                                          uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XFormattedString> xString(chart2::FormattedString::create(xContext));
+    xString->setString(u"Sales"_ustr);
+    xTitle->setText({ xString });
+    uno::Reference<chart2::XTitled>(xChartModel, uno::UNO_QUERY_THROW)->setTitleObject(xTitle);
+
+    // The first pull is what hands the parts of the chart out.
+    const sal_Int64 nBase
+        = getVectorPrimitives(u"testChartTitleEditBase").getInt("/version").value_or(-1);
+
+    const SdrObjList* pParts = svx::vector::membersOf(*pChart);
+    CPPUNIT_ASSERT(pParts);
+    SdrTextObj* pTitle = nullptr;
+    SdrObjListIter aIterator(pParts, SdrIterMode::DeepNoGroups);
+    while (aIterator.IsMore() && !pTitle)
+    {
+        SdrObject* pObject = aIterator.Next();
+        if (svx::vector::chartPartNameAround(*pObject).indexOf("Title=") >= 0)
+            pTitle = DynCastSdrTextObj(pObject);
+    }
+    CPPUNIT_ASSERT_MESSAGE("the chart has no title part", pTitle);
+    // The slide names the title by this id while the chart is active.
+    const sal_uInt64 nTitleId = svx::vector::idOf(*pTitle);
+
+    auto* pTextEdit
+        = dynamic_cast<svx::vector::InPlaceTextEdit*>(xChartModel->getCurrentController().get());
+    CPPUNIT_ASSERT(pTextEdit);
+    SdrObjEditView* pChartView = pTextEdit->getInPlaceTextEditView();
+    CPPUNIT_ASSERT(pChartView);
+
+    // The title is selected in the chart and F2 starts its edit:
+    uno::Reference<view::XSelectionSupplier> xSelection(xChartModel->getCurrentController(),
+                                                        uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xSelection->select(uno::Any(pTitle->GetName())));
+    auto* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_F2);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_F2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_MESSAGE("the edit of the title does not start", pChartView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(pTitle, pChartView->GetTextEditObject());
+    const bool bFound = svx::vector::inPlaceTextEditOf(*pViewShell) == pChartView;
+
+    // Since before the edit began, so the order the edit added its entry to travels.
+    auto aBegin = getVectorPrimitives(u"testChartTitleEditBegin", nBase);
+    const auto oEntry = findEntryOfKind(aBegin, "texteditoverlay");
+    const sal_Int64 nAtBegin = aBegin.getInt("/version").value_or(-1);
+    const sal_Int64 nEntryId = -2 - sal_Int64(pViewShell->GetViewShellId().get());
+
+    // A key is typed in the title:
+    pChartView->GetTextEditOutlinerView()->GetEditView().InsertText(u"X"_ustr);
+    auto aTyped = getVectorPrimitives(u"testChartTitleEditTyped", nAtBegin);
+    const auto oTypedEntry = findEntryOfKind(aTyped, "texteditoverlay");
+
+    // The client places the caret in the title by the id the slide names it by:
+    const bool bCaretPlaced = pChartView->SetKitTextCursor(nTitleId, 0, 1, 0, 1);
+
+    // A new selection in the chart ends the edit.
+    xSelection->select(uno::Any());
+    pClient->DeactivateObject();
+    Scheduler::ProcessEventsToIdle();
+
+    // The slide carries the edit of the chart with the title as its parent, also after a
+    // keystroke, and the caret lands in the title:
+    CPPUNIT_ASSERT_MESSAGE("the edit view of the chart is not found", bFound);
+    CPPUNIT_ASSERT_MESSAGE("the slide carries no entry for the edit", oEntry.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(nTitleId), oEntry->getInt("parent").value_or(-1));
+    CPPUNIT_ASSERT(orderNames(aBegin, nEntryId));
+    CPPUNIT_ASSERT_MESSAGE("a keystroke does not carry the entry", oTypedEntry.has_value());
+    CPPUNIT_ASSERT(findTextPortionUnder(*oTypedEntry, "X"_ostr).has_value());
+    CPPUNIT_ASSERT_MESSAGE("the caret is not placed in the title", bCaretPlaced);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectUnderTextEditSaysSo)

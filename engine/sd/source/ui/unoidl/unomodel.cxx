@@ -2498,6 +2498,11 @@ void SdXImpressDocument::forgetVectorObject(const SdrPage& rPage, sal_uInt64 nOb
     aIterator->second.maObjectChangeVersions.erase(nObjectId);
 }
 
+void SdXImpressDocument::countUpVectorOrder(const SdrPage& rPage)
+{
+    maVectorParts[vectorPartKeyOf(rPage)].maVersions.countUpOrder();
+}
+
 std::vector<sal_uInt64> SdXImpressDocument::getVectorRecordedIds(const SdrPage& rPage) const
 {
     auto aIterator = maVectorParts.find(vectorPartKeyOf(rPage));
@@ -2551,6 +2556,16 @@ constexpr bool isTextEditEntryKey(sal_uInt64 nKey) { return sal_Int64(nKey) < 0;
 constexpr sal_Int32 constVectorModeSlides = 0;
 constexpr sal_Int32 constVectorModeMasterPages = 1;
 constexpr sal_Int32 constVectorModeNotesPages = 2;
+
+/// The page the vector view draws the object on: its own, or for an object on the page of a chart
+/// active in place, the page that holds the chart.
+const SdrPage* pageDrawnOn(const SdrObject& rObject)
+{
+    const SdrObject* pOutermost = &rObject;
+    while (const SdrObject* pHolder = svx::vector::holderOf(*pOutermost))
+        pOutermost = pHolder;
+    return pOutermost->getSdrPageFromSdrObject();
+}
 
 /// The views render the changed part from vector primitives only if
 /// they asked for them, so each view's callback handler decides itself
@@ -2923,7 +2938,7 @@ void SdXImpressDocument::notifyTextEditChanged(const SdrObject& rEdited)
     if (!mpDoc || !mpDocShell)
         return;
 
-    const SdPage* pPage = dynamic_cast<const SdPage*>(rEdited.getSdrPageFromSdrObject());
+    const SdPage* pPage = dynamic_cast<const SdPage*>(pageDrawnOn(rEdited));
     const auto oPart = partAndModeOfPage(pPage);
     if (!oPart)
         return;
@@ -3692,11 +3707,16 @@ private:
                     = pBase ? pBase->GetMainViewShell() : nullptr;
                 SdrObjEditView* pView = pViewShell ? pViewShell->GetView() : nullptr;
 
+                // An object active in place, such as a chart, runs its text edit in a view of
+                // its own.
+                if (!pView || !pView->IsTextEdit())
+                    pView = svx::vector::inPlaceTextEditOf(*pShell);
+
                 // Only an edit running on this page belongs in this page's payload.
                 if (pView && pView->IsTextEdit())
                 {
                     const SdrObject* pEdited = pView->GetTextEditObject();
-                    if (pEdited && pEdited->getSdrPageFromSdrObject() == pPage)
+                    if (pEdited && pageDrawnOn(*pEdited) == pPage)
                         aView.mpView = pView;
                 }
 
@@ -3869,20 +3889,24 @@ private:
     }
 
     /// Looks at the text of a running edit and counts the part's version up when it moved, the
-    /// way a changed object does. An edit that has ended leaves nothing recorded behind it.
+    /// way a changed object does. An edit that has ended leaves nothing recorded behind it. An
+    /// entry that comes or goes changes the set of entries, so the order travels with it.
     void resolveTextEditEntry(SdPage* pPage)
     {
+        bool bEntriesChanged = false;
         std::unordered_set<sal_uInt64> aLiveKeys;
         for (const EditingView& rView : views(pPage))
         {
             const sal_uInt64 nKey = textEditEntryKey(rView.mnViewId);
             aLiveKeys.insert(nKey);
+            const bool bRecorded = mpModel->findVectorObjectContent(*pPage, nKey) != nullptr;
 
             // A view that stopped editing, or moved to another page, leaves nothing behind.
             if (!rView.mpView)
                 mpModel->forgetVectorObject(*pPage, nKey);
             else
                 mpModel->recordVectorObjectContent(*pPage, nKey, textEditContentOf(rView));
+            bEntriesChanged |= bRecorded != (rView.mpView != nullptr);
         }
 
         // A view that closed while its edit ran is gone from the list of views, so its entry
@@ -3890,8 +3914,14 @@ private:
         for (const sal_uInt64 nKey : mpModel->getVectorRecordedIds(*pPage))
         {
             if (isTextEditEntryKey(nKey) && !aLiveKeys.contains(nKey))
+            {
                 mpModel->forgetVectorObject(*pPage, nKey);
+                bEntriesChanged = true;
+            }
         }
+
+        if (bEntriesChanged)
+            mpModel->countUpVectorOrder(*pPage);
     }
 
     /// One entry per painted object on the page, into the open objects array, in the order the
