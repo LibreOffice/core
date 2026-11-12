@@ -2524,6 +2524,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCtrlClickTogglesSelection)
     click(pSecond, 0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
     CPPUNIT_ASSERT(pView->IsObjMarked(pSecond));
+
+    // The Command key of a macOS client adds to the selection and removes from it like ctrl.
+    click(pFirst, KEY_MOD3);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pFirst));
+    click(pFirst, KEY_MOD3);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pSecond));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCtrlClickTable)

@@ -33,6 +33,7 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
@@ -1661,9 +1662,15 @@ void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, KitMouse
     // no reason - just always true so far.
     assert (rKitMouseEventData.meModifiers == MouseEventModifiers::SIMPLECLICK);
 
+    // A macOS client sends the Command key as KEY_MOD3. Command does the job of ctrl there, so
+    // report it as KEY_MOD1 too, the same as native VCL does on macOS.
+    sal_uInt16 nModifier = rKitMouseEventData.mnModifier;
+    if (nModifier & KEY_MOD3)
+        nModifier |= KEY_MOD1;
+
     pKitEv->maMouseEvent = MouseEvent(rKitMouseEventData.maPosition, rKitMouseEventData.mnCount,
                                       rKitMouseEventData.meModifiers, rKitMouseEventData.mnButtons,
-                                      rKitMouseEventData.mnModifier);
+                                      nModifier);
     if (rKitMouseEventData.maLogicPosition)
     {
         pKitEv->maMouseEvent.setLogicPosition(*rKitMouseEventData.maLogicPosition);

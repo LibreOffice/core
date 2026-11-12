@@ -877,11 +877,11 @@ bool Application::KitHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
     aMouseEvent.mnTime = tools::Time::GetSystemTicks();
     aMouseEvent.mnX = pEvent->GetPosPixel().X();
     aMouseEvent.mnY = pEvent->GetPosPixel().Y();
-    // GetModifier() reports only KEY_SHIFT/KEY_MOD1/KEY_MOD2; a kit client can
-    // also send KEY_MOD3 (the browser's stand-in for a remote macOS client's
-    // Command key, distinct from Ctrl there), so fold it in separately here.
+    // A macOS client sends the Command key as KEY_MOD3, which GetModifier() leaves out. Command
+    // does the job of ctrl there, so report it as KEY_MOD1 too, the same as native VCL does on
+    // macOS.
     aMouseEvent.mnCode = pEvent->GetButtons() | pEvent->GetModifier()
-                          | (pEvent->IsMod3() ? KEY_MOD3 : 0);
+                          | (pEvent->IsMod3() ? KEY_MOD1 | KEY_MOD3 : 0);
 
     switch (nEvent)
     {

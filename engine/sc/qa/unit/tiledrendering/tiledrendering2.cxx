@@ -1399,6 +1399,35 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropInsertWholeColumn)
     CPPUNIT_ASSERT_EQUAL(u"ACDBEF"_ustr, aRow);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommandClickAddsCellToSelection)
+{
+    // Given a document where A1 is selected:
+    ScModelObj* pModelObj = createDoc("cell_drag.fods");
+    ScTestViewCallback aView;
+    Point aFirst = lcl_cellCenter(mxComponent, aView, u"$A$1"_ustr);
+    Point aSecond = lcl_cellCenter(mxComponent, aView, u"$C$3"_ustr);
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aFirst.getX(), aFirst.getY(), 1,
+                              MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONUP, aFirst.getX(), aFirst.getY(), 1,
+                              MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // When clicking C3 with the macOS Command key, which a kit client sends as KEY_MOD3:
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aSecond.getX(), aSecond.getY(), 1,
+                              MOUSE_LEFT, KEY_MOD3);
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONUP, aSecond.getX(), aSecond.getY(), 1,
+                              MOUSE_LEFT, KEY_MOD3);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then A1 and C3 are both selected, and the cells between them are not, the same as with Ctrl:
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    const ScMarkData& rMark = pView->GetViewData().GetMarkData();
+    CPPUNIT_ASSERT(rMark.IsCellMarked(0, 0));
+    CPPUNIT_ASSERT(rMark.IsCellMarked(2, 2));
+    CPPUNIT_ASSERT(!rMark.IsCellMarked(1, 1));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropCopyCommand)
 {
     // Given a document with A1=A and D1=E:

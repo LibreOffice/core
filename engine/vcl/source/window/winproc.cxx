@@ -1010,10 +1010,8 @@ std::optional<bool> ImplKitHandleDrag(ImplFrameData* pFrameData, NotifyEventType
 {
     vcl::Window* pDragWin = pFrameData->mpMouseDownWin;
 
-    // A kit client sends the macOS Command key as KEY_MOD3, and it copies the same as Ctrl.
-    sal_Int8 nAction = (nCode & (KEY_MOD1 | KEY_MOD3))
-                           ? css::datatransfer::dnd::DNDConstants::ACTION_COPY
-                           : css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    sal_Int8 nAction = (nCode & KEY_MOD1) ? css::datatransfer::dnd::DNDConstants::ACTION_COPY
+                                          : css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     if (pDragWin &&
         nEvent == NotifyEventType::MOUSEMOVE &&
@@ -1166,9 +1164,7 @@ bool ImplKitHandleDragForMouseEvent(vcl::Window* pWindow, NotifyEventType nEvent
 
     const Point aWinPos = rEvent.GetPosPixel();
     const Point aMousePos = pWindow->OutputToScreenPixel(aWinPos);
-    // A kit client sends the macOS Command key as KEY_MOD3, which GetModifier leaves out.
-    const sal_uInt16 nCode
-        = rEvent.GetButtons() | rEvent.GetModifier() | (rEvent.IsMod3() ? KEY_MOD3 : 0);
+    const sal_uInt16 nCode = rEvent.GetButtons() | rEvent.GetModifier();
     // An event that only ended a drag, such as a press that arrives while a drag runs, goes on to
     // the window as any other event.
     if (ImplKitHandleDrag(pFrameData, nEvent, aMousePos, aWinPos, nCode, rEvent.GetClicks())
