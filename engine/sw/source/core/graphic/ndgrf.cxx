@@ -155,6 +155,7 @@ bool SwGrfNode::ReRead(
         {
             // Note: if there is DDE in the FltName, then it is a DDE-linked graphic
             OUString sCmd( sURLLink );
+            bool bLinkChanged = false;
             if( !rFltName.isEmpty() )
             {
                 sfx2::SvBaseLinkObjectType nNewType;
@@ -168,10 +169,18 @@ bool SwGrfNode::ReRead(
 
                 if( nNewType != mxLink->GetObjType() )
                 {
+                    bLinkChanged = true;
                     mxLink->Disconnect();
                     mxLink->SetObjType( nNewType );
                 }
             }
+
+            if (sCmd != mxLink->GetLinkSourceName())
+                bLinkChanged = true;
+
+            // A changed source needs one load attempt even if the old source was already loaded.
+            if (bLinkChanged)
+                mbInBaseLinkSwapIn = true;
 
             mxLink->SetLinkSourceName( sCmd );
         }

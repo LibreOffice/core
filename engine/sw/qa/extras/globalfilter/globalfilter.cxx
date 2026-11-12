@@ -58,6 +58,7 @@ public:
 
     void testEmbeddedGraphicRoundtrip();
     void testLinkedGraphicRT();
+    void testLinkedGraphicReRead();
     void testImageWithSpecialID();
     void testGraphicShape();
     void testMultipleIdenticalGraphics();
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
     CPPUNIT_TEST(testLinkedGraphicRT);
+    CPPUNIT_TEST(testLinkedGraphicReRead);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testGraphicShape);
     CPPUNIT_TEST(testMultipleIdenticalGraphics);
@@ -221,6 +223,31 @@ void Test::testLinkedGraphicRT()
         const tools::SvRef<sfx2::SvBaseLink> & rLink = rLinkManager.GetLinks()[0];
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), rLink->GetLinkSourceName().indexOf("linked_graphic.jpg") >= 0);
     }
+}
+
+void Test::testLinkedGraphicReRead()
+{
+    createSwDoc("document_with_linked_graphic.odt");
+    getSwDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+
+    SwGrfNode* pGrfNode = nullptr;
+    SwNodes& rNodes = getSwDoc()->GetNodes();
+    for (SwNodeOffset nIndex(0); nIndex < rNodes.Count(); ++nIndex)
+    {
+        if (rNodes[nIndex]->IsGrfNode())
+        {
+            pGrfNode = rNodes[nIndex]->GetGrfNode();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pGrfNode);
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pGrfNode->GetGrfObj(true).GetGraphic().GetType());
+
+    const OUString sNewURL = m_directories.getURLFromSrc(u"/sw/qa/core/text/data/image.png");
+    SwPaM aGrfPaM(*pGrfNode);
+    getSwDoc()->getIDocumentContentOperations().ReRead(aGrfPaM, sNewURL, OUString(), nullptr);
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pGrfNode->GetGrfObj(true).GetGraphic().GetType());
 }
 
 void Test::testImageWithSpecialID()
