@@ -269,14 +269,7 @@ class CalcVectorManager extends VectorManagerBase {
 			build,
 		);
 		if (!typed) return false;
-		if (caret.selected || caret.anchor) {
-			// The selection is gone with the text it covered.
-			app.file.textCursor.anchor = null;
-			if (caret.selected)
-				(
-					app.map._docLayer as unknown as cool.CanvasTileLayerInterface
-				).showTextSelection([]);
-		}
+		if (caret.selected || caret.anchor) cool.dropReplacedSelection();
 		this._showTypedCaret(typed);
 		this._fireChanged([]);
 		return true;

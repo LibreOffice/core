@@ -89,11 +89,10 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// The rectangle of the caret finds the object the caret is in, and the logical caret the
 	/// place in its text.
 	protected _caretPositionIn(target: EditTarget): cool.CaretPosition | null {
-		return target.tree.caretAt(
-			target.caret.x1,
-			target.caret.y1,
-			target.caret.y2,
-			target.logical ?? undefined,
+		return cool.TextPrediction.caretAt(
+			target.tree,
+			target.caret,
+			target.logical,
 		);
 	}
 

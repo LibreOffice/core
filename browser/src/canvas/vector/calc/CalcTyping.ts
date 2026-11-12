@@ -38,9 +38,8 @@ namespace cool {
 		logical: LogicalCaret;
 	}
 
-	/// A change typed here that the engine has not answered yet.
-	interface CalcTypedChange extends UnansweredEdit {
-		/// The first cell of the edit.
+	/// The first cell of the cell edit that a typed change went into.
+	interface CalcTypedCell {
 		column: number;
 		row: number;
 	}
@@ -89,7 +88,7 @@ namespace cool {
 		/// The text edits of that sheet with the typing in them.
 		private typed: CalcTextEdit[] | null = null;
 		/// The changes the engine has not answered.
-		private pending = new UnansweredEdits<CalcTypedChange>();
+		private pending = new TextPrediction<CalcTypedCell>();
 		/// True from an input that moves the edit until the engine reports the caret again.
 		private held = false;
 
@@ -123,9 +122,10 @@ namespace cool {
 			origin: CalcCellOrigin,
 			caret: CalcCaret,
 		): boolean {
-			if (this.held || !CalcTyping.covers(caret, false)) return false;
-			const placed = this.treeOf(edits, viewId, origin);
-			return placed !== null && CalcTyping.lookUp(placed.tree, caret) !== null;
+			if (this.held) return false;
+			return this.pending.canTypeAt(caret, () =>
+				this.placeOf(edits, viewId, origin, caret),
+			);
 		}
 
 		/// Applies a change at the caret and keeps it until the engine answers. build gets the
@@ -139,42 +139,27 @@ namespace cool {
 			ticket: InputTicket,
 			build: (selected: SelectedAround | null) => PredictedChange,
 		): CalcTypedCaret | null {
-			if (this.held) return null;
-			if (!caret.logical || !CalcTyping.covers(caret, true)) return null;
-			// Typing in another sheet starts over from the edits of the engine there.
-			if (this.part !== part) this.forget();
-			const typed = this.typed ?? CalcTyping.copyOf(edits);
-			const placed = this.treeOf(typed, viewId, origin);
-			if (!placed) return null;
-			const position = CalcTyping.lookUp(placed.tree, caret);
-			if (!position) return null;
-			const selected = caret.anchor
-				? selectedAround(position, caret.anchor)
-				: null;
-			const applied = applyPredictedChange(
-				placed.tree,
-				position,
-				caret.logical,
-				build(selected),
+			if (this.held || !caret.logical) return null;
+			const typed = this.pending.type(
+				caret,
+				() => {
+					// Typing in another sheet starts over from the edits of the engine there.
+					if (this.part !== part) this.forget();
+					const copy = this.typed ?? CalcTyping.copyOf(edits);
+					const place = this.placeOf(copy, viewId, origin, caret);
+					return place ? { ...place, edits: copy } : null;
+				},
+				build,
+				(place) => ({
+					ticket,
+					column: place.edit.column ?? 0,
+					row: place.edit.row ?? 0,
+				}),
 			);
-			if (!applied) return null;
-
-			const caretAfter: LogicalCaret = {
-				paragraph: caret.logical.paragraph,
-				index: Math.max(0, caret.logical.index + applied.indexShift),
-				atEnd: applied.position.atEnd,
-			};
+			if (!typed || !typed.caretAfter) return null;
 			this.part = part;
-			this.typed = typed;
-			this.pending.record({
-				ticket,
-				column: placed.edit.column ?? 0,
-				row: placed.edit.row ?? 0,
-				caretBefore: { ...caret.logical, atEnd: position.atEnd },
-				caretAfter,
-				...applied.change,
-			});
-			return this.caretIn(placed.tree, caretAfter);
+			this.typed = typed.place.edits;
+			return this.caretIn(typed.place.tree, typed.caretAfter);
 		}
 
 		/// Drops the changes the engine edits include and applies the rest again. An undefined
@@ -197,8 +182,11 @@ namespace cool {
 			const placed = this.treeOf(typed, viewId, origin);
 			if (
 				!placed ||
-				!UnansweredEdits.applyAgain(left, (change) =>
-					this.applyAgain(placed, change),
+				// A change applies in the cell it was typed in only.
+				!TextPrediction.applyAgain(left, (change) =>
+					placed.edit.column === change.column && placed.edit.row === change.row
+						? { tree: placed.tree, objectId: CalcTyping.entryId }
+						: null,
 				)
 			) {
 				this.forget();
@@ -224,10 +212,11 @@ namespace cool {
 		/// caret away from the typing, as after an autocorrection, drops the typing.
 		keepsCaret(update: CaretUpdate): boolean {
 			this.held = false;
-			// A caret in a drawing object is not in the cell.
-			const verdict = this.pending.verdictOn(update, () => false);
-			if (verdict === CaretUpdateVerdict.Elsewhere) this.forget();
-			return verdict === CaretUpdateVerdict.Older;
+			return this.pending.keepsCaret(update, {
+				// A caret in a drawing object is not in the cell.
+				inEdit: () => false,
+				elsewhere: () => this.forget(),
+			});
 		}
 
 		/// Drop the typing, so the edits of the engine are drawn.
@@ -272,26 +261,21 @@ namespace cool {
 			return { tree: new PredictionTree(data, this.measurer), edit };
 		}
 
-		/// Apply a change kept from before. It applies in the same cell only.
-		private applyAgain(placed: CalcEditTree, change: CalcTypedChange): boolean {
-			if (
-				placed.edit.column !== change.column ||
-				placed.edit.row !== change.row
-			)
-				return false;
-			const position = placed.tree.caretIn(
-				CalcTyping.entryId,
-				change.caretBefore,
+		/// The cell edit of the view among the edits and the position of the caret in it, or null.
+		private placeOf(
+			edits: CalcTextEdit[],
+			viewId: number,
+			origin: CalcCellOrigin,
+			caret: CalcCaret,
+		): (CalcEditTree & TypingPlace) | null {
+			const placed = this.treeOf(edits, viewId, origin);
+			if (!placed) return null;
+			const position = TextPrediction.caretAt(
+				placed.tree,
+				caret.rectangle,
+				caret.logical,
 			);
-			if (!position) return false;
-			return (
-				applyPredictedChange(
-					placed.tree,
-					position,
-					change.caretBefore,
-					change,
-				) !== null
-			);
+			return position ? { ...placed, position } : null;
 		}
 
 		private caretIn(
@@ -305,30 +289,6 @@ namespace cool {
 						logical: { paragraph: logical.paragraph, index: logical.index },
 					}
 				: null;
-		}
-
-		/// True when typing at the caret shows here. A selection must be in one paragraph.
-		private static covers(caret: CalcCaret, replacing: boolean): boolean {
-			const selected = caret.selected || caret.anchor !== null;
-			if (!selected) return true;
-			return (
-				replacing &&
-				caret.anchor !== null &&
-				caret.logical !== null &&
-				caret.anchor.paragraph === caret.logical.paragraph
-			);
-		}
-
-		private static lookUp(
-			tree: PredictionTree,
-			caret: CalcCaret,
-		): CaretPosition | null {
-			return tree.caretAt(
-				caret.rectangle.x1,
-				caret.rectangle.y1,
-				caret.rectangle.y2,
-				caret.logical ?? undefined,
-			);
 		}
 
 		/// A copy of the text edits that a change can go into.

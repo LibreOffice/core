@@ -20,12 +20,15 @@
  * bitmap tile grid, so the tile methods stay the no-ops of RenderManagerBase.
  */
 
-/// A predicted edit the server has not acknowledged yet.
-interface PredictedTextEdit extends cool.UnansweredEdit {
+/// The part and the entry that a predicted edit went into.
+interface PredictedEditKey {
 	partId: cool.VectorPartGuid;
 	/// The id of the edited entry.
 	objectId: number;
 }
+
+/// A predicted edit the server has not acknowledged yet.
+type PredictedTextEdit = cool.KeyedEdit<PredictedEditKey>;
 
 /// Where a press puts the caret: the edit target, the entry and the logical caret in it.
 interface CaretPress {
@@ -850,29 +853,23 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		return text;
 	}
 
-	// The cached tree and caret of the edited part, or null when no caret is visible, the part
-	// is not cached, or text is selected that the edit does not cover.
-	private _editTarget(overSelection = false): EditTarget | null {
-		// An edit covers a selection in the caret's paragraph whose ends the client knows.
-		// A selection over a paragraph break alone draws no rectangle, so its anchor counts
-		// too.
-		const selected =
-			TextSelections.isActive() || Boolean(app.file.textCursor.anchor);
-		if (selected && !(overSelection && this._selectionAnchorInParagraph()))
-			return null;
-		return this._caretTarget();
+	// The caret of this view with the other end of its selection, as an edit finds them.
+	private static _typingCaret(): cool.TypingCaret {
+		const cursor = app.file.textCursor;
+		return {
+			logical: cursor.logical ?? null,
+			anchor: cursor.anchor ?? null,
+			selected: TextSelections.isActive(),
+		};
 	}
 
-	// The other end of a selection in the caret's paragraph, or null when there is none or its
-	// start is not known.
-	private _selectionAnchorInParagraph(): cool.LogicalCaret | null {
-		const cursor = app.file.textCursor;
-		const anchor = cursor.anchor;
-		return anchor &&
-			cursor.logical &&
-			anchor.paragraph === cursor.logical.paragraph
-			? anchor
-			: null;
+	// The cached tree of the edited part and the caret in it, or null when no caret is visible,
+	// the part is not cached or the tree shows no such place.
+	private _typingPlace(): (cool.TypingPlace & { target: EditTarget }) | null {
+		const target = this._caretTarget();
+		if (!target) return null;
+		const position = this._caretPositionIn(target);
+		return position ? { tree: target.tree, position, target } : null;
 	}
 
 	/// The cached tree and caret of the part the caret is in, with text selected or not, or null
@@ -959,8 +956,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// True when a keystroke at the caret can be predicted. The tree stays
 	/// unchanged.
 	canPredictAtCaret(): boolean {
-		const target = this._editTarget();
-		return target !== null && this._caretPositionIn(target) !== null;
+		return this._typedEdits.canTypeAt(
+			VectorPartManagerBase._typingCaret(),
+			() => this._typingPlace(),
+		);
 	}
 
 	/// Insert typed text into the cached tree so it shows before the server re-renders. It
@@ -1272,40 +1271,28 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		// The engine learns of a caret moved here before the edit, so the edit's number is
 		// the one after it.
 		LocalCaret.tell();
-		const target = this._editTarget(true);
-		if (!target) return false;
-		const position = this._caretPositionIn(target);
-		if (!position) return false;
-		const anchor = this._selectionAnchorInParagraph();
-		const selected = anchor ? cool.selectedAround(position, anchor) : null;
-		const applied = cool.applyPredictedChange(
-			target.tree,
-			position,
-			target.logical,
-			build(selected),
+		const typed = this._typedEdits.type(
+			VectorPartManagerBase._typingCaret(),
+			() => this._typingPlace(),
+			build,
+			// An edit without an object id is not recorded.
+			(place) => {
+				const objectId = place.position.objectId;
+				return objectId === undefined
+					? null
+					: {
+							ticket: cool.InputSequence.ticketForTheNextMessage(),
+							partId: place.tree.data.partId,
+							objectId,
+						};
+			},
 		);
-		if (!applied) return false;
-		if (target.logical) {
-			const caretAfter = {
-				paragraph: target.logical.paragraph,
-				index: Math.max(0, target.logical.index + applied.indexShift),
-				atEnd: applied.position.atEnd,
-			};
-			this._recordEdit(
-				target.tree.data.partId,
-				position,
-				target.logical,
-				caretAfter,
-				applied.change,
-			);
-			target.logical.index = caretAfter.index;
-		}
-		if (selected) {
-			// The selection is gone with the text it covered.
-			app.file.textCursor.anchor = null;
-			if (TextSelections.isActive()) this._docLayer.showTextSelection([]);
-		}
-		this._placeCaret(target, applied.caretShift);
+		if (!typed) return false;
+		const target = typed.place.target;
+		if (target.logical && typed.caretAfter)
+			target.logical.index = typed.caretAfter.index;
+		if (typed.replacedSelection) cool.dropReplacedSelection();
+		this._placeCaret(target, typed.caretShift);
 		this.changedHere();
 		return true;
 	}
@@ -1339,7 +1326,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	}
 
 	// The edits typed here that the engine has not answered, of every part.
-	protected _typedEdits = new cool.UnansweredEdits<PredictedTextEdit>();
+	protected _typedEdits = new cool.TextPrediction<PredictedEditKey>();
 
 	// The edits of the part.
 	private static _ofPart(
@@ -1364,27 +1351,6 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			() => this._sendVectorPrimitivesRequest(partId, data.mode),
 			{ data: data.mode },
 		);
-	}
-
-	// Record an edit for replay until its message is answered. An edit without an object id
-	// is not recorded.
-	private _recordEdit(
-		partId: cool.VectorPartGuid,
-		position: cool.CaretPosition,
-		caretBefore: cool.LogicalCaret,
-		caretAfter: cool.LogicalCaret,
-		change: cool.PredictedChange,
-	): void {
-		const objectId = position.objectId;
-		if (objectId === undefined) return;
-		this._typedEdits.record({
-			ticket: cool.InputSequence.ticketForTheNextMessage(),
-			partId,
-			objectId,
-			caretBefore: { ...caretBefore, atEnd: position.atEnd },
-			caretAfter,
-			...change,
-		});
 	}
 
 	// Drop the edits the content includes and replay the rest, only on the
@@ -1428,9 +1394,11 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			this._typedEdits.forget(ofPart);
 			return;
 		}
-		const treeChanged = cool.UnansweredEdits.applyAgain(toReplay, (edit) =>
-			this._replayEdit(data, edit),
-		);
+		const tree = this._treeOf(data);
+		const treeChanged = cool.TextPrediction.applyAgain(toReplay, (edit) => ({
+			tree,
+			objectId: edit.objectId,
+		}));
 		if (!treeChanged) this._abandonEdits(partId);
 		if (treeChanged) {
 			// The newest edit set the caret, replayed or not, unless the caret moved
@@ -1463,26 +1431,6 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// not applied by the engine.
 	protected abstract _answerCarriesEditedEntries(): boolean;
 
-	// Apply a recorded edit. Returns true when the tree changed.
-	private _replayEdit(
-		data: cool.VectorPrimitivesData,
-		edit: PredictedTextEdit,
-	): boolean {
-		const position = this._treeOf(data).caretIn(
-			edit.objectId,
-			edit.caretBefore,
-		);
-		if (!position) return false;
-		return (
-			cool.applyPredictedChange(
-				this._treeOf(data),
-				position,
-				edit.caretBefore,
-				edit,
-			) !== null
-		);
-	}
-
 	/// True when the update is older than the newest edit, so the local caret
 	/// stays. A current update that puts the caret elsewhere, as after
 	/// autocorrect, drops the edits and re-fetches the part.
@@ -1493,25 +1441,22 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		if (LocalCaret.isAhead(update)) return true;
 		const partId = this._editedPartId();
 		if (partId === undefined) return false;
-		const verdict = this._typedEdits.verdictOn(
-			update,
+		return this._typedEdits.keepsCaret(update, {
 			// A running edit's entry keeps its id across objects, so compare with the
 			// edited object.
-			(objectId, newest) =>
+			inEdit: (objectId, newest) =>
 				objectId === this._editedObjectOf(partId, newest.objectId),
-			VectorPartManagerBase._ofPart(partId),
+			matches: VectorPartManagerBase._ofPart(partId),
 			// A caret moved here after the newest edit is where the engine's caret
 			// answers from.
-			(newest) =>
+			expected: (newest) =>
 				moved &&
 				moved.caret.partId === partId &&
 				moved.sequence > cool.UnansweredEdits.sentAs(newest)
 					? moved.caret.logical
 					: newest.caretAfter,
-		);
-		if (verdict === cool.CaretUpdateVerdict.Elsewhere)
-			this._abandonEdits(partId);
-		return verdict === cool.CaretUpdateVerdict.Older;
+			elsewhere: () => this._abandonEdits(partId),
+		});
 	}
 
 	/// Draw again what shows the parts, once a picture or a font that they use has loaded. The

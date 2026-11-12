@@ -630,6 +630,7 @@ COOL_JS_LST =\
 	src/canvas/vector/prediction/ParagraphWrap.ts \
 	src/canvas/vector/prediction/TextEdit.ts \
 	src/canvas/vector/prediction/UnansweredEdits.ts \
+	src/canvas/vector/prediction/TextPrediction.ts \
 	src/canvas/vector/prediction/CaretMove.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorHitTest.ts \

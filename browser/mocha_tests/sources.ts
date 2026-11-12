@@ -202,6 +202,7 @@
 /// <reference path="../src/canvas/vector/prediction/ParagraphWrap.ts" />
 /// <reference path="../src/canvas/vector/prediction/TextEdit.ts" />
 /// <reference path="../src/canvas/vector/prediction/UnansweredEdits.ts" />
+/// <reference path="../src/canvas/vector/prediction/TextPrediction.ts" />
 /// <reference path="../src/canvas/vector/prediction/CaretMove.ts" />
 /// <reference path="../src/canvas/vector/VectorContentSection.ts" />
 /// <reference path="../src/canvas/vector/calc/CalcVectorData.ts" />
