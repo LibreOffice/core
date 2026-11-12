@@ -397,12 +397,19 @@ window.L.Map.include({
 	},
 
 	_resolveCurrentPage: function (page, currentPage, pageRects) {
-		if ((page !== 'prev' && page !== 'next') || this.isEditMode() || !pageRects || pageRects.length === 0) {
+		if ((page !== 'prev' && page !== 'next') || !pageRects || pageRects.length === 0) {
 			return currentPage;
 		}
 
-		// In the mode where the cursor is absent, _currentPage may be stale.
-		// Determine the currently visible page from the viewport instead.
+		// Without a visible cursor, _currentPage may not be the page in view.
+		const center = app.activeDocument.activeLayout.zoomAnchorPoint();
+		for (let i = 0; i < pageRects.length; i++) {
+			const pageRectangle = new cool.SimpleRectangle(
+				pageRects[i][0], pageRects[i][1], pageRects[i][2], pageRects[i][3]);
+			if (pageRectangle.containsPoint(center.toArray()))
+				return i;
+		}
+
 		for (let i = 0; i < pageRects.length; i++) {
 			if (!app.isRectangleVisibleInTheDisplayedArea(pageRects[i]))
 				continue;
@@ -416,18 +423,22 @@ window.L.Map.include({
 	goToPage: function (page) {
 		const docLayer = this._docLayer;
 		const pageRects = app.file && app.file.writer && app.file.writer.pageRectangleList;
-		const sourcePage = this._resolveCurrentPage(page, docLayer._currentPage, pageRects);
+		const isCursorInView = this.isEditMode() && app.isOwnCursorInView();
+		const sourcePage = isCursorInView
+			? docLayer._currentPage
+			: this._resolveCurrentPage(page, docLayer._currentPage, pageRects);
+		const cursorPage = docLayer._currentPage;
 		app.idleHandler.notifyActive();
 
 		if (page === 'prev') {
-			if (sourcePage > 0) {
-				docLayer._currentPage = sourcePage - 1;
-			}
+			docLayer._currentPage = (sourcePage > 0)
+				? sourcePage - 1
+				: sourcePage;
 		}
 		else if (page === 'next') {
-			if (sourcePage < docLayer._pages - 1) {
-				docLayer._currentPage = sourcePage + 1;
-			}
+			docLayer._currentPage = (sourcePage < docLayer._pages - 1)
+				? sourcePage + 1
+				: sourcePage;
 		}
 		else if (typeof (page) === 'number' && page >= 0 && page < docLayer._pages) {
 			docLayer._currentPage = page;
@@ -446,6 +457,16 @@ window.L.Map.include({
 			});
 		}
 		else {
+			if (this.isEditMode() && this.userList)
+				this.userList.followUser(docLayer._getViewId(), false);
+
+			// Core may leave a cursor already on the target page where it is,
+			// so scroll to it here.
+			if (this.isEditMode() && !isCursorInView && docLayer._currentPage === cursorPage
+				&& pageRects && pageRects.length > docLayer._currentPage) {
+				const pageRectangle = pageRects[docLayer._currentPage];
+				docLayer.scrollToPos(new cool.SimplePoint(pageRectangle[0], pageRectangle[1]));
+			}
 			app.socket.sendMessage('setpage page=' + docLayer._currentPage);
 		}
 		this.fire('pagenumberchanged', {

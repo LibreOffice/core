@@ -35,6 +35,26 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 		desktopHelper.assertScrollbarPosition('vertical', 187, 197);
 	});
 
+	it('Switching page after scrolling.', function() {
+		cy.cGet('#menu-insert').click();
+		cy.cGet('body').contains('#menu-insert li a', 'Page Break').click();
+		cy.cGet('#menu-insert').click();
+		cy.cGet('body').contains('#menu-insert li a', 'Page Break').click();
+		desktopHelper.assertVisiblePage(3, 3, 3);
+		helper.typeIntoDocument('{ctrl}{home}');
+		desktopHelper.assertVisiblePage(1, 1, 3);
+		cy.getFrameWindow().then(function(win) {
+			desktopHelper.scrollViewDown(win);
+			desktopHelper.scrollViewDown(win);
+			desktopHelper.scrollViewDown(win);
+		});
+		cy.cGet('#toolbar-down #nextpage').click();
+		desktopHelper.assertVisiblePage(3, 3, 3);
+		cy.cGet('#toolbar-down #prevpage').click();
+		desktopHelper.assertVisiblePage(2, 2, 3);
+		cy.cGet('.cursor-overlay .blinking-cursor').should('be.visible');
+	});
+
 	it('Text entering mode.', function() {
 		cy.cGet('#InsertMode').should('have.text', 'Insert');
 		helper.typeIntoDocument('{insert}');
