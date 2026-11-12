@@ -247,8 +247,9 @@ namespace cool {
 	}
 
 	/// The kinds of entries a text document page has besides the page itself: the frames of its
-	/// layout, the border lines a table draws over its cells, the border lines of a frame, and
-	/// drawing objects.
+	/// layout, the border lines a table draws over its cells, the border lines of a frame, the
+	/// background of a frame, and drawing objects. A background comes in the paint order before
+	/// the objects that lie behind the text, and before the frame it belongs to.
 	export type TextPageEntryKind =
 		| 'header'
 		| 'footer'
@@ -260,6 +261,7 @@ namespace cool {
 		| 'table'
 		| 'tableborders'
 		| 'borders'
+		| 'background'
 		| 'row'
 		| 'cell'
 		| 'textframe'

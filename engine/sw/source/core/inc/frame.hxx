@@ -634,7 +634,8 @@ public:
         const Point& rOrigin, drawinglayer::primitive2d::Primitive2DContainer& rBorders) const;
 
     /** Adds the entries of this frame and its lowers to rCollector. An entry holds what the frame
-        draws itself, relative to the top left of its frame area.
+        draws itself, relative to the top left of its frame area. A page and a fly place the
+        backgrounds of the frames they hold before the objects behind the text.
      */
     virtual void CreatePrimitives(sw::vector::Collector& rCollector) const;
 

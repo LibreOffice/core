@@ -4990,10 +4990,14 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
 
     rCollector.open(*this);
     const Point aOrigin(rCollector.origin());
-    const bool bBorderLayer = IsPageFrame() || IsFlyFrame();
-    if (bBorderLayer)
+    // A page and a fly each draw their own layers of backgrounds and of border lines.
+    const bool bOwnLayers = IsPageFrame() || IsFlyFrame();
+    if (bOwnLayers)
+    {
+        rCollector.openBackgroundLayer();
         rCollector.openBorderLayer();
-    rCollector.add(CreateBackgroundPrimitives(aOrigin, rCollector.context()));
+    }
+    rCollector.addBackground(*this, CreateBackgroundPrimitives(aOrigin, rCollector.context()));
     drawinglayer::primitive2d::Primitive2DContainer aBorders;
     rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
     // The separator lines between the columns lie over the content of the columns, as the border
@@ -5007,8 +5011,9 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
     }
     rCollector.deferBorders(*this, std::move(aBorders));
 
-    // The page draws the objects behind the text before its content and the other objects
-    // after it. Flies are frames of their own, anchored somewhere else on the page.
+    // The page draws the objects behind the text over the backgrounds of its frames and before
+    // their content, and the other objects after it. Flies are frames of their own, anchored
+    // somewhere else on the page.
     const SwPageFrame* pPage = IsPageFrame() ? static_cast<const SwPageFrame*>(this) : nullptr;
     if (pPage)
         sw::vector::addPageObjects(rCollector, *pPage, sw::vector::ObjectPlace::BehindText);
@@ -5041,9 +5046,13 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
         }
     }
 
-    // The border lines lie over the content, and the objects in front of the text over them.
-    if (bBorderLayer)
+    // The backgrounds of the frames go before the objects behind the text. The border lines lie
+    // over the content, and the objects in front of the text over them.
+    if (bOwnLayers)
+    {
+        rCollector.closeBackgroundLayer();
         rCollector.closeBorderLayer();
+    }
 
     if (pPage)
         sw::vector::addPageObjects(rCollector, *pPage, sw::vector::ObjectPlace::InFrontOfText);

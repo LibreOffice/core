@@ -7259,7 +7259,8 @@ void SwTabFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
         return;
 
     rCollector.open(*this);
-    rCollector.add(CreateBackgroundPrimitives(rCollector.origin(), rCollector.context()));
+    rCollector.addBackground(
+        *this, CreateBackgroundPrimitives(rCollector.origin(), rCollector.context()));
     drawinglayer::primitive2d::Primitive2DContainer aBorders;
     rCollector.add(CreateShadowAndBorderPrimitives(rCollector.origin(), aBorders));
     rCollector.deferBorders(*this, std::move(aBorders));

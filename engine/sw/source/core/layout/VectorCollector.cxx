@@ -13,6 +13,7 @@
 #include <VectorText.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <anchoredobject.hxx>
 #include <dflyobj.hxx>
 #include <doc.hxx>
@@ -43,6 +44,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iterator>
 #include <string_view>
 
 namespace sw::vector
@@ -73,6 +75,8 @@ std::string_view nameOf(EntryKind eKind)
             return "tableborders";
         case EntryKind::Borders:
             return "borders";
+        case EntryKind::Background:
+            return "background";
         case EntryKind::Row:
             return "row";
         case EntryKind::Cell:
@@ -138,6 +142,13 @@ sal_uInt64 bordersEntryIdOf(const SwFrame& rFrame)
     return (sal_uInt64(2) << 40) + rFrame.GetFrameId();
 }
 
+sal_uInt64 backgroundEntryIdOf(const SwFrame& rFrame)
+{
+    // The ids start at 4 * 2^40. The ids of border entries stay below 2 * 2^40 + 2^32, and the
+    // range from 3 * 2^40 up holds the keys the page entries are recorded under.
+    return (sal_uInt64(4) << 40) + rFrame.GetFrameId();
+}
+
 void Collector::open(const SwFrame& rFrame)
 {
     const EntryKind eKind = kindOf(rFrame);
@@ -199,9 +210,60 @@ std::vector<Entry> Collector::take()
 {
     assert(maOpen.empty() && "Collector::take: an entry is still open");
     assert(maBorderLayers.empty() && "Collector::take: a layer of border lines is still open");
+    assert(maBackgroundLayers.empty() && "Collector::take: a layer of backgrounds is still open");
     std::vector<Entry> aEntries;
     aEntries.swap(maEntries);
     return aEntries;
+}
+
+void Collector::openBackgroundLayer()
+{
+    BackgroundLayer aLayer;
+    aLayer.mnPosition = maEntries.size();
+    aLayer.mnFirst = maBackgrounds.size();
+    maBackgroundLayers.push_back(aLayer);
+}
+
+void Collector::addBackground(const SwFrame& rFrame,
+                              drawinglayer::primitive2d::Primitive2DContainer&& rBackground)
+{
+    if (rBackground.empty())
+        return;
+
+    // The paint draws the backgrounds of paragraphs and table cells once more over the objects
+    // behind the text when the document asks for that. Their own entries come after those
+    // objects.
+    const bool bOverObjects
+        = (rFrame.IsTextFrame() || rFrame.IsCellFrame())
+          && rFrame.getRootFrame()->GetFormat()->getIDocumentSettingAccess().get(
+                 DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS);
+    if (maBackgroundLayers.empty() || rFrame.IsPageFrame() || rFrame.IsFlyFrame() || bOverObjects)
+    {
+        add(std::move(rBackground));
+        return;
+    }
+
+    Entry aEntry;
+    aEntry.mnId = backgroundEntryIdOf(rFrame);
+    aEntry.moParent = current().mnId;
+    aEntry.meKind = EntryKind::Background;
+    aEntry.maBox = current().maBox;
+    aEntry.maPrimitives = std::move(rBackground);
+    maBackgrounds.push_back(std::move(aEntry));
+}
+
+void Collector::closeBackgroundLayer()
+{
+    assert(!maBackgroundLayers.empty() && "Collector::closeBackgroundLayer: no layer is open");
+    const BackgroundLayer aLayer = maBackgroundLayers.back();
+    maBackgroundLayers.pop_back();
+    // The entries open now were opened before the layer, so they keep their indexes.
+    assert((maOpen.empty() || maOpen.back() < aLayer.mnPosition)
+           && "Collector::closeBackgroundLayer: an entry opened inside the layer is still open");
+    maEntries.insert(maEntries.begin() + aLayer.mnPosition,
+                     std::make_move_iterator(maBackgrounds.begin() + aLayer.mnFirst),
+                     std::make_move_iterator(maBackgrounds.end()));
+    maBackgrounds.resize(aLayer.mnFirst);
 }
 
 void Collector::openBorderLayer() { maBorderLayers.push_back(maBorders.size()); }

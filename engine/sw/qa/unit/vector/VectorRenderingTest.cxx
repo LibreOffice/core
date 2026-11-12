@@ -149,6 +149,21 @@ protected:
         xParagraph->setPropertyValue(u"FillColor"_ustr, uno::Any(sal_Int32(0xff0000)));
         calcLayout();
     }
+
+    /// Adds a frame that lies behind the text, anchored at the first paragraph.
+    void insertFrameBehindTheText()
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xFrame(
+            xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY_THROW);
+        xFrameProperties->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(4000, 2000)));
+        xFrameProperties->setPropertyValue(u"Opaque"_ustr, uno::Any(false));
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XText> xText = xTextDocument->getText();
+        xText->insertTextContent(xText->createTextCursor(), xFrame, false);
+        calcLayout();
+    }
 };
 
 /// The nSkip-th entry of the kind, or nullptr when there are not that many.
@@ -172,6 +187,51 @@ const sw::vector::Entry* findEntryById(const std::vector<sw::vector::Entry>& rEn
     auto aIterator = std::find_if(rEntries.begin(), rEntries.end(),
                            [nId](const sw::vector::Entry& rEntry) { return rEntry.mnId == nId; });
     return aIterator == rEntries.end() ? nullptr : &*aIterator;
+}
+
+/// The entry of the background of the frame whose entry has the id nFrameEntryId, or the end.
+std::vector<sw::vector::Entry>::const_iterator
+findBackgroundOf(const std::vector<sw::vector::Entry>& rEntries, sal_uInt64 nFrameEntryId)
+{
+    return std::ranges::find_if(rEntries,
+                                [nFrameEntryId](const sw::vector::Entry& rEntry)
+                                {
+                                    return rEntry.meKind == sw::vector::EntryKind::Background
+                                           && rEntry.moParent
+                                           && *rEntry.moParent == nFrameEntryId;
+                                });
+}
+
+std::vector<sw::vector::Entry>::const_iterator
+findIteratorById(const std::vector<sw::vector::Entry>& rEntries, sal_uInt64 nId)
+{
+    return std::ranges::find_if(rEntries, [nId](const sw::vector::Entry& rEntry)
+                                { return rEntry.mnId == nId; });
+}
+
+/// The nSkip-th paragraph that sits in the body, or nullptr when there are not that many.
+const sw::vector::Entry* findBodyParagraph(const std::vector<sw::vector::Entry>& rEntries,
+                                           size_t nSkip)
+{
+    const sw::vector::Entry* pBody = findEntry(rEntries, sw::vector::EntryKind::Body);
+    for (const sw::vector::Entry& rEntry : rEntries)
+    {
+        if (!pBody || rEntry.meKind != sw::vector::EntryKind::TextFrame || !rEntry.moParent
+            || *rEntry.moParent != pBody->mnId)
+            continue;
+        if (nSkip == 0)
+            return &rEntry;
+        --nSkip;
+    }
+    return nullptr;
+}
+
+/// The first fly among the entries, or the end.
+std::vector<sw::vector::Entry>::const_iterator
+findFly(const std::vector<sw::vector::Entry>& rEntries)
+{
+    return std::ranges::find_if(rEntries, [](const sw::vector::Entry& rEntry)
+                                { return rEntry.meKind == sw::vector::EntryKind::Fly; });
 }
 
 basegfx::B2DRange rangeOf(const sw::vector::Entry& rEntry)
@@ -277,29 +337,80 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPageEntryComesFirst)
     CPPUNIT_ASSERT_EQUAL(pBody->mnId, *pText->moParent);
 }
 
-/// The fill of a paragraph is drawn relative to the top left of its own frame.
+/// The fill of a paragraph is an entry of its own with the box of the paragraph, drawn relative
+/// to the top left of that box.
 CPPUNIT_TEST_FIXTURE(Test, testVectorBackgroundIsRelativeToItsFrame)
 {
     createTwoParagraphsWithFilledSecond();
 
-    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+    const std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
 
     const sw::vector::Entry* pSecond
         = findEntry(aEntries, sw::vector::EntryKind::TextFrame, /*nSkip=*/1);
     CPPUNIT_ASSERT(pSecond);
-    CPPUNIT_ASSERT(holds(pSecond->maPrimitives, PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D));
+    auto aBackgroundIterator = findBackgroundOf(aEntries, pSecond->mnId);
+    CPPUNIT_ASSERT(aBackgroundIterator != aEntries.end());
+    CPPUNIT_ASSERT(
+        holds(aBackgroundIterator->maPrimitives, PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D));
+    CPPUNIT_ASSERT_EQUAL(pSecond->maBox, aBackgroundIterator->maBox);
+    // The first paragraph has no fill, so the fill of the second one is the only background.
+    CPPUNIT_ASSERT(!findEntry(aEntries, sw::vector::EntryKind::Background, /*nSkip=*/1));
     // The frame sits well inside the page, while its fill starts at the frame's own top left.
     CPPUNIT_ASSERT_GREATER(tools::Long(1000), pSecond->maBox.Top());
-    const basegfx::B2DRange aRange = rangeOf(*pSecond);
+    const basegfx::B2DRange aRange = rangeOf(*aBackgroundIterator);
     CPPUNIT_ASSERT_LESS(2.0, std::abs(aRange.getMinX()));
     CPPUNIT_ASSERT_LESS(2.0, std::abs(aRange.getMinY()));
+}
+
+/// A frame behind the text is drawn over the fill of a paragraph and under its text.
+CPPUNIT_TEST_FIXTURE(Test, testVectorFrameBehindTheTextLiesOverTheParagraphFill)
+{
+    createTwoParagraphsWithFilledSecond();
+    insertFrameBehindTheText();
+
+    const std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    // The frame holds a paragraph of its own, so the filled one is looked up in the body.
+    const sw::vector::Entry* pSecond = findBodyParagraph(aEntries, /*nSkip=*/1);
+    CPPUNIT_ASSERT(pSecond);
+    auto aBackgroundIterator = findBackgroundOf(aEntries, pSecond->mnId);
+    auto aFlyIterator = findFly(aEntries);
+    CPPUNIT_ASSERT(aBackgroundIterator != aEntries.end());
+    CPPUNIT_ASSERT(aFlyIterator != aEntries.end());
+    CPPUNIT_ASSERT(aBackgroundIterator < aFlyIterator);
+    CPPUNIT_ASSERT(aFlyIterator < findIteratorById(aEntries, pSecond->mnId));
+}
+
+/// When the document draws the paragraph backgrounds over the drawings, the fill of a paragraph
+/// is drawn over a frame behind the text.
+CPPUNIT_TEST_FIXTURE(Test, testVectorParagraphFillOverDrawingsLiesOverTheFrameBehindTheText)
+{
+    createTwoParagraphsWithFilledSecond();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance(u"com.sun.star.text.DocumentSettings"_ustr), uno::UNO_QUERY);
+    xSettings->setPropertyValue(u"BackgroundParaOverDrawings"_ustr, uno::Any(true));
+    insertFrameBehindTheText();
+
+    const std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    // The frame holds a paragraph of its own, so the filled one is looked up in the body.
+    const sw::vector::Entry* pSecond = findBodyParagraph(aEntries, /*nSkip=*/1);
+    CPPUNIT_ASSERT(pSecond);
+    // The fill is part of the entry of the paragraph, which comes after the frame.
+    CPPUNIT_ASSERT(!findEntry(aEntries, sw::vector::EntryKind::Background));
+    auto aFlyIterator = findFly(aEntries);
+    CPPUNIT_ASSERT(aFlyIterator != aEntries.end());
+    CPPUNIT_ASSERT(aFlyIterator < findIteratorById(aEntries, pSecond->mnId));
+    // The text is one short word, so only the fill makes the entry as wide as the paragraph.
+    CPPUNIT_ASSERT_GREATER(double(pSecond->maBox.Width()) - 2.0, rangeOf(*pSecond).getWidth());
 }
 
 /// A paragraph pushed down the page keeps the same primitives, and only its box moves.
 CPPUNIT_TEST_FIXTURE(Test, testVectorMovedParagraphKeepsItsPrimitives)
 {
     createTwoParagraphsWithFilledSecond();
-    std::vector<sw::vector::Entry> aBefore = decomposeFirstPage();
+    const std::vector<sw::vector::Entry> aBefore = decomposeFirstPage();
     const sw::vector::Entry* pSecond
         = findEntry(aBefore, sw::vector::EntryKind::TextFrame, /*nSkip=*/1);
     CPPUNIT_ASSERT(pSecond);
@@ -309,12 +420,20 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorMovedParagraphKeepsItsPrimitives)
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->SplitNode();
     calcLayout();
-    std::vector<sw::vector::Entry> aAfter = decomposeFirstPage();
+    const std::vector<sw::vector::Entry> aAfter = decomposeFirstPage();
 
     const sw::vector::Entry* pMoved = findEntryById(aAfter, pSecond->mnId);
     CPPUNIT_ASSERT(pMoved);
     CPPUNIT_ASSERT_GREATER(pSecond->maBox.Top(), pMoved->maBox.Top());
     CPPUNIT_ASSERT(pMoved->maPrimitives.operator==(pSecond->maPrimitives));
+    // The fill of the paragraph is the same entry at the new place, with the same primitives.
+    auto aFillBefore = findBackgroundOf(aBefore, pSecond->mnId);
+    auto aFillAfter = findBackgroundOf(aAfter, pSecond->mnId);
+    CPPUNIT_ASSERT(aFillBefore != aBefore.end());
+    CPPUNIT_ASSERT(aFillAfter != aAfter.end());
+    CPPUNIT_ASSERT_EQUAL(aFillBefore->mnId, aFillAfter->mnId);
+    CPPUNIT_ASSERT_EQUAL(pMoved->maBox, aFillAfter->maBox);
+    CPPUNIT_ASSERT(aFillAfter->maPrimitives.operator==(aFillBefore->maPrimitives));
 }
 
 /// The border of a paragraph is an entry of its own after the paragraph, with the same box.
@@ -408,11 +527,14 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorCellBackgroundGraphicIsDrawn)
     xCell->setPropertyValue(u"BackGraphicLocation"_ustr, uno::Any(style::GraphicLocation_TILED));
     calcLayout();
 
-    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+    const std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
 
     const sw::vector::Entry* pCell = findEntry(aEntries, sw::vector::EntryKind::Cell);
     CPPUNIT_ASSERT(pCell);
-    CPPUNIT_ASSERT(holds(pCell->maPrimitives, PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D));
+    auto aBackgroundIterator = findBackgroundOf(aEntries, pCell->mnId);
+    CPPUNIT_ASSERT(aBackgroundIterator != aEntries.end());
+    CPPUNIT_ASSERT(
+        holds(aBackgroundIterator->maPrimitives, PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D));
 }
 
 /// The collapsing borders of a table are an entry of the table that comes after all its cells.

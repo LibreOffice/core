@@ -4377,7 +4377,7 @@ void SwTextFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
 
     rCollector.open(*this);
     const Point aOrigin(rCollector.origin());
-    rCollector.add(CreateBackgroundPrimitives(aOrigin, rCollector.context()));
+    rCollector.addBackground(*this, CreateBackgroundPrimitives(aOrigin, rCollector.context()));
     drawinglayer::primitive2d::Primitive2DContainer aBorders;
     rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
     drawinglayer::primitive2d::Primitive2DContainer aOverObjects;

@@ -34,8 +34,8 @@ class SwTextFrame;
 /// The content of a Writer page as a client that draws vector primitives receives it.
 namespace sw::vector
 {
-/// What an entry of a page is: a layout frame, the border lines of a table or of a frame, or a
-/// drawing object.
+/// What an entry of a page is: a layout frame, the background of a frame, the border lines of a
+/// table or of a frame, or a drawing object.
 enum class EntryKind
 {
     Page,
@@ -49,6 +49,7 @@ enum class EntryKind
     Table,
     TableBorders,
     Borders,
+    Background,
     Row,
     Cell,
     TextFrame,
@@ -77,10 +78,14 @@ SW_DLLPUBLIC sal_uInt64 tableBordersEntryIdOf(const SwFrame& rTable);
 /// The id of the entry holding the border lines of rFrame.
 SW_DLLPUBLIC sal_uInt64 bordersEntryIdOf(const SwFrame& rFrame);
 
+/// The id of the entry holding the background of rFrame.
+SW_DLLPUBLIC sal_uInt64 backgroundEntryIdOf(const SwFrame& rFrame);
+
 /** One entry of a page: a frame or a drawing object, with what it draws itself.
 
     The primitives are in twips relative to the top left of the box, so an entry that only moves
-    keeps them. The lowers of a frame are entries of their own and come after it.
+    keeps them. The lowers of a frame are entries of their own and come after it. The background
+    of a frame inside a page or a fly is an entry of its own too, and comes before the frame.
  */
 struct SW_DLLPUBLIC Entry
 {
@@ -117,7 +122,10 @@ struct SW_DLLPUBLIC Entry
 /** Gathers the entries of one page in paint order.
 
     A frame opens its entry, adds what it draws itself, lets its lowers open theirs, and closes
-    its entry. Each entry comes after the entry it sits in.
+    its entry. Each entry comes after the entry it sits in, except the entry of a background.
+
+    A page is drawn in layers, and so is a fly: the backgrounds of all its frames, the objects
+    behind its text, the content of the frames, the border lines, the objects in front.
  */
 class SW_DLLPUBLIC Collector
 {
@@ -158,6 +166,22 @@ public:
     /// The entries gathered so far, in paint order. The collector is empty afterwards.
     std::vector<Entry> take();
 
+    /// Starts a layer of backgrounds right after the entries gathered so far. The backgrounds of
+    /// the frames in a page or in a fly lie under all its content and under the objects behind
+    /// its text.
+    void openBackgroundLayer();
+
+    /// Adds rBackground, the background of rFrame relative to origin(), with rFrame's entry open.
+    /// It stays in that entry for a page, a fly, no open layer, and a paragraph or table cell
+    /// whose background the document draws over the objects behind the text. Otherwise it
+    /// becomes an entry of its own at the start of the innermost background layer.
+    void addBackground(const SwFrame& rFrame,
+                       drawinglayer::primitive2d::Primitive2DContainer&& rBackground);
+
+    /// Moves the background entries kept since the layer opened last to where the layer started,
+    /// and closes it.
+    void closeBackgroundLayer();
+
     /// Starts a layer of border lines. The border lines of the frames in a page or in a fly lie
     /// over all its content.
     void openBorderLayer();
@@ -171,6 +195,15 @@ public:
     void closeBorderLayer();
 
 private:
+    /// A layer of backgrounds that is open.
+    struct BackgroundLayer
+    {
+        /// The index into maEntries where the backgrounds of the layer go.
+        size_t mnPosition = 0;
+        /// The index into maBackgrounds of the first background of the layer.
+        size_t mnFirst = 0;
+    };
+
     Context maContext;
     std::vector<Entry> maEntries;
     /// Indexes into maEntries of the entries open now, the innermost last.
@@ -179,6 +212,10 @@ private:
     std::vector<Entry> maBorders;
     /// Indexes into maBorders where the layers open now start, the innermost last.
     std::vector<size_t> maBorderLayers;
+    /// The entries of backgrounds whose layer is still open, in paint order.
+    std::vector<Entry> maBackgrounds;
+    /// The layers of backgrounds open now, the innermost last.
+    std::vector<BackgroundLayer> maBackgroundLayers;
 };
 
 /// The range of rArea, which is in document twips, relative to rOrigin.
