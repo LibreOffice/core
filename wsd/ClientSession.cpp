@@ -3429,11 +3429,11 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             return false;
         }
 
-        // A headless session only reads the document, so it is read-only whatever the host allows
-        // the user, with no comments and no tracked changes.
+        // Another document reads this one through the view, so it is read-only whatever the host
+        // allows the user, with no comments and no tracked changes.
         if (_isRemoteDocumentConnection && isWritable())
         {
-            LOG_DBG("Setting the headless view [" << getId() << "] to readonly");
+            LOG_DBG("Setting the view [" << getId() << "] of a linked document to readonly");
             setWritable(false);
         }
 #endif
@@ -4016,7 +4016,7 @@ bool ClientSession::attemptLock(const std::shared_ptr<DocumentBroker>& docBroker
     // We are only allowed to change into edit mode if the read-only mode is because of failed lock
     if (!_isLockFailed)
         return false;
-    // A headless view stays read-only.
+    // The view of a linked document stays read-only.
     if (_isRemoteDocumentConnection)
         return false;
 

@@ -141,6 +141,9 @@ void PreviewSession::attach(DocumentBroker& docBroker, const std::string& id,
             return;
         }
 
+        // The previews are for another document that shows and copies the slides of this one.
+        _clientSession->setRemoteDocumentConnection();
+
         docBroker.addSession(_clientSession, std::move(wopiFileInfo));
 
         // The view speaks the browser protocol: the handshake, then the load.

@@ -4014,6 +4014,103 @@ public:
     }
 };
 
+/// A preview of a presentation is read through a view that the server makes. The other views
+/// of the presentation see that view marked as the view of a linked document.
+class UnitRemoteDocumentPreviewView : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitPreviewView, Done) _phase;
+
+    /// Asks for the preview index, which the server answers through a view of its own.
+    std::thread _previewThread;
+
+public:
+    UnitRemoteDocumentPreviewView()
+        : WopiTestServer("UnitRemoteDocumentPreviewView", "slide-link-source.odp")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitRemoteDocumentPreviewView()
+    {
+        if (_previewThread.joinable())
+            _previewThread.join();
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase != Phase::WaitLoadStatus)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::WaitPreviewView);
+
+        _previewThread = std::thread(
+            [this]
+            {
+                http::Request request("/cool/preview?WOPISrc=" +
+                                      Uri::encode(getWopiHostURI() + "/wopi/files/source.odp") +
+                                      "&access_token=anything");
+                auto session = http::Session::create(helpers::getTestServerURI());
+                session->setTimeout(std::chrono::seconds(30));
+                const std::shared_ptr<const http::Response> response =
+                    session->syncRequest(request);
+                TST_LOG("The preview index answered "
+                        << (response ? static_cast<int>(response->statusLine().statusCode()) : 0));
+            });
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (_phase != Phase::WaitPreviewView || !message.starts_with("viewinfo:"))
+            return false;
+
+        // Only a list with a view beside our own tells anything.
+        const std::size_t first = message.find("\"id\":");
+        if (first == std::string_view::npos ||
+            message.find("\"id\":", first + 1) == std::string_view::npos)
+            return false;
+
+        TRANSITION_STATE(_phase, Phase::Done);
+        if (message.find("\"remotelink\":\"true\"") == std::string_view::npos)
+            failTest("The view of a preview must be marked, got [" + std::string(message) + ']');
+        else
+            passTest("The view of a preview is marked as the view of a linked document");
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/source.odp?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitPreviewView:
+            case Phase::Done:
+            {
+                break;
+            }
+        }
+    }
+};
+
 /// A view subscribes to a source its token sees watermarked. The source hands out no copies
 /// of its slides to that user, so the link is refused on the source's side and the view is
 /// told the source is missing, with no slides to show.
@@ -4128,7 +4225,8 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitLinkPostPersistentLink(),
             new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(),
             new UnitLinkAccessBatch(), new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(),
-            new UnitRemoteDocumentPreview(), new UnitRemoteDocumentNoExport(), nullptr
+            new UnitRemoteDocumentPreview(), new UnitRemoteDocumentPreviewView(),
+            new UnitRemoteDocumentNoExport(), nullptr
     };
 }
 

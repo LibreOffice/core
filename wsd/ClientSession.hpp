@@ -593,6 +593,9 @@ public:
     void updateBrowserSettingsJSON(const std::string& json);
 #endif
 
+    /// Marks the view as one through which another document reads this one.
+    void setRemoteDocumentConnection() { _isRemoteDocumentConnection = true; }
+
 private:
     /// The value of one AI setting: the user's view setting, else their user private info, which is
     /// then copied into the view settings, else the coolwsd.xml value.
@@ -925,7 +928,8 @@ private:
     /// If Session is for convert-to
     bool _isConvertTo;
 
-    /// True for a headless connection, one whose load named a connection chain.
+    /// True for a view through which another document reads this one: a headless connection,
+    /// whose load names a connection chain, or the view of a preview.
     bool _isRemoteDocumentConnection;
 
     /// True after a reconnect, until the browser's next load has refreshed the view.
