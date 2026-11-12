@@ -95,18 +95,21 @@ struct UserInfo
 {
     UserInfo()
         : _readOnly(false)
+        , _remoteLink(false)
         , _connected(false)
         , _parked(false)
     {
     }
 
     UserInfo(const std::string& userId, const std::string& userName,
-             const std::string& userExtraInfo, const std::string& userPrivateInfo, bool readOnly)
+             const std::string& userExtraInfo, const std::string& userPrivateInfo, bool readOnly,
+             bool remoteLink)
         : _userId(userId)
         , _userName(userName)
         , _userExtraInfo(userExtraInfo)
         , _userPrivateInfo(userPrivateInfo)
         , _readOnly(readOnly)
+        , _remoteLink(remoteLink)
         , _connected(true)
         , _parked(false)
     {
@@ -124,6 +127,8 @@ struct UserInfo
 
     void setReadOnly(bool readOnly) { _readOnly = readOnly; }
 
+    bool isRemoteLink() const { return _remoteLink; }
+
     bool isConnected() const { return _connected; }
 
     void setDisconnected() { _connected = false; }
@@ -138,6 +143,8 @@ private:
     std::string _userExtraInfo;
     std::string _userPrivateInfo;
     bool _readOnly;
+    /// True for the view of another document that reads this one to show and copy its slides.
+    bool _remoteLink;
     bool _connected;
     /// True while the view's browser is away but expected back.
     bool _parked;

@@ -2555,6 +2555,158 @@ public:
     }
 };
 
+/// A headless connection is read-only even when its load URL does not ask for that and the host
+/// lets the user write: the last permission the view hears before the document's status is
+/// readonly. The view list marks the view as the view of a linked document, with no part.
+class UnitRemoteDocumentHeadlessReadOnly : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, Connecting, Done) _phase;
+
+    /// Carries the connection below, so that waiting for its answer leaves coolwsd's main
+    /// thread free to fork the kit it loads in.
+    std::thread _connectThread;
+
+    std::string fileWopiSrc(int fileId) const
+    {
+        return getWopiHostURI() + "/wopi/files/" + std::to_string(fileId);
+    }
+
+    /// Loads the document over a headless connection whose URL names no permission. Returns
+    /// an empty string when the view is read-only and the view list marks it, else what is
+    /// wrong.
+    std::string checkHeadlessView(const std::string& wopiSrc)
+    {
+        const std::string encodedWopiSrc = Uri::encode(wopiSrc + "?access_token=anything");
+
+        const std::shared_ptr<http::WebSocketSession> session =
+            http::WebSocketSession::create(helpers::getTestServerURI());
+        if (!session)
+            return "no session";
+
+        http::Request request("/cool/" + encodedWopiSrc + "/ws");
+        session->asyncRequest(request, socketPoll());
+
+        helpers::sendTextFrame(session,
+                               "load url=" + encodedWopiSrc +
+                                   " remotechain=" + Uri::encode(fileWopiSrc(4)),
+                               getTestname());
+
+        std::string permission;
+        std::string viewInfo;
+        std::string problem;
+        for (;;)
+        {
+            const std::string answer = helpers::getResponseStringAny(
+                session, { "perm:", "viewinfo:", "status:", "error:" }, getTestname());
+            if (answer.starts_with("perm:"))
+                permission = answer;
+            else if (answer.starts_with("viewinfo:"))
+                viewInfo = answer;
+            else
+            {
+                if (!answer.starts_with("status:"))
+                    problem = "no status, got [" + answer + ']';
+                break;
+            }
+        }
+
+        if (problem.empty())
+        {
+            if (viewInfo.empty())
+                viewInfo = helpers::getResponseString(session, "viewinfo:", getTestname());
+
+            if (permission != "perm: readonly")
+                problem = "the view must be read-only, got [" + permission + ']';
+            else if (viewInfo.find("\"remotelink\":\"true\"") == std::string::npos)
+                problem = "the view list must mark the view, got [" + viewInfo + ']';
+            else if (viewInfo.find("\"part\":") != std::string::npos)
+                problem = "the view list must give the view no part, got [" + viewInfo + ']';
+        }
+
+        session->asyncShutdown();
+        return problem;
+    }
+
+public:
+    UnitRemoteDocumentHeadlessReadOnly()
+        : WopiTestServer("UnitRemoteDocumentHeadlessReadOnly")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitRemoteDocumentHeadlessReadOnly()
+    {
+        if (_connectThread.joinable())
+            _connectThread.join();
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    bool onDataLoss(const std::string& reason) override
+    {
+        // The documents here are read for their load answer alone and none of them is ever
+        // saved, so a document leaving with nothing uploaded is what this test does rather than
+        // a loss it reports.
+        TST_LOG("onDataLoss (expected): " << reason);
+        return false;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        // The document loading over the headless connection below also lands here; only the
+        // first client drives the connection.
+        if (_phase != Phase::WaitLoadStatus)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::Connecting);
+
+        // An assertion failure throws, which would leave this thread through no catch of its
+        // own, so the answer is reported instead.
+        _connectThread = std::thread(
+            [this]
+            {
+                const std::string problem = checkHeadlessView(fileWopiSrc(3));
+                if (!problem.empty())
+                {
+                    failTest("Headless view: " + problem);
+                    return;
+                }
+
+                TRANSITION_STATE(_phase, Phase::Done);
+                passTest("A headless view is read-only and marked in the view list");
+            });
+
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/1?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::Connecting:
+            case Phase::Done:
+            {
+                break;
+            }
+        }
+    }
+};
+
 /// A POST /cool/links whose Link object carries a PersistentLink binds the registered document to a
 /// source the open document's pages name: the name stops being reported as missing, and the
 /// views are sent the registered link, under the name the integrator gave it, standing for
@@ -3972,7 +4124,8 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitRemoteDocumentMissing(), new UnitRemoteDocumentRetry(),
             new UnitRemoteDocumentIsolation(), new UnitLinkReadOnlyView(),
             new UnitRemoteDocumentSaved(),
-            new UnitRemoteDocumentChain(), new UnitLinkPostPersistentLink(),
+            new UnitRemoteDocumentChain(), new UnitRemoteDocumentHeadlessReadOnly(),
+            new UnitLinkPostPersistentLink(),
             new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(),
             new UnitLinkAccessBatch(), new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(),
             new UnitRemoteDocumentPreview(), new UnitRemoteDocumentNoExport(), nullptr

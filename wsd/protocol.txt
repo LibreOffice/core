@@ -1923,6 +1923,10 @@ viewinfo: <payload>
     "true" means the view's browser lost its connection and the server is
     holding the view for that browser to come back to.
 
+    The view through which another document reads this one, to show and
+    copy its slides, carries "remotelink": "true" and no "part". Such a
+    view is always read-only.
+
 redlinetablechanged:
 
     Signals that the redlines table has been modified.

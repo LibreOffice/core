@@ -3400,8 +3400,9 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             {
                 // A headless session names the docKeys already on its connection chain, so a
                 // subscription that would close a cycle can be refused. Naming a chain is what
-                // makes the connection a headless one.
-                if (value.empty())
+                // makes the connection a headless one. A server with remote links turned off
+                // has no headless connections, so it reads no chain.
+                if (value.empty() || !RemoteDocumentBroker::isEnabled())
                     continue;
 
                 _isRemoteDocumentConnection = true;
@@ -3426,6 +3427,14 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
                     << "]: the host allows no export for this user");
             sendTextFrameAndLogError("error: cmd=load kind=noexport");
             return false;
+        }
+
+        // A headless session only reads the document, so it is read-only whatever the host allows
+        // the user, with no comments and no tracked changes.
+        if (_isRemoteDocumentConnection && isWritable())
+        {
+            LOG_DBG("Setting the headless view [" << getId() << "] to readonly");
+            setWritable(false);
         }
 #endif
 
@@ -3535,6 +3544,11 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
         }
 
         oss << " readonly=" << (isReadOnly() ? 1 : 0);
+
+        if (_isRemoteDocumentConnection)
+        {
+            oss << " remotelink=1";
+        }
 
         if (isAllowChangeComments())
         {
@@ -4001,6 +4015,9 @@ bool ClientSession::attemptLock(const std::shared_ptr<DocumentBroker>& docBroker
         return true;
     // We are only allowed to change into edit mode if the read-only mode is because of failed lock
     if (!_isLockFailed)
+        return false;
+    // A headless view stays read-only.
+    if (_isRemoteDocumentConnection)
         return false;
 
     std::string failReason;

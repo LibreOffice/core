@@ -1429,6 +1429,10 @@ void ChildSession::parseLoadCommand(const StringVector& tokens, std::string& par
         {
             _isReadOnly = value != "0";
         }
+        else if (name == "remotelink")
+        {
+            _isRemoteLink = value != "0";
+        }
         else if (name == "isAllowChangeComments")
         {
             _isAllowChangeComments = value == "true";
@@ -7358,7 +7362,9 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT && !payload.empty())
         {
             _currentPartId = payload;
-            if (_docManager)
+            // The view of a linked document has no person looking at a part, so the other views
+            // hear nothing of its moves.
+            if (_docManager && !_isRemoteLink)
                 _docManager->notifyViewPart(getViewId(), _currentPartId);
         }
 

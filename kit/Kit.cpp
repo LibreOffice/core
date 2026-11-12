@@ -2063,6 +2063,8 @@ void Document::notifyViewInfo()
             const bool readonly = itView->second.isReadOnly();
             oss << "\"readonly\":\"" << readonly << "\",";
             oss << "\"parked\":\"" << (itView->second.isParked() ? "true" : "false") << "\",";
+            if (itView->second.isRemoteLink())
+                oss << "\"remotelink\":\"true\",";
             const auto it = viewColorsMap.find(username);
             if (it != viewColorsMap.end())
             {
@@ -2070,9 +2072,10 @@ void Document::notifyViewInfo()
             }
         }
 
-        // The part the view is on, so a view that joins can place the others.
+        // The part the view is on, so a view that joins can place the others. The view of a
+        // linked document has no person looking at a part, so it has no part here.
         const std::shared_ptr<ChildSession> session = findSessionByViewId(viewId);
-        if (session && !session->getCurrentPartId().empty())
+        if (session && !session->isRemoteLink() && !session->getCurrentPartId().empty())
             oss << "\"part\":\"" << JsonUtil::escapeJSONValue(session->getCurrentPartId())
                 << "\",";
 
@@ -2940,7 +2943,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
 
     _sessionUserInfo[viewId] = UserInfo(session->getViewUserId(), session->getViewUserName(),
                                         session->getViewUserExtraInfo(), session->getViewUserPrivateInfo(),
-                                        session->isReadOnly());
+                                        session->isReadOnly(), session->isRemoteLink());
 
     if (!lang.empty())
     {
@@ -3690,6 +3693,7 @@ void Document::dumpState(std::ostream& oss)
             << " userName: " << Anonymizer::anonymize(it.second.getUserName())
             << " userExtraInfo: " << it.second.getUserExtraInfo()
             << " readOnly: " << it.second.isReadOnly()
+            << " remoteLink: " << it.second.isRemoteLink()
             << " connected: " << it.second.isConnected()
             << " parked: " << it.second.isParked();
     }

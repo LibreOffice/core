@@ -95,6 +95,7 @@ public:
     const std::string& getViewUserName() const { return getUserName(); }
     const std::string& getViewUserExtraInfo() const { return getUserExtraInfo(); }
     const std::string& getViewUserPrivateInfo() const { return getUserPrivateInfo(); }
+    bool isRemoteLink() const { return _isRemoteLink; }
     void updateSpeed();
     int getSpeed();
     bool isDocLoaded() const { return _isDocLoaded; }
@@ -502,6 +503,7 @@ public:
             << "\n\tisDocLoaded: " << _isDocLoaded
             << "\n\tisDocPasswordToModifyEntered: " << _isDocPasswordToModifyEntered
             << "\n\tisRestrictedUser: " << _isRestrictedUser
+            << "\n\tisRemoteLink: " << _isRemoteLink
             << "\n\tvectorParts: " << _vectorParts.size()
             << "\n\tinputSequence: " << _inputSequence
             << "\n\tdocType: " << _docType
@@ -555,6 +557,9 @@ private:
 
     /// Whether the user of this view is restricted, as the last blockingcommandstatus said.
     bool _isRestrictedUser = false;
+
+    /// True when another document reads this one through this view, to show and copy its slides.
+    bool _isRemoteLink = false;
 
     /// The ids of the vector parts a primitives response served this session. A client that
     /// holds a part draws the document from primitives, and one that holds none draws it from
