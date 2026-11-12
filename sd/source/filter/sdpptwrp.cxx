@@ -169,15 +169,12 @@ bool SdPPTFilter::Import()
             pDocStream->SetVersion( pStorage->GetVersion() );
             pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
-            if ( pStorage->IsStream( u"EncryptedSummary"_ustr ) )
-                mrMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
-            else
-            {
-                bRet = ImportPPT( mrDocument, *pDocStream, *pStorage, mrMedium );
+            const bool bEncrypted = pStorage->IsStream(u"EncryptedSummary"_ustr);
 
-                if ( !bRet )
-                    mrMedium.SetError(SVSTREAM_WRONGVERSION);
-            }
+            bRet = ImportPPT(mrDocument, *pDocStream, *pStorage, mrMedium);
+
+            if (!bRet && !bEncrypted)
+                mrMedium.SetError(SVSTREAM_WRONGVERSION);
         }
     }
 

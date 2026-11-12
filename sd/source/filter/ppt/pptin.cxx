@@ -95,7 +95,79 @@
 #include <memory>
 #include <string_view>
 
+
+#include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/docpasswordrequest.hxx>
+
+#include <svl/stritem.hxx>
+#include <sfx2/sfxsids.hrc>
+
+#include "pptcrypt.hxx"
+#include <svx/svxerr.hxx>
+
 using namespace ::com::sun::star;
+
+namespace
+{
+// Adapter class connecting SdPPTImport's password verification mechanism to PptCrypt::verifyPassword()
+class PptPasswordVerifier final : public comphelper::IDocPasswordVerifier
+{
+public:
+    explicit PptPasswordVerifier(
+        const PptCryptoApiEncryptionInfo& rInfo)
+        : mrInfo(rInfo)
+    {
+    }
+
+    comphelper::DocPasswordVerifierResult verifyPassword(
+        const OUString& rPassword,
+        css::uno::Sequence<css::beans::NamedValue>& /*rEncryptionData*/) override
+    {
+        // MS-OFFCRYPTO 2.3.2: RC4 CryptoAPI can be identified by
+        // AlgID = 0x00000000 or AlgID = 0x00006801,
+        // provided fCryptoAPI = 1 and fAES = 0.
+        const bool bRC4CryptoAPI =
+            (mrInfo.nFlags & 0x00000004) != 0
+            && (mrInfo.nFlags & 0x00000008) == 0
+            && (mrInfo.nAlgID == 0x00000000
+                || mrInfo.nAlgID == 0x00006801);
+
+        if (!bRC4CryptoAPI
+            || (mrInfo.nAlgIDHash != 0x00000000
+                && mrInfo.nAlgIDHash != 0x00008004)
+            || mrInfo.nVerifierHashSize != 20
+            || mrInfo.aEncryptedVerifierHash.size() != 20)
+        {
+            return comphelper::DocPasswordVerifierResult::Abort;
+        }
+
+        const std::vector<sal_uInt8> aSalt(
+            mrInfo.aSalt.begin(), mrInfo.aSalt.end());
+
+        const std::vector<sal_uInt8> aVerifier(
+            mrInfo.aEncryptedVerifier.begin(),
+            mrInfo.aEncryptedVerifier.end());
+
+        if (!PptCrypt::verifyPassword(
+                rPassword, aSalt, aVerifier,
+                mrInfo.aEncryptedVerifierHash, mrInfo.nKeySize))
+        {
+            return comphelper::DocPasswordVerifierResult::WrongPassword;
+        }
+
+        return comphelper::DocPasswordVerifierResult::OK;
+    }
+
+    comphelper::DocPasswordVerifierResult verifyEncryptionData(
+        const css::uno::Sequence<css::beans::NamedValue>&) override
+    {
+        return comphelper::DocPasswordVerifierResult::WrongPassword;
+    }
+
+private:
+    const PptCryptoApiEncryptionInfo& mrInfo;
+};
+}
 
 SdPPTImport::SdPPTImport( SdDrawDocument& rDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium )
     : maParam(rDocStream)
@@ -146,10 +218,59 @@ SdPPTImport::SdPPTImport( SdDrawDocument& rDocument, SvStream& rDocStream, SotSt
     }
 
     pFilter.reset(new ImplSdPPTImport(rDocument, rStorage, rMedium, maParam));
+
+    if (maParam.aCurrentUserAtom.IsEncrypted())
+    {
+        mbEncrypted = true;
+
+        if (!maParam.oCryptoApiEncryptionInfo)
+        {
+            rMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
+            return;
+        }
+
+        PptPasswordVerifier aVerifier(
+            *maParam.oCryptoApiEncryptionInfo);
+
+        OUString aMediaPassword;
+        const SfxStringItem* pPasswordItem = rMedium.GetItemSet().GetItem<SfxStringItem>(SID_PASSWORD, false);
+
+        if (pPasswordItem)
+            aMediaPassword = pPasswordItem->GetValue();
+
+        const css::uno::Sequence<css::beans::NamedValue> aEmptyEncryptionData;
+
+        const auto aEncryptionData =
+            comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                aVerifier,
+                aEmptyEncryptionData,
+                aMediaPassword,
+                rMedium.GetInteractionHandler(),
+                rMedium.GetOrigURL(),
+                comphelper::DocPasswordRequestType::MS);
+
+        if (!aEncryptionData.hasElements())
+        {
+            rMedium.SetError(ERRCODE_IO_ABORT);
+            return;
+        }
+
+        // Password verification is implemented, but stream decryption
+        // is not implemented yet. Do not pass encrypted data to the
+        // regular PowerPoint importer.
+        rMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
+    }
 }
 
 bool SdPPTImport::Import()
 {
+    if (mbEncrypted)
+    {
+        // A validated password is not sufficient to import the document:
+        // PowerPoint Document and Pictures still need to be decrypted.
+        return false;
+    }
+
     return pFilter->Import();
 }
 

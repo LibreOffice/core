@@ -80,6 +80,7 @@ class SdPPTImport
 {
     PowerPointImportParam maParam;
     std::unique_ptr<ImplSdPPTImport> pFilter;
+    bool mbEncrypted = false;
 
 public:
 
