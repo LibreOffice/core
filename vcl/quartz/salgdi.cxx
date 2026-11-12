@@ -87,6 +87,65 @@ bool FontHasCharacter(CTFontRef pFont, const OUString& rString, sal_Int32 nIndex
     return CTFontGetGlyphsForCharacters(pFont, reinterpret_cast<const UniChar*>(rString.getStr() + nIndex), glyphs.get(), nLen);
 }
 
+// CoreText may suggest a font that we cannot use for the missing characters: a
+// private system font (family name starting with a period, e.g. ".PingFang UI SC"
+// for the system UI font) or an 'hvgl'-only font (tdf#163000). Those are not in
+// our font list and CoreText cannot create them by name, so the glyph fallback
+// would fail and the characters would be drawn with the .notdef glyph of the
+// base font (tdf#174329). In that case ask CoreText for the public fonts that
+// support the same language and use the first one that has the characters.
+CTFontRef GetUsableFallbackFont(CTFontRef pSuggested, const OUString& rMissingChars)
+{
+    if (!pSuggested)
+        return nullptr;
+
+    CTFontDescriptorRef pDesc = CTFontCopyFontDescriptor(pSuggested);
+    if (IsFontUsableByVCL(pDesc))
+    {
+        CFRelease(pDesc);
+        return pSuggested;
+    }
+
+    CFArrayRef pLanguages
+        = static_cast<CFArrayRef>(CTFontDescriptorCopyAttribute(pDesc, kCTFontLanguagesAttribute));
+    CFRelease(pDesc);
+
+    CTFontRef pResult = nullptr;
+    if (pLanguages)
+    {
+        const void* pKeys[] = { kCTFontLanguagesAttribute };
+        const void* pValues[] = { pLanguages };
+        CFDictionaryRef pAttributes = CFDictionaryCreate(
+            nullptr, pKeys, pValues, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        CTFontDescriptorRef pQuery = CTFontDescriptorCreateWithAttributes(pAttributes);
+        CFArrayRef pMatches = CTFontDescriptorCreateMatchingFontDescriptors(pQuery, nullptr);
+        if (pMatches)
+        {
+            sal_Int32 nFirstCharEnd = 0;
+            rMissingChars.iterateCodePoints(&nFirstCharEnd);
+            for (CFIndex i = 0; i < CFArrayGetCount(pMatches) && !pResult; ++i)
+            {
+                auto pMatch = static_cast<CTFontDescriptorRef>(CFArrayGetValueAtIndex(pMatches, i));
+                CTFontRef pFont
+                    = CTFontCreateWithFontDescriptor(pMatch, CTFontGetSize(pSuggested), nullptr);
+                if (!pFont)
+                    continue;
+                if (IsFontUsableByVCL(pMatch) && FontHasCharacter(pFont, rMissingChars, 0, nFirstCharEnd))
+                    pResult = pFont;
+                else
+                    CFRelease(pFont);
+            }
+            CFRelease(pMatches);
+        }
+        CFRelease(pQuery);
+        CFRelease(pAttributes);
+        CFRelease(pLanguages);
+    }
+
+    CFRelease(pSuggested);
+    return pResult;
+}
+
 }
 
 bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
@@ -97,7 +156,9 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSele
     CFStringRef pStr = CreateCFString(rMissingChars);
     if (pStr)
     {
-        CTFontRef pFallback = CTFontCreateForString(pFont->GetCTFont(), pStr, CFRangeMake(0, CFStringGetLength(pStr)));
+        CTFontRef pFallback = GetUsableFallbackFont(
+            CTFontCreateForString(pFont->GetCTFont(), pStr, CFRangeMake(0, CFStringGetLength(pStr))),
+            rMissingChars);
         if (pFallback)
         {
             bFound = true;

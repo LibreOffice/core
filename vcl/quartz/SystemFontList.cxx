@@ -228,10 +228,8 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     return rDFA;
 }
 
-static void fontEnumCallBack( const void* pValue, void* pContext )
+bool IsHvglOnlyFont(CTFontDescriptorRef pFD)
 {
-    CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
-
     // tdf#163000 don't add any fonts with an 'hvgl' font table
     // macOS Sequoia added a new PingFangUI.ttc font file which
     // contains all of the PingFang font families. However, any
@@ -245,10 +243,10 @@ static void fontEnumCallBack( const void* pValue, void* pContext )
     // the following link for more details about the new 'hvgl'
     // font table:
     // https://gitlab.freedesktop.org/freetype/freetype/-/issues/1281
+    bool bHvglOnly = false;
     CFNumberRef pFontFormat = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute(pFD, kCTFontFormatAttribute));
     if (pFontFormat)
     {
-        bool bSkipFont = false;
         int nFontFormat;
         // At least for the PingFangUI.ttc font file, the font format is
         // different on macOS and iOS
@@ -276,17 +274,40 @@ static void fontEnumCallBack( const void* pValue, void* pContext )
                             bHvglTableFound = true;
                         }
                     }
-                    bSkipFont = !bGlyfTableFound && bHvglTableFound;
+                    bHvglOnly = !bGlyfTableFound && bHvglTableFound;
                     CFRelease(pFontTableTags);
                 }
                 CFRelease(pFont);
             }
         }
         CFRelease(pFontFormat);
-
-        if (bSkipFont)
-            return;
     }
+    return bHvglOnly;
+}
+
+bool IsFontUsableByVCL(CTFontDescriptorRef pFD)
+{
+    CFStringRef pFamily = static_cast<CFStringRef>(CTFontDescriptorCopyAttribute(pFD, kCTFontFamilyNameAttribute));
+    if (!pFamily)
+        return false;
+
+    const OUString aFamily = GetOUString(pFamily);
+    // Private system fonts (the ones whose family name starts with a period) are
+    // not in the list returned by CoreText and are not meant to be used by
+    // applications, so they can never be resolved by their family name.
+    const bool bUsable = !aFamily.isEmpty() && aFamily[0] != '.' && !IsHvglOnlyFont(pFD)
+                         && checkFontTypeSupported(pFD, pFamily);
+    CFRelease(pFamily);
+    return bUsable;
+}
+
+static void fontEnumCallBack( const void* pValue, void* pContext )
+{
+    CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
+
+    // tdf#163000 don't add any fonts with an 'hvgl' font table
+    if (IsHvglOnlyFont(pFD))
+        return;
 
     bool bFontEnabled;
     FontAttributes rDFA = DevFontFromCTFontDescriptor( pFD, &bFontEnabled );
