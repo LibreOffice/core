@@ -1170,12 +1170,6 @@ uno::Sequence<sal_Int8> CanvasHelper::getData(rendering::IntegerBitmapLayout& aL
     return uno::Sequence<sal_Int8>();
 }
 
-uno::Sequence<sal_Int8> CanvasHelper::getPixel(rendering::IntegerBitmapLayout& /*bitmapLayout*/,
-                                               const geometry::IntegerPoint2D& /*pos*/)
-{
-    return uno::Sequence<sal_Int8>();
-}
-
 namespace
 {
 class CairoColorSpace : public cppu::WeakImplHelper<css::rendering::XIntegerBitmapColorSpace>

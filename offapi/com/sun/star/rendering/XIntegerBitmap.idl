@@ -58,35 +58,6 @@ interface XIntegerBitmap : XBitmap
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
 
-    /** Get a single pixel of the bitmap, returning its color
-        value.<p>
-
-        If the internal data format's pixel are not integer multiples
-        of bytes (i.e. if one pixel occupies less than a byte - the
-        case of more than one byte per pixel is not specified), the
-        color value is returned in the least significant bits of the
-        single byte returned as the color. The details of the returned
-        pixel data are to be retrieved from the passed bitmap layout.<p>
-
-        Note that the bitmap memory layout might change for volatile
-        bitmaps.<p>
-
-        @param bitmapLayout
-        The memory layout the returned data is in. Note that the color
-        space returned therein needs to always match the current color
-        space as would have been returned by getMemoryLayout().
-
-        @param pos
-        A position, within the bounds of the bitmap, to retrieve the
-        color from.
-
-        @throws com::sun::star::lang::IndexOutOfBoundsException
-        if the given position is outside the permissible bitmap area.
-     */
-    sequence<byte>      getPixel( [out] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
-
-
     /** Query the memory layout for this bitmap.<p>
 
         Please note that for volatile bitmaps, the memory layout might

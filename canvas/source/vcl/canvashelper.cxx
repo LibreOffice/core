@@ -871,33 +871,6 @@ uno::Sequence<sal_Int8> CanvasHelper::getData(rendering::IntegerBitmapLayout& rL
     return aRes;
 }
 
-uno::Sequence<sal_Int8> CanvasHelper::getPixel(rendering::IntegerBitmapLayout& rLayout,
-                                               const geometry::IntegerPoint2D& pos)
-{
-    if (!mpOutDevProvider)
-        return uno::Sequence<sal_Int8>(); // we're disposed
-
-    rLayout = getMemoryLayout();
-    rLayout.ScanLines = 1;
-    rLayout.ScanLineBytes = 4;
-    rLayout.ScanLineStride = rLayout.ScanLineBytes;
-
-    OutputDevice& rOutDev(mpOutDevProvider->getOutDev());
-
-    vclcanvastools::OutDevStateKeeper aStateKeeper(mpProtectedOutDevProvider);
-    rOutDev.EnableMapMode(false);
-    rOutDev.SetAntialiasing(AntialiasingFlags::Enable);
-
-    const Size aBmpSize(rOutDev.GetOutputSizePixel());
-
-    ENSURE_ARG_OR_THROW(pos.X >= 0 && pos.X < aBmpSize.Width(), "X coordinate out of bounds");
-    ENSURE_ARG_OR_THROW(pos.Y >= 0 && pos.Y < aBmpSize.Height(), "Y coordinate out of bounds");
-
-    // TODO(F2): Support alpha canvas here
-    return ::canvastools::colorToStdIntSequence(
-        rOutDev.GetPixel(vcl::unotools::pointFromIntegerPoint2D(pos)));
-}
-
 rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
 {
     if (!mpOutDevProvider)

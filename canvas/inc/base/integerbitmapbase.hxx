@@ -53,18 +53,6 @@ namespace canvas
                                                      rect );
         }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
-                                                                  const css::geometry::IntegerPoint2D& pos ) override
-        {
-            canvastools::verifyArgs(pos, __func__, static_cast<cppu::OWeakObject*>(this));
-            canvastools::verifyIndexRange(pos, Base::getSize() );
-
-            typename Base::MutexType aGuard( Base::m_aMutex );
-
-            return Base::maCanvasHelper.getPixel( bitmapLayout,
-                                                      pos );
-        }
-
         virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) override
         {
             typename Base::MutexType aGuard( Base::m_aMutex );

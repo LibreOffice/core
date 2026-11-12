@@ -127,25 +127,6 @@ namespace dxcanvas
 
         return aRes;
     }
-
-    uno::Sequence< sal_Int8 > DXBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
-                                                  const geometry::IntegerPoint2D&   pos )
-    {
-        const geometry::IntegerSize2D aSize( maSize.getWidth(),maSize.getHeight() );
-
-        ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
-                             "CanvasHelper::getPixel: X coordinate out of bounds" );
-        ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aSize.Height,
-                             "CanvasHelper::getPixel: Y coordinate out of bounds" );
-
-        Gdiplus::Color aColor;
-
-        if( Gdiplus::Ok != mpBitmap->GetPixel( pos.X, pos.Y, &aColor ) )
-            return uno::Sequence< sal_Int8 >();
-
-        return dxcanvastools::argbToIntSequence(aColor.GetValue());
-    }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

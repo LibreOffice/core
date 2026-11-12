@@ -87,10 +87,6 @@ namespace vclcanvas
             getData( css::rendering::IntegerBitmapLayout&      bitmapLayout,
                      const css::geometry::IntegerRectangle2D&  rect );
 
-        css::uno::Sequence< sal_Int8 >
-            getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
-                      const css::geometry::IntegerPoint2D& pos );
-
         css::rendering::IntegerBitmapLayout getMemoryLayout() const;
 
         /// @internal

@@ -161,18 +161,6 @@ namespace dxcanvas
         return mpTarget->getData(bitmapLayout,rect);
     }
 
-    uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
-                                                            const geometry::IntegerPoint2D&   pos )
-    {
-        SAL_INFO( "canvas.directx", "::dxcanvas::BitmapCanvasHelper::getPixel()" );
-
-        ENSURE_OR_THROW( mpTarget,
-                          "::dxcanvas::BitmapCanvasHelper::getPixel(): disposed" );
-
-        bitmapLayout = getMemoryLayout();
-        return mpTarget->getPixel(bitmapLayout,pos);
-    }
-
     uno::Reference< rendering::XBitmapPalette > BitmapCanvasHelper::getPalette()
     {
         // TODO(F1): Palette bitmaps NYI

@@ -65,9 +65,6 @@ public:
     VCL_DLLPUBLIC virtual css::uno::Sequence<::sal_Int8>
         SAL_CALL getData(css::rendering::IntegerBitmapLayout& bitmapLayout,
                          const css::geometry::IntegerRectangle2D& rect) override;
-    VCL_DLLPUBLIC virtual css::uno::Sequence<::sal_Int8>
-        SAL_CALL getPixel(css::rendering::IntegerBitmapLayout& bitmapLayout,
-                          const css::geometry::IntegerPoint2D& pos) override;
     /// @throws css::uno::RuntimeException
     VCL_DLLPUBLIC css::uno::Reference<css::rendering::XBitmapPalette> getPalette();
     virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout() override;

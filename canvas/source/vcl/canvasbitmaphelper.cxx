@@ -119,38 +119,6 @@ namespace vclcanvas
         return aRes;
     }
 
-    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
-                                                            const geometry::IntegerPoint2D& pos )
-    {
-        SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getPixel()" );
-
-        if( !mpBackBuffer )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
-
-        rLayout = getMemoryLayout();
-        rLayout.ScanLines = 1;
-        rLayout.ScanLineBytes = 4;
-        rLayout.ScanLineStride = rLayout.ScanLineBytes;
-
-        const Size aBmpSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
-
-        ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aBmpSize.Width(),
-                         "X coordinate out of bounds" );
-        ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
-                         "Y coordinate out of bounds" );
-
-        ::Color aColor = mpBackBuffer->getBitmapReference().GetPixelColor(pos.X, pos.Y);
-
-        uno::Sequence< sal_Int8 > aRes( 4 );
-        sal_Int8* pRes = aRes.getArray();
-        pRes[ 0 ] = aColor.GetRed();
-        pRes[ 1 ] = aColor.GetGreen();
-        pRes[ 2 ] = aColor.GetBlue();
-        pRes[ 3 ] = aColor.GetAlpha();
-
-        return aRes;
-    }
-
     rendering::IntegerBitmapLayout CanvasBitmapHelper::getMemoryLayout() const
     {
         if( !mpOutDevProvider )

@@ -159,9 +159,6 @@ public:
     css::uno::Sequence<sal_Int8> getData(css::rendering::IntegerBitmapLayout& bitmapLayout,
                                          const css::geometry::IntegerRectangle2D& rect);
 
-    css::uno::Sequence<sal_Int8> getPixel(css::rendering::IntegerBitmapLayout& bitmapLayout,
-                                          const css::geometry::IntegerPoint2D& pos);
-
     css::rendering::IntegerBitmapLayout getMemoryLayout();
 
     void doPolyPolygonPath(const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,

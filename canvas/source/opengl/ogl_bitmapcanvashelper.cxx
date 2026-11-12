@@ -48,13 +48,6 @@ namespace oglcanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
-                                                            const geometry::IntegerPoint2D&   /*pos*/ )
-    {
-        // TODO(F2): NYI - and improbable to ever be
-        return uno::Sequence< sal_Int8 >();
-    }
-
     rendering::IntegerBitmapLayout BitmapCanvasHelper::getMemoryLayout() const
     {
         return ::canvastools::getStdMemoryLayout(getSize());

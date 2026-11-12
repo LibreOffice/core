@@ -496,49 +496,6 @@ namespace dxcanvas
             return aRes;
         }
     }
-
-
-    // DXSurfaceBitmap::getPixel
-
-
-    uno::Sequence< sal_Int8 > DXSurfaceBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
-                                                         const geometry::IntegerPoint2D&   pos )
-    {
-        if(hasAlpha())
-        {
-            const geometry::IntegerSize2D aSize(maSize.getWidth(), maSize.getHeight());
-
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
-                            "CanvasHelper::getPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aSize.Height,
-                            "CanvasHelper::getPixel: Y coordinate out of bounds" );
-
-            Gdiplus::Color aColor;
-
-            if( Gdiplus::Ok != mpGDIPlusBitmap->GetPixel( pos.X, pos.Y, &aColor ) )
-                return uno::Sequence< sal_Int8 >();
-
-            return dxcanvastools::argbToIntSequence(aColor.GetValue());
-        }
-        else
-        {
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getWidth(),
-                            "CanvasHelper::getPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getHeight(),
-                            "CanvasHelper::getPixel: Y coordinate out of bounds" );
-
-            // lock the directx surface to receive the pointer to the surface memory.
-            D3DLOCKED_RECT aLockedRect;
-            if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
-                throw uno::RuntimeException("failed to lock directX surface to surface memory");
-
-            sal_uInt32 *pDst = reinterpret_cast<sal_uInt32 *>((static_cast<BYTE *>(aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
-            Gdiplus::Color aColor(*pDst);
-            mpSurface->UnlockRect();
-
-            return dxcanvastools::argbToIntSequence(aColor.GetValue());
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

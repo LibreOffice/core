@@ -421,60 +421,6 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
-                                                              const geometry::IntegerPoint2D&   pos )
-{
-    SolarMutexGuard aGuard;
-
-    bitmapLayout = getMemoryLayout();
-
-    // Invalid/empty bitmap: no data available
-    if( !m_pBmpAcc )
-        throw lang::IndexOutOfBoundsException();
-
-    if( pos.X < 0 || pos.Y < 0 ||
-        pos.X > m_pBmpAcc->Width() || pos.Y > m_pBmpAcc->Height() )
-    {
-        throw lang::IndexOutOfBoundsException();
-    }
-
-    uno::Sequence< sal_Int8 > aRet((m_nBitsPerOutputPixel + 7)/8);
-    sal_Int8* pOutBuf = aRet.getArray();
-
-    // copy stuff to output sequence
-    bitmapLayout.ScanLines     = 1;
-    bitmapLayout.ScanLineBytes =
-    bitmapLayout.ScanLineStride= aRet.getLength();
-
-    BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
-    assert(pBmpAcc && "Invalid bmp read access");
-
-    if( !m_aBmp.HasAlpha() )
-    {
-        // can return bitmap data as-is
-        Scanline pScan = pBmpAcc->GetScanline(pos.Y);
-        const tools::Long nScanlineLeftOffset( pos.X*m_nBitsPerOutputPixel/8 );
-        memcpy(pOutBuf, pScan+nScanlineLeftOffset, aRet.getLength() );
-    }
-    else
-    {
-        assert( m_nBitsPerInputPixel == 24 );
-        assert( m_nBitsPerOutputPixel == 32 );
-
-        // return it always in the same format. This makes the conversion
-        // in the convertIntegerTo* methods easier.
-        BitmapColor aCol = pBmpAcc->GetPixel(pos.Y, pos.X);
-        *pOutBuf++ = aCol.GetBlue();
-        *pOutBuf++ = aCol.GetGreen();
-        *pOutBuf++ = aCol.GetRed();
-        // vcl used to store transparency. Now it stores alpha. But we need the UNO
-        // interface to still preserve the old interface.
-        *pOutBuf++ = 255 - aCol.GetAlpha();
-    }
-
-    return aRet;
-}
-
 uno::Reference< rendering::XBitmapPalette > VclCanvasBitmap::getPalette()
 {
     SolarMutexGuard aGuard;

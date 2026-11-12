@@ -97,10 +97,6 @@ namespace dxcanvas
             getData( css::rendering::IntegerBitmapLayout&      bitmapLayout,
                      const css::geometry::IntegerRectangle2D&  rect );
 
-        css::uno::Sequence< sal_Int8 >
-            getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
-                      const css::geometry::IntegerPoint2D& pos );
-
         css::uno::Reference< css::rendering::XBitmapPalette > getPalette();
 
         css::rendering::IntegerBitmapLayout getMemoryLayout();
