@@ -538,6 +538,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     m_pGrabBagItem.reset();
     if (rSource.m_pGrabBagItem!=nullptr)
         m_pGrabBagItem.reset(rSource.m_pGrabBagItem->Clone());
+    maThemeStyleRefs = rSource.maThemeStyleRefs;
     impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
 }
 
@@ -2021,6 +2022,20 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (m_pGrabBagItem)
     {
         m_pGrabBagItem->dumpAsXml(pWriter);
+    }
+
+    if (maThemeStyleRefs.isStated())
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ThemeStyleRefs"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("line"), "%" SAL_PRIdINT32,
+                                                maThemeStyleRefs.maLine.mnIndex);
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("fill"), "%" SAL_PRIdINT32,
+                                                maThemeStyleRefs.maFill.mnIndex);
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("effect"), "%" SAL_PRIdINT32,
+                                                maThemeStyleRefs.maEffect.mnIndex);
+        (void)xmlTextWriterWriteFormatAttribute(
+            pWriter, BAD_CAST("font"), "%d", int(maThemeStyleRefs.maFont.meType));
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
     if (mpProperties)

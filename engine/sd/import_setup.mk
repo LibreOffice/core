@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_import_tests$(1), \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     drawinglayer \
     drawinglayercore \
     editeng \

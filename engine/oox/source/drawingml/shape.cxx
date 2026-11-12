@@ -122,6 +122,7 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <docmodel/theme/ThemeStyleRef.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdtrans.hxx>
@@ -1964,6 +1965,11 @@ Reference< XShape > const & Shape::createAndInsert(
         // available as property there, so store it in InteropGrabBag.
         putPropertyToGrabBag(u"mso-rotation-angle"_ustr, Any(mnRotation));
 
+        // What the shape takes from the styles of the theme behind it. A shape that is drawn
+        // with one of them points at it rather than stating what it looks like, so that the
+        // theme is what decides and a change of theme reaches the shape.
+        model::ThemeStyleRefs aThemeStyleRefs;
+
         if( pTheme )
         {
             if( const ShapeStyleRef* pLineRef = getShapeStyleRef( XML_lnRef ) )
@@ -1991,6 +1997,9 @@ Reference< XShape > const & Shape::createAndInsert(
                     {u"Transformations"_ustr, cpo::uno::Any(pLineRef->maPhClr.getTransformations())}
                 });
                 putPropertyToGrabBag( u"StyleLnRef"_ustr, Any( aProperties ) );
+
+                aThemeStyleRefs.maLine.mnIndex = pLineRef->mnThemedIdx;
+                aThemeStyleRefs.maLine.maColor = aLinePhClrComplex;
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
@@ -2013,6 +2022,10 @@ Reference< XShape > const & Shape::createAndInsert(
 
                     putPropertyToGrabBag( u"StyleFillRef"_ustr, Any( aProperties ) );
                 }
+
+                aThemeStyleRefs.maFill.mnIndex = pFillRef->mnThemedIdx;
+                aThemeStyleRefs.maFill.maColor
+                    = pFillRef->maPhClr.createComplexColor(rGraphicHelper, nFillPhClrTheme);
             }
             if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_effectRef ) )
             {
@@ -2027,6 +2040,10 @@ Reference< XShape > const & Shape::createAndInsert(
                     {u"Transformations"_ustr, cpo::uno::Any(pEffectRef->maPhClr.getTransformations())}
                 });
                 putPropertyToGrabBag( u"StyleEffectRef"_ustr, Any( aProperties ) );
+
+                aThemeStyleRefs.maEffect.mnIndex = pEffectRef->mnThemedIdx;
+                aThemeStyleRefs.maEffect.maColor = pEffectRef->maPhClr.createComplexColor(
+                    rGraphicHelper, pEffectRef->maPhClr.getSchemeColorIndex());
             }
             if( const ShapeStyleRef* pFontRef = getShapeStyleRef( XML_fontRef ) )
             {
@@ -2040,6 +2057,18 @@ Reference< XShape > const & Shape::createAndInsert(
                     {u"Transformations"_ustr, cpo::uno::Any(pFontRef->maPhClr.getTransformations())}
                 });
                 putPropertyToGrabBag( u"StyleFontRef"_ustr, Any( aProperties ) );
+
+                aThemeStyleRefs.maFont.meType = pFontRef->mnThemedIdx == XML_major
+                                                    ? model::ThemeFontRefType::Major
+                                                    : model::ThemeFontRefType::Minor;
+                aThemeStyleRefs.maFont.maColor = pFontRef->maPhClr.createComplexColor(
+                    rGraphicHelper, pFontRef->maPhClr.getSchemeColorIndex());
+            }
+
+            if (aThemeStyleRefs.isStated())
+            {
+                if (SdrObject* pObject = SdrObject::getSdrObjectFromXShape(mxShape))
+                    pObject->SetThemeStyleRefs(aThemeStyleRefs);
             }
         }
         ShapePropertyMap aShapeProps( rFilterBase.getModelObjectHelper() );

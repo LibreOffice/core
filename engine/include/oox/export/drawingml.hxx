@@ -30,6 +30,7 @@
 #include <vector>
 
 #include <com/sun/star/beans/PropertyState.hpp>
+#include <docmodel/theme/ThemeStyleRef.hxx>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
@@ -387,8 +388,8 @@ protected:
     /// Output the media (including copying a video from vnd.sun.star.Package: to the output if necessary).
     void WriteMediaNonVisualProperties(const cpo::uno::Reference<css::drawing::XShape>& xShape);
 
-    void WriteStyleProperties( sal_Int32 nTokenId, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties );
-    void WriteFontRefStyle( const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties );
+    void WriteStyleReference( sal_Int32 nTokenId, model::ThemeStyleRef const& rStyleRef );
+    void WriteFontReference( model::ThemeFontRef const& rFontRef );
 
     OUString GetComponentDir() const;
     OUString GetRelationCompPrefix() const;
@@ -634,7 +635,7 @@ public:
         A shape that names none of them has no style block, because the four references a block
         must stand on would then all be made up, and a made-up reference to the font of the theme
         is read back as text of a colour the shape never stated. */
-    bool HasShapeStyle( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    static bool HasShapeStyle( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeStyle( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OOX_DLLPUBLIC void WriteShapeEffects( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffect( std::u16string_view sName, const cpo::uno::Sequence< css::beans::PropertyValue >& aEffectProps );

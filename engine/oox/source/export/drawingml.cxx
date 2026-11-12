@@ -147,7 +147,9 @@
 #include <editeng/flditem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/unonrule.hxx>
+#include <docmodel/theme/ThemeStyleRef.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <svx/svdobj.hxx>
 #include <docmodel/uno/UnoBlurEffect.hxx>
 #include <docmodel/uno/UnoGlowEffect.hxx>
 #include <docmodel/uno/UnoInnerShadowEffect.hxx>
@@ -9466,105 +9468,64 @@ void DrawingML::WriteFill(const Reference<XPropertySet>& xPropSet, const awt::Si
     }
 }
 
-void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, const Sequence< PropertyValue >& aProperties )
+namespace
 {
-    if( aProperties.hasElements() )
-    {
-        OUString sSchemeClr;
-        sal_uInt32 nIdx = 0;
-        Sequence< PropertyValue > aTransformations;
-        for( const auto& rProp : aProperties)
-        {
-            if( rProp.Name == "SchemeClr" )
-                rProp.Value >>= sSchemeClr;
-            else if( rProp.Name == "Idx" )
-                rProp.Value >>= nIdx;
-            else if( rProp.Name == "Transformations" )
-                rProp.Value >>= aTransformations;
-        }
-        mpFS->startElementNS(XML_a, nTokenId, XML_idx, OString::number(nIdx));
-        WriteColor(sSchemeClr, aTransformations);
-        mpFS->endElementNS( XML_a, nTokenId );
-    }
-    else
-    {
-        // write mock <a:*Ref> tag
-        mpFS->singleElementNS(XML_a, nTokenId, XML_idx, OString::number(0));
-    }
+/** What a shape takes from the styles of the theme behind it, or nothing where there is no shape
+    of the model behind the properties. */
+const model::ThemeStyleRefs* themeStyleRefsOf(const Reference<XPropertySet>& rxShapeProperties)
+{
+    Reference<drawing::XShape> xShape(rxShapeProperties, UNO_QUERY);
+    if (!xShape.is())
+        return nullptr;
+    const SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+    return pObject ? &pObject->GetThemeStyleRefs() : nullptr;
+}
 }
 
 bool DrawingML::HasShapeStyle( const Reference< XPropertySet >& xPropSet )
 {
-    if ( !GetProperty( xPropSet, u"InteropGrabBag"_ustr ) )
-        return false;
+    const model::ThemeStyleRefs* pStyleRefs = themeStyleRefsOf(xPropSet);
+    return pStyleRefs && pStyleRefs->isStated();
+}
 
-    Sequence< PropertyValue > aGrabBag;
-    mAny >>= aGrabBag;
-    for (const auto& rProp : aGrabBag)
+void DrawingML::WriteStyleReference(sal_Int32 nTokenId, model::ThemeStyleRef const& rStyleRef)
+{
+    if (!rStyleRef.maColor.isValidThemeType() && rStyleRef.maColor.getType() == model::ColorType::Unused)
     {
-        if (rProp.Name != "StyleFillRef" && rProp.Name != "StyleLnRef"
-            && rProp.Name != "StyleEffectRef" && rProp.Name != "StyleFontRef")
-            continue;
-        Sequence< PropertyValue > aReference;
-        if ((rProp.Value >>= aReference) && aReference.hasElements())
-            return true;
+        mpFS->singleElementNS(XML_a, nTokenId, XML_idx, OString::number(rStyleRef.mnIndex));
+        return;
     }
-    return false;
+
+    mpFS->startElementNS(XML_a, nTokenId, XML_idx, OString::number(rStyleRef.mnIndex));
+    WriteEffectColor(rStyleRef.maColor);
+    mpFS->endElementNS(XML_a, nTokenId);
+}
+
+void DrawingML::WriteFontReference(model::ThemeFontRef const& rFontRef)
+{
+    const OString aIndex
+        = rFontRef.meType == model::ThemeFontRefType::Major ? "major"_ostr : "minor"_ostr;
+    if (!rFontRef.maColor.isValidThemeType() && rFontRef.maColor.getType() == model::ColorType::Unused)
+    {
+        mpFS->singleElementNS(XML_a, XML_fontRef, XML_idx, aIndex);
+        return;
+    }
+
+    mpFS->startElementNS(XML_a, XML_fontRef, XML_idx, aIndex);
+    WriteEffectColor(rFontRef.maColor);
+    mpFS->endElementNS(XML_a, XML_fontRef);
 }
 
 void DrawingML::WriteShapeStyle( const Reference< XPropertySet >& xPropSet )
 {
-    // check existence of the grab bag
-    if ( !GetProperty( xPropSet, u"InteropGrabBag"_ustr ) )
+    const model::ThemeStyleRefs* pStyleRefs = themeStyleRefsOf(xPropSet);
+    if (!pStyleRefs)
         return;
 
-    // extract the relevant properties from the grab bag
-    Sequence< PropertyValue > aGrabBag;
-    Sequence< PropertyValue > aFillRefProperties, aLnRefProperties, aEffectRefProperties;
-    Sequence< PropertyValue > aFontRefProperties;
-    mAny >>= aGrabBag;
-    for (const auto& rProp : aGrabBag)
-    {
-        if( rProp.Name == "StyleFillRef" )
-            rProp.Value >>= aFillRefProperties;
-        else if( rProp.Name == "StyleLnRef" )
-            rProp.Value >>= aLnRefProperties;
-        else if( rProp.Name == "StyleEffectRef" )
-            rProp.Value >>= aEffectRefProperties;
-        else if( rProp.Name == "StyleFontRef" )
-            rProp.Value >>= aFontRefProperties;
-    }
-
-    WriteStyleProperties( XML_lnRef, aLnRefProperties );
-    WriteStyleProperties( XML_fillRef, aFillRefProperties );
-    WriteStyleProperties( XML_effectRef, aEffectRefProperties );
-    WriteFontRefStyle( aFontRefProperties );
-}
-
-void DrawingML::WriteFontRefStyle( const Sequence< PropertyValue >& aProperties )
-{
-    OUString sSchemeClr;
-    OUString sIdx(u"minor"_ustr);
-    Sequence< PropertyValue > aTransformations;
-    for( const auto& rProp : aProperties )
-    {
-        if( rProp.Name == "SchemeClr" )
-            rProp.Value >>= sSchemeClr;
-        else if( rProp.Name == "Idx" )
-            rProp.Value >>= sIdx;
-        else if( rProp.Name == "Transformations" )
-            rProp.Value >>= aTransformations;
-    }
-
-    if( sSchemeClr.isEmpty() )
-    {
-        mpFS->singleElementNS(XML_a, XML_fontRef, XML_idx, sIdx.toUtf8());
-        return;
-    }
-
-    mpFS->startElementNS(XML_a, XML_fontRef, XML_idx, sIdx.toUtf8());
-    WriteColor(sSchemeClr, aTransformations);
-    mpFS->endElementNS(XML_a, XML_fontRef);
+    WriteStyleReference(XML_lnRef, pStyleRefs->maLine);
+    WriteStyleReference(XML_fillRef, pStyleRefs->maFill);
+    WriteStyleReference(XML_effectRef, pStyleRefs->maEffect);
+    WriteFontReference(pStyleRefs->maFont);
 }
 
 void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< PropertyValue >& aEffectProps )

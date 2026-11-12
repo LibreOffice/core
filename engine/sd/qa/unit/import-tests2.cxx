@@ -37,6 +37,7 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <docmodel/theme/ThemeStyleRef.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <editeng/editeng.hxx>
@@ -133,6 +134,26 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf157529)
     // Expected: transparence value: 100%
     // Actual  : transparence value: 0%
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), nTransparence2);
+}
+
+// A shape drawn with the styles of the theme behind it says which of them it takes, so that the
+// theme is what decides what the shape looks like.
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testShapeNamesTheStylesOfItsTheme)
+{
+    // Given a slide whose shape is drawn with the first line, fill and effect style of its theme:
+    createSdImpressDoc("pptx/shape-soft-edges.pptx");
+
+    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    SdPage* pPage = pDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT_GREATER(size_t(0), pPage->GetObjCount());
+
+    // Then the shape names those styles rather than only the values they work out to.
+    const model::ThemeStyleRefs& rRefs = pPage->GetObj(0)->GetThemeStyleRefs();
+    CPPUNIT_ASSERT(rRefs.isStated());
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), rRefs.maFill.mnIndex);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), rRefs.maLine.mnIndex);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf160490)

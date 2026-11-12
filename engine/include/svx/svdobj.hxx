@@ -29,6 +29,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/typedwhich.hxx>
 #include <tools/degree.hxx>
+#include <docmodel/theme/ThemeStyleRef.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/svxdllapi.h>
@@ -426,6 +427,12 @@ public:
     void GetGrabBagItem(cpo::uno::Any& rVal) const;
 
     void SetGrabBagItem(const cpo::uno::Any& rVal);
+
+    /** What the shape takes from the styles of the theme behind it, and the colours it gives
+        those styles to work with. Stated by a shape that is drawn with them, and left alone by
+        one that is drawn with values of its own. */
+    const model::ThemeStyleRefs& GetThemeStyleRefs() const { return maThemeStyleRefs; }
+    void SetThemeStyleRefs(const model::ThemeStyleRefs& rRefs) { maThemeStyleRefs = rRefs; }
 
     // Return the position in the navigation order for the called object.
     // Note that this method may update the navigation position of the
@@ -1043,6 +1050,7 @@ private:
     sal_uInt32                        m_nOrdNum;      // order number of the object in the list
     class UniqueID                          maUniqueID;
     std::unique_ptr<SfxGrabBagItem>   m_pGrabBagItem; // holds the GrabBagItem property
+    model::ThemeStyleRefs             maThemeStyleRefs;
     // Position in the navigation order. SAL_MAX_UINT32 when not used.
     sal_uInt32                        mnNavigationPosition;
     SdrLayerID                        mnLayerID;
