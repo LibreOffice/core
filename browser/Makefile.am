@@ -895,6 +895,7 @@ COOL_JS_LST =\
 	src/control/Control.MobileSearchBar.ts \
 	src/control/Control.MobileTopBar.ts \
 	src/control/Control.MobileBottomBar.js \
+	src/control/LinkedViewRow.tsx \
 	src/control/Control.UserList.ts \
 	src/control/Control.FormulaBarJSDialog.js \
 	src/control/Control.SheetsBar.js \
@@ -1926,6 +1927,7 @@ pot:
 		src/control/Control.Zotero.js \
 		src/control/HRuler.ts \
 		src/control/IFrameDialog.js \
+		src/control/LinkedViewRow.tsx \
 		src/control/Parts.js \
 		src/control/Permission.js \
 		src/control/Signing.js \

@@ -1753,6 +1753,17 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 	opacity: 0.5;
 }
 
+/* A presentation that links to the document. It is not a person, so it cannot be followed. */
+.user-list-item.linked-view:hover {
+	background-color: transparent;
+	cursor: default;
+}
+
+#userlist-dropdown .linked-view-avatar {
+	border-color: transparent;
+	background-color: transparent;
+}
+
 #follow-editor {
 	padding: var(--spacing-m);
 	display: flex;

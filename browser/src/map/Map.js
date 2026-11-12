@@ -559,7 +559,7 @@ window.L.Map = window.L.Evented.extend({
 		this.fire('postMessage', {msgId: 'View_Added', args: {Deprecated: true, ViewId: viewInfo.id, UserId: viewInfo.userid, UserName: viewInfo.username, UserExtraInfo: viewInfo.userextrainfo, Color: app.LOUtil.rgbToHex(viewInfo.color), ReadOnly: viewInfo.readonly}});
 
 		// Fire last, otherwise not all events are handled correctly.
-		this.fire('addview', {viewId: viewInfo.id, userId: viewInfo.userid, username: viewInfo.username, extraInfo: viewInfo.userextrainfo, readonly: this.isViewReadOnly(viewInfo.id), parked: this.isViewParked(viewInfo.id)});
+		this.fire('addview', {viewId: viewInfo.id, userId: viewInfo.userid, username: viewInfo.username, extraInfo: viewInfo.userextrainfo, readonly: this.isViewReadOnly(viewInfo.id), parked: this.isViewParked(viewInfo.id), remoteLink: this.isViewRemoteLink(viewInfo.id)});
 
 		this.updateAvatars();
 	},
@@ -791,6 +791,12 @@ window.L.Map = window.L.Evented.extend({
 	// back to.
 	isViewParked: function(viewid) {
 		return this._viewInfo[viewid].parked === 'true';
+	},
+
+	// Another document reads this one through the view, to show and copy its slides. Nobody
+	// looks through it.
+	isViewRemoteLink: function(viewid) {
+		return this._viewInfo[viewid].remotelink === 'true';
 	},
 
 	// true when the form controls of this view are in design mode and are edited as objects, false
@@ -1333,6 +1339,10 @@ window.L.Map = window.L.Evented.extend({
 			followEditor = false;
 			followUser = false;
 		}
+
+		// The view of a linked document sits wherever it last read, so it is not followed.
+		if (followUser && this._viewInfo[viewId] && this.isViewRemoteLink(viewId))
+			return;
 
 		if (followUser) {
 			if (instantJump) this._goToViewId(viewId);

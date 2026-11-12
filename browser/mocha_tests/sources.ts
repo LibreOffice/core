@@ -364,6 +364,7 @@
 /// <reference path="../src/control/jsdialog/Widget.TreeView.ts" />
 /// <reference path="../src/control/Control.MobileSearchBar.ts" />
 /// <reference path="../src/control/Control.MobileTopBar.ts" />
+/// <reference path="../src/control/LinkedViewRow.tsx" />
 /// <reference path="../src/control/Control.UserList.ts" />
 /// <reference path="../src/control/Control.SaveState.tsx" />
 /// <reference path="../src/control/Control.NotebookbarBase.ts" />

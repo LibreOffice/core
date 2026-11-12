@@ -25,6 +25,8 @@ interface User {
 	color: string;
 	readonly: boolean;
 	parked: boolean;
+	// The view through which another document reads this one. Nobody looks through it.
+	remoteLink: boolean;
 	you: boolean;
 	cachedHeaderAvatar?: HTMLImageElement;
 	cachedUserListAvatar?: HTMLImageElement;
@@ -38,6 +40,7 @@ interface UserEvent {
 	extraInfo: UserExtraInfo;
 	readonly: boolean;
 	parked: boolean;
+	remoteLink: boolean;
 }
 
 interface ViewParkedEvent {
@@ -146,6 +149,9 @@ class UserList extends window.L.Control {
 	}
 
 	followUser(viewId: number, instantJump: boolean = true) {
+		// The view of a linked document sits wherever it last read, so it is not followed.
+		if (this.users.get(viewId)?.remoteLink) return;
+
 		const myViewId = this.map._docLayer._viewId;
 		const followingViewId = app.getFollowedViewId();
 		const followMyself = viewId === myViewId;
@@ -289,7 +295,7 @@ class UserList extends window.L.Control {
 				const isSelf = viewId === this.map._docLayer._viewId;
 				const isFollowed =
 					followedUser !== undefined && viewId === followedUser[0];
-				if (isSelf || isFollowed) {
+				if (isSelf || isFollowed || user.remoteLink) {
 					continue;
 				}
 
@@ -309,14 +315,17 @@ class UserList extends window.L.Control {
 		}.bind(this)();
 	}
 
-	// Number of rows the list shows: one per user behind the open views, plus
-	// one for every view that came without a user id.
+	// Number of rows of people the list shows: one per user behind the open
+	// views, plus one for every view that came without a user id. The views of
+	// linked documents are not people and are not counted.
 	getListedUserCount(): number {
 		const listedUserIds = new Set<string>();
 		let count = 0;
 
 		for (const user of this.users.values()) {
-			if (!user.userId) {
+			if (user.remoteLink) {
+				continue;
+			} else if (!user.userId) {
 				count++;
 			} else if (!listedUserIds.has(user.userId)) {
 				listedUserIds.add(user.userId);
@@ -327,14 +336,35 @@ class UserList extends window.L.Control {
 		return count;
 	}
 
-	// Any view of the given user, or undefined when the user has none left.
+	// The names of the users who have a presentation open that links to this
+	// document, once per user, in the order their views came. A view without a
+	// user id names a user of its own.
+	getLinkedViewUsers(): string[] {
+		const users = new Map<string, string>();
+
+		for (const [viewId, user] of this.users) {
+			if (!user.remoteLink) {
+				continue;
+			}
+
+			const key = user.userId ? 'user:' + user.userId : 'view:' + viewId;
+			if (!users.has(key)) {
+				users.set(key, user.username);
+			}
+		}
+
+		return Array.from(users.values());
+	}
+
+	// Any view the given user looks through, or undefined when the user has none
+	// left. The view of a linked document is not one.
 	getViewOfUser(userId: string): number | undefined {
 		if (!userId) {
 			return undefined;
 		}
 
 		for (const [viewId, user] of this.users) {
-			if (user.userId === userId) {
+			if (user.userId === userId && !user.remoteLink) {
 				return viewId;
 			}
 		}
@@ -368,7 +398,11 @@ class UserList extends window.L.Control {
 			return;
 		}
 
-		if (!acting.userId || acting.userId !== followed.userId) {
+		if (
+			acting.remoteLink ||
+			!acting.userId ||
+			acting.userId !== followed.userId
+		) {
 			return;
 		}
 
@@ -388,10 +422,12 @@ class UserList extends window.L.Control {
 		const joinedViews = this.joinedViews;
 		this.joinedViews = new Set();
 
+		// The list opens while anyone else, or any linked document, reads the
+		// document.
 		if (
 			window.mode.isSmallScreenDevice() ||
 			this.hideUserList() ||
-			sortedUsers.length === 1
+			(sortedUsers.length === 1 && this.getLinkedViewUsers().length === 0)
 		) {
 			userListElement.removeAttribute('accesskey');
 			userListElementBackground.style.display = 'none';
@@ -441,9 +477,10 @@ class UserList extends window.L.Control {
 
 	updateUserListCount() {
 		const count = this.getListedUserCount();
+		const linked = this.getLinkedViewUsers().length;
 
 		if (this.map.mobileTopBar) {
-			if (!this.hideUserList() && count > 1)
+			if (!this.hideUserList() && (count > 1 || linked > 0))
 				this.map.mobileTopBar.showItem('userlist', true);
 			else this.map.mobileTopBar.showItem('userlist', false);
 		}
@@ -489,11 +526,12 @@ class UserList extends window.L.Control {
 			color: color,
 			readonly: e.readonly,
 			parked: e.parked,
+			remoteLink: e.remoteLink,
 		});
 
 		// A user who is already in the list opened one more connection, which
-		// joins the row they already have.
-		if (firstViewOfUser) {
+		// joins the row they already have. A linked document is no one joining.
+		if (firstViewOfUser && !e.remoteLink) {
 			this.showJoinLeaveMessage('join', e.viewId, username, color);
 
 			if (this.viewsAreJoining) {
@@ -528,14 +566,15 @@ class UserList extends window.L.Control {
 	}
 
 	// A row stands for a user, who may have several views. The user is away
-	// only when every one of those views is parked.
+	// only when every one of those views is parked. The view of a linked
+	// document does not keep the user here.
 	isUserParked(user: User): boolean {
 		if (!user.userId) {
 			return user.parked;
 		}
 
 		for (const other of this.users.values()) {
-			if (other.userId === user.userId && !other.parked) {
+			if (other.userId === user.userId && !other.parked && !other.remoteLink) {
 				return false;
 			}
 		}
@@ -561,7 +600,11 @@ class UserList extends window.L.Control {
 			}
 		}
 
-		if (user !== undefined && remainingViewId === undefined) {
+		if (
+			user !== undefined &&
+			!user.remoteLink &&
+			remainingViewId === undefined
+		) {
 			this.showJoinLeaveMessage('leave', e.viewId, user.username, user.color);
 		}
 
@@ -679,6 +722,7 @@ class UserList extends window.L.Control {
 		const focusedFollowEditor = focusedInside?.id === 'follow-editor';
 
 		const users = Array.from(this.getSortedUsers());
+		const linkedUsers = this.getLinkedViewUsers();
 
 		const following = this.getFollowedUser();
 
@@ -751,7 +795,12 @@ class UserList extends window.L.Control {
 		followEditorWrapper.id = 'follow-editor';
 		followEditorWrapper.setAttribute('role', 'checkbox');
 		followEditorWrapper.setAttribute('tabindex', '0');
-		followEditorWrapper.setAttribute('index', users.length + ':0');
+		// The rows of the people come first, then the rows of the linked
+		// presentations, then this checkbox.
+		followEditorWrapper.setAttribute(
+			'index',
+			users.length + linkedUsers.length + ':0',
+		);
 		followEditorWrapper.setAttribute(
 			'aria-label',
 			_('Always follow the editor'),
@@ -793,7 +842,16 @@ class UserList extends window.L.Control {
 		followEditorCheckboxLabel.setAttribute('for', 'follow-editor-checkbox');
 		followEditorCheckboxLabel.setAttribute('aria-hidden', 'true');
 
-		popoverElement.replaceChildren(...userElements, followEditorWrapper);
+		const linkedList =
+			linkedUsers.length > 0
+				? [buildLinkedViewList(linkedUsers, users.length, this.map)]
+				: [];
+
+		popoverElement.replaceChildren(
+			...userElements,
+			...linkedList,
+			followEditorWrapper,
+		);
 
 		const restored = this.findRowToRefocus(
 			popoverElement,

@@ -122,6 +122,7 @@
 /// <reference path="./SlideLinks.test.ts" />
 /// <reference path="./SlideLinkToolbar.test.ts" />
 /// <reference path="./SlideImportPane.test.ts" />
+/// <reference path="./UserList.test.ts" />
 /// <reference path="./ExportFormats.test.ts" />
 /// <reference path="./Tooltip.test.ts" />
 /// <reference path="./CollabNotices.test.ts" />
