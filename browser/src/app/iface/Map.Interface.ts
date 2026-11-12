@@ -221,7 +221,9 @@ interface MapInterface extends Evented {
 	_limitZoom(zoom: number): number;
 	isViewReadOnly(viewid: number): boolean;
 	isViewParked(viewid: number): boolean;
-	context?: { appId: string; context: string };
+	// The context of the selection, and in contexts that one first, then the contexts of the
+	// structures that enclose the selection.
+	context?: { appId: string; context: string; contexts?: Array<string> };
 	eSignature?: cool.ESignature;
 
 	// TODO: Fix type.

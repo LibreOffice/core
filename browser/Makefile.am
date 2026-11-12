@@ -806,6 +806,7 @@ COOL_JS_LST =\
 	src/control/Control.Tooltip.js \
 	src/control/Control.ESignature.ts \
 	src/control/Control.ESignatureDialog.ts \
+	src/control/Control.TableStylesDialog.ts \
 	src/control/Control.AIChatSidebar.ts \
 	src/slideimport/SlideImportSession.ts \
 	src/slideimport/VectorThumbnail.tsx \
@@ -1936,6 +1937,7 @@ pot:
 		src/control/Control.ServerAuditDialog.ts \
 		src/control/Control.SheetsBar.js \
 		src/control/Control.StatusBar.js \
+		src/control/Control.TableStylesDialog.ts \
 		src/control/Control.Tabs.js \
 		src/control/Control.Toolbar.js \
 		src/control/Control.TopToolbar.js \

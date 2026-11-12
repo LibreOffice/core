@@ -423,6 +423,7 @@ class Menubar extends window.L.Control {
 				{uno: '.uno:Protect'},
 				{uno: '.uno:UnsetCellsReadOnly'},
 				{type: 'separator'},
+				{name: _('Table Styles...'), id: 'tablestyles', type: 'action'},
 				{uno: '.uno:TableDialog'}
 			]},
 			{name: _UNO('.uno:FormatFormMenu', 'text'), id: 'form', type: 'menu', accessibility: {combination: 'MM'}, menu: [
@@ -650,6 +651,7 @@ class Menubar extends window.L.Control {
 					{uno: '.uno:SetMinimalColumnWidth'},
 					{uno: '.uno:SetOptimalColumnWidth'},
 					{uno: '.uno:DistributeColumns'}]},
+				{name: _('Table Styles...'), id: 'tablestyles', type: 'action'},
 				{uno: '.uno:TableDialog'}]
 			},
 			{name: _UNO('.uno:SlideMenu', 'presentation'), id: 'slide', type: 'menu', accessibility: {combination: 'MS'}, menu: [
@@ -1138,6 +1140,7 @@ class Menubar extends window.L.Control {
 					{name: _UNO('.uno:DeletePivotTable', 'spreadsheet'), uno: '.uno:DeletePivotTable'}]},
 				{type: 'separator'},
 				{name: _UNO('.uno:DataTableMenu', 'spreadsheet'), type: 'menu', menu: [
+					{name: _('Table Styles...'), id: 'tablestyles', type: 'action'},
 					{name: _UNO('.uno:RemoveCalcTable', 'spreadsheet'), uno: '.uno:RemoveCalcTable'},
 					{name: _UNO('.uno:TableTotalRow', 'spreadsheet'), uno: '.uno:TableTotalRow'},
 					{name: _UNO('.uno:ResizeCalcTable', 'spreadsheet'), uno: '.uno:ResizeCalcTable'},
@@ -2442,6 +2445,13 @@ class Menubar extends window.L.Control {
 						itemState = this._map['stateChangeHandler'].getItemValue(id);
 						if (itemState === 'true') $(aItem).addClass(constChecked);
 						else $(aItem).removeClass(constChecked);
+					} else if (id === 'tablestyles') {
+						// Follow the table command next to it in the menu.
+						const tableUno = this._map.getDocType() === 'spreadsheet'
+							? '.uno:RemoveCalcTable' : '.uno:TableDialog';
+						itemState = this._map['stateChangeHandler'].getItemValue(tableUno);
+						if (itemState === 'disabled') $(aItem).addClass('disabled');
+						else $(aItem).removeClass('disabled');
 					} else if (id === 'presentation-in-console') {
 						if (this._map.uiManager.shouldShowPresenterConsole()) {
 							$(aItem).addClass(constChecked);
@@ -2813,6 +2823,8 @@ class Menubar extends window.L.Control {
 			this._map.insertPage();
 		} else if (id === 'insertshape') {
 			this._openInsertShapesWizard();
+		} else if (id === 'tablestyles') {
+			new TableStylesDialog().open();
 		} else if (id === 'duplicatepage') {
 			this._map.duplicatePage();
 		} else if (id === 'about') {

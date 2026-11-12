@@ -339,6 +339,7 @@
 /// <reference path="../src/control/Control.ServerAuditDialog.ts" />
 /// <reference path="../src/control/Control.ESignature.ts" />
 /// <reference path="../src/control/Control.ESignatureDialog.ts" />
+/// <reference path="../src/control/Control.TableStylesDialog.ts" />
 /// <reference path="../src/control/ColorPicker.ts" />
 /// <reference path="../src/unoshortcuts.ts" />
 /// <reference path="../src/control/jsdialog/Util.Shortcuts.ts" />

@@ -1246,6 +1246,20 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	max-height: 24px; /* required for hidpi*/
 }
 
+/* The table style gallery fills the dialog width and scrolls within a bounded height. */
+#TableStylesDialog .ui-iconview {
+	max-height: min(60vh, 480px);
+	overflow-y: auto;
+	margin-bottom: 8px;
+}
+
+/* New Table Style and Clear Style sit together at the start of the row below the gallery. */
+#TableStylesDialog-actions {
+	display: flex;
+	justify-content: start;
+	gap: 8px;
+}
+
 #ServerAuditDialog .ui-treeview-entry {
 	display: grid;
 	grid-template-columns: var(--btn-img-size) 6fr 3fr;

@@ -255,27 +255,29 @@ class TableStylesService {
 					id: 'tablestyles_design-iconview-list',
 					type: 'iconviewlist',
 					accessibility: { focusBack: false, combination: 'TL', de: null },
-					children: [
-						{
-							id: 'tablestyles_design',
-							type: 'iconview',
-							text: _('Table Styles'),
-							command: '.uno:DatabaseSettings',
-							enabled: this.enabled,
-							aria: { label: _('Table Styles') },
-							accessibility: {
-								focusBack: true,
-								combination: 'TS',
-							},
-							entries: this.generateJSON(),
-							singleclickactivate: true,
-							textWithIconEnabled: false, // standard names from core are not translated yet
-							selectionmode: 'single',
-						} as IconViewJSON,
-					],
+					children: [this.generateIconViewJSON()],
 				},
 			],
 		};
+	}
+
+	public generateIconViewJSON(): IconViewJSON {
+		return {
+			id: 'tablestyles_design',
+			type: 'iconview',
+			text: _('Table Styles'),
+			command: '.uno:DatabaseSettings',
+			enabled: this.enabled,
+			aria: { label: _('Table Styles') },
+			accessibility: {
+				focusBack: true,
+				combination: 'TS',
+			},
+			entries: this.generateJSON(),
+			singleclickactivate: true,
+			textWithIconEnabled: false, // standard names from core are not translated yet
+			selectionmode: 'single',
+		} as IconViewJSON;
 	}
 
 	public getNoneStyle(): TableStyleEntry {
