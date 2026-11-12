@@ -27,6 +27,10 @@
 #include <anchoredobject.hxx>
 #include <flyfrm.hxx>
 #include <tabfrm.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <docufld.hxx>
+#include <fmtfld.hxx>
+#include <txtfld.hxx>
 
 using namespace ::com::sun::star;
 
@@ -191,6 +195,34 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableMultiNested)
     // 6 table frames: 3 masters and 3 follows, all listed on the page of the master's anchor:
     int nTables = countXPathNodes(pXmlDoc, "//page[1]//tab");
     CPPUNIT_ASSERT_EQUAL(6, nTables);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentInFootnoteAndHeader)
+{
+    // Given a document with a comment in a footnote and another comment in a header:
+    // When importing that document:
+    createSwDoc("comment-in-footnote-and-header.docx");
+
+    // Then make sure both comments are imported, one in each of those texts:
+    SwFieldType* pPostitFieldType
+        = getSwDoc()->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit);
+    std::vector<SwFormatField*> aFormatFields;
+    pPostitFieldType->GatherFields(aFormatFields);
+    // Without the accompanying fix in place, this test would have failed, the load failed, as the
+    // comments part was looked up from the footnotes part and the header part.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFormatFields.size());
+    int nInFootnote = 0;
+    int nInHeader = 0;
+    for (const SwFormatField* pFormatField : aFormatFields)
+    {
+        const SwTextNode& rNode = pFormatField->GetTextField()->GetTextNode();
+        if (rNode.FindFootnoteStartNode())
+            ++nInFootnote;
+        else if (rNode.FindHeaderStartNode())
+            ++nInHeader;
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nInFootnote);
+    CPPUNIT_ASSERT_EQUAL(1, nInHeader);
 }
 }
 

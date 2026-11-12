@@ -258,6 +258,7 @@ OOXMLDocument::getSubStream(const OUString & rId)
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
     pTemp->mbIsSubstream = true;
+    pTemp->mpMainDocument = getMainDocument();
     return pRet;
 }
 
@@ -268,6 +269,7 @@ OOXMLDocument::getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int32 n
     OOXMLDocument * pDocument = new OOXMLDocument(OOXMLDocumentFactory::createStream(mpStream, nType),
             uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor, nullptr);
     pDocument->setXNoteId(nId);
+    pDocument->mpMainDocument = getMainDocument();
     pDocument->setModel(getModel());
     pDocument->setDrawPage(getDrawPage());
 
@@ -344,6 +346,12 @@ void OOXMLDocument::resolveCommentsExtensibleStream(Stream& rStream)
 void OOXMLDocument::resolveComment(Stream & rStream,
                                        const sal_Int32 nId)
 {
+    if (mpMainDocument)
+    {
+        mpMainDocument->resolveComment(rStream, nId);
+        return;
+    }
+
     if (!mbCommentsExtendedResolved)
     {
         resolveCommentsExtendedStream(rStream);
