@@ -477,9 +477,9 @@ namespace FileUtil
     }
 
     /// Opens each directory the components name below localDir in turn, making the missing
-    /// ones. Returns the last one, or -1.
+    /// ones when makeMissing is true. Returns the last one, or -1.
     int openDirectoriesBelow(const std::string& localDir,
-                             const std::vector<std::string>& components)
+                             const std::vector<std::string>& components, bool makeMissing)
     {
         int dirFd = openJailDirectory(localDir);
         if (dirFd < 0)
@@ -490,7 +490,7 @@ namespace FileUtil
 
         for (const std::string& component : components)
         {
-            if (::mkdirat(dirFd, component.c_str(), 0777) < 0 && errno != EEXIST)
+            if (makeMissing && ::mkdirat(dirFd, component.c_str(), 0777) < 0 && errno != EEXIST)
             {
                 LOG_SYS("Failed to make directory [" << Anonymizer::anonymizeUrl(component)
                                                      << "] below ["
@@ -500,7 +500,10 @@ namespace FileUtil
             }
             const int nextFd = ::openat(dirFd, component.c_str(),
                                         O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
-            if (nextFd < 0)
+            if (nextFd < 0 && errno == ENOENT)
+                LOG_DBG("No directory [" << Anonymizer::anonymizeUrl(component) << "] below ["
+                                         << Anonymizer::anonymizeUrl(localDir) << ']');
+            else if (nextFd < 0)
                 LOG_SYS("Directory [" << Anonymizer::anonymizeUrl(component) << "] below ["
                                       << Anonymizer::anonymizeUrl(localDir)
                                       << "] is not a real directory");
@@ -554,7 +557,90 @@ namespace FileUtil
             ::unlinkat(dirFd, fileName.c_str(), 0);
         return copied;
     }
+
+    /// The names of the directories below localDir on the way to localPath, ending with the file
+    /// name, or nothing when localPath does not name a file under localDir or has a "." or "..".
+    std::vector<std::string> componentsBelow(const std::string& localDir,
+                                             const std::string& localPath)
+    {
+        if (localPath.size() <= localDir.size() || !localPath.starts_with(localDir) ||
+            localPath.ends_with('/') ||
+            (!localDir.ends_with('/') && localPath[localDir.size()] != '/'))
+        {
+            return {};
+        }
+
+        std::vector<std::string> components =
+            Util::splitStringToVector(localPath.substr(localDir.size()), '/');
+        for (const std::string& component : components)
+        {
+            if (component == "." || component == "..")
+                return {};
+        }
+        return components;
+    }
+
+    /// The flags to open a file for reading with, so that a FIFO at the name returns at once and a
+    /// terminal at the name does not become the controlling terminal.
+    constexpr int ReadFlags = O_RDONLY | O_NONBLOCK | O_NOCTTY | O_NOFOLLOW | O_CLOEXEC;
+
+    void logOpenFailure(const std::string& path)
+    {
+        if (errno == ENOENT)
+            LOG_DBG("No file [" << Anonymizer::anonymizeUrl(path) << ']');
+        else
+            LOG_SYS("Failed to open [" << Anonymizer::anonymizeUrl(path) << ']');
+    }
+
+    /// Returns fd, in blocking mode, when it is open on a regular file. Otherwise closes it and
+    /// returns -1.
+    int keepIfRegularFile(int fd, const std::string& path)
+    {
+        if (fd < 0)
+            return -1;
+
+        struct stat st;
+        if (::fstat(fd, &st) != 0)
+            LOG_SYS("Failed to stat [" << Anonymizer::anonymizeUrl(path) << ']');
+        else if (!S_ISREG(st.st_mode))
+            LOG_WRN("[" << Anonymizer::anonymizeUrl(path) << "] is not a regular file");
+        else
+        {
+            const int flags = ::fcntl(fd, F_GETFL);
+            if (flags >= 0 && ::fcntl(fd, F_SETFL, flags & ~O_NONBLOCK) == 0)
+                return fd;
+            LOG_SYS("Failed to make [" << Anonymizer::anonymizeUrl(path) << "] blocking");
+        }
+
+        ::close(fd);
+        return -1;
+    }
     } // namespace
+
+    int openFileInJail(bool usingMountNamespaces, std::string localJailRoot, std::string jailPath)
+    {
+        const auto [localDir, localPath] =
+            localPathToJail(usingMountNamespaces, std::move(localJailRoot), std::move(jailPath));
+        std::vector<std::string> components = componentsBelow(localDir, localPath);
+        if (components.empty())
+        {
+            LOG_WRN("[" << Anonymizer::anonymizeUrl(localPath) << "] is not a file below ["
+                        << Anonymizer::anonymizeUrl(localDir) << ']');
+            return -1;
+        }
+
+        const std::string fileName = std::move(components.back());
+        components.pop_back();
+        const int dirFd = openDirectoriesBelow(localDir, components, /*makeMissing=*/false);
+        if (dirFd < 0)
+            return -1;
+
+        const int fd = ::openat(dirFd, fileName.c_str(), ReadFlags);
+        if (fd < 0)
+            logOpenFailure(localPath);
+        ::close(dirFd);
+        return keepIfRegularFile(fd, localPath);
+    }
 
     std::string moveFileIntoJail(bool usingMountNamespaces, std::string localJailRoot,
                                  std::string jailPath, const std::string& localPath)
@@ -563,15 +649,12 @@ namespace FileUtil
             localPathToJail(usingMountNamespaces, std::move(localJailRoot), std::move(jailPath));
 
         bool moved = false;
-        if (destination.size() > localDir.size() && destination.starts_with(localDir) &&
-            !destination.ends_with('/'))
+        std::vector<std::string> components = componentsBelow(localDir, destination);
+        if (!components.empty())
         {
-            // localPathToJail has already resolved any "." and "..".
-            std::vector<std::string> components =
-                Util::splitStringToVector(destination.substr(localDir.size()), '/');
             const std::string fileName = std::move(components.back());
             components.pop_back();
-            const int dirFd = openDirectoriesBelow(localDir, components);
+            const int dirFd = openDirectoriesBelow(localDir, components, /*makeMissing=*/true);
             if (dirFd >= 0)
             {
                 moved = ::renameat(AT_FDCWD, localPath.c_str(), dirFd, fileName.c_str()) == 0;

@@ -48,6 +48,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <ctime>
+#include <fcntl.h>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -86,6 +87,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testResolveRealpath);
     CPPUNIT_TEST(testFindFileInJail);
     CPPUNIT_TEST(testMoveFileIntoJail);
+    CPPUNIT_TEST(testOpenFileInJail);
     CPPUNIT_TEST(testStringCompare);
     CPPUNIT_TEST(testJsonUtilEscapeJSONValue);
     CPPUNIT_TEST(testStateEnum);
@@ -130,6 +132,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testResolveRealpath();
     void testFindFileInJail();
     void testMoveFileIntoJail();
+    void testOpenFileInJail();
     void testStringCompare();
     void testJsonUtilEscapeJSONValue();
     void testStateEnum();
@@ -1317,6 +1320,26 @@ std::string fileContents(const std::string& path)
     std::getline(std::ifstream(path), line);
     return line;
 }
+
+/// The bytes of the file open at fd, which is closed afterwards, after checking that fd is in
+/// blocking mode.
+std::string openedContents(int fd)
+{
+    constexpr std::string_view testname = __func__;
+    LOK_ASSERT(fd >= 0);
+
+    const int flags = ::fcntl(fd, F_GETFL);
+    std::string contents;
+    char buffer[256];
+    ssize_t count;
+    while ((count = ::read(fd, buffer, sizeof(buffer))) > 0)
+        contents.append(buffer, count);
+    ::close(fd);
+    LOK_ASSERT(flags >= 0);
+    LOK_ASSERT_EQUAL(0, flags & O_NONBLOCK);
+    LOK_ASSERT_EQUAL(ssize_t(0), count);
+    return contents;
+}
 } // namespace
 
 void WhiteBoxTests::testMoveFileIntoJail()
@@ -1413,6 +1436,52 @@ void WhiteBoxTests::testMoveFileIntoJail()
     }
     else
         TST_LOG("No second file system in /dev/shm, so the copy between file systems is untested");
+}
+
+void WhiteBoxTests::testOpenFileInJail()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+    const std::string jailRoot = dir + "/jails/jailid";
+    const std::string outside = dir + "/outside";
+    Poco::File(jailRoot + "/user/docs/abc").createDirectories();
+    Poco::File(outside).createDirectories();
+    std::ofstream(outside + "/secret.txt") << "secret";
+    std::ofstream(jailRoot + "/user/docs/abc/doc.odt") << "document";
+
+    // A file in the jail is opened.
+    LOK_ASSERT_EQUAL(std::string("document"),
+                     openedContents(FileUtil::openFileInJail(false, jailRoot,
+                                                             "/user/docs/abc/doc.odt")));
+
+    // A link at the file's own name is not followed.
+    LOK_ASSERT_EQUAL(0, symlink((outside + "/secret.txt").c_str(),
+                                (jailRoot + "/user/docs/abc/link.odt").c_str()));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openFileInJail(false, jailRoot, "/user/docs/abc/link.odt"));
+
+    // A link to a directory on the way is not followed.
+    LOK_ASSERT_EQUAL(0, symlink(outside.c_str(), (jailRoot + "/user/docs/linked").c_str()));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openFileInJail(false, jailRoot, "/user/docs/linked/secret.txt"));
+
+    // A directory, a missing file and a path with ".." above the jail root are not opened, and
+    // nothing is made on the way.
+    LOK_ASSERT_EQUAL(-1, FileUtil::openFileInJail(false, jailRoot, "/user/docs/abc"));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openFileInJail(false, jailRoot, "/user/missing/doc.odt"));
+    LOK_ASSERT(!FileUtil::Stat(jailRoot + "/user/missing").exists());
+    LOK_ASSERT_EQUAL(-1, FileUtil::openFileInJail(false, jailRoot, "../../outside/secret.txt"));
+
+    // A FIFO at the name is not opened, and the open returns without waiting for a writer.
+    LOK_ASSERT_EQUAL(0, mkfifo((jailRoot + "/user/docs/abc/fifo.odt").c_str(), 0600));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openFileInJail(false, jailRoot, "/user/docs/abc/fifo.odt"));
+
+    // With mount namespaces, the jail's /tmp is where /tmp is mounted from.
+    Poco::File(dir + "/jails/tmp/cool-jailid/user/docs/abc").createDirectories();
+    std::ofstream(dir + "/jails/tmp/cool-jailid/user/docs/abc/doc.odt") << "mounted";
+    LOK_ASSERT_EQUAL(std::string("mounted"),
+                     openedContents(FileUtil::openFileInJail(true, jailRoot,
+                                                             "/tmp/user/docs/abc/doc.odt")));
 }
 
 void WhiteBoxTests::testStringCompare()

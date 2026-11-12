@@ -140,6 +140,11 @@ namespace FileUtil
     /// Returns the local path of the moved file, or an empty string with localPath left in place.
     std::string moveFileIntoJail(bool usingMountNamespaces, std::string localJailRoot,
                                  std::string jailPath, const std::string& localPath);
+
+    /// Opens for reading the regular file that jailPath names in the jail under localJailRoot,
+    /// mapped as buildLocalPathToJail maps it, reached through no link. Returns the file
+    /// descriptor, in blocking mode, or -1 with errno undefined.
+    int openFileInJail(bool usingMountNamespaces, std::string localJailRoot, std::string jailPath);
 #endif
 
     // returns two strings
