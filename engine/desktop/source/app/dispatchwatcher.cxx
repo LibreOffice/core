@@ -57,6 +57,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/scheduler.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 
@@ -557,6 +558,12 @@ bool DispatchWatcher::executeDispatchRequests(
             {
                 if ( xDoc.is() )
                 {
+                    // A document can leave work to a timer as it is read, and a run from the
+                    // command line goes from reading to writing with none of the idle moments
+                    // that let a timer run. The work that is waiting is done here, so that the
+                    // document is whole by the time it is written or printed.
+                    Scheduler::ProcessEventsToIdle();
+
                     // Do we need to save the document in a different format?
                     if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
                          aDispatchRequest.aRequestType == REQUEST_CAT )
