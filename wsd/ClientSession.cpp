@@ -5915,7 +5915,12 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
                                                  std::chrono::steady_clock::now() - _viewLoadStart)
                                           << " after the load started. Dropping the result.");
             else
-                HttpHelper::sendFileAndShutdown(saveAsSocket, resultURL.getPath(), response);
+            {
+                http::InputFile file(FileUtil::openLocalFileInJail(COOLWSD::EnableMountNamespaces,
+                                                                   docBroker->getJailRoot(),
+                                                                   resultURL.getPath()));
+                HttpHelper::sendFileAndShutdown(saveAsSocket, file, response);
+            }
         }
         else if (saveAsSocket)
         {

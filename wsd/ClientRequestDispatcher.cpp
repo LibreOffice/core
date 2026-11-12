@@ -3252,8 +3252,8 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
 
         const std::string decoded = Uri::decode(url);
 
-        const Poco::Path filePath(FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces,
-                                                           COOLWSD::ChildRoot + jailId,
+        const std::string jailRoot = COOLWSD::ChildRoot + jailId;
+        const Poco::Path filePath(FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces, jailRoot,
                                                            JAILED_DOCUMENT_ROOT + decoded));
         const std::string filePathAnonym = Anonymizer::anonymizeUrl(filePath.toString());
 
@@ -3294,7 +3294,9 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
 
             try
             {
-                HttpHelper::sendFile(socket, filePath.toString(), response);
+                http::InputFile file(FileUtil::openLocalFileInJail(
+                    COOLWSD::EnableMountNamespaces, jailRoot, filePath.toString()));
+                HttpHelper::sendFile(socket, file, response);
             }
             catch (const Poco::Exception& exc)
             {
