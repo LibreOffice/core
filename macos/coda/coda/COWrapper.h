@@ -74,7 +74,8 @@
 // Push the saved view settings (viewsetting.json) into the running document's
 // JS so the kit applies them (AI credentials, Zotero, signing cert, ...). Sent
 // by the client (main.js) on load via the SYNCSETTINGS message.
-+ (void)syncSettingsWith:(Document *_Nonnull)document NS_SWIFT_NAME(syncSettings(with:));
++ (void)syncSettingsWith:(Document *_Nonnull)document withSecrets:(BOOL)withSecrets
+    NS_SWIFT_NAME(syncSettings(with:withSecrets:));
 
 // The release version, the source revision, and the full copyright line, the
 // same values the server reports to the web client.

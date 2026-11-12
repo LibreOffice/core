@@ -7016,9 +7016,11 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         }
         else if (s == L"SYNCSETTINGS")
         {
+            // The editor frame of an account window gets no secrets (it is in the remote server's
+            // origin):
             Desktop::syncSettings([&data](const std::vector<char>& buf) {
                 send2JS(data, buf.data(), buf.size());
-            });
+            }, !data.editorFrame);
         }
         else if (s.starts_with(L"UPLOADSETTINGS "))
         {

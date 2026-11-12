@@ -485,7 +485,9 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
              return (nil, nil)
         }
         else if body == "SYNCSETTINGS" {
-            COWrapper.syncSettings(with: document)
+            // The editor frame of an account window gets no secrets (it is in the remote server's
+            // origin):
+            COWrapper.syncSettings(with: document, withSecrets: document.editorFrame == nil)
             return (nil, nil)
         }
         else if body.hasPrefix("SETDARKMODE ") {

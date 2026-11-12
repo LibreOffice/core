@@ -893,7 +893,7 @@ static std::atomic<int> appDocIdCounter(1);
     uploadAndApplySettings(std::string([payload UTF8String]));
 }
 
-+ (void)syncSettingsWith:(Document *)document {
++ (void)syncSettingsWith:(Document *)document withSecrets:(BOOL)withSecrets {
     // syncSettings() reads viewsetting.json and invokes the callback with a
     // "viewsetting: <json>" frame; hand it straight to the document's JS the
     // same way the kit's own messages are delivered. Mirrors the Qt (Bridge.cpp)
@@ -901,7 +901,7 @@ static std::atomic<int> appDocIdCounter(1);
     Desktop::syncSettings([document](const std::vector<char>& data) {
         if (!data.empty())
             [document send2JS:data.data() length:(NSInteger)data.size()];
-    });
+    }, withSecrets);
 }
 
 + (NSString *)coolwsdVersion {

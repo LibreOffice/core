@@ -45,6 +45,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     /// The remote document's name, like "calc.ods".
     private var remoteDocumentName: String?
 
+    // The editor frame asked for the view settings before its document existed:
+    private var syncSettingsPending = false
+
     private var hasShownPage = false
 
     static func open(accountId: String, url: URL) {
@@ -198,6 +201,10 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         editorFrameInfo = frameInfo
         COWrapper.LOG_DBG("The editor frame loaded")
+        // The frame's earlier page ends together with its document and its pending SYNCSETTINGS
+        // (also when that page sent no BYE):
+        closeRemoteDocument()
+        syncSettingsPending = false
         putCodaPageIn(frameInfo)
     }
 
@@ -243,6 +250,11 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         guard let remoteDocument else {
             COWrapper.LOG_DBG("\(kind) came before the document")
+            // The page asks for the view settings as it starts, before it fetches its document, so
+            // the answer waits for the document:
+            if body == "SYNCSETTINGS" {
+                syncSettingsPending = true
+            }
             return (nil, nil)
         }
 
@@ -362,6 +374,10 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         // The document shows its Save As, print and error dialogs on this window.
         document.addWindowController(self)
         remoteDocument = document
+        if syncSettingsPending {
+            syncSettingsPending = false
+            _ = ViewController.handleDocumentMessage("SYNCSETTINGS", document: document)
+        }
         return document.tempFileURL?.path ?? ""
     }
 

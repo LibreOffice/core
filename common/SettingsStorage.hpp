@@ -40,7 +40,10 @@ namespace Desktop
 
     std::string fetchSettingsConfig();
 
-    void syncSettings(const std::function<void(const std::vector<char>&)>& sendFileCallback);
+    // Sends the user's view settings, with the stored secrets left blank and flagged as kept unless
+    // withSecrets is true:
+    void syncSettings(
+        const std::function<void(const std::vector<char>&)>& sendFileCallback, bool withSecrets);
 
     // The configuration the engine reads: the directory the dialog writes its
     // groups into, in the user's own profile. An app has no jail, so nothing

@@ -53,6 +53,9 @@
     <ClCompile Include="..\..\..\common\Session.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\SettingsSecrets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\common\SettingsStorage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

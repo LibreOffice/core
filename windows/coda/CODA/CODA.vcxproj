@@ -207,6 +207,7 @@
     <ClCompile Include="..\..\..\common\RecentFiles.cpp" />
     <ClCompile Include="..\..\..\common\RegexUtil.cpp" />
     <ClCompile Include="..\..\..\common\Session.cpp" />
+    <ClCompile Include="..\..\..\common\SettingsSecrets.cpp" />
     <ClCompile Include="..\..\..\common\SettingsStorage.cpp" />
     <ClCompile Include="..\..\..\common\SigUtil-mobile.cpp" />
     <ClCompile Include="..\..\..\common\Simd.cpp" />

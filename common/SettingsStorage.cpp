@@ -15,7 +15,9 @@
 
 #include <common/ConfigUtil.hpp>
 #include <common/Log.hpp>
+#include <common/SettingsSecrets.hpp>
 #include <common/Util.hpp>
+#include <common/ViewSettings.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 
@@ -198,7 +200,8 @@ std::string fetchSettingsConfig()
     }
 }
 
-void syncSettings(const std::function<void(const std::vector<char>&)>& sendFileCallback)
+void syncSettings(
+    const std::function<void(const std::vector<char>&)>& sendFileCallback, bool withSecrets)
 {
     try
     {
@@ -231,8 +234,19 @@ void syncSettings(const std::function<void(const std::vector<char>&)>& sendFileC
                         }
                         std::ostringstream ss;
                         ss << in.rdbuf();
+                        std::string content = ss.str();
+                        if (!withSecrets) {
+                            content = SettingsSecrets::redactSettingSecrets(
+                                content, ViewSettings::SecretFields);
+                            if (content.empty()) {
+                                LOG_WRN(
+                                    "syncSettings: not sending " << key
+                                    << ", as it does not parse");
+                                return;
+                            }
+                        }
 
-                        const std::string payload = key + ": " + ss.str();
+                        const std::string payload = key + ": " + content;
 
                         sendFileCallback(std::vector<char>(payload.begin(), payload.end()));
                     }

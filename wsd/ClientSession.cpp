@@ -26,7 +26,7 @@
 #include <common/ContainerUtil.hpp>
 #include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
-#if defined(QTAPP) || defined(MACOSAPP)
+#if defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
 #include <common/SettingsStorage.hpp>
 #endif
 #include <common/NumUtil.hpp>
@@ -3440,13 +3440,13 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             LOG_DBG("Loading on part " << loadPart << ", where the last view of this document was");
         }
 
-#if defined(QTAPP) || defined(MACOSAPP)
+#if defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
         // The kit reads SignatureCert/Key/Ca from authorprivateinfo (set at load
         // time and frozen there). On the desktop apps there is no WOPI host to
         // seed _userPrivateInfo, so the engine would fall back to NSS and
         // complain about a missing Mozilla profile. Hydrate it from the user's
         // viewsetting.json so the kit sees the credentials when building the
-        // .uno:Signature arguments. CODA-Q (QTAPP) and CODA-M (MACOSAPP) link
+        // .uno:Signature arguments. All CODA platforms link
         // common/SettingsStorage.cpp and so get the Desktop:: layer; the other
         // app builds stay without signing support until they pick it up.
         {

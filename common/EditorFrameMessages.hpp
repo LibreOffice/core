@@ -31,7 +31,7 @@ inline constexpr std::string_view ALLOWED_APP_COMMANDS[] = {
     "COMMANDSTATECHANGED", "FOCUSIFHWKBD",    "FONTPICKER",   "HULLO",
     "HYPERLINK",           "LICENSE",         "PRINT",        "REMOTEBOOTSTRAPFAILED",
     "SAVECOMPLETED",       "SAVEFAILED",      "SAVESTARTED",  "SETDARKMODE",
-    "TEXTCLIPBOARD",       "WELCOME",
+    "SYNCSETTINGS",        "TEXTCLIPBOARD",   "WELCOME",
 };
 
 /// Commands that name a local file or open another document, or let the document read the files
