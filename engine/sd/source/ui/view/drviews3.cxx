@@ -296,7 +296,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             VclPtr<VclAbstractDialog> pSecDlg(svx::seclabel::CreateSecurityLabelDialog(
                 pSecWin ? pSecWin->GetFrameWeld() : nullptr,
                 std::make_unique<SdSecurityLabelTarget>(*this)));
-            pSecDlg->StartExecuteAsync([pSecDlg](sal_Int32 /*nResult*/) {});
+            pSecDlg->StartExecuteAsync([pSecDlg](sal_Int32 /*nResult*/) { pSecDlg->disposeOnce(); });
             rReq.Done();
             break;
         }

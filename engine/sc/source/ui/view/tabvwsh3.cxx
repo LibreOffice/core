@@ -430,7 +430,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // The dialog lives in svx; Calc supplies the marking-placement target.
                 VclPtr<VclAbstractDialog> pDlg(svx::seclabel::CreateSecurityLabelDialog(
                     GetFrameWeld(), std::make_unique<ScSecurityLabelTarget>(*this)));
-                pDlg->StartExecuteAsync([pDlg](sal_Int32 /*nResult*/) {});
+                pDlg->StartExecuteAsync([pDlg](sal_Int32 /*nResult*/)
+                                        { pDlg->disposeOnce(); });
                 rReq.Done();
             }
             break;
