@@ -111,6 +111,26 @@ public:
                     { comphelper::makePropertyValue(u"FilterName"_ustr,
                                                     u"OpenDocument Text Flat XML"_ustr) });
     }
+
+    /// Compares the loaded document with an older version of it and shows the differences as
+    /// tracked changes.
+    void compareWith(std::u16string_view rOldFile)
+    {
+        uno::Sequence<beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue(u"URL"_ustr, createFileURL(rOldFile)),
+            comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+        };
+        dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+    }
+
+    /// Counts the tracked changes of the document that have the type eType.
+    size_t countRedlines(RedlineType eType)
+    {
+        const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+        return std::count_if(
+            rRedlines.begin(), rRedlines.end(),
+            [eType](const SwRangeRedline* pRedline) { return pRedline->GetType() == eType; });
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
@@ -1713,6 +1733,23 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testRegisteredDatabaseFormLoadsOnlyAfterLink
     // and loads.
     pDocShell->AllowLinkUpdate();
     CPPUNIT_ASSERT(xLoadable->isLoaded());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsMovedParagraph)
+{
+    // Given a document with the paragraphs "A", "A", "A" and "B", where an older version has the
+    // paragraphs "B" and "A":
+    createSwDoc("compare-moved-para-new.fodt");
+
+    // When comparing it with the older version:
+    // Without the fix in place, this test would have failed with:
+    // - Assertion `value >= 0' failed
+    // i.e. the search for the shortest edit went one paragraph before the start of the document.
+    compareWith(u"compare-moved-para-old.fodt");
+
+    // Then the paragraphs that differ are shown as one insertion and one deletion:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Insert));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Delete));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
