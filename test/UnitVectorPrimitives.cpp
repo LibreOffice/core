@@ -87,6 +87,7 @@ class UnitVectorPrimitives : public UnitWSD
     TestResult testSessionHoldsThePartsTheDocumentServed();
     TestResult testDrawingFromTilesForgetsTheParts();
     TestResult testTextCaretIsPlacedByItsOwnMessage();
+    TestResult testNewPageIsNamedByAPageListMessage();
 
 public:
     UnitVectorPrimitives();
@@ -546,6 +547,57 @@ UnitBase::TestResult UnitVectorPrimitives::testTextCaretIsPlacedByItsOwnMessage(
     return TestResult::Ok;
 }
 
+// A session holds a page of a text document. A page break adds a page, and the session is sent
+// the list of the pages: the id and the rectangle of each page.
+UnitBase::TestResult UnitVectorPrimitives::testNewPageIsNamedByAPageListMessage()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("PageListPoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> session = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(session, "status", testname);
+    const std::string status = helpers::assertResponseString(session, "status:", testname);
+    const std::vector<std::string> pageIds = pageIdsOf(status.substr(7));
+    LOK_ASSERT(!pageIds.empty());
+
+    helpers::sendTextFrame(session,
+                           "commandvalues command=.uno:VectorPrimitives?partid=" + pageIds[0],
+                           testname);
+    const std::vector<char> answer =
+        helpers::getResponseMessage(session, "zstdvectorprimitives:", testname);
+    LOK_ASSERT_MESSAGE("no primitives were answered for the page", !answer.empty());
+
+    helpers::sendTextFrame(session, "uno .uno:InsertPagebreak", testname);
+    const std::string prefix = "vectorpartids:";
+    const std::string message = helpers::getResponseString(session, prefix, testname, 10s);
+    LOK_ASSERT_MESSAGE("no page list was sent for the new page", !message.empty());
+    Poco::JSON::Parser parser;
+    const Poco::JSON::Object::Ptr pageList =
+        parser.parse(message.substr(prefix.size())).extract<Poco::JSON::Object::Ptr>();
+    const Poco::JSON::Array::Ptr newPageIds = pageList->getArray("pageids");
+    const Poco::JSON::Array::Ptr newRectangles = pageList->getArray("pagerectangles");
+    LOK_ASSERT_MESSAGE("the page list has no page ids", !newPageIds.isNull());
+    LOK_ASSERT_MESSAGE("the page list has no page rectangles", !newRectangles.isNull());
+    LOK_ASSERT_EQUAL(pageIds.size() + 1, newPageIds->size());
+    LOK_ASSERT_EQUAL(newPageIds->size(), newRectangles->size());
+
+    // The status names the pages by the same ids.
+    helpers::sendTextFrame(session, "status", testname);
+    const std::string newStatus = helpers::assertResponseString(session, "status:", testname);
+    const std::vector<std::string> statusPageIds = pageIdsOf(newStatus.substr(7));
+    LOK_ASSERT_EQUAL(statusPageIds.size(), newPageIds->size());
+    for (std::size_t i = 0; i < statusPageIds.size(); ++i)
+        LOK_ASSERT_EQUAL(statusPageIds[i], newPageIds->get(i).toString());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
 void UnitVectorPrimitives::invokeWSDTest()
 {
     UnitBase::TestResult result = testDeltaReachesEverySessionHoldingThePart();
@@ -585,6 +637,10 @@ void UnitVectorPrimitives::invokeWSDTest()
         exitTest(result);
 
     result = testTextCaretIsPlacedByItsOwnMessage();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testNewPageIsNamedByAPageListMessage();
     if (result != TestResult::Ok)
         exitTest(result);
 

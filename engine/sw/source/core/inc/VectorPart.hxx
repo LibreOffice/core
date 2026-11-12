@@ -47,6 +47,11 @@ SW_DLLPUBLIC const SwPageFrame* pageOf(const SwRootFrame& rLayout, std::string_v
 /// The part ids of the pages of rLayout, in page order.
 SW_DLLPUBLIC std::vector<OString> partIdsOf(const SwRootFrame& rLayout);
 
+/// The pages of rLayout in page order, as a JSON object: "pageids" holds the part id of each page
+/// as a string, and "pagerectangles" holds the frame area of each page in twips as
+/// [ left, top, width, height ]. Both arrays have one entry for each page.
+SW_DLLPUBLIC OString pageListOf(const SwRootFrame& rLayout);
+
 /** What one document served of its pages as vector primitives, and the versions they count in.
 
     Every page is a part. A part counts its version up when something a client draws changed

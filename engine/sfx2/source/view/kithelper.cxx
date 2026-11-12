@@ -965,6 +965,20 @@ void KitHelper::notifyVectorPartChanged(const SfxObjectShell* pDocShell, const O
     }
 }
 
+void KitHelper::notifyVectorPartIdsChanged(const SfxObjectShell* pDocShell,
+                                           const OString& rPayload)
+{
+    if (DisableCallbacks::disabled())
+        return;
+
+    for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(false); pViewShell;
+         pViewShell = SfxViewShell::GetNext(*pViewShell, false))
+    {
+        if (pViewShell->GetObjectShell() == pDocShell)
+            pViewShell->viewCallback(COKitCallbackType::VECTOR_PART_IDS, rPayload);
+    }
+}
+
 void KitHelper::notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPart,
                                            tools::Rectangle const* pRect,
                                            bool bSkipViewShowingPart)

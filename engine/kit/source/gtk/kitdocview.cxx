@@ -1532,6 +1532,7 @@ callback (gpointer pData)
     case COKitCallbackType::USER_SETTINGS_PERSISTED:
     case COKitCallbackType::OPEN_LINKED_DOCUMENT:
     case COKitCallbackType::REFRESH_LINKED_FILES:
+    case COKitCallbackType::VECTOR_PART_IDS:
     {
         // TODO: Implement me
         break;

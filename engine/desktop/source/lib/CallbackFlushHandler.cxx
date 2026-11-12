@@ -552,6 +552,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
         case COKitCallbackType::MOUSE_POINTER:
         case COKitCallbackType::INVALIDATE_HEADER:
         case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
+        case COKitCallbackType::VECTOR_PART_IDS:
             SAL_INFO("kit", "Elide event in background save mode");
             return;
         default:
@@ -748,6 +749,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
             case COKitCallbackType::TOOLTIP:
             case COKitCallbackType::SHAPE_INNER_TEXT:
             case COKitCallbackType::SHAPE_DRAG_PREVIEW:
+            case COKitCallbackType::VECTOR_PART_IDS:
             {
                 if (removeAll(type))
                     SAL_INFO("kit", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");

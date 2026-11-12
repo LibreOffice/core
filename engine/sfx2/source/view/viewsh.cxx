@@ -5450,6 +5450,7 @@ static bool ignoreCOKitViewCallback(COKitCallbackType eType, const SfxViewShell_
         case COKitCallbackType::TEXT_SELECTION:
         case COKitCallbackType::COMMENT:
         case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
+        case COKitCallbackType::VECTOR_PART_IDS:
             break;
         default:
             // Reject e.g. invalidate during paint.

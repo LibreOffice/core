@@ -730,6 +730,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('partstatus:')) {
 			this._onStatusMsg(textMsg);
 		}
+		else if (textMsg.startsWith('vectorpartids:')) {
+			// A text document is the one that names its pages by such a list.
+			if (this._onVectorPartIdsMsg)
+				this._onVectorPartIdsMsg(textMsg);
+		}
 		else if (textMsg.startsWith('textselection:') ||
 		         textMsg.startsWith('textselectionstart:') ||
 		         textMsg.startsWith('textselectionend:')) {

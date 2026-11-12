@@ -755,7 +755,7 @@ OString lcl_DocumentSizePayload(const SwViewShell& rShell)
 
 /// Marks the pages that a vector client holds and that lie under rAreas as changed, and tells
 /// every view of the document that each of them changed. When the page ids changed, every view
-/// is also told the document size, without a tile invalidation. A page with a deferred push is
+/// is also sent the ids and the rectangles of the pages. A page with a deferred push is
 /// announced as changed whether or not rAreas holds an area.
 void lcl_NotifyVectorParts(const SwViewShell& rShell, const SwRegionRects& rAreas)
 {
@@ -778,21 +778,10 @@ void lcl_NotifyVectorParts(const SwViewShell& rShell, const SwRegionRects& rArea
     for (const OString& rPartId : pParts->invalidate(*pLayout, rAreas))
         KitHelper::notifyVectorPartChanged(pDocShell, rPartId, sw::vector::constModePrintLayout);
 
-    // A new page frame can replace an old one and keep the document size. A change of the page ids
-    // still goes out to every view as a document size change, with no tile invalidation.
-    if (!pParts->recordPageIds(*pLayout))
-        return;
-    const rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-    if (!xModel.is())
-        return;
-    const OString sPayload = lcl_DocumentSizePayload(rShell);
-    for (SfxViewShell* pView = SfxViewShell::GetFirst(false); pView;
-         pView = SfxViewShell::GetNext(*pView, false))
-    {
-        if (pView->GetObjectShell() == pDocShell)
-            KitHelper::notifyDocumentSizeChanged(pView, sPayload, xModel.get(),
-                                                 /*bInvalidateAllParts=*/false);
-    }
+    // A page is drawn at the rectangle that has the index of its id, so the ids and the
+    // rectangles go out together, read from the layout as it is now.
+    if (pParts->recordPageIds(*pLayout))
+        KitHelper::notifyVectorPartIdsChanged(pDocShell, sw::vector::pageListOf(*pLayout));
 }
 }
 

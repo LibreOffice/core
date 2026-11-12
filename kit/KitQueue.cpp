@@ -396,6 +396,7 @@ bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const st
         case COKitCallbackType::CURSOR_VISIBLE: // the cursor visibility has changed
         case COKitCallbackType::STATUS_INDICATOR_SET_VALUE: // setting the indicator value
         case COKitCallbackType::DOCUMENT_SIZE_CHANGED: // setting the document size
+        case COKitCallbackType::VECTOR_PART_IDS: // the list of the pages
         case COKitCallbackType::CELL_CURSOR: // the cell cursor has moved
         case COKitCallbackType::INVALIDATE_VIEW_CURSOR: // the view cursor has moved
         case COKitCallbackType::CELL_VIEW_CURSOR: // the view cell cursor has moved

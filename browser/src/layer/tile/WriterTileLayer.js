@@ -140,6 +140,40 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			this._setNewSize(last);
 	},
 
+	// Takes the rectangles of the pages and the ids of the same pages, in the same order. A
+	// document without page ids gives none.
+	_setPageList: function (pageRectangles, pageIds) {
+		app.file.writer.pageRectangleList = pageRectangles.slice(); // Copy the array.
+		app.file.writer.pageIds = pageIds ? pageIds.slice() : [];
+		// Pages without ids are drawn from tiles. A loaded document that goes to tiles has none
+		// yet, so it asks for them.
+		if (RenderManager.layoutChanged() && !RenderManager.drawsFromPrimitives() &&
+			this._map._docLoaded)
+			this._requestNewTiles();
+		RenderManager.partListChanged();
+		// Recalculate view layout so view size reflects the new pages.
+		// Needed for ViewLayoutMultiPage where the viewSize setter is a no-op.
+		if (app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage')
+			app.activeDocument.activeLayout.reset();
+	},
+
+	// The list of the pages changed. The message carries the ids and the rectangles of the
+	// pages, which are taken together. The first status brings the first list, so a message
+	// that comes before it is ignored.
+	_onVectorPartIdsMsg: function (textMsg) {
+		if (!this._documentInfo)
+			return;
+		const pageList = JSON.parse(textMsg.substring('vectorpartids:'.length));
+		if (!Array.isArray(pageList.pageids) || !Array.isArray(pageList.pagerectangles)
+			|| pageList.pageids.length !== pageList.pagerectangles.length)
+			return;
+		this._setPageList(pageList.pagerectangles, pageList.pageids);
+		// The page list is no longer the one of the last status, so the next status is taken in
+		// full, also when its text is the text of the last one.
+		this._documentInfo = textMsg;
+		RenderManager.update();
+	},
+
 	_onStatusMsg: function (textMsg) {
 		const statusJSON = JSON.parse(textMsg.replace('status:', '').replace('statusupdate:', ''));
 
@@ -217,19 +251,7 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			this._currentPage = parseInt(statusJSON.selectedpart);
 		}
 		this._pages = statusJSON.partscount;
-		app.file.writer.pageRectangleList = statusJSON.pagerectangles.slice(); // Copy the array.
-		// The ids of the same pages, in the same order.
-		app.file.writer.pageIds = statusJSON.pageids ? statusJSON.pageids.slice() : [];
-		// Pages without ids are drawn from tiles. A loaded document that goes to tiles has none
-		// yet, so it asks for them.
-		if (RenderManager.layoutChanged() && !RenderManager.drawsFromPrimitives() &&
-			this._map._docLoaded)
-			this._requestNewTiles();
-		RenderManager.partListChanged();
-		// Recalculate view layout so view size reflects the new pages.
-		// Needed for ViewLayoutMultiPage where the viewSize setter is a no-op.
-		if (app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage')
-			app.activeDocument.activeLayout.reset();
+		this._setPageList(statusJSON.pagerectangles, statusJSON.pageids);
 
 		// Restore the multi-page view the user last used for this document. The
 		// server sends the remembered mode in the viewsetting: message; we apply

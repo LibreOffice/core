@@ -1664,12 +1664,29 @@ statusupdate: type=<typeName> parts=<numberOfParts> current=<currentPartNumber> 
     For a text document the JSON payload has a pageids array: the id of
     each page as a string, in the order of pagerectangles. A page keeps its
     id while it exists, and .uno:VectorPrimitives names a page by it. When
-    the ids change, also with the same document size, a new status goes
-    out. A document that has no page ids leaves the field out.
+    the ids change, a vectorpartids: message says so. A document that has
+    no page ids leaves the field out.
 
     The first status: after a reconnect that gave the client its old view
     back has "reattached": true. The view still has its cursor, selection,
     part and dialogs in the kit.
+
+vectorpartids: {"pageids": [<id>, ...], "pagerectangles": [[<x>, <y>, <width>, <height>], ...]}
+
+    The list of the pages of a text document changed: a page was added or
+    removed, or a page took the place of another. Sent to every session of
+    a document that served a page as vector primitives.
+
+    pageids is the id of each page as a string and pagerectangles is the
+    rectangle of each page in twips. Both are in page order, both have one
+    entry for each page, and both have the meaning of the fields of the
+    same name in status:. The two arrays describe the same moment, so the
+    page with the id at an index lies at the rectangle at that index.
+
+    The message carries no document size. When the size changed too, a
+    status: follows as for any other size change. A session that was
+    inactive when the list changed gets a status: instead when it is
+    active again.
 
 styles: {"styleFamily": ["styles in family"], etc. }
 

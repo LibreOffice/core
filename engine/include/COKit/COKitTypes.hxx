@@ -1412,7 +1412,22 @@ enum class COKitCallbackType
      * by their ids as getLinkedFiles() gives them, for example
      * { "ids": [ "chapter1.odt" ] }; without "ids" every file is meant.
      */
-    REFRESH_LINKED_FILES = 81
+    REFRESH_LINKED_FILES = 81,
+
+    /**
+     * The list of the pages of a Writer document that serves its pages as
+     * vector primitives changed: a page was added or removed, or a page took
+     * the place of another.
+     *
+     * Pushed to every view of the document. The payload is a JSON object with
+     * the id of each page in "pageids" and the rectangle of each page, in
+     * twips, in "pagerectangles", both in page order and both read from the
+     * layout at the same moment, for example
+     * { "pageids": [ "5", "9" ],
+     *   "pagerectangles": [ [ 284, 284, 12240, 15840 ], [ 284, 16408, 12240, 15840 ] ] }.
+     * The ids are the part ids that .uno:VectorPrimitives takes.
+     */
+    VECTOR_PART_IDS = 82
 };
 
 enum class COKitKeyEventType
@@ -1602,6 +1617,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_OPEN_LINKED_DOCUMENT";
     case COKitCallbackType::REFRESH_LINKED_FILES:
         return "KIT_CALLBACK_REFRESH_LINKED_FILES";
+    case COKitCallbackType::VECTOR_PART_IDS:
+        return "KIT_CALLBACK_VECTOR_PART_IDS";
     }
 
     assert(!"Unknown COKitCallbackType type.");

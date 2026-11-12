@@ -59,6 +59,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCallbackInvalidation);
     CPPUNIT_TEST(testCallbackIndicatorValue);
     CPPUNIT_TEST(testCallbackPageSize);
+    CPPUNIT_TEST(testCallbackPageList);
     CPPUNIT_TEST(testPutAndPop);
     CPPUNIT_TEST(testPopEmptyQueue);
     CPPUNIT_TEST(testClear);
@@ -119,6 +120,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testCallbackInvalidation();
     void testCallbackIndicatorValue();
     void testCallbackPageSize();
+    void testCallbackPageList();
     void testPutAndPop();
     void testPopEmptyQueue();
     void testClear();
@@ -1233,6 +1235,27 @@ void KitQueueTests::testCallbackPageSize()
     LOK_ASSERT_EQUAL(item._view, -1);
     LOK_ASSERT_EQUAL(item._type, COKitCallbackType::DOCUMENT_SIZE_CHANGED);
     LOK_ASSERT_EQUAL_STR("12474, 205748", item._payload);
+}
+
+// A page list of a view replaces the page lists of that view queued before it.
+void KitQueueTests::testCallbackPageList()
+{
+    constexpr std::string_view testname = __func__;
+
+    TilePrioritizer dummy;
+    KitQueue queue(dummy);
+
+    const std::string onePage = R"({ "pageids": [ "5"], "pagerectangles": [ [ 0, 0, 9, 9]]})";
+    const std::string twoPages =
+        R"({ "pageids": [ "5", "9"], "pagerectangles": [ [ 0, 0, 9, 9], [ 0, 12, 9, 9]]})";
+    queue.putCallback(0, COKitCallbackType::VECTOR_PART_IDS, onePage);
+    queue.putCallback(0, COKitCallbackType::VECTOR_PART_IDS, twoPages);
+
+    LOK_ASSERT_EQUAL(1, static_cast<int>(queue.callbackSize()));
+    const KitQueue::Callback item = queue.getCallback();
+    LOK_ASSERT_EQUAL(0, item._view);
+    LOK_ASSERT_EQUAL(item._type, COKitCallbackType::VECTOR_PART_IDS);
+    LOK_ASSERT_EQUAL_STR(twoPages, item._payload);
 }
 
 void KitQueueTests::testCallbackModifiedStatusIsSkipped()

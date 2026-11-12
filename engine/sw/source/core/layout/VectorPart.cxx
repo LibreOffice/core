@@ -108,6 +108,36 @@ std::vector<OString> partIdsOf(const SwRootFrame& rLayout)
     return aPartIds;
 }
 
+OString pageListOf(const SwRootFrame& rLayout)
+{
+    std::vector<const SwPageFrame*> aPages;
+    for (const SwFrame* pFrame = rLayout.Lower(); pFrame; pFrame = pFrame->GetNext())
+    {
+        if (pFrame->IsPageFrame())
+            aPages.push_back(static_cast<const SwPageFrame*>(pFrame));
+    }
+
+    tools::JsonWriter aWriter;
+    {
+        auto aIds = aWriter.startArray("pageids");
+        for (const SwPageFrame* pPage : aPages)
+            aWriter.putSimpleValue(OUString::fromUtf8(partIdOf(*pPage)));
+    }
+    {
+        auto aRectangles = aWriter.startArray("pagerectangles");
+        for (const SwPageFrame* pPage : aPages)
+        {
+            const SwRect& rArea = pPage->getFrameArea();
+            auto aRectangle = aWriter.startAnonArray();
+            aWriter.putSimpleValue(rArea.Left());
+            aWriter.putSimpleValue(rArea.Top());
+            aWriter.putSimpleValue(rArea.Width());
+            aWriter.putSimpleValue(rArea.Height());
+        }
+    }
+    return aWriter.finishAndGetAsOString();
+}
+
 bool PartStore::recordPageIds(const SwRootFrame& rLayout)
 {
     std::vector<sal_uInt32> aPageIds;

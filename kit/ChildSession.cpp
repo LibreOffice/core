@@ -6974,6 +6974,12 @@ void ChildSession::rememberEventsForInactiveUser(const COKitCallbackType type,
     {
         _stateRecorder.recordInvalidate(); // TODO remember the area, not just a bool ('true' invalidates everything)
     }
+    else if (type == COKitCallbackType::VECTOR_PART_IDS)
+    {
+        // The status names the pages as they are when the user is active again, so a change of
+        // the page list is remembered as a document size change, which sends the status.
+        _stateRecorder.recordEvent(COKitCallbackType::DOCUMENT_SIZE_CHANGED, std::string());
+    }
     else if (type == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR ||
              type == COKitCallbackType::CURSOR_VISIBLE ||
              type == COKitCallbackType::TEXT_SELECTION ||
@@ -7190,6 +7196,10 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
         // A delta describes the part rather than one view, so a session has nothing of its own
         // to send for it.
+        break;
+    case COKitCallbackType::VECTOR_PART_IDS:
+        // The payload is the JSON object with the ids and the rectangles of the pages.
+        sendTextFrame("vectorpartids: " + payload);
         break;
     case COKitCallbackType::PRESENTATION_INFO:
         // The engine signalled that the presentation info changed. Rebuild

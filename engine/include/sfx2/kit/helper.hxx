@@ -243,6 +243,9 @@ public:
     /// the page list nMode names, changed.
     static void notifyVectorPartChanged(const SfxObjectShell* pDocShell, const OString& rPartId,
                                         int nMode);
+    /// Emits a COKitCallbackType::VECTOR_PART_IDS with rPayload for every view of pDocShell.
+    static void notifyVectorPartIdsChanged(const SfxObjectShell* pDocShell,
+                                           const OString& rPayload);
     /// Emits a COKitCallbackType::INVALIDATE_TILES for the given part on the views of
     /// the document. A null rectangle invalidates the whole part. When
     /// bSkipViewShowingPart is true the views currently showing that part are
