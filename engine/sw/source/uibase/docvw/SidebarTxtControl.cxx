@@ -325,7 +325,7 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 {
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     const sal_uInt16 nKey = rKeyCode.GetCode();
-    if (nKey == KEY_F12 && getenv("SW_DEBUG") && !o3tl::IsRunningUnitTest() && !o3tl::IsRunningUITest())
+    if (nKey == KEY_F9 && getenv("SW_DEBUG") && !o3tl::IsRunningUnitTest() && !o3tl::IsRunningUITest())
     {
         if (rKeyEvt.GetKeyCode().IsShift())
         {

@@ -52,6 +52,7 @@
 #include <vcl/settings.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <o3tl/test_info.hxx>
 
 namespace sd {
 
@@ -218,7 +219,7 @@ void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectan
 
 void Window::KeyInput(const KeyEvent& rKEvt)
 {
-    if (getenv("SD_DEBUG") && rKEvt.GetKeyCode().GetCode() == KEY_F12 && mpViewShell)
+    if (getenv("SD_DEBUG") && rKEvt.GetKeyCode().GetCode() == KEY_F9 && mpViewShell && !o3tl::IsRunningUnitTest() && !o3tl::IsRunningUITest())
     {
         mpViewShell->GetDoc()->dumpAsXml(nullptr);
         if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())

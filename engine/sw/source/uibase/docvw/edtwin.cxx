@@ -1482,7 +1482,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     bool bAppendSpace = s_pQuickHlpData->m_bAppendSpace;
     s_pQuickHlpData->m_bAppendSpace = false;
 
-    if (nKey == KEY_F12 && getenv("SW_DEBUG") && !o3tl::IsRunningUnitTest() && !o3tl::IsRunningUITest())
+    if (nKey == KEY_F9 && getenv("SW_DEBUG") && !o3tl::IsRunningUnitTest() && !o3tl::IsRunningUITest())
     {
         if( rKEvt.GetKeyCode().IsShift())
         {

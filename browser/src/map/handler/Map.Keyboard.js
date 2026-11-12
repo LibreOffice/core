@@ -138,7 +138,8 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		40  : true, // down arrow
 		45  : true, // insert
 		93  : true, // context menu
-		113 : true  // f2
+		113 : true, // f2
+		120 : true  // f9
 	},
 
 	// See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode for list of keycodes
