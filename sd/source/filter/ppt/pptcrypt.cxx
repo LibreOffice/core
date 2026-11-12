@@ -146,27 +146,30 @@ bool deriveKey(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt, s
     return true;
 }
 
-bool decryptVerifier(const RC4Key& rKey, sal_uInt32 nKeyBits,
-                     const std::vector<sal_uInt8>& rEncryptedVerifier,
-                     const std::vector<sal_uInt8>& rEncryptedHash,
-                     std::array<sal_uInt8, ENCRYPTION_VERIFIER_SIZE>& rVerifier,
-                     SHA1Hash& rVerifierHash)
+bool decryptRC4Data(const RC4Key& rKey, sal_uInt32 nKeyBits,
+                    const std::vector<sal_uInt8>& rEncryptedData,
+                    std::vector<sal_uInt8>& rDecryptedData)
 {
-    // create RC4 context (needed as RC4 is a stream cipher, not a block cipher)
-    // memory allocated but not initialized yet with a key so not ready to decipher
-    // rtl_cipher_destroyARCFOUR for RAII
+    if (rEncryptedData.size() > std::numeric_limits<sal_uInt32>::max())
+        return false;
+
+    if (rEncryptedData.empty())
+    {
+        rDecryptedData.clear();
+        return true;
+    }
+
     CipherHandle xCipher(rtl_cipher_createARCFOUR(rtl_Cipher_ModeStream),
                          rtl_cipher_destroyARCFOUR);
 
     if (!xCipher)
         return false;
 
-    // MS-OFFCRYPTO 2.3.2: If keyLength is exactly 40 bits, the encryption key MUST be composed of
-    // the first 40 bits of Hfinal and 88 bits set to zero, creating a 128-bit key
+    // MS-OFFCRYPTO 2.3.2: a 40-bit key is extended to 128 bits
+    // with the remaining 88 bits set to zero.
     const sal_uInt32 nRC4KeyBytes
         = nKeyBits == RC4_DEFAULT_KEY_BITS ? RC4_40BIT_EFFECTIVE_KEY_SIZE : nKeyBits / 8;
 
-    // context and direction initialization
     if (rtl_cipher_initARCFOUR(xCipher.get(), rtl_Cipher_DirectionDecode, rKey.data(), nRC4KeyBytes,
                                nullptr, 0)
         != rtl_Cipher_E_None)
@@ -174,33 +177,41 @@ bool decryptVerifier(const RC4Key& rKey, sal_uInt32 nKeyBits,
         return false;
     }
 
-    // The verifier and its hash share one continuous RC4 stream
-    // the deciphering will be on both in the same time
-    constexpr sal_uInt32 VERIFIER_DATA_SIZE = ENCRYPTION_VERIFIER_SIZE + SHA1_HASH_SIZE;
+    std::vector<sal_uInt8> aDecryptedData(rEncryptedData.size());
 
-    // both arrays initialized with 0 "VERIFIER_DATA_SIZE times"
-    std::array<sal_uInt8, VERIFIER_DATA_SIZE> aEncryptedData{};
-    std::array<sal_uInt8, VERIFIER_DATA_SIZE> aDecryptedData{};
-
-    // copy first the encrypted verifier into aEncryptedData
-    std::copy(rEncryptedVerifier.begin(), rEncryptedVerifier.end(), aEncryptedData.begin());
-
-    // copy the encrypted hash (after the encrypted verifier) into aEncryptedData
-    std::copy(rEncryptedHash.begin(), rEncryptedHash.end(),
-              aEncryptedData.begin() + ENCRYPTION_VERIFIER_SIZE);
-
-    // decipher
-    if (rtl_cipher_decodeARCFOUR(xCipher.get(), aEncryptedData.data(), aEncryptedData.size(),
-                                 aDecryptedData.data(), aDecryptedData.size())
+    if (rtl_cipher_decodeARCFOUR(
+            xCipher.get(), rEncryptedData.data(), static_cast<sal_uInt32>(rEncryptedData.size()),
+            aDecryptedData.data(), static_cast<sal_uInt32>(aDecryptedData.size()))
         != rtl_Cipher_E_None)
     {
         return false;
     }
 
-    // copy the decrypted data into the verifier
-    std::copy_n(aDecryptedData.begin(), ENCRYPTION_VERIFIER_SIZE, rVerifier.begin());
+    rDecryptedData.swap(aDecryptedData);
+    return true;
+}
 
-    // and the the of decrypted date into the hash of the verifier
+bool decryptVerifier(const RC4Key& rKey, sal_uInt32 nKeyBits,
+                     const std::vector<sal_uInt8>& rEncryptedVerifier,
+                     const std::vector<sal_uInt8>& rEncryptedHash,
+                     std::array<sal_uInt8, ENCRYPTION_VERIFIER_SIZE>& rVerifier,
+                     SHA1Hash& rVerifierHash)
+{
+    // The verifier and its hash share one continuous RC4 stream.
+    std::vector<sal_uInt8> aEncryptedData;
+    aEncryptedData.reserve(ENCRYPTION_VERIFIER_SIZE + SHA1_HASH_SIZE);
+    aEncryptedData.insert(aEncryptedData.end(), rEncryptedVerifier.begin(),
+                          rEncryptedVerifier.end());
+    aEncryptedData.insert(aEncryptedData.end(), rEncryptedHash.begin(), rEncryptedHash.end());
+
+    std::vector<sal_uInt8> aDecryptedData;
+    if (!decryptRC4Data(rKey, nKeyBits, aEncryptedData, aDecryptedData))
+        return false;
+
+    if (aDecryptedData.size() != ENCRYPTION_VERIFIER_SIZE + SHA1_HASH_SIZE)
+        return false;
+
+    std::copy_n(aDecryptedData.begin(), ENCRYPTION_VERIFIER_SIZE, rVerifier.begin());
     std::copy_n(aDecryptedData.begin() + ENCRYPTION_VERIFIER_SIZE, SHA1_HASH_SIZE,
                 rVerifierHash.begin());
 
@@ -208,6 +219,24 @@ bool decryptVerifier(const RC4Key& rKey, sal_uInt32 nKeyBits,
 }
 
 } // namespace
+
+bool PptCrypt::decryptData(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt,
+                           sal_uInt32 nBlock, sal_uInt32 nKeyBits,
+                           const std::vector<sal_uInt8>& rEncryptedData,
+                           std::vector<sal_uInt8>& rDecryptedData)
+{
+    // MS-OFFCRYPTO 2.3.5.1: an unspecified KeySize means 40 bits.
+    if (nKeyBits == RC4_KEY_BITS_UNSPECIFIED)
+        nKeyBits = RC4_DEFAULT_KEY_BITS;
+
+    RC4Key aKey{};
+    SecureArrayCleaner aKeyCleaner{ aKey.data(), aKey.size() };
+
+    if (!deriveKey(rPassword, rSalt, nBlock, nKeyBits, aKey))
+        return false;
+
+    return decryptRC4Data(aKey, nKeyBits, rEncryptedData, rDecryptedData);
+}
 
 bool PptCrypt::verifyPassword(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt,
                               const std::vector<sal_uInt8>& rEncryptedVerifier,

@@ -28,6 +28,14 @@
 class SD_DLLPUBLIC PptCrypt
 {
 public:
+    // Decrypt an arbitrary buffer using the RC4 CryptoAPI key derived
+    // from the password, salt and block number.
+    // The output is left unchanged if decryption fails.
+    static bool decryptData(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt,
+                            sal_uInt32 nBlock, sal_uInt32 nKeyBits,
+                            const std::vector<sal_uInt8>& rEncryptedData,
+                            std::vector<sal_uInt8>& rDecryptedData);
+
     static bool verifyPassword(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt,
                                const std::vector<sal_uInt8>& rEncryptedVerifier,
                                const std::vector<sal_uInt8>& rEncryptedVerifierHash,
