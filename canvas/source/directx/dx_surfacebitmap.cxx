@@ -559,55 +559,6 @@ namespace dxcanvas
     }
 
 
-    // DXSurfaceBitmap::setPixel
-
-
-    void DXSurfaceBitmap::setPixel( const uno::Sequence< sal_Int8 >&      color,
-                                    const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
-                                    const geometry::IntegerPoint2D&       pos )
-    {
-        if(hasAlpha())
-        {
-            const geometry::IntegerSize2D aSize( maSize.getWidth(), maSize.getHeight() );
-
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
-                            "CanvasHelper::setPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aSize.Height,
-                            "CanvasHelper::setPixel: Y coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( color.getLength() > 3,
-                            "CanvasHelper::setPixel: not enough color components" );
-
-            if( Gdiplus::Ok != mpGDIPlusBitmap->SetPixel( pos.X, pos.Y,
-                                                Gdiplus::Color( dxcanvastools::sequenceToArgb( color ))))
-            {
-                throw uno::RuntimeException("Problem with setting the color of bitmap object");
-            }
-        }
-        else
-        {
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getWidth(),
-                            "CanvasHelper::setPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getHeight(),
-                            "CanvasHelper::setPixel: Y coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( color.getLength() > 3,
-                            "CanvasHelper::setPixel: not enough color components" );
-
-            Gdiplus::Color aColor(dxcanvastools::sequenceToArgb(color));
-
-            // lock the directx surface to receive the pointer to the surface memory.
-            D3DLOCKED_RECT aLockedRect;
-            if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
-                throw uno::RuntimeException("cannot lock the directx surface to surface memory");
-
-            sal_uInt32 *pDst = reinterpret_cast<sal_uInt32 *>((static_cast<BYTE *>(aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
-            *pDst = aColor.GetValue();
-            mpSurface->UnlockRect();
-        }
-
-        mbIsSurfaceDirty = true;
-    }
-
-
     // DXSurfaceBitmap::getPixel
 
 

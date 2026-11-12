@@ -101,10 +101,6 @@ namespace dxcanvas
                       const css::rendering::IntegerBitmapLayout&    bitmapLayout,
                       const css::geometry::IntegerRectangle2D&      rect );
 
-        void setPixel( const css::uno::Sequence< sal_Int8 >&        color,
-                       const css::rendering::IntegerBitmapLayout&   bitmapLayout,
-                       const css::geometry::IntegerPoint2D&         pos );
-
         css::uno::Sequence< sal_Int8 >
             getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                       const css::geometry::IntegerPoint2D& pos );

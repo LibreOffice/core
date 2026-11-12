@@ -173,18 +173,6 @@ namespace dxcanvas
         mpTarget->setData(data,bitmapLayout,rect);
     }
 
-    void BitmapCanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       color,
-                                       const rendering::IntegerBitmapLayout&  bitmapLayout,
-                                       const geometry::IntegerPoint2D&        pos )
-    {
-        SAL_INFO( "canvas.directx", "::dxcanvas::BitmapCanvasHelper::setPixel()" );
-
-        ENSURE_OR_THROW( mpTarget,
-                          "::dxcanvas::BitmapCanvasHelper::setPixel(): disposed" );
-
-        mpTarget->setPixel(color,bitmapLayout,pos);
-    }
-
     uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
                                                             const geometry::IntegerPoint2D&   pos )
     {

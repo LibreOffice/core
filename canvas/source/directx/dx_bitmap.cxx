@@ -161,26 +161,6 @@ namespace dxcanvas
         mpBitmap->UnlockBits( &aBmpData );
     }
 
-    void DXBitmap::setPixel( const uno::Sequence< sal_Int8 >&       color,
-                             const rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
-                             const geometry::IntegerPoint2D&        pos )
-    {
-        const geometry::IntegerSize2D aSize( maSize.getWidth(),maSize.getHeight() );
-
-        ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
-                             "CanvasHelper::setPixel: X coordinate out of bounds" );
-        ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aSize.Height,
-                             "CanvasHelper::setPixel: Y coordinate out of bounds" );
-        ENSURE_ARG_OR_THROW( color.getLength() > 3,
-                             "CanvasHelper::setPixel: not enough color components" );
-
-        if( Gdiplus::Ok != mpBitmap->SetPixel( pos.X, pos.Y,
-                                                      Gdiplus::Color( dxcanvastools::sequenceToArgb( color ))))
-        {
-            throw uno::RuntimeException("SetPixel called with invalid x,y points or color");
-        }
-    }
-
     uno::Sequence< sal_Int8 > DXBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                   const geometry::IntegerPoint2D&   pos )
     {
