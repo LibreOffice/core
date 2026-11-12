@@ -16489,7 +16489,6 @@ vcl::unotools::colorToDoubleSequence(Color const&, com::sun::star::uno::Referenc
 vcl::unotools::doubleSequenceToColor(com::sun::star::uno::Sequence<double> const&, com::sun::star::uno::Reference<com::sun::star::rendering::XColorSpace> const&)
 vcl::unotools::pointFromB2DPoint(basegfx::B2DPoint const&)
 vcl::unotools::pointFromB2IPoint(basegfx::B2IPoint const&)
-vcl::unotools::pointFromIntegerPoint2D(com::sun::star::geometry::IntegerPoint2D const&)
 vcl::unotools::rectangleFromB2IRectangle(basegfx::B2IRange const&)
 vcl::unotools::rectangleFromIntegerRectangle2D(com::sun::star::geometry::IntegerRectangle2D const&)
 vcl::unotools::size2DFromSize(Size const&)

@@ -19,7 +19,6 @@
 
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
-#include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
@@ -353,11 +352,6 @@ geometry::IntegerSize2D integerSize2DFromSize(const Size& rSize)
 Size sizeFromIntegerSize2D(const geometry::IntegerSize2D& rSize)
 {
     return Size(rSize.Width, rSize.Height);
-}
-
-Point pointFromIntegerPoint2D(const geometry::IntegerPoint2D& rPoint)
-{
-    return Point(rPoint.X, rPoint.Y);
 }
 
 tools::Rectangle rectangleFromIntegerRectangle2D(const geometry::IntegerRectangle2D& rRectangle)
