@@ -280,7 +280,11 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments via 
         cy.cGet('.jsdialog-window #searchterm input').should('be.visible');
         cy.cGet('.jsdialog-window #OptionsExpander > .ui-expander .ui-expander-btn').click();
         cy.cGet('.jsdialog-window #OptionsExpander > .ui-expander .ui-expander-btn').should('have.attr', 'aria-expanded', 'true');
+        // The expander opens at once in the browser, and the dialog is rebuilt again when core
+        // answers the toggle.
+        helper.processToIdle(this.win);
         cy.cGet('.jsdialog-window #notes input').should('be.visible').check();
+        helper.processToIdle(this.win);
         cy.cGet('.jsdialog-window #notes input').should('be.checked');
         cy.cGet('.jsdialog-window #searchterm input').type('{selectall}{backspace}apple');
         helper.processToIdle(this.win);
