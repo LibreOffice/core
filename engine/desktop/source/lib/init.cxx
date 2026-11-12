@@ -20,6 +20,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <svx/VectorObjectContent.hxx>
+#include <svx/VectorPart.hxx>
 #include <cmath>
 
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -267,6 +268,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/IVectorParts.hxx>
 #include <vcl/dialoghelper.hxx>
 #if defined(_WIN32) && !USE_HEADLESS_CODE
 #include <vcl/BitmapTools.hxx>
@@ -9377,7 +9379,14 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
         return {};
     }
 
-    if (aCommand.starts_with(".uno:VectorPrimitives"))
+    // The whole name of the command decides whether it is one of the vector commands. Such a
+    // command is answered by the vector parts of the document.
+    const svx::vector::PartCommand eVectorCommand = svx::vector::partCommandOf(aCommand);
+    vcl::IVectorParts* pVectorParts
+        = eVectorCommand != svx::vector::PartCommand::None ? pDoc->getVectorPartsInterface()
+                                                           : nullptr;
+
+    if (pVectorParts && eVectorCommand == svx::vector::PartCommand::Primitives)
     {
         // Record on the view's callback handler that it renders from vector
         // primitives, and in which mode. No mode named means the slides.
@@ -9418,6 +9427,13 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
                                          ".uno:CursorBlinkTime=" + OString::number(nBlinkTime));
             }
         }
+    }
+
+    if (pVectorParts)
+    {
+        tools::JsonWriter aJsonWriter;
+        pVectorParts->answerVectorCommand(aJsonWriter, aCommand);
+        return aJsonWriter.finishAndGetAsStdString();
     }
 
     if (aCommand == ".uno:ReadOnly")
@@ -9540,8 +9556,11 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
         tools::JsonWriter aJsonWriter;
         {
             auto aIds = aJsonWriter.startArray("ids");
-            for (const OString& rPartId : pDoc->getVectorPartIds())
-                aJsonWriter.putSimpleValue(OUString::fromUtf8(rPartId));
+            if (vcl::IVectorParts* pPartsOfDocument = pDoc->getVectorPartsInterface())
+            {
+                for (const OString& rPartId : pPartsOfDocument->getVectorPartIds())
+                    aJsonWriter.putSimpleValue(OUString::fromUtf8(rPartId));
+            }
         }
         return aJsonWriter.finishAndGetAsStdString();
     }

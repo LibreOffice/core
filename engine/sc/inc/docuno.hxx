@@ -55,6 +55,7 @@
 #include <svl/itemprop.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <svx/VectorObjectContent.hxx>
+#include <vcl/IVectorParts.hxx>
 
 class ScDocShell;
 class ScAnnotationObj;
@@ -76,6 +77,7 @@ namespace sc { class VectorContent; }
 class SAL_DLLPUBLIC_RTTI ScModelObj : public SfxBaseModel,
                     public vcl::ITiledRenderable,
                     public svx::vector::InPlaceContent,
+                    public vcl::IVectorParts,
                     public css::sheet::XSpreadsheetDocument,
                     public css::document::XActionLockable,
                     public css::sheet::XCalculatable,
@@ -419,9 +421,21 @@ public:
     /// @see vcl::ITiledRenderable::getPostItsPos().
     void getPostItsPos(tools::JsonWriter& rJsonWriter) override;
 
-    /// @see vcl::ITiledRenderable::pushVectorPrimitivesDelta().
+    /// @see vcl::ITiledRenderable::getVectorPartsInterface(). The parts are the sheets.
+    vcl::IVectorParts* getVectorPartsInterface() override;
+
+    /// @see vcl::IVectorParts::answerVectorCommand().
+    bool answerVectorCommand(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
+
+    /// @see vcl::IVectorParts::pushVectorPrimitivesDelta().
     void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter, std::string_view rPartId,
                                    int nMode) override;
+
+    /// @see vcl::IVectorParts::getVectorPartIds().
+    std::vector<OString> getVectorPartIds() override;
+
+    /// @see vcl::IVectorParts::forgetVectorPart().
+    void forgetVectorPart(std::string_view rPartId) override;
 
     /// The text of a cell or a shape that is edited in place on sheet nTab changed.
     void vectorTextEditChanged(SCTAB nTab);

@@ -62,6 +62,7 @@
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/IVectorParts.hxx>
 #include <com/sun/star/text/XPasteBroadcaster.hpp>
 
 #include "unobaseclass.hxx"
@@ -172,7 +173,8 @@ SwXTextDocumentBaseClass;
 
 class SW_DLLPUBLIC SwXTextDocument final : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
-    public vcl::ITiledRenderable
+    public vcl::ITiledRenderable,
+    public vcl::IVectorParts
 {
 private:
     class Impl;
@@ -503,9 +505,14 @@ public:
     /// @see vcl::ITiledRenderable::getCommandValues().
     void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
-    /// The answers to the requests of a client that draws the pages from vector primitives: the
-    /// primitives of a page, a graphic, a font, and dropping what was served of a page.
-    void getVectorCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand);
+    /// @see vcl::ITiledRenderable::getVectorPartsInterface(). The parts are the pages.
+    vcl::IVectorParts* getVectorPartsInterface() override;
+
+    /// @see vcl::IVectorParts::answerVectorCommand().
+    bool answerVectorCommand(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
+
+    /// @see vcl::IVectorParts::forgetVectorPart().
+    void forgetVectorPart(std::string_view rPartId) override;
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
     OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
@@ -519,7 +526,7 @@ public:
                           sal_Int32 nIndex, sal_Int32 nAnchorParagraph,
                           sal_Int32 nAnchorIndex) override;
 
-    /// @see vcl::ITiledRenderable::pushVectorPrimitivesDelta().
+    /// @see vcl::IVectorParts::pushVectorPrimitivesDelta().
     void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter, std::string_view rPartId,
                                    int nMode) override;
 
@@ -530,7 +537,7 @@ public:
     /// @see vcl::ITiledRenderable::setDrawnFromModel().
     void setDrawnFromModel(bool bDrawnFromModel) override;
 
-    /// @see vcl::ITiledRenderable::getVectorPartIds(). The ids are the page ids.
+    /// @see vcl::IVectorParts::getVectorPartIds(). The ids are the page ids.
     std::vector<OString> getVectorPartIds() override;
 
     /// @see vcl::ITiledRenderable::getEditMode().

@@ -35,6 +35,8 @@ class VirtualDevice;
 
 namespace vcl
 {
+class IVectorParts;
+
     /*
      * Map directly to css cursor styles to avoid further mapping in the client.
      * Gtk (via gdk_cursor_new_from_name) also supports the same css cursor styles.
@@ -516,22 +518,10 @@ public:
     }
 
     /**
-     * Writes the vector primitives delta of a part: the objects that changed since the part was
-     * last pushed, then moves that mark to the part's current version. rPartId is the id the
-     * vector primitives of the part carry as their partId, and nMode the page list the part sits
-     * in. Writes nothing when nothing changed since the last push or when no part carries that
-     * id.
+     * The parts of the document as vector primitives, or nullptr for a document that serves
+     * none. The document owns the object.
      */
-    virtual void pushVectorPrimitivesDelta(tools::JsonWriter& /*rJsonWriter*/,
-                                           std::string_view /*rPartId*/, int /*nMode*/)
-    {
-    }
-
-    /**
-     * The ids that the vector primitives of the parts carry as their partId, in the order the
-     * parts lie in the document.
-     */
-    virtual std::vector<OString> getVectorPartIds() { return {}; }
+    virtual IVectorParts* getVectorPartsInterface() { return nullptr; }
 
     /**
      * Returns an opaque string reflecting the render state of a component

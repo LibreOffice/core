@@ -4112,8 +4112,7 @@ private:
 
 bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
-    if (svx::vector::isPartCommand(rCommand) || rCommand == u"VectorThumbnail"
-        || rCommand == u"ExtractDocumentStructure"
+    if (rCommand == u"VectorThumbnail" || rCommand == u"ExtractDocumentStructure"
         || rCommand == u"GetDesignTemplates" || rCommand == u"GetDesignTemplateDesigns"
         || rCommand == u"SecurityLabel" || rCommand == u"ShapeGhost"
         || rCommand == u"ReserveObjectIds" || rCommand == u"ShapeStyleKey")
@@ -4300,32 +4299,43 @@ void SdXImpressDocument::notifyShapeStyleKey()
     }
 }
 
+vcl::IVectorParts* SdXImpressDocument::getVectorPartsInterface() { return this; }
+
+bool SdXImpressDocument::answerVectorCommand(::tools::JsonWriter& rJsonWriter,
+                                             std::string_view rCommand)
+{
+    // A page is named by its part id, the page GUID, and no mode named means the slides.
+    return svx::vector::answerPartCommand(
+        rJsonWriter, rCommand, maVectorResources,
+        [this, &rJsonWriter](const svx::vector::PartRequest& rRequest)
+        {
+            writeVectorPrimitives(rJsonWriter, rRequest.maPartId,
+                                  rRequest.moMode.value_or(constVectorModeSlides),
+                                  rRequest.mnSinceVersion, /*bPush*/ false);
+        },
+        [this](std::string_view rPartId) { forgetVectorPart(rPartId); });
+}
+
+std::vector<OString> SdXImpressDocument::getVectorPartIds() { return {}; }
+
+void SdXImpressDocument::forgetVectorPart(std::string_view rPartId)
+{
+    // A part id names a page in the one form the document writes it in.
+    const tools::Guid aGuid(rPartId);
+    const OString aWritten = aGuid.getString();
+    if (std::string_view(aWritten) != rPartId)
+        return;
+    // The table starts a part made later above the versions of this one, so a version a client
+    // held before names no content a part serves later.
+    maVectorParts.forget(aGuid);
+}
+
 void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                                           std::string_view rCommand)
 {
-    // A page is named by its part id, the page GUID, and no mode named means the slides.
-    if (svx::vector::answerPartCommand(
-            rJsonWriter, rCommand, maVectorResources,
-            [this, &rJsonWriter](const svx::vector::PartRequest& rRequest)
-            {
-                writeVectorPrimitives(rJsonWriter, rRequest.maPartId,
-                                      rRequest.moMode.value_or(constVectorModeSlides),
-                                      rRequest.mnSinceVersion, /*bPush*/ false);
-            },
-            [this](std::string_view rPartId)
-            {
-                // A part id names a page in the one form the document writes it in.
-                const tools::Guid aGuid(rPartId);
-                const OString aWritten = aGuid.getString();
-                if (std::string_view(aWritten) != rPartId)
-                    return;
-                // The table starts a part made later above the versions of this one, so a
-                // version a client held before names no content a part serves later.
-                maVectorParts.forget(aGuid);
-            }))
-    {
+    if (answerVectorCommand(rJsonWriter, rCommand))
         return;
-    }
+
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
 

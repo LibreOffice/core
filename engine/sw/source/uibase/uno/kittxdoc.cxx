@@ -1501,30 +1501,36 @@ std::vector<OString> SwXTextDocument::getVectorPartIds()
     return pLayout ? sw::vector::partIdsOf(*pLayout) : std::vector<OString>();
 }
 
-void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
-                                             std::string_view rCommand)
+vcl::IVectorParts* SwXTextDocument::getVectorPartsInterface() { return this; }
+
+bool SwXTextDocument::answerVectorCommand(tools::JsonWriter& rJsonWriter,
+                                          std::string_view rCommand)
 {
-    using namespace std::string_view_literals;
+    const svx::vector::PartCommand eCommand = svx::vector::partCommandOf(rCommand);
+    if (eCommand == svx::vector::PartCommand::None)
+        return false;
+
     SwWrtShell* pShell = m_pDocShell ? m_pDocShell->GetWrtShell() : nullptr;
     const SwRootFrame* pLayout = pShell ? pShell->GetLayout() : nullptr;
     if (!pLayout)
-        return;
+        return true;
 
     // The store holds the graphics and fonts of the pages it served, so it is made by the first
     // request for a page.
+    const bool bPrimitives = eCommand == svx::vector::PartCommand::Primitives;
     SwDoc* pDoc = m_pDocShell->GetDoc();
     sw::vector::PartStore* pParts = pDoc->GetVectorParts();
-    if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"sv) && !pParts)
+    if (bPrimitives && !pParts)
     {
         pParts = &pDoc->EnsureVectorParts();
         pParts->recordPageIds(*pLayout);
     }
     if (!pParts)
-        return;
+        return true;
 
     // A text edit in a drawing object reports each change of its text only while the drawing
     // model says that a client draws from it.
-    if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"sv))
+    if (bPrimitives)
         setDrawnFromModel(true);
 
     // The answer is for every view, so the text of a drawing object and of a chart keeps its
@@ -1539,7 +1545,14 @@ void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
             pParts->write(rJsonWriter, *pLayout, rRequest.maPartId, rRequest.mnSinceVersion,
                           /*bPush=*/false);
         },
-        [pParts](std::string_view rPartId) { pParts->forget(rPartId); });
+        [this](std::string_view rPartId) { forgetVectorPart(rPartId); });
+    return true;
+}
+
+void SwXTextDocument::forgetVectorPart(std::string_view rPartId)
+{
+    if (sw::vector::PartStore* pParts = getVectorParts())
+        pParts->forget(rPartId);
 }
 
 void SwXTextDocument::setDrawnFromModel(bool bDrawnFromModel)
@@ -1676,8 +1689,7 @@ bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
             u"SecurityLabel",
             u"Headings" };
 
-    return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end()
-           || svx::vector::isPartCommand(rCommand);
+    return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
 }
 
 int SwXTextDocument::getEditMode()
@@ -1730,14 +1742,11 @@ std::string SwXTextDocument::getPartInfo(int /*nPart*/)
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
     using namespace std::string_view_literals;
+    if (answerVectorCommand(rJsonWriter, rCommand))
+        return;
+
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
-
-    if (o3tl::starts_with(rCommand, ".uno:Vector"sv))
-    {
-        getVectorCommandValues(rJsonWriter, rCommand);
-        return;
-    }
 
     if (o3tl::starts_with(rCommand, ".uno:TextFormFields"sv))
     {

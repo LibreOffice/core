@@ -13,7 +13,6 @@
 
 #include <drawinglayer/processor2d/VectorResourceCache.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/string_view.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <tools/json_writer.hxx>
 
@@ -93,10 +92,27 @@ void writeAnswerVersions(tools::JsonWriter& rWriter, sal_Int64 nFrom, sal_uInt64
     rWriter.put("version", sal_Int64(nVersion));
 }
 
-bool isPartCommand(std::u16string_view rCommand)
+std::string_view commandNameOf(std::string_view rCommand)
 {
-    return rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics"
-           || rCommand == u"VectorRenderingFont" || rCommand == u"VectorForgetPart";
+    static constexpr std::string_view aPrefix(".uno:");
+    if (!rCommand.starts_with(aPrefix))
+        return {};
+    rCommand.remove_prefix(aPrefix.size());
+    return rCommand.substr(0, rCommand.find('?'));
+}
+
+PartCommand partCommandOf(std::string_view rCommand)
+{
+    const std::string_view aName = commandNameOf(rCommand);
+    if (aName == "VectorPrimitives")
+        return PartCommand::Primitives;
+    if (aName == "VectorRenderingGraphics")
+        return PartCommand::Graphic;
+    if (aName == "VectorRenderingFont")
+        return PartCommand::Font;
+    if (aName == "VectorForgetPart")
+        return PartCommand::ForgetPart;
+    return PartCommand::None;
 }
 
 PartRequest readPartRequest(std::string_view rCommand, sal_Int32 nEpoch)
@@ -128,30 +144,33 @@ bool answerPartCommand(tools::JsonWriter& rWriter, std::string_view rCommand,
                        const std::function<void(const PartRequest&)>& rWritePart,
                        const std::function<void(std::string_view)>& rForgetPart)
 {
-    const bool bGraphic = o3tl::starts_with(rCommand, ".uno:VectorRenderingGraphics");
-    const bool bFont = o3tl::starts_with(rCommand, ".uno:VectorRenderingFont");
-    const bool bPrimitives = o3tl::starts_with(rCommand, ".uno:VectorPrimitives");
-    const bool bForget = o3tl::starts_with(rCommand, ".uno:VectorForgetPart");
-    if (!bGraphic && !bFont && !bPrimitives && !bForget)
+    const PartCommand eCommand = partCommandOf(rCommand);
+    if (eCommand == PartCommand::None)
         return false;
 
     const PartRequest aRequest = readPartRequest(rCommand, rResources.getEpoch());
     const std::map<OUString, OUString>& rParameters = aRequest.maParameters;
-    if (bGraphic)
+    switch (eCommand)
     {
-        if (auto it = rParameters.find(u"checksum"_ustr); it != rParameters.end())
-            rResources.writeGraphic(rWriter, it->second.toInt64());
+        case PartCommand::Graphic:
+            if (auto it = rParameters.find(u"checksum"_ustr); it != rParameters.end())
+                rResources.writeGraphic(rWriter, it->second.toInt64());
+            break;
+        case PartCommand::Font:
+            // The id of a font is the hash of its file, in hexadecimal.
+            if (auto it = rParameters.find(u"id"_ustr); it != rParameters.end())
+                rResources.writeFont(rWriter, it->second.toUInt64(16));
+            break;
+        case PartCommand::Primitives:
+            rWritePart(aRequest);
+            break;
+        case PartCommand::ForgetPart:
+            if (rForgetPart && !aRequest.maPartId.isEmpty())
+                rForgetPart(aRequest.maPartId);
+            break;
+        case PartCommand::None:
+            break;
     }
-    else if (bFont)
-    {
-        // The id of a font is the hash of its file, in hexadecimal.
-        if (auto it = rParameters.find(u"id"_ustr); it != rParameters.end())
-            rResources.writeFont(rWriter, it->second.toUInt64(16));
-    }
-    else if (bPrimitives)
-        rWritePart(aRequest);
-    else if (rForgetPart && !aRequest.maPartId.isEmpty())
-        rForgetPart(aRequest.maPartId);
     return true;
 }
 }

@@ -25,6 +25,7 @@
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/IVectorParts.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -368,7 +369,8 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
     }
 
     ITiledRenderable* pDocument = getTiledRenderable(m_pDocument);
-    if (!pDocument)
+    vcl::IVectorParts* pVectorParts = pDocument ? pDocument->getVectorPartsInterface() : nullptr;
+    if (!pVectorParts)
         return;
 
     // The handlers of the other views of the document. A view can close while a delta is computed,
@@ -399,7 +401,7 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
         // The delta describes the part, not this view. So the first handler to flush a part writes
         // the one delta for the change.
         tools::JsonWriter aJsonWriter;
-        pDocument->pushVectorPrimitivesDelta(
+        pVectorParts->pushVectorPrimitivesDelta(
             aJsonWriter, std::string_view(rPartId.getStr(), rPartId.getLength()), nMode);
         const OString aDelta = aJsonWriter.finishAndGetAsOString();
 

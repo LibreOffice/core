@@ -8,6 +8,7 @@
  */
 
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/IVectorParts.hxx>
 
 namespace vcl
 {
@@ -72,6 +73,8 @@ const std::map<PointerStyle, OString> gaKitPointerMap{
 #endif
 
 ITiledRenderable::~ITiledRenderable() {}
+
+IVectorParts::~IVectorParts() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

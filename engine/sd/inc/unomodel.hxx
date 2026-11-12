@@ -62,6 +62,7 @@
 #include <svx/fmdmod.hxx>
 
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/IVectorParts.hxx>
 #include <vcl/dropcache.hxx>
 
 #include <comphelper/servicehelper.hxx>
@@ -114,6 +115,7 @@ class SAL_DLLPUBLIC_RTTI SdXImpressDocument final : public SfxBaseModel, // impl
                            public css::presentation::XHandoutMasterSupplier,
                            public css::view::XRenderable,
                            public vcl::ITiledRenderable,
+                           public vcl::IVectorParts,
                            public CacheOwner
 {
     friend class SdDrawPagesAccess;
@@ -545,9 +547,22 @@ public:
 
     SD_DLLPUBLIC virtual void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
-    /// @see vcl::ITiledRenderable::pushVectorPrimitivesDelta().
+    /// @see vcl::ITiledRenderable::getVectorPartsInterface(). The parts are the pages.
+    SD_DLLPUBLIC vcl::IVectorParts* getVectorPartsInterface() override;
+
+    /// @see vcl::IVectorParts::answerVectorCommand().
+    SD_DLLPUBLIC bool answerVectorCommand(tools::JsonWriter& rJsonWriter,
+                                          std::string_view rCommand) override;
+
+    /// @see vcl::IVectorParts::pushVectorPrimitivesDelta().
     SD_DLLPUBLIC void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
                                                 std::string_view rPartId, int nMode) override;
+
+    /// @see vcl::IVectorParts::getVectorPartIds().
+    SD_DLLPUBLIC std::vector<OString> getVectorPartIds() override;
+
+    /// @see vcl::IVectorParts::forgetVectorPart().
+    SD_DLLPUBLIC void forgetVectorPart(std::string_view rPartId) override;
 
     /// @see vcl::ITiledRenderable::getPresentationInfo().
     SD_DLLPUBLIC std::string getPresentationInfo(bool bAllyState = false) const override;

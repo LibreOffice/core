@@ -304,16 +304,36 @@ struct PartRequest
     std::map<OUString, OUString> maParameters;
 };
 
-/// True for "VectorPrimitives", "VectorRenderingGraphics", "VectorRenderingFont" and
-/// "VectorForgetPart", the commands a client that draws vector primitives sends.
-SVXCORE_DLLPUBLIC bool isPartCommand(std::u16string_view rCommand);
+/// The commands a client that draws vector primitives sends.
+enum class PartCommand
+{
+    /// Any other command.
+    None,
+    /// "VectorPrimitives", which asks for the primitives of a part.
+    Primitives,
+    /// "VectorRenderingGraphics", which asks for a graphic.
+    Graphic,
+    /// "VectorRenderingFont", which asks for a font.
+    Font,
+    /// "VectorForgetPart", which drops the state of a part.
+    ForgetPart
+};
+
+/// The name of rCommand, a command with its parameters like ".uno:Name?key=value": the text
+/// between ".uno:" and the "?" that opens the parameters. Empty when rCommand does not start
+/// with ".uno:".
+SVXCORE_DLLPUBLIC std::string_view commandNameOf(std::string_view rCommand);
+
+/// Which of the commands of PartCommand rCommand is, a command with its parameters. The whole
+/// name decides, so a longer name that only starts with one of them is PartCommand::None.
+SVXCORE_DLLPUBLIC PartCommand partCommandOf(std::string_view rCommand);
 
 /// The parameters of rCommand, a command with its parameters, read against nEpoch, the epoch
 /// the document counts in.
 SVXCORE_DLLPUBLIC PartRequest readPartRequest(std::string_view rCommand, sal_Int32 nEpoch);
 
-/** Answers rCommand, a command with its parameters, when it is one of the commands isPartCommand
-    names, and returns false for any other command. A graphic and a font come from rResources.
+/** Answers rCommand, a command with its parameters, when it is one of the commands of
+    PartCommand, and returns false for any other command. A graphic and a font come from rResources.
     rWritePart writes the primitives of the part a request names. rForgetPart drops the state of
     a part, and the answer to it is empty. Without rForgetPart a part is kept.
  */

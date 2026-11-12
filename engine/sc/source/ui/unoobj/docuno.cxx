@@ -1704,8 +1704,23 @@ bool ScModelObj::supportsCommand(std::u16string_view rCommand)
 {
     return std::any_of(std::begin(aCalcCommands), std::end(aCalcCommands),
                        [rCommand](const auto& rEntry)
-                       { return o3tl::equalsAscii(rCommand, rEntry.first); })
-           || svx::vector::isPartCommand(rCommand);
+                       { return o3tl::equalsAscii(rCommand, rEntry.first); });
+}
+
+vcl::IVectorParts* ScModelObj::getVectorPartsInterface() { return this; }
+
+bool ScModelObj::answerVectorCommand(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+{
+    if (svx::vector::partCommandOf(rCommand) == svx::vector::PartCommand::None)
+        return false;
+    if (!pDocShell)
+        return true;
+    if (!mpVectorContent)
+        mpVectorContent = std::make_unique<sc::VectorContent>(*pDocShell);
+    if (ScViewData* pViewData = ScDocShell::GetViewData())
+        lcl_fitGridWindowToDocument(*pViewData, getDocumentSize());
+    mpVectorContent->getCommandValues(rJsonWriter, rCommand);
+    return true;
 }
 
 void ScModelObj::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
@@ -1713,6 +1728,14 @@ void ScModelObj::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
 {
     if (mpVectorContent)
         mpVectorContent->pushDelta(rJsonWriter, rPartId, nMode);
+}
+
+std::vector<OString> ScModelObj::getVectorPartIds() { return {}; }
+
+void ScModelObj::forgetVectorPart(std::string_view rPartId)
+{
+    if (mpVectorContent)
+        mpVectorContent->forgetSheet(rPartId);
 }
 
 void ScModelObj::vectorTextEditChanged(SCTAB nTab)
@@ -1731,19 +1754,10 @@ void ScModelObj::setDrawnFromModel(bool bDrawnFromModel)
 
 void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
-    const ParsedCommand aCommand = ParsedCommand::parse(rCommand);
-
-    if (svx::vector::isPartCommand(OUString::fromUtf8(aCommand.aName)))
-    {
-        if (!pDocShell)
-            return;
-        if (!mpVectorContent)
-            mpVectorContent = std::make_unique<sc::VectorContent>(*pDocShell);
-        if (ScViewData* pViewData = ScDocShell::GetViewData())
-            lcl_fitGridWindowToDocument(*pViewData, getDocumentSize());
-        mpVectorContent->getCommandValues(rJsonWriter, rCommand);
+    if (answerVectorCommand(rJsonWriter, rCommand))
         return;
-    }
+
+    const ParsedCommand aCommand = ParsedCommand::parse(rCommand);
 
     switch (findCalcCommand(aCommand.aName))
     {

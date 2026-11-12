@@ -127,7 +127,7 @@ public:
     explicit VectorContent(ScDocShell& rDocShell);
     virtual ~VectorContent() override;
 
-    /// Answer the commands svx::vector::isPartCommand names.
+    /// Answer the commands of svx::vector::PartCommand.
     void getCommandValues(tools::JsonWriter& rWriter, std::string_view rCommand);
     /// The bytes of block JSON kept, over all sheets.
     SC_DLLPUBLIC size_t heldContentBytes() const;
@@ -136,6 +136,8 @@ public:
 
     /// Write the changes of a sheet since it was last pushed, or nothing when it did not change.
     void pushDelta(tools::JsonWriter& rWriter, std::string_view rPartId, sal_Int32 nMode);
+    /// Drop the state of the sheet that rPartId names.
+    void forgetSheet(std::string_view rPartId);
 
     /// Take a hint about painted ranges, finished changes, or inserted, removed, moved sheets. The
     /// sheets a hint names are the indexes they have when the hint comes.
@@ -292,9 +294,6 @@ private:
 
     /// Answer a request for the primitives of a sheet.
     void writeRequestedSheet(tools::JsonWriter& rWriter, const svx::vector::PartRequest& rRequest);
-    /// Drop the state of the sheet that rPartId names.
-    void forgetSheet(std::string_view rPartId);
-
     /// Write the answer or the push for the sheet. nMode is only named back in the header.
     void writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState& rState, sal_Int32 nMode,
                                const std::vector<BlockRequest>& rBlocks, sal_Int64 nSinceVersion,
