@@ -3161,6 +3161,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsMovedParagraph)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Delete));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsOnlyParagraphRsid)
+{
+    // Given two versions of a document with the same RSID root and the same paragraph text, where
+    // the paragraph and its characters have different editing session identifiers:
+    createSwDoc("compare-para-rsid-new.fodt");
+
+    // When comparing it with the older version:
+    compareWith(u"compare-para-rsid-old.fodt");
+
+    // Then nothing is shown as changed:
+    // Without the fix in place, this test would have failed with:
+    // - Expression: getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty()
+    // i.e. the paragraph was shown as deleted and inserted again.
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

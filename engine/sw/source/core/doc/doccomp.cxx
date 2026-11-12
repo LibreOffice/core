@@ -1505,8 +1505,7 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
     switch( rDstNd.GetNodeType() )
     {
     case SwNodeType::Text:
-        bRet = CompareTextNd( *rDstNd.GetTextNode(), *rSrcNd.GetTextNode() )
-            && ( !CmpOptions.bUseRsid || rDstNd.GetTextNode()->CompareParRsid( *rSrcNd.GetTextNode() ) );
+        bRet = CompareTextNd( *rDstNd.GetTextNode(), *rSrcNd.GetTextNode() );
         break;
 
     case SwNodeType::Table:
