@@ -36,7 +36,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         value. At the associated XIntegerBitmap, the
         XIntegerBitmap::setPixel() method will expect
         a sequence of ceil(BitsPerPixel/8) bytes, and the
-        XIntegerReadOnlyBitmap::getPixel() will
+        XIntegerBitmap::getPixel() will
         return that number of bytes. Similarly, the color conversion
         expect input data in multiples of ceil(BitsPerPixel/8), and
         also return converted data in chunks of this.<p>

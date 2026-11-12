@@ -55,7 +55,7 @@ struct IntegerRectangle2D;
 namespace com::sun::star::rendering
 {
 class XBitmap;
-class XIntegerReadOnlyBitmap;
+class XIntegerBitmap;
 }
 
 namespace com::sun::star::rendering
@@ -83,7 +83,7 @@ css::uno::Reference<css::rendering::XBitmap>
 /** Create a Bitmap from an XBitmap
          */
 ::Bitmap VCL_DLLPUBLIC
-bitmapFromXBitmap(const css::uno::Reference<css::rendering::XIntegerReadOnlyBitmap>& xInputBitmap);
+bitmapFromXBitmap(const css::uno::Reference<css::rendering::XIntegerBitmap>& xInputBitmap);
 
 // Color conversions (vcl/tools Color <-> canvas standard color space)
 

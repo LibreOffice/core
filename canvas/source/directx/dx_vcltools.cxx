@@ -237,8 +237,7 @@ namespace dxcanvastools
                                        const uno::Reference< rendering::XBitmap >&     xBitmap )
         {
             // TODO(F2): add support for floating point bitmap formats
-            uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
-                xBitmap, uno::UNO_QUERY );
+            uno::Reference<rendering::XIntegerBitmap> xIntBmp(xBitmap, uno::UNO_QUERY);
 
             if( !xIntBmp.is() )
                 return false;

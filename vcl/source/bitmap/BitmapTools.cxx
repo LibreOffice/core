@@ -28,7 +28,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <vcl/alpha.hxx>
 #include <vcl/dibtools.hxx>
@@ -137,7 +137,8 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, Bitmap& rBitmap, doub
 
     if (xBitmap.is())
     {
-        const css::uno::Reference<css::rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
+        const css::uno::Reference<css::rendering::XIntegerBitmap> xIntBmp(xBitmap,
+                                                                          uno::UNO_QUERY_THROW);
         rBitmap = vcl::unotools::bitmapFromXBitmap(xIntBmp);
     }
 

@@ -69,8 +69,7 @@ using namespace vclcanvas;
                 }
 
                 // TODO(F2): add support for floating point bitmap formats
-                uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
-                    xBitmap, uno::UNO_QUERY_THROW );
+                uno::Reference<rendering::XIntegerBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
 
                 ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xIntBmp );
                 if( !aBmp.IsEmpty() )

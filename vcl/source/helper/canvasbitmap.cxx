@@ -328,7 +328,7 @@ uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( 
     return uno::Reference<rendering::XBitmap>( new VclCanvasBitmap( aNewBmp ) );
 }
 
-// XIntegerReadOnlyBitmap
+// XIntegerBitmap
 uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
                                                              const geometry::IntegerRectangle2D& rect )
 {

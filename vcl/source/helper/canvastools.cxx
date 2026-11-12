@@ -64,7 +64,7 @@ bool equalsLayout(const rendering::IntegerBitmapLayout& rLHS,
            && rLHS.Palette == rRHS.Palette && rLHS.IsMsbFirst == rRHS.IsMsbFirst;
 }
 bool readBmp(sal_Int32 nWidth, sal_Int32 nHeight, const rendering::IntegerBitmapLayout& rLayout,
-             const uno::Reference<rendering::XIntegerReadOnlyBitmap>& xInputBitmap,
+             const uno::Reference<rendering::XIntegerBitmap>& xInputBitmap,
              BitmapScopedWriteAccess& rWriteAcc, bool bHasAlpha)
 {
     rendering::IntegerBitmapLayout aCurrLayout;
@@ -132,7 +132,7 @@ bool readBmp(sal_Int32 nWidth, sal_Int32 nHeight, const rendering::IntegerBitmap
 }
 }
 
-::Bitmap bitmapFromXBitmap(const uno::Reference<rendering::XIntegerReadOnlyBitmap>& xInputBitmap)
+::Bitmap bitmapFromXBitmap(const uno::Reference<rendering::XIntegerBitmap>& xInputBitmap)
 {
     SAL_INFO("vcl.helper", "vcl::unotools::bitmapExFromXBitmap()");
 

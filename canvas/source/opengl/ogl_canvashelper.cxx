@@ -569,9 +569,8 @@ namespace oglcanvas
                 {
                     // TODO(P3): Highly inefficient - simply copies pixel data
 
-                    uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntegerBitmap(
-                        textures[0].Bitmap,
-                        uno::UNO_QUERY);
+                    uno::Reference<rendering::XIntegerBitmap> xIntegerBitmap(textures[0].Bitmap,
+                                                                             uno::UNO_QUERY);
                     if( xIntegerBitmap.is() )
                     {
                         const geometry::IntegerSize2D aSize=xIntegerBitmap->getSize();
@@ -770,8 +769,7 @@ namespace oglcanvas
             {
                 // TODO(P3): Highly inefficient - simply copies pixel data
 
-                uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntegerBitmap(
-                    xBitmap, uno::UNO_QUERY);
+                uno::Reference<rendering::XIntegerBitmap> xIntegerBitmap(xBitmap, uno::UNO_QUERY);
                 if( xIntegerBitmap.is() )
                 {
                     const geometry::IntegerSize2D aSize=xBitmap->getSize();

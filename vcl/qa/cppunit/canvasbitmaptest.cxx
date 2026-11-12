@@ -23,7 +23,7 @@
 #include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
-#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
 
@@ -248,9 +248,8 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
 
 }
 
-class TestBitmap : public cppu::WeakImplHelper< rendering::XIntegerReadOnlyBitmap,
-                                                 rendering::XBitmapPalette,
-                                                 rendering::XIntegerBitmapColorSpace >
+class TestBitmap : public cppu::WeakImplHelper<rendering::XIntegerBitmap, rendering::XBitmapPalette,
+                                               rendering::XIntegerBitmapColorSpace>
 {
 private:
     geometry::IntegerSize2D        maSize;
@@ -265,7 +264,7 @@ private:
     virtual uno::Reference< rendering::XBitmap > SAL_CALL getScaledBitmap( const geometry::RealSize2D&,
                                                                            sal_Bool ) override { return this; }
 
-    // XIntegerReadOnlyBitmap
+    // XIntegerBitmap
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getData( rendering::IntegerBitmapLayout&     bitmapLayout,
                                                           const geometry::IntegerRectangle2D& rect ) override
     {
@@ -696,8 +695,8 @@ void CanvasBitmapTest::runTest()
 
     // Testing XBitmap import
 
-    uno::Reference< rendering::XIntegerReadOnlyBitmap > xTestBmp(
-        new TestBitmap( geometry::IntegerSize2D(10,10), true ));
+    uno::Reference<rendering::XIntegerBitmap> xTestBmp(
+        new TestBitmap(geometry::IntegerSize2D(10, 10), true));
 
     Bitmap aBmp = vcl::unotools::bitmapFromXBitmap(xTestBmp);
     CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is alpha",
