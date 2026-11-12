@@ -3557,6 +3557,29 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPagesPdfOnWhiteWithDarkSchem
                                rColor.IsDark());
 }
 
+// A document loaded from a PDF is shown on white paper in a dark scheme, with its text as the
+// PDF draws it
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPdfDocumentOnWhiteWithDarkScheme)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+
+    ScopedDocumentColor aScopedDocumentColor;
+
+    addScheme(u"Dark"_ustr, Color(0x1c, 0x1c, 0x1c));
+    SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
+    dispatchThemeCommand(mxComponent, u".uno:ChangeTheme"_ustr, u"Dark"_ustr);
+
+    // The left margin of the page is white
+    assertTilePixelColor(pXImpressDocument, 40, 600, COL_WHITE);
+
+    // The first line of text, "ABC 123 XYZ", is 58 to 98 points down and 187 to 408 points
+    // across. A tile pixel is 7.5 twips tall and 15 twips wide. The page border is outside.
+    const tools::Rectangle aFirstLine(Point(250, 155), Point(544, 261));
+    CPPUNIT_ASSERT(countDarkPixels(getTile(pXImpressDocument), aFirstLine) > 0);
+}
+
 // Test that changing the theme in one view doesn't change it in the other view
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
 {

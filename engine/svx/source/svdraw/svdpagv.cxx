@@ -18,6 +18,7 @@
  */
 
 #include <svx/svdpagv.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 
@@ -984,6 +985,14 @@ void SdrPageView::SetApplicationBackgroundColor(Color aBackgroundColor)
 void SdrPageView::SetApplicationDocumentColor(Color aDocumentColor)
 {
     maDocumentColor = aDocumentColor;
+}
+
+Color SdrPageView::GetApplicationDocumentColor() const
+{
+    if (GetView().GetModel().IsPDFDocument())
+        return COL_WHITE;
+
+    return maDocumentColor;
 }
 
 void SdrPageView::resetGridOffsetsOfAllPageWindows() const

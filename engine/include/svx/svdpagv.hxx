@@ -249,7 +249,10 @@ public:
 
     // #103911# Set/Get document color for svx at SdrPageViews
     void SetApplicationDocumentColor(Color aDocumentColor);
-    const Color& GetApplicationDocumentColor() const { return maDocumentColor;}
+    /// The color of the page itself, the paper the objects are painted on. COL_AUTO is the
+    /// document color of the color scheme. For a document loaded from a PDF it is white, whatever
+    /// was set.
+    Color GetApplicationDocumentColor() const;
 
     void resetGridOffsetsOfAllPageWindows() const;
 };

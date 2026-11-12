@@ -1885,6 +1885,9 @@ SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 // #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
 Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDisplay ) const
 {
+    if (getSdrModelFromSdrPage().IsPDFDocument())
+        return GetPageBackgroundColor(COL_WHITE);
+
     Color aColor(COL_WHITE);
 
     if(bScreenDisplay && (!pView || pView->GetApplicationDocumentColor() == COL_AUTO))

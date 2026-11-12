@@ -233,7 +233,11 @@ namespace sdr::contact
                                        .IsPrintPreview());
             if (bToView)
             {
-                if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+                const Color aDocumentColor(
+                    mrPageWindow.GetPageView().GetApplicationDocumentColor());
+                if (COL_AUTO != aDocumentColor)
+                    aNewViewInformation2D.setAutoColor(aDocumentColor);
+                else if (const SfxViewShell* pViewShell = SfxViewShell::Current())
                     aNewViewInformation2D.setAutoColor(
                         pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
             }
