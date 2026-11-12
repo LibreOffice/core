@@ -100,7 +100,8 @@ class PresentationBar {
 						command: 'importslides',
 						image: false,
 						inlineLabel: true,
-						visible: this.map.getDocType() === 'presentation' && app.impress.isSlideImportSupported()
+						visible: this.map.getDocType() === 'presentation' && this.map.isEditMode()
+							&& app.impress.isSlideImportSupported()
 					}
 				]
 			}

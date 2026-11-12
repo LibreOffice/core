@@ -51,7 +51,7 @@ function createSlideLayoutEntryWidget(
 	});
 	container.appendChild(overview);
 
-	if (app.impress.isSlideImportSupported()) {
+	if (builder.map.isEditMode() && app.impress.isSlideImportSupported()) {
 		const importSlides = createSlideLayoutButton(
 			'importslides-entry',
 			_('Import your slides'),
