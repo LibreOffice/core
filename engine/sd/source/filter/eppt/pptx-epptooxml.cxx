@@ -3555,6 +3555,9 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
     aDML.SetMaster(bMaster);
     aDML.SetPageType(ePageType);
     aDML.SetSlideMasterPart(bSlideMasterPart);
+    // Of the parts a presentation is written in, the layouts are the ones that stand between
+    // two others.
+    aDML.SetWritingALayoutPart(ePageType == MASTER && !bSlideMasterPart);
     aDML.SetBackgroundDark(mbIsBackgroundDark);
 
     // A master standing for a group writes its placeholders and the shapes the group shares. A

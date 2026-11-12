@@ -2629,6 +2629,17 @@ static OUString lcl_GetTarget(const cpo::uno::Reference<css::frame::XModel>& xMo
     return sTarget;
 }
 
+namespace
+{
+/** Whether a shape stands in an area a page keeps for it, which is where a value the shape
+    states none of its own is taken from the page behind it. */
+bool isAreaOfAPage(const uno::Reference<beans::XPropertySet>& rxShapeProperties)
+{
+    uno::Reference<drawing::XShape> xShape(rxShapeProperties, uno::UNO_QUERY);
+    return xShape.is() && xShape->getShapeType().startsWith("com.sun.star.presentation.");
+}
+}
+
 void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int32 nElement, WriteRunInput& rRunInput)
 {
     Reference< XPropertySet > rXPropSet = rRun;
@@ -2971,8 +2982,13 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
             // An automatic colour is the colour the shape holding the text asks for. The
             // shapes that take a level of a list style each ask for their own, and a line
             // break shows no text at all, so both of those leave the colour for the reader.
+            // An area of a layout takes its colour from the master behind it, and giving it one
+            // of its own cuts the slides in front of it off from that master. A master has
+            // nothing behind it and a slide nothing in front of it, so both state the colour
+            // they resolved, which is the only one a reader of this format can show.
             else if (GetDocumentType() == DOCUMENT_PPTX && !rRunInput.bIsLevelDefault
-                     && !rRunInput.bIsLineBreak)
+                     && !rRunInput.bIsLineBreak
+                     && !(mbWritingALayoutPart && isAreaOfAPage(rRunInput.xShapePropSet)))
             {
                 // Resolve COL_AUTO for PPTX since MS Powerpoint doesn't have automatic colors.
                 bool bIsTextBackgroundDark = mbIsBackgroundDark;

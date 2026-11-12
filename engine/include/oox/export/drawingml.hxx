@@ -330,6 +330,10 @@ protected:
     /// True when exporting presentation placeholder shape.
     bool mbPlaceholder;
 
+    /// True while a layout is written: the one part whose areas both take a value from the page
+    /// behind them and hand one to the pages in front of them.
+    bool mbWritingALayoutPart = false;
+
     /// The alignment of the paragraphs of a Fontwork shape, which the engine takes from the shape,
     /// not from the paragraphs; set while the text of such a shape is written.
     std::optional<css::style::ParagraphAdjust> moFontworkParaAdjust;
@@ -455,6 +459,7 @@ public:
     bool isDiagramModelTextExport() const { return mbDiagramModelTextExport; }
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
+    void SetWritingALayoutPart(bool bLayoutPart) { mbWritingALayoutPart = bLayoutPart; }
 
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
     OOX_DLLPUBLIC OUString writeGraphicToStorage(const Graphic &rGraphic , bool bRelPathToMedia = false, GraphicExport::TypeHint eHint = GraphicExport::TypeHint::Detect);

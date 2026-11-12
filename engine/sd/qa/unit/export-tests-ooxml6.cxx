@@ -55,9 +55,11 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include <sdpage.hxx>
@@ -200,6 +202,48 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testListStyleStatesNoLanguage)
         "lang");
     assertXPath(pMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr", "lang",
                 u"en-US");
+}
+
+// An area of a layout takes the colour of its text from the master behind it where it states
+// none of its own, so giving it a colour on the way out cuts it off from that master.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testLayoutAreaKeepsTheColourOfItsMaster)
+{
+    // Given a layout whose area for the footer states no colour:
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Then the area still holds its text and still states no colour for it.
+    xmlDocUniquePtr pLayout = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    static constexpr OString aFooter("//p:sp[p:nvSpPr/p:nvPr/p:ph[@type='ftr']]"_ostr);
+    CPPUNIT_ASSERT_GREATER(0, countXPathNodes(pLayout, aFooter + "//a:r"));
+    assertXPath(pLayout, aFooter + "//a:r/a:rPr/a:solidFill", 0);
+}
+
+// A slide is the end of that chain: nothing takes a colour from it, and the colour it resolved
+// against its own background is the only one a reader of this format can show.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testAutoTitleOnDarkSlide)
+{
+    // Given a slide given a black background of its own, with a title typed into it:
+    createSdImpressDoc();
+    uno::Reference<beans::XPropertySet> xPageProps(getPage(0), uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xBackground(
+        xFactory->createInstance(u"com.sun.star.drawing.Background"_ustr), uno::UNO_QUERY_THROW);
+    xBackground->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
+    xBackground->setPropertyValue(u"FillColor"_ustr, uno::Any(sal_Int32(0x000000)));
+    xPageProps->setPropertyValue(u"Background"_ustr, uno::Any(xBackground));
+    uno::Reference<text::XText>(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW)
+        ->setString(u"Title"_ustr);
+
+    save(TestFilter::PPTX);
+
+    // Then the title states the white it resolved to. Written without one it would take the
+    // dark colour of the master instead, and a reader would show black on black.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
+                "val", u"FFFFFF");
 }
 
 // A list style states no colour for a level whose first run asks for the automatic one. The
