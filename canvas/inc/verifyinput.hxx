@@ -32,7 +32,6 @@ namespace com::sun::star::geometry
     struct RealRectangle2D;
     struct AffineMatrix2D;
     struct Matrix2D;
-    struct IntegerPoint2D;
     struct IntegerSize2D;
     struct IntegerRectangle2D;
 }
@@ -533,18 +532,6 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyIndexRange( const css::geometry::IntegerRectangle2D& rect,
                                const css::geometry::IntegerSize2D&      size );
-
-        /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
-            index range is violated
-
-            @param pos
-            Position to verify
-
-            @param size
-            Given position must be within ((0,0), (size.Width, size.Height))
-         */
-        CANVASTOOLS_DLLPUBLIC void verifyIndexRange( const css::geometry::IntegerPoint2D& pos,
-                               const css::geometry::IntegerSize2D&  size );
 
         /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
             the size is negative or null

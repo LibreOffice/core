@@ -22,7 +22,6 @@
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/geometry/RealBezierSegment2D.hpp>
@@ -582,18 +581,6 @@ namespace canvastools
                 aRect.getMaxX() > size.Width ||
                 aRect.getMinY() < 0 ||
                 aRect.getMaxY() > size.Height )
-            {
-                throw css::lang::IndexOutOfBoundsException();
-            }
-        }
-
-        void verifyIndexRange( const geometry::IntegerPoint2D& pos,
-                               const geometry::IntegerSize2D&  size )
-        {
-            if( pos.X < 0 ||
-                pos.X > size.Width ||
-                pos.Y < 0 ||
-                pos.Y > size.Height )
             {
                 throw css::lang::IndexOutOfBoundsException();
             }
