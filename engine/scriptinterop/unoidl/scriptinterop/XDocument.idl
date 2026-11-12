@@ -49,6 +49,14 @@ interface XDocument : XBase
      */
     sequence<XFootnote> getFootnotes();
 
+    /** Returns the default language of the document, as an Apps Script language code such as
+        "en" or "pt_BR".
+
+        Returns null when the document has no default language, or one that Apps Script has no
+        code for.
+
+        @gas Document.getLanguage
+     */
     com::sun::star::beans::Optional<string> getLanguage();
 
     /** Inserts an image at the user's cursor, anchored as a character.

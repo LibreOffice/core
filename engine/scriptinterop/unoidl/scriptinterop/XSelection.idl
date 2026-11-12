@@ -33,7 +33,10 @@ interface XSelection : XBase
      */
     sequence<XRangeElement> getRangeElements();
 
-    /// @deprecated The same as getRangeElements
+    /** The same as getRangeElements, under its older name, which Apps Script has deprecated.
+
+        @gas Range.getSelectedElements
+     */
     sequence<XRangeElement> getSelectedElements();
 
     /** Returns the selected text.

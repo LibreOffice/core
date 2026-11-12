@@ -41,9 +41,30 @@ interface XContainerElement: XElement {
      */
     XText editAsText();
 
+    /** Returns the first match of a regular expression in the element, or null if there is none.
+
+        The pattern uses the syntax of ICU regular expressions. A match does not cross the end of
+        a paragraph or an inline image, and an empty match is skipped.
+
+        @throws RuntimeException
+            if searchPattern is not a valid regular expression.
+
+        @gas ContainerElement.findText
+     */
     [overload findText] com::sun::star::beans::Optional<XRangeElement> findText(
         [in] string searchPattern);
 
+    /** Returns the first match of a regular expression after an earlier match, or null if there
+        is none.
+
+        @param from
+            The result of an earlier findText call on this element.
+        @throws RuntimeException
+            if searchPattern is not a valid regular expression, or from is not a match in this
+            element.
+
+        @gas ContainerElement.findText
+     */
     [overload findText] com::sun::star::beans::Optional<XRangeElement> findTextFrom(
         [in] string searchPattern, [in] XRangeElement from);
 

@@ -13,40 +13,82 @@ module scriptinterop {
 
 interface XParagraph;
 
+/** An image that is placed at a position of its own rather than in a line of text, and is
+    anchored to a paragraph or to a page.
+
+    Sizes are in pixels at 96 pixels per inch. Offsets are in points, measured from the point that
+    the image's position refers to: the top left corner of the paragraph for an image that
+    addPositionedImage added, and the top left corner of the page for an image anchored with
+    setPageAnchor. The setters return this image, for chaining.
+
+    @gas PositionedImage
+ */
 interface XPositionedImage: XBase {
+    /** @gas PositionedImage.getHeight */
     long getHeight();
 
+    /** Returns the name of the image in the document.
+
+        @gas PositionedImage.getId
+     */
     string getId();
 
+    /** @gas PositionedImage.getLayout */
     PositionedLayout getLayout();
 
+    /** @gas PositionedImage.getLeftOffset */
     double getLeftOffset();
 
+    /** Returns the paragraph that the image is anchored to.
+
+        @throws RuntimeException
+            if the image is anchored to a page.
+
+        @gas PositionedImage.getParagraph
+     */
     XParagraph getParagraph();
 
+    /** @gas PositionedImage.getTopOffset */
     double getTopOffset();
 
+    /** @gas PositionedImage.getWidth */
     long getWidth();
 
+    /** @gas PositionedImage.setHeight */
     XPositionedImage setHeight([in] long height);
 
+    /** @gas PositionedImage.setLayout */
     XPositionedImage setLayout([in] PositionedLayout layout);
 
+    /** @gas PositionedImage.setLeftOffset */
     XPositionedImage setLeftOffset([in] double offset);
 
+    /** @gas PositionedImage.setTopOffset */
     XPositionedImage setTopOffset([in] double offset);
 
+    /** @gas PositionedImage.setWidth */
     XPositionedImage setWidth([in] long width);
 
     // Setting the ID, the image's name in the document, which GAS's PositionedImage does not offer:
 
+    /** Sets the name of the image in the document. */
     XPositionedImage setId([in] string id);
 
     // Anchoring to a page, after which the offsets are measured from the top left corner of the
     // page, which GAS's PositionedImage does not offer:
 
+    /** Returns the number of the page that the image is anchored to, counted from 1, or null if
+        the image is anchored to a paragraph.
+     */
     com::sun::star::beans::Optional<long> getPageAnchor();
 
+    /** Anchors the image to the given page, counted from 1.
+
+        The image keeps its offsets, which then count from the top left corner of the page.
+
+        @throws RuntimeException
+            if page is less than 1 or greater than 32767.
+     */
     XPositionedImage setPageAnchor([in] long page);
 };
 

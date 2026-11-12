@@ -115,14 +115,27 @@ interface XCursor: XBase {
 
     boolean isBold();
 
+    /** Returns whether the text at the cursor is italic or oblique. */
     boolean isItalic();
 
     boolean isUnderline();
 
+    /** Sets whether text at the cursor is bold.
+
+        Null removes the setting, so that the text takes it from its style.
+     */
     XCursor setBold([in] com::sun::star::beans::Optional<boolean> value);
 
+    /** Sets whether text at the cursor is italic.
+
+        Null removes the setting, so that the text takes it from its style.
+     */
     XCursor setItalic([in] com::sun::star::beans::Optional<boolean> value);
 
+    /** Sets whether text at the cursor is underlined.
+
+        Null removes the setting, so that the text takes it from its style.
+     */
     XCursor setUnderline([in] com::sun::star::beans::Optional<boolean> value);
 };
 

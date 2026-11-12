@@ -22,6 +22,16 @@ module scriptinterop {
  */
 interface XParagraph: XContainerElement
 {
+    /** Adds the given image to the paragraph as a positioned image.
+
+        The image keeps its natural size. It sits at the top left corner of the paragraph, and the
+        text runs on both sides of it.
+
+        @throws RuntimeException
+            if image is null or its bytes cannot be read as an image.
+
+        @gas Paragraph.addPositionedImage
+     */
     XPositionedImage addPositionedImage([in] XBlob image);
 
     /** @gas Paragraph.getAlignment */
@@ -65,8 +75,19 @@ interface XParagraph: XContainerElement
      */
     long getNestingLevel();
 
+    /** Returns the positioned image with the given ID that is anchored to the paragraph.
+
+        @throws RuntimeException
+            if the paragraph has no positioned image with that ID.
+
+        @gas Paragraph.getPositionedImage
+     */
     XPositionedImage getPositionedImage([in] string id);
 
+    /** Returns the images anchored to the paragraph or to one of its characters.
+
+        @gas Paragraph.getPositionedImages
+     */
     sequence<XPositionedImage> getPositionedImages();
 
     /** Returns whether the paragraph runs left to right.
@@ -79,6 +100,16 @@ interface XParagraph: XContainerElement
      */
     com::sun::star::beans::Optional<boolean> isLeftToRight();
 
+    /** Removes the positioned image with the given ID from the paragraph.
+
+        @returns
+            true
+        @throws RuntimeException
+            if the paragraph has no positioned image with that ID. Apps Script returns false
+            instead.
+
+        @gas Paragraph.removePositionedImage
+     */
     boolean removePositionedImage([in] string id);
 
     /** Sets the paragraph style of the given heading level.

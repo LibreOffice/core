@@ -15,7 +15,9 @@ module scriptinterop {
  */
 struct ImageOptions
 {
+    /** The width of the image. */
     double widthCm;
+    /** The height of the image. */
     double heightCm;
 };
 

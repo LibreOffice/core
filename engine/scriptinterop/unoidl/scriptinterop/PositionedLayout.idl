@@ -11,11 +11,22 @@
 
 module scriptinterop {
 
+/** How the text of a document flows around a positioned image.
+
+    @gas PositionedLayout
+ */
 enum PositionedLayout {
+    /** The image lies in front of the text, which runs on underneath it. An image behind the text
+        also reads as this. */
     ABOVE_TEXT,
+    /** The text stops above the image and goes on below it, with nothing on either side. */
     BREAK_BOTH,
+    /** The text runs only on the right of the image. */
     BREAK_LEFT,
+    /** The text runs only on the left of the image. */
     BREAK_RIGHT,
+    /** The text runs on both sides of the image. Any wrap that has no other value, such as one
+        that picks the wider side, also reads as this. */
     WRAP_TEXT
 };
 

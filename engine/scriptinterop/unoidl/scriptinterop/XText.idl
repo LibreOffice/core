@@ -29,7 +29,7 @@ module scriptinterop {
     The text of a container, from XContainerElement.editAsText, joins the texts of all the
     paragraphs in it, also those in nested tables, with a line break after each but the last. A
     line break counts as one character and has the formatting of the character before it. Here
-    appendText, deleteText, insertText and setText throw as not implemented.
+    appendText, deleteText, insertText, merge and setText throw as not implemented.
 
     @gas Text
  */
@@ -43,17 +43,51 @@ interface XText: XElement {
     /** @gas Text.editAsText */
     XText editAsText();
 
+    /** Returns the first match of a regular expression in the text, or null if there is none.
+
+        The pattern uses the syntax of ICU regular expressions. A match does not cross the end of
+        a paragraph or an inline image, and an empty match is skipped.
+
+        @throws RuntimeException
+            if searchPattern is not a valid regular expression.
+
+        @gas Text.findText
+     */
     [overload findText] com::sun::star::beans::Optional<XRangeElement> findText(
         [in] string searchPattern);
 
+    /** Returns the first match of a regular expression after an earlier match, or null if there
+        is none.
+
+        @param from
+            The result of an earlier findText call on this text.
+        @throws RuntimeException
+            if searchPattern is not a valid regular expression, or from is not a match in this
+            text.
+
+        @gas Text.findText
+     */
     [overload findText] com::sun::star::beans::Optional<XRangeElement> findTextFrom(
         [in] string searchPattern, [in] XRangeElement from);
 
     /** @gas Text.getFontFamily */
     com::sun::star::beans::Optional<string> getFontFamily([in] long offset);
 
+    /** Returns the color of the whole text, as "#rrggbb".
+
+        Returns null when parts of the text have different colors, or when the color is automatic
+        or not set on the text.
+
+        @gas Text.getForegroundColor
+     */
     [overload getForegroundColor] com::sun::star::beans::Optional<string> getForegroundColor();
 
+    /** Returns the color of the text at the given offset, as "#rrggbb".
+
+        An automatic color reads as null.
+
+        @gas Text.getForegroundColor
+     */
     [overload getForegroundColor] com::sun::star::beans::Optional<string> getForegroundColorAt(
         [in] long offset);
 
@@ -93,6 +127,14 @@ interface XText: XElement {
     /** @gas Text.isUnderline */
     com::sun::star::beans::Optional<boolean> isUnderline([in] long offset);
 
+    /** Joins the element with the element before it, such as a paragraph with the paragraph
+        before it, and returns the text of the joined element.
+
+        @throws RuntimeException
+            if the element before it is missing or of another type.
+
+        @gas Text.merge
+     */
     XText merge();
 
     /** @gas Text.setBold */
@@ -112,9 +154,19 @@ interface XText: XElement {
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<string> fontFamilyName);
 
+    /** Sets the color of the whole text.
+
+        @param color
+            A color as "#rrggbb", or null to remove the color.
+        @throws RuntimeException
+            if color is neither null nor of the form "#rrggbb".
+
+        @gas Text.setForegroundColor
+     */
     [overload setForegroundColor] XText setForegroundColor(
         [in] com::sun::star::beans::Optional<string> color);
 
+    /** @gas Text.setForegroundColor */
     [overload setForegroundColor] XText setForegroundColorRange(
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<string> color);

@@ -52,18 +52,45 @@ interface XBody: XContainerElement {
      */
     sequence<XElement> getChildren();
 
+    /** Returns the left margin of the page, in points.
+
+        This and the other page getters read the page style that the body starts with, as Apps
+        Script has one page size and one set of margins for the whole document.
+
+        @gas Body.getMarginLeft
+     */
     double getMarginLeft();
 
+    /** Returns the top margin of the page, in points.
+
+        @gas Body.getMarginTop
+     */
     double getMarginTop();
 
+    /** Returns the height of the page, in points.
+
+        @gas Body.getPageHeight
+     */
     double getPageHeight();
 
+    /** Returns the width of the page, in points.
+
+        @gas Body.getPageWidth
+     */
     double getPageWidth();
 
     // The images anchored to pages, which GAS's Body does not offer:
 
+    /** Returns the images that are anchored to a page. */
     sequence<XPositionedImage> getPositionedImages();
 
+    /** Removes the image with the given ID that is anchored to a page.
+
+        @returns
+            true
+        @throws RuntimeException
+            if no image with that ID is anchored to a page.
+     */
     boolean removePositionedImage([in] string id);
 };
 

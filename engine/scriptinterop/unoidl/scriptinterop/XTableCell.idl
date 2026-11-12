@@ -16,6 +16,7 @@ module scriptinterop {
     @gas TableCell
  */
 interface XTableCell: XContainerElement {
+    /** Returns the paragraphs and tables of the cell, in document order. */
     sequence<XElement> getChildren();
 
     /** This always returns 1 for now, even for a horizontally merged cell.

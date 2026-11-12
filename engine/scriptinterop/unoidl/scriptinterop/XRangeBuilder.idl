@@ -46,9 +46,31 @@ interface XRangeBuilder {
     [overload addElement] XRangeBuilder addElementRange(
         [in] XText text, [in] long startOffset, [in] long endOffsetInclusive);
 
+    /** Adds the given elements and everything between them to the range.
+
+        An element that lies wholly between the two is added as a whole.
+
+        @throws RuntimeException
+            if an element is null, the two are in different parts of the document, such as the
+            body and a footnote, or the end lies before the start.
+
+        @gas RangeBuilder.addElementsBetween
+     */
     [overload addElementsBetween] XRangeBuilder addElementsBetween(
         [in] XElement startElement, [in] XElement endElementInclusive);
 
+    /** Adds the text from an offset in one text to an offset in another, and everything between
+        them, to the range.
+
+        The offsets are 0-based and counted as in XText, and endOffsetInclusive is the last
+        character added. An offset into the text of a container counts in the paragraph there.
+
+        @throws RuntimeException
+            if a text is null, an offset is negative or past the end of its text, the two texts
+            are in different parts of the document, or the end lies before the start.
+
+        @gas RangeBuilder.addElementsBetween
+     */
     [overload addElementsBetween] XRangeBuilder addElementsBetweenOffsets(
         [in] XText startTextElement, [in] long startOffset, [in] XText endTextElementInclusive,
         [in] long endOffsetInclusive);
