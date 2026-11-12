@@ -498,67 +498,6 @@ namespace dxcanvas
     }
 
 
-    // DXSurfaceBitmap::setData
-
-
-    void DXSurfaceBitmap::setData( const uno::Sequence< sal_Int8 >&      data,
-                                   const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
-                                   const geometry::IntegerRectangle2D&   rect )
-    {
-        if(hasAlpha())
-        {
-            const Gdiplus::Rect aRect( dxcanvastools::gdiPlusRectFromIntegerRectangle2D( rect ) );
-
-            Gdiplus::BitmapData aBmpData;
-            aBmpData.Width       = rect.X2-rect.X1;
-            aBmpData.Height      = rect.Y2-rect.Y1;
-            aBmpData.Stride      = 4*aBmpData.Width;
-            aBmpData.PixelFormat = PixelFormat32bppARGB;
-            aBmpData.Scan0       = const_cast<sal_Int8 *>(data.getConstArray());
-
-            // TODO(F1): Support more pixel formats natively
-
-            if( Gdiplus::Ok != mpGDIPlusBitmap->LockBits( &aRect,
-                                                Gdiplus::ImageLockModeWrite | Gdiplus::ImageLockModeUserInputBuf,
-                                                PixelFormat32bppARGB, // TODO: Adapt to
-                                                                           // Graphics native
-                                                                          // format/change
-                                                                          // getMemoryLayout
-                                                &aBmpData ) )
-            {
-                throw uno::RuntimeException("GDIPlus method call was unsuccessful, problem with locking bitmap aRect object");
-            }
-
-            // commit data to bitmap
-            mpGDIPlusBitmap->UnlockBits( &aBmpData );
-        }
-        else
-        {
-            sal_uInt32 nWidth = rect.X2-rect.X1;
-            sal_uInt32 nHeight = rect.Y2-rect.Y1;
-
-            // lock the directx surface to receive the pointer to the surface memory.
-            D3DLOCKED_RECT aLockedRect;
-            if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
-                throw uno::RuntimeException("failed to lock directx surface to surface memory");
-
-            auto* pSrc = data.getConstArray();
-            sal_uInt8 *pDst = (static_cast<BYTE *>(aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1;
-            sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
-            for(sal_uInt32 y=0; y<nHeight; ++y)
-            {
-                memcpy(pDst,pSrc,nSegmentSizeInBytes);
-                pSrc += nSegmentSizeInBytes;
-                pDst += aLockedRect.Pitch;
-            }
-
-            mpSurface->UnlockRect();
-        }
-
-        mbIsSurfaceDirty = true;
-    }
-
-
     // DXSurfaceBitmap::getPixel
 
 

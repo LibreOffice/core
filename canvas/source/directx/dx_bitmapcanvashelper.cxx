@@ -161,18 +161,6 @@ namespace dxcanvas
         return mpTarget->getData(bitmapLayout,rect);
     }
 
-    void BitmapCanvasHelper::setData( const uno::Sequence< sal_Int8 >&      data,
-                                      const rendering::IntegerBitmapLayout& bitmapLayout,
-                                      const geometry::IntegerRectangle2D&   rect )
-    {
-        SAL_INFO( "canvas.directx", "::dxcanvas::BitmapCanvasHelper::setData()" );
-
-        ENSURE_OR_THROW( mpTarget,
-                          "::dxcanvas::BitmapCanvasHelper::setData(): disposed" );
-
-        mpTarget->setData(data,bitmapLayout,rect);
-    }
-
     uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
                                                             const geometry::IntegerPoint2D&   pos )
     {

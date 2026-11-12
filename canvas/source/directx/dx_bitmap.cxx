@@ -128,39 +128,6 @@ namespace dxcanvas
         return aRes;
     }
 
-    void DXBitmap::setData( const uno::Sequence< sal_Int8 >&        data,
-                            const rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
-                            const geometry::IntegerRectangle2D&     rect )
-    {
-        const Gdiplus::Rect aRect( dxcanvastools::gdiPlusRectFromIntegerRectangle2D( rect ) );
-
-        Gdiplus::BitmapData aBmpData;
-        aBmpData.Width       = rect.X2-rect.X1;
-        aBmpData.Height      = rect.Y2-rect.Y1;
-        aBmpData.Stride      = 4*aBmpData.Width;
-        aBmpData.PixelFormat = PixelFormat32bppARGB;
-        aBmpData.Scan0       = const_cast<sal_Int8 *>(data.getConstArray());
-            // const_cast is safe, "Gdiplus::ImageLockModeWrite
-            // | Gdiplus::ImageLockModeUserInputBuf makes the data go from
-            // BitmapData into Bitmap", says Thorsten
-
-        // TODO(F1): Support more pixel formats natively
-
-        if( Gdiplus::Ok != mpBitmap->LockBits( &aRect,
-                                                      Gdiplus::ImageLockModeWrite | Gdiplus::ImageLockModeUserInputBuf,
-                                                      PixelFormat32bppARGB, // TODO: Adapt to
-                                                      // Graphics native
-                                                      // format/change
-                                                      // getMemoryLayout
-                                                      &aBmpData ) )
-        {
-            throw uno::RuntimeException("Internal error while writing BitmapData into Bitmap");
-        }
-
-        // commit data to bitmap
-        mpBitmap->UnlockBits( &aBmpData );
-    }
-
     uno::Sequence< sal_Int8 > DXBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                   const geometry::IntegerPoint2D&   pos )
     {

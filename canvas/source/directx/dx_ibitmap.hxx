@@ -41,11 +41,6 @@ namespace dxcanvas
             css::rendering::IntegerBitmapLayout&       bitmapLayout,
             const css::geometry::IntegerRectangle2D&   rect ) = 0;
 
-        virtual void setData(
-            const css::uno::Sequence< sal_Int8 >&      data,
-            const css::rendering::IntegerBitmapLayout& bitmapLayout,
-            const css::geometry::IntegerRectangle2D&   rect ) = 0;
-
         virtual css::uno::Sequence< sal_Int8 > getPixel(
             css::rendering::IntegerBitmapLayout&       bitmapLayout,
             const css::geometry::IntegerPoint2D&       pos ) = 0;
