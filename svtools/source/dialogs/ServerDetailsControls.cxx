@@ -38,6 +38,8 @@ using namespace com::sun::star::uno;
 
 constexpr sal_uInt16 HTTP_DEFAULT_PORT = 80;
 constexpr sal_uInt16 HTTPS_DEFAULT_PORT = 443;
+constexpr OUString HTTP_SCHEME = u"http"_ustr;
+constexpr OUString HTTPS_SCHEME = u"https"_ustr;
 
 DetailsContainer::DetailsContainer(PlaceEditDialog* pDialog)
     : m_pDialog(pDialog)
@@ -158,7 +160,7 @@ void HostDetailsContainer::setDefaultPort(sal_uInt16 nDefaultPort)
 }
 
 DavDetailsContainer::DavDetailsContainer(PlaceEditDialog* pBuilder)
-    : HostDetailsContainer(pBuilder, HTTP_DEFAULT_PORT, u"http"_ustr)
+    : HostDetailsContainer(pBuilder, HTTP_DEFAULT_PORT, HTTP_SCHEME)
 {
     m_pDialog->m_xCBDavs->connect_toggled(LINK(this, DavDetailsContainer, ToggledDavsHdl));
 
@@ -204,9 +206,9 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, weld::Toggleable&, rCheckBox, vo
 
     setDefaultPort(bCheckedDavs ? HTTPS_DEFAULT_PORT : HTTP_DEFAULT_PORT);
 
-    OUString sScheme( u"http"_ustr );
+    OUString sScheme( HTTP_SCHEME );
     if ( bCheckedDavs )
-        sScheme = "https";
+        sScheme = HTTPS_SCHEME;
     setScheme( sScheme );
 
     notifyChange( );
