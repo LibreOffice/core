@@ -373,6 +373,10 @@ class GraphicSelection {
 		if (this.sameObjects(this.announcedObjectIDs, this.selectedObjectIDs))
 			return;
 		this.announcedObjectIDs = this.selectedObjectIDs.slice();
+
+		// Cropping belongs to the picture it was switched on for, so another selection ends it.
+		if (this.cropping) this.toggleCropping();
+
 		app.events.fire('graphicselectionchanged', {
 			objectIds: this.selectedObjectIDs.slice(),
 		});
