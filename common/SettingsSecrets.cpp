@@ -25,7 +25,7 @@ std::string SettingsSecrets::redactSettingSecrets(
 {
     Poco::JSON::Object::Ptr json;
     if (!JsonUtil::parseJSON(body, json) || !json)
-        return body;
+        return "";
 
     bool changed = false;
     for (const std::string_view& field : secretFields)

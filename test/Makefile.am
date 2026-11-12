@@ -210,6 +210,7 @@ test_base_sources = \
 	OomKillsWhiteBoxTests.cpp \
 	ProcessWhiteBoxTests.cpp \
 	RequestDetailsTests.cpp \
+	SettingsSecretsTests.cpp \
 	StringVectorTests.cpp \
 	TestGlobals.cpp \
 	UriTests.cpp \
