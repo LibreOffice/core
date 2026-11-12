@@ -12,6 +12,7 @@
 #pragma once
 
 #include <span>
+#include <string>
 #include <string_view>
 
 #include <common/ServerPrivateInfo.hpp>
@@ -36,6 +37,13 @@ inline std::span<const std::string_view> fieldsFor(std::string_view fileName)
         return ServerPrivateInfo::SecretFields;
     return {};
 }
+
+// Replace each stored secret in a settings body with an empty value and add a
+// companion "<field>Stored": true flag, so the browser learns that a secret
+// exists without receiving it. A body that is not JSON, or that holds none of
+// these fields with a value, is returned unchanged.
+std::string redactSettingSecrets(const std::string& body,
+                                 std::span<const std::string_view> secretFields);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

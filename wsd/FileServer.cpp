@@ -2246,35 +2246,6 @@ std::string settingFileName(const std::string& fileUrl)
     }
 }
 
-// Replace each stored secret in a settings body with an empty value and add a
-// companion "<field>Stored": true flag, so the browser learns that a secret
-// exists without receiving it. A body that is not JSON, or that holds none of
-// these fields with a value, is returned unchanged.
-std::string redactSettingSecrets(const std::string& body,
-                                 std::span<const std::string_view> secretFields)
-{
-    Poco::JSON::Object::Ptr json;
-    if (!JsonUtil::parseJSON(body, json) || !json)
-        return body;
-
-    bool changed = false;
-    for (const std::string_view& field : secretFields)
-    {
-        const std::string name(field);
-        if (!json->has(name))
-            continue;
-        std::string value;
-        JsonUtil::findJSONValue(json, name, value);
-        if (value.empty())
-            continue;
-        json->set(name, std::string());
-        json->set(name + std::string(SettingsSecrets::StoredFlagSuffix), true);
-        changed = true;
-    }
-
-    return changed ? JsonUtil::jsonToString(json) : body;
-}
-
 // True when the uploaded body asks to keep at least one stored secret, i.e. it
 // carries a "<field>Stored": true flag. Only then must the server read the
 // currently stored file to restore that secret.
@@ -2432,7 +2403,8 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
         clientResponse.set("Content-Disposition", "attachment");
         clientResponse.setBody(secretFields.empty()
                                    ? httpResponse->getBody()
-                                   : redactSettingSecrets(httpResponse->getBody(), secretFields));
+                                   : SettingsSecrets::redactSettingSecrets(
+                                         httpResponse->getBody(), secretFields));
         destSocket->sendAndShutdown(clientResponse);
         LOG_DBG("Successfully fetched setting file from [" << uriAnonym << ']');
     };
