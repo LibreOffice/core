@@ -47,6 +47,7 @@
 
 #include <sfx2/request.hxx>
 
+#include <svx/drawstyleutils.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xlnclit.hxx>
 #include <sdr/overlay/overlayobjectcell.hxx>
@@ -1181,7 +1182,13 @@ void SvxTableController::Execute( SfxRequest& rReq )
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
             if( pArgs )
-                SetAttributes( *pArgs, false );
+            {
+                // A fill color picked on its own comes with a solid fill style, so it shows in
+                // the cells whose fill style was none.
+                std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
+                svx::convertDrawStyleArguments(*pNewArgs);
+                SetAttributes( *pNewArgs, false );
+            }
         }
         break;
 

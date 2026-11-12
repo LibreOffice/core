@@ -76,6 +76,7 @@
 #include <svx/svddrgmt.hxx>
 #include <svx/svdomedia.hxx>
 #include <avmedia/mediaitem.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/xlineit0.hxx>
@@ -3527,6 +3528,47 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf164855)
     const SfxItemSet& rParaAttribs2 = rEdit2.GetParaAttribs(0);
     pAdjust = rParaAttribs2.GetItem(EE_PARA_JUST);
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, pAdjust->GetAdjust());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTableCellFillColorShowsWithoutFill)
+{
+    // A fill color picked for selected table cells shows also in a cell that had no fill before.
+    createSdImpressDoc();
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { u"Rows"_ustr, cpo::uno::Any(sal_Int32(2)) }, { u"Columns"_ustr, cpo::uno::Any(sal_Int32(2)) } }));
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(2));
+    CPPUNIT_ASSERT(pTableObject);
+
+    uno::Reference<css::table::XTable> xTable(pTableObject->getTable(), uno::UNO_SET_THROW);
+    uno::Reference<beans::XPropertySet> xCellA1(xTable->getCellByPosition(0, 0),
+                                                uno::UNO_QUERY_THROW);
+    xCellA1->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_NONE));
+
+    SdrView* pView = pViewShell->GetView();
+    auto pTableController
+        = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+    CPPUNIT_ASSERT(pTableController);
+    pTableController->selectAll();
+
+    cpo::uno::Sequence<beans::PropertyValue> aColorArgs(comphelper::InitPropertySequence(
+        { { u"FillColor"_ustr, cpo::uno::Any(sal_Int32(COL_LIGHTGREEN)) } }));
+    dispatchCommand(mxComponent, u".uno:FillColor"_ustr, aColorArgs);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1 (SOLID)
+    // - Actual  : 0 (NONE)
+    // The cell kept the color but no fill, so it stayed white on screen.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
+                         xCellA1->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN,
+                         Color(ColorTransparency,
+                               xCellA1->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
