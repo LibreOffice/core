@@ -928,6 +928,44 @@ static bool paintUsingPrimitivesHelper(
     return false;
 }
 
+/// The primitive that draws rGraphicObject with rGraphicAttr over the unit square, placed by
+/// rTransformation. Cropping, mirroring and the color adjustments are in the attributes.
+static drawinglayer::primitive2d::Primitive2DReference
+lcl_createGraphicPrimitive(const basegfx::B2DHomMatrix& rTransformation,
+                           const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr)
+{
+    return new drawinglayer::primitive2d::GraphicPrimitive2D(
+            rTransformation,
+            rGraphicObject,
+            rGraphicAttr);
+}
+
+/// The name of the fly format that holds rNode, or no text when the node is in no fly.
+static OUString lcl_getFlyFormatName(const SwNode& rNode)
+{
+    return nullptr == rNode.GetFlyFormat() ? OUString()
+                                           : rNode.GetFlyFormat()->GetName().toString();
+}
+
+/// Puts rContent inside the primitive that carries the name, the title and the description of an
+/// object, when one of the three has text.
+static void lcl_embedInObjectInfo(drawinglayer::primitive2d::Primitive2DContainer& rContent,
+                                  const OUString& rName, const OUString& rTitle,
+                                  const OUString& rDescription)
+{
+    if(!rName.isEmpty() || !rTitle.isEmpty() || !rDescription.isEmpty())
+    {
+        // Embed to ObjectInfoPrimitive2D when we have Name/Title/Description
+        // information available
+        rContent = drawinglayer::primitive2d::Primitive2DContainer {
+            new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
+                std::move(rContent),
+                rName,
+                rTitle,
+                rDescription) };
+    }
+}
+
 // MM02 original using fallback to VOC and primitive-based version
 void paintGraphicUsingPrimitivesHelper(
     vcl::RenderContext & rOutputDevice,
@@ -943,7 +981,7 @@ void paintGraphicUsingPrimitivesHelper(
     // -> the primitive renderer will create the needed pdf export data
     // -> if bitmap content, it will be cached system-dependent
     drawinglayer::primitive2d::Primitive2DContainer aContent {
-        new drawinglayer::primitive2d::GraphicPrimitive2D(
+        lcl_createGraphicPrimitive(
             rGraphicTransform,
             rGrfObj,
             rGraphicAttr) };
@@ -990,17 +1028,7 @@ void paintGraphicUsingPrimitivesHelper(
         }
     }
 
-    if(!rName.isEmpty() || !rTitle.isEmpty() || !rDescription.isEmpty())
-    {
-        // Embed to ObjectInfoPrimitive2D when we have Name/Title/Description
-        // information available
-        rContent = drawinglayer::primitive2d::Primitive2DContainer {
-            new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-                std::move(rContent),
-                rName,
-                rTitle,
-                rDescription) };
-    }
+    lcl_embedInObjectInfo(rContent, rName, rTitle, rDescription);
 
     basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
     aTargetRange.transform(rGraphicTransform);
@@ -1071,7 +1099,7 @@ void ViewObjectContactOfSwNoTextFrame::createPrimitive2DSequence(
         // MM02 this is the right place in the VOC-Mechanism to create
         // the primitives for visualization - these will be automatically
         // buffered and reused
-        rVisitor.visit(new drawinglayer::primitive2d::GraphicPrimitive2D(
+        rVisitor.visit(lcl_createGraphicPrimitive(
             aGraphicTransform,
             rGrfObj,
             aGraphicAttr));
@@ -1316,7 +1344,7 @@ void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
                 *pOut,
                 aPrimitives,
                 aGraphicTransform,
-                nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName().toString(),
+                lcl_getFlyFormatName(*pGrfNd),
                 rNoTNd.GetTitle(),
                 rNoTNd.GetDescription());
             bSucceeded = true;
@@ -1334,7 +1362,7 @@ void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
             rGrfObj,
             aGrfAttr,
             aGraphicTransform,
-            nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName().toString(),
+            lcl_getFlyFormatName(*pGrfNd),
             rNoTNd.GetTitle(),
             rNoTNd.GetDescription());
     }
@@ -1622,9 +1650,8 @@ SwNoTextFrame::CreateContentPrimitives(const Point& rOrigin) const
             // the color adjustments are in the graphic attributes.
             GraphicAttr aGraphicAttr;
             pGrfNd->GetGraphicAttr(aGraphicAttr, this);
-            drawinglayer::primitive2d::Primitive2DReference xPicture(
-                new drawinglayer::primitive2d::GraphicPrimitive2D(
-                    aToLocal * getFrameAreaTransformation(), rGraphicObject, aGraphicAttr));
+            drawinglayer::primitive2d::Primitive2DReference xPicture(lcl_createGraphicPrimitive(
+                aToLocal * getFrameAreaTransformation(), rGraphicObject, aGraphicAttr));
             // The primitive made last is taken again when it equals the new one. It holds what it
             // prepared for drawing, so a picture that spans many tiles is prepared once. It lets
             // go of that after a while without use, so the frame keeps only the primitive itself.
@@ -1698,19 +1725,8 @@ SwNoTextFrame::CreateContentPrimitives(const Point& rOrigin) const
     // A picture with a name, a title or a description carries them around its content, as when
     // painted.
     if (bPicture)
-    {
-        const OUString sName(pGrfNd->GetFlyFormat() ? pGrfNd->GetFlyFormat()->GetName().toString()
-                                                    : OUString());
-        const OUString sTitle(rNoTNd.GetTitle());
-        const OUString sDescription(rNoTNd.GetDescription());
-        if (!sName.isEmpty() || !sTitle.isEmpty() || !sDescription.isEmpty())
-        {
-            aPrimitives = drawinglayer::primitive2d::Primitive2DContainer{
-                new drawinglayer::primitive2d::ObjectInfoPrimitive2D(std::move(aPrimitives), sName,
-                                                                     sTitle, sDescription)
-            };
-        }
-    }
+        lcl_embedInObjectInfo(aPrimitives, lcl_getFlyFormatName(*pGrfNd), rNoTNd.GetTitle(),
+                              rNoTNd.GetDescription());
     return aPrimitives;
 }
 

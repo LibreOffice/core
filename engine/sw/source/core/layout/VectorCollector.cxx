@@ -350,13 +350,12 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
     if (aPrimitives.empty())
         return;
 
-    // A rule is cropped rather than shrunk, so a rule made of a picture keeps its scale.
+    // A rule is cropped with the mask that the paint puts around it. The primitives of the object
+    // are in document twips, as the mask is.
     if (oClip)
     {
-        // The primitives of the object are in document twips, so the mask has no origin to move
-        // by.
         drawinglayer::primitive2d::Primitive2DReference xMask(
-            createMask(*oClip, Point(), std::move(aPrimitives)));
+            createHorizontalRuleMask(*oClip, std::move(aPrimitives)));
         aPrimitives = drawinglayer::primitive2d::Primitive2DContainer{ xMask };
     }
 

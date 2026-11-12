@@ -27,6 +27,8 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/character.hxx>
@@ -1525,6 +1527,12 @@ void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
     if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"sv))
         setDrawnFromModel(true);
 
+    // The answer is for every view, so the text of a drawing object and of a chart keeps its
+    // automatic colors, which each client resolves for its own view.
+    comphelper::COKit::setVectorRendering(true);
+    comphelper::ScopeGuard aVectorRenderingGuard(
+        [] { comphelper::COKit::setVectorRendering(false); });
+
     svx::vector::answerPartCommand(
         rJsonWriter, rCommand, pParts->getResources(),
         [pParts, &rJsonWriter, pLayout](const svx::vector::PartRequest& rRequest) {
@@ -1561,6 +1569,12 @@ void SwXTextDocument::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
         return;
     // The drawing model can be made after the first page was served, so it is told here too.
     setDrawnFromModel(true);
+
+    // The answer is for every view, so the text of a drawing object and of a chart keeps its
+    // automatic colors, which each client resolves for its own view.
+    comphelper::COKit::setVectorRendering(true);
+    comphelper::ScopeGuard aVectorRenderingGuard(
+        [] { comphelper::COKit::setVectorRendering(false); });
     pParts->write(rJsonWriter, *pLayout, rPartId, /*nSinceVersion=*/-1, /*bPush=*/true);
 }
 

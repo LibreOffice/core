@@ -560,6 +560,16 @@ std::optional<SwRect> getHorizontalRuleClip(const SdrObject* pObj)
     return {};
 }
 
+drawinglayer::primitive2d::Primitive2DReference
+createHorizontalRuleMask(const SwRect& rClip,
+                         drawinglayer::primitive2d::Primitive2DContainer&& rPrimitives)
+{
+    const basegfx::B2DRectangle aClip(rClip.Left(), rClip.Top(), rClip.Right(), rClip.Bottom());
+    return new drawinglayer::primitive2d::MaskPrimitive2D(
+        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClip)),
+        std::move(rPrimitives));
+}
+
 void SwViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
                         const sdr::contact::ViewObjectContact& rOriginal,
                         const sdr::contact::DisplayInfo& rDisplayInfo,
@@ -586,13 +596,7 @@ void SwViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
         sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
             rOriginal, rDisplayInfo, aRule);
         if (!aRule.empty())
-        {
-            const basegfx::B2DRectangle aClip(oClip->Left(), oClip->Top(), oClip->Right(),
-                                              oClip->Bottom());
-            rVisitor.visit(new drawinglayer::primitive2d::MaskPrimitive2D(
-                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClip)),
-                std::move(aRule)));
-        }
+            rVisitor.visit(createHorizontalRuleMask(*oClip, std::move(aRule)));
         return;
     }
 

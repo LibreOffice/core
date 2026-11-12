@@ -22,6 +22,7 @@
 #include <tools/color.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <swrect.hxx>
 #include <swregion.hxx>
 #include <memory>
@@ -48,6 +49,13 @@ class SwTextFrame;
 /// The area the paint crops the horizontal rule pObj to: the frame area of the cell or the fly it
 /// sits in. None for any other object and for a rule in body text.
 std::optional<SwRect> getHorizontalRuleClip(const SdrObject* pObj);
+
+/// The primitives of a horizontal rule cropped to rClip, the area that getHorizontalRuleClip gives
+/// for the rule. The primitives and the area are in document twips. The rule keeps its own size
+/// and shows only inside the area, so a rule made of a picture keeps its scale.
+drawinglayer::primitive2d::Primitive2DReference
+createHorizontalRuleMask(const SwRect& rClip,
+                         drawinglayer::primitive2d::Primitive2DContainer&& rPrimitives);
 
 // --> OD #i76669#
 //namespace sdr::contact { class ViewObjectContactRedirector; }
