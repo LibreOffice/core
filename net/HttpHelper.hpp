@@ -67,6 +67,16 @@ void sendFile(const std::shared_ptr<StreamSocket>& socket, const std::string& pa
               http::Response& response, bool noCache = false, bool deflate = false,
               bool headerOnly = false);
 
+#if !MOBILEAPP
+/// Sends the first size bytes of file as HTTP response. A file that ends early ends the connection.
+void sendFile(const std::shared_ptr<StreamSocket>& socket, http::InputFile& file,
+              http::Response& response, bool noCache = false);
+
+/// Sends the first size bytes of file as HTTP response and shutdown the socket.
+void sendFileAndShutdown(const std::shared_ptr<StreamSocket>& socket, http::InputFile& file,
+                         http::Response& response, bool noCache = false);
+#endif
+
 /// Verifies that the host in the given WOPISrc holds only bytes a host name can hold, and that
 /// the WOPISrc is properly URI-encoded. A malformed host gets an HTTP error in every build. An
 /// unencoded WOPISrc only warns in release builds, but closes the socket in debug builds, to

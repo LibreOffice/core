@@ -76,18 +76,11 @@ void sendDeflatedFileContent(const std::shared_ptr<StreamSocket>& socket, const 
     }
 }
 
-void sendFileImpl(const std::shared_ptr<StreamSocket>& socket, const std::string& path,
-                  http::Response& response, const bool noCache, const bool deflate,
-                  const bool headerOnly, const bool closeSocket)
+/// Sets the headers that every file response has, and sizes the socket's send buffer for a file of
+/// size bytes. Returns the size of the pieces to send the file in.
+int prepareFileResponse(const std::shared_ptr<StreamSocket>& socket, http::Response& response,
+                        const std::size_t size, const bool noCache, const bool closeSocket)
 {
-    FileUtil::Stat st(path);
-    if (st.bad())
-    {
-        LOG_WRN('#' << socket->getFD() << ": Failed to stat [" << path
-                    << "]. File will not be sent.");
-        throw Poco::FileNotFoundException("Failed to stat [" + path + "]. File will not be sent.");
-    }
-
     if (!noCache)
     {
         // 60 * 60 * 24 * 128 (days) = 11059200
@@ -106,12 +99,28 @@ void sendFileImpl(const std::shared_ptr<StreamSocket>& socket, const std::string
         response.setConnectionToken(http::Header::ConnectionToken::Close);
     }
 
-    int bufferSize = std::min<std::size_t>(st.size(), Socket::MaximumSendBufferSize);
-    if (static_cast<long>(st.size()) >= socket->getSendBufferSize())
+    int bufferSize = std::min<std::size_t>(size, Socket::MaximumSendBufferSize);
+    if (static_cast<long>(size) >= socket->getSendBufferSize())
     {
         socket->setSocketBufferSize(bufferSize);
         bufferSize = socket->getSendBufferSize();
     }
+    return bufferSize;
+}
+
+void sendFileImpl(const std::shared_ptr<StreamSocket>& socket, const std::string& path,
+                  http::Response& response, const bool noCache, const bool deflate,
+                  const bool headerOnly, const bool closeSocket)
+{
+    FileUtil::Stat st(path);
+    if (st.bad())
+    {
+        LOG_WRN('#' << socket->getFD() << ": Failed to stat [" << path
+                    << "]. File will not be sent.");
+        throw Poco::FileNotFoundException("Failed to stat [" + path + "]. File will not be sent.");
+    }
+
+    const int bufferSize = prepareFileResponse(socket, response, st.size(), noCache, closeSocket);
 
     // Disable deflate for now - until we can cache deflated data.
     // FIXME: IE/Edge doesn't work well with deflate, so check with
@@ -141,6 +150,27 @@ void sendFileImpl(const std::shared_ptr<StreamSocket>& socket, const std::string
     }
 }
 
+#if !MOBILEAPP
+void sendOpenFileImpl(const std::shared_ptr<StreamSocket>& socket, http::InputFile& file,
+                      http::Response& response, const bool noCache, const bool closeSocket)
+{
+    if (file.size() < 0)
+        throw Poco::FileNotFoundException("The file to send is not open");
+
+    const int bufferSize = prepareFileResponse(socket, response, file.size(), noCache, closeSocket);
+    response.setContentLength(file.size());
+    socket->send(response);
+
+    std::unique_ptr<char[]> buf = std::make_unique<char[]>(bufferSize);
+    int64_t count;
+    while ((count = file.read(buf.get(), bufferSize)) > 0)
+        socket->send(buf.get(), count, true);
+
+    // The response promised file.size() bytes, so a file that ended early ends the connection.
+    if (count < 0 || closeSocket)
+        socket->asyncShutdown();
+}
+#endif
 } // namespace
 
 namespace HttpHelper
@@ -158,6 +188,20 @@ void sendFileAndShutdown(const std::shared_ptr<StreamSocket>& socket, const std:
 {
     sendFileImpl(socket, path, response, noCache, deflate, headerOnly, true);
 }
+
+#if !MOBILEAPP
+void sendFile(const std::shared_ptr<StreamSocket>& socket, http::InputFile& file,
+              http::Response& response, const bool noCache)
+{
+    sendOpenFileImpl(socket, file, response, noCache, false);
+}
+
+void sendFileAndShutdown(const std::shared_ptr<StreamSocket>& socket, http::InputFile& file,
+                         http::Response& response, const bool noCache)
+{
+    sendOpenFileImpl(socket, file, response, noCache, true);
+}
+#endif
 
 } // namespace HttpHelper
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
