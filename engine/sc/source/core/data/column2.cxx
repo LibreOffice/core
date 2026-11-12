@@ -190,8 +190,11 @@ tools::Long ScColumn::GetNeededSize(
         }
     }
 
-    // #i111387#, tdf#121040: disable automatic line breaks for all number formats
-    if (bBreak && bCellIsValue && (rContext.NFGetType(nFormat) == SvNumFormatType::NUMBER))
+    // #i111387#, tdf#121040: a number never wraps, whatever its number format, as in the painters
+    // (sc::wrapsTextAutomatically). Justified text breaks into lines, except a plain number.
+    const bool bJustified = eHorJust == SvxCellHorJustify::Block;
+    if (bBreak && bCellIsValue
+        && (!bJustified || rContext.NFGetType(nFormat) == SvNumFormatType::NUMBER))
     {
         // If a formula cell needs to be interpreted during aCell.hasNumeric()
         // to determine the type, the pattern may get invalidated because the
@@ -213,7 +216,7 @@ tools::Long ScColumn::GetNeededSize(
             else
             {
                 nFormat = pPattern->GetNumberFormat( rContext, pCondSet );
-                if (rContext.NFGetType(nFormat) == SvNumFormatType::NUMBER)
+                if (!bJustified || rContext.NFGetType(nFormat) == SvNumFormatType::NUMBER)
                     bBreak = false;
             }
         }
