@@ -407,6 +407,11 @@ class SAL_DLLPUBLIC_RTTI SwAnchoredObject
         */
         void UpdateObjInSortedList();
 
+        /** Moves the anchored object to its sorted position in the <SwSortedObjs> lists of its
+            anchor frame and its page frame, and invalidates nothing.
+        */
+        void ReorderInSortedLists();
+
         /** method to determine, if a format on the anchored object is possible
 
             A format isn't possible, if anchored object is in an invisible layer.
