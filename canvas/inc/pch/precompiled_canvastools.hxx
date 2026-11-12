@@ -60,7 +60,6 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/geometry/RealBezierSegment2D.hpp>
