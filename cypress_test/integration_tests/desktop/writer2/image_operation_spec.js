@@ -59,16 +59,24 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		insertImage();
 		//when Keep ratio is unchecked
 		helper.assertImageSize(248, 63);
+		// Each size change makes the engine refresh both size fields again a little later, and
+		// that refresh replaces a value typed into a field before it lands.
+		helper.processToIdle(this.win);
 		// if window is too small sidebar won't popup
 
 		cy.cGet('#selectwidth input').type('{selectAll}{backspace}3{enter}');
+		helper.assertImageSize(139, 63);
+		helper.processToIdle(this.win);
 
 		cy.cGet('#selectheight input').type('{selectAll}{backspace}2{enter}');
 
 		helper.assertImageSize(139, 93);
+		helper.processToIdle(this.win);
 
 		//Keep ratio checked
 		cy.cGet('#ratio input').check();
+		cy.cGet('#ratio input').should('be.checked');
+		helper.processToIdle(this.win);
 
 		cy.cGet('#selectheight input').type('{selectAll}{backspace}5{enter}');
 
