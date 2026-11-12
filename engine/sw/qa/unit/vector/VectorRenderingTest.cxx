@@ -41,16 +41,22 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <tools/json_writer.hxx>
 
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <drawdoc.hxx>
 #include <itabenum.hxx>
 #include <lineinfo.hxx>
 #include <pagefrm.hxx>
@@ -936,6 +942,13 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPictureIsAFlyAnchoredInItsParagraph)
                          pGraphic->getTransform());
     CPPUNIT_ASSERT(pGraphic->getGraphicAttr().IsCropped());
     CPPUNIT_ASSERT(pGraphic->getGraphicAttr().IsMirrored());
+
+    // A picture that did not change keeps its primitive from one decomposition to the next.
+    std::vector<sw::vector::Entry> aAgain = decomposeFirstPage();
+    const sw::vector::Entry* pPictureAgain
+        = findEntry(aAgain, sw::vector::EntryKind::NoTextFrame);
+    CPPUNIT_ASSERT(pPictureAgain);
+    CPPUNIT_ASSERT_EQUAL(pGraphic, pictureOf(*pPictureAgain));
 }
 
 /// A picture that cannot be read on a rotated frame shows the box that says why upright over the
@@ -1222,6 +1235,45 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorDeltaCarriesTheChangedParagraphOnly)
     CPPUNIT_ASSERT(!objectOf(*oDelta, nFirstId));
 }
 
+/// Typing into the text of a drawing shape gives a delta that carries the shape.
+CPPUNIT_TEST_FIXTURE(Test, testVectorDeltaCarriesTheShapeWhoseTextIsEdited)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(3000, 2000));
+    uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    uno::Reference<drawing::XDrawPageSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    xSupplier->getDrawPage()->add(xShape);
+    calcLayout();
+    // The edit reports its changes once a page was served, so the page is served before it starts.
+    requestFirstPage();
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+    const sw::vector::Entry* pShape = findEntry(aEntries, sw::vector::EntryKind::Shape);
+    CPPUNIT_ASSERT(pShape);
+
+    SdrPage* pPage = getSwDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrView* pView = getSwDocShell()->GetWrtShell()->GetDrawView();
+    pView->SdrBeginTextEdit(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"X"_ustr);
+
+    // The typing alone marked the page, so the push runs with no area named.
+    tools::JsonWriter aWriter;
+    getSwTextDoc()->pushVectorPrimitivesDelta(aWriter, sw::vector::partIdOf(firstPage()),
+                                              sw::vector::constModePrintLayout);
+    const OString aJson = aWriter.finishAndGetAsOString();
+    pView->SdrEndTextEdit();
+
+    CPPUNIT_ASSERT(aJson != tools::JsonWriter::EMPTY_DOCUMENT);
+    const boost::property_tree::ptree aDelta = parse(aJson);
+    const boost::property_tree::ptree* pEdited = objectOf(aDelta, pShape->mnId);
+    CPPUNIT_ASSERT(pEdited);
+    CPPUNIT_ASSERT(pEdited->get_child_optional("primitives"));
+}
+
 /// A paragraph pushed down by a new one comes in the delta without its primitives, and the
 /// new order comes along.
 CPPUNIT_TEST_FIXTURE(Test, testVectorDeltaMovesAParagraphWithoutItsPrimitives)
@@ -1413,6 +1465,36 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorForgottenPageGetsNoDeltas)
     CPPUNIT_ASSERT(
         getSwTextDoc()->getVectorParts()->invalidate(*pLayout, { firstPage().getFrameArea() })
             .empty());
+}
+
+/// Once every page was forgotten, a request that names the version held before gets the page
+/// whole, in a new epoch.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPageIsServedWholeAfterEveryPageWasForgotten)
+{
+    createSwDoc();
+    getSwDocShell()->GetWrtShell()->Insert(u"text"_ustr);
+    calcLayout();
+    const sal_Int64 nServed = requestFirstPage().get<sal_Int64>("version");
+    const sal_Int32 nEpoch = getSwTextDoc()->getVectorParts()->getEpoch();
+    const OString aPartId = sw::vector::partIdOf(firstPage());
+
+    {
+        tools::JsonWriter aWriter;
+        getSwTextDoc()->getCommandValues(
+            aWriter, Concat2View(".uno:VectorForgetPart?partid=" + aPartId));
+        aWriter.finishAndGetAsOString();
+    }
+    CPPUNIT_ASSERT(nEpoch != getSwTextDoc()->getVectorParts()->getEpoch());
+
+    tools::JsonWriter aWriter;
+    getSwTextDoc()->getCommandValues(
+        aWriter, Concat2View(".uno:VectorPrimitives?partid=" + aPartId + "&since="
+                             + OString::number(nServed) + "&epoch=" + OString::number(nEpoch)));
+    const boost::property_tree::ptree aPayload = parse(aWriter.finishAndGetAsOString());
+
+    CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitives"), aPayload.get<std::string>("type"));
+    for (const auto& rObject : aPayload.get_child("objects"))
+        CPPUNIT_ASSERT(rObject.second.get_child_optional("primitives"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

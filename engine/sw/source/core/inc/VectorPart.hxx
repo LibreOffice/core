@@ -83,6 +83,8 @@ public:
 
     /// Drops what was written for the entries of the part, and marks the part as held by no
     /// client. Its versions go on counting, and the next request for the part serves it whole.
+    /// When no client holds any part after that, the state of every part is dropped and a new
+    /// epoch starts. The graphics and fonts stay, since a client can ask for them at any time.
     void forget(std::string_view rPartId);
 
     /// The part ids whose push wrote nothing because the layout was busy, once the layout is

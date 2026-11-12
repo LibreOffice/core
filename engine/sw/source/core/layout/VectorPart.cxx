@@ -145,6 +145,19 @@ void PartStore::forget(std::string_view rPartId)
     aKept.maVersions = aIterator->second.maVersions;
     aKept.maVersions.forget();
     aIterator->second = std::move(aKept);
+
+    const bool bAnyServed = std::ranges::any_of(
+        maParts, [](const auto& rPart) { return rPart.second.maVersions.isServed(); });
+    if (bAnyServed)
+        return;
+
+    // No client holds a part now, so the state of every part goes, and the versions start again
+    // in a new epoch. A version that a client still names counts in the old epoch, so the request
+    // that names it is answered with the whole part.
+    maParts.clear();
+    maEntries.clear();
+    maDeferredPushes.clear();
+    maResources.renewEpoch();
 }
 
 std::vector<OString> PartStore::invalidate(const SwRootFrame& rLayout,

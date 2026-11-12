@@ -36,10 +36,12 @@
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/degree.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/rendercontext/State.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <cmath>
@@ -171,10 +173,15 @@ void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, cons
         aStart.adjustY(-std::sin(fAngle) * fWidth);
     }
 
+    // The device draws the digits of the range in the script of its digit language, so the text
+    // of the primitive holds those digits. Each of them takes the place of one digit of the range,
+    // so the range and the advances stay as they are.
+    const OUString aText = localizeDigits(rText, rDevice.GetDigitLanguage(), nIndex, nLength);
+
     const drawinglayer::primitive2d::Primitive2DReference xText(
         drawinglayer::primitive2d::createTextPrimitiveFromFont(
-            aStart, rText, nIndex, nLength, std::move(aDXArray), std::move(aKashidaArray),
-            rDevice.GetFont(), aState));
+            aStart, aText, nIndex, nLength, std::move(aDXArray),
+            std::move(aKashidaArray), rDevice.GetFont(), aState));
     if (!xText)
         return;
 
@@ -185,6 +192,30 @@ void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, cons
             1.0 - aFontColor.GetAlpha() / 255.0));
     else
         maLine.push_back(xText);
+}
+
+OUString TextSink::localizeDigits(const OUString& rText, LanguageType eDigitLanguage,
+                                  sal_Int32 nIndex, sal_Int32 nLength)
+{
+    const bool bSameText = rText == maDigitSource;
+    if (bSameText && eDigitLanguage == meDigitLanguage)
+        return maLocalizedDigits;
+
+    // A range without digits looks the same in any digit language, so it keeps the string of the
+    // portion before it.
+    const std::u16string_view aRange(rText.subView(nIndex, nLength));
+    const bool bDigits = o3tl::containsAsciiDigit(aRange);
+    if (bSameText && !bDigits)
+        return maLocalizedDigits;
+
+    // The digits of the whole string change, so the next portions of the paragraph in the same
+    // digit language get this string too. Every digit script is in the basic multilingual plane,
+    // so a digit stays one code unit and the ranges of all portions stay valid.
+    sal_Int32 nTextLength = rText.getLength();
+    maLocalizedDigits = LocalizeDigitsInString(rText, eDigitLanguage, 0, nTextLength);
+    maDigitSource = rText;
+    meDigitLanguage = eDigitLanguage;
+    return maLocalizedDigits;
 }
 
 void TextSink::addFill(const SwRect& rArea, const Color& rColor)

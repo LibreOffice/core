@@ -36,12 +36,14 @@
 #include <xmloff/odffields.hxx>
 #include <sfx2/kit/helper.hxx>
 
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <svx/seclabel/SecLabelStore.hxx>
 #include <svx/svdview.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <edtwin.hxx>
 #include <docsh.hxx>
 #include <fmtrfmrk.hxx>
@@ -1518,6 +1520,11 @@ void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
     if (!pParts)
         return;
 
+    // A text edit in a drawing object reports each change of its text only while the drawing
+    // model says that a client draws from it.
+    if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"sv))
+        setDrawnFromModel(true);
+
     svx::vector::answerPartCommand(
         rJsonWriter, rCommand, pParts->getResources(),
         [pParts, &rJsonWriter, pLayout](const svx::vector::PartRequest& rRequest) {
@@ -1525,6 +1532,15 @@ void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
                           /*bPush=*/false);
         },
         [pParts](std::string_view rPartId) { pParts->forget(rPartId); });
+}
+
+void SwXTextDocument::setDrawnFromModel(bool bDrawnFromModel)
+{
+    SwDoc* pDoc = m_pDocShell ? m_pDocShell->GetDoc() : nullptr;
+    if (!pDoc)
+        return;
+    if (SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel())
+        pDrawModel->SetDrawnFromModel(bDrawnFromModel);
 }
 
 sw::vector::PartStore* SwXTextDocument::getVectorParts() const
@@ -1543,6 +1559,8 @@ void SwXTextDocument::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
     const SwRootFrame* pLayout = pShell ? pShell->GetLayout() : nullptr;
     if (!pLayout)
         return;
+    // The drawing model can be made after the first page was served, so it is told here too.
+    setDrawnFromModel(true);
     pParts->write(rJsonWriter, *pLayout, rPartId, /*nSinceVersion=*/-1, /*bPush=*/true);
 }
 

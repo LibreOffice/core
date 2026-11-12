@@ -1622,8 +1622,17 @@ SwNoTextFrame::CreateContentPrimitives(const Point& rOrigin) const
             // the color adjustments are in the graphic attributes.
             GraphicAttr aGraphicAttr;
             pGrfNd->GetGraphicAttr(aGraphicAttr, this);
-            aPrimitives.push_back(new drawinglayer::primitive2d::GraphicPrimitive2D(
-                aToLocal * getFrameAreaTransformation(), rGraphicObject, aGraphicAttr));
+            drawinglayer::primitive2d::Primitive2DReference xPicture(
+                new drawinglayer::primitive2d::GraphicPrimitive2D(
+                    aToLocal * getFrameAreaTransformation(), rGraphicObject, aGraphicAttr));
+            // The primitive made last is taken again when it equals the new one. It holds what it
+            // prepared for drawing, so a picture that spans many tiles is prepared once. It lets
+            // go of that after a while without use, so the frame keeps only the primitive itself.
+            if (mxPicturePrimitive && *mxPicturePrimitive == *xPicture)
+                xPicture = mxPicturePrimitive;
+            else
+                mxPicturePrimitive = xPicture;
+            aPrimitives.push_back(xPicture);
             bPicture = true;
         }
     }

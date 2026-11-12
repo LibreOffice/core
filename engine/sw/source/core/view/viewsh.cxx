@@ -796,6 +796,11 @@ void lcl_NotifyVectorParts(const SwViewShell& rShell, const SwRegionRects& rArea
 }
 }
 
+void SwViewShell::NotifyVectorPartsChanged(const SwRect& rArea) const
+{
+    lcl_NotifyVectorParts(*this, SwRegionRects(rArea));
+}
+
 void SwViewShell::FlushPendingKitInvalidateTiles()
 {
     assert(comphelper::COKit::isActive());
@@ -1750,6 +1755,9 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         {
             oRegion->LimitToOrigin();
             oRegion->Compress( SwRegionRects::CompressFuzzy );
+            // The action formatted frames without an edit. The pages under the areas it changed
+            // are marked as changed for the clients that hold them as vector primitives.
+            lcl_NotifyVectorParts(*this, *oRegion);
             bRet = false;
             if ( !oRegion->empty() )
             {
@@ -2047,8 +2055,17 @@ void SwViewShell::PaintFromPrimitives(OutputDevice& rDevice, const tools::Rectan
 
     // The tile holds only what the pages draw, and the area between the pages stays empty.
     const SwRect aArea(rRect);
-    const drawinglayer::primitive2d::Primitive2DContainer aPrimitives
-        = lcl_CreateAreaPrimitives(*this, *pLayout, aArea, GetViewOptions()->GetDocColor());
+    // An anti-aliased edge or a line right outside the tile reaches into its border pixels. So
+    // the decomposition includes one device pixel more on each side, and one more twip for the
+    // rounding of the pixel size.
+    const Size aPixel(rDevice.PixelToLogic(Size(1, 1)));
+    SwRect aDecomposedArea(aArea);
+    aDecomposedArea.SubLeft(aPixel.Width() + 1);
+    aDecomposedArea.AddRight(aPixel.Width() + 1);
+    aDecomposedArea.SubTop(aPixel.Height() + 1);
+    aDecomposedArea.AddBottom(aPixel.Height() + 1);
+    const drawinglayer::primitive2d::Primitive2DContainer aPrimitives = lcl_CreateAreaPrimitives(
+        *this, *pLayout, aDecomposedArea, GetViewOptions()->GetDocColor());
 
     drawinglayer::geometry::ViewInformation2D aViewInformation;
     aViewInformation.setViewTransformation(rDevice.GetViewTransformation());

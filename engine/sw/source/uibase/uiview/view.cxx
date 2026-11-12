@@ -127,6 +127,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/svdotext.hxx>
 #include <svx/svdview.hxx>
 #include <node2lay.hxx>
 #include <cntfrm.hxx>
@@ -2200,6 +2201,20 @@ void SwView::flushPendingKitInvalidateTiles()
 {
     if (SwWrtShell* pSh = GetWrtShellPtr())
         pSh->FlushPendingKitInvalidateTiles();
+}
+
+void SwView::textEditContentChanged()
+{
+    SwWrtShell* pShell = GetWrtShellPtr();
+    const SdrView* pDrawView = pShell ? pShell->GetDrawView() : nullptr;
+    const SdrObject* pEdited
+        = pDrawView && pDrawView->IsTextEdit() ? pDrawView->GetTextEditObject() : nullptr;
+    if (!pEdited)
+        return;
+
+    // The edit engine invalidates the window of the view only. The pages keep their primitives
+    // by the areas the layout invalidates, so the area of the edited object is named here.
+    pShell->NotifyVectorPartsChanged(SwRect(pEdited->GetCurrentBoundRect()));
 }
 
 std::optional<OString> SwView::getKitPayload(COKitCallbackType eType, int nViewId) const

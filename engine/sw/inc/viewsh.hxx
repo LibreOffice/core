@@ -273,6 +273,10 @@ public:
     void InvalidateWindows( const SwRect &rRect );
     void FlushPendingKitInvalidateTiles();
 
+    /// Marks the pages that lie under rArea, in document twips, and that a client holds as vector
+    /// primitives as changed, and tells every view of the document that each of them changed.
+    void NotifyVectorPartsChanged(const SwRect& rArea) const;
+
     /// Invalidates complete Layout (ApplyViewOption).
     SW_DLLPUBLIC void Reformat();
 

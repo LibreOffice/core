@@ -56,6 +56,10 @@ private:
     sdr::contact::ViewContact& GetViewContact() const;
     void OnGraphicArrived();
 
+    /// The primitive that the picture was decomposed to last, relative to the origin given then.
+    /// It holds what it prepared for drawing the picture.
+    mutable drawinglayer::primitive2d::Primitive2DReference mxPicturePrimitive;
+
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 

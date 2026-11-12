@@ -527,6 +527,9 @@ public:
     /// owns them.
     sw::vector::PartStore* getVectorParts() const;
 
+    /// @see vcl::ITiledRenderable::setDrawnFromModel().
+    void setDrawnFromModel(bool bDrawnFromModel) override;
+
     /// @see vcl::ITiledRenderable::getVectorPartIds(). The ids are the page ids.
     std::vector<OString> getVectorPartIds() override;
 

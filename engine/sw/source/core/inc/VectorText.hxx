@@ -14,6 +14,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <swdllapi.h>
 #include <swrect.hxx>
@@ -128,6 +129,12 @@ public:
 private:
     void finishLine();
 
+    /// rText with its digits in the script of eDigitLanguage, or rText when the range from nIndex
+    /// of nLength has no digits to change. The text portions of one paragraph get the same
+    /// string as long as they share a digit language.
+    OUString localizeDigits(const OUString& rText, LanguageType eDigitLanguage, sal_Int32 nIndex,
+                            sal_Int32 nLength);
+
     Point maOrigin;
     SwRect maTextArea;
     const Context& mrContext;
@@ -153,6 +160,12 @@ private:
 
     /// What lies over the objects anchored as a character, relative to the origin.
     drawinglayer::primitive2d::Primitive2DContainer maOverObjects;
+
+    /// The last string whose digits were put in the script of meDigitLanguage, and the result,
+    /// which has the same length.
+    OUString maDigitSource;
+    OUString maLocalizedDigits;
+    LanguageType meDigitLanguage = LANGUAGE_DONTKNOW;
 };
 
 /// rPrimitives cut to rArea, which is in document twips. The primitives and the result are
