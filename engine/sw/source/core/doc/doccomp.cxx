@@ -21,7 +21,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <i18nutil/unicode.hxx>
@@ -1049,7 +1048,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             else
                 x = thi;
             y = x - d;
-            while( o3tl::make_unsigned(x) < nEnd1 && o3tl::make_unsigned(y) < nEnd2 &&
+            while( x < tools::Long(nEnd1) && y < tools::Long(nEnd2) &&
                 m_rMoved1.GetIndex( x ) == m_rMoved2.GetIndex( y ))
             {
                 ++x;
@@ -1081,7 +1080,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             else
                 x = thi - 1;
             y = x - d;
-            while( o3tl::make_unsigned(x) > nStt1 && o3tl::make_unsigned(y) > nStt2 &&
+            while( x > tools::Long(nStt1) && y > tools::Long(nStt2) &&
                 m_rMoved1.GetIndex( x - 1 ) == m_rMoved2.GetIndex( y - 1 ))
             {
                 --x;

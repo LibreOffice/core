@@ -3144,6 +3144,23 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsFootnotesTrackedDeleteBe
     CPPUNIT_ASSERT(noteHasRedline(*pFirstNote));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsMovedParagraph)
+{
+    // Given a document with the paragraphs "A", "A", "A" and "B", where an older version has the
+    // paragraphs "B" and "A":
+    createSwDoc("compare-moved-para-new.fodt");
+
+    // When comparing it with the older version:
+    // Without the fix in place, this test would have failed with:
+    // - Assertion `value >= 0' failed
+    // i.e. the search for the shortest edit went one paragraph before the start of the document.
+    compareWith(u"compare-moved-para-old.fodt");
+
+    // Then the paragraphs that differ are shown as one insertion and one deletion:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Insert));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Delete));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
