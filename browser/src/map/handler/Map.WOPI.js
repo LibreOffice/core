@@ -1337,7 +1337,8 @@ window.L.Map.WOPI = window.L.Handler.extend({
 				UserExtraInfo: this._map._viewInfo[viewInfoIdx].userextrainfo,
 				Color: this._map._viewInfo[viewInfoIdx].color,
 				ReadOnly: this._map._viewInfo[viewInfoIdx].readonly,
-				IsCurrentView: this._map._docLayer._viewId === parseInt(viewInfoIdx, 10)
+				IsCurrentView: this._map._docLayer._viewId === parseInt(viewInfoIdx, 10),
+				IsRemoteLink: this._map.isViewRemoteLink(viewInfoIdx)
 			});
 		}
 
