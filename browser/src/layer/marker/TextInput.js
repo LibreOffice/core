@@ -1850,13 +1850,22 @@ window.L.TextInput = window.L.Layer.extend({
 		var msg = '_setSelectionRange:\n' +
 			'    start: ' + start + ', end: ' + end +'\n';
 
-		// the character of an image is not editable: the caret goes before or after its element
-		const outsideImage = function(node, offset) {
-			const image = node.parentNode.closest('[role="img"]');
-			if (!image)
+		// the character of an image or a checkbox is not editable: the caret goes beside it
+		const textArea = this._textArea;
+		const getUnit = function(node) {
+			let unit = null;
+			for (let element = node.parentNode.closest('[contenteditable="false"]');
+				element && element !== textArea && textArea.contains(element);
+				element = element.parentNode.closest('[contenteditable="false"]'))
+				unit = element;
+			return unit;
+		};
+		const getPositionOutsideUnit = function(node, offset) {
+			const unit = getUnit(node);
+			if (!unit)
 				return [node, offset];
-			const index = Array.prototype.indexOf.call(image.parentNode.childNodes, image);
-			return [image.parentNode, offset > 0 ? index + 1 : index];
+			const index = Array.prototype.indexOf.call(unit.parentNode.childNodes, unit);
+			return [unit.parentNode, offset > 0 ? index + 1 : index];
 		};
 		var startContainer = null;
 		let endContainer = null;
@@ -1869,17 +1878,17 @@ window.L.TextInput = window.L.Layer.extend({
 			msg += '    current node: ' + currentNode + ', text content: "' + currentNode.textContent + '"\n';
 			var len = currentNode.textContent.length;
 			msg += '    pos: ' + pos + ', len: ' + len +'\n';
-			// after an image, the offset belongs to the text that follows it, not inside the image
-			const inImage = currentNode.parentNode.closest('[role="img"]') !== null;
-			if (!startContainer && (start < pos + len || (start === pos + len && !inImage))) {
+			// after an image or a checkbox, the offset belongs to the text that follows it
+			const inUnit = getUnit(currentNode) !== null;
+			if (!startContainer && (start < pos + len || (start === pos + len && !inUnit))) {
 				startContainer = currentNode;
-				range.setStart(...outsideImage(currentNode, start - pos));
+				range.setStart(...getPositionOutsideUnit(currentNode, start - pos));
 				msg += '    current node set as start: offset: ' + (start - pos) + '\n';
 			}
 			// The range end is set only after the range start has been set.
-			if (startContainer && (end < pos + len || (end === pos + len && !inImage))) {
+			if (startContainer && (end < pos + len || (end === pos + len && !inUnit))) {
 				endContainer = currentNode;
-				range.setEnd(...outsideImage(currentNode, end - pos));
+				range.setEnd(...getPositionOutsideUnit(currentNode, end - pos));
 				msg += '    current node set as end:   offset: ' + (end - pos) + '\n';
 				break;
 			}
@@ -1887,11 +1896,11 @@ window.L.TextInput = window.L.Layer.extend({
 			pos += len;
 			currentNode = walker.nextNode();
 		}
-		// an image ends the paragraph: the caret goes after it
+		// an image or a checkbox ends the paragraph: the caret goes after it
 		if (!startContainer && lastNode)
-			range.setStart(...outsideImage(lastNode, lastNode.textContent.length));
+			range.setStart(...getPositionOutsideUnit(lastNode, lastNode.textContent.length));
 		if (!endContainer && lastNode)
-			range.setEnd(...outsideImage(lastNode, lastNode.textContent.length));
+			range.setEnd(...getPositionOutsideUnit(lastNode, lastNode.textContent.length));
 		// no text node: after the pre-space, as at the start
 		if (!startContainer && !lastNode) {
 			const offset = Math.min(1, this._textArea.childNodes.length);

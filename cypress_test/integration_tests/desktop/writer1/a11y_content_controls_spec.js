@@ -125,6 +125,34 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 		cy.cGet('.jsdialog-window.modalpopup').should('not.exist');
 	});
 
+	it('a second Space toggles the checkbox back', function () {
+		// into the checkbox, which starts at 7
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{rightarrow}'.repeat(8));
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		let checked;
+		cy.cGet('#clipboard-area [role="checkbox"]').then(function ($checkbox) {
+			checked = $checkbox.attr('aria-checked') === 'true';
+		});
+
+		// a toggle leaves the caret after the checkbox
+		cy.realPress('Space');
+		cy.cGet('#clipboard-area [role="checkbox"]').should(function ($checkbox) {
+			expect($checkbox.attr('aria-checked'), 'the state after one')
+				.to.equal(String(!checked));
+		});
+		cy.waitUntil(function () {
+			return win.app.map._textInput._getSelectionEnd() === 8;
+		});
+		cy.realPress('Space');
+		cy.cGet('#clipboard-area [role="checkbox"]').should(function ($checkbox) {
+			expect($checkbox.attr('aria-checked'), 'the state after two')
+				.to.equal(String(checked));
+		});
+	});
+
 	it('over a slow connection the second Right at a checkbox goes past it', function () {
 		// before the checkbox, which starts at 7
 		helper.typeIntoDocument('{ctrl}{home}');
