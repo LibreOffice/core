@@ -141,6 +141,7 @@ all_la_unit_tests = \
 	unit-media-uri.la \
 	unit-proxy.la \
 	unit-wasm-proxy.la \
+	unit-view-setting-secrets.la \
 	unit-wopi-httpredirect.la \
 	unit-convert-to-password-protected.la \
 	unit-bad-doc-load.la \
@@ -495,6 +496,8 @@ unit_proxy_la_SOURCES = UnitProxy.cpp
 unit_proxy_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS) $(LIBPFM_LIBS)
 unit_wasm_proxy_la_SOURCES = UnitWasmProxy.cpp
 unit_wasm_proxy_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_view_setting_secrets_la_SOURCES = UnitViewSettingSecrets.cpp
+unit_view_setting_secrets_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 endif
 
 if HAVE_LO_PATH

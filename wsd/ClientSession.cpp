@@ -38,6 +38,7 @@
 #include <common/SettingsSecrets.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Util.hpp>
+#include <common/ViewSettings.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/HttpServer.hpp>
 #include <net/WebSocketHandler.hpp>
@@ -2934,6 +2935,19 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
         return true;
     }
 
+    // The secrets that the page left untouched (which the "viewsetting:" answer below carries blank
+    // and flagged again, as the page sent them, unless it leaves them out altogether):
+    std::vector<std::string> keptSecrets;
+    for (std::string_view const & field: ViewSettings::SecretFields) {
+        std::string const name(field);
+        std::string const flag = name + std::string(SettingsSecrets::StoredFlagSuffix);
+        bool kept = false;
+        JsonUtil::findJSONValue(viewSettings, flag, kept);
+        if (kept) {
+            keptSecrets.push_back(name);
+        }
+    }
+
 #if MOBILEAPP && DOCS_SHARE_PROCESS
     // The page of an integrator's editor frame (from the remote server's origin) gets the AI
     // providers and their keys from the stored settings, whatever it sends instead (as each stored
@@ -3013,6 +3027,13 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     viewSettings->remove("aiImageProviderAPIKey");
     viewSettings->remove("aiImageProviderURL");
     viewSettings->remove("aiImageModel");
+
+    for (std::string const & name: keptSecrets) {
+        if (viewSettings->has(name)) {
+            viewSettings->set(name, std::string());
+            viewSettings->set(name + std::string(SettingsSecrets::StoredFlagSuffix), true);
+        }
+    }
 
     viewSettings->set("aiConfigured", aiConfigured);
     if (aiConfigured)
