@@ -650,6 +650,14 @@ namespace FileUtil
     }
     } // namespace
 
+    int openRegularFile(const std::string& path)
+    {
+        const int fd = ::open(path.c_str(), ReadFlags);
+        if (fd < 0)
+            logOpenFailure(path);
+        return keepIfRegularFile(fd, path);
+    }
+
     int openFileInJail(bool usingMountNamespaces, std::string localJailRoot, std::string jailPath)
     {
         const auto [localDir, localPath] =

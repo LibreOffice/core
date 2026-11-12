@@ -596,6 +596,13 @@ protected:
     /// Returns the root path of the jail directory of docs.
     std::string getLocalRootPath() const;
 
+#if !MOBILEAPP
+    /// Opens for reading the jailed file being uploaded, or with a thumbnailSize the thumbnail of
+    /// that size beside it, reached from the jail's root through no link. Returns the file
+    /// descriptor, or -1.
+    int openFileUploading(const std::string& thumbnailSize) const;
+#endif
+
 private:
     Poco::URI _uri;
     AdditionalFilePocoUris _additionalFileUris;

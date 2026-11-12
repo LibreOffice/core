@@ -36,6 +36,7 @@
 #include <common/FileUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
+#include <common/Thumbnail.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
@@ -83,6 +84,22 @@ std::string StorageBase::getJailPresetsPath() const
 {
     return getLocalJailPath(_localStorePath, JAILED_CONFIG_ROOT);
 }
+
+#if !MOBILEAPP
+int StorageBase::openFileUploading(const std::string& thumbnailSize) const
+{
+    std::string jailPath =
+        Poco::Path(_jailPath, Poco::Path(_jailedFilePath).getFileName()).toString() +
+        TO_UPLOAD_SUFFIX + UPLOADING_SUFFIX;
+    if (!thumbnailSize.empty())
+        jailPath = Thumbnail::filePath(jailPath, thumbnailSize);
+    if (jailPath.starts_with('/'))
+        jailPath.erase(0, 1);
+
+    return FileUtil::openFileInJail(COOLWSD::EnableMountNamespaces, _localStorePath,
+                                    std::move(jailPath));
+}
+#endif
 
 void StorageBase::initialize()
 {

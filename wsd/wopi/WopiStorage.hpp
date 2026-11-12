@@ -345,6 +345,12 @@ private:
     }
 
 private:
+    /// Opens for reading the file to upload, saveAsPath for a save-as or else the jailed file
+    /// being uploaded, or with a thumbnailSize the thumbnail of that size beside it. Returns the
+    /// file descriptor, or -1.
+    int openFileToUpload(const std::string& saveAsPath, bool isSaveAs,
+                         const std::string& thumbnailSize) const;
+
     /// A URL provided by the WOPI host to use for GetFile.
     std::string _fileUrl;
 

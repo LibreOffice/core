@@ -1058,11 +1058,6 @@ public:
     bool addFilePart(const std::string& name, std::shared_ptr<InputFile> file,
                      const std::string& contentType, const std::string& filename);
 
-    /// Adds a part as above whose bytes are those of the file at path. Returns false, and adds
-    /// nothing, when the file is not a regular file that can be opened for reading.
-    bool addFilePart(const std::string& name, const std::string& path,
-                     const std::string& contentType, const std::string& filename);
-
     /// The number of parts added so far.
     std::size_t partCount() const { return _parts.size(); }
 

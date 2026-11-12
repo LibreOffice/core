@@ -161,6 +161,11 @@ namespace FileUtil
     /// mapped as buildLocalPathToJail maps it, reached through no link. Returns the file
     /// descriptor, in blocking mode, or -1 with errno undefined.
     int openFileInJail(bool usingMountNamespaces, std::string localJailRoot, std::string jailPath);
+
+    /// Opens for reading the regular file at path. A link at the name itself is refused, but links
+    /// in the directories on the way are followed. Returns the file descriptor, in blocking mode,
+    /// or -1 with errno undefined.
+    int openRegularFile(const std::string& path);
 #endif
 
     // returns two strings

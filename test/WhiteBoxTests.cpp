@@ -1491,6 +1491,12 @@ void WhiteBoxTests::testOpenFileInJail()
     LOK_ASSERT_EQUAL(std::string("mounted"),
                      openedContents(FileUtil::openFileInJail(true, jailRoot,
                                                              "/tmp/user/docs/abc/doc.odt")));
+
+    // openRegularFile follows no link at the name itself.
+    const std::string documentDir = jailRoot + "/user/docs/abc";
+    LOK_ASSERT_EQUAL(std::string("document"),
+                     openedContents(FileUtil::openRegularFile(documentDir + "/doc.odt")));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openRegularFile(documentDir + "/link.odt"));
 }
 
 void WhiteBoxTests::testStringCompare()

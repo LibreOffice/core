@@ -836,6 +836,17 @@ std::string WopiStorage::downloadDocument(const Poco::URI& uriObject, const std:
         return Poco::Path(getJailPath(), getFileInfo().getFilename()).toString();
 }
 
+int WopiStorage::openFileToUpload(const std::string& saveAsPath, bool isSaveAs,
+                                  const std::string& thumbnailSize) const
+{
+    if (!isSaveAs)
+        return openFileUploading(thumbnailSize);
+
+    // The save-as file is where the kit's reply named it, after it was found in the jail.
+    return FileUtil::openRegularFile(
+        thumbnailSize.empty() ? saveAsPath : Thumbnail::filePath(saveAsPath, thumbnailSize));
+}
+
 std::size_t WopiStorage::uploadLocalFileToStorageAsync(
     const Authorization& auth, LockContext& lockCtx, const std::string& saveAsPath,
     const std::string& saveAsFilename, const bool isRename, const Attributes& attribs,
@@ -861,8 +872,9 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
     const std::string filePath(isSaveAs ? saveAsPath : getRootFilePathUploading());
     std::string filePathAnonym = Anonymizer::anonymizeUrl(filePath);
 
-    const FileUtil::Stat fileStat(filePath);
-    if (!fileStat.good())
+    const auto file =
+        std::make_shared<http::InputFile>(openFileToUpload(saveAsPath, isSaveAs, std::string()));
+    if (file->size() < 0)
     {
         LOG_ERR("Cannot access file [" << filePathAnonym << "] to upload to wopi storage.");
         asyncUploadCallback(
@@ -871,7 +883,7 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
         return 0;
     }
 
-    const std::size_t size = (fileStat.good() ? fileStat.size() : 0);
+    const std::size_t size = file->size();
 
     Poco::URI uriObject(getUri());
     uriObject.setPath(isSaveAs || isRename ? uriObject.getPath()
@@ -955,17 +967,20 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
         {
             // The document is the first part, so a host can read it before the thumbnails.
             http::MultipartFormDataSource multipart;
-            if (multipart.addFilePart("file", filePath, "application/octet-stream",
+            if (multipart.addFilePart("file", file, "application/octet-stream",
                                       isSaveAs ? saveAsFilename : getFileInfo().getFilename()))
             {
                 for (const std::string& thumbnailSize : thumbnailSizes)
                 {
-                    const std::string thumbnailPath = Thumbnail::filePath(filePath, thumbnailSize);
-                    if (!multipart.addFilePart("thumbnail-" + thumbnailSize, thumbnailPath,
-                                               "image/png", "thumbnail-" + thumbnailSize + ".png"))
+                    if (!multipart.addFilePart(
+                            "thumbnail-" + thumbnailSize,
+                            std::make_shared<http::InputFile>(
+                                openFileToUpload(saveAsPath, isSaveAs, thumbnailSize)),
+                            "image/png", "thumbnail-" + thumbnailSize + ".png"))
                     {
                         LOG_WRN(wopiLog << " cannot read the thumbnail ["
-                                        << Anonymizer::anonymizeUrl(thumbnailPath)
+                                        << Anonymizer::anonymizeUrl(
+                                               Thumbnail::filePath(filePath, thumbnailSize))
                                         << "] to send it");
                     }
                 }
@@ -988,7 +1003,7 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
             httpRequest.setContentType("application/octet-stream");
             httpRequest.setContentLength(size);
 
-            httpRequest.setBodyFile(filePath);
+            httpRequest.setBodyFile(file);
         }
 
         http::Session::FinishedCallback finishedCallback =

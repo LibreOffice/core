@@ -1312,15 +1312,6 @@ bool MultipartFormDataSource::addFilePart(const std::string& name,
     return true;
 }
 
-bool MultipartFormDataSource::addFilePart(const std::string& name, const std::string& path,
-                                          const std::string& contentType,
-                                          const std::string& filename)
-{
-    return addFilePart(name,
-                       std::make_shared<InputFile>(::open(path.c_str(), O_RDONLY | O_CLOEXEC)),
-                       contentType, filename);
-}
-
 int64_t MultipartFormDataSource::size() const
 {
     int64_t total = closing().size();
