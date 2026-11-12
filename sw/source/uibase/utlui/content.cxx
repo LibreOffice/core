@@ -1487,7 +1487,19 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     m_xTreeView->connect_drag_begin(LINK(this, SwContentTree, DragBeginHdl));
     m_xTreeView->connect_mouse_move(LINK(this, SwContentTree, MouseMoveHdl));
     m_xTreeView->connect_mouse_press(LINK(this, SwContentTree, MousePressHdl));
-    m_xTreeView->set_column_editables({true});
+
+    // tdf#166730 Workaround for gtk tree view edit behavior.
+    //
+    // Unfortunately, gtk uses double-click on an editable label to start editing,
+    // rather than the slow click used by other toolkits. Effectively, gtk is
+    // forcing applications to choose either editing or activation, but we want both.
+    //
+    // Disable column editing under gtk. This preserves double-click activate. Users
+    // can still edit labels via the context menu. The most common navigator action
+    // is double-clicking on items to navigate to them, so it's important to preserve
+    // this use, even if at the cost of making editing slightly less convenient.
+    m_xTreeView->set_column_editables({ Application::GetToolkit() != Toolkit::Gtk });
+
     m_xTreeView->connect_editing(LINK(this, SwContentTree, EditingEntryHdl),
                                  LINK(this, SwContentTree, EditedEntryHdl));
 
