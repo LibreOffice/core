@@ -3457,6 +3457,10 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
                 Poco::JSON::Object::Ptr viewSettings;
                 if (JsonUtil::parseJSON(vs.content, viewSettings))
                 {
+                    // The stored settings, which supply each secret that a page sends back blank
+                    // and flagged as kept (a remote page never gets the secrets):
+                    setViewSettingsJSON(viewSettings);
+
                     std::string cert, key, ca;
                     JsonUtil::findJSONValue(viewSettings, "signatureCert", cert);
                     JsonUtil::findJSONValue(viewSettings, "signatureKey", key);
