@@ -1090,6 +1090,10 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         mrWriter.put("lineIndent", rLayout.mfLineIndent * mfScaleFactor);
         mrWriter.put("lineWidth", rLayout.mfLineWidth * mfScaleFactor);
     }
+
+    // The text is blanks of a string of its own, so it is no text of the paragraph.
+    if (rLayout.mbFillerBlanks)
+        mrWriter.put("fillerBlanks", true);
 }
 
 // Write matrix as 6 elements. Scale all components (unit conversion).

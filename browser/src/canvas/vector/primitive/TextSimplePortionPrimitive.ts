@@ -79,6 +79,11 @@ namespace cool {
 		/// indent, plus the first-line indent or the bullet on a first line.
 		lineIndent?: number;
 		lineWidth?: number;
+		/// True when the text is a string of blanks of its own in place of a
+		/// range of the paragraph text. Such blanks are there for what is
+		/// drawn along them: an underline, an overline, a strikeout or a
+		/// background. textPosition counts in that string.
+		fillerBlanks?: boolean;
 	}
 
 	export namespace TextSimplePortionPrimitive {

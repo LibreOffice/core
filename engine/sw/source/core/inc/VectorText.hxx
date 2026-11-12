@@ -39,7 +39,8 @@ class Context;
 
     Each text portion is tagged with the line it sits on: where the line starts in the text area
     before alignment, how wide it wraps, its ascent and height, the size of the text area and the
-    alignment of the paragraph.
+    alignment of the paragraph. Blanks drawn from a string of their own, like the ones that carry
+    an underline across a tab, are tagged as no text of the paragraph.
  */
 class SW_DLLPUBLIC TextSink
 {
@@ -64,10 +65,11 @@ public:
     /// rPosition, a point on the baseline in document twips. That point is the left end of the
     /// run, or the right end of a right-to-left run when the layout mode puts the origin there.
     /// aAdvances holds the distance from the start to the end of each character. Empty advances
-    /// are measured on rDevice.
+    /// are measured on rDevice. bFillerBlanks says that rText is a string of blanks of its own in
+    /// place of a range of the paragraph text, and the text portion is tagged as such.
     void addText(const OutputDevice& rDevice, const Point& rPosition, const OUString& rText,
                  sal_Int32 nIndex, sal_Int32 nLength, KernArraySpan aAdvances,
-                 std::span<const bool> aKashida);
+                 std::span<const bool> aKashida, bool bFillerBlanks);
 
     /// Fills rArea with rColor, for a highlight or a character background.
     void addFill(const SwRect& rArea, const Color& rColor);

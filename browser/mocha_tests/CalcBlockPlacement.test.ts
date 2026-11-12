@@ -527,6 +527,7 @@ describe('calcPlacedFields', function () {
 			'emphasisMarkBelow',
 			'familyname',
 			'fieldType',
+			'fillerBlanks',
 			'fontHeight',
 			'fontId',
 			'fontSize',

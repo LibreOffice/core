@@ -371,4 +371,42 @@ describe('text prediction caret lookup', function () {
 		nodeassert.strictEqual(position.run.start, 5);
 		nodeassert.strictEqual(position.offset, 0);
 	});
+
+	it('finds the caret in the paragraph text when filler blanks outnumber its runs', function () {
+		// One run of paragraph text and three runs of blanks that only carry an underline.
+		const run = (
+			text: string,
+			textPosition: number,
+			translateX: number,
+			fillerBlanks?: boolean,
+		): any => ({
+			type: 'textDecoratedPortion',
+			text,
+			textPosition,
+			textLength: 2,
+			matrix: [1, 0, 0, 1, translateX, 0],
+			fontSize: 360,
+			familyname: 'Arial',
+			paragraph: 0,
+			fillerBlanks,
+		});
+		const data = predictionTest.boxPart([
+			run('  ', 0, 0, true),
+			run('  ', 0, 200, true),
+			run('\t\tab', 2, 400),
+			run('  ', 0, 400, true),
+		]);
+		const position = predictionTest.findCaretPosition(
+			data,
+			0,
+			0,
+			0,
+			measure,
+			{ paragraph: 0, index: 3 },
+			1,
+		);
+		nodeassert.ok(position);
+		nodeassert.strictEqual(position.run.visibleText, 'ab');
+		nodeassert.strictEqual(position.offset, 1);
+	});
 });

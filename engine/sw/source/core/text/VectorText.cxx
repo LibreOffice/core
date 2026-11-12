@@ -18,6 +18,7 @@
 #include <pagefrm.hxx>
 #include <paratr.hxx>
 #include <rootfrm.hxx>
+#include <swfont.hxx>
 #include <txtfrm.hxx>
 #include <VectorCollector.hxx>
 #include <viewopt.hxx>
@@ -116,7 +117,7 @@ void TextSink::startLine(SwTwips nLeft, SwTwips nWidth, SwTwips nAscent, SwTwips
 
 void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, const OUString& rText,
                        sal_Int32 nIndex, sal_Int32 nLength, KernArraySpan aAdvances,
-                       std::span<const bool> aKashida)
+                       std::span<const bool> aKashida, bool bFillerBlanks)
 {
     if (nLength <= 0)
         return;
@@ -154,7 +155,10 @@ void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, cons
     aState.meLayoutMode = rDevice.GetLayoutMode();
     aState.meLanguage = rDevice.GetFont().GetLanguage();
     if (mbParagraph)
+    {
         aState.moLayout = maLayout;
+        aState.moLayout->mbFillerBlanks = bFillerBlanks;
+    }
 
     // The device puts the right end of a right-to-left run at rPosition unless the layout mode
     // asks for the left end. A text primitive starts at the left end, so the start moves back
@@ -351,13 +355,31 @@ drawinglayer::primitive2d::Primitive2DContainer TextSink::takeOverObjects()
     return aOverObjects;
 }
 
+namespace
+{
+/// Whether aText is a string of blanks of its own in place of a range of the text of the frame
+/// that rInfo draws. The paint draws such blanks for the underline, the overline, the strikeout
+/// or the background along them: across a tab, across the space between two portions, and along
+/// a run of mixed font sizes that shares one underline.
+bool isFillerBlanks(const SwDrawTextInfo& rInfo, std::u16string_view aText)
+{
+    const SwTextFrame* pFrame = rInfo.GetFrame();
+    if (!pFrame || aText.empty() || pFrame->GetText() == aText)
+        return false;
+
+    return std::ranges::all_of(aText,
+                               [](sal_Unicode cCharacter) { return cCharacter == CH_BLANK; });
+}
+}
+
 void drawTextArray(SwDrawTextInfo& rInfo, const Point& rPosition, const OUString& rText,
                    KernArraySpan aAdvances, std::span<const bool> aKashida, sal_Int32 nIndex,
                    sal_Int32 nLength)
 {
     if (TextSink* pSink = rInfo.GetPrimitiveSink())
     {
-        pSink->addText(rInfo.GetOut(), rPosition, rText, nIndex, nLength, aAdvances, aKashida);
+        pSink->addText(rInfo.GetOut(), rPosition, rText, nIndex, nLength, aAdvances, aKashida,
+                       isFillerBlanks(rInfo, rText));
         return;
     }
     rInfo.GetOut().DrawTextArray(rPosition, rText, aAdvances, aKashida, nIndex, nLength);
@@ -368,7 +390,8 @@ void drawText(SwDrawTextInfo& rInfo, const Point& rPosition, const OUString& rTe
 {
     if (TextSink* pSink = rInfo.GetPrimitiveSink())
     {
-        pSink->addText(rInfo.GetOut(), rPosition, rText, nIndex, nLength, {}, {});
+        pSink->addText(rInfo.GetOut(), rPosition, rText, nIndex, nLength, {}, {},
+                       isFillerBlanks(rInfo, rText));
         return;
     }
     rInfo.GetOut().DrawText(rPosition, rText, nIndex, nLength);
@@ -388,7 +411,8 @@ void drawStretchText(SwDrawTextInfo& rInfo, const Point& rPosition, tools::Long 
             for (double& rAdvance : aAdvances)
                 rAdvance *= fScale;
         }
-        pSink->addText(rInfo.GetOut(), rPosition, rText, nIndex, nLength, aAdvances, {});
+        pSink->addText(rInfo.GetOut(), rPosition, rText, nIndex, nLength, aAdvances, {},
+                       isFillerBlanks(rInfo, rText));
         return;
     }
     rInfo.GetOut().DrawStretchText(rPosition, nWidth, rText, nIndex, nLength);

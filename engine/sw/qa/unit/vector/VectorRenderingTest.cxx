@@ -43,6 +43,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <o3tl/string_view.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -877,6 +878,43 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorBoldAndUnderlinedWordsHaveTheirOwnPortions)
     }
     CPPUNIT_ASSERT(bFoundBold);
     CPPUNIT_ASSERT(bFoundUnderline);
+}
+
+/// The blanks that carry the underline across a tab are tagged as no text of the paragraph, and
+/// the portions of the paragraph text are not.
+CPPUNIT_TEST_FIXTURE(Test, testVectorBlanksUnderAnUnderlinedTabAreNoParagraphText)
+{
+    createSwDoc();
+    getSwDocShell()->GetWrtShell()->Insert(u"left\tright"_ustr);
+    uno::Reference<beans::XPropertySet>(getParagraph(1), uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"CharUnderline"_ustr, uno::Any(awt::FontUnderline::SINGLE));
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    const sw::vector::Entry* pText = findEntry(aEntries, sw::vector::EntryKind::TextFrame);
+    CPPUNIT_ASSERT(pText);
+    OUStringBuffer aParagraphText;
+    bool bFoundUnderlinedBlanks = false;
+    for (const auto* pPortion : portionsOf(*pText))
+    {
+        const OUString aText(pPortion->getText().copy(pPortion->getTextPosition(),
+                                                      pPortion->getTextLength()));
+        if (!pPortion->getLayout().mbFillerBlanks)
+        {
+            aParagraphText.append(aText);
+            continue;
+        }
+        CPPUNIT_ASSERT(o3tl::trim(aText).empty());
+        auto pDecorated
+            = dynamic_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(
+                pPortion);
+        if (pDecorated
+            && pDecorated->getFontUnderline() != drawinglayer::primitive2d::TEXT_LINE_NONE)
+            bFoundUnderlinedBlanks = true;
+    }
+    CPPUNIT_ASSERT(bFoundUnderlinedBlanks);
+    CPPUNIT_ASSERT_EQUAL(u"leftright"_ustr, aParagraphText.makeStringAndClear());
 }
 
 /// The numbering label of a numbered paragraph is a bullet in front of the paragraph text.

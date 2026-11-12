@@ -74,6 +74,11 @@ struct TextPortionLayout
     /// The size of the area that the lines wrap in.
     double mfTextAreaWidth = 0.0;
     double mfTextAreaHeight = 0.0;
+    /// Whether the text is a string of blanks of its own in place of a range of the paragraph
+    /// text. Such blanks are there for what is drawn along them, which is an underline, an
+    /// overline, a strikeout or a background, and the position of the portion counts in that
+    /// string.
+    bool mbFillerBlanks = false;
 
     bool operator==(const TextPortionLayout&) const = default;
 };

@@ -51,11 +51,15 @@ namespace cool {
 		return first;
 	}
 
-	// The buffer most runs carry, the longest one on a tie.
+	// The buffer that most runs carry. When two buffers are carried by the same number of runs,
+	// the longer one wins. Filler blanks are no text of the paragraph, so their buffers are not
+	// counted.
 	function paragraphText(runs: TextRun[]): string {
 		const counts = new Map<string, number>();
-		for (const run of runs)
+		for (const run of runs) {
+			if (run.primitive.fillerBlanks) continue;
 			counts.set(run.text, (counts.get(run.text) ?? 0) + 1);
+		}
 		let best = '';
 		let bestCount = 0;
 		for (const [text, count] of counts)
@@ -69,17 +73,19 @@ namespace cool {
 		return best;
 	}
 
-	// True when the run is a field: its buffer is not its paragraph's text.
+	// True when the run is a field: its buffer is not its paragraph's text. Filler blanks count
+	// as one, as their buffer is their own.
 	function isFieldRun(run: TextRun, siblings: TextRun[]): boolean {
 		if (run.paragraph == null) return false;
+		if (run.primitive.fillerBlanks) return true;
 		const paragraphRuns = siblings.filter(
 			(other) => other.paragraph === run.paragraph,
 		);
 		return run.text !== paragraphText(paragraphRuns);
 	}
 
-	// The paragraph's runs in reading order, without its fields. The offsets of the other runs
-	// already skip a field's character.
+	// The paragraph's runs in reading order, without its fields and its filler blanks. The
+	// offsets of the other runs already skip a field's character.
 	export function paragraphTextRuns(
 		siblings: TextRun[],
 		paragraph: number,
@@ -89,7 +95,7 @@ namespace cool {
 		);
 		const text = paragraphText(paragraphRuns);
 		return paragraphRuns
-			.filter((run) => run.text === text)
+			.filter((run) => run.text === text && !run.primitive.fillerBlanks)
 			.sort((a, b) => a.baseline - b.baseline || a.x - b.x);
 	}
 
