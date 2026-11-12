@@ -5018,6 +5018,22 @@ void centreDrawnShapes(const SmartArtDiagram& rDgm, const ShapePtr& pRoot)
     sal_Int32 nRight(std::numeric_limits<sal_Int32>::min());
     sal_Int32 nBottom(std::numeric_limits<sal_Int32>::min());
     bool bAny(false);
+    // a transition whose layout node draws it with the connector algorithm is drawn by a
+    // connector, whichever shape the connector turned out as: a curved one in a row is a
+    // rightArrow in the box of the curve, Alternating_Flow's
+    std::map<const Shape*, rtl::Reference<svx::diagram::Point>> aPointOf;
+    for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+        if (rEntry.second)
+            aPointOf[rEntry.second.get()] = rEntry.first;
+    const auto& rNodes(layoutNodesBelow(rDgm, *rDgm.getLayout()->getNode()));
+    const auto aByConnector = [&](const ShapePtr& pChild) {
+        const auto aNode = rNodes.find(pChild->getInternalName());
+        const auto aPoint = aPointOf.find(pChild.get());
+        if (aNode == rNodes.end() || !aNode->second || aPoint == aPointOf.end())
+            return false;
+        const AlgAtom* pAlg(algorithmOf(rDgm, *aNode->second, aPoint->second));
+        return pAlg && pAlg->getType() == XML_conn;
+    };
     const auto aGather = [&](const ShapePtr& pShape, awt::Point aAt, auto& rSelf) -> void {
         for (const ShapePtr& pChild : pShape->getChildren())
         {
@@ -5034,7 +5050,8 @@ void centreDrawnShapes(const SmartArtDiagram& rDgm, const ShapePtr& pRoot)
                                     || pChild->getDataNodeType() == XML_parTrans)
                                    && (pChild->getSubType() == XML_conn
                                        || pChild->getSubType() == XML_circularArrow
-                                       || pChild->getSubType() == XML_leftCircularArrow))
+                                       || pChild->getSubType() == XML_leftCircularArrow
+                                       || aByConnector(pChild)))
                               && pChild->getSize().Width > 0 && pChild->getSize().Height > 0);
             if (bDrawn)
             {
@@ -9194,6 +9211,9 @@ struct UprightNode
     ShapePtr pCell;
     ShapePtr pBranch;
     awt::Size aCell;
+    // where the elbows down to the children start, as a part of the cell's height from its
+    // top: the bottom of the shape in the cell that shows the node, 1 for the cell's own bottom
+    double fElbowFrom = 1.0;
     std::vector<UprightNode> aChildren;
     std::vector<double> aOffsets;
     std::vector<std::pair<double, double>> aContour;
@@ -9238,6 +9258,41 @@ bool gatherUprightNodes(const SmartArtDiagram& rDgm, const ShapePtr& pBranch,
             return false;
         aNode.aCell = awt::Size(static_cast<sal_Int32>(fWidth), static_cast<sal_Int32>(fHeight));
         rKnown[rName] = aNode.aCell;
+        // the shape in the cell that shows the same node as the cell, Name_and_Title's rootText
+        // 0.9 of the cell high with the title hanging below it, is where the elbows start
+        if (const auto aCellPoint = rPoints.find(aNode.pCell.get()); aCellPoint != rPoints.end()
+            && aCellPoint->second.is() && aNode.pCell != pRow)
+        {
+            const auto aCellNode = rLayoutNodes.find(rName);
+            const OUString& rShown(
+                aCellPoint->second->getPresentation().msPresentationAssociationId);
+            std::vector<Constraint> aOwn;
+            if (aCellNode != rLayoutNodes.end() && aCellNode->second)
+                gatherDecidedConstraints(rDgm, *aCellNode->second, aCellPoint->second, aOwn);
+            for (const ShapePtr& pShows : aNode.pCell->getChildren())
+            {
+                const auto aShowsPoint = rPoints.find(pShows.get());
+                if (aShowsPoint == rPoints.end() || !aShowsPoint->second.is()
+                    || aShowsPoint->second->getPresentation().msPresentationAssociationId
+                           != rShown)
+                    continue;
+                double fTop(0.0), fPart(0.0);
+                for (const Constraint& rConstraint : aOwn)
+                {
+                    if (rConstraint.mnFor != XML_ch
+                        || rConstraint.msForName != pShows->getInternalName()
+                        || rConstraint.mnRefType != XML_h || !rConstraint.msRefForName.isEmpty())
+                        continue;
+                    if (rConstraint.mnType == XML_t)
+                        fTop = rConstraint.mfFactor;
+                    else if (rConstraint.mnType == XML_h)
+                        fPart = rConstraint.mfFactor;
+                }
+                if (fPart > 0.0 && fTop + fPart < 1.0)
+                    aNode.fElbowFrom = fTop + fPart;
+                break;
+            }
+        }
         bool bBranchHasNodes(false);
         if (aNode.pBranch)
             for (const ShapePtr& pBelow : aNode.pBranch->getChildren())
@@ -9392,7 +9447,10 @@ void placeUpright(SmartArtDiagram& rDgm, const UprightNode& rNode, double fMiddl
     // the connectors, one before each child: an elbow from the bottom middle of the cell to the
     // top middle of the child, at least a tenth of an inch wide where the two stand in line
     const sal_Int32 nCellMiddle(static_cast<sal_Int32>((fMiddle - fLeft) * fScale));
-    const sal_Int32 nGap(static_cast<sal_Int32>(fLevelGap * fScale));
+    // the elbow reaches up over the gap to the shape that shows the node, which may end above
+    // the cell's bottom
+    const sal_Int32 nGap(static_cast<sal_Int32>(
+        (fLevelGap + (1.0 - rNode.fElbowFrom) * rNode.aCell.Height) * fScale));
     size_t nChild(0);
     for (const ShapePtr& pChild : rNode.pBranch->getChildren())
     {

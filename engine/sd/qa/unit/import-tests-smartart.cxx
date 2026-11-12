@@ -3231,6 +3231,43 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAsWideAsItsWordKeepsItsFont)
                                  0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCurvedTransitionIsNotCentred)
+{
+    // the curved connector between the two composites is drawn as an arrow that reaches below
+    // the frame; it is no node, so the nodes stand where the layout puts them, 0.15 of the
+    // frame's height from its top
+    createSdImpressDoc("pptx/smartart-curved-transition-not-centred.pptx");
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    pDiagram->getDiagramHelper()->reLayout();
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    const tools::Rectangle aFrame(drawnBoxesOf(xDiagram, u"ooxml-rect"_ustr).at(0));
+    uno::Reference<drawing::XShape> xTwo(findChildShapeByText(xDiagram, u"Two"_ustr));
+    CPPUNIT_ASSERT(xTwo.is());
+    const tools::Long nTop(SdrObject::getSdrObjectFromXShape(xTwo)->GetSnapRect().Top());
+    CPPUNIT_ASSERT_LESS(tools::Long(20),
+                        std::abs(nTop - aFrame.Top() - tools::Long(0.15 * aFrame.GetHeight())));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testElbowStartsUnderTheShapeOfTheNode)
+{
+    // the root's cell holds its text 0.9 of the cell high and a title that hangs below it, the
+    // elbows down to the children start right under the text and not under the title
+    createSdImpressDoc("pptx/smartart-elbow-from-the-shape-of-the-node.pptx");
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    pDiagram->getDiagramHelper()->reLayout();
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xRoot(findChildShapeByText(xDiagram, u"One"_ustr));
+    CPPUNIT_ASSERT(xRoot.is());
+    const tools::Long nRootBottom(SdrObject::getSdrObjectFromXShape(xRoot)->GetSnapRect().Bottom());
+    const std::vector<tools::Rectangle> aElbows(
+        drawnBoxesOf(xDiagram, u"ooxml-bentConnector3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aElbows.size());
+    for (const tools::Rectangle& rElbow : aElbows)
+        CPPUNIT_ASSERT_LESS(tools::Long(20), std::abs(rElbow.Top() - nRootBottom));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
