@@ -4662,6 +4662,7 @@ void HwpReader::makeOutline(Outline const * hbox)
 
 void HwpReader::parsePara(HWPPara * para)
 {
+    HWPPara *pFirstPara = para;
     bool bAlreadyParsing = !d->aParaParseStack.insert(para).second;
     if (bAlreadyParsing)
     {
@@ -4714,7 +4715,7 @@ void HwpReader::parsePara(HWPPara * para)
         para = para->Next();
     }
 
-    d->aParaParseStack.erase(para);
+    d->aParaParseStack.erase(pFirstPara);
 }
 
 void HwpReader::startEl(const OUString& el)
