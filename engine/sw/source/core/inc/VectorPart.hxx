@@ -81,10 +81,10 @@ public:
     /// Whether a client holds the part: it was served, and not forgotten since.
     bool isServed(std::string_view rPartId) const;
 
-    /// Drops what was written for the entries of the part, and marks the part as held by no
-    /// client. Its versions go on counting, and the next request for the part serves it whole.
-    /// When no client holds any part after that, the state of every part is dropped and a new
-    /// epoch starts. The graphics and fonts stay, since a client can ask for them at any time.
+    /// Drops the part, with what was written for its entries, so no client holds it. A part made
+    /// later starts above the versions of this one, and the next request for the part serves it
+    /// whole. When no client holds any part after that, the state of every part is dropped and a
+    /// new epoch starts. The graphics and fonts stay, since a client can ask for them at any time.
     void forget(std::string_view rPartId);
 
     /// The part ids whose push wrote nothing because the layout was busy, once the layout is
@@ -135,7 +135,7 @@ private:
                            bool bDrawing,
                            drawinglayer::Primitive2dJsonProcessor& rProcessor);
 
-    std::unordered_map<OString, PartState> maParts;
+    svx::vector::PartTable<OString, PartState> maParts;
     std::unordered_map<sal_uInt64, RecordedEntry> maEntries;
     /// The frame ids of the pages in page order, as they were last recorded.
     std::vector<sal_uInt32> maPageIds;

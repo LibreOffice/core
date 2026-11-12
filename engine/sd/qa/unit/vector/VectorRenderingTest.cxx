@@ -2183,6 +2183,34 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushWritesNothingForAForgottenPart
     CPPUNIT_ASSERT(carriesObject(*oDelta, pObject->GetUniqueID()));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartStartsAboveTheVersionsOfAForgottenPart)
+{
+    // A version a client still names from a part the model dropped names no content of any part
+    // served later, so every part first served after that starts above it.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    SdrObject* pObject = page(1)->GetObj(0);
+
+    getVectorPrimitives(u"testFloorFull");
+    moveObject(pObject, Size(500, 500));
+    auto oDelta = pushVectorPrimitivesDelta();
+    CPPUNIT_ASSERT(oDelta.has_value());
+    const sal_Int64 nHeld = oDelta->getInt("/version").value_or(-1);
+    CPPUNIT_ASSERT_GREATER(sal_Int64(0), nHeld);
+
+    requestVectorPrimitivesRaw(".uno:VectorForgetPart?partid=" + firstPartId());
+
+    // The master was never served before.
+    auto aMaster = getVectorPrimitives(u"testFloorMaster", -1, 1);
+    assertJsonPath(aMaster, "/type", "vectorprimitives");
+    CPPUNIT_ASSERT_GREATER(nHeld, aMaster.getInt("/version").value_or(-1));
+
+    // The slide itself comes back whole and above the version it was dropped at.
+    auto aAgain = getVectorPrimitives(u"testFloorAgain", nHeld);
+    assertJsonPath(aAgain, "/type", "vectorprimitives");
+    CPPUNIT_ASSERT_GREATER(nHeld, aAgain.getInt("/version").value_or(-1));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushWritesNothingBeforeTheFirstServe)
 {
     // Nothing holds a part before the first response serves it, so a change before that pushes

@@ -12,6 +12,7 @@
 #include <svx/VectorPart.hxx>
 
 #include <drawinglayer/processor2d/VectorResourceCache.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <tools/json_writer.hxx>
@@ -22,6 +23,8 @@ sal_Int64 PartVersions::stepFrom(sal_Int64 nSinceVersion, bool bPush) const
 {
     if (bPush)
         nSinceVersion = sal_Int64(mnLastSentVersion);
+    else if (!mbServed)
+        return -1;
     if (nSinceVersion > sal_Int64(mnVersion) || nSinceVersion < sal_Int64(mnFirstVersion))
         return -1;
     return nSinceVersion;
@@ -38,10 +41,38 @@ void PartVersions::noteWritten(bool bPush)
     }
 }
 
-void PartVersions::forget()
+bool writePart(tools::JsonWriter& rWriter, PartVersions& rVersions, sal_Int64 nSinceVersion,
+               bool bPush, const PartCallbacks& rCallbacks)
 {
-    mbServed = false;
-    mnFirstVersion = countUp();
+    // A push goes to the clients that hold the part.
+    if (bPush && !rVersions.isServed())
+        return false;
+
+    const sal_Int64 nFrom = rVersions.stepFrom(nSinceVersion, bPush);
+    const bool bDelta = nFrom >= 0;
+
+    // A change only marked what may differ. The comparison decides whether the version moves, so
+    // it runs before the version is looked at and written.
+    rCallbacks.maResolve(nFrom);
+
+    if (bPush && !rVersions.isChangedSince(nFrom)
+        && !(rCallbacks.maIsPushDue && rCallbacks.maIsPushDue()))
+        return false;
+
+    rCallbacks.maWriteHeader(bDelta);
+    writeAnswerVersions(rWriter, nFrom, rVersions.getVersion());
+
+    // The order names every entry of the part, so a delta carries it only when it changed after
+    // the version the delta steps from.
+    if (bDelta && rCallbacks.maWriteOrder
+        && rVersions.getOrderVersion() > o3tl::make_unsigned(nFrom))
+        rCallbacks.maWriteOrder();
+
+    rCallbacks.maWriteEntries(nFrom);
+
+    // The answer named a version, so a client that pulled it holds the part from here on.
+    rVersions.noteWritten(bPush);
+    return true;
 }
 
 void writeAnswerHeader(tools::JsonWriter& rWriter, bool bDelta, sal_Int32 nMode,

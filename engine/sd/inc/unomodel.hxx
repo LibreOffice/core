@@ -151,22 +151,10 @@ public:
     /// of the same model only when they carry the same epoch.
     SD_DLLPUBLIC sal_Int32 getVectorEpoch() const;
 
-    /// Content version of the part that stands for the page, counted up on each object
-    /// change. 0 when nothing changed since the document was opened.
-    sal_uInt64 getVectorPartVersion(const SdrPage& rPage) const;
-
-    /// True when an answer about the part that steps from nSince carries a change: the whole
-    /// part always does, and a delta does when the version of the part moved after nSince.
-    bool isVectorPartChangedSince(const SdrPage& rPage, sal_Int64 nSince) const;
-
     /// True when the object with the given unique id last changed on the
     /// part at a version later than nSince.
     bool isVectorObjectChangedSince(const SdrPage& rPage, sal_uInt64 nObjectId,
                                     sal_uInt64 nSince) const;
-
-    /// True when the set of objects on the part, or the order they paint in, changed after the
-    /// given version.
-    bool isVectorOrderChangedSince(const SdrPage& rPage, sal_uInt64 nSince) const;
 
     /// The objects a change asked for a fresh look at, taken out of the part's state.
     std::unordered_set<sal_uInt64> takeVectorDirtyObjects(const SdrPage& rPage);
@@ -287,8 +275,9 @@ private:
 
     /// Vector content state, keyed by the GUID of the page it belongs to, which is also the
     /// page's part id. The state stays with the page when pages are inserted, removed or moved
-    /// and its index in the page list changes.
-    std::unordered_map<tools::Guid, VectorPartState> maVectorParts;
+    /// and its index in the page list changes. The state of a part that no client holds is
+    /// dropped, and a part made later starts above the versions of every dropped part.
+    svx::vector::PartTable<tools::Guid, VectorPartState> maVectorParts;
 
     /// Writes the primitives of the page rPartId names in the page list nMode. A non-negative
     /// nSinceVersion asks for the delta against that version instead of the whole page. A push

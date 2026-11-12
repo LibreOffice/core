@@ -125,30 +125,24 @@ bool PartStore::recordPageIds(const SwRootFrame& rLayout)
 
 bool PartStore::isServed(std::string_view rPartId) const
 {
-    auto aIterator = maParts.find(OString(rPartId));
-    return aIterator != maParts.end() && aIterator->second.maVersions.isServed();
+    return maParts.isServed(OString(rPartId));
 }
 
 void PartStore::forget(std::string_view rPartId)
 {
-    auto aIterator = maParts.find(OString(rPartId));
-    if (aIterator == maParts.end())
+    const OString aPartId(rPartId);
+    if (!maParts.find(aPartId))
         return;
 
     // An entry that moved to another page by now is kept for that page.
     std::erase_if(maEntries,
                   [&rPartId](const auto& rPair) { return rPair.second.maPartId == rPartId; });
 
-    // The versions go on counting from where they are, so a version a client held before names
-    // no content the part serves later.
-    PartState aKept;
-    aKept.maVersions = aIterator->second.maVersions;
-    aKept.maVersions.forget();
-    aIterator->second = std::move(aKept);
+    // The table starts a part made later above the versions of this one, so a version a client
+    // held before names no content a part serves later.
+    maParts.forget(aPartId);
 
-    const bool bAnyServed = std::ranges::any_of(
-        maParts, [](const auto& rPart) { return rPart.second.maVersions.isServed(); });
-    if (bAnyServed)
+    if (maParts.isAnyServed())
         return;
 
     // No client holds a part now, so the state of every part goes, and the versions start again
@@ -212,7 +206,7 @@ std::vector<OString> PartStore::invalidate(const SwRootFrame& rLayout,
     }
 
     // A served page that is gone is reported too. A gone page that no client holds is dropped
-    // with its versions, since its part id names no page again.
+    // with its versions.
     for (const auto& rGone : aParts)
     {
         PartState& rState = rGone.second->second;
@@ -224,7 +218,7 @@ std::vector<OString> PartStore::invalidate(const SwRootFrame& rLayout,
         else
         {
             const OString aPartId(rGone.second->first);
-            maParts.erase(aPartId);
+            maParts.forget(aPartId);
         }
     }
     return aChanged;
@@ -377,46 +371,39 @@ void PartStore::write(tools::JsonWriter& rWriter, const SwRootFrame& rLayout,
     if (!pPage)
     {
         // A page that is gone is answered with the header alone, and the store drops it with its
-        // versions. Every frame has an id of its own, so the part id names no page again.
+        // versions.
         aWriteCommonHeader(/*bDelta=*/false);
         forget(rPartId);
-        maParts.erase(OString(rPartId));
         return;
     }
 
     const OString aPartId(rPartId);
-    PartState& rState = maParts[aPartId];
-    nSinceVersion = rState.maVersions.stepFrom(nSinceVersion, bPush);
-    const bool bDelta = nSinceVersion >= 0;
+    PartState& rState = maParts.get(aPartId);
 
-    // An entry of the page that another page holds by now left the page, even when no change
-    // marked the page yet.
-    const bool bEntryLeft
-        = std::any_of(rState.maOrder.begin(), rState.maOrder.end(), [&](sal_uInt64 nId) {
-              auto aIterator = maEntries.find(recordKeyOf(nId, *pPage));
-              return aIterator != maEntries.end() && aIterator->second.maPartId != aPartId;
-          });
+    svx::vector::PartCallbacks aCallbacks;
+    aCallbacks.maResolve = [&](sal_Int64 nFrom) {
+        // An entry of the page that another page holds by now left the page, even when no change
+        // marked the page yet.
+        const bool bEntryLeft
+            = std::ranges::any_of(rState.maOrder, [&](sal_uInt64 nId) {
+                  auto aIterator = maEntries.find(recordKeyOf(nId, *pPage));
+                  return aIterator != maEntries.end() && aIterator->second.maPartId != aPartId;
+              });
 
-    // A full answer compares the page with its record, and so does a delta for a dirty page.
-    if (rState.mbDirty || bEntryLeft || !bDelta)
-        refresh(rState, *pPage);
-
-    if (bPush && !rState.maVersions.isChangedSince(nSinceVersion))
-        return;
-
-    aWriteCommonHeader(bDelta);
-    svx::vector::writeAnswerVersions(rWriter, nSinceVersion, rState.maVersions.getVersion());
-
-    if (bDelta && rState.maVersions.getOrderVersion() > o3tl::make_unsigned(nSinceVersion))
-    {
+        // A full answer compares the page with its record, and so does a delta for a dirty page.
+        if (rState.mbDirty || bEntryLeft || nFrom < 0)
+            refresh(rState, *pPage);
+    };
+    aCallbacks.maWriteHeader = aWriteCommonHeader;
+    aCallbacks.maWriteOrder = [&]() {
         auto aOrder = rWriter.startArray("order");
         for (const sal_uInt64 nId : rState.maOrder)
             rWriter.putSimpleValue(nId);
-    }
+    };
+    aCallbacks.maWriteEntries = [&](sal_Int64 nFrom) {
+        drawinglayer::Primitive2dJsonProcessor aProcessor(rWriter);
+        maResources.attachTo(aProcessor);
 
-    drawinglayer::Primitive2dJsonProcessor aProcessor(rWriter);
-    maResources.attachTo(aProcessor);
-    {
         auto aObjects = rWriter.startArray("objects");
         for (const sal_uInt64 nId : rState.maOrder)
         {
@@ -426,14 +413,14 @@ void PartStore::write(tools::JsonWriter& rWriter, const SwRootFrame& rLayout,
                 continue;
             const RecordedEntry& rRecord = aIterator->second;
 
-            if (!bDelta || rRecord.mnDrawnVersion > o3tl::make_unsigned(nSinceVersion))
+            if (nFrom < 0 || rRecord.mnDrawnVersion > o3tl::make_unsigned(nFrom))
                 writeEntry(rWriter, rRecord, /*bDrawing=*/true, aProcessor);
-            else if (rRecord.mnPlacedVersion > o3tl::make_unsigned(nSinceVersion))
+            else if (rRecord.mnPlacedVersion > o3tl::make_unsigned(nFrom))
                 writeEntry(rWriter, rRecord, /*bDrawing=*/false, aProcessor);
         }
-    }
+    };
 
-    rState.maVersions.noteWritten(bPush);
+    svx::vector::writePart(rWriter, rState.maVersions, nSinceVersion, bPush, aCallbacks);
 }
 }
 

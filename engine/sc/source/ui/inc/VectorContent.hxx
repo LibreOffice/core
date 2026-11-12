@@ -391,14 +391,11 @@ private:
     /// The sheets with cells changed since the views were last told.
     std::set<SCTAB> maChangedTabs;
     /// The state of each sheet a client asked for.
-    std::map<SCTAB, SheetState> maSheets;
+    svx::vector::PartTable<SCTAB, SheetState, std::map<SCTAB, SheetState>> maSheets;
     /// Counts the uses of the blocks of every sheet, so the ones used longest ago are known.
     sal_uInt64 mnUseCount = 0;
     /// The most bytes of block JSON kept, constHeldContentBytes unless set otherwise.
     size_t mnHeldContentBudget = constHeldContentBytes;
-    /// The versions of each sheet that was forgotten and not asked for since. A sheet asked for
-    /// again counts on from them.
-    std::map<SCTAB, svx::vector::PartVersions> maForgottenVersions;
     /// An answer or a push is being written from a sheet state.
     bool mbWriting = false;
     /// The sheets have to be reset once the write in progress is done.

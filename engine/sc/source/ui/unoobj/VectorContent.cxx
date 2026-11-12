@@ -677,16 +677,9 @@ void VectorContent::forgetSheet(std::string_view rPartId)
     const std::optional<SCTAB> oTab = sheetOfPartId(OUString::fromUtf8(rPartId));
     if (!oTab)
         return;
-    // The versions count on, so a version a client held before names no content the sheet
-    // serves later.
-    auto aIterator = maSheets.find(*oTab);
-    if (aIterator != maSheets.end())
-    {
-        svx::vector::PartVersions aVersions = aIterator->second.maVersions;
-        aVersions.forget();
-        maForgottenVersions[*oTab] = aVersions;
-        maSheets.erase(aIterator);
-    }
+    // The table starts a sheet state made later above the versions of this one, so a version a
+    // client held before names no content a sheet serves later.
+    maSheets.forget(*oTab);
     maSheetListeners.erase(*oTab);
     maChangedTabs.erase(*oTab);
 }
@@ -760,8 +753,8 @@ void VectorContent::pushDelta(tools::JsonWriter& rWriter, std::string_view rPart
     if (!oTab)
         return;
 
-    auto aIterator = maSheets.find(*oTab);
-    if (aIterator == maSheets.end())
+    SheetState* pState = maSheets.find(*oTab);
+    if (!pState)
     {
         // A new epoch dropped the sheet state. Only the header is written, naming the new epoch.
         svx::vector::writeAnswerHeader(rWriter, /*bDelta*/ true, nMode, OString::number(*oTab),
@@ -770,23 +763,15 @@ void VectorContent::pushDelta(tools::JsonWriter& rWriter, std::string_view rPart
         return;
     }
     // A sheet that nobody asked for has nothing to push.
-    if (!aIterator->second.maVersions.isServed())
+    if (!pState->maVersions.isServed())
         return;
 
-    writeVectorPrimitives(rWriter, aIterator->second, nMode, {}, /*nSinceVersion*/ -1,
-                          /*bPush*/ true);
+    writeVectorPrimitives(rWriter, *pState, nMode, {}, /*nSinceVersion*/ -1, /*bPush*/ true);
 }
 
 VectorContent::SheetState& VectorContent::sheetState(SCTAB nTab)
 {
-    auto [aIterator, bNew] = maSheets.try_emplace(nTab);
-    SheetState& rState = aIterator->second;
-    auto aForgotten = bNew ? maForgottenVersions.find(nTab) : maForgottenVersions.end();
-    if (aForgotten != maForgottenVersions.end())
-    {
-        rState.maVersions = aForgotten->second;
-        maForgottenVersions.erase(aForgotten);
-    }
+    SheetState& rState = maSheets.get(nTab);
     rState.mnTab = nTab;
     listenToSheet(nTab);
     return rState;
@@ -820,155 +805,174 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
     if (ScDrawLayer* pDrawLayer = mrDocShell.GetDocument().GetDrawLayer())
         pDrawLayer->SetDrawnFromModel(true);
     const SCTAB nTab = rState.mnTab;
-    nSinceVersion = rState.maVersions.stepFrom(nSinceVersion, bPush);
-    const bool bDelta = nSinceVersion >= 0;
+    OString aTextEdits;
 
-    // Hints only mark what may differ. Comparing the rewritten content decides on a new version.
-    resolveDirtyBlocks(rState);
-    for (const BlockRequest& rRequest : rBlocks)
-        resolveBlock(rState, rRequest.maKey);
-    // A whole answer compares every object again, which repairs changes that came without a hint.
-    if (!bDelta && !bPush)
-        rState.mbObjectsDirty = true;
-    resolveObjects(rState);
-    resolveSheet(rState);
-    const OString aTextEdits = writeTextEdits(nTab);
-
-    const sal_uInt64 nSince = bDelta ? sal_uInt64(nSinceVersion) : 0;
-    auto isNew = [&](sal_uInt64 nVersion) { return !bDelta || nVersion > nSince; };
-    // A push carries the blocks changed since the last one from their content, which a block
-    // built by a request in between may have dropped since.
-    if (bPush)
+    svx::vector::PartCallbacks aCallbacks;
+    aCallbacks.maResolve = [&](sal_Int64 nFrom)
     {
-        for (auto& [rKey, rBlock] : rState.maBlocks)
-        {
-            if (rBlock.mnVersion > std::max(nSince, rBlock.mnCreatedVersion)
-                && !rBlock.mbContentHeld)
-                resolveBlock(rState, rKey);
-        }
-    }
-
-    // A push also names the blocks that became stale since the last one.
-    const bool bNewStale = std::any_of(rState.maBlocks.begin(), rState.maBlocks.end(),
-                                       [](const auto& rEntry)
-                                       { return rEntry.second.mbDirty && !rEntry.second.mbStaleSent; });
-    if (bPush && !rState.maVersions.isChangedSince(nSinceVersion)
-        && aTextEdits == rState.maLastTextEdits && !rState.mbTextEditChanged && !bNewStale
-        && rState.maShifts.empty())
-        return;
-
-    svx::vector::writeAnswerHeader(rWriter, bDelta, nMode, OString::number(nTab),
-                                   maResources.getEpoch());
-    rWriter.put("docType", "spreadsheet");
-    if (oRequestId)
-        rWriter.put("requestId", *oRequestId);
-    if (!bPush)
-    {
-        // The blocks asked for, so the client knows which it has current even when it forgot the
-        // request before the answer came.
-        auto aAsked = rWriter.startArray("blocks");
+        const bool bDelta = nFrom >= 0;
+        // Hints only mark what may differ. Comparing the rewritten content decides on a new
+        // version.
+        resolveDirtyBlocks(rState);
         for (const BlockRequest& rRequest : rBlocks)
-            rWriter.putSimpleValue(rtl::Concat2View(OUString::number(rRequest.maKey.first) + ":"
-                                                    + OUString::number(rRequest.maKey.second)));
-    }
-    svx::vector::writeAnswerVersions(rWriter, nSinceVersion, rState.maVersions.getVersion());
-    rWriter.put("blockRows", sal_Int32(constBlockRows));
-    rWriter.put("blockColumns", sal_Int32(constBlockColumns));
+            resolveBlock(rState, rRequest.maKey);
+        // A whole answer compares every object again, which repairs changes that came without a
+        // hint.
+        if (!bDelta && !bPush)
+            rState.mbObjectsDirty = true;
+        resolveObjects(rState);
+        resolveSheet(rState);
+        aTextEdits = writeTextEdits(nTab);
 
-    if (isNew(rState.maSheet.mnVersion))
-        rWriter.putRaw(Concat2View("\"sheet\": " + rState.maSheet.maContent));
-
-    // The text styles that the cell text written here names.
-    std::set<sal_Int32> aTextStyles;
-    {
-        auto aObjects = rWriter.startArray("objects");
+        // A push carries the blocks changed since the last one from their content, which a block
+        // built by a request in between may have dropped since.
         if (bPush)
         {
-            // A push carries each block with a part changed after the last push. A client holds a
-            // block from its first write or later, so parts of that write are left out, and a block
-            // built since the last push is not written.
-            for (const auto& [rKey, rBlock] : rState.maBlocks)
+            const sal_uInt64 nSince = bDelta ? sal_uInt64(nFrom) : 0;
+            for (auto& [rKey, rBlock] : rState.maBlocks)
             {
-                const sal_uInt64 nFrom = std::max(nSince, rBlock.mnCreatedVersion);
-                if (rBlock.mnVersion > nFrom)
-                    writeBlockEntry(rWriter, rState, rKey, rBlock, nFrom, aTextStyles);
+                if (rBlock.mnVersion > std::max(nSince, rBlock.mnCreatedVersion)
+                    && !rBlock.mbContentHeld)
+                    resolveBlock(rState, rKey);
             }
         }
-        else
+    };
+    aCallbacks.maIsPushDue = [&]()
+    {
+        // A push also names the blocks that became stale since the last one, tells the rows and
+        // columns that moved, and carries a text edit that changed.
+        const bool bNewStale
+            = std::ranges::any_of(rState.maBlocks, [](const auto& rEntry)
+                                  { return rEntry.second.mbDirty && !rEntry.second.mbStaleSent; });
+        return aTextEdits != rState.maLastTextEdits || rState.mbTextEditChanged || bNewStale
+               || !rState.maShifts.empty();
+    };
+    aCallbacks.maWriteHeader = [&](bool bDelta)
+    {
+        svx::vector::writeAnswerHeader(rWriter, bDelta, nMode, OString::number(nTab),
+                                       maResources.getEpoch());
+        rWriter.put("docType", "spreadsheet");
+        if (oRequestId)
+            rWriter.put("requestId", *oRequestId);
+        if (!bPush)
         {
-            // A pull carries the requested blocks, apart from those the client has up to date.
+            // The blocks asked for, so the client knows which it has current even when it forgot
+            // the request before the answer came.
+            auto aAsked = rWriter.startArray("blocks");
             for (const BlockRequest& rRequest : rBlocks)
+                rWriter.putSimpleValue(
+                    rtl::Concat2View(OUString::number(rRequest.maKey.first) + ":"
+                                     + OUString::number(rRequest.maKey.second)));
+        }
+    };
+    // The order of the drawing objects follows the blocks, and a whole answer carries it too, so
+    // it is written with the entries.
+    aCallbacks.maWriteEntries = [&](sal_Int64 nFrom)
+    {
+        const bool bDelta = nFrom >= 0;
+        const sal_uInt64 nSince = bDelta ? sal_uInt64(nFrom) : 0;
+        auto isNew = [&](sal_uInt64 nVersion) { return !bDelta || nVersion > nSince; };
+
+        rWriter.put("blockRows", sal_Int32(constBlockRows));
+        rWriter.put("blockColumns", sal_Int32(constBlockColumns));
+
+        if (isNew(rState.maSheet.mnVersion))
+            rWriter.putRaw(Concat2View("\"sheet\": " + rState.maSheet.maContent));
+
+        // The text styles that the cell text written here names.
+        std::set<sal_Int32> aTextStyles;
+        {
+            auto aObjects = rWriter.startArray("objects");
+            if (bPush)
             {
-                auto aIterator = rState.maBlocks.find(rRequest.maKey);
-                if (aIterator == rState.maBlocks.end())
-                    continue;
-                if (rRequest.moHeldVersion
-                    && *rRequest.moHeldVersion >= aIterator->second.mnVersion)
-                    continue;
-                writeBlockEntry(rWriter, rState, rRequest.maKey, aIterator->second,
-                                rRequest.moHeldVersion.value_or(0), aTextStyles);
+                // A push carries each block with a part changed after the last push. A client
+                // holds a block from its first write or later, so parts of that write are left
+                // out, and a block built since the last push is not written.
+                for (const auto& [rKey, rBlock] : rState.maBlocks)
+                {
+                    const sal_uInt64 nBlockFrom = std::max(nSince, rBlock.mnCreatedVersion);
+                    if (rBlock.mnVersion > nBlockFrom)
+                        writeBlockEntry(rWriter, rState, rKey, rBlock, nBlockFrom, aTextStyles);
+                }
+            }
+            else
+            {
+                // A pull carries the requested blocks, apart from those the client has up to date.
+                for (const BlockRequest& rRequest : rBlocks)
+                {
+                    auto aIterator = rState.maBlocks.find(rRequest.maKey);
+                    if (aIterator == rState.maBlocks.end())
+                        continue;
+                    if (rRequest.moHeldVersion
+                        && *rRequest.moHeldVersion >= aIterator->second.mnVersion)
+                        continue;
+                    writeBlockEntry(rWriter, rState, rRequest.maKey, aIterator->second,
+                                    rRequest.moHeldVersion.value_or(0), aTextStyles);
+                }
             }
         }
-    }
 
-    if (!aTextStyles.empty())
-    {
-        auto aStyles = rWriter.startNode("textStyles");
-        for (const sal_Int32 nStyle : aTextStyles)
-            rWriter.putRaw(Concat2View("\"" + OString::number(nStyle)
-                                       + "\": " + maTextStyles.fieldsOf(nStyle)));
-    }
-
-    // A push names the held blocks that were not built again since the last push, once. A client
-    // asks for the ones it shows, and does not take the versions of the pushes for them.
-    if (bPush)
-    {
-        writeStaleBlocks(rWriter, rState);
-        for (auto& [rKey, rBlock] : rState.maBlocks)
+        if (!aTextStyles.empty())
         {
-            if (rBlock.mbDirty)
-                rBlock.mbStaleSent = true;
+            auto aStyles = rWriter.startNode("textStyles");
+            for (const sal_Int32 nStyle : aTextStyles)
+                rWriter.putRaw(Concat2View("\"" + OString::number(nStyle)
+                                           + "\": " + maTextStyles.fieldsOf(nStyle)));
         }
-    }
 
-    // A push tells the rows and columns moved since the last one, once.
-    if (bPush && !rState.maShifts.empty())
-    {
-        auto aShifts = rWriter.startArray("shifts");
-        for (const Shift& rShift : rState.maShifts)
+        // A push names the held blocks that were not built again since the last push, once. A
+        // client asks for the ones it shows, and does not take the versions of the pushes for
+        // them.
+        if (bPush)
         {
-            auto aShift = rWriter.startStruct();
-            rWriter.put("axis", rShift.mbRows ? "rows" : "columns");
-            rWriter.put("at", sal_Int32(rShift.mnAt));
-            rWriter.put("by", sal_Int32(rShift.mnBy));
-            auto aAcross = rWriter.startArray("across");
-            rWriter.putSimpleValue(sal_Int32(rShift.mnAcrossFirst));
-            rWriter.putSimpleValue(sal_Int32(rShift.mnAcrossLast));
+            writeStaleBlocks(rWriter, rState);
+            for (auto& [rKey, rBlock] : rState.maBlocks)
+            {
+                if (rBlock.mbDirty)
+                    rBlock.mbStaleSent = true;
+            }
         }
-        rState.maShifts.clear();
-    }
 
-    if (isNew(rState.maObjectBlocks.mnVersion))
-        rWriter.putRaw(Concat2View("\"objectBlocks\": " + rState.maObjectBlocks.maContent));
+        // A push tells the rows and columns moved since the last one, once.
+        if (bPush && !rState.maShifts.empty())
+        {
+            auto aShifts = rWriter.startArray("shifts");
+            for (const Shift& rShift : rState.maShifts)
+            {
+                auto aShift = rWriter.startStruct();
+                rWriter.put("axis", rShift.mbRows ? "rows" : "columns");
+                rWriter.put("at", sal_Int32(rShift.mnAt));
+                rWriter.put("by", sal_Int32(rShift.mnBy));
+                auto aAcross = rWriter.startArray("across");
+                rWriter.putSimpleValue(sal_Int32(rShift.mnAcrossFirst));
+                rWriter.putSimpleValue(sal_Int32(rShift.mnAcrossLast));
+            }
+            rState.maShifts.clear();
+        }
 
-    if (isNew(rState.maVersions.getOrderVersion()))
-    {
-        auto aOrder = rWriter.startArray("drawOrder");
-        for (const sal_uInt64 nId : rState.maObjectOrder)
-            rWriter.putSimpleValue(sal_Int64(nId));
-    }
+        if (isNew(rState.maObjectBlocks.mnVersion))
+            rWriter.putRaw(Concat2View("\"objectBlocks\": " + rState.maObjectBlocks.maContent));
 
-    // The text edits are always sent whole, so they list only the edits that are open.
-    rWriter.putRaw(Concat2View("\"textEdits\": " + aTextEdits));
+        if (isNew(rState.maVersions.getOrderVersion()))
+        {
+            auto aOrder = rWriter.startArray("drawOrder");
+            for (const sal_uInt64 nId : rState.maObjectOrder)
+                rWriter.putSimpleValue(sal_Int64(nId));
+        }
 
-    // The text edits the readers hold go with the mark. The first pull sets the version pushes
-    // count from, and no client holds an older one.
-    if (bPush || !rState.maVersions.isServed())
-        rState.maLastTextEdits = aTextEdits;
-    if (bPush)
-        rState.mbTextEditChanged = false;
-    rState.maVersions.noteWritten(bPush);
-    dropOldContent();
+        // The text edits are always sent whole, so they list only the edits that are open.
+        rWriter.putRaw(Concat2View("\"textEdits\": " + aTextEdits));
+
+        // The text edits the readers hold go with the mark. The first pull sets the version
+        // pushes count from, and no client holds an older one.
+        if (bPush || !rState.maVersions.isServed())
+            rState.maLastTextEdits = aTextEdits;
+        if (bPush)
+            rState.mbTextEditChanged = false;
+    };
+
+    if (svx::vector::writePart(rWriter, rState.maVersions, nSinceVersion, bPush, aCallbacks))
+        dropOldContent();
 }
 
 void VectorContent::writeBlockEntry(tools::JsonWriter& rWriter, const SheetState& rState,
@@ -1910,8 +1914,7 @@ OString VectorContent::writeTextEdits(SCTAB nTab)
 
 VectorContent::SheetState* VectorContent::stateOf(SCTAB nTab)
 {
-    auto aIterator = maSheets.find(nTab);
-    return aIterator == maSheets.end() ? nullptr : &aIterator->second;
+    return maSheets.find(nTab);
 }
 
 void VectorContent::markRangeDirty(const ScRange& rRange)
@@ -2103,7 +2106,6 @@ void VectorContent::resetSheets()
     for (const auto& [nTab, rState] : maSheets)
         aServed.push_back(nTab);
     maSheets.clear();
-    maForgottenVersions.clear();
     maSheetListeners.clear();
     maChangedTabs.clear();
     maResources.renewEpoch();
