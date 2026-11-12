@@ -861,6 +861,35 @@ private:
     Stage _stage;
 };
 
+#if !MOBILEAPP
+/// A file open for reading, closed when the object is destroyed.
+class InputFile final
+{
+public:
+    /// Takes ownership of fd, which may be -1. The file counts as open only when fd is open on a
+    /// regular file.
+    explicit InputFile(int fd);
+    ~InputFile();
+
+    InputFile(const InputFile&) = delete;
+    InputFile& operator=(const InputFile&) = delete;
+
+    /// The size of the file when it was opened, or -1 when it is not open.
+    int64_t size() const { return _size; }
+
+    /// Reads up to length bytes from the current position, stopping at size bytes in all. Returns
+    /// the number of bytes read, 0 once size bytes have been read, and -1 on an error, when the
+    /// file ends early, or when the file is not open.
+    int64_t read(char* buffer, int64_t length);
+
+private:
+    int _fd;
+    int64_t _size;
+    /// The bytes still to read before size bytes have been read.
+    int64_t _remaining;
+};
+#endif
+
 /// An HTTP Request made over Session.
 class Request : public RequestCommon
 {
@@ -917,6 +946,11 @@ public:
 
     /// Set the file to send as the body of the request.
     void setBodyFile(const std::string& path);
+
+#if !MOBILEAPP
+    /// Set the body of the request to the first size bytes of file.
+    void setBodyFile(std::shared_ptr<InputFile> file);
+#endif
 
     void setBody(std::string body, std::string contentType = "text/html;charset=utf-8");
 
@@ -995,9 +1029,10 @@ private:
     State _state;
 };
 
+#if !MOBILEAPP
 /// Builds a multipart/form-data body (RFC 7578) out of files on disk and streams it as the
-/// body of a Request, reading each file in pieces as the body is written. Each file is opened
-/// when its part is added, so the body carries the bytes of the file as it was at that moment,
+/// body of a Request, reading each file in pieces as the body is written. Each file is already
+/// open when its part is added, so the body carries the bytes of the file that was opened,
 /// whatever is done to its name afterwards. The body can be written once.
 class MultipartFormDataSource final
 {
@@ -1010,9 +1045,13 @@ public:
     /// The boundary that separates the parts.
     const std::string& boundary() const { return _boundary; }
 
-    /// Adds a part named name whose bytes are the file at path, declared to the receiver with
-    /// the given Content-Type and filename. Returns false, and adds nothing, when the file
-    /// is not a regular file that can be opened for reading.
+    /// Adds a part named name whose bytes are those of file, declared to the receiver with the
+    /// given Content-Type and filename. Returns false, and adds nothing, when file is not open.
+    bool addFilePart(const std::string& name, std::shared_ptr<InputFile> file,
+                     const std::string& contentType, const std::string& filename);
+
+    /// Adds a part as above whose bytes are those of the file at path. Returns false, and adds
+    /// nothing, when the file is not a regular file that can be opened for reading.
     bool addFilePart(const std::string& name, const std::string& path,
                      const std::string& contentType, const std::string& filename);
 
@@ -1031,10 +1070,8 @@ private:
     {
         /// From the boundary line to the empty line that ends the header of the part.
         std::string header;
-        /// The file whose bytes follow the header, open and positioned at its start.
-        std::shared_ptr<std::ifstream> file;
-        /// The size of the file when the part was added.
-        int64_t size;
+        /// The file whose first size bytes follow the header, positioned at its start.
+        std::shared_ptr<InputFile> file;
     };
 
     /// Produces the body one segment at a time: the header of a part, the bytes of its file,
@@ -1047,6 +1084,7 @@ private:
     const std::string _boundary;
     std::vector<Part> _parts;
 };
+#endif
 
 /// A server-side HTTP Request parser for incoming request.
 class RequestParser final : public RequestCommon

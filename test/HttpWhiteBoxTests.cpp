@@ -28,6 +28,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <cstdint>
+#include <fcntl.h>
 #include <fstream>
 #include <memory>
 #include <string>
@@ -740,6 +741,15 @@ void HttpWhiteBoxTests::testMultiPartDataParser()
     }
 }
 
+namespace
+{
+/// The file at path, opened for reading.
+std::shared_ptr<http::InputFile> openInputFile(const std::string& path)
+{
+    return std::make_shared<http::InputFile>(::open(path.c_str(), O_RDONLY | O_CLOEXEC));
+}
+} // namespace
+
 void HttpWhiteBoxTests::testMultipartFormDataSource()
 {
     constexpr std::string_view testname = __func__;
@@ -757,12 +767,16 @@ void HttpWhiteBoxTests::testMultipartFormDataSource()
     std::ofstream(imagePath, std::ios::binary) << image;
 
     http::MultipartFormDataSource source;
-    LOK_ASSERT(source.addFilePart("file", documentPath, "application/octet-stream",
+    LOK_ASSERT(source.addFilePart("file", openInputFile(documentPath), "application/octet-stream",
                                   "hello \"world\".odt"));
-    LOK_ASSERT(
-        source.addFilePart("thumbnail-256x256", imagePath, "image/png", "thumbnail-256x256.png"));
-    LOK_ASSERT(!source.addFilePart("missing", dir + "/missing.png", "image/png", "missing.png"));
-    LOK_ASSERT(!source.addFilePart("directory", dir, "image/png", "directory.png"));
+    LOK_ASSERT(source.addFilePart("thumbnail-256x256", openInputFile(imagePath), "image/png",
+                                  "thumbnail-256x256.png"));
+    LOK_ASSERT(!source.addFilePart("missing", openInputFile(dir + "/missing.png"), "image/png",
+                                   "missing.png"));
+    LOK_ASSERT(!source.addFilePart("directory",
+                                   std::make_shared<http::InputFile>(
+                                       ::open(dir.c_str(), O_RDONLY | O_DIRECTORY | O_CLOEXEC)),
+                                   "image/png", "directory.png"));
     LOK_ASSERT_EQUAL(2UL, source.partCount());
 
     // The parts hold the files as they were when added: a newer file renamed over the image
@@ -816,7 +830,7 @@ void HttpWhiteBoxTests::testMultipartFormDataSource()
     // A file cut short after its part was added cannot fill the part, so writing the body
     // fails rather than sending fewer bytes than the header promised.
     http::MultipartFormDataSource shortSource;
-    LOK_ASSERT(shortSource.addFilePart("file", imagePath, "image/png", "image.png"));
+    LOK_ASSERT(shortSource.addFilePart("file", openInputFile(imagePath), "image/png", "image.png"));
     std::ofstream(imagePath, std::ios::binary | std::ios::trunc) << "x";
     http::Request shortRequest("/wopi/files/0/contents", http::Request::VERB_POST);
     shortSource.applyTo(shortRequest);
@@ -824,6 +838,32 @@ void HttpWhiteBoxTests::testMultipartFormDataSource()
     Buffer shortOut;
     while (written && shortRequest.stage() != http::Request::Stage::Finished)
         written = shortRequest.writeData(shortOut, 4096);
+    LOK_ASSERT(!written);
+
+    // A file sent as the whole body sends the size it had when opened, even after it grows.
+    const std::string plainPath = dir + "/plain.odt";
+    std::ofstream(plainPath, std::ios::binary) << "abc";
+    http::Request plainRequest("/wopi/files/0/contents", http::Request::VERB_POST);
+    plainRequest.setBodyFile(openInputFile(plainPath));
+    std::ofstream(plainPath, std::ios::binary | std::ios::app) << "def";
+    LOK_ASSERT_EQUAL(std::string("3"), plainRequest.get("Content-Length"));
+    Buffer plainOut;
+    while (plainRequest.stage() != http::Request::Stage::Finished)
+    {
+        LOK_ASSERT(plainRequest.writeData(plainOut, 4096));
+    }
+    const std::string plainWire(plainOut.data(), plainOut.size());
+    LOK_ASSERT(plainWire.ends_with("\r\n\r\nabc"));
+
+    // A file cut short after it was opened fails the body.
+    std::ofstream(plainPath, std::ios::binary) << "abc";
+    http::Request cutRequest("/wopi/files/0/contents", http::Request::VERB_POST);
+    cutRequest.setBodyFile(openInputFile(plainPath));
+    std::ofstream(plainPath, std::ios::binary | std::ios::trunc) << "a";
+    written = true;
+    Buffer cutOut;
+    while (written && cutRequest.stage() != http::Request::Stage::Finished)
+        written = cutRequest.writeData(cutOut, 4096);
     LOK_ASSERT(!written);
 }
 

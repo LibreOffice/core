@@ -18,7 +18,6 @@
 
 #include "HttpRequest.hpp"
 
-#include <common/FileUtil.hpp>
 #include <common/HexUtil.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
@@ -28,6 +27,7 @@
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
 
+#include <cerrno>
 #include <cstdint>
 #include <cstring>
 #include <fstream>
@@ -38,6 +38,10 @@
 #include <sys/types.h>
 #include <utility>
 #include <vector>
+
+#if !MOBILEAPP
+#include <unistd.h>
+#endif
 
 namespace
 {
@@ -1132,6 +1136,53 @@ void Request::setBody(std::string body, std::string contentType)
         bodySize);
 }
 
+#if !MOBILEAPP
+InputFile::InputFile(int fd)
+    : _fd(fd)
+    , _size(-1)
+    , _remaining(0)
+{
+    struct stat st;
+    if (_fd >= 0 && ::fstat(_fd, &st) == 0 && S_ISREG(st.st_mode))
+    {
+        _size = st.st_size;
+        _remaining = _size;
+    }
+}
+
+InputFile::~InputFile()
+{
+    if (_fd >= 0)
+        ::close(_fd);
+}
+
+int64_t InputFile::read(char* buffer, int64_t length)
+{
+    if (_size < 0)
+        return -1;
+    if (_remaining == 0)
+        return 0;
+
+    ssize_t count;
+    do
+    {
+        count = ::read(_fd, buffer, std::min(length, _remaining));
+    } while (count < 0 && errno == EINTR);
+    if (count <= 0)
+        return -1;
+
+    _remaining -= count;
+    return count;
+}
+
+void Request::setBodyFile(std::shared_ptr<InputFile> file)
+{
+    const int64_t size = file->size();
+    setBodySource([file = std::move(file)](char* buffer, int64_t length)
+                  { return file->read(buffer, length); },
+                  size);
+}
+
 class MultipartFormDataSource::Reader final
 {
 public:
@@ -1139,7 +1190,6 @@ public:
         : _parts(std::move(parts))
         , _closing(std::move(closing))
         , _textOffset(0)
-        , _fileRemaining(0)
         , _next(0)
         , _closingPending(true)
     {
@@ -1161,21 +1211,16 @@ public:
             }
             else if (_file)
             {
-                if (_fileRemaining == 0)
+                const int64_t count = _file->read(buffer + total, length - total);
+                if (count < 0)
+                    return -1;
+                if (count == 0)
                 {
                     _file.reset();
                     setText("\r\n");
                     continue;
                 }
 
-                // The part is as long as its header promised, which is the size the file had
-                // when it was opened.
-                _file->read(buffer + total, std::min(length - total, _fileRemaining));
-                const int64_t count = _file->gcount();
-                if (count <= 0)
-                    return -1;
-
-                _fileRemaining -= count;
                 total += count;
             }
             else if (_next < _parts.size())
@@ -1183,7 +1228,6 @@ public:
                 const Part& part = _parts[_next++];
                 setText(part.header);
                 _file = part.file;
-                _fileRemaining = part.size;
             }
             else if (_closingPending)
             {
@@ -1212,8 +1256,7 @@ private:
     std::string_view _text;
     std::size_t _textOffset;
     /// The file of the part being produced, null between parts.
-    std::shared_ptr<std::ifstream> _file;
-    int64_t _fileRemaining;
+    std::shared_ptr<InputFile> _file;
     /// The index of the next part to produce.
     std::size_t _next;
     bool _closingPending;
@@ -1253,37 +1296,36 @@ std::string encodeDispositionParameter(const std::string& value)
 }
 } // namespace
 
-bool MultipartFormDataSource::addFilePart(const std::string& name, const std::string& path,
+bool MultipartFormDataSource::addFilePart(const std::string& name,
+                                          std::shared_ptr<InputFile> file,
                                           const std::string& contentType,
                                           const std::string& filename)
 {
-    if (!FileUtil::Stat(path).isFile())
-        return false;
-
-    auto file = std::make_shared<std::ifstream>(path, std::ios::binary);
-    if (!file->is_open())
-        return false;
-
-    // The size of the file that was opened, which stays the size of the part.
-    file->seekg(0, std::ios_base::end);
-    const int64_t size = file->tellg();
-    file->seekg(0, std::ios_base::beg);
-    if (size < 0)
+    if (file->size() < 0)
         return false;
 
     std::string header = "--" + _boundary + "\r\n";
     header += "Content-Disposition: form-data; name=\"" + encodeDispositionParameter(name) +
               "\"; filename=\"" + encodeDispositionParameter(filename) + "\"\r\n";
     header += "Content-Type: " + contentType + "\r\n\r\n";
-    _parts.emplace_back(Part{ std::move(header), std::move(file), size });
+    _parts.emplace_back(Part{ std::move(header), std::move(file) });
     return true;
+}
+
+bool MultipartFormDataSource::addFilePart(const std::string& name, const std::string& path,
+                                          const std::string& contentType,
+                                          const std::string& filename)
+{
+    return addFilePart(name,
+                       std::make_shared<InputFile>(::open(path.c_str(), O_RDONLY | O_CLOEXEC)),
+                       contentType, filename);
 }
 
 int64_t MultipartFormDataSource::size() const
 {
     int64_t total = closing().size();
     for (const Part& part : _parts)
-        total += part.header.size() + part.size + 2; // The CRLF after the file.
+        total += part.header.size() + part.file->size() + 2; // The CRLF after the file.
 
     return total;
 }
@@ -1296,6 +1338,7 @@ void MultipartFormDataSource::applyTo(Request& request) const
     request.setBodySource([reader = std::move(reader)](char* buffer, int64_t length)
                           { return reader->read(buffer, length); }, size());
 }
+#endif
 
 std::pair<std::string, std::string> Request::getBasicAuth() const
 {
