@@ -30,6 +30,16 @@ CPPUNIT_TEST_FIXTURE(Test, testSortedObjsInsert)
     // crash in debug builds:
     createSwDoc("sorted-objs-insert.docx");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSortedObjsWrapLoop)
+{
+    // Given a document with shapes in a multi-column section, where the layout keeps moving one
+    // shape and so changes its wrap mode to end the loop:
+    // When importing that document and closing it:
+    // Then make sure that the object lists stay sorted, which failed an assertion in debug builds
+    // when the shapes were removed:
+    createSwDoc("sorted-objs-wrap-loop.rtf");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -661,6 +661,14 @@ void SwAnchoredObject::UpdateObjInSortedList()
             }
         }
     }
+    ReorderInSortedLists();
+}
+
+void SwAnchoredObject::ReorderInSortedLists()
+{
+    if (!GetAnchorFrame())
+        return;
+
     // update its position in the sorted object list of its anchor frame
     AnchorFrame()->GetDrawObjs()->Update( *this );
     // update its position in the sorted object list of its page frame

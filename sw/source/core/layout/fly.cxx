@@ -1930,6 +1930,9 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                                     pFormat->LockModify();
                                     pFormat->SetFormatAttr( aAttr );
                                     pFormat->UnlockModify();
+                                    // The wrap mode is a sort key of the object lists, and the
+                                    // locked change notifies nobody.
+                                    pAnchoredObj->ReorderInSortedLists();
                                 }
                             }
                             else
