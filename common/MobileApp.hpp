@@ -62,6 +62,9 @@ public:
     CODocument *coDocument;
 #endif
     std::weak_ptr<DocumentBroker> docBroker;
+    // Set for a document that is open in an integrator's editor frame (whose page comes from the
+    // remote server's origin):
+    bool inEditorFrame = false;
 };
 
 #if !ENABLE_WOPI

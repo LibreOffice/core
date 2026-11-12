@@ -50,6 +50,7 @@
 + (bool)isBinaryMessage:(const char *_Nonnull)buffer length:(NSInteger)length;
 
 + (int)generateNewAppDocId;
++ (void)setInEditorFrame:(int)appDocId;
 + (int)fakeSocketSocket;
 
 + (void)LOG_DBG:(NSString *_Nonnull)message NS_SWIFT_NAME(LOG_DBG(_:));

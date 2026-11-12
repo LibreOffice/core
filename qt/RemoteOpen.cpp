@@ -15,6 +15,7 @@
 #include <common/CODAConfig.hpp>
 #include <common/EditorFrameMessages.hpp>
 #include <common/Log.hpp>
+#include <common/MobileApp.hpp>
 #include <net/FakeSocket.hpp>
 #include <qt/CoolLocalSchemeHandler.hpp>
 #include <qt/WebView.hpp>
@@ -644,6 +645,7 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
         ._appDocId = coda::generateNewAppDocId(),
         ._remoteInfo = std::move(remoteInfo),
     };
+    ::DocumentData::get(_document._appDocId).inEditorFrame = true;
     QWebEngineView* view = QWebEngineView::forPage(this);
     _bridge = std::make_unique<Bridge>(nullptr, nullptr, _document, view);
     _bridge->setFrame(frame);

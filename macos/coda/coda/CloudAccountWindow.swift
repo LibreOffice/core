@@ -355,6 +355,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         document.fileType = fileType
         document.connect(webView: webView)
         document.editorFrame = editorFrameInfo
+        COWrapper.setInEditorFrame(document.appDocId)
 
         remoteDocumentName = values[0]
 

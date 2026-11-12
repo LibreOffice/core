@@ -31,6 +31,7 @@
 #endif
 #include <common/NumUtil.hpp>
 #include <common/Log.hpp>
+#include <common/MobileApp.hpp>
 #include <common/Protocol.hpp>
 #include <common/ServerPrivateInfo.hpp>
 #include <common/Session.hpp>
@@ -2932,6 +2933,32 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
         LOG_WRN("Failed to parse updateviewsettings JSON");
         return true;
     }
+
+#if MOBILEAPP && DOCS_SHARE_PROCESS
+    // The page of an integrator's editor frame (from the remote server's origin) gets the AI
+    // providers and their keys from the stored settings, whatever it sends instead (as each stored
+    // key belongs to its stored provider), and so does the page of a document without DocumentData
+    // (whose ID outlived the document that it was created for, which may have been in such a
+    // frame):
+    if (std::shared_ptr<DocumentBroker> const docBroker = getDocumentBroker()) {
+        DocumentData const * const data = DocumentData::getIfExists(docBroker->getMobileAppDocId());
+        if (data == nullptr || data->inEditorFrame) {
+            Poco::JSON::Object::Ptr const stored = getViewSettingsJSON();
+            for (char const * field:
+                 {"aiProviderAPIKey", "aiProviderURL", "aiProviderModel", "aiImageProviderAPIKey",
+                  "aiImageProviderURL", "aiImageModel"})
+            {
+                std::string value;
+                if (stored && JsonUtil::findJSONValue(stored, field, value)) {
+                    viewSettings->set(field, value);
+                } else {
+                    viewSettings->remove(field);
+                }
+                viewSettings->remove(field + std::string(SettingsSecrets::StoredFlagSuffix));
+            }
+        }
+    }
+#endif
 
     // The browser never receives stored secrets, so a save it did not change
     // arrives asking to keep them. Put those back before the settings are
