@@ -61,6 +61,8 @@ def kit_crashes(log):
         if not match:
             continue
         pid, thread, signal = match.groups()
+        # The log prefix pads the pid with zeros, and other messages print it without them.
+        pid = str(int(pid))
         signal = signal or '?'
         sandbox = forbidden.pop(pid, None) if signal in ('SIGABRT', '?') else None
         names = set()
