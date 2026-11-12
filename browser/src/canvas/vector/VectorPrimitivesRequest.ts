@@ -12,7 +12,7 @@
 namespace cool {
 	/// A request for the vector primitives of a part.
 	export interface VectorPrimitivesRequest {
-		/// The part asked for: the GUID of a page, or the index of a sheet.
+		/// The part asked for: the GUID of a slide or of a sheet, or the id of a text page.
 		partId: string;
 		/// The mode the part is asked in.
 		mode: number;

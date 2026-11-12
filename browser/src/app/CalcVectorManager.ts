@@ -17,6 +17,10 @@
  * placed on the rounded cells of the sheet geometry when drawn, so it lines up with the grid and
  * cursor, and a zoom asks for nothing again. A block in view is asked for with the version held,
  * and the engine answers only when it is newer. Changes arrive as pushed deltas.
+ *
+ * The engine names a sheet by an id that stays with the sheet when it moves to another index. The
+ * status lists the id of the sheet at each index, in app.calc.partIds. What is held of a sheet is
+ * kept under its id, and the index of the sheet is looked up in the status.
  */
 
 class CalcVectorManager extends VectorManagerBase {
@@ -67,7 +71,7 @@ class CalcVectorManager extends VectorManagerBase {
 	// Font attributes of cell text by id. An id is stable within an epoch.
 	private _textStyles: Map<number, cool.CalcTextStyle> = new Map();
 
-	// What is held of each sheet, keyed by sheet.
+	// What is held of each sheet, keyed by the id of the sheet.
 	private _sheets: Map<string, cool.CalcSheetData> = new Map();
 
 	// The epoch the held versions count in.
@@ -75,6 +79,9 @@ class CalcVectorManager extends VectorManagerBase {
 
 	// Sheets that were asked for at least once.
 	private _sheetRequested: Set<string> = new Set();
+
+	// The id of the sheet at each index in the last status that named the sheets, empty before it.
+	private _lastPartIds: string[] = [];
 
 	// For each sheet marked stale, the id of the first request sent after the mark. Only an
 	// answer to that request or a later one brings the stale blocks of the sheet up to date.
@@ -103,8 +110,11 @@ class CalcVectorManager extends VectorManagerBase {
 	// Blocks of a sheet waiting to be asked for, most wanted first. Each draw replaces them, so
 	// only blocks still in view are asked for. A refresh holds stale blocks around the view, none
 	// of which the view shows.
-	private _queue: { part: number; keys: string[]; refresh?: boolean } | null =
-		null;
+	private _queue: {
+		sheetKey: string;
+		keys: string[];
+		refresh?: boolean;
+	} | null = null;
 
 	// Callbacks that release graphics memory held for drawing the content.
 	private _reclaimListeners: (() => void)[] = [];
@@ -112,11 +122,11 @@ class CalcVectorManager extends VectorManagerBase {
 	// Counts up each time a font or an image the content names has loaded.
 	private _resourceVersion = 0;
 
-	// The drawing objects of each sheet in tile twips, keyed by part.
-	private _objectViews: Map<number, cool.CalcObjectView> = new Map();
+	// The drawing objects of each sheet in tile twips, keyed by the id of the sheet.
+	private _objectViews: Map<string, cool.CalcObjectView> = new Map();
 	// Counts changes of content and geometry. Older object views get rebuilt.
 	private _changeCount = 0;
-	private _viewCounts: Map<number, number> = new Map();
+	private _viewCounts: Map<string, number> = new Map();
 	private _listensToGeometry = false;
 	// Counts up on every change of the sheet geometry, the zoom among them.
 	private _geometryCount = 0;
@@ -416,14 +426,14 @@ class CalcVectorManager extends VectorManagerBase {
 
 		this._listenToGeometry();
 
-		let view = this._objectViews.get(part);
+		let view = this._objectViews.get(sheet.id);
 		if (!view) {
-			view = new cool.CalcObjectView(part);
-			this._objectViews.set(part, view);
+			view = new cool.CalcObjectView(sheet.id);
+			this._objectViews.set(sheet.id, view);
 		}
-		if (this._viewCounts.get(part) !== this._changeCount) {
+		if (this._viewCounts.get(sheet.id) !== this._changeCount) {
 			view.update(sheet, geometry);
-			this._viewCounts.set(part, this._changeCount);
+			this._viewCounts.set(sheet.id, this._changeCount);
 		}
 		return view;
 	}
@@ -458,9 +468,7 @@ class CalcVectorManager extends VectorManagerBase {
 		this._listenToGeometry();
 
 		const key =
-			CalcVectorManager._sheetKey(sheet.part) +
-			'/' +
-			cool.calcBlockKey(block.blockRow, block.blockColumn);
+			sheet.id + '/' + cool.calcBlockKey(block.blockRow, block.blockColumn);
 		const pixel = app.tile.size.x / RenderManager.tileSize;
 		const editedCells = this._editedCellsIn(sheet, block);
 		const edited = editedCells
@@ -548,8 +556,46 @@ class CalcVectorManager extends VectorManagerBase {
 			if (key.startsWith(sheetKey + '/')) this._placedBlocks.delete(key);
 	}
 
-	private static _sheetKey(part: number): string {
-		return String(part);
+	// The id of the sheet at the index, from the last status. Undefined before the first status
+	// and for an index the status does not name.
+	private static _sheetKey(part: number): string | undefined {
+		const ids = app.calc.partIds;
+		return (ids && ids[part]) || undefined;
+	}
+
+	// The index of the sheet with the id in the last status, or -1 when the status names no such
+	// sheet.
+	private static _partOf(sheetKey: string): number {
+		const ids = app.calc.partIds;
+		return ids ? ids.indexOf(sheetKey) : -1;
+	}
+
+	/// Follow the sheet list of a new status. A sheet that moved keeps what is held of it under
+	/// its new index, and what is held of a sheet that is gone is dropped. A status with the same
+	/// list as the last one changes nothing.
+	partIdsChanged(): void {
+		const ids = app.calc.partIds ?? [];
+		const listChanged =
+			ids.length !== this._lastPartIds.length ||
+			ids.some((id, index) => id !== this._lastPartIds[index]);
+		this._lastPartIds = ids.slice();
+		if (!listChanged) return;
+
+		let changed = false;
+		for (const [sheetKey, sheet] of Array.from(this._sheets.entries())) {
+			const part = CalcVectorManager._partOf(sheetKey);
+			if (part < 0) {
+				this._dropSheet(sheetKey, sheet);
+				changed = true;
+			} else if (part !== sheet.part) {
+				sheet.part = part;
+				changed = true;
+			}
+		}
+		// The typing is kept by the index of its sheet, so it ends when a sheet moved.
+		if (changed) this._typing.forget();
+		// The view draws again, and asks for the blocks of a sheet that just got its id.
+		this._fireChanged([]);
 	}
 
 	// The owner name of the fonts and images of an entry, released with it.
@@ -558,14 +604,15 @@ class CalcVectorManager extends VectorManagerBase {
 	}
 
 	getSheet(part: number): cool.CalcSheetData | undefined {
-		return this._sheets.get(CalcVectorManager._sheetKey(part));
+		const key = CalcVectorManager._sheetKey(part);
+		return key === undefined ? undefined : this._sheets.get(key);
 	}
 
-	private _ensureSheet(part: number): cool.CalcSheetData {
-		const key = CalcVectorManager._sheetKey(part);
+	private _ensureSheet(key: string, part: number): cool.CalcSheetData {
 		let sheet = this._sheets.get(key);
 		if (!sheet) {
 			sheet = {
+				id: key,
 				part: part,
 				version: 0,
 				complete: false,
@@ -597,8 +644,10 @@ class CalcVectorManager extends VectorManagerBase {
 		view?: { rows: number; columns: number },
 	): void {
 		if (view) this._view = view;
-		const sheet = this._ensureSheet(part);
+		// Before the first status the sheet has no id, so nothing is asked for.
 		const sheetKey = CalcVectorManager._sheetKey(part);
+		if (sheetKey === undefined) return;
+		const sheet = this._ensureSheet(sheetKey, part);
 		const keys: string[] = [];
 		for (const [blockRow, blockColumn] of blocks) {
 			const key = cool.calcBlockKey(blockRow, blockColumn);
@@ -615,8 +664,8 @@ class CalcVectorManager extends VectorManagerBase {
 			keys.push(...this._staleAround(sheet, sheetKey, blocks, direction));
 			refresh = keys.length > 0;
 		}
-		this._queue = { part, keys, refresh };
-		if (keys.length === 0 && needsSheet) this._sendRequest(part, []);
+		this._queue = { sheetKey, keys, refresh };
+		if (keys.length === 0 && needsSheet) this._sendRequest(sheet, []);
 		this._sendQueued();
 	}
 
@@ -695,7 +744,7 @@ class CalcVectorManager extends VectorManagerBase {
 	private _sendQueued(): void {
 		const queue = this._queue;
 		if (!queue) return;
-		const sheetKey = CalcVectorManager._sheetKey(queue.part);
+		const sheetKey = queue.sheetKey;
 		const sheet = this._sheets.get(sheetKey);
 		if (!sheet) {
 			this._queue = null;
@@ -742,7 +791,7 @@ class CalcVectorManager extends VectorManagerBase {
 				if (this._isWanted(sheet, sheetKey, other)) keys.push(other);
 				return false;
 			});
-			this._sendRequest(queue.part, keys);
+			this._sendRequest(sheet, keys);
 		}
 	}
 
@@ -757,9 +806,8 @@ class CalcVectorManager extends VectorManagerBase {
 	}
 
 	/// Ask for blocks of a sheet, and for changes to its objects and settings.
-	private _sendRequest(part: number, keys: string[]): void {
-		const sheet = this._ensureSheet(part);
-		const sheetKey = CalcVectorManager._sheetKey(part);
+	private _sendRequest(sheet: cool.CalcSheetData, keys: string[]): void {
+		const sheetKey = sheet.id;
 		const names: string[] = [];
 		for (const key of keys) {
 			const held = sheet.blocks.get(key);
@@ -775,7 +823,7 @@ class CalcVectorManager extends VectorManagerBase {
 			(requestId) =>
 				app.socket.sendMessage(
 					cool.vectorPrimitivesRequest({
-						partId: String(part),
+						partId: sheetKey,
 						mode: CalcVectorManager.contentMode,
 						requestId: requestId,
 						blocks: names,
@@ -798,8 +846,9 @@ class CalcVectorManager extends VectorManagerBase {
 	/// the sheets shown longest ago beyond maxSheets.
 	evict(part: number, keep: Set<string>): void {
 		const sheetKey = CalcVectorManager._sheetKey(part);
-		const sheet = this._sheets.get(sheetKey);
-		if (!sheet) return;
+		const sheet =
+			sheetKey === undefined ? undefined : this._sheets.get(sheetKey);
+		if (sheetKey === undefined || !sheet) return;
 
 		let holdsVisible = false;
 		for (const key of keep) {
@@ -847,16 +896,20 @@ class CalcVectorManager extends VectorManagerBase {
 		);
 		this._sheets.delete(sheetKey);
 		this._forgetPlaced(sheetKey);
+		this._objectViews.delete(sheetKey);
+		this._viewCounts.delete(sheetKey);
+		// The server pushes the changes of a sheet that was asked for until it hears that the
+		// sheet is held no more. A later request for the sheet asks for it whole.
+		if (this._sheetRequested.has(sheetKey))
+			app.socket.sendMessage(
+				'commandvalues command=.uno:VectorForgetPart?partid=' + sheetKey,
+			);
 		this._sheetRequested.delete(sheetKey);
 		this._staleFrom.delete(sheetKey);
 		this._sheetsBehind.delete(sheetKey);
 		// A later answer for the sheet finds no request and is dropped.
 		this._requests.forgetWhere((request) => request.data === sheetKey);
-		if (
-			this._queue &&
-			CalcVectorManager._sheetKey(this._queue.part) === sheetKey
-		)
-			this._queue = null;
+		if (this._queue && this._queue.sheetKey === sheetKey) this._queue = null;
 	}
 
 	/// Mark one sheet as possibly behind, to ask again with the versions held.
@@ -906,10 +959,9 @@ class CalcVectorManager extends VectorManagerBase {
 
 	/// Handle an answer to .uno:VectorPrimitives or a pushed delta.
 	handleVectorPrimitives(values: cool.CalcVectorResponse): void {
-		const part = parseInt(values.partId);
-		if (isNaN(part)) return;
+		const sheetKey = values.partId;
+		if (!sheetKey) return;
 
-		const sheetKey = CalcVectorManager._sheetKey(part);
 		const requestId = values.requestId;
 		const request =
 			requestId !== undefined
@@ -933,7 +985,15 @@ class CalcVectorManager extends VectorManagerBase {
 		)
 			return;
 
-		const sheet = this._ensureSheet(part);
+		// A sheet held knows its index. An answer for a sheet that the status no longer names is
+		// dropped.
+		const heldSheet = this._sheets.get(sheetKey);
+		const part = heldSheet
+			? heldSheet.part
+			: CalcVectorManager._partOf(sheetKey);
+		if (part < 0) return;
+
+		const sheet = this._ensureSheet(sheetKey, part);
 		if (request) this._sheetRequested.add(sheetKey);
 		if (values.type === 'vectorprimitives') sheet.complete = true;
 		// The answer names the blocks asked for and carries those that changed, so all of them are
@@ -1066,10 +1126,10 @@ class CalcVectorManager extends VectorManagerBase {
 				}
 				if (moved.length > 0) {
 					const queued =
-						this._queue && this._queue.part === part
+						this._queue && this._queue.sheetKey === sheetKey
 							? this._queue.keys.filter((key) => moved.indexOf(key) < 0)
 							: [];
-					this._queue = { part, keys: moved.concat(queued) };
+					this._queue = { sheetKey, keys: moved.concat(queued) };
 					this._sendQueued();
 				}
 			}

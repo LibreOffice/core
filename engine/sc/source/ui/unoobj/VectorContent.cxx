@@ -79,6 +79,8 @@
 #include <functional>
 #include <set>
 #include <string_view>
+#include <unordered_map>
+#include <vector>
 
 using namespace drawinglayer;
 
@@ -542,19 +544,13 @@ private:
     bool mbAreaAlive = true;
 };
 
-std::optional<SCTAB> VectorContent::sheetOfPartId(std::u16string_view aPartId) const
+std::optional<SCTAB> VectorContent::sheetOfPartId(std::string_view rPartId) const
 {
-    if (aPartId.empty())
+    const tools::Guid aGuid(rPartId);
+    const OString aWritten = aGuid.getString();
+    if (aGuid.isEmpty() || std::string_view(aWritten) != rPartId)
         return std::nullopt;
-    const ScDocument& rDocument = mrDocShell.GetDocument();
-    const sal_Int32 nTab = o3tl::toInt32(aPartId);
-    if (nTab < 0 || nTab >= rDocument.GetTableCount() || !rDocument.HasTable(SCTAB(nTab)))
-        return std::nullopt;
-    // A part id names a sheet in the one form the document writes it in, the decimal number.
-    const OUString aWritten = OUString::number(nTab);
-    if (aPartId != std::u16string_view(aWritten))
-        return std::nullopt;
-    return SCTAB(nTab);
+    return mrDocShell.GetDocument().GetTabByGuid(aGuid);
 }
 
 ScAddress VectorContent::anchorCellOf(const ScDocument& rDocument, SCTAB nTab, SdrObject& rObject)
@@ -641,12 +637,12 @@ VectorContent::VectorContent(ScDocShell& rDocShell)
     listenToDrawLayer();
 }
 
-void VectorContent::listenToSheet(SCTAB nTab)
+void VectorContent::listenToSheet(const tools::Guid& rGuid, SCTAB nTab)
 {
-    if (maSheetListeners.contains(nTab))
+    if (maSheetListeners.contains(rGuid))
         return;
     maSheetListeners.emplace(
-        nTab, std::make_unique<SheetListener>(*this, mrDocShell.GetDocument(), nTab));
+        rGuid, std::make_unique<SheetListener>(*this, mrDocShell.GetDocument(), nTab));
 }
 
 void VectorContent::listenToDrawLayer()
@@ -674,14 +670,16 @@ void VectorContent::getCommandValues(tools::JsonWriter& rWriter, std::string_vie
 
 void VectorContent::forgetSheet(std::string_view rPartId)
 {
-    const std::optional<SCTAB> oTab = sheetOfPartId(OUString::fromUtf8(rPartId));
-    if (!oTab)
+    // A part id names a sheet in the one form the document writes it in.
+    const tools::Guid aGuid(rPartId);
+    const OString aWritten = aGuid.getString();
+    if (std::string_view(aWritten) != rPartId)
         return;
     // The table starts a sheet state made later above the versions of this one, so a version a
     // client held before names no content a sheet serves later.
-    maSheets.forget(*oTab);
-    maSheetListeners.erase(*oTab);
-    maChangedTabs.erase(*oTab);
+    maSheets.forget(aGuid);
+    maSheetListeners.erase(aGuid);
+    maChangedSheets.erase(aGuid);
 }
 
 void VectorContent::writeRequestedSheet(tools::JsonWriter& rWriter,
@@ -691,10 +689,11 @@ void VectorContent::writeRequestedSheet(tools::JsonWriter& rWriter,
     const sal_Int32 nMode = rRequest.moMode.value_or(constCellPositionsMode);
 
     const ScDocument& rDocument = mrDocShell.GetDocument();
-    const std::optional<SCTAB> oTab = sheetOfPartId(OUString::fromUtf8(rRequest.maPartId));
+    const std::optional<SCTAB> oTab = sheetOfPartId(rRequest.maPartId);
     if (!oTab)
     {
-        // A sheet that is not there gets the header alone.
+        // A sheet that is not there gets the header alone. A deleted sheet is such a sheet, and
+        // so is the id a sheet had before its delete was undone.
         svx::vector::writeAnswerHeader(rWriter, /*bDelta*/ false, nMode, rRequest.maPartId,
                                        maResources.getEpoch());
         rWriter.put("docType", "spreadsheet");
@@ -749,31 +748,27 @@ void VectorContent::writeRequestedSheet(tools::JsonWriter& rWriter,
 
 void VectorContent::pushDelta(tools::JsonWriter& rWriter, std::string_view rPartId, sal_Int32 nMode)
 {
-    const std::optional<SCTAB> oTab = sheetOfPartId(OUString::fromUtf8(rPartId));
+    const std::optional<SCTAB> oTab = sheetOfPartId(rPartId);
     if (!oTab)
         return;
 
-    SheetState* pState = maSheets.find(*oTab);
-    if (!pState)
-    {
-        // A new epoch dropped the sheet state. Only the header is written, naming the new epoch.
-        svx::vector::writeAnswerHeader(rWriter, /*bDelta*/ true, nMode, OString::number(*oTab),
-                                       maResources.getEpoch());
-        rWriter.put("docType", "spreadsheet");
-        return;
-    }
     // A sheet that nobody asked for has nothing to push.
-    if (!pState->maVersions.isServed())
+    SheetState* pState = stateOf(*oTab);
+    if (!pState || !pState->maVersions.isServed())
         return;
 
+    pState->mnTab = *oTab;
     writeVectorPrimitives(rWriter, *pState, nMode, {}, /*nSinceVersion*/ -1, /*bPush*/ true);
 }
 
 VectorContent::SheetState& VectorContent::sheetState(SCTAB nTab)
 {
-    SheetState& rState = maSheets.get(nTab);
+    const tools::Guid aGuid = mrDocShell.GetDocument().GetTabGuid(nTab);
+    SheetState& rState = maSheets.get(aGuid);
+    if (rState.maPartId.isEmpty())
+        rState.maPartId = aGuid.getString();
     rState.mnTab = nTab;
-    listenToSheet(nTab);
+    listenToSheet(aGuid, nTab);
     return rState;
 }
 
@@ -789,15 +784,15 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
     comphelper::ScopeGuard aVectorRenderingGuard([]
                                                  { comphelper::COKit::setVectorRendering(false); });
 
-    // A sheet change during the write resets the states after it, so the answer is built from one
-    // state and carries its epoch.
+    // The sheet states stay in place while an answer is written from one of them. A change of the
+    // sheet list during the write is followed once the write is done.
     mbWriting = true;
     comphelper::ScopeGuard aWritingGuard(
         [this]
         {
             mbWriting = false;
-            if (mbResetSheetsPending)
-                resetSheets();
+            if (mbSheetListChangePending)
+                sheetListChanged();
         });
 
     listenToDrawLayer();
@@ -849,7 +844,7 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
     };
     aCallbacks.maWriteHeader = [&](bool bDelta)
     {
-        svx::vector::writeAnswerHeader(rWriter, bDelta, nMode, OString::number(nTab),
+        svx::vector::writeAnswerHeader(rWriter, bDelta, nMode, rState.maPartId,
                                        maResources.getEpoch());
         rWriter.put("docType", "spreadsheet");
         if (oRequestId)
@@ -1914,7 +1909,12 @@ OString VectorContent::writeTextEdits(SCTAB nTab)
 
 VectorContent::SheetState* VectorContent::stateOf(SCTAB nTab)
 {
-    return maSheets.find(nTab);
+    if (maSheets.empty())
+        return nullptr;
+    const tools::Guid aGuid = mrDocShell.GetDocument().GetTabGuid(nTab);
+    if (aGuid.isEmpty())
+        return nullptr;
+    return maSheets.find(aGuid);
 }
 
 void VectorContent::markRangeDirty(const ScRange& rRange)
@@ -1970,8 +1970,15 @@ void VectorContent::cellsChanged(const ScRange& rRange)
     // The results are read when the block is written, so a cell still to be calculated is right
     // by then. The views hear of the sheet once the change that brought the cells is done.
     markRangeDirty(rRange);
+    if (maSheets.empty())
+        return;
+    const ScDocument& rDocument = mrDocShell.GetDocument();
     for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
-        maChangedTabs.insert(nTab);
+    {
+        const tools::Guid aGuid = rDocument.GetTabGuid(nTab);
+        if (maSheets.find(aGuid))
+            maChangedSheets.insert(aGuid);
+    }
 }
 
 void VectorContent::markObjectDirty(SCTAB nTab, sal_uInt64 nId)
@@ -1982,18 +1989,22 @@ void VectorContent::markObjectDirty(SCTAB nTab, sal_uInt64 nId)
 
 void VectorContent::notifyChangedSheets()
 {
-    const std::set<SCTAB> aTabs = std::move(maChangedTabs);
-    maChangedTabs.clear();
-    for (SCTAB nTab : aTabs)
-        notifyViews(nTab);
+    const std::unordered_set<tools::Guid> aSheets = std::move(maChangedSheets);
+    maChangedSheets.clear();
+    for (const tools::Guid& rGuid : aSheets)
+        notifyViewsOf(rGuid);
 }
 
 void VectorContent::notifyViews(SCTAB nTab)
 {
-    if (!stateOf(nTab))
-        return;
-    KitHelper::notifyVectorPartChanged(&mrDocShell, OString::number(nTab),
-                                       constCellPositionsMode);
+    if (const SheetState* pState = stateOf(nTab))
+        KitHelper::notifyVectorPartChanged(&mrDocShell, pState->maPartId, constCellPositionsMode);
+}
+
+void VectorContent::notifyViewsOf(const tools::Guid& rGuid)
+{
+    if (const SheetState* pState = maSheets.find(rGuid))
+        KitHelper::notifyVectorPartChanged(&mrDocShell, pState->maPartId, constCellPositionsMode);
 }
 
 void VectorContent::documentHint(const SfxHint& rHint)
@@ -2083,41 +2094,67 @@ void VectorContent::documentHint(const SfxHint& rHint)
             break;
         }
         case SfxHintId::ScTables:
-            // Hiding a sheet renumbers nothing. The other sheet changes renumber the part ids,
-            // so all clients start over in a new epoch.
+            // A hidden sheet stays in the sheet list where it was. An inserted, deleted, moved or
+            // copied sheet changes the list, and the sheets that stay keep their part ids, their
+            // states and their versions.
             if (static_cast<const ScTablesHint&>(rHint).GetTablesHintId() == SC_TAB_HIDDEN)
                 break;
             if (mbWriting)
-                mbResetSheetsPending = true;
+                mbSheetListChangePending = true;
             else
-                resetSheets();
+                sheetListChanged();
             break;
         default:
             break;
     }
 }
 
-void VectorContent::resetSheets()
+void VectorContent::sheetListChanged()
 {
-    mbResetSheetsPending = false;
-    // The views are told for each served sheet, and their push writes the new epoch.
-    const SCTAB nTabCount = mrDocShell.GetDocument().GetTableCount();
-    std::vector<SCTAB> aServed;
-    for (const auto& [nTab, rState] : maSheets)
-        aServed.push_back(nTab);
-    maSheets.clear();
+    mbSheetListChangePending = false;
+    ScDocument& rDocument = mrDocShell.GetDocument();
+
+    // A sheet that left the document is a part that is gone, so its state is dropped. The table
+    // starts a sheet state made later above its versions. The undo of a sheet delete makes a new
+    // table with a new GUID, so the sheet it brings back is a new part, and a client asks for it
+    // whole.
+    std::unordered_map<tools::Guid, SCTAB> aTabsByGuid;
+    for (SCTAB nTab = 0, nCount = rDocument.GetTableCount(); nTab < nCount; ++nTab)
+        aTabsByGuid.emplace(rDocument.GetTabGuid(nTab), nTab);
+
+    std::unordered_set<tools::Guid> aGoneSheets;
+    for (const auto& rSheet : maSheets)
+    {
+        if (!aTabsByGuid.contains(rSheet.first))
+            aGoneSheets.insert(rSheet.first);
+    }
+    for (const tools::Guid& rGuid : aGoneSheets)
+    {
+        maChangedSheets.erase(rGuid);
+        maSheets.forget(rGuid);
+    }
+
+    // The area of a listener stays at the index it was made for when its sheet moves, so every
+    // held sheet is listened to again at the index it has now.
     maSheetListeners.clear();
-    maChangedTabs.clear();
-    maResources.renewEpoch();
     // The charts moved with their sheets.
-    if (const ScDrawLayer* pDrawLayer = mrDocShell.GetDocument().GetDrawLayer())
+    if (const ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer())
         mxChartListener->relocate(*pDrawLayer);
 
-    for (const SCTAB nTab : aServed)
+    for (auto& [rGuid, rState] : maSheets)
     {
-        if (nTab < nTabCount)
-            KitHelper::notifyVectorPartChanged(&mrDocShell, OString::number(nTab),
-                                               constCellPositionsMode);
+        const auto aTab = aTabsByGuid.find(rGuid);
+        if (aTab == aTabsByGuid.end())
+            continue;
+        listenToSheet(rGuid, aTab->second);
+        // A formula or an object on any sheet can name the sheet that came, went or moved, and
+        // such a change comes without a paint of the other sheets. So every held block and the
+        // objects of each held sheet are compared with the document again. A part whose content
+        // did not change keeps its version, and the epoch stays, so a client keeps what it holds.
+        for (auto& [rKey, rBlock] : rState.maBlocks)
+            markRowsDirty(rBlock, 0, 0, /*bWholeBlock*/ true);
+        rState.mbObjectsDirty = true;
+        KitHelper::notifyVectorPartChanged(&mrDocShell, rState.maPartId, constCellPositionsMode);
     }
 }
 

@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <svl/lstner.hxx>
 #include <svx/VectorPart.hxx>
+#include <tools/Guid.hxx>
 #include <tools/gen.hxx>
 #include <tools/long.hxx>
 
@@ -32,6 +33,7 @@
 #include <set>
 #include <string_view>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -79,14 +81,21 @@ drawinglayer::primitive2d::Primitive2DContainer inPlaceContentOf(ScDocShell& rDo
 /** The content of the sheets of one document as JSON primitives, for clients that draw it
     themselves.
 
-    The part is the sheet index. The cells are cut into blocks of a fixed number of rows and
-    columns, named by block row and block column. The cells are laid out in the exact geometry of
-    the document, and each position of their primitives is written relative to the cells, as
-    [column, offset] or [row, offset] (see CellPositionJsonProcessor), so the content stays right
-    when a column or a row changes size. A block has parts: the borders of the whole block, and the
-    other layers of each row. A drawing object is named by its unique id and anchored to a cell, in
-    twips from the top-left corner of that cell. It travels with the block that holds its anchor
-    cell, and the sheet names the blocks whose objects paint over which cells.
+    The part is a sheet. Its id is the GUID of the table of the sheet, in the form
+    tools::Guid::getString writes it, so a sheet keeps its id, its state and its versions when it
+    moves to another index, and when other sheets are inserted or deleted. Every answer and push
+    looks the sheet index up from the GUID, and a hint that names a sheet index goes to the state
+    of the sheet that is at the index then. The undo of a sheet delete makes a new table, so the
+    sheet it brings back is a new part with a new id.
+
+    The cells are cut into blocks of a fixed number of rows and columns, named by block row and
+    block column. The cells are laid out in the exact geometry of the document, and each position of
+    their primitives is written relative to the cells, as [column, offset] or [row, offset] (see
+    CellPositionJsonProcessor), so the content stays right when a column or a row changes size. A
+    block has parts: the borders of the whole block, and the other layers of each row. A drawing
+    object is named by its unique id and anchored to a cell, in twips from the top-left corner of
+    that cell. It travels with the block that holds its anchor cell, and the sheet names the blocks
+    whose objects paint over which cells.
 
     The mode of a request names nothing about the content: a sheet is held once for each mode a
     client asks for, so a client gets its answers and pushes in the mode it asked in.
@@ -128,7 +137,8 @@ public:
     /// Write the changes of a sheet since it was last pushed, or nothing when it did not change.
     void pushDelta(tools::JsonWriter& rWriter, std::string_view rPartId, sal_Int32 nMode);
 
-    /// Take a hint about painted ranges, finished changes, or inserted, removed, moved sheets.
+    /// Take a hint about painted ranges, finished changes, or inserted, removed, moved sheets. The
+    /// sheets a hint names are the indexes they have when the hint comes.
     void documentHint(const SfxHint& rHint);
 
     /// The cells of the range got new results, or get them when they are next read.
@@ -239,6 +249,10 @@ private:
 
     struct SheetState
     {
+        /// The id of the part: the GUID of the sheet in the form the document writes it.
+        OString maPartId;
+        /// The index of the sheet in the answer or push being written. Each one looks the index
+        /// up from the GUID before it writes, so the index follows the sheet when it moves.
         SCTAB mnTab = 0;
         /// The last version handed out on the sheet, the version the sheet was last pushed at,
         /// and the version at which the drawing objects or their order changed last.
@@ -287,18 +301,24 @@ private:
                                bool bPush, std::optional<sal_Int64> oRequestId = std::nullopt);
 
     void listenToDrawLayer();
-    void listenToSheet(SCTAB nTab);
+    /// Listen for the cells that get new results on the sheet with this GUID, which is at nTab.
+    void listenToSheet(const tools::Guid& rGuid, SCTAB nTab);
+    /// The state of the sheet at nTab, which is made when no client asked for the sheet before.
     SheetState& sheetState(SCTAB nTab);
-    /// Drop every sheet state, start a new epoch and tell the views for each held sheet and mode.
-    void resetSheets();
+    /// Follow a change of the sheet list: drop the state of each sheet that left the document,
+    /// listen to each held sheet at the index it has now, and compare each held sheet with the
+    /// document again.
+    void sheetListChanged();
     /// Mark the rows of the range in every held block of its block rows.
     void markRangeDirty(const ScRange& rRange);
     static void markRowsDirty(BlockState& rBlock, SCROW nStartRow, SCROW nEndRow, bool bWholeBlock);
     void markObjectDirty(SCTAB nTab, sal_uInt64 nId);
-    /// The states of a sheet, one for each mode it was asked in.
-    /// The state of the sheet, or nullptr when no client asked for the sheet.
+    /// The state of the sheet at nTab, or nullptr when no client asked for the sheet.
     SheetState* stateOf(SCTAB nTab);
+    /// Tell the views that the sheet at nTab changed, when a client asked for the sheet.
     void notifyViews(SCTAB nTab);
+    /// Tell the views that the sheet with this GUID changed, when a client asked for the sheet.
+    void notifyViewsOf(const tools::Guid& rGuid);
     /// Tell the views of the sheets whose cells changed since they were last told.
     void notifyChangedSheets();
 
@@ -328,8 +348,9 @@ private:
     /// The column at a position across the sheet, in twips, or the last column for a position
     /// past its end.
     static SCCOL columnAt(const ScDocument& rDocument, SCTAB nTab, tools::Long nTwips);
-    /// The number of the sheet, which is also its part id, or nothing when the id names no sheet.
-    std::optional<SCTAB> sheetOfPartId(std::u16string_view aPartId) const;
+    /// The index of the sheet whose GUID the part id is, or nothing when the id names no sheet of
+    /// the document. An id names a sheet in the one form the document writes it in.
+    std::optional<SCTAB> sheetOfPartId(std::string_view rPartId) const;
     /// The cell an object not inside a group is anchored to. An object anchored to the page takes
     /// the cell under its top-left corner, the way the office anchors it when asked to.
     static ScAddress anchorCellOf(const ScDocument& rDocument, SCTAB nTab, SdrObject& rObject);
@@ -386,20 +407,22 @@ private:
     drawinglayer::TextStyleTable maTextStyles;
     /// Listens to written charts, which change with their data without a drawing layer hint.
     rtl::Reference<ChartModifyListener> mxChartListener;
-    /// Hears of cells with new results on each served sheet, which come without a paint.
-    std::map<SCTAB, std::unique_ptr<SheetListener>> maSheetListeners;
-    /// The sheets with cells changed since the views were last told.
-    std::set<SCTAB> maChangedTabs;
-    /// The state of each sheet a client asked for.
-    svx::vector::PartTable<SCTAB, SheetState, std::map<SCTAB, SheetState>> maSheets;
+    /// Hears of cells with new results on each served sheet, which come without a paint. The key
+    /// is the GUID of the sheet.
+    std::unordered_map<tools::Guid, std::unique_ptr<SheetListener>> maSheetListeners;
+    /// The GUIDs of the sheets with cells changed since the views were last told.
+    std::unordered_set<tools::Guid> maChangedSheets;
+    /// The state of each sheet a client asked for, by the GUID of the sheet.
+    svx::vector::PartTable<tools::Guid, SheetState> maSheets;
     /// Counts the uses of the blocks of every sheet, so the ones used longest ago are known.
     sal_uInt64 mnUseCount = 0;
     /// The most bytes of block JSON kept, constHeldContentBytes unless set otherwise.
     size_t mnHeldContentBudget = constHeldContentBytes;
     /// An answer or a push is being written from a sheet state.
     bool mbWriting = false;
-    /// The sheets have to be reset once the write in progress is done.
-    bool mbResetSheetsPending = false;
+    /// The sheet list changed during the write in progress, which is followed once the write is
+    /// done.
+    bool mbSheetListChangePending = false;
 };
 }
 

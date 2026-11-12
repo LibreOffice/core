@@ -9,6 +9,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// The id that the status names the sheet first listed at the index by, in the form of a GUID.
+function calcSheetId(part: number): string {
+	return '{00000000-0000-0000-0000-' + ('000000000000' + part).slice(-12) + '}';
+}
+
+// The ids of a status that lists the given number of sheets.
+function calcSheetIds(count: number): string[] {
+	const ids: string[] = [];
+	for (let part = 0; part < count; part++) ids.push(calcSheetId(part));
+	return ids;
+}
+
 describe('CalcVectorManager requests', function () {
 	let recorder: SocketRecorder;
 	let manager: CalcVectorManager;
@@ -16,12 +28,14 @@ describe('CalcVectorManager requests', function () {
 
 	beforeEach(function () {
 		recorder = new SocketRecorder();
+		app.calc.partIds = calcSheetIds(4);
 		manager = new CalcVectorManager();
 		changes = 0;
 		manager.onVectorChanged(() => changes++);
 	});
 	afterEach(function () {
 		recorder.restore();
+		app.calc.partIds = null;
 	});
 
 	it('acknowledges a tile that comes after the view switched to vectors, and keeps none', function () {
@@ -47,10 +61,12 @@ describe('CalcVectorManager requests', function () {
 		);
 	}
 
-	// The parts named by the messages sent, in their order.
+	// The sheets named by the messages sent, in their order, each by its index in the status.
 	function parts(): number[] {
 		return recorder.sent.map((message) =>
-			Number(message.split('partid=')[1].split('&')[0]),
+			(app.calc.partIds ?? []).indexOf(
+				message.split('partid=')[1].split('&')[0],
+			),
 		);
 	}
 
@@ -90,7 +106,7 @@ describe('CalcVectorManager requests', function () {
 			type: 'vectorprimitives',
 			docType: 'spreadsheet',
 			mode: 0,
-			partId: String(part),
+			partId: calcSheetId(part),
 			epoch: 7,
 			requestId,
 			version: 1,
@@ -105,6 +121,106 @@ describe('CalcVectorManager requests', function () {
 		for (const request of (manager as any)._requests.requests())
 			request.sent -= 2 * (CalcVectorManager as any).requestTimeout;
 	}
+
+	it('names the sheet by the id from the status', function () {
+		manager.requestBlocks(1, [[0, 0]]);
+
+		nodeassert.strictEqual(
+			recorder.sent[0].split('partid=')[1].split('&')[0],
+			calcSheetId(1),
+		);
+	});
+
+	it('asks for nothing before the status names the sheets', function () {
+		app.calc.partIds = null;
+
+		manager.requestBlocks(0, [[0, 0]]);
+
+		nodeassert.deepStrictEqual(recorder.sent, []);
+		nodeassert.strictEqual(manager.getSheet(0), undefined);
+	});
+
+	it('keeps the blocks of a sheet that moved to another index', function () {
+		manager.requestBlocks(0, [[0, 0]]);
+		manager.handleVectorPrimitives(
+			answer(0, requestIds()[0], [wholeBlock(0, 0)]),
+		);
+		const sent = recorder.sent.length;
+
+		// Another sheet takes the first index.
+		app.calc.partIds = [calcSheetId(9), calcSheetId(0)];
+		manager.partIdsChanged();
+
+		nodeassert.strictEqual(manager.getSheet(1)?.blocks.has('0:0'), true);
+		nodeassert.strictEqual(manager.getSheet(1)?.part, 1);
+		nodeassert.strictEqual(manager.getSheet(0), undefined);
+		// The block is held, so the view of the moved sheet asks for nothing.
+		manager.requestBlocks(1, [[0, 0]]);
+		nodeassert.strictEqual(recorder.sent.length, sent);
+	});
+
+	it('takes a push for a sheet that moved under its new index', function () {
+		manager.requestBlocks(0, [[0, 0]]);
+		manager.handleVectorPrimitives(
+			answer(0, requestIds()[0], [wholeBlock(0, 0)]),
+		);
+		app.calc.partIds = [calcSheetId(9), calcSheetId(0)];
+		manager.partIdsChanged();
+
+		const changed = wholeBlock(0, 0);
+		changed.version = 2;
+		manager.handleVectorPrimitives({
+			type: 'vectorprimitivesdelta',
+			docType: 'spreadsheet',
+			mode: 0,
+			partId: calcSheetId(0),
+			epoch: 7,
+			from: 1,
+			version: 2,
+			objects: [changed],
+		});
+
+		nodeassert.strictEqual(manager.getSheet(1)?.blocks.get('0:0')?.version, 2);
+	});
+
+	it('drops the blocks of a sheet that is gone from the status', function () {
+		manager.requestBlocks(0, [[0, 0]]);
+		const requestId = requestIds()[0];
+		manager.handleVectorPrimitives(answer(0, requestId, [wholeBlock(0, 0)]));
+
+		app.calc.partIds = [calcSheetId(1)];
+		manager.partIdsChanged();
+
+		nodeassert.strictEqual((manager as any)._sheets.size, 0);
+		// A late answer for the sheet is not kept either.
+		manager.handleVectorPrimitives(answer(0, requestId, [wholeBlock(0, 0)]));
+		nodeassert.strictEqual((manager as any)._sheets.size, 0);
+	});
+
+	it('tells the server that a sheet gone from the status is held no more', function () {
+		manager.requestBlocks(0, [[0, 0]]);
+		manager.handleVectorPrimitives(
+			answer(0, requestIds()[0], [wholeBlock(0, 0)]),
+		);
+
+		app.calc.partIds = [calcSheetId(1)];
+		manager.partIdsChanged();
+
+		nodeassert.strictEqual(
+			recorder.sent[recorder.sent.length - 1],
+			'commandvalues command=.uno:VectorForgetPart?partid=' + calcSheetId(0),
+		);
+	});
+
+	it('draws nothing again for a status with the same sheet list', function () {
+		manager.partIdsChanged();
+		const drawn = changes;
+
+		app.calc.partIds = calcSheetIds(4);
+		manager.partIdsChanged();
+
+		nodeassert.strictEqual(changes, drawn);
+	});
 
 	it('asks for one block in each request, two at a time', function () {
 		manager.requestBlocks(0, [
@@ -599,10 +715,12 @@ describe('CalcVectorManager eviction', function () {
 
 	beforeEach(function () {
 		recorder = new SocketRecorder();
+		app.calc.partIds = calcSheetIds((CalcVectorManager as any).maxSheets + 1);
 		manager = new CalcVectorManager();
 	});
 	afterEach(function () {
 		recorder.restore();
+		app.calc.partIds = null;
 	});
 
 	// Holds the sheet with its first block in view.
@@ -614,7 +732,7 @@ describe('CalcVectorManager eviction', function () {
 			type: 'vectorprimitives',
 			docType: 'spreadsheet',
 			mode: 0,
-			partId: String(part),
+			partId: calcSheetId(part),
 			epoch: 7,
 			requestId,
 			version: 1,

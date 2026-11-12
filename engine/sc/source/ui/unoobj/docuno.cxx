@@ -777,6 +777,12 @@ std::string ScModelObj::getPartInfo( int nPart )
     if (pViewData->GetDocument().GetHashCode(nPart, hashCode))
         jsonWriter.put("hash", OUString::number(hashCode));
 
+    // The GUID of the sheet stays the same when the sheet moves to another index. It is the id
+    // of the sheet as a vector part.
+    const tools::Guid aGuid = rDocument.GetTabGuid(nPart);
+    if (!aGuid.isEmpty())
+        jsonWriter.put("id", aGuid.getString());
+
     Size lastColRow = getDataArea(nPart);
     jsonWriter.put("lastcolumn", lastColRow.getWidth());
     jsonWriter.put("lastrow", lastColRow.getHeight());

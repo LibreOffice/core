@@ -487,7 +487,7 @@ namespace cool {
 				}
 			}
 
-			const sheetKey = sheet ? String(sheet.part) : '';
+			const sheetKey = sheet ? sheet.id : '';
 			// The rasters hold the text of the sheet shown, so a switch of sheet drops them.
 			if (sheetKey !== this._rasterSheet) {
 				this._rasters.clear();
@@ -872,7 +872,7 @@ namespace cool {
 					this._nextRasterJob++;
 					continue;
 				}
-				const sheetKey = String(job.sheet.part);
+				const sheetKey = job.sheet.id;
 				if (sheetKey !== this._rasterSheet) {
 					this._nextRasterJob++;
 					continue;

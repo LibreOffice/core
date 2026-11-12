@@ -243,9 +243,10 @@ namespace cool {
 
 		private _placed: Map<number, CalcPlacedEntry> = new Map();
 
-		constructor(part: number) {
+		/// partId is the id the engine names the sheet by.
+		constructor(partId: string) {
 			this.data = {
-				partId: String(part),
+				partId: partId,
 				mode: 0,
 				slideWidth: 0,
 				slideHeight: 0,

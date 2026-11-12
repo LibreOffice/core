@@ -92,6 +92,19 @@ boost::property_tree::ptree parseJson(const OString& rJson)
     return aTree;
 }
 
+/// The part id of the sheet at nTab, as the document names the sheet in the status.
+OString partIdOf(ScModelObj* pModelObj, SCTAB nTab)
+{
+    return pModelObj->GetDocument()->GetTabGuid(nTab).getString();
+}
+
+/// The parameter of a request that names the sheet at nTab as its part.
+std::string sheetPart(ScModelObj* pModelObj, SCTAB nTab)
+{
+    const OString aPartId = partIdOf(pModelObj, nTab);
+    return "partid=" + std::string(aPartId.getStr(), aPartId.getLength());
+}
+
 /// Ask the document for vector primitives, as a client does.
 boost::property_tree::ptree requestVectorPrimitives(ScModelObj* pModelObj, std::string_view aQuery)
 {
@@ -387,13 +400,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellPositionsKeepOtherColum
     Scheduler::ProcessEventsToIdle();
 
     const auto oBefore = cellTextAt(
-        requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0"), 3, 1);
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0"), 3, 1);
     CPPUNIT_ASSERT(oBefore);
 
     setColumnWidth(*pDocShell, 0, 3000);
 
     const auto oAfter = cellTextAt(
-        requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0"), 3, 1);
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0"), 3, 1);
     CPPUNIT_ASSERT(oAfter);
     CPPUNIT_ASSERT_EQUAL(asJson(*oBefore), asJson(*oAfter));
 }
@@ -409,7 +422,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockHoldsCellText)
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitives"), aResponse.get<std::string>("type"));
     CPPUNIT_ASSERT_EQUAL(std::string("spreadsheet"), aResponse.get<std::string>("docType"));
@@ -438,7 +451,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorParagraphBoundsAreCellPosit
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     std::vector<boost::property_tree::ptree> aBounds;
     for (const auto& rRow : blockRows(aResponse))
@@ -462,7 +475,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellTextNamesItsFontByStyle
     setCellString(*pDocShell, 0, 1, u"Two"_ustr);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     std::vector<std::string> aStyles;
     for (const auto& rText : cellTexts(aResponse))
@@ -491,7 +504,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTextOverflowsIntoEmptyCells
                   u"A text that is much longer than the width of a single column"_ustr);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT(cellTextAt(aResponse, 0, 0));
 
     bool bHasCover = false;
@@ -512,13 +525,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldBlockIsNotSentAgain)
     setCellString(*pDocShell, 0, 0, u"Hello"_ustr);
 
     const boost::property_tree::ptree aFirst
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const sal_Int64 nVersion = blockVersion(aFirst);
     CPPUNIT_ASSERT(nVersion > 0);
     const std::string aEpoch = aFirst.get<std::string>("epoch");
 
-    const boost::property_tree::ptree aSecond = requestVectorPrimitives(
-        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=0:0:" + std::to_string(nVersion));
+    const boost::property_tree::ptree aSecond
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&epoch=" + aEpoch
+                                                 + "&blocks=0:0:" + std::to_string(nVersion));
     CPPUNIT_ASSERT_EQUAL(0, blockCount(aSecond));
 }
 
@@ -531,20 +545,22 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorDeltaCarriesChangedBlock)
     setCellString(*pDocShell, 0, 0, u"Hello"_ustr);
 
     const boost::property_tree::ptree aFirst
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const sal_Int64 nVersion = blockVersion(aFirst);
 
     setCellString(*pDocShell, 0, 0, u"World"_ustr);
 
     tools::JsonWriter aPushWriter;
-    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0", sc::VectorContent::constCellPositionsMode);
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, partIdOf(pModelObj, 0),
+                                         sc::VectorContent::constCellPositionsMode);
     const boost::property_tree::ptree aDelta = parseJson(aPushWriter.finishAndGetAsOString());
     CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitivesdelta"), aDelta.get<std::string>("type"));
     CPPUNIT_ASSERT_EQUAL(1, blockCount(aDelta));
     CPPUNIT_ASSERT(blockVersion(aDelta) > nVersion);
 
     tools::JsonWriter aSecondPushWriter;
-    pModelObj->pushVectorPrimitivesDelta(aSecondPushWriter, "0", sc::VectorContent::constCellPositionsMode);
+    pModelObj->pushVectorPrimitivesDelta(aSecondPushWriter, partIdOf(pModelObj, 0),
+                                         sc::VectorContent::constCellPositionsMode);
     CPPUNIT_ASSERT_EQUAL(tools::JsonWriter::EMPTY_DOCUMENT,
                          aSecondPushWriter.finishAndGetAsOString());
 }
@@ -560,13 +576,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorDeltaCarriesOnlyTheChangedR
     setCellString(*pDocShell, 0, 2, u"Third"_ustr);
 
     const boost::property_tree::ptree aFirst
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT_EQUAL(size_t(3), blockRows(aFirst).size());
 
     setCellString(*pDocShell, 0, 1, u"Changed"_ustr);
 
     tools::JsonWriter aPushWriter;
-    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0", sc::VectorContent::constCellPositionsMode);
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, partIdOf(pModelObj, 0),
+                                         sc::VectorContent::constCellPositionsMode);
     const boost::property_tree::ptree aDelta = parseJson(aPushWriter.finishAndGetAsOString());
     const std::vector<boost::property_tree::ptree> aRows = blockRows(aDelta);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aRows.size());
@@ -582,12 +599,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorEmptiedRowIsSentEmpty)
     CPPUNIT_ASSERT(pDocShell);
     setCellString(*pDocShell, 0, 0, u"Hello"_ustr);
 
-    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     clearCell(*pDocShell, 0, 0);
 
     tools::JsonWriter aPushWriter;
-    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0", sc::VectorContent::constCellPositionsMode);
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, partIdOf(pModelObj, 0),
+                                         sc::VectorContent::constCellPositionsMode);
     const boost::property_tree::ptree aDelta = parseJson(aPushWriter.finishAndGetAsOString());
     const std::vector<boost::property_tree::ptree> aRows = blockRows(aDelta);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aRows.size());
@@ -595,24 +613,73 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorEmptiedRowIsSentEmpty)
     CPPUNIT_ASSERT(!aRows[0].get_child_optional("content.layers"));
 }
 
-CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorNewSheetStartsNewEpoch)
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorSheetKeepsItsPartWhenASheetIsInsertedBeforeIt)
 {
-    // Inserting a sheet changes which sheet a part id names, so a new epoch starts.
+    // A sheet keeps its part id, its epoch and its versions when another sheet takes its index.
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
+    setCellString(*pDocShell, 0, 0, u"Hello"_ustr);
 
+    const OString aPartId = partIdOf(pModelObj, 0);
+    const std::string aPart = sheetPart(pModelObj, 0);
     const boost::property_tree::ptree aFirst
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, aPart + "&mode=-1&blocks=0:0");
+    const sal_Int64 nVersion = blockVersion(aFirst);
+    CPPUNIT_ASSERT(nVersion > 0);
     const std::string aEpoch = aFirst.get<std::string>("epoch");
 
     pDocShell->GetDocFunc().InsertTable(0, u"Inserted"_ustr, false, false);
     Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(aPartId, partIdOf(pModelObj, 1));
+    CPPUNIT_ASSERT(aPartId != partIdOf(pModelObj, 0));
+
+    // The block the client holds is still current under the id and the epoch it was asked with.
+    const boost::property_tree::ptree aHeld = requestVectorPrimitives(
+        pModelObj, aPart + "&mode=-1&epoch=" + aEpoch + "&blocks=0:0:" + std::to_string(nVersion));
+    CPPUNIT_ASSERT_EQUAL(aEpoch, aHeld.get<std::string>("epoch"));
+    CPPUNIT_ASSERT_EQUAL(0, blockCount(aHeld));
+
+    // An edit of the sheet at its new index is pushed under the same id, as a newer version of
+    // the same block.
+    pDocShell->GetDocFunc().SetStringCell(ScAddress(0, 0, 1), u"World"_ustr, true);
+    Scheduler::ProcessEventsToIdle();
 
     tools::JsonWriter aPushWriter;
-    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0", sc::VectorContent::constCellPositionsMode);
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, aPartId,
+                                         sc::VectorContent::constCellPositionsMode);
     const boost::property_tree::ptree aDelta = parseJson(aPushWriter.finishAndGetAsOString());
-    CPPUNIT_ASSERT(aEpoch != aDelta.get<std::string>("epoch"));
+    CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitivesdelta"), aDelta.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(std::string(aPartId.getStr(), aPartId.getLength()),
+                         aDelta.get<std::string>("partId"));
+    CPPUNIT_ASSERT_EQUAL(aEpoch, aDelta.get<std::string>("epoch"));
+    CPPUNIT_ASSERT_EQUAL(1, blockCount(aDelta));
+    CPPUNIT_ASSERT(blockVersion(aDelta) > nVersion);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorDeletedSheetIsAGonePart)
+{
+    // A deleted sheet is a part that is gone: a request for its id gets the header alone, and
+    // the sheet after it keeps its id.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    pDocShell->GetDocFunc().InsertTable(1, u"Second"_ustr, false, true);
+    Scheduler::ProcessEventsToIdle();
+
+    const std::string aFirstPart = sheetPart(pModelObj, 0);
+    const OString aSecondId = partIdOf(pModelObj, 1);
+    CPPUNIT_ASSERT(requestVectorPrimitives(pModelObj, aFirstPart + "&mode=-1&blocks=0:0")
+                       .get_child_optional("version"));
+
+    pDocShell->GetDocFunc().DeleteTable(0, false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(aSecondId, partIdOf(pModelObj, 0));
+
+    const boost::property_tree::ptree aGone
+        = requestVectorPrimitives(pModelObj, aFirstPart + "&mode=-1&blocks=0:0");
+    CPPUNIT_ASSERT(!aGone.get_child_optional("version"));
+    CPPUNIT_ASSERT(!aGone.get_child_optional("objects"));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPrimitiveTileStepsMatchTiles)
@@ -665,7 +732,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedCurrencyShowsHash)
     applyToCell(*pDocShell, 0, 0, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 0, 0);
     CPPUNIT_ASSERT(oText);
     const std::set<std::string> aFlags = cellTextFlags(*oText);
@@ -699,7 +766,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedCurrencyWithNoBreakS
     CPPUNIT_ASSERT(rDocument.GetString(0, 0, 0).indexOf(u'\u00A0') >= 0);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 0, 0);
     CPPUNIT_ASSERT(oText);
     const std::set<std::string> aFlags = cellTextFlags(*oText);
@@ -723,7 +790,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorJustifiedNumberShowsHash)
     applyToCell(*pDocShell, 0, 0, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 0, 0);
     CPPUNIT_ASSERT(oText);
     const std::set<std::string> aFlags = cellTextFlags(*oText);
@@ -747,7 +814,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedNumberShowsHashAndAr
     applyToCell(*pDocShell, 0, 0, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 0, 0);
     CPPUNIT_ASSERT(oText);
     const std::set<std::string> aFlags = cellTextFlags(*oText);
@@ -773,7 +840,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorNarrowAutoFilterButtonIsHal
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     // Where the button starts in its column: the first point of its outline is "column:offset".
     auto aButtonStartOf = [&aResponse](int nColumn) {
         const std::string aOutline = cellMarkOutline(aResponse, "autoFilter", nColumn, 0);
@@ -805,7 +872,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorShrunkTextGetsNoClipArrow)
     applyToCell(*pDocShell, 0, 0, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 0, 0);
     CPPUNIT_ASSERT(oText);
     CPPUNIT_ASSERT(cellTextFlags(*oText).count("shrink"));
@@ -827,23 +894,26 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorOverflowingTextStaysInTheBl
                   u"A text that is much longer than the width of a single column"_ustr);
     setCellString(*pDocShell, nLast + 1, 0, u"Next"_ustr);
 
-    const auto oBlocked
-        = cellTextAt(requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0"), nLast, 0);
+    const auto oBlocked = cellTextAt(
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0"), nLast,
+        0);
     CPPUNIT_ASSERT(oBlocked);
     CPPUNIT_ASSERT(oBlocked->get_child_optional("clip"));
     const boost::property_tree::ptree aNextBlock
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:1");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:1");
     CPPUNIT_ASSERT(cellTextAt(aNextBlock, nLast + 1, 0));
     CPPUNIT_ASSERT(!cellTextAt(aNextBlock, nLast, 0));
 
     clearCell(*pDocShell, nLast + 1, 0);
 
-    const auto oOverflowing
-        = cellTextAt(requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0"), nLast, 0);
+    const auto oOverflowing = cellTextAt(
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0"), nLast,
+        0);
     CPPUNIT_ASSERT(oOverflowing);
     CPPUNIT_ASSERT(!oOverflowing->get_child_optional("clip"));
-    CPPUNIT_ASSERT(
-        !cellTextAt(requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:1"), nLast, 0));
+    CPPUNIT_ASSERT(!cellTextAt(
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:1"), nLast,
+        0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorShapeEntryCarriesItsGeometry)
@@ -873,7 +943,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorShapeEntryCarriesItsGeometr
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     const auto oShape = drawingEntry(aResponse, pShape->GetUniqueID());
     CPPUNIT_ASSERT(oShape);
@@ -925,8 +995,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRightToLeftSheetKeepsDocume
     aPattern.ItemSetPut(aBox);
     applyToCell(*pDocShell, 1, 1, aPattern);
 
-    const boost::property_tree::ptree aLeftToRight
-        = blockBorders(requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0"));
+    const boost::property_tree::ptree aLeftToRight = blockBorders(
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0"));
     CPPUNIT_ASSERT(!aLeftToRight.empty());
 
     rDocument.SetLayoutRTL(0, true);
@@ -934,8 +1004,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRightToLeftSheetKeepsDocume
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(rDocument.IsLayoutRTL(0));
 
-    const boost::property_tree::ptree aRightToLeft
-        = blockBorders(requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0"));
+    const boost::property_tree::ptree aRightToLeft = blockBorders(
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0"));
     CPPUNIT_ASSERT_EQUAL(asJson(aLeftToRight), asJson(aRightToLeft));
 }
 
@@ -952,7 +1022,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorMergedCellsShowTheTextOfThe
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT(cellTextAt(aResponse, 0, 0));
     CPPUNIT_ASSERT_EQUAL(size_t(1), cellTexts(aResponse).size());
 
@@ -988,7 +1058,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorMergedCellsWithHiddenFirstC
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT(cellTextAt(aResponse, 1, 1));
     CPPUNIT_ASSERT(cellTextAt(aResponse, 1, 3));
 }
@@ -1007,7 +1077,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHiddenRowDrawsNoText)
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT(cellTextAt(aResponse, 0, 0));
     CPPUNIT_ASSERT(!cellTextAt(aResponse, 0, 1));
     CPPUNIT_ASSERT(cellTextAt(aResponse, 0, 2));
@@ -1033,7 +1103,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRowHeightUpdatesMergedAreaF
                         SvxVerJustifyItem(SvxCellVerJustify::Center, ATTR_VER_JUSTIFY));
     Scheduler::ProcessEventsToIdle();
 
-    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     // The text is centred in the merged area, so a taller row inside it moves the text.
     // The paint starts at the changed row, the way an adjusted row height reports it.
@@ -1044,7 +1114,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRowHeightUpdatesMergedAreaF
     Scheduler::ProcessEventsToIdle();
 
     tools::JsonWriter aPushWriter;
-    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0", sc::VectorContent::constCellPositionsMode);
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, partIdOf(pModelObj, 0),
+                                         sc::VectorContent::constCellPositionsMode);
     const boost::property_tree::ptree aDelta = parseJson(aPushWriter.finishAndGetAsOString());
     CPPUNIT_ASSERT(cellTextAt(aDelta, 0, nMergeStart));
 }
@@ -1069,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellTextKeepsAutomaticFontC
     rDocument.ApplyPatternAreaTab(0, 2, 0, 2, 0, aRed);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     auto fontColorOf = [&aResponse](const boost::property_tree::ptree& rPortion)
     {
         return aResponse.get_child("textStyles")
@@ -1113,7 +1184,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellPositionsFill)
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     std::optional<boost::property_tree::ptree> oFill;
     for (const auto& rRow : blockRows(aResponse))
     {
@@ -1154,7 +1225,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellFillLeans)
     applyToCell(*pDocShell, 1, 1, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     std::vector<std::string> aPaths;
     for (const auto& rRow : blockRows(aResponse))
     {
@@ -1216,7 +1287,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVector3DSceneIsOneObject)
     CPPUNIT_ASSERT(pCube);
 
     const boost::property_tree::ptree aFirst
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT(drawingEntry(aFirst, pScene->GetUniqueID()));
     CPPUNIT_ASSERT(!drawingEntry(aFirst, pCube->GetUniqueID()));
 
@@ -1228,8 +1299,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVector3DSceneIsOneObject)
     xCubeProperties->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(sal_Int32(0x00ff00)));
     Scheduler::ProcessEventsToIdle();
 
-    const boost::property_tree::ptree aSecond = requestVectorPrimitives(
-        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=0:0:" + std::to_string(nVersion));
+    const boost::property_tree::ptree aSecond
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&epoch=" + aEpoch
+                                                 + "&blocks=0:0:" + std::to_string(nVersion));
     CPPUNIT_ASSERT(drawingEntry(aSecond, pScene->GetUniqueID()));
     CPPUNIT_ASSERT(!drawingEntry(aSecond, pCube->GetUniqueID()));
 }
@@ -1244,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellPositionsTextOrigin)
     Scheduler::ProcessEventsToIdle();
 
     const auto oText = cellTextAt(
-        requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0"), 3, 1);
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0"), 3, 1);
     CPPUNIT_ASSERT(oText);
     const boost::property_tree::ptree& rPortion = oText->get_child("children").begin()->second;
     const auto [nColumn, fX] = cellPosition(rPortion.get_child("x"));
@@ -1271,7 +1343,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellPositionsClipOutsideThe
     Scheduler::ProcessEventsToIdle();
 
     const auto oText = cellTextAt(
-        requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0"), 0, 2);
+        requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0"), 0, 2);
     CPPUNIT_ASSERT(oText);
     // Across, the clip ends in the cell, before the room for the arrow that marks the cut.
     const boost::property_tree::ptree& rClip = oText->get_child("clip");
@@ -1296,7 +1368,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCompletedCellEditIsPushedAg
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
     setCellString(*pDocShell, 1, 3, u"Teszt asztal v"_ustr);
-    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     typeCharsInCell("T", 1, 5, pView, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
     ScViewData& rViewData = pView->GetViewData();
@@ -1305,7 +1377,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCompletedCellEditIsPushedAg
     CPPUNIT_ASSERT_EQUAL(u"Teszt asztal v"_ustr, pEditView->getEditEngine().GetText());
     {
         tools::JsonWriter aPushWriter;
-        pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0",
+        pModelObj->pushVectorPrimitivesDelta(aPushWriter, partIdOf(pModelObj, 0),
                                              sc::VectorContent::constCellPositionsMode);
         CPPUNIT_ASSERT(
             parseJson(aPushWriter.finishAndGetAsOString()).get_child_optional("textEdits"));
@@ -1314,7 +1386,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCompletedCellEditIsPushedAg
     typeCharsInCell("e", 1, 5, pView, pModelObj, /*bInEdit*/ true, /*bCommit*/ false);
     CPPUNIT_ASSERT_EQUAL(u"Teszt asztal v"_ustr, pEditView->getEditEngine().GetText());
     tools::JsonWriter aPushWriter;
-    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0",
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, partIdOf(pModelObj, 0),
                                          sc::VectorContent::constCellPositionsMode);
     const OString aPush = aPushWriter.finishAndGetAsOString();
     CPPUNIT_ASSERT(aPush != tools::JsonWriter::EMPTY_DOCUMENT);
@@ -1339,7 +1411,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorAsianVerticalCellIsVertical
     applyToCell(*pDocShell, 1, 1, aStacked);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     // The characters of the cell that a text portion lists as upright, in their order.
     auto aUprightOf = [&aResponse](int nColumn) {
@@ -1395,11 +1467,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorAsianVerticalCellEditIsInIt
     aPattern.ItemSetPut(ScVerticalStackCell(true));
     aPattern.ItemSetPut(SfxBoolItem(ATTR_VERTICAL_ASIAN, true));
     applyToCell(*pDocShell, 1, 5, aPattern);
-    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     typeCharsInCell("ab", 1, 5, pView, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
     tools::JsonWriter aPushWriter;
-    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0",
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, partIdOf(pModelObj, 0),
                                          sc::VectorContent::constCellPositionsMode);
     const boost::property_tree::ptree aPush = parseJson(aPushWriter.finishAndGetAsOString());
     const auto oEdits = aPush.get_child_optional("textEdits");
@@ -1462,7 +1534,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorStackedCellTakesItsAlignmen
     }
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     // Where the first line of the cell starts, in twips from the start of its column.
     auto aStartOf = [&aResponse](int nColumn) {
         const auto oText = cellTextAt(aResponse, nColumn, 1);
@@ -1515,7 +1587,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedCellTextTakesItsVerti
     }
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     // Where the last line starts along its line, in the coordinates of the turned text.
     auto aLastLineStartOf = [&aResponse](int nColumn) {
         const auto oText = cellTextAt(aResponse, nColumn, 1);
@@ -1560,7 +1632,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedLineTooHighStaysAtTh
     applyToCell(*pDocShell, 1, 1, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 1, 1);
     CPPUNIT_ASSERT(oText);
     std::vector<boost::property_tree::ptree> aBounds;
@@ -1593,7 +1665,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedTextTooHighGetsClipA
     applyToCell(*pDocShell, 1, 3, aWrap);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT(hasCellMark(aResponse, "clipRight", 1, 1));
     CPPUNIT_ASSERT(!hasCellMark(aResponse, "clipRight", 1, 3));
 }
@@ -1620,7 +1692,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedTextIsHyphenated)
     applyToCell(*pDocShell, 1, 1, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 1, 1);
     CPPUNIT_ASSERT(oText);
     // The engine draws the hyphen at the end of a line as a portion of its own.
@@ -1658,7 +1730,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRichTextAlignedToRepeatIsRe
     applyToCell(*pDocShell, 1, 1, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 1, 1);
     CPPUNIT_ASSERT(oText);
     CPPUNIT_ASSERT(cellTextFlags(*oText).count("repeat"));
@@ -1693,7 +1765,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedTextIsClippedToItsCel
     applyToCell(*pDocShell, 1, 1, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 1, 1);
     CPPUNIT_ASSERT(oText);
     CPPUNIT_ASSERT(cellTextFlags(*oText).count("clippedBottom"));
@@ -1717,7 +1789,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedTextShrinksToFit)
     applyToCell(*pDocShell, 1, 1, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 1, 1);
     CPPUNIT_ASSERT(oText);
     const std::set<std::string> aFlags = cellTextFlags(*oText);
@@ -1744,7 +1816,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedWrappedTextFitsTheCe
     applyToCell(*pDocShell, 1, 1, aPattern);
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const auto oText = cellTextAt(aResponse, 1, 1);
     CPPUNIT_ASSERT(oText);
     int nLines = 0;
@@ -1783,7 +1855,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlig
     }
 
     const boost::property_tree::ptree aResponse
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     // Where the text starts, in twips from the start of its column: the place of the transform
     // that turns the text around its start.
     auto aStartOf = [&aResponse](int nColumn) {
@@ -1816,7 +1888,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellEditGrowsOutsideASmallW
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
-    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     // Moving the cursor can extend the tiled area, which sizes the window too, so the window is
     // made small after it, as a session that never painted a tile leaves it. Then the zoom
@@ -1858,8 +1930,8 @@ std::string requestBlockColumn(ScModelObj* pModelObj, int nBlockRows)
     std::string aBlocks;
     for (int nBlockRow = 0; nBlockRow < nBlockRows; ++nBlockRow)
         aBlocks += (nBlockRow ? "," : "") + std::to_string(nBlockRow) + ":0";
-    const boost::property_tree::ptree aAnswer
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=" + aBlocks);
+    const boost::property_tree::ptree aAnswer = requestVectorPrimitives(
+        pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=" + aBlocks);
     CPPUNIT_ASSERT_EQUAL(nBlockRows, blockCount(aAnswer));
     return aAnswer.get<std::string>("epoch");
 }
@@ -1867,7 +1939,8 @@ std::string requestBlockColumn(ScModelObj* pModelObj, int nBlockRows)
 boost::property_tree::ptree pushCellPositions(ScModelObj* pModelObj)
 {
     tools::JsonWriter aWriter;
-    pModelObj->pushVectorPrimitivesDelta(aWriter, "0", sc::VectorContent::constCellPositionsMode);
+    pModelObj->pushVectorPrimitivesDelta(aWriter, partIdOf(pModelObj, 0),
+                                         sc::VectorContent::constCellPositionsMode);
     const OString aJson = aWriter.finishAndGetAsOString();
     if (aJson == tools::JsonWriter::EMPTY_DOCUMENT)
         return {};
@@ -1899,7 +1972,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorManyChangedBlocksAreNamedSt
     // Asked for, the block is built and comes with the answer, which names no stale blocks: the
     // push did, once, and the others are still stale.
     const boost::property_tree::ptree aAnswer = requestVectorPrimitives(
-        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=3:0:1");
+        pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&epoch=" + aEpoch + "&blocks=3:0:1");
     CPPUNIT_ASSERT_EQUAL(1, blockCount(aAnswer));
     CPPUNIT_ASSERT(staleBlocks(aAnswer).empty());
 
@@ -1924,7 +1997,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorFewChangedBlocksArePushedAf
 
     // The client asks for block 2:0, which is built again. A cell typed in it afterwards is
     // pushed at once, although the other blocks are still stale.
-    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=2:0");
+    requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=2:0");
     setCellString(*pDocShell, 0, 2 * sc::VectorContent::constBlockRows + 1, u"Typed"_ustr);
 
     const boost::property_tree::ptree aPush = pushCellPositions(pModelObj);
@@ -1963,7 +2036,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHiddenSheetKeepsEpoch)
     CPPUNIT_ASSERT(pDocShell);
     pDocShell->GetDocFunc().InsertTable(1, u"Second"_ustr, false, true);
     const boost::property_tree::ptree aFirst
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const std::string aEpoch = aFirst.get<std::string>("epoch");
 
     cpo::uno::Reference<com::sun::star::container::XIndexAccess> xSheets(
@@ -1974,7 +2047,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHiddenSheetKeepsEpoch)
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aAnswer = requestVectorPrimitives(
-        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=0:0");
+        pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&epoch=" + aEpoch + "&blocks=0:0");
     CPPUNIT_ASSERT_EQUAL(aEpoch, aAnswer.get<std::string>("epoch"));
 }
 
@@ -2034,7 +2107,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockWithDroppedContentKeep
     setCellString(*pDocShell, 0, sc::VectorContent::constBlockRows, u"Other"_ustr);
 
     const boost::property_tree::ptree aFirst
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const std::string aEpoch = aFirst.get<std::string>("epoch");
     const sal_Int64 nVersion = blockVersion(aFirst);
     CPPUNIT_ASSERT(nVersion > 0);
@@ -2044,17 +2117,18 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockWithDroppedContentKeep
 
     // A budget below the content drops the JSON of every block after the next answer.
     pContent->setHeldContentBudget(0);
-    CPPUNIT_ASSERT_EQUAL(1, blockCount(requestVectorPrimitives(pModelObj,
-                                                               "partid=0&mode=-1&blocks=1:0")));
+    CPPUNIT_ASSERT_EQUAL(1, blockCount(requestVectorPrimitives(
+                                pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=1:0")));
     CPPUNIT_ASSERT_EQUAL(size_t(0), pContent->heldContentBytes());
 
     // Held in its version, the first block is not sent again, and asked for whole it comes in
     // the same version with its text.
-    const boost::property_tree::ptree aHeld = requestVectorPrimitives(
-        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=0:0:" + std::to_string(nVersion));
+    const boost::property_tree::ptree aHeld
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&epoch=" + aEpoch
+                                                 + "&blocks=0:0:" + std::to_string(nVersion));
     CPPUNIT_ASSERT_EQUAL(0, blockCount(aHeld));
     const boost::property_tree::ptree aWhole
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT_EQUAL(1, blockCount(aWhole));
     CPPUNIT_ASSERT_EQUAL(nVersion, blockVersion(aWhole));
     CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 0));
@@ -2075,8 +2149,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldBlockContentIsCompresse
     Scheduler::ProcessEventsToIdle();
 
     tools::JsonWriter aWriter;
-    static_cast<vcl::ITiledRenderable*>(pModelObj)->getCommandValues(
-        aWriter, ".uno:VectorPrimitives?partid=0&mode=-1&blocks=0:0");
+    const std::string aCommand
+        = ".uno:VectorPrimitives?" + sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0";
+    static_cast<vcl::ITiledRenderable*>(pModelObj)->getCommandValues(aWriter, aCommand);
     const sal_Int32 nAnswerBytes = aWriter.finishAndGetAsOString().getLength();
 
     sc::VectorContent* pContent = pModelObj->getVectorContent();
@@ -2089,7 +2164,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldBlockContentIsCompresse
     // and the other rows still come whole when the block is asked for.
     setCellString(*pDocShell, 0, 5, u"Changed"_ustr);
     const boost::property_tree::ptree aWhole
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT_EQUAL(size_t(sc::VectorContent::constBlockRows * 4), cellTexts(aWhole).size());
     CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 5));
     CPPUNIT_ASSERT(cellTextAt(aWhole, 3, 63));
@@ -2108,14 +2183,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldContentBudgetSpansTheSh
     Scheduler::ProcessEventsToIdle();
 
     const boost::property_tree::ptree aFirst
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     const sal_Int64 nFirstVersion = blockVersion(aFirst);
     sc::VectorContent* pContent = pModelObj->getVectorContent();
     CPPUNIT_ASSERT(pContent);
     const size_t nFirstBytes = pContent->heldContentBytes();
     CPPUNIT_ASSERT_GREATER(size_t(0), nFirstBytes);
     const boost::property_tree::ptree aSecond
-        = requestVectorPrimitives(pModelObj, "partid=1&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 1) + "&mode=-1&blocks=0:0");
     const std::string aSecondEpoch = aSecond.get<std::string>("epoch");
     const sal_Int64 nSecondVersion = blockVersion(aSecond);
     const size_t nBothBytes = pContent->heldContentBytes();
@@ -2124,14 +2199,15 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldContentBudgetSpansTheSh
 
     // One byte short of both: using the second sheet's block again drops the first sheet's.
     pContent->setHeldContentBudget(nBothBytes - 1);
-    CPPUNIT_ASSERT_EQUAL(0, blockCount(requestVectorPrimitives(
-                                pModelObj, "partid=1&mode=-1&epoch=" + aSecondEpoch
-                                               + "&blocks=0:0:" + std::to_string(nSecondVersion))));
+    CPPUNIT_ASSERT_EQUAL(0,
+                         blockCount(requestVectorPrimitives(
+                             pModelObj, sheetPart(pModelObj, 1) + "&mode=-1&epoch=" + aSecondEpoch
+                                            + "&blocks=0:0:" + std::to_string(nSecondVersion))));
     CPPUNIT_ASSERT_EQUAL(nSecondBytes, pContent->heldContentBytes());
 
     // The first sheet's block is built again in its version, and the second sheet's goes.
     const boost::property_tree::ptree aWhole
-        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+        = requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT_EQUAL(nFirstVersion, blockVersion(aWhole));
     CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 0));
     CPPUNIT_ASSERT_EQUAL(nFirstBytes, pContent->heldContentBytes());
@@ -2169,7 +2245,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorInsertedAndRemovedRowsArePu
     const ScDocument& rDocument = pDocShell->GetDocument();
     const std::string aAllColumns = "0," + std::to_string(rDocument.MaxCol());
     setCellString(*pDocShell, 0, 0, u"Text"_ustr);
-    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    requestVectorPrimitives(pModelObj, sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0");
 
     CPPUNIT_ASSERT(pDocShell->GetDocFunc().InsertCells(
         ScRange(0, 10, 0, rDocument.MaxCol(), 12, 0), nullptr, INS_INSROWS_BEFORE, false, true));

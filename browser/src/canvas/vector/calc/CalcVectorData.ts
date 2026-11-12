@@ -209,6 +209,9 @@ namespace cool {
 
 	/// What the client holds of one sheet.
 	export interface CalcSheetData {
+		/// The id the engine names the sheet by. It stays with the sheet when the sheet moves.
+		id: string;
+		/// The index of the sheet in the last status.
 		part: number;
 		/// The newest version of the sheet the client has heard of.
 		version: number;

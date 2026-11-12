@@ -376,6 +376,20 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 	},
 
+	_refreshPartIds(statusJSON) {
+		app.calc.partIds = [];
+
+		// The id of a sheet stays with it when it moves to another index. A status without ids
+		// leaves each entry empty, and such a sheet is not asked for as vector primitives.
+		for (let i = 0; i < statusJSON.parts.length; i++) {
+			const id = statusJSON.parts[i].id;
+			app.calc.partIds.push(typeof id === 'string' ? id : '');
+		}
+
+		// What is held of each sheet as vector primitives follows the sheet to its new index.
+		if (app.calc.vectorManager) app.calc.vectorManager.partIdsChanged();
+	},
+
 	_getMarginPropertiesForTheMap: function() {
 		const rowHeaderSection = app.sectionContainer.getSectionWithName(app.CSections.RowHeader.name);
 		const columnHeaderSection = app.sectionContainer.getSectionWithName(app.CSections.ColumnHeader.name);
@@ -518,6 +532,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			// geometry below sees the sheet that is at the selected index now.
 			this._refreshPartNames(statusJSON);
 			this._refreshPartHashes(statusJSON);
+			this._refreshPartIds(statusJSON);
 
 			const reconnecting = app.socket._reconnecting;
 			if (reconnecting) {

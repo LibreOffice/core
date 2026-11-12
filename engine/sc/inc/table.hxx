@@ -21,6 +21,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <tools/Guid.hxx>
 #include "attarray.hxx"
 #include "column.hxx"
 #include "colcontainer.hxx"
@@ -272,6 +273,12 @@ private:
 
     std::shared_ptr<sc::SheetViewManager> mpSheetViewManager;
 
+    /// Names this table object for as long as it lives, wherever the sheet moves in the document.
+    /// It is generated the first time it is asked for and kept in memory only, so a table made
+    /// from another one, as a copy of a sheet or the undo of a deleted sheet is, has a GUID of its
+    /// own. It is empty until then.
+    mutable tools::Guid maGuid;
+
 friend class ScDocument;                    // for FillInfo
 friend class ScColumn;
 friend class ScValueIterator;
@@ -398,6 +405,14 @@ public:
                         const OUString& rOpt, const OUString& rTab, sal_Int32 nRefreshDelay );
 
     sal_Int64   GetHashCode () const;
+    const tools::Guid& GetGuid() const
+    {
+        // Most tables, like the ones of undo and clipboard documents, are never asked for their
+        // GUID, so it is generated here.
+        if (maGuid.isEmpty())
+            maGuid = tools::Guid(tools::Guid::Generate);
+        return maGuid;
+    }
 
     const OUString& GetName() const { return aName; }
     void        SetName( const OUString& rNewName );

@@ -203,6 +203,9 @@ interface AppInterface {
 		otherCellCursors: any;
 		splitCoordinate: null | cool.SimplePoint;
 		partHashes: null | Array<string>; // the engine's hash of each sheet, from the status message
+		/// The id of each sheet as a vector part, by sheet index, from the status message. Null
+		/// before the first status. The id stays with a sheet when it moves to another index.
+		partIds: null | Array<string>;
 		filterPopupCell: any; // The cell a filter popup belongs to: { popupId, column, row }.
 		isRTL(): boolean;
 		isSelectedPartSheetView(): boolean;

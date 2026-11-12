@@ -43,6 +43,7 @@
 #include <svl/typedwhich.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/gen.hxx>
+#include <tools/Guid.hxx>
 #include <tools/solar.h>
 
 #include <cassert>
@@ -1079,6 +1080,11 @@ public:
 
     SC_DLLPUBLIC bool HasTable( SCTAB nTab ) const;
     SC_DLLPUBLIC bool GetHashCode( SCTAB nTab, sal_Int64& rHashCode) const;
+    /// The GUID of the table at nTab, or an empty GUID when there is no table at nTab. The GUID
+    /// stays with the table when the sheet moves, and a copied sheet has a GUID of its own.
+    SC_DLLPUBLIC tools::Guid GetTabGuid( SCTAB nTab ) const;
+    /// The index of the table that has the GUID, or nothing when no table of the document has it.
+    SC_DLLPUBLIC std::optional<SCTAB> GetTabByGuid( const tools::Guid& rGuid ) const;
     SC_DLLPUBLIC bool GetName( SCTAB nTab, OUString& rName ) const;
     SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, OUString& rName ) const;
     SC_DLLPUBLIC bool IsCodeNameStated( SCTAB nTab ) const;

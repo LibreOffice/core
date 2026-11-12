@@ -193,6 +193,25 @@ bool ScDocument::GetHashCode( SCTAB nTab, sal_Int64& rHashCode ) const
     return false;
 }
 
+tools::Guid ScDocument::GetTabGuid(SCTAB nTab) const
+{
+    if (const ScTable* pTable = FetchTable(nTab))
+        return pTable->GetGuid();
+    return tools::Guid();
+}
+
+std::optional<SCTAB> ScDocument::GetTabByGuid(const tools::Guid& rGuid) const
+{
+    if (rGuid.isEmpty())
+        return std::nullopt;
+    for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
+    {
+        if (maTabs[nTab] && maTabs[nTab]->GetGuid() == rGuid)
+            return SCTAB(nTab);
+    }
+    return std::nullopt;
+}
+
 bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
