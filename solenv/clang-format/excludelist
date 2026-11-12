@@ -4322,7 +4322,6 @@ hwpfilter/source/hwpfile.cxx
 hwpfilter/source/hwpfile.h
 hwpfilter/source/hwplib.h
 hwpfilter/source/hwpread.cxx
-hwpfilter/source/hwpreader.cxx
 hwpfilter/source/hwpreader.hxx
 hwpfilter/source/ksc5601.h
 hwpfilter/source/lexer.cxx
