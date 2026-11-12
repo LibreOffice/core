@@ -636,6 +636,8 @@ describe('calcPlacedFields', function () {
 			'state',
 			'step',
 			'strictFormat',
+			'tabIndex',
+			'tabStop',
 			'textColor',
 			'time',
 			'vertical',

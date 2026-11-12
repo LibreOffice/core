@@ -44,6 +44,17 @@ namespace cool {
       }
     >();
 
+    /// The ids of the controls shown, in the order of the page.
+    private static _shownOrder: number[] = [];
+
+    /// Whether the first control takes the focus the next time the controls are shown, where
+    /// the document asks for it: after the document opens and after the design mode ends.
+    private static _autoFocusPending = true;
+
+    /// Whether the design mode the controls are shown after is one the document reported, as
+    /// against the time before the document reports the mode while it opens.
+    private static _leavingDesignMode = false;
+
     /// The id of the page the elements are shown for, empty where none are shown.
     public static shownPart: string = '';
 
@@ -58,8 +69,14 @@ namespace cool {
     ): void {
       const layer = VectorFormControlLayer;
       const shown = new Set<number>();
+      const order: number[] = [];
       layer.shownPart = data ? String(data.partId) : '';
-      if (data && !app.map.isFormControlDesignMode()) {
+      const designMode = app.map.isFormControlDesignMode();
+      if (designMode) {
+        layer._autoFocusPending = true;
+        if (app.map.areFormControlsObjects()) layer._leavingDesignMode = true;
+      }
+      if (data && !designMode) {
         for (const id of data.order) {
           const object = data.objects.get(id);
           if (!object || object.objectKind !== layer.formControlKind) continue;
@@ -71,9 +88,11 @@ namespace cool {
           const primitive = layer._primitiveIn(object.primitives ?? []);
           if (!primitive) continue;
           shown.add(id);
+          order.push(id);
           layer._place(id, primitive, originX, originY, scale);
         }
       }
+      layer._shownOrder = order;
 
       for (const [id, entry] of layer._elements)
         if (!shown.has(id)) {
@@ -81,6 +100,101 @@ namespace cool {
           entry.element.remove();
           layer._elements.delete(id);
         }
+
+      if (data && !designMode && layer._autoFocusPending)
+        layer._focusFirstControl();
+    }
+
+    /*
+      Gives the first control of the page in the order of Tab the focus, where the document asks
+      for that, as the office does when the document opens and when the design mode ends. The
+      first control is the first one that takes the keyboard and is enabled. The question waits
+      until the document has said whether it asks. Where no control takes the focus after the
+      design mode ends, the document has the keyboard.
+    */
+    private static _focusFirstControl(): void {
+      const layer = VectorFormControlLayer;
+      const setting = app.map['stateChangeHandler'].getItemValue(
+        '.uno:AutoControlFocus',
+      );
+      if (setting === undefined) return;
+      layer._autoFocusPending = false;
+      const leavingDesignMode = layer._leavingDesignMode;
+      layer._leavingDesignMode = false;
+      const first =
+        setting === true || setting === 'true'
+          ? layer
+              ._inTabOrder()
+              .find((id: number) => layer._takesFocus(id, false))
+          : undefined;
+      if (first !== undefined) layer._focusControl(first);
+      else if (leavingDesignMode) app.map.focus();
+    }
+
+    // the ids of the controls shown, in the order Tab goes through them
+    private static _inTabOrder(): number[] {
+      const layer = VectorFormControlLayer;
+      const placeOf = (id: number) =>
+        layer._elements.get(id)?.primitive.tabIndex || Infinity;
+      // the sort keeps the order of the page among the controls of one place
+      return layer._shownOrder.slice().sort((one: number, other: number) => {
+        const onePlace = placeOf(one);
+        const otherPlace = placeOf(other);
+        return onePlace === otherPlace ? 0 : onePlace < otherPlace ? -1 : 1;
+      });
+    }
+
+    /*
+      Whether that control takes the focus from the keyboard: it is enabled and its element has
+      a part that takes the keyboard. Where Tab goes, the control is also one Tab stops at, as its
+      model says, or else as its kind does.
+    */
+    private static _takesFocus(id: number, byTab: boolean): boolean {
+      const layer = VectorFormControlLayer;
+      const entry = layer._elements.get(id);
+      if (!entry || entry.primitive.disabled) return false;
+      if (byTab && entry.primitive.tabStop === false) return false;
+      // the table control and the navigation bar are drawn and do not work in the client
+      const kind = entry.primitive.kind;
+      if (kind === 'tableControl' || kind === 'navigationBar') return false;
+      return !!layer._focusTarget(entry.element);
+    }
+
+    // the part of the control's element that takes the keyboard, where it has one that is enabled
+    private static _focusTarget(element: HTMLElement): HTMLElement | null {
+      return element.querySelector<HTMLElement>(
+        '.vector-form-field:not(:disabled), .vector-form-list, ' +
+          'input[type="checkbox"]:not(:disabled), input[type="radio"]:not(:disabled), ' +
+          'button.ui-pushbutton:not(:disabled)',
+      );
+    }
+
+    // gives that control the focus
+    private static _focusControl(id: number): void {
+      const entry = VectorFormControlLayer._elements.get(id);
+      const target = entry
+        ? VectorFormControlLayer._focusTarget(entry.element)
+        : null;
+      target?.focus({ preventScroll: true });
+    }
+
+    /*
+      Tab moves the focus to the next control in the order of Tab, Shift+Tab to the one before.
+      From the last control it goes round to the first one, and from the first to the last one.
+    */
+    private static _moveFocus(fromId: number, forward: boolean): void {
+      const layer = VectorFormControlLayer;
+      const order = layer._inTabOrder();
+      const from = order.indexOf(fromId);
+      if (from < 0) return;
+      for (let step = 1; step < order.length; step++) {
+        const at =
+          (from + (forward ? step : -step) + order.length) % order.length;
+        if (layer._takesFocus(order[at], true)) {
+          layer._focusControl(order[at]);
+          return;
+        }
+      }
     }
 
     // the form control among the primitives of an object, at any depth
@@ -127,6 +241,11 @@ namespace cool {
         !entry.element.contains(document.activeElement) &&
         !entry.element.querySelector('.vector-form-open-part');
       if (!entry || entry.built !== built || answered) {
+        // the focus stays on the control when its element is made anew
+        const focused =
+          entry && entry.element.contains(document.activeElement)
+            ? (document.activeElement as HTMLElement)
+            : null;
         if (entry) {
           layer._closeOpenPart(entry.element);
           entry.element.remove();
@@ -139,6 +258,7 @@ namespace cool {
         };
         layer._elements.set(id, entry);
         layer._holderElement().appendChild(entry.element);
+        if (focused) layer._focusAgain(id, focused);
       } else if (!answered && !entry.sent) {
         // the control as the server sent it last, so a later change waits for a newer one
         entry.primitive = primitive;
@@ -153,6 +273,37 @@ namespace cool {
       style.top = (originY + origin.y * scale) / app.dpiScale + 'px';
       style.transform =
         'scale(' + (scale * layer.twipsPerPixel) / app.dpiScale + ')';
+    }
+
+    /*
+      Gives the focus to the control made anew whose element before had it, at the part that
+      takes the keyboard. A field that shows the same text keeps the caret and the selection. A
+      control that no longer takes the focus gives the keyboard to the document.
+    */
+    private static _focusAgain(id: number, focused: HTMLElement): void {
+      const layer = VectorFormControlLayer;
+      const entry = layer._elements.get(id);
+      const target = entry ? layer._focusTarget(entry.element) : null;
+      if (!target || !layer._takesFocus(id, false)) {
+        app.map.focus();
+        return;
+      }
+      target.focus({ preventScroll: true });
+      // only a text input and a text area have a caret to put back
+      const hasCaret = (element: HTMLElement) =>
+        element instanceof HTMLTextAreaElement ||
+        (element instanceof HTMLInputElement && element.type === 'text');
+      if (!hasCaret(target)) return;
+      const field = target as HTMLInputElement;
+      const before = focused as HTMLInputElement;
+      if (hasCaret(focused) && before.value === field.value)
+        field.setSelectionRange(
+          before.selectionStart,
+          before.selectionEnd,
+          before.selectionDirection ?? undefined,
+        );
+      // a field that shows another text, as the server formatted it, has the caret at its end
+      else field.setSelectionRange(field.value.length, field.value.length);
     }
 
     /*
@@ -316,17 +467,55 @@ namespace cool {
           break;
       }
 
-      // the keyboard stays with the document: the controls take no focus, by click or by Tab
+      // The Tab of the browser does not go into the controls from the rest of the page. A click
+      // gives the focus to a field, as it is typed into, to a list, and to a check box and an
+      // option button, also on the label. A click on a button leaves the focus where it was.
       element
         .querySelectorAll<HTMLElement>('button, input, select, textarea, a')
         .forEach((focusable: HTMLElement) =>
           focusable.setAttribute('tabindex', '-1'),
         );
-      // a field takes the focus, as it is typed into
       element.addEventListener('mousedown', (event: MouseEvent) => {
-        if (!(event.target as Element).classList.contains('vector-form-field'))
-          event.preventDefault();
+        if ((event.target as Element).classList.contains('vector-form-field'))
+          return;
+        event.preventDefault();
+        const isBox =
+          primitive.kind === 'checkBox' || primitive.kind === 'optionButton';
+        if (isBox && !primitive.disabled)
+          layer._focusTarget(element)?.focus({ preventScroll: true });
       });
+
+      // In a control with the focus, Tab and Shift+Tab go to the next and the previous control,
+      // before the control itself sees the key, and close a part open under the control. Escape
+      // gives the keyboard to the document. A field that is typed into takes Escape itself, as it
+      // takes back the text first.
+      element.addEventListener(
+        'keydown',
+        (event: KeyboardEvent) => {
+          if (event.ctrlKey || event.altKey || event.metaKey) return;
+          if (event.key === 'Tab') {
+            event.preventDefault();
+            event.stopPropagation();
+            layer._closeOpenPart(element);
+            layer._moveFocus(id, !event.shiftKey);
+          } else if (
+            event.key === 'Escape' &&
+            !(event.target as Element).matches(
+              'input.vector-form-field, textarea.vector-form-field',
+            )
+          ) {
+            event.preventDefault();
+            event.stopPropagation();
+            app.map.focus();
+          }
+        },
+        true,
+      );
+      // the keys typed in a control are the control's, the document does not see them
+      for (const type of ['keydown', 'keypress', 'keyup'])
+        element.addEventListener(type, (event: Event) =>
+          event.stopPropagation(),
+        );
 
       // the wheel scrolls and zooms the document, as it does over the page
       element.addEventListener(
@@ -365,9 +554,9 @@ namespace cool {
 
     /*
       The text a field shows becomes an input to type in, a text area where the field holds
-      several lines. Return, or leaving the field, sends what was typed; Escape takes it back.
-      The keys typed there are the field's, the document does not see them, and Return and
-      Escape give the keyboard back to the document.
+      several lines. Return, or leaving the field, sends what was typed, and the field keeps the
+      focus after Return. Escape takes back what was typed and gives the keyboard back to the
+      document. The keys typed there are the field's, the document does not see them.
     */
     private static _makeTypable(
       id: number,
@@ -445,20 +634,28 @@ namespace cool {
           input.value.length === 5 ? input.value + seconds : input.value,
         );
       };
+      // The other fields send their text when it differs from the text the server last got.
+      let sentText = original;
+      const sendText = () => {
+        if (!input.isConnected || input.value === sentText) return;
+        sentText = input.value;
+        VectorFormControlLayer._send(id, 'text', input.value);
+      };
       if (isClock) input.addEventListener('blur', sendTime);
-      else
-        input.addEventListener('change', () =>
-          VectorFormControlLayer._send(id, 'text', input.value),
-        );
+      else input.addEventListener('change', sendText);
       input.addEventListener('keydown', (event: Event) => {
         event.stopPropagation();
         const key = (event as KeyboardEvent).key;
-        // Escape takes back what was typed since the value the server last got
-        if (key === 'Escape') input.value = isClock ? sentTime : original;
-        if (key === 'Escape' || (key === 'Enter' && !primitive.multiLine)) {
+        if (key === 'Escape') {
+          // Escape takes back what was typed since the value the server last got
+          input.value = isClock ? sentTime : sentText;
           event.preventDefault();
           input.blur();
           app.map.focus();
+        } else if (key === 'Enter' && !primitive.multiLine) {
+          event.preventDefault();
+          if (isClock) sendTime();
+          else sendText();
         }
       });
       for (const type of ['keypress', 'keyup', 'input'])
@@ -539,7 +736,7 @@ namespace cool {
           sendTime();
           return;
         }
-        if (input.value !== original) layer._send(id, 'text', input.value);
+        sendText();
         layer._send(id, 'spin', up ? 'up' : 'down');
       };
       if (spinArrows && spinArrows.length >= 2) {
@@ -583,8 +780,9 @@ namespace cool {
                   onClick={() => {
                     input.value = entry;
                     close();
-                    layer._send(id, 'text', entry);
-                    app.map.focus();
+                    sendText();
+                    // the field keeps the focus after the pick, or takes it
+                    input.focus({ preventScroll: true });
                   }}
                 >
                   {entry}
@@ -605,7 +803,8 @@ namespace cool {
             layer._calendar(primitive.date, (picked: string) => {
               close();
               layer._send(id, 'date', picked);
-              app.map.focus();
+              // the field keeps the focus after the pick, or takes it
+              input.focus({ preventScroll: true });
             }),
           );
         });
@@ -841,7 +1040,6 @@ namespace cool {
               if (!enabled) return;
               close();
               layer._send(id, 'image', action);
-              app.map.focus();
             }}
           >
             {text}
@@ -1049,10 +1247,10 @@ namespace cool {
       ) as HTMLSelectElement;
       list.selectedIndex = chosen;
       if (primitive.disabled || primitive.readOnly) list.disabled = true;
-      list.addEventListener('change', () => {
-        VectorFormControlLayer._send(id, 'select', String(list.selectedIndex));
-        app.map.focus();
-      });
+      // the list keeps the focus after the pick
+      list.addEventListener('change', () =>
+        VectorFormControlLayer._send(id, 'select', String(list.selectedIndex)),
+      );
       list.addEventListener('keydown', (event: Event) =>
         event.stopPropagation(),
       );
@@ -1061,15 +1259,56 @@ namespace cool {
 
     /*
       A list that shows its entries: a click selects the entry alone; with Ctrl, in a list that
-      takes several, the entry joins the selection or leaves it.
+      takes several, the entry joins the selection or leaves it. An enabled list takes the focus
+      by Tab and by a click, and shows it with an outline. With the focus, the up and down arrows
+      select the entry above or below the first one selected, and Home and End the first and the
+      last entry.
     */
     private static _makeList(
       id: number,
       element: HTMLElement,
       primitive: FormControlPrimitive,
     ): void {
-      if (primitive.disabled || primitive.readOnly) return;
+      const list = element.querySelector<HTMLElement>('.ui-listbox');
+      if (!list || primitive.disabled) return;
+      list.classList.add('vector-form-list');
+      list.setAttribute('tabindex', '-1');
+      list.addEventListener('mousedown', () =>
+        list.focus({ preventScroll: true }),
+      );
+      if (primitive.readOnly) return;
+
       const selected = primitive.selected ?? [];
+      const count = primitive.items?.length ?? 0;
+      // the entry the keys last selected, so a key pressed again before the server answers goes
+      // on from there
+      let current = selected.length ? Math.min(...selected) : -1;
+      let alone = selected.length === 1;
+      list.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.ctrlKey || event.altKey || event.metaKey || !count) return;
+        let wanted: number;
+        switch (event.key) {
+          case 'ArrowDown':
+            wanted = Math.min(count - 1, current + 1);
+            break;
+          case 'ArrowUp':
+            wanted = Math.max(0, current - 1);
+            break;
+          case 'Home':
+            wanted = 0;
+            break;
+          case 'End':
+            wanted = count - 1;
+            break;
+          default:
+            return;
+        }
+        event.preventDefault();
+        if (alone && current === wanted) return;
+        current = wanted;
+        alone = true;
+        VectorFormControlLayer._send(id, 'select', String(wanted));
+      });
       element
         .querySelectorAll<HTMLElement>('.ui-listbox > div')
         .forEach((entry: HTMLElement, at: number) => {

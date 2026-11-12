@@ -42,6 +42,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xmlexchg.hxx>
+#include <sfx2/viewsh.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -896,6 +897,12 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
 IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
 {
     m_nAutoFocusEvent = nullptr;
+
+    // A view that draws from its objects shows its form controls in the client, which gives the
+    // first control the focus there.
+    const SfxViewShell* pViewShell = m_pView ? m_pView->GetSfxViewShell() : nullptr;
+    if (pViewShell && pViewShell->drawsFromObjects())
+        return;
 
     // go to the first form of our page, examine it's TabController, go to its first (in terms of the tab order)
     // control, give it the focus

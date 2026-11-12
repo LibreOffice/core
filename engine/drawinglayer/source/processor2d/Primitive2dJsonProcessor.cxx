@@ -1302,6 +1302,16 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
     bool bReadOnly(false);
     if ((aValueOf(u"ReadOnly"_ustr) >>= bReadOnly) && bReadOnly)
         mrWriter.put("readOnly", true);
+    // The place of the control in the order Tab goes through the form, where the model gives one.
+    // The controls with a place come first, the lowest first, and the others follow.
+    sal_Int16 nTabIndex(0);
+    if ((aValueOf(u"TabIndex"_ustr) >>= nTabIndex) && nTabIndex > 0)
+        mrWriter.put("tabIndex", sal_Int32(nTabIndex));
+    // Whether Tab stops at the control, where the model says so. Where it does not, the kind of
+    // the control decides.
+    bool bTabStop(true);
+    if (aValueOf(u"Tabstop"_ustr) >>= bTabStop)
+        mrWriter.put("tabStop", bTabStop);
     bool bDefault(false);
     aValueOf(u"DefaultButton"_ustr) >>= bDefault;
     if (bDefault)

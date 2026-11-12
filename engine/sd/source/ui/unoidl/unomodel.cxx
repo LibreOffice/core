@@ -7311,7 +7311,21 @@ void SdXImpressDocument::initializeForTiledRendering(const cpo::uno::Sequence<cs
 void SdXImpressDocument::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    KitHelper::postKeyEventAsync(getDocWindow(), eType, nCharCode, nKeyCode);
+    VclPtr<vcl::Window> pWindow(getDocWindow());
+
+    // A view that draws from its objects works its form controls in the client, so the keys go to
+    // the document window, also where a control window inside it took the focus.
+    DrawViewShell* pViewShell = GetViewShell();
+    const SfxViewShell* pSfxViewShell = pViewShell ? pViewShell->GetViewShell() : nullptr;
+    if (pWindow && pSfxViewShell && pSfxViewShell->drawsFromObjects()
+        && pWindow.get() == pViewShell->GetActiveWindow())
+    {
+        const VclPtr<vcl::Window> pFocused(pWindow->GetFocusedWindow());
+        if (pFocused && pFocused != pWindow && pWindow->IsWindowOrChild(pFocused))
+            pWindow->GrabFocus();
+    }
+
+    KitHelper::postKeyEventAsync(pWindow, eType, nCharCode, nKeyCode);
 }
 
 void SdXImpressDocument::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,

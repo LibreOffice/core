@@ -76,6 +76,12 @@ namespace cool {
 		disabled?: boolean;
 		/// A control that shows its value as an enabled one does and takes no change of it.
 		readOnly?: boolean;
+		/// The place of the control in the order Tab goes through the form, from 1. The controls
+		/// with a place come first, the lowest first, and the others follow in the order of the
+		/// page.
+		tabIndex?: number;
+		/// Whether Tab stops at the control. Where it is absent, the kind of the control decides.
+		tabStop?: boolean;
 		defaultButton?: boolean;
 		/// 0 left, 1 centred, 2 right.
 		align?: number;

@@ -73,3 +73,12 @@ html[data-bg-theme='dark'] .cursor-handler {
 .vector-form-controls.passing .vector-form-control {
 	pointer-events: none !important;
 }
+
+/* A list that drops down has the focus in the browser's list, which lies unseen over the drawn
+   field. The drawn field shows the focus, as a field that is typed into does, and so does a list
+   that shows its entries. */
+.vector-form-control:has(> select.vector-form-field:focus) > .ui-edit,
+.vector-form-control .vector-form-list:focus {
+	outline: auto Highlight;
+	outline-offset: -1px;
+}
