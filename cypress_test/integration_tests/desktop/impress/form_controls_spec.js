@@ -6,7 +6,7 @@ var formHelper = require('../../common/form_controls_helper');
 
 // The form controls of a slide in a view drawn from vector primitives. Out of design mode they
 // work as elements over the page, and what is done with them goes to the server. In design mode
-// they are objects of the slide.
+// they are objects of the slide. A view that cannot edit shows them read-only.
 describe(['tagdesktop'], 'Form controls on a vector slide', function() {
 
 	beforeEach(function() {
@@ -15,7 +15,7 @@ describe(['tagdesktop'], 'Form controls on a vector slide', function() {
 		}.bind(this));
 	});
 
-	it('The controls work in the browser, and in design mode they are objects to edit.', function() {
+	it('The controls work in the browser, in design mode they are objects to edit, and a view that cannot edit shows them read-only.', function() {
 		var win = this.win;
 
 		// The document opens out of design mode, and every control of the slide is an element
@@ -194,5 +194,24 @@ describe(['tagdesktop'], 'Form controls on a vector slide', function() {
 		// Out of design mode the new control works as the others do.
 		formHelper.switchDesignMode(win, false);
 		cy.cGet('.vector-form-controls .vector-form-control').should('have.length', 15);
+
+		// A view that cannot edit shows every control read-only. A field takes no typing, a check
+		// box keeps its state, a list offers no choice, and nothing goes to the server.
+		cy.then(function() {
+			win.app.map.setPermission('readonly');
+		});
+		// The controls are made anew together for the new permission, so the field is looked up
+		// again on each try.
+		cy.wrap(null).should(function() {
+			var control = formHelper.controlAt(win, 'name');
+			expect(control, 'the element of name').to.not.equal(null);
+			expect(control.querySelector('input').readOnly, 'the name field read-only').to.equal(true);
+		});
+		formHelper.getPart(win, 'colour', 'select').should('be.disabled');
+		formHelper.forgetSent(win);
+		formHelper.getPart(win, 'agree', 'input[type="checkbox"]').should('be.checked');
+		formHelper.getPart(win, 'agree', 'input[type="checkbox"]').click();
+		formHelper.getPart(win, 'agree', 'input[type="checkbox"]').should('be.checked');
+		formHelper.expectNoFormControlSent(win);
 	});
 });

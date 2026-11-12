@@ -231,25 +231,27 @@ namespace cool {
 		}
 
 		private _drawFileBasedView(): void {
-			const docLayer = this._docLayer;
-			const partHeightPixels = Math.round(
-				(docLayer._partHeightTwips + docLayer._spaceBetweenParts) *
-					app.twipsToPixels,
-			);
-			if (partHeightPixels <= 0) return;
+			const layout = app.activeDocument.activeLayout as ViewLayoutFileBased;
+			const pages = layout.viewRectangles;
+			if (!pages) return;
 
-			const viewedRectangle = app.activeDocument.activeLayout.viewedRectangle;
-			let topVisible = Math.floor(viewedRectangle.pY1 / partHeightPixels);
-			let bottomVisible = Math.ceil(
-				(viewedRectangle.pY1 + viewedRectangle.pHeight) / partHeightPixels,
-			);
-			topVisible = Math.max(0, topVisible);
-			bottomVisible = Math.min(bottomVisible, docLayer._parts - 1);
+			// The pages sit centred in one column of the layout, and the scroll position is in
+			// the same core pixels. The context starts at the document anchor.
+			const scrollX = layout.scrollProperties.viewX;
+			const scrollY = layout.scrollProperties.viewY;
+			const visible = cool.SimpleRectangle.fromCorePixels([
+				scrollX,
+				scrollY,
+				this.size[0],
+				this.size[1],
+			]);
 
 			const scale = app.twipsToPixels;
-			const offsetX = -viewedRectangle.pX1;
 
-			for (let part = topVisible; part <= bottomVisible; part++) {
+			for (let part = 0; part < pages.length; part++) {
+				const page = pages[part];
+				if (!visible.intersectsRectangle(page.toArray())) continue;
+
 				// The file-based view scrolls the slides, never a master page. A slide is
 				// drawn once the master it names has arrived too.
 				const cached = RenderManager.isPartDrawable(
@@ -260,10 +262,8 @@ namespace cool {
 					: undefined;
 				if (!cached) continue;
 
-				const offsetY = -viewedRectangle.pY1 + part * partHeightPixels;
-
 				this.context.save();
-				this.context.translate(offsetX, offsetY);
+				this.context.translate(page.pX1 - scrollX, page.pY1 - scrollY);
 				this.context.scale(scale, scale);
 				// Nobody edits a page in this view, so it draws the page without the
 				// content an editing view adds and without the placeholder outlines.

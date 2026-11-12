@@ -30,13 +30,15 @@ var formControlKind = 32;
 var sentBy = new WeakMap();
 
 /*
-	Opens impress/form_controls.fodp in a view drawn from vector primitives, with the notebookbar,
-	and records the messages sent to the server from then on. Calls back with the frame window.
+	Opens impress/form_controls.fodp in a view drawn from vector primitives, and records the
+	messages sent to the server from then on. Calls back with the frame window. The document opens
+	for editing with the notebookbar, or read-only when readOnly is true.
 */
-function loadFormDocument(onWindow) {
+function loadFormDocument(onWindow, readOnly) {
 	cy.viewport(1920, 1080);
 	var path = helper.setupDocument('impress/form_controls.fodp');
-	helper.loadDocument(path, true, undefined, undefined, 'vector=true');
+	helper.loadDocument(path, true, undefined, undefined,
+		'vector=true' + (readOnly ? '&permission=readonly' : ''));
 	cy.getFrameWindow().then(function(win) {
 		// The usual load checks wait for tiles, which a vector view does not have.
 		cy.wrap(null).should(function() {
@@ -60,7 +62,8 @@ function loadFormDocument(onWindow) {
 			onWindow(win);
 		});
 	});
-	desktopHelper.switchUIToNotebookbar();
+	if (!readOnly)
+		desktopHelper.switchUIToNotebookbar();
 }
 
 // The section that keeps the geometry of the objects the client holds.
@@ -189,6 +192,19 @@ function expectSent(win, action, value) {
 	});
 }
 
+// Waits for the server to finish its work, and checks that no form control message was sent.
+function expectNoFormControlSent(win) {
+	cy.then(function() {
+		return helper.processToIdle(win);
+	});
+	cy.then(function() {
+		var sent = sentBy.get(win).filter(function(message) {
+			return message.indexOf('formcontrol ') === 0;
+		});
+		expect(sent, 'form control messages').to.deep.equal([]);
+	});
+}
+
 // Waits for the design mode of the form controls to be on or off, as the server reports it.
 function waitForDesignMode(on) {
 	cy.getFrameWindow().should(function(win) {
@@ -240,6 +256,7 @@ module.exports.leaveField = leaveField;
 module.exports.clickOnCanvas = clickOnCanvas;
 module.exports.forgetSent = forgetSent;
 module.exports.expectSent = expectSent;
+module.exports.expectNoFormControlSent = expectNoFormControlSent;
 module.exports.waitForDesignMode = waitForDesignMode;
 module.exports.clickFormTabButton = clickFormTabButton;
 module.exports.switchDesignMode = switchDesignMode;
