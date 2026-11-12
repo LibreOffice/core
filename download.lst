@@ -493,8 +493,8 @@ NSS_TARBALL := nss-3.133-with-nspr-4.39.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ODFGEN_SHA256SUM := 55200027fd46623b9bdddd38d275e7452d1b0ff8aeddcad6f9ae6dc25f610625
-ODFGEN_VERSION_MICRO := 8
+ODFGEN_SHA256SUM := b68ec10c23b8ac7abed8dfeb181b8592714c1e5bd33997ced0ee8bd6c4612bc5
+ODFGEN_VERSION_MICRO := 9
 ODFGEN_TARBALL := libodfgen-0.1.$(ODFGEN_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
