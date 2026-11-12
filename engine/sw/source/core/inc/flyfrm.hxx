@@ -173,6 +173,14 @@ protected:
 public:
     // #i26791#
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL ) const override;
+    /** Adds the entries of the fly and its lowers to rCollector. A fly draws in layers of its
+        own: the backgrounds of its frames, their content, the border lines. A fly that holds a
+        picture draws its background only where it shows: in the margin around the picture, or
+        whole behind a picture that lets it show through, cut to the contour the text wraps at.
+        A fly that a tracked change deleted is crossed out over all its content, unless it is
+        anchored as a character, where the text draws the cross.
+     */
+    virtual void CreatePrimitives( sw::vector::Collector& rCollector ) const override;
     virtual Size ChgSize( const Size& aNewSize ) override;
     virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;

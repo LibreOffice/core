@@ -2073,6 +2073,9 @@ void SwViewShell::PaintFromPrimitives(OutputDevice& rDevice, const tools::Rectan
     aViewInformation.setViewport(basegfx::B2DRange(aArea.Left(), aArea.Top(),
                                                    aArea.Left() + aArea.Width(),
                                                    aArea.Top() + aArea.Height()));
+    // Text in the automatic color, as in a chart or in a drawing object, contrasts with the
+    // document color of this view.
+    aViewInformation.setAutoColor(GetViewOptions()->GetDocColor());
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor
         = drawinglayer::processor2d::createProcessor2DFromOutputDevice(rDevice, aViewInformation);
     if (pProcessor)

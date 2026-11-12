@@ -84,6 +84,10 @@ public:
     /// The separation lines between the inner columns, relative to rOrigin
     drawinglayer::primitive2d::Primitive2DContainer
     CreateColumnLinePrimitives(const Point& rOrigin) const;
+    /// Adds the entries of the lowers to rCollector, in their order. eMode names the lowers that
+    /// are taken: all of them, only the header and the footer, or all but those two.
+    void CreateLowerPrimitives(sw::vector::Collector& rCollector,
+                               PaintFrameMode eMode = PAINT_ALL) const;
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 

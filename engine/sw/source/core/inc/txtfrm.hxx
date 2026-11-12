@@ -25,6 +25,7 @@
 #include "TextFrameIndex.hxx"
 #include <nodeoffset.hxx>
 
+#include <optional>
 #include <set>
 #include <utility>
 
@@ -34,6 +35,7 @@ namespace sw::mark { class MarkBase; }
 namespace sw { enum class ParagraphBreakMode; }
 namespace sw::vector { class Context; class TextSink; }
 class SwCharRange;
+class SwTaggedPDFHelper;
 class SwTextNode;
 class SwTextAttrEnd;
 class SwTextFormatter;
@@ -344,6 +346,22 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     /// Draws the line numbers and the change bars beside the lines of the frame that lie in
     /// rRect, into pSink when it is set and onto the output device of the view otherwise.
     void DrawExtraData( const SwRect& rRect, sw::vector::TextSink* pSink ) const;
+
+    /** Draws the lines of the frame that lie in rRect, and the drop cap. rRect is in the
+        coordinates of the document when the call starts, and in the coordinates the lines are
+        measured in when it returns: a vertical frame is turned and a right-to-left frame is
+        mirrored. Without pSink the lines go onto the output device of the view, with the spelling,
+        grammar and smart tag marks of the view. They are clipped at rRect when bOnWin is set,
+        when the frame is too small for its lines or when bCutByUpper is set, and the drop cap is
+        drawn after the last line. With pSink the lines go into it as primitives, each line is
+        announced to it, nothing is clipped, and the drop cap is drawn with the first line that
+        holds text. The two tags and isPDFTaggingEnabled are as in SwTextPainter::DrawTextLine.
+        The frame has its paragraph portion and is locked.
+     */
+    void DrawTextLines( SwRect& rRect, bool bOnWin, bool bCutByUpper,
+                        std::optional<SwTaggedPDFHelper>& roTaggedLabel,
+                        std::optional<SwTaggedPDFHelper>& roTaggedParagraph,
+                        bool isPDFTaggingEnabled, sw::vector::TextSink* pSink ) const;
 
     virtual void SwClientNotify(SwModify const& rModify, SfxHint const& rHint) override;
 

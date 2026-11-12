@@ -15,6 +15,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <anchoredobject.hxx>
+#include <dcontact.hxx>
 #include <dflyobj.hxx>
 #include <doc.hxx>
 #include <flyfrm.hxx>
@@ -28,6 +29,8 @@
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>
 #include <viewimp.hxx>
+#include <viewopt.hxx>
+#include <viewsh.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -36,11 +39,18 @@
 #include <rootfrm.hxx>
 #include <tools/color.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdouno.hxx>
 #include <svx/VectorObjectContent.hxx>
+#include <vcl/GraphicObject.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/virdev.hxx>
 
 #include <algorithm>
 #include <cassert>
@@ -147,6 +157,13 @@ sal_uInt64 backgroundEntryIdOf(const SwFrame& rFrame)
     // The ids start at 4 * 2^40. The ids of border entries stay below 2 * 2^40 + 2^32, and the
     // range from 3 * 2^40 up holds the keys the page entries are recorded under.
     return (sal_uInt64(4) << 40) + rFrame.GetFrameId();
+}
+
+sal_uInt64 overContentEntryIdOf(const SwFrame& rFrame)
+{
+    // The ids start at 5 * 2^40, above the ids of background entries, which stay below
+    // 4 * 2^40 + 2^32.
+    return (sal_uInt64(5) << 40) + rFrame.GetFrameId();
 }
 
 void Collector::open(const SwFrame& rFrame)
@@ -271,15 +288,26 @@ void Collector::openBorderLayer() { maBorderLayers.push_back(maBorders.size()); 
 void Collector::deferBorders(const SwFrame& rFrame,
                              drawinglayer::primitive2d::Primitive2DContainer&& rBorders)
 {
-    if (rBorders.empty())
+    deferLines(bordersEntryIdOf(rFrame), std::move(rBorders));
+}
+
+void Collector::deferOverContent(const SwFrame& rFrame,
+                                 drawinglayer::primitive2d::Primitive2DContainer&& rLines)
+{
+    deferLines(overContentEntryIdOf(rFrame), std::move(rLines));
+}
+
+void Collector::deferLines(sal_uInt64 nId, drawinglayer::primitive2d::Primitive2DContainer&& rLines)
+{
+    if (rLines.empty())
         return;
 
     Entry aEntry;
-    aEntry.mnId = bordersEntryIdOf(rFrame);
+    aEntry.mnId = nId;
     aEntry.moParent = current().mnId;
     aEntry.meKind = EntryKind::Borders;
     aEntry.maBox = current().maBox;
-    aEntry.maPrimitives = std::move(rBorders);
+    aEntry.maPrimitives = std::move(rLines);
     // Without a layer around them the lines come right after what is gathered so far.
     if (maBorderLayers.empty())
         maEntries.push_back(std::move(aEntry));
@@ -417,6 +445,73 @@ bool isDrawn(const SwAnchoredObject& rObject, const IDocumentDrawModelAccess& rA
     return true;
 }
 
+/// Whether the view that rContext is for hides rObject and shows a placeholder in its place. A
+/// view can hide the drawing objects and the controls, and it can hide the pictures, which hides
+/// every fly. Entries for any client show every object.
+bool isReplacedInView(const SdrObject& rObject, const Context& rContext)
+{
+    if (!rContext.isForView() || !GetUserCall(&rObject))
+        return false;
+
+    const SwViewOption& rOptions = rContext.options();
+    if (!rOptions.IsDraw()
+        && (dynamic_cast<const SdrUnoObj*>(&rObject) || dynamic_cast<const SdrAttrObj*>(&rObject)))
+        return true;
+    return !rOptions.IsGraphic() && dynamic_cast<const SwVirtFlyDrawObj*>(&rObject);
+}
+
+/// Whether rObject is anchored inside a fly that the view of rContext shows a placeholder for.
+/// The placeholder of that fly stands for all it holds.
+bool isInReplacedFly(const SwAnchoredObject& rObject, const Context& rContext)
+{
+    const SwFrame* pAnchor = rObject.GetAnchorFrame();
+    const SwFlyFrame* pFly = pAnchor ? pAnchor->FindFlyFrame() : nullptr;
+    while (pFly)
+    {
+        if (isReplacedInView(*pFly->GetVirtDrawObj(), rContext))
+            return true;
+        pAnchor = pFly->GetAnchorFrame();
+        pFly = pAnchor ? pAnchor->FindFlyFrame() : nullptr;
+    }
+    return false;
+}
+
+/// Adds the entry of the placeholder that the view of rCollector shows in place of rObject, which
+/// it hides. The placeholder covers the area of the object with the space around it, and it is
+/// what the paint of the view draws there, recorded as a picture.
+void addReplacement(Collector& rCollector, const SwAnchoredObject& rObject)
+{
+    const SdrObject* pObject = rObject.GetDrawObj();
+    const SwViewShell* pShell = rCollector.context().shell();
+    const SwRect aBox(GetBoundRectOfAnchoredObj(pObject));
+    if (!pShell || !aBox.HasArea() || !rCollector.wants(aBox))
+        return;
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice;
+    pDevice->SetMapMode(MapMode(MapUnit::MapTwip));
+    GDIMetaFile aRecording;
+    aRecording.Record(pDevice.get());
+    vcl::Font aFont(pDevice->GetFont());
+    Graphic::DrawEx(*pDevice, OUString(), aFont,
+                    const_cast<SwViewShell*>(pShell)->GetReplacementBitmap(), Point(),
+                    aBox.SSize());
+    aRecording.Stop();
+    aRecording.WindStart();
+    aRecording.SetPrefMapMode(MapMode(MapUnit::MapTwip));
+    aRecording.SetPrefSize(aBox.SSize());
+
+    const SwFlyFrame* pFly = rObject.DynCastFlyFrame();
+    if (pFly)
+        rCollector.open(pFly->GetFrameId(), EntryKind::Fly, aBox);
+    else
+        rCollector.open(entryIdOf(*pObject), EntryKind::Shape, aBox);
+    rCollector.current().moAnchor = anchorOf(rObject);
+    rCollector.add(new drawinglayer::primitive2d::GraphicPrimitive2D(
+        basegfx::utils::createScaleB2DHomMatrix(aBox.Width(), aBox.Height()),
+        GraphicObject(Graphic(aRecording))));
+    rCollector.close();
+}
+
 /// Adds the entries of the objects in rObjects that are drawn at ePlace, in paint order. With
 /// bAsCharacter set, only objects anchored as a character are added.
 void addObjects(Collector& rCollector, const SwSortedObjs& rObjects,
@@ -450,10 +545,14 @@ void addObjects(Collector& rCollector, const SwSortedObjs& rObjects,
 
     for (const SwAnchoredObject* pObject : aObjects)
     {
-        if (const SwFlyFrame* pFly = pObject->DynCastFlyFrame())
-        {
+        // A view shows a placeholder for an object it hides, and nothing for what a hidden fly
+        // holds.
+        if (isReplacedInView(*pObject->GetDrawObj(), rCollector.context()))
+            addReplacement(rCollector, *pObject);
+        else if (isInReplacedFly(*pObject, rCollector.context()))
+            continue;
+        else if (const SwFlyFrame* pFly = pObject->DynCastFlyFrame())
             pFly->CreatePrimitives(rCollector);
-        }
         else
             addShape(rCollector, *pObject);
     }

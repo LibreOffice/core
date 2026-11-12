@@ -35,7 +35,8 @@ class SwTextFrame;
 namespace sw::vector
 {
 /// What an entry of a page is: a layout frame, the background of a frame, the border lines of a
-/// table or of a frame, or a drawing object.
+/// table or of a frame, or a drawing object. What a frame draws over its content, such as the
+/// cross over a deleted fly, is an entry of the kind of border lines.
 enum class EntryKind
 {
     Page,
@@ -80,6 +81,10 @@ SW_DLLPUBLIC sal_uInt64 bordersEntryIdOf(const SwFrame& rFrame);
 
 /// The id of the entry holding the background of rFrame.
 SW_DLLPUBLIC sal_uInt64 backgroundEntryIdOf(const SwFrame& rFrame);
+
+/// The id of the entry holding what rFrame draws over its content and over the border lines of
+/// that content.
+SW_DLLPUBLIC sal_uInt64 overContentEntryIdOf(const SwFrame& rFrame);
 
 /** One entry of a page: a frame or a drawing object, with what it draws itself.
 
@@ -191,10 +196,20 @@ public:
     void deferBorders(const SwFrame& rFrame,
                       drawinglayer::primitive2d::Primitive2DContainer&& rBorders);
 
+    /// Keeps rLines, what rFrame draws over its content and over the border lines of that content,
+    /// relative to origin(), as an entry of the kind of border lines in the entry of rFrame. It is
+    /// added when the innermost border layer closes, after the entries kept before it.
+    void deferOverContent(const SwFrame& rFrame,
+                          drawinglayer::primitive2d::Primitive2DContainer&& rLines);
+
     /// Adds the entries of the border lines kept since the layer opened last, and closes it.
     void closeBorderLayer();
 
 private:
+    /// Keeps rLines, relative to origin(), as an entry of the kind of border lines with the id nId
+    /// in the open entry. It is added when the innermost border layer closes.
+    void deferLines(sal_uInt64 nId, drawinglayer::primitive2d::Primitive2DContainer&& rLines);
+
     /// A layer of backgrounds that is open.
     struct BackgroundLayer
     {

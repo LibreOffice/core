@@ -4980,7 +4980,7 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
 {
     // A hidden frame has no area and draws nothing. A row goes on, as its cells can span into the
     // rows below it.
-    if (!getFramePrintArea().HasArea() && !IsRowFrame() && !IsPageFrame())
+    if (!getFramePrintArea().HasArea() && !IsRowFrame())
         return;
     if (!rCollector.wants(GetPaintArea()))
         return;
@@ -4989,14 +4989,15 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
         return;
 
     rCollector.open(*this);
+    CreateOwnPrimitives(rCollector);
+    if (IsLayoutFrame())
+        static_cast<const SwLayoutFrame*>(this)->CreateLowerPrimitives(rCollector);
+    rCollector.close();
+}
+
+void SwFrame::CreateOwnPrimitives(sw::vector::Collector& rCollector) const
+{
     const Point aOrigin(rCollector.origin());
-    // A page and a fly each draw their own layers of backgrounds and of border lines.
-    const bool bOwnLayers = IsPageFrame() || IsFlyFrame();
-    if (bOwnLayers)
-    {
-        rCollector.openBackgroundLayer();
-        rCollector.openBorderLayer();
-    }
     rCollector.addBackground(*this, CreateBackgroundPrimitives(aOrigin, rCollector.context()));
     drawinglayer::primitive2d::Primitive2DContainer aBorders;
     rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
@@ -5010,57 +5011,6 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
         aBorders = std::move(aColumnLines);
     }
     rCollector.deferBorders(*this, std::move(aBorders));
-
-    // The page draws the objects behind the text over the backgrounds of its frames and before
-    // their content, and the other objects after it. Flies are frames of their own, anchored
-    // somewhere else on the page.
-    const SwPageFrame* pPage = IsPageFrame() ? static_cast<const SwPageFrame*>(this) : nullptr;
-    if (pPage)
-        sw::vector::addPageObjects(rCollector, *pPage, sw::vector::ObjectPlace::BehindText);
-
-    if (IsLayoutFrame())
-    {
-        const SwLayoutFrame& rLayout = static_cast<const SwLayoutFrame&>(*this);
-        // The frame is kept alive over the walk of its lowers.
-        SwFrameDeleteGuard aDeleteGuard(const_cast<SwFrame*>(this));
-        // When the document paints the objects behind the text over the header and the footer,
-        // the page draws its header and footer first, then those objects, then the body.
-        const bool bHeaderFooterFirst
-            = pPage
-              && pPage->GetFormat()->getIDocumentSettingAccess().get(
-                  DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
-        if (bHeaderFooterFirst)
-        {
-            for (const SwFrame* pLower = rLayout.Lower(); pLower; pLower = pLower->GetNext())
-            {
-                if (pLower->IsHeaderFrame() || pLower->IsFooterFrame())
-                    pLower->CreatePrimitives(rCollector);
-            }
-            sw::vector::addPageObjects(rCollector, *pPage,
-                                       sw::vector::ObjectPlace::BehindBodyText);
-        }
-        for (const SwFrame* pLower = rLayout.Lower(); pLower; pLower = pLower->GetNext())
-        {
-            if (!bHeaderFooterFirst || !(pLower->IsHeaderFrame() || pLower->IsFooterFrame()))
-                pLower->CreatePrimitives(rCollector);
-        }
-    }
-
-    // The backgrounds of the frames go before the objects behind the text. The border lines lie
-    // over the content, and the objects in front of the text over them.
-    if (bOwnLayers)
-    {
-        rCollector.closeBackgroundLayer();
-        rCollector.closeBorderLayer();
-    }
-
-    if (pPage)
-        sw::vector::addPageObjects(rCollector, *pPage, sw::vector::ObjectPlace::InFrontOfText);
-
-    if (IsFlyFrame())
-        rCollector.current().moAnchor = sw::vector::anchorOf(*static_cast<const SwFlyFrame*>(this));
-
-    rCollector.close();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

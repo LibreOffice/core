@@ -617,12 +617,16 @@ public:
         const SwFrame* pCellFrameForBottomBorderAttrs, const Point& rOrigin = Point(),
         bool bWithRedlineRenderMode = true) const;
 
-    /** The fill of the frame's own background, relative to rOrigin, without view shading. A text
-        fly without a background takes the one of the frames it is anchored in, or white. A table
-        row or a table cell that a tracked change inserted or deleted is filled with the color of
-        that change, while the layout shows the changes and the options of rContext draw them in
-        the standard way. The current view still hides the page background when set to, and
-        aligns the area of a background graphic to its pixels during a paint or in browse mode.
+    /** The fill of the frame's own background, relative to rOrigin. The paint decides the same
+        fill, the same area and the same placement of a background graphic. A fly without a
+        background takes the one of the frames it is anchored in, or the color behind the
+        document: white for any client, the color of the view for a view. A table row or a table
+        cell that a tracked change inserted or deleted is filled with the color of that change,
+        while the layout shows the changes and the options of rContext draw them in the standard
+        way. A decomposition for a view also has the index shading of that view, and leaves out
+        a background graphic while the view hides pictures. The current view still hides the page
+        background when set to, and aligns the area of a background graphic to its pixels during
+        a paint or in browse mode.
      */
     drawinglayer::primitive2d::Primitive2DContainer
     CreateBackgroundPrimitives(const Point& rOrigin, const sw::vector::Context& rContext) const;
@@ -634,10 +638,15 @@ public:
         const Point& rOrigin, drawinglayer::primitive2d::Primitive2DContainer& rBorders) const;
 
     /** Adds the entries of this frame and its lowers to rCollector. An entry holds what the frame
-        draws itself, relative to the top left of its frame area. A page and a fly place the
-        backgrounds of the frames they hold before the objects behind the text.
+        draws itself, relative to the top left of its frame area.
      */
     virtual void CreatePrimitives(sw::vector::Collector& rCollector) const;
+
+    /** Adds what the frame draws itself to its entry, the open one of rCollector: the background
+        and the shadow. The separator lines of its columns and its border lines are kept for the
+        border layer, the separator lines first.
+     */
+    void CreateOwnPrimitives(sw::vector::Collector& rCollector) const;
 
     // retouch, not in the area of the given Rect!
     void Retouch( const SwPageFrame *pPage, const SwRect &rRect ) const;

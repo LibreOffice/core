@@ -187,6 +187,13 @@ public:
     virtual void CheckDirection( bool bVert ) override;
     void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) const;
+
+    /** Adds the entries of the page to rCollector in the order the page is painted in: the
+        backgrounds of its frames, the objects behind the text, the header and the footer with
+        the objects behind the body text when the document paints those first, the body, the
+        border lines, the objects in front of the text.
+     */
+    virtual void CreatePrimitives( sw::vector::Collector& rCollector ) const override;
     bool HasGrid() const { return m_bHasGrid; }
 
     void PaintDecorators( ) const;

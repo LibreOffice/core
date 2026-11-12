@@ -831,67 +831,15 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     // Read before the frame is swapped.
     const bool bCutByUpper = IsCutByUpper();
 
-    {
-        SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
+    const bool bOnWin = pSh->GetWin() != nullptr;
 
-        if ( IsVertical() )
-            SwitchVerticalToHorizontal( const_cast<SwRect&>(rRect) );
+    // Output loop: For each Line ... (which is still visible) ...
+    // rRect is switched for a vertical and for a right-to-left frame, and put back below.
+    DrawTextLines( const_cast<SwRect&>(rRect), bOnWin, bCutByUpper, oTaggedLabel,
+                   oTaggedParagraph, isPDFTaggingEnabled, nullptr );
 
-        if ( IsRightToLeft() )
-            SwitchRTLtoLTR( const_cast<SwRect&>(rRect) );
-
-        SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
-        sw::WrongListIterator iterWrong(*this, &SwTextNode::GetWrong);
-        sw::WrongListIterator iterGrammar(*this, &SwTextNode::GetGrammarCheck);
-        sw::WrongListIterator iterSmartTags(*this, &SwTextNode::GetSmartTags);
-        if (iterWrong.LooksUseful())
-        {
-            aInf.SetWrongList( &iterWrong );
-        }
-        if (iterGrammar.LooksUseful())
-        {
-            aInf.SetGrammarCheckList( &iterGrammar );
-        }
-        if (iterSmartTags.LooksUseful())
-        {
-            aInf.SetSmartTags( &iterSmartTags );
-        }
-        aInf.GetTextFly().SetTopRule();
-
-        SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
-        // Optimization: if no free flying Frame overlaps into our line, the
-        // SwTextFly just switches off
-        aInf.GetTextFly().Relax();
-
-        OutputDevice* pOut = aInf.GetOut();
-        const bool bOnWin = pSh->GetWin() != nullptr;
-
-        // A cell, a fly or a column can be narrower than this frame, and then the rect to paint in
-        // ends before the frame does (SwFrame::GetPaintArea). Lines reaching past that end have to
-        // be cut, or they are drawn over what stands beside that cell or fly - and the screen is
-        // not the only place where that matters, so allow the clip on a printer and in a PDF too.
-        SwSaveClip aClip(bOnWin || IsUndersized() || bCutByUpper ? pOut : nullptr);
-
-        // Output loop: For each Line ... (which is still visible) ...
-        //   adapt rRect (Top + 1, Bottom - 1)
-        // Because the Iterator attaches the Lines without a gap to each other
-        aLine.TwipsToLine( rRect.Top() + 1 );
-        tools::Long nBottom = rRect.Bottom();
-
-        do
-        {
-            aLine.DrawTextLine(rRect, aClip, IsUndersized(), bCutByUpper, oTaggedLabel,
-                               oTaggedParagraph, isPDFTaggingEnabled);
-
-        } while( aLine.Next() && aLine.Y() <= nBottom );
-
-        // Once is enough:
-        if( aLine.IsPaintDrop() )
-            aLine.PaintDropPortion();
-
-        if( rRepaint.HasArea() )
-            rRepaint.Clear();
-    }
+    if( rRepaint.HasArea() )
+        rRepaint.Clear();
 
     PaintParagraphStylesHighlighting();
 
@@ -901,6 +849,111 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     assert(!oTaggedLabel); // must have been closed if opened
     assert(!isPDFTaggingEnabled || oTaggedParagraph || rRect.GetIntersection(getFrameArea()) != getFrameArea()); // must have been created during complete paint (PDF export is always complete paint)
+}
+
+void SwTextFrame::DrawTextLines( SwRect& rRect, const bool bOnWin, const bool bCutByUpper,
+                                 std::optional<SwTaggedPDFHelper>& roTaggedLabel,
+                                 std::optional<SwTaggedPDFHelper>& roTaggedParagraph,
+                                 const bool isPDFTaggingEnabled,
+                                 sw::vector::TextSink* pSink ) const
+{
+    SwTextFrame* pThis = const_cast<SwTextFrame*>(this);
+    SwSwapIfNotSwapped swap( pThis );
+
+    if ( IsVertical() )
+        SwitchVerticalToHorizontal( rRect );
+
+    if ( IsRightToLeft() )
+        SwitchRTLtoLTR( rRect );
+
+    // With a sink the paint info measures on the reference device and hands every draw to the
+    // sink. Without one it draws onto the output device of the view.
+    std::optional<SwTextPaintInfo> oPaintInfo;
+    if ( pSink )
+        oPaintInfo.emplace( pThis, rRect, *pSink );
+    else
+        oPaintInfo.emplace( pThis, rRect );
+    SwTextPaintInfo& rInf = *oPaintInfo;
+
+    // The marks under wrong, ungrammatical and tagged words belong to the view.
+    std::optional<sw::WrongListIterator> oIterWrong;
+    std::optional<sw::WrongListIterator> oIterGrammar;
+    std::optional<sw::WrongListIterator> oIterSmartTags;
+    if ( !pSink )
+    {
+        // Each getter of the text node has a const and a non-const form, and the iterator takes
+        // the const one.
+        SwWrongList const* (SwTextNode::*pGetWrong)() const = &SwTextNode::GetWrong;
+        SwWrongList const* (SwTextNode::*pGetGrammarCheck)() const = &SwTextNode::GetGrammarCheck;
+        SwWrongList const* (SwTextNode::*pGetSmartTags)() const = &SwTextNode::GetSmartTags;
+        oIterWrong.emplace( *this, pGetWrong );
+        oIterGrammar.emplace( *this, pGetGrammarCheck );
+        oIterSmartTags.emplace( *this, pGetSmartTags );
+        if ( oIterWrong->LooksUseful() )
+        {
+            rInf.SetWrongList( &*oIterWrong );
+        }
+        if ( oIterGrammar->LooksUseful() )
+        {
+            rInf.SetGrammarCheckList( &*oIterGrammar );
+        }
+        if ( oIterSmartTags->LooksUseful() )
+        {
+            rInf.SetSmartTags( &*oIterSmartTags );
+        }
+    }
+    rInf.GetTextFly().SetTopRule();
+
+    SwTextPainter aLine( pThis, &rInf );
+    // Optimization: if no free flying Frame overlaps into our line, the
+    // SwTextFly just switches off
+    rInf.GetTextFly().Relax();
+
+    OutputDevice* pOut = rInf.GetOut();
+
+    // A cell, a fly or a column can be narrower than this frame, and then the rect to paint in
+    // ends before the frame does (SwFrame::GetPaintArea). Lines reaching past that end are cut
+    // at it on the device: on a window, and on a printer and in a PDF as well. A sink takes the
+    // lines whole.
+    SwSaveClip aClip( !pSink && ( bOnWin || IsUndersized() || bCutByUpper ) ? pOut : nullptr );
+
+    // Output loop: For each Line ... (which is still visible) ...
+    //   adapt rRect (Top + 1, Bottom - 1)
+    // Because the Iterator attaches the Lines without a gap to each other
+    aLine.TwipsToLine( rRect.Top() + 1 );
+    tools::Long nBottom = rRect.Bottom();
+
+    // For a sink the drop cap is a part of the first line that holds text.
+    bool bDropLineSeen = false;
+    bool bDropDrawn = false;
+    do
+    {
+        if ( pSink )
+            pSink->startLine( aLine.GetLeftMargin(), aLine.GetLineWidth(),
+                              aLine.GetCurr()->GetAscent(), aLine.GetCurr()->Height() );
+        aLine.DrawTextLine( rRect, aClip, IsUndersized(), bCutByUpper, roTaggedLabel,
+                            roTaggedParagraph, isPDFTaggingEnabled );
+        if ( pSink && !bDropLineSeen && aLine.GetLength() )
+        {
+            bDropLineSeen = true;
+            if ( aLine.IsPaintDrop() )
+            {
+                // Drawing the drop cap moves the walk to the line of the drop cap, so the
+                // walk goes back to the line it drew last.
+                const SwLineLayout* pDrawn = aLine.GetCurr();
+                aLine.PaintDropPortion();
+                bDropDrawn = true;
+                aLine.Top();
+                while ( aLine.GetCurr() != pDrawn && aLine.Next() )
+                    ;
+            }
+        }
+
+    } while( aLine.Next() && aLine.Y() <= nBottom );
+
+    // Once is enough:
+    if( aLine.IsPaintDrop() && !bDropDrawn )
+        aLine.PaintDropPortion();
 }
 
 namespace
@@ -965,58 +1018,19 @@ SwTextFrame::CreateTextPrimitives(
     }
 
     {
+        // The sink takes the print area as the line iterator measures it, so the frame is turned
+        // before the sink is made.
         SwSwapIfNotSwapped aSwap(pThis);
-
-        if (IsVertical())
-            SwitchVerticalToHorizontal(aDrawArea);
-        if (IsRightToLeft())
-            SwitchRTLtoLTR(aDrawArea);
 
         // The area the lines wrap in, as the line iterator measures it.
         SwRect aTextArea(getFramePrintArea());
         aTextArea.Pos(aTextArea.Pos() + getFrameArea().Pos());
 
         sw::vector::TextSink aSink(rOrigin, aTextArea, alignOf(*this), rContext);
-        SwTextPaintInfo aInfo(pThis, aDrawArea, aSink);
-        aInfo.GetTextFly().SetTopRule();
-
-        SwTextPainter aLine(pThis, &aInfo);
-        aInfo.GetTextFly().Relax();
-
-        SwSaveClip aClip(nullptr);
         std::optional<SwTaggedPDFHelper> oTaggedLabel;
         std::optional<SwTaggedPDFHelper> oTaggedParagraph;
-
-        aLine.TwipsToLine(aDrawArea.Top() + 1);
-        const SwTwips nBottom = aDrawArea.Bottom();
-        // The drop cap is a part of the first line that holds text.
-        bool bDropLineSeen = false;
-        bool bDropDrawn = false;
-        do
-        {
-            aSink.startLine(aLine.GetLeftMargin(), aLine.GetLineWidth(),
-                            aLine.GetCurr()->GetAscent(), aLine.GetCurr()->Height());
-            aLine.DrawTextLine(aDrawArea, aClip, bUndersized, bCutByUpper, oTaggedLabel,
-                               oTaggedParagraph, /*isPDFTaggingEnabled=*/false);
-            if (!bDropLineSeen && aLine.GetLength())
-            {
-                bDropLineSeen = true;
-                if (aLine.IsPaintDrop())
-                {
-                    // Drawing the drop cap moves the walk to the line of the drop cap, so the
-                    // walk goes back to the line it drew last.
-                    const SwLineLayout* pDrawn = aLine.GetCurr();
-                    aLine.PaintDropPortion();
-                    bDropDrawn = true;
-                    aLine.Top();
-                    while (aLine.GetCurr() != pDrawn && aLine.Next())
-                        ;
-                }
-            }
-        } while (aLine.Next() && aLine.Y() <= nBottom);
-
-        if (aLine.IsPaintDrop() && !bDropDrawn)
-            aLine.PaintDropPortion();
+        DrawTextLines(aDrawArea, /*bOnWin=*/false, bCutByUpper, oTaggedLabel, oTaggedParagraph,
+                      /*isPDFTaggingEnabled=*/false, &aSink);
 
         aPrimitives = aSink.take();
         rOverObjects = aSink.takeOverObjects();

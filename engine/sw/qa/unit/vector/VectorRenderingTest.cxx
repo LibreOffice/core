@@ -1111,6 +1111,35 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPictureIsAFlyAnchoredInItsParagraph)
     CPPUNIT_ASSERT_EQUAL(pGraphic, pictureOf(*pPictureAgain));
 }
 
+/// A fly with a fill of its own draws no fill behind an opaque picture that covers it whole, as
+/// the paint leaves that area to the picture.
+CPPUNIT_TEST_FIXTURE(Test, testVectorFlyDrawsNoFillBehindAnOpaquePicture)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphic(
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+    xGraphic->setPropertyValue(u"AnchorType"_ustr,
+                               uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(2000, 1000)));
+    xGraphic->setPropertyValue(u"Graphic"_ustr, redPicture());
+    xGraphic->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
+    xGraphic->setPropertyValue(u"FillColor"_ustr, uno::Any(sal_Int32(0x0000ff)));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(),
+                             uno::Reference<text::XTextContent>(xGraphic, uno::UNO_QUERY), false);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    // The picture has no margin around it, so no stripe of the fill shows either.
+    const sw::vector::Entry* pFly = findEntry(aEntries, sw::vector::EntryKind::Fly);
+    CPPUNIT_ASSERT(pFly);
+    CPPUNIT_ASSERT(pFly->maPrimitives.empty());
+    CPPUNIT_ASSERT(findEntry(aEntries, sw::vector::EntryKind::NoTextFrame));
+}
+
 /// A picture that cannot be read on a rotated frame shows the box that says why upright over the
 /// whole entry, as the paint draws it.
 CPPUNIT_TEST_FIXTURE(Test, testVectorBrokenRotatedPictureShowsAnUprightBox)
