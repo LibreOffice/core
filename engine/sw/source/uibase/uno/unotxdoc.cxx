@@ -163,6 +163,7 @@
 #include <viscrs.hxx>
 #include <srcview.hxx>
 #include <edtwin.hxx>
+#include <mdiexp.hxx>
 #include <swdtflvr.hxx>
 #include <PostItMgr.hxx>
 
@@ -3688,7 +3689,11 @@ void SwXTextDocument::setClientVisibleArea(const tools::Rectangle& rRectangle)
 
     if (SwViewShell* pViewShell = m_pDocShell->GetWrtShell())
     {
-        pViewShell->setKitVisibleArea(rRectangle);
+        if (pViewShell->getKitVisibleArea() != rRectangle)
+        {
+            pViewShell->setKitVisibleArea(rRectangle);
+            PageNumNotify(*pViewShell);
+        }
     }
 }
 

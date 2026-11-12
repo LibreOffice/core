@@ -191,6 +191,29 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     CPPUNIT_ASSERT_EQUAL(".uno:StatePageNumber=Page 2 of 2"_ostr, aView2.m_aStateChanges[0]);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageInView)
+{
+    // Given a 2-page document, the cursor on page 1
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    SwFrame* pPage2 = pWrtShell->GetLayout()->GetLower()->GetNext();
+    CPPUNIT_ASSERT(pPage2);
+
+    // When the client scrolls to page 2
+    pXTextDocument->setClientVisibleArea(pPage2->getFrameArea().SVRect());
+
+    // Then the status bar shows the page in view
+    // Without the fix
+    // - Expected: Page 2 of 2
+    // - Actual  : Page 1 of 2
+    std::unique_ptr<SfxStringListItem> pItem;
+    pWrtShell->GetView().GetViewFrame().GetBindings().QueryState(FN_STAT_PAGE, pItem);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL(u"Page 2 of 2"_ustr, pItem->GetList()[0]);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRules)
 {
     // Given a document with 3 pages: first page is ~empty, then page break, then pages 2 & 3 have

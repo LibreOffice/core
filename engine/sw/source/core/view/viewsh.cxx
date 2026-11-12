@@ -31,6 +31,7 @@
 #include <drawdoc.hxx>
 #include <swwait.hxx>
 #include <crsrsh.hxx>
+#include <viscrs.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -2887,6 +2888,38 @@ SwPostItMgr* SwViewShell::GetPostItMgr()
 void SwViewShell::GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers, const SwView& rView)
 {
     SwRect rViewVisArea(rView.GetVisArea());
+    if (comphelper::COKit::isActive())
+    {
+        // The client shows one page, the cursor's one while the cursor is in the client's area.
+        SwRect aKitVisibleArea(getKitVisibleArea());
+        aKitVisibleArea.Intersection(GetLayout()->getFrameArea());
+        if (!aKitVisibleArea.IsEmpty())
+        {
+            Point aPoint = aKitVisibleArea.Center();
+            if (const SwCursorShell* pCursorShell = dynamic_cast<const SwCursorShell*>(this))
+            {
+                const SwRect& rCursorRectangle = pCursorShell->GetCharRect();
+                if (pCursorShell->GetVisibleCursor()->IsVisible()
+                    && aKitVisibleArea.Overlaps(rCursorRectangle))
+                    aPoint = rCursorRectangle.TopLeft();
+            }
+            if (const SwPageFrame* pPage = GetLayout()->GetPageAtPos(aPoint, nullptr, true))
+            {
+                const SvxNumberType& rNumberType = pPage->GetPageDesc()->GetNumType();
+                rVisiblePageNumbers.nFirstPhy = pPage->GetPhyPageNum();
+                rVisiblePageNumbers.nFirstVirt = pPage->GetVirtPageNum();
+                rVisiblePageNumbers.sFirstCustomPhy
+                    = rNumberType.GetNumStr(rVisiblePageNumbers.nFirstPhy);
+                rVisiblePageNumbers.sFirstCustomVirt
+                    = rNumberType.GetNumStr(rVisiblePageNumbers.nFirstVirt);
+                rVisiblePageNumbers.nLastPhy = rVisiblePageNumbers.nFirstPhy;
+                rVisiblePageNumbers.nLastVirt = rVisiblePageNumbers.nFirstVirt;
+                rVisiblePageNumbers.sLastCustomPhy = rVisiblePageNumbers.sFirstCustomPhy;
+                rVisiblePageNumbers.sLastCustomVirt = rVisiblePageNumbers.sFirstCustomVirt;
+                return;
+            }
+        }
+    }
     vcl::RenderContext* pRenderContext = GetOut();
     const SwPageFrame* pPageFrame = Imp()->GetFirstVisPage(pRenderContext);
     SwRect rPageRect = pPageFrame->getFrameArea();
