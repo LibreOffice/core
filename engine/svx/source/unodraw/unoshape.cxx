@@ -207,7 +207,7 @@ SvxShape::~SvxShape() noexcept
     DBG_ASSERT( mnLockCount == 0, "Locked shape was disposed!" );
 
     if ( mpImpl->mpMaster )
-        mpImpl->mpMaster->dispose();
+        mpImpl->mpMaster->disposeShapeMaster();
 
     if ( mxSdrObject )
     {

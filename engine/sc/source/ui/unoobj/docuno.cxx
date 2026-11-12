@@ -41,6 +41,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
+#include <svx/unoshape.hxx>
 
 #include <COKit/COKit.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -4384,13 +4385,13 @@ cpo::uno::Reference<cpo::uno::XInterface> ScModelObj::create(
 
         //  if the drawing factory created a shape, a ScShapeObj has to be used
         //  to support own properties like ImageMap:
+        if (!xRet)
+            return nullptr;
 
         uno::Reference<drawing::XShape> xShape( xRet, uno::UNO_QUERY );
         if ( xShape.is() )
         {
-            xRet.clear();               // for aggregation, xShape must be the object's only ref
-            new ScShapeObj( xShape );   // aggregates object and modifies xShape
-            xRet.set(xShape);
+            new ScShapeObj( &dynamic_cast<SvxShape&>(*xRet) );   // attaches a SvxUnoMaster object
         }
     }
     return xRet;

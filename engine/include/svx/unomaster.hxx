@@ -65,7 +65,9 @@ public:
     /// @throws cpo::uno::RuntimeException
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() = 0;
 
-    virtual void dispose() = 0;
+    /// Called from SvxShape::~SvxShape to tell the shape master to free itself, since the
+    /// SvxShape is going away.
+    virtual void disposeShapeMaster() = 0;
 
 protected:
     ~SvxShapeMaster() {}

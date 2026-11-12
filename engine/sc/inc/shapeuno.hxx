@@ -26,9 +26,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <svx/unomaster.hxx>
 
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 namespace com::sun::star {
     namespace drawing {
@@ -40,39 +39,32 @@ namespace cpo::uno {
 }
 class SdrObject;
 struct SvEventDescription;
-class  ScMacroInfo;
+class ScMacroInfo;
+class SvxShape;
 
 //  object which aggregates all svx shape objects,
 //  to add own properties
 
-typedef ::cppu::WeakImplHelper <   css::beans::XPropertySet
-                                ,   css::beans::XPropertyState
-                                ,   css::text::XTextContent
-                                ,   css::document::XEventsSupplier
-                                ,   css::lang::XServiceInfo
-                                >   ScShapeObj_Base;
-typedef ::cppu::ImplHelper1     <   css::text::XText
-                                >   ScShapeObj_TextBase;
-typedef ::cppu::ImplHelper1     <   css::container::XChild
-                                >   ScShapeObj_ChildBase;
-class ScShapeObj final : public ScShapeObj_Base
-                    ,public ScShapeObj_TextBase
-                    ,public ScShapeObj_ChildBase
+class ScShapeObj final : public SvxShapeMaster
+                       , public css::text::XTextContent
+                       , public css::document::XEventsSupplier
+                       , public css::text::XText
+                       , public css::container::XChild
 {
 private:
     friend ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( const ScShapeObj* pShape, bool bCreate );
-    cpo::uno::Reference< cpo::uno::XAggregation >              mxShapeAgg;
+    SvxShape*                                                  mpShape;
     // cached pointers to avoid repeated queryAggregation calls:
-    css::beans::XPropertySet*                                  pShapePropertySet;
-    css::beans::XPropertyState*                                pShapePropertyState;
     cpo::uno::Reference< css::beans::XPropertySetInfo >        mxPropSetInfo;
+    // pointers to sub-interfaces inside SvxShape, which we have to init at construct time
+    css::lang::XComponent* mpComponent;
+    css::text::XText* mpText;
+    css::text::XSimpleText* mpSimpleText;
+    css::text::XTextRange* mpTextRange;
     bool                                                       bIsTextShape;
     bool                                                       bIsNoteCaption;
 
     SdrObject* GetSdrObject() const noexcept;
-
-    void                    GetShapePropertySet();
-    void                    GetShapePropertyState();
 
 friend class ShapeUnoEventAccessImpl;
 
@@ -80,9 +72,22 @@ public:
     static const SvEventDescription* GetSupportedMacroItems();
 
                             // ctor modifies xShape parameter
-                            ScShapeObj( cpo::uno::Reference<
-                                            css::drawing::XShape > & xShape );
-    virtual                 ~ScShapeObj() override;
+                            ScShapeObj( SvxShape* pShape );
+    ~ScShapeObj();
+
+        // SvxShapeMaster
+    virtual bool queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue( const OUString& aPropertyName,
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue(
+                                    const OUString& PropertyName ) override;
+    virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
+    virtual void setPropertyToDefault( const OUString& PropertyName ) override;
+    virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
+    virtual void disposeShapeMaster() override;
 
                             // XInterface
     virtual cpo::uno::Any queryInterface(
@@ -90,38 +95,15 @@ public:
     virtual void   acquire() noexcept override;
     virtual void   release() noexcept override;
 
-                            // XPropertySet
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            getPropertySetInfo() override;
-    virtual void   setPropertyValue( const OUString& aPropertyName,
-                                    const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any getPropertyValue(
-                                    const OUString& PropertyName ) override;
-    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void   addVetoableChangeListener( const OUString& PropertyName,
-                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-
-                            // XPropertyState
-    virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyState >
-                            getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
-    virtual void   setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
-
                             // XTextContent
     virtual void   attach(const cpo::uno::Reference< css::text::XTextRange > & xTextRange) override;
     virtual cpo::uno::Reference< css::text::XTextRange >
                             getAnchor() override;
 
                             // XComponent
-    virtual void   dispose() override;
     virtual void   addEventListener(const cpo::uno::Reference< css::lang::XEventListener > & aListener) override;
     virtual void   removeEventListener(const cpo::uno::Reference< css::lang::XEventListener > & aListener) override;
+    virtual void   dispose() override;
 
                             // XText
     virtual void   insertTextContent( const cpo::uno::Reference< css::text::XTextRange >& xRange,
@@ -153,17 +135,9 @@ public:
     virtual cpo::uno::Reference< cpo::uno::XInterface > getParent() override;
     virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& xParent ) override;
 
-                            // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
-    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
-
                             // XEventsSupplier
     virtual cpo::uno::Reference< css::container::XNameReplace > getEvents() override;
 
-                            // XServiceInfo
-    virtual OUString getImplementationName(  ) override ;
-    virtual bool supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

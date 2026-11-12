@@ -19,6 +19,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
+#include <svx/unoshape.hxx>
 #include <pageuno.hxx>
 #include <shapeuno.hxx>
 
@@ -36,9 +37,9 @@ ScPageObj::~ScPageObj() noexcept
 
 uno::Reference<drawing::XShape > ScPageObj::CreateShape( SdrObject *pObj ) const
 {
-    uno::Reference<drawing::XShape> xShape(SvxDrawPage::CreateShape( pObj ));
+    uno::Reference<drawing::XShape > xShape(SvxDrawPage::CreateShape( pObj ));
 
-    new ScShapeObj( xShape );       // aggregates object and modifies xShape
+    new ScShapeObj( &dynamic_cast<SvxShape&>(*xShape) ); // shape master
 
     return xShape;
 }

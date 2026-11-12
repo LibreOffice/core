@@ -72,7 +72,7 @@ public:
     virtual ~SdXShape() noexcept;
 
     virtual bool queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny ) override;
-    virtual void dispose() override;
+    virtual void disposeShapeMaster() override;
 
     // XInterface
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;

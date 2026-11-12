@@ -268,7 +268,7 @@ SdXShape::~SdXShape() noexcept
 {
 }
 
-void SdXShape::dispose()
+void SdXShape::disposeShapeMaster()
 {
     mpShape->setMaster( nullptr );
     delete this;
