@@ -279,6 +279,9 @@ public:
 
     // especially for Oliver Specht
     Point           GetWindowPosTopLeft( sal_Int32 nParagraph );
+    /// The point of the window, in the units of the output area, that shows the point
+    /// rDocumentPosition of the document. Vertical text turns the document in the window.
+    Point           GetWindowPosition( const Point& rDocumentPosition ) const;
     void            MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
     SAL_DLLPRIVATE void            MoveParagraphs( tools::Long nDiff );
 

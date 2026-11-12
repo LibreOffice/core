@@ -820,6 +820,11 @@ Point EditView::GetWindowPosTopLeft( sal_Int32 nParagraph )
     return getImpl().GetWindowPos( aDocPos );
 }
 
+Point EditView::GetWindowPosition( const Point& rDocumentPosition ) const
+{
+    return getImpl().GetWindowPos( rDocumentPosition );
+}
+
 void EditView::SetSelectionMode( EESelectionMode eMode )
 {
     getImpl().SetSelectionMode( eMode );
