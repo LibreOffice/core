@@ -9,7 +9,7 @@
 	--template-page-preview-width: 126px;
 	--template-preview-max-width: 170px;
 	--template-landscape-preview-height: 128px;
-	--template-card-width: calc(var(--template-preview-max-width) + 2 * var(--spacing-s));
+	--template-card-width: calc(var(--template-preview-max-width) + 2 * var(--spacing-m));
 	--color-primary-text: #ffffff;
 	--color-accent-background: var(--color-background-lighter);
 
@@ -330,7 +330,7 @@ body:not([data-doctype]) .backstage-view {
 .backstage-home-templates-row {
 	display: flex;
 	flex-wrap: nowrap;
-	align-items: flex-end;
+	align-items: stretch;
 	gap: calc(var(--spacing-xl) + var(--spacing-m));
 	margin-bottom: var(--spacing-m);
 	padding: 0 0 0.5rem;
@@ -408,17 +408,18 @@ body:not([data-doctype]) .backstage-view {
 	max-width: 420px;
 }
 
+/* Every card is one column of the same width, so the columns of all sections line up. The cards
+   of a row stretch to the height of the tallest card in that row. */
 .backstage-templates-grid {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-end;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, var(--template-card-width));
 	gap: calc(var(--spacing-xl) + var(--spacing-m));
 }
 
-/* The top padding leaves room for the favorite star above a preview of full height. */
 .backstage-template-card {
 	position: relative;
-	padding: calc(var(--btn-img-size) + 2 * var(--spacing-s)) var(--spacing-s) var(--spacing-s);
+	padding: var(--spacing-m);
+	border-radius: var(--border-radius);
 	cursor: pointer;
 	text-align: center;
 	transition: background-color var(--duration-normal) var(--ease-standard);
@@ -426,8 +427,7 @@ body:not([data-doctype]) .backstage-view {
 	flex-direction: column;
 	align-items: center;
 	box-sizing: border-box;
-	width: min-content;
-	max-width: var(--template-card-width);
+	width: var(--template-card-width);
 }
 
 
@@ -435,12 +435,12 @@ body:not([data-doctype]) .backstage-view {
 	background-color: var(--color-backstage-hover);
 }
 
-/* The star shows on hover and on keyboard focus, and stays on a favorite. It sits just above
-   the top corner of the preview. */
+/* The star shows on hover and on keyboard focus, and stays on a favorite. It sits in the top
+   corner of the card at the end side, in the space that a preview of full height leaves free. */
 #backstage-view .backstage-template-favorite {
 	position: absolute;
-	bottom: calc(100% + var(--spacing-s));
-	inset-inline-end: 0;
+	top: var(--spacing-s);
+	inset-inline-end: var(--spacing-s);
 	width: var(--btn-img-size);
 	height: var(--btn-img-size);
 	min-width: 0;
@@ -507,19 +507,16 @@ body:not([data-doctype]) .backstage-view {
 	animation: fade-out var(--duration-fast) var(--ease-in) forwards;
 }
 
-/* A row aligns its cards at the bottom, so the bottom edges of the previews and their names line
-   up while each card is only as tall as its preview. */
+/* The preview area has the height of a page preview, and each preview sits in its middle, so the
+   names of a row line up. */
 .template-thumbnail {
+	height: var(--template-preview-height);
 	padding: 0;
 	display: flex;
 	justify-content: center;
-	align-items: end;
+	align-items: center;
 	background: transparent;
 	flex: 0 0 auto;
-}
-
-.template-preview-frame {
-	position: relative;
 }
 
 .template-thumbnail img {
@@ -570,6 +567,8 @@ body:not([data-doctype]) .backstage-view {
 	margin-top: var(--spacing-m);
 	width: 0;
 	min-width: 100%;
+	/* A name shows at most two lines. */
+	max-height: 3em;
 	white-space: normal;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -696,16 +695,15 @@ body:not([data-doctype]) .backstage-view {
 }
 
 .template-blank-row {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-end;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, var(--template-card-width));
 	gap: calc(var(--spacing-xl) + var(--spacing-m));
 	overflow-x: auto;
 	padding-block: var(--spacing-m);
 }
 
 .template-grid-empty {
-	flex-basis: 100%;
+	grid-column: 1 / -1;
 	text-align: center;
 	color: var(--color-text-light);
 	padding: 24px 0;
