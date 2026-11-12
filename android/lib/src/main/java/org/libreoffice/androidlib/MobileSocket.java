@@ -4,16 +4,12 @@ import android.util.Log;
 import android.webkit.WebResourceResponse;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -28,6 +24,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Android it is not possible to read the body of an intercepted request, which prevents you from implementing the other side of the
  * ProxySocket protocol. Similarly, long-running HTTP requests which continually receive partial data were ruled out as Android doesn't
  * reliably send partial responses immediately.
+ *
+ * Each request is answered at once with every message queued so far, as one complete response.
+ * The WebView reads responses on a few threads shared by every page, so none may wait for data.
  */
 public class MobileSocket {
     public interface Callback {
@@ -36,16 +35,14 @@ public class MobileSocket {
 
     int serial = 0;
     BlockingQueue<byte[]> sendingMessages;
-    ExecutorService socketMessageExecutor;
 
     private static String LOGTAG = MobileSocket.class.getSimpleName();
 
     public MobileSocket() {
         sendingMessages = new LinkedBlockingQueue<>();
-        socketMessageExecutor = Executors.newFixedThreadPool(1);
     }
 
-    public void sendMessage(byte[] message, PipedOutputStream output) throws IOException {
+    public void sendMessage(byte[] message, OutputStream output) throws IOException {
         this.serial = this.serial + 1;
 
         byte[] serialString = Integer.toString(this.serial, 16).getBytes();
@@ -90,7 +87,7 @@ public class MobileSocket {
         output.write((byte) '\n'); // End of message
     }
 
-    public void flushMessageBuffer(PipedOutputStream output) throws IOException {
+    public void flushMessageBuffer(OutputStream output) throws IOException {
         ArrayList<byte[]> messages = new ArrayList<>();
         sendingMessages.drainTo(messages);
 
@@ -101,7 +98,6 @@ public class MobileSocket {
         for (byte[] message : messages) {
             sendMessage(message, output);
         }
-        output.close();
     }
 
     public void queueSend(byte[] message, Callback callback) throws InterruptedException {
@@ -109,7 +105,7 @@ public class MobileSocket {
         callback.call();
     }
 
-    public WebResourceResponse open() {
+    public synchronized WebResourceResponse open() {
         this.serial = 0;
 
         byte[] name = "mobile".getBytes();
@@ -121,23 +117,16 @@ public class MobileSocket {
         );
     }
 
-    public WebResourceResponse write() {
-        PipedInputStream data;
+    // Requests arrive on several threads. The lock keeps each response's serials contiguous.
+    public synchronized WebResourceResponse write() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
-            PipedOutputStream output = new PipedOutputStream();
-            data = new PipedInputStream(output);
-
-            socketMessageExecutor.execute(() -> {
-                try {
-                    flushMessageBuffer(output);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            flushMessageBuffer(output);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return COWebViewClient.response(200, "OK", data);
+        byte[] data = output.toByteArray();
+        return COWebViewClient.response(200, "OK", new ByteArrayInputStream(data), data.length);
     }
 }
