@@ -2331,7 +2331,10 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mnArrY(0),
     mnX(0), mnCellX(0), mnCellY(0),
     mnPosX(0), mnPosY(0), mnInitPosX(0),
-    mbBreak( (meHorJustAttr == SvxCellHorJustify::Block) || lcl_GetBoolValue(*pPattern, ATTR_LINEBREAK, pCondSet) ),
+    // A number reaches the EditEngine too, e.g. with a no-break space as thousands separator.
+    mbBreak( (meHorJustAttr == SvxCellHorJustify::Block)
+             || sc::wrapsTextAutomatically(lcl_GetBoolValue(*pPattern, ATTR_LINEBREAK, pCondSet),
+                                           bCellIsValue) ),
     mbCellIsValue(bCellIsValue),
     mbAsianVertical(false),
     mbPixelToLogic(false),

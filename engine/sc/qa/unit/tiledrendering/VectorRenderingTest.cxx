@@ -63,6 +63,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/virdev.hxx>
 
+#include <i18nlangtag/lang.h>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/process.h>
 
@@ -639,9 +640,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPrimitiveTileStepsMatchTiles)
     CPPUNIT_ASSERT_LESS(1500, differingPixels(aTiles, aPrimitives));
 }
 
-CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedCurrencyWraps)
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedCurrencyShowsHash)
 {
-    // A number in a currency format wraps like text. Only a plain number format ignores the wrap.
+    // A number never wraps, whatever its number format, as in the window and in Excel: a currency
+    // that does not fit shows "###". It wrapped like text.
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
@@ -661,8 +663,66 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedCurrencyWraps)
     const auto oText = cellTextAt(aResponse, 0, 0);
     CPPUNIT_ASSERT(oText);
     const std::set<std::string> aFlags = cellTextFlags(*oText);
-    CPPUNIT_ASSERT(aFlags.count("wrap"));
-    CPPUNIT_ASSERT(!aFlags.count("hashFill"));
+    CPPUNIT_ASSERT(!aFlags.count("wrap"));
+    CPPUNIT_ASSERT(aFlags.count("hashFill"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedCurrencyWithNoBreakSpaceShowsHash)
+{
+    // A currency whose thousands separator is a no-break space is laid out by the EditEngine, and
+    // it does not wrap there either: it shows "###" when it does not fit. It wrapped there.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetColWidth(0, 0, 800);
+    setCellValue(*pDocShell, 0, 0, 123456789.0);
+
+    // The no-break spaces are written into the format, so the case does not depend on locale data.
+    OUString aCode(u"0\"\u00A0\"000\"\u00A0\"000 [$EUR]"_ustr);
+    sal_Int32 nCheckPos = 0;
+    SvNumFormatType nType = SvNumFormatType::ALL;
+    sal_uInt32 nFormat = 0;
+    rDocument.GetFormatTable()->PutEntry(aCode, nCheckPos, nType, nFormat, LANGUAGE_ENGLISH_US);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nCheckPos);
+    CPPUNIT_ASSERT(nType & SvNumFormatType::CURRENCY);
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(ScLineBreakCell(true));
+    aPattern.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    applyToCell(*pDocShell, 0, 0, aPattern);
+    CPPUNIT_ASSERT(rDocument.GetString(0, 0, 0).indexOf(u'\u00A0') >= 0);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const auto oText = cellTextAt(aResponse, 0, 0);
+    CPPUNIT_ASSERT(oText);
+    const std::set<std::string> aFlags = cellTextFlags(*oText);
+    CPPUNIT_ASSERT(!aFlags.count("wrap"));
+    CPPUNIT_ASSERT(aFlags.count("hashFill"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorJustifiedNumberShowsHash)
+{
+    // Justified text breaks into lines, but a number in a plain number format does not, as in the
+    // window: it shows "###" when it does not fit.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetColWidth(0, 0, 400);
+    setCellValue(*pDocShell, 0, 0, 123456789.0);
+
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(SvxHorJustifyItem(SvxCellHorJustify::Block, ATTR_HOR_JUSTIFY));
+    applyToCell(*pDocShell, 0, 0, aPattern);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const auto oText = cellTextAt(aResponse, 0, 0);
+    CPPUNIT_ASSERT(oText);
+    const std::set<std::string> aFlags = cellTextFlags(*oText);
+    CPPUNIT_ASSERT(!aFlags.count("wrap"));
+    CPPUNIT_ASSERT(aFlags.count("hashFill"));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedNumberShowsHashAndArrow)

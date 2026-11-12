@@ -109,6 +109,11 @@ bool isNumberFormatText(const ScDocument& rDocument, SCCOL nColumn, SCROW nRow, 
     return pNumberFormatter->GetType(nCurrentNumberFormat) == SvNumFormatType::TEXT;
 }
 
+bool wrapsTextAutomatically(bool bLineBreak, bool bCellIsValue)
+{
+    return bLineBreak && !bCellIsValue;
+}
+
 bool hasEditCharacters(std::u16string_view rText, bool bHasRepeatCharacter)
 {
     for (const sal_Unicode cCharacter : rText)

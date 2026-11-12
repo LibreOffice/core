@@ -41,6 +41,12 @@ SvxCellHorJustify getAlignmentFromContext(SvxCellHorJustify eInHorJust, bool bCe
 /// Whether the number format of the cell is a text format.
 bool isNumberFormatText(const ScDocument& rDocument, SCCOL nColumn, SCROW nRow, SCTAB nTab);
 
+/** Whether "wrap text automatically" breaks the text of a cell into lines. A number never wraps,
+    whatever its number format, as in Excel: one that does not fit shows "###" (#i111387#,
+    tdf#121040). The rule holds whether the text goes to the EditEngine or not.
+ */
+bool wrapsTextAutomatically(bool bLineBreak, bool bCellIsValue);
+
 /** Whether the text holds characters that only the EditEngine lays out: soft hyphen, zero width
     space, direction marks, no-break hyphen and word joiner. The no-break space counts only without
     a repeat character, because it is the thousands separator of some number formats.

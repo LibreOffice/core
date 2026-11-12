@@ -1129,10 +1129,8 @@ bool CellPrimitiveBuilder::Impl::addSimpleText(const CellSource& rSource)
     SvxCellVerJustify eVerJust = rPattern.GetItem(ATTR_VER_JUSTIFY, pCondSet).GetValue();
     if (eVerJust == SvxCellVerJustify::Standard)
         eVerJust = SvxCellVerJustify::Bottom;
-    bool bLineBreak = rPattern.GetItem(ATTR_LINEBREAK, pCondSet).GetValue();
-    // A number in a plain number format never wraps. Currency, percent, date and time formats do.
-    if (bLineBreak && rCell.hasNumeric() && pFormatter->GetType(nFormat) == SvNumFormatType::NUMBER)
-        bLineBreak = false;
+    const bool bLineBreak = sc::wrapsTextAutomatically(
+        rPattern.GetItem(ATTR_LINEBREAK, pCondSet).GetValue(), rCell.hasNumeric());
     const bool bRepeatAttr = eHorJustAttr == SvxCellHorJustify::Repeat;
     const bool bRotated
         = !bRepeatAttr && rPattern.GetItem(ATTR_ROTATE_VALUE, pCondSet).GetValue() != 0_deg100;
@@ -1600,12 +1598,17 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         default:
             break;
     }
-    // A number in a plain number format never wraps. Currency, percent, date and time formats do.
+    // Stacked text has a line per character. Justified text breaks into lines, except a number in a
+    // plain number format, as in ScOutputData::LayoutStrings.
     SvNumberFormatter* pFormatter = mrDocument.GetFormatTable();
     const sal_uInt32 nFormat = rPattern.GetNumberFormat(pFormatter, pCondSet);
-    if (bBreak && bCellIsValue && !bStacked
-        && pFormatter->GetType(nFormat) == SvNumFormatType::NUMBER)
-        bBreak = false;
+    if (!bStacked)
+    {
+        if (eHorJustAttr != SvxCellHorJustify::Block)
+            bBreak = sc::wrapsTextAutomatically(bBreak, bCellIsValue);
+        else if (bCellIsValue && pFormatter->GetType(nFormat) == SvNumFormatType::NUMBER)
+            bBreak = false;
+    }
 
     const OUString aCellString = mrDocument.GetString(nColumn, nRow, mnTab);
     const SvxCellHorJustify eHorJustContext
