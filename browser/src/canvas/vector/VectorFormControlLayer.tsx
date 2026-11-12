@@ -452,9 +452,10 @@ namespace cool {
           else layer._makeList(id, element, primitive);
           break;
         case 'fileSelection':
+          // the control works as a text field that holds the path, and the field takes the
+          // whole width
+          element.querySelector('button')?.remove();
           layer._makeTypable(id, element, primitive);
-          // the kit has no file picker for it, the path is typed
-          element.querySelector('button')?.setAttribute('disabled', '');
           break;
         case 'spinButton':
           layer._makeSpinButton(id, element, primitive);
