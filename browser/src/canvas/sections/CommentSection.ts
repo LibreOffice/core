@@ -551,6 +551,17 @@ export class Comment extends CanvasSectionObject {
 		}
 		this.sectionProperties.container.style.maxHeight = maxHeight;
 
+		if (clamped) {
+			const marker = this.sectionProperties.commentMarkerSubSection;
+			app.console.debug('comment card placed: ' + this.sectionProperties.data.id
+				+ ' at ' + Math.round(left) + ',' + Math.round(top)
+				+ ' asked ' + this.containerPosX + ',' + this.containerPosY
+				+ ' bounds ' + canvasContainerBounds.left + ',' + canvasContainerBounds.top
+				+ ',' + canvasContainerBounds.right + ',' + canvasContainerBounds.bottom
+				+ ' anchor ' + this.sectionProperties.data.anchorPos
+				+ ' marker ' + (marker ? marker.position : 'none'));
+		}
+
 		this.sectionProperties.container.style.left = Math.round(left) + 'px';
 		this.sectionProperties.container.style.top = Math.round(top) + 'px';
 
@@ -2111,6 +2122,8 @@ export class Comment extends CanvasSectionObject {
 		const docType = app.map._docLayer._docType;
 
 		if (['presentation', 'drawing'].includes(docType)) {
+			app.console.debug('comment card clicked: ' + this.sectionProperties.data.id
+				+ ' card at ' + this.position + ' click at ' + point.pX + ',' + point.pY);
 			this.sectionProperties.commentListSection.selectById(this.sectionProperties.data.id);
 			// This click selected the comment. Stop it from reaching the document
 			// view, where the canvas-targeted listener would treat it as a click

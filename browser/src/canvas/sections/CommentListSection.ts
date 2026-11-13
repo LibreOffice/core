@@ -1510,6 +1510,11 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public select (annotation: Comment, force: boolean = false): void {
+		app.console.debug('comment show requested: ' + annotation?.sectionProperties.data.id
+			+ ' anchor ' + annotation?.sectionProperties.data.anchorPos
+			+ ' pendingInit ' + annotation?.pendingInit
+			+ ' selected ' + this.sectionProperties.selectedComment?.sectionProperties.data.id
+			+ ' force ' + force);
 		if (force
 			|| (annotation && !annotation.pendingInit && annotation !== this.sectionProperties.selectedComment
 			&& (annotation.sectionProperties.data.resolved !== 'true' || this.sectionProperties.showResolved)
@@ -1727,6 +1732,7 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public unselect (): void {
+		app.console.debug('comment unselected: ' + this.sectionProperties.selectedComment?.sectionProperties.data.id);
 		this.pendingSelectedCommentReveal = false;
 		this.listenForClickOutsideComment(false);
 		if (this.sectionProperties.selectedComment && this.sectionProperties.selectedComment.sectionProperties.data.id != 'new') {
@@ -1815,6 +1821,8 @@ export class CommentSection extends CanvasSectionObject {
 			return;
 		}
 
+		app.console.debug('comment closed by a click outside: ' + selected.sectionProperties.data.id
+			+ ' click at ' + e.clientX + ',' + e.clientY);
 		this.unselect();
 	};
 

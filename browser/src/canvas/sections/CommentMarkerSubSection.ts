@@ -100,6 +100,16 @@ class CommentMarkerSubSection extends HTMLObjectSection {
 	onClick(point: cool.SimplePoint, e: MouseEvent): void {
 		e.stopPropagation();
 		this.stopPropagating();
+		app.console.debug(
+			'comment marker clicked: ' +
+				this.sectionProperties.data.id +
+				' marker at ' +
+				this.position +
+				' click at ' +
+				point.pX +
+				',' +
+				point.pY,
+		);
 		this.sectionProperties.parentSection.sectionProperties.commentListSection.selectById(
 			this.sectionProperties.data.id,
 		);
