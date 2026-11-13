@@ -3534,6 +3534,23 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testElbowStartsUnderTheShapeOfTheNode
         CPPUNIT_ASSERT_LESS(tools::Long(20), std::abs(rElbow.Top() - nRootBottom));
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testConnectorKeepsItsTextOnReLayout)
+{
+    // the connectors between the nodes show the texts of their sibling transitions
+    createSdImpressDoc("pptx/smartart-connector-text.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    for (const OUString& rText : { u"A"_ustr, u"B"_ustr, u"C"_ustr })
+    {
+        uno::Reference<drawing::XShape> xConnector(findChildShapeByText(xDiagram, rText));
+        CPPUNIT_ASSERT_MESSAGE(rText.toUtf8().getStr(), xConnector.is());
+        uno::Reference<beans::XPropertySet> xProperties(xConnector, uno::UNO_QUERY);
+        comphelper::SequenceAsHashMap aGeometry(
+            xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"ooxml-rightArrow"_ustr, aGeometry[u"Type"_ustr].get<OUString>());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

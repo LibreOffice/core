@@ -70,7 +70,11 @@ void DiagramData_oox::fillTextBodiesFromXShapes()
 {
     for (const rtl::Reference<svx::diagram::Point>& rPoint : getPoints())
     {
-        if (!rPoint.is() || svx::diagram::TypeConstant::XML_node != rPoint->mnXMLType)
+        // a transition can show a text too, a connector does with presOf axis self
+        if (!rPoint.is()
+            || (svx::diagram::TypeConstant::XML_node != rPoint->mnXMLType
+                && svx::diagram::TypeConstant::XML_sibTrans != rPoint->mnXMLType
+                && svx::diagram::TypeConstant::XML_parTrans != rPoint->mnXMLType))
             continue;
 
         // a shape that shows several Points holds the text of this one in its paragraphs from
