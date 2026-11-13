@@ -1708,23 +1708,36 @@ abstract class SelectionSection extends CanvasSectionObject {
 			: this.groups().flatMap((group: HandleGroup) => group.outline() ?? []);
 		if (!polygons?.length) return;
 
-		this.context.save();
-		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		SelectionSection.strokeOutline(
+			this.context,
+			polygons,
+			HandleLook.outlineOfADrag,
+		);
+	}
+
+	/// Draws those polygons, given in twips, as a thin line of that colour on the canvas.
+	public static strokeOutline(
+		context: CanvasRenderingContext2D,
+		polygons: cool.ObjectPathPolygon[],
+		colour: string,
+	): void {
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
 
 		// The point at the very start of the document says where the drawing of the part begins
 		// on the canvas, and a twip is that many pixels wide.
 		const origin = new cool.SimplePoint(0, 0);
-		this.context.translate(origin.vX, origin.vY);
-		this.context.scale(app.twipsToPixels, app.twipsToPixels);
-		this.context.strokeStyle = HandleLook.outlineOfADrag;
-		this.context.lineWidth = app.pixelsToTwips;
-		this.context.beginPath();
+		context.translate(origin.vX, origin.vY);
+		context.scale(app.twipsToPixels, app.twipsToPixels);
+		context.strokeStyle = colour;
+		context.lineWidth = app.pixelsToTwips;
+		context.beginPath();
 
 		for (const polygon of polygons) {
 			const points = polygon.points ?? [];
 			if (!points.length) continue;
 
-			this.context.moveTo(points[0].x, points[0].y);
+			context.moveTo(points[0].x, points[0].y);
 
 			for (let at = 1; at <= points.length; ++at) {
 				const from = points[at - 1];
@@ -1732,7 +1745,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 				if (at === points.length && !polygon.closed) break;
 
 				if (from.aheadX !== undefined || to.behindX !== undefined)
-					this.context.bezierCurveTo(
+					context.bezierCurveTo(
 						from.aheadX ?? from.x,
 						from.aheadY ?? from.y,
 						to.behindX ?? to.x,
@@ -1740,14 +1753,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 						to.x,
 						to.y,
 					);
-				else this.context.lineTo(to.x, to.y);
+				else context.lineTo(to.x, to.y);
 			}
 
-			if (polygon.closed) this.context.closePath();
+			if (polygon.closed) context.closePath();
 		}
 
-		this.context.stroke();
-		this.context.restore();
+		context.stroke();
+		context.restore();
 	}
 
 	onDraw(): void {

@@ -170,7 +170,7 @@ its start to its end:
 | What | What happens |
 |---|---|
 | Before the press | The lines across the view and the place, as for a shape. |
-| Press and drag | The line shows plain, half see-through, from where the press was to the mouse, with its length and its angle beside the mouse; the angle counts upwards from the right. |
+| Press and drag | The line shows plain, half see-through, from where the press was to the mouse, with its length and its angle beside the mouse; the angle counts upwards from the right. A dimension line shows as one, with its help lines and the box of its text, and the value it will write beside the mouse. |
 | Shift | The line turns to the nearest multiple of 45 degrees and keeps its length. The line at 45 degrees does so by itself, and Shift lets it go free. |
 | Alt | The line is dragged out from its middle. |
 | Ctrl | Turns the snap over, as for a shape. |

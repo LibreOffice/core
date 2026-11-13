@@ -303,24 +303,12 @@ class MeasurementGhost {
 		const which = handle.at ?? 0;
 
 		if (which === 2 || which === 3) {
-			const start = which === 2 ? at : square.apply(0, 0);
-			const end = which === 3 ? at : square.apply(1, 0);
-			const along = end.subtract(start);
-			const length = along.length();
-			if (!length) return null;
-
-			const high = square.apply(0, 1).subtract(square.apply(0, 0)).length();
-			return {
-				measurement: measurement,
-				square: new cool.Matrix2D(
-					along.x,
-					along.y,
-					(-along.y / length) * high,
-					(along.x / length) * high,
-					start.x,
-					start.y,
-				),
-			};
+			const moved = MeasurementGhost.squareBetween(
+				square,
+				which === 2 ? at : square.apply(0, 0),
+				which === 3 ? at : square.apply(1, 0),
+			);
+			return moved ? { measurement: measurement, square: moved } : null;
 		}
 
 		const back = square.invert();
@@ -341,6 +329,92 @@ class MeasurementGhost {
 		}
 
 		return { measurement: changed, square: square };
+	}
+
+	/// The square of a measurement whose measured line runs from that start to that end, as high as
+	/// that square; nothing where the line has no length.
+	private static squareBetween(
+		square: cool.Matrix2D,
+		start: cool.Point,
+		end: cool.Point,
+	): cool.Matrix2D | null {
+		const along = end.subtract(start);
+		const length = along.length();
+		if (!length) return null;
+
+		const high = square.apply(0, 1).subtract(square.apply(0, 0)).length();
+		return new cool.Matrix2D(
+			along.x,
+			along.y,
+			(-along.y / length) * high,
+			(along.x / length) * high,
+			start.x,
+			start.y,
+		);
+	}
+
+	/// The value the measurement would write, with its unit, where the measured line it writes
+	/// its value for now is that long and becomes this long.
+	private static writtenFor(
+		measurement: cool.ObjectMeasurement,
+		was: number,
+		now: number,
+	): string | null {
+		if (!was) return null;
+
+		const separator = measurement.decimalSeparator || '.';
+		const value = MeasurementGhost.valueOf(measurement);
+		if (value === null) return null;
+
+		let written = ((value * now) / was).toFixed(
+			Math.max(0, measurement.decimals),
+		);
+		if (written.includes('.'))
+			written = written.replace(/0+$/, '').replace(/\.$/, '');
+		written = written.replace('.', separator);
+
+		return measurement.unit ? written + ' ' + measurement.unit : written;
+	}
+
+	/// How wide the text of the measurement is where it writes that value; the text grows or
+	/// shrinks with the value.
+	private static textWidthFor(
+		measurement: cool.ObjectMeasurement,
+		value: string | null,
+	): number {
+		const written = measurement.value + ' ' + measurement.unit;
+		return value !== null && written.trim().length
+			? (measurement.textWidth * value.length) / written.trim().length
+			: measurement.textWidth;
+	}
+
+	/*
+		A measurement as the one on that square would be laid out on a measured line from that
+		start to that end, in twips: its lines and the box of its text, and the value it would
+		write. Nothing where the line has no length.
+	*/
+	public static between(
+		measurement: cool.ObjectMeasurement,
+		square: cool.Matrix2D,
+		start: cool.Point,
+		end: cool.Point,
+	): { outline: cool.ObjectPathPolygon[]; value: string | null } | null {
+		const moved = MeasurementGhost.squareBetween(square, start, end);
+		if (!moved) return null;
+
+		const lengthOf = (square: cool.Matrix2D): number =>
+			square.apply(1, 0).subtract(square.apply(0, 0)).length();
+		const value = MeasurementGhost.writtenFor(
+			measurement,
+			lengthOf(square),
+			lengthOf(moved),
+		);
+		const outline = MeasurementGhost.laidOut(
+			measurement,
+			moved,
+			MeasurementGhost.textWidthFor(measurement, value),
+		);
+		return outline ? { outline: outline, value: value } : null;
 	}
 
 	/// The measurement as the handle at that point would leave it, in twips: its lines and the
@@ -365,16 +439,11 @@ class MeasurementGhost {
 
 		// The text grows or shrinks with the value it writes, where an end is dragged.
 		const value = MeasurementGhost.reading(selection, handle, at, ortho);
-		const written = found.measurement.value + ' ' + found.measurement.unit;
-		const textWidth =
-			value !== null && written.trim().length
-				? (found.measurement.textWidth * value.length) / written.trim().length
-				: found.measurement.textWidth;
 
 		return MeasurementGhost.laidOut(
 			shaped.measurement,
 			shaped.square,
-			textWidth,
+			MeasurementGhost.textWidthFor(found.measurement, value),
 		);
 	}
 
@@ -605,23 +674,11 @@ class MeasurementGhost {
 
 		const lengthOf = (square: cool.Matrix2D): number =>
 			square.apply(1, 0).subtract(square.apply(0, 0)).length();
-		const was = lengthOf(found.square);
-		if (!was) return null;
-
-		const separator = found.measurement.decimalSeparator || '.';
-		const value = MeasurementGhost.valueOf(found.measurement);
-		if (value === null) return null;
-
-		let written = ((value * lengthOf(shaped.square)) / was).toFixed(
-			Math.max(0, found.measurement.decimals),
+		return MeasurementGhost.writtenFor(
+			found.measurement,
+			lengthOf(found.square),
+			lengthOf(shaped.square),
 		);
-		if (written.includes('.'))
-			written = written.replace(/0+$/, '').replace(/\.$/, '');
-		written = written.replace('.', separator);
-
-		return found.measurement.unit
-			? written + ' ' + found.measurement.unit
-			: written;
 	}
 }
 

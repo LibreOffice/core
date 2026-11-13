@@ -1041,6 +1041,23 @@ OString DrawViewShell::GetShapeStyleKey()
     return OString(comphelper::hashToString(aHash));
 }
 
+rtl::Reference<SdrObject> DrawViewShell::MakeDefaultMeasureLine()
+{
+    // the view is set to create a dimension line while the tool makes it, and put back after
+    const SdrObjKind eKind(mpDrawView->GetCurrentObjIdentifier());
+    const SdrInventor eInventor(mpDrawView->GetCurrentObjInventor());
+    mpDrawView->SetCurrentObj(SdrObjKind::Measure);
+
+    SfxRequest aRequest(SID_DRAW_MEASURELINE, SfxCallMode::SYNCHRON, GetDoc()->GetPool());
+    rtl::Reference<FuPoor> xFunction = FuConstructRectangle::Create(
+        *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), aRequest, false);
+    rtl::Reference<SdrObject> xLine = xFunction->CreateDefaultObject(
+        SID_DRAW_MEASURELINE, ::tools::Rectangle(Point(), GetDefaultObjectSize()));
+
+    mpDrawView->SetCurrentObj(eKind, eInventor);
+    return xLine;
+}
+
 void DrawViewShell::FuDeleteSelectedObjects()
 {
     if( !mpDrawView )

@@ -8772,6 +8772,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeGhost)
     // the client gives a created shape its own id, so the look promises none
     CPPUNIT_ASSERT(!rValues.get_child_optional("id"));
 
+    // a dimension line is described too, with the measurement its look is laid out from
+    tools::JsonWriter aMeasureWriter;
+    pXImpressDocument->getCommandValues(aMeasureWriter, ".uno:ShapeGhost?Shape=MeasureLine");
+    std::stringstream aMeasureStream((std::string(aMeasureWriter.finishAndGetAsOString())));
+    boost::property_tree::ptree aMeasureTree;
+    boost::property_tree::read_json(aMeasureStream, aMeasureTree);
+    const boost::property_tree::ptree& rMeasure
+        = aMeasureTree.get_child("commandValues.objects").front().second;
+    CPPUNIT_ASSERT(rMeasure.get_child_optional("measurement"));
+    CPPUNIT_ASSERT(!rMeasure.get_child("transform").empty());
+
     // the document does not know of it
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(nUndoCount, pDocument->GetUndoManager()->GetUndoActionCount());

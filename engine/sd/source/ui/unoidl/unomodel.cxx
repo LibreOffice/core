@@ -4199,18 +4199,24 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
     const size_t nDot = aShape.find(u'.');
     sd::DrawViewShell* pShell
         = mpDocShell ? dynamic_cast<sd::DrawViewShell*>(mpDocShell->GetViewShell()) : nullptr;
-    if (nDot == std::u16string_view::npos || !pShell)
+    if (!pShell)
         return;
 
-    const std::u16string_view aGroup(aShape.substr(0, nDot));
+    // the dimension line is no custom shape; its look carries the measurement it lays out
+    const bool bMeasureLine(aShape == u"MeasureLine");
     const auto pGroup
-        = std::find_if(std::begin(aGroups), std::end(aGroups),
-                       [&aGroup](const auto& rGroup) { return rGroup.first == aGroup; });
-    if (pGroup == std::end(aGroups))
+        = nDot == std::u16string_view::npos
+              ? std::end(aGroups)
+              : std::find_if(std::begin(aGroups), std::end(aGroups),
+                             [aGroup = aShape.substr(0, nDot)](const auto& rGroup)
+                             { return rGroup.first == aGroup; });
+    if (!bMeasureLine && pGroup == std::end(aGroups))
         return;
 
-    const OUString aType(aShape.substr(nDot + 1));
-    const rtl::Reference<SdrObject> xDescribed(pShell->MakeDefaultShape(pGroup->second, aType));
+    const OUString aType(bMeasureLine ? std::u16string_view() : aShape.substr(nDot + 1));
+    const rtl::Reference<SdrObject> xDescribed(
+        bMeasureLine ? pShell->MakeDefaultMeasureLine()
+                     : pShell->MakeDefaultShape(pGroup->second, aType));
     SdrObject* pObject = xDescribed.get();
     SdPage* pPage = pShell->GetActualPage();
     if (!pObject || !pPage)

@@ -814,6 +814,21 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 		ClassicShapeCreateContext.askedAhead.clear();
 	}
 
+	/// The look of that command where the library knows it; where not, it is asked for, once.
+	public static knownLook(shape: string): ShapeLook | undefined {
+		ClassicShapeCreateContext.followTheGhosts();
+		const look = ClassicShapeCreateContext.library.get(shape);
+		if (!look && !ClassicShapeCreateContext.askedAhead.has(shape))
+			ClassicShapeCreateContext.ask(shape);
+		return look;
+	}
+
+	/// One of that command was made, so its look is one to keep, also over a restart.
+	public static made(shape: string): void {
+		ClassicShapeCreateContext.used.add(shape);
+		ClassicShapeCreateContext.storeTheUsed();
+	}
+
 	/// Stores the looks of the shapes used, where the library keeps looks.
 	private static storeTheUsed(): void {
 		if (
@@ -914,7 +929,9 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 			? values.objects[0]
 			: undefined;
 		const primitives = entry?.primitives;
-		if (!(values?.width > 0 && values?.height > 0 && Array.isArray(primitives)))
+		// a dimension line has no box; it is laid out from its measurement
+		const hasABox = values?.width > 0 && values?.height > 0;
+		if (!((hasABox || entry?.measurement) && Array.isArray(primitives)))
 			return null;
 		const x = values.x ?? 0;
 		const y = values.y ?? 0;
@@ -1093,9 +1110,7 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 		engine's report of it replaces it.
 	*/
 	protected wasSent(box: cool.Range2D): void {
-		// a shape made is one to keep the look of, also over a restart
-		ClassicShapeCreateContext.used.add(this.shape);
-		ClassicShapeCreateContext.storeTheUsed();
+		ClassicShapeCreateContext.made(this.shape);
 
 		const id = this.givenId;
 		const created = id === undefined ? null : this.createdIn(box, id);
@@ -1214,8 +1229,11 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 	/// hand, and the line then takes one of its own.
 	private givenId: number | undefined = undefined;
 
+	/// The look of a dimension line is asked for at once, where it is not known yet.
 	public started(): void {
 		ReservedObjectIds.keepEnough();
+		if (this.shape === ClassicLineCreateContext.measureLine)
+			ClassicShapeCreateContext.knownLook(this.shape);
 	}
 
 	/// The office shows the plain cross while a line is created.
@@ -1283,6 +1301,9 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 	/// The length of the line and its angle, counted upwards from the right as the office does.
 	protected readingOf(_size: cool.Point): string {
 		if (!this.start || !this.end) return '';
+		// a dimension line shows the value it will write
+		const value = this.measured()?.value;
+		if (value) return value;
 		const x = this.end.x - this.start.x;
 		const y = this.end.y - this.start.y;
 		const degrees = (-Math.atan2(y, x) * 180) / Math.PI;
@@ -1297,23 +1318,56 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 	/// The sign after an angle in degrees.
 	private static readonly degreeSign: string = String.fromCharCode(0xb0);
 
-	/// Draws the line plain from its start to its end, half see-through while it is dragged.
+	/// The command of the dimension line, whose look the engine tells.
+	private static readonly measureLine: string = 'MeasureLine';
+
+	/// The dimension line as dragged, laid out from the look of the default one: its lines, the
+	/// box of its text and the value it writes. Nothing for another kind, or before the look is
+	/// known.
+	private measured(): {
+		outline: cool.ObjectPathPolygon[];
+		value: string | null;
+	} | null {
+		if (this.shape !== ClassicLineCreateContext.measureLine) return null;
+		if (!this.start || !this.end) return null;
+		const entry = ClassicShapeCreateContext.knownLook(this.shape)?.entry;
+		const square = cool.Matrix2D.fromArray(entry?.transform);
+		if (!entry?.measurement || !square) return null;
+		return MeasurementGhost.between(
+			entry.measurement,
+			square,
+			this.start,
+			this.end,
+		);
+	}
+
+	/// Draws the line plain from its start to its end, half see-through while it is dragged; a
+	/// dimension line as laid out where its look is known.
 	protected drawTheObject(
 		context: CanvasRenderingContext2D,
 		_box: cool.Range2D,
 		whole: boolean,
 	): boolean {
 		if (!this.start || !this.end) return false;
-		const from = new cool.SimplePoint(this.start.x, this.start.y);
-		const to = new cool.SimplePoint(this.end.x, this.end.y);
 		context.save();
 		context.globalAlpha = whole ? 1 : 0.5;
-		context.strokeStyle = HandleLook.outlineColour;
-		context.lineWidth = Math.max(1, app.dpiScale);
-		context.beginPath();
-		context.moveTo(from.vX, from.vY);
-		context.lineTo(to.vX, to.vY);
-		context.stroke();
+		const measured = this.measured();
+		if (measured) {
+			SelectionSection.strokeOutline(
+				context,
+				measured.outline,
+				HandleLook.outlineColour,
+			);
+		} else {
+			const from = new cool.SimplePoint(this.start.x, this.start.y);
+			const to = new cool.SimplePoint(this.end.x, this.end.y);
+			context.strokeStyle = HandleLook.outlineColour;
+			context.lineWidth = Math.max(1, app.dpiScale);
+			context.beginPath();
+			context.moveTo(from.vX, from.vY);
+			context.lineTo(to.vX, to.vY);
+			context.stroke();
+		}
 		context.restore();
 		return true;
 	}
@@ -1324,30 +1378,35 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 		its arrows.
 	*/
 	protected wasSent(box: cool.Range2D): void {
+		const measured = this.measured();
+		if (measured) ClassicShapeCreateContext.made(this.shape);
+
 		const id = this.givenId;
 		const part = RenderGeometrySection.currentPart();
 		if (id === undefined || !part || !this.start || !this.end) return;
+		// the stand-in is the line, or the lines of the dimension line, as hairlines
+		const polygons: cool.ObjectPathPolygon[] = measured?.outline ?? [
+			{ points: [this.start, this.end] },
+		];
 		const created: cool.SlideObject = {
 			id: id,
 			x: box.minX,
 			y: box.minY,
 			width: box.width,
 			height: box.height,
-			primitives: [
-				{
-					type: cool.PolygonHairlinePrimitive.type,
-					color: HandleLook.outlineColour,
-					path:
-						'M ' +
-						this.start.x +
-						' ' +
-						this.start.y +
-						' L ' +
-						this.end.x +
-						' ' +
-						this.end.y,
-				} as cool.PolygonHairlinePrimitive,
-			],
+			primitives: polygons.map(
+				(polygon) =>
+					({
+						type: cool.PolygonHairlinePrimitive.type,
+						color: HandleLook.outlineColour,
+						path:
+							(polygon.points ?? [])
+								.map(
+									(point, at) => (at ? 'L ' : 'M ') + point.x + ' ' + point.y,
+								)
+								.join(' ') + (polygon.closed ? ' Z' : ''),
+					}) as cool.PolygonHairlinePrimitive,
+			),
 		};
 		if (
 			RenderManager.addProvisionalObject(
