@@ -59,6 +59,18 @@ void setVerticalTextAlignment(ScEditEngineDefaulter& rEngine, bool bTopToBottom,
 /// text would reach out of the cell. The value is a heuristic.
 constexpr tools::Long constAsianVerticalBottomGap = 5;
 
+/** Whether wrapped text is clearly too high for its cell: by more than 1 mm, over several lines,
+    with clip marks shown. The window then marks the cell as clipped, and starts normal text at the
+    top instead of the bottom, which looks better and lets the EditEngine skip the lines outside
+    the cell. The heights are in 1/100 mm, as the EditEngine measures them.
+ */
+template <typename T>
+bool editTextClearlyTooHigh(T nEngineHeight, T nCellHeight, bool bBreak, bool bMarkClipped,
+                            bool bSeveralLines)
+{
+    return nEngineHeight - nCellHeight > 100 && bBreak && bMarkClipped && bSeveralLines;
+}
+
 /** Where stacked text starts across its cell, in the units of the arguments. Stacked text that
     wraps starts at the left margin. Otherwise the text, nNeeded wide with both margins, moves by
     the alignment of the cell. nOnePixel is the size of a device pixel.

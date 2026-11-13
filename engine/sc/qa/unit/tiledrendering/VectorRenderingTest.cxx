@@ -49,6 +49,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
@@ -1473,6 +1474,36 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedCellTextTakesItsVerti
     const double fBottom = aLastLineStartOf(3);
     CPPUNIT_ASSERT_GREATER(fCenter, fTop);
     CPPUNIT_ASSERT_GREATER(fBottom, fCenter);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedLineTooHighStaysAtTheBottom)
+{
+    // A single wrapped line that is too high for its cell stays at the bottom of the cell, as in
+    // the window, where only several lines that are clearly too high start at the top. It started
+    // at the top.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetRowHeight(1, 0, 300);
+    rDocument.SetManualHeight(1, 1, 0, true);
+    setCellString(*pDocShell, 1, 1, u"Big"_ustr);
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(ScLineBreakCell(true));
+    aPattern.ItemSetPut(SvxFontHeightItem(400, 100, ATTR_FONT_HEIGHT));
+    applyToCell(*pDocShell, 1, 1, aPattern);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const auto oText = cellTextAt(aResponse, 1, 1);
+    CPPUNIT_ASSERT(oText);
+    std::vector<boost::property_tree::ptree> aBounds;
+    collectNamed(*oText, "bounds", aBounds);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aBounds.size());
+    // The bounds are the left, top, right and bottom of the paragraph. Its top sticks out of the
+    // cell, so it is in the row above.
+    const auto aTop = std::next(aBounds[0].begin());
+    CPPUNIT_ASSERT_EQUAL(0, cellPosition(aTop->second).first);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)

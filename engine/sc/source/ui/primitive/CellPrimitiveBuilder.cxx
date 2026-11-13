@@ -1843,10 +1843,16 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         fExtentY = fEngineHeight;
     }
 
-    // Wrapped text taller than the cell starts at the top; text taller than the cell is cut.
+    // Normal wrapped text that is clearly too high for the cell starts at the top, as in
+    // ScOutputData::DrawEditStandard; text taller than the cell is cut.
     const double fAlignInnerHeight = aSizes.mfAlignHeight - fTopMargin - fBottomMargin;
     const bool bStartAtTop
-        = fExtentY > fAlignInnerHeight && bBreak && eVerJust == SvxCellVerJustify::Standard;
+        = eVerJust == SvxCellVerJustify::Standard && eOrient == SvxCellOrientation::Standard
+          && nRotate == 0_deg100
+          && sc::editTextClearlyTooHigh(
+              fExtentY * constMm100PerTwip, fAlignInnerHeight * constMm100PerTwip, bBreak,
+              maSettings.mbClipMarks,
+              rEngine.GetParagraphCount() > 1 || rEngine.GetLineCount(0) > 1);
     if (fExtentY > fAlignInnerHeight + 1)
         eFlags |= CellTextFlags::ClippedBottom;
     if (aArea.mbLeftClip)
