@@ -4376,6 +4376,55 @@ void ClientSession::postProcessCopyPayload(const std::shared_ptr<Message>& paylo
         });
 }
 
+std::string ClientSession::registerEmbeddedMedia(const std::shared_ptr<DocumentBroker>& docBroker,
+                                                 const std::string& id, const std::string& url,
+                                                 const std::string& mimeType)
+{
+    // The broker keeps the internal URL, the client gets the public one.
+    Poco::JSON::Object record;
+    record.set("id", id);
+    record.set("url", url);
+    if (!mimeType.empty())
+        record.set("mimeType", mimeType);
+    std::ostringstream recordStr;
+    record.stringify(recordStr);
+    docBroker->addEmbeddedMedia(id, recordStr.str());
+
+    return createMediaURI("media", id);
+}
+
+bool ClientSession::publishAnimatedGifs(const Poco::JSON::Array::Ptr& gifs,
+                                        const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    if (gifs.isNull())
+        return false;
+
+    bool modified = false;
+    for (size_t gifIndex = 0; gifIndex < gifs->size(); gifIndex++)
+    {
+        Poco::JSON::Object::Ptr gif = gifs->getObject(gifIndex);
+        if (gif.isNull())
+            continue;
+
+        const std::string id = JsonUtil::getJSONValue<std::string>(gif, "id");
+        const std::string url = JsonUtil::getJSONValue<std::string>(gif, "url");
+        const std::string checksum = JsonUtil::getJSONValue<std::string>(gif, "checksum");
+        std::string mimeType = JsonUtil::getJSONValue<std::string>(gif, "mimeType");
+        if (mimeType.empty())
+            mimeType = "image/gif";
+
+        if (!id.empty() && !url.empty())
+        {
+            std::string mediaUrl = registerEmbeddedMedia(docBroker, id, url, mimeType);
+            if (!checksum.empty())
+                mediaUrl += "&Ver=" + checksum;
+            gif->set("url", mediaUrl);
+            modified = true;
+        }
+    }
+    return modified;
+}
+
 bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& payload, const std::shared_ptr<DocumentBroker>& docBroker)
 {
     std::string json(payload->data().data(), payload->size());
@@ -4385,22 +4434,6 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
     json.erase(0, iterator); // Remove the prefix to parse the purse JSON part.
 
     bool modified = false;
-
-    // Keep the original message with the internal URL, hand out the public one.
-    const auto registerMedia = [this, &docBroker](const std::string& id, const std::string& url,
-                                                  const std::string& mimeType) -> std::string
-    {
-        Poco::JSON::Object record;
-        record.set("id", id);
-        record.set("url", url);
-        if (!mimeType.empty())
-            record.set("mimeType", mimeType);
-        std::ostringstream recordStr;
-        record.stringify(recordStr);
-        docBroker->addEmbeddedMedia(id, recordStr.str());
-
-        return createMediaURI("media", id);
-    };
 
     Poco::JSON::Object::Ptr rootObject;
     try
@@ -4427,37 +4460,15 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
 
                             if (!id.empty() && !url.empty())
                             {
-                                video->set("url", registerMedia(id, url, std::string()));
+                                video->set("url", registerEmbeddedMedia(docBroker, id, url,
+                                                                        std::string()));
                                 modified = true;
                             }
                         }
                     }
 
-                    Poco::JSON::Array::Ptr gifs = slide->getArray("gifs");
-                    if (!gifs.isNull() && gifs->size() > 0)
-                    {
-                        for (size_t gifIndex = 0; gifIndex < gifs->size(); gifIndex++)
-                        {
-                            Poco::JSON::Object::Ptr gif = gifs->getObject(gifIndex);
-                            const std::string id = JsonUtil::getJSONValue<std::string>(gif, "id");
-                            const std::string url = JsonUtil::getJSONValue<std::string>(gif, "url");
-                            const std::string checksum =
-                                JsonUtil::getJSONValue<std::string>(gif, "checksum");
-                            std::string mimeType =
-                                JsonUtil::getJSONValue<std::string>(gif, "mimeType");
-                            if (mimeType.empty())
-                                mimeType = "image/gif";
-
-                            if (!id.empty() && !url.empty())
-                            {
-                                std::string mediaUrl = registerMedia(id, url, mimeType);
-                                if (!checksum.empty())
-                                    mediaUrl += "&Ver=" + checksum;
-                                gif->set("url", mediaUrl);
-                                modified = true;
-                            }
-                        }
-                    }
+                    if (publishAnimatedGifs(slide->getArray("gifs"), docBroker))
+                        modified = true;
 
                     // Sound click actions are served like videos.
                     Poco::JSON::Array::Ptr interactions = slide->getArray("interactions");
@@ -4485,7 +4496,8 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
                             if (mimeType.empty())
                                 mimeType = "application/octet-stream";
 
-                            clickAction->set("sound", registerMedia(id, url, mimeType));
+                            clickAction->set("sound",
+                                             registerEmbeddedMedia(docBroker, id, url, mimeType));
                             modified = true;
                         }
                     }

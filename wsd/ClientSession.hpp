@@ -422,6 +422,18 @@ public:
     /// Handle presentation info request
     bool handlePresentationInfo(const std::shared_ptr<Message>& payload, const std::shared_ptr<DocumentBroker>& docBroker);
 
+    /// Records the media file at the internal url as embedded media of the document, under
+    /// id, and returns the public URL it is served at.
+    std::string registerEmbeddedMedia(const std::shared_ptr<DocumentBroker>& docBroker,
+                                      const std::string& id, const std::string& url,
+                                      const std::string& mimeType);
+
+    /// Gives every gif in the list, each an object with an id, the internal url of its file, an
+    /// optional checksum and an optional mimeType, the public URL of its file. Returns whether
+    /// any url changed.
+    bool publishAnimatedGifs(const Poco::JSON::Array::Ptr& gifs,
+                             const std::shared_ptr<DocumentBroker>& docBroker);
+
 #if !MOBILEAPP
     /// Takes the source documents named by the slide links the document reports, so that a
     /// source the storage listed no remote link for is still known by its name.
