@@ -1,11 +1,17 @@
 # Collabora Online with a Grammalecte server beside it. Collabora reaches the
-# checker over a network of its own, which is where the checker stays: it
-# answers anyone who can reach it, with no password.
+# checker over HTTPS, at https://grammalecte, on a network of its own: the
+# checker answers anyone who can reach it, with no password.
 #
 #   docker compose up
 #
 # Then open a Writer document, set the language of the text to French and
 # the checker underlines the grammar errors as you type.
+#
+# The Grammalecte server speaks plain HTTP only, so an nginx front serves it
+# over HTTPS, with a certificate that ../tls/make-certs.sh makes on the
+# first start, in ./certs. Collabora Online is given the certificate
+# authority that signed it, and verifies the front as it would any other
+# server (see ../tls/README).
 
 services:
   collabora:
@@ -15,7 +21,12 @@ services:
     environment:
       # Your hosts, as for any Collabora Online container.
       - aliasgroup1=https://my-wopi-host.example.com:443
-      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:grammalecte.enabled=true --o:grammalecte.base_url=http://grammalecte:8080
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:grammalecte.enabled=true --o:grammalecte.base_url=https://grammalecte
+    volumes:
+      # The usual certificate authorities and the one of ./certs, for
+      # Collabora Online and for the document processes in their jails.
+      - ./certs/ca-bundle.crt:/etc/ssl/certs/ca-certificates.crt:ro
+      - ./certs/ca-bundle.crt:/opt/cool/systemplate/etc/ssl/certs/ca-certificates.crt:ro
     networks:
       - web
       - checkers
@@ -24,13 +35,51 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # The HTTPS front, the only part of the service Collabora Online can reach.
   grammalecte:
-    build: .
+    image: nginx:stable-alpine
+    environment:
+      - TLS_HOST=grammalecte
+      - TLS_UPSTREAM=grammalecte-server:8080
+    volumes:
+      - ../tls/front.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./certs:/certs:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "--cacert", "/certs/ca.crt",
+             "--resolve", "grammalecte:443:127.0.0.1",
+             "https://grammalecte/get_options/fr"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
     networks:
       - checkers
+      - grammalecte
+    depends_on:
+      grammalecte-server:
+        condition: service_healthy
     restart: unless-stopped
+
+  grammalecte-server:
+    build: .
+    networks:
+      - grammalecte
+    depends_on:
+      certs:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # Makes the certificates in ./certs on the first start, then exits.
+  certs:
+    image: python:3-slim
+    entrypoint: ["sh", "/make-certs.sh", "grammalecte"]
+    volumes:
+      - ../tls/make-certs.sh:/make-certs.sh:ro
+      - .:/service
+    network_mode: none
 
 networks:
   web:
   checkers:
+    internal: true
+  grammalecte:
     internal: true

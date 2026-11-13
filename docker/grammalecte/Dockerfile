@@ -8,7 +8,8 @@
 #   curl -d 'text=Il%20sont%20parti.' http://127.0.0.1:8080/gc_text/fr
 #
 # The server has no authentication and no TLS: keep it on an internal
-# network, as compose.yaml here does.
+# network, behind an HTTPS front, as compose.yaml here does; Collabora Online
+# reaches it over HTTPS only.
 
 ARG GRAMMALECTE_VERSION=2.3.0
 ARG GRAMMALECTE_SHA256=aaa4219704857778038ecc1db18f6a907994c0125b8e762dcecc69130280684f

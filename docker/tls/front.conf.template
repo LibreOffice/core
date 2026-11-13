@@ -1,0 +1,21 @@
+# The HTTPS front of a writing aid service, for the nginx image, which fills
+# in TLS_HOST and TLS_UPSTREAM from its environment when it starts.
+# Collabora Online talks to https://${TLS_HOST}, and the requests go on to
+# the service at http://${TLS_UPSTREAM}, which nothing but this front can
+# reach.
+
+server {
+    listen 443 ssl;
+    server_name ${TLS_HOST};
+
+    ssl_certificate /certs/${TLS_HOST}.crt;
+    ssl_certificate_key /certs/${TLS_HOST}.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    client_max_body_size 16m;
+
+    location / {
+        proxy_pass http://${TLS_UPSTREAM};
+        proxy_read_timeout 60s;
+    }
+}

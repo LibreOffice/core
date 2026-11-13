@@ -143,7 +143,8 @@ Writing aids next to Collabora Online
 
 Three subdirectories run a remote sentence checker or a translation service
 beside a Collabora Online container, with a compose.yaml and a README on
-how to configure it:
+how to configure it. Collabora Online reaches them over HTTPS only, through
+an nginx front with a certificate of its own, set up by what tls/ holds:
 
 - grammalecte/: Grammalecte, the French grammar checker, built from its
   release archive.
@@ -154,6 +155,9 @@ how to configure it:
 - libretranslate/: LibreTranslate, the machine translation service behind
   the Translate command, built from its PyPI release with the models of the
   chosen languages.
+
+- tls/: the certificate script and nginx configuration the HTTPS fronts of
+  the three share.
 
 
 Usage

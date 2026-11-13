@@ -2,7 +2,7 @@ LibreTranslate for Collabora Online
 
 LibreTranslate is a machine translation service that runs on your own
 hardware, with models from the Argos Translate project. Collabora Online
-talks to it over HTTP for the Translate command of Writer, the way it talks
+talks to it over HTTPS for the Translate command of Writer, the way it talks
 to DeepL, and replaces the document text, or the selection, with the
 translation. This directory builds the service and shows how to run it next
 to Collabora Online.
@@ -25,7 +25,10 @@ Build and try it:
          http://127.0.0.1:5000/translate
 
 The answer is the German sentence. The languages the server has models
-for are listed at http://127.0.0.1:5000/languages.
+for are listed at http://127.0.0.1:5000/languages. The server speaks plain
+HTTP here, which is fine for trying it on your own machine, but Collabora
+Online reaches the translation providers over HTTPS only: an http:// base
+URL is never asked.
 
 Running it next to Collabora Online:
 
@@ -33,12 +36,17 @@ Running it next to Collabora Online:
     docker compose up
 
 compose.yaml starts the collabora/code image with the provider enabled and
-pointed at the service, on a network the service shares with nothing else.
-In coolwsd.xml the same two settings are
+pointed at https://libretranslate, and puts the LibreTranslate server
+behind an nginx front that serves it over HTTPS. Collabora Online can reach
+the front only, on a network it shares with nothing else, and the front
+alone reaches the server. The front's certificate is made on the first
+start, in ./certs, and Collabora Online is given the certificate authority
+that signed it; ../tls/README tells how, and how to use certificates of
+your own. In coolwsd.xml the two settings are
 
     <libretranslate>
         <enabled>true</enabled>
-        <base_url>http://libretranslate:5000</base_url>
+        <base_url>https://libretranslate</base_url>
     </libretranslate>
 
 The base URL is the root of the server; the provider appends /translate and
@@ -59,14 +67,14 @@ for a few seconds; the LT_THREADS environment variable says how many are
 translated at once, four by default. Collabora Online waits 30 seconds
 for each one.
 
-The server has no authentication by default and no TLS. Anyone who can
-reach it can send it text, so keep it on an internal network, as
+The server has no authentication by default. Anyone who can reach it can
+send it text, so keep it on an internal network, as
 compose.yaml does, and never on a public address. A server that must be
 reachable more widely can demand a key: start it with LT_API_KEYS=true and
 LT_REQUIRE_API_KEY_SECRET=true, keep its key database on a volume mounted
 at /srv/libretranslate/db, create a key with
 
-    docker compose exec libretranslate /srv/libretranslate/bin/ltmanage keys add 120
+    docker compose exec libretranslate-server /srv/libretranslate/bin/ltmanage keys add 120
 
 (the number is the requests per minute the key allows) and put the key in
 api_key of the libretranslate block of coolwsd.xml.

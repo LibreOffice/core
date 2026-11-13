@@ -1,0 +1,35 @@
+HTTPS for the writing aids
+
+Collabora Online reaches the writing aid services, the remote sentence
+checkers and the translation providers, over HTTPS only: a base URL that
+starts with http:// is never asked. The services run beside it in
+grammalecte/, languagetool/ and libretranslate/ speak plain HTTP, so their
+compose.yaml files put an nginx front before each, and this directory holds
+what the fronts share:
+
+- make-certs.sh makes a private certificate authority and a certificate it
+  signs for the service's host name, in ./certs of the service's directory,
+  on the first start. It also writes ca-bundle.crt, the usual certificate
+  authorities with the private one added. The files belong to the owner of
+  the service's directory, so they can be replaced or deleted without root.
+
+- front.conf.template is the nginx configuration of a front: it serves
+  https://<host> with that certificate and passes the requests on to the
+  service, on a network that only the front and the service share.
+
+Collabora Online is given ca-bundle.crt as its certificate bundle, twice:
+at /etc/ssl/certs/ca-certificates.crt for the server, and at the same path
+under /opt/cool/systemplate for the document processes, which run in jails
+made from that template and do the checking and the translating. Without
+the second, the server finds the service but the documents cannot reach it.
+Collabora Online verifies the certificate, so leave ssl_verification on.
+
+To use certificates of your own, put <host>.crt, <host>.key and the ca.crt
+that signed them in ./certs before the first start; delete ./certs to have
+new ones made.
+
+Without Docker, a certificate authority of your own goes into the system's
+bundle, as the distribution does it (update-ca-certificates,
+update-ca-trust), and then into the jails' template, which
+coolwsd-systemplate-setup refreshes (the Debian packages run it after every
+apt run).

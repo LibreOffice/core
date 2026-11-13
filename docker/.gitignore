@@ -1,0 +1,3 @@
+# The certificates and keys the writing aids make on their first start
+# (see tls/README).
+/*/certs/

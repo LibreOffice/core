@@ -13,7 +13,8 @@
 #        http://127.0.0.1:5000/translate
 #
 # The server has no authentication by default and no TLS: keep it on an
-# internal network, as compose.yaml here does.
+# internal network, behind an HTTPS front, as compose.yaml here does;
+# Collabora Online reaches it over HTTPS only.
 
 # The languages to translate between, two at least. Every model goes to or
 # from English, so a translation between two other languages goes through

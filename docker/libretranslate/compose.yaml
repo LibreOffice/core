@@ -1,12 +1,18 @@
 # Collabora Online with a LibreTranslate server beside it. Collabora reaches
-# the translator over a network of its own, which is where the translator
-# stays: it answers anyone who can reach it, with no password.
+# the translator over HTTPS, at https://libretranslate, on a network of its
+# own: the translator answers anyone who can reach it, with no password.
 #
 #   docker compose up
 #
 # Then open a Writer document and translate it, or a selection of it, with
 # Tools > Translate: the dialog lists the languages the server has models
 # for (see the README on choosing them).
+#
+# The LibreTranslate server speaks plain HTTP here, so an nginx front serves
+# it over HTTPS, with a certificate that ../tls/make-certs.sh makes on the
+# first start, in ./certs. Collabora Online is given the certificate
+# authority that signed it, and verifies the front as it would any other
+# server (see ../tls/README).
 
 services:
   collabora:
@@ -16,7 +22,12 @@ services:
     environment:
       # Your hosts, as for any Collabora Online container.
       - aliasgroup1=https://my-wopi-host.example.com:443
-      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:libretranslate.enabled=true --o:libretranslate.base_url=http://libretranslate:5000
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:libretranslate.enabled=true --o:libretranslate.base_url=https://libretranslate
+    volumes:
+      # The usual certificate authorities and the one of ./certs, for
+      # Collabora Online and for the document processes in their jails.
+      - ./certs/ca-bundle.crt:/etc/ssl/certs/ca-certificates.crt:ro
+      - ./certs/ca-bundle.crt:/opt/cool/systemplate/etc/ssl/certs/ca-certificates.crt:ro
     networks:
       - web
       - translators
@@ -25,7 +36,31 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # The HTTPS front, the only part of the service Collabora Online can reach.
   libretranslate:
+    image: nginx:stable-alpine
+    environment:
+      - TLS_HOST=libretranslate
+      - TLS_UPSTREAM=libretranslate-server:5000
+    volumes:
+      - ../tls/front.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./certs:/certs:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "--cacert", "/certs/ca.crt",
+             "--resolve", "libretranslate:443:127.0.0.1",
+             "https://libretranslate/languages"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+    networks:
+      - translators
+      - libretranslate
+    depends_on:
+      libretranslate-server:
+        condition: service_healthy
+    restart: unless-stopped
+
+  libretranslate-server:
     build:
       context: .
       # The languages to build the models for; see the README.
@@ -36,10 +71,24 @@ services:
     # environment:
     #   - LT_THREADS=8
     networks:
-      - translators
+      - libretranslate
+    depends_on:
+      certs:
+        condition: service_completed_successfully
     restart: unless-stopped
+
+  # Makes the certificates in ./certs on the first start, then exits.
+  certs:
+    image: python:3-slim
+    entrypoint: ["sh", "/make-certs.sh", "libretranslate"]
+    volumes:
+      - ../tls/make-certs.sh:/make-certs.sh:ro
+      - .:/service
+    network_mode: none
 
 networks:
   web:
   translators:
+    internal: true
+  libretranslate:
     internal: true
