@@ -1046,7 +1046,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
     if (nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize()
     // tdf#153223 polyline with lineheight >0 not drawn when skia is off
-#ifdef MACOSX
+#if defined MACOSX || defined IOS
         || !SkiaHelper::isVCLSkiaEnabled()
 #endif
        )
