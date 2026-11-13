@@ -336,6 +336,12 @@ Select one picture and press Crop in the toolbar. Crop marks appear on the pictu
 The Shape tab of the notebookbar has two buttons for the points of one selected object. Only one
 kind of points is shown at a time: showing the one hides the other.
 
+A change of the points shows at once, also before the engine has answered on a slow connection:
+the points and a thin outline of the whole path stand as the change leaves them, until the
+engine's answer takes over. That holds for deleting and adding a point, a curve or a line, a
+corner, smooth or symmetric point, closing or opening, splitting and simplifying. A point added on
+a curve can move a little when the answer comes.
+
 | Button | What it does |
 |---|---|
 | Edit Points | Shown in place of Convert to Polygon when one path is selected. Shows the points and weights of the path, and hides them again. Its arrow opens: Add Point, Close Path (closes an open path or opens a closed one), Simplify Curves, Simplify All, and the conversions To Curve, To Contour and To Polygon. |

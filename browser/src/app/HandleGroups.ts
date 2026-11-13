@@ -2588,7 +2588,8 @@ class PathHandles extends HandlesMovedOneByOne {
 			if (stepped) return editor?.outlineFor(handle.name, stepped.at) ?? null;
 		}
 
-		return null;
+		// a change of the path that has not come back shows the whole path as it will be
+		return editor?.changedOutline() ?? null;
 	}
 
 	public paint(section: SelectionSection, shown: SelectionHandle[]): void {

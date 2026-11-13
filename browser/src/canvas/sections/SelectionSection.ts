@@ -699,6 +699,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const objects = this.selectedObjects();
 		this.editor = PathEditing.editedPath(objects)
 			? new PathEditing(
+					'object ' + String(objects[0]),
 					() => RenderGeometrySection.objectOf(objects[0])?.path,
 					new ObjectPathSink(objects[0], this),
 				)

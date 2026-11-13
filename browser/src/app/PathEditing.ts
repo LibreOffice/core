@@ -46,6 +46,9 @@ interface PathSink {
 	setContinuity(place: PathPlace, continuity: number): void;
 	/// The path is split into two at a point.
 	split(place: PathPlace): void;
+	/// The path shown changed here before the change came back, or went back to the one given;
+	/// what shows it is to be drawn again.
+	shownPathChanged(): void;
 	/// The path is closed, or opened.
 	setClosed(closed: boolean): void;
 	/// Every curved edge that runs straight becomes a line; with pointsOnALine, the points
@@ -75,15 +78,37 @@ interface PathPointFacts {
 	It knows nothing of what holds the path: it reads the path from where it is given and hands
 	every change to a sink, so the same thing serves the path of an object, a path being drawn,
 	a lasso and the path an animation follows.
+
+	A change shows at once: the path is changed here the way the one who takes the change will
+	change it, and that path is the one edited and shown until the path given changes, which
+	is when the change came back.
 */
 class PathEditing implements HandleSource {
 	private source: () => cool.ObjectPathPolygon[] | undefined;
 	private sink: PathSink;
+	/// What the path belongs to, which names the path changed here across editors made anew.
+	private key: string;
+
+	/// The paths changed here, by what they belong to: the path changed, the path given it was
+	/// changed from, and the wait after which it goes without an answer.
+	private static changedHere = new Map<
+		string,
+		{
+			path: cool.ObjectPathPolygon[];
+			from: cool.ObjectPathPolygon[] | undefined;
+			wait: ReturnType<typeof setTimeout>;
+		}
+	>();
+
+	/// How long a path changed here is shown without an answer, in milliseconds.
+	private static readonly longestWait: number = 5000;
 
 	constructor(
+		key: string,
 		source: () => cool.ObjectPathPolygon[] | undefined,
 		sink: PathSink,
 	) {
+		this.key = key;
 		this.source = source;
 		this.sink = sink;
 	}
@@ -117,9 +142,65 @@ class PathEditing implements HandleSource {
 		);
 	}
 
-	/// The path being edited, or nothing where there is none.
+	/// The path being edited, or nothing where there is none: the path changed here while the
+	/// change has not come back, else the path given.
 	public path(): cool.ObjectPathPolygon[] | undefined {
-		return this.source();
+		const given = this.source();
+		const changed = PathEditing.changedHere.get(this.key);
+		if (!changed) return given;
+		if (changed.from === given) return changed.path;
+
+		PathEditing.forget(this.key);
+		return given;
+	}
+
+	/// The whole path as changed here, while the change has not come back; nothing else.
+	public changedOutline(): cool.ObjectPathPolygon[] | null {
+		return this.path() === this.source() ? null : (this.path() ?? null);
+	}
+
+	private static forget(key: string): void {
+		const changed = PathEditing.changedHere.get(key);
+		if (!changed) return;
+		clearTimeout(changed.wait);
+		PathEditing.changedHere.delete(key);
+	}
+
+	/*
+		Changes the path here as the change will change it, so it shows at once. A change made
+		while another one has not come back goes on from that one. Nothing changes where the
+		change answers nothing.
+	*/
+	private changeHere(
+		change: (path: cool.ObjectPathPolygon[]) => cool.ObjectPathPolygon[] | null,
+	): void {
+		const path = this.path();
+		if (!path) return;
+
+		const changed = change(
+			path.map((polygon: cool.ObjectPathPolygon) => ({
+				...polygon,
+				points: (polygon.points ?? []).map((point: cool.ObjectPathPoint) => ({
+					...point,
+				})),
+			})),
+		);
+		if (!changed) return;
+
+		const before = PathEditing.changedHere.get(this.key);
+		const from = before ? before.from : this.source();
+		PathEditing.forget(this.key);
+		const key = this.key;
+		const sink = this.sink;
+		PathEditing.changedHere.set(key, {
+			path: changed,
+			from: from,
+			wait: setTimeout(() => {
+				PathEditing.forget(key);
+				sink.shownPathChanged();
+			}, PathEditing.longestWait),
+		});
+		sink.shownPathChanged();
 	}
 
 	/*
@@ -335,42 +416,58 @@ class PathEditing implements HandleSource {
 		const place = this.pointOf(handleName);
 		if (!place) return false;
 
+		this.changeHere((path) => PathEditing.withoutThePoint(path, place));
 		this.sink.deletePoint(place);
 		return true;
 	}
 
 	/// Adds a point on the edge nearest to that place, in twips on the page.
 	public insertPointAt(at: cool.Point): void {
+		this.changeHere((path) => PathEditing.withAPointAt(path, at));
 		this.sink.insertPointAt(at);
 	}
 
 	/// Makes the edge after the point a handle stands for a curve, or a line.
 	public setSegmentCurved(handleName: string, curved: boolean): void {
 		const place = this.pointOf(handleName);
-		if (place) this.sink.setSegmentCurved(place, curved);
+		if (!place) return;
+		this.changeHere((path) =>
+			PathEditing.withTheEdgeCurved(path, place, curved),
+		);
+		this.sink.setSegmentCurved(place, curved);
 	}
 
 	/// Sets how the curve runs through the point a handle stands for.
 	public setContinuity(handleName: string, continuity: number): void {
 		const place = this.pointOf(handleName);
-		if (place) this.sink.setContinuity(place, continuity);
+		if (!place) return;
+		this.changeHere((path) =>
+			PathEditing.withTheContinuity(path, place, continuity),
+		);
+		this.sink.setContinuity(place, continuity);
 	}
 
 	/// Splits the path at the point a handle stands for.
 	public split(handleName: string): void {
 		const place = this.pointOf(handleName);
-		if (place) this.sink.split(place);
+		if (!place) return;
+		this.changeHere((path) => PathEditing.splitAt(path, place));
+		this.sink.split(place);
 	}
 
 	/// Closes the path, or opens it again where it is closed.
 	public switchClosed(): void {
 		const path = this.path();
-		if (path) this.sink.setClosed(!PathEditing.isClosed(path));
+		if (!path) return;
+		const closed = !PathEditing.isClosed(path);
+		this.changeHere((changed) => PathEditing.closedOrOpened(changed, closed));
+		this.sink.setClosed(closed);
 	}
 
 	/// Turns every curved edge that runs straight into a line. With pointsOnALine, it also
 	/// deletes the points that lie on a straight line between their neighbours.
 	public simplify(pointsOnALine: boolean): void {
+		this.changeHere((path) => PathEditing.simplified(path, pointsOnALine));
 		this.sink.simplify(pointsOnALine);
 	}
 
@@ -399,6 +496,528 @@ class PathEditing implements HandleSource {
 		)
 			--count;
 		return count;
+	}
+
+	// The changes of a path as the engine makes them, on a copy of the path. Each answers the
+	// changed path, or nothing where the engine changes more than the path.
+
+	/// Without that point; a polygon left with fewer than two points goes. A path left with no
+	/// polygon takes the object with it, which is more than the path.
+	private static withoutThePoint(
+		path: cool.ObjectPathPolygon[],
+		place: PathPlace,
+	): cool.ObjectPathPolygon[] | null {
+		const points = path[place.polygon]?.points;
+		if (!points || place.point >= points.length) return null;
+
+		points.splice(place.point, 1);
+		if (points.length < 2) path.splice(place.polygon, 1);
+		return path.length ? path : null;
+	}
+
+	/// The point after that one in its polygon, or nothing for the last point of an open one.
+	private static nextOf(
+		polygon: cool.ObjectPathPolygon,
+		point: number,
+	): number | null {
+		const count = (polygon.points ?? []).length;
+		if (point + 1 < count) return point + 1;
+		return polygon.closed && count > 1 ? 0 : null;
+	}
+
+	/// The edge after that point made a curve, its new weights on the line at one third and two
+	/// thirds of it, or made a line, without weights.
+	private static withTheEdgeCurved(
+		path: cool.ObjectPathPolygon[],
+		place: PathPlace,
+		curved: boolean,
+	): cool.ObjectPathPolygon[] | null {
+		const polygon = path[place.polygon];
+		const next = polygon ? PathEditing.nextOf(polygon, place.point) : null;
+		if (!polygon || next === null) return null;
+
+		const from = polygon.points[place.point];
+		const to = polygon.points[next];
+		if (curved) {
+			if (from.aheadX === undefined || from.aheadY === undefined) {
+				from.aheadX = from.x + (to.x - from.x) / 3;
+				from.aheadY = from.y + (to.y - from.y) / 3;
+			}
+			if (to.behindX === undefined || to.behindY === undefined) {
+				to.behindX = from.x + (2 * (to.x - from.x)) / 3;
+				to.behindY = from.y + (2 * (to.y - from.y)) / 3;
+			}
+		} else {
+			delete from.aheadX;
+			delete from.aheadY;
+			delete to.behindX;
+			delete to.behindY;
+		}
+		return path;
+	}
+
+	/*
+		How the curve runs through that point set as the drawing layer sets it: a corner puts
+		each weight a third of the way to the neighbour on its side; smooth sets the two weights
+		on one line through the point, each keeping its length; symmetric gives them the length
+		of the two together, halved, as well. A point without both weights stays as it is for
+		smooth and symmetric.
+	*/
+	private static withTheContinuity(
+		path: cool.ObjectPathPolygon[],
+		place: PathPlace,
+		continuity: number,
+	): cool.ObjectPathPolygon[] | null {
+		const polygon = path[place.polygon];
+		const points = polygon?.points ?? [];
+		const point = points[place.point];
+		if (!point) return null;
+
+		const count = points.length;
+		const at = new cool.Point(point.x, point.y);
+		const prev = points[(place.point + count - 1) % count];
+		const next = points[(place.point + 1) % count];
+		const hasIn = point.behindX !== undefined && point.behindY !== undefined;
+		const hasOut = point.aheadX !== undefined && point.aheadY !== undefined;
+		const third = (to: cool.ObjectPathPoint) =>
+			at.add(new cool.Point(to.x, to.y).subtract(at).divideBy(3));
+
+		if (continuity === 0) {
+			if (hasIn) {
+				if (!polygon.closed && place.point === 0) {
+					delete point.behindX;
+					delete point.behindY;
+				} else {
+					const weight = third(prev);
+					point.behindX = weight.x;
+					point.behindY = weight.y;
+				}
+			}
+			if (hasOut) {
+				const weight = third(next);
+				point.aheadX = weight.x;
+				point.aheadY = weight.y;
+			}
+			delete point.continuity;
+			return path;
+		}
+
+		// a point without both weights keeps them, but takes the way the curve runs through it
+		if (!hasIn || !hasOut) {
+			point.continuity = continuity as 1 | 2;
+			return path;
+		}
+
+		const comingIn = new cool.Point(
+			point.behindX as number,
+			point.behindY as number,
+		).subtract(at);
+		const goingOut = new cool.Point(
+			point.aheadX as number,
+			point.aheadY as number,
+		).subtract(at);
+		const inLength = comingIn.length();
+		const outLength = goingOut.length();
+		if (!inLength || !outLength) return path;
+
+		const inWay = comingIn.divideBy(inLength);
+		const outWay = goingOut.divideBy(outLength);
+		const cross = inWay.x * outWay.y - inWay.y * outWay.x;
+		const facing =
+			Math.abs(cross) < 1e-9 && inWay.x * outWay.x + inWay.y * outWay.y < 0;
+		const common = (inLength + outLength) / 2;
+		const set = (behind: cool.Point, ahead: cool.Point) => {
+			point.behindX = behind.x;
+			point.behindY = behind.y;
+			point.aheadX = ahead.x;
+			point.aheadY = ahead.y;
+		};
+
+		if (facing) {
+			if (continuity === 2)
+				set(
+					at.add(inWay.multiplyBy(common)),
+					at.subtract(inWay.multiplyBy(common)),
+				);
+			else if (Math.abs(inLength - outLength) < 1e-9) {
+				// equal lengths would be symmetric; smooth takes a third of each edge
+				const prevLength =
+					new cool.Point(prev.x, prev.y).subtract(at).length() / 3;
+				const nextLength =
+					new cool.Point(next.x, next.y).subtract(at).length() / 3;
+				set(
+					at.add(inWay.multiplyBy(prevLength)),
+					at.add(outWay.multiplyBy(nextLength)),
+				);
+			}
+		} else {
+			// the weights stand across the line halfway between their two ways
+			const sum = inWay.add(outWay);
+			const sumLength = sum.length();
+			const across = sumLength
+				? new cool.Point(-sum.y / sumLength, sum.x / sumLength)
+				: new cool.Point(-inWay.y, inWay.x);
+			const inLong = continuity === 2 ? common : inLength;
+			const outLong = continuity === 2 ? common : outLength;
+			if (cross > 0)
+				set(
+					at.subtract(across.multiplyBy(inLong)),
+					at.add(across.multiplyBy(outLong)),
+				);
+			else
+				set(
+					at.add(across.multiplyBy(inLong)),
+					at.subtract(across.multiplyBy(outLong)),
+				);
+		}
+		point.continuity = continuity as 1 | 2;
+		return path;
+	}
+
+	/*
+		Split at a point. A closed polygon opens there, and the point becomes both of its ends.
+		An open polygon becomes two that meet at the point, which the engine makes two objects
+		of; until its answer both show here as parts of this path. Only a path of one polygon is
+		split, and an open one not at its ends.
+	*/
+	private static splitAt(
+		path: cool.ObjectPathPolygon[],
+		place: PathPlace,
+	): cool.ObjectPathPolygon[] | null {
+		const polygon = path[place.polygon];
+		const points = polygon?.points ?? [];
+		const at = place.point;
+		if (path.length !== 1 || points.length < 3) return null;
+
+		const without = (
+			point: cool.ObjectPathPoint,
+			side: 'behind' | 'ahead',
+		): cool.ObjectPathPoint => {
+			const kept = { ...point };
+			if (side === 'behind') {
+				delete kept.behindX;
+				delete kept.behindY;
+			} else {
+				delete kept.aheadX;
+				delete kept.aheadY;
+			}
+			delete kept.continuity;
+			return kept;
+		};
+
+		if (polygon.closed) {
+			const around = points.slice(at).concat(points.slice(0, at));
+			return [
+				{
+					closed: false,
+					points: [without(around[0], 'behind')]
+						.concat(around.slice(1))
+						.concat([without(points[at], 'ahead')]),
+				},
+			];
+		}
+
+		if (at === 0 || at + 1 >= points.length) return null;
+		return [
+			{
+				closed: false,
+				points: points.slice(0, at).concat([without(points[at], 'ahead')]),
+			},
+			{
+				closed: false,
+				points: [without(points[at], 'behind')].concat(points.slice(at + 1)),
+			},
+		];
+	}
+
+	/*
+		Every curved edge that runs straight made a line: one whose weights lie on the line
+		between its ends. With pointsOnALine the points that lie on a straight line between their
+		neighbours go too, walking each polygon once as the engine does: a point goes when it and
+		every point gone since the last one kept lie on the line from that one to the next. An
+		open polygon keeps its ends, a closed one at least three points.
+	*/
+	private static simplified(
+		path: cool.ObjectPathPolygon[],
+		pointsOnALine: boolean,
+	): cool.ObjectPathPolygon[] | null {
+		// the engine allows one of its units, a hundredth of a millimetre, in twips
+		const reach = 1440 / 2540;
+
+		for (const polygon of path) {
+			const points = polygon.points ?? [];
+			points.forEach((point: cool.ObjectPathPoint, at: number) => {
+				const next = PathEditing.nextOf(polygon, at);
+				if (next === null) return;
+				const edge = PathEditing.edgeOf(point, points[next]);
+				if (
+					edge.curved &&
+					PathEditing.onTheLine(edge.start, edge.end, edge.out, reach) &&
+					PathEditing.onTheLine(edge.start, edge.end, edge.into, reach)
+				) {
+					delete point.aheadX;
+					delete point.aheadY;
+					delete points[next].behindX;
+					delete points[next].behindY;
+				}
+			});
+
+			if (pointsOnALine)
+				polygon.points = PathEditing.withoutPointsOnALine(polygon, reach);
+		}
+		return path;
+	}
+
+	/// Whether a point lies within reach of the straight line between two others, and between
+	/// them.
+	private static onTheLine(
+		from: cool.Point,
+		to: cool.Point,
+		at: cool.Point,
+		reach: number,
+	): boolean {
+		const along = to.subtract(from);
+		const length2 = along.x * along.x + along.y * along.y;
+		if (!length2) return at.subtract(from).length() <= reach;
+		const cut =
+			((at.x - from.x) * along.x + (at.y - from.y) * along.y) / length2;
+		if (cut < 0 || cut > 1) return false;
+		return from.add(along.multiplyBy(cut)).subtract(at).length() <= reach;
+	}
+
+	/// The points of a polygon without those on a straight line between their neighbours, by the
+	/// engine's walk.
+	private static withoutPointsOnALine(
+		polygon: cool.ObjectPathPolygon,
+		reach: number,
+	): cool.ObjectPathPoint[] {
+		const points = polygon.points ?? [];
+		const count = points.length;
+		const closed = polygon.closed === true;
+		const least = closed ? 3 : 2;
+		if (count <= least) return points;
+
+		const straight = (point: cool.ObjectPathPoint) =>
+			point.aheadX === undefined && point.behindX === undefined;
+		const placeOf = (point: cool.ObjectPathPoint) =>
+			new cool.Point(point.x, point.y);
+		// whether every point between two lies on the line from the one to the other
+		const runsStraight = (from: number, to: number): boolean => {
+			if (points[from].aheadX !== undefined || points[to].behindX !== undefined)
+				return false;
+			for (let at = (from + 1) % count; at !== to; at = (at + 1) % count)
+				if (
+					!straight(points[at]) ||
+					!PathEditing.onTheLine(
+						placeOf(points[from]),
+						placeOf(points[to]),
+						placeOf(points[at]),
+						reach,
+					)
+				)
+					return false;
+			return true;
+		};
+
+		const kept = [0];
+		let left = count;
+		const end = closed ? count : count - 1;
+		for (let at = 1; at < end; ++at) {
+			if (left > least && runsStraight(kept[kept.length - 1], (at + 1) % count))
+				--left;
+			else kept.push(at);
+		}
+		if (!closed) kept.push(count - 1);
+		else if (
+			kept.length > least &&
+			runsStraight(kept[kept.length - 1], kept[1])
+		)
+			kept.shift();
+
+		return kept.map((at: number) => points[at]);
+	}
+
+	/// Every polygon closed, without points at its end that repeat its first, or every one open.
+	private static closedOrOpened(
+		path: cool.ObjectPathPolygon[],
+		closed: boolean,
+	): cool.ObjectPathPolygon[] | null {
+		for (const polygon of path) {
+			const points = polygon.points ?? [];
+			if (closed)
+				while (
+					points.length > 1 &&
+					points[points.length - 1].x === points[0].x &&
+					points[points.length - 1].y === points[0].y
+				)
+					points.pop();
+			polygon.closed = closed;
+		}
+		return path;
+	}
+
+	/*
+		A point added on the edge nearest to that place, where the place nearest to it lies
+		inside an edge rather than on one of its ends. A curve is split there into two curves,
+		so the path keeps its shape and the new point runs smoothly through.
+	*/
+	private static withAPointAt(
+		path: cool.ObjectPathPolygon[],
+		at: cool.Point,
+	): cool.ObjectPathPolygon[] | null {
+		let best: {
+			polygon: number;
+			point: number;
+			cut: number;
+			distance: number;
+		} | null = null;
+
+		path.forEach((polygon: cool.ObjectPathPolygon, which: number) => {
+			(polygon.points ?? []).forEach((_point, point: number) => {
+				const next = PathEditing.nextOf(polygon, point);
+				if (next === null) return;
+				const edge = PathEditing.edgeOf(
+					polygon.points[point],
+					polygon.points[next],
+				);
+				const nearest = PathEditing.nearestOnEdge(edge, at);
+				if (!best || nearest.distance < best.distance)
+					best = { polygon: which, point: point, ...nearest };
+			});
+		});
+
+		const found = best as {
+			polygon: number;
+			point: number;
+			cut: number;
+			distance: number;
+		} | null;
+		if (!found || found.cut <= 1e-6 || found.cut >= 1 - 1e-6) return null;
+
+		const points = path[found.polygon].points;
+		const next = PathEditing.nextOf(path[found.polygon], found.point) as number;
+		const from = points[found.point];
+		const to = points[next];
+		const edge = PathEditing.edgeOf(from, to);
+		const t = found.cut;
+		const between = (a: cool.Point, b: cool.Point) =>
+			a.add(b.subtract(a).multiplyBy(t));
+
+		let added: cool.ObjectPathPoint;
+		if (edge.curved) {
+			const a = between(edge.start, edge.out);
+			const b = between(edge.out, edge.into);
+			const c = between(edge.into, edge.end);
+			const ab = between(a, b);
+			const bc = between(b, c);
+			const middle = between(ab, bc);
+			from.aheadX = a.x;
+			from.aheadY = a.y;
+			to.behindX = c.x;
+			to.behindY = c.y;
+			added = {
+				x: middle.x,
+				y: middle.y,
+				behindX: ab.x,
+				behindY: ab.y,
+				aheadX: bc.x,
+				aheadY: bc.y,
+				continuity: 1,
+			};
+		} else {
+			const middle = between(edge.start, edge.end);
+			added = { x: middle.x, y: middle.y };
+		}
+
+		points.splice(found.point + 1, 0, added);
+		return path;
+	}
+
+	/// An edge from one point to the next: its ends, its weights where it is curved, else its
+	/// ends again.
+	private static edgeOf(
+		from: cool.ObjectPathPoint,
+		to: cool.ObjectPathPoint,
+	): {
+		start: cool.Point;
+		out: cool.Point;
+		into: cool.Point;
+		end: cool.Point;
+		curved: boolean;
+	} {
+		const start = new cool.Point(from.x, from.y);
+		const end = new cool.Point(to.x, to.y);
+		const out =
+			from.aheadX !== undefined && from.aheadY !== undefined
+				? new cool.Point(from.aheadX, from.aheadY)
+				: start;
+		const into =
+			to.behindX !== undefined && to.behindY !== undefined
+				? new cool.Point(to.behindX, to.behindY)
+				: end;
+		return { start, out, into, end, curved: out !== start || into !== end };
+	}
+
+	/// The place on an edge nearest to a point, as the share of the edge before it, and how far
+	/// it is. A curve is searched in steps, then more finely around the nearest step.
+	private static nearestOnEdge(
+		edge: {
+			start: cool.Point;
+			out: cool.Point;
+			into: cool.Point;
+			end: cool.Point;
+			curved: boolean;
+		},
+		at: cool.Point,
+	): { cut: number; distance: number } {
+		if (!edge.curved) {
+			const along = edge.end.subtract(edge.start);
+			const length2 = along.x * along.x + along.y * along.y;
+			const cut = length2
+				? Math.max(
+						0,
+						Math.min(
+							1,
+							((at.x - edge.start.x) * along.x +
+								(at.y - edge.start.y) * along.y) /
+								length2,
+						),
+					)
+				: 0;
+			const on = edge.start.add(along.multiplyBy(cut));
+			return { cut, distance: on.subtract(at).length() };
+		}
+
+		const pointAt = (t: number) => {
+			const u = 1 - t;
+			return new cool.Point(
+				u * u * u * edge.start.x +
+					3 * u * u * t * edge.out.x +
+					3 * u * t * t * edge.into.x +
+					t * t * t * edge.end.x,
+				u * u * u * edge.start.y +
+					3 * u * u * t * edge.out.y +
+					3 * u * t * t * edge.into.y +
+					t * t * t * edge.end.y,
+			);
+		};
+		const distanceAt = (t: number) => pointAt(t).subtract(at).length();
+
+		const steps = 32;
+		let cut = 0;
+		for (let step = 1; step <= steps; ++step)
+			if (distanceAt(step / steps) < distanceAt(cut)) cut = step / steps;
+
+		let low = Math.max(0, cut - 1 / steps);
+		let high = Math.min(1, cut + 1 / steps);
+		for (let round = 0; round < 30; ++round) {
+			const first = low + (high - low) / 3;
+			const second = high - (high - low) / 3;
+			if (distanceAt(first) < distanceAt(second)) high = second;
+			else low = first;
+		}
+		cut = (low + high) / 2;
+		return { cut, distance: distanceAt(cut) };
 	}
 
 	/*
@@ -639,6 +1258,12 @@ class ObjectPathSink implements PathSink {
 
 	public simplify(pointsOnALine: boolean): void {
 		this.send('simplifyobjectpath', 'points=' + String(pointsOnALine));
+	}
+
+	/// The handles stand on the path as shown, so they are worked out again.
+	public shownPathChanged(): void {
+		this.selection.refresh();
+		app.sectionContainer?.requestReDraw();
 	}
 
 	/// The parameters that name a point of the path to the engine.
