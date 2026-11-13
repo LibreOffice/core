@@ -370,9 +370,6 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     // just horrible
     if (fn == SRCDIR "/svx/source/form/filtnav.cxx")
         return;
-    // using clucene macros
-    if (fn == SRCDIR "/helpcompiler/source/HelpSearch.cxx")
-        return;
     // linked list
     if (fn == SRCDIR "/filter/source/graphicfilter/ios2met/ios2met.cxx")
         return;

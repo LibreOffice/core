@@ -116,8 +116,6 @@ include/formula/tokenarray.hxx:495
     formula::FormulaToken * formula::FormulaTokenArray::AddStringName(const svl::SharedString &,_Bool)
 include/formula/tokenarray.hxx:496
     formula::FormulaToken * formula::FormulaTokenArray::AddDPFieldName(const svl::SharedString &)
-include/helpcompiler/HelpIndexer.hxx:58
-    _Bool HelpIndexer::indexDocuments()
 include/o3tl/sorted_vector.hxx:46
     o3tl::sorted_vector<Value, Compare, Find> o3tl::<deduction guide for sorted_vector>(o3tl::sorted_vector<Value, Compare, Find>)
 include/o3tl/sorted_vector.hxx:59

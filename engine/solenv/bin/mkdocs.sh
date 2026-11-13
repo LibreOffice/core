@@ -268,7 +268,7 @@ if [ ${#empty_modules[*]} -gt 10 ]; then
   echo -e "<p>&nbsp;</p><p>READMEs were not available for these modules:</p><ul>\n" >> "$BASE_OUTPUT/index.html"
   for module_name in "${empty_modules[@]}"; do
     # Do not process these directories
-    if [[ "$module_name" =~ ^(autom4te.cache|dictionaries|docs|helpcompiler|helpcontent2|include|instdir|lo|translations|workdir)$ ]]; then
+    if [[ "$module_name" =~ ^(autom4te.cache|dictionaries|docs|helpcontent2|include|instdir|lo|translations|workdir)$ ]]; then
       continue
     fi
     echo -e "<li><a href=\"https://git.libreoffice.org/core/+/refs/heads/master/${module_name}\">${module_name}</a></li>\n" >> "$BASE_OUTPUT/index.html"

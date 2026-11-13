@@ -9,7 +9,6 @@ merge (anonymous namespace)::CffGlobal with (anonymous namespace)::CffSubsetterC
 merge (anonymous namespace)::Char1 with (anonymous namespace)::Char2
 merge (anonymous namespace)::Char2 with (anonymous namespace)::Char3
 merge (anonymous namespace)::DIBInfoHeader with (anonymous namespace)::DIBV5Header
-maybe merge (anonymous namespace)::Data with cppu::PropertySetMixinImpl::Impl, in modules helpcompiler and cppuhelper
 merge (anonymous namespace)::DomVisitor with (anonymous namespace)::DomExport
 maybe merge (anonymous namespace)::EventContainerTest with (anonymous namespace)::testInsertOrder, in modules toolkit and workdir
 maybe merge (anonymous namespace)::GluePointTest with (anonymous namespace)::testTdf157543_5PointStar, in modules svx and workdir

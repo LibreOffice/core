@@ -228,8 +228,6 @@ filter/source/graphicfilter/icgm/chart.hxx:43
     DataNode nBoxY2 sal_Int16
 framework/inc/dispatch/dispatchprovider.hxx:76
     framework::DispatchProvider m_aProtocolHandlerCache HandlerCache
-helpcompiler/inc/HelpCompiler.hxx:200
-    HelpCompiler lang const std::string
 include/basctl/idecodecompletiontypes.hxx:93
     basctl::IdeParamInfo sQualifiedTypeName OUString
 include/basctl/idecodecompletiontypes.hxx:94

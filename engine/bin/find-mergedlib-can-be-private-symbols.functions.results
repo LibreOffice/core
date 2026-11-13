@@ -1428,15 +1428,6 @@ Help::UpdatePopover(void*, vcl::Window*, tools::Rectangle const&, rtl::OUString 
 Help::~Help()
 HelpButton::Click()
 HelpButton::StateChanged(StateChangedType)
-HelpIndexer::HelpIndexer(rtl::OUString, rtl::OUString, std::basic_string_view<char16_t, std::char_traits<char16_t> >, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-HelpIndexer::helpDocument(rtl::OUString const&, lucene::document::Document*) const
-HelpIndexer::helpFileReader(rtl::OUString const&)
-HelpIndexer::indexDocuments()
-HelpIndexer::scanForFiles()
-HelpIndexer::scanForFiles(rtl::OUString const&)
-HelpLinker::main(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const*, rtl::OUString const*)
-HelpSearch::HelpSearch(rtl::OUString const&)
-HelpSearch::query(rtl::OUString const&, bool, std::vector<rtl::OUString, std::allocator<rtl::OUString> >&, std::vector<float, std::allocator<float> >&)
 HelpSettings::GetBalloonDelay()
 HelpSettings::GetTipTimeout() const
 HelpSettings::HelpSettings()

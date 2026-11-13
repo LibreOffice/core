@@ -277,7 +277,6 @@ class Parser:
             "formula" : 1,
             "fpicker" : 1,
             "framework" : 1,
-            "helpcompiler" : 1,
             "hwpfilter" : 1,
             "i18npool" : 1,
             "i18nlangtag" : 1,

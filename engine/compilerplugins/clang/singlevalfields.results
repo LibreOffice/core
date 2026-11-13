@@ -213,9 +213,6 @@ filter/source/msfilter/viscache.hxx:29
 framework/source/uiconfiguration/imagemanagerimpl.hxx:168
     framework::ImageManagerImpl m_aResourceString
     private:resource/images/moduleimages
-helpcompiler/inc/BasCodeTagger.hxx:27
-    BasicCodeTagger m_Highlighter
-    0
 i18npool/inc/breakiterator_unicode.hxx:74
     i18npool::BreakIterator_Unicode lineRule
     line

@@ -372,8 +372,6 @@ framework/source/layoutmanager/toolbarlayoutmanager.hxx:275
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:279
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
-helpcompiler/inc/HelpCompiler.hxx:204
-    HelpCompiler gui std::string
 i18nutil/source/utility/paper.cxx:314
     paperword string char *
 include/basegfx/DrawCommands.hxx:81

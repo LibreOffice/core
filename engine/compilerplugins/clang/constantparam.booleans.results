@@ -540,10 +540,6 @@ framework/inc/uielement/uicommanddescription.hxx:81
     void framework::UICommandDescription::UICommandDescription(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,_Bool)
     _Bool 
     1
-helpcompiler/inc/HelpCompiler.hxx:57
-    void fs::path::path(const class std::basic_string<char> &,enum fs::convert)
-    enum fs::convert 
-    0
 hwpfilter/source/hfont.h:62
     const char * HWPFont::GetFontName(int,int)
     int lang

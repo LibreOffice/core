@@ -2451,8 +2451,7 @@ AC_ARG_WITH(help,
          can be used to bundle only the common part, .e.g help-specific icons.
          This is useful when you build the helpcontent separately.])
     [
-                          Usage:     --with-help    build the old local help
-                                 --without-help     no local help (default)
+                          Usage:     --without-help     no local help (default)
                                  --with-help=html   build the new HTML local help
                                  --with-help=online build the new HTML online help
     ],
@@ -5806,24 +5805,10 @@ if test -n "$with_help" -a "$with_help" != "no"; then
         HELP_ONLINE=TRUE
         AC_MSG_RESULT([HTML (online)])
         ;;
-    yes)
-        WITH_HELPPACKS=TRUE
-        SCPDEFS="$SCPDEFS -DWITH_HELPPACKS"
-        AC_MSG_RESULT([XML (local)])
-        ;;
     *)
         AC_MSG_ERROR([Unknown --with-help=$with_help])
         ;;
     esac
-else
-    AC_MSG_RESULT([no])
-fi
-
-AC_MSG_CHECKING([if we need to build the help index tooling])
-if test "$with_help" = yes -a -z "$DISABLE_DYNLOADING"; then
-    BUILD_TYPE="$BUILD_TYPE HELPTOOLS"
-    test_clucene=yes
-    AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
 fi
@@ -6029,7 +6014,6 @@ if test "$cross_compiling" = "yes"; then
         GLM
         GRAPHITE
         HARFBUZZ
-        HELPTOOLS
         ICU
         LCMS2
         LIBJPEG_TURBO

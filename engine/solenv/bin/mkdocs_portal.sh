@@ -141,7 +141,7 @@ done
 if [ ${#empty_modules[*]} -gt 10 ]; then
     echo -e "<p>&nbsp;</p><p>READMEs were not available for these modules:</p><ul>\n" >> "$BASE_OUTPUT/index.html"
     for module_name in "${empty_modules[@]}"; do
-        if [[ "$module_name" =~ ^(autom4te.cache|dictionaries|docs|helpcompiler|helpcontent2|include|instdir|lo|translations|workdir)$ ]]
+        if [[ "$module_name" =~ ^(autom4te.cache|dictionaries|docs|helpcontent2|include|instdir|lo|translations|workdir)$ ]]
         then
             continue
         fi

@@ -2715,12 +2715,6 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 
-ifneq ($(filter HELPTOOLS,$(BUILD_TYPE)),)
-$(eval $(call gb_Helper_register_external_libraries_for_install,clucene,PLAINLIBS_OOO,ooo,\
-    clucene \
-))
-endif
-
 endif # SYSTEM_CLUCENE
 
 define gb_LinkTarget__use_gobject

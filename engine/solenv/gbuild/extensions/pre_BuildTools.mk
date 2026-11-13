@@ -33,10 +33,6 @@ gb_BUILD_TOOLS_executables = \
 		unoidl-check \
 		unoidl-write \
 		xrmex \
-    $(call gb_Helper_optional,HELPTOOLS, \
-        HelpIndexer \
-        HelpLinker \
-    ) \
     $(if $(filter WNT,$(OS)),$(call gb_Helper_optional,DESKTOP,lngconvex)) \
 
 gb_BUILD_TOOLS_executables_extern = \

@@ -1492,10 +1492,6 @@ framework/source/uiconfiguration/windowstateconfiguration.cxx:150
     enum (anonymous namespace)::ConfigurationAccess_WindowState::(unnamed at /home/noel/libo-plugin/framework/source/uiconfiguration/windowstateconfiguration.cxx:142:9) WINDOWSTATE_MASK_DOCKPOS
 framework/source/uiconfiguration/windowstateconfiguration.cxx:151
     enum (anonymous namespace)::ConfigurationAccess_WindowState::(unnamed at /home/noel/libo-plugin/framework/source/uiconfiguration/windowstateconfiguration.cxx:142:9) WINDOWSTATE_MASK_DOCKSIZE
-helpcompiler/inc/BasCodeTagger.hxx:35
-    enum BasicCodeTagger::TaggerException NULL_DOCUMENT
-helpcompiler/inc/HelpCompiler.hxx:50
-    enum fs::convert native
 i18nlangtag/source/languagetag/languagetag.cxx:369
     enum LanguageTagImpl::Extraction EXTRACTED_KNOWN_BAD
 i18npool/inc/cclass_unicode.hxx:37

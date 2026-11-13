@@ -24,10 +24,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 endif
 
 $(eval $(call gb_Helper_register_executables,NONE, \
-    $(call gb_Helper_optional,HELPTOOLS, \
-	HelpIndexer \
-	HelpLinker \
-    ) \
 	bestreversemap \
 	cfgex \
 	cofficeotron \
@@ -315,7 +311,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fsstorage \
 	fwk \
-    $(call gb_Helper_optional,HELPTOOLS,helplinker) \
 	i18npool \
 	i18nsearch \
 	$(call gb_Helper_optional,QUICKJS,jsuno) \

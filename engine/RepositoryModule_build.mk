@@ -89,7 +89,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 		xmloff \
 		xmlscript \
 	) \
-    $(call gb_Helper_optional,HELPTOOLS,helpcompiler) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 ))
 

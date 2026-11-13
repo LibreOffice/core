@@ -812,8 +812,6 @@ include/formula/tokenarray.hxx:607
     std::basic_ostream<type-parameter-?-?, type-parameter-?-?> & formula::operator<<(std::basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const formula::FormulaTokenArray &)
 include/formula/tokenarray.hxx:663
     formula::FormulaToken * formula::FormulaTokenArrayPlainIterator::GetNextStringNameRPN()
-include/helpcompiler/HelpIndexer.hxx:63
-    const rtl::OUString & HelpIndexer::getErrorMessage() const
 include/i18nlangtag/languagetag.hxx:298
     enum LanguageTag::ScriptType LanguageTag::getScriptType() const
 include/o3tl/any.hxx:155

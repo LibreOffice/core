@@ -1085,11 +1085,6 @@ Help::Start(rtl::OUString const&, weld::Widget*)
 Help::UpdatePopover(void*, vcl::Window*, tools::Rectangle const&, rtl::OUString const&)
 HelpButton::Click()
 HelpButton::StateChanged(StateChangedType)
-HelpIndexer::helpDocument(rtl::OUString const&, lucene::document::Document*) const
-HelpIndexer::helpFileReader(rtl::OUString const&)
-HelpIndexer::scanForFiles()
-HelpIndexer::scanForFiles(rtl::OUString const&)
-HelpLinker::main(std::__debug::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const*, rtl::OUString const*)
 HelpSettings::GetBalloonDelay()
 HelpSettings::GetTipTimeout() const
 HelpSettings::operator!=(HelpSettings const&) const

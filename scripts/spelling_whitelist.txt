@@ -4439,7 +4439,6 @@ helpdatafileproxy
 helperapi
 helpid
 helpids
-helplinker
 helppackages
 helptext
 helptexts
