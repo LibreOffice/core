@@ -64,7 +64,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
 {
     SolarMutexGuard aGuard;
     if (!m_pDoc)
-        throw RuntimeException();
+        throw RuntimeException(u"SwXTextDefaults::setPropertyValue: document is not available"_ustr, getXWeak());
     const SfxItemPropertyMapEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
@@ -124,7 +124,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
     if (!m_pDoc)
-        throw RuntimeException();
+        throw RuntimeException(u"SwXTextDefaults::getPropertyValue: document is not available"_ustr, getXWeak());
     const SfxItemPropertyMapEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
@@ -160,7 +160,7 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
     SolarMutexGuard aGuard;
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     if (!m_pDoc)
-        throw RuntimeException();
+        throw RuntimeException(u"SwXTextDefaults::getPropertyState: document is not available"_ustr, getXWeak());
     const SfxItemPropertyMapEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
@@ -185,7 +185,7 @@ Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Seq
 void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyName )
 {
     if (!m_pDoc)
-        throw RuntimeException();
+        throw RuntimeException(u"SwXTextDefaults::setPropertyToDefault: document is not available"_ustr, getXWeak());
     const SfxItemPropertyMapEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
@@ -198,7 +198,7 @@ void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyNa
 Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName )
 {
     if (!m_pDoc)
-        throw RuntimeException();
+        throw RuntimeException(u"SwXTextDefaults::getPropertyDefault: document is not available"_ustr, getXWeak());
     const SfxItemPropertyMapEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
