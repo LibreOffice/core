@@ -166,13 +166,16 @@ drawinglayer::primitive2d::Primitive2DReference CellMarkPrimitive2D::create2DDec
         case CellMarkKind::AutoFilter:
         case CellMarkKind::PivotButton:
         {
-            // A square button at the right edge of the cell, as high as the cell allows.
-            const double fSide = std::min({ constButtonPixels * mfPixelSize,
-                                            maCellRange.getHeight(), maCellRange.getWidth() });
-            const basegfx::B2DRange aButton(fRight - fSide, fBottom - fSide, fRight, fBottom);
+            // A button at the right edge of the cell, at most half as wide as the cell and as high
+            // as the cell allows. ScDPFieldButton::getPopupBoundingBox gives the window the same
+            // box, where a click opens the menu.
+            const double fLargest = constButtonPixels * mfPixelSize;
+            const double fWidth = std::min(fLargest, maCellRange.getWidth() / 2);
+            const double fHeight = std::min(fLargest, maCellRange.getHeight());
+            const basegfx::B2DRange aButton(fRight - fWidth, fBottom - fHeight, fRight, fBottom);
             const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aButton));
 
-            const double fArrowHalf = fSide / 4;
+            const double fArrowHalf = std::min(fWidth, fHeight) / 4;
             const basegfx::B2DPoint aCenter(aButton.getCenter());
 
             drawinglayer::primitive2d::Primitive2DContainer aButtonParts{

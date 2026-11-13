@@ -168,6 +168,29 @@ bool hasCellMark(const boost::property_tree::ptree& rResponse, std::string_view 
     return false;
 }
 
+/// The outline of the button that a cell mark draws: the path of its first filled shape.
+std::string cellMarkOutline(const boost::property_tree::ptree& rResponse, std::string_view aKind,
+                            int nColumn, int nRow)
+{
+    for (const auto& rRow : blockRows(rResponse))
+    {
+        auto oMarks = rRow.get_child_optional("content.layers.marks");
+        if (!oMarks)
+            continue;
+        for (const auto& rMark : *oMarks)
+        {
+            if (rMark.second.get<std::string>("kind") != aKind
+                || rMark.second.get<int>("column") != nColumn
+                || rMark.second.get<int>("row") != nRow)
+                continue;
+            // The button is a group of shapes, and the outline is filled first.
+            const auto& rGroup = rMark.second.get_child("children").front().second;
+            return rGroup.get_child("children").front().second.get<std::string>("path");
+        }
+    }
+    return std::string();
+}
+
 /// The border layer of the first block in a response that has borders, or an empty tree.
 boost::property_tree::ptree blockBorders(const boost::property_tree::ptree& rResponse)
 {
@@ -665,6 +688,37 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedNumberShowsHashAndAr
     // A number aligns to the right, so it is cut off at the left.
     CPPUNIT_ASSERT(hasCellMark(aResponse, "clipLeft", 0, 0));
     CPPUNIT_ASSERT(!hasCellMark(aResponse, "clipRight", 0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorNarrowAutoFilterButtonIsHalfTheCell)
+{
+    // An autofilter button is at most half as wide as its cell, as in the window, where only that
+    // part opens the menu. It filled a narrow cell, so a click on its left half did nothing.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    setColumnWidth(*pDocShell, 0, 200);
+    setColumnWidth(*pDocShell, 1, 2000);
+    rDocument.ApplyFlagsTab(0, 0, 1, 0, 0, ScMF::Auto);
+    pDocShell->PostPaintGridAll();
+    Scheduler::ProcessEventsToIdle();
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    // Where the button starts in its column: the first point of its outline is "column:offset".
+    auto aButtonStartOf = [&aResponse](int nColumn) {
+        const std::string aOutline = cellMarkOutline(aResponse, "autoFilter", nColumn, 0);
+        CPPUNIT_ASSERT(!aOutline.empty());
+        const std::string aStart = aOutline.substr(1, aOutline.find(',') - 1);
+        CPPUNIT_ASSERT_EQUAL(std::to_string(nColumn) + ":", aStart.substr(0, aStart.find(':') + 1));
+        return std::stod(aStart.substr(aStart.find(':') + 1));
+    };
+
+    // The narrow column is 200 twips wide, so its button starts in the middle.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, aButtonStartOf(0), 1.0);
+    // The wide column keeps a button of 17 pixels of 15 twips, at its right edge.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2000.0 - 17 * 15, aButtonStartOf(1), 1.0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorShrunkTextGetsNoClipArrow)
