@@ -693,6 +693,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('graphicselection:')) {
 			this._map.fire('resettopbottompagespacing');
 			GraphicSelection.onMessage(textMsg);
+			if (this._animatedGifManager)
+				this._animatedGifManager.onGraphicSelectionMessage();
 		}
 		else if (textMsg.startsWith('graphicinnertextarea:')) {
 			return; // Not used.

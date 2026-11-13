@@ -22,6 +22,8 @@ class AnimatedGifManager {
 
 	private _sections: Map<number, AnimatedGifSection> = new Map();
 	private _presentationInfo: any = null;
+	// The last state of each flip command: 'true', 'false' or 'disabled'.
+	private _flipStates: Map<string, string> = new Map();
 
 	constructor(map: any) {
 		this._map = map;
@@ -29,6 +31,8 @@ class AnimatedGifManager {
 		map.on('presentationinfo', this._onPresentationInfo, this);
 		map.on('updateparts', this._onUpdateParts, this);
 		map.on('zoomend', this._onZoomEnd, this);
+		map.on('animatedimages', this._onAnimatedImages, this);
+		map.on('commandstatechanged', this._onCommandStateChanged, this);
 		app.events.on('contextchange', this._onContextChange.bind(this));
 		app.events.on(
 			'graphicselectionchanged',
@@ -46,6 +50,53 @@ class AnimatedGifManager {
 		) {
 			app.socket.sendMessage('getpresentationinfo');
 		}
+	}
+
+	// A text document lists the animated images of the selection when asked. The selection is
+	// reported again after each move or resize of the image, so the list is asked for again then.
+	public onGraphicSelectionMessage() {
+		if (this._map.getDocType() !== 'text') return;
+		const extraInfo = GraphicSelection.extraInfo;
+		if (
+			GraphicSelection.selectedObjectIDs.length > 0 &&
+			extraInfo &&
+			extraInfo.graphicExtension === 'gif'
+		) {
+			app.socket.sendMessage('commandvalues command=.uno:AnimatedImages');
+			return;
+		}
+		this._reconcile([]);
+	}
+
+	// A flip of the image turns the state of a flip command between 'true' and 'false' but keeps
+	// the selection, so the list is asked for again then. The state turns from 'disabled' to
+	// 'false' when an image gets selected, and the selection itself brings the list then.
+	private _onCommandStateChanged(event: any) {
+		const commandName = event.commandName;
+		if (
+			commandName !== '.uno:FlipHorizontal' &&
+			commandName !== '.uno:FlipVertical'
+		)
+			return;
+		const state = String(event.state);
+		const previous = this._flipStates.get(commandName);
+		this._flipStates.set(commandName, state);
+		const isFlipState = (value: string | undefined) =>
+			value === 'true' || value === 'false';
+		if (
+			this._sections.size > 0 &&
+			isFlipState(previous) &&
+			isFlipState(state) &&
+			previous !== state
+		)
+			this.onGraphicSelectionMessage();
+	}
+
+	// The list can arrive after the selection moved on, so only the images still selected play.
+	private _onAnimatedImages(event: { images: GifInfo[] }) {
+		const selected = GraphicSelection.selectedObjectIDs;
+		const images = event.images || [];
+		this._reconcile(images.filter((image) => selected.includes(image.id)));
 	}
 
 	private _onPresentationInfo(info: any) {

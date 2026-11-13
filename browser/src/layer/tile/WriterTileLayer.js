@@ -59,7 +59,10 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
-		if (values.comments && !window.mode.isInteractivePreview()) {
+		if (values.commandName === '.uno:AnimatedImages') {
+			this._map.fire('animatedimages', { images: values.commandValues.images });
+		}
+		else if (values.comments && !window.mode.isInteractivePreview()) {
 			values.comments.forEach(function(comment) {
 				comment.id = comment.id.toString();
 				comment.parent = comment.parentId.toString();
