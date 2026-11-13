@@ -70,7 +70,7 @@ DECLARE_WW8EXPORT_TEST(testTdf72511_editengLRSpace, "tdf72511_editengLRSpace.doc
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, u"ParaLeftMargin"_ustr));
 
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xGroupShape->getShapeByIndex(1), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.TextShape"_ustr, xShape2->getShapeType());
     uno::Reference<text::XTextRange> xTextbox(xShape2, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xTBPara(xTextbox, uno::UNO_QUERY);

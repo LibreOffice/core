@@ -226,7 +226,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<drawing::XDrawPage> xDrawPage(pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
     // Create a selection on the second word.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetTextSelection)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<drawing::XDrawPage> xDrawPage(pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Shape"_ustr);
     // Create a selection on the shape text.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -332,7 +332,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResetSelection)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<drawing::XDrawPage> xDrawPage(pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
     // Create a selection on the second word.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -1834,7 +1834,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewRenderKeepsReportedTextSel
 
     uno::Reference<drawing::XDrawPage> xDrawPage(
         pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
 
     SdrView* pView = pViewShell->GetView();
@@ -1932,7 +1932,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReportedTextSelectionFollowsBoldC
 
     uno::Reference<drawing::XDrawPage> xDrawPage(
         pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
 
     SdrView* pView = pViewShell->GetView();
@@ -1962,7 +1962,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClickReportsCollapsedTextSelectio
 
     uno::Reference<drawing::XDrawPage> xDrawPage(
         pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
 
     SdrView* pView = pViewShell->GetView();
@@ -2225,7 +2225,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xPage->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Somethingxx"_ustr, xShape->getString());
 }
 
@@ -2760,7 +2760,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testLanguageAllText)
     // Assert that the shape text language was changed.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xRun(xShape, uno::UNO_QUERY_THROW);
     lang::Locale aLocale;
     xRun->getPropertyValue(u"CharLocale"_ustr) >>= aLocale;

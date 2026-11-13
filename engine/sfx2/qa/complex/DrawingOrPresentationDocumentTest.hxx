@@ -45,7 +45,7 @@ public:
         // remove all shapes - Impress has two default shapes in a new doc; just get rid of them
         Reference<XShapes> firstPageShapes = getFirstPageShapes();
         while (firstPageShapes->getCount() > 0)
-            firstPageShapes->remove(Reference<XShape>(firstPageShapes->getByIndex(0), UNO_QUERY));
+            firstPageShapes->remove(Reference<XShape>(firstPageShapes->getShapeByIndex(0), UNO_QUERY));
     }
 
     virtual void doSingleModification() override
@@ -70,7 +70,7 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be one shape, not more, not less", sal_Int32(1),
                                      firstPageShapes->getCount());
 
-        Any shape = firstPageShapes->getByIndex(0);
+        Reference<XShape> shape = firstPageShapes->getShapeByIndex(0);
         verifyShapeGeometry(shape, BIG_CIRCLE_SIZE, BIG_CIRCLE_SIZE);
         Reference<XPropertySet> shapeProps(shape, UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -153,10 +153,9 @@ private:
     /**
      * verifies the given shape has the given size
      */
-    static void verifyShapeGeometry(const Any& i_shapeObject, sal_Int32 i_expectedWidth,
+    static void verifyShapeGeometry(const cpo::uno::Reference<css::drawing::XShape>& shape, sal_Int32 i_expectedWidth,
                                     sal_Int32 i_expectedHeight)
     {
-        Reference<XShape> shape(i_shapeObject, UNO_QUERY);
         css::awt::Size shapeSize = shape->getSize();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected shape width", i_expectedWidth, shapeSize.Width);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected shape height", i_expectedHeight, shapeSize.Height);

@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelorientation)
 
         uno::Reference<drawing::XShapes> xGroup(xShape, uno::UNO_QUERY);
         // This resulted in lang::IndexOutOfBoundsException, as nested groupshapes weren't handled.
-        uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getShapeByIndex(0));
         CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GroupShape"_ustr, xShapeDescriptor->getShapeType());
 
         // 'actual child size' = 'group ext' * 'child ext' / 'chExt from group', see section 'chExt' in
@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelorientation)
         // = 8636Hmm. FIXME: Expected value is as in LO 7.2. Reason for difference is yet unknown.
         if (bIsExport)
         {
-            uno::Reference<drawing::XShape> xYear(xGroup->getByIndex(1), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xYear(xGroup->getShapeByIndex(1));
             // This was 2, due to incorrect handling of parent transformations inside DML groupshapes.
             CPPUNIT_ASSERT_EQUAL(sal_Int32(8662), xYear->getSize().Width);
         }
@@ -86,7 +86,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBezier)
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeTextbox, "groupshape-textbox.docx")
 {
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
     // The VML export lost text on textboxes inside groupshapes.
     // The DML export does not, make sure it stays that way.
     CPPUNIT_ASSERT_EQUAL(u"first"_ustr, xShape->getString());
@@ -98,7 +98,7 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapePicture, "groupshape-picture.docx")
 {
     // Picture in the groupshape got lost, groupshape had only one child.
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getShapeByIndex(1));
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GraphicObjectShape"_ustr, xShapeDescriptor->getShapeType());
 }
 
@@ -852,7 +852,7 @@ void Test::verifyComboBoxExport(bool aComboBoxAsDropDown)
     {
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
         uno::Reference<drawing::XControlShape> xControl(xShape, uno::UNO_QUERY);
 
         CPPUNIT_ASSERT_EQUAL(u"Manolo"_ustr, getProperty<OUString>(xControl->getControl(), u"Text"_ustr));

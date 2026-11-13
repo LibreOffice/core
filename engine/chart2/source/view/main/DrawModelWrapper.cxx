@@ -216,7 +216,8 @@ void DrawModelWrapper::clearMainDrawPage()
         uno::Reference< drawing::XShape > xShape;
         for( sal_Int32 nS = nSubCount; nS--; )
         {
-            if( xChartRoot->getByIndex( nS ) >>= xShape )
+            xShape = xChartRoot->getShapeByIndex( nS );
+            if( xShape )
                 xChartRoot->remove( xShape );
         }
     }

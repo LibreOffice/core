@@ -1678,7 +1678,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91332)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                              uno::UNO_SET_THROW);
-    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: rgba[90cf47ff]

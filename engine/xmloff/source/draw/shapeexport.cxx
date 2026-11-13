@@ -213,7 +213,7 @@ static cpo::uno::Reference<css::drawing::XShape> GetPDFShape(const uno::Referenc
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0));
     if (!xDrawPage)
         return nullptr;
-    return uno::Reference<drawing::XShape>(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    return xDrawPage->getShapeByIndex(0);
 }
 
 uno::Reference<lang::XComponent> XMLShapeExport::checkForPDFShapeReplacement(const uno::Reference<drawing::XShape>& xShape)
@@ -1004,7 +1004,7 @@ void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XS
     const sal_Int32 nShapeCount(xShapes->getCount());
     for(sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
     {
-        xShapes->getByIndex(nShapeId) >>= xShape;
+        xShape = xShapes->getShapeByIndex(nShapeId);
         SAL_WARN_IF( !xShape.is(), "xmloff", "Shape without a XShape?" );
         if(!xShape.is())
             continue;
@@ -1025,7 +1025,7 @@ void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xS
     const sal_Int32 nShapeCount(xShapes->getCount());
     for(sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
     {
-        xShapes->getByIndex(nShapeId) >>= xShape;
+        xShape = xShapes->getShapeByIndex(nShapeId);
         SAL_WARN_IF( !xShape.is(), "xmloff", "Shape without a XShape?" );
         if(!xShape.is())
             continue;
@@ -1053,7 +1053,7 @@ void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
     sal_Int32 const nCount(xShapes->getCount());
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        uno::Reference<beans::XPropertySet> const xShape(xShapes->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> const xShape(xShapes->getShapeByIndex(i), uno::UNO_QUERY);
         if (!xShape.is())
         {
             SAL_WARN("xmloff", "FixZOrder: null shape, cannot sort");

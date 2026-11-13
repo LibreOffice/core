@@ -1047,8 +1047,8 @@ bool SVGFilter::implExportDocument()
 
         for(sal_Int32 a(0); a < maShapeSelection->getCount(); a++)
         {
-            Reference< css::drawing::XShape > xShapeCandidate;
-            if((maShapeSelection->getByIndex(a) >>= xShapeCandidate) && xShapeCandidate.is())
+            Reference< css::drawing::XShape > xShapeCandidate = maShapeSelection->getShapeByIndex(a);
+            if(xShapeCandidate.is())
             {
                 Reference< XPropertySet > xShapePropSet( xShapeCandidate, UNO_QUERY );
                 css::awt::Rectangle aBoundRect;
@@ -2162,7 +2162,8 @@ bool SVGFilter::implExportShapes( const Reference< css::drawing::XShapes >& rxSh
 
     for( sal_Int32 i = 0, nCount = rxShapes->getCount(); i < nCount; ++i )
     {
-        if( ( rxShapes->getByIndex( i ) >>= xShape ) && xShape.is() )
+        xShape = rxShapes->getShapeByIndex( i );
+        if( xShape.is() )
             bRet = implExportShape( xShape, bMaster ) || bRet;
 
         xShape = nullptr;
@@ -2424,7 +2425,8 @@ bool SVGFilter::implCreateObjectsFromShapes( const Reference< css::drawing::XDra
 
     for( sal_Int32 i = 0, nCount = rxShapes->getCount(); i < nCount; ++i )
     {
-        if( ( rxShapes->getByIndex( i ) >>= xShape ) && xShape.is() )
+        xShape = rxShapes->getShapeByIndex( i );
+        if( xShape.is() )
             bRet = implCreateObjectsFromShape( rxPage, xShape ) || bRet;
 
         xShape = nullptr;

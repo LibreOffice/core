@@ -128,8 +128,7 @@ void GetSelectableFromAny(uno::Reference<cpo::uno::XInterface> const& xIfc,
         sal_Int32 nShapes(xShapes->getCount());
         for (sal_Int32 i = 0; i < nShapes; ++i)
         {
-            uno::Reference<lang::XUnoTunnel> xShape;
-            xShapes->getByIndex(i) >>= xShape;
+            uno::Reference<lang::XUnoTunnel> xShape(xShapes->getShapeByIndex(i), UNO_QUERY);
             if (xShape.is())
             {
                 SvxShape *const pSvxShape(

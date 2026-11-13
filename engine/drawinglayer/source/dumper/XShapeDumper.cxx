@@ -1927,11 +1927,10 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
 void dumpXShapes( const uno::Reference< drawing::XShapes >& xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties )
 {
     (void)xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShapes" ) );
-    uno::Reference< container::XIndexAccess > xIA( xShapes, uno::UNO_QUERY_THROW);
-    sal_Int32 nLength = xIA->getCount();
+    sal_Int32 nLength = xShapes->getCount();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        uno::Reference< drawing::XShape > xShape( xIA->getByIndex( i ), uno::UNO_QUERY_THROW );
+        uno::Reference< drawing::XShape > xShape( xShapes->getShapeByIndex( i ), uno::UNO_SET_THROW );
         dumpXShape( xShape, xmlWriter, bDumpInteropProperties );
     }
 

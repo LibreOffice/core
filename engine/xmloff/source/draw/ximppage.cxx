@@ -481,10 +481,7 @@ void SdXMLGenericPageContext::DeleteAllShapes()
     // when setting the presentation page layout.
     while(mxShapes->getCount())
     {
-        Reference< drawing::XShape > xShape;
-        cpo::uno::Any aAny(mxShapes->getByIndex(0));
-
-        aAny >>= xShape;
+        Reference< drawing::XShape > xShape = mxShapes->getShapeByIndex(0);
 
         if(xShape.is())
         {

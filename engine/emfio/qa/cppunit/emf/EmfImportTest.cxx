@@ -2072,7 +2072,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
     // Get the EMF.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
     xShape->getPropertyValue(u"FillBitmap"_ustr) >>= xGraphic;
     Graphic aGraphic(xGraphic);

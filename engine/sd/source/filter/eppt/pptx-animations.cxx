@@ -1255,8 +1255,7 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
     {
         for (sal_uInt32 i = 0; i < nShapes; i++)
         {
-            Reference<XShape> xShape;
-            xShapes->getByIndex(i) >>= xShape;
+            Reference<XShape> xShape = xShapes->getShapeByIndex(i);
             sal_Int32 nId = mrPowerPointExport.GetShapeID(xShape);
             if (nId != -1)
                 aSlideShapeIDs.insert(nId);

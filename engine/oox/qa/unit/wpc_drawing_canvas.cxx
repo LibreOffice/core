@@ -67,9 +67,9 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Text_in_ellipse)
     // in the bounding box. Without fix the rectangle width was 9398 Hmm.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     // getByIndex(0) gives the background shape, the ellipse is at index 1
-    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
     awt::Rectangle aBoundRect;
     xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     // The tolerance 10 is estimated and can be adjusted if required for HiDPI.
@@ -85,8 +85,8 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_MulticolorGradient)
     // were imported, ColorStops had only two elements.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
     awt::Gradient2 aGradient;
     xShapeProps->getPropertyValue(UNO_NAME_FILLGRADIENT) >>= aGradient;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aGradient.ColorStops.getLength());
@@ -101,8 +101,8 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CanvasBackground)
     // of the shape which represents the background was zero.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
     awt::Rectangle aBoundRect;
     xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
     CPPUNIT_ASSERT(aBoundRect.Width > 0);
@@ -117,8 +117,8 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Glow)
     // VML does not know any glow effect. Thus it was lost on import.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
 
     // Check glow properties
     sal_Int32 nGlowEffectRad = 0;
@@ -141,11 +141,11 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_BentConnector)
     // custom shape, not as connector shape
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<lang::XServiceInfo> xInfo(xGroup->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xInfo(xGroup->getShapeByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.ConnectorShape"_ustr));
 
-    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(2), uno::UNO_QUERY);
     css::drawing::ConnectorType eEdgeKind;
     xShapeProps->getPropertyValue(UNO_NAME_EDGEKIND) >>= eEdgeKind;
     CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_STANDARD, eEdgeKind);
@@ -168,11 +168,11 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_ThemeColor)
     // VML has no information about theme colors. Thus ThemeColorType was always 'Unknown'.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
 
     // Check color of shape used for pseudo background
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
         CPPUNIT_ASSERT(xShapeProps->getPropertyValue(UNO_NAME_FILL_COMPLEX_COLOR)
                        >>= xComplexColor);
@@ -190,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_ThemeColor)
     }
     // Check colors of 'heart' shape
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
         CPPUNIT_ASSERT(xShapeProps->getPropertyValue(UNO_NAME_FILL_COMPLEX_COLOR)
                        >>= xComplexColor);
@@ -199,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_ThemeColor)
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getThemeColorType());
     }
     {
-        uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
         CPPUNIT_ASSERT(xShapeProps->getPropertyValue(UNO_NAME_LINE_COMPLEX_COLOR)
                        >>= xComplexColor);
@@ -220,7 +220,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf104671_Cloud)
     // custom shape.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xInfo(xGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr));
 }
@@ -234,8 +234,8 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Shadow)
     // import shadow at all.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
     bool bHasShadow = false;
     xShapeProps->getPropertyValue(UNO_NAME_SHADOW) >>= bHasShadow;
     CPPUNIT_ASSERT(bHasShadow);
@@ -262,10 +262,10 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158339_shape_text_in_group)
     // Make sure there is only one object on that page. Without fix there were three objects.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
     // Get the group which represents the drawing canvas and the group object inside.
-    uno::Reference<drawing::XShapes> xCanvas(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapes> xGroup(xCanvas->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xCanvas(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xCanvas->getShapeByIndex(1), uno::UNO_QUERY);
     // Get the properties of the second shape inside the group
-    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
     // and make sure the shape has text.
     uno::Reference<css::text::XTextFrame> xTextFrame;
     xShapeProps->getPropertyValue(u"TextBoxContent"_ustr) >>= xTextFrame;
@@ -283,8 +283,8 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158348_shape_text_in_table_cell)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // Get the shape and make sure it has text.
-    uno::Reference<drawing::XShapes> xCanvas(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProps(xCanvas->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xCanvas(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xCanvas->getShapeByIndex(1), uno::UNO_QUERY);
     uno::Reference<css::text::XTextFrame> xTextFrame;
     xShapeProps->getPropertyValue(u"TextBoxContent"_ustr) >>= xTextFrame;
     CPPUNIT_ASSERT(xTextFrame.is());
@@ -310,11 +310,11 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CurvedConnector2)
     // uses 1/2 of width or height. The path by LO looks more round.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<lang::XServiceInfo> xInfo(xGroup->getByIndex(3), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xInfo(xGroup->getShapeByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.ConnectorShape"_ustr));
 
-    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getShapeByIndex(3), uno::UNO_QUERY);
     css::drawing::ConnectorType eEdgeKind;
     xShapeProps->getPropertyValue(UNO_NAME_EDGEKIND) >>= eEdgeKind;
     CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_CURVE, eEdgeKind);

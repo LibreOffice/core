@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xPages(xDoc->getDrawPages(), uno::UNO_SET_THROW);
         uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
-        uno::Reference<text::XTextRange> xBox(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextRange> xBox(xPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
 
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(u"Title of Impress template"_ustr, xBox->getString());
@@ -168,7 +168,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xPages(xDoc->getDrawPages(), uno::UNO_SET_THROW);
         uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
-        uno::Reference<text::XTextRange> xBox(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextRange> xBox(xPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
 
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(u"Title of Impress template"_ustr, xBox->getString());

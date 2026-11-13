@@ -260,7 +260,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, testBulletedParagraphEditing)
                            ->getDrawPages()
                            ->getDrawPageByIndex(0);
     const auto xController = mxDocument.queryThrow<frame::XModel>()->getCurrentController();
-    xController.queryThrow<view::XSelectionSupplier>()->select(xPage->getByIndex(0));
+    xController.queryThrow<view::XSelectionSupplier>()->select(uno::Any(xPage->getShapeByIndex(0)));
     documentPostKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
     documentPostKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();

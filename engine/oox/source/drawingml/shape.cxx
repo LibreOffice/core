@@ -2880,13 +2880,13 @@ void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)
         Reference<XShapes> xShapes(mxShape, UNO_QUERY_THROW);
         tools::Rectangle aBackgroundRect
             = SdrObject::getSdrObjectFromXShape(
-                  Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW))
+                  Reference<XShape>(xShapes->getShapeByIndex(0), UNO_SET_THROW))
                   ->GetLogicRect();
         while (xShapes->hasElements())
-            xShapes->remove(Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW));
+            xShapes->remove(Reference<XShape>(xShapes->getShapeByIndex(0), UNO_SET_THROW));
         xShapes->add(xShape);
         SdrObject::getSdrObjectFromXShape(
-            Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW))
+            Reference<XShape>(xShapes->getShapeByIndex(0), UNO_SET_THROW))
             ->NbcSetLogicRect(aBackgroundRect);
     }
     catch (const cpo::uno::Exception&)

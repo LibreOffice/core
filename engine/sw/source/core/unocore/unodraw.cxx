@@ -534,7 +534,7 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwFmDrawPage* const pDrawPage)
     m_aShapes.reserve(nCount);
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
     {
-        uno::Reference<drawing::XShape> xShape(pDrawPage->getByIndex(nIdx), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(pDrawPage->getShapeByIndex(nIdx), uno::UNO_QUERY);
         m_aShapes.push_back(cpo::uno::Any(xShape));
     }
 }
@@ -603,7 +603,7 @@ sal_Int32 SwFmDrawPage::getCount()
         return SwTextBoxHelper::getCount(GetSdrPage());
 }
 
-cpo::uno::Any SwFmDrawPage::getByIndex(sal_Int32 nIndex)
+cpo::uno::Reference<drawing::XShape> SwFmDrawPage::getShapeByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -612,6 +612,11 @@ cpo::uno::Any SwFmDrawPage::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     return SwTextBoxHelper::getByIndex(GetSdrPage(), nIndex);
+}
+
+cpo::uno::Any SwFmDrawPage::getByIndex(sal_Int32 nIndex)
+{
+    return cpo::uno::Any(getShapeByIndex(nIndex));
 }
 
 cpo::uno::Type  SwFmDrawPage::getElementType()
@@ -2870,6 +2875,21 @@ cpo::uno::Any SwXGroupShape::getByIndex(sal_Int32 nIndex)
     if(!xAcc.is())
         throw cpo::uno::RuntimeException();
     return xAcc->getByIndex(nIndex);
+}
+
+uno::Reference<drawing::XShape> SwXGroupShape::getShapeByIndex(sal_Int32 nIndex)
+{
+    SolarMutexGuard aGuard;
+    uno::Reference<XShapes> xAcc;
+    if( m_xShapeAgg.is() )
+    {
+        const cpo::uno::Type& rType = cppu::UnoType<XShapes>::get();
+        cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
+        aAgg >>= xAcc;
+    }
+    if(!xAcc.is())
+        throw cpo::uno::RuntimeException();
+    return xAcc->getShapeByIndex(nIndex);
 }
 
 cpo::uno::Type SwXGroupShape::getElementType(  )

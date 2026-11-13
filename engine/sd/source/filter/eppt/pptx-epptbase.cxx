@@ -690,8 +690,7 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
     {
         if ( !bGroup || ( GetCurrentGroupLevel() == 0 ) )
         {
-            Any aAny( mXShapes->getByIndex( nIndex ) );
-            aAny >>= mXShape;
+            mXShape = mXShapes->getShapeByIndex( nIndex );
         }
         else
         {

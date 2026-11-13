@@ -211,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testTdf165261HorzAnchor)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
 
     uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
     drawing::TextHorizontalAdjust eHori;
@@ -559,7 +559,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testtdf170102_layout_type)
         sal_Int32 nObjCount = xPage->getCount();
         for (sal_Int32 j = 0; j < nObjCount; j++)
         {
-            uno::Reference<lang::XServiceInfo> xShapeInfo(xPage->getByIndex(j),
+            uno::Reference<lang::XServiceInfo> xShapeInfo(xPage->getShapeByIndex(j),
                                                           uno::UNO_QUERY_THROW);
             // without the fix in place there would be a graphic shape placeholder
             CPPUNIT_ASSERT_MESSAGE(

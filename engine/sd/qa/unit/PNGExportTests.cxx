@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
 
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
 
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
 

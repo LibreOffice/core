@@ -300,7 +300,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
     uno::Reference<drawing::XShape> xShape;
     for (sal_Int32 i=0; i<nShapeCount; ++i)
     {
-        mxShapeList->getByIndex(i) >>= xShape;
+        xShape = mxShapeList->getShapeByIndex(i);
         aPos = xShape->getPosition();
         aSize = xShape->getSize();
 

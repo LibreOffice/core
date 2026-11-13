@@ -4297,7 +4297,7 @@ void XMLTextParagraphExport::ExportContentControl(
 }
 
 void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
-    const Reference<XIndexAccess> & rShapes,
+    const Reference<drawing::XDrawPage> & rShapes,
     const rtl::Reference<xmloff::OFormLayerXMLExport>& xFormExport   )
 {
     // check parameters ad pre-conditions

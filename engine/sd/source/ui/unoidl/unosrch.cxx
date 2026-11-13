@@ -77,7 +77,7 @@ public:
         mnIndex++;
         if( mxShapes.is() && mxShapes->getCount() > mnIndex )
         {
-            mxShapes->getByIndex( mnIndex ) >>= xShape;
+            xShape = mxShapes->getShapeByIndex( mnIndex );
         }
         return xShape;
     }
@@ -291,7 +291,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
     uno::Reference< drawing::XShape >  xShape;
 
     if( mpPage && mpPage->getCount() > 0)
-        mpPage->getByIndex(0) >>= xShape;
+        xShape = mpPage->getShapeByIndex(0);
 
     return xShape;
 

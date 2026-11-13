@@ -164,20 +164,17 @@ void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        uno::Reference< drawing::XShape > xShape;
-        if ( xShapes->getByIndex( i ) >>= xShape )
+        uno::Reference< drawing::XShape > xShape = xShapes->getShapeByIndex( i );
+        if (xShape)
         {
-            if (xShape)
-            {
-                // do *not* write BackgroundShape. MSO has BG infos just as fill properties
-                // as part of the OOXData DomTree
-                SdrObject* pTarget(SdrObject::getSdrObjectFromXShape(xShape));
-                if (nullptr == pTarget || pTarget->isDiagramBackgroundShape())
-                    continue;
+            // do *not* write BackgroundShape. MSO has BG infos just as fill properties
+            // as part of the OOXData DomTree
+            SdrObject* pTarget(SdrObject::getSdrObjectFromXShape(xShape));
+            if (nullptr == pTarget || pTarget->isDiagramBackgroundShape())
+                continue;
 
-                // write Shape & sub-shapes
-                aShapeExport.WriteShape(xShape);
-            }
+            // write Shape & sub-shapes
+            aShapeExport.WriteShape(xShape);
         }
     }
 

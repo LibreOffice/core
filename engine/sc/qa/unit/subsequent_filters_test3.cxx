@@ -1026,7 +1026,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeRotationImport)
 
     for (sal_Int32 ind = 0; ind < 12; ++ind)
     {
-        uno::Reference<drawing::XShape> xShape(xPage->getByIndex(ind), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(ind), uno::UNO_SET_THROW);
 
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
         cpo::uno::Any nRotProp = xShapeProperties->getPropertyValue(u"RotateAngle"_ustr);
@@ -1052,7 +1052,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeDisplacementOnRotationImport)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                              uno::UNO_SET_THROW);
-    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0), uno::UNO_SET_THROW);
 
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
     cpo::uno::Any aRectProp = xShapeProperties->getPropertyValue(u"FrameRect"_ustr);
@@ -1069,7 +1069,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyUpright)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                              uno::UNO_SET_THROW);
-    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
 
     // Check that we imported "Upright".
@@ -1112,7 +1112,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyRotateAngle)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                              uno::UNO_SET_THROW);
-    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
 
     // Check the text direction.
@@ -1598,9 +1598,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                              uno::UNO_SET_THROW);
-    uno::Reference<drawing::XShapes> xSmartArt(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xSmartArt(xPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
     // shape 0 is the background shape without text
-    uno::Reference<text::XTextRange> xShape(xSmartArt->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xSmartArt->getShapeByIndex(1), uno::UNO_QUERY);
 
     // text color
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);

@@ -604,7 +604,7 @@ private:
             uno::Reference<drawing::XShape> xShape;
             try
             {
-                xShapes->getByIndex(i) >>= xShape;
+                xShape = xShapes->getShapeByIndex(i);
             }
             catch (...)
             {

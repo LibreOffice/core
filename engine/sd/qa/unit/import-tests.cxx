@@ -1266,7 +1266,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf97808)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                              uno::UNO_SET_THROW);
-    uno::Reference<beans::XPropertySet> xLine(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xLine(xPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
     //uno::Reference<style::XStyle> xParent;
     uno::Reference<style::XStyle> xParent;
     CPPUNIT_ASSERT(xLine->getPropertyValue(u"Style"_ustr) >>= xParent);
@@ -1299,7 +1299,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo64512)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly three shapes", static_cast<sal_Int32>(3),
                                  xPage->getCount());
 
-    uno::Reference<beans::XPropertySet> xConnectorShape(xPage->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xConnectorShape(xPage->getShapeByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("no connector shape", xConnectorShape.is());
 
     uno::Reference<beans::XPropertySet> xSvgShape(
@@ -2012,7 +2012,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf165732)
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
 
     // Shape "2": each side reduced by 1: 200 -> 199.
-    uno::Reference<beans::XPropertySet> xShape0(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape0(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int32 nLeft = 0, nRight = 0;
     xShape0->getPropertyValue(u"TextLeftDistance"_ustr) >>= nLeft;
     xShape0->getPropertyValue(u"TextRightDistance"_ustr) >>= nRight;
@@ -2020,13 +2020,13 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf165732)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(199), nRight);
 
     // Shape "1": no clamping.
-    uno::Reference<beans::XPropertySet> xShape1(xPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape1(xPage->getShapeByIndex(1), uno::UNO_QUERY);
     sal_Int32 nLeft1 = 0;
     xShape1->getPropertyValue(u"TextLeftDistance"_ustr) >>= nLeft1;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nLeft1);
 
     // Shape "5": top and bottom reduced by 17.5: 200 -> 183 (rounded).
-    uno::Reference<beans::XPropertySet> xShape7(xPage->getByIndex(7), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape7(xPage->getShapeByIndex(7), uno::UNO_QUERY);
     sal_Int32 nUpper = 0, nLower = 0;
     xShape7->getPropertyValue(u"TextUpperDistance"_ustr) >>= nUpper;
     xShape7->getPropertyValue(u"TextLowerDistance"_ustr) >>= nLower;

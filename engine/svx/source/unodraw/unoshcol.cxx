@@ -150,12 +150,16 @@ sal_Int32 SvxShapeCollection::getCount()
 
 cpo::uno::Any SvxShapeCollection::getByIndex( sal_Int32 Index )
 {
+    return cpo::uno::Any( getShapeByIndex(Index) );
+}
+
+Reference<drawing::XShape> SvxShapeCollection::getShapeByIndex( sal_Int32 Index )
+{
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();
 
     std::unique_lock g(m_aMutex);
-    Reference<drawing::XShape> xShape = maShapeContainer[Index];
-    return cpo::uno::Any( xShape );
+    return maShapeContainer[Index];
 }
 
 std::vector<cpo::uno::Reference<css::drawing::XShape>> SvxShapeCollection::getAllShapes() const

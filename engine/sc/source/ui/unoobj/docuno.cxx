@@ -2548,7 +2548,7 @@ bool ScModelObj::FillRenderMarkData( const cpo::uno::Any& aSelection,
         {
             //print a selected ole object
             // multi selection isn't supported yet
-            uno::Reference< drawing::XShape > xShape( xShapes->getByIndex(0), uno::UNO_QUERY );
+            uno::Reference< drawing::XShape > xShape( xShapes->getShapeByIndex(0), uno::UNO_QUERY );
             SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape );
             if( pSdrObj && pDocShell )
             {

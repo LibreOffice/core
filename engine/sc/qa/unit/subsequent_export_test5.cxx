@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), xPage->getCount());
     for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
     {
-        cpo::uno::Reference<css::beans::XPropertySet> xProps(xPage->getByIndex(i),
+        cpo::uno::Reference<css::beans::XPropertySet> xProps(xPage->getShapeByIndex(i),
                                                              cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::chart2::XChartDocument> xChart(
             xProps->getPropertyValue(u"Model"_ustr), cpo::uno::UNO_QUERY_THROW);
@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), xPage->getCount());
     for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
     {
-        cpo::uno::Reference<css::beans::XPropertySet> xProps(xPage->getByIndex(i),
+        cpo::uno::Reference<css::beans::XPropertySet> xProps(xPage->getShapeByIndex(i),
                                                              cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::chart2::XChartDocument> xChart(
             xProps->getPropertyValue(u"Model"_ustr), cpo::uno::UNO_QUERY_THROW);
@@ -907,7 +907,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testShapeStyles)
         uno::Reference<drawing::XDrawPagesSupplier> xDPS(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShapes> xShapes(xDPS->getDrawPages()->getDrawPageByIndex(0),
                                                  uno::UNO_SET_THROW);
-        uno::Reference<beans::XPropertySet> xShape(xShapes->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xShape(xShapes->getShapeByIndex(0), uno::UNO_QUERY_THROW);
 
         // check style hierarchy
         uno::Reference<style::XStyle> xStyle(xShape->getPropertyValue(u"Style"_ustr),
@@ -1004,7 +1004,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf119565)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                              uno::UNO_SET_THROW);
-    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 35
@@ -1844,7 +1844,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testDecorativeODF14)
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getDrawPageByIndex(0),
                                                  uno::UNO_SET_THROW);
-        uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
         return xShape->getPropertyValue(u"Decorative"_ustr).get<bool>();
     };
     // Without the fix draw:decorative was ignored

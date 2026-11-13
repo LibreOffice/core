@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143455SmartArtPosition)
     loadFromFile(u"tdf143455_SmartArtPosition.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     // Without fix in place the group, which represents the SmartArt, was placed at the initializing
     // position 0|0.
     sal_Int32 nHoriPosition = 0;
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143208wrapTight)
     // the corresponding shape property 'ContourOutside=true' was not set.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     bool bContourOutside = false;
     xShape->getPropertyValue(u"ContourOutside"_ustr) >>= bContourOutside;
     CPPUNIT_ASSERT(bContourOutside);
@@ -119,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142304GroupPosition)
     loadFromFile(u"tdf142304GroupPosition.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int32 nVertPosition = 0;
     xShape->getPropertyValue(u"VertOrientPosition"_ustr) >>= nVertPosition;
     // Without fix in place the group was shifted left and down
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540ChildRotation)
     loadFromFile(u"tdf141540ChildRotation.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xRotatedShape(xGroup->getByIndex(1), uno::UNO_QUERY);
     sal_Int32 nShearAngle = 9000; // initialize with invalid value
     xRotatedShape->getPropertyValue(u"ShearAngle"_ustr) >>= nShearAngle;
@@ -152,7 +152,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupRotation)
     loadFromFile(u"tdf141540GroupRotation.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int32 nShearAngle = 9000; // init with invalid value
     xShape->getPropertyValue(u"ShearAngle"_ustr) >>= nShearAngle;
     // Without fix in place, this test would have failed with:
@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupLinePosSize)
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
 
     // Test line
-    uno::Reference<drawing::XShape> xLineShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xLineShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     awt::Point aPosition = xLineShape->getPosition();
     awt::Size aSize = xLineShape->getSize();
     // Without fix in place, you had got Position = (19|6498), Size = 5001 x 2
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupLinePosSize)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7071), aSize.Height);
 
     // Test group
-    uno::Reference<drawing::XShape> xGroupShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     aPosition = xGroupShape->getPosition();
     aSize = xGroupShape->getSize();
     // Without fix in place, you had got Position = (11511|3480), Size = 4022 x 4022
@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeRotation)
     loadFromFile(u"group-shape-rotation.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int32 nVertPosition = 0;
     xShape->getPropertyValue(u"VertOrientPosition"_ustr) >>= nVertPosition;
     // Without the accompanying fix in place, this test would have failed with:
@@ -212,7 +212,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawShapeInlineEffect)
     loadFromFile(u"draw-shape-inline-effect.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int32 nBottomMargin = 0;
     xShape->getPropertyValue(u"BottomMargin"_ustr) >>= nBottomMargin;
     // 273 in mm100 is 98425 EMUs from the file.
@@ -230,7 +230,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineAnchoredZOrder)
     loadFromFile(u"inline-anchored-zorder.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<container::XNamed> xOval(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xOval(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Oval 2
     // - Actual  :
@@ -245,7 +245,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineInShapeAnchoredZOrder)
     loadFromFile(u"inline-inshape-anchored-zorder.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<container::XNamed> xOval(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xOval(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Picture 1
     // - Actual  : Text Box 2
@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelfromhInsidemargin)
     loadFromFile(u"relfromh-insidemargin.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int16 nRelation = 0;
     xShape->getPropertyValue(u"HoriOrientRelation"_ustr) >>= nRelation;
     // Without the accompanying fix in place, this test would have failed with:
@@ -276,7 +276,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolyCrop)
     loadFromFile(u"wrap-poly-crop.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     drawing::PointSequenceSequence aContour;
     xShape->getPropertyValue(u"ContourPolyPolygon"_ustr) >>= aContour;
     auto aPolyPolygon = basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(aContour);
@@ -305,7 +305,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxTextline)
     loadFromFile(u"textbox-textline.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int16 nActualRelation{};
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"VertOrientRelation"_ustr) >>= nActualRelation);
     sal_Int32 nActualPosition{};
@@ -322,7 +322,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxTextlineTop)
     loadFromFile(u"textbox-textline-top.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int16 nActualRelation{};
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"VertOrientRelation"_ustr) >>= nActualRelation);
     sal_Int16 nExpectedRelation = text::RelOrientation::TEXT_LINE;
@@ -346,7 +346,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellWrapnoneColumn)
     // Then make sure the shape can leave the cell:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xNamedShape(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Text Box 1"_ustr, xNamedShape->getName());
     bool bFollowingTextFlow = true;
@@ -380,7 +380,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellOfHraphics)
     // Then make sure the cell obeys the layoutInCell:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     bool bFollowingTextFlow = false;
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bFollowingTextFlow);
     CPPUNIT_ASSERT(bFollowingTextFlow);
@@ -395,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149840SmartArtBackground)
     loadFromFile(u"tdf149840_SmartArtBackground.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
 
     // The first shape in the group, which represents the SmartArt, corresponds to the background of

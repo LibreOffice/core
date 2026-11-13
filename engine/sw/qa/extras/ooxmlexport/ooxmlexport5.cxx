@@ -302,7 +302,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeTIF)
 DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
 {
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
     // This checks textbox textrun size of font which is in group shape.
     CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, u"CharHeight"_ustr));
 }

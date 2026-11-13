@@ -125,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testSwappedOutImageExport)
         uno::Reference<drawing::XDrawPage> xDrawPage(
             xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
 
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
 
         // Check Graphic, Size
@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testSwappedOutImageExport)
 
         // Second Image
         xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1), uno::UNO_SET_THROW);
-        xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        xImage.set(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
         XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
         // Check Graphic, Size
@@ -490,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testImageWithSpecialID)
         uno::Reference<drawing::XDrawPage> xDrawPage(
             xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
 
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
 
         // Check Graphic, Size
@@ -510,7 +510,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testImageWithSpecialID)
 
         // Second Image
         xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1), uno::UNO_SET_THROW);
-        xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        xImage.set(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
         XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
         // Check Graphic, Size
@@ -584,7 +584,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testEmbeddedPdf)
     createSdImpressDoc("odp/embedded-pdf.odp");
     saveAndReload(TestFilter::ODP);
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
-    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
     xShape->getPropertyValue(u"ReplacementGraphic"_ustr) >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
@@ -757,7 +757,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfGrayscaleImageUnderInvisibleT
     CPPUNIT_ASSERT(xGroupShape.is());
 
     // first shape in the group is the picture
-    uno::Reference<beans::XPropertySet> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
 
     uno::Reference<graphic::XGraphic> xGraphic;
@@ -780,7 +780,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfGrayscaleImageUnderInvisibleT
     // but with their pdf text mode as Invisible so it is the picture that
     // is seen and the text is hidden. Test a sample text shape here. Without
     // the fix this test would fail as these shapes were visible.
-    uno::Reference<beans::XPropertySet> xTextShape(xGroupShape->getByIndex(10), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextShape(xGroupShape->getShapeByIndex(10), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextShape.is());
     bool bVisible(true);
     xTextShape->getPropertyValue(u"Visible"_ustr) >>= bVisible;
@@ -802,7 +802,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfClippedImages)
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroupShape.is());
 
-    uno::Reference<beans::XPropertySet> xGraphicShape1(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphicShape1(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGraphicShape1.is());
     bool bVisible(true);
     xGraphicShape1->getPropertyValue(u"Visible"_ustr) >>= bVisible;
@@ -810,7 +810,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfClippedImages)
 
     // before the fix the clip for this graphic wasn't taken into account so it was visible
     // now it is detected as entirely clipped out and toggled to invisible
-    uno::Reference<beans::XPropertySet> xGraphicShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphicShape2(xGroupShape->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGraphicShape2.is());
     xGraphicShape2->getPropertyValue(u"Visible"_ustr) >>= bVisible;
     CPPUNIT_ASSERT_MESSAGE("2nd Graphic should be Invisible", !bVisible);

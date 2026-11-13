@@ -1327,8 +1327,7 @@ void AnimationsExporter::exportTriggersImpl(const uno::Reference<drawing::XShape
     sal_Int32 nCount = xShapes->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        auto xObject = xShapes->getByIndex(i);
-        uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
+        auto xShape = xShapes->getShapeByIndex(i);
         if (!xShape.is())
             continue;
 
@@ -5941,9 +5940,8 @@ void SdXImpressDocument::render( sal_Int32 nRenderer, const cpo::uno::Any& rSele
                                     sal_Int32 i, nCount = xMasterPage->getCount();
                                     for ( i = 0; i < nCount; i++ )
                                     {
-                                        aAny = xMasterPage->getByIndex( i );
-                                        uno::Reference< drawing::XShape > xShape;
-                                        if ( aAny >>= xShape )
+                                        uno::Reference< drawing::XShape > xShape = xMasterPage->getShapeByIndex( i );
+                                        if ( xShape )
                                             ImplPDFExportShapeInteraction( xShape, *mpDoc, *pPDFExtOutDevData );
                                     }
                                 }
@@ -5954,9 +5952,8 @@ void SdXImpressDocument::render( sal_Int32 nRenderer, const cpo::uno::Any& rSele
                         sal_Int32 i, nCount = xPage->getCount();
                         for ( i = 0; i < nCount; i++ )
                         {
-                            aAny = xPage->getByIndex( i );
-                            uno::Reference< drawing::XShape > xShape;
-                            if ( aAny >>= xShape )
+                            uno::Reference< drawing::XShape > xShape = xPage->getShapeByIndex( i );
+                            if ( xShape )
                                 ImplPDFExportShapeInteraction( xShape, *mpDoc, *pPDFExtOutDevData );
                         }
 
@@ -6136,8 +6133,7 @@ void SdXImpressDocument::render( sal_Int32 nRenderer, const cpo::uno::Any& rSele
 
             for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
             {
-                uno::Reference< drawing::XShape > xShape;
-                xShapes->getByIndex( i ) >>= xShape;
+                uno::Reference< drawing::XShape > xShape = xShapes->getShapeByIndex( i );
 
                 if( xShape.is() )
                 {
@@ -7775,8 +7771,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                     auto count = xShapes->getCount();
                     for (auto j = 0; j < count; j++)
                     {
-                        auto xObject = xShapes->getByIndex(j);
-                        uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
+                        auto xShape = xShapes->getShapeByIndex(j);
                         if (!xShape.is())
                         {
                             continue;

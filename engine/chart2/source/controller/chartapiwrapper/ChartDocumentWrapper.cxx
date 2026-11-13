@@ -1102,7 +1102,8 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
     uno::Reference< drawing::XShape > xShape;
     for( sal_Int32 nS = 0; nS < nSubCount; nS++ )
     {
-        if( xDrawPage->getByIndex( nS ) >>= xShape )
+        xShape = xDrawPage->getShapeByIndex( nS );
+        if( xShape )
         {
             if( xShape.is() && xChartRoot!=xShape )
                 aShapeVector.push_back( xShape );

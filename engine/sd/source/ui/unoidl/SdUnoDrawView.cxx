@@ -172,7 +172,7 @@ bool SdUnoDrawView::select( const Any& aSelection )
             const sal_uInt32 nCount = xShapes->getCount();
             for( sal_uInt32 i = 0; i < nCount; i++ )
             {
-                xShapes->getByIndex(i) >>= xShape;
+                xShape = xShapes->getShapeByIndex(i);
                 if( xShape.is() )
                 {
                     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);

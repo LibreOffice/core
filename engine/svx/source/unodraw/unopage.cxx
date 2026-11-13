@@ -322,6 +322,11 @@ sal_Int32 SvxDrawPage::getCount()
 
 cpo::uno::Any SvxDrawPage::getByIndex( sal_Int32 Index )
 {
+    return cpo::uno::Any(getShapeByIndex(Index));
+}
+
+Reference< drawing::XShape > SvxDrawPage::getShapeByIndex( sal_Int32 Index )
+{
     SolarMutexGuard aGuard;
 
     if( (mpModel == nullptr) || (mpPage == nullptr) )
@@ -338,7 +343,7 @@ cpo::uno::Any SvxDrawPage::getByIndex( sal_Int32 Index )
                                     + OUString::number(Index));
 
 
-    return Any(Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY ));
+    return pObj->getUnoShape();
 }
 
 // css::container::XElementAccess
@@ -384,9 +389,8 @@ void SvxDrawPage::SelectObjectsInView( const Reference< drawing::XShapes > & aSh
     tools::Long nCount = aShapes->getCount();
     for( tools::Long i = 0; i < nCount; i++ )
     {
-        cpo::uno::Any aAny( aShapes->getByIndex(i) );
-        Reference< drawing::XShape > xShape;
-        if( aAny >>= xShape )
+        Reference< drawing::XShape > xShape = aShapes->getShapeByIndex(i);
+        if( xShape )
             lcl_markSdrObjectOfShape( xShape, *mpView, *pPageView );
     }
 }

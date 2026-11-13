@@ -113,10 +113,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
     loadFromFile(u"frame-direction.docx");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xFrame0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame2(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xFrame0(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame1(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame2(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
     // Without the accompanying fix in place, all of the following values would be text::WritingMode2::CONTEXT
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::CONTEXT,
                          xFrame0->getPropertyValue(u"WritingMode"_ustr).get<sal_Int16>());
@@ -274,8 +274,8 @@ CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
 
     // Then make sure the shape is on top of the chart:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<lang::XServiceInfo> xChart(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<lang::XServiceInfo> xChart(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed, as the chart was on top
     // of the shape.
     CPPUNIT_ASSERT(xChart->supportsService(u"com.sun.star.text.TextEmbeddedObject"_ustr));

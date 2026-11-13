@@ -2380,6 +2380,11 @@ Any SdDrawPage::getByIndex( sal_Int32 Index )
     return SdGenericDrawPage::getByIndex( Index );
 }
 
+uno::Reference<XShape> SdDrawPage::getShapeByIndex( sal_Int32 Index )
+{
+    return SdGenericDrawPage::getShapeByIndex( Index );
+}
+
 // XElementAccess
 cpo::uno::Type SdDrawPage::getElementType()
 {
@@ -2624,7 +2629,6 @@ Any SdMasterPage::queryInterface( const cpo::uno::Type & rType )
     throwIfDisposed();
 
     cpo::uno::Any aAny;
-
     if( rType == cppu::UnoType<container::XIndexAccess>::get() )
         aAny <<= Reference< container::XIndexAccess >(static_cast<presentation::XPresentationPage*>(this));
     else if( rType == cppu::UnoType<container::XElementAccess>::get() )
@@ -2747,6 +2751,15 @@ sal_Int32 SdMasterPage::getCount()
     throwIfDisposed();
 
     return SdGenericDrawPage::getCount();
+}
+
+Reference<XShape> SdMasterPage::getShapeByIndex( sal_Int32 Index )
+{
+    ::SolarMutexGuard aGuard;
+
+    throwIfDisposed();
+
+    return SdGenericDrawPage::getShapeByIndex(Index);
 }
 
 Any SdMasterPage::getByIndex( sal_Int32 Index )

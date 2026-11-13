@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPicwPich)
     // Then make sure the graphic's preferred size is correct:
     uno::Reference<drawing::XDrawPageSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xTextDocument->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
     xShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     Graphic aGraphic(xGraphic);

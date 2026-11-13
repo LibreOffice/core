@@ -1323,15 +1323,13 @@ void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
 
         while( nCount < xMasterSlide->getCount())
         {
-            Reference< drawing::XShape > xShape;
-            xMasterSlide->getByIndex(xMasterSlide->getCount()-1) >>= xShape;
+            Reference< drawing::XShape > xShape = xMasterSlide->getShapeByIndex(xMasterSlide->getCount()-1);
             xMasterSlide->remove(xShape);
         }
     }
     while( xSlide->getCount() )
     {
-        Reference< drawing::XShape > xShape;
-        xSlide->getByIndex(0) >>= xShape;
+        Reference< drawing::XShape > xShape = xSlide->getShapeByIndex(0);
         xSlide->remove( xShape );
     }
 

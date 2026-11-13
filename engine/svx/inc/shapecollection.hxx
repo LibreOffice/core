@@ -61,6 +61,7 @@ public:
     // XShapes
     virtual void add(const cpo::uno::Reference<css::drawing::XShape>& xShape) override;
     virtual void remove(const cpo::uno::Reference<css::drawing::XShape>& xShape) override;
+    virtual cpo::uno::Reference<css::drawing::XShape> getShapeByIndex(sal_Int32 Index) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

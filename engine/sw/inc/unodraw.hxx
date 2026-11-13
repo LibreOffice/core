@@ -92,6 +92,7 @@ public:
     //XShapes
     virtual void add(const cpo::uno::Reference< css::drawing::XShape > & xShape) override;
     virtual void remove(const cpo::uno::Reference< css::drawing::XShape > & xShape) override;
+    virtual cpo::uno::Reference< css::drawing::XShape > getShapeByIndex(sal_Int32 nIndex) override;
 
     //XShapeGrouper
     virtual cpo::uno::Reference< css::drawing::XShapeGroup >  group(const cpo::uno::Reference< css::drawing::XShapes > & xShapes) override;
@@ -264,6 +265,7 @@ public:
     //XShapes
     virtual void add( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void remove( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual cpo::uno::Reference< css::drawing::XShape > getShapeByIndex(sal_Int32 nIndex) override;
 
     //XIndexAccess
     virtual sal_Int32 getCount() override;

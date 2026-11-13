@@ -78,7 +78,7 @@ SdXMLNotesContext::SdXMLNotesContext(
     uno::Reference<drawing::XShape> xShape;
     while (rShapes->getCount())
     {
-        rShapes->getByIndex(0) >>= xShape;
+        xShape = rShapes->getShapeByIndex(0);
         if (xShape.is())
             rShapes->remove(xShape);
     }

@@ -2173,8 +2173,7 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
             const sal_Int32 nShapeCount(mxAdditionalShapes->getCount());
             for (sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
             {
-                Reference< drawing::XShape > xShape;
-                mxAdditionalShapes->getByIndex(nShapeId) >>= xShape;
+                Reference< drawing::XShape > xShape = mxAdditionalShapes->getShapeByIndex(nShapeId);
                 SAL_WARN_IF(!xShape.is(), "xmloff.chart", "Shape without an XShape?");
                 if (!xShape.is())
                     continue;

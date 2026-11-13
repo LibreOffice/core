@@ -190,7 +190,7 @@ void ScVbaObjectContainer::collectShapes()
     maShapes.clear();
     for( sal_Int32 nIndex = 0, nCount = mxShapes->getCount(); nIndex < nCount; ++nIndex )
     {
-        uno::Reference< drawing::XShape > xShape( mxShapes->getByIndex( nIndex ), uno::UNO_QUERY_THROW );
+        uno::Reference< drawing::XShape > xShape( mxShapes->getShapeByIndex( nIndex ), uno::UNO_SET_THROW );
         if( implPickShape( xShape ) )
             maShapes.push_back( xShape );
     }

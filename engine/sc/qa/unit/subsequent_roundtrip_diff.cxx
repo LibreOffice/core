@@ -409,7 +409,7 @@ private:
         add(rPath, "ShapeCount", OUString::number(xShapes->getCount()));
         for (sal_Int32 i = 0; i < xShapes->getCount(); ++i)
         {
-            uno::Reference<drawing::XShape> xShape(xShapes->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(xShapes->getShapeByIndex(i));
             if (!xShape.is())
                 continue;
             const OString aPath = rPath + OString::Concat("/") + indexed("shape", i);

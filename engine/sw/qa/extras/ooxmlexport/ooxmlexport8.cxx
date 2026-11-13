@@ -126,8 +126,7 @@ xray image.AnchorType
 */
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShapes> shapes(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> image;
-    shapes->getByIndex(0) >>= image;
+    uno::Reference<drawing::XShape> image = shapes->getShapeByIndex(0);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
@@ -656,23 +655,23 @@ DECLARE_OOXMLEXPORT_TEST(testN792778, "n792778.docx")
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroupShape->getCount());
 
-    uno::Reference<drawing::XShapes> xInnerGroupShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xInnerGroupShape(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xInnerGroupShape->getCount());
 
-    uno::Reference<drawing::XShape> xInnerShape(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xInnerShape(xInnerGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
 
-    xInnerGroupShape.set(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    xInnerGroupShape.set(xGroupShape->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xInnerGroupShape->getCount());
 
-    xInnerShape.set(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
+    xInnerShape.set(xInnerGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeSmarttag, "groupshape-smarttag.docx")
 {
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     // First run of shape text was missing due to the w:smartTag wrapper around it.
     CPPUNIT_ASSERT_EQUAL(u"Box 2"_ustr, xShape->getString());
 
@@ -1196,8 +1195,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo68607, "fdo68607.docx")
 DECLARE_OOXMLEXPORT_TEST(testVmlTextVerticalAdjust, "vml-text-vertical-adjust.docx")
 {
     uno::Reference<drawing::XShapes> xOuterGroupShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapes> xInnerGroupShape(xOuterGroupShape->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xInnerGroupShape(xOuterGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xInnerGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     // Was CENTER.
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, u"TextVerticalAdjust"_ustr));
 }

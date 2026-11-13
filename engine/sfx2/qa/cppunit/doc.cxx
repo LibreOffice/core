@@ -51,10 +51,10 @@ CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    cpo::uno::Any aShape = xDrawPage->getByIndex(0);
+    uno::Reference<drawing::XShape> aShape = xDrawPage->getShapeByIndex(0);
     uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
                                                          uno::UNO_QUERY);
-    xController->select(aShape);
+    xController->select(uno::Any(aShape));
 
     // See if it has a signing certificate associated.
     SfxViewShell* pViewShell

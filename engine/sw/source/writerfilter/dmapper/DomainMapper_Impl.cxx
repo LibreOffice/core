@@ -793,7 +793,7 @@ static void reanchorObjects(const uno::Reference<cpo::uno::XInterface>& xFrom,
         {
             try
             {
-                uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i),
+                uno::Reference<text::XTextContent> xShape(xDrawPage->getShapeByIndex(i),
                                                           uno::UNO_QUERY);
                 if (!xShape)
                     continue;
@@ -5145,11 +5145,11 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             {
                 try
                 {
-                    uno::Reference<text::XTextRange> xFrame(xShapes->getByIndex(i), uno::UNO_QUERY);
+                    uno::Reference<text::XTextRange> xFrame(xShapes->getShapeByIndex(i), uno::UNO_QUERY);
                     uno::Reference<beans::XPropertySet> xFramePropertySet;
                     if (xFrame)
                         xFramePropertySet.set(xFrame, uno::UNO_QUERY_THROW);
-                    uno::Reference<beans::XPropertySet> xShapePropertySet(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
+                    uno::Reference<beans::XPropertySet> xShapePropertySet(xShapes->getShapeByIndex(i), uno::UNO_QUERY_THROW);
 
                     comphelper::SequenceAsHashMap aGrabBag( xShapePropertySet->getPropertyValue(u"CharInteropGrabBag"_ustr) );
 
@@ -6488,7 +6488,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const cpo::uno::Reference<cs
     if (xGroup)
         for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
             AttachTextBoxContentToShape(
-                uno::Reference<drawing::XShape>(xGroup->getByIndex(i), uno::UNO_QUERY));
+                uno::Reference<drawing::XShape>(xGroup->getShapeByIndex(i), uno::UNO_QUERY));
 
     // if this shape has to be a textbox, attach the frame
     if (!xProps->getPropertyValue(u"TextBox"_ustr).get<bool>())

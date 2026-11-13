@@ -89,7 +89,7 @@ CPPUNIT_TEST_FIXTURE(KitSearchTest, Search)
     setupCOKitViewCallback(pViewShell->GetViewShellBase());
     uno::Reference<drawing::XDrawPage> xDrawPage(
         pXImpressDocument->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     xShape->setString(u"Aaa bbb."_ustr);
 
     lcl_search(u"bbb"_ustr);
@@ -759,7 +759,7 @@ OUString getShapeText(SdXImpressDocument* pXImpressDocument, sal_uInt32 nPage, s
     uno::Reference<drawing::XDrawPage> xDrawPage
         = pXImpressDocument->getDrawPages()->getDrawPageByIndex(nPage);
 
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(nShape), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(nShape), uno::UNO_QUERY);
     return xShape->getString();
 }
 }

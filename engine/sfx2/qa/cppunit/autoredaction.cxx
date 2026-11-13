@@ -90,8 +90,7 @@ CPPUNIT_TEST_FIXTURE(AutoRedactionTest, testImageRedaction)
         // Iterate through all shapes on this page
         for (sal_Int32 j = 0; j < xDrawPage->getCount(); j++)
         {
-            uno::Reference<drawing::XShape> xShape;
-            xDrawPage->getByIndex(j) >>= xShape;
+            uno::Reference<drawing::XShape> xShape = xDrawPage->getShapeByIndex(j);
             CPPUNIT_ASSERT(xShape.is());
 
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);

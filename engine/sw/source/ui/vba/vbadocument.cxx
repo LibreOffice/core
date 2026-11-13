@@ -627,7 +627,7 @@ SwVbaDocument::getControlShape( std::u16string_view sName )
     sal_Int32 nCount = xIndexAccess->getCount();
     for( int index = 0; index < nCount; index++ )
     {
-        cpo::uno::Any aUnoObj =  xIndexAccess->getByIndex( index );
+        uno::Reference< drawing::XShape > aUnoObj =  xIndexAccess->getShapeByIndex( index );
         // It seems there are some drawing objects that can not query into Control shapes?
         uno::Reference< drawing::XControlShape > xControlShape( aUnoObj, uno::UNO_QUERY );
         if( xControlShape.is() )
@@ -635,7 +635,7 @@ SwVbaDocument::getControlShape( std::u16string_view sName )
             uno::Reference< container::XNamed > xNamed( xControlShape->getControl(), uno::UNO_QUERY_THROW );
             if( sName == xNamed->getName() )
             {
-                return aUnoObj;
+                return cpo::uno::Any(aUnoObj);
             }
         }
     }

@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125551)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShapeBg(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeBg(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1024), xShapeBg->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(576), xShapeBg->getPosition().Y);
@@ -417,15 +417,15 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf136830)
     // Without the fix in place, the X position of the shapes would have been 0
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
 
-    uno::Reference<drawing::XShape> xShape1(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape1(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14134), xShape1->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-5321), xShape1->getPosition().Y);
 
-    uno::Reference<drawing::XShape> xShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape2(xGroupShape->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8085), xShape2->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8085), xShape2->getPosition().Y);
 
-    uno::Reference<drawing::XShape> xShape3(xGroupShape->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape3(xGroupShape->getShapeByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8283), xShape3->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4620), xShape3->getPosition().Y);
 }
@@ -932,7 +932,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf147121)
 
     // Get the second line props of the placeholder
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
-    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xRun(
         getRunFromParagraph(2, getParagraphFromShape(0, xShape)), uno::UNO_QUERY_THROW);
 
@@ -1973,7 +1973,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNewShapeTakesFileThemeColor)
     saveAndReload(TestFilter::PPTX);
 
     xPage = getPage(0);
-    xShapeProps.set(xPage->getByIndex(xPage->getCount() - 1), uno::UNO_QUERY_THROW);
+    xShapeProps.set(xPage->getShapeByIndex(xPage->getCount() - 1), uno::UNO_QUERY_THROW);
     xShapeProps->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x05326E), nFillColor);
     Color nReloadedLineColor;

@@ -785,10 +785,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf84684)
     createSwDoc("tdf84684.rtf");
     // The ZOrder of the two children of the group shape were swapped.
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<container::XNamed> xChild1(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xChild1(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
     // This was Pie 2.
     CPPUNIT_ASSERT_EQUAL(u"Rectangle 1"_ustr, xChild1->getName());
-    uno::Reference<container::XNamed> xChild2(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xChild2(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
     // This was Rectangle 1.
     CPPUNIT_ASSERT_EQUAL(u"Pie 2"_ustr, xChild2->getName());
 }

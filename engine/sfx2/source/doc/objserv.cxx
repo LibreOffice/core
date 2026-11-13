@@ -825,7 +825,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     sal_Int32 nShapeCount = xPage->getCount();
                     for (sal_Int32 nShapeNum = 0; nShapeNum < nShapeCount; ++nShapeNum)
                     {
-                        uno::Reference< drawing::XShape > xCurrShape(xPage->getByIndex(nShapeNum), uno::UNO_QUERY);
+                        uno::Reference< drawing::XShape > xCurrShape(xPage->getShapeByIndex(nShapeNum), uno::UNO_QUERY);
                         if (!xCurrShape.is())
                             continue;
 
@@ -1126,7 +1126,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         sal_Int32 nShapeCount = xPage->getCount();
                         for (sal_Int32 nShapeNum = 0; nShapeNum < nShapeCount; ++nShapeNum)
                         {
-                            uno::Reference< drawing::XShape > xCurrShape(xPage->getByIndex(nShapeNum), uno::UNO_QUERY);
+                            uno::Reference< drawing::XShape > xCurrShape(xPage->getShapeByIndex(nShapeNum), uno::UNO_QUERY);
                             if (!xCurrShape.is())
                                 continue;
 

@@ -757,7 +757,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
             for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                mxShapes->getByIndex( nIndex ) >>= xShape;
+                xShape = mxShapes->getShapeByIndex( nIndex );
                 SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
                 if( pObj )
                     aShapes.push_back( pObj );
@@ -1117,7 +1117,7 @@ void GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xC
                 break;
 
             // get first shape to detect corresponding page and model
-            mxShapes->getByIndex(0) >>= mxShape;
+            mxShape = mxShapes->getShapeByIndex(0);
         }
         else
         {
@@ -1192,7 +1192,7 @@ void GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xC
             // the first shape
             for( sal_Int32 nIndex = 1; bOk && ( nIndex < nCount ); nIndex++ )
             {
-                mxShapes->getByIndex( nIndex ) >>= xShape;
+                xShape = mxShapes->getShapeByIndex( nIndex );
                 pObj = SdrObject::getSdrObjectFromXShape(xShape);
                 bOk = pObj && pObj->getSdrPageFromSdrObject() == pPage;
             }

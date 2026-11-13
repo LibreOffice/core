@@ -337,8 +337,8 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
     sal_Int32 nCount = xShapes->getCount();
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        Reference< drawing::XShape > xShape;
-        if ( xShapes->getByIndex( i ) >>= xShape )
+        Reference< drawing::XShape > xShape = xShapes->getShapeByIndex( i );
+        if ( xShape )
         {
             if ( xShape.is() )
             {

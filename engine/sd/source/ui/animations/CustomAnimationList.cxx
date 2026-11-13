@@ -82,8 +82,7 @@ static bool getShapeIndex(  const Reference< XShapes >& xShapes, const Reference
     sal_Int32 n;
     for( n = 0; n < nCount; n++ )
     {
-        Reference< XShape > xChild;
-        xShapes->getByIndex( n ) >>= xChild;
+        Reference< XShape > xChild = xShapes->getShapeByIndex( n );
         if( xChild == xShape )
             return true;
 

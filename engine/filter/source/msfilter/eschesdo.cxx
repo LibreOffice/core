@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
@@ -834,8 +835,7 @@ void ImplEESdrWriter::ImplWritePage(
     const sal_uInt32 nShapes = mXShapes->getCount();
     for( sal_uInt32 n = 0; n < nShapes; ++n )
     {
-        ImplEESdrObject aObj( *o3tl::doAccess<Reference<XShape>>(
-                                    mXShapes->getByIndex( n )) );
+        ImplEESdrObject aObj( mXShapes->getShapeByIndex( n ) );
         if( aObj.IsValid() )
         {
             ImplWriteShape( aObj, rSolverContainer, ooxmlExport );

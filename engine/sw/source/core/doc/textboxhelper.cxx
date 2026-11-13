@@ -393,7 +393,7 @@ sal_Int32 SwTextBoxHelper::getCount(const SwDoc& rDoc)
     return nRet;
 }
 
-cpo::uno::Any SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex)
+uno::Reference<drawing::XShape> SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex)
 {
     if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();
@@ -405,7 +405,7 @@ cpo::uno::Any SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex
         if (p->IsTextBox())
             continue;
         if (nCount == nIndex)
-            return cpo::uno::Any(p->getUnoShape());
+            return p->getUnoShape();
         ++nCount;
     }
 

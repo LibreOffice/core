@@ -1568,14 +1568,12 @@ protected:
     std::vector<cpo::uno::Reference<css::drawing::XShape>> shapes()
     {
         std::vector<cpo::uno::Reference<css::drawing::XShape>> result;
-        cpo::uno::Reference<css::container::XIndexAccess> const access = page_;
-        if (access.is())
+        if (page_.is())
         {
-            auto const n = access->getCount();
+            auto const n = page_->getCount();
             for (sal_Int32 i = 0; i != n; ++i)
             {
-                cpo::uno::Reference<css::drawing::XShape> shape;
-                access->getByIndex(i) >>= shape;
+                cpo::uno::Reference<css::drawing::XShape> shape = page_->getShapeByIndex(i);
                 if (shape.is())
                 {
                     result.push_back(shape);
@@ -2122,8 +2120,7 @@ public:
         auto const n = shapes->getCount();
         for (sal_Int32 i = 0; i != n; ++i)
         {
-            cpo::uno::Reference<css::drawing::XShape> shape;
-            shapes->getByIndex(i) >>= shape;
+            cpo::uno::Reference<css::drawing::XShape> shape = shapes->getShapeByIndex(i);
             if (!shape.is())
             {
                 continue;

@@ -157,7 +157,7 @@ void Drawing::convertAndInsert() const
     {
         try
         {
-            Reference< XControlShape > xCtrlShape( xShapes->getByIndex(i), UNO_QUERY );
+            Reference< XControlShape > xCtrlShape( xShapes->getShapeByIndex(i), UNO_QUERY );
             if (!xCtrlShape.is())
                 continue;
             Reference< XControlModel > xCtrlModel( xCtrlShape->getControl(), UNO_SET_THROW );

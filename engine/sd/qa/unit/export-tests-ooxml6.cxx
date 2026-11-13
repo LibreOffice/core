@@ -229,7 +229,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTextInsetsOfAShapeWithNoHeight)
         uno::Reference<drawing::XMasterPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPage> xShapes(xSupplier->getMasterPages()->getDrawPageByIndex(0),
                                                  uno::UNO_SET_THROW);
-        uno::Reference<beans::XPropertySet> xShape(xShapes->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xShape(xShapes->getShapeByIndex(0), uno::UNO_QUERY_THROW);
         sal_Int32 nTop = 0;
         xShape->getPropertyValue(u"TextUpperDistance"_ustr) >>= nTop;
         return nTop;
@@ -564,7 +564,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFormControlExport)
     std::vector<OUString> aNames;
     for (sal_Int32 nShape = 0; nShape < xPage->getCount(); ++nShape)
     {
-        uno::Reference<drawing::XControlShape> xControlShape(xPage->getByIndex(nShape),
+        uno::Reference<drawing::XControlShape> xControlShape(xPage->getShapeByIndex(nShape),
                                                              uno::UNO_QUERY);
         if (!xControlShape.is())
             continue;

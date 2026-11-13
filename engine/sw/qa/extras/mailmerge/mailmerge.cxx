@@ -23,7 +23,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored
     sal_uInt16 nPhysPages = mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), nPhysPages);
 
-    uno::Reference<container::XIndexAccess> xDraws = mxSwTextDocument->getDrawPage();
+    uno::Reference<drawing::XDrawPage> xDraws = mxSwTextDocument->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
 
     std::set<sal_uInt16> pages;
@@ -31,7 +31,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored
 
     for (sal_Int32 i = 0; i < xDraws->getCount(); i++)
     {
-        xPropertySet.set(xDraws->getByIndex(i), uno::UNO_QUERY);
+        xPropertySet.set(xDraws->getShapeByIndex(i), uno::UNO_QUERY);
 
         text::TextContentAnchorType nAnchorType;
         CPPUNIT_ASSERT(xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_TYPE ) >>= nAnchorType);
@@ -363,7 +363,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118113, "tdf118113.odt", "tdf118113.ods", "t
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(9), nPhysPages);
 
     // verify that there is a text box for each data record
-    uno::Reference<container::XIndexAccess> xDraws = mxSwTextDocument->getDrawPage();
+    uno::Reference<drawing::XDrawPage> xDraws = mxSwTextDocument->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
 
     // verify the text box for each data record is anchored to the first page of the given data record's pages
@@ -371,7 +371,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118113, "tdf118113.odt", "tdf118113.ods", "t
     uno::Reference<beans::XPropertySet> xPropertySet;
     for (sal_Int32 i = 0; i < xDraws->getCount(); i++)
     {
-        xPropertySet.set(xDraws->getByIndex(i), uno::UNO_QUERY);
+        xPropertySet.set(xDraws->getShapeByIndex(i), uno::UNO_QUERY);
 
         text::TextContentAnchorType nAnchorType;
         CPPUNIT_ASSERT(xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_TYPE ) >>= nAnchorType);

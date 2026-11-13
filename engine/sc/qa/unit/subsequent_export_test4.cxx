@@ -1228,7 +1228,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xIA_DrawPage(
         xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), UNO_SET_THROW);
-    uno::Reference<drawing::XControlShape> xControlShape(xIA_DrawPage->getByIndex(0),
+    uno::Reference<drawing::XControlShape> xControlShape(xIA_DrawPage->getShapeByIndex(0),
                                                          UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
@@ -1319,7 +1319,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlFontXlsxExport)
     // reloaded document: the controls still carry the effects
     auto xDrawPagesSupplier = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
     auto xIA_DrawPage = xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0);
-    auto xControlShape = xIA_DrawPage->getByIndex(0).queryThrow<drawing::XControlShape>();
+    auto xControlShape = xIA_DrawPage->getShapeByIndex(0).queryThrow<drawing::XControlShape>();
     auto xPropertySet = xControlShape->getControl().queryThrow<beans::XPropertySet>();
 
     float fFontWeight = 0;
@@ -1386,7 +1386,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlAlignXlsxExport)
     auto xDrawPagesSupplier = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
     auto xIA_DrawPage = xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0);
 
-    auto xFirstShape = xIA_DrawPage->getByIndex(0).queryThrow<drawing::XControlShape>();
+    auto xFirstShape = xIA_DrawPage->getShapeByIndex(0).queryThrow<drawing::XControlShape>();
     auto xFirst = xFirstShape->getControl().queryThrow<beans::XPropertySet>();
     sal_Int16 nAlign = 0;
     xFirst->getPropertyValue(u"Align"_ustr) >>= nAlign;
@@ -1395,7 +1395,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlAlignXlsxExport)
     xFirst->getPropertyValue(u"VerticalAlign"_ustr) >>= eVerAlign;
     CPPUNIT_ASSERT_EQUAL(style::VerticalAlignment_BOTTOM, eVerAlign);
 
-    auto xSecondShape = xIA_DrawPage->getByIndex(1).queryThrow<drawing::XControlShape>();
+    auto xSecondShape = xIA_DrawPage->getShapeByIndex(1).queryThrow<drawing::XControlShape>();
     auto xSecond = xSecondShape->getControl().queryThrow<beans::XPropertySet>();
     xSecond->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);

@@ -56,7 +56,7 @@ uno::Reference<drawing::XShape> TestScene3d::getShape(sal_uInt8 nShapeIndex, sal
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(nPageIndex),
                                                  uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShapeIndex), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(nShapeIndex), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
     return xShape;
 }

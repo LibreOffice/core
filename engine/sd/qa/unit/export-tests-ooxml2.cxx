@@ -804,7 +804,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92527)
     uno::Reference<drawing::XDrawPagesSupplier> xDoc2(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getDrawPageByIndex(0),
                                               uno::UNO_SET_THROW);
-    uno::Reference<drawing::XShape> xShape2(xPage2->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xPage2->getShapeByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet2(xShape2, uno::UNO_QUERY_THROW);
     cpo::uno::Sequence<beans::PropertyValue> aProps;
     xPropertySet2->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aProps;
@@ -1567,7 +1567,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testLayoutAreasKeepTheirOwnText)
     uno::Reference<drawing::XShape> xFirstArea;
     for (sal_Int32 i = 0; i < xLayout->getCount(); ++i)
     {
-        uno::Reference<drawing::XShape> xShape(xLayout->getByIndex(i), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xLayout->getShapeByIndex(i), uno::UNO_SET_THROW);
         if (xShape->getShapeType() == "com.sun.star.presentation.OutlinerShape")
         {
             xFirstArea = xShape;
@@ -1834,7 +1834,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSmartartRotation2)
     // NOTE: Now we have a slot (comphelper::dispatchCommand(u".uno:DiagramToGroup"_ustr, {})) and method
     //       at DiagramHelper_svx to do that, adapted removal of Diagram/SmartArt functionality
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
-    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     SdrObjGroup* pSdrObjGroup
         = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xShape));
     pSdrObjGroup->getDiagramHelper()->disconnectFromSdrObjGroup(false);
@@ -2215,7 +2215,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSlideKeepsTheAreaItFillsWhenAnother
     bool bRemoved = false;
     for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
     {
-        uno::Reference<text::XTextRange> xText(xPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xText(xPage->getShapeByIndex(i), uno::UNO_QUERY);
         if (xText.is() && xText->getString() == "Left")
         {
             xPage->remove(uno::Reference<drawing::XShape>(xText, uno::UNO_QUERY_THROW));

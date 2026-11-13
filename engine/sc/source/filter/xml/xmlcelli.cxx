@@ -991,7 +991,7 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
 
     LockSolarMutex();
     ScDetectiveFunc aDetFunc( *pDoc, rPosition.Tab() );
-    uno::Reference<container::XIndexAccess> xShapesIndex = rXMLImport.GetTables().GetCurrentXShapes(); // make draw page
+    uno::Reference<drawing::XShapes> xShapesIndex = rXMLImport.GetTables().GetCurrentXShapes(); // make draw page
     for(const auto& rDetectiveObj : *pDetectiveObjVec)
     {
         aDetFunc.InsertObject( rDetectiveObj.eObjType, rPosition, rDetectiveObj.aSourceRange, rDetectiveObj.bHasError );

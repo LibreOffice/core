@@ -163,7 +163,7 @@ public:
     /// Get a shape by index, excluding TextBoxes.
     ///
     /// @throws css::lang::IndexOutOfBoundsException
-    static cpo::uno::Any getByIndex(SdrPage const* pPage, sal_Int32 nIndex);
+    static cpo::uno::Reference<css::drawing::XShape> getByIndex(SdrPage const* pPage, sal_Int32 nIndex);
     /// Get the order of the shape, excluding TextBoxes.
     static sal_Int32 getOrdNum(const SdrObject* pObject);
     /// If pTextBox is a textbox, then set rWrapThrough to the surround of its shape.

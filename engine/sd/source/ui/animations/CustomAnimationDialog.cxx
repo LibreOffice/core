@@ -1590,7 +1590,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
     sal_Int32 nShape, nCount = xCurrentPage->getCount();
     for( nShape = 0; nShape < nCount; nShape++ )
     {
-        Reference< XShape > xShape( xCurrentPage->getByIndex( nShape ), UNO_QUERY );
+        Reference< XShape > xShape( xCurrentPage->getShapeByIndex( nShape ), UNO_QUERY );
 
         if( !xShape.is() )
             continue;
@@ -1760,7 +1760,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleCurrentPage ) >>= xCurrentPage;
 
             if( xCurrentPage.is() && (nShape >= 0) && (nShape < xCurrentPage->getCount()) )
-                xCurrentPage->getByIndex( nShape ) >>= xTrigger;
+                xTrigger = xCurrentPage->getShapeByIndex( nShape );
         }
     }
 

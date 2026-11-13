@@ -425,13 +425,10 @@ void ObjectHierarchy::createAdditionalShapesTree(tChildContainer& rContainer)
             sal_Int32 nCount = xDrawPage->getCount();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
-                Reference< drawing::XShape > xShape;
-                if ( xDrawPage->getByIndex( i ) >>= xShape )
+                Reference< drawing::XShape > xShape = xDrawPage->getShapeByIndex( i );
+                if ( xShape.is() && xShape != xChartRoot )
                 {
-                    if ( xShape.is() && xShape != xChartRoot )
-                    {
-                        rContainer.emplace_back( xShape );
-                    }
+                    rContainer.emplace_back( xShape );
                 }
             }
         }

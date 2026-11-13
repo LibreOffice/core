@@ -88,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraph(
         xShape->createEnumeration()->nextElement(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPortion(xParagraph->createEnumeration()->nextElement(),
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testUnderlineFillOverridesInheritedFollow
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xShape->createEnumeration();
     uno::Reference<container::XEnumerationAccess> xParagraph;
     auto getUnderlineColor = [&xParagraph]()
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> XPropSet(getChildShape(getChildShape(xShape, 0), 0),
                                                  uno::UNO_QUERY);
 
@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
@@ -179,7 +179,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<chart2::XChartDocument> xModel(xShape->getPropertyValue(u"Model"_ustr),
                                                   uno::UNO_QUERY);
     uno::Reference<chart2::XCoordinateSystemContainer> xDiagram(xModel->getFirstDiagram(),
@@ -216,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
     // Check the end transparency of the gradient.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Rectangle 4"_ustr, xShape->getName());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     awt::Gradient2 aTransparence;
@@ -250,7 +250,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int16 nParaAdjust = -1;
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"ParaAdjust"_ustr) >>= nParaAdjust);
     // Without the accompanying fix in place, this test would have failed with:
@@ -267,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     drawing::TextHorizontalAdjust eAdjust;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 3 (center)
@@ -283,8 +283,8 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XNamed> xShape0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<container::XNamed> xShape1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape0(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape1(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps0(xShape0, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
     sal_Int32 nRotateAngle0;
@@ -306,8 +306,8 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf146534_CameraRotationRevolutionNon
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XNamed> xShape0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<container::XNamed> xShape1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape0(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape1(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps0(xShape0, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
     sal_Int32 nRotateAngle0;
@@ -329,7 +329,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage(
             xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
         bool bShadow = false;
         CPPUNIT_ASSERT(xShape->getPropertyValue(u"Shadow"_ustr) >>= bShadow);
 
@@ -358,8 +358,8 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGroupShapeSmartArt)
     // Then make sure that the smartart is not just an empty group shape:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapes> xSmartArt(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xSmartArt(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed, because we lost all
     // children of the group shape representing the smartart.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), xSmartArt->getCount());
@@ -375,7 +375,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     auto xDrawPage = xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0);
-    uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapeProps.is());
@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
     // Then make sure that the slide 2 shape's text color is blue, not red:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
                                                         uno::UNO_QUERY);
@@ -445,7 +445,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
 
     // Check the reference to that theme:
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
                                                         uno::UNO_QUERY);
@@ -479,16 +479,16 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
     // Test if we were able to import the footer shapes with CustomShape service.
-    uno::Reference<drawing::XShape> xShapeDateTime(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeDateTime(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeDateTime->getShapeType());
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.lang.IndexOutOfBoundsException
     // i.e. the shape wasn't on the slide there since it was imported as a property, not a shape.
 
-    uno::Reference<drawing::XShape> xShapeFooter(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeFooter(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeFooter->getShapeType());
 
-    uno::Reference<drawing::XShape> xShapeSlideNum(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeSlideNum(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeSlideNum->getShapeType());
 }
 
@@ -504,7 +504,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_objPlaceholderCustomShape)
     // Without the fix in place, this test would have failed with
     // Expected: shape type: "com.sun.star.drawing.CustomShape"
     // Actual  : shape type: "com.sun.star.presentation.OutlinerShape"
-    uno::Reference<drawing::XShape> xObjShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xObjShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xObjShape->getShapeType());
 }
 
@@ -515,7 +515,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCellRange> xTable;
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"Model"_ustr) >>= xTable);
     uno::Reference<beans::XPropertySet> xA1(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
@@ -561,7 +561,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
 
     // check line and fill theme color of shape1
     {
-        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
         CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
@@ -592,7 +592,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
     // check line and fill theme color of shape2
     {
         uno::Reference<util::XComplexColor> xComplexColor;
-        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         {
@@ -626,7 +626,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testVert270AndTextRot)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
@@ -650,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
@@ -681,7 +681,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
     // Get ViewBox of shape
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
@@ -700,7 +700,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf139425PathWithoutGuideReferences)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
@@ -721,7 +721,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontTheme)
     // Get shape and its properties
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
 
     // Make sure shape has correct font and local.
@@ -743,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontText)
     // Get shape and its properties
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
 
     // Make sure shape has correct font and local.
@@ -765,7 +765,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testToplevelLineHorOffsetDOCX)
     // When checking the transform and the points of the shape:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     drawing::HomogenMatrix3 aTransformation;
     xShape->getPropertyValue(u"Transformation"_ustr) >>= aTransformation;
     basegfx::B2DHomMatrix aMatrix;
@@ -814,7 +814,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testDOCXVerticalLineRotation)
     // Then make sure the vertical line shape has no rotation:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int32 nRotateAngle{};
     xShape->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle;
     // Without the accompanying fix in place, this test would have failed with:
@@ -834,7 +834,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyle)
     // and increasing indent results in correct behavior of 1499 mm100 / 1.5cm indent:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xShapeText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xShapeText->createEnumeration();
     xParagraphs->nextElement();
@@ -861,7 +861,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyle)
     uno::Reference<drawing::XDrawPage> xMasterPage(
         xMasterPagesSupplier->getMasterPages()->getDrawPageByIndex(0));
     // First would be the title shape.
-    uno::Reference<text::XTextRange> xMasterShape(xMasterPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xMasterShape(xMasterPage->getShapeByIndex(1), uno::UNO_QUERY);
     xShapeText.set(xMasterShape->getText(), uno::UNO_QUERY);
     xParagraphs = xShapeText->createEnumeration();
     // As a sample, check the 2nd paragraph's level 3 left margin.
@@ -890,7 +890,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testConnectorText)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     // Get SmartArt object, which is actually a group with 8 shapes.
-    uno::Reference<drawing::XShape> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xSmartArt(xDrawPage->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GroupShape"_ustr, xSmartArt->getShapeType());
     uno::Reference<container::XIndexAccess> xGroup(xSmartArt, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
@@ -930,7 +930,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_verticalArrow)
     // Make sure arrow in the diagram points down
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropSet(getChildShape(xShape, 2), uno::UNO_QUERY);
     sal_Int32 nAngle;
     xPropSet->getPropertyValue(u"RotateAngle"_ustr) >>= nAngle;
@@ -957,7 +957,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testUnderlineFillColorTypes)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
     for (const auto& [rText, rColor, eThemeColorType] : aExpected)
@@ -1001,7 +1001,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_spanColors)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xSmartArt(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
 
     // The items are the shapes that carry the text. The expected colors are the ones the
     // cached drawing of the original file gives them.
@@ -1089,7 +1089,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_hueNeverPassesRed)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
+    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getShapeByIndex(0),
                                                       uno::UNO_QUERY_THROW);
 
     // The colors that the cached drawing of the original file gives the items whose letter
@@ -1202,7 +1202,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_noLineWhereTheStyleGivesNone
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
+    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getShapeByIndex(0),
                                                       uno::UNO_QUERY_THROW);
 
     sal_Int32 nWithoutText(0);

@@ -70,7 +70,7 @@ bool XDocumentAuditing::hasRightAmountOfShapes(const uno::Reference<drawing::XDr
         {
             for (sal_Int32 i = nElementCount; i < nCount; i++)
             {
-                uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(i), UNO_QUERY_THROW);
+                uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(i), UNO_SET_THROW);
                 m_Position = xShape->getPosition();
             }
         }

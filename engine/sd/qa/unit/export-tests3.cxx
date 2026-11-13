@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testEmbeddedText)
     saveAndReload(TestFilter::ODG);
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
-    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xText.is());
 
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testTransparenText)
     saveAndReload(TestFilter::ODG);
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
-    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
     sal_Int16 nCharTransparence = 0;
     xShape->getPropertyValue(u"CharTransparence"_ustr) >>= nCharTransparence;
 
@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testDefaultSubscripts)
     saveAndReload(TestFilter::ODG);
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
-    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(1), uno::UNO_QUERY);
     // Default subscripts were too large, enlarging the gap between the next line.
     // The exact size isn't important. Was 18975, now 16604.
     CPPUNIT_ASSERT(17000 > xShape->getSize().Height);

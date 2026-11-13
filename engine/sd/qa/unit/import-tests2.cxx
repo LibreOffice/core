@@ -1101,7 +1101,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testNotesPageTheme)
     uno::Reference<drawing::XDrawPage> xNotesPage(xPage->getNotesPage(), uno::UNO_SET_THROW);
     for (sal_Int32 nShape = 0; nShape < xNotesPage->getCount(); ++nShape)
     {
-        uno::Reference<text::XText> xText(xNotesPage->getByIndex(nShape), uno::UNO_QUERY);
+        uno::Reference<text::XText> xText(xNotesPage->getShapeByIndex(nShape), uno::UNO_QUERY);
         if (!xText.is())
             continue;
         uno::Reference<container::XEnumerationAccess> xParagraphs(xText, uno::UNO_QUERY_THROW);
@@ -1175,7 +1175,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf108926)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xNotesPage->getCount());
 
     // Second object should be imported as an empty presentation shape
-    uno::Reference<beans::XPropertySet> xPresentationShape(xNotesPage->getByIndex(1),
+    uno::Reference<beans::XPropertySet> xPresentationShape(xNotesPage->getShapeByIndex(1),
                                                            uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPresentationShape.is());
     bool bIsEmptyPresObject = false;
@@ -1730,7 +1730,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf122899)
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
     awt::Rectangle aFrameRect;
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -1771,7 +1771,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCropToShape)
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShape->getShapeType());
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -1938,11 +1938,11 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testGroupShadowPPTXImport)
     createSdImpressDoc("pptx/group-shadow.pptx");
 
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShapes> xInnerGroup(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xInnerGroup(xGroup->getShapeByIndex(1), uno::UNO_QUERY_THROW);
     const std::pair<const char*, uno::Reference<beans::XPropertySet>> aInGroup[] = {
-        { "In group", uno::Reference<beans::XPropertySet>(xGroup->getByIndex(0), uno::UNO_QUERY) },
+        { "In group", uno::Reference<beans::XPropertySet>(xGroup->getShapeByIndex(0), uno::UNO_QUERY) },
         { "In inner group",
-          uno::Reference<beans::XPropertySet>(xInnerGroup->getByIndex(0), uno::UNO_QUERY) },
+          uno::Reference<beans::XPropertySet>(xInnerGroup->getShapeByIndex(0), uno::UNO_QUERY) },
     };
     auto getShadowColor = [](const uno::Reference<beans::XPropertySet>& xShape) {
         Color aColor;
@@ -1961,34 +1961,34 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testGroupShadowPPTXImport)
     }
 
     // A shape in the group with a shadow of its own keeps that shadow.
-    uno::Reference<beans::XPropertySet> xOwnShadow(xGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xOwnShadow(xGroup->getShapeByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xOwnShadow->getPropertyValue(u"Shadow"_ustr).get<bool>());
     CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), getShadowColor(xOwnShadow));
 
     // The group shadow follows the outline of the group, so a shape on an opaque rectangle of the
     // group casts none, but a shape on a half transparent rectangle does.
-    auto hasShadow = [](const uno::Any& rShape) {
+    auto hasShadow = [](const uno::Reference<drawing::XShape>& rShape) {
         uno::Reference<beans::XPropertySet> xShape(rShape, uno::UNO_QUERY_THROW);
         return xShape->getPropertyValue(u"Shadow"_ustr).get<bool>();
     };
-    CPPUNIT_ASSERT(!hasShadow(xGroup->getByIndex(3)));
-    CPPUNIT_ASSERT(hasShadow(xGroup->getByIndex(5)));
-    uno::Reference<drawing::XShapes> xGroupOnOpaque(xGroup->getByIndex(6), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(!hasShadow(xGroupOnOpaque->getByIndex(0)));
+    CPPUNIT_ASSERT(!hasShadow(xGroup->getShapeByIndex(3)));
+    CPPUNIT_ASSERT(hasShadow(xGroup->getShapeByIndex(5)));
+    uno::Reference<drawing::XShapes> xGroupOnOpaque(xGroup->getShapeByIndex(6), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!hasShadow(xGroupOnOpaque->getShapeByIndex(0)));
     // The rectangle takes its fill from the theme, and the fill reference makes it half
     // transparent.
-    CPPUNIT_ASSERT(hasShadow(xGroup->getByIndex(9)));
+    CPPUNIT_ASSERT(hasShadow(xGroup->getShapeByIndex(9)));
 
     // A scaled group shadow has the size of the whole group, so the shapes in it get no copy.
     uno::Reference<drawing::XShapes> xScaledGroup(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(!hasShadow(xScaledGroup->getByIndex(0)));
+    CPPUNIT_ASSERT(!hasShadow(xScaledGroup->getShapeByIndex(0)));
 
     uno::Reference<beans::XPropertySet> xOutside(getShapeFromPage(2, 0));
     CPPUNIT_ASSERT(!xOutside->getPropertyValue(u"Shadow"_ustr).get<bool>());
 
     // A shape with a reflection of its own also gets the group shadow, and the export writes the
     // shadow before the reflection, in the order of CT_EffectList.
-    CPPUNIT_ASSERT(hasShadow(xGroup->getByIndex(7)));
+    CPPUNIT_ASSERT(hasShadow(xGroup->getShapeByIndex(7)));
     save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPathNodeName(
@@ -3188,8 +3188,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16279_LayoutPlaceholderKeepsMasterAu
         uno::Reference<beans::XPropertySet> xShape;
         for (sal_Int32 i = 0; i < xLayout->getCount() && !xShape; i++)
         {
-            if (xLayout->getByIndex(i).queryThrow<container::XNamed>()->getName() == aName)
-                xShape.set(xLayout->getByIndex(i), uno::UNO_QUERY_THROW);
+            if (xLayout->getShapeByIndex(i).queryThrow<container::XNamed>()->getName() == aName)
+                xShape.set(xLayout->getShapeByIndex(i), uno::UNO_QUERY_THROW);
         }
         CPPUNIT_ASSERT(xShape);
 

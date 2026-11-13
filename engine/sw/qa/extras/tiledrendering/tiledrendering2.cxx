@@ -3595,7 +3595,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteShapeFromPresentationAtCaret
         xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
     uno::Reference<view::XSelectionSupplier> xSelection(xPresentation->getCurrentController(),
                                                          uno::UNO_QUERY_THROW);
-    xSelection->select(xSlide->getByIndex(0));
+    xSelection->select(Any(xSlide->getShapeByIndex(0)));
     dispatchCommand(mxComponent2, u".uno:Copy"_ustr, {});
 
     // The kit gives every document view a clipboard of its own, and a paste across documents

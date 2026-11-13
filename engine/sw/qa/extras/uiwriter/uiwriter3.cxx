@@ -412,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xGroupShape->getCount());
 
-    uno::Reference<beans::XPropertySet> xProperties(xGroupShape->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProperties(xGroupShape->getShapeByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, xProperties->getPropertyValue(u"TextBox"_ustr).get<bool>());
 
     selectShape(1);

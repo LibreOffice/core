@@ -624,7 +624,7 @@ bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
             sal_Int32 i(0);
             while (!bDebugResult && (i < nCount))
             {
-                xShapes->getByIndex(i) >>= xShape;
+                xShape = xShapes->getShapeByIndex(i);
                 if (xShape.is() && (xIndexShape.get() == xShape.get()))
                 {
                     bDebugResult = true;
@@ -765,8 +765,7 @@ void ScChildrenShapes::FillShapes(std::vector < uno::Reference < drawing::XShape
         sal_uInt32 nCount(xShapes->getCount());
         for (sal_uInt32 i = 0; i < nCount; ++i)
         {
-            uno::Reference<drawing::XShape> xShape;
-            xShapes->getByIndex(i) >>= xShape;
+            uno::Reference<drawing::XShape> xShape = xShapes->getShapeByIndex(i);
             if (xShape.is())
                 rShapes.push_back(xShape);
         }
@@ -904,8 +903,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
         mnShapesSelected = xShapes->getCount();
         for (sal_uInt32 i = 0; i < mnShapesSelected; ++i)
         {
-            uno::Reference< drawing::XShape > xShape;
-            xShapes->getByIndex(i) >>= xShape;
+            uno::Reference< drawing::XShape > xShape = xShapes->getShapeByIndex(i);
             if (xShape.is())
             {
                 ScAccessibleShapeData* pShapeData = new ScAccessibleShapeData(xShape);

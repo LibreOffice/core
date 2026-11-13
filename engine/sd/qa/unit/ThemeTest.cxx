@@ -94,20 +94,20 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
         xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);
 
-    uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getShapeByIndex(0), uno::UNO_QUERY);
     // Blue.
     CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), GetShapeTextColor(xShape));
 
-    uno::Reference<text::XTextRange> xShape2(xDrawPageShapes->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape2(xDrawPageShapes->getShapeByIndex(1), uno::UNO_QUERY);
     // Blue, lighter.
     CPPUNIT_ASSERT_EQUAL(Color(0xb4c7e7), GetShapeTextColor(xShape2));
 
-    uno::Reference<text::XTextRange> xShape3(xDrawPageShapes->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape3(xDrawPageShapes->getShapeByIndex(2), uno::UNO_QUERY);
     // Blue, darker.
     CPPUNIT_ASSERT_EQUAL(Color(0x2f5597), GetShapeTextColor(xShape3));
 
     // Shape fill:
-    uno::Reference<beans::XPropertySet> xShape4(xDrawPageShapes->getByIndex(4), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape4(xDrawPageShapes->getShapeByIndex(4), uno::UNO_QUERY);
     // Blue.
     CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), GetShapeFillColor(xShape4));
 
@@ -120,7 +120,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
     }
 
-    uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getByIndex(5), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getShapeByIndex(5), uno::UNO_QUERY);
     // Blue, lighter.
     CPPUNIT_ASSERT_EQUAL(Color(0xb4c7e7), GetShapeFillColor(xShape5));
     // The theme index, and effects (lum mod, lum off) are set by the PPTX import:

@@ -555,7 +555,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
     m_xParent = xShape;
     for (sal_Int32 i = 0; i < xGroupShape->getCount(); ++i)
     {
-        uno::Reference<drawing::XShape> xChild(xGroupShape->getByIndex(i), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xChild(xGroupShape->getShapeByIndex(i), uno::UNO_SET_THROW);
         sal_Int32 nSavedNamespace = mnXmlNamespace;
 
         uno::Reference<lang::XServiceInfo> xServiceInfo(xChild, uno::UNO_QUERY_THROW);
@@ -780,8 +780,7 @@ static OUString lcl_GetTarget(const cpo::uno::Reference<css::frame::XModel>& xMo
             sal_uInt32 nShapes = xShapes->getCount();
             for (sal_uInt32 j = 0; j < nShapes; j++)
             {
-                Reference<XShape> xShape;
-                xShapes->getByIndex(j) >>= xShape;
+                Reference<XShape> xShape = xShapes->getShapeByIndex(j);
                 Reference<container::XNamed> xName(xShape, UNO_QUERY);
                 if (!xName)
                     continue;

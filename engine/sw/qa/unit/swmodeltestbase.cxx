@@ -367,7 +367,7 @@ uno::Reference<drawing::XShape> SwModelTestBase::getShape(int number)
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(number - 1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(number - 1), uno::UNO_QUERY);
     return xShape;
 }
 
@@ -392,7 +392,7 @@ uno::Reference<drawing::XShape> SwModelTestBase::getShapeByName(std::u16string_v
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
     {
-        uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xShape(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
         if (xShape->getName() == aName)
         {
             xRet.set(xShape, uno::UNO_QUERY);
@@ -444,7 +444,7 @@ int SwModelTestBase::getPages() const
 int SwModelTestBase::getShapes() const
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XDrawPage> xDraws = xDrawPageSupplier->getDrawPage();
     return xDraws->getCount();
 }
 

@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testGlowTextInShape)
     saveAndReload(TestFilter::ODP);
 
     uno::Reference<drawing::XDrawPage> xDP(getPage(0));
-    uno::Reference<beans::XPropertySet> xShape(xDP->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDP->getShapeByIndex(0), uno::UNO_QUERY);
 
     // Check glow text properties in shapes
     sal_Int32 nGlowEffectRad = 0;
@@ -705,7 +705,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testSvgImageSupport)
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDrawPage.is());
 
         // Get the image
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
 
         // Convert to a XGraphic
@@ -860,7 +860,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testPlaceholderPromptODFRoundTrip)
         auto xShapes = xMPs->getDrawPageByIndex(nPage);
         for (sal_Int32 nShape = 0; nShape < xShapes->getCount(); ++nShape)
         {
-            auto xProps = xShapes->getByIndex(nShape).queryThrow<beans::XPropertySet>();
+            auto xProps = xShapes->getShapeByIndex(nShape).queryThrow<beans::XPropertySet>();
             OUString aShapePrompt;
             if (xProps->getPropertySetInfo()->hasPropertyByName(u"CustomPromptText"_ustr)
                 && (xProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aShapePrompt)

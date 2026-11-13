@@ -610,7 +610,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignedVmlShapesFlushAtCellEdges)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, u"LeftMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, u"RightMargin"_ustr));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),
+    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0),
                                                uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, u"LeftMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, u"RightMargin"_ustr));
@@ -700,11 +700,11 @@ CPPUNIT_TEST_FIXTURE(Test, testRightAlignedShapeBesideFly)
 
     // And the shape keeps its alignment. Nothing turned it into an absolute position.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     bool bFound = false;
     for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
     {
-        uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
         if (!xInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr))
             continue;
         uno::Reference<beans::XPropertySet> xShape(xInfo, uno::UNO_QUERY);

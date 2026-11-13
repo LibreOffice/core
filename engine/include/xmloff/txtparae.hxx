@@ -51,7 +51,7 @@ namespace com::sun::star
 {
     namespace beans { class XPropertySet; class XPropertySetInfo; }
     namespace container { class XEnumeration; class XIndexAccess; }
-    namespace drawing { class XShape; }
+    namespace drawing { class XShape; class XDrawPage; }
     namespace text { class XTextContent; class XTextRange; class XText;
                      class XFootnote; class XTextFrame; class XTextSection;
                      class XTextField; }
@@ -541,7 +541,7 @@ public:
      * XMLSectionExport, which is only available here.
      */
     void PreventExportOfControlsInMuteSections(
-        const cpo::uno::Reference< css::container::XIndexAccess> & rShapes,
+        const cpo::uno::Reference< css::drawing::XDrawPage> & rShapes,
         const rtl::Reference<xmloff::OFormLayerXMLExport>& xFormExport );
 
     SinglePropertySetInfoCache& GetCharStyleNamesPropInfoCache() { return m_aCharStyleNamesPropInfoCache; }

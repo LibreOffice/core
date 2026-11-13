@@ -34,7 +34,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureInTextframe)
     loadFromFile(u"picture-in-textframe.rtf");
     uno::Reference<drawing::XDrawPageSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xTextDocument->getDrawPage();
-    uno::Reference<beans::XPropertySet> xInnerShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xInnerShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
     text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;
     xInnerShape->getPropertyValue(u"AnchorType"_ustr) >>= eAnchorType;
     // Without the accompanying fix in place, this test would have failed with:
@@ -54,7 +54,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermark)
     // Then make sure the watermark effect is not lost on import:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPagesSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     drawing::ColorMode eMode{};
     xShape->getPropertyValue(u"GraphicColorMode"_ustr) >>= eMode;
     // Without the accompanying fix in place, this test would have failed with:

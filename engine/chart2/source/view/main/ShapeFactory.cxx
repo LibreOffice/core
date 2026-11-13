@@ -2336,7 +2336,8 @@ rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getChartRootShape(
         uno::Reference< drawing::XShape > xShape;
         for( sal_Int32 nN = nCount; nN--; )
         {
-            if( xDrawPage->getByIndex( nN ) >>= xShape )
+            xShape = xDrawPage->getShapeByIndex( nN );
+            if( xShape )
             {
                 if( ShapeFactory::getShapeName( xShape ) == "com.sun.star.chart2.shapes" )
                 {
@@ -2550,7 +2551,8 @@ void ShapeFactory::removeSubShapes( const rtl::Reference<SvxShapeGroupAnyD>& xSh
         uno::Reference< drawing::XShape > xShape;
         for( sal_Int32 nS = nSubCount; nS--; )
         {
-            if( xShapes->getByIndex( nS ) >>= xShape )
+            xShape = xShapes->getShapeByIndex( nS );
+            if( xShape )
                 xShapes->remove( xShape );
         }
     }

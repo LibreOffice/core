@@ -574,14 +574,11 @@ SdrObject* ShapeController::getFirstAdditionalShape()
             sal_Int32 nCount = xDrawPage->getCount();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
-                Reference< drawing::XShape > xShape;
-                if ( xDrawPage->getByIndex( i ) >>= xShape )
+                Reference< drawing::XShape > xShape = xDrawPage->getShapeByIndex( i );
+                if ( xShape.is() && xShape != xChartRoot )
                 {
-                    if ( xShape.is() && xShape != xChartRoot )
-                    {
-                        xFirstShape = std::move(xShape);
-                        break;
-                    }
+                    xFirstShape = std::move(xShape);
+                    break;
                 }
             }
             if ( xFirstShape.is() )
@@ -613,14 +610,11 @@ SdrObject* ShapeController::getLastAdditionalShape()
             sal_Int32 nCount = xDrawPage->getCount();
             for ( sal_Int32 i = nCount - 1; i >= 0; --i )
             {
-                Reference< drawing::XShape > xShape;
-                if ( xDrawPage->getByIndex( i ) >>= xShape )
+                Reference< drawing::XShape > xShape = xDrawPage->getShapeByIndex( i );
+                if ( xShape.is() && xShape != xChartRoot )
                 {
-                    if ( xShape.is() && xShape != xChartRoot )
-                    {
-                        xLastShape = std::move(xShape);
-                        break;
-                    }
+                    xLastShape = std::move(xShape);
+                    break;
                 }
             }
             if ( xLastShape.is() )

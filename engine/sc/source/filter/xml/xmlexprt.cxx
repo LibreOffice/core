@@ -522,7 +522,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
         sal_Int32 nShapes = xDrawPage->getCount();
         for (sal_Int32 nShape = 0; nShape < nShapes; ++nShape)
         {
-            uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShape), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(nShape), uno::UNO_QUERY);
             if (!xShape.is())
                 continue;
 

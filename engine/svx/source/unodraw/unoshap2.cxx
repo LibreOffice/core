@@ -320,8 +320,12 @@ sal_Int32 SvxShapeGroup::getCount()
     return nRetval;
 }
 
-
 cpo::uno::Any SvxShapeGroup::getByIndex( sal_Int32 Index )
+{
+    return cpo::uno::Any(getShapeByIndex(Index));
+}
+
+Reference< drawing::XShape > SvxShapeGroup::getShapeByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
 
@@ -336,8 +340,7 @@ cpo::uno::Any SvxShapeGroup::getByIndex( sal_Int32 Index )
     if(pDestObj == nullptr)
         throw lang::IndexOutOfBoundsException();
 
-    Reference< drawing::XShape > xShape( pDestObj->getUnoShape(), uno::UNO_QUERY );
-    return cpo::uno::Any( xShape );
+    return pDestObj->getUnoShape();
 }
 
 // css::container::XElementAccess

@@ -357,8 +357,7 @@ awt::Size ExportDialog::GetOriginalSize()
             const sal_Int32 nCount = mxShapes->getCount();
             for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                uno::Reference< drawing::XShape > xShape;
-                mxShapes->getByIndex( nIndex ) >>= xShape;
+                uno::Reference< drawing::XShape > xShape = mxShapes->getShapeByIndex( nIndex );
                 aShapesRange.expand( GetShapeRangeForXShape( xShape, xPrimitiveFactory, aViewInformation ) );
             }
         }

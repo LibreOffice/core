@@ -540,9 +540,8 @@ ShapeGroupContext::ShapeGroupContext( uno::Reference< drawing::XShapes > xShapes
 
 void ShapeGroupContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
 {
-    cpo::uno::Any aAny( mxShapes->getByIndex( nSourcePos ) );
-    uno::Reference< beans::XPropertySet > xPropSet;
-    aAny >>= xPropSet;
+    uno::Reference<drawing::XShape> xShape( mxShapes->getShapeByIndex( nSourcePos ) );
+    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
 
     if( !(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( u"ZOrder"_ustr )) )
         return;

@@ -497,10 +497,10 @@ void dropStaleThemeColorsOfShapes(const uno::Reference<drawing::XShapes>& xShape
 {
     for (sal_Int32 i = 0; i < xShapes->getCount(); ++i)
     {
-        uno::Any aShape = xShapes->getByIndex(i);
-        if (uno::Reference<drawing::XShapes> xGroup{ aShape, uno::UNO_QUERY })
+        uno::Reference< drawing::XShape > xShape = xShapes->getShapeByIndex(i);
+        if (uno::Reference<drawing::XShapes> xGroup{ xShape, uno::UNO_QUERY })
             dropStaleThemeColorsOfShapes(xGroup, rThemes);
-        else if (uno::Reference<beans::XPropertySet> xShapeSet{ aShape, uno::UNO_QUERY })
+        else if (uno::Reference<beans::XPropertySet> xShapeSet{ xShape, uno::UNO_QUERY })
             dropStaleThemeColors(xShapeSet, rThemes);
     }
 }

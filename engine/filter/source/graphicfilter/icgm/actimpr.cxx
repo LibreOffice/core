@@ -433,7 +433,7 @@ void CGMImpressOutAct::EndGroup()
     uno::Reference< drawing::XShapes >  aXShapes = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
     for ( sal_uInt32 i = nFirstIndex; i < nCurrentCount; i++ )
     {
-        uno::Reference< drawing::XShape >  aXShape = *o3tl::doAccess<uno::Reference<drawing::XShape>>(maXShapes->getByIndex( i ));
+        uno::Reference< drawing::XShape >  aXShape = maXShapes->getShapeByIndex( i );
         if (aXShape.is() )
         {
             aXShapes->add( aXShape );
@@ -885,7 +885,7 @@ void CGMImpressOutAct::AppendText( const char* pString )
     if ( !nFinalTextCount )
         return;
 
-    uno::Reference< drawing::XShape >  aShape = *o3tl::doAccess<uno::Reference<drawing::XShape>>(maXShapes->getByIndex( nFinalTextCount - 1 ));
+    uno::Reference< drawing::XShape >  aShape = maXShapes->getShapeByIndex( nFinalTextCount - 1 );
     if ( !aShape.is() )
         return;
 

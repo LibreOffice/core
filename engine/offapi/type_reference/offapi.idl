@@ -5139,6 +5139,7 @@ module com {
      interface ::com::sun::star::container::XIndexAccess;
      void add([in] ::com::sun::star::drawing::XShape xShape);
      void remove([in] ::com::sun::star::drawing::XShape xShape);
+     XShape getShapeByIndex( [in] long Index ) raises( com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::lang::WrappedTargetException );
     };
    };
    module view {

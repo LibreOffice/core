@@ -825,7 +825,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSingleOleExport)
     auto xDrawPage(xDrawPageSupplier->getDrawPage());
     auto xModel(mxComponent.queryThrow<css::frame::XModel>());
     auto xController(xModel->getCurrentController().queryThrow<css::view::XSelectionSupplier>());
-    xController->select(xDrawPage->getByIndex(0));
+    xController->select(Any(xDrawPage->getShapeByIndex(0)));
 
     // Store only the selection
     cpo::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {

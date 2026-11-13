@@ -850,7 +850,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableExport)
     // Then make sure the floating table is there & has the expected properties:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    xFrame.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xFrame.set(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     bool bIsSplitAllowed{};
     xFrame->getPropertyValue(u"IsSplitAllowed"_ustr) >>= bIsSplitAllowed;
     // Without the accompanying fix in place, this test would have failed, the table was not

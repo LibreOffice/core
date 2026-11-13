@@ -41,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTable)
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.lang.IndexOutOfBoundsException
     // i.e. the table was not floating / was not in a fly frame.
-    uno::Reference<beans::XPropertySet> xFrame(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     bool bIsSplitAllowed{};
     xFrame->getPropertyValue(u"IsSplitAllowed"_ustr) >>= bIsSplitAllowed;
     CPPUNIT_ASSERT(bIsSplitAllowed);

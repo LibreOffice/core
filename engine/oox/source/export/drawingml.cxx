@@ -2595,8 +2595,7 @@ static OUString lcl_GetTarget(const cpo::uno::Reference<css::frame::XModel>& xMo
             sal_uInt32 nShapes = xShapes->getCount();
             for (sal_uInt32 j = 0; j < nShapes; j++)
             {
-                Reference<XShape> xShape;
-                xShapes->getByIndex(j) >>= xShape;
+                Reference<XShape> xShape = xShapes->getShapeByIndex(j);
                 Reference<container::XNamed> xName(xShape, UNO_QUERY);
                 if (!xName)
                     continue;
@@ -10563,7 +10562,7 @@ void DrawingML::WriteDiagram(const cpo::uno::Reference<css::drawing::XShape>& rX
         cpo::uno::Reference<css::drawing::XShapes> xShapes(rXShape, uno::UNO_QUERY);
         if (xShapes.is() && xShapes->hasElements())
         {
-            cpo::uno::Reference<css::drawing::XShape> xShapeBg(xShapes->getByIndex(0),
+            cpo::uno::Reference<css::drawing::XShape> xShapeBg(xShapes->getShapeByIndex(0),
                                                                uno::UNO_QUERY);
             awt::Point aPos = xShapeBg->getPosition();
             awt::Size aSize = xShapeBg->getSize();

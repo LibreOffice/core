@@ -185,7 +185,7 @@ xray ThisComponent.DrawPage(1).getByIndex(0).String
     // The groupshape should be in the foreground, not the background.
     CPPUNIT_ASSERT(getProperty<bool>(xShapes, u"Opaque"_ustr));
 
-    uno::Reference<text::XTextRange> xShape(xShapes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xShapes->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"TEXT1\n"_ustr, xShape->getString());
 
     // test the textbox is on the first page (it was put onto another page without the fix)
@@ -678,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeLine)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1392), xShape->getSize().Height);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShape(2), uno::UNO_QUERY);
-    xShape.set(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    xShape.set(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1272), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2286), xShape->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10160), xShape->getSize().Width);
@@ -692,12 +692,12 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeChildRotation)
     // groupshapes), the first child wasn't in the top left corner of an inline
     // groupshape.
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-5741), xShape->getPosition().Y);
 
 #if HAVE_MORE_FONTS
-    xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
+    xShape.set(xGroupShape->getShapeByIndex(4), uno::UNO_QUERY);
     // This was true, a VML textbox without <v:textbox style="mso-fit-shape-to-text:t"> had
     // auto-grow on.
     CPPUNIT_ASSERT(!getProperty<bool>(xShape, u"TextAutoGrowHeight"_ustr));
@@ -706,7 +706,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeChildRotation)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Font", u"Times New Roman"_ustr, getProperty<OUString>(getRun(xText, 1), u"CharFontName"_ustr));
 #endif
 
-    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroupShape->getByIndex(5), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroupShape->getShapeByIndex(5));
     // This was com.sun.star.drawing.RectangleShape, all shape text in a single line.
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.TextShape"_ustr, xShapeDescriptor->getShapeType());
 }
@@ -766,8 +766,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeSdt)
     createSwDoc("groupshape-sdt.docx");
     // All problems here are due to the groupshape: we have a drawinglayer rectangle, not a writer textframe.
     uno::Reference<drawing::XShapes> xOuterGroupShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapes> xInnerGroupShape(xOuterGroupShape->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xShape(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xInnerGroupShape(xOuterGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xInnerGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     // Border distances were not implemented, this was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1905), getProperty<sal_Int32>(xShape, u"TextUpperDistance"_ustr));
     // Sdt field result wasn't imported, this was "".
@@ -1413,7 +1413,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf85232)
 {
     createSwDoc("tdf85232.docx");
     uno::Reference<drawing::XShapes> xShapes(getShapeByName(u"Group 219"), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xShapes->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xShapes->getShapeByIndex(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = xShape;
     // Make sure we're not testing the ellipse child.
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.LineShape"_ustr, xShapeDescriptor->getShapeType());
@@ -1903,7 +1903,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeTextHighlight)
     // They should correspond to the list above.
     for (size_t idx = 0; idx < xColors.size(); ++idx)
     {
-        uno::Reference<text::XTextRange> xTextRange(xGroupShape->getByIndex(idx), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xTextRange(xGroupShape->getShapeByIndex(idx), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> firstParagraph = getParagraphOfText(1, xTextRange->getText());
         uno::Reference<text::XTextRange> firstRun = getRun(firstParagraph, 1);
         uno::Reference<beans::XPropertySet> props(firstRun, uno::UNO_QUERY_THROW);

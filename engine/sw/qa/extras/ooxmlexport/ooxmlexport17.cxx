@@ -598,13 +598,13 @@ DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
         for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
         {
             // Get the child shape
-            uno::Reference<beans::XPropertySet> xChildShapeProperties(xGroup->getByIndex(i),
+            uno::Reference<beans::XPropertySet> xChildShapeProperties(xGroup->getShapeByIndex(i),
                 uno::UNO_QUERY_THROW);
             // Check for textbox
             if (!xChildShapeProperties->getPropertyValue(u"TextBox"_ustr).get<bool>())
             {
                 // Is this a Group Shape? Put it into the queue.
-                uno::Reference<drawing::XShapes> xInnerGroup(xGroup->getByIndex(i), uno::UNO_QUERY);
+                uno::Reference<drawing::XShapes> xInnerGroup(xGroup->getShapeByIndex(i), uno::UNO_QUERY);
                 if (xInnerGroup)
                     xGroupList.push(xInnerGroup);
                 continue;
@@ -788,12 +788,12 @@ DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
     // Get the WPG shape
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     // And the embed WPG
-    uno::Reference<drawing::XShapes> xEmbedGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xEmbedGroup(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
 
     // Get the properties of the shapes
-    uno::Reference<beans::XPropertySet> xOuterShape(xGroup->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xMiddleShape(xEmbedGroup->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xInnerShape(xEmbedGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xOuterShape(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMiddleShape(xEmbedGroup->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xInnerShape(xEmbedGroup->getShapeByIndex(1), uno::UNO_QUERY);
 
     // Get the properties of the textboxes too
     uno::Reference<beans::XPropertySet> xOuterTextBox(
@@ -916,8 +916,8 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY_THROW);
 
     // Get the textboxes of the groupshape
-    uno::Reference<text::XText> xTextBox1(xGroup->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<text::XText> xTextBox2(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xTextBox1(xGroup->getShapeByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xTextBox2(xGroup->getShapeByIndex(1), uno::UNO_QUERY_THROW);
 
     // Get the properties of the textboxes
     uno::Reference<beans::XPropertySet> xTextBox1Properties(xTextBox1, uno::UNO_QUERY_THROW);

@@ -56,10 +56,10 @@ DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GroupShape"_ustr, MyShape->getShapeType());
 
     uno::Reference<drawing::XShapes> xGroup(MyShape, uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xTriangle(xGroup->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShapes> xEmbedGroup(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xCircle(xEmbedGroup->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xDiamond(xEmbedGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xTriangle(xGroup->getShapeByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xEmbedGroup(xGroup->getShapeByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCircle(xEmbedGroup->getShapeByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDiamond(xEmbedGroup->getShapeByIndex(1), uno::UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The circle lost its textbox", true, xCircle->getPropertyValue(u"TextBox"_ustr).get<bool>());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The diamond lost its textbox", true, xDiamond->getPropertyValue(u"TextBox"_ustr).get<bool>());
@@ -170,7 +170,7 @@ DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")
 {
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getShapeByIndex(0));
     // This was a com.sun.star.drawing.CustomShape, due to lack of handling of groupshapes inside groupshapes.
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GroupShape"_ustr, xShapeDescriptor->getShapeType());
 
@@ -477,7 +477,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
 {
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
-    CPPUNIT_ASSERT_EQUAL(u"sdt and sdtContent inside groupshape"_ustr, uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"sdt and sdtContent inside groupshape"_ustr, uno::Reference<text::XTextRange>(xGroupShape->getShapeByIndex(1), uno::UNO_QUERY_THROW)->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDmlCharheightDefault, "dml-charheight-default.docx")
@@ -692,7 +692,7 @@ DECLARE_OOXMLEXPORT_TEST(test_extra_image, "test_extra_image.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo74401, "fdo74401.docx")
 {
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapeDescriptor> xShape(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShape(xGroupShape->getShapeByIndex(1));
     // The triangle (second child) was a TextShape before, so it was shown as a rectangle.
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShape->getShapeType());
 
@@ -831,7 +831,7 @@ DECLARE_OOXMLEXPORT_TEST(testCaption, "caption.docx")
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeTrackedchanges, "groupshape-trackedchanges.docx")
 {
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
     // Shape text was completely missing, ensure inserted text is available.
     uno::Reference<text::XText> xText
         = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();

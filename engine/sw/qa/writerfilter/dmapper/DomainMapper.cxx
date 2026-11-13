@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableThenTable)
     uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xAnchor = xShape->getAnchor();
     // Make sure the anchor text is the body text, not some cell.
     CPPUNIT_ASSERT_EQUAL(xBodyText, xAnchor->getText());

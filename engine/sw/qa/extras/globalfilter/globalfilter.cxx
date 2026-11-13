@@ -288,7 +288,7 @@ uno::Reference<drawing::XShape> lcl_getShape(const uno::Reference<lang::XCompone
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
     {
-        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
         uno::Reference<graphic::XGraphic> xGraphic;
         xShapeProperties->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
         if (xGraphic.is())
@@ -393,7 +393,7 @@ std::vector<uno::Reference<graphic::XGraphic>>
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
     {
-        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
         uno::Reference<graphic::XGraphic> xGraphic;
         xShapeProperties->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
         if (xGraphic.is())

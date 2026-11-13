@@ -911,9 +911,9 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupedShapeLink)
     // tdf#154469 Hyperlink in grouped shape not exported
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"https://www.libreoffice.org"_ustr,
-                         getProperty<OUString>(xGroupShape->getByIndex(0), u"Hyperlink"_ustr));
+                         getProperty<OUString>(xGroupShape->getShapeByIndex(0), u"Hyperlink"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"https://www.documentfoundation.org"_ustr,
-                         getProperty<OUString>(xGroupShape->getByIndex(1), u"Hyperlink"_ustr));
+                         getProperty<OUString>(xGroupShape->getShapeByIndex(1), u"Hyperlink"_ustr));
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);

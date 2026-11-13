@@ -580,10 +580,9 @@ sal_uInt32 SdXMLExport::ImpRecursiveObjectCount(const Reference< drawing::XShape
 
         for(sal_Int32 a(0); a < nCount; a++)
         {
-            Any aAny(xShapes->getByIndex(a));
-            Reference< drawing::XShapes > xGroup;
+            Reference< drawing::XShapes > xGroup(xShapes->getShapeByIndex(a), UNO_QUERY);
 
-            if((aAny >>= xGroup) && xGroup.is())
+            if(xGroup.is())
             {
                 // #93180# count group objects, too.
                 nRetval += 1 + ImpRecursiveObjectCount(xGroup);

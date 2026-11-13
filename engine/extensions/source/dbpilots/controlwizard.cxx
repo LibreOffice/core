@@ -243,7 +243,7 @@ using namespace cpo::uno;
 
     void OControlWizard::implDetermineShape()
     {
-        Reference< XIndexAccess > xPageObjects = m_aContext.xDrawPage;
+        Reference< XDrawPage > xPageObjects = m_aContext.xDrawPage;
         DBG_ASSERT(xPageObjects.is(), "OControlWizard::implDetermineShape: invalid page!");
 
         // for comparing the model
@@ -258,7 +258,8 @@ using namespace cpo::uno;
         Reference< XControlModel > xControlModel;
         for (sal_Int32 i=0; i<nObjects; ++i)
         {
-            if (xPageObjects->getByIndex(i) >>= xControlShape)
+            xControlShape.set(xPageObjects->getShapeByIndex(i), UNO_QUERY);
+            if (xControlShape)
             {   // it _is_ a control shape
                 xControlModel = xControlShape->getControl();
                 DBG_ASSERT(xControlModel.is(), "OControlWizard::implDetermineShape: control shape without model!");

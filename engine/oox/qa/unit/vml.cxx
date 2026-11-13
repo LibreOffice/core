@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
     {
         // This tests a polyline shape which is not closed.
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
@@ -64,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_PLIN, ePolygonKind);
     }
     {
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
     }
     {
         // This tests a filled shape where v:polyline does not have attribute coordsize
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
@@ -107,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf137314_vml_rotation_unit_fd)
     loadFromFile(u"tdf137314_vml_rotation_unit_fd.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
     loadFromFile(u"group-spt202.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
     loadFromFile(u"shape-non-autosize-with-text.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // - Actual  : 1115
@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testGraphicStroke)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
     uno::Reference<beans::XPropertySet> xShape;
-    uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     if (xInfo->supportsService(u"com.sun.star.drawing.OLE2Shape"_ustr))
         xShape.set(xInfo, uno::UNO_QUERY);
 
@@ -190,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWatermark)
     // Then make sure the watermark effect is not lost on import:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     drawing::ColorMode eMode{};
     xShape->getPropertyValue(u"GraphicColorMode"_ustr) >>= eMode;
     // Without the accompanying fix in place, this test would have failed with:
@@ -210,8 +210,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWriterFontworkTrimTrue)
     saveAndReload(TestFilter::DOCX);
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),
-                                           uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0));
 
     // Make sure the shape height is not changed.
     // Without the fix the test would have failed with expected 4999 actual 1732.
@@ -227,7 +226,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testVMLTextpathStyle)
 
     // Then the Fontwork shape carries those attributes
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),
+    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0),
                                                uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr, xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, xShape->getPropertyValue(u"CharWeight"_ustr).get<float>());
@@ -247,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testVMLDetectWordArtOnImport)
     loadFromFile(u"tdf153258_VML_import_WordArt_detection.docx");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),
+    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0),
                                            uno::UNO_QUERY);
 
     // Make sure the shape width and height is not changed.

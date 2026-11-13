@@ -1625,7 +1625,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 const sal_Int32 nShapeCount( mxAdditionalShapes->getCount());
                 for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
                 {
-                    mxAdditionalShapes->getByIndex( nShapeId ) >>= xShape;
+                    xShape = mxAdditionalShapes->getShapeByIndex( nShapeId );
                     SAL_WARN_IF( !xShape.is(), "xmloff.chart",  "Shape without an XShape?" );
                     if( ! xShape.is())
                         continue;
@@ -1674,7 +1674,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 const sal_Int32 nShapeCount( mxAdditionalShapes->getCount());
                 for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
                 {
-                    mxAdditionalShapes->getByIndex( nShapeId ) >>= xShape;
+                    xShape = mxAdditionalShapes->getShapeByIndex( nShapeId );
                     SAL_WARN_IF( !xShape.is(), "xmloff.chart", "Shape without an XShape?" );
                     if( ! xShape.is())
                         continue;

@@ -555,7 +555,7 @@ bool
                 if( xShape.is() )
                 {
                     for( sal_Int32 i = 0, nCount = xShapes->getCount(); ( i < nCount ) && !bRet; ++i )
-                        if( xShapes->getByIndex( i ) == xShape )
+                        if( xShapes->getShapeByIndex( i ) == xShape )
                             bRet = true;
                 }
             }
@@ -632,7 +632,7 @@ void
                 {
                     sal_Int32 nCount = xShapes->getCount();
                     for (sal_Int32 i=0; ( i < nCount ) && !bFound; ++i )
-                        if( xShapes->getByIndex( i ) == xShape )
+                        if( xShapes->getShapeByIndex( i ) == xShape )
                             bFound = true;
                 }
                 else

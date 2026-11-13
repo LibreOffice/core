@@ -1852,7 +1852,7 @@ OUString ChartView::dump(OUString const & kind)
     OUStringBuffer aBuffer;
     for(sal_Int32 i = 0; i < n; ++i)
     {
-        uno::Reference< drawing::XShapes > xShape(m_xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference< drawing::XShapes > xShape(m_xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
         if(xShape.is())
         {
             OUString aString = XShapeDumper::dump(uno::Reference<drawing::XShapes>(mxRootShape));
@@ -1860,7 +1860,7 @@ OUString ChartView::dump(OUString const & kind)
         }
         else
         {
-            uno::Reference< drawing::XShape > xSingleShape(m_xDrawPage->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference< drawing::XShape > xSingleShape(m_xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
             if(!xSingleShape.is())
                 continue;
             OUString aString = XShapeDumper::dump(xSingleShape);
