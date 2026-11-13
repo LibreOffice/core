@@ -75,6 +75,8 @@ bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits
     const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
     if (maGraphicContext.isSet()) // remove warning
     {
+        CGContextClearRect(maGraphicContext.get(), CGRectMake(0, 0, mnWidth, mnHeight));
+
         if( bFlipped )
         {
             CGContextTranslateCTM( maGraphicContext.get(), 0, +mnHeight );
@@ -541,7 +543,7 @@ bool AquaSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY, bool /*bAl
         mnBitmapDepth = 8;  // TODO: are 1bit vdevs worth it?
         const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
 
-        void* pRawData = std::malloc( nBytesPerRow * nDY );
+        void* pRawData = std::calloc( 1, nBytesPerRow * nDY );
         maBitmapContext.set(CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  mnBitmapDepth, nBytesPerRow,
                                                  GetSalData()->mxGraySpace, kCGImageAlphaNone));
@@ -555,7 +557,7 @@ bool AquaSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY, bool /*bAl
             mnBitmapDepth = 32;
 
             const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
-            void* pRawData = std::malloc( nBytesPerRow * nDY );
+            void* pRawData = std::calloc( 1, nBytesPerRow * nDY );
             const int nFlags = uint32_t(kCGImageAlphaNoneSkipFirst) | uint32_t(kCGImageByteOrder32Little);
             maBitmapContext.set(CGBitmapContextCreate(pRawData, nDX, nDY, 8, nBytesPerRow,
                                                       GetSalData()->mxRGBSpace, nFlags));
