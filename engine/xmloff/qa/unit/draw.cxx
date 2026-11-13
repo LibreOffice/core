@@ -9,6 +9,7 @@
 
 #include <test/unoapixml_test.hxx>
 
+#include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
@@ -1220,6 +1221,36 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testEmptyGraphicShapeOdf)
     // leaving draw:image's choice between xlink:href and office:binary-data unsatisfied,
     // and the validator rejected the element as incomplete.
     saveAndReload(TestFilter::ODG);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testAirplaneTransitionLoext)
+{
+    // Given a document with an airplane transition, subtype is in loext:subtype, not in
+    // coext:subtype:
+    loadFromFile(u"airplane-transition-loext.fodp");
+
+    // When loading that document:
+    auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                     ->getDrawPages()
+                     ->getByIndex(0)
+                     .queryThrow<beans::XPropertySet>();
+
+    // Then make sure the extension attribute wins over the smil:subtype fallback:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 120 (AIRPLANE)
+    // - Actual  : 1 (LEFTTORIGHT)
+    // i.e. loext:subtype was ignored.
+    CPPUNIT_ASSERT_EQUAL(animations::TransitionSubType::AIRPLANE,
+                         xPage->getPropertyValue(u"TransitionSubtype"_ustr).get<sal_Int16>());
+
+    // And when saving it back to ODP:
+    save(TestFilter::ODP);
+
+    // Then make sure that the subtype is still written as coext:subtype only:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"airplane"_ustr,
+                         getXPathContent(pXmlDoc, "//anim:transitionFilter/@coext:subtype"));
+    assertXPath(pXmlDoc, "//anim:transitionFilter[@loext:subtype]", 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

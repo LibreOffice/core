@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+    xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
+    xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
+    xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
+    office:version="1.4"
+    office:mimetype="application/vnd.oasis.opendocument.presentation">
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="page1" draw:master-page-name="" xml:id="id1" draw:id="id1">
+        <anim:par presentation:node-type="timing-root">
+          <anim:par smil:begin="id1.begin">
+            <anim:transitionFilter smil:dur="1.25s" smil:type="miscShapeWipe"
+                                   smil:subtype="leftToRight" loext:subtype="airplane"/>
+          </anim:par>
+        </anim:par>
+      </draw:page>
+    </office:presentation>
+  </office:body>
+</office:document>

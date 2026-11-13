@@ -1044,8 +1044,10 @@ void AnimationNodeContext::init_node(  const cpo::uno::Reference< css::xml::sax:
             break;
 
             case XML_ELEMENT(CO_EXT, XML_SUBTYPE):
+            case XML_ELEMENT(LO_EXT, XML_SUBTYPE):
             {
                 // Applied after all attributes, so it wins over the smil:subtype fallback.
+                // Import both coext and loext, but always write coext.
                 if (xTransitionFilter.is()
                     && SvXMLUnitConverter::convertEnum(nEnum, aIter.toView(),
                                                        aAnimations_EnumMap_TransitionSubTypeExt))
