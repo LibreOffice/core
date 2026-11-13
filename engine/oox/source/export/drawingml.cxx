@@ -2491,10 +2491,10 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             // Keep its camera and apply only later model rotation changes to xfrm.
             if (p3DEffectProps == std::cend(aGrabBagProps) && IsFontworkShape(xPropertySet))
             {
-                p3DEffectProps = std::find_if(
+                auto pText3DEffectProps = std::find_if(
                     std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
                     [](const PropertyValue& rProp) { return rProp.Name == "Text3DEffectProperties"; });
-                if (p3DEffectProps != std::cend(aGrabBagProps))
+                if (pText3DEffectProps != std::cend(aGrabBagProps))
                 {
                     auto pImportedRotation = std::find_if(
                         std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
@@ -2513,6 +2513,10 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
                         if (nAdjustedRotation < 0)
                             nAdjustedRotation += nFullTurn;
                         oMSORotation = static_cast<sal_Int32>(nAdjustedRotation);
+                        // Only replay the text camera when the imported model angle is known.
+                        // Without it the branch below would write the imported rotation and
+                        // drop a later rotation of the shape.
+                        p3DEffectProps = pText3DEffectProps;
                     }
                 }
             }

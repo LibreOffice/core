@@ -1869,6 +1869,29 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkText3DRotationRoundTrip)
     assertText3D(pRestored);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontworkText3DRotationWithoutImportedAngle)
+{
+    // Given WordArt with text 3D, but without the model angle that import records:
+    loadFromFile(u"fontwork-camera-rotation.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGrabBag(xShape->getPropertyValue(u"InteropGrabBag"_ustr));
+    CPPUNIT_ASSERT(aGrabBag.contains(u"Text3DEffectProperties"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aGrabBag.erase(u"OriginalText3DRotateAngle"_ustr));
+    xShape->setPropertyValue(u"InteropGrabBag"_ustr,
+                             uno::Any(aGrabBag.getAsConstPropertyValueList()));
+
+    // When the shape is rotated and exported:
+    xShape->setPropertyValue(u"RotateAngle"_ustr, uno::Any(sal_Int32(4000)));
+    save(TestFilter::PPTX);
+
+    // Then the rotation is exported, not the one from the grab bag:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:spPr/a:xfrm", "rot", u"19200000");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3dWriter)
 {
     // Given the same extruded Fontwork and rectangle in a Writer document, and a Fontwork turned
