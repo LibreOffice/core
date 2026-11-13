@@ -202,6 +202,13 @@ function documentPageGaps(pageWindow: any): void {
 	pageWindow.HTMLElement.prototype.scrollIntoView = () => {};
 }
 
+/// jsdom stops the page's timers on close, but requestAnimationFrame still works after it, so a
+/// frame loop that starts then keeps node running for ever. On a closed page it does nothing.
+function documentPageClose(pageWindow: any): void {
+	pageWindow.requestAnimationFrame = (): number => 0;
+	pageWindow.close();
+}
+
 function documentPageWait<T>(
 	test: () => T,
 	what: string,
@@ -359,10 +366,10 @@ async function openDocumentPage(docType: string): Promise<DocumentPage> {
 			errors,
 			serverSays,
 			waitFor: documentPageWait,
-			close: () => pageWindow.close(),
+			close: () => documentPageClose(pageWindow),
 		};
 	} catch (error) {
-		pageWindow.close();
+		documentPageClose(pageWindow);
 		if (errors.length)
 			error.message += '\nThe page reported:\n' + errors.join('\n');
 		throw error;
