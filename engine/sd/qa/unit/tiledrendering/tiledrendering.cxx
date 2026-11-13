@@ -8848,6 +8848,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeGhost)
     CPPUNIT_ASSERT(rMeasure.get_child_optional("measurement"));
     CPPUNIT_ASSERT(!rMeasure.get_child("transform").empty());
 
+    // a connector too, with the numbers its run is worked out from
+    tools::JsonWriter aConnectorWriter;
+    pXImpressDocument->getCommandValues(aConnectorWriter,
+                                        ".uno:ShapeGhost?Shape=ConnectorLinesArrowEnd");
+    std::stringstream aConnectorStream((std::string(aConnectorWriter.finishAndGetAsOString())));
+    boost::property_tree::ptree aConnectorTree;
+    boost::property_tree::read_json(aConnectorStream, aConnectorTree);
+    const boost::property_tree::ptree& rConnector
+        = aConnectorTree.get_child("commandValues.objects").front().second;
+    CPPUNIT_ASSERT_EQUAL(std::string("three"), rConnector.get<std::string>("routing.kind"));
+
     // the document does not know of it
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(nUndoCount, pDocument->GetUndoManager()->GetUndoActionCount());

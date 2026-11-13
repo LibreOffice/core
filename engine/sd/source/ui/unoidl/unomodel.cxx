@@ -106,6 +106,8 @@
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/style.hxx>
 #include <svl/cryptosign.hxx>
@@ -4202,21 +4204,25 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
     if (!pShell)
         return;
 
-    // the dimension line is no custom shape; its look carries the measurement it lays out
-    const bool bMeasureLine(aShape == u"MeasureLine");
     const auto pGroup
         = nDot == std::u16string_view::npos
               ? std::end(aGroups)
               : std::find_if(std::begin(aGroups), std::end(aGroups),
                              [aGroup = aShape.substr(0, nDot)](const auto& rGroup)
                              { return rGroup.first == aGroup; });
-    if (!bMeasureLine && pGroup == std::end(aGroups))
-        return;
 
-    const OUString aType(bMeasureLine ? std::u16string_view() : aShape.substr(nDot + 1));
+    // a dimension line or a connector is no custom shape; its look carries the measurement it
+    // lays out, or the numbers its run is worked out from, and its command names its slot
+    const bool bShape(pGroup != std::end(aGroups));
+    const SfxSlot* pSlot
+        = bShape ? nullptr
+                 : SfxSlotPool::GetSlotPool(pShell->GetViewFrame()).GetUnoSlot(OUString(aShape));
+
+    const OUString aType(bShape ? aShape.substr(nDot + 1) : std::u16string_view());
     const rtl::Reference<SdrObject> xDescribed(
-        bMeasureLine ? pShell->MakeDefaultMeasureLine()
-                     : pShell->MakeDefaultShape(pGroup->second, aType));
+        bShape ? pShell->MakeDefaultShape(pGroup->second, aType)
+               : pSlot ? pShell->MakeDefaultLineObject(pSlot->GetSlotId())
+                       : rtl::Reference<SdrObject>());
     SdrObject* pObject = xDescribed.get();
     SdPage* pPage = pShell->GetActualPage();
     if (!pObject || !pPage)

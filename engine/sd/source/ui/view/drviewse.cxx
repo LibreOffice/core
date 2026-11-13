@@ -1120,18 +1120,58 @@ OString DrawViewShell::GetShapeStyleKey()
     return OString(comphelper::hashToString(aHash));
 }
 
-rtl::Reference<SdrObject> DrawViewShell::MakeDefaultMeasureLine()
+rtl::Reference<SdrObject> DrawViewShell::MakeDefaultLineObject(sal_uInt16 nSlotId)
 {
-    // the view is set to create a dimension line while the tool makes it, and put back after
+    SdrObjKind eMade;
+    switch (nSlotId)
+    {
+        case SID_DRAW_MEASURELINE:
+            eMade = SdrObjKind::Measure;
+            break;
+        case SID_TOOL_CONNECTOR:
+        case SID_CONNECTOR_ARROW_START:
+        case SID_CONNECTOR_ARROW_END:
+        case SID_CONNECTOR_ARROWS:
+        case SID_CONNECTOR_CIRCLE_START:
+        case SID_CONNECTOR_CIRCLE_END:
+        case SID_CONNECTOR_CIRCLES:
+        case SID_CONNECTOR_LINE:
+        case SID_CONNECTOR_LINE_ARROW_START:
+        case SID_CONNECTOR_LINE_ARROW_END:
+        case SID_CONNECTOR_LINE_ARROWS:
+        case SID_CONNECTOR_LINE_CIRCLE_START:
+        case SID_CONNECTOR_LINE_CIRCLE_END:
+        case SID_CONNECTOR_LINE_CIRCLES:
+        case SID_CONNECTOR_CURVE:
+        case SID_CONNECTOR_CURVE_ARROW_START:
+        case SID_CONNECTOR_CURVE_ARROW_END:
+        case SID_CONNECTOR_CURVE_ARROWS:
+        case SID_CONNECTOR_CURVE_CIRCLE_START:
+        case SID_CONNECTOR_CURVE_CIRCLE_END:
+        case SID_CONNECTOR_CURVE_CIRCLES:
+        case SID_CONNECTOR_LINES:
+        case SID_CONNECTOR_LINES_ARROW_START:
+        case SID_CONNECTOR_LINES_ARROW_END:
+        case SID_CONNECTOR_LINES_ARROWS:
+        case SID_CONNECTOR_LINES_CIRCLE_START:
+        case SID_CONNECTOR_LINES_CIRCLE_END:
+        case SID_CONNECTOR_LINES_CIRCLES:
+            eMade = SdrObjKind::Edge;
+            break;
+        default:
+            return nullptr;
+    }
+
+    // the view is set to create that kind of object while the tool makes it, and put back after
     const SdrObjKind eKind(mpDrawView->GetCurrentObjIdentifier());
     const SdrInventor eInventor(mpDrawView->GetCurrentObjInventor());
-    mpDrawView->SetCurrentObj(SdrObjKind::Measure);
+    mpDrawView->SetCurrentObj(eMade);
 
-    SfxRequest aRequest(SID_DRAW_MEASURELINE, SfxCallMode::SYNCHRON, GetDoc()->GetPool());
+    SfxRequest aRequest(nSlotId, SfxCallMode::SYNCHRON, GetDoc()->GetPool());
     rtl::Reference<FuPoor> xFunction = FuConstructRectangle::Create(
         *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), aRequest, false);
     rtl::Reference<SdrObject> xLine = xFunction->CreateDefaultObject(
-        SID_DRAW_MEASURELINE, ::tools::Rectangle(Point(), GetDefaultObjectSize()));
+        nSlotId, ::tools::Rectangle(Point(), GetDefaultObjectSize()));
 
     mpDrawView->SetCurrentObj(eKind, eInventor);
     return xLine;

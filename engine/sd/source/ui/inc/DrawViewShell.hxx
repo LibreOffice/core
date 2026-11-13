@@ -216,9 +216,9 @@ public:
     /// Makes the default object of a custom shape, of that group's slot and that type, in the
     /// default size, as the custom shape tool makes it. It is not inserted anywhere.
     rtl::Reference<SdrObject> MakeDefaultShape(sal_uInt16 nSlotId, const OUString& rShapeType);
-    /// Makes the default dimension line in the default size, as the tool for it makes it. It is
-    /// not inserted anywhere.
-    rtl::Reference<SdrObject> MakeDefaultMeasureLine();
+    /// Makes the default dimension line or connector of that slot in the default size, as the
+    /// tool for it makes it; nothing for another slot. It is not inserted anywhere.
+    rtl::Reference<SdrObject> MakeDefaultLineObject(sal_uInt16 nSlotId);
     /// A key of the attributes a new shape of this view takes, its own and those of its style, and
     /// of the build that makes it: a hash in hexadecimal, the same as long as they are the same.
     OString GetShapeStyleKey();

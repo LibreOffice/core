@@ -943,10 +943,11 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 			? values.objects[0]
 			: undefined;
 		const primitives = entry?.primitives;
-		// a dimension line has no box; it is laid out from its measurement
+		// a dimension line or a connector has no box; it is laid out from its measurement, or
+		// its run is worked out from its routing numbers
 		const hasABox = values?.width > 0 && values?.height > 0;
-		if (!((hasABox || entry?.measurement) && Array.isArray(primitives)))
-			return null;
+		const laidOut = !!entry?.measurement || !!entry?.routing;
+		if (!((hasABox || laidOut) && Array.isArray(primitives))) return null;
 		const x = values.x ?? 0;
 		const y = values.y ?? 0;
 		return {
@@ -1355,6 +1356,12 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 		);
 	}
 
+	/// What the stand-in draws as hairlines: the lines of a dimension line where its look is
+	/// known; nothing for the plain line.
+	protected standInPolygons(): cool.ObjectPathPolygon[] | null {
+		return this.measured()?.outline ?? null;
+	}
+
 	/// Draws the line plain from its start to its end, half see-through while it is dragged; a
 	/// dimension line as laid out where its look is known.
 	protected drawTheObject(
@@ -1392,14 +1399,14 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 		its arrows.
 	*/
 	protected wasSent(box: cool.Range2D): void {
-		const measured = this.measured();
-		if (measured) ClassicShapeCreateContext.made(this.shape);
+		// a kind with a look keeps it, also over a restart; a plain line has none to keep
+		ClassicShapeCreateContext.made(this.shape);
 
 		const id = this.givenId;
 		const part = RenderGeometrySection.currentPart();
 		if (id === undefined || !part || !this.start || !this.end) return;
 		// the stand-in is the line, or the lines of the dimension line, as hairlines
-		const polygons: cool.ObjectPathPolygon[] = measured?.outline ?? [
+		const polygons: cool.ObjectPathPolygon[] = this.standInPolygons() ?? [
 			{ points: [this.start, this.end] },
 		];
 		const created: cool.SlideObject = {
@@ -1491,6 +1498,66 @@ class ClassicConnectorCreateContext extends ClassicLineCreateContext {
 	private here: ConnectorEndTie = null;
 	private startTie: ConnectorEndTie = null;
 	private endTie: ConnectorEndTie = null;
+
+	/// The look of the connector is asked for at once, where it is not known yet: it holds the
+	/// numbers its run is worked out from.
+	public started(): void {
+		super.started();
+		ClassicShapeCreateContext.knownLook(this.shape);
+	}
+
+	/*
+		The run the connector will take, worked out the way the engine works it out, from the
+		numbers of the default connector of its command and what its ends tie to: the place on
+		an object, or the point a free end lies at. Nothing before those numbers are known.
+	*/
+	private run(): cool.ObjectPathPoint[] | undefined {
+		const routing = ClassicShapeCreateContext.knownLook(this.shape)?.entry
+			?.routing;
+		const data = RenderGeometrySection.currentPart();
+		if (!routing || !data || !this.start || !this.end) return undefined;
+
+		const tieOf = (tie: ConnectorEndTie, at: cool.Point): cool.ConnectorTie =>
+			tie ? tie.tie : { x: at.x, y: at.y };
+		const nodeOf = (tie: ConnectorEndTie) =>
+			tie ? ConnectorRouter.nodeOf(data.objects.get(tie.objectId)) : undefined;
+		return ConnectorRouter.route(
+			{
+				...routing,
+				trackUserDefined: false,
+				lineDeltas: routing.lineDeltas.map(() => 0),
+				tieAtStart: tieOf(this.startTie, this.start),
+				tieAtEnd: tieOf(this.endTie, this.end),
+			},
+			nodeOf(this.startTie),
+			nodeOf(this.endTie),
+		);
+	}
+
+	/// The connector along the run it will take, where that is known, else as a line.
+	protected drawTheObject(
+		context: CanvasRenderingContext2D,
+		box: cool.Range2D,
+		whole: boolean,
+	): boolean {
+		const run = this.run();
+		if (!run) return super.drawTheObject(context, box, whole);
+		context.save();
+		context.globalAlpha = whole ? 1 : 0.5;
+		SelectionSection.strokeOutline(
+			context,
+			[{ closed: false, points: run }],
+			HandleLook.outlineColour,
+		);
+		context.restore();
+		return true;
+	}
+
+	/// The stand-in follows the run as well, where it is known.
+	protected standInPolygons(): cool.ObjectPathPolygon[] | null {
+		const run = this.run();
+		return run ? [{ closed: false, points: run }] : super.standInPolygons();
+	}
 
 	/// An end lands on the place within reach on the object under the mouse, else as a line's.
 	protected placeOf(at: cool.Point, modifier: number): cool.Point {
