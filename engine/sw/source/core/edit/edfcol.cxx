@@ -2262,7 +2262,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat, const bool bReset
                 SwRangeRedline * pRedline = new SwRangeRedline( RedlineType::ParagraphFormat, aPaM );
                 auto const result(GetDoc()->getIDocumentRedlineAccess().AppendRedline( pRedline, true));
                 // store original paragraph style to reject formatting change
-                if ( IDocumentRedlineAccess::AppendResult::IGNORED != result &&
+                if ( IDocumentRedlineAccess::AppendResult::APPENDED == result &&
                     ( nPoolId == SwPoolFormatId::COLL_STANDARD || !sParaStyleName.isEmpty() ) )
                 {
                     std::unique_ptr<SwRedlineExtraData_FormatColl> xExtra;

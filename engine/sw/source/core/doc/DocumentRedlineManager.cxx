@@ -2674,6 +2674,19 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             PreAppendFormatRedline(aContext);
             break;
 
+        case RedlineType::ParagraphFormat:
+            // A paragraph that already has a paragraph format change keeps that one, because it
+            // holds the oldest formatting, which rejecting the change sets again.
+            if (pRedl->GetType() == RedlineType::ParagraphFormat
+                && (eCmpPos == SwComparePosition::Equal || eCmpPos == SwComparePosition::Inside))
+            {
+                delete pNewRedl;
+                pNewRedl = nullptr;
+                // The existing change covers the new one, so the new one counts as merged into it.
+                bMerged = true;
+            }
+            break;
+
         case RedlineType::FmtColl:
             // How should we behave here?
             // insert as is

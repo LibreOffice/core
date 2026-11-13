@@ -3381,6 +3381,62 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMakeRedlineOverSameDeletion)
     CPPUNIT_ASSERT_EQUAL(u"Earlier Author"_ustr, rRedlines[0]->GetAuthorString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsParagraphStyleTwice)
+{
+    // Given a document where the paragraph has the Quote style, and an old version where it has
+    // the default style:
+    createSwDoc("compare-para-style-new.fodt");
+
+    // When comparing with the old version twice:
+    compareWith(u"compare-para-style-old.fodt");
+    compareWith(u"compare-para-style-old.fodt");
+
+    // Then the style change is shown once:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::ParagraphFormat, rRedlines[0]->GetType());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsBoldTwice)
+{
+    // Given a document where "world" is bold, and an old version where it is not:
+    createSwDoc("compare-bold-new.fodt");
+
+    // When comparing with the old version twice:
+    compareWith(u"compare-bold-old.fodt");
+    compareWith(u"compare-bold-old.fodt");
+
+    // Then the bold word is shown once as a formatting change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlines[0]->GetType());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMakeRedlineParagraphFormatTwice)
+{
+    // Given a document with a single paragraph, which is selected:
+    createSwDoc();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->setString(u"test"_ustr);
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+
+    // When tracking a paragraph format change on it twice through the API:
+    uno::Reference<text::XRedline> xRedline(xCursor, uno::UNO_QUERY);
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
+    xRedline->makeRedline(u"ParagraphFormat"_ustr, aProps);
+    // Without the fix in place, this test would have failed with an IllegalArgumentException,
+    // because the second redline was reported as not inserted.
+    xRedline->makeRedline(u"ParagraphFormat"_ustr, aProps);
+
+    // Then the paragraph has one paragraph format change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::ParagraphFormat, rRedlines[0]->GetType());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
