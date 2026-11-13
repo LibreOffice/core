@@ -28,14 +28,14 @@ const SLIDE_DRAG_GHOST_BORDER = 6;
  * slides the drag carries. The slide navigator's reorder drag and the
  * slide import pane's insert drag both build their ghost here.
  *
- * sources lists the pictures front to back, the grabbed slide first; blank
- * entries (a slide whose preview has not rendered yet) are skipped. count
- * is the full number of slides in the drag, which can exceed the pictures
- * shown. The caller appends the ghost to the document, hands it to
- * setDragImage and removes it once the browser has taken its snapshot.
+ * sources lists the pictures front to back, the grabbed slide first, each an image URL or the
+ * pixels of the picture. Blank URLs, for a slide whose preview has not rendered yet, are skipped.
+ * count is the full number of slides in the drag, which can exceed the pictures shown. The caller
+ * appends the ghost to the document, hands it to setDragImage and removes it once the browser has
+ * taken its snapshot.
  */
 function buildSlideDragGhost(
-  sources: string[],
+  sources: Array<string | HTMLCanvasElement | ImageBitmap>,
   width: number,
   height: number,
   count: number,
@@ -59,18 +59,22 @@ function buildSlideDragGhost(
   // grab point.
   for (let i = layers.length - 1; i >= 0; i--) {
     const offset = i * SLIDE_DRAG_GHOST_STACK_OFFSET;
-    ghost.appendChild(
-      <img
-        src={layers[i]}
-        alt=""
-        style={{
-          left: offset + 'px',
-          top: offset + 'px',
-          width: width + 'px',
-          height: height + 'px',
-        }}
-      />,
-    );
+    const style = {
+      left: offset + 'px',
+      top: offset + 'px',
+      width: width + 'px',
+      height: height + 'px',
+    };
+    const source = layers[i];
+    if (typeof source === 'string') {
+      ghost.appendChild(<img src={source} alt="" style={style} />);
+      continue;
+    }
+    const canvas = (
+      <canvas width={source.width} height={source.height} style={style} />
+    ) as HTMLCanvasElement;
+    canvas.getContext('2d')?.drawImage(source, 0, 0);
+    ghost.appendChild(canvas);
   }
   if (count > 1) {
     ghost.appendChild(

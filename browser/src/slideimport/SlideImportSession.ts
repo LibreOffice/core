@@ -46,9 +46,8 @@ interface SlideImportSection {
 }
 
 interface SlideImportThumbnail {
-	url: string;
-	width: number;
-	height: number;
+	// The picture of the slide, in device pixels.
+	picture: HTMLCanvasElement | ImageBitmap;
 }
 
 interface SlideImportError {

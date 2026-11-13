@@ -189,7 +189,8 @@
 	z-index: -1;
 }
 
-.slide-drag-ghost img {
+.slide-drag-ghost img,
+.slide-drag-ghost canvas {
 	display: block;
 	position: absolute;
 	border: 3px solid var(--color-border);

@@ -809,15 +809,22 @@ class SlideImportPane {
     const slot = this.thumbnailSlotOf(source, textMsg);
     if (slot === undefined) return;
 
-    source.thumbnails.set(slot, {
-      url: app.socket.pngDataUrl(imgBytes.subarray(imgIndex)),
-      width: source.docWidth,
-      height: source.docHeight,
-    });
-
-    // The slide frames already exist from the presentation info, so drop the
-    // arrived thumbnail into its slot without rebuilding the list.
-    this.updateThumbnail(source, slot);
+    // A tile can arrive without the first byte of the PNG signature.
+    const png = imgBytes.subarray(imgIndex);
+    const parts: BlobPart[] =
+      png[0] === 0x89 ? [png] : [new Uint8Array([0x89]), png];
+    const partId = source.slideParts[slot];
+    createImageBitmap(new Blob(parts, { type: 'image/png' })).then(
+      (bitmap) => {
+        if (source.slideParts[slot] !== partId) return;
+        source.thumbnails.set(slot, { picture: bitmap });
+        // The slide frames already exist from the presentation info, so drop the arrived thumbnail
+        // into its slot without rebuilding the list.
+        this.updateThumbnail(source, slot);
+      },
+      () =>
+        window.app.console.warn('slide import: a thumbnail does not decode'),
+    );
   }
 
   // A thumbnail that the source sent as vector content, which is drawn here at the size of the
@@ -851,11 +858,7 @@ class SlideImportPane {
     const [width, height] = this.thumbnailPixelSize(source);
     VectorThumbnail.draw(thumbnail, width, height).then((canvas) => {
       if (!canvas || source.slideParts[slot] !== partId) return;
-      source.thumbnails.set(slot, {
-        url: canvas.toDataURL('image/png'),
-        width: source.docWidth,
-        height: source.docHeight,
-      });
+      source.thumbnails.set(slot, { picture: canvas });
       this.updateThumbnail(source, slot);
     });
   }
@@ -1052,10 +1055,20 @@ class SlideImportPane {
       '.slide-import-slide[data-index="' + index + '"]',
     );
     if (!option) return;
-    const img = option.querySelector('.preview-img') as HTMLImageElement;
-    if (!img) return;
-    img.src = thumbnail.url;
-    img.classList.remove('slide-import-skeleton');
+    const canvas = option.querySelector('.preview-img') as HTMLCanvasElement;
+    if (!canvas) return;
+    SlideImportPane.drawThumbnail(canvas, thumbnail);
+  }
+
+  // Draws a thumbnail into the canvas of its frame, which takes the size of the thumbnail.
+  private static drawThumbnail(
+    canvas: HTMLCanvasElement,
+    thumbnail: SlideImportThumbnail,
+  ): void {
+    canvas.width = thumbnail.picture.width;
+    canvas.height = thumbnail.picture.height;
+    canvas.getContext('2d')?.drawImage(thumbnail.picture, 0, 0);
+    canvas.classList.remove('slide-import-skeleton');
   }
 
   private onInserted(e: any): void {
@@ -2093,22 +2106,13 @@ class SlideImportPane {
       });
   }
 
-  // A blank picture with the slide's shape. Its intrinsic size gives the
-  // frame the same footprint as the rendered thumbnail that replaces it,
-  // so the list does not jump when the image arrives.
-  private placeholderUrl(source: SlideImportPaneSource): string {
-    const width = source.docWidth > 0 ? source.docWidth : 16;
-    const height = source.docHeight > 0 ? source.docHeight : 9;
-    return (
-      'data:image/svg+xml,' +
-      encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="' +
-          width +
-          '" height="' +
-          height +
-          '"/>',
-      )
-    );
+  // The size of a slide frame's canvas before its thumbnail arrives: the thumbnail size, so the
+  // list keeps its layout when the thumbnail is drawn in. Before the source names its page size it
+  // is 16:9.
+  private blankThumbnailSize(source: SlideImportPaneSource): [number, number] {
+    return source.docWidth > 0 && source.docHeight > 0
+      ? this.thumbnailPixelSize(source)
+      : [16, 9];
   }
 
   // The slide carries the navigator's preview markup and classes, so
@@ -2125,6 +2129,19 @@ class SlideImportPane {
     const active = this.isActive(source);
     const selected = active && this.session.selection.has(index);
     const focused = active ? index === this.focusIndex : index === 0;
+    const [width, height] = this.blankThumbnailSize(source);
+    const picture = (
+      <canvas
+        class={
+          'preview-img slide-import-skeleton' +
+          (selected ? ' preview-img-selectedpart' : '')
+        }
+        width={width}
+        height={height}
+        aria-hidden="true"
+      />
+    ) as HTMLCanvasElement;
+    if (thumbnail) SlideImportPane.drawThumbnail(picture, thumbnail);
     return (
       <div
         class={
@@ -2145,15 +2162,7 @@ class SlideImportPane {
         <span class="preview-helper" />
         <span class="preview-slide-number" aria-hidden="true" />
         <span class="slide-import-thumb">
-          <img
-            class={
-              'preview-img' +
-              (selected ? ' preview-img-selectedpart' : '') +
-              (thumbnail ? '' : ' slide-import-skeleton')
-            }
-            src={thumbnail ? thumbnail.url : this.placeholderUrl(source)}
-            alt=""
-          />
+          {picture}
           <span
             class={'slide-import-checkbox' + (selected ? ' checked' : '')}
             aria-hidden="true"
@@ -2215,14 +2224,16 @@ class SlideImportPane {
   ): void {
     if (!e.dataTransfer.setDragImage) return;
     const frame = e.currentTarget as HTMLElement;
-    const img = frame.querySelector('.preview-img') as HTMLImageElement | null;
-    if (!img) return;
-    const rect = img.getBoundingClientRect();
+    const picture = frame.querySelector('.preview-img');
+    if (!picture) return;
+    const rect = picture.getBoundingClientRect();
     const sources = [index]
       .concat(slides.filter((slide) => slide !== index))
       .map((slide) => {
         const thumbnail = source.thumbnails.get(slide);
-        return thumbnail ? thumbnail.url : this.placeholderUrl(source);
+        if (thumbnail) return thumbnail.picture;
+        const [width, height] = this.blankThumbnailSize(source);
+        return (<canvas width={width} height={height} />) as HTMLCanvasElement;
       });
     const ghost = buildSlideDragGhost(
       sources,
