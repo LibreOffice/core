@@ -291,7 +291,7 @@ public:
     // helper methods for the StarOffice api
     SAL_DLLPRIVATE Point GetTailPoint( bool bTail ) const;
     void SetTailPoint( bool bTail, const Point& rPt );
-    SAL_DLLPRIVATE void setGluePointIndex( bool bTail, sal_Int32 nId = -1 );
+    void setGluePointIndex( bool bTail, sal_Int32 nId = -1 );
     SAL_DLLPRIVATE sal_Int32 getGluePointIndex( bool bTail );
 
     SAL_DLLPRIVATE virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;

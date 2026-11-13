@@ -177,6 +177,19 @@ its start to its end:
 | Let go | The line is made from the start to the end and selected at once, also before the engine has answered; its arrows show once the engine has. An arrow at the start stays at the start, whichever way the line was dragged. The mode is over. |
 | Escape, a click without a drag, a command, a press elsewhere, another slide | End the mode without a line. |
 
+### Creating a connector
+
+A connector chosen from the Connectors grid - in the Home tab, or in the grid of Lines in the
+Insert tab - or anywhere else puts one into the same mode for a connector. It is dragged out from
+its start to its end:
+
+| What | What happens |
+|---|---|
+| Before the press | The object under the mouse shows the places a connector can tie itself to, its own glue points and the middles of its sides. The one within reach is lit, and the press would start there. |
+| Press and drag | The connector shows as a line from its start to the mouse, with its length. The object under the mouse shows its places, and the end snaps to the one within reach. The start keeps showing the place it is tied to. |
+| Let go | The connector is made, tied at each end as shown: to a glue point of its own, to the middle of a side, or to the object as a whole where an end stands on its middle. An end over none of them stays free. It is selected at once, also before the engine has answered. The mode is over. |
+| Escape, a click without a drag, a command, a press elsewhere, another slide | End the mode without a connector. |
+
 
 ## 2. Changing objects
 

@@ -60,6 +60,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
+#include <svx/svdoedge.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
@@ -8670,6 +8671,49 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertShapeIntoSlide)
     // Undo removes it again.
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateConnectorBetweenPoints)
+{
+    // a connector dragged out in the client from one shape to another is tied as the client says
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+
+    // a box as X, Y, Width and Height, or two points as StartX, StartY, EndX and EndY, in twips
+    const auto inTwips = [](sal_Int32 nX, sal_Int32 nY, sal_Int32 nX2, sal_Int32 nY2,
+                            bool bPoints) {
+        return comphelper::InitPropertySequence({
+            { bPoints ? u"StartX"_ustr : u"X"_ustr, cpo::uno::Any(nX) },
+            { bPoints ? u"StartY"_ustr : u"Y"_ustr, cpo::uno::Any(nY) },
+            { bPoints ? u"EndX"_ustr : u"Width"_ustr, cpo::uno::Any(nX2) },
+            { bPoints ? u"EndY"_ustr : u"Height"_ustr, cpo::uno::Any(nY2) },
+        });
+    };
+    dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr,
+                    inTwips(1000, 1000, 2000, 1000, false));
+    SdrObject* pFirst = pSlide->GetObj(pSlide->GetObjCount() - 1);
+    dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr,
+                    inTwips(5000, 3000, 2000, 1000, false));
+    SdrObject* pSecond = pSlide->GetObj(pSlide->GetObjCount() - 1);
+
+    // from the middle of the right side of the first to the middle of the left side of the second,
+    // tied to those two of the four sides
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(inTwips(3000, 1500, 5000, 3500, true));
+    const OUString aTies(OUString::number(pFirst->GetUniqueID()) + " 1 "
+                         + OUString::number(pSecond->GetUniqueID()) + " 3");
+    aArgs.realloc(aArgs.getLength() + 1);
+    aArgs.getArray()[aArgs.getLength() - 1] = comphelper::makePropertyValue(u"Ties"_ustr, aTies);
+    dispatchCommand(mxComponent, u".uno:Connector"_ustr, aArgs);
+
+    auto pConnector = dynamic_cast<SdrEdgeObj*>(pSlide->GetObj(pSlide->GetObjCount() - 1));
+    CPPUNIT_ASSERT(pConnector);
+    CPPUNIT_ASSERT_EQUAL(pFirst, pConnector->GetConnectedNode(true));
+    CPPUNIT_ASSERT_EQUAL(pSecond, pConnector->GetConnectedNode(false));
+    // a middle of a side is one of the four every object has, counted from 0
+    CPPUNIT_ASSERT(pConnector->GetConnection(true).IsAutoVertex());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pConnector->GetConnection(true).GetConnectorId());
+    CPPUNIT_ASSERT(pConnector->GetConnection(false).IsAutoVertex());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pConnector->GetConnection(false).GetConnectorId());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateLineBetweenPoints)

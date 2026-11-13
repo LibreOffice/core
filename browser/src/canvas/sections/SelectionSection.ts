@@ -1034,9 +1034,21 @@ abstract class SelectionSection extends CanvasSectionObject {
 		tie: cool.ConnectorTie;
 		point?: cool.Point;
 	} | null {
-		const aimed = this.aimingAt;
-		if (aimed === null) return null;
+		return this.aimingAt === null
+			? null
+			: SelectionSection.tieOn(this.aimingAt, at);
+	}
 
+	/// Where an end of a connector at that point would tie itself to that object, by the same
+	/// rule as an end dragged there; nothing where it would stay free.
+	public static tieOn(
+		aimed: number,
+		at: cool.Point,
+	): {
+		objectId: number;
+		tie: cool.ConnectorTie;
+		point?: cool.Point;
+	} | null {
 		const object = RenderGeometrySection.objectOf(aimed);
 		if (!object) return null;
 
@@ -1713,6 +1725,47 @@ abstract class SelectionSection extends CanvasSectionObject {
 			polygons,
 			HandleLook.outlineOfADrag,
 		);
+	}
+
+	/*
+		Draws the places an end of a connector can tie itself to on that object, its own points
+		and the middles of its sides, as the drag of an end shows them; the one at that point is
+		lit.
+	*/
+	public static paintTargets(
+		context: CanvasRenderingContext2D,
+		objectId: number,
+		lit: cool.Point | null,
+	): void {
+		const size = ShapeHandlesSection.handleSize();
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
+		for (const target of [
+			...GluePointHandles.ownPointsOf(objectId),
+			...GluePointHandles.defaultPointsOf(objectId),
+		]) {
+			const isLit = !!lit && target.point.equals(lit);
+			context.beginPath();
+			context.strokeStyle = HandleLook.outlineColour;
+			context.fillStyle = HandleLook.lay(
+				context,
+				'tiePoint',
+				HandleLook.drawnAt(target),
+				isLit ? size / 8 : 0,
+			);
+			context.closePath();
+			context.fill();
+			context.stroke();
+			if (isLit) {
+				context.strokeStyle = SelectionSection.underTheMouse(
+					String(context.fillStyle),
+				);
+				context.lineWidth = 2 * app.dpiScale;
+				context.stroke();
+				context.lineWidth = 1;
+			}
+		}
+		context.restore();
 	}
 
 	/// Draws those polygons, given in twips, as a thin line of that colour on the canvas.

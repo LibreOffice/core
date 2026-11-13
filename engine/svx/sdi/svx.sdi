@@ -11002,7 +11002,8 @@ SfxBoolItem ProtectSize SID_ATTR_TRANSFORM_PROTECT_SIZE
 ]
 
 SfxBoolItem Connector SID_TOOL_CONNECTOR
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -11018,7 +11019,8 @@ SfxBoolItem Connector SID_TOOL_CONNECTOR
 ]
 
 SfxBoolItem ConnectorArrowEnd SID_CONNECTOR_ARROW_END
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11034,7 +11036,8 @@ SfxBoolItem ConnectorArrowEnd SID_CONNECTOR_ARROW_END
 ]
 
 SfxBoolItem ConnectorArrows SID_CONNECTOR_ARROWS
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11050,7 +11053,8 @@ SfxBoolItem ConnectorArrows SID_CONNECTOR_ARROWS
 ]
 
 SfxBoolItem ConnectorArrowStart SID_CONNECTOR_ARROW_START
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11066,7 +11070,8 @@ SfxBoolItem ConnectorArrowStart SID_CONNECTOR_ARROW_START
 ]
 
 SfxBoolItem ConnectorCircleEnd SID_CONNECTOR_CIRCLE_END
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11082,7 +11087,8 @@ SfxBoolItem ConnectorCircleEnd SID_CONNECTOR_CIRCLE_END
 ]
 
 SfxBoolItem ConnectorCircles SID_CONNECTOR_CIRCLES
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11098,7 +11104,8 @@ SfxBoolItem ConnectorCircles SID_CONNECTOR_CIRCLES
 ]
 
 SfxBoolItem ConnectorCircleStart SID_CONNECTOR_CIRCLE_START
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11114,7 +11121,8 @@ SfxBoolItem ConnectorCircleStart SID_CONNECTOR_CIRCLE_START
 ]
 
 SfxBoolItem ConnectorCurve SID_CONNECTOR_CURVE
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11130,7 +11138,8 @@ SfxBoolItem ConnectorCurve SID_CONNECTOR_CURVE
 ]
 
 SfxBoolItem ConnectorCurveArrowEnd SID_CONNECTOR_CURVE_ARROW_END
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11146,7 +11155,8 @@ SfxBoolItem ConnectorCurveArrowEnd SID_CONNECTOR_CURVE_ARROW_END
 ]
 
 SfxBoolItem ConnectorCurveArrows SID_CONNECTOR_CURVE_ARROWS
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11162,7 +11172,8 @@ SfxBoolItem ConnectorCurveArrows SID_CONNECTOR_CURVE_ARROWS
 ]
 
 SfxBoolItem ConnectorCurveArrowStart SID_CONNECTOR_CURVE_ARROW_START
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11178,7 +11189,8 @@ SfxBoolItem ConnectorCurveArrowStart SID_CONNECTOR_CURVE_ARROW_START
 ]
 
 SfxBoolItem ConnectorCurveCircleEnd SID_CONNECTOR_CURVE_CIRCLE_END
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11194,7 +11206,8 @@ SfxBoolItem ConnectorCurveCircleEnd SID_CONNECTOR_CURVE_CIRCLE_END
 ]
 
 SfxBoolItem ConnectorCurveCircles SID_CONNECTOR_CURVE_CIRCLES
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11210,7 +11223,8 @@ SfxBoolItem ConnectorCurveCircles SID_CONNECTOR_CURVE_CIRCLES
 ]
 
 SfxBoolItem ConnectorCurveCircleStart SID_CONNECTOR_CURVE_CIRCLE_START
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11226,7 +11240,8 @@ SfxBoolItem ConnectorCurveCircleStart SID_CONNECTOR_CURVE_CIRCLE_START
 ]
 
 SfxBoolItem ConnectorLine SID_CONNECTOR_LINE
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11242,7 +11257,8 @@ SfxBoolItem ConnectorLine SID_CONNECTOR_LINE
 ]
 
 SfxBoolItem ConnectorLineArrowEnd SID_CONNECTOR_LINE_ARROW_END
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11258,7 +11274,8 @@ SfxBoolItem ConnectorLineArrowEnd SID_CONNECTOR_LINE_ARROW_END
 ]
 
 SfxBoolItem ConnectorLineArrows SID_CONNECTOR_LINE_ARROWS
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11274,7 +11291,8 @@ SfxBoolItem ConnectorLineArrows SID_CONNECTOR_LINE_ARROWS
 ]
 
 SfxBoolItem ConnectorLineArrowStart SID_CONNECTOR_LINE_ARROW_START
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11290,7 +11308,8 @@ SfxBoolItem ConnectorLineArrowStart SID_CONNECTOR_LINE_ARROW_START
 ]
 
 SfxBoolItem ConnectorLineCircleEnd SID_CONNECTOR_LINE_CIRCLE_END
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11306,7 +11325,8 @@ SfxBoolItem ConnectorLineCircleEnd SID_CONNECTOR_LINE_CIRCLE_END
 ]
 
 SfxBoolItem ConnectorLineCircles SID_CONNECTOR_LINE_CIRCLES
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11322,7 +11342,8 @@ SfxBoolItem ConnectorLineCircles SID_CONNECTOR_LINE_CIRCLES
 ]
 
 SfxBoolItem ConnectorLineCircleStart SID_CONNECTOR_LINE_CIRCLE_START
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11338,7 +11359,8 @@ SfxBoolItem ConnectorLineCircleStart SID_CONNECTOR_LINE_CIRCLE_START
 ]
 
 SfxBoolItem ConnectorLines SID_CONNECTOR_LINES
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11354,7 +11376,8 @@ SfxBoolItem ConnectorLines SID_CONNECTOR_LINES
 ]
 
 SfxBoolItem ConnectorLinesArrowEnd SID_CONNECTOR_LINES_ARROW_END
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11370,7 +11393,8 @@ SfxBoolItem ConnectorLinesArrowEnd SID_CONNECTOR_LINES_ARROW_END
 ]
 
 SfxBoolItem ConnectorLinesArrows SID_CONNECTOR_LINES_ARROWS
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11386,7 +11410,8 @@ SfxBoolItem ConnectorLinesArrows SID_CONNECTOR_LINES_ARROWS
 ]
 
 SfxBoolItem ConnectorLinesArrowStart SID_CONNECTOR_LINES_ARROW_START
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11402,7 +11427,8 @@ SfxBoolItem ConnectorLinesArrowStart SID_CONNECTOR_LINES_ARROW_START
 ]
 
 SfxBoolItem ConnectorLinesCircleEnd SID_CONNECTOR_LINES_CIRCLE_END
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11418,7 +11444,8 @@ SfxBoolItem ConnectorLinesCircleEnd SID_CONNECTOR_LINES_CIRCLE_END
 ]
 
 SfxBoolItem ConnectorLinesCircles SID_CONNECTOR_LINES_CIRCLES
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -11434,7 +11461,8 @@ SfxBoolItem ConnectorLinesCircles SID_CONNECTOR_LINES_CIRCLES
 ]
 
 SfxBoolItem ConnectorLinesCircleStart SID_CONNECTOR_LINES_CIRCLE_START
-
+(SfxStringItem Ties FN_PARAM_1, SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

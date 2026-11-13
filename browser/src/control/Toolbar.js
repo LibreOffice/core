@@ -13,7 +13,7 @@
  * Toolbar handler
  */
 
-/* global app $ window brandProductName DocUtil GraphicSelection _ Interaction ClassicCreateContext ClassicLineCreateContext */
+/* global app $ window brandProductName DocUtil GraphicSelection _ Interaction ClassicCreateContext ClassicLineCreateContext ClassicConnectorCreateContext */
 
 window.L.Map.include({
 
@@ -322,10 +322,11 @@ window.L.Map.include({
 		// a command ends a mode one was put into, as creating a shape by a drag
 		Interaction.leaveMode();
 
-		// in a view that draws from objects a line chosen anywhere is dragged out where it goes;
-		// the command that brings its points goes out as it is
+		// in a view that draws from objects a line or a connector chosen anywhere is dragged out
+		// where it goes; the command that brings its points goes out as it is
 		var line = command.startsWith('.uno:') ? command.substring('.uno:'.length) : '';
-		if ((!json || Object.keys(json).length === 0) && ClassicLineCreateContext.makes(line) &&
+		if ((!json || Object.keys(json).length === 0) &&
+			(ClassicLineCreateContext.makes(line) || ClassicConnectorCreateContext.makes(line)) &&
 			ClassicCreateContext.canCreate(line)) {
 			ClassicCreateContext.start(line);
 			return;

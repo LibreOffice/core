@@ -73,7 +73,8 @@ abstract class ClassicCreateContext implements InteractionMode {
 		return (
 			(ClassicShapeCreateContext.makes(shape) ||
 				ClassicTextCreateContext.makes(shape) ||
-				ClassicLineCreateContext.makes(shape)) &&
+				ClassicLineCreateContext.makes(shape) ||
+				ClassicConnectorCreateContext.makes(shape)) &&
 			RenderGeometrySection.answersPointer() &&
 			app.map.isEditMode()
 		);
@@ -89,7 +90,9 @@ abstract class ClassicCreateContext implements InteractionMode {
 			? new ClassicTextCreateContext(shape)
 			: ClassicLineCreateContext.makes(shape)
 				? new ClassicLineCreateContext(shape)
-				: new ClassicShapeCreateContext(shape);
+				: ClassicConnectorCreateContext.makes(shape)
+					? new ClassicConnectorCreateContext(shape)
+					: new ClassicShapeCreateContext(shape);
 		Interaction.enterMode(mode);
 		mode.started();
 	}
@@ -220,8 +223,18 @@ abstract class ClassicCreateContext implements InteractionMode {
 	/// Whether the last snap was to the grid, where every point snaps.
 	private snappedToTheGrid: boolean = false;
 
+	/// Where the mouse at that point places the drag; for most kinds the point snapped.
+	protected placeOf(at: cool.Point, modifier: number): cool.Point {
+		return this.snapped(at, modifier);
+	}
+
+	/// What a kind draws besides the object and the readings; nothing for most kinds.
+	protected drawMore(_context: CanvasRenderingContext2D): void {
+		// Most kinds draw nothing more.
+	}
+
 	/// That point of the page snapped as the drag snaps, to the grid or to the other objects.
-	private snapped(at: cool.Point, modifier: number): cool.Point {
+	protected snapped(at: cool.Point, modifier: number): cool.Point {
 		const point = new cool.SimplePoint(at.x, at.y);
 		const turnedOver =
 			(modifier & (app.UNOModifier.CTRL | app.UNOModifier.CTRLMAC)) !== 0;
@@ -268,7 +281,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 		if (this.leftThePart()) return;
 		this.lastAt = at;
 		this.lastPressed = pressed;
-		const point = this.snapped(at, modifier);
+		const point = this.placeOf(at, modifier);
 		if (!pressed || !this.from) {
 			this.hover = point;
 			return;
@@ -282,7 +295,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 
 	mouseDown(at: cool.Point, modifier: number): void {
 		if (this.leftThePart()) return;
-		this.from = this.snapped(at, modifier);
+		this.from = this.placeOf(at, modifier);
 		this.pressedAt = at;
 		this.hover = null;
 		this.box = null;
@@ -477,6 +490,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 				true,
 			);
 		}
+		this.drawMore(context);
 		context.restore();
 	}
 
@@ -1222,8 +1236,8 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 	}
 
 	/// The start and the end of the line as dragged, in twips; null while no drag runs.
-	private start: cool.Point | null = null;
-	private end: cool.Point | null = null;
+	protected start: cool.Point | null = null;
+	protected end: cool.Point | null = null;
 
 	/// The id given to the line sent, one reserved for this view; undefined where none was at
 	/// hand, and the line then takes one of its own.
@@ -1418,5 +1432,139 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 			this.forgetTheSent();
 			GraphicSelection.selectAndShow([id]);
 		}
+	}
+}
+
+/// Where an end of a connector ties itself: the object, and the place on it as the engine counts
+/// it.
+type ConnectorEndTie = ReturnType<typeof SelectionSection.tieOn>;
+
+/*
+	Creating a connector by dragging it out from its start to its end, as the office does: the
+	object under the mouse shows the places an end can tie itself to, already before the press,
+	and the start and the end snap to the one within reach, which is lit. An end let go of over
+	none of them stays free. The connector is drawn as a line between its ends until the engine
+	reports it, tied as the client found its ends.
+*/
+class ClassicConnectorCreateContext extends ClassicLineCreateContext {
+	/// The commands that make a connector.
+	private static readonly connectors: string[] = [
+		'Connector',
+		'ConnectorArrowStart',
+		'ConnectorArrowEnd',
+		'ConnectorArrows',
+		'ConnectorCircleStart',
+		'ConnectorCircleEnd',
+		'ConnectorCircles',
+		'ConnectorLine',
+		'ConnectorLineArrowStart',
+		'ConnectorLineArrowEnd',
+		'ConnectorLineArrows',
+		'ConnectorLineCircleStart',
+		'ConnectorLineCircleEnd',
+		'ConnectorLineCircles',
+		'ConnectorCurve',
+		'ConnectorCurveArrowStart',
+		'ConnectorCurveArrowEnd',
+		'ConnectorCurveArrows',
+		'ConnectorCurveCircleStart',
+		'ConnectorCurveCircleEnd',
+		'ConnectorCurveCircles',
+		'ConnectorLines',
+		'ConnectorLinesArrowStart',
+		'ConnectorLinesArrowEnd',
+		'ConnectorLinesArrows',
+		'ConnectorLinesCircleStart',
+		'ConnectorLinesCircleEnd',
+		'ConnectorLinesCircles',
+	];
+
+	/// Whether that command makes a connector.
+	public static makes(shape: string): boolean {
+		return ClassicConnectorCreateContext.connectors.indexOf(shape) >= 0;
+	}
+
+	/// The object under the mouse, whose places to tie to are shown; null over none.
+	private aimed: number | null = null;
+
+	/// Where the mouse would tie an end now, and where the start and the end are tied.
+	private here: ConnectorEndTie = null;
+	private startTie: ConnectorEndTie = null;
+	private endTie: ConnectorEndTie = null;
+
+	/// An end lands on the place within reach on the object under the mouse, else as a line's.
+	protected placeOf(at: cool.Point, modifier: number): cool.Point {
+		const under = RenderGeometrySection.objectIdAt(at.x, at.y);
+		this.aimed = under ?? null;
+		this.here =
+			this.aimed === null ? null : SelectionSection.tieOn(this.aimed, at);
+		return this.here?.point ?? (this.here ? at : this.snapped(at, modifier));
+	}
+
+	mouseDown(at: cool.Point, modifier: number): void {
+		super.mouseDown(at, modifier);
+		this.startTie = this.here;
+		this.endTie = null;
+	}
+
+	/// A connector goes from where the drag began to the mouse; Shift and Alt change nothing.
+	protected dragTo(
+		from: cool.Point,
+		to: cool.Point,
+		_modifier: number,
+	): cool.Range2D | null {
+		this.start = from;
+		this.end = to;
+		this.endTie = this.here;
+		return cool.Range2D.fromPoints([from, to]);
+	}
+
+	/*
+		The ties go along as four numbers: the object at the start and its place, then the same
+		for the end. A place counts as the engine counts the glue points of a connector: -1 for
+		the best side, 0 to 3 for the middles of the sides, and an own point by its id and 3.
+		An object of 0 leaves that end free.
+	*/
+	protected moreArguments(): { [name: string]: { type: string; value: any } } {
+		const counted = (tie: ConnectorEndTie): string => {
+			if (!tie) return '0 -1';
+			const place = tie.tie.autoVertex
+				? (tie.tie.point ?? 0)
+				: tie.tie.bestVertex
+					? -1
+					: (tie.tie.point ?? 0) + 3;
+			return tie.objectId + ' ' + place;
+		};
+		return {
+			...super.moreArguments(),
+			Ties: {
+				type: 'string',
+				value: counted(this.startTie) + ' ' + counted(this.endTie),
+			},
+		};
+	}
+
+	/// A connector shows its length only.
+	protected readingOf(_size: cool.Point): string {
+		if (!this.start || !this.end) return '';
+		return ClassicCreateContext.inTheUnit(
+			Math.hypot(this.end.x - this.start.x, this.end.y - this.start.y),
+		);
+	}
+
+	/// The places to tie to on the object under the mouse, and the one the start is tied to.
+	protected drawMore(context: CanvasRenderingContext2D): void {
+		if (this.aimed !== null)
+			SelectionSection.paintTargets(
+				context,
+				this.aimed,
+				this.here?.point ?? null,
+			);
+		if (this.startTie && this.startTie.objectId !== this.aimed)
+			SelectionSection.paintTargets(
+				context,
+				this.startTie.objectId,
+				this.startTie.point ?? null,
+			);
 	}
 }

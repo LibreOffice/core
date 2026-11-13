@@ -41,6 +41,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdomeas.hxx>
+#include <svx/svdoedge.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdorect.hxx>
@@ -76,6 +77,7 @@
 #include <tools/UniqueID.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <svx/svdoashp.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 
 #include <DrawViewShell.hxx>
@@ -123,6 +125,7 @@
 #include <svx/srchdlg.hxx>
 
 #include <algorithm>
+#include <array>
 #include <functional>
 #include <libxml/xmlwriter.h>
 #include <rtl/strbuf.hxx>
@@ -170,8 +173,9 @@ static std::optional<::tools::Rectangle> lcl_getRequestedRectangle(SfxRequest co
                               Size(toMm100(nWidth), toMm100(nHeight)));
 }
 
-// the two points a line is to be created between, given with the request in twips on the slide;
-// FN_PARAM_4 is left out, as the rectangle function reads it as IsSticky for every slot
+// the two points a line or a connector is to be created between, given with the request in twips
+// on the slide; FN_PARAM_4 is left out, as the rectangle function reads it as IsSticky for every
+// slot
 static std::optional<std::pair<Point, Point>> lcl_getRequestedLine(SfxRequest const& rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -201,6 +205,29 @@ static std::optional<std::pair<Point, Point>> lcl_getRequestedLine(SfxRequest co
     if (aStart == aEnd)
         return std::nullopt;
     return std::make_pair(aStart, aEnd);
+}
+
+// what the ends of a connector are to be tied to, given with the request as four numbers: the id of
+// the object at the start and the index of its glue point, then the same for the end; an object id
+// of 0 leaves that end free, and the index counts as the glue point properties of a connector do
+static std::optional<std::array<sal_Int64, 4>> lcl_getRequestedTies(SfxRequest const& rReq)
+{
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    const auto* pTies
+        = pArgs ? dynamic_cast<const SfxStringItem*>(pArgs->GetItem(FN_PARAM_1, false)) : nullptr;
+    if (!pTies)
+        return std::nullopt;
+
+    std::array<sal_Int64, 4> aTies;
+    sal_Int32 nAt = 0;
+    for (sal_Int64& rTie : aTies)
+    {
+        const std::u16string_view aNumber(o3tl::getToken(pTies->GetValue(), 0, ' ', nAt));
+        if (aNumber.empty())
+            return std::nullopt;
+        rTie = o3tl::toInt64(aNumber);
+    }
+    return aTies;
 }
 
 static void ImpAddPrintableCharactersToTextEdit(SfxRequest const & rReq, ::sd::View* pView)
@@ -630,6 +657,34 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 case SID_LINE_CIRCLE_ARROW:
                 case SID_LINE_ARROW_SQUARE:
                 case SID_LINE_SQUARE_ARROW:
+                case SID_TOOL_CONNECTOR:
+                case SID_CONNECTOR_ARROW_START:
+                case SID_CONNECTOR_ARROW_END:
+                case SID_CONNECTOR_ARROWS:
+                case SID_CONNECTOR_CIRCLE_START:
+                case SID_CONNECTOR_CIRCLE_END:
+                case SID_CONNECTOR_CIRCLES:
+                case SID_CONNECTOR_LINE:
+                case SID_CONNECTOR_LINE_ARROW_START:
+                case SID_CONNECTOR_LINE_ARROW_END:
+                case SID_CONNECTOR_LINE_ARROWS:
+                case SID_CONNECTOR_LINE_CIRCLE_START:
+                case SID_CONNECTOR_LINE_CIRCLE_END:
+                case SID_CONNECTOR_LINE_CIRCLES:
+                case SID_CONNECTOR_CURVE:
+                case SID_CONNECTOR_CURVE_ARROW_START:
+                case SID_CONNECTOR_CURVE_ARROW_END:
+                case SID_CONNECTOR_CURVE_ARROWS:
+                case SID_CONNECTOR_CURVE_CIRCLE_START:
+                case SID_CONNECTOR_CURVE_CIRCLE_END:
+                case SID_CONNECTOR_CURVE_CIRCLES:
+                case SID_CONNECTOR_LINES:
+                case SID_CONNECTOR_LINES_ARROW_START:
+                case SID_CONNECTOR_LINES_ARROW_END:
+                case SID_CONNECTOR_LINES_ARROWS:
+                case SID_CONNECTOR_LINES_CIRCLE_START:
+                case SID_CONNECTOR_LINES_CIRCLE_END:
+                case SID_CONNECTOR_LINES_CIRCLES:
                     oRequestedLine = lcl_getRequestedLine(rReq);
                     break;
             }
@@ -866,6 +921,29 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             pMeasure->SetPoint(aStart, 0);
             pMeasure->SetPoint(aEnd, 1);
+        }
+        else if (auto pConnector = dynamic_cast<SdrEdgeObj*>(pObj.get()))
+        {
+            pConnector->SetTailPoint(true, aStart);
+            pConnector->SetTailPoint(false, aEnd);
+
+            // the ends are tied as the client found them, before the connector goes in, so the
+            // insertion is one undo step with its ties
+            if (const auto oTies = lcl_getRequestedTies(rReq))
+            {
+                for (const bool bStart : { true, false })
+                {
+                    const sal_Int64 nObjectId((*oTies)[bStart ? 0 : 2]);
+                    SdrObject* pNode = nObjectId > 0
+                                           ? pPageView->GetPage()->FindObjectByUniqueID(nObjectId)
+                                           : nullptr;
+                    if (!pNode)
+                        continue;
+                    pConnector->ConnectToNode(bStart, pNode);
+                    pConnector->setGluePointIndex(
+                        bStart, static_cast<sal_Int32>((*oTies)[bStart ? 1 : 3]));
+                }
+            }
         }
     }
 

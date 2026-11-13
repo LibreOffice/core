@@ -370,6 +370,21 @@ function insertTable(grid = document.getElementsByClassName('inserttable-grid')[
 	}
 }
 
+// the kinds of connectors, offered on their own and with the lines
+const connectorKinds = [
+	{img: 'connectors_connector', uno: 'Connector', text: _UNO('.uno:Connector', 'presentation')},
+	{img: 'connectors_connectorarrows', uno: 'ConnectorArrows', text: _UNO('.uno:ConnectorArrows', 'presentation')},
+	{img: 'connectors_connectorarrowend', uno: 'ConnectorArrowEnd', text: _UNO('.uno:ConnectorArrowEnd', 'presentation')},
+	{img: 'connectors_connectorlinearrowend', uno: 'ConnectorLineArrowEnd', text: _UNO('.uno:ConnectorLineArrowEnd', 'presentation')},
+	{img: 'connectors_connectorcurvearrowend', uno: 'ConnectorCurveArrowEnd', text: _UNO('.uno:ConnectorCurveArrowEnd', 'presentation')},
+	{img: 'connectors_connectorlinesarrowend', uno: 'ConnectorLinesArrowEnd', text: _UNO('.uno:ConnectorLinesArrowEnd', 'presentation')},
+	{img: 'connectors_connectorline', uno: 'ConnectorLine', text: _UNO('.uno:ConnectorLine', 'presentation')},
+	{img: 'connectors_connectorcurve', uno: 'ConnectorCurve', text: _UNO('.uno:ConnectorCurve', 'presentation')},
+	{img: 'connectors_connectorlines', uno: 'ConnectorLines', text: _UNO('.uno:ConnectorLines', 'presentation')},
+	{img: 'connectors_connectorlinearrows', uno: 'ConnectorLineArrows', text: _UNO('.uno:ConnectorLineArrows', 'presentation')},
+	{img: 'connectors_connectorcurvearrows', uno: 'ConnectorCurveArrows', text: _UNO('.uno:ConnectorCurveArrows', 'presentation')}
+];
+
 var shapes = {
 	'insertshapes': {
 		'Basic Shapes': [
@@ -518,19 +533,7 @@ var shapes = {
 		]
 	},
 	'insertconnectors': {
-		'Connectors': [
-			{img: 'connectors_connector', uno: 'Connector', text: _UNO('.uno:Connector', 'presentation')},
-			{img: 'connectors_connectorarrows', uno: 'ConnectorArrows', text: _UNO('.uno:ConnectorArrows', 'presentation')},
-			{img: 'connectors_connectorarrowend', uno: 'ConnectorArrowEnd', text: _UNO('.uno:ConnectorArrowEnd', 'presentation')},
-			{img: 'connectors_connectorlinearrowend', uno: 'ConnectorLineArrowEnd', text: _UNO('.uno:ConnectorLineArrowEnd', 'presentation')},
-			{img: 'connectors_connectorcurvearrowend', uno: 'ConnectorCurveArrowEnd', text: _UNO('.uno:ConnectorCurveArrowEnd', 'presentation')},
-			{img: 'connectors_connectorlinesarrowend', uno: 'ConnectorLinesArrowEnd', text: _UNO('.uno:ConnectorLinesArrowEnd', 'presentation')},
-			{img: 'connectors_connectorline', uno: 'ConnectorLine', text: _UNO('.uno:ConnectorLine', 'presentation')},
-			{img: 'connectors_connectorcurve', uno: 'ConnectorCurve', text: _UNO('.uno:ConnectorCurve', 'presentation')},
-			{img: 'connectors_connectorlines', uno: 'ConnectorLines', text: _UNO('.uno:ConnectorLines', 'presentation')},
-			{img: 'connectors_connectorlinearrows', uno: 'ConnectorLineArrows', text: _UNO('.uno:ConnectorLineArrows', 'presentation')},
-			{img: 'connectors_connectorcurvearrows', uno: 'ConnectorCurvearrows', text: _UNO('.uno:ConnectorCurveArrows', 'presentation')}
-		]
+		'Connectors': connectorKinds
 	},
 	'insertlines': {
 		'Lines and Arrows': [
@@ -544,7 +547,8 @@ var shapes = {
 			{img: 'lines_line', uno: 'Line', text: _UNO('.uno:Line', 'presentation')},
 			{img: 'lines_measureline', uno: 'MeasureLine', text: _UNO('.uno:MeasureLine', 'presentation')},
 			{img: 'lines_line_diagonal', uno: 'Line_Diagonal', text: _UNO('.uno:Line_Diagonal', 'presentation')}
-		]
+		],
+		'Connectors': connectorKinds
 	}
 };
 
