@@ -477,9 +477,15 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
                 return false;
             const int nGuidSize = 0x10;
             StreamDataSequence aDataSeq;
-            sal_Int32 nBytesToRead = nStreamSize - nGuidSize;
-            while ( nBytesToRead )
-                nBytesToRead -= rInStrm.readData( aDataSeq, nBytesToRead );
+            if ( nStreamSize > nGuidSize )
+            {
+                // One read gets all the bytes that are there, up to the end of the stream
+                sal_Int64 nRemaining = rInStrm.getRemaining();
+                sal_Int32 nBytesToRead = nStreamSize - nGuidSize;
+                if ( ( nRemaining >= 0 ) && ( nRemaining < nBytesToRead ) )
+                    nBytesToRead = static_cast< sal_Int32 >( nRemaining );
+                rInStrm.readData( aDataSeq, nBytesToRead );
+            }
             SequenceInputStream aInSeqStream( aDataSeq );
             importControlFromStream( aInSeqStream, rxFormComp, rStrmClassId );
         }
