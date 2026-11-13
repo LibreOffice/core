@@ -31,6 +31,7 @@
 /// <reference path="./helper/matchMediaMock.ts" />
 /// <reference path="./helper/fakeClock.ts" />
 /// <reference path="./helper/requestCleanup.ts" />
+/// <reference path="./helper/liveHandles.ts" />
 /// <reference path="./helper/SocketRecorder.ts" />
 /// <reference path="./helper/rectUtil.ts" />
 /// <reference path="./helper/Events.ts"/>
