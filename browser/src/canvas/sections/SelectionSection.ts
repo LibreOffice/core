@@ -156,7 +156,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// The path of a single selected object, with the points and the weights that shape it, or
 	/// null where what is selected has no path.
-	private editor: PolyPolygonEditor | null = null;
+	private editor: PathEditing | null = null;
 
 	/// The handle the mouse is over, marked so, or null while it is over none.
 	private hovered: string | null = null;
@@ -697,8 +697,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 			points becomes a line, which has no path to edit.
 		*/
 		const objects = this.selectedObjects();
-		this.editor = PolyPolygonEditor.editedPath(objects)
-			? new PolyPolygonEditor(objects[0])
+		this.editor = PathEditing.editedPath(objects)
+			? new PathEditing(
+					() => RenderGeometrySection.objectOf(objects[0])?.path,
+					new ObjectPathSink(objects[0], this),
+				)
 			: null;
 		if (
 			!this.editor &&
@@ -790,7 +793,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/// The path of what is selected, for an interaction that works on one of its points.
-	public pathEditor(): PolyPolygonEditor | null {
+	public pathEditor(): PathEditing | null {
 		return this.editor;
 	}
 
@@ -2799,23 +2802,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (event.shiftKey) return 15;
 		if (event.altKey) return 0.1;
 		return 1;
-	}
-
-	/*
-		Hands the engine what a drag or a key did to the points of a path: the object it belongs
-		to and one item for every point or weight that moved. The points that did not move are
-		not named at all, so a path of many thousand points still travels as the few numbers that
-		changed, and the ones left alone come back exactly as they went out.
-	*/
-	public static sendPathChanges(objectId: number, changes: string[]): void {
-		if (!changes.length) return;
-
-		app.socket.sendMessage(
-			'setobjectpoints id=' +
-				String(objectId) +
-				' changes=' +
-				changes.join(';'),
-		);
 	}
 
 	/*

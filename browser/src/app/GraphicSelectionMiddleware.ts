@@ -222,7 +222,7 @@ class GraphicSelection {
 	/// Whether one object is selected and its path can be edited point by point, so it needs no
 	/// conversion first.
 	public static isOnePath(): boolean {
-		return PolyPolygonEditor.editedPath(this.selectedObjectIDs) !== undefined;
+		return PathEditing.editedPath(this.selectedObjectIDs) !== undefined;
 	}
 
 	/// What the toolbars were last told: whether the selection is one path, and whether that
@@ -253,7 +253,7 @@ class GraphicSelection {
 		whether the path is closed, as the state of a command.
 	*/
 	private static tellThePathButtons(): void {
-		const path = PolyPolygonEditor.editedPath(this.selectedObjectIDs);
+		const path = PathEditing.editedPath(this.selectedObjectIDs);
 		const onePath = path !== undefined;
 		const notebookbar = app.map.uiManager?.notebookbar;
 		if (
@@ -270,7 +270,7 @@ class GraphicSelection {
 			);
 		}
 
-		const closed = PolyPolygonEditor.isClosed(path);
+		const closed = PathEditing.isClosed(path);
 		if (closed !== this.closedToldAs) {
 			this.closedToldAs = closed;
 			app.map.fire('commandstatechanged', {

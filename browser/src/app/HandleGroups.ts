@@ -2419,36 +2419,7 @@ class PathHandles extends HandlesMovedOneByOne {
 	/// A closed path can always be opened. An open path can be closed when one of its polygons
 	/// has at least three points.
 	public canBeClosedOrOpened(): boolean {
-		const path = this.selection.pathEditor()?.path() ?? [];
-		return (
-			PolyPolygonEditor.isClosed(path) ||
-			path.some(
-				(polygon: cool.ObjectPathPolygon) =>
-					PathHandles.pointsOnceClosed(polygon) >= 3,
-			)
-		);
-	}
-
-	/// The number of points the polygon has once it is closed. Points at the end that equal the
-	/// first point are not counted, because a closed polygon does not repeat its first point.
-	private static pointsOnceClosed(polygon: cool.ObjectPathPolygon): number {
-		const points = polygon.points ?? [];
-		let count = points.length;
-		while (
-			count > 1 &&
-			points[count - 1].x === points[0].x &&
-			points[count - 1].y === points[0].y
-		)
-			--count;
-		return count;
-	}
-
-	/// The parameters that name a point of the path to the engine.
-	private static parametersOf(place: {
-		polygon: number;
-		point: number;
-	}): string {
-		return 'polygon=' + String(place.polygon) + ' point=' + String(place.point);
+		return this.selection.pathEditor()?.canBeClosedOrOpened() ?? false;
 	}
 
 	/// The point the keyboard is on is drawn larger and does not blink.
@@ -2470,12 +2441,6 @@ class PathHandles extends HandlesMovedOneByOne {
 	/// The id of the menu a click on a point opens.
 	private static readonly menuId: string = 'path-point-menu';
 
-	/// The point that a handle stands for. It is null for a weight, and for a point that the path
-	/// no longer has.
-	private placeOf(handle: SelectionHandle) {
-		return this.selection.pathEditor()?.pointOf(handle.name) ?? null;
-	}
-
 	/*
 		Opens the menu of a point below the point. The entries delete the point, make the edge
 		after it a curve or a line, set how the curve runs through the point, and split the path
@@ -2483,29 +2448,14 @@ class PathHandles extends HandlesMovedOneByOne {
 		- The last point of an open polygon has no edge after it.
 		- The edge is a curve when a weight bends it at either end.
 		- Smooth and symmetric need a point with both weights. The current choice is checked and
-		  disabled. A point that reports no choice is a corner.
+		  disabled.
 		- A path of one polygon can be split at any point of a closed polygon, and at any point
 		  of an open polygon except its two ends.
 	*/
 	private openTheMenuOf(handle: SelectionHandle): void {
-		const place = this.placeOf(handle);
-		if (!place) return;
-
-		const points = place.of.points;
-		const point = points[place.point];
-		const next = points[(place.point + 1) % points.length];
-		const closed = place.of.closed === true;
-		const hasAnEdgeOut = place.point + 1 < points.length || closed;
-		const curved =
-			hasAnEdgeOut &&
-			(point.aheadX !== undefined || next.behindX !== undefined);
-		const weightIn = point.behindX !== undefined;
-		const weightOut = point.aheadX !== undefined;
-		const continuity = point.continuity ?? 0;
-		const canBeSplit =
-			place.path.length === 1 &&
-			points.length >= 3 &&
-			(closed || (place.point > 0 && place.point + 1 < points.length));
+		const editing = this.selection.pathEditor();
+		const facts = editing?.factsAt(handle.name);
+		if (!editing || !facts) return;
 
 		const way = (
 			id: string,
@@ -2518,8 +2468,8 @@ class PathHandles extends HandlesMovedOneByOne {
 			type: 'action',
 			text,
 			img,
-			checked: continuity === value,
-			isEnabled: () => enabled && continuity !== value,
+			checked: facts.continuity === value,
+			isEnabled: () => enabled && facts.continuity !== value,
 		});
 
 		const entries: MenuDefinition[] = [
@@ -2527,27 +2477,33 @@ class PathHandles extends HandlesMovedOneByOne {
 			{ id: 'delete', type: 'action', text: _('Delete'), img: 'bezierdelete' },
 			{ id: 'separator', type: 'separator' },
 			{
-				id: curved ? 'line' : 'curve',
+				id: facts.curved ? 'line' : 'curve',
 				type: 'action',
-				text: curved ? _('To Line') : _('To Curve'),
+				text: facts.curved ? _('To Line') : _('To Curve'),
 				img: 'bezierconvert',
-				isEnabled: () => hasAnEdgeOut,
+				isEnabled: () => facts.hasAnEdgeOut,
 			},
 			{ id: 'separator', type: 'separator' },
-			way('corner', _('Corner Point'), 'bezieredge', 0, weightIn || weightOut),
+			way(
+				'corner',
+				_('Corner Point'),
+				'bezieredge',
+				0,
+				facts.weightIn || facts.weightOut,
+			),
 			way(
 				'smooth',
 				_('Smooth Transition'),
 				'beziersmooth',
 				1,
-				weightIn && weightOut,
+				facts.weightIn && facts.weightOut,
 			),
 			way(
 				'symmetric',
 				_('Symmetric Transition'),
 				'beziersymmetric',
 				2,
-				weightIn && weightOut,
+				facts.weightIn && facts.weightOut,
 			),
 			{ id: 'separator', type: 'separator' },
 			{
@@ -2555,64 +2511,24 @@ class PathHandles extends HandlesMovedOneByOne {
 				type: 'action',
 				text: _('Split Path'),
 				img: 'beziercutline',
-				isEnabled: () => canBeSplit,
+				isEnabled: () => facts.canBeSplit,
 			},
 		];
 
 		this.openAMenuBelow(
 			handle,
-			0.5 * PolyPolygonEditor.pointSize(),
+			0.5 * PathEditing.pointSize(),
 			PathHandles.menuId,
 			entries,
 			(chosen: string): void => {
-				const at = PathHandles.parametersOf(place);
-				if (chosen === 'delete') this.deleteThePoint(handle);
+				if (chosen === 'delete') editing.deletePoint(handle.name);
 				else if (chosen === 'curve' || chosen === 'line')
-					this.sendAboutThePath(
-						'setobjectsegmentcurved',
-						at + ' curved=' + String(chosen === 'curve'),
-					);
-				else if (chosen === 'corner')
-					this.sendAboutThePath(
-						'setobjectpointcontinuity',
-						at + ' continuity=0',
-					);
-				else if (chosen === 'smooth')
-					this.sendAboutThePath(
-						'setobjectpointcontinuity',
-						at + ' continuity=1',
-					);
-				else if (chosen === 'symmetric')
-					this.sendAboutThePath(
-						'setobjectpointcontinuity',
-						at + ' continuity=2',
-					);
-				else if (chosen === 'split') {
-					this.sendAboutThePath('splitobjectpath', at);
-				}
+					editing.setSegmentCurved(handle.name, chosen === 'curve');
+				else if (chosen === 'corner') editing.setContinuity(handle.name, 0);
+				else if (chosen === 'smooth') editing.setContinuity(handle.name, 1);
+				else if (chosen === 'symmetric') editing.setContinuity(handle.name, 2);
+				else if (chosen === 'split') editing.split(handle.name);
 			},
-		);
-	}
-
-	/*
-		Sends a change of the path of the selected object, with its parameters if it has any.
-		The change names points by their index in the path the client has. So it is not sent
-		while an undo or a redo is on its way, and point moves that still wait are sent first.
-		The change can add or remove points and weights, so the keyboard leaves the points.
-	*/
-	private sendAboutThePath(command: string, change: string): void {
-		if (ChangeOutbox.undoOnItsWay()) {
-			this.selection.showTheHoldBack();
-			return;
-		}
-
-		this.selection.travel.leave();
-		ChangeOutbox.sendEverythingAhead();
-		app.socket.sendMessage(
-			command +
-				' id=' +
-				String(this.selection.selectedObjects()[0]) +
-				(change ? ' ' + change : ''),
 		);
 	}
 
@@ -2621,49 +2537,32 @@ class PathHandles extends HandlesMovedOneByOne {
 		true for every handle of the path, so the key is used up and the object is not deleted.
 	*/
 	public deleteThePoint(handle: SelectionHandle): boolean {
-		const place = this.placeOf(handle);
-		if (!place) return true;
-
-		this.sendAboutThePath('deleteobjectpoint', PathHandles.parametersOf(place));
+		this.selection.pathEditor()?.deletePoint(handle.name);
 		return true;
 	}
 
 	/// Adds a point to the path of the selected object, on the edge nearest to the press. The
 	/// press is in twips on the page.
 	public addAt(at: cool.SimplePoint): void {
-		this.sendAboutThePath(
-			'insertobjectpoint',
-			'x=' + String(Math.round(at.x)) + ' y=' + String(Math.round(at.y)),
-		);
+		this.selection.pathEditor()?.insertPointAt(new cool.Point(at.x, at.y));
 	}
 
 	/// Closes the path of the selected object, or opens it again where it is closed.
 	public switchClosed(): void {
-		const path = this.selection.pathEditor()?.path();
-		if (!path) return;
-
-		this.sendAboutThePath(
-			'setobjectpathclosed',
-			'closed=' + String(!PolyPolygonEditor.isClosed(path)),
-		);
+		this.selection.pathEditor()?.switchClosed();
 	}
 
 	/// Turns every curved edge of the path that runs straight into a line. With pointsOnALine,
 	/// it also deletes the points that lie on a straight line between their neighbours.
 	public simplify(pointsOnALine: boolean): void {
-		this.sendAboutThePath(
-			'simplifyobjectpath',
-			'points=' + String(pointsOnALine),
-		);
+		this.selection.pathEditor()?.simplify(pointsOnALine);
 	}
 
 	public handOver(handle: SelectionHandle, to: cool.Point): void {
-		const change = this.selection.pathEditor()?.changeFor(handle.name, to);
-		if (!change) return;
+		const editing = this.selection.pathEditor();
+		if (!editing) return;
 
-		SelectionSection.sendPathChanges(this.selection.selectedObjects()[0], [
-			change,
-		]);
+		editing.moveTo(handle.name, to);
 		HeldSteps.hold(this.selection, handle, to);
 	}
 
