@@ -146,6 +146,7 @@ struct DocumentTab
     bool hasContent = false;
     // The page agreed to the close, so the tab can go without asking it again.
     bool readyToClose = false;
+    int docUnloadingRetries = 0;
     // The tab has no WebView2 of its own. The document stays loaded in the engine under appDocId,
     // with no session, until the tab gets a new WebView2.
     bool viewDiscarded = false;
@@ -306,6 +307,8 @@ static const int CODA_WM_MOVETABTONEWWINDOW = WM_APP + 8;
 // Moves the tab named in the wParam from another window into this one, to the position in the
 // tab order given in the lParam, or to the end when that is -1. Posted for the same reason.
 static const int CODA_WM_MOVETABTOWINDOW = WM_APP + 9;
+// Retries the load of the tab named in the wParam. Posted to the hidden owner window.
+static const int CODA_WM_RETRYAFTERUNLOADING = WM_APP + 10;
 
 // One file pick the engine asked for, posted as CODA_WM_SHOWFILEPICKER to the hidden owner
 // window; the wide strings own the dialog's title and filter text.
@@ -753,7 +756,7 @@ static void createAndStartMessagePumpThread(DocumentTab& data)
 
                         return;
                     }
-                    if (pollfd[0].revents == POLLIN)
+                    if (pollfd[0].revents & POLLIN)
                     {
                         int n = fakeSocketAvailableDataLength(data.fakeClientFd);
                         // I don't want to check for n being -1 here, even if that will lead to a crash,
@@ -763,6 +766,17 @@ static void createAndStartMessagePumpThread(DocumentTab& data)
                             return;
                         std::vector<char> buf(n);
                         n = fakeSocketRead(data.fakeClientFd, buf.data(), n);
+
+                        // The file is still unloading and the server drops the connection, so
+                        // the page is reloaded to ask again, as in the Qt app.
+                        if (std::string_view(buf.data(), n)
+                                .starts_with("error: cmd=load kind=docunloading"))
+                        {
+                            PostMessageW(hiddenOwnerWindow, CODA_WM_RETRYAFTERUNLOADING,
+                                         (WPARAM)data.tabId, 0);
+                            return;
+                        }
+
                         send2JS(data, buf.data(), n);
                     }
                 }
@@ -795,6 +809,54 @@ static void do_hullo_handling_things(DocumentTab& data)
 
     std::string message(data.filenameAndUri.uri + " " + std::to_string(data.appDocId));
     fakeSocketWriteQueue(data.fakeClientFd, message.c_str(), message.size());
+}
+
+static void retryLoadAfterUnloading(int tabId)
+{
+    DocumentTab* tab = findTab(tabId);
+    if (!tab || !tab->app2js.joinable())
+        return;
+
+    tab->app2js.join();
+    fakeSocketClose(tab->closeNotificationPipeForForwardingThread[0]);
+    fakeSocketClose(tab->closeNotificationPipeForForwardingThread[1]);
+    fakeSocketClose(tab->fakeClientFd);
+    tab->fakeClientFd = -1;
+
+    if (tab->readyToClose)
+        return;
+
+    constexpr int maxRetries = 10;
+    if (tab->docUnloadingRetries++ >= maxRetries)
+    {
+        LOG_WRN("Document [" << tab->filenameAndUri.uri
+                             << "] is still unloading, closing its tab");
+        tab->readyToClose = true;
+        PostMessageW(tab->hWnd, CODA_WM_CLOSETAB, (WPARAM)tabId, 0);
+        return;
+    }
+
+    tab->fakeClientFd = fakeSocketSocket();
+
+    const UINT delayMilliseconds = 500 * tab->docUnloadingRetries * tab->docUnloadingRetries;
+    LOG_INF("Document [" << tab->filenameAndUri.uri << "] is still unloading, reloading tab "
+                         << tabId << " in " << delayMilliseconds << "ms");
+
+    // The tab can move to another window meanwhile, so the timer is not one of its window.
+    SetTimer(hiddenOwnerWindow, tabId, delayMilliseconds, nullptr);
+}
+
+static void reloadAfterUnloading(int tabId)
+{
+    KillTimer(hiddenOwnerWindow, tabId);
+
+    DocumentTab* tab = findTab(tabId);
+    if (!tab || tab->readyToClose || !tab->webView || tab->app2js.joinable())
+        return;
+
+    LOG_INF("Reloading tab " << tabId << " to load appDocId " << tab->appDocId
+                             << " again, attempt " << tab->docUnloadingRetries);
+    tab->webView->Reload();
 }
 
 // automatic: the first start or an update ("WELCOME auto"), as opposed to Help > Latest
@@ -920,6 +982,10 @@ static void do_print(int appDocId)
 static void do_other_message_handling_things(const DocumentTab& data, const char* message)
 {
     LOG_TRC_NOFILE("Handling other message:'" << message << "'");
+
+    // Not before the next hello on the new connection.
+    if (!data.app2js.joinable())
+        return;
 
     fakeSocketWriteQueue(data.fakeClientFd, message, strlen(message));
 }
@@ -1967,6 +2033,14 @@ static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wPara
                 filenamesAndUrisToOpen.pop_front();
                 openCOOLWindow(nextDocument, DocumentMode::EDIT);
             }
+            return 0;
+
+        case CODA_WM_RETRYAFTERUNLOADING:
+            retryLoadAfterUnloading((int)wParam);
+            return 0;
+
+        case WM_TIMER:
+            reloadAfterUnloading((int)wParam);
             return 0;
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
@@ -7103,6 +7177,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             data.docType = docTypeFromFilename(filename);
             data.isModified = false;
             data.readyToClose = false;
+            data.docUnloadingRetries = 0;
 
             // Connect to COOLWSD
             int rc = fakeSocketConnect(data.fakeClientFd, coolwsd_server_socket_fd);
