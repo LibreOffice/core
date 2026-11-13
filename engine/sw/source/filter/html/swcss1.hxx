@@ -46,7 +46,7 @@ class SwHTMLParser;
 class SwCSS1Parser : public SvxCSS1Parser
 {
     SwDoc *m_pDoc;
-    SwHTMLParser const& m_rHTMLParser;
+    SwHTMLParser const* m_pHTMLParser;
 
     sal_uLong m_aFontHeights[7];
 
@@ -73,6 +73,8 @@ class SwCSS1Parser : public SvxCSS1Parser
     void SetTableTextColl( bool bHeader );
     void SetLinkCharFormats();
 
+    void FillTextCollFromClass( SwTextFormatColl& rColl, const SvxCSS1MapEntry& rClass );
+
 protected:
     virtual void StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
@@ -81,7 +83,7 @@ protected:
     using CSS1Parser::ParseStyleSheet;
 
 public:
-    SwCSS1Parser( SwDoc *pDoc, SwHTMLParser const& rParser,
+    SwCSS1Parser( SwDoc *pDoc, SwHTMLParser const* pParser,
         sal_uInt32 const aFHeight[7], const OUString& rBaseURL, bool bNewDoc);
     virtual ~SwCSS1Parser() override;
 

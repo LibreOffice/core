@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <tools/hostfilter.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
@@ -92,12 +93,12 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
         m_pDoc->ChgPageDesc( pos, rNewPageDesc );
 }
 
-SwCSS1Parser::SwCSS1Parser(SwDoc *const pDoc, SwHTMLParser const& rParser,
+SwCSS1Parser::SwCSS1Parser(SwDoc *const pDoc, SwHTMLParser const* pParser,
         const sal_uInt32 aFHeights[7], const OUString& rBaseURL, bool const bNewDoc)
     : SvxCSS1Parser(pDoc->GetAttrPool(), rBaseURL,
                    aItemIds, SAL_N_ELEMENTS(aItemIds))
     , m_pDoc( pDoc )
-    , m_rHTMLParser(rParser)
+    , m_pHTMLParser(pParser)
     , m_nDropCapCnt( 0 ),
     m_bIsNewDoc( bNewDoc ),
     m_bBodyBGColorSet( false ),
@@ -1140,6 +1141,25 @@ const FontList *SwCSS1Parser::GetFontList() const
     return pFList;
 }
 
+// A property the style sets itself stays, because it comes from a rule for an element and the
+// class, which is stronger than a rule for the class alone.
+static void lcl_clearItemsSetInStyle( SfxItemSet& rItemSet, const SfxItemSet& rStyleItemSet )
+{
+    SfxWhichIter aIter( rItemSet );
+    for( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich() )
+    {
+        if( SfxItemState::SET == rStyleItemSet.GetItemState( nWhich, false ) )
+            rItemSet.ClearItem( nWhich );
+    }
+}
+
+static void lcl_fillCharFormatFromClass( SwCharFormat& rCharFormat, const SvxCSS1MapEntry& rClass )
+{
+    SfxItemSet aItemSet( rClass.GetItemSet() );
+    lcl_clearItemsSetInStyle( aItemSet, rCharFormat.GetAttrSet() );
+    SetCharFormatAttrs( &rCharFormat, aItemSet );
+}
+
 SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& rClass ) const
 {
     // search the corresponding style
@@ -1211,8 +1231,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
             {
                 pCFormat = m_pDoc->MakeCharFormat( aTmp, pCFormat );
                 pCFormat->SetAuto(false);
-                SfxItemSet aItemSet( pClass->GetItemSet() );
-                SetCharFormatAttrs( pCFormat, aItemSet );
+                lcl_fillCharFormatFromClass( *pCFormat, *pClass );
             }
         }
     }
@@ -1317,14 +1336,7 @@ SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( SwPoolFormatId nTextColl,
             if( pClass )
             {
                 pColl = m_pDoc->MakeTextFormatColl( aTmp, pColl );
-                SfxItemSet aItemSet( pClass->GetItemSet() );
-                SvxCSS1PropertyInfo aPropInfo( pClass->GetPropertyInfo() );
-                aPropInfo.SetBoxItem( aItemSet, MIN_BORDER_DIST );
-                bool bPositioned = MayBePositioned( pClass->GetPropertyInfo() );
-                if( bPositioned )
-                    aItemSet.ClearItem( RES_BACKGROUND );
-                SetTextCollAttrs( pColl, aItemSet, aPropInfo,
-                                 this );
+                FillTextCollFromClass( *pColl, *pClass );
             }
         }
 
@@ -1334,6 +1346,18 @@ SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( SwPoolFormatId nTextColl,
         lcl_swcss1_setEncoding( *pColl, GetDfltEncoding() );
 
     return pColl;
+}
+
+void SwCSS1Parser::FillTextCollFromClass( SwTextFormatColl& rColl, const SvxCSS1MapEntry& rClass )
+{
+    SfxItemSet aItemSet( rClass.GetItemSet() );
+    SvxCSS1PropertyInfo aPropInfo( rClass.GetPropertyInfo() );
+    aPropInfo.SetBoxItem( aItemSet, MIN_BORDER_DIST );
+    bool bPositioned = MayBePositioned( rClass.GetPropertyInfo() );
+    if( bPositioned )
+        aItemSet.ClearItem( RES_BACKGROUND );
+    lcl_clearItemsSetInStyle( aItemSet, rColl.GetAttrSet() );
+    SetTextCollAttrs( &rColl, aItemSet, aPropInfo, this );
 }
 
 SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
@@ -1360,7 +1384,7 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( SwPoolFormatId nPoolId, bool bCreat
     const SwPageDesc *pPageDesc = FindPageDesc(m_pDoc, nPoolId);
     if( !pPageDesc && bCreate )
     {
-        if (m_rHTMLParser.IsReadingHeaderOrFooter())
+        if (m_pHTMLParser && m_pHTMLParser->IsReadingHeaderOrFooter())
         {   // (there should be only one definition of header/footer in HTML)
             SAL_WARN("sw.html", "no creating PageDesc while reading header/footer");
             return nullptr;
