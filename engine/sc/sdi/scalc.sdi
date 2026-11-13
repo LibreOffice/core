@@ -6279,7 +6279,7 @@ SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
     GroupId = SfxGroupId::Format;
 ]
 
-SvxSizeItem CalcPageMargin SID_SC_ATTR_PAGE_MARGIN
+SfxStringItem CalcPageMargin SID_SC_ATTR_PAGE_MARGIN
 (
     SvxLRSpaceItem Page SID_ATTR_LRSPACE,
     SvxULSpaceItem Page SID_ATTR_ULSPACE,
@@ -6298,7 +6298,7 @@ SvxSizeItem CalcPageMargin SID_SC_ATTR_PAGE_MARGIN
 ]
 
 
-SvxSizeItem CalcPageSize SID_SC_ATTR_PAGE_SIZE
+SfxUInt16Item CalcPageSize SID_SC_ATTR_PAGE_SIZE
 (
     SfxUInt16Item PaperFormat SID_SC_ATTR_PAGE_SIZE
 )

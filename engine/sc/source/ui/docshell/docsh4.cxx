@@ -47,6 +47,9 @@
 #include <svx/pageitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/paperinf.hxx>
+#include <i18nutil/paper.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -755,6 +758,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     pBindings->Invalidate(SID_ATTR_PAGE_SIZE);
                     pBindings->Invalidate(SID_ATTR_PAGE_ORIENTATION);
+                    pBindings->Invalidate(SID_SC_ATTR_PAGE_SIZE);
                 }
 
                 rReq.Done();
@@ -2473,6 +2477,35 @@ void ScDocShell::GetStatePageStyle( SfxItemSet&     rSet,
     }
 }
 
+namespace
+{
+/// The paper of a page style, in either orientation. PAPER_USER when the page size is no known
+/// paper.
+sal_uInt16 lcl_GetPaper(const SfxItemSet& rStyleSet)
+{
+    const Size& rSize = rStyleSet.Get(ATTR_PAGE_SIZE).GetSize();
+    PaperInfo aInfo(o3tl::convert(rSize.Width(), o3tl::Length::twip, o3tl::Length::mm100),
+                    o3tl::convert(rSize.Height(), o3tl::Length::twip, o3tl::Length::mm100));
+    aInfo.doSloppyFit(/*bAlsoTryRotated=*/true);
+    return static_cast<sal_uInt16>(aInfo.getPaper());
+}
+
+/// The four margins of a page style as a JSON object, in hundredths of a millimetre, the unit of
+/// the arguments of .uno:CalcPageMargin.
+OUString lcl_GetPageMargins(const SfxItemSet& rStyleSet)
+{
+    const SvxLRSpaceItem& rLR = rStyleSet.Get(ATTR_LRSPACE);
+    const SvxULSpaceItem& rUL = rStyleSet.Get(ATTR_ULSPACE);
+    tools::JsonWriter aJson;
+    aJson.put("left", o3tl::convert(rLR.ResolveLeft({}), o3tl::Length::twip, o3tl::Length::mm100));
+    aJson.put("right",
+              o3tl::convert(rLR.ResolveRight({}), o3tl::Length::twip, o3tl::Length::mm100));
+    aJson.put("top", o3tl::convert(rUL.GetUpper(), o3tl::Length::twip, o3tl::Length::mm100));
+    aJson.put("bottom", o3tl::convert(rUL.GetLower(), o3tl::Length::twip, o3tl::Length::mm100));
+    return OUString::fromUtf8(aJson.finishAndGetAsOString());
+}
+}
+
 void ScDocShell::GetState( SfxItemSet &rSet )
 {
     bool bTabView = GetBestViewShell() != nullptr;
@@ -2576,7 +2609,12 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                             if (pStyleSheet)
                             {
                                 const SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-                                rSet.Put(rStyleSet.Get(ATTR_PAGE));
+                                if (nWhich == SID_SC_ATTR_PAGE_SIZE)
+                                    rSet.Put(SfxUInt16Item(nWhich, lcl_GetPaper(rStyleSet)));
+                                else if (nWhich == SID_SC_ATTR_PAGE_MARGIN)
+                                    rSet.Put(SfxStringItem(nWhich, lcl_GetPageMargins(rStyleSet)));
+                                else
+                                    rSet.Put(rStyleSet.Get(ATTR_PAGE));
                             }
                         }
                     }
