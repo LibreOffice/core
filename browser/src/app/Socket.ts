@@ -1583,10 +1583,6 @@ class Socket {
 			});
 		} else if (textMsg.startsWith('presetconfigid:')) {
 			app.presetConfigId = textMsg.substring('presetconfigid:'.length).trim();
-		} else if (textMsg.startsWith('userpresetconfigid:')) {
-			app.userPresetConfigId = textMsg
-				.substring('userpresetconfigid:'.length)
-				.trim();
 		} else if (textMsg.startsWith('userpresetsapplied:')) {
 			app.userPresetsApplied =
 				textMsg.substring('userpresetsapplied:'.length).trim() === 'true';

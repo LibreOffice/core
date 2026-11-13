@@ -5479,13 +5479,10 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         // rather than relying on signal absence.
         forwardToChild(session, "userpersistence " + session->getUserPersistenceState());
 
-        // Both configIds are pre-encoded so they match the on-disk sharedpresets/<configId>/
-        // directory names; loadExtensions queries each preset/<configId>/extensions/ index in turn:
+        // The configId is pre-encoded so that it matches the name of its on-disk
+        // sharedpresets/<configId>/ directory:
         if (!_configId.empty()) {
             session->sendTextFrame("presetconfigid: " + Uri::encode(_configId));
-        }
-        if (!_userConfigId.empty()) {
-            session->sendTextFrame("userpresetconfigid: " + Uri::encode(_userConfigId));
         }
 
         // Whether the document is running with this user's own configuration,
