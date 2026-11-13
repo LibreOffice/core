@@ -22,6 +22,7 @@
 #include "dxfgrprd.hxx"
 #include "dxfvec.hxx"
 #include "dxfgeom.hxx"
+#include <rtl/strbuf.hxx>
 #include <tools/long.hxx>
 
 #include <memory>
@@ -488,7 +489,7 @@ public:
     double fLineSpacing;           // 44
     double fRotAngle;              // 50, degrees
     tools::Long nAttachment;       // 71, 1-9: top/middle/bottom x left/center/right
-    OString m_sText;               // 3 chunks then 1
+    OStringBuffer m_sText;         // 3 chunks then 1
     OString m_sStyle;              // 7
 
     DXFMTextEntity();

@@ -951,7 +951,7 @@ void DXFMTextEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 50: fRotAngle=rDGR.GetF(); break;
         case 71: nAttachment=rDGR.GetI(); break;
         case  1:
-        case  3: m_sText += rDGR.GetS(); break;
+        case  3: m_sText.append(rDGR.GetS()); break;
         case  7: m_sStyle=rDGR.GetS(); break;
         case 101: bInEmbeddedObject=true; break;
         default: DXFBasicEntity::EvaluateGroup(rDGR);
