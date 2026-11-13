@@ -380,6 +380,8 @@ public:
     void                        AddDeferredLinkLoad(
                                     const cpo::uno::Reference<cpo::uno::XInterface>& rxOwner,
                                     std::function<void(const cpo::uno::Reference<cpo::uno::XInterface>&)> aLoad);
+    bool                        HasDeferredLinkLoads() const
+                                    { return !maDeferredLinkLoads.empty(); }
     virtual bool                LoadExternal( SfxMedium& rMedium );
     bool                        IsConfigOptionsChecked() const;
     void                        SetConfigOptionsChecked( bool bChecked );

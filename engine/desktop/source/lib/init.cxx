@@ -10155,7 +10155,7 @@ static std::string getExternalLinksDisabled(COKitDocument* pThis)
     // link updates are not allowed for it yet.
     const bool bDisabled
         = !pObjectShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate()
-          && pObjectShell->HasUpdatableLinks();
+          && (pObjectShell->HasUpdatableLinks() || pObjectShell->HasDeferredLinkLoads());
 
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:ExternalLinksDisabled");
