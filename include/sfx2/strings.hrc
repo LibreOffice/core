@@ -286,6 +286,8 @@
 #define STR_GET_INVOLVED_BUTTON                 NC_("STR_GET_INVOLVED_BUTTON", "Get involved")
 #define STR_DONATE_TEXT                         NC_("STR_DONATE_TEXT", "Support the development of %PRODUCTNAME.")
 // Translators: text will be abbreviated at >8 characters, eg. "Please D..."
+#define STR_DONATE_BANNER_TEXT                  NC_("STR_DONATE_BANNER_TEXT", "%PRODUCTNAME is free software.")
+#define STR_DONATE_BANNER_SUBTEXT               NC_("STR_DONATE_BANNER_SUBTEXT", "Please support the community that makes it!")
 #define STR_DONATE_BUTTON                       NC_("STR_DONATE_BUTTON", "Donate")
 #define STR_CREDITS_BUTTON                      NC_("STR_CREDITS_BUTTON", "~Credits")
 #define STR_WHATSNEW_TEXT                       NC_("STR_WHATSNEW_TEXT", "You are running version %PRODUCTVERSION of %PRODUCTNAME for the first time. \n\nDo you want to learn what's new?")

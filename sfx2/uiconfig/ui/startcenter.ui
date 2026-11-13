@@ -677,89 +677,19 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=3 n-rows=3 -->
-              <object class="GtkGrid" id="gdDonation">
+              <object class="GtkBox" id="gdDonation">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">24</property>
-                <property name="margin-end">24</property>
-                <property name="margin-top">24</property>
-                <property name="margin-bottom">24</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkImage" id="imgDonationLeft">
+                  <object class="GtkImage" id="imgDonation">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                    <property name="height">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lbDonateTitle">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="valign">end</property>
-                    <property name="margin-start">24</property>
-                    <property name="margin-top">12</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="startcenter|donatetitle">%PRODUCTNAME is free software.</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                      <attribute name="scale" value="1.5"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lbDonateText">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="valign">center</property>
-                    <property name="margin-start">24</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="startcenter|donatetext">Please support the community that makes it!</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLinkButton" id="btnDonateLink">
-                    <property name="label" translatable="yes" context="startcenter|donatelink">Click here to donate</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="margin-start">24</property>
-                    <property name="relief">none</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="imgDonationRight">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="margin-end">25</property>
-                    <property name="icon-name">res/donate.png</property>
-                    <property name="icon_size">3</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                    <property name="height">3</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
               </object>
