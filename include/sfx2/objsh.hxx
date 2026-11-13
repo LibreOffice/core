@@ -23,6 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <comphelper/errcode.hxx>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weakref.hxx>
