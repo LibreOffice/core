@@ -54,6 +54,9 @@
 
 #include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <DocumentLinksAdministrationManager.hxx>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <pam.hxx>
 #include <poolfmt.hxx>
 #include <docsh.hxx>
@@ -1206,12 +1209,17 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
         }
         else
         {
+            // A held-back style sheet may give the class its properties later, so the class gets
+            // a style even without a rule for it yet.
             const SvxCSS1MapEntry *pClass = GetClass( aClass );
-            if( pClass )
+            if( pClass || m_pHeldBackStyleSheets )
             {
                 pCFormat = m_pDoc->MakeCharFormat( aTmp, pCFormat );
                 pCFormat->SetAuto(false);
-                lcl_fillCharFormatFromClass( *pCFormat, *pClass );
+                if( pClass )
+                    lcl_fillCharFormatFromClass( *pCFormat, *pClass );
+                if( m_pHeldBackStyleSheets )
+                    m_pHeldBackStyleSheets->aCharFormatClasses.emplace_back( aTmp, aClass );
             }
         }
     }
@@ -1312,11 +1320,16 @@ SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( SwPoolFormatId nTextColl,
         }
         else
         {
+            // A held-back style sheet may give the class its properties later, so the class gets
+            // a style even without a rule for it yet.
             const SvxCSS1MapEntry *pClass = GetClass( aClass );
-            if( pClass )
+            if( pClass || m_pHeldBackStyleSheets )
             {
                 pColl = m_pDoc->MakeTextFormatColl( aTmp, pColl );
-                FillTextCollFromClass( *pColl, *pClass );
+                if( pClass )
+                    FillTextCollFromClass( *pColl, *pClass );
+                if( m_pHeldBackStyleSheets )
+                    m_pHeldBackStyleSheets->aTextCollClasses.emplace_back( aTmp, aClass );
             }
         }
 
@@ -1338,6 +1351,49 @@ void SwCSS1Parser::FillTextCollFromClass( SwTextFormatColl& rColl, const SvxCSS1
         aItemSet.ClearItem( RES_BACKGROUND );
     lcl_clearItemsSetInStyle( aItemSet, rColl.GetAttrSet() );
     SetTextCollAttrs( &rColl, aItemSet, aPropInfo, this );
+}
+
+void SwCSS1Parser::ApplyHeldBackStyleSheets( SwDoc& rDoc, const SwHTMLHeldBackStyleSheets& rSheets )
+{
+    // The styles change as they would have at load, outside undo, so the undo actions recorded
+    // since the load no longer match the document and are removed too.
+    ::sw::UndoGuard const aUndoGuard( rDoc.GetIDocumentUndoRedo() );
+    rDoc.GetIDocumentUndoRedo().DelAllUndoObj();
+
+    SwCSS1Parser aParser( &rDoc, nullptr, rSheets.aFontHeights, rSheets.aBaseURL, true );
+    aParser.SetDfltEncoding( rSheets.eEncoding );
+    // The sheets of the document are parsed again with the linked ones, so that a later sheet
+    // overrides an earlier one, as at load.
+    for( const SwHTMLHeldBackStyleSheet& rSheet : rSheets.aStyleSheets )
+    {
+        if( rSheet.aURL.isEmpty() )
+        {
+            aParser.ParseStyleSheet( rSheet.aSource );
+            continue;
+        }
+        OUString sSource;
+        if( SfxHTMLParser::DownloadFile( rSheet.aURL, sSource ) && !sSource.isEmpty() )
+            aParser.ParseStyleSheet( sSource );
+    }
+    aParser.SetDelayedStyles();
+
+    for( const auto& [rName, rClass] : rSheets.aTextCollClasses )
+    {
+        const SvxCSS1MapEntry* pClass = aParser.GetClass( rClass );
+        SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rName );
+        if( pClass && pColl )
+        {
+            aParser.FillTextCollFromClass( *pColl, *pClass );
+            lcl_swcss1_setEncoding( *pColl, aParser.GetDfltEncoding() );
+        }
+    }
+    for( const auto& [rName, rClass] : rSheets.aCharFormatClasses )
+    {
+        const SvxCSS1MapEntry* pClass = aParser.GetClass( rClass );
+        SwCharFormat* pCharFormat = rDoc.FindCharFormatByName( rName );
+        if( pClass && pCharFormat )
+            lcl_fillCharFormatFromClass( *pCharFormat, *pClass );
+    }
 }
 
 SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
@@ -1723,15 +1779,22 @@ void SwHTMLParser::NewStyle()
     m_bIgnoreRawData = sType.getLength() && o3tl::getToken(sType, 0,';') != sCSS_mimetype;
 }
 
+void SwHTMLParser::ParseStyleSource()
+{
+    if( m_aStyleSource.isEmpty() )
+        return;
+
+    if( const std::shared_ptr<SwHTMLHeldBackStyleSheets>& pSheets
+        = m_pCSS1Parser->GetHeldBackStyleSheets() )
+        pSheets->aStyleSheets.push_back( { OUString(), m_aStyleSource } );
+    m_pCSS1Parser->ParseStyleSheet( m_aStyleSource );
+    m_aStyleSource.clear();
+}
+
 void SwHTMLParser::EndStyle()
 {
     m_bIgnoreRawData = false;
-
-    if( !m_aStyleSource.isEmpty() )
-    {
-        m_pCSS1Parser->ParseStyleSheet( m_aStyleSource );
-        m_aStyleSource.clear();
-    }
+    ParseStyleSource();
 }
 
 bool SwHTMLParser::FileDownload( const OUString& rURL,
@@ -1813,6 +1876,12 @@ void SwHTMLParser::InsertLink()
             {
                 SAL_WARN( "sw.html", "SwHTMLParser::InsertLink: blocked file path: \"" << sHRef << "\"" );
             }
+            else if( IsNewDoc()
+                && m_xDoc->GetDocumentLinksAdministrationManager().GetLinkUpdateOnLoad()
+                       != ::sw::DocumentLinksAdministrationManager::LinkUpdateOnLoad::Update )
+            {
+                HoldBackStyleSheet( sHRef );
+            }
             else if( GetMedium() )
             {
                 // start download of style source
@@ -1846,6 +1915,42 @@ void SwHTMLParser::InsertLink()
         if( FinishFileDownload( sSource ) && !sSource.isEmpty() )
             m_pCSS1Parser->ParseStyleSheet( sSource );
     }
+}
+
+static void lcl_applyHeldBackStyleSheets( SwDocShell* pShell,
+                                          const std::shared_ptr<SwHTMLHeldBackStyleSheets>& pSheets )
+{
+    if( SwDoc* pDoc = pShell->GetDoc() )
+        SwCSS1Parser::ApplyHeldBackStyleSheets( *pDoc, *pSheets );
+}
+
+void SwHTMLParser::HoldBackStyleSheet( const OUString& rURL )
+{
+    std::shared_ptr<SwHTMLHeldBackStyleSheets> pSheets = m_pCSS1Parser->GetHeldBackStyleSheets();
+    if( !pSheets )
+    {
+        SwDocShell* pShell = m_xDoc->GetDocShell();
+        if( !pShell )
+            return;
+        uno::Reference<style::XStyleFamiliesSupplier> xSupplier( pShell->GetModel(),
+                                                                      uno::UNO_QUERY );
+        if( !xSupplier.is() )
+            return;
+
+        pSheets = std::make_shared<SwHTMLHeldBackStyleSheets>();
+        pSheets->aBaseURL = m_sBaseURL;
+        std::copy( std::begin( m_aFontHeights ), std::end( m_aFontHeights ),
+                   std::begin( pSheets->aFontHeights ) );
+        pSheets->eEncoding = m_pCSS1Parser->GetDfltEncoding();
+        m_pCSS1Parser->SetHeldBackStyleSheets( pSheets );
+
+        // The load changes the styles of the document, so their families own it.
+        pShell->AddDeferredLinkLoad( xSupplier->getStyleFamilies(),
+                                     [pShell, pSheets](
+                                         const uno::Reference<uno::XInterface>& )
+                                     { lcl_applyHeldBackStyleSheets( pShell, pSheets ); } );
+    }
+    pSheets->aStyleSheets.push_back( { rURL, OUString() } );
 }
 
 bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )

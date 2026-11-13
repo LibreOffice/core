@@ -790,6 +790,9 @@ private:
 
     // <STYLE>
     void NewStyle();
+    // Parse the style sheet given in the document so far, and keep it if a linked one is held
+    // back
+    void ParseStyleSource();
     void EndStyle();
 
     static inline bool HasStyleOptions( std::u16string_view rStyle, std::u16string_view rId,
@@ -878,6 +881,8 @@ private:
     void ParseMoreMetaOptions();
 
     bool FileDownload( const OUString& rURL, OUString& rStr );
+    // Leave the style sheet at rURL to be fetched once the user allows link updates
+    void HoldBackStyleSheet( const OUString& rURL );
     void InsertLink();
 
     void InsertIDOption();
