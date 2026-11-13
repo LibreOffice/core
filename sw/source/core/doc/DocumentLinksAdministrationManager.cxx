@@ -213,7 +213,8 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     registerDeferredFormImageLinks(pShell->GetDeferredFormControlImages(), GetLinkManager());
     pShell->ClearDeferredFormControlImages();
 
-    if (GetLinkManager().GetLinks().empty() && !pShell->HasExternalDatabaseForms())
+    if (GetLinkManager().GetLinks().empty() && !pShell->HasExternalDatabaseForms()
+        && !pShell->HasDeferredLinkLoads())
         return;
     sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
     sal_uInt16 nUpdateDocMode = pShell->GetUpdateDocMode();
@@ -255,13 +256,7 @@ void DocumentLinksAdministrationManager::UpdateLinks()
             pShell->SetPendingLinkUpdateInfobar();
         }
         else
-        {
-            rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
-            SfxMedium* medium = pShell->GetMedium();
-            GetLinkManager().UpdateAllLinks(
-                false,
-                medium == nullptr ? OUString() : medium->GetName());
-        }
+            pShell->AllowLinkUpdate();
     }
     else
     {

@@ -91,6 +91,28 @@ public:
     {
     }
 
+    /// Writes to maTempFile a document whose XForms instance has inline data and also names
+    /// xforms-instance.xml. A document in the source tree cannot hold the file's absolute URL.
+    void writeDocumentWithXFormsInstanceURL()
+    {
+        const OString aInstanceURL
+            = OUStringToOString(createFileURL(u"xforms-instance.xml"), RTL_TEXTENCODING_UTF8);
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::WRITE | StreamMode::TRUNC);
+        aStream.WriteOString(Concat2View(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            "<office:document xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
+            " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\""
+            " xmlns:xforms=\"http://www.w3.org/2002/xforms\" office:version=\"1.4\""
+            " office:mimetype=\"application/vnd.oasis.opendocument.text\">"
+            "<office:body><office:text><office:forms>"
+            "<xforms:model id=\"Model\">"
+            "<xforms:instance src=\""
+            + aInstanceURL
+            + "\"><data xmlns=\"\"><name>inline</name></data></xforms:instance>"
+              "</xforms:model>"
+              "</office:forms><text:p/></office:text></office:body></office:document>"));
+    }
+
     /// Loads embedded-drawing-linked-image.fodt: a Writer document holding a Draw object whose page
     /// has a linked image. An embedded document has no base URL of its own, so the link is pointed
     /// at the image's full URL in a temporary copy.
@@ -1517,26 +1539,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableAutoFormats)
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testXFormsInstanceURLLoadsOnlyAfterLinkUpdateAllowed)
 {
-    // Given a document whose XForms instance has inline data and also names a file. A document in
-    // the source tree cannot hold the file's absolute URL, so write one with it:
-    const OString aInstanceURL
-        = OUStringToOString(createFileURL(u"xforms-instance.xml"), RTL_TEXTENCODING_UTF8);
-    {
-        SvFileStream aStream(maTempFile.GetURL(), StreamMode::WRITE | StreamMode::TRUNC);
-        aStream.WriteOString(Concat2View(
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-            "<office:document xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
-            " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\""
-            " xmlns:xforms=\"http://www.w3.org/2002/xforms\" office:version=\"1.4\""
-            " office:mimetype=\"application/vnd.oasis.opendocument.text\">"
-            "<office:body><office:text><office:forms>"
-            "<xforms:model id=\"Model\">"
-            "<xforms:instance src=\""
-            + aInstanceURL
-            + "\"><data xmlns=\"\"><name>inline</name></data></xforms:instance>"
-              "</xforms:model>"
-              "</office:forms><text:p/></office:text></office:body></office:document>"));
-    }
+    // Given a document whose XForms instance has inline data and also names a file:
+    writeDocumentWithXFormsInstanceURL();
 
     // When the document is loaded, the instance keeps its inline data:
     loadFromURL(maTempFile.GetURL());
@@ -1548,6 +1552,29 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testXFormsInstanceURLLoadsOnlyAfterLinkUpdat
     // When the user then allows link updates, the instance holds the data of the file it names.
     getSwDocShell()->AllowLinkUpdate();
     CPPUNIT_ASSERT_EQUAL(u"loaded"_ustr, getInstanceName(xModel));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testXFormsInstanceURLLoadsAtOnceWhenLinkUpdatesAllowed)
+{
+    // Given a document whose XForms instance has inline data and also names a file. A flat file
+    // is loaded by a filter that ignores the update mode asked for, so the test opens the zipped
+    // form:
+    writeDocumentWithXFormsInstanceURL();
+    loadFromURL(maTempFile.GetURL());
+
+    // When the document is loaded with links updated without asking:
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::QUIET_UPDATE)),
+    };
+    saveAndReload(TestFilter::ODT, aParams);
+
+    // Then the instance holds the data of the file it names, and nothing waits for the user:
+    uno::Reference<xforms::XFormsSupplier> xFormsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<xforms::XModel> xModel(xFormsSupplier->getXForms()->getByName(u"Model"_ustr),
+                                          uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"loaded"_ustr, getInstanceName(xModel));
+    CPPUNIT_ASSERT(!getSwDocShell()->HasDeferredLinkLoads());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCloseDocWithFillBitmapLinkTracker)

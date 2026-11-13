@@ -384,6 +384,8 @@ public:
     void                        AddDeferredLinkLoad(
                                     const css::uno::Reference<css::uno::XInterface>& rxOwner,
                                     std::function<void(const css::uno::Reference<css::uno::XInterface>&)> aLoad);
+    bool                        HasDeferredLinkLoads() const
+                                    { return !maDeferredLinkLoads.empty(); }
     virtual bool                LoadExternal( SfxMedium& rMedium );
     bool                        IsConfigOptionsChecked() const;
     void                        SetConfigOptionsChecked( bool bChecked );
