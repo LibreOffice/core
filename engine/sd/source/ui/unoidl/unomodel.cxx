@@ -107,6 +107,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/style.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
@@ -2994,6 +2995,15 @@ bool SdXImpressDocument::isVectorMasterChangedSince(const SdrPage& rPage, sal_uI
 
 void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
+    if (mpShapeStyle && &rBC == mpShapeStyle)
+    {
+        if (rHint.GetId() == SfxHintId::Dying)
+            mpShapeStyle = nullptr;
+        else if (rHint.GetId() == SfxHintId::DataChanged)
+            notifyShapeStyleKey();
+        return;
+    }
+
     if( mpDoc )
     {
         if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
@@ -4083,7 +4093,7 @@ bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
     if (svx::vector::isPartCommand(rCommand) || rCommand == u"ExtractDocumentStructure"
         || rCommand == u"GetDesignTemplates" || rCommand == u"GetDesignTemplateDesigns"
         || rCommand == u"SecurityLabel" || rCommand == u"ShapeGhost"
-        || rCommand == u"ReserveObjectIds")
+        || rCommand == u"ReserveObjectIds" || rCommand == u"ShapeStyleKey")
         return true;
     return false;
 }
@@ -4167,8 +4177,9 @@ void SdXImpressDocument::writeReservedObjectIds(::tools::JsonWriter& rJsonWriter
     default object of that shape and holds it as its object in creation, which is inserted
     nowhere, and the answer carries its size, its id and how it is drawn, for the client to show
     it while the shape is dragged out. With Hold=false the shape is only described, for a client
-    that keeps the looks of shapes ahead of their use: nothing is held, and no id goes along. A
-    shape of no known group gets an answer without an object.
+    that keeps the looks of shapes ahead of their use: nothing is held, and no id goes along. The
+    key of the attributes the shape took goes along, which tells whether a kept look still holds.
+    A shape of no known group gets an answer without an object.
 */
 void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
                                          std::u16string_view aShape, bool bHold)
@@ -4182,6 +4193,7 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
         { u"FlowChartShapes", SID_DRAWTBX_CS_FLOWCHART },
     };
 
+    listenToTheShapeStyle();
     rJsonWriter.put("commandName", ".uno:ShapeGhost");
     auto aValues = rJsonWriter.startNode("commandValues");
     rJsonWriter.put("shape", OUString(aShape));
@@ -4214,6 +4226,9 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
     if (bHold)
         rJsonWriter.put("id", svx::vector::idOf(*pObject));
 
+    // the look holds as long as the attributes of new shapes stay as they are
+    rJsonWriter.put("styleKey", pShell->GetShapeStyleKey());
+
     // some shapes are always as wide as high, as the custom shape tool makes them
     rJsonWriter.put("asWideAsHigh", SdrObjCustomShape::doConstructOrthogonal(aType));
 
@@ -4230,6 +4245,36 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
     auto aObjects = rJsonWriter.startArray("objects");
     VectorContentWriter aWriter(mpDoc, this, OString());
     aWriter.writeObjectInCreation(rJsonWriter, pPage, *pObject);
+}
+
+void SdXImpressDocument::listenToTheShapeStyle()
+{
+    if (mpShapeStyle || !mpDoc)
+        return;
+    mpShapeStyle = mpDoc->GetDefaultStyleSheet();
+    if (mpShapeStyle)
+        StartListening(*mpShapeStyle);
+}
+
+/*
+    A changed style makes the looks a client keeps of shapes wrong, so each view gets the new key
+    at once, as the state of .uno:ShapeStyleKey; the key is that of the view, as the page it shows
+    decides which style its new shapes take.
+*/
+void SdXImpressDocument::notifyShapeStyleKey()
+{
+    for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell;
+         pViewShell = SfxViewShell::GetNext(*pViewShell))
+    {
+        if (pViewShell->GetObjectShell() != mpDocShell)
+            continue;
+        auto* pBase = dynamic_cast<sd::ViewShellBase*>(pViewShell);
+        auto* pShell = pBase ? dynamic_cast<sd::DrawViewShell*>(pBase->GetMainViewShell().get())
+                             : nullptr;
+        if (pShell)
+            pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED,
+                                     ".uno:ShapeStyleKey=" + pShell->GetShapeStyleKey());
+    }
 }
 
 void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
@@ -4268,6 +4313,18 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
     if (o3tl::starts_with(rCommand, ".uno:ReserveObjectIds"))
     {
         writeReservedObjectIds(rJsonWriter, aMap[u"Count"_ustr].toInt32());
+        return;
+    }
+
+    if (o3tl::starts_with(rCommand, ".uno:ShapeStyleKey"))
+    {
+        listenToTheShapeStyle();
+        // the key of the attributes new shapes of the current view take, empty without a view
+        rJsonWriter.put("commandName", ".uno:ShapeStyleKey");
+        auto aValues = rJsonWriter.startNode("commandValues");
+        sd::DrawViewShell* pShell
+            = mpDocShell ? dynamic_cast<sd::DrawViewShell*>(mpDocShell->GetViewShell()) : nullptr;
+        rJsonWriter.put("styleKey", pShell ? pShell->GetShapeStyleKey() : OString());
         return;
     }
 
@@ -6877,6 +6934,8 @@ void SdXImpressDocument::dumpState(rtl::OStringBuffer& rState)
     rState.append(" objects in ");
     rState.append(sal_Int32(maVectorParts.size()));
     rState.append(" parts");
+    rState.append("\nSdXImpressDocument shape style listened to:\t");
+    rState.append(mpShapeStyle ? "yes" : "no");
 }
 
 OUString SdXImpressDocument::getCacheName() const { return u"SdXImpressDocument"_ustr; }
@@ -8444,6 +8503,12 @@ void SdXImpressDocument::dispose()
         return;
 
     ::SolarMutexGuard aGuard;
+
+    if (mpShapeStyle)
+    {
+        EndListening(*mpShapeStyle);
+        mpShapeStyle = nullptr;
+    }
 
     if( mpDoc )
     {

@@ -657,8 +657,13 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 	}
 
 	/// The looks of the shapes known so far in this session, by command; a shape looks the same
-	/// whenever it is made, so the drag shows it at once where it is known.
+	/// whenever it is made with the same attributes, so the drag shows it at once where it is
+	/// known.
 	private static library: Map<string, ShapeLook> = new Map();
+
+	/// The key of the attributes new shapes take, which the engine tells with every look; the
+	/// looks in the library are all of this key.
+	private static styleKey: string = '';
 
 	/// The shapes whose look was asked for ahead, so each is asked for once.
 	private static askedAhead: Set<string> = new Set();
@@ -669,6 +674,15 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 		ClassicShapeCreateContext.askedAhead.clear();
 	}
 
+	/// Whether the library keeps the looks; without it every drag asks for its shape.
+	private static keeping: boolean = true;
+
+	/// Keeps the looks of shapes from now on, or forgets them and keeps none.
+	public static keepTheLooks(keep: boolean): void {
+		ClassicShapeCreateContext.keeping = keep;
+		if (!keep) ClassicShapeCreateContext.forgetTheLooks();
+	}
+
 	/// Whether the answers about shapes are followed, which they are once.
 	private static followingTheGhosts: boolean = false;
 
@@ -677,14 +691,51 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 	private static followTheGhosts(): void {
 		if (ClassicShapeCreateContext.followingTheGhosts) return;
 		ClassicShapeCreateContext.followingTheGhosts = true;
+		// the engine tells a changed key by itself as well
+		app.map.on('commandstatechanged', (event: any) => {
+			if (event.commandName === '.uno:ShapeStyleKey')
+				ClassicShapeCreateContext.takeTheKey(event.state);
+		});
 		app.map.on('commandvalues', (event: any) => {
+			if (event.commandName === '.uno:ShapeStyleKey') {
+				ClassicShapeCreateContext.takeTheKey(event.commandValues?.styleKey);
+				return;
+			}
 			if (event.commandName !== '.uno:ShapeGhost') return;
 			const values = event.commandValues;
+			ClassicShapeCreateContext.takeTheKey(values?.styleKey);
 			const look = ClassicShapeCreateContext.lookOf(values);
-			if (look) ClassicShapeCreateContext.library.set(values.shape, look);
+			if (look && ClassicShapeCreateContext.keeping)
+				ClassicShapeCreateContext.library.set(values.shape, look);
 			const mode = Interaction.modeOn();
 			if (mode instanceof ClassicShapeCreateContext) mode.takeTheGhost(values);
 		});
+	}
+
+	/*
+		Where the attributes of new shapes changed, as by a change of the default drawing style,
+		the looks kept are not right any more: we forget them, and the shape of a mode that is on
+		is asked for again.
+	*/
+	private static takeTheKey(key: string | undefined): void {
+		if (!key || key === ClassicShapeCreateContext.styleKey) return;
+		const known = ClassicShapeCreateContext.styleKey !== '';
+		ClassicShapeCreateContext.styleKey = key;
+		if (!known) return;
+		ClassicShapeCreateContext.forgetTheLooks();
+		const mode = Interaction.modeOn();
+		if (mode instanceof ClassicShapeCreateContext)
+			ClassicShapeCreateContext.ask(mode.shape);
+	}
+
+	/// Asks the engine how that shape looks; it only describes the shape and holds nothing.
+	private static ask(shape: string): void {
+		ClassicShapeCreateContext.askedAhead.add(shape);
+		app.socket.sendMessage(
+			'commandvalues command=.uno:ShapeGhost?Shape=' +
+				encodeURIComponent(shape) +
+				'&Hold=false',
+		);
 	}
 
 	/// The look an answer about a shape tells, where it tells one.
@@ -714,39 +765,31 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 		if (
 			!ClassicShapeCreateContext.makes(shape) ||
 			!RenderGeometrySection.answersPointer() ||
+			!ClassicShapeCreateContext.keeping ||
 			ClassicShapeCreateContext.library.has(shape) ||
 			ClassicShapeCreateContext.askedAhead.has(shape)
 		)
 			return;
 		ClassicShapeCreateContext.followTheGhosts();
 		ReservedObjectIds.keepEnough();
-		ClassicShapeCreateContext.askedAhead.add(shape);
-		app.socket.sendMessage(
-			'commandvalues command=.uno:ShapeGhost?Shape=' +
-				encodeURIComponent(shape) +
-				'&Hold=false',
-		);
+		ClassicShapeCreateContext.ask(shape);
 	}
 
 	/*
-		Shows the shape at once where the library knows how it looks, and asks the engine for the
-		shape, which it holds for the drag: the answer brings the id the shape is created under.
+		Shows the shape at once where the library knows how it looks, and asks the engine whether
+		the attributes of new shapes are still those of the library; else it asks for the look.
 	*/
 	public started(): void {
 		ClassicShapeCreateContext.followTheGhosts();
 		ReservedObjectIds.keepEnough();
 		const look = ClassicShapeCreateContext.library.get(this.shape);
-		if (look) {
-			this.asWideAsHigh = look.asWideAsHigh;
-			this.ghost = look;
+		if (!look) {
+			ClassicShapeCreateContext.ask(this.shape);
 			return;
 		}
-		ClassicShapeCreateContext.askedAhead.add(this.shape);
-		app.socket.sendMessage(
-			'commandvalues command=.uno:ShapeGhost?Shape=' +
-				encodeURIComponent(this.shape) +
-				'&Hold=false',
-		);
+		this.asWideAsHigh = look.asWideAsHigh;
+		this.ghost = look;
+		app.socket.sendMessage('commandvalues command=.uno:ShapeStyleKey');
 	}
 
 	/// The office shows the plain cross while a custom shape is created.

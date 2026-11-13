@@ -8906,6 +8906,38 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReservedObjectIds)
     CPPUNIT_ASSERT_EQUAL(nSecondFirst + 499, shapeWithId(nSecondFirst + 499));
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeStyleKey)
+{
+    // a client keeps the looks of shapes as long as the key of the attributes stays the same
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    const auto styleKey = [&]() {
+        tools::JsonWriter aWriter;
+        pXImpressDocument->getCommandValues(aWriter, ".uno:ShapeStyleKey");
+        std::stringstream aStream((std::string(aWriter.finishAndGetAsOString())));
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        return aTree.get<std::string>("commandValues.styleKey");
+    };
+
+    const std::string aKey = styleKey();
+    CPPUNIT_ASSERT(!aKey.empty());
+    // asked again with nothing changed, it is the same, though every new shape is another object
+    CPPUNIT_ASSERT_EQUAL(aKey, styleKey());
+
+    // new shapes take the fill colour of the default style, so the key changes with it
+    SfxStyleSheet* pStyle = pXImpressDocument->GetDoc()->GetDefaultStyleSheet();
+    CPPUNIT_ASSERT(pStyle);
+    pStyle->GetItemSet().Put(XFillColorItem(OUString(), COL_LIGHTMAGENTA));
+    pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
+    const std::string aChangedKey = styleKey();
+    CPPUNIT_ASSERT(aKey != aChangedKey);
+    // the view is told the new key at once, without asking
+    CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(),
+                             ".uno:ShapeStyleKey=" + aChangedKey)
+                   != aView.m_aStateChanged.end());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShape)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");

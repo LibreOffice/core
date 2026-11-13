@@ -73,6 +73,7 @@ namespace com::sun::star::i18n { class XForbiddenCharacters; }
 namespace avmedia { struct MediaTempFile; }
 
 class SdrGrafObj;
+class SfxStyleSheet;
 class SdrObject;
 class SdrPage;
 class SdDrawDocument;
@@ -302,6 +303,14 @@ private:
     /// Answers .uno:ShapeGhost: makes the default object of the named shape, as the object in
     /// creation of the current view where bHold, and writes its size and how it is drawn.
     void writeShapeGhost(tools::JsonWriter& rJsonWriter, std::u16string_view aShape, bool bHold);
+
+    /// The style new shapes take, listened to once a client asked for the looks of shapes;
+    /// nullptr before that and after the style went.
+    SfxStyleSheet* mpShapeStyle = nullptr;
+    /// Starts listening to the style new shapes take, where it does not yet.
+    void listenToTheShapeStyle();
+    /// Tells every view of the document the key of the attributes its new shapes take.
+    void notifyShapeStyleKey();
 
     cpo::uno::Reference<cpo::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);

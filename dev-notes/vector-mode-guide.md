@@ -134,7 +134,9 @@ and the shape is dragged out where it is to go, as in the office:
 | Escape, a click without a drag, a command, a press elsewhere, another slide, a text edit that starts | End the mode without a shape. |
 
 How a shape looks is asked of the engine when the mouse rests on it in the shapes grid, and kept
-for the session, so a drag shows it from the first move. The console command
+for the session, so a drag shows it from the first move. Where the attributes new shapes take
+change, as by a change of the default drawing style, the kept looks are forgotten when the next
+drag starts, and the shape is asked for again. The console command
 ClassicShapeCreateContext.forgetTheLooks() forgets what was kept, so each shape is asked for again.
 
 Shift, Alt and Ctrl take effect at once, also while the mouse stands still. Positions and sizes are

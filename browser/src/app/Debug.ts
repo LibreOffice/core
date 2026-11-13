@@ -510,6 +510,22 @@ class DebugManager {
 				},
 			});
 
+		// switching it off and on again forgets the looks of shapes kept so far
+		if (vectorDocument)
+			this._addDebugTool({
+				name: 'Keep shape looks',
+				category: 'Display',
+				startsOn: true,
+				dependsOn: 'Vector',
+				keepOnClose: true,
+				onAdd: function () {
+					ClassicShapeCreateContext.keepTheLooks(true);
+				},
+				onRemove: function () {
+					ClassicShapeCreateContext.keepTheLooks(false);
+				},
+			});
+
 		// Predicted edits change the vector cache, so the caret that shows
 		// them is a Vector tool.
 		if (vectorDocument || vectorText || vectorSpreadsheet)

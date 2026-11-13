@@ -28,6 +28,7 @@
 #include <cpo/uno/Any.hxx>
 
 #include <COKit/COKit.hxx>
+#include <comphelper/hash.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -117,6 +118,8 @@
 
 #include <algorithm>
 #include <functional>
+#include <libxml/xmlwriter.h>
+#include <rtl/strbuf.hxx>
 #include <optional>
 
 using namespace ::com::sun::star;
@@ -902,6 +905,44 @@ rtl::Reference<SdrObject> DrawViewShell::MakeDefaultShape(sal_uInt16 nSlotId,
 
     mpDrawView->SetCurrentObj(eKind, eInventor);
     return xShape;
+}
+
+OString DrawViewShell::GetShapeStyleKey()
+{
+    // every new shape takes the same attributes but its geometry, so we look at a rectangle
+    rtl::Reference<SdrObject> xShape(MakeDefaultShape(SID_DRAWTBX_CS_BASIC, u"rectangle"_ustr));
+    if (!xShape)
+        return OString();
+
+    xmlBufferPtr pBuffer = xmlBufferCreate();
+    xmlTextWriterPtr pWriter = xmlNewTextWriterMemory(pBuffer, 0);
+    (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+    // the attributes the shape inherits from its style count as well
+    for (const SfxItemSet* pSet = &xShape->GetMergedItemSet(); pSet; pSet = pSet->GetParent())
+        pSet->dumpAsXml(pWriter);
+    (void)xmlTextWriterEndDocument(pWriter);
+    xmlFreeTextWriter(pWriter);
+    OString aDump(reinterpret_cast<const char*>(xmlBufferContent(pBuffer)));
+    xmlBufferFree(pBuffer);
+
+    // the items name their place in memory, which differs from shape to shape
+    OStringBuffer aKeyed(aDump.getLength());
+    for (sal_Int32 nAt = 0; nAt < aDump.getLength();)
+    {
+        const sal_Int32 nPointer = aDump.indexOf(" ptr=\"", nAt);
+        const sal_Int32 nEnd = nPointer < 0 ? -1 : aDump.indexOf('"', nPointer + 6);
+        if (nEnd < 0)
+        {
+            aKeyed.append(aDump.subView(nAt));
+            break;
+        }
+        aKeyed.append(aDump.subView(nAt, nPointer - nAt));
+        nAt = nEnd + 1;
+    }
+
+    const std::vector<unsigned char> aHash(comphelper::Hash::calculateHash(
+        aKeyed.getStr(), aKeyed.getLength(), comphelper::HashType::SHA1));
+    return OString(comphelper::hashToString(aHash));
 }
 
 void DrawViewShell::FuDeleteSelectedObjects()
