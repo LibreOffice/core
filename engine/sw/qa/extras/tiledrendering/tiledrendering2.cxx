@@ -5688,6 +5688,44 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTextCursorMovesTheCaretOfTheViewT
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pWrtShell2->GetCursor()->GetPoint()->GetContentIndex());
 }
 
+namespace
+{
+/// Clicks the left button once at aPos, in twips.
+void lcl_click(SwXTextDocument* pXTextDocument, Point aPos)
+{
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aPos.getX(), aPos.getY(), 1,
+                                   MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aPos.getX(), aPos.getY(), 1,
+                                   MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClickOutsideVerticalTextBoxEndsEdit)
+{
+    // Given a document with a vertical text box beside the body text:
+    SwXTextDocument* pXTextDocument = createDoc("vertical-text-box.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    // The end of the body text, away from the anchor of the box at the start of the paragraph.
+    pWrtShell->EndPara();
+    Point aInBody = pWrtShell->GetCharRect().Center();
+    pWrtShell->SttPara();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    tools::Rectangle aShapeRect = pPage->GetObj(0)->GetLogicRect();
+    // The first column of text runs down the right edge of the box.
+    Point aOnText(aShapeRect.Right() - 150, aShapeRect.Top() + 600);
+
+    // When the user clicks the text of the box, which starts editing it, and then clicks the body
+    // text:
+    lcl_click(pXTextDocument, aOnText);
+    CPPUNIT_ASSERT(pWrtShell->GetDrawView()->IsTextEdit());
+    lcl_click(pXTextDocument, aInBody);
+
+    // Then the editing of the box ends and nothing is selected any more:
+    CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

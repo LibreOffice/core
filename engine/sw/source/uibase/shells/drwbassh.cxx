@@ -84,7 +84,10 @@ SwDrawBaseShell::SwDrawBaseShell(SwView &_rView)
 
     rWin.SetBezierMode(SID_BEZIER_MOVE);
 
-    if ( !_rView.GetDrawFuncPtr() )
+    // While the text of a shape is edited, this shell sits below the text edit shell and the
+    // view keeps no draw function, so a click outside the shape ends the text edit.
+    const SdrView* pSdrView = GetShell().GetDrawView();
+    if (!_rView.GetDrawFuncPtr() && !(pSdrView && pSdrView->IsTextEdit()))
         _rView.GetEditWin().StdDrawMode( SdrObjKind::NONE, true );
 
     SwTransferable::CreateSelection( GetShell() );
