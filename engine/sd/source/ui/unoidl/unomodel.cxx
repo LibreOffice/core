@@ -3255,7 +3255,7 @@ public:
 
     /// Writes the entry of an object that is on no page yet, as drawn on that page, into the
     /// open array, as an object of the page would be written once inserted.
-    void writeObjectInCreation(tools::JsonWriter& rWriter, SdPage* pPage, SdrObject& rObject)
+    void writeObjectOnNoPage(tools::JsonWriter& rWriter, SdPage* pPage, SdrObject& rObject)
     {
         setupProcessor(rWriter, pPage);
         writeObjectEntry(rWriter, rObject, 0, contentOf(rObject));
@@ -4174,15 +4174,13 @@ void SdXImpressDocument::writeReservedObjectIds(::tools::JsonWriter& rJsonWriter
 
 /*
     The answer to .uno:ShapeGhost?Shape=BasicShapes.rectangle and the like: the view makes the
-    default object of that shape and holds it as its object in creation, which is inserted
-    nowhere, and the answer carries its size, its id and how it is drawn, for the client to show
-    it while the shape is dragged out. With Hold=false the shape is only described, for a client
-    that keeps the looks of shapes ahead of their use: nothing is held, and no id goes along. The
-    key of the attributes the shape took goes along, which tells whether a kept look still holds.
-    A shape of no known group gets an answer without an object.
+    default object of that shape, which is inserted nowhere, and the answer carries its size and
+    how it is drawn, for the client to show it while the shape is dragged out. The key of the
+    attributes the shape took goes along, which tells whether a kept look still holds. A shape of
+    no known group gets an answer without an object.
 */
 void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
-                                         std::u16string_view aShape, bool bHold)
+                                         std::u16string_view aShape)
 {
     static constexpr std::pair<std::u16string_view, sal_uInt16> aGroups[] = {
         { u"BasicShapes", SID_DRAWTBX_CS_BASIC },
@@ -4212,19 +4210,11 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
         return;
 
     const OUString aType(aShape.substr(nDot + 1));
-    rtl::Reference<SdrObject> xDescribed;
-    if (!bHold)
-        xDescribed = pShell->MakeDefaultShape(pGroup->second, aType);
-    SdrObject* pObject
-        = bHold ? pShell->MakeObjectInCreation(pGroup->second, aType) : xDescribed.get();
+    const rtl::Reference<SdrObject> xDescribed(pShell->MakeDefaultShape(pGroup->second, aType));
+    SdrObject* pObject = xDescribed.get();
     SdPage* pPage = pShell->GetActualPage();
     if (!pObject || !pPage)
         return;
-
-    // the object keeps the id it was made with when it is inserted, so the client can take the
-    // shape as created before the engine reports it
-    if (bHold)
-        rJsonWriter.put("id", svx::vector::idOf(*pObject));
 
     // the look holds as long as the attributes of new shapes stay as they are
     rJsonWriter.put("styleKey", pShell->GetShapeStyleKey());
@@ -4244,7 +4234,7 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
     // the entry the object will have once inserted, which the client can take as created
     auto aObjects = rJsonWriter.startArray("objects");
     VectorContentWriter aWriter(mpDoc, this, OString());
-    aWriter.writeObjectInCreation(rJsonWriter, pPage, *pObject);
+    aWriter.writeObjectOnNoPage(rJsonWriter, pPage, *pObject);
 }
 
 void SdXImpressDocument::listenToTheShapeStyle()
@@ -4330,7 +4320,7 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
 
     if (o3tl::starts_with(rCommand, ".uno:ShapeGhost"))
     {
-        writeShapeGhost(rJsonWriter, aMap[u"Shape"_ustr], aMap[u"Hold"_ustr] != u"false");
+        writeShapeGhost(rJsonWriter, aMap[u"Shape"_ustr]);
         return;
     }
 

@@ -300,9 +300,9 @@ private:
     /// Answers .uno:ReserveObjectIds: reserves that many object ids for the current view.
     void writeReservedObjectIds(tools::JsonWriter& rJsonWriter, sal_Int32 nCount);
 
-    /// Answers .uno:ShapeGhost: makes the default object of the named shape, as the object in
-    /// creation of the current view where bHold, and writes its size and how it is drawn.
-    void writeShapeGhost(tools::JsonWriter& rJsonWriter, std::u16string_view aShape, bool bHold);
+    /// Answers .uno:ShapeGhost: makes the default object of the named shape, and writes its size
+    /// and how it is drawn.
+    void writeShapeGhost(tools::JsonWriter& rJsonWriter, std::u16string_view aShape);
 
     /// The style new shapes take, listened to once a client asked for the looks of shapes;
     /// nullptr before that and after the style went.

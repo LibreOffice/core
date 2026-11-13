@@ -8711,8 +8711,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateShapeInRectangle)
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeGhost)
 {
-    // the shape shown while it is dragged out is made on the view, outside the document, and is
-    // the shape created at the end of the drag
+    // the shape shown while it is dragged out is described by the engine, and the document stays
+    // as it was
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
     SdPage* pSlide = pDocument->GetSdPage(0, PageKind::Standard);
@@ -8728,51 +8728,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeGhost)
     CPPUNIT_ASSERT_EQUAL(std::string("BasicShapes.rectangle"), rValues.get<std::string>("shape"));
     CPPUNIT_ASSERT(rValues.get<sal_Int64>("width") > 0);
     CPPUNIT_ASSERT(rValues.get<sal_Int64>("height") > 0);
+    CPPUNIT_ASSERT(!rValues.get<std::string>("styleKey").empty());
     const boost::property_tree::ptree& rEntry = rValues.get_child("objects").front().second;
     CPPUNIT_ASSERT(!rEntry.get_child("primitives").empty());
-    const sal_uInt64 nPromisedId = rValues.get<sal_uInt64>("id");
-    CPPUNIT_ASSERT_EQUAL(nPromisedId, rEntry.get<sal_uInt64>("id"));
+    // the client gives a created shape its own id, so the look promises none
+    CPPUNIT_ASSERT(!rValues.get_child_optional("id"));
 
     // the document does not know of it
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(nUndoCount, pDocument->GetUndoManager()->GetUndoActionCount());
-    sd::DrawViewShell* pShell
-        = dynamic_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
-    CPPUNIT_ASSERT(pShell);
-    SdrObject* pInCreation = pShell->GetObjectInCreation();
-    CPPUNIT_ASSERT(pInCreation);
-
-    // a shape only described, for the client's library of looks, leaves the one held alone
-    tools::JsonWriter aDescribed;
-    pXImpressDocument->getCommandValues(
-        aDescribed, ".uno:ShapeGhost?Shape=BasicShapes.ellipse&Hold=false");
-    std::stringstream aDescribedStream((std::string(aDescribed.finishAndGetAsOString())));
-    boost::property_tree::ptree aDescribedTree;
-    boost::property_tree::read_json(aDescribedStream, aDescribedTree);
-    const boost::property_tree::ptree& rDescribed = aDescribedTree.get_child("commandValues");
-    CPPUNIT_ASSERT(!rDescribed.get_child("objects").front().second.get_child("primitives").empty());
-    CPPUNIT_ASSERT(!rDescribed.get_child_optional("id"));
-    CPPUNIT_ASSERT_EQUAL(pInCreation, pShell->GetObjectInCreation());
-    CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
-
-    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { u"X"_ustr, cpo::uno::Any(sal_Int32(1000)) },
-        { u"Y"_ustr, cpo::uno::Any(sal_Int32(1500)) },
-        { u"Width"_ustr, cpo::uno::Any(sal_Int32(4000)) },
-        { u"Height"_ustr, cpo::uno::Any(sal_Int32(3000)) },
-    }));
-    dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
-
-    // the drag ends in that very object, in the dragged rectangle
-    CPPUNIT_ASSERT_EQUAL(nObjectCount + 1, pSlide->GetObjCount());
-    SdrObject* pShape = pSlide->GetObj(pSlide->GetObjCount() - 1);
-    CPPUNIT_ASSERT_EQUAL(pInCreation, pShape);
-    // under the id the client was told
-    CPPUNIT_ASSERT_EQUAL(nPromisedId, pShape->GetUniqueID());
-    CPPUNIT_ASSERT(!pShell->GetObjectInCreation());
-    CPPUNIT_ASSERT_EQUAL(o3tl::convert(4000, o3tl::Length::twip, o3tl::Length::mm100),
-                         static_cast<sal_Int64>(pShape->GetLogicRect().GetWidth()));
-    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pDocument->GetUndoManager()->GetUndoActionCount());
 }
 
 namespace

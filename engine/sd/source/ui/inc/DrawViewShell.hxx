@@ -213,14 +213,8 @@ public:
     void            FuTemporary(SfxRequest& rReq);
     void            FuPermanent(SfxRequest& rReq);
 
-    /** Makes the default object of a custom shape, of that group's slot and that type, in the
-        default size, and holds it as the object in creation of this view, in place of one held
-        before. It is not inserted anywhere: a client shows it while the shape is dragged out,
-        and a request to create that shape in a rectangle takes it.
-     */
-    SdrObject* MakeObjectInCreation(sal_uInt16 nSlotId, const OUString& rShapeType);
     /// Makes the default object of a custom shape, of that group's slot and that type, in the
-    /// default size, as the custom shape tool makes it, without holding it.
+    /// default size, as the custom shape tool makes it. It is not inserted anywhere.
     rtl::Reference<SdrObject> MakeDefaultShape(sal_uInt16 nSlotId, const OUString& rShapeType);
     /// A key of the attributes a new shape of this view takes, its own and those of its style, and
     /// of the build that makes it: a hash in hexadecimal, the same as long as they are the same.
@@ -230,8 +224,6 @@ public:
     sal_uInt64 ReserveObjectIds(sal_uInt32 nCount);
     /// Takes that id out of the ids this view reserved, answering whether it was one of them.
     bool TakeReservedObjectId(sal_uInt64 nId);
-    /// The object in creation this view holds, if any.
-    SdrObject* GetObjectInCreation() const { return mxObjectInCreation.get(); }
     void            FuSupport(SfxRequest& rReq);
     void            FuDeleteSelectedObjects();
     void            FuSupportRotate(SfxRequest const & rReq);
@@ -498,10 +490,6 @@ private:
     Size GetDefaultObjectSize() const;
 
     std::unique_ptr<DrawView> mpDrawView;
-    /// The object in creation, which is on no page, and the slot and type that made it.
-    rtl::Reference<SdrObject> mxObjectInCreation;
-    sal_uInt16 mnObjectInCreationSlot = 0;
-    OUString maObjectInCreationType;
     /// The object ids reserved for this view and not taken yet.
     std::set<sal_uInt64> maReservedObjectIds;
     SdPage*             mpActualPage;

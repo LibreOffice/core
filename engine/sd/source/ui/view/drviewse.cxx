@@ -780,26 +780,11 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     if(!pPageView)
         return;
 
-    // create the default object, or take the one in creation of that kind, which the client has
-    // shown while the shape was dragged out
-    rtl::Reference<SdrObject> pObj;
-    const SfxItemSet* pRequestArgs = rReq.GetArgs();
-    const SfxStringItem* pShapeType
-        = pRequestArgs ? pRequestArgs->GetItem<SfxStringItem>(nSId, false) : nullptr;
-    if (!nGivenId && oRequestedRectangle && mxObjectInCreation && nSId == mnObjectInCreationSlot
-        && pShapeType && pShapeType->GetValue() == maObjectInCreationType)
-    {
-        // the client was told which shapes are as wide as high, and dragged those so
-        pObj = std::move(mxObjectInCreation);
-        pObj->SetLogicRect(aNewObjectRectangle);
-    }
-    else
-    {
-        // the object made first is the new one, so it takes the id the client gave it
-        UniqueID::giveNext(nGivenId);
-        pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
-        UniqueID::giveNext(0);
-    }
+    // the object made first is the new one, so it takes the id the client gave it
+    UniqueID::giveNext(nGivenId);
+    rtl::Reference<SdrObject> pObj
+        = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
+    UniqueID::giveNext(0);
 
     if(!pObj)
         return;
@@ -879,15 +864,6 @@ sal_uInt64 DrawViewShell::ReserveObjectIds(sal_uInt32 nCount)
 bool DrawViewShell::TakeReservedObjectId(sal_uInt64 nId)
 {
     return maReservedObjectIds.erase(nId) > 0;
-}
-
-SdrObject* DrawViewShell::MakeObjectInCreation(sal_uInt16 nSlotId, const OUString& rShapeType)
-{
-    mxObjectInCreation.clear();
-    mnObjectInCreationSlot = nSlotId;
-    maObjectInCreationType = rShapeType;
-    mxObjectInCreation = MakeDefaultShape(nSlotId, rShapeType);
-    return mxObjectInCreation.get();
 }
 
 rtl::Reference<SdrObject> DrawViewShell::MakeDefaultShape(sal_uInt16 nSlotId,

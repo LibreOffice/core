@@ -859,13 +859,12 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 			ClassicShapeCreateContext.ask(mode.shape);
 	}
 
-	/// Asks the engine how that shape looks; it only describes the shape and holds nothing.
+	/// Asks the engine how that shape looks.
 	private static ask(shape: string): void {
 		ClassicShapeCreateContext.askedAhead.add(shape);
 		app.socket.sendMessage(
 			'commandvalues command=.uno:ShapeGhost?Shape=' +
-				encodeURIComponent(shape) +
-				'&Hold=false',
+				encodeURIComponent(shape),
 		);
 	}
 
@@ -889,8 +888,7 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 
 	/*
 		Asks the engine how a shape looks, ahead of its use, where the library does not know it
-		yet: when the mouse rests on it in the shapes grid. The engine only describes it then and
-		holds nothing.
+		yet: when the mouse rests on it in the shapes grid.
 	*/
 	public static lookAhead(shape: string): void {
 		if (
