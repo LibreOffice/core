@@ -1782,7 +1782,8 @@ void SwHTMLParser::InsertLink()
         }
 
         if( !sHRef.isEmpty() && sRel.equalsIgnoreAsciiCase( "STYLESHEET" ) &&
-            ( sType.isEmpty() || o3tl::getToken(sType, 0,';') == sCSS_mimetype ) )
+            ( sType.isEmpty() || o3tl::getToken(sType, 0,';') == sCSS_mimetype ) &&
+            m_xDoc->AllowAccessLink() )
         {
             if( HostFilter::isFileUrlForbidden( sHRef ) )
             {
