@@ -151,7 +151,8 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                     rRenderParm.Value >>= aUIProps;
                     setUIOptions( aUIProps );
                 }
-                else if( rRenderParm.Name == "NUp" )
+                // tdf#38443 - pass any NUp* printing option (see Printer::PreparePrintJob)
+                else if (rRenderParm.Name.startsWith("NUp"))
                 {
                     setValue( rRenderParm.Name, rRenderParm.Value );
                 }
