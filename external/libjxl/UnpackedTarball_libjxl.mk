@@ -27,7 +27,6 @@ $(eval $(call gb_UnpackedTarball_add_files,libjxl,lib/include/jxl,\
 ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,libjxl,\
 	external/libjxl/windows-compile-directives.patch.0 \
-	external/libjxl/0001-Fix-MSVC-intrinsics-include-order-5071.patch.0 \
 ))
 endif
 

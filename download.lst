@@ -401,8 +401,8 @@ LIBGPGERROR_TARBALL := libgpg-error-1.61.tar.bz2
 # so that git cherry-pick
 # will not run into conflicts
 # Also update external/libjxl/version.h
-LIBJXL_SHA256SUM := 03e9be69a30be4011f559da75328b6d7cea8ad921fabfbd551ce10bf45cdc992
-LIBJXL_TARBALL := libjxl-0.12.0.tar.gz
+LIBJXL_SHA256SUM := 24d18c9af2d1f5a17730b3f8d3f70a5c16e5ac303f5d9d5fe9dc00cf7ca82af2
+LIBJXL_TARBALL := libjxl-0.13.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
