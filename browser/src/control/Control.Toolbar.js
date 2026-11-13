@@ -531,6 +531,20 @@ var shapes = {
 			{img: 'connectors_connectorlinearrows', uno: 'ConnectorLineArrows', text: _UNO('.uno:ConnectorLineArrows', 'presentation')},
 			{img: 'connectors_connectorcurvearrows', uno: 'ConnectorCurvearrows', text: _UNO('.uno:ConnectorCurveArrows', 'presentation')}
 		]
+	},
+	'insertlines': {
+		'Lines and Arrows': [
+			{img: 'lines_linearrowend', uno: 'LineArrowEnd', text: _UNO('.uno:LineArrowEnd', 'presentation')},
+			{img: 'lines_linecirclearrow', uno: 'LineCircleArrow', text: _UNO('.uno:LineCircleArrow', 'presentation')},
+			{img: 'lines_linesquarearrow', uno: 'LineSquareArrow', text: _UNO('.uno:LineSquareArrow', 'presentation')},
+			{img: 'lines_linearrows', uno: 'LineArrows', text: _UNO('.uno:LineArrows', 'presentation')},
+			{img: 'lines_linearrowstart', uno: 'LineArrowStart', text: _UNO('.uno:LineArrowStart', 'presentation')},
+			{img: 'lines_linearrowcircle', uno: 'LineArrowCircle', text: _UNO('.uno:LineArrowCircle', 'presentation')},
+			{img: 'lines_linearrowsquare', uno: 'LineArrowSquare', text: _UNO('.uno:LineArrowSquare', 'presentation')},
+			{img: 'lines_line', uno: 'Line', text: _UNO('.uno:Line', 'presentation')},
+			{img: 'lines_measureline', uno: 'MeasureLine', text: _UNO('.uno:MeasureLine', 'presentation')},
+			{img: 'lines_line_diagonal', uno: 'Line_Diagonal', text: _UNO('.uno:Line_Diagonal', 'presentation')}
+		]
 	}
 };
 
@@ -544,7 +558,8 @@ const shapeGroupTitles = {
 	'Stars and Banners': _UNO('.uno:StarShapes'),
 	'Callouts': _UNO('.uno:CalloutShapes'),
 	'Flowchart': _UNO('.uno:FlowChartShapes'),
-	'Connectors': _UNO('.uno:ConnectorToolbox')
+	'Connectors': _UNO('.uno:ConnectorToolbox'),
+	'Lines and Arrows': _UNO('.uno:ArrowsToolbox')
 };
 
 function createShapesPanel(shapeType) {
@@ -753,7 +768,8 @@ function getShapesPopupElements(closeCallback) {
 	return wrapperContainer;
 }
 
-function getConnectorsPopupElements(closeCallback) {
+// the popup of a grid of that table of kinds, that many in a row
+function getGridPopupElements(shapeType, width, closeCallback) {
 	lastClosePopupCallback = closeCallback;
 
 	const gridContainer = document.createElement('div');
@@ -765,7 +781,7 @@ function getConnectorsPopupElements(closeCallback) {
 
 	gridContainer.appendChild(grid);
 
-	insertShapes('insertconnectors', gridContainer.children[0], 2);
+	insertShapes(shapeType, gridContainer.children[0], width);
 
 
 	const wrapperContainer = document.createElement('div');
@@ -784,6 +800,14 @@ function getConnectorsPopupElements(closeCallback) {
 	focusFirstShapeOnOpen(grid);
 
 	return wrapperContainer;
+}
+
+function getConnectorsPopupElements(closeCallback) {
+	return getGridPopupElements('insertconnectors', 2, closeCallback);
+}
+
+function getLinesPopupElements(closeCallback) {
+	return getGridPopupElements('insertlines', 5, closeCallback);
 }
 
 function getColorPickerData(type) {
@@ -1327,6 +1351,7 @@ global.setupToolbar = setupToolbar;
 global.getInsertTablePopupElements = getInsertTablePopupElements;
 global.getShapesPopupElements = getShapesPopupElements;
 global.getConnectorsPopupElements = getConnectorsPopupElements;
+global.getLinesPopupElements = getLinesPopupElements;
 global.createShapesPanel = createShapesPanel;
 global.getUNOCommand = getUNOCommand;
 global.unoCmdToToolbarId = unoCmdToToolbarId;

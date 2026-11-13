@@ -161,9 +161,11 @@ view is back in the selection; the mode does not stay on for another text.
 
 ### Creating a line
 
-Insert, Line - in the notebookbar or the compact toolbar - and every line or arrow chosen anywhere
-else put one into the same mode for a line, with the cross as pointer. The line is dragged out
-from its start to its end:
+Insert, Line - in the notebookbar or the compact toolbar - puts one into the same mode for a line,
+with the cross as pointer. Its arrow opens "Lines and Arrows", a grid of the line kinds: the line
+with an arrow at one end or both, with a circle or a square, the plain line, the dimension line
+and the line at 45 degrees. Every one of them, chosen there or anywhere else, is dragged out from
+its start to its end:
 
 | What | What happens |
 |---|---|

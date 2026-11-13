@@ -281,6 +281,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			{type: 'toolitem',  id: 'insertobjectchart', text: _UNO('.uno:InsertObjectChart', '', true), command: '.uno:InsertObjectChart', icon: 'compact_drawchart.svg', accessibility: { focusBack: true, combination: 'IC' }},
 			{type: 'menubutton',  id: 'insertshapes:InsertShapesMenu', command: '.uno:BasicShapes', noLabel: true, text: _('Insert shapes'), icon: 'compact_basicshapes.svg', accessibility: { focusBack: true, combination: 'IP' }},
 			{type: 'toolitem',  id: 'insertline', text: _UNO('.uno:Line', '', true), command: '.uno:Line', icon: 'compact_line.svg', accessibility: { focusBack: true, combination: 'IL' }},
+			{type: 'menubutton',  id: 'insertlines:InsertLinesMenu', text: _('Lines'), command: '.uno:Line', applyCallback: '.uno:Line', icon: 'compact_line.svg', noLabel: true, visible: false, accessibility: { focusBack: true, combination: 'IL' }},
 			{type: 'menubutton',  id: 'insertconnectors:InsertConnectorsMenu', command: 'connector', noLabel: true, text: _('Insert connectors'), visible: false, accessibility: { focusBack: true, combination: 'IR' }},
 			{type: 'separator', orientation: 'vertical',   id: 'breakinsert', desktop: true},
 			{type: 'customtoolitem',  id: 'inserttextbox', text: _UNO('.uno:Text', '', true), command: 'inserttextbox', visible: false, icon: 'compact_text.svg', accessibility: { focusBack: true, combination: 'IB' }},
@@ -497,10 +498,13 @@ class TopToolbar extends JSDialog.Toolbar {
 					'leftpara', 'centerpara', 'rightpara', 'justifypara', 'breakpara', 'linespacing',
 					'gridvisible', 'griduse','changelayout',
 					'breakspacing', 'defaultbullet-presentation', 'defaultnumbering-presentation', 'breakbullet', 'inserttextbox', 'inserttable',  'insertannotation', 'backcolor',
-					'breaksidebar', 'modifypage', 'slidechangewindow', 'customanimation', 'masterslidespanel', 'navigator'
+					'breaksidebar', 'modifypage', 'slidechangewindow', 'customanimation', 'masterslidespanel', 'navigator',
+					'insertlines'
 				].forEach((id) => {
 					this.showItem(id, true);
 				});
+				// the line and its arrows are chosen from one button with a grid
+				this.showItem('insertline', false);
 
 				this.showItem('printoptions', false);
 			}
@@ -509,10 +513,11 @@ class TopToolbar extends JSDialog.Toolbar {
 			if (this.parentContainer) {
 				['leftpara', 'centerpara', 'rightpara', 'justifypara', 'breakpara', 'linespacing', 'gridvisible', 'griduse',
 					'breakspacing', 'defaultbullet', 'defaultnumbering', 'breakbullet', 'inserttextbox', 'inserttable', 'backcolor',
-					'breaksidebar', 'sidebar', 'insertconnectors'
+					'breaksidebar', 'sidebar', 'insertconnectors', 'insertlines'
 				].forEach((id) => {
 					this.showItem(id, true);
 				});
+				this.showItem('insertline', false);
 
 				this.showItem('printoptions', false);
 			}

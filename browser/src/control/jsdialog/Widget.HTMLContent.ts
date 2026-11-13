@@ -297,6 +297,8 @@ var getElementsFromId = function (
 		return window.getShapesPopupElements(closeCallback);
 	else if (id === 'insertconnectorspopup')
 		return window.getConnectorsPopupElements(closeCallback);
+	else if (id === 'insertlinespopup')
+		return window.getLinesPopupElements(closeCallback);
 	else if (id === 'userslistpopup')
 		return window.L.control.createUserListWidget();
 	else if (id === 'slideuserspopup')

@@ -1659,10 +1659,12 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 								'type': 'toolbox',
 								'children': [
 									{
-										'id': 'insert-line',
-										'type': 'toolitem',
-										'text': _UNO('.uno:Line', 'presentation'),
+										'id': 'insert-line:InsertLinesMenu',
+										'type': 'menubutton',
+										'noLabel': true,
+										'text': _('Lines'),
 										'command': '.uno:Line',
+										'applyCallback': '.uno:Line',
 										'accessibility': { focusBack: true, combination: 'IL', de: null }
 									}
 								]

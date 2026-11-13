@@ -720,6 +720,16 @@ button.leaflet-control-search-next
 .w2ui-icon.connectors_connectorlines { background: url('images/lc_connectorlines.svg') no-repeat center; }
 .w2ui-icon.connectors_connectorlinearrows { background: url('images/lc_connectorlinearrows.svg') no-repeat center; }
 .w2ui-icon.connectors_connectorcurvearrows { background: url('images/lc_connectorcurvearrows.svg') no-repeat center; }
+.w2ui-icon.lines_line { background: url('images/lc_line.svg') no-repeat center; }
+.w2ui-icon.lines_linearrowend { background: url('images/lc_linearrowend.svg') no-repeat center; }
+.w2ui-icon.lines_linecirclearrow { background: url('images/lc_linecirclearrow.svg') no-repeat center; }
+.w2ui-icon.lines_linesquarearrow { background: url('images/lc_linesquarearrow.svg') no-repeat center; }
+.w2ui-icon.lines_linearrows { background: url('images/lc_linearrows.svg') no-repeat center; }
+.w2ui-icon.lines_linearrowstart { background: url('images/lc_linearrowstart.svg') no-repeat center; }
+.w2ui-icon.lines_linearrowcircle { background: url('images/lc_linearrowcircle.svg') no-repeat center; }
+.w2ui-icon.lines_linearrowsquare { background: url('images/lc_linearrowsquare.svg') no-repeat center; }
+.w2ui-icon.lines_measureline { background: url('images/lc_measureline.svg') no-repeat center; }
+.w2ui-icon.lines_line_diagonal { background: url('images/lc_line_diagonal.svg') no-repeat center; }
 
 .w2ui-icon.frame01 { background: url('images/fr01.svg') no-repeat center; }
 .w2ui-icon.frame02 { background: url('images/fr02.svg') no-repeat center; }
@@ -1215,6 +1225,16 @@ button.leaflet-control-search-next
 [data-theme='dark'] .w2ui-icon.connectors_connectorlines { background: url('images/dark/lc_connectorlines.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.connectors_connectorlinearrows { background: url('images/dark/lc_connectorlinearrows.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.connectors_connectorcurvearrows { background: url('images/dark/lc_connectorcurvearrows.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_line { background: url('images/dark/lc_line.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_linearrowend { background: url('images/dark/lc_linearrowend.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_linecirclearrow { background: url('images/dark/lc_linecirclearrow.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_linesquarearrow { background: url('images/dark/lc_linesquarearrow.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_linearrows { background: url('images/dark/lc_linearrows.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_linearrowstart { background: url('images/dark/lc_linearrowstart.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_linearrowcircle { background: url('images/dark/lc_linearrowcircle.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_linearrowsquare { background: url('images/dark/lc_linearrowsquare.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_measureline { background: url('images/dark/lc_measureline.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_line_diagonal { background: url('images/dark/lc_line_diagonal.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.print { background: url('images/dark/lc_print.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.undo { background: url('images/dark/lc_undo.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.redo { background: url('images/dark/lc_redo.svg') no-repeat center; }
@@ -1482,6 +1502,23 @@ button.leaflet-control-search-next
 
 .insertshape-grid.insertconnectors .row-header {
 	display: none;
+}
+
+/* the Shapes and Lines buttons stand one above the other and are as wide as their column, so
+   their arrows line up */
+.notebookbar.vertical:has(> .toolbox > [id^='insert-line']) > .toolbox {
+	justify-self: stretch;
+	grid-template-columns: 1fr;
+}
+
+.notebookbar.vertical:has(> .toolbox > [id^='insert-line']) > .toolbox > .menubutton {
+	width: 100%;
+}
+
+/* the lines fit without scrolling; their popup keeps room for a scrollbar as the shapes popup
+   has one, so both are as wide */
+.ui-grid:has(.insertshape-grid.insertlines) {
+	scrollbar-gutter: stable;
 }
 
 .insertshape-grid:hover div {

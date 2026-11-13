@@ -621,6 +621,9 @@ interface Window {
 	getConnectorsPopupElements: (
 		callback: EventListenerOrEventListenerObject,
 	) => HTMLElement;
+	getLinesPopupElements: (
+		callback: EventListenerOrEventListenerObject,
+	) => HTMLElement;
 	getInsertTablePopupElements: (
 		callback: EventListenerOrEventListenerObject,
 	) => HTMLElement;
