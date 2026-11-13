@@ -5726,6 +5726,30 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClickOutsideVerticalTextBoxEndsEd
     CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeleteVerticalTextBoxAfterClickBesideText)
+{
+    // Given a document with a vertical text box, its columns of text at the right edge:
+    SwXTextDocument* pXTextDocument = createDoc("vertical-text-box.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    tools::Rectangle aShapeRect = pPage->GetObj(0)->GetLogicRect();
+    // The empty part of the box, a short way left of the columns of text.
+    Point aBesideText(aShapeRect.Left() + aShapeRect.GetWidth() * 3 / 4,
+                      aShapeRect.Center().getY());
+
+    // When the user clicks the empty part of the box and presses Delete:
+    lcl_click(pXTextDocument, aBesideText);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
+    // The click selects the box and leaves its text alone.
+    CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->IsTextEdit());
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DELETE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the box is removed:
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3748,6 +3748,42 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkPresentationRoundtripODP
     CPPUNIT_ASSERT_EQUAL(std::string("presentation"), aLinks[0].get<std::string>("unit"));
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClickBesideTextOfRotatedVerticalTextBox)
+{
+    // Given a vertical text box, its single column of text at the right edge, which is turned by
+    // 90 degrees, so its line of text runs along the top edge of the page:
+    SdXImpressDocument* pXImpressDocument = createDoc("vertical-text-box.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    Point aCenter = pObject->GetCurrentBoundRect().Center();
+    pObject->Rotate(aCenter, 9000_deg100, 1.0, 0.0);
+    ::tools::Rectangle aRect = pObject->GetCurrentBoundRect();
+    // The empty part of the box, about a line away from the text, and the text itself.
+    Point aBesideText = o3tl::convert(aCenter, o3tl::Length::mm100, o3tl::Length::twip);
+    Point aOnText = o3tl::convert(Point(aCenter.getX(), aRect.Top() + 300), o3tl::Length::mm100,
+                                  o3tl::Length::twip);
+
+    // When the user clicks the empty part of the box:
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aBesideText.getX(),
+                                      aBesideText.getY(), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aBesideText.getX(),
+                                      aBesideText.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the click selects the box and leaves its text alone:
+    sd::View* pView = pViewShell->GetView();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pView->GetMarkedObjectList().GetMarkCount());
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+
+    // And a click on the text still edits it:
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aOnText.getX(),
+                                      aOnText.getY(), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aOnText.getX(),
+                                      aOnText.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <editeng/outlobj.hxx>
 
 #include <svx/strings.hrc>
@@ -552,8 +554,18 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 
         if(!bBoundRectHit && aBoundRect.Contains(aLocalLogicPosition))
         {
+            // The tolerance runs along the text lines, which are vertical in vertical writing
+            // and turn with the object. The hit test grows the text range along the page axes.
+            basegfx::B2DVector aTextHitTolerance(
+                pTextObj && pTextObj->IsVerticalWriting() ? basegfx::B2DVector(0.0, 2000.0)
+                                                          : basegfx::B2DVector(2000.0, 0.0));
+            if (Degree100 nAngle = pHitObj->GetRotateAngle())
+            {
+                aTextHitTolerance *= basegfx::utils::createRotateB2DHomMatrix(toRadians(nAngle));
+                aTextHitTolerance = basegfx::absolute(aTextHitTolerance);
+            }
             bool bTEHit(pPV
-                        && SdrObjectPrimitiveHit(*pHitObj, aLocalLogicPosition, { 2000.0, 0.0 },
+                        && SdrObjectPrimitiveHit(*pHitObj, aLocalLogicPosition, aTextHitTolerance,
                                                  *pPV, &pPV->GetVisibleLayers(), true));
 
             // TextEdit attached to an object in a locked layer
