@@ -169,8 +169,9 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
     double fZoom = mfZoomY > 1.0 ? mfZoomY : 1.0;
     if (fZoom > 1.0)
     {
-        nW = fZoom * (nW - 1);
-        nH = fZoom * (nH - 1);
+        const tools::Long nZoomedMax = fZoom * (nMaxSize - 1);
+        nW = std::min(maSize.getWidth() / 2, nZoomedMax);
+        nH = std::min(maSize.getHeight(), nZoomedMax);
     }
 
     // #i114944# AutoFilter button is left-aligned in RTL.

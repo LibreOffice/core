@@ -21,6 +21,9 @@
 #endif
 
 #include <svl/asiancfg.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
 #include <simpleformulacalc.hxx>
 #include <stringutil.hxx>
@@ -31,6 +34,7 @@
 #include <undoblk.hxx>
 #include <undotab.hxx>
 #include <attrib.hxx>
+#include <dpcontrol.hxx>
 #include <dbdata.hxx>
 #include <filterentries.hxx>
 #include <reftokenhelper.hxx>
@@ -8674,6 +8678,30 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyTabRelativeTabRefs)
 
         xDocShell->DoClose();
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testZoomedFilterButtonIsHalfTheCell)
+{
+    // A drop-down button is at most half as wide as its cell at any zoom. Its largest size grows
+    // with the zoom, but the size of the cell is zoomed already: the half was zoomed a second
+    // time, so the button of a narrow cell grew as wide as the cell or wider.
+    ScopedVclPtrInstance<VirtualDevice> pDevice;
+    ScDPFieldButton aButton(pDevice.get(), Application::GetSettings().GetStyleSettings(), 2.0,
+                            *m_pDoc);
+    Point aPos;
+    Size aSize;
+
+    // A cell 24 pixels wide at 200% has a button 12 pixels wide at its right edge.
+    aButton.setBoundingBox(Point(0, 0), Size(24, 40), false);
+    aButton.getPopupBoundingBox(aPos, aSize);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12), aPos.X());
+
+    // A wide cell keeps the largest button, which grows with the zoom.
+    aButton.setBoundingBox(Point(0, 0), Size(200, 40), false);
+    aButton.getPopupBoundingBox(aPos, aSize);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2 * 17), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2 * 17), aSize.Height());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
