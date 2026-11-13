@@ -1843,16 +1843,27 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         fExtentY = fEngineHeight;
     }
 
-    // Normal wrapped text that is clearly too high for the cell starts at the top, as in
-    // ScOutputData::DrawEditStandard; text taller than the cell is cut.
+    // Normal and stacked wrapped text that is clearly too high for the cell gets the arrow on the
+    // right, and the text is cut before it, as in ScOutputData. Normal text then starts at the top
+    // instead of the bottom. Text taller than the cell is cut.
     const double fAlignInnerHeight = aSizes.mfAlignHeight - fTopMargin - fBottomMargin;
-    const bool bStartAtTop
-        = eVerJust == SvxCellVerJustify::Standard && eOrient == SvxCellOrientation::Standard
-          && nRotate == 0_deg100
+    const bool bClearlyTooHigh
+        = !bVertical && !bAsianVertical && nRotate == 0_deg100
           && sc::editTextClearlyTooHigh(
-              fExtentY * constMm100PerTwip, fAlignInnerHeight * constMm100PerTwip, bBreak,
-              maSettings.mbClipMarks,
+              fExtentY * constMm100PerTwip, fAlignInnerHeight * constMm100PerTwip,
+              bStacked ? bStackedWraps : bBreak, maSettings.mbClipMarks,
               rEngine.GetParagraphCount() > 1 || rEngine.GetLineCount(0) > 1);
+    if (bClearlyTooHigh && !bClipRightMark)
+    {
+        bClipRightMark = true;
+        if (!aArea.mbRightMarkRoom)
+        {
+            aArea.mbRightMarkRoom = true;
+            aSizes.mfClipWidth -= SC_CLIPMARK_SIZE;
+        }
+    }
+    const bool bStartAtTop = bClearlyTooHigh && eVerJust == SvxCellVerJustify::Standard
+                             && eOrient == SvxCellOrientation::Standard;
     if (fExtentY > fAlignInnerHeight + 1)
         eFlags |= CellTextFlags::ClippedBottom;
     if (aArea.mbLeftClip)

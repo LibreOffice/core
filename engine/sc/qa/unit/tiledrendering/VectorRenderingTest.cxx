@@ -1506,6 +1506,32 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedLineTooHighStaysAtTh
     CPPUNIT_ASSERT_EQUAL(0, cellPosition(aTop->second).first);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedTextTooHighGetsClipArrow)
+{
+    // Wrapped text of several lines that is clearly too high for its cell gets the arrow at the
+    // right edge, as on tiles, where it shows that the text goes on below. A single line that is
+    // too high does not. Neither had an arrow.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    setColumnWidth(*pDocShell, 1, 1700);
+    rDocument.SetRowHeightRange(1, 3, 0, 300);
+    rDocument.SetManualHeight(1, 3, 0, true);
+    setCellString(*pDocShell, 1, 1, u"First line second line third line fourth line"_ustr);
+    setCellString(*pDocShell, 1, 3, u"Big"_ustr);
+    ScPatternAttr aWrap(rDocument.getCellAttributeHelper());
+    aWrap.ItemSetPut(ScLineBreakCell(true));
+    applyToCell(*pDocShell, 1, 1, aWrap);
+    aWrap.ItemSetPut(SvxFontHeightItem(400, 100, ATTR_FONT_HEIGHT));
+    applyToCell(*pDocShell, 1, 3, aWrap);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    CPPUNIT_ASSERT(hasCellMark(aResponse, "clipRight", 1, 1));
+    CPPUNIT_ASSERT(!hasCellMark(aResponse, "clipRight", 1, 3));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)
 {
     // Rotated text is centered in its cell by default and takes the alignment of the cell, as in
