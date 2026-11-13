@@ -142,7 +142,7 @@ bool AxBinaryPropertyReader::StringProperty::readProperty( AxAlignedInputStream&
 bool AxBinaryPropertyReader::ArrayStringProperty::readProperty( AxAlignedInputStream& rInStrm )
 {
     sal_Int64 nEndPos = rInStrm.tell() + mnSize;
-    while( rInStrm.tell() < nEndPos )
+    while( !rInStrm.isEof() && (rInStrm.tell() < nEndPos) )
     {
         OUString aString;
         if( !lclReadString( rInStrm, aString, rInStrm.readuInt32(), true ) )
