@@ -24,6 +24,13 @@ interface PageSizeOption {
 	uno: string;
 }
 
+/// Whether a Calc page size command sets the paper of the current page style.
+JSDialog.isCurrentCalcPageSize = function (uno: string): boolean {
+	const paper = app.map['stateChangeHandler'].getItemValue('.uno:CalcPageSize');
+	const match = /\?PaperFormat:long=(\d+)$/.exec(uno);
+	return !!match && paper !== undefined && match[1] === String(paper);
+};
+
 function createPageSizeEntryWidget(data: any, builder: any): HTMLElement {
 	const sizes: PageSizeOption[] = data.options || [];
 	const container = document.createElement('div');
@@ -37,13 +44,19 @@ function createPageSizeEntryWidget(data: any, builder: any): HTMLElement {
 	container.appendChild(list);
 
 	const map = builder.map;
+	// Calc reports the paper of its page style. Elsewhere the first size is highlighted.
+	const isCalc = map._docLayer.isCalc();
 
-	sizes.forEach((opt) => {
+	sizes.forEach((opt, index) => {
 		const item = document.createElement('div');
 		item.className = 'ui-combobox-entry jsdialog ui-grid-cell';
 		item.id = opt.id;
 		item.setAttribute('role', 'option');
-		item.setAttribute('aria-selected', 'false');
+		const isSelected = isCalc
+			? JSDialog.isCurrentCalcPageSize(opt.uno)
+			: index === 0;
+		if (isSelected) item.classList.add('selected');
+		item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
 		item.tabIndex = 0;
 
 		item.addEventListener('click', (evt: MouseEvent) => {
@@ -103,14 +116,12 @@ JSDialog.pageSizeEntry = function (
 	const element = createPageSizeEntryWidget(data, builder);
 	parentContainer.appendChild(element);
 
-	// Focus first item
-	const firstEntry = element.querySelector('.ui-combobox-entry') as HTMLElement;
-	if (firstEntry) {
-		firstEntry.focus();
-		firstEntry.classList.add('selected');
-		firstEntry.setAttribute('aria-selected', 'true');
-
-		data.initialSelectedId = firstEntry.id;
+	// Focus the selected size, or the first one when none is selected.
+	const focusEntry = (element.querySelector('.ui-combobox-entry.selected') ||
+		element.querySelector('.ui-combobox-entry')) as HTMLElement;
+	if (focusEntry) {
+		focusEntry.focus();
+		data.initialSelectedId = focusEntry.id;
 	}
 
 	return false;

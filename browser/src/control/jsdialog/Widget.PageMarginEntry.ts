@@ -29,15 +29,49 @@ interface PageMarginOptions {
 	[id: string]: PageMarginOption;
 }
 
+/// A length in inches as hundredths of a millimetre, the unit of the page margin commands.
+function inchesToHMM(inches: number): number {
+	return Math.round(inches * 25.4 * 100);
+}
+
+/// The id of the preset that has the margins of the current Calc page style, or an empty string
+/// when none of the presets has them.
+JSDialog.currentCalcPageMarginId = function (): string {
+	const margins = app.map['stateChangeHandler'].getItemValue(
+		'.uno:CalcPageMargin',
+	);
+	if (!margins || typeof margins !== 'object') return '';
+
+	// The page style keeps its margins in twips, so a margin read back can be a hundredth of a
+	// millimetre away from the value that was sent.
+	const isNear = (inches: number, hundredthsOfMillimetre: number) =>
+		Math.abs(inchesToHMM(inches) - hundredthsOfMillimetre) <= 2;
+	const options: PageMarginOptions = JSDialog.pageMarginOptions;
+	const id = Object.keys(options).find((key) => {
+		const details = options[key].details;
+		return (
+			isNear(details.Left, margins.left) &&
+			isNear(details.Right, margins.right) &&
+			isNear(details.Top, margins.top) &&
+			isNear(details.Bottom, margins.bottom)
+		);
+	});
+	return id || '';
+};
+
 JSDialog.PageMarginEntry = function (
 	parentContainer: Element,
 	data: any,
 	builder: any,
 ): boolean {
-	const inchesToHMM = (inches: number) => Math.round(inches * 25.4 * 100);
 	const options: PageMarginOptions = data.options;
 	const map = builder.map;
 	const isCalc = map._docLayer.isCalc();
+	// Calc reports the margins of its page style. Elsewhere the first preset is highlighted.
+	const selectedId = isCalc
+		? JSDialog.currentCalcPageMarginId()
+		: Object.keys(options)[0];
+	data.initialSelectedId = selectedId || Object.keys(options)[0];
 
 	const lang = window.coolParams.get('lang') || 'en-US';
 	const useImperial = lang === 'en-US' || lang === 'en'; // we need to consider both short form as some user can user lang=en-US using document URL
@@ -88,9 +122,8 @@ JSDialog.PageMarginEntry = function (
 		builder.callback('dialog', 'close', { id: data.id }, null);
 	};
 
-	Object.keys(options).forEach((key, index) => {
+	Object.keys(options).forEach((key) => {
 		const opt = options[key];
-		const isFirstItem = index === 0;
 
 		const item = document.createElement('div');
 		item.className = 'margin-item';
@@ -110,11 +143,9 @@ JSDialog.PageMarginEntry = function (
 			}
 		});
 
-		if (isFirstItem) {
+		if (key === selectedId) {
 			item.classList.add('selected');
 			item.setAttribute('aria-selected', 'true');
-
-			data.initialSelectedId = item.id;
 		}
 
 		const img = document.createElement('img');

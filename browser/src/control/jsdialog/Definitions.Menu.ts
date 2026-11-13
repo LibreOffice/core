@@ -2586,3 +2586,4 @@ menuDefinitions.set('PictureEffectsMenu', [
 ] as Array<MenuDefinition>);
 
 JSDialog.MenuDefinitions = menuDefinitions;
+JSDialog.pageMarginOptions = pageMarginOptions;
