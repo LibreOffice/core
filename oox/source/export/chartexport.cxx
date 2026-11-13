@@ -1889,7 +1889,9 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
 
                                 pFS->startElement(FSNS(XML_cx, XML_f));
 
-                                Reference<chart2::data::XDataSequence> xSeq(aSeqCnt[0]->getValues());
+                                Reference<chart2::data::XDataSequence> xSeq(
+                                    aSeqCnt.hasElements() ? aSeqCnt[0]->getValues()
+                                                          : Reference<chart2::data::XDataSequence>());
                                 ChartDimInfo aInfo = getChartDimInfo(xSeq);
                                 if (aInfo.bHasInfo && !aInfo.sFormula.isEmpty()) {
                                     pFS->writeEscaped(aInfo.sFormula);
@@ -1963,7 +1965,9 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                             pFS->startElement(FSNS(XML_cx, XML_f));
 
                             // Get the stored formula reference
-                            Reference<chart2::data::XDataSequence> xSeq(aSeqCnt[0]->getValues()); // TODO
+                            Reference<chart2::data::XDataSequence> xSeq( // TODO
+                                aSeqCnt.hasElements() ? aSeqCnt[0]->getValues()
+                                                      : Reference<chart2::data::XDataSequence>());
                             ChartDimInfo aInfo = getChartDimInfo(xSeq);
                             if (aInfo.bHasInfo && !aInfo.sFormula.isEmpty()) {
                                 pFS->writeEscaped(aInfo.sFormula);
