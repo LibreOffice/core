@@ -20,6 +20,7 @@
 #include <common/Protocol.hpp>
 #include <common/Uri.hpp>
 #include <wsd/DocumentBroker.hpp>
+#include <wsd/PreviewCache.hpp>
 #include <wsd/RemoteDocumentBroker.hpp>
 
 #include <Poco/JSON/Array.h>
@@ -87,13 +88,20 @@ std::string slideSectionsOf(const Poco::JSON::Object::Ptr& index)
     return oss.str();
 }
 
-/// The URL of the picture of the slide with the given part in the index of a source. Empty
-/// when the index has no such slide.
-std::string pictureUrlOf(const Poco::JSON::Object::Ptr& index, const std::string& part)
+/// The URL and the media type of the picture of a slide in the index of a source.
+struct SlidePicture
+{
+    std::string url;
+    std::string mime;
+};
+
+/// The picture of the slide with the given part in the index of a source. The URL is empty when the
+/// index has no such slide.
+SlidePicture pictureOf(const Poco::JSON::Object::Ptr& index, const std::string& part)
 {
     const Poco::JSON::Array::Ptr slides = index->getArray("slides");
     if (!slides || part.empty())
-        return std::string();
+        return SlidePicture();
 
     for (std::size_t i = 0; i < slides->size(); ++i)
     {
@@ -102,10 +110,13 @@ std::string pictureUrlOf(const Poco::JSON::Object::Ptr& index, const std::string
             continue;
 
         const Poco::JSON::Object::Ptr preview = slide->getObject("preview");
-        return preview ? preview->optValue<std::string>("url", std::string()) : std::string();
+        if (!preview)
+            return SlidePicture();
+        return { preview->optValue<std::string>("url", std::string()),
+                 preview->optValue<std::string>("mime", std::string()) };
     }
 
-    return std::string();
+    return SlidePicture();
 }
 
 /// An HTTP session to the server remote documents are reached through, with the timeout of
@@ -191,15 +202,15 @@ bool RemoteLinkPrefetcher::answerFromIndex(DocumentBroker& docBroker, const std:
 
     std::string part;
     COOLProtocol::getTokenStringFromMessage(command, "part", part);
-    const std::string url = pictureUrlOf(_index, part);
-    if (url.empty())
+    const SlidePicture picture = pictureOf(_index, part);
+    if (picture.url.empty())
     {
         LOG_DBG("The index of [" << Anonymizer::anonymizeUrl(_wopiSrc) << "] has no slide ["
                                  << part << "], the live link answers");
         return false;
     }
 
-    fetchPicture(docBroker, command, url);
+    fetchPicture(docBroker, command, picture.url, picture.mime);
     return true;
 }
 
@@ -301,7 +312,7 @@ void RemoteLinkPrefetcher::onIndexFetched(DocumentBroker& docBroker,
 }
 
 void RemoteLinkPrefetcher::fetchPicture(DocumentBroker& docBroker, const std::string& command,
-                                        const std::string& url)
+                                        const std::string& url, const std::string& mime)
 {
     docBroker.assertCorrectThread();
 
@@ -317,9 +328,12 @@ void RemoteLinkPrefetcher::fetchPicture(DocumentBroker& docBroker, const std::st
     // cannot be read. A subscription dropped while the request was out takes no answer.
     const std::weak_ptr<DocumentBroker> weakDocBroker = docBroker.weak_from_this();
     const std::weak_ptr<RemoteLinkPrefetcher> weakSelf = weak_from_this();
-    const auto finish = [weakSelf, weakDocBroker, command](
+    // A vector thumbnail keeps its own frame name. An older server's index names a PNG image.
+    const std::string frameName =
+        mime == PreviewCache::PictureMime ? "zstdvectorthumbnail: " : "tile: ";
+    const auto finish = [weakSelf, weakDocBroker, command, frameName](
                             const std::shared_ptr<http::Session>& session,
-                            const std::string_view png)
+                            const std::string_view picture)
     {
         const std::shared_ptr<RemoteLinkPrefetcher> self = weakSelf.lock();
         const std::shared_ptr<DocumentBroker> broker = weakDocBroker.lock();
@@ -329,18 +343,18 @@ void RemoteLinkPrefetcher::fetchPicture(DocumentBroker& docBroker, const std::st
         std::vector<std::shared_ptr<http::Session>>& requests = self->_pictureRequests;
         requests.erase(std::remove(requests.begin(), requests.end(), session), requests.end());
 
-        if (png.empty())
+        if (picture.empty())
         {
             self->forwardCommand(*broker, command);
             return;
         }
 
         static constexpr std::string_view commandName = "tile ";
+        const std::string header = frameName + command.substr(commandName.size()) + "\n";
         std::vector<char> payload;
-        payload.reserve(commandName.size() + command.size() + 2 + png.size());
-        const std::string header = "tile: " + command.substr(commandName.size()) + "\n";
+        payload.reserve(header.size() + picture.size());
         payload.insert(payload.end(), header.begin(), header.end());
-        payload.insert(payload.end(), png.begin(), png.end());
+        payload.insert(payload.end(), picture.begin(), picture.end());
         broker->sendRemoteDocumentCommandResult(self->_tag, Uri::encode(self->_wopiSrc),
                                                 payload);
     };

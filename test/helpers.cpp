@@ -13,6 +13,8 @@
 
 #include <test/helpers.hpp>
 
+#include <zstd.h>
+
 namespace helpers
 {
 
@@ -528,6 +530,26 @@ Poco::JSON::Object::Ptr parseJsonReply(const std::string& reply, const std::stri
 
     Poco::JSON::Parser parser;
     return parser.parse(reply.substr(prefix.size() + 1)).extract<Poco::JSON::Object::Ptr>();
+}
+
+Poco::JSON::Object::Ptr readVectorThumbnail(const std::string_view frame)
+{
+    const unsigned long long size = ZSTD_getFrameContentSize(frame.data(), frame.size());
+    if (size == ZSTD_CONTENTSIZE_ERROR || size == ZSTD_CONTENTSIZE_UNKNOWN)
+        return nullptr;
+
+    std::string json(size, '\0');
+    const std::size_t written =
+        ZSTD_decompress(json.data(), json.size(), frame.data(), frame.size());
+    if (ZSTD_isError(written))
+        return nullptr;
+    json.resize(written);
+
+    Poco::JSON::Object::Ptr thumbnail;
+    if (!JsonUtil::parseJSON(json, thumbnail) ||
+        thumbnail->optValue<std::string>("type", std::string()) != "vectorthumbnail")
+        return nullptr;
+    return thumbnail;
 }
 
 void assertErrorReply(const std::shared_ptr<http::WebSocketSession>& ws, const std::string& command,

@@ -1274,7 +1274,7 @@ getslidesections
     Returns the slide sections for an Impress presentation as a JSON array.
     Response: slidesections: [{name, id, startIndex, slideCount}, ...]
 
-createvectorthumbnail part=<part> [dpi=<dpi>]
+createvectorthumbnail part=<part> [dpi=<dpi>] [id=<id>]
 
     Writes the thumbnail of the slide or page at index <part> of a
     presentation or a drawing as vector primitives. The thumbnail is kept
@@ -1283,26 +1283,28 @@ createvectorthumbnail part=<part> [dpi=<dpi>]
     pixels to the inch of the size it is drawn at, and every font its text
     uses, cut down to the characters that text draws. <dpi> is 200 when it
     is not given, and is clamped to 10 to 600. A small preview asks for
-    less, around 40 to 60. The reply is a binary frame
-        zstdvectorthumbnail:\n<zstd-compressed JSON>
+    less, around 40 to 60. <id> is any token the client chooses, and the
+    reply names it back, so a client with several requests out knows which
+    one a reply answers. The reply is a binary frame
+        zstdvectorthumbnail: part=<part> [id=<id>]\n<zstd-compressed JSON>
     or, when compression fails, a text frame
-        vectorthumbnail: <JSON>
+        vectorthumbnail: part=<part> [id=<id>] <JSON>
     The JSON holds "type" ("vectorthumbnail"), "part", "dpi", "mode", "partId",
     "objects" as in a vector primitives answer, "graphics" with one entry per
     image ("checksum", "data" as a data URL), and "fonts" with one entry per
     font ("fontId", "ranges" as the first and the last code point of each run
     of characters the font holds, "data" in base64). A cut-down font has an id
-    of its own, the hash of its bytes, and the text names it by that id. A
-    part the document does not hold is answered with "error": "nopage".
+    of its own, the hash of its bytes, and the text names it by that id.
 
     The thumbnail takes the content of the document into a file of its own,
     so a host that allows no export, or that has what leaves the document
     watermarked, is answered
         error: cmd=createvectorthumbnail kind=noexport
     Other errors are
-        error: cmd=createvectorthumbnail kind=<syntax|unsupported>
+        error: cmd=createvectorthumbnail kind=syntax
+        error: cmd=createvectorthumbnail kind=<unsupported|nopage> part=<part> [id=<id>]
     where unsupported means a document that is neither a presentation nor a
-    drawing.
+    drawing, and nopage a part the document does not hold.
 
 removetextcontext id=<windowId> before=<before_position> after=<after_position> [sequence=<sequence>]
 

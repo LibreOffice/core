@@ -1521,7 +1521,8 @@ class Socket {
 			this._onZstdVectorThumbnailMessage(e);
 			return;
 		} else if (textMsg.startsWith('vectorthumbnail:')) {
-			this._onVectorThumbnail(textMsg.substring('vectorthumbnail:'.length + 1));
+			// The JSON follows the part and the id of the request.
+			this._onVectorThumbnail(textMsg.substring(textMsg.indexOf('{')));
 			return;
 		} else if (textMsg.startsWith('sliderenderingcomplete:')) {
 			this._onSlideRenderingCompleteMsg(textMsg, e);
@@ -1656,6 +1657,7 @@ class Socket {
 		'delta:',
 		'slidelayer:',
 		'zstdslidelayer:',
+		'zstdvectorthumbnail:',
 		'windowpaint:',
 	];
 

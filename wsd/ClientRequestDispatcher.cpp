@@ -2482,8 +2482,8 @@ bool ClientRequestDispatcher::handlePreviewContentRequest(
 
     // A tag the cache handed out, or one a preview session made a name for its cached
     // pictures, is answered from the disk, whether its document is open or not.
-    std::string png;
-    switch (PreviewCache::readPicture(tag, guid, png))
+    std::string picture;
+    switch (PreviewCache::readPicture(tag, guid, picture))
     {
         case PreviewCache::Lookup::Found:
         {
@@ -2492,7 +2492,7 @@ bool ClientRequestDispatcher::handlePreviewContentRequest(
             response.set("Cache-Control", "private, max-age=" +
                                               std::to_string(
                                                   PreviewCache::remainingTtlSeconds(tag)));
-            response.setBody(std::move(png), "image/png");
+            response.setBody(std::move(picture), std::string(PreviewCache::PictureMime));
             socket->sendAndShutdown(response);
             return true;
         }

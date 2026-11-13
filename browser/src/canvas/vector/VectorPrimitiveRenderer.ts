@@ -165,6 +165,13 @@ namespace cool {
 			this._pageBackdropTransparency = transparency;
 		}
 
+		/// Take the document background of the view and what the page entry
+		/// holds behind its objects, which the tree carries unresolved.
+		setUpPageColors(page: SlideObject | undefined): void {
+			this.setDocumentBackground(VectorColors.documentBackground());
+			this.setPageBackdrop(page?.backdrop, page?.backdropTransparency);
+		}
+
 		/// Draw the fills and lines in the colors the document gives them,
 		/// or in colors that follow a dark view.
 		setAuthoredColors(authored: boolean): void {

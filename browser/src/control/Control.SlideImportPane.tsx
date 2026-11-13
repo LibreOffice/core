@@ -532,6 +532,13 @@ class SlideImportPane {
       );
     } else if (textMsg.startsWith('tile:')) {
       this.onRemoteThumbnail(source, textMsg, e.imgBytes, e.imgIndex ?? 0);
+    } else if (textMsg.startsWith('zstdvectorthumbnail:')) {
+      this.onRemoteVectorThumbnail(
+        source,
+        textMsg,
+        e.imgBytes,
+        e.imgIndex ?? 0,
+      );
     } else if (textMsg.startsWith('exportslides:') && this.isActive(source)) {
       // Only the source an insert takes its slides from writes them out for
       // this pane.
@@ -734,14 +741,7 @@ class SlideImportPane {
     )
       return;
 
-    const targetWidth = 160;
-    const targetHeight = Math.max(
-      1,
-      Math.round((targetWidth * source.docHeight) / source.docWidth),
-    );
-    // The bitmap is the thumbnail size times the exact device pixel ratio, so at a ratio such as
-    // 1.25 it keeps one bitmap pixel per screen pixel.
-    const scale = app.dpiScale || 1;
+    const [width, height] = this.thumbnailPixelSize(source);
 
     for (const slot of slots) {
       // The request names the slide by its part identifier, which the source
@@ -756,9 +756,9 @@ class SlideImportPane {
         'tile nviewid=0 part=' +
           partId +
           ' mode=0 width=' +
-          Math.round(targetWidth * scale) +
+          width +
           ' height=' +
-          Math.round(targetHeight * scale) +
+          height +
           ' tileposx=0 tileposy=0 tilewidth=' +
           source.docWidth +
           ' tileheight=' +
@@ -769,6 +769,35 @@ class SlideImportPane {
     }
   }
 
+  // The size in device pixels that a thumbnail is drawn at: 160 CSS pixels wide, with the
+  // proportions of the slides.
+  private thumbnailPixelSize(source: SlideImportPaneSource): [number, number] {
+    const targetWidth = 160;
+    const targetHeight = Math.max(
+      1,
+      Math.round((targetWidth * source.docHeight) / source.docWidth),
+    );
+    // The bitmap is the thumbnail size times the exact device pixel ratio, so at a ratio such as
+    // 1.25 it keeps one bitmap pixel per screen pixel.
+    const scale = app.dpiScale || 1;
+    return [Math.round(targetWidth * scale), Math.round(targetHeight * scale)];
+  }
+
+  // The thumbnail slot that an answer names. A preview echoes its slot index as the integer id, so
+  // an answer with no id is not one of our thumbnails.
+  private thumbnailSlotOf(
+    source: SlideImportPaneSource,
+    textMsg: string,
+  ): number | undefined {
+    const id = new ServerCommand(textMsg, this.map).id;
+    if (id === undefined || id === '') return undefined;
+
+    const slot = parseInt(id, 10);
+    if (isNaN(slot) || slot < 0 || slot >= source.slideParts.length)
+      return undefined;
+    return slot;
+  }
+
   private onRemoteThumbnail(
     source: SlideImportPaneSource,
     textMsg: string,
@@ -777,13 +806,8 @@ class SlideImportPane {
   ): void {
     if (!imgBytes) return;
 
-    // A preview tile echoes its slot index as the integer id. A tile with
-    // no id is not one of our thumbnails.
-    const id = new ServerCommand(textMsg, this.map).id;
-    if (id === undefined || id === '') return;
-
-    const slot = parseInt(id, 10);
-    if (isNaN(slot) || slot < 0 || slot >= source.slideParts.length) return;
+    const slot = this.thumbnailSlotOf(source, textMsg);
+    if (slot === undefined) return;
 
     source.thumbnails.set(slot, {
       url: app.socket.pngDataUrl(imgBytes.subarray(imgIndex)),
@@ -794,6 +818,46 @@ class SlideImportPane {
     // The slide frames already exist from the presentation info, so drop the
     // arrived thumbnail into its slot without rebuilding the list.
     this.updateThumbnail(source, slot);
+  }
+
+  // A thumbnail that the source sent as vector content, which is drawn here at the size of the
+  // slot, once its images and fonts have loaded.
+  private onRemoteVectorThumbnail(
+    source: SlideImportPaneSource,
+    textMsg: string,
+    imgBytes: Uint8Array | undefined,
+    imgIndex: number,
+  ): void {
+    if (!imgBytes) return;
+
+    const slot = this.thumbnailSlotOf(source, textMsg);
+    if (slot === undefined) return;
+
+    let thumbnail: cool.VectorThumbnailResponse;
+    try {
+      thumbnail = JSON.parse(
+        new TextDecoder().decode(
+          (window as any).fzstd.decompress(imgBytes.subarray(imgIndex)),
+        ),
+      );
+    } catch (error) {
+      window.app.console.warn('slide import: a thumbnail does not read');
+      return;
+    }
+
+    // The source can list its slides anew while the thumbnail draws, and the slot then belongs to
+    // another slide.
+    const partId = source.slideParts[slot];
+    const [width, height] = this.thumbnailPixelSize(source);
+    VectorThumbnail.draw(thumbnail, width, height).then((canvas) => {
+      if (!canvas || source.slideParts[slot] !== partId) return;
+      source.thumbnails.set(slot, {
+        url: canvas.toDataURL('image/png'),
+        width: source.docWidth,
+        height: source.docHeight,
+      });
+      this.updateThumbnail(source, slot);
+    });
   }
 
   // The source the pages of this document are linked to, when the given

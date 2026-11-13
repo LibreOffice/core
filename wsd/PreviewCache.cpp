@@ -77,7 +77,7 @@ std::string entryPath(const std::string& docKey)
 
 std::string picturePath(const std::string& entry, std::size_t position)
 {
-    return Poco::Path(entry, std::to_string(position) + ".png").toString();
+    return Poco::Path(entry, std::to_string(position) + ".zst").toString();
 }
 
 bool writeFile(const std::string& path, const std::string& data)
@@ -299,9 +299,11 @@ Poco::JSON::Object::Ptr PreviewCache::lookup(const std::string& docKey,
         return nullptr;
 
     Poco::JSON::Object::Ptr cache = index->getObject("cache");
+    // An entry stored with pictures of another media type is rendered again.
     if (!cache ||
         cache->optValue<std::string>("lastModifiedTime", std::string()) != lastModifiedTime ||
-        cache->optValue<Poco::UInt64>("size", 0) != size)
+        cache->optValue<Poco::UInt64>("size", 0) != size ||
+        cache->optValue<std::string>("pictureMime", std::string()) != PictureMime)
     {
         LOG_DBG("PreviewCache: the entry of [" << docKey << "] is outdated");
         return nullptr;
@@ -340,6 +342,7 @@ void PreviewCache::store(const std::string& docKey, const std::string& lastModif
         Poco::JSON::Object::Ptr cache = new Poco::JSON::Object();
         cache->set("lastModifiedTime", lastModifiedTime);
         cache->set("size", static_cast<Poco::UInt64>(size));
+        cache->set("pictureMime", std::string(PictureMime));
 
         // The stamp goes into a copy, so the index of the caller stays as it was.
         Poco::JSON::Object stored(*index);
@@ -388,7 +391,7 @@ void PreviewCache::registerTag(const std::string& tag, const std::string& docKey
 }
 
 PreviewCache::Lookup PreviewCache::readPicture(const std::string& tag, const std::string& guid,
-                                               std::string& png)
+                                               std::string& picture)
 {
     std::lock_guard<std::mutex> lock(Mutex);
     if (CachePath.empty())
@@ -431,8 +434,8 @@ PreviewCache::Lookup PreviewCache::readPicture(const std::string& tag, const std
     if (itSlide == it->second.slides.end())
         return Lookup::UnknownSlide;
 
-    png.clear();
-    if (FileUtil::readFile(picturePath(entry, itSlide->second), png, MaxCachedFileSize) <= 0)
+    picture.clear();
+    if (FileUtil::readFile(picturePath(entry, itSlide->second), picture, MaxCachedFileSize) <= 0)
         return Lookup::Missing;
 
     return Lookup::Found;

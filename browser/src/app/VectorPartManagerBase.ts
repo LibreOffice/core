@@ -262,7 +262,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	}
 
 	/// The entry that stands for the page among the given objects, if any.
-	protected static _pageEntryOf(
+	static pageEntryOf(
 		objects: Iterable<cool.SlideObject>,
 	): cool.SlideObject | undefined {
 		for (const object of objects) {
@@ -275,11 +275,9 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// the page holds behind its objects. The tree carries both unresolved,
 	/// and the renderer keeps what it was last given.
 	protected _setUpColors(data: cool.VectorPrimitivesData): void {
-		this._renderer.setDocumentBackground(
-			cool.VectorColors.documentBackground(),
+		this._renderer.setUpPageColors(
+			VectorPartManagerBase.pageEntryOf(data.objects.values()),
 		);
-		const page = VectorPartManagerBase._pageEntryOf(data.objects.values());
-		this._renderer.setPageBackdrop(page?.backdrop, page?.backdropTransparency);
 	}
 
 	/// Set the renderer up for a draw of the part: the bounds of its page, whether the content

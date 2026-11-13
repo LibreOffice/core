@@ -52,7 +52,7 @@ constexpr auto MissingToken = "missingsecret";
 /// A token the storage accepts, with a watermark over the document for its user.
 constexpr auto WatermarkedToken = "watermarkedsecret";
 
-constexpr auto PngSignature = "\x89PNG\r\n\x1a\n";
+constexpr auto PictureMime = "application/vnd.collabora.vector-thumbnail+zstd";
 
 std::shared_ptr<const http::Response> httpGet(const std::string& path)
 {
@@ -267,8 +267,9 @@ public:
 
             const Poco::JSON::Object::Ptr preview = slide->getObject("preview");
             LOK_ASSERT_MESSAGE("Each slide has a preview", preview);
-            LOK_ASSERT_EQUAL(std::string("image/png"),
+            LOK_ASSERT_EQUAL(std::string(PictureMime),
                              preview->optValue<std::string>("mime", std::string()));
+            LOK_ASSERT_EQUAL(PreviewSession::PreviewDpi, preview->optValue<int>("dpi", 0));
             const std::string url = preview->optValue<std::string>("url", std::string());
             LOK_ASSERT_MESSAGE("The content URL names this server",
                                url.find("ServerId=") != std::string::npos);
@@ -285,17 +286,22 @@ public:
         // The pictures of two slides.
         const auto first = httpGet(firstUrl);
         LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK), statusOf(first));
-        LOK_ASSERT_EQUAL(std::string("image/png"), first->get("Content-Type"));
-        LOK_ASSERT_MESSAGE("The content is a PNG",
-                           first->getBody().starts_with(PngSignature));
+        LOK_ASSERT_EQUAL(std::string(PictureMime), first->get("Content-Type"));
+        const Poco::JSON::Object::Ptr firstThumbnail =
+            helpers::readVectorThumbnail(first->getBody());
+        LOK_ASSERT_MESSAGE("The content is a vector thumbnail", firstThumbnail);
+        LOK_ASSERT_EQUAL(0, firstThumbnail->optValue<int>("part", -1));
+        LOK_ASSERT_EQUAL(PreviewSession::PreviewDpi, firstThumbnail->optValue<int>("dpi", 0));
 
         const auto second = httpGet(secondUrl);
         LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK), statusOf(second));
-        LOK_ASSERT_MESSAGE("The content is a PNG",
-                           second->getBody().starts_with(PngSignature));
+        const Poco::JSON::Object::Ptr secondThumbnail =
+            helpers::readVectorThumbnail(second->getBody());
+        LOK_ASSERT_MESSAGE("The content is a vector thumbnail", secondThumbnail);
+        LOK_ASSERT_EQUAL(1, secondThumbnail->optValue<int>("part", -1));
         LOK_ASSERT_MESSAGE("Two slides have two pictures", first->getBody() != second->getBody());
 
-        // A slide asked for again is answered from the tile cache, with the same picture.
+        // A slide asked for again comes with the same picture.
         const auto cached = httpGet(firstUrl);
         LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK), statusOf(cached));
         LOK_ASSERT_EQUAL(std::string(first->getBody()), std::string(cached->getBody()));
@@ -446,8 +452,8 @@ public:
                                url.starts_with("/cool/preview/" + tag + "/content?"));
             const auto picture = httpGet(url);
             LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK), statusOf(picture));
-            LOK_ASSERT_MESSAGE("The cached content is a PNG",
-                               picture->getBody().starts_with(PngSignature));
+            LOK_ASSERT_MESSAGE("The cached content is a vector thumbnail",
+                               helpers::readVectorThumbnail(picture->getBody()));
         }
         LOK_ASSERT_EQUAL(1U, _brokersCreated.load());
 

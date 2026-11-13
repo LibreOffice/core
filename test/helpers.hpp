@@ -234,6 +234,10 @@ std::string assertNotInResponse(T& ws, const std::string_view prefix,
 /// malformed body raises, so that one catch covers both.
 Poco::JSON::Object::Ptr parseJsonReply(const std::string& reply, const std::string& prefix);
 
+/// The vector thumbnail that a zstd frame holds, parsed. Null when the bytes are not a zstd frame
+/// of JSON whose type is "vectorthumbnail".
+Poco::JSON::Object::Ptr readVectorThumbnail(std::string_view frame);
+
 /// Send a command and check the error reply it provokes.
 /// Sends a command and asserts the error it is answered with. named is what the
 /// answer says the command was for, such as " part=3", and is empty for an answer

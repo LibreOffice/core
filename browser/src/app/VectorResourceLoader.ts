@@ -165,20 +165,26 @@ class VectorResourceLoader {
 			this.fonts.setUnavailable(fontId);
 			return;
 		}
-		const binary = window.atob(values.data);
-		const bytes = new Uint8Array(binary.length);
-		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-		const face = new FontFace('vecfont-' + fontId, bytes.buffer);
-		face
-			.load()
-			.then(() => {
-				(document as unknown as { fonts: Set<FontFace> }).fonts.add(face);
+		VectorResourceLoader.loadFontFace(fontId, values.data)
+			.then((face) => {
 				this.fonts.setLoaded(fontId, face);
 				this._loaded(this.fonts.partsFor(fontId));
 			})
 			.catch(() => {
 				this.fonts.setUnavailable(fontId);
 			});
+	}
+
+	/// Load a font file given in base64 as a FontFace of the family "vecfont-<id>", and put it
+	/// on the document once it loads. The promise is rejected when the file does not decode.
+	static async loadFontFace(fontId: string, data: string): Promise<FontFace> {
+		const binary = window.atob(data);
+		const bytes = new Uint8Array(binary.length);
+		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+		const face = new FontFace('vecfont-' + fontId, bytes.buffer);
+		await face.load();
+		(document as unknown as { fonts: Set<FontFace> }).fonts.add(face);
+		return face;
 	}
 
 	/// Record a checksum no usable image could be obtained for, and log the reason.

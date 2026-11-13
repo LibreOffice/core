@@ -787,7 +787,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		data: cool.VectorPrimitivesData,
 		objects: cool.SlideObject[],
 	): void {
-		const page = VectorPartManagerBase._pageEntryOf(objects);
+		const page = VectorPartManagerBase.pageEntryOf(objects);
 		if (page) this._takeMasterReference(data, page);
 	}
 

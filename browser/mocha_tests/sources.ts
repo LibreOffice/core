@@ -372,6 +372,7 @@
 /// <reference path="../src/control/Control.PaneSplitter.tsx" />
 /// <reference path="../src/slideimport/SlideImportSession.ts" />
 /// <reference path="../src/slideimport/SlideLinks.ts" />
+/// <reference path="../src/slideimport/VectorThumbnail.tsx" />
 /// <reference path="../src/control/SlideSectionHeader.tsx" />
 /// <reference path="../src/control/SlideLinkPanel.tsx" />
 /// <reference path="../src/control/SlidePresentationsRow.tsx" />

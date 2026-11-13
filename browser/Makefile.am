@@ -789,6 +789,7 @@ COOL_JS_LST =\
 	src/control/Control.ESignatureDialog.ts \
 	src/control/Control.AIChatSidebar.ts \
 	src/slideimport/SlideImportSession.ts \
+	src/slideimport/VectorThumbnail.tsx \
 	src/slideimport/SlideLinks.ts \
 	src/control/SlideDragGhost.tsx \
 	src/control/SlideSectionHeader.tsx \

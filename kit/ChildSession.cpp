@@ -6798,8 +6798,16 @@ bool ChildSession::createVectorThumbnail(const StringVector& tokens)
 {
     int part = -1;
     int dpi = 0;
-    if (tokens.size() < 2 || tokens.size() > 3 || !getTokenInteger(tokens[1], "part", part) ||
-        part < 0 || (tokens.size() == 3 && (!getTokenInteger(tokens[2], "dpi", dpi) || dpi <= 0)))
+    std::string id;
+    bool valid = tokens.size() >= 2 && getTokenInteger(tokens[1], "part", part) && part >= 0;
+    for (std::size_t i = 2; valid && i < tokens.size(); ++i)
+    {
+        if (getTokenInteger(tokens[i], "dpi", dpi))
+            valid = dpi > 0;
+        else
+            valid = getTokenString(tokens[i], "id", id) && !id.empty();
+    }
+    if (!valid)
     {
         sendTextFrameAndLogError("error: cmd=createvectorthumbnail kind=syntax");
         return false;
@@ -6807,25 +6815,35 @@ bool ChildSession::createVectorThumbnail(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
+    // The answer names the part and the id of the request, so a client with several requests out
+    // knows which one it answers.
+    const std::string request = "part=" + std::to_string(part) + (id.empty() ? "" : " id=" + id);
+
     const COKitDocumentType type = getLOKitDocument()->getDocumentType();
     if (type != COKitDocumentType::PRESENTATION && type != COKitDocumentType::DRAWING)
     {
-        sendTextFrameAndLogError("error: cmd=createvectorthumbnail kind=unsupported");
+        sendTextFrameAndLogError("error: cmd=createvectorthumbnail kind=unsupported " + request);
+        return false;
+    }
+
+    std::string command = ".uno:VectorThumbnail?part=" + std::to_string(part);
+    if (dpi > 0)
+        command += "&dpi=" + std::to_string(dpi);
+    std::string json(getLOKitDocument()->getCommandValues(command.c_str()));
+
+    // A thumbnail always holds its objects. An answer without them names a page that is not in the
+    // document.
+    if (json.find("\"objects\"") == std::string::npos)
+    {
+        sendTextFrameAndLogError("error: cmd=createvectorthumbnail kind=nopage " + request);
         return false;
     }
 
     // The thumbnail carries its images and fonts, so it is large and goes compressed. Without
     // compression it goes as a text frame.
-    std::string command = ".uno:VectorThumbnail?part=" + std::to_string(part);
-    if (dpi > 0)
-        command += "&dpi=" + std::to_string(dpi);
-    std::string json(getLOKitDocument()->getCommandValues(command.c_str()));
-    if (json.empty())
-        json = "{}";
-
-    if (sendZstdFrame("zstdvectorthumbnail:\n", json.data(), json.size()))
+    if (sendZstdFrame("zstdvectorthumbnail: " + request + '\n', json.data(), json.size()))
         return true;
-    return sendTextFrame("vectorthumbnail: " + json);
+    return sendTextFrame("vectorthumbnail: " + request + ' ' + json);
 }
 
 bool ChildSession::getSlideSections()

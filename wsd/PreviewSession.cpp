@@ -339,10 +339,8 @@ void PreviewSession::onFrame(const std::string_view frame)
         onStatus(firstLine, frame);
     else if (tokens.equals(0, "presentationinfo:"))
         onPresentationInfo(frame);
-    else if (tokens.equals(0, "tile:"))
-        onTile(tokens, frame, /*gone=*/false);
-    else if (tokens.equals(0, "tilegone:"))
-        onTile(tokens, frame, /*gone=*/true);
+    else if (tokens.equals(0, "zstdvectorthumbnail:"))
+        onVectorThumbnail(tokens, frame, /*gone=*/false);
     else if (tokens.equals(0, "error:"))
         onError(tokens);
 }
@@ -498,8 +496,6 @@ void PreviewSession::sendPendingContentRequests()
     if (!_presentationInfo)
         return;
 
-    // A tile the tile cache holds is answered while its request is sent, and the answer
-    // removes the request from the map, so the commands are sent once the walk is over.
     std::vector<std::string> commands;
     for (auto it = _contentRequests.begin(); it != _contentRequests.end();)
     {
@@ -510,8 +506,10 @@ void PreviewSession::sendPendingContentRequests()
             continue;
         }
 
-        if (_slidesByGuid.find(request.guid) == _slidesByGuid.end() || _docWidth <= 0 ||
-            _docHeight <= 0)
+        const auto slide = _slidesByGuid.find(request.guid);
+        const int part = slide != _slidesByGuid.end() ? slide->second->optValue<int>("index", -1)
+                                                      : -1;
+        if (part < 0)
         {
             if (const std::shared_ptr<StreamSocket> socket = request.socket.lock())
                 answerError(socket, http::StatusCode::NotFound, "no such slide");
@@ -519,16 +517,20 @@ void PreviewSession::sendPendingContentRequests()
             continue;
         }
 
-        // The whole slide as one preview tile, which the kit answers with the id echoed back.
-        const int height = std::max(
-            1, static_cast<int>(std::lround(static_cast<double>(PreviewWidth) * _docHeight /
-                                            _docWidth)));
-        std::ostringstream command;
-        command << "tile nviewid=0 part=" << request.guid << " mode=0 width=" << PreviewWidth
-                << " height=" << height << " tileposx=0 tileposy=0 tilewidth=" << _docWidth
-                << " tileheight=" << _docHeight << " id=" << it->first;
+        // The view renders a slide once, and that picture answers every request for the slide.
         request.sent = true;
-        commands.push_back(command.str());
+        const bool asked =
+            std::any_of(_slidesAsked.begin(), _slidesAsked.end(),
+                        [&request](const auto& entry) { return entry.second == request.guid; });
+        if (!asked)
+        {
+            // The kit names the slide by its index and echoes the id back.
+            std::ostringstream command;
+            command << "createvectorthumbnail part=" << part << " dpi=" << PreviewDpi
+                    << " id=" << it->first;
+            _slidesAsked.emplace(it->first, request.guid);
+            commands.push_back(command.str());
+        }
         ++it;
     }
 
@@ -536,32 +538,35 @@ void PreviewSession::sendPendingContentRequests()
         sendCommand(command);
 }
 
-void PreviewSession::onTile(const StringVector& tokens, const std::string_view frame,
-                            const bool gone)
+void PreviewSession::onVectorThumbnail(const StringVector& tokens, const std::string_view frame,
+                                       const bool gone)
 {
     int id = -1;
     if (!COOLProtocol::getTokenInteger(tokens, "id", id) || id < ContentIdBase)
+        return;
+
+    const auto itAsked = _slidesAsked.find(id);
+    if (itAsked == _slidesAsked.end())
+        return;
+
+    const std::string guid = itAsked->second;
+    _slidesAsked.erase(itAsked);
+
+    bool forCache = false;
+    std::vector<std::shared_ptr<StreamSocket>> sockets;
+    for (auto it = _contentRequests.begin(); it != _contentRequests.end();)
     {
-        // A preview a browser view asked for, which the kit sends every view.
-        return;
+        if (it->second.guid != guid)
+        {
+            ++it;
+            continue;
+        }
+
+        forCache = forCache || it->second.forCache;
+        if (std::shared_ptr<StreamSocket> socket = it->second.socket.lock())
+            sockets.push_back(std::move(socket));
+        it = _contentRequests.erase(it);
     }
-
-    const auto it = _contentRequests.find(id);
-    if (it == _contentRequests.end())
-        return;
-
-    std::string part;
-    COOLProtocol::getTokenString(tokens, "part", part);
-    if (part != it->second.guid)
-    {
-        LOG_WRN("Preview [" << _tag << "] got a tile of slide [" << part << "] for a request of ["
-                            << it->second.guid << "], dropped");
-        return;
-    }
-
-    const std::shared_ptr<StreamSocket> socket = it->second.socket.lock();
-    const bool forCache = it->second.forCache;
-    _contentRequests.erase(it);
 
     const std::size_t newline = frame.find('\n');
     if (gone || newline == std::string_view::npos || newline + 1 >= frame.size())
@@ -569,36 +574,26 @@ void PreviewSession::onTile(const StringVector& tokens, const std::string_view f
         // The cache gets the whole document or nothing.
         if (forCache)
         {
-            LOG_WRN("Preview [" << _tag << "] gave up filling the cache: slide [" << part
+            LOG_WRN("Preview [" << _tag << "] gave up filling the cache: slide [" << guid
                                 << "] has no picture");
             _fillingCache = false;
         }
 
-        if (socket)
+        for (const std::shared_ptr<StreamSocket>& socket : sockets)
             answerError(socket, gone ? http::StatusCode::NotFound : http::StatusCode::BadGateway,
                         gone ? "the slide is gone" : "the slide picture is empty");
         return;
     }
 
-    // The tile store keeps a picture without its first byte, which is the format marker of
-    // the frame it came in: for a PNG that is the first byte of the PNG signature, so the
-    // signature is completed here.
-    static constexpr std::string_view PngSignatureTail = "PNG\r\n\x1a\n";
-    const std::string_view payload = frame.substr(newline + 1);
-    std::string png;
-    png.reserve(payload.size() + 1);
-    if (payload.starts_with(PngSignatureTail))
-        png.push_back('\x89');
-    png.append(payload);
-
+    const std::string picture(frame.substr(newline + 1));
     if (_fillingCache)
     {
-        _cachePictures[part] = png;
+        _cachePictures[guid] = picture;
         storeInCacheWhenComplete();
     }
 
-    if (socket)
-        answerContent(socket, png);
+    for (const std::shared_ptr<StreamSocket>& socket : sockets)
+        answerContent(socket, picture);
 }
 
 void PreviewSession::onError(const StringVector& tokens)
@@ -608,7 +603,12 @@ void PreviewSession::onError(const StringVector& tokens)
     COOLProtocol::getTokenString(tokens, "cmd", cmd);
     COOLProtocol::getTokenString(tokens, "kind", kind);
 
-    if (cmd == "load" || cmd == "internal" || cmd == "storage")
+    if (cmd == "createvectorthumbnail")
+    {
+        // The kit has no picture of the slide, which is gone from the document.
+        onVectorThumbnail(tokens, std::string_view(), /*gone=*/true);
+    }
+    else if (cmd == "load" || cmd == "internal" || cmd == "storage")
     {
         LOG_ERR("Preview [" << _tag << "] failed to load its view: cmd=" << cmd
                             << " kind=" << kind);
@@ -645,6 +645,7 @@ void PreviewSession::answerAllPending(const http::StatusCode status, const std::
             answerError(socket, status, reason);
     }
 
+    _slidesAsked.clear();
     std::map<int, ContentRequest> contentRequests;
     contentRequests.swap(_contentRequests);
     for (const auto& it : contentRequests)
@@ -675,14 +676,14 @@ void PreviewSession::answerIndex(const std::shared_ptr<StreamSocket>& socket)
 }
 
 void PreviewSession::answerContent(const std::shared_ptr<StreamSocket>& socket,
-                                   const std::string_view png)
+                                   const std::string_view picture)
 {
     touch(std::chrono::steady_clock::now());
 
     http::Response response(http::StatusCode::OK);
     response.add("X-Content-Type-Options", "nosniff");
     response.set("Cache-Control", "private, max-age=" + std::to_string(remainingTtlSeconds()));
-    response.setBody(std::string(png), "image/png");
+    response.setBody(std::string(picture), std::string(PreviewCache::PictureMime));
     socket->sendAndShutdown(response);
 }
 
@@ -743,12 +744,8 @@ Poco::JSON::Object::Ptr PreviewSession::buildIndex() const
                 slide->set("height", height);
 
                 Poco::JSON::Object::Ptr preview = new Poco::JSON::Object();
-                preview->set("mime", "image/png");
-                preview->set("width", PreviewWidth);
-                preview->set("height",
-                             width > 0 ? static_cast<int>(std::lround(
-                                             static_cast<double>(PreviewWidth) * height / width))
-                                       : 0);
+                preview->set("mime", std::string(PreviewCache::PictureMime));
+                preview->set("dpi", PreviewDpi);
                 slide->set("preview", preview);
 
                 slides->add(slide);
@@ -782,6 +779,7 @@ void PreviewSession::dumpState(std::ostream& os) const
     os << "\n      infoRequested: " << _infoRequested;
     os << "\n      indexRequests: " << _indexRequests.size();
     os << "\n      contentRequests: " << _contentRequests.size();
+    os << "\n      slidesAsked: " << _slidesAsked.size();
     os << "\n      nextContentId: " << _nextContentId;
     os << "\n      broker: " << (_docBroker.expired() ? "none" : "live");
     os << "\n      fillingCache: " << _fillingCache;

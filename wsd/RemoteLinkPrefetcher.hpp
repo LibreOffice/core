@@ -65,10 +65,10 @@ private:
     /// is none.
     void onIndexFetched(DocumentBroker& docBroker, const Poco::JSON::Object::Ptr& index);
 
-    /// Fetches the picture of the slide a tile command names, from the URL the index gives
-    /// for it, and answers the command with it.
+    /// Fetches the picture of the slide a tile command names, from the URL the index gives for it,
+    /// and answers the command with it. mime is the media type the index gives for the picture.
     void fetchPicture(DocumentBroker& docBroker, const std::string& command,
-                      const std::string& url);
+                      const std::string& url, const std::string& mime);
 
     /// Sends one command to the live link of the subscription.
     void forwardCommand(const DocumentBroker& docBroker, const std::string& command) const;

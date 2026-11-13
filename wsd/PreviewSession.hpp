@@ -80,7 +80,9 @@ private:
 class PreviewSession final : public std::enable_shared_from_this<PreviewSession>
 {
 public:
-    static constexpr int PreviewWidth = 320;
+    /// The image resolution of a slide picture. A 10 inch slide drawn 160 pixels wide at three
+    /// device pixels to one needs 48 pixels to the inch.
+    static constexpr int PreviewDpi = 50;
 
     static constexpr std::size_t TagLength = 64;
 
@@ -88,8 +90,7 @@ public:
     /// asked for right after the index, so a short time covers an answer with room to spare.
     static constexpr std::chrono::seconds TagTtl{ 15 };
 
-    /// The first tile id a content request uses. The ids below it belong to the previews of
-    /// a browser view, which the kit answers with the same frames.
+    /// The first id a content request uses. The answer carries the same id.
     static constexpr int ContentIdBase = 1 << 20;
 
     STATE_ENUM(State,
@@ -184,8 +185,8 @@ private:
         std::weak_ptr<StreamSocket> socket;
         std::string guid;
         std::chrono::steady_clock::time_point deadline;
-        /// Whether the tile was asked for. False while the presentation information the
-        /// request needs has not arrived.
+        /// Whether the picture was asked for. False while the presentation information the request
+        /// needs has not arrived.
         bool sent = false;
         /// Whether the session asked for the picture itself, to fill the cache. Such a request
         /// has no socket.
@@ -200,11 +201,12 @@ private:
 
     void onStatus(std::string_view firstLine, std::string_view frame);
     void onPresentationInfo(std::string_view json);
-    void onTile(const StringVector& tokens, std::string_view frame, bool gone);
+    /// A picture of a slide, or the error that says it has none when gone is true.
+    void onVectorThumbnail(const StringVector& tokens, std::string_view frame, bool gone);
     void onError(const StringVector& tokens);
 
-    /// Sends the tile request of a content request whose slide the presentation information
-    /// lists, and answers the ones it does not list.
+    /// Asks for the picture of a content request whose slide the presentation information lists,
+    /// and answers the ones it does not list.
     void sendPendingContentRequests();
 
     /// Asks for the picture of every slide, once, so the cache gets the whole document.
@@ -218,7 +220,7 @@ private:
     void fail(http::StatusCode status, const std::string& reason);
 
     void answerIndex(const std::shared_ptr<StreamSocket>& socket);
-    void answerContent(const std::shared_ptr<StreamSocket>& socket, std::string_view png);
+    void answerContent(const std::shared_ptr<StreamSocket>& socket, std::string_view picture);
     void answerAllPending(http::StatusCode status, const std::string& reason);
     static void answerError(const std::shared_ptr<StreamSocket>& socket, http::StatusCode status,
                             const std::string& reason);
@@ -259,8 +261,11 @@ private:
     bool _infoRequested;
 
     std::vector<IndexRequest> _indexRequests;
-    /// The content requests in flight, by tile id.
+    /// The content requests in flight, by id.
     std::map<int, ContentRequest> _contentRequests;
+    /// The slides asked of the view and not answered yet: the GUID of each, by the id that its
+    /// command carries.
+    std::map<int, std::string> _slidesAsked;
     int _nextContentId;
 
     /// Whether the session is collecting the picture of every slide for the cache.

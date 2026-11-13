@@ -3760,17 +3760,6 @@ public:
         return true;
     }
 
-    /// The width a PNG declares in its header.
-    static unsigned pngWidth(const std::string_view png)
-    {
-        if (png.size() < 24)
-            return 0;
-
-        return (static_cast<unsigned char>(png[16]) << 24) |
-               (static_cast<unsigned char>(png[17]) << 16) |
-               (static_cast<unsigned char>(png[18]) << 8) | static_cast<unsigned char>(png[19]);
-    }
-
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
@@ -3826,19 +3815,21 @@ public:
             TST_LOG("Got: [" << frame << ']');
             _gotSections = true;
         }
-        else if (frame.starts_with("tile: "))
+        else if (frame.starts_with("zstdvectorthumbnail: "))
         {
             const std::size_t end = frame.find('\n');
-            LOK_ASSERT_MESSAGE("The tile carries its picture after its header",
+            LOK_ASSERT_MESSAGE("The thumbnail comes after its header",
                                end != std::string_view::npos);
             const std::string_view header = frame.substr(0, end);
             TST_LOG("Got: [" << header << ']');
-            LOK_ASSERT_MESSAGE("The tile echoes the id of the request",
+            LOK_ASSERT_MESSAGE("The thumbnail echoes the id of the request",
                                header.find(" id=0") != std::string_view::npos);
-            const std::string_view png = frame.substr(end + 1);
-            LOK_ASSERT_MESSAGE("The picture is a PNG", png.starts_with("\x89PNG"));
-            // The preview index serves one fixed size, wider than the request asked for.
-            LOK_ASSERT_EQUAL(320u, pngWidth(png));
+            // The preview index serves the slide as vector content, which the view draws at the
+            // size it needs.
+            const Poco::JSON::Object::Ptr thumbnail =
+                helpers::readVectorThumbnail(frame.substr(end + 1));
+            LOK_ASSERT_MESSAGE("The picture is a vector thumbnail", thumbnail);
+            LOK_ASSERT_EQUAL(0, thumbnail->optValue<int>("part", -1));
             _gotPicture = true;
         }
 

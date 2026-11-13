@@ -18,6 +18,7 @@
 #include <cstddef>
 #include <iosfwd>
 #include <string>
+#include <string_view>
 #include <vector>
 
 /// The slide previews of presentations, kept on disk so that they outlive the document they
@@ -28,7 +29,7 @@
 /// parts that belong to one answer (the tag, its expiry and the picture URLs), the storage's
 /// LastModifiedTime and Size the entry was made for, and one picture per slide, named by the
 /// position of the slide. An entry is valid while the storage reports the same
-/// LastModifiedTime and Size.
+/// LastModifiedTime and Size, and its pictures have the media type PictureMime.
 ///
 /// The tags handed out for cached entries live in memory, each for a ttl counted from its
 /// last use. A tag stands for a CheckFileInfo that passed, so reading a picture by its tag
@@ -38,6 +39,10 @@
 class PreviewCache
 {
 public:
+    /// The media type of a slide picture: a vector thumbnail as JSON, compressed with zstd.
+    static constexpr std::string_view PictureMime =
+        "application/vnd.collabora.vector-thumbnail+zstd";
+
     /// How a picture asked for by tag was found.
     enum class Lookup
     {
@@ -81,7 +86,8 @@ public:
                             std::chrono::steady_clock::time_point expiresAt);
 
     /// Reads the picture of one slide of the entry the given tag names.
-    static Lookup readPicture(const std::string& tag, const std::string& guid, std::string& png);
+    static Lookup readPicture(const std::string& tag, const std::string& guid,
+                              std::string& picture);
 
     /// The seconds before the given tag expires, zero when it is not live.
     static long remainingTtlSeconds(const std::string& tag);
