@@ -27,5 +27,4 @@ vendor = "Collabora Productivity Ltd."
 description = "Brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
-provides = "libreoffice"
 End
