@@ -71,6 +71,7 @@
 #include <optional>
 #include <set>
 #include <sstream>
+#include <tuple>
 #include <vector>
 
 namespace
@@ -894,6 +895,35 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorMergedCellsShowTheTextOfThe
     CPPUNIT_ASSERT_EQUAL(aExpected.size(), aAreas[0].size());
     for (size_t nIndex = 0; nIndex < aExpected.size(); ++nIndex)
         CPPUNIT_ASSERT_EQUAL(aExpected[nIndex], aAreas[0][nIndex]);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorMergedCellsWithHiddenFirstCellShowText)
+{
+    // A merged area whose first column or first row is hidden still shows the text of its first
+    // cell in its visible part, as in the window. The text was missing.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    // B2:D2 with column B hidden, and B4:C6 with row 4 hidden.
+    setCellString(*pDocShell, 1, 1, u"First column hidden"_ustr);
+    setCellString(*pDocShell, 1, 3, u"First row hidden"_ustr);
+    for (const auto& [nEndColumn, nRow, nEndRow] :
+         { std::tuple<SCCOL, SCROW, SCROW>{ 3, 1, 1 }, { 2, 3, 5 } })
+    {
+        ScCellMergeOption aMerge(1, nRow, nEndColumn, nEndRow);
+        aMerge.maTabs.insert(0);
+        pDocShell->GetDocFunc().MergeCells(aMerge, false, true, true);
+    }
+    rDocument.SetColHidden(1, 1, 0, true);
+    rDocument.SetRowHidden(3, 3, 0, true);
+    pDocShell->PostPaintGridAll();
+    Scheduler::ProcessEventsToIdle();
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    CPPUNIT_ASSERT(cellTextAt(aResponse, 1, 1));
+    CPPUNIT_ASSERT(cellTextAt(aResponse, 1, 3));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHiddenRowDrawsNoText)

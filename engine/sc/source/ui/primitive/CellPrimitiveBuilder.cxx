@@ -2011,7 +2011,7 @@ void CellPrimitiveBuilder::Impl::placeEditText(const CellEditText& rText)
 void CellPrimitiveBuilder::Impl::buildText(const ScTableInfo& rInfo)
 {
     const RowInfo* pRowInfo = rInfo.mpRowInfo.get();
-    std::set<std::pair<SCCOL, SCROW>> aOutsideOrigins;
+    std::set<std::pair<SCCOL, SCROW>> aOrigins;
 
     SCCOL nLastContentColumn = mrDocument.MaxCol();
     if (maSettings.mbTextFromOutside)
@@ -2032,15 +2032,16 @@ void CellPrimitiveBuilder::Impl::buildText(const ScTableInfo& rInfo)
             const ScCellInfo& rCell = rRow.cellInfo(nColumn);
             if (rCell.bHOverlapped || rCell.bVOverlapped)
             {
-                // A merged area shows the text of its first cell, which can be outside the range.
-                if (maSettings.mbTextFromOutside)
-                {
-                    SCCOL nOriginColumn = nColumn;
-                    SCROW nOriginRow = nRow;
-                    mrDocument.ExtendOverlapped(nOriginColumn, nOriginRow, nColumn, nRow, mnTab);
-                    if (nOriginColumn < mnStartColumn || nOriginRow < mnStartRow)
-                        aOutsideOrigins.emplace(nOriginColumn, nOriginRow);
-                }
+                // A merged area shows the text of its first cell. The loop does not come to that
+                // cell when it is hidden, or outside the range, as in ScOutputData.
+                SCCOL nOriginColumn = nColumn;
+                SCROW nOriginRow = nRow;
+                mrDocument.ExtendOverlapped(nOriginColumn, nOriginRow, nColumn, nRow, mnTab);
+                const bool bOutside = nOriginColumn < mnStartColumn || nOriginRow < mnStartRow;
+                if (bOutside ? maSettings.mbTextFromOutside
+                             : isColumnHidden(nOriginColumn)
+                                   || mrDocument.RowHidden(nOriginRow, mnTab))
+                    aOrigins.emplace(nOriginColumn, nOriginRow);
                 continue;
             }
             if (isColumnHidden(nColumn))
@@ -2072,7 +2073,7 @@ void CellPrimitiveBuilder::Impl::buildText(const ScTableInfo& rInfo)
             addCellText(nRight, nRow, nullptr);
     }
 
-    for (const auto& [nColumn, nRow] : aOutsideOrigins)
+    for (const auto& [nColumn, nRow] : aOrigins)
         addCellText(nColumn, nRow, nullptr);
 }
 
