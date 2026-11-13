@@ -229,12 +229,12 @@ void SfxHTMLParser::StartFileDownload(const OUString& rURL)
     pDLMedium->Download();
 }
 
-bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
+static bool lcl_readDownloadedFile( SfxMedium& rMedium, OUString& rStr )
 {
-    bool bOK = pDLMedium && pDLMedium->GetErrorCode() == ERRCODE_NONE;
+    bool bOK = rMedium.GetErrorCode() == ERRCODE_NONE;
     if( bOK )
     {
-        SvStream* pStream = pDLMedium->GetInStream();
+        SvStream* pStream = rMedium.GetInStream();
         DBG_ASSERT( pStream, "No In-Stream received from Medium" );
 
         SvMemoryStream aStream;
@@ -246,9 +246,23 @@ bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
         rStr = read_uInt8s_ToOUString(aStream, nLen, RTL_TEXTENCODING_UTF8);
     }
 
+    return bOK;
+}
+
+bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
+{
+    bool bOK = pDLMedium && lcl_readDownloadedFile( *pDLMedium, rStr );
+
     pDLMedium.reset();
 
     return bOK;
+}
+
+bool SfxHTMLParser::DownloadFile( const OUString& rURL, OUString& rStr )
+{
+    SfxMedium aMedium( rURL, SFX_STREAM_READONLY );
+    aMedium.Download();
+    return lcl_readDownloadedFile( aMedium, rStr );
 }
 
 void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
