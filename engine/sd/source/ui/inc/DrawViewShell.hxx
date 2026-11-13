@@ -222,8 +222,8 @@ public:
     /// Makes the default object of a custom shape, of that group's slot and that type, in the
     /// default size, as the custom shape tool makes it, without holding it.
     rtl::Reference<SdrObject> MakeDefaultShape(sal_uInt16 nSlotId, const OUString& rShapeType);
-    /// A key of the attributes a new shape of this view takes, its own and those of its style: a
-    /// hash in hexadecimal, the same as long as they are the same.
+    /// A key of the attributes a new shape of this view takes, its own and those of its style, and
+    /// of the build that makes it: a hash in hexadecimal, the same as long as they are the same.
     OString GetShapeStyleKey();
     /// Reserves that many object ids for this view, which no other object takes, and answers the
     /// first; the rest follow it. A client gives the objects it creates one of them each.

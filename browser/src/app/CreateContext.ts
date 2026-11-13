@@ -630,6 +630,101 @@ class ReservedObjectIds {
 }
 
 /*
+	The looks of shapes kept in the browser's storage, so they hold over documents and restarts.
+	They are kept under the key of the attributes they were made with, which the engine gives and
+	which names its build too, for the few keys used last; looks of a key not used for long, or
+	kept in another format, are dropped. Where the storage cannot be used, nothing is kept.
+*/
+class ShapeLookStore {
+	/// The name the looks have in the storage.
+	private static readonly storageName: string = 'cool-shape-looks';
+
+	/// The format the looks are kept in; looks of another one are dropped.
+	private static readonly format: number = 1;
+
+	/// How many keys keep their looks, the ones used last.
+	private static readonly keys: number = 4;
+
+	/// When the looks are written next, where they are to be.
+	private static writing: ReturnType<typeof setTimeout> | null = null;
+
+	// what the storage holds: the looks by key, the key used last first
+	private static read(): { key: string; looks: any }[] {
+		try {
+			const kept = JSON.parse(
+				window.localStorage.getItem(ShapeLookStore.storageName) || 'null',
+			);
+			if (kept?.format === ShapeLookStore.format && Array.isArray(kept.keys))
+				return kept.keys;
+		} catch (error) {
+			// a storage that cannot be read or holds no looks keeps none
+		}
+		return [];
+	}
+
+	/// The looks kept under that key.
+	public static load(key: string): Map<string, ShapeLook> {
+		const looks: Map<string, ShapeLook> = new Map();
+		const kept =
+			ShapeLookStore.read().find((entry) => entry.key === key)?.looks ?? {};
+		for (const shape in kept) {
+			const look = kept[shape];
+			const box = look?.box;
+			if (!Array.isArray(box) || box.length !== 4) continue;
+			if (!Array.isArray(look.primitives) || !look.entry) continue;
+			looks.set(shape, {
+				box: new cool.Range2D(box[0], box[1], box[2], box[3]),
+				primitives: look.primitives,
+				asWideAsHigh: look.asWideAsHigh === true,
+				entry: look.entry,
+			});
+		}
+		return looks;
+	}
+
+	/// Keeps those looks under that key, a moment later, so a run of looks is written once.
+	public static save(key: string, looks: Map<string, ShapeLook>): void {
+		if (ShapeLookStore.writing !== null) clearTimeout(ShapeLookStore.writing);
+		ShapeLookStore.writing = setTimeout(() => {
+			ShapeLookStore.writing = null;
+			const written: any = {};
+			looks.forEach((look, shape) => {
+				written[shape] = {
+					box: [look.box.minX, look.box.minY, look.box.maxX, look.box.maxY],
+					primitives: look.primitives,
+					asWideAsHigh: look.asWideAsHigh,
+					entry: look.entry,
+				};
+			});
+			const keys = ShapeLookStore.read().filter((entry) => entry.key !== key);
+			keys.unshift({ key: key, looks: written });
+			try {
+				window.localStorage.setItem(
+					ShapeLookStore.storageName,
+					JSON.stringify({
+						format: ShapeLookStore.format,
+						keys: keys.slice(0, ShapeLookStore.keys),
+					}),
+				);
+			} catch (error) {
+				// a full or blocked storage keeps what it had
+			}
+		}, 1000);
+	}
+
+	/// Forgets all looks kept.
+	public static clear(): void {
+		if (ShapeLookStore.writing !== null) clearTimeout(ShapeLookStore.writing);
+		ShapeLookStore.writing = null;
+		try {
+			window.localStorage.removeItem(ShapeLookStore.storageName);
+		} catch (error) {
+			// a blocked storage holds nothing to forget
+		}
+	}
+}
+
+/*
 	Creating a shape of the shapes grid by a drag. The library of looks knows how the shape looks
 	from before or from a look ahead, or the engine is asked at once; the drag shows it, and the
 	frame until it is known. Letting go creates the shape under an id reserved for this view and
@@ -665,22 +760,51 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 	/// looks in the library are all of this key.
 	private static styleKey: string = '';
 
+	/// The shapes created by a drag under the key of the library, or whose looks came from the
+	/// storage; only their looks are stored, not those only asked for ahead.
+	private static used: Set<string> = new Set();
+
 	/// The shapes whose look was asked for ahead, so each is asked for once.
 	private static askedAhead: Set<string> = new Set();
 
 	/// Forgets every look the library holds, so each shape is asked for again.
 	public static forgetTheLooks(): void {
 		ClassicShapeCreateContext.library.clear();
+		ClassicShapeCreateContext.used.clear();
 		ClassicShapeCreateContext.askedAhead.clear();
+	}
+
+	/// Stores the looks of the shapes used, where the library keeps looks.
+	private static storeTheUsed(): void {
+		if (
+			!ClassicShapeCreateContext.keeping ||
+			ClassicShapeCreateContext.styleKey === ''
+		)
+			return;
+		const looks: Map<string, ShapeLook> = new Map();
+		ClassicShapeCreateContext.library.forEach((look, shape) => {
+			if (ClassicShapeCreateContext.used.has(shape)) looks.set(shape, look);
+		});
+		ShapeLookStore.save(ClassicShapeCreateContext.styleKey, looks);
 	}
 
 	/// Whether the library keeps the looks; without it every drag asks for its shape.
 	private static keeping: boolean = true;
 
-	/// Keeps the looks of shapes from now on, or forgets them and keeps none.
+	/// Keeps the looks of shapes from now on, or forgets them, the stored ones too, and keeps none.
 	public static keepTheLooks(keep: boolean): void {
 		ClassicShapeCreateContext.keeping = keep;
-		if (!keep) ClassicShapeCreateContext.forgetTheLooks();
+		if (keep) return;
+		ClassicShapeCreateContext.forgetTheLooks();
+		ShapeLookStore.clear();
+	}
+
+	/// Asks the engine for the key of the attributes new shapes take where it is not known yet,
+	/// so the looks kept for it are there before the first drag.
+	public static learnTheKey(): void {
+		ClassicShapeCreateContext.followTheGhosts();
+		if (ClassicShapeCreateContext.styleKey === '')
+			app.socket.sendMessage('commandvalues command=.uno:ShapeStyleKey');
 	}
 
 	/// Whether the answers about shapes are followed, which they are once.
@@ -705,8 +829,11 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 			const values = event.commandValues;
 			ClassicShapeCreateContext.takeTheKey(values?.styleKey);
 			const look = ClassicShapeCreateContext.lookOf(values);
-			if (look && ClassicShapeCreateContext.keeping)
+			if (look && ClassicShapeCreateContext.keeping) {
 				ClassicShapeCreateContext.library.set(values.shape, look);
+				if (ClassicShapeCreateContext.used.has(values.shape))
+					ClassicShapeCreateContext.storeTheUsed();
+			}
 			const mode = Interaction.modeOn();
 			if (mode instanceof ClassicShapeCreateContext) mode.takeTheGhost(values);
 		});
@@ -714,15 +841,19 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 
 	/*
 		Where the attributes of new shapes changed, as by a change of the default drawing style,
-		the looks kept are not right any more: we forget them, and the shape of a mode that is on
-		is asked for again.
+		the looks kept are not right any more: we take those kept for the new key instead, and the
+		shape of a mode that is on is asked for again.
 	*/
 	private static takeTheKey(key: string | undefined): void {
 		if (!key || key === ClassicShapeCreateContext.styleKey) return;
-		const known = ClassicShapeCreateContext.styleKey !== '';
 		ClassicShapeCreateContext.styleKey = key;
-		if (!known) return;
 		ClassicShapeCreateContext.forgetTheLooks();
+		if (ClassicShapeCreateContext.keeping) {
+			ClassicShapeCreateContext.library = ShapeLookStore.load(key);
+			ClassicShapeCreateContext.library.forEach((_look, shape) =>
+				ClassicShapeCreateContext.used.add(shape),
+			);
+		}
 		const mode = Interaction.modeOn();
 		if (mode instanceof ClassicShapeCreateContext)
 			ClassicShapeCreateContext.ask(mode.shape);
@@ -924,6 +1055,10 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 		engine's report of it replaces it.
 	*/
 	protected wasSent(box: cool.Range2D): void {
+		// a shape made is one to keep the look of, also over a restart
+		ClassicShapeCreateContext.used.add(this.shape);
+		ClassicShapeCreateContext.storeTheUsed();
+
 		const id = this.givenId;
 		const created = id === undefined ? null : this.createdIn(box, id);
 		const part = RenderGeometrySection.currentPart();

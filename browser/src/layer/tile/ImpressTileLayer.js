@@ -12,7 +12,7 @@
  * Impress tile layer is used to display a presentation document
  */
 
-/* global app $ cool RenderManager ViewLayoutVector ViewLayoutFileBased ReservedObjectIds */
+/* global app $ cool RenderManager ViewLayoutVector ViewLayoutFileBased ReservedObjectIds ClassicShapeCreateContext */
 
 // Single source of truth for Impress view modes. Keyed by the core
 // 'contextchange' context. 'mode' is the persisted string, 'uno' enters the
@@ -348,6 +348,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 	onUpdatePermission: function (e) {
 		ReservedObjectIds.editModeChanged(e.detail.perm === 'edit');
+		if (e.detail.perm === 'edit') ClassicShapeCreateContext.learnTheKey();
 
 		if (window.mode.isSmallScreenDevice()) {
 			if (e.detail.perm === 'edit') {

@@ -67,9 +67,13 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/module.hxx>
 #include <svl/cryptosign.hxx>
 #include <tools/debug.hxx>
 #include <tools/UniqueID.hxx>
+#include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <svx/svdoashp.hxx>
 #include <o3tl/unit_conversion.hxx>
 
 #include <DrawViewShell.hxx>
@@ -907,6 +911,41 @@ rtl::Reference<SdrObject> DrawViewShell::MakeDefaultShape(sal_uInt16 nSlotId,
     return xShape;
 }
 
+// when the libraries that make a shape and write how it looks were built, as the times they were
+// last changed; a new build changes it, so looks kept from another build are not taken
+static const OString& lcl_getShapeBuild()
+{
+    static const OString aBuild = []() {
+        const oslGenericFunction aInLibraries[] = {
+            reinterpret_cast<oslGenericFunction>(&lcl_getRequestedRectangle),
+            reinterpret_cast<oslGenericFunction>(&SdrObjCustomShape::doConstructOrthogonal),
+            reinterpret_cast<oslGenericFunction>(
+                &drawinglayer::Primitive2dJsonProcessor::writeGraphicBase64),
+        };
+        std::set<OUString> aLibraries;
+        for (oslGenericFunction pFunction : aInLibraries)
+        {
+            OUString aUrl;
+            if (osl::Module::getUrlFromAddress(pFunction, aUrl))
+                aLibraries.insert(aUrl);
+        }
+        OStringBuffer aTimes;
+        for (const OUString& rUrl : aLibraries)
+        {
+            osl::DirectoryItem aItem;
+            osl::FileStatus aStatus(osl_FileStatus_Mask_ModifyTime);
+            if (osl::DirectoryItem::get(rUrl, aItem) != osl::FileBase::E_None
+                || aItem.getFileStatus(aStatus) != osl::FileBase::E_None)
+                continue;
+            const TimeValue aTime(aStatus.getModifyTime());
+            aTimes.append(OString::number(aTime.Seconds) + "." + OString::number(aTime.Nanosec)
+                          + " ");
+        }
+        return aTimes.makeStringAndClear();
+    }();
+    return aBuild;
+}
+
 OString DrawViewShell::GetShapeStyleKey()
 {
     // every new shape takes the same attributes but its geometry, so we look at a rectangle
@@ -940,6 +979,7 @@ OString DrawViewShell::GetShapeStyleKey()
         nAt = nEnd + 1;
     }
 
+    aKeyed.append(lcl_getShapeBuild());
     const std::vector<unsigned char> aHash(comphelper::Hash::calculateHash(
         aKeyed.getStr(), aKeyed.getLength(), comphelper::HashType::SHA1));
     return OString(comphelper::hashToString(aHash));
