@@ -342,6 +342,20 @@ uprightRanges(const TextSimplePortionPrimitive2D& rPrimitive)
     }
     return aRanges;
 }
+
+/// Add the characters the portion draws to rCharacters.
+void collectDrawnCharacters(std::set<sal_UCS4>& rCharacters,
+                            const TextSimplePortionPrimitive2D& rPrimitive)
+{
+    const OUString& rText = rPrimitive.getText();
+    const sal_Int32 nStart
+        = std::clamp<sal_Int32>(rPrimitive.getTextPosition(), 0, rText.getLength());
+    const sal_Int32 nEnd
+        = std::clamp<sal_Int32>(nStart + rPrimitive.getTextLength(), nStart, rText.getLength());
+    sal_Int32 nIndex = nStart;
+    while (nIndex < nEnd)
+        rCharacters.insert(rText.iterateCodePoints(&nIndex));
+}
 } // end anonymous namespace
 
 namespace drawinglayer
@@ -419,10 +433,13 @@ void Primitive2dJsonProcessor::writeGraphicBase64(tools::JsonWriter& rWriter,
 }
 
 /// Write graphic: checksum + either cache or inline base64.
-void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic)
+void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic,
+                                                const basegfx::B2DHomMatrix& rImageTransform,
+                                                bool bTurned)
 {
     sal_Int64 nChecksum = static_cast<sal_Int64>(rGraphic.GetChecksum());
     mrWriter.put("checksum", nChecksum);
+    collectDrawnSize(nChecksum, rImageTransform, bTurned);
 
     if (mpBitmapCache)
     {
@@ -437,13 +454,38 @@ void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic)
 /// the image in the cache. The cache must be set before any bitmap
 /// primitive is serialised. Bitmaps are always referenced by
 /// checksum on the wire and never carry inline data.
-void Primitive2dJsonProcessor::writeBitmapData(const Bitmap& rBitmap)
+void Primitive2dJsonProcessor::writeBitmapData(const Bitmap& rBitmap,
+                                               const basegfx::B2DHomMatrix& rImageTransform)
 {
     assert(mpBitmapCache && "bitmap cache must be set before writing bitmap primitives");
 
     sal_Int64 nChecksum = static_cast<sal_Int64>(rBitmap.GetChecksum());
     mrWriter.put("checksum", nChecksum);
+    collectDrawnSize(nChecksum, rImageTransform, /*bTurned*/ false);
     mpBitmapCache->emplace(nChecksum, Graphic(rBitmap));
+}
+
+void Primitive2dJsonProcessor::collectDrawnSize(sal_Int64 nChecksum,
+                                                const basegfx::B2DHomMatrix& rImageTransform,
+                                                bool bTurned)
+{
+    if (!mpResourceUsage)
+        return;
+
+    // The sides of the unit square, carried into the coordinates of the part and scaled to the
+    // units written, are the width and the height the image is drawn at.
+    const basegfx::B2DHomMatrix aPartTransform(maEnclosingTransformation * rImageTransform);
+    double fWidth = std::hypot(aPartTransform.get(0, 0), aPartTransform.get(1, 0)) * mfScaleFactor;
+    double fHeight = std::hypot(aPartTransform.get(0, 1), aPartTransform.get(1, 1)) * mfScaleFactor;
+    if (bTurned)
+    {
+        fWidth = std::max(fWidth, fHeight);
+        fHeight = fWidth;
+    }
+
+    basegfx::B2DVector& rSize = mpResourceUsage->maDrawnSizeByGraphic[nChecksum];
+    rSize.setX(std::max(rSize.getX(), fWidth));
+    rSize.setY(std::max(rSize.getY(), fHeight));
 }
 
 void Primitive2dJsonProcessor::writeSvgGradientCommon(
@@ -619,7 +661,8 @@ void Primitive2dJsonProcessor::writeHatchScaled(
 }
 
 void Primitive2dJsonProcessor::writeFillGraphic(
-    const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic)
+    const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic,
+    const basegfx::B2DHomMatrix& rArea)
 {
     auto aFillNode = mrWriter.startNode("fillGraphic");
     mrWriter.put("tiling", rFillGraphic.getTiling());
@@ -629,7 +672,14 @@ void Primitive2dJsonProcessor::writeFillGraphic(
     // The graphic range is a position in the unit square of the area being
     // filled, not a length, so it goes out at a scale of one.
     writeRange("graphicRange", rFillGraphic.getGraphicRange(), 1.0);
-    writeGraphicData(rFillGraphic.getGraphic());
+
+    // The graphic range is one image of the fill, a tile when the fill repeats it.
+    const basegfx::B2DRange& rImageRange = rFillGraphic.getGraphicRange();
+    writeGraphicData(rFillGraphic.getGraphic(),
+                     rArea
+                         * basegfx::utils::createScaleTranslateB2DHomMatrix(
+                             rImageRange.getWidth(), rImageRange.getHeight(),
+                             rImageRange.getMinX(), rImageRange.getMinY()));
 }
 
 void Primitive2dJsonProcessor::writeLineAttributeScaled(
@@ -886,7 +936,18 @@ void Primitive2dJsonProcessor::writeTextStyleFields(tools::JsonWriter& rWriter,
         }
         if (aFace.mnFontId != 0)
         {
-            rWriter.put("fontId", OString::number(aFace.mnFontId, 16));
+            if (mpResourceUsage)
+            {
+                collectDrawnCharacters(mpResourceUsage->maCharactersByFont[aFace.mnFontId],
+                                       rPrimitive);
+            }
+            sal_uInt64 nWrittenId = aFace.mnFontId;
+            if (mpFontIds)
+            {
+                if (auto aFontId = mpFontIds->find(aFace.mnFontId); aFontId != mpFontIds->end())
+                    nWrittenId = aFontId->second;
+            }
+            rWriter.put("fontId", OString::number(nWrittenId, 16));
             if (aFace.mbSyntheticBold)
                 rWriter.put("syntheticBold", true);
             if (aFace.mbSyntheticItalic)
@@ -1381,7 +1442,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const Size aSizePixel(rBitmap.GetSizePixel());
             mrWriter.put("width", aSizePixel.getWidth());
             mrWriter.put("height", aSizePixel.getHeight());
-            writeBitmapData(rBitmap);
+            writeBitmapData(rBitmap, rPrimitive.getTransform());
         }
         break;
 
@@ -1740,7 +1801,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const auto& rPrimitive = static_cast<const FillGraphicPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "fillGraphic");
             putMatrix("matrix", rPrimitive.getTransformation(), MatrixKind::Image);
-            writeFillGraphic(rPrimitive.getFillGraphic());
+            writeFillGraphic(rPrimitive.getFillGraphic(), rPrimitive.getTransformation());
 
             if (rPrimitive.hasTransparency())
                 mrWriter.put("transparency", rPrimitive.getTransparency());
@@ -1754,7 +1815,11 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("type", "polyPolygonGraphic");
             writePathScaled(rPrimitive.getB2DPolyPolygon());
             putRange("definitionRange", rPrimitive.getDefinitionRange(), mfScaleFactor);
-            writeFillGraphic(rPrimitive.getFillGraphic());
+            const basegfx::B2DRange& rDefinition = rPrimitive.getDefinitionRange();
+            writeFillGraphic(rPrimitive.getFillGraphic(),
+                             basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                 rDefinition.getWidth(), rDefinition.getHeight(),
+                                 rDefinition.getMinX(), rDefinition.getMinY()));
 
             if (rPrimitive.hasTransparency())
                 mrWriter.put("transparency", rPrimitive.getTransparency());
@@ -1794,6 +1859,9 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             putMatrix("matrix", rPrimitive.getTransform(), MatrixKind::Image);
 
             const GraphicAttr& rAttributes = rPrimitive.getGraphicAttr();
+            // The frame shows the part of the image the crop leaves, so the whole image is
+            // drawn larger than the frame.
+            basegfx::B2DHomMatrix aWholeImageTransform = rPrimitive.getTransform();
             if (rAttributes.IsCropped())
             {
                 // With a unit object scale, calculateCropScaling returns the reciprocal of the
@@ -1814,6 +1882,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 mrWriter.put("y", -fTop);
                 mrWriter.put("width", 1.0 + fLeft + fRight);
                 mrWriter.put("height", 1.0 + fTop + fBottom);
+                aWholeImageTransform
+                    = aWholeImageTransform
+                      * basegfx::utils::createScaleTranslateB2DHomMatrix(
+                          1.0 + fLeft + fRight, 1.0 + fTop + fBottom, -fLeft, -fTop);
             }
 
             if (rAttributes.IsTransparent())
@@ -1833,7 +1905,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 mrWriter.put("width", sal_Int64(aSizePixel.getWidth()));
                 mrWriter.put("height", sal_Int64(aSizePixel.getHeight()));
             }
-            writeGraphicData(rGraphic);
+            writeGraphicData(rGraphic, aWholeImageTransform, rAttributes.GetRotation() != 0_deg10);
         }
         break;
 
@@ -1873,7 +1945,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const Size aSizePixel(rBitmap.GetSizePixel());
             mrWriter.put("width", aSizePixel.getWidth());
             mrWriter.put("height", aSizePixel.getHeight());
-            writeBitmapData(rBitmap);
+            writeBitmapData(rBitmap, rPrimitive.getTransform());
         }
         break;
 

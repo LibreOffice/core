@@ -11,16 +11,65 @@
 
 #include <drawinglayer/processor2d/VectorResourceCache.hxx>
 
+#include <basegfx/vector/b2dvector.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/random.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/stream.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <vcl/font/CharacterSubset.hxx>
+#include <vcl/gfxlink.hxx>
 
+#include <algorithm>
 #include <chrono>
+#include <cmath>
+#include <optional>
 
 namespace drawinglayer
 {
+namespace
+{
+/// Write nSize bytes from pData under sName in base64, after aPrefix.
+void putBase64(tools::JsonWriter& rWriter, std::string_view sName, std::string_view aPrefix,
+               const void* pData, std::size_t nSize)
+{
+    const cpo::uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(pData),
+                                                 static_cast<sal_Int32>(nSize));
+    OStringBuffer aBase64(aPrefix);
+    comphelper::Base64::encode(aBase64, aSequence);
+    rWriter.put(sName, aBase64.makeStringAndClear());
+}
+
+/// The graphic scaled down to rPixelSize, or nothing when it is not a still bitmap or not larger.
+std::optional<Bitmap> fittedBitmap(const Graphic& rGraphic, const basegfx::B2DVector& rPixelSize)
+{
+    if (rGraphic.GetType() != GraphicType::Bitmap || rGraphic.IsAnimated()
+        || rGraphic.getVectorGraphicData())
+        return {};
+
+    const Size aPixels = rGraphic.GetSizePixel();
+    if (aPixels.IsEmpty())
+        return {};
+
+    // One scale for both sides keeps the proportions of the image. The side that needs more of its
+    // pixels decides it.
+    const double fScale = std::max(rPixelSize.getX() / aPixels.Width(),
+                                   rPixelSize.getY() / aPixels.Height());
+    if (fScale >= 1.0)
+        return {};
+
+    const Size aFitted(std::max<tools::Long>(1, std::lround(aPixels.Width() * fScale)),
+                       std::max<tools::Long>(1, std::lround(aPixels.Height() * fScale)));
+    Bitmap aBitmap(rGraphic.GetBitmap());
+    if (!aBitmap.Scale(aFitted, BmpScaleFlag::BestQuality))
+        return {};
+    return aBitmap;
+}
+}
+
 void VectorResourceCache::attachTo(Primitive2dJsonProcessor& rProcessor)
 {
     rProcessor.setBitmapCache(maBitmapCache);
@@ -48,12 +97,111 @@ void VectorResourceCache::writeFont(tools::JsonWriter& rWriter, sal_uInt64 nFont
         return;
 
     const BinaryDataContainer& rBytes = aIterator->second;
-    const cpo::uno::Sequence<sal_Int8> aSequence(
-        reinterpret_cast<const sal_Int8*>(rBytes.getData()),
-        static_cast<sal_Int32>(rBytes.getSize()));
-    OStringBuffer aBase64;
-    comphelper::Base64::encode(aBase64, aSequence);
-    rWriter.put("data", aBase64.makeStringAndClear());
+    putBase64(rWriter, "data", "", rBytes.getData(), rBytes.getSize());
+}
+
+std::optional<FontSubset>
+VectorResourceCache::subsetFont(sal_uInt64 nFontId, const std::set<sal_UCS4>& rCharacters) const
+{
+    auto aIterator = maFontCache.find(nFontId);
+    if (aIterator == maFontCache.end())
+        return {};
+
+    FontSubset aSubset;
+    aSubset.maBytes = font::subsetToCharacters(aIterator->second, rCharacters);
+    if (aSubset.maBytes.isEmpty())
+        return {};
+    aSubset.mnFontId = aSubset.maBytes.calculateHash();
+    aSubset.maRanges = font::characterRanges(rCharacters);
+    return aSubset;
+}
+
+std::map<sal_uInt64, FontSubset> VectorResourceCache::subsetFonts(const ResourceUsage& rUsage) const
+{
+    std::map<sal_uInt64, FontSubset> aSubsets;
+    for (const auto& [nFontId, rCharacters] : rUsage.maCharactersByFont)
+    {
+        if (std::optional<FontSubset> oSubset = subsetFont(nFontId, rCharacters))
+            aSubsets.emplace(nFontId, std::move(*oSubset));
+    }
+    return aSubsets;
+}
+
+void VectorResourceCache::writeFontSubset(tools::JsonWriter& rWriter, const FontSubset& rSubset)
+{
+    rWriter.put("type", "vectorrenderingfont");
+    rWriter.put("fontId", OString::number(rSubset.mnFontId, 16));
+    {
+        auto aRangeArray = rWriter.startArray("ranges");
+        for (const auto& [nFirst, nLast] : rSubset.maRanges)
+        {
+            auto aRange = rWriter.startAnonArray();
+            rWriter.putSimpleValue(sal_Int64(nFirst));
+            rWriter.putSimpleValue(sal_Int64(nLast));
+        }
+    }
+    putBase64(rWriter, "data", "", rSubset.maBytes.getData(), rSubset.maBytes.getSize());
+}
+
+void VectorResourceCache::writeGraphicForPixelSize(tools::JsonWriter& rWriter,
+                                                   sal_Int64 nChecksum,
+                                                   const basegfx::B2DVector& rPixelSize) const
+{
+    auto aIterator = maBitmapCache.find(nChecksum);
+    const std::optional<Bitmap> oFitted
+        = aIterator != maBitmapCache.end() ? fittedBitmap(aIterator->second, rPixelSize)
+                                           : std::nullopt;
+    if (!oFitted)
+    {
+        writeGraphic(rWriter, nChecksum);
+        return;
+    }
+
+    rWriter.put("type", "vectorrenderinggraphics");
+    rWriter.put("checksum", nChecksum);
+
+    // A photo stays a JPEG image, which is far smaller than PNG for one. JPEG holds no alpha, so an
+    // image with transparent parts is a PNG image.
+    const Graphic& rGraphic = aIterator->second;
+    const bool bJpeg = rGraphic.IsGfxLink()
+                       && rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeJpg
+                       && !oFitted->HasAlpha();
+    SvMemoryStream aStream;
+    if (GraphicConverter::Export(aStream, Graphic(*oFitted),
+                                 bJpeg ? ConvertDataFormat::JPG : ConvertDataFormat::PNG)
+        != ERRCODE_NONE)
+    {
+        rWriter.put("error", "conversionfailed");
+        return;
+    }
+    putBase64(rWriter, "data", bJpeg ? "data:image/jpeg;base64," : "data:image/png;base64,",
+              aStream.GetData(), aStream.Tell());
+}
+
+void VectorResourceCache::writeResources(tools::JsonWriter& rWriter, const ResourceUsage& rUsage,
+                                         double fPixelsPerUnit,
+                                         const std::map<sal_uInt64, FontSubset>& rSubsets) const
+{
+    {
+        auto aGraphicArray = rWriter.startArray("graphics");
+        for (const auto& [nChecksum, rDrawnSize] : rUsage.maDrawnSizeByGraphic)
+        {
+            auto aEntry = rWriter.startStruct();
+            writeGraphicForPixelSize(rWriter, nChecksum,
+                                     basegfx::B2DVector(rDrawnSize.getX() * fPixelsPerUnit,
+                                                        rDrawnSize.getY() * fPixelsPerUnit));
+        }
+    }
+
+    auto aFontArray = rWriter.startArray("fonts");
+    for (const auto& rFont : rUsage.maCharactersByFont)
+    {
+        auto aEntry = rWriter.startStruct();
+        if (auto aSubset = rSubsets.find(rFont.first); aSubset != rSubsets.end())
+            writeFontSubset(rWriter, aSubset->second);
+        else
+            writeFont(rWriter, rFont.first);
+    }
 }
 
 sal_Int32 VectorResourceCache::getEpoch() const

@@ -15,17 +15,20 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 
 #include <functional>
+#include <map>
 #include <optional>
 #include <set>
 #include <unordered_map>
 #include <vector>
 
 #include <vcl/BinaryDataContainer.hxx>
+#include <vcl/vclenum.hxx>
 
 class Bitmap;
 class Graphic;
@@ -75,6 +78,14 @@ public:
 private:
     std::unordered_map<OString, sal_Int32> maIds;
     std::vector<OString> maFields;
+};
+
+/// The characters drawn in each font, by font id, and the largest drawn size of each whole image,
+/// uncropped, by checksum, in the units the content is written in.
+struct ResourceUsage
+{
+    std::map<sal_uInt64, std::set<sal_UCS4>> maCharactersByFont;
+    std::map<sal_Int64, basegfx::B2DVector> maDrawnSizeByGraphic;
 };
 
 /** Primitive processor that converts primitives into a JSON resolution independent representation. */
@@ -165,6 +176,14 @@ public:
     /// The ids of the styles that the portions written so far name.
     const std::set<sal_Int32>& getUsedTextStyles() const { return maUsedTextStyles; }
 
+    /// Collect the graphics and fonts the primitives written from here on draw with into
+    /// pUsage. nullptr stops collecting.
+    void setResourceUsage(ResourceUsage* pUsage) { mpResourceUsage = pUsage; }
+
+    /// The id written for a font, by the id of the whole font. A font not in pFontIds is written
+    /// by its own id. nullptr writes every font by its own id.
+    void setFontIds(const std::map<sal_uInt64, sal_uInt64>* pFontIds) { mpFontIds = pFontIds; }
+
 protected:
     tools::JsonWriter& getWriter() { return mrWriter; }
 
@@ -210,7 +229,9 @@ private:
     /// Write the range the primitive covers as "bounds", scaled. An empty range is left out.
     void writeBoundsScaled(const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive);
     void writeHatchScaled(const drawinglayer::attribute::FillHatchAttribute& rHatch);
-    void writeFillGraphic(const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic);
+    /// Write the graphic that fills the area rArea maps the unit square onto.
+    void writeFillGraphic(const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic,
+                          const basegfx::B2DHomMatrix& rArea);
     void writeLineAttributeScaled(const drawinglayer::attribute::LineAttribute& rLineAttribute);
     void writeStrokeAttributeScaled(const drawinglayer::attribute::StrokeAttribute& rStroke);
     /// Write the modifier's name and its parameters into the open node.
@@ -225,8 +246,15 @@ private:
                               double fFontSize);
 
     void writeSvgGradientCommon(const drawinglayer::primitive2d::SvgGradientHelper& rGradient);
-    void writeGraphicData(const Graphic& rGraphic);
-    void writeBitmapData(const Bitmap& rBitmap);
+    /// Write a graphic that rImageTransform maps the unit square onto. bTurned says that the
+    /// graphic is turned inside that square, so its width can lie along either side.
+    void writeGraphicData(const Graphic& rGraphic, const basegfx::B2DHomMatrix& rImageTransform,
+                          bool bTurned = false);
+    void writeBitmapData(const Bitmap& rBitmap, const basegfx::B2DHomMatrix& rImageTransform);
+    /// Grow the size recorded for the graphic with nChecksum to the size it is drawn at, where
+    /// rImageTransform maps the unit square onto the whole image.
+    void collectDrawnSize(sal_Int64 nChecksum, const basegfx::B2DHomMatrix& rImageTransform,
+                          bool bTurned);
     void writeGradient(const drawinglayer::attribute::FillGradientAttribute& rGradient,
                        std::string_view sNodeName = "gradient");
 
@@ -251,6 +279,8 @@ private:
     ExternalPrimitiveWriter maExternalPrimitiveWriter;
     TextStyleTable* mpTextStyles = nullptr;
     std::set<sal_Int32> maUsedTextStyles;
+    ResourceUsage* mpResourceUsage = nullptr;
+    const std::map<sal_uInt64, sal_uInt64>* mpFontIds = nullptr;
 };
 
 } // namespace drawinglayer

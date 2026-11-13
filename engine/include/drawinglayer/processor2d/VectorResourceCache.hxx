@@ -15,11 +15,22 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/vclenum.hxx>
 
+#include <map>
+#include <optional>
+#include <set>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
+namespace basegfx
+{
+class B2DVector;
+}
 namespace tools
 {
 class JsonWriter;
@@ -27,6 +38,15 @@ class JsonWriter;
 
 namespace drawinglayer
 {
+/// A font cut down to the characters of maRanges, each range the first and the last code point of a
+/// run. The id is the hash of maBytes, so it differs from the id of the whole font.
+struct FontSubset
+{
+    sal_uInt64 mnFontId = 0;
+    std::vector<std::pair<sal_UCS4, sal_UCS4>> maRanges;
+    BinaryDataContainer maBytes;
+};
+
 /** The graphics and fonts one document's vector primitives name, and the epoch of its versions.
 
     A primitive names a graphic by its checksum and a font by the hash of the font file. The client
@@ -44,6 +64,28 @@ public:
 
     /// Write the answer to a font request: type, font id in hex, and the bytes in base64 if known.
     void writeFont(tools::JsonWriter& rWriter, sal_uInt64 nFontId) const;
+
+    /// The font with nFontId cut down to rCharacters, or nothing when the font is not held or
+    /// cannot be cut down.
+    std::optional<FontSubset> subsetFont(sal_uInt64 nFontId,
+                                         const std::set<sal_UCS4>& rCharacters) const;
+
+    /// The fonts of rUsage cut down to the characters drawn in each, by the id of the whole font.
+    std::map<sal_uInt64, FontSubset> subsetFonts(const ResourceUsage& rUsage) const;
+
+    /// Like writeFont for rSubset, with its code points as "ranges".
+    static void writeFontSubset(tools::JsonWriter& rWriter, const FontSubset& rSubset);
+
+    /// Like writeGraphic, with a still bitmap larger than rPixelSize scaled down to it, keeping its
+    /// proportions.
+    void writeGraphicForPixelSize(tools::JsonWriter& rWriter, sal_Int64 nChecksum,
+                                  const basegfx::B2DVector& rPixelSize) const;
+
+    /// Write the arrays "graphics" and "fonts" of rUsage, each graphic sized at fPixelsPerUnit. A
+    /// font with an entry in rSubsets is written as that subset, any other font whole.
+    void writeResources(tools::JsonWriter& rWriter, const ResourceUsage& rUsage,
+                        double fPixelsPerUnit,
+                        const std::map<sal_uInt64, FontSubset>& rSubsets) const;
 
     std::unordered_map<sal_Int64, Graphic>& getBitmapCache() { return maBitmapCache; }
     std::unordered_map<sal_uInt64, BinaryDataContainer>& getFontCache() { return maFontCache; }
