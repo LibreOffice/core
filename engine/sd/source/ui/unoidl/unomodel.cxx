@@ -4142,8 +4142,8 @@ OUString lcl_ReadTemplateThumbnailDataUrl(const OUString& rUrl)
 }
 
 /*
-    The answer to .uno:ReserveObjectIds?Count=16: that many object ids reserved for the current
-    view, between one and 64, as the first and the count; the rest follow the first. No other
+    The answer to .uno:ReserveObjectIds?Count=50: that many object ids reserved for the current
+    view, between one and 1000, as the first and the count; the rest follow the first. No other
     object takes them, so the client gives the objects it creates one each, and they keep it. The
     ids travel in 32 bits, so none are reserved where they would not fit.
 */
@@ -4153,7 +4153,7 @@ void SdXImpressDocument::writeReservedObjectIds(::tools::JsonWriter& rJsonWriter
     auto aValues = rJsonWriter.startNode("commandValues");
     sd::DrawViewShell* pShell
         = mpDocShell ? dynamic_cast<sd::DrawViewShell*>(mpDocShell->GetViewShell()) : nullptr;
-    const sal_uInt32 nWanted(std::clamp<sal_Int32>(nCount, 1, 64));
+    const sal_uInt32 nWanted(std::clamp<sal_Int32>(nCount, 1, 1000));
     sal_uInt64 nFirst(0);
     if (pShell)
         nFirst = pShell->ReserveObjectIds(nWanted);

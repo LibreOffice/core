@@ -541,56 +541,91 @@ interface ShapeLook {
 	entry: cool.SlideObject;
 }
 
+/// A run of object ids the engine reserved for this view: the first one and how many of them are
+/// still free. A count of 0 is an empty set.
+interface IdSet {
+	first: number;
+	count: number;
+}
+
 /*
 	Object ids the engine reserved for this view, which no other object takes. The client gives
 	each shape it creates one of them, so the shape has its real id from the start and nothing has
-	to be told again once the engine reports it. A block is asked for when the first is needed,
-	and the next one while a few are left.
+	to be told again once the engine reports it. We hold two sets, the active one the ids are taken
+	from and a reserve. Both are asked for when the document goes into edit mode; when the active
+	one is used up, the reserve becomes the active one and a new reserve is asked for.
 */
 class ReservedObjectIds {
-	/// The ids at hand, the lowest first.
-	private static ids: number[] = [];
+	/// How many ids the engine is asked for in one set.
+	public static setSize: number = 50;
 
-	/// Whether a block was asked for and has not come yet.
-	private static asking: boolean = false;
+	/// The set the ids are taken from.
+	private static active: IdSet = { first: 0, count: 0 };
+
+	/// The set that takes over once the active one is used up.
+	private static reserve: IdSet = { first: 0, count: 0 };
+
+	/// How many sets were asked for and have not come yet.
+	private static asked: number = 0;
 
 	/// Whether the answers are followed, which they are once.
 	private static following: boolean = false;
 
-	// how many ids a block holds, and how few left make the next one asked for
-	private static readonly block: number = 16;
-	private static readonly few: number = 4;
-
-	/// Asks for a block where few ids are left.
-	public static keepEnough(): void {
-		if (!ReservedObjectIds.following) {
-			ReservedObjectIds.following = true;
-			app.map.on('commandvalues', (event: any) => {
-				if (event.commandName !== '.uno:ReserveObjectIds') return;
-				ReservedObjectIds.asking = false;
-				const first = Number(event.commandValues?.first);
-				const count = Number(event.commandValues?.count);
-				for (let at = 0; first > 0 && at < count; ++at)
-					ReservedObjectIds.ids.push(first + at);
-			});
-		}
-		if (
-			ReservedObjectIds.asking ||
-			ReservedObjectIds.ids.length > ReservedObjectIds.few
-		)
-			return;
-		ReservedObjectIds.asking = true;
-		app.socket.sendMessage(
-			'commandvalues command=.uno:ReserveObjectIds?Count=' +
-				ReservedObjectIds.block,
-		);
+	/// Fills both sets once the document can be edited.
+	public static editModeChanged(edit: boolean): void {
+		if (edit) ReservedObjectIds.keepEnough();
 	}
 
-	/// Takes the next id, if one is at hand.
+	/// Asks for as many sets as are empty and not asked for yet.
+	public static keepEnough(): void {
+		ReservedObjectIds.follow();
+		const empty =
+			(ReservedObjectIds.active.count === 0 ? 1 : 0) +
+			(ReservedObjectIds.reserve.count === 0 ? 1 : 0);
+		for (; ReservedObjectIds.asked < empty; ++ReservedObjectIds.asked)
+			app.socket.sendMessage(
+				'commandvalues command=.uno:ReserveObjectIds?Count=' +
+					ReservedObjectIds.setSize,
+			);
+	}
+
+	/// Takes the next id of the active set, where there is one.
 	public static take(): number | undefined {
-		const id = ReservedObjectIds.ids.shift();
+		ReservedObjectIds.moveTheReserveUp();
+		const set = ReservedObjectIds.active;
+		const id = set.count > 0 ? set.first : undefined;
+		if (id !== undefined) {
+			++set.first;
+			--set.count;
+		}
+		ReservedObjectIds.moveTheReserveUp();
 		ReservedObjectIds.keepEnough();
 		return id;
+	}
+
+	// a used up active set is followed by the reserve, so a new set asked for becomes the reserve
+	private static moveTheReserveUp(): void {
+		if (ReservedObjectIds.active.count > 0) return;
+		ReservedObjectIds.active = ReservedObjectIds.reserve;
+		ReservedObjectIds.reserve = { first: 0, count: 0 };
+	}
+
+	// an answer fills the active set where it is empty, else the reserve
+	private static follow(): void {
+		if (ReservedObjectIds.following) return;
+		ReservedObjectIds.following = true;
+		app.map.on('commandvalues', (event: any) => {
+			if (event.commandName !== '.uno:ReserveObjectIds') return;
+			ReservedObjectIds.asked = Math.max(0, ReservedObjectIds.asked - 1);
+			const set: IdSet = {
+				first: Number(event.commandValues?.first) || 0,
+				count: Number(event.commandValues?.count) || 0,
+			};
+			if (set.first <= 0 || set.count <= 0) return;
+			if (ReservedObjectIds.active.count === 0) ReservedObjectIds.active = set;
+			else if (ReservedObjectIds.reserve.count === 0)
+				ReservedObjectIds.reserve = set;
+		});
 	}
 }
 

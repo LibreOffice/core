@@ -8893,6 +8893,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReservedObjectIds)
     // an id never reserved is not taken either
     CPPUNIT_ASSERT(shapeWithId(1) != 1);
     CPPUNIT_ASSERT(!reserved(pSlide->GetObj(pSlide->GetObjCount() - 1)->GetUniqueID()));
+
+    // a client may hold a second, larger set as its reserve, which lies after the first
+    tools::JsonWriter aSecondWriter;
+    pXImpressDocument->getCommandValues(aSecondWriter, ".uno:ReserveObjectIds?Count=500");
+    std::stringstream aSecondStream((std::string(aSecondWriter.finishAndGetAsOString())));
+    boost::property_tree::ptree aSecondTree;
+    boost::property_tree::read_json(aSecondStream, aSecondTree);
+    CPPUNIT_ASSERT_EQUAL(500, aSecondTree.get<int>("commandValues.count"));
+    const sal_uInt64 nSecondFirst = aSecondTree.get<sal_uInt64>("commandValues.first");
+    CPPUNIT_ASSERT(nSecondFirst >= nFirst + 16);
+    CPPUNIT_ASSERT_EQUAL(nSecondFirst + 499, shapeWithId(nSecondFirst + 499));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShape)
