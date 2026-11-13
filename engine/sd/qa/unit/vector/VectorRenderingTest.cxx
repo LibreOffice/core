@@ -42,6 +42,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <vcl/keycodes.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/kit.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/metric.hxx>
@@ -54,6 +56,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdopage.hxx>
@@ -87,7 +90,9 @@
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 
+#include <comphelper/base64.hxx>
 #include <osl/file.hxx>
+#include <tools/stream.hxx>
 #include <boost/property_tree/ptree.hpp>
 
 #include <algorithm>
@@ -2728,6 +2733,130 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testOtherMastersComingAndGoingMoveNoth
     CPPUNIT_ASSERT(oRemoved.has_value());
     assertNothingMoved(*oRemoved, nMasterVersion);
     assertNothingMoved(getVectorPrimitives(u"testMastersGoSlide", nSlideVersion), nSlideVersion);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testThumbnailDrawsTheMasterAndCarriesItsFonts)
+{
+    // A thumbnail carries the master inline, and its fonts cut down to the characters drawn.
+
+    // The font is read from a realized face, so the test needs at least one usable font. Pass
+    // trivially when the environment has none.
+    ScopedVclPtrInstance<VirtualDevice> pProbeDevice;
+    pProbeDevice->SetFont(vcl::Font(u"Liberation Sans"_ustr, Size(0, 2000)));
+    if (pProbeDevice->GetCurrentFontRawData().isEmpty())
+        return;
+
+    createBlankDoc();
+    SdPage* pMasterPage = static_cast<SdPage*>(&page(1)->TRG_GetMasterPage());
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
+        pMasterPage->getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pRect->SetMergedItem(XFillColorItem(OUString(), Color(0xc00000)));
+    pMasterPage->NbcInsertObject(pRect.get());
+    addTextBox(tools::Rectangle(Point(1000, 5000), Size(8000, 2000)), u"Hello"_ustr);
+
+    auto oJson = requestVectorPrimitives(".uno:VectorThumbnail?part=0"_ostr);
+    CPPUNIT_ASSERT(oJson.has_value());
+    assertJsonPath(*oJson, "/type", "vectorthumbnail");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), oJson->getInt("/part").value_or(-1));
+    assertJsonPath(*oJson, "/partId", firstPartId());
+
+    // The page entry draws the rectangle of the master itself.
+    const auto oPage = oJson->at("/objects/0");
+    CPPUNIT_ASSERT(oPage.has_value());
+    assertJsonPath(*oPage, "kind", "page");
+    CPPUNIT_ASSERT(!oPage->has("masterPartId"));
+    CPPUNIT_ASSERT(hasNodeWithColor(*oPage, "polyPolygonColor"_ostr, "#c00000"_ostr));
+
+    // The font the text names travels with the thumbnail and holds the four characters of
+    // "Hello": H, e, l and o.
+    const std::optional<tools::JsonPath> oFontId = oJson->at("/objects")->findFirst("fontId");
+    CPPUNIT_ASSERT(oFontId.has_value());
+    const OString aFontId = oFontId->getString().value_or(""_ostr);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), oJson->getSize("/fonts").value_or(0));
+    assertJsonPath(*oJson, "/fonts/0/fontId", aFontId);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), oJson->getSize("/fonts/0/ranges").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64('H'), oJson->getInt("/fonts/0/ranges/0/0").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64('o'), oJson->getInt("/fonts/0/ranges/3/1").value_or(-1));
+
+    // The cut-down font has an id of its own, so a client can hold it next to the whole font that
+    // the slide names. It is also smaller than the whole font.
+    const OString aWholeFontId = getVectorPrimitives(u"testThumbnailCarriesItsFonts")
+                                     .at("/objects")
+                                     ->findFirst("fontId")
+                                     ->getString()
+                                     .value_or(""_ostr);
+    CPPUNIT_ASSERT(!aWholeFontId.isEmpty());
+    CPPUNIT_ASSERT(aFontId != aWholeFontId);
+    auto oWholeFont = requestVectorPrimitives(".uno:VectorRenderingFont?id=" + aWholeFontId);
+    CPPUNIT_ASSERT(oWholeFont.has_value());
+    const sal_Int32 nSubsetLength
+        = oJson->getString("/fonts/0/data").value_or(OString()).getLength();
+    CPPUNIT_ASSERT(nSubsetLength > 0);
+    CPPUNIT_ASSERT_LESS(oWholeFont->getString("/data").value_or(OString()).getLength(),
+                        nSubsetLength);
+}
+
+/// The pixel size of the one image of a thumbnail, which comes as a PNG image.
+Size thumbnailImageSize(const tools::JsonPath& rJson)
+{
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rJson.getSize("/graphics").value_or(0));
+    const OString aData = rJson.getString("/graphics/0/data").value_or(OString());
+    static constexpr std::string_view aPrefix = "data:image/png;base64,";
+    CPPUNIT_ASSERT(aData.startsWith(aPrefix));
+
+    cpo::uno::Sequence<sal_Int8> aBytes;
+    comphelper::Base64::decode(aBytes, std::string_view(aData).substr(aPrefix.size()));
+    SvMemoryStream aStream(const_cast<sal_Int8*>(aBytes.getConstArray()), aBytes.getLength(),
+                           StreamMode::READ);
+    Graphic aImported;
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, GraphicFilter::GetGraphicFilter().ImportGraphic(
+                                           aImported, u"", aStream));
+    return aImported.GetSizePixel();
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testThumbnailScalesAnImageDown)
+{
+    // An image of 2000 pixels on each side drawn one inch wide comes at 200 pixels to the inch,
+    // or at the resolution the request names.
+    createBlankDoc();
+    Bitmap aBitmap(Size(2000, 2000), vcl::PixelFormat::N24_BPP);
+    aBitmap.Erase(COL_LIGHTRED);
+    SdrPage* pPage = page(1);
+    rtl::Reference<SdrGrafObj> pGraphic
+        = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), Graphic(aBitmap),
+                         tools::Rectangle(Point(1000, 1000), Size(2540, 2540)));
+    pPage->NbcInsertObject(pGraphic.get());
+
+    auto oJson = requestVectorPrimitives(".uno:VectorThumbnail?part=0"_ostr);
+    CPPUNIT_ASSERT(oJson.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(200), oJson->getInt("/dpi").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(Size(200, 200), thumbnailImageSize(*oJson));
+
+    auto oPreview = requestVectorPrimitives(".uno:VectorThumbnail?part=0&dpi=50"_ostr);
+    CPPUNIT_ASSERT(oPreview.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(50), oPreview->getInt("/dpi").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(Size(50, 50), thumbnailImageSize(*oPreview));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testThumbnailLeavesThePartAlone)
+{
+    // A client that holds the slide sees nothing move when a thumbnail of it is written, and a
+    // slide that is not in the document gets an answer that says so.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(4000, 2000)), Color(0x4472c4),
+                 COL_BLACK);
+    const sal_Int64 nVersion
+        = getVectorPrimitives(u"testThumbnailLeavesThePartAlone").getInt("/version").value_or(-1);
+
+    CPPUNIT_ASSERT(requestVectorPrimitives(".uno:VectorThumbnail?part=0"_ostr).has_value());
+    assertNothingMoved(getVectorPrimitives(u"testThumbnailLeavesThePartAloneDelta", nVersion),
+                       nVersion);
+
+    auto oMissing = requestVectorPrimitives(".uno:VectorThumbnail?part=5"_ostr);
+    CPPUNIT_ASSERT(oMissing.has_value());
+    assertJsonPath(*oMissing, "/type", "vectorthumbnail");
+    assertJsonPath(*oMissing, "/error", "nopage");
 }
 
 } // namespace

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <memory>
 #include <set>
 
@@ -3196,6 +3197,14 @@ public:
     /// document. A pull always writes the header.
     void setPush(bool bPush) { mbPush = bPush; }
 
+    /// Write a self-contained thumbnail of the page, as a slide show shows it, with images of
+    /// nDpi pixels to the inch. The versions and records of the part stay as they are.
+    void setThumbnail(sal_Int32 nDpi)
+    {
+        mbThumbnail = true;
+        mnThumbnailDpi = nDpi;
+    }
+
     /// The page the request names, or nullptr when the document holds no such page or the mode
     /// is one this writer does not serve. Resolved once, and later calls return the same page.
     SdPage* resolvePage()
@@ -3211,6 +3220,11 @@ public:
     void write(tools::JsonWriter& rWriter)
     {
         SdPage* pPage = resolvePage();
+        if (mbThumbnail && pPage)
+        {
+            writeThumbnail(rWriter, pPage);
+            return;
+        }
         if (!pPage)
         {
             // A push writes nothing for a page that is not there. A pull gets the header
@@ -3264,6 +3278,44 @@ public:
     }
 
 private:
+    /// Each graphic is scaled down to its drawn size, and each font cut down to the characters
+    /// drawn.
+    void writeThumbnail(tools::JsonWriter& rWriter, SdPage* pPage)
+    {
+        // The text names a cut-down font by the id of its bytes, so a first write collects the
+        // characters of every font. The objects are built once and the second write reuses them.
+        drawinglayer::ResourceUsage aUsage;
+        tools::JsonWriter aCollectingWriter;
+        setupProcessor(aCollectingWriter, pPage);
+        moProcessor->setResourceUsage(&aUsage);
+        writeThumbnailObjects(aCollectingWriter, pPage);
+        // Only the usage is kept from the first write, its text is dropped.
+        (void)aCollectingWriter.finishAndGetAsOString();
+
+        const drawinglayer::VectorResourceCache& rResources = mpModel->getVectorResources();
+        const std::map<sal_uInt64, drawinglayer::FontSubset> aSubsets
+            = rResources.subsetFonts(aUsage);
+        std::map<sal_uInt64, sal_uInt64> aFontIds;
+        for (const auto& [nFontId, rSubset] : aSubsets)
+            aFontIds.emplace(nFontId, rSubset.mnFontId);
+
+        setupProcessor(rWriter, pPage);
+        moProcessor->setFontIds(&aFontIds);
+        rWriter.put("type", "vectorthumbnail");
+        rWriter.put("mode", mnMode);
+        rWriter.put("partId", maPartId);
+        writeThumbnailObjects(rWriter, pPage);
+        // The content is written in twips, 1440 to the inch.
+        rResources.writeResources(rWriter, aUsage, mnThumbnailDpi / 1440.0, aSubsets);
+    }
+
+    void writeThumbnailObjects(tools::JsonWriter& rWriter, SdPage* pPage)
+    {
+        auto aObjectsArray = rWriter.startArray("objects");
+        writePageEntry(rWriter, pPage);
+        writePageObjects(rWriter, pPage);
+    }
+
     /// Answer a request for a page the document does not hold with the header alone. A client
     /// whose page list has not caught up with a mode switch asks for a part that is not there,
     /// and an answer it can read lets it drop the request and ask again.
@@ -3326,13 +3378,14 @@ private:
         // Some content is kept for an editing view alone: the prompt of an empty placeholder
         // and the stand-in graphic of an empty picture. The drawing layer empties the wrapper
         // holding it unless the output says it is such a view, and the payload serves one, so
-        // the content travels.
-        aViewInformation.setEditViewActive(true);
+        // the content travels. A thumbnail shows the page as a slide show does, without it.
+        aViewInformation.setEditViewActive(!mbThumbnail);
 
         // While a text edit runs, the object it runs on hides its own text and the entry for the
         // edit carries what has been typed so far. Saying the edit is active is what makes the
-        // object hide it, so the text is not drawn twice.
-        aViewInformation.setTextEditActive(anyViewIsEditing(pPage));
+        // object hide it, so the text is not drawn twice. A thumbnail has no entry for the edit,
+        // so the object draws the text the document holds.
+        aViewInformation.setTextEditActive(!mbThumbnail && anyViewIsEditing(pPage));
         return aViewInformation;
     }
 
@@ -3409,7 +3462,8 @@ private:
         if (!moPageContent)
         {
             SdXImpressDocument::VectorObjectContent aContent;
-            if (const SdPage* pMasterPage = servedMasterOf(pPage))
+            // A thumbnail stands on its own, so its page entry carries the master inline.
+            if (const SdPage* pMasterPage = mbThumbnail ? nullptr : servedMasterOf(pPage))
             {
                 pageOwnPrimitives(pPage, aContent.maPrimitives);
                 maPageMasterPartId = pMasterPage->GetGuid().getString();
@@ -3661,7 +3715,12 @@ private:
         if (!moPartObjects)
         {
             moPartObjects.emplace();
-            collectPartObjects(pPage, *moPartObjects);
+            // The page entry of a thumbnail draws the whole master, the placeholders the slide
+            // fills in among it, so the objects are the page's own.
+            if (mbThumbnail)
+                collectPaintedObjects(*pPage, *moPartObjects);
+            else
+                collectPartObjects(pPage, *moPartObjects);
         }
         return *moPartObjects;
     }
@@ -3787,8 +3846,12 @@ private:
             // placeholder while leaving the aids to the view that edits the page. An object
             // drawn behind the page rather than on it is marked out where it lives, on the
             // master, so it brings none of them here.
-            aContent.maAids
-                = sd::createPlaceholderDecoration(rObject, isBehindThePage(rObject));
+            // A thumbnail shows the page as a slide show does, without them.
+            if (!mbThumbnail)
+            {
+                aContent.maAids
+                    = sd::createPlaceholderDecoration(rObject, isBehindThePage(rObject));
+            }
         }
 
         svx::vector::describeObject(rObject, aContent, maViewInformation);
@@ -3956,10 +4019,12 @@ private:
             // record is built here.
             const sal_uInt64 nObjectId = svx::vector::idOf(*pObject);
             const SdXImpressDocument::VectorObjectContent* pContent = nullptr;
+            // A thumbnail is built with view information of its own, so it builds every object
+            // and leaves the records alone.
             const auto aResolved = maResolvedContent.find(nObjectId);
             if (aResolved != maResolvedContent.end())
                 pContent = &aResolved->second;
-            else
+            else if (!mbThumbnail)
                 pContent = mpModel->findVectorObjectContent(*pPage, nObjectId);
             if (!pContent)
             {
@@ -3967,7 +4032,8 @@ private:
                     = &maResolvedContent.emplace(nObjectId, contentOf(*pObject)).first->second;
                 // What was written is what the client holds from here on, so a later change to
                 // the object is compared against this.
-                mpModel->noteVectorObjectWritten(*pPage, nObjectId, *pContent);
+                if (!mbThumbnail)
+                    mpModel->noteVectorObjectWritten(*pPage, nObjectId, *pContent);
             }
 
             const SdrObject* pParent = svx::vector::holderOf(*pObject);
@@ -4053,6 +4119,8 @@ private:
     sal_Int32 mnMode;
     sal_Int64 mnSinceVersion = -1;
     bool mbPush = false;
+    bool mbThumbnail = false;
+    sal_Int32 mnThumbnailDpi = 0;
     bool mbResolved = false;
     SdPage* mpPage = nullptr;
     drawinglayer::geometry::ViewInformation2D maViewInformation;
@@ -4075,7 +4143,8 @@ private:
 
 bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
-    if (svx::vector::isPartCommand(rCommand) || rCommand == u"ExtractDocumentStructure"
+    if (svx::vector::isPartCommand(rCommand) || rCommand == u"VectorThumbnail"
+        || rCommand == u"ExtractDocumentStructure"
         || rCommand == u"GetDesignTemplates" || rCommand == u"GetDesignTemplateDesigns"
         || rCommand == u"SecurityLabel" || rCommand == u"ShapeGhost"
         || rCommand == u"ReserveObjectIds" || rCommand == u"ShapeStyleKey")
@@ -4319,6 +4388,22 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         return;
     }
 
+    if (o3tl::starts_with(rCommand, ".uno:VectorThumbnail"))
+    {
+        // The slide is named by its index. No index names no slide.
+        sal_Int32 nPart = -1;
+        if (auto aIterator = aMap.find(u"part"_ustr); aIterator != aMap.end())
+            nPart = aIterator->second.toInt32();
+
+        // 200 pixels to the inch stay sharp when the thumbnail is shown large. The clamp keeps
+        // every image within what a client can decode.
+        sal_Int32 nDpi = 200;
+        if (auto aIterator = aMap.find(u"dpi"_ustr); aIterator != aMap.end())
+            nDpi = std::clamp<sal_Int32>(aIterator->second.toInt32(), 10, 600);
+        writeVectorThumbnail(rJsonWriter, nPart, nDpi);
+        return;
+    }
+
     if (o3tl::starts_with(rCommand, ".uno:SecurityLabel"))
     {
         // The document's STANAG marking (empty when unlabelled), for the browser's
@@ -4504,6 +4589,33 @@ void SdXImpressDocument::writeVectorPrimitives(::tools::JsonWriter& rJsonWriter,
     // told, so the step from there is still to be written for them.
     if (pPage)
         maVectorParts[vectorPartKeyOf(*pPage)].maVersions.noteWritten(bPush);
+}
+
+void SdXImpressDocument::writeVectorThumbnail(::tools::JsonWriter& rJsonWriter, sal_Int32 nPart,
+                                              sal_Int32 nDpi)
+{
+    SdPage* pPage = nullptr;
+    if (mpDoc && nPart >= 0 && nPart < mpDoc->GetSdPageCount(PageKind::Standard))
+        pPage = mpDoc->GetSdPage(sal_uInt16(nPart), PageKind::Standard);
+    if (!pPage)
+    {
+        rJsonWriter.put("type", "vectorthumbnail");
+        rJsonWriter.put("part", nPart);
+        rJsonWriter.put("error", "nopage");
+        return;
+    }
+
+    // The flag marks this write as a render, so a text edit reports only the view's own selection.
+    comphelper::COKit::setVectorRendering(true);
+    comphelper::ScopeGuard aVectorRenderingGuard(
+        [] { comphelper::COKit::setVectorRendering(false); });
+
+    rJsonWriter.put("part", nPart);
+    rJsonWriter.put("dpi", nDpi);
+    VectorContentWriter aContentWriter(mpDoc, this, pPage->GetGuid().getString(),
+                                       constVectorModeSlides);
+    aContentWriter.setThumbnail(nDpi);
+    aContentWriter.write(rJsonWriter);
 }
 
 /******************************************************************************

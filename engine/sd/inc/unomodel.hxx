@@ -312,6 +312,10 @@ private:
     /// Tells every view of the document the key of the attributes its new shapes take.
     void notifyShapeStyleKey();
 
+    /// Writes a self-contained thumbnail of the slide at index nPart, with images of nDpi pixels
+    /// to the inch of their drawn size. The slide's versions stay as they are.
+    void writeVectorThumbnail(tools::JsonWriter& rJsonWriter, sal_Int32 nPart, sal_Int32 nDpi);
+
     cpo::uno::Reference<cpo::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
 
