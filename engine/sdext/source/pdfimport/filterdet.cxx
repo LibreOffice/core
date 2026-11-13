@@ -281,6 +281,7 @@ struct FilenameMime {
 
 constexpr FilenameMime aFilenameMimeMap[] = {
     { u"Original.odt"_ustr, u"application/vnd.oasis.opendocument.text"_ustr },
+    { u"Original.odm"_ustr, u"application/vnd.oasis.opendocument.text-master"_ustr },
     { u"Original.odp"_ustr, u"application/vnd.oasis.opendocument.presentation"_ustr },
     { u"Original.ods"_ustr, u"application/vnd.oasis.opendocument.spreadsheet"_ustr },
     { u"Original.odg"_ustr, u"application/vnd.oasis.opendocument.graphics"_ustr },

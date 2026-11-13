@@ -1036,6 +1036,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 OUString aExt;
                 if (aSrcMimetype == "application/vnd.oasis.opendocument.text")
                     aExt = u".odt"_ustr;
+                else if (aSrcMimetype == "application/vnd.oasis.opendocument.text-master")
+                    aExt = u".odm"_ustr;
                 else if (aSrcMimetype == "application/vnd.oasis.opendocument.presentation")
                     aExt = u".odp"_ustr;
                 else if (aSrcMimetype == "application/vnd.oasis.opendocument.spreadsheet")
