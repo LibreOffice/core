@@ -1291,6 +1291,8 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"AlignHorizontalCenter", { PayloadType::IsActivePayload, true } },
         { u"AlignRight", { PayloadType::IsActivePayload, true } },
         { u"DocumentRepair", { PayloadType::IsActivePayload, true } },
+        { u"FlipHorizontal", { PayloadType::IsActiveOrDisabledPayload, true } },
+        { u"FlipVertical", { PayloadType::IsActiveOrDisabledPayload, true } },
         { u"ObjectAlignLeft", { PayloadType::IsActiveOrDisabledPayload, true } },
         { u"ObjectAlignRight", { PayloadType::IsActiveOrDisabledPayload, true } },
         { u"AlignCenter", { PayloadType::IsActiveOrDisabledPayload, true } },
