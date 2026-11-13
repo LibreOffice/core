@@ -19,6 +19,8 @@
 
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
+#include <tools/hostfilter.hxx>
+#include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <svl/urihelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -1815,7 +1817,11 @@ void SwHTMLParser::InsertLink()
         if( !sHRef.isEmpty() && sRel.equalsIgnoreAsciiCase( "STYLESHEET" ) &&
             ( sType.isEmpty() || o3tl::getToken(sType, 0,';') == sCSS_mimetype ) )
         {
-            if( GetMedium() )
+            if( HostFilter::isFileUrlForbidden( sHRef ) )
+            {
+                SAL_WARN( "sw.html", "SwHTMLParser::InsertLink: blocked file path: \"" << sHRef << "\"" );
+            }
+            else if( GetMedium() )
             {
                 // start download of style source
                 StartFileDownload(sHRef);
