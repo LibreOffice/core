@@ -167,7 +167,10 @@ namespace LOKitHelper
     inline bool isHybridPDF(COKitDocument* loKitDocument)
     {
         const std::string value(loKitDocument->getCommandValues(".uno:HybridPDF"));
-        return value.find("true") != std::string::npos;
+        Poco::JSON::Object::Ptr object;
+        if (!JsonUtil::parseJSON(value, object))
+            return false;
+        return JsonUtil::getJSONValue<std::string>(object, "hybridpdf") == "true";
     }
 
     inline std::string documentStatus(COKitDocument *loKitDocument, bool diffSizePages = false)

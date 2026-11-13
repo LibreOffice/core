@@ -1728,14 +1728,17 @@ void DesktopKitTest::testHybridPDFState()
         m_directories.getURLFromSrc(u"filter/qa/unit/data/hybrid_writer.pdf"),
         COKitDocumentType::TEXT);
     CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
-    std::string aValues = pDocument->getCommandValues(".uno:HybridPDF");
-    CPPUNIT_ASSERT(aValues.find("\"hybridpdf\":\"true\"") != std::string::npos);
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(pDocument->getCommandValues(".uno:HybridPDF"));
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), aTree.get<std::string>("hybridpdf"));
     closeDoc();
 
     // A document opened from ODF does not:
     pDocument = loadDoc("blank_text.odt");
-    aValues = pDocument->getCommandValues(".uno:HybridPDF");
-    CPPUNIT_ASSERT(aValues.find("\"hybridpdf\":\"false\"") != std::string::npos);
+    aStream = std::stringstream(pDocument->getCommandValues(".uno:HybridPDF"));
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(std::string("false"), aTree.get<std::string>("hybridpdf"));
 }
 
 void DesktopKitTest::testSaveAsHybridPDF()
