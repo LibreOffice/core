@@ -479,6 +479,12 @@ IMAGE_SETEVENT:
 
     Graphic aGraphic;
     INetURLObject aGraphicURL( sGrfNm );
+    const bool bCacheClipboardImage = m_bFromClipboard
+                                      && (aGraphicURL.GetProtocol() == INetProtocol::Http
+                                          || aGraphicURL.GetProtocol() == INetProtocol::Https);
+    const OUString sClipboardImageURL
+        = bCacheClipboardImage ? aGraphicURL.GetURLNoMark(INetURLObject::DecodeMechanism::NONE)
+                               : OUString();
     if( aGraphicURL.GetProtocol() == INetProtocol::Data )
     {
         std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
@@ -501,8 +507,26 @@ IMAGE_SETEVENT:
             KitHelper::sendNetworkAccessError("paste", aGraphicURL.GetHost());
 
         // aGraphicData is non-empty for <object data="..."> -> not a linked graphic.
-        if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
+        if (bCacheClipboardImage)
+        {
+            const auto it = m_aClipboardImageCache.find(sClipboardImageURL);
+            if (it != m_aClipboardImageCache.end())
+            {
+                aGraphic = it->second;
+                sGrfNm.clear();
+            }
+            else if (ERRCODE_NONE
+                     == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
+            {
+                m_aClipboardImageCache.emplace(sClipboardImageURL, aGraphic);
+                sGrfNm.clear();
+            }
+        }
+        else if (ERRCODE_NONE
+                 == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
+        {
             sGrfNm.clear();
+        }
     }
 
     if (!sGrfNm.isEmpty())

@@ -7,7 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
 #include <swmodeltestbase.hxx>
+
+#include <algorithm>
+#include <atomic>
+#include <string>
+#include <utility>
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -26,11 +33,27 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/util/XLinkUpdate.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <cpo/uno/Sequence.hxx>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 
+#include <osl/socket.hxx>
+#include <osl/thread.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Security.hxx>
+#include <rtl/strbuf.hxx>
+#include <test/commontesttools.hxx>
 #include <tools/datetime.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <sot/exchange.hxx>
+#include <tools/stream.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/transfer.hxx>
 
 #include <docsh.hxx>
 #include <editsh.hxx>
@@ -40,7 +63,9 @@
 #include <fmtflcnt.hxx>
 #include <fmtfsize.hxx>
 #include <frameformats.hxx>
+#include <swdtflvr.hxx>
 #include <unotxdoc.hxx>
+#include <wrtsh.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -48,6 +73,191 @@ using namespace ::cpo::uno;
 
 namespace
 {
+class LocalImageServer final : public osl::Thread
+{
+public:
+    explicit LocalImageServer(OString aImageData)
+        : m_aAddress(u"127.0.0.1"_ustr, 0)
+        , m_aImageData(std::move(aImageData))
+    {
+    }
+
+    ~LocalImageServer() { stop(); }
+
+    bool start()
+    {
+        m_aAcceptorSocket.setOption(osl_Socket_OptionReuseAddr, 1);
+        if (!m_aAcceptorSocket.bind(m_aAddress) || !m_aAcceptorSocket.listen())
+        {
+            m_aAcceptorSocket.close();
+            return false;
+        }
+
+        m_nPort = m_aAcceptorSocket.getLocalPort();
+        if (m_nPort <= 0)
+        {
+            m_aAcceptorSocket.close();
+            return false;
+        }
+
+        if (!create())
+        {
+            m_aAcceptorSocket.close();
+            return false;
+        }
+        m_bStarted = true;
+        return true;
+    }
+
+    void stop()
+    {
+        if (!m_bStarted)
+            return;
+
+        m_bStopping.store(true);
+        m_aAcceptorSocket.close();
+        join();
+        m_bStarted = false;
+    }
+
+    sal_Int32 getPort() const { return m_nPort; }
+    sal_Int32 getSingleRequestCount() const { return m_nSingleRequestCount.load(); }
+    sal_Int32 getRepeatedRequestCount() const { return m_nRepeatedRequestCount.load(); }
+    sal_Int32 getConnectionCount() const { return m_nConnectionCount.load(); }
+    const std::string& getRequestLog() const { return m_aRequestLog; }
+
+private:
+    void run() override
+    {
+        while (!m_bStopping.load())
+        {
+            osl::StreamSocket aClient;
+            const auto nResult = m_aAcceptorSocket.acceptConnection(aClient);
+            if (nResult != osl_Socket_Ok)
+                break;
+            ++m_nConnectionCount;
+
+            std::string aRequest;
+            while (aRequest.find("\r\n") == std::string::npos && aRequest.size() < 4096)
+            {
+                char aBuffer[512];
+                const sal_Int32 nRead = aClient.recv(aBuffer, sizeof(aBuffer));
+                if (nRead <= 0)
+                    break;
+                aRequest.append(aBuffer, nRead);
+            }
+            if (aRequest.empty())
+            {
+                m_aRequestLog.append("(connection closed without a request)\n");
+                aClient.close();
+                continue;
+            }
+            const size_t nLineEnd = aRequest.find("\r\n");
+            m_aRequestLog.append(aRequest, 0,
+                                 nLineEnd == std::string::npos ? aRequest.size() : nLineEnd);
+            m_aRequestLog.push_back('\n');
+
+            const bool bSingleImage = aRequest.find("/single.jpg") != std::string::npos;
+            const bool bRepeatedImage = aRequest.find("/repeated.jpg") != std::string::npos;
+            const bool bOptions = aRequest.rfind("OPTIONS ", 0) == 0;
+            const bool bGet = aRequest.rfind("GET ", 0) == 0;
+            if (bSingleImage || bRepeatedImage)
+            {
+                if (bGet)
+                {
+                    if (bSingleImage)
+                        ++m_nSingleRequestCount;
+                    else
+                        ++m_nRepeatedRequestCount;
+                }
+
+                if (bOptions)
+                {
+                    static constexpr char sOptions[]
+                        = "HTTP/1.1 200 OK\r\nAllow: GET, HEAD, OPTIONS\r\nContent-Length: 0\r\n"
+                          "Connection: close\r\n\r\n";
+                    writeAll(aClient, sOptions, sizeof(sOptions) - 1);
+                }
+                else
+                {
+                    const OString aHeaderString = OString::Concat("HTTP/1.1 200 OK\r\n"
+                                                                  "Content-Type: image/jpeg\r\n"
+                                                                  "Cache-Control: no-store\r\n"
+                                                                  "Content-Length: ")
+                                                  + OString::number(m_aImageData.getLength())
+                                                  + "\r\nConnection: close\r\n\r\n";
+                    writeAll(aClient, aHeaderString.getStr(), aHeaderString.getLength());
+                    if (bGet)
+                        writeAll(aClient, m_aImageData.getStr(), m_aImageData.getLength());
+                }
+            }
+            else
+            {
+                static constexpr char sNotFound[]
+                    = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
+                writeAll(aClient, sNotFound, sizeof(sNotFound) - 1);
+            }
+
+            aClient.close();
+        }
+    }
+
+    static void writeAll(osl::StreamSocket& rSocket, const char* pData, sal_Int32 nLength)
+    {
+        while (nLength > 0)
+        {
+            const sal_Int32 nWritten = rSocket.write(pData, nLength);
+            if (nWritten <= 0)
+                return;
+            pData += nWritten;
+            nLength -= nWritten;
+        }
+    }
+
+    osl::SocketAddr m_aAddress;
+    osl::AcceptorSocket m_aAcceptorSocket;
+    OString m_aImageData;
+    sal_Int32 m_nPort = 0;
+    std::atomic<bool> m_bStopping = false;
+    std::atomic<sal_Int32> m_nSingleRequestCount = 0;
+    std::atomic<sal_Int32> m_nRepeatedRequestCount = 0;
+    std::atomic<sal_Int32> m_nConnectionCount = 0;
+    std::string m_aRequestLog;
+    bool m_bStarted = false;
+};
+
+class ScopedWebDAVHTTPProvider final
+{
+public:
+    ScopedWebDAVHTTPProvider()
+    {
+        const auto xContext = comphelper::getProcessComponentContext();
+        mxBroker = ucb::UniversalContentBroker::create(xContext);
+        mxProviderManager = mxBroker;
+        CPPUNIT_ASSERT(mxProviderManager.is());
+
+        uno::Reference<cpo::uno::XInterface> xInstance
+            = xContext->getServiceManager()->createInstanceWithContext(
+                u"com.sun.star.ucb.WebDAVContentProvider"_ustr, xContext);
+        mxProvider.set(xInstance, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(mxProvider.is());
+        mxProviderManager->registerContentProvider(mxProvider, u"http"_ustr, true);
+    }
+
+    ~ScopedWebDAVHTTPProvider()
+    {
+        if (!mxProviderManager.is() || !mxProvider.is())
+            return;
+
+        mxProviderManager->deregisterContentProvider(mxProvider, u"http"_ustr);
+    }
+
+private:
+    uno::Reference<ucb::XUniversalContentBroker> mxBroker;
+    uno::Reference<ucb::XContentProviderManager> mxProviderManager;
+    uno::Reference<ucb::XContentProvider> mxProvider;
+};
+
 class HtmlImportTest : public SwModelTestBase
 {
     public:
@@ -465,6 +675,103 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageNotFetchedWithoutPermission)
         }
     }
     CPPUNIT_FAIL("no graphic node in the document");
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf45307RepeatedClipboardImage)
+{
+    ScopedConfigValue<officecfg::Office::Security::Net::AllowInsecureProtocols>
+        aAllowInsecureProtocols(true);
+    createSwDoc();
+    ScopedWebDAVHTTPProvider aHTTPProvider;
+
+    SvFileStream aImageStream(createFileURL(u"libreoffice.jpg"), StreamMode::READ);
+    CPPUNIT_ASSERT(aImageStream.IsOpen());
+    const sal_Int32 nImageSize = static_cast<sal_Int32>(aImageStream.remainingSize());
+    CPPUNIT_ASSERT(nImageSize > 0);
+    uno::Sequence<sal_Int8> aImageBytes(nImageSize);
+    aImageStream.ReadBytes(aImageBytes.getArray(), nImageSize);
+    const OString aImageData(reinterpret_cast<const char*>(aImageBytes.getConstArray()),
+                             nImageSize);
+
+    LocalImageServer aServer(aImageData);
+    CPPUNIT_ASSERT(aServer.start());
+
+    const OString aBaseURL
+        = OString::Concat("http://127.0.0.1:") + OString::number(aServer.getPort());
+    const OString aHTMLStart = OString::Concat("<html><body><table><tr><td><img src=\"") + aBaseURL
+                               + "/single.jpg\"></td>";
+    OStringBuffer aHTML(aHTMLStart);
+    for (int i = 0; i < 3; ++i)
+        aHTML.append(OString::Concat("<td><img src=\"") + aBaseURL + "/repeated.jpg\"></td>");
+    aHTML.append("</tr></table></body></html>");
+
+    class HTMLTransferable final : public comphelper::WeakImplHelper<datatransfer::XTransferable>
+    {
+    public:
+        explicit HTMLTransferable(OString aHTML)
+            : m_aHTML(std::move(aHTML))
+        {
+        }
+
+        uno::Any getTransferData(const datatransfer::DataFlavor& rFlavor) override
+        {
+            if (!isDataFlavorSupported(rFlavor))
+                return {};
+
+            uno::Sequence<sal_Int8> aBytes(m_aHTML.getLength());
+            std::copy_n(reinterpret_cast<const sal_Int8*>(m_aHTML.getStr()), m_aHTML.getLength(),
+                        aBytes.getArray());
+            return uno::Any(aBytes);
+        }
+
+        uno::Sequence<datatransfer::DataFlavor> getTransferDataFlavors() override
+        {
+            return { getHTMLFlavor() };
+        }
+
+        bool isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override
+        {
+            return rFlavor.MimeType.equalsIgnoreAsciiCase(getHTMLFlavor().MimeType);
+        }
+
+    private:
+        OString m_aHTML;
+
+        static datatransfer::DataFlavor getHTMLFlavor()
+        {
+            datatransfer::DataFlavor aFlavor;
+            CPPUNIT_ASSERT(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML, aFlavor));
+            return aFlavor;
+        }
+    };
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    uno::Reference<datatransfer::XTransferable> xTransferable
+        = new HTMLTransferable(aHTML.makeStringAndClear());
+    TransferableDataHelper aDataHelper(xTransferable);
+    CPPUNIT_ASSERT(aDataHelper.HasFormat(SotClipboardFormatId::HTML));
+    // PasteFileContent gives SwHTMLParser an empty base URL for clipboard HTML.
+    CPPUNIT_ASSERT(
+        SwTransferable::PasteFormat(*pWrtShell, aDataHelper, SotClipboardFormatId::HTML));
+
+    SwDoc* pDoc = getSwDoc();
+    sal_Int32 nGraphics = 0;
+    for (SwNodeOffset nNode(0); nNode < pDoc->GetNodes().Count(); ++nNode)
+    {
+        if (SwGrfNode* pGrfNode = pDoc->GetNodes()[nNode]->GetGrfNode())
+        {
+            ++nGraphics;
+            CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pGrfNode->GetGrfObj().GetType());
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nGraphics);
+
+    aServer.stop();
+    CPPUNIT_ASSERT_MESSAGE(aServer.getRequestLog(), aServer.getConnectionCount() > 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(aServer.getRequestLog(), sal_Int32(1),
+                                 aServer.getSingleRequestCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(aServer.getRequestLog(), sal_Int32(1),
+                                 aServer.getRepeatedRequestCount());
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageButtonPictureWaitsForLinkUpdate)

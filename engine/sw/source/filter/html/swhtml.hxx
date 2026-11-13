@@ -35,8 +35,10 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <vcl/graph.hxx>
 #include <vcl/vclptr.hxx>
 
+#include <map>
 #include <memory>
 #include <optional>
 #include <utility>
@@ -535,6 +537,9 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     OUString m_aEmbedURL;
 
     std::unique_ptr<SfxItemSet> m_pTargetCharAttrs;
+
+    /// Successfully loaded remote images reused only during this clipboard HTML parse.
+    std::map<OUString, Graphic> m_aClipboardImageCache;
 
     void DeleteFormImpl();
 

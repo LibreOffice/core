@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_htmlimport, \
 	i18nlangtag \
 	sal \
 	sfx \
+	sot \
 	subsequenttest \
 	svl \
 	svt \
@@ -60,6 +61,10 @@ $(eval $(call gb_CppunitTest_use_ure,sw_htmlimport))
 $(eval $(call gb_CppunitTest_use_vcl,sw_htmlimport))
 
 $(eval $(call gb_CppunitTest_use_rdb,sw_htmlimport,services))
+
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_htmlimport,\
+	officecfg/registry \
+))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_htmlimport))
 
