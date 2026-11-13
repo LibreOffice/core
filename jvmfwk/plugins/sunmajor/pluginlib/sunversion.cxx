@@ -127,11 +127,11 @@ bool SunVersion::init(const char *szVersion)
         return true;
 
     // Now handle any patch or update version after the numeric part. Only a
-    // single '_' is allowed, and if present must be the next character
+    // single '_' is allowed, and if present must be the first character
     const size_t nUnderscorePos = sPatchlevel.find_first_of('_');
     if (nUnderscorePos != sPatchlevel.find_last_of('_'))
         return false;
-    if (nUnderscorePos != std::u16string_view::npos && nUnderscorePos > 0)
+    if (nUnderscorePos != std::u16string_view::npos && nUnderscorePos != 0)
         return false;
 
     // Only a single - allowed and it must come after any '_'
@@ -140,7 +140,8 @@ bool SunVersion::init(const char *szVersion)
     {
         if (nDashPos != sPatchlevel.find_last_of('-'))
             return false;
-        if (nUnderscorePos != std::u16string_view::npos && nDashPos < nUnderscorePos)
+        // If no '_' was found, then the next character must be a '-'.
+        if (nUnderscorePos == std::u16string_view::npos && nDashPos != 0)
             return false;
     }
 
@@ -151,8 +152,9 @@ bool SunVersion::init(const char *szVersion)
     // If an underscore is first, next characters must be update level digits.
     // The update level digits may be followed by a pre-release string (eg, "-rc2"
     // or "-beta1") or a single 'a' (like "1.4.1_01a" on Solaris 9).
-    if (nUnderscorePos == 0)
+    if (nUnderscorePos != std::u16string_view::npos)
     {
+        assert(nUnderscorePos == 0);
         assert(sPatchlevel.starts_with(u"_"));
         sPatchlevel.remove_prefix(1);
 
