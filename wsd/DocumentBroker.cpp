@@ -2094,17 +2094,8 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
                                                                      JAILED_CONFIG_ROOT);
         _userConfigId = "user-" + userId + "-" + Cache::getConfigId(userSettingsUri);
 
-        // The browser-consumed "extensions" group needs to land in sharedpresets (where the wsd
-        // file server can see it), not in the kit user profile where every other user-level group
-        // lives:
-        auto const userExtensionsBase
-            = Poco::Path(COOLWSD::ChildRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH);
-        auto const userExtensionsDir = Poco::Path(userExtensionsBase, Uri::encode(_userConfigId));
-        Poco::File(Poco::Path(userExtensionsDir, "extensions")).createDirectories();
-
         _userSettingsUri = userSettingsUri;
-        asyncInstallPresets(session, _userConfigId, userSettingsUri, jailPresetsPath,
-                            {{"extensions", userExtensionsDir.toString()}});
+        asyncInstallPresets(session, _userConfigId, userSettingsUri, jailPresetsPath, {});
         session->setUserPresetsApplied(true);
     }
 
@@ -2516,7 +2507,9 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
             addGroup(settings, "autocorr", presets);
             addGroup(settings, "template", presets);
             addGroup(settings, "themes", presets);
-            addGroup(settings, "extensions", presets);
+            if (_sharedPresets) {
+                addGroup(settings, "extensions", presets);
+            }
             // SPIF security-label policies. Read-only to the engine (which scans
             // the jail's spif/ config dir at label-dialog build time), so this is
             // not a round-trip group; persistence is the Settings-UI upload.
