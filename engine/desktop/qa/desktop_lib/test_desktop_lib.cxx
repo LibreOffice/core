@@ -222,6 +222,7 @@ public:
     void testGetStyles();
     void testGetStylesSpreadsheet();
     void testGetStylesPresentation();
+    void testExternalLinksDisabledWithHeldBackStyleSheet();
     void testGetFonts();
     void testCreateView();
     void testGetPartPageRectangles();
@@ -359,6 +360,7 @@ public:
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetStylesSpreadsheet);
     CPPUNIT_TEST(testGetStylesPresentation);
+    CPPUNIT_TEST(testExternalLinksDisabledWithHeldBackStyleSheet);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
     CPPUNIT_TEST(testGetPartPageRectangles);
@@ -739,6 +741,25 @@ void DesktopKitTest::testGetStylesSpreadsheet()
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:StyleApply"), aCommandName);
     // The cell styles, the page styles that have a header or a footer, and the commands.
     CPPUNIT_ASSERT_EQUAL(std::string("CellStyles Commands HeaderFooter"), aLists);
+}
+
+void DesktopKitTest::testExternalLinksDisabledWithHeldBackStyleSheet()
+{
+    // Given an HTML document that links a style sheet, loaded with links updated on request:
+    COKitDocumentImpl* pDocument = loadDoc("linked-style-sheet.html", COKitDocumentType::TEXT);
+
+    // Then the document offers its links, because the style sheet waits for them:
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(pDocument->getCommandValues(".uno:ExternalLinksDisabled"));
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT(aTree.get<bool>("disabled"));
+
+    // And once the user allows link updates, nothing is left to offer:
+    SfxObjectShell::GetShellFromComponent(pDocument->mxComponent)->AllowLinkUpdate();
+    aTree.clear();
+    std::stringstream aStreamAfter(pDocument->getCommandValues(".uno:ExternalLinksDisabled"));
+    boost::property_tree::read_json(aStreamAfter, aTree);
+    CPPUNIT_ASSERT(!aTree.get<bool>("disabled"));
 }
 
 void DesktopKitTest::testGetStylesPresentation()

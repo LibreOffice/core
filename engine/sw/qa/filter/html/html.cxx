@@ -10,7 +10,11 @@
 #include <swmodeltestbase.hxx>
 #include <test/htmltesttools.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/charhiddenitem.hxx>
@@ -23,6 +27,7 @@
 #include <fmtfsize.hxx>
 #include <frameformats.hxx>
 #include <hintids.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <unotxdoc.hxx>
 #include <itabenum.hxx>
@@ -314,6 +319,89 @@ CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
     OUString aContent = getXPathContent(pHtmlDoc, "/html/body/p/text()");
     CPPUNIT_ASSERT_EQUAL(u"content"_ustr, aContent.trim());
 }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkedStyleSheetAppliesOnlyAfterLinkUpdateAllowed)
+{
+    // Given an HTML document that links a style sheet, loaded with links updated on request:
+    setImportFilterName(TestFilter::HTML_WRITER);
+    createSwDoc("linked-style-sheet.html");
+
+    // Then the document is not styled by the sheet yet, but the paragraph of a class keeps its
+    // own style:
+    uno::Reference<text::XTextRange> xPlain = getParagraph(1, u"plain"_ustr);
+    uno::Reference<text::XTextRange> xNote = getParagraph(2, u"note"_ustr);
+    CPPUNIT_ASSERT(getProperty<Color>(xPlain, u"CharColor"_ustr) != Color(0xff0000));
+    CPPUNIT_ASSERT(getProperty<OUString>(xNote, u"ParaStyleName"_ustr).endsWith(".note"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xNote, u"CharWeight"_ustr));
+
+    // When the user allows link updates, the styles take the properties of the sheet:
+    getSwDocShell()->AllowLinkUpdate();
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getProperty<Color>(xPlain, u"CharColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getProperty<Color>(xNote, u"CharColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xNote, u"CharWeight"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkedStyleSheetAfterEditsBeforeLinkUpdateAllowed)
+{
+    // Given an HTML document that links a style sheet, loaded with links updated on request:
+    setImportFilterName(TestFilter::HTML_WRITER);
+    createSwDoc("linked-style-sheet.html");
+
+    // And the user types and deletes the style of a class before allowing link updates:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"x"_ustr);
+    IDocumentUndoRedo& rUndoRedo = getSwDoc()->GetIDocumentUndoRedo();
+    CPPUNIT_ASSERT(rUndoRedo.GetUndoActionCount() > 0);
+    uno::Reference<text::XTextRange> xNote = getParagraph(2, u"note"_ustr);
+    OUString aNoteStyle = getProperty<OUString>(xNote, u"ParaStyleName"_ustr);
+    uno::Reference<container::XNameContainer> xParaStyles(getStyles(u"ParagraphStyles"_ustr),
+                                                          uno::UNO_QUERY_THROW);
+    xParaStyles->removeByName(aNoteStyle);
+
+    // When the user allows link updates, the remaining styles take the properties of the sheet,
+    // and the edits made before can no longer be undone:
+    getSwDocShell()->AllowLinkUpdate();
+    uno::Reference<text::XTextRange> xPlain = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getProperty<Color>(xPlain, u"CharColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sal_Int32(rUndoRedo.GetUndoActionCount()));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkedStyleSheetKeepsDocumentOrder)
+{
+    // Given an HTML document with a style sheet of its own before and after a linked one, loaded
+    // with links updated on request:
+    setImportFilterName(TestFilter::HTML_WRITER);
+    createSwDoc("linked-style-sheet-order.html");
+
+    // When the user allows link updates:
+    getSwDocShell()->AllowLinkUpdate();
+
+    // Then each rule is overridden only by a later sheet, as at load:
+    uno::Reference<text::XTextRange> xPlain = getParagraph(1, u"plain"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[0000ffff]
+    // - Actual  : rgba[ff0000ff]
+    // i.e. the linked sheet overrode the sheet that follows it in the document.
+    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), getProperty<Color>(xPlain, u"CharColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xPlain, u"CharWeight"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkedStyleSheetAppliesAtLoadWhenLinkUpdatesAllowed)
+{
+    // Given an HTML document that links a style sheet, loaded with links updated without asking:
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::QUIET_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"linked-style-sheet.html"), aParams);
+
+    // Then the document is styled by the sheet at once:
+    uno::Reference<text::XTextRange> xPlain = getParagraph(1, u"plain"_ustr);
+    uno::Reference<text::XTextRange> xNote = getParagraph(2, u"note"_ustr);
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getProperty<Color>(xPlain, u"CharColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xNote, u"CharWeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDisplayNoneImport)

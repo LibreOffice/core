@@ -1299,11 +1299,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         if (!m_bBodySeen)
         {
             m_bBodySeen = true;
-            if( !m_aStyleSource.isEmpty() )
-            {
-                m_pCSS1Parser->ParseStyleSheet( m_aStyleSource );
-                m_aStyleSource.clear();
-            }
+            ParseStyleSource();
             if( IsNewDoc() )
             {
                 InsertBodyOptions();

@@ -22,11 +22,15 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <string_view>
+#include <utility>
+#include <vector>
 
 #include <svtools/htmltokn.h>
 #include <tools/solar.h>
 
+#include <names.hxx>
 #include <poolfmt.hxx>
 
 #include "svxcss1.hxx"
@@ -39,6 +43,30 @@ class SwFormatDrop;
 class SwPageDesc;
 class SwHTMLParser;
 
+/// A style sheet of an HTML document: linked from aURL, or given in the document itself as
+/// aSource when aURL is empty.
+struct SwHTMLHeldBackStyleSheet
+{
+    OUString aURL;
+    OUString aSource;
+};
+
+/// The style sheets an HTML document links to that are fetched only once the user allows link
+/// updates for the document, and what is needed to apply them to its styles then.
+struct SwHTMLHeldBackStyleSheets
+{
+    /// The linked sheets, and the sheets in the document after the first of them, in document
+    /// order.
+    std::vector<SwHTMLHeldBackStyleSheet> aStyleSheets;
+    OUString aBaseURL;
+    sal_uInt32 aFontHeights[7] = {};
+    rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
+    /// The paragraph styles made for a class, by name, each with its class.
+    std::vector<std::pair<UIName, OUString>> aTextCollClasses;
+    /// The character styles made for a class, by name, each with its class.
+    std::vector<std::pair<UIName, OUString>> aCharFormatClasses;
+};
+
 // This header looks harmless, but includes still quite
 // inconspicuous one or the other! On the other hand this class
 // is rarely needed. Therefore its own header.
@@ -47,6 +75,7 @@ class SwCSS1Parser : public SvxCSS1Parser
 {
     SwDoc *m_pDoc;
     SwHTMLParser const* m_pHTMLParser;
+    std::shared_ptr<SwHTMLHeldBackStyleSheets> m_pHeldBackStyleSheets;
 
     sal_uLong m_aFontHeights[7];
 
@@ -88,6 +117,14 @@ public:
     virtual ~SwCSS1Parser() override;
 
     virtual bool ParseStyleSheet( const OUString& rIn ) override;
+
+    const std::shared_ptr<SwHTMLHeldBackStyleSheets>& GetHeldBackStyleSheets() const
+        { return m_pHeldBackStyleSheets; }
+    void SetHeldBackStyleSheets( const std::shared_ptr<SwHTMLHeldBackStyleSheets>& pSheets )
+        { m_pHeldBackStyleSheets = pSheets; }
+
+    // Fetch the held-back style sheets and apply them to the styles of the document
+    static void ApplyHeldBackStyleSheets( SwDoc& rDoc, const SwHTMLHeldBackStyleSheets& rSheets );
 
     // determine font height for a certain font size (0-6)
     virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const override;
