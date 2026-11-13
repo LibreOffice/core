@@ -642,7 +642,7 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
             return false;
         }
 
-        if (serveBrowserPresetExtensionFile(relPath, response, noCache, socket)) {
+        if (serveBrowserPresetExtensionFile(request, relPath, response, noCache, socket)) {
             return true;
         }
 
@@ -1115,8 +1115,8 @@ std::string extensionMimeType(std::string const & fileName) {
 }
 
 bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
-    std::string const & relPath, http::Response & response, bool noCache,
-    std::shared_ptr<StreamSocket> const & socket)
+    HTTPRequest const & request, std::string const & relPath, http::Response & response,
+    bool noCache, std::shared_ptr<StreamSocket> const & socket)
 {
     static std::string const urlPrefix = "/browser/dist/preset/";
     if (!relPath.starts_with(urlPrefix)) {
@@ -1134,6 +1134,29 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         return true;
     }
     auto const rest = tail.substr(firstSlash + 1);
+
+    // A browser keeps a file but checks it again before each use (as an admin can replace it),
+    // with an ETag from the file's modification time and size:
+    auto const sendPresetFile = [&](std::string const & path) {
+        FileUtil::Stat const stat(path);
+        std::string const etag
+            = '"' + std::to_string(stat.modifiedTimeUs()) + '-' + std::to_string(stat.size()) + '"';
+        auto const it = request.find("If-None-Match");
+        if (it != request.end() && ifNoneMatch(it->second, etag)) {
+            http::Response notModified(http::StatusCode::NotModified);
+            if (response.header().getConnectionToken() == http::Header::ConnectionToken::Close) {
+                notModified.setConnectionToken(http::Header::ConnectionToken::Close);
+            }
+            hstsHeaders(notModified);
+            notModified.set("Cache-Control", "no-cache");
+            notModified.set("ETag", etag);
+            socket->send(notModified);
+        } else {
+            response.set("ETag", etag);
+            HttpHelper::sendFile(socket, path, response, true);
+        }
+    };
+
     static std::string const extensionsSegment = "extensions/";
     if (!rest.starts_with(extensionsSegment) && rest != "extensions") {
         HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
@@ -1180,9 +1203,7 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         response.setContentType("application/json");
         response.add("X-Content-Type-Options", "nosniff");
         response.set("Content-Length", std::to_string(body.size()));
-        if (noCache) {
-            response.set("Cache-Control", "no-cache");
-        }
+        response.set("Cache-Control", "no-cache");
         socket->send(response);
         socket->send(body);
         return true;
@@ -1203,6 +1224,8 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
             return true;
         }
         response.setContentType(extensionMimeType(subPath));
+        // A shared resource changes only with the build, which its URL names through the version
+        // hash:
         HttpHelper::sendFile(socket, distFile.toString(), response, noCache);
         return true;
     }
@@ -1240,9 +1263,7 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         response.setContentType("application/json");
         response.add("X-Content-Type-Options", "nosniff");
         response.set("Content-Length", std::to_string(body.size()));
-        if (noCache) {
-            response.set("Cache-Control", "no-cache");
-        }
+        response.set("Cache-Control", "no-cache");
         socket->send(response);
         socket->send(body);
         return true;
@@ -1258,7 +1279,7 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         return true;
     }
     response.setContentType(extensionMimeType(file));
-    HttpHelper::sendFile(socket, filePath.toString(), response, noCache);
+    sendPresetFile(filePath.toString());
     return true;
 }
 

@@ -219,7 +219,8 @@ private:
     // <ChildRoot>/tmp/sharedpresets/<configId>/extensions/:  "index.json" synthesises a JSON array
     // of the per-id directories present; anything else is read from disk.  Returns true when the
     // request has been handled and a response has been sent:
-    static bool serveBrowserPresetExtensionFile(std::string const & relPath,
+    static bool serveBrowserPresetExtensionFile(Poco::Net::HTTPRequest const & request,
+                                                std::string const & relPath,
                                                 http::Response & response, bool noCache,
                                                 std::shared_ptr<StreamSocket> const & socket);
 
