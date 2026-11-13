@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <utility>
 
 #include <sal/log.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
@@ -55,9 +56,11 @@ class TestRestProtocol : public test::BootstrapFixtureBase
 private:
     CPPUNIT_TEST_SUITE(TestRestProtocol);
     CPPUNIT_TEST(testProofreading);
+    CPPUNIT_TEST(testSpellCheckers);
     CPPUNIT_TEST_SUITE_END();
 
     void testProofreading();
+    void testSpellCheckers();
 };
 
 void TestRestProtocol::testProofreading()
@@ -95,6 +98,26 @@ void TestRestProtocol::testProofreading()
     // The server's message for the code, when it sent one.
     CPPUNIT_ASSERT_EQUAL(u"Dieses Wort korrigieren?"_ustr, aResult.aErrors[0].aShortComment);
     CPPUNIT_ASSERT(aResult.aErrors[1].aShortComment != "Dieses Wort korrigieren?");
+}
+
+// LanguageTool and the Duden Korrekturserver mark misspelt words, so the
+// languages they take over from the local spell checker stay in the lists of
+// spell checked languages; Grammalecte checks grammar only.
+void TestRestProtocol::testSpellCheckers()
+{
+    const std::pair<OUString, bool> aCheckers[] = {
+        { u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, true },
+        { u"cpo.lingu.Duden"_ustr, true },
+        { u"cpo.lingu.Grammalecte"_ustr, false },
+    };
+    for (const auto& [rImplName, bSpellChecker] : aCheckers)
+    {
+        Reference<css::linguistic2::XProofreader> xProofreader(
+            m_xSFactory->createInstance(rImplName), UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(rImplName.toUtf8().getStr(), xProofreader.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rImplName.toUtf8().getStr(), bSpellChecker,
+                                     xProofreader->isSpellChecker());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestRestProtocol);

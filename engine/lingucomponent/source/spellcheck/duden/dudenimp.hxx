@@ -21,6 +21,9 @@ public:
     // XServiceDisplayName
     OUString getServiceDisplayName(const css::lang::Locale& rLocale) override;
 
+    // XProofreader
+    bool isSpellChecker() override;
+
     // XServiceInfo
     OUString getImplementationName() override;
 

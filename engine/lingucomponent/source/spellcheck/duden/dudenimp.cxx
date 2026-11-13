@@ -83,6 +83,10 @@ DudenChecker::DudenChecker()
 {
 }
 
+// The server marks misspelt words too, so the languages it serves are spell
+// checked while it is on, also where the local spell checker gave them up.
+bool DudenChecker::isSpellChecker() { return true; }
+
 bool DudenChecker::isEnabled()
 {
     return DudenCfg::IsEnabled::get() && !DudenCfg::BaseURL::get().value_or(OUString()).isEmpty();
