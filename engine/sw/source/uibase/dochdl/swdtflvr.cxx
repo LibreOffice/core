@@ -1577,7 +1577,8 @@ bool SwTransferable::Paste(SwWrtShell& rSh, const TransferableDataHelper& rData,
             && pCursor->Start()->GetNodeIndex() == pCursor->End()->GetNodeIndex())
         {
             OUString sURL = rData.GetSimpleURL();
-            if (!sURL.isEmpty())
+            // When the selected text is itself a URL, the pasted URL replaces it as ordinary text.
+            if (!sURL.isEmpty() && !TransferableDataHelper::IsSimpleURL(rSh.GetSelText()))
             {
                 rSh.InsertURL(SwFormatINetFormat(sURL, OUString()), OUString());
                 return true;

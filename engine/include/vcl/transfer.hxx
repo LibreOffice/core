@@ -387,6 +387,9 @@ public:
 
     /// Returns a simple web URL on the clipboard if present
     OUString GetSimpleURL() const;
+
+    /// Whether rText, ignoring leading and trailing spaces, is a single web or mail URL
+    static bool IsSimpleURL(std::u16string_view rText);
 };
 
 class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") DragSourceHelper

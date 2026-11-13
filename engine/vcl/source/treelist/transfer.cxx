@@ -23,6 +23,7 @@
 #include <shlobj.h>
 #endif
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -2104,19 +2105,25 @@ OUString TransferableDataHelper::GetSimpleURL() const
             return sURL;
 
         sText = sText.trim();
-        if (sText.indexOf('\n') < 0 && sText.indexOf('\r') < 0)
-        {
-            INetURLObject aURLObj;
-            // A bare word must not be promoted to a hyperlink ex:"Cool" -> "http://Cool"
-            aURLObj.SetSmartProtocol(INetProtocol::NotValid);
-            aURLObj.SetSmartURL(sText);
-            if (aURLObj.GetProtocol() == INetProtocol::Http ||
-                aURLObj.GetProtocol() == INetProtocol::Https ||
-                aURLObj.GetProtocol() == INetProtocol::Mailto)
-                sURL = sText;
-        }
+        if (IsSimpleURL(sText))
+            sURL = sText;
     }
     return sURL;
+}
+
+bool TransferableDataHelper::IsSimpleURL(std::u16string_view rText)
+{
+    std::u16string_view sText = o3tl::trim(rText);
+    if (sText.empty() || sText.find_first_of(u"\n\r") != std::u16string_view::npos)
+        return false;
+
+    INetURLObject aURLObj;
+    // A bare word must not be promoted to a hyperlink ex:"Cool" -> "http://Cool"
+    aURLObj.SetSmartProtocol(INetProtocol::NotValid);
+    aURLObj.SetSmartURL(sText);
+    return aURLObj.GetProtocol() == INetProtocol::Http
+           || aURLObj.GetProtocol() == INetProtocol::Https
+           || aURLObj.GetProtocol() == INetProtocol::Mailto;
 }
 
 std::unique_ptr<SvStream> TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat ) const

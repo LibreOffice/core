@@ -55,6 +55,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/stringtransfer.hxx>
 #include <drwlayer.hxx>
 #include <editeng/flditem.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -1034,6 +1035,46 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditingHyperlinkCellKeepsItsOwnLi
     ScModule::get()->InputEnterHandler();
     CPPUNIT_ASSERT_EQUAL(u"[LibreOffice](http://www.libreoffice.org/)"_ustr,
                          lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteURLOverHyperlinkAddressReplacesIt)
+{
+    // Pasting an address over the selected address of a hyperlink cell puts the pasted address in
+    // the cell, so the cell shows the new address and links to it.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("https://www.example.com/", aA1.Col(), aA1.Row(), pView, pModelObj,
+                    /*bInEdit*/ false, /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    lcl_selectInCell(pView, 0, 24);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"https://www.example.com/"_ustr,
+                                      u"https://www.example.com/"_ustr));
+    ScModule::get()->InputEnterHandler();
+    CPPUNIT_ASSERT_EQUAL(u"[https://www.example.com/](https://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+
+    // The whole address is selected and a new address is pasted over it.
+    lcl_selectInCell(pView, 0, 24);
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetEditActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    pEditView->GetClipboard()->setContents(
+        new svt::OStringTransferable(u"https://www.collaboraoffice.com/"_ustr), {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    ScModule::get()->InputEnterHandler();
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: [https://www.collaboraoffice.com/](https://www.collaboraoffice.com/)
+    // - Actual  : [https://www.example.com/](https://www.example.com/)
+    CPPUNIT_ASSERT_EQUAL(
+        u"[https://www.collaboraoffice.com/](https://www.collaboraoffice.com/)"_ustr,
+        lcl_getCellTextWithLinks(*pDoc, aA1));
 }
 
 // The automatic font color of a shape being edited has to be resolved against the fill of

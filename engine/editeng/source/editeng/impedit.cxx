@@ -2146,7 +2146,8 @@ void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> cons
     if ( !xDataObj.is() || !EditEngine::HasValidData( xDataObj ) )
         return;
 
-    // Paste URL as hyperlink over selected text
+    // Paste URL as hyperlink over selected text. When the selected text is itself a URL, the
+    // pasted URL replaces it as ordinary text.
     {
         EditSelection aSel(GetEditSelection());
         if (aSel.HasRange()
@@ -2157,18 +2158,21 @@ void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> cons
             if (!sURL.isEmpty())
             {
                 OUString sSelectedText = getImpEditEngine().GetSelected(aSel);
-                SvxURLField aURLField(sURL, sSelectedText, SvxURLFormat::Repr);
-                SvxFieldItem aFieldItem(aURLField, EE_FEATURE_FIELD);
+                if (!TransferableDataHelper::IsSimpleURL(sSelectedText))
+                {
+                    SvxURLField aURLField(sURL, sSelectedText, SvxURLFormat::Repr);
+                    SvxFieldItem aFieldItem(aURLField, EE_FEATURE_FIELD);
 
-                getImpEditEngine().UndoActionStart(EDITUNDO_PASTE);
-                aSel = getEditEngine().DeleteSelection(aSel);
-                EditPaM aPaM = getImpEditEngine().InsertField(aSel, aFieldItem);
-                getImpEditEngine().UndoActionEnd();
-                SetEditSelection(EditSelection(aPaM, aPaM));
-                getImpEditEngine().UpdateSelections();
-                getImpEditEngine().FormatAndLayout(GetEditViewPtr());
-                ShowCursor(DoAutoScroll(), true);
-                return;
+                    getImpEditEngine().UndoActionStart(EDITUNDO_PASTE);
+                    aSel = getEditEngine().DeleteSelection(aSel);
+                    EditPaM aPaM = getImpEditEngine().InsertField(aSel, aFieldItem);
+                    getImpEditEngine().UndoActionEnd();
+                    SetEditSelection(EditSelection(aPaM, aPaM));
+                    getImpEditEngine().UpdateSelections();
+                    getImpEditEngine().FormatAndLayout(GetEditViewPtr());
+                    ShowCursor(DoAutoScroll(), true);
+                    return;
+                }
             }
         }
     }

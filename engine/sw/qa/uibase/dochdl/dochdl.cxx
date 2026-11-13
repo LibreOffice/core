@@ -144,6 +144,30 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testPasteURLOverSelection)
     CPPUNIT_ASSERT_EQUAL(aURL, pINetFormat->GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testPasteURLOverSelectedURL)
+{
+    // Pasting an address over a selected address replaces the selected address with the pasted
+    // one.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert2(u"See https://www.example.com/ now"_ustr);
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 28, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 24, /*bBasicCall=*/false);
+
+    rtl::Reference<svt::OStringTransferable> xTransferable(
+        new svt::OStringTransferable(u"https://www.collaboraoffice.com/"_ustr));
+    TransferableDataHelper aHelper(xTransferable);
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: See https://www.collaboraoffice.com/ now
+    // - Actual  : See https://www.example.com/ now
+    CPPUNIT_ASSERT_EQUAL(u"See https://www.collaboraoffice.com/ now"_ustr, pTextNode->GetText());
+}
+
 namespace
 {
 /// Minimal XTransferable that exposes exactly one flavor: SVG.
