@@ -2062,7 +2062,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			if (builder._isStringCloseToURL(data.icon))
 				icon.src = data.icon;
 			else
-				app.LOUtil.setImage(icon, app.LOUtil.getIconNameOfCommand(data.icon), builder.map);
+				app.LOUtil.setImage(icon, app.LOUtil.getIconNameOfIcon(data.icon), builder.map);
 			icon.alt = '';
 		}
 		if (data.checked && data.checked === true) {
