@@ -72,7 +72,8 @@ abstract class ClassicCreateContext implements InteractionMode {
 	public static canCreate(shape: string): boolean {
 		return (
 			(ClassicShapeCreateContext.makes(shape) ||
-				ClassicTextCreateContext.makes(shape)) &&
+				ClassicTextCreateContext.makes(shape) ||
+				ClassicLineCreateContext.makes(shape)) &&
 			RenderGeometrySection.answersPointer() &&
 			app.map.isEditMode()
 		);
@@ -86,7 +87,9 @@ abstract class ClassicCreateContext implements InteractionMode {
 		ClassicCreateContext.listen();
 		const mode = ClassicTextCreateContext.makes(shape)
 			? new ClassicTextCreateContext(shape)
-			: new ClassicShapeCreateContext(shape);
+			: ClassicLineCreateContext.makes(shape)
+				? new ClassicLineCreateContext(shape)
+				: new ClassicShapeCreateContext(shape);
 		Interaction.enterMode(mode);
 		mode.started();
 	}
@@ -122,6 +125,51 @@ abstract class ClassicCreateContext implements InteractionMode {
 	/// The arguments the command takes besides the rectangle.
 	protected moreArguments(): { [name: string]: { type: string; value: any } } {
 		return {};
+	}
+
+	/// The rectangle a drag from that corner to that point gives, with Shift and Alt.
+	protected dragTo(
+		from: cool.Point,
+		to: cool.Point,
+		modifier: number,
+	): cool.Range2D | null {
+		return this.boxTo(from, to, modifier);
+	}
+
+	/// Whether that rectangle is large enough for an object; a smaller one is a click.
+	protected largeEnough(box: cool.Range2D, least: number): boolean {
+		return box.width >= least && box.height >= least;
+	}
+
+	/// The arguments that place the object, the rectangle in twips.
+	protected placeArguments(box: cool.Range2D): {
+		[name: string]: { type: string; value: any };
+	} {
+		return {
+			X: ClassicCreateContext.twipsArgument(box.minX),
+			Y: ClassicCreateContext.twipsArgument(box.minY),
+			Width: ClassicCreateContext.twipsArgument(box.width),
+			Height: ClassicCreateContext.twipsArgument(box.height),
+		};
+	}
+
+	/// What is written beside the mouse while it drags, of that size of the drag.
+	protected readingOf(size: cool.Point): string {
+		return (
+			'(' +
+			ClassicCreateContext.inTheUnit(size.x) +
+			', ' +
+			ClassicCreateContext.inTheUnit(size.y) +
+			')'
+		);
+	}
+
+	/// A length in twips as an argument of a command.
+	protected static twipsArgument(twips: number): {
+		type: string;
+		value: string;
+	} {
+		return { type: 'long', value: String(Math.round(twips)) };
 	}
 
 	/// Draws the object as it looks in that rectangle, half see-through while dragged and whole
@@ -188,10 +236,13 @@ abstract class ClassicCreateContext implements InteractionMode {
 	}
 
 	/// The rectangle from the corner the drag began at to that point, with Shift and Alt.
-	private boxTo(to: cool.Point, modifier: number): cool.Range2D | null {
-		if (!this.from) return null;
-		let width = to.x - this.from.x;
-		let height = to.y - this.from.y;
+	private boxTo(
+		from: cool.Point,
+		to: cool.Point,
+		modifier: number,
+	): cool.Range2D | null {
+		let width = to.x - from.x;
+		let height = to.y - from.y;
 		// as in the office, Shift makes a shape as wide as high, and lets one that is made so
 		// be dragged out freely
 		const shift = (modifier & app.UNOModifier.SHIFT) !== 0;
@@ -202,11 +253,11 @@ abstract class ClassicCreateContext implements InteractionMode {
 		}
 		// with Alt the drag began at the middle of the shape
 		const fromMiddle = (modifier & app.UNOModifier.ALT) !== 0;
-		const x1 = fromMiddle ? this.from.x - width : this.from.x;
-		const y1 = fromMiddle ? this.from.y - height : this.from.y;
+		const x1 = fromMiddle ? from.x - width : from.x;
+		const y1 = fromMiddle ? from.y - height : from.y;
 		return cool.Range2D.fromPoints([
 			new cool.Point(x1, y1),
-			new cool.Point(this.from.x + width, this.from.y + height),
+			new cool.Point(from.x + width, from.y + height),
 		]);
 	}
 
@@ -222,7 +273,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 			this.hover = point;
 			return;
 		}
-		this.box = this.boxTo(point, modifier);
+		this.box = this.dragTo(this.from, point, modifier);
 		this.signedSize = new cool.Point(
 			point.x - this.from.x,
 			point.y - this.from.y,
@@ -244,7 +295,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 		const box = this.box;
 		const least = ClassicCreateContext.twips(ClassicCreateContext.leastSize);
 		// a click, or a drag too small for an object, is the kind's own, or ends the mode
-		if (!dragged || !box || box.width < least || box.height < least) {
+		if (!dragged || !box || !this.largeEnough(box, least)) {
 			if (!this.clicked(this.from, this.pressedAt ?? this.from))
 				Interaction.leaveMode();
 			return;
@@ -275,15 +326,8 @@ abstract class ClassicCreateContext implements InteractionMode {
 			ClassicCreateContext.longestWait,
 		);
 		Interaction.leaveMode();
-		const value = (twips: number) => ({
-			type: 'long',
-			value: String(Math.round(twips)),
-		});
 		app.map.sendUnoCommand('.uno:' + this.shape, {
-			X: value(box.minX),
-			Y: value(box.minY),
-			Width: value(box.width),
-			Height: value(box.height),
+			...this.placeArguments(box),
 			...this.moreArguments(),
 		});
 		this.wasSent(box);
@@ -313,7 +357,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 		The length in the unit the sidebar measures positions and sizes in: inches where the
 		ruler says so or the language is American English, centimetres otherwise.
 	*/
-	private static inTheUnit(twips: number): string {
+	protected static inTheUnit(twips: number): string {
 		const ruler = app.map.stateChangeHandler.getItemValue(
 			'.uno:LeftRightParaMargin',
 		);
@@ -381,11 +425,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 			);
 			ClassicCreateContext.writeAt(
 				context,
-				'(' +
-					ClassicCreateContext.inTheUnit(this.signedSize.x) +
-					', ' +
-					ClassicCreateContext.inTheUnit(this.signedSize.y) +
-					')',
+				this.readingOf(this.signedSize),
 				corner,
 				this.signedSize.x < 0,
 				this.signedSize.y < 0,
@@ -1135,5 +1175,189 @@ class ClassicTextCreateContext extends ClassicCreateContext {
 
 	protected moreArguments(): { [name: string]: { type: string; value: any } } {
 		return { Grow: { type: 'boolean', value: this.grows } };
+	}
+}
+
+/*
+	Creating a line by dragging it out from its start to its end, as the office does: Shift keeps
+	it at a multiple of 45 degrees, or lets the line at 45 degrees go free, Alt drags it out from
+	its middle, and Ctrl turns the snap over.
+	A click makes no line. While dragged and until the engine reports it, the line is drawn plain,
+	without its arrows; letting go creates it under an id reserved for this view and takes it as
+	created at once, selected.
+*/
+class ClassicLineCreateContext extends ClassicCreateContext {
+	/// The commands that make a line, from its start to its end.
+	private static readonly lines: string[] = [
+		'Line',
+		'Line_Diagonal',
+		'MeasureLine',
+		'LineArrowStart',
+		'LineArrowEnd',
+		'LineArrows',
+		'LineArrowCircle',
+		'LineCircleArrow',
+		'LineArrowSquare',
+		'LineSquareArrow',
+	];
+
+	/// Whether that command makes a line.
+	public static makes(shape: string): boolean {
+		return ClassicLineCreateContext.lines.indexOf(shape) >= 0;
+	}
+
+	/// The start and the end of the line as dragged, in twips; null while no drag runs.
+	private start: cool.Point | null = null;
+	private end: cool.Point | null = null;
+
+	/// The id given to the line sent, one reserved for this view; undefined where none was at
+	/// hand, and the line then takes one of its own.
+	private givenId: number | undefined = undefined;
+
+	public started(): void {
+		ReservedObjectIds.keepEnough();
+	}
+
+	/// The office shows the plain cross while a line is created.
+	public pointer(): string {
+		return 'crosshair';
+	}
+
+	/// The line from where the drag began to that point, and the rectangle around it.
+	protected dragTo(
+		from: cool.Point,
+		to: cool.Point,
+		modifier: number,
+	): cool.Range2D | null {
+		let x = to.x - from.x;
+		let y = to.y - from.y;
+		// as in the office, Shift turns the line to the nearest multiple of 45 degrees; the line at
+		// 45 degrees keeps to those by itself, and Shift lets it go free
+		const shift = (modifier & app.UNOModifier.SHIFT) !== 0;
+		if (shift !== (this.shape === 'Line_Diagonal')) {
+			const step = Math.PI / 4;
+			const angle = Math.round(Math.atan2(y, x) / step) * step;
+			const length = Math.hypot(x, y);
+			x = Math.cos(angle) * length;
+			y = Math.sin(angle) * length;
+		}
+		this.end = new cool.Point(from.x + x, from.y + y);
+		// with Alt the drag began at the middle of the line
+		this.start =
+			(modifier & app.UNOModifier.ALT) !== 0
+				? new cool.Point(from.x - x, from.y - y)
+				: from;
+		return cool.Range2D.fromPoints([this.start, this.end]);
+	}
+
+	/// A line is long enough where its length is, whatever its direction.
+	protected largeEnough(_box: cool.Range2D, least: number): boolean {
+		return (
+			!!this.start &&
+			!!this.end &&
+			Math.hypot(this.end.x - this.start.x, this.end.y - this.start.y) >= least
+		);
+	}
+
+	protected placeArguments(_box: cool.Range2D): {
+		[name: string]: { type: string; value: any };
+	} {
+		const start = this.start ?? new cool.Point(0, 0);
+		const end = this.end ?? start;
+		return {
+			StartX: ClassicCreateContext.twipsArgument(start.x),
+			StartY: ClassicCreateContext.twipsArgument(start.y),
+			EndX: ClassicCreateContext.twipsArgument(end.x),
+			EndY: ClassicCreateContext.twipsArgument(end.y),
+		};
+	}
+
+	/// The id the line is to take, the next reserved for this view, where one is at hand.
+	protected moreArguments(): { [name: string]: { type: string; value: any } } {
+		this.givenId = ReservedObjectIds.take();
+		return this.givenId === undefined
+			? {}
+			: { Id: { type: 'unsigned long', value: String(this.givenId) } };
+	}
+
+	/// The length of the line and its angle, counted upwards from the right as the office does.
+	protected readingOf(_size: cool.Point): string {
+		if (!this.start || !this.end) return '';
+		const x = this.end.x - this.start.x;
+		const y = this.end.y - this.start.y;
+		const degrees = (-Math.atan2(y, x) * 180) / Math.PI;
+		return (
+			ClassicCreateContext.inTheUnit(Math.hypot(x, y)) +
+			', ' +
+			((degrees + 360) % 360).toFixed(1) +
+			ClassicLineCreateContext.degreeSign
+		);
+	}
+
+	/// The sign after an angle in degrees.
+	private static readonly degreeSign: string = String.fromCharCode(0xb0);
+
+	/// Draws the line plain from its start to its end, half see-through while it is dragged.
+	protected drawTheObject(
+		context: CanvasRenderingContext2D,
+		_box: cool.Range2D,
+		whole: boolean,
+	): boolean {
+		if (!this.start || !this.end) return false;
+		const from = new cool.SimplePoint(this.start.x, this.start.y);
+		const to = new cool.SimplePoint(this.end.x, this.end.y);
+		context.save();
+		context.globalAlpha = whole ? 1 : 0.5;
+		context.strokeStyle = HandleLook.outlineColour;
+		context.lineWidth = Math.max(1, app.dpiScale);
+		context.beginPath();
+		context.moveTo(from.vX, from.vY);
+		context.lineTo(to.vX, to.vY);
+		context.stroke();
+		context.restore();
+		return true;
+	}
+
+	/*
+		Where the line was given an id, it is taken as created at once, under that id, which is its
+		real one: it is in the part and selected, and the engine's report of it replaces it with
+		its arrows.
+	*/
+	protected wasSent(box: cool.Range2D): void {
+		const id = this.givenId;
+		const part = RenderGeometrySection.currentPart();
+		if (id === undefined || !part || !this.start || !this.end) return;
+		const created: cool.SlideObject = {
+			id: id,
+			x: box.minX,
+			y: box.minY,
+			width: box.width,
+			height: box.height,
+			primitives: [
+				{
+					type: cool.PolygonHairlinePrimitive.type,
+					color: HandleLook.outlineColour,
+					path:
+						'M ' +
+						this.start.x +
+						' ' +
+						this.start.y +
+						' L ' +
+						this.end.x +
+						' ' +
+						this.end.y,
+				} as cool.PolygonHairlinePrimitive,
+			],
+		};
+		if (
+			RenderManager.addProvisionalObject(
+				part.partId,
+				created,
+				ClassicCreateContext.longestWait,
+			)
+		) {
+			this.forgetTheSent();
+			GraphicSelection.selectAndShow([id]);
+		}
 	}
 }

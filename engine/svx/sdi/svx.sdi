@@ -4997,7 +4997,8 @@ SfxVoidItem LeftRightParaMargin_Vertical SID_ATTR_PARA_LRSPACE_VERTICAL
 
 
 SfxBoolItem MeasureLine SID_DRAW_MEASURELINE
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -5014,7 +5015,8 @@ SfxBoolItem MeasureLine SID_DRAW_MEASURELINE
 
 
 SfxBoolItem Line SID_DRAW_LINE
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -5030,7 +5032,8 @@ SfxBoolItem Line SID_DRAW_LINE
 ]
 
 SfxBoolItem LineArrowCircle SID_LINE_ARROW_CIRCLE
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -5046,7 +5049,8 @@ SfxBoolItem LineArrowCircle SID_LINE_ARROW_CIRCLE
 ]
 
 SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -5062,7 +5066,8 @@ SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
 ]
 
 SfxBoolItem LineArrows SID_LINE_ARROWS
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -5078,7 +5083,8 @@ SfxBoolItem LineArrows SID_LINE_ARROWS
 ]
 
 SfxBoolItem LineArrowSquare SID_LINE_ARROW_SQUARE
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -5094,7 +5100,8 @@ SfxBoolItem LineArrowSquare SID_LINE_ARROW_SQUARE
 ]
 
 SfxBoolItem LineArrowStart SID_LINE_ARROW_START
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -5110,7 +5117,8 @@ SfxBoolItem LineArrowStart SID_LINE_ARROW_START
 ]
 
 SfxBoolItem LineCircleArrow SID_LINE_CIRCLE_ARROW
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -5126,7 +5134,8 @@ SfxBoolItem LineCircleArrow SID_LINE_CIRCLE_ARROW
 ]
 
 SfxBoolItem LineSquareArrow SID_LINE_SQUARE_ARROW
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -5142,7 +5151,8 @@ SfxBoolItem LineSquareArrow SID_LINE_SQUARE_ARROW
 ]
 
 SfxBoolItem Line_Diagonal SID_DRAW_XLINE
-
+(SfxInt32Item StartX FN_PARAM_2, SfxInt32Item StartY FN_PARAM_3,
+ SfxInt32Item EndX FN_PARAM_5, SfxInt32Item EndY FN_PARAM_6, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

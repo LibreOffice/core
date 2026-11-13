@@ -13,7 +13,7 @@
  * Toolbar handler
  */
 
-/* global app $ window brandProductName DocUtil GraphicSelection _ Interaction */
+/* global app $ window brandProductName DocUtil GraphicSelection _ Interaction ClassicCreateContext ClassicLineCreateContext */
 
 window.L.Map.include({
 
@@ -321,6 +321,15 @@ window.L.Map.include({
 	sendUnoCommand: function (command, json, force) {
 		// a command ends a mode one was put into, as creating a shape by a drag
 		Interaction.leaveMode();
+
+		// in a view that draws from objects a line chosen anywhere is dragged out where it goes;
+		// the command that brings its points goes out as it is
+		var line = command.startsWith('.uno:') ? command.substring('.uno:'.length) : '';
+		if ((!json || Object.keys(json).length === 0) && ClassicLineCreateContext.makes(line) &&
+			ClassicCreateContext.canCreate(line)) {
+			ClassicCreateContext.start(line);
+			return;
+		}
 
 		if (command.indexOf('.uno:') < 0 && command.indexOf('vnd.sun.star.script') < 0)
 			console.error('Trying to send uno command without prefix: "' + command + '"');

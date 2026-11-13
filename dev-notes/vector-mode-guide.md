@@ -159,6 +159,22 @@ same mode for text, with the office's text pointer, a cross with a text cursor b
 Either new text is in text edit at once. A text left empty goes again when its edit ends, and the
 view is back in the selection; the mode does not stay on for another text.
 
+### Creating a line
+
+Insert, Line - in the notebookbar or the compact toolbar - and every line or arrow chosen anywhere
+else put one into the same mode for a line, with the cross as pointer. The line is dragged out
+from its start to its end:
+
+| What | What happens |
+|---|---|
+| Before the press | The lines across the view and the place, as for a shape. |
+| Press and drag | The line shows plain, half see-through, from where the press was to the mouse, with its length and its angle beside the mouse; the angle counts upwards from the right. |
+| Shift | The line turns to the nearest multiple of 45 degrees and keeps its length. The line at 45 degrees does so by itself, and Shift lets it go free. |
+| Alt | The line is dragged out from its middle. |
+| Ctrl | Turns the snap over, as for a shape. |
+| Let go | The line is made from the start to the end and selected at once, also before the engine has answered; its arrows show once the engine has. An arrow at the start stays at the start, whichever way the line was dragged. The mode is over. |
+| Escape, a click without a drag, a command, a press elsewhere, another slide | End the mode without a line. |
+
 
 ## 2. Changing objects
 

@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_tiledrendering, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_tiledrendering, \
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \

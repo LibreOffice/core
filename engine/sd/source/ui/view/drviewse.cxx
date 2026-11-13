@@ -40,6 +40,8 @@
 #include <svx/clipfmtitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdomeas.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdotext.hxx>
@@ -168,6 +170,39 @@ static std::optional<::tools::Rectangle> lcl_getRequestedRectangle(SfxRequest co
                               Size(toMm100(nWidth), toMm100(nHeight)));
 }
 
+// the two points a line is to be created between, given with the request in twips on the slide;
+// FN_PARAM_4 is left out, as the rectangle function reads it as IsSticky for every slot
+static std::optional<std::pair<Point, Point>> lcl_getRequestedLine(SfxRequest const& rReq)
+{
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    if (!pArgs)
+        return std::nullopt;
+
+    const SfxInt32Item* pStartXItem = pArgs->GetItem<SfxInt32Item>(FN_PARAM_2, false);
+    const SfxInt32Item* pStartYItem = pArgs->GetItem<SfxInt32Item>(FN_PARAM_3, false);
+    const SfxInt32Item* pEndXItem = pArgs->GetItem<SfxInt32Item>(FN_PARAM_5, false);
+    const SfxInt32Item* pEndYItem = pArgs->GetItem<SfxInt32Item>(FN_PARAM_6, false);
+    if (!pStartXItem || !pStartYItem || !pEndXItem || !pEndYItem)
+        return std::nullopt;
+
+    constexpr sal_Int32 nMostTwips = 10000000;
+    const sal_Int32 aCoordinates[] = { pStartXItem->GetValue(), pStartYItem->GetValue(),
+                                       pEndXItem->GetValue(), pEndYItem->GetValue() };
+    for (sal_Int32 nCoordinate : aCoordinates)
+        if (std::abs(nCoordinate) > nMostTwips)
+            return std::nullopt;
+
+    auto toMm100 = [](sal_Int32 nTwips) {
+        return static_cast<::tools::Long>(
+            o3tl::convert(nTwips, o3tl::Length::twip, o3tl::Length::mm100));
+    };
+    const Point aStart(toMm100(aCoordinates[0]), toMm100(aCoordinates[1]));
+    const Point aEnd(toMm100(aCoordinates[2]), toMm100(aCoordinates[3]));
+    if (aStart == aEnd)
+        return std::nullopt;
+    return std::make_pair(aStart, aEnd);
+}
+
 static void ImpAddPrintableCharactersToTextEdit(SfxRequest const & rReq, ::sd::View* pView)
 {
     // evtl. feed characters to activated textedit
@@ -290,6 +325,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     bool bRectangle = false;
     // where the shape goes when the request says, instead of the middle of the slide
     std::optional<::tools::Rectangle> oRequestedRectangle;
+    // where a line goes when the request says, from its start to its end
+    std::optional<std::pair<Point, Point>> oRequestedLine;
     // the id the client gave the object it creates, one this view reserved for it; nought for
     // none, where the object takes the next id as any other
     sal_uInt64 nGivenId = 0;
@@ -579,6 +616,30 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             bCreateDirectly = comphelper::COKit::isActive();
             bRectangle = true;
+
+            // a line dragged out in the client comes with its two points and is made at once
+            switch (nSId)
+            {
+                case SID_DRAW_LINE:
+                case SID_DRAW_XLINE:
+                case SID_DRAW_MEASURELINE:
+                case SID_LINE_ARROW_START:
+                case SID_LINE_ARROW_END:
+                case SID_LINE_ARROWS:
+                case SID_LINE_ARROW_CIRCLE:
+                case SID_LINE_CIRCLE_ARROW:
+                case SID_LINE_ARROW_SQUARE:
+                case SID_LINE_SQUARE_ARROW:
+                    oRequestedLine = lcl_getRequestedLine(rReq);
+                    break;
+            }
+            if (oRequestedLine)
+            {
+                bCreateDirectly = true;
+                oRequestedRectangle
+                    = ::tools::Rectangle::Normalize(oRequestedLine->first, oRequestedLine->second);
+            }
+
             SetCurrentFunction( FuConstructRectangle::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
@@ -788,6 +849,25 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     if(!pObj)
         return;
+
+    // the default line lies across the middle of its rectangle; a requested one goes from its
+    // start to its end, so the arrow of the start stays at the start
+    if (oRequestedLine)
+    {
+        const auto& [aStart, aEnd] = *oRequestedLine;
+        if (auto pPath = dynamic_cast<SdrPathObj*>(pObj.get()))
+        {
+            basegfx::B2DPolygon aLine;
+            aLine.append(basegfx::B2DPoint(aStart.X(), aStart.Y()));
+            aLine.append(basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+            pPath->SetPathPoly(basegfx::B2DPolyPolygon(aLine));
+        }
+        else if (auto pMeasure = dynamic_cast<SdrMeasureObj*>(pObj.get()))
+        {
+            pMeasure->SetPoint(aStart, 0);
+            pMeasure->SetPoint(aEnd, 1);
+        }
+    }
 
     if (bTextGrows)
     {

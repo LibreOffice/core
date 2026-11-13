@@ -60,6 +60,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
@@ -68,6 +69,8 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstit.hxx>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -8667,6 +8670,41 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertShapeIntoSlide)
     // Undo removes it again.
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateLineBetweenPoints)
+{
+    // a line dragged out in the client goes from where the drag began to where it ended
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pSlide = pDocument->GetSdPage(0, PageKind::Standard);
+    const size_t nObjectCount = pSlide->GetObjCount();
+
+    // towards the upper left, so a line laid from the corners of its rectangle would be turned
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"StartX"_ustr, cpo::uno::Any(sal_Int32(5000)) },
+        { u"StartY"_ustr, cpo::uno::Any(sal_Int32(4000)) },
+        { u"EndX"_ustr, cpo::uno::Any(sal_Int32(1000)) },
+        { u"EndY"_ustr, cpo::uno::Any(sal_Int32(1500)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:LineArrowEnd"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(nObjectCount + 1, pSlide->GetObjCount());
+    auto pLine = dynamic_cast<SdrPathObj*>(pSlide->GetObj(pSlide->GetObjCount() - 1));
+    CPPUNIT_ASSERT(pLine);
+    const basegfx::B2DPolygon aLine(pLine->GetPathPoly().getB2DPolygon(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), aLine.count());
+    const auto mm100 = [](sal_Int32 nTwips) {
+        return double(o3tl::convert(nTwips, o3tl::Length::twip, o3tl::Length::mm100));
+    };
+    CPPUNIT_ASSERT_EQUAL(mm100(5000), aLine.getB2DPoint(0).getX());
+    CPPUNIT_ASSERT_EQUAL(mm100(4000), aLine.getB2DPoint(0).getY());
+    CPPUNIT_ASSERT_EQUAL(mm100(1000), aLine.getB2DPoint(1).getX());
+    CPPUNIT_ASSERT_EQUAL(mm100(1500), aLine.getB2DPoint(1).getY());
+    // the arrow stays at the end the drag ended at
+    CPPUNIT_ASSERT(pLine->GetMergedItem(XATTR_LINEEND).GetLineEndValue().count() > 0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+                         pLine->GetMergedItem(XATTR_LINESTART).GetLineStartValue().count());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateShapeInRectangle)
