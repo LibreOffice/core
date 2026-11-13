@@ -4406,7 +4406,10 @@ bool ClientSession::publishAnimatedGifs(const Poco::JSON::Array::Ptr& gifs,
         if (gif.isNull())
             continue;
 
-        const std::string id = JsonUtil::getJSONValue<std::string>(gif, "id");
+        // A gif with a mediaId is served under it, otherwise under its id.
+        std::string id = JsonUtil::getJSONValue<std::string>(gif, "mediaId");
+        if (id.empty())
+            id = JsonUtil::getJSONValue<std::string>(gif, "id");
         const std::string url = JsonUtil::getJSONValue<std::string>(gif, "url");
         const std::string checksum = JsonUtil::getJSONValue<std::string>(gif, "checksum");
         std::string mimeType = JsonUtil::getJSONValue<std::string>(gif, "mimeType");
@@ -4423,6 +4426,46 @@ bool ClientSession::publishAnimatedGifs(const Poco::JSON::Array::Ptr& gifs,
         }
     }
     return modified;
+}
+
+bool ClientSession::handleAnimatedImages(const std::shared_ptr<Message>& payload,
+                                         const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    std::string json(payload->data().data(), payload->size());
+    const auto iterator = json.find('{');
+    if (iterator == std::string::npos)
+        return forwardToClient(payload);
+
+    const std::string prefix = json.substr(0, iterator);
+    json.erase(0, iterator);
+
+    // The reply is {"commandName": ".uno:AnimatedImages", "commandValues": {"images": [...]}},
+    // each image in the form of a gif of the presentation info.
+    Poco::JSON::Object::Ptr rootObject;
+    bool modified = false;
+    try
+    {
+        if (JsonUtil::parseJSON(json, rootObject) &&
+            JsonUtil::getJSONValue<std::string>(rootObject, "commandName") ==
+                ".uno:AnimatedImages")
+        {
+            Poco::JSON::Object::Ptr values = rootObject->getObject("commandValues");
+            if (!values.isNull())
+                modified = publishAnimatedGifs(values->getArray("images"), docBroker);
+        }
+    }
+    catch (const std::exception& exception)
+    {
+        LOG_ERR("animated images parsing failure: " << exception.what());
+    }
+
+    if (!modified)
+        return forwardToClient(payload);
+
+    std::ostringstream imagesStr;
+    rootObject->stringify(imagesStr);
+    return forwardToClient(
+        std::make_shared<Message>(prefix + imagesStr.str(), Message::Dir::Out));
 }
 
 bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& payload, const std::shared_ptr<DocumentBroker>& docBroker)
@@ -5373,6 +5416,10 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
                 LOG_ERR("commandvalues parsing failure: " << exception.what());
             }
         }
+
+        // The answer to .uno:AnimatedImages names files in the jail, which get public URLs.
+        if (payload->contains(".uno:AnimatedImages"))
+            return handleAnimatedImages(payload, docBroker);
     }
     else if (tokens.equals(0, "invalidatetiles:"))
     {
