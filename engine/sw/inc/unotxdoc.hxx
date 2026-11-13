@@ -83,6 +83,7 @@ class SwPrintData;
 class SwRenderData;
 class SwViewShell;
 namespace sw::vector { class PartStore; }
+namespace avmedia { class AnimatedGifTempFiles; }
 class SfxItemPropertySet;
 class SwXTextTables;
 class SwXTextFrames;
@@ -221,6 +222,10 @@ private:
 
     std::unique_ptr<SwPrintUIOptions>               m_pPrintUIOptions;
     std::unique_ptr<SwRenderData>                   m_pRenderData;
+
+    /// The files with the bytes of the animated GIFs served to clients, one per drawing object
+    /// of a graphic frame. Made when the first such GIF is asked for.
+    std::unique_ptr<avmedia::AnimatedGifTempFiles> m_pAnimatedGifTempFiles;
 
     void                    GetNumberFormatter();
 
@@ -517,6 +522,9 @@ public:
 
     /// @see vcl::IVectorParts::getVectorResource().
     std::string getVectorResource(std::string_view rCommand) override;
+
+    /// Implements getCommandValues(".uno:AnimatedImages").
+    void getAnimatedImages(tools::JsonWriter& rJsonWriter);
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
     OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;

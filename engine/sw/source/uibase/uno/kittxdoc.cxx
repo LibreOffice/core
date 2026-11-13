@@ -26,6 +26,7 @@
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 
+#include <avmedia/mediaitem.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -67,6 +68,12 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
+#include <dflyobj.hxx>
+#include <flyfrm.hxx>
+#include <grfatr.hxx>
+#include <ndgrf.hxx>
+#include <notxtfrm.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
 
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -1691,7 +1698,8 @@ bool SwXTextDocument::supportsCommand(const KitParsedCommand& rCommand)
             "ExtractDocumentStructure",
             "ExtractLinkTargets",
             "SecurityLabel",
-            "Headings" };
+            "Headings",
+            "AnimatedImages" };
 
     return std::find(vForward.begin(), vForward.end(), rCommand.aName) != vForward.end();
 }
@@ -1741,6 +1749,78 @@ std::string SwXTextDocument::getPartInfo(int /*nPart*/)
     jsonWriter.put("mode", getEditMode());
     jsonWriter.put("partHasComments", partHasComments() ? "true" : "false");
     return jsonWriter.finishAndGetAsStdString();
+}
+
+void SwXTextDocument::getAnimatedImages(tools::JsonWriter& rJsonWriter)
+{
+    rJsonWriter.put("commandName", ".uno:AnimatedImages");
+    auto aCommandValues = rJsonWriter.startNode("commandValues");
+    auto aImages = rJsonWriter.startArray("images");
+
+    SwWrtShell* pWrtShell = m_pDocShell ? m_pDocShell->GetWrtShell() : nullptr;
+    if (!pWrtShell || !pWrtShell->HasDrawView())
+        return;
+
+    // The images listed are the selected ones of this view.
+    const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
+    for (size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark)
+    {
+        const auto* pVirtFly
+            = dynamic_cast<const SwVirtFlyDrawObj*>(rMarkList.GetMark(nMark)->GetMarkedSdrObj());
+        const SwFlyFrame* pFly = pVirtFly ? pVirtFly->GetFlyFrame() : nullptr;
+        const SwFrame* pLower = pFly ? pFly->Lower() : nullptr;
+        if (!pLower || !pLower->IsNoTextFrame())
+            continue;
+
+        const auto* pNoText = static_cast<const SwNoTextFrame*>(pLower);
+        const SwGrfNode* pGraphicNode = pNoText->GetNode()->GetGrfNode();
+        if (!pGraphicNode)
+            continue;
+
+        // Only an image that fills its frame area whole and upright is listed, so a rotated or
+        // cropped image is left out.
+        const SwAttrSet& rSet = pGraphicNode->GetSwAttrSet();
+        const SwCropGrf& rCrop = rSet.GetCropGrf();
+        if (rSet.GetRotationGrf().GetValue() != 0_deg10 || rCrop.GetLeft() || rCrop.GetTop()
+            || rCrop.GetRight() || rCrop.GetBottom())
+            continue;
+
+        // The file belongs to the drawing object of the frame format, which stays the same when
+        // the layout makes a new frame for the image, for example after a change of anchor.
+        const SdrObject* pMaster = pFly->GetFormat()->FindSdrObject();
+        if (!pMaster)
+            continue;
+
+        if (!m_pAnimatedGifTempFiles)
+            m_pAnimatedGifTempFiles = std::make_unique<avmedia::AnimatedGifTempFiles>();
+        const Graphic& rGraphic = pGraphicNode->GetGrf();
+        const OUString aUrl
+            = m_pAnimatedGifTempFiles->getOrCreate(pMaster->GetUniqueID(), rGraphic);
+        if (aUrl.isEmpty())
+            continue;
+
+        // The print area of the frame is where the image is drawn, in document twips.
+        SwRect aArea(pNoText->getFramePrintArea());
+        aArea.Pos() += pNoText->getFrameArea().Pos();
+
+        GraphicAttr aGraphicAttr;
+        pGraphicNode->GetGraphicAttr(aGraphicAttr, pNoText);
+
+        auto aImage = rJsonWriter.startStruct();
+        rJsonWriter.put("id", static_cast<sal_Int64>(pVirtFly->GetUniqueID()));
+        // The id of the file, which stays the same when the image gets a new frame.
+        rJsonWriter.put("mediaId", static_cast<sal_Int64>(pMaster->GetUniqueID()));
+        rJsonWriter.put("url", aUrl);
+        // The checksum changes only when the image is replaced, not when it moves.
+        rJsonWriter.put("checksum", static_cast<sal_Int64>(rGraphic.GetChecksum()));
+        rJsonWriter.put("mimeType", "image/gif");
+        rJsonWriter.put("x", aArea.Left());
+        rJsonWriter.put("y", aArea.Top());
+        rJsonWriter.put("width", aArea.Width());
+        rJsonWriter.put("height", aArea.Height());
+        if (aGraphicAttr.IsMirrored())
+            rJsonWriter.put("mirror", static_cast<sal_Int32>(aGraphicAttr.GetMirrorFlags()));
+    }
 }
 
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter,
@@ -1805,6 +1885,10 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter,
     else if (o3tl::starts_with(rCommand, ".uno:Headings"sv))
     {
         GetHeadings(rJsonWriter, m_pDocShell);
+    }
+    else if (o3tl::starts_with(rCommand, ".uno:AnimatedImages"sv))
+    {
+        getAnimatedImages(rJsonWriter);
     }
 }
 

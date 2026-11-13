@@ -6545,6 +6545,102 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testChangeBarClickShowsManageChanges)
     rViewFrame.SetChildWindow(FN_REDLINE_ACCEPT, false);
 }
 
+namespace
+{
+/// The images that getCommandValues(".uno:AnimatedImages") lists.
+boost::property_tree::ptree getAnimatedImages(SwXTextDocument& rTextDocument)
+{
+    tools::JsonWriter aWriter;
+    rTextDocument.getCommandValues(aWriter, KitParsedCommand::parse(".uno:AnimatedImages"));
+    std::stringstream aStream(aWriter.finishAndGetAsOString().getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    return aTree.get_child("commandValues.images");
+}
+}
+
+// A selected animated GIF is listed with the file holding its bytes and the area it is drawn in,
+// and an image that is not selected is not listed.
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnimatedImagesOfSelection)
+{
+    SwXTextDocument* pXTextDocument = createDoc("animated-gif.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // The command reaches the document from a client.
+    CPPUNIT_ASSERT(pXTextDocument->supportsCommand(KitParsedCommand::parse(".uno:AnimatedImages")));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), getAnimatedImages(*pXTextDocument).size());
+
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    pWrtShell->SelectObj(Point(), 0, pObject);
+
+    boost::property_tree::ptree aImages = getAnimatedImages(*pXTextDocument);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aImages.size());
+    const boost::property_tree::ptree& rImage = aImages.begin()->second;
+    // The id is the one the graphic selection reports for the image.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pObject->GetUniqueID()),
+                         rImage.get<sal_Int64>("id"));
+    CPPUNIT_ASSERT(rImage.get<std::string>("url").ends_with(".gif"));
+    CPPUNIT_ASSERT_EQUAL(std::string("image/gif"), rImage.get<std::string>("mimeType"));
+    // The frame is 6cm wide and high.
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3402), rImage.get<sal_Int64>("width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3402), rImage.get<sal_Int64>("height"));
+
+    // The same image keeps its file.
+    boost::property_tree::ptree aImagesAgain = getAnimatedImages(*pXTextDocument);
+    CPPUNIT_ASSERT_EQUAL(rImage.get<std::string>("url"),
+                         aImagesAgain.begin()->second.get<std::string>("url"));
+
+    pWrtShell->UnSelectFrame();
+    pWrtShell->LeaveSelFrameMode();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), getAnimatedImages(*pXTextDocument).size());
+}
+
+// An animated image keeps its file when its anchor changes.
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnimatedImageFileAfterAnchorChange)
+{
+    SwXTextDocument* pXTextDocument = createDoc("animated-gif.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0));
+    const boost::property_tree::ptree aFirst = getAnimatedImages(*pXTextDocument).begin()->second;
+    const std::string aUrl = aFirst.get<std::string>("url");
+    const sal_Int64 nMediaId = aFirst.get<sal_Int64>("mediaId");
+
+    for (const OUString& rCommand : { u".uno:SetAnchorToPage"_ustr, u".uno:SetAnchorToPara"_ustr })
+    {
+        dispatchCommand(mxComponent, rCommand, {});
+        pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0));
+        boost::property_tree::ptree aImages = getAnimatedImages(*pXTextDocument);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aImages.size());
+        // The image is listed under the id of its new selection, with the file it had before.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pPage->GetObj(0)->GetUniqueID()),
+                             aImages.begin()->second.get<sal_Int64>("id"));
+        CPPUNIT_ASSERT_EQUAL(aUrl, aImages.begin()->second.get<std::string>("url"));
+        CPPUNIT_ASSERT_EQUAL(nMediaId, aImages.begin()->second.get<sal_Int64>("mediaId"));
+    }
+}
+
+// A mirrored animated image is listed with its mirroring.
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnimatedImageMirroring)
+{
+    SwXTextDocument* pXTextDocument = createDoc("animated-gif.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0));
+    CPPUNIT_ASSERT(!getAnimatedImages(*pXTextDocument).begin()->second.count("mirror"));
+
+    uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphic(
+        xSupplier->getGraphicObjects()->getByName(u"AnimatedGif"_ustr), uno::UNO_QUERY);
+    xGraphic->setPropertyValue(u"HoriMirroredOnEvenPages"_ustr, uno::Any(true));
+    xGraphic->setPropertyValue(u"HoriMirroredOnOddPages"_ustr, uno::Any(true));
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(BmpMirrorFlags::Horizontal),
+                         getAnimatedImages(*pXTextDocument).begin()->second.get<int>("mirror"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

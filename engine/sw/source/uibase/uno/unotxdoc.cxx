@@ -69,6 +69,7 @@
 #include <svx/insertfilehelper.hxx>
 #include <swundo.hxx>
 #include <unotxdoc.hxx>
+#include <avmedia/mediaitem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
 #include <fldbas.hxx>
@@ -611,6 +612,9 @@ void SwXTextDocument::dispose()
     // Delete UnoActionContexts before deleting the SwDoc, as the first has unowned pointers to the
     // second.
     maActionArr.clear();
+
+    // The extracted animated GIF files are removed from the jail.
+    m_pAnimatedGifTempFiles.reset();
 
     SfxBaseModel::dispose();
 }
