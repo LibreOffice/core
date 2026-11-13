@@ -487,6 +487,8 @@ namespace desktop {
                                const char* pValue) override;
         void selectTableCells(unsigned long long nObjectId, int nFirstColumn, int nFirstRow,
                               int nLastColumn, int nLastRow) override;
+        void setConnectorEnd(unsigned long long nConnectorId, bool bStart, int nX, int nY,
+                             unsigned long long nTiedTo, int nGluePoint) override;
     };
 
     struct DESKTOP_DLLPUBLIC COKitImpl : public COKit

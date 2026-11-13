@@ -1494,8 +1494,7 @@ class ClassicConnectorCreateContext extends ClassicLineCreateContext {
 
 	/// An end lands on the place within reach on the object under the mouse, else as a line's.
 	protected placeOf(at: cool.Point, modifier: number): cool.Point {
-		const under = RenderGeometrySection.objectIdAt(at.x, at.y);
-		this.aimed = under ?? null;
+		this.aimed = SelectionSection.tieTargetAt(at);
 		this.here =
 			this.aimed === null ? null : SelectionSection.tieOn(this.aimed, at);
 		return this.here?.point ?? (this.here ? at : this.snapped(at, modifier));
@@ -1519,22 +1518,13 @@ class ClassicConnectorCreateContext extends ClassicLineCreateContext {
 		return cool.Range2D.fromPoints([from, to]);
 	}
 
-	/*
-		The ties go along as four numbers: the object at the start and its place, then the same
-		for the end. A place counts as the engine counts the glue points of a connector: -1 for
-		the best side, 0 to 3 for the middles of the sides, and an own point by its id and 3.
-		An object of 0 leaves that end free.
-	*/
+	/// The ties go along as four numbers: the object at the start and its glue point, then the
+	/// same for the end. An object of 0 leaves that end free.
 	protected moreArguments(): { [name: string]: { type: string; value: any } } {
-		const counted = (tie: ConnectorEndTie): string => {
-			if (!tie) return '0 -1';
-			const place = tie.tie.autoVertex
-				? (tie.tie.point ?? 0)
-				: tie.tie.bestVertex
-					? -1
-					: (tie.tie.point ?? 0) + 3;
-			return tie.objectId + ' ' + place;
-		};
+		const counted = (tie: ConnectorEndTie): string =>
+			tie
+				? tie.objectId + ' ' + SelectionSection.gluePointIndexOf(tie.tie)
+				: '0 -1';
 		return {
 			...super.moreArguments(),
 			Ties: {

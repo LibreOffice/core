@@ -9004,6 +9004,58 @@ void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
     rModel.EndUndo();
 }
 
+void COKitDocumentImpl::setConnectorEnd(unsigned long long nConnectorId, bool bStart, int nX,
+                                        int nY, unsigned long long nTiedTo, int nGluePoint)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setConnectorEnd");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
+    const SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
+    auto* pConnector
+        = pPage ? dynamic_cast<SdrEdgeObj*>(pPage->FindObjectByUniqueID(nConnectorId)) : nullptr;
+
+    if (!pConnector)
+    {
+        SetLastExceptionMsg(u"No connector of that id is on the page the view shows"_ustr);
+        SAL_WARN("sd", "setconnectorend did nothing: no connector of that id");
+        return;
+    }
+
+    if (!lcl_viewReaches(*pPageView, *pConnector))
+    {
+        SAL_WARN("sd", "setconnectorend did nothing: the connector is not one this view changes");
+        return;
+    }
+
+    // an end tied to nothing that is on the page is left free
+    SdrObject* pNode = nTiedTo ? pPage->FindObjectByUniqueID(nTiedTo) : nullptr;
+
+    // The place arrives in twips and the model holds the page in its own unit.
+    const Point aWhereTo(o3tl::convert(tools::Long(nX), o3tl::Length::twip, o3tl::Length::mm100),
+                         o3tl::convert(tools::Long(nY), o3tl::Length::twip, o3tl::Length::mm100));
+
+    // the move changes the run and the items of the connector, as a drag of the end does
+    SdrModel& rModel(pConnector->getSdrModelFromSdrObject());
+    SdrUndoFactory& rFactory(rModel.GetSdrUndoFactory());
+    rModel.BegUndo(SvxResId(STR_DragMethMove));
+    rModel.AddUndo(rFactory.CreateUndoAttrObject(*pConnector));
+    rModel.AddUndo(rFactory.CreateUndoGeoObject(*pConnector));
+
+    pConnector->MoveEndTo(bStart, aWhereTo, pNode, nGluePoint);
+    pConnector->SetChanged();
+    pConnector->BroadcastObjectChange();
+
+    rModel.EndUndo();
+}
+
 void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::setViewOption");

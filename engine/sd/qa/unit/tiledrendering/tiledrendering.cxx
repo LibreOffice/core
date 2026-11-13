@@ -8703,7 +8703,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateConnectorBetweenPoints)
                          + OUString::number(pSecond->GetUniqueID()) + " 3");
     aArgs.realloc(aArgs.getLength() + 1);
     aArgs.getArray()[aArgs.getLength() - 1] = comphelper::makePropertyValue(u"Ties"_ustr, aTies);
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDoc()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
     dispatchCommand(mxComponent, u".uno:Connector"_ustr, aArgs);
+    // made and tied as one step
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
 
     auto pConnector = dynamic_cast<SdrEdgeObj*>(pSlide->GetObj(pSlide->GetObjCount() - 1));
     CPPUNIT_ASSERT(pConnector);
@@ -8714,6 +8718,23 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateConnectorBetweenPoints)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pConnector->GetConnection(true).GetConnectorId());
     CPPUNIT_ASSERT(pConnector->GetConnection(false).IsAutoVertex());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pConnector->GetConnection(false).GetConnectorId());
+
+    // the run leaves each shape the way its side faces: from the right side of the first to
+    // the right, into the left side of the second from the left
+    const basegfx::B2DPolygon aRun(pConnector->GetEdgeTrackPath().getB2DPolygon(0));
+    CPPUNIT_ASSERT(aRun.count() >= 2);
+    CPPUNIT_ASSERT_EQUAL(aRun.getB2DPoint(0).getY(), aRun.getB2DPoint(1).getY());
+    CPPUNIT_ASSERT(aRun.getB2DPoint(1).getX() > aRun.getB2DPoint(0).getX());
+    const sal_uInt32 nLast(aRun.count() - 1);
+    CPPUNIT_ASSERT_EQUAL(aRun.getB2DPoint(nLast).getY(), aRun.getB2DPoint(nLast - 1).getY());
+    CPPUNIT_ASSERT(aRun.getB2DPoint(nLast - 1).getX() < aRun.getB2DPoint(nLast).getX());
+
+    // an end moved to a point with no object to tie to hangs free there
+    const Point aFree(10000, 10000);
+    pConnector->MoveEndTo(false, aFree, nullptr, -1);
+    CPPUNIT_ASSERT(!pConnector->GetConnectedNode(false));
+    CPPUNIT_ASSERT_EQUAL(pFirst, pConnector->GetConnectedNode(true));
+    CPPUNIT_ASSERT_EQUAL(aFree, pConnector->GetPoint(1));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateLineBetweenPoints)

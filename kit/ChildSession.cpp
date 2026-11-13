@@ -697,6 +697,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "cropobject") ||
                tokens.equals(0, "formcontrol") ||
                tokens.equals(0, "selectcells") ||
+               tokens.equals(0, "setconnectorend") ||
                tokens.equals(0, "downloadas") ||
                tokens.equals(0, "getchildid") ||
                tokens.equals(0, "gettextselection") ||
@@ -862,6 +863,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "selectcells"))
         {
             return selectCells(tokens);
+        }
+        else if (tokens.equals(0, "setconnectorend"))
+        {
+            return setConnectorEnd(tokens);
         }
         else if (tokens.equals(0, "downloadas"))
         {
@@ -2486,6 +2491,32 @@ bool ChildSession::selectCells(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->selectTableCells(std::strtoull(objectId.c_str(), nullptr, 10),
                                          firstColumn, firstRow, lastColumn, lastRow);
+
+    return true;
+}
+
+bool ChildSession::setConnectorEnd(const StringVector& tokens)
+{
+    std::string connectorId;
+    std::string tiedTo;
+    int start = 0;
+    int x = 0;
+    int y = 0;
+    int gluePoint = -1;
+
+    if (!hasTokens(tokens, 7) || !getTokenString(tokens[1], "id", connectorId)
+        || !getTokenInteger(tokens[2], "start", start) || !getTokenInteger(tokens[3], "x", x)
+        || !getTokenInteger(tokens[4], "y", y) || !getTokenString(tokens[5], "tiedto", tiedTo)
+        || !getTokenInteger(tokens[6], "gluepoint", gluePoint))
+    {
+        sendTextFrameAndLogError("error: cmd=setconnectorend kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->setConnectorEnd(std::strtoull(connectorId.c_str(), nullptr, 10),
+                                        start != 0, x, y,
+                                        std::strtoull(tiedTo.c_str(), nullptr, 10), gluePoint);
 
     return true;
 }

@@ -1005,10 +1005,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 			held !== undefined &&
 			['9.0.0', '9.0.1'].includes(held.name);
 
-		const under = onAnEnd
-			? (RenderGeometrySection.objectIdAt(at.x, at.y) ?? null)
-			: null;
-		const aimed = under === connector ? null : under;
+		const aimed =
+			onAnEnd && connector !== undefined
+				? SelectionSection.tieTargetAt(new cool.Point(at.x, at.y), connector)
+				: null;
 
 		if (aimed === this.aimingAt) return;
 
@@ -1037,6 +1037,31 @@ abstract class SelectionSection extends CanvasSectionObject {
 		return this.aimingAt === null
 			? null
 			: SelectionSection.tieOn(this.aimingAt, at);
+	}
+
+	/// The object an end of a connector at that point can tie to: the frontmost one there that is
+	/// no connector, as a connector is tied to nothing, and not the one left out; null for none.
+	public static tieTargetAt(
+		at: cool.Point,
+		leavingOut?: number,
+	): number | null {
+		return (
+			RenderGeometrySection.objectIdsAt(at.x, at.y).find(
+				(objectId: number) =>
+					objectId !== leavingOut && !ObjectHandles.isAConnector(objectId),
+			) ?? null
+		);
+	}
+
+	/*
+		The glue point a tie names, counted as the engine counts the glue points of a connector:
+		-1 for the best side, 0 to 3 for the middles of the sides, and an own point by its id
+		and 3.
+	*/
+	public static gluePointIndexOf(tie: cool.ConnectorTie): number {
+		if (tie.autoVertex) return tie.point ?? 0;
+		if (tie.bestVertex) return -1;
+		return (tie.point ?? 0) + 3;
 	}
 
 	/// Where an end of a connector at that point would tie itself to that object, by the same

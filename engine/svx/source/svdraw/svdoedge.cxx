@@ -2155,6 +2155,31 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(const SdrDragMethod& rDr
     return aResult;
 }
 
+void SdrEdgeObj::MoveEndTo(bool bTail1, const Point& rPoint, SdrObject* pNode,
+                           sal_Int32 nGluePoint)
+{
+    DisconnectFromNode(bTail1);
+    ImpSetTailPoint(bTail1, rPoint);
+    if (pNode)
+    {
+        ConnectToNode(bTail1, pNode);
+        setGluePointIndex(bTail1, nGluePoint);
+    }
+
+    // the lines of the run were placed for the end where it stood, as after a drag of the end
+    m_aEdgeInfo.m_aObj1Line2 = Point();
+    m_aEdgeInfo.m_aObj1Line3 = Point();
+    m_aEdgeInfo.m_aObj2Line2 = Point();
+    m_aEdgeInfo.m_aObj2Line3 = Point();
+    m_aEdgeInfo.m_aMiddleLine = Point();
+
+    *m_pEdgeTrack = ImpCalcEdgeTrack(*m_pEdgeTrack, m_aCon1, m_aCon2, &m_aEdgeInfo);
+    m_bEdgeTrackDirty = false;
+    ImpSetEdgeInfoToAttr();
+    m_bEdgeTrackUserDefined = false;
+    SetBoundAndSnapRectsDirty();
+}
+
 bool SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)
 {
     rDragStat.SetNoSnap();

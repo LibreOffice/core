@@ -926,24 +926,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             pConnector->SetTailPoint(true, aStart);
             pConnector->SetTailPoint(false, aEnd);
-
-            // the ends are tied as the client found them, before the connector goes in, so the
-            // insertion is one undo step with its ties
-            if (const auto oTies = lcl_getRequestedTies(rReq))
-            {
-                for (const bool bStart : { true, false })
-                {
-                    const sal_Int64 nObjectId((*oTies)[bStart ? 0 : 2]);
-                    SdrObject* pNode = nObjectId > 0
-                                           ? pPageView->GetPage()->FindObjectByUniqueID(nObjectId)
-                                           : nullptr;
-                    if (!pNode)
-                        continue;
-                    pConnector->ConnectToNode(bStart, pNode);
-                    pConnector->setGluePointIndex(
-                        bStart, static_cast<sal_Int32>((*oTies)[bStart ? 1 : 3]));
-                }
-            }
         }
     }
 
@@ -962,6 +944,25 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     auto pObjTmp = pObj.get();
     // insert into page
     GetView()->InsertObjectAtView(pObj.get(), *pPageView);
+
+    // a connector's run is laid out between the objects it ties only while all are on one page,
+    // so its ends are tied as the client found them once it is in; the ties are part of the
+    // object, which the undo of the insertion takes out whole
+    if (auto pConnector = oRequestedLine ? dynamic_cast<SdrEdgeObj*>(pObjTmp) : nullptr)
+    {
+        const auto oTies = lcl_getRequestedTies(rReq);
+        for (const bool bStart : { true, false })
+        {
+            const sal_Int64 nObjectId(oTies ? (*oTies)[bStart ? 0 : 2] : 0);
+            SdrObject* pNode
+                = nObjectId > 0 ? pPageView->GetPage()->FindObjectByUniqueID(nObjectId) : nullptr;
+            pConnector->MoveEndTo(bStart, bStart ? oRequestedLine->first : oRequestedLine->second,
+                                  pNode,
+                                  oTies ? static_cast<sal_Int32>((*oTies)[bStart ? 1 : 3]) : -1);
+        }
+        pConnector->SetChanged();
+        pConnector->BroadcastObjectChange();
+    }
 
     // Now that pFuActual has done what it was created for we
     // can switch on the edit mode for callout objects.

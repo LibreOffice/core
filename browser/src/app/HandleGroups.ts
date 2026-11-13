@@ -332,6 +332,8 @@ abstract class HandleGroup {
 		const objectId = this.selection.selectedObjects()[0];
 		if (objectId === undefined) return;
 
+		if (this.sendTheConnectorEnd(objectId, handle, to)) return;
+
 		// The name says the kind, the polygon and the point. The number the object gives the
 		// handle travels beside them, for the handles that are told apart by nothing else.
 		const named = handle.name.split('.');
@@ -354,6 +356,46 @@ abstract class HandleGroup {
 				// The engine moves the handle as the office does while Shift is held.
 				(ortho ? ' ortho=1' : ''),
 		);
+	}
+
+	/*
+		Hands the engine an end of a connector that was moved, with what it ties to there, which
+		the client finds by the rule the engine has: the object a drag aims at, or for a key step
+		the object under the end that is no connector. Answers whether the handle was an end of a
+		connector.
+	*/
+	private sendTheConnectorEnd(
+		objectId: number,
+		handle: SelectionHandle,
+		to: cool.Point,
+	): boolean {
+		const start = handle.name === '9.0.0';
+		if (
+			!ObjectHandles.isAConnector(objectId) ||
+			(!start && handle.name !== '9.0.1')
+		)
+			return false;
+
+		const aimed =
+			this.selection.aimedAtObject() ??
+			SelectionSection.tieTargetAt(to, objectId);
+		const tie = aimed === null ? null : SelectionSection.tieOn(aimed, to);
+
+		app.socket.sendMessage(
+			'setconnectorend id=' +
+				String(objectId) +
+				' start=' +
+				(start ? '1' : '0') +
+				' x=' +
+				String(Math.round(to.x)) +
+				' y=' +
+				String(Math.round(to.y)) +
+				' tiedto=' +
+				String(tie ? tie.objectId : 0) +
+				' gluepoint=' +
+				String(tie ? SelectionSection.gluePointIndexOf(tie.tie) : -1),
+		);
+		return true;
 	}
 
 	/*

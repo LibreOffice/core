@@ -132,6 +132,7 @@ class ChangeOutbox {
 	/// each with where the part that names the thing ends and the state begins.
 	private static readonly namedStates: { [command: string]: string } = {
 		setobjecthandle: ' x=',
+		setconnectorend: ' x=',
 		setobjectcontrolpoint: ' x=',
 		setobjectgluepoint: ' x=',
 		cropobject: ' x1=',

@@ -400,6 +400,7 @@ namespace COOLProtocol
         static constexpr auto names = std::to_array<std::string_view>({
             "setobjecttransform",
             "setobjecthandle",
+            "setconnectorend",
             "setobjectcontrolpoint",
             "setobjectgluepoint",
             "setobjectpoints",

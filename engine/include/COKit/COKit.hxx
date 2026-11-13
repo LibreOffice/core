@@ -1625,6 +1625,24 @@ struct COKitDocument
                                   int nLastColumn, int nLastRow)
         = 0;
 
+    /**
+     * Moves the start or the end of a connector to a point and ties it to an object at one of its
+     * glue points, or leaves it free there. The run is laid out anew, as after a drag of that
+     * end, as one step to undo.
+     *
+     * @param nConnectorId the unique id of the connector
+     * @param bStart true for the start, false for the end
+     * @param nX where the end goes, on the page, in twips
+     * @param nY where the end goes, on the page, in twips
+     * @param nTiedTo the unique id of the object the end ties to, 0 for none
+     * @param nGluePoint the glue point it ties to, counted as the glue point properties of a
+     * connector count them: -1 for the best side, 0 to 3 for the middles of the sides, an own
+     * glue point by its id and 3
+     */
+    virtual void setConnectorEnd(unsigned long long nConnectorId, bool bStart, int nX, int nY,
+                                 unsigned long long nTiedTo, int nGluePoint)
+        = 0;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
