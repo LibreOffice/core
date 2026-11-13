@@ -1088,6 +1088,41 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeTextEditAutoColorOnDarkPage)
     pView->SdrEndTextEdit();
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextBoxTextPaintedOnce)
+{
+    ScModelObj* pModelObj = createDoc("shape-textbox.ods");
+    const ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    SdrObject* pObject = pViewData->GetDocument().GetDrawLayer()->GetPage(0)->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+
+    // Fill the shape with white
+    pObject->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pObject->SetMergedItem(XFillColorItem(OUString(), COL_WHITE));
+
+    SdrView* pView = pViewData->GetViewShell()->GetScDrawView();
+    pView->SdrBeginTextEdit(pObject);
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+
+    // Clear the edited text, so only the shape's own text could show up on the tile
+    pOutlinerView->SelectRange(0, pOutlinerView->GetOutliner().GetParagraphCount());
+    pOutlinerView->InsertText(OUString());
+
+    Bitmap aBitmap = getTile(pModelObj, 0, 0, 3840, 3840);
+    BitmapScopedReadAccess pAccess(aBitmap);
+    bool bTextOnTile(false);
+    for (tools::Long nY = 8; nY < 248 && !bTextOnTile; ++nY)
+    {
+        for (tools::Long nX = 8; nX < 248 && !bTextOnTile; ++nX)
+            bTextOnTile = Color(pAccess->GetPixel(nY, nX)) != COL_WHITE;
+    }
+
+    // Without the fix the shape's own text was still painted on the tile
+    CPPUNIT_ASSERT(!bTextOnTile);
+    pView->SdrEndTextEdit();
+}
+
 // This lives apart from the other tile tests because rendering a document with a chart
 // leaves a shell of the chart behind, which upsets tests that ask for the render state
 // of the current view afterwards.

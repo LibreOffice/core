@@ -621,6 +621,9 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     if (!pViewShell)
         return;
 
+    // Hide the text of a shape in text edit, since the edit view paints it
+    comphelper::COKit::TiledPaintingGuard aTiledPaintingGuard(pViewShell->GetDocId());
+
     ScViewData* pActiveViewData = &pViewShell->GetViewData();
     double fFracX(double(o3tl::toTwips(nOutputWidth, o3tl::Length::px)) / nTileWidth);
     double fFracY(double(o3tl::toTwips(nOutputHeight, o3tl::Length::px)) / nTileHeight);
@@ -1309,6 +1312,9 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     // the zoom, so both follow the new zoom here.
     if (ScTabViewShell* pViewShell = pViewData->GetViewShell())
     {
+        SdrView* pSdrView = pViewData->GetScDrawView();
+        if (pSdrView && pSdrView->IsTextEdit())
+            pSdrView->ModelHasChanged();
         pViewShell->UpdateInPlaceClientGridOffset();
         pViewShell->VisAreaChanged();
     }
