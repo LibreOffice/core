@@ -3078,9 +3078,10 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         COKitDocumentImpl* pDocument = new COKitDocumentImpl(xComponent, nThisDocumentId);
         pDocument->maOriginalDocumentUrlKey = aOriginalDocumentUrlKey;
 
-        // A remote checker's server that had not answered when the kit was
-        // forked, or that was set up since, is asked now, and the local spell
-        // checker steps aside for a reachable one.
+        // The kit asks the remote checkers' servers itself: the forkit's
+        // answers may not hold in the jail. The local spell checker steps
+        // aside for a server the kit reaches, and takes back what it handed
+        // to one the kit does not.
         desktop::remotechecker::handLanguagesToRemoteCheckers();
 
         if (bSuppressDialogs)
@@ -12196,7 +12197,8 @@ static void preloadData()
 
     // setup the remote checkers before spell checking init. Their servers
     // are asked here, within the probe's limit, so the kits are forked with
-    // the answers and with the languages already handed over.
+    // the languages already handed over; a kit asks again itself, as its
+    // jail may not reach what this process reaches.
     desktop::remotechecker::setRemoteCheckerConfig();
     desktop::remotechecker::handLanguagesToRemoteCheckers();
     desktop::remotechecker::logRemoteCheckerLanguages();

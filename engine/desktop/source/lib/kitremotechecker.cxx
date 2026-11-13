@@ -40,6 +40,7 @@
 #include <linguistic/misc.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Linguistic.hxx>
+#include <osl/process.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/json_writer.hxx>
@@ -178,13 +179,23 @@ bool isRemoteCheckerEnabled(const RemoteChecker& rChecker)
 }
 
 // What a remote checker's server answered when it was asked about itself,
-// and when it was asked.
+// when it was asked, and by which process.
 struct RemoteCheckerProbe
 {
     cpo::uno::Sequence<css::beans::PropertyValue> aAnswer;
     bool bReachable = false;
     std::chrono::steady_clock::time_point aAskedAt;
+    oslProcessIdentifier nAskedBy = 0;
 };
+
+oslProcessIdentifier currentProcess()
+{
+    oslProcessInfo aInfo;
+    aInfo.Size = sizeof(aInfo);
+    if (osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aInfo) != osl_Process_E_None)
+        return 0;
+    return aInfo.Ident;
+}
 
 // A server that did not answer is asked again after this long: it may have
 // been starting up.
@@ -205,11 +216,16 @@ std::string probeKey(const RemoteChecker& rChecker)
            + "|" + OUStringToOString(aKey, RTL_TEXTENCODING_UTF8).getStr();
 }
 
-// An answer that said the server is there stands; a no stands for a while.
+// An answer that said the server is there stands in the process that got
+// it; a no stands for a while. A kit inherits the forkit's answers, but it
+// runs in a jail, which may not reach what the forkit reached: it asks
+// again, and if no answer comes, the local spell checker takes back the
+// languages it handed over.
 bool isCurrent(const RemoteCheckerProbe& rProbe)
 {
-    return rProbe.bReachable
-           || std::chrono::steady_clock::now() - rProbe.aAskedAt < REMOTE_CHECKER_RETRY;
+    if (rProbe.bReachable)
+        return rProbe.nAskedBy == currentProcess();
+    return std::chrono::steady_clock::now() - rProbe.aAskedAt < REMOTE_CHECKER_RETRY;
 }
 
 // The answer on record for the checker's server, current or not; nothing
@@ -259,6 +275,7 @@ RemoteCheckerProbe probeRemoteChecker(const RemoteChecker& rChecker)
             rValue.Value >>= aProbe.bReachable;
     }
     aProbe.aAskedAt = std::chrono::steady_clock::now();
+    aProbe.nAskedBy = currentProcess();
     if (!aProbe.bReachable)
         std::cerr << "Remote checker " << rChecker.pId
                   << " has not answered; keeping the local spell checker\n";
@@ -443,8 +460,8 @@ ServerSettings getServerSettings(const char* pPrefix)
 // settings is the server's again when this runs before theirs are applied.
 // The groups' nested choices, the Duden style checks and the Grammalecte
 // rule families, are the user's own and stay. The languages are handed
-// over separately: by the forkit, whose kits inherit the servers' answers,
-// and by a kit when it loads a document.
+// over separately: by the forkit, whose kits inherit the hand-over, and by
+// a kit, which asks the servers itself and keeps or undoes it.
 void setRemoteCheckerConfig()
 {
     try
