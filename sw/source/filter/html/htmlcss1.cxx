@@ -20,6 +20,8 @@
 #include <hintids.hxx>
 #include <tools/stream.hxx>
 #include <svl/itemiter.hxx>
+#include <tools/hostfilter.hxx>
+#include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/docfile.hxx>
@@ -1771,7 +1773,11 @@ void SwHTMLParser::InsertLink()
             ( sType.isEmpty() || o3tl::getToken(sType, 0,';') == sCSS_mimetype ) &&
             m_xDoc->AllowAccessLink() )
         {
-            if( GetMedium() )
+            if( HostFilter::isFileUrlForbidden( sHRef ) )
+            {
+                SAL_WARN( "sw.html", "SwHTMLParser::InsertLink: blocked file path: \"" << sHRef << "\"" );
+            }
+            else if( GetMedium() )
             {
                 // start download of style source
                 StartFileDownload(sHRef);
