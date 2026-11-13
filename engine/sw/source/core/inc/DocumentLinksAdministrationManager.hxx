@@ -68,6 +68,11 @@ public:
     void onFillBitmapURLChanged(SwFormat& rFormat, std::u16string_view rNewURL) override;
     void onFillBitmapURLChanged(SwContentNode& rNode, std::u16string_view rNewURL) override;
 
+    /// What a load does with the links of the document: Never leaves them alone, Off keeps them
+    /// from updating, Ask offers them to the user, and Update updates them.
+    enum class LinkUpdateOnLoad { Never, Off, Ask, Update };
+    LinkUpdateOnLoad GetLinkUpdateOnLoad() const;
+
     //Non-Interface method
     bool SelectServerObj( std::u16string_view rStr, SwPaM*& rpPam, std::optional<SwNodeRange>& rpRange ) const;
 
