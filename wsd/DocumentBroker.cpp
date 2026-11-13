@@ -2095,7 +2095,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         _userConfigId = "user-" + userId + "-" + Cache::getConfigId(userSettingsUri);
 
         _userSettingsUri = userSettingsUri;
-        asyncInstallPresets(session, _userConfigId, userSettingsUri, jailPresetsPath, {});
+        asyncInstallPresets(session, _userConfigId, userSettingsUri, jailPresetsPath);
         session->setUserPresetsApplied(true);
     }
 
@@ -2193,12 +2193,13 @@ void PresetsInstallTask::launchNextPreset()
 }
 
 void PresetsInstallTask::sweepStaleExtensions() {
+    if (!_sharedPresets) {
+        return;
+    }
     // The destination dir is resolved the same way addGroup does for the extensions group, so a
     // sweep still works when the integrator just turned the array empty (addGroup bails early but
     // stale entries from the previous round are still on disk):
-    auto const overrideIt = _groupOverridePath.find("extensions");
-    auto const & base = overrideIt != _groupOverridePath.end() ? overrideIt->second : _presetsPath;
-    Poco::Path const extDir(base, "extensions");
+    Poco::Path const extDir(_presetsPath, "extensions");
     try {
         Poco::File dir(extDir);
         if (!dir.exists() || !dir.isDirectory()) {
@@ -2255,11 +2256,7 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
         const std::string uri = JsonUtil::getJSONValue<std::string>(elem, "uri");
         const std::string stamp = JsonUtil::getJSONValue<std::string>(elem, "stamp");
 
-        // A group with no entry in _groupOverridePath falls back to _presetsPath:
-        auto const overrideIt = _groupOverridePath.find(groupName);
-        auto const & groupBase
-            = overrideIt != _groupOverridePath.end() ? overrideIt->second : _presetsPath;
-        Poco::Path destDir(groupBase, groupName);
+        Poco::Path destDir(_presetsPath, groupName);
         // A template root's subdirectory names are its template group names, and the engine's own
         // installation keeps the presentation templates in "presnt".
         if (_sharedPresets && groupName == "template")
@@ -2326,12 +2323,10 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
 
 PresetsInstallTask::PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll,
                    const std::string& configId,
-                   const std::string& presetsPath,
-                   std::map<std::string, std::string> groupOverridePath, bool sharedPresets,
+                   const std::string& presetsPath, bool sharedPresets,
                    const std::function<void(bool)>& installFinishedCB)
     : _configId(configId)
     , _presetsPath(presetsPath)
-    , _groupOverridePath(std::move(groupOverridePath))
     , _sharedPresets(sharedPresets)
     , _poll(poll)
     , _idCount(0)
@@ -2726,7 +2721,7 @@ void DocumentBroker::reinstallUserPresets(const std::shared_ptr<ClientSession>& 
         COOLWSD::EnableMountNamespaces, getJailRoot(), JAILED_CONFIG_ROOT);
 
     LOG_DBG("Re-reading the settings of [" << session->getId() << "] into the jail");
-    asyncInstallPresets(session, _userConfigId, _userSettingsUri, jailPresetsPath, {},
+    asyncInstallPresets(session, _userConfigId, _userSettingsUri, jailPresetsPath,
                         /*onlyWhileAlone=*/true);
 }
 
@@ -2734,7 +2729,6 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
                                          const std::string& configId,
                                          const std::string& userSettingsUri,
                                          const std::string& presetsPath,
-                                         std::map<std::string, std::string> groupOverridePath,
                                          bool onlyWhileAlone)
 {
     auto installFinishedCB = [selfWeak = weak_from_this(), this, session, userSettingsUri,
@@ -2812,7 +2806,7 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
     UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerPresetsInstallStart());
     loadTimings().record("presetsInstallStart");
     _asyncInstallTask = asyncInstallPresets(_poll, configId, userSettingsUri,
-                                            presetsPath, std::move(groupOverridePath),
+                                            presetsPath,
                                             /*sharedPresets=*/false, session, installFinishedCB);
     _asyncInstallTask->appendCallback([selfWeak = weak_from_this(), this,
                                        keepPollAlive=_poll](bool){
@@ -2915,7 +2909,6 @@ std::shared_ptr<PresetsInstallTask>
 DocumentBroker::asyncInstallPresets(const std::shared_ptr<SocketPoll>& poll, const std::string& configId,
                                     const std::string& userSettingsUri,
                                     const std::string& presetsPath,
-                                    std::map<std::string, std::string> groupOverridePath,
                                     bool sharedPresets,
                                     const std::shared_ptr<ClientSession>& session,
                                     const std::function<void(bool)>& installFinishedCB)
@@ -2929,7 +2922,6 @@ DocumentBroker::asyncInstallPresets(const std::shared_ptr<SocketPoll>& poll, con
     LOG_DBG("Getting settings from [" << uriAnonym << ']');
 
     auto presetTasks = std::make_shared<PresetsInstallTask>(poll, configId, presetsPath,
-                                                            std::move(groupOverridePath),
                                                             sharedPresets, installFinishedCB);
 
     // When result arrives, extract uris of what we want to install to the jail's user presets

@@ -904,7 +904,6 @@ public:
                              const std::string& configId,
                              const std::string& userSettingsUri,
                              const std::string& presetsPath,
-                             std::map<std::string, std::string> groupOverridePath,
                              bool onlyWhileAlone = false);
 
     static void getBrowserSettingSync(const std::shared_ptr<ClientSession>& session,
@@ -923,7 +922,6 @@ public:
                                     const std::string& configId,
                                     const std::string& userSettingsUri,
                                     const std::string& presetsPath,
-                                    std::map<std::string, std::string> groupOverridePath,
                                     bool sharedPresets,
                                     const std::shared_ptr<ClientSession>& session,
                                     const std::function<void(bool)>& finishedCB);

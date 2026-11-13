@@ -22,7 +22,6 @@
 #include <Poco/Timestamp.h>
 
 #include <functional>
-#include <map>
 #include <memory>
 #include <set>
 #include <string>
@@ -46,9 +45,6 @@ private:
     std::shared_ptr<ClientSession> _session;
     std::string _configId;
     std::string _presetsPath;
-    // Per-group destination override; a group listed here goes under <override>/<group>/ instead of
-    // the default <_presetsPath>/<group>/:
-    std::map<std::string, std::string> _groupOverridePath;
     // True for the presets of a whole configuration, which every user of that configuration
     // shares. False for the presets of one individual user:
     bool _sharedPresets;
@@ -88,8 +84,7 @@ private:
 
 public:
     PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll, const std::string& configId,
-                       const std::string& presetsPath,
-                       std::map<std::string, std::string> groupOverridePath, bool sharedPresets,
+                       const std::string& presetsPath, bool sharedPresets,
                        const std::function<void(bool)>& installFinishedCB);
 
     bool empty() const
