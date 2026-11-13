@@ -1143,9 +1143,10 @@ namespace sw::mark
                 // move position of that is in the range out of it
 
                 std::optional< SwPosition > oNewPos;
-                if ( oEndContentIdx )
+                const SwContentNode* pEndContentNode = rEnd.GetContentNode();
+                if (oEndContentIdx && pEndContentNode)
                 {
-                    oNewPos.emplace( *rEnd.GetContentNode(), *oEndContentIdx );
+                    oNewPos.emplace(*pEndContentNode, *oEndContentIdx);
                 }
                 else
                 {
