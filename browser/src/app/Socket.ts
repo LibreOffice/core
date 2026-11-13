@@ -1517,6 +1517,12 @@ class Socket {
 				textMsg.startsWith('zstdvectorprimitivesdelta:'),
 			);
 			return;
+		} else if (textMsg.startsWith('zstdvectorthumbnail:')) {
+			this._onZstdVectorThumbnailMessage(e);
+			return;
+		} else if (textMsg.startsWith('vectorthumbnail:')) {
+			this._onVectorThumbnail(textMsg.substring('vectorthumbnail:'.length + 1));
+			return;
 		} else if (textMsg.startsWith('sliderenderingcomplete:')) {
 			this._onSlideRenderingCompleteMsg(textMsg, e);
 			return;
@@ -1731,6 +1737,7 @@ class Socket {
 		'zstdvectorprimitives:',
 		'zstdvectorprimitivesdelta:',
 		'zstdvectorrenderingfont:',
+		'zstdvectorthumbnail:',
 		'windowpaint:',
 	];
 
@@ -3108,6 +3115,36 @@ class Socket {
 	private _onSlideImportMsg(textMsg: string): void {
 		const content = JSON.parse(textMsg.substring('slideimport:'.length + 1));
 		this._map.fire('slideimport', { message: content });
+	}
+
+	// 'zstdvectorthumbnail:' message: the thumbnail of one slide, compressed with zstd.
+	private _onZstdVectorThumbnailMessage(
+		e: SlurpMessageEvent | MinimalMessageEvent,
+	): void {
+		const event = e as SlurpMessageEvent;
+		if (!event.imgBytes || event.imgIndex === undefined) {
+			window.app.console.warn('zstdvectorthumbnail with no payload');
+			return;
+		}
+		const compressed = event.imgBytes.subarray(event.imgIndex);
+		this._onVectorThumbnail(
+			new TextDecoder().decode((window as any).fzstd.decompress(compressed)),
+		);
+	}
+
+	// The thumbnail of one slide: its primitives, and the graphics and fonts they draw with, so
+	// it can be kept and drawn apart from the document.
+	private _onVectorThumbnail(json: string): void {
+		let thumbnail;
+		try {
+			thumbnail = JSON.parse(json);
+		} catch (error) {
+			window.app.console.warn(
+				'vectorthumbnail with a payload that is not JSON',
+			);
+			return;
+		}
+		this._map.fire('vectorthumbnail', { thumbnail: thumbnail });
 	}
 
 	// 'zstdvectorprimitives:' message: a zstd-compressed .uno:VectorPrimitives response.

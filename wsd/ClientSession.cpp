@@ -2199,6 +2199,18 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 
         return forwardToChild(firstLine, docBroker);
     }
+    else if (tokens.equals(0, "createvectorthumbnail"))
+    {
+        // A thumbnail carries the images and fonts of the slide, so it puts the content of the
+        // document in a file of its own, the way an export does.
+        if (!allowsCleanExport())
+        {
+            LOG_WRN("Refusing to write a vector thumbnail: the host allows no export");
+            return sendTextFrameAndLogError("error: cmd=createvectorthumbnail kind=noexport");
+        }
+
+        return forwardToChild(firstLine, docBroker);
+    }
 #if !MOBILEAPP
     else if (tokens.equals(0, "exportslides"))
     {

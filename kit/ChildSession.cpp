@@ -752,7 +752,8 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "exportslides") ||
                tokens.equals(0, "executescript") ||
                tokens.equals(0, "proxyreturn") ||
-               tokens.equals(0, "getslidesections"));
+               tokens.equals(0, "getslidesections") ||
+               tokens.equals(0, "createvectorthumbnail"));
 
         ProfileZone pz("ChildSession::_handleInput:" + tokens[0]);
 
@@ -1291,6 +1292,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "getslidesections"))
         {
             return getSlideSections();
+        }
+        else if (tokens.equals(0, "createvectorthumbnail"))
+        {
+            return createVectorThumbnail(tokens);
         }
         else
         {
@@ -6787,6 +6792,40 @@ bool ChildSession::proxyReturn(char const * buffer, int length) {
     }
     _docManager->getLOKit()->deliverProxyResult(callId, full.substr(idEnd + 1));
     return true;
+}
+
+bool ChildSession::createVectorThumbnail(const StringVector& tokens)
+{
+    int part = -1;
+    int dpi = 0;
+    if (tokens.size() < 2 || tokens.size() > 3 || !getTokenInteger(tokens[1], "part", part) ||
+        part < 0 || (tokens.size() == 3 && (!getTokenInteger(tokens[2], "dpi", dpi) || dpi <= 0)))
+    {
+        sendTextFrameAndLogError("error: cmd=createvectorthumbnail kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+
+    const COKitDocumentType type = getLOKitDocument()->getDocumentType();
+    if (type != COKitDocumentType::PRESENTATION && type != COKitDocumentType::DRAWING)
+    {
+        sendTextFrameAndLogError("error: cmd=createvectorthumbnail kind=unsupported");
+        return false;
+    }
+
+    // The thumbnail carries its images and fonts, so it is large and goes compressed. Without
+    // compression it goes as a text frame.
+    std::string command = ".uno:VectorThumbnail?part=" + std::to_string(part);
+    if (dpi > 0)
+        command += "&dpi=" + std::to_string(dpi);
+    std::string json(getLOKitDocument()->getCommandValues(command.c_str()));
+    if (json.empty())
+        json = "{}";
+
+    if (sendZstdFrame("zstdvectorthumbnail:\n", json.data(), json.size()))
+        return true;
+    return sendTextFrame("vectorthumbnail: " + json);
 }
 
 bool ChildSession::getSlideSections()

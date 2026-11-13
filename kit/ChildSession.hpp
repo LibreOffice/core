@@ -440,6 +440,7 @@ private:
     bool executeScript(char const * buffer, int length, StringVector const & tokens);
     bool proxyReturn(char const * buffer, int length);
     bool getSlideSections();
+    bool createVectorThumbnail(const StringVector& tokens);
 
     void rememberEventsForInactiveUser(COKitCallbackType type, const std::string& payload);
     /// Keeps a .uno:TextEditLocked state change for a user who is away, when it is one that user

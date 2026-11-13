@@ -45,6 +45,7 @@ namespace COOLProtocol
         "zstdvectorprimitives:",
         "zstdvectorprimitivesdelta:",
         "zstdvectorrenderingfont:",
+        "zstdvectorthumbnail:",
         "windowpaint:",
         "urp:",
         "remotedoccommandresult:"
