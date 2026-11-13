@@ -69,6 +69,9 @@ public:
             LanguageType& eNumLang, const OUString& aValStr,
             std::u16string_view aNumStr, SvNumberFormatter& rFormatter );
 
+    // Download a file and read it as UTF-8. Returns TRUE if the download was successful.
+    static bool DownloadFile( const OUString& rURL, OUString& rStr );
+
 protected:
     // Start a file download. This is done asynchronously or synchronously.
     // In the synchronous case, the parser is in the working state after
