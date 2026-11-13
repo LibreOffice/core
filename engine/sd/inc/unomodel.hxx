@@ -72,7 +72,7 @@
 #include "sddllapi.h"
 
 namespace com::sun::star::i18n { class XForbiddenCharacters; }
-namespace avmedia { struct MediaTempFile; }
+namespace avmedia { struct MediaTempFile; class AnimatedGifTempFiles; }
 
 class SdrGrafObj;
 class SfxStyleSheet;
@@ -261,15 +261,8 @@ private:
     /// The graphics and fonts the vector primitives name, and the epoch their versions count in.
     drawinglayer::VectorResourceCache maVectorResources;
 
-    struct AnimatedGifTempFile
-    {
-        sal_uInt64 mnChecksum = 0;
-        OUString maUrl;
-        std::shared_ptr<avmedia::MediaTempFile> mpTempFile;
-    };
-
     /// Extracted animated GIF files, keyed by the graphic object's unique id.
-    mutable std::unordered_map<sal_uInt64, AnimatedGifTempFile> maAnimatedGifCache;
+    mutable std::unique_ptr<avmedia::AnimatedGifTempFiles> mpAnimatedGifTempFiles;
 
     struct ClickSoundTempFile
     {

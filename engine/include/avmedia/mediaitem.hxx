@@ -23,6 +23,7 @@
 #include <avmedia/avmediadllapi.h>
 #include <memory>
 #include <string_view>
+#include <unordered_map>
 
 #include <o3tl/typed_flags_set.hxx>
 #include <utility>
@@ -163,6 +164,30 @@ struct AVMEDIA_DLLPUBLIC MediaTempFile
         : m_TempFileURL(std::move(aURL))
     {}
     ~MediaTempFile();
+};
+
+/** Temp files that hold the original bytes of animated GIFs, one per object.
+
+    An object keeps its file while its graphic has the same checksum, and gets a new file once
+    the graphic changes. The files are removed with this cache.
+ */
+class AVMEDIA_DLLPUBLIC AnimatedGifTempFiles
+{
+public:
+    /** The URL of the temp file holding the GIF bytes of rGraphic, for the object with the
+        unique id nObjectId. Empty when rGraphic is not animated or does not keep the bytes of a
+        GIF file.
+     */
+    OUString getOrCreate(sal_uInt64 nObjectId, const Graphic& rGraphic);
+
+private:
+    struct Entry
+    {
+        sal_uInt64 mnChecksum = 0;
+        std::shared_ptr<MediaTempFile> mpTempFile;
+    };
+
+    std::unordered_map<sal_uInt64, Entry> maEntries;
 };
 
 }

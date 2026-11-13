@@ -91,7 +91,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
-#include <comphelper/seqstream.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <comphelper/mediamimetype.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -277,7 +276,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/gfxlink.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <unordered_map>
 #include <unordered_set>
@@ -7909,40 +7907,10 @@ static void getTextHyperlinkInteractions(const uno::Reference<drawing::XShape>& 
 
 OUString SdXImpressDocument::getOrCreateAnimatedGifUrl(const SdrGrafObj& rGraphicObject) const
 {
-    const Graphic& rGraphic = rGraphicObject.GetGraphic();
-    if (!rGraphic.IsAnimated() || !rGraphic.IsGfxLink())
-        return OUString();
-
-    const GfxLink aGfxLink = rGraphic.GetGfxLink();
-    if (aGfxLink.GetType() != GfxLinkType::NativeGif || aGfxLink.GetDataSize() == 0)
-        return OUString();
-
-    const sal_uInt64 nId = rGraphicObject.GetUniqueID();
-    const sal_uInt64 nChecksum = rGraphic.GetChecksum();
-
-    // Reuse the file already written for this object while its image is
-    // unchanged. A replaced image has a different checksum and gets a fresh
-    // file below.
-    auto it = maAnimatedGifCache.find(nId);
-    if (it != maAnimatedGifCache.end() && it->second.mnChecksum == nChecksum
-        && it->second.mpTempFile)
-        return it->second.maUrl;
-
-    const cpo::uno::Sequence<sal_Int8> aBytes(
-        reinterpret_cast<const sal_Int8*>(aGfxLink.GetData()),
-        static_cast<sal_Int32>(aGfxLink.GetDataSize()));
-    uno::Reference<io::XInputStream> xStream(new comphelper::SequenceInputStream(aBytes));
-
-    OUString aTempFileUrl;
-    if (!avmedia::CreateMediaTempFile(xStream, aTempFileUrl, u".gif"))
-        return OUString();
-
-    AnimatedGifTempFile aEntry;
-    aEntry.mnChecksum = nChecksum;
-    aEntry.maUrl = aTempFileUrl;
-    aEntry.mpTempFile = std::make_shared<avmedia::MediaTempFile>(aTempFileUrl);
-    maAnimatedGifCache[nId] = std::move(aEntry);
-    return aTempFileUrl;
+    if (!mpAnimatedGifTempFiles)
+        mpAnimatedGifTempFiles = std::make_unique<avmedia::AnimatedGifTempFiles>();
+    return mpAnimatedGifTempFiles->getOrCreate(rGraphicObject.GetUniqueID(),
+                                               rGraphicObject.GetGraphic());
 }
 
 OUString SdXImpressDocument::getOrCreateClickSoundUrl(const SdrObject& rObject,
@@ -8827,7 +8795,7 @@ void SdXImpressDocument::dispose()
     }
 
     // Drop the extracted animated GIF and click sound files so they are removed from the jail.
-    maAnimatedGifCache.clear();
+    mpAnimatedGifTempFiles.reset();
     maClickSoundCache.clear();
 
     // Call the base class dispose() before setting the mbDisposed flag

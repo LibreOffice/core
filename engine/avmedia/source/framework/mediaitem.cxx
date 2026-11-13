@@ -43,6 +43,8 @@
 #include <osl/file.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/gfxlink.hxx>
+#include <comphelper/seqstream.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -583,6 +585,36 @@ bool CreateMediaTempFile(uno::Reference<io::XInputStream> const& xInStream,
 MediaTempFile::~MediaTempFile()
 {
     ::osl::File::remove(m_TempFileURL);
+}
+
+OUString AnimatedGifTempFiles::getOrCreate(sal_uInt64 nObjectId, const Graphic& rGraphic)
+{
+    if (!rGraphic.IsAnimated() || !rGraphic.IsGfxLink())
+        return OUString();
+
+    // The checksum is taken from the encoded bytes, so a known graphic is found without
+    // decoding it.
+    const sal_uInt64 nChecksum = rGraphic.GetChecksum();
+    auto it = maEntries.find(nObjectId);
+    if (it != maEntries.end() && it->second.mnChecksum == nChecksum && it->second.mpTempFile)
+        return it->second.mpTempFile->m_TempFileURL;
+
+    const GfxLink aGfxLink = rGraphic.GetGfxLink();
+    if (aGfxLink.GetType() != GfxLinkType::NativeGif || aGfxLink.GetDataSize() == 0)
+        return OUString();
+
+    const uno::Sequence<sal_Int8> aBytes(reinterpret_cast<const sal_Int8*>(aGfxLink.GetData()),
+                                         static_cast<sal_Int32>(aGfxLink.GetDataSize()));
+    uno::Reference<io::XInputStream> xStream(new comphelper::SequenceInputStream(aBytes));
+
+    OUString aTempFileUrl;
+    if (!CreateMediaTempFile(xStream, aTempFileUrl, u".gif"))
+        return OUString();
+
+    Entry& rEntry = maEntries[nObjectId];
+    rEntry.mnChecksum = nChecksum;
+    rEntry.mpTempFile = std::make_shared<MediaTempFile>(aTempFileUrl);
+    return aTempFileUrl;
 }
 
 } // namespace avmedia
