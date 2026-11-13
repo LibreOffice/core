@@ -130,6 +130,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// change to the frames or the headers, the element that held the focus in the panel
 		// then, and how far the deck of the panel was scrolled.
 		this._linkPanelSuspended = null;
+		this._addedSectionPart = undefined;
 		this._direction = this.options.allowOrientation ?
 			(!window.mode.isDesktop() && window.L.DomUtil.isPortrait() ? 'x' : 'y') :
 			this.options.axis;
@@ -953,6 +954,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					that._map.hideSlide();
 					break;
 				case 'addsection':
+					that._addedSectionPart = that._map._docLayer._selectedPart;
 					app.socket.sendMessage('uno .uno:AddSlideSection');
 					break;
 				case 'unlinkslide':
@@ -1263,6 +1265,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._ensureVisiblePreviews();
 
 		this._updateSelectedSection();
+
+		if (this._addedSectionPart !== undefined) {
+			this._scrollToPart(this._addedSectionPart, 'smooth');
+			this._addedSectionPart = undefined;
+		}
 	},
 
 	_updateSelectedSection: function () {
@@ -2390,7 +2397,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		);
 	},
 
-	_scrollToPart: function(part) {
+	_scrollToPart: function(part, behavior = 'auto') {
+		if (behavior === 'smooth' && window.matchMedia &&
+		    window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+			behavior = 'auto';
+
 		var partNo = part !== undefined ? part : this._map.getCurrentPartNumber();
 		// Use the preview tile's parent frame directly instead of child index
 		var node = this._previewTiles[partNo] ? this._previewTiles[partNo].parentNode : null;
@@ -2401,7 +2412,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// 'nearest' leaves a fully visible slide in place and scrolls a partly visible
 			// or hidden one by the least amount that shows it whole.
 			this.scrollTimer = setTimeout(() => {
-				node.scrollIntoView({block: 'nearest', inline: 'nearest'});
+				node.scrollIntoView({block: 'nearest', inline: 'nearest', behavior: behavior});
 				this.scrollTimer = null;
 			}, 50);
 		}
