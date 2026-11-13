@@ -216,29 +216,13 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     if (GetLinkManager().GetLinks().empty() && !pShell->HasExternalDatabaseForms()
         && !pShell->HasDeferredLinkLoads())
         return;
-    sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
-    sal_uInt16 nUpdateDocMode = pShell->GetUpdateDocMode();
-    if (nLinkMode == NEVER && nUpdateDocMode != document::UpdateDocMode::FULL_UPDATE)
+    const LinkUpdateOnLoad eUpdate = GetLinkUpdateOnLoad();
+    if (eUpdate == LinkUpdateOnLoad::Never)
         return;
 
-    bool bAskUpdate = nLinkMode == MANUAL;
-    bool bUpdate = true;
-    switch(nUpdateDocMode)
-    {
-        case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
-        case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
-        case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
-    }
-    if (nLinkMode == AUTOMATIC && !bAskUpdate)
-    {
-        if (!pShell->IsTrustedLocationForUpdatingLinks())
-        {
-            bAskUpdate = true;
-        }
-    }
     comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
     // An embedded document is loaded with no update mode, and follows the document that contains it.
-    if (!bUpdate && pShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
+    if (eUpdate == LinkUpdateOnLoad::Off && pShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
     {
         if (rEmbeddedObjectContainer.getUserAllowsLinkUpdate())
             GetLinkManager().UpdateAllLinks(false, OUString());
@@ -246,22 +230,44 @@ void DocumentLinksAdministrationManager::UpdateLinks()
             pShell->SetPendingLinkUpdateInfobar();
         return;
     }
-    if (bUpdate)
+    switch (eUpdate)
     {
-        if (bAskUpdate)
-        {
+        case LinkUpdateOnLoad::Ask:
             // Don't show a modal dialog during load - show an infobar
             // after the view is ready instead
             rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
             pShell->SetPendingLinkUpdateInfobar();
-        }
-        else
+            break;
+        case LinkUpdateOnLoad::Update:
             pShell->AllowLinkUpdate();
+            break;
+        default:
+            rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+            break;
     }
-    else
+}
+
+DocumentLinksAdministrationManager::LinkUpdateOnLoad
+DocumentLinksAdministrationManager::GetLinkUpdateOnLoad() const
+{
+    SwDocShell* pShell = m_rDoc.GetDocShell();
+    if (!pShell)
+        return LinkUpdateOnLoad::Never;
+    sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
+    sal_uInt16 nUpdateDocMode = pShell->GetUpdateDocMode();
+    if (nLinkMode == NEVER && nUpdateDocMode != document::UpdateDocMode::FULL_UPDATE)
+        return LinkUpdateOnLoad::Never;
+
+    bool bAskUpdate = nLinkMode == MANUAL;
+    switch(nUpdateDocMode)
     {
-        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+        case document::UpdateDocMode::NO_UPDATE:   return LinkUpdateOnLoad::Off;
+        case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
+        case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
     }
+    if (nLinkMode == AUTOMATIC && !bAskUpdate && !pShell->IsTrustedLocationForUpdatingLinks())
+        bAskUpdate = true;
+    return bAskUpdate ? LinkUpdateOnLoad::Ask : LinkUpdateOnLoad::Update;
 }
 
 bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const OUString& rMimeType,
