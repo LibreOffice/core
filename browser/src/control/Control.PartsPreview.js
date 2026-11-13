@@ -754,6 +754,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 			var part = that._findClickedPart(img.parentNode);
 			var partIndex = parseInt(part) - 1;
+			let sectionStartPart = app.impress.getFirstSelectedSlideIndex();
+			if (sectionStartPart === -1)
+				sectionStartPart = that._map._docLayer._selectedPart;
 			var isPresentation = that._map._docLayer._docType === 'presentation';
 
 			var entries = [];
@@ -864,12 +867,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				});
 			}
 
-			// if not the first section slide then add entry for section
+			// Offer Add Section unless a section already starts where the new one would
 			var isFirstSectionSlide = false;
 			const sections = app.impress.sections;
 			if (sections) {
 				for (let i = 0; i < sections.length; i++) {
-					if (sections[i].startIndex === partIndex) {
+					if (sections[i].startIndex === sectionStartPart) {
 						isFirstSectionSlide = true;
 						break;
 					}
@@ -954,7 +957,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					that._map.hideSlide();
 					break;
 				case 'addsection':
-					that._addedSectionPart = that._map._docLayer._selectedPart;
+					that._addedSectionPart = sectionStartPart;
 					app.socket.sendMessage('uno .uno:AddSlideSection');
 					break;
 				case 'unlinkslide':

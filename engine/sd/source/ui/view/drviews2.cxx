@@ -2964,16 +2964,34 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_ADD_SLIDE_SECTION:
         {
-            SdPage* pPage = GetActualPage();
-            if (pPage)
+            // The section starts at the topmost selected slide. With no slide selected it starts
+            // at the current slide. The slide sorter of this view holds the selection when there
+            // is one, otherwise the selected flags of the pages do.
+            const bool bUseSlideSorter
+                = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())
+                  != nullptr;
+            sal_Int32 nStartSlide = -1;
+            const sal_uInt16 nPageCount = GetDoc()->GetSdPageCount(PageKind::Standard);
+            for (sal_uInt16 nIndex = 0; nIndex < nPageCount && nStartSlide < 0; ++nIndex)
             {
-                sal_uInt16 nPage = (pPage->GetPageNum() - 1) / 2;
+                SdPage* pCandidate = GetDoc()->GetSdPage(nIndex, PageKind::Standard);
+                if ((bUseSlideSorter && IsSelected(nIndex))
+                    || (!bUseSlideSorter && pCandidate && pCandidate->IsSelected()))
+                    nStartSlide = nIndex;
+            }
+            if (nStartSlide < 0)
+            {
+                if (SdPage* pActualPage = GetActualPage())
+                    nStartSlide = (pActualPage->GetPageNum() - 1) / 2;
+            }
+            if (nStartSlide >= 0)
+            {
                 sd::SlideSectionManager& rMgr = GetDoc()->GetSectionManager();
                 auto pUndo = GetDoc()->IsUndoEnabled()
                     ? std::make_unique<sd::UndoSlideSection>(
                           *GetDoc(), SdResId(STR_UNDO_ADD_SLIDE_SECTION))
                     : nullptr;
-                rMgr.AddSection(nPage, SdResId(STR_DEFAULT_SLIDE_SECTION_NAME));
+                rMgr.AddSection(nStartSlide, SdResId(STR_DEFAULT_SLIDE_SECTION_NAME));
                 if (pUndo)
                     GetDoc()->AddUndo(std::move(pUndo));
                 GetDocSh()->SetModified();

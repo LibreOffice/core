@@ -520,6 +520,12 @@ app.impress.isSlideSelected = function (index) {
 	} else return false;
 };
 
+// The index of the topmost selected slide, or -1 when no slide is selected.
+app.impress.getFirstSelectedSlideIndex = function () {
+	if (!app.impress.partList) return -1;
+	return app.impress.partList.findIndex((part) => part && part.selected === 1);
+};
+
 // Slide import builds on the live links between documents. It needs remote
 // links enabled in the server configuration and a storage that resolves the
 // persistent links.

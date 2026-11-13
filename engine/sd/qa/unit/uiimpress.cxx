@@ -6745,6 +6745,36 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testEditingAfterSlideSectionRename)
                          xDrawPage->getShapeByIndex(0).queryThrow<text::XTextRange>()->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testAddSlideSectionStartsAtTopmostSelectedSlide)
+{
+    // A selection made from the bottom up keeps its first clicked slide, the lowest one, as the
+    // current slide. The new section still starts at the topmost selected slide.
+    createSdImpressDoc();
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+
+    auto* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+
+    vcl::ITiledRenderable& rRenderable = *pImpressDocument;
+    pImpressDocument->setPart(3);
+    for (int nPart = 0; nPart < 4; ++nPart)
+        rRenderable.selectPart(nPart, 0);
+    rRenderable.selectPart(3, 1);
+    rRenderable.selectPart(2, 1);
+    rRenderable.selectPart(1, 1);
+    CPPUNIT_ASSERT_EQUAL(3, pImpressDocument->getPart());
+
+    dispatchCommand(mxComponent, u".uno:AddSlideSection"_ustr, {});
+
+    sd::SlideSectionManager& rManager = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rManager.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rManager.GetSection(0).mnStartIndex);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDemoteTitle)
 {
     OutlinerView* pOutlinerView = createOutlineView({ u"A", u"B" });

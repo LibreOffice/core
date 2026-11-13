@@ -226,6 +226,7 @@ interface AppInterface {
 		areAllSlidesHidden(): boolean;
 		isSlideImportSupported(): boolean;
 		getSelectedSlidesCount(): number;
+		getFirstSelectedSlideIndex(): number;
 		getSelectedSectionName(): string | null;
 		// The slide sections of the document, in slide order.
 		sections: Array<{
