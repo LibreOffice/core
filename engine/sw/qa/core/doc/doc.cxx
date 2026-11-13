@@ -3284,6 +3284,74 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsOnlyParagraphRsid)
     CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTrackedDeletion)
+{
+    // Given a document where text that the old version still has is already a tracked deletion by
+    // another author:
+    createSwDoc("compare-tracked-deletion-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+    const SwRedlineTable& rRedlines = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-tracked-deletion-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then that text is still there once, as one tracked deletion by the earlier author:
+    CPPUNIT_ASSERT_EQUAL(u"Some words here later"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(u"Earlier Author"_ustr, rRedlines[0]->GetAuthorString());
+    CPPUNIT_ASSERT_EQUAL(u" later"_ustr, rRedlines[0]->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTrackedParagraphDeletion)
+{
+    // Given a document where a paragraph that the old version still has is already a tracked
+    // deletion by another author:
+    createSwDoc("compare-tracked-paragraph-deletion-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+    const SwRedlineTable& rRedlines = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(
+            u"URL"_ustr, createFileURL(u"compare-tracked-paragraph-deletion-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then that paragraph is still there once, as one tracked deletion by the earlier author:
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"Middle"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(u"Earlier Author"_ustr, rRedlines[0]->GetAuthorString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTrackedRowDeletion)
+{
+    // Given a document where the middle row of a table is a tracked deletion, and an old version
+    // that still has that row:
+    createSwDoc("compare-table-row-deleted-old.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->DeleteRow();
+    CPPUNIT_ASSERT_EQUAL(u"-D-"_ustr, GetTrackedRows(*pDoc));
+
+    // When comparing with the old version:
+    compareWith(u"compare-table-row-deleted-old.fodt");
+
+    // Then the table still has that row once, tracked as deleted:
+    CPPUNIT_ASSERT_EQUAL(u"-D-"_ustr, GetTrackedRows(*pDoc));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -231,8 +231,11 @@ public:
         { m_aLines.push_back( aLine ); }
 
     // Tracks the differences. Adds to pInsertedNotes, when it is given, the footnotes and the
-    // endnotes whose anchors are tracked as inserted.
+    // endnotes whose anchors are tracked as inserted. Removes from pShownNotes, when it is given,
+    // the notes of a tracked deletion that the old version has as it is, because those notes are
+    // the ones that match old notes.
     void SetRedlinesToDoc( bool bUseDocInfo,
+                           o3tl::sorted_vector<const SwTextFootnote*>* pShownNotes,
                            o3tl::sorted_vector<const SwTextFootnote*>* pInsertedNotes );
 
 private:
@@ -2739,7 +2742,47 @@ void CompareData::TrackInsertedRow( const SwTableLine& rLine,
     }
 }
 
+namespace
+{
+/// Finds a tracked deletion with the same text as rRange that starts where rRange ends, or ends
+/// where it starts.
+const SwRangeRedline* lcl_FindSameDeletionNextTo(const SwDoc& rDoc, const SwPaM& rRange)
+{
+    const OUString aText = rRange.GetText();
+    for (const SwRangeRedline* pRedline : rDoc.getIDocumentRedlineAccess().GetRedlineTable())
+    {
+        if (pRedline->GetType() != RedlineType::Delete)
+            continue;
+        if ((*pRedline->Start() == *rRange.End() || *pRedline->End() == *rRange.Start())
+            && pRedline->GetText() == aText)
+            return pRedline;
+    }
+    return nullptr;
+}
+
+/// Removes the text that the comparison copied in from the old version, without tracking it.
+/// rRange and rStepPos move to the end of that text, so they stay valid.
+void lcl_RemoveCopiedText(SwDoc& rDoc, SwPaM& rRange, SwPosition& rStepPos)
+{
+    IDocumentRedlineAccess& rRedlineAccess = rDoc.getIDocumentRedlineAccess();
+    const RedlineFlags eOldFlags = rRedlineAccess.GetRedlineFlags();
+    rRedlineAccess.SetRedlineFlags_intern(eOldFlags & ~RedlineFlags::On);
+    ::sw::UndoGuard const aUndoGuard(rDoc.GetIDocumentUndoRedo());
+    SwPaM aPaM(*rRange.Start(), *rRange.End());
+    rRange.DeleteMark();
+    *rRange.GetPoint() = *aPaM.End();
+    rStepPos = *aPaM.End();
+    // A range of whole paragraphs is removed from its end to its start, so the paragraph after it
+    // stays as it is.
+    if (!aPaM.Start()->GetContentIndex() && !aPaM.End()->GetContentIndex())
+        aPaM.Exchange();
+    rDoc.getIDocumentContentOperations().DeleteAndJoin(aPaM);
+    rRedlineAccess.SetRedlineFlags_intern(eOldFlags);
+}
+}
+
 void CompareData::SetRedlinesToDoc( bool bUseDocInfo,
+                                    o3tl::sorted_vector<const SwTextFootnote*>* pShownNotes,
                                     o3tl::sorted_vector<const SwTextFootnote*>* pInsertedNotes )
 {
     // get the Author / TimeStamp from the "other" document info
@@ -2807,7 +2850,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo,
     // Several deleted rows behind the same row go one after the other.
     const SwTableLine* pBehindAnchor = nullptr;
     const SwTableLine* pBehindLast = nullptr;
-    for (const Step& rStep : aSteps)
+    for (Step& rStep : aSteps)
     {
         if (const TrackedRow* pRow = rStep.pRow)
         {
@@ -2826,6 +2869,21 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo,
         }
 
         SwPaM* pTmp = rStep.pDelete;
+        // The text that the new version already tracks as deleted is hidden while comparing, so
+        // the comparison copies it in again from the old version, next to that deletion. The
+        // existing deletion stays, with its author, and the copy goes.
+        if (const SwRangeRedline* pDeletion = lcl_FindSameDeletionNextTo(m_rDoc, *pTmp))
+        {
+            if (pShownNotes)
+            {
+                o3tl::sorted_vector<const SwTextFootnote*> aNotes;
+                lcl_AddNotesInRange(*pDeletion, aNotes);
+                for (const SwTextFootnote* pNote : aNotes)
+                    pShownNotes->erase(pNote);
+            }
+            lcl_RemoveCopiedText(m_rDoc, *pTmp, rStep.aPos);
+            continue;
+        }
         m_rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTmp, false, RedlineType::Any );
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
@@ -3016,11 +3074,12 @@ namespace
 
     // Pairs the footnotes and the endnotes of the two documents by their anchors, once the main
     // text has its tracked changes. rKeptNotes are the notes rDestDoc had before the comparison.
-    // rShownNotes are the notes in text that was already tracked as deleted. They were hidden
-    // during the comparison, so they have no old note. Any other note is a copy of an old note in
-    // deleted text. rInsertedNotes are the notes whose anchors the comparison tracked as inserted.
-    // So the old notes are, in order, the new notes that are in neither rShownNotes nor
-    // rInsertedNotes.
+    // rShownNotes are the notes in text that was already tracked as deleted and that the old
+    // version lacks. They were hidden during the comparison, so they have no old note. A note in
+    // text that was already tracked as deleted and that the old version has as it is matches that
+    // old note. Any other note is a copy of an old note in deleted text. rInsertedNotes are the
+    // notes whose anchors the comparison tracked as inserted. So the old notes are, in order, the
+    // new notes that are in neither rShownNotes nor rInsertedNotes.
     Comparators buildNoteComparators(SwDoc& rSrcDoc, SwDoc& rDestDoc,
                                      const o3tl::sorted_vector<const SwTextFootnote*>& rKeptNotes,
                                      const o3tl::sorted_vector<const SwTextFootnote*>& rShownNotes,
@@ -3161,7 +3220,7 @@ tools::Long SwDoc::CompareDoc( const SwDoc& rDoc )
             for (auto& a : rComparisons)
             {
                 CompareData& rD1 = *a.second;
-                rD1.SetRedlinesToDoc( !bDocWasModified, pInsertedNotes );
+                rD1.SetRedlinesToDoc( !bDocWasModified, pShownNotes, pInsertedNotes );
             }
         }
         return nDiffs;
