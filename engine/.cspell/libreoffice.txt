@@ -9,7 +9,6 @@ avmedia
 buildall
 ccache
 checkall
-clucene
 coinmp
 comphelper
 coredumpctl
@@ -33,7 +32,6 @@ instsetoo
 javac
 jfreereport
 lastrun
-libclucene
 libebook
 liblangtag
 LIBO

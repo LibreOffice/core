@@ -28,11 +28,9 @@ LICENSE=	MPL20
 
 ONLY_FOR_ARCHS=	aarch64 amd64
 
-# clucene is only checked by configure; nothing links it while help is disabled
 BUILD_DEPENDS=	${LOCALBASE}/include/glm/glm.hpp:math/glm \
 		${LOCALBASE}/include/sane/sane.h:graphics/sane-backends \
 		${LOCALBASE}/include/sqlext.h:databases/unixODBC \
-		${LOCALBASE}/libdata/pkgconfig/libclucene-core.pc:textproc/clucene \
 		${PYTHON_PKGNAMEPREFIX}lxml>0:devel/py-lxml@${PY_FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}polib>0:devel/py-polib@${PY_FLAVOR} \
 		bash:shells/bash \

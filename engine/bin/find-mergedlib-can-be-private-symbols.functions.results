@@ -226,14 +226,6 @@ BuilderBase::handleRow(xmlreader::XmlReader&, rtl::OUString const&)
 Button::GetImageAlign() const
 Button::SetImageAlign(ImageAlign)
 Button::SetModeImage(Image const&)
-CLuceneError::CLuceneError()
-CLuceneError::CLuceneError(CLuceneError const&)
-CLuceneError::CLuceneError(int, char const*, bool)
-CLuceneError::CLuceneError(int, wchar_t const*, bool)
-CLuceneError::set(int, char const*, bool)
-CLuceneError::set(int, wchar_t const*, bool)
-CLuceneError::twhat()
-CLuceneError::~CLuceneError()
 CairoCommon::GetBitCount() const
 CairoCommon::applyColor(_cairo*, Color, double)
 CairoCommon::applyColor2(_cairo*, Color)
@@ -15712,7 +15704,6 @@ _freeTable
 _getRequiredSize
 _getTableDirectorySize
 _lgflr
-_lucene_shutdown()
 _maxpw
 _tiffDummyMapProc
 _tiffDummyUnmapProc
@@ -19935,18 +19926,6 @@ lp_yy_switch_to_buffer
 lp_yylex
 lp_yyparse
 lp_yyrestart
-lucene_i64tot(long, wchar_t*, int)
-lucene_snwprintf(wchar_t*, unsigned long, wchar_t const*, ...)
-lucene_tcscasecmp(wchar_t const*, wchar_t const*)
-lucene_tcslwr(wchar_t*)
-lucene_utf8charlen(unsigned char)
-lucene_utf8towc(wchar_t&, char const*)
-lucene_utf8towcs(wchar_t*, char const*, unsigned long)
-lucene_vsnwprintf(wchar_t*, unsigned long, wchar_t const*, __va_list_tag (&) [1])
-lucene_wcstoutf8(char*, wchar_t const*, unsigned long)
-lucene_wcstoutf8string[abi:cxx11](wchar_t const*, unsigned long)
-lucene_wctoutf8(char*, wchar_t)
-lucene_wprintf(wchar_t const*, ...)
 main
 makeNotebookbarTabControl
 makeNotebookbarToolBox

@@ -356,7 +356,7 @@ endef
 #
 # NOTE: This is a bit hackish, but it is the easiest way to move files
 # around or delete files (typically because the file causes build
-# problems in the original location, c.f. clucene). This is doable by
+# problems in the original location). This is doable by
 # using -E with patch (we use GNU patch anyway), but it would mean an
 # additional patch to maintain...
 #

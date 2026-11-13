@@ -163,8 +163,6 @@ with open("bin/find-mergedlib-can-be-private-symbols.whole-class.results", "wt")
         # ignore some external libraries
         if i.startswith("antlr4::"):
             continue
-        if i.startswith("lucene::"):
-            continue
         if i.startswith("Sk"):
             continue
         if i.startswith("Qt"):
@@ -258,8 +256,6 @@ with open("bin/find-mergedlib-can-be-private-symbols.functions.results", "wt") a
         elif sym.startswith("sqlite3_"):
             continue
         elif sym.startswith("libepubgen::"):
-            continue
-        elif sym.startswith("lucene::"):
             continue
         elif sym.startswith("Hunspell::"):
             continue

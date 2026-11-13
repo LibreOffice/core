@@ -229,8 +229,6 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
             continue
         elif sym.startswith("libepubgen::"):
             continue
-        elif sym.startswith("lucene::"):
-            continue
         elif sym.startswith("Hunspell::"):
             continue
         elif sym.startswith("sk_"):

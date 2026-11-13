@@ -513,13 +513,6 @@
           "dest-filename": "boost_1_91_0.tar.xz"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz",
-          "sha256": "ddfdc433dd8ad31b5c5819cc4404a8d2127472a3b720d3e744e8c51d79732eab",
-          "type": "file",
-          "dest": "engine/external/tarballs",
-          "dest-filename": "48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz"
-        },
-        {
           "url": "https://gerrit.collaboraoffice.com/src/Cbc-releases-2.10.13.tar.gz",
           "sha256": "62fde44dcf6f3d05c5cd291d7435cdd1b7e8acd3c78ec481dd39fe49cbc40399",
           "type": "file",

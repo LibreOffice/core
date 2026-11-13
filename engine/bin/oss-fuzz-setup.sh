@@ -15,7 +15,6 @@ curl --no-progress-meter -S --fail \
     -C - -O https://gerrit.collaboraoffice.com/src/$FONT_LIBERATION_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/extern/$OPENSYMBOL_TTF \
     -C - -O https://gerrit.collaboraoffice.com/src/$RASQAL_TARBALL \
-    -C - -O https://gerrit.collaboraoffice.com/src/$CLUCENE_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/src/$HYPHEN_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/src/$RAPTOR_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/src/$MYTHES_TARBALL \

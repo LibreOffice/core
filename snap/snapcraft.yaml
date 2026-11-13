@@ -207,7 +207,6 @@ parts:
         --without-system-argon2 \
         --without-system-boost \
         --without-system-cairo \
-        --without-system-clucene \
         --without-system-coinmp \
         --without-system-cppunit \
         --without-system-dragonbox \

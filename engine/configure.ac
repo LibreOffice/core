@@ -1010,7 +1010,6 @@ AC_SUBST(ENABLE_KIT_ALWAYS_ACTIVE)
 # This is also true for most test_* variables.
 # ===================================================================
 build_crypto=yes
-test_clucene=no
 test_gdb_index=no
 test_split_debug=no
 test_webdav=yes
@@ -6002,7 +6001,6 @@ if test "$cross_compiling" = "yes"; then
         BOOST
         BZIP2
         CAIRO
-        CLUCENE
         CURL
         DBCONNECTIVITY
         DESKTOP
@@ -9715,26 +9713,6 @@ AC_SUBST(NAFLAGS)
 AC_SUBST(LIBJPEG_CFLAGS)
 AC_SUBST(LIBJPEG_LIBS)
 AC_SUBST(SYSTEM_LIBJPEG)
-
-dnl ===================================================================
-dnl Check for system clucene
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([clucene],[CLUCENE],[libclucene-core])
-if test "$SYSTEM_CLUCENE" = TRUE; then
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    save_CPPFLAGS=$CPPFLAGS
-    CXXFLAGS="$CXXFLAGS $CLUCENE_CFLAGS"
-    CPPFLAGS="$CPPFLAGS $CLUCENE_CFLAGS"
-    dnl https://sourceforge.net/p/clucene/bugs/200/
-    dnl https://bugzilla.redhat.com/show_bug.cgi?id=794795
-    AC_CHECK_HEADER([CLucene/analysis/cjk/CJKAnalyzer.h], [],
-                 [AC_MSG_ERROR([Your version of libclucene has contribs-lib missing.])], [#include <CLucene.h>])
-    CXXFLAGS=$save_CXXFLAGS
-    CPPFLAGS=$save_CPPFLAGS
-    AC_LANG_POP([C++])
-    CLUCENE_LIBS="$CLUCENE_LIBS -lclucene-contribs-lib"
-fi
 
 dnl ===================================================================
 dnl Check for system expat

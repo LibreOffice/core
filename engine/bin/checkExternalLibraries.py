@@ -43,7 +43,6 @@ libraryNames = {
     "tiff": "libtiff",
     "zxing": "zxing-cpp",
     "liborcus": "orcus",
-    "clucene-core": "clucene-core",
     "y-crdt": "y-crdt",
     "sqlite": "sqlite",
     "reemkufi": "aliftype-reem-kufi-fonts",

@@ -11,7 +11,6 @@
 100 sd::ViewShell
 99 SalInstanceWidget
 98 SkPath
-97 lucene::index::IndexWriter
 93 sdr::table::SdrTableObj
 90 connectivity::ODatabaseMetaDataResultSet
 90 ScDocument
@@ -29,7 +28,6 @@
 63 framework::Desktop
 63 SdXImpressDocument
 63 ScTableSheetObj
-62 lucene::queryParser::QueryParser
 62 antlr4::Parser
 62 SkMatrix
 60 SvxRuler
@@ -73,7 +71,6 @@
 41 SvXMLImport
 41 ScTokenArray
 41 ListBox
-40 lucene::index::IndexReader
 40 ScDataPilotFieldObj
 39 antlr4::misc::IntervalSet
 39 antlr4::BufferedTokenStream
@@ -86,9 +83,6 @@
 37 SdDrawDocument
 36 canvastools
 36 antlr4::Lexer
-35 lucene::util::Misc
-35 lucene::queryParser::QueryParserTokenManager
-35 lucene::index::MultiReader
 35 UnoControlModel
 35 SwXTextTable
 35 SwXContentControl
@@ -115,12 +109,8 @@
 31 SwDocStyleSheet
 31 SvxMSDffManager
 31 SvNumberformat
-30 lucene::store::FSDirectory
-30 lucene::index::IndexModifier
-30 lucene::document::Field
 30 SkImageFilters
 30 E3dObject
-29 lucene::util::StringBuffer
 29 SwXTextTableCursor
 29 SwXTextRange
 29 SwXFootnote
@@ -128,7 +118,6 @@
 29 SkPaintFilterCanvas
 29 Application
 28 sdr::contact::ObjectContact
-28 lucene::search::BooleanQuery
 28 comphelper::MimeConfigurationHelper
 28 SwXNumberingRules
 28 SwXBookmark
@@ -136,7 +125,6 @@
 28 SvxCharacterMap
 28 SkImage
 27 oox::drawingml::Color
-27 lucene::analysis::Token
 27 antlr4::DefaultErrorStrategy
 27 SwPagePreview
 27 SwNode
@@ -201,7 +189,6 @@
 20 vcl::PrinterController
 20 psp::PrintFontManager
 20 oox::ThemeExport
-20 lucene::index::LogMergePolicy
 20 dbtools::DatabaseMetaData
 20 antlr4::ANTLRInputStream
 20 SwXTextField
@@ -215,8 +202,6 @@
 19 svx::diagram::DiagramData_svx
 19 sd::slidesorter::controller::Clipboard
 19 ooo::vba::UserFormGeometryHelper
-19 lucene::search::Explanation
-19 lucene::analysis::PorterStemmer
 19 drawinglayer::primitive2d
 19 connectivity::sdbcx::OKey
 19 antlr4::RuleContext
@@ -238,10 +223,6 @@
 18 svx::DialControl
 18 svt::StatusbarController
 18 oox::GraphicHelper
-18 lucene::store::RAMDirectory
-18 lucene::search::PhraseQuery
-18 lucene::queryParser::legacy::QueryParserBase
-18 lucene::index::FieldInfos
 18 connectivity::OSQLParseTreeIterator
 18 comphelper::UNOMemoryStream
 18 SwXLineBreak
@@ -261,9 +242,6 @@
 18 SalInstanceMenu
 18 LanguageTag
 18 FormattedField
-17 lucene::util::ScorerDocQueue
-17 lucene::search::spans::SpanNearQuery
-17 lucene::search::MultiPhraseQuery
 17 cpo::uno::Any SwXStyle
 17 canvas::ParametricPolyPolygon
 17 basegfx::B3DPolyPolygon
@@ -282,9 +260,6 @@
 17 LocaleDataWrapper
 17 ImplJobSetup
 16 vcl::test::OutputDeviceTestCommon
-16 lucene::search::MultiSearcher
-16 lucene::search::IndexSearcher
-16 lucene::index::MultipleTermPositions
 16 chart::DataInterpreter
 16 canvas::CanvasCustomSpriteHelper
 16 antlr4::Recognizer
@@ -313,12 +288,6 @@
 15 sfx2::FileDialogHelper
 15 sdr::overlay::OverlayManager
 15 sc::SheetViewManager
-15 lucene::util::BitSet
-15 lucene::search::spans::SpanOrQuery
-15 lucene::search::spans::SpanNotQuery
-15 lucene::search::spans::SpanFirstQuery
-15 lucene::search::RangeQuery
-15 lucene::search::BooleanClause
 15 dbtools::param::ParameterWrapper
 15 antlr4::tree::pattern::RuleTagToken
 15 antlr4::tree::pattern::ParseTreePatternMatcher
@@ -344,12 +313,6 @@
 15 ScAnnotationsObj
 15 QtInstance
 15 AccessibleBrowseBox
-14 lucene::store::RAMOutputStream
-14 lucene::store::RAMInputStream
-14 lucene::search::Sort
-14 lucene::search::Query
-14 lucene::index::TermVectorsReader
-14 lucene::index::Term
 14 drawinglayer::attribute::Sdr3DObjectAttribute
 14 basegfx::unotools
 14 antlr4::atn::PredictionContext
@@ -379,12 +342,6 @@
 13 sax_fastparser::FastSaxParser
 13 oox::core::FilterBase
 13 oox::core::ContextHandler2Helper
-13 lucene::store::IndexInput
-13 lucene::search::spans::SpanTermQuery
-13 lucene::search::SortField
-13 lucene::search::FuzzyQuery
-13 lucene::index::Payload
-13 lucene::analysis::standard::StandardTokenizer
 13 formula::FormulaTokenArray
 13 drawinglayer::geometry::ViewInformation2D
 13 drawinglayer::attribute::FontAttribute
@@ -419,14 +376,6 @@
 12 utl::ConfigItem
 12 oox::shape::ShapeContextHandler
 12 oox::StorageBase
-12 lucene::store::BufferedIndexInput
-12 lucene::search::PrefixQuery
-12 lucene::search::FuzzyTermEnum
-12 lucene::search::FieldSortedHitQueue
-12 lucene::search::ConstantScoreQuery
-12 lucene::search::ChainedFilter
-12 lucene::queryParser::legacy::QueryParser
-12 lucene::index::DirectoryIndexReader
 12 dbtools::SQLExceptionInfo
 12 dbtools::DBTypeConversion
 12 connectivity::file::OConnection
@@ -480,13 +429,6 @@
 11 oox::shape::ShapeFilterBase
 11 oox::ole::OleStorage
 11 oox::crypto::AgileEngine
-11 lucene::store::RAMFile
-11 lucene::store::IndexOutput
-11 lucene::store::Directory
-11 lucene::search::TermQuery
-11 lucene::search::MatchAllDocsQuery
-11 lucene::search::BooleanScorer2
-11 lucene::queryParser::legacy::MultiFieldQueryParser
 11 drawinglayer::attribute::FillGraphicAttribute
 11 connectivity::odbc::OTools
 11 connectivity::file::ODatabaseMetaData
@@ -537,12 +479,6 @@
 10 oox::PropertyMap
 10 oox::ModelObjectHelper
 10 ooo::vba::ConcreteXShapeGeometryAttributes
-10 lucene::util::SimpleInputStreamReader
-10 lucene::util::AStringReader
-10 lucene::search::Searcher
-10 lucene::queryParser::MultiFieldQueryParser
-10 lucene::index::MergePolicy::OneMerge
-10 lucene::document::DateTools
 10 linguistic
 10 drawinglayer::primitive2d::TextLayouterDevice
 10 drawinglayer::primitive2d::ScenePrimitive2D

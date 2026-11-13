@@ -91,13 +91,6 @@
         "dest-filename": "@BOOST_TARBALL@"
     },
     {
-        "url": "https://gerrit.collaboraoffice.com/src/@CLUCENE_TARBALL@",
-        "sha256": "@CLUCENE_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@CLUCENE_TARBALL@"
-    },
-    {
         "url": "https://gerrit.collaboraoffice.com/src/@COINOR_CBC_TARBALL@",
         "sha256": "@COINOR_CBC_SHA256SUM@",
         "type": "file",

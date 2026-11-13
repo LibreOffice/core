@@ -820,7 +820,6 @@ Longvarbinary
 Lookups
 Lorem
 Loremdolsit
-Lucene
 Lucida
 Luxi
 Lvalue
@@ -2663,7 +2662,6 @@ closemobilewizard
 closepath
 clrscheme
 clsid
-clucene
 cluelessness
 clusterlist
 cmap
@@ -5345,7 +5343,6 @@ ltr
 ltrch
 ltrim
 ltrpar
-lucene
 luctus
 ludob
 lue

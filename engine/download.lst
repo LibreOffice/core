@@ -35,8 +35,6 @@ CDR_TARBALL := libcdr-0.1.9.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CLUCENE_SHA256SUM := ddfdc433dd8ad31b5c5819cc4404a8d2127472a3b720d3e744e8c51d79732eab
-CLUCENE_TARBALL := 48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

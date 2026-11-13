@@ -2680,43 +2680,6 @@ endef
 endif # ENABLE_VALGRIND
 
 
-ifneq ($(SYSTEM_CLUCENE),)
-
-define gb_LinkTarget__use_clucene
-$(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(CLUCENE_CFLAGS))) \
-	-DSYSTEM_CLUCENE \
-)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(CLUCENE_CFLAGS)))) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(CLUCENE_LIBS) \
-)
-
-endef
-
-else # !SYSTEM_CLUCENE
-
-define gb_LinkTarget__use_clucene
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/clucene/src/core \
-	-I$(gb_UnpackedTarball_workdir)/clucene/src/shared \
-	-I$(gb_UnpackedTarball_workdir)/clucene/src/contribs-lib \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	clucene \
-)
-
-endef
-
-endif # SYSTEM_CLUCENE
-
 define gb_LinkTarget__use_gobject
 $(call gb_LinkTarget_add_libs,$(1),\
        $(GOBJECT_LIBS) \

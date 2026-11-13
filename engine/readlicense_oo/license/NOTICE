@@ -20,26 +20,6 @@ Portions of this software (C) Copyright IBM Corporation 2003, 2012.  All Rights 
 
 ____
 
-As part of the base system this product also includes code from the following
-Apache projects:
-- Apache Lucene
-
-The notices from these projects are following:
-
-Apache Lucene
-Copyright 2006 The Apache Software Foundation
-
-This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
-
-The snowball stemmers in
-  contrib/snowball/src/java/net/sf/snowball
-were developed by Martin Porter and Richard Boulton.
-The full snowball package is available from
-  http://snowball.tartarus.org/
-
-____
-
 As part of the base system this product may also includes code from the following
 projects which are licensed under the Apache license:
 - redland
