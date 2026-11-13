@@ -27,6 +27,7 @@
 
 class SdDrawDocument;
 class SfxMedium;
+class SvMemoryStream;
 
 /*************************************************************************
 |*
@@ -78,9 +79,9 @@ public:
 
 class SdPPTImport
 {
-    PowerPointImportParam maParam;
+    std::unique_ptr<SvMemoryStream> mxDocStream;
+    std::unique_ptr<PowerPointImportParam> mxParam;
     std::unique_ptr<ImplSdPPTImport> pFilter;
-    bool mbEncrypted = false;
 
 public:
 

@@ -21,7 +21,9 @@
 
 #include <array>
 #include <cstddef>
+#include <functional>
 #include <memory>
+#include <span>
 #include <vector>
 
 #include <optional>
@@ -122,6 +124,10 @@ struct MSFILTER_DLLPUBLIC PowerPointImportParam
     PptCurrentUserAtom  aCurrentUserAtom;
     std::vector<sal_uInt8> aCryptSession10ContainerData;
     std::optional<PptCryptoApiEncryptionInfo> oCryptoApiEncryptionInfo;
+
+    // Called after the persist directory has been reconstructed and
+    // CryptSession10Container has been parsed.
+    std::function<bool(SvStream&, std::span<const sal_uInt32>, sal_uInt32, sal_uInt32, const PptCryptoApiEncryptionInfo&)> aDecryptPersistObjects;
 
     PowerPointImportParam( SvStream& rDocStream );
 };

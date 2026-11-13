@@ -86,7 +86,7 @@ bool calculateSHA1(const std::vector<sal_uInt8>& rData, SHA1Hash& rHash)
     return rtl_digest_get(xDigest.get(), rHash.data(), SHA1_HASH_SIZE) == rtl_Digest_E_None;
 }
 
-bool deriveKey(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt, sal_uInt32 nBlock,
+bool deriveKey(const OUString& rPassword, std::span<const sal_uInt8> rSalt, sal_uInt32 nBlock,
                sal_uInt32 nKeyBits, RC4Key& rKey)
 {
     if (rSalt.size() != CRYPTOAPI_SALT_SIZE || rPassword.getLength() > MAX_PASSWORD_LENGTH)
@@ -147,7 +147,7 @@ bool deriveKey(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt, s
 }
 
 bool decryptRC4Data(const RC4Key& rKey, sal_uInt32 nKeyBits,
-                    const std::vector<sal_uInt8>& rEncryptedData,
+                    std::span<const sal_uInt8> rEncryptedData,
                     std::vector<sal_uInt8>& rDecryptedData)
 {
     if (rEncryptedData.size() > std::numeric_limits<sal_uInt32>::max())
@@ -220,22 +220,21 @@ bool decryptVerifier(const RC4Key& rKey, sal_uInt32 nKeyBits,
 
 } // namespace
 
-bool PptCrypt::decryptData(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt,
-                           sal_uInt32 nBlock, sal_uInt32 nKeyBits,
-                           const std::vector<sal_uInt8>& rEncryptedData,
+bool PptCrypt::decryptData(const OUString& rPassword, std::span<const sal_uInt8> rSalt,
+                           sal_uInt32 nBlock, sal_uInt32 nKeySize, std::span<const sal_uInt8> rData,
                            std::vector<sal_uInt8>& rDecryptedData)
 {
     // MS-OFFCRYPTO 2.3.5.1: an unspecified KeySize means 40 bits.
-    if (nKeyBits == RC4_KEY_BITS_UNSPECIFIED)
-        nKeyBits = RC4_DEFAULT_KEY_BITS;
+    if (nKeySize == RC4_KEY_BITS_UNSPECIFIED)
+        nKeySize = RC4_DEFAULT_KEY_BITS;
 
     RC4Key aKey{};
     SecureArrayCleaner aKeyCleaner{ aKey.data(), aKey.size() };
 
-    if (!deriveKey(rPassword, rSalt, nBlock, nKeyBits, aKey))
+    if (!deriveKey(rPassword, rSalt, nBlock, nKeySize, aKey))
         return false;
 
-    return decryptRC4Data(aKey, nKeyBits, rEncryptedData, rDecryptedData);
+    return decryptRC4Data(aKey, nKeySize, rData, rDecryptedData);
 }
 
 bool PptCrypt::verifyPassword(const OUString& rPassword, const std::vector<sal_uInt8>& rSalt,

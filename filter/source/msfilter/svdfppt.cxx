@@ -1626,13 +1626,34 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
         }
     }
 
-    // Read the CryptSession10Container of an encrypted PowerPoint document.
+    // Read the CryptSession10Container and decrypt the persist objects
+    // of an encrypted PowerPoint document.
     if (m_bOk && rParam.aCurrentUserAtom.IsEncrypted())
     {
         m_bOk = lcl_ReadPptCryptoApiEncryptionInfo(rStCtrl, nStreamLen, m_aUserEditAtom.nEncryptSessionPersistIdRef,
                     m_pPersistPtr, m_nPersistPtrCnt, rParam);
-    }
 
+        // Decrypt the persist objects before continuing with the regular ppt parsing
+        if (m_bOk)
+        {
+            if (!rParam.aDecryptPersistObjects
+                || !rParam.oCryptoApiEncryptionInfo
+                || !m_aUserEditAtom.nEncryptSessionPersistIdRef
+                || !rParam.aDecryptPersistObjects(
+                    rStCtrl,
+                    std::span<const sal_uInt32>(
+                        m_pPersistPtr.get(), m_nPersistPtrCnt),
+                    *m_aUserEditAtom.nEncryptSessionPersistIdRef,
+                    m_aUserEditAtom.nDocumentRef,
+                    *rParam.oCryptoApiEncryptionInfo))
+            {
+                SAL_WARN("filter.ms", "Failed to decrypt PPT persist objects");
+                m_bOk = false;
+            }
+        }
+    }
+    // from here all persist objects in rStCtrl are decrypted
+    // The Pictures stream is still encrypted (TODO)
     if ( rStCtrl.GetError() != ERRCODE_NONE )
         m_bOk = false;
     if ( m_bOk )

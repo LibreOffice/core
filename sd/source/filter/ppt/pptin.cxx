@@ -19,7 +19,10 @@
 
 #include <osl/file.hxx>
 #include <sal/log.hxx>
+#include <algorithm>
+#include <array>
 #include <comphelper/configuration.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
@@ -95,7 +98,6 @@
 #include <memory>
 #include <string_view>
 
-
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 
@@ -104,6 +106,12 @@
 
 #include "pptcrypt.hxx"
 #include <svx/svxerr.hxx>
+
+#include <comphelper/errcode.hxx>
+#include <tools/stream.hxx>
+#include <limits>
+
+
 
 using namespace ::com::sun::star;
 
@@ -155,6 +163,10 @@ public:
             return comphelper::DocPasswordVerifierResult::WrongPassword;
         }
 
+        // Keep the password that was actually verified
+        // It may have been entered through the interaction handler
+        maVerifiedPassword = rPassword;
+
         return comphelper::DocPasswordVerifierResult::OK;
     }
 
@@ -164,14 +176,235 @@ public:
         return comphelper::DocPasswordVerifierResult::WrongPassword;
     }
 
+    const OUString& getVerifiedPassword() const
+    {
+        return maVerifiedPassword;
+    }
+
 private:
     const PptCryptoApiEncryptionInfo& mrInfo;
+    OUString maVerifiedPassword;
 };
+
+std::unique_ptr<SvMemoryStream> lcl_CopyStream(SvStream& rSource)
+{
+    auto pCopy = std::make_unique<SvMemoryStream>();
+
+    const sal_uInt64 nOldPos = rSource.Tell();
+    const sal_uInt64 nSize = rSource.TellEnd();
+
+    comphelper::ScopeGuard aRestorePosition(
+        [&rSource, nOldPos]()
+        {
+            rSource.Seek(nOldPos);
+        });
+
+    if (!checkSeek(rSource, 0)
+        || pCopy->WriteStream(rSource, nSize) != nSize)
+    {
+        pCopy->SetError(ERRCODE_IO_GENERAL);
+        return pCopy;
+    }
+
+    pCopy->Seek(0);
+    return pCopy;
 }
 
-SdPPTImport::SdPPTImport( SdDrawDocument& rDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium )
-    : maParam(rDocStream)
+bool lcl_DecryptPptPersistObjects(
+    SvStream& rStream,
+    std::span<const sal_uInt32> rPersistPtr,
+    sal_uInt32 nCryptSessionPersistId,
+    sal_uInt32 nDocumentPersistId,
+    const OUString& rPassword,
+    const PptCryptoApiEncryptionInfo& rInfo)
 {
+    // check persistent ids
+    if (rPersistPtr.size() <= 1
+        || nCryptSessionPersistId == 0
+        || nCryptSessionPersistId >= rPersistPtr.size()
+        || nDocumentPersistId == 0
+        || nDocumentPersistId >= rPersistPtr.size())
+    {
+        SAL_WARN("sd.filter", "Invalid PPT persist IDs");
+        return false;
+    }
+
+    const sal_uInt64 nStreamSize = rStream.TellEnd();
+    const sal_uInt64 nOldPos = rStream.Tell();
+
+    comphelper::ScopeGuard aRestorePosition(
+        [&rStream, nOldPos]()
+        {
+            rStream.Seek(nOldPos);
+        });
+
+    // we must make the list of the offset of persist objects which must be decrypted
+    std::vector<sal_uInt32> aPersistOffsets;
+
+    // we must begin at 1 because 0 doesn't exist as ident of persist object
+    for (size_t nPersistId = 1;
+         nPersistId < rPersistPtr.size();
+         ++nPersistId)
+    {
+        const sal_uInt32 nOffset = rPersistPtr[nPersistId];
+
+        if (nOffset != 0 || nPersistId == nDocumentPersistId)
+        {
+            // a persist object begins with a record header of 8 bytes
+            if (nOffset > nStreamSize || nStreamSize - nOffset < 8)
+            {
+                SAL_WARN("sd.filter", "Invalid PPT persist object offset");
+                return false;
+            }
+
+            aPersistOffsets.push_back(nOffset);
+        }
+    }
+    // elements in the array rPersistPtr are organized by PersistId and not by
+    // the physical position in the stream
+    // so we must sort the vector because we must take into account physical position
+    std::sort(aPersistOffsets.begin(), aPersistOffsets.end());
+
+    // we can now remove duplicates
+    aPersistOffsets.erase(
+        std::unique(aPersistOffsets.begin(), aPersistOffsets.end()),
+        aPersistOffsets.end());
+
+    auto lcl_ReadAt = [&rStream](sal_uInt64 nOffset,
+                                sal_uInt8* pData,
+                                sal_uInt64 nLength) -> bool
+    {
+        if (!checkSeek(rStream, nOffset))
+            return false;
+        return rStream.ReadBytes(pData, nLength) == nLength;
+    };
+
+    for (size_t nPersistId = 1;
+         nPersistId < rPersistPtr.size();
+         ++nPersistId)
+    {
+        const sal_uInt32 nOffset = rPersistPtr[nPersistId];
+
+        // Offset zero is valid for the DocumentContainer
+        // Other zero entries represent unused persist IDs
+        if (nOffset == 0 && nPersistId != nDocumentPersistId)
+            continue;
+
+        // CryptSession10Container has an unencrypted RecordHeader
+        // Its data was already read and parsed by the generic filter
+        if (nPersistId == nCryptSessionPersistId)
+            continue;
+
+        // First decrypt the encrypted RecordHeader to obtain recLen
+        std::vector<sal_uInt8> aEncryptedHeader(8);
+        if (!lcl_ReadAt(nOffset, aEncryptedHeader.data(), 8))
+        {
+            return false;
+        }
+        std::vector<sal_uInt8> aDecryptedHeader;
+
+        if (!PptCrypt::decryptData(
+                rPassword, rInfo.aSalt, nPersistId, rInfo.nKeySize, aEncryptedHeader, aDecryptedHeader)
+            || aDecryptedHeader.size() != 8)
+        {
+            SAL_WARN("sd.filter", "Cannot decrypt PPT RecordHeader");
+            return false;
+        }
+
+        // RecordHeader layout:
+        // recVerInstance : 2 bytes
+        // recType        : 2 bytes
+        // recLen         : 4 bytes (little endian)
+        const sal_uInt32 nRecordLength =
+            static_cast<sal_uInt32>(aDecryptedHeader[4])
+            | (static_cast<sal_uInt32>(aDecryptedHeader[5]) << 8)
+            | (static_cast<sal_uInt32>(aDecryptedHeader[6]) << 16)
+            | (static_cast<sal_uInt32>(aDecryptedHeader[7]) << 24);
+        if (nRecordLength > nStreamSize - nOffset - 8)
+        {
+            SAL_WARN("sd.filter", "PPT persist object exceeds stream size");
+            return false;
+        }
+
+        const auto nObjectSize = sal_uInt64(nRecordLength) + 8;
+
+        // Ensure that the persist object does not overlap the next one
+        const auto itNext = std::upper_bound(aPersistOffsets.begin(), aPersistOffsets.end(), nOffset);
+
+        if (itNext != aPersistOffsets.end() && nObjectSize > *itNext - nOffset)
+        {
+            SAL_WARN("sd.filter", "PPT persist object overlaps next object");
+            return false;
+        }
+
+        if (nObjectSize > std::numeric_limits<size_t>::max())
+        {
+            SAL_WARN("sd.filter", "PPT persist object is too large");
+            return false;
+        }
+        std::vector<sal_uInt8> aEncryptedObject(static_cast<size_t>(nObjectSize));
+
+        if (!lcl_ReadAt(nOffset, aEncryptedObject.data(), nObjectSize))
+        {
+            return false;
+        }
+
+        // Decrypt the entire object with a fresh RC4 state
+        // Do not continue the RC4 state used for the header preview
+        std::vector<sal_uInt8> aDecryptedObject;
+
+        if (!PptCrypt::decryptData(
+                rPassword, rInfo.aSalt, nPersistId, rInfo.nKeySize,
+                aEncryptedObject, aDecryptedObject)
+            || aDecryptedObject.size() != nObjectSize)
+        {
+            SAL_WARN("sd.filter", "Cannot decrypt PPT persist object");
+            return false;
+        }
+
+        if (!checkSeek(rStream, nOffset)
+            || rStream.WriteBytes(aDecryptedObject.data(), nObjectSize) != nObjectSize)
+        {
+            SAL_WARN("sd.filter", "Cannot write decrypted PPT persist object");
+            return false;
+        }
+    }
+    return true;
+}
+
+}
+
+SdPPTImport::SdPPTImport(SdDrawDocument& rDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium)
+{
+    mxParam = std::make_unique<PowerPointImportParam>(rDocStream);
+
+    // First read Current User to determine whether the document is encrypted
+    rtl::Reference<SotStorageStream> pCurrentUserStream(rStorage.OpenSotStream(u"Current User"_ustr, StreamMode::STD_READ));
+    if (pCurrentUserStream)
+    {
+        ReadPptCurrentUserAtom(*pCurrentUserStream, mxParam->aCurrentUserAtom);
+    }
+
+    const bool bEncrypted = mxParam->aCurrentUserAtom.IsEncrypted();
+
+    if (bEncrypted)
+    {
+        auto aCurrentUserAtom = mxParam->aCurrentUserAtom;
+
+        mxDocStream = lcl_CopyStream(rDocStream);
+
+        if (mxDocStream->GetError() != ERRCODE_NONE)
+        {
+            rMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
+            return;
+        }
+
+        mxParam = std::make_unique<PowerPointImportParam>(*mxDocStream);
+
+        // Restore the Current User information read from the OLE storage
+        mxParam->aCurrentUserAtom = aCurrentUserAtom;
+    }
+
 #ifdef DBG_UTIL
     std::unique_ptr<PropRead> pSummaryInformation(new PropRead( rStorage, u"\005SummaryInformation"_ustr ));
     if ( pSummaryInformation->IsValid() )
@@ -191,19 +424,13 @@ SdPPTImport::SdPPTImport( SdDrawDocument& rDocument, SvStream& rDocStream, SotSt
                 aPropItem.Read( aComment );
                 if ( aComment.indexOf( "Applixware" ) >= 0 )
                 {
-                    maParam.nImportFlags |= PPT_IMPORTFLAGS_NO_TEXT_ASSERT;
+                    mxParam->nImportFlags |= PPT_IMPORTFLAGS_NO_TEXT_ASSERT;
                 }
             }
         }
     }
     pSummaryInformation.reset();
 #endif
-
-    rtl::Reference<SotStorageStream> pCurrentUserStream(rStorage.OpenSotStream(u"Current User"_ustr, StreamMode::STD_READ));
-    if (pCurrentUserStream)
-    {
-        ReadPptCurrentUserAtom(*pCurrentUserStream, maParam.aCurrentUserAtom);
-    }
 
     // iterate over all styles
     SdStyleSheetPool* pStyleSheetPool = rDocument.GetSdStyleSheetPool();
@@ -217,61 +444,65 @@ SdPPTImport::SdPPTImport( SdDrawDocument& rDocument, SvStream& rDocStream, SotSt
             rSet.ClearItem( EE_CHAR_PAIRKERNING );
     }
 
-    pFilter.reset(new ImplSdPPTImport(rDocument, rStorage, rMedium, maParam));
-
-    if (maParam.aCurrentUserAtom.IsEncrypted())
+    if (mxParam->aCurrentUserAtom.IsEncrypted())
     {
-        mbEncrypted = true;
+        mxParam->aDecryptPersistObjects =
+            [&rMedium](
+                SvStream& rStream,
+                std::span<const sal_uInt32> rPersistPtr,
+                sal_uInt32 nCryptSessionPersistId,
+                sal_uInt32 nDocumentPersistId,
+                const PptCryptoApiEncryptionInfo& rInfo)
+            {
+                PptPasswordVerifier aVerifier(rInfo);
 
-        if (!maParam.oCryptoApiEncryptionInfo)
-        {
-            rMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
-            return;
-        }
+                OUString aMediaPassword;
 
-        PptPasswordVerifier aVerifier(
-            *maParam.oCryptoApiEncryptionInfo);
+                const SfxStringItem* pPasswordItem =
+                    rMedium.GetItemSet().GetItem<SfxStringItem>(
+                        SID_PASSWORD, false);
 
-        OUString aMediaPassword;
-        const SfxStringItem* pPasswordItem = rMedium.GetItemSet().GetItem<SfxStringItem>(SID_PASSWORD, false);
+                if (pPasswordItem)
+                    aMediaPassword = pPasswordItem->GetValue();
 
-        if (pPasswordItem)
-            aMediaPassword = pPasswordItem->GetValue();
+                const css::uno::Sequence<css::beans::NamedValue>
+                    aEmptyEncryptionData;
 
-        const css::uno::Sequence<css::beans::NamedValue> aEmptyEncryptionData;
+                const auto aEncryptionData =
+                    comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                        aVerifier,
+                        aEmptyEncryptionData,
+                        aMediaPassword,
+                        rMedium.GetInteractionHandler(),
+                        rMedium.GetOrigURL(),
+                        comphelper::DocPasswordRequestType::MS);
 
-        const auto aEncryptionData =
-            comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-                aVerifier,
-                aEmptyEncryptionData,
-                aMediaPassword,
-                rMedium.GetInteractionHandler(),
-                rMedium.GetOrigURL(),
-                comphelper::DocPasswordRequestType::MS);
+                if (!aEncryptionData.hasElements())
+                {
+                    rMedium.SetError(ERRCODE_IO_ABORT);
+                    return false;
+                }
 
-        if (!aEncryptionData.hasElements())
-        {
-            rMedium.SetError(ERRCODE_IO_ABORT);
-            return;
-        }
+                const OUString aVerifiedPassword =
+                    aVerifier.getVerifiedPassword();
 
-        // Password verification is implemented, but stream decryption
-        // is not implemented yet. Do not pass encrypted data to the
-        // regular PowerPoint importer.
-        rMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
+                return lcl_DecryptPptPersistObjects(
+                    rStream,
+                    rPersistPtr,
+                    nCryptSessionPersistId,
+                    nDocumentPersistId,
+                    aVerifiedPassword,
+                    rInfo);
+            };
     }
+
+    pFilter.reset(
+        new ImplSdPPTImport(rDocument, rStorage, rMedium, *mxParam));
 }
 
 bool SdPPTImport::Import()
 {
-    if (mbEncrypted)
-    {
-        // A validated password is not sufficient to import the document:
-        // PowerPoint Document and Pictures still need to be decrypted.
-        return false;
-    }
-
-    return pFilter->Import();
+    return pFilter && pFilter->Import();
 }
 
 SdPPTImport::~SdPPTImport()
