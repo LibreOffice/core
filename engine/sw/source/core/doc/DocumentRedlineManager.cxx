@@ -2004,6 +2004,7 @@ void DocumentRedlineManager::PreAppendDeleteRedline(AppendRedlineContext& rCtx)
             delete rCtx.pNewRedl;
             rCtx.pNewRedl = nullptr;
             rCtx.bCompress = true;
+            rCtx.bMerged = true;
 
             MaybeNotifyRedlineModification(*rCtx.pRedl, m_rDoc);
             break;

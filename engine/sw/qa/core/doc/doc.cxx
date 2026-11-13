@@ -3352,6 +3352,35 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTrackedRowDeletion)
     CPPUNIT_ASSERT_EQUAL(u"-D-"_ustr, GetTrackedRows(*pDoc));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMakeRedlineOverSameDeletion)
+{
+    // Given a document where " later" is a tracked deletion by one author:
+    createSwDoc("compare-tracked-deletion-new.fodt");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XParagraphCursor> xParaCursor(xCursor, uno::UNO_QUERY);
+    xParaCursor->gotoNextParagraph(/*bExpand=*/false);
+    xCursor->goRight(15, /*bExpand=*/false);
+    xCursor->goRight(6, /*bExpand=*/true);
+    CPPUNIT_ASSERT_EQUAL(u" later"_ustr, xCursor->getString());
+
+    // When another author tracks the same text as deleted through the API:
+    uno::Reference<text::XRedline> xRedline(xCursor, uno::UNO_QUERY);
+    cpo::uno::Sequence<beans::PropertyValue> aProps = {
+        comphelper::makePropertyValue(u"RedlineAuthor"_ustr, u"Other Author"_ustr),
+    };
+    // Without the fix in place, this test would have failed with an IllegalArgumentException,
+    // because the redline was reported as not inserted.
+    xRedline->makeRedline(u"Delete"_ustr, aProps);
+
+    // Then the text is still one tracked deletion, by the first author:
+    const SwRedlineTable& rRedlines
+        = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(u"Earlier Author"_ustr, rRedlines[0]->GetAuthorString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
