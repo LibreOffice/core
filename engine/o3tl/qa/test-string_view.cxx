@@ -47,6 +47,7 @@ private:
     CPPUNIT_TEST(testEndsWith);
     CPPUNIT_TEST(testEndsWithRest);
     CPPUNIT_TEST(testEqualsIgnoreAsciiCase);
+    CPPUNIT_TEST(testContainsAsciiDigit);
     CPPUNIT_TEST(testGetToken);
     CPPUNIT_TEST(testIterateCodePoints);
     CPPUNIT_TEST_SUITE_END();
@@ -584,6 +585,20 @@ private:
         CPPUNIT_ASSERT_EQUAL(0, o3tl::compareToIgnoreAsciiCase(u"test"sv, u"test"sv));
         CPPUNIT_ASSERT_GREATER(0, o3tl::compareToIgnoreAsciiCase(u"zest"sv, u"test"sv));
         CPPUNIT_ASSERT_LESS(0, o3tl::compareToIgnoreAsciiCase(u"test"sv, u"test2"sv));
+    }
+
+    void testContainsAsciiDigit()
+    {
+        using namespace std::string_view_literals;
+        CPPUNIT_ASSERT(o3tl::containsAsciiDigit(u"page 12"sv));
+        CPPUNIT_ASSERT(o3tl::containsAsciiDigit(u"0"sv));
+        CPPUNIT_ASSERT(o3tl::containsAsciiDigit("9 items"sv));
+        CPPUNIT_ASSERT(!o3tl::containsAsciiDigit(u""sv));
+        CPPUNIT_ASSERT(!o3tl::containsAsciiDigit(u"no digits"sv));
+        // A digit of another script is not an ASCII digit.
+        CPPUNIT_ASSERT(!o3tl::containsAsciiDigit(u"١٢"sv));
+        // A byte above 0x7F is not taken for a digit.
+        CPPUNIT_ASSERT(!o3tl::containsAsciiDigit("\xB2"sv));
     }
 
     void testGetToken()

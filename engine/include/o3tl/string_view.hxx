@@ -457,6 +457,29 @@ std::basic_string_view<charT, traits> trim(std::basic_string_view<charT, traits>
 inline auto trim(std::string_view str) { return trim<>(str); }
 inline auto trim(std::u16string_view str) { return trim<>(str); }
 
+// Whether str holds at least one ASCII digit, '0' to '9':
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool containsAsciiDigit(std::basic_string_view<charT, traits> str) noexcept
+{
+    for (charT c : str)
+    {
+        if (rtl::isAsciiDigit(rtl::toCodePointArgument(c)))
+            return true;
+    }
+    return false;
+}
+
+// "deduction guides"
+
+constexpr bool containsAsciiDigit(std::string_view str) noexcept
+{
+    return containsAsciiDigit<>(str);
+}
+constexpr bool containsAsciiDigit(std::u16string_view str) noexcept
+{
+    return containsAsciiDigit<>(str);
+}
+
 // Like OString::toInt32, but for std::string_view:
 inline sal_Int32 toInt32(std::u16string_view str, sal_Int16 radix = 10)
 {
