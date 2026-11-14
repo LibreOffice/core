@@ -16,12 +16,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
@@ -125,6 +128,29 @@ bool EPUBExportFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rD
     uno::Reference<document::XExporter> xExporter(xInitialization, uno::UNO_QUERY);
     xExporter->setSourceDocument(mxSourceDocument);
     uno::Reference<document::XFilter> xFilter(xInitialization, uno::UNO_QUERY);
+
+    // The book is built from the ODF export of the document, where a master document leaves out
+    // the content of its linked sections unless told otherwise, so tell it.
+    uno::Reference<beans::XPropertySet> xSettings;
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxSourceDocument, uno::UNO_QUERY);
+    if (xServiceInfo && xServiceInfo->supportsService(u"com.sun.star.text.GlobalDocument"_ustr))
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxSourceDocument, uno::UNO_QUERY);
+        if (xFactory)
+            xSettings.set(xFactory->createInstance(u"com.sun.star.text.DocumentSettings"_ustr),
+                          uno::UNO_QUERY);
+    }
+    bool bSaveLinkedContent = true;
+    if (xSettings)
+    {
+        xSettings->getPropertyValue(u"SaveGlobalDocumentLinks"_ustr) >>= bSaveLinkedContent;
+        if (!bSaveLinkedContent)
+            xSettings->setPropertyValue(u"SaveGlobalDocumentLinks"_ustr, uno::Any(true));
+    }
+    comphelper::ScopeGuard aRestoreSettings([&xSettings, bSaveLinkedContent]() {
+        if (xSettings && !bSaveLinkedContent)
+            xSettings->setPropertyValue(u"SaveGlobalDocumentLinks"_ustr, uno::Any(false));
+    });
 
     return xFilter->filter(rDescriptor);
 }

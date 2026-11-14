@@ -141,6 +141,7 @@ class Menubar extends window.L.Control {
 			{name: _UNO('.uno:PickList', 'text'), id: 'file', type: 'menu', accessibility: {combination: 'MF'}, menu: [
 				{name: _UNO('.uno:Save', 'text'), unoid: '.uno:Save', id: 'save', type: 'action'},
 				{name: _UNO('.uno:SaveAs', 'text'), id: 'saveas', type: window.prefs.get('saveAsMode') === 'group' ? 'menu' : 'action', menu: [
+					{name: _('ODF master document (.odm)'), id: 'saveas-odm', type: 'action'},
 					{name: _('ODF text document (.odt)'), id: 'saveas-odt', type: 'action'},
 					{name: _('Word 2003 Document (.doc)'), id: 'saveas-doc', type: 'action'},
 					{name: _('Word Document (.docx)'), id: 'saveas-docx', type: 'action'},
@@ -1585,7 +1586,7 @@ class Menubar extends window.L.Control {
 			() => app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).hasAnyComments() ? 'savecomments' : undefined,
 			'shareas', //file menu
 			'print','print-active-sheet', 'print-all-sheets', 'print-notespages', // file menu
-			'downloadas-odt', 'downloadas-doc', 'downloadas-docx', 'downloadas-rtf', // file menu
+			'downloadas-odm', 'downloadas-odt', 'downloadas-doc', 'downloadas-docx', 'downloadas-rtf', // file menu
 			'downloadas-odp', 'downloadas-ppt', 'downloadas-pptx', 'downloadas-odg', 'exportpdf' , // file menu
 			!window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf', !window.ThisIsAMobileApp ? 'exportepub' : 'downloadas-epub', // file menu
 			'downloadas-ods', 'downloadas-xls', 'downloadas-xlsx', 'downloadas-csv', 'closedocument', // file menu
@@ -3055,6 +3056,9 @@ class Menubar extends window.L.Control {
 			return false;
 
 		if (menuItem.id && (menuItem.id === 'saveas' || menuItem.id.startsWith('saveas-')) && this._map['wopi'].UserCanNotWriteRelative)
+			return false;
+
+		if (menuItem.id === 'saveas-odm' && !app.LOUtil.isMasterDocument(this._map))
 			return false;
 
 		if (menuItem.id && (menuItem.id.startsWith('exportas')) && this._map['wopi'].UserCanNotWriteRelative)

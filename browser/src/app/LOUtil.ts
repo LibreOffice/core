@@ -1196,10 +1196,24 @@ class LOUtil {
 		return filename.substring(idx + 1);
 	}
 
+	/// Whether the document is a master document, which links its chapters
+	/// from other files. The mobile apps use local storage, not WOPI, so
+	/// BaseFileName is empty there and the document URL, which ends with the
+	/// file name, is used instead.
+	public static isMasterDocument(map: any): boolean {
+		const fileName: string = (
+			(map['wopi'] && map['wopi'].BaseFileName) ||
+			(map.options && map.options.doc) ||
+			''
+		).toLowerCase();
+		return fileName.endsWith('.odm') || fileName.endsWith('.otm');
+	}
+
 	public static isFileODF(map: any): boolean {
 		var ext = LOUtil.getFileExtension(map);
 		return (
 			ext === 'odt' ||
+			ext === 'odm' ||
 			ext === 'ods' ||
 			ext === 'odp' ||
 			ext === 'odg' ||

@@ -430,6 +430,11 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters
 	writerglobal8_template \
 	writerglobal8_writer \
 	writerglobal8_HTML \
+	writerglobal8_OOXML \
+	writerglobal8_MS_Word_97 \
+	writerglobal8_RTF \
+	writerglobal8_EPUB \
+	writerglobal8_Markdown \
 ))
 
 # fcfg_calc

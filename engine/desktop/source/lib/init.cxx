@@ -437,14 +437,20 @@ constexpr ExtensionMap aWriterExtensionMap[] =
     { "md",    u"Markdown"_ustr },
 };
 
-// a master document has its own filters, it is written as a text document by writerglobal8_writer
+// a master document has its own filters; all but odm and otm write one document that holds the
+// content of its linked sections
 constexpr ExtensionMap aWriterGlobalExtensionMap[] =
 {
+    { "doc",   u"writerglobal8_MS_Word_97"_ustr },
+    { "docx",  u"writerglobal8_OOXML"_ustr },
+    { "epub",  u"writerglobal8_EPUB"_ustr },
     { "html",  u"writerglobal8_HTML"_ustr },
+    { "md",    u"writerglobal8_Markdown"_ustr },
     { "odm",   u"writerglobal8"_ustr },
     { "odt",   u"writerglobal8_writer"_ustr },
     { "otm",   u"writerglobal8_template"_ustr },
     { "pdf",   u"writer_globaldocument_pdf_Export"_ustr },
+    { "rtf",   u"writerglobal8_RTF"_ustr },
 };
 
 constexpr ExtensionMap aCalcExtensionMap[] =

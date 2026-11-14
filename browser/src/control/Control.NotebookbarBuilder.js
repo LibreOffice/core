@@ -446,6 +446,12 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 					'text': _('Word 2003 Document (.doc)')
 				}
 			];
+			// the own format of a master document comes first
+			if (app.LOUtil.isMasterDocument(this.options.map))
+				submenuOpts.unshift({
+					'action': 'saveas-odm',
+					'text': _('ODF master document (.odm)')
+				});
 		} else if (docType === 'spreadsheet') {
 			submenuOpts = [
 				{

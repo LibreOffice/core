@@ -58,6 +58,20 @@ app.getExportFormats = function (docType: string): ExportFormat[] {
 		window.ThisIsAMobileApp ? undefined : 'exportepub',
 	);
 
+	// the own format of a master document is odm
+	if (docType === 'text' && app.map && app.LOUtil.isMasterDocument(app.map))
+		return [
+			pdf,
+			makeExportFormat('odm', _('ODF master document (.odm)')),
+			makeExportFormat('odt', _('ODF text document (.odt)')),
+			makeExportFormat('doc', _('Word 2003 Document (.doc)')),
+			makeExportFormat('docx', _('Word Document (.docx)')),
+			makeExportFormat('rtf', _('Rich Text (.rtf)')),
+			epub,
+			makeExportFormat('html', _('HTML file (.html)')),
+			makeExportFormat('md', _('Markdown (.md)'), true),
+		];
+
 	if (docType === 'text')
 		return [
 			pdf,

@@ -236,6 +236,7 @@ public:
     void testExportDirectToPdfDottedName();
     void testSaveAsJsonOptions();
     void testMasterDocument();
+    void testMasterDocumentFlatExports();
     void testSaveAsCalc();
     void testPasteWriter();
     void testPasteWriterJPEG();
@@ -370,6 +371,7 @@ public:
     CPPUNIT_TEST(testExportDirectToPdfDottedName);
     CPPUNIT_TEST(testSaveAsJsonOptions);
     CPPUNIT_TEST(testMasterDocument);
+    CPPUNIT_TEST(testMasterDocumentFlatExports);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
@@ -1068,6 +1070,31 @@ void DesktopKitTest::testMasterDocument()
         return;
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT(pPdfDocument->getPageCount() > 0);
+}
+
+void DesktopKitTest::testMasterDocumentFlatExports()
+{
+    // Given a master document with the content of its linked sections cached:
+    COKitDocumentImpl* pDocument = loadDoc("master-document-cached.odm");
+
+    // When saving it in the formats that hold one document, then each holds the content of the
+    // sections. Without the fix in place, a master document could not be saved in these formats.
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "epub", nullptr));
+    for (const char* pFormat : { "docx", "doc", "rtf", "md" })
+    {
+        utl::TempFileNamed aFile(u"", true, Concat2View(u"." + OUString::createFromAscii(pFormat)));
+        aFile.EnableKillingFile();
+        CPPUNIT_ASSERT_MESSAGE(pFormat,
+                               pDocument->saveAs(aFile.GetURL().toUtf8().getStr(), pFormat, nullptr));
+
+        cpo::uno::Reference<lang::XComponent> xSaved
+            = loadFromDesktop(aFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
+        cpo::uno::Reference<text::XTextDocument> xText(xSaved, cpo::uno::UNO_QUERY_THROW);
+        OUString aText = xText->getText()->getString();
+        CPPUNIT_ASSERT_MESSAGE(pFormat, aText.indexOf("Cached text of the present chapter") >= 0);
+        CPPUNIT_ASSERT_MESSAGE(pFormat, aText.indexOf("Cached text of the missing chapter") >= 0);
+        cpo::uno::Reference<util::XCloseable>(xSaved, cpo::uno::UNO_QUERY_THROW)->close(false);
+    }
 }
 
 void DesktopKitTest::testSaveAsCalc()

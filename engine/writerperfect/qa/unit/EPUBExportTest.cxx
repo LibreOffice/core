@@ -74,7 +74,10 @@ void EPUBExportTest::createDoc(std::u16string_view rFile,
     loadFromFile(rFile);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aMediaDescriptor;
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"EPUB"_ustr;
+    // a master document has an EPUB filter of its own
+    aMediaDescriptor[u"FilterName"_ustr] <<= o3tl::ends_with(rFile, u".odm")
+                                                 ? u"writerglobal8_EPUB"_ustr
+                                                 : u"EPUB"_ustr;
     if (maFilterOptions.isEmpty())
         aMediaDescriptor[u"FilterData"_ustr] <<= rFilterData;
     else
@@ -868,6 +871,20 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testAbi11105)
     // appeared in a table cell messed up page spans.
     createDoc(u"abi11105.abw", {});
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMasterDocument)
+{
+    // Given a master document that saves its linked sections without their content, when
+    // exporting it as EPUB:
+    createDoc(u"master-document-cached.odm", {});
+
+    // Then the content of the linked sections is in the book. Without the fix in place, only the
+    // paragraph outside the sections was exported.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"OEBPS/sections/section0001.xhtml"_ustr);
+    assertXPath(pXmlDoc, "//xhtml:p", 3);
+    assertXPathContent(pXmlDoc, "(//xhtml:p)[2]", u"Cached text of the present chapter");
+    assertXPathContent(pXmlDoc, "(//xhtml:p)[3]", u"Cached text of the missing chapter");
 }
 }
 
