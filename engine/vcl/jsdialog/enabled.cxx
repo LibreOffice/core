@@ -528,7 +528,8 @@ constexpr auto MenuList
     = frozen::make_unordered_set<std::u16string_view>({
         { u"sfx/ui/stylecontextmenu.ui" },
         { u"modules/simpress/ui/mastermenu.ui" },
-        { u"modules/simpress/ui/layoutmenu.ui" }
+        { u"modules/simpress/ui/layoutmenu.ui" },
+        { u"modules/swriter/ui/mastercontextmenu.ui" } // Writer -> Navigator -> Master View -> right click
     });
 
 // ========== SIDEBAR ==================================================== //

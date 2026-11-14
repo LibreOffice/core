@@ -565,6 +565,14 @@ button#button2.ui-pushbutton.jsdialog.sidebar {
 
 /* Navigator */
 
+/* The chapters of a master document and its headings are on separate tabs. The
+   grid cell of the toolbar carries the id of the toolbar and an inline display. */
+#navigator-dock-wrapper:not(.master-view) #NavigatorPanel #global,
+#navigator-dock-wrapper:not(.master-view) #NavigatorPanel #globaltree,
+#navigator-dock-wrapper.master-view #NavigatorPanel #contenttree {
+	display: none !important;
+}
+
 #NavigatorPanel #contentbox,
 #NavigatorPanel #contenttree,
 #NavigatorPanel #tree {

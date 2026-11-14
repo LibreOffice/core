@@ -405,6 +405,10 @@ public:
     /// source the storage listed no remote link for is still known by its name.
     void recordSlideLinkSources(const std::shared_ptr<Message>& payload,
                                 const std::shared_ptr<DocumentBroker>& docBroker);
+
+    /// Forwards a message of the kit about the linked files to the client without the URLs that
+    /// name the files in the jail.
+    bool forwardWithoutJailUrls(const std::shared_ptr<Message>& payload);
 #endif // !MOBILEAPP
 
     /// Handle a clipboard fetch / put request.

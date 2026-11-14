@@ -1342,7 +1342,20 @@ enum class COKitCallbackType
      * from the per-user config tree now instead of waiting for the end of
      * the session. The payload is empty.
      */
-    USER_SETTINGS_PERSISTED = 79
+    USER_SETTINGS_PERSISTED = 79,
+
+    /**
+     * The user asked to edit a document that a master document links to.
+     *
+     * Sent to the view whose user chose Edit for a linked file in the
+     * Navigator of a master document. The engine does not open the file
+     * itself; the host opens it, for example in a window of its own. The
+     * payload is a JSON object with the URL of the linked file, as the master
+     * document resolves it, and the name of the section that shows it, for
+     * example
+     * { "url": "file:///home/user/book/chapter1.odt", "section": "chapter1.odt" }.
+     */
+    OPEN_LINKED_DOCUMENT = 80
 };
 
 enum class COKitKeyEventType
@@ -1528,6 +1541,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_REDLINE_RECORDING_FOR_ALL_VIEWS";
     case COKitCallbackType::USER_SETTINGS_PERSISTED:
         return "KIT_CALLBACK_USER_SETTINGS_PERSISTED";
+    case COKitCallbackType::OPEN_LINKED_DOCUMENT:
+        return "KIT_CALLBACK_OPEN_LINKED_DOCUMENT";
     }
 
     assert(!"Unknown COKitCallbackType type.");

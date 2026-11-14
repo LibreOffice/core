@@ -235,6 +235,18 @@ class NavigatorPanel extends SidebarBase {
 			}
 			navigationTabs.push(navigatorTab);
 
+			// A master document lists its chapters, which are files of their own,
+			// next to the headings. Both trees are in the same navigator, the tab
+			// chooses which one shows.
+			if (this.map.isText() && app.LOUtil.isMasterDocument(this.map)) {
+				const masterTab = window.L.DomUtil.create('button', 'tab', navOptions);
+				masterTab.id = 'tab-master';
+				masterTab.textContent = _('Master View');
+				if (this.navigatorDockWrapper)
+					masterTab.setAttribute('aria-controls', 'navigator-dock-wrapper');
+				navigationTabs.push(masterTab);
+			}
+
 			if (this.map.isText()) {
 				// Create Quick Find tab
 				var quickFindTab = window.L.DomUtil.create('button', 'tab', navOptions);
@@ -484,11 +496,15 @@ class NavigatorPanel extends SidebarBase {
 			this.presentationControlsWrapper.style.display = 'flex';
 			this.navigatorDockWrapper.style.display = 'none';
 			this.quickFindWrapper.style.display = 'none';
-		} else if (tabId === 'tab-navigator') {
+		} else if (tabId === 'tab-navigator' || tabId === 'tab-master') {
 			if (!app.showNavigator)
 				app.map.sendUnoCommand('.uno:Navigator?Navigator:bool=true');
 			this.presentationControlsWrapper.style.display = 'none';
 			this.navigatorDockWrapper.style.display = 'block';
+			this.navigatorDockWrapper.classList.toggle(
+				'master-view',
+				tabId === 'tab-master',
+			);
 			this.quickFindWrapper.style.display = 'none';
 		} else if (tabId === 'tab-quick-find') {
 			if (!app.showQuickFind)

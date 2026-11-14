@@ -991,6 +991,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('redlinerecordingforallviews:')) {
 			this._onRedlineRecordingForAllViewsMsg(textMsg);
 		}
+		else if (textMsg.startsWith('openlinkeddocument:')) {
+			this._onOpenLinkedDocumentMsg(textMsg);
+		}
 		else if (textMsg.startsWith('redlinetablechanged:')) {
 			obj = JSON.parse(textMsg.substring('redlinetablechanged:'.length + 1));
 			let section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
@@ -1404,6 +1407,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				commandValues: obj.commandValues
 			});
 		}
+	},
+
+	// The user chose Edit for a file that a master document links to. The apps
+	// open it in a window of their own.
+	_onOpenLinkedDocumentMsg: function (textMsg) {
+		const obj = JSON.parse(textMsg.substring('openlinkeddocument:'.length + 1));
+		if (window.ThisIsAMobileApp && obj.url)
+			window.postMobileMessage('opendoc file=' + encodeURIComponent(obj.url));
 	},
 
 	// A user turned on recording of tracked changes for all users. That user sees the Review

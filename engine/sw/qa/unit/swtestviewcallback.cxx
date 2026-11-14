@@ -220,6 +220,11 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aExportFile = aPayload;
             break;
         }
+        case COKitCallbackType::OPEN_LINKED_DOCUMENT:
+        {
+            m_aOpenLinkedDocument = aPayload;
+            break;
+        }
         case COKitCallbackType::ERROR_REPORT:
         {
             m_aErrorReport = aPayload;

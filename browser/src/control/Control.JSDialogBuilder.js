@@ -347,6 +347,12 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			}
 			builder._defaultCallbackHandlerSendMessage(objectType, eventType, object, data, builder);
 
+			// A menu of the engine is not closed by the engine, which takes the choice
+			// as an answer it does not wait for: the choice closes it here.
+			const menu = builder.map.jsdialog ? builder.map.jsdialog.dialogs[builder.windowId] : null;
+			if (object.id === '__MENU__' && eventType === 'select' && menu && menu.isDropdown)
+				builder.map.jsdialog.close(builder.windowId, false);
+
 			if (objectType === 'combobox' && eventType === 'selected'
 				&& JSDialog.focusMapUnlessInDialog(builder)) {
 				return 'focusHandled';

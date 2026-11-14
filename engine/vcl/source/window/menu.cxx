@@ -2404,12 +2404,20 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
 
 void Menu::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) const
 {
+    // A hidden item is not offered.
+    std::vector<size_t> aShown;
+    for (size_t i = 0; i < GetItemCount(); i++)
+    {
+        if (pItemList->GetDataFromPos(i)->bVisible)
+            aShown.push_back(i);
+    }
+
     rJsonWriter.put("id", "__MENU__"); // we have single instance of menu at the time per session
     rJsonWriter.put("type", "menu");
-    rJsonWriter.put("count", GetItemCount());
+    rJsonWriter.put("count", aShown.size());
     {
         auto aEntries = rJsonWriter.startArray("entries");
-        for (size_t i = 0; i < GetItemCount(); i++)
+        for (size_t i : aShown)
         {
             auto aEntry = rJsonWriter.startStruct();
             sal_uInt16 nId = GetItemId(i);

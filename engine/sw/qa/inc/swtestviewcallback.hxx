@@ -83,6 +83,8 @@ public:
     std::vector<int> m_aRecordingForAllViewsBy;
     TestKitCallbackWrapper m_callbackWrapper;
     OString m_aExportFile;
+    /// Payload of the last OPEN_LINKED_DOCUMENT callback.
+    OString m_aOpenLinkedDocument;
     /// The payload of the last error report.
     OString m_aErrorReport;
     bool m_bCursorVisible = false;

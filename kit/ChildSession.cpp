@@ -7207,6 +7207,9 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     case COKitCallbackType::REDLINE_RECORDING_FOR_ALL_VIEWS:
         sendTextFrame("redlinerecordingforallviews: " + payload);
         break;
+    case COKitCallbackType::OPEN_LINKED_DOCUMENT:
+        sendTextFrame("openlinkeddocument: " + payload);
+        break;
     case COKitCallbackType::COMMENT:
     {
         sendTextFrame("comment: " + payload);

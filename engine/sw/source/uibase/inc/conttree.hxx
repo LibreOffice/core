@@ -354,7 +354,11 @@ private:
     std::optional<SwGlblDocContent>       m_oDocContent;
     std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
 
-    static const SfxObjectShell* s_pShowShell;
+    // the context menu is kept after it is shown, as the choice may arrive later
+    std::unique_ptr<weld::Builder> m_xContextMenuBuilder;
+    std::unique_ptr<weld::Menu> m_xContextMenu;
+    std::unique_ptr<weld::Menu> m_xContextSubMenu;
+
 
     void        InsertRegion( const SwGlblDocContent* _pContent,
                               const cpo::uno::Sequence< OUString >& _rFiles );
@@ -369,6 +373,8 @@ private:
     DECL_LINK(FocusInHdl, weld::Widget&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(ContextMenuSelectHdl, const OUString&, void);
+    static void HideInsertFileEntries(weld::Menu& rMenu);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
     SwNavigationPI* GetParentWindow();
@@ -377,8 +383,6 @@ private:
     void            GotoContent(const SwGlblDocContent*);
     MenuEnableFlags GetEnableFlags() const;
 
-    static void     SetShowShell(const SfxObjectShell*pSet) {s_pShowShell = pSet;}
-    DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, void*, void);
 
 public:
     SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog);

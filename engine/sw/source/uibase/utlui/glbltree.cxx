@@ -54,13 +54,14 @@
 
 #include <sfx2/event.hxx>
 #include <unotxvw.hxx>
+#include <tools/json_writer.hxx>
+#include <COKit/COKitTypes.hxx>
 
 using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
-const SfxObjectShell* SwGlobalTree::s_pShowShell = nullptr;
 
 namespace {
 
@@ -283,34 +284,52 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 m_xTreeView->set_cursor(*xEntry);
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"modules/swriter/ui/mastercontextmenu.ui"_ustr));
-        std::unique_ptr<weld::Menu> xPopup = xBuilder->weld_menu(u"navmenu"_ustr);
-        std::unique_ptr<weld::Menu> xSubPopup = xBuilder->weld_menu(u"insertmenu"_ustr);
+        m_xContextSubMenu.reset();
+        m_xContextMenu.reset();
+        m_xContextMenuBuilder = Application::CreateBuilder(m_xTreeView.get(), u"modules/swriter/ui/mastercontextmenu.ui"_ustr);
+        m_xContextMenu = m_xContextMenuBuilder->weld_menu(u"navmenu"_ustr);
+        m_xContextSubMenu = m_xContextMenuBuilder->weld_menu(u"insertmenu"_ustr);
 
         const MenuEnableFlags nEnableFlags = GetEnableFlags();
 
-        xPopup->set_sensitive(u"updatesel"_ustr, bool(nEnableFlags & MenuEnableFlags::UpdateSel));
+        m_xContextMenu->set_sensitive(u"updatesel"_ustr, bool(nEnableFlags & MenuEnableFlags::UpdateSel));
 
-        xPopup->set_sensitive(u"editlink"_ustr, bool(nEnableFlags & MenuEnableFlags::EditLink));
+        m_xContextMenu->set_sensitive(u"editlink"_ustr, bool(nEnableFlags & MenuEnableFlags::EditLink));
 
         //disabling if applicable
-        xSubPopup->set_sensitive(u"insertindex"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
-        xSubPopup->set_sensitive(u"insertfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
-        xSubPopup->set_sensitive(u"insertnewfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
-        xSubPopup->set_sensitive(u"inserttext"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertText));
+        m_xContextSubMenu->set_sensitive(u"insertindex"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
+        m_xContextSubMenu->set_sensitive(u"insertfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        m_xContextSubMenu->set_sensitive(u"insertnewfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        m_xContextSubMenu->set_sensitive(u"inserttext"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertText));
+        HideInsertFileEntries(*m_xContextSubMenu);
 
-        xPopup->set_sensitive(u"update"_ustr, bool(nEnableFlags & MenuEnableFlags::Update));
-        xPopup->set_sensitive(u"insert"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertIdx));
-        xPopup->set_sensitive(u"editcontent"_ustr, bool(nEnableFlags & MenuEnableFlags::Edit));
-        xPopup->set_sensitive(u"deleteentry"_ustr, bool(nEnableFlags & MenuEnableFlags::Delete));
+        m_xContextMenu->set_sensitive(u"update"_ustr, bool(nEnableFlags & MenuEnableFlags::Update));
+        m_xContextMenu->set_sensitive(u"insert"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertIdx));
+        m_xContextMenu->set_sensitive(u"editcontent"_ustr, bool(nEnableFlags & MenuEnableFlags::Edit));
+        m_xContextMenu->set_sensitive(u"deleteentry"_ustr, bool(nEnableFlags & MenuEnableFlags::Delete));
 
-        OUString sCommand = xPopup->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
-        if (!sCommand.isEmpty())
-            ExecuteContextMenuAction(sCommand);
+        // The choice may arrive after the menu was shown. A choice in the submenu is reported by
+        // the menu too.
+        m_xContextMenu->connect_activate(LINK(this, SwGlobalTree, ContextMenuSelectHdl));
+        m_xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
 
         bPop = true;
     }
     return bPop;
+}
+
+IMPL_LINK(SwGlobalTree, ContextMenuSelectHdl, const OUString&, rIdent, void)
+{
+    if (!rIdent.isEmpty())
+        ExecuteContextMenuAction(rIdent);
+}
+
+void SwGlobalTree::HideInsertFileEntries(weld::Menu& rMenu)
+{
+    // Inserting a file or a new document needs the file to stay where it is picked or created,
+    // which only the products can arrange.
+    rMenu.set_visible(u"insertfile"_ustr, false);
+    rMenu.set_visible(u"insertnewfile"_ustr, false);
 }
 
 void SwGlobalTree::TbxMenuHdl(std::u16string_view rCommand, weld::Menu& rMenu)
@@ -322,6 +341,7 @@ void SwGlobalTree::TbxMenuHdl(std::u16string_view rCommand, weld::Menu& rMenu)
         rMenu.set_sensitive(u"insertfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
         rMenu.set_sensitive(u"insertnewfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
         rMenu.set_sensitive(u"inserttext"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertText));
+        HideInsertFileEntries(rMenu);
     }
     else if (rCommand == u"update")
     {
@@ -624,7 +644,8 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
     }
     else if (rSelectedPopupEntry == u"updatelinks" || rSelectedPopupEntry == u"updateall")
     {
-        m_pActiveShell->GetLinkManager().UpdateAllLinks(true, u""_ustr);
+        // asking for the update is the consent to it
+        m_pActiveShell->GetView().GetDocShell()->AllowLinkUpdate();
         if (rSelectedPopupEntry == u"updateall")
             nSlot = FN_UPDATE_TOX;
         pCont = nullptr;
@@ -1007,33 +1028,14 @@ bool SwGlobalTree::Update(bool bHard)
 
 void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 {
+    // The document is opened by the host, which knows where to show it and how to reach the file.
     const OUString sFileName(pCont->GetSection()->GetLinkFileName().getToken(0,
             sfx2::cTokenSeparator));
-    bool bFound = false;
-    const SfxObjectShell* pCurr = SfxObjectShell::GetFirst();
-    while( !bFound && pCurr )
-    {
-        if(pCurr->GetMedium() &&
-           pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri) == sFileName)
-        {
-            bFound = true;
-            SwGlobalTree::SetShowShell(pCurr);
-            Application::PostUserEvent(LINK(this, SwGlobalTree, ShowFrameHdl));
-            pCurr = nullptr;
-        }
-        else
-            pCurr = SfxObjectShell::GetNext(*pCurr);
-    }
-    if(!bFound)
-    {
-        SfxStringItem aURL(SID_FILE_NAME, sFileName);
-        SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
-        SfxStringItem aTargetFrameName( SID_TARGETNAME, u"_blank"_ustr );
-        SfxStringItem aReferer(SID_REFERER, m_pActiveShell->GetView().GetDocShell()->GetTitle());
-        m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->
-                ExecuteList(SID_OPENDOC, SfxCallMode::ASYNCHRON,
-                        { &aURL, &aReadOnly, &aReferer, &aTargetFrameName });
-    }
+    tools::JsonWriter aJson;
+    aJson.put("url", sFileName);
+    aJson.put("section", pCont->GetSection()->GetSectionName().toString());
+    m_pActiveShell->GetView().viewCallback(COKitCallbackType::OPEN_LINKED_DOCUMENT,
+                                           aJson.finishAndGetAsOString());
 }
 
 IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl, weld::TreeView&, bool)
@@ -1053,14 +1055,6 @@ IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl, weld::TreeView&, bool)
 SwNavigationPI* SwGlobalTree::GetParentWindow()
 {
     return m_pDialog;
-}
-
-IMPL_STATIC_LINK_NOARG(SwGlobalTree, ShowFrameHdl, void*, void)
-{
-    SfxViewFrame* pFirst = s_pShowShell ? SfxViewFrame::GetFirst(s_pShowShell) : nullptr;
-    if (pFirst)
-        pFirst->ToTop();
-    SwGlobalTree::SetShowShell(nullptr);
 }
 
 void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequence< OUString >& _rFiles )

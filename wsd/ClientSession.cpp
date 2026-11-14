@@ -926,6 +926,24 @@ void ClientSession::downloadCompareDocument(const Poco::URI& uri, int redirectLi
     httpSession->response()->setBodySizeLimit(
         ConfigUtil::getConfigValue<int64_t>("storage.wopi.max_file_size", 0));
 }
+
+bool ClientSession::forwardWithoutJailUrls(const std::shared_ptr<Message>& payload)
+{
+    // The URLs the kit gives name files in the jail, which the client has no business knowing;
+    // it knows the files by their paths relative to the document.
+    const std::string message(payload->data().data(), payload->size());
+    const std::size_t jsonStart = message.find('{');
+    Poco::JSON::Object::Ptr object;
+    if (jsonStart == std::string::npos || !JsonUtil::parseJSON(message.substr(jsonStart), object))
+        return forwardToClient(payload);
+
+    object->remove("url");
+
+    std::ostringstream oss;
+    oss << message.substr(0, jsonStart);
+    object->stringify(oss);
+    return forwardToClient(std::make_shared<Message>(oss.str(), Message::Dir::Out));
+}
 #endif
 
 #if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
@@ -4051,6 +4069,12 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
 #endif // !MOBILEAPP
         return forwardToClient(payload);
     }
+#if !MOBILEAPP
+    else if (tokens.equals(0, "openlinkeddocument:"))
+    {
+        return forwardWithoutJailUrls(payload);
+    }
+#endif // !MOBILEAPP
     else if (tokens.equals(0, "clipboardcontent:"))
     {
 #if !MOBILEAPP // Most likely nothing of this makes sense in a mobile app

@@ -11,6 +11,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <editeng/editids.hrc>
@@ -36,6 +37,7 @@
 #include <tools/json_writer.hxx>
 #include <tools/datetime.hxx>
 #include <tools/hostfilter.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
@@ -1649,6 +1651,129 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoCommentDeletionAndTextChange)
     CPPUNIT_ASSERT_EQUAL(std::string("Add"),
                          aView.m_aComment.get_child("action").get_value<std::string>());
     CPPUNIT_ASSERT_EQUAL(nPostItId, aView.m_aComment.get_child("id").get_value<sal_uInt32>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigator)
+{
+    // Given a master document with its Navigator open, where the first linked section has its
+    // file next to the document:
+    createSwGlobalDoc("master-cached-sections.odm");
+    getSwTextDoc()->initializeForTiledRendering({});
+    SwTestViewCallback aView;
+    SwView* pView = getSwDocShell()->GetView();
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, true);
+    Scheduler::ProcessEventsToIdle();
+    const OUString sKey
+        = OUString::number(reinterpret_cast<sal_uInt64>(static_cast<SfxViewShell*>(pView)))
+          + "navigator";
+
+    // When the linked section is selected in the tree of the master document and Edit is
+    // clicked, the way the client sends it:
+    StringMap aSelect{ { u"cmd"_ustr, u"select"_ustr },
+                       { u"data"_ustr, u"1"_ustr },
+                       { u"type"_ustr, u"treeview"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"globaltree"_ustr, aSelect));
+    StringMap aEdit{ { u"cmd"_ustr, u"click"_ustr },
+                     { u"data"_ustr, u"edit"_ustr },
+                     { u"type"_ustr, u"toolbox"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"global"_ustr, aEdit));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the view is asked to open the linked file, as the engine has nowhere to show it.
+    // Without the fix in place, the tree of a master document was hidden and Edit tried to open
+    // the file in a new frame.
+    CPPUNIT_ASSERT(!aView.m_aOpenLinkedDocument.isEmpty());
+    std::stringstream aStream{ std::string(aView.m_aOpenLinkedDocument) };
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT(o3tl::ends_with(aTree.get<std::string>("url"), "/master-chapter.odt"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Present"), aTree.get<std::string>("section"));
+
+    // When the Update menu of the toolbar is opened, then it is sent to the client instead of
+    // waiting for a choice in the engine.
+    aView.m_aJSDialogs.clear();
+    StringMap aOpenMenu{ { u"cmd"_ustr, u"openmenu"_ustr },
+                         { u"data"_ustr, u"update"_ustr },
+                         { u"type"_ustr, u"toolbox"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"global"_ustr, aOpenMenu));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(std::any_of(aView.m_aJSDialogs.begin(), aView.m_aJSDialogs.end(),
+                               [](const OString& rDialog) {
+                                   return rDialog.indexOf("\"dropdown\"") >= 0
+                                          && rDialog.indexOf("updateall") >= 0;
+                               }));
+
+    // When All is chosen in that menu, then the choice reaches that menu and is the consent to
+    // update the links: the section shows its file.
+    StringMap aChoose{ { u"cmd"_ustr, u"select"_ustr },
+                       { u"data"_ustr, u"updateall"_ustr },
+                       { u"type"_ustr, u"menu"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"__MENU__"_ustr, aChoose));
+    Scheduler::ProcessEventsToIdle();
+    uno::Reference<text::XTextSectionsSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> xSection(
+        xSupplier->getTextSections()->getByName(u"Present"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"Text of the chapter file"_ustr, xSection->getAnchor()->getString());
+
+    // When the context menu of the tree is asked for, then it is sent to the client.
+    aView.m_aJSDialogs.clear();
+    StringMap aContext{ { u"cmd"_ustr, u"contextmenu"_ustr },
+                        { u"data"_ustr, u"1"_ustr },
+                        { u"type"_ustr, u"treeview"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"globaltree"_ustr, aContext));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(std::any_of(aView.m_aJSDialogs.begin(), aView.m_aJSDialogs.end(),
+                               [](const OString& rDialog) {
+                                   return rDialog.indexOf("editcontent") >= 0
+                                          && rDialog.indexOf("deleteentry") >= 0;
+                               }));
+
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
+    Scheduler::ProcessEventsToIdle();
+}
+
+/// Opens the Insert menu of the toolbar of the Navigator of the view and returns what is sent.
+std::vector<OString> openMasterDocInsertMenu(const SwView* pView, SwTestViewCallback& rView)
+{
+    const OUString sKey
+        = OUString::number(reinterpret_cast<sal_uInt64>(static_cast<const SfxViewShell*>(pView)))
+          + "navigator";
+    rView.m_aJSDialogs.clear();
+    StringMap aOpenMenu{ { u"cmd"_ustr, u"openmenu"_ustr },
+                         { u"data"_ustr, u"insert"_ustr },
+                         { u"type"_ustr, u"toolbox"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"global"_ustr, aOpenMenu));
+    Scheduler::ProcessEventsToIdle();
+    std::vector<OString> aMenus;
+    std::copy_if(rView.m_aJSDialogs.begin(), rView.m_aJSDialogs.end(), std::back_inserter(aMenus),
+                 [](const OString& rDialog) {
+                     return rDialog.indexOf("\"dropdown\"") >= 0
+                            && rDialog.indexOf("inserttext") >= 0;
+                 });
+    return aMenus;
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorHidesInsertFile)
+{
+    // Given a master document with its Navigator open, where no file picker gives the picked
+    // file itself, as the server and the mobile apps have:
+    createSwGlobalDoc("master-cached-sections.odm");
+    getSwTextDoc()->initializeForTiledRendering({});
+    SwTestViewCallback aView;
+    SwView* pView = getSwDocShell()->GetView();
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the Insert menu of the toolbar is opened, then it offers no file to link to, as a
+    // copy of the picked file goes away. Without the fix in place, the hidden entry was sent.
+    std::vector<OString> aMenus = openMasterDocInsertMenu(pView, aView);
+    CPPUNIT_ASSERT(!aMenus.empty());
+    CPPUNIT_ASSERT(std::none_of(aMenus.begin(), aMenus.end(), [](const OString& rMenu) {
+        return rMenu.indexOf("insertfile") >= 0 || rMenu.indexOf("insertnewfile") >= 0;
+    }));
+
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
+    Scheduler::ProcessEventsToIdle();
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testNavigatorContentTreeKeyedToOwningView)

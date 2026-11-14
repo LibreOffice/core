@@ -567,15 +567,24 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
         if (pActView && pActView->GetWrtShellPtr())
             m_xGlobalToolBox->set_item_active(u"save"_ustr,
                         pActView->GetWrtShellPtr()->IsGlblDocSaveLinks());
-        if (m_pConfig->IsGlobalActive())
-            ToggleTree();
-        else
-            m_xContent1ToolBox->set_visible(true);
+        // The chapters of a master document are listed next to its headings, the user interface
+        // chooses which of the two it shows.
+        m_xGlobalToolBox->set_item_visible(u"globaltoggle"_ustr, false);
+        m_xGlobalToolBox->show();
+        m_xGlobalBox->show();
+        m_xGlobalTree->ShowTree();
+        SetGlobalMode(true);
         if (bFloatingNavigator)
             m_xGlobalTree->grab_focus();
     }
-    else if (bFloatingNavigator)
-        m_xContentTree->grab_focus();
+    else
+    {
+        m_xGlobalToolBox->hide();
+        m_xGlobalBox->hide();
+        m_xGlobalTree->HideTree();
+        if (bFloatingNavigator)
+            m_xContentTree->grab_focus();
+    }
 
     m_xContentTree->set_accessible_name(SwResId(STR_ACCESS_TL_CONTENT));
     m_xGlobalTree->set_accessible_name(SwResId(STR_ACCESS_TL_GLOBAL));
@@ -587,9 +596,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     {
         m_xBuilder->weld_container(u"gridcontent16"_ustr)->hide();
         m_xDocListBox->hide();
-        m_xGlobalBox->hide();
-        m_xGlobalToolBox->hide();
-        m_xGlobalTree->HideTree();
 
         //Open Headings by default
         SwView *pView = GetCreateView();
