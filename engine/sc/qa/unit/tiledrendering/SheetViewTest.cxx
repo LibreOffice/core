@@ -1271,6 +1271,83 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewIgnoresLaterDefaultViewFilter)
     CPPUNIT_ASSERT(rDocument.RowFiltered(2, nDefaultViewTab));
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilterSurvivesCommentInsert)
+{
+    // An auto-filter added on a sheet view stays on that sheet view, with its buttons on the
+    // header row, after a comment is added to a cell inside the filtered range.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    // A table with a header row and three rows of numbers in A1:C4.
+    rDocument.SetString(ScAddress(0, 0, 0), u"Alpha"_ustr);
+    rDocument.SetString(ScAddress(1, 0, 0), u"Beta"_ustr);
+    rDocument.SetString(ScAddress(2, 0, 0), u"Gamma"_ustr);
+    for (SCROW nRow = 1; nRow <= 3; ++nRow)
+    {
+        for (SCCOL nColumn = 0; nColumn <= 2; ++nColumn)
+            rDocument.SetValue(ScAddress(nColumn, nRow, 0), nRow * 10.0 + nColumn);
+    }
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab = 0;
+    const SCTAB nSheetViewTab = 1;
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // Add the auto-filter on the sheet view.
+    gotoCell(u"A1");
+    dispatchCommand(mxComponent, u".uno:DataFilterAutoFilter"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    const ScRange aTableRange(0, 0, nSheetViewTab, 2, 3, nSheetViewTab);
+    CPPUNIT_ASSERT_EQUAL(aTableRange, getAutoFilterArea(rDocument, nSheetViewTab));
+    for (SCCOL nColumn = 0; nColumn <= 2; ++nColumn)
+    {
+        ScMF nFlag = rDocument.GetAttr(nColumn, 0, nSheetViewTab, ATTR_MERGE_FLAG).GetValue();
+        CPPUNIT_ASSERT(bool(nFlag & ScMF::Auto));
+    }
+    const ScDBData* pDefaultViewDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    const bool bDefaultViewHasAutoFilter
+        = pDefaultViewDBData && pDefaultViewDBData->HasAutoFilter();
+
+    // Add a comment to C3 from the sheet view.
+    gotoCell(u"C3");
+    dispatchCommand(
+        mxComponent, u".uno:InsertAnnotation"_ustr,
+        comphelper::InitPropertySequence({ { u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    ScPostIt* pNote = rDocument.GetNote(ScAddress(2, 2, nSheetViewTab));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(u"Comment"_ustr, pNote->GetText());
+
+    // The sheet view keeps its auto-filter over the same range, with the buttons on the header
+    // row.
+    ScDBData* pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT_MESSAGE("The sheet view lost its database range after a comment was added",
+                           pSheetViewDBData);
+    CPPUNIT_ASSERT_MESSAGE("The sheet view lost its auto-filter after a comment was added",
+                           pSheetViewDBData->HasAutoFilter());
+    ScRange aRange;
+    pSheetViewDBData->GetArea(aRange);
+    CPPUNIT_ASSERT_EQUAL(aTableRange, aRange);
+    for (SCCOL nColumn = 0; nColumn <= 2; ++nColumn)
+    {
+        ScMF nFlag = rDocument.GetAttr(nColumn, 0, nSheetViewTab, ATTR_MERGE_FLAG).GetValue();
+        CPPUNIT_ASSERT_MESSAGE("A filter button left the header row after a comment was added",
+                               bool(nFlag & ScMF::Auto));
+    }
+
+    // The default view keeps the auto-filter state it had before the comment.
+    pDefaultViewDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(bDefaultViewHasAutoFilter,
+                         pDefaultViewDBData && pDefaultViewDBData->HasAutoFilter());
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
 {
     // Create two views, and leave the second one current.

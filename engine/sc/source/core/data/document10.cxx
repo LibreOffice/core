@@ -23,6 +23,7 @@
 #include <refupdatecontext.hxx>
 #include <sal/log.hxx>
 #include <scitems.hxx>
+#include <attrib.hxx>
 #include <datamapper.hxx>
 #include <documentlinkmgr.hxx>
 #include <drwlayer.hxx>
@@ -1522,6 +1523,24 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
         SetColHidden(0, MaxCol(), nSheetViewTab, false);
         for (auto const& rHiddenRange : aSheetViewHiddenColumns)
             SetColHidden(rHiddenRange.first, rHiddenRange.second, nSheetViewTab, true);
+
+        // The content copy brings the cell attributes of the default view, which carry no
+        // auto-filter buttons when the auto-filter belongs to the sheet view alone. Put the
+        // buttons back on the header row of the sheet view's own auto-filter.
+        ScDBData* pSheetViewAutoFilterData = GetAnonymousDBData(nSheetViewTab);
+        if (pSheetViewAutoFilterData && pSheetViewAutoFilterData->HasAutoFilter())
+        {
+            ScRange aAutoFilterRange;
+            pSheetViewAutoFilterData->GetArea(aAutoFilterRange);
+            SCROW nHeaderRow = aAutoFilterRange.aStart.Row();
+            for (SCCOL nColumn = aAutoFilterRange.aStart.Col();
+                 nColumn <= aAutoFilterRange.aEnd.Col(); ++nColumn)
+            {
+                ScMF nFlag
+                    = GetAttr(nColumn, nHeaderRow, nSheetViewTab, ATTR_MERGE_FLAG).GetValue();
+                ApplyAttr(nColumn, nHeaderRow, nSheetViewTab, ScMergeFlagAttr(nFlag | ScMF::Auto));
+            }
+        }
 
         // Revert the sorting of the default view table.
         // It can happen that the default view was sorted after the sheet view
