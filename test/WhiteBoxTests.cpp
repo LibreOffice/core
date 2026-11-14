@@ -1662,7 +1662,7 @@ void WhiteBoxTests::testThumbnailParseSize()
     constexpr auto testname = __func__;
 
     // The parsed size as "<W>x<H>" again, or "none" when the text is not a size.
-    const auto parse = [](std::string_view text)
+    const auto parse = [](std::string_view text) -> std::string
     {
         const auto size = Thumbnail::parseSize(text);
         return size ? std::to_string(size->first) + 'x' + std::to_string(size->second)

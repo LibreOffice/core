@@ -351,7 +351,7 @@ std::optional<std::string> gasLibraries(
         }
         auto const userSymbol = library->optValue<std::string>("userSymbol", "");
         auto const libraryId = library->optValue<std::string>("libraryId", "");
-        auto const version = library->optValue<bool>("developmentMode", false)
+        std::string const version = library->optValue<bool>("developmentMode", false)
             ? std::string("HEAD")
             : library->has("version") ? library->get("version").toString() : std::string();
         if (!isIdentifier(userSymbol) || !isPlainName(libraryId) || !isPlainName(version)) {
