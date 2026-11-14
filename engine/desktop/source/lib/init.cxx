@@ -437,6 +437,16 @@ constexpr ExtensionMap aWriterExtensionMap[] =
     { "md",    u"Markdown"_ustr },
 };
 
+// a master document has its own filters, it is written as a text document by writerglobal8_writer
+constexpr ExtensionMap aWriterGlobalExtensionMap[] =
+{
+    { "html",  u"writerglobal8_HTML"_ustr },
+    { "odm",   u"writerglobal8"_ustr },
+    { "odt",   u"writerglobal8_writer"_ustr },
+    { "otm",   u"writerglobal8_template"_ustr },
+    { "pdf",   u"writer_globaldocument_pdf_Export"_ustr },
+};
+
 constexpr ExtensionMap aCalcExtensionMap[] =
 {
     { "csv",   u"Text - txt - csv (StarCalc)"_ustr },
@@ -1331,8 +1341,9 @@ COKitDocumentType lcl_getDocumentType (COKitDocument* pThis)
         {
             return COKitDocumentType::DRAWING;
         }
-        else if (xDocument->supportsService(u"com.sun.star.text.TextDocument"_ustr) || xDocument->supportsService(u"com.sun.star.text.WebDocument"_ustr))
+        else if (xDocument->supportsService(u"com.sun.star.text.GenericTextDocument"_ustr))
         {
+            // text, web and master documents
             return COKitDocumentType::TEXT;
         }
         else
@@ -3420,8 +3431,7 @@ std::string COKitImpl::extractDocumentStructureRequest(const char* pFilePath, co
 
                 //if it is a writer document..
                 uno::Reference<lang::XServiceInfo> xDocument(xComp, uno::UNO_QUERY_THROW);
-                if (xDocument->supportsService(u"com.sun.star.text.TextDocument"_ustr)
-                    || xDocument->supportsService(u"com.sun.star.text.WebDocument"_ustr)
+                if (xDocument->supportsService(u"com.sun.star.text.GenericTextDocument"_ustr)
                     || xDocument->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr))
                 {
                     tools::JsonWriter aJson;
@@ -3818,8 +3828,15 @@ static OUString getFilterNameForFormat(COKitDocument* pThis, std::u16string_view
             pMap = aDrawExtensionMap;
             break;
         case COKitDocumentType::TEXT:
-            pMap = aWriterExtensionMap;
+        {
+            COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
+            uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY);
+            if (xDocument && xDocument->supportsService(u"com.sun.star.text.GlobalDocument"_ustr))
+                pMap = aWriterGlobalExtensionMap;
+            else
+                pMap = aWriterExtensionMap;
             break;
+        }
         case COKitDocumentType::OTHER:
         default:
             return {};

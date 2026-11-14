@@ -235,6 +235,7 @@ public:
     void testSaveAsHybridPDF();
     void testExportDirectToPdfDottedName();
     void testSaveAsJsonOptions();
+    void testMasterDocument();
     void testSaveAsCalc();
     void testPasteWriter();
     void testPasteWriterJPEG();
@@ -368,6 +369,7 @@ public:
     CPPUNIT_TEST(testSaveAsHybridPDF);
     CPPUNIT_TEST(testExportDirectToPdfDottedName);
     CPPUNIT_TEST(testSaveAsJsonOptions);
+    CPPUNIT_TEST(testMasterDocument);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
@@ -536,7 +538,10 @@ DesktopKitTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType
     switch (eType)
     {
     case COKitDocumentType::TEXT:
-        aService = u"com.sun.star.text.TextDocument"_ustr;
+        if (rFileURL.endsWithIgnoreAsciiCase(".odm"))
+            aService = u"com.sun.star.text.GlobalDocument"_ustr;
+        else
+            aService = u"com.sun.star.text.TextDocument"_ustr;
         break;
     case COKitDocumentType::SPREADSHEET:
         aService = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
@@ -1032,6 +1037,37 @@ void DesktopKitTest::testSaveAsJsonOptions()
     // - Actual  : 3
     // i.e. FilterOptions was ignored.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
+}
+
+void DesktopKitTest::testMasterDocument()
+{
+    COKitDocumentImpl* pDocument = loadDoc("master-document.odm");
+    // Without the fix in place, a master document was of type OTHER and could not be saved
+    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
+
+    // the mimetype is the first entry of the package, stored uncompressed: its size is at
+    // offset 18 of the local file header, its data at offset 38 after the 8 byte name
+    std::function<OUString()> getMimeType = [this]() {
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+        sal_uInt32 nSize = 0;
+        aStream.Seek(18);
+        aStream.ReadUInt32(nSize);
+        aStream.Seek(38);
+        return OStringToOUString(read_uInt8s_ToOString(aStream, nSize), RTL_TEXTENCODING_ASCII_US);
+    };
+
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "odm", nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"application/vnd.oasis.opendocument.text-master"_ustr, getMimeType());
+
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"application/vnd.oasis.opendocument.text"_ustr, getMimeType());
+
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "pdf", nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT(pPdfDocument->getPageCount() > 0);
 }
 
 void DesktopKitTest::testSaveAsCalc()
