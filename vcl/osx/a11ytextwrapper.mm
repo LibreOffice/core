@@ -47,9 +47,13 @@ using namespace ::com::sun::star::uno;
 
 +(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value
 {
-    // TODO
-    (void)wrapper;
-    (void)value;
+    if ( [ wrapper accessibleEditableText ] && [ value isKindOfClass: [ NSString class ] ] ) {
+        try {
+            [ wrapper accessibleEditableText ] -> setText ( GetOUString ( static_cast<NSString *>(value) ) );
+        } catch ( const Exception & ) {
+            // empty
+        }
+    }
 }
 
 +(id)numberOfCharactersAttributeForElement:(AquaA11yWrapper *)wrapper {

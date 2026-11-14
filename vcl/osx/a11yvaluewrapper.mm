@@ -59,12 +59,28 @@ using namespace ::com::sun::star::uno;
 }
 
 +(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
-    // TODO: Detect Type from NSNumber
-    if ( [ value isKindOfClass: [ NSNumber class ] ] 
+    if ( [ value isKindOfClass: [ NSNumber class ] ]
       && [ wrapper accessibleValue ] ) {
         NSNumber * number = static_cast<NSNumber *>(value);
-        Any numberAny ( [ number longValue ] );
-        [ wrapper accessibleValue ] -> setCurrentValue ( numberAny );
+        try {
+            // Different types of numerical values for XAccessibleValue are possible.
+            // If the current value has an integer type, also use that for the new
+            // value, so that implementations expecting it can handle the value.
+            // Otherwise use double, which is what e.g. Calc and Writer cells expect.
+            // Note: Any ( long ) would be a hyper, which neither a sal_Int32 nor
+            // a double can be extracted from.
+            const Any aCurrentValue = [ wrapper accessibleValue ] -> getCurrentValue();
+            Any numberAny;
+            if ( aCurrentValue.getValueTypeClass() == TypeClass_LONG )
+                numberAny <<= static_cast<sal_Int32>( [ number intValue ] );
+            else if ( aCurrentValue.getValueTypeClass() == TypeClass_HYPER )
+                numberAny <<= static_cast<sal_Int64>( [ number longLongValue ] );
+            else
+                numberAny <<= [ number doubleValue ];
+            [ wrapper accessibleValue ] -> setCurrentValue ( numberAny );
+        } catch ( const Exception & ) {
+            // empty
+        }
     }
 }
 
