@@ -311,11 +311,14 @@ static const int CODA_WM_MOVETABTOWINDOW = WM_APP + 9;
 static const int CODA_WM_RETRYAFTERUNLOADING = WM_APP + 10;
 
 // One file pick the engine asked for, posted as CODA_WM_SHOWFILEPICKER to the hidden owner
-// window; the wide strings own the dialog's title and filter text.
+// window; the wide strings own the dialog's title and filter text. A pick of where a new file
+// goes has the file URL the save dialog starts with in suggestedUri.
 struct FilePickerRequest
 {
     std::wstring title;
     std::vector<std::pair<std::wstring, std::wstring>> filters;
+    bool save = false;
+    std::string suggestedUri;
     void (*pfnPicked)(void* pContext, const char* pUrl);
     void* pContext;
 };
@@ -2018,6 +2021,23 @@ static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wPara
 
             const HWND foreground = GetForegroundWindow();
             const HWND owner = findWindow(foreground) ? foreground : hiddenOwnerWindow;
+            if (request->save)
+            {
+                std::string name;
+                std::string folder;
+                if (!request->suggestedUri.empty())
+                {
+                    const std::string path = fileUriToWindowsPath(request->suggestedUri);
+                    const std::size_t lastSlash = path.find_last_of('\\');
+                    name = path.substr(lastSlash + 1);
+                    if (lastSlash != std::string::npos)
+                        folder = path.substr(0, lastSlash);
+                }
+                FilenameAndUri saveResult = fileSaveDialog(owner, name, folder, filterSpecs);
+                request->pfnPicked(request->pContext,
+                                   saveResult.uri.empty() ? nullptr : saveResult.uri.c_str());
+                return 0;
+            }
             auto openResult = fileOpenDialog(owner, request->title, filterSpecs, false);
             if (!openResult.empty())
                 request->pfnPicked(request->pContext, openResult[0].uri.c_str());
@@ -6639,10 +6659,35 @@ static void filePickerProviderPick(const char* pTitle, const COKitFilePickerFilt
                  reinterpret_cast<WPARAM>(request.release()), 0);
 }
 
+// The engine asks where a new file goes, the chapter of a master document for example. As for an
+// open-file pick, CODA_WM_SHOWFILEPICKER shows the save dialog on the hidden owner window's thread.
+static void filePickerProviderPickSaveLocation(const char* pTitle, const char* pSuggestedUrl,
+                                               const COKitFilePickerFilter* pFilters,
+                                               size_t nFilters,
+                                               void (*pfnPicked)(void* pContext, const char* pUrl),
+                                               void* pContext)
+{
+    std::unique_ptr<FilePickerRequest> request = std::make_unique<FilePickerRequest>();
+    if (pTitle)
+        request->title = Util::string_to_wide_string(pTitle);
+    for (size_t i = 0; i < nFilters; ++i)
+        request->filters.push_back({ Util::string_to_wide_string(pFilters[i].pName),
+                                     Util::string_to_wide_string(pFilters[i].pWildcards) });
+    request->save = true;
+    if (pSuggestedUrl)
+        request->suggestedUri = pSuggestedUrl;
+    request->pfnPicked = pfnPicked;
+    request->pContext = pContext;
+
+    PostMessageW(hiddenOwnerWindow, CODA_WM_SHOWFILEPICKER,
+                 reinterpret_cast<WPARAM>(request.release()), 0);
+}
+
 void install_filepicker_provider(COKit& kitOffice)
 {
     static COKitFilePickerProvider provider{};
     provider.pick = filePickerProviderPick;
+    provider.pickSaveLocation = filePickerProviderPickSaveLocation;
     // The native picker gives the file the user picked, which a document may link to.
     provider.picksFilesInPlace = true;
     kitOffice.installFilePickerProvider(&provider);

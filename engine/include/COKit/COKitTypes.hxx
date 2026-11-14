@@ -111,6 +111,22 @@ struct COKitFilePickerProvider
      * file, the chapters of a master document for example; a copy goes away.
      */
     bool picksFilesInPlace;
+
+    /**
+     * Show a native save-file picker, where the user chooses the folder and the name of a
+     * file the engine is about to create, the chapter of a master document for example.
+     * The same thread and completion rules apply as for pick: pfnPicked gets the URL of
+     * the chosen file ("file://..."), or nullptr when the user cancelled. The engine
+     * creates the file at that URL and the document may link to it, so the URL must be
+     * where the file stays.
+     *
+     * pSuggestedUrl is the file URL the picker starts with, its folder and its name.
+     * pFilters is as for pick. Leave this nullptr when the app has no such picker; the
+     * engine then does not offer to create such files.
+     */
+    void (*pickSaveLocation)(const char* pTitle, const char* pSuggestedUrl,
+                             const COKitFilePickerFilter* pFilters, size_t nFilters,
+                             void (*pfnPicked)(void* pContext, const char* pUrl), void* pContext);
 };
 
 // getDocumentType is part of the API whether or not the unstable half is asked for, so the

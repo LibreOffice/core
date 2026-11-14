@@ -81,19 +81,25 @@ bool isAvailable()
 
 bool picksFilesInPlace() { return isAvailable() && getProvider()->picksFilesInPlace; }
 
-void pick(const OUString& rTitle, const std::vector<Filter>& rFilters,
-          std::function<void(std::optional<OUString>)> aOnPicked)
+namespace
 {
-    if (!isAvailable())
-        return;
-
+/** A context for a pick, holding the title, the filters and the given strings for the C arrays,
+    with a pointer to each string in the order given. */
+std::unique_ptr<PickContext> makePickContext(const std::vector<OUString>& rStrings,
+                                             const std::vector<Filter>& rFilters,
+                                             std::function<void(std::optional<OUString>)> aOnPicked,
+                                             std::vector<const char*>& rStringPointers)
+{
     auto pContext = std::make_unique<PickContext>();
     pContext->aOnPicked = std::move(aOnPicked);
 
-    // Two strings per filter plus the title; reserve so the C pointers stay valid.
-    pContext->aStrings.reserve(2 * rFilters.size() + 1);
-    pContext->aStrings.push_back(rTitle.toUtf8());
-    const char* pTitle = pContext->aStrings.back().getStr();
+    // Reserve so the C pointers stay valid.
+    pContext->aStrings.reserve(2 * rFilters.size() + rStrings.size());
+    for (const OUString& rString : rStrings)
+    {
+        pContext->aStrings.push_back(rString.toUtf8());
+        rStringPointers.push_back(pContext->aStrings.back().getStr());
+    }
 
     for (const Filter& rFilter : rFilters)
     {
@@ -102,10 +108,40 @@ void pick(const OUString& rTitle, const std::vector<Filter>& rFilters,
         pContext->aStrings.push_back(rFilter.sWildcards.toUtf8());
         pContext->aFilters.push_back({ pName, pContext->aStrings.back().getStr() });
     }
+    return pContext;
+}
+}
 
-    auto* filters = pContext->aFilters.data();
-    auto nfilters = pContext->aFilters.size();
-    getProvider()->pick(pTitle, filters, nfilters, pickedCallback, pContext.release());
+void pick(const OUString& rTitle, const std::vector<Filter>& rFilters,
+          std::function<void(std::optional<OUString>)> aOnPicked)
+{
+    if (!isAvailable())
+        return;
+
+    std::vector<const char*> aStrings;
+    std::unique_ptr<PickContext> pContext
+        = makePickContext({ rTitle }, rFilters, std::move(aOnPicked), aStrings);
+    const COKitFilePickerFilter* pFilters = pContext->aFilters.data();
+    const size_t nFilters = pContext->aFilters.size();
+    getProvider()->pick(aStrings[0], pFilters, nFilters, pickedCallback, pContext.release());
+}
+
+bool canPickSaveLocation() { return getProvider().has_value() && getProvider()->pickSaveLocation; }
+
+void pickSaveLocation(const OUString& rTitle, const OUString& rSuggestedUrl,
+                      const std::vector<Filter>& rFilters,
+                      std::function<void(std::optional<OUString>)> aOnPicked)
+{
+    if (!canPickSaveLocation())
+        return;
+
+    std::vector<const char*> aStrings;
+    std::unique_ptr<PickContext> pContext
+        = makePickContext({ rTitle, rSuggestedUrl }, rFilters, std::move(aOnPicked), aStrings);
+    const COKitFilePickerFilter* pFilters = pContext->aFilters.data();
+    const size_t nFilters = pContext->aFilters.size();
+    getProvider()->pickSaveLocation(aStrings[0], aStrings[1], pFilters, nFilters, pickedCallback,
+                                    pContext.release());
 }
 
 bool requestAndRedispatch(const OUString& rCommand, const OUString& rArgument,

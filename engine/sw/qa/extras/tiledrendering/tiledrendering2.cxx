@@ -42,6 +42,8 @@
 #include <tools/hostfilter.hxx>
 #include <o3tl/string_view.hxx>
 #include <unotools/datetime.hxx>
+#include <unotools/tempfile.hxx>
+#include <osl/file.hxx>
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -1870,6 +1872,77 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorInsertFile)
     text::SectionFileLink aLink;
     xSection->getPropertyValue(u"FileLink"_ustr) >>= aLink;
     CPPUNIT_ASSERT_EQUAL(createFileURL(u"master-chapter.odt"), aLink.FileURL);
+
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
+    Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorInsertNewDocument)
+{
+    // Given a master document with its Navigator open, in an app that asks the user where a new
+    // file goes:
+    createSwGlobalDoc("master-cached-sections.odm");
+    getSwTextDoc()->initializeForTiledRendering({});
+    SwTestViewCallback aView;
+    SwView* pView = getSwDocShell()->GetView();
+
+    utl::TempFileNamed aFolder(nullptr, true);
+    aFolder.EnableKillingFile();
+    const OUString aNewUrl = aFolder.GetURL() + "/new-chapter.odt";
+    static OString aPickedUrl;
+    aPickedUrl = aNewUrl.toUtf8();
+    static OString aSuggestedUrl;
+    COKitFilePickerProvider aProvider{};
+    aProvider.pick = [](const char*, const COKitFilePickerFilter*, size_t,
+                        void (*pfnPicked)(void*, const char*), void* pContext)
+    { pfnPicked(pContext, nullptr); };
+    aProvider.pickSaveLocation = [](const char*, const char* pSuggestedUrl,
+                                    const COKitFilePickerFilter*, size_t,
+                                    void (*pfnPicked)(void*, const char*), void* pContext)
+    {
+        aSuggestedUrl = OString(pSuggestedUrl);
+        pfnPicked(pContext, aPickedUrl.getStr());
+    };
+    sfx2::COKitFilePicker::installProvider(&aProvider);
+    comphelper::ScopeGuard aProviderGuard([] { sfx2::COKitFilePicker::installProvider(nullptr); });
+
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, true);
+    Scheduler::ProcessEventsToIdle();
+    const OUString sKey
+        = OUString::number(reinterpret_cast<sal_uInt64>(static_cast<SfxViewShell*>(pView)))
+          + "navigator";
+
+    // When the Insert menu of the toolbar is opened, then it offers a new document:
+    std::vector<OString> aMenus = openMasterDocInsertMenu(pView, aView);
+    CPPUNIT_ASSERT(std::any_of(aMenus.begin(), aMenus.end(), [](const OString& rMenu) {
+        return rMenu.indexOf("insertnewfile") >= 0;
+    }));
+
+    // And when a new document is chosen there, and a place for it:
+    StringMap aChoose{ { u"cmd"_ustr, u"select"_ustr },
+                       { u"data"_ustr, u"insertnewfile"_ustr },
+                       { u"type"_ustr, u"menu"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"__MENU__"_ustr, aChoose));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the picker starts next to the master document, with a name not taken yet:
+    CPPUNIT_ASSERT(o3tl::ends_with(aSuggestedUrl, "/master-cached-sections-1.odt"));
+    // And the new document is created there and linked to:
+    osl::DirectoryItem aItem;
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::DirectoryItem::get(aNewUrl, aItem));
+    uno::Reference<text::XTextSectionsSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSection(
+        xSupplier->getTextSections()->getByName(u"new-chapter.odt"_ustr), uno::UNO_QUERY_THROW);
+    text::SectionFileLink aLink;
+    xSection->getPropertyValue(u"FileLink"_ustr) >>= aLink;
+    CPPUNIT_ASSERT_EQUAL(aNewUrl, aLink.FileURL);
+    // And the host is asked to open it, to write the chapter:
+    CPPUNIT_ASSERT(!aView.m_aOpenLinkedDocument.isEmpty());
+    std::stringstream aStream{ std::string(aView.m_aOpenLinkedDocument) };
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT(o3tl::ends_with(aTree.get<std::string>("url"), "/new-chapter.odt"));
+    CPPUNIT_ASSERT_EQUAL(std::string("new-chapter.odt"), aTree.get<std::string>("section"));
 
     pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
     Scheduler::ProcessEventsToIdle();

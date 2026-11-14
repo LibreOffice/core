@@ -42,11 +42,22 @@ SFX2_DLLPUBLIC bool isAvailable();
     so that a document may link to it. */
 SFX2_DLLPUBLIC bool picksFilesInPlace();
 
+/** Whether the app can ask the user where a new file goes, a file the document may link to. */
+SFX2_DLLPUBLIC bool canPickSaveLocation();
+
 /** Ask the app's native file picker for a file. Returns at once; rOnPicked runs later on
     the engine's main-loop thread, with the picked file's URL, or without a value when the
     user cancelled. Does nothing when isAvailable() is false. */
 SFX2_DLLPUBLIC void pick(const OUString& rTitle, const std::vector<Filter>& rFilters,
                          std::function<void(std::optional<OUString>)> aOnPicked);
+
+/** Ask the app's native save-file picker where a new file goes, starting with the folder and
+    the name of rSuggestedUrl. Returns at once; rOnPicked runs later on the engine's main-loop
+    thread, with the URL of the file to create, or without a value when the user cancelled.
+    Does nothing when canPickSaveLocation() is false. */
+SFX2_DLLPUBLIC void pickSaveLocation(const OUString& rTitle, const OUString& rSuggestedUrl,
+                                     const std::vector<Filter>& rFilters,
+                                     std::function<void(std::optional<OUString>)> aOnPicked);
 
 /** Ask the app's native file picker for a file and dispatch rCommand with the picked
     file's URL as the string parameter named rArgument, followed by rExtraArguments, on the

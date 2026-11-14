@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -57,37 +58,18 @@
 #include <tools/json_writer.hxx>
 #include <COKit/COKitTypes.hxx>
 #include <sfx2/cokitfilepicker.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <osl/file.hxx>
+#include <doc.hxx>
+#include <iodetect.hxx>
+#include <numrule.hxx>
 
 using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
-
-namespace {
-
-class SwGlobalFrameListener_Impl : public SfxListener
-{
-    bool m_bValid;
-public:
-    explicit SwGlobalFrameListener_Impl(SfxViewFrame& rFrame)
-        : m_bValid(true)
-    {
-        StartListening(rFrame);
-    }
-
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    bool                IsValid() const {return m_bValid;}
-};
-
-}
-
-void SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
-{
-    if( rHint.GetId() == SfxHintId::Dying)
-        m_bValid = false;
-}
 
 namespace {
 
@@ -158,6 +140,7 @@ SwGlobalTree::SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigati
 
 SwGlobalTree::~SwGlobalTree()
 {
+    m_xAlive.reset();
     m_pSwGlblDocContents.reset();
     m_pDocInserter.reset();
     m_aUpdateTimer.Stop();
@@ -330,7 +313,8 @@ void SwGlobalTree::HideInsertFileEntries(weld::Menu& rMenu)
     // An inserted file is linked to, so it has to stay where it is picked: a picker that gives a
     // copy, as an upload to a server is, offers nothing to link to.
     rMenu.set_visible(u"insertfile"_ustr, sfx2::COKitFilePicker::picksFilesInPlace());
-    rMenu.set_visible(u"insertnewfile"_ustr, false);
+    // A new document is linked to as well, so it is created where the user chooses.
+    rMenu.set_visible(u"insertnewfile"_ustr, sfx2::COKitFilePicker::canPickSaveLocation());
 }
 
 void SwGlobalTree::TbxMenuHdl(std::u16string_view rCommand, weld::Menu& rMenu)
@@ -741,63 +725,8 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
     }
     else if (rSelectedPopupEntry == u"insertnewfile")
     {
-        SfxViewFrame& rGlobFrame = m_pActiveShell->GetView().GetViewFrame();
-        SwGlobalFrameListener_Impl aFrameListener(rGlobFrame);
-
-        // Creating a new doc
-        SfxStringItem aFactory(SID_NEWDOCDIRECT,
-                        SwDocShell::Factory().GetFilterContainer()->GetName());
-
-        SfxPoolItemHolder aResult(
-            rDispatch.ExecuteList(SID_NEWDOCDIRECT,
-            SfxCallMode::SYNCHRON, { &aFactory }));
-        const SfxFrameItem* pItem(static_cast<const SfxFrameItem*>(aResult.getItem()));
-
-        // save at
-        SfxFrame* pFrame = pItem ? pItem->GetFrame() : nullptr;
-        SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
-        if (pViewFrame)
-        {
-            aResult = pViewFrame->GetDispatcher()->Execute(
-                    SID_SAVEASDOC, SfxCallMode::SYNCHRON );
-            const SfxBoolItem* pBool(static_cast<const SfxBoolItem*>(aResult.getItem()));
-            SfxObjectShell& rObj = *pViewFrame->GetObjectShell();
-            const SfxMedium* pMedium = rObj.GetMedium();
-            OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri));
-            // Insert the area with the Doc-Name
-            // Bring the own Doc in the foreground
-            if(aFrameListener.IsValid() && !sNewFile.isEmpty())
-            {
-                rGlobFrame.ToTop();
-                // Due to the update the entries are invalid
-                if (nEntry != -1)
-                {
-                    Update( false );
-                    Display();
-                    m_xTreeView->select(nEntry);
-                    Select();
-                    nEntry = m_xTreeView->get_selected_index();
-                    pCont = nEntry != -1 ? weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(nEntry)) : nullptr;
-                }
-                else
-                {
-                    nEntry = -1;
-                    pCont = nullptr;
-                }
-                if(pBool->GetValue())
-                {
-                    InsertRegion(pCont, &sNewFile);
-                    pViewFrame->ToTop();
-                }
-                else
-                    pViewFrame->GetDispatcher()->Execute(SID_CLOSEWIN, SfxCallMode::SYNCHRON);
-            }
-            else
-            {
-                pViewFrame->ToTop();
-                return;
-            }
-        }
+        InsertNewDocument(std::move(oContCopy));
+        pCont = nullptr;
     }
     else if (rSelectedPopupEntry == u"inserttext")
     {
@@ -1067,6 +996,115 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     aJson.put("section", pCont->GetSection()->GetSectionName().toString());
     m_pActiveShell->GetView().viewCallback(COKitCallbackType::OPEN_LINKED_DOCUMENT,
                                            aJson.finishAndGetAsOString());
+}
+
+namespace
+{
+/// Creates an empty text document at rUrl, with the styles and the chapter numbering of rMaster.
+bool CreateChapterFile(const OUString& rUrl, const SwDoc& rMaster)
+{
+    std::shared_ptr<const SfxFilter> pFilter = SwIoSystem::GetFilterOfFormat(FILTER_XML);
+    if (!pFilter)
+        return false;
+
+    SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
+    if (!xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow))
+        return false;
+
+    SwDoc* pDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
+    pDoc->ReplaceStyles(rMaster);
+    if (const SwNumRule* pOutlineRule = rMaster.GetOutlineNumRule())
+        pDoc->SetOutlineNumRule(*pOutlineRule);
+
+    SfxMedium* pMedium = new SfxMedium(rUrl, StreamMode::STD_READWRITE);
+    pMedium->SetFilter(pFilter);
+    xDocSh->DoSaveAs(*pMedium);
+    xDocSh->DoSaveCompleted(pMedium);
+    const bool bCreated = !xDocSh->GetErrorIgnoreWarning();
+    xDocSh->DoClose();
+    return bCreated;
+}
+
+/// A file next to the master document rMasterUrl, named after it, that does not exist yet.
+OUString SuggestChapterUrl(std::u16string_view rMasterUrl)
+{
+    INetURLObject aUrl(rMasterUrl);
+    if (rMasterUrl.empty() || aUrl.GetProtocol() != INetProtocol::File)
+        return OUString();
+
+    const OUString aBase = aUrl.getBase(INetURLObject::LAST_SEGMENT, true,
+                                        INetURLObject::DecodeMechanism::WithCharset);
+    // A folder that cannot be looked into gets no suggestion, nor does one that is full.
+    for (sal_Int32 nNumber = 1; nNumber <= 1000; ++nNumber)
+    {
+        aUrl.setName(Concat2View(aBase + "-" + OUString::number(nNumber) + ".odt"));
+        const OUString aCandidate = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        osl::DirectoryItem aItem;
+        const osl::FileBase::RC eResult = osl::DirectoryItem::get(aCandidate, aItem);
+        if (eResult == osl::FileBase::E_NOENT)
+            return aCandidate;
+        if (eResult != osl::FileBase::E_None)
+            break;
+    }
+    return OUString();
+}
+}
+
+void SwGlobalTree::InsertNewDocument(std::optional<SwGlblDocContent> oDocContent)
+{
+    std::shared_ptr<const SfxFilter> pFilter = SwIoSystem::GetFilterOfFormat(FILTER_XML);
+    std::vector<sfx2::COKitFilePicker::Filter> aFilters;
+    if (pFilter)
+        aFilters.push_back({ pFilter->GetUIName(), pFilter->GetWildcard().getGlob() });
+
+    // Next to the master document as the user knows it, which an app may have opened as a copy.
+    SfxMedium* pMedium = m_pActiveShell->GetView().GetDocShell()->GetMedium();
+    const OUString aSuggested = SuggestChapterUrl(pMedium ? pMedium->GetBaseURL() : OUString());
+
+    std::weak_ptr<bool> xAlive = m_xAlive;
+    const int nView = KitHelper::getCurrentView();
+    sfx2::COKitFilePicker::pickSaveLocation(
+        SwResId(STR_NEW_FILE), aSuggested, aFilters,
+        [this, xAlive, nView, oDocContent = std::move(oDocContent)](
+            const std::optional<OUString>& roUrl)
+        {
+            // The Navigator can be gone by the time the user picks.
+            if (xAlive.expired() || !m_pActiveShell || !roUrl)
+                return;
+
+            // Switch to the view that asked, and switch back when done.
+            comphelper::ScopeGuard aRestoreView(
+                [nSavedView = KitHelper::getCurrentView()]
+                {
+                    if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
+                        KitHelper::setView(nSavedView);
+                });
+            if (nView >= 0 && KitHelper::getCurrentView() != nView)
+                KitHelper::setView(nView);
+
+            if (!CreateChapterFile(*roUrl, *m_pActiveShell->GetDoc()))
+            {
+                SAL_WARN("sw.ui", "Cannot create the chapter " << *roUrl);
+                return;
+            }
+            InsertRegion(oDocContent ? &*oDocContent : nullptr, &*roUrl);
+
+            // The new chapter is written where the host shows it.
+            const INetURLObject aNewUrl(*roUrl);
+            if (!m_pSwGlblDocContents)
+                return;
+            for (const std::unique_ptr<SwGlblDocContent>& pContent : *m_pSwGlblDocContents)
+            {
+                if (pContent->GetType() == GLBLDOC_SECTION
+                    && INetURLObject(o3tl::getToken(pContent->GetSection()->GetLinkFileName(), 0,
+                                                    sfx2::cTokenSeparator))
+                           == aNewUrl)
+                {
+                    OpenDoc(pContent.get());
+                    break;
+                }
+            }
+        });
 }
 
 IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl, weld::TreeView&, bool)

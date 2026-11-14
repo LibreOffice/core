@@ -257,6 +257,28 @@ void install_clipboard_provider(COKit &rOffice)
     rOffice.installClipboardProvider(&provider);
 }
 
+// The content types of the picker filters. A wildcard has the shape "*.png"; the extension
+// follows the last dot.
+static NSArray<UTType*>* contentTypesForFilters(const COKitFilePickerFilter* pFilters, size_t nFilters)
+{
+    NSMutableArray<UTType*>* types = [NSMutableArray array];
+    for (size_t i = 0; i < nFilters; ++i)
+    {
+        NSString* wildcards = [NSString stringWithUTF8String:pFilters[i].pWildcards];
+        for (NSString* wildcard in [wildcards componentsSeparatedByString:@";"])
+        {
+            NSRange dot = [wildcard rangeOfString:@"." options:NSBackwardsSearch];
+            if (dot.location == NSNotFound)
+                continue;
+            UTType* type =
+                [UTType typeWithFilenameExtension:[wildcard substringFromIndex:dot.location + 1]];
+            if (type)
+                [types addObject:type];
+        }
+    }
+    return types;
+}
+
 // The engine asks the user for a file. Convert the details on the calling
 // thread, then show an open panel on the main thread and answer through the
 // completion; the engine's main loop keeps running while the panel is open.
@@ -268,22 +290,7 @@ static void filePickerProviderPick(const char* pTitle, const COKitFilePickerFilt
     @autoreleasepool {
         NSString* title = pTitle && pTitle[0] ? [NSString stringWithUTF8String:pTitle] : nil;
 
-        NSMutableArray<UTType*>* types = [NSMutableArray array];
-        for (size_t i = 0; i < nFilters; ++i)
-        {
-            NSString* wildcards = [NSString stringWithUTF8String:pFilters[i].pWildcards];
-            for (NSString* wildcard in [wildcards componentsSeparatedByString:@";"])
-            {
-                // A wildcard has the shape "*.png"; the extension follows the last dot.
-                NSRange dot = [wildcard rangeOfString:@"." options:NSBackwardsSearch];
-                if (dot.location == NSNotFound)
-                    continue;
-                UTType* type =
-                    [UTType typeWithFilenameExtension:[wildcard substringFromIndex:dot.location + 1]];
-                if (type)
-                    [types addObject:type];
-            }
-        }
+        NSArray<UTType*>* types = contentTypesForFilters(pFilters, nFilters);
 
         dispatch_async(dispatch_get_main_queue(), ^{
             NSOpenPanel* panel = [NSOpenPanel openPanel];
@@ -314,10 +321,55 @@ static void filePickerProviderPick(const char* pTitle, const COKitFilePickerFilt
 // Install the process-global file picker provider (declared in macos.h). After
 // this a command that needs the user to pick a file - compare documents,
 // insert an image - opens a native open panel instead of the engine's dialog.
+// The engine asks where a new file goes, the chapter of a master document for example. As for
+// an open-file pick, a save panel on the main thread answers through the completion. The sandbox
+// lets the app write the file the user chose there.
+static void filePickerProviderPickSaveLocation(const char* pTitle, const char* pSuggestedUrl,
+                                               const COKitFilePickerFilter* pFilters,
+                                               size_t nFilters,
+                                               void (*pfnPicked)(void* pContext, const char* pUrl),
+                                               void* pContext)
+{
+    @autoreleasepool {
+        NSString* title = pTitle && pTitle[0] ? [NSString stringWithUTF8String:pTitle] : nil;
+        NSURL* suggested = pSuggestedUrl && pSuggestedUrl[0]
+            ? [NSURL URLWithString:[NSString stringWithUTF8String:pSuggestedUrl]]
+            : nil;
+        NSArray<UTType*>* types = contentTypesForFilters(pFilters, nFilters);
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSSavePanel* panel = [NSSavePanel savePanel];
+            if (title)
+                panel.message = title;
+            if (types.count > 0)
+                panel.allowedContentTypes = types;
+            if (suggested)
+            {
+                panel.directoryURL = [suggested URLByDeletingLastPathComponent];
+                panel.nameFieldStringValue = suggested.lastPathComponent;
+            }
+
+            void (^deliver)(NSModalResponse) = ^(NSModalResponse result) {
+                if (result == NSModalResponseOK && panel.URL)
+                    pfnPicked(pContext, panel.URL.absoluteString.UTF8String);
+                else
+                    pfnPicked(pContext, nullptr);
+            };
+
+            NSWindow* window = NSApp.keyWindow;
+            if (window)
+                [panel beginSheetModalForWindow:window completionHandler:deliver];
+            else
+                [panel beginWithCompletionHandler:deliver];
+        });
+    }
+}
+
 void install_filepicker_provider(COKit &rOffice)
 {
     static COKitFilePickerProvider provider{};
     provider.pick = filePickerProviderPick;
+    provider.pickSaveLocation = filePickerProviderPickSaveLocation;
     // The native picker gives the file the user picked, which a document may link to.
     provider.picksFilesInPlace = true;
     rOffice.installFilePickerProvider(&provider);

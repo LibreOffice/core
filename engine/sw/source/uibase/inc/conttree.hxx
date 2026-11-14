@@ -361,6 +361,9 @@ private:
     std::unique_ptr<weld::Menu> m_xContextMenu;
     std::unique_ptr<weld::Menu> m_xContextSubMenu;
 
+    // tells the completion of a pick whether the tree is still there
+    std::shared_ptr<bool> m_xAlive = std::make_shared<bool>(true);
+
 
     void        InsertRegion( const SwGlblDocContent* _pContent,
                               const cpo::uno::Sequence< OUString >& _rFiles );
@@ -386,6 +389,8 @@ private:
     void            RequestFreshLinkedFiles(const std::vector<OUString>& rIds = {});
     // the path of the file a section links to, relative to this document, as the host knows it
     OUString        LinkedFileId(const SwSection& rSection);
+    // asks where a new document goes, then creates it and links to it at the given position
+    void            InsertNewDocument(std::optional<SwGlblDocContent> oDocContent);
     void            GotoContent(const SwGlblDocContent*);
     MenuEnableFlags GetEnableFlags() const;
 
