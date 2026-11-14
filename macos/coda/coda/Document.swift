@@ -146,10 +146,11 @@ class Document: NSDocument {
     private func setPendingIfModified(url: URL,
                                       typeName: String,
                                       saveOperation: NSDocument.SaveOperationType,
+                                      force: Bool = false,
                                       completionHandler: @escaping ((any Error)?) -> Void) -> Bool {
         modifiedLock.lock()
         defer { modifiedLock.unlock() }
-        if _isModified {
+        if _isModified || force {
             let t = self.changeCountToken(for: saveOperation)
             pendingSave = PendingSave(url: url, typeName: typeName, operation: saveOperation, completion: completionHandler, token: t)
             return true
@@ -383,10 +384,22 @@ class Document: NSDocument {
      */
     override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType, completionHandler: @escaping ((any Error)?) -> Void) {
 
-        if setPendingIfModified(url: url, typeName: typeName, saveOperation: saveOperation, completionHandler: completionHandler) {
+        // The engine writes the relative links of the document, the chapters of a master
+        // document for example, for the file it saves. Saved as another file, it is told that
+        // file first, and saved into another folder it writes even an unmodified document, as
+        // its links are written anew for that folder.
+        let changesFile = saveOperation == .saveAsOperation || (saveOperation == .saveOperation && self.fileURL == nil)
+        let changesFolder = changesFile && url.deletingLastPathComponent() != self.fileURL?.deletingLastPathComponent()
+        if changesFile && url != self.fileURL {
+            let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-._~:/"))
+            let encoded = url.absoluteString.addingPercentEncoding(withAllowedCharacters: allowed) ?? url.absoluteString
+            COWrapper.handleMessage(with: self, message: "originaldocumenturl url=" + encoded)
+        }
+
+        if setPendingIfModified(url: url, typeName: typeName, saveOperation: saveOperation, force: changesFolder, completionHandler: completionHandler) {
             // we have to wait for COOL to save first
             DispatchQueue.main.async {
-                COWrapper.handleMessage(with: self, message: "save dontTerminateEdit=1 dontSaveIfUnmodified=1")
+                COWrapper.handleMessage(with: self, message: changesFolder ? "save dontTerminateEdit=1" : "save dontTerminateEdit=1 dontSaveIfUnmodified=1")
             }
         }
         else {

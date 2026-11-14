@@ -362,6 +362,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     return (nil, nil)
                 }
 
+                if body.hasPrefix("GRANTLINKEDFILES ") {
+                    grantLinkedFiles(String(body.dropFirst("GRANTLINKEDFILES ".count)))
+                    return (nil, nil)
+                }
+
                 if ViewController.handleFetchAIModels(body, replyHandler: replyHandler) {
                     return nil
                 }
@@ -980,6 +985,26 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         }
 
         return nil // not handled
+    }
+
+    /// The document links to files, the chapters of a master document for example, in a folder
+    /// the sandbox does not let the app read. Once the user chose that folder, the engine reads
+    /// them where they are, and their links are updated, which choosing the folder agrees to.
+    func grantLinkedFiles(_ json: String) {
+        guard let data = json.data(using: .utf8),
+              let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let links = object["links"] as? [[String: Any]] else {
+            COWrapper.LOG_ERR("GRANTLINKEDFILES without a list of links")
+            return
+        }
+        let files = links.compactMap { ($0["url"] as? String).flatMap { URL(string: $0) } }
+            .filter { $0.isFileURL }
+        guard !files.isEmpty else { return }
+
+        LinkedFolderAccess.ask(for: files, window: view.window) { [weak self] granted in
+            guard granted, let self, let document = self.document else { return }
+            COWrapper.handleMessage(with: document, message: "allowlinkupdate")
+        }
     }
 
     func exchangeMonitors() {

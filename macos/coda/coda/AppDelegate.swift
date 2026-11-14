@@ -21,6 +21,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         setUserName();
 
+        // The folders the user allowed for the files documents link to stay readable.
+        LinkedFolderAccess.restore()
+
         setenv("FONTCONFIG_PATH", Bundle.main.resourcePath! + "/fontconfig", 1)
 
         // Initialize the COOLWSD
