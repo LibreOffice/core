@@ -74,6 +74,10 @@ class SAL_DLLPUBLIC_RTTI ScImportExport
     bool        mbIncludeBOM; // Whether to include a byte-order-mark in the output.
     bool        mbDetermineRangeOnly;   // Only work out which range an import would
                                         // cover, leaving the document untouched.
+    SCTAB       mnSheetViewTab;         // The sheet view holder table that a paste was made
+                                        // on, when aRange is on its default view table, or -1.
+    bool        mbRefusedOnSheetView;   // The paste was not made, because it reaches into rows
+                                        // that the sheet view sorts or filters on its own.
     ScExportTextOptions mExportTextOptions;
 
     std::unique_ptr<ScAsciiOptions> pExtOptions;        // extended options
@@ -160,6 +164,8 @@ public:
     void SetDetermineRangeOnly( bool b ) { mbDetermineRangeOnly = b; }
     void SetImportBroadcast( bool b ) { mbImportBroadcast = b; }
     void SetOverwriting( const bool bOverwriting ) { mbOverwriting = bOverwriting; }
+    void SetSheetViewTab( SCTAB nTab ) { mnSheetViewTab = nTab; }
+    bool IsRefusedOnSheetView() const { return mbRefusedOnSheetView; }
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 
     bool GetIncludeBOM() const { return mbIncludeBOM; }

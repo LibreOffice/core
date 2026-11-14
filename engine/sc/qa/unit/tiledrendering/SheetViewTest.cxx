@@ -1638,6 +1638,106 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testPasteOnSheetViewIntoItsAutoFilterIsRefused)
     CPPUNIT_ASSERT_EQUAL(21.0, rDocument.GetValue(ScAddress(1, 2, nSheetViewTab)));
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testPlainTextPasteOnSheetViewReachesDefaultView)
+{
+    // Plain text that one user pastes from the clipboard on a sheet view appears on the default
+    // view of the same tab, stays on the sheet view after the sync, and goes away from both on
+    // undo.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // User A types into A1 on the default view.
+    switchToDefaultView();
+    typeCharsInCell(std::string("ABC"), 0, 0, mpTabViewDefaultView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+
+    // User B creates a sheet view of that tab.
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+
+    // User B has plain text from outside the document on the clipboard and pastes it into A5
+    // on the sheet view.
+    vcl::unohelper::TextDataObject::CopyStringTo(
+        u"Plain"_ustr, mpTabViewSheetView->GetViewData().GetActiveWin()->GetClipboard());
+    moDefaultView->ClearAllInvalids();
+    gotoCell(u"A5");
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The pasted text is on the default view and on the sheet view, the default view tab is
+    // repainted, and user B stays on the sheet view.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The pasted text did not reach the default view", u"Plain"_ustr,
+                                 rDocument.GetString(ScAddress(0, 4, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"Plain"_ustr, rDocument.GetString(ScAddress(0, 4, nSheetViewTab)));
+    auto const& rDefaultViewParts = moDefaultView->m_aInvalidationsParts;
+    CPPUNIT_ASSERT_MESSAGE("The default view tab was not repainted after the paste",
+                           std::ranges::find(rDefaultViewParts, int(nDefaultViewTab))
+                               != rDefaultViewParts.end());
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, mpTabViewSheetView->GetViewData().GetTabNumber());
+
+    // Undo on the sheet view removes the pasted text from both views.
+    undo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(0, 4, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(0, 4, nSheetViewTab)));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testPlainTextPasteOnSheetViewIntoItsAutoFilterIsRefused)
+{
+    // Plain text that is pasted on a sheet view into the range of the sheet view's own
+    // auto-filter changes neither the sheet view nor the default view, because the sheet view
+    // can order and hide the rows of that range differently from the default view.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // A table with a header row and three rows of numbers in A1:C4.
+    rDocument.SetString(ScAddress(0, 0, 0), u"Alpha"_ustr);
+    rDocument.SetString(ScAddress(1, 0, 0), u"Beta"_ustr);
+    rDocument.SetString(ScAddress(2, 0, 0), u"Gamma"_ustr);
+    for (SCROW nRow = 1; nRow <= 3; ++nRow)
+    {
+        for (SCCOL nColumn = 0; nColumn <= 2; ++nColumn)
+            rDocument.SetValue(ScAddress(nColumn, nRow, 0), nRow * 10.0 + nColumn);
+    }
+
+    setupViews();
+
+    // User B creates a sheet view and adds an auto-filter to A1:C4 on it.
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+    gotoCell(u"A1");
+    dispatchCommand(mxComponent, u".uno:DataFilterAutoFilter"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 2, 3, nSheetViewTab),
+                         getAutoFilterArea(rDocument, nSheetViewTab));
+
+    // User B pastes plain text into B3, inside the auto-filter range.
+    vcl::unohelper::TextDataObject::CopyStringTo(
+        u"Plain"_ustr, mpTabViewSheetView->GetViewData().GetActiveWin()->GetClipboard());
+    gotoCell(u"B3");
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // B3 keeps its number on both views.
+    CPPUNIT_ASSERT_EQUAL(21.0, rDocument.GetValue(ScAddress(1, 2, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(21.0, rDocument.GetValue(ScAddress(1, 2, nSheetViewTab)));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
 {
     // Create two views, and leave the second one current.

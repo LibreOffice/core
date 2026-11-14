@@ -114,7 +114,7 @@ ScImportExport::ScImportExport( ScDocument& r )
       bAll( true ), bSingle( true ), bUndo( false ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
-      mbDetermineRangeOnly(false)
+      mbDetermineRangeOnly(false), mnSheetViewTab(-1), mbRefusedOnSheetView(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -130,7 +130,7 @@ ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
-      mbDetermineRangeOnly(false)
+      mbDetermineRangeOnly(false), mnSheetViewTab(-1), mbRefusedOnSheetView(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -147,7 +147,7 @@ ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
-      mbDetermineRangeOnly(false)
+      mbDetermineRangeOnly(false), mnSheetViewTab(-1), mbRefusedOnSheetView(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -165,7 +165,7 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
-      mbDetermineRangeOnly(false)
+      mbDetermineRangeOnly(false), mnSheetViewTab(-1), mbRefusedOnSheetView(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -237,6 +237,20 @@ bool ScImportExport::IsFormatSupported( SotClipboardFormatId nFormat )
 // Prepare for Undo
 bool ScImportExport::StartPaste()
 {
+    // A paste on a sheet view is written to the default view table, and the sync afterwards
+    // copies it to the sheet view. Rows that the sheet view sorts or filters on its own are
+    // other rows on the default view table, so a paste into them is refused.
+    if (mnSheetViewTab >= 0)
+    {
+        ScRange aSheetViewRange(aRange);
+        aSheetViewRange.aStart.SetTab(mnSheetViewTab);
+        aSheetViewRange.aEnd.SetTab(mnSheetViewTab);
+        if (sc::DocFuncUtil::isRangeOnSheetViewOwnRows(rDoc, aSheetViewRange))
+        {
+            mbRefusedOnSheetView = true;
+            return false;
+        }
+    }
     if ( !bAll )
     {
         ScEditableTester aTester = ScEditableTester::CreateAndTestRange(rDoc, aRange, sc::EditAction::Unknown);

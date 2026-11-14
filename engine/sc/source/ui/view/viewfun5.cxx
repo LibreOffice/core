@@ -696,9 +696,15 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
 
     bool bRet = false;
     ScDocument& rDoc = GetViewData().GetDocument();
-    ScAddress aCellPos( nPosX, nPosY, GetViewData().CurrentTabForData() );
+    // On a sheet view the text is written to the default view tab, and the sync afterwards
+    // copies it to the sheet view.
+    const SCTAB nViewTab = GetViewData().CurrentTabForData();
+    const SCTAB nDataTab = rDoc.GetDefaultViewTableNumber(nViewTab);
+    ScAddress aCellPos( nPosX, nPosY, nDataTab );
     auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
     pObj->SetOverwriting( true );
+    if (nDataTab != nViewTab)
+        pObj->SetSheetViewTab(nViewTab);
 
     auto pStrBuffer = std::make_shared<OUString>();
     if (std::unique_ptr<SvStream> xStream = rDataHelper.GetSotStorageStream( nFormatId ) )
@@ -783,6 +789,12 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
                     // Content was partially pasted, which can be undone by
                     // the user though.
                     bShowErrorDialog = bShowErrorDialog && pObj->IsOverflow();
+
+                    if (pObj->IsRefusedOnSheetView())
+                    {
+                        bShowErrorDialog = false;
+                        ErrorMessage(STR_SHEET_VIEW_PASTE_OWN_ROWS);
+                    }
                 }
                 else
                 {
@@ -808,6 +820,14 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
     else if ((nFormatId != SotClipboardFormatId::STRING && nFormatId != SotClipboardFormatId::STRING_TSVC)
             && rDataHelper.GetString( nFormatId, *pStrBuffer ))
         bRet = pObj->ImportString( *pStrBuffer, nFormatId );
+
+    // The message names the reason, and the paste counts as handled, so the caller does not
+    // add its general paste error.
+    if (pObj->IsRefusedOnSheetView())
+    {
+        ErrorMessage(STR_SHEET_VIEW_PASTE_OWN_ROWS);
+        bRet = true;
+    }
 
     InvalidateAttribs();
     GetViewData().UpdateInputHandler();
