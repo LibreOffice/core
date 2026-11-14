@@ -120,7 +120,7 @@ namespace cool {
 			slack: number,
 		): boolean {
 			for (const entry of data.objects.values()) {
-				if (!entry.primitives?.length) continue;
+				if (!entry.primitives?.length || entry.printed === false) continue;
 				if (
 					entry.x === undefined ||
 					entry.y === undefined ||

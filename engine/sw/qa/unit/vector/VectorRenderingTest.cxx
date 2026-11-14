@@ -591,6 +591,42 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorHiddenShapeHasNoEntry)
     CPPUNIT_ASSERT(!findEntry(aEntries, sw::vector::EntryKind::Shape));
 }
 
+/// A frame that is not set to print is in the page for any client, marked as not printed, and so
+/// is the paragraph in it. The paragraph of the body is printed.
+CPPUNIT_TEST_FIXTURE(Test, testVectorFrameNotPrintedIsMarked)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY_THROW);
+    xFrameProperties->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(4000, 2000)));
+    xFrameProperties->setPropertyValue(u"Print"_ustr, uno::Any(false));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(), xFrame, false);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    auto aFlyIterator = findFly(aEntries);
+    CPPUNIT_ASSERT(aFlyIterator != aEntries.end());
+    CPPUNIT_ASSERT(!aFlyIterator->mbPrinted);
+    const sal_uInt64 nFlyId = aFlyIterator->mnId;
+    auto aFlyTextIterator = std::ranges::find_if(
+        aEntries,
+        [nFlyId](const sw::vector::Entry& rEntry)
+        {
+            return rEntry.meKind == sw::vector::EntryKind::TextFrame && rEntry.moParent
+                   && *rEntry.moParent == nFlyId;
+        });
+    CPPUNIT_ASSERT(aFlyTextIterator != aEntries.end());
+    CPPUNIT_ASSERT(!aFlyTextIterator->mbPrinted);
+    const sw::vector::Entry* pBodyText = findBodyParagraph(aEntries, 0);
+    CPPUNIT_ASSERT(pBodyText);
+    CPPUNIT_ASSERT(pBodyText->mbPrinted);
+}
+
 /// When the document paints the objects behind the text over the header, a frame behind the
 /// text is drawn over the header and under the body text.
 CPPUNIT_TEST_FIXTURE(Test, testVectorFrameBehindTheTextLiesBetweenHeaderAndBody)

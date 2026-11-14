@@ -122,6 +122,10 @@ struct SW_DLLPUBLIC Entry
     /// For a fly or a drawing object: the id of the frame it is anchored in. None for an object
     /// anchored to the page.
     std::optional<sal_uInt64> moAnchor;
+
+    /// False for what printing leaves out: a fly or a drawing object that is not set to print, an
+    /// object anchored in such a fly, and every entry inside one of them.
+    bool mbPrinted = true;
 };
 
 /** Gathers the entries of one page in paint order.
@@ -244,6 +248,9 @@ void addColorFill(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
 /// The frame the object is anchored in and moves with, or none when that frame is the page.
 std::optional<sal_uInt64> anchorOf(const SwAnchoredObject& rObject);
 
+/// Whether printing shows rObject: it is set to print, and so is every fly it is anchored in.
+bool isPrinted(const SwAnchoredObject& rObject);
+
 /// Where the objects on a layer of the drawing are drawn, against the text of the page.
 enum class ObjectPlace
 {
@@ -258,8 +265,7 @@ enum class ObjectPlace
 
 /// Adds the entries of the objects anchored on rPage that are drawn at ePlace, in paint order.
 /// The page holds every object but the ones anchored as a character. An object is added when it
-/// is visible, on a visible layer and placed where the paint draws it. When the collector is not
-/// for a view, it also has to be set to print.
+/// is visible, on a visible layer and placed where the paint draws it.
 void addPageObjects(Collector& rCollector, const SwPageFrame& rPage, ObjectPlace ePlace);
 
 /// Adds the entries of the objects anchored as a character in rFrame, in the order of their

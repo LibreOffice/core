@@ -302,6 +302,10 @@ namespace cool {
 		/// members follow it in the object list and draw its content, so
 		/// a group with members has no primitives of its own.
 		parent?: number;
+		/// False on an entry of a text document page that printing leaves out: a frame or a
+		/// shape that is not set to print, and everything inside it. Absent on every other
+		/// entry.
+		printed?: boolean;
 		/// Id of the layer the object is on.
 		layer?: number;
 		/// True for a placeholder that holds no content of its own yet.

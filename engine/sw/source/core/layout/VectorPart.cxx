@@ -56,7 +56,7 @@ bool samePlace(const Entry& rOne, const SwRect& rOneBox, const Entry& rOther,
 {
     return rOneBox == rOtherBox && rOne.moParent == rOther.moParent
            && rOne.mbIsFollow == rOther.mbIsFollow && rOne.mbHasFollow == rOther.mbHasFollow
-           && rOne.moAnchor == rOther.moAnchor;
+           && rOne.moAnchor == rOther.moAnchor && rOne.mbPrinted == rOther.mbPrinted;
 }
 
 /// Whether the layout is idle: no view of the document runs an action, formats the layout, paints
@@ -363,6 +363,8 @@ void PartStore::writeEntry(tools::JsonWriter& rWriter, const RecordedEntry& rRec
         rWriter.put("hasFollow", true);
     if (rEntry.moAnchor)
         rWriter.put("anchor", *rEntry.moAnchor);
+    if (!rEntry.mbPrinted)
+        rWriter.put("printed", false);
 
     // An entry that only moved goes without primitives, and the reader keeps the ones it has.
     if (bDrawing)

@@ -121,7 +121,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 	}
 
 	/// Draw the entries of a text document page in paint order, each where its primitives
-	/// start on the page.
+	/// start on the page. What printing leaves out is not drawn.
 	renderTextPage(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
@@ -129,7 +129,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 		this._setUpRenderer(data, /*editView=*/ false, /*authoredColors=*/ false);
 		for (const id of data.order) {
 			const entry = data.objects.get(id);
-			if (!entry?.primitives) continue;
+			if (!entry?.primitives || entry.printed === false) continue;
 			const origin = VectorPartManagerBase.entryOrigin(data, entry);
 			if (!origin) continue;
 			// The context comes back as it was, also when a primitive throws.
@@ -292,6 +292,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 			{ x: x - origin.x, y: y - origin.y, toleranceX: 0, toleranceY: 0 },
 			(entry) =>
 				entry.kind !== undefined &&
+				entry.printed !== false &&
 				WriterVectorManager.drawnOverText.has(entry.kind) &&
 				entry.x !== undefined &&
 				entry.y !== undefined &&

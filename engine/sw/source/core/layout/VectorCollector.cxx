@@ -178,6 +178,8 @@ void Collector::open(const SwFrame& rFrame)
         current().mbIsFollow = rTextFrame.IsFollow();
         current().mbHasFollow = rTextFrame.HasFollow();
     }
+    else if (rFrame.IsFlyFrame() && !isPrinted(static_cast<const SwFlyFrame&>(rFrame)))
+        current().mbPrinted = false;
 }
 
 void Collector::open(sal_uInt64 nId, EntryKind eKind, const SwRect& rBox)
@@ -187,7 +189,10 @@ void Collector::open(sal_uInt64 nId, EntryKind eKind, const SwRect& rBox)
     aEntry.meKind = eKind;
     aEntry.maBox = rBox;
     if (!maOpen.empty())
+    {
         aEntry.moParent = maEntries[maOpen.back()].mnId;
+        aEntry.mbPrinted = maEntries[maOpen.back()].mbPrinted;
+    }
 
     maOpen.push_back(maEntries.size());
     maEntries.push_back(std::move(aEntry));
@@ -265,6 +270,7 @@ void Collector::addBackground(const SwFrame& rFrame,
     aEntry.moParent = current().mnId;
     aEntry.meKind = EntryKind::Background;
     aEntry.maBox = current().maBox;
+    aEntry.mbPrinted = current().mbPrinted;
     aEntry.maPrimitives = std::move(rBackground);
     maBackgrounds.push_back(std::move(aEntry));
 }
@@ -307,6 +313,7 @@ void Collector::deferLines(sal_uInt64 nId, drawinglayer::primitive2d::Primitive2
     aEntry.moParent = current().mnId;
     aEntry.meKind = EntryKind::Borders;
     aEntry.maBox = current().maBox;
+    aEntry.mbPrinted = current().mbPrinted;
     aEntry.maPrimitives = std::move(rLines);
     // Without a layer around them the lines come right after what is gathered so far.
     if (maBorderLayers.empty())
@@ -356,6 +363,15 @@ std::optional<sal_uInt64> anchorOf(const SwAnchoredObject& rObject)
     return pAnchor->GetFrameId();
 }
 
+bool isPrinted(const SwAnchoredObject& rObject)
+{
+    if (!rObject.GetFrameFormat()->GetPrint().GetValue())
+        return false;
+    const SwFrame* pAnchor = rObject.GetAnchorFrame();
+    const SwFlyFrame* pAnchorFly = pAnchor ? pAnchor->FindFlyFrame() : nullptr;
+    return !pAnchorFly || isPrinted(*pAnchorFly);
+}
+
 namespace
 {
 /// Adds the entry of a drawing object that is not a frame of Writer: a shape, a control or a
@@ -389,6 +405,8 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
 
     rCollector.open(entryIdOf(*pObject), EntryKind::Shape, aBox);
     rCollector.current().moAnchor = anchorOf(rObject);
+    if (!isPrinted(rObject))
+        rCollector.current().mbPrinted = false;
     // A view draws the entries right away and compares nothing, so it needs no decomposition.
     if (!rCollector.context().isForView())
         svx::vector::decomposeForComparison(aPrimitives, rCollector.current().maDrawn,
@@ -409,10 +427,9 @@ ObjectPlace placeOf(SdrLayerID nLayer, const IDocumentDrawModelAccess& rAccess)
     return ObjectPlace::InFrontOfText;
 }
 
-/// Whether the paint draws rObject, judged from the layout and the document alone. The object
-/// has to be visible and on a visible layer, and set to print unless rContext is for a view,
-/// since a view also shows what is not printed. The object that stands for all the frames of a
-/// fly format is never drawn, as each of those frames has an object of its own. Every object
+/// Whether the paint draws rObject on the screen, judged from the layout and the document alone.
+/// The object has to be visible and on a visible layer. The object that stands for all the frames
+/// of a fly format is never drawn, as each of those frames has an object of its own. Every object
 /// needs the frame it is anchored at. A fly has to overlap its page, a drawing object needs a
 /// valid position of the frame it is anchored at, and an object anchored in a fly is drawn only
 /// when that fly is.
@@ -422,8 +439,6 @@ bool isDrawn(const SwAnchoredObject& rObject, const IDocumentDrawModelAccess& rA
     const SdrObject* pDrawObject = rObject.GetDrawObj();
     if (!pDrawObject || !rAccess.IsVisibleLayerId(pDrawObject->GetLayer())
         || !pDrawObject->IsVisible())
-        return false;
-    if (!rContext.isForView() && !rObject.GetFrameFormat()->GetPrint().GetValue())
         return false;
     if (dynamic_cast<const SwFlyDrawObj*>(pDrawObject))
         return false;
@@ -506,6 +521,8 @@ void addReplacement(Collector& rCollector, const SwAnchoredObject& rObject)
     else
         rCollector.open(entryIdOf(*pObject), EntryKind::Shape, aBox);
     rCollector.current().moAnchor = anchorOf(rObject);
+    if (!isPrinted(rObject))
+        rCollector.current().mbPrinted = false;
     rCollector.add(new drawinglayer::primitive2d::GraphicPrimitive2D(
         basegfx::utils::createScaleB2DHomMatrix(aBox.Width(), aBox.Height()),
         GraphicObject(Graphic(aRecording))));
