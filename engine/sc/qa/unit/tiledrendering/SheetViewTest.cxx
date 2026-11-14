@@ -1432,6 +1432,55 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewAutoFilterSurvivesSortOnDefaultView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testPasteOnDefaultViewReachesSheetView)
+{
+    // A cell that one user copies and pastes on the default view appears on the sheet view that
+    // another user has open on the same tab, and that user is told to repaint it.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // User A types into A1 and A2 on the default view.
+    switchToDefaultView();
+    typeCharsInCell(std::string("ABC"), 0, 0, mpTabViewDefaultView, pModelObj);
+    typeCharsInCell(std::string("XYZ"), 0, 1, mpTabViewDefaultView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+
+    // User B creates a sheet view of that tab.
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(0, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, rDocument.GetString(ScAddress(0, 1, nSheetViewTab)));
+
+    // User A copies A1 and pastes it into A5 on the default view.
+    switchToDefaultView();
+    gotoCell(u"A1");
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    moSheetView->ClearAllInvalids();
+    gotoCell(u"A5");
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(0, 4, nDefaultViewTab)));
+
+    // The pasted cell is on the sheet view as well, and the sheet view tab is repainted.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The pasted cell did not reach the sheet view", u"ABC"_ustr,
+                                 rDocument.GetString(ScAddress(0, 4, nSheetViewTab)));
+    auto const& rSheetViewParts = moSheetView->m_aInvalidationsParts;
+    CPPUNIT_ASSERT_MESSAGE("The sheet view tab was not repainted after the paste",
+                           std::ranges::find(rSheetViewParts, int(nSheetViewTab))
+                               != rSheetViewParts.end());
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
 {
     // Create two views, and leave the second one current.

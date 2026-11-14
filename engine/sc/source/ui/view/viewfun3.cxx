@@ -67,6 +67,7 @@
 #include <clipoptions.hxx>
 #include <gridwin.hxx>
 #include <SheetViewManager.hxx>
+#include <docfuncutil.hxx>
 #include <uiitems.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <sfx2/kit/helper.hxx>
@@ -2123,6 +2124,17 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
         HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, u"data-area-invalidate"_ustr);
 
     pDocSh->ResolveSpilledOutputs();
+
+    // The paste wrote to the tables of the mark directly, so copy those tables to their sheet
+    // views. The paste repainted only the tables it wrote to, so the invalidation includes the
+    // views that show a sheet view of them. A sheet view holder table has no sheet views of its
+    // own, and the sync leaves it alone.
+    ScDocument& rDoc = rViewData.GetDocument();
+    for (const SCTAB nTab : rMark)
+    {
+        rDoc.SyncSheetViews(nTab);
+        sc::DocFuncUtil::invalidateSheetViewTiles(*pDocSh, nTab, true /* bIncludeViewShownPart */);
+    }
 }
 
 //      D R A G   A N D   D R O P
