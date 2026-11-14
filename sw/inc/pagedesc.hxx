@@ -49,7 +49,7 @@ class SW_DLLPUBLIC SwPageFootnoteInfo
 {
 private:
     gfx::Length m_nMaxHeight = 0_emu;   ///< maximum height of the footnote area.
-    sal_uLong   m_nLineWidth;   ///< width of separator line
+    sal_uInt16   m_nLineWidth;   ///< width of separator line
     SvxBorderLineStyle m_eLineStyle;  ///< Style of the separator line
     Color       m_LineColor;    ///< color of the separator line
     double      m_Width;        ///< percentage width of the separator line.
@@ -59,7 +59,7 @@ private:
 
 public:
     gfx::Length GetHeight() const { return m_nMaxHeight; }
-    sal_uLong   GetLineWidth() const    { return m_nLineWidth; }
+    sal_uInt16   GetLineWidth() const    { return m_nLineWidth; }
     const Color& GetLineColor() const   { return m_LineColor;}
     SvxBorderLineStyle  GetLineStyle() const { return m_eLineStyle; }
     double GetWidth() const    { return m_Width; }
@@ -68,7 +68,7 @@ public:
     gfx::Length GetBottomDist() const { return m_nBottomDist; }
 
     void SetHeight(gfx::Length const nNew) { m_nMaxHeight = nNew; }
-    void SetLineWidth(sal_uLong const nSet) { m_nLineWidth = nSet; }
+    void SetLineWidth(sal_uInt16 const nSet) { m_nLineWidth = nSet; }
     void SetLineStyle(SvxBorderLineStyle const eSet) {m_eLineStyle = eSet;}
     void SetLineColor(const Color& rCol)    { m_LineColor = rCol;}
     void SetWidth(double rNew)    { m_Width = rNew; }
