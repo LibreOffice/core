@@ -3765,6 +3765,12 @@ button.has-img img {
 	margin: auto;
 }
 
+/* An image of the engine shown with an icon of ours, at the size of the bitmap it replaces */
+img.ui-image.ui-image-icon {
+	width: 16px;
+	height: 16px;
+}
+
 .ui-drawing-area-container {
 	margin: auto;
 }

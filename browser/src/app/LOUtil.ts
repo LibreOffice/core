@@ -963,12 +963,114 @@ class LOUtil {
 			updatefields3funlocksoftfixed3abool3d1: 'updateall',
 			navelement: 'navigator',
 			switchtoedit: 'edit',
+			insertformula: 'functiondialog',
+			charttheme: 'themedialog',
+			chartgradientpalette: 'gradientlinear',
 		};
 		if (iconURLAliases[cleanName]) {
 			cleanName = iconURLAliases[cleanName];
 		}
 
 		return 'lc_' + cleanName + '.svg';
+	}
+
+	// The icons of our own for the icons of the engine that toolbar items and
+	// images name by path, as the engine sends it in 'iconpath'. Most of these
+	// paths name the icon by a resource id, which says nothing about its
+	// purpose, and some differ only in the folder of their module.
+	private static readonly engineIconPaths: IconNameMap = {
+		// Writer Navigator, master document and headings toolbars
+		'sw/res/sc20171.png': 'movedown',
+		'sw/res/sc20174.png': 'moveup',
+		'sw/res/sc20172.png': 'outlineleft',
+		'sw/res/sc20173.png': 'outlineright',
+		'sw/res/sc20245.png': 'editdoc',
+		'sw/res/sc20246.png': 'updateall',
+		'sw/res/sc20247.png': 'swressc20247',
+		'sw/res/sc20248.png': 'save',
+		// Writer quick find
+		'sw/res/sr20006.png': 'searchdialog',
+		// Style families of the styles deck, and the inspector
+		'sw/res/sf01.png': 'parastyle',
+		'sw/res/sf02.png': 'charstyle',
+		'sw/res/sf03.png': 'framestyle',
+		'sw/res/sf04.png': 'pagestyle',
+		'sw/res/sf05.png': 'liststyle',
+		'sw/res/sf06.png': 'tablestyle',
+		'sw/res/sr20012.png': 'fontdialog',
+		'sc/res/sf01.png': 'tablestyle',
+		'sc/res/sf02.png': 'pagestyle',
+		'sd/res/sf01.png': 'basicshapes',
+		'sd/res/sf02.png': 'presentation',
+		'res/sc05554.png': 'formatpaintbrush',
+		'res/sc05555.png': 'stylenewbyexample',
+		'res/sc05556.png': 'styleupdatebyexample',
+		// Spelling dialog
+		'edit-paste': 'paste',
+		'accessories-character-map': 'insertsymbol',
+		// Calc Navigator
+		'sc/res/na03.png': 'dataranges',
+		'sc/res/na05.png': 'firstrecord',
+		'sc/res/na06.png': 'lastrecord',
+		'sc/res/na011.png': 'outlinebullet',
+		'sc/res/na010.png': 'showdetail',
+		'sc/res/na07.png': 'scenarios',
+		'sc/res/na09.png': 'inserthyperlink',
+		'sc/res/dropurl.png': 'inserthyperlink',
+		'sc/res/droplink.png': 'dragmodelink',
+		'sc/res/dropcopy.png': 'copy',
+		// Impress Navigator
+		'sd/res/nv03.png': 'firstrecord',
+		'sd/res/nv04.png': 'prevrecord',
+		'sd/res/nv05.png': 'nextrecord',
+		'sd/res/nv06.png': 'lastrecord',
+		'sd/res/nv08.png': 'copy',
+		'sd/res/nv09.png': 'dragmodelink',
+		'sd/res/nv010.png': 'inserthyperlink',
+		'sd/res/graphic.png': 'basicshapes',
+		// Calc sidebar, cell borders and their line style
+		'sc/res/sidebar/CellBorder.png': 'setborderstyle',
+		'sc/res/sidebar/CellBorderLineStyle_005.png': 'linestyle',
+		'sc/res/sidebar/CellBorderLineStyle_110.png': 'linestyle',
+		'sc/res/sidebar/CellBorderLineStyle_250.png': 'linestyle',
+		'sc/res/sidebar/CellBorderLineStyle_260.png': 'linestyle',
+		'sc/res/sidebar/CellBorderLineStyle_400.png': 'linestyle',
+		'sc/res/sidebar/CellBorderLineStyle_450.png': 'linestyle',
+		'sc/res/sidebar/CellBorderLineStyle_500.png': 'linestyle',
+		'sc/res/sidebar/CellBorderLineStyle_505.png': 'linestyle',
+		'sc/res/sidebar/CellBorderLineStyle_750.png': 'linestyle',
+		'sc/res/sidebar/CellBorder_Empty_18x18.png': 'fr01',
+		'sc/res/sidebar/CellBorder_Left_18x18.png': 'fr02',
+		'sc/res/sidebar/CellBorder_Right_18x18.png': 'fr03',
+		'sc/res/sidebar/CellBorder_LeftAndRight_18x18.png': 'fr04',
+		'sc/res/sidebar/CellBorder_Top_18x18.png': 'fr05',
+		'sc/res/sidebar/CellBorder_Bottom_18x18.png': 'fr06',
+		'sc/res/sidebar/CellBorder_TopAndBottom_18x18.png': 'fr07',
+		'sc/res/sidebar/CellBorder_FourBorders_18x18.png': 'fr08',
+		'sc/res/sidebar/CellBorder_All_18x18.png': 'borderall',
+		'sc/res/sidebar/CellBorder_CrissCross_18x18.png': 'bordercrisscross',
+		'sc/res/sidebar/CellBorder_LeftDiagonal_18x18.png': 'borderdiagdown',
+		'sc/res/sidebar/CellBorder_RightDiagonal_18x18.png': 'borderdiagup',
+		// Area sidebar, gradient types
+		'svx/res/symphony/linear.png': 'gradientlinear',
+		'svx/res/symphony/axial.png': 'gradientaxial',
+		'svx/res/symphony/radial.png': 'gradientradial',
+		'svx/res/symphony/ellipsoid.png': 'gradientellipsoid',
+		'svx/res/symphony/Quadratic.png': 'gradientquadratic',
+		'svx/res/symphony/Square.png': 'gradientsquare',
+		// Paragraph sidebar, the images beside the spacings and indents
+		'svx/res/symphony/spacing1.png': 'aboveparaspacing',
+		'svx/res/symphony/spacing2.png': 'belowparaspacing',
+		'svx/res/symphony/Indent4.png': 'beforetextindent',
+		'svx/res/symphony/Indent3.png': 'aftertextindent',
+		'svx/res/symphony/Indent2.png': 'firstlineindent',
+	};
+
+	// Resolve the icon path of a toolbar item or an image that the engine sent us, e.g.
+	// 'sw/res/sc20245.png', to an icon of ours. Empty when we have none for it.
+	public static getIconNameOfIconPath(iconPath: string): string {
+		const name = iconPath ? LOUtil.engineIconPaths[iconPath] : undefined;
+		return name ? 'lc_' + name + '.svg' : '';
 	}
 
 	// Resolve an icon file name that the engine sent us, e.g. a toolbar item

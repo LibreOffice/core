@@ -366,6 +366,36 @@ describe('LOUtil', function () {
 			);
 		});
 
+		it('engine icon paths map to icons of ours', function () {
+			nodeassert.strictEqual(
+				'lc_editdoc.svg',
+				LOUtil.getIconNameOfIconPath('sw/res/sc20245.png'),
+			);
+			// The same file name in two modules is two icons.
+			nodeassert.strictEqual(
+				'lc_parastyle.svg',
+				LOUtil.getIconNameOfIconPath('sw/res/sf01.png'),
+			);
+			nodeassert.strictEqual(
+				'lc_basicshapes.svg',
+				LOUtil.getIconNameOfIconPath('sd/res/sf01.png'),
+			);
+			nodeassert.strictEqual(
+				'lc_aboveparaspacing.svg',
+				LOUtil.getIconNameOfIconPath('svx/res/symphony/spacing1.png'),
+			);
+			// A path without an icon of ours, and no path.
+			nodeassert.strictEqual(
+				'',
+				LOUtil.getIconNameOfIconPath('sw/res/sc20177.png'),
+			);
+			nodeassert.strictEqual('', LOUtil.getIconNameOfIconPath(''));
+		});
+
+		it('a resource id name has no icon of ours', function () {
+			nodeassert.strictEqual('', LOUtil.getIconNameOfIcon('lc_sc20245.svg'));
+		});
+
 		it('a link name with a stray percent sign is kept as sent', function () {
 			nodeassert.strictEqual(
 				'lc_foo25bar.svg',

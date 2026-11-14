@@ -1394,8 +1394,24 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
 		var image = window.L.DomUtil.create('img', builder.options.cssClass + ' ui-image ui-decorative-image', parentContainer);
 		image.id = data.id;
-		image.src = data.image ? data.image.replace(/\\/g, '') : '';
 		image.alt = data.text;
+		const bitmap = data.image ? data.image.replace(/\\/g, '') : '';
+		// An image of the icon theme of the engine that we have an icon of our own
+		// for shows that, in the theme of the user; the bitmap stays the fallback.
+		const iconName = app.LOUtil.getIconNameOfIconPath(data.iconpath);
+		if (iconName) {
+			window.L.DomUtil.addClass(image, 'ui-image-icon');
+			app.LOUtil.setImage(image, iconName, builder.map);
+			if (bitmap) {
+				image.onerror = function() {
+					image.onerror = null;
+					image.src = bitmap;
+					image.style.display = '';
+				};
+			}
+		} else {
+			image.src = bitmap;
+		}
 
 		return false;
 	},
@@ -1553,6 +1569,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				// we ship under that name, so that we don't request a file that
 				// is not there and fall back to the base64 image below instead.
 				var coreIconName = data.icon && !isIconURL ?
+					app.LOUtil.getIconNameOfIconPath(data.iconpath) ||
 					app.LOUtil.getIconNameOfIcon(data.icon) : '';
 				if (isIconURL) {
 					buttonImage = createButtonImage();
