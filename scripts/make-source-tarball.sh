@@ -57,12 +57,23 @@ git -C "$top" archive --format=tar --prefix="$name/" -o "$tmp/online.tar" "$tag"
 git -C "$translations" archive --format=tar --prefix="$name/engine/translations/" \
     -o "$tmp/translations.tar" "$tag"
 
-# GNU tar appends one archive to another; the translations tree lands under
-# engine/translations inside the same top directory.
-tar -Af "$tmp/online.tar" "$tmp/translations.tar"
+# Join the two archives; the translations tree lands under engine/translations
+# inside the same top directory. GNU tar appends one archive to another, the
+# BSD tar of FreeBSD and macOS copies archive members with @archive.
+if tar --version 2>/dev/null | grep -q 'GNU tar'; then
+    tar -Af "$tmp/online.tar" "$tmp/translations.tar"
+    combined=$tmp/online.tar
+else
+    combined=$tmp/combined.tar
+    tar -cf "$combined" "@$tmp/online.tar" "@$tmp/translations.tar"
+fi
 
 mkdir -p "$outdir"
-xz -T0 -c "$tmp/online.tar" > "$outdir/$name.tar.xz"
+xz -T0 -c "$combined" > "$outdir/$name.tar.xz"
 
 echo "$outdir/$name.tar.xz"
-sha256sum "$outdir/$name.tar.xz"
+if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$outdir/$name.tar.xz"
+else
+    sha256 -r "$outdir/$name.tar.xz"
+fi
