@@ -33,6 +33,7 @@
 #include <svl/stritem.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -1071,15 +1072,21 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             }
             break;
 
+        // The documents made of this one are written where an app's file picker says, which has
+        // to be able to ask for that.
         case FN_NEW_GLOBAL_DOC:
             if (dynamic_cast<const SwGlobalDocShell*>(this) != nullptr
-                || GetObjectShell()->isExportLocked())
+                || GetObjectShell()->isExportLocked()
+                || (sfx2::COKitFilePicker::isAvailable()
+                    && !sfx2::COKitFilePicker::canPickSaveLocation()))
                 rSet.DisableItem( nWhich );
             break;
 
         case FN_NEW_HTML_DOC:
             if (dynamic_cast<const SwWebDocShell*>(this) != nullptr
-                || GetObjectShell()->isExportLocked())
+                || GetObjectShell()->isExportLocked()
+                || (sfx2::COKitFilePicker::isAvailable()
+                    && !sfx2::COKitFilePicker::canPickSaveLocation()))
                 rSet.DisableItem( nWhich );
             break;
 

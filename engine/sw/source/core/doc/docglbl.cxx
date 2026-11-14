@@ -22,6 +22,9 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/docfile.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/bindings.hxx>
@@ -502,16 +505,21 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         GetDocumentSettingManager().set(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS, false);
     }
 
-    // The medium isn't locked after reopening the document.
-    SfxRequest aReq( SID_SAVEASDOC, SfxCallMode::SYNCHRON, GetAttrPool() );
-    aReq.AppendItem( SfxStringItem( SID_FILE_NAME, rPath ) );
-    aReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
-    if(pFilter)
-        aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
-    const SfxPoolItemHolder& rResult(mpDocShell->ExecuteSlot(aReq));
-    const SfxBoolItem *pRet(static_cast<const SfxBoolItem*>(rResult.getItem()));
-
-    return pRet && pRet->GetValue();
+    // The made document is written as given, without asking where it goes.
+    try
+    {
+        uno::Reference<frame::XStorable> xStorable(mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Sequence<beans::PropertyValue> aArgs;
+        if (pFilter)
+            aArgs = { comphelper::makePropertyValue(u"FilterName"_ustr, pFilter->GetFilterName()) };
+        xStorable->storeToURL(rPath, aArgs);
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sw.core", "cannot write " << rPath);
+        return false;
+    }
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

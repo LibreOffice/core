@@ -1179,6 +1179,21 @@ class BackstageView extends window.L.Class {
 
 		// extract list from notebookbar - in case need to add condition better to add there?
 		const exportOptions = this.getExportOptionsFromNotebookbar();
+		// A desktop app asks where a master document made of this one goes, with a
+		// document per chapter next to it, unless the engine disabled the command as
+		// the app may not ask.
+		if (
+			window.mode.isCODesktop() &&
+			this.map.isText() &&
+			!app.LOUtil.isMasterDocument(this.map) &&
+			this.map.stateChangeHandler.getItemValue('.uno:NewGlobalDoc') !==
+				'disabled'
+		)
+			exportOptions.downloadAs.push({
+				action: 'exportodm',
+				text: _('Master document, a document per chapter'),
+				command: 'createmasterdocument',
+			});
 
 		if (exportOptions.downloadAs.length > 0) {
 			this.contentArea.appendChild(

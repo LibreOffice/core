@@ -166,6 +166,9 @@ public:
     OUString GetLinkedFileId(const OUString& rURL) const;
 private:
 
+    /// Asks the app where the document made by splitting this one goes, then makes it.
+    SAL_DLLPRIVATE void PickSplitDocumentLocation(sal_uInt16 nWhich);
+
     SAL_DLLPRIVATE void                  RemoveOLEObjects();
     SAL_DLLPRIVATE void                  CalcLayoutForOLEObjects();
 

@@ -4010,9 +4010,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
         { { u"FileName"_ustr, cpo::uno::Any(maTempFile.GetURL()) } });
     dispatchCommand(mxComponent, u".uno:NewGlobalDoc"_ustr, aPropertyValues);
 
-    // Use loadFromDesktop instead of loadFromURL to avoid calling mxComponent->dispose()
-    // Otherwise it fails with 'DeInitVCL: some top Windows are still alive'
-    mxComponent = loadFromDesktop(maTempFile.GetURL());
+    // The document stays open as it was, and the master document is opened on its own.
+    loadFromURL(maTempFile.GetURL());
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwDoc* const pMasterDoc(pWrtShell->GetDoc());

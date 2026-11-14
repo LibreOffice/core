@@ -65,6 +65,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
@@ -1946,6 +1947,55 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorInsertNewDocume
 
     pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
     Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCreateMasterDocumentWherePicked)
+{
+    // Given a text document with three chapters, in an app that asks the user where a new file
+    // goes:
+    createDoc("master-split-source.fodt");
+    SwTestViewCallback aView;
+
+    utl::TempFileNamed aFolder(nullptr, true);
+    aFolder.EnableKillingFile();
+    const OUString aMasterUrl = aFolder.GetURL() + "/book.odm";
+    static OString aPickedUrl;
+    aPickedUrl = aMasterUrl.toUtf8();
+    COKitFilePickerProvider aProvider{};
+    aProvider.pick = [](const char*, const COKitFilePickerFilter*, size_t,
+                        void (*pfnPicked)(void*, const char*), void* pContext)
+    { pfnPicked(pContext, nullptr); };
+    aProvider.pickSaveLocation = [](const char*, const char*, const COKitFilePickerFilter*, size_t,
+                                    void (*pfnPicked)(void*, const char*), void* pContext)
+    { pfnPicked(pContext, aPickedUrl.getStr()); };
+    sfx2::COKitFilePicker::installProvider(&aProvider);
+    comphelper::ScopeGuard aProviderGuard([] { sfx2::COKitFilePicker::installProvider(nullptr); });
+
+    // When Create Master Document is chosen:
+    dispatchCommand(mxComponent, u".uno:NewGlobalDoc"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the host is asked to open the master document made where the user chose. Without the
+    // fix in place, the engine waited for its own save dialog.
+    CPPUNIT_ASSERT(!aView.m_aOpenLinkedDocument.isEmpty());
+    std::stringstream aStream{ std::string(aView.m_aOpenLinkedDocument) };
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(aMasterUrl, OUString::fromUtf8(aTree.get<std::string>("url")));
+
+    // And the document itself stays as it was:
+    CPPUNIT_ASSERT(!getSwDocShell()->IsModified());
+    uno::Reference<text::XTextSectionsSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xSupplier->getTextSections()->hasElements());
+
+    // And the master document links to a document per chapter:
+    uno::Reference<lang::XComponent> xMaster = loadFromDesktop(aMasterUrl);
+    comphelper::ScopeGuard aMasterGuard([xMaster] { xMaster->dispose(); });
+    uno::Reference<lang::XServiceInfo> xInfo(xMaster, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.text.GlobalDocument"_ustr));
+    uno::Reference<text::XTextSectionsSupplier> xMasterSections(xMaster, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
+                         xMasterSections->getTextSections()->getElementNames().getLength());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testNavigatorContentTreeKeyedToOwningView)

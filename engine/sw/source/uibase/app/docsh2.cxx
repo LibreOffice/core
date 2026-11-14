@@ -24,6 +24,13 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <ooo/vba/word/XDocument.hpp>
 #include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <comphelper/diagnose_ex.hxx>
+#include <COKit/COKitTypes.hxx>
+#include <tools/json_writer.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -396,6 +403,94 @@ bool SwDocShell::PrepareClose( bool bUI )
         }
     }
     return bRet;
+}
+
+namespace
+{
+/** Splits a copy of rDocShell into the master document or HTML document rFileName and the
+    documents it links to. rDocShell stays as it is. */
+bool SplitCopy(SwDocShell& rDocShell, bool bCreateHtml, const OUString& rFileName,
+               bool bCreateByOutlineLevel, sal_Int32 nOutlineLevel, const OUString& rTemplateName)
+{
+    utl::TempFileNamed aCopyFile(u"", true, u".odt");
+    aCopyFile.EnableKillingFile();
+    try
+    {
+        uno::Reference<frame::XStorable> xStorable(rDocShell.GetModel(), uno::UNO_QUERY_THROW);
+        xStorable->storeToURL(aCopyFile.GetURL(),
+                              { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr) });
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sw.ui", "cannot write the copy to split");
+        return false;
+    }
+
+    SfxObjectShellRef xCopy;
+    SfxObjectShellLock xCopyLock;
+    if (SwFindDocShell(xCopy, xCopyLock, aCopyFile.GetURL(), OUString(), u"writer8"_ustr, 0,
+                       nullptr, {})
+        != 2)
+        return false;
+
+    SwDoc* pCopy = static_cast<SwDocShell*>(xCopy.get())->GetDoc();
+    if (bCreateByOutlineLevel)
+        return bCreateHtml ? pCopy->GenerateHTMLDoc(rFileName, nOutlineLevel)
+                           : pCopy->GenerateGlobalDoc(rFileName, nOutlineLevel);
+
+    const SwTextFormatColl* pSplitColl = nullptr;
+    if (!rTemplateName.isEmpty())
+        pSplitColl = pCopy->FindTextFormatCollByName(UIName(rTemplateName));
+    return bCreateHtml ? pCopy->GenerateHTMLDoc(rFileName, pSplitColl)
+                       : pCopy->GenerateGlobalDoc(rFileName, pSplitColl);
+}
+}
+
+void SwDocShell::PickSplitDocumentLocation(sal_uInt16 nWhich)
+{
+    const bool bCreateHtml = nWhich == FN_NEW_HTML_DOC;
+    std::shared_ptr<const SfxFilter> pFilter
+        = bCreateHtml
+              ? SwIoSystem::GetFilterOfFormat(u"HTML", SwWebDocShell::Factory().GetFilterContainer())
+              : SwGlobalDocShell::Factory().GetFilterContainer()->GetFilter4Extension(u"odm"_ustr);
+    std::vector<sfx2::COKitFilePicker::Filter> aFilters;
+    if (pFilter)
+        aFilters.push_back({ pFilter->GetUIName(), pFilter->GetWildcard().getGlob() });
+
+    // Next to this document as the user knows it, which an app may have opened as a copy.
+    OUString aSuggested;
+    INetURLObject aUrl(GetMedium() ? GetMedium()->GetBaseURL() : OUString());
+    if (aUrl.GetProtocol() == INetProtocol::File)
+    {
+        aUrl.setExtension(bCreateHtml ? u"html" : u"odm");
+        aSuggested = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    }
+
+    SfxObjectShellRef xThis(this);
+    const int nView = KitHelper::getCurrentView();
+    sfx2::COKitFilePicker::pickSaveLocation(
+        SwResId(bCreateHtml ? STR_LOAD_HTML_DOC : STR_LOAD_GLOBAL_DOC), aSuggested, aFilters,
+        [xThis, nWhich, nView](const std::optional<OUString>& roUrl)
+        {
+            // The document can be closed by the time the user picks.
+            if (!roUrl || !SfxViewFrame::GetFirst(xThis.get()))
+                return;
+
+            // Switch to the view that asked, which the host shows the made document for, and
+            // switch back when done.
+            comphelper::ScopeGuard aRestoreView(
+                [nSavedView = KitHelper::getCurrentView()]
+                {
+                    if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
+                        KitHelper::setView(nSavedView);
+                });
+            if (nView >= 0 && KitHelper::getCurrentView() != nView)
+                KitHelper::setView(nView);
+
+            SfxRequest aReq(nWhich, SfxCallMode::SYNCHRON, xThis->GetPool());
+            aReq.AppendItem(SfxStringItem(nWhich, *roUrl));
+            xThis->ExecuteSlot(aReq);
+        });
 }
 
 void SwDocShell::Execute(SfxRequest& rReq)
@@ -974,6 +1069,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if ( pTemplItem )
                         aTemplateName = pTemplItem->GetValue();
                 }
+                if (aFileName.isEmpty() && sfx2::COKitFilePicker::canPickSaveLocation())
+                {
+                    // The app asks where the document goes, and the command runs again with it.
+                    PickSplitDocumentLocation(nWhich);
+                    break;
+                }
                 if ( aFileName.isEmpty() )
                 {
                     bool bError = false;
@@ -1151,52 +1252,30 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if( !aFileName.isEmpty() )
                 {
-                    if( PrepareClose( false ) )
                     {
                         SwWait aWait( *this, true );
-
-                        if ( bCreateByOutlineLevel )
-                        {
-                            bDone = bCreateHtml
-                                ? m_xDoc->GenerateHTMLDoc( aFileName, nTemplateOutlineLevel )
-                                : m_xDoc->GenerateGlobalDoc( aFileName, nTemplateOutlineLevel );
-                        }
-                        else
-                        {
-                            const SwTextFormatColl* pSplitColl = nullptr;
-                            if ( !aTemplateName.isEmpty() )
-                                pSplitColl = m_xDoc->FindTextFormatCollByName(UIName(aTemplateName));
-                            bDone = bCreateHtml
-                                ? m_xDoc->GenerateHTMLDoc( aFileName, pSplitColl )
-                                : m_xDoc->GenerateGlobalDoc( aFileName, pSplitColl );
-                        }
-                        if( bDone )
-                        {
-                            SfxStringItem aName( SID_FILE_NAME, aFileName );
-                            SfxStringItem aReferer(SID_REFERER, OUString());
-                            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                            while(pViewShell)
-                            {
-                                //search for the view that created the call
-                                if(pViewShell->GetObjectShell() == this && pViewShell->GetDispatcher())
-                                {
-                                    SfxFrameItem aFrameItem(SID_DOCFRAME, &pViewShell->GetViewFrame());
-                                    SfxDispatcher* pDispatch = pViewShell->GetDispatcher();
-                                    pDispatch->ExecuteList(SID_OPENDOC,
-                                        SfxCallMode::ASYNCHRON,
-                                        { &aName, &aReferer, &aFrameItem });
-                                    break;
-                                }
-                                pViewShell = SfxViewShell::GetNext(*pViewShell);
-                            }
-                        }
+                        bDone = SplitCopy(*this, bCreateHtml, aFileName, bCreateByOutlineLevel,
+                                          nTemplateOutlineLevel, aTemplateName);
+                    }
+                    if (bDone && GetView())
+                    {
+                        // The document made of this one is opened by the host, which knows where
+                        // to show it.
+                        tools::JsonWriter aJson;
+                        aJson.put("url", aFileName);
+                        // The view that asked is the current one, when it shows this document.
+                        SfxViewShell* pViewShell = SfxViewShell::Current();
+                        if (!pViewShell || pViewShell->GetObjectShell() != this)
+                            pViewShell = GetView();
+                        pViewShell->viewCallback(COKitCallbackType::OPEN_LINKED_DOCUMENT,
+                                                 aJson.finishAndGetAsOString());
                     }
                     if( !bDone && !rReq.IsAPI() )
                     {
-                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
-                                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                                      SwResId(STR_CANTCREATE)));
-                        xInfoBox->run();
+                        std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+                            GetView() ? GetView()->GetFrameWeld() : nullptr, VclMessageType::Info,
+                            VclButtonsType::Ok, SwResId(STR_CANTCREATE)));
+                        xInfoBox->runAsync(xInfoBox, [](sal_Int32) {});
                     }
                 }
             }

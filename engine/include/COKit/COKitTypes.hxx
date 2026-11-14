@@ -1378,6 +1378,10 @@ enum class COKitCallbackType
      * name of the section that shows it, for example
      * { "url": "file:///home/user/book/chapter1.odt", "id": "chapter1.odt",
      *   "section": "chapter1.odt" }.
+     *
+     * Also sent with only the URL for a document made of the current one,
+     * the master document made by Create Master Document for example, which
+     * the host opens the same way: { "url": "file:///home/user/book.odm" }.
      */
     OPEN_LINKED_DOCUMENT = 80,
 

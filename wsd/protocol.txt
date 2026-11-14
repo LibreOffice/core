@@ -1892,6 +1892,10 @@ openlinkeddocument: <payload>
     SectionName in its Values, and the integration opens the file the path
     names relative to the master document.
 
+    A document made of the current one, the master document Create Master
+    Document makes in a desktop app, comes with its URL only, as
+    {"url":"file:///.../book.odm"}, and the app opens it the same way.
+
 redlinerecordingforallviews: <payload>
 
     Signals that a view turned on recording of tracked changes for all

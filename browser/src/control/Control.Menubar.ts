@@ -148,6 +148,7 @@ class Menubar extends window.L.Control {
 					{name: _('Rich Text (.rtf)'), id: 'saveas-rtf', type: 'action'},
 				]},
 				{name: _('Export as'), id: 'exportas', type: 'menu', menu: exportAsMenu('text')},
+				{name: _('Create Master Document...'), id: 'createmasterdocument', type: 'action'},
 				{name: _('Rename Document'), id: 'renamedocument', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
@@ -2719,6 +2720,7 @@ class Menubar extends window.L.Control {
 			|| id.startsWith('ext:')
 			|| id === 'importslides'
 			|| id === 'updateslidelinks'
+			|| id === 'createmasterdocument'
 			|| id === 'onboardingtour') {
 			app.dispatcher.dispatch(id);
 		} else if (id === ('settings-dialog')) {
@@ -3001,6 +3003,13 @@ class Menubar extends window.L.Control {
 			return false;
 		}
 		if (menuItem.id === 'fontworkgalleryfloater' && !this._isFileODF) {
+			return false;
+		}
+		// Only a desktop app can ask where the made documents go, and in a sandbox
+		// it may not, which the engine says by disabling the command.
+		if (menuItem.id === 'createmasterdocument'
+			&& (!window.mode.isCODesktop() || app.LOUtil.isMasterDocument(this._map)
+				|| this._map['stateChangeHandler'].getItemValue('.uno:NewGlobalDoc') === 'disabled')) {
 			return false;
 		}
 		if (this._map.isReadOnlyMode() && menuItem.type === 'menu') {

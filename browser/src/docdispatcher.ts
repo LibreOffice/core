@@ -785,6 +785,10 @@ class Dispatcher {
 	}
 
 	private addExportCommands() {
+		this.actionsMap['createmasterdocument'] = function () {
+			app.map.sendUnoCommand('.uno:NewGlobalDoc');
+		};
+
 		this.actionsMap['exportpdf'] = function () {
 			app.map.sendUnoCommand('.uno:ExportToPDF', {
 				SynchronMode: {
