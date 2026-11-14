@@ -72,6 +72,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Locale;
@@ -92,6 +94,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -188,6 +191,13 @@ public class LOActivity extends AppCompatActivity {
     public static final int REQUEST_SAVEAS_MD = 516;
     public static final int REQUEST_COPY = 600;
     public static final int REQUEST_ALL_FILES_ACCESS = 601;
+    public static final int REQUEST_LINKED_FOLDER = 602;
+
+    /// The files the document links to that wait for the user to allow the folder holding them.
+    private JSONArray mPendingLinkedFiles = null;
+    /** The copy the engine reads of each linked file, by its path relative to the document. */
+    private final Map<String, File> mLinkedFileCopies = new HashMap<>();
+    private static final ExecutorService linkedFilesExecutor = Executors.newSingleThreadExecutor();
 
     /** Broadcasting event for passing info back to the shell. */
     public static final String LO_ACTIVITY_BROADCAST = "LOActivityBroadcast";
@@ -1126,6 +1136,9 @@ public class LOActivity extends AppCompatActivity {
         documentLoaded = false;
         postMobileMessageNative("BYE");
 
+        // The copies of the files the document links to go with it.
+        linkedFilesExecutor.execute(this::removeLinkedFileCopies);
+
         mProgressDialog.dismiss();
 
         super.onDestroy();
@@ -1135,6 +1148,18 @@ public class LOActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == REQUEST_LINKED_FOLDER) {
+            JSONArray links = mPendingLinkedFiles;
+            mPendingLinkedFiles = null;
+            if (resultCode == RESULT_OK && intent != null && intent.getData() != null && links != null) {
+                Uri tree = intent.getData();
+                getContentResolver().takePersistableUriPermission(tree, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                final Uri document = getIntent().getData();
+                linkedFilesExecutor.execute(() -> giveLinkedFiles(document, tree, links));
+            }
+            return;
+        }
+
         if (requestCode == REQUEST_ALL_FILES_ACCESS) {
             mResolvedFile = resolveWritableFile(getIntent().getData());
             if (mResolvedFile != null) {
@@ -1559,6 +1584,168 @@ public class LOActivity extends AppCompatActivity {
     }
 
     /**
+     * The document links to files, the chapters of a master document for example, that the app may
+     * not read. A document opened from a document provider is a copy without its folder, so the
+     * files are copied from a folder tree the user allowed, where they are next to the document.
+     * When no tree allowed before holds them, the user is asked for one.
+     */
+    private void grantLinkedFiles(String json) {
+        final JSONArray links;
+        try {
+            links = new JSONObject(json).getJSONArray("links");
+        } catch (JSONException e) {
+            Log.e(TAG, "GRANTLINKEDFILES without a list of links");
+            return;
+        }
+        final Uri document = getIntent().getData();
+        if (document == null || !ContentResolver.SCHEME_CONTENT.equals(document.getScheme()))
+            return;
+
+        linkedFilesExecutor.execute(() -> {
+            for (Uri tree : LinkedFiles.allowedTrees(getContentResolver())) {
+                if (resolvesAll(tree, document, links)) {
+                    giveLinkedFiles(document, tree, links);
+                    return;
+                }
+            }
+            runOnUiThread(() -> {
+                mPendingLinkedFiles = links;
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, document);
+                startActivityForResult(intent, REQUEST_LINKED_FOLDER);
+            });
+        });
+    }
+
+    private boolean resolvesAll(Uri tree, Uri document, JSONArray links) {
+        for (int i = 0; i < links.length(); i++) {
+            String id = links.optJSONObject(i) != null ? links.optJSONObject(i).optString("id") : "";
+            if (id.isEmpty() || LinkedFiles.resolve(getContentResolver(), tree, document, id) == null)
+                return false;
+        }
+        return true;
+    }
+
+    /** Copies each linked file found in the tree and gives the engine the copy, then lets the links update. */
+    private void giveLinkedFiles(Uri document, Uri tree, JSONArray links) {
+        final List<String> messages = copyLinkedFiles(document, Collections.singletonList(tree), links);
+        messages.add("allowlinkupdate");
+        postLinkedFileMessages(document, messages);
+    }
+
+    /**
+     * Gives the engine the messages made for the linked files of the document, on the UI thread,
+     * when this activity still shows that document: the copies are made on the linked files
+     * executor, which outlives the activity, and the messages go to the document the app shows.
+     */
+    private void postLinkedFileMessages(Uri document, List<String> messages) {
+        runOnUiThread(() -> {
+            if (isFinishing() || isDestroyed() || !document.equals(getIntent().getData()))
+                return;
+            for (String message : messages)
+                postMobileMessageNative(message);
+        });
+    }
+
+    /**
+     * The user asked to read the linked files anew: a copy is what the file was when it was made,
+     * so the files are copied again from the folder trees the user allowed, and the engine reads
+     * the fresh copies.
+     */
+    private void refreshLinkedFiles(String json) {
+        final JSONArray links;
+        try {
+            links = new JSONObject(json).getJSONArray("links");
+        } catch (JSONException e) {
+            Log.e(TAG, "LINKEDFILESREFRESH without a list of links");
+            return;
+        }
+        final Uri document = getIntent().getData();
+        if (document == null || !ContentResolver.SCHEME_CONTENT.equals(document.getScheme()))
+            return;
+
+        linkedFilesExecutor.execute(() -> {
+            final List<String> messages =
+                copyLinkedFiles(document, LinkedFiles.allowedTrees(getContentResolver()), links);
+            postLinkedFileMessages(document, messages);
+        });
+    }
+
+    /**
+     * Copies each linked file found in one of the trees, and returns the messages that give the
+     * engine the copies. The copy a file had before is removed, as the engine reads the new one.
+     * Runs on the linked files executor, which owns mLinkedFileCopies.
+     */
+    private List<String> copyLinkedFiles(Uri document, List<Uri> trees, JSONArray links) {
+        final List<String> messages = new ArrayList<>();
+        for (int i = 0; i < links.length(); i++) {
+            JSONObject link = links.optJSONObject(i);
+            String id = link != null ? link.optString("id") : "";
+            if (id.isEmpty())
+                continue;
+            for (Uri tree : trees) {
+                Uri found = LinkedFiles.resolve(getContentResolver(), tree, document, id);
+                if (found == null)
+                    continue;
+                String name = id.substring(id.lastIndexOf('/') + 1);
+                File copy = LinkedFiles.copyToCache(getContentResolver(), found, getCacheDir(), name);
+                if (copy != null) {
+                    messages.add("linkedfile source id=" + Uri.encode(id) + " file="
+                                 + Uri.encode(Uri.fromFile(copy).toString()));
+                    File previous = mLinkedFileCopies.put(id, copy);
+                    if (previous != null)
+                        LinkedFiles.removeCopy(previous);
+                }
+                break;
+            }
+        }
+        return messages;
+    }
+
+    /** Removes the copies of the linked files. Runs on the linked files executor. */
+    private void removeLinkedFileCopies() {
+        for (File copy : mLinkedFileCopies.values())
+            LinkedFiles.removeCopy(copy);
+        mLinkedFileCopies.clear();
+    }
+
+    /** Edit of a file a master document links to: it opens as the document of this activity. */
+    private void openLinkedDocument(String arguments) {
+        String file = null;
+        String id = null;
+        for (String token : arguments.split(" ")) {
+            if (token.startsWith("file="))
+                file = Uri.decode(token.substring("file=".length()));
+            else if (token.startsWith("id="))
+                id = Uri.decode(token.substring("id=".length()));
+        }
+        final String fileUrl = file;
+        final String relativePath = id;
+        final Uri document = getIntent().getData();
+        linkedFilesExecutor.execute(() -> {
+            Uri target = null;
+            if (fileUrl != null && fileUrl.startsWith("file://") && new File(Uri.parse(fileUrl).getPath()).isFile()
+                    && !ContentResolver.SCHEME_CONTENT.equals(document != null ? document.getScheme() : null))
+                target = Uri.parse(fileUrl);
+            else if (relativePath != null && document != null) {
+                for (Uri tree : LinkedFiles.allowedTrees(getContentResolver())) {
+                    target = LinkedFiles.resolve(getContentResolver(), tree, document, relativePath);
+                    if (target != null)
+                        break;
+                }
+            }
+            if (target == null) {
+                Log.w(TAG, "opendoc: cannot find " + fileUrl);
+                return;
+            }
+            final Intent intent = new Intent(Intent.ACTION_EDIT, target);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.setClass(LOActivity.this, LOActivity.class);
+            runOnUiThread(() -> startActivity(intent));
+        });
+    }
+
+    /**
      * @param message The message to test for the prefix
      * @param prefix The prefix to test for
      * @return true if the decoded message starts with the prefix, else false
@@ -1629,6 +1816,18 @@ public class LOActivity extends AppCompatActivity {
                         mMobileWizardVisible = false;
                         break;
                 }
+                return false;
+            }
+            case "GRANTLINKEDFILES": {
+                grantLinkedFiles(messageAndParam.length > 1 ? messageAndParam[1] : "");
+                return false;
+            }
+            case "LINKEDFILESREFRESH": {
+                refreshLinkedFiles(messageAndParam.length > 1 ? messageAndParam[1] : "");
+                return false;
+            }
+            case "opendoc": {
+                openLinkedDocument(messageAndParam.length > 1 ? messageAndParam[1] : "");
                 return false;
             }
             case "HYPERLINK": {

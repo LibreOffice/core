@@ -1423,8 +1423,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_onOpenLinkedDocumentMsg: function (textMsg) {
 		const obj = JSON.parse(textMsg.substring('openlinkeddocument:'.length + 1));
 		if (window.ThisIsAMobileApp) {
+			// The path relative to the master document finds the file where the
+			// app reads it through a folder the user allowed.
 			if (obj.url)
-				window.postMobileMessage('opendoc file=' + encodeURIComponent(obj.url));
+				window.postMobileMessage(
+					'opendoc file=' +
+						encodeURIComponent(obj.url) +
+						(obj.id ? ' id=' + encodeURIComponent(obj.id) : ''),
+				);
 		} else if (obj.id) {
 			this._map.fire('postMessage', {
 				msgId: 'UI_OpenLinkedDocument',
