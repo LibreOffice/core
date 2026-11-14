@@ -1222,6 +1222,58 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf172833CodeBlock)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf172949EmptyCodeBlock)
+{
+    // Given a document with an empty code block paragraph between two normal ones:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"Block1"_ustr);
+    pWrtShell->SplitNode();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
+    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_HTML_PRE);
+    pDoc->SetTextFormatColl(*pCursor, pColl);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"Block3"_ustr);
+    pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
+    pDoc->SetTextFormatColl(*pCursor, pColl);
+
+    // When saving that to markdown:
+    save(TestFilter::MD);
+
+    // Then make sure the empty code block is not lost:
+    std::string aActual = TempFileToString();
+    std::string aExpected(
+        // clang-format off
+        "Block1" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "```" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "```" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "Block3" SAL_NEWLINE_STRING
+        // clang-format on
+    );
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Block1
+    //
+    // ```
+    //
+    // ```
+    //
+    // Block3
+    //
+    // - Actual  : Block1
+    //
+    //
+    // Block3
+    //
+    // i.e. the empty code block was lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

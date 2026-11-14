@@ -664,13 +664,16 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
     }
 
     const OUString& rNodeText = rNode.GetText();
-    if (!rNodeText.isEmpty())
+    const SwFormatColl* pFormatColl = rNode.GetFormatColl();
+    // Empty code block paragraphs still need their fences, see tdf#172949.
+    const bool bCodeBlock
+        = pFormatColl && pFormatColl->GetPoolFormatId() == SwPoolFormatId::COLL_HTML_PRE;
+    if (!rNodeText.isEmpty() || bCodeBlock)
     {
         // Paragraphs separate by empty lines
         if (!bFirst && !bInTable)
             rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
 
-        const SwFormatColl* pFormatColl = rNode.GetFormatColl();
         if (pFormatColl && pFormatColl->GetPoolFormatId() == SwPoolFormatId::COLL_HTML_BLOCKQUOTE)
         {
             // <https://spec.commonmark.org/0.31.2/#block-quotes> first block quote, then heading.
@@ -871,6 +874,12 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
                                 currentStatus);
             }
             nStrPos = nEndOfChunk;
+        }
+        if (nStrPos == nEnd)
+        {
+            // Empty paragraph (e.g. an empty code block line, tdf#172949): still process the
+            // formatting changes at this position, as the loop above did not run.
+            OutFormattingChange(rWrt, positions, nStrPos, currentStatus);
         }
         assert(positions.hintStarts.current() == nullptr);
         // Output final closing attributes
