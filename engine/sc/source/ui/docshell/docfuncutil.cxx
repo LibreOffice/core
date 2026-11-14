@@ -30,6 +30,7 @@
 #include <docuno.hxx>
 #include <SheetViewManager.hxx>
 #include <SheetView.hxx>
+#include <dbdata.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <tools/gen.hxx>
@@ -174,6 +175,59 @@ void DocFuncUtil::syncSheetViewsOfTable(ScDocShell& rDocShell, SCTAB nTab)
 {
     rDocShell.GetDocument().SyncSheetViews(nTab);
     invalidateSheetViewTiles(rDocShell, nTab, true /* bIncludeViewShownPart */);
+}
+
+bool DocFuncUtil::isRangeOnSheetViewAutoFilter(ScDocument& rDocument, const ScRange& rRange)
+{
+    SCTAB nTab = rRange.aStart.Tab();
+    if (!rDocument.IsSheetViewHolder(nTab))
+        return false;
+
+    ScDBCollection* pDBCollection = rDocument.GetDBCollection();
+    if (!pDBCollection)
+        return false;
+
+    for (ScDBData* pDBData : pDBCollection->GetAllDBsFromTab(nTab))
+    {
+        if (!pDBData->HasAutoFilter())
+            continue;
+
+        ScRange aDBRange;
+        pDBData->GetArea(aDBRange);
+        if (rRange.Intersects(aDBRange))
+            return true;
+    }
+    return false;
+}
+
+bool DocFuncUtil::isRangeOnSheetViewOwnRows(ScDocument& rDocument, const ScRange& rRange)
+{
+    if (isRangeOnSheetViewAutoFilter(rDocument, rRange))
+        return true;
+
+    SCTAB nTab = rRange.aStart.Tab();
+    std::shared_ptr<sc::SheetView> pSheetView = rDocument.GetSheetView(nTab);
+    if (!pSheetView)
+        return false;
+
+    if (SortOrderReverser const* pSortOrder = pSheetView->getSortOrder())
+    {
+        SortOrderInfo const& rSortInfo = pSortOrder->maSortInfo;
+        ScRange aSortRange(rSortInfo.mnFirstColumn, rSortInfo.mnFirstRow, nTab,
+                           rSortInfo.mnLastColumn, rSortInfo.mnLastRow, nTab);
+        if (rRange.Intersects(aSortRange))
+            return true;
+    }
+
+    if (ReorderParam const* pReorderParameters = pSheetView->getReorderParameters())
+    {
+        ScRange aSortRange(pReorderParameters->maSortRange);
+        aSortRange.aStart.SetTab(nTab);
+        aSortRange.aEnd.SetTab(nTab);
+        if (rRange.Intersects(aSortRange))
+            return true;
+    }
+    return false;
 }
 
 tools::Rectangle DocFuncUtil::wholePartInvalidationRectangle()

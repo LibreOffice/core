@@ -616,6 +616,7 @@
 #define STR_DATAPROVIDER_NODATABASERANGE        NC_("STR_DATAPROVIDER_NODATABASERANGE", "A Database Range is missing.")
 #define STR_SHEET_VIEW_DEFAULT_VIEW_NAME        NC_("STR_SHEET_VIEW_DEFAULT_VIEW_NAME", "Default View")
 #define STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE  NC_("STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE", "Temporary View %1")
+#define STR_SHEET_VIEW_PASTE_OWN_ROWS           NC_("STR_SHEET_VIEW_PASTE_OWN_ROWS", "This sheet view sorts or filters these rows on its own, so it cannot paste here. Paste outside the filtered range, or in the default view.")
 
 #endif
 

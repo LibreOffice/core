@@ -1163,6 +1163,17 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     nUndoFlags |= InsertDeleteFlags::NOCAPTIONS;
 
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
+
+    // On a sheet view the paste is made on the default view tab, which needs a single
+    // destination range whose rows map one to one.
+    const bool bOnSheetView
+        = GetViewData().GetDocument().IsSheetViewHolder(GetViewData().GetTabNumber());
+    if (bOnSheetView && (rClipParam.isMultiRange() || GetViewData().GetMarkData().IsMultiMarked()))
+    {
+        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+        return false;
+    }
+
     if (rClipParam.isMultiRange())
     {
         // Source data is multi-range.
@@ -1394,6 +1405,30 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     ScRange aUserRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
     tools::Long nRangeWidth = GetViewData().GetDocShell()->GetDocument().GetColWidth(nStartCol,nEndCol,nStartTab);
 
+    // On a sheet view the paste writes to the default view tab, and the sync afterwards copies
+    // it to the sheet view, so the default view and the undo have it too.
+    ScRange aViewUserRange = aUserRange;
+    if (bOnSheetView)
+    {
+        if (sc::DocFuncUtil::isRangeOnSheetViewOwnRows(rDoc, aUserRange))
+        {
+            ErrorMessage(STR_SHEET_VIEW_PASTE_OWN_ROWS);
+            return false;
+        }
+        const SCTAB nDefaultViewTab = rDoc.GetDefaultViewTableNumber(nStartTab);
+        nStartTab = nDefaultViewTab;
+        nEndTab = nDefaultViewTab;
+        aUserRange.aStart.SetTab(nDefaultViewTab);
+        aUserRange.aEnd.SetTab(nDefaultViewTab);
+        aFilteredMark.SelectOneTable(nDefaultViewTab);
+        aFilteredMark.SetAreaTab(nDefaultViewTab);
+        for (size_t i = 0; i < aRangeList.size(); ++i)
+        {
+            aRangeList[i].aStart.SetTab(nDefaultViewTab);
+            aRangeList[i].aEnd.SetTab(nDefaultViewTab);
+        }
+    }
+
     //  should lines be inserted?
     //  ( too large nEndCol/nEndRow are detected below)
     bool bInsertCells = ( eMoveMode != INS_NONE && !bOffLimits );
@@ -1402,7 +1437,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         //  Instead of EnterListAction, the paste undo action is merged into the
         //  insert action, so Repeat can insert the right cells
 
-        MarkRange( aUserRange );            // set through CopyFromClip
+        MarkRange( aViewUserRange );        // set through CopyFromClip
 
         // CutMode is reset on insertion of cols/rows but needed again on cell move
         bool bCut = pClipDoc->IsCutMode();
@@ -1554,9 +1589,9 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if (GetViewData().IsActive())
     {
         DoneBlockMode();
-        InitOwnBlockMode( aUserRange );
+        InitOwnBlockMode( aViewUserRange );
     }
-    rMark.SetMarkArea( aUserRange );
+    rMark.SetMarkArea( aViewUserRange );
     MarkDataChanged();
 
         //  copy from clipboard
@@ -1626,7 +1661,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     pMixDoc.reset();
 
     bool IsRangeWidthChanged = nRangeWidth != GetViewData().GetDocShell()->GetDocument().GetColWidth(nStartCol,nEndCol,nStartTab);
-    AdjustBlockHeight(true, nullptr, IsRangeWidthChanged );            // update row heights before pasting objects
+    // update row heights before pasting objects, on the tab the paste wrote to
+    AdjustBlockHeight(true, bOnSheetView ? &aFilteredMark : nullptr, IsRangeWidthChanged );
 
     ::std::vector< OUString > aExcludedChartNames;
     SdrPage* pPage = nullptr;
@@ -2125,10 +2161,11 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 
     pDocSh->ResolveSpilledOutputs();
 
-    // The paste wrote to the tables of the mark directly, so copy those tables to their sheet
-    // views.
+    // The paste wrote to the tables of the mark directly, or to their default view tables for a
+    // paste on a sheet view, so copy those tables to their sheet views.
+    ScDocument& rDoc = rViewData.GetDocument();
     for (const SCTAB nTab : rMark)
-        sc::DocFuncUtil::syncSheetViewsOfTable(*pDocSh, nTab);
+        sc::DocFuncUtil::syncSheetViewsOfTable(*pDocSh, rDoc.GetDefaultViewTableNumber(nTab));
 }
 
 //      D R A G   A N D   D R O P

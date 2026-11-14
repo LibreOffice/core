@@ -65,6 +65,17 @@ public:
     /// views of its own, so nothing changes for one.
     static void syncSheetViewsOfTable(ScDocShell& rDocShell, SCTAB nTab);
 
+    /// True when rRange is on a sheet view holder table and overlaps an auto-filter range of
+    /// that table.
+    static bool isRangeOnSheetViewAutoFilter(ScDocument& rDocument, const ScRange& rRange);
+
+    /// True when rRange is on a sheet view holder table and overlaps rows that the sheet view
+    /// can order or hide differently from its default view: an auto-filter range of the holder
+    /// table, the range the sheet view is sorted on, or a range the default view was sorted on
+    /// after the sheet view was created. Every other row of the holder table is the same row of
+    /// the default view table.
+    static bool isRangeOnSheetViewOwnRows(ScDocument& rDocument, const ScRange& rRange);
+
     /// A rectangle larger than any sheet, so it covers every tile of a part regardless of
     /// that part's actual size. Pass it to KitHelper::notifyInvalidationAllViews to invalidate
     /// a whole part by its index rather than by a specific area.
