@@ -29,6 +29,10 @@ to compile and build your code, it avoids any arbitrary limitations of
 our scripting APIs, and in general is far more simple and intuitive -
 if you are a reasonably able C++ programmer.
 
+## AI policy
+
+[AI policy in TDF wiki](https://wiki.documentfoundation.org/Development/AI_policy).
+
 ## The Build Chain and Runtime Baselines
 
 The C++ baseline is C++23. The available features are constrained by
