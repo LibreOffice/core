@@ -374,91 +374,92 @@ int main(int argc, char** argv)
     bool hasFileArgument = false;
     bool failed = false;
     bool optionsEnded = false;
-    for (int i = 1; i < argc; i++)
-    {
-        const std::string argument = argv[i];
-        if (!optionsEnded && argument.starts_with("-"))
-        {
-            if (argument == "--")
-                optionsEnded = true;
-            else if (auto outputDirectory = readOptionValue(argc, argv, i, "--outdir"))
-                options.outputDirectory = *outputDirectory;
-            // These two options of soffice are accepted and ignored. The value after --convert-to
-            // is the first argument that is not an option, so it becomes the format argument.
-            else if (argument == "--convert-to")
-                std::cerr << "Note: ignoring --convert-to, the output format is the first argument"
-                             " that is not an option\n";
-            else if (auto imageType = readOptionValue(argc, argv, i, "--convert-images-to"))
-                std::cerr << "Note: ignoring --convert-images-to " << *imageType << "\n";
-            else if (argument == "-h" || argument == "--help")
-            {
-                printUsage(programName);
-                return 0;
-            }
-            else
-            {
-                std::cerr << "Error: unknown option " << argument << "\n";
-                printUsage(programName);
-                return 1;
-            }
-            continue;
-        }
-
-        // The first argument that is not an option is the format, as in soffice --convert-to.
-        if (!hasFormatArgument)
-        {
-            hasFormatArgument = true;
-            parseFormatArgument(argument, options);
-            if (options.format.empty())
-            {
-                std::cerr << "Error: no output format before the first colon in " << argument
-                          << "\n";
-                return 1;
-            }
-            continue;
-        }
-
-        if (argument.empty())
-        {
-            std::cerr << "Error: a file name cannot be empty\n";
-            return 1;
-        }
-
-        hasFileArgument = true;
-        const std::vector<std::string> matches = expandPattern(argument);
-        if (matches.empty())
-        {
-            std::cerr << "Error: no file matches " << argument << "\n";
-            failed = true;
-        }
-        inputs.insert(inputs.end(), matches.begin(), matches.end());
-    }
-
-    if (!hasFormatArgument || !hasFileArgument)
-    {
-        printUsage(programName);
-        return 1;
-    }
-
-    const std::vector<Conversion> conversions = planConversions(inputs, options, failed);
-    if (conversions.empty())
-        return 1;
-
-    if (!options.outputDirectory.empty())
-    {
-        std::error_code error;
-        std::filesystem::create_directories(options.outputDirectory, error);
-        if (error)
-        {
-            std::cerr << "Error: could not create " << options.outputDirectory << ": "
-                      << error.message() << "\n";
-            return 1;
-        }
-    }
-
     std::unique_ptr<COKit> office;
     try
     {
+        for (int i = 1; i < argc; i++)
+        {
+            const std::string argument = argv[i];
+            if (!optionsEnded && argument.starts_with("-"))
+            {
+                if (argument == "--")
+                    optionsEnded = true;
+                else if (auto outputDirectory = readOptionValue(argc, argv, i, "--outdir"))
+                    options.outputDirectory = *outputDirectory;
+                // These two options of soffice are accepted and ignored. The value after
+                // --convert-to is the first argument that is not an option, so it becomes the
+                // format argument.
+                else if (argument == "--convert-to")
+                    std::cerr << "Note: ignoring --convert-to, the output format is the first"
+                                 " argument that is not an option\n";
+                else if (auto imageType = readOptionValue(argc, argv, i, "--convert-images-to"))
+                    std::cerr << "Note: ignoring --convert-images-to " << *imageType << "\n";
+                else if (argument == "-h" || argument == "--help")
+                {
+                    printUsage(programName);
+                    return 0;
+                }
+                else
+                {
+                    std::cerr << "Error: unknown option " << argument << "\n";
+                    printUsage(programName);
+                    return 1;
+                }
+                continue;
+            }
+
+            // The first argument that is not an option is the format, as in soffice --convert-to.
+            if (!hasFormatArgument)
+            {
+                hasFormatArgument = true;
+                parseFormatArgument(argument, options);
+                if (options.format.empty())
+                {
+                    std::cerr << "Error: no output format before the first colon in " << argument
+                              << "\n";
+                    return 1;
+                }
+                continue;
+            }
+
+            if (argument.empty())
+            {
+                std::cerr << "Error: a file name cannot be empty\n";
+                return 1;
+            }
+
+            hasFileArgument = true;
+            const std::vector<std::string> matches = expandPattern(argument);
+            if (matches.empty())
+            {
+                std::cerr << "Error: no file matches " << argument << "\n";
+                failed = true;
+            }
+            inputs.insert(inputs.end(), matches.begin(), matches.end());
+        }
+
+        if (!hasFormatArgument || !hasFileArgument)
+        {
+            printUsage(programName);
+            return 1;
+        }
+
+        const std::vector<Conversion> conversions = planConversions(inputs, options, failed);
+        if (conversions.empty())
+            return 1;
+
+        if (!options.outputDirectory.empty())
+        {
+            std::error_code error;
+            std::filesystem::create_directories(options.outputDirectory, error);
+            if (error)
+            {
+                std::cerr << "Error: could not create " << options.outputDirectory << ": "
+                          << error.message() << "\n";
+                return 1;
+            }
+        }
+
         std::string kit_path;
 
 #if defined _WIN32
