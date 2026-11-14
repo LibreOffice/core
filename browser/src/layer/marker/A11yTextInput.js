@@ -1297,10 +1297,17 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			// older than this report
 			this._remotePosition = undefined;
 			// where those keys take the caret from the reported one
-			nPos = after.reduce((pos, input) => pos + input.step, nPos);
-			if (isNaN(nPos))
-				return;
+			const unknown = after.findIndex((input) => isNaN(input.step));
+			const known = unknown === -1 ? after : after.slice(0, unknown);
+			nPos = known.reduce((pos, input) => pos + input.step, nPos);
 			nPos = Math.min(Math.max(nPos, 0), this.getPlainTextContent().length);
+			if (unknown !== -1) {
+				// The caret here stays where it is. The core has the caret where the keys of known
+				// step take it. A key that moves the caret further brings a new report.
+				if (window.getSelection().isCollapsed)
+					this._setLastCursorPosition(nPos);
+				return;
+			}
 		}
 		// where the caret is now, also during arrow keys when the report includes them all
 		if ((after.length || (inputSequence !== undefined && this._isLeftRightArrow))
