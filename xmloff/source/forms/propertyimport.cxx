@@ -35,6 +35,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <tools/urlobj.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -347,7 +348,10 @@ bool OPropertyImport::handleAttribute(sal_Int32 nAttributeToken, const OUString&
         // convert the value string into the target type
         if ((nAttributeToken & TOKEN_MASK) == token::XML_HREF)
         {
-            aNewValue.Value <<= m_rContext.getGlobalContext().GetAbsoluteReference(_rValue);
+            SvXMLImport& rImport = m_rContext.getGlobalContext();
+            if (INetURLObject(_rValue).IsExoticProtocol())
+                rImport.NotifyMacroEventRead();
+            aNewValue.Value <<= rImport.GetAbsoluteReference(_rValue);
         }
         else
         {
@@ -454,6 +458,9 @@ void OSinglePropertyContext::startFastElement(
             PropertyConversion::convertString(aPropType,
                                            sValue);
     }
+
+    if (aPropValue.Name == "TargetURL" && INetURLObject(sValue).IsExoticProtocol())
+        GetImport().NotifyMacroEventRead();
 
     // now that we finally have our property value, add it to our parent object
     if( !aPropValue.Name.isEmpty() )
