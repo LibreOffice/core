@@ -21,6 +21,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <string_view>
 #include <vector>
 #include <unordered_map>
 
@@ -128,7 +129,7 @@ namespace SvtSecurityOptions
        Check whether the given uri is either no dangerous macro-execution
        URI at all or else the given referer is a trusted source.
     */
-    UNOTOOLS_DLLPUBLIC bool isSecureMacroUri(OUString const & uri, OUString const & referer);
+    UNOTOOLS_DLLPUBLIC bool isSecureMacroUri(std::u16string_view uri, OUString const & referer);
 
     /**
        Check whether the given referer URI is untrusted, and links
