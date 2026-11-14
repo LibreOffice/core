@@ -17,6 +17,7 @@
 
 #import <objc/message.h>
 #import <objc/runtime.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 #import <poll.h>
 #import <sys/stat.h>
@@ -38,9 +39,67 @@
 @interface DocumentViewController() <WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, UIScrollViewDelegate, UIDocumentPickerDelegate, UIFontPickerViewControllerDelegate> {
     int closeNotificationPipeForForwardingThread[2];
     NSURL *downloadAsTmpURL;
+    // The picker of the folder that holds the files the document links to, as opposed to the
+    // one that exports the document.
+    UIDocumentPickerViewController *linkedFolderPicker;
 }
 
 @end
+
+// The files a document links to, the chapters of a master document for example, are read where
+// they are, in a folder the user chose; the app may read it, also in later sessions, through a
+// bookmark.
+static NSString *const LinkedFolderBookmarksKey = @"LinkedFolderBookmarks";
+
+static void restoreLinkedFolderAccess()
+{
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        NSArray *bookmarks = [[NSUserDefaults standardUserDefaults] arrayForKey:LinkedFolderBookmarksKey];
+        for (NSData *bookmark in bookmarks) {
+            BOOL stale = NO;
+            NSURL *folder = [NSURL URLByResolvingBookmarkData:bookmark options:0 relativeToURL:nil
+                                          bookmarkDataIsStale:&stale error:nil];
+            [folder startAccessingSecurityScopedResource];
+        }
+    });
+}
+
+static void rememberLinkedFolder(NSURL *folder)
+{
+    NSData *bookmark = [folder bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil
+                                         relativeToURL:nil error:nil];
+    if (!bookmark)
+        return;
+    // A folder allowed again replaces its bookmark.
+    NSString *path = [[folder URLByStandardizingPath] path];
+    NSMutableArray *bookmarks = [NSMutableArray array];
+    for (NSData *kept in [[NSUserDefaults standardUserDefaults] arrayForKey:LinkedFolderBookmarksKey]) {
+        BOOL stale = NO;
+        NSURL *keptFolder = [NSURL URLByResolvingBookmarkData:kept options:0 relativeToURL:nil
+                                         bookmarkDataIsStale:&stale error:nil];
+        if (![[[keptFolder URLByStandardizingPath] path] isEqualToString:path])
+            [bookmarks addObject:kept];
+    }
+    [bookmarks addObject:bookmark];
+    [[NSUserDefaults standardUserDefaults] setObject:bookmarks forKey:LinkedFolderBookmarksKey];
+}
+
+// The deepest folder that holds all of the given files.
+static NSURL *commonFolderOf(NSArray<NSURL *> *files)
+{
+    if ([files count] == 0)
+        return nil;
+    NSArray<NSString *> *common = [[files[0] URLByDeletingLastPathComponent] pathComponents];
+    for (NSURL *file in files) {
+        NSArray<NSString *> *parts = [[file URLByDeletingLastPathComponent] pathComponents];
+        NSUInteger count = 0;
+        while (count < [common count] && count < [parts count] && [common[count] isEqualToString:parts[count]])
+            count++;
+        common = [common subarrayWithRange:NSMakeRange(0, count)];
+    }
+    return [common count] ? [NSURL fileURLWithPathComponents:common] : nil;
+}
 
 // From https://gist.github.com/myell0w/d8dfabde43f8da543f9c
 static BOOL isExternalKeyboardAttached()
@@ -383,6 +442,8 @@ static UIColor *mainBackgroundColor(BOOL dark)
         if ([message.body isEqualToString:@"HULLO"]) {
             // Now we know that the JS has started completely
 
+            restoreLinkedFolderAccess();
+
             // Contact the permanently (during app lifetime) listening COOLWSD server
             // "public" socket
             assert(coolwsd_server_socket_fd != -1);
@@ -445,6 +506,13 @@ static UIColor *mainBackgroundColor(BOOL dark)
 
             // This is read in the code in ClientRequestDispatcher::handleIncomingMessage()
             std::string message(url + " " + std::to_string(self.document->appDocId));
+            // We load a working copy from a temp dir, so pass the original file the user
+            // opened as a third token. The Online parts forward it to the engine as a
+            // document load option, so the relative links of the document, such as the
+            // chapters of a master document, are relative to the real location. The URL is
+            // percent-encoded (no spaces), so it stays a single token.
+            if ([self.document fileURL] != nil)
+                message += " " + std::string([[[self.document fileURL] absoluteString] UTF8String]);
             fakeSocketWriteQueue(self.document->fakeClientFd, message.c_str(), message.size());
 
             return;
@@ -506,6 +574,84 @@ static UIColor *mainBackgroundColor(BOOL dark)
         } else if ([message.body hasPrefix:@"SETDARKMODE "]) {
             self.view.backgroundColor =
                 mainBackgroundColor([message.body isEqualToString:@"SETDARKMODE true"]);
+            return;
+        } else if ([message.body hasPrefix:@"GRANTLINKEDFILES "]) {
+            // The document links to files outside the folders the app may read. The user is asked
+            // for the folder that holds them; the engine then reads them where they are, and their
+            // links are updated, which choosing the folder agrees to.
+            NSData *json = [[message.body substringFromIndex:[@"GRANTLINKEDFILES " length]]
+                               dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+            NSMutableArray<NSURL *> *files = [NSMutableArray array];
+            for (NSDictionary *link in object[@"links"]) {
+                NSURL *url = [NSURL URLWithString:link[@"url"]];
+                if ([url isFileURL])
+                    [files addObject:url];
+            }
+            if ([files count] == 0)
+                return;
+            linkedFolderPicker = [[UIDocumentPickerViewController alloc]
+                                    initForOpeningContentTypes:@[UTTypeFolder]];
+            linkedFolderPicker.delegate = self;
+            linkedFolderPicker.directoryURL = commonFolderOf(files);
+            [self presentViewController:linkedFolderPicker animated:YES completion:nil];
+            return;
+        } else if ([message.body hasPrefix:@"LINKEDFILESREFRESH "]) {
+            // The user asked to read the linked files anew. The engine reads them where they are,
+            // but a file of a cloud provider, iCloud Drive for example, can be a local copy that is
+            // not up to date until it is read through file coordination, which updates it. The
+            // links are updated again from the files that come out of that.
+            NSData *json = [[message.body substringFromIndex:[@"LINKEDFILESREFRESH " length]]
+                               dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+            NSMutableArray<NSURL *> *files = [NSMutableArray array];
+            for (NSDictionary *link in object[@"links"]) {
+                NSURL *url = [NSURL URLWithString:link[@"url"]];
+                if ([url isFileURL])
+                    [files addObject:url];
+            }
+            if ([files count] == 0)
+                return;
+            __weak DocumentViewController *weakSelf = self;
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+                NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+                for (NSURL *file in files) {
+                    NSError *error = nil;
+                    [coordinator coordinateReadingItemAtURL:file
+                                                    options:NSFileCoordinatorReadingWithoutChanges
+                                                      error:&error
+                                                 byAccessor:^(NSURL *) {}];
+                    if (error)
+                        LOG_WRN("Cannot bring the linked file " << [[file path] UTF8String]
+                                << " up to date: " << [[error localizedDescription] UTF8String]);
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    DocumentViewController *strongSelf = weakSelf;
+                    if (!strongSelf || !strongSelf.document)
+                        return;
+                    const std::string allow = "allowlinkupdate";
+                    fakeSocketWriteQueue(strongSelf.document->fakeClientFd, allow.c_str(), allow.size());
+                });
+            });
+            return;
+        } else if ([message.body hasPrefix:@"opendoc "]) {
+            // Edit of a file a master document links to opens it as a document of its own.
+            for (NSString *item in [message.body componentsSeparatedByString:@" "]) {
+                if (![item hasPrefix:@"file="])
+                    continue;
+                NSURL *url = [NSURL URLWithString:[[item substringFromIndex:[@"file=" length]]
+                                                      stringByRemovingPercentEncoding]];
+                if (![url isFileURL] || ![[NSFileManager defaultManager] fileExistsAtPath:[url path]])
+                    return;
+                UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                DocumentViewController *documentViewController =
+                    [storyBoard instantiateViewControllerWithIdentifier:@"DocumentViewController"];
+                documentViewController.document = [[CODocument alloc] initWithFileURL:url];
+                documentViewController.document->fakeClientFd = -1;
+                documentViewController.document->readOnly = false;
+                documentViewController.document.viewController = documentViewController;
+                [self presentViewController:documentViewController animated:YES completion:nil];
+            }
             return;
         } else if ([message.body hasPrefix:@"HYPERLINK"]) {
             NSArray *messageBodyItems = [message.body componentsSeparatedByString:@" "];
@@ -583,11 +729,25 @@ static UIColor *mainBackgroundColor(BOOL dark)
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
+    if (controller == linkedFolderPicker) {
+        linkedFolderPicker = nil;
+        NSURL *folder = [urls firstObject];
+        if (folder && [folder startAccessingSecurityScopedResource]) {
+            rememberLinkedFolder(folder);
+            const std::string allow = "allowlinkupdate";
+            fakeSocketWriteQueue(self.document->fakeClientFd, allow.c_str(), allow.size());
+        }
+        return;
+    }
     std::remove([[downloadAsTmpURL path] UTF8String]);
     std::remove([[[downloadAsTmpURL URLByDeletingLastPathComponent] path] UTF8String]);
 }
 
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
+    if (controller == linkedFolderPicker) {
+        linkedFolderPicker = nil;
+        return;
+    }
     std::remove([[downloadAsTmpURL path] UTF8String]);
     std::remove([[[downloadAsTmpURL URLByDeletingLastPathComponent] path] UTF8String]);
 }
