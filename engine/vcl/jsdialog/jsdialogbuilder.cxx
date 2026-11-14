@@ -848,7 +848,10 @@ std::unique_ptr<weld::Menu> JSInstanceBuilder::weld_menu(const OUString& id)
     std::unique_ptr<weld::Menu> pWeldWidget(pMenu);
 
     if (pWeldWidget)
+    {
+        pMenu->set_map_id(getMapIdFromWindowId());
         JSInstanceBuilder::Menus().Remember(getMapIdFromWindowId(), pWeldWidget.get());
+    }
 
     return pWeldWidget;
 }
@@ -1743,8 +1746,34 @@ void JSToolbar::set_item_active(const OUString& rIdent, bool bActive)
         sendUpdate();
 }
 
+void JSToolbar::set_item_menu(const OUString& rIdent, weld::Menu* pMenu)
+{
+    SalInstanceToolbar::set_item_menu(rIdent, pMenu);
+    if (pMenu)
+        m_aItemMenus[rIdent] = pMenu;
+    else
+        m_aItemMenus.erase(rIdent);
+}
+
 void JSToolbar::set_menu_item_active(const OUString& rIdent, bool bActive)
 {
+    // A menu does not open here, where it would wait for a choice, but in the browser, which
+    // reports the choice to the menu later.
+    std::map<OUString, weld::Menu*>::const_iterator it = m_aItemMenus.find(rIdent);
+    if (it != m_aItemMenus.end())
+    {
+        if (bActive)
+        {
+            ToolBoxItemId nItemId = m_xToolBox->GetItemId(rIdent);
+            // the item counts as active while its owner prepares the menu
+            m_sStartShowIdent = m_xToolBox->GetItemCommand(nItemId);
+            signal_toggle_menu(m_sStartShowIdent);
+            m_sStartShowIdent.clear();
+            it->second->popup_at_rect(this, m_xToolBox->GetItemRect(nItemId));
+        }
+        return;
+    }
+
     bool bWasActive = get_menu_item_active(rIdent);
     SalInstanceToolbar::set_menu_item_active(rIdent, bActive);
 
@@ -2279,6 +2308,12 @@ JSMenu::JSMenu(JSDialogSender* pSender, PopupMenu* pPopupMenu, SalInstanceBuilde
 {
 }
 
+JSMenu::~JSMenu()
+{
+    if (!m_sMapId.isEmpty() && JSInstanceBuilder::Menus().Find(m_sMapId) == this)
+        JSInstanceBuilder::Menus().Forget(m_sMapId);
+}
+
 OUString JSMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
                                weld::Placement /*ePlace*/)
 {
@@ -2299,6 +2334,10 @@ OUString JSMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rR
         else
             SAL_WARN("vcl", "No entry detected in JSMenu::popup_at_rect");
     }
+
+    // A builder can have several menus, the choice goes to the one shown.
+    if (!m_sMapId.isEmpty())
+        JSInstanceBuilder::Menus().Remember(m_sMapId, this);
 
     m_pSender->sendMenu(m_pPopupMenu, pParent ? pParent->get_buildable_name() : u""_ustr, sCancelId);
 

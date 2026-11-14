@@ -729,11 +729,15 @@ public:
 
 class JSToolbar final : public JSWidget<SalInstanceToolbar, ::ToolBox>
 {
+    // the menus of dropdown items, shown in the browser instead of executed here
+    std::map<OUString, weld::Menu*> m_aItemMenus;
+
 public:
     JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
 
     virtual void set_item_active(const OUString& rIdent, bool bActive) override;
+    virtual void set_item_menu(const OUString& rIdent, weld::Menu* pMenu) override;
     virtual void set_menu_item_active(const OUString& rIdent, bool bActive) override;
     virtual void set_item_sensitive(const OUString& rIdent, bool bSensitive) override;
     virtual void set_item_icon_name(const OUString& rIdent, const OUString& rIconName) override;
@@ -900,10 +904,15 @@ class JSMenu final : public SalInstanceMenu
 {
     VclPtr<PopupMenu> m_pPopupMenu;
     JSDialogSender* m_pSender;
+    // under this id the browser reports the selection of the menu shown last
+    OUString m_sMapId;
 
 public:
     JSMenu(JSDialogSender* pSender, PopupMenu* pMenu, SalInstanceBuilder* pBuilder,
            bool bTakeOwnership);
+    virtual ~JSMenu() override;
+
+    void set_map_id(const OUString& rMapId) { m_sMapId = rMapId; }
 
     virtual OUString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
                                    weld::Placement ePlace = weld::Placement::Under) override;
