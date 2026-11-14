@@ -22,6 +22,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
@@ -6929,6 +6931,53 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testObjectStreams)
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getAttachmentCount());
     CPPUNIT_ASSERT_EQUAL(u"Original.odt"_ustr, pPdfDocument->getAttachment(0)->getName());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testHybridMasterDocumentKeepsSectionContent)
+{
+    // Given a master document that saves its linked sections without their content:
+    loadFromFile(u"master-document-cached.odm");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance(u"com.sun.star.text.DocumentSettings"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xSettings->getPropertyValue(u"SaveGlobalDocumentLinks"_ustr).get<bool>());
+
+    // When exporting it as a hybrid PDF:
+    uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
+        u"IsAddStream"_ustr, true) };
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    xStorable->storeToURL(
+        maTempFile.GetURL(),
+        { comphelper::makePropertyValue(u"FilterName"_ustr,
+                                        u"writer_globaldocument_pdf_Export"_ustr),
+          comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    // Then the document itself is unchanged:
+    CPPUNIT_ASSERT(!xSettings->getPropertyValue(u"SaveGlobalDocumentLinks"_ustr).get<bool>());
+    uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xModifiable->isModified());
+
+    // And the embedded master document carries the content of its sections. Without the fix in
+    // place, the sections were empty, and their files do not travel with the PDF.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getAttachmentCount());
+    std::unique_ptr<vcl::pdf::PDFiumAttachment> pAttachment = pPdfDocument->getAttachment(0);
+    CPPUNIT_ASSERT_EQUAL(u"Original.odm"_ustr, pAttachment->getName());
+    std::vector<unsigned char> aFile;
+    CPPUNIT_ASSERT(pAttachment->getFile(aFile));
+    utl::TempFileNamed aOriginal(u"", true, u".odm");
+    aOriginal.EnableKillingFile();
+    {
+        SvFileStream aStream(aOriginal.GetURL(), StreamMode::WRITE | StreamMode::TRUNC);
+        aStream.WriteBytes(aFile.data(), aFile.size());
+    }
+    loadFromURL(aOriginal.GetURL());
+    uno::Reference<text::XTextSectionsSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> xSection(
+        xSupplier->getTextSections()->getByName(u"Present"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"Cached text of the present chapter"_ustr,
+                         xSection->getAnchor()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFAttachmentsWithEncryptedFile)

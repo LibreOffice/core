@@ -31,6 +31,7 @@
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -60,6 +61,7 @@
 #include <com/sun/star/task/PDFExportException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/sheet/XSheetRange.hpp>
@@ -281,6 +283,30 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
     };
     if (m_aPreparedPassword.hasElements())
         aArgs.push_back(comphelper::makePropertyValue(u"EncryptionData"_ustr, m_aPreparedPassword));
+
+    // A master document saves its linked sections without their content unless told otherwise,
+    // and the files they link to do not travel with the PDF, so the embedded copy has to carry
+    // the content.
+    Reference<beans::XPropertySet> xSettings;
+    Reference<lang::XServiceInfo> xServiceInfo(m_xSrcDoc, UNO_QUERY);
+    if (xServiceInfo && xServiceInfo->supportsService(u"com.sun.star.text.GlobalDocument"_ustr))
+    {
+        Reference<lang::XMultiServiceFactory> xFactory(m_xSrcDoc, UNO_QUERY);
+        if (xFactory)
+            xSettings.set(xFactory->createInstance(u"com.sun.star.text.DocumentSettings"_ustr),
+                          UNO_QUERY);
+    }
+    bool bSaveLinkedContent = true;
+    if (xSettings)
+    {
+        xSettings->getPropertyValue(u"SaveGlobalDocumentLinks"_ustr) >>= bSaveLinkedContent;
+        if (!bSaveLinkedContent)
+            xSettings->setPropertyValue(u"SaveGlobalDocumentLinks"_ustr, Any(true));
+    }
+    comphelper::ScopeGuard aRestoreSettings([&xSettings, bSaveLinkedContent]() {
+        if (xSettings && !bSaveLinkedContent)
+            xSettings->setPropertyValue(u"SaveGlobalDocumentLinks"_ustr, Any(false));
+    });
 
     try
     {
