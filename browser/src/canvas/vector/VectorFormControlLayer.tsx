@@ -53,7 +53,7 @@ namespace cool {
       if (data && !app.map.isFormControlDesignMode()) {
         for (const id of data.order) {
           const object = data.objects.get(id);
-          if (object?.objectKind !== layer.formControlKind) continue;
+          if (!object || object.objectKind !== layer.formControlKind) continue;
           if (
             object.layer !== undefined &&
             !RenderManager.isLayerVisible(object.layer)

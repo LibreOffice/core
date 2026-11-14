@@ -1120,7 +1120,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		y: number,
 	): boolean {
 		const objects = this._cache.get(partId)?.objects;
-		if (objects?.get(hitId)?.objectKind !== VectorPartManagerBase.tableKind)
+		if (
+			!objects ||
+			objects.get(hitId)?.objectKind !== VectorPartManagerBase.tableKind
+		)
 			return true;
 		const text = objects.get(entryId);
 		if (
