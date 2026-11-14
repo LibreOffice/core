@@ -14,6 +14,13 @@
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/hostfilter.hxx>
+#include <tools/json_writer.hxx>
+#include <vcl/scheduler.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
+
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -83,6 +90,80 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkUpdateKeepsSectionOfForbiddenFile)
     CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
 }
 #endif
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkedFileReadFromCopy)
+{
+    // Given a master document whose linked files may not be read where they are, as in a jail:
+    comphelper::ScopeGuard g([]() { HostFilter::resetAllowedExtRefPaths(); });
+    HostFilter::setAllowedExtRefPaths("");
+    createSwGlobalDoc("master-cached-sections.odm");
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+
+    // Then the document reports the files by their path relative to it, none of them readable:
+    // The id, the section and whether it is readable, of each linked file.
+    using LinkedFiles = std::vector<std::tuple<std::string, std::string, bool>>;
+    std::function<LinkedFiles()> getLinks = [pTextDoc]() {
+        tools::JsonWriter aJson;
+        CPPUNIT_ASSERT(pTextDoc->getLinkedFiles(aJson));
+        std::stringstream aStream{ std::string(aJson.finishAndGetAsOString()) };
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        LinkedFiles aLinks;
+        for (const auto& rLink : aTree.get_child("links"))
+            aLinks.emplace_back(rLink.second.get<std::string>("id"),
+                                rLink.second.get<std::string>("section"),
+                                rLink.second.get<bool>("readable"));
+        return aLinks;
+    };
+    LinkedFiles aLinks = getLinks();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aLinks.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("master-chapter.odt"), std::get<0>(aLinks[0]));
+    CPPUNIT_ASSERT_EQUAL(std::string("Present"), std::get<1>(aLinks[0]));
+    CPPUNIT_ASSERT(!std::get<2>(aLinks[0]));
+    CPPUNIT_ASSERT_EQUAL(std::string("master-missing-chapter.odt"), std::get<0>(aLinks[1]));
+    CPPUNIT_ASSERT(!std::get<2>(aLinks[1]));
+
+    // When the host gives a copy of the missing file, which is read in its place:
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), pTextDoc->setLinkedFileSource(u"no-such-file.odt"_ustr,
+                                                                      createFileURL(u"master-chapter.odt")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         pTextDoc->setLinkedFileSource(u"master-missing-chapter.odt"_ustr,
+                                                       createFileURL(u"master-chapter.odt")));
+    aLinks = getLinks();
+    CPPUNIT_ASSERT(!std::get<2>(aLinks[0]));
+    CPPUNIT_ASSERT(std::get<2>(aLinks[1]));
+
+    // And the user allows the links to be updated:
+    getSwDocShell()->AllowLinkUpdate();
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the section of the file with a copy shows the copy, the other keeps its content.
+    // Without the fix in place, both files were refused.
+    CPPUNIT_ASSERT_EQUAL(u"Cached text of the present chapter"_ustr,
+                         getSectionText(u"Present"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Text of the chapter file"_ustr, getSectionText(u"Missing"_ustr));
+
+    // And the document is saved with the link it had, not with the copy.
+    save(TestFilter::ODM_GLOBAL);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "(//text:section-source)[2]", "href")
+                       .endsWith("/master-missing-chapter.odt"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkedFileIdOfAbsoluteLink)
+{
+    // Given a master document:
+    createSwGlobalDoc("master-cached-sections.odm");
+    SwDocShell* pDocShell = getSwDocShell();
+
+    // Then a file next to it is known by its path relative to it:
+    CPPUNIT_ASSERT_EQUAL(u"master-chapter.odt"_ustr,
+                         pDocShell->GetLinkedFileId(createFileURL(u"master-chapter.odt")));
+    // And a file that shares no folder with it keeps its URL, which a host asks for no copy of.
+    // Without the fix in place, the path climbed up to the root from where the document was.
+    CPPUNIT_ASSERT_EQUAL(u"file:///chapter.odt"_ustr,
+                         pDocShell->GetLinkedFileId(u"file:///chapter.odt"_ustr));
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineEndsBeforeToC)
 {

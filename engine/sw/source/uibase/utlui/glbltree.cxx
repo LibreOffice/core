@@ -618,13 +618,19 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
     sal_uInt16 nSlot = 0;
     if (rSelectedPopupEntry == u"updatesel")
     {
+        // asking for the update is the consent to updating the links of the document; only these
+        // sections are updated now
+        m_pActiveShell->GetView().GetDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(
+            true);
         // Two passes: first update the areas, then the directories.
-        m_xTreeView->selected_foreach([this](weld::TreeIter& rSelEntry){
+        std::vector<OUString> aUpdatedFiles;
+        m_xTreeView->selected_foreach([this, &aUpdatedFiles](weld::TreeIter& rSelEntry){
             SwGlblDocContent* pContent = weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(rSelEntry));
             if (GLBLDOC_SECTION == pContent->GetType() &&
                 pContent->GetSection()->IsConnected())
             {
                 const_cast<SwSection*>(pContent->GetSection())->UpdateNow();
+                aUpdatedFiles.push_back(LinkedFileId(*pContent->GetSection()));
             }
             return false;
         });
@@ -636,6 +642,8 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
         });
 
         bUpdateHard = true;
+        if (!aUpdatedFiles.empty())
+            RequestFreshLinkedFiles(aUpdatedFiles);
     }
     else if (rSelectedPopupEntry == u"updateindex")
     {
@@ -646,6 +654,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
     {
         // asking for the update is the consent to it
         m_pActiveShell->GetView().GetDocShell()->AllowLinkUpdate();
+        RequestFreshLinkedFiles();
         if (rSelectedPopupEntry == u"updateall")
             nSlot = FN_UPDATE_TOX;
         pCont = nullptr;
@@ -1024,6 +1033,26 @@ bool SwGlobalTree::Update(bool bHard)
     }
     // FIXME: Implement a test for changes!
     return bRet;
+}
+
+void SwGlobalTree::RequestFreshLinkedFiles(const std::vector<OUString>& rIds)
+{
+    tools::JsonWriter aJson;
+    if (!rIds.empty())
+    {
+        tools::JsonWriter::ScopedJsonWriterNode<']'> aIds = aJson.startArray("ids");
+        for (const OUString& rId : rIds)
+            aJson.putSimpleValue(rId);
+    }
+    m_pActiveShell->GetView().viewCallback(COKitCallbackType::REFRESH_LINKED_FILES,
+                                           aJson.finishAndGetAsOString());
+}
+
+OUString SwGlobalTree::LinkedFileId(const SwSection& rSection)
+{
+    // The host knows the file by its path relative to this document, as the document links to it.
+    return m_pActiveShell->GetView().GetDocShell()->GetLinkedFileId(
+        rSection.GetLinkFileName().getToken(0, sfx2::cTokenSeparator));
 }
 
 void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)

@@ -237,6 +237,7 @@ public:
     void testSaveAsJsonOptions();
     void testMasterDocument();
     void testMasterDocumentFlatExports();
+    void testLinkedFiles();
     void testSaveAsCalc();
     void testPasteWriter();
     void testPasteWriterJPEG();
@@ -372,6 +373,7 @@ public:
     CPPUNIT_TEST(testSaveAsJsonOptions);
     CPPUNIT_TEST(testMasterDocument);
     CPPUNIT_TEST(testMasterDocumentFlatExports);
+    CPPUNIT_TEST(testLinkedFiles);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
@@ -1095,6 +1097,37 @@ void DesktopKitTest::testMasterDocumentFlatExports()
         CPPUNIT_ASSERT_MESSAGE(pFormat, aText.indexOf("Cached text of the missing chapter") >= 0);
         cpo::uno::Reference<util::XCloseable>(xSaved, cpo::uno::UNO_QUERY_THROW)->close(false);
     }
+}
+
+void DesktopKitTest::testLinkedFiles()
+{
+    // Given a master document whose two sections link to files that are not next to it:
+    COKitDocumentImpl* pDocument = loadDoc("master-document-cached.odm");
+
+    // Then the API reports them by their path relative to the document:
+    std::stringstream aStream(pDocument->getLinkedFiles());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    std::vector<std::string> aIds;
+    for (const auto& rLink : aTree.get_child("links"))
+    {
+        aIds.push_back(rLink.second.get<std::string>("id"));
+        CPPUNIT_ASSERT(!rLink.second.get<bool>("readable"));
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aIds.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("master-chapter.odt"), aIds[0]);
+    CPPUNIT_ASSERT_EQUAL(std::string("master-missing-chapter.odt"), aIds[1]);
+
+    // And a copy is taken only from a file on this machine and only for a file that is linked:
+    const OString aCopy = createFileURL(u"blank_text.odt").toUtf8();
+    CPPUNIT_ASSERT_EQUAL(-1, pDocument->setLinkedFileSource("master-chapter.odt",
+                                                           "https://example.org/chapter.odt"));
+    CPPUNIT_ASSERT_EQUAL(-1, pDocument->setLinkedFileSource("no-such-file.odt", aCopy.getStr()));
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->setLinkedFileSource("master-chapter.odt", aCopy.getStr()));
+
+    std::stringstream aStream2(pDocument->getLinkedFiles());
+    boost::property_tree::read_json(aStream2, aTree);
+    CPPUNIT_ASSERT(aTree.get_child("links").front().second.get<bool>("readable"));
 }
 
 void DesktopKitTest::testSaveAsCalc()

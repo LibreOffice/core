@@ -1714,6 +1714,30 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigator)
     uno::Reference<text::XTextContent> xSection(
         xSupplier->getTextSections()->getByName(u"Present"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"Text of the chapter file"_ustr, xSection->getAnchor()->getString());
+    // And the host is asked for fresh copies of every file, where it gave copies of them.
+    CPPUNIT_ASSERT_EQUAL(1, aView.m_nRefreshLinkedFiles);
+    std::stringstream aRefreshAll{ std::string(aView.m_aRefreshLinkedFiles) };
+    boost::property_tree::ptree aRefreshAllTree;
+    boost::property_tree::read_json(aRefreshAll, aRefreshAllTree);
+    CPPUNIT_ASSERT(!aRefreshAllTree.get_child_optional("ids"));
+
+    // When the selected section is updated, then the host is asked for a fresh copy of its file
+    // only.
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"globaltree"_ustr, aSelect));
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"global"_ustr, aOpenMenu));
+    Scheduler::ProcessEventsToIdle();
+    StringMap aChooseSelection{ { u"cmd"_ustr, u"select"_ustr },
+                                { u"data"_ustr, u"updatesel"_ustr },
+                                { u"type"_ustr, u"menu"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"__MENU__"_ustr, aChooseSelection));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(2, aView.m_nRefreshLinkedFiles);
+    std::stringstream aRefreshOne{ std::string(aView.m_aRefreshLinkedFiles) };
+    boost::property_tree::ptree aRefreshOneTree;
+    boost::property_tree::read_json(aRefreshOne, aRefreshOneTree);
+    const boost::property_tree::ptree& rIds = aRefreshOneTree.get_child("ids");
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rIds.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("master-chapter.odt"), rIds.front().second.data());
 
     // When the context menu of the tree is asked for, then it is sent to the client.
     aView.m_aJSDialogs.clear();
@@ -1751,6 +1775,24 @@ std::vector<OString> openMasterDocInsertMenu(const SwView* pView, SwTestViewCall
                             && rDialog.indexOf("inserttext") >= 0;
                  });
     return aMenus;
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUpdateAllLinksAllowsLinkUpdate)
+{
+    // Given a master document whose links the user was not asked about yet:
+    createSwGlobalDoc("master-cached-sections.odm");
+    getSwTextDoc()->initializeForTiledRendering({});
+    SwTestViewCallback aView;
+    CPPUNIT_ASSERT(!getSwDocShell()->getEmbeddedObjectContainer().getUserAllowsLinkUpdate());
+
+    // When the links are updated from the menu:
+    dispatchCommand(mxComponent, u".uno:UpdateAllLinks"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then that is the consent to update them, so the fresh copies the host is asked for show.
+    // Without the fix in place, the copies were taken and not shown.
+    CPPUNIT_ASSERT(getSwDocShell()->getEmbeddedObjectContainer().getUserAllowsLinkUpdate());
+    CPPUNIT_ASSERT_EQUAL(1, aView.m_nRefreshLinkedFiles);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorHidesInsertFile)

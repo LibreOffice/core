@@ -85,6 +85,9 @@ public:
     OString m_aExportFile;
     /// Payload of the last OPEN_LINKED_DOCUMENT callback.
     OString m_aOpenLinkedDocument;
+    /// Number of REFRESH_LINKED_FILES callbacks, and the payload of the last one.
+    int m_nRefreshLinkedFiles = 0;
+    OString m_aRefreshLinkedFiles;
     /// The payload of the last error report.
     OString m_aErrorReport;
     bool m_bCursorVisible = false;

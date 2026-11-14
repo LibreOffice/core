@@ -25,6 +25,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <o3tl/sorted_vector.hxx>
 
+#include <map>
 #include <string_view>
 #include <vector>
 
@@ -60,6 +61,9 @@ class SFX2_DLLPUBLIC LinkManager
     SvLinkSources aServerTbl;
 
     SfxObjectShell *pPersist; // LinkMgr must be release before SfxObjectShell
+
+    // the file each link URL is read from instead of the place it names
+    std::map<OUString, OUString> maLinkReadURLs;
 
     bool        InsertLink( SvBaseLink* pLink, SvBaseLinkObjectType nObjType, SfxLinkUpdateMode nUpdateType,
                             const OUString* pName );
@@ -130,6 +134,16 @@ public:
 
     void        UpdateAllLinks(bool bAskUpdate,
                                OUString const & referer);
+
+    /** Read the file a link names from another file, a copy the host keeps where it can be read.
+
+        The link keeps the URL it names, so the document is saved with it. Only the host sets
+        this, for a copy it made of the file, so reading it needs no other permission.
+     */
+    void SetLinkReadURL(const OUString& rLinkURL, const OUString& rReadURL);
+
+    /// The file a link URL is read from instead of the place it names, empty when there is none.
+    OUString GetLinkReadURL(const OUString& rLinkURL) const;
 
     // Call for list of links (eg for link-dialog)
     const       SvBaseLinks& GetLinks() const { return aLinkTbl; }

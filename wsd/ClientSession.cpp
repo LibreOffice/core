@@ -938,6 +938,13 @@ bool ClientSession::forwardWithoutJailUrls(const std::shared_ptr<Message>& paylo
         return forwardToClient(payload);
 
     object->remove("url");
+    const Poco::JSON::Array::Ptr links = object->getArray("links");
+    for (std::size_t i = 0; links && i < links->size(); ++i)
+    {
+        Poco::JSON::Object::Ptr link = links->getObject(i);
+        if (link)
+            link->remove("url");
+    }
 
     std::ostringstream oss;
     oss << message.substr(0, jsonStart);
@@ -1847,6 +1854,19 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         return true;
     }
 #endif // !MOBILEAPP && !WASMAPP
+    else if (tokens.equals(0, "linkedfile"))
+    {
+        // A client reads which files its document links to. Which file a link is read from is
+        // for the server to say.
+        if (tokens.size() != 2 || !tokens.equals(1, "list"))
+        {
+            LOG_ERR("Bad syntax for: " << firstLine);
+            sendTextFrameAndLogError("error: cmd=linkedfile kind=syntax");
+            return false;
+        }
+
+        return forwardToChild(firstLine, docBroker);
+    }
     else if (tokens.equals(0, "slidelink"))
     {
         // A client reads the links its own document holds, takes the link off one unit of it,
@@ -4070,6 +4090,10 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
         return forwardToClient(payload);
     }
 #if !MOBILEAPP
+    else if (tokens.equals(0, "linkedfiles:"))
+    {
+        return forwardWithoutJailUrls(payload);
+    }
     else if (tokens.equals(0, "openlinkeddocument:"))
     {
         return forwardWithoutJailUrls(payload);

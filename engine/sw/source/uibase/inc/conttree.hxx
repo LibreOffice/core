@@ -28,6 +28,7 @@
 
 #include <map>
 #include <memory>
+#include <vector>
 
 #include <o3tl/enumarray.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -40,6 +41,7 @@ class SwWrtShell;
 class SwContentType;
 class SwNavigationPI;
 class SwNavigationConfig;
+class SwSection;
 class SfxObjectShell;
 class SdrObject;
 
@@ -380,6 +382,10 @@ private:
     SwNavigationPI* GetParentWindow();
 
     void            OpenDoc(const SwGlblDocContent*);
+    // asks the host for fresh copies of the files the document links to, where it gives copies
+    void            RequestFreshLinkedFiles(const std::vector<OUString>& rIds = {});
+    // the path of the file a section links to, relative to this document, as the host knows it
+    OUString        LinkedFileId(const SwSection& rSection);
     void            GotoContent(const SwGlblDocContent*);
     MenuEnableFlags GetEnableFlags() const;
 

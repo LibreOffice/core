@@ -338,6 +338,11 @@ private:
     /// The links of the document to the slides and the sections of other documents, as the JSON
     /// body of a slidelinks: message. A document that reports none gives an empty list.
     std::string getSlideLinksJson();
+    bool linkedFile(const StringVector& tokens);
+    bool linkedFileSource(const StringVector& tokens);
+    /// The files that sections of the document link to, as the JSON body of a linkedfiles:
+    /// message. A document that reports none gives an empty list.
+    std::string getLinkedFilesJson();
     bool keyEvent(const StringVector& tokens, LokEventTargetEnum target);
     bool extTextInputEvent(const StringVector& tokens);
     bool dialogKeyEvent(const char* buffer, int length, const std::vector<std::string>& tokens);

@@ -9167,6 +9167,53 @@ int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pU
     return nRefreshed;
 }
 
+std::string COKitDocumentImpl::getLinkedFiles()
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(this);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return {};
+    }
+
+    tools::JsonWriter aJsonWriter;
+    const bool bWritten = pDoc->getLinkedFiles(aJsonWriter);
+    // A JsonWriter checks at destruction that its data was extracted.
+    OString aLinks = aJsonWriter.finishAndGetAsOString();
+    if (!bWritten)
+        return {};
+
+    return convertOStringToStdString(aLinks);
+}
+
+int COKitDocumentImpl::setLinkedFileSource(const char* pId, const char* pUrl)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return -1;
+
+    ITiledRenderable* pDoc = getTiledRenderable(this);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return -1;
+    }
+
+    // The copy is a file on this machine, so that reading it needs no network.
+    if (!pId || !pUrl || !std::string_view(pUrl).starts_with("file://"))
+    {
+        SetLastExceptionMsg(u"A linked file is read from a file and from nowhere else"_ustr);
+        return -1;
+    }
+
+    return pDoc->setLinkedFileSource(getUString(pId), getUString(pUrl));
+}
+
 bool COKitDocumentImpl::breakSlideLink(const char* pUnit, const char* pId, bool bDeep)
 {
     SolarMutexGuard aGuard;

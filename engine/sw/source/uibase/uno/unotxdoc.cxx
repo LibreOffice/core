@@ -149,6 +149,7 @@
 
 #include <editeng/langitem.hxx>
 #include <docary.hxx>
+#include <section.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/searchopt.hxx>
 
@@ -182,6 +183,9 @@
 #include <DocumentRedlineManager.hxx>
 #include <xmloff/odffields.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/hostfilter.hxx>
+#include <tools/urlobj.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <svx/svdpage.hxx>
@@ -3499,6 +3503,87 @@ Size SwXTextDocument::getDocumentSize()
 
     return Size(aDocSize.Width()  + 2 * DOCUMENTBORDER,
                 aDocSize.Height() + 2 * DOCUMENTBORDER);
+}
+
+namespace
+{
+/// Whether the engine may read the file at the URL: a regular file it can open for reading.
+bool lcl_IsReadableFile(const OUString& rURL)
+{
+    osl::DirectoryItem aItem;
+    osl::FileStatus aStatus(osl_FileStatus_Mask_Type);
+    if (osl::DirectoryItem::get(rURL, aItem) != osl::FileBase::E_None
+        || aItem.getFileStatus(aStatus) != osl::FileBase::E_None
+        || aStatus.getFileType() != osl::FileStatus::Regular)
+        return false;
+    osl::File aFile(rURL);
+    return aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None;
+}
+
+/// Calls rFunc with each section that links to a file, and the URL of that file.
+template <typename Func> void lcl_ForEachLinkedFile(SwDoc& rDoc, Func rFunc)
+{
+    for (const SwSectionFormat* pFormat : rDoc.GetSections())
+    {
+        SwSection* pSection = pFormat->GetSection();
+        if (!pSection || pSection->GetType() != SectionType::FileLink || !pFormat->IsInNodesArr())
+            continue;
+        const OUString aURL = pSection->GetLinkFileName().getToken(0, sfx2::cTokenSeparator);
+        if (!aURL.isEmpty())
+            rFunc(*pSection, aURL);
+    }
+}
+}
+
+bool SwXTextDocument::getLinkedFiles(tools::JsonWriter& rJsonWriter)
+{
+    SolarMutexGuard aGuard;
+    if (!m_pDocShell)
+        return false;
+
+    SwDoc& rDoc = *m_pDocShell->GetDoc();
+    const sfx2::LinkManager& rLinkManager = rDoc.getIDocumentLinksAdministration().GetLinkManager();
+    tools::JsonWriter::ScopedJsonWriterNode<']'> aLinks = rJsonWriter.startArray("links");
+    lcl_ForEachLinkedFile(rDoc, [&](const SwSection& rSection, const OUString& rURL) {
+        const bool bReadable
+            = !rLinkManager.GetLinkReadURL(rURL).isEmpty()
+              || (!HostFilter::isFileUrlForbidden(rURL) && lcl_IsReadableFile(rURL));
+        tools::JsonWriter::ScopedJsonWriterNode<'}'> aLink = rJsonWriter.startStruct();
+        rJsonWriter.put("id", m_pDocShell->GetLinkedFileId(rURL));
+        rJsonWriter.put("url", rURL);
+        rJsonWriter.put("section", rSection.GetSectionName().toString());
+        rJsonWriter.put("filter",
+                        rSection.GetLinkFileName().getToken(1, sfx2::cTokenSeparator));
+        rJsonWriter.put("readable", bReadable);
+    });
+    return true;
+}
+
+sal_Int32 SwXTextDocument::setLinkedFileSource(const OUString& rId, const OUString& rFileUrl)
+{
+    SolarMutexGuard aGuard;
+    if (!m_pDocShell)
+        return -1;
+
+    SwDoc& rDoc = *m_pDocShell->GetDoc();
+    sfx2::LinkManager& rLinkManager = rDoc.getIDocumentLinksAdministration().GetLinkManager();
+    std::vector<SwSection*> aSections;
+    lcl_ForEachLinkedFile(rDoc, [&](SwSection& rSection, const OUString& rURL) {
+        if (m_pDocShell->GetLinkedFileId(rURL) != rId)
+            return;
+        rLinkManager.SetLinkReadURL(rURL, rFileUrl);
+        aSections.push_back(&rSection);
+    });
+    if (aSections.empty())
+        return -1;
+
+    // A copy that comes after the user allowed the links to be updated is shown at once.
+    if (m_pDocShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+    {
+        for (SwSection* pSection : aSections)
+            pSection->UpdateNow();
+    }
+    return aSections.size();
 }
 
 void SwXTextDocument::setPart(int nPart, bool /*bAllowChangeFocus*/)

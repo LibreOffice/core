@@ -1531,6 +1531,7 @@ callback (gpointer pData)
     case COKitCallbackType::REDLINE_RECORDING_FOR_ALL_VIEWS:
     case COKitCallbackType::USER_SETTINGS_PERSISTED:
     case COKitCallbackType::OPEN_LINKED_DOCUMENT:
+    case COKitCallbackType::REFRESH_LINKED_FILES:
     {
         // TODO: Implement me
         break;

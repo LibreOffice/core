@@ -35,6 +35,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
+#include <tools/urlobj.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docmacromode.hxx>
 #include <sfx2/printer.hxx>
@@ -123,6 +124,28 @@ void SwDocShell::InitInterface_Impl()
 
 
 SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), u"swriter"_ustr  )
+
+OUString SwDocShell::GetLinkedFileId(const OUString& rURL) const
+{
+    SfxMedium* pDocMedium = GetMedium();
+    const OUString aBase = pDocMedium ? pDocMedium->GetBaseURL() : OUString();
+    if (aBase.isEmpty())
+        return rURL;
+
+    // A file that shares no folder with the document, as one an absolute link made elsewhere
+    // names, is the same file wherever the document is. Its path relative to the document would
+    // climb up to the root from where the document happens to be.
+    const INetURLObject aBaseObject(aBase);
+    const INetURLObject aLinkObject(rURL);
+    if (aBaseObject.GetProtocol() == aLinkObject.GetProtocol()
+        && aBaseObject.getSegmentCount() > 1 && aLinkObject.getSegmentCount() > 0
+        && aBaseObject.getName(0, true, INetURLObject::DecodeMechanism::NONE)
+               != aLinkObject.getName(0, true, INetURLObject::DecodeMechanism::NONE))
+        return rURL;
+
+    return INetURLObject::GetRelURL(aBase, rURL, INetURLObject::EncodeMechanism::WasEncoded,
+                                    INetURLObject::DecodeMechanism::WithCharset);
+}
 
 bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
         uno::Reference<text::XTextRange> const& xInsertPosition)

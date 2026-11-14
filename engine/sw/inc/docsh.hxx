@@ -159,6 +159,13 @@ class SW_DLLPUBLIC SwDocShell
 
     SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
 
+public:
+    /// The identifier of a file a section links to, by its URL: the path of the file relative
+    /// to this document, as plain text and not percent-encoded, or the URL when the document has
+    /// no location to be relative to or the file shares no folder with it.
+    OUString GetLinkedFileId(const OUString& rURL) const;
+private:
+
     SAL_DLLPRIVATE void                  RemoveOLEObjects();
     SAL_DLLPRIVATE void                  CalcLayoutForOLEObjects();
 

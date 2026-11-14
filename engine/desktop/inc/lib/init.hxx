@@ -453,6 +453,8 @@ namespace desktop {
         int refreshSlideLinks(const char* pSourceName, const char* pUrl,
                               const char* pLastModifiedTime, std::string* pNotUpdated) override;
         bool breakSlideLink(const char* pUnit, const char* pId, bool bDeep) override;
+        std::string getLinkedFiles() override;
+        int setLinkedFileSource(const char* pId, const char* pUrl) override;
         bool exportPages(const char* pParts, const char* pUrl) override;
         void selectObjects(const char* pObjectIds) override;
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges) override;

@@ -2249,6 +2249,14 @@ void Document::pickFile(const char* title, const COKitFilePickerFilter* filters,
 }
 #endif // !MACOSAPP && !QTAPP && !_WIN32
 
+void Document::keepLinkedFileCopy(const std::string& id, const std::string& path)
+{
+    std::string& kept = _linkedFileCopies[id];
+    if (!kept.empty() && kept != path)
+        FileUtil::removeFile(kept);
+    kept = path;
+}
+
 void Document::completeFilePick(unsigned id, int viewId, const std::string& url)
 {
     const auto it = _pendingFilePicks.find(id);

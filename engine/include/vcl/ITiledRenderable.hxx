@@ -627,6 +627,23 @@ public:
         return false;
     }
 
+    /** Writes the files that sections of the document link to, as
+        {"links":[{"id","url","section","filter","readable"},...]}: the id is the path of the file
+        relative to the document, the URL is where the document resolves it, the section is the
+        section that shows it, the filter is the filter that reads it, and readable tells whether
+        it can be read, from a copy the host gave or from where it is (Writer only function) */
+    virtual bool getLinkedFiles(tools::JsonWriter& /*rJsonWriter*/) { return false; }
+
+    /** Reads the file with the identifier rId, as getLinkedFiles reports it, from the local file
+        rFileUrl from now on, while the links keep the URL they name. When the user already
+        allowed the links to be updated, the sections that show the file are updated from it at
+        once. Returns the number of sections that link to the file, -1 when none does (Writer
+        only function) */
+    virtual sal_Int32 setLinkedFileSource(const OUString& /*rId*/, const OUString& /*rFileUrl*/)
+    {
+        return -1;
+    }
+
     /** The index in the page list of the standard pages of the page holding the identifier
         rGuid, a braced GUID string as ODF keeps it; -1 when no standard page of the document
         holds it (Impress only function) */

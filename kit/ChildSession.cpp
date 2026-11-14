@@ -706,6 +706,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "insertfilelist") ||
                tokens.equals(0, "slideimport") ||
                tokens.equals(0, "slidelink") ||
+               tokens.equals(0, "linkedfile") ||
                tokens.equals(0, "key") ||
                tokens.equals(0, "textinput") ||
                tokens.equals(0, "windowkey") ||
@@ -912,6 +913,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "slidelink"))
         {
             return slideLink(tokens);
+        }
+        else if (tokens.equals(0, "linkedfile"))
+        {
+            return linkedFile(tokens);
         }
         else if (tokens.equals(0, "key"))
         {
@@ -4546,6 +4551,96 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
 
     return sendTextFrame(reply + ",\"count\":" + std::to_string(count) + ",\"notUpdated\":" +
                          (notUpdated.empty() ? "[]" : notUpdated) + '}');
+}
+
+bool ChildSession::linkedFile(const StringVector& tokens)
+{
+    if (tokens.size() == 2 && tokens.equals(1, "list"))
+        return sendTextFrame("linkedfiles: " + getLinkedFilesJson());
+    if (tokens.size() == 4 && tokens.equals(1, "source"))
+        return linkedFileSource(tokens);
+
+    sendTextFrameAndLogError("error: cmd=linkedfile kind=syntax");
+    return false;
+}
+
+std::string ChildSession::getLinkedFilesJson()
+{
+    getLOKitDocument()->setView(_viewId);
+
+    const std::string links = getLOKitDocument()->getLinkedFiles();
+    if (links.empty())
+        return "{\"links\":[]}";
+
+    return links;
+}
+
+bool ChildSession::linkedFileSource(const StringVector& tokens)
+{
+    std::string encodedId;
+    std::string encodedFile;
+    if (!getTokenString(tokens[2], "id", encodedId) || !getTokenString(tokens[3], "file", encodedFile))
+    {
+        sendTextFrameAndLogError("error: cmd=linkedfile kind=syntax");
+        return false;
+    }
+
+    std::string id;
+    std::string file;
+    try
+    {
+        URI::decode(encodedId, id);
+        URI::decode(encodedFile, file);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("linkedfile source: cannot decode the id or the file: " << exc.displayText());
+        sendTextFrameAndLogError("error: cmd=linkedfile kind=syntax");
+        return false;
+    }
+
+    // The copy is picked out of the staging area by name, so the name is a plain file name: no
+    // path separator and not a directory reference.
+    if (id.empty() || !Util::isPlainFileName(file))
+    {
+        sendTextFrameAndLogError("error: cmd=linkedfile kind=syntax");
+        return false;
+    }
+
+    // A copy the server staged stays in the staging area until a fresh copy of the same file
+    // replaces it, as every update of the link reads it again; one the kit does not take goes at
+    // once.
+    const std::string path = getJailDocRoot() + "insertfile/" + file;
+    if (!FileUtil::Stat(path).exists())
+    {
+        LOG_ERR("linkedfile source: no file staged as [" << file << ']');
+        sendTextFrameAndLogError("error: cmd=linkedfile kind=failed");
+        return false;
+    }
+
+    // Reading a linked file anew changes the document, which is an edit.
+    if (isReadOnly())
+    {
+        LOG_ERR("linkedfile source: a read-only view does not read linked files");
+        FileUtil::removeFile(path);
+        sendTextFrameAndLogError("error: cmd=linkedfile kind=failed");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    const std::string url = Poco::URI(Poco::Path(path)).toString();
+    const int count = getLOKitDocument()->setLinkedFileSource(id.c_str(), url.c_str());
+    if (count < 0)
+    {
+        FileUtil::removeFile(path);
+        sendTextFrameAndLogError("error: cmd=linkedfile kind=notlinked");
+        return false;
+    }
+    _docManager->keepLinkedFileCopy(id, path);
+
+    return sendTextFrame("linkedfile: {\"status\":\"registered\",\"id\":\"" +
+                         JsonUtil::escapeJSONValue(id) + "\",\"count\":" + std::to_string(count) +
+                         '}');
 }
 
 bool ChildSession::slideLinkBreak(const StringVector& tokens)

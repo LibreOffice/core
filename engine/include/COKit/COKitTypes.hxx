@@ -1355,7 +1355,20 @@ enum class COKitCallbackType
      * example
      * { "url": "file:///home/user/book/chapter1.odt", "section": "chapter1.odt" }.
      */
-    OPEN_LINKED_DOCUMENT = 80
+    OPEN_LINKED_DOCUMENT = 80,
+
+    /**
+     * The user asked to read the files the document links to anew.
+     *
+     * Sent to the view whose user asked for the update, for example with
+     * Update in the Navigator of a master document. The engine reads the
+     * files at once, from where it reads them; a host that gave the engine
+     * copies of them gives fresh copies, which the engine reads in turn. The
+     * payload is a JSON object. Its "ids" array names the files to read anew
+     * by their ids as getLinkedFiles() gives them, for example
+     * { "ids": [ "chapter1.odt" ] }; without "ids" every file is meant.
+     */
+    REFRESH_LINKED_FILES = 81
 };
 
 enum class COKitKeyEventType
@@ -1543,6 +1556,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_USER_SETTINGS_PERSISTED";
     case COKitCallbackType::OPEN_LINKED_DOCUMENT:
         return "KIT_CALLBACK_OPEN_LINKED_DOCUMENT";
+    case COKitCallbackType::REFRESH_LINKED_FILES:
+        return "KIT_CALLBACK_REFRESH_LINKED_FILES";
     }
 
     assert(!"Unknown COKitCallbackType type.");

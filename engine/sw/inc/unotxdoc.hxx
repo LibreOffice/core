@@ -539,6 +539,10 @@ public:
     void setEditMode(int nEditMode) override;
     /// @see vcl::ITiledRenderable::getPartInfo().
     std::string getPartInfo(int nPart) override;
+    /// @see vcl::ITiledRenderable::getLinkedFiles().
+    bool getLinkedFiles(tools::JsonWriter& rJsonWriter) override;
+    /// @see vcl::ITiledRenderable::setLinkedFileSource().
+    sal_Int32 setLinkedFileSource(const OUString& rId, const OUString& rFileUrl) override;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);

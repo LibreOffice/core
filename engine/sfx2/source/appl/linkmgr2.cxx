@@ -287,6 +287,20 @@ static void disallowAllLinksUpdate(SvBaseLink* pShellProvider)
         pShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
 }
 
+void LinkManager::SetLinkReadURL(const OUString& rLinkURL, const OUString& rReadURL)
+{
+    if (rReadURL.isEmpty())
+        maLinkReadURLs.erase(rLinkURL);
+    else
+        maLinkReadURLs[rLinkURL] = rReadURL;
+}
+
+OUString LinkManager::GetLinkReadURL(const OUString& rLinkURL) const
+{
+    std::map<OUString, OUString>::const_iterator it = maLinkReadURLs.find(rLinkURL);
+    return it == maLinkReadURLs.end() ? OUString() : it->second;
+}
+
 void LinkManager::UpdateAllLinks(
     bool bAskUpdate,
     OUString const & referer )

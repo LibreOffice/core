@@ -225,6 +225,12 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aOpenLinkedDocument = aPayload;
             break;
         }
+        case COKitCallbackType::REFRESH_LINKED_FILES:
+        {
+            ++m_nRefreshLinkedFiles;
+            m_aRefreshLinkedFiles = aPayload;
+            break;
+        }
         case COKitCallbackType::ERROR_REPORT:
         {
             m_aErrorReport = aPayload;

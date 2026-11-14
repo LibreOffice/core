@@ -1068,6 +1068,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.GetLinkManager().UpdateAllLinks(
                         false, medium == nullptr ? OUString() : medium->GetName() );
                     rSh.EndAllAction();
+                    // A host that gave copies of the linked files gives fresh ones.
+                    GetView().viewCallback(COKitCallbackType::REFRESH_LINKED_FILES, "{}"_ostr);
                 }
                 SfxDispatcher &rDis = *rTempView.GetViewFrame().GetDispatcher();
                 lcl_UnlockSoftFixed(rSh);
@@ -1565,6 +1567,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
         case FN_UPDATE_ALL_LINKS:
             {
+                // asking for the update is the consent to it
+                GetObjectShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
                 if( !rSh.GetLinkManager().GetLinks().empty() )
                 {
                     rSh.EnterStdMode();
@@ -1576,6 +1580,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.GetLinkManager().UpdateAllLinks(
                         false, medium == nullptr ? OUString() : medium->GetName() );
                     rSh.EndAllAction();
+                    // A host that gave copies of the linked files gives fresh ones.
+                    GetView().viewCallback(COKitCallbackType::REFRESH_LINKED_FILES, "{}"_ostr);
                 }
             }
             break;

@@ -436,6 +436,10 @@ public:
 
     std::shared_ptr<ChildSession> findSessionByViewId(int viewId);
 
+    /// Keeps the copy the server staged at path for the linked file with the given id, as the
+    /// file the engine reads, and removes the copy of that file it kept before.
+    void keepLinkedFileCopy(const std::string& id, const std::string& path);
+
     /// Answers the file pick with the given request id, from the view that was asked. An empty
     /// url means the user cancelled. An answer from any other view is ignored.
     void completeFilePick(unsigned id, int viewId, const std::string& url);
@@ -658,6 +662,9 @@ private:
     /// one thread that drives the document, so the map needs no lock.
     std::map<unsigned, PendingFilePick> _pendingFilePicks;
     unsigned _nextFilePickId;
+
+    /// The copy the server staged of each linked file the engine reads, by the id of the file.
+    std::map<std::string, std::string> _linkedFileCopies;
 
     std::atomic<bool> _stop;
 

@@ -1309,6 +1309,34 @@ struct COKitDocument
     virtual bool breakSlideLink(const char* pUnit, const char* pId, bool bDeep) = 0;
 
     /**
+     * Get the files that sections of a text document link to, the chapters of a master
+     * document for example.
+     *
+     * Returns JSON of the form {"links":[{"id":"<id>","url":"<url>","section":"<name>",
+     * "filter":"<filter>","readable":<bool>},...]}, one entry per linked section: the id is the
+     * path of the file relative to the document, as plain text and not percent-encoded,
+     * chapter1.odt or ../shared/chapter2.odt, the url
+     * is where the document resolves it, the section the section that shows it, the filter the
+     * filter that reads it, and readable whether it can be read, from a copy given with
+     * setLinkedFileSource or from where it is. Empty for anything but a text document.
+     */
+    virtual std::string getLinkedFiles() = 0;
+
+    /**
+     * Read a linked file from a local copy from now on.
+     *
+     * The sections keep the URL they link to, so the document is saved with it. When the user
+     * already allowed the links of the document to be updated, the sections that show the file
+     * are updated from the copy at once; otherwise they are when the user allows it.
+     *
+     * pId names the file by the identifier getLinkedFiles reports for it, and pUrl is a file:
+     * URL of the copy on this machine. Returns the number of sections that link to the file, or
+     * -1 when none does, when the URL is not a file on this machine or when the view cannot
+     * edit.
+     */
+    virtual int setLinkedFileSource(const char* pId, const char* pUrl) = 0;
+
+    /**
      * Writes the given pages out as a document of their own, in the order they are given.
      *
      * @param pParts a comma separated list of the pages to write, named the way this document

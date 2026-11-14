@@ -1142,13 +1142,20 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
         }
         else
         {
-            if (HostFilter::isFileUrlForbidden(sFileName))
+            // A copy of the file the host keeps is read in its place, with no further permission.
+            OUString sReadName
+                = rDoc.getIDocumentLinksAdministration().GetLinkManager().GetLinkReadURL(sFileName);
+            if (sReadName.isEmpty())
             {
-                SAL_WARN("sw.core", "SwIntrnlSectRefLink::DataChanged: blocked file path: \"" << sFileName << "\"");
-                return ERROR_GENERAL;
+                if (HostFilter::isFileUrlForbidden(sFileName))
+                {
+                    SAL_WARN("sw.core", "SwIntrnlSectRefLink::DataChanged: blocked file path: \"" << sFileName << "\"");
+                    return ERROR_GENERAL;
+                }
+                sReadName = sFileName;
             }
 
-            nRet = SwFindDocShell(xDocSh, xLockRef, sFileName, pSectNd->GetSection().GetLinkFilePassword(),
+            nRet = SwFindDocShell(xDocSh, xLockRef, sReadName, pSectNd->GetSection().GetLinkFilePassword(),
                                   sFilter, 0, rDoc.GetDocShell(), {});
             if (!nRet)
                 return ERROR_GENERAL;
