@@ -9,7 +9,15 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
+
+#include <comphelper/scopeguard.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <tools/hostfilter.hxx>
+
+#include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentState.hxx>
 #include <redline.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -24,7 +32,57 @@ public:
         : SwModelTestBase(u"/sw/qa/core/docnode/data/"_ustr)
     {
     }
+
+    OUString getSectionText(const OUString& rName)
+    {
+        uno::Reference<css::text::XTextSectionsSupplier> xSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+        uno::Reference<css::text::XTextContent> xSection(
+            xSupplier->getTextSections()->getByName(rName), uno::UNO_QUERY_THROW);
+        return xSection->getAnchor()->getString();
+    }
 };
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkUpdateKeepsSectionOfMissingFile)
+{
+    // Given a master document whose two linked sections have their content cached, the file of
+    // the second one is missing:
+    createSwGlobalDoc("master-cached-sections.odm");
+    SwDoc* pDoc = getSwDoc();
+
+    // When updating the links:
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, u""_ustr);
+
+    // Then the first section shows its file, and the second keeps its content. Without the fix,
+    // the second section was emptied before its file was found missing.
+    CPPUNIT_ASSERT_EQUAL(u"Text of the chapter file"_ustr, getSectionText(u"Present"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Cached text of the missing chapter"_ustr,
+                         getSectionText(u"Missing"_ustr));
+}
+
+// HostFilter::setAllowedExtRefPaths takes colon-separated paths, which do not fit Windows paths.
+#ifndef _WIN32
+CPPUNIT_TEST_FIXTURE(Test, testLinkUpdateKeepsSectionOfForbiddenFile)
+{
+    // Given a master document with cached section content, where no file URL may be followed:
+    comphelper::ScopeGuard g([]() { HostFilter::resetAllowedExtRefPaths(); });
+    HostFilter::setAllowedExtRefPaths("");
+    createSwGlobalDoc("master-cached-sections.odm");
+    SwDoc* pDoc = getSwDoc();
+    pDoc->getIDocumentState().ResetModified();
+
+    // When updating the links:
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, u""_ustr);
+
+    // Then both sections keep their content and the document is not modified. Without the fix,
+    // both sections were emptied before the file URLs were found forbidden.
+    CPPUNIT_ASSERT_EQUAL(u"Cached text of the present chapter"_ustr,
+                         getSectionText(u"Present"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Cached text of the missing chapter"_ustr,
+                         getSectionText(u"Missing"_ustr));
+    CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
+}
+#endif
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineEndsBeforeToC)
 {

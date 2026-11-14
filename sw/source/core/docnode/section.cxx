@@ -1119,6 +1119,45 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
         return SUCCESS;
     }
 
+    // Find the linked file before changing anything, so that a file which may not be followed
+    // or cannot be loaded leaves the section content and the document as they are.
+    OUString sFileName;
+    OUString sFilter;
+    OUString sRange;
+    RedlineFlags eOldRedlineFlags = RedlineFlags::NONE;
+    SfxObjectShellRef xDocSh;
+    SfxObjectShellLock xLockRef;
+    int nRet = 0;
+    if (nDataFormat == SotClipboardFormatId::SIMPLE_FILE)
+    {
+        if (!(rValue >>= sFileName))
+            return ERROR_GENERAL;
+        sfx2::LinkManager::GetDisplayNames(this, nullptr, &sFileName, &sRange, &sFilter);
+
+        if (sFileName.isEmpty())
+        {
+            xDocSh = rDoc.GetDocShell();
+            nRet = 1;
+        }
+        else
+        {
+            if (HostFilter::isFileUrlForbidden(sFileName))
+            {
+                SAL_WARN("sw.core", "SwIntrnlSectRefLink::DataChanged: blocked file path: \"" << sFileName << "\"");
+                return ERROR_GENERAL;
+            }
+
+            nRet = SwFindDocShell(xDocSh, xLockRef, sFileName, pSectNd->GetSection().GetLinkFilePassword(),
+                                  sFilter, 0, rDoc.GetDocShell(), {});
+            if (!nRet)
+                return ERROR_GENERAL;
+
+            SwDoc* pSrcDoc = static_cast<SwDocShell*>(xDocSh.get())->GetDoc();
+            eOldRedlineFlags = pSrcDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+            pSrcDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowInsert);
+        }
+    }
+
     //  #i38810# - Due to possible existing signatures, the
     // document has to be modified after updating a link.
     rDoc.getIDocumentState().SetModified();
@@ -1178,44 +1217,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
         break;
 
     case SotClipboardFormatId::SIMPLE_FILE:
-        if ( rValue.hasValue() )
         {
-            OUString sFileName;
-            if ( !(rValue >>= sFileName) )
-                break;
-            OUString sFilter;
-            OUString sRange;
-            sfx2::LinkManager::GetDisplayNames( this, nullptr, &sFileName,
-                                                    &sRange, &sFilter );
-
-            if (HostFilter::isFileUrlForbidden(sFileName))
-            {
-                SAL_WARN("sw.core", "SwIntrnlSectRefLink::DataChanged: blocked file path: \"" << sFileName << "\"");
-                break;
-            }
-
-            RedlineFlags eOldRedlineFlags = RedlineFlags::NONE;
-            SfxObjectShellRef xDocSh;
-            SfxObjectShellLock xLockRef;
-            int nRet;
-            if( sFileName.isEmpty() )
-            {
-                xDocSh = rDoc.GetDocShell();
-                nRet = 1;
-            }
-            else
-            {
-                nRet = SwFindDocShell( xDocSh, xLockRef, sFileName,
-                                    rSection.GetLinkFilePassword(),
-                                    sFilter, 0, rDoc.GetDocShell(), {} );
-                if( nRet )
-                {
-                    SwDoc* pSrcDoc = static_cast<SwDocShell*>( xDocSh.get() )->GetDoc();
-                    eOldRedlineFlags = pSrcDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-                    pSrcDoc->getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowInsert );
-                }
-            }
-
             if( nRet )
             {
                 rSection.SetConnectFlag();
