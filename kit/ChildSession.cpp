@@ -1806,7 +1806,7 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
     if (isForgetPart)
     {
         if (!partId.empty())
-            _docManager->releaseVectorParts(*this, { partId });
+            _docManager->releaseVectorParts(*this, { std::move(partId) });
         return true;
     }
 

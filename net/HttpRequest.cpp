@@ -1290,7 +1290,7 @@ void MultipartFormDataSource::applyTo(Request& request) const
     request.setContentType("multipart/form-data; boundary=" + _boundary);
 
     auto reader = std::make_shared<Reader>(_parts, closing());
-    request.setBodySource([reader](char* buffer, int64_t length)
+    request.setBodySource([reader = std::move(reader)](char* buffer, int64_t length)
                           { return reader->read(buffer, length); }, size());
 }
 
