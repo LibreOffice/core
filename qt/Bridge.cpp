@@ -24,6 +24,7 @@
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
 #include <common/Protocol.hpp>
+#include <common/Uri.hpp>
 #include <qt/QtClipboard.hpp>
 #include <qt/qt.hpp>
 #include <common/Util.hpp>
@@ -63,6 +64,7 @@
 #include <QStringList>
 #include <QTemporaryFile>
 #include <QTimer>
+#include <QSettings>
 #include <QUrl>
 #include <QWidget>
 
@@ -102,6 +104,60 @@ namespace
 
     std::mutex BridgeRegistryMutex;
     std::map<unsigned, Bridge*> BridgeRegistry;
+
+    // The files a document links to, the chapters of a master document for example, are named by
+    // their real location. Inside a sandbox the app reads a folder outside of its own through the
+    // document portal only, under another path, once the user chose that folder. The folders
+    // chosen are kept: the real folder and the path the app reads it under.
+    constexpr const char* LinkedFoldersKey = "LinkedFolders";
+
+    /// The path the app reads the file with the real path hostPath under, from a folder the user
+    /// chose before. Empty when there is none.
+    QString readablePathFor(const QString& hostPath)
+    {
+        QSettings settings;
+        settings.beginGroup(LinkedFoldersKey);
+        for (const QString& key : settings.childKeys())
+        {
+            const QString hostFolder = QUrl::fromPercentEncoding(key.toUtf8());
+            const QString readableFolder = settings.value(key).toString();
+            if (hostPath.startsWith(hostFolder + '/') && QFileInfo(readableFolder).isDir())
+            {
+                const QString candidate = readableFolder + hostPath.mid(hostFolder.size());
+                if (QFileInfo(candidate).isFile())
+                    return candidate;
+            }
+        }
+        return QString();
+    }
+
+    /// Keeps the folder the user chose: its real path and the path the app reads it under.
+    void rememberLinkedFolder(const QString& readableFolder)
+    {
+        std::string hostUri = coda::hostDisplayUriForPath(readableFolder);
+        const QString hostFolder =
+            hostUri.empty() ? readableFolder : QUrl(QString::fromStdString(hostUri)).toLocalFile();
+        QSettings settings;
+        settings.beginGroup(LinkedFoldersKey);
+        settings.setValue(QString::fromUtf8(QUrl::toPercentEncoding(hostFolder)), readableFolder);
+    }
+
+    /// The deepest folder that holds all of the given files.
+    QString commonFolder(const QStringList& files)
+    {
+        if (files.isEmpty())
+            return QString();
+        QStringList common = QFileInfo(files.first()).absolutePath().split('/');
+        for (const QString& file : files)
+        {
+            const QStringList parts = QFileInfo(file).absolutePath().split('/');
+            int count = 0;
+            while (count < common.size() && count < parts.size() && common[count] == parts[count])
+                ++count;
+            common = common.mid(0, count);
+        }
+        return common.join('/');
+    }
 } // namespace
 
 void coda::registerBridge(unsigned appDocId, Bridge* bridge)
@@ -860,6 +916,16 @@ QVariant Bridge::cool(const QString& messageStr)
         // 1st request: the initial GET /?file_path=...  (mimic WebSocket upgrade)
         std::string initMsg(_document._fileURL.toString() +
                             (" " + std::to_string(_document._appDocId)));
+        // A document opened through the document portal is read under a path of the portal. Its
+        // real location is the third token, so the relative links of the document, the chapters
+        // of a master document for example, are relative to that.
+        if (_document._fileURL.getScheme() == "file")
+        {
+            const std::string hostUri = coda::hostDisplayUriForPath(
+                QString::fromStdString(_document._fileURL.getPath()));
+            if (!hostUri.empty() && hostUri != _document._fileURL.toString())
+                initMsg += ' ' + hostUri;
+        }
         LOG_INF("sending handshake on client fd " << _document._fakeClientFd << ": " << initMsg);
         fakeSocketWriteQueue(_document._fakeClientFd, initMsg.c_str(), initMsg.size());
     }
@@ -1454,6 +1520,61 @@ QVariant Bridge::cool(const QString& messageStr)
                                QFile::remove(tmpPath);
                            });
     }
+    else if (tokens.equals(0, "GRANTLINKEDFILES"))
+    {
+        // The document links to files the app may not read: in a sandbox, files outside the
+        // folders the app reads. Each is read from a folder the user chose, under the path the
+        // app reads it under; their links are then updated, which choosing the folder agrees to.
+        const QJsonDocument json = QJsonDocument::fromJson(
+            QByteArray::fromStdString(message.substr(std::string("GRANTLINKEDFILES ").size())));
+        QStringList hostPaths;
+        QStringList ids;
+        for (const QJsonValue& link : json.object()["links"].toArray())
+        {
+            const QUrl url(link.toObject()["url"].toString());
+            if (url.isLocalFile())
+            {
+                hostPaths << url.toLocalFile();
+                ids << link.toObject()["id"].toString();
+            }
+        }
+        if (hostPaths.isEmpty())
+            return {};
+
+        const std::function<void()> giveFiles = [this, hostPaths, ids]()
+        {
+            for (int i = 0; i < hostPaths.size(); ++i)
+            {
+                const QString readable = readablePathFor(hostPaths[i]);
+                if (readable.isEmpty() || readable == hostPaths[i])
+                    continue;
+                const std::string source =
+                    "linkedfile source id=" + Uri::encode(ids[i].toStdString()) + " file=" +
+                    Uri::encode(QUrl::fromLocalFile(readable).toString().toStdString());
+                fakeSocketWriteQueue(_document._fakeClientFd, source.c_str(), source.size());
+            }
+            const std::string allow = "allowlinkupdate";
+            fakeSocketWriteQueue(_document._fakeClientFd, allow.c_str(), allow.size());
+        };
+
+        // A folder chosen before may hold them all.
+        bool allKnown = true;
+        for (const QString& hostPath : hostPaths)
+            allKnown = allKnown && (QFileInfo(hostPath).isReadable() || !readablePathFor(hostPath).isEmpty());
+        if (allKnown)
+        {
+            giveFiles();
+            return {};
+        }
+
+        const QString folder = QFileDialog::getExistingDirectory(
+            _webView, QObject::tr("Choose the folder that holds the files this document links to"),
+            commonFolder(hostPaths));
+        if (folder.isEmpty())
+            return {};
+        rememberLinkedFolder(folder);
+        giveFiles();
+    }
     else if (tokens.equals(0, "HYPERLINK"))
     {
         QString qurl = QString::fromStdString(tokens.substrFromToken(1));
@@ -1472,6 +1593,13 @@ QVariant Bridge::cool(const QString& messageStr)
 
         QUrl url(decodedUri);
         QString localPath = url.isLocalFile() ? url.toLocalFile() : decodedUri;
+        // A file outside the sandbox is read from the folder the user chose for it.
+        if (!QFileInfo(localPath).exists())
+        {
+            const QString readable = readablePathFor(localPath);
+            if (!readable.isEmpty())
+                localPath = readable;
+        }
 
         QFileInfo fileInfo(localPath);
         if (!fileInfo.exists() || !fileInfo.isFile())
