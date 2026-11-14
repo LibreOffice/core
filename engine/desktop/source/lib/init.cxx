@@ -5907,6 +5907,18 @@ void COKitImpl::setOption(const char *pOption, const char* pValue)
         else
             sal_detail_set_log_selector(pCurrentSalLogOverride);
     }
+    else if (strcmp(pOption, "originaldocumenturl") == 0)
+    {
+        // An embedder that works on a copy of the file the user opened saves it as another file
+        // the user chose: the links of the document are relative to that file from now on.
+        if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
+        {
+            if (SfxMedium* pMedium = pDocSh->GetTopShell().GetMedium())
+                comphelper::COKit::setOriginalDocumentUrl(
+                    pMedium->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                    OUString::fromUtf8(pValue));
+        }
+    }
     else if (strcmp(pOption, "allowlinkupdate") == 0)
     {
         // An object being edited in place is the current shell, and its outer document is the one

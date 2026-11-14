@@ -238,6 +238,7 @@ public:
     void testMasterDocument();
     void testMasterDocumentFlatExports();
     void testLinkedFiles();
+    void testOriginalDocumentUrlOption();
     void testSaveAsCalc();
     void testPasteWriter();
     void testPasteWriterJPEG();
@@ -374,6 +375,7 @@ public:
     CPPUNIT_TEST(testMasterDocument);
     CPPUNIT_TEST(testMasterDocumentFlatExports);
     CPPUNIT_TEST(testLinkedFiles);
+    CPPUNIT_TEST(testOriginalDocumentUrlOption);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
@@ -1128,6 +1130,24 @@ void DesktopKitTest::testLinkedFiles()
     std::stringstream aStream2(pDocument->getLinkedFiles());
     boost::property_tree::read_json(aStream2, aTree);
     CPPUNIT_ASSERT(aTree.get_child("links").front().second.get<bool>("readable"));
+}
+
+void DesktopKitTest::testOriginalDocumentUrlOption()
+{
+    // Given a document an app works on as a copy of the file the user opened:
+    loadDoc("blank_text.odt");
+    const OUString aWorkingURL
+        = INetURLObject(createFileURL(u"blank_text.odt")).GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    comphelper::ScopeGuard g(
+        [&aWorkingURL]() { comphelper::COKit::clearOriginalDocumentUrl(aWorkingURL); });
+
+    // When the app names another file the copy is saved as:
+    COKitImpl aOffice;
+    aOffice.setOption("originaldocumenturl", "file:///home/user/book/master.odt");
+
+    // Then the copy stands for that file. Without the fix in place, the option did nothing.
+    CPPUNIT_ASSERT_EQUAL(u"file:///home/user/book/master.odt"_ustr,
+                         comphelper::COKit::getOriginalDocumentUrl(aWorkingURL));
 }
 
 void DesktopKitTest::testSaveAsCalc()

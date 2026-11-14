@@ -1909,6 +1909,13 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 
         return forwardToChild(firstLine, docBroker);
     }
+    else if (tokens.equals(0, "originaldocumenturl"))
+    {
+        // Only an app works on a copy of a file of its own, and saves it as another one.
+        if (!Util::isMobileApp() || !canChangeDocument())
+            return false;
+        return forwardToChild(firstLine, docBroker);
+    }
     else if (tokens.equals(0, "allowlinkupdate"))
     {
         // The browser only hides the prompt, this is the enforcement that only
@@ -2158,8 +2165,10 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     else if (tokens.equals(0, "linkedfile"))
     {
         // A client reads which files its document links to. Which file a link is read from is
-        // for the server to say.
-        if (tokens.size() != 2 || !tokens.equals(1, "list"))
+        // for the server to say, and in an app for the app, which is where its client runs.
+        const bool listsFiles = tokens.size() == 2 && tokens.equals(1, "list");
+        const bool givesSource = Util::isMobileApp() && tokens.size() == 4 && tokens.equals(1, "source");
+        if (!listsFiles && !givesSource)
         {
             LOG_ERR("Bad syntax for: " << firstLine);
             sendTextFrameAndLogError("error: cmd=linkedfile kind=syntax");

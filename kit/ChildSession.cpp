@@ -737,6 +737,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "traceeventrecording") ||
                tokens.equals(0, "sallogoverride") ||
                tokens.equals(0, "allowlinkupdate") ||
+               tokens.equals(0, "originaldocumenturl") ||
                tokens.equals(0, "setviewreadonly") ||
                tokens.equals(0, "rendersearchresult") ||
                tokens.equals(0, "contentcontrolevent") ||
@@ -1171,6 +1172,31 @@ bool ChildSession::_handleInput(const char *buffer, int length)
             {
                 getLOKit()->setOption("sallogoverride", tokens[1].c_str());
             }
+        }
+        else if (tokens.equals(0, "originaldocumenturl"))
+        {
+            // An app that saves its working copy as another file the user chose names that
+            // file before the copy is written, so the relative links are written for it.
+            std::string encodedUrl;
+            std::string url;
+            if (tokens.size() == 2 && getTokenString(tokens[1], "url", encodedUrl))
+            {
+                try
+                {
+                    URI::decode(encodedUrl, url);
+                }
+                catch (const Poco::Exception&)
+                {
+                    url.clear();
+                }
+            }
+            if (!url.starts_with("file://"))
+            {
+                sendTextFrameAndLogError("error: cmd=originaldocumenturl kind=syntax");
+                return false;
+            }
+            getLOKitDocument()->setView(_viewId);
+            getLOKit()->setOption("originaldocumenturl", url.c_str());
         }
         else if (tokens.equals(0, "allowlinkupdate"))
         {
@@ -4631,9 +4657,11 @@ bool ChildSession::linkedFileSource(const StringVector& tokens)
         return false;
     }
 
-    // The copy is picked out of the staging area by name, so the name is a plain file name: no
-    // path separator and not a directory reference.
-    if (id.empty() || !Util::isPlainFileName(file))
+    // On a server the copy is picked out of the staging area by name, so the name is a plain file
+    // name: no path separator and not a directory reference. In an app, the app itself names its
+    // copy, or the file where it may read it, by a file URL.
+    const bool appFile = Util::isMobileApp() && file.starts_with("file://");
+    if (id.empty() || (!appFile && !Util::isPlainFileName(file)))
     {
         sendTextFrameAndLogError("error: cmd=linkedfile kind=syntax");
         return false;
@@ -4641,8 +4669,9 @@ bool ChildSession::linkedFileSource(const StringVector& tokens)
 
     // A copy the server staged stays in the staging area until a fresh copy of the same file
     // replaces it, as every update of the link reads it again; one the kit does not take goes at
-    // once.
-    const std::string path = getJailDocRoot() + "insertfile/" + file;
+    // once. The app keeps its own copies.
+    const std::string path =
+        appFile ? Poco::URI(file).getPath() : getJailDocRoot() + "insertfile/" + file;
     if (!FileUtil::Stat(path).exists())
     {
         LOG_ERR("linkedfile source: no file staged as [" << file << ']');
@@ -4654,21 +4683,24 @@ bool ChildSession::linkedFileSource(const StringVector& tokens)
     if (isReadOnly())
     {
         LOG_ERR("linkedfile source: a read-only view does not read linked files");
-        FileUtil::removeFile(path);
+        if (!appFile)
+            FileUtil::removeFile(path);
         sendTextFrameAndLogError("error: cmd=linkedfile kind=failed");
         return false;
     }
 
     getLOKitDocument()->setView(_viewId);
-    const std::string url = Poco::URI(Poco::Path(path)).toString();
+    const std::string url = appFile ? file : Poco::URI(Poco::Path(path)).toString();
     const int count = getLOKitDocument()->setLinkedFileSource(id.c_str(), url.c_str());
     if (count < 0)
     {
-        FileUtil::removeFile(path);
+        if (!appFile)
+            FileUtil::removeFile(path);
         sendTextFrameAndLogError("error: cmd=linkedfile kind=notlinked");
         return false;
     }
-    _docManager->keepLinkedFileCopy(id, path);
+    if (!appFile)
+        _docManager->keepLinkedFileCopy(id, path);
 
     return sendTextFrame("linkedfile: {\"status\":\"registered\",\"id\":\"" +
                          JsonUtil::escapeJSONValue(id) + "\",\"count\":" + std::to_string(count) +

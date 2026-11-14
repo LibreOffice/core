@@ -55,6 +55,7 @@ class Socket {
 	private _externalLinksDisabled: boolean = false;
 	private _externalLinksListening: boolean = false;
 	private _externalLinksShown: boolean = false;
+	private _linkedFilesAsked: boolean = false;
 	private _slurpTimer: TimeoutHdl | undefined;
 	private _renderEventTimer: TimeoutHdl | undefined;
 	private _renderEventTimerStart: DOMHighResTimeStamp | undefined;
@@ -1232,6 +1233,17 @@ class Socket {
 		}
 
 		this._maybeOfferExternalLinks(command);
+
+		// In an app, the app finds the files a text document links to, the
+		// chapters of a master document, where the server does it otherwise.
+		if (
+			window.ThisIsAMobileApp &&
+			command.type === 'text' &&
+			!this._linkedFilesAsked
+		) {
+			this._linkedFilesAsked = true;
+			this.sendMessage('linkedfile list');
+		}
 	}
 
 	// Let the user agree to load this document's disabled external links.

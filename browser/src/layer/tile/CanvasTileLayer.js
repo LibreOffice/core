@@ -994,6 +994,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('openlinkeddocument:')) {
 			this._onOpenLinkedDocumentMsg(textMsg);
 		}
+		else if (textMsg.startsWith('linkedfiles:')) {
+			this._onLinkedFilesMsg(textMsg);
+		}
+		else if (textMsg.startsWith('linkedfilesrefresh:')) {
+			this._onLinkedFilesRefreshMsg(textMsg);
+		}
 		else if (textMsg.startsWith('redlinetablechanged:')) {
 			obj = JSON.parse(textMsg.substring('redlinetablechanged:'.length + 1));
 			let section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
@@ -1423,6 +1429,47 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				args: { RelativePath: obj.id, SectionName: obj.section },
 			});
 		}
+	},
+
+	// The user asked to read the files the document links to anew. The mobile
+	// apps read them from copies, or from a cloud provider that keeps local
+	// copies, and refresh those; the desktop apps read them where they are.
+	_onLinkedFilesRefreshMsg: function (textMsg) {
+		if (!window.ThisIsTheAndroidApp && !window.ThisIsTheiOSApp)
+			return;
+		const json = textMsg.substring('linkedfilesrefresh:'.length + 1);
+		window.postMobileMessage('LINKEDFILESREFRESH ' + json);
+	},
+
+	// The files the document links to. In an app, files the app may not read
+	// yet, as they are in a folder the user did not open, are offered to the
+	// app, which asks the user for that folder. The Windows app reads the
+	// files where they are and asks for no folder.
+	_onLinkedFilesMsg: function (textMsg) {
+		if (
+			!window.ThisIsAMobileApp ||
+			window.ThisIsTheWindowsApp ||
+			this._linkedFilesOffered
+		)
+			return;
+		const obj = JSON.parse(textMsg.substring('linkedfiles:'.length + 1));
+		const unreadable = (obj.links || []).filter((link) => !link.readable);
+		if (unreadable.length === 0)
+			return;
+
+		this._linkedFilesOffered = true;
+		this._map.uiManager.showSnackbar(
+			_('This document links to files in a folder the app may not read.'),
+			_('Allow access'),
+			() => {
+				window.postMobileMessage(
+					'GRANTLINKEDFILES ' + JSON.stringify({ links: unreadable }),
+				);
+			},
+			-1 /* no timeout */,
+			false /* no progress */,
+			true /* dismissable */,
+		);
 	},
 
 	// A user turned on recording of tracked changes for all users. That user sees the Review
