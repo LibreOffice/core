@@ -62,6 +62,7 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
     uno::Reference<beans::XPropertySet> xPropertySet(xInterface, UNO_QUERY);
     if (xPropertySet.is())
     {
+        bool bFound = false;
         if (xPropertySet->getPropertySetInfo()->hasPropertyByName(u"ImageURL"_ustr))
         {
             OUString sURL;
@@ -72,9 +73,12 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
                 if (!aGraphic.IsNone())
                 {
                     raGraphicList.push_back(aGraphic.GetXGraphic());
+                    bFound = true;
                 }
             }
-        } else if (xPropertySet->getPropertySetInfo()->hasPropertyByName(u"Graphic"_ustr))
+        }
+        // tdf#123167 - a control with an embedded graphic has an empty image url
+        if (!bFound && xPropertySet->getPropertySetInfo()->hasPropertyByName(u"Graphic"_ustr))
         {
             uno::Reference<css::graphic::XGraphic> xGraphic;
             xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;

@@ -16,8 +16,12 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -1376,6 +1380,49 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappedOutGraphicKeepsSizeAfterThreadedLoa
     // Without the fix in place, this test would have failed, the graphic reported a size of 0
     // bytes.
     CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(GraphicTest, testTdf123167_EmbeddedControlGraphic)
+{
+    // A button model has both an image url and a graphic property
+    uno::Reference<beans::XPropertySet> xButtonModel(
+        m_xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.awt.UnoControlButtonModel"_ustr, m_xContext),
+        uno::UNO_QUERY_THROW);
+
+    // Embed an image using the graphic and leave the image url empty
+    Graphic aGraphic(createBitmap());
+    xButtonModel->setPropertyValue(u"Graphic"_ustr, uno::Any(aGraphic.GetXGraphic()));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+                         xButtonModel->getPropertyValue(u"ImageURL"_ustr).get<OUString>());
+
+    std::vector<uno::Reference<graphic::XGraphic>> aGraphicList;
+    vcl::graphic::SearchForGraphics(xButtonModel, aGraphicList);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the embedded image of the button was not found and so not stored in the document
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aGraphicList.size());
+
+    uno::Reference<lang::XComponent>(xButtonModel, uno::UNO_QUERY_THROW)->dispose();
+
+    // A form text field has neither an image url nor a graphic property
+    uno::Reference<beans::XPropertySet> xTextFieldModel(
+        m_xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.form.component.TextField"_ustr, m_xContext),
+        uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xTextFieldModel->getPropertySetInfo()->hasPropertyByName(u"Graphic"_ustr));
+
+    // Without checking for the graphic property, this test would have failed with
+    // An uncaught UNO exception
+    // - com.sun.star.beans.UnknownPropertyException
+    // i.e. the graphic of a control without a graphic property was requested
+    aGraphicList.clear();
+    vcl::graphic::SearchForGraphics(xTextFieldModel, aGraphicList);
+    CPPUNIT_ASSERT(aGraphicList.empty());
+
+    uno::Reference<lang::XComponent>(xTextFieldModel, uno::UNO_QUERY_THROW)->dispose();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
