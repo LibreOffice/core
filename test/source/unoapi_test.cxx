@@ -111,6 +111,8 @@ void UnoApiTest::validate(TestFilter eFilter)
         eFormat = ValidationFormat::OOXML;
     else if (eFilter == TestFilter::ODT)
         eFormat = ValidationFormat::ODF;
+    else if (eFilter == TestFilter::ODM_GLOBAL)
+        eFormat = ValidationFormat::ODF;
     else if (eFilter == TestFilter::ODS)
         eFormat = ValidationFormat::ODF;
     else if (eFilter == TestFilter::ODP)

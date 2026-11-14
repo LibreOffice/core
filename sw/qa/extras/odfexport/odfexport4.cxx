@@ -1926,6 +1926,23 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkedSectionSourceXlinkType)
         getXPath(pXmlDoc, "//text:section-source", "href").endsWith("/linked-section-target.odt"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMasterDocHeadingPlaceholders)
+{
+    // a master document saves its linked sections without their content, but with one empty
+    // heading per outline level that keeps the heading style of that level
+    createSwGlobalDoc("tdf121119.odm");
+    save(TestFilter::ODM_GLOBAL);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//text:section/text:h", 10);
+    assertXPath(pXmlDoc, "//text:section/text:h[1]", "style-name", u"Heading_20_1");
+    assertXPath(pXmlDoc, "//text:section/text:h[1]", "outline-level", u"1");
+    assertXPath(pXmlDoc, "//text:section/text:h[10]", "style-name", u"Heading_20_10");
+    assertXPath(pXmlDoc, "//text:section/text:h[10]", "outline-level", u"10");
+    // Without the fix the level was written as text:level, which does not exist on text:h
+    assertXPath(pXmlDoc, "//text:section/text:h[@text:level]", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
