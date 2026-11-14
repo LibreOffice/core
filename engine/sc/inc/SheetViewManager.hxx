@@ -41,6 +41,11 @@ private:
     /** Sort data for a default view. Null when no sort. */
     std::shared_ptr<DefaultViewSortData> mpSortData;
 
+    /** True when the default view had an auto-filter at the moment the sheet views last took
+     *  their state from it, or were created from it.
+     */
+    bool mbDefaultViewHadAutoFilter = false;
+
     /** Ensure sort data is allocated. */
     DefaultViewSortData& ensureSortData();
 
@@ -178,6 +183,13 @@ public:
 
     /** Restore sort data from a previous capture. */
     void restoreSortData(std::shared_ptr<DefaultViewSortData> const& pData);
+
+    bool getDefaultViewHadAutoFilter() const { return mbDefaultViewHadAutoFilter; }
+
+    void setDefaultViewHadAutoFilter(bool bHadAutoFilter)
+    {
+        mbDefaultViewHadAutoFilter = bHadAutoFilter;
+    }
 };
 }
 

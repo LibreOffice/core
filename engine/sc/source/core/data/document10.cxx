@@ -1360,6 +1360,15 @@ void ScDocument::CleanupSheetViewsForDeletedTab(SCTAB nTab)
     }
 }
 
+void ScDocument::RememberDefaultViewAutoFilter(SCTAB nDefaultViewTable)
+{
+    std::shared_ptr<sc::SheetViewManager> pManager = GetSheetViewManager(nDefaultViewTable);
+    if (!pManager)
+        return;
+    ScDBData const* pDBData = GetAnonymousDBData(nDefaultViewTable);
+    pManager->setDefaultViewHadAutoFilter(pDBData && pDBData->HasAutoFilter());
+}
+
 std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
 {
     ScTable* pTable = FetchTable(nTab);
@@ -1374,6 +1383,7 @@ std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
             auto nSheetViewID = pTable->GetSheetViewManager()->create(pSheetViewTable);
             pSheetViewTable->SetVisible(false);
             pSheetViewTable->SetSheetViewHolder(nSheetViewID, pTable);
+            RememberDefaultViewAutoFilter(nTab);
             return { nSheetViewID, nSheetViewTab };
         }
     }
@@ -1399,6 +1409,7 @@ ScDocument::RestoreSheetView(SCTAB nTab, sc::SheetViewID nID, OUString const& rN
                 return { sc::InvalidSheetViewID, -1 };
             pSheetViewTable->SetVisible(false);
             pSheetViewTable->SetSheetViewHolder(nSheetViewID, pTable);
+            RememberDefaultViewAutoFilter(nTab);
             return { nSheetViewID, nSheetViewTab };
         }
     }
@@ -1467,13 +1478,23 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
     // Get the anonymous DB data for the default view table
     ScDBData* pDefaultViewDBData = GetAnonymousDBData(nDefaultViewTable);
 
+    // A sheet view can hold an auto-filter of its own while the default view has none, and a
+    // sort on the default view gives it an anonymous range without an auto-filter. The default
+    // view's auto-filter state is given to the sheet views when it has an auto-filter, or when
+    // its auto-filter was removed since the previous sync.
+    const bool bDefaultViewHasAutoFilter
+        = pDefaultViewDBData && pDefaultViewDBData->HasAutoFilter();
+    const bool bTakeDefaultViewAutoFilter
+        = bDefaultViewHasAutoFilter || pManager->getDefaultViewHadAutoFilter();
+    pManager->setDefaultViewHadAutoFilter(bDefaultViewHasAutoFilter);
+
     // Iterate all valid sheet views
     for (auto& rSheetView : pManager->iterateValidSheetViews())
     {
         SCTAB nSheetViewTab = rSheetView.getTableNumber();
 
         // Sync the sheet view's anonymous DB data from the default view
-        if (pDefaultViewDBData)
+        if (pDefaultViewDBData && bTakeDefaultViewAutoFilter)
         {
             ScDBData* pSheetViewDBData = GetAnonymousDBData(nSheetViewTab);
             if (pSheetViewDBData)
@@ -1516,8 +1537,18 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
             nColumn = nLastColumn + 1;
         }
 
+        // The content copy replaces the sheet view's anonymous range with a copy of the default
+        // view's range. A sheet view that keeps an auto-filter of its own gets its own range
+        // back after the copy.
+        std::unique_ptr<ScDBData> pOwnAutoFilterData;
+        if (!bTakeDefaultViewAutoFilter && pNoNameData && pNoNameData->HasAutoFilter())
+            pOwnAutoFilterData = std::make_unique<ScDBData>(*pNoNameData);
+
         // Overwrite the content from the default view table
         OverwriteContent(nDefaultViewTable, nSheetViewTab);
+
+        if (pOwnAutoFilterData)
+            SetAnonymousDBData(nSheetViewTab, std::move(pOwnAutoFilterData));
 
         // Restore the sheet view's own hidden columns after the content copy.
         SetColHidden(0, MaxCol(), nSheetViewTab, false);

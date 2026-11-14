@@ -1348,6 +1348,90 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilterSurvivesCommentInsert
                          pDefaultViewDBData && pDefaultViewDBData->HasAutoFilter());
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewAutoFilterSurvivesSortOnDefaultView)
+{
+    // An auto-filter added on a sheet view stays on that sheet view, with its buttons on the
+    // header row, after the same table is sorted on the default view, which has no auto-filter.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // A table with a header row and three rows of numbers in A1:C4, out of order in column A.
+    rDocument.SetString(ScAddress(0, 0, 0), u"Alpha"_ustr);
+    rDocument.SetString(ScAddress(1, 0, 0), u"Beta"_ustr);
+    rDocument.SetString(ScAddress(2, 0, 0), u"Gamma"_ustr);
+    const double aColumnAValues[] = { 30.0, 10.0, 20.0 };
+    for (SCROW nRow = 1; nRow <= 3; ++nRow)
+    {
+        rDocument.SetValue(ScAddress(0, nRow, 0), aColumnAValues[nRow - 1]);
+        rDocument.SetValue(ScAddress(1, nRow, 0), nRow * 100.0);
+        rDocument.SetValue(ScAddress(2, nRow, 0), nRow * 1000.0);
+    }
+
+    setupViews();
+
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+
+    // Add the auto-filter on the sheet view.
+    gotoCell(u"A1");
+    dispatchCommand(mxComponent, u".uno:DataFilterAutoFilter"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    const ScRange aTableRange(0, 0, nSheetViewTab, 2, 3, nSheetViewTab);
+    CPPUNIT_ASSERT_EQUAL(aTableRange, getAutoFilterArea(rDocument, nSheetViewTab));
+    for (SCCOL nColumn = 0; nColumn <= 2; ++nColumn)
+    {
+        ScMF nFlag = rDocument.GetAttr(nColumn, 0, nSheetViewTab, ATTR_MERGE_FLAG).GetValue();
+        CPPUNIT_ASSERT(bool(nFlag & ScMF::Auto));
+    }
+    const ScDBData* pDefaultViewDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    CPPUNIT_ASSERT(!pDefaultViewDBData || !pDefaultViewDBData->HasAutoFilter());
+
+    // Sort the table on the default view.
+    switchToDefaultView();
+    sortAscendingForCell(u"A2");
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(10.0, rDocument.GetValue(ScAddress(0, 1, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(20.0, rDocument.GetValue(ScAddress(0, 2, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDocument.GetValue(ScAddress(0, 3, nDefaultViewTab)));
+
+    // The sheet view keeps its auto-filter over the same range, with the buttons on the header
+    // row.
+    ScDBData* pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT_MESSAGE("The sheet view lost its database range after a sort on the default "
+                           "view",
+                           pSheetViewDBData);
+    CPPUNIT_ASSERT_MESSAGE("The sheet view lost its auto-filter after a sort on the default view",
+                           pSheetViewDBData->HasAutoFilter());
+    ScRange aRange;
+    pSheetViewDBData->GetArea(aRange);
+    CPPUNIT_ASSERT_EQUAL(aTableRange, aRange);
+    for (SCCOL nColumn = 0; nColumn <= 2; ++nColumn)
+    {
+        ScMF nFlag = rDocument.GetAttr(nColumn, 0, nSheetViewTab, ATTR_MERGE_FLAG).GetValue();
+        CPPUNIT_ASSERT_MESSAGE("A filter button left the header row after a sort on the default "
+                               "view",
+                               bool(nFlag & ScMF::Auto));
+    }
+
+    // The default view still has no auto-filter and no buttons.
+    pDefaultViewDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    CPPUNIT_ASSERT(!pDefaultViewDBData || !pDefaultViewDBData->HasAutoFilter());
+    for (SCCOL nColumn = 0; nColumn <= 2; ++nColumn)
+    {
+        ScMF nFlag = rDocument.GetAttr(nColumn, 0, nDefaultViewTab, ATTR_MERGE_FLAG).GetValue();
+        CPPUNIT_ASSERT(!(nFlag & ScMF::Auto));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
 {
     // Create two views, and leave the second one current.

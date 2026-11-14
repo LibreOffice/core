@@ -2600,6 +2600,11 @@ public:
 private:
     ScDocument(const ScDocument& r) = delete;
 
+    /** Records in the sheet view manager of the table whether the table has an auto-filter
+     *  now.
+     */
+    void RememberDefaultViewAutoFilter(SCTAB nDefaultViewTable);
+
     void                FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
                                        SCCOL nX1, SCCOL nX2 ) const;
 
