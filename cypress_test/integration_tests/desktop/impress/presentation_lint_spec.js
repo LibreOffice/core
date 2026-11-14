@@ -1270,9 +1270,17 @@ describe(['tagdesktop'], 'Presentation cleanup in the tabbed view', function() {
 
 		helper.setupAndLoadDocument('impress/presentation_lint.fodp');
 		desktopHelper.switchUIToNotebookbar();
+
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	it('the Review tab opens and closes the cleanup deck', function() {
+		// The sidebar the document opens with has arrived, so it has no answer
+		// still on the way that would take the dock back from the deck.
+		helper.processToIdle(this.win);
+
 		cy.cGet('#Review-tab-label').click();
 
 		cy.cGet(button).should('be.visible').click();
