@@ -1820,6 +1820,17 @@ bool startWithLandlockJail()
     return start;
 }
 
+/// Puts this process into its own user and mount namespace as root, see
+/// JailUtil::enterMountingNS. Those namespaces exist only on Linux, elsewhere this fails.
+bool enterMountingNS()
+{
+#ifdef __linux__
+    return JailUtil::enterMountingNS(geteuid(), getegid());
+#else
+    return false;
+#endif
+}
+
 } // namespace
 
 // Due to the possibility of enterMountingNS failing at an intermediate stage
@@ -1835,7 +1846,7 @@ bool COOLWSD::testMountingNSInFork()
                                   // the purposes of that test
                                   LOG_DBG("Test moving into user namespace as uid 0 in level 2 "
                                           "child");
-                                  return JailUtil::enterMountingNS(geteuid(), getegid()) ? 1 : 0;
+                                  return enterMountingNS() ? 1 : 0;
                               }) == 1;
 }
 
@@ -1864,7 +1875,7 @@ void COOLWSD::setupChildRoot(const bool UseMountNamespaces)
                 const bool childMountWorked = COOLWSD::testMountingNSInFork();
 
                 LOG_DBG("Move into user namespace as uid 0");
-                if (childMountWorked && JailUtil::enterMountingNS(geteuid(), getegid()))
+                if (childMountWorked && enterMountingNS())
                     JailUtil::enableMountNamespaces();
                 else
                 {
