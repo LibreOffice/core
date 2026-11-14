@@ -289,6 +289,10 @@ UnitBase::TestResult UnitVectorPrimitives::testTextPageDeltaReachesTheSessionTha
     helpers::sendTextFrame(leaver,
                            "commandvalues command=.uno:VectorForgetPart?partid=" + pageIds[0],
                            testname);
+    // The forget has no answer. The kit handles one session's messages in order, so the answer to
+    // a status that follows it shows the forget is done before the keeper types.
+    helpers::sendTextFrame(leaver, "status", testname);
+    helpers::assertResponseString(leaver, "status:", testname);
     helpers::sendChar(keeper, 'x', helpers::SpecialKey::skNone, testname);
     const std::vector<char> afterForget =
         helpers::getResponseMessage(keeper, "zstdvectorprimitivesdelta:", testname);
