@@ -98,7 +98,7 @@ public:
                Failed ///< The view could not be created or was lost; the session is done.
     );
 
-    PreviewSession(std::string tag, Poco::URI uriPublic, std::string fileName,
+    PreviewSession(std::string tag, const Poco::URI& uriPublic, std::string fileName,
                    std::string lastModifiedTime, std::size_t fileSize,
                    std::chrono::seconds ttl, std::chrono::seconds timeout);
 

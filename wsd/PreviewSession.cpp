@@ -85,11 +85,11 @@ void PreviewProtocolHandler::dumpState(std::ostream& os, const std::string& inde
     os << ']';
 }
 
-PreviewSession::PreviewSession(std::string tag, Poco::URI uriPublic, std::string fileName,
+PreviewSession::PreviewSession(std::string tag, const Poco::URI& uriPublic, std::string fileName,
                                std::string lastModifiedTime, const std::size_t fileSize,
                                const std::chrono::seconds ttl, const std::chrono::seconds timeout)
     : _tag(std::move(tag))
-    , _uriPublic(std::move(uriPublic))
+    , _uriPublic(uriPublic)
     , _fileName(std::move(fileName))
     , _lastModifiedTime(std::move(lastModifiedTime))
     , _fileSize(fileSize)
