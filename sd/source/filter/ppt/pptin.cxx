@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <array>
 #include <comphelper/configuration.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
@@ -2678,6 +2679,12 @@ void ImplSdPPTImport::FillSdAnimationInfo(SdAnimationInfo* pInfo, const PptInter
         case 0x07 :                     // CustomShowAction
         default :                       // 0x00: no action, else unknown action
         break;
+    }
+
+    if (INetURLObject(pInfo->GetBookmark()).IsExoticProtocol())
+    {
+        if (::sd::DrawDocShell* pDocShell = mrDoc.GetDocSh())
+            comphelper::DocumentInfo::notifyMacroEventRead(pDocShell->GetModel());
     }
 }
 
