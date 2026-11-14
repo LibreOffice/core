@@ -207,7 +207,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
     if( maData.mbValid )
         maData.mbValid = !sEventName.isEmpty();
 
-    if (!maData.msMacroName.isEmpty())
+    if (!maData.msMacroName.isEmpty() || INetURLObject(maData.msBookmark).IsExoticProtocol())
         rImp.NotifyMacroEventRead();
 }
 
