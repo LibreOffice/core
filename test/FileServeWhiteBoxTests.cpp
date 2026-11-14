@@ -35,6 +35,7 @@
 #include <cstdint>
 #include <fstream>
 #include <memory>
+#include <random>
 
 /// File-Serve White-Box unit-tests.
 class FileServeTests : public CPPUNIT_NS::TestFixture
@@ -748,14 +749,9 @@ void FileServeTests::testGzipCopyIsCompleteStream()
     // Bytes from a pseudo-random sequence do not compress, so their gzip stream is larger than
     // the input, like the stream of an already-compressed PNG image.
     std::string random(20000, '\0');
-    std::uint32_t state = 2463534242u;
+    std::mt19937 generator(2463534242u);
     for (char& byte : random)
-    {
-        state ^= state << 13;
-        state ^= state >> 17;
-        state ^= state << 5;
-        byte = static_cast<char>(state & 0xff);
-    }
+        byte = static_cast<char>(generator() & 0xff);
 
     const std::string text(20000, 'a');
 
