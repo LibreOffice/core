@@ -849,7 +849,11 @@ QVariant Bridge::cool(const QString& messageStr)
                                       << _document._fakeClientFd << " to server fd "
                                       << coolwsd_server_socket_fd);
         int rc = fakeSocketConnect(_document._fakeClientFd, coolwsd_server_socket_fd);
-        assert(rc != -1);
+        if (rc == -1)
+        {
+            LOG_ERR("HULLO: failed to connect fakesocket");
+            return {};
+        }
 
         createAndStartMessagePumpThread();
 
