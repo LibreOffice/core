@@ -142,15 +142,10 @@ void SetSecureURLs( std::vector< OUString >&& urlList )
 }
 
 bool isSecureMacroUri(
-    OUString const & uri, OUString const & referer)
+    std::u16string_view uri, OUString const & referer)
 {
     switch (INetURLObject(uri).GetProtocol()) {
     case INetProtocol::Macro:
-        if (uri.startsWithIgnoreAsciiCase("macro:///")) {
-            // Denotes an App-BASIC macro (see SfxMacroLoader::loadMacro), which
-            // is considered safe:
-            return true;
-        }
         return referer.equalsIgnoreAsciiCase("private:user")
             || isTrustedLocationUri(referer);
     default:
