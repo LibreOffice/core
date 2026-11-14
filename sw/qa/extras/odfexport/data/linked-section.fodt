@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Before the section</text:p>
+   <text:section text:name="Linked">
+    <text:section-source xlink:type="simple" xlink:href="linked-section-target.odt" text:filter-name="writer8"/>
+    <text:p>Cached content of the linked file</text:p>
+   </text:section>
+   <text:p>After the section</text:p>
+  </office:text>
+ </office:body>
+</office:document>
