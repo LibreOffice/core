@@ -21,6 +21,9 @@ class TransitionParameters {
 	public callback: VoidFunction = null;
 	// Draws the latest video frames into current and next, or null when both stay still.
 	public refreshSlides: VoidFunction = null;
+	// Draws the frame of a morph at a time from 0 to 1 into the canvas. False when the slides
+	// cannot be drawn object by object. Null outside a morph.
+	public drawMorph: (time: number) => boolean = null;
 }
 
 abstract class TransitionBase extends SlideChangeGl {

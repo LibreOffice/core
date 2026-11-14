@@ -272,6 +272,8 @@ namespace cool {
 		/// Stable identity of the object: the engine's SdrObject unique
 		/// id, unchanged across edits to the same object.
 		id?: number;
+		/// The name the object carries, empty where it has none.
+		name?: string;
 		/// The style of the object. Absent on a group, whose members
 		/// carry their own, and where no style of the object is solid.
 		properties?: SlideObjectProperties;

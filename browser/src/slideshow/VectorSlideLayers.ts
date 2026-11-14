@@ -258,16 +258,44 @@ class VectorSlideLayers {
 		texture?: WebGLTexture | null,
 		videos?: Map<number, ContentFrame>,
 	): boolean {
-		const data = this.data;
-		if (this.context.isDisposed() || !data) return false;
+		if (!this.begin(texture)) return false;
+		this.drawLayers(states, videos);
+		this.end();
+		return true;
+	}
+
+	/// Start a frame at the canvas size, into texture when given, else into the canvas. The
+	/// frame is cleared to black, or drawn over what the canvas holds when clear is false. False
+	/// when nothing can be drawn.
+	public begin(texture?: WebGLTexture | null, clear: boolean = true): boolean {
+		if (this.context.isDisposed() || !this.data) return false;
 		while (this.unpainted.length > 0) this.paintNext();
-		if (!this.quads.begin(this.canvasWidth, this.canvasHeight, texture))
-			return false;
+		return this.quads.begin(
+			this.canvasWidth,
+			this.canvasHeight,
+			texture,
+			clear,
+		);
+	}
+
+	/// Draw layers into the frame begin started: all of them, or those whose run owners holds,
+	/// where undefined stands for the runs that no target owns. A layer of a target is drawn in
+	/// the state states gives it, and any other layer in restState.
+	public drawLayers(
+		states: Map<number, cool.ObjectRenderState> | undefined,
+		videos?: Map<number, ContentFrame>,
+		owners?: ReadonlySet<number | undefined>,
+		restState?: cool.DrawState,
+	): void {
+		const data = this.data;
+		if (this.context.isDisposed() || !data) return;
 
 		for (const layer of this.layers) {
-			const state = this._stateOf(layer, states);
-			if (state?.hidden) continue;
 			const owner = layer.run.owner;
+			if (owners && !owners.has(owner)) continue;
+			const state =
+				owner === undefined ? restState : this._stateOf(layer, states);
+			if (state?.hidden) continue;
 			if (
 				layer.paragraph !== undefined &&
 				owner !== undefined &&
@@ -288,9 +316,11 @@ class VectorSlideLayers {
 			if (videos?.size && layer.paragraph === undefined)
 				this._drawVideos(layer, data, videos, state);
 		}
+	}
 
+	/// Finish the frame begin started.
+	public end(): void {
 		this.quads.end();
-		return true;
 	}
 
 	/// Forget the layers, so the next frame draws them anew.

@@ -133,6 +133,17 @@ abstract class SlideCompositor {
 		return false;
 	}
 
+	/// Draw the frame of a morph from one slide to the next at time, from 0 to 1, into the canvas
+	/// of the WebGL context. False when the compositor does not draw the slides object by object.
+	public drawMorphFrame(
+		_context: RenderContextGl,
+		_leavingIndex: number,
+		_enteringIndex: number,
+		_time: number,
+	): boolean {
+		return false;
+	}
+
 	/// True when the compositor draws the frames of the slides straight into a WebGL context.
 	public drawsFrames(): boolean {
 		return false;

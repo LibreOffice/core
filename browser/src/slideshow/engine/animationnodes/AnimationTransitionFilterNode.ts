@@ -49,6 +49,16 @@ class TransitionFilterInfo {
 
 		return transitionFilterInfo;
 	}
+
+	/// True for a morph from one slide to the next, by object, word or character.
+	isMorph(): boolean {
+		return (
+			this.transitionType === TransitionType.FADE &&
+			(this.transitionSubtype === TransitionSubType.MORPH ||
+				this.transitionSubtype === TransitionSubType.MORPHBYWORD ||
+				this.transitionSubtype === TransitionSubType.MORPHBYCHARACTER)
+		);
+	}
 }
 
 class AnimationTransitionFilterNode extends AnimationBaseNode {

@@ -30,6 +30,16 @@
 
 declare var SlideShow: any;
 
+/// What a frame of a morph draws of one of its two slides: the layers, the state of each
+/// animation target, the video frames, and the animation targets that each object directly on
+/// the slide holds.
+interface MorphSide {
+	layers: VectorSlideLayers;
+	states: Map<number, cool.ObjectRenderState>;
+	videos: Map<number, ContentFrame>;
+	ownersByObject: Map<number, number[]>;
+}
+
 class VectorCompositor extends SlideCompositor {
 	private offscreenCanvas: OffscreenCanvas = null;
 	private offscreenContext: OffscreenCanvasRenderingContext2D = null;
@@ -62,6 +72,8 @@ class VectorCompositor extends SlideCompositor {
 	private cancelPaintingAhead: (() => void) | null = null;
 	// The slide that is shown once its transition has ended. Null while a transition runs.
 	private shownSlideHash: string | null = null;
+	// The pairs of objects of the morph that runs, null outside a morph.
+	private morph: SlideMorph | null = null;
 
 	constructor(slideShowPresenter: SlideShowPresenter) {
 		super(slideShowPresenter);
@@ -332,7 +344,26 @@ class VectorCompositor extends SlideCompositor {
 				above = data.objects.get(above)?.parent;
 			if (above === undefined) targets.set(id, []);
 		}
+
+		// A slide that a morph leaves or enters draws each object directly on it on its own, so
+		// the morph can move it.
+		if (this._isInMorph(slideHash))
+			for (const id of SlideMorph.topObjects(data))
+				if (!targets.has(id)) targets.set(id, []);
 		return targets;
+	}
+
+	// True when the slide has a morph into it, or the slide after it has.
+	private _isInMorph(slideHash: string): boolean {
+		const slideInfo = this._metaPresentation.getSlideInfo(slideHash);
+		if (!slideInfo) return false;
+		if (TransitionFilterInfo.fromSlideInfo(slideInfo)?.isMorph()) return true;
+		const nextInfo = slideInfo.next
+			? this._metaPresentation.getSlideInfo(slideInfo.next)
+			: null;
+		return (
+			!!nextInfo && !!TransitionFilterInfo.fromSlideInfo(nextInfo)?.isMorph()
+		);
 	}
 
 	// The frame each video shows now, by the object id of its shape. The
@@ -379,6 +410,146 @@ class VectorCompositor extends SlideCompositor {
 			texture,
 			this._videoFrames(slideHash, data),
 		);
+	}
+
+	public drawMorphFrame(
+		context: RenderContextGl,
+		leavingIndex: number,
+		enteringIndex: number,
+		time: number,
+	): boolean {
+		if (this.disposed || context.isDisposed()) return false;
+		const leavingHash = this._metaPresentation.getSlideHash(leavingIndex);
+		const enteringHash = this._metaPresentation.getSlideHash(enteringIndex);
+		const leavingData = this._drawableData(leavingHash);
+		const enteringData = this._drawableData(enteringHash);
+		if (!leavingData || !enteringData) return false;
+
+		this._dropDisposedLayers();
+		const leavingLayers = this._slideLayers(context, leavingHash, leavingData);
+		const enteringLayers = this._slideLayers(
+			context,
+			enteringHash,
+			enteringData,
+		);
+		if (!leavingLayers || !enteringLayers) return false;
+		if (!this.morph?.isBetween(leavingData, enteringData))
+			this.morph = new SlideMorph(leavingData, enteringData);
+
+		const [leavingMoves, enteringMoves] = this.morph.states(time);
+		const leaving = this._morphSide(
+			leavingLayers,
+			leavingHash,
+			leavingData,
+			leavingMoves,
+		);
+		const entering = this._morphSide(
+			enteringLayers,
+			enteringHash,
+			enteringData,
+			enteringMoves,
+		);
+
+		// Both backgrounds are drawn under the objects of both slides, so the background coming
+		// in does not cover an object of the slide going out.
+		const rest = new Set<number | undefined>([undefined]);
+		if (!leaving.layers.begin()) return false;
+		leaving.layers.drawLayers(undefined, leaving.videos, rest);
+		leaving.layers.end();
+		if (!entering.layers.begin(null, false)) return false;
+		entering.layers.drawLayers(undefined, entering.videos, rest, {
+			alpha: time,
+		});
+		entering.layers.end();
+
+		// Each run of steps from one slide is drawn in one pass.
+		const steps = this.morph.paintOrder;
+		for (let index = 0; index < steps.length;) {
+			const isLeaving = steps[index].leaving;
+			const side = isLeaving ? leaving : entering;
+			const owners = new Set<number>();
+			for (
+				;
+				index < steps.length && steps[index].leaving === isLeaving;
+				++index
+			)
+				for (const owner of side.ownersByObject.get(steps[index].id) ?? [])
+					owners.add(owner);
+			if (!side.layers.begin(null, false)) return false;
+			side.layers.drawLayers(side.states, side.videos, owners);
+			side.layers.end();
+		}
+		return true;
+	}
+
+	// What a frame of a morph draws of one slide. Each animation target is drawn in the state
+	// its animation gives it, carried along by the move of the object directly on the slide
+	// that holds it.
+	private _morphSide(
+		layers: VectorSlideLayers,
+		slideHash: string,
+		data: cool.VectorPrimitivesData,
+		moves: Map<number, cool.ObjectRenderState>,
+	): MorphSide {
+		const animations = this._drawStates(slideHash, data);
+		const states = new Map<number, cool.ObjectRenderState>();
+		const ownersByObject = new Map<number, number[]>();
+		for (const owner of this._animatedTargets(slideHash, data).keys()) {
+			const top = VectorCompositor._topObjectOf(data, owner);
+			if (top === undefined) continue;
+			const owners = ownersByObject.get(top);
+			if (owners) owners.push(owner);
+			else ownersByObject.set(top, [owner]);
+			states.set(
+				owner,
+				VectorCompositor._overMove(moves.get(top), animations?.get(owner)),
+			);
+		}
+		return {
+			layers,
+			states,
+			videos: this._videoFrames(slideHash, data),
+			ownersByObject,
+		};
+	}
+
+	// The object directly on the slide that holds the object, itself or through the groups
+	// above it. Undefined for an object that no such object holds.
+	private static _topObjectOf(
+		data: cool.VectorPrimitivesData,
+		objectId: number,
+	): number | undefined {
+		for (
+			let at: number | undefined = objectId, guard = 0;
+			at !== undefined && guard < 100;
+			++guard
+		) {
+			const object = data.objects.get(at);
+			if (!object) return undefined;
+			if (object.parent === 0) return at;
+			at = object.parent;
+		}
+		return undefined;
+	}
+
+	// The state of an animation target moved by a morph: its animation's transform first and
+	// the move after it, with the opacities multiplied.
+	private static _overMove(
+		move: cool.ObjectRenderState | undefined,
+		animation: cool.ObjectRenderState | undefined,
+	): cool.ObjectRenderState {
+		if (!move) return animation ?? {};
+		if (!animation) return move;
+		const state: cool.ObjectRenderState = VectorCompositor.overOwner(
+			move,
+			animation,
+		);
+		if (animation.paragraphs) {
+			state.paragraphs = new Map();
+			for (const [paragraph, own] of animation.paragraphs)
+				state.paragraphs.set(paragraph, VectorCompositor.overOwner(move, own));
+		}
+		return state;
 	}
 
 	// The layers of a context that is gone are freed with it.
@@ -764,6 +935,7 @@ class VectorCompositor extends SlideCompositor {
 		else this.masterVideos.deleteResources();
 		this.videos.enterSlide(slideHash, slideInfo, this.renderContext);
 		this.shownSlideHash = slideHash;
+		this.morph = null;
 		this._paintNextSlideAhead(slideHash);
 	}
 
@@ -779,6 +951,7 @@ class VectorCompositor extends SlideCompositor {
 		this.shownSlideHash = null;
 		this.layers.forEach((sets) => sets.forEach((layers) => layers.dispose()));
 		this.layers.clear();
+		this.morph = null;
 		this.pendingReady = null;
 		this.pendingSlideNumber = null;
 	}

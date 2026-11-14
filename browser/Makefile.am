@@ -1032,11 +1032,13 @@ COOL_JS_LST =\
     src/slideshow/ShapeTransitionMask.ts \
     src/slideshow/SlideQuads.ts \
     src/slideshow/SlidePartsGl.ts \
+    src/slideshow/SlideMorph.ts \
     src/slideshow/VectorSlideLayers.ts \
     src/slideshow/Transition2d.ts \
     src/slideshow/Transition3d.ts \
     src/slideshow/transition/ClippingTransition.ts \
 	src/slideshow/transition/FadeTransition.ts \
+	src/slideshow/transition/MorphTransition.ts \
 	src/slideshow/transition/PlusTransition.ts \
 	src/slideshow/transition/CircleTransition.ts \
 	src/slideshow/transition/VenetianTransition.ts \

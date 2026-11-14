@@ -83,13 +83,14 @@ class SlideQuadsGl {
 		return this.direction;
 	}
 
-	/// Start a frame of width by height pixels, cleared to black. It goes into texture when
-	/// given, resized to the frame, else into the canvas, which then has the frame's size. False
-	/// when the texture cannot be drawn into.
+	/// Start a frame of width by height pixels, cleared to black, or over what the canvas holds
+	/// when clear is false. It goes into texture when given, resized to the frame, else into the
+	/// canvas, which then has the frame's size. False when the texture cannot be drawn into.
 	public begin(
 		width: number,
 		height: number,
 		texture?: WebGLTexture | null,
+		clear: boolean = true,
 	): boolean {
 		if (this.context.isDisposed()) return false;
 		const gl = this.context.getGl();
@@ -102,8 +103,10 @@ class SlideQuadsGl {
 		// row at the bottom.
 		this.direction = this.target ? -1 : 1;
 		gl.viewport(0, 0, width, height);
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
-		gl.clear(gl.COLOR_BUFFER_BIT);
+		if (clear) {
+			gl.clearColor(0.0, 0.0, 0.0, 1.0);
+			gl.clear(gl.COLOR_BUFFER_BIT);
+		}
 		// The quads are flat and drawn in order, and a flipped one faces away, so every quad
 		// is drawn whole. A 3D transition turns depth testing and face culling on in the same
 		// context.

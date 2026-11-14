@@ -1273,6 +1273,22 @@ class SlideShowHandler {
 		transitionParameters.next = enteringSlideTexture;
 		transitionParameters.transitionFilterInfo = transitionFilterInfo;
 
+		if (
+			!this.isStarting &&
+			nOldSlide !== undefined &&
+			transitionFilterInfo.isMorph() &&
+			this.slideCompositor.drawsFrames()
+		) {
+			const context = this.slideRenderer._context as RenderContextGl;
+			transitionParameters.drawMorph = (time: number) =>
+				this.slideCompositor.drawMorphFrame(
+					context,
+					nOldSlide,
+					nNewSlide,
+					time,
+				);
+		}
+
 		const isLeavingSlideMoving =
 			!this.isStarting &&
 			nOldSlide !== undefined &&

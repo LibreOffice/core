@@ -199,6 +199,8 @@ function createTransition(
 	if (isSlideTransition) {
 		switch (type) {
 			case TransitionType.FADE:
+				if (transitionParameters.transitionFilterInfo.isMorph())
+					return new SlideShow.MorphTransition(transitionParameters);
 				return new SlideShow.FadeTransition(transitionParameters);
 
 			case TransitionType.SLIDEWIPE:
