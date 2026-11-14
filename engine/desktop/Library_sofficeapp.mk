@@ -119,6 +119,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 # COKit bits
 ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
+	desktop/source/lib/CallbackFlushHandler \
 	desktop/source/lib/init \
 	desktop/source/lib/l10ntranslate \
 	desktop/source/lib/kitinteractionhandler \
@@ -131,6 +132,7 @@ $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/kitclipboard,servi
 else
 ifneq ($(filter TRUE,$(USING_X11) $(DISABLE_GUI))($filter EMSCRIPTEN,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
+	desktop/source/lib/CallbackFlushHandler \
 	desktop/source/lib/init \
 	desktop/source/lib/l10ntranslate \
 	desktop/source/lib/kitinteractionhandler \

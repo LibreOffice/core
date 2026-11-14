@@ -1,7 +1,7 @@
 ---
 assumeFilename: desktop/source/lib/init.cxx
 excludelist:
-    desktop/inc/lib/init.hxx:
+    desktop/inc/lib/CallbackFlushHandler.hxx:
     # Complete type is needed
     - boost/property_tree/ptree.hpp
     desktop/qa/desktop_lib/test_desktop_lib.cxx:

@@ -112,9 +112,9 @@ dbaccess/source/ui/inc/FieldControls.hxx:60
     void dbaui::OPropNumericEditCtrl::set_min(int)
 dbaccess/source/ui/inc/unodatbr.hxx:313
     _Bool dbaui::SbaTableQueryBrowser::implCopyObject(ODataClipboard &,const weld::TreeIter &,int)
-desktop/inc/lib/init.hxx:119
+desktop/inc/lib/CallbackFlushHandler.hxx:71
     _Bool desktop::CallbackFlushHandler::isVectorRendering() const
-desktop/inc/lib/init.hxx:158
+desktop/inc/lib/CallbackFlushHandler.hxx:121
      desktop::CallbackFlushHandler::CallbackData::CallbackData(const tools::Rectangle *,int)
 desktop/source/lib/kitclipboard.hxx:157
      KitClipboardFactory::KitClipboardFactory()

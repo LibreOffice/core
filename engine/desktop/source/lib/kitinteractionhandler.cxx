@@ -49,6 +49,7 @@
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 
 #include "../../inc/lib/init.hxx"
+#include "../../inc/lib/CallbackFlushHandler.hxx"
 
 #include <COKit/COKit.hxx>
 #include <sfx2/kit/helper.hxx>

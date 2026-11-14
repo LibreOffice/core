@@ -118,7 +118,7 @@ dbaccess/source/ui/querydesign/SelectionBrowseBox.hxx:57
 dbaccess/source/ui/tabledesign/TEditControl.hxx:70
     dbaui::OTableEditorCtrl::ClipboardInvalidator m_aInvalidateTimer
     dbaccess ClipboardInvalidator
-desktop/inc/lib/init.hxx:224
+desktop/inc/lib/CallbackFlushHandler.hxx:208
     desktop::CallbackFlushHandler::PerViewIdData set
     0
 desktop/source/app/app.cxx:507

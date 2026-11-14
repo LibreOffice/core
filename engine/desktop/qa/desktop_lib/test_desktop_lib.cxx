@@ -93,6 +93,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <lib/init.hxx>
+#include <lib/CallbackFlushHandler.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <svx/ColorSets.hxx>
 #include <svx/svxids.hrc>
