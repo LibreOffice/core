@@ -170,6 +170,12 @@ void DocFuncUtil::invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefault
                                               &aWholePart, bSkipViewShowingPart);
 }
 
+void DocFuncUtil::syncSheetViewsOfTable(ScDocShell& rDocShell, SCTAB nTab)
+{
+    rDocShell.GetDocument().SyncSheetViews(nTab);
+    invalidateSheetViewTiles(rDocShell, nTab, true /* bIncludeViewShownPart */);
+}
+
 tools::Rectangle DocFuncUtil::wholePartInvalidationRectangle()
 {
     return tools::Rectangle(0, 0, 1000000000, 1000000000);

@@ -60,7 +60,9 @@
 #include <svx/svdpage.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <vcl/unohelp2.hxx>
 
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 using namespace css;
@@ -1474,6 +1476,52 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testPasteOnDefaultViewReachesSheetView)
 
     // The pasted cell is on the sheet view as well, and the sheet view tab is repainted.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The pasted cell did not reach the sheet view", u"ABC"_ustr,
+                                 rDocument.GetString(ScAddress(0, 4, nSheetViewTab)));
+    auto const& rSheetViewParts = moSheetView->m_aInvalidationsParts;
+    CPPUNIT_ASSERT_MESSAGE("The sheet view tab was not repainted after the paste",
+                           std::ranges::find(rSheetViewParts, int(nSheetViewTab))
+                               != rSheetViewParts.end());
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testPlainTextPasteOnDefaultViewReachesSheetView)
+{
+    // Plain text that one user pastes from the clipboard on the default view appears on the
+    // sheet view that another user has open on the same tab, and that user is told to repaint it.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // User A types into A1 on the default view.
+    switchToDefaultView();
+    typeCharsInCell(std::string("ABC"), 0, 0, mpTabViewDefaultView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+
+    // User B creates a sheet view of that tab.
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+
+    // User A has plain text from outside the document on the clipboard and pastes it into A5
+    // on the default view.
+    switchToDefaultView();
+    vcl::unohelper::TextDataObject::CopyStringTo(
+        u"Plain"_ustr, mpTabViewDefaultView->GetViewData().GetActiveWin()->GetClipboard());
+    moSheetView->ClearAllInvalids();
+    gotoCell(u"A5");
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(u"Plain"_ustr, rDocument.GetString(ScAddress(0, 4, nDefaultViewTab)));
+
+    // The pasted text is on the sheet view as well, and the sheet view tab is repainted.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The pasted text did not reach the sheet view", u"Plain"_ustr,
                                  rDocument.GetString(ScAddress(0, 4, nSheetViewTab)));
     auto const& rSheetViewParts = moSheetView->m_aInvalidationsParts;
     CPPUNIT_ASSERT_MESSAGE("The sheet view tab was not repainted after the paste",

@@ -60,6 +60,11 @@ public:
     static void invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefaultViewTab,
                                          bool bIncludeViewShownPart = false);
 
+    /// Copy the content of the table nTab to its sheet views and invalidate their tiles on
+    /// every view, including the views that show them. A sheet view holder table has no sheet
+    /// views of its own, so nothing changes for one.
+    static void syncSheetViewsOfTable(ScDocShell& rDocShell, SCTAB nTab);
+
     /// A rectangle larger than any sheet, so it covers every tile of a part regardless of
     /// that part's actual size. Pass it to KitHelper::notifyInvalidationAllViews to invalidate
     /// a whole part by its index rather than by a specific area.

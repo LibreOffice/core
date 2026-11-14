@@ -2126,15 +2126,9 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
     pDocSh->ResolveSpilledOutputs();
 
     // The paste wrote to the tables of the mark directly, so copy those tables to their sheet
-    // views. The paste repainted only the tables it wrote to, so the invalidation includes the
-    // views that show a sheet view of them. A sheet view holder table has no sheet views of its
-    // own, and the sync leaves it alone.
-    ScDocument& rDoc = rViewData.GetDocument();
+    // views.
     for (const SCTAB nTab : rMark)
-    {
-        rDoc.SyncSheetViews(nTab);
-        sc::DocFuncUtil::invalidateSheetViewTiles(*pDocSh, nTab, true /* bIncludeViewShownPart */);
-    }
+        sc::DocFuncUtil::syncSheetViewsOfTable(*pDocSh, nTab);
 }
 
 //      D R A G   A N D   D R O P

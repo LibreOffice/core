@@ -28,6 +28,7 @@
 
 #include <global.hxx>
 #include <docsh.hxx>
+#include <docfuncutil.hxx>
 #include <undoblk.hxx>
 #include <rangenam.hxx>
 #include <tabvwsh.hxx>
@@ -279,6 +280,11 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
         if (!bHeight)
             pDocSh->PostPaint( aRange, PaintPartFlags::Grid );
         pDocSh->SetDocumentModified();
+
+        // The paste wrote to the tables of aRange directly, so copy those tables to their
+        // sheet views.
+        for (SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); ++nTab)
+            sc::DocFuncUtil::syncSheetViewsOfTable(*pDocSh, nTab);
     }
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
