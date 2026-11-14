@@ -39,6 +39,8 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <IDocumentOutlineNodes.hxx>
+
 const int CharactersBeforeAndAfter = 40;
 const sal_Int32 MaxShownSearchResultLength = 120;
 
@@ -445,6 +447,40 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::It
 
     std::unique_ptr<SwPaM>& rxPaM = m_vPaMs[sId.toUInt64()];
 
+    if (m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        auto nPos = m_pWrtShell->GetOutlinePos(UCHAR_MAX, rxPaM.get());
+        if (nPos != SwOutlineNodes::npos)
+        {
+            bool bOutlineContentMadeVisible = false;
+            if (!m_pWrtShell->IsOutlineContentVisible(nPos))
+            {
+                m_pWrtShell->MakeOutlineContentVisible(nPos);
+                bOutlineContentMadeVisible = true;
+            }
+            int nLevel = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
+            while (nLevel && --nPos != SwOutlineNodes::npos)
+            {
+                int nCurrentPosLevel
+                    = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
+                if (nCurrentPosLevel < nLevel)
+                {
+                    if (!m_pWrtShell->IsOutlineContentVisible(nPos))
+                    {
+                        m_pWrtShell->MakeOutlineContentVisible(nPos);
+                        bOutlineContentMadeVisible = true;
+                    }
+                    nLevel = nCurrentPosLevel;
+                }
+            }
+            if (bOutlineContentMadeVisible)
+            {
+                m_pWrtShell->SetModified();
+                m_pWrtShell->GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
+            }
+        }
+    }
+
     m_pWrtShell->StartAction();
     bool bFound = false;
     for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
@@ -504,6 +540,8 @@ void QuickFindPanel::FillSearchFindsList()
     SwWait aWait(*m_pWrtShell->GetDoc()->GetDocShell(), true);
 
     m_pWrtShell->AssureStdMode();
+
+    MakeAllOutlineContentTemporarilyVisible aMAOCTV(m_pWrtShell->GetDoc());
 
     i18nutil::SearchOptions2 aSearchOptions;
     aSearchOptions.Locale = GetAppLanguageTag().getLocale();
