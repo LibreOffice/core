@@ -700,6 +700,13 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     if (const SfxStringItem* pBaseURLItem = GetItemSet().GetItem<SfxStringItem>(SID_DOC_BASEURL))
         return pBaseURLItem->GetValue();
 
+    // An embedder may load and save a working copy of the file the user opened, somewhere else.
+    // The relative links of the document, chapters and images, are relative to that file.
+    const OUString aOriginalURL = comphelper::COKit::getOriginalDocumentUrl(
+        GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
+    if (!aOriginalURL.isEmpty())
+        return aOriginalURL;
+
     OUString aBaseURL;
     if (!comphelper::IsFuzzing() && GetContent().is())
     {

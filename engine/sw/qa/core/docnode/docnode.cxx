@@ -11,7 +11,10 @@
 
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <tools/urlobj.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/hostfilter.hxx>
 #include <tools/json_writer.hxx>
@@ -90,6 +93,42 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkUpdateKeepsSectionOfForbiddenFile)
     CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
 }
 #endif
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkedFilesOfWorkingCopy)
+{
+    // Given a master document loaded from a working copy somewhere else, as an app does that loads
+    // a temporary copy of the file the user opened:
+    createTempCopy(u"master-cached-sections.odm");
+    const OUString aWorkingURL
+        = INetURLObject(maTempFile.GetURL()).GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    comphelper::COKit::setOriginalDocumentUrl(aWorkingURL,
+                                              createFileURL(u"master-cached-sections.odm"));
+    comphelper::ScopeGuard g(
+        [&aWorkingURL]() { comphelper::COKit::clearOriginalDocumentUrl(aWorkingURL); });
+    loadFromURL(maTempFile.GetURL());
+
+    // Then the links are relative to the file the user opened, so the chapter next to it is found.
+    // Without the fix in place, they were relative to the working copy, where there is no chapter.
+    tools::JsonWriter aJson;
+    CPPUNIT_ASSERT(getSwTextDoc()->getLinkedFiles(aJson));
+    std::stringstream aStream{ std::string(aJson.finishAndGetAsOString()) };
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    const boost::property_tree::ptree& rFirst = aTree.get_child("links").front().second;
+    CPPUNIT_ASSERT_EQUAL(std::string("master-chapter.odt"), rFirst.get<std::string>("id"));
+    CPPUNIT_ASSERT(rFirst.get<bool>("readable"));
+
+    getSwDocShell()->AllowLinkUpdate();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"Text of the chapter file"_ustr, getSectionText(u"Present"_ustr));
+
+    // And when the working copy is saved, the link is still relative to the file the user opened.
+    // Without the fix in place, it was made relative to the working copy.
+    cpo::uno::Reference<css::frame::XStorable> xStorable(mxComponent, cpo::uno::UNO_QUERY_THROW);
+    xStorable->store();
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "(//text:section-source)[1]", "href", u"../master-chapter.odt");
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testLinkedFileReadFromCopy)
 {
