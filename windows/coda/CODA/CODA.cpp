@@ -6643,6 +6643,8 @@ void install_filepicker_provider(COKit& kitOffice)
 {
     static COKitFilePickerProvider provider{};
     provider.pick = filePickerProviderPick;
+    // The native picker gives the file the user picked, which a document may link to.
+    provider.picksFilesInPlace = true;
     kitOffice.installFilePickerProvider(&provider);
 }
 

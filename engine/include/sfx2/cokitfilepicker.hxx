@@ -38,6 +38,10 @@ SFX2_DLLPUBLIC void installProvider(const COKitFilePickerProvider* pProvider);
 /** Whether this is a COKit app with a native file picker installed. */
 SFX2_DLLPUBLIC bool isAvailable();
 
+/** Whether the picker gives the file the user picked, where it stays, rather than a copy of it,
+    so that a document may link to it. */
+SFX2_DLLPUBLIC bool picksFilesInPlace();
+
 /** Ask the app's native file picker for a file. Returns at once; rOnPicked runs later on
     the engine's main-loop thread, with the picked file's URL, or without a value when the
     user cancelled. Does nothing when isAvailable() is false. */

@@ -10,6 +10,7 @@
 #include <COKit/COKit.hxx>
 
 #include <QApplication>
+#include <QFile>
 #include <QFileDialog>
 #include <QMetaObject>
 #include <QStringList>
@@ -71,10 +72,16 @@ static void filePickerProviderPick(const char* pTitle, const COKitFilePickerFilt
         Qt::QueuedConnection);
 }
 
+// Inside flatpak the FileChooser portal gives a document-portal path, which the app may read in
+// this session only.
+static bool picksThroughPortal() { return QFile::exists(QStringLiteral("/.flatpak-info")); }
+
 void install_filepicker_provider(COKit& rOffice)
 {
     static COKitFilePickerProvider provider{};
     provider.pick = filePickerProviderPick;
+    // The native picker gives the file the user picked, which a document may link to.
+    provider.picksFilesInPlace = !picksThroughPortal();
     rOffice.installFilePickerProvider(&provider);
 }
 

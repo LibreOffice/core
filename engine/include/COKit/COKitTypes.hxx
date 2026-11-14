@@ -104,6 +104,13 @@ struct COKitFilePickerProvider
      */
     void (*pick)(const char* pTitle, const COKitFilePickerFilter* pFilters, size_t nFilters,
                  void (*pfnPicked)(void* pContext, const char* pUrl), void* pContext);
+
+    /**
+     * Whether the URL pick passes on is the file the user picked, where it stays, rather than
+     * a copy of it, as a native picker of a desktop app gives. A document may link to such a
+     * file, the chapters of a master document for example; a copy goes away.
+     */
+    bool picksFilesInPlace;
 };
 
 // getDocumentType is part of the API whether or not the unstable half is asked for, so the

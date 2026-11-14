@@ -79,6 +79,8 @@ bool isAvailable()
     return comphelper::COKit::isActive() && getProvider().has_value() && getProvider()->pick;
 }
 
+bool picksFilesInPlace() { return isAvailable() && getProvider()->picksFilesInPlace; }
+
 void pick(const OUString& rTitle, const std::vector<Filter>& rFilters,
           std::function<void(std::optional<OUString>)> aOnPicked)
 {

@@ -318,6 +318,8 @@ void install_filepicker_provider(COKit &rOffice)
 {
     static COKitFilePickerProvider provider{};
     provider.pick = filePickerProviderPick;
+    // The native picker gives the file the user picked, which a document may link to.
+    provider.picksFilesInPlace = true;
     rOffice.installFilePickerProvider(&provider);
 }
 

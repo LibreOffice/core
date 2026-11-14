@@ -56,6 +56,7 @@
 #include <unotxvw.hxx>
 #include <tools/json_writer.hxx>
 #include <COKit/COKitTypes.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 
 using namespace ::cpo::uno;
 using namespace ::cpo::uno;
@@ -326,9 +327,9 @@ IMPL_LINK(SwGlobalTree, ContextMenuSelectHdl, const OUString&, rIdent, void)
 
 void SwGlobalTree::HideInsertFileEntries(weld::Menu& rMenu)
 {
-    // Inserting a file or a new document needs the file to stay where it is picked or created,
-    // which only the products can arrange.
-    rMenu.set_visible(u"insertfile"_ustr, false);
+    // An inserted file is linked to, so it has to stay where it is picked: a picker that gives a
+    // copy, as an upload to a server is, offers nothing to link to.
+    rMenu.set_visible(u"insertfile"_ustr, sfx2::COKitFilePicker::picksFilesInPlace());
     rMenu.set_visible(u"insertnewfile"_ustr, false);
 }
 

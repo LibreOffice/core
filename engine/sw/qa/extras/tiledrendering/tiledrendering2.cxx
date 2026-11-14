@@ -11,12 +11,15 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/text/SectionFileLink.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <COKit/COKitTypes.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1814,6 +1817,59 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorHidesInsertFile
     CPPUNIT_ASSERT(std::none_of(aMenus.begin(), aMenus.end(), [](const OString& rMenu) {
         return rMenu.indexOf("insertfile") >= 0 || rMenu.indexOf("insertnewfile") >= 0;
     }));
+
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
+    Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorInsertFile)
+{
+    // Given a master document with its Navigator open, in an app whose file picker gives the
+    // picked file itself:
+    createSwGlobalDoc("master-cached-sections.odm");
+    getSwTextDoc()->initializeForTiledRendering({});
+    SwTestViewCallback aView;
+    SwView* pView = getSwDocShell()->GetView();
+
+    static OString aPickedUrl;
+    aPickedUrl = createFileURL(u"master-chapter.odt").toUtf8();
+    COKitFilePickerProvider aProvider{};
+    aProvider.pick = [](const char*, const COKitFilePickerFilter*, size_t,
+                        void (*pfnPicked)(void*, const char*), void* pContext)
+    { pfnPicked(pContext, aPickedUrl.getStr()); };
+    aProvider.picksFilesInPlace = true;
+    sfx2::COKitFilePicker::installProvider(&aProvider);
+    comphelper::ScopeGuard aProviderGuard([] { sfx2::COKitFilePicker::installProvider(nullptr); });
+
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, true);
+    Scheduler::ProcessEventsToIdle();
+    const OUString sKey
+        = OUString::number(reinterpret_cast<sal_uInt64>(static_cast<SfxViewShell*>(pView)))
+          + "navigator";
+    StringMap aSelect{ { u"cmd"_ustr, u"select"_ustr },
+                       { u"data"_ustr, u"1"_ustr },
+                       { u"type"_ustr, u"treeview"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"globaltree"_ustr, aSelect));
+
+    // When the Insert menu of the toolbar is opened, then it offers to insert a file:
+    std::vector<OString> aMenus = openMasterDocInsertMenu(pView, aView);
+    CPPUNIT_ASSERT(std::any_of(aMenus.begin(), aMenus.end(), [](const OString& rMenu) {
+        return rMenu.indexOf("insertfile") >= 0;
+    }));
+
+    // And when a file is picked through it, then the document links to that file where it is.
+    StringMap aChoose{ { u"cmd"_ustr, u"select"_ustr },
+                       { u"data"_ustr, u"insertfile"_ustr },
+                       { u"type"_ustr, u"menu"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"__MENU__"_ustr, aChoose));
+    Scheduler::ProcessEventsToIdle();
+    uno::Reference<text::XTextSectionsSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSection(
+        xSupplier->getTextSections()->getByName(u"master-chapter.odt"_ustr),
+        uno::UNO_QUERY_THROW);
+    text::SectionFileLink aLink;
+    xSection->getPropertyValue(u"FileLink"_ustr) >>= aLink;
+    CPPUNIT_ASSERT_EQUAL(createFileURL(u"master-chapter.odt"), aLink.FileURL);
 
     pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
     Scheduler::ProcessEventsToIdle();
