@@ -87,6 +87,7 @@ all_la_unit_tests = \
 	unit-collab-protocol.la \
 	unit-quarantine.la \
 	unit-remote-document.la \
+	unit-linked-files.la \
 	unit-link-post-disabled.la \
 	unit-preview-endpoint.la \
 	unit-wopi.la \
@@ -349,6 +350,8 @@ unit_oauth_la_SOURCES = UnitOAuth.cpp
 unit_oauth_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_remote_document_la_SOURCES = UnitRemoteDocument.cpp
 unit_remote_document_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_linked_files_la_SOURCES = UnitLinkedFiles.cpp
+unit_linked_files_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_link_post_disabled_la_SOURCES = UnitLinkPostDisabled.cpp
 unit_link_post_disabled_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_preview_endpoint_la_SOURCES = UnitPreviewEndpoint.cpp

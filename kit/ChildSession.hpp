@@ -343,6 +343,8 @@ private:
     /// The files that sections of the document link to, as the JSON body of a linkedfiles:
     /// message. A document that reports none gives an empty list.
     std::string getLinkedFilesJson();
+    /// The linked files a REFRESH_LINKED_FILES request names, in the form of getLinkedFilesJson().
+    std::string getLinkedFilesToRefreshJson(const std::string& request);
     bool keyEvent(const StringVector& tokens, LokEventTargetEnum target);
     bool extTextInputEvent(const StringVector& tokens);
     bool dialogKeyEvent(const char* buffer, int length, const std::vector<std::string>& tokens);

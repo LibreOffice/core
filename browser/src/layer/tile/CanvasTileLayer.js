@@ -1410,11 +1410,19 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	// The user chose Edit for a file that a master document links to. The apps
-	// open it in a window of their own.
+	// open it in a window of their own. In a browser the integration opens it, as
+	// it knows the file by its path relative to the master document.
 	_onOpenLinkedDocumentMsg: function (textMsg) {
 		const obj = JSON.parse(textMsg.substring('openlinkeddocument:'.length + 1));
-		if (window.ThisIsAMobileApp && obj.url)
-			window.postMobileMessage('opendoc file=' + encodeURIComponent(obj.url));
+		if (window.ThisIsAMobileApp) {
+			if (obj.url)
+				window.postMobileMessage('opendoc file=' + encodeURIComponent(obj.url));
+		} else if (obj.id) {
+			this._map.fire('postMessage', {
+				msgId: 'UI_OpenLinkedDocument',
+				args: { RelativePath: obj.id, SectionName: obj.section },
+			});
+		}
 	},
 
 	// A user turned on recording of tracked changes for all users. That user sees the Review

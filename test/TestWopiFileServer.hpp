@@ -234,6 +234,58 @@ void handleLinkAccessRequest(const Poco::Net::HTTPRequest& request,
     if (JsonUtil::parseJSON(body, object))
         JsonUtil::findJSONValue(object, "PersistentLink", persistentLink);
 
+    // The files that sections of a text document link to are named by their path relative to
+    // the document, and are files next to it here.
+    std::string kind;
+    if (object)
+        JsonUtil::findJSONValue(object, "Kind", kind);
+    if (kind == "relative")
+    {
+        static constexpr std::string_view prefix = "/wopi/files";
+        static constexpr std::string_view suffix = "/linkaccess";
+        const std::string uriPath = Poco::URI(request.getURI()).getPath();
+        const std::string documentPath =
+            uriPath.substr(prefix.size(), uriPath.size() - prefix.size() - suffix.size());
+
+        std::string accessToken = requestDetails.getParam("access_token");
+        if (accessToken.empty())
+            accessToken = "test";
+
+        Poco::JSON::Array::Ptr links = new Poco::JSON::Array();
+        const Poco::JSON::Array::Ptr paths = object->getArray("RelativePaths");
+        for (std::size_t i = 0; paths && i < paths->size(); ++i)
+        {
+            const std::string relativePath = paths->getElement<std::string>(i);
+            Poco::Path path(Poco::Path(documentPath).parent());
+            path.resolve(Poco::Path(relativePath));
+            const std::string filePath = path.toString();
+
+            Poco::JSON::Object::Ptr link = new Poco::JSON::Object();
+            link->set("RelativePath", relativePath);
+            if (FileUtil::Stat(filePath).isFile())
+            {
+                link->set("Status", 200);
+                link->set("WOPISrc", localWopiSrc(requestDetails, filePath));
+                link->set("AccessToken", accessToken);
+                link->set("BaseFileName", path.getFileName());
+            }
+            else
+                link->set("Status", 404);
+            links->add(link);
+        }
+
+        Poco::JSON::Object::Ptr answer = new Poco::JSON::Object();
+        answer->set("Links", links);
+        std::ostringstream jsonStream;
+        answer->stringify(jsonStream);
+
+        http::Response httpResponse(http::StatusCode::OK);
+        FileServerRequestHandler::hstsHeaders(httpResponse);
+        httpResponse.setBody(jsonStream.str(), "application/json; charset=utf-8");
+        socket->send(httpResponse);
+        return;
+    }
+
     if (persistentLink.empty())
     {
         LOG_ERR("Link access request that names no persistent link");
@@ -410,6 +462,8 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         // The pages of a presentation record the source their slides came from by its
         // persistent link, and a POST to <WOPISrc>/linkaccess names the document behind one.
         fileInfo->set("SupportsLinkAccess", true);
+        // It also names the files a document links to by their path relative to it.
+        fileInfo->set("SupportsRelativeLinkAccess", true);
 
         std::ostringstream jsonStream;
         fileInfo->stringify(jsonStream);

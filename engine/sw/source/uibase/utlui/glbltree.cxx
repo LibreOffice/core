@@ -1062,6 +1062,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
             sfx2::cTokenSeparator));
     tools::JsonWriter aJson;
     aJson.put("url", sFileName);
+    aJson.put("id", LinkedFileId(*pCont->GetSection()));
     aJson.put("section", pCont->GetSection()->GetSectionName().toString());
     m_pActiveShell->GetView().viewCallback(COKitCallbackType::OPEN_LINKED_DOCUMENT,
                                            aJson.finishAndGetAsOString());

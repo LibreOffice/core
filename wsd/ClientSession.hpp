@@ -409,6 +409,22 @@ public:
     /// Forwards a message of the kit about the linked files to the client without the URLs that
     /// name the files in the jail.
     bool forwardWithoutJailUrls(const std::shared_ptr<Message>& payload);
+
+    /// Asks the storage for the linked files the linkedfiles: answer of the kit names as not
+    /// readable, or for every one with refresh, as the kit reads a copy of one it was given.
+    void requestLinkedFiles(const std::shared_ptr<Message>& payload,
+                            const std::shared_ptr<DocumentBroker>& docBroker, bool refresh);
+
+    /// Takes the answer of the storage for the linked files in asked, and downloads each file
+    /// it names.
+    void completeLinkedFiles(const std::vector<std::string>& asked, unsigned statusCode,
+                             const std::string& body);
+
+    /// Downloads the file with the path relativePath from a URL on the WOPI host of the
+    /// document into the jail, and gives it to the kit as the file it reads for the links to
+    /// that path. Follows up to redirectLimit redirects on that host.
+    void downloadLinkedFile(const std::string& relativePath, const Poco::URI& uri,
+                            const std::string& accessToken, int redirectLimit);
 #endif // !MOBILEAPP
 
     /// Handle a clipboard fetch / put request.
@@ -447,6 +463,11 @@ public:
     /// /cool/links for this view, sending it to the client when
     /// notifyClient is set. Each accepted POST consumes and rotates it.
     void rotateLinkToken(bool notifyClient);
+
+    /// The storage of the document answers for the files that sections of a text document link
+    /// to, by their path relative to the document, so the files the kit cannot read are copied
+    /// into the jail for it.
+    void enableLinkedFiles() { _linkedFilesEnabled = true; }
 
     /// True when the given token is this view's current link POST
     /// token, and not empty.
@@ -850,6 +871,16 @@ private:
 
     /// Client is using a text document?
     bool _isTextDocument;
+
+    /// The storage answers for the files the document links to, see enableLinkedFiles().
+    bool _linkedFilesEnabled = false;
+    /// The linked files were asked for in this view, once the user allowed the links to be
+    /// updated.
+    bool _linkedFilesAsked = false;
+    /// The list of linked files the kit answers next is the one this session asked for.
+    bool _linkedFilesListPending = false;
+    /// The number of linked files given to the kit that it did not answer for yet.
+    int _linkedFileSourcesPending = 0;
 
     /// The session is read-only only because the file has a view-only extension.
     bool _isReadOnlyForViewFile = false;

@@ -1351,9 +1351,10 @@ enum class COKitCallbackType
      * Navigator of a master document. The engine does not open the file
      * itself; the host opens it, for example in a window of its own. The
      * payload is a JSON object with the URL of the linked file, as the master
-     * document resolves it, and the name of the section that shows it, for
-     * example
-     * { "url": "file:///home/user/book/chapter1.odt", "section": "chapter1.odt" }.
+     * document resolves it, its path relative to the master document, and the
+     * name of the section that shows it, for example
+     * { "url": "file:///home/user/book/chapter1.odt", "id": "chapter1.odt",
+     *   "section": "chapter1.odt" }.
      */
     OPEN_LINKED_DOCUMENT = 80,
 

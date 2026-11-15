@@ -345,6 +345,64 @@ exportslides [slides=<p0,p1,...>|guids=<g0,g1,...>]
         error: cmd=exportslides kind=failed
     before any page is written.
 
+linkedfile list
+
+    Reads the files that sections of a text document link to, the chapters of
+    a master document for example. The reply is
+        linkedfiles: {"links":[{"id":"<path>","url":"<url>","section":"<name>",
+                                "filter":"<filter>","readable":<true|false>},...]}
+    one entry per linked section. <path> is the path of the file relative to
+    the document, as plain text and not percent-encoded, with / between its
+    folders, as chapter1.odt or ../shared/chapter2.odt,
+    url is where the document resolves it, left out for a client of the server,
+    as it names a file in the jail, section the section that shows it,
+    filter the filter that reads it, and readable whether the kit can read it,
+    from where it is or from a copy the server gave it. A document that links
+    to nothing, and a document that is not a text document, gives an empty
+    list.
+
+    When CheckFileInfo says SupportsRelativeLinkAccess, the server asks the
+    storage for the files the kit cannot read, once the user of a view that
+    may change the document allowed its links to be updated (allowlinkupdate):
+    it POSTs
+        {"Kind":"relative","RelativePaths":["<path>",...]}
+    to <WOPISrc>/linkaccess, with at most 64 paths of at most 1024 bytes each.
+    Only relative paths are asked for: not one from the root, a URL or a
+    drive. The storage answers
+        {"Links":[{"RelativePath":"<path>","Status":<status>,
+                   "WOPISrc":"<WOPISrc>","AccessToken":"<token>"},...]}
+    resolving each path against the folder of the document. The path comes
+    out of the content of the document, so the storage gives a file only when
+    the user may read it, and decides whether a path that leads out of the
+    folder of the document by .. is answered. An entry whose
+    Status is not 200, absent counting as 200, and a path without an entry,
+    are files the storage does not give. For the others the server downloads
+    <WOPISrc>/contents with that access token, only from the WOPI host of the
+    document, into the staging area of the jail, and gives the copy to the kit
+    with linkedfile source. The kit reads the file from the copy for the rest
+    of the session, and the document keeps linking to the path it had. The
+    question, the copies and the answers of the kit to them are the server's
+    own and are not sent to the client. The content of a copy, fetched with
+    the access of one user, becomes content of the document: every view of
+    the document shows it, and a master document that saves the content of
+    its links as well keeps it.
+
+    When the user asks to read the linked files anew, with Update in the
+    Navigator of a master document for example, the kit tells the server
+        linkedfilesrefresh: <the list as in linkedfiles:>
+    with the files the user asked for, every file or those of the sections
+    the user chose. The server asks the storage for every file of the list
+    again, the readable ones too, and gives the kit fresh copies the same
+    way: a copy is what the storage had when it was made.
+
+linkedfile source id=<path> file=<staged name>
+
+    Sent by the server alone, never by a client: the kit reads the linked file
+    with the path <path> from the file staged as <staged name>. Both are
+    percent-encoded. The reply is
+        linkedfile: {"status":"registered","id":"<path>","count":<sections>}
+    or error: cmd=linkedfile kind=<syntax|failed|notlinked>.
+
 slidelink list
 slidelink break unit=<slide|section|presentation> id=<id> [deep=<0|1>]
 slidelink update source=<source name> file=<staged name> [time=<source time>]
@@ -1764,6 +1822,19 @@ redlinetablechanged:
 
     Signals that the redlines table has been modified.
     Redlines are used for tracking changes.
+
+openlinkeddocument: <payload>
+
+    Signals that the user chose Edit for a file a master document links to,
+    which the engine does not open itself. <payload> is a JSON object with the
+    URL the document resolves the file to, its path relative to the document,
+    and the name of the section that shows it, for example
+    {"url":"file:///.../chapter1.odt","id":"chapter1.odt","section":"chapter1.odt"}.
+    The server leaves out the URL, which names a file in the jail.
+    The apps open the file in a window of their own. In a browser the client
+    posts UI_OpenLinkedDocument to the integration, with RelativePath and
+    SectionName in its Values, and the integration opens the file the path
+    names relative to the master document.
 
 redlinerecordingforallviews: <payload>
 

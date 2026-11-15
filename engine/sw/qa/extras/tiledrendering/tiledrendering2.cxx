@@ -1687,6 +1687,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigator)
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT(o3tl::ends_with(aTree.get<std::string>("url"), "/master-chapter.odt"));
+    CPPUNIT_ASSERT_EQUAL(std::string("master-chapter.odt"), aTree.get<std::string>("id"));
     CPPUNIT_ASSERT_EQUAL(std::string("Present"), aTree.get<std::string>("section"));
 
     // When the Update menu of the toolbar is opened, then it is sent to the client instead of

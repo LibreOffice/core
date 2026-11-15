@@ -80,6 +80,7 @@
 #include <cctype>
 #include <cstdio>
 #include <iomanip>
+#include <set>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -4564,6 +4565,37 @@ bool ChildSession::linkedFile(const StringVector& tokens)
     return false;
 }
 
+std::string ChildSession::getLinkedFilesToRefreshJson(const std::string& request)
+{
+    const std::string links = getLinkedFilesJson();
+
+    // The request names the files to read anew by their ids, or names none for every file.
+    Poco::JSON::Object::Ptr requestObject;
+    if (!JsonUtil::parseJSON(request, requestObject) || !requestObject->has("ids"))
+        return links;
+    const Poco::JSON::Array::Ptr ids = requestObject->getArray("ids");
+    Poco::JSON::Object::Ptr linksObject;
+    if (!ids || !JsonUtil::parseJSON(links, linksObject) || !linksObject->getArray("links"))
+        return links;
+
+    std::set<std::string> asked;
+    for (std::size_t i = 0; i < ids->size(); ++i)
+        asked.insert(ids->getElement<std::string>(i));
+
+    const Poco::JSON::Array::Ptr all = linksObject->getArray("links");
+    Poco::JSON::Array::Ptr chosen = new Poco::JSON::Array();
+    for (std::size_t i = 0; i < all->size(); ++i)
+    {
+        const Poco::JSON::Object::Ptr link = all->getObject(i);
+        if (link && asked.count(JsonUtil::getJSONValue<std::string>(link, "id")))
+            chosen->add(link);
+    }
+    linksObject->set("links", chosen);
+    std::ostringstream oss;
+    linksObject->stringify(oss);
+    return oss.str();
+}
+
 std::string ChildSession::getLinkedFilesJson()
 {
     getLOKitDocument()->setView(_viewId);
@@ -7304,6 +7336,10 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         break;
     case COKitCallbackType::OPEN_LINKED_DOCUMENT:
         sendTextFrame("openlinkeddocument: " + payload);
+        break;
+    case COKitCallbackType::REFRESH_LINKED_FILES:
+        // The files to give fresh copies of go with the request.
+        sendTextFrame("linkedfilesrefresh: " + getLinkedFilesToRefreshJson(payload));
         break;
     case COKitCallbackType::COMMENT:
     {

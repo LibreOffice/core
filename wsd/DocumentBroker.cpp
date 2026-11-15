@@ -5407,6 +5407,8 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
     {
 #if !MOBILEAPP
         const bool supportsLinkAccess = wopiFileInfo && wopiFileInfo->getSupportsLinkAccess();
+        const bool supportsRelativeLinkAccess =
+            wopiFileInfo && wopiFileInfo->getSupportsRelativeLinkAccess();
 #endif
 
         // First, download the document, since this can fail.
@@ -5454,6 +5456,8 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
 
         if (supportsLinkAccess)
             _remoteLinks.enableViewLinkAccess(*this, id);
+        if (supportsRelativeLinkAccess)
+            session->enableLinkedFiles();
 #endif
 
         const std::size_t count = _sessions.size();

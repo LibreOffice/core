@@ -101,6 +101,7 @@ public:
     bool getSupportsRename() const { return _supportsRename; }
     bool getSupportsLocks() const { return _supportsLocks; }
     bool getSupportsLinkAccess() const { return _supportsLinkAccess; }
+    bool getSupportsRelativeLinkAccess() const { return _supportsRelativeLinkAccess; }
     bool getUserCanRename() const { return _userCanRename; }
     bool getUserCanOnlyComment() const { return _userCanOnlyComment; }
     bool getUserCanOnlyManageRedlines() const { return _userCanOnlyManageRedlines; }
@@ -208,6 +209,8 @@ private:
     bool _supportsRename = false;
     /// Whether the storage answers a POST to <WOPISrc>/linkaccess
     bool _supportsLinkAccess = false;
+    /// Whether the storage also answers it for files named by their path relative to the document
+    bool _supportsRelativeLinkAccess = false;
     /// If user is allowed to rename the document
     bool _userCanRename = false;
     /// If user is limited to only writing/modifying comments
