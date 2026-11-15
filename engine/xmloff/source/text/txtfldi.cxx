@@ -2371,6 +2371,7 @@ void XMLMacroFieldImportContext::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_NAME):
             sMacro = OUString::fromUtf8(sAttrValue);
             bValid = true;
+            GetImport().NotifyMacroEventRead();
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
