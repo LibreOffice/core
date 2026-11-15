@@ -1795,9 +1795,18 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                 // is not available it falls back to the base64 "image" below.
                 // e.g. "chart2/res/dataeditor_icon05.png" -> "lc_dataeditor_icon05.svg"
                 // e.g. "cmd/sc_paste.png"                 -> "lc_paste.svg"
-                const OUString sIconName = vcl::kit::svgIconName(GetItemIconName(nId));
+                // Code may set another image than the one the .ui file names, e.g. one per
+                // state; a rendered image has no name and keeps the one of the .ui file.
+                OUString sIconPath = GetItemImage(nId).GetStock();
+                if (sIconPath.isEmpty())
+                    sIconPath = GetItemIconName(nId);
+                const OUString sIconName = vcl::kit::svgIconName(sIconPath);
                 if (!sIconName.isEmpty())
                     rJsonWriter.put("icon", sIconName);
+                // The icon name drops the folder of the path, which tells the modules apart:
+                // sw/res/sf01.png and sc/res/sf01.png show different style families.
+                if (!sIconPath.isEmpty())
+                    rJsonWriter.put("iconpath", sIconPath);
 
                 // Always emit base64 PNG as fallback for COOL instances
                 // that don't have the corresponding SVG in browser/images/

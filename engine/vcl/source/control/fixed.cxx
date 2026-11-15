@@ -1006,6 +1006,9 @@ void FixedImage::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     Control::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("id", get_id());
     rJsonWriter.put("type", "image");
+    // The client may have an icon of its own for an image of the icon theme.
+    if (!maImage.GetStock().isEmpty())
+        rJsonWriter.put("iconpath", maImage.GetStock());
     if (!!maImage)
     {
         SvMemoryStream aOStm(6535, 6535);
