@@ -368,14 +368,6 @@ void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
 
     SfxApplication *pSfxApp = SfxGetpApp();
 
-    SAL_INFO(
-        "sfx.control",
-        "-SfxDispatcher(" << this << (bPush ? ")::Push(" : ")::Pop(")
-            << (rShell.GetInterface()
-                ? rShell.GetInterface()->GetClassName() : SAL_STREAM(&rShell))
-            << (bDelete ? ") with delete" : ")")
-            << (bUntil ? " (up to)" : ""));
-
     // same shell as on top of the to-do stack?
     if(!xImp->aToDoStack.empty() && xImp->aToDoStack.front().pCluster == &rShell)
     {
