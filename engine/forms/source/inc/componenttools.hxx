@@ -22,6 +22,7 @@
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <rtl/ustring.hxx>
 
 #include <set>
 
@@ -76,6 +77,11 @@ namespace frm
 
     cpo::uno::Reference< css::frame::XModel >  getXModel(
         const cpo::uno::Reference< cpo::uno::XInterface >& _rxComponent );
+
+    /** Whether a form may dispatch rURL in the frame of rxModel. A script URL needs the document's
+        permission to run scripts, and any exotic URL is treated as a hyperlink from the document.
+    */
+    bool isFormURLAllowed(const OUString& rURL, const cpo::uno::Reference<css::frame::XModel>& rxModel);
 
 
 } // namespace frm
