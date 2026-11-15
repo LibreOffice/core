@@ -18,22 +18,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.libreoffice.androidlib.lok.LokClipboardData;
-import org.libreoffice.androidlib.lok.LokClipboardEntry;
-
 /**
- * Read-only provider streaming clipboard content to other applications.
+ * Read-only provider serving the HTML and the text of a copy to other applications, from the
+ * .html and .txt files written next to the .data file that the content URI names.
  */
 public class ClipboardFileProvider extends ContentProvider {
-    private static final String TAG = "ClipboardFileProvider";
-
     private static final String MIME_HTML = "text/html";
     private static final String MIME_PLAIN = "text/plain";
 
@@ -69,35 +63,57 @@ public class ClipboardFileProvider extends ContentProvider {
         return file;
     }
 
-    private LokClipboardData dataFor(Uri uri) throws FileNotFoundException {
-        File file = fileFor(getContext(), uri);
-        if (file == null || !file.exists())
-            throw new FileNotFoundException("no clipboard data for " + uri);
-
-        LokClipboardData data = LokClipboardData.createFromFile(file);
-        if (data == null)
-            throw new FileNotFoundException("corrupt clipboard data for " + uri);
-        return data;
+    /// the file next to a .data file with the given extension, "html" or "txt"
+    public static File sideFile(File dataFile, String extension) {
+        String name = dataFile.getName();
+        int dot = name.lastIndexOf('.');
+        String base = dot > 0 ? name.substring(0, dot) : name;
+        return new File(dataFile.getParentFile(), base + "." + extension);
     }
 
-    private static byte[] entryFor(LokClipboardData data, String mimeType) {
-        String wanted = MIME_HTML.equals(mimeType) ? MIME_HTML : MIME_PLAIN;
-        for (LokClipboardEntry entry : data.clipboardEntries) {
-            if (entry.mime != null && entry.mime.startsWith(wanted))
-                return entry.data;
-        }
-        return null;
+    private File existingSideFile(Uri uri, String extension) {
+        File dataFile = fileFor(getContext(), uri);
+        if (dataFile == null)
+            return null;
+        File file = sideFile(dataFile, extension);
+        return file.isFile() ? file : null;
     }
 
     private static String streamTypeFor(String mimeTypeFilter) {
         if (mimeTypeFilter == null)
             return null;
-        if (ClipDescription.compareMimeTypes(MIME_HTML, mimeTypeFilter)
-                && !ClipDescription.compareMimeTypes(MIME_PLAIN, mimeTypeFilter))
-            return MIME_HTML;
         if (ClipDescription.compareMimeTypes(MIME_PLAIN, mimeTypeFilter))
             return MIME_PLAIN;
+        if (ClipDescription.compareMimeTypes(MIME_HTML, mimeTypeFilter))
+            return MIME_HTML;
         return null;
+    }
+
+    /// the HTML, else the text, else null
+    private File defaultFile(Uri uri) {
+        File file = existingSideFile(uri, "html");
+        return file != null ? file : existingSideFile(uri, "txt");
+    }
+
+    private File typedFile(Uri uri, String mimeTypeFilter) {
+        if ("*/*".equals(mimeTypeFilter))
+            return defaultFile(uri);
+        String streamType = streamTypeFor(mimeTypeFilter);
+        if (MIME_HTML.equals(streamType))
+            return existingSideFile(uri, "html");
+        if (MIME_PLAIN.equals(streamType)) {
+            File file = existingSideFile(uri, "txt");
+            // no plain text variant... serve the html one rather than nothing
+            return file != null ? file : existingSideFile(uri, "html");
+        }
+        return null;
+    }
+
+    /// the length comes from the open descriptor, so it survives the next copy unlinking the file
+    private static AssetFileDescriptor openSideFile(File file) throws FileNotFoundException {
+        ParcelFileDescriptor descriptor =
+            ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+        return new AssetFileDescriptor(descriptor, 0, descriptor.getStatSize());
     }
 
     @Override
@@ -107,21 +123,17 @@ public class ClipboardFileProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return MIME_HTML;
+        File file = defaultFile(uri);
+        if (file == null)
+            return null;
+        return file.getName().endsWith(".txt") ? MIME_PLAIN : MIME_HTML;
     }
 
     @Override
     public String[] getStreamTypes(Uri uri, String mimeTypeFilter) {
-        LokClipboardData data;
-        try {
-            data = dataFor(uri);
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-
-        boolean hasHtml = entryFor(data, MIME_HTML) != null
+        boolean hasHtml = existingSideFile(uri, "html") != null
             && ClipDescription.compareMimeTypes(MIME_HTML, mimeTypeFilter);
-        boolean hasPlain = entryFor(data, MIME_PLAIN) != null
+        boolean hasPlain = existingSideFile(uri, "txt") != null
             && ClipDescription.compareMimeTypes(MIME_PLAIN, mimeTypeFilter);
 
         if (hasHtml && hasPlain)
@@ -136,33 +148,10 @@ public class ClipboardFileProvider extends ContentProvider {
     @Override
     public AssetFileDescriptor openTypedAssetFile(Uri uri, String mimeTypeFilter, Bundle opts)
             throws FileNotFoundException {
-        LokClipboardData data = dataFor(uri);
-
-        String streamType = streamTypeFor(mimeTypeFilter);
-        byte[] bytes = streamType != null ? entryFor(data, streamType) : null;
-        if (bytes == null && MIME_PLAIN.equals(streamType)) {
-            // no plain text variant... serve the html one rather than nothing
-            bytes = entryFor(data, MIME_HTML);
-        }
-        if (bytes == null)
+        File file = typedFile(uri, mimeTypeFilter);
+        if (file == null)
             throw new FileNotFoundException("no stream of type " + mimeTypeFilter + " for " + uri);
-
-        final byte[] streamBytes = bytes;
-        ParcelFileDescriptor readSide = openPipeHelper(uri, streamType, opts, streamBytes,
-            new PipeDataWriter<byte[]>() {
-                @Override
-                public void writeDataToPipe(ParcelFileDescriptor output, Uri uri, String mimeType,
-                                            Bundle opts, byte[] args) {
-                    try (FileOutputStream out =
-                             new FileOutputStream(output.getFileDescriptor())) {
-                        out.write(args);
-                        out.flush();
-                    } catch (IOException e) {
-                        Log.w(TAG, "failed to stream clipboard data: " + e);
-                    }
-                }
-            });
-        return new AssetFileDescriptor(readSide, 0, AssetFileDescriptor.UNKNOWN_LENGTH);
+        return openSideFile(file);
     }
 
     @Override
@@ -171,11 +160,15 @@ public class ClipboardFileProvider extends ContentProvider {
         if (projection == null)
             projection = new String[] { OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE };
 
+        File file = defaultFile(uri);
         MatrixCursor cursor = new MatrixCursor(projection, 1);
         Object[] row = new Object[projection.length];
         for (int i = 0; i < projection.length; ++i) {
             if (OpenableColumns.DISPLAY_NAME.equals(projection[i]))
-                row[i] = "clipboard.html";
+                row[i] = file != null && file.getName().endsWith(".txt")
+                    ? "clipboard.txt" : "clipboard.html";
+            else if (OpenableColumns.SIZE.equals(projection[i]))
+                row[i] = file != null ? file.length() : null;
             else
                 row[i] = null;
         }
@@ -184,8 +177,18 @@ public class ClipboardFileProvider extends ContentProvider {
     }
 
     @Override
+    public AssetFileDescriptor openAssetFile(Uri uri, String mode) throws FileNotFoundException {
+        if (!"r".equals(mode))
+            throw new FileNotFoundException("read-only provider");
+        File file = defaultFile(uri);
+        if (file == null)
+            throw new FileNotFoundException("no clipboard content for " + uri);
+        return openSideFile(file);
+    }
+
+    @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
-        throw new FileNotFoundException("use openTypedAssetFile");
+        return openAssetFile(uri, mode).getParcelFileDescriptor();
     }
 
     @Override

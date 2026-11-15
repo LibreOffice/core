@@ -235,7 +235,7 @@ same tables):
 | Windows | Fixed list (`CODA.cpp:771`): plain text, `text/html` (CF_HTML fragment extracted), `text/rtf`, `image/png`, Star Embed Source XML, Star Object Descriptor XML. `image/svg+xml` is recognised but not yet consumed. Anything else is dropped. | The same fixed list (`CODA.cpp:631`): plain text, RTF, HTML, PNG (written under both `image/png` and `PNG`), Star Embed Source XML, Star Object Descriptor XML. |
 | Qt | Explicit whitelist (`QtClipboard.cpp:162`): `text/*`, `image/png`, `image/jpeg`, `image/bmp`, `image/svg+*`, `application/x-openoffice-*`, `application/x-libreoffice-*`, ODF `application/vnd.oasis.opendocument.*`, `application/vnd.sun.xml.*`, `application/msword`, `application/mathml+xml`, `application/pdf`. Broadest of the native apps. | Whatever the Kit advertises. The lazy clipboard publishes the full reported flavor list and fetches bytes on demand (`QtClipboard.cpp:92,225`). No whitelist on this side. |
 | iOS | The engine drives the paste through the provider, like macOS: it lists the pasteboard flavors, each system type mapped back to its MIME type, and pulls only the single format its paste path chooses (`ios/ios.mm`). | Every flavor the Kit reports, serialized at copy time (UIPasteboard has no lazy owner): known types under their system UTI, the internal engine formats raw under their MIME names. |
-| Android | The engine drives the paste through the provider, like iOS: the clip's declared types mapped to `text/html` and `text/plain;charset=utf-8`, plus the image type of the item URI, and it pulls only the single format its paste path chooses (`SystemClipboard.java`). A clip an earlier process of the app wrote offers every format stored in its clipboard file. | Every flavor the Kit reports, serialized at copy time into the clipboard file; the clip itself carries the text and HTML inline when small, and a content URI that `ClipboardFileProvider` streams text and HTML from otherwise. |
+| Android | The engine drives the paste through the provider, like iOS: the clip's declared types mapped to `text/html` and `text/plain;charset=utf-8`, plus the image type of the item URI, and it pulls only the single format its paste path chooses (`SystemClipboard.java`). A clip an earlier process of the app wrote offers every format stored in its clipboard file. | Every flavor the Kit reports, serialized at copy time into the clipboard file; the clip itself carries the text and HTML inline when small, and a content URI that `ClipboardFileProvider` serves the text and HTML from otherwise, as whole files with a known length. |
 
 Takeaways:
 - macOS and iOS are the most permissive in both directions. They forward
@@ -710,8 +710,11 @@ Four points differ from iOS:
   (`ClipboardFileProvider.getClipboardDir`) and the clip points at it with
   a content URI. A paste in a later process of the app finds the signature
   prefix on the label and lists and reads the formats from that file, so
-  it keeps full fidelity. Other apps stream the text and HTML from the
-  same URI through `ClipboardFileProvider`, which also covers content
+  it keeps full fidelity. The HTML and the plain text also go to files of
+  their own next to the data file, `clip-<time>.html` and `.txt`, and
+  `ClipboardFileProvider` serves those to other apps for the same URI as
+  whole files with a known length, since a receiver may open the URI
+  plainly or ask for its size before reading it. That also covers content
   above the Binder transaction limit. The clip inlines the text and HTML
   only below 512 KB.
 - Listing without reading. The engine lists the formats more often than

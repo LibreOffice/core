@@ -18,6 +18,8 @@ import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -80,8 +82,8 @@ public class SystemClipboard {
         }
 
         // The full content always goes to a file: a later process of the app reads it
-        // back from there, and ClipboardFileProvider streams it to other apps, both
-        // without any size constraint.
+        // back from there. The HTML and the plain text also go to files of their own
+        // next to it, for other apps, both without any size constraint.
         File clipboardFile = newClipboardFile();
         if (clipboardFile != null && !clipboardData.writeToFile(clipboardFile)) {
             Log.e(TAG, "failed to write the clipboard file");
@@ -90,6 +92,12 @@ public class SystemClipboard {
 
         String text = clipboardData.getText();
         String html = clipboardData.getHtml();
+        if (clipboardFile != null) {
+            if (html != null)
+                writeSideFile(clipboardFile, "html", entryBytes(clipboardData, MIME_HTML));
+            if (text != null)
+                writeSideFile(clipboardFile, "txt", entryBytes(clipboardData, "text/plain"));
+        }
         Uri clipUri = clipboardFile != null
             ? ClipboardFileProvider.uriFor(sContext, clipboardFile.getName()) : null;
 
@@ -292,6 +300,25 @@ public class SystemClipboard {
                 oldFile.delete();
 
         return new File(directory, "clip-" + System.currentTimeMillis() + ".data");
+    }
+
+    private static byte[] entryBytes(LokClipboardData clipboardData, String mimePrefix) {
+        for (LokClipboardEntry entry : clipboardData.clipboardEntries) {
+            if (entry.mime.startsWith(mimePrefix))
+                return entry.data;
+        }
+        return null;
+    }
+
+    /// Write one format of the copy next to the data file.
+    private static void writeSideFile(File clipboardFile, String extension, byte[] content) {
+        File file = ClipboardFileProvider.sideFile(clipboardFile, extension);
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            out.write(content);
+        } catch (IOException e) {
+            Log.e(TAG, "failed to write " + file.getName() + ": " + e);
+            file.delete();
+        }
     }
 
     /// Image mime type of a clipboard uri, or null when it is not an image.
