@@ -75,7 +75,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
     HTMLOutFuncs::Out_String( rStrm, rContent, pNonConvertableChars ).WriteOString( "\"/>" );
 }
 
-void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
+void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, std::u16string_view rBaseURL,
         const uno::Reference<document::XDocumentProperties> & i_xDocProps,
         const char *pIndent,
         OUString *pNonConvertableChars    )
@@ -133,8 +133,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         const OUString aReloadURL = i_xDocProps->getAutoloadURL();
         if( !aReloadURL.isEmpty() )
         {
-            sContent += ";URL=" + URIHelper::simpleNormalizedMakeRelative(
-                          rBaseURL, aReloadURL);
+            sContent += ";URL=" + URIHelper::MakeRelative(rBaseURL, aReloadURL);
         }
 
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_refresh, sContent, true,
@@ -218,7 +217,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 }
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
-    SvStream& rOut, const OUString& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet )
+    SvStream& rOut, std::u16string_view rBaseURL, const uno::Reference < beans::XPropertySet >& xSet )
 {
     try
     {
@@ -230,8 +229,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             OUString aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             if( !aURL.isEmpty() )
             {
-                aURL = URIHelper::simpleNormalizedMakeRelative(
-                    rBaseURL, aURL );
+                aURL = URIHelper::MakeRelative(rBaseURL, aURL);
                 sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
                 rOut.WriteOString( sOut );
                 sOut.setLength(0);
