@@ -483,6 +483,9 @@ private:
     // that do not depend on the formula cell's matrix size, for which only
     // bMatrixFormula can be used.
     inline bool IsInArrayContext() const;
+    // The size of the range that the formula fills as an array formula. It is 0 by 0 without a
+    // formula cell, or before the cell has an array result.
+    void GetMatrixFormulaSize(SCCOL& rColumns, SCROW& rRows) const;
     ScMatrixRef PopMatrix();
     sc::RangeMatrix PopRangeMatrix();
     void QueryMatrixType(const ScMatrixRef& xMat, SvNumFormatType& rRetTypeExpr, sal_uInt32& rRetIndexExpr);

@@ -548,6 +548,47 @@ CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorFormulaStringRoun
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledFormulaKeepsItsResultWhenRecalculated)
+{
+    // ROW, COLUMN and RAND give one value in a spilling formula, on every calculation. In a fixed
+    // array formula they fill its whole range instead.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=SEQUENCE(3)+ROW()"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
+                                /*bDynamicArrayMaster=*/true);
+    m_pDoc->InsertMatrixFormula(1, 0, 1, 0, aMark, u"=SEQUENCE(1;3)+COLUMN()"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
+                                /*bDynamicArrayMaster=*/true);
+    m_pDoc->InsertMatrixFormula(0, 4, 0, 4, aMark, u"=SEQUENCE(1;3)*0+RAND()"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
+                                /*bDynamicArrayMaster=*/true);
+
+    for (int nCalculation = 0; nCalculation < 2; ++nCalculation)
+    {
+        if (nCalculation > 0)
+            m_pDoc->CalcAll();
+        // Reading the first cell of a spilling formula calculates it and spills the result.
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+        // One random number goes to every cell of the result.
+        const double fRandom = m_pDoc->GetValue(ScAddress(0, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(fRandom, m_pDoc->GetValue(ScAddress(1, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(fRandom, m_pDoc->GetValue(ScAddress(2, 4, 0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

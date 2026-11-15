@@ -1850,6 +1850,23 @@ void ScInterpreter::ScPi()
     PushDouble(M_PI);
 }
 
+void ScInterpreter::GetMatrixFormulaSize(SCCOL& rColumns, SCROW& rRows) const
+{
+    rColumns = 0;
+    rRows = 0;
+    if (!pMyFormulaCell)
+        return;
+    // A spilling formula covers the range of its previous result, so every calculation starts from
+    // one cell, as the first one does.
+    if (pMyFormulaCell->IsDynamicArrayMaster())
+    {
+        rColumns = 1;
+        rRows = 1;
+        return;
+    }
+    pMyFormulaCell->GetMatColsRows(rColumns, rRows);
+}
+
 void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, double fLast )>& RandomFunc,
         double fFirst, double fLast )
 {
@@ -1867,8 +1884,8 @@ void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, dou
             nCols = std::max<SCCOL>(0, static_cast<SCCOL>(nC));
             nRows = std::max<SCROW>(0, static_cast<SCROW>(nR));
         }
-        else if (pMyFormulaCell)
-            pMyFormulaCell->GetMatColsRows( nCols, nRows);
+        else
+            GetMatrixFormulaSize(nCols, nRows);
 
         if (nCols == 1 && nRows == 1)
         {
@@ -4721,8 +4738,7 @@ void ScInterpreter::ScColumn()
         {
             SCCOL nCols = 0;
             SCROW nRows = 0;
-            if (pMyFormulaCell)
-                pMyFormulaCell->GetMatColsRows( nCols, nRows);
+            GetMatrixFormulaSize(nCols, nRows);
             bool bMayBeScalar;
             if (nCols == 0)
             {
@@ -4834,8 +4850,7 @@ void ScInterpreter::ScRow()
         {
             SCCOL nCols = 0;
             SCROW nRows = 0;
-            if (pMyFormulaCell)
-                pMyFormulaCell->GetMatColsRows( nCols, nRows);
+            GetMatrixFormulaSize(nCols, nRows);
             bool bMayBeScalar;
             if (nRows == 0)
             {

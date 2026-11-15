@@ -66,7 +66,7 @@ void ScInterpreter::ScFilterXML()
             {
                 SCCOL nCols;
                 SCROW nRows;
-                pMyFormulaCell->GetMatColsRows( nCols, nRows);
+                GetMatrixFormulaSize(nCols, nRows);
                 nMatCols = nCols;
                 nMatRows = nRows;
             }
