@@ -46,12 +46,12 @@ These steps prepare the machine that produces the port submissions. Any FreeBSD 
 
 ```sh
 sudo pkg install git poudriere portlint portfmt
-git clone --depth 1 -b 2026Q3 https://git.FreeBSD.org/ports.git ~/ports
+git clone --depth 1 -b 2026Q4 https://git.FreeBSD.org/ports.git ~/ports
 ```
 
 Expected result: `~/ports/Mk/bsd.port.mk` exists, and `portclippy`, `portfmt` and `portlint` are on the path (portclippy comes with portfmt).
 
-Clone the **quarterly branch**, not the head of the tree, and keep it on that branch. poudriere can install a dependency as a binary package only when the version in the local ports tree matches the version in the FreeBSD package repository. The quarterly branch changes rarely, so nearly everything is fetched; a checkout of the tree's head is usually a few days ahead of the builders, and every mismatched package is then built from source. In our case a head checkout meant building Qt WebEngine, a Chromium build of eight hours on four cores, purely because ffmpeg had been updated in the tree that week.
+Clone the current **quarterly branch** (`git ls-remote https://git.FreeBSD.org/ports.git 'refs/heads/20*Q*'` lists them), not the head of the tree, and move to the next one when it is branched, early in January, April, July and October. poudriere can install a dependency as a binary package only when the version in the local ports tree matches the version in the FreeBSD package repository. The quarterly branch changes rarely, so nearly everything is fetched; a checkout of the tree's head is usually a few days ahead of the builders, and every mismatched package is then built from source. In our case a head checkout meant building Qt WebEngine, a Chromium build of eight hours on four cores, purely because ffmpeg had been updated in the tree that week.
 
 ### 4.2 The source checkout
 
@@ -73,7 +73,10 @@ FREEBSD_HOST=https://download.FreeBSD.org
 DISTFILES_CACHE=/home/<user>/ports/distfiles # any writable directory
 USE_TMPFS=no                                 # the work directory does not fit in 16 GB of RAM
 ALLOW_MAKE_JOBS=yes                          # let the engine build use all cores
+CCACHE_DIR=/var/cache/ccache                 # reuse compiled objects between runs
 ```
+
+Create the ccache directory before the first run and give it to the build user, which is `nobody` in the jail: `sudo mkdir -p /var/cache/ccache && printf 'max_size = 20G\nbase_dir = /wrkdirs\nhash_dir = false\n' | sudo tee /var/cache/ccache/ccache.conf && sudo chown -R 65534:65534 /var/cache/ccache`. `base_dir` and `hash_dir` matter: the work directory is named after the version, so without them a new tarball misses every cached object. The first run fills the cache, about 600 MB, and is no faster; after that a rebuild of the port takes about fifteen minutes instead of three hours, which matters when a build failure has to be fixed and the run repeated.
 
 Then create a build jail for the FreeBSD release to build for, register the ports tree, and register our overlay:
 
@@ -101,7 +104,7 @@ git fetch --tags && git -C engine/translations fetch --tags
 scripts/make-source-tarball.sh coda-26.04.4.1-1 /tmp/out
 ```
 
-Expected result: the script prints the path and the SHA256 of `/tmp/out/collabora-office-26.04.4.1-1.tar.xz`. The tarball is about 580 MB and takes three minutes on a fast machine; it contains the monorepo tree at the tag, including the engine sources and the npm shrinkpack, plus the translations under `engine/translations`. The script refuses to run if the tag is missing in either repository.
+Expected result: the script prints the path and the SHA256 of `/tmp/out/collabora-office-26.04.4.1-1.tar.xz`. The tarball is about 400 MB and takes three minutes; the script works with GNU and BSD tar, so it runs on the FreeBSD machine as well as on Linux; it contains the monorepo tree at the tag, including the engine sources and the npm shrinkpack, plus the translations under `engine/translations`. The script refuses to run if the tag is missing in either repository.
 
 Publish the file at `https://www.collaboraoffice.com/downloads/collabora-office/src/collabora-office-26.04.4.1-1.tar.xz`. The URL must be permanent: the FreeBSD builders fetch it every time they rebuild the package, which happens whenever a dependency changes, for years.
 
@@ -109,7 +112,7 @@ Publish the file at `https://www.collaboraoffice.com/downloads/collabora-office/
 
 In `qt/freebsd/editors/collabora-office/Makefile`, set `DISTVERSION` to the version, `26.04.4.1-1` in the example. The ports framework turns `26.04.4.1-1` into the package version `26.04.4.1.1`.
 
-If `engine/download.lst` changed since the last release, regenerate the list of engine externals: configure an engine tree with `--with-distro=CPFreeBSDQt`, run `gmake -f Makefile.fetch fetch-names` in it, and update `ENGINE_SRC_TARBALLS` and the other `DISTFILES` entries accordingly. The README in `qt/freebsd/` says which download site each entry belongs to.
+If `engine/download.lst` changed since the last release, regenerate the list of engine externals: configure an engine tree with `./autogen.sh --with-distro=CPFreeBSDQt --disable-fetch-external`, run `gmake -f config_host.mk -f Makefile.fetch BUILDDIR=$PWD gb_Side=host fetch-names` in it, and update `ENGINE_SRC_TARBALLS` and the other `DISTFILES` entries accordingly. The README in `qt/freebsd/` says which download site each entry belongs to.
 
 ### 5.4 Checksums
 
@@ -152,7 +155,13 @@ sudo poudriere testport -S -j 151amd64 -p default -O collabora -b quarterly edit
 
 The options: `-j` picks the build jail, `-p default` the ports tree, `-O collabora` adds our overlay, `-b quarterly` lets poudriere fetch dependencies as binary packages from the FreeBSD quarterly repository instead of building them, and `-S` stops poudriere from rebuilding everything that depends on a package it did have to build. Use `-b latest` only with a ports checkout that tracks the head of the tree. Always pass `-S`.
 
-Expected result: the run ends with `Built: 1` and the port's own log ends with `No pkg-plist issues found` and `build time: 03:01:57` or thereabouts. Our port takes just about three hours in the jail on four cores. The dependency phase takes an hour or so the first time, mostly downloads, and is nearly instant afterwards because poudriere caches the packages. Logs are under `/usr/local/poudriere/data/logs/bulk/151amd64-default/`, with the port's own log in the `logs/` subdirectory of the run; keep it, it is attached to the submission.
+If the port's log fails in the `lib-depends` phase with `pkg-static: Missing dependency 'ffmpeg'` while installing qt6-webengine, the binary repository is behind the ports tree for one of ffmpeg's dependencies (in November 2026 it was graphics/libjxl). poudriere then neither fetches ffmpeg nor builds it, because the fetched qt6-webengine package seems to make it unnecessary. Build ffmpeg explicitly before the port, which takes about half an hour:
+
+```sh
+sudo poudriere bulk -b quarterly -j 151amd64 -p default -O collabora multimedia/ffmpeg
+```
+
+Expected result: the run ends with `Built: 1` and the port's own log ends with `No pkg-plist issues found` and `build time: 03:01:57` or thereabouts. Our port takes just about three hours in the jail on four cores, or about fifteen minutes when ccache already holds the objects. The dependency phase takes an hour or so the first time, mostly downloads, and is nearly instant afterwards because poudriere caches the packages. Logs are under `/usr/local/poudriere/data/logs/bulk/151amd64-default/`, with the port's own log in the `logs/` subdirectory of the run; keep it, it is attached to the submission.
 
 Read the Q/A section of the port's log even when the run succeeds. It lists every library the staged binaries link without a declaration, in the form `Error: ... is linked to ... but it is not declared as a dependency` followed by `Warning: you need LIB_DEPENDS+=...`, and this is the authoritative source for the dependency list; the final port was built by following it until the section was empty. It also prints `you might not need LIB_DEPENDS on ...` advisories, which are not always right: two of ours name libraries that the binaries demonstrably link, checked with `readelf -d`, so verify before removing anything.
 
@@ -201,6 +210,13 @@ These were found by the jail builds and are fixed in the tree. They are listed b
 - **BSD versus GNU tools.** `readlink -f` prints nothing for a path that does not exist yet, which emptied the engine path compiled into the app, since the engine is not installed when the app is configured. BSD `sed` rejects GNU's `\|` alternation and `\s`, which silently emptied a generated component list. BSD `make` is not GNU make, so the app's configure needs `MAKE=gmake`.
 - **What a clean jail does not have.** The unversioned `python3` command comes from a separate meta package, so configure now looks the interpreter up and accepts a `PYTHON` variable. `libtoolize` needs an explicit dependency on devel/libtool, because the framework's autoreconf helper does not imply it. rsync is needed by the browser install step.
 - **File modes.** The `zip` tool in ports creates archives readable only by the owner, unlike the Linux one, and the engine's installer keeps the modes it finds, which left 59 data files unreadable in a package owned by root. The port opens them up after installing.
+
+- **System libraries next to bundled copies.** pdfium carries its own abseil, and the engine builds it against the abseil package instead. Every pdfium file that includes the bundled abseil headers needs the matching change in `engine/external/pdfium/system-abseil.diff`, or the bundled and the system headers meet and the file does not compile; check the list with `grep -rn '#include "third_party/abseil-cpp' --include=*.cpp --include=*.h` over the unpacked pdfium sources, outside `third_party`, after every pdfium update.
+- **Linux-only code in the app.** Files from `common/` and `wsd/` that the app starts to build bring Linux-specific code with them, such as user and mount namespaces or `SO_PEERCRED`; they need `#ifdef __linux__` or a FreeBSD branch with its own headers.
+- **Two copies of cairo in one process.** The engine draws with its bundled cairo, patched for RGBA byte order, but on FreeBSD Qt WebEngine links the system ffmpeg, which brings librsvg and the system cairo into the app's global symbol scope. The engine library is therefore loaded with `RTLD_DEEPBIND` on FreeBSD (`engine/include/COKit/COKitInit.h`); without it shapes and text are drawn with red and blue swapped while pictures look right. When colours look wrong, compare with `LD_PRELOAD=/usr/local/lib/collaboraoffice/program/libcairo-lo.so.2 coda-qt`.
+- **Release build with -Werror.** The port builds without debug code, so a variable used only in an `assert()` is unused and stops the build.
+
+To find such failures without a three-hour round trip per fix, configure the engine tree of a checkout on the FreeBSD machine with `./autogen.sh --with-distro=CPFreeBSDQt --disable-fetch-external --with-external-tar=$HOME/ports/distfiles/collabora-office`, configure the app with the same switches as `APP_CONFIGURE_ARGS` in the port, and run `gmake build-qtapp-gbuild-libs` and then `gmake`: the app and the parts of the engine it compiles itself build in minutes, and only the engine has to be built for real by poudriere.
 
 ## 8. Where things are
 

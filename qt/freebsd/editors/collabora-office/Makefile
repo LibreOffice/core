@@ -49,7 +49,7 @@ BUILD_DEPENDS=	${LOCALBASE}/include/glm/glm.hpp:math/glm \
 		rsync:net/rsync \
 		zip:archivers/zip
 # The engine's solver library links the COIN-OR libraries directly.
-LIB_DEPENDS=	libabsl_strings.so:devel/abseil \
+LIB_DEPENDS=	libabsl_bad_optional_access.so:devel/abseil \
 		libabw-0.1.so:textproc/libabw \
 		libboost_date_time.so:devel/boost-libs \
 		libCbc.so:math/cbc \
@@ -135,8 +135,10 @@ USES=		autoreconf:build bison compiler:c++20-lang desktop-file-utils \
 		gettext-runtime gettext-tools gmake gnome ninja:build perl5 \
 		pkgconfig python qt:6 shebangfix ssl tar:xz
 USE_GNOME=	libxml2 libxslt
-# configure checks for Qt WebSockets, but the app does not end up linked to it
-USE_QT=		base webchannel webengine tools:build websockets:build
+# The app links everything the Qt pkg-config modules it asks for list,
+# including Quick, Qml and Positioning, which come with WebEngine.
+USE_QT=		base declarative positioning webchannel webengine websockets \
+		tools:build
 
 SHEBANG_GLOB=	*.py
 # The jail has only the versioned interpreter; the app's configure and
@@ -165,13 +167,14 @@ APP_CONFIGURE_ARGS=	--prefix=${PREFIX} --enable-qtapp --disable-server \
 			--with-lo-builddir=${ENGINE_WRKSRC} \
 			--with-vendor="Collabora Productivity Limited" \
 			--with-app-name="Collabora Office" \
-			--with-info-url=https://collaboraoffice.com/ MAKE=${MAKE_CMD}
+			--with-info-url=https://collaboraoffice.com/ \
+			MAKE=${MAKE_CMD}
 
 ENGINE_SRC_TARBALLS=	afdko-5.0.1.tar.gz antlr4-cpp-runtime-4.13.2-source.zip \
 			cairo-1.18.4.tar.xz dragonbox-1.1.3.tar.gz \
 			libjpeg-turbo-3.1.3.tar.gz meson-1.8.3.tar.gz \
-			pdfium-7988.tar.bz2 phc-winner-argon2-20190702.tar.gz \
-			pixman-0.46.4.tar.xz quickjs-v0.14.0.tar.gz \
+			pdfium-8138.tar.bz2 phc-winner-argon2-20190702.tar.gz \
+			pixman-0.46.4.tar.xz quickjs-0.18.0-amalgam.zip \
 			zxcvbn-c-2.7.tar.gz
 
 do-configure:

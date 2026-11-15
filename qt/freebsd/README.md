@@ -93,8 +93,11 @@ release. Two more things worth knowing for local tests outside poudriere:
 - **Release.** Set `DISTVERSION` to the new version, publish the tarball, run
   `makesum`.
 - **Externals.** After a change to `engine/download.lst`, regenerate the
-  tarball list from a configured engine tree with
-  `gmake -f Makefile.fetch fetch-names` and update `ENGINE_SRC_TARBALLS` and
+  tarball list from an engine tree configured with `--with-distro=CPFreeBSDQt`
+  with
+  `gmake -f config_host.mk -f Makefile.fetch BUILDDIR=$PWD gb_Side=host fetch-names`
+  (the top-level makefile leaves the fetch rules out when fetching is
+  disabled, as the distro-config does) and update `ENGINE_SRC_TARBALLS` and
   the other `DISTFILES` entries, then run `makesum`. Every external comes from
   our own mirror now, the opens___.ttf font and POCO included.
 - **Ports libraries.** The `LIB_DEPENDS` entries use the versioned library
@@ -111,7 +114,9 @@ tree, and the routine for later releases.
 ## Not done yet
 
 - `distinfo` is generated once the first release tarball is published;
-  `pkg-plist` was generated from a test tarball and needs regenerating with
-  `makeplist` whenever the installed file set changes.
+  `pkg-plist` was last updated from a poudriere run on a test tarball of
+  co-26.04 in November 2026 and needs updating whenever the installed file set
+  changes, from the check-plist output of a poudriere run or with
+  `makeplist`.
 - Submission to the FreeBSD ports tree as `editors/collabora-office`, with
   releng@collaboraoffice.com as maintainer.
