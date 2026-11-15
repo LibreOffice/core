@@ -13,4 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
 
+$(eval $(call gb_UnpackedTarball_add_patches,mdds,\
+    external/mdds/unused-private-field.patch \
+))
+
 # vim: set noet sw=4 ts=4:
