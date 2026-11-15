@@ -37,6 +37,9 @@
 #include <unotxdoc.hxx>
 #include <formatlinebreak.hxx>
 #include <o3tl/string_view.hxx>
+#include <osl/file.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/tempfile.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -1223,6 +1226,40 @@ nde muito parto na água. Tb posso fazer porcentagem de atendimento..."_ustr);
     verify();
     saveAndReload(TestFilter::DOC);
     verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFileHyperlinkRelative)
+{
+    // A link to a file beside the document is stored relative to the document, so it still
+    // points beside the document after the document is copied to another folder.
+    createSwDoc();
+    INetURLObject aTarget(maTempFile.GetURL());
+    aTarget.setName(u"target.odt");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, u"link"_ustr, false);
+    xCursor->gotoStart(true);
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    xCursorProps->setPropertyValue(
+        u"HyperLinkURL"_ustr,
+        uno::Any(aTarget.GetMainURL(INetURLObject::DecodeMechanism::NONE)));
+    save(TestFilter::DOC);
+
+    utl::TempFileNamed aOtherFolder(nullptr, true);
+    aOtherFolder.EnableKillingFile();
+    INetURLObject aCopy(aOtherFolder.GetURL());
+    aCopy.insertName(u"copy.doc");
+    OUString aCopyURL = aCopy.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::File::copy(maTempFile.GetURL(), aCopyURL));
+    loadFromURL(aCopyURL);
+
+    aCopy.setName(u"target.odt");
+    CPPUNIT_ASSERT_EQUAL(aCopy.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                         getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
+    mxComponent->dispose();
+    mxComponent.clear();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

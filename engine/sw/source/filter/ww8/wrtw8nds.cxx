@@ -1129,7 +1129,7 @@ bool WW8AttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarg
     OUString sURL = *pLinkURL;
 
     if ( !sURL.isEmpty() )
-        sURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
+        sURL = URIHelper::MakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
 
     if (bBookMarkOnly)
     {
@@ -1194,7 +1194,7 @@ bool WW8AttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
     // the output URL is absolute or relative.
     OUString sRelativeURL;
     if ( !rUrl.isEmpty() )
-        sRelativeURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), rUrl );
+        sRelativeURL = URIHelper::MakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), rUrl );
     bool bAbsolute = sRelativeURL == rUrl;
 
     static const sal_uInt8 aURLData1[] = {
@@ -1247,9 +1247,11 @@ bool WW8AttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
         };
 
         // save the links to files as relative
-        sURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
-        if ( eProto == INetProtocol::File && sURL.startsWith( "/" ) )
+        OUString sRelative = URIHelper::MakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
+        if ( eProto == INetProtocol::File && sRelative == sURL )
             sURL = aURL.PathToFileName();
+        else
+            sURL = sRelative;
 
         // special case for the absolute windows names
         // (convert '/c:/foo/bar.doc' into 'c:\foo\bar.doc')
