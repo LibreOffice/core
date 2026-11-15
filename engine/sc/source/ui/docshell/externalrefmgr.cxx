@@ -3218,7 +3218,7 @@ bool ScExternalRefManager::hasExternalData() const
     return !maSrcFiles.empty();
 }
 
-void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
+void ScExternalRefManager::resetSrcFileData(std::u16string_view rBaseFileUrl)
 {
     for (auto& rSrcFile : maSrcFiles)
     {
@@ -3230,8 +3230,9 @@ void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
         if (aAbsName.isEmpty())
             aAbsName = rSrcFile.maFileName;
 
-        rSrcFile.maRelativeName = URIHelper::simpleNormalizedMakeRelative(
-            rBaseFileUrl, aAbsName);
+        rSrcFile.maRelativeName = INetURLObject::GetRelURL(
+            rBaseFileUrl, aAbsName, INetURLObject::EncodeMechanism::WasEncoded,
+            INetURLObject::DecodeMechanism::NONE);
     }
 }
 

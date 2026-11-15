@@ -680,7 +680,7 @@ public:
      * @param rBaseFileUrl Absolute URL of the content.xml fragment of the
      *                     document being exported.
      */
-    void resetSrcFileData(const OUString& rBaseFileUrl);
+    void resetSrcFileData(std::u16string_view rBaseFileUrl);
 
     /**
      * Replace the original URL with the real URL that was generated from the relative URL.
