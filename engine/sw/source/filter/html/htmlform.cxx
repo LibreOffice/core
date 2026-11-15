@@ -1302,6 +1302,8 @@ void SwHTMLParser::NewForm( bool bAppend )
     aTmp <<= aAction;
     xFormPropSet->setPropertyValue(u"TargetURL"_ustr,
                                     aTmp );
+    if (INetURLObject(aAction).IsExoticProtocol())
+        NotifyMacroEventRead();
 
     aTmp <<= nMethod;
     xFormPropSet->setPropertyValue(u"SubmitMethod"_ustr,
