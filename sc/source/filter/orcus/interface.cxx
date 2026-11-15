@@ -690,6 +690,16 @@ ScOrcusSheetProperties::~ScOrcusSheetProperties() {}
 
 namespace
 {
+/** Limit the nSpan positions starting at nStart to the range 0 to nMax. Return false if none of
+    them are in that range. */
+bool clipSpan(sal_Int64 nStart, sal_Int64 nSpan, sal_Int64 nMax, sal_Int64& rFirst,
+              sal_Int64& rLast)
+{
+    rFirst = std::max<sal_Int64>(nStart, 0);
+    rLast = std::min<sal_Int64>(nStart + nSpan - 1, nMax);
+    return rFirst <= rLast;
+}
+
 double translateToInternal(double nVal, orcus::length_unit_t unit)
 {
     switch (unit)
@@ -718,36 +728,49 @@ double translateToInternal(double nVal, orcus::length_unit_t unit)
 void ScOrcusSheetProperties::set_column_width(os::col_t col, os::col_t col_span, double width,
                                               orcus::length_unit_t unit)
 {
+    sal_Int64 nFirst, nLast;
+    if (!clipSpan(col, col_span, mrDoc.getDoc().MaxCol(), nFirst, nLast))
+        return;
+
     double nNewWidth = translateToInternal(width, unit);
 
-    for (os::col_t offset = 0; offset < col_span; ++offset)
-        mrDoc.getDoc().SetColWidthOnly(col + offset, mnTab, nNewWidth);
+    for (sal_Int64 nCol = nFirst; nCol <= nLast; ++nCol)
+        mrDoc.getDoc().SetColWidthOnly(nCol, mnTab, nNewWidth);
 }
 
 void ScOrcusSheetProperties::set_column_hidden(os::col_t col, os::col_t col_span, bool hidden)
 {
-    if (hidden)
-        mrDoc.getDoc().SetColHidden(col, col + col_span - 1, mnTab, hidden);
+    sal_Int64 nFirst, nLast;
+    if (hidden && clipSpan(col, col_span, mrDoc.getDoc().MaxCol(), nFirst, nLast))
+        mrDoc.getDoc().SetColHidden(nFirst, nLast, mnTab, hidden);
 }
 
 void ScOrcusSheetProperties::set_row_height(os::row_t row, os::row_t row_span, double height,
                                             orcus::length_unit_t unit)
 {
+    sal_Int64 nFirst, nLast;
+    if (!clipSpan(row, row_span, mrDoc.getDoc().MaxRow(), nFirst, nLast))
+        return;
+
     double nNewHeight = translateToInternal(height, unit);
-    SCROW nStartRow = row;
-    SCROW nEndRow = row + row_span - 1;
-    mrDoc.getDoc().SetRowHeightOnly(nStartRow, nEndRow, mnTab, nNewHeight);
+    mrDoc.getDoc().SetRowHeightOnly(nFirst, nLast, mnTab, nNewHeight);
 }
 
 void ScOrcusSheetProperties::set_row_hidden(os::row_t row, os::row_t row_span, bool hidden)
 {
-    SCROW nStartRow = row;
-    SCROW nEndRow = row + row_span - 1;
-    mrDoc.getDoc().SetRowHidden(nStartRow, nEndRow, mnTab, hidden);
+    sal_Int64 nFirst, nLast;
+    if (clipSpan(row, row_span, mrDoc.getDoc().MaxRow(), nFirst, nLast))
+        mrDoc.getDoc().SetRowHidden(nFirst, nLast, mnTab, hidden);
 }
 
 void ScOrcusSheetProperties::set_merge_cell_range(const orcus::spreadsheet::range_t& range)
 {
+    const ScDocument& rDoc = mrDoc.getDoc();
+    if (range.first.column < 0 || range.first.row < 0 || range.first.column > range.last.column
+        || range.first.row > range.last.row || range.last.column > rDoc.MaxCol()
+        || range.last.row > rDoc.MaxRow())
+        return;
+
     mrDoc.setMergedCells(mnTab, range.first.column, range.first.row, range.last.column,
                          range.last.row);
 }
@@ -1213,10 +1236,13 @@ void ScOrcusSheet::set_format(os::row_t row_start, os::col_t col_start, os::row_
 
 void ScOrcusSheet::set_column_format(os::col_t col, os::col_t col_span, std::size_t xf_index)
 {
+    sal_Int64 nFirst, nLast;
+    if (!clipSpan(col, col_span, mrDoc.getDoc().MaxCol(), nFirst, nLast))
+        return;
+
     ScPatternAttr aPattern(mrDoc.getDoc().getCellAttributeHelper());
     mrStyles.applyXfToItemSet(aPattern.GetItemSetWritable(), xf_index);
-    mrDoc.getDoc().ApplyPatternAreaTab(col, 0, col + col_span - 1, mrDoc.getDoc().MaxRow(), mnTab,
-                                       aPattern);
+    mrDoc.getDoc().ApplyPatternAreaTab(nFirst, 0, nLast, mrDoc.getDoc().MaxRow(), mnTab, aPattern);
 }
 
 void ScOrcusSheet::set_row_format(os::row_t row, std::size_t xf_index)
