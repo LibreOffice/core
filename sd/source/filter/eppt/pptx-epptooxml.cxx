@@ -1893,8 +1893,8 @@ void PowerPointExport::WritePresentationProps()
     pFS->startElementNS(XML_p, XML_presentationPr, presentationPrNamespaces(*this));
 
     pFS->startElementNS(XML_p, XML_showPr, XML_loop, sax_fastparser::UseIf("1", bEndlessVal),
-                        XML_useTimings, sax_fastparser::UseIf("0", bChangeManually),
-                        XML_showNarration, "1");
+                        XML_showNarration, "1",
+                        XML_useTimings, sax_fastparser::UseIf("0", bChangeManually));
 
     Reference<drawing::XDrawPages> xDrawPages(mXModel->getDrawPages(), uno::UNO_SET_THROW);
     if (!sFirstPage.isEmpty())
@@ -3561,8 +3561,8 @@ void PowerPointExport::WriteNotesMaster()
     // color map - now it uses colors from hardcoded theme, once we eventually generate theme, this might need update
     pFS->singleElementNS(XML_p, XML_clrMap,
                          XML_bg1, "lt1",
-                         XML_bg2, "lt2",
                          XML_tx1, "dk1",
+                         XML_bg2, "lt2",
                          XML_tx2, "dk2",
                          XML_accent1, "accent1",
                          XML_accent2, "accent2",
