@@ -131,12 +131,12 @@ public:
         const OUString& rPassword,
         css::uno::Sequence<css::beans::NamedValue>& /*rEncryptionData*/) override
     {
-        // MS-OFFCRYPTO 2.3.2: RC4 CryptoAPI can be identified by
-        // AlgID = 0x00000000 or AlgID = 0x00006801,
-        // provided fCryptoAPI = 1 and fAES = 0.
+        // MS-OFFCRYPTO 2.3.1 and 2.3.2:
+        // fCryptoAPI = 1 and fAES = 0 identifies RC4 CryptoAPI
+        // fCryptoAPI is bit 2 (0x04), fAES is bit 5 (0x20)
         const bool bRC4CryptoAPI =
             (mrInfo.nFlags & 0x00000004) != 0
-            && (mrInfo.nFlags & 0x00000008) == 0
+            && (mrInfo.nFlags & 0x00000020) == 0
             && (mrInfo.nAlgID == 0x00000000
                 || mrInfo.nAlgID == 0x00006801);
 
