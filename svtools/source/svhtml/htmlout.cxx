@@ -595,7 +595,7 @@ SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor, bool 
 }
 
 SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
-                                      const OUString& rBaseURL,
+                                      std::u16string_view rBaseURL,
                                       const ImageMap& rIMap,
                                       const OUString& rName,
                                       const HTMLOutEvent *pEventTable,
@@ -714,8 +714,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 OUString aURL( pObj->GetURL() );
                 if( !aURL.isEmpty() && pObj->IsActive() )
                 {
-                    aURL = URIHelper::simpleNormalizedMakeRelative(
-                        rBaseURL, aURL );
+                    aURL = URIHelper::MakeRelative(rBaseURL, aURL);
                     sOut.append(OOO_STRING_SVTOOLS_HTML_O_href "=\"");
                     rStream.WriteOString( sOut );
                     sOut.setLength(0);
@@ -775,7 +774,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 }
 
 SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
-                                   const OUString& rBaseURL,
+                                   std::u16string_view rBaseURL,
                                    std::u16string_view rSource,
                                    std::u16string_view rLanguage,
                                    ScriptType eScriptType,
@@ -800,7 +799,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
         rStrm.WriteOString( sOut );
         sOut.setLength(0);
-        Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(rBaseURL, rSrc) );
+        Out_String( rStrm, URIHelper::MakeRelative(rBaseURL, rSrc) );
         sOut.append('\"');
     }
 

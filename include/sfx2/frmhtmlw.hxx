@@ -47,13 +47,13 @@ class SFX2_DLLPUBLIC SfxFrameHTMLWriter
                                 OUString *pNonConvertableChars = nullptr );
 
 public:
-    static void Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
+    static void Out_DocInfo( SvStream& rStrm, std::u16string_view rBaseURL,
             const css::uno::Reference< css::document::XDocumentProperties>&,
             const char *pIndent,
             OUString *pNonConvertableChars = nullptr );
 
     static void Out_FrameDescriptor(
-        SvStream&, const OUString& rBaseURL, const css::uno::Reference < css::beans::XPropertySet >& xSet);
+        SvStream&, std::u16string_view rBaseURL, const css::uno::Reference < css::beans::XPropertySet >& xSet);
 };
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,

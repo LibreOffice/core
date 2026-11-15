@@ -628,7 +628,7 @@ void OHTMLImportExport::WriteHeader()
     IncIndent(1);
     HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_head).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
-    SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), OUString(),
+    SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), std::u16string_view(),
         xDocProps, sIndent );
     m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
     IncIndent(-1);
