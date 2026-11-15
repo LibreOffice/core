@@ -211,9 +211,11 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
     if( !rLinkName.isEmpty() )
     {
         rStrm.WriteChar( '<' ).WriteOString( OOO_STRING_SVTOOLS_HTML_image ).WriteChar( ' ' ).WriteOString( OOO_STRING_SVTOOLS_HTML_O_src ).WriteOString( "=\"" );
-        HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
-                    aBaseURL,
-                    rLinkName ) ).WriteChar( '\"' );
+        HTMLOutFuncs::Out_String(rStrm, INetURLObject::GetRelURL(
+                                            aBaseURL, rLinkName,
+                                            INetURLObject::EncodeMechanism::WasEncoded,
+                                            INetURLObject::DecodeMechanism::NONE))
+            .WriteChar('\"');
         if ( !rImgOptions.empty() )
             rStrm.WriteOString( rImgOptions );
         rStrm.WriteChar( '>' ).WriteOString( SAL_NEWLINE_STRING ).WriteOString( GetIndentStr() );

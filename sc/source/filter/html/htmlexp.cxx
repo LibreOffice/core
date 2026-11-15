@@ -642,9 +642,10 @@ void ScHTMLExport::WriteBody()
                 if( !aLink.isEmpty() )
                 {
                     rStrm.WriteChar( ' ' ).WriteOString( OOO_STRING_SVTOOLS_HTML_O_background ).WriteOString( "=\"" );
-                    OUT_STR( URIHelper::simpleNormalizedMakeRelative(
-                                aBaseURL,
-                                aLink ) ).WriteChar( '\"' );
+                    OUT_STR(INetURLObject::GetRelURL(aBaseURL, aLink,
+                                                     INetURLObject::EncodeMechanism::WasEncoded,
+                                                     INetURLObject::DecodeMechanism::NONE))
+                        .WriteChar('\"');
                 }
             }
         }
