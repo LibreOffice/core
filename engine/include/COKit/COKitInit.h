@@ -80,9 +80,18 @@ extern "C"
         // the component libraries that cppuhelper loads later. Otherwise a
         // catch (uno::Exception&) in one library misses an exception thrown
         // by another, and for instance loading a Writer document fails.
+        //
+        // On FreeBSD the host process may also have the system cairo loaded
+        // already, for instance through Qt WebEngine's ffmpeg and librsvg.
+        // Without RTLD_DEEPBIND the office library's cairo calls would bind to
+        // that copy instead of the bundled one, which lays out pixels in a
+        // different byte order, and colours come out with red and blue swapped.
         return dlopen(pFN, RTLD_LAZY
 #if defined KIT_LOADLIB_GLOBAL || defined __FreeBSD__
                       | RTLD_GLOBAL
+#endif
+#if defined __FreeBSD__
+                      | RTLD_DEEPBIND
 #endif
                       );
     }
