@@ -68,6 +68,7 @@
 #include <i18nutil/scriptchangescanner.hxx>
 #include <i18nutil/guessparadirection.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/urlobj.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
@@ -660,14 +661,22 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
         bool bCtrlClickHappened = rMEvt.IsMod1();
         bool bCtrlClickSecOption
             = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
-        if ((bCtrlClickHappened && bCtrlClickSecOption)
-            || (!bCtrlClickHappened && !bCtrlClickSecOption))
+        if (((bCtrlClickHappened && bCtrlClickSecOption)
+             || (!bCtrlClickHappened && !bCtrlClickSecOption))
+            && !INetURLObject(pUrlField->GetURL()).IsExoticProtocol())
         {
-            cpo::uno::Reference<css::system::XSystemShellExecute> exec(
-                css::system::SystemShellExecute::create(
-                    comphelper::getProcessComponentContext()));
-            exec->execute(pUrlField->GetURL(), OUString(),
-                          css::system::SystemShellExecuteFlags::DEFAULTS);
+            try
+            {
+                cpo::uno::Reference<css::system::XSystemShellExecute> exec(
+                    css::system::SystemShellExecute::create(
+                        comphelper::getProcessComponentContext()));
+                exec->execute(pUrlField->GetURL(), OUString(),
+                              css::system::SystemShellExecuteFlags::URIS_ONLY);
+            }
+            catch (const cpo::uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("editeng", "cannot open <" << pUrlField->GetURL() << ">");
+            }
         }
     }
     return true;
