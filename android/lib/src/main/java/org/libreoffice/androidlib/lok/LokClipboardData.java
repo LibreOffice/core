@@ -7,23 +7,15 @@
 
 package org.libreoffice.androidlib.lok;
 
-import android.util.Base64;
-import android.util.JsonReader;
-import android.util.JsonWriter;
-
 import java.io.Serializable;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import com.android.tools.r8.keepanno.annotations.KeepItemKind;
 import com.android.tools.r8.keepanno.annotations.KeepTarget;
@@ -100,13 +92,6 @@ public class LokClipboardData implements Serializable {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public LokClipboardEntry getBest() {
-        if (!clipboardEntries.isEmpty()) {
-            return clipboardEntries.get(0);
-        }
-        return null;
     }
 }
 
