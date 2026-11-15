@@ -205,6 +205,12 @@ cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getCameraAt
     cpo::uno::Sequence<css::beans::PropertyValue> aSeq(6);
     auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
+    if( mnPreset.has_value() )
+    {
+        pSeq[nSize].Name = u"prst"_ustr;
+        pSeq[nSize].Value <<= getCameraPrstName( *mnPreset );
+        nSize++;
+    }
     if( mfFieldOfVision.has_value() )
     {
         pSeq[nSize].Name = u"fov"_ustr;
@@ -215,12 +221,6 @@ cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getCameraAt
     {
         pSeq[nSize].Name = u"zoom"_ustr;
         pSeq[nSize].Value <<= *mfZoom;
-        nSize++;
-    }
-    if( mnPreset.has_value() )
-    {
-        pSeq[nSize].Name = u"prst"_ustr;
-        pSeq[nSize].Value <<= getCameraPrstName( *mnPreset );
         nSize++;
     }
     if( maCameraRotation.mnLatitude.has_value() )
@@ -250,16 +250,16 @@ cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getLightRig
     cpo::uno::Sequence<css::beans::PropertyValue> aSeq(5);
     auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
-    if( mnLightRigDirection.has_value() )
-    {
-        pSeq[nSize].Name = u"dir"_ustr;
-        pSeq[nSize].Value <<= getLightRigDirName( *mnLightRigDirection );
-        nSize++;
-    }
     if( mnLightRigType.has_value() )
     {
         pSeq[nSize].Name = u"rig"_ustr;
         pSeq[nSize].Value <<= getLightRigName( *mnLightRigType );
+        nSize++;
+    }
+    if( mnLightRigDirection.has_value() )
+    {
+        pSeq[nSize].Name = u"dir"_ustr;
+        pSeq[nSize].Value <<= getLightRigDirName( *mnLightRigDirection );
         nSize++;
     }
     if( maLightRigRotation.mnLatitude.has_value() )
@@ -289,12 +289,6 @@ cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getBevelAtt
     cpo::uno::Sequence<css::beans::PropertyValue> aSeq(3);
     auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
-    if( rProps.mnPreset.has_value() )
-    {
-        pSeq[nSize].Name = u"prst"_ustr;
-        pSeq[nSize].Value <<= getBevelPresetTypeString( *rProps.mnPreset );
-        nSize++;
-    }
     if( rProps.mnWidth.has_value() )
     {
         pSeq[nSize].Name = u"w"_ustr;
@@ -305,6 +299,12 @@ cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getBevelAtt
     {
         pSeq[nSize].Name = u"h"_ustr;
         pSeq[nSize].Value <<= *rProps.mnHeight;
+        nSize++;
+    }
+    if( rProps.mnPreset.has_value() )
+    {
+        pSeq[nSize].Name = u"prst"_ustr;
+        pSeq[nSize].Value <<= getBevelPresetTypeString( *rProps.mnPreset );
         nSize++;
     }
     aSeq.realloc( nSize );

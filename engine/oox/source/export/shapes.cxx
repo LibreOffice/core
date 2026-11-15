@@ -2741,13 +2741,14 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
         }
     }
 
-    mpFS->startElementNS(XML_a, XML_tcPr, XML_anchor, sVerticalAlignment,
-    XML_vert, aTextVerticalValue,
-    XML_horzOverflow, aHorizontalOverflowValue,
+    mpFS->startElementNS(XML_a, XML_tcPr,
     XML_marL, OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)),
     XML_marR, OString::number(oox::drawingml::convertHmmToEmu(nRightMargin)),
     XML_marT, OString::number(oox::drawingml::convertHmmToEmu(nTopMargin)),
-    XML_marB, OString::number(oox::drawingml::convertHmmToEmu(nBottomMargin)));
+    XML_marB, OString::number(oox::drawingml::convertHmmToEmu(nBottomMargin)),
+    XML_vert, aTextVerticalValue,
+    XML_anchor, sVerticalAlignment,
+    XML_horzOverflow, aHorizontalOverflowValue);
 
     // Write background fill for table cell.
     // TODO
@@ -3236,19 +3237,19 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     if (pProgID)
     {
         mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
+                          XML_spid, "",
                           XML_showAsIcon, sax_fastparser::UseIf("1", bShowAsIcon),
-                          XML_progId, pProgID,
                           FSNS(XML_r, XML_id), sRelId,
-                          XML_spid, "" );
+                          XML_progId, pProgID );
     }
     else
     {
         mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
+                          // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
+                          XML_spid, "",
 //?                                              XML_name, "Document",
                           XML_showAsIcon, sax_fastparser::UseIf("1", bShowAsIcon),
-                          FSNS(XML_r, XML_id), sRelId,
-                          // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
-                          XML_spid, "" );
+                          FSNS(XML_r, XML_id), sRelId );
     }
 
     if (sURL.isEmpty())

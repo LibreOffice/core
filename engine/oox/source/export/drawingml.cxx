@@ -1023,9 +1023,9 @@ void DrawingML::WriteLineArrow( const Reference< XPropertySet >& rXPropSet, bool
     }
 
     mpFS->singleElementNS( XML_a, bLineStart ? XML_headEnd : XML_tailEnd,
-                           XML_len, len,
                            XML_type, type,
-                           XML_w, width );
+                           XML_w, width,
+                           XML_len, len );
 }
 
 void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Reference< frame::XModel > const & xModel )
@@ -1160,10 +1160,10 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     if (nEmuLineWidth == 0 || static_cast<sal_uInt32>(oox::drawingml::convertEmuToHmm(nEmuLineWidth)) != nLineWidth)
         nEmuLineWidth = oox::drawingml::convertHmmToEmu(nLineWidth);
     mpFS->startElementNS( XML_a, XML_ln,
-                          XML_cap, cap,
                           XML_w, sax_fastparser::UseIf(OString::number(nEmuLineWidth),
                               nLineWidth == 0 || GetDocumentType() == DOCUMENT_XLSX    // tdf#119565 LO doesn't export the actual theme.xml in XLSX.
-                                  || (nLineWidth > 1 && nStyleLineWidth != nLineWidth)));
+                                  || (nLineWidth > 1 && nStyleLineWidth != nLineWidth)),
+                          XML_cap, cap);
 
     if( bColorSet )
     {
@@ -2353,9 +2353,9 @@ void DrawingML::WriteTransformation(const Reference< XShape >& xShape, const too
 {
 
     mpFS->startElementNS( nXmlNamespace, XML_xfrm,
+                          XML_rot, sax_fastparser::UseIf(OString::number(nRotation), nRotation % 21600000 != 0),
                           XML_flipH, sax_fastparser::UseIf("1", bFlipH),
-                          XML_flipV, sax_fastparser::UseIf("1", bFlipV),
-                          XML_rot, sax_fastparser::UseIf(OString::number(nRotation), nRotation % 21600000 != 0));
+                          XML_flipV, sax_fastparser::UseIf("1", bFlipV));
 
     sal_Int32 nLeft = rRect.Left();
     sal_Int32 nTop = rRect.Top();
@@ -2878,11 +2878,11 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                           XML_b, bold,
                           XML_i, italic,
                           XML_u, underline,
+                          XML_strike, strikeout,
+                          XML_cap, cap,
                           // For Condensed character spacing spc value is negative.
                           XML_spc, sax_fastparser::UseIf(OString::number(nCharKerning), nCharKerning != 0),
-                          XML_strike, strikeout,
-                          XML_baseline, sax_fastparser::UseIf(OString::number(nCharEscapement*1000), nCharEscapement != 0),
-                          XML_cap, cap );
+                          XML_baseline, sax_fastparser::UseIf(OString::number(nCharEscapement*1000), nCharEscapement != 0) );
 
     // Fontwork-shapes in LO have text outline and fill from shape stroke and shape fill
     // PowerPoint has this as run properties
