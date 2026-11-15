@@ -1272,9 +1272,6 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
                  requestDetails.equals(1, "getMetrics"))
         {
-            if (!COOLWSD::AdminEnabled)
-                throw Poco::FileAccessDeniedException("Admin console disabled");
-
             // See metrics.txt
             std::shared_ptr<http::Response> response =
                 std::make_shared<http::Response>(http::StatusCode::OK);

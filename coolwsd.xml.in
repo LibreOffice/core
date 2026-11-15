@@ -405,7 +405,7 @@
     </storage>
 
     <admin_console desc="Web admin console settings.">
-        <enable desc="Enable the admin console functionality" type="bool" default="true">true</enable>
+        <enable desc="Enable the admin console pages and its WebSocket. The /cool/getMetrics endpoint and the Options dialog do not depend on this setting." type="bool" default="true">true</enable>
         <enable_pam desc="Enable admin user authentication with PAM" type="bool" default="false">false</enable_pam>
         <username desc="The username of the admin console. Ignored if PAM is enabled."></username>
         <password desc="The password of the admin console. Deprecated on most platforms. Instead, use PAM or coolconfig to set up a secure password."></password>

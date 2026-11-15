@@ -98,6 +98,7 @@ all_la_unit_tests = \
 	unit-load.la \
 	unit-wopi-languages.la \
 	unit-session.la \
+	unit-admin-disabled.la \
 	unit-wopi-edge-cases.la \
 	unit-socket-failure.la \
 	unit-kit-child-session.la \
@@ -448,6 +449,8 @@ unit_each_view_la_SOURCES = UnitEachView.cpp
 unit_each_view_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_session_la_SOURCES = UnitSession.cpp
 unit_session_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_admin_disabled_la_SOURCES = UnitAdminDisabled.cpp
+unit_admin_disabled_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_uno_command_la_SOURCES = UnitUNOCommand.cpp
 unit_uno_command_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_legacy_uno_api_warning_la_SOURCES = UnitLegacyUnoApiWarning.cpp

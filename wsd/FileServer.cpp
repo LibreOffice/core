@@ -411,8 +411,6 @@ FileServerRequestHandler::~FileServerRequestHandler()
 bool FileServerRequestHandler::isAdminLoggedIn(const Poco::Net::HTTPRequest& request,
                                                std::string& jwtToken)
 {
-    assert(COOLWSD::AdminEnabled);
-
     try
     {
         NameValueCollection cookies;
@@ -439,8 +437,6 @@ bool FileServerRequestHandler::isAdminLoggedIn(const Poco::Net::HTTPRequest& req
 bool FileServerRequestHandler::authenticateAdmin(const Poco::Net::HTTPBasicCredentials& credentials,
                                                  http::Response& response, std::string& jwtToken)
 {
-    assert(COOLWSD::AdminEnabled);
-
     const std::string& userProvidedUsr = credentials.getUsername();
     const std::string& userProvidedPwd = credentials.getPassword();
 
@@ -698,9 +694,6 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
             if (endPoint == "admin-bundle.js")
             {
                 noCache = true;
-
-                if (!COOLWSD::AdminEnabled)
-                    throw Poco::FileAccessDeniedException("Admin console disabled");
 
                 // Ask UAs to block if they detect any XSS attempt
                 response.add("X-XSS-Protection", "1; mode=block");
