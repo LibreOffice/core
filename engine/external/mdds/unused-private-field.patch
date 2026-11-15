@@ -1,0 +1,19 @@
+--- include/mdds/node.hpp
++++ include/mdds/node.hpp
+@@ -237,7 +237,7 @@
+     typedef typename T::nonleaf_node nonleaf_node;
+     typedef std::vector<nonleaf_node> nonleaf_node_pool_type;
+ 
+-    tree_builder(nonleaf_node_pool_type& pool) : m_pool(pool), m_pool_pos(pool.begin()), m_pool_pos_end(pool.end())
++    tree_builder(nonleaf_node_pool_type& pool) : m_pool_pos(pool.begin()), m_pool_pos_end(pool.end())
+     {}
+ 
+     nonleaf_node* build(const leaf_node_ptr& left_leaf_node)
+@@ -363,7 +363,6 @@
+         return build_tree_non_leaf(new_node_list);
+     }
+ 
+-    nonleaf_node_pool_type& m_pool;
+     typename nonleaf_node_pool_type::iterator m_pool_pos;
+     typename nonleaf_node_pool_type::iterator m_pool_pos_end;
+ };
