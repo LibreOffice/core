@@ -134,6 +134,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -8707,6 +8708,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                             OUString sMacro = sCommand.getToken(0, ' ', nIndex);
                             xFieldInterface->setPropertyValue(
                                     getPropertyName(PROP_MACRO_NAME), cpo::uno::Any( sMacro ));
+                            if (!sMacro.isEmpty())
+                                comphelper::DocumentInfo::notifyMacroEventRead(
+                                    static_cast<SfxBaseModel*>(m_xTextDocument.get()));
                         }
 
                         //extract quick help text

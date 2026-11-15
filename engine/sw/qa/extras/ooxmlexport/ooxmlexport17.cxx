@@ -528,6 +528,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
 {
     createSwDoc("tdf148494.docx");
+    CPPUNIT_ASSERT(getSwDocShell()->GetMacroCallsSeenWhileLoading());
     save(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
