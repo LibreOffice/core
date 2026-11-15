@@ -5566,15 +5566,15 @@ void ChartExport::exportOneAxis_chartex(
     {
         if (!xGrid.is())
             return;
-        bool bShow = false;
+        bool bGridShow = false;
         try
         {
-            xGrid->getPropertyValue(u"Show"_ustr) >>= bShow;
+            xGrid->getPropertyValue(u"Show"_ustr) >>= bGridShow;
         }
         catch (const cpo::uno::Exception&)
         {
         }
-        if (!bShow)
+        if (!bGridShow)
             return;
 
         if (hasExplicitSpPr(xGrid))
