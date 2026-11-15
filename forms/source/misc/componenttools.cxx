@@ -20,7 +20,12 @@
 #include <componenttools.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <comphelper/scripturl.hxx>
 #include <comphelper/sequence.hxx>
+#include <sfx2/objsh.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -30,6 +35,8 @@ namespace frm
 {
 
 
+    using ::com::sun::star::frame::XController;
+    using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::Reference;
@@ -96,6 +103,21 @@ namespace frm
             xModel.set( xParent, UNO_QUERY );
         }
         return xModel;
+    }
+
+
+    bool isFormURLAllowed(const OUString& rURL, const Reference<XModel>& rxModel)
+    {
+        if (comphelper::isScriptURL(rURL) && !SfxObjectShell::isDocumentScriptAllowed(rURL, rxModel))
+            return false;
+
+        weld::Window* pDialogParent = nullptr;
+        if (Reference<XController> xController = rxModel->getCurrentController())
+            if (Reference<XFrame> xFrame = xController->getFrame())
+                pDialogParent = Application::GetFrameWeld(xFrame->getContainerWindow());
+
+        return SfxObjectShell::AllowedLinkProtocolFromDocument(
+            rURL, SfxObjectShell::GetShellFromComponent(rxModel), pDialogParent);
     }
 
 
