@@ -288,8 +288,9 @@
             });
         }
 
-        // Answers the editor's request for a presentation to import with a picker.
-        function openImportPicker(values) {
+        // Shows a dialog that lists documents of this server, and returns the element of the
+        // list. Cancel and Escape close it and call onCancel.
+        function openPicker(titleText, onCancel) {
           closeImportPicker();
 
           const overlay = document.createElement('div');
@@ -298,25 +299,36 @@
           dialog.id = 'import-dialog';
           const title = document.createElement('p');
           title.id = 'import-title';
-          title.textContent = 'Add presentation - pick a document of this server';
+          title.textContent = titleText;
           dialog.appendChild(title);
           const list = document.createElement('div');
           list.id = 'import-list';
           list.textContent = 'Loading...';
           dialog.appendChild(list);
+          const cancelPicker = function() {
+            closeImportPicker();
+            if (onCancel)
+              onCancel();
+          };
           const cancel = document.createElement('button');
           cancel.type = 'button';
           cancel.className = 'cancel';
           cancel.textContent = 'Cancel';
-          cancel.addEventListener('click', closeImportPicker);
+          cancel.addEventListener('click', cancelPicker);
           dialog.appendChild(cancel);
           overlay.appendChild(dialog);
           overlay.addEventListener('keydown', function(event) {
             if (event.key === 'Escape')
-              closeImportPicker();
+              cancelPicker();
           });
           document.body.appendChild(overlay);
           cancel.focus();
+          return list;
+        }
+
+        // Answers the editor's request for a presentation to import with a picker.
+        function openImportPicker(values) {
+          const list = openPicker('Add presentation - pick a document of this server');
 
           listDocuments()
             .then(function(entries) {
@@ -340,6 +352,90 @@
                 item.textContent = entry.name;
                 item.title = entry.path;
                 item.addEventListener('click', function() { addPermanentLink(values, entry); });
+                list.appendChild(item);
+              });
+            })
+            .catch(function(error) {
+              list.textContent = 'Could not list the documents: ' + error.message;
+            });
+        }
+
+        // The local path of the document this page opened, as the WOPI host serves it.
+        function openedDocumentPath() {
+          const params = new URLSearchParams(window.location.search);
+          const filePath = params.get('file_path');
+          if (filePath)
+            return filePath;
+          const wopiSrc = params.get('WOPISrc') || '';
+          const filesIndex = wopiSrc.indexOf('/wopi/files/');
+          return filesIndex === -1 ? '' :
+            decodeURIComponent(wopiSrc.substring(filesIndex + '/wopi/files'.length));
+        }
+
+        // The path of a file given by its path relative to the folder of another one.
+        function resolvePath(documentPath, relativePath) {
+          const segments = documentPath.split('/').slice(0, -1);
+          relativePath.split('/').forEach(function(segment) {
+            if (segment === '..')
+              segments.pop();
+            else if (segment !== '.' && segment !== '')
+              segments.push(segment);
+          });
+          return segments.join('/');
+        }
+
+        // The path of a file relative to the folder of another one.
+        function relativePath(documentPath, filePath) {
+          const from = documentPath.split('/').slice(0, -1);
+          const to = filePath.split('/');
+          let common = 0;
+          while (common < from.length && common < to.length - 1 && from[common] === to[common])
+            common++;
+          return '../'.repeat(from.length - common) + to.slice(common).join('/');
+        }
+
+        // Edit in the Navigator of a master document: the chapter opens in a tab of its own.
+        function openLinkedDocument(values) {
+          if (!values || !values.RelativePath)
+            return;
+          const url = new URL(window.location);
+          url.searchParams.delete('WOPISrc');
+          url.searchParams.set('file_path', resolvePath(openedDocumentPath(), values.RelativePath));
+          window.open(url.href, '_blank');
+        }
+
+        // Insert > File in the Navigator of a master document: a text document of this server,
+        // which the master document links to by its path relative to it.
+        function openSubdocumentPicker() {
+          let answered = false;
+          const answer = function(path) {
+            if (answered)
+              return;
+            answered = true;
+            post({'MessageId': 'Action_PickLinkedFile', 'Values': path ? {'RelativePath': path} : {}});
+          };
+          const list = openPicker('Insert file - pick a text document of this server',
+                                  function() { answer(''); });
+          const opened = openedDocumentPath();
+          listDocuments()
+            .then(function(entries) {
+              const offered = entries.filter(function(entry) {
+                return entry.path !== opened && /\.(odt|fodt|ott|docx|doc|rtf)$/i.test(entry.name);
+              });
+              list.textContent = '';
+              if (offered.length === 0) {
+                list.textContent = 'No text document to insert. Upload one on documents.html first.';
+                return;
+              }
+              offered.forEach(function(entry) {
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.textContent = entry.name;
+                item.title = entry.path;
+                item.addEventListener('click', function() {
+                  closeImportPicker();
+                  answer(relativePath(opened, entry.path));
+                });
                 list.appendChild(item);
               });
             })
@@ -384,6 +480,12 @@
               break;
             case 'UI_GetPermanentLink':
               openImportPicker(msg.Values || {});
+              break;
+            case 'UI_OpenLinkedDocument':
+              openLinkedDocument(msg.Values);
+              break;
+            case 'UI_PickLinkedFile':
+              openSubdocumentPicker();
               break;
             case 'UI_Mention':
               if (!msg.Values)
