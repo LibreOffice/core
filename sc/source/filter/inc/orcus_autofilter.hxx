@@ -65,15 +65,18 @@ public:
 
     virtual void commit() override;
 
-    void reset(SCCOL nStartCol, ScQueryConnect eConn, commitFuncType func);
+    void reset(SCCOL nStartCol, SCCOL nEndCol, ScQueryConnect eConn, commitFuncType func);
 
 private:
+    bool isFieldInRange(orcus::spreadsheet::col_t field) const;
+
     ScDocument& mrDoc;
     const ScOrcusGlobalSettings& mrGlobalSettings;
     ScOrcusAutoFilterMultiValues maMultiValues;
     std::unique_ptr<ScOrcusAutoFilterNode> mxChild;
 
     SCCOL mnStartCol = -1;
+    SCCOL mnEndCol = -1;
     ScQueryConnect meConn = ScQueryConnect::SC_AND;
     bool mbHasRegex = false;
 
@@ -93,7 +96,7 @@ public:
 
     virtual void commit() override;
 
-    void reset(const orcus::spreadsheet::range_t& range);
+    bool reset(const orcus::spreadsheet::range_t& range);
 
 private:
     ScDocumentImport& mrDoc;

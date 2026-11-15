@@ -1243,7 +1243,9 @@ void ScOrcusSheet::fill_down_cells(os::row_t row, os::col_t col, os::row_t range
 
 os::iface::import_auto_filter* ScOrcusSheet::start_auto_filter(const os::range_t& range)
 {
-    maAutoFilter.reset(range);
+    if (!maAutoFilter.reset(range))
+        return nullptr;
+
     return &maAutoFilter;
 }
 
