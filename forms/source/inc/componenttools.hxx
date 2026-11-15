@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <rtl/ustring.hxx>
 
 #include <set>
 
@@ -76,6 +77,11 @@ namespace frm
 
     css::uno::Reference< css::frame::XModel >  getXModel(
         const css::uno::Reference< css::uno::XInterface >& _rxComponent );
+
+    /** Whether a form may dispatch rURL in the frame of rxModel. A script URL needs the document's
+        permission to run scripts, and any exotic URL is treated as a hyperlink from the document.
+    */
+    bool isFormURLAllowed(const OUString& rURL, const css::uno::Reference<css::frame::XModel>& rxModel);
 
 
 } // namespace frm
