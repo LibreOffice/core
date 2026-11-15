@@ -179,6 +179,8 @@ public:
 
     void testNormalizedMakeRelative();
 
+    void testMakeRelative();
+
     void testFindFirstURLInText();
 
     void testFindFirstDOIInText();
@@ -187,6 +189,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNormalizedMakeRelative);
+    CPPUNIT_TEST(testMakeRelative);
     CPPUNIT_TEST(testFindFirstURLInText);
     CPPUNIT_TEST(testFindFirstDOIInText);
     CPPUNIT_TEST(testResolveIdnaHost);
@@ -281,6 +284,32 @@ void Test::testNormalizedMakeRelative() {
             msg = buf.makeStringAndClear();
         }
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);
+    }
+}
+
+void Test::testMakeRelative()
+{
+    struct Data
+    {
+        OUString base;
+        OUString url;
+        OUString expected;
+    };
+    static Data const tests[] = {
+        { u"file:///a/b/doc.html"_ustr, u"file:///a/b/c/img.png"_ustr, u"c/img.png"_ustr },
+        { u"file:///a/b/doc.html"_ustr, u"file:///a/x/img%20one.png"_ustr,
+          u"../x/img%20one.png"_ustr },
+        { u"file:///a/b/doc.html"_ustr, u"http://example.org/x"_ustr,
+          u"http://example.org/x"_ustr },
+        { u"file:///a/b/doc.html"_ustr, u"#bookmark|outline"_ustr, u"#bookmark|outline"_ustr },
+        { u"file:///a/b/doc.html"_ustr, u"C:\\test.txt"_ustr, u"C:\\test.txt"_ustr },
+        { u"file:///a/b/doc.html"_ustr, u"..\\..\\test.odt"_ustr, u"..\\..\\test.odt"_ustr },
+        { u""_ustr, u"file:///a/b/c/img.png"_ustr, u"file:///a/b/c/img.png"_ustr },
+    };
+    for (auto const& [base, url, expected] : tests)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString(base + " " + url).toUtf8().getStr(), expected,
+                                     URIHelper::MakeRelative(base, url));
     }
 }
 

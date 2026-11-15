@@ -276,6 +276,16 @@ OUString URIHelper::simpleNormalizedMakeRelative(
 }
 
 
+OUString URIHelper::MakeRelative(std::u16string_view rBaseURL, OUString const & rURL)
+{
+    INetURLObject aURL(rURL);
+    if (aURL.HasError() || aURL.GetProtocol() != INetURLObject(rBaseURL).GetProtocol())
+        return rURL;
+    return INetURLObject::GetRelURL(rBaseURL, rURL, INetURLObject::EncodeMechanism::WasEncoded,
+                                    INetURLObject::DecodeMechanism::NONE);
+}
+
+
 //  FindFirstURLInText
 
 

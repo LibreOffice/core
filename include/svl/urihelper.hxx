@@ -113,6 +113,14 @@ normalizedMakeRelative(
 SVL_DLLPUBLIC OUString simpleNormalizedMakeRelative( OUString const & baseUriReference,
                                                      OUString const & uriReference);
 
+/**
+   Make rURL relative to rBaseURL, working on the two strings alone.
+
+   @return rURL made relative if it is an absolute URL with the same scheme as rBaseURL,
+   otherwise rURL unchanged
+*/
+SVL_DLLPUBLIC OUString MakeRelative(std::u16string_view rBaseURL, OUString const & rURL);
+
 SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
                                           sal_Int32 & rBegin,
                                           sal_Int32 & rEnd,
