@@ -379,6 +379,15 @@ void SfxDispatchController_Impl::UnBindController()
     }
 }
 
+namespace
+{
+bool isCallerOnlyArgument(std::u16string_view rName)
+{
+    return rName == u"Referer" || rName == u"MacroExecutionMode" || rName == u"UpdateDocMode"
+           || rName == u"DocumentBaseURL" || rName == u"SalvagedFile";
+}
+}
+
 void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL, cpo::uno::Sequence< css::beans::PropertyValue >& rArgs )
 {
     // Extract the parameter from the URL and put them into the property value sequence
@@ -404,6 +413,9 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
             aParamName = aToken.getToken( 0, ':', nParmIndex );
             aParamType = aToken.getToken( 0, ':', nParmIndex );
         }
+
+        if (isCallerOnlyArgument(aParamName))
+            continue;
 
         sal_Int32 nLen = rArgs.getLength();
         rArgs.realloc( nLen+1 );
