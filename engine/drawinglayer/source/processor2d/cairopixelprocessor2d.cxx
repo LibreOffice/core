@@ -36,7 +36,6 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
@@ -4790,8 +4789,6 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         // continue with decompose
         default:
         {
-            SAL_INFO("drawinglayer", "default case for " << drawinglayer::primitive2d::idToString(
-                                         rCandidate.getPrimitive2DID()));
             // process recursively
             process(rCandidate);
             break;

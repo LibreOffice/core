@@ -366,8 +366,6 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         }
         default:
         {
-            SAL_INFO("drawinglayer", "default case for " << drawinglayer::primitive2d::idToString(
-                                         rCandidate.getPrimitive2DID()));
             // process recursively
             process(rCandidate);
             break;

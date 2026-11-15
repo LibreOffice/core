@@ -45,7 +45,6 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
@@ -2137,8 +2136,6 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         // continue with decompose as fallback
         default:
         {
-            SAL_INFO("drawinglayer", "default case for " << drawinglayer::primitive2d::idToString(
-                                         rCandidate.getPrimitive2DID()));
             // process recursively
             process(rCandidate);
             break;
