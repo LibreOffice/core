@@ -13,6 +13,7 @@
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -24,6 +25,7 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
@@ -2025,6 +2027,45 @@ CPPUNIT_TEST_FIXTURE(Test, testMasterDocHeadingPlaceholders)
     assertXPath(pXmlDoc, "//text:section/text:h[10]", "outline-level", u"10");
     // Without the fix the level was written as text:level, which does not exist on text:h
     assertXPath(pXmlDoc, "//text:section/text:h[@text:level]", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testIndexSortLanguage)
+{
+    // Given a document with an alphabetical index and a bibliography that sort in German:
+    createSwDoc();
+    const lang::Locale aGerman(u"de"_ustr, u"DE"_ustr, OUString());
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> xIndex(
+        xFactory->createInstance(u"com.sun.star.text.DocumentIndex"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet>(xIndex, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"Locale"_ustr, uno::Any(aGerman));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->getEnd(), xIndex, false);
+    uno::Reference<beans::XPropertySet> xBibliography(
+        xFactory->createInstance(u"com.sun.star.text.FieldMaster.Bibliography"_ustr),
+        uno::UNO_QUERY_THROW);
+    xBibliography->setPropertyValue(u"Locale"_ustr, uno::Any(aGerman));
+
+    // When it is saved and loaded again:
+    saveAndReload(TestFilter::ODT);
+
+    // Then both still sort in German. Without the fix in place, the language, written in the fo
+    // namespace of ODF, was not read, and both sorted in the default language.
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xLoadedIndex(
+        xIndexSupplier->getDocumentIndexes()->getByIndex(0), uno::UNO_QUERY_THROW);
+    lang::Locale aLocale = getProperty<lang::Locale>(xLoadedIndex, u"Locale"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"de"_ustr, aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"DE"_ustr, aLocale.Country);
+    uno::Reference<text::XTextFieldsSupplier> xFieldsSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xLoadedBibliography(
+        xFieldsSupplier->getTextFieldMasters()->getByName(
+            u"com.sun.star.text.FieldMaster.Bibliography"_ustr),
+        uno::UNO_QUERY_THROW);
+    aLocale = getProperty<lang::Locale>(xLoadedBibliography, u"Locale"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"de"_ustr, aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"DE"_ustr, aLocale.Country);
 }
 
 } // end of anonymous namespace

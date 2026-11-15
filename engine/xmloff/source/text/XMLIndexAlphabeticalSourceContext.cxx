@@ -139,12 +139,15 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(const sax_fastparser::F
             maLanguageTagODF.maRfcLanguageTag = aIter.toString();
             break;
         case XML_ELEMENT(FO, XML_LANGUAGE):
+        case XML_ELEMENT(FO_COMPAT, XML_LANGUAGE):
             maLanguageTagODF.maLanguage = aIter.toString();
             break;
         case XML_ELEMENT(FO, XML_SCRIPT):
+        case XML_ELEMENT(FO_COMPAT, XML_SCRIPT):
             maLanguageTagODF.maScript = aIter.toString();
             break;
         case XML_ELEMENT(FO, XML_COUNTRY):
+        case XML_ELEMENT(FO_COMPAT, XML_COUNTRY):
             maLanguageTagODF.maCountry = aIter.toString();
             break;
 

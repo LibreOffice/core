@@ -94,12 +94,15 @@ void XMLIndexBibliographyConfigurationContext::SetAttribute(
             sAlgorithm = sValue;
             break;
         case XML_ELEMENT(FO, XML_LANGUAGE):
+        case XML_ELEMENT(FO_COMPAT, XML_LANGUAGE):
             maLanguageTagODF.maLanguage = sValue;
             break;
         case XML_ELEMENT(FO, XML_SCRIPT):
+        case XML_ELEMENT(FO_COMPAT, XML_SCRIPT):
             maLanguageTagODF.maScript = sValue;
             break;
         case XML_ELEMENT(FO, XML_COUNTRY):
+        case XML_ELEMENT(FO_COMPAT, XML_COUNTRY):
             maLanguageTagODF.maCountry = sValue;
             break;
         case XML_ELEMENT(STYLE, XML_RFC_LANGUAGE_TAG):
