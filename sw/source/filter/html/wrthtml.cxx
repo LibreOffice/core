@@ -1628,7 +1628,7 @@ OUString SwHTMLWriter::normalizeURL(const OUString& url, bool own) const
     else if (own && m_bRelativeURLsForOwnObjects && GetOrigFileName())
         base = *GetOrigFileName();
     if (!base.isEmpty())
-        ret = URIHelper::simpleNormalizedMakeRelative(base, ret);
+        ret = URIHelper::MakeRelative(base, ret);
     return ret;
 }
 
