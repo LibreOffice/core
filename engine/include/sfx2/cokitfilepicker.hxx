@@ -45,6 +45,18 @@ SFX2_DLLPUBLIC bool picksFilesInPlace();
 /** Whether the app can ask the user where a new file goes, a file the document may link to. */
 SFX2_DLLPUBLIC bool canPickSaveLocation();
 
+/** Whether the host can give a file to link to that the engine cannot read where it is, with
+    the URL the document links to and a copy to read. */
+SFX2_DLLPUBLIC bool canPickLinkTarget();
+
+/** The answer of a pick of a file to link to: the URL the document links to, absolute or
+    relative to the document, and the URL of the copy the engine reads now. */
+struct LinkTarget
+{
+    OUString sLinkUrl;
+    OUString sReadUrl;
+};
+
 /** Ask the app's native file picker for a file. Returns at once; rOnPicked runs later on
     the engine's main-loop thread, with the picked file's URL, or without a value when the
     user cancelled. Does nothing when isAvailable() is false. */
@@ -58,6 +70,12 @@ SFX2_DLLPUBLIC void pick(const OUString& rTitle, const std::vector<Filter>& rFil
 SFX2_DLLPUBLIC void pickSaveLocation(const OUString& rTitle, const OUString& rSuggestedUrl,
                                      const std::vector<Filter>& rFilters,
                                      std::function<void(std::optional<OUString>)> aOnPicked);
+
+/** Ask the host for a file to link to. Returns at once; rOnPicked runs later on the engine's
+    main-loop thread, with the link target, or without a value when the user cancelled. Does
+    nothing when canPickLinkTarget() is false. */
+SFX2_DLLPUBLIC void pickLinkTarget(const OUString& rTitle, const std::vector<Filter>& rFilters,
+                                   std::function<void(std::optional<LinkTarget>)> aOnPicked);
 
 /** Ask the app's native file picker for a file and dispatch rCommand with the picked
     file's URL as the string parameter named rArgument, followed by rExtraArguments, on the

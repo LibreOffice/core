@@ -857,6 +857,18 @@ std::mutex GlobalCallbackMutex;
 Document* GlobalCallbackDocument = nullptr;
 } // namespace
 
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
+namespace
+{
+/// The file picker the kit gives the engine: the browser, or the integrator through it.
+COKitFilePickerProvider& kitFilePickerProvider()
+{
+    static COKitFilePickerProvider provider{};
+    return provider;
+}
+}
+#endif
+
 Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailId,
                    const std::string& docKey, const std::string& docId, const std::string& url,
                    const std::shared_ptr<WebSocketHandler>& websocketHandler,
@@ -902,7 +914,7 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
     // The browser is this document's file picker: a dialog that needs a file asks the browser
     // of the view that is current, and the uploaded file comes back as a URL in the jail.
 #if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
-    static COKitFilePickerProvider filePickerProvider{};
+    COKitFilePickerProvider& filePickerProvider = kitFilePickerProvider();
     filePickerProvider.pick = pickFile;
     _loKit->installFilePickerProvider(&filePickerProvider);
 #endif
@@ -2251,7 +2263,85 @@ void Document::pickFile(const char* title, const COKitFilePickerFilter* filters,
     LOG_DBG("Asking view [" << session->getViewId() << "] for a file, pick id [" << id << ']');
     session->sendTextFrame(oss.str());
 }
+
+void Document::pickLinkTarget(const char* title, const COKitFilePickerFilter* filters, size_t count,
+                              void (*picked)(void* context, const char* linkUrl,
+                                             const char* readUrl),
+                              void* context)
+{
+    const std::pair<Document*, std::shared_ptr<ChildSession>> current =
+        findDocumentOfCurrentView();
+    Document* const document = current.first;
+    const std::shared_ptr<ChildSession>& session = current.second;
+    if (!session)
+    {
+        LOG_WRN("No session for the current view to ask for a file to link to; the pick is "
+                "cancelled");
+        picked(context, nullptr, nullptr);
+        return;
+    }
+
+    // The browser keeps one request at a time, as for a file pick.
+    document->cancelFilePicks(session->getViewId());
+
+    const unsigned id = document->_nextFilePickId++;
+    PendingFilePick pick{ nullptr, context, session->getViewId() };
+    pick.pickedLink = picked;
+    document->_pendingFilePicks[id] = pick;
+
+    std::ostringstream oss;
+    oss << "linkpicker: {\"id\":" << id << ",\"title\":\""
+        << JsonUtil::escapeJSONValue(title ? title : "") << "\",\"filters\":[";
+    for (size_t i = 0; i < count; ++i)
+    {
+        if (i > 0)
+            oss << ',';
+        oss << '"' << JsonUtil::escapeJSONValue(filters[i].pWildcards ? filters[i].pWildcards : "")
+            << '"';
+    }
+    oss << "]}";
+
+    LOG_DBG("Asking view [" << session->getViewId() << "] for a file to link to, pick id [" << id
+                            << ']');
+    session->sendTextFrame(oss.str());
+}
+
+void Document::enableLinkPicks()
+{
+    COKitFilePickerProvider& filePickerProvider = kitFilePickerProvider();
+    if (filePickerProvider.pickLinkTarget)
+        return;
+
+    filePickerProvider.pickLinkTarget = pickLinkTarget;
+    _loKit->installFilePickerProvider(&filePickerProvider);
+}
 #endif // !MACOSAPP && !QTAPP && !_WIN32
+
+bool Document::completeLinkPick(unsigned id, int viewId, const std::string& relativePath,
+                                const std::string& readUrl)
+{
+    const std::map<unsigned, PendingFilePick>::iterator it = _pendingFilePicks.find(id);
+    if (it == _pendingFilePicks.end() || !it->second.pickedLink)
+    {
+        LOG_DBG("No open link pick with id [" << id << "]; ignoring the answer");
+        return false;
+    }
+
+    if (it->second.viewId != viewId)
+    {
+        LOG_WRN("Link pick [" << id << "] was asked of view [" << it->second.viewId
+                              << "], not of view [" << viewId << "]; ignoring the answer");
+        return false;
+    }
+
+    const PendingFilePick pick = it->second;
+    _pendingFilePicks.erase(it);
+    const bool picked = !relativePath.empty() && !readUrl.empty();
+    LOG_DBG("Link pick [" << id << "] answered with " << (picked ? "a file" : "no file"));
+    pick.pickedLink(pick.context, picked ? relativePath.c_str() : nullptr,
+                    picked ? readUrl.c_str() : nullptr);
+    return true;
+}
 
 void Document::keepLinkedFileCopy(const std::string& id, const std::string& path)
 {
@@ -2279,6 +2369,12 @@ void Document::completeFilePick(unsigned id, int viewId, const std::string& url)
         return;
     }
 
+    if (!it->second.picked)
+    {
+        LOG_WRN("Pick [" << id << "] is of a file to link to; ignoring the answer");
+        return;
+    }
+
     const PendingFilePick pick = it->second;
     _pendingFilePicks.erase(it);
     LOG_DBG("File pick [" << id << "] answered with " << (url.empty() ? "no file" : "a file"));
@@ -2299,7 +2395,10 @@ void Document::cancelFilePicks(int viewId)
         LOG_DBG("View [" << viewId << "] left with file pick [" << it->first
                          << "] open; cancelling it");
         it = _pendingFilePicks.erase(it);
-        pick.picked(pick.context, nullptr);
+        if (pick.pickedLink)
+            pick.pickedLink(pick.context, nullptr, nullptr);
+        else
+            pick.picked(pick.context, nullptr);
     }
 }
 

@@ -127,6 +127,22 @@ struct COKitFilePickerProvider
     void (*pickSaveLocation)(const char* pTitle, const char* pSuggestedUrl,
                              const COKitFilePickerFilter* pFilters, size_t nFilters,
                              void (*pfnPicked)(void* pContext, const char* pUrl), void* pContext);
+
+    /**
+     * Ask the user for a file the document is to link to, which the host keeps where the
+     * engine cannot read it, the chapter of a master document in the storage of a server for
+     * example. The same thread and completion rules apply as for pick: pfnPicked gets the file
+     * the document links to, as an absolute URL or as its path relative to the document in
+     * plain text, not percent-encoded and with / between its folders, and the URL of a copy of
+     * the file the engine reads now, or nullptr for both when the user cancelled.
+     *
+     * Leave this nullptr when the host has no such picker.
+     */
+    void (*pickLinkTarget)(const char* pTitle, const COKitFilePickerFilter* pFilters,
+                           size_t nFilters,
+                           void (*pfnPicked)(void* pContext, const char* pLinkUrl,
+                                             const char* pReadUrl),
+                           void* pContext);
 };
 
 // getDocumentType is part of the API whether or not the unstable half is asked for, so the

@@ -1949,6 +1949,73 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorInsertNewDocume
     Scheduler::ProcessEventsToIdle();
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorInsertLinkTarget)
+{
+    // Given a master document with its Navigator open, on a server whose storage keeps the
+    // files: the host gives a copy of the picked file and the path the document links to.
+    createSwGlobalDoc("master-cached-sections.odm");
+    getSwTextDoc()->initializeForTiledRendering({});
+    SwTestViewCallback aView;
+    SwView* pView = getSwDocShell()->GetView();
+
+    static OString aReadUrl;
+    aReadUrl = createFileURL(u"master-chapter.odt").toUtf8();
+    COKitFilePickerProvider aProvider{};
+    aProvider.pick = [](const char*, const COKitFilePickerFilter*, size_t,
+                        void (*pfnPicked)(void*, const char*), void* pContext)
+    { pfnPicked(pContext, nullptr); };
+    aProvider.pickLinkTarget
+        = [](const char*, const COKitFilePickerFilter*, size_t,
+             void (*pfnPicked)(void*, const char*, const char*), void* pContext)
+    { pfnPicked(pContext, "chapters/in storage.odt", aReadUrl.getStr()); };
+    sfx2::COKitFilePicker::installProvider(&aProvider);
+    comphelper::ScopeGuard aProviderGuard([] { sfx2::COKitFilePicker::installProvider(nullptr); });
+
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, true);
+    Scheduler::ProcessEventsToIdle();
+    const OUString sKey
+        = OUString::number(reinterpret_cast<sal_uInt64>(static_cast<SfxViewShell*>(pView)))
+          + "navigator";
+
+    // When the Insert menu of the toolbar is opened, then it offers to insert a file:
+    std::vector<OString> aMenus = openMasterDocInsertMenu(pView, aView);
+    CPPUNIT_ASSERT(std::any_of(aMenus.begin(), aMenus.end(), [](const OString& rMenu) {
+        return rMenu.indexOf("insertfile") >= 0;
+    }));
+
+    // And when a file is picked through it:
+    StringMap aChoose{ { u"cmd"_ustr, u"select"_ustr },
+                       { u"data"_ustr, u"insertfile"_ustr },
+                       { u"type"_ustr, u"menu"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"__MENU__"_ustr, aChoose));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the document links to the file by its path next to the document:
+    uno::Reference<text::XTextSectionsSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSection(
+        xSupplier->getTextSections()->getByName(u"in storage.odt"_ustr), uno::UNO_QUERY_THROW);
+    text::SectionFileLink aLink;
+    xSection->getPropertyValue(u"FileLink"_ustr) >>= aLink;
+    CPPUNIT_ASSERT(aLink.FileURL.endsWith("/chapters/in storage.odt"));
+    // And the section shows the copy:
+    uno::Reference<text::XTextContent> xContent(xSection, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"Text of the chapter file"_ustr, xContent->getAnchor()->getString());
+    // And the host knows the file by the path it gave, as plain text, not percent-encoded as
+    // "chapters/in%20storage.odt":
+    tools::JsonWriter aJson;
+    CPPUNIT_ASSERT(getSwTextDoc()->getLinkedFiles(aJson));
+    std::stringstream aStream{ std::string(aJson.finishAndGetAsOString()) };
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    std::vector<std::string> aIds;
+    for (const auto& rLink : aTree.get_child("links"))
+        aIds.push_back(rLink.second.get<std::string>("id"));
+    CPPUNIT_ASSERT(std::find(aIds.begin(), aIds.end(), "chapters/in storage.odt") != aIds.end());
+
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
+    Scheduler::ProcessEventsToIdle();
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCreateMasterDocumentWherePicked)
 {
     // Given a text document with three chapters, in an app that asks the user where a new file

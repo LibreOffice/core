@@ -97,6 +97,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 
 	addHooks: function() {
 		this._map.on('postMessage', this._postMessage, this);
+		this._map.on('linkpicker', this._onLinkPicker, this);
 
 		window.L.DomEvent.on(window, 'message', this._postMessageListener, this);
 
@@ -131,8 +132,19 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		}
 	},
 
+	// The engine asks for a file in the storage to link to, the chapter of a master
+	// document for example. The integration lets the user pick it.
+	_onLinkPicker: function(request) {
+		this._linkPickerId = request.id;
+		this._map.fire('postMessage', {
+			msgId: 'UI_PickLinkedFile',
+			args: { Title: request.title, Filters: request.filters },
+		});
+	},
+
 	removeHooks: function() {
 		this._map.off('postMessage', this._postMessage, this);
+		this._map.off('linkpicker', this._onLinkPicker, this);
 
 		this.postLoadDisable();
 
@@ -817,6 +829,16 @@ window.L.Map.WOPI = window.L.Handler.extend({
 				}
 
 				this._map.insertURL(msg.Values.url, "comparedocumentsurl");
+			}
+		}
+		else if (msg.MessageId == 'Action_PickLinkedFile') {
+			// The file the integration picked for the linkpicker: request, by its path
+			// relative to the document, or none when the user cancelled.
+			if (this._linkPickerId !== undefined) {
+				const path = msg.Values && msg.Values.RelativePath;
+				app.socket.sendMessage('linkpickerresult id=' + this._linkPickerId +
+					(path ? ' path=' + encodeURIComponent(path) : ''));
+				this._linkPickerId = undefined;
 			}
 		}
 		else if (msg.MessageId == 'Action_InsertLink') {

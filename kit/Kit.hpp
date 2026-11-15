@@ -444,6 +444,17 @@ public:
     /// url means the user cancelled. An answer from any other view is ignored.
     void completeFilePick(unsigned id, int viewId, const std::string& url);
 
+    /// Answers the link pick with the given request id, from the view that was asked, with the
+    /// path of the picked file relative to the document and the URL of its copy to read. Empty
+    /// strings mean the user cancelled, or that there is no copy. Returns whether the pick was
+    /// open and took the answer.
+    bool completeLinkPick(unsigned id, int viewId, const std::string& relativePath,
+                          const std::string& readUrl);
+
+    /// Lets the engine ask for a file to link to: the server gives the picked file from the
+    /// storage of the document.
+    void enableLinkPicks();
+
     void invalidateCanonicalId(const std::string& sessionId);
 
     /// Tells the session its canonical view id and view render state.
@@ -591,6 +602,14 @@ private:
     /// no session for the view, completes the pick at once as cancelled.
     static void pickFile(const char* title, const COKitFilePickerFilter* filters, size_t count,
                          void (*picked)(void* context, const char* url), void* context);
+
+    /// Sends a linkpicker: request to the browser of the view that is current, which asks the
+    /// integrator for a file in the storage, and keeps the completion until the answer is there.
+    static void pickLinkTarget(const char* title, const COKitFilePickerFilter* filters,
+                               size_t count,
+                               void (*picked)(void* context, const char* linkUrl,
+                                              const char* readUrl),
+                               void* context);
 #endif
 
     /// Answers every open file pick of the given view as cancelled.
@@ -656,6 +675,8 @@ private:
         void (*picked)(void* context, const char* url);
         void* context;
         int viewId;
+        /// The completion of a pick of a file to link to, instead of picked.
+        void (*pickedLink)(void* context, const char* linkUrl, const char* readUrl) = nullptr;
     };
 
     /// Open file picks by request id. The engine asks and the browser's answer arrives on the

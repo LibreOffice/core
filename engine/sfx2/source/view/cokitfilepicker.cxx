@@ -44,13 +44,19 @@ struct PickContext
     std::vector<COKitFilePickerFilter> aFilters;
     std::function<void(std::optional<OUString>)> aOnPicked;
     std::optional<OUString> oUrl;
+    /// For a pick of a file to link to, instead of aOnPicked and oUrl.
+    std::function<void(std::optional<LinkTarget>)> aOnPickedLink;
+    std::optional<LinkTarget> oLinkTarget;
 };
 
 // The main-loop half of a completed pick, run as a posted user event.
 void PickCompletedEvent(void* pEv, void*)
 {
     std::unique_ptr<PickContext> pContext(static_cast<PickContext*>(pEv));
-    pContext->aOnPicked(pContext->oUrl);
+    if (pContext->aOnPickedLink)
+        pContext->aOnPickedLink(pContext->oLinkTarget);
+    else
+        pContext->aOnPicked(pContext->oUrl);
 }
 
 /** The completion the provider calls, on whichever thread. The answer travels to the
@@ -61,6 +67,17 @@ void pickedCallback(void* pContext, const char* pUrl)
     PickContext* pPickContext = static_cast<PickContext*>(pContext);
     if (pUrl)
         pPickContext->oUrl = OUString::fromUtf8(pUrl);
+
+    Application::PostUserEvent(LINK_NONMEMBER(pPickContext, PickCompletedEvent));
+}
+
+/// The completion of a pick of a file to link to, as pickedCallback.
+void pickedLinkCallback(void* pContext, const char* pLinkUrl, const char* pReadUrl)
+{
+    PickContext* pPickContext = static_cast<PickContext*>(pContext);
+    if (pLinkUrl && pReadUrl)
+        pPickContext->oLinkTarget
+            = LinkTarget{ OUString::fromUtf8(pLinkUrl), OUString::fromUtf8(pReadUrl) };
 
     Application::PostUserEvent(LINK_NONMEMBER(pPickContext, PickCompletedEvent));
 }
@@ -142,6 +159,23 @@ void pickSaveLocation(const OUString& rTitle, const OUString& rSuggestedUrl,
     const size_t nFilters = pContext->aFilters.size();
     getProvider()->pickSaveLocation(aStrings[0], aStrings[1], pFilters, nFilters, pickedCallback,
                                     pContext.release());
+}
+
+bool canPickLinkTarget() { return getProvider().has_value() && getProvider()->pickLinkTarget; }
+
+void pickLinkTarget(const OUString& rTitle, const std::vector<Filter>& rFilters,
+                    std::function<void(std::optional<LinkTarget>)> aOnPicked)
+{
+    if (!canPickLinkTarget())
+        return;
+
+    std::vector<const char*> aStrings;
+    std::unique_ptr<PickContext> pContext = makePickContext({ rTitle }, rFilters, {}, aStrings);
+    pContext->aOnPickedLink = std::move(aOnPicked);
+    const COKitFilePickerFilter* pFilters = pContext->aFilters.data();
+    const size_t nFilters = pContext->aFilters.size();
+    getProvider()->pickLinkTarget(aStrings[0], pFilters, nFilters, pickedLinkCallback,
+                                  pContext.release());
 }
 
 bool requestAndRedispatch(const OUString& rCommand, const OUString& rArgument,

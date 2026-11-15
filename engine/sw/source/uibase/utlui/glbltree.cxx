@@ -64,6 +64,7 @@
 #include <doc.hxx>
 #include <iodetect.hxx>
 #include <numrule.hxx>
+#include <IDocumentLinksAdministration.hxx>
 
 using namespace ::cpo::uno;
 using namespace ::cpo::uno;
@@ -311,8 +312,10 @@ IMPL_LINK(SwGlobalTree, ContextMenuSelectHdl, const OUString&, rIdent, void)
 void SwGlobalTree::HideInsertFileEntries(weld::Menu& rMenu)
 {
     // An inserted file is linked to, so it has to stay where it is picked: a picker that gives a
-    // copy, as an upload to a server is, offers nothing to link to.
-    rMenu.set_visible(u"insertfile"_ustr, sfx2::COKitFilePicker::picksFilesInPlace());
+    // copy, as an upload to a server is, offers nothing to link to, unless the host also says
+    // where the file stays.
+    rMenu.set_visible(u"insertfile"_ustr, sfx2::COKitFilePicker::picksFilesInPlace()
+                                              || sfx2::COKitFilePicker::canPickLinkTarget());
     // A new document is linked to as well, so it is created where the user chooses.
     rMenu.set_visible(u"insertnewfile"_ustr, sfx2::COKitFilePicker::canPickSaveLocation());
 }
@@ -719,8 +722,14 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
     }
     else if (rSelectedPopupEntry == u"insertfile")
     {
-        m_oDocContent = std::move(oContCopy);
-        InsertRegion( &*m_oDocContent );
+        if (!sfx2::COKitFilePicker::picksFilesInPlace()
+            && sfx2::COKitFilePicker::canPickLinkTarget())
+            InsertLinkTarget(std::move(oContCopy));
+        else
+        {
+            m_oDocContent = std::move(oContCopy);
+            InsertRegion(m_oDocContent ? &*m_oDocContent : nullptr);
+        }
         pCont = nullptr;
     }
     else if (rSelectedPopupEntry == u"insertnewfile")
@@ -1048,6 +1057,52 @@ OUString SuggestChapterUrl(std::u16string_view rMasterUrl)
     }
     return OUString();
 }
+}
+
+void SwGlobalTree::InsertLinkTarget(std::optional<SwGlblDocContent> oDocContent)
+{
+    std::weak_ptr<bool> xAlive = m_xAlive;
+    const int nView = KitHelper::getCurrentView();
+    sfx2::COKitFilePicker::pickLinkTarget(
+        SwResId(STR_FILE), sfx2::COKitFilePicker::documentImportFilters(u"swriter"_ustr),
+        [this, xAlive, nView, oDocContent = std::move(oDocContent)](
+            const std::optional<sfx2::COKitFilePicker::LinkTarget>& roTarget)
+        {
+            // The Navigator can be gone by the time the user picks.
+            if (xAlive.expired() || !m_pActiveShell || !roTarget)
+                return;
+
+            // Switch to the view that asked, and switch back when done.
+            comphelper::ScopeGuard aRestoreView(
+                [nSavedView = KitHelper::getCurrentView()]
+                {
+                    if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
+                        KitHelper::setView(nSavedView);
+                });
+            if (nView >= 0 && KitHelper::getCurrentView() != nView)
+                KitHelper::setView(nView);
+
+            // The document links to the file where the host keeps it, and reads it from the copy,
+            // which the section reads as soon as it is inserted. The host names the file by an
+            // absolute URL, or by its path relative to the document as plain text, which is
+            // encoded as it is made absolute.
+            SfxMedium* pMedium = m_pActiveShell->GetView().GetDocShell()->GetMedium();
+            const OUString aBaseUrl = pMedium ? pMedium->GetBaseURL() : OUString();
+            const INetURLObject aAbsoluteTarget(roTarget->sLinkUrl);
+            OUString aLinkUrl = roTarget->sLinkUrl;
+            if (!aAbsoluteTarget.HasError())
+                aLinkUrl = aAbsoluteTarget.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            else if (!aBaseUrl.isEmpty())
+                aLinkUrl = INetURLObject::GetAbsURL(aBaseUrl, roTarget->sLinkUrl,
+                                                    INetURLObject::EncodeMechanism::All,
+                                                    INetURLObject::DecodeMechanism::NONE);
+            INetURLObject aSectionUrl;
+            aSectionUrl.SetSmartURL(aLinkUrl);
+            m_pActiveShell->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().SetLinkReadURL(
+                aSectionUrl.GetMainURL(INetURLObject::DecodeMechanism::WithCharset),
+                roTarget->sReadUrl);
+            InsertRegion(oDocContent ? &*oDocContent : nullptr, &aLinkUrl);
+        });
 }
 
 void SwGlobalTree::InsertNewDocument(std::optional<SwGlblDocContent> oDocContent)

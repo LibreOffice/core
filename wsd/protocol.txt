@@ -247,6 +247,18 @@ filepickerresult id=<n> [name=<name>]
     the request ends with no file. A name of another shape, or a file that
     cannot be moved, gets an error and also ends the request with no file.
 
+linkpickerresult id=<n> [path=<path>]
+
+    Answers the 'linkpicker:' request with id <n>: <path>, percent-encoded, is
+    the path of the picked file relative to the document, as the integration
+    gave it in Action_PickLinkedFile. Without a path, the user cancelled. The server
+    asks the storage for the file the way it does for linkedfile list, stages
+    the copy and tells the kit
+        linkpickerresult id=<n> path=<path> file=<staged name>
+    or linkpickerresult id=<n> when the storage gives no file. The server takes
+    an answer to the last 'linkpicker:' request of the session only, and the
+    kit takes the answer of the server alone; it never gets the client's.
+
 slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>]
                    [at=<S>] [keepdesign=<0|1>] [link=<0|1>] [time=<source time>]
                    [sourcepositions=<p0,p1,...>]
@@ -402,6 +414,11 @@ linkedfile list
     app reads the files through file coordination, which brings a file of a
     cloud provider up to date, and sends allowlinkupdate. The desktop apps
     read the files where they are and need neither.
+
+    With SupportsRelativeLinkAccess the server also sends linkedfile
+    enablepick to the kit, once a view that may change a text document loaded
+    it, so that the Navigator of a master document offers Insert > File: the
+    user picks the file in the storage, see 'linkpicker:'.
 
 linkedfile source id=<path> file=<staged name>
 
@@ -1376,6 +1393,18 @@ filepicker: <JSON>
     filters - an array of strings. Each is the wildcards of one file type,
               separated by semicolons ("*.png;*.jpg"). An empty array means
               any file.
+
+linkpicker: <JSON>
+
+    The engine needs the user to pick a file in the storage of the document,
+    to link to it, the chapter of a master document for example. The client
+    posts UI_PickLinkedFile to the integration, with the Title and Filters of
+    the pick in its Values. The integration lets the user pick a file and
+    answers with Action_PickLinkedFile, whose Values carry the RelativePath of
+    the file relative to the document, or no RelativePath when the user
+    cancelled. The client
+    sends that path back with 'linkpickerresult'. Properties as for
+    'filepicker:'.
 
 coolserver <coolwsd version> <coolwsd git hash> <major.minor[-patch]>
 

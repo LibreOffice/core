@@ -1016,6 +1016,29 @@ void ClientSession::requestLinkedFiles(const std::shared_ptr<Message>& payload,
     if (asked.empty())
         return;
 
+    // Each copy is given to the kit as the file it reads for the links to its path.
+    fetchLinkedFiles(asked, docBroker,
+                     [this, docBroker](const std::string& relativePath, const std::string& stagedName)
+                     {
+                         if (stagedName.empty())
+                             return;
+                         ++_linkedFileSourcesPending;
+                         forwardToChild("linkedfile source id=" + Uri::encode(relativePath) +
+                                            " file=" + Uri::encode(stagedName),
+                                        docBroker);
+                     });
+}
+
+void ClientSession::fetchLinkedFiles(const std::vector<std::string>& relativePaths,
+                                     const std::shared_ptr<DocumentBroker>& docBroker,
+                                     const LinkedFileStaged& onStaged)
+{
+    const std::function<void()> noCopies = [&relativePaths, &onStaged]()
+    {
+        for (const std::string& relativePath : relativePaths)
+            onStaged(relativePath, std::string());
+    };
+
     // The question goes to the storage of this document, authorized the way every other WOPI
     // request of this view is.
     const Authorization& auth = getAuthorization();
@@ -1028,14 +1051,15 @@ void ClientSession::requestLinkedFiles(const std::shared_ptr<Message>& payload,
         LOG_WRN("Not asking for the files linked from [" << docBroker->getDocKey()
                                                          << "]: the WOPI URL [" << uriAnonym
                                                          << "] is relative");
+        noCopies();
         return;
     }
 
     Poco::JSON::Object::Ptr body = new Poco::JSON::Object();
     body->set("Kind", "relative");
     Poco::JSON::Array::Ptr paths = new Poco::JSON::Array();
-    for (const std::string& id : asked)
-        paths->add(id);
+    for (const std::string& relativePath : relativePaths)
+        paths->add(relativePath);
     body->set("RelativePaths", paths);
     std::ostringstream bodyStream;
     body->stringify(bodyStream);
@@ -1049,11 +1073,13 @@ void ClientSession::requestLinkedFiles(const std::shared_ptr<Message>& payload,
     {
         LOG_WRN("Not asking for the files linked from ["
                 << docBroker->getDocKey() << "]: no HTTP session to [" << uriAnonym << ']');
+        noCopies();
         return;
     }
 
     httpSession->setFinishedHandler(
-        [selfWeak = weak_from_this(), this, asked](const std::shared_ptr<http::Session>& finished)
+        [selfWeak = weak_from_this(), this, relativePaths,
+         onStaged](const std::shared_ptr<http::Session>& finished)
         {
             std::shared_ptr<MessageHandlerInterface> selfLifecycle = selfWeak.lock();
             if (!selfLifecycle || SigUtil::getShutdownRequestFlag())
@@ -1061,21 +1087,44 @@ void ClientSession::requestLinkedFiles(const std::shared_ptr<Message>& payload,
 
             const std::shared_ptr<const http::Response> response = finished->response();
             completeLinkedFiles(
-                asked, response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0,
-                response ? response->getBody() : std::string());
+                relativePaths,
+                response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0,
+                response ? response->getBody() : std::string(), onStaged);
+        });
+    // A storage that cannot be reached gives no file, which every waiting request is told.
+    httpSession->setConnectFailHandler(
+        [selfWeak = weak_from_this(), this, relativePaths, onStaged,
+         uriAnonym](const std::shared_ptr<http::Session>&)
+        {
+            std::shared_ptr<MessageHandlerInterface> selfLifecycle = selfWeak.lock();
+            if (!selfLifecycle || SigUtil::getShutdownRequestFlag())
+                return;
+
+            LOG_WRN("Cannot connect to [" << uriAnonym << "] to ask for linked files");
+            for (const std::string& relativePath : relativePaths)
+                onStaged(relativePath, std::string());
         });
 
-    LOG_INF("Asking [" << uriAnonym << "] for " << asked.size() << " files linked from ["
+    LOG_INF("Asking [" << uriAnonym << "] for " << relativePaths.size() << " files linked from ["
                        << docBroker->getDocKey() << ']');
     httpSession->asyncRequest(request, docBroker->getPoll());
 }
 
 void ClientSession::completeLinkedFiles(const std::vector<std::string>& asked,
-                                        const unsigned statusCode, const std::string& body)
+                                        const unsigned statusCode, const std::string& body,
+                                        const LinkedFileStaged& onStaged)
 {
     const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
     if (!docBroker)
         return;
+
+    // A file the storage gives no copy of is answered as such, once the answer is read.
+    std::vector<std::string> unanswered = asked;
+    const std::function<void()> noCopies = [&unanswered, &onStaged]()
+    {
+        for (const std::string& relativePath : unanswered)
+            onStaged(relativePath, std::string());
+    };
 
     constexpr std::size_t MaxAnswerSize = 256 * 1024;
     Poco::JSON::Object::Ptr object;
@@ -1084,6 +1133,7 @@ void ClientSession::completeLinkedFiles(const std::vector<std::string>& asked,
     {
         LOG_WRN("The storage gave no answer for the files linked from ["
                 << docBroker->getDocKey() << "], status " << statusCode);
+        noCopies();
         return;
     }
 
@@ -1091,7 +1141,10 @@ void ClientSession::completeLinkedFiles(const std::vector<std::string>& asked,
     // absent. A file without an entry is one the storage knows nothing of.
     const Poco::JSON::Array::Ptr links = object->getArray("Links");
     if (!links)
+    {
+        noCopies();
         return;
+    }
 
     std::vector<std::string> answered;
     for (std::size_t i = 0; i < links->size(); ++i)
@@ -1105,6 +1158,7 @@ void ClientSession::completeLinkedFiles(const std::vector<std::string>& asked,
             std::find(answered.begin(), answered.end(), relativePath) != answered.end())
             continue;
         answered.push_back(relativePath);
+        unanswered.erase(std::find(unanswered.begin(), unanswered.end(), relativePath));
 
         int status = static_cast<int>(http::StatusCode::OK);
         JsonUtil::findJSONValue(link, "Status", status);
@@ -1117,6 +1171,7 @@ void ClientSession::completeLinkedFiles(const std::vector<std::string>& asked,
             LOG_INF("The storage has no file [" << pathAnonym << "] linked from ["
                                                 << docBroker->getDocKey() << "], status "
                                                 << status);
+            onStaged(relativePath, std::string());
             continue;
         }
 
@@ -1132,6 +1187,7 @@ void ClientSession::completeLinkedFiles(const std::vector<std::string>& asked,
             LOG_ERR("The storage named the file [" << pathAnonym << "] linked from ["
                                                    << docBroker->getDocKey()
                                                    << "] by a malformed URL: " << exc.displayText());
+            onStaged(relativePath, std::string());
             continue;
         }
 
@@ -1141,15 +1197,18 @@ void ClientSession::completeLinkedFiles(const std::vector<std::string>& asked,
             LOG_WRN("Not downloading the file [" << pathAnonym << "] linked from ["
                                                  << docBroker->getDocKey()
                                                  << "]: it is not on the WOPI host of the document");
+            onStaged(relativePath, std::string());
             continue;
         }
 
-        downloadLinkedFile(relativePath, uri, accessToken, CompareRedirectLimit);
+        downloadLinkedFile(relativePath, uri, accessToken, CompareRedirectLimit, onStaged);
     }
+    noCopies();
 }
 
 void ClientSession::downloadLinkedFile(const std::string& relativePath, const Poco::URI& uri,
-                                       const std::string& accessToken, int redirectLimit)
+                                       const std::string& accessToken, int redirectLimit,
+                                       const LinkedFileStaged& onStaged)
 {
     const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
     if (!docBroker)
@@ -1160,20 +1219,24 @@ void ClientSession::downloadLinkedFile(const std::string& relativePath, const Po
         "linkedfile-" + Util::rng::getHexString(16) + fileExtension(relativePath);
     const std::string stagedPath = docBroker->jailStagingPath(stagedName);
     if (stagedPath.empty())
+    {
+        onStaged(relativePath, std::string());
         return;
+    }
 
     const std::string stagedDirectory = Poco::Path(stagedPath).parent().toString();
     Poco::File(stagedDirectory).createDirectories();
     if (!FileUtil::checkDiskSpace(stagedDirectory))
     {
         LOG_ERR("Low disk space to download a file linked from [" << docBroker->getDocKey() << ']');
+        onStaged(relativePath, std::string());
         return;
     }
 
     const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
     http::Session::FinishedCallback finishedCallback =
         [selfWeak = weak_from_this(), this, relativePath, uri, accessToken, redirectLimit,
-         stagedName, stagedPath, uriAnonym](const std::shared_ptr<http::Session>& session)
+         stagedName, stagedPath, uriAnonym, onStaged](const std::shared_ptr<http::Session>& session)
     {
         std::shared_ptr<MessageHandlerInterface> selfLifecycle = selfWeak.lock();
         const std::shared_ptr<DocumentBroker> broker =
@@ -1199,14 +1262,18 @@ void ClientSession::downloadLinkedFile(const std::string& relativePath, const Po
             {
                 LOG_ERR("The redirect from [" << uriAnonym
                                               << "] is malformed: " << exc.displayText());
+                onStaged(relativePath, std::string());
                 return;
             }
 
             if (isCompareDownloadUrl(target, getPublicUri()))
-                downloadLinkedFile(relativePath, target, accessToken, redirectLimit - 1);
+                downloadLinkedFile(relativePath, target, accessToken, redirectLimit - 1, onStaged);
             else
+            {
                 LOG_WRN("Not following the redirect from ["
                         << uriAnonym << "]: it leaves the WOPI host of the document");
+                onStaged(relativePath, std::string());
+            }
             return;
         }
 
@@ -1216,30 +1283,96 @@ void ClientSession::downloadLinkedFile(const std::string& relativePath, const Po
             LOG_ERR("Failed to download a linked file from ["
                     << uriAnonym << "]: " << httpResponse->statusLine().reasonPhrase());
             FileUtil::removeFile(stagedPath);
+            onStaged(relativePath, std::string());
             return;
         }
 
-        ++_linkedFileSourcesPending;
-        forwardToChild("linkedfile source id=" + Uri::encode(relativePath) +
-                           " file=" + Uri::encode(stagedName),
-                       broker);
+        onStaged(relativePath, stagedName);
     };
 
     LOG_DBG("Downloading a linked file from [" << uriAnonym << ']');
     std::shared_ptr<http::Session> httpSession = StorageConnectionManager::getWopiHttpSession(uri);
     httpSession->setFinishedHandler(std::move(finishedCallback));
+    httpSession->setConnectFailHandler(
+        [selfWeak = weak_from_this(), this, relativePath, stagedPath, uriAnonym,
+         onStaged](const std::shared_ptr<http::Session>&)
+        {
+            FileUtil::removeFile(stagedPath);
+            std::shared_ptr<MessageHandlerInterface> selfLifecycle = selfWeak.lock();
+            if (!selfLifecycle || SigUtil::getShutdownRequestFlag())
+                return;
+
+            LOG_ERR("Cannot connect to [" << uriAnonym << "] to download a linked file");
+            onStaged(relativePath, std::string());
+        });
     const http::Request httpRequest =
         StorageConnectionManager::createProofSignedRequest(uri, accessToken);
+    // A request that does not start is answered by the handler above.
     if (!httpSession->asyncRequest(httpRequest, docBroker->getPoll()))
-    {
-        FileUtil::removeFile(stagedPath);
         return;
-    }
 
     httpSession->response()->saveBodyToFile(stagedPath);
     httpSession->response()->setBodySizeLimit(
         ConfigUtil::getConfigValue<int64_t>("storage.wopi.max_file_size", 0));
 }
+
+bool ClientSession::linkPickerResult(const StringVector& tokens,
+                                     const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    // linkpickerresult id=<n> [path=<path>]: the URL-encoded path of the picked file relative to
+    // the document, or no path when the user cancelled.
+    int id = 0;
+    std::string encodedPath;
+    const bool wellFormed = (tokens.size() == 2 || tokens.size() == 3) &&
+                            getTokenInteger(tokens[1], "id", id) && id >= 0 &&
+                            (tokens.size() == 2 || getTokenString(tokens[2], "path", encodedPath));
+    std::string relativePath;
+    if (wellFormed && !encodedPath.empty())
+    {
+        try
+        {
+            Poco::URI::decode(encodedPath, relativePath);
+        }
+        catch (const Poco::Exception&)
+        {
+            // relativePath stays empty and fails the check below.
+        }
+    }
+    if (!wellFormed || (!encodedPath.empty() && !isRelativeLinkPath(relativePath)))
+    {
+        LOG_ERR("Bad syntax for: " << tokens.cat(' ', 0));
+        sendTextFrameAndLogError("error: cmd=linkpickerresult kind=syntax");
+        return false;
+    }
+
+    if (id != _openLinkPick)
+    {
+        LOG_WRN("The client answers a pick of a file to link to [" << id
+                                                                    << "] the kit did not ask for");
+        sendTextFrameAndLogError("error: cmd=linkpickerresult kind=notasked");
+        return false;
+    }
+    _openLinkPick = -1;
+
+    const std::string answer = "linkpickerresult id=" + std::to_string(id);
+    if (relativePath.empty() || !_linkedFilesEnabled || !canChangeDocument())
+        return forwardToChild(answer, docBroker);
+
+    // The kit gets the file the storage keeps under that path, or no file.
+    fetchLinkedFiles({ relativePath }, docBroker,
+                     [this, docBroker, answer](const std::string& path,
+                                               const std::string& stagedName)
+                     {
+                         if (stagedName.empty())
+                             forwardToChild(answer, docBroker);
+                         else
+                             forwardToChild(answer + " path=" + Uri::encode(path) +
+                                                " file=" + Uri::encode(stagedName),
+                                            docBroker);
+                     });
+    return true;
+}
+
 #endif
 
 #if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
@@ -2162,6 +2295,12 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         return true;
     }
 #endif // !MOBILEAPP && !WASMAPP
+#if !MOBILEAPP
+    else if (tokens.equals(0, "linkpickerresult"))
+    {
+        return linkPickerResult(tokens, docBroker);
+    }
+#endif // !MOBILEAPP
     else if (tokens.equals(0, "linkedfile"))
     {
         // A client reads which files its document links to. Which file a link is read from is
@@ -4432,6 +4571,21 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
         return forwardWithoutJailUrls(payload);
     }
 #endif // !MOBILEAPP
+#if !MOBILEAPP
+    else if (tokens.equals(0, "linkpicker:"))
+    {
+        // The client answers this pick only, so the storage is asked for no file the kit did not
+        // ask for.
+        Poco::JSON::Object::Ptr object;
+        const std::string message(payload->data().data(), payload->size());
+        const std::size_t jsonStart = message.find('{');
+        int id = -1;
+        if (jsonStart != std::string::npos && JsonUtil::parseJSON(message.substr(jsonStart), object))
+            JsonUtil::findJSONValue(object, "id", id);
+        _openLinkPick = id;
+        return forwardToClient(payload);
+    }
+#endif // !MOBILEAPP
     else if (tokens.equals(0, "linkedfilesrefresh:"))
     {
 #if !MOBILEAPP
@@ -4760,6 +4914,15 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
         if (statusJsonObject->has("type"))
             _isTextDocument = statusJsonObject->get("type").toString() == "text";
 
+#if !MOBILEAPP
+        // The storage gives the file the user picks for a new link in a text document, to a
+        // view that may change the document.
+        if (_isTextDocument && _linkedFilesEnabled && !_linkPicksEnabled && canChangeDocument())
+        {
+            _linkPicksEnabled = true;
+            forwardToChild("linkedfile enablepick", docBroker);
+        }
+#endif // !MOBILEAPP
         if (statusJsonObject->has("viewid"))
             _kitViewId = std::atoi(statusJsonObject->get("viewid").toString().c_str());
         if (statusJsonObject->has("hybridpdf") &&

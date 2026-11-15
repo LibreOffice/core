@@ -660,6 +660,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('getchildid:')) {
 			this._onGetChildIdMsg(textMsg);
 		}
+		else if (textMsg.startsWith('linkpicker:')) {
+			this._map.fire('linkpicker', JSON.parse(textMsg.substring('linkpicker:'.length + 1)));
+		}
 		else if (textMsg.startsWith('filepicker:')) {
 			this._map.fire('filepicker', JSON.parse(textMsg.substring('filepicker:'.length + 1)));
 		}

@@ -391,6 +391,9 @@ private:
     OUString        LinkedFileId(const SwSection& rSection);
     // asks where a new document goes, then creates it and links to it at the given position
     void            InsertNewDocument(std::optional<SwGlblDocContent> oDocContent);
+    // asks the host for a file it keeps, with a copy to read, and links to it at the given
+    // position
+    void            InsertLinkTarget(std::optional<SwGlblDocContent> oDocContent);
     void            GotoContent(const SwGlblDocContent*);
     MenuEnableFlags GetEnableFlags() const;
 

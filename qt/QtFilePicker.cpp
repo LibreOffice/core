@@ -7,6 +7,8 @@
 
 #include "QtFilePicker.hpp"
 
+#include "DBusService.hpp"
+
 #include <COKit/COKit.hxx>
 
 #include <QApplication>
@@ -136,6 +138,52 @@ static void filePickerProviderPickSaveLocation(const char* pTitle, const char* p
 // this session only.
 static bool picksThroughPortal() { return QFile::exists(QStringLiteral("/.flatpak-info")); }
 
+// A file the user picks to link to, through the portal: the document links to the host path of
+// the file and reads it through the portal path.
+static void filePickerProviderPickLinkTarget(const char* pTitle,
+                                             const COKitFilePickerFilter* pFilters,
+                                             size_t nFilters,
+                                             void (*pfnPicked)(void* pContext, const char* pLinkUrl,
+                                                               const char* pReadUrl),
+                                             void* pContext)
+{
+    QString title = pTitle && pTitle[0] ? QString::fromUtf8(pTitle) : QObject::tr("Open File");
+    const QStringList nameFilters = toNameFilters(pFilters, nFilters);
+
+    QMetaObject::invokeMethod(
+        qApp,
+        [title, nameFilters, pfnPicked, pContext]()
+        {
+            QFileDialog* dialog = new QFileDialog(QApplication::activeWindow(), title);
+            if (!nameFilters.isEmpty())
+                dialog->setNameFilters(nameFilters);
+            dialog->setFileMode(QFileDialog::ExistingFile);
+            dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+            // finished fires exactly once, for a pick and for a cancel alike.
+            QObject::connect(
+                dialog, &QDialog::finished,
+                [dialog, pfnPicked, pContext](int result)
+                {
+                    const QStringList files = dialog->selectedFiles();
+                    if (result != QDialog::Accepted || files.isEmpty())
+                    {
+                        pfnPicked(pContext, nullptr, nullptr);
+                        return;
+                    }
+                    // A file the app may read where it is, in a folder the sandbox gives, has
+                    // no other path.
+                    const QByteArray readUrl = QUrl::fromLocalFile(files.first()).toEncoded();
+                    const std::string hostUrl = coda::hostDisplayUriForPath(files.first());
+                    pfnPicked(pContext, hostUrl.empty() ? readUrl.constData() : hostUrl.c_str(),
+                              readUrl.constData());
+                });
+
+            dialog->open();
+        },
+        Qt::QueuedConnection);
+}
+
 void install_filepicker_provider(COKit& rOffice)
 {
     static COKitFilePickerProvider provider{};
@@ -145,6 +193,8 @@ void install_filepicker_provider(COKit& rOffice)
         provider.pickSaveLocation = filePickerProviderPickSaveLocation;
     // The native picker gives the file the user picked, which a document may link to.
     provider.picksFilesInPlace = !picksThroughPortal();
+    if (picksThroughPortal())
+        provider.pickLinkTarget = filePickerProviderPickLinkTarget;
     rOffice.installFilePickerProvider(&provider);
 }
 

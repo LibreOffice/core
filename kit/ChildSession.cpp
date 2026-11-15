@@ -742,6 +742,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "rendersearchresult") ||
                tokens.equals(0, "contentcontrolevent") ||
                tokens.equals(0, "filepickerresult") ||
+               tokens.equals(0, "linkpickerresult") ||
                tokens.equals(0, "a11ystate") ||
                tokens.equals(0, "firsttilesent") ||
                tokens.equals(0, "geta11yfocusedparagraph") ||
@@ -1135,6 +1136,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "filepickerresult"))
         {
             return filePickerResult(tokens);
+        }
+        else if (tokens.equals(0, "linkpickerresult"))
+        {
+            return linkPickerResult(tokens);
         }
         else if (tokens.equals(0, "traceeventrecording"))
         {
@@ -4591,6 +4596,13 @@ bool ChildSession::linkedFile(const StringVector& tokens)
         return sendTextFrame("linkedfiles: " + getLinkedFilesJson());
     if (tokens.size() == 4 && tokens.equals(1, "source"))
         return linkedFileSource(tokens);
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
+    if (tokens.size() == 2 && tokens.equals(1, "enablepick"))
+    {
+        _docManager->enableLinkPicks();
+        return true;
+    }
+#endif
 
     sendTextFrameAndLogError("error: cmd=linkedfile kind=syntax");
     return false;
@@ -5145,6 +5157,68 @@ bool ChildSession::filePickerResult(const StringVector& tokens)
 
     _docManager->completeFilePick(static_cast<unsigned>(id), _viewId, url);
     return answered;
+}
+
+bool ChildSession::linkPickerResult(const StringVector& tokens)
+{
+    // linkpickerresult id=<n> [path=<path> file=<name>]: the URL-encoded path of the picked file
+    // relative to the document, and the name of its copy the server staged, or neither when
+    // there is no file.
+    int id = 0;
+    std::string encodedPath;
+    std::string encodedFile;
+    const bool wellFormed = (tokens.size() == 2 || tokens.size() == 4) &&
+                            getTokenInteger(tokens[1], "id", id) && id >= 0 &&
+                            (tokens.size() == 2 || (getTokenString(tokens[2], "path", encodedPath) &&
+                                                    getTokenString(tokens[3], "file", encodedFile)));
+    std::string relativePath;
+    std::string file;
+    if (wellFormed && tokens.size() == 4)
+    {
+        try
+        {
+            URI::decode(encodedPath, relativePath);
+            URI::decode(encodedFile, file);
+        }
+        catch (const Poco::Exception&)
+        {
+            // The strings stay empty and fail the check below.
+        }
+    }
+    // The copy is picked out of the staging area by name.
+    if (!wellFormed ||
+        (tokens.size() == 4 && (relativePath.empty() || !Util::isPlainFileName(file))))
+    {
+        sendTextFrameAndLogError("error: cmd=linkpickerresult kind=syntax");
+        return false;
+    }
+
+    // The copy of the picked file is kept as the one the engine reads when the pick takes it, and
+    // goes otherwise.
+    std::string path;
+    std::string readUrl;
+    if (!file.empty())
+    {
+        path = getJailDocRoot() + "insertfile/" + file;
+        if (!FileUtil::Stat(path).exists())
+        {
+            LOG_ERR("linkpickerresult: no file staged as [" << file << ']');
+            path.clear();
+        }
+        else if (!isReadOnly())
+            readUrl = Poco::URI(Poco::Path(path)).toString();
+    }
+
+    const bool taken = _docManager->completeLinkPick(
+        static_cast<unsigned>(id), _viewId, readUrl.empty() ? std::string() : relativePath, readUrl);
+    if (!path.empty())
+    {
+        if (taken && !readUrl.empty())
+            _docManager->keepLinkedFileCopy(relativePath, path);
+        else
+            FileUtil::removeFile(path);
+    }
+    return true;
 }
 
 bool ChildSession::renderSearchResult(const char* buffer, int length, const StringVector& /*tokens*/)

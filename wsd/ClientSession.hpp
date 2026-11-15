@@ -406,6 +406,11 @@ public:
     void recordSlideLinkSources(const std::shared_ptr<Message>& payload,
                                 const std::shared_ptr<DocumentBroker>& docBroker);
 
+    /// Called for each file asked of the storage, with its path relative to the document and
+    /// the name of the copy staged in the jail, or an empty name when there is no copy.
+    using LinkedFileStaged =
+        std::function<void(const std::string& relativePath, const std::string& stagedName)>;
+
     /// Forwards a message of the kit about the linked files to the client without the URLs that
     /// name the files in the jail.
     bool forwardWithoutJailUrls(const std::shared_ptr<Message>& payload);
@@ -415,16 +420,28 @@ public:
     void requestLinkedFiles(const std::shared_ptr<Message>& payload,
                             const std::shared_ptr<DocumentBroker>& docBroker, bool refresh);
 
+    /// Asks the storage of the document for the files with the paths relativePaths, relative
+    /// to the document, and stages a copy of each one in the jail.
+    void fetchLinkedFiles(const std::vector<std::string>& relativePaths,
+                          const std::shared_ptr<DocumentBroker>& docBroker,
+                          const LinkedFileStaged& onStaged);
+
     /// Takes the answer of the storage for the linked files in asked, and downloads each file
     /// it names.
     void completeLinkedFiles(const std::vector<std::string>& asked, unsigned statusCode,
-                             const std::string& body);
+                             const std::string& body, const LinkedFileStaged& onStaged);
 
     /// Downloads the file with the path relativePath from a URL on the WOPI host of the
-    /// document into the jail, and gives it to the kit as the file it reads for the links to
-    /// that path. Follows up to redirectLimit redirects on that host.
+    /// document into the jail. Follows up to redirectLimit redirects on that host.
     void downloadLinkedFile(const std::string& relativePath, const Poco::URI& uri,
-                            const std::string& accessToken, int redirectLimit);
+                            const std::string& accessToken, int redirectLimit,
+                            const LinkedFileStaged& onStaged);
+
+    /// Takes the answer of the client to a link pick of the kit: the path of the picked file
+    /// relative to the document, which the integrator gave, or none when the user cancelled.
+    /// The file is staged from the storage and given to the kit.
+    bool linkPickerResult(const StringVector& tokens,
+                          const std::shared_ptr<DocumentBroker>& docBroker);
 #endif // !MOBILEAPP
 
     /// Handle a clipboard fetch / put request.
@@ -879,8 +896,13 @@ private:
     bool _linkedFilesAsked = false;
     /// The list of linked files the kit answers next is the one this session asked for.
     bool _linkedFilesListPending = false;
+    /// The kit was told that the storage gives the file the user picks for a new link.
+    bool _linkPicksEnabled = false;
     /// The number of linked files given to the kit that it did not answer for yet.
     int _linkedFileSourcesPending = 0;
+    /// The id of the pick of a file to link to that the kit asked the client for and the client
+    /// did not answer yet, or -1. The client keeps one such request at a time.
+    int _openLinkPick = -1;
 
     /// The session is read-only only because the file has a view-only extension.
     bool _isReadOnlyForViewFile = false;
