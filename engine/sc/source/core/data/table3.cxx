@@ -379,14 +379,16 @@ std::unique_ptr<ScSortInfoArray> ScTable::CreateSortInfoArray(
     {
         for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
         {
-            SCCOL nCol = static_cast<SCCOL>(rSortParam.maKeyState[nSort].nField);
-            ScColumn* pCol = &aCol[nCol];
+            SCCOLROW nField = rSortParam.maKeyState[nSort].nField;
+            ScColumn* pCol = IsAllocatedColumn(nField) ? &aCol[nField] : nullptr;
             sc::ColumnBlockConstPosition aBlockPos;
-            pCol->InitBlockPosition(aBlockPos);
+            if (pCol)
+                pCol->InitBlockPosition(aBlockPos);
             for ( SCROW nRow = nInd1; nRow <= nInd2; nRow++ )
             {
                 ScSortInfo & rInfo = pArray->Get( nSort, nRow );
-                rInfo.maCell = pCol->GetCellValue(aBlockPos, nRow);
+                if (pCol)
+                    rInfo.maCell = pCol->GetCellValue(aBlockPos, nRow);
                 rInfo.nOrg = nRow;
             }
         }
@@ -1711,10 +1713,11 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const
     {
         do
         {
-            SCCOL nCol = static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField);
+            SCCOLROW nField = aSortParam.maKeyState[nSort].nField;
             nRes = 0;
-            if(nCol < GetAllocatedColumnsCount())
+            if (IsAllocatedColumn(nField))
             {
+                SCCOL nCol = static_cast<SCCOL>(nField);
                 ScRefCellValue aCell1 = aCol[nCol].GetCellValue(nIndex1);
                 ScRefCellValue aCell2 = aCol[nCol].GetCellValue(nIndex2);
                 nRes = CompareCell(nSort, aCell1, nCol, nIndex1, aCell2, nCol, nIndex2);
@@ -2509,6 +2512,9 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 case SC_TOPPERC:
                 case SC_BOTPERC:
                 {
+                    if (rEntry.nField < 0 || rEntry.nField > rDocument.MaxCol())
+                        break;
+
                     ScSortParam aLocalSortParam(rParam, static_cast<SCCOL>(rEntry.nField));
                     aSortParam = aLocalSortParam;       // used in CreateSortInfoArray, Compare
                     if (!bSortCollatorInitialized)

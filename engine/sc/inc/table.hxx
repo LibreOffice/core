@@ -1191,6 +1191,7 @@ public:
     ScColumnsRange GetColumnsRange(SCCOL begin, SCCOL end) const;
     SCCOL ClampToAllocatedColumns(SCCOL nCol) const { return std::min(nCol, static_cast<SCCOL>(aCol.size() - 1)); }
     SCCOL GetAllocatedColumnsCount() const { return aCol.size(); }
+    bool IsAllocatedColumn(SCCOLROW nCol) const { return nCol >= 0 && nCol < GetAllocatedColumnsCount(); }
 
     /**
      * Serializes the sheet's geometry data.
