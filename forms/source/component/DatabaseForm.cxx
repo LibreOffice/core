@@ -63,6 +63,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/scripturl.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
@@ -2236,6 +2237,8 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
     }
 
     if (!xModel.is())
+        return;
+    if (comphelper::isScriptURL(aURLStr) && !SfxObjectShell::isDocumentScriptAllowed(aURLStr, xModel))
         return;
     Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
     if (!xFrame.is())
