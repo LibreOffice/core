@@ -1043,7 +1043,9 @@ void SwTransferable::PrepareForCopyTextRange(SwPaM & rPaM)
     AddFormat( SotClipboardFormatId::RTF );
 #if HAVE_FEATURE_DESKTOP
     AddFormat( SotClipboardFormatId::RICHTEXT );
+#endif
     AddFormat( SotClipboardFormatId::HTML );
+#if HAVE_FEATURE_DESKTOP
     AddFormat( SotClipboardFormatId::MARKDOWN );
 #endif
     AddFormat( SotClipboardFormatId::STRING );
@@ -1199,7 +1201,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut, bool bDeleteRedlines )
             AddFormat( SotClipboardFormatId::RTF );
 #if HAVE_FEATURE_DESKTOP
             AddFormat( SotClipboardFormatId::RICHTEXT );
+#endif
             AddFormat( SotClipboardFormatId::HTML );
+#if HAVE_FEATURE_DESKTOP
             AddFormat( SotClipboardFormatId::MARKDOWN );
 #endif
         }
