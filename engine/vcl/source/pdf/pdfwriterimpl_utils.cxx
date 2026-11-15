@@ -284,11 +284,10 @@ void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
     }
     if (nDelta)
     {
-        aCreationMetaDateString.append(char('0' + ((nDelta / 36000) % 10)));
-        aCreationMetaDateString.append(char('0' + ((nDelta / 3600) % 10)));
-        aCreationMetaDateString.append(":");
-        aCreationMetaDateString.append(char('0' + ((nDelta / 600) % 6)));
-        aCreationMetaDateString.append(char('0' + ((nDelta / 60) % 10)));
+        aCreationMetaDateString.append(OStringChar(char('0' + ((nDelta / 36000) % 10)))
+                                       + OStringChar(char('0' + ((nDelta / 3600) % 10))) + ":"
+                                       + OStringChar(char('0' + ((nDelta / 600) % 6)))
+                                       + OStringChar(char('0' + ((nDelta / 60) % 10))));
     }
     aID.append(i_rCString1.getStr(), i_rCString1.getLength());
 
