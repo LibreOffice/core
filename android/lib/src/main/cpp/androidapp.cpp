@@ -25,6 +25,8 @@
 
 #include <osl/detail/android-bootstrap.h>
 
+#include <androidapp.hpp>
+
 const int SHOW_JS_MAXLEN = 70;
 
 int coolwsd_server_socket_fd = -1;
@@ -60,48 +62,58 @@ JNI_OnLoad(JavaVM* vm, void*) {
 #else
     Log::initialize("Mobile", "information");
 #endif
+
+    resolveSystemClipboardClass(env);
+
     return JNI_VERSION_1_6;
 }
 
-// Exception safe JVM detach, JNIEnv is TLS for Java - so per-thread.
-class JNIThreadContext
+// declared in androidapp.hpp
+JNIThreadContext::JNIThreadContext(jint localCapacity)
 {
-    JNIEnv *_env;
-public:
-    JNIThreadContext()
+    assert(javaVM != nullptr);
+    const jint res = javaVM->GetEnv(reinterpret_cast<void**>(&_env), JNI_VERSION_1_6);
+    if (res == JNI_EDETACHED)
     {
-        assert(javaVM != nullptr);
-        jint res = javaVM->GetEnv((void**)&_env, JNI_VERSION_1_6);
-        if (res == JNI_EDETACHED) {
-            LOG_DBG("Attach worker thread");
-            res = javaVM->AttachCurrentThread(&_env, nullptr);
-            if (JNI_OK != res) {
-                LOG_DBG("Failed to AttachCurrentThread");
-            }
-        }
-        else if (res == JNI_EVERSION) {
-            LOG_DBG("GetEnv version not supported");
+        LOG_DBG("Attach worker thread");
+        if (javaVM->AttachCurrentThread(&_env, nullptr) != JNI_OK)
+        {
+            LOG_ERR("Failed to AttachCurrentThread");
+            _env = nullptr;
             return;
         }
-        else if (res != JNI_OK) {
-            LOG_DBG("GetEnv another error " << res);
-            return;
-        }
+        _attachedHere = true;
+    }
+    else if (res != JNI_OK)
+    {
+        LOG_ERR("GetEnv failed with " << res);
+        _env = nullptr;
+        return;
     }
 
-    ~JNIThreadContext()
+    _framePushed = _env->PushLocalFrame(localCapacity) == 0;
+    if (!_framePushed)
     {
+        _env->ExceptionClear();
+        LOG_ERR("Cannot push a JNI local frame");
+    }
+}
+
+JNIThreadContext::~JNIThreadContext()
+{
+    if (_env && _framePushed)
+        _env->PopLocalFrame(nullptr);
+    if (_attachedHere)
         javaVM->DetachCurrentThread();
-    }
-
-    JNIEnv *getEnv() const { return _env; }
-};
+}
 
 static void send2JS(const JNIThreadContext &jctx, const std::vector<char>& buffer)
 {
     LOG_DBG("Send to JS: " << COOLProtocol::getAbbreviatedMessage(buffer.data(), buffer.size()));
 
     JNIEnv *env = jctx.getEnv();
+    if (!env)
+        return;
 
     jbyteArray jmessage = env->NewByteArray(buffer.size());
     env->SetByteArrayRegion(jmessage, 0, buffer.size(),
@@ -119,6 +131,8 @@ void postDirectMessage(std::string message)
 {
     JNIThreadContext ctx;
     JNIEnv *env = ctx.getEnv();
+    if (!env)
+        return;
 
     jstring jstr = env->NewStringUTF(message.c_str());
     jmethodID callPostMobileMessage = env->GetMethodID(g_loActivityClz, "postMobileMessage", "(Ljava/lang/String;)V");
@@ -347,150 +361,6 @@ const char* copyJavaString(JNIEnv* pEnv, jstring aJavaString)
     const char* pClone = strdup(pTemp);
     pEnv->ReleaseStringUTFChars(aJavaString, pTemp);
     return pClone;
-}
-
-extern "C"
-JNIEXPORT jboolean JNICALL
-Java_org_libreoffice_androidlib_LOActivity_getClipboardContent(JNIEnv *env, jobject, jobject lokClipboardData)
-{
-    const char** mimeTypes = nullptr;
-    std::vector<std::string> outMimeTypes;
-    std::vector<std::vector<char>> outStreams;
-
-    jclass jclazz = env->FindClass("java/util/ArrayList");
-    jmethodID methodId_ArrayList_Add = env->GetMethodID(jclazz, "add", "(Ljava/lang/Object;)Z");
-
-    jclass class_LokClipboardEntry = env->FindClass("org/libreoffice/androidlib/lok/LokClipboardEntry");
-    jmethodID methodId_LokClipboardEntry_Constructor = env->GetMethodID(class_LokClipboardEntry, "<init>", "()V");
-    jfieldID fieldId_LokClipboardEntry_Mime = env->GetFieldID(class_LokClipboardEntry , "mime", "Ljava/lang/String;");
-    jfieldID fieldId_LokClipboardEntry_Data = env->GetFieldID(class_LokClipboardEntry, "data", "[B");
-
-    jclass class_LokClipboardData = env->GetObjectClass(lokClipboardData);
-    jfieldID fieldId_LokClipboardData_clipboardEntries = env->GetFieldID(class_LokClipboardData , "clipboardEntries", "Ljava/util/ArrayList;");
-
-    auto items = getLOKDocumentForAndroidOnly()->getClipboard(mimeTypes);
-    if (items.empty())
-    {
-        LOG_DBG("failed to fetch mime-types");
-        return false;
-    }
-
-    for (const auto& item : items)
-    {
-        // Create new LokClipboardEntry instance
-        jobject clipboardEntry = env->NewObject(class_LokClipboardEntry, methodId_LokClipboardEntry_Constructor);
-
-        jstring mimeType = env->NewStringUTF(item.aMimeType.c_str());
-        // clipboardEntry.mime= mimeType
-        env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime, mimeType);
-        env->DeleteLocalRef(mimeType);
-
-        const size_t aByteArraySize = item.aData.size();
-        jbyteArray aByteArray = env->NewByteArray(aByteArraySize);
-        // Copy char* to bytearray
-        env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) item.aData.data());
-        // clipboardEntry.data = aByteArray
-        env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data, aByteArray);
-
-        // clipboardData.clipboardEntries
-        jobject lokClipboardData_clipboardEntries = env->GetObjectField(lokClipboardData, fieldId_LokClipboardData_clipboardEntries);
-
-        // clipboardEntries.add(clipboardEntry)
-        env->CallBooleanMethod(lokClipboardData_clipboardEntries, methodId_ArrayList_Add, clipboardEntry);
-    }
-
-    const char* mimeTypesHTML[] = { "text/plain;charset=utf-8", "text/html", nullptr };
-
-    items = getLOKDocumentForAndroidOnly()->getClipboard(mimeTypesHTML);
-    if (items.empty())
-    {
-        LOG_DBG("failed to fetch mime-types");
-        return false;
-    }
-
-    for (const auto& item : items)
-    {
-        // Create new LokClipboardEntry instance
-        jobject clipboardEntry = env->NewObject(class_LokClipboardEntry, methodId_LokClipboardEntry_Constructor);
-
-        jstring mimeType = env->NewStringUTF(item.aMimeType.c_str());
-        // clipboardEntry.mime= mimeType
-        env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime, mimeType);
-        env->DeleteLocalRef(mimeType);
-
-        size_t aByteArraySize = item.aData.size();
-        jbyteArray aByteArray = env->NewByteArray(aByteArraySize);
-        // Copy char* to bytearray
-        env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) item.aData.data());
-        // clipboardEntry.data = aByteArray
-        env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data, aByteArray);
-
-        // clipboardData.clipboardEntries
-        jobject lokClipboardData_clipboardEntries = env->GetObjectField(lokClipboardData, fieldId_LokClipboardData_clipboardEntries);
-
-        // clipboardEntries.add(clipboardEntry)
-        env->CallBooleanMethod(lokClipboardData_clipboardEntries, methodId_ArrayList_Add, clipboardEntry);
-    }
-
-    return true;
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_org_libreoffice_androidlib_LOActivity_setClipboardContent(JNIEnv *env, jobject, jobject lokClipboardData) {
-    jclass class_ArrayList= env->FindClass("java/util/ArrayList");
-    jmethodID methodId_ArrayList_ToArray = env->GetMethodID(class_ArrayList, "toArray", "()[Ljava/lang/Object;");
-
-    jclass class_LokClipboardEntry = env->FindClass("org/libreoffice/androidlib/lok/LokClipboardEntry");
-    jfieldID fieldId_LokClipboardEntry_Mime = env->GetFieldID(class_LokClipboardEntry , "mime", "Ljava/lang/String;");
-    jfieldID fieldId_LokClipboardEntry_Data = env->GetFieldID(class_LokClipboardEntry, "data", "[B");
-
-    jclass class_LokClipboardData = env->GetObjectClass(lokClipboardData);
-    jfieldID fieldId_LokClipboardData_clipboardEntries = env->GetFieldID(class_LokClipboardData , "clipboardEntries", "Ljava/util/ArrayList;");
-
-    jobject lokClipboardData_clipboardEntries = env->GetObjectField(lokClipboardData, fieldId_LokClipboardData_clipboardEntries);
-
-    jobjectArray clipboardEntryArray = (jobjectArray) env->CallObjectMethod(lokClipboardData_clipboardEntries, methodId_ArrayList_ToArray);
-
-    size_t nEntrySize= env->GetArrayLength(clipboardEntryArray);
-
-    if (nEntrySize == 0)
-        return;
-
-    size_t pSizes[nEntrySize];
-    const char* pMimeTypes[nEntrySize];
-    const char* pStreams[nEntrySize];
-
-    for (size_t nEntryIndex = 0; nEntryIndex < nEntrySize; ++nEntryIndex)
-    {
-        jobject clipboardEntry = env->GetObjectArrayElement(clipboardEntryArray, nEntryIndex);
-
-        jstring mimetype = (jstring) env->GetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime);
-        jbyteArray data = (jbyteArray) env->GetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data);
-
-        pMimeTypes[nEntryIndex] = copyJavaString(env, mimetype);
-
-        size_t dataArrayLength = env->GetArrayLength(data);
-        char* dataArray = new char[dataArrayLength];
-        env->GetByteArrayRegion(data, 0, dataArrayLength, reinterpret_cast<jbyte*>(dataArray));
-
-        pSizes[nEntryIndex] = dataArrayLength;
-        pStreams[nEntryIndex] = dataArray;
-    }
-
-    getLOKDocumentForAndroidOnly()->setClipboard(nEntrySize, pMimeTypes, pSizes, pStreams);
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_org_libreoffice_androidlib_LOActivity_paste(JNIEnv *env, jobject, jstring inMimeType, jbyteArray inData) {
-    const char* mimeType = env->GetStringUTFChars(inMimeType, nullptr);
-
-    size_t dataArrayLength = env->GetArrayLength(inData);
-    char* dataArray = new char[dataArrayLength];
-    env->GetByteArrayRegion(inData, 0, dataArrayLength, reinterpret_cast<jbyte*>(dataArray));
-    getLOKDocumentForAndroidOnly()->paste(mimeType, dataArray, dataArrayLength);
-    env->ReleaseStringUTFChars(inMimeType, mimeType);
 }
 
 extern "C"

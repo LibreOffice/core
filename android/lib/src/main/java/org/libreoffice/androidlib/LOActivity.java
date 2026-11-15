@@ -10,9 +10,6 @@ package org.libreoffice.androidlib;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipDescription;
-import android.content.ClipboardManager;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -59,7 +56,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -75,7 +71,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -84,9 +79,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -102,8 +94,6 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.libreoffice.androidlib.lok.LokClipboardData;
-import org.libreoffice.androidlib.lok.LokClipboardEntry;
 
 import com.android.tools.r8.keepanno.annotations.UsedByNative;
 
@@ -119,19 +109,11 @@ public class LOActivity extends AppCompatActivity {
     private static final String KEY_DOCUMENT_URI = "documentUri";
     private static final String KEY_IS_EDITABLE = "isEditable";
     private static final String KEY_INTENT_URI = "intentUri";
-    private static final String CLIPBOARD_FILE_PATH = "LibreofficeClipboardFile.data";
-    private static final String CLIPBOARD_COOL_SIGNATURE = "cool-clip-magic-4a22437e49a8-";
-    private static final int CLIPBOARD_SYSTEM_LIMIT_BYTES = 512 * 1024;
     public static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENTS_LIST";
     private static String USER_NAME_KEY = "USER_NAME";
     public static final String NIGHT_MODE_KEY = "NIGHT_MODE";
 
     private File mTempFile = null;
-
-    private final AtomicBoolean mPendingCopyToSystemClipboard = new AtomicBoolean(false);
-
-    // Since as the clipboard can be quite large, it's better to not do this on the same thread as everything else
-    private static final ExecutorService clipboardExecutor = Executors.newSingleThreadExecutor();
 
     /// The actual file path of the document, when the app can write it directly.
     private volatile File mResolvedFile = null;
@@ -141,9 +123,6 @@ public class LOActivity extends AppCompatActivity {
 
     private int providerId;
     private Activity mActivity;
-
-    /// Unique number identifying this app + document.
-    private long loadDocumentMillis = 0;
 
     @Nullable
     private URI documentUri;
@@ -159,8 +138,6 @@ public class LOActivity extends AppCompatActivity {
     private boolean isDocDebuggable = BuildConfig.DEBUG;
     private boolean documentLoaded = false;
 
-    private ClipboardManager clipboardManager;
-    private ClipData clipData;
     private Thread nativeMsgThread;
     private Handler nativeHandler;
     private Looper nativeLooper;
@@ -577,7 +554,7 @@ public class LOActivity extends AppCompatActivity {
 
             getMainHandler();
 
-            clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            SystemClipboard.initialize(this);
             nativeMsgThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -1419,8 +1396,6 @@ public class LOActivity extends AppCompatActivity {
         mWebView.loadUrl(finalUrlToLoad);
 
         documentLoaded = true;
-
-        loadDocumentMillis = android.os.SystemClock.uptimeMillis();
     }
 
     private boolean isDarkMode() {
@@ -1470,7 +1445,6 @@ public class LOActivity extends AppCompatActivity {
 
         if (beforeMessageFromWebView(messageAndParameterArray)) {
             postMobileMessageNative(message);
-            afterMessageFromWebView(messageAndParameterArray);
         }
     }
 
@@ -1581,12 +1555,6 @@ public class LOActivity extends AppCompatActivity {
             });
         } else if (messageStartsWith(message, "error:")) {
             runOnUiThread(() -> mProgressDialog.dismiss());
-        } else if (messageStartsWith(message, "unocommandresult:")
-                   && mPendingCopyToSystemClipboard.get()) {
-            final String result = new String(message, Charset.forName("UTF-8"));
-            if ((result.contains(".uno:Copy") || result.contains(".uno:Cut"))
-                    && mPendingCopyToSystemClipboard.compareAndSet(true, false))
-                clipboardExecutor.execute(this::populateClipboard);
         }
     }
 
@@ -1634,16 +1602,6 @@ public class LOActivity extends AppCompatActivity {
             case "exportfile":
                 initiateExportFile(messageAndParam[1]);
                 return false;
-            case "uno":
-                switch (messageAndParam[1]) {
-                    case ".uno:Paste":
-                        return performPaste(false);
-                    case ".uno:PasteSpecial":
-                        return performPaste(true);
-                    default:
-                        break;
-                }
-                break;
             case "DIM_SCREEN": {
                 getMainHandler().post(new Runnable() {
                     @Override
@@ -1968,23 +1926,6 @@ public class LOActivity extends AppCompatActivity {
         return null;
     }
 
-    private void afterMessageFromWebView(String[] messageAndParameterArray) {
-        switch (messageAndParameterArray[0]) {
-            case "uno":
-                switch (messageAndParameterArray[1]) {
-                    case ".uno:Copy":
-                    case ".uno:Cut":
-                        mPendingCopyToSystemClipboard.set(true);
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     private void initiatePrint() {
         PrintManager printManager = (PrintManager) getSystemService(PRINT_SERVICE);
         PrintDocumentAdapter printAdapter = new PrintAdapter(LOActivity.this);
@@ -2000,322 +1941,7 @@ public class LOActivity extends AppCompatActivity {
 
     public native void saveAs(String fileUri, String format, String options);
 
-    public native boolean getClipboardContent(LokClipboardData aData);
-
-    public native void setClipboardContent(LokClipboardData aData);
-
-    public native void paste(String mimeType, byte[] data);
-
     public native void postUnoCommand(String command, String arguments, boolean bNotifyWhenFinished);
-
-    /// Returns a magic that specifies this application - and this document.
-    private final String getClipboardMagic() {
-        return CLIPBOARD_COOL_SIGNATURE + Long.toString(loadDocumentMillis);
-    }
-
-    /// Needs to be executed after the .uno:Copy / Paste has executed
-    public final void populateClipboard()
-    {
-        // No longer written; left over from previous versions of the app.
-        File legacyFile = new File(getApplicationContext().getCacheDir(), CLIPBOARD_FILE_PATH);
-        if (legacyFile.exists())
-            legacyFile.delete();
-
-        LokClipboardData clipboardData = new LokClipboardData();
-        if (!LOActivity.this.getClipboardContent(clipboardData)) {
-            Log.e(TAG, "no clipboard to copy");
-            return;
-        }
-
-        // The full content always goes to a file: in-app pastes read it
-        // back from there, and ClipboardFileProvider streams it to other
-        // apps, both without any size constraint.
-        File clipboardFile = newClipboardFile();
-        if (clipboardFile != null && !clipboardData.writeToFile(clipboardFile)) {
-            Log.e(TAG, "failed to write the clipboard file");
-            clipboardFile = null;
-        }
-
-        String text = clipboardData.getText();
-        String html = clipboardData.getHtml();
-
-        if (html == null)
-            return;
-
-        int idx = html.indexOf("<meta name=\"generator\" content=\"");
-
-        if (idx < 0)
-            idx = html.indexOf("<meta http-equiv=\"content-type\" content=\"text/html;");
-
-        if (idx >= 0) { // inject our magic
-            StringBuffer newHtml = new StringBuffer(html);
-            newHtml.insert(idx, "<meta name=\"origin\" content=\"" + getClipboardMagic() + "\"/>\n");
-            html = newHtml.toString();
-        }
-
-        if (text == null || text.length() == 0)
-            Log.i(TAG, "set text to clipoard with: text '" + text + "' and html '" + html + "'");
-
-        Uri clipUri = clipboardFile != null
-            ? ClipboardFileProvider.uriFor(this, clipboardFile.getName()) : null;
-
-        // Binder transactions share a ~1 MB buffer per process, and larger
-        // setPrimaryClip() calls throw TransactionTooLargeException
-        // (strings are parceled as UTF-16, two bytes per char). Oversized
-        // content is therefore not inlined into the clip - receivers
-        // stream it from clipUri instead, which coerceToText() /
-        // coerceToHtmlText() do transparently when there is no inline text.
-        int estimatedParcelSize = 2 * (html.length() + (text != null ? text.length() : 0));
-        boolean inline = estimatedParcelSize <= CLIPBOARD_SYSTEM_LIMIT_BYTES || clipUri == null;
-
-        clipData = makeClipData(inline ? text : null, inline ? html : null, clipUri);
-        try {
-            clipboardManager.setPrimaryClip(clipData);
-        } catch (RuntimeException e) {
-            // Some vendors reject clips well below the nominal limit; a
-            // URI-only clip is tiny and always fits.
-            Log.w(TAG, "setPrimaryClip failed, retrying with the URI only: " + e);
-            if (clipUri != null) {
-                clipData = makeClipData(null, null, clipUri);
-                clipboardManager.setPrimaryClip(clipData);
-            }
-        }
-    }
-
-    /// a clipboard carrying our magic in the label, the full-fidelity data
-    /// behind 'uri', and - when small enough - the inline text and HTML
-    private final ClipData makeClipData(String text, String html, Uri uri) {
-        // ClipData.Item refuses HTML without plain text
-        if (html != null && text == null)
-            text = "";
-        ClipDescription description = new ClipDescription(getClipboardMagic(),
-            new String[]{ClipDescription.MIMETYPE_TEXT_HTML, ClipDescription.MIMETYPE_TEXT_PLAIN});
-        return new ClipData(description, new ClipData.Item(text, html, null, uri));
-    }
-
-    /// create a fresh file for the current clipboard... open streams of a
-    /// deleted file keep working, so a paste that is happening while we copy
-    /// is allowed to finish. We prefer this than deleting/recreating due to
-    /// potential permission issues if we or the smartphone vendor does that
-    /// improperly...
-    private final File newClipboardFile() {
-        File dir = ClipboardFileProvider.getClipboardDir(this);
-        if (!dir.isDirectory() && !dir.mkdirs()) {
-            Log.e(TAG, "failed to create the clipboard directory");
-            return null;
-        }
-
-        File[] oldFiles = dir.listFiles();
-        if (oldFiles != null)
-            for (File oldFile : oldFiles)
-                oldFile.delete();
-
-        return new File(dir, "clip-" + System.currentTimeMillis() + ".data");
-    }
-
-    /// Do the paste, and return true if we should short-circuit the paste locally (ie. let the core handle that)
-    /// With chooseFormat, foreign content goes to the kit clipboard whole, for the Paste Special dialog.
-    private final boolean performPaste(boolean chooseFormat)
-    {
-        clipData = clipboardManager.getPrimaryClip();
-        if (clipData == null)
-            return false;
-
-        ClipDescription clipDesc = clipData.getDescription();
-        if (clipDesc == null || clipData.getItemCount() < 1)
-            return false;
-
-        CharSequence label = clipDesc.getLabel();
-        if (label != null && label.toString().startsWith(CLIPBOARD_COOL_SIGNATURE)) {
-            if (label.toString().equals(getClipboardMagic())) {
-                Log.i(TAG, "clipboard comes from us - same instance: short circuit it");
-                return true;
-            }
-
-            Log.i(TAG, "clipboard comes from us - other instance: paste from the clipboard file");
-            File clipboardFile = ClipboardFileProvider.fileFor(this, clipData.getItemAt(0).getUri());
-            LokClipboardData clipboardData = null;
-            if (clipboardFile != null && clipboardFile.exists())
-                clipboardData = LokClipboardData.createFromFile(clipboardFile);
-
-            if (clipboardData != null) {
-                LOActivity.this.setClipboardContent(clipboardData);
-                return true;
-            }
-            // couldn't read the clipboard file, try a standard paste...
-        }
-
-        if (chooseFormat && !isClipboardFromThisApp())
-            return offerSystemClipboardToKit();
-
-        // Choose a representation from the clipboard that we prefer rather than going with the
-        // first one by default ... ideally we'd eventually change this so that we have a native
-        // clipboard handler in VCL so everything is done like in the other apps...
-        for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
-            if (clipDesc.getMimeType(i).startsWith("image/")) {
-                Log.d(TAG, "Pasting image mime: " + clipDesc.getMimeType(i));
-                byte[] image = readUriContent(clipData.getItemAt(0).getUri());
-                if (image != null) {
-                    LOActivity.this.paste(clipDesc.getMimeType(i), image);
-                    return false;
-                }
-            }
-        }
-
-        for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
-            Log.d(TAG, "Pasting mime " + i + ": " + clipDesc.getMimeType(i));
-
-            if (clipDesc.getMimeType(i).equals(ClipDescription.MIMETYPE_TEXT_HTML)) {
-                final String html = clipData.getItemAt(0).coerceToHtmlText(this);
-                if (html == null || html.isEmpty())
-                    continue;
-                // Check if the clipboard content was made with the app
-                if (html.contains(CLIPBOARD_COOL_SIGNATURE)) {
-                    // Check if the clipboard content is from the same app instance
-                    if (html.contains(getClipboardMagic())) {
-                        Log.i(TAG, "clipboard comes from us - same instance: short circuit it " + html);
-                        return true;
-                    } else {
-                        Log.i(TAG, "clipboard comes from us - other instance: paste from clipboard file");
-
-                        File clipboardFile = new File(getApplicationContext().getCacheDir(), CLIPBOARD_FILE_PATH);
-                        LokClipboardData clipboardData = null;
-                        if (clipboardFile.exists())
-                            clipboardData = LokClipboardData.createFromFile(clipboardFile);
-
-                        if (clipboardData != null) {
-                            LOActivity.this.setClipboardContent(clipboardData);
-                            return true;
-                        }
-
-                        // Couldn't get data from the clipboard file, but we can still paste html
-                        if (chooseFormat)
-                            return offerSystemClipboardToKit();
-
-                        byte[] htmlByteArray = html.getBytes(Charset.forName("UTF-8"));
-                        LOActivity.this.paste("text/html", htmlByteArray);
-                        return false;
-                    }
-                } else {
-                    Log.i(TAG, "foreign html, length " + html.length());
-                    byte[] htmlByteArray = html.getBytes(Charset.forName("UTF-8"));
-                    LOActivity.this.paste("text/html", htmlByteArray);
-                    return false;
-                }
-            }
-        }
-
-        // try the plaintext as the last resort
-        for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
-            Log.d(TAG, "Plain text paste attempt " + i + ": " + clipDesc.getMimeType(i));
-
-            if (clipDesc.getMimeType(i).equals(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                final ClipData.Item clipItem = clipData.getItemAt(0);
-                final CharSequence textSequence = clipItem.coerceToText(this);
-                if (textSequence == null)
-                    continue;
-                String text = textSequence.toString();
-                byte[] textByteArray = text.getBytes(Charset.forName("UTF-8"));
-                LOActivity.this.paste("text/plain;charset=utf-8", textByteArray);
-            }
-        }
-
-        return false;
-    }
-
-    private boolean isClipboardFromThisApp()
-    {
-        CharSequence label = clipData.getDescription().getLabel();
-        if (label != null && label.toString().startsWith(CLIPBOARD_COOL_SIGNATURE))
-            return true;
-
-        for (int i = 0; i < clipData.getItemCount(); ++i) {
-            String html = clipData.getItemAt(i).getHtmlText();
-            if (html != null && html.contains(CLIPBOARD_COOL_SIGNATURE))
-                return true;
-        }
-        return false;
-    }
-
-    /// Hand the system clipboard to the kit. Returns false when there was nothing to hand over.
-    private boolean offerSystemClipboardToKit()
-    {
-        LokClipboardData clipboardData = new LokClipboardData();
-        for (int i = 0; i < clipData.getItemCount(); ++i) {
-            ClipData.Item item = clipData.getItemAt(i);
-
-            String html = item.getHtmlText();
-            if (html != null)
-                addClipboardEntry(clipboardData, "text/html",
-                                  html.getBytes(Charset.forName("UTF-8")));
-
-            CharSequence text = item.getText();
-            if (text != null)
-                addClipboardEntry(clipboardData, "text/plain;charset=utf-8",
-                                  text.toString().getBytes(Charset.forName("UTF-8")));
-
-            Uri uri = item.getUri();
-            if (uri != null) {
-                String mimeType = imageMimeTypeOf(uri);
-                if (mimeType != null) {
-                    byte[] image = readUriContent(uri);
-                    if (image != null)
-                        addClipboardEntry(clipboardData, mimeType, image);
-                }
-            }
-        }
-
-        if (clipboardData.clipboardEntries.isEmpty()) {
-            Log.i(TAG, "system clipboard has no html, text or image to hand to the kit");
-            return false;
-        }
-
-        LOActivity.this.setClipboardContent(clipboardData);
-        return true;
-    }
-
-    /// Image mime type of a clipboard uri, or null when it is not an image.
-    private String imageMimeTypeOf(Uri uri)
-    {
-        String mimeType = getContentResolver().getType(uri);
-        if (mimeType != null && mimeType.startsWith("image/"))
-            return mimeType;
-
-        ClipDescription clipDesc = clipData.getDescription();
-        for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
-            if (clipDesc.getMimeType(i).startsWith("image/"))
-                return clipDesc.getMimeType(i);
-        }
-        return null;
-    }
-
-    private static void addClipboardEntry(LokClipboardData clipboardData, String mimeType,
-                                          byte[] data)
-    {
-        LokClipboardEntry entry = new LokClipboardEntry();
-        entry.mime = mimeType;
-        entry.data = data;
-        clipboardData.clipboardEntries.add(entry);
-    }
-
-    /// Read the whole uri content, or null when that fails.
-    private byte[] readUriContent(Uri uri)
-    {
-        try (InputStream stream = getContentResolver().openInputStream(uri)) {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-            int nRead;
-            byte[] data = new byte[16384];
-            while ((nRead = stream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-
-            return buffer.toByteArray();
-        } catch (Exception e) {
-            Log.d(TAG, "Failed to read clipboard content: " + e.getMessage());
-            return null;
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

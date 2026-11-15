@@ -138,6 +138,10 @@ Util::LoadTimings KitLoadTimings;
 #include "windows.hpp"
 #endif
 
+#ifdef __ANDROID__
+#include <androidapp.hpp>
+#endif
+
 #ifdef QTAPP
 #include <qt/InsertableFiles.hpp>
 #include <qt/QtClipboard.hpp>
@@ -4180,9 +4184,11 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
     loKit->registerRevealInFileManagerCallback(reveal_in_file_manager);
 #endif
 
-    // The desktop apps use one process-shared clipboard, so closing a document
-    // does not have to serialize the clipboard onto the system clipboard.
-#if defined(MACOSAPP) || defined(_WIN32) || defined(QTAPP)
+    // The desktop apps and the Android app use one process-shared clipboard, so closing a
+    // document does not have to serialize the clipboard onto the system clipboard. Android runs
+    // this once per document; the engine lives for the process, so the install just renews the
+    // provider on the clipboard it already has.
+#if defined(MACOSAPP) || defined(_WIN32) || defined(QTAPP) || defined(__ANDROID__)
     install_clipboard_provider(*loKit);
 #endif
 

@@ -1326,12 +1326,6 @@ window.L.Clipboard = window.L.Class.extend({
 			window.postMobileMessage('uno ' + cmd);
 			return true;
 		}
-		if (window.ThisIsTheAndroidApp) {
-			// perform internal operations
-			app.socket.sendMessage('uno ' + cmd);
-			return true;
-		}
-
 		if (cmd === '.uno:Copy' || cmd === '.uno:CopyHyperlinkLocation' || cmd === '.uno:CopySlide') {
 			this._execCopyCutPaste('copy', cmd, params);
 		} else if (cmd === 'copy-markdown') {
@@ -1462,8 +1456,8 @@ window.L.Clipboard = window.L.Class.extend({
 			this._map._textInput._abortComposition(ev);
 			this._clipboardSerial++;
 
-			if (window.ThisIsTheiOSApp) {
-				// The engine reads the system pasteboard itself, through the
+			if (window.ThisIsTheiOSApp || window.ThisIsTheAndroidApp) {
+				// The engine reads the system clipboard itself, through the
 				// installed clipboard provider.
 				this._doInternalPaste(this._map, ev.usePasteKeyEvent);
 				return false;
@@ -1760,7 +1754,5 @@ window.L.Clipboard = window.L.Class.extend({
 });
 
 window.L.clipboard = function(map) {
-	if (window.ThisIsTheAndroidApp)
-		window.app.console.log('======> Assertion failed!? No window.L.Clipboard object should be needed in the Android app');
 	return new window.L.Clipboard(map);
 };

@@ -217,7 +217,7 @@ class BrowserProperties {
 			// system clipboard and .uno:Paste reads it back in the engine, so
 			// the browser moves no clipboard payload itself.
 			hasEngineClipboardProvider: function() {
-				return global.ThisIsTheiOSApp || global.mode.isCODesktop();
+				return global.ThisIsTheiOSApp || global.ThisIsTheAndroidApp || global.mode.isCODesktop();
 			},
 			isDesktop: function() {
 				if (global.ThisIsTheWindowsApp || global.ThisIsTheQtApp	|| global.ThisIsTheMacOSApp)

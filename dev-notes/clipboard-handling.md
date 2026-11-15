@@ -136,9 +136,9 @@ formats and the app does only raw NSPasteboard input and output:
   single client module for every platform: web, the CODA desktop apps,
   the mobile apps, and WASM. It branches on `window.ThisIsTheWindowsApp`,
   `ThisIsTheQtApp`, `ThisIsTheiOSApp`, `ThisIsTheMacOSApp`,
-  `ThisIsTheAndroidApp`, `ThisIsTheEmscriptenApp`. Android short-circuits
-  most of it and asserts the module is not needed
-  (`Clipboard.js:1651`).
+  `ThisIsTheAndroidApp`, `ThisIsTheEmscriptenApp`. The apps with an
+  engine clipboard provider (`window.mode.hasEngineClipboardProvider()`)
+  send only the uno command and skip the payload handling.
 - **Own-content marker.** Copied HTML is wrapped in
   `<div id="meta-origin" data-coolorigin="<clipboard endpoint URL>">`.
   The browser adds it in `_originWrapBody` (`Clipboard.js:179`). The
@@ -146,9 +146,10 @@ formats and the app does only raw NSPasteboard input and output:
   `preProcessSetClipboardPayload`
   (`wsd/ClientSession.cpp:2638,4187`). On paste the browser reads it
   back in `_getMetaOrigin` (`Clipboard.js:216`) to decide internal versus
-  external. Android does not use this marker. It uses its own
-  `cool-clip-magic-<instance id>` signature instead
-  (`android/lib/.../LOActivity.java:107`).
+  external. Android does not use this marker. Its clip label carries a
+  `cool-clip-magic-<process id>` signature instead, which tells a clip of
+  the running process from one of an earlier process of the app
+  (`android/lib/.../SystemClipboard.java`).
 
 ## Per-platform bridge at a glance
 
@@ -159,7 +160,7 @@ formats and the app does only raw NSPasteboard input and output:
 | Windows | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly | Win32 clipboard formats, delayed rendering | `windows/coda/CODA/CODA.cpp` |
 | Qt | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly | QClipboard, QMimeData | `qt/QtClipboard.cpp` |
 | iOS | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly | UIPasteboard, UTType | `ios/ios.mm` |
-| Android | `@JavascriptInterface` plus JNI getClipboardContent/setClipboardContent/paste | ClipboardManager, ClipData | `android/lib/.../androidapp.cpp:355` |
+| Android | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly | ClipboardManager, ClipData, a clipboard file behind a content URI | `android/lib/.../AndroidClipboard.cpp`, `SystemClipboard.java` |
 | WASM | none, uses the web browser path | browser `navigator.clipboard` | `Clipboard.js` |
 
 A plain-text-only fast path exists as `TEXTCLIPBOARD <text>` on macOS,
@@ -234,7 +235,7 @@ same tables):
 | Windows | Fixed list (`CODA.cpp:771`): plain text, `text/html` (CF_HTML fragment extracted), `text/rtf`, `image/png`, Star Embed Source XML, Star Object Descriptor XML. `image/svg+xml` is recognised but not yet consumed. Anything else is dropped. | The same fixed list (`CODA.cpp:631`): plain text, RTF, HTML, PNG (written under both `image/png` and `PNG`), Star Embed Source XML, Star Object Descriptor XML. |
 | Qt | Explicit whitelist (`QtClipboard.cpp:162`): `text/*`, `image/png`, `image/jpeg`, `image/bmp`, `image/svg+*`, `application/x-openoffice-*`, `application/x-libreoffice-*`, ODF `application/vnd.oasis.opendocument.*`, `application/vnd.sun.xml.*`, `application/msword`, `application/mathml+xml`, `application/pdf`. Broadest of the native apps. | Whatever the Kit advertises. The lazy clipboard publishes the full reported flavor list and fetches bytes on demand (`QtClipboard.cpp:92,225`). No whitelist on this side. |
 | iOS | The engine drives the paste through the provider, like macOS: it lists the pasteboard flavors, each system type mapped back to its MIME type, and pulls only the single format its paste path chooses (`ios/ios.mm`). | Every flavor the Kit reports, serialized at copy time (UIPasteboard has no lazy owner): known types under their system UTI, the internal engine formats raw under their MIME names. |
-| Android | One flavor only, first match in priority order HTML, then `image/*`, then plain text (`LOActivity.java:1535,1568,1593`). | `text/html` plus plain text only, through `ClipData.newHtmlText` (`LOActivity.java:1515`). Full fidelity is kept in a side cache file, not on the system clipboard. |
+| Android | The engine drives the paste through the provider, like iOS: the clip's declared types mapped to `text/html` and `text/plain;charset=utf-8`, plus the image type of the item URI, and it pulls only the single format its paste path chooses (`SystemClipboard.java`). A clip an earlier process of the app wrote offers every format stored in its clipboard file. | Every flavor the Kit reports, serialized at copy time into the clipboard file; the clip itself carries the text and HTML inline when small, and a content URI that `ClipboardFileProvider` streams text and HTML from otherwise. |
 
 Takeaways:
 - macOS and iOS are the most permissive in both directions. They forward
@@ -374,8 +375,8 @@ fields are browser widgets, and clipboard there mostly bypasses the Kit.
 
 ## What is not shared (duplicated per platform)
 
-This section describes the state before the COKitClipboardProvider move and
-still holds for Android. macOS, Windows, Qt, and iOS have since moved to
+This section describes the state before the COKitClipboardProvider move.
+macOS, Windows, Qt, iOS and Android have since moved to
 the provider (see the Done section): the engine now decides the formats, so
 the mapping tables there are reached through the provider callbacks and the
 old eager write and read-everything paths named below are gone. The
@@ -543,10 +544,10 @@ above.
 - Browser to native paste is confirmed HTML-only on every platform. No
   native app reads the meta-origin URL or makes any network request on
   paste. Its clipboard "fetch" calls all pull from the in-process Kit
-  (`COWrapper.mm:204`, `QtClipboard.cpp:50`), and Android's cross-instance
-  restore reads a local cache file
-  (`getCacheDir()/LibreofficeClipboardFile.data`,
-  `LOActivity.java:1486,1546`), not the source server.
+  (`COWrapper.mm:204`, `QtClipboard.cpp:50`), and Android's restore of a
+  clip from an earlier process reads a local cache file
+  (`getCacheDir()/clipboard/`, `SystemClipboard.java`), not the source
+  server.
 - For the native to browser direction there is no server URL to hand the
   browser, and the only web-platform fit is web custom clipboard formats
   (the `web ` type prefix on the async Clipboard API). The project uses
@@ -680,6 +681,65 @@ Two per-platform points differ from macOS:
   where macOS and Windows install their provider, so the install sits in
   `runKitLoopInAThread()` (`kit/Kit.cpp`).
 
+### Android: engine-driven clipboard through COKitClipboardProvider
+
+The Android app followed iOS onto the provider. The engine picks the
+formats in both directions; the native side
+(`android/lib/src/main/cpp/AndroidClipboard.cpp`) only moves bytes over
+JNI to the static methods of `SystemClipboard.java`, which does the
+ClipboardManager calls. The Java-driven path is gone: the copy no longer
+waits for a `unocommandresult:` to pull the formats, and `.uno:Paste` is
+no longer intercepted in `beforeMessageFromWebView`. The three clipboard
+JNI entry points went with it. The browser treats Android like iOS:
+`hasEngineClipboardProvider()` is true, `_readClipboardItems` reports an
+internal paste, and the DOM paste event short-circuits to `.uno:Paste`.
+The keydown handler prevents the default for Ctrl+C, X and V on Android,
+so the WebView does not follow the uno command with a DOM event that
+would send it again.
+
+Four points differ from iOS:
+
+- Ownership check. Android has no pasteboard change count. The clip label
+  carries a signature with the process id, and the clipboard is ours while
+  the primary clip's label equals it. The engine clipboard is shared by
+  every document of the process, so the signature is per process, not per
+  document.
+- The clipboard file. ClipData cannot carry the internal engine formats,
+  and Android kills a background process readily, so the eager advertise
+  writes every format to a file in the app cache
+  (`ClipboardFileProvider.getClipboardDir`) and the clip points at it with
+  a content URI. A paste in a later process of the app finds the signature
+  prefix on the label and lists and reads the formats from that file, so
+  it keeps full fidelity. Other apps stream the text and HTML from the
+  same URI through `ClipboardFileProvider`, which also covers content
+  above the Binder transaction limit. The clip inlines the text and HTML
+  only below 512 KB.
+- Listing without reading. The engine lists the formats more often than
+  it pastes, for example when Writer decides whether paste is possible at
+  the cursor, and since Android 12 the system shows a notice whenever an
+  app reads another app's clip. `getMimeTypes` therefore works from the
+  clip description, which is not a read, and reads the clip itself only
+  for a copy of an earlier process of the app, which the system does not
+  announce, or for a clip that declares only a list of URIs. The bytes
+  are read in `getData`, on the paste.
+- Install point and threading. Android runs one document per process
+  and the install sits in `startMainLoop()` with the desktop apps, so it
+  runs once per document; the engine lives for the process and the install
+  just renews the provider on the shared clipboard. The engine attaches
+  the kit thread to the JVM while a document's main loop runs and detaches
+  it when the document closes, so the callbacks look the JNI environment
+  up and never detach a thread they did not attach. No `flushClipboard`
+  call is needed on document close, because the advertise already pulled
+  every format.
+
+The formats on the mobile platforms are fewer than on the desktop. Writer
+offers only the embed source, RTF and plain text for a text selection
+where HAVE_FEATURE_DESKTOP is off (`sw/source/uibase/dochdl/swdtflvr.cxx`,
+from tdf#124752), and the engine's answer to a `text/html` request it
+cannot serve is the plain text wrapped in a pre element. HTML is the one
+rich format the Android applications read, so Writer offers it on the
+mobile platforms as well; the other desktop-only formats stay off there.
+
 ### Engine: pastes resolve a remote Collabora Online clipboard
 
 Scenario 7, the browser to native half, is done in the engine's clipboard
@@ -784,20 +844,11 @@ explains it.
   return, and a code comment already says so. Windows paste does not use
   it. Remove it and its branch in `_asyncAttemptNavigatorClipboardRead`
   (`Clipboard.js:1142`).
-- Collapse the redundant two-pass clipboard capture on Android. It calls
-  `getClipboard` once for all flavors and again only for
-  `text/plain;charset=utf-8` and `text/html` (`androidapp.cpp:355`). The
-  first pass already returns those, so the second is wasted work. The
-  iOS copy of this pattern went away with the provider move.
 - Extract one canonical MIME list. Pull the supported MIME types, the
   plain-text normalisation, and the Star format names into a single shared
   header that the five mapping tables read from, even before the adapters
   are refactored. This makes the supported set auditable in one place and
   is the first step of the larger rework.
-- Align the own-content marker. Have Android read and write the shared
-  `data-coolorigin` div instead of its own `cool-clip-magic` signature,
-  and take the per-instance id from the `ViewId` and `Tag` already in the
-  URL.
 - Harden the formula-bar clipboard path. Paste keys on `#sc_input_window`
   being `:focus` while focus actually sits on a hidden text area
   (`Widget.FormulabarEdit.js:446`), so the check can read false. Copy and
@@ -807,16 +858,6 @@ explains it.
 
 ### Larger reworks
 
-- Move Android onto the COKitClipboardProvider (the model macOS,
-  Windows, Qt, and iOS now use, see the Done section). Each app implements
-  the same small surface: advertise a flavor list on copy, list the
-  pasteboard flavors, fetch one format's bytes, and answer the
-  own-clipboard check. The engine then drives both directions and picks
-  the paste format, so the per-platform "which flavors matter" lists and
-  the eager copy out go away. This is the chosen shape of the "shares
-  lots of code" goal for the in-process apps: the shared logic lives in
-  the engine instead of a shared C++ helper, and each app is left a thin
-  raw input and output adapter.
 - Browser to native rich paste (scenario 7, the easy half) is done in the
   engine, see the Done section. The follow-up is to let the web client use
   the same path for its cross-server paste: the browser would post only the
@@ -836,8 +877,7 @@ explains it.
   flavors, and has-it-changed. Adopt the Windows native-does-everything
   model, so JavaScript sends one fire-and-forget verb and never needs a
   reply. This folds in the MIME table unification, the own-clipboard check,
-  and a single verb vocabulary. Android needs the most work, since it has no
-  clipboard verbs today. This is also the home for the super-bonus, hooking
+  and a single verb vocabulary. This is also the home for the super-bonus, hooking
   the system clipboard in the CODA shell and pushing it into the online
   document, since the native side already reads the operating system
   clipboard.
