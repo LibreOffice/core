@@ -13,6 +13,7 @@
 
 #include <svl/sharedstringpool.hxx>
 
+#include <algorithm>
 #include <memory>
 
 namespace os = orcus::spreadsheet;
@@ -154,6 +155,9 @@ ScOrcusAutoFilterNode::ScOrcusAutoFilterNode(ScDocument& rDoc, const ScOrcusGlob
 
 void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op, double value)
 {
+    if (!isFieldInRange(field))
+        return;
+
     ScQueryEntry aEntry;
     aEntry.nField = mnStartCol + field;
     aEntry.eConnect = meConn;
@@ -167,6 +171,9 @@ void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op
 void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op,
                                         std::string_view value, bool regex)
 {
+    if (!isFieldInRange(field))
+        return;
+
     ScQueryEntry aEntry;
     aEntry.nField = mnStartCol + field;
     aEntry.eConnect = meConn;
@@ -184,6 +191,9 @@ void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op
 
 void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op)
 {
+    if (!isFieldInRange(field))
+        return;
+
     ScQueryEntry aEntry;
     aEntry.nField = mnStartCol + field;
     aEntry.eConnect = meConn;
@@ -208,14 +218,18 @@ os::iface::import_auto_filter_node* ScOrcusAutoFilterNode::start_node(os::auto_f
     };
 
     mxChild = std::make_unique<ScOrcusAutoFilterNode>(mrDoc, mrGlobalSettings);
-    mxChild->reset(mnStartCol, toQueryConnect(op), std::move(func));
+    mxChild->reset(mnStartCol, mnEndCol, toQueryConnect(op), std::move(func));
     return mxChild.get();
 }
 
 os::iface::import_auto_filter_multi_values*
 ScOrcusAutoFilterNode::start_multi_values(os::col_t field)
 {
-    auto func = [this, field](ScQueryEntry aEntry) {
+    auto func = [this, field](ScQueryEntry aEntry)
+    {
+        if (!isFieldInRange(field))
+            return;
+
         aEntry.nField = mnStartCol + field;
         maEntries.push_back(std::move(aEntry));
     };
@@ -226,9 +240,16 @@ ScOrcusAutoFilterNode::start_multi_values(os::col_t field)
 
 void ScOrcusAutoFilterNode::commit() { maCommitFunc(std::move(maEntries), mbHasRegex); }
 
-void ScOrcusAutoFilterNode::reset(SCCOL nStartCol, ScQueryConnect eConn, commitFuncType func)
+bool ScOrcusAutoFilterNode::isFieldInRange(os::col_t field) const
+{
+    return field >= 0 && field <= mnEndCol - mnStartCol;
+}
+
+void ScOrcusAutoFilterNode::reset(SCCOL nStartCol, SCCOL nEndCol, ScQueryConnect eConn,
+                                  commitFuncType func)
 {
     mnStartCol = nStartCol;
+    mnEndCol = nEndCol;
     meConn = eConn;
 
     mxChild.reset();
@@ -265,7 +286,7 @@ os::iface::import_auto_filter_node* ScOrcusAutoFilter::start_node(os::auto_filte
         rData.SetQueryParam(aParam);
     };
 
-    maNode.reset(mnCol1, toQueryConnect(op), std::move(func));
+    maNode.reset(mnCol1, mnCol2, toQueryConnect(op), std::move(func));
     return &maNode;
 }
 
@@ -281,15 +302,22 @@ void ScOrcusAutoFilter::commit()
     }
 }
 
-void ScOrcusAutoFilter::reset(const os::range_t& range)
+bool ScOrcusAutoFilter::reset(const os::range_t& range)
 {
+    const ScDocument& rDoc = mrDoc.getDoc();
+    if (range.first.column < 0 || range.first.row < 0 || range.first.column > rDoc.MaxCol()
+        || range.first.row > rDoc.MaxRow() || range.first.column > range.last.column
+        || range.first.row > range.last.row)
+        return false;
+
     mnCol1 = range.first.column;
-    mnCol2 = range.last.column;
+    mnCol2 = std::min<os::col_t>(range.last.column, rDoc.MaxCol());
     mnRow1 = range.first.row;
-    mnRow2 = range.last.row;
+    mnRow2 = std::min<os::row_t>(range.last.row, rDoc.MaxRow());
 
     mxData = std::make_unique<ScDBData>(STR_DB_LOCAL_NONAME, mnTab, mnCol1, mnRow1, mnCol2, mnRow2);
     mxData->SetAutoFilter(true);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
