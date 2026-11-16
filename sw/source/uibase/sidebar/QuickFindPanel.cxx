@@ -575,7 +575,7 @@ void QuickFindPanel::FillSearchFindsList()
     m_pWrtShell->StartAllAction();
     /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
         aSearchOptions, m_xCommentsCheckButton->get_active(), SwDocPositions::Start,
-        SwDocPositions::End, FindRanges::InBody | FindRanges::InSelAll, false);
+        SwDocPositions::End, FindRanges::InSelAll, false);
     m_pWrtShell->EndAllAction();
 
     if (m_pWrtShell->HasMark())
