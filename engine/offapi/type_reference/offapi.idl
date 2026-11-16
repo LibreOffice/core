@@ -16028,14 +16028,6 @@ module com {
      void update([in] any Status);
      void pop();
     };
-    published interface XPropertyMatcher {
-     interface ::cpo::uno::XInterface;
-     boolean matches([in] ::com::sun::star::ucb::XCommandProcessor Properties, [in] ::com::sun::star::ucb::XCommandEnvironment Environment);
-    };
-    published interface XPropertyMatcherFactory {
-     interface ::cpo::uno::XInterface;
-     ::com::sun::star::ucb::XPropertyMatcher createPropertyMatcher([in] sequence< ::com::sun::star::ucb::SearchCriterium > Criteria);
-    };
     published interface XRecycler {
      interface ::cpo::uno::XInterface;
      void trashContent([in] ::com::sun::star::ucb::XCommandProcessor Properties, [in] ::com::sun::star::ucb::XContentIdentifier Identifier);

@@ -3644,8 +3644,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	XParameterizedContentProvider \
 	XPersistentPropertySet \
 	XProgressHandler \
-	XPropertyMatcher \
-	XPropertyMatcherFactory \
 	XPropertySetRegistry \
 	XPropertySetRegistryFactory \
 	XRecycler \
