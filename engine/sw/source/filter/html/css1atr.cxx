@@ -2657,8 +2657,20 @@ static SwHTMLWriter& OutCSS1_SvxLineSpacing( SwHTMLWriter& rWrt, const SfxPoolIt
     else if( nPercentHeight &&
         !(nPercentHeight < 115 && rWrt.m_bParaDotLeaders )) // avoid HTML scrollbars and missing descenders
     {
-        OString sHeight(OString::number(nPercentHeight) + "%");
-        rWrt.OutCSS1_PropertyAscii(sCSS1_P_line_height, sHeight);
+        // A proportional spacing is written as a unitless number, which every run inside the
+        // paragraph scales by its own font size. A percentage computes to one length on the
+        // paragraph, and a run with a larger font inherits that length as it is.
+        OStringBuffer sHeight(OString::number(nPercentHeight / 100));
+        const sal_uInt16 nHundredths = nPercentHeight % 100;
+        if (nHundredths)
+        {
+            sHeight.append('.');
+            if (nHundredths < 10)
+                sHeight.append('0');
+            sHeight.append(static_cast<sal_Int32>(
+                nHundredths % 10 == 0 ? nHundredths / 10 : nHundredths));
+        }
+        rWrt.OutCSS1_PropertyAscii(sCSS1_P_line_height, sHeight.makeStringAndClear());
     }
 
     return rWrt;

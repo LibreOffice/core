@@ -14,6 +14,8 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -1806,6 +1808,36 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTextSplitByRsidExportsAsOneRun)
     assertXPath(pHtmlDoc, "/html/body/p/em//font[@color]", 1);
     CPPUNIT_ASSERT_EQUAL(u"The cat sat on the doormat. It was happy."_ustr,
                          getXPathContent(pHtmlDoc, "/html/body/p/em").replaceAll("\n", " "));
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testProportionalLineSpacing)
+{
+    // A paragraph with a proportional line spacing of 115%.
+    createSwDoc();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    xTextDocument->getText()->setString(u"line spacing"_ustr);
+    style::LineSpacing aSpacing;
+    aSpacing.Mode = style::LineSpacingMode::PROP;
+    aSpacing.Height = 115;
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    xParagraph->setPropertyValue(u"ParaLineSpacing"_ustr, uno::Any(aSpacing));
+    save(TestFilter::HTML_WRITER);
+
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+    // The spacing is a unitless number, which each run inside the paragraph scales by its own
+    // font size, where a percentage computes to one length that every run inherits.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: line-height: 1.15
+    // - Actual  : line-height: 115%
+    const OUString aStyle = getXPath(pHtmlDoc, "/html/body/p", "style");
+    CPPUNIT_ASSERT_MESSAGE(aStyle.toUtf8().getStr(), aStyle.indexOf("line-height: 1.15") >= 0);
+
+    // The number reads back as the same percentage.
+    saveAndReload(TestFilter::HTML_WRITER);
+    auto aReloaded = getProperty<style::LineSpacing>(getParagraph(1), u"ParaLineSpacing"_ustr);
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP, aReloaded.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(115), aReloaded.Height);
 }
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();

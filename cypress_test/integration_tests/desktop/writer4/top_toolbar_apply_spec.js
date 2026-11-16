@@ -187,13 +187,13 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 
 		writerHelper.selectAllTextOfDoc();
 		helper.copy();
-		cy.cGet('#copy-paste-container p').should('have.attr', 'style').should('contain', 'line-height: 150%');
+		cy.cGet('#copy-paste-container p').should('have.attr', 'style').should('match', /line-height: 1\.5(;|$)/);
 
 		selectLineSpacing('Line Spacing: 1');
 
 		writerHelper.selectAllTextOfDoc();
 		helper.copy();
-		cy.cGet('#copy-paste-container p').should('have.attr', 'style').should('contain', 'line-height: 100%');
+		cy.cGet('#copy-paste-container p').should('have.attr', 'style').should('match', /line-height: 1(;|$)/);
 	});
 
 	it('Apply Line spacing: 2', function() {
@@ -201,7 +201,7 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 		selectLineSpacing('Line Spacing: 2');
 		writerHelper.selectAllTextOfDoc();
 		helper.copy();
-		cy.cGet('#copy-paste-container p').should('have.attr', 'style').should('contain', 'line-height: 200%');
+		cy.cGet('#copy-paste-container p').should('have.attr', 'style').should('match', /line-height: 2(;|$)/);
 	});
 
 	it('Apply superscript.', function() {

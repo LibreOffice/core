@@ -1646,7 +1646,9 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
         break;
     case CSS1_NUMBER:
         {
-            nPropHeight = o3tl::narrowing<sal_uInt16>(pExpr->GetNumber() * 100);
+            // the number is a factor of the font size, and 1.15 times 100 is just under 115 in
+            // floating point, so the percentage is rounded
+            nPropHeight = o3tl::narrowing<sal_uInt16>(std::lround(pExpr->GetNumber() * 100));
         }
         break;
     default:

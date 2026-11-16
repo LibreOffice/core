@@ -742,6 +742,11 @@ from tdf#124752), and the engine's answer to a `text/html` request it
 cannot serve is the plain text wrapped in a pre element. HTML is the one
 rich format the Android applications read, so Writer offers it on the
 mobile platforms as well; the other desktop-only formats stay off there.
+Writer's HTML export writes a proportional line spacing as a unitless
+line-height, which each run of the receiving editor scales by its own
+font. A percentage computes to one length on the paragraph and the runs
+inherit that length, so a mail compose box drew the wrapped lines of a
+pasted paragraph on top of each other.
 
 ### Engine: pastes resolve a remote Collabora Online clipboard
 
