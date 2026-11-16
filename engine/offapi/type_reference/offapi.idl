@@ -15797,25 +15797,6 @@ module com {
      boolean CaseSensitive;
      boolean RegularExpression;
     };
-    published struct Rule {
-     sequence< ::com::sun::star::ucb::RuleTerm > Terms;
-     string Parameter;
-     short Action;
-    };
-    published constants RuleAction {
-     const short COPY = 8;
-     const short DELETE = 9;
-     const short FORWARD = 11;
-     const short HIDE = 2;
-     const short LINK = 10;
-     const short MARK = 3;
-     const short MARKREAD = 5;
-     const short MARKUNREAD = 6;
-     const short MOVE = 7;
-     const short NONE = 0;
-     const short SHOW = 1;
-     const short UNMARK = 4;
-    };
     published constants RuleOperator {
      const short CONTAINS = 1;
      const short CONTAINSNOT = 2;
@@ -15825,10 +15806,6 @@ module com {
      const short NOTEQUAL = 6;
      const short VALUE_FALSE = 8;
      const short VALUE_TRUE = 7;
-    };
-    published struct RuleSet {
-     sequence< ::com::sun::star::ucb::Rule > Rules;
-     boolean HandleFolder;
     };
     published struct SearchCriterium {
      sequence< ::com::sun::star::ucb::RuleTerm > Terms;

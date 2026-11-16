@@ -27,7 +27,6 @@
 #include <com/sun/star/ucb/DocumentStoreMode.hpp>
 #include <com/sun/star/ucb/Priority.hpp>
 #include <com/sun/star/ucb/RecipientInfo.hpp>
-#include <com/sun/star/ucb/RuleSet.hpp>
 #include <com/sun/star/ucb/SendInfo.hpp>
 #include <com/sun/star/ucb/SendMediaTypes.hpp>
 #include <com/sun/star/ucb/SynchronizePolicy.hpp>
@@ -127,9 +126,6 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"Priority"_ustr, -1, cppu::UnoType<css::ucb::Priority>::get(), ATTR_DEFAULT },
     { u"References"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"Referer"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
-    { u"Rules"_ustr, -1, cppu::UnoType<css::ucb::RuleSet>::get(), ATTR_DEFAULT },
-    { u"SearchCriteria"_ustr, -1, cppu::UnoType<css::ucb::RuleSet>::get(),
-      ATTR_DEFAULT },
     { u"SearchIndirections"_ustr, -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
     { u"SearchLocations"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"SearchRecursive"_ustr, -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },

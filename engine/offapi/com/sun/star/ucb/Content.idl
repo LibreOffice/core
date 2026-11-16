@@ -746,11 +746,6 @@ published service Content
                     <td>contains the &quot;References&quot; field of a news article.</td>
                 </tr>
                 <tr>
-                    <td>Rules</td>
-                    <td>RuleSet</td>
-                    <td>contains the rules set for a content.</td>
-                </tr>
-                <tr>
                     <td>SeenCount</td>
                     <td>long</td>
                     <td>contains the count of seen/read subcontents of a folder content.</td>

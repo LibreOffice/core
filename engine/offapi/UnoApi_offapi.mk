@@ -3585,10 +3585,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	RemoteContentProviderChangeAction \
 	RemoteContentProviderChangeEvent \
 	ResultSetException \
-	Rule \
-	RuleAction \
 	RuleOperator \
-	RuleSet \
 	RuleTerm \
 	SearchCommandArgument \
 	SearchCriterium \
