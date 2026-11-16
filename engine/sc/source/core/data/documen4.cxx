@@ -50,6 +50,7 @@
 #include <formulacell.hxx>
 #include <listenercontext.hxx>
 #include <scmatrix.hxx>
+#include <scopetools.hxx>
 #include <tablestyle.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
@@ -898,6 +899,7 @@ void ScDocument::CompileDBFormula( sal_uInt16 nIndex )
 
     // Flag the recompile so the table auto-expand ignores its SetDirty broadcasts (not user edits).
     ScCompilingDBFormulaGuard aGuard(*this);
+    sc::DelayDeletingBroadcasters aDelayDeletingBroadcasters(*this);
     sc::StartListeningContext aStartListenCxt(*this);
     sc::CompileFormulaContext aCxt(*this);
     for (auto& rxTab : maTabs)

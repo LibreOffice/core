@@ -3395,6 +3395,103 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRefResizeScope)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRefResizeKeepsListening)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+
+    // A header and 300 data rows, and a column of [@Col] formulas that read the two cells of
+    // their own row.
+    constexpr SCROW nLastRow = 300;
+    ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
+    {
+        std::unique_ptr<ScDBData> pData(new ScDBData(u"table"_ustr, 0, 0, 0, 2, nLastRow));
+        CPPUNIT_ASSERT(pDBs->getNamedDBs().insert(std::move(pData)));
+    }
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"Year"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"Amount"_ustr);
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"Product"_ustr);
+    for (SCROW nRow = 1; nRow <= nLastRow; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 0), 2000);
+        m_pDoc->SetValue(ScAddress(1, nRow, 0), nRow);
+        m_pDoc->SetString(ScAddress(2, nRow, 0), u"=table[@Year]*table[@Amount]"_ustr);
+    }
+    m_pDoc->RegroupFormulaCells(ScRange(2, 1, 0, 2, nLastRow, 0));
+    const ScFormulaCell* pTop = m_pDoc->GetFormulaCell(ScAddress(2, 1, 0));
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT_EQUAL(nLastRow, pTop->GetSharedLength());
+
+    // Growing the table recompiles the group, which ends listening cell by cell and then
+    // listens again, while the broadcasters that ran out of listeners are kept.
+    ScDBData* pLive = pDBs->getNamedDBs().findByUpperName(u"TABLE"_ustr);
+    CPPUNIT_ASSERT(pLive);
+    ScDBData aNewData(*pLive);
+    aNewData.SetArea(0, 0, 0, 2, nLastRow + 1);
+    ScDBDocFunc(*m_xDocShell).ModifyDBData(aNewData);
+
+    // The formulas still follow the cells they read, at both ends of the group.
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 3);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2, 1, 0)));
+    m_pDoc->SetValue(ScAddress(1, nLastRow, 0), 2);
+    CPPUNIT_ASSERT_EQUAL(4000.0, m_pDoc->GetValue(ScAddress(2, nLastRow, 0)));
+    CPPUNIT_ASSERT_EQUAL(2000.0 * 150, m_pDoc->GetValue(ScAddress(2, 150, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRefUndoInsertRowKeepsListening)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+
+    // A header and 300 data rows, and a column of [@Col] formulas that read the two cells of
+    // their own row.
+    constexpr SCROW nLastRow = 300;
+    ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
+    {
+        std::unique_ptr<ScDBData> pData(new ScDBData(u"table"_ustr, 0, 0, 0, 2, nLastRow));
+        CPPUNIT_ASSERT(pDBs->getNamedDBs().insert(std::move(pData)));
+    }
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"Year"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"Amount"_ustr);
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"Product"_ustr);
+    for (SCROW nRow = 1; nRow <= nLastRow; ++nRow)
+    {
+        m_pDoc->SetValue(ScAddress(0, nRow, 0), 2000);
+        m_pDoc->SetValue(ScAddress(1, nRow, 0), nRow);
+        m_pDoc->SetString(ScAddress(2, nRow, 0), u"=table[@Year]*table[@Amount]"_ustr);
+    }
+    m_pDoc->RegroupFormulaCells(ScRange(2, 1, 0, 2, nLastRow, 0));
+
+    // Inserting a row inside the table grows its range, so the undo restores the old database
+    // ranges and recompiles every formula, which ends listening and listens again cell by cell.
+    const ScRange aRow(0, 100, 0, m_pDoc->MaxCol(), 100, 0);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SetMarkArea(aRow);
+    CPPUNIT_ASSERT(m_xDocShell->GetDocFunc().InsertCells(aRow, &aMark, INS_INSROWS_BEFORE, true, true));
+    CPPUNIT_ASSERT_EQUAL(u"=table[@Year]*table[@Amount]"_ustr, m_pDoc->GetFormula(2, nLastRow + 1, 0));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(u"=table[@Year]*table[@Amount]"_ustr, m_pDoc->GetFormula(2, nLastRow, 0));
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(2, nLastRow + 1, 0).isEmpty());
+
+    // The formulas still follow the cells they read, at both ends of the column.
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 3);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2, 1, 0)));
+    m_pDoc->SetValue(ScAddress(1, nLastRow, 0), 2);
+    CPPUNIT_ASSERT_EQUAL(4000.0, m_pDoc->GetValue(ScAddress(2, nLastRow, 0)));
+    CPPUNIT_ASSERT_EQUAL(2000.0 * 150, m_pDoc->GetValue(ScAddress(2, 150, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncFTEST)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.

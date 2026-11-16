@@ -4353,6 +4353,7 @@ void ScDocument::CalcAll()
 
 void ScDocument::CompileAll()
 {
+    sc::DelayDeletingBroadcasters aDelayDeletingBroadcasters(*this);
     sc::CompileFormulaContext aCxt(*this);
     for (const auto& a : maTabs)
     {
