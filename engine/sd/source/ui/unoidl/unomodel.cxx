@@ -5732,21 +5732,7 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
 
 static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
-    if ( xShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
-    {
-        uno::Reference< container::XIndexAccess > xIndexAccess( xShape, uno::UNO_QUERY );
-        if ( xIndexAccess.is() )
-        {
-            sal_Int32 i, nCount = xIndexAccess->getCount();
-            for ( i = 0; i < nCount; i++ )
-            {
-                uno::Reference< drawing::XShape > xSubShape( xIndexAccess->getByIndex( i ), uno::UNO_QUERY );
-                if ( xSubShape.is() )
-                    ImplPDFExportShapeInteraction( xSubShape, rDoc, rPDFExtOutDevData );
-            }
-        }
-    }
-    // a group has its own click action too
+    // the click action of the shape itself, a group has one too
     {
         uno::Reference< beans::XPropertySet > xShapePropSet( xShape, uno::UNO_QUERY );
         if( xShapePropSet.is() )
@@ -5883,6 +5869,22 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                     default :
                     break;
                 }
+            }
+        }
+    }
+    // the links of the members come after the one of the group, so that they are on top of it
+    // and a click on a member follows its own link, as in the slide show
+    if ( xShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
+    {
+        uno::Reference< container::XIndexAccess > xIndexAccess( xShape, uno::UNO_QUERY );
+        if ( xIndexAccess.is() )
+        {
+            sal_Int32 i, nCount = xIndexAccess->getCount();
+            for ( i = 0; i < nCount; i++ )
+            {
+                uno::Reference< drawing::XShape > xSubShape( xIndexAccess->getByIndex( i ), uno::UNO_QUERY );
+                if ( xSubShape.is() )
+                    ImplPDFExportShapeInteraction( xSubShape, rDoc, rPDFExtOutDevData );
             }
         }
     }

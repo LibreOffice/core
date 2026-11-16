@@ -7993,6 +7993,42 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testShapeClickLinkTaggedNotesPages)
     CPPUNIT_ASSERT_EQUAL(1, nLinks);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testGroupAndMemberClickLink)
+{
+    // a group that goes to the first slide, and a member of it that goes to the last one
+    loadFromFile(u"group-and-member-link.fodp");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pAnnots->GetElements().size());
+    std::vector<vcl::filter::PDFObjectElement*> aDestPages;
+    for (auto* pElement : pAnnots->GetElements())
+    {
+        auto pAnnotReference = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pAnnotReference);
+        vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+        CPPUNIT_ASSERT(pAnnot);
+        CPPUNIT_ASSERT(pAnnot->Lookup("StructParent"_ostr));
+        auto pDest = dynamic_cast<vcl::filter::PDFArrayElement*>(pAnnot->Lookup("Dest"_ostr));
+        CPPUNIT_ASSERT(pDest);
+        auto pDestPage = dynamic_cast<vcl::filter::PDFReferenceElement*>(pDest->GetElement(0));
+        CPPUNIT_ASSERT(pDestPage);
+        aDestPages.push_back(pDestPage->LookupObject());
+    }
+    // a viewer follows the last link at the point of a click, so the link of the member comes
+    // after the one of the group, as in the slide show, where a click on the member is its own;
+    // without the fix the link of the group was the last one and covered the member
+    CPPUNIT_ASSERT_EQUAL(aPages[0], aDestPages[0]);
+    CPPUNIT_ASSERT_EQUAL(aPages[1], aDestPages[1]);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testGroupClickLink)
 {
     // a group with a title and a click action that opens a URL
