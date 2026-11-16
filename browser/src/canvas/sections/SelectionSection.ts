@@ -1804,6 +1804,36 @@ abstract class SelectionSection extends CanvasSectionObject {
 		colour: string,
 	): void {
 		context.save();
+		SelectionSection.layOutline(context, polygons);
+		context.strokeStyle = colour;
+		context.lineWidth = app.pixelsToTwips;
+		context.stroke();
+		context.restore();
+	}
+
+	/*
+		Fills the area those polygons in twips enclose, each one closed back to its start, in that
+		colour. Where they lie in one another the even-odd rule applies, as the engine fills an
+		object of several polygons: a polygon inside another one is a hole.
+	*/
+	public static fillOutline(
+		context: CanvasRenderingContext2D,
+		polygons: cool.ObjectPathPolygon[],
+		colour: string,
+	): void {
+		context.save();
+		SelectionSection.layOutline(context, polygons);
+		context.fillStyle = colour;
+		context.fill('evenodd');
+		context.restore();
+	}
+
+	/// Lays those polygons in twips into a new path of the context, with the context set to
+	/// twips on the canvas, curves where the polygons have weights.
+	private static layOutline(
+		context: CanvasRenderingContext2D,
+		polygons: cool.ObjectPathPolygon[],
+	): void {
 		context.setTransform(1, 0, 0, 1, 0, 0);
 
 		// The point at the very start of the document says where the drawing of the part begins
@@ -1811,8 +1841,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const origin = new cool.SimplePoint(0, 0);
 		context.translate(origin.vX, origin.vY);
 		context.scale(app.twipsToPixels, app.twipsToPixels);
-		context.strokeStyle = colour;
-		context.lineWidth = app.pixelsToTwips;
 		context.beginPath();
 
 		for (const polygon of polygons) {
@@ -1840,9 +1868,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 			if (polygon.closed) context.closePath();
 		}
-
-		context.stroke();
-		context.restore();
 	}
 
 	onDraw(): void {

@@ -209,27 +209,40 @@ abstract class ClassicCreateContext implements InteractionMode {
 	/*
 		Where the object sent was given an id, it is taken as created at once, under that id, which
 		is its real one: it is in the part and selected, drawn as those polygons in hairlines in
-		that rectangle, and the engine's report of it replaces it.
+		that rectangle, filled in that colour under them where one is given, and the engine's
+		report of it replaces it.
 	*/
 	protected standInAsCreated(
 		box: cool.Range2D,
 		polygons: cool.ObjectPathPolygon[],
+		fill?: string,
 	): void {
 		const id = this.givenId;
 		if (id === undefined) return;
+		const filled: cool.Primitive[] = fill
+			? [
+					{
+						type: cool.PolyPolygonColorPrimitive.type,
+						color: fill,
+						path: PathDrawing.asSvg(polygons),
+					} as cool.PolyPolygonColorPrimitive,
+				]
+			: [];
 		this.takeAsCreated({
 			id: id,
 			x: box.minX,
 			y: box.minY,
 			width: box.width,
 			height: box.height,
-			primitives: polygons.map(
-				(polygon) =>
-					({
-						type: cool.PolygonHairlinePrimitive.type,
-						color: HandleLook.outlineColour,
-						path: PathDrawing.asSvg([polygon]),
-					}) as cool.PolygonHairlinePrimitive,
+			primitives: filled.concat(
+				polygons.map(
+					(polygon) =>
+						({
+							type: cool.PolygonHairlinePrimitive.type,
+							color: HandleLook.outlineColour,
+							path: PathDrawing.asSvg([polygon]),
+						}) as cool.PolygonHairlinePrimitive,
+				),
 			),
 		});
 	}
@@ -1715,12 +1728,58 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		);
 	}
 
+	/// The look of a default shape is asked for at once, where it is not known yet, as it tells
+	/// the colour a filled kind is filled with.
 	public started(): void {
 		ReservedObjectIds.keepEnough();
+		if (this.fills()) ClassicShapeCreateContext.knownLook(this.fillTaker);
 	}
 
 	public pointer(): string {
 		return 'crosshair';
+	}
+
+	/// The shape whose look tells the fill of the default style, which a filled kind takes too.
+	private readonly fillTaker: string = 'BasicShapes.rectangle';
+
+	/// Whether the kind is filled, so its parts close.
+	private fills(): boolean {
+		return ClassicPathCreateContext.kinds[this.shape].closes;
+	}
+
+	/*
+		The colour the object will be filled with: the fill of a default shape, which takes the
+		same default style. Until its look is known, the colour of the outline stands in.
+	*/
+	private fillColour(): string {
+		const find = (primitives: cool.Primitive[]): string | null => {
+			for (const primitive of primitives) {
+				if (primitive.type === cool.PolyPolygonColorPrimitive.type)
+					return (primitive as cool.PolyPolygonColorPrimitive).color;
+				const children = (primitive as { children?: cool.Primitive[] })
+					.children;
+				const found = children ? find(children) : null;
+				if (found) return found;
+			}
+			return null;
+		};
+		const look = ClassicShapeCreateContext.knownLook(this.fillTaker);
+		return (look && find(look.primitives)) ?? HandleLook.outlineColour;
+	}
+
+	/// Draws that path as the object will look, filled half see-through where the kind fills,
+	/// with its outline over it.
+	private drawThePath(
+		context: CanvasRenderingContext2D,
+		path: cool.ObjectPathPolygon[],
+	): void {
+		if (this.fills()) {
+			context.save();
+			context.globalAlpha = 0.5;
+			SelectionSection.fillOutline(context, path, this.fillColour());
+			context.restore();
+		}
+		SelectionSection.strokeOutline(context, path, HandleLook.outlineColour);
 	}
 
 	/*
@@ -1911,24 +1970,27 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	/// as point editing shows them, and the start point of the part where a click would end it.
 	protected drawMore(context: CanvasRenderingContext2D): void {
 		if (this.sent) return;
-		SelectionSection.strokeOutline(
-			context,
-			this.drawing.shown(),
-			HandleLook.outlineColour,
-		);
+		this.drawThePath(context, this.drawing.shown());
 		const held = this.drawing.pointOfTheWeights();
 		if (held) PathEditing.paintPointWithWeights(context, held);
+
+		// a circle as wide as the reach around the start point says the mouse is drawn onto it;
+		// it has a light edge, as the lines across the view have, so it shows on any page and
+		// object
 		const start = this.drawing.startOnTheMouse();
 		if (!start) return;
 		const at = new cool.SimplePoint(start.x, start.y);
-		const half = Math.round(4 * app.dpiScale);
-		context.fillStyle = HandleLook.outlineColour;
-		context.fillRect(
-			Math.round(at.vX) - half,
-			Math.round(at.vY) - half,
-			2 * half,
-			2 * half,
-		);
+		const radius = ClassicPathCreateContext.reach * app.dpiScale;
+		context.save();
+		context.beginPath();
+		context.arc(at.vX, at.vY, radius, 0, 2 * Math.PI);
+		context.strokeStyle = '#FFFFFF';
+		context.lineWidth = 3 * app.dpiScale;
+		context.stroke();
+		context.strokeStyle = HandleLook.outlineColour;
+		context.lineWidth = app.dpiScale;
+		context.stroke();
+		context.restore();
 	}
 
 	/// The path sent stands for the object until the engine reports it.
@@ -1937,15 +1999,15 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		_box: cool.Range2D,
 		_whole: boolean,
 	): boolean {
-		SelectionSection.strokeOutline(
-			context,
-			this.sentPath,
-			HandleLook.outlineColour,
-		);
+		this.drawThePath(context, this.sentPath);
 		return true;
 	}
 
 	protected wasSent(box: cool.Range2D): void {
-		this.standInAsCreated(box, this.sentPath);
+		this.standInAsCreated(
+			box,
+			this.sentPath,
+			this.fills() ? this.fillColour() : undefined,
+		);
 	}
 }
