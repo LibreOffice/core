@@ -345,6 +345,16 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     const bool bTextInRectangle = (nSId == SID_ATTR_CHAR || nSId == SID_ATTR_CHAR_VERTICAL)
                                   && lcl_getRequestedRectangle(rReq).has_value();
 
+    // Text edit takes the focus. A control that still has it, such as a sidebar field with a typed
+    // value, takes that value when it loses the focus, and the command it runs replaces the current
+    // function. Taking the focus here runs that command before the text function exists.
+    if (nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE
+        || nSId == SID_ATTR_CHAR_VERTICAL || nSId == SID_TEXT_FITTOSIZE_VERTICAL)
+    {
+        if (sd::Window* pWindow = GetActiveWindow(); pWindow && !pWindow->HasFocus())
+            pWindow->GrabFocus();
+    }
+
     if( HasCurrentFunction() && !bTextInRectangle &&
         ( nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE ||
           nSId == SID_ATTR_CHAR_VERTICAL || nSId == SID_TEXT_FITTOSIZE_VERTICAL ) )

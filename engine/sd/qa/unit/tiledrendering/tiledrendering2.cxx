@@ -156,6 +156,43 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarLayoutsKeptOnViewSwitch)
     CPPUNIT_ASSERT_EQUAL(0, aView1.m_aJSDialogSelectCounts["layoutpanel_icons"]);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarFieldCommitsBeforeTextEdit)
+{
+    // Given a selected shape, and a column count typed into the sidebar, so that the field keeps
+    // the focus:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    sfx2::sidebar::Sidebar::Setup(u"");
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:BasicShapes.quadrat"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    SdrObject* pShape = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+    const OUString sSidebarId
+        = OUString::number(reinterpret_cast<sal_uInt64>(SfxViewShell::Current())) + "sidebar";
+    StringMap aValue{ { u"type"_ustr, u"spinfield"_ustr },
+                      { u"cmd"_ustr, u"value"_ustr },
+                      { u"data"_ustr, u"3"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sSidebarId, u"FLD_COL_NUMBER"_ustr, aValue));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), DynCastSdrTextObj(pShape)->GetTextColumnsNumber());
+
+    // When the shape is double-clicked to edit its text:
+    const Point aCenter = pShape->GetSnapRect().Center();
+    const int nX = o3tl::toTwips(aCenter.getX(), o3tl::Length::mm100);
+    const int nY = o3tl::toTwips(aCenter.getY(), o3tl::Length::mm100);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 2, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 2, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the text of the shape is edited. Without the fix in place, the field took its value
+    // again when text edit took the focus, which ended the text tool while it was starting text
+    // edit, and the document crashed.
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(pShape, static_cast<SdrObject*>(pView->GetTextEditObject()));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarLayoutsContextMenuUsesClickedLayout)
 {
     // The context menu of the Layouts panel acts on the layout that was right-clicked. The first
