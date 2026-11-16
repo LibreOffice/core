@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-03 20:16+0000\n"
-"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-06 02:09+0000\n"
+"Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1595,6 +1595,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Ce fichier est un dictionnaire d'orthographe, pas un manuel. Envoyez une "
+"liste de mots avec un mot par ligne."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1844,26 +1846,26 @@ msgstr "Dupliquer le Style"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n année"
+msgstr[1] "%n années"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n jour"
+msgstr[1] "%n jours"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n heure"
+msgstr[1] "%n heures"
 
 #: src/app/Util.ts:325
-#, fuzzy
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] "1 minute"
+msgstr[0] "%n minute"
+msgstr[1] "%n minutes"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
@@ -1917,9 +1919,8 @@ msgid "Reply"
 msgstr "Répondre"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Commentaire"
+msgstr "commentaire"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1927,7 +1928,7 @@ msgstr "Pressez Ctrl + Entrer pour poster"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Répondre à {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2041,11 +2042,11 @@ msgstr "Le document contient des médias non pris en charge"
 
 #: src/canvas/sections/SelectionSection.ts:1562
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Rétablissement en cours..."
 
 #: src/canvas/sections/SelectionSection.ts:1563
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Annulation en cours..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2195,7 +2196,7 @@ msgstr "Décontracté"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "ton {0}"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2273,27 +2274,27 @@ msgstr "Que voulez-vous faire de ce document ?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Bonjour, {0} !"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Bonjour !"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Bonjour, {0} !"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Bonjour !"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Bonsoir, {0} !"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Bonsoir !"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -3207,6 +3208,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Le tableau indique ce que chaque cellule affiche. La liste « Formules : » "
+"qui le suit donne la formule de chaque cellule qui en contient une."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3279,9 +3282,8 @@ msgid "Slides"
 msgstr "Diapositives"
 
 #: src/control/Control.CleanupSidebar.ts:241
-#, fuzzy
 msgid "Hidden slides"
-msgstr "Cacher les diapositives"
+msgstr "Diapositives cachées"
 
 #: src/control/Control.CleanupSidebar.ts:246
 msgid "Unused master slides"
@@ -3476,7 +3478,7 @@ msgstr "Progression du nettoyage"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Arrêter de nettoyer"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -3999,9 +4001,8 @@ msgid "Back"
 msgstr "Retour"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Aucun(e)"
+msgstr "Terminer"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -4818,7 +4819,6 @@ msgstr "Aide en ligne"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:678
 #: src/control/Control.Menubar.ts:850 src/control/Control.Menubar.ts:1178
 #: src/control/Control.NotebookbarWriter.js:530
-#, fuzzy
 msgid "Show Tour"
 msgstr "Tour de démonstration"
 
@@ -5198,7 +5198,6 @@ msgid "Summarize"
 msgstr "Résumer"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
 msgstr "Résumer les points clés de ce texte"
 
@@ -5229,21 +5228,18 @@ msgid "Rewrite the selected text as short bullet points."
 msgstr "Réécrire le texte sélectionné sous forme de liste à puces."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
 msgstr "Créer des diapositives"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Image générée par IA"
+msgstr "Générer une Image par IA"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
 msgstr "Générer les notes de présentateur"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
 msgstr "Créer une formule"
 
@@ -5470,12 +5466,11 @@ msgstr "Couleur de remplissage (Photos transparentes seulement)"
 
 #: src/control/Control.Notebookbar.js:673
 msgid "Area"
-msgstr ""
+msgstr "Zone"
 
 #: src/control/Control.Notebookbar.js:688
-#, fuzzy
 msgid "Line"
-msgstr "Lien"
+msgstr "Ligne"
 
 #: src/control/Control.Notebookbar.js:731
 msgid "Line Width"
@@ -6155,9 +6150,8 @@ msgid "Master Slide Templates"
 msgstr "Modèles de Diapo Maîtresse"
 
 #: src/control/Control.NotebookbarImpress.js:1953
-#, fuzzy
 msgid "This Presentation"
-msgstr "Fermer Présentation"
+msgstr "Cette présentation"
 
 #: src/control/Control.NotebookbarImpress.js:1962
 msgid "Presentation Templates"
@@ -6254,7 +6248,6 @@ msgid "Switch to Editing"
 msgstr "Passer en édition"
 
 #: src/control/Control.HyperlinkWizard.ts:67
-#, fuzzy
 msgid "Link"
 msgstr "Lien"
 
@@ -6302,43 +6295,39 @@ msgstr "aperçu de la page %1, %3 est manquant"
 
 #: src/control/Control.PartsPreview.js:991
 msgid "%1, %3 is missing"
-msgstr ""
+msgstr "%1, %3 est manquant"
 
 #: src/control/Control.PartsPreview.js:995
 msgid "preview of page %1, not found in %3"
 msgstr "aperçu de la page %1, introuvable dans %3"
 
 #: src/control/Control.PartsPreview.js:996
-#, fuzzy
 msgid "%1, not found in %3"
-msgstr "Diapo %1, non trouvé dans %3"
+msgstr "%1, non trouvé dans %3"
 
 #: src/control/Control.PartsPreview.js:1000
 msgid "preview of page %1, no access to %3"
 msgstr "aperçu de la page %1, pas d'accès à %3"
 
 #: src/control/Control.PartsPreview.js:1001
-#, fuzzy
 msgid "%1, no access to %3"
-msgstr "Diapositive %1, pas d'accès à %3"
+msgstr "%1, pas d'accès à %3"
 
 #: src/control/Control.PartsPreview.js:1005
 msgid "preview of page %1, could not open %3"
 msgstr "aperçu de la page %1, ne pouvait pas ouvrir %3"
 
 #: src/control/Control.PartsPreview.js:1006
-#, fuzzy
 msgid "%1, could not open %3"
-msgstr "Diapositive %1, ne pouvait pas ouvrir %3"
+msgstr "%1, ne pouvait pas ouvrir %3"
 
 #: src/control/Control.PartsPreview.js:1011
 msgid "preview of page %1, %2 changed in %3"
 msgstr "aperçu de la page %1, %2 changé dans %3"
 
 #: src/control/Control.PartsPreview.js:1012
-#, fuzzy
 msgid "%1, %2 changed in %3"
-msgstr "Diapositive %1, %2 modifiée dans %3"
+msgstr "%1, %2 modifiée dans %3"
 
 #: src/control/Control.PartsPreview.js:1015
 msgid "preview of page %1, changed in %3"
@@ -6346,25 +6335,23 @@ msgstr "aperçu de la page %1, changée dans %3"
 
 #: src/control/Control.PartsPreview.js:1016
 msgid "%1, changed in %3"
-msgstr ""
+msgstr "%1, changé dans %3"
 
 #: src/control/Control.PartsPreview.js:1020
 msgid "preview of page %1, %3 is disconnected"
 msgstr "aperçu de la page %1, %3 est déconnecté"
 
 #: src/control/Control.PartsPreview.js:1021
-#, fuzzy
 msgid "%1, %3 is disconnected"
-msgstr "Diapositive %1, %3 est déconnecté"
+msgstr "%1, %3 est déconnecté"
 
 #: src/control/Control.PartsPreview.js:1025
 msgid "preview of page %1, linked to %2 in %3"
 msgstr "aperçu de la page %1, lié à %2 en %3"
 
 #: src/control/Control.PartsPreview.js:1026
-#, fuzzy
 msgid "%1, linked to %2 in %3"
-msgstr "Diapositive %1, liée à %2 en %3"
+msgstr "%1, liée à %2 en %3"
 
 #: src/control/Control.PartsPreview.js:1029
 msgid "preview of page %1, linked to %2"
@@ -6372,7 +6359,7 @@ msgstr "aperçu de la page %1, lié à %2"
 
 #: src/control/Control.PartsPreview.js:1030
 msgid "%1, linked to %2"
-msgstr ""
+msgstr "%1, liée à %2"
 
 #: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
