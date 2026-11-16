@@ -1018,6 +1018,38 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableKeepsTheNameOfItsStyle)
     assertXPath(pStyles, "//a:tblStyleLst/a:tblStyle[@styleId='" + aStyleName.toUtf8() + "']", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testStrictTableStylesAreNotKept)
+{
+    // A strict OOXML presentation saves no table styles part, because the saved package is
+    // transitional, and the whole file would fail validation.
+    // If the conversion of such table styles part to transitional gets implemented, this test
+    // can be removed.
+    createSdImpressDoc("pptx/table_strict.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pContentTypes = parseExport(u"[Content_Types].xml"_ustr);
+    assertXPath(pContentTypes,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/tableStyles.xml']", 0);
+    xmlDocUniquePtr pRels = parseExport(u"ppt/_rels/presentation.xml.rels"_ustr);
+    assertXPath(pRels, "/rels:Relationships/rels:Relationship[@Target='tableStyles.xml']", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableStylesWithoutTablesAreKept)
+{
+    // A presentation that has no table can still have a table styles part, which
+    // should be kept during roundtrip.
+    createSdImpressDoc("pptx/empty-title-placeholder.pptx");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pRels = parseExport(u"ppt/_rels/presentation.xml.rels"_ustr);
+    assertXPath(pRels, "/rels:Relationships/rels:Relationship[@Target='tableStyles.xml']", 1);
+
+    xmlDocUniquePtr pStyles = parseExport(u"ppt/tableStyles.xml"_ustr);
+    assertXPath(pStyles, "/a:tblStyleLst", "def", u"{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}");
+    assertXPath(pStyles, "/a:tblStyleLst/a:tblStyle", 3);
+}
+
 // A table cell that lets its text run on past its edge still says so after a save.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableCellKeepsLettingItsTextRunOn)
 {

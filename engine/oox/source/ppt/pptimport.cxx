@@ -28,6 +28,7 @@
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -49,6 +50,7 @@
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ppt/presentationfragmenthandler.hxx>
 #include <oox/ppt/presPropsfragmenthandler.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star;
@@ -113,6 +115,9 @@ bool PowerPointImport::importDocument()
         = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc(u"presProps");
 
     bool bRet = importFragment(xPresentationFragmentHandler);
+    // Table styles can exist even without tables in the presentation
+    if (bRet)
+        getTableStyles();
     if (bRet && !sPresPropsPath.isEmpty())
     {
         FragmentHandlerRef xPresPropsFragmentHandler(
@@ -296,6 +301,8 @@ oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
     {
         mpTableStyleList = std::make_shared<oox::drawingml::table::TableStyleList>( );
         Reference<xml::dom::XDocument> xDoc = importFragment(maTableStyleListPath);
+        if (!xDoc.is())
+            return mpTableStyleList;
         importFragment( new oox::drawingml::table::TableStyleListFragmentHandler(
                             *this, maTableStyleListPath, *mpTableStyleList ),
                         Reference<xml::sax::XFastSAXSerializable>(xDoc, UNO_QUERY_THROW) );
@@ -313,6 +320,12 @@ void PowerPointImport::keepTableStyles(const Reference<xml::dom::XDocument>& xDo
 
     try
     {
+        // A save writes a transitional package, so only a part whose root is in the transitional
+        // namespace is kept
+        Reference<xml::dom::XElement> xRoot = xDocument->getDocumentElement();
+        if (!xRoot.is() || xRoot->getNamespaceURI() != getNamespaceURL(OOX_NS(dml)))
+            return;
+
         Reference<beans::XPropertySet> xDocProps(getModel(), UNO_QUERY);
         if (!xDocProps.is())
             return;

@@ -83,7 +83,8 @@ public:
 #endif
 
 private:
-    /** Keeps what the document says about the styles its tables are drawn in. */
+    /** Keeps what the document says about the styles its tables are drawn in. The part is kept
+        when its root element is in the transitional DrawingML namespace. */
     void keepTableStyles(const cpo::uno::Reference<css::xml::dom::XDocument>& xDocument);
 
     virtual GraphicHelper* implCreateGraphicHelper() const override;
