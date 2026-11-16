@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-15 11:10+0000\n"
-"Last-Translator: Hello Hi <hiiiiiii@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-15 22:45+0000\n"
+"Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
 "Language: ru\n"
@@ -1197,7 +1197,6 @@ msgid "Choose the AI provider to use for text and image generation."
 msgstr "Выберите провайдера ИИ для генерации текста и изображений."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3488
-#, fuzzy
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
@@ -1210,7 +1209,6 @@ msgid "seconds"
 msgstr "секунд"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3652
-#, fuzzy
 msgid "Text generation"
 msgstr "Генерация текста"
 
@@ -1232,7 +1230,6 @@ msgid "Leave empty if your server does not require one"
 msgstr "Оставьте поле пустым, если сервер не требует"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3725
-#, fuzzy
 msgid ""
 "To edit documents, pick a model with tool calling, e.g. gpt-4o or llama3.1. "
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
@@ -1243,17 +1240,14 @@ msgstr ""
 "поддерживают только чат и не могут работать с документами."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3744
-#, fuzzy
 msgid "Image generation"
 msgstr "Генерация изображений"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3752
-#, fuzzy
 msgid "Same as text provider"
 msgstr "Тот же, что и для текста"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4107
-#, fuzzy
 msgid "Required for this provider"
 msgstr "Обязательно для этого провайдера"
 
@@ -1308,7 +1302,6 @@ msgstr ""
 "API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4640
-#, fuzzy
 msgid "Lightproof Sentence Checker"
 msgstr "Средство проверки предложений Lightproof"
 
@@ -1317,12 +1310,10 @@ msgid "Choose what the sentence checker looks for as you type."
 msgstr "Выберите, что проверять при вводе текста."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4691
-#, fuzzy
 msgid "Remote Sentence Checkers"
 msgstr "Внешние средства проверки предложений"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4695
-#, fuzzy
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
@@ -1338,7 +1329,6 @@ msgstr "Включено"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4742
 #: admin/src/integrator/AdminIntegratorSettings.ts:5117
 #: src/control/backstage/CloudDialogs.tsx:104
-#, fuzzy
 msgid "Server URL"
 msgstr "URL-адрес сервера"
 
@@ -1348,7 +1338,6 @@ msgstr "Имя пользователя"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4776
 #: admin/src/integrator/AdminIntegratorSettings.ts:5136
-#, fuzzy
 msgid "Verify the server certificate"
 msgstr "Проверять сертификат сервера"
 
@@ -1389,7 +1378,6 @@ msgid "Progressive"
 msgstr "Прогрессивный"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4819
-#, fuzzy
 msgid "Tolerant"
 msgstr "Терпимый"
 
@@ -1398,7 +1386,6 @@ msgid "Press agencies"
 msgstr "Информационные агентства"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
-#, fuzzy
 msgid "Explanations"
 msgstr "Объяснения"
 
@@ -1515,7 +1502,6 @@ msgstr "Ваши собственные настройки будут сброш
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5267
 #: admin/src/integrator/AdminIntegratorSettings.ts:5928
-#, fuzzy
 msgid "Enter {0}"
 msgstr "Введите {0}"
 
@@ -1528,7 +1514,6 @@ msgstr ""
 "здесь применятся к следующему открытому документу."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5395
-#, fuzzy
 msgid ""
 "This document is open in more than one window, so what you change here "
 "applies to the next document you open rather than this one."
@@ -7830,15 +7815,15 @@ msgstr "Заполнить ряды"
 #: src/control/jsdialog/Definitions.Menu.ts:111
 #: src/control/jsdialog/Definitions.Menu.ts:1791
 msgid "Normal"
-msgstr "Нормально"
+msgstr "Обычные"
 
 #: src/control/jsdialog/Definitions.Menu.ts:116
 msgid "Wide"
-msgstr "Широкий"
+msgstr "Широкие"
 
 #: src/control/jsdialog/Definitions.Menu.ts:121
 msgid "Narrow"
-msgstr "Узкий"
+msgstr "Узкие"
 
 #: src/control/jsdialog/Definitions.Menu.ts:185
 msgid "Min"
@@ -9267,7 +9252,7 @@ msgstr "Не удалось прочитать выбранный файл."
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
-msgstr "диалог Печать"
+msgstr "Окно печати"
 
 #: src/map/handler/Map.SlideShow.js:59
 #: src/slideshow/SlideShowPresenter.ts:1447
@@ -9672,7 +9657,7 @@ msgstr "Жёлтая идея"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr "Добро пожаловать в Электронные таблицы"
+msgstr "Добро пожаловать в Таблицы"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0200\n"
-"PO-Revision-Date: 2026-11-15 16:39+0000\n"
+"PO-Revision-Date: 2026-11-15 22:45+0000\n"
 "Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "help/ru/>\n"
@@ -1842,6 +1842,12 @@ msgid ""
 "class=\"productname\">{productname}</span>. This step also converts complex "
 "object types into static images."
 msgstr ""
+"При копировании выделенного фрагмента, содержащего изображения или другие "
+"объекты, в правом нижнем углу появляется виджет <span class=\"ui\">Скачать "
+"выделенное</span>. Нажмите <span class=\"ui\">Скачать</span>, а затем "
+"скопируйте снова, чтобы содержимое стало доступно приложениям за пределами "
+"<span class=\"productname\">{productname}</span>. Этот шаг также преобразует "
+"сложные типы объектов в статические изображения."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
@@ -1865,6 +1871,9 @@ msgid ""
 "lists the recent changes to the document and lets you take the document "
 "back to an earlier state."
 msgstr ""
+"Функция <span class=\"ui\">Восстановить</span> на вкладке <span class=\"ui\">"
+"Файл</span> показывает список последних изменений документа и позволяет "
+"вернуть его к более раннему состоянию."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
 #, fuzzy
@@ -1880,6 +1889,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Диалоговое окно восстановления документа со списком прошлых состояний "
+"документа и столбцами для типа действия, автора и отметки времени"
 
 #: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
@@ -1895,7 +1906,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Неактивный документ"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
 #, fuzzy

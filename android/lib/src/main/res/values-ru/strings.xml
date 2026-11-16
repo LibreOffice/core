@@ -23,4 +23,9 @@
     <string name="use_text">Использовать текстовый формат</string>
     <string name="cant_open_the_document">Не удалось открыть документ</string>
     <string name="convert_odf_message">Этот документ может содержать форматирование или содержимое, которые не могут быть сохранены в выбранном формате файла \"Текст\".</string>
+    <string name="all_files_access_title">Открыто в режиме только для чтения</string>
+    <string name="all_files_access_message">Приложение, поделившееся этим файлом, запретило сохранять в него изменения.\n\nПредоставьте разрешение «Доступ ко всем файлам», чтобы это приложение могло записывать файл в место его хранения, и тогда вы сможете редактировать его здесь.</string>
+    <string name="all_files_access_grant">Разрешить доступ</string>
+    <string name="do_not_ask_again">Не спрашивать снова</string>
+    <string name="failed_to_save_file">Не удалось сохранить изменения в файл</string>
 </resources>

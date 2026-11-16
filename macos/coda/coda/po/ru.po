@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: coolwsd 25.04.7.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-06 18:17+0000\n"
-"PO-Revision-Date: 2026-11-15 11:52+0000\n"
+"PO-Revision-Date: 2026-11-15 22:45+0000\n"
 "Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "desktop-apps/collabora-office-macos-app/ru/>\n"
@@ -128,7 +128,7 @@ msgstr "Новый"
 
 msgctxt "WeT-3V-zwk.title"
 msgid "Paste and Match Style"
-msgstr ""
+msgstr "Вставить и согласовать стиль"
 
 #, fuzzy
 msgctxt "aTl-1u-JFS.title"
@@ -137,73 +137,73 @@ msgstr "Печатать…"
 
 msgctxt "aUF-d1-5bR.title"
 msgid "Window"
-msgstr ""
+msgstr "Окно"
 
 msgctxt "bib-Uj-vzu.title"
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 msgctxt "dMs-cI-mzQ.title"
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 msgctxt "dRJ-4n-Yzg.title"
 msgid "Undo"
-msgstr ""
+msgstr "Отменить"
 
 msgctxt "gVA-U4-sdL.title"
 msgid "Paste"
-msgstr ""
+msgstr "Вставить"
 
 msgctxt "hz9-B4-Xy5.title"
 msgid "Services"
-msgstr ""
+msgstr "Службы"
 
 msgctxt "kIP-vf-haE.title"
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Показать боковую панель"
 
 msgctxt "oas-Oc-fiZ.title"
 msgid "Open Recent"
-msgstr ""
+msgstr "Открыть недавние"
 
 msgctxt "pxx-59-PXV.title"
 msgid "Save…"
-msgstr ""
+msgstr "Сохранить…"
 
 msgctxt "qIS-W8-SiK.title"
 msgid "Page Setup…"
-msgstr ""
+msgstr "Параметры страницы…"
 
 msgctxt "snW-S8-Cw5.title"
 msgid "Show Toolbar"
-msgstr ""
+msgstr "Показать панель инструментов"
 
 msgctxt "tXI-mr-wws.title"
 msgid "Open Recent"
-msgstr ""
+msgstr "Открыть последние"
 
 #. Do not change the placeholder ProductName!
 msgctxt "uQy-DD-JDr.title"
 msgid "ProductName"
-msgstr ""
+msgstr "ProductName"
 
 msgctxt "uRl-iY-unG.title"
 msgid "Cut"
-msgstr ""
+msgstr "Вырезать"
 
 msgctxt "vFu-3Y-2xa.title"
 msgid "Window"
-msgstr ""
+msgstr "Окно"
 
 msgctxt "vNY-rz-j42.title"
 msgid "Clear Menu"
-msgstr ""
+msgstr "Очистить меню"
 
 msgctxt "wpr-3q-Mcd.title"
 msgid "Help"
-msgstr ""
+msgstr "Справка"
 
 msgctxt "x3v-GG-iWU.title"
 msgid "Copy"
-msgstr ""
+msgstr "Копировать"
