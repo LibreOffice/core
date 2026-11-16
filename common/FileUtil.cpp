@@ -28,6 +28,7 @@
 #include <Poco/Path.h>
 #include <Poco/SHA2Engine.h>
 
+#include <cctype>
 #include <chrono>
 #include <cstdio>
 #include <cstdlib>
@@ -843,6 +844,14 @@ namespace FileUtil
         return std::none_of(name.begin(), name.end(),
                             [](unsigned char c)
                             { return c == '/' || c == '\\' || c < 0x20 || c == 0x7f; });
+    }
+
+    bool isPlainExtension(std::string_view extension)
+    {
+        if (extension.empty())
+            return false;
+        return std::all_of(extension.begin(), extension.end(),
+                           [](unsigned char c) { return c < 0x80 && std::isalnum(c); });
     }
 
     std::string sha256Base64(const std::string& path)

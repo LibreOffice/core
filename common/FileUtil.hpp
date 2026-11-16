@@ -255,6 +255,9 @@ namespace FileUtil
     /// no path separator or control character in it.
     bool isPlainFileName(std::string_view name);
 
+    /// Returns true iff extension is ASCII letters and digits only, like "odt" or "docx".
+    bool isPlainExtension(std::string_view extension);
+
     /// Returns true iff the two files both exist, can be read,
     /// have equal size and every byte of their contents match.
     bool compareFileContents(const std::string& rhsPath, const std::string& lhsPath);
