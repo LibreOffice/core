@@ -39,8 +39,8 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			--without-glpk \
 			--enable-dependency-linking F77=unavailable \
-			'CFLAGS=$(call gb_ExternalProject_get_build_flags,coinmp) -DNDEBUG' \
-			'CXXFLAGS=$(call gb_ExternalProject_get_build_flags,coinmp) -DNDEBUG' \
+			'CFLAGS=$(call gb_ExternalProject_get_build_flags,coinmp) $(if $(filter FALSE,$(ASSERT_ALWAYS_ABORT)),-DNDEBUG)' \
+			'CXXFLAGS=$(call gb_ExternalProject_get_build_flags,coinmp) $(if $(filter FALSE,$(ASSERT_ALWAYS_ABORT)),-DNDEBUG)' \
 			$(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
