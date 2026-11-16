@@ -7750,7 +7750,7 @@ void LinearChildExtents::read(const SmartArtDiagram& rDgm, const LayoutNode& rRo
                 // all alike to 0.32, where a share would have taken what the others leave.
                 if (bShare && bByName)
                     for (const Constraint& rOther : rConstraints)
-                        if (rOther.msRefForName == rConstraint.msForName
+                        if (rOther.msRefForName == rConstraint.msRefForName
                             && rOther.msForName != rConstraint.msForName
                             && (rOther.mnRefType == nAxisType || rOther.mnRefType == nOtherType))
                         {
