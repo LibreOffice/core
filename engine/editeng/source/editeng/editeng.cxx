@@ -1007,7 +1007,7 @@ void EditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
         // #i100014#
         // It is not a good idea to subtract 1 from a count and cast the result
         // to sal_uInt16 without check, if the count is 0.
-        pOwner->ImplCheckParagraphs( nPara, pOwner->pEditEngine->GetParagraphCount() );
+        pOwner->ImplCheckParagraphs( nPara, pOwner->m_pEditEngine->GetParagraphCount() );
 
         if ( !IsInUndo() && IsUndoEnabled() )
             pOwner->UndoActionEnd();
@@ -1789,7 +1789,7 @@ tools::Rectangle EditEngine::GetBulletArea( sal_Int32 nPara )
     if (Outliner* pOwner = getImpl().GetOwner())
     {
         tools::Rectangle aBulletArea { Point(), Point() };
-        if ( nPara < pOwner->pEditEngine->GetParagraphCount() )
+        if ( nPara < pOwner->m_pEditEngine->GetParagraphCount() )
         {
             if ( pOwner->ImplHasNumberFormat( nPara ) )
                 aBulletArea = pOwner->ImpCalcBulletArea( nPara, false, false );

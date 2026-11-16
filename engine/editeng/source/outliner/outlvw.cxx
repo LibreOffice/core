@@ -64,7 +64,7 @@ void OutlinerView::DrawText_ToEditView( const tools::Rectangle& rRect, OutputDev
 {
     // For the first Paint/KeyInput/Drop an empty Outliner is turned into
     // an Outliner with exactly one paragraph.
-    if( rOwner.bFirstParaIsEmpty )
+    if( rOwner.m_bFirstParaIsEmpty )
         rOwner.Insert( OUString() );
 
     // use TextHierarchyBreakupOutliner to get all text embedded to the
@@ -81,7 +81,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
 {
     // For the first Paint/KeyInput/Drop an empty Outliner is turned into
     // an Outliner with exactly one paragraph.
-    if( rOwner.bFirstParaIsEmpty )
+    if( rOwner.m_bFirstParaIsEmpty )
         rOwner.Insert( OUString() );
 
     pEditView->getImpl().FitSelectionIntoText();
@@ -132,10 +132,10 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
             {
                 if( !bReadOnly && !bSelection && ( rOwner.GetOutlinerMode() != OutlinerMode::TextObject ) )
                 {
-                    if (aSel.end.nIndex == rOwner.pEditEngine->GetTextLen(aSel.end.nPara))
+                    if (aSel.end.nIndex == rOwner.m_pEditEngine->GetTextLen(aSel.end.nPara))
                     {
-                        if (aSel.end.nPara + 1 < rOwner.pEditEngine->GetParagraphCount()
-                            && rOwner.pEditEngine->HasParaFlag(aSel.end.nPara + 1, ParaFlag::ISPAGE) )
+                        if (aSel.end.nPara + 1 < rOwner.m_pEditEngine->GetParagraphCount()
+                            && rOwner.m_pEditEngine->HasParaFlag(aSel.end.nPara + 1, ParaFlag::ISPAGE) )
                         {
                             if (!rOwner.ImpCanDeleteSelectedPages(this, aSel.end.nPara, 1))
                                 return false;
@@ -197,7 +197,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                     {
                         // Don't let insert empty paragraph with numbering. Instead end numbering.
                         if (rOwner.GetEditEngine().GetNumberingDepth(aSel.end.nPara) > -1 &&
-                            rOwner.pEditEngine->GetTextLen( aSel.end.nPara ) == 0)
+                            rOwner.m_pEditEngine->GetTextLen( aSel.end.nPara ) == 0)
                         {
                             ToggleBullets();
                             pEditView->ShowCursor();
@@ -205,7 +205,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                         }
                         // ImpGetCursor again???
                         if( !bSelection &&
-                                aSel.end.nIndex == rOwner.pEditEngine->GetTextLen( aSel.end.nPara ) )
+                                aSel.end.nIndex == rOwner.m_pEditEngine->GetTextLen( aSel.end.nPara ) )
                         {
                             sal_Int32 nChildren = rOwner.GetChildCount(aSel.end.nPara);
                             if( nChildren && !rOwner.HasVisibleChildren(aSel.end.nPara))
@@ -230,7 +230,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                     }
                     if( !bKeyProcessed && !bSelection &&
                                 !aKeyCode.IsShift() && aKeyCode.IsMod1() &&
-                            ( aSel.end.nIndex == rOwner.pEditEngine->GetTextLen(aSel.end.nPara) ) )
+                            ( aSel.end.nIndex == rOwner.m_pEditEngine->GetTextLen(aSel.end.nPara) ) )
                     {
                         rOwner.UndoActionStart( OLUNDO_INSERT );
                         sal_Int32 nTemp = aSel.end.nPara;
@@ -278,7 +278,7 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
         if ( rOwner.IsTextPos( aPaperPos, 0, &bBullet ) )
         {
             Point aDocPos = rOwner.GetDocPos( aPaperPos );
-            nPara = rOwner.pEditEngine->FindParagraph( aDocPos.Y() );
+            nPara = rOwner.m_pEditEngine->FindParagraph( aDocPos.Y() );
 
             if ( bBullet )
             {
@@ -415,7 +415,7 @@ sal_Int16 OutlinerView::GetDepth() const
 
 void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 {
-    bool bUpdate = rOwner.pEditEngine->SetUpdateLayout( false );
+    bool bUpdate = rOwner.m_pEditEngine->SetUpdateLayout( false );
 
     if( !rOwner.IsInUndo() && rOwner.IsUndoEnabled() )
         rOwner.UndoActionStart( OLUNDO_ATTR );
@@ -466,8 +466,8 @@ void OutlinerView::Indent( short nDiff )
     if( !nDiff || ( ( nDiff > 0 ) && ImpCalcSelectedPages( true ) && !rOwner.ImpCanIndentSelectedPages( this ) ) )
         return;
 
-    const bool bOutlinerView = bool(rOwner.pEditEngine->GetControlWord() & EEControlBits::OUTLINER);
-    bool bUpdate = rOwner.pEditEngine->SetUpdateLayout( false );
+    const bool bOutlinerView = bool(rOwner.m_pEditEngine->GetControlWord() & EEControlBits::OUTLINER);
+    bool bUpdate = rOwner.m_pEditEngine->SetUpdateLayout( false );
 
     bool bUndo = !rOwner.IsInUndo() && rOwner.IsUndoEnabled();
 
@@ -488,7 +488,7 @@ void OutlinerView::Indent( short nDiff )
             if( (bPage && (nDiff == +1)) || (!bPage && (nDiff == -1) && (nOldDepth <= 0))  )
             {
                             // Notify App
-                rOwner.nDepthChangedHdlPrevDepth = nOldDepth;
+                rOwner.m_nDepthChangedHdlPrevDepth = nOldDepth;
                 ParaFlag nPrevFlags = rOwner.GetEditEngine().GetParaFlag(nPara);
 
                 if( bPage )
@@ -497,7 +497,7 @@ void OutlinerView::Indent( short nDiff )
                     rOwner.GetEditEngine().SetParaFlag( nPara, ParaFlag::ISPAGE );
 
                 rOwner.DepthChangedHdl(nPrevFlags, nPara);
-                rOwner.pEditEngine->QuickMarkInvalid(ESelection(nPara, 0));
+                rOwner.m_pEditEngine->QuickMarkInvalid(ESelection(nPara, 0));
 
                 if( bUndo )
                     rOwner.InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( &rOwner, nPara, nPrevFlags, rOwner.GetEditEngine().GetParaFlag(nPara) ) );
@@ -516,8 +516,8 @@ void OutlinerView::Indent( short nDiff )
 
         if ( nNewDepth < Outliner::gnMinDepth )
             nNewDepth = Outliner::gnMinDepth;
-        if ( nNewDepth > rOwner.nMaxDepth )
-            nNewDepth = rOwner.nMaxDepth;
+        if ( nNewDepth > rOwner.m_nMaxDepth )
+            nNewDepth = rOwner.m_nMaxDepth;
 
         if( nOldDepth < nMinDepth )
             nMinDepth = nOldDepth;
@@ -550,7 +550,7 @@ void OutlinerView::Indent( short nDiff )
                 }
             }
 
-            rOwner.nDepthChangedHdlPrevDepth = nOldDepth;
+            rOwner.m_nDepthChangedHdlPrevDepth = nOldDepth;
             ParaFlag nPrevFlags = rOwner.GetEditEngine().GetParaFlag(nPara);
 
             rOwner.ImplInitDepth( nPara, nNewDepth, true );
@@ -565,7 +565,7 @@ void OutlinerView::Indent( short nDiff )
         else
         {
             // Needs at least a repaint...
-            rOwner.pEditEngine->QuickMarkInvalid(ESelection(nPara, 0));
+            rOwner.m_pEditEngine->QuickMarkInvalid(ESelection(nPara, 0));
         }
     }
 
@@ -636,7 +636,7 @@ void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara
         if( bDone )
         {
             // The line under the paragraph should disappear ...
-            rOwner.pEditEngine->QuickMarkToBeRepainted( nPara );
+            rOwner.m_pEditEngine->QuickMarkToBeRepainted( nPara );
         }
     }
 
@@ -666,9 +666,9 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
     rOwner.UndoActionStart( OLUNDO_INSERT );
 
-    const bool bPrevUpdateLayout = rOwner.pEditEngine->SetUpdateLayout( false );
+    const bool bPrevUpdateLayout = rOwner.m_pEditEngine->SetUpdateLayout( false );
     sal_Int32 nStart, nParaCount;
-    nParaCount = rOwner.pEditEngine->GetParagraphCount();
+    nParaCount = rOwner.m_pEditEngine->GetParagraphCount();
     sal_uInt16 nSize = ImpInitPaste( nStart );
     pEditView->InsertText( rParaObj.GetTextObject() );
     ImpPasted( nStart, nParaCount, nSize);
@@ -701,8 +701,8 @@ void OutlinerView::Paste( bool bUseSpecial, SotClipboardFormatId format)
 
     rOwner.UndoActionStart( OLUNDO_INSERT );
 
-    const bool bPrevUpdateLayout = rOwner.pEditEngine->SetUpdateLayout( false );
-    rOwner.bPasting = true;
+    const bool bPrevUpdateLayout = rOwner.m_pEditEngine->SetUpdateLayout( false );
+    rOwner.m_bPasting = true;
 
     if ( bUseSpecial )
         pEditView->PasteSpecial(format);
@@ -711,7 +711,7 @@ void OutlinerView::Paste( bool bUseSpecial, SotClipboardFormatId format)
 
     if ( rOwner.GetOutlinerMode() == OutlinerMode::OutlineObject )
     {
-        const sal_Int32 nParaCount = rOwner.pEditEngine->GetParagraphCount();
+        const sal_Int32 nParaCount = rOwner.m_pEditEngine->GetParagraphCount();
 
         for( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
             rOwner.ImplSetLevelDependentStyleSheet( nPara );
@@ -788,7 +788,7 @@ PointerStyle OutlinerView::GetPointer( const Point& rPosPixel )
 
 sal_Int32 OutlinerView::ImpInitPaste( sal_Int32& rStart )
 {
-    rOwner.bPasting = true;
+    rOwner.m_bPasting = true;
     ESelection aSelection( pEditView->GetSelection() );
     aSelection.Adjust();
     rStart = aSelection.start.nPara;
@@ -799,8 +799,8 @@ sal_Int32 OutlinerView::ImpInitPaste( sal_Int32& rStart )
 
 void OutlinerView::ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_Int32 nSize)
 {
-    rOwner.bPasting = false;
-    sal_Int32 nCurParaCount = rOwner.pEditEngine->GetParagraphCount();
+    rOwner.m_bPasting = false;
+    sal_Int32 nCurParaCount = rOwner.m_pEditEngine->GetParagraphCount();
     if( nCurParaCount < nPrevParaCount )
         nSize = nSize - ( nPrevParaCount - nCurParaCount );
     else
@@ -842,7 +842,7 @@ sal_Int32 OutlinerView::ImpCalcSelectedPages( bool bIncludeFirstSelected )
 
     if( nPages )
     {
-        rOwner.nDepthChangedHdlPrevDepth = nPages;
+        rOwner.m_nDepthChangedHdlPrevDepth = nPages;
         rOwner.mnFirstSelPage = nFirstPage;
     }
 
@@ -857,7 +857,7 @@ void OutlinerView::ToggleBullets()
     ESelection aSel( pEditView->GetSelection() );
     aSel.Adjust();
 
-    const bool bUpdate = rOwner.pEditEngine->SetUpdateLayout( false );
+    const bool bUpdate = rOwner.m_pEditEngine->SetUpdateLayout( false );
 
     sal_Int16 nNewDepth = -2;
     const SvxNumRule* pDefaultBulletNumRule = nullptr;
@@ -871,7 +871,7 @@ void OutlinerView::ToggleBullets()
             {
                 // determine default numbering rule for bullets
                 const ESelection aSelection(nPara, 0);
-                const SfxItemSet aTmpSet(rOwner.pEditEngine->GetAttribs(aSelection));
+                const SfxItemSet aTmpSet(rOwner.m_pEditEngine->GetAttribs(aSelection));
                 const SfxPoolItem& rPoolItem = aTmpSet.GetPool()->GetUserOrPoolDefaultItem( EE_PARA_NUMBULLET );
                 const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(&rPoolItem);
                 pDefaultBulletNumRule =  pNumBulletItem ? &pNumBulletItem->GetNumRule() : nullptr;
@@ -912,9 +912,9 @@ void OutlinerView::ToggleBullets()
     rOwner.ImplCheckParagraphs(aSel.start.nPara, nParaCount);
 
     sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
-    rOwner.pEditEngine->QuickMarkInvalid(ESelection(aSel.start.nPara, 0, nEndPara, 0));
+    rOwner.m_pEditEngine->QuickMarkInvalid(ESelection(aSel.start.nPara, 0, nEndPara, 0));
 
-    rOwner.pEditEngine->SetUpdateLayout( bUpdate );
+    rOwner.m_pEditEngine->SetUpdateLayout( bUpdate );
 
     rOwner.UndoActionEnd();
 }
@@ -996,8 +996,8 @@ void OutlinerView::EnsureNumberingIsOn()
     ESelection aSel(pEditView->GetSelection());
     aSel.Adjust();
 
-    const bool bUpdate = rOwner.pEditEngine->IsUpdateLayout();
-    rOwner.pEditEngine->SetUpdateLayout(false);
+    const bool bUpdate = rOwner.m_pEditEngine->IsUpdateLayout();
+    rOwner.m_pEditEngine->SetUpdateLayout(false);
 
     for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
     {
@@ -1009,9 +1009,9 @@ void OutlinerView::EnsureNumberingIsOn()
     rOwner.ImplCheckParagraphs(aSel.start.nPara, nParaCount);
 
     const sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
-    rOwner.pEditEngine->QuickMarkInvalid(ESelection(aSel.start.nPara, 0, nEndPara, 0));
+    rOwner.m_pEditEngine->QuickMarkInvalid(ESelection(aSel.start.nPara, 0, nEndPara, 0));
 
-    rOwner.pEditEngine->SetUpdateLayout(bUpdate);
+    rOwner.m_pEditEngine->SetUpdateLayout(bUpdate);
 
     rOwner.UndoActionEnd();
 }
@@ -1022,11 +1022,11 @@ void OutlinerView::ApplyBulletsNumbering(
     const bool bCheckCurrentNumRuleBeforeApplyingNewNumRule,
     const bool bAtSelection )
 {
-    if (!rOwner.pEditEngine)
+    if (!rOwner.m_pEditEngine)
         return;
 
     rOwner.UndoActionStart(OLUNDO_DEPTH);
-    const bool bUpdate = rOwner.pEditEngine->SetUpdateLayout(false);
+    const bool bUpdate = rOwner.m_pEditEngine->SetUpdateLayout(false);
 
     sal_Int32 nStartPara = 0;
     sal_Int32 nEndPara = 0;
@@ -1099,7 +1099,7 @@ void OutlinerView::ApplyBulletsNumbering(
                     {
                         // Use default value when has not contain bullet item.
                         ESelection aSelection(nPara, 0);
-                        SfxItemSet aTmpSet(rOwner.pEditEngine->GetAttribs(aSelection));
+                        SfxItemSet aTmpSet(rOwner.m_pEditEngine->GetAttribs(aSelection));
                         pNumBulletItem = aTmpSet.GetItem(EE_PARA_NUMBULLET);
                     }
 
@@ -1129,9 +1129,9 @@ void OutlinerView::ApplyBulletsNumbering(
 
     const sal_uInt16 nParaCount = static_cast<sal_uInt16>(rOwner.GetEditEngine().GetParagraphCount());
     rOwner.ImplCheckParagraphs( nStartPara, nParaCount );
-    rOwner.pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
+    rOwner.m_pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
-    rOwner.pEditEngine->SetUpdateLayout( bUpdate );
+    rOwner.m_pEditEngine->SetUpdateLayout( bUpdate );
 
     rOwner.UndoActionEnd();
 }
@@ -1156,7 +1156,7 @@ void OutlinerView::SwitchOffBulletsNumbering(
     }
 
     rOwner.UndoActionStart( OLUNDO_DEPTH );
-    const bool bUpdate = rOwner.pEditEngine->SetUpdateLayout( false );
+    const bool bUpdate = rOwner.m_pEditEngine->SetUpdateLayout( false );
 
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara )
     {
@@ -1181,9 +1181,9 @@ void OutlinerView::SwitchOffBulletsNumbering(
 
     const sal_uInt16 nParaCount = static_cast<sal_uInt16>(rOwner.GetEditEngine().GetParagraphCount());
     rOwner.ImplCheckParagraphs( nStartPara, nParaCount );
-    rOwner.pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
+    rOwner.m_pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
-    rOwner.pEditEngine->SetUpdateLayout( bUpdate );
+    rOwner.m_pEditEngine->SetUpdateLayout( bUpdate );
     rOwner.UndoActionEnd();
 }
 
@@ -1221,7 +1221,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages )
 
 void OutlinerView::InsertText( const OUString& rNew, bool bSelect )
 {
-    if( rOwner.bFirstParaIsEmpty )
+    if( rOwner.m_bFirstParaIsEmpty )
         rOwner.Insert( OUString() );
     pEditView->InsertText( rNew, bSelect );
 }

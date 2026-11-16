@@ -460,18 +460,18 @@ private:
 
     friend class TextChainingUtils;
 
-    std::unique_ptr<EditEngine> pEditEngine;
+    std::unique_ptr<EditEngine> m_pEditEngine;
 
-    ViewList            aViewList;
+    ViewList            m_aViewList;
 
     sal_Int32           mnFirstSelPage;
-    Link<ParagraphHdlParam,void>   aParaInsertedHdl;
-    Link<ParagraphHdlParam,void>   aParaRemovingHdl;
-    Link<DepthChangeHdlParam,void> aDepthChangedHdl;
-    Link<Outliner*,void>           aBeginMovingHdl;
-    Link<MoveParagraphsHdlParam,void> aEndMovingHdl;
-    Link<OutlinerView*,bool>       aIndentingPagesHdl;
-    Link<OutlinerView*,bool>       aRemovingPagesHdl;
+    Link<ParagraphHdlParam,void>   m_aParaInsertedHdl;
+    Link<ParagraphHdlParam,void>   m_aParaRemovingHdl;
+    Link<DepthChangeHdlParam,void> m_aDepthChangedHdl;
+    Link<Outliner*,void>           m_aBeginMovingHdl;
+    Link<MoveParagraphsHdlParam,void> m_aEndMovingHdl;
+    Link<OutlinerView*,bool>       m_aIndentingPagesHdl;
+    Link<OutlinerView*,bool>       m_aRemovingPagesHdl;
     Link<EditFieldInfo*,void>      maCalcFieldValueHdl;
     Link<EditFieldInfo*,void>      maSdrCalcFieldValueHdl;
     Link<PaintFirstLineInfo*,void> maPaintFirstLineHdl;
@@ -480,18 +480,18 @@ private:
     Link<Outliner*,bool>           maSpellNextDocumentHdl;
     Link<Outliner*,bool>           maConvertNextDocumentHdl;
 
-    sal_Int32           nDepthChangedHdlPrevDepth;
-    sal_Int16           nMaxDepth;
+    sal_Int32           m_nDepthChangedHdlPrevDepth;
+    sal_Int16           m_nMaxDepth;
     static constexpr sal_Int16 gnMinDepth = -1;
 
-    OutlinerMode        nOutlinerMode;
+    OutlinerMode        m_nOutlinerMode;
 
-    bool                bFirstParaIsEmpty;
-    sal_uInt8           nBlockInsCallback;
-    bool                bPasting;
+    bool                m_bFirstParaIsEmpty;
+    sal_uInt8           m_nBlockInsCallback;
+    bool                m_bPasting;
 
-    Link<EENotify&,void> aOutlinerNotifyHdl;
-    NotifyList          aNotifyCache;
+    Link<EENotify&,void> m_aOutlinerNotifyHdl;
+    NotifyList          m_aNotifyCache;
 
     DECL_DLLPRIVATE_LINK(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
     DECL_DLLPRIVATE_LINK(    EndMovingParagraphsHdl, MoveParagraphsInfo&, void );
@@ -592,7 +592,7 @@ public:
     Color const &   GetBackgroundColor() const;
 
     SAL_DLLPRIVATE void            SetMaxDepth( sal_Int16 nDepth );
-    SAL_DLLPRIVATE sal_Int16       GetMaxDepth() const { return nMaxDepth; }
+    SAL_DLLPRIVATE sal_Int16       GetMaxDepth() const { return m_nMaxDepth; }
 
     /// @return previous value of bUpdateLayout state
     bool            SetUpdateLayout( bool bUpdate );
@@ -625,11 +625,11 @@ public:
     bool            IsModified() const;
 
     SAL_DLLPRIVATE void            ParagraphInsertedHdl(sal_Int32 nParaPos);
-    SAL_DLLPRIVATE void            SetParaInsertedHdl(const Link<ParagraphHdlParam,void>& rLink){aParaInsertedHdl=rLink;}
-    SAL_DLLPRIVATE const Link<ParagraphHdlParam,void>& GetParaInsertedHdl() const { return aParaInsertedHdl; }
+    SAL_DLLPRIVATE void            SetParaInsertedHdl(const Link<ParagraphHdlParam,void>& rLink){m_aParaInsertedHdl=rLink;}
+    SAL_DLLPRIVATE const Link<ParagraphHdlParam,void>& GetParaInsertedHdl() const { return m_aParaInsertedHdl; }
 
-    SAL_DLLPRIVATE void            SetParaRemovingHdl(const Link<ParagraphHdlParam,void>& rLink){aParaRemovingHdl=rLink;}
-    SAL_DLLPRIVATE const Link<ParagraphHdlParam,void>& GetParaRemovingHdl() const { return aParaRemovingHdl; }
+    SAL_DLLPRIVATE void            SetParaRemovingHdl(const Link<ParagraphHdlParam,void>& rLink){m_aParaRemovingHdl=rLink;}
+    SAL_DLLPRIVATE const Link<ParagraphHdlParam,void>& GetParaRemovingHdl() const { return m_aParaRemovingHdl; }
 
     SAL_DLLPRIVATE std::optional<NonOverflowingText> GetNonOverflowingText() const;
     SAL_DLLPRIVATE std::optional<OverflowingText> GetOverflowingText() const;
@@ -640,16 +640,16 @@ public:
 
 
     SAL_DLLPRIVATE void            DepthChangedHdl(ParaFlag nPrevFlags, sal_Int32 nParaPos);
-    SAL_DLLPRIVATE void            SetDepthChangedHdl(const Link<DepthChangeHdlParam,void>& rLink){aDepthChangedHdl=rLink;}
-    SAL_DLLPRIVATE const Link<DepthChangeHdlParam,void>& GetDepthChangedHdl() const { return aDepthChangedHdl; }
-    SAL_DLLPRIVATE sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(nDepthChangedHdlPrevDepth); }
+    SAL_DLLPRIVATE void            SetDepthChangedHdl(const Link<DepthChangeHdlParam,void>& rLink){m_aDepthChangedHdl=rLink;}
+    SAL_DLLPRIVATE const Link<DepthChangeHdlParam,void>& GetDepthChangedHdl() const { return m_aDepthChangedHdl; }
+    SAL_DLLPRIVATE sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(m_nDepthChangedHdlPrevDepth); }
 
     SAL_DLLPRIVATE bool            RemovingPagesHdl( OutlinerView* );
-    SAL_DLLPRIVATE void            SetRemovingPagesHdl(const Link<OutlinerView*,bool>& rLink){aRemovingPagesHdl=rLink;}
+    SAL_DLLPRIVATE void            SetRemovingPagesHdl(const Link<OutlinerView*,bool>& rLink){m_aRemovingPagesHdl=rLink;}
     SAL_DLLPRIVATE bool            IndentingPagesHdl( OutlinerView* );
-    SAL_DLLPRIVATE void            SetIndentingPagesHdl(const Link<OutlinerView*,bool>& rLink){aIndentingPagesHdl=rLink;}
+    SAL_DLLPRIVATE void            SetIndentingPagesHdl(const Link<OutlinerView*,bool>& rLink){m_aIndentingPagesHdl=rLink;}
     // valid only in the two upper handlers
-    SAL_DLLPRIVATE sal_Int32       GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
+    SAL_DLLPRIVATE sal_Int32       GetSelPageCount() const { return m_nDepthChangedHdlPrevDepth; }
 
     SAL_DLLPRIVATE void            SetCalcFieldValueHdl(const Link<EditFieldInfo*,void>& rLink ) { maCalcFieldValueHdl= rLink; }
     SAL_DLLPRIVATE const Link<EditFieldInfo*,void>& GetCalcFieldValueHdl() const { return maCalcFieldValueHdl; }
@@ -722,10 +722,10 @@ public:
     void            SetControlWord( EEControlBits nWord );
     EEControlBits   GetControlWord() const;
 
-    SAL_DLLPRIVATE const Link<Outliner*,void>& GetBeginMovingHdl() const { return aBeginMovingHdl; }
-    SAL_DLLPRIVATE void            SetBeginMovingHdl(const Link<Outliner*,void>& rLink) {aBeginMovingHdl=rLink;}
-    SAL_DLLPRIVATE const Link<MoveParagraphsHdlParam,void>& GetEndMovingHdl() const {return aEndMovingHdl;}
-    SAL_DLLPRIVATE void            SetEndMovingHdl( const Link<MoveParagraphsHdlParam,void>& rLink){aEndMovingHdl=rLink;}
+    SAL_DLLPRIVATE const Link<Outliner*,void>& GetBeginMovingHdl() const { return m_aBeginMovingHdl; }
+    SAL_DLLPRIVATE void            SetBeginMovingHdl(const Link<Outliner*,void>& rLink) {m_aBeginMovingHdl=rLink;}
+    SAL_DLLPRIVATE const Link<MoveParagraphsHdlParam,void>& GetEndMovingHdl() const {return m_aEndMovingHdl;}
+    SAL_DLLPRIVATE void            SetEndMovingHdl( const Link<MoveParagraphsHdlParam,void>& rLink){m_aEndMovingHdl=rLink;}
 
     sal_Int32       GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
@@ -806,13 +806,13 @@ public:
 
     bool            ShouldCreateBigTextObject() const;
 
-    const EditEngine& GetEditEngine() const { return *pEditEngine; }
-    EditEngine& GetEditEngine() { return *pEditEngine; }
+    const EditEngine& GetEditEngine() const { return *m_pEditEngine; }
+    EditEngine& GetEditEngine() { return *m_pEditEngine; }
 
     // this is needed for StarOffice Api
     SAL_DLLPRIVATE void            SetLevelDependentStyleSheet( sal_Int32 nPara );
 
-    SAL_DLLPRIVATE OutlinerMode    GetOutlinerMode() const { return nOutlinerMode; }
+    SAL_DLLPRIVATE OutlinerMode    GetOutlinerMode() const { return m_nOutlinerMode; }
 
     // spell and return a sentence
     bool            SpellSentence(EditView const & rEditView, svx::SpellPortions& rToFill );
@@ -862,7 +862,7 @@ public:
     void SetIgnoreBreakAfterMultilineField(bool b);
 
     // return FirstParaIsEmpty state
-    bool getFirstParaIsEmpty() const { return bFirstParaIsEmpty; }
+    bool getFirstParaIsEmpty() const { return m_bFirstParaIsEmpty; }
 
 protected:
     // called from SdrOutliner

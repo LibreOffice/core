@@ -49,7 +49,7 @@ void OutlinerUndoChangeParaFlags::Redo()
 void OutlinerUndoChangeParaFlags::ImplChangeFlags( ParaFlag nFlags )
 {
     Outliner* pOutliner = GetOutliner();
-    pOutliner->nDepthChangedHdlPrevDepth = pOutliner->GetEditEngine().GetNumberingDepth(mnPara);
+    pOutliner->m_nDepthChangedHdlPrevDepth = pOutliner->GetEditEngine().GetNumberingDepth(mnPara);
     ParaFlag nPrevFlags = pOutliner->GetEditEngine().GetParaFlag(mnPara);
 
     pOutliner->GetEditEngine().ClearAndSetParaFlag(mnPara, nFlags);
@@ -129,7 +129,7 @@ OLUndoExpand::~OLUndoExpand()
 void OLUndoExpand::Restore( bool bUndo )
 {
     assert(pOutliner && "Undo:No Outliner");
-    DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
+    DBG_ASSERT(pOutliner->m_pEditEngine,"Outliner already deleted");
 
     bool bExpand = false;
     sal_uInt16 _nId = GetId();

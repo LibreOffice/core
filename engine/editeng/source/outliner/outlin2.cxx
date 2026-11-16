@@ -41,184 +41,184 @@ using namespace ::com::sun::star::linguistic2;
 
 bool Outliner::SetUpdateLayout( bool bUpdate )
 {
-    return pEditEngine->SetUpdateLayout( bUpdate );
+    return m_pEditEngine->SetUpdateLayout( bUpdate );
 }
 
 
 bool Outliner::IsUpdateLayout() const
 {
-    return pEditEngine->IsUpdateLayout();
+    return m_pEditEngine->IsUpdateLayout();
 }
 
 const SfxItemSet& Outliner::GetEmptyItemSet() const
 {
-    return pEditEngine->GetEmptyItemSet();
+    return m_pEditEngine->GetEmptyItemSet();
 }
 
 void Outliner::EnableUndo( bool bEnable )
 {
-    pEditEngine->EnableUndo( bEnable );
+    m_pEditEngine->EnableUndo( bEnable );
 }
 
 bool Outliner::IsUndoEnabled() const
 {
-    return pEditEngine->IsUndoEnabled();
+    return m_pEditEngine->IsUndoEnabled();
 }
 
 MapMode const & Outliner::GetRefMapMode() const
 {
-    return pEditEngine->GetRefMapMode();
+    return m_pEditEngine->GetRefMapMode();
 }
 
 void Outliner::SetRefMapMode( const MapMode& rMMode )
 {
-    pEditEngine->SetRefMapMode( rMMode );
+    m_pEditEngine->SetRefMapMode( rMMode );
 }
 
 void Outliner::SetBackgroundColor( const Color& rColor )
 {
-    pEditEngine->SetBackgroundColor( rColor );
+    m_pEditEngine->SetBackgroundColor( rColor );
 }
 
 Color const & Outliner::GetBackgroundColor() const
 {
-    return pEditEngine->GetBackgroundColor();
+    return m_pEditEngine->GetBackgroundColor();
 }
 
 
 void Outliner::ClearModifyFlag()
 {
-    pEditEngine->ClearModifyFlag();
+    m_pEditEngine->ClearModifyFlag();
 }
 
 bool Outliner::IsModified() const
 {
-    return pEditEngine->IsModified();
+    return m_pEditEngine->IsModified();
 }
 
 sal_uInt32 Outliner::GetTextHeight() const
 {
-    return pEditEngine->GetTextHeight();
+    return m_pEditEngine->GetTextHeight();
 }
 
 void Outliner::SetModifyHdl( const Link<LinkParamNone*,void>& rLink )
 {
-    pEditEngine->SetModifyHdl( rLink );
+    m_pEditEngine->SetModifyHdl( rLink );
 }
 
 void Outliner::SetNotifyHdl( const Link<EENotify&,void>& rLink )
 {
-    aOutlinerNotifyHdl = rLink;
+    m_aOutlinerNotifyHdl = rLink;
 
     if ( rLink.IsSet() )
-        pEditEngine->SetNotifyHdl( LINK( this, Outliner, EditEngineNotifyHdl ) );
+        m_pEditEngine->SetNotifyHdl( LINK( this, Outliner, EditEngineNotifyHdl ) );
     else
-        pEditEngine->SetNotifyHdl( Link<EENotify&,void>() );
+        m_pEditEngine->SetNotifyHdl( Link<EENotify&,void>() );
 }
 
 void Outliner::SetStatusEventHdl( const Link<EditStatus&, void>& rLink )
 {
-    pEditEngine->SetStatusEventHdl( rLink );
+    m_pEditEngine->SetStatusEventHdl( rLink );
 }
 
 Link<EditStatus&, void> const & Outliner::GetStatusEventHdl() const
 {
-    return pEditEngine->GetStatusEventHdl();
+    return m_pEditEngine->GetStatusEventHdl();
 }
 
 void Outliner::SetDefTab( sal_uInt16 nTab )
 {
-    pEditEngine->SetDefTab( nTab );
+    m_pEditEngine->SetDefTab( nTab );
 }
 
 bool Outliner::IsFlatMode() const
 {
-    return pEditEngine->IsFlatMode();
+    return m_pEditEngine->IsFlatMode();
 }
 
 bool Outliner::UpdateFields()
 {
-    return pEditEngine->UpdateFields();
+    return m_pEditEngine->UpdateFields();
 }
 
 void Outliner::RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData )
 {
-    pEditEngine->RemoveFields( isFieldData );
+    m_pEditEngine->RemoveFields( isFieldData );
 }
 
 void Outliner::SetWordDelimiters( const OUString& rDelimiters )
 {
-    pEditEngine->SetWordDelimiters( rDelimiters );
+    m_pEditEngine->SetWordDelimiters( rDelimiters );
 }
 
 OUString const & Outliner::GetWordDelimiters() const
 {
-    return pEditEngine->GetWordDelimiters();
+    return m_pEditEngine->GetWordDelimiters();
 }
 
 OUString Outliner::GetWord(const EPaM& rPos)
 {
-    return pEditEngine->GetWord(rPos);
+    return m_pEditEngine->GetWord(rPos);
 }
 
 void Outliner::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect )
 {
-    pEditEngine->DrawText_ToRectangle( rOutDev, rOutRect, Point( 0, 0 ), true );
+    m_pEditEngine->DrawText_ToRectangle( rOutDev, rOutRect, Point( 0, 0 ), true );
 }
 
 void Outliner::DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos )
 {
-    pEditEngine->DrawText_ToPosition( rOutDev, rStartPos );
+    m_pEditEngine->DrawText_ToPosition( rOutDev, rStartPos );
 }
 
 void Outliner::SetPaperSize( const Size& rSize )
 {
-    pEditEngine->SetPaperSize( rSize );
+    m_pEditEngine->SetPaperSize( rSize );
 }
 
 const Size& Outliner::GetPaperSize() const
 {
-    return pEditEngine->GetPaperSize();
+    return m_pEditEngine->GetPaperSize();
 }
 
 void Outliner::SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
-    pEditEngine->SetPolygon( rPolyPolygon );
+    m_pEditEngine->SetPolygon( rPolyPolygon );
 }
 
 void Outliner::SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon)
 {
-    pEditEngine->SetPolygon( rPolyPolygon, pLinePolyPolygon);
+    m_pEditEngine->SetPolygon( rPolyPolygon, pLinePolyPolygon);
 }
 
 void Outliner::ClearPolygon()
 {
-    pEditEngine->ClearPolygon();
+    m_pEditEngine->ClearPolygon();
 }
 
 const Size& Outliner::GetMinAutoPaperSize() const
 {
-    return pEditEngine->GetMinAutoPaperSize();
+    return m_pEditEngine->GetMinAutoPaperSize();
 }
 
 void Outliner::SetMinAutoPaperSize( const Size& rSz )
 {
-    pEditEngine->SetMinAutoPaperSize( rSz );
+    m_pEditEngine->SetMinAutoPaperSize( rSz );
 }
 
 const Size& Outliner::GetMaxAutoPaperSize() const
 {
-    return pEditEngine->GetMaxAutoPaperSize();
+    return m_pEditEngine->GetMaxAutoPaperSize();
 }
 
 void Outliner::SetMaxAutoPaperSize( const Size& rSz )
 {
-    pEditEngine->SetMaxAutoPaperSize( rSz );
+    m_pEditEngine->SetMaxAutoPaperSize( rSz );
 }
 
 void Outliner::SetMinColumnWrapHeight(tools::Long nVal)
 {
-    pEditEngine->SetMinColumnWrapHeight(nVal);
+    m_pEditEngine->SetMinColumnWrapHeight(nVal);
 }
 
 bool Outliner::IsExpanded( sal_Int32 nPara ) const
@@ -229,7 +229,7 @@ bool Outliner::IsExpanded( sal_Int32 nPara ) const
 sal_Int32 Outliner::GetParent( sal_Int32 nPara ) const
 {
     sal_Int32 nParaPrev = nPara-1;
-    while ( nParaPrev >= 0 && ( pEditEngine->GetNumberingDepth(nParaPrev) >= pEditEngine->GetNumberingDepth(nPara) ) )
+    while ( nParaPrev >= 0 && ( m_pEditEngine->GetNumberingDepth(nParaPrev) >= m_pEditEngine->GetNumberingDepth(nPara) ) )
     {
         --nParaPrev;
     }
@@ -240,27 +240,27 @@ sal_Int32 Outliner::GetParent( sal_Int32 nPara ) const
 bool Outliner::HasHiddenChildren( sal_Int32 nPara ) const
 {
     sal_Int32 nParaNext = nPara+1;
-    if (nParaNext >= pEditEngine->GetParagraphCount())
+    if (nParaNext >= m_pEditEngine->GetParagraphCount())
         return false;
-    return ( pEditEngine->GetNumberingDepth(nParaNext) > pEditEngine->GetNumberingDepth(nPara) )
-        && !pEditEngine->IsBulletVisible(nParaNext);
+    return ( m_pEditEngine->GetNumberingDepth(nParaNext) > m_pEditEngine->GetNumberingDepth(nPara) )
+        && !m_pEditEngine->IsBulletVisible(nParaNext);
 }
 
 bool Outliner::HasVisibleChildren( sal_Int32 nPara ) const
 {
     sal_Int32 nParaNext = nPara+1;
-    if (nParaNext >= pEditEngine->GetParagraphCount())
+    if (nParaNext >= m_pEditEngine->GetParagraphCount())
         return false;
-    return ( pEditEngine->GetNumberingDepth(nParaNext) > pEditEngine->GetNumberingDepth(nPara) )
-        && pEditEngine->IsBulletVisible(nParaNext);
+    return ( m_pEditEngine->GetNumberingDepth(nParaNext) > m_pEditEngine->GetNumberingDepth(nPara) )
+        && m_pEditEngine->IsBulletVisible(nParaNext);
 }
 
 sal_Int32 Outliner::GetChildCount( sal_Int32 nPara ) const
 {
     sal_Int32 nChildCount = 0;
     sal_Int32 nParaNext = nPara+1;
-    while ( nParaNext < pEditEngine->GetParagraphCount()
-            && ( pEditEngine->GetNumberingDepth(nParaNext) > pEditEngine->GetNumberingDepth(nPara) ) )
+    while ( nParaNext < m_pEditEngine->GetParagraphCount()
+            && ( m_pEditEngine->GetNumberingDepth(nParaNext) > m_pEditEngine->GetNumberingDepth(nPara) ) )
     {
         nChildCount++;
         ++nParaNext;
@@ -270,102 +270,102 @@ sal_Int32 Outliner::GetChildCount( sal_Int32 nPara ) const
 
 Size Outliner::CalcTextSize()
 {
-    return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeight());
+    return Size(m_pEditEngine->CalcTextWidth(),m_pEditEngine->GetTextHeight());
 }
 
 void Outliner::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
-    pEditEngine->SetStyleSheetPool( pSPool );
+    m_pEditEngine->SetStyleSheetPool( pSPool );
 }
 
 SfxStyleSheetPool* Outliner::GetStyleSheetPool()
 {
-    return pEditEngine->GetStyleSheetPool();
+    return m_pEditEngine->GetStyleSheetPool();
 }
 
 SfxStyleSheet* Outliner::GetStyleSheet( sal_Int32 nPara )
 {
-    return pEditEngine->GetStyleSheet( nPara );
+    return m_pEditEngine->GetStyleSheet( nPara );
 }
 
 bool Outliner::IsInSelectionMode() const
 {
-    return pEditEngine->IsInSelectionMode();
+    return m_pEditEngine->IsInSelectionMode();
 }
 
 void Outliner::SetControlWord( EEControlBits nWord )
 {
-    pEditEngine->SetControlWord( nWord );
+    m_pEditEngine->SetControlWord( nWord );
 }
 
 EEControlBits Outliner::GetControlWord() const
 {
-    return pEditEngine->GetControlWord();
+    return m_pEditEngine->GetControlWord();
 }
 
 void Outliner::SetAsianCompressionMode( CharCompressType n )
 {
-    pEditEngine->SetAsianCompressionMode( n );
+    m_pEditEngine->SetAsianCompressionMode( n );
 }
 
 void Outliner::SetKernAsianPunctuation( bool b )
 {
-    pEditEngine->SetKernAsianPunctuation( b );
+    m_pEditEngine->SetKernAsianPunctuation( b );
 }
 
 void Outliner::SetAddExtLeading( bool bExtLeading )
 {
-    pEditEngine->SetAddExtLeading( bExtLeading );
+    m_pEditEngine->SetAddExtLeading( bExtLeading );
 }
 
 void Outliner::UndoActionStart( sal_uInt16 nId )
 {
-    pEditEngine->UndoActionStart( nId );
+    m_pEditEngine->UndoActionStart( nId );
 }
 
 void Outliner::UndoActionEnd()
 {
-    pEditEngine->UndoActionEnd();
+    m_pEditEngine->UndoActionEnd();
 }
 
 void Outliner::InsertUndo( std::unique_ptr<EditUndo> pUndo )
 {
-    pEditEngine->GetUndoManager().AddUndoAction( std::move(pUndo) );
+    m_pEditEngine->GetUndoManager().AddUndoAction( std::move(pUndo) );
 }
 
 bool Outliner::IsInUndo() const
 {
-    return pEditEngine->IsInUndo();
+    return m_pEditEngine->IsInUndo();
 }
 
 sal_Int32 Outliner::GetLineCount( sal_Int32 nParagraph ) const
 {
-    return pEditEngine->GetLineCount( nParagraph );
+    return m_pEditEngine->GetLineCount( nParagraph );
 }
 
 sal_Int32 Outliner::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const
 {
-    return pEditEngine->GetLineLen( nParagraph, nLine );
+    return m_pEditEngine->GetLineLen( nParagraph, nLine );
 }
 
 sal_uInt32 Outliner::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
 {
-    return pEditEngine->GetLineHeight( nParagraph, nLine );
+    return m_pEditEngine->GetLineHeight( nParagraph, nLine );
 }
 
 void Outliner::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 {
-    pEditEngine->RemoveCharAttribs( nPara, nWhich );
+    m_pEditEngine->RemoveCharAttribs( nPara, nWhich );
 }
 
 EESpellState Outliner::HasSpellErrors()
 {
-    return pEditEngine->HasSpellErrors();
+    return m_pEditEngine->HasSpellErrors();
 }
 
 bool Outliner::HasConvertibleTextPortion( LanguageType nLang )
 {
-    return pEditEngine->HasConvertibleTextPortion( nLang );
+    return m_pEditEngine->HasConvertibleTextPortion( nLang );
 }
 
 bool Outliner::ConvertNextDocument()
@@ -377,27 +377,27 @@ bool Outliner::ConvertNextDocument()
 
 void Outliner::SetDefaultLanguage( LanguageType eLang )
 {
-    pEditEngine->SetDefaultLanguage( eLang );
+    m_pEditEngine->SetDefaultLanguage( eLang );
 }
 
 void Outliner::CompleteOnlineSpelling()
 {
-    pEditEngine->CompleteOnlineSpelling();
+    m_pEditEngine->CompleteOnlineSpelling();
 }
 
 bool Outliner::HasText( const SvxSearchItem& rSearchItem )
 {
-    return pEditEngine->HasText( rSearchItem );
+    return m_pEditEngine->HasText( rSearchItem );
 }
 
 void Outliner::SetEditEnginePool( SfxItemPool* pPool )
 {
-    pEditEngine->SetItemPool( pPool );
+    m_pEditEngine->SetItemPool( pPool );
 }
 
 SfxItemPool* Outliner::GetEditEnginePool() const
 {
-    return pEditEngine->GetItemPool();
+    return m_pEditEngine->GetItemPool();
 }
 
 bool Outliner::SpellNextDocument()
@@ -410,12 +410,12 @@ bool Outliner::SpellNextDocument()
 
 void Outliner::SetSpeller( Reference< XSpellChecker > const &xSpeller )
 {
-    pEditEngine->SetSpeller( xSpeller );
+    m_pEditEngine->SetSpeller( xSpeller );
 }
 
 Reference< XSpellChecker > const & Outliner::GetSpeller()
 {
-    return pEditEngine->GetSpeller();
+    return m_pEditEngine->GetSpeller();
 }
 
 void Outliner::SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars)
@@ -425,22 +425,22 @@ void Outliner::SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharacte
 
 void Outliner::SetHyphenator( Reference< XHyphenator > const & xHyph )
 {
-    pEditEngine->SetHyphenator( xHyph );
+    m_pEditEngine->SetHyphenator( xHyph );
 }
 
 OutputDevice* Outliner::GetRefDevice() const
 {
-    return pEditEngine->GetRefDevice();
+    return m_pEditEngine->GetRefDevice();
 }
 
 tools::Rectangle Outliner::GetParaBounds( sal_Int32 nParagraph ) const
 {
-    return pEditEngine->GetParaBounds(nParagraph );
+    return m_pEditEngine->GetParaBounds(nParagraph );
 }
 
 Point Outliner::GetDocPos( const Point& rPaperPos ) const
 {
-    return pEditEngine->GetDocPos( rPaperPos );
+    return m_pEditEngine->GetDocPos( rPaperPos );
 }
 
 bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
@@ -452,11 +452,11 @@ bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBu
 {
     if ( pbBullet)
         *pbBullet = false;
-    bool bTextPos = pEditEngine->IsTextPos( rPaperPos, nBorder );
+    bool bTextPos = m_pEditEngine->IsTextPos( rPaperPos, nBorder );
     if ( !bTextPos )
     {
         Point aDocPos = GetDocPos( rPaperPos );
-        sal_Int32 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
+        sal_Int32 nPara = m_pEditEngine->FindParagraph( aDocPos.Y() );
         if ((nPara != EE_PARA_MAX) && ImplHasNumberFormat(nPara))
         {
             tools::Rectangle aBulArea = ImpCalcBulletHitArea( nPara );
@@ -474,162 +474,162 @@ bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBu
 
 void Outliner::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 {
-    pEditEngine->QuickSetAttribs( rSet, rSel );
+    m_pEditEngine->QuickSetAttribs( rSet, rSel );
 }
 
 void Outliner::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
-    bFirstParaIsEmpty = false;
-    pEditEngine->QuickInsertText( rText, rSel );
+    m_bFirstParaIsEmpty = false;
+    m_pEditEngine->QuickInsertText( rText, rSel );
 }
 
 void Outliner::QuickDelete( const ESelection& rSel )
 {
-    bFirstParaIsEmpty = false;
-    pEditEngine->QuickDelete( rSel );
+    m_bFirstParaIsEmpty = false;
+    m_pEditEngine->QuickDelete( rSel );
 }
 
 void Outliner::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )
 {
-    bFirstParaIsEmpty = false;
-    pEditEngine->QuickInsertField( rFld, rSel );
+    m_bFirstParaIsEmpty = false;
+    m_pEditEngine->QuickInsertField( rFld, rSel );
 }
 
 ESelection Outliner::QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel )
 {
-    bFirstParaIsEmpty = false;
-    return pEditEngine->QuickInsertUrlField( rField, rSel );
+    m_bFirstParaIsEmpty = false;
+    return m_pEditEngine->QuickInsertUrlField( rField, rSel );
 }
 
 void Outliner::QuickInsertLineBreak( const ESelection& rSel )
 {
-    bFirstParaIsEmpty = false;
-    pEditEngine->QuickInsertLineBreak( rSel );
+    m_bFirstParaIsEmpty = false;
+    m_pEditEngine->QuickInsertLineBreak( rSel );
 }
 
 void Outliner::QuickFormatDoc()
 {
-    pEditEngine->QuickFormatDoc();
+    m_pEditEngine->QuickFormatDoc();
 }
 
 const ScalingParameters & Outliner::getScalingParameters() const
 {
-    return pEditEngine->getScalingParameters();
+    return m_pEditEngine->getScalingParameters();
 }
 
 void Outliner::setScalingParameters(ScalingParameters const& rScalingParameters)
 {
-    pEditEngine->setScalingParameters(rScalingParameters);
+    m_pEditEngine->setScalingParameters(rScalingParameters);
 }
 
 void Outliner::setRoundFontSizeToPt(bool bRound) const
 {
-    pEditEngine->setRoundFontSizeToPt(bRound);
+    m_pEditEngine->setRoundFontSizeToPt(bRound);
 }
 
 void Outliner::setLineSpacingBelowBaseline(bool bBelow) const
 {
-    pEditEngine->setLineSpacingBelowBaseline(bBelow);
+    m_pEditEngine->setLineSpacingBelowBaseline(bBelow);
 }
 
 void Outliner::setTextFitting(EETextFitting eFitting) const
 {
-    pEditEngine->setTextFitting(eFitting);
+    m_pEditEngine->setTextFitting(eFitting);
 }
 
 void Outliner::setTextFittingHeight(tools::Long nHeight) const
 {
-    pEditEngine->setTextFittingHeight(nHeight);
+    m_pEditEngine->setTextFittingHeight(nHeight);
 }
 
 void Outliner::EraseVirtualDevice()
 {
-    pEditEngine->EraseVirtualDevice();
+    m_pEditEngine->EraseVirtualDevice();
 }
 
 bool Outliner::ShouldCreateBigTextObject() const
 {
-    return pEditEngine->ShouldCreateBigTextObject();
+    return m_pEditEngine->ShouldCreateBigTextObject();
 }
 
 void Outliner::SetVertical(bool bVertical)
 {
-    pEditEngine->SetVertical(bVertical);
+    m_pEditEngine->SetVertical(bVertical);
 }
 
 void Outliner::SetRotation(TextRotation nRotation)
 {
-    pEditEngine->SetRotation(nRotation);
+    m_pEditEngine->SetRotation(nRotation);
 }
 
 bool Outliner::IsVertical() const
 {
-    return pEditEngine->IsEffectivelyVertical();
+    return m_pEditEngine->IsEffectivelyVertical();
 }
 
 bool Outliner::IsTopToBottom() const
 {
-    return pEditEngine->IsTopToBottom();
+    return m_pEditEngine->IsTopToBottom();
 }
 
 void Outliner::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
 {
-    pEditEngine->SetTextColumns(nColumns, nSpacing);
+    m_pEditEngine->SetTextColumns(nColumns, nSpacing);
 }
 
 void Outliner::SetFixedCellHeight( bool bUseFixedCellHeight )
 {
-    pEditEngine->SetFixedCellHeight( bUseFixedCellHeight );
+    m_pEditEngine->SetFixedCellHeight( bUseFixedCellHeight );
 }
 
 void Outliner::SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir )
 {
-    pEditEngine->SetDefaultHorizontalTextDirection( eHTextDir );
+    m_pEditEngine->SetDefaultHorizontalTextDirection( eHTextDir );
 }
 
 EEHorizontalTextDirection Outliner::GetDefaultHorizontalTextDirection() const
 {
-    return pEditEngine->GetDefaultHorizontalTextDirection();
+    return m_pEditEngine->GetDefaultHorizontalTextDirection();
 }
 
 LanguageType Outliner::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
 {
-    return pEditEngine->GetLanguage( nPara, nPos ).nLang;
+    return m_pEditEngine->GetLanguage( nPara, nPos ).nLang;
 }
 
 void Outliner::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
-    pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
+    m_pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
 
 void Outliner::EnableAutoColor( bool b )
 {
-    pEditEngine->EnableAutoColor( b );
+    m_pEditEngine->EnableAutoColor( b );
 }
 
 void Outliner::ForceAutoColor( bool b )
 {
-    pEditEngine->ForceAutoColor( b );
+    m_pEditEngine->ForceAutoColor( b );
 }
 
 bool Outliner::IsForceAutoColor() const
 {
-    return pEditEngine->IsForceAutoColor();
+    return m_pEditEngine->IsForceAutoColor();
 }
 
 bool Outliner::SpellSentence(EditView const & rEditView, svx::SpellPortions& rToFill )
 {
-    return pEditEngine->SpellSentence(rEditView, rToFill );
+    return m_pEditEngine->SpellSentence(rEditView, rToFill );
 }
 
 void Outliner::PutSpellingToSentenceStart( EditView const & rEditView )
 {
-    pEditEngine->PutSpellingToSentenceStart( rEditView );
+    m_pEditEngine->PutSpellingToSentenceStart( rEditView );
 }
 
 void Outliner::ApplyChangedSentence(EditView const & rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck )
 {
-    pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );
+    m_pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
