@@ -386,9 +386,9 @@ dnl checks build and host OSes
 dnl do this before argument processing to allow for platform dependent defaults
 dnl ===================================================================
 
-# are we running in wsl but are called from git-bash/env with mingw64 or clangarm64 in path?
-# if so, we aim to run nearly everything in the Windows realm, and only run autogen/configure
-# in wsl and run a few tools via wsl
+# are we running in wsl but are called from git-bash? if so, we aim to run nearly everything in
+# the Windows realm, and only run autogen/configure in wsl and run a few tools via wsl.
+# $MSYSTEM if WSLENV forwards it, else git-bash's MSYS2 environment bin directory in PATH
 WSL_ONLY_AS_HELPER=
 # the same idea without WSL: autogen/configure run in an MSYS2 shell ($MSYSTEM is set there,
 # and in git-bash), the build runs from git-bash with native tools, and the few unix-only
@@ -398,7 +398,8 @@ WSL_ONLY_AS_HELPER=
 # and the CODA-W front-end always start configure in a real MSYS2 shell, and a plain git-bash
 # has no autotools, so autogen.sh stops early there with a clear message anyway
 MSYS_ONLY_AS_HELPER=
-if test -n "$WSL_DISTRO_NAME" && $(echo $PATH |grep -q -e mingw64 -e clangarm64); then
+if test -n "$WSL_DISTRO_NAME" && { test -n "$MSYSTEM" ||
+        echo "$PATH" | grep -qE '/(mingw32|mingw64|ucrt64|clang64|clangarm64)/bin/?(:|$)'; }; then
     WSL_ONLY_AS_HELPER=TRUE
 elif test -n "$MSYSTEM"; then
     MSYS_ONLY_AS_HELPER=TRUE

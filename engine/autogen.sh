@@ -36,6 +36,12 @@ $src_path=getcwd();
 # used in our makefiles - ie. this gets dependencies right via SRC_ROOT
 chdir ($build_path);
 
+# wsl-as-helper: in WSL, called from git-bash ($MSYSTEM if WSLENV forwards it, else git-bash's
+# MSYS2 environment bin directory in PATH)
+my $wsl_as_helper = $ENV{WSL_DISTRO_NAME}
+    && ($ENV{MSYSTEM}
+        || $ENV{PATH} =~ m{/(?:mingw32|mingw64|ucrt64|clang64|clangarm64)/bin/?(?::|$)});
+
 my $aclocal;
 my $autoconf;
 
@@ -50,7 +56,7 @@ sub sanity_checks($)
        $autoconf    => "autoconf is required",
        $aclocal     => "$aclocal is required",
       );
-    if (($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) || $system =~ /^(?:MSYS|MINGW)/) {
+    if ($wsl_as_helper || $system =~ /^(?:MSYS|MINGW)/) {
         # for wsl-as-helper and msys2-as-helper builds we only need the m4
         # macros like for macOS
         delete $required{'pkg-config'};
@@ -170,7 +176,7 @@ my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
 $aclocal_flags .= " -I $src_path/m4";
 # the m4/mac directory provides the pkg-config macros used in configure
-$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin' || ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) || $system =~ /^(?:MSYS|MINGW)/);
+$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin' || $wsl_as_helper || $system =~ /^(?:MSYS|MINGW)/);
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
@@ -186,8 +192,8 @@ if ($src_path ne $build_path)
         chomp $src_path_win;
     }
     # wsl-as-helper method: autogen.sh/configure runs within a wsl-container (WSL_DISTRO_NAME)
-    # and build is run from within git-bash (that adds .../Git/mingw64/bin to PATH)
-    if ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) {
+    # and build is run from within git-bash (see $wsl_as_helper)
+    if ($wsl_as_helper) {
         $src_path_win=`wslpath -m $src_path`;
         chomp $src_path_win;
     }
