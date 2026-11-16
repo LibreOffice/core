@@ -340,14 +340,14 @@ void flushClipboardOnDocClose(unsigned appDocId)
     if (!sWeOwnClipboard.load())
         return;
 
-    DocumentData* docData = DocumentData::getIfExists(appDocId);
-    if (!docData || !docData->loKitDocument)
+    COKitDocument* loKitDoc = DocumentData::loadedKitDocument(appDocId);
+    if (!loKitDoc)
         return;
 
     // Render the lazy transferable into engine-held bytes now: the shared
     // clipboard outlives the document, but a Writer or Impress transferable
     // still references the document it was copied from.
-    docData->loKitDocument->flushClipboard();
+    loKitDoc->flushClipboard();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
