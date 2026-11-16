@@ -428,6 +428,7 @@ shared_headers = \
                  common/CoolMount.hpp \
                  common/Crypto.hpp \
                  common/EditorFrameMessages.hpp \
+                 common/FailurePage.hpp \
                  common/FileExtensions.hpp \
                  common/FileUtil.hpp \
                  common/Globals.hpp \
