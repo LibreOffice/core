@@ -138,12 +138,13 @@
                     <property name="activates-default">True</property>
                     <property name="width-chars">5</property>
                     <property name="truncate-multiline">True</property>
+                    <property name="placeholder-text" translatable="yes" context="pdfgeneralpage|pages">example: 1, 3-5, 7, 9</property>
                     <accessibility>
                       <relation type="labelled-by" target="pagerange"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="pages-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pages">Exports the pages you type in the box.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pages">To export a range of pages, use a format like 3-6. To export single pages, use a format like 7,9,11. You can export a combination of page ranges and single pages, by using a format like 3-6,8,10,12. Semicolons can be used instead of commas.</property>
                       </object>
                     </child>
                   </object>
