@@ -467,8 +467,7 @@ namespace COOLProtocol
             tokens.equals(0, "setobjectsegmentcurved") ||
             tokens.equals(0, "splitobjectpath") ||
             tokens.equals(0, "setobjectpathclosed") ||
-            tokens.equals(0, "simplifyobjectpath") ||
-            tokens.equals(0, "insertpolygonobject"))
+            tokens.equals(0, "simplifyobjectpath"))
         {
             return true;
         }
