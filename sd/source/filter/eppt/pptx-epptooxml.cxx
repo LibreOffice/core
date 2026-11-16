@@ -786,9 +786,25 @@ bool PowerPointExport::exportDocument()
                 oox::getRelationship(Relationship::THEME),
                 u"theme/theme1.xml");
 
+    // Take the attributes the model doesn't include the grabbag and export them in schema order
+    const comphelper::SequenceAsHashMap aStatedAttributes(
+        comphelper::SequenceAsHashMap(mXModel->getPropertyValue(u"InteropGrabBag"_ustr))
+            .getUnpackedValueOrDefault(u"OOXPresentationAttributes"_ustr,
+                                       uno::Sequence<beans::PropertyValue>()));
     auto pAttributes = presentationNamespaces(*this);
+    const auto addStatedAttribute = [&aStatedAttributes, &pAttributes](sal_Int32 nToken,
+                                                                       const OUString& rName)
+    {
+        bool bValue = false;
+        if (aStatedAttributes.getValue(rName) >>= bValue)
+            pAttributes->add(nToken, bValue ? "1" : "0");
+    };
+    addStatedAttribute(XML_showSpecialPlsOnTitleSld, u"showSpecialPlsOnTitleSld"_ustr);
+    addStatedAttribute(XML_strictFirstAndLastChars, u"strictFirstAndLastChars"_ustr);
     if (mbEmbedFonts)
         pAttributes->add(XML_embedTrueTypeFonts, "1");
+    addStatedAttribute(XML_saveSubsetFonts, u"saveSubsetFonts"_ustr);
+    addStatedAttribute(XML_autoCompressPictures, u"autoCompressPictures"_ustr);
     mPresentationFS->startElementNS(XML_p, XML_presentation, pAttributes);
 
     mXStatusIndicator = getStatusIndicator();

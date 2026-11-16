@@ -953,6 +953,39 @@ void PresentationFragmentHandler::finalizeImport()
     }
 }
 
+/** Keeps the attributes of the presentation element that the model has no place for. */
+static void keepPresentationAttributes(const XmlFilterBase& rFilter,
+                                       const AttributeList& rAttribs)
+{
+    const std::pair<sal_Int32, OUString> aAttributes[]
+        = { { XML_showSpecialPlsOnTitleSld, u"showSpecialPlsOnTitleSld"_ustr },
+            { XML_strictFirstAndLastChars, u"strictFirstAndLastChars"_ustr },
+            { XML_saveSubsetFonts, u"saveSubsetFonts"_ustr },
+            { XML_autoCompressPictures, u"autoCompressPictures"_ustr } };
+
+    comphelper::SequenceAsHashMap aStated;
+    for (const auto& [nToken, rName] : aAttributes)
+    {
+        if (const std::optional<bool> oValue = rAttribs.getBool(nToken))
+            aStated[rName] <<= *oValue;
+    }
+    if (aStated.empty())
+        return;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(rFilter.getModel(), uno::UNO_QUERY_THROW);
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
+        aGrabBag[u"OOXPresentationAttributes"_ustr] <<= aStated.getAsConstPropertyValueList();
+        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
+                                    uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("oox", "keepPresentationAttributes");
+    }
+}
+
 // CT_Presentation
 ::oox::core::ContextHandlerRef PresentationFragmentHandler::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
@@ -960,6 +993,7 @@ void PresentationFragmentHandler::finalizeImport()
     {
     case PPT_TOKEN( presentation ):
         mbEmbedTrueTypeFonts = rAttribs.getBool(XML_embedTrueTypeFonts, false);
+        keepPresentationAttributes(getFilter(), rAttribs);
         return this;
     case PPT_TOKEN( sldMasterIdLst ):
     case PPT_TOKEN( notesMasterIdLst ):
