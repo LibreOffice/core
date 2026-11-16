@@ -2398,6 +2398,8 @@ class Menubar extends window.L.Control {
 						} else {
 							$(aItem).removeClass('disabled');
 						}
+					} else if (id === 'updateslidelinks') {
+						$(aItem).css('display', this._map.slideLinks && this._map.slideLinks.hasLinks() ? '' : 'none');
 					} else if (id === 'showannotations') {
 						var section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
 						if (section) {
