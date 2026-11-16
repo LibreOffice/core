@@ -37,8 +37,7 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-SpriteCanvas::SpriteCanvas(const uno::Sequence<uno::Any>& aArguments,
-                           const uno::Reference<uno::XComponentContext>& /*rxContext*/)
+SpriteCanvas::SpriteCanvas(const uno::Sequence<uno::Any>& aArguments)
     : maArguments(aArguments)
 {
 }
@@ -194,9 +193,9 @@ bool SpriteCanvas::repaint(const SurfaceSharedPtr& pSurface, const rendering::Vi
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_SpriteCanvas_Cairo_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const& args)
 {
-    rtl::Reference<cairocanvas::SpriteCanvas> p = new cairocanvas::SpriteCanvas(args, context);
+    rtl::Reference<cairocanvas::SpriteCanvas> p = new cairocanvas::SpriteCanvas(args);
     p->initialize();
     return cppu::acquire(p.get());
 }
