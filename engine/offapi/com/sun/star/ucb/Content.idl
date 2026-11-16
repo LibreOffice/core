@@ -594,22 +594,6 @@ published service Content
                     <td>contains the count of marked documents within a folder.</td>
                 </tr>
                 <tr>
-                    <td>DocumentHeader</td>
-                    <td>sequence&lt; DocumentHeaderField &gt; </td>
-                    <td>contains a sequence of document header fields (i.e. header
-                        fields of a MIME-message, or the document info of an
-                        office document ). For some standard header fields there
-                        are predefined separate properties, like &quot;MessageTo&quot;.
-                    </td>
-                </tr>
-                <tr>
-                    <td>DocumentStoreMode</td>
-                    <td>DocumentStoreMode</td>
-                    <td>contains information about the way a folder stores the
-                        contents of (remote) documents.
-                    </td>
-                </tr>
-                <tr>
                     <td>FolderCount</td>
                     <td>long</td>
                     <td>contains the count of subfolders of a folder.</td>
@@ -726,11 +710,6 @@ published service Content
                     <td>contains a password (e.g. needed to access a POP3-Server).</td>
                 </tr>
                 <tr>
-                    <td>Priority</td>
-                    <td>Priority</td>
-                    <td>contains a priority (i.e. of a message).</td>
-                </tr>
-                <tr>
                     <td>References</td>
                     <td>string</td>
                     <td>contains the &quot;References&quot; field of a news article.</td>
@@ -779,11 +758,6 @@ published service Content
                     <td>contains the count of subscribed contents of a folder.</td>
                 </tr>
                 <tr>
-                    <td>SynchronizePolicy</td>
-                    <td>SynchronizePolicy</td>
-                    <td>contains the policy to use when synchronizing two objects.</td>
-                </tr>
-                <tr>
                     <td>TargetFrames</td>
                     <td>string</td>
                     <td>contains information about the target frame to use when displaying
@@ -827,11 +801,6 @@ published service Content
                     <td>string</td>
                     <td>contains a user name. (e.g. the user name needed to access a
                         POP3-Account)</td>
-                </tr>
-                <tr>
-                    <td>VerificationMode</td>
-                    <td>VerificationMode </td>
-                    <td>describes a verification policy.</td>
                 </tr>
         </table>
      */

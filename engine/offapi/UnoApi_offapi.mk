@@ -3518,9 +3518,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	ContentInfoAttribute \
 	ContentProviderInfo \
 	ContentResultSetCapability \
-	CrossReference \
-	DocumentHeaderField \
-	DocumentStoreMode \
 	DuplicateCommandIdentifierException \
 	DuplicateProviderException \
 	Error \
@@ -3575,7 +3572,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	OpenMode \
 	PostCommandArgument \
 	PostCommandArgument2 \
-	Priority \
 	PropertyCommandArgument \
 	PropertyValueInfo \
 	PropertyValueState \
@@ -3583,10 +3579,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	RemoteContentProviderChangeAction \
 	RemoteContentProviderChangeEvent \
 	ResultSetException \
-	SendInfo \
 	ServiceNotFoundException \
 	SortingInfo \
-	SynchronizePolicy \
 	TransferCommandOperation \
 	TransferInfo \
 	TransferInfo2 \
@@ -3596,7 +3590,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	UnsupportedDataSinkException \
 	UnsupportedNameClashException \
 	UnsupportedOpenModeException \
-	VerificationMode \
 	WelcomeDynamicResultSetStruct \
 	XAnyCompare \
 	XAnyCompareFactory \
@@ -3621,7 +3614,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	XContentProviderFactory \
 	XContentProviderManager \
 	XContentProviderSupplier \
-	XDataContainer \
 	XDynamicResultSet \
 	XDynamicResultSetListener \
 	XFetchProvider \

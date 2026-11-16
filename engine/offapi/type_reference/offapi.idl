@@ -15255,24 +15255,12 @@ module com {
     published constants ContentResultSetCapability {
      const short SORTED = 1;
     };
-    published struct CrossReference {
-     string Group;
-     long Id;
-    };
     published service HierarchyDataSource {
      interface ::com::sun::star::lang::XMultiServiceFactory;
      interface ::com::sun::star::lang::XComponent;
     };
     published service DefaultHierarchyDataSource {
      service ::com::sun::star::ucb::HierarchyDataSource;
-    };
-    published struct DocumentHeaderField {
-     string Name;
-     string Value;
-    };
-    published enum DocumentStoreMode {
-     REMOTE = 0,
-     LOCAL = 1
     };
     published exception DuplicateCommandIdentifierException: ::cpo::uno::Exception {
     };
@@ -15705,13 +15693,6 @@ module com {
      string MediaType;
      string Referer;
     };
-    published enum Priority {
-     HIGHEST = 0,
-     HIGH = 1,
-     NORMAL = 2,
-     LOW = 3,
-     LOWEST = 4
-    };
     published service PropertiesManager: ::com::sun::star::beans::XPropertySetInfo;
     published interface XPropertySetRegistry {
      interface ::cpo::uno::XInterface;
@@ -15765,10 +15746,6 @@ module com {
     };
     published exception ResultSetException: ::com::sun::star::sdbc::SQLException {
     };
-    published struct SendInfo {
-     string ProtocolType;
-     string Value;
-    };
     published interface XSimpleFileAccess {
      interface ::cpo::uno::XInterface;
      void copy([in] string SourceURL, [in] string DestURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
@@ -15806,11 +15783,6 @@ module com {
      ::com::sun::star::ucb::XPropertySetRegistry createPropertySetRegistry([in] string URL);
     };
     published service Store: ::com::sun::star::ucb::XPropertySetRegistryFactory;
-    published enum SynchronizePolicy {
-     SERVER_IS_MASTER = 0,
-     CLIENT_IS_MASTER = 1,
-     NONE_IS_MASTER = 2
-    };
     published struct TransferInfo {
      boolean MoveData;
      string SourceURL;
@@ -15849,11 +15821,6 @@ module com {
     };
     published exception UnsupportedOpenModeException: ::cpo::uno::Exception {
      short Mode;
-    };
-    published enum VerificationMode {
-     ALWAYS = 0,
-     ONCE = 1,
-     NEVER = 2
     };
     published service WebDAVContentProvider {
      interface ::com::sun::star::ucb::XContentProvider;
@@ -15916,15 +15883,6 @@ module com {
      ::com::sun::star::ucb::XContentIdentifier mapContentIdentifier([in] ::com::sun::star::ucb::XContentIdentifier Source);
      ::com::sun::star::ucb::XContent mapContent([in] ::com::sun::star::ucb::XContent Source);
      boolean mapRow([inout] sequence< any > Value);
-    };
-    /** @deprecated */ published interface XDataContainer {
-     interface ::com::sun::star::container::XIndexContainer;
-     string getContentType();
-     void setContentType([in] string aType);
-     sequence< byte > getData();
-     void setData([in] sequence< byte > aData);
-     /** @deprecated */ string getDataURL();
-     /** @deprecated */ void setDataURL([in] string aURL);
     };
     published interface XDynamicResultSetListener {
      interface ::com::sun::star::lang::XEventListener;

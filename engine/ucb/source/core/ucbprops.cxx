@@ -21,15 +21,7 @@
 
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/ucb/CrossReference.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/ucb/DocumentHeaderField.hpp>
-#include <com/sun/star/ucb/DocumentStoreMode.hpp>
-#include <com/sun/star/ucb/Priority.hpp>
-#include <com/sun/star/ucb/SendInfo.hpp>
-#include <com/sun/star/ucb/SynchronizePolicy.hpp>
-#include <com/sun/star/ucb/VerificationMode.hpp>
-#include <com/sun/star/ucb/XDataContainer.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -53,9 +45,6 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"ContentCountLimit"_ustr, -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
     { u"ContentType"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"Cookie"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
-    { u"CrossReferences"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::CrossReference>>::get(),
-      ATTR_DEFAULT },
     { u"DateCreated"_ustr, -1, cppu::UnoType<css::util::DateTime>::get(),
       ATTR_DEFAULT },
     { u"DateModified"_ustr, -1, cppu::UnoType<css::util::DateTime>::get(),
@@ -67,11 +56,6 @@ UcbPropertiesManager::UcbPropertiesManager()
       ATTR_DEFAULT | PropertyAttribute::READONLY },
     { u"DocumentCountMarked"_ustr, -1, cppu::UnoType<sal_Int32>::get(),
       ATTR_DEFAULT | PropertyAttribute::READONLY },
-    { u"DocumentHeader"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::DocumentHeaderField>>::get(),
-      ATTR_DEFAULT },
-    { u"DocumentStoreMode"_ustr, -1,
-      cppu::UnoType<css::ucb::DocumentStoreMode>::get(), ATTR_DEFAULT },
     { u"DocumentViewMode"_ustr, -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
     { u"FTPAccount"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"Flags"_ustr, -1, cppu::UnoType<sal_Int32>::get(), ATTR_DEFAULT },
@@ -100,8 +84,6 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"Keywords"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"LocalBase"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"MessageBCC"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
-    { u"MessageBody"_ustr, -1, cppu::UnoType<css::ucb::XDataContainer>::get(),
-      ATTR_DEFAULT },
     { u"MessageCC"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"MessageFrom"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"MessageId"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
@@ -115,7 +97,6 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"OutgoingMessageViewMode"_ustr, -1, cppu::UnoType<sal_Int16>::get(),
       ATTR_DEFAULT },
     { u"Password"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
-    { u"Priority"_ustr, -1, cppu::UnoType<css::ucb::Priority>::get(), ATTR_DEFAULT },
     { u"References"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"Referer"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"SearchIndirections"_ustr, -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
@@ -123,27 +104,9 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"SearchRecursive"_ustr, -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
     { u"SeenCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(),
       ATTR_DEFAULT | PropertyAttribute::READONLY },
-    { u"SendCopyTarget"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
-      ATTR_DEFAULT },
-    { u"SendFroms"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
-      ATTR_DEFAULT },
-    { u"SendPasswords"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
-      ATTR_DEFAULT },
     { u"SendProtocolPrivate"_ustr, -1, cppu::UnoType<sal_Int16>::get(),
       ATTR_DEFAULT },
     { u"SendProtocolPublic"_ustr, -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
-    { u"SendReplyTos"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
-      ATTR_DEFAULT },
-    { u"SendServerNames"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
-      ATTR_DEFAULT },
-    { u"SendUserNames"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
-      ATTR_DEFAULT },
     { u"SendVIMPostOfficePath"_ustr, -1, cppu::UnoType<OUString>::get(),
       ATTR_DEFAULT },
     { u"ServerBase"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
@@ -154,8 +117,6 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"SizeLimit"_ustr, -1, cppu::UnoType<sal_Int64>::get(), ATTR_DEFAULT },
     { u"SubscribedCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(),
       ATTR_DEFAULT | PropertyAttribute::READONLY },
-    { u"SynchronizePolicy"_ustr, -1,
-      cppu::UnoType<css::ucb::SynchronizePolicy>::get(), ATTR_DEFAULT },
     { u"TargetFrames"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"TargetURL"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"TimeLimitStore"_ustr, -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
@@ -168,8 +129,7 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"UserName"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"UserSortCriterium"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"VIMPostOfficePath"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
-    { u"VerificationMode"_ustr, -1, cppu::UnoType<css::ucb::VerificationMode>::get(),
-      ATTR_DEFAULT }})
+    })
 {
 }
 
