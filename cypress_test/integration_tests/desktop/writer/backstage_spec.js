@@ -237,6 +237,40 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		});
 	});
 
+	it('Shows the favorite templates before the blank documents on New', function() {
+		cy.then(() => {
+			win.prefs.set('templateFavorites', '[]');
+			ensureBackstage(win).show();
+		});
+
+		cy.cGet('#backstage-new').click();
+		cy.cGet('.template-blank-row .backstage-template-favorite').should('not.exist');
+		cy.cGet('.backstage-template-sections .backstage-template-card').first().then(function(card) {
+			var id = card[0].id;
+			cy.cGet('#' + id + ' .backstage-template-favorite').focus();
+			cy.cGet('#' + id + ' .backstage-template-favorite').click();
+			cy.cGet('#' + id).should('have.class', 'is-favorite');
+
+			cy.cGet('.template-blank-row .backstage-template-card').should(function(cards) {
+				expect(cards.toArray().map(function(card) { return card.id; })).to.deep.equal([
+					'favorite-' + id, 'blank-writer', 'blank-calc', 'blank-impress', 'blank-draw',
+				]);
+			});
+
+			// The star in the start row removes the favorite from both cards. Focusing the star
+			// below scrolled the view, so the start row is above it.
+			cy.cGet('#favorite-' + id + ' .backstage-template-favorite')
+				.scrollIntoView()
+				.should('be.visible')
+				.and('have.attr', 'aria-pressed', 'true')
+				.click();
+			cy.cGet('.backstage-snackbar').should('have.text', 'Template removed from favorites');
+			cy.cGet('#favorite-' + id).should('not.exist');
+			cy.cGet('#' + id).should('not.have.class', 'is-favorite');
+			cy.cGet('.template-blank-row .backstage-template-card').should('have.length', 4);
+		});
+	});
+
 	it('Shows no My templates section outside the Qt app', function() {
 		cy.then(() => {
 			ensureBackstage(win).show();

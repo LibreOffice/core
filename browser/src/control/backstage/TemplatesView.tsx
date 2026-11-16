@@ -12,13 +12,14 @@
 /* global _ */
 
 /*
- * "New" view: a row of blank documents, then the templates under a search box
- * and type filter chips. Also exposes templateCard, reused by HomeView.
+ * "New" view: a row of the favorite templates and the blank documents, then the templates under a
+ * search box and type filter chips. Also exposes templateCard, reused by HomeView.
  */
 
 namespace BackstageTemplates {
   export interface TemplateExplorerProps {
-    blankTemplates: TemplateData[];
+    // The row of the favorite templates and the blank documents.
+    startRow: HTMLElement;
     searchQuery: string;
     filter: TemplateFilter;
     // The part below the search field and the filter chips.
@@ -133,7 +134,7 @@ namespace BackstageTemplates {
   export function templateExplorer(props: TemplateExplorerProps): HTMLElement {
     return (
       <div class="backstage-template-explorer">
-        {blankTemplatesRow(props.blankTemplates, props.onTemplateClick)}
+        {props.startRow}
         <h3 class="backstage-templates-heading">{_('Templates')}</h3>
         <div class="template-search-bar">
           {searchInput(
@@ -148,14 +149,26 @@ namespace BackstageTemplates {
     );
   }
 
-  function blankTemplatesRow(
-    templates: TemplateData[],
-    onClick: (t: TemplateData) => void,
-  ): HTMLElement {
+  export interface NewViewStartRowProps {
+    favoriteTemplates: TemplateData[];
+    favoriteState: (template: TemplateData) => TemplateFavoriteState;
+    blankTemplates: TemplateData[];
+    onTemplateClick: (template: TemplateData) => void;
+  }
+
+  export function newViewStartRow(props: NewViewStartRowProps): HTMLElement {
     return (
       <div class="template-blank-row">
-        {templates.map((t) =>
-          templateCard(t, () => onClick(t), { isBlank: true }),
+        {props.favoriteTemplates.map((t) =>
+          // The same template also has its card below, which carries its plain id.
+          templateCard(
+            { ...t, id: 'favorite-' + t.id },
+            () => props.onTemplateClick(t),
+            { favorite: props.favoriteState(t) },
+          ),
+        )}
+        {props.blankTemplates.map((t) =>
+          templateCard(t, () => props.onTemplateClick(t), { isBlank: true }),
         )}
       </div>
     );
