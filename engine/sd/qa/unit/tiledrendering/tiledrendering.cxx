@@ -8766,6 +8766,71 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertShapeIntoSlide)
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateCurveAlongPath)
+{
+    // a curve drawn in the client is made along the path drawn, with its curved segments
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    const size_t nObjectCount = pSlide->GetObjCount();
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"Path"_ustr,
+          cpo::uno::Any(u"{\"path\": [{\"points\": ["
+                        "{\"x\": 1000, \"y\": 3000, \"aheadX\": 2000, \"aheadY\": 1000},"
+                        "{\"x\": 5000, \"y\": 3000, \"behindX\": 4000, \"behindY\": 1000}"
+                        "]}]}"_ustr) },
+    }));
+    dispatchCommand(mxComponent, u".uno:Bezier_Unfilled"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(nObjectCount + 1, pSlide->GetObjCount());
+    auto pCurve = dynamic_cast<SdrPathObj*>(pSlide->GetObj(pSlide->GetObjCount() - 1));
+    CPPUNIT_ASSERT(pCurve);
+    const basegfx::B2DPolygon aCurve(pCurve->GetPathPoly().getB2DPolygon(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), aCurve.count());
+    CPPUNIT_ASSERT(aCurve.areControlPointsUsed());
+    CPPUNIT_ASSERT(!aCurve.isClosed());
+    // the path arrives in twips and the model holds it in its own unit
+    const double fToModel(o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000 * fToModel, aCurve.getB2DPoint(0).getX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5000 * fToModel, aCurve.getB2DPoint(1).getX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2000 * fToModel, aCurve.getNextControlPoint(0).getX(), 1.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateCurveWithClosingCurve)
+{
+    // a closed curve keeps its points as given, with no point added where it closes: a single
+    // point whose two weights span a loop, and a curved edge from the last point to the first
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"Path"_ustr,
+          cpo::uno::Any(u"{\"path\": ["
+                        "{\"closed\": true, \"points\": [{\"x\": 1000, \"y\": 3000,"
+                        " \"behindX\": 2000, \"behindY\": 1000, \"aheadX\": 0, \"aheadY\": 1000}]},"
+                        "{\"closed\": true, \"points\": [{\"x\": 4000, \"y\": 3000},"
+                        " {\"x\": 6000, \"y\": 3000, \"aheadX\": 6000, \"aheadY\": 1000}]}"
+                        "]}"_ustr) },
+    }));
+    dispatchCommand(mxComponent, u".uno:BezierFill"_ustr, aArgs);
+
+    auto pCurve = dynamic_cast<SdrPathObj*>(pSlide->GetObj(pSlide->GetObjCount() - 1));
+    CPPUNIT_ASSERT(pCurve);
+    const basegfx::B2DPolyPolygon& rPath(pCurve->GetPathPoly());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), rPath.count());
+    const basegfx::B2DPolygon aLoop(rPath.getB2DPolygon(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aLoop.count());
+    CPPUNIT_ASSERT(aLoop.isClosed());
+    CPPUNIT_ASSERT(aLoop.isPrevControlPointUsed(0));
+    CPPUNIT_ASSERT(aLoop.isNextControlPointUsed(0));
+    const basegfx::B2DPolygon aClosing(rPath.getB2DPolygon(1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), aClosing.count());
+    CPPUNIT_ASSERT(aClosing.isClosed());
+    // the edge back to the first point has one weight only, at its start
+    CPPUNIT_ASSERT(aClosing.isNextControlPointUsed(1));
+    CPPUNIT_ASSERT(!aClosing.isPrevControlPointUsed(0));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateConnectorBetweenPoints)
 {
     // a connector dragged out in the client from one shape to another is tied as the client says

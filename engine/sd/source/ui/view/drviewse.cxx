@@ -42,7 +42,9 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdoedge.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdotext.hxx>
@@ -130,6 +132,9 @@
 #include <libxml/xmlwriter.h>
 #include <rtl/strbuf.hxx>
 #include <optional>
+#include <sstream>
+
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -205,6 +210,76 @@ static std::optional<std::pair<Point, Point>> lcl_getRequestedLine(SfxRequest co
     if (aStart == aEnd)
         return std::nullopt;
     return std::make_pair(aStart, aEnd);
+}
+
+/*
+    The path a polygon or a curve is to be created along, given with the request in twips on the
+    slide, in the form the path of an object goes out to the client: {"path": [{"closed": true,
+    "points": [{"x", "y", "behindX", "behindY", "aheadX", "aheadY"}, ...]}, ...]}, where closed
+    and the weights are there only where in use. It is point by point as the model holds it, so
+    a curved closing edge and a single point with two weights come as they are. The answer is in
+    the model's unit. FN_PARAM_1 to FN_PARAM_4 are left out, as the curve function reads them for
+    its own arguments.
+*/
+static std::optional<basegfx::B2DPolyPolygon> lcl_getRequestedPath(SfxRequest const& rReq)
+{
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    const auto* pPath
+        = pArgs ? dynamic_cast<const SfxStringItem*>(pArgs->GetItem(FN_PARAM_5, false)) : nullptr;
+    if (!pPath)
+        return std::nullopt;
+
+    basegfx::B2DPolyPolygon aPath;
+    try
+    {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(
+            std::string(OUStringToOString(pPath->GetValue(), RTL_TEXTENCODING_UTF8)));
+        boost::property_tree::read_json(aStream, aTree);
+
+        const boost::property_tree::ptree aPolygons(aTree.get_child("path"));
+        for (const auto& rPolygonNode : aPolygons)
+        {
+            basegfx::B2DPolygon aPolygon;
+            const boost::property_tree::ptree aPoints(rPolygonNode.second.get_child("points"));
+            for (const auto& rPointNode : aPoints)
+            {
+                const boost::property_tree::ptree& rPoint(rPointNode.second);
+                const basegfx::B2DPoint aPoint(rPoint.get<double>("x"), rPoint.get<double>("y"));
+                aPolygon.append(aPoint);
+                const sal_uInt32 nIndex(aPolygon.count() - 1);
+                if (rPoint.get_optional<double>("behindX"))
+                    aPolygon.setPrevControlPoint(nIndex,
+                                                 basegfx::B2DPoint(rPoint.get<double>("behindX"),
+                                                                   rPoint.get<double>("behindY")));
+                if (rPoint.get_optional<double>("aheadX"))
+                    aPolygon.setNextControlPoint(nIndex,
+                                                 basegfx::B2DPoint(rPoint.get<double>("aheadX"),
+                                                                   rPoint.get<double>("aheadY")));
+            }
+            aPolygon.setClosed(rPolygonNode.second.get("closed", false));
+
+            // a polygon needs an edge, between two points or by the weights of a single one
+            if (aPolygon.count() > 1 || aPolygon.areControlPointsUsed())
+                aPath.append(aPolygon);
+        }
+    }
+    catch (...)
+    {
+        return std::nullopt;
+    }
+    if (!aPath.count())
+        return std::nullopt;
+
+    constexpr double fMostTwips = 10000000;
+    const basegfx::B2DRange aRange(aPath.getB2DRange());
+    if (std::abs(aRange.getMinX()) > fMostTwips || std::abs(aRange.getMinY()) > fMostTwips
+        || std::abs(aRange.getMaxX()) > fMostTwips || std::abs(aRange.getMaxY()) > fMostTwips)
+        return std::nullopt;
+
+    const double fToModel(o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
+    aPath.transform(basegfx::utils::createScaleB2DHomMatrix(fToModel, fToModel));
+    return aPath;
 }
 
 // what the ends of a connector are to be tied to, given with the request as four numbers: the id of
@@ -355,6 +430,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     std::optional<::tools::Rectangle> oRequestedRectangle;
     // where a line goes when the request says, from its start to its end
     std::optional<std::pair<Point, Point>> oRequestedLine;
+    // the path a polygon or a curve is drawn along when the request gives one
+    std::optional<basegfx::B2DPolyPolygon> oRequestedPath;
     // the id the client gave the object it creates, one this view reserved for it; nought for
     // none, where the object takes the next id as any other
     sal_uInt64 nGivenId = 0;
@@ -713,6 +790,19 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             // defaults -- to be consistent with the line insert case above.
             bCreateDirectly = comphelper::COKit::isActive();
 
+            // a polygon or a curve drawn in the client comes with its path and is made at once
+            oRequestedPath = lcl_getRequestedPath(rReq);
+            if (oRequestedPath)
+            {
+                bCreateDirectly = true;
+                const basegfx::B2DRange aRange(oRequestedPath->getB2DRange());
+                oRequestedRectangle = ::tools::Rectangle(
+                    basegfx::fround<::tools::Long>(aRange.getMinX()),
+                    basegfx::fround<::tools::Long>(aRange.getMinY()),
+                    basegfx::fround<::tools::Long>(aRange.getMaxX()),
+                    basegfx::fround<::tools::Long>(aRange.getMaxY()));
+            }
+
             SetCurrentFunction( FuConstructBezierPolygon::Create(*this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent) );
             rReq.Done();
         }
@@ -905,6 +995,13 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     if(!pObj)
         return;
+
+    // the default polygon or curve fills its rectangle; a requested one takes the path drawn
+    if (oRequestedPath)
+    {
+        if (auto pPath = dynamic_cast<SdrPathObj*>(pObj.get()))
+            pPath->SetPathPoly(*oRequestedPath);
+    }
 
     // the default line lies across the middle of its rectangle; a requested one goes from its
     // start to its end, so the arrow of the start stays at the start

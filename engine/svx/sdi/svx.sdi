@@ -110,7 +110,7 @@ SfxVoidItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
 ]
 
 SfxBoolItem Polygon SID_DRAW_POLYGON
-
+(SfxStringItem Path FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -463,7 +463,7 @@ SvxBrushItem BackgroundPatternController SID_BACKGROUND_PATTERN
 
 
 SfxBoolItem Bezier_Unfilled SID_DRAW_BEZIER_NOFILL
-
+(SfxStringItem Path FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -582,7 +582,7 @@ SfxBoolItem BezierEliminatePoints SID_BEZIER_ELIMINATE_POINTS
 
 
 SfxBoolItem BezierFill SID_DRAW_BEZIER_FILL
-
+(SfxStringItem Path FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -3305,7 +3305,7 @@ SfxBoolItem FormProperties SID_FM_PROPERTIES
 
 
 SfxBoolItem Freeline SID_DRAW_FREELINE
-
+(SfxStringItem Path FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -3324,7 +3324,7 @@ SfxBoolItem Freeline SID_DRAW_FREELINE
 SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
 (SfxUInt16Item Transparence FN_PARAM_1, SfxStringItem Color FN_PARAM_2,
  SfxUInt16Item Width FN_PARAM_3, SfxBoolItem IsSticky FN_PARAM_4,
- SfxStringItem ShapeName SID_SHAPE_NAME)
+ SfxStringItem ShapeName SID_SHAPE_NAME, SfxStringItem Path FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -6064,7 +6064,7 @@ SfxBoolItem Pie_Unfilled SID_DRAW_PIE_NOFILL
 
 
 SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
-
+(SfxStringItem Path FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -6081,7 +6081,7 @@ SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
 
 
 SfxBoolItem Polygon_Diagonal_Unfilled SID_DRAW_XPOLYGON_NOFILL
-
+(SfxStringItem Path FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -6098,7 +6098,7 @@ SfxBoolItem Polygon_Diagonal_Unfilled SID_DRAW_XPOLYGON_NOFILL
 
 
 SfxBoolItem Polygon_Unfilled SID_DRAW_POLYGON_NOFILL
-
+(SfxStringItem Path FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
