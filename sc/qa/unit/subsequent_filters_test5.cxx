@@ -729,6 +729,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testXLSFormulaCallingProcedureSetsLoadFlag)
     CPPUNIT_ASSERT(getScDocShell()->GetMacroCallsSeenWhileLoading());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testODFValidityErrorActionSetsLoadFlag)
+{
+    createScDoc("fods/validity-error-action.fods");
+    CPPUNIT_ASSERT(getScDocShell()->GetMacroCallsSeenWhileLoading());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
