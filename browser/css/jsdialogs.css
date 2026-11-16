@@ -2199,6 +2199,36 @@ img.ui-combobox-value-preview {
 	color: var(--color-text-darker) !important;
 }
 
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry,
+[id^='spreadsheet-tab-menu'][id$='-entries'] .ui-combobox-entry,
+[id^='statusbar-context-menu'][id$='-entries'] .ui-combobox-entry,
+[id^='comment-menu-'][id$='-entries'] .ui-combobox-entry {
+	width: 100%;
+}
+
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry:focus-visible,
+[id^='spreadsheet-tab-menu'][id$='-entries'] .ui-combobox-entry:focus-visible,
+[id^='statusbar-context-menu'][id$='-entries'] .ui-combobox-entry:focus-visible,
+[id^='comment-menu-'][id$='-entries'] .ui-combobox-entry:focus-visible {
+	outline: 2px solid var(--color-primary-dark);
+	outline-offset: -2px;
+}
+
+[data-theme='dark'] [id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry:focus-visible,
+[data-theme='dark'] [id^='spreadsheet-tab-menu'][id$='-entries'] .ui-combobox-entry:focus-visible,
+[data-theme='dark'] [id^='statusbar-context-menu'][id$='-entries'] .ui-combobox-entry:focus-visible,
+[data-theme='dark'] [id^='comment-menu-'][id$='-entries'] .ui-combobox-entry:focus-visible {
+	outline-color: var(--color-primary);
+}
+
+/* No 15px overflow to make up for at the end of these entries. */
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry > span.shortcut,
+[id^='spreadsheet-tab-menu'][id$='-entries'] .ui-combobox-entry > span.shortcut,
+[id^='statusbar-context-menu'][id$='-entries'] .ui-combobox-entry > span.shortcut,
+[id^='comment-menu-'][id$='-entries'] .ui-combobox-entry > span.shortcut {
+	padding-inline-end: 5px;
+}
+
 /* A checked context menu entry shows a check mark at the end of its row, after
  * the shortcut. The sheet tab menu and the status bar menu show it the same
  * way. */
@@ -2208,9 +2238,9 @@ img.ui-combobox-value-preview {
 	content: '\2713';
 	flex-shrink: 0;
 	margin-inline-start: auto;
-	/* The same spacing as span.shortcut below: 16px from the text, and 20px
-	 * at the end, because .ui-combobox-entry is 15px wider than the menu. */
-	padding-inline: 16px 20px;
+	/* The same spacing as span.shortcut in these menus: 16px from the text,
+	 * and 5px at the end. */
+	padding-inline: 16px 5px;
 	color: var(--color-primary);
 }
 [id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry.context-menu-checked > span.shortcut {
