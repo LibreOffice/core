@@ -12,8 +12,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-07 14:51+0000\n"
-"Last-Translator: H2Oufoe <regularwater@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-08 14:55+0000\n"
+"Last-Translator: Weslley Tavares "
+"<weslleytavars@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -7105,7 +7106,7 @@ msgstr "Inserir planilha depois desta"
 
 #: src/control/Control.Tabs.js:109 src/control/Control.Tabs.js:116
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Redefinir a cor da janela"
 
 #: src/control/Control.Tabs.js:136 src/control/Control.Tabs.js:140
 msgid "Move Sheet Left"
@@ -7137,19 +7138,19 @@ msgstr "Digite o nome da nova planilha"
 
 #: src/control/Control.Tabs.js:771
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Proteger planilha"
 
 #: src/control/Control.Tabs.js:771
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Insira uma senha para proteger a planilha"
 
 #: src/control/Control.Tabs.js:775
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Desproteger Planilha"
 
 #: src/control/Control.Tabs.js:775
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Insira a senha para desproteger a planilha"
 
 #: src/control/Control.Toolbar.js:1060
 msgid ""
@@ -7161,15 +7162,15 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1095
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "Planilha recalculada em %1 ms"
 
 #: src/control/Control.Toolbar.js:1096
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Documento recalculado em %1 ms"
 
 #: src/control/Control.TopToolbar.js:121 src/control/Control.TopToolbar.js:125
 msgid "Show Menu Bar"
-msgstr ""
+msgstr "Mostrar Menu"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
@@ -7198,7 +7199,7 @@ msgstr "Principal"
 
 #: src/control/Control.UIManager.ts:256
 msgid "You are currently in View mode, press {0} to edit"
-msgstr ""
+msgstr "Você está no modo visualização. Pressione {0} para editar"
 
 #: src/control/Control.UIManager.ts:661
 msgid "Enter new name"
@@ -7220,31 +7221,31 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:3149
 msgid "Confirm password"
-msgstr ""
+msgstr "Confirmar senha"
 
 #: src/control/Control.UIManager.ts:3195
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "A senha de confirmação é diferente da senha inserida"
 
 #: src/control/Control.UIManager.ts:3412
 msgid "Copy error details"
-msgstr ""
+msgstr "Copiar detalhes do erro"
 
 #: src/control/Control.UIManager.ts:3459
 msgid "Show technical details"
-msgstr ""
+msgstr "Mostrar detalhes tecnicos"
 
 #: src/control/Control.UIManager.ts:3473
 msgid "Technical Details:"
-msgstr ""
+msgstr "Detalhes técnicos:"
 
 #: src/control/Control.UIManager.ts:3477
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Os detalhes do erro foram copiados"
 
 #: src/control/Control.UIManager.ts:3487
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Falha ao copiar os detalhes do erro"
 
 #: src/control/Control.UserList.ts:64
 msgid "{user} has joined"
@@ -7313,7 +7314,7 @@ msgstr "Carregando..."
 #: src/slideshow/SlideShowPresenter.ts:900
 #: src/slideshow/SlideShowPresenter.ts:946
 msgid "Previous"
-msgstr ""
+msgstr "Anterior"
 
 #: src/control/Control.Zotero.js:292
 msgid "Language:"
@@ -7361,7 +7362,7 @@ msgstr "Falha ao carregar coleções"
 
 #: src/control/Control.Zotero.js:790
 msgid "Loading references"
-msgstr ""
+msgstr "Carregando referências"
 
 #: src/control/Control.Zotero.js:824
 msgid "Citation Style"
@@ -7441,7 +7442,7 @@ msgstr ""
 
 #: src/control/HRuler.ts:326
 msgid "First line"
-msgstr ""
+msgstr "Primeira linha"
 
 #: src/control/HRuler.ts:332
 msgid "Before"
@@ -7469,7 +7470,7 @@ msgstr "Excluir tabulação"
 
 #: src/control/Parts.js:635 src/control/Parts.js:639
 msgid "Show sheets"
-msgstr ""
+msgstr "Mostrar planilhas"
 
 #: src/control/Permission.js:27 src/control/Permission.js:28
 msgid "Edit document"
@@ -7498,11 +7499,11 @@ msgstr "Documento exige uma senha para editar."
 
 #: src/control/Permission.js:430
 msgid "Edit locally"
-msgstr ""
+msgstr "Editar localmente"
 
 #: src/control/Permission.js:431
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Alterações são sincronizadas quando você as salva"
 
 #: src/control/Permission.js:437
 msgid "Collaborative editing"
@@ -7510,15 +7511,15 @@ msgstr "Edição colaborativa"
 
 #: src/control/Permission.js:438 src/control/Permission.js:471
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Editar em colaboração em tempo real"
 
 #: src/control/Permission.js:461
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Continuar visualizando cópia local"
 
 #: src/control/Permission.js:462
 msgid "Continue with your version"
-msgstr ""
+msgstr "Continuar com sua versão"
 
 #: src/control/Permission.js:470
 msgid "Join collaborative editing"
@@ -7526,7 +7527,7 @@ msgstr "Entrar em edição colaborativa"
 
 #: src/control/Permission.js:496
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Esperando as alterações serem salvas..."
 
 #: src/control/Permission.js:588 src/control/Permission.js:638
 msgid "How would you like to edit?"
@@ -7547,7 +7548,7 @@ msgstr ""
 
 #: src/control/Permission.js:600 src/control/Permission.js:616
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Escolha como gostaria de continuar:"
 
 #: src/control/Permission.js:610
 msgid "started editing"
@@ -7555,18 +7556,19 @@ msgstr ""
 
 #: src/control/Permission.js:611
 msgid "{0} started editing"
-msgstr ""
+msgstr "{0} começou a editar"
 
 #: src/control/Permission.js:621
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
-msgstr ""
+msgstr "Outra pessoa está editando este documento. Escolha como prosseguir:"
 
 #: src/control/Permission.js:639
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Outros usuários estão visualizando este documento. Escolha como prosseguir:"
 
 #: src/control/Permission.js:657
 msgid "Save as ODF format"
@@ -7590,7 +7592,7 @@ msgstr ""
 
 #: src/control/Signing.js:21
 msgid "The document is not signed."
-msgstr ""
+msgstr "O documento não está assinado."
 
 #: src/control/Signing.js:32
 msgid "This document is digitally signed and the signature is valid."
@@ -7626,7 +7628,7 @@ msgstr ""
 
 #: src/control/Styles.js:20 src/control/jsdialog/Definitions.Menu.ts:2267
 msgid "Title, Content"
-msgstr ""
+msgstr "Título, Conteúdo"
 
 #: src/control/Styles.js:21 src/control/jsdialog/Definitions.Menu.ts:2268
 msgid "Title and 2 Content"
@@ -7634,7 +7636,7 @@ msgstr ""
 
 #: src/control/Styles.js:22 src/control/jsdialog/Definitions.Menu.ts:2269
 msgid "Title Only"
-msgstr ""
+msgstr "Somente título"
 
 #: src/control/Styles.js:23 src/control/jsdialog/Definitions.Menu.ts:2265
 msgid "Blank Slide"
@@ -7642,7 +7644,7 @@ msgstr "Slide em branco"
 
 #: src/control/Styles.js:24 src/control/jsdialog/Definitions.Menu.ts:2270
 msgid "Centered Text"
-msgstr ""
+msgstr "Texto centralizado"
 
 #: src/control/Styles.js:25 src/control/jsdialog/Definitions.Menu.ts:2272
 msgid "Title, Content and 2 Content"
