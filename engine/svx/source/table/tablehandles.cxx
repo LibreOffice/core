@@ -79,12 +79,11 @@ void TableEdgeHdl::SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, T
     }
 }
 
+// The pointer over an edge inside a table is the plain arrow. The edge is thin and hard to hit, and
+// the borders are moved with the markers along the outside of the table.
 PointerStyle TableEdgeHdl::GetPointer() const
 {
-    if( mbHorizontal )
-        return PointerStyle::VSplit;
-    else
-        return PointerStyle::HSplit;
+    return PointerStyle::Arrow;
 }
 
 sal_Int32 TableEdgeHdl::GetValidDragOffset( const SdrDragStat& rDrag ) const
