@@ -475,7 +475,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                 if (pName)
                 {
                     if (pName->IsMacro()) // user-defined macro name.
-                        aStack << aPool.Store(ocMacro, pName->GetXclName());
+                        aStack << StoreMacroCall(pName->GetXclName());
                     else if (pName->GetScRangeData()
                              || pName->HasTokens()) // check forward declaration
                         aStack << aPool.StoreName(nUINT16,
@@ -666,7 +666,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                         if (pName->GetScRangeData())
                             aStack << aPool.StoreName( nNameIdx, pName->IsGlobal() ? -1 : pName->GetScTab());
                         else if (pName->IsMacro())
-                            aStack << aPool.Store(ocMacro, pName->GetXclName());
+                            aStack << StoreMacroCall(pName->GetXclName());
                         else if (ScGlobal::IsValidExternal(pName->GetXclName()))
                             aStack << aPool.Store(ocExternal, pName->GetXclName());
                         else

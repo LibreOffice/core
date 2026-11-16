@@ -42,6 +42,8 @@ protected:
 
     void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs );
 
+    TokenId             StoreMacroCall( const OUString& rName );
+
     void                ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData&, const bool bName );
 
 public:
