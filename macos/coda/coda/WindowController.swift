@@ -52,6 +52,9 @@ class WindowController: NSWindowController {
     /// Track menu states here, to be able to show the state in the menu
     var commandState: [String: String] = [:]
 
+    /// The document window that was the main window last.
+    static weak var lastMainDocumentWindow: NSWindow?
+
     /// Remember the new command state value as reported by the engine.
     func handleCommandStateChange(_ stateChange: CommandStateChange) {
         // extract the command name from the ".uno:CommandName" form
@@ -85,5 +88,60 @@ extension WKWebView: @retroactive NSMenuItemValidation {
         }
 
         return true
+    }
+}
+
+extension WindowController: NSWindowDelegate {
+
+    // The document window that was main last is the one that a new document joins as a tab.
+    func windowDidBecomeMain(_ notification: Notification) {
+        guard let window, (document as? Document)?.isWelcome == false else {
+            return
+        }
+        WindowController.lastMainDocumentWindow = window
+    }
+}
+
+extension WindowController: NSToolbarDelegate {
+
+    private static let newDocumentItem = NSToolbarItem.Identifier("CODANewDocument")
+
+    /// Give the window a toolbar with just a + button at its end, which opens a new document. The
+    /// toolbar is part of the title bar, so the button is there whether one document is open or
+    /// several.
+    func addNewDocumentToolbar() {
+        guard let window else { return }
+
+        let toolbar = NSToolbar(identifier: "CODADocumentToolbar")
+        toolbar.delegate = self
+        toolbar.displayMode = .iconOnly
+        toolbar.allowsUserCustomization = false
+        window.toolbar = toolbar
+        window.toolbarStyle = .unified
+    }
+
+    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return [.flexibleSpace, WindowController.newDocumentItem]
+    }
+
+    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return toolbarDefaultItemIdentifiers(toolbar)
+    }
+
+    func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
+                 willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        guard itemIdentifier == WindowController.newDocumentItem else {
+            return nil
+        }
+
+        let label = NSLocalizedString("New", comment: "Toolbar button that opens a new document")
+        let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+        item.label = label
+        item.toolTip = label
+        item.image = NSImage(systemSymbolName: "plus", accessibilityDescription: label)
+        item.isBordered = true
+        // The action goes up the responder chain to the document controller.
+        item.action = #selector(NSDocumentController.newDocument(_:))
+        return item
     }
 }

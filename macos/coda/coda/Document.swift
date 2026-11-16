@@ -278,6 +278,8 @@ class Document: NSDocument {
                 // Prefer tabbed approach for documents
                 win.tabbingMode = .preferred
                 win.tabbingIdentifier = "CollaboraDocumentTab"
+
+                windowController.addNewDocumentToolbar()
             }
 
             // Set minimum window size
@@ -330,6 +332,13 @@ class Document: NSDocument {
                     view.heightAnchor.constraint(equalToConstant: 16),
                 ])
                 win.tab.accessoryView = view
+            }
+
+            // A new document joins the tabs of the document window that the user was on last,
+            // also when another window, such as the backstage, is in front at this moment.
+            if !isWelcome, let tabbedWith = WindowController.lastMainDocumentWindow,
+               tabbedWith !== win, tabbedWith.isVisible {
+                tabbedWith.addTabbedWindow(win, ordered: .above)
             }
         }
 

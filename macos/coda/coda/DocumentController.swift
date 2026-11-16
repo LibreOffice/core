@@ -95,6 +95,18 @@ final class DocumentController: NSDocumentController {
     }
 
     /**
+     * The + button for a new document is in the toolbar of a document window, so the tab bar
+     * has no + button of its own. AppKit gives the tab bar one when something answers
+     * newWindowForTab:.
+     */
+    override func responds(to aSelector: Selector!) -> Bool {
+        if aSelector == #selector(NSResponder.newWindowForTab(_:)) {
+            return false
+        }
+        return super.responds(to: aSelector)
+    }
+
+    /**
      * Intercept File -> New (and also the Open panel's New Document button)
      */
     override func newDocument(_ sender: Any?) {
