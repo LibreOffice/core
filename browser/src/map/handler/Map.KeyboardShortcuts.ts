@@ -585,8 +585,8 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'r', preventDefault: false, platform: Platform.MAC }), // Refresh browser tab
 	new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'R', preventDefault: false, platform: Platform.WINDOWS | Platform.LINUX }), // Refresh browser tab & clear cache
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'm', preventDefault: false, platform: Platform.MAC }), // On MacOS, minimize window
-    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'q', preventDefault: false, platform: Platform.MAC }), // On MacOS, quit browser
-    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'w', platform: Platform.LINUX | Platform.WINDOWS | Platform.MAC, preventDefault: false }), // Close current tab
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'q', preventDefault: false, platform: Platform.MAC | Platform.CODAMAC }), // On MacOS, quit browser
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'w', platform: Platform.LINUX | Platform.WINDOWS | Platform.MAC | Platform.CODAMAC, preventDefault: false }), // Close current tab
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'n', dispatchAction: 'backstage-new', platform: Platform.CODAWINDOWS | Platform.CODAMAC | Platform.CODAQT }), // Open backstage "New" tab in desktop apps
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'n', preventDefault: false, platform: ~(Platform.CODAWINDOWS | Platform.CODAMAC | Platform.CODAQT) }), // Open new browser window (everywhere except desktop apps)
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 't', preventDefault: false }), // Open new browser tab
