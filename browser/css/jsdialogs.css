@@ -2465,6 +2465,13 @@ img.ui-combobox-value-preview {
 	grid-template-columns: auto 25px 1fr 25px;
 }
 
+/* The grid of the places a gluepoint can be anchored to is as wide as its submenu, so a column is
+ * wider than a button. Each button stands in the middle of its column and is as wide as its icon,
+ * which puts its frame and its selected background around the icon. */
+[id^='tie-point-menu-anchor-grid'] > .unotoolbutton {
+	justify-self: center;
+}
+
 /* Arrow/chevron. Masked rather than drawn, so it takes the text colour: the
    asset's own #bbb is under 3:1 on white and vanishes on a focused entry. */
 .ui-combobox-entry.ui-has-menu::after {

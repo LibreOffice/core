@@ -1481,33 +1481,19 @@ struct COKitDocument
         = 0;
 
     /**
-     * Sets whether one of the points a drawing object was given for a connector to tie itself to
-     * keeps its distance from the side it is measured from when the object changes size, or
-     * keeps its share of the size of the object. The point stays where it is on the page. A point
-     * the shape makes from its own geometry stays as it is. It is one step to undo.
+     * Sets what one of the points a drawing object was given for a connector to tie itself to is
+     * anchored to. The point stays where it is on the page. A point the shape makes from its own
+     * geometry stays as it is. It is one step to undo.
      *
      * @param nObjectId the unique id of the object, as the render geometry names it
      * @param nAt which of the points of that object, counted from zero as they are listed
-     * @param bKeepsItsDistance true for a distance, false for a share of the size
+     * @param pAnchor "none" for a point that keeps its share of the size of the object, or one of
+     * "top-left", "top", "top-right", "left", "center", "right", "bottom-left", "bottom" and
+     * "bottom-right" for a point that keeps its distance from that corner, the middle of that
+     * side, or the middle of the object
      */
-    virtual void setObjectGluePointKeepsItsDistance(unsigned long long nObjectId, int nAt,
-                                                    bool bKeepsItsDistance)
-        = 0;
-
-    /**
-     * Sets the side of a drawing object that one of the points it was given for a connector to
-     * tie itself to is measured from, across the object or down it. The point stays where it is
-     * on the page. A point the shape makes from its own geometry stays as it is. It is one step
-     * to undo.
-     *
-     * @param nObjectId the unique id of the object, as the render geometry names it
-     * @param nAt which of the points of that object, counted from zero as they are listed
-     * @param bDown false for the side across the object, true for the side down it
-     * @param pSide across the object "left", "middle" or "right"; down it "top", "middle" or
-     * "bottom"
-     */
-    virtual void setObjectGluePointFrom(unsigned long long nObjectId, int nAt, bool bDown,
-                                        const char* pSide)
+    virtual void setObjectGluePointAnchor(unsigned long long nObjectId, int nAt,
+                                          const char* pAnchor)
         = 0;
 
     /**

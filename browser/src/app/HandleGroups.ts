@@ -109,14 +109,15 @@ abstract class HandleGroup {
 
 	/*
 		Opens a menu with these entries, the given number of core pixels below the handle. When
-		an entry is chosen, the menu and its submenus close, and chosen gets the id of the entry.
+		an entry is chosen, the menu and its submenus close, and chosen gets the id of the entry. A
+		menu that only shows text has no entry to choose and needs no chosen.
 	*/
 	protected openAMenuBelow(
 		handle: SelectionHandle,
 		below: number,
 		menuId: string,
 		entries: MenuDefinition[],
-		chosen: (id: string) => void,
+		chosen?: (id: string) => void,
 	): void {
 		const container = document.getElementById('canvas-container');
 		if (!container) return;
@@ -142,14 +143,19 @@ abstract class HandleGroup {
 				_objectType: string,
 				eventType: string,
 				_object: unknown,
-				_data: unknown,
+				data: unknown,
 				entry: JSBuilder | MenuDefinition,
 			): boolean => {
-				if (eventType !== 'selected') return false;
+				// A button of a grid in the menu reports a click with its command, which names the
+				// entry it stands for.
+				let id: string;
+				if (eventType === 'selected') id = (entry as MenuDefinition)?.id ?? '';
+				else if (eventType === 'click' && typeof data === 'string') id = data;
+				else return false;
 
 				// An entry of a submenu closes the submenu as well as the menu.
 				JSDialog.CloseAllDropdowns();
-				chosen((entry as MenuDefinition)?.id ?? '');
+				chosen?.(id);
 				return true;
 			},
 			'',
@@ -1765,91 +1771,161 @@ class TiePointHandles extends HandleGroup {
 	private static readonly menuId: string = 'tie-point-menu';
 
 	/*
+		The nine places a point can be anchored to, row by row from the upper left corner, by the
+		names of the align attribute of ODF, with the text that names each one in the language of
+		the user interface.
+	*/
+	private static anchors(): { name: string; text: string }[] {
+		return [
+			{ name: 'top-left', text: _('Top Left') },
+			{ name: 'top', text: _('Top') },
+			{ name: 'top-right', text: _('Top Right') },
+			{ name: 'left', text: _('Left') },
+			{ name: 'center', text: _('Center') },
+			{ name: 'right', text: _('Right') },
+			{ name: 'bottom-left', text: _('Bottom Left') },
+			{ name: 'bottom', text: _('Bottom') },
+			{ name: 'bottom-right', text: _('Bottom Right') },
+		];
+	}
+
+	/*
+		What a point is anchored to: "none" for a point that keeps its share of the size, else the
+		place it keeps its distance from. The render geometry leaves out a side that is the middle,
+		so a point with neither side is anchored to the center.
+	*/
+	private static anchorOf(point: cool.ObjectGluePoint): string {
+		if (point.keepsItsDistance !== true) return 'none';
+
+		return (
+			[point.fromDown, point.fromAcross].filter(Boolean).join('-') || 'center'
+		);
+	}
+
+	/// The name of the icon that shows that anchor: the percent sign for none, else a box with a
+	/// dot on that place.
+	private static iconOfTheAnchor(anchor: string): string {
+		return anchor === 'none'
+			? 'gluepercent'
+			: 'glueanchor' + anchor.replace('-', '');
+	}
+
+	/*
+		The nine places to anchor a point to, as buttons in a grid of three by three that stand
+		where the place is on the box. The one the point is anchored to is selected. A button is
+		chosen by its command, which is the id of the entry it stands for.
+
+		A button with a value to compare is one that is on or off, and it tells a screen reader
+		whether it is pressed. No command state holds the anchor, so the value never matches and
+		selected alone turns the button on.
+	*/
+	private static anchorGrid(anchor: string): GridWidgetJSON {
+		return {
+			id: TiePointHandles.menuId + '-anchor-grid',
+			type: 'grid',
+			cols: 3,
+			rows: 3,
+			children: TiePointHandles.anchors().map(
+				(one: { name: string; text: string }, at: number) =>
+					({
+						id: TiePointHandles.menuId + '-anchor-' + one.name,
+						type: 'toolitem',
+						command: 'anchor-' + one.name,
+						text: one.text,
+						icon: 'lc_' + TiePointHandles.iconOfTheAnchor(one.name) + '.svg',
+						noLabel: true,
+						selected: one.name === anchor,
+						stateValue: one.name,
+						left: at % 3,
+						top: Math.floor(at / 3),
+						tabIndex: 0,
+						index: Math.floor(at / 3) + ':' + (at % 3),
+					}) as any as WidgetJSON,
+			),
+		} as any as GridWidgetJSON;
+	}
+
+	/*
 		Opens the menu of a point, below the point: the way a connector comes into the object
-		there, whether the point keeps its share of the size of the object, the side it is
-		measured from across the object and down it, and taking the point away. The ways the point
-		names are checked, both of them for a point that names two sides facing each other, and
-		none for a point that names no way. A point the shape makes from its own geometry keeps
-		all of these and stays, so for such a point the entries are shown disabled. The sides a
-		point is measured from count only for a point that keeps its distance, so they are
-		disabled for a point that keeps its share.
+		there, what the point is anchored to, and taking the point away. The ways the point names
+		are checked, both of them for a point that names two sides facing each other, and none for
+		a point that names no way.
+
+		The anchor is None for a point that keeps its share of the size of the object. Otherwise
+		it is one of nine places on the box of the object, laid out as a grid: a corner, the
+		middle of a side, or the middle of the box. The point keeps its distance from that place
+		when the object changes size.
+
+		A point the shape makes from its own geometry keeps all of these and stays, so its menu
+		holds a line that says it cannot be edited.
 	*/
 	private openTheMenuOf(handle: SelectionHandle): void {
 		const at = Number(handle.name.split('.')[1]);
 		const point = this.held(handle);
 		if (!point || !(at >= 0)) return;
 
+		const header: MenuDefinition = {
+			id: 'gluepoint',
+			type: 'header',
+			text: _('Gluepoint'),
+		};
+
+		if (point.fromTheShape === true) {
+			this.openAMenuBelow(
+				handle,
+				0.5 * ShapeHandlesSection.gluePointSize(),
+				TiePointHandles.menuId,
+				[
+					header,
+					{
+						id: 'fromtheshape',
+						type: 'json',
+						content: {
+							id: TiePointHandles.menuId + '-from-the-shape',
+							type: 'fixedtext',
+							text: _('Default gluepoints cannot be edited.'),
+						},
+					},
+				],
+			);
+			return;
+		}
+
 		const ways = TiePointHandles.waysOf(point.wayOut);
-		const canBeChanged = () => point.fromTheShape !== true;
-		const keepsItsDistance = point.keepsItsDistance === true;
 		const side = (id: string, text: string, img: string): MenuDefinition => ({
 			id,
 			type: 'action',
 			text,
 			img,
 			checked: ways.includes(id),
-			isEnabled: canBeChanged,
 		});
-
-		// A side the point is measured from, named by the axis and the side as the engine takes
-		// them. The render geometry leaves the middle out.
-		const from = (
-			axis: 'across' | 'down',
-			name: string,
-			text: string,
-			img: string,
-		): MenuDefinition => ({
-			id: axis + '-' + name,
-			type: 'action',
-			text,
-			img,
-			checked:
-				(axis === 'across' ? point.fromAcross : point.fromDown) ===
-				(name === 'middle' ? undefined : name),
-		});
-		const sidesCanBeChanged = () => canBeChanged() && keepsItsDistance;
+		const anchor = TiePointHandles.anchorOf(point);
 
 		const entries: MenuDefinition[] = [
-			{
-				id: 'gluepoint',
-				type: 'header',
-				text: _('Gluepoint'),
-			},
+			header,
 			side('left', _('Left'), 'glueescapedirectionleft'),
 			side('right', _('Right'), 'glueescapedirectionright'),
 			side('top', _('Up'), 'glueescapedirectiontop'),
 			side('bottom', _('Down'), 'glueescapedirectionbottom'),
 			{ id: 'separator', type: 'separator' },
 			{
-				id: 'relative',
-				type: 'action',
-				text: _('Relative'),
-				img: 'gluepercent',
-				checked: !keepsItsDistance,
-				isEnabled: canBeChanged,
-			},
-			{
-				id: 'across',
+				id: 'anchor',
 				type: 'menu',
-				text: _('Horizontal Alignment'),
-				img: 'gluehorzaligncenter',
-				isEnabled: sidesCanBeChanged,
+				text: _('Anchor'),
+				img: TiePointHandles.iconOfTheAnchor(anchor),
 				items: [
-					from('across', 'left', _('Left'), 'gluehorzalignleft'),
-					from('across', 'middle', _('Center'), 'gluehorzaligncenter'),
-					from('across', 'right', _('Right'), 'gluehorzalignright'),
-				],
-			},
-			{
-				id: 'down',
-				type: 'menu',
-				text: _('Vertical Alignment'),
-				img: 'gluevertaligncenter',
-				isEnabled: sidesCanBeChanged,
-				items: [
-					from('down', 'top', _('Top'), 'gluevertaligntop'),
-					from('down', 'middle', _('Center'), 'gluevertaligncenter'),
-					from('down', 'bottom', _('Bottom'), 'gluevertalignbottom'),
+					{
+						id: 'anchor-none',
+						type: 'action',
+						text: _('None'),
+						img: TiePointHandles.iconOfTheAnchor('none'),
+						checked: anchor === 'none',
+					},
+					{
+						id: 'anchor-grid',
+						type: 'json',
+						content: TiePointHandles.anchorGrid(anchor),
+					},
 				],
 			},
 			{ id: 'separator', type: 'separator' },
@@ -1858,7 +1934,6 @@ class TiePointHandles extends HandleGroup {
 				type: 'action',
 				text: _('Delete'),
 				img: 'delete',
-				isEnabled: canBeChanged,
 			},
 		];
 
@@ -1868,21 +1943,18 @@ class TiePointHandles extends HandleGroup {
 			TiePointHandles.menuId,
 			entries,
 			(chosen: string): void => {
-				const [axis, name] = chosen.split('-');
+				const anchorPrefix = 'anchor-';
 				if (chosen === 'delete') this.deleteThePoint(handle);
-				else if (chosen === 'relative')
-					this.sendAboutThePoint(
-						'setobjectgluepointdistance',
-						at,
-						'keeps=' + String(!keepsItsDistance),
-					);
-				else if ((axis === 'across' || axis === 'down') && name)
-					this.sendAboutThePoint(
-						'setobjectgluepointfrom',
-						at,
-						chosen.replace('-', '='),
-					);
-				else if (TiePointHandles.sides.some((one) => one.name === chosen))
+				else if (chosen.startsWith(anchorPrefix)) {
+					// The anchor the point has already changes nothing and leaves no step to undo.
+					const to = chosen.substring(anchorPrefix.length);
+					if (to !== anchor)
+						this.sendAboutThePoint(
+							'setobjectgluepointanchor',
+							at,
+							'anchor=' + to,
+						);
+				} else if (TiePointHandles.sides.some((one) => one.name === chosen))
 					this.sendAboutThePoint(
 						'setobjectgluepointwayout',
 						at,

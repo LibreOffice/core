@@ -688,8 +688,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "insertobjectgluepoint") ||
                tokens.equals(0, "deleteobjectgluepoint") ||
                tokens.equals(0, "setobjectgluepointwayout") ||
-               tokens.equals(0, "setobjectgluepointdistance") ||
-               tokens.equals(0, "setobjectgluepointfrom") ||
+               tokens.equals(0, "setobjectgluepointanchor") ||
                tokens.equals(0, "setobjecttransform") ||
                tokens.equals(0, "setobjectcontrolpoint") ||
                tokens.equals(0, "setobjecthandle") ||
@@ -827,13 +826,9 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         {
             return setObjectGluePointWayOut(tokens);
         }
-        else if (tokens.equals(0, "setobjectgluepointdistance"))
+        else if (tokens.equals(0, "setobjectgluepointanchor"))
         {
-            return setObjectGluePointDistance(tokens);
-        }
-        else if (tokens.equals(0, "setobjectgluepointfrom"))
-        {
-            return setObjectGluePointFrom(tokens);
+            return setObjectGluePointAnchor(tokens);
         }
         else if (tokens.equals(0, "setobjecttransform"))
         {
@@ -2277,63 +2272,31 @@ bool ChildSession::setObjectGluePointWayOut(const StringVector& tokens)
     return true;
 }
 
-bool ChildSession::setObjectGluePointDistance(const StringVector& tokens)
+bool ChildSession::setObjectGluePointAnchor(const StringVector& tokens)
 {
     std::string objectId;
-    std::string keeps;
+    std::string anchor;
     int nAt = 0;
 
     if (tokens.size() != 4 || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenInteger(tokens[2], "at", nAt) || !getTokenString(tokens[3], "keeps", keeps)
-        || (keeps != "true" && keeps != "false"))
+        || !getTokenInteger(tokens[2], "at", nAt) || !getTokenString(tokens[3], "anchor", anchor))
     {
-        sendTextFrameAndLogError("error: cmd=setobjectgluepointdistance kind=syntax");
+        sendTextFrameAndLogError("error: cmd=setobjectgluepointanchor kind=syntax");
         return false;
     }
 
-    // How a point keeps its place is part of the document, which a read-only view does not
+    // What a point is anchored to is part of the document, which a read-only view does not
     // change.
     if (isReadOnly())
     {
-        sendTextFrameAndLogError("error: cmd=setobjectgluepointdistance kind=failure");
+        sendTextFrameAndLogError("error: cmd=setobjectgluepointanchor kind=failure");
         return false;
     }
 
     // The id an object is named by counts as far as an unsigned long long does.
     getLOKitDocument()->setView(_viewId);
-    getLOKitDocument()->setObjectGluePointKeepsItsDistance(
-        std::strtoull(objectId.c_str(), nullptr, 10), nAt, keeps == "true");
-    return true;
-}
-
-bool ChildSession::setObjectGluePointFrom(const StringVector& tokens)
-{
-    std::string objectId;
-    std::string side;
-    int nAt = 0;
-
-    // The side is named across the object or down it.
-    const bool down = tokens.size() == 4 && tokens.startsWith(3, "down=");
-    if (tokens.size() != 4 || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenInteger(tokens[2], "at", nAt)
-        || !getTokenString(tokens[3], down ? "down" : "across", side))
-    {
-        sendTextFrameAndLogError("error: cmd=setobjectgluepointfrom kind=syntax");
-        return false;
-    }
-
-    // The side a point is measured from is part of the document, which a read-only view does not
-    // change.
-    if (isReadOnly())
-    {
-        sendTextFrameAndLogError("error: cmd=setobjectgluepointfrom kind=failure");
-        return false;
-    }
-
-    // The id an object is named by counts as far as an unsigned long long does.
-    getLOKitDocument()->setView(_viewId);
-    getLOKitDocument()->setObjectGluePointFrom(std::strtoull(objectId.c_str(), nullptr, 10), nAt,
-                                               down, side.c_str());
+    getLOKitDocument()->setObjectGluePointAnchor(std::strtoull(objectId.c_str(), nullptr, 10), nAt,
+                                                 anchor.c_str());
     return true;
 }
 

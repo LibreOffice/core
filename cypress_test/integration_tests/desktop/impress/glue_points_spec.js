@@ -143,7 +143,8 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 			var point = gluePoints(win)[at];
 			clickOnTheObject(win, point.x, point.y);
 		});
-		cy.cGet('#tie-point-menu-entry-1').should('be.visible');
+		// The menu of a point the shape makes holds a line of text in place of the entries.
+		cy.cGet('#tie-point-menu-entry-1, #tie-point-menu-from-the-shape').should('be.visible');
 	}
 
 	// Chooses an entry of the menu of a point and waits until the engine has answered.
@@ -155,14 +156,21 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 	}
 
-	// Chooses an entry of a submenu of the menu of a point and waits until the engine has
-	// answered. The entry the point holds now is checked when the submenu opens.
-	function chooseInSubmenu(win, entry, item, checkedItem) {
-		var submenu = '#tie-point-menu-' + entry + '-entry-';
-		cy.cGet('#tie-point-menu-entry-' + entry).click();
-		cy.cGet(submenu + checkedItem).should('have.class', 'checked');
-		cy.cGet(submenu + item).click();
-		cy.cGet('#tie-point-menu-entry-' + entry).should('not.exist');
+	// The Anchor entry of the menu of a point, and the None entry of its submenu.
+	var anchorEntry = '#tie-point-menu-entry-6';
+	var noAnchor = '#tie-point-menu-6-entry-0';
+
+	// Opens the Anchor submenu of the menu of a point.
+	function openTheAnchors() {
+		cy.cGet(anchorEntry).click();
+		cy.cGet(noAnchor).should('be.visible');
+	}
+
+	// Chooses None or a place of the grid in the Anchor submenu and waits until the engine has
+	// answered.
+	function chooseAnAnchor(win, selector) {
+		cy.cGet(selector).click();
+		cy.cGet(anchorEntry).should('not.exist');
 		cy.then(function() {
 			return helper.processToIdle(win);
 		});
@@ -269,37 +277,39 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		chooseInPointMenu(win, 3);
 		expectWayOut(win, undefined);
 
-		// A new point keeps its share of the size, so the sides it is measured from count for
-		// nothing and are disabled. Turning Relative off keeps the point where it is.
+		// A new point keeps its share of the size, so its anchor is None. Anchored to the upper
+		// left corner, the point keeps its distance from that corner and stays where it is.
 		openMenuOfPoint(win, 0);
-		cy.cGet('#tie-point-menu-entry-6').should('have.class', 'checked');
-		cy.cGet('#tie-point-menu-entry-7').should('have.attr', 'disabled');
-		cy.cGet('#tie-point-menu-entry-8').should('have.attr', 'disabled');
-		chooseInPointMenu(win, 6);
+		openTheAnchors();
+		cy.cGet(noAnchor).should('have.class', 'checked');
+		chooseAnAnchor(win, '#tie-point-menu-anchor-top-left');
 		expectThePoint(win, function(point) {
 			expect(point.keepsItsDistance, 'keeps its distance').to.equal(true);
-			expect(point.x, 'across the object').to.be.closeTo(0.25, 0.01);
-			expect(point.y, 'down the object').to.be.closeTo(0.25, 0.01);
-		});
-
-		// Measured from the left side and then from the upper one, the point stays where it is.
-		openMenuOfPoint(win, 0);
-		cy.cGet('#tie-point-menu-entry-6').should('not.have.class', 'checked');
-		chooseInSubmenu(win, 7, 0, 1);
-		expectThePoint(win, function(point) {
 			expect(point.fromAcross, 'measured across from').to.equal('left');
+			expect(point.fromDown, 'measured down from').to.equal('top');
 			expect(point.x, 'across the object').to.be.closeTo(0.25, 0.01);
+			expect(point.y, 'down the object').to.be.closeTo(0.25, 0.01);
 		});
 
+		// The grid shows the corner the point is anchored to. None makes the point keep its
+		// share of the size again, measured from the middle, and it stays where it is.
 		openMenuOfPoint(win, 0);
-		chooseInSubmenu(win, 8, 0, 1);
+		openTheAnchors();
+		cy.cGet(noAnchor).should('not.have.class', 'checked');
+		cy.cGet('#tie-point-menu-anchor-top-left').should('have.class', 'selected');
+		cy.cGet('#tie-point-menu-anchor-top-left > button').should('have.attr', 'aria-pressed', 'true');
+		cy.cGet('#tie-point-menu-anchor-top-right > button').should('have.attr', 'aria-pressed', 'false');
+		chooseAnAnchor(win, noAnchor);
 		expectThePoint(win, function(point) {
-			expect(point.fromDown, 'measured down from').to.equal('top');
+			expect(point.keepsItsDistance, 'keeps its distance').to.not.equal(true);
+			expect(point.fromAcross, 'measured across from').to.equal(undefined);
+			expect(point.fromDown, 'measured down from').to.equal(undefined);
+			expect(point.x, 'across the object').to.be.closeTo(0.25, 0.01);
 			expect(point.y, 'down the object').to.be.closeTo(0.25, 0.01);
 		});
 
 		openMenuOfPoint(win, 0);
-		chooseInPointMenu(win, 10);
+		chooseInPointMenu(win, 8);
 		cy.wrap(null).should(function() {
 			expect(gluePoints(win), 'points after Delete').to.have.length(0);
 		});
@@ -324,7 +334,7 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 	});
 
-	it('A point the shape makes from its geometry offers no change.', function() {
+	it('A point the shape makes from its geometry says it cannot be edited.', function() {
 		var win = this.win;
 		selectByTab(win, 2);
 		showGluePoints(win);
@@ -338,8 +348,8 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 
 		openMenuOfPoint(win, 0);
-		[1, 2, 3, 4, 6, 7, 8, 10].forEach(function(entry) {
-			cy.cGet('#tie-point-menu-entry-' + entry).should('have.attr', 'disabled');
-		});
+		cy.cGet('#tie-point-menu-from-the-shape')
+			.should('contain.text', 'Default gluepoints cannot be edited.');
+		cy.cGet('[id^="tie-point-menu-entry-"]').should('not.exist');
 	});
 });

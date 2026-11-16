@@ -7777,68 +7777,54 @@ void COKitDocumentImpl::setObjectGluePointWayOut(unsigned long long nObjectId, i
 }
 
 /*
-    Sets whether one of the points a drawing object was given keeps its distance from the side it
-    is measured from when the object changes size, or keeps its share of the size of the object.
-    The point stays where it is on the page either way.
+    Sets what one of the points a drawing object was given is anchored to. "none" makes the point
+    keep its share of the size of the object. The other names are the nine of the align attribute
+    of ODF: the point keeps its distance from that corner, the middle of that side, or the middle
+    of the object when the object changes size. A point that keeps its share is measured from the
+    middle, which is how a document holds it. The point stays where it is on the page.
 */
-void COKitDocumentImpl::setObjectGluePointKeepsItsDistance(unsigned long long nObjectId, int nAt,
-                                                           bool bKeepsItsDistance)
+void COKitDocumentImpl::setObjectGluePointAnchor(unsigned long long nObjectId, int nAt,
+                                                 const char* pAnchor)
 {
-    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointKeepsItsDistance");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointAnchor");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    lcl_changeAddedGluePoint(nObjectId, nAt, STR_EditSetGluePercent,
-                             [bKeepsItsDistance](SdrGluePoint& rGluePoint,
-                                                 const SdrObject& rObject) {
-                                 const Point aOnThePage(rGluePoint.GetAbsolutePos(rObject));
-                                 rGluePoint.SetPercent(!bKeepsItsDistance);
-                                 rGluePoint.SetAbsolutePos(aOnThePage, rObject);
-                             });
-}
-
-/*
-    Sets the side of a drawing object that one of the points the object was given is measured
-    from, across the object or down it. The names are the ones the render geometry reports the
-    side by, and "middle" measures the point from the middle of the object. The point stays where
-    it is on the page.
-*/
-void COKitDocumentImpl::setObjectGluePointFrom(unsigned long long nObjectId, int nAt, bool bDown,
-                                               const char* pSide)
-{
-    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointFrom");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    static const std::map<std::string_view, SdrAlign> aAcross{
-        { "left", SdrAlign::HORZ_LEFT },
-        { "middle", SdrAlign::HORZ_CENTER },
-        { "right", SdrAlign::HORZ_RIGHT },
-    };
-    static const std::map<std::string_view, SdrAlign> aDown{
-        { "top", SdrAlign::VERT_TOP },
-        { "middle", SdrAlign::VERT_CENTER },
-        { "bottom", SdrAlign::VERT_BOTTOM },
-    };
-
-    const std::map<std::string_view, SdrAlign>& rSides = bDown ? aDown : aAcross;
-    const auto aSide = rSides.find(pSide ? std::string_view(pSide) : std::string_view());
-    if (aSide == rSides.end())
+    struct Anchor
     {
-        SetLastExceptionMsg(u"A point is measured from no side of that name"_ustr);
+        bool mbShareOfTheSize;
+        SdrAlign meAcross;
+        SdrAlign meDown;
+    };
+    static const std::map<std::string_view, Anchor> aAnchors{
+        { "none", { true, SdrAlign::HORZ_CENTER, SdrAlign::VERT_CENTER } },
+        { "top-left", { false, SdrAlign::HORZ_LEFT, SdrAlign::VERT_TOP } },
+        { "top", { false, SdrAlign::HORZ_CENTER, SdrAlign::VERT_TOP } },
+        { "top-right", { false, SdrAlign::HORZ_RIGHT, SdrAlign::VERT_TOP } },
+        { "left", { false, SdrAlign::HORZ_LEFT, SdrAlign::VERT_CENTER } },
+        { "center", { false, SdrAlign::HORZ_CENTER, SdrAlign::VERT_CENTER } },
+        { "right", { false, SdrAlign::HORZ_RIGHT, SdrAlign::VERT_CENTER } },
+        { "bottom-left", { false, SdrAlign::HORZ_LEFT, SdrAlign::VERT_BOTTOM } },
+        { "bottom", { false, SdrAlign::HORZ_CENTER, SdrAlign::VERT_BOTTOM } },
+        { "bottom-right", { false, SdrAlign::HORZ_RIGHT, SdrAlign::VERT_BOTTOM } },
+    };
+
+    const auto aAnchor = aAnchors.find(pAnchor ? std::string_view(pAnchor) : std::string_view());
+    if (aAnchor == aAnchors.end())
+    {
+        SetLastExceptionMsg(u"A point has no anchor of that name"_ustr);
         return;
     }
 
-    const SdrAlign eSide = aSide->second;
-    lcl_changeAddedGluePoint(nObjectId, nAt, STR_EditSetGlueAlign,
-                             [bDown, eSide](SdrGluePoint& rGluePoint, const SdrObject& rObject) {
+    const Anchor aTo = aAnchor->second;
+    lcl_changeAddedGluePoint(nObjectId, nAt,
+                             aTo.mbShareOfTheSize ? STR_EditSetGluePercent : STR_EditSetGlueAlign,
+                             [aTo](SdrGluePoint& rGluePoint, const SdrObject& rObject) {
                                  const Point aOnThePage(rGluePoint.GetAbsolutePos(rObject));
-                                 if (bDown)
-                                     rGluePoint.SetVertAlign(eSide);
-                                 else
-                                     rGluePoint.SetHorzAlign(eSide);
+                                 rGluePoint.SetPercent(aTo.mbShareOfTheSize);
+                                 rGluePoint.SetHorzAlign(aTo.meAcross);
+                                 rGluePoint.SetVertAlign(aTo.meDown);
                                  rGluePoint.SetAbsolutePos(aOnThePage, rObject);
                              });
 }
