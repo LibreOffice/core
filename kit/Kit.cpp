@@ -5187,15 +5187,10 @@ void lokit_main(
 
 #else // DOCS_SHARE_PROCESS
         auto const termination = mainKit->termination;
-#if defined(QTAPP) || defined(MACOS) || defined(_WIN32)
-        // Release the mainKit KitSocketPoll instance early here, so that its destructor will
-        // reliably be called on the expected "lokit_runloop" owner thread (started by
-        // initKitRunLoopThread), avoiding a race between this thread releasing its shared reference
-        // when mainKit goes out of scope and the "lokit_runloop" thread releasing its shared
-        // reference when it releases the KitSocketPoll instance at the end of
-        // KitWebSocketHandler::onDisconnect (in kit/KitWebSocket.cpp):
+        // This thread releases its reference to the poll before it waits. The thread that runs the
+        // kit loop then releases the last reference, so the poll is destroyed on the thread that
+        // owns it.
         mainKit.reset();
-#endif
         if (!fatalError)
         {
             std::unique_lock<std::mutex> lock(termination->mutex);
