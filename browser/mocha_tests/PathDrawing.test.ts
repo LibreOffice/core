@@ -292,6 +292,20 @@ describe('PathDrawing', function () {
 		nodeassert.strictEqual(new PathDrawing(open, 10).stopHere(), 'nothingLeft');
 	});
 
+	it('a start point held off draws no mouse onto it', function () {
+		const drawing = new PathDrawing(filled, 10);
+		click(drawing, [
+			[0, 0],
+			[100, 0],
+			[100, 100],
+		]);
+		drawing.holdOffTheStart(true);
+		const placed = drawing.moveTo(new cool.Point(5, 3), false);
+		nodeassert.deepStrictEqual([placed.x, placed.y], [5, 3]);
+		nodeassert.strictEqual(drawing.startOnTheMouse(), null);
+		nodeassert.strictEqual(drawing.setThePoint(false), 'goesOn');
+	});
+
 	it('a part with too few points is dropped', function () {
 		const drawing = new PathDrawing(filled, 10);
 		click(drawing, [[0, 0]]);

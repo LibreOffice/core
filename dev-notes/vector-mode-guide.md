@@ -206,7 +206,8 @@ parts:
 | Press and drag, for a curve | The press sets the point, snapped, and the drag pulls out its two weights: the one ahead follows the mouse, the one behind mirrors it, so the curve runs smoothly through the point. A click without a drag, or a drag back to the point, leaves a corner. The point and its weights show as in point editing, also after the button comes up, and the edge to the mouse leaves along the weight ahead. Shift keeps the weights to steps of 45 degrees. |
 | Shift | The edge from the last point keeps to steps of 45 degrees. The kinds at 45 degrees do so by themselves, and Shift lets them go free. |
 | Ctrl | Turns the snap over, as for a shape. |
-| Shift or Ctrl pressed or let go | Takes effect at once, also while the mouse stands still. |
+| Alt | Holds the start point of the part off: it draws no mouse onto it and shows no circle, so a point can be set right beside it. |
+| Shift, Ctrl or Alt pressed or let go | Takes effect at once, also while the mouse stands still. |
 | The start point of the part | Pulls the mouse in when it comes near, and a circle as wide as that reach shows around it. A click there ends the part closed and sets no point there. For a curve a drag there pulls the weights of the start point, so the curve comes back into it along the drag. |
 | Right click | Sets the last point and ends the part, for a curve with the weights a drag of the right button pulls. Before the first point of a part it makes the object of the parts ended instead, a drag of it included. No menu opens. |
 | Closed or open | A filled kind closes every part. For the kinds that are not filled the first part decides: where it was closed on its start point, every later part closes too, also by a right click or Enter, and the object is closed with no fill; where it ended open, every later part stays open, and the start point of a part pulls no mouse in. |
@@ -228,6 +229,7 @@ A freeform line is drawn by hand, a stroke for every part:
 | Back to the start | A stroke of the filled kind that comes back to where it began ends there, closed, while the button is still down. |
 | Fill | The filled kind shows its fill while it is drawn, as a filled polygon does, the stroke being drawn too; a stroke inside another one shows as a hole at once. |
 | Shift, Ctrl | Change nothing: a stroke follows the mouse as it is, not snapped and not in steps. |
+| Alt | A stroke of the filled kind that comes back to its start does not end there, so it can go on past it. |
 | Click without a drag, Enter, right click | Make the object of the strokes drawn. Enter during a stroke ends the stroke first. A click before any stroke ends the mode with nothing made. |
 | Backspace, Delete | Take away the last stroke; the last one ends the mode with nothing made. |
 | Escape | Makes the object of the strokes ended; with none ended the mode ends with nothing made. |

@@ -1792,6 +1792,8 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	mouseAt(at: cool.Point, modifier: number, _pressed: boolean): void {
 		super.mouseAt(at, modifier, false);
 		if (Interaction.modeOn() !== this || !this.hover) return;
+		// Alt holds the start point off, so a point or a stroke can end beside it
+		this.drawing.holdOffTheStart((modifier & app.UNOModifier.ALT) !== 0);
 		if (this.drawing.stroking()) {
 			// a stroke of a kind that closes ends by itself when it comes back to its start
 			this.hover = null;

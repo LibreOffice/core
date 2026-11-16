@@ -64,6 +64,15 @@ class PathDrawing {
 	private pressedOnTheStart: boolean = false;
 	/// Whether the pull went far enough to give weights.
 	private pulledOut: boolean = false;
+	/// Whether the start point of the part is held off, so it draws no mouse onto it and a stroke
+	/// coming back to it does not close.
+	private startHeldOff: boolean = false;
+
+	/// Holds the start point of the part off, or lets it draw the mouse onto it again.
+	public holdOffTheStart(off: boolean): void {
+		this.startHeldOff = off;
+	}
+
 	/// Where the press for a curve was, as the mouse was then, not snapped.
 	private pressedAt: cool.Point | null = null;
 	/// The places of the stroke being drawn by hand, in twips; null while none is drawn.
@@ -123,7 +132,12 @@ class PathDrawing {
 		const nearTheStart = start.distanceTo(at) <= this.reach;
 		if (!nearTheStart && start.distanceTo(at) > 2 * this.reach)
 			this.strokeLeftItsStart = true;
-		if (this.kind.closes && nearTheStart && this.strokeLeftItsStart)
+		if (
+			this.kind.closes &&
+			!this.startHeldOff &&
+			nearTheStart &&
+			this.strokeLeftItsStart
+		)
 			return this.strokeEnd();
 
 		stroke.push(at);
@@ -195,6 +209,7 @@ class PathDrawing {
 		const start = this.points[0];
 		return (
 			this.closing() !== false &&
+			!this.startHeldOff &&
 			!!start &&
 			!!this.next &&
 			this.points.length >= 2 &&
@@ -222,6 +237,7 @@ class PathDrawing {
 		if (
 			start &&
 			this.closing() !== false &&
+			!this.startHeldOff &&
 			this.points.length >= 2 &&
 			new cool.Point(start.x, start.y).subtract(at).length() <= this.reach
 		)
