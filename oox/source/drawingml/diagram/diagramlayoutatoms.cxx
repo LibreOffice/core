@@ -8635,7 +8635,7 @@ static bool gatherSidewaysRows(const ShapePtr& pBranch, const std::vector<Constr
         }
         aRow.fWidth = aRow.aNode.Width + (aRow.aRows.empty() ? 0.0 : aRow.fGap + aRow.fBranchWidth);
         aRow.fHeight = std::max<double>(aRow.aNode.Height, aRow.fBranchHeight);
-        rRows.push_back(aRow);
+        rRows.push_back(std::move(aRow));
     }
     return true;
 }
