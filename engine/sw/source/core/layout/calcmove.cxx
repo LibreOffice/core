@@ -50,6 +50,36 @@
 
 // Move methods
 
+static bool lcl_IsEmptySectionColumnTarget(const SwContentFrame& rFrame,
+                                           const SwLayoutFrame& rNewUpper)
+{
+    if (!rFrame.IsTextFrame() || rFrame.IsInTab() || rFrame.IsInFootnote() || rFrame.IsInFly()
+        || rFrame.IsPageBreak(true) || rFrame.IsColBreak(true))
+        return false;
+
+    const SwLayoutFrame* pOldUpper = rFrame.GetUpper();
+    if (!pOldUpper || !pOldUpper->IsColBodyFrame() || !rNewUpper.IsColBodyFrame()
+        || rNewUpper.Lower())
+        return false;
+
+    const SwSectionFrame* pOldSection = pOldUpper->FindSctFrame();
+    const SwSectionFrame* pNewSection = rNewUpper.FindSctFrame();
+    const MoveBwdJumpReasons eReasons = SwFlowFrame::GetMoveBwdJumpReasons();
+
+    if (pOldSection && pOldSection == pNewSection
+        && eReasons == MoveBwdJumpReason::SkippedSectionColumns)
+        return true;
+
+    if (!pOldSection || !pNewSection
+        || eReasons != MoveBwdJumpReason::SkippedMasterColumns
+        || pNewSection->GetFollow() != pOldSection
+        || pOldUpper->GetUpper()->GetPrev())
+        return false;
+
+    const SwPageFrame* pOldPage = rFrame.FindPageFrame();
+    return pOldPage && rNewUpper.FindPageFrame() == pOldPage->GetPrev();
+}
+
 /// Return value tells whether the Frame should be moved.
 bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
 {
@@ -77,7 +107,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
         SwPageFrame * const pNewPage = pNewUpper->FindPageFrame();
         SwPageFrame *pOldPage = FindPageFrame();
 
-        if ( SwFlowFrame::IsMoveBwdJump() )
+        if (SwFlowFrame::IsMoveBwdJump() && !lcl_IsEmptySectionColumnTarget(*this, *pNewUpper))
             return true;
 
         if( IsInFootnote() && IsInSct() )

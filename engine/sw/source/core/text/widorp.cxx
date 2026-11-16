@@ -767,7 +767,7 @@ auto FindNonFlyPortion(SwLineLayout const& rLine) -> bool
 
 } // namespace sw
 
-bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTst, bool bMoveBwd )
+bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bSkipWidows, bool bMoveBwd )
 {
     // Here it does not matter, if pFrame is swapped or not.
     // IsInside() takes care of itself
@@ -822,14 +822,8 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
         m_nWidLines = rSet.GetWidows().GetValue();
     }
 
-    // After Orphans/Initials, do enough lines remain for Widows?
-    // If we are currently doing a test formatting, we may not
-    // consider the widows rule for two reasons:
-    // 1. The columns may have different widths.
-    //    Widow lines would have wrong width.
-    // 2. Test formatting is only done up to the given space.
-    //    we do not have any lines for widows at all.
-    if( bTst || nLineCnt - nMinLines >= m_nWidLines )
+    // After Orphans/Initials, do enough lines remain for Widows? The caller may skip this rule.
+    if( bSkipWidows || nLineCnt - nMinLines >= m_nWidLines )
     {
         if( rMaxHeight >= nLineSum )
         {

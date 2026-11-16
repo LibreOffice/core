@@ -230,6 +230,8 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     void PrepWidows( const sal_uInt16 nNeed, bool bNotify );
     void InvalidateRange_( const SwCharRange &, const tools::Long = 0);
     inline void InvalidateRange( const SwCharRange &, const tools::Long = 0);
+    bool WouldFitImpl(SwTwips& rMaxHeight, bool& bSplit, bool bTest, bool bMoveBwd,
+                      bool bCheckWidows);
 
     // WidowsAndOrphans, AdjustFrame, AdjustFollow
     void FormatAdjust( SwTextFormatter &rLine, WidowsAndOrphans &rFrameBreak,

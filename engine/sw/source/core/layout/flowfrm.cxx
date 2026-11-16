@@ -70,6 +70,11 @@ using namespace css;
 
 MoveBwdJumpReasons SwFlowFrame::s_eMoveBwdJumpReasons = MoveBwdJumpReason::NONE;
 
+void SwFlowFrame::ResetMoveBwdJump()
+{
+    s_eMoveBwdJumpReasons = MoveBwdJumpReason::NONE;
+}
+
 SwFlowFrame::SwFlowFrame( SwFrame &rFrame ) :
     m_rThis( rFrame ),
     m_pFollow( nullptr ),
@@ -2613,7 +2618,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                 }
             } while( bGoOn );
             if( bJump )
-                SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::ColumnBreakJump );
+                SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::SkippedEmptyColumn );
         }
     }
     else // No breaks - we can flow back.

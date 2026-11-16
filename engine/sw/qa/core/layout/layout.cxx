@@ -47,6 +47,7 @@
 #include <ndtxt.hxx>
 #include <tabfrm.hxx>
 #include <cntfrm.hxx>
+#include <flowfrm.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -59,6 +60,19 @@ public:
     SwCoreLayoutTest()
         : SwModelTestBase(u"/sw/qa/core/layout/data/"_ustr)
     {
+    }
+
+    void setUp() override
+    {
+        SwFlowFrame::ResetMoveBwdJump();
+        SwModelTestBase::setUp();
+        SwFlowFrame::ResetMoveBwdJump();
+    }
+
+    void tearDown() override
+    {
+        SwModelTestBase::tearDown();
+        SwFlowFrame::ResetMoveBwdJump();
     }
 };
 
@@ -524,6 +538,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
 
     // Then make sure border is at the left edge of the text area.
     SwDocShell* pShell = getSwDocShell();
+    SwRootFrame* pLayout = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+    CPPUNIT_ASSERT(pLayout);
+    SwFrame* pPage = pLayout->GetLower();
+    CPPUNIT_ASSERT(pPage);
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
@@ -531,7 +549,13 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
     // - Expected: 2565
     // - Actual  : 1425
     // Where 2565 is close to the left edge of the text area (2553).
-    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]", "x", u"2565");
+    const tools::Long nPrintAreaLeft
+        = pPage->getFrameArea().Left() + pPage->getFramePrintArea().Left();
+    const tools::Long nBorderX
+        = getXPath(pXmlDoc, "//polyline[@style='solid']/point[1]", "x").toInt32();
+    // Compare relative to the page, since another layout test may leave the view horizontally
+    // centered on a wider work area. The line is 12 twips inside the print area's left edge.
+    CPPUNIT_ASSERT_EQUAL(nPrintAreaLeft + tools::Long(12), nBorderX);
 #endif
 }
 

@@ -40,7 +40,7 @@ enum class MoveBwdJumpReason : sal_uInt8
     SkippedSectionColumns = 0x02,
     SkippedMasterColumns = 0x04,
     FootnoteJump = 0x08,
-    ColumnBreakJump = 0x10,
+    SkippedEmptyColumn = 0x10,
 };
 
 namespace o3tl
@@ -172,7 +172,7 @@ public:
     static bool IsMoveBwdJump() { return s_eMoveBwdJumpReasons != MoveBwdJumpReason::NONE; }
     static MoveBwdJumpReasons GetMoveBwdJumpReasons() { return s_eMoveBwdJumpReasons; }
     static void AddMoveBwdJumpReason( MoveBwdJumpReason eReason ) { s_eMoveBwdJumpReasons |= eReason; }
-    static void ResetMoveBwdJump() { s_eMoveBwdJumpReasons = MoveBwdJumpReason::NONE; }
+    SW_DLLPUBLIC static void ResetMoveBwdJump();
 
     void SetUndersized( const bool bNew ) { m_bUndersized = bNew; }
     bool IsUndersized()  const { return m_bUndersized; }

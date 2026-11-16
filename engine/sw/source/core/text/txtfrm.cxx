@@ -3408,9 +3408,14 @@ class SwTestFormat
     SwTextFrame *pFrame;
     std::shared_ptr<SwParaPortion> xOldPara;
     SwRect aOldFrame, aOldPrt;
+    // True only when this nonempty frame was formatted from its own offset through
+    // the end of its paragraph text, with no new-line flag, rest portion, or stop
+    // flag set. Its test-format line count is then usable for the widows rule.
+    bool m_bComplete = false;
 public:
     SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPrv, SwTwips nMaxHeight );
     ~SwTestFormat();
+    bool IsComplete() const { return m_bComplete; }
 };
 
 SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwips nMaxHeight )
@@ -3468,6 +3473,9 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     SwTextFormatter  aLine( pFrame, &aInf );
 
     pFrame->Format_( aLine, aInf );
+    m_bComplete = !pFrame->IsEmpty() && aInf.GetTextStart() == pFrame->GetOffset()
+                  && aInf.GetIdx().get() >= aInf.GetText().getLength() && !aInf.IsNewLine()
+                  && !aInf.GetRest() && !aInf.IsStop();
 
     if ( pFrame->IsVertical() )
         pFrame->SwapWidthAndHeight();
@@ -3499,7 +3507,50 @@ bool SwTextFrame::TestFormat( const SwFrame* pPrv, SwTwips &rMaxHeight, bool &bS
 
     SwTestFormat aSave( this, pPrv, rMaxHeight );
 
-    return SwTextFrame::WouldFit(rMaxHeight, bSplit, true, false);
+    bool bCheckWidows = false;
+    const SwLayoutFrame* pBody = GetUpper();
+    const SwSectionFrame* pSection = FindSctFrame();
+    const SwLayoutFrame* pColumn = pBody && pBody->IsColBodyFrame() ? pBody->GetUpper() : nullptr;
+    const SwFrame* pNextColumn = pColumn ? pColumn->GetNext() : nullptr;
+    const SwLayoutFrame* pNextBody
+        = pNextColumn && pNextColumn->IsColumnFrame()
+              ? static_cast<const SwLayoutFrame*>(pNextColumn->GetLower())
+              : nullptr;
+    if (!pNextColumn && pSection && pSection->GetFollow())
+    {
+        const SwFrame* pFollowColumn = pSection->GetFollow()->GetLower();
+        if (pFollowColumn && pFollowColumn->IsColumnFrame())
+            pNextBody = static_cast<const SwLayoutFrame*>(pFollowColumn->GetLower());
+    }
+    const SwSectionFrame* pNextSection = pNextBody ? pNextBody->FindSctFrame() : nullptr;
+    const bool bSectionColumnText = !IsInTab() && !IsInFootnote() && !IsInFly() && !GetDrawObjs()
+                                    && !IsPageBreak(true) && !IsColBreak(true);
+    // A test format normally skips the widows rule for two reasons: the next
+    // column may have a different width, so widow lines would be measured at the
+    // wrong width, and formatting may stop at rMaxHeight before there are widow
+    // lines to count. This guard rules both out: the next column has the same
+    // width and writing mode and no objects, and the test format laid out all of
+    // this frame's remaining text.
+    if (bSectionColumnText && aSave.IsComplete() && pBody && pBody->IsColBodyFrame() && pSection
+        && pSection->GetSection() && pNextBody && pNextBody->IsColBodyFrame() && pNextSection
+        && pNextSection->GetSection() == pSection->GetSection())
+    {
+        const SwRectFnSet aBodyRectFnSet(*pBody);
+        const SwRectFnSet aNextBodyRectFnSet(*pNextBody);
+        const bool bSameWritingMode
+            = pBody->IsVertical() == pNextBody->IsVertical()
+              && pBody->IsVertLR() == pNextBody->IsVertLR()
+              && pBody->IsVertLRBT() == pNextBody->IsVertLRBT();
+        const SwTwips nWidth = aBodyRectFnSet.GetWidth(pBody->getFramePrintArea());
+        const SwPageFrame* pNextPage = pNextBody->FindPageFrame();
+        const bool bNextBodyHasNoObjects
+            = pNextPage && !pNextBody->GetDrawObjs()
+              && BwdMoveNecessary(pNextPage, pNextBody->getFrameArea()) == 0;
+        bCheckWidows = bSameWritingMode && bNextBodyHasNoObjects && nWidth > 0
+                       && nWidth == aNextBodyRectFnSet.GetWidth(pNextBody->getFramePrintArea());
+    }
+
+    return WouldFitImpl(rMaxHeight, bSplit, true, false, bCheckWidows);
 }
 
 /**
@@ -3515,6 +3566,12 @@ bool SwTextFrame::TestFormat( const SwFrame* pPrv, SwTwips &rMaxHeight, bool &bS
  * @returns true if I can split
  */
 bool SwTextFrame::WouldFit(SwTwips &rMaxHeight, bool &bSplit, bool bTst, bool bMoveBwd)
+{
+    return WouldFitImpl(rMaxHeight, bSplit, bTst, bMoveBwd, false);
+}
+
+bool SwTextFrame::WouldFitImpl(SwTwips& rMaxHeight, bool& bSplit, bool bTst, bool bMoveBwd,
+                               bool bCheckWidows)
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTextFrame::WouldFit with swapped frame" );
@@ -3597,7 +3654,8 @@ bool SwTextFrame::WouldFit(SwTwips &rMaxHeight, bool &bSplit, bool bTst, bool bM
     // is breaking necessary?
     bSplit = !aFrameBreak.IsInside( aLine );
     if ( bSplit )
-        bRet = !aFrameBreak.IsKeepAlways() && aFrameBreak.WouldFit(aLine, rMaxHeight, bTst, bMoveBwd);
+        bRet = !aFrameBreak.IsKeepAlways()
+               && aFrameBreak.WouldFit(aLine, rMaxHeight, bTst && !bCheckWidows, bMoveBwd);
     else
     {
         // we need the total height including the current line
