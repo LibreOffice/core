@@ -383,12 +383,14 @@ class VectorCompositor extends SlideCompositor {
 		return morphs;
 	}
 
-	// The pieces that a morph takes the text of the slide apart into, null for a morph that
-	// keeps the text with its objects.
+	// The pieces that a morph takes the text of the slide apart into. A morph by object moves the
+	// words of the paired objects, so the text keeps its size while its object is resized. Null
+	// outside a morph.
 	private static _pieceModeOf(
 		morph: TransitionFilterInfo | null | undefined,
 	): MorphPieceMode | null {
 		switch (morph?.transitionSubtype) {
+			case TransitionSubType.MORPH:
 			case TransitionSubType.MORPHBYWORD:
 				return 'words';
 			case TransitionSubType.MORPHBYCHARACTER:
@@ -515,11 +517,10 @@ class VectorCompositor extends SlideCompositor {
 		if (!leavingData || !enteringData) return false;
 
 		// Both slides are drawn with the pieces of this morph.
-		const mode = VectorCompositor._pieceModeOf(
-			TransitionFilterInfo.fromSlideInfo(
-				this._metaPresentation.getSlideInfo(enteringHash),
-			),
+		const filterInfo = TransitionFilterInfo.fromSlideInfo(
+			this._metaPresentation.getSlideInfo(enteringHash),
 		);
+		const mode = VectorCompositor._pieceModeOf(filterInfo);
 		this._dropDisposedLayers();
 		const leavingLayers = this._slideLayers(
 			context,
@@ -546,7 +547,7 @@ class VectorCompositor extends SlideCompositor {
 						mode,
 						this._animatedTargets(enteringHash, enteringData),
 					).entries,
-					splitsText: true,
+					splitsText: filterInfo?.transitionSubtype !== TransitionSubType.MORPH,
 				}
 			: undefined;
 		if (!this.morph?.isBetween(leavingData, enteringData, text))

@@ -286,4 +286,64 @@ describe('SlideMorph', function () {
 		nodeassert.strictEqual(entering.get(-1).alpha, 0);
 		nodeassert.strictEqual(morph.states(1)[1].get(-1).alpha, 1);
 	});
+
+	it('keeps the size of the words while their object is resized', function () {
+		// A word in slide twips, its box 200 wide and 100 high at x, y.
+		const word = (
+			key: number,
+			owner: number,
+			text: string,
+			x: number,
+			y: number,
+		) => ({
+			key,
+			owner,
+			piece: {
+				text,
+				paragraph: 0,
+				frame: new cool.Matrix2D(200, 0, 0, 100, x, y),
+				clip: new cool.Matrix2D(200, 0, 0, 100, x, y),
+			},
+		});
+		const morph = new SlideMorph(
+			slide([[10, 'Box', [0, 0, 1000, 500]]]),
+			slide([[20, 'Box', [2000, 0, 2000, 1000]]]),
+			undefined,
+			undefined,
+			{
+				leaving: [word(-1, 10, 'Hello', 100, 200)],
+				entering: [
+					word(-1, 20, 'Hello', 2100, 400),
+					word(-2, 20, 'World', 2400, 400),
+				],
+				splitsText: false,
+			},
+		);
+
+		nodeassert.deepStrictEqual(morph.pairs, [{ leaving: 10, entering: 20 }]);
+		nodeassert.deepStrictEqual(Array.from(morph.leavingSplit), [10]);
+
+		const [leaving, entering] = morph.states(0.5);
+		// The object doubles in size, while the word keeps its width of 200 and goes halfway
+		// from its place in the leaving text to its place in the entering one.
+		nodeassert.deepStrictEqual(
+			moved(leaving.get(-1).transform, 100, 200),
+			[1100, 300],
+		);
+		nodeassert.deepStrictEqual(
+			moved(leaving.get(-1).transform, 300, 200),
+			[1300, 300],
+		);
+		nodeassert.deepStrictEqual(
+			moved(entering.get(-1).transform, 2100, 400),
+			[1100, 300],
+		);
+		// The word that only the entering text has stays in its place in the text and shows
+		// from the middle of the morph on.
+		nodeassert.strictEqual(entering.get(-2).alpha, 0);
+		nodeassert.deepStrictEqual(
+			moved(morph.states(1)[1].get(-2).transform, 2400, 400),
+			[2400, 400],
+		);
+	});
 });

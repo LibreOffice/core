@@ -16,6 +16,11 @@
  * where the object is on the leaving slide to where it is on the entering one, while the entering
  * copy fades in over the leaving one. An object without a pair fades out, or in.
  *
+ * The text of a pair keeps its size while the object is resized. Each word has a place in the text
+ * of its object, which moves and turns with the object at the size of the text, and goes to the
+ * place of the same word in the text of the other copy. A word that the other copy does not have
+ * keeps its place in the text and fades out or in.
+ *
  * A morph by word or by character pairs no objects. The objects stay where they are and fade out
  * or in without their text, while a word or a character that reads the same on both slides moves
  * from its place on the leaving slide to its place on the entering one, also from one object into
@@ -28,6 +33,18 @@ interface MorphSlidePiece {
 	key: number;
 	owner: number;
 	piece: MorphPiece;
+}
+
+/// A piece of the text of a paired object, which moves with its object at its own size. pair is
+/// the position of the pair of its object. from and to are the frames of the piece in the space
+/// of the anchor of its object, at the start and at the end of the morph. paired is false for a
+/// piece that the other copy of the object does not have.
+interface MorphAnchoredPiece {
+	entry: MorphSlidePiece;
+	pair: number;
+	from: cool.Matrix2D;
+	to: cool.Matrix2D;
+	paired: boolean;
 }
 
 /// The pieces of the texts of the two slides of a morph. splitsText is true for a morph by word
@@ -82,6 +99,11 @@ class SlideMorph {
 	private readonly piecePairs: [MorphSlidePiece, MorphSlidePiece][] = [];
 	private readonly leavingLonePieces: MorphSlidePiece[] = [];
 	private readonly enteringLonePieces: MorphSlidePiece[] = [];
+	// The pieces of the text of the paired objects.
+	private readonly anchoredPieces: [
+		MorphAnchoredPiece[],
+		MorphAnchoredPiece[],
+	] = [[], []];
 
 	/// leavingHidden and enteringHidden hold the objects that an animation holds hidden on
 	/// either slide, which take no part in the morph. text holds the pieces of the texts of the
@@ -143,6 +165,75 @@ class SlideMorph {
 		for (; next < leavingObjects.length; ++next)
 			if (leavingAlone.has(leavingObjects[next]))
 				this.paintOrder.push({ leaving: true, id: leavingObjects[next] });
+
+		if (text && !text.splitsText) this._anchorPieces(text);
+	}
+
+	// Pair the pieces of each pair of objects with each other only, so a word stays in its
+	// object, and place each piece in the space of the anchor of its object. The pieces of the
+	// entering copy are placed against the anchor that the move ends at.
+	private _anchorPieces(text: MorphTextPieces): void {
+		const piecesOf = (pieces: MorphSlidePiece[], owner: number) =>
+			pieces.filter((entry) => entry.owner === owner);
+		const [leavingAnchored, enteringAnchored] = this.anchoredPieces;
+		this.pairs.forEach((pair, index) => {
+			const leavingPieces = piecesOf(text.leaving, pair.leaving);
+			const enteringPieces = piecesOf(text.entering, pair.entering);
+			if (leavingPieces.length) this.leavingSplit.add(pair.leaving);
+			if (enteringPieces.length) this.enteringSplit.add(pair.entering);
+			const [from, to] = this.places[index];
+			const start = SlideMorph._anchorOf(from);
+			const end = SlideMorph._anchorOf(SlideMorph._targetOf(from, to));
+			const place = (entry: MorphSlidePiece, anchor: cool.Matrix2D) =>
+				entry.piece.frame.then(anchor.invert() ?? cool.Matrix2D.IDENTITY);
+
+			const match = MorphMatcher.matchPieces(
+				leavingPieces.map((entry) => entry.piece),
+				enteringPieces.map((entry) => entry.piece),
+			);
+			for (const [leavingIndex, enteringIndex] of match.pairs) {
+				const leavingEntry = leavingPieces[leavingIndex];
+				const enteringEntry = enteringPieces[enteringIndex];
+				const pieceFrom = place(leavingEntry, start);
+				const pieceTo = place(enteringEntry, end);
+				leavingAnchored.push({
+					entry: leavingEntry,
+					pair: index,
+					from: pieceFrom,
+					to: pieceTo,
+					paired: true,
+				});
+				enteringAnchored.push({
+					entry: enteringEntry,
+					pair: index,
+					from: pieceFrom,
+					to: pieceTo,
+					paired: true,
+				});
+			}
+			for (const at of match.leavingOnly) {
+				const entry = leavingPieces[at];
+				const own = place(entry, start);
+				leavingAnchored.push({
+					entry,
+					pair: index,
+					from: own,
+					to: own,
+					paired: false,
+				});
+			}
+			for (const at of match.enteringOnly) {
+				const entry = enteringPieces[at];
+				const own = place(entry, end);
+				enteringAnchored.push({
+					entry,
+					pair: index,
+					from: own,
+					to: own,
+					paired: false,
+				});
+			}
+		});
 	}
 
 	/// True when the morph goes from the leaving tree to the entering tree, with the pieces of
@@ -216,9 +307,11 @@ class SlideMorph {
 		// The two copies of a pair cover each other fully in the middle of the morph.
 		const leavingAlpha = Math.min(1, 2 * (1 - time));
 		const enteringAlpha = Math.min(1, 2 * time);
+		const placesNow: MorphPlace[] = [];
 		this.pairs.forEach((pair, index) => {
 			const [from, to] = this.places[index];
 			const now = SlideMorph._placeAt(from, to, time);
+			placesNow.push(now);
 			leavingStates.set(pair.leaving, {
 				transform: SlideMorph._moving(from, now),
 				alpha: leavingAlpha,
@@ -254,6 +347,41 @@ class SlideMorph {
 			leavingStates.set(entry.key, { alpha: Math.max(0, 1 - 2 * time) });
 		for (const entry of this.enteringLonePieces)
 			enteringStates.set(entry.key, { alpha: Math.max(0, 2 * time - 1) });
+
+		// A piece of a paired object is drawn in its place in the text, in the anchor of the
+		// object where it is now.
+		const [leavingAnchored, enteringAnchored] = this.anchoredPieces;
+		const anchored = (
+			pieces: MorphAnchoredPiece[],
+			states: Map<number, cool.ObjectRenderState>,
+			pairedAlpha: number,
+			loneAlpha: number,
+		) => {
+			for (const piece of pieces) {
+				const frame = MorphMatcher.interpolate(piece.from, piece.to, time).then(
+					SlideMorph._anchorOf(placesNow[piece.pair]),
+				);
+				states.set(piece.entry.key, {
+					transform: MorphMatcher.mapping(
+						piece.entry.piece.frame,
+						frame,
+					)?.toArray(),
+					alpha: piece.paired ? pairedAlpha : loneAlpha,
+				});
+			}
+		};
+		anchored(
+			leavingAnchored,
+			leavingStates,
+			leavingAlpha,
+			Math.max(0, 1 - 2 * time),
+		);
+		anchored(
+			enteringAnchored,
+			enteringStates,
+			enteringAlpha,
+			Math.max(0, 2 * time - 1),
+		);
 		return [leavingStates, enteringStates];
 	}
 
@@ -302,20 +430,7 @@ class SlideMorph {
 		to: MorphPlace,
 		time: number,
 	): MorphPlace {
-		let target = to;
-		if (from.height * to.height < 0) {
-			const flipped: MorphPlace = {
-				...to,
-				width: -to.width,
-				height: -to.height,
-				angle: to.angle + Math.PI,
-			};
-			if (
-				Math.abs(SlideMorph._turn(from, flipped)) <
-				Math.abs(SlideMorph._turn(from, to))
-			)
-				target = flipped;
-		}
+		const target = SlideMorph._targetOf(from, to);
 		return {
 			centerX: SlideMorph._between(from.centerX, target.centerX, time),
 			centerY: SlideMorph._between(from.centerY, target.centerY, time),
@@ -323,6 +438,31 @@ class SlideMorph {
 			height: SlideMorph._between(from.height, target.height, time),
 			angle: from.angle + SlideMorph._turn(from, target) * time,
 		};
+	}
+
+	// The place that the move from one place to the other ends at: the other place, or that
+	// place turned half round and mirrored along its other axis where that turns less.
+	private static _targetOf(from: MorphPlace, to: MorphPlace): MorphPlace {
+		if (from.height * to.height >= 0) return to;
+		const flipped: MorphPlace = {
+			...to,
+			width: -to.width,
+			height: -to.height,
+			angle: to.angle + Math.PI,
+		};
+		return Math.abs(SlideMorph._turn(from, flipped)) <
+			Math.abs(SlideMorph._turn(from, to))
+			? flipped
+			: to;
+	}
+
+	// The frame that has its origin at the middle of the place and is turned like it, at a scale
+	// of 1. A piece of text placed in it keeps its size and turns with the place.
+	private static _anchorOf(place: MorphPlace): cool.Matrix2D {
+		return cool.Matrix2D.IDENTITY.rotateAround(0, 0, place.angle).translate(
+			place.centerX,
+			place.centerY,
+		);
 	}
 
 	// The angle from one place to the other, the shorter way round.
