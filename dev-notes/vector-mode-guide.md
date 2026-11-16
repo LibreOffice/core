@@ -208,7 +208,7 @@ parts:
 | Ctrl | Turns the snap over, as for a shape. |
 | Shift or Ctrl pressed or let go | Takes effect at once, also while the mouse stands still. |
 | The start point of the part | Pulls the mouse in when it comes near, and a circle as wide as that reach shows around it. A click there ends the part closed and sets no point there. For a curve a drag there pulls the weights of the start point, so the curve comes back into it along the drag. |
-| Right click | Sets the last point and ends the part, for a curve with the weights a drag of the right button pulls. No menu opens. |
+| Right click | Sets the last point and ends the part, for a curve with the weights a drag of the right button pulls. Before the first point of a part it makes the object of the parts ended instead, a drag of it included. No menu opens. |
 | Closed or open | A filled kind closes every part. For the kinds that are not filled the first part decides: where it was closed on its start point, every later part closes too, also by a right click or Enter, and the object is closed with no fill; where it ended open, every later part stays open, and the start point of a part pulls no mouse in. |
 | Fill | A filled kind shows its fill while it is drawn, half see-through in the colour the object will get: the parts drawn so far and the part being drawn, closed back to its start. A part inside another one shows as a hole, as in the object made. Until the engine has answered, the object shows filled as well. |
 | After a part ended | The lines across the view follow the mouse again, and the next click begins the next part of the same object. A part with too few points - one, or two where it closes - is dropped. |

@@ -1883,21 +1883,26 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		return true;
 	}
 
-	/// The right button sets the point of a curve as the left one does.
+	/// The right button sets the point of a curve as the left one does, where the part has a
+	/// point already; before its first one the right button makes the object.
 	rightDown(at: cool.Point, modifier: number): void {
 		this.mouseAt(at, modifier, true);
 		if (Interaction.modeOn() !== this || !this.curves) return;
-		this.drawing.press();
+		if (!this.drawing.beforeThePart()) this.drawing.press();
 	}
 
-	/// The right button sets the last point of a part, or lets go of it, and ends the part; for a
-	/// line drawn by hand it makes the object.
+	/// The right button sets the last point of a part, or lets go of it, and ends the part. For a
+	/// line drawn by hand, and before the first point of a part, it makes the object.
 	rightUp(at: cool.Point, modifier: number): void {
 		this.mouseAt(at, modifier, false);
 		if (Interaction.modeOn() !== this) return;
 		this.lastUpAt = null;
+		// with nothing drawn of the part being begun, the right button is done drawing
+		const done =
+			this.freehand ||
+			(!this.drawing.pulling() && this.drawing.beforeThePart());
 		this.went(
-			this.freehand
+			done
 				? this.drawing.finish()
 				: this.curves
 					? this.drawing.release(true)
