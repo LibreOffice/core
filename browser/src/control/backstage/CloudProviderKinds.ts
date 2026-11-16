@@ -37,10 +37,6 @@ namespace BackstageCloudKinds {
 		isBrand: boolean;
 	}
 
-	// A kind ends up inside a CSS class name and inside a stored account id, so it holds
-	// lower-case letters, digits and dashes, and starts with a letter or a digit.
-	const kindPattern = /^[a-z0-9][a-z0-9-]*$/;
-
 	// Any server that speaks the protocol, whichever product runs it.
 	const otherKind = 'other';
 
@@ -52,7 +48,7 @@ namespace BackstageCloudKinds {
 	];
 
 	export function isValidKind(kind: unknown): boolean {
-		return typeof kind === 'string' && kindPattern.test(kind);
+		return CloudProviderList.isValidKind(kind);
 	}
 
 	// The services on offer, in the order they are listed to the user. A branding that declares
