@@ -15,6 +15,11 @@
 #include <common/UserTemplates.hpp>
 #include <common/Util.hpp>
 
+#include <Poco/DOM/AutoPtr.h>
+#include <Poco/DOM/DOMParser.h>
+#include <Poco/DOM/Document.h>
+#include <Poco/DOM/Element.h>
+#include <Poco/DOM/Node.h>
 #include <Poco/Zip/ZipArchive.h>
 #include <Poco/Zip/ZipStream.h>
 
@@ -22,6 +27,8 @@
 #include <cctype>
 #include <fstream>
 #include <map>
+#include <optional>
+#include <string_view>
 
 namespace filesystem = std::filesystem;
 
@@ -96,34 +103,108 @@ std::string typeOfExtension(const std::map<std::string, std::string>& types,
     return it == types.end() ? std::string() : it->second;
 }
 
-constexpr const char* previewFileName = "preview.png";
+// The copy of the image of the first page in the folder of a template, by image format.
+constexpr const char* pngPreviewFileName = "preview.png";
+constexpr const char* jpegPreviewFileName = "preview.jpeg";
+constexpr const char* previewFileNames[] = { pngPreviewFileName, jpegPreviewFileName };
 
-// An ODF file carries an image of its first page as Thumbnails/thumbnail.png. Copies that image to
-// the target path, and nothing when the file has no such image.
-void extractPreview(const filesystem::path& templatePath, const filesystem::path& target)
+// The bytes of one entry of the zip file, or nothing when the entry is missing or larger than
+// maxSize. The name matches without regard to case, as part names in an OOXML package do.
+std::optional<std::string> readZipEntry(std::istream& in, const Poco::Zip::ZipArchive& archive,
+                                        const std::string& name, std::size_t maxSize)
+{
+    auto header = archive.findHeader(name);
+    if (header == archive.headerEnd())
+    {
+        const std::string lowerCaseName = Util::toLower(name);
+        header = std::find_if(archive.headerBegin(), archive.headerEnd(),
+                              [&lowerCaseName](const auto& item)
+                              { return Util::toLower(item.first) == lowerCaseName; });
+    }
+    if (header == archive.headerEnd() || header->second.getUncompressedSize() > maxSize)
+        return std::nullopt;
+
+    Poco::Zip::ZipInputStream zipStream(in, header->second);
+    std::string content;
+    char buffer[8192];
+    while (zipStream.read(buffer, sizeof(buffer)) || zipStream.gcount() > 0)
+    {
+        content.append(buffer, zipStream.gcount());
+        if (content.size() > maxSize)
+            return std::nullopt;
+    }
+    return content;
+}
+
+// The name of the zip entry that _rels/.rels gives as the thumbnail of an OOXML package, or empty
+// when there is none. A target is relative to the root of the package, which is also the root of
+// the zip file.
+std::string ooxmlThumbnailEntry(const std::string& relationships)
+{
+    constexpr std::string_view thumbnailType =
+        "http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail";
+
+    Poco::XML::DOMParser parser;
+    Poco::AutoPtr<Poco::XML::Document> document = parser.parseString(relationships);
+    Poco::XML::Element* root = document->documentElement();
+    if (!root)
+        return std::string();
+
+    for (Poco::XML::Node* node = root->firstChild(); node; node = node->nextSibling())
+    {
+        if (node->nodeType() != Poco::XML::Node::ELEMENT_NODE ||
+            node->localName() != "Relationship")
+            continue;
+        auto* element = static_cast<Poco::XML::Element*>(node);
+        if (element->getAttribute("Type") != thumbnailType ||
+            element->getAttribute("TargetMode") == "External")
+            continue;
+        std::string target = element->getAttribute("Target");
+        if (!target.empty() && target[0] == '/')
+            target.erase(0, 1);
+        return target;
+    }
+    return std::string();
+}
+
+// Copies the image of the first page out of the template file into the folder, and nothing when
+// the file has no such image. An ODF file carries it as Thumbnails/thumbnail.png. An OOXML file
+// can name one in _rels/.rels, and only a PNG or JPEG image is copied.
+void extractPreview(const filesystem::path& templatePath, const filesystem::path& folder)
 {
     // An image of one page is far smaller than this.
     constexpr std::size_t maxPreviewSize = 1024 * 1024;
+    constexpr std::size_t maxRelationshipsSize = 64 * 1024;
     try
     {
         std::ifstream in(templatePath, std::ios::binary);
         const Poco::Zip::ZipArchive archive(in);
-        const auto header = archive.findHeader("Thumbnails/thumbnail.png");
-        if (header == archive.headerEnd() || header->second.getUncompressedSize() > maxPreviewSize)
-            return;
 
-        Poco::Zip::ZipInputStream zipStream(in, header->second);
-        std::string image;
-        char buffer[8192];
-        while (zipStream.read(buffer, sizeof(buffer)) || zipStream.gcount() > 0)
+        std::string entry = "Thumbnails/thumbnail.png";
+        filesystem::path target = folder / pngPreviewFileName;
+        if (archive.findHeader(entry) == archive.headerEnd())
         {
-            image.append(buffer, zipStream.gcount());
-            if (image.size() > maxPreviewSize)
+            const std::optional<std::string> relationships =
+                readZipEntry(in, archive, "_rels/.rels", maxRelationshipsSize);
+            if (!relationships)
+                return;
+
+            entry = ooxmlThumbnailEntry(*relationships);
+            const std::string extension = lowerCaseExtension(entry);
+            if (extension == "png")
+                target = folder / pngPreviewFileName;
+            else if (extension == "jpeg" || extension == "jpg")
+                target = folder / jpegPreviewFileName;
+            else
                 return;
         }
 
+        const std::optional<std::string> image = readZipEntry(in, archive, entry, maxPreviewSize);
+        if (!image)
+            return;
+
         std::ofstream out(target, std::ios::binary);
-        out.write(image.data(), image.size());
+        out.write(image->data(), image->size());
         out.close();
         if (!out)
         {
@@ -213,7 +294,7 @@ std::optional<UserTemplates::Entry> UserTemplates::addFile(const std::string& so
         return std::nullopt;
     }
 
-    extractPreview(target, folder / previewFileName);
+    extractPreview(target, folder);
     return entryInFolder(folder);
 }
 
@@ -306,9 +387,16 @@ UserTemplates::entryInFolder(const filesystem::path& templateFolder) const
                      type,
                      path.string<char>(),
                      std::string() };
-        const filesystem::path preview = templateFolder / previewFileName;
-        if (!filesystem::is_symlink(preview, error) && filesystem::is_regular_file(preview, error))
-            entry.previewPath = preview.string<char>();
+        for (const char* previewFileName : previewFileNames)
+        {
+            const filesystem::path preview = templateFolder / previewFileName;
+            if (!filesystem::is_symlink(preview, error) &&
+                filesystem::is_regular_file(preview, error))
+            {
+                entry.previewPath = preview.string<char>();
+                break;
+            }
+        }
         return entry;
     }
     return std::nullopt;

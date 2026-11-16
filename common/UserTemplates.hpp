@@ -18,8 +18,8 @@
 
 // The templates that the user added, each one a copy of a template file or of a document. The
 // folder holds one subfolder per template, named by the id of the template, and the subfolder
-// holds the file and, for an ODF file, the preview image from inside it. The name of the template
-// is the name of that file without its extension.
+// holds the file and, when the file carries one, the preview image from inside it. The name of the
+// template is the name of that file without its extension.
 class UserTemplates
 {
 public:
@@ -31,7 +31,7 @@ public:
         // "writer", "calc", "impress" or "draw".
         std::string type;
         std::string path;
-        // A PNG image of the first page, or empty when the file carries none.
+        // A PNG or JPEG image of the first page, or empty when the file carries none.
         std::string previewPath;
     };
 
