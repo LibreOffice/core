@@ -53,6 +53,27 @@ describe(['tagdesktop'], 'JSDialog Help button test', function() {
 			});
 	});
 
+	it('Online Help search keeps the Collabora Office content out', function() {
+		cy.cGet('#Help-tab-label').click();
+		cy.cGet('.unoOnlineHelp').click();
+		cy.cGet('#online-help-content').should('exist');
+		cy.cGet('#online-help-content .webBasedCOOLOnly').should('exist');
+		cy.cGet('#online-help-content .mobileAppAndCODAOnly').should('not.exist');
+		// The dialog moves the focus to its content once it is laid out; type
+		// only after that, or the keys go elsewhere.
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.cGet('#online-help-content-box').should('have.focus');
+
+		// Search for a phrase only the Collabora Office section has, then
+		// clear the search: the section must not come back.
+		cy.cGet('#online-help-search-input').type('file manager');
+		cy.cGet('#online-help-search-button').click();
+		cy.cGet('#online-help-search-input').should('have.class', 'search-not-found');
+		cy.cGet('#online-help-search-input').clear();
+		cy.cGet('#online-help-content [id="1335A"]').should('exist');
+		cy.cGet('#online-help-content [id="1335B"]').should('not.exist');
+	});
+
 	it('Help button focus ring is not clipped by the dialog', function() {
 		// Open a dialog that carries a Help button (Data > Validity).
 		cy.cGet('#Data-tab-label').click();

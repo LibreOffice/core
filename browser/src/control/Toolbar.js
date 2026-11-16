@@ -490,6 +490,13 @@ window.L.Map.include({
 			}
 		} else /* id === 'online-help' */ {
 			document.getElementById('keyboard-shortcuts-content').classList.add('hide');
+			// The help is shared by the web-based product and by the apps, so drop
+			// the content of the other one, before the search can show or match it.
+			const otherProduct = document.documentElement.getAttribute('data-app-type') === 'mobile'
+				? '.webBasedCOOLOnly' : '.mobileAppAndCODAOnly';
+			document.getElementById('online-help-content').querySelectorAll(otherProduct).forEach(function (element) {
+				element.remove();
+			});
 			if (window.socketProxy) {
 				var helpdiv = document.getElementById('online-help-content');
 				var imgList = helpdiv.querySelectorAll('img');
