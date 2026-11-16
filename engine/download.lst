@@ -444,8 +444,8 @@ LCMS2_TARBALL := lcms2-2.19.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBEOT_SHA256SUM := ccb7c038142d8195879ba36410a983c632d547db05e357fddc6bbf2b7f64117e
-LIBEOT_TARBALL := libeot-0.0.2.tar.gz
+LIBEOT_SHA256SUM := 2cb904cbe291019b928dbc2231620bcf273be0298f596c2494348e7be1d7051a
+LIBEOT_TARBALL := libeot-0.0.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
