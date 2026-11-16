@@ -29,4 +29,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
 endif
 endif
 
+# multi-colour gradients as loext:gradient-stop; sent upstream to libwpd-devel, drop with
+# the libodfgen release that has it
+$(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
+    external/libodfgen/multi-colour-gradients.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:
