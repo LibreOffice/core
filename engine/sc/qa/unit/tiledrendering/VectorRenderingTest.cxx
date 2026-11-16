@@ -50,10 +50,12 @@
 #include <editeng/colritem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/wghtitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
@@ -1634,6 +1636,44 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedTextIsHyphenated)
           };
     aFind(*oText);
     CPPUNIT_ASSERT(bHyphen);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRichTextAlignedToRepeatIsRepeated)
+{
+    // Rich text in a cell aligned to repeat is repeated across the cell as plain text, as in
+    // ScOutputData. The cell builder drew it once.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetColWidth(1, 0, 3000);
+    ScFieldEditEngine& rEngine = rDocument.GetEditEngine();
+    rEngine.SetTextCurrentDefaults(u"ab-"_ustr);
+    SfxItemSet aBold(rEngine.GetEmptyItemSet());
+    aBold.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+    rEngine.QuickSetAttribs(aBold, ESelection(0, 1, 0, 2));
+    rDocument.SetEditText(ScAddress(1, 1, 0), rEngine.CreateTextObject());
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(SvxHorJustifyItem(SvxCellHorJustify::Repeat, ATTR_HOR_JUSTIFY));
+    applyToCell(*pDocShell, 1, 1, aPattern);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const auto oText = cellTextAt(aResponse, 1, 1);
+    CPPUNIT_ASSERT(oText);
+    CPPUNIT_ASSERT(cellTextFlags(*oText).count("repeat"));
+    bool bRepeated = false;
+    std::function<void(const boost::property_tree::ptree&)> aFind
+        = [&](const boost::property_tree::ptree& rNode) {
+              const std::string aType = rNode.get<std::string>("type", "");
+              if ((aType == "textSimplePortion" || aType == "textDecoratedPortion")
+                  && rNode.get<std::string>("text").find("ab-ab-") != std::string::npos)
+                  bRepeated = true;
+              for (const auto& rChild : rNode)
+                  aFind(rChild.second);
+          };
+    aFind(*oText);
+    CPPUNIT_ASSERT(bRepeated);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)

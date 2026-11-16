@@ -71,6 +71,7 @@
 #include <svx/algitem.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -1562,7 +1563,7 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
                   || rPattern.GetItem(ATTR_LINEBREAK, pCondSet).GetValue();
     if (eHorJustAttr == SvxCellHorJustify::Repeat)
     {
-        // "repeat" draws the text once and turns off orientation and rotation.
+        // "repeat" turns off orientation and rotation.
         eOrient = SvxCellOrientation::Standard;
         nRotate = 0_deg100;
     }
@@ -1766,10 +1767,12 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         eFlags |= CellTextFlags::Wrap;
 
     TextSizes aSizes;
+    const bool bRepeat = !bBreak && eHorJustAttr == SvxCellHorJustify::Repeat;
     const bool bShrink = !bBreak && rPattern.GetItem(ATTR_SHRINKTOFIT, pCondSet).GetValue()
                          && eHorJustAttr != SvxCellHorJustify::Repeat;
-    // A number, a text that shrinks to fit and vertical or rotated text stay inside their cell.
-    const bool bNoOverflow = bCellIsValue || bShrink || bVertical || nRotate != 0_deg100;
+    // A number, a repeated or shrunk text and vertical or rotated text stay inside their cell.
+    const bool bNoOverflow
+        = bCellIsValue || bRepeat || bShrink || bVertical || nRotate != 0_deg100;
     // Wrapped lines take no width of their own, the way the engine size of the window counts them.
     const double fNeededWidth
         = (bBreak && !bStacked && !bAsianVertical ? 0.0 : fExtentX) + fLeftMargin + fRightMargin;
@@ -1806,6 +1809,31 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
                 eFlags |= CellTextFlags::Shrink;
             }
         }
+    }
+
+    // A cell aligned to repeat repeats its text as plain text, as in ScOutputData, when the
+    // space holds the formatted text at least twice.
+    if (bRepeat && !aArea.mbLeftClip && !aArea.mbRightClip && rEngine.GetParagraphCount() == 1
+        && aSizes.mfAlignWidth - fLeftMargin - fRightMargin >= 2 * fEngineWidth)
+    {
+        const double fAvailable = aSizes.mfAlignWidth - fLeftMargin - fRightMargin;
+        const OUString aText = rEngine.GetText();
+        rEngine.SetTextCurrentDefaults(aText);
+        const double fRepeatWidth = engineWidth();
+        const tools::Long nRepeatCount
+            = fRepeatWidth > 0 ? static_cast<tools::Long>(fAvailable / fRepeatWidth) : 0;
+        if (nRepeatCount > 1)
+        {
+            OUStringBuffer aRepeated(aText);
+            for (tools::Long nRepeat = 1; nRepeat < nRepeatCount; ++nRepeat)
+                aRepeated.append(aText);
+            rEngine.SetTextCurrentDefaults(aRepeated.makeStringAndClear());
+            eFlags |= CellTextFlags::Repeat;
+        }
+        fEngineWidth = engineWidth();
+        fEngineHeight = engineHeight();
+        fExtentX = fEngineWidth;
+        fExtentY = fEngineHeight;
     }
 
     bool bClipLeftMark = false;
