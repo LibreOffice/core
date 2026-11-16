@@ -522,8 +522,10 @@ std::optional<Extensions::CallScript> Extensions::makeCallScript(
                 " return remote[name].apply(null, args); }; })(" + jsonQuote(name) + ')'};
         }
         if (kind == "gas") {
+            // A manifest.json makes the directory a native extension, also when it has an
+            // appsscript.json:
             auto const appsscript = readJsonObject(*dir, "appsscript.json");
-            if (!appsscript) {
+            if (!appsscript || Poco::File(Poco::Path(*dir, "manifest.json")).exists()) {
                 error = "extension " + id + " is no Apps Script add-on";
                 return {};
             }
@@ -565,6 +567,90 @@ std::optional<Extensions::CallScript> Extensions::makeCallScript(
         error = "extension " + id + " cannot be read: " + e.displayText();
         return {};
     }
+}
+
+std::optional<Poco::Path> Extensions::servableFile(
+    Poco::Path const & extension, std::string const & file)
+{
+    // The path names a file and has a single spelling (each segment is a name other than "." and
+    // "..", without a NUL character), and neither the extension's directory nor anything on the way
+    // to the file is a symbolic link:
+    Poco::Path current = Poco::Path::forDirectory(extension.toString());
+    auto directoryName = current.toString();
+    while (directoryName.size() > 1 && directoryName.ends_with('/')) {
+        directoryName.pop_back();
+    }
+    if (!Poco::File(directoryName).exists() || Poco::File(directoryName).isLink()) {
+        return {};
+    }
+    std::vector<std::string> segments;
+    Poco::Path entry;
+    for (std::string_view rest = file;;) {
+        auto const slash = rest.find('/');
+        auto const segment = rest.substr(0, slash);
+        if (segment.empty() || segment == "." || segment == ".."
+            || segment.find('\0') != std::string_view::npos)
+        {
+            return {};
+        }
+        segments.emplace_back(segment);
+        entry = current;
+        entry.setFileName(segments.back());
+        if (!Poco::File(entry).exists() || Poco::File(entry).isLink()) {
+            return {};
+        }
+        if (slash == std::string_view::npos) {
+            if (!Poco::File(entry).isFile()) {
+                return {};
+            }
+            break;
+        }
+        current.pushDirectory(segments.back());
+        rest.remove_prefix(slash + 1);
+    }
+
+    // The code of an Apps Script add-on (its .gs and .js files, and whatever the "scripts" of a
+    // _cool-gas.json lists in its own directory or a directory above it), unless a manifest.json
+    // makes it a native extension:
+    if (Poco::File(Poco::Path(extension, "appsscript.json")).exists()
+        && !Poco::File(Poco::Path(extension, "manifest.json")).exists())
+    {
+        if (file.ends_with(".gs") || file.ends_with(".js")) {
+            return {};
+        }
+        std::string directory;
+        for (std::size_t i = 0; i != segments.size(); ++i) {
+            std::string relative;
+            for (std::size_t j = i; j != segments.size(); ++j) {
+                relative += (j == i ? "" : "/") + segments[j];
+            }
+            auto const listing = readJsonObject(extension, directory + "_cool-gas.json");
+            auto const scripts = listing ? listing->getArray("scripts") : nullptr;
+            for (std::size_t k = 0; scripts && k != scripts->size(); ++k) {
+                if (scripts->get(k).isString() && scripts->getElement<std::string>(k) == relative) {
+                    return {};
+                }
+            }
+            directory += segments[i] + '/';
+        }
+    }
+
+    // The files that the manifest.json of a native extension lists as "remote" (and, as the
+    // extension is unusable without a manifest, everything but an unreadable manifest.json):
+    if (Poco::File(Poco::Path(extension, "manifest.json")).exists()) {
+        auto const manifest = readJsonObject(extension, "manifest.json");
+        if (!manifest) {
+            return file == "manifest.json" ? std::optional(entry) : std::nullopt;
+        }
+        auto const remote = manifest->getArray("remote");
+        for (std::size_t i = 0; remote && i != remote->size(); ++i) {
+            if (remote->get(i).isString() && remote->getElement<std::string>(i) == file) {
+                return {};
+            }
+        }
+    }
+
+    return entry;
 }
 
 #if ENABLE_DEBUG

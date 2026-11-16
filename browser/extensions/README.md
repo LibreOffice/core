@@ -47,6 +47,10 @@ must add to `remote` rather than declare or assign it. (A function expression th
 repeats the name, as above, gives the function its name in the stack traces of
 errors, which a function assigned to a property does not get otherwise.)
 
+The `remote` files of an installed extension stay on the server, so the panel's pages
+cannot load them. In the same way, the pages of an installed Apps Script add-on cannot
+load its `.gs` and `.js` files.
+
 The name of such a function must not contain whitespace. The panel calls one of them
 through `cool.remote`, which returns a promise of the function's return value:
 

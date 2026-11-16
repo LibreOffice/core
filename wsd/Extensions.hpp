@@ -55,6 +55,13 @@ std::optional<CallScript> makeCallScript(
 // them.
 std::string synthesizeGasSidecar(std::vector<std::pair<std::string, std::string>> const & scripts);
 
+// The path of the file at the relative path within the directory of an extension, if it is one that
+// pages of the extension may load, as opposed to code that only the kit runs (the scripts of an
+// Apps Script add-on, and the files that the manifest of a native extension lists as "remote"), and
+// is reached through a single spelling of its path without any symbolic links, else an empty
+// optional:
+std::optional<Poco::Path> servableFile(Poco::Path const & extension, std::string const & file);
+
 #if ENABLE_DEBUG
 // For the dev-only "drop a directory into browser/dist/extensions/" feature, emit
 // <distExtensionsDir>/index.json as a JSON array of the <id>s of the extension subdirectories,

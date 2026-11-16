@@ -1231,8 +1231,9 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
     }
     auto const id = subPath.substr(0, idSlash);
     auto const file = subPath.substr(idSlash + 1);
-    if (id.empty() || id == "." || id == ".." || file.empty() || file == "." || file == ".."
-        || file.find("../") != std::string::npos || file.find("/..") != std::string::npos)
+    if (id.empty() || id == "." || id == ".." || id.find('\0') != std::string::npos
+        || file.empty() || file == "." || file == ".." || file.find("../") != std::string::npos
+        || file.find("/..") != std::string::npos)
     {
         HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
         return true;
@@ -1245,7 +1246,9 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         Poco::Path dirPath(extDir);
         dirPath.pushDirectory(id);
         Poco::Path const appsscript(dirPath, "appsscript.json");
-        if (!Poco::File(appsscript).exists()) {
+        if (!Poco::File(appsscript).exists()
+            || Poco::File(Poco::Path(dirPath, "manifest.json")).exists())
+        {
             HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
             return true;
         }
@@ -1267,17 +1270,15 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         return true;
     }
 
-    Poco::Path filePath(extDir);
-    filePath.pushDirectory(id);
-    // file may carry "/" for nested resources; the traversal check above already rejected ".." and
-    // absolute paths:
-    filePath.append(file);
-    if (!Poco::File(filePath).exists()) {
+    Poco::Path extensionPath(extDir);
+    extensionPath.pushDirectory(id);
+    auto const filePath = Extensions::servableFile(extensionPath, file);
+    if (!filePath) {
         HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
         return true;
     }
     response.setContentType(extensionMimeType(file));
-    sendPresetFile(filePath.toString());
+    sendPresetFile(filePath->toString());
     return true;
 }
 

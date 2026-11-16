@@ -13,7 +13,11 @@
 
 #include <string>
 
+#include <unistd.h>
+
 #include <Poco/File.h>
+#include <Poco/FileStream.h>
+#include <Poco/Path.h>
 #include <Poco/TemporaryFile.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -42,6 +46,7 @@ public:
     CPPUNIT_TEST(testRemote);
     CPPUNIT_TEST(testGas);
     CPPUNIT_TEST(testGasSidecar);
+    CPPUNIT_TEST(testServableFile);
     CPPUNIT_TEST(testDocumentEvent);
     CPPUNIT_TEST(testUnknown);
 #if ENABLE_DEBUG
@@ -115,6 +120,22 @@ public:
         LOK_ASSERT(!Extensions::makeCallScript(
             childRoot, configId, "com.example.remote", "gas", "run", error));
         LOK_ASSERT(!error.empty());
+
+        // Neither is an extension with both an appsscript.json and a manifest.json:
+        Poco::TemporaryFile root;
+        Poco::Path const both = Poco::Path::forDirectory(
+            root.path()
+            + "/tmp/sharedpresets/shared-https_example.com%3A9980%2Fsettings/extensions/"
+              "com.example.both/");
+        Poco::File(both).createDirectories();
+        Poco::FileOutputStream(Poco::Path(both, "appsscript.json").toString()) << "{}";
+        Poco::FileOutputStream(Poco::Path(both, "manifest.json").toString())
+            << "{\"manifestVersion\": \"0.2\"}";
+        Poco::FileOutputStream(Poco::Path(both, "a.gs").toString()) << "function run() {}";
+        error.clear();
+        LOK_ASSERT(!Extensions::makeCallScript(
+            root.path(), configId, "com.example.both", "gas", "run", error));
+        LOK_ASSERT(!error.empty());
     }
 
     void testGasSidecar() {
@@ -135,6 +156,69 @@ public:
             {{"c.gs",
               "myfunction notMe() {}\nfunctionX() {}\nfunction 1st() {}\nfunction ok() {}"}});
         LOK_ASSERT(other.starts_with("{\"scripts\":[\"c.gs\"],\"functions\":[\"ok\"]"));
+    }
+
+    void testServableFile() {
+        constexpr std::string_view testname = __func__;
+
+        Poco::Path const presets(
+            std::string(childRoot)
+            + "/tmp/sharedpresets/shared-https_example.com%3A9980%2Fsettings/extensions/");
+
+        // Pages of an Apps Script add-on can load everything but its scripts, also those of its
+        // libraries:
+        Poco::Path const gas(presets, "com.example.gas/");
+        LOK_ASSERT(Extensions::servableFile(gas, "appsscript.json").has_value());
+        LOK_ASSERT(!Extensions::servableFile(gas, "a.gs"));
+        LOK_ASSERT(!Extensions::servableFile(gas, "_cool-gas-libraries/lib1/3/lib.gs"));
+        LOK_ASSERT(
+            Extensions::servableFile(gas, "_cool-gas-libraries/lib1/3/appsscript.json")
+                .has_value());
+
+        // Pages of a native extension can load everything but its remote files:
+        Poco::Path const remote(presets, "com.example.remote/");
+        LOK_ASSERT(Extensions::servableFile(remote, "manifest.json").has_value());
+        LOK_ASSERT(!Extensions::servableFile(remote, "remote.js"));
+        LOK_ASSERT(!Extensions::servableFile(remote, "helper.js"));
+
+        // A file has a single spelling:
+        LOK_ASSERT(!Extensions::servableFile(remote, "./remote.js"));
+        LOK_ASSERT(
+            !Extensions::servableFile(gas, "_cool-gas-libraries//lib1/3/appsscript.json"));
+        LOK_ASSERT(!Extensions::servableFile(remote, std::string("remote.js\0", 10)));
+        LOK_ASSERT_EQUAL(
+            std::string(childRoot)
+                + "/tmp/sharedpresets/shared-https_example.com%3A9980%2Fsettings/extensions/"
+                  "com.example.remote/manifest.json",
+            Extensions::servableFile(remote, "manifest.json")->toString());
+
+        // A directory is no file:
+        LOK_ASSERT(!Extensions::servableFile(gas, "_cool-gas-libraries/lib1"));
+
+        // A file that the _cool-gas.json of an Apps Script add-on lists as a script is code,
+        // whatever its name, and a symbolic link is never served:
+        Poco::TemporaryFile directory;
+        directory.createDirectories();
+        Poco::Path const addOn = Poco::Path::forDirectory(directory.path());
+        Poco::FileOutputStream(Poco::Path(addOn, "appsscript.json").toString()) << "{}";
+        Poco::FileOutputStream(Poco::Path(addOn, "_cool-gas.json").toString())
+            << "{\"scripts\": [\"code.txt\"]}";
+        Poco::FileOutputStream(Poco::Path(addOn, "code.txt").toString()) << "function f() {}";
+        Poco::FileOutputStream(Poco::Path(addOn, "page.html").toString()) << "<p></p>";
+        LOK_ASSERT(!Extensions::servableFile(addOn, "code.txt"));
+        LOK_ASSERT(Extensions::servableFile(addOn, "page.html").has_value());
+        LOK_ASSERT_EQUAL(
+            0,
+            symlink(
+                Poco::Path(addOn, "page.html").toString().c_str(),
+                Poco::Path(addOn, "link.html").toString().c_str()));
+        LOK_ASSERT(!Extensions::servableFile(addOn, "link.html"));
+
+        // A directory with both an appsscript.json and a manifest.json is a native extension,
+        // whose pages can load its .js files:
+        Poco::FileOutputStream(Poco::Path(addOn, "manifest.json").toString()) << "{}";
+        Poco::FileOutputStream(Poco::Path(addOn, "panel.js").toString()) << "";
+        LOK_ASSERT(Extensions::servableFile(addOn, "panel.js").has_value());
     }
 
     void testDocumentEvent() {

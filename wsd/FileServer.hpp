@@ -217,7 +217,8 @@ private:
 
     // Serve "/browser/dist/preset/<encodedConfigId>/extensions/..." out of
     // <ChildRoot>/tmp/sharedpresets/<configId>/extensions/:  "index.json" synthesises a JSON array
-    // of the per-id directories present; anything else is read from disk.  Returns true when the
+    // of the per-id directories present; a file of an extension is read from disk when
+    // Extensions::servableFile allows it.  Returns true when the
     // request has been handled and a response has been sent:
     static bool serveBrowserPresetExtensionFile(Poco::Net::HTTPRequest const & request,
                                                 std::string const & relPath,
