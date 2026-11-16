@@ -5586,6 +5586,154 @@ void settleUprightText(const SmartArtDiagram& rDgm)
     }
 }
 
+namespace
+{
+// A curved connector on the ring that states its own height: that height, and whether it has a
+// head at its start and at its end.
+struct RingArc
+{
+    double fHeight = 0.0;
+    bool bHeadAtStart = false;
+    bool bHeadAtEnd = false;
+    // begPad and endPad as parts of connDist
+    double fBeginPad = 0.0;
+    double fEndPad = 0.0;
+};
+}
+
+// The angle at which the circle round rCentre with fRadius leaves the box rAt, rSize, going from
+// fFrom clockwise, or anticlockwise where bClockwise is false; fFrom where the box does not hold
+// the circle there. Angles in degrees, clockwise from the right as the presets take them.
+static double ringLeavesBox(const awt::Size& rCentre, double fRadius, const awt::Point& rAt,
+                            const awt::Size& rSize, double fFrom, bool bClockwise)
+{
+    const auto aInside = [&](double fAngle) {
+        const double fX(rCentre.Width + fRadius * std::cos(basegfx::deg2rad(fAngle)));
+        const double fY(rCentre.Height + fRadius * std::sin(basegfx::deg2rad(fAngle)));
+        return fX >= rAt.X && fX <= rAt.X + rSize.Width && fY >= rAt.Y
+               && fY <= rAt.Y + rSize.Height;
+    };
+    // a coarse walk to the first angle outside, then halving the last step
+    const double fDirection(bClockwise ? 1.0 : -1.0);
+    double fIn(fFrom), fOut(fFrom);
+    for (int nStep = 1; nStep <= 360; ++nStep)
+    {
+        fOut = fFrom + fDirection * nStep;
+        if (!aInside(fOut))
+            break;
+        fIn = fOut;
+    }
+    for (int nHalving = 0; nHalving < 30; ++nHalving)
+    {
+        const double fMid((fIn + fOut) / 2.0);
+        (aInside(fMid) ? fIn : fOut) = fMid;
+    }
+    return std::fmod(fOut + 720.0, 360.0);
+}
+
+// A curved line through rStart and rStop round the middle fMiddleX, fMiddleY, its shape the square
+// around that circle: the arc preset, which runs clockwise from its first angle to its second.
+// connRout curve takes the shorter way round from the start, longCurve the longer one, and where
+// both are a half circle curve runs clockwise. Run the other way, the arc's start is the line's
+// end, so its line ends change places.
+// Whether the way from the angle fFrom to fTo round a circle runs clockwise: the shorter way
+// round, or the longer one for bLong; for a half circle clockwise, and anticlockwise for bLong.
+static bool runsClockwise(double fFrom, double fTo, bool bLong)
+{
+    const double fClockwise(std::fmod(fTo - fFrom + 720.0, 360.0));
+    if (std::abs(fClockwise - 180.0) <= 1e-6)
+        return !bLong;
+    const bool bShortIsClockwise(fClockwise < 180.0);
+    return bLong ? !bShortIsClockwise : bShortIsClockwise;
+}
+
+static void setLineArc(Shape& rLine, const awt::Point& rStart, const awt::Point& rStop,
+                       double fMiddleX, double fMiddleY, bool bLong)
+{
+    const double fFrom(basegfx::rad2deg(std::atan2(rStart.Y - fMiddleY, rStart.X - fMiddleX)));
+    const double fTo(basegfx::rad2deg(std::atan2(rStop.Y - fMiddleY, rStop.X - fMiddleX)));
+    const bool bRunClockwise(runsClockwise(fFrom, fTo, bLong));
+    rLine.setSubType(XML_arc);
+    rLine.getCustomShapeProperties()
+        = std::make_shared<CustomShapeProperties>(*rLine.getCustomShapeProperties());
+    CustomShapeProperties& rProperties(*rLine.getCustomShapeProperties());
+    rProperties.setShapePresetType(XML_arc);
+    const double fFirst(std::fmod((bRunClockwise ? fFrom : fTo) + 720.0, 360.0));
+    const double fSecond(std::fmod((bRunClockwise ? fTo : fFrom) + 720.0, 360.0));
+    setGuideValue(rProperties.getAdjustmentGuideList(), u"adj1"_ustr,
+                  static_cast<sal_Int32>(std::lround(fFirst * 60000.0)));
+    setGuideValue(rProperties.getAdjustmentGuideList(), u"adj2"_ustr,
+                  static_cast<sal_Int32>(std::lround(fSecond * 60000.0)));
+    if (!bRunClockwise)
+        std::swap(rLine.getLineProperties().maStartArrow, rLine.getLineProperties().maEndArrow);
+}
+
+// A block arrow bent round a circle of fRadius, in the square box rArc already has, over the way
+// clockwise from fA to fB, angles in degrees: the circular arrow preset with its heads where
+// bHeadAtA and bHeadAtB say, or the band, blockArc, without any. fHeight is the height the
+// connector states: the body is 0.6 of it thick, the head 0.7 of it from the middle line and
+// half of it along the circle.
+static void setRingArrow(Shape& rArc, double fA, double fB, bool bHeadAtA, bool bHeadAtB,
+                         double fHeight, double fRadius)
+{
+    auto& rGuides(rArc.getCustomShapeProperties()->getAdjustmentGuideList());
+    const auto aSet = [&rGuides](const OUString& rName, double fValue) {
+        setGuideValue(rGuides, rName, static_cast<sal_Int32>(std::lround(fValue)));
+    };
+    const auto aAngle = [](double f) { return std::fmod(f + 720.0, 360.0); };
+    const double fBox(rArc.getSize().Width);
+    sal_Int32 nPreset(XML_blockArc);
+    if (!bHeadAtA && !bHeadAtB)
+    {
+        aSet(u"adj1"_ustr, aAngle(fA) * 60000.0);
+        aSet(u"adj2"_ustr, aAngle(fB) * 60000.0);
+        aSet(u"adj3"_ustr, 0.6 * fHeight / fBox * 100000.0);
+    }
+    else
+    {
+        // adj3 is where the head at B starts, adj4 where the arrow starts or, with a head at
+        // A, where that head ends
+        const double fHead(basegfx::rad2deg(fHeight / 2.0 / fRadius));
+        if (bHeadAtA && bHeadAtB)
+        {
+            nPreset = XML_leftRightCircularArrow;
+            aSet(u"adj3"_ustr, aAngle(fB - fHead) * 60000.0);
+            aSet(u"adj4"_ustr, aAngle(fA + fHead) * 60000.0);
+        }
+        else if (bHeadAtA)
+        {
+            nPreset = XML_leftCircularArrow;
+            aSet(u"adj3"_ustr, aAngle(fA + fHead) * 60000.0);
+            aSet(u"adj4"_ustr, aAngle(fB) * 60000.0);
+        }
+        else
+        {
+            nPreset = XML_circularArrow;
+            aSet(u"adj3"_ustr, aAngle(fB - fHead) * 60000.0);
+            aSet(u"adj4"_ustr, aAngle(fA) * 60000.0);
+        }
+        aSet(u"adj1"_ustr, 0.6 * fHeight / fBox * 100000.0);
+        aSet(u"adj2"_ustr, fHead * 60000.0);
+        aSet(u"adj5"_ustr, 0.7 * fHeight / fBox * 100000.0);
+    }
+    rArc.setSubType(nPreset);
+    rArc.getCustomShapeProperties()->setShapePresetType(nPreset);
+}
+
+// the points of the shapes before and after the transition xOwn among its row's children, none
+// where it is the first or the last there
+static std::pair<rtl::Reference<svx::diagram::Point>, rtl::Reference<svx::diagram::Point>>
+rowNeighboursOf(const SmartArtDiagram& rDgm, const rtl::Reference<svx::diagram::Point>& xOwn)
+{
+    const OUString aRow(presentationParentOf(rDgm, xOwn->msModelId));
+    const std::vector<OUString> aInRow(presentationChildrenOf(rDgm, aRow));
+    const auto aOwnAt = std::find(aInRow.begin(), aInRow.end(), xOwn->msModelId);
+    if (aOwnAt == aInRow.end() || aOwnAt == aInRow.begin() || aOwnAt + 1 == aInRow.end())
+        return {};
+    return { rDgm.getData()->getPointByModelID(*(aOwnAt - 1)),
+             rDgm.getData()->getPointByModelID(*(aOwnAt + 1)) };
+}
+
 void settleNamedConnectors(const SmartArtDiagram& rDgm)
 {
     const PresPointShapeMap& rShapes(rDgm.getLayout()->getPresPointShapeMap());
@@ -6301,9 +6449,12 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                 }
             }
 
-            // a 2D one, a block arrow bent round, is the same circle where it names both ends
+            // a 2D one, a block arrow bent round, is the same circle where it names both ends, and
+            // where it names neither in a row, the shapes before and after it being its ends
             const bool bLine(aDim != rMap.end() && aDim->second == XML_1D);
-            if ((bLine || (!aSourceName.isEmpty() && !aTargetName.isEmpty()))
+            const bool bBodyInRow(!bLine && bInARow && aSourceName.isEmpty()
+                                  && aTargetName.isEmpty());
+            if ((bLine || bBodyInRow || (!aSourceName.isEmpty() && !aTargetName.isEmpty()))
                 && isEdgeSite(nBeginSite) && isEdgeSite(nEndSite))
             {
                 rtl::Reference<svx::diagram::Point> xFrom;
@@ -6316,18 +6467,7 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                                                   /*bBefore*/ false);
                 }
                 else
-                {
-                    // the shapes before and after the line among its row's children
-                    const OUString aRow(presentationParentOf(rDgm, xOwn->msModelId));
-                    const std::vector<OUString> aInRow(presentationChildrenOf(rDgm, aRow));
-                    const auto aOwnAt = std::find(aInRow.begin(), aInRow.end(), xOwn->msModelId);
-                    if (aOwnAt != aInRow.end() && aOwnAt != aInRow.begin()
-                        && aOwnAt + 1 != aInRow.end())
-                    {
-                        xFrom = rDgm.getData()->getPointByModelID(*(aOwnAt - 1));
-                        xTo = rDgm.getData()->getPointByModelID(*(aOwnAt + 1));
-                    }
-                }
+                    std::tie(xFrom, xTo) = rowNeighboursOf(rDgm, xOwn);
                 const auto aFrom = xFrom.is() ? rShapes.find(xFrom) : rShapes.end();
                 const auto aTo = xTo.is() ? rShapes.find(xTo) : rShapes.end();
                 const std::optional<awt::Point> aFromAt(
@@ -6392,7 +6532,17 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                                     break;
                             }
                         }
-                        const double fBox(fDiameter + fBand);
+                        // a line has no band, the circle is all of it; a block arrow in a row
+                        // reaches beyond the circle by what its height gives it, its height being
+                        // what the row laid it out with
+                        const double fRowHeight(pShape->getSize().Height);
+                        const bool bHeadAtBegin(rMap.count(XML_begSty)
+                                                && rMap.find(XML_begSty)->second == XML_arr);
+                        const bool bHeadAtEnd(!rMap.count(XML_endSty)
+                                              || rMap.find(XML_endSty)->second != XML_noArr);
+                        if (bBodyInRow)
+                            fBand = 2.0 * (bHeadAtBegin || bHeadAtEnd ? 0.65 : 0.15) * fRowHeight;
+                        const double fBox(fDiameter + (bLine ? 0.0 : fBand));
                         const awt::Size aSquare(static_cast<sal_Int32>(fBox),
                                                 static_cast<sal_Int32>(fBox));
                         pShape->setSize(aSquare);
@@ -6401,9 +6551,73 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                             static_cast<sal_Int32>(fMiddleX - fBox / 2.0) - aParentAt->X,
                             static_cast<sal_Int32>(fMiddleY - fBox / 2.0) - aParentAt->Y));
                         pShape->setRotation(0);
+                        if (bLine)
+                            setLineArc(*pShape, aStart, aStop, fMiddleX, fMiddleY,
+                                       nRoute == XML_longCurve);
+                        else if (bBodyInRow)
+                        {
+                            const double fFrom(basegfx::rad2deg(
+                                std::atan2(aStart.Y - fMiddleY, aStart.X - fMiddleX)));
+                            const double fTo(basegfx::rad2deg(
+                                std::atan2(aStop.Y - fMiddleY, aStop.X - fMiddleX)));
+                            // the preset runs clockwise; run the other way, the way starts at
+                            // the end and the heads change places
+                            const bool bClockwise(
+                                runsClockwise(fFrom, fTo, nRoute == XML_longCurve));
+                            pShape->getCustomShapeProperties()
+                                = std::make_shared<CustomShapeProperties>(
+                                    *pShape->getCustomShapeProperties());
+                            setRingArrow(*pShape, bClockwise ? fFrom : fTo,
+                                         bClockwise ? fTo : fFrom,
+                                         bClockwise ? bHeadAtBegin : bHeadAtEnd,
+                                         bClockwise ? bHeadAtEnd : bHeadAtBegin, fRowHeight,
+                                         fRadius);
+                        }
                         continue;
                     }
                 }
+            }
+        }
+
+        // A line, dim 1D, in a row that names neither of its ends runs from the shape before it to
+        // the one after it, from begPts of the one to endPts of the other: straight for connRout
+        // stra, and for bend across to the middle of the way, along it and across again.
+        if (bInARow && aSourceName.isEmpty() && aTargetName.isEmpty()
+            && (nRoute == XML_stra || nRoute == XML_bend) && rMap.count(XML_dim)
+            && rMap.find(XML_dim)->second == XML_1D)
+        {
+            const sal_Int32 nBeginSite(rMap.count(XML_begPts) ? rMap.find(XML_begPts)->second : 0);
+            const sal_Int32 nEndSite(rMap.count(XML_endPts) ? rMap.find(XML_endPts)->second : 0);
+            const auto [xFrom, xTo] = rowNeighboursOf(rDgm, xOwn);
+            const auto aFrom = xFrom.is() ? rShapes.find(xFrom) : rShapes.end();
+            const auto aTo = xTo.is() ? rShapes.find(xTo) : rShapes.end();
+            const std::optional<awt::Point> aFromAt(
+                xFrom.is() ? absolutePlaceOf(rDgm, xFrom->msModelId) : std::nullopt);
+            const std::optional<awt::Point> aToAt(
+                xTo.is() ? absolutePlaceOf(rDgm, xTo->msModelId) : std::nullopt);
+            const std::optional<awt::Point> aParentAt(
+                absolutePlaceOf(rDgm, presentationParentOf(rDgm, xOwn->msModelId)));
+            if (isEdgeSite(nBeginSite) && isEdgeSite(nEndSite) && aFrom != rShapes.end()
+                && aTo != rShapes.end() && aFromAt && aToAt && aParentAt)
+            {
+                const awt::Point aStart(siteOn(nBeginSite, *aFromAt, aFrom->second->getSize()));
+                const awt::Point aStop(siteOn(nEndSite, *aToAt, aTo->second->getSize()));
+                const awt::Size aBox(std::max<sal_Int32>(1, std::abs(aStop.X - aStart.X)),
+                                     std::max<sal_Int32>(1, std::abs(aStop.Y - aStart.Y)));
+                pShape->setSize(aBox);
+                pShape->setChildSize(aBox);
+                pShape->setPosition(awt::Point(std::min(aStart.X, aStop.X) - aParentAt->X,
+                                               std::min(aStart.Y, aStop.Y) - aParentAt->Y));
+                pShape->setRotation(0);
+                // both presets run from the top left to the bottom right, mirrored to run
+                // the other way
+                const sal_Int32 nPreset(nRoute == XML_bend ? XML_bentConnector3 : XML_line);
+                pShape->setSubType(nPreset);
+                pShape->getCustomShapeProperties()
+                    = std::make_shared<CustomShapeProperties>(*pShape->getCustomShapeProperties());
+                pShape->getCustomShapeProperties()->setShapePresetType(nPreset);
+                pShape->setFlip(aStop.X < aStart.X, aStop.Y < aStart.Y);
+                continue;
             }
         }
 
@@ -9949,10 +10163,11 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             // A connector that spans the ring it stands on, its diam being the diam of the
             // ring, is as large as the ring and keeps that. Its own proportions, an h stated as
             // a part of its w, describe a connector between two nodes and not this one.
+            // a diam of less than nothing is the same ring, run the other way round
             bool bSpansTheRing(false);
             for (const Constraint& rConstraint : rConstraints)
                 if (XML_diam == rConstraint.mnType && XML_diam == rConstraint.mnRefType
-                    && rConstraint.mfFactor > 0.0
+                    && rConstraint.mfFactor != 0.0
                     && (rConstraint.msForName == rShape->getInternalName()
                         || (rConstraint.msForName.isEmpty()
                             && XML_sibTrans == rConstraint.mnPointType)))
@@ -10219,8 +10434,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
 
             for (const Constraint& rConstraint : rConstraints)
             {
+                // a diam of less than nothing is the same ring, run the other way round
                 if (XML_diam != rConstraint.mnType || XML_diam != rConstraint.mnRefType
-                    || rConstraint.mfFactor <= 0.0)
+                    || rConstraint.mfFactor == 0.0)
                     continue;
 
                 if (!rConstraint.msForName.isEmpty())
@@ -11168,6 +11384,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 const sal_Int32 nConnectorRadius = nRadius * cos(basegfx::deg2rad(fStep));
                 const sal_Int32 nConnectorAngle = nSpanAngle > 0 ? 0 : 180;
 
+                std::map<const oox::drawingml::Shape*, RingArc> aOwnArcs;
                 sal_Int32 idx = 0;
                 for (auto & aCurrShape : aCycleChildren)
                 {
@@ -11722,7 +11939,86 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             return aFound != pArcAlgorithm->getMap().end() ? aFound->second
                                                                            : nUnstated;
                         };
-                        if (pArcAlgorithm && pArcAlgorithm->getType() == XML_conn
+                        // A curved connector round the whole ring that states its own height as
+                        // a part of its width, Text_Cycle's "h refType w fact 0.65", runs on the
+                        // ring itself from where the ring leaves the box of the node before it
+                        // to where it meets the box of the next one: a line, dim 1D, is the arc
+                        // preset on the ring, and with a body it is the circular arrow with its
+                        // heads where begSty and endSty say, or the band without any. The body is
+                        // 0.6 of that height thick and reaches 0.65 of it beyond the ring, the
+                        // head 0.7 of it from the middle and half of it along the ring; the band
+                        // reaches 0.15 of it beyond. The angles are set once all nodes stand.
+                        double fOwnHeightOfWidth(0.0), fBeginPad(0.0), fEndPad(0.0);
+                        if (pArcAlgorithm && aArcNode != aArcNodes.end() && aArcNode->second)
+                        {
+                            std::vector<Constraint> aOwnArc;
+                            gatherOwnConstraints(*aArcNode->second, aOwnArc);
+                            for (const Constraint& rOwn : aOwnArc)
+                            {
+                                if (!rOwn.msForName.isEmpty())
+                                    continue;
+                                if (rOwn.mnType == XML_h && rOwn.mnRefType == XML_w
+                                    && rOwn.mfFactor > 0.0)
+                                    fOwnHeightOfWidth = rOwn.mfFactor;
+                                else if (rOwn.mnType == XML_begPad
+                                         && rOwn.mnRefType == XML_connDist)
+                                    fBeginPad = rOwn.mfFactor;
+                                else if (rOwn.mnType == XML_endPad
+                                         && rOwn.mnRefType == XML_connDist)
+                                    fEndPad = rOwn.mfFactor;
+                            }
+                        }
+                        const bool bOwnArc(pArcAlgorithm && pArcAlgorithm->getType() == XML_conn
+                                           && fOwnHeightOfWidth > 0.0
+                                           && (aParameter(XML_connRout, XML_stra) == XML_curve
+                                               || aParameter(XML_connRout, XML_stra)
+                                                      == XML_longCurve));
+                        // its width is what the ring states for its transitions, a part of a
+                        // named shape's width; the size it got so far is the ring's
+                        double fArcWidth(0.0);
+                        for (const Constraint& rConstraint : rConstraints)
+                            if (rConstraint.mnType == XML_w && rConstraint.mnRefType == XML_w
+                                && rConstraint.mfFactor > 0.0
+                                && !rConstraint.msRefForName.isEmpty()
+                                && (rConstraint.msForName == aCurrShape->getInternalName()
+                                    || (rConstraint.msForName.isEmpty()
+                                        && rConstraint.mnPointType == XML_sibTrans)))
+                                fArcWidth = rConstraint.mfFactor
+                                            * aSizeOfChild(rConstraint.msRefForName, nPlainWidth,
+                                                           nPlainHeight)
+                                                  .Width;
+                        if (bOwnArc && fArcWidth > 0.0)
+                        {
+                            const double fHeight(fOwnHeightOfWidth * fArcWidth);
+                            const bool bLine(aParameter(XML_dim, XML_2D) == XML_1D);
+                            const bool bHeadAtStart(aParameter(XML_begSty, XML_noArr) == XML_arr);
+                            const bool bHeadAtEnd(aParameter(XML_endSty, XML_arr) == XML_arr);
+                            sal_Int32 nPreset(XML_arc);
+                            double fReach(0.0);
+                            if (!bLine)
+                            {
+                                nPreset = bHeadAtStart && bHeadAtEnd ? XML_leftRightCircularArrow
+                                          : bHeadAtStart             ? XML_leftCircularArrow
+                                          : bHeadAtEnd               ? XML_circularArrow
+                                                                     : XML_blockArc;
+                                fReach = (nPreset == XML_blockArc ? 0.15 : 0.65) * fHeight;
+                            }
+                            aCurrShape->setSubType(nPreset);
+                            aCurrShape->getCustomShapeProperties()
+                                = std::make_shared<CustomShapeProperties>(
+                                    *aCurrShape->getCustomShapeProperties());
+                            aCurrShape->getCustomShapeProperties()->setShapePresetType(nPreset);
+                            const sal_Int32 nArcBox(
+                                static_cast<sal_Int32>(2.0 * (nRadius + fReach)));
+                            aCurrSize = awt::Size(nArcBox, nArcBox);
+                            aCurrShape->setSize(aCurrSize);
+                            aCurrShape->setChildSize(aCurrSize);
+                            aCurrShape->setPosition(awt::Point(aRingCentre.Width - nArcBox / 2,
+                                                               aRingCentre.Height - nArcBox / 2));
+                            aOwnArcs[aCurrShape.get()]
+                                = { fHeight, bHeadAtStart, bHeadAtEnd, fBeginPad, fEndPad };
+                        }
+                        else if (pArcAlgorithm && pArcAlgorithm->getType() == XML_conn
                             && (aParameter(XML_connRout, XML_stra) == XML_curve
                                 || aParameter(XML_connRout, XML_stra) == XML_longCurve)
                             && aParameter(XML_begSty, XML_noArr) == XML_noArr
@@ -11819,7 +12115,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 for (size_t nArc = 0; nArc < nChildren; ++nArc)
                 {
                     const oox::drawingml::ShapePtr& rArc(aCycleChildren[nArc]);
-                    if (rArc->getSubType() != XML_blockArc)
+                    const auto aOwnArc = aOwnArcs.find(rArc.get());
+                    if (rArc->getSubType() != XML_blockArc && aOwnArc == aOwnArcs.end())
                         continue;
                     oox::drawingml::ShapePtr pFrom, pTo;
                     for (size_t nStep = 1; nStep < nChildren && !pFrom; ++nStep)
@@ -11831,12 +12128,62 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     if (!pFrom || !pTo || pFrom == pTo)
                         continue;
                     double fFrom(aAngleOf(pFrom)), fTo(aAngleOf(pTo));
-                    if (fStep < 0.0)
-                        std::swap(fFrom, fTo);
                     auto& rGuides(rArc->getCustomShapeProperties()->getAdjustmentGuideList());
                     const auto aSet = [&rGuides](const OUString& rName, double fValue) {
                         setGuideValue(rGuides, rName, static_cast<sal_Int32>(std::lround(fValue)));
                     };
+                    if (aOwnArc != aOwnArcs.end())
+                    {
+                        // the way clockwise from A to B: from where the ring leaves the box of
+                        // the node before to where it meets the box of the next one, or the
+                        // other way round for a ring that runs anticlockwise, the start then
+                        // being at B
+                        const bool bClockwise(fStep >= 0.0);
+                        const double fLeave(ringLeavesBox(aRingCentre, nRadius,
+                                                          pFrom->getPosition(), pFrom->getSize(),
+                                                          fFrom, bClockwise));
+                        const double fMeet(ringLeavesBox(aRingCentre, nRadius, pTo->getPosition(),
+                                                         pTo->getSize(), fTo, !bClockwise));
+                        const RingArc& rOwn(aOwnArc->second);
+                        // connDist is the way straight from the one end to the other, and the
+                        // pads leave a part of it free at the start and at the end, along the ring
+                        const double fSpan(std::fmod((bClockwise ? fMeet - fLeave : fLeave - fMeet)
+                                                         + 720.0,
+                                                     360.0));
+                        const double fConnDist(2.0 * nRadius
+                                               * std::sin(basegfx::deg2rad(fSpan) / 2.0));
+                        const double fBeginPadAngle(
+                            basegfx::rad2deg(rOwn.fBeginPad * fConnDist / nRadius));
+                        const double fEndPadAngle(
+                            basegfx::rad2deg(rOwn.fEndPad * fConnDist / nRadius));
+                        const double fA(std::fmod(
+                            (bClockwise ? fLeave + fBeginPadAngle : fMeet + fEndPadAngle) + 720.0,
+                            360.0));
+                        const double fB(std::fmod(
+                            (bClockwise ? fMeet - fEndPadAngle : fLeave - fBeginPadAngle) + 720.0,
+                            360.0));
+                        const bool bHeadAtA(bClockwise ? rOwn.bHeadAtStart : rOwn.bHeadAtEnd);
+                        const bool bHeadAtB(bClockwise ? rOwn.bHeadAtEnd : rOwn.bHeadAtStart);
+                        switch (rArc->getSubType())
+                        {
+                            case XML_arc:
+                                aSet(u"adj1"_ustr, fA * 60000.0);
+                                aSet(u"adj2"_ustr, fB * 60000.0);
+                                // the preset runs clockwise, from A, so its line ends are
+                                // the other way round where the connector starts at B
+                                if (!bClockwise)
+                                    std::swap(rArc->getLineProperties().maStartArrow,
+                                              rArc->getLineProperties().maEndArrow);
+                                break;
+                            default:
+                                setRingArrow(*rArc, fA, fB, bHeadAtA, bHeadAtB, rOwn.fHeight,
+                                             nRadius);
+                                break;
+                        }
+                        continue;
+                    }
+                    if (fStep < 0.0)
+                        std::swap(fFrom, fTo);
                     aSet(u"adj1"_ustr, fFrom * 60000.0);
                     aSet(u"adj2"_ustr, fTo * 60000.0);
                 }

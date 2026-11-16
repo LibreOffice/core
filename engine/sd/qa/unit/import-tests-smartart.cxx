@@ -3547,7 +3547,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testConnectorKeepsItsTextOnReLayout)
         uno::Reference<beans::XPropertySet> xProperties(xConnector, uno::UNO_QUERY);
         comphelper::SequenceAsHashMap aGeometry(
             xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u"ooxml-rightArrow"_ustr, aGeometry[u"Type"_ustr].get<OUString>());
+        // the connectors are curved lines, dim 1D, connRout longCurve
+        CPPUNIT_ASSERT_EQUAL(u"ooxml-arc"_ustr, aGeometry[u"Type"_ustr].get<OUString>());
     }
 }
 
@@ -3682,6 +3683,181 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSidewaysHierarchyAssistantStandsI
     CPPUNIT_ASSERT_LESS(aBoss.Center().Y(), aMary.Bottom());
     // the assistant comes into the line to it from below
     CPPUNIT_ASSERT_EQUAL(size_t(1), drawnBoxesOf(xDiagram, u"ooxml-bentConnector2"_ustr).size());
+}
+
+// the connectors of a Diagram drawn with the given geometry
+static std::vector<uno::Reference<drawing::XShape>>
+connectorsDrawnAs(const uno::Reference<drawing::XShape>& xDiagram, const OUString& rGeometry)
+{
+    std::vector<uno::Reference<drawing::XShape>> aShapes;
+    collectShapesWithGeometry(xDiagram, rGeometry, aShapes);
+    return aShapes;
+}
+
+// whether the line of xShape has an arrow at its start, and one at its end
+static std::pair<bool, bool> lineArrowsOf(const uno::Reference<drawing::XShape>& xShape)
+{
+    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY_THROW);
+    return { !xProperties->getPropertyValue(u"LineStartName"_ustr).get<OUString>().isEmpty(),
+             !xProperties->getPropertyValue(u"LineEndName"_ustr).get<OUString>().isEmpty() };
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFlowLineConnectorStraight)
+{
+    // a line, dim 1D, connRout stra, from the right of one circle to the top left of the next
+    createSdImpressDoc("pptx/smartart-flow-line-straight.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+    const auto aLines(connectorsDrawnAs(xDiagram, u"ooxml-line"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aLines.size());
+    for (const auto& xLine : aLines)
+    {
+        CPPUNIT_ASSERT(!lineArrowsOf(xLine).first);
+        CPPUNIT_ASSERT(lineArrowsOf(xLine).second);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFlowLineConnectorBend)
+{
+    // connRout bend draws the line as an elbow
+    createSdImpressDoc("pptx/smartart-flow-line-bend.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+    const auto aElbows(connectorsDrawnAs(xDiagram, u"ooxml-bentConnector3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aElbows.size());
+    for (const auto& xElbow : aElbows)
+    {
+        CPPUNIT_ASSERT(!lineArrowsOf(xElbow).first);
+        CPPUNIT_ASSERT(lineArrowsOf(xElbow).second);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFlowLineConnectorCurves)
+{
+    // connRout curve and longCurve draw half a circle over the way, above and below it; the
+    // arc runs clockwise, so the one below runs from its end and has its arrow at its start
+    for (const auto& [rFile, bBelow] :
+         { std::make_pair(u"pptx/smartart-flow-line-curve.pptx"_ustr, false),
+           std::make_pair(u"pptx/smartart-flow-line-long-curve.pptx"_ustr, true) })
+    {
+        createSdImpressDoc(OUStringToOString(rFile, RTL_TEXTENCODING_UTF8).getStr());
+        uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+        const tools::Rectangle aNode(
+            SdrObject::getSdrObjectFromXShape(findChildShapeByText(xDiagram, u"One"_ustr))
+                ->GetSnapRect());
+        const auto aArcs(connectorsDrawnAs(xDiagram, u"ooxml-arc"_ustr));
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aArcs.size());
+        for (const auto& xArc : aArcs)
+        {
+            const tools::Rectangle aDrawn(SdrObject::getSdrObjectFromXShape(xArc)->GetSnapRect());
+            if (bBelow)
+                CPPUNIT_ASSERT_GREATER(aNode.Bottom(), aDrawn.Bottom());
+            else
+                CPPUNIT_ASSERT_LESS(aNode.Top(), aDrawn.Top());
+            CPPUNIT_ASSERT_EQUAL(bBelow, lineArrowsOf(xArc).first);
+            CPPUNIT_ASSERT_EQUAL(!bBelow, lineArrowsOf(xArc).second);
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRingConnectorRunsOnTheRing)
+{
+    // a curved connector of a ring between text nodes runs on the ring from the box of one
+    // node to the box of the next: a line is an arc, a body the arrow its ends ask for
+    const std::pair<OUString, OUString> aCases[] = {
+        { u"pptx/smartart-ring-arc-line.pptx"_ustr, u"ooxml-arc"_ustr },
+        { u"pptx/smartart-ring-arc-end-arrow.pptx"_ustr, u"ooxml-circularArrow"_ustr },
+        { u"pptx/smartart-ring-arc-start-arrow.pptx"_ustr, u"ooxml-leftCircularArrow"_ustr },
+        { u"pptx/smartart-ring-arc-both-arrows.pptx"_ustr, u"ooxml-leftRightCircularArrow"_ustr },
+        { u"pptx/smartart-ring-arc-no-arrow.pptx"_ustr, u"ooxml-blockArc"_ustr },
+    };
+    for (const auto& [rFile, rGeometry] : aCases)
+    {
+        createSdImpressDoc(OUStringToOString(rFile, RTL_TEXTENCODING_UTF8).getStr());
+        uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+        const std::vector<tools::Rectangle> aArcs(drawnBoxesOf(xDiagram, rGeometry));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rGeometry.toUtf8().getStr(), size_t(5), aArcs.size());
+        // all of them share the ring's square
+        for (const tools::Rectangle& rArc : aArcs)
+        {
+            CPPUNIT_ASSERT_LESS(tools::Long(5), std::abs(rArc.Center().X() - aArcs[0].Center().X()));
+            CPPUNIT_ASSERT_LESS(tools::Long(5), std::abs(rArc.GetWidth() - aArcs[0].GetWidth()));
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTwoNodeRingArcsKeepTheirPads)
+{
+    // two nodes on a ring, right to left with a diam of less than nothing and left to right:
+    // each line runs on the ring and leaves begPad and endPad of the way between the node boxes
+    // free, 0.2 of it
+    createSdImpressDoc("pptx/smartart-two-node-ring-arcs.pptx");
+    for (sal_Int32 nDiagram = 0; nDiagram < 2; ++nDiagram)
+    {
+        uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(nDiagram, 0), uno::UNO_QUERY);
+        SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+        CPPUNIT_ASSERT(pDiagram);
+        CPPUNIT_ASSERT(pDiagram->isDiagram());
+        pDiagram->getDiagramHelper()->reLayout();
+        xDiagram.set(getShapeFromPage(nDiagram, 0), uno::UNO_QUERY);
+
+        std::vector<uno::Reference<drawing::XShape>> aArcs;
+        collectShapesWithGeometry(xDiagram, u"ooxml-arc"_ustr, aArcs);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aArcs.size());
+        for (const auto& xArc : aArcs)
+        {
+            uno::Reference<beans::XPropertySet> xProperties(xArc, uno::UNO_QUERY_THROW);
+            comphelper::SequenceAsHashMap aGeometry(
+                xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+            const auto aAdjustments(
+                aGeometry[u"AdjustmentValues"_ustr]
+                    .get<uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAdjustments.getLength());
+            // the box of each node leaves the ring 36.1 degrees from its middle, and the pads
+            // take 18.5 degrees more at each end, the arc above or below spans 70.7 degrees
+            const double fStart(aAdjustments[0].Value.get<sal_Int32>() / 60000.0);
+            const double fEnd(aAdjustments[1].Value.get<sal_Int32>() / 60000.0);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(70.7, std::fmod(fEnd - fStart + 360.0, 360.0), 1.0);
+            CPPUNIT_ASSERT(std::abs(fStart - 234.6) < 1.0 || std::abs(fStart - 54.6) < 1.0);
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFlowBlockArrowBendsRound)
+{
+    // a curved connector with a body in a row is a block arrow bent round the circle through
+    // its ends: curve over the row, longCurve and a diam of less than nothing under it
+    const std::pair<OUString, bool> aCases[] = {
+        { u"pptx/smartart-flow-block-arc-over.pptx"_ustr, true },
+        { u"pptx/smartart-flow-block-arc-under.pptx"_ustr, false },
+        { u"pptx/smartart-flow-block-arc-minus-diam.pptx"_ustr, false },
+    };
+    for (const auto& [rFile, bOver] : aCases)
+    {
+        createSdImpressDoc(OUStringToOString(rFile, RTL_TEXTENCODING_UTF8).getStr());
+        uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+        std::vector<uno::Reference<drawing::XShape>> aArrows;
+        collectShapesWithGeometry(xDiagram, u"ooxml-circularArrow"_ustr, aArrows);
+        collectShapesWithGeometry(xDiagram, u"ooxml-leftCircularArrow"_ustr, aArrows);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rFile.toUtf8().getStr(), size_t(2), aArrows.size());
+        for (const auto& xArrow : aArrows)
+        {
+            uno::Reference<beans::XPropertySet> xProperties(xArrow, uno::UNO_QUERY_THROW);
+            comphelper::SequenceAsHashMap aGeometry(
+                xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+            const bool bLeft(aGeometry[u"Type"_ustr].get<OUString>()
+                             == u"ooxml-leftCircularArrow");
+            const auto aAdjustments(
+                aGeometry[u"AdjustmentValues"_ustr]
+                    .get<uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>());
+            const double fThird(aAdjustments[2].Value.get<sal_Int32>() / 60000.0);
+            const double fFourth(aAdjustments[3].Value.get<sal_Int32>() / 60000.0);
+            // the body runs clockwise from adj4 to adj3, or from adj3 to adj4 for the left one;
+            // its middle lies above the circle's middle for angles past 180 degrees
+            const double fFrom(bLeft ? fThird : fFourth), fTo(bLeft ? fFourth : fThird);
+            const double fMiddle(
+                std::fmod(fFrom + std::fmod(fTo - fFrom + 360.0, 360.0) / 2.0, 360.0));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(rFile.toUtf8().getStr(), bOver, fMiddle > 180.0);
+        }
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
