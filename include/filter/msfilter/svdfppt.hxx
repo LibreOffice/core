@@ -366,7 +366,7 @@ public:
         , eLastViewType( PptViewTypeEnum::NONE )
         {}
 
-    friend SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom );
+    MSFILTER_DLLPUBLIC friend SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom );
 };
 
 struct PptOEPlaceholderAtom

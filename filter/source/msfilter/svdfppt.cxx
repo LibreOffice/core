@@ -1628,7 +1628,15 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
     // Read the CryptSession10Container and decrypt the persist objects
     // of an encrypted PowerPoint document.
-    if (m_bOk && rParam.aCurrentUserAtom.IsEncrypted())
+    //
+    // MS-PPT Appendix A, note 11:
+    // PowerPoint 2002 uses 0xE391C05F for encrypted documents.
+    // Its UserEditAtom identifies the encryption session through
+    // encryptSessionPersistIdRef.
+    const bool bPowerPoint2002Encrypted = (rParam.aCurrentUserAtom.nMagic == 0xE391C05F)
+        && m_aUserEditAtom.nEncryptSessionPersistIdRef.has_value();
+
+    if (m_bOk && (rParam.aCurrentUserAtom.IsEncrypted() || bPowerPoint2002Encrypted))
     {
         m_bOk = lcl_ReadPptCryptoApiEncryptionInfo(rStCtrl, nStreamLen, m_aUserEditAtom.nEncryptSessionPersistIdRef,
                     m_pPersistPtr, m_nPersistPtrCnt, rParam);

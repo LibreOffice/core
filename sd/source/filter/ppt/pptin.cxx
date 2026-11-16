@@ -186,6 +186,54 @@ private:
     OUString maVerifiedPassword;
 };
 
+// MS-PPT Appendix A, note 11:
+// PowerPoint 2002 writes 0xE391C05F as CurrentUserAtom.headerToken
+// for encrypted documents
+//
+// Distinguish these documents from ordinary unencrypted PowerPoint
+// documents, which also use 0xE391C05F, by checking the encrypted
+// UserEditAtom extension (MS-PPT 2.3.3)
+bool lcl_IsPowerPoint2002Encrypted(
+    SvStream& rDocStream,
+    const PptCurrentUserAtom& rCurrentUserAtom)
+{
+    constexpr sal_uInt32 nPowerPoint2002HeaderToken = 0xE391C05F;
+    // MS-PPT: 2.13.24: 0x0FF5 specifies a UserEditAtom
+    constexpr sal_uInt16 nUserEditAtomRecordType = 0x0FF5;
+    // MS-PPT: 2.3.3: (recLen) MUST be 0x0000001C or 0x00000020
+    constexpr sal_uInt32 nEncryptedUserEditAtomLength = 0x20;
+    constexpr sal_uInt64 nEncryptedUserEditAtomSize = 8 + nEncryptedUserEditAtomLength;
+
+    if (rCurrentUserAtom.nMagic != nPowerPoint2002HeaderToken
+        || !rCurrentUserAtom.nCurrentUserEdit)
+    {
+        return false;
+    }
+
+    const sal_uInt64 nOldPos = rDocStream.Tell();
+    const sal_uInt64 nStreamSize = rDocStream.TellEnd();
+    bool bEncrypted = false;
+
+    if ( (rCurrentUserAtom.nCurrentUserEdit <= nStreamSize)
+        && ( (nStreamSize - rCurrentUserAtom.nCurrentUserEdit) >= nEncryptedUserEditAtomSize)
+        && checkSeek(rDocStream, rCurrentUserAtom.nCurrentUserEdit))
+    {
+        PptUserEditAtom aUserEditAtom;
+        ReadPptUserEditAtom(rDocStream, aUserEditAtom);
+
+        bEncrypted =
+            rDocStream.good()
+            && aUserEditAtom.aHd.nRecType == nUserEditAtomRecordType
+            && aUserEditAtom.aHd.nRecLen == nEncryptedUserEditAtomLength
+            && aUserEditAtom.nEncryptSessionPersistIdRef.has_value()
+            && *aUserEditAtom.nEncryptSessionPersistIdRef != 0;
+    }
+
+    const bool bRestoreSucceeded = checkSeek(rDocStream, nOldPos);
+    return bEncrypted && bRestoreSucceeded;
+}
+
+
 std::unique_ptr<SvMemoryStream> lcl_CopyStream(SvStream& rSource)
 {
     auto pCopy = std::make_unique<SvMemoryStream>();
@@ -385,7 +433,12 @@ SdPPTImport::SdPPTImport(SdDrawDocument& rDocument, SvStream& rDocStream, SotSto
         ReadPptCurrentUserAtom(*pCurrentUserStream, mxParam->aCurrentUserAtom);
     }
 
-    const bool bEncrypted = mxParam->aCurrentUserAtom.IsEncrypted();
+    const bool bPowerPoint2002Encrypted =
+        lcl_IsPowerPoint2002Encrypted(
+            rDocStream, mxParam->aCurrentUserAtom);
+
+    const bool bEncrypted =
+        mxParam->aCurrentUserAtom.IsEncrypted() || bPowerPoint2002Encrypted;
 
     if (bEncrypted)
     {
@@ -444,10 +497,10 @@ SdPPTImport::SdPPTImport(SdDrawDocument& rDocument, SvStream& rDocStream, SotSto
             rSet.ClearItem( EE_CHAR_PAIRKERNING );
     }
 
-    if (mxParam->aCurrentUserAtom.IsEncrypted())
+    if (bEncrypted)
     {
         mxParam->aDecryptPersistObjects =
-            [&rMedium](
+            [&rMedium, bPowerPoint2002Encrypted](
                 SvStream& rStream,
                 std::span<const sal_uInt32> rPersistPtr,
                 sal_uInt32 nCryptSessionPersistId,
@@ -465,26 +518,53 @@ SdPPTImport::SdPPTImport(SdDrawDocument& rDocument, SvStream& rDocStream, SotSto
                 if (pPasswordItem)
                     aMediaPassword = pPasswordItem->GetValue();
 
-                const css::uno::Sequence<css::beans::NamedValue>
-                    aEmptyEncryptionData;
+                OUString aVerifiedPassword;
+                bool bPasswordVerified = false;
 
-                const auto aEncryptionData =
-                    comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-                        aVerifier,
-                        aEmptyEncryptionData,
-                        aMediaPassword,
-                        rMedium.GetInteractionHandler(),
-                        rMedium.GetOrigURL(),
-                        comphelper::DocPasswordRequestType::MS);
-
-                if (!aEncryptionData.hasElements())
+                // MS-OFFCRYPTO 2.4.2.3:
+                // PowerPoint 2002/2003 uses this default encryption
+                // password when Method 3 write protection is used
+                // without a separately supplied encryption password.
+                // Do not replace the normal password verification:
+                // the default password must pass the RC4 verifier.
+                if (bPowerPoint2002Encrypted && aMediaPassword.isEmpty())
                 {
-                    rMedium.SetError(ERRCODE_IO_ABORT);
-                    return false;
+                    const OUString aDefaultPassword =
+                        u"/01Hannes Ruescher/01"_ustr;
+                    css::uno::Sequence<css::beans::NamedValue>
+                        aDefaultEncryptionData;
+
+                    if (aVerifier.verifyPassword(
+                            aDefaultPassword, aDefaultEncryptionData)
+                        == comphelper::DocPasswordVerifierResult::OK)
+                    {
+                        aVerifiedPassword =
+                            aVerifier.getVerifiedPassword();
+                        bPasswordVerified = true;
+                    }
                 }
 
-                const OUString aVerifiedPassword =
-                    aVerifier.getVerifiedPassword();
+                if (!bPasswordVerified)
+                {
+                    const css::uno::Sequence<css::beans::NamedValue>
+                        aEmptyEncryptionData;
+                    const auto aEncryptionData =
+                        comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                            aVerifier,
+                            aEmptyEncryptionData,
+                            aMediaPassword,
+                            rMedium.GetInteractionHandler(),
+                            rMedium.GetOrigURL(),
+                            comphelper::DocPasswordRequestType::MS);
+
+                    if (!aEncryptionData.hasElements())
+                    {
+                        rMedium.SetError(ERRCODE_IO_ABORT);
+                        return false;
+                    }
+
+                    aVerifiedPassword = aVerifier.getVerifiedPassword();
+                }
 
                 return lcl_DecryptPptPersistObjects(
                     rStream,
