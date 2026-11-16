@@ -43,6 +43,8 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectAPNG();
     void testDetectGIF();
     void testDetectGIFMetadata();
+    void testDetectGIFMetadataStill();
+    void testDetectGIFLogSizeAfterFrames();
     void testDetectPSD();
     void testDetectTGA();
     void testDetectTIF();
@@ -73,6 +75,8 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectAPNG);
     CPPUNIT_TEST(testDetectGIF);
     CPPUNIT_TEST(testDetectGIFMetadata);
+    CPPUNIT_TEST(testDetectGIFMetadataStill);
+    CPPUNIT_TEST(testDetectGIFLogSizeAfterFrames);
     CPPUNIT_TEST(testDetectPSD);
     CPPUNIT_TEST(testDetectTGA);
     CPPUNIT_TEST(testDetectTIF);
@@ -242,6 +246,50 @@ void GraphicFormatDetectorTest::testDetectGIFMetadata()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), rMetadata.mnBitsPerPixel);
 
     CPPUNIT_ASSERT_EQUAL(Size(), rMetadata.maLogSize);
+    CPPUNIT_ASSERT_EQUAL(true, rMetadata.mbIsAnimated);
+}
+
+void GraphicFormatDetectorTest::testDetectGIFMetadataStill()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.gif"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"GIF"_ustr, true);
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkGIF());
+    auto const& rMetadata = aDetector.getMetadata();
+
+    CPPUNIT_ASSERT_EQUAL(Size(10, 10), rMetadata.maPixSize);
+    CPPUNIT_ASSERT_EQUAL(false, rMetadata.mbIsAnimated);
+}
+
+void GraphicFormatDetectorTest::testDetectGIFLogSizeAfterFrames()
+{
+    // Two 1x1 frames, then the STARDIV logic size extension that the GIF
+    // export writes after the last frame
+    const sal_uInt8 aFrame[] = { 0x2c, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0x02, 0x02, 0x44, 0x01, 0x00 };
+    SvMemoryStream aStream;
+    aStream.WriteBytes("GIF89a", 6);
+    const sal_uInt8 aScreen[] = { 1, 0, 1, 0, 0x80, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff };
+    aStream.WriteBytes(aScreen, sizeof(aScreen));
+    aStream.WriteBytes(aFrame, sizeof(aFrame));
+    aStream.WriteBytes(aFrame, sizeof(aFrame));
+    const sal_uInt8 aExtensionStart[] = { 0x21, 0xff, 0x0b };
+    aStream.WriteBytes(aExtensionStart, sizeof(aExtensionStart));
+    aStream.WriteBytes("STARDIV 5.0", 11);
+    aStream.WriteUChar(9).WriteUChar(1);
+    aStream.SetEndian(SvStreamEndian::LITTLE);
+    aStream.WriteUInt32(2540).WriteUInt32(1270);
+    aStream.WriteUChar(0).WriteUChar(0x3b);
+    aStream.Seek(0);
+
+    vcl::GraphicFormatDetector aDetector(aStream, u"GIF"_ustr, true);
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkGIF());
+    auto const& rMetadata = aDetector.getMetadata();
+
+    CPPUNIT_ASSERT_EQUAL(Size(1, 1), rMetadata.maPixSize);
+    CPPUNIT_ASSERT_EQUAL(Size(2540, 1270), rMetadata.maLogSize);
     CPPUNIT_ASSERT_EQUAL(true, rMetadata.mbIsAnimated);
 }
 

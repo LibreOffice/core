@@ -57,6 +57,7 @@ class GIFReader
     Animation           aAnimation;
     sal_uInt64          nAnimationByteSize;
     sal_uInt64          nAnimationMinFileData;
+    sal_uInt32          nFrameCount;
     Bitmap              aBmp8;
     Bitmap              aBmp1;
     BitmapPalette       aGPalette;
@@ -85,6 +86,8 @@ class GIFReader
     sal_uInt16          nLoops;
     GIFAction           eActAction;
     bool                bStatus;
+    // Only walk the blocks and count the frames: no LZW decoding, no bitmaps
+    bool                bScanOnly;
     bool                bGCTransparent;         // is the image transparent, if yes:
     bool                bInterlaced;
     bool                bOverreadBlock;
@@ -121,6 +124,7 @@ public:
 GIFReader::GIFReader( SvStream& rStm )
     : nAnimationByteSize(0)
     , nAnimationMinFileData(0)
+    , nFrameCount(0)
     , aGPalette ( 256 )
     , aLPalette ( 256 )
     , rIStm ( rStm )
@@ -142,6 +146,7 @@ GIFReader::GIFReader( SvStream& rStm )
     , nLoops ( 1 )
     , eActAction ( GLOBAL_HEADER_READING )
     , bStatus ( false )
+    , bScanOnly ( false )
     , bGCTransparent  ( false )
     , bInterlaced ( false)
     , bOverreadBlock ( false )
@@ -208,6 +213,9 @@ void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPal
         bStatus = false;
         return;
     }
+
+    if (bScanOnly)
+        return;
 
     if (bGCTransparent)
     {
@@ -527,7 +535,7 @@ sal_uLong GIFReader::ReadNextBlock()
 
             if (rIStm.good())
             {
-                if( bOverreadBlock )
+                if( bOverreadBlock || bScanOnly )
                     nRet = 3;
                 else
                 {
@@ -654,6 +662,18 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
 
 void GIFReader::CreateNewBitmaps()
 {
+    ++nFrameCount;
+
+    if (bScanOnly)
+    {
+        // the same budget as the decoded frames below: 32 bits per pixel with
+        // an alpha mask, 8 bits without
+        const sal_uInt64 nPixels = static_cast<sal_uInt64>(nImageWidth) * nImageHeight;
+        nAnimationByteSize += (bGCTransparent || nPaletteSize > 2) ? nPixels * 4 : nPixels;
+        nAnimationMinFileData += nPixels / 2560;
+        return;
+    }
+
     AnimationFrame aAnimationFrame;
 
     pAcc8.reset();
@@ -880,6 +900,9 @@ bool GIFReader::ProcessGIF()
 
 bool GIFReader::ReadIsAnimated()
 {
+    // Read to the end, not to the second frame: the STARDIV logic size
+    // extension of GetLogicSize() follows the last frame
+    bScanOnly = true;
     bStatus = true;
     while (ProcessGIF() && eActAction != END_READING)
     {}
@@ -892,7 +915,7 @@ bool GIFReader::ReadIsAnimated()
         eReadState = GIFREAD_OK;
 
     if (eReadState == GIFREAD_OK)
-        return aAnimation.Count() > 1;
+        return nFrameCount > 1;
     return false;
 }
 
