@@ -486,12 +486,13 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                                 pLinkIds ? nullptr : pAnchorKey,
                                 &annotIds)
                     };
+                    // the link of a shape of a master page is tagged too, it is not background
                     if (pLinkIds)
                     {
                         rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
                                 new drawinglayer::primitive2d::StructureTagPrimitive2D(
                                     vcl::pdf::StructElement::Link,
-                                    bBackground,
+                                    false, // Background
                                     false, // Image
                                     false, // Decorative
                                     std::move(rNewPrimitiveSequence),
@@ -522,14 +523,13 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
         // Link element around the member, inside the element of the group
         auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
         assert(pPDFExtOutDevData);
-        ::std::vector<sal_Int32> const*const pLinkIds(pPDFExtOutDevData->GetLinkAnnotIds(pSdrObj));
-        SdrPage const*const pSdrPage(pSdrObj->getSdrPageFromSdrObject());
-        if (pLinkIds && pSdrPage)
+        if (::std::vector<sal_Int32> const*const pLinkIds
+                = pPDFExtOutDevData->GetLinkAnnotIds(pSdrObj))
         {
             rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
                     new drawinglayer::primitive2d::StructureTagPrimitive2D(
                         vcl::pdf::StructElement::Link,
-                        pSdrPage->IsMasterPage(), // Background
+                        false, // Background
                         false, // Image
                         false, // Decorative
                         std::move(rNewPrimitiveSequence),

@@ -700,11 +700,13 @@ sal_Int32 PDFExtOutDevData::CreateDest( const tools::Rectangle& rRect, sal_Int32
 }
 sal_Int32 PDFExtOutDevData::CreateLink(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr, SdrObject const*const pObj)
 {
+    if (nPageNr == -1)
+        nPageNr = mnPage;
     mpGlobalSyncData->mActions.push_back(
-        vcl::CreateLink{rAltText, mrOutDev.GetMapMode(), rRect, nPageNr == -1 ? mnPage : nPageNr } );
+        vcl::CreateLink{rAltText, mrOutDev.GetMapMode(), rRect, nPageNr } );
     auto const ret(mpGlobalSyncData->mCurId++);
     if (pObj)
-        m_LinkAnnotations[pObj].push_back(ret);
+        m_LinkAnnotations[{ pObj, nPageNr }].push_back(ret);
     return ret;
 }
 
@@ -730,7 +732,7 @@ sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect,
 
 ::std::vector<sal_Int32> const* PDFExtOutDevData::GetLinkAnnotIds(SdrObject const*const pObj) const
 {
-    auto const it(m_LinkAnnotations.find(pObj));
+    auto const it(m_LinkAnnotations.find({ pObj, mnPage }));
     return it == m_LinkAnnotations.end() ? nullptr : &it->second;
 }
 

@@ -7911,6 +7911,65 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testGroupMemberClickLinkTagged)
     CPPUNIT_ASSERT_EQUAL(1, nLinks);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMasterPageClickLinkTagged)
+{
+    // two slides of a master page with a picture that has a click action
+    loadFromFile(u"master-page-link.fodp");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
+    std::set<vcl::filter::PDFObjectElement*> aAnnots;
+    for (auto* pPage : aPages)
+    {
+        auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(pPage->Lookup("Annots"_ostr));
+        CPPUNIT_ASSERT(pAnnots);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
+        auto pAnnotReference
+            = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+        CPPUNIT_ASSERT(pAnnotReference);
+        vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+        CPPUNIT_ASSERT(pAnnot);
+        // Without the fix the link of a shape of a master page was not in the structure tree
+        CPPUNIT_ASSERT(pAnnot->Lookup("StructParent"_ostr));
+        aAnnots.insert(pAnnot);
+    }
+
+    // each page has its own Link, which refers to the annotation of that page only
+    std::set<vcl::filter::PDFObjectElement*> aLinked;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pS || pS->GetValue() != "Link")
+            continue;
+        auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pKids);
+        int nObjR = 0;
+        for (auto* pKid : pKids->GetElements())
+        {
+            auto pObjR = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pKid);
+            auto pType = pObjR ? dynamic_cast<vcl::filter::PDFNameElement*>(
+                                     pObjR->LookupElement("Type"_ostr))
+                               : nullptr;
+            if (pType && pType->GetValue() == "OBJR")
+            {
+                auto pObj = dynamic_cast<vcl::filter::PDFReferenceElement*>(
+                    pObjR->LookupElement("Obj"_ostr));
+                CPPUNIT_ASSERT(pObj);
+                aLinked.insert(pObj->LookupObject());
+                ++nObjR;
+            }
+        }
+        // Without the fix the Link on the second page also had the annotation of the first page
+        CPPUNIT_ASSERT_EQUAL(1, nObjR);
+    }
+    CPPUNIT_ASSERT(operator==(aAnnots, aLinked));
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testShapeClickLinkTaggedNotesPages)
 {
     // the slide with the linked picture is painted again on its notes page

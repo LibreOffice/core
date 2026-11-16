@@ -97,8 +97,10 @@ class VCL_DLLPUBLIC PDFExtOutDevData final : public ExtOutDevData
     std::vector<OUString> maChapterNames;
     // map from annotation SdrObject to annotation index
     ::std::map<SdrObject const*, ::std::vector<sal_Int32>> m_ScreenAnnotations;
-    // map from SdrObject to the ids of the links on it
-    ::std::map<SdrObject const*, ::std::vector<sal_Int32>> m_LinkAnnotations;
+    // map from SdrObject and page to the ids of the links on it; a shape of a master page
+    // is on every page that uses it
+    ::std::map<::std::pair<SdrObject const*, sal_Int32>, ::std::vector<sal_Int32>>
+        m_LinkAnnotations;
 
     SwEnhancedPDFState * m_pSwPDFState = nullptr;
     ScEnhancedPDFState * m_pScPDFState = nullptr;
@@ -291,7 +293,8 @@ public:
     /// Get back the annotations created for one SdrObject.
     ::std::vector<sal_Int32> const& GetScreenAnnotIds(SdrObject const* pObj) const;
 
-    /// Get back the links created for one SdrObject, or nullptr if there are none.
+    /// Get back the links created for one SdrObject on the current page, or nullptr if there are
+    /// none.
     ::std::vector<sal_Int32> const* GetLinkAnnotIds(SdrObject const* pObj) const;
 
     /** Set the destination for a link
