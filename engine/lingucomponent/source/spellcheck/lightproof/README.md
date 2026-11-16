@@ -123,8 +123,8 @@ it to be unpleasant: it is one long Python list of regular expressions.
 registry: a file names the languages it serves, so nothing else has to say
 where it is or what it is for.
 
-They deliberately do not ride inside the dictionary extensions, the way the
-spelling, hyphenation and thesaurus data do, for two reasons.
+They deliberately do not ride with the dictionaries in `share/dictionaries`,
+the way the spelling, hyphenation and thesaurus data do.
 
 A build configured with `--without-myspell-dicts` leaves the whole
 dictionaries module out, and the flatpak and the snap are both configured
@@ -132,15 +132,6 @@ that way. That is no loss for the other three, which fall back to whatever
 the system has in `/usr/share`. There is no system package of sentence
 checking rules, so a build that left ours out would have none at all and no
 way to get any, which is why these have to be installed unconditionally.
-
-And an entry in a dictionary's `dictionaries.xcu` is registered per user
-profile, refreshed only when the extension directory looks newer than the
-profile. It does not look newer when a build rewrites files inside it, so a
-profile that registered an older build would keep its answer and never see a
-newly added package. Online would not notice, because its forkit registers
-the bundled extensions into a throwaway profile at startup and the kits
-inherit the merged configuration across `fork()`; an app has no forkit and
-keeps its profile. A directory of files has no registration to go stale.
 
 ## What the compiler will and will not accept
 
