@@ -32,6 +32,8 @@
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
 #include <defnamesbuffer.hxx>
+#include <docsh.hxx>
+#include <document.hxx>
 #include <externallinkbuffer.hxx>
 #include <tablebuffer.hxx>
 #include <formula/opcode.hxx>
@@ -965,7 +967,11 @@ bool FormulaParserImpl::pushDefinedNameOperand( const DefinedNameRef& rxDefName 
     if( !rxDefName || rxDefName->getModelName().isEmpty() )
         return pushBiffErrorOperand( BIFF_ERR_NAME );
     if( rxDefName->isMacroFunction() )
+    {
+        if (ScDocShell* pDocShell = getScDocument().GetDocumentShell())
+            pDocShell->SetMacroCallsSeenWhileLoading();
         return pushValueOperand( rxDefName->getModelName(), OPCODE_MACRO );
+    }
     if( rxDefName->getTokenIndex() >= 0 )
         return pushValueOperand( rxDefName->getTokenIndex(), OPCODE_NAME );
     return pushEmbeddedRefOperand( *rxDefName, true );
