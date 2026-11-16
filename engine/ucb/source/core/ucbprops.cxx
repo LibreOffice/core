@@ -26,7 +26,6 @@
 #include <com/sun/star/ucb/DocumentHeaderField.hpp>
 #include <com/sun/star/ucb/DocumentStoreMode.hpp>
 #include <com/sun/star/ucb/Priority.hpp>
-#include <com/sun/star/ucb/RecipientInfo.hpp>
 #include <com/sun/star/ucb/SendInfo.hpp>
 #include <com/sun/star/ucb/SendMediaTypes.hpp>
 #include <com/sun/star/ucb/SynchronizePolicy.hpp>
@@ -113,12 +112,6 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"NewsGroups"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"NoCacheList"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"Origin"_ustr, -1, cppu::UnoType<OUString>::get(),
-      ATTR_DEFAULT | PropertyAttribute::READONLY },
-    { u"OutgoingMessageRecipients"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::RecipientInfo>>::get(),
-      ATTR_DEFAULT },
-    { u"OutgoingMessageState"_ustr, -1,
-      cppu::UnoType<css::ucb::OutgoingMessageState>::get(),
       ATTR_DEFAULT | PropertyAttribute::READONLY },
     { u"OutgoingMessageViewMode"_ustr, -1, cppu::UnoType<sal_Int16>::get(),
       ATTR_DEFAULT },

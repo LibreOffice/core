@@ -15659,16 +15659,6 @@ module com {
      const short DOCUMENT_SHARE_DENY_WRITE = 5;
      const short FOLDERS = 1;
     };
-    published enum OutgoingMessageState {
-     WRITTEN = 0,
-     PARTIALLY_LOCALLY_SENT = 1,
-     COMPLETELY_LOCALLY_SENT = 2,
-     RECOVERABLE_LOCAL_ERROR = 3,
-     NONRECOVERABLE_LOCAL_ERROR = 4,
-     EXTERNAL_ERROR = 5,
-     WAITING_CONFIRMATION = 6,
-     CONFIRMED = 7
-    };
     published service PackageContentProvider {
      interface ::com::sun::star::ucb::XContentProvider;
     };
@@ -15740,21 +15730,6 @@ module com {
     };
     published struct PropertyValueInfo: ::com::sun::star::beans::PropertyValue {
      ::com::sun::star::ucb::PropertyValueState ValueState;
-    };
-    published struct RecipientInfo {
-     string ProtocolType;
-     ::com::sun::star::ucb::OutgoingMessageState State;
-     string To;
-     string CC;
-     string BCC;
-     string Newsgroups;
-     string Server;
-     string Username;
-     string Password;
-     string VIMPostOfficePath;
-     string ProtocolErrorString;
-     long ProtocolErrorNumber;
-     long SendTries;
     };
     published service RemoteAccessContentProvider {
      service ::com::sun::star::ucb::ContentProvider;

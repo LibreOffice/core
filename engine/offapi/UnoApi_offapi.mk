@@ -3573,14 +3573,12 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	OpenCommandArgument2 \
 	OpenCommandArgument3 \
 	OpenMode \
-	OutgoingMessageState \
 	PostCommandArgument \
 	PostCommandArgument2 \
 	Priority \
 	PropertyCommandArgument \
 	PropertyValueInfo \
 	PropertyValueState \
-	RecipientInfo \
 	RememberAuthentication \
 	RemoteContentProviderChangeAction \
 	RemoteContentProviderChangeEvent \
