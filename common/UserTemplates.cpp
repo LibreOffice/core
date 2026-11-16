@@ -11,6 +11,7 @@
 
 #include <config.h>
 
+#include <common/FileExtensions.hpp>
 #include <common/Log.hpp>
 #include <common/UserTemplates.hpp>
 #include <common/Util.hpp>
@@ -47,47 +48,6 @@ std::string fileStemForName(const std::string& name)
     if (stem == "." || stem == "..")
         return std::string();
     return stem;
-}
-
-// This is the list of ViewFilter_Application::isFilteredExtension in
-// engine/sfx2/source/control/templatelocalview.cxx, plus dotm.
-const std::map<std::string, std::string>& typeOfTemplateExtension()
-{
-    static const std::map<std::string, std::string> types = {
-        { "ott", "writer" },  { "ots", "calc" },   { "otp", "impress" },  { "otg", "draw" },
-        { "otm", "writer" },  { "oth", "writer" }, { "stw", "writer" },   { "stc", "calc" },
-        { "sti", "impress" }, { "std", "draw" },   { "dotx", "writer" },  { "dotm", "writer" },
-        { "xltx", "calc" },   { "xltm", "calc" },  { "potx", "impress" }, { "potm", "impress" },
-        { "dot", "writer" },  { "xlt", "calc" },   { "pot", "impress" },
-    };
-    return types;
-}
-
-// The extension of the document that each template file creates. The older StarOffice templates
-// create an ODF document.
-const std::map<std::string, std::string>& documentExtensionOfTemplateExtension()
-{
-    static const std::map<std::string, std::string> extensions = {
-        { "ott", "odt" },   { "ots", "ods" },   { "otp", "odp" },   { "otg", "odg" },
-        { "otm", "odm" },   { "oth", "html" },  { "stw", "odt" },   { "stc", "ods" },
-        { "sti", "odp" },   { "std", "odg" },   { "dotx", "docx" }, { "dotm", "docm" },
-        { "xltx", "xlsx" }, { "xltm", "xlsm" }, { "potx", "pptx" }, { "potm", "pptm" },
-        { "dot", "doc" },   { "xlt", "xls" },   { "pot", "ppt" },
-    };
-    return extensions;
-}
-
-// Extensions of ordinary documents: ODF, flat ODF, OOXML, the older binary formats and RTF.
-const std::map<std::string, std::string>& typeOfDocumentExtension()
-{
-    static const std::map<std::string, std::string> types = {
-        { "odt", "writer" },   { "ods", "calc" },     { "odp", "impress" },  { "odg", "draw" },
-        { "fodt", "writer" },  { "fods", "calc" },    { "fodp", "impress" }, { "fodg", "draw" },
-        { "docx", "writer" },  { "docm", "writer" },  { "xlsx", "calc" },    { "xlsm", "calc" },
-        { "pptx", "impress" }, { "pptm", "impress" }, { "doc", "writer" },   { "rtf", "writer" },
-        { "xls", "calc" },     { "ppt", "impress" },
-    };
-    return types;
 }
 
 std::string lowerCaseExtension(const std::string& fileName)
@@ -339,30 +299,31 @@ bool UserTemplates::remove(const std::string& id)
 
 std::string UserTemplates::documentTypeOfTemplate(const std::string& fileName)
 {
-    return typeOfExtension(typeOfTemplateExtension(), lowerCaseExtension(fileName));
+    return typeOfExtension(FileExtensions::typeOfTemplateExtension(), lowerCaseExtension(fileName));
 }
 
 std::string UserTemplates::documentTypeOfFile(const std::string& fileName)
 {
     const std::string extension = lowerCaseExtension(fileName);
-    const std::string type = typeOfExtension(typeOfTemplateExtension(), extension);
-    return type.empty() ? typeOfExtension(typeOfDocumentExtension(), extension) : type;
+    const std::string type = typeOfExtension(FileExtensions::typeOfTemplateExtension(), extension);
+    return type.empty() ? typeOfExtension(FileExtensions::typeOfDocumentExtension(), extension)
+                        : type;
 }
 
 std::string UserTemplates::documentExtensionOfFile(const std::string& fileName)
 {
     const std::string extension = lowerCaseExtension(fileName);
-    if (typeOfDocumentExtension().contains(extension))
+    if (FileExtensions::typeOfDocumentExtension().contains(extension))
         return extension;
-    return typeOfExtension(documentExtensionOfTemplateExtension(), extension);
+    return typeOfExtension(FileExtensions::documentExtensionOfTemplateExtension(), extension);
 }
 
 std::vector<std::string> UserTemplates::acceptedExtensions()
 {
     std::vector<std::string> extensions;
-    for (const auto& [extension, type] : typeOfTemplateExtension())
+    for (const auto& [extension, type] : FileExtensions::typeOfTemplateExtension())
         extensions.push_back(extension);
-    for (const auto& [extension, type] : typeOfDocumentExtension())
+    for (const auto& [extension, type] : FileExtensions::typeOfDocumentExtension())
         extensions.push_back(extension);
     return extensions;
 }

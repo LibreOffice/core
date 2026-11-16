@@ -24,6 +24,7 @@
 #include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/ContainerUtil.hpp>
+#include <common/FileExtensions.hpp>
 #include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
 #if defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
@@ -5372,37 +5373,6 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     return std::nullopt;
 }
 
-/// Map a file extension to a document type for password-protected icons.
-static std::string getDocTypeFromExtension(const std::string& ext)
-{
-    static const Util::UnorderedStringMap<std::string> extToType = {
-        // Writer
-        { "odt", "writer" }, { "fodt", "writer" }, { "doc", "writer" }, { "docx", "writer" },
-        { "docm", "writer" }, { "dot", "writer" }, { "dotx", "writer" }, { "dotm", "writer" },
-        { "rtf", "writer" }, { "txt", "writer" }, { "wpd", "writer" }, { "wps", "writer" },
-        { "sxw", "writer" }, { "stw", "writer" }, { "ott", "writer" }, { "otm", "writer" },
-        { "hwp", "writer" }, { "wri", "writer" }, { "abw", "writer" }, { "pages", "writer" },
-        // Calc
-        { "ods", "calc" }, { "fods", "calc" }, { "xls", "calc" }, { "xlsx", "calc" },
-        { "xlsm", "calc" }, { "xlsb", "calc" }, { "xla", "calc" }, { "xltx", "calc" },
-        { "xltm", "calc" }, { "csv", "calc" }, { "tsv", "calc" }, { "sxc", "calc" },
-        { "stc", "calc" }, { "ots", "calc" }, { "dbf", "calc" }, { "numbers", "calc" },
-        // Impress
-        { "odp", "impress" }, { "fodp", "impress" }, { "ppt", "impress" }, { "pptx", "impress" },
-        { "pptm", "impress" }, { "pot", "impress" }, { "potx", "impress" }, { "potm", "impress" },
-        { "ppsx", "impress" }, { "sxi", "impress" }, { "sti", "impress" }, { "otp", "impress" },
-        { "key", "impress" },
-        // Draw
-        { "odg", "draw" }, { "fodg", "draw" }, { "vsd", "draw" }, { "vss", "draw" },
-        { "pub", "draw" }, { "sxd", "draw" }, { "std", "draw" }, { "otg", "draw" },
-        { "cdr", "draw" }, { "wpg", "draw" }, { "cgm", "draw" }, { "emf", "draw" },
-        { "wmf", "draw" },
-    };
-
-    auto it = extToType.find(ext);
-    return (it != extToType.end()) ? it->second : "writer";
-}
-
 void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBroker,
                                     const std::shared_ptr<StreamSocket>& saveAsSocket,
                                     std::string errorKind)
@@ -5425,7 +5395,7 @@ void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBr
         const std::string ext = (dotPos != std::string::npos)
                                     ? docPath.substr(dotPos + 1)
                                     : std::string();
-        const std::string docType = getDocTypeFromExtension(ext);
+        const std::string docType = FileExtensions::getDocTypeFromExtension(ext);
 
         const std::string iconPath = COOLWSD::FileServerRoot +
             "/browser/dist/images/password-protected-" + docType + ".png";

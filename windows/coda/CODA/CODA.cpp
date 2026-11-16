@@ -69,6 +69,7 @@
 #include <common/CODAConfig.hpp>
 #include <common/Common.hpp>
 #include <common/EditorFrameMessages.hpp>
+#include <common/FileExtensions.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/LangUtil.hpp>
 #include <common/Protocol.hpp>
@@ -3301,35 +3302,6 @@ static void withWebView2Environment(std::function<void(ICoreWebView2Environment*
             .Get());
 }
 
-// The document kind the tab strip keys its icon and colour off. The engine
-// decides what a file really is when it opens it; the strip needs a name for it
-// before that, and the extension is what there is to go on.
-static std::string docTypeFromFilename(const std::string& filename)
-{
-    const auto lastPeriod = filename.find_last_of('.');
-    if (lastPeriod == std::string::npos)
-        return "other";
-
-    std::string extension = filename.substr(lastPeriod + 1);
-    for (char& c : extension)
-        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-
-    static const std::set<std::string> writer = { "odt", "doc", "docx", "docm", "rtf", "txt", "fodt" };
-    static const std::set<std::string> calc = { "ods", "xls", "xlsx", "xlsm", "csv", "fods" };
-    static const std::set<std::string> impress = { "odp", "ppt", "pptx", "pptm", "ppsx", "fodp" };
-    static const std::set<std::string> draw = { "odg", "fodg" };
-
-    if (writer.count(extension))
-        return "writer";
-    if (calc.count(extension))
-        return "calc";
-    if (impress.count(extension))
-        return "impress";
-    if (draw.count(extension))
-        return "draw";
-    return "other";
-}
-
 // The window takes its title from the document it shows.
 static std::wstring windowTitleForTab(const DocumentTab& tab)
 {
@@ -3362,7 +3334,7 @@ static DocumentTab& createTab(WindowState& window, const FilenameAndUri& filenam
     else if (mode == DocumentMode::WELCOME)
         tab.docType = "welcome";
     else
-        tab.docType = docTypeFromFilename(filenameAndUri.filename);
+        tab.docType = FileExtensions::docTypeFromFilename(filenameAndUri.filename);
 
     window.tabIds.push_back(tabId);
 
@@ -6912,7 +6884,7 @@ static void writeRemoteDocFile(DocumentTab& data, int id, const std::string& arg
         return;
     }
 
-    if (docTypeFromFilename(name) == "other")
+    if (FileExtensions::docTypeFromFilename(name) == "other")
     {
         LOG_WRN("A remote document was not written: ." << extension << " is not a document type");
         postReplyToCall(data.hWnd, data.tabId, id, std::string());
@@ -7398,7 +7370,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 data.mode = DocumentMode::EDIT;
             }
             recentFiles.add(data.filenameAndUri.uri);
-            data.docType = docTypeFromFilename(filename);
+            data.docType = FileExtensions::docTypeFromFilename(filename);
             data.isModified = false;
             data.readyToClose = false;
             data.docUnloadingRetries = 0;
