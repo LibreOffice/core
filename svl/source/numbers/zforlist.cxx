@@ -1000,12 +1000,10 @@ static OUString lcl_buildBooleanStringFormat(const SvNumberformat* pEntry, const
     // Build Boolean number format, which needs non-zero and zero subformat
     // codes with TRUE and FALSE strings.
     const Color* pColor = nullptr;
-    OUString aFormatStr, aTemp;
-    pEntry->GetOutputString( 1.0, aTemp, &pColor, rNatNum, rCurrentLang );
-    aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
-    pEntry->GetOutputString( 0.0, aTemp, &pColor, rNatNum, rCurrentLang );
-    aFormatStr += aTemp + "\"";
-    return aFormatStr;
+    OUString aTrue, aFalse;
+    pEntry->GetOutputString(1.0, aTrue, &pColor, rNatNum, rCurrentLang);
+    pEntry->GetOutputString(0.0, aFalse, &pColor, rNatNum, rCurrentLang);
+    return "\"" + aTrue + "\";\"" + aTrue + "\";\"" + aFalse + "\"";
 }
 
 OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKeywordTable& rKeywords,
