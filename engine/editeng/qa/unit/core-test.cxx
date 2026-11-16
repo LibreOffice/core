@@ -210,6 +210,7 @@ public:
     void testCreateLines();
     void testTdf154248MultilineFieldWrapping();
     void testMultilineFieldClipInvariance();
+    void testColumnsClippedToTopBand();
     void testMultilineFieldSublineSpacing();
     void testMultilineFieldSelectionHighlight();
     void testTdf151748StaleKashidaArray();
@@ -304,6 +305,7 @@ public:
     CPPUNIT_TEST(testCreateLines);
     CPPUNIT_TEST(testTdf154248MultilineFieldWrapping);
     CPPUNIT_TEST(testMultilineFieldClipInvariance);
+    CPPUNIT_TEST(testColumnsClippedToTopBand);
     CPPUNIT_TEST(testMultilineFieldSublineSpacing);
     CPPUNIT_TEST(testMultilineFieldSelectionHighlight);
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
@@ -3089,6 +3091,39 @@ void Test::testMultilineFieldClipInvariance()
 
     // The skipped field no longer pulls the text below it upward.
     CPPUNIT_ASSERT_EQUAL(nReferenceY, nClippedY);
+}
+
+void Test::testColumnsClippedToTopBand()
+{
+    // Text in three columns, painted through a clip rectangle that covers only the top of the
+    // text, the way edit mode paints a shape in tile-sized bands. The first line of every column
+    // lies in that band, so all three columns show text there.
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
+    aOutliner.SetTextColumns(3, 100);
+
+    EditEngine& rEditEngine = aOutliner.GetEditEngine();
+    rEditEngine.SetPaperSize(Size(9000, 5000));
+    rEditEngine.SetText(u"COLUMNA1\nCOLUMNA2\nCOLUMNB1\nCOLUMNB2\nCOLUMNC1\nCOLUMNC2"_ustr);
+    rEditEngine.QuickFormatDoc(false);
+
+    // The six one-line paragraphs balance into three columns of two lines each.
+    const tools::Rectangle aFullClip(Point(0, 0), Size(0x7FFFFFFF, 0x7FFFFFFF));
+    PortionPositionCollector aFull;
+    rEditEngine.StripPortions(aFull, aFullClip);
+    const tools::Long nFirstLineY = aFull.findTextY(u"COLUMNA1");
+    CPPUNIT_ASSERT_MESSAGE("first line not drawn in the full render", nFirstLineY >= 0);
+    CPPUNIT_ASSERT_EQUAL(nFirstLineY, aFull.findTextY(u"COLUMNB1"));
+    CPPUNIT_ASSERT_EQUAL(nFirstLineY, aFull.findTextY(u"COLUMNC1"));
+
+    // The band ends inside the first line.
+    const tools::Long nLineHeight = rEditEngine.GetParaPortions().getRef(0).GetHeight();
+    const tools::Rectangle aBand(Point(0, 0), Size(0x7FFFFFFF, nLineHeight / 2));
+    PortionPositionCollector aClipped;
+    rEditEngine.StripPortions(aClipped, aBand);
+    CPPUNIT_ASSERT_EQUAL(nFirstLineY, aClipped.findTextY(u"COLUMNA1"));
+    // Without the fix in place, only the first column was drawn in the band.
+    CPPUNIT_ASSERT_EQUAL(nFirstLineY, aClipped.findTextY(u"COLUMNB1"));
+    CPPUNIT_ASSERT_EQUAL(nFirstLineY, aClipped.findTextY(u"COLUMNC1"));
 }
 
 void Test::testMultilineFieldSublineSpacing()

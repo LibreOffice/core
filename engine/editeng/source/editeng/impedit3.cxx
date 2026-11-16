@@ -3791,6 +3791,24 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont = GetParaPortions().getRef(0).GetNode().GetCharAttribs().GetDefFont();
 
+    // A line that wraps into the next column starts again at the top of the text, so text that
+    // comes later in the document can be above text that comes earlier. With several columns the
+    // clip rectangle only limits the extent across the lines, and the text is collected over its
+    // whole length.
+    if (mnColumns > 1)
+    {
+        if (!IsEffectivelyVertical())
+        {
+            aClipRect.SetTop(-0x3FFFFFFF);
+            aClipRect.SetBottom(0x3FFFFFFF);
+        }
+        else
+        {
+            aClipRect.SetLeft(-0x3FFFFFFF);
+            aClipRect.SetRight(0x3FFFFFFF);
+        }
+    }
+
     // always strip at Origin(0, 0), use as StartPos
     Point aStartPos(0, 0);
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
