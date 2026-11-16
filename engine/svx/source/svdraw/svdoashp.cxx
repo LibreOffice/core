@@ -2688,11 +2688,13 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
     {
         rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
+        rOutliner.SetMinColumnWrapHeight(nAnkHgt);
     }
 
     if(SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting())
     {
         rOutliner.SetMinAutoPaperSize(Size(0, nAnkHgt));
+        rOutliner.SetMinColumnWrapHeight(nAnkWdt);
     }
     rOutliner.SetMaxAutoPaperSize( Size( nMaxAutoPaperWidth, nMaxAutoPaperHeight ) );
     rOutliner.SetPaperSize( aNullSize );

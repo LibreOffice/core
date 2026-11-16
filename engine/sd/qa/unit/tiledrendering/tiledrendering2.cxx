@@ -33,6 +33,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/section.hxx>
@@ -58,6 +59,10 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <sstream>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/svdoashp.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -2859,6 +2864,43 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOpenHyperlinkOnlyOrdinaryProtocol
     insertLinkAtCursor(pView, u"https://www.example.com/"_ustr);
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OPEN_HYPERLINK, SfxCallMode::SYNCHRON);
     CPPUNIT_ASSERT_EQUAL("https://www.example.com/"_ostr, aView.m_aHyperlinkClicked);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTextColumnsFillInEditMode)
+{
+    // Given a rectangle shape with its text in three columns, much taller than its three lines of
+    // text:
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    rtl::Reference<SdrObjCustomShape> pShape = new SdrObjCustomShape(*pXImpressDocument->GetDoc());
+    const OUString aType(u"rectangle"_ustr);
+    pShape->MergeDefaultAttributes(&aType);
+    pShape->SetLogicRect(::tools::Rectangle(Point(1000, 1000), Size(15000, 8000)));
+    SfxItemSet aSet(pShape->GetMergedItemSet());
+    aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
+    aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+    pShape->SetMergedItemSet(aSet);
+    pShape->SetTextColumnsNumber(3);
+    pViewShell->GetActualPage()->InsertObject(pShape.get());
+    pShape->SetText(u"A\nB\nC"_ustr);
+
+    // When editing its text:
+    pView->MarkObj(pShape.get(), pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pShape.get());
+    SdrOutliner* pOutliner = pView->GetTextEditOutliner();
+    CPPUNIT_ASSERT(pOutliner);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pOutliner->GetParagraphCount());
+
+    // Then all three lines stay in the first column, as they are outside edit mode, so the text
+    // is as high as the three lines together:
+    const EditEngine& rEditEngine = pOutliner->GetEditEngine();
+    sal_uInt32 nLinesHeight = 0;
+    for (sal_Int32 nPara = 0; nPara < 3; ++nPara)
+        nLinesHeight += rEditEngine.GetTextHeight(nPara);
+    // Without the fix in place, the lines were spread over the three columns, and the text was
+    // only as high as one line.
+    CPPUNIT_ASSERT_EQUAL(nLinesHeight, rEditEngine.GetTextHeight());
 }
 
 namespace
