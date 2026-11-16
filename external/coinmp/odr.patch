@@ -16,7 +16,7 @@
  extern int CbcOrClpEnvironmentIndex;
 --- Clp/src/CbcOrClpParam.cpp
 +++ Clp/src/CbcOrClpParam.cpp
-@@ -1201,7 +1201,11 @@
+@@ -1201,9 +1201,17 @@
  static char line[1000];
  static char *where = NULL;
  extern int CbcOrClpRead_mode;
@@ -26,5 +26,11 @@
 +extern int CbcOrClpEnvironmentIndex;
 +#endif
  // Alternative to environment
++#if defined _MSC_VER || !defined COIN_HAS_CBC
  char *alternativeEnvironment = NULL;
++#else
++extern char *alternativeEnvironment;
++#endif
  static size_t fillEnv()
+ {
+ #if defined(_MSC_VER) || defined(__MSVCRT__)
