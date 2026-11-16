@@ -4452,6 +4452,8 @@ bool ChildSession::slideLink(const StringVector& tokens)
             return slideLinkUpdate(tokens);
         if (tokens.equals(1, "break"))
             return slideLinkBreak(tokens);
+        if (tokens.equals(1, "addsource") || tokens.equals(1, "removesource"))
+            return slideLinkKeepSource(tokens);
     }
 
     sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
@@ -4806,6 +4808,52 @@ bool ChildSession::slideLinkBreak(const StringVector& tokens)
 
     return sendTextFrame("slidelink: {\"status\":\"broken\",\"unit\":\"" + unit + "\",\"id\":\"" +
                          JsonUtil::escapeJSONValue(id) + "\"}");
+}
+
+bool ChildSession::slideLinkKeepSource(const StringVector& tokens)
+{
+    // Nothing is answered. The document reports its links again when its kept sources change. A
+    // source that is kept already, or was not kept, leaves the document as it is.
+    const bool add = tokens.equals(1, "addsource");
+    std::string encodedSource;
+    std::string encodedName;
+    if (tokens.size() < 3 || tokens.size() > (add ? 4 : 3) ||
+        !getTokenString(tokens[2], "source", encodedSource) ||
+        (tokens.size() == 4 && !getTokenString(tokens[3], "name", encodedName)))
+    {
+        LOG_ERR("slidelink " << tokens[1] << ": bad syntax");
+        return false;
+    }
+
+    std::string source;
+    std::string name;
+    try
+    {
+        URI::decode(encodedSource, source);
+        URI::decode(encodedName, name);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("slidelink " << tokens[1] << ": cannot decode: " << exc.displayText());
+        return false;
+    }
+
+    // Keeping a source, or keeping it no more, changes the document.
+    if (isReadOnly())
+    {
+        LOG_ERR("slidelink " << tokens[1] << ": a read-only view does not change sources");
+        return false;
+    }
+
+    SigUtil::addActivity(getId(), "slidelink " + tokens[1]);
+
+    getLOKitDocument()->setView(_viewId);
+
+    const bool changed = add ? getLOKitDocument()->addSlideLinkSource(source.c_str(), name.c_str())
+                             : getLOKitDocument()->removeSlideLinkSource(source.c_str());
+    LOG_DBG("slidelink " << tokens[1] << (changed ? ": the kept sources changed"
+                                                  : ": the kept sources stay as they are"));
+    return true;
 }
 
 bool ChildSession::extTextInputEvent(const StringVector& tokens)

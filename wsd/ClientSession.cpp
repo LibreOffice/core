@@ -86,6 +86,7 @@
 #include <map>
 #include <memory>
 #include <numeric>
+#include <set>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -2264,6 +2265,36 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         docBroker->resolveRemoteDocumentSource(getId(), Uri::decode(encodedSource));
         return true;
     }
+    else if (tokens.equals(0, "remotelinkkeep"))
+    {
+        std::string encodedSource;
+        int keep = 0;
+        if (tokens.size() != 3 ||
+            !COOLProtocol::getTokenString(tokens[1], "source", encodedSource) ||
+            encodedSource.empty() || !COOLProtocol::getTokenInteger(tokens[2], "keep", keep) ||
+            (keep != 0 && keep != 1))
+        {
+            sendTextFrameAndLogError("error: cmd=remotelinkkeep kind=syntax");
+            return false;
+        }
+
+        // The sources a document keeps are saved with it, so only a view that may change the
+        // document changes them.
+        if (!canChangeDocument())
+        {
+            sendTextFrameAndLogError("error: cmd=remotelinkkeep kind=readonly");
+            return false;
+        }
+
+        if (!docBroker->keepRemoteDocumentSource(client_from_this(), Uri::decode(encodedSource),
+                                                 keep == 1))
+        {
+            sendTextFrameAndLogError("error: cmd=remotelinkkeep kind=notfound");
+            return false;
+        }
+
+        return true;
+    }
     else if (tokens.equals(0, "remotelinkremove"))
     {
         std::string encodedSource;
@@ -2282,7 +2313,15 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             return false;
         }
 
-        if (!docBroker->removeRemoteDocumentSource(Uri::decode(encodedSource)))
+        // A source the document keeps goes out of the document as well, so it does not come
+        // back with the next load. That one may be a source no remote link is bound to. The
+        // document leaves a source it does not keep, or one linked as a whole, as it is.
+        const std::string source = Uri::decode(encodedSource);
+        if (RemoteDocumentBroker::isEnabled())
+            docBroker->forwardToChild(client_from_this(),
+                                      "slidelink removesource source=" + Uri::encode(source));
+
+        if (!docBroker->removeRemoteDocumentSource(source))
         {
             sendTextFrameAndLogError("error: cmd=remotelinkremove kind=notfound");
             return false;
@@ -4343,6 +4382,8 @@ void ClientSession::recordSlideLinkSources(const std::shared_ptr<Message>& paylo
         return;
 
     std::vector<std::string> names;
+    std::map<std::string, std::string> displayNames;
+    std::set<std::string> keptOnly;
     Poco::JSON::Object::Ptr rootObject;
     try
     {
@@ -4372,6 +4413,37 @@ void ClientSession::recordSlideLinkSources(const std::shared_ptr<Message>& paylo
 
             names.push_back(source);
         }
+
+        // The document also keeps sources on their own, whether or not a link reads from one,
+        // each with the name it had when it was recorded.
+        Poco::JSON::Array::Ptr sources = rootObject->getArray("sources");
+        // The document keeps a name of up to 128 UTF-16 code units, and one of those takes up
+        // to three bytes here.
+        constexpr std::size_t MaxDisplayNameLength = 3 * 128;
+        for (std::size_t i = 0; !sources.isNull() && i < sources->size(); ++i)
+        {
+            Poco::JSON::Object::Ptr kept = sources->getObject(i);
+            if (kept.isNull())
+                continue;
+
+            const std::string source = JsonUtil::getJSONValue<std::string>(kept, "source");
+            if (source.empty() || source.size() > MaxNameLength)
+                continue;
+
+            if (std::find(names.begin(), names.end(), source) == names.end())
+            {
+                if (names.size() >= MaxSources)
+                    continue;
+                names.push_back(source);
+                keptOnly.insert(source);
+            }
+
+            const std::string name = JsonUtil::getJSONValue<std::string>(kept, "name");
+            if (!name.empty() && name.size() <= MaxDisplayNameLength &&
+                std::none_of(name.begin(), name.end(),
+                             [](unsigned char c) { return c < 0x20 || c == 0x7f; }))
+                displayNames[source] = name;
+        }
     }
     catch (const std::exception& exc)
     {
@@ -4379,7 +4451,8 @@ void ClientSession::recordSlideLinkSources(const std::shared_ptr<Message>& paylo
         return;
     }
 
-    docBroker->setRemoteDocumentNamedSources(std::move(names));
+    docBroker->setRemoteDocumentNamedSources(std::move(names), std::move(displayNames),
+                                             std::move(keptOnly));
 }
 #endif // !MOBILEAPP
 

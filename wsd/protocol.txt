@@ -119,15 +119,31 @@ remotelinkresolve source=<encoded persistent link>
     sees a source reported as missing can have it looked for again.
     Requires the remote_links feature and SupportsLinkAccess.
 
+remotelinkkeep source=<encoded persistent link> keep=<0|1>
+
+    With keep=1, records the remote link bound to the given persistent link
+    in the open document as a source it keeps on its own, under the name
+    the storage gave it, so it is saved with the document and listed for
+    the next user who opens it, whether or not a slide is linked to it. With
+    keep=0 the document keeps it no more. See the sources of slidelinks.
+    Each is one undo step, and the kit sends slidelinks again when the kept
+    sources changed. Answered with an error of kind 'readonly' for a view
+    that may not change the document, and with keep=1 of kind 'notfound'
+    when no remote link is bound to the persistent link or the view holds
+    no token for it. Requires the remote_links feature to be enabled.
+
 remotelinkremove source=<encoded persistent link>
 
     Drops the remote link bound to the given persistent link from the list
     of this document, for every view. The subscriptions to it go down with
     it, and the fresh list goes out to all views. The link is named by its
     persistent link, the value the document's pages store, and not by the
-    address the storage resolved it to. Answered with an error of kind
-    'notfound' when no remote link is bound to it. Requires the remote_links
-    feature to be enabled.
+    address the storage resolved it to. A source the document keeps on its
+    own, see the sources of slidelinks, goes out of the document as well, as
+    one undo step, also when no remote link is bound to it. Answered with an
+    error of kind 'notfound' when no remote link is bound to the persistent
+    link and the document keeps no source under it that none of its links
+    reads from. Requires the remote_links feature to be enabled.
 
 remotedoccommand source=<encoded persistent link> <inner client command>
 
@@ -482,11 +498,13 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
                                "parent":"<id>","source":"<source document>",
                                "sourceId":"<id>","name":"<name>",
                                "lastModifiedTime":"<time>",
-                               "slides":["<part>",...]},...]}
-    one flat array in document order: a presentation, then the sections it
-    spans, each followed by the slides it spans. The unit says what the link
-    holds a copy of: one slide of the source, one section of it, or the whole
-    presentation. <id> is the part of the linked page for a slide, the
+                               "slides":["<part>",...]},...],
+                     "sources":[{"source":"<source document>","name":"<name>"},...]}
+    The links are one flat array in document order: a presentation, then the
+    sections it spans, each followed by the slides it spans. The unit says
+    what the link holds a copy of: one slide of the source, one section of
+    it, or the whole presentation. <id> is the part of the linked page for a
+    slide, the
     identifier of the section for a section, as the slidesections list names
     it, and an identifier of the link's own for a presentation. parent is the
     innermost link that spans the unit: the section that spans a slide, else
@@ -505,6 +523,18 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
     the parts the link spans, in slide order. A page linked to a file by its
     path is no link of this list, since a refresh has no way to reach it. A
     document that links to nothing reports an empty array.
+
+    sources lists the source documents the document keeps on its own, whether
+    or not a link reads from one, in the order they were recorded: source is
+    the persistent link and name the name the document had when it was
+    recorded, or empty. A source is recorded there on a remotelinkkeep of
+    one of the remote links of the document, and taken out by a
+    remotelinkkeep with keep=0 or a remotelinkremove, so a file a user chose
+    to keep is saved with the document and listed for the next user who
+    opens it. A remote link nobody chose to keep is not recorded. A source
+    linked as a whole presentation is kept as well, from the linking on, and
+    stays kept when that link is taken off. The kit sends the list again when
+    the kept sources change, as it does for the links.
 
     A link holds while its unit spans the slides it was linked with, in that
     order: the one page for a slide, the same slides in the same order for a
@@ -1588,10 +1618,12 @@ remotelinks: <json>
     /cool/links and the storage's answers over <WOPISrc>/linkaccess
     (WOPISrc, BaseFileName, LastModifiedTime and PersistentLink per
     entry), and from the sources the document's own slide
-    links name. A remotelinkremove takes one off the list, for every view,
+    links name and the sources it keeps on its own. A remotelinkremove
+    takes one off the list, for every view,
     and the fresh list goes out to all of them. Built for the receiving
     view: the source list is the same for every view, but the state is
-    that view's own, and the name and last-modified time of a source are
+    that view's own, and the name the storage gives a source and its
+    last-modified time are
     given only to a view that holds a token for it. Sent to a view when it
     joins and again when the shared list or that view's own access or
     subscription state changes. Access tokens and the addresses of the
@@ -1600,7 +1632,9 @@ remotelinks: <json>
 
         { "name": "<the BaseFileName the integrator gave the document, or the
                     file name at the end of its WOPISrc, for a view that holds
-                    a token for it; the persistent link for any other view>",
+                    a token for it; for any other view the name the open
+                    document records for the source, or else the persistent
+                    link>",
           "lastModifiedTime": "<time for a view that holds a token, else empty>",
           "state": "noaccess|available|subscribed|connected|disconnected|failed|missing",
           "error": "<why the subscription is failed or missing, or empty>",
@@ -1623,10 +1657,12 @@ remotelinks: <json>
     the server allows, and 'disconnected' for a live link that was lost
     for good.
     'missing' means the source cannot be read: either it could not be read
-    from storage, or it is a document the open one names as the source of
-    its slides that no remote link stands for. Such an entry carries its
-    name alone, so it says what the slides were made from while nothing can
-    reach it; its persistentLink is that name.
+    from storage, or it is a document the open one names, as the source of
+    its slides or as a source it keeps on its own, that no remote link
+    stands for. Such an entry carries the name the open document records
+    for the source, or else the persistent link, so it says which document
+    is meant while nothing can reach it. A source this view holds no token
+    for is named the same way.
 
     'access' is what asking this view's storage for the persistent link came
     to, and it is empty for a source this view never asked for, which is
@@ -2511,6 +2547,21 @@ child-<sessionId> setclipboard name=<name>:
      length\n
      <binary selection content>
      ...
+
+child-<sessionId> slidelink addsource source=<encoded persistent link> [name=<encoded name>]
+child-<sessionId> slidelink removesource source=<encoded persistent link>
+
+    Keeps a source document in the document on its own, under the name
+    given, or keeps it no more. The server sends them for a view that may
+    change the document: addsource on a remotelinkkeep with keep=1, and
+    removesource on a remotelinkkeep with keep=0 and on every
+    remotelinkremove. A source linked as a whole
+    presentation is kept for as long as that link holds: an addsource
+    leaves its name as the link records it, and a removesource leaves it
+    kept. A client that sends either is answered kind=syntax by
+    the server. Each is one undo step. Nothing is answered: the kit sends
+    slidelinks again when the kept sources changed, and a source kept
+    already under that name, or not kept, leaves the document as it is.
 
 remotedocevent tag=<t> source=<encoded persistent link> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
 

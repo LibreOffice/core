@@ -6596,9 +6596,12 @@ void DocumentBroker::setRemoteDocumentSource(const RemoteLink& link)
     _remoteLinks.setSource(*this, link);
 }
 
-void DocumentBroker::setRemoteDocumentNamedSources(std::vector<std::string> names)
+void DocumentBroker::setRemoteDocumentNamedSources(std::vector<std::string> names,
+                                                   std::map<std::string, std::string> displayNames,
+                                                   std::set<std::string> keptOnly)
 {
-    _remoteLinks.setNamedSources(*this, std::move(names));
+    _remoteLinks.setNamedSources(*this, std::move(names), std::move(displayNames),
+                                 std::move(keptOnly));
 }
 
 void DocumentBroker::setRemoteDocumentViewToken(const std::string& tag,
@@ -6665,11 +6668,37 @@ bool DocumentBroker::registerRemoteDocumentLinks(const std::string& oneTimeToken
     return registered;
 }
 
+bool DocumentBroker::keepRemoteDocumentSource(const std::shared_ptr<ClientSession>& session,
+                                              const std::string& persistentLink, bool keep)
+{
+    ASSERT_CORRECT_THREAD();
+
+    if (!RemoteDocumentBroker::isEnabled())
+        return false;
+
+    std::string message = std::string("slidelink ") + (keep ? "addsource" : "removesource") +
+                          " source=" + Uri::encode(persistentLink);
+    if (keep)
+    {
+        // The document records the name the remote link goes by, so only a link on the list
+        // that the view can read is kept.
+        const std::optional<std::string> name =
+            _remoteLinks.listedName(session->getId(), persistentLink);
+        if (!name)
+            return false;
+        if (!name->empty())
+            message += " name=" + Uri::encode(*name);
+    }
+
+    return forwardToChild(session, message);
+}
+
 bool DocumentBroker::removeRemoteDocumentSource(const std::string& persistentLink)
 {
     ASSERT_CORRECT_THREAD();
 
-    return _remoteLinks.removeSource(*this, persistentLink);
+    const bool forgotten = _remoteLinks.forgetKeptSource(*this, persistentLink);
+    return _remoteLinks.removeSource(*this, persistentLink) || forgotten;
 }
 
 void DocumentBroker::handleRemoteDocumentSubscribe(const std::string& tag,

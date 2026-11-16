@@ -331,6 +331,8 @@ private:
     bool slideLinkList();
     bool slideLinkUpdate(const StringVector& tokens);
     bool slideLinkBreak(const StringVector& tokens);
+    /// Keeps a source document in the document, or keeps it no more.
+    bool slideLinkKeepSource(const StringVector& tokens);
     /// The links of the document to the slides and the sections of other documents, as the JSON
     /// body of a slidelinks: message. A document that reports none gives an empty list.
     std::string getSlideLinksJson();

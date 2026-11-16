@@ -129,7 +129,9 @@ bool RemoteLinks::removeSource(DocumentBroker& docBroker, const std::string& per
     return true;
 }
 
-void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names)
+void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names,
+                                  std::map<std::string, std::string> displayNames,
+                                  std::set<std::string> keptOnly)
 {
     docBroker.assertCorrectThread();
 
@@ -138,10 +140,13 @@ void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::st
 
     const bool firstReport = !_namedSourcesKnown;
     _namedSourcesKnown = true;
-    if (!firstReport && names == _namedSources)
+    if (!firstReport && names == _namedSources && displayNames == _namedSourceNames &&
+        keptOnly == _keptOnlySources)
         return;
 
     _namedSources = std::move(names);
+    _namedSourceNames = std::move(displayNames);
+    _keptOnlySources = std::move(keptOnly);
 
     for (auto& itView : _views)
     {
@@ -158,6 +163,22 @@ void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::st
 
     resolveUnlistedSources(docBroker);
     refreshAllViews(docBroker);
+}
+
+bool RemoteLinks::forgetKeptSource(DocumentBroker& docBroker, const std::string& persistentLink)
+{
+    docBroker.assertCorrectThread();
+
+    if (_keptOnlySources.erase(persistentLink) == 0)
+        return false;
+
+    std::erase(_namedSources, persistentLink);
+    _namedSourceNames.erase(persistentLink);
+    for (auto& itView : _views)
+        itView.second.linkAccess.erase(persistentLink);
+
+    refreshAllViews(docBroker);
+    return true;
 }
 
 void RemoteLinks::setViewToken(DocumentBroker& docBroker, const std::string& tag,
@@ -1158,6 +1179,14 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         return it == view->linkAccess.end() ? std::string() : linkAccessName(it->second);
     };
 
+    // The name the document records for a source, or the persistent link when it records none.
+    // The document is open in the view, so the name says nothing the view cannot read.
+    const auto recordedName = [this](const std::string& persistentLink) -> const std::string&
+    {
+        const auto it = _namedSourceNames.find(persistentLink);
+        return it == _namedSourceNames.end() || it->second.empty() ? persistentLink : it->second;
+    };
+
     Poco::JSON::Array::Ptr documents = new Poco::JSON::Array();
     for (const auto& it : _entries)
     {
@@ -1180,7 +1209,8 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         const bool readable = state != "noaccess";
 
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-        entry->set("name", readable ? entryName(it.second) : it.second.persistentLink);
+        entry->set("name",
+                   readable ? entryName(it.second) : recordedName(it.second.persistentLink));
         entry->set("state", state);
         entry->set("error", error);
         entry->set("lastModifiedTime", readable ? it.second.lastModifiedTime : std::string());
@@ -1198,7 +1228,7 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
             continue;
 
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-        entry->set("name", name);
+        entry->set("name", recordedName(name));
         entry->set("state", "missing");
         entry->set("error", std::string());
         entry->set("lastModifiedTime", std::string());
@@ -1254,6 +1284,14 @@ void RemoteLinks::dumpState(std::ostream& os) const
     os << "\n  sources the document names: " << _namedSources.size()
        << " reported: " << (_namedSourcesKnown ? "yes" : "no");
     for (const std::string& name : _namedSources)
+    {
+        const auto itName = _namedSourceNames.find(name);
+        os << "\n    " << Anonymizer::anonymize(name) << " recorded name: "
+           << (itName == _namedSourceNames.end() ? std::string()
+                                                 : Anonymizer::anonymize(itName->second));
+    }
+    os << "\n  sources the document keeps with no link: " << _keptOnlySources.size();
+    for (const std::string& name : _keptOnlySources)
         os << "\n    " << Anonymizer::anonymize(name);
     os << "\n  incoming docKey chain: " << _incomingDocKeyChain.size();
     for (const std::string& docKey : _incomingDocKeyChain)

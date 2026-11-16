@@ -15,9 +15,12 @@
 
 #include <Poco/JSON/Object.h>
 
+#include <algorithm>
 #include <iosfwd>
 #include <map>
+#include <optional>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -48,8 +51,18 @@ public:
 
     /// Records the source documents the open document's own content names, which is the whole of
     /// what it names: a name reported here and nowhere else stands for a document the storage
-    /// listed no remote link for, so nothing can reach it. The same for every view.
-    void setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names);
+    /// listed no remote link for, so nothing can reach it. displayNames holds the name the
+    /// document records for a source, by persistent link, for the sources it records one for.
+    /// keptOnly holds the sources the document keeps on its own that none of its links reads
+    /// from. The same for every view.
+    void setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names,
+                         std::map<std::string, std::string> displayNames,
+                         std::set<std::string> keptOnly);
+
+    /// Stops naming a source the document keeps on its own that none of its links reads from,
+    /// ahead of the document's own report that it keeps the source no more. Reports whether
+    /// the source was one of those.
+    bool forgetKeptSource(DocumentBroker& docBroker, const std::string& persistentLink);
 
     /// Drops the remote link bound to the given persistent link: the record of it, which is
     /// the same for every view, and in every view the token, the live link and the link
@@ -121,6 +134,20 @@ public:
     /// The persistent link the remote link at the given WOPISrc is bound to. Empty when no
     /// remote link is recorded at that address.
     std::string persistentLinkOf(const std::string& wopiSrc) const;
+
+    /// The name the remote link bound to the given persistent link goes by, as the user knows
+    /// the document, for a view that holds a token for it. Nothing when no remote link is
+    /// bound to the persistent link or the view holds no token for it.
+    std::optional<std::string> listedName(const std::string& tag,
+                                          const std::string& persistentLink) const
+    {
+        const auto it = persistentLink.empty() ? _entries.end() : findListed(persistentLink);
+        const auto itView = _views.find(tag);
+        if (it == _entries.end() || itView == _views.end() ||
+            itView->second.tokens.find(it->first) == itView->second.tokens.end())
+            return std::nullopt;
+        return entryName(it->second);
+    }
 
     /// True when no remote link source is known.
     bool empty() const { return _entries.empty() && _namedSources.empty(); }
@@ -270,6 +297,14 @@ private:
     /// pages record, in the order the document names them. One a remote link is bound to is
     /// reported as that document; any other is reported as a document nothing can reach.
     std::vector<std::string> _namedSources;
+
+    /// The name the open document records for a source it names, by persistent link. A source
+    /// with no entry has no recorded name.
+    std::map<std::string, std::string> _namedSourceNames;
+
+    /// The sources the open document keeps on its own that none of its links reads from, by
+    /// persistent link. Each is one of the named sources.
+    std::set<std::string> _keptOnlySources;
 
     /// Whether the document has reported the sources its content names yet, also when it
     /// names none. A view asks its storage once the report is in.

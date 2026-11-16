@@ -1394,6 +1394,122 @@ public:
     }
 };
 
+/// A remote link registered for a presentation is on the list alone. A view that asks for it
+/// has the document keep it with no slide linked to it, so it is saved with the document, and
+/// has the document keep it no more.
+class UnitLinkKeptSource : public WopiTestServer
+{
+    /// The persistent link the registered remote link is bound to.
+    static constexpr auto SourceLink = "storage:library";
+
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitListed, WaitRefused, WaitKept, WaitDropped, Done)
+    _phase;
+
+    /// The persistent links of the sources a slidelinks: message lists as kept.
+    static std::vector<std::string> keptSources(const std::string_view message)
+    {
+        std::vector<std::string> kept;
+        Poco::JSON::Object::Ptr root;
+        const std::size_t start = message.find('{');
+        if (start == std::string_view::npos || !JsonUtil::parseJSON(message.substr(start), root))
+            return kept;
+
+        const Poco::JSON::Array::Ptr sources = root->getArray("sources");
+        for (std::size_t i = 0; sources && i < sources->size(); ++i)
+            kept.push_back(sources->getObject(i)->optValue<std::string>("source", std::string()));
+        return kept;
+    }
+
+public:
+    UnitLinkKeptSource()
+        : WopiTestServer("UnitLinkKeptSource", "slide-link-source.odp")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitLoadStatus)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitListed);
+            registerRemoteLink(
+                socketPoll(), getWopiHostURI() + "/wopi/files/consumer.odp", "anything",
+                getWopiHostURI() + "/wopi/files/slide-link-source.odp", "remotetoken",
+                [this](unsigned status)
+                { LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK), status); },
+                std::string(), SourceLink);
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("remotelinks:") && _phase == Phase::WaitListed &&
+            message.find(SourceLink) != std::string_view::npos)
+        {
+            // The link is on the list. A link that is not on it cannot be kept.
+            TRANSITION_STATE(_phase, Phase::WaitRefused);
+            WSD_CMD("remotelinkkeep source=" + Uri::encode("storage:other") + " keep=1");
+            return false;
+        }
+
+        if (message.starts_with("error: cmd=remotelinkkeep") && _phase == Phase::WaitRefused)
+        {
+            LOK_ASSERT_MESSAGE("Expected a not-found rejection",
+                               message.find("kind=notfound") != std::string_view::npos);
+            TRANSITION_STATE(_phase, Phase::WaitKept);
+            WSD_CMD("remotelinkkeep source=" + Uri::encode(SourceLink) + " keep=1");
+            return false;
+        }
+
+        if (!message.starts_with("slidelinks:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+        const std::vector<std::string> kept = keptSources(message);
+
+        // Registering the link alone keeps nothing in the document.
+        LOK_ASSERT_MESSAGE("The document keeps a source nobody asked it to keep",
+                           kept.empty() || _phase == Phase::WaitKept ||
+                               _phase == Phase::WaitDropped);
+
+        if (_phase == Phase::WaitKept && kept == std::vector<std::string>{ SourceLink })
+        {
+            // The document lists the kept link though no slide is linked to it.
+            TRANSITION_STATE(_phase, Phase::WaitDropped);
+            WSD_CMD("remotelinkkeep source=" + Uri::encode(SourceLink) + " keep=0");
+        }
+        else if (_phase == Phase::WaitDropped && kept.empty())
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The document kept the link when asked and let it go when asked");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+            initWebsocket("/wopi/files/consumer.odp?access_token=anything");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
 /// Two documents subscribe to each other at the same moment. Exactly one
 /// link survives and the other is refused as a cycle, so the pair cannot
 /// keep each other loaded forever.
@@ -4216,7 +4332,7 @@ UnitBase** unit_create_wsd_multi(void)
     {
         new UnitRemoteDocument(), new UnitRemoteDocumentViewClose(), new UnitRemoteDocumentUnload(),
             new UnitRemoteDocumentCycle(), new UnitLinkPost(), new UnitLinkPostAccessToken(),
-            new UnitLinkPostBatch(), new UnitLinkDelete(),
+            new UnitLinkPostBatch(), new UnitLinkDelete(), new UnitLinkKeptSource(),
             new UnitRemoteDocumentMutual(), new UnitRemoteDocumentCommand(),
             new UnitRemoteDocumentMissing(), new UnitRemoteDocumentRetry(),
             new UnitRemoteDocumentIsolation(), new UnitLinkReadOnlyView(),

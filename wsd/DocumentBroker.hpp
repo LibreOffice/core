@@ -44,6 +44,7 @@
 #include <deque>
 #include <cstddef>
 #include <map>
+#include <set>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -607,8 +608,19 @@ public:
     void setRemoteDocumentSource(const RemoteLink& link);
 
     /// Records the source documents this document's own content names, the whole of what it
-    /// names, so that a source the storage listed no remote link for is still reported.
-    void setRemoteDocumentNamedSources(std::vector<std::string> names);
+    /// names, so that a source the storage listed no remote link for is still reported, with
+    /// the name the document records for a source, by persistent link, and the sources it
+    /// keeps on its own that none of its links reads from.
+    void setRemoteDocumentNamedSources(std::vector<std::string> names,
+                                       std::map<std::string, std::string> displayNames = {},
+                                       std::set<std::string> keptOnly = {});
+
+    /// Tells the document, through the given view, to keep the source of the given persistent
+    /// link on its own, under the name its remote link goes by, or to keep it no more. False
+    /// when the source is to be kept and no remote link is bound to the persistent link, or
+    /// the view holds no token for it.
+    bool keepRemoteDocumentSource(const std::shared_ptr<ClientSession>& session,
+                                  const std::string& persistentLink, bool keep);
 
     /// Records the access token one view holds for a remote link. Private.
     void setRemoteDocumentViewToken(const std::string& tag, const std::string& wopiSrc,
@@ -636,7 +648,8 @@ public:
 
     /// Drops the remote link bound to the given persistent link, at the request of a view. The
     /// link is dropped for every view, since the list of remote links is the same for all of
-    /// them. Reports whether one was bound to it.
+    /// them. A source the document keeps on its own that none of its links reads from is
+    /// listed no more either. Reports whether one was bound to it or listed that way.
     bool removeRemoteDocumentSource(const std::string& persistentLink);
 
     /// Opens or drops one view's subscription to the remote document bound to the given
