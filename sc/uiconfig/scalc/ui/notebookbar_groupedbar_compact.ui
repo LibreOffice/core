@@ -1804,40 +1804,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-WordCountDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WordCountDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuReview-separator3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuReview-TrackChanges">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:TrackChanges</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuReview-ShowTrackedChanges">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ShowTrackedChanges</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuReview-AcceptTrackedChanges">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:AcceptTrackedChanges</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuReview-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2505,13 +2471,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-ShowGraphics">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ShowGraphics</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuView-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -3093,13 +3052,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Hyphenate</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuLanguage-WordCountDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WordCountDialog</property>
       </object>
     </child>
   </object>

@@ -2109,13 +2109,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-ShowGraphics">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="action-name">.uno:ShowGraphics</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuView-separator5">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
