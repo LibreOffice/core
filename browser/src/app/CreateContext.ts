@@ -1790,6 +1790,8 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 					? this.drawing.release(false)
 					: this.drawing.setThePoint(false),
 		);
+		// the double click the browser reports after this release is the one that made the object
+		if (secondClick) InteractionModeSection.passOverTheDoubleClick();
 		this.placeAgain(at, modifier);
 	}
 

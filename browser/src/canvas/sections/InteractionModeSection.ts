@@ -74,6 +74,34 @@ class InteractionModeSection extends WholePageSection {
 		this.stopPropagating();
 	}
 
+	/// How long the double click that follows a release is waited for, in milliseconds.
+	private static readonly doubleClickWait: number = 500;
+
+	/*
+		Passes over the double click the browser reports after the release that just ended a mode,
+		so it reaches nothing under the mode, which would start a text edit on the object made, or
+		take the selection away from it. It is caught at the window, before the canvas has it; one
+		that does not come soon is no longer waited for.
+	*/
+	public static passOverTheDoubleClick(): void {
+		const passOver = (event: MouseEvent) => {
+			if (event.target !== document.getElementById('document-canvas')) return;
+			event.stopPropagation();
+			event.preventDefault();
+			stop();
+		};
+		const stop = () => {
+			app.timerRegistry.clearTimeout(wait);
+			window.removeEventListener('dblclick', passOver, true);
+		};
+		const wait = app.timerRegistry.setTimeout(
+			'passoverdoubleclick',
+			stop,
+			InteractionModeSection.doubleClickWait,
+		);
+		window.addEventListener('dblclick', passOver, true);
+	}
+
 	/// The section, where it is there.
 	private static section(): InteractionModeSection | null {
 		const section = app.sectionContainer?.getSectionWithName(
