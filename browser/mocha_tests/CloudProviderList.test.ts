@@ -175,3 +175,191 @@ describe('CloudProviderList', function () {
 		nodeassert.strictEqual(reasons.length, 1);
 	});
 });
+
+// A Storage that keeps its items in memory.
+class MemoryStorage {
+	items: Map<string, string> = new Map();
+
+	get length(): number {
+		return this.items.size;
+	}
+
+	key(index: number): string | null {
+		const keys = Array.from(this.items.keys());
+		return index < keys.length ? keys[index] : null;
+	}
+
+	getItem(key: string): string | null {
+		return this.items.has(key) ? this.items.get(key) : null;
+	}
+
+	setItem(key: string, value: string): void {
+		this.items.set(key, String(value));
+	}
+
+	removeItem(key: string): void {
+		this.items.delete(key);
+	}
+
+	clear(): void {
+		this.items.clear();
+	}
+}
+
+describe('CloudProviderList refresh', function () {
+	const svgLogo = 'data:image/svg+xml;base64,PHN2Zy8+';
+	const cacheKey = 'coda.cloudProviderList';
+
+	function listFile(kinds: string[]): string {
+		return JSON.stringify({
+			kind: 'cloudproviders',
+			providers: kinds.map((kind) => ({
+				kind: kind,
+				label: kind + ' label',
+				logo: svgLogo,
+				hasSyncClient: false,
+			})),
+		});
+	}
+
+	// A fetch that answers every request with the same reply, and records the URLs it got.
+	function fakeFetch(reply: {
+		ok: boolean;
+		status: number;
+		body?: string;
+	}): any {
+		const fetchFunction: any = (url: string) => {
+			fetchFunction.urls.push(url);
+			return Promise.resolve({
+				ok: reply.ok,
+				status: reply.status,
+				text: () => Promise.resolve(reply.body || ''),
+			});
+		};
+		fetchFunction.urls = [];
+		return fetchFunction;
+	}
+
+	function failingFetch(): any {
+		return () => Promise.reject(new TypeError('Failed to fetch'));
+	}
+
+	function kindsOf(data: CloudProviderList.Data | null): string[] {
+		return data ? data.providers.map((entry) => entry.kind) : [];
+	}
+
+	let storage: MemoryStorage;
+	let warnings: string[];
+	let originalWarn: any;
+
+	beforeEach(function () {
+		storage = new MemoryStorage();
+		warnings = [];
+		originalWarn = app.console.warn;
+		app.console.warn = (...args: any[]) => {
+			warnings.push(args.join(' '));
+		};
+	});
+
+	afterEach(function () {
+		app.console.warn = originalWarn;
+	});
+
+	it('caches a valid downloaded list and returns it', async function () {
+		const data = await CloudProviderList.refresh(
+			fakeFetch({
+				ok: true,
+				status: 200,
+				body: listFile(['owncloud', 'pydio']),
+			}),
+			storage as any,
+		);
+		nodeassert.deepStrictEqual(kindsOf(data), ['owncloud', 'pydio']);
+		nodeassert.deepStrictEqual(
+			kindsOf(CloudProviderList.cached(storage as any)),
+			['owncloud', 'pydio'],
+		);
+		nodeassert.deepStrictEqual(warnings, []);
+	});
+
+	it('keeps the cached list when the download fails', async function () {
+		const cachedText = listFile(['owncloud']);
+		const failures = [
+			failingFetch(),
+			fakeFetch({ ok: false, status: 404 }),
+			fakeFetch({ ok: true, status: 200, body: '{' }),
+		];
+		for (const fetchFunction of failures) {
+			storage.setItem(cacheKey, cachedText);
+			const data = await CloudProviderList.refresh(
+				fetchFunction,
+				storage as any,
+			);
+			nodeassert.strictEqual(data, null);
+			nodeassert.strictEqual(storage.getItem(cacheKey), cachedText);
+		}
+	});
+
+	it('returns nothing when the downloaded list did not change', async function () {
+		const fetchFunction = fakeFetch({
+			ok: true,
+			status: 200,
+			body: listFile(['owncloud']),
+		});
+		nodeassert.notStrictEqual(
+			await CloudProviderList.refresh(fetchFunction, storage as any),
+			null,
+		);
+		nodeassert.strictEqual(
+			await CloudProviderList.refresh(fetchFunction, storage as any),
+			null,
+		);
+	});
+
+	it('downloads the list once from the published address', async function () {
+		const fetchFunction = fakeFetch({
+			ok: true,
+			status: 200,
+			body: listFile(['owncloud']),
+		});
+		await CloudProviderList.refresh(fetchFunction, storage as any);
+		nodeassert.deepStrictEqual(fetchFunction.urls, [
+			CloudProviderList.remoteUrl,
+		]);
+	});
+
+	it('ignores a cached list that it cannot read', function () {
+		for (const text of ['{', '[]', listFile([])]) {
+			storage.setItem(cacheKey, text);
+			nodeassert.strictEqual(CloudProviderList.cached(storage as any), null);
+		}
+		storage.clear();
+		nodeassert.strictEqual(CloudProviderList.cached(storage as any), null);
+	});
+
+	it('reads no list from a storage that throws', function () {
+		const broken: any = {
+			getItem: () => {
+				throw new Error('denied');
+			},
+		};
+		nodeassert.strictEqual(CloudProviderList.cached(broken), null);
+	});
+
+	it('logs one warning that names the cause of a failed download', async function () {
+		const cases: [any, string][] = [
+			[failingFetch(), 'network'],
+			[fakeFetch({ ok: false, status: 404 }), '404'],
+			[
+				fakeFetch({ ok: true, status: 200, body: listFile([]) }),
+				'no usable provider',
+			],
+		];
+		for (const [fetchFunction, cause] of cases) {
+			warnings = [];
+			await CloudProviderList.refresh(fetchFunction, storage as any);
+			nodeassert.strictEqual(warnings.length, 1, cause);
+			nodeassert.ok(warnings[0].indexOf(cause) >= 0, warnings[0]);
+		}
+	});
+});

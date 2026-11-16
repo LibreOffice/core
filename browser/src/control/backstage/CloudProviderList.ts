@@ -82,18 +82,24 @@ namespace CloudProviderList {
 	}
 
 	// The list a parsed file holds, or null when the file is not a list this code can read or
-	// holds no usable provider. Unknown fields are ignored.
-	export function validate(value: unknown): Data | null {
-		if (!isObject(value)) return null;
-		if (value.kind !== fileKind) return null;
-		if (!Array.isArray(value.providers)) return null;
+	// holds no usable provider. Unknown fields are ignored. reject receives the reason for a null
+	// result.
+	export function validate(
+		value: unknown,
+		reject: (reason: string) => null = () => null,
+	): Data | null {
+		if (!isObject(value) || value.kind !== fileKind)
+			return reject('the file is not a cloud provider list');
+		if (!Array.isArray(value.providers))
+			return reject('the file is not a cloud provider list');
 
 		const providers: Provider[] = [];
 		value.providers.forEach((entry: unknown) => {
 			const provider = validateProvider(entry);
 			if (provider) providers.push(provider);
 		});
-		if (providers.length === 0) return null;
+		if (providers.length === 0)
+			return reject('the file holds no usable provider');
 		return { providers: providers };
 	}
 
@@ -115,7 +121,86 @@ namespace CloudProviderList {
 		} catch (error) {
 			return reject('the file is not JSON');
 		}
-		const data = validate(parsed);
-		return data ? data : reject('the file is not a valid cloud provider list');
+		return validate(parsed, reject);
+	}
+
+	// The reply of a fetch call, as far as refresh reads it.
+	export interface FetchReply {
+		ok: boolean;
+		status: number;
+		text(): Promise<string>;
+	}
+
+	export type FetchFunction = (
+		url: string,
+		init?: RequestInit,
+	) => Promise<FetchReply>;
+
+	// The published list. The address stays the same, and the file behind it changes.
+	export const remoteUrl = 'https://col.la/codacloudproviders';
+
+	// The last downloaded list after validation, stored in the format of the file.
+	const cacheKey = 'coda.cloudProviderList';
+
+	function readItem(storage: Storage, key: string): string | null {
+		try {
+			return storage.getItem(key);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	// The last downloaded list, or null when there is none or it cannot be read.
+	export function cached(storage: Storage): Data | null {
+		const text = readItem(storage, cacheKey);
+		if (text === null) return null;
+		try {
+			return validate(JSON.parse(text));
+		} catch (error) {
+			return null;
+		}
+	}
+
+	// Downloads the published list and stores it. Resolves with the new list when it differs
+	// from the stored one, and with null in every other case. A failure keeps the stored list.
+	export async function refresh(
+		fetchFunction: FetchFunction,
+		storage: Storage,
+	): Promise<Data | null> {
+		const fail = (reason: string): null => {
+			window.app.console.warn(
+				'Cloud provider list: ' + reason + ', so the stored list stays',
+			);
+			return null;
+		};
+
+		let text: string;
+		try {
+			// no-cache makes the web view ask the server whether its copy is current.
+			const reply = await fetchFunction(remoteUrl, { cache: 'no-cache' });
+			if (!reply.ok)
+				return fail(remoteUrl + ' answered with HTTP status ' + reply.status);
+			text = await reply.text();
+		} catch (error) {
+			return fail('a network error stopped the download of ' + remoteUrl);
+		}
+
+		let reason = '';
+		const data = parseRemote(text, (rejected) => {
+			reason = rejected;
+		});
+		if (!data) return fail(reason);
+
+		const stored = JSON.stringify({
+			kind: fileKind,
+			providers: data.providers,
+		});
+		if (readItem(storage, cacheKey) === stored) return null;
+		try {
+			storage.setItem(cacheKey, stored);
+		} catch (error) {
+			return fail('the browser storage refused the list');
+		}
+		return data;
 	}
 }

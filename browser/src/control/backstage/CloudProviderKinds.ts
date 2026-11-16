@@ -42,39 +42,18 @@ namespace BackstageCloudKinds {
 	// Any server that speaks the protocol, whichever product runs it.
 	const otherKind = 'other';
 
-	// The services this build ships with. A branding offers its own instead.
-	const shippedKinds: CloudKindEntry[] = [
-		{
-			kind: 'nextcloud',
-			label: 'Nextcloud',
-			isBrand: false,
-			logo: 'images/cloud-providers/nextcloud.svg',
-		},
-		{
-			kind: 'opencloud',
-			label: 'OpenCloud',
-			isBrand: false,
-			logo: 'images/cloud-providers/opencloud.svg',
-		},
-		{
-			kind: 'seafile',
-			label: 'Seafile',
-			isBrand: false,
-			logo: 'images/cloud-providers/seafile.svg',
-		},
-	];
-
 	export function isValidKind(kind: unknown): boolean {
 		return CloudProviderList.isValidKind(kind);
 	}
 
 	// The services on offer, in the order they are listed to the user. A branding that declares
-	// a list is taken at its word, even when nothing in that list is usable: the shipped
-	// services appear only where no branding declared a list at all. Other comes last, and
-	// exactly once: a branding that names it as well gets the translated entry, not two rows.
+	// a list is taken at its word, even when nothing in that list is usable: the downloaded
+	// services appear only where no branding declared a list at all. Before the first download
+	// only Other is on offer. Other comes last, and exactly once: a branding that names it as
+	// well gets the translated entry, not two rows.
 	export function list(): CloudKindEntry[] {
 		const branded = brandedKinds();
-		const offered = branded !== undefined ? branded : shippedKinds;
+		const offered = branded !== undefined ? branded : downloadedKinds();
 		return offered.concat([
 			{ kind: otherKind, label: _('Other'), isBrand: false },
 		]);
@@ -139,6 +118,40 @@ namespace BackstageCloudKinds {
 		image.draggable = false;
 		if (className) image.className = className;
 		return image;
+	}
+
+	// Downloads the published list unless a branding declares its own. Resolves with true when
+	// the list on offer changed.
+	export function refreshList(): Promise<boolean> {
+		if (isBranded()) return Promise.resolve(false);
+		const storage = pageStorage();
+		if (!storage) return Promise.resolve(false);
+		return CloudProviderList.refresh(
+			(url, init) => fetch(url, init),
+			storage,
+		).then((data) => data !== null);
+	}
+
+	// The storage of the page, or null where the browser refuses access to it.
+	function pageStorage(): Storage | null {
+		try {
+			return localStorage;
+		} catch (error) {
+			return null;
+		}
+	}
+
+	function downloadedKinds(): CloudKindEntry[] {
+		const storage = pageStorage();
+		const data = storage ? CloudProviderList.cached(storage) : null;
+		if (!data) return [];
+		return data.providers.map((provider) => ({
+			kind: provider.kind,
+			label: provider.label,
+			isBrand: false,
+			logo: provider.logo,
+			logoDark: provider.logoDark,
+		}));
 	}
 
 	function find(kind: CloudProviderKind): CloudKindEntry | undefined {
