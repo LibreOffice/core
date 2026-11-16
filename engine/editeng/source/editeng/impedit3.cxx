@@ -2301,7 +2301,6 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
             aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
             aUserOptions.applyForbiddenRules = static_cast<const SfxBoolItem&>(rNode.GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
             aUserOptions.allowPunctuationOutsideMargin = bAllowPunctuationOutsideMargin;
-            aUserOptions.allowHyphenateEnglish = false;
 
             if (!maStatus.IsSingleLine())
             {

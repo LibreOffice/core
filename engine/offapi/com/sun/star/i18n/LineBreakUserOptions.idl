@@ -39,9 +39,6 @@ published struct LineBreakUserOptions
         the punctuation would wrap. */
     boolean allowPunctuationOutsideMargin;
 
-    /// Allow English hyphenation.
-    boolean allowHyphenateEnglish;
-
 };
 
 }; }; }; };

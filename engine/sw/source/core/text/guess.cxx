@@ -713,7 +713,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
         LineBreakUserOptions aUserOpt(
                 aForbidden.beginLine, aForbidden.endLine,
-                rInf.HasForbiddenChars(), bAllowHanging, false );
+                rInf.HasForbiddenChars(), bAllowHanging );
 
         // !!! We must have a local copy of the locale, because inside
         // getLineBreak the LinguEventListener can trigger a new formatting,

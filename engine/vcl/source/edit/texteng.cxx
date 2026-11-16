@@ -1631,7 +1631,6 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nPor
     aUserOptions.forbiddenEndCharacters = ImpGetLocaleDataWrapper()->getForbiddenCharacters().endLine;
     aUserOptions.applyForbiddenRules = true;
     aUserOptions.allowPunctuationOutsideMargin = false;
-    aUserOptions.allowHyphenateEnglish = false;
 
     static const css::lang::Locale aDefLocale;
     i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, aDefLocale, pLine->GetStart(), aHyphOptions, aUserOptions );

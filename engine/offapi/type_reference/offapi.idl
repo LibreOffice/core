@@ -7491,7 +7491,6 @@ module com {
      string forbiddenEndCharacters;
      boolean applyForbiddenRules;
      boolean allowPunctuationOutsideMargin;
-     boolean allowHyphenateEnglish;
     };
     published interface XBreakIterator {
      interface ::cpo::uno::XInterface;
