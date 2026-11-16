@@ -1520,15 +1520,22 @@ button.leaflet-control-search-next
 	display: none;
 }
 
-/* the Shapes and Lines buttons stand one above the other and are as wide as their column, so
-   their arrows line up */
+/* the Shapes and Lines buttons stand one above the other and are as wide as their column, with
+   their arrows at the right edge, so the arrows line up; a toolbox is only as wide as its content
+   otherwise, and the arrow follows the label */
 .notebookbar.vertical:has(> .toolbox > [id^='insert-line']) > .toolbox {
 	justify-self: stretch;
+	width: auto;
 	grid-template-columns: 1fr;
 }
 
 .notebookbar.vertical:has(> .toolbox > [id^='insert-line']) > .toolbox > .menubutton {
 	width: 100%;
+	grid-template-columns: 1fr auto auto;
+}
+
+.notebookbar.vertical:has(> .toolbox > [id^='insert-line']) > .toolbox > .menubutton > .arrowbackground {
+	justify-self: end;
 }
 
 /* the lines fit without scrolling; their popup keeps room for a scrollbar as the shapes popup
