@@ -155,6 +155,24 @@ final class CODAWebView: WKWebView {
         ViewController.openDocuments(urls)
         return !urls.isEmpty
     }
+
+    // The page receives every modified key before the menus do, and it consumes Ctrl-Tab. While
+    // the window has more than one tab, Ctrl-Tab and Shift-Ctrl-Tab select the next and the
+    // previous tab here.
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        if event.type == .keyDown && event.keyCode == 48 /* kVK_Tab */
+            && modifiers.subtracting(.shift) == .control,
+           let window, (window.tabbedWindows?.count ?? 0) > 1 {
+            if modifiers.contains(.shift) {
+                window.selectPreviousTab(nil)
+            } else {
+                window.selectNextTab(nil)
+            }
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
 }
 
 class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavigationDelegate, WKUIDelegate {
