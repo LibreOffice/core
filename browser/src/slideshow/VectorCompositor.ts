@@ -50,6 +50,18 @@ interface SlideTextPieces {
 	layerPieces: SlidePiece[];
 }
 
+/// The two slides of a morph: the hash, the data and the layers of each, and the pieces of their
+/// text when the morph takes the text apart.
+interface MorphSlides {
+	leavingHash: string;
+	enteringHash: string;
+	leavingData: cool.VectorPrimitivesData;
+	enteringData: cool.VectorPrimitivesData;
+	leavingLayers: VectorSlideLayers;
+	enteringLayers: VectorSlideLayers;
+	text: MorphTextPieces | undefined;
+}
+
 class VectorCompositor extends SlideCompositor {
 	private offscreenCanvas: OffscreenCanvas = null;
 	private offscreenContext: OffscreenCanvasRenderingContext2D = null;
@@ -503,18 +515,33 @@ class VectorCompositor extends SlideCompositor {
 		);
 	}
 
-	public drawMorphFrame(
+	/// Build the layers of the two slides of a morph and paint them, so the first frame of the
+	/// morph draws at once. False when either slide cannot be drawn object by object.
+	public prepareMorph(
 		context: RenderContextGl,
 		leavingIndex: number,
 		enteringIndex: number,
-		time: number,
 	): boolean {
-		if (this.disposed || context.isDisposed()) return false;
+		const morph = this._morphOf(context, leavingIndex, enteringIndex);
+		if (!morph) return false;
+		while (morph.leavingLayers.paintNext());
+		while (morph.enteringLayers.paintNext());
+		return true;
+	}
+
+	// The layers of the two slides of a morph, with the pieces of the morph, and the pairs of
+	// objects of the morph in this.morph. Null when either slide cannot be drawn.
+	private _morphOf(
+		context: RenderContextGl,
+		leavingIndex: number,
+		enteringIndex: number,
+	): MorphSlides | null {
+		if (this.disposed || context.isDisposed()) return null;
 		const leavingHash = this._metaPresentation.getSlideHash(leavingIndex);
 		const enteringHash = this._metaPresentation.getSlideHash(enteringIndex);
 		const leavingData = this._drawableData(leavingHash);
 		const enteringData = this._drawableData(enteringHash);
-		if (!leavingData || !enteringData) return false;
+		if (!leavingData || !enteringData) return null;
 
 		// Both slides are drawn with the pieces of this morph.
 		const filterInfo = TransitionFilterInfo.fromSlideInfo(
@@ -534,7 +561,7 @@ class VectorCompositor extends SlideCompositor {
 			enteringData,
 			mode,
 		);
-		if (!leavingLayers || !enteringLayers) return false;
+		if (!leavingLayers || !enteringLayers) return null;
 		const text: MorphTextPieces | undefined = mode
 			? {
 					leaving: this._slidePieces(
@@ -561,11 +588,39 @@ class VectorCompositor extends SlideCompositor {
 			const megabytes = (layers: VectorSlideLayers) =>
 				(layers.textureMemory / (1024 * 1024)).toFixed(1);
 			app.console.debug(
-				`VectorCompositor.drawMorphFrame: ${text?.leaving.length ?? 0} and ` +
+				`VectorCompositor: a morph of ${text?.leaving.length ?? 0} and ` +
 					`${text?.entering.length ?? 0} pieces of text, layers of ` +
 					`${megabytes(leavingLayers)} and ${megabytes(enteringLayers)} MB`,
 			);
 		}
+		return {
+			leavingHash,
+			enteringHash,
+			leavingData,
+			enteringData,
+			leavingLayers,
+			enteringLayers,
+			text,
+		};
+	}
+
+	public drawMorphFrame(
+		context: RenderContextGl,
+		leavingIndex: number,
+		enteringIndex: number,
+		time: number,
+	): boolean {
+		const morph = this._morphOf(context, leavingIndex, enteringIndex);
+		if (!morph || !this.morph) return false;
+		const {
+			leavingHash,
+			enteringHash,
+			leavingData,
+			enteringData,
+			leavingLayers,
+			enteringLayers,
+			text,
+		} = morph;
 
 		const [leavingMoves, enteringMoves] = this.morph.states(time);
 		const leaving = this._morphSide(

@@ -25,6 +25,19 @@ class MorphTransition extends SlideShow.FadeTransition {
 		super(transitionParameters);
 	}
 
+	// The fade draws the slides from their textures. A morph that got none builds no program.
+	protected createProgram(): void {
+		if (this.enteringSlide) super.createProgram();
+	}
+
+	protected prepareTransition(): void {
+		if (this.enteringSlide) super.prepareTransition();
+	}
+
+	public endTransition(): void {
+		if (this.program) super.endTransition();
+	}
+
 	public render(nT: number, properties?: AnimatedElementRenderProperties) {
 		if (this.context.isDisposed()) return;
 		const drawMorph = this.transitionParameters.drawMorph;
@@ -36,8 +49,12 @@ class MorphTransition extends SlideShow.FadeTransition {
 			drawMorph(MorphTransition._eased(nT));
 		}
 		if (!this.isMorphing) {
-			super.render(nT, properties);
-			return;
+			if (this.enteringSlide) {
+				super.render(nT, properties);
+				return;
+			}
+			// Without the slide textures there is no fade, so the entering slide shows at once.
+			if (!this.transitionParameters.drawEnteringSlide?.()) return;
 		}
 		app.map.fire('newslideshowframe', { frame: this.gl.canvas });
 	}

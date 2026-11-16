@@ -24,6 +24,9 @@ class TransitionParameters {
 	// Draws the frame of a morph at a time from 0 to 1 into the canvas. False when the slides
 	// cannot be drawn object by object. Null outside a morph.
 	public drawMorph: (time: number) => boolean = null;
+	// Draws the entering slide into the canvas. False when it cannot be drawn. Null outside a
+	// morph that got no slide textures.
+	public drawEnteringSlide: () => boolean = null;
 }
 
 abstract class TransitionBase extends SlideChangeGl {

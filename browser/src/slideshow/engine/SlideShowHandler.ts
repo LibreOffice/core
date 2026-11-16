@@ -1254,27 +1254,11 @@ class SlideShowHandler {
 		nNewSlide: number,
 		nOldSlide: number,
 	): TransitionParameters {
-		let leavingSlideTexture: WebGLTexture | ImageBitmap = null;
 		const transitionFilterInfo = TransitionFilterInfo.fromSlideInfo(
 			this.getSlideInfo(nNewSlide),
 		);
-		if (this.isStarting) {
-			leavingSlideTexture = this.slideRenderer.createEmptyTexture();
-		} else {
-			leavingSlideTexture =
-				nOldSlide !== undefined &&
-				this.slideRenderer.lastRenderedSlideIndex === nOldSlide
-					? this.slideRenderer.getSlideTexture()
-					: this.getTexture(nOldSlide, transitionFilterInfo);
-		}
-		const enteringSlideTexture = this.getTexture(
-			nNewSlide,
-			transitionFilterInfo,
-		);
 		const transitionParameters = new TransitionParameters();
 		transitionParameters.context = this.slideRenderer._context;
-		transitionParameters.current = leavingSlideTexture;
-		transitionParameters.next = enteringSlideTexture;
 		transitionParameters.transitionFilterInfo = transitionFilterInfo;
 
 		if (
@@ -1291,7 +1275,30 @@ class SlideShowHandler {
 					nNewSlide,
 					time,
 				);
+			// A morph draws both slides from their layers and takes no texture of either.
+			if (this.slideCompositor.prepareMorph(context, nOldSlide, nNewSlide)) {
+				transitionParameters.drawEnteringSlide = () =>
+					this.slideCompositor.drawFrameInto(context, nNewSlide);
+				return transitionParameters;
+			}
 		}
+
+		let leavingSlideTexture: WebGLTexture | ImageBitmap = null;
+		if (this.isStarting) {
+			leavingSlideTexture = this.slideRenderer.createEmptyTexture();
+		} else {
+			leavingSlideTexture =
+				nOldSlide !== undefined &&
+				this.slideRenderer.lastRenderedSlideIndex === nOldSlide
+					? this.slideRenderer.getSlideTexture()
+					: this.getTexture(nOldSlide, transitionFilterInfo);
+		}
+		const enteringSlideTexture = this.getTexture(
+			nNewSlide,
+			transitionFilterInfo,
+		);
+		transitionParameters.current = leavingSlideTexture;
+		transitionParameters.next = enteringSlideTexture;
 
 		const isLeavingSlideMoving =
 			!this.isStarting &&
