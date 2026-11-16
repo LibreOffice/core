@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-10-23 06:26+0000\n"
+"PO-Revision-Date: 2026-11-16 11:08+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/id/>\n"
-"Language: \n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1466,11 +1466,12 @@ msgstr "Yang pertama dikonfigurasi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Menerjemahkan dengan {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5055
 msgid "No provider is set up: the Translate command is not offered."
 msgstr ""
+"Belum ada penyedia yang dikonfigurasi: perintah Terjemahkan tidak tersedia."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5095
 msgid "API URL"
@@ -1581,6 +1582,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"File ini adalah kamus ejaan, bukan daftar kata. Unggah daftar kata dengan "
+"satu kata per baris."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1826,26 +1829,26 @@ msgstr "Duplikat Gaya"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
+msgstr[0] "%n tahun"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
+msgstr[0] "%n hari"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
+msgstr[0] "%n jam"
 
 #: src/app/Util.ts:325
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] ""
+msgstr[0] "%n menit"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "kurang dari satu menit"
 
 #: src/canvas/sections/CommentListSection.ts:2273
 #: src/canvas/sections/CommentListSection.ts:2286
@@ -1895,9 +1898,8 @@ msgid "Reply"
 msgstr "Balas"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Komentar"
+msgstr "komentar"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1905,7 +1907,7 @@ msgstr "Tekan Ctrl + Enter untuk memposting"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Balas {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2019,11 +2021,11 @@ msgstr "Dokumen berisi video yang tidak didukung"
 
 #: src/canvas/sections/SelectionSection.ts:1562
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Menunggu pengulangan..."
 
 #: src/canvas/sections/SelectionSection.ts:1563
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Menunggu pembatalan..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2173,7 +2175,7 @@ msgstr "Kasual"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "Nada {0}"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2250,27 +2252,27 @@ msgstr "Apa yang ingin Anda lakukan dengan dokumen ini?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Selamat pagi, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Selamat pagi!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Selamat siang, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Selamat siang!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Selamat malam, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Selamat malam!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2867,21 +2869,20 @@ msgid "Reject action"
 msgstr "Tolak tindakan"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Terkirim"
+msgstr "Kirim"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Kirim sel-sel ini"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Jangan kirim sel-sel ini"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Tidak ada yang dikirim."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -2999,11 +3000,11 @@ msgstr "Diagnosa galat formula di"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "Untuk mendiagnosis kesalahan di %1, sel-sel ini akan dikirim ke %2:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Apakah Anda ingin mengirimnya?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3013,7 +3014,7 @@ msgstr "Saya memiliki galat formula di spreadsheet saya."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Sel {0} (Lembar: {1}) berisi:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3030,9 +3031,8 @@ msgstr "Sel yang direferensikan"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Harap diagnosa mengapa formula ini menghasilkan"
+msgstr "Harap diagnosis penyebab rumus ini menghasilkan kesalahan {0}."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3048,11 +3048,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "hanya sel yang memiliki kesalahan"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "file lain, hanya namanya"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3163,6 +3163,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Tabel ini menunjukkan tampilan setiap sel. Daftar \"Rumus:\" di bawahnya "
+"memuat rumus dari setiap sel yang memilikinya."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3430,7 +3432,7 @@ msgstr "Progres pembersihan"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Hentikan Pembersihan"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -4767,9 +4769,8 @@ msgstr "Bantuan daring"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:678
 #: src/control/Control.Menubar.ts:850 src/control/Control.Menubar.ts:1178
 #: src/control/Control.NotebookbarWriter.js:530
-#, fuzzy
 msgid "Show Tour"
-msgstr "Tampilkan tur"
+msgstr "Tampilkan Tur"
 
 #: src/control/Control.Menubar.ts:462 src/control/Control.Menubar.ts:680
 #: src/control/Control.Menubar.ts:852 src/control/Control.Menubar.ts:1180
@@ -5413,7 +5414,7 @@ msgstr "Warna Isian (Hanya Gambar Transparan)"
 
 #: src/control/Control.Notebookbar.js:673
 msgid "Area"
-msgstr ""
+msgstr "Area"
 
 #: src/control/Control.Notebookbar.js:688
 msgid "Line"
@@ -6235,43 +6236,39 @@ msgstr "pratinjau halaman %1, %3 tidak tersedia"
 
 #: src/control/Control.PartsPreview.js:991
 msgid "%1, %3 is missing"
-msgstr ""
+msgstr "%1, %3 tidak ada"
 
 #: src/control/Control.PartsPreview.js:995
 msgid "preview of page %1, not found in %3"
 msgstr "pratinjau halaman %1, tidak ditemukan di %3"
 
 #: src/control/Control.PartsPreview.js:996
-#, fuzzy
 msgid "%1, not found in %3"
-msgstr "Slide %1, tidak ditemukan di %3"
+msgstr "%1, tidak ditemukan di %3"
 
 #: src/control/Control.PartsPreview.js:1000
 msgid "preview of page %1, no access to %3"
 msgstr "pratinjau halaman %1, tidak ada akses ke %3"
 
 #: src/control/Control.PartsPreview.js:1001
-#, fuzzy
 msgid "%1, no access to %3"
-msgstr "Slide %1, tidak ada akses ke %3"
+msgstr "%1, tidak memiliki akses ke %3"
 
 #: src/control/Control.PartsPreview.js:1005
 msgid "preview of page %1, could not open %3"
 msgstr "pratinjau halaman %1, tidak dapat membuka %3"
 
 #: src/control/Control.PartsPreview.js:1006
-#, fuzzy
 msgid "%1, could not open %3"
-msgstr "Slide %1, tidak dapat membuka %3"
+msgstr "%1, tidak dapat membuka %3"
 
 #: src/control/Control.PartsPreview.js:1011
 msgid "preview of page %1, %2 changed in %3"
 msgstr "pratinjau halaman %1, %2 berubah di %3"
 
 #: src/control/Control.PartsPreview.js:1012
-#, fuzzy
 msgid "%1, %2 changed in %3"
-msgstr "Slide %1, %2 berubah di %3"
+msgstr "%1, %2 berubah di %3"
 
 #: src/control/Control.PartsPreview.js:1015
 msgid "preview of page %1, changed in %3"
@@ -6279,25 +6276,23 @@ msgstr "pratinjau halaman %1, berubah di %3"
 
 #: src/control/Control.PartsPreview.js:1016
 msgid "%1, changed in %3"
-msgstr ""
+msgstr "%1, berubah di %3"
 
 #: src/control/Control.PartsPreview.js:1020
 msgid "preview of page %1, %3 is disconnected"
 msgstr "pratinjau halaman %1, koneksi ke %3 terputus"
 
 #: src/control/Control.PartsPreview.js:1021
-#, fuzzy
 msgid "%1, %3 is disconnected"
-msgstr "Slide %1, koneksi ke %3 terputus"
+msgstr "%1, %3 terputus"
 
 #: src/control/Control.PartsPreview.js:1025
 msgid "preview of page %1, linked to %2 in %3"
 msgstr "pratinjau halaman %1, ditautkan ke %2 di %3"
 
 #: src/control/Control.PartsPreview.js:1026
-#, fuzzy
 msgid "%1, linked to %2 in %3"
-msgstr "Slide %1, ditautkan ke %2 di %3"
+msgstr "%1, ditautkan ke %2 di %3"
 
 #: src/control/Control.PartsPreview.js:1029
 msgid "preview of page %1, linked to %2"
@@ -6305,23 +6300,23 @@ msgstr "pratinjau halaman %1, ditautkan ke %2"
 
 #: src/control/Control.PartsPreview.js:1030
 msgid "%1, linked to %2"
-msgstr ""
+msgstr "%1, ditautkan ke %2"
 
 #: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Ditautkan ke bagian dari %1 yang tidak ada"
 
 #: src/control/Control.PartsPreview.js:1255
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Ditautkan ke bagian dari %1 yang telah berubah"
 
 #: src/control/Control.PartsPreview.js:1257
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Ditautkan ke bagian dari %1, terputus"
 
 #: src/control/Control.PartsPreview.js:1258
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Ditautkan ke bagian dari %1"
 
 #: src/control/Control.PartsPreview.js:1402
 #: src/control/Control.PartsPreview.js:1569
@@ -6346,15 +6341,15 @@ msgstr "Pindahkan Bagian ke Bawah"
 
 #: src/control/Control.PartsPreview.js:1446
 msgid "Update Section"
-msgstr ""
+msgstr "Perbarui Bagian"
 
 #: src/control/Control.PartsPreview.js:1454
 msgid "Unlink Section"
-msgstr ""
+msgstr "Putuskan Tautan Bagian"
 
 #: src/control/Control.PartsPreview.js:1461
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Putuskan Tautan Bagian & Slide"
 
 #: src/control/Control.PartsPreview.js:1470
 msgid "Collapse All Sections"
@@ -6487,7 +6482,7 @@ msgstr "Sisipkan slide"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Sisipkan bagian \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6503,19 +6498,21 @@ msgstr "Sisipkan {0} slide"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "Cara menyisipkan bagian"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Sisipkan sebagai bagian \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Sisipkan sebagai slide terpisah"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Ditautkan ke bagiannya di {0}. Perbarui Tautan akan menerapkan perubahan "
+"selanjutnya."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6657,11 +6654,11 @@ msgstr "Tertaut ke {0} dalam {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:122
 msgid "Linked to {0}"
-msgstr ""
+msgstr "Ditautkan ke {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:123
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "Dalam bagian yang ditautkan ke {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:148
 msgid "Hide the actions for this linked slide"
@@ -6678,7 +6675,7 @@ msgstr "Putuskan Tautan"
 #: src/control/Control.SlideLinkToolbar.tsx:179
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update section"
-msgstr ""
+msgstr "Perbarui bagian"
 
 #: src/control/Control.SlideLinkToolbar.tsx:193
 msgid "Not available"
@@ -6707,24 +6704,28 @@ msgstr "Tidak ada slide dalam presentasi ini yang ditautkan ke file lain."
 
 #: src/slideimport/SlideLinks.ts:433
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Bagian ini tidak dapat diperbarui karena sumbernya tidak tersedia."
 
 #: src/slideimport/SlideLinks.ts:455
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Satu bagian tertaut tidak dapat diperbarui karena sumbernya tidak tersedia."
 
 #: src/slideimport/SlideLinks.ts:458
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"{0} bagian tertaut tidak dapat diperbarui karena sumbernya tidak tersedia."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"Bagian ini akan berisi slide yang saat ini ada di bagian sumbernya di {0}. "
+"Perubahan yang dibuat pada slide-slide ini dalam presentasi ini akan hilang."
 
 #: src/slideimport/SlideLinks.ts:470
 msgid ""
@@ -6732,10 +6733,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"{0} bagian tertaut akan berisi slide yang saat ini ada di bagian sumbernya "
+"dalam file sumber. Perubahan yang dibuat pada slide-slide ini dalam "
+"presentasi ini akan hilang."
 
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update sections"
-msgstr ""
+msgstr "Perbarui bagian"
 
 #: src/slideimport/SlideLinks.ts:542
 msgid "This slide is not linked to another file."
@@ -6757,6 +6761,7 @@ msgstr "{0} tidak dapat dibaca."
 #: src/slideimport/SlideLinks.ts:750
 msgid "You do not have access to {0}, so the section cannot be updated."
 msgstr ""
+"Anda tidak memiliki akses ke {0}, sehingga bagian ini tidak dapat diperbarui."
 
 #: src/slideimport/SlideLinks.ts:753
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6775,11 +6780,11 @@ msgstr "Slide dari {0} tidak dapat dibaca ke dalam presentasi ini."
 
 #: src/slideimport/SlideLinks.ts:927
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "Bagian ini telah diperbarui dari {0}."
 
 #: src/slideimport/SlideLinks.ts:1076
 msgid "Cannot update the section: {0} no longer holds its source section."
-msgstr ""
+msgstr "Tidak dapat memperbarui bagian: {0} tidak lagi memuat bagian sumbernya."
 
 #: src/slideimport/SlideLinks.ts:1102
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6791,14 +6796,12 @@ msgid "Unlinking the slide failed."
 msgstr "Gagal memutuskan tautan slide."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Gagal memutuskan tautan slide."
+msgstr "Gagal memutuskan tautan bagian."
 
 #: src/slideimport/SlideLinks.ts:1139
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "Gagal memperbarui slide dari {0}."
+msgstr "Gagal memperbarui bagian dari {0}."
 
 #: src/slideimport/SlideLinks.ts:1140 src/slideimport/SlideLinks.ts:1199
 msgid "Updating the slides of {0} failed."
@@ -8222,11 +8225,11 @@ msgstr "Kolom {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:632
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 sedang mengedit"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:633
 msgid "Another user is editing"
-msgstr ""
+msgstr "Pengguna lain sedang mengedit"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8234,7 +8237,7 @@ msgstr "Potong"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Bilah rumus"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8428,7 +8431,7 @@ msgstr "Kurangi nilai"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Tambahkan isian untuk mengedit {0}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8703,12 +8706,16 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"Anda tidak lagi memiliki akses ke dokumen ini. Label keamanannya telah "
+"diubah."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Anda tidak lagi dapat mengedit dokumen ini. Label keamanannya telah diubah. "
+"Buka kembali dokumen untuk melihatnya."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8844,7 +8851,7 @@ msgstr "Dokumen tidak dapat disimpan."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Penyimpanan menolak untuk menyimpan dokumen."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -9015,15 +9022,15 @@ msgstr "Penyunting Daring"
 
 #: src/layer/tile/CanvasTileLayer.js:1398
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "%1 mulai merekam perubahan untuk semua pengguna."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Perekaman perubahan telah dimulai untuk semua pengguna."
 
 #: src/layer/tile/CanvasTileLayer.js:1401
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Perubahan Anda kini dilacak."
 
 #: src/layer/tile/CanvasTileLayer.js:1487
 msgid "Functions"
