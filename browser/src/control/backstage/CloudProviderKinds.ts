@@ -82,6 +82,12 @@ namespace BackstageCloudKinds {
 		return brandedKinds() !== undefined;
 	}
 
+	// Whether there is a list to check a kind against: one that a branding declares, or one that
+	// was downloaded. Before the first download of a build without a branding list there is none.
+	export function isListKnown(): boolean {
+		return isBranded() || downloadedList() !== null;
+	}
+
 	// The icon of a service, with className added to its classes. A listed service shows its
 	// logo, and a second logo for the dark theme when it has one. The bare backstage-cloud-icon
 	// class draws the generic cloud, which a service that is no longer listed gets. A branded
@@ -141,9 +147,14 @@ namespace BackstageCloudKinds {
 		}
 	}
 
-	function downloadedKinds(): CloudKindEntry[] {
+	// The last downloaded list, or null when there is none.
+	function downloadedList(): CloudProviderList.Data | null {
 		const storage = pageStorage();
-		const data = storage ? CloudProviderList.cached(storage) : null;
+		return storage ? CloudProviderList.cached(storage) : null;
+	}
+
+	function downloadedKinds(): CloudKindEntry[] {
+		const data = downloadedList();
 		if (!data) return [];
 		return data.providers.map((provider) => ({
 			kind: provider.kind,

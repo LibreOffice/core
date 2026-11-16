@@ -89,7 +89,8 @@ namespace BackstageTemplates {
 
   export interface AddCloudDialogProps {
     isEdit: boolean;
-    initialKind: CloudProviderKind;
+    // null for a new account, which starts on the first service on offer.
+    initialKind: CloudProviderKind | null;
     initialDomain: string;
     initialName: string;
     onCancel: () => void;
@@ -375,22 +376,25 @@ namespace BackstageTemplates {
   // open/closed, click-outside listener) is encapsulated in this closure.
 
   export function kindDropdown(
-    initialValue: CloudProviderKind,
+    initialValue: CloudProviderKind | null,
     labelledBy?: string,
   ): { element: HTMLElement; getValue: () => CloudProviderKind } {
-    const kinds = BackstageCloudKinds.list();
-
     // An account stored while another branding was in place names a service that is no
     // longer on offer. It reads as Other everywhere else, so editing it starts there too,
-    // and saving keeps the type the user was shown.
-    let currentValue: CloudProviderKind =
-      BackstageCloudKinds.offeredKind(initialValue);
+    // and saving keeps the type the user was shown. A new account starts on the first service.
+    const startValue = (): CloudProviderKind =>
+      initialValue === null ?
+        BackstageCloudKinds.defaultKind()
+      : BackstageCloudKinds.offeredKind(initialValue);
+    let currentValue: CloudProviderKind = startValue();
+    let hasUserChosen = false;
     let isOpen = false;
     let wrapperEl: HTMLElement;
+    let listEl: HTMLElement;
     let toggleEl: HTMLButtonElement;
     let toggleLabelEl: HTMLElement;
     let toggleIconEl: HTMLElement;
-    const optionEls: HTMLElement[] = [];
+    let optionEls: HTMLElement[] = [];
 
     const updateToggle = () => {
       toggleLabelEl.textContent = BackstageCloudKinds.label(currentValue);
@@ -428,6 +432,7 @@ namespace BackstageTemplates {
 
     const select = (k: CloudProviderKind) => {
       currentValue = k;
+      hasUserChosen = true;
       updateToggle();
       optionEls.forEach((el) =>
         el.setAttribute(
@@ -437,6 +442,31 @@ namespace BackstageTemplates {
       );
       close();
       toggleEl.focus();
+    };
+
+    const option = (k: BackstageCloudKinds.CloudKindEntry): HTMLElement => (
+      <li
+        class="backstage-modal-dropdown-option"
+        role="option"
+        data-value={k.kind}
+        tabindex="0"
+        aria-selected={String(k.kind === currentValue)}
+        onClick={() => select(k.kind)}
+        onKeydown={(e: KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            select(k.kind);
+          }
+        }}
+      >
+        {BackstageCloudKinds.icon(k.kind, 'backstage-modal-dropdown-icon')}
+        <span>{k.label}</span>
+      </li>
+    );
+
+    const fillList = () => {
+      optionEls = BackstageCloudKinds.list().map(option);
+      listEl.replaceChildren(...optionEls);
     };
 
     const element = (
@@ -482,39 +512,42 @@ namespace BackstageTemplates {
             ▾
           </span>
         </button>
-        <ul class="backstage-modal-dropdown-list" role="listbox">
-          {kinds.map((k) => (
-            <li
-              class="backstage-modal-dropdown-option"
-              role="option"
-              data-value={k.kind}
-              tabindex="0"
-              aria-selected={String(k.kind === currentValue)}
-              ref={(el: HTMLElement) => optionEls.push(el)}
-              onClick={() => select(k.kind)}
-              onKeydown={(e: KeyboardEvent) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  select(k.kind);
-                }
-              }}
-            >
-              {BackstageCloudKinds.icon(
-                k.kind,
-                'backstage-modal-dropdown-icon',
-              )}
-              <span>{k.label}</span>
-            </li>
-          ))}
-        </ul>
+        <ul
+          class="backstage-modal-dropdown-list"
+          role="listbox"
+          ref={(el: HTMLElement) => {
+            listEl = el;
+          }}
+        />
       </div>
     );
 
+    fillList();
     updateToggle();
+
+    // A new list can arrive while the dialog is open. A kind that the user did not pick yet is
+    // worked out again, so an edited account shows its own kind once that kind is listed, and a
+    // new account moves to the first service.
+    BackstageCloudKinds.refreshList().then((changed) => {
+      if (!changed || !wrapperEl.isConnected) return;
+      currentValue =
+        hasUserChosen ?
+          BackstageCloudKinds.offeredKind(currentValue)
+        : startValue();
+      fillList();
+      updateToggle();
+    });
+
+    // While no list is known, the kind of an edited account cannot be checked against one. It
+    // stays as it was stored unless the user picked a type.
+    const keepsStoredKind = (): boolean =>
+      initialValue !== null &&
+      !hasUserChosen &&
+      !BackstageCloudKinds.isListKnown();
 
     return {
       element,
-      getValue: () => currentValue,
+      getValue: () => (keepsStoredKind() ? initialValue : currentValue),
     };
   }
 }

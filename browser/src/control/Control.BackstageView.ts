@@ -588,7 +588,7 @@ class BackstageView extends window.L.Class {
 		this.mountDialog((close) =>
 			BackstageTemplates.addCloudDialog({
 				isEdit: !!provider,
-				initialKind: provider?.kind ?? BackstageCloudKinds.defaultKind(),
+				initialKind: provider ? provider.kind : null,
 				initialDomain: provider?.url ?? '',
 				initialName: provider?.name ?? '',
 				onCancel: close,

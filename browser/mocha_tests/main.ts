@@ -157,4 +157,5 @@
 /// <reference path="./BackstageAccountTemplates.test.ts" />
 /// <reference path="./CloudProviderList.test.ts" />
 /// <reference path="./BackstageCloudKinds.test.ts" />
+/// <reference path="./BackstageKindDropdown.test.ts" />
 // NOTE: reference new tests here ...

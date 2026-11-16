@@ -69,6 +69,17 @@ describe('BackstageCloudKinds', function () {
 		nodeassert.strictEqual(BackstageCloudKinds.isBranded(), false);
 	});
 
+	it('knows the list once one is downloaded or a branding declares one', function () {
+		nodeassert.strictEqual(BackstageCloudKinds.isListKnown(), false);
+
+		cacheList([provider('nextcloud')]);
+		nodeassert.strictEqual(BackstageCloudKinds.isListKnown(), true);
+
+		storage.clear();
+		globals.brandCloudProviders = [];
+		nodeassert.strictEqual(BackstageCloudKinds.isListKnown(), true);
+	});
+
 	it('lists the downloaded providers, then Other', function () {
 		cacheList([provider('nextcloud'), provider('seafile')]);
 		nodeassert.deepStrictEqual(kinds(), ['nextcloud', 'seafile', 'other']);
