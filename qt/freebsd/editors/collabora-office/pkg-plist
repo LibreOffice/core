@@ -3832,9 +3832,6 @@ share/coolwsd/browser/dist/images/close-widget.svg
 share/coolwsd/browser/dist/images/closedoc-dark_branding.svg
 share/coolwsd/browser/dist/images/closedoc.svg
 share/coolwsd/browser/dist/images/cloud-providers/generic.svg
-share/coolwsd/browser/dist/images/cloud-providers/nextcloud.svg
-share/coolwsd/browser/dist/images/cloud-providers/opencloud.svg
-share/coolwsd/browser/dist/images/cloud-providers/seafile.svg
 share/coolwsd/browser/dist/images/coda-collab-collaborative-editing-dark.svg
 share/coolwsd/browser/dist/images/coda-collab-collaborative-editing-light.svg
 share/coolwsd/browser/dist/images/coda-collab-local-editing-dark.svg
