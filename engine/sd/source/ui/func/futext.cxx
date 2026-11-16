@@ -348,8 +348,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                      eHit == SdrHitKind::Handle                                 ||
                      eHit == SdrHitKind::MarkedObject                           ||
                      eHit == SdrHitKind::TextEditObj                            ||
-                     ( eHit == SdrHitKind::UnmarkedObject && bFirstObjCreated &&
-                       !bPermanent ) )
+                     ( eHit == SdrHitKind::UnmarkedObject && bFirstObjCreated ) )
                 {
                     // Handle, hit marked or unmarked object
                     if (eHit == SdrHitKind::TextEditObj)
@@ -454,8 +453,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         bReturn = true;
                     }
                 }
-                else if ( nSlotId != SID_TEXTEDIT &&
-                          (bPermanent || !bFirstObjCreated) )
+                else if (nSlotId != SID_TEXTEDIT && !bFirstObjCreated)
                 {
                     // create object
                     mpView->SetCurrentObj(SdrObjKind::Text);
@@ -606,8 +604,6 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     if( (mpView && mpView->MouseButtonUp(rMEvt, mpWindow->GetOutDev())) || rMEvt.GetClicks() == 2 )
         return true; // handle event from SdrView
 
-    bool bEmptyTextObj = false;
-
     if (mxTextObj.get().is())
     {
         bool bReset = true;
@@ -619,9 +615,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             if (rMarkList.GetMarkCount() == 1
                 && ( rMarkList.GetMark(0)->GetMarkedSdrObj() == mxTextObj.get().get()) )
             {
-                if (!GetTextObj()->GetOutlinerParaObject() )
-                    bEmptyTextObj = true;
-                else
+                if (GetTextObj()->GetOutlinerParaObject())
                     bFirstObjCreated = true;
                 bReset = false;
             }
@@ -770,10 +764,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( !mxTextObj.get().is() && mpView )
     {
-        if ( ( (!bEmptyTextObj   &&  bPermanent) ||
-             (!bFirstObjCreated && !bPermanent) ) &&
-              !mpDocSh->IsReadOnly()               &&
-              nSlotId != SID_TEXTEDIT )
+        if (!bFirstObjCreated && !mpDocSh->IsReadOnly() && nSlotId != SID_TEXTEDIT)
         {
             // text body (left-justified AutoGrow)
             mpView->SetCurrentObj(SdrObjKind::Text);
@@ -970,12 +961,6 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
         bReturn = cancel();
     }
 
-    if( bPermanent )
-    {
-        mpView->SetCurrentObj(SdrObjKind::Text);
-        mpView->SetEditMode(SdrViewEditMode::Create);
-    }
-
     if (!bReturn)
     {
         bReturn = FuDraw::KeyInput(aKEvt);
@@ -1030,11 +1015,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
     if( mxTextObj.get().is() && (mxTextObj.get()->getSdrPageFromSdrObject() == pPV->GetPage()) )
     {
         mpView->SetCurrentObj(SdrObjKind::Text);
-
-        if( bPermanent )
-            mpView->SetEditMode(SdrViewEditMode::Create);
-        else
-            mpView->SetEditMode(SdrViewEditMode::Edit);
+        mpView->SetEditMode(SdrViewEditMode::Edit);
 
         bool bEmptyOutliner = false;
 
