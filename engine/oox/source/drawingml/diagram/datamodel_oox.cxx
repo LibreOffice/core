@@ -70,9 +70,11 @@ void DiagramData_oox::fillTextBodiesFromXShapes()
 {
     for (const rtl::Reference<svx::diagram::Point>& rPoint : getPoints())
     {
-        // a transition can show a text too, a connector does with presOf axis self
+        // an assistant is a node of a type of its own, and a transition can show a text too, a
+        // connector does with presOf axis self
         if (!rPoint.is()
             || (svx::diagram::TypeConstant::XML_node != rPoint->mnXMLType
+                && svx::diagram::TypeConstant::XML_asst != rPoint->mnXMLType
                 && svx::diagram::TypeConstant::XML_sibTrans != rPoint->mnXMLType
                 && svx::diagram::TypeConstant::XML_parTrans != rPoint->mnXMLType))
             continue;

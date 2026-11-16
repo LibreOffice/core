@@ -8936,8 +8936,13 @@ struct SidewaysRoot
     ShapePtr pRoot;
     ShapePtr pNode;
     ShapePtr pBranch;
+    // the assistants, a branch of their own that stands in the gap between the node and its
+    // branch
+    ShapePtr pAssistants;
     awt::Size aNode;
     std::vector<SidewaysRoot> aRows;
+    std::vector<SidewaysRoot> aAssistants;
+    double fAssistantsWidth = 0.0;
     double fGap = 0.0; // between the node and the branch
     double fRowGap = 0.0; // between two rows of the branch
     double fWidth = 0.0; // the whole, node, gap and branch
@@ -8989,6 +8994,8 @@ static bool gatherSidewaysRows(const ShapePtr& pBranch, const std::vector<Constr
                 aRow.pNode = pInside;
             else if (!aRow.pBranch)
                 aRow.pBranch = pInside;
+            else if (!aRow.pAssistants)
+                aRow.pAssistants = pInside;
         }
         if (!aRow.pNode)
             aRow.pNode = pRow;
@@ -9009,6 +9016,10 @@ static bool gatherSidewaysRows(const ShapePtr& pBranch, const std::vector<Constr
         if (aRow.pBranch
             && !gatherSidewaysRows(aRow.pBranch, rConstraints, rRoom, rKnown, aRow.aRows))
             return false;
+        if (aRow.pAssistants
+            && !gatherSidewaysRows(aRow.pAssistants, rConstraints, rRoom, rKnown,
+                                   aRow.aAssistants))
+            return false;
         // the gaps after the rows, which may be the shapes they are stated against
         aRow.fGap = readSidewaysGap(rConstraints, XML_sp, rKnown, aRow.aNode.Width, 0.4);
         aRow.fRowGap = readSidewaysGap(rConstraints, XML_sibSp, rKnown, aRow.aNode.Height, 0.15);
@@ -9017,11 +9028,97 @@ static bool gatherSidewaysRows(const ShapePtr& pBranch, const std::vector<Constr
             aRow.fBranchWidth = std::max(aRow.fBranchWidth, aRow.aRows[nSub].fWidth);
             aRow.fBranchHeight += aRow.aRows[nSub].fHeight + (nSub > 0 ? aRow.fRowGap : 0.0);
         }
-        aRow.fWidth = aRow.aNode.Width + (aRow.aRows.empty() ? 0.0 : aRow.fGap + aRow.fBranchWidth);
-        aRow.fHeight = std::max<double>(aRow.aNode.Height, aRow.fBranchHeight);
+        // the assistants stand in a column in the gap, the first above the line from the node to
+        // its branch, the next below it and so on, sibSp apart and sibSp around the line
+        double fAbove(0.0), fBelow(0.0);
+        for (size_t nAssistant = 0; nAssistant < aRow.aAssistants.size(); ++nAssistant)
+        {
+            const SidewaysRoot& rAssistant(aRow.aAssistants[nAssistant]);
+            aRow.fAssistantsWidth = std::max(aRow.fAssistantsWidth, rAssistant.fWidth);
+            double& rSide(nAssistant % 2 == 0 ? fAbove : fBelow);
+            rSide += aRow.fRowGap / (rSide == 0.0 ? 2.0 : 1.0) + rAssistant.fHeight;
+        }
+        aRow.fWidth = aRow.aNode.Width
+                      + (aRow.aAssistants.empty() ? 0.0 : aRow.fGap + aRow.fAssistantsWidth)
+                      + (aRow.aRows.empty() ? 0.0 : aRow.fGap + aRow.fBranchWidth);
+        aRow.fHeight = std::max({ static_cast<double>(aRow.aNode.Height), aRow.fBranchHeight,
+                                  2.0 * std::max(fAbove, fBelow) });
         rRows.push_back(aRow);
     }
     return true;
+}
+
+static void placeSidewaysRoot(SmartArtDiagram& rDgm, const SidewaysRoot& rRoot,
+                              const awt::Point& rAt, double fScale, bool bLeft);
+
+// Places the column of assistants of rRoot in the gap after its node, nColumn wide: the first
+// above the line from the node to its branch, the next below it and so on, each in the middle of
+// the column, and the connector to each one from the middle of the node's side across to below or
+// above the middle of the assistant, and up or down into it.
+static void placeSidewaysAssistants(SmartArtDiagram& rDgm, const SidewaysRoot& rRoot,
+                                    const awt::Size& rBox, const awt::Size& rNode,
+                                    sal_Int32 nNodeMiddleY, sal_Int32 nGap, sal_Int32 nColumn,
+                                    double fScale, bool bLeft)
+{
+    const sal_Int32 nColumnLeft(bLeft ? rNode.Width + nGap : rBox.Width - rNode.Width - nGap
+                                                                 - nColumn);
+    const awt::Size aColumn(std::max<sal_Int32>(1, nColumn), rBox.Height);
+    rRoot.pAssistants->setPosition(awt::Point(nColumnLeft, 0));
+    rRoot.pAssistants->setSize(aColumn);
+    rRoot.pAssistants->setChildSize(aColumn);
+    rDgm.getLaidOutSideways().insert(rRoot.pAssistants.get());
+
+    const double fRowGap(rRoot.fRowGap * fScale);
+    double fAbove(nNodeMiddleY - fRowGap / 2.0), fBelow(nNodeMiddleY + fRowGap / 2.0);
+    std::vector<std::pair<sal_Int32, sal_Int32>> aEnds; // middle and the side the line comes in
+    for (size_t nAssistant = 0; nAssistant < rRoot.aAssistants.size(); ++nAssistant)
+    {
+        const SidewaysRoot& rAssistant(rRoot.aAssistants[nAssistant]);
+        const awt::Size aRowBox(static_cast<sal_Int32>(rAssistant.fWidth * fScale),
+                                static_cast<sal_Int32>(rAssistant.fHeight * fScale));
+        const bool bUp(nAssistant % 2 == 0);
+        const double fTop(bUp ? fAbove - aRowBox.Height : fBelow);
+        if (bUp)
+            fAbove = fTop - fRowGap;
+        else
+            fBelow = fTop + aRowBox.Height + fRowGap;
+        const sal_Int32 nLeft((aColumn.Width - aRowBox.Width) / 2);
+        placeSidewaysRoot(rDgm, rAssistant, awt::Point(nLeft, static_cast<sal_Int32>(fTop)),
+                          fScale, bLeft);
+        // the node of the assistant stands in the middle of its row box
+        const sal_Int32 nAssistantNodeHeight(
+            static_cast<sal_Int32>(rAssistant.aNode.Height * fScale));
+        const sal_Int32 nMiddle(static_cast<sal_Int32>(fTop) + aRowBox.Height / 2);
+        aEnds.emplace_back(nLeft + aRowBox.Width / 2,
+                           bUp ? nMiddle + nAssistantNodeHeight / 2
+                               : nMiddle - nAssistantNodeHeight / 2);
+    }
+
+    // the connectors, one before each assistant: across from the node's side and then up or
+    // down, the bent connector with one corner, mirrored to go up and to go left
+    const sal_Int32 nFromX(bLeft ? -nGap : aColumn.Width + nGap);
+    size_t nAssistant(0);
+    for (const ShapePtr& pChild : rRoot.pAssistants->getChildren())
+    {
+        if (pChild->getSubType() != XML_conn)
+            continue;
+        if (nAssistant >= aEnds.size())
+            break;
+        const awt::Point aStop(aEnds[nAssistant].first, aEnds[nAssistant].second);
+        ++nAssistant;
+        const awt::Size aElbow(std::max<sal_Int32>(1, std::abs(aStop.X - nFromX)),
+                               std::max<sal_Int32>(1, std::abs(aStop.Y - nNodeMiddleY)));
+        pChild->setPosition(
+            awt::Point(std::min(nFromX, aStop.X), std::min(nNodeMiddleY, aStop.Y)));
+        pChild->setSize(aElbow);
+        pChild->setChildSize(aElbow);
+        pChild->setSubType(XML_bentConnector2);
+        pChild->getCustomShapeProperties()
+            = std::make_shared<CustomShapeProperties>(*pChild->getCustomShapeProperties());
+        pChild->getCustomShapeProperties()->setShapePresetType(XML_bentConnector2);
+        pChild->setFlip(aStop.X < nFromX, aStop.Y < nNodeMiddleY);
+        rDgm.getLaidOutSideways().insert(pChild.get());
+    }
 }
 
 // Places a root and all below it at the scale found, the root's box at rAt with the size its
@@ -9050,12 +9147,23 @@ static void placeSidewaysRoot(SmartArtDiagram& rDgm, const SidewaysRoot& rRoot,
         rRoot.pNode->setSize(aNode);
         rRoot.pNode->setChildSize(aNode);
     }
+    const sal_Int32 nGap(static_cast<sal_Int32>(rRoot.fGap * fScale));
+    const sal_Int32 nNodeMiddleY(nNodeTop + aNode.Height / 2);
+    // the column of the assistants comes first after the node, the branch after it
+    sal_Int32 nColumn(0);
+    if (rRoot.pAssistants && !rRoot.aAssistants.empty())
+    {
+        nColumn = static_cast<sal_Int32>(rRoot.fAssistantsWidth * fScale);
+        placeSidewaysAssistants(rDgm, rRoot, aBox, aNode, nNodeMiddleY, nGap, nColumn, fScale,
+                                bLeft);
+        nColumn += nGap;
+    }
     if (!rRoot.pBranch || rRoot.aRows.empty())
         return;
 
-    const sal_Int32 nGap(static_cast<sal_Int32>(rRoot.fGap * fScale));
-    const awt::Size aBranch(std::max<sal_Int32>(1, aBox.Width - aNode.Width - nGap), aBox.Height);
-    const sal_Int32 nBranchLeft(bLeft ? aNode.Width + nGap : 0);
+    const awt::Size aBranch(std::max<sal_Int32>(1, aBox.Width - aNode.Width - nGap - nColumn),
+                            aBox.Height);
+    const sal_Int32 nBranchLeft(bLeft ? aNode.Width + nGap + nColumn : 0);
     rRoot.pBranch->setPosition(awt::Point(nBranchLeft, 0));
     rRoot.pBranch->setSize(aBranch);
     rRoot.pBranch->setChildSize(aBranch);
@@ -9085,8 +9193,7 @@ static void placeSidewaysRoot(SmartArtDiagram& rDgm, const SidewaysRoot& rRoot,
     // connector routed as a bend, connRout bend, is the elbow over the gap, across to its
     // middle, down or up to the row's middle and across again, Horizontal_Multi-level_
     // Hierarchy's lines from a level's right edge to the left edges of the level below
-    const sal_Int32 nFromX(bLeft ? -nGap : aBranch.Width + nGap);
-    const sal_Int32 nNodeMiddleY(nNodeTop + aNode.Height / 2);
+    const sal_Int32 nFromX(bLeft ? -nGap - nColumn : aBranch.Width + nGap + nColumn);
     std::map<OUString, const LayoutNode*> aLayoutNodes;
     if (rDgm.getLayout() && rDgm.getLayout()->getNode())
         gatherLayoutNodes(*rDgm.getLayout()->getNode(), aLayoutNodes);
@@ -9119,6 +9226,15 @@ static void placeSidewaysRoot(SmartArtDiagram& rDgm, const SidewaysRoot& rRoot,
                 = std::make_shared<CustomShapeProperties>(*pChild->getCustomShapeProperties());
             auto& rProperties(*pChild->getCustomShapeProperties());
             rProperties.setShapePresetType(XML_bentConnector3);
+            // past a column of assistants the bend is half a gap before the row
+            if (nColumn > 0 && aElbow.Width > nGap / 2)
+            {
+                rProperties.getAdjustmentGuideList() = CustomShapeGuideContainer();
+                rProperties.getAdjustmentGuideList().push_back(
+                    { u"adj1"_ustr,
+                      OUString::number(static_cast<sal_Int64>(
+                          100000.0 * (aElbow.Width - nGap / 2.0) / aElbow.Width)) });
+            }
             pChild->setFlip((aStop.X < aStart.X), (aStop.Y < aStart.Y));
             rDgm.getLaidOutSideways().insert(pChild.get());
             continue;

@@ -3653,6 +3653,37 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testLineConnectorHasItsArrowAtTheEnd)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAssistantKeepsItsTextOnReLayout)
+{
+    // Mary is the assistant of Boss, a point of type asst
+    createSdImpressDoc("pptx/smartart-sideways-hierarchy-assistant.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+    CPPUNIT_ASSERT(findChildShapeByText(xDiagram, u"Mary"_ustr).is());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSidewaysHierarchyAssistantStandsInTheGap)
+{
+    // Boss stands beside Paul, John and Tim; his assistant Mary stands between them, above
+    // the line from Boss to his children
+    createSdImpressDoc("pptx/smartart-sideways-hierarchy-assistant.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    auto aBoxOf = [&xDiagram](const OUString& rText) {
+        uno::Reference<drawing::XShape> xShape(findChildShapeByText(xDiagram, rText));
+        CPPUNIT_ASSERT(xShape.is());
+        return SdrObject::getSdrObjectFromXShape(xShape)->GetSnapRect();
+    };
+    const tools::Rectangle aBoss(aBoxOf(u"Boss"_ustr));
+    const tools::Rectangle aMary(aBoxOf(u"Mary"_ustr));
+    const tools::Rectangle aPaul(aBoxOf(u"Paul"_ustr));
+    CPPUNIT_ASSERT_EQUAL(aBoss.GetSize(), aMary.GetSize());
+    CPPUNIT_ASSERT_GREATER(aBoss.Right(), aMary.Left());
+    CPPUNIT_ASSERT_LESS(aPaul.Left(), aMary.Right());
+    CPPUNIT_ASSERT_LESS(aBoss.Center().Y(), aMary.Bottom());
+    // the assistant comes into the line to it from below
+    CPPUNIT_ASSERT_EQUAL(size_t(1), drawnBoxesOf(xDiagram, u"ooxml-bentConnector2"_ustr).size());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
