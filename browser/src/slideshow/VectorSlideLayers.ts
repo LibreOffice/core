@@ -379,13 +379,22 @@ class VectorSlideLayers {
 				);
 				this._paint(layer, data, state);
 			}
-			this._drawQuad(layer.texture, layer.pixels, state);
-			if (
+			const frames =
 				videos?.size &&
 				layer.paragraph === undefined &&
 				layer.piece === undefined
-			)
-				this._drawVideos(layer, data, videos, state);
+					? this._frameQuads(layer, data, videos)
+					: [];
+			// The layer holds the still image of each video under its frame. The frame covers
+			// it fully only while drawn opaque, so a faded layer is drawn around the frames.
+			this._drawQuad(
+				layer.texture,
+				layer.pixels,
+				state,
+				frames.map((frame) => frame.rectangle),
+			);
+			for (const frame of frames)
+				this._drawQuad(frame.texture, frame.rectangle, state);
 		}
 	}
 
@@ -826,14 +835,22 @@ class VectorSlideLayers {
 		];
 	}
 
-	// Draw the current frame of each video whose shape is in the layer's run, or in the part of
-	// the master the run draws, over the layer in its state.
-	private _drawVideos(
+	// The texture and the rectangle of the current frame of each video whose shape is in the
+	// layer's run, or in the part of the master the run draws, with the frame uploaded.
+	private _frameQuads(
 		layer: SlideLayer,
 		data: cool.VectorPrimitivesData,
 		videos: Map<number, ContentFrame>,
-		state: cool.DrawState | undefined,
-	): void {
+	): { texture: WebGLTexture; rectangle: number[] }[] {
+		const quads: { texture: WebGLTexture; rectangle: number[] }[] = [];
+		const add = (objectId: number) => {
+			const frame = videos.get(objectId);
+			if (!frame) return;
+			const texture = this.quads.frameTexture(objectId, frame.source);
+			if (!texture) return;
+			this._countVideo(objectId, frame.source);
+			quads.push({ texture, rectangle: this.quads.frameRectangle(frame) });
+		};
 		const masterRange = layer.run.master;
 		if (masterRange && this.master)
 			for (
@@ -841,22 +858,10 @@ class VectorSlideLayers {
 				position < masterRange.end;
 				++position
 			)
-				this._drawVideo(this.master.order[position], videos, state);
+				add(this.master.order[position]);
 		for (let position = layer.run.start; position < layer.run.end; ++position)
-			this._drawVideo(data.order[position], videos, state);
-	}
-
-	private _drawVideo(
-		objectId: number,
-		videos: Map<number, ContentFrame>,
-		state: cool.DrawState | undefined,
-	): void {
-		const frame = videos.get(objectId);
-		if (!frame) return;
-		const texture = this.quads.frameTexture(objectId, frame.source);
-		if (!texture) return;
-		this._countVideo(objectId, frame.source);
-		this._drawQuad(texture, this.quads.frameRectangle(frame), state);
+			add(data.order[position]);
+		return quads;
 	}
 
 	// Count the bytes of the video texture of the object, which holds a picture of source.
@@ -898,21 +903,27 @@ class VectorSlideLayers {
 		);
 	}
 
-	// Draw the texture over the rectangle, in canvas pixels, in the state given.
+	// Draw the texture over the rectangle, in canvas pixels, in the state given. Under an alpha
+	// below 1 the draw leaves out the holes, rectangles in canvas pixels that the state moves
+	// along with the texture.
 	private _drawQuad(
 		texture: WebGLTexture | null,
 		rectangle: number[],
 		state: cool.DrawState | undefined,
+		holes: number[][] = [],
 	): void {
 		const gl = this.context.getGl();
 		const transform = this._pixelTransform(state?.transform);
+		const alpha = state?.alpha ?? 1;
 
 		const clip = state?.clip;
-		if (clip) this._stencilClip(clip, transform);
+		const drawnHoles = alpha < 1 ? holes : [];
+		const isStenciled = !!clip || drawnHoles.length > 0;
+		if (isStenciled) this._stencil(clip, drawnHoles, transform);
 
-		this.quads.drawQuad(texture, rectangle, state?.alpha ?? 1, transform);
+		this.quads.drawQuad(texture, rectangle, alpha, transform);
 
-		if (clip) {
+		if (isStenciled) {
 			gl.disable(gl.STENCIL_TEST);
 			gl.stencilMask(0xff);
 		}
@@ -937,24 +948,17 @@ class VectorSlideLayers {
 		]);
 	}
 
-	// Mark the part the clip leaves drawn in the stencil buffer, and let the next draw reach
-	// only that part. Bit 0 holds the frame. Bit 1 holds the pieces, each a fan that inverts
-	// the bit, which fills any polygon by the even-odd rule since no two pieces overlap.
-	private _stencilClip(
-		clip: cool.DrawClip,
+	// Mark the part that the clip leaves drawn and that the holes leave out in the stencil
+	// buffer, and let the next draw reach only that part. Bit 0 holds the frame of the clip.
+	// Bit 1 holds its pieces, each a fan that inverts the bit, which fills any polygon by the
+	// even-odd rule since no two pieces overlap. Bit 2 holds the holes, rectangles in canvas
+	// pixels.
+	private _stencil(
+		clip: cool.DrawClip | undefined,
+		holes: number[][],
 		stateTransform: Float32Array,
 	): void {
 		const gl = this.context.getGl();
-		const toPixels = this._clipToPixels(clip.transform, stateTransform);
-
-		const [x, y, width, height] = clip.frame;
-		const frame = VectorSlideLayers._fan(
-			[x, y, x + width, y, x + width, y + height, x, y + height],
-			toPixels,
-		);
-		const pieces: number[] = [];
-		for (const piece of clip.pieces)
-			pieces.push(...VectorSlideLayers._pieceFan(piece, toPixels));
 
 		gl.enable(gl.STENCIL_TEST);
 		gl.stencilMask(0xff);
@@ -974,23 +978,66 @@ class VectorSlideLayers {
 		);
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.stencilBuffer);
 
-		gl.stencilFunc(gl.ALWAYS, 0x01, 0xff);
-		gl.stencilMask(0x01);
-		gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(frame), gl.STREAM_DRAW);
-		gl.drawArrays(gl.TRIANGLES, 0, frame.length / 2);
+		// Outside a clip every pixel passes that no hole covers.
+		let reference = 0x00;
+		if (clip) {
+			const toPixels = this._clipToPixels(clip.transform, stateTransform);
+			const [x, y, width, height] = clip.frame;
+			const frame = VectorSlideLayers._fan(
+				[x, y, x + width, y, x + width, y + height, x, y + height],
+				toPixels,
+			);
+			const pieces: number[] = [];
+			for (const piece of clip.pieces)
+				pieces.push(...VectorSlideLayers._pieceFan(piece, toPixels));
 
-		if (pieces.length) {
-			gl.stencilMask(0x02);
-			gl.stencilOp(gl.KEEP, gl.KEEP, gl.INVERT);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pieces), gl.STREAM_DRAW);
-			gl.drawArrays(gl.TRIANGLES, 0, pieces.length / 2);
+			gl.stencilFunc(gl.ALWAYS, 0x01, 0xff);
+			gl.stencilMask(0x01);
+			gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(frame), gl.STREAM_DRAW);
+			gl.drawArrays(gl.TRIANGLES, 0, frame.length / 2);
+
+			if (pieces.length) {
+				gl.stencilMask(0x02);
+				gl.stencilOp(gl.KEEP, gl.KEEP, gl.INVERT);
+				gl.bufferData(
+					gl.ARRAY_BUFFER,
+					new Float32Array(pieces),
+					gl.STREAM_DRAW,
+				);
+				gl.drawArrays(gl.TRIANGLES, 0, pieces.length / 2);
+			}
+			reference = clip.inverted ? 0x01 : 0x03;
+		}
+
+		if (holes.length) {
+			const toPixels = (x: number, y: number): [number, number] => [
+				stateTransform[0] * x + stateTransform[3] * y + stateTransform[6],
+				stateTransform[1] * x + stateTransform[4] * y + stateTransform[7],
+			];
+			const triangles: number[] = [];
+			for (const [x, y, width, height] of holes)
+				triangles.push(
+					...VectorSlideLayers._fan(
+						[x, y, x + width, y, x + width, y + height, x, y + height],
+						toPixels,
+					),
+				);
+			gl.stencilFunc(gl.ALWAYS, 0x04, 0xff);
+			gl.stencilMask(0x04);
+			gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+			gl.bufferData(
+				gl.ARRAY_BUFFER,
+				new Float32Array(triangles),
+				gl.STREAM_DRAW,
+			);
+			gl.drawArrays(gl.TRIANGLES, 0, triangles.length / 2);
 		}
 
 		gl.colorMask(true, true, true, true);
 		gl.stencilMask(0x00);
 		gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
-		gl.stencilFunc(gl.EQUAL, clip.inverted ? 0x01 : 0x03, 0x03);
+		gl.stencilFunc(gl.EQUAL, reference, clip ? 0x07 : 0x04);
 	}
 
 	// Clip coordinates to canvas pixels: the clip's transform to twips, twips to pixels, then
