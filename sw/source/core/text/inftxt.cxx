@@ -1623,7 +1623,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
             bool bNoCapsHyphenation, bool bNoLastWordHyphenation,
             sal_Int16 nMinWordLength, sal_Int16 nTextHyphZone, bool bKeep, sal_Int16 nKeepType,
             bool bKeepLine, sal_Int16 nCompoundMinLeading,
-            sal_Int16 nTextHyphZoneAlways, sal_Int16 nLevel, sal_Int16 nCompoundMinTrailing,
+            sal_Int16 nCompoundMinTrailing, sal_Int16 nTextHyphZoneAlways, sal_Int16 nLevel,
             bool bSplitCompoundWord )
 {
     sal_Int32 nLen = rVals.getLength();
