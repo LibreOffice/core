@@ -37,6 +37,7 @@
 /// <reference path="../src/app/HandleScaling.ts" />
 /// <reference path="../src/app/SelectionHandles.ts" />
 /// <reference path="../src/app/PathEditing.ts" />
+/// <reference path="../src/app/PathDrawing.ts" />
 /// <reference path="../src/app/FreeformStroke.ts" />
 /// <reference path="../src/app/VectorSettings.ts" />
 /// <reference path="../src/app/HandleLook.ts" />

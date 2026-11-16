@@ -30,7 +30,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 	/// The part the mode was entered on; it ends when another one is shown.
 	private part: number;
 	/// Where the mouse stands snapped, in twips, while no drag runs; null off the page.
-	private hover: cool.Point | null = null;
+	protected hover: cool.Point | null = null;
 	/// The corner the drag began at, snapped, in twips; null while no drag runs.
 	private from: cool.Point | null = null;
 	/// Where the press was, in twips, as it came, not snapped.
@@ -74,7 +74,8 @@ abstract class ClassicCreateContext implements InteractionMode {
 			(ClassicShapeCreateContext.makes(shape) ||
 				ClassicTextCreateContext.makes(shape) ||
 				ClassicLineCreateContext.makes(shape) ||
-				ClassicConnectorCreateContext.makes(shape)) &&
+				ClassicConnectorCreateContext.makes(shape) ||
+				ClassicPathCreateContext.makes(shape)) &&
 			RenderGeometrySection.answersPointer() &&
 			app.map.isEditMode()
 		);
@@ -92,7 +93,9 @@ abstract class ClassicCreateContext implements InteractionMode {
 				? new ClassicLineCreateContext(shape)
 				: ClassicConnectorCreateContext.makes(shape)
 					? new ClassicConnectorCreateContext(shape)
-					: new ClassicShapeCreateContext(shape);
+					: ClassicPathCreateContext.makes(shape)
+						? new ClassicPathCreateContext(shape)
+						: new ClassicShapeCreateContext(shape);
 		Interaction.enterMode(mode);
 		mode.started();
 	}
@@ -188,6 +191,74 @@ abstract class ClassicCreateContext implements InteractionMode {
 	/// The command for the object in that rectangle went out; nothing more for most kinds.
 	protected wasSent(_box: cool.Range2D): void {
 		// Most kinds wait for the engine's report of the object.
+	}
+
+	/// The id given to the object sent, one reserved for this view; undefined where none was at
+	/// hand, and the object then takes one of its own.
+	protected givenId: number | undefined = undefined;
+
+	/// The argument that gives the object the next id reserved for this view, where one is at
+	/// hand.
+	protected idArgument(): { [name: string]: { type: string; value: any } } {
+		this.givenId = ReservedObjectIds.take();
+		return this.givenId === undefined
+			? {}
+			: { Id: { type: 'unsigned long', value: String(this.givenId) } };
+	}
+
+	/*
+		Where the object sent was given an id, it is taken as created at once, under that id, which
+		is its real one: it is in the part and selected, drawn as those polygons in hairlines in
+		that rectangle, and the engine's report of it replaces it.
+	*/
+	protected standInAsCreated(
+		box: cool.Range2D,
+		polygons: cool.ObjectPathPolygon[],
+	): void {
+		const id = this.givenId;
+		if (id === undefined) return;
+		this.takeAsCreated({
+			id: id,
+			x: box.minX,
+			y: box.minY,
+			width: box.width,
+			height: box.height,
+			primitives: polygons.map(
+				(polygon) =>
+					({
+						type: cool.PolygonHairlinePrimitive.type,
+						color: HandleLook.outlineColour,
+						path: PathDrawing.asSvg([polygon]),
+					}) as cool.PolygonHairlinePrimitive,
+			),
+		});
+	}
+
+	/// Takes that object as created, in the part and selected, until the engine's report of it
+	/// replaces it.
+	protected takeAsCreated(created: cool.SlideObject): void {
+		const part = RenderGeometrySection.currentPart();
+		if (
+			created.id !== undefined &&
+			part &&
+			RenderManager.addProvisionalObject(
+				part.partId,
+				created,
+				ClassicCreateContext.longestWait,
+			)
+		) {
+			this.forgetTheSent();
+			GraphicSelection.selectAndShow([created.id]);
+		}
+	}
+
+	/// Whether the right button is the mode's; for most kinds it opens the menu as anywhere.
+	takesTheRightButton(): boolean {
+		return false;
+	}
+
+	rightUp(_at: cool.Point, _modifier: number): void {
+		// The right button is not taken by most kinds.
 	}
 
 	/// The frame waiting for the engine, of the mode last on.
@@ -1002,10 +1073,6 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 	/// made in, in twips; null until the engine or the library told.
 	private ghost: ShapeLook | null = null;
 
-	/// The id given to the shape sent, one reserved for this view; undefined where none was at
-	/// hand, and the shape then takes one of its own.
-	private givenId: number | undefined = undefined;
-
 	/// Whether the shape is always as wide as high, as the engine makes some.
 	private asWideAsHigh: boolean = false;
 
@@ -1113,10 +1180,7 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 
 	/// The id the shape is to take, the next reserved for this view, where one is at hand.
 	protected moreArguments(): { [name: string]: { type: string; value: any } } {
-		this.givenId = ReservedObjectIds.take();
-		return this.givenId === undefined
-			? {}
-			: { Id: { type: 'unsigned long', value: String(this.givenId) } };
+		return this.idArgument();
 	}
 
 	/*
@@ -1129,20 +1193,7 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 
 		const id = this.givenId;
 		const created = id === undefined ? null : this.createdIn(box, id);
-		const part = RenderGeometrySection.currentPart();
-		if (
-			created &&
-			created.id !== undefined &&
-			part &&
-			RenderManager.addProvisionalObject(
-				part.partId,
-				created,
-				ClassicCreateContext.longestWait,
-			)
-		) {
-			this.forgetTheSent();
-			GraphicSelection.selectAndShow([created.id]);
-		}
+		if (created) this.takeAsCreated(created);
 	}
 }
 
@@ -1240,10 +1291,6 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 	protected start: cool.Point | null = null;
 	protected end: cool.Point | null = null;
 
-	/// The id given to the line sent, one reserved for this view; undefined where none was at
-	/// hand, and the line then takes one of its own.
-	private givenId: number | undefined = undefined;
-
 	/// The look of a dimension line is asked for at once, where it is not known yet.
 	public started(): void {
 		ReservedObjectIds.keepEnough();
@@ -1307,10 +1354,7 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 
 	/// The id the line is to take, the next reserved for this view, where one is at hand.
 	protected moreArguments(): { [name: string]: { type: string; value: any } } {
-		this.givenId = ReservedObjectIds.take();
-		return this.givenId === undefined
-			? {}
-			: { Id: { type: 'unsigned long', value: String(this.givenId) } };
+		return this.idArgument();
 	}
 
 	/// The length of the line and its angle, counted upwards from the right as the office does.
@@ -1402,43 +1446,12 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 		// a kind with a look keeps it, also over a restart; a plain line has none to keep
 		ClassicShapeCreateContext.made(this.shape);
 
-		const id = this.givenId;
-		const part = RenderGeometrySection.currentPart();
-		if (id === undefined || !part || !this.start || !this.end) return;
+		if (!this.start || !this.end) return;
 		// the stand-in is the line, or the lines of the dimension line, as hairlines
-		const polygons: cool.ObjectPathPolygon[] = this.standInPolygons() ?? [
-			{ points: [this.start, this.end] },
-		];
-		const created: cool.SlideObject = {
-			id: id,
-			x: box.minX,
-			y: box.minY,
-			width: box.width,
-			height: box.height,
-			primitives: polygons.map(
-				(polygon) =>
-					({
-						type: cool.PolygonHairlinePrimitive.type,
-						color: HandleLook.outlineColour,
-						path:
-							(polygon.points ?? [])
-								.map(
-									(point, at) => (at ? 'L ' : 'M ') + point.x + ' ' + point.y,
-								)
-								.join(' ') + (polygon.closed ? ' Z' : ''),
-					}) as cool.PolygonHairlinePrimitive,
-			),
-		};
-		if (
-			RenderManager.addProvisionalObject(
-				part.partId,
-				created,
-				ClassicCreateContext.longestWait,
-			)
-		) {
-			this.forgetTheSent();
-			GraphicSelection.selectAndShow([id]);
-		}
+		this.standInAsCreated(
+			box,
+			this.standInPolygons() ?? [{ points: [this.start, this.end] }],
+		);
 	}
 }
 
@@ -1623,5 +1636,213 @@ class ClassicConnectorCreateContext extends ClassicLineCreateContext {
 				this.startTie.objectId,
 				this.startTie.point ?? null,
 			);
+	}
+}
+
+/*
+	Creating a polygon by setting its points one by one, as the office does, but with several
+	parts: a point is set where the button comes up, and follows the mouse while it is pressed. A
+	right click sets the last point of a part and ends it, and a click on the start point of the
+	part ends it with no point set there. A filled kind closes every part, an unfilled one leaves
+	every part open.
+	The next part begins where the mouse sets its first point. A double click or Enter makes the
+	object of the parts drawn. Backspace takes back the last point, Delete and Escape the part
+	being drawn, then the parts before; the mode ends once nothing is left.
+*/
+class ClassicPathCreateContext extends ClassicCreateContext {
+	/// The commands that make a polygon, each with the way its path is drawn.
+	private static readonly kinds: { [shape: string]: PathDrawingKind } = {
+		Polygon: { multi: true, closes: true, inSteps: false },
+		Polygon_Unfilled: { multi: true, closes: false, inSteps: false },
+		Polygon_Diagonal: { multi: true, closes: true, inSteps: true },
+		Polygon_Diagonal_Unfilled: { multi: true, closes: false, inSteps: true },
+	};
+
+	/// Whether that command makes a polygon.
+	public static makes(shape: string): boolean {
+		return ClassicPathCreateContext.kinds[shape] !== undefined;
+	}
+
+	/// How near the start point of a part the mouse is drawn onto it, in CSS pixels.
+	private static readonly reach: number = 6;
+
+	/// Two clicks this near in time, in milliseconds, and in place, in CSS pixels, are a double
+	/// click.
+	private static readonly doubleClickTime: number = 500;
+	private static readonly doubleClickReach: number = 4;
+
+	private drawing: PathDrawing;
+
+	/// The path sent, drawn until the engine's answer brings the object.
+	private sentPath: cool.ObjectPathPolygon[] = [];
+
+	/// When and where the last click came up, as it came.
+	private lastUpTime: number = 0;
+	private lastUpAt: cool.Point | null = null;
+
+	constructor(shape: string) {
+		super(shape);
+		this.drawing = new PathDrawing(
+			ClassicPathCreateContext.kinds[shape],
+			ClassicCreateContext.twips(ClassicPathCreateContext.reach),
+		);
+	}
+
+	public started(): void {
+		ReservedObjectIds.keepEnough();
+	}
+
+	public pointer(): string {
+		return 'crosshair';
+	}
+
+	/*
+		The point the mouse places follows it, snapped; Shift keeps the edge to steps of 45
+		degrees, or lets it go free for a kind that keeps to them. Before the first point of a
+		part the lines across the view show where it would be set.
+	*/
+	mouseAt(at: cool.Point, modifier: number, _pressed: boolean): void {
+		super.mouseAt(at, modifier, false);
+		if (Interaction.modeOn() !== this || !this.hover) return;
+		this.drawing.moveTo(this.hover, (modifier & app.UNOModifier.SHIFT) !== 0);
+		if (!this.drawing.beforeThePart()) this.hover = null;
+	}
+
+	mouseDown(at: cool.Point, modifier: number): void {
+		this.mouseAt(at, modifier, true);
+	}
+
+	/// The second click of a double click makes the object and sets no point.
+	mouseUp(at: cool.Point, modifier: number, _dragged: boolean): void {
+		this.mouseAt(at, modifier, false);
+		if (Interaction.modeOn() !== this) return;
+
+		const now = Date.now();
+		const doubleClick =
+			!!this.lastUpAt &&
+			now - this.lastUpTime <= ClassicPathCreateContext.doubleClickTime &&
+			this.lastUpAt.subtract(at).length() <=
+				ClassicCreateContext.twips(ClassicPathCreateContext.doubleClickReach);
+		this.lastUpTime = doubleClick ? 0 : now;
+		this.lastUpAt = doubleClick ? null : at;
+
+		this.went(
+			doubleClick ? this.drawing.finish() : this.drawing.setThePoint(false),
+		);
+		this.placeAgain(at, modifier);
+	}
+
+	// after a part ended, the lines across the view show at once where the next one would begin
+	private placeAgain(at: cool.Point, modifier: number): void {
+		if (Interaction.modeOn() === this) this.mouseAt(at, modifier, false);
+	}
+
+	takesTheRightButton(): boolean {
+		return true;
+	}
+
+	rightUp(at: cool.Point, modifier: number): void {
+		this.mouseAt(at, modifier, false);
+		if (Interaction.modeOn() !== this) return;
+		this.lastUpAt = null;
+		this.went(this.drawing.setThePoint(true));
+		this.placeAgain(at, modifier);
+	}
+
+	/// A path drawn goes on over a drag the container calls off.
+	dragCancelled(): void {
+		// The points set so far stay.
+	}
+
+	mouseLeft(): void {
+		super.mouseLeft();
+		this.drawing.mouseLeft();
+	}
+
+	/// Enter makes the object, Backspace takes back the last point, Delete the part being drawn.
+	keyEvent(event: KeyboardEvent, modifier: number): boolean {
+		if (event.type === 'keydown' && !modifier) {
+			if (event.key === 'Enter') {
+				this.went(this.drawing.finish());
+				return true;
+			}
+			if (event.key === 'Backspace') {
+				this.went(this.drawing.back());
+				return true;
+			}
+			if (event.key === 'Delete') {
+				this.went(this.drawing.dropThePart());
+				return true;
+			}
+		}
+		return super.keyEvent(event, modifier);
+	}
+
+	escape(): boolean {
+		this.went(this.drawing.dropThePart());
+		return true;
+	}
+
+	/// What follows a step of the drawing: the object is made once the path is finished, the
+	/// mode ends with nothing made once nothing is left.
+	private went(outcome: PathDrawingOutcome): void {
+		if (outcome === 'finished') {
+			this.sentPath = this.drawing.path();
+			this.send(PathDrawing.rangeOf(this.sentPath));
+		} else if (outcome === 'nothingLeft') Interaction.leaveMode();
+		app.sectionContainer?.requestReDraw();
+	}
+
+	/// The path goes point by point in twips, which places the object as well.
+	protected placeArguments(_box: cool.Range2D): {
+		[name: string]: { type: string; value: any };
+	} {
+		return {
+			Path: { type: 'string', value: PathDrawing.asJson(this.sentPath) },
+		};
+	}
+
+	protected moreArguments(): { [name: string]: { type: string; value: any } } {
+		return this.idArgument();
+	}
+
+	/// The path drawn so far, with the piece to the mouse, and the start point of the part where
+	/// a click would end it.
+	protected drawMore(context: CanvasRenderingContext2D): void {
+		if (this.sent) return;
+		SelectionSection.strokeOutline(
+			context,
+			this.drawing.shown(),
+			HandleLook.outlineColour,
+		);
+		const start = this.drawing.startOnTheMouse();
+		if (!start) return;
+		const at = new cool.SimplePoint(start.x, start.y);
+		const half = Math.round(4 * app.dpiScale);
+		context.fillStyle = HandleLook.outlineColour;
+		context.fillRect(
+			Math.round(at.vX) - half,
+			Math.round(at.vY) - half,
+			2 * half,
+			2 * half,
+		);
+	}
+
+	/// The path sent stands for the object until the engine reports it.
+	protected drawTheObject(
+		context: CanvasRenderingContext2D,
+		_box: cool.Range2D,
+		_whole: boolean,
+	): boolean {
+		SelectionSection.strokeOutline(
+			context,
+			this.sentPath,
+			HandleLook.outlineColour,
+		);
+		return true;
+	}
+
+	protected wasSent(box: cool.Range2D): void {
+		this.standInAsCreated(box, this.sentPath);
 	}
 }

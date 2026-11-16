@@ -190,6 +190,28 @@ its start to its end:
 | Let go | The connector is made, tied at each end as shown: to a glue point of its own, to the middle of a side, or to the object as a whole where an end stands on its middle. An end over none of them stays free. It is selected at once, also before the engine has answered. The mode is over. |
 | Escape, a click without a drag, a command, a press elsewhere, another slide | End the mode without a connector. |
 
+### Creating a polygon
+
+The grid of Lines in the Insert tab has a row "Curves and Polygons": the polygon, the polygon at
+45 degrees, and the filled kind of each. Every one of them, chosen there or anywhere else, puts
+one into a mode where the polygon is drawn point by point, with the cross as pointer. One polygon
+object can hold several parts:
+
+| What | What happens |
+|---|---|
+| Before the first point of a part | The lines across the view and the place, as for a shape. |
+| Click | Sets a point where the button comes up. While the button is down the point follows the mouse, snapped, so it can be corrected. The edge from the last point to the mouse is shown. |
+| Shift | The edge from the last point keeps to steps of 45 degrees. The kinds at 45 degrees do so by themselves, and Shift lets them go free. |
+| Ctrl | Turns the snap over, as for a shape. |
+| The start point of the part | Pulls the mouse in when it comes near and shows as a small square. A click there ends the part and sets no point there; a filled kind closes it, an unfilled one leaves it open. |
+| Right click | Sets the last point where the button comes up and ends the part. No menu opens. |
+| Closed or open | The kind decides: a filled kind closes every part, an unfilled one leaves every part open. |
+| After a part ended | The lines across the view follow the mouse again, and the next click begins the next part of the same object. A part with too few points - one, or two where it closes - is dropped. |
+| Double click, Enter | Make the object of the parts drawn, the part being drawn ending as a right click ends it. The second click of a double click sets no point. The object is selected at once, also before the engine has answered. The mode is over. |
+| Backspace | Takes back the last point. Where the part being drawn has none, it takes back the last point of the part before, which is then drawn on. With nothing left the mode ends without an object. |
+| Delete, Escape | Take away the part being drawn, then the parts before one by one; the last one ends the mode without an object. |
+| A command, a press elsewhere, another slide | End the mode without an object. |
+
 
 ## 2. Changing objects
 

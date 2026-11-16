@@ -23,8 +23,47 @@ class InteractionModeSection extends WholePageSection {
 	/// The mode last on, which may still draw after it is over.
 	private static lastMode: InteractionMode | null = null;
 
+	/// The release of the right button over the canvas, which the container does not hand on.
+	private rightReleased: (event: PointerEvent) => void;
+
 	constructor() {
 		super(app.CSections.InteractionMode.name);
+		this.rightReleased = (event: PointerEvent) => this.onRightUp(event);
+	}
+
+	onInitialize(): void {
+		super.onInitialize();
+		this.context.canvas.addEventListener('pointerup', this.rightReleased);
+	}
+
+	onRemove(): void {
+		this.context.canvas.removeEventListener('pointerup', this.rightReleased);
+	}
+
+	/// The place on the page, in twips, of a mouse event over the canvas.
+	private inTheDocumentAt(event: MouseEvent): cool.Point {
+		const rect = this.context.canvas.getBoundingClientRect();
+		return this.inTheDocument(
+			cool.SimplePoint.fromCorePixels([
+				(event.clientX - rect.left) * app.dpiScale - this.myTopLeft[0],
+				(event.clientY - rect.top) * app.dpiScale - this.myTopLeft[1],
+			]),
+		);
+	}
+
+	private onRightUp(event: PointerEvent): void {
+		const mode = Interaction.modeOn();
+		if (event.button !== 2 || !mode || !mode.takesTheRightButton()) return;
+		mode.rightUp(this.inTheDocumentAt(event), MouseControl.readModifier(event));
+		this.containerObject.requestReDraw();
+	}
+
+	// the menu opens on the press or on the release, as the system has it
+	onContextMenu(_point: cool.SimplePoint, e: MouseEvent): void {
+		if (!Interaction.modeOn()?.takesTheRightButton()) return;
+		e.preventDefault();
+		e.stopPropagation();
+		this.stopPropagating();
 	}
 
 	/// The section, where it is there.

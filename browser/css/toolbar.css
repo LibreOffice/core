@@ -730,6 +730,10 @@ button.leaflet-control-search-next
 .w2ui-icon.lines_linearrowsquare { background: url('images/lc_linearrowsquare.svg') no-repeat center; }
 .w2ui-icon.lines_measureline { background: url('images/lc_measureline.svg') no-repeat center; }
 .w2ui-icon.lines_line_diagonal { background: url('images/lc_line_diagonal.svg') no-repeat center; }
+.w2ui-icon.lines_polygon_unfilled { background: url('images/lc_polygon_unfilled.svg') no-repeat center; }
+.w2ui-icon.lines_polygon_diagonal_unfilled { background: url('images/lc_polygon_diagonal_unfilled.svg') no-repeat center; }
+.w2ui-icon.lines_polygon { background: url('images/lc_polygon.svg') no-repeat center; }
+.w2ui-icon.lines_polygon_diagonal { background: url('images/lc_polygon_diagonal.svg') no-repeat center; }
 
 .w2ui-icon.frame01 { background: url('images/fr01.svg') no-repeat center; }
 .w2ui-icon.frame02 { background: url('images/fr02.svg') no-repeat center; }
@@ -1235,6 +1239,10 @@ button.leaflet-control-search-next
 [data-theme='dark'] .w2ui-icon.lines_linearrowsquare { background: url('images/dark/lc_linearrowsquare.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.lines_measureline { background: url('images/dark/lc_measureline.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.lines_line_diagonal { background: url('images/dark/lc_line_diagonal.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_polygon_unfilled { background: url('images/dark/lc_polygon_unfilled.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_polygon_diagonal_unfilled { background: url('images/dark/lc_polygon_diagonal_unfilled.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_polygon { background: url('images/dark/lc_polygon.svg') no-repeat center; }
+[data-theme='dark'] .w2ui-icon.lines_polygon_diagonal { background: url('images/dark/lc_polygon_diagonal.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.print { background: url('images/dark/lc_print.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.undo { background: url('images/dark/lc_undo.svg') no-repeat center; }
 [data-theme='dark'] .w2ui-icon.redo { background: url('images/dark/lc_redo.svg') no-repeat center; }
