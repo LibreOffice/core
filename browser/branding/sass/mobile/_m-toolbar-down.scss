@@ -1,7 +1,4 @@
 
-#mobile-edit-button {
-	background-color: base.get-cssvar(primary-element) !important;
-}
 @if $mobile {
 	#toolbar-down .unotoolbutton.selected {
 		border: 1px solid base.get-cssvar(primary-text) !important;

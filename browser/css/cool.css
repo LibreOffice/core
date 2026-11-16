@@ -597,13 +597,17 @@ input, button {
 	height: 56px;
 	right: 16px;
 	bottom: 16px;
-	background-color: var(--color-primary);
+	background-color: rgb(var(--doc-type, 11, 135, 231));
 	border-radius: 50%;
 	box-shadow: 0 4px 8px 0 var(--color-black-20), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	z-index: 1001;
 	transform: scale(1);
 	transition: transform 0.5s;
 	display: none;
+}
+
+[data-theme='dark'] #mobile-edit-button {
+	background-color: var(--color-primary);
 }
 
 #mobile-edit-button.impress.portrait {
