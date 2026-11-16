@@ -1103,6 +1103,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testTdf173710DocumentLanguage)
     assertXPath(pXmlDoc, "/p:presentation/p:defaultTextStyle/a:defPPr/a:defRPr", "lang", u"en-US");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresentationKeepsAttributes)
+{
+    // The presentation has showSpecialPlsOnTitleSld="0", strictFirstAndLastChars="0"
+    // and saveSubsetFonts="1" set, and autoCompressPictures isn't set
+    createSdImpressDoc("pptx/tdf128684.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Ensure the same attributes are kept
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:presentation", "showSpecialPlsOnTitleSld", u"0");
+    assertXPath(pXmlDoc, "/p:presentation", "strictFirstAndLastChars", u"0");
+    assertXPath(pXmlDoc, "/p:presentation", "saveSubsetFonts", u"1");
+    assertXPathNoAttribute(pXmlDoc, "/p:presentation", "autoCompressPictures");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testTdf43547ShapeAltText)
 {
     // A picture, a text box, a table, a line, a polyline, a rectangle and an ellipse, each with a
