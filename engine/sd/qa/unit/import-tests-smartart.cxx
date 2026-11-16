@@ -3551,6 +3551,43 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testConnectorKeepsItsTextOnReLayout)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAcrossItsTurnedBoxIsFitted)
+{
+    // the chevrons are turned by a quarter and may grow in height, their text stays upright
+    createSdImpressDoc("pptx/smartart-turned-text-across.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    uno::Reference<text::XText> xText(findChildShapeByText(xDiagram, u"One"_ustr),
+                                      uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xParagraphs(xText, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xParagraph(
+        xParagraphs->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xRun(xParagraph->createEnumeration()->nextElement(),
+                                             uno::UNO_QUERY_THROW);
+    // the growing height only widens the text, the line has to fit the chevron's depth
+    CPPUNIT_ASSERT_EQUAL(28.0, xRun->getPropertyValue(u"CharHeight"_ustr).get<double>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontStatedAsPartFitsOnItsOwn)
+{
+    // the nodes start at 0.78 of the middle's font, without op, so both fit their own boxes
+    createSdImpressDoc("pptx/smartart-font-part-fits-alone.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    auto aFirstRunHeight = [&xDiagram](const OUString& rText) {
+        uno::Reference<container::XEnumerationAccess> xParagraphs(
+            findChildShapeByText(xDiagram, rText), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumerationAccess> xParagraph(
+            xParagraphs->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xRun(xParagraph->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY_THROW);
+        return xRun->getPropertyValue(u"CharHeight"_ustr).get<double>();
+    };
+    // the middle is not pulled down with the nodes
+    CPPUNIT_ASSERT_EQUAL(60.0, aFirstRunHeight(u"One"_ustr));
+    CPPUNIT_ASSERT_EQUAL(22.0, aFirstRunHeight(u"Thirteen"_ustr));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

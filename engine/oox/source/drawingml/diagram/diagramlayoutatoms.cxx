@@ -2350,7 +2350,11 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
                 continue;
             if (rConstraint.mnRefType == XML_none && rConstraint.mfValue > 0.0)
                 bStated = true;
-            else if (rConstraint.mnRefType == XML_primFontSz && !rConstraint.msRefForName.isEmpty())
+            // a link holds with op equ, or without op at the same size; a part stated without op
+            // is only where the node starts, it fits on its own
+            else if (rConstraint.mnRefType == XML_primFontSz && !rConstraint.msRefForName.isEmpty()
+                     && (rConstraint.mnOperator == XML_equ
+                         || (rConstraint.mnOperator == XML_none && rConstraint.mfFactor == 1.0)))
             {
                 aNext = rConstraint.msRefForName;
                 fLinkPart = rConstraint.mfFactor;
@@ -15089,7 +15093,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                        || (nTurn > 225 && nTurn < 315)));
                 // a font a row fitted is checked in the final box too: a text whose width the row
                 // gives breaks its lines there, Continuous_Block_Process's Twenty-one
-                if (!ownRuleGrows(getLayoutNode(), XML_h)
+                // a height that grows makes a text across its box only wider, so it is fitted too
+                if ((!ownRuleGrows(getLayoutNode(), XML_h) || bAcross)
                     && rShape->getSize().Width > 0
                     && rShape->getSize().Height > 0 && !textParagraphsOf(rDgm, rShape).empty())
                 {
