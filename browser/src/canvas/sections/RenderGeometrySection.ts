@@ -1097,9 +1097,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const yDiff = -viewedRectangle.pY1;
 
 		// while a selection frame is drawn it is what the pointer shows, not the object under it,
-		// and while the freeform line tool is chosen the pointer draws and marks no object
+		// and while a mode is on the pointer draws and marks no object
 		if (RenderGeometrySection.frame) this.strokeTheFrame(xDiff, yDiff);
-		else if (!FreeformLineSection.isChosen() && !Interaction.modeOn())
+		else if (!Interaction.modeOn())
 			this.outlineHitUnderMouse(data, xDiff, yDiff);
 
 		// The rectangles and the name of the hit are feedback about the geometry the client holds,

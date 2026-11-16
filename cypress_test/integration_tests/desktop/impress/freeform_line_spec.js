@@ -47,14 +47,41 @@ describe(['tagdesktop'], 'Freeform line on a vector slide', function() {
 		};
 	}
 
-	// Chooses the tool from the Insert tab, or puts it away, and waits for its state.
-	function clickTheTool(win, chosen) {
+	// The mode one is in, or null. The classes of the page are names of its script, not
+	// properties of its window, so the page itself is asked.
+	function modeOn(win) {
+		return win.eval('Interaction.modeOn()');
+	}
+
+	// Waits until the mode that draws the line is on, or off.
+	function waitForTheMode(win, on) {
+		cy.wrap(null).should(function() {
+			expect(!!modeOn(win), 'the mode that draws the line').to.equal(on);
+		});
+	}
+
+	// Chooses the freeform line in the Insert tab, which puts the view into the mode that draws
+	// it.
+	function chooseTheLine(win) {
 		desktopHelper.selectNotebookbarTab('Insert');
 		cy.cGet('#insert-freeform-line-button').click();
 		cy.then(function() {
 			return helper.processToIdle(win);
 		});
-		helper.waitForMapState('freeformline', chosen ? 'true' : 'false');
+		waitForTheMode(win, true);
+	}
+
+	// Clicks at that place in twips on the page, without moving.
+	function clickAt(win, x, y) {
+		cy.then(function() {
+			var place = onCanvas(win, x, y);
+			cy.cGet('#document-canvas')
+				.trigger('mousedown', place.x, place.y, { button: 0, buttons: 1 })
+				.trigger('mouseup', place.x, place.y, { button: 0, buttons: 0 });
+		});
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
 	}
 
 	// Presses the button at the first place, moves through the others in steps, and lets go at
@@ -85,13 +112,13 @@ describe(['tagdesktop'], 'Freeform line on a vector slide', function() {
 		});
 	}
 
-	it('A line drawn with the tool becomes a selected polyline through its corners.', function() {
+	it('A line drawn by hand becomes a selected curve with a corner where it turns.', function() {
 		var win = this.win;
 		cy.wrap(null).should(function() {
 			expect(geometry(win).heldByThePage(), 'objects of the slide').to.have.length(2);
 		});
 
-		clickTheTool(win, true);
+		chooseTheLine(win);
 
 		// A V shape below the two objects: down to the right, then up to the right.
 		var places = [
@@ -101,62 +128,49 @@ describe(['tagdesktop'], 'Freeform line on a vector slide', function() {
 		];
 		drawThrough(win, places);
 
-		// The engine adds the line as a polyline, the kind 9, and selects it. The tool is put away
-		// and the line drawn while waiting for the engine goes.
+		// The stroke is one part; a click that draws nothing makes the object of it.
+		waitForTheMode(win, true);
+		clickAt(win, 8000, 7000);
+
+		// The engine adds the line as a freehand line, the kind 12, and it is selected. The mode is
+		// over.
+		waitForTheMode(win, false);
 		cy.wrap(null).should(function() {
 			expect(geometry(win).heldByThePage(), 'objects of the slide').to.have.length(3);
 			var objectId = selectedObject(win);
 			expect(objectId, 'selected object').to.not.be.undefined;
 			var object = geometry(win).objectOf(objectId);
-			expect(object.objectKind, 'kind of the selected object').to.equal(9);
+			expect(object.objectKind, 'kind of the selected object').to.equal(12);
 
-			// The straight runs between the corners are kept as single edges, give or take a
-			// place where a step of the mouse was rounded.
+			// Each straight run is fitted with one curve, and the turn between them stays a
+			// corner, give or take a place where a step of the mouse was rounded.
 			var points = object.path[0].points;
-			expect(points.length, 'points of the line').to.be.within(3, 6);
+			expect(points.length, 'points of the line').to.be.within(3, 5);
 			expect(points[0].x, 'first point').to.be.closeTo(places[0].x, 60);
 			expect(points[0].y, 'first point').to.be.closeTo(places[0].y, 60);
 			expect(points[points.length - 1].x, 'last point').to.be.closeTo(places[2].x, 60);
 			expect(points[points.length - 1].y, 'last point').to.be.closeTo(places[2].y, 60);
-
-			expect(win.app.sectionContainer.doesSectionExist('freeform line'),
-				'the line drawn while waiting').to.equal(false);
 		});
-		helper.waitForMapState('freeformline', 'false');
 	});
 
-	it('The tool stays chosen after a press that draws no line, and Escape puts it away.', function() {
+	it('A click before any line ends the mode with nothing made, as Escape does.', function() {
 		var win = this.win;
-		clickTheTool(win, true);
+		chooseTheLine(win);
 
-		// A press that does not move draws no line, so nothing is added.
-		cy.then(function() {
-			var place = onCanvas(win, 1701, 6237);
-			cy.cGet('#document-canvas').click(place.x, place.y);
-		});
-		cy.then(function() {
-			return helper.processToIdle(win);
-		});
-		helper.waitForMapState('freeformline', 'true');
+		clickAt(win, 1701, 6237);
+		waitForTheMode(win, false);
 		cy.wrap(null).should(function() {
 			expect(geometry(win).heldByThePage(), 'objects of the slide').to.have.length(2);
 		});
 
+		chooseTheLine(win);
 		helper.typeIntoDocument('{esc}');
-		helper.waitForMapState('freeformline', 'false');
-		cy.wrap(null).should(function() {
-			expect(win.app.sectionContainer.doesSectionExist('freeform line'),
-				'the section of the tool').to.equal(false);
-		});
-
-		// The button chooses the tool again, and a second click puts it away.
-		clickTheTool(win, true);
-		clickTheTool(win, false);
+		waitForTheMode(win, false);
 	});
 
-	it('Escape during a press ends it, so its release selects nothing.', function() {
+	it('Escape during a press drops the line, so its release selects nothing.', function() {
 		var win = this.win;
-		clickTheTool(win, true);
+		chooseTheLine(win);
 
 		// The keys go to the document without a click that would end the press first.
 		cy.cGet('div.clipboard').focus();
@@ -169,11 +183,11 @@ describe(['tagdesktop'], 'Freeform line on a vector slide', function() {
 				.trigger('mousedown', place.x, place.y, { button: 0, buttons: 1 });
 		});
 		cy.wrap(null).should(function() {
-			var section = win.app.sectionContainer.getSectionWithName('freeform line');
-			expect(section && section.stroke, 'the line the press started').to.be.ok;
+			var mode = modeOn(win);
+			expect(mode && mode.drawing.stroking(), 'the line the press started').to.be.ok;
 		});
 		helper.typeIntoDocument('{esc}');
-		helper.waitForMapState('freeformline', 'false');
+		waitForTheMode(win, false);
 		cy.then(function() {
 			cy.cGet('#document-canvas')
 				.trigger('mouseup', place.x, place.y, { button: 0, buttons: 0 })

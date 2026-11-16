@@ -1667,9 +1667,23 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 			inSteps: false,
 			curves: true,
 		},
+		Freeline: { multi: true, closes: true, inSteps: false, freehand: true },
+		Freeline_Unfilled: {
+			multi: true,
+			closes: false,
+			inSteps: false,
+			freehand: true,
+		},
 	};
 
-	/// Whether that command makes a polygon or a curve.
+	/// The least step from one place of a stroke drawn by hand to the next, how far the curves
+	/// fitted to it may stray from it, and over how long a run a turn is looked at for a
+	/// corner, in CSS pixels.
+	private static readonly strokeStep: number = 2;
+	private static readonly strokeTolerance: number = 3;
+	private static readonly cornerReach: number = 12;
+
+	/// Whether that command makes a polygon, a curve or a line drawn by hand.
 	public static makes(shape: string): boolean {
 		return ClassicPathCreateContext.kinds[shape] !== undefined;
 	}
@@ -1685,6 +1699,8 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	private drawing: PathDrawing;
 	/// Whether the kind draws curves, whose points are set when the button goes down.
 	private curves: boolean;
+	/// Whether the kind is drawn by hand, a stroke for every part.
+	private freehand: boolean;
 	/// Whether the button that went down is the second one of a double click, which makes the
 	/// object when it comes up.
 	private secondClick: boolean = false;
@@ -1703,6 +1719,12 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 			ClassicCreateContext.twips(ClassicPathCreateContext.reach),
 		);
 		this.curves = !!ClassicPathCreateContext.kinds[shape].curves;
+		this.freehand = !!ClassicPathCreateContext.kinds[shape].freehand;
+		this.drawing.strokesTaken(
+			ClassicCreateContext.twips(ClassicPathCreateContext.strokeStep),
+			ClassicCreateContext.twips(ClassicPathCreateContext.strokeTolerance),
+			ClassicCreateContext.twips(ClassicPathCreateContext.cornerReach),
+		);
 	}
 
 	public started(): void {
@@ -1722,6 +1744,13 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	mouseAt(at: cool.Point, modifier: number, _pressed: boolean): void {
 		super.mouseAt(at, modifier, false);
 		if (Interaction.modeOn() !== this || !this.hover) return;
+		if (this.drawing.stroking()) {
+			// a stroke of a kind that closes ends by itself when it comes back to its start
+			this.hover = null;
+			const outcome = this.drawing.strokeTo(at);
+			if (outcome !== 'goesOn') this.went(outcome);
+			return;
+		}
 		const shift = (modifier & app.UNOModifier.SHIFT) !== 0;
 		if (this.drawing.pulling()) {
 			this.drawing.pull(at, shift);
@@ -1736,6 +1765,10 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	/// no point; another one sets the point of a curve.
 	mouseDown(at: cool.Point, modifier: number): void {
 		this.mouseAt(at, modifier, true);
+		if (this.freehand) {
+			this.drawing.strokeFrom(at);
+			return;
+		}
 		this.secondClick =
 			!!this.lastUpAt &&
 			Date.now() - this.lastUpTime <=
@@ -1750,6 +1783,12 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	mouseUp(at: cool.Point, modifier: number, _dragged: boolean): void {
 		this.mouseAt(at, modifier, false);
 		if (Interaction.modeOn() !== this) return;
+
+		if (this.freehand) {
+			this.handUp();
+			this.placeAgain(at, modifier);
+			return;
+		}
 
 		const secondClick = this.secondClick;
 		this.secondClick = false;
@@ -1766,9 +1805,28 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		this.placeAgain(at, modifier);
 	}
 
-	// after a part ended, the lines across the view show at once where the next one would begin
+	/*
+		The button came up after a stroke drawn by hand: the stroke becomes a part. A click that
+		drew nothing makes the object of the parts drawn. A stroke that already ended on its start
+		leaves nothing to do.
+	*/
+	private handUp(): void {
+		if (!this.drawing.stroking()) return;
+		if (this.drawing.strokeWent()) this.went(this.drawing.strokeEnd());
+		else {
+			this.drawing.strokeDropped();
+			this.went(this.drawing.finish());
+		}
+	}
+
+	/*
+		After a part ended, the lines across the view show at once where the next one would begin.
+		Where the release ended the mode, its press ends with it, so its click reaches nothing
+		under the mode, which would select there.
+	*/
 	private placeAgain(at: cool.Point, modifier: number): void {
 		if (Interaction.modeOn() === this) this.mouseAt(at, modifier, false);
+		else app.sectionContainer?.cancelPress();
 	}
 
 	takesTheRightButton(): boolean {
@@ -1782,13 +1840,18 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		this.drawing.press();
 	}
 
-	/// The right button sets the last point of a part, or lets go of it, and ends the part.
+	/// The right button sets the last point of a part, or lets go of it, and ends the part; for a
+	/// line drawn by hand it makes the object.
 	rightUp(at: cool.Point, modifier: number): void {
 		this.mouseAt(at, modifier, false);
 		if (Interaction.modeOn() !== this) return;
 		this.lastUpAt = null;
 		this.went(
-			this.curves ? this.drawing.release(true) : this.drawing.setThePoint(true),
+			this.freehand
+				? this.drawing.finish()
+				: this.curves
+					? this.drawing.release(true)
+					: this.drawing.setThePoint(true),
 		);
 		this.placeAgain(at, modifier);
 	}
@@ -1806,24 +1869,28 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	/// Enter makes the object, Backspace takes back the last point, Delete the part being drawn.
 	keyEvent(event: KeyboardEvent, modifier: number): boolean {
 		if (event.type === 'keydown' && !modifier) {
-			if (event.key === 'Enter') {
-				this.went(this.drawing.finish());
-				return true;
-			}
-			if (event.key === 'Backspace') {
-				this.went(this.drawing.back());
-				return true;
-			}
-			if (event.key === 'Delete') {
-				this.went(this.drawing.dropThePart());
-				return true;
-			}
+			if (event.key === 'Enter') return this.byKey(() => this.drawing.finish());
+			if (event.key === 'Backspace')
+				return this.byKey(() => this.drawing.back());
+			if (event.key === 'Delete')
+				return this.byKey(() => this.drawing.dropThePart());
 		}
 		return super.keyEvent(event, modifier);
 	}
 
 	escape(): boolean {
-		this.went(this.drawing.dropThePart());
+		return this.byKey(() => this.drawing.dropThePart());
+	}
+
+	/*
+		Takes a step of the drawing for a key. Where the button was down drawing a stroke or
+		pulling weights, the step took what it drew, and the press ends with it, so its release
+		and its click reach nothing.
+	*/
+	private byKey(step: () => PathDrawingOutcome): boolean {
+		const held = this.drawing.stroking() || this.drawing.pulling();
+		this.went(step());
+		if (held) app.sectionContainer?.cancelPress();
 		return true;
 	}
 

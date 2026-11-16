@@ -441,8 +441,8 @@ COOL_JS_LST =\
 	src/app/HandleScaling.ts \
 	src/app/SelectionHandles.ts \
 	src/app/PathEditing.ts \
+	src/app/PathFit.ts \
 	src/app/PathDrawing.ts \
-	src/app/FreeformStroke.ts \
 	src/app/HandleGroups.ts \
 	src/app/TableHandles.ts \
 	src/app/ConnectorRouter.ts \
@@ -657,7 +657,6 @@ COOL_JS_LST =\
 	src/canvas/sections/OverviewPreviewsSection.ts \
 	src/canvas/sections/PreviewEditSection.ts \
 	src/canvas/sections/WholePageSection.ts \
-	src/canvas/sections/FreeformLineSection.ts \
 	src/canvas/sections/InteractionModeSection.ts \
 	src/canvas/sections/TableResizeMarkerSection.ts \
 	src/canvas/sections/TableSelectMarkerSection.ts \

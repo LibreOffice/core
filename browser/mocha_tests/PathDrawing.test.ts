@@ -186,6 +186,54 @@ describe('PathDrawing', function () {
 		nodeassert.strictEqual(points[1].behindX, 50);
 	});
 
+	it('a stroke is fitted; dropping one being drawn keeps the parts before', function () {
+		const drawing = new PathDrawing(
+			{ multi: true, closes: false, inSteps: false, freehand: true },
+			10,
+		);
+		drawing.strokesTaken(2, 3, 20);
+		drawing.strokeFrom(new cool.Point(0, 0));
+		for (let x = 10; x <= 300; x += 10) drawing.strokeTo(new cool.Point(x, 0));
+		nodeassert.strictEqual(drawing.strokeEnd(), 'partEnded');
+		nodeassert.strictEqual(
+			PathDrawing.asSvg(drawing.path()),
+			'M 0 0 C 100 0 200 0 300 0',
+		);
+
+		drawing.strokeFrom(new cool.Point(0, 100));
+		drawing.strokeTo(new cool.Point(50, 100));
+		nodeassert.strictEqual(drawing.dropThePart(), 'goesOn');
+		nodeassert.strictEqual(drawing.path().length, 1);
+		nodeassert.strictEqual(drawing.stroking(), false);
+	});
+
+	it('a stroke of a kind that closes ends by itself when it comes back to its start', function () {
+		const drawing = new PathDrawing(
+			{ multi: true, closes: true, inSteps: false, freehand: true },
+			10,
+		);
+		drawing.strokesTaken(2, 3, 20);
+		drawing.strokeFrom(new cool.Point(0, 0));
+		const way = [
+			[100, 0],
+			[200, 0],
+			[200, 100],
+			[200, 200],
+			[100, 200],
+			[0, 200],
+			[0, 100],
+			[0, 30],
+		];
+		for (const at of way)
+			nodeassert.strictEqual(
+				drawing.strokeTo(new cool.Point(at[0], at[1])),
+				'goesOn',
+			);
+		nodeassert.strictEqual(drawing.strokeTo(new cool.Point(0, 5)), 'partEnded');
+		nodeassert.strictEqual(drawing.path()[0].closed, true);
+		nodeassert.strictEqual(drawing.stroking(), false);
+	});
+
 	it('a part with too few points is dropped', function () {
 		const drawing = new PathDrawing(filled, 10);
 		click(drawing, [[0, 0]]);

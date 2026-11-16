@@ -10,13 +10,14 @@
  */
 
 /// How a path is drawn: whether it may hold several polygons, whether each of them closes when
-/// it ends, whether its edges keep to steps of 45 degrees by themselves, and whether its points
-/// get weights, so its edges are curves.
+/// it ends, whether its edges keep to steps of 45 degrees by themselves, whether its points get
+/// weights, so its edges are curves, and whether each part is drawn by hand in one stroke.
 interface PathDrawingKind {
 	multi: boolean;
 	closes: boolean;
 	inSteps: boolean;
 	curves?: boolean;
+	freehand?: boolean;
 }
 
 /// What a step of drawing did: the path goes on, a part of it ended, the path is finished, or
@@ -36,6 +37,10 @@ type PathDrawingOutcome = 'goesOn' | 'partEnded' | 'finished' | 'nothingLeft';
 	object holds them, and the kind says which. A part that ends with too few points is dropped.
 	A path of one polygon is finished as soon as its part ends; one of several goes on with the
 	next part.
+
+	A part drawn by hand is one stroke: the places the mouse goes through while the button is
+	down, which are fitted with curves when the stroke ends. A stroke of a kind that closes ends
+	by itself, closed, when it comes back to where it began.
 */
 class PathDrawing {
 	private kind: PathDrawingKind;
@@ -56,6 +61,86 @@ class PathDrawing {
 	private pressedOnTheStart: boolean = false;
 	/// Whether the pull went far enough to give weights.
 	private pulledOut: boolean = false;
+	/// The places of the stroke being drawn by hand, in twips; null while none is drawn.
+	private stroke: cool.Point[] | null = null;
+	/// Whether the stroke went further than the reach from where it began, so coming back there
+	/// closes it.
+	private strokeLeftItsStart: boolean = false;
+
+	/// The least step from one place of a stroke to the next, how far the curves fitted to it may
+	/// stray from it, and over how long a run a turn is looked at for a corner, in twips.
+	private strokeStep: number = 0;
+	private strokeTolerance: number = 0;
+	private cornerReach: number = 0;
+
+	/// Says how fine a stroke drawn by hand is taken, in twips.
+	public strokesTaken(
+		step: number,
+		tolerance: number,
+		cornerReach: number,
+	): void {
+		this.strokeStep = step;
+		this.strokeTolerance = tolerance;
+		this.cornerReach = cornerReach;
+	}
+
+	/// Begins a stroke drawn by hand at that place.
+	public strokeFrom(at: cool.Point): void {
+		this.stroke = [at];
+		this.strokeLeftItsStart = false;
+		this.next = null;
+	}
+
+	/// Whether a stroke is being drawn by hand.
+	public stroking(): boolean {
+		return this.stroke !== null;
+	}
+
+	/*
+		Takes the stroke on to that place, where it lies the least step from the place before.
+		Where the kind closes its parts and the stroke comes back within the reach of where it
+		began, it ends there, closed.
+	*/
+	public strokeTo(at: cool.Point): PathDrawingOutcome {
+		const stroke = this.stroke;
+		if (!stroke) return 'goesOn';
+		const start = stroke[0];
+		const last = stroke[stroke.length - 1];
+		if (last.distanceTo(at) < this.strokeStep) return 'goesOn';
+
+		const nearTheStart = start.distanceTo(at) <= this.reach;
+		if (!nearTheStart && start.distanceTo(at) > 2 * this.reach)
+			this.strokeLeftItsStart = true;
+		if (this.kind.closes && nearTheStart && this.strokeLeftItsStart)
+			return this.strokeEnd();
+
+		stroke.push(at);
+		return 'goesOn';
+	}
+
+	/// Whether the stroke being drawn has gone anywhere, so it is a stroke and not a click.
+	public strokeWent(): boolean {
+		return (this.stroke?.length ?? 0) >= 2;
+	}
+
+	/// Ends the stroke being drawn and makes a part of it, fitted with curves.
+	public strokeEnd(): PathDrawingOutcome {
+		const stroke = this.stroke;
+		this.stroke = null;
+		if (!stroke) return 'goesOn';
+		this.points = PathFit.fit(
+			stroke,
+			this.strokeTolerance,
+			this.cornerReach,
+			this.kind.closes,
+		);
+		return this.endThePart(this.kind.closes);
+	}
+
+	/// Gives up the stroke being drawn.
+	public strokeDropped(): void {
+		this.stroke = null;
+	}
 
 	constructor(kind: PathDrawingKind, reach: number) {
 		this.kind = kind;
@@ -239,8 +324,14 @@ class PathDrawing {
 		delete point.behindY;
 	}
 
-	/// Finishes the path: the part being drawn ends as the kind ends its parts.
+	/// Finishes the path: the part being drawn ends as the kind ends its parts, a stroke being
+	/// drawn by hand too.
 	public finish(): PathDrawingOutcome {
+		if (this.stroke && this.strokeWent()) {
+			const outcome = this.strokeEnd();
+			if (outcome === 'finished' || outcome === 'nothingLeft') return outcome;
+		}
+		this.stroke = null;
 		if (this.points.length) this.endThePart(this.kind.closes);
 		return this.path().length ? 'finished' : 'nothingLeft';
 	}
@@ -278,6 +369,8 @@ class PathDrawing {
 	/// Takes back the last point, of the part before where the part being drawn has none, which
 	/// is then drawn on. Nothing is left once the last point of the first part goes.
 	public back(): PathDrawingOutcome {
+		// a part drawn by hand goes as a whole
+		if (this.kind.freehand) return this.dropThePart();
 		this.pulled = null;
 		this.pressedOnTheStart = false;
 		if (!this.points.length) {
@@ -296,6 +389,12 @@ class PathDrawing {
 	*/
 	public dropThePart(): PathDrawingOutcome {
 		this.pulled = null;
+		// a stroke being drawn is the part being drawn
+		if (this.stroke) {
+			this.stroke = null;
+			if (!this.kind.multi) this.parts = [];
+			return this.parts.length ? 'goesOn' : 'nothingLeft';
+		}
 		this.pressedOnTheStart = false;
 		if (!this.kind.multi) {
 			this.parts = [];
@@ -317,6 +416,10 @@ class PathDrawing {
 	/// from its last point to where the next one would be set. While the start point of a part
 	/// that closes is pulled, the part shows closed.
 	public shown(): cool.ObjectPathPolygon[] {
+		if (this.stroke)
+			return this.stroke.length >= 2
+				? this.parts.concat([{ closed: false, points: this.stroke }])
+				: this.parts;
 		const drawing = this.next ? this.points.concat([this.next]) : this.points;
 		const closing = this.pressedOnTheStart && this.kind.closes;
 		return drawing.length >= 2

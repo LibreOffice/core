@@ -195,7 +195,8 @@ its start to its end:
 The grid of Lines in the Insert tab has a row "Curves and Polygons": the curve, the polygon, the
 polygon at 45 degrees, and the filled kind of each. Every one of them, chosen there or anywhere
 else - the Curve button of the Insert tab too - puts one into a mode where the object is drawn
-point by point, with the cross as pointer. One object can hold several parts:
+point by point, with the cross as pointer; the Freeform Line button of the Insert tab puts one
+into the same mode for a line drawn by hand. One object can hold several parts:
 
 | What | What happens |
 |---|---|
@@ -212,6 +213,15 @@ point by point, with the cross as pointer. One object can hold several parts:
 | Backspace | Takes back the last point. Where the part being drawn has none, it takes back the last point of the part before, which is then drawn on. With nothing left the mode ends without an object. |
 | Delete, Escape | Take away the part being drawn, then the parts before one by one; the last one ends the mode without an object. |
 | A command, a press elsewhere, another slide | End the mode without an object. |
+
+A freeform line is drawn by hand, a stroke for every part:
+
+| What | What happens |
+|---|---|
+| Press and drag | Draws a stroke where the mouse goes. When the button comes up the stroke is fitted with curves that keep within about 3 pixels of it; a turn sharper than 60 degrees stays a corner. The next stroke is the next part. |
+| Back to the start | A stroke of the filled kind that comes back to where it began ends there, closed, while the button is still down. |
+| Click without a drag, Enter, right click | Make the object of the strokes drawn. A click before any stroke ends the mode with nothing made. |
+| Backspace, Delete, Escape | Take away the last stroke; the last one ends the mode with nothing made. During a stroke they take that stroke away and end the press. |
 
 
 ## 2. Changing objects
@@ -678,7 +688,7 @@ in the sections above.
 | Circle section, arc, segment | As in the office | As a rectangle, plus the start and end angle handles | - |
 | Line | As in the office | Its two ends, the turn handle beside its middle; 0 lays it level (see Lines) | - |
 | Polyline, polygon, curve | As in the office | Points and weights with Edit Points, moved by drag and key, and edited by their menu (see Editing points) | - |
-| Freehand line | As in the office | As a curve | Not checked yet |
+| Freehand line | Drawn by hand and fitted with curves (see Creating a polygon or a curve) | As a curve | - |
 | Text box, title, outline | As in the office | As a rectangle; double click, typing, F2 or Return edits the text | - |
 | Callout | As in the office | As a rectangle, plus the tail end; the tail is laid out live | - |
 | Custom shape, Fontwork | As in the office | As a rectangle, plus the yellow handles on their rails | No live shape while a yellow handle is dragged |
@@ -869,10 +879,10 @@ draws them.
 
 What is still missing, or only partly there:
 
-- Creating by a drag works for the shapes grid and for text boxes. Lines, curves, connectors,
-  polygons, our own callouts and vertical text are still added in the middle of the slide by
-  default; they are to be created by drags of their own. The Freeform Line tool draws by a drag
-  already. Tables keep their own insert dialog.
+- Creating by a drag works for the shapes grid, text boxes, lines, connectors, polygons, curves
+  and freeform lines. Our own callouts and vertical text are still added in the middle of the
+  slide by default; they are to be created by drags of their own. Tables keep their own insert
+  dialog.
 
 - 3D objects and 3D charts: they are shown as one picture. Selecting single objects inside a
   scene, and turning a scene in 3D as the office does, are planned.

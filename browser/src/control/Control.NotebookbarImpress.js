@@ -1758,10 +1758,9 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 								'children': [
 									{
 										'id': 'insert-freeform-line',
-										'type': 'customtoolitem',
+										'type': 'toolitem',
 										'text': _UNO('.uno:Freeline_Unfilled', 'presentation'),
-										'command': 'freeformline',
-										'icon': 'lc_freeline_unfilled.svg',
+										'command': '.uno:Freeline_Unfilled',
 										'accessibility': { focusBack: true, combination: 'FF', de: null }
 									}
 								]
