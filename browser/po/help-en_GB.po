@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0200\n"
-"PO-Revision-Date: 2026-08-12 01:32+0000\n"
-"Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
+"PO-Revision-Date: 2026-11-16 11:08+0000\n"
+"Last-Translator: Stuart Swales <skswales@users.noreply.hosted.weblate.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "collabora-online/help/en_GB/>\n"
 "Language: en_GB\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -2414,7 +2414,6 @@ msgstr ""
 "text, and Save/Cancel buttons"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span "
 "class=\"productname\">{productname}</span> adds symbols to each cell of a "
@@ -2424,9 +2423,9 @@ msgid ""
 msgstr ""
 "<span class=\"def\">Conditional formatting:</span> <span "
 "class=\"productname\">{productname}</span> adds symbols to each cell of a "
-"range based on cells conditions. Select the cell range and click the <span "
-"class=\"ui\">Conditional Formatting</span> icon on the toolbar. Select the "
-"symbol set to apply on the range."
+"range based on cells conditions. Select the cell range and click <span "
+"class=\"ui\">Conditional</span> on the <span class=\"ui\">Home</span> tab. "
+"Select the symbol set to apply on the range."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2511,7 +2510,6 @@ msgstr ""
 "Direct formatting applies only to the current object selected."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span "
 "class=\"productname\">{productname}</span> supports paragraph styles. You "
@@ -2520,8 +2518,8 @@ msgid ""
 msgstr ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\">"
 "{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Choose menu <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Edit styles</span> to change style."
+"paragraph style to a paragraph. Select the style in the style list on the "
+"<span class=\"ui\">Home</span> tab."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
@@ -2536,7 +2534,6 @@ msgid "Handling Tables"
 msgstr "Handling Tables"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
-#, fuzzy
 msgid ""
 "Insert tables with <span class=\"ui\">Insert</span> → <span "
 "class=\"ui\">Table</span>. Select the initial number of rows and columns. "
@@ -2544,10 +2541,11 @@ msgid ""
 "class=\"ui\">Table</span> tab. The default paragraph style inside cells is "
 "“Table contents”."
 msgstr ""
-"Insert tables with proper icon in the toolbar. Select the initial number of "
-"rows and columns. Add rows and columns with the cell context menu. Merge "
-"cells with the <span class=\"ui\">Table</span> menu. The default paragraph "
-"style inside cells is “Table contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\">"
+"Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\">"
+"Table</span> tab. The default paragraph style inside cells is “Table contents"
+"”."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
@@ -2558,15 +2556,14 @@ msgstr ""
 "currently showing 5 by 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells, open the context menu and choose <span class=\"ui\">Table "
 "Properties</span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\">"
-"Properties</span>. Fine tune the table with the properties dialogue box."
+"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
+"span>. Fine tune the table with the properties dialogue box."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -3036,7 +3033,6 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Why can't I delete text? It just gets a strike-through?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
-#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3047,8 +3043,8 @@ msgstr ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Edit</span> → <span class=\"ui\">Track "
-"Changes </span> → <span class=\"ui\">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\">"
+"Record</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
@@ -3081,20 +3077,18 @@ msgstr ""
 "document."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
-#, fuzzy
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Review</span> → "
 "<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"To display or hide track changes choose <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
+"To display or hide track changes choose <span class=\"ui\">Review</span> → "
+"<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
-#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3107,13 +3101,12 @@ msgid ""
 msgstr ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Edit</span> → <span class=\"ui\">"
-"Track Changes </span> → <span class=\"ui\">Accept</span> or <span "
-"class=\"ui\">Reject</span>. Furthermore, if you need to filter changes "
-"before accepting or rejecting, choose <span class=\"ui\">Edit</span> → <span "
-"class=\"ui\">Track Changes </span> → <span class=\"ui\">Manage</span>. A "
-"dialogue box shows a list of all tracked changes. Use the dialogue box "
-"buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\">"
+"Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\">"
+"Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\">"
+"Manage</span>. A dialogue box shows a list of all tracked changes. Use the "
+"dialogue box buttons accordingly."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
