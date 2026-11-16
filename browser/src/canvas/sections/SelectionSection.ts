@@ -2111,7 +2111,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		Writes an angle beside where it is changed, below and to the right, where the pointer
 		leaves it free: what the running interaction reads beside the mouse, and while nothing
 		runs, the turn or the slant beside the handle above the selection, wherever that one is
-		shown. It has a light edge, so it reads on any page. Each of the two can be switched off in
+		shown and the angle is not nought. It has a light edge, so it reads on any page. Each of the two can be switched off in
 		the client's preferences: vectorAngleAtMouse and vectorAngleAtHandle.
 	*/
 	private drawTheReading(): void {
@@ -2161,12 +2161,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// The angle of the selection in the mode of the handle above it: the turn as the engine
 	/// counts it, or the slant.
-	private readingOfTheHandleAbove(handle: SelectionHandle): string {
-		return this.handleMode() === 'shear'
+	private readingOfTheHandleAbove(handle: SelectionHandle): string | null {
+		const shear = this.handleMode() === 'shear';
+		const reading = shear
 			? ShearingInteraction.readingOf(
 					ShearingInteraction.slantOf(this, handle.turnedBy ?? 0),
 				)
 			: TurningInteraction.readingOf(this.turnOfTheSelection());
+		// a selection that is not turned or slanted shows no angle beside the handle
+		const none = shear
+			? ShearingInteraction.readingOf(0)
+			: TurningInteraction.readingOf(0);
+		return reading === none ? null : reading;
 	}
 
 	/// Whether the selection is one object that draws itself, not several and not a group.

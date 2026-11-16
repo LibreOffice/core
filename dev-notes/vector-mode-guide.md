@@ -352,8 +352,10 @@ A single object turns and shears from the angle and slant it has, and so do seve
 a group whose objects all have the same turn and slant. Otherwise several objects or a group
 start from nought each time, on their upright frame, and get one change all alike.
 
-The two angle readings can be switched off in the client's preferences: vectorAngleAtMouse for
-the one beside the mouse, vectorAngleAtHandle for the one beside the handle. How long the mouse
+The angle beside the turn handle shows only while the selection is turned, or in the shearing
+mode slanted; at nought it is left out. Beside the mouse, while turning or shearing, it always
+shows. The two angle readings can be switched off in the client's preferences: vectorAngleAtMouse
+for the one beside the mouse, vectorAngleAtHandle for the one beside the handle. How long the mouse
 rests before the bar comes up is vectorOtherModeDelay, in milliseconds.
 
 ### Other keys
