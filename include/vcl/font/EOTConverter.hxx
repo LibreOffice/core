@@ -68,6 +68,11 @@ public:
     bool convert(std::vector<sal_uInt8>& rEmbeddedOutput);
 };
 
+/** Decodes EOT font data to the font it wraps, with rEditingAllowed set from the font's embedding
+    permissions. Returns false if the data does not decode. Defined only when ENABLE_EOT is set. */
+bool decodeEOT(const void* pData, sal_uInt32 nSize, std::vector<char>& rFontData,
+               bool& rEditingAllowed);
+
 } // end font namespace
 
 int VCL_DLLPUBLIC TestEOT(const void* data, sal_uInt32 size);

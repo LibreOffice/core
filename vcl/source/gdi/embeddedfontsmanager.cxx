@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/font/EOTConverter.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/interaction.hxx>
@@ -45,16 +46,6 @@
 #include <com/sun/star/document/FontsDisallowEditingRequest.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
-
-#if ENABLE_EOT
-extern "C"
-{
-namespace libeot
-{
-#include <libeot/libeot.h>
-} // namespace libeot
-} // extern "C"
-#endif
 
 using namespace com::sun::star;
 using namespace vcl;
@@ -310,23 +301,13 @@ bool EmbeddedFontsManager::addEmbeddedFont( const uno::Reference< io::XInputStre
 #if ENABLE_EOT
     if( eot )
     {
-        unsigned uncompressedFontSize = 0;
-        unsigned char *nakedPointerToUncompressedFont = nullptr;
-        libeot::EOTMetadata eotMetadata;
-        libeot::EOTError uncompressError =
-            libeot::EOT2ttf_buffer( reinterpret_cast<unsigned char *>(fontData.data()), fontData.size(), &eotMetadata, &nakedPointerToUncompressedFont, &uncompressedFontSize );
-        std::shared_ptr<unsigned char> uncompressedFont( nakedPointerToUncompressedFont, libeot::EOTfreeBuffer );
-        if( uncompressError != libeot::EOT_SUCCESS )
+        std::vector< char > uncompressedFont;
+        if( !::font::decodeEOT( fontData.data(), fontData.size(), uncompressedFont, sufficientFontRights ) )
         {
             SAL_WARN( "vcl.fonts", "Failed to uncompress font" );
-            libeot::EOTfreeMetadata( &eotMetadata );
             return false;
         }
-        fontData.clear();
-        fontData.insert(fontData.end(), reinterpret_cast<char*>(uncompressedFont.get()),
-                        reinterpret_cast<char*>(uncompressedFont.get() + uncompressedFontSize));
-        sufficientFontRights = libeot::EOTcanLegallyEdit( &eotMetadata );
-        libeot::EOTfreeMetadata( &eotMetadata );
+        fontData = std::move( uncompressedFont );
     }
 #endif
 
