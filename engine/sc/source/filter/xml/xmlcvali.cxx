@@ -387,6 +387,8 @@ void ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElement*/ )
     aValidation.sErrorMessage = sErrorMessage;
     GetCondition( aValidation );
     aValidation.aAlertStyle = GetAlertStyle();
+    if (aValidation.aAlertStyle == sheet::ValidationAlertStyle_MACRO)
+        GetImport().NotifyMacroEventRead();
     aValidation.bShowErrorMessage = bDisplayError;
     aValidation.bShowInputMessage = bDisplayHelp;
     aValidation.bIgnoreBlanks = bAllowEmptyCell;
