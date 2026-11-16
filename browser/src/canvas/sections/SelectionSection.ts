@@ -998,7 +998,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/*
 		While an end of a connector is dragged, the object under the mouse is the one the end
 		would tie itself to, and it offers the places where it could land. They come and go as
-		the mouse enters an object and leaves it again.
+		the mouse enters the box of an object and leaves it again.
 	*/
 	private aimAtWhatIsUnder(at: cool.SimplePoint): void {
 		const connector = this.theConnector();
@@ -1043,14 +1043,31 @@ abstract class SelectionSection extends CanvasSectionObject {
 			: SelectionSection.tieOn(this.aimingAt, at);
 	}
 
-	/// The object an end of a connector at that point can tie to: the frontmost one there that is
-	/// no connector, as a connector is tied to nothing, and not the one left out; null for none.
+	/// How far from a point to tie to an end of a connector still ties to it, in twips: a handle's
+	/// size either way of the point, which is the engine's reach for a tie.
+	private static tieReach(): number {
+		return ShapeHandlesSection.handleSize() * app.pixelsToTwips;
+	}
+
+	/*
+		The object an end of a connector at that point can tie to: the frontmost one whose box,
+		widened by the reach of a tie, holds the point. A connector is tied to nothing, and the
+		one left out is passed by. Null for none.
+
+		A point to tie to can lie off the outline of the shape, as the middles of the sides of a
+		polygon lie on its box. Taking the object by its box keeps such a point within reach of
+		an end that comes near it, as the engine finds the object by its box too.
+	*/
 	public static tieTargetAt(
 		at: cool.Point,
 		leavingOut?: number,
 	): number | null {
 		return (
-			RenderGeometrySection.objectIdsAt(at.x, at.y).find(
+			RenderGeometrySection.objectIdsBoxedAt(
+				at.x,
+				at.y,
+				SelectionSection.tieReach(),
+			).find(
 				(objectId: number) =>
 					objectId !== leavingOut && !ObjectHandles.isAConnector(objectId),
 			) ?? null
@@ -1081,8 +1098,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const object = RenderGeometrySection.objectOf(aimed);
 		if (!object) return null;
 
-		// The engine's reach for a tie is a handle's size either way of the point.
-		const reach = ShapeHandlesSection.handleSize() * app.pixelsToTwips;
+		const reach = SelectionSection.tieReach();
 		const within = (point: cool.Point) =>
 			Math.abs(point.x - at.x) <= reach && Math.abs(point.y - at.y) <= reach;
 		const nearest = (

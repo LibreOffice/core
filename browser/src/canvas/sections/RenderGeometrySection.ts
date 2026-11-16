@@ -480,6 +480,72 @@ class RenderGeometrySection extends CanvasSectionObject {
 		if (app.sectionContainer) app.sectionContainer.requestReDraw();
 	}
 
+	/*
+		Whether the entry is a drawing object the slide shows. An entry with a kind stands for
+		the page or for a running edit, the copy of a master placeholder is the master's to own,
+		not the slide's, and an object on a hidden layer is not shown.
+	*/
+	private static standsOnTheSlide(object: cool.SlideObject): boolean {
+		if (object.kind !== undefined || !object.transform) return false;
+		if (object.masterContent) return false;
+		return (
+			object.layer === undefined || RenderManager.isLayerVisible(object.layer)
+		);
+	}
+
+	/// Whether the object is a form control that works as a control, which it does out of design
+	/// mode: it is not selected and covers what lies behind it.
+	private static worksAsAControl(object: cool.SlideObject): boolean {
+		return (
+			object.objectKind === RenderGeometrySection.formControlKind &&
+			!app.map.isFormControlDesignMode()
+		);
+	}
+
+	/*
+		The objects of the page whose painted box, widened by that margin on every side, holds a
+		document position, in twips, from the front to the back. A group with members paints
+		nothing of its own, so its members stand for it.
+	*/
+	public static objectIdsBoxedAt(
+		x: number,
+		y: number,
+		margin: number,
+	): number[] {
+		const data = RenderGeometrySection.currentPart();
+		if (!data) return [];
+
+		const groups = new Set<number>();
+		data.objects.forEach((object: cool.SlideObject) => {
+			if (object.parent !== undefined && object.parent > 0)
+				groups.add(object.parent);
+		});
+
+		const ids: number[] = [];
+		for (let index = data.order.length - 1; index >= 0; --index) {
+			const id = data.order[index];
+			const object = data.objects.get(id);
+			if (!object || groups.has(id)) continue;
+			if (!RenderGeometrySection.standsOnTheSlide(object)) continue;
+
+			const left = object.x ?? 0;
+			const top = object.y ?? 0;
+			if (
+				x < left - margin ||
+				x > left + (object.width ?? 0) + margin ||
+				y < top - margin ||
+				y > top + (object.height ?? 0) + margin
+			)
+				continue;
+
+			if (RenderGeometrySection.worksAsAControl(object)) break;
+
+			ids.push(id);
+		}
+
+		return ids;
+	}
+
 	/// The objects the point meets, from the front to the back: the topmost alone, or with
 	/// everyOne set every one of them.
 	private walkObjectsAt(
@@ -500,15 +566,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		for (let index = data.order.length - 1; index >= 0; --index) {
 			const id = data.order[index];
 			const object = data.objects.get(id);
-			// An entry with a kind stands for the page or for a running edit, and the copy of a
-			// master placeholder is the master's to own, not the slide's.
-			if (!object || object.kind !== undefined || !object.transform) continue;
-			if (object.masterContent) continue;
-			if (
-				object.layer !== undefined &&
-				!RenderManager.isLayerVisible(object.layer)
-			)
-				continue;
+			if (!object || !RenderGeometrySection.standsOnTheSlide(object)) continue;
 
 			// The box the object paints into is upright and comes with the entry, so a point
 			// outside it, and outside the tolerance around it, is settled without building a
@@ -556,13 +614,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 					: undefined);
 			if (!hit) continue;
 
-			// out of design mode a form control works as a control: it is not selected and covers
-			// what lies behind it
-			if (
-				object.objectKind === RenderGeometrySection.formControlKind &&
-				!app.map.isFormControlDesignMode()
-			)
-				break;
+			if (RenderGeometrySection.worksAsAControl(object)) break;
 
 			hits.push({ id: id, hit: hit });
 			if (!everyOne) break;

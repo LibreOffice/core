@@ -108,6 +108,7 @@
 /// <reference path="./CalcVectorManager.test.ts" />
 /// <reference path="./ChangeOutbox.test.ts" />
 /// <reference path="./RenderGeometrySection.test.ts" />
+/// <reference path="./ConnectorTieTarget.test.ts" />
 /// <reference path="./DocDispatcherExtensions.test.ts" />
 /// <reference path="./StateMachine.test.ts" />
 /// <reference path="./ContributedNotebookbarTabs.test.ts" />
