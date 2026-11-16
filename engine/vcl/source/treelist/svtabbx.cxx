@@ -60,6 +60,9 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
         if (pIt)
             rJsonWriter.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
 
+        if (pEntry->IsSeparator())
+            rJsonWriter.put("separator", true);
+
         // column based data
         {
             auto aColumns = rJsonWriter.startArray("columns");
@@ -74,6 +77,9 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                     {
                         auto aColumn = rJsonWriter.startStruct();
                         rJsonWriter.put("text", pStringItem->GetText());
+
+                        if (pEntry->IsSeparator())
+                            rJsonWriter.put("separator", true);
 
                         if (pTabListBox->IsInplaceEditingEnabled()) {
                             SvLBoxTab* pTab = pTabListBox->GetTab( pEntry, &rItem );

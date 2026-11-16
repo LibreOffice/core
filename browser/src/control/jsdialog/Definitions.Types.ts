@@ -545,6 +545,7 @@ interface ComboBoxWidget extends WidgetJSON {
 
 interface TreeColumnJSON {
 	text?: any;
+	separator?: boolean;
 	link?: string;
 	collapsed?: string | boolean;
 	expanded?: string | boolean;
@@ -559,6 +560,7 @@ interface TreeColumnJSON {
 interface TreeEntryJSON {
 	row: number | string; // unique id of the entry
 	text: string; // deprecated: simple text for an entry
+	separator?: boolean; // entry is a separator, drawn as a line
 	state: boolean; // checked radio/checkbox or not
 	enabled: boolean; // enabled entry or not
 	selected: boolean; // is entry selected

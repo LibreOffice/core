@@ -370,8 +370,7 @@ class TreeViewControl {
 	}
 
 	isSeparator(element: TreeColumnJSON) {
-		if (!element.text) return false;
-		return element.text.toLowerCase() === 'separator';
+		return element.separator === true;
 	}
 
 	static isSingleClickActivate(treeViewData: TreeWidgetJSON) {
