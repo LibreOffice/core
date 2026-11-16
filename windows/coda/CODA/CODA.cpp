@@ -979,15 +979,21 @@ static void quit_application()
 
 static void do_print(int appDocId)
 {
+    COKitDocument* kitDocument = DocumentData::loadedKitDocument(appDocId);
+    if (!kitDocument)
+    {
+        LOG_WRN("PRINT was ignored: the document is not loaded yet");
+        return;
+    }
+
     const std::string tempFile = FileUtil::createRandomTmpDir() + "\\p.pdf";
     const std::string tempFileUri = pathToURI(Poco::Path(tempFile));
 
     // Leave form fields and comments out of the printout, like the browser does when printing to
     // PDF.
-    DocumentData::get(appDocId).loKitDocument->saveAs(
-        tempFileUri.c_str(), "pdf",
-        "{\"ExportFormFields\":{\"type\":\"boolean\",\"value\":\"false\"},"
-        "\"ExportNotes\":{\"type\":\"boolean\",\"value\":\"false\"}}");
+    kitDocument->saveAs(tempFileUri.c_str(), "pdf",
+                        "{\"ExportFormFields\":{\"type\":\"boolean\",\"value\":\"false\"},"
+                        "\"ExportNotes\":{\"type\":\"boolean\",\"value\":\"false\"}}");
 
     STARTUPINFOW startupInfo{ sizeof(STARTUPINFOW) };
     PROCESS_INFORMATION processInformation;
