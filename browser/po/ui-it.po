@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-01 07:07+0000\n"
+"PO-Revision-Date: 2026-11-09 16:06+0000\n"
 "Last-Translator: Francesco Saltori <fs00@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/it/>\n"
-"Language: \n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -432,13 +432,12 @@ msgstr "Il tuo server WOPI non è sicuro: Verifica SSL fallita"
 
 #: admin/src/AdminSocketServerAudit.js:40
 #: src/control/Control.ServerAuditDialog.ts:72
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"I documenti non sono correttamente isolati: mancano funzionalità o spazi dei "
-"nomi."
+"I documenti non sono correttamente isolati: capability, namespace e landlock "
+"non disponibili."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:97
@@ -473,7 +472,7 @@ msgstr ""
 #: admin/src/AdminSocketServerAudit.js:60
 #: src/control/Control.ServerAuditDialog.ts:151
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
+msgstr "Bind mounting veloce della sandbox Kit non configurato"
 
 #: admin/src/AdminSocketServerAudit.js:64
 msgid ""
@@ -489,7 +488,7 @@ msgstr "Errore"
 
 #: admin/src/AdminSocketServerAudit.js:115
 msgid "Learn more"
-msgstr ""
+msgstr "Maggiori informazioni"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -619,11 +618,11 @@ msgstr "Modalità scura"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:809
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Controllo ortografico automatico"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:810
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Usa lo zoom impostato da questo server"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:811
 msgid "Smart Zoom"
@@ -631,11 +630,11 @@ msgstr "Zoom intelligente"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:812
 msgid "Default Zoom"
-msgstr "Zoom di default"
+msgstr "Zoom predefinito"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:813
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Scorrimento fluido"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:814
 msgid "Compact layout"
@@ -652,7 +651,7 @@ msgstr "Mostra righello"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:817
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Mostra segni di formattazione"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:818
 #: src/control/Control.NotebookbarWriter.js:2467
@@ -704,11 +703,11 @@ msgstr "Altro"
 #: admin/src/integrator/AdminIntegratorSettings.ts:831
 #: src/control/Control.NotebookbarImpress.js:776
 msgid "Show Grid"
-msgstr "Mostra Griglia"
+msgstr "Mostra griglia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:832
 msgid "Snap to grid"
-msgstr "Allinea alla Griglia"
+msgstr "Allinea alla griglia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:833
 msgid "Synchronize axes"
@@ -738,7 +737,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:839
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Mostra margini"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:840
 #: src/control/Control.BackstageView.ts:892
@@ -866,19 +865,19 @@ msgstr "Brochure da destra a sinistra"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:876
 msgid "English"
-msgstr ""
+msgstr "Inglese"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:877
 msgid "Hungarian"
-msgstr ""
+msgstr "Ungherese"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:878
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portoghese (Brasile)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:879
 msgid "Russian"
-msgstr ""
+msgstr "Russo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1612
 msgid "Invalid JSON file"
@@ -1001,24 +1000,29 @@ msgstr "Imposta le preferenze predefinite dell'interfaccia."
 #: admin/src/integrator/AdminIntegratorSettings.ts:2072
 #: admin/src/integrator/AdminIntegratorSettings.ts:5471
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Comportamento dello zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2217
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Quando l'opzione è abilitata, i documenti di testo vengono aperti al livello "
+"di zoom scelto dal server. Disabilita per scegliere lo zoom liberamente."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2223
 msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Quando l'opzione è abilitata, Writer adatta il documento alla larghezza "
+"della schermata all'apertura. Se è disabilitata, il documento viene aperto "
+"al livello di zoom predefinito impostato qui sotto."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2276
 #: admin/src/integrator/Xcu.ts:624
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Nessun'impostazione disponibile per {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2288
 msgid "Select a tab to browser settings."
@@ -1042,12 +1046,11 @@ msgstr "Salva impostazioni documento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2612
 msgid "(Warning: Server accessibility must be enabled to toggle)"
-msgstr ""
-"(Attenzione: l'accessibilità server deve essere abilitata per cambiare stato)"
+msgstr "(Attenzione: l'accessibilità deve essere abilitata lato server)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2845
 msgid "Notebookbar view"
-msgstr "Modalità Notebookbar"
+msgstr "Vista a schede"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2852
 #: src/control/Control.NotebookbarCalc.js:1665
@@ -1159,7 +1162,7 @@ msgstr "Impostazioni di firma dei documenti"
 #: src/control/Notebookbar.AIAssistantTab.ts:256
 #: src/control/Notebookbar.AIAssistantTab.ts:257
 msgid "AI Assistant"
-msgstr "Assistente AI"
+msgstr "Assistente IA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3389
 #: admin/src/integrator/AdminIntegratorSettings.ts:5199
@@ -4572,7 +4575,7 @@ msgstr "Ripara"
 #: src/control/Control.Menubar.ts:163 src/control/Control.Menubar.ts:514
 #: src/control/Control.Menubar.ts:724 src/control/Control.Menubar.ts:902
 msgid "Find"
-msgstr ""
+msgstr "Trova"
 
 #: src/control/Control.Menubar.ts:167
 msgid "Compare Changes"
@@ -5053,7 +5056,7 @@ msgstr "Risultati"
 
 #: src/control/Control.NavigatorPanel.ts:644
 msgid "Find and Replace"
-msgstr ""
+msgstr "Trova e sostituisci"
 
 #: src/control/Control.NavigatorPanel.ts:653
 #: src/control/jsdialog/Widget.Combobox.js:497
@@ -5642,7 +5645,7 @@ msgstr "Cattivo"
 #: src/control/Control.NotebookbarCalc.js:1104
 #: src/control/PermissionMode.ts:469
 msgid "Editing"
-msgstr ""
+msgstr "Modifica"
 
 #: src/control/Control.NotebookbarCalc.js:1128
 #: src/control/Control.NotebookbarDraw.js:1245
@@ -7672,16 +7675,16 @@ msgstr "Modalità modifica"
 
 #: src/control/PermissionMode.ts:274
 msgid "Review Mode"
-msgstr ""
+msgstr "Modalità revisione"
 
 #: src/control/PermissionMode.ts:292 src/control/PermissionMode.ts:472
 #: src/control/PermissionMode.ts:478 src/control/PermissionMode.ts:484
 msgid "Viewing"
-msgstr ""
+msgstr "Visualizzazione"
 
 #: src/control/PermissionMode.ts:468
 msgid "Reviewing"
-msgstr ""
+msgstr "Revisione"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:394
 msgid "Save Image to Server"
@@ -8410,7 +8413,7 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.TreeView.ts:2633
 msgid "Headings and objects that you add to the document will appear here"
-msgstr "Le intestazioni e gli oggetti che ggiungi al documento appariranno qui"
+msgstr "Le intestazioni e gli oggetti che aggiungi al documento appariranno qui"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2690
 msgid "Search items"
