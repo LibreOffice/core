@@ -74,7 +74,7 @@ CanvasFactory::CanvasFactory()
                     }
                     if( xEntryNameAccess->getByName(u"AntialiasingImplementations"_ustr) >>= implementationList )
                     {
-                        m_aAAImplementations[serviceName] = implementationList;
+                        m_aAAImplementations[serviceName] = std::move(implementationList);
                     }
                 }
             }
