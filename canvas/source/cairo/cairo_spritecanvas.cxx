@@ -37,177 +37,159 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-    SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
-                                const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
-        maArguments(aArguments)
+SpriteCanvas::SpriteCanvas(const uno::Sequence<uno::Any>& aArguments,
+                           const uno::Reference<uno::XComponentContext>& /*rxContext*/)
+    : maArguments(aArguments)
+{
+}
+
+void SpriteCanvas::initialize()
+{
+    SAL_INFO("canvas.cairo", "CairoSpriteCanvas created " << this);
+
+    // #i64742# Only call initialize when not in probe mode
+    if (!maArguments.hasElements())
+        return;
+
+    /* maArguments:
+       0: ptr to creating instance (Window or VirtualDevice)
+       1: current bounds of creating instance
+       2: bool, denoting always on top state for Window (always false for VirtualDevice)
+       3: XWindow for creating Window (or empty for VirtualDevice)
+       4: SystemGraphicsData as a streamed Any
+     */
+    ENSURE_ARG_OR_THROW(maArguments.getLength() >= 4
+                            && maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER
+                            && maArguments[3].getValueTypeClass() == uno::TypeClass_INTERFACE,
+                        "CairoSpriteCanvas::initialize: wrong number of arguments, or wrong types");
+
+    awt::Rectangle aRect;
+    maArguments[1] >>= aRect;
+
+    bool bIsFullscreen(false);
+    maArguments[2] >>= bIsFullscreen;
+
+    uno::Reference<awt::XWindow> xParentWindow;
+    maArguments[3] >>= xParentWindow;
+
+    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+    if (!pParentWindow)
+        throw lang::NoSupportException(
+            u"Parent window not VCL window, or canvas out-of-process!"_ustr, nullptr);
+
+    bool bHasCairo = pParentWindow->GetOutDev()->SupportsCairo();
+    ENSURE_ARG_OR_THROW(bHasCairo, "CairoSpriteCanvas::SpriteCanvas: No Cairo capability");
+
+    Size aPixelSize(pParentWindow->GetOutputSizePixel());
+    const ::basegfx::B2ISize aSize(aPixelSize.Width(), aPixelSize.Height());
+
+    // setup helper
+    maDeviceHelper.init(*pParentWindow, *this, aSize, bIsFullscreen);
+
+    setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW));
+
+    maCanvasHelper.init(maRedrawManager, *this, aSize);
+
+    maArguments.realloc(0);
+}
+
+void SpriteCanvas::disposeThis()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    // forward to parent
+    SpriteCanvasBaseT::disposeThis();
+}
+
+sal_Bool SAL_CALL SpriteCanvas::updateScreen(sal_Bool bUpdateAll)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    // avoid repaints on hidden window (hidden: not mapped to
+    // screen). Return failure, since the screen really has _not_
+    // been updated (caller should try again later)
+    return mbIsVisible
+           && maCanvasHelper.updateScreen(
+                  ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds), bUpdateAll,
+                  mbSurfaceDirty);
+}
+
+OUString SAL_CALL SpriteCanvas::getServiceName()
+{
+    return u"com.sun.star.rendering.SpriteCanvas.Cairo"_ustr;
+}
+
+//  XServiceInfo
+sal_Bool SpriteCanvas::supportsService(const OUString& sServiceName)
+{
+    return cppu::supportsService(this, sServiceName);
+}
+OUString SpriteCanvas::getImplementationName()
+{
+    return u"com.sun.star.comp.rendering.SpriteCanvas.Cairo"_ustr;
+}
+css::uno::Sequence<OUString> SpriteCanvas::getSupportedServiceNames()
+{
+    return { getServiceName() };
+}
+
+SurfaceSharedPtr SpriteCanvas::getSurface() { return maDeviceHelper.getBufferSurface(); }
+
+SurfaceSharedPtr SpriteCanvas::createSurface(const ::basegfx::B2ISize& rSize, int aContent)
+{
+    return maDeviceHelper.createSurface(rSize, aContent);
+}
+
+SurfaceSharedPtr SpriteCanvas::createSurface(::Bitmap& rBitmap)
+{
+    BitmapSystemData aData;
+    if (rBitmap.GetSystemData(aData))
     {
+        const Size aSize = rBitmap.GetSizePixel();
+
+        return maDeviceHelper.createSurface(aData, aSize);
     }
 
-    void SpriteCanvas::initialize()
-    {
-        SAL_INFO("canvas.cairo", "CairoSpriteCanvas created " << this);
+    return SurfaceSharedPtr();
+}
 
-        // #i64742# Only call initialize when not in probe mode
-        if( !maArguments.hasElements() )
-            return;
+SurfaceSharedPtr SpriteCanvas::changeSurface()
+{
+    // non-modifiable surface here
+    return SurfaceSharedPtr();
+}
 
-        /* maArguments:
-           0: ptr to creating instance (Window or VirtualDevice)
-           1: current bounds of creating instance
-           2: bool, denoting always on top state for Window (always false for VirtualDevice)
-           3: XWindow for creating Window (or empty for VirtualDevice)
-           4: SystemGraphicsData as a streamed Any
-         */
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
-                             maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
-                             maArguments[3].getValueTypeClass() == uno::TypeClass_INTERFACE,
-                             "CairoSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
+OutputDevice* SpriteCanvas::getOutputDevice() { return maDeviceHelper.getOutputDevice(); }
 
-        awt::Rectangle aRect;
-        maArguments[1] >>= aRect;
+SurfaceSharedPtr const& SpriteCanvas::getBufferSurface() const
+{
+    return maDeviceHelper.getBufferSurface();
+}
 
-        bool bIsFullscreen( false );
-        maArguments[2] >>= bIsFullscreen;
+SurfaceSharedPtr const& SpriteCanvas::getWindowSurface() const
+{
+    return maDeviceHelper.getWindowSurface();
+}
 
-        uno::Reference< awt::XWindow > xParentWindow;
-        maArguments[3] >>= xParentWindow;
+const ::basegfx::B2ISize& SpriteCanvas::getSizePixel() const
+{
+    return maDeviceHelper.getSizePixel();
+}
 
-        VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-        if( !pParentWindow )
-            throw lang::NoSupportException(
-                u"Parent window not VCL window, or canvas out-of-process!"_ustr, nullptr);
+void SpriteCanvas::setSizePixel(const ::basegfx::B2ISize& rSize)
+{
+    maCanvasHelper.setSize(rSize);
+    // re-set background surface, in case it needed recreation
+    maCanvasHelper.setSurface(maDeviceHelper.getBufferSurface(), false);
+}
 
-        bool bHasCairo = pParentWindow->GetOutDev()->SupportsCairo();
-        ENSURE_ARG_OR_THROW(bHasCairo,
-                            "CairoSpriteCanvas::SpriteCanvas: No Cairo capability");
+void SpriteCanvas::flush() { maDeviceHelper.flush(); }
 
-        Size aPixelSize( pParentWindow->GetOutputSizePixel() );
-        const ::basegfx::B2ISize aSize( aPixelSize.Width(),
-                                        aPixelSize.Height() );
-
-        // setup helper
-        maDeviceHelper.init( *pParentWindow,
-                             *this,
-                             aSize,
-                             bIsFullscreen );
-
-        setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW));
-
-        maCanvasHelper.init( maRedrawManager,
-                             *this,
-                             aSize );
-
-        maArguments.realloc(0);
-    }
-
-    void SpriteCanvas::disposeThis()
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        // forward to parent
-        SpriteCanvasBaseT::disposeThis();
-    }
-
-    sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
-        return mbIsVisible && maCanvasHelper.updateScreen(
-            ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds),
-            bUpdateAll,
-            mbSurfaceDirty);
-    }
-
-    OUString SAL_CALL SpriteCanvas::getServiceName(  )
-    {
-        return u"com.sun.star.rendering.SpriteCanvas.Cairo"_ustr;
-    }
-
-    //  XServiceInfo
-    sal_Bool SpriteCanvas::supportsService(const OUString& sServiceName)
-    {
-        return cppu::supportsService(this, sServiceName);
-
-    }
-    OUString SpriteCanvas::getImplementationName()
-    {
-        return u"com.sun.star.comp.rendering.SpriteCanvas.Cairo"_ustr;
-    }
-    css::uno::Sequence< OUString > SpriteCanvas::getSupportedServiceNames()
-    {
-        return { getServiceName() };
-    }
-
-    SurfaceSharedPtr SpriteCanvas::getSurface()
-    {
-        return maDeviceHelper.getBufferSurface();
-    }
-
-    SurfaceSharedPtr SpriteCanvas::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
-    {
-        return maDeviceHelper.createSurface( rSize, aContent );
-    }
-
-    SurfaceSharedPtr SpriteCanvas::createSurface( ::Bitmap& rBitmap )
-    {
-        BitmapSystemData aData;
-        if( rBitmap.GetSystemData( aData ) ) {
-            const Size aSize = rBitmap.GetSizePixel();
-
-            return maDeviceHelper.createSurface( aData, aSize );
-        }
-
-        return SurfaceSharedPtr();
-    }
-
-    SurfaceSharedPtr SpriteCanvas::changeSurface()
-    {
-        // non-modifiable surface here
-        return SurfaceSharedPtr();
-    }
-
-    OutputDevice* SpriteCanvas::getOutputDevice()
-    {
-        return maDeviceHelper.getOutputDevice();
-    }
-
-    SurfaceSharedPtr const & SpriteCanvas::getBufferSurface() const
-    {
-        return maDeviceHelper.getBufferSurface();
-    }
-
-    SurfaceSharedPtr const & SpriteCanvas::getWindowSurface() const
-    {
-        return maDeviceHelper.getWindowSurface();
-    }
-
-    const ::basegfx::B2ISize& SpriteCanvas::getSizePixel() const
-    {
-        return maDeviceHelper.getSizePixel();
-    }
-
-    void SpriteCanvas::setSizePixel( const ::basegfx::B2ISize& rSize )
-    {
-        maCanvasHelper.setSize( rSize );
-        // re-set background surface, in case it needed recreation
-        maCanvasHelper.setSurface( maDeviceHelper.getBufferSurface(),
-                                   false );
-    }
-
-    void SpriteCanvas::flush()
-    {
-        maDeviceHelper.flush();
-    }
-
-    bool SpriteCanvas::repaint( const SurfaceSharedPtr&       pSurface,
-                                const rendering::ViewState&   viewState,
-                                const rendering::RenderState& renderState )
-    {
-        return maCanvasHelper.repaint( pSurface, viewState, renderState );
-    }
+bool SpriteCanvas::repaint(const SurfaceSharedPtr& pSurface, const rendering::ViewState& viewState,
+                           const rendering::RenderState& renderState)
+{
+    return maCanvasHelper.repaint(pSurface, viewState, renderState);
+}
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -44,108 +44,106 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
-                                             css::rendering::XIntegerBitmap,
-                                             css::rendering::XGraphicDevice,
-                                             css::awt::XWindowListener,
-                                             css::util::XUpdatable,
-                                             css::beans::XPropertySet,
-                                             css::lang::XServiceName,
-                                             css::lang::XServiceInfo >  WindowGraphicDeviceBase_Base;
-    typedef ::canvas::BufferedGraphicDeviceBase<
-        ::canvas::DisambiguationHelper<WindowGraphicDeviceBase_Base>, SpriteDeviceHelper,
-        ::osl::MutexGuard>
-        SpriteCanvasBase_Base;
-    /** Mixin SpriteSurface
+typedef ::cppu::WeakComponentImplHelper<
+    css::rendering::XSpriteCanvas, css::rendering::XIntegerBitmap, css::rendering::XGraphicDevice,
+    css::awt::XWindowListener, css::util::XUpdatable, css::beans::XPropertySet,
+    css::lang::XServiceName, css::lang::XServiceInfo>
+    WindowGraphicDeviceBase_Base;
+typedef ::canvas::BufferedGraphicDeviceBase<
+    ::canvas::DisambiguationHelper<WindowGraphicDeviceBase_Base>, SpriteDeviceHelper,
+    ::osl::MutexGuard>
+    SpriteCanvasBase_Base;
+/** Mixin SpriteSurface
 
-        Have to mixin the SpriteSurface before deriving from
-        ::canvas::SpriteCanvasBase, as this template should already
-        implement some of those interface methods.
+    Have to mixin the SpriteSurface before deriving from
+    ::canvas::SpriteCanvasBase, as this template should already
+    implement some of those interface methods.
 
-        The reason why this appears kinda convoluted is the fact that
-        we cannot specify non-IDL types as WeakComponentImplHelper
-        template args, and furthermore, don't want to derive
-        ::canvas::SpriteCanvasBase directly from
-        ::canvas::SpriteSurface (because derivees of
-        ::canvas::SpriteCanvasBase have to explicitly forward the
-        XInterface methods (e.g. via DECLARE_UNO3_AGG_DEFAULTS)
-        anyway). Basically, ::canvas::CanvasCustomSpriteBase should
-        remain a base class that provides implementation, not to
-        enforce any specific interface on its derivees.
-     */
-    class SpriteCanvasBaseSpriteSurface_Base : public SpriteCanvasBase_Base,
-                                               public ::canvas::SpriteSurface,
-                                               public SurfaceProvider
-    {
-    };
+    The reason why this appears kinda convoluted is the fact that
+    we cannot specify non-IDL types as WeakComponentImplHelper
+    template args, and furthermore, don't want to derive
+    ::canvas::SpriteCanvasBase directly from
+    ::canvas::SpriteSurface (because derivees of
+    ::canvas::SpriteCanvasBase have to explicitly forward the
+    XInterface methods (e.g. via DECLARE_UNO3_AGG_DEFAULTS)
+    anyway). Basically, ::canvas::CanvasCustomSpriteBase should
+    remain a base class that provides implementation, not to
+    enforce any specific interface on its derivees.
+ */
+class SpriteCanvasBaseSpriteSurface_Base : public SpriteCanvasBase_Base,
+                                           public ::canvas::SpriteSurface,
+                                           public SurfaceProvider
+{
+};
 
-    typedef ::canvas::SpriteCanvasBase<SpriteCanvasBaseSpriteSurface_Base, SpriteCanvasHelper,
-                                       ::osl::MutexGuard>
-        SpriteCanvasBaseT;
+typedef ::canvas::SpriteCanvasBase<SpriteCanvasBaseSpriteSurface_Base, SpriteCanvasHelper,
+                                   ::osl::MutexGuard>
+    SpriteCanvasBaseT;
 
-    /** Product of this component's factory.
+/** Product of this component's factory.
 
-        The SpriteCanvas object combines the actual Window canvas with
-        the XGraphicDevice interface. This is because there's a
-        one-to-one relation between them, anyway, since each window
-        can have exactly one canvas and one associated
-        XGraphicDevice. And to avoid messing around with circular
-        references, this is implemented as one single object.
-     */
-    class SpriteCanvas : public SpriteCanvasBaseT,
-                         public RepaintTarget
-    {
-    public:
-        SpriteCanvas( const css::uno::Sequence< css::uno::Any >&                aArguments,
-                      const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    The SpriteCanvas object combines the actual Window canvas with
+    the XGraphicDevice interface. This is because there's a
+    one-to-one relation between them, anyway, since each window
+    can have exactly one canvas and one associated
+    XGraphicDevice. And to avoid messing around with circular
+    references, this is implemented as one single object.
+ */
+class SpriteCanvas : public SpriteCanvasBaseT, public RepaintTarget
+{
+public:
+    SpriteCanvas(const css::uno::Sequence<css::uno::Any>& aArguments,
+                 const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
-        void initialize();
+    void initialize();
 
-        /// Dispose all internal references
-        virtual void disposeThis() override;
+    /// Dispose all internal references
+    virtual void disposeThis() override;
 
-        // Forwarding the XComponent implementation to the
-        // cppu::ImplHelper templated base
-        //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
-        //                                       |                 |                            |
-        //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
+    // Forwarding the XComponent implementation to the
+    // cppu::ImplHelper templated base
+    //                                 Classname     Base doing refcounting     Base implementing the XComponent interface
+    //                                    |                 |                       |
+    //                                    V                 V                       V
+    DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(SpriteCanvas, WindowGraphicDeviceBase_Base,
+                                         ::cppu::WeakComponentImplHelperBase)
 
-        // XSpriteCanvas (partial)
-        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) override;
+    // XSpriteCanvas (partial)
+    virtual sal_Bool SAL_CALL updateScreen(sal_Bool bUpdateAll) override;
 
-        // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) override;
+    // XServiceName
+    virtual OUString SAL_CALL getServiceName() override;
 
-        //  XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    //  XServiceInfo
+    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-        // SurfaceProvider
-        virtual ::cairo::SurfaceSharedPtr getSurface() override;
-        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent ) override;
-        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) override;
-        virtual ::cairo::SurfaceSharedPtr changeSurface() override;
-        virtual OutputDevice* getOutputDevice() override;
+    // SurfaceProvider
+    virtual ::cairo::SurfaceSharedPtr getSurface() override;
+    virtual ::cairo::SurfaceSharedPtr createSurface(const ::basegfx::B2ISize& rSize,
+                                                    int aContent) override;
+    virtual ::cairo::SurfaceSharedPtr createSurface(::Bitmap& rBitmap) override;
+    virtual ::cairo::SurfaceSharedPtr changeSurface() override;
+    virtual OutputDevice* getOutputDevice() override;
 
-        // RepaintTarget
-        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const css::rendering::ViewState&   viewState,
-                              const css::rendering::RenderState& renderState ) override;
+    // RepaintTarget
+    virtual bool repaint(const ::cairo::SurfaceSharedPtr& pSurface,
+                         const css::rendering::ViewState& viewState,
+                         const css::rendering::RenderState& renderState) override;
 
-        ::cairo::SurfaceSharedPtr const & getWindowSurface() const;
-        ::cairo::SurfaceSharedPtr const & getBufferSurface() const;
+    ::cairo::SurfaceSharedPtr const& getWindowSurface() const;
+    ::cairo::SurfaceSharedPtr const& getBufferSurface() const;
 
-        const ::basegfx::B2ISize& getSizePixel() const;
-        void setSizePixel( const ::basegfx::B2ISize& rSize );
-        void flush();
+    const ::basegfx::B2ISize& getSizePixel() const;
+    void setSizePixel(const ::basegfx::B2ISize& rSize);
+    void flush();
 
-     private:
-        css::uno::Sequence< css::uno::Any >                maArguments;
-    };
+private:
+    css::uno::Sequence<css::uno::Any> maArguments;
+};
 
-    typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;
+typedef ::rtl::Reference<SpriteCanvas> SpriteCanvasRef;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
