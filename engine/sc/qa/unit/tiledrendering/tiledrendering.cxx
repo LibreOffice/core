@@ -2841,6 +2841,38 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFormulaResultChangeInvalidatesEve
                    != aView1.m_aInvalidationsParts.end());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFillFormulaDownPaintsOnce)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 28050, 10605));
+    pModelObj->setClientZoom(256, 256, 1920, 1920);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScTestViewCallback aView;
+    ScDocument& rDoc = pView->GetViewData().GetDocument();
+
+    constexpr SCROW nRows = 500;
+    for (SCROW nRow = 0; nRow < nRows; ++nRow)
+        rDoc.SetValue(ScAddress(0, nRow, 0), nRow + 1);
+    rDoc.SetString(ScAddress(1, 0, 0), u"=A1*2"_ustr);
+
+    // The view has been at the bottom of the data, so a paint of any of the filled cells reaches
+    // the view.
+    pView->SetCursor(1, nRows - 1);
+    pView->SetCursor(1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    aView.ClearAllInvalids();
+    pView->FillAuto(FILL_TO_BOTTOM, 1, 0, 1, 0, nRows - 1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix, each of the 499 filled cells tracked its formula on its own, and each
+    // tracking invalidated that one cell.
+    CPPUNIT_ASSERT_LESS(size_t(10), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(u"=A500*2"_ustr, rDoc.GetFormula(1, nRows - 1, 0));
+    CPPUNIT_ASSERT_EQUAL(1000.0, rDoc.GetValue(ScAddress(1, nRows - 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
 {
     ScModelObj* pModelObj = createDoc("insert_delete_sheet.ods");

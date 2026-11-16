@@ -33,6 +33,7 @@
 #include <osl/diagnose.h>
 
 #include <attrib.hxx>
+#include <bcaslot.hxx>
 #include <patattr.hxx>
 #include <formulacell.hxx>
 #include <table.hxx>
@@ -1795,8 +1796,13 @@ void ScTable::FillFormulaVertical(
     aCol[nCol].EndListeningFormulaCells(aEndCxt, nStartRow, nEndRow, &nStartRow, &nEndRow);
     aCol[nCol].StartListeningFormulaCells(aStartCxt, aEndCxt, nStartRow, nEndRow);
 
-    for (const auto& rSpan : aSpans)
-        aCol[nCol].SetDirty(rSpan.mnRow1, rSpan.mnRow2, ScColumn::BROADCAST_NONE);
+    // The spans can reach down a whole column, and SetDirty() tracks the formulas once per
+    // cell. Coalesce the broadcasts so the formulas are tracked once.
+    {
+        ScBulkBroadcast aBulkBroadcast(rDocument.GetBASM(), SfxHintId::ScDataChanged);
+        for (const auto& rSpan : aSpans)
+            aCol[nCol].SetDirty(rSpan.mnRow1, rSpan.mnRow2, ScColumn::BROADCAST_NONE);
+    }
 
     rProgress += nRow2 - nRow1 + 1;
     if (pProgress)
