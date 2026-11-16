@@ -1355,4 +1355,28 @@ describe('SlideLinks', function () {
 		});
 		nodeassert.deepEqual(told, ['Unlinking the presentation failed.']);
 	});
+
+	it('knows the sources the document keeps with no slide linked', function () {
+		deliver('slidelinks', {
+			message: {
+				links: list.links,
+				sources: [
+					{ source: 'Library.odp', name: 'Library.odp' },
+					{ source: '', name: 'No link' },
+					{ name: 'No source' },
+				],
+			},
+		});
+		nodeassert.equal(links.isKept('Library.odp'), true);
+		nodeassert.equal(links.isKept('Sales deck.odp'), false);
+		nodeassert.equal(links.isKept(''), false);
+		// A kept source is no link, and slides linked on their own are no
+		// link to the whole of their source.
+		nodeassert.equal(links.countSlidesFrom('Library.odp'), 0);
+		nodeassert.equal(links.isLinkedAsWhole('Sales deck.odp'), false);
+
+		// The next list replaces the kept sources.
+		deliver('slidelinks', { message: list });
+		nodeassert.equal(links.isKept('Library.odp'), false);
+	});
 });

@@ -486,6 +486,17 @@ class SlideImportSession {
 		);
 	}
 
+	// Asks the server to record the remote link bound to a persistent link in
+	// the document, so it is saved with it, or to record it no more.
+	public static keepRemoteLink(persistentLink: string, keep: boolean): void {
+		app.socket.sendMessage(
+			'remotelinkkeep source=' +
+				encodeURIComponent(persistentLink) +
+				' keep=' +
+				(keep ? '1' : '0'),
+		);
+	}
+
 	// Asks the server to drop the remote link bound to a persistent link, for
 	// every view of the document.
 	public static removeRemoteLink(persistentLink: string): void {

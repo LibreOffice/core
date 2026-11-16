@@ -107,6 +107,9 @@ class SlideLinks {
 	private byPart: Map<string, SlideLink[]> = new Map();
 	// The sources the document links to, in the order the list reports them.
 	private sources: string[] = [];
+	// The sources the document keeps on its own, whether or not a link reads
+	// from one, by persistent link.
+	private kept: Set<string> = new Set();
 	// The slides a source reports, by the identifier of each one, the
 	// identifiers of its sections, and the time that source was last modified
 	// when they were read. A null set stands for a source that has been asked
@@ -211,6 +214,20 @@ class SlideLinks {
 			);
 		if (link.unit === 'section' && link.sourceId)
 			return known.sections !== null && !known.sections.has(link.sourceId);
+		return false;
+	}
+
+	// Whether the document keeps the source on its own, so that it is saved
+	// with the document also while no slide is linked to it.
+	public isKept(source: string): boolean {
+		return this.kept.has(source);
+	}
+
+	// Whether a link holds a copy of the whole of the source. The document
+	// keeps such a source for as long as the link holds.
+	public isLinkedAsWhole(source: string): boolean {
+		for (const link of this.links.values())
+			if (link.unit === 'presentation' && link.source === source) return true;
 		return false;
 	}
 
@@ -645,6 +662,12 @@ class SlideLinks {
 		this.links.clear();
 		this.byPart.clear();
 		this.sources = [];
+		this.kept.clear();
+		const keptEntries: any[] =
+			e.message && Array.isArray(e.message.sources) ? e.message.sources : [];
+		for (const entry of keptEntries)
+			if (entry && typeof entry.source === 'string' && entry.source)
+				this.kept.add(entry.source);
 		for (const entry of entries) {
 			if (
 				!entry ||

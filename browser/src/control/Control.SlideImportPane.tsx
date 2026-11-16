@@ -944,6 +944,21 @@ class SlideImportPane {
     if (source.opening) return _('Reading the slides...');
     if (source.state === 'missing') {
       if (source.access === 'pending') return _('Looking for the file...');
+      // A file the presentation keeps in its list with no slide linked to it
+      // yet has no slides here to speak of.
+      if (!this.linkedSource(source)) {
+        if (source.access === 'denied')
+          return _(
+            'This file is listed in the presentation. You do not have permission to open it.',
+          );
+        if (source.access === 'failed')
+          return _(
+            'This file is listed in the presentation. Looking for it did not work this time.',
+          );
+        return _(
+          "This file is listed in the presentation, but it can't be found. Choose it again to import its slides.",
+        );
+      }
       if (source.access === 'denied')
         return _(
           'The slides are in this presentation. You do not have permission to open the file they came from.',
@@ -1263,7 +1278,7 @@ class SlideImportPane {
 
     this.panel
       .querySelectorAll(
-        '.navigation-expand-button, .close-navigation-button, .slide-import-insert, .slide-import-slide, .slide-import-linksource[data-cooltip]',
+        '.navigation-expand-button, .close-navigation-button, .slide-import-insert, .slide-import-slide, .slide-import-linksource[data-cooltip], .slide-import-source-keep',
       )
       .forEach((el: Element) =>
         window.L.control.attachTooltipEventListener(el, this.map),
@@ -1517,6 +1532,50 @@ class SlideImportPane {
     return source.state !== 'missing';
   }
 
+  // What the row of a file says about keeping it in the presentation's own list.
+  // A file is saved in that list only when the user asks, so one opened to look at
+  // leaves no trace. The list is saved in a format that keeps links, and only a
+  // file this user can read is kept. A file linked as a whole is in the list for
+  // as long as that link holds.
+  private keepState(
+    source: SlideImportPaneSource,
+  ): 'none' | 'offered' | 'kept' | 'linked' {
+    const links = this.map.slideLinks;
+    if (!links || !source.persistentLink || !this.session.formatKeepsLinks())
+      return 'none';
+    if (links.isLinkedAsWhole(source.persistentLink)) return 'linked';
+    if (links.isKept(source.persistentLink)) return 'kept';
+    return this.degraded(source) ? 'none' : 'offered';
+  }
+
+  // The button on a row that keeps the file in the presentation or lets it go.
+  // It is pressed while the file is kept, and it is off while a link to the
+  // whole file keeps it.
+  private renderKeepButton(source: SlideImportPaneSource): HTMLElement | '' {
+    const keep = this.keepState(source);
+    if (keep === 'none') return '';
+    const kept = keep !== 'offered';
+    let tip = _('Click to add the presentation');
+    if (keep === 'kept') tip = _('Click to remove the presentation');
+    else if (keep === 'linked')
+      tip = _('The presentation is linked, so it cannot be removed');
+    return (
+      <button
+        class={'slide-import-source-keep' + (kept ? ' kept' : '')}
+        aria-pressed={kept ? 'true' : 'false'}
+        aria-label={_('Keep {0} in this presentation').replace(
+          '{0}',
+          source.name,
+        )}
+        data-cooltip={tip}
+        disabled={keep === 'linked'}
+        onClick={() =>
+          SlideImportSession.keepRemoteLink(source.persistentLink, !kept)
+        }
+      />
+    );
+  }
+
   // One row of the source list: the file, what the pane says of it, and the
   // menu of what can be done with it. The file is a button while there are
   // slides to show or hide, and the reason it has none when it has none.
@@ -1573,6 +1632,7 @@ class SlideImportPane {
               {this.sourceMessage(source)}
             </span>
           )}
+          {this.renderKeepButton(source)}
           {source.state !== 'missing' && (
             <button
               class="slide-import-source-menu"
