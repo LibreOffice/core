@@ -1315,6 +1315,46 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testRotateFlip)
     }
 }
 
+// A shape that grows to its text stays where the slide puts it, mirrored or not.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMirroredShapeThatGrowsToItsTextStays)
+{
+    // Given a slide with two shapes that grow to their text, the first mirrored and the second
+    // turned as well as mirrored, each stating where it sits:
+    createSdImpressDoc("pptx/mirrored-shape-grows-to-its-text.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Saving rounds each coordinate once, so a twentieth of a millimetre of slack is allowed.
+    // The defect this guards against moves a shape by its own width and height, which is a
+    // hundred times as far, and moves it again on every save.
+    const double fSlack = 20000.0; // EMU
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 152400
+    // - Actual  : -3809880
+    // i.e. the first shape came back one width to the left and one height above the place the
+    // slide gives it.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        152400.0,
+        getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:xfrm/a:off", "x").toDouble(),
+        fSlack);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        200560.0,
+        getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:xfrm/a:off", "y").toDouble(),
+        fSlack);
+
+    // A shape that is turned as well is moved the other way, so the second one came back one
+    // width to the right and one height below its place.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        5029200.0,
+        getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm/a:off", "x").toDouble(),
+        fSlack);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        200560.0,
+        getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm/a:off", "y").toDouble(),
+        fSlack);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106867)
 {
     createSdImpressDoc("pptx/tdf106867.pptx");

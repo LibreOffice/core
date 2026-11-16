@@ -2577,10 +2577,6 @@ Reference< XShape > const & Shape::createAndInsert(
         if (mbWps && aServiceName == "com.sun.star.drawing.LineShape" && !pParentGroupShape)
             mxShape->setPosition(maPosition);
 
-        SdrObject* pShape = SdrObject::getSdrObjectFromXShape(mxShape);
-        if (pShape)
-            aOrigSize = pShape->GetLogicRect();
-
         if (bIsConnectorShape)
         {
             msConnectorName = mpCustomShapePropertiesPtr->getShapePresetTypeName();
@@ -2715,6 +2711,14 @@ Reference< XShape > const & Shape::createAndInsert(
             if (auto oClip = lcl_getClipPolygon(*mpCustomShapePropertiesPtr, aShapeRectHmm))
                 aPropertySet.setAnyProperty(PROP_GraphicClipPolyPolygon, Any(*oClip));
         }
+
+        // The frame the shape states, kept for the text to be measured against below. It is taken
+        // here, once the geometry of the shape is in place, because a shape that is flipped is
+        // held as a turn and a mirror, and the frame of a turned shape starts at another corner.
+        // A frame taken before the turn names a different place on the page than the same frame
+        // taken after it.
+        if (SdrObject* pStatedShape = SdrObject::getSdrObjectFromXShape(mxShape))
+            aOrigSize = pStatedShape->GetLogicRect();
 
         // in some cases, we don't have any text body.
         if( mpTextBody && ( !pPlaceholder || !mpTextBody->isEmpty() ) )
