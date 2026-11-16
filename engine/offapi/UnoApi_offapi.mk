@@ -3585,12 +3585,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	RemoteContentProviderChangeAction \
 	RemoteContentProviderChangeEvent \
 	ResultSetException \
-	RuleOperator \
-	RuleTerm \
-	SearchCommandArgument \
-	SearchCriterium \
-	SearchInfo \
-	SearchRecursion \
 	SendInfo \
 	SendMediaTypes \
 	ServiceNotFoundException \

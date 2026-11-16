@@ -338,16 +338,6 @@ published service Content
                     </td>
                 </tr>
                 <tr>
-                    <td>search</td>
-                    <td>XDynamicResultSet</td>
-                    <td>SearchCommandArgument aSearchCommandArg</td>
-                    <td>
-                        This command searches for subcontents of a content matching the
-                        given search criteria. The command will return an implementation
-                        of service DynamicResultSet.
-                    </td>
-                </tr>
-                <tr>
                     <td>transfer</td>
                     <td>void</td>
                     <td>TransferInfo aTransferInfo</td>

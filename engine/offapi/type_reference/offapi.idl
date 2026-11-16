@@ -15790,43 +15790,6 @@ module com {
     };
     published exception ResultSetException: ::com::sun::star::sdbc::SQLException {
     };
-    published struct RuleTerm {
-     string Property;
-     any Operand;
-     short Operator;
-     boolean CaseSensitive;
-     boolean RegularExpression;
-    };
-    published constants RuleOperator {
-     const short CONTAINS = 1;
-     const short CONTAINSNOT = 2;
-     const short EQUAL = 5;
-     const short GREATEREQUAL = 3;
-     const short LESSEQUAL = 4;
-     const short NOTEQUAL = 6;
-     const short VALUE_FALSE = 8;
-     const short VALUE_TRUE = 7;
-    };
-    published struct SearchCriterium {
-     sequence< ::com::sun::star::ucb::RuleTerm > Terms;
-    };
-    published enum SearchRecursion {
-     NONE = 0,
-     ONE_LEVEL = 1,
-     DEEP = 2
-    };
-    published struct SearchInfo {
-     sequence< ::com::sun::star::ucb::SearchCriterium > Criteria;
-     ::com::sun::star::ucb::SearchRecursion Recursion;
-     boolean IncludeBase;
-     boolean RespectFolderViewRestrictions;
-     boolean RespectDocViewRestrictions;
-     boolean FollowIndirections;
-    };
-    published struct SearchCommandArgument {
-     ::com::sun::star::ucb::SearchInfo Info;
-     sequence< ::com::sun::star::beans::Property > Properties;
-    };
     published struct SendInfo {
      string ProtocolType;
      string Value;
