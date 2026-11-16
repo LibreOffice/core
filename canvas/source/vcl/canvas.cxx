@@ -33,93 +33,80 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
-                    const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
-        maArguments(aArguments)
-    {
-    }
+Canvas::Canvas(const uno::Sequence<uno::Any>& aArguments,
+               const uno::Reference<uno::XComponentContext>& /*rxContext*/)
+    : maArguments(aArguments)
+{
+}
 
-    void Canvas::initialize()
-    {
-        // #i64742# Only perform initialization when not in probe mode
-        if( !maArguments.hasElements() )
-            return;
+void Canvas::initialize()
+{
+    // #i64742# Only perform initialization when not in probe mode
+    if (!maArguments.hasElements())
+        return;
 
-        /* maArguments:
-           0: ptr to creating instance (Window or VirtualDevice)
-           1: current bounds of creating instance
-           2: bool, denoting always on top state for Window (always false for VirtualDevice)
-           3: XWindow for creating Window (or empty for VirtualDevice)
-           4: SystemGraphicsData as a streamed Any
-         */
-        SolarMutexGuard aGuard;
+    /* maArguments:
+       0: ptr to creating instance (Window or VirtualDevice)
+       1: current bounds of creating instance
+       2: bool, denoting always on top state for Window (always false for VirtualDevice)
+       3: XWindow for creating Window (or empty for VirtualDevice)
+       4: SystemGraphicsData as a streamed Any
+     */
+    SolarMutexGuard aGuard;
 
-        SAL_INFO("canvas.vcl", "VCLCanvas::initialize called" );
+    SAL_INFO("canvas.vcl", "VCLCanvas::initialize called");
 
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
-                             maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER,
-                             "Canvas::initialize: wrong number of arguments, or wrong types" );
+    ENSURE_ARG_OR_THROW(maArguments.getLength() >= 5
+                            && maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER,
+                        "Canvas::initialize: wrong number of arguments, or wrong types");
 
-        sal_Int64 nPtr = 0;
-        maArguments[0] >>= nPtr;
+    sal_Int64 nPtr = 0;
+    maArguments[0] >>= nPtr;
 
-        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
-        if( !pOutDev )
-            throw lang::NoSupportException(u"Passed OutDev invalid!"_ustr, nullptr);
+    OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
+    if (!pOutDev)
+        throw lang::NoSupportException(u"Passed OutDev invalid!"_ustr, nullptr);
 
-        OutDevProviderSharedPtr pOutdevProvider = std::make_shared<OutDevHolder>(*pOutDev);
+    OutDevProviderSharedPtr pOutdevProvider = std::make_shared<OutDevHolder>(*pOutDev);
 
-        // setup helper
-        maDeviceHelper.init( pOutdevProvider );
-        maCanvasHelper.init( *this,
-                             pOutdevProvider,
-                             true,   // OutDev state preservation
-                             false ); // no alpha on surface
+    // setup helper
+    maDeviceHelper.init(pOutdevProvider);
+    maCanvasHelper.init(*this, pOutdevProvider,
+                        true, // OutDev state preservation
+                        false); // no alpha on surface
 
-        maArguments.realloc(0);
-    }
+    maArguments.realloc(0);
+}
 
-    Canvas::~Canvas()
-    {
-        SAL_INFO("canvas.vcl", "VCLCanvas destroyed" );
-    }
+Canvas::~Canvas() { SAL_INFO("canvas.vcl", "VCLCanvas destroyed"); }
 
-    void Canvas::disposeThis()
-    {
-        SolarMutexGuard aGuard;
+void Canvas::disposeThis()
+{
+    SolarMutexGuard aGuard;
 
-        // forward to parent
-        CanvasBaseT::disposeThis();
-    }
+    // forward to parent
+    CanvasBaseT::disposeThis();
+}
 
-    OUString SAL_CALL Canvas::getServiceName(  )
-    {
-        return u"com.sun.star.rendering.Canvas.VCL"_ustr;
-    }
+OUString SAL_CALL Canvas::getServiceName() { return u"com.sun.star.rendering.Canvas.VCL"_ustr; }
 
-    OUString Canvas::getImplementationName() {
-        return u"com.sun.star.comp.rendering.Canvas.VCL"_ustr;
-    }
+OUString Canvas::getImplementationName() { return u"com.sun.star.comp.rendering.Canvas.VCL"_ustr; }
 
-    sal_Bool Canvas::supportsService(OUString const & ServiceName) {
-        return cppu::supportsService(this, ServiceName);
-    }
+sal_Bool Canvas::supportsService(OUString const& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
 
-    css::uno::Sequence<OUString> Canvas::getSupportedServiceNames() {
-        return {getServiceName()};
-    }
+css::uno::Sequence<OUString> Canvas::getSupportedServiceNames() { return { getServiceName() }; }
 
-    bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
-                          const rendering::ViewState&   viewState,
-                          const rendering::RenderState& renderState,
-                          const ::Point&                rPt,
-                          const ::Size&                 rSz,
-                          const GraphicAttr&            rAttr ) const
-    {
-        SolarMutexGuard aGuard;
+bool Canvas::repaint(const GraphicObjectSharedPtr& rGrf, const rendering::ViewState& viewState,
+                     const rendering::RenderState& renderState, const ::Point& rPt,
+                     const ::Size& rSz, const GraphicAttr& rAttr) const
+{
+    SolarMutexGuard aGuard;
 
-        return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
-    }
+    return maCanvasHelper.repaint(rGrf, viewState, renderState, rPt, rSz, rAttr);
+}
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

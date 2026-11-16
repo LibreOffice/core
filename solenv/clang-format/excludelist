@@ -552,8 +552,6 @@ canvas/source/vcl/bitmapbackbuffer.cxx
 canvas/source/vcl/bitmapbackbuffer.hxx
 canvas/source/vcl/cachedbitmap.cxx
 canvas/source/vcl/cachedbitmap.hxx
-canvas/source/vcl/canvas.cxx
-canvas/source/vcl/canvas.hxx
 canvas/source/vcl/canvasbitmap.cxx
 canvas/source/vcl/canvasbitmap.hxx
 canvas/source/vcl/canvasbitmaphelper.cxx

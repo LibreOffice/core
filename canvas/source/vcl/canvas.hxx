@@ -43,71 +43,65 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
-                                             css::rendering::XIntegerBitmap,
-                                             css::rendering::XGraphicDevice,
-                                             css::util::XUpdatable,
-                                             css::beans::XPropertySet,
-                                             css::lang::XServiceName,
-                                             css::lang::XServiceInfo >    GraphicDeviceBase_Base;
-    typedef ::canvas::GraphicDeviceBase<::canvas::BaseMutexHelper<GraphicDeviceBase_Base>,
-                                        DeviceHelper, vclcanvastools::LocalGuard>
-        CanvasBase_Base;
-    typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<CanvasBase_Base, CanvasHelper, vclcanvastools::LocalGuard>>
-        CanvasBaseT;
+typedef ::cppu::WeakComponentImplHelper<
+    css::rendering::XBitmapCanvas, css::rendering::XIntegerBitmap, css::rendering::XGraphicDevice,
+    css::util::XUpdatable, css::beans::XPropertySet, css::lang::XServiceName,
+    css::lang::XServiceInfo>
+    GraphicDeviceBase_Base;
+typedef ::canvas::GraphicDeviceBase<::canvas::BaseMutexHelper<GraphicDeviceBase_Base>, DeviceHelper,
+                                    vclcanvastools::LocalGuard>
+    CanvasBase_Base;
+typedef ::canvas::IntegerBitmapBase<
+    canvas::BitmapCanvasBase2<CanvasBase_Base, CanvasHelper, vclcanvastools::LocalGuard>>
+    CanvasBaseT;
 
-    /** Product of this component's factory.
+/** Product of this component's factory.
 
-        The Canvas object combines the actual Window canvas with
-        the XGraphicDevice interface. This is because there's a
-        one-to-one relation between them, anyway, since each window
-        can have exactly one canvas and one associated
-        XGraphicDevice. And to avoid messing around with circular
-        references, this is implemented as one single object.
-     */
-    class Canvas : public CanvasBaseT,
-                   public RepaintTarget
-    {
-    public:
-        Canvas( const css::uno::Sequence<
-                      css::uno::Any >&               aArguments,
-                const css::uno::Reference<
-                      css::uno::XComponentContext >& rxContext );
+    The Canvas object combines the actual Window canvas with
+    the XGraphicDevice interface. This is because there's a
+    one-to-one relation between them, anyway, since each window
+    can have exactly one canvas and one associated
+    XGraphicDevice. And to avoid messing around with circular
+    references, this is implemented as one single object.
+ */
+class Canvas : public CanvasBaseT, public RepaintTarget
+{
+public:
+    Canvas(const css::uno::Sequence<css::uno::Any>& aArguments,
+           const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
-        void initialize();
+    void initialize();
 
-        /// For resource tracking
-        virtual ~Canvas() override;
+    /// For resource tracking
+    virtual ~Canvas() override;
 
-        /// Dispose all internal references
-        virtual void disposeThis() override;
+    /// Dispose all internal references
+    virtual void disposeThis() override;
 
-        // Forwarding the XComponent implementation to the
-        // cppu::ImplHelper templated base
-        //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
-        //                                       |                 |                            |
-        //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas,   GraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
+    // Forwarding the XComponent implementation to the
+    // cppu::ImplHelper templated base
+    //                              Classname  Base doing refcounting   Base implementing the XComponent interface
+    //                                     |                 |            |
+    //                                     V                 V            V
+    DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(Canvas, GraphicDeviceBase_Base,
+                                         ::cppu::WeakComponentImplHelperBase)
 
-        // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) override;
+    // XServiceName
+    virtual OUString SAL_CALL getServiceName() override;
 
-        OUString SAL_CALL getImplementationName() override;
-        sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-        // RepaintTarget
-        virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,
-                              const css::rendering::ViewState&              viewState,
-                              const css::rendering::RenderState&            renderState,
-                              const ::Point&                                rPt,
-                              const ::Size&                                 rSz,
-                              const GraphicAttr&                            rAttr ) const override;
+    // RepaintTarget
+    virtual bool repaint(const GraphicObjectSharedPtr& rGrf,
+                         const css::rendering::ViewState& viewState,
+                         const css::rendering::RenderState& renderState, const ::Point& rPt,
+                         const ::Size& rSz, const GraphicAttr& rAttr) const override;
 
-    private:
-        css::uno::Sequence< css::uno::Any >                maArguments;
-    };
+private:
+    css::uno::Sequence<css::uno::Any> maArguments;
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
