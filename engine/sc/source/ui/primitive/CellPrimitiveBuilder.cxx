@@ -1698,8 +1698,13 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     const double fInnerWidth = aCellRange.getWidth() - fLeftMargin - fRightMargin;
     const double fInnerHeight = aCellRange.getHeight() - fTopMargin - fBottomMargin;
     Size aPaperSize(1000000, 1000000);
-    // Vertical text breaks at the height of the cell.
-    const double fLineLength = std::max(0.0, bVertical ? fInnerHeight : fInnerWidth);
+    // Vertical text breaks at the height of the cell, and rotated text at the length of a line
+    // that crosses the height of the cell, as in ScOutputData::DrawRotated.
+    double fLineLength = std::max(0.0, bVertical ? fInnerHeight : fInnerWidth);
+    const double fAbsSin = std::fabs(std::sin(toRadians(nRotate)));
+    const double fAbsCos = std::fabs(std::cos(toRadians(nRotate)));
+    if (bBreak && nRotate != 0_deg100)
+        fLineLength = std::max(0.0, fInnerHeight) / fAbsSin;
     if (bAsianVertical)
     {
         const double fColumnLength
@@ -1744,7 +1749,7 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     // vertical text takes the width of its columns.
     auto engineWidth = [&]()
     {
-        if (bBreak && !bStacked && !bAsianVertical)
+        if (bBreak && !bStacked && !bAsianVertical && nRotate == 0_deg100)
             return fLineLength;
         return double(rEngine.CalcTextWidth()) * constTwipsPerMm100;
     };
@@ -1752,6 +1757,31 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
 
     double fEngineWidth = engineWidth();
     double fEngineHeight = engineHeight();
+    if (bBreak && nRotate != 0_deg100)
+    {
+        // The lines of rotated text get shorter until the turned text fits the height of the cell,
+        // in at most 5 steps, as in ScOutputData. A line shorter than 4 pixels takes half the
+        // height.
+        const double fPixel = maSettings.mfPixelSize;
+        for (int nSteps = 5; nSteps > 0;)
+        {
+            const double fHeight = fInnerHeight - fEngineHeight * fAbsCos + 2 * fPixel;
+            double fNewLength = fHeight / fAbsSin + 2 * fPixel;
+            if (fNewLength >= fLineLength)
+                break;
+            if (fNewLength < 4 * fPixel)
+            {
+                fNewLength = fInnerHeight / 2 / fAbsSin + 2 * fPixel;
+                nSteps = 0;
+            }
+            else
+                --nSteps;
+            fLineLength = fNewLength;
+            rEngine.SetPaperSize(Size(tools::Long(fLineLength * constMm100PerTwip), aPaperSize.Height()));
+            fEngineWidth = engineWidth();
+            fEngineHeight = engineHeight();
+        }
+    }
     if (bStacked)
     {
         fEngineWidth = fEngineWidth * 11 / 10;
@@ -2053,11 +2083,16 @@ void CellPrimitiveBuilder::Impl::placeEditText(const CellEditText& rText)
     const bool bHorizontalClip = rText.mbClipHorizontally;
     const bool bRotatedOut = rText.mnRotate != 0_deg100;
     const double fHuge = 1e9;
-    const bool bClip = !bRotatedOut && (bHorizontalClip || bVerticalClip);
-    const basegfx::B2DRange aClip(bHorizontalClip ? aClipArea.getMinX() : -fHuge,
-                                  bVerticalClip ? aClipArea.getMinY() : -fHuge,
-                                  bHorizontalClip ? aClipArea.getMaxX() : fHuge,
-                                  bVerticalClip ? aClipArea.getMaxY() : fHuge);
+    // Rotated text may reach out of its cell to the sides and down, but not above the top of its
+    // cell, as in ScOutputData::DrawRotated.
+    const bool bClip = bRotatedOut || bHorizontalClip || bVerticalClip;
+    const basegfx::B2DRange aClip
+        = bRotatedOut ? basegfx::B2DRange(-fHuge, aAlign.getMinY() + rText.mfTopMargin, fHuge,
+                                          fHuge)
+                      : basegfx::B2DRange(bHorizontalClip ? aClipArea.getMinX() : -fHuge,
+                                          bVerticalClip ? aClipArea.getMinY() : -fHuge,
+                                          bHorizontalClip ? aClipArea.getMaxX() : fHuge,
+                                          bVerticalClip ? aClipArea.getMaxY() : fHuge);
 
     rowLayers(rText.mnRow)
         .maText.push_back(new CellTextPrimitive2D(rText.mnColumn, rText.mnRow, aAlign, aClip,

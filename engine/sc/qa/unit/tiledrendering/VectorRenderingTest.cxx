@@ -1725,6 +1725,44 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedTextShrinksToFit)
     CPPUNIT_ASSERT(!aFlags.count("clippedBottom"));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedWrappedTextFitsTheCellHeight)
+{
+    // Wrapped text rotated by 45 degrees breaks into lines short enough that the turned text fits
+    // the height of the cell, as in ScOutputData. It broke at the width of the cell, into a few
+    // long lines that reached over the rows above.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetColWidth(1, 0, 1584);
+    rDocument.SetRowHeight(1, 0, 1296);
+    rDocument.SetManualHeight(1, 1, 0, true);
+    setCellString(*pDocShell, 1, 1, u"A long text that is rotated and wrapped in its cell"_ustr);
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(ScRotateValueItem(Degree100(4500)));
+    aPattern.ItemSetPut(ScLineBreakCell(true));
+    applyToCell(*pDocShell, 1, 1, aPattern);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const auto oText = cellTextAt(aResponse, 1, 1);
+    CPPUNIT_ASSERT(oText);
+    int nLines = 0;
+    std::function<void(const boost::property_tree::ptree&)> aCount
+        = [&](const boost::property_tree::ptree& rNode) {
+              const std::string aType = rNode.get<std::string>("type", "");
+              if (aType == "textSimplePortion" || aType == "textDecoratedPortion")
+                  ++nLines;
+              for (const auto& rChild : rNode)
+                  aCount(rChild.second);
+          };
+    aCount(*oText);
+    // The text takes 6 lines here, and 4 lines at the width of the cell.
+    CPPUNIT_ASSERT_GREATER(4, nLines);
+    // The text is cut at the top of its cell, as in ScOutputData.
+    CPPUNIT_ASSERT(oText->get_child_optional("clip"));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)
 {
     // Rotated text is centered in its cell by default and takes the alignment of the cell, as in
@@ -1751,10 +1789,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlig
     auto aStartOf = [&aResponse](int nColumn) {
         const auto oText = cellTextAt(aResponse, nColumn, 1);
         CPPUNIT_ASSERT(oText);
-        const boost::property_tree::ptree& rPlaced = oText->get_child("children").front().second;
-        CPPUNIT_ASSERT_EQUAL(std::string("transform"), rPlaced.get<std::string>("type"));
+        // The clip of rotated text puts the transform in a mask.
+        std::vector<boost::property_tree::ptree> aMatrices;
+        collectNamed(*oText, "matrix", aMatrices);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aMatrices.size());
         std::vector<boost::property_tree::ptree> aMatrix;
-        for (const auto& rValue : rPlaced.get_child("matrix"))
+        for (const auto& rValue : aMatrices[0])
             aMatrix.push_back(rValue.second);
         CPPUNIT_ASSERT_EQUAL(size_t(6), aMatrix.size());
         const auto [nStartColumn, fOffset] = cellPosition(aMatrix[4]);
