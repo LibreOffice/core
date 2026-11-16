@@ -634,6 +634,18 @@ public:
         return -1;
     }
 
+    /** Keeps the source document rSourceName in the document under the name rName, whether or
+        not a link reads from it. A source kept already takes the name. One undo step. Returns
+        whether the kept sources changed (Impress only function) */
+    virtual bool addSlideLinkSource(const OUString& /*rSourceName*/, const OUString& /*rName*/)
+    {
+        return false;
+    }
+
+    /** Keeps the source document rSourceName in the document no more. The links that read from
+        it stay. One undo step. Returns whether the source was kept (Impress only function) */
+    virtual bool removeSlideLinkSource(const OUString& /*rSourceName*/) { return false; }
+
     /** The index in the page list of the standard pages of the page holding the identifier
         rGuid, a braced GUID string as ODF keeps it; -1 when no standard page of the document
         holds it (Impress only function) */

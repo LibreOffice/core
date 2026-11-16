@@ -92,6 +92,20 @@ struct SlideLinkSourceSection
     OUString maName;
 };
 
+/// A source document the document keeps on its own, whether or not a link reads from it.
+struct SlideLinkSource
+{
+    /// The identifier of the record, a GUID in braced form made when the source was recorded,
+    /// the way a link to a whole presentation gets an identifier of its own.
+    OUString maId;
+    /// The source document, as the user knows it: the persistent link the storage resolves.
+    OUString maSource;
+    /// The name of the source document when it was recorded. Empty when none was given.
+    OUString maName;
+
+    bool operator==(const SlideLinkSource&) const = default;
+};
+
 /** Owns every link of the document to a unit of a source document, whatever its kind.
 
     A link holds while its span is what it was made with: the one page for a slide, the same
@@ -106,19 +120,33 @@ struct SlideLinkSourceSection
     The links are saved with the document as the SlideLinks property of the model, a sequence of
     one property value sequence per link that holds, with the fields of SlideLinkRecord under
     the names Unit, Id, Source, SourceId, Name, LastModifiedTime and Slides.
+
+    The manager also keeps a list of source documents, each recorded once by its persistent
+    link with the name it had then. A kept source stands on its own: it needs no link that
+    reads from it, and it stays when the last link to it goes. A kept source is saved in the
+    SlideLinks property after the links as a link to a whole presentation that spans no
+    slides: the unit "presentation" under the name Unit, the fields of SlideLinkSource under
+    the names Id, Source and Name, and an empty Slides. A link to the whole of a kept source
+    takes over that record: it holds under the identifier of the kept source, and while it
+    holds the two are saved as the one link. A source linked as a whole is kept from then on,
+    so the record with no slides is saved again once the link is taken off or holds no more.
 */
 class SD_DLLPUBLIC SlideLinkManager
 {
 public:
     explicit SlideLinkManager(SdDrawDocument& rDoc);
 
-    /// The links that hold, as the SlideLinks property holds them.
+    /// The links that hold and the kept sources, as the SlideLinks property holds them.
     cpo::uno::Sequence<css::beans::PropertyValue> GetLinksAsPropertyValues() const;
 
-    /** Takes the links of the SlideLinks property in place of every link held now.
+    /** Takes the links and the kept sources of the SlideLinks property in place of every link
+        and every source held now.
 
         A link that does not describe the slides it finds, or that holds a value of a shape the
-        record cannot keep, is dropped.
+        record cannot keep, is dropped. A link to a whole presentation that lists no slides is
+        a kept source. It is dropped when its identifier is no GUID, when its persistent link
+        is unreadable or listed already, and beyond the number of sources a document keeps. A
+        source with an unreadable name is kept with no name.
     */
     void SetLinksFromPropertyValues(const cpo::uno::Sequence<css::beans::PropertyValue>& rLinks);
 
@@ -141,11 +169,13 @@ public:
 
         {"links":[{"unit":"<slide|section|presentation>","id":"<id>","parent":"<id>",
                    "source":"<source>","sourceId":"<id>","name":"<name>",
-                   "lastModifiedTime":"<time>","slides":["<part>",...]},...]}
+                   "lastModifiedTime":"<time>","slides":["<part>",...]},...],
+         "sources":[{"source":"<source>","name":"<name>"},...]}
 
-        One flat array in document order, a presentation before its sections and a section
-        before its slides. A part is the identifier the page holds now, and the parent is the
-        innermost link that spans the unit, or empty.
+        The links are one flat array in document order, a presentation before its sections and
+        a section before its slides. A part is the identifier the page holds now, and the parent
+        is the innermost link that spans the unit, or empty. The sources are the kept sources,
+        in the order they were recorded.
     */
     void WriteLinks(tools::JsonWriter& rJsonWriter) const;
 
@@ -246,8 +276,40 @@ public:
     */
     bool Break(SlideLinkKind eKind, std::u16string_view rId, bool bDeep);
 
-    /** Announces the link list as changed when the links that hold are not the ones they were
-        at the last announcement.
+    /// The kept sources, in the order they were recorded.
+    const std::vector<SlideLinkSource>& GetSources() const { return maSources; }
+
+    /// The most sources a document keeps.
+    static constexpr size_t MaxSources = 64;
+
+    /** Keeps the source document rSource under the name rName, or with no name when rName is
+        not readable. A source kept already takes the name when it differs. One undo action.
+
+        @return true when the list of kept sources changed, false when rSource is not readable,
+                when the source is kept under that name already, when a link to the whole
+                source holds, which then gives the source its name, or when the document keeps
+                MaxSources sources.
+    */
+    bool AddSource(const OUString& rSource, const OUString& rName);
+
+    /** Keeps the source document rSource no more. The links that read from it stay as they
+        are. One undo action.
+
+        @return true when the source was kept and is not now. False as well while a link to the
+                whole source holds, since that link keeps the source.
+    */
+    bool RemoveSource(std::u16string_view rSource);
+
+    /** Puts the kept record of the source document rSource in the state rState, with no undo
+        action. An empty state means the source is not kept. A source that is kept again goes to
+        the place nPosition in the list, or to the end when the list is shorter. The other kept
+        sources stay as they are, and a source linked as a whole stays kept.
+    */
+    void RestoreSource(std::u16string_view rSource, size_t nPosition,
+                       const std::optional<SlideLinkSource>& rState);
+
+    /** Announces the link list as changed when the links that hold, or the kept sources, are
+        not the ones they were at the last announcement.
     */
     void NotifyLinksIfChanged();
 
@@ -275,8 +337,11 @@ public:
 private:
     SdDrawDocument& mrDoc;
     std::vector<SlideLinkRecord> maLinks;
+    /// The kept sources, in the order they were recorded, each persistent link once.
+    std::vector<SlideLinkSource> maSources;
     /// The kind and identifier of each link that held when the link list was last announced as
-    /// changed, in document order.
+    /// changed, in document order, followed by the persistent link and the name of each source
+    /// kept then.
     std::vector<OUString> maAnnouncedLinks;
     /// How many operations hold the announcement back now. Zero when nothing does.
     sal_Int32 mnAnnouncementsHeld = 0;
@@ -305,7 +370,11 @@ private:
     /// hold. A presentation that lists no sections takes the sections that hold its slides.
     std::optional<SlideLinkRecord> Validate(const SlideLinkRecord& rRecord) const;
 
-    /// The kind and identifier of every link that holds, in document order.
+    /// Whether a link to the whole of the source document rSource holds.
+    bool IsLinkedAsWhole(std::u16string_view rSource) const;
+
+    /// The kind and identifier of every link that holds, in document order, followed by the
+    /// persistent link and the name of every kept source.
     std::vector<OUString> GetHoldingKeys() const;
 
     /// The records of the slides nFirstSlide on, each linked to the slide of rSource it was read

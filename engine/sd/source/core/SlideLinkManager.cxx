@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <map>
 #include <memory>
+#include <optional>
 #include <utility>
 
 #include <COKit/COKit.hxx>
@@ -137,6 +138,27 @@ OUString makeKey(const SlideLinkRecord& rRecord)
     return GetSlideLinkKindName(rRecord.meKind) + ":" + rRecord.maId;
 }
 
+/// The key the announced list keeps for one kept source.
+OUString makeKey(const SlideLinkSource& rSource)
+{
+    return "source:" + rSource.maSource + "\n" + rSource.maName;
+}
+
+/// The place in rSources of the source recorded under the persistent link rSource, or the end of
+/// rSources when none is.
+template <typename Sources> auto findSource(Sources& rSources, std::u16string_view rSource)
+{
+    return std::find_if(rSources.begin(), rSources.end(),
+                        [&rSource](const SlideLinkSource& rKept)
+                        { return rKept.maSource == rSource; });
+}
+
+/// Whether one of rSources is recorded under the persistent link rSource.
+bool holdsSource(const std::vector<SlideLinkSource>& rSources, std::u16string_view rSource)
+{
+    return findSource(rSources, rSource) != rSources.end();
+}
+
 bool isSameUnit(const SlideLinkRecord& rOne, const SlideLinkRecord& rOther)
 {
     return rOne.meKind == rOther.meKind && rOne.maId == rOther.maId;
@@ -205,6 +227,32 @@ cpo::uno::Sequence<beans::PropertyValue> SlideLinkManager::GetLinksAsPropertyVal
             comphelper::makePropertyValue(u"Link"_ustr + OUString::number(nLink),
                                           comphelper::containerToSequence(aProperties)));
     }
+    size_t nEntry = aLinks.size();
+    for (size_t nSource = 0; nSource < maSources.size(); ++nSource)
+    {
+        // The link to a whole presentation that took over the record of a kept source stands
+        // for the source, so the two are one record.
+        if (std::any_of(aLinks.begin(), aLinks.end(),
+                        [this, nSource](const SlideLinkRecord& rRecord) {
+                            return rRecord.meKind == SlideLinkKind::Presentation
+                                   && rRecord.maId == maSources[nSource].maId;
+                        }))
+            continue;
+
+        // A kept source is written as a link to a whole presentation that spans no slides.
+        const std::vector<beans::PropertyValue> aProperties{
+            comphelper::makePropertyValue(u"Unit"_ustr, gPresentationKindName),
+            comphelper::makePropertyValue(u"Id"_ustr, maSources[nSource].maId),
+            comphelper::makePropertyValue(u"Source"_ustr, maSources[nSource].maSource),
+            comphelper::makePropertyValue(u"SourceId"_ustr, OUString()),
+            comphelper::makePropertyValue(u"Name"_ustr, maSources[nSource].maName),
+            comphelper::makePropertyValue(u"LastModifiedTime"_ustr, OUString()),
+            comphelper::makePropertyValue(u"Slides"_ustr, cpo::uno::Sequence<OUString>())
+        };
+        aList.push_back(
+            comphelper::makePropertyValue(u"Link"_ustr + OUString::number(nEntry++),
+                                          comphelper::containerToSequence(aProperties)));
+    }
     return comphelper::containerToSequence(aList);
 }
 
@@ -212,6 +260,21 @@ void SlideLinkManager::SetLinksFromPropertyValues(
     const cpo::uno::Sequence<beans::PropertyValue>& rLinks)
 {
     maLinks.clear();
+    maSources.clear();
+
+    // Records one kept source, under an identifier that is a GUID and a persistent link that is
+    // readable and not listed yet, up to the number of sources a document keeps. A name that is
+    // not readable is left empty, since the name only says what the source is called.
+    const auto keepSource
+        = [this](const OUString& rId, const OUString& rSource, const OUString& rName) {
+              const OUString aId = SlideLink::NormaliseGuid(rId);
+              if (aId.isEmpty() || maSources.size() >= MaxSources
+                  || !SlideLink::IsReadablePersistentLink(rSource)
+                  || holdsSource(maSources, rSource))
+                  return false;
+              maSources.push_back({ aId, rSource, getRecordableName(rName) });
+              return true;
+          };
 
     for (const beans::PropertyValue& rLink : rLinks)
     {
@@ -240,6 +303,15 @@ void SlideLinkManager::SetLinksFromPropertyValues(
         }
         aRecord.maSlides = comphelper::sequenceToContainer<std::vector<OUString>>(aSlides);
 
+        // A link to a whole presentation that spans no slides is a source the document keeps
+        // with nothing linked to it yet.
+        if (aUnit == gPresentationKindName && aRecord.maSlides.empty())
+        {
+            if (!keepSource(aRecord.maId, aRecord.maSource, aRecord.maName))
+                SAL_WARN("sd", "dropping a source the document cannot keep");
+            continue;
+        }
+
         const std::optional<SlideLinkKind> oKind = ParseSlideLinkKind(aUnit);
         if (!oKind)
         {
@@ -252,6 +324,10 @@ void SlideLinkManager::SetLinksFromPropertyValues(
         // and a link that does not describe those slides is dropped, so the unit keeps its slides
         // alone.
         std::optional<SlideLinkRecord> oRecord = Validate(aRecord);
+        // A link to a whole presentation stands for the kept source as well, under its own
+        // identifier. The source stays kept when the link describes its slides no more.
+        if (aRecord.meKind == SlideLinkKind::Presentation)
+            keepSource(aRecord.maId, aRecord.maSource, aRecord.maName);
         if (!oRecord)
         {
             SAL_WARN("sd", "dropping the unreadable slide link of " << aRecord.maId);
@@ -260,8 +336,8 @@ void SlideLinkManager::SetLinksFromPropertyValues(
         Put({ std::move(*oRecord) });
     }
 
-    // The links read here are the ones the document starts with, so a later change is announced
-    // against them.
+    // The links and the sources read here are the ones the document starts with, so a later
+    // change is announced against them.
     maAnnouncedLinks = GetHoldingKeys();
 }
 
@@ -516,21 +592,121 @@ OUString SlideLinkManager::GetParent(const SlideLinkRecord& rRecord) const
 
 void SlideLinkManager::WriteLinks(tools::JsonWriter& rJsonWriter) const
 {
-    auto aLinksArray = rJsonWriter.startArray("links");
-    for (const SlideLinkRecord& rRecord : GetLinks())
     {
-        auto aLinkNode = rJsonWriter.startStruct();
-        rJsonWriter.put("unit", GetSlideLinkKindName(rRecord.meKind));
-        rJsonWriter.put("id", rRecord.maId);
-        rJsonWriter.put("parent", GetParent(rRecord));
-        rJsonWriter.put("source", rRecord.maSource);
-        rJsonWriter.put("sourceId", rRecord.maSourceId);
-        rJsonWriter.put("name", rRecord.maName);
-        rJsonWriter.put("lastModifiedTime", rRecord.maLastModifiedTime);
-        auto aSlidesArray = rJsonWriter.startArray("slides");
-        for (const OUString& rSlide : rRecord.maSlides)
-            rJsonWriter.putSimpleValue(rSlide);
+        auto aLinksArray = rJsonWriter.startArray("links");
+        for (const SlideLinkRecord& rRecord : GetLinks())
+        {
+            auto aLinkNode = rJsonWriter.startStruct();
+            rJsonWriter.put("unit", GetSlideLinkKindName(rRecord.meKind));
+            rJsonWriter.put("id", rRecord.maId);
+            rJsonWriter.put("parent", GetParent(rRecord));
+            rJsonWriter.put("source", rRecord.maSource);
+            rJsonWriter.put("sourceId", rRecord.maSourceId);
+            rJsonWriter.put("name", rRecord.maName);
+            rJsonWriter.put("lastModifiedTime", rRecord.maLastModifiedTime);
+            auto aSlidesArray = rJsonWriter.startArray("slides");
+            for (const OUString& rSlide : rRecord.maSlides)
+                rJsonWriter.putSimpleValue(rSlide);
+        }
     }
+
+    auto aSourcesArray = rJsonWriter.startArray("sources");
+    for (const SlideLinkSource& rSource : maSources)
+    {
+        auto aSourceNode = rJsonWriter.startStruct();
+        rJsonWriter.put("source", rSource.maSource);
+        rJsonWriter.put("name", rSource.maName);
+    }
+}
+
+bool SlideLinkManager::AddSource(const OUString& rSource, const OUString& rName)
+{
+    if (!SlideLink::IsReadablePersistentLink(rSource))
+        return false;
+
+    // The name only says what the source is called, so a source is kept without one. A source
+    // linked as a whole goes by the name its link records, which is the one saved.
+    const OUString aName = getRecordableName(rName);
+    if (IsLinkedAsWhole(rSource))
+        return false;
+
+    std::optional<SlideLinkSource> oOldSource;
+    SlideLinkSource aNewSource;
+    size_t nPosition = maSources.size();
+    const auto it = findSource(maSources, rSource);
+    if (it != maSources.end())
+    {
+        if (it->maName == aName)
+            return false;
+        oOldSource = *it;
+        it->maName = aName;
+        aNewSource = *it;
+        nPosition = it - maSources.begin();
+    }
+    else
+    {
+        if (maSources.size() >= MaxSources)
+            return false;
+        aNewSource = { tools::Guid(tools::Guid::Generate).getOUString(), rSource, aName };
+        maSources.push_back(aNewSource);
+    }
+
+    if (mrDoc.IsUndoEnabled())
+        mrDoc.AddUndo(std::make_unique<UndoSlideLinkSources>(
+            mrDoc, SdResId(STR_UNDO_ADD_SLIDE_LINK_SOURCE), rSource, nPosition,
+            std::move(oOldSource), std::move(aNewSource)));
+    mrDoc.SetChanged();
+    NotifyLinksIfChanged();
+    return true;
+}
+
+bool SlideLinkManager::IsLinkedAsWhole(std::u16string_view rSource) const
+{
+    const std::vector<SlideLinkRecord> aLinks = GetLinks();
+    return std::any_of(aLinks.begin(), aLinks.end(),
+                       [&rSource](const SlideLinkRecord& rRecord) {
+                           return rRecord.meKind == SlideLinkKind::Presentation
+                                  && rRecord.maSource == rSource;
+                       });
+}
+
+bool SlideLinkManager::RemoveSource(std::u16string_view rSource)
+{
+    // A source linked as a whole is kept for as long as the link holds.
+    if (IsLinkedAsWhole(rSource))
+        return false;
+
+    const auto it = findSource(maSources, rSource);
+    if (it == maSources.end())
+        return false;
+    const size_t nPosition = it - maSources.begin();
+    SlideLinkSource aOldSource = std::move(*it);
+    maSources.erase(it);
+
+    if (mrDoc.IsUndoEnabled())
+        mrDoc.AddUndo(std::make_unique<UndoSlideLinkSources>(
+            mrDoc, SdResId(STR_UNDO_REMOVE_SLIDE_LINK_SOURCE), OUString(rSource), nPosition,
+            std::move(aOldSource), std::nullopt));
+    mrDoc.SetChanged();
+    NotifyLinksIfChanged();
+    return true;
+}
+
+void SlideLinkManager::RestoreSource(std::u16string_view rSource, size_t nPosition,
+                                     const std::optional<SlideLinkSource>& rState)
+{
+    const auto it = findSource(maSources, rSource);
+    if (!rState)
+    {
+        // A source linked as a whole stays kept for as long as the link holds.
+        if (it != maSources.end() && !IsLinkedAsWhole(rSource))
+            maSources.erase(it);
+    }
+    else if (it != maSources.end())
+        *it = *rState;
+    else if (maSources.size() < MaxSources)
+        maSources.insert(maSources.begin() + std::min(nPosition, maSources.size()), *rState);
+    NotifyLinksIfChanged();
 }
 
 void SlideLinkManager::Put(std::vector<SlideLinkRecord> aRecords)
@@ -725,16 +901,41 @@ bool SlideLinkManager::LinkInsertedPresentation(SdDrawDocument& rSource, sal_Int
 
     SlideLinkRecord aPresentation;
     aPresentation.meKind = SlideLinkKind::Presentation;
-    aPresentation.maId = tools::Guid(tools::Guid::Generate).getOUString();
+    // The link takes over the record of the source when the document keeps it already with
+    // nothing linked to it, so one record stands for the source. A second link to the same
+    // source gets an identifier of its own.
+    const auto itKept = findSource(maSources, rSourceName);
+    const bool bTakeKept
+        = itKept != maSources.end()
+          && std::none_of(maLinks.begin(), maLinks.end(),
+                          [&itKept](const SlideLinkRecord& rHeld) {
+                              return rHeld.meKind == SlideLinkKind::Presentation
+                                     && rHeld.maId == itKept->maId;
+                          });
+    aPresentation.maId
+        = bTakeKept ? itKept->maId : tools::Guid(tools::Guid::Generate).getOUString();
     aPresentation.maSource = rSourceName;
     aPresentation.maName = rFileName;
     aPresentation.maLastModifiedTime = rLastModifiedTime;
     aPresentation.maSections = aSectionIds;
     aPresentation.maSlides = GetUnitSlides(aPresentation);
+    // A source linked as a whole is kept, so it stays in the document when the link goes, also
+    // when the linking is undone. The link and the kept source are announced together.
+    const bool bKeepSource = itKept == maSources.end() && maSources.size() < MaxSources;
+    // A source kept already goes by the name the link records from here on.
+    const OUString aKeptName = itKept != maSources.end() ? itKept->maName : OUString();
+    if (bKeepSource)
+        maSources.push_back({ aPresentation.maId, rSourceName, aPresentation.maName });
+    else if (itKept != maSources.end())
+        itKept->maName = aPresentation.maName;
     aRecords.push_back(std::move(aPresentation));
 
     if (!Set(std::move(aRecords), SdResId(STR_UNDO_LINK_SLIDE_PRESENTATION)))
     {
+        if (bKeepSource)
+            maSources.pop_back();
+        else if (itKept != maSources.end())
+            itKept->maName = aKeptName;
         rSections.RestoreSectionsSnapshot(aSnapshot);
         return false;
     }
@@ -1327,6 +1528,8 @@ std::vector<OUString> SlideLinkManager::GetHoldingKeys() const
     std::vector<OUString> aKeys;
     for (const SlideLinkRecord& rRecord : GetLinks())
         aKeys.push_back(makeKey(rRecord));
+    for (const SlideLinkSource& rSource : maSources)
+        aKeys.push_back(makeKey(rSource));
     return aKeys;
 }
 

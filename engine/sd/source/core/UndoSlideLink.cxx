@@ -44,6 +44,33 @@ void UndoSlideLinks::Redo()
 
 OUString UndoSlideLinks::GetComment() const { return maComment; }
 
+UndoSlideLinkSources::UndoSlideLinkSources(SdDrawDocument& rDoc, const OUString& rComment,
+                                           const OUString& rSource, size_t nPosition,
+                                           std::optional<SlideLinkSource> oOldSource,
+                                           std::optional<SlideLinkSource> oNewSource)
+    : SdrUndoAction(rDoc)
+    , maSource(rSource)
+    , mnPosition(nPosition)
+    , moOldSource(std::move(oOldSource))
+    , moNewSource(std::move(oNewSource))
+    , maComment(rComment)
+{
+}
+
+void UndoSlideLinkSources::Undo()
+{
+    auto& rDoc = static_cast<SdDrawDocument&>(m_rMod);
+    rDoc.GetSlideLinkManager().RestoreSource(maSource, mnPosition, moOldSource);
+}
+
+void UndoSlideLinkSources::Redo()
+{
+    auto& rDoc = static_cast<SdDrawDocument&>(m_rMod);
+    rDoc.GetSlideLinkManager().RestoreSource(maSource, mnPosition, moNewSource);
+}
+
+OUString UndoSlideLinkSources::GetComment() const { return maComment; }
+
 } // namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

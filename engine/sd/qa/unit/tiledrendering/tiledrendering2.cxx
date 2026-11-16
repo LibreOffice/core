@@ -4034,6 +4034,148 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTileClientJoiningVectorDocumentPa
     CPPUNIT_ASSERT_LESS(sal_uInt8(100), aBlue.GetRed());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkKeptSourceRoundtripODP)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    sd::SlideLinkManager& rLinks = pXImpressDocument->GetDoc()->GetSlideLinkManager();
+
+    // A source is kept with no slide linked to it, once, and takes a new name.
+    CPPUNIT_ASSERT(pXImpressDocument->addSlideLinkSource(u"library/shapes"_ustr, u"Shapes"_ustr));
+    CPPUNIT_ASSERT(pXImpressDocument->addSlideLinkSource(u"library/icons"_ustr, u"Icons.odp"_ustr));
+    CPPUNIT_ASSERT(
+        !pXImpressDocument->addSlideLinkSource(u"library/icons"_ustr, u"Icons.odp"_ustr));
+    CPPUNIT_ASSERT(
+        pXImpressDocument->addSlideLinkSource(u"library/shapes"_ustr, u"Shapes.odp"_ustr));
+    // A source that cannot be read back is refused.
+    CPPUNIT_ASSERT(!pXImpressDocument->addSlideLinkSource(OUString(), u"No link.odp"_ustr));
+    CPPUNIT_ASSERT(!pXImpressDocument->addSlideLinkSource(u"library/\x0001"_ustr, OUString()));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rLinks.GetSources().size());
+    CPPUNIT_ASSERT(rLinks.GetLinks().empty());
+
+    // The list a client reads names the kept sources next to the links.
+    tools::JsonWriter aJsonWriter;
+    CPPUNIT_ASSERT(pXImpressDocument->getSlideLinks(aJsonWriter));
+    std::stringstream aStream((std::string(aJsonWriter.finishAndGetAsOString())));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    std::vector<std::string> aListed;
+    for (const auto& rSource : aTree.get_child("sources"))
+        aListed.push_back(rSource.second.get<std::string>("source") + "="
+                          + rSource.second.get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aListed.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("library/shapes=Shapes.odp"), aListed[0]);
+    CPPUNIT_ASSERT_EQUAL(std::string("library/icons=Icons.odp"), aListed[1]);
+
+    // The kept sources survive a save to ODF and the load back, in order and under the
+    // identifiers they were recorded with.
+    const std::vector<sd::SlideLinkSource> aKept = rLinks.GetSources();
+    CPPUNIT_ASSERT_EQUAL(u"library/shapes"_ustr, aKept[0].maSource);
+    CPPUNIT_ASSERT_EQUAL(u"Shapes.odp"_ustr, aKept[0].maName);
+    CPPUNIT_ASSERT_EQUAL(u"library/icons"_ustr, aKept[1].maSource);
+    CPPUNIT_ASSERT(aKept[0].maId.startsWith("{"));
+    CPPUNIT_ASSERT(aKept[0].maId != aKept[1].maId);
+    saveAndReload(TestFilter::ODP);
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    sd::SlideLinkManager& rReloaded = pXImpressDocument->GetDoc()->GetSlideLinkManager();
+    CPPUNIT_ASSERT(bool(aKept == rReloaded.GetSources()));
+    // A kept source is no link: the list of links stays empty.
+    CPPUNIT_ASSERT(rReloaded.GetLinks().empty());
+
+    // A source goes on its own, and undo brings it back.
+    CPPUNIT_ASSERT(pXImpressDocument->removeSlideLinkSource(u"library/shapes"_ustr));
+    CPPUNIT_ASSERT(!pXImpressDocument->removeSlideLinkSource(u"library/shapes"_ustr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rReloaded.GetSources().size());
+    CPPUNIT_ASSERT_EQUAL(u"library/icons"_ustr, rReloaded.GetSources()[0].maSource);
+    pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT(bool(aKept == rReloaded.GetSources()));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkPresentationTakesKeptSource)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+
+    // The source is kept with nothing linked to it, and the whole presentation is linked after.
+    CPPUNIT_ASSERT(pXImpressDocument->addSlideLinkSource(u"Q3 deck.odp"_ustr, u"Q3 deck.odp"_ustr));
+    const OUString aKeptId
+        = pXImpressDocument->GetDoc()->GetSlideLinkManager().GetSources()[0].maId;
+    const OUString aPresentationId = insertLinkedPresentation(
+        *pXImpressDocument,
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-presentation.odp"));
+
+    // The link holds under the identifier the kept source had, and the source is kept once.
+    CPPUNIT_ASSERT_EQUAL(aKeptId, aPresentationId);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<size_t>(1),
+        pXImpressDocument->GetDoc()->GetSlideLinkManager().GetSources().size());
+
+    // Saved, the two are one record: the link comes back with its slides and the source kept.
+    saveAndReload(TestFilter::ODP);
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    {
+        sd::SlideLinkManager& rLinks = pXImpressDocument->GetDoc()->GetSlideLinkManager();
+        const sd::SlideLinkRecord* pLink
+            = rLinks.Find(sd::SlideLinkKind::Presentation, aPresentationId);
+        CPPUNIT_ASSERT(pLink);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pLink->maSlides.size());
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rLinks.GetSources().size());
+        CPPUNIT_ASSERT_EQUAL(aKeptId, rLinks.GetSources()[0].maId);
+    }
+
+    // With the link taken off, the source stays kept under the same identifier, with no slides.
+    CPPUNIT_ASSERT(pXImpressDocument->breakSlideLink(u"presentation"_ustr, aPresentationId,
+                                                     /*bDeep=*/true));
+    saveAndReload(TestFilter::ODP);
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::SlideLinkManager& rLinks = pXImpressDocument->GetDoc()->GetSlideLinkManager();
+    CPPUNIT_ASSERT(!rLinks.Find(sd::SlideLinkKind::Presentation, aPresentationId));
+    CPPUNIT_ASSERT(rLinks.GetLinks().empty());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rLinks.GetSources().size());
+    CPPUNIT_ASSERT_EQUAL(aKeptId, rLinks.GetSources()[0].maId);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, rLinks.GetSources()[0].maSource);
+}
+
+// A source kept by linking the whole of it stays kept when an earlier keep is undone
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkKeptSourceUndoLeavesOtherSources)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    sd::SlideLinkManager& rLinks = pXImpressDocument->GetDoc()->GetSlideLinkManager();
+
+    CPPUNIT_ASSERT(
+        pXImpressDocument->addSlideLinkSource(u"library/icons"_ustr, u"Icons.odp"_ustr));
+    insertLinkedPresentation(
+        *pXImpressDocument,
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-presentation.odp"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rLinks.GetSources().size());
+    const OUString aLinkedSource = rLinks.GetSources()[1].maSource;
+
+    // The linking is undone and then the keep. The linked source is the one still kept.
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT(rLinks.GetLinks().empty());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rLinks.GetSources().size());
+    CPPUNIT_ASSERT_EQUAL(aLinkedSource, rLinks.GetSources()[0].maSource);
+
+    // Redo keeps the first source again, in the place it had.
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rLinks.GetSources().size());
+    CPPUNIT_ASSERT_EQUAL(u"library/icons"_ustr, rLinks.GetSources()[0].maSource);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

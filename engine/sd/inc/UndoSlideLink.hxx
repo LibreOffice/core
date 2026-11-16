@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <optional>
 #include <vector>
 
 #include <svx/svdundo.hxx>
@@ -43,6 +44,31 @@ private:
     std::vector<SlideLinkRecord> maNewLinks;
     OUString maComment;
     bool mbNewCaptured = false;
+};
+
+/** One change to one source document a document keeps: the source kept, renamed or kept no more.
+
+    The action holds the record of that source as it was before the change and as it is after it,
+    each empty when the source is not kept, and the place the source has in the list. Undo puts
+    the first back and redo the second. The other kept sources stay as they are.
+*/
+class SD_DLLPUBLIC UndoSlideLinkSources final : public SdrUndoAction
+{
+public:
+    UndoSlideLinkSources(SdDrawDocument& rDoc, const OUString& rComment, const OUString& rSource,
+                         size_t nPosition, std::optional<SlideLinkSource> oOldSource,
+                         std::optional<SlideLinkSource> oNewSource);
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual OUString GetComment() const override;
+
+private:
+    OUString maSource;
+    size_t mnPosition;
+    std::optional<SlideLinkSource> moOldSource;
+    std::optional<SlideLinkSource> moNewSource;
+    OUString maComment;
 };
 
 } // namespace sd

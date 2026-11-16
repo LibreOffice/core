@@ -8219,6 +8219,44 @@ bool COKitDocumentImpl::breakSlideLink(const char* pUnit, const char* pId, bool 
     return pUnit && pId && pDoc->breakSlideLink(getUString(pUnit), getUString(pId), bDeep);
 }
 
+bool COKitDocumentImpl::addSlideLinkSource(const char* pSourceName, const char* pName)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return false;
+
+    ITiledRenderable* pDoc = getTiledRenderable(this);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return false;
+    }
+
+    return pSourceName
+           && pDoc->addSlideLinkSource(getUString(pSourceName),
+                                       pName ? getUString(pName) : OUString());
+}
+
+bool COKitDocumentImpl::removeSlideLinkSource(const char* pSourceName)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return false;
+
+    ITiledRenderable* pDoc = getTiledRenderable(this);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return false;
+    }
+
+    return pSourceName && pDoc->removeSlideLinkSource(getUString(pSourceName));
+}
+
 bool COKitDocumentImpl::exportPages(const char* pParts, const char* pUrl)
 {
     SolarMutexGuard aGuard;

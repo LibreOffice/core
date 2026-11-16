@@ -8366,6 +8366,16 @@ bool SdXImpressDocument::breakSlideLink(const OUString& rUnit, const OUString& r
     return mpDoc->GetSlideLinkManager().Break(*oKind, rId, bDeep);
 }
 
+bool SdXImpressDocument::addSlideLinkSource(const OUString& rSourceName, const OUString& rName)
+{
+    return mpDoc && mpDoc->GetSlideLinkManager().AddSource(rSourceName, rName);
+}
+
+bool SdXImpressDocument::removeSlideLinkSource(const OUString& rSourceName)
+{
+    return mpDoc && mpDoc->GetSlideLinkManager().RemoveSource(rSourceName);
+}
+
 namespace
 {
 /// Names the standard pages the given indices ask for, by the name each carries in the

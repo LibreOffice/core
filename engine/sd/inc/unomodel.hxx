@@ -602,6 +602,11 @@ public:
                                              const OUString& rFileUrl,
                                              const OUString& rLastModifiedTime,
                                              std::vector<OString>* pNotUpdated = nullptr) override;
+    /// @see vcl::ITiledRenderable::addSlideLinkSource().
+    SD_DLLPUBLIC bool addSlideLinkSource(const OUString& rSourceName,
+                                         const OUString& rName) override;
+    /// @see vcl::ITiledRenderable::removeSlideLinkSource().
+    SD_DLLPUBLIC bool removeSlideLinkSource(const OUString& rSourceName) override;
     /// @see vcl::ITiledRenderable::breakSlideLink().
     SD_DLLPUBLIC bool breakSlideLink(const OUString& rUnit, const OUString& rId,
                                      bool bDeep) override;

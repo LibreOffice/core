@@ -494,6 +494,8 @@
 #define STR_UNDO_UPDATE_LINKED_SECTION                  NC_("STR_UNDO_UPDATE_LINKED_SECTION", "Update linked section")
 #define STR_UNDO_UNLINK_SLIDE_SECTION                   NC_("STR_UNDO_UNLINK_SLIDE_SECTION", "Unlink section")
 #define STR_UNDO_LINK_SLIDE_PRESENTATION                NC_("STR_UNDO_LINK_SLIDE_PRESENTATION", "Link presentation")
+#define STR_UNDO_ADD_SLIDE_LINK_SOURCE                  NC_("STR_UNDO_ADD_SLIDE_LINK_SOURCE", "Add source presentation")
+#define STR_UNDO_REMOVE_SLIDE_LINK_SOURCE               NC_("STR_UNDO_REMOVE_SLIDE_LINK_SOURCE", "Remove source presentation")
 #define STR_UNDO_UPDATE_LINKED_PRESENTATION             NC_("STR_UNDO_UPDATE_LINKED_PRESENTATION", "Update linked presentation")
 #define STR_UNDO_UNLINK_SLIDE_PRESENTATION              NC_("STR_UNDO_UNLINK_SLIDE_PRESENTATION", "Unlink presentation")
 

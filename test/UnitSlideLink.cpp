@@ -743,9 +743,10 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkPresentation()
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(15), links->size());
         presentations = getLinksOfUnit(links, "presentation");
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), presentations.size());
+        // The document kept the source when the first link was taken off, under the identifier
+        // that link had, and the new link to the whole source takes that record over.
         const std::string secondId = presentations[0]->getValue<std::string>("id");
-        LOK_ASSERT_MESSAGE("the second presentation has an identifier of its own",
-                           secondId != presentationId);
+        LOK_ASSERT_EQUAL(presentationId, secondId);
         helpers::sendTextFrame(socket, "slidelink break unit=presentation deep=1 id=" +
                                            encodeId(secondId),
                                testname);

@@ -1337,6 +1337,28 @@ struct COKitDocument
     virtual int setLinkedFileSource(const char* pId, const char* pUrl) = 0;
 
     /**
+     * Keep a source document in the document, whether or not a link reads from it.
+     *
+     * The kept sources are saved with the document and reported by getSlideLinks under
+     * "sources". A source kept already takes the name given. This is one undo action.
+     *
+     * @param pSourceName the source document as the user knows it, its persistent link.
+     * @param pName the name of the source document now. May be empty.
+     * @return true when the kept sources changed.
+     */
+    virtual bool addSlideLinkSource(const char* pSourceName, const char* pName) = 0;
+
+    /**
+     * Keep a source document in the document no more.
+     *
+     * The links that read from the source stay as they are. This is one undo action.
+     *
+     * @param pSourceName the source document, as getSlideLinks reports it under "sources".
+     * @return true when the source was kept and is not now.
+     */
+    virtual bool removeSlideLinkSource(const char* pSourceName) = 0;
+
+    /**
      * Writes the given pages out as a document of their own, in the order they are given.
      *
      * @param pParts a comma separated list of the pages to write, named the way this document
