@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-09 07:37+0000\n"
-"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-09 16:06+0000\n"
+"Last-Translator: alxhu <alxhu@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -1605,6 +1605,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Diese Datei ist ein Rechtschreibwörterbuch, kein Wörterbuch. Laden Sie eine "
+"Liste von Wörtern hoch, bei der jede Zeile ein Wort enthält."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1852,20 +1854,20 @@ msgstr "Stil duplizieren"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Jahr"
+msgstr[1] "%n Jahre"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Tag"
+msgstr[1] "%n Tage"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Stunde"
+msgstr[1] "%n Stunden"
 
 #: src/app/Util.ts:325
 msgid "%n minute"
@@ -2050,11 +2052,11 @@ msgstr "Dokument enthält nicht unterstützte Medien"
 
 #: src/canvas/sections/SelectionSection.ts:1562
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Warte auf Wiederholung..."
 
 #: src/canvas/sections/SelectionSection.ts:1563
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Warte auf Rückgängigmachung..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -3056,11 +3058,11 @@ msgstr "Formelfehler diagnostizieren in"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "Um die Fehler in %1 zu untersuchen, werden diese Zellen an %2 gesendet:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Möchten Sie die senden?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3104,7 +3106,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "nur Zellen mit Fehlern"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
@@ -3223,6 +3225,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Die Tabelle zeigt, was jede Zelle anzeigt. Die \"Formeln:\"-Liste darunter "
+"listet alle Formeln der Zellen auf, sofern diese eine Formel enthalten."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -6428,15 +6432,15 @@ msgstr "Abschnitt nach unten verschieben"
 
 #: src/control/Control.PartsPreview.js:1446
 msgid "Update Section"
-msgstr ""
+msgstr "Abschnitt aktualisieren"
 
 #: src/control/Control.PartsPreview.js:1454
 msgid "Unlink Section"
-msgstr ""
+msgstr "Abschnitt entlinken"
 
 #: src/control/Control.PartsPreview.js:1461
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Abschnitt & Folien entlinken"
 
 #: src/control/Control.PartsPreview.js:1470
 msgid "Collapse All Sections"
@@ -6571,7 +6575,7 @@ msgstr "Folien einfügen"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Abschnitt \"{0}\" einfügen"
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6591,11 +6595,11 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Als Abschnitt \"{0}\" einfügen"
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Als seperate Folien einfügen"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
@@ -6762,7 +6766,7 @@ msgstr "Entlinken"
 #: src/control/Control.SlideLinkToolbar.tsx:179
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update section"
-msgstr ""
+msgstr "Abschnitt aktualisieren"
 
 #: src/control/Control.SlideLinkToolbar.tsx:193
 msgid "Not available"
@@ -6792,17 +6796,23 @@ msgstr "Keine Folie dieser Präsentation ist mit einer anderen Datei verlinkt."
 #: src/slideimport/SlideLinks.ts:433
 msgid "The section cannot be updated, because its source is not available."
 msgstr ""
+"Dieser Abschnitt kann nicht aktualisiert werden, da dessen Quelle nicht "
+"verfügbar ist."
 
 #: src/slideimport/SlideLinks.ts:455
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Ein verlinkter Abschnitt kann nicht aktualisiert werden, da dessen Quelle "
+"nicht verfügbar ist."
 
 #: src/slideimport/SlideLinks.ts:458
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"{0} verlinkte Abschnitte können nicht aktualisiert werden, da ihre Quellen "
+"nicht verfügbar sind."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid ""
@@ -6819,7 +6829,7 @@ msgstr ""
 
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update sections"
-msgstr ""
+msgstr "Abschnitte bearbeiten"
 
 #: src/slideimport/SlideLinks.ts:542
 msgid "This slide is not linked to another file."
@@ -6841,6 +6851,8 @@ msgstr "{0} konnte nicht gelesen werden."
 #: src/slideimport/SlideLinks.ts:750
 msgid "You do not have access to {0}, so the section cannot be updated."
 msgstr ""
+"Sie haben kein Zugriff auf {0}, sodass der Abschnitt nicht aktualisiert "
+"werden kann."
 
 #: src/slideimport/SlideLinks.ts:753
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6861,7 +6873,7 @@ msgstr ""
 
 #: src/slideimport/SlideLinks.ts:927
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "Dieser Abschnitt wurde aktualisiert von {0}."
 
 #: src/slideimport/SlideLinks.ts:1076
 msgid "Cannot update the section: {0} no longer holds its source section."
@@ -8315,11 +8327,11 @@ msgstr "Spalte {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:632
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 ist am Bearbeiten"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:633
 msgid "Another user is editing"
-msgstr ""
+msgstr "Ein anderer Anwender ist am Bearbeiten"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8805,12 +8817,17 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"Sie haben nicht länger Zugriff auf dieses Dokument. Die "
+"Sicherheitskennzeichnung wurde geändert."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Sie können dieses Dokument nicht mehr bearbeiten. Die "
+"Sicherheitskennzeichnung wurde geändert. Bitte öffnen Sie es erneut, um es "
+"anzuzeigen."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8957,7 +8974,7 @@ msgstr "Dokument kann nicht gespeichert werden."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Der Speicherort verweigerte das Abspeichern des Dokumentes."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -9145,15 +9162,15 @@ msgstr "Online-Editor"
 
 #: src/layer/tile/CanvasTileLayer.js:1398
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "%1 startete die Aufzeichnung der Änderungen für alle Anwender."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Die Aufzeichnung der Änderungen wurde für alle Anwender gestartet."
 
 #: src/layer/tile/CanvasTileLayer.js:1401
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Ihre Änderungen werden nun aufgezeichnet."
 
 #: src/layer/tile/CanvasTileLayer.js:1487
 msgid "Functions"
