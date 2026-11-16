@@ -1,0 +1,309 @@
+From c785bdd6f544ff1b88a6d4aafb6b643be12fb635 Mon Sep 17 00:00:00 2001
+From: Andras Timar <andras.timar@collabora.com>
+Date: Mon, 16 Nov 2026 11:59:31 +0100
+Subject: [PATCH] write gradients of more than two colours as loext gradient
+ stops
+
+A gradient given as svg:linearGradient or svg:radialGradient became a
+two-colour draw:gradient from the vector's first two stops, whatever
+their number: a gradient of three colours lost its last one, and its
+start was the middle colour.
+
+draw:start-color (and draw:start of the opacity) is now the last stop
+and draw:end-color the first one, as it already was for two stops, and
+when these two cannot express the gradient (more than two stops, or a
+stop inside the gradient) its stops are written as
+<loext:gradient-stop> children of draw:gradient and <loext:opacity-stop>
+children of draw:opacity. Their offsets follow the existing order: a
+stop at svg:offset x is at 1 - x, from draw:start-color. Documents with
+two stops at 0 and 1 are written as before, apart from the loext
+namespace, now declared by the ODG, ODP, ODS and ODT generators.
+---
+ src/FillManager.cxx   | 143 ++++++++++++++++++++++++++++++++++++++++--
+ src/OdgGenerator.cxx  |   1 +
+ src/OdpGenerator.cxx  |   1 +
+ src/OdsGenerator.cxx  |   1 +
+ src/OdtGenerator.cxx  |   1 +
+ test/testGraphic1.cxx |  25 ++++++++
+ 6 files changed, 166 insertions(+), 6 deletions(-)
+
+diff --git a/src/FillManager.cxx b/src/FillManager.cxx
+index 8bc8d7d..419931b 100644
+--- a/src/FillManager.cxx
++++ b/src/FillManager.cxx
+@@ -22,11 +22,92 @@
+ 
+ #include "FillManager.hxx"
+ 
++#include <algorithm>
++#include <cmath>
++#include <locale>
++#include <sstream>
++#include <vector>
++
+ #include <librevenge/librevenge.h>
+ 
+ #include "FilterInternal.hxx"
+ #include "DocumentElement.hxx"
+ 
++namespace
++{
++
++//! reads a value in [0, 1] given as "0.5" or "50%"
++bool getFractionValue(librevenge::RVNGProperty const *prop, double &value)
++{
++	if (!prop)
++		return false;
++	std::istringstream stream(prop->getStr().cstr());
++	stream.imbue(std::locale::classic());
++	double val = 0;
++	stream >> val;
++	if (stream.fail() || !std::isfinite(val))
++		return false;
++	if (stream.peek() == '%')
++		val /= 100;
++	value = std::max(0., std::min(1., val));
++	return true;
++}
++
++struct GradientStop
++{
++	GradientStop() : offset(0), colour(), opacity(1) {}
++	//! the offset in ODF's order: 0 at draw:start-color
++	double offset;
++	librevenge::RVNGString colour;
++	double opacity;
++};
++
++/** Returns the stops of a gradient vector in ODF's order.
++
++	As draw:start-color and draw:end-color are taken from the vector,
++	its last stop is at the start of the gradient and its first one is at
++	the end: a stop's offset in ODF is 1 - svg:offset. A stop without an
++	svg:offset is placed as if the stops were evenly spaced.
++ */
++std::vector<GradientStop> getOdfGradientStops(librevenge::RVNGPropertyListVector const &gradient)
++{
++	std::vector<GradientStop> stops;
++	unsigned long const count = gradient.count();
++	for (unsigned long i = count; i > 0;)
++	{
++		--i;
++		librevenge::RVNGPropertyList const &stop = gradient[i];
++		double offset = count > 1 ? double(i) / double(count - 1) : 0;
++		getFractionValue(stop["svg:offset"], offset);
++		GradientStop odfStop;
++		odfStop.offset = 1 - offset;
++		if (stop["svg:stop-color"])
++			odfStop.colour = stop["svg:stop-color"]->getStr();
++		getFractionValue(stop["svg:stop-opacity"], odfStop.opacity);
++		stops.push_back(odfStop);
++	}
++	std::stable_sort(stops.begin(), stops.end(), [](GradientStop const &a, GradientStop const &b)
++	{
++		return a.offset < b.offset;
++	});
++	return stops;
++}
++
++//! whether the start and the end values alone would lose some of the stops
++bool needStopElements(std::vector<GradientStop> const &stops)
++{
++	if (stops.size() > 2)
++		return true;
++	for (GradientStop const &stop : stops)
++	{
++		if (stop.offset > 0 && stop.offset < 1)
++			return true;
++	}
++	return false;
++}
++
++}
++
+ void FillManager::clean()
+ {
+ 	mBitmapStyles.clear();
+@@ -177,12 +258,16 @@ librevenge::RVNGString FillManager::getStyleNameForGradient(librevenge::RVNGProp
+ 	}
+ 	else if (gradient->count() >= 2)
+ 	{
+-		if ((*gradient)[1]["svg:stop-color"])
+-			openElement->addAttribute("draw:start-color", (*gradient)[1]["svg:stop-color"]->getStr());
++		unsigned long const last = gradient->count() - 1;
++		if ((*gradient)[last]["svg:stop-color"])
++			openElement->addAttribute("draw:start-color", (*gradient)[last]["svg:stop-color"]->getStr());
+ 		if ((*gradient)[0]["svg:stop-color"])
+ 			openElement->addAttribute("draw:end-color", (*gradient)[0]["svg:stop-color"]->getStr());
+-		if ((*gradient)[0]["svg:stop-opacity"] || (*gradient)[1]["svg:stop-opacity"])
+-			needCreateOpacityStyle=true;
++		for (unsigned long i = 0; i <= last; ++i)
++		{
++			if ((*gradient)[i]["svg:stop-opacity"])
++				needCreateOpacityStyle=true;
++		}
+ 		openElement->addAttribute("draw:border", "0%");
+ 	}
+ 	else
+@@ -191,6 +276,25 @@ librevenge::RVNGString FillManager::getStyleNameForGradient(librevenge::RVNGProp
+ 	}
+ 
+ 	mGradientStyles.push_back(openElement);
++	// stops that the start and end colours cannot express: loext:gradient-stop
++	if (gradient && gradient->count() >= 2)
++	{
++		std::vector<GradientStop> const stops = getOdfGradientStops(*gradient);
++		if (needStopElements(stops))
++		{
++			for (GradientStop const &stop : stops)
++			{
++				if (stop.colour.empty())
++					continue;
++				std::shared_ptr<TagOpenElement> stopElement = std::make_shared<TagOpenElement>("loext:gradient-stop");
++				stopElement->addAttribute("svg:offset", libodfgen::doubleToString(stop.offset));
++				stopElement->addAttribute("loext:color-type", "rgb");
++				stopElement->addAttribute("loext:color-value", stop.colour);
++				mGradientStyles.push_back(stopElement);
++				mGradientStyles.push_back(std::make_shared<TagCloseElement>("loext:gradient-stop"));
++			}
++		}
++	}
+ 	mGradientStyles.push_back(std::make_shared<TagCloseElement>("draw:gradient"));
+ 	return name;
+ }
+@@ -278,12 +382,30 @@ librevenge::RVNGString FillManager::getStyleNameForOpacity(librevenge::RVNGPrope
+ 	const librevenge::RVNGPropertyListVector *gradient = style.child("svg:linearGradient");
+ 	if (!gradient)
+ 		gradient = style.child("svg:radialGradient");
++	std::vector<GradientStop> stops;
+ 	if (gradient && gradient->count() >= 2)
+ 	{
+-		if ((*gradient)[1]["svg:stop-opacity"])
+-			pList.insert("draw:start", (*gradient)[1]["svg:stop-opacity"]->getStr());
++		unsigned long const last = gradient->count() - 1;
++		if ((*gradient)[last]["svg:stop-opacity"])
++			pList.insert("draw:start", (*gradient)[last]["svg:stop-opacity"]->getStr());
+ 		if ((*gradient)[0]["svg:stop-opacity"])
+ 			pList.insert("draw:end", (*gradient)[0]["svg:stop-opacity"]->getStr());
++		stops = getOdfGradientStops(*gradient);
++		if (needStopElements(stops))
++		{
++			librevenge::RVNGPropertyListVector opacities;
++			for (GradientStop const &stop : stops)
++			{
++				librevenge::RVNGPropertyList opacity;
++				opacity.insert("svg:offset", stop.offset);
++				opacity.insert("svg:stop-opacity", stop.opacity);
++				opacities.append(opacity);
++			}
++			// (in the key: transparencies that differ only in their stops are different)
++			pList.insert("librevenge:opacity-stops", opacities);
++		}
++		else
++			stops.clear();
+ 	}
+ 	// prepare angle: ODG angle unit is 0.1 degree
+ 	librevenge::RVNGString angleValue;
+@@ -341,6 +463,15 @@ librevenge::RVNGString FillManager::getStyleNameForOpacity(librevenge::RVNGPrope
+ 		openElement->addAttribute("draw:end", pList["draw:end"]->getStr());
+ 
+ 	mOpacityStyles.push_back(openElement);
++	// stops that the start and end values cannot express: loext:opacity-stop
++	for (GradientStop const &stop : stops)
++	{
++		std::shared_ptr<TagOpenElement> stopElement = std::make_shared<TagOpenElement>("loext:opacity-stop");
++		stopElement->addAttribute("svg:offset", libodfgen::doubleToString(stop.offset));
++		stopElement->addAttribute("svg:stop-opacity", libodfgen::doubleToString(stop.opacity));
++		mOpacityStyles.push_back(stopElement);
++		mOpacityStyles.push_back(std::make_shared<TagCloseElement>("loext:opacity-stop"));
++	}
+ 	mOpacityStyles.push_back(std::make_shared<TagCloseElement>("draw:opacity"));
+ 	return name;
+ }
+diff --git a/src/OdgGenerator.cxx b/src/OdgGenerator.cxx
+index a7ddb4b..6aa4b46 100644
+--- a/src/OdgGenerator.cxx
++++ b/src/OdgGenerator.cxx
+@@ -306,6 +306,7 @@ bool OdgGeneratorPrivate::writeTargetDocument(OdfDocumentHandler *pHandler, OdfS
+ 	docContentPropList.addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+ 	docContentPropList.addAttribute("xmlns:config", "urn:oasis:names:tc:opendocument:xmlns:config:1.0");
+ 	docContentPropList.addAttribute("xmlns:ooo", "http://openoffice.org/2004/office");
++	docContentPropList.addAttribute("xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+ 	docContentPropList.addAttribute("office:version", "1.0", true);
+ 	if (streamType == ODF_FLAT_XML)
+ 		docContentPropList.addAttribute("office:mimetype", "application/vnd.oasis.opendocument.graphics");
+diff --git a/src/OdpGenerator.cxx b/src/OdpGenerator.cxx
+index 7a3dedb..15e7cb3 100644
+--- a/src/OdpGenerator.cxx
++++ b/src/OdpGenerator.cxx
+@@ -471,6 +471,7 @@ bool OdpGeneratorPrivate::writeTargetDocument(OdfDocumentHandler *pHandler, OdfS
+ 	docContentPropList.addAttribute("xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
+ 	// WARNING: this is not ODF!
+ 	docContentPropList.addAttribute("xmlns:ooo", "http://openoffice.org/2004/office");
++	docContentPropList.addAttribute("xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+ 	docContentPropList.addAttribute("xmlns:officeooo", "http://openoffice.org/2009/office");
+ 	docContentPropList.addAttribute("xmlns:anim","urn:oasis:names:tc:opendocument:xmlns:animation:1.0");
+ 	docContentPropList.addAttribute("xmlns:smil","urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
+diff --git a/src/OdsGenerator.cxx b/src/OdsGenerator.cxx
+index a8f1add..adee8e9 100644
+--- a/src/OdsGenerator.cxx
++++ b/src/OdsGenerator.cxx
+@@ -690,6 +690,7 @@ bool OdsGeneratorPrivate::writeTargetDocument(OdfDocumentHandler *pHandler, OdfS
+ 	docContentPropList.insert("xmlns:xlink", "http://www.w3.org/1999/xlink");
+ 	docContentPropList.insert("xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
+ 	docContentPropList.insert("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
++	docContentPropList.insert("xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+ 	docContentPropList.insert("xmlns:chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
+ 	docContentPropList.insert("xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
+ 	docContentPropList.insert("xmlns:math", "http://www.w3.org/1998/Math/MathML");
+diff --git a/src/OdtGenerator.cxx b/src/OdtGenerator.cxx
+index f472285..6105e35 100644
+--- a/src/OdtGenerator.cxx
++++ b/src/OdtGenerator.cxx
+@@ -390,6 +390,7 @@ bool OdtGeneratorPrivate::writeTargetDocument(OdfDocumentHandler *pHandler, OdfS
+ 	docContentPropList.insert("xmlns:xlink", "http://www.w3.org/1999/xlink");
+ 	docContentPropList.insert("xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
+ 	docContentPropList.insert("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
++	docContentPropList.insert("xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+ 	docContentPropList.insert("xmlns:chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
+ 	docContentPropList.insert("xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
+ 	docContentPropList.insert("xmlns:math", "http://www.w3.org/1998/Math/MathML");
+diff --git a/test/testGraphic1.cxx b/test/testGraphic1.cxx
+index ebe86d5..95df9f0 100644
+--- a/test/testGraphic1.cxx
++++ b/test/testGraphic1.cxx
+@@ -131,6 +131,31 @@ static void sendGraphic(Generator &generator, void (Generator::*SetStyle)(const
+ 	shape.insert("svg:cy", 1.8+yDiff/72., librevenge::RVNG_INCH);
+ 	shape.insert("librevenge:rotate", 30);
+ 	generator.drawEllipse(shape);
++
++	// a gradient of more than two colours, with a transparent stop
++	style=style2;
++	style.insert("draw:fill", "gradient");
++	style.insert("draw:style", "linear");
++	style.insert("draw:angle", 90);
++	librevenge::RVNGPropertyListVector stops;
++	char const *const colours[] = { "#FF0000", "#00C000", "#0000FF" };
++	for (int i = 0; i < 3; ++i)
++	{
++		librevenge::RVNGPropertyList stop;
++		stop.insert("svg:offset", 0.5 * i, librevenge::RVNG_PERCENT);
++		stop.insert("svg:stop-color", colours[i]);
++		stop.insert("svg:stop-opacity", i == 1 ? 0.5 : 1., librevenge::RVNG_PERCENT);
++		stops.append(stop);
++	}
++	style.insert("svg:linearGradient", stops);
++	(generator.*SetStyle)(style);
++
++	shape.clear();
++	shape.insert("svg:x", 70+xDiff, librevenge::RVNG_POINT);
++	shape.insert("svg:y", 240+yDiff, librevenge::RVNG_POINT);
++	shape.insert("svg:width", 100, librevenge::RVNG_POINT);
++	shape.insert("svg:height", 30, librevenge::RVNG_POINT);
++	generator.drawRectangle(shape);
+ }
+ 
+ static void createOdg()
+-- 
+2.56.1
+
