@@ -99,7 +99,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xRecentCharView[16];
     std::unique_ptr<weld::CustomWeld> m_xFavCharView[16];
 
-    std::unique_ptr<weld::Widget> m_xRecentGrid;
+    std::unique_ptr<weld::Container> m_xRecentGrid;
     std::unique_ptr<weld::Container> m_xFavGrid;
 
     Link<CharChange*, void> m_aUpdateFavHdl;

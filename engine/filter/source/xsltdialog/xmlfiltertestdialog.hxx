@@ -63,12 +63,12 @@ private:
     std::unique_ptr<filter_info_impl> m_xFilterInfo;
     OUString m_sDialogTitle;
 
-    std::unique_ptr<weld::Widget> m_xExport;
+    std::unique_ptr<weld::Frame> m_xExport;
     std::unique_ptr<weld::Label>  m_xFTExportXSLTFile;
     std::unique_ptr<weld::Button> m_xPBExportBrowse;
     std::unique_ptr<weld::Button> m_xPBCurrentDocument;
     std::unique_ptr<weld::Label>  m_xFTNameOfCurrentFile;
-    std::unique_ptr<weld::Widget> m_xImport;
+    std::unique_ptr<weld::Frame> m_xImport;
     std::unique_ptr<weld::Label>  m_xFTImportXSLTFile;
     std::unique_ptr<weld::Label>  m_xFTImportTemplate;
     std::unique_ptr<weld::Label>  m_xFTImportTemplateFile;

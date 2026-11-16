@@ -68,7 +68,7 @@ private:
 
     RTSDialog* m_pParent;
 
-    std::unique_ptr<weld::Widget> m_xContainer;
+    std::unique_ptr<weld::Container> m_xContainer;
 
     std::unique_ptr<weld::CheckButton> m_xCbFromSetup;
 
@@ -104,7 +104,7 @@ private:
     const psp::PPDValue* m_pCustomValue;
     RTSDialog* m_pParent;
 
-    std::unique_ptr<weld::Widget> m_xContainer;
+    std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::TreeView> m_xPPDKeyBox;
     std::unique_ptr<weld::TreeView> m_xPPDValueBox;
     std::unique_ptr<weld::Entry> m_xCustomEdit;

@@ -2090,7 +2090,7 @@ namespace svxform
         , m_xDefaultFT(m_xBuilder->weld_label(u"valueft"_ustr))
         , m_xDefaultED(m_xBuilder->weld_entry(u"value"_ustr))
         , m_xDefaultBtn(m_xBuilder->weld_button(u"browse"_ustr))
-        , m_xSettingsFrame(m_xBuilder->weld_widget(u"settingsframe"_ustr))
+        , m_xSettingsFrame(m_xBuilder->weld_frame(u"settingsframe"_ustr))
         , m_xDataTypeLB(m_xBuilder->weld_combo_box(u"datatype"_ustr))
         , m_xRequiredCB(m_xBuilder->weld_check_button(u"required"_ustr))
         , m_xRequiredBtn(m_xBuilder->weld_button(u"requiredcond"_ustr))

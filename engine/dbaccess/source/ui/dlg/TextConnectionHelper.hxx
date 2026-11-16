@@ -47,13 +47,13 @@ namespace dbaui
 
         std::unique_ptr<weld::Builder> m_xBuilder;
         std::unique_ptr<weld::Widget> m_xContainer;
-        std::unique_ptr<weld::Widget> m_xExtensionHeader;
+        std::unique_ptr<weld::Frame> m_xExtensionHeader;
         std::unique_ptr<weld::RadioButton> m_xAccessTextFiles;
         std::unique_ptr<weld::RadioButton> m_xAccessCSVFiles;
         std::unique_ptr<weld::RadioButton> m_xAccessOtherFiles;
         std::unique_ptr<weld::Entry> m_xOwnExtension;
         std::unique_ptr<weld::Label> m_xExtensionExample;
-        std::unique_ptr<weld::Widget> m_xFormatHeader;
+        std::unique_ptr<weld::Frame> m_xFormatHeader;
         std::unique_ptr<weld::Label> m_xFieldSeparatorLabel;
         std::unique_ptr<weld::ComboBox> m_xFieldSeparator;
         std::unique_ptr<weld::Label> m_xTextSeparatorLabel;
@@ -63,7 +63,7 @@ namespace dbaui
         std::unique_ptr<weld::Label> m_xThousandsSeparatorLabel;
         std::unique_ptr<weld::ComboBox> m_xThousandsSeparator;
         std::unique_ptr<weld::CheckButton> m_xRowHeader;
-        std::unique_ptr<weld::Widget> m_xCharSetHeader;
+        std::unique_ptr<weld::Frame> m_xCharSetHeader;
         std::unique_ptr<weld::Label> m_xCharSetLabel;
         std::unique_ptr<CharSetListBox> m_xCharSet;
 

@@ -44,12 +44,12 @@ public:
     std::unique_ptr<weld::CheckButton> m_xCBPassword;
     std::unique_ptr<weld::Entry> m_xEDPassword;
     std::unique_ptr<weld::Label> m_xFTPasswordLabel;
-    std::unique_ptr<weld::Widget> m_xTypeGrid;
+    std::unique_ptr<weld::Container> m_xTypeGrid;
 
     std::unique_ptr<weld::Entry> m_xEDShare;
     std::unique_ptr<weld::Label> m_xFTShare;
 
-    std::unique_ptr<weld::Widget> m_xDetailsGrid;
+    std::unique_ptr<weld::Container> m_xDetailsGrid;
     std::unique_ptr<weld::Widget> m_xHostBox;
     std::unique_ptr<weld::Entry> m_xEDHost;
     std::unique_ptr<weld::Label> m_xFTHost;

@@ -366,7 +366,7 @@ namespace svxform
         std::unique_ptr<weld::Label> m_xDefaultFT;
         std::unique_ptr<weld::Entry> m_xDefaultED;
         std::unique_ptr<weld::Button> m_xDefaultBtn;
-        std::unique_ptr<weld::Widget> m_xSettingsFrame;
+        std::unique_ptr<weld::Frame> m_xSettingsFrame;
         std::unique_ptr<weld::ComboBox> m_xDataTypeLB;
         std::unique_ptr<weld::CheckButton> m_xRequiredCB;
         std::unique_ptr<weld::Button> m_xRequiredBtn;

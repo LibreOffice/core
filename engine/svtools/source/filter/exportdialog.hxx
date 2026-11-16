@@ -98,11 +98,11 @@ private:
     std::unique_ptr<weld::SpinButton> mxNfResolution;
     std::unique_ptr<weld::ComboBox> mxLbResolution;
 
-    std::unique_ptr<weld::Widget> mxColorDepth;
+    std::unique_ptr<weld::Frame> mxColorDepth;
     std::unique_ptr<weld::ComboBox> mxLbColorDepth;
 
-    std::unique_ptr<weld::Widget> mxJPGWEBPQuality;
-    std::unique_ptr<weld::Widget> mxPNGCompression;
+    std::unique_ptr<weld::Frame> mxJPGWEBPQuality;
+    std::unique_ptr<weld::Frame> mxPNGCompression;
 
     std::unique_ptr<weld::Scale> mxSbPngCompression;
     std::unique_ptr<weld::SpinButton> mxNfPngCompression;
@@ -112,20 +112,20 @@ private:
 
     std::unique_ptr<weld::CheckButton> mxCbLossless;
 
-    std::unique_ptr<weld::Widget> mxMode;
+    std::unique_ptr<weld::Frame> mxMode;
     std::unique_ptr<weld::CheckButton> mxCbInterlaced;
 
-    std::unique_ptr<weld::Widget> mxBMPCompression;
+    std::unique_ptr<weld::Frame> mxBMPCompression;
     std::unique_ptr<weld::CheckButton> mxCbRLEEncoding;
 
-    std::unique_ptr<weld::Widget> mxDrawingObjects;
+    std::unique_ptr<weld::Frame> mxDrawingObjects;
     std::unique_ptr<weld::CheckButton> mxCbSaveTransparency;
 
-    std::unique_ptr<weld::Widget> mxEncoding;
+    std::unique_ptr<weld::Frame> mxEncoding;
     std::unique_ptr<weld::RadioButton> mxRbBinary;
     std::unique_ptr<weld::RadioButton> mxRbText;
 
-    std::unique_ptr<weld::Widget> mxEPSGrid;
+    std::unique_ptr<weld::Container> mxEPSGrid;
     std::unique_ptr<weld::RadioButton> mxModifyDimension;
     std::unique_ptr<weld::RadioButton> mxModifyResolution;
     std::unique_ptr<weld::CheckButton> mxCbEPSPreviewTIFF;
@@ -138,7 +138,7 @@ private:
     std::unique_ptr<weld::RadioButton> mxRbEPSCompressionNone;
 
 
-    std::unique_ptr<weld::Widget> mxInfo;
+    std::unique_ptr<weld::Frame> mxInfo;
     std::unique_ptr<weld::Label> mxFtEstimatedSize;
 
     std::unique_ptr<weld::Button> mxBtnOK;

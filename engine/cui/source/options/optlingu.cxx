@@ -218,17 +218,17 @@ namespace {
 
 class OptionsBreakSet : public weld::GenericDialogController
 {
-    std::unique_ptr<weld::Widget> m_xBeforeFrame;
-    std::unique_ptr<weld::Widget> m_xAfterFrame;
-    std::unique_ptr<weld::Widget> m_xMinimalFrame;
+    std::unique_ptr<weld::Frame> m_xBeforeFrame;
+    std::unique_ptr<weld::Frame> m_xAfterFrame;
+    std::unique_ptr<weld::Frame> m_xMinimalFrame;
     std::unique_ptr<weld::SpinButton> m_xBreakNF;
 
 public:
     OptionsBreakSet(weld::Window* pParent, sal_uInt16 nRID)
         : GenericDialogController(pParent, u"cui/ui/breaknumberoption.ui"_ustr, u"BreakNumberOption"_ustr)
-        , m_xBeforeFrame(m_xBuilder->weld_widget(u"beforeframe"_ustr))
-        , m_xAfterFrame(m_xBuilder->weld_widget(u"afterframe"_ustr))
-        , m_xMinimalFrame(m_xBuilder->weld_widget(u"miniframe"_ustr))
+        , m_xBeforeFrame(m_xBuilder->weld_frame(u"beforeframe"_ustr))
+        , m_xAfterFrame(m_xBuilder->weld_frame(u"afterframe"_ustr))
+        , m_xMinimalFrame(m_xBuilder->weld_frame(u"miniframe"_ustr))
     {
         assert(EID_NUM_PRE_BREAK == nRID || EID_NUM_POST_BREAK == nRID || EID_NUM_MIN_WORDLEN == nRID); //unexpected ID
 

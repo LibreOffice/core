@@ -69,7 +69,7 @@ class ODbaseIndexDialog : public weld::GenericDialogController
 
     std::unique_ptr<weld::Button> m_xPB_OK;
     std::unique_ptr<weld::ComboBox> m_xCB_Tables;
-    std::unique_ptr<weld::Widget> m_xIndexes;
+    std::unique_ptr<weld::Frame> m_xIndexes;
     std::unique_ptr<weld::TreeView> m_xLB_TableIndexes;
     std::unique_ptr<weld::TreeView> m_xLB_FreeIndexes;
 

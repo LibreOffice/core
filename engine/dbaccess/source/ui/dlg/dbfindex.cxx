@@ -46,7 +46,7 @@ ODbaseIndexDialog::ODbaseIndexDialog(weld::Window * pParent, OUString aDataSrcNa
     , m_aDSN(std::move(aDataSrcName))
     , m_xPB_OK(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xCB_Tables(m_xBuilder->weld_combo_box(u"table"_ustr))
-    , m_xIndexes(m_xBuilder->weld_widget(u"frame"_ustr))
+    , m_xIndexes(m_xBuilder->weld_frame(u"frame"_ustr))
     , m_xLB_TableIndexes(m_xBuilder->weld_tree_view(u"tableindex"_ustr))
     , m_xLB_FreeIndexes(m_xBuilder->weld_tree_view(u"freeindex"_ustr))
     , m_xAdd(m_xBuilder->weld_button(u"add"_ustr))
