@@ -1350,6 +1350,19 @@ class MouseControl extends CanvasSectionObject {
 		}
 
 		/*
+			The system counts the clicks of a double or a triple click with its own double click
+			time, which is often longer than the timer here. A click that the system counts as the
+			second or the third one goes with the clicks before it, also when the timer has sent
+			them already, so a slow triple click still selects the paragraph.
+		*/
+		if (!this.clickTimer && e.detail > 1) {
+			this.clickCount = e.detail;
+			this.pendingClickInfo = clickInfo;
+			this.flushPendingClick();
+			return;
+		}
+
+		/*
 			In a view that draws from objects a second click counts toward a double click only
 			close to the first one. One further away is a click of its own, so clicks quickly from
 			one object to the next each select their object here.

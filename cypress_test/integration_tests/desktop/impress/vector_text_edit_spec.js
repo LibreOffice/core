@@ -209,28 +209,33 @@ var desktopHelper = require('../../common/desktop_helper');
 			expectSelectedText('Text ');
 		});
 
-		// Clicks the document canvas count times at (x, y), in CSS pixels, with no time
-		// between the clicks, so they count together however busy the machine is.
-		function clickTimes(x, y, count) {
+		// Sends the events of one click on the document canvas at (x, y), in CSS pixels, with
+		// detail as the count the system gives it.
+		function clickWithDetail(x, y, detail) {
 			cy.cGet('#document-canvas').then(function(canvas) {
 				var element = canvas[0];
 				var frame = element.ownerDocument.defaultView;
 				var bounds = element.getBoundingClientRect();
-				for (var detail = 1; detail <= count; detail++) {
-					['mousedown', 'mouseup', 'click'].forEach(function(type) {
-						element.dispatchEvent(new frame.MouseEvent(type, {
-							bubbles: true,
-							cancelable: true,
-							view: frame,
-							clientX: bounds.left + x,
-							clientY: bounds.top + y,
-							button: 0,
-							buttons: type === 'mousedown' ? 1 : 0,
-							detail: detail,
-						}));
-					});
-				}
+				['mousedown', 'mouseup', 'click'].forEach(function(type) {
+					element.dispatchEvent(new frame.MouseEvent(type, {
+						bubbles: true,
+						cancelable: true,
+						view: frame,
+						clientX: bounds.left + x,
+						clientY: bounds.top + y,
+						button: 0,
+						buttons: type === 'mousedown' ? 1 : 0,
+						detail: detail,
+					}));
+				});
 			});
+		}
+
+		// Clicks the document canvas count times at (x, y), in CSS pixels, with no time
+		// between the clicks, so they count together however busy the machine is.
+		function clickTimes(x, y, count) {
+			for (var detail = 1; detail <= count; detail++)
+				clickWithDetail(x, y, detail);
 		}
 
 		it('selects a word on a double click and a paragraph on a triple click', function() {
@@ -253,6 +258,23 @@ var desktopHelper = require('../../common/desktop_helper');
 			});
 			expectCaret({ paragraph: 0, index: 6 }, { paragraph: 0, index: 0 });
 			expectNoPressSent();
+		});
+
+		it('selects a paragraph on a slow triple click', function() {
+			var middle;
+			keysToServer('{rightarrow}{rightarrow}').then(function(caret) { middle = caret; });
+			keysToServer('{end}');
+
+			// The system counts the clicks together, while each one comes after the timer that
+			// merges clicks here has run out.
+			cy.then(function() {
+				var at = onCanvas(middle.x, middle.y);
+				for (var detail = 1; detail <= 3; detail++) {
+					clickWithDetail(at.x, at.y, detail);
+					cy.then(function() { return helper.waitForTimers(win, 'clicktimer'); });
+				}
+			});
+			expectCaret({ paragraph: 0, index: 6 }, { paragraph: 0, index: 0 });
 		});
 
 		it('replaces or deletes the selected text', function() {
