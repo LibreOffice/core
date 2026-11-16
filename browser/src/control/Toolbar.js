@@ -531,7 +531,6 @@ window.L.Map.include({
 
 		// Let's translate
 		var max;
-		var translatableContent;
 		// The tags html2po extracts strings from; keep in sync with the source
 		// references in po/templates/cool-help.pot.
 		var translatableTags = ['h1', 'h2', 'h3', 'h4', 'td', 'p', 'li', 'button'];
@@ -568,17 +567,6 @@ window.L.Map.include({
 			image.alt = image.alt.toLocaleHelpString();
 		});
 
-		//translatable screenshots
-		var supportedLanguage = ['de', 'fr', 'it', 'es', 'pt-BR'];
-		var currentLanguage = String.locale;
-		if (supportedLanguage.indexOf(currentLanguage) >= 0) {
-			translatableContent = $(contentElement.querySelectorAll('.screenshot img'));
-
-			for (i = 0, max = translatableContent.length; i < max; i++) {
-				translatableContent[i].src = translatableContent[i].src.replace('/en/', '/'+currentLanguage+'/');
-			}
-		}
-
 		// Substitute {productname} in Online Help and replace special Mac key names
 		if (id === 'online-help-content') {
 			var productNameContent = contentElement.querySelectorAll('span.productname');
@@ -588,6 +576,17 @@ window.L.Map.include({
 			}
 			// eslint-disable-next-line no-restricted-syntax -- help page markup that we ship
 			document.getElementById('online-help-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('online-help-content').innerHTML);
+
+			// The screenshots are taken in the languages of the products. One
+			// that a language lacks falls back to the English screenshot.
+			const screenshotLanguage = this._helpScreenshotLanguage(String.locale);
+			if (screenshotLanguage) {
+				contentElement.querySelectorAll('.screenshot img').forEach(function (image) {
+					const englishSrc = image.src;
+					image.addEventListener('error', function () { image.src = englishSrc; }, { once: true });
+					image.src = englishSrc.replace('/en/', '/' + screenshotLanguage + '/');
+				});
+			}
 		}
 		if (id === 'keyboard-shortcuts-content') {
 			// The desktop apps and the browser have different file
@@ -708,6 +707,20 @@ window.L.Map.include({
 		});
 
 		this._focusContainer(id + '-box');
+	},
+
+	// The folder under images/help/ with the screenshots for the given UI
+	// language, or null for English. A regional variant without screenshots
+	// of its own (de-AT, pt-PT) gets those of its language.
+	_helpScreenshotLanguage: function(locale) {
+		const languages = ['ar', 'bg', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'en-GB', 'eo', 'es', 'eu', 'fi', 'fr',
+			'ga', 'gl', 'he', 'hr', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'kk', 'ko', 'lo', 'lt', 'nb', 'nl', 'nn',
+			'oc', 'pl', 'pt', 'pt-BR', 'ro', 'ru', 'sk', 'sl', 'sq', 'sv', 'tr', 'uk', 'vi', 'zh-CN', 'zh-TW'];
+		const tag = String(locale || '').replace(/_/g, '-').toLowerCase();
+		const find = function (wanted) {
+			return languages.find(function (language) { return language.toLowerCase() === wanted; });
+		};
+		return find(tag) || find(tag.split('-')[0]) || null;
 	},
 
 	_focusContainer: function(id) {
