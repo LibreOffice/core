@@ -2875,7 +2875,7 @@ static bool layoutTextDrivenSnake(const SmartArtDiagram& rDgm, const AlgAtom& rA
                                            spaceAfterPartsOf(rNode), rDgm.getTextFont()));
         aCell.mnHeight = aGrown(nStatedHeight, nText + nOverUnder);
         rMutable.getFittedFontSizes()[pChild->getInternalName()] = fTextFont;
-        aCells.push_back(aCell);
+        aCells.push_back(std::move(aCell));
     }
 
     // nodes stated as equally high take the highest
