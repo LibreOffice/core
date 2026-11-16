@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-03 20:16+0000\n"
-"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-13 09:51+0000\n"
+"Last-Translator: Dmitry <secret-rabbit@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
 "Language: ru\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
-msgstr "Консоль администратора"
+msgstr "Административная консоль"
 
 #: admin/admin.strings.js:16
 msgid "Settings"
@@ -552,7 +552,7 @@ msgstr "Сервис временно недоступен"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:788
 msgid "Signature Certificate"
-msgstr "Сигнатура Сертификата"
+msgstr "Сигнатура сертификата"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:789
 msgid "Signature Key"
@@ -572,9 +572,8 @@ msgstr "Провайдер"
 #: admin/src/integrator/AdminIntegratorSettings.ts:796
 #: admin/src/integrator/AdminIntegratorSettings.ts:4765
 #: admin/src/integrator/AdminIntegratorSettings.ts:5126
-#, fuzzy
 msgid "API key"
-msgstr "API Ключ"
+msgstr "API-ключ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:793
 #: admin/src/integrator/AdminIntegratorSettings.ts:798
@@ -597,11 +596,11 @@ msgstr "Таймаут запроса"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
-msgstr ""
+msgstr "Идентификатор клиента"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:804
 msgid "Secret"
-msgstr ""
+msgstr "Секретный ключ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid "In-document Screen Reader"
@@ -956,11 +955,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1678
 msgid "Upload Extension"
-msgstr ""
+msgstr "Загрузить расширения"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1685
 msgid "Security policies"
-msgstr ""
+msgstr "Политики безопасности"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1687
 msgid ""
@@ -970,7 +969,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1693
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Загрузка политики безопасности"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1782
 msgid "Settings are only available to signed-in users."
@@ -1346,15 +1345,15 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4803
 msgid "Spelling"
-msgstr ""
+msgstr "Проверка орфографии"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4804
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Проверка орфографии и грамматики"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "German spelling"
-msgstr ""
+msgstr "Немецкая орфография"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Duden recommendation"
@@ -1412,7 +1411,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Regional words"
-msgstr ""
+msgstr "Диалектные слова"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Colloquial and vulgar words"
@@ -1420,7 +1419,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4866
 msgid "Filler words"
-msgstr ""
+msgstr "Фильтр слов"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4867
 msgid "Offensive wording"
@@ -1440,7 +1439,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid "Translation"
-msgstr ""
+msgstr "Перевод"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5019
 msgid ""
@@ -2293,7 +2292,7 @@ msgstr "Повторить"
 #: src/control/Control.NotebookbarWriter.js:81
 #: src/control/Control.NotebookbarWriter.js:1077 src/control/Styles.js:38
 msgid "Insert"
-msgstr "Вставить"
+msgstr "Вставка"
 
 #: src/control/Control.AIChatSidebar.ts:969
 #: src/control/Control.AIChatSidebar.ts:1003
@@ -5340,7 +5339,7 @@ msgstr ""
 #: src/control/Control.NotebookbarCalc.js:1199
 #: src/control/Control.NotebookbarWriter.js:1955
 msgid "Size"
-msgstr ""
+msgstr "Размер"
 
 #: src/control/Notebookbar.WriterTableTab.ts:307
 #: src/control/Control.NotebookbarImpress.js:2374
@@ -5352,7 +5351,7 @@ msgstr ""
 #: src/control/Control.NotebookbarDraw.js:861
 #: src/control/Control.NotebookbarImpress.js:2413
 msgid "Alignment"
-msgstr ""
+msgstr "Выравнивание"
 
 #: src/control/Notebookbar.WriterTableTab.ts:472
 #: src/control/Control.NotebookbarCalc.js:72
@@ -5364,9 +5363,8 @@ msgstr "Формат"
 
 #: src/control/Notebookbar.WriterTableTab.ts:530
 #: src/control/Control.NotebookbarCalc.js:2403
-#, fuzzy
 msgid "Sort"
-msgstr "Краткий"
+msgstr "Сортировка"
 
 #: src/control/Notebookbar.WriterTableTab.ts:550
 msgid "Protect"
@@ -5625,9 +5623,8 @@ msgid "Number Format"
 msgstr "Числовой формат"
 
 #: src/control/Control.NotebookbarCalc.js:946
-#, fuzzy
 msgid "Cells"
-msgstr "Ячейка"
+msgstr "Ячейки"
 
 #: src/control/Control.NotebookbarCalc.js:1055
 msgid "Heading 1"
@@ -5648,7 +5645,7 @@ msgstr "Плохо"
 #: src/control/Control.NotebookbarCalc.js:1104
 #: src/control/PermissionMode.ts:469
 msgid "Editing"
-msgstr ""
+msgstr "Редактирование"
 
 #: src/control/Control.NotebookbarCalc.js:1128
 #: src/control/Control.NotebookbarDraw.js:1245
@@ -5660,7 +5657,7 @@ msgstr "Заменить"
 #: src/control/Control.NotebookbarCalc.js:1192
 #: src/control/Control.NotebookbarWriter.js:1948
 msgid "Margin"
-msgstr ""
+msgstr "Поля"
 
 #: src/control/Control.NotebookbarCalc.js:1260
 msgid "Row Height"
@@ -5816,7 +5813,7 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:1602
 #: src/control/Control.NotebookbarWriter.js:1365
 msgid "Illustrations"
-msgstr ""
+msgstr "Иллюстрации"
 
 #: src/control/Control.NotebookbarCalc.js:1925
 #: src/control/Control.NotebookbarDraw.js:1076
@@ -5836,7 +5833,7 @@ msgstr "Ассистент"
 
 #: src/control/Control.NotebookbarCalc.js:2143
 msgid "Insert Function"
-msgstr ""
+msgstr "Вставить функцию"
 
 #: src/control/Control.NotebookbarCalc.js:2151
 #, fuzzy
@@ -5845,19 +5842,19 @@ msgstr "Мастер функций"
 
 #: src/control/Control.NotebookbarCalc.js:2165
 msgid "AutoSum"
-msgstr ""
+msgstr "Автосумма"
 
 #: src/control/Control.NotebookbarCalc.js:2178
 msgid "Financial"
-msgstr ""
+msgstr "Финансовые"
 
 #: src/control/Control.NotebookbarCalc.js:2196
 msgid "Logical"
-msgstr ""
+msgstr "Логические"
 
 #: src/control/Control.NotebookbarCalc.js:2226
 msgid "Date & Time"
-msgstr ""
+msgstr "Дата и время"
 
 #: src/control/Control.NotebookbarCalc.js:2238
 msgid "Lookup & Reference"
@@ -5869,7 +5866,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarCalc.js:2268
 msgid "More Functions"
-msgstr ""
+msgstr "Другие функции"
 
 #: src/control/Control.NotebookbarCalc.js:2313
 #, fuzzy
@@ -5878,7 +5875,7 @@ msgstr "диапазон"
 
 #: src/control/Control.NotebookbarCalc.js:2454
 msgid "Filter"
-msgstr ""
+msgstr "Фильтр"
 
 #: src/control/Control.NotebookbarCalc.js:2691
 msgid "Proofing"
@@ -5888,7 +5885,7 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:2127
 #: src/control/Control.NotebookbarWriter.js:2386
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Автоматическая проверка орфографии"
 
 #: src/control/Control.NotebookbarCalc.js:2758
 #: src/control/Control.NotebookbarImpress.js:2164
@@ -5900,7 +5897,7 @@ msgstr "Примечание"
 #: src/control/Control.NotebookbarCalc.js:2808
 #: src/control/Control.NotebookbarWriter.js:2538
 msgid "Tracking"
-msgstr ""
+msgstr "Запись"
 
 #: src/control/Control.NotebookbarCalc.js:2897
 msgid "Comment on Change"
@@ -5908,16 +5905,16 @@ msgstr ""
 
 #: src/control/Control.NotebookbarCalc.js:2908
 msgid "Protection"
-msgstr ""
+msgstr "Защита"
 
 #: src/control/Control.NotebookbarCalc.js:2978
 msgid "Format Cells"
-msgstr "Формат Ячеек"
+msgstr "Формат ячеек"
 
 #: src/control/Control.NotebookbarCalc.js:3038
 #: src/control/Control.NotebookbarImpress.js:1976
 msgid "Themes"
-msgstr ""
+msgstr "Темы"
 
 #: src/control/Control.NotebookbarCalc.js:3114
 #: src/control/Control.NotebookbarCalc.js:3451
@@ -7671,11 +7668,11 @@ msgstr "Только чтение"
 
 #: src/control/PermissionMode.ts:260
 msgid "Viewing Mode"
-msgstr ""
+msgstr "Режим просмотра"
 
 #: src/control/PermissionMode.ts:266
 msgid "Editing Mode"
-msgstr ""
+msgstr "Режим редактирования"
 
 #: src/control/PermissionMode.ts:274
 msgid "Review Mode"
@@ -7684,7 +7681,7 @@ msgstr ""
 #: src/control/PermissionMode.ts:292 src/control/PermissionMode.ts:472
 #: src/control/PermissionMode.ts:478 src/control/PermissionMode.ts:484
 msgid "Viewing"
-msgstr ""
+msgstr "Просмотр"
 
 #: src/control/PermissionMode.ts:468
 msgid "Reviewing"
@@ -8248,7 +8245,7 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:183
 msgid "Custom Margins…"
-msgstr ""
+msgstr "Настраиваемые поля…"
 
 #: src/control/jsdialog/Widget.PageSizeEntry.ts:91
 msgid "More Paper Sizes..."

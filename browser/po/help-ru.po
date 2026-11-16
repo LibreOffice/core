@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0200\n"
-"PO-Revision-Date: 2026-06-08 17:01+0000\n"
-"Last-Translator: Артур <atter192837@gmail.com>\n"
+"PO-Revision-Date: 2026-11-13 09:51+0000\n"
+"Last-Translator: Dmitry <secret-rabbit@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "help/ru/>\n"
 "Language: ru\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1367,7 +1367,7 @@ msgstr "Стандартный формат"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:200-9
 msgid "Insert"
-msgstr "Вставить"
+msgstr "Вставка"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-38
 msgid "Insert date"
