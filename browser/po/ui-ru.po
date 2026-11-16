@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
 "PO-Revision-Date: 2026-11-13 09:51+0000\n"
-"Last-Translator: Dmitry <secret-rabbit@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: Hello Hi <hiiiiiii@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
 "Language: ru\n"
@@ -871,15 +871,15 @@ msgstr "Английский"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:877
 msgid "Hungarian"
-msgstr ""
+msgstr "Венгерский"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:878
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Португальский (Бразилия)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:879
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1612
 msgid "Invalid JSON file"
