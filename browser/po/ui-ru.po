@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
 "PO-Revision-Date: 2026-11-15 11:10+0000\n"
-"Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: Hello Hi <hiiiiiii@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
 "Language: ru\n"
@@ -591,7 +591,7 @@ msgstr "Таймаут запроса"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
-msgstr "Идентификатор клиента"
+msgstr "ID клиента"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:804
 msgid "Secret"
