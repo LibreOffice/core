@@ -534,7 +534,7 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwFmDrawPage* const pDrawPage)
     m_aShapes.reserve(nCount);
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
     {
-        uno::Reference<drawing::XShape> xShape(pDrawPage->getShapeByIndex(nIdx), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(pDrawPage->getShapeByIndex(nIdx));
         m_aShapes.push_back(cpo::uno::Any(xShape));
     }
 }
