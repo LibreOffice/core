@@ -100,6 +100,7 @@
 /// <reference path="./ImpressVectorManager.test.ts" />
 /// <reference path="./ShapeTransitionMask.test.ts" />
 /// <reference path="./VectorSlideLayers.test.ts" />
+/// <reference path="./MorphMatcher.test.ts" />
 /// <reference path="./SlideMorph.test.ts" />
 /// <reference path="./SlideAnimations.test.ts" />
 /// <reference path="./AnimatedContentRenderer.test.ts" />

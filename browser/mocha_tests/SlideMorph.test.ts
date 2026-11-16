@@ -11,11 +11,25 @@
 
 describe('SlideMorph', function () {
 	// A slide of the given objects in paint order after its page entry, each an id, a name
-	// and a box [x, y, width, height] in twips.
-	function slide(objects: [number, string, number[]][]): any {
+	// and a box [x, y, width, height] in twips. An object is a rectangle, unless a geometry
+	// type of a custom shape is given after its box.
+	function slide(objects: [number, string, number[], string?][]): any {
 		const entries: [number, any][] = [[1, { id: 1, parent: -1, kind: 'page' }]];
-		for (const [id, name, [x, y, width, height]] of objects)
-			entries.push([id, { id, name, parent: 0, x, y, width, height }]);
+		for (const [id, name, [x, y, width, height], shapeType] of objects)
+			entries.push([
+				id,
+				{
+					id,
+					name,
+					parent: 0,
+					x,
+					y,
+					width,
+					height,
+					objectKind: 33,
+					shapeType: shapeType ?? 'rect',
+				},
+			]);
 		return {
 			order: entries.map(([id]) => id),
 			objects: new Map(entries),
@@ -40,11 +54,11 @@ describe('SlideMorph', function () {
 			slide([
 				[10, 'Title', [0, 0, 100, 100]],
 				[11, 'Rectangle 3', [0, 0, 100, 100]],
-				[12, 'Gone', [0, 0, 100, 100]],
+				[12, 'Gone', [0, 0, 100, 100], 'ellipse'],
 			]),
 			slide([
 				[20, 'Rectangle 3', [0, 0, 100, 100]],
-				[21, 'New', [0, 0, 100, 100]],
+				[21, 'New', [0, 0, 100, 100], 'star5'],
 				[22, 'Title', [0, 0, 100, 100]],
 			]),
 		);
@@ -77,15 +91,34 @@ describe('SlideMorph', function () {
 		nodeassert.deepStrictEqual(morph.enteringAlone, [22]);
 	});
 
-	it('leaves objects without a name unpaired', function () {
+	it('pairs objects without a name by their kind', function () {
 		const morph = new SlideMorph(
-			slide([[10, '', [0, 0, 100, 100]]]),
-			slide([[20, '', [0, 0, 100, 100]]]),
+			slide([
+				[10, '', [0, 0, 100, 100]],
+				[11, '', [0, 0, 100, 100], 'ellipse'],
+			]),
+			slide([[20, '', [500, 0, 100, 100]]]),
 		);
 
-		nodeassert.deepStrictEqual(morph.pairs, []);
-		nodeassert.deepStrictEqual(morph.leavingAlone, [10]);
-		nodeassert.deepStrictEqual(morph.enteringAlone, [20]);
+		nodeassert.deepStrictEqual(morph.pairs, [{ leaving: 10, entering: 20 }]);
+		nodeassert.deepStrictEqual(morph.leavingAlone, [11]);
+		nodeassert.deepStrictEqual(morph.enteringAlone, []);
+	});
+
+	it('leaves out the objects that an animation hides', function () {
+		const morph = new SlideMorph(
+			slide([[10, 'Box', [0, 0, 100, 100]]]),
+			slide([
+				[20, 'Box', [0, 0, 100, 100]],
+				[21, '', [0, 0, 100, 100]],
+			]),
+			undefined,
+			new Set([20]),
+		);
+
+		nodeassert.deepStrictEqual(morph.pairs, [{ leaving: 10, entering: 21 }]);
+		nodeassert.deepStrictEqual(morph.enteringAlone, []);
+		nodeassert.ok(!morph.paintOrder.some((step) => step.id === 20));
 	});
 
 	it('moves both copies of a pair halfway at the middle of the morph', function () {
@@ -121,11 +154,11 @@ describe('SlideMorph', function () {
 		const morph = new SlideMorph(
 			slide([
 				[10, 'Box', [0, 0, 100, 100]],
-				[11, 'Gone', [0, 0, 100, 100]],
+				[11, 'Gone', [0, 0, 100, 100], 'ellipse'],
 			]),
 			slide([
 				[20, 'Box', [1000, 2000, 300, 100]],
-				[21, 'New', [0, 0, 100, 100]],
+				[21, 'New', [0, 0, 100, 100], 'star5'],
 			]),
 		);
 
@@ -170,12 +203,12 @@ describe('SlideMorph', function () {
 		const morph = new SlideMorph(
 			slide([
 				[10, 'A', [0, 0, 100, 100]],
-				[11, 'Gone', [0, 0, 100, 100]],
+				[11, 'Gone', [0, 0, 100, 100], 'ellipse'],
 				[12, 'B', [0, 0, 100, 100]],
 			]),
 			slide([
 				[20, 'B', [0, 0, 100, 100]],
-				[21, 'New', [0, 0, 100, 100]],
+				[21, 'New', [0, 0, 100, 100], 'star5'],
 				[22, 'A', [0, 0, 100, 100]],
 			]),
 		);

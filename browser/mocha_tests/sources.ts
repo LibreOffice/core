@@ -527,6 +527,7 @@
 /// <reference path="../src/slideshow/ShapeTransitionMask.ts" />
 /// <reference path="../src/slideshow/SlideQuads.ts" />
 /// <reference path="../src/slideshow/SlidePartsGl.ts" />
+/// <reference path="../src/slideshow/MorphMatcher.ts" />
 /// <reference path="../src/slideshow/SlideMorph.ts" />
 /// <reference path="../src/slideshow/VectorSlideLayers.ts" />
 /// <reference path="../src/slideshow/Transition2d.ts" />

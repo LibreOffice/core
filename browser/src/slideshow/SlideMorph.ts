@@ -11,11 +11,10 @@
  */
 
 /*
- * The morph from one slide to the next. An object of the leaving slide and an object of the
- * entering slide with the same name are one pair. Both copies of a pair move, turn and resize
- * together from where the object is on the leaving slide to where it is on the entering one,
- * while the entering copy fades in over the leaving one. An object without a pair fades out, or
- * in.
+ * The morph from one slide to the next. MorphMatcher pairs the objects of the leaving slide with
+ * the objects of the entering slide. Both copies of a pair move, turn and resize together from
+ * where the object is on the leaving slide to where it is on the entering one, while the entering
+ * copy fades in over the leaving one. An object without a pair fades out, or in.
  */
 
 /// The object ids of a leaving object and of the entering object it becomes.
@@ -55,40 +54,44 @@ class SlideMorph {
 	// The place of each pair on the leaving and on the entering slide, by position in pairs.
 	private readonly places: [MorphPlace, MorphPlace][] = [];
 
+	/// leavingHidden and enteringHidden hold the objects that an animation holds hidden on
+	/// either slide, which take no part in the morph.
 	constructor(
 		leaving: cool.VectorPrimitivesData,
 		entering: cool.VectorPrimitivesData,
+		leavingHidden?: Set<number>,
+		enteringHidden?: Set<number>,
 	) {
 		this.leaving = leaving;
 		this.entering = entering;
-		const leavingObjects = SlideMorph.topObjects(leaving);
-		const enteringObjects = SlideMorph.topObjects(entering);
+		const leavingObjects = MorphMatcher.candidates(leaving, leavingHidden);
+		const enteringObjects = MorphMatcher.candidates(entering, enteringHidden);
+		const match = MorphMatcher.match(
+			leaving,
+			entering,
+			leavingHidden,
+			enteringHidden,
+		);
 
-		const enteringByName = new Map<string, number[]>();
-		for (const id of enteringObjects) {
-			const name = entering.objects.get(id)?.name;
-			if (!name) continue;
-			const named = enteringByName.get(name);
-			if (named) named.push(id);
-			else enteringByName.set(name, [id]);
-		}
-
-		// Objects that share a name on one slide pair in paint order.
+		// The pairs in the paint order of the leaving slide.
 		const partners = new Map<number, number>();
-		for (const id of leavingObjects) {
-			const name = leaving.objects.get(id)?.name;
-			const partner = name ? enteringByName.get(name)?.shift() : undefined;
+		const pairedLeaving = new Set<number>();
+		for (const [id, partner] of match.pairs
+			.slice()
+			.sort(
+				(one, other) =>
+					leavingObjects.indexOf(one[0]) - leavingObjects.indexOf(other[0]),
+			)) {
 			const from = SlideMorph._placeOf(leaving, id);
-			const to =
-				partner !== undefined ? SlideMorph._placeOf(entering, partner) : null;
-			if (partner === undefined || !from || !to) {
-				this.leavingAlone.push(id);
-				continue;
-			}
+			const to = SlideMorph._placeOf(entering, partner);
+			if (!from || !to) continue;
 			this.pairs.push({ leaving: id, entering: partner });
 			this.places.push([from, to]);
 			partners.set(partner, id);
+			pairedLeaving.add(id);
 		}
+		for (const id of leavingObjects)
+			if (!pairedLeaving.has(id)) this.leavingAlone.push(id);
 		for (const id of enteringObjects)
 			if (!partners.has(id)) this.enteringAlone.push(id);
 

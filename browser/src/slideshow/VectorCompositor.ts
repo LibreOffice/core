@@ -434,7 +434,12 @@ class VectorCompositor extends SlideCompositor {
 		);
 		if (!leavingLayers || !enteringLayers) return false;
 		if (!this.morph?.isBetween(leavingData, enteringData))
-			this.morph = new SlideMorph(leavingData, enteringData);
+			this.morph = new SlideMorph(
+				leavingData,
+				enteringData,
+				this._hiddenObjects(leavingHash, leavingData),
+				this._hiddenObjects(enteringHash, enteringData),
+			);
 
 		const [leavingMoves, enteringMoves] = this.morph.states(time);
 		const leaving = this._morphSide(
@@ -480,6 +485,20 @@ class VectorCompositor extends SlideCompositor {
 			side.layers.end();
 		}
 		return true;
+	}
+
+	// The objects that the animations of the slide hold hidden: the ones that an exit effect
+	// took away on the slide a morph leaves, and the ones that wait for an entrance effect on
+	// the slide it enters.
+	private _hiddenObjects(
+		slideHash: string,
+		data: cool.VectorPrimitivesData,
+	): Set<number> {
+		const hidden = new Set<number>();
+		this._drawStates(slideHash, data)?.forEach((state, id) => {
+			if (state.hidden) hidden.add(id);
+		});
+		return hidden;
 	}
 
 	// What a frame of a morph draws of one slide. Each animation target is drawn in the state
