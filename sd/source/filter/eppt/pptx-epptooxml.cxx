@@ -57,7 +57,6 @@
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/datetime.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
