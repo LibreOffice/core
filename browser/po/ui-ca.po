@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
 "PO-Revision-Date: 2026-11-08 04:01+0000\n"
-"Last-Translator: Joan Montané <jmontane@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: Adria Figuera <afiguera@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ca/>\n"
 "Language: ca\n"
@@ -451,6 +451,8 @@ msgid ""
 "Your server is configured with insufficient hardware resources, which may "
 "lead to poor performance."
 msgstr ""
+"El teu servidor ha estat configurat amb recursos de maquinari insuficients, "
+"la qual cosa pot conduir a un rendiment pobre."
 
 #: admin/src/AdminSocketServerAudit.js:59
 #: src/control/Control.ServerAuditDialog.ts:136
@@ -467,6 +469,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Alguns clients s'han connectat amb el formulari WebSocket URL antic, que "
+"està en previsió de ser eliminat. Comproveu que el vostre servidor "
+"intermediari transmeti el formulari compacte."
 
 #: admin/src/AdminSocketServerAudit.js:99
 #: admin/src/integrator/AdminIntegratorSettings.ts:6213
@@ -500,38 +505,42 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:706
 msgid "Invalid request"
-msgstr ""
+msgstr "Petició no vàlida"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:707
 #: src/control/Control.AIChatSidebar.ts:2248
 msgid "Invalid API key"
-msgstr ""
+msgstr "Clau API no vàlida"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:708
 #: src/control/Control.AIChatSidebar.ts:2249
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "La clau API no té els permisos necessaris"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
+"L'amfitrió IA no es troba a la llista d'amfitrions permesa al servidor "
+"(ai.allowed_hosts). Demana els permisos al teu administrador per permetre'l."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2253
 msgid "Rate limited - please wait a moment and retry"
 msgstr ""
+"Límit de peticions assolit - espera una estona i torna-ho a intentar, si us "
+"plau"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:714
 #: src/control/Control.AIChatSidebar.ts:2254
 msgid "API server error - try again later"
-msgstr ""
+msgstr "Error al servidor API - torna a intentar-ho més endavant"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Servei no disponible temporalment"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:788
 msgid "Signature Certificate"
@@ -576,7 +585,7 @@ msgstr "Mida de la imatge"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:800
 msgid "Request timeout"
-msgstr ""
+msgstr "Temps de petició exhaurit"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
