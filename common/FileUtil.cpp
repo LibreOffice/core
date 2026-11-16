@@ -459,7 +459,10 @@ namespace FileUtil
             target.pop_back();
         const std::string::size_type slash = target.find_last_of('/');
         if (slash == 0 || slash == std::string::npos)
+        {
+            errno = openErrno;
             return -1;
+        }
 
         const int rootFd =
             ::open(target.substr(0, slash).c_str(), O_RDONLY | O_DIRECTORY | O_CLOEXEC);
