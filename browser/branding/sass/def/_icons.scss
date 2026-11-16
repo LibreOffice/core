@@ -520,6 +520,39 @@ $img-mathandtrigfunctions: false !default;
 $img-logicalfunctions: false !default;
 $img-textfunctions: false !default;
 $img-financialfunctions: false !default;
+$img-reinstatetrackedchange: false !default;
+$img-distributecolumns: false !default;
+$img-distributerows: false !default;
+$img-orientation: false !default;
+$img-pagesize: false !default;
+$img-slidesize: false !default;
+$img-pagesetup: false !default;
+$img-toggleprintgrid: false !default;
+$img-selectsheetview: false !default;
+$img-newsheetview: false !default;
+$img-removesheetview: false !default;
+$img-exitsheetview: false !default;
+$img-solverdialog: false !default;
+$img-presenttoall: false !default;
+$img-addtheme: false !default;
+$img-setoptimalcolumnwidth: false !default;
+$img-setoptimalrowheight: false !default;
+$img-formatungroup: false !default;
+$img-removecalctable: false !default;
+$img-summarizewithpivot: false !default;
+$img-videobackground: false !default;
+$img-validatesidebara11y: false !default;
+$img-validatedialogsa11y: false !default;
+$img-formatarea: false !default;
+$img-tablecellbackgroundcolor: false !default;
+$img-autoformatredlineapply: false !default;
+$img-tracechangemode: false !default;
+$img-acceptchanges: false !default;
+$img-updateslidelinks: false !default;
+$img-shapesdeck: false !default;
+$img-insertthreadedcomment: false !default;
+$img-groupsparklines: false !default;
+$img-ungroupsparklines: false !default;
 
 // navigator-tab-color
 $color-navigator-tab: false !default;
@@ -976,9 +1009,9 @@ $color-navigator-tab: false !default;
 	@if $img-goalseekdialog { #{$notdark} .unoGoalSeekDialog .unobutton img {background-image: url($img-goalseekdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-validation { #{$notdark} .unoValidation .unobutton img {background-image: url($img-validation); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-statisticsmenu { #{$notdark} .unoData-StatisticsMenu .unobutton img {background-image: url($img-statisticsmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
-	@if $img-printrangesmenu { #{$notdark} .unoData-PrintRangesMenu .unobutton img {background-image: url($img-printrangesmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
-	@if $img-rowmenuheight { #{$notdark} .unoData-RowMenuHeight .unobutton img {background-image: url($img-rowmenuheight); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
-	@if $img-columnmenuwidth { #{$notdark} .unoData-ColumnMenuWidth .unobutton img {background-image: url($img-columnmenuwidth); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-printrangesmenu { #{$notdark} .unoData-PrintRangesMenu .unobutton img, #{$notdark} .MenuPrintRanges .unobutton img {background-image: url($img-printrangesmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-rowmenuheight { #{$notdark} .unoData-RowMenuHeight .unobutton img, #{$notdark} .MenuRowHeight .unobutton img {background-image: url($img-rowmenuheight); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-columnmenuwidth { #{$notdark} .unoData-ColumnMenuWidth .unobutton img, #{$notdark} .MenuColumnWidth .unobutton img {background-image: url($img-columnmenuwidth); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-freezepanes { #{$notdark} .unoFreezePanes .unobutton img {background-image: url($img-freezepanes); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-freezepanescolumn { #{$notdark} .unoFreezePanesColumn .unobutton img {background-image: url($img-freezepanescolumn); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-freezepanesrow { #{$notdark} .unoFreezePanesRow .unobutton img {background-image: url($img-freezepanesrow); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
@@ -988,7 +1021,7 @@ $color-navigator-tab: false !default;
 	@if $img-chapternumberingdialog { #{$notdark} .unoChapterNumberingDialog .unobutton img {background-image: url($img-chapternumberingdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-namegroup { #{$notdark} .unoNameGroup .unobutton img {background-image: url($img-namegroup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-alttext { #{$notdark} .unoObjectTitleDescription .unobutton img {background-image: url($img-alttext); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
-	@if $img-themedialog { #{$notdark} .unoThemeDialog .unobutton img {background-image: url($img-themedialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-themedialog { #{$notdark} .unoThemeDialog .unobutton img, #{$notdark} .overflow-button-themes-group .unobutton img {background-image: url($img-themedialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-selectall { #{$notdark} .unoSelectAll .unobutton img {background-image: url($img-selectall); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-wrapoff { #{$notdark} .unoWrapOff .unobutton img {background-image: url($img-wrapoff); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-wrapon { #{$notdark} .unoWrapOn .unobutton img {background-image: url($img-wrapon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
@@ -1236,7 +1269,7 @@ $color-navigator-tab: false !default;
 
 	@if $img-hangingindent { #{$notdark} .unoHangingIndent .unobutton img {background-image: url($img-hangingindent); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-connectortoolbox { #{$notdark} .unoConnectorToolbox .unobutton img , #{$notdark} #insertconnectors img {background-image: url($img-connectortoolbox); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
-	@if $img-xlinecolor { #{$notdark} .unospan-XLineColor .unobutton img{background-image: url($img-xlinecolor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-xlinecolor { #{$notdark} .unospan-XLineColor .unobutton img, #{$notdark} .unoXLineColor .unobutton img {background-image: url($img-xlinecolor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-fillcolor { #{$notdark} .unospan-FillColor .unobutton img{background-image: url($img-fillcolor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-duplicatepage {#{$notdark} .unoDuplicatePage .unobutton img, #{$notdark} .unoduplicatepage .unobutton img , #{$notdark} #duplicatepage img, #{$notdark} .ui-combobox-entry.unoDuplicatePage img {content: url($img-duplicatepage)}}
 	@if $img-presentation { #{$notdark} .unoPresentation .unobutton img , #{$notdark} .unopresentation .unobutton img , #{$notdark} #presentation img {background-image: url($img-presentation) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
@@ -1300,4 +1333,37 @@ $color-navigator-tab: false !default;
 	@if $img-financialfunctions {#{$notdark} .FinancialFunctionsMenu .unobutton img {background-image: url($img-financialfunctions); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-fullscreenpresentation {#{$notdark} .fullscreen-presentation .unobutton img {background-image: url($img-fullscreenpresentation); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-presentationcurrentslide {#{$notdark} .presentation-currentslide .unobutton img {background-image: url($img-presentationcurrentslide); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-reinstatetrackedchange {#{$notdark} .unoReinstateTrackedChange .unobutton img {background-image: url($img-reinstatetrackedchange); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-distributecolumns {#{$notdark} .unoDistributeColumns .unobutton img {background-image: url($img-distributecolumns); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-distributerows {#{$notdark} .unoDistributeRows .unobutton img {background-image: url($img-distributerows); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-orientation {#{$notdark} .MenuOrientation .unobutton img {background-image: url($img-orientation); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-pagesize {#{$notdark} .MenuPageSizesWriter .unobutton img, #{$notdark} .MenuPageSizesCalc .unobutton img {background-image: url($img-pagesize); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-slidesize {#{$notdark} .unoSlideSize .unobutton img {background-image: url($img-slidesize); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-pagesetup {#{$notdark} .unoPageSetup .unobutton img {background-image: url($img-pagesetup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-toggleprintgrid {#{$notdark} .unoTogglePrintGrid .unobutton img {background-image: url($img-toggleprintgrid); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-selectsheetview {#{$notdark} .unoSelectSheetView .unobutton img {background-image: url($img-selectsheetview); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-newsheetview {#{$notdark} .unoNewSheetView .unobutton img {background-image: url($img-newsheetview); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-removesheetview {#{$notdark} .unoRemoveSheetView .unobutton img {background-image: url($img-removesheetview); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-exitsheetview {#{$notdark} .unoExitSheetView .unobutton img {background-image: url($img-exitsheetview); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-solverdialog {#{$notdark} .unoSolverDialog .unobutton img {background-image: url($img-solverdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-presenttoall {#{$notdark} .presenttoall .unobutton img {background-image: url($img-presenttoall); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-addtheme {#{$notdark} .unoAddTheme .unobutton img {background-image: url($img-addtheme); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-setoptimalcolumnwidth {#{$notdark} .unoSetOptimalColumnWidth .unobutton img {background-image: url($img-setoptimalcolumnwidth); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-setoptimalrowheight {#{$notdark} .unoSetOptimalRowHeight .unobutton img {background-image: url($img-setoptimalrowheight); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-formatungroup {#{$notdark} .unoFormatUngroup .unobutton img {background-image: url($img-formatungroup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-removecalctable {#{$notdark} .unoRemoveCalcTable .unobutton img {background-image: url($img-removecalctable); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-summarizewithpivot {#{$notdark} .unoSummarizeWithPivot .unobutton img {background-image: url($img-summarizewithpivot); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-videobackground {#{$notdark} .videobackground .unobutton img {background-image: url($img-videobackground); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-validatesidebara11y {#{$notdark} .validatesidebara11y .unobutton img {background-image: url($img-validatesidebara11y); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-validatedialogsa11y {#{$notdark} .validatedialogsa11y .unobutton img {background-image: url($img-validatedialogsa11y); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-formatarea {#{$notdark} .unoFormatArea .unobutton img {background-image: url($img-formatarea); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-tablecellbackgroundcolor {#{$notdark} .unoTableCellBackgroundColor .unobutton img {background-image: url($img-tablecellbackgroundcolor); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-autoformatredlineapply {#{$notdark} .unoAutoFormatRedlineApply .unobutton img {background-image: url($img-autoformatredlineapply); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-tracechangemode {#{$notdark} .unoTraceChangeMode .unobutton img {background-image: url($img-tracechangemode); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-acceptchanges {#{$notdark} .unoAcceptChanges .unobutton img {background-image: url($img-acceptchanges); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-updateslidelinks {#{$notdark} .updateslidelinks .unobutton img {background-image: url($img-updateslidelinks); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-shapesdeck {#{$notdark} .unoSidebarDeck\.ShapesDeck .unobutton img {background-image: url($img-shapesdeck); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertthreadedcomment {#{$notdark} .unoInsertThreadedComment .unobutton img, #{$notdark} .insertthreadedcomment .unobutton img {background-image: url($img-insertthreadedcomment); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-groupsparklines {#{$notdark} .unoGroupSparklines .unobutton img {background-image: url($img-groupsparklines); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-ungroupsparklines {#{$notdark} .unoUngroupSparklines .unobutton img {background-image: url($img-ungroupsparklines); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 }
