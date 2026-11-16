@@ -12,9 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-08 14:55+0000\n"
-"Last-Translator: Weslley Tavares "
-"<weslleytavars@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-15 11:10+0000\n"
+"Last-Translator: H2Oufoe <regularwater@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -22,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -5199,7 +5198,7 @@ msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr "Faça textos curtos"
+msgstr "Fazer marcadores"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
@@ -6177,7 +6176,7 @@ msgstr "Estilos"
 
 #: src/control/Control.NotebookbarWriter.js:1210
 msgid "Lists/Bullets"
-msgstr "Listas/Bullets"
+msgstr "Listas/Marcadores"
 
 #: src/control/Control.NotebookbarWriter.js:1498
 msgid "Header & Footer"
