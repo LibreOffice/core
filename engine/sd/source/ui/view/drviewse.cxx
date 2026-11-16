@@ -279,7 +279,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         if( pFuText )
         {
-            pFuText->SetPermanent(true);
+            // The text tool takes the request and keeps its setting for whether it stays on, so a
+            // click on an empty part of the slide afterwards selects.
             xFunc->ReceiveRequest( rReq );
 
             Invalidate();

@@ -9041,6 +9041,79 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateTextInRectangle)
     CPPUNIT_ASSERT_EQUAL(nObjectCount + 1, pSlide->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClickOnSlideAfterTextSlotInTextEdit)
+{
+    // A text slot that arrives while the text tool is on comes from Ctrl+Enter to the next text,
+    // from Enter on the selected text or from the insert text button. A click on an empty part
+    // of the slide after any of them ends the edit and makes no new text.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    // The third slide has a title and an outline, and is empty below the outline.
+    pXImpressDocument->setPart(2);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pSlide = pViewShell->GetActualPage();
+    SdrView* pView = pViewShell->GetView();
+    const size_t nObjectCount = pSlide->GetObjCount();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), nObjectCount);
+    SdrObject* pTitle = pSlide->GetObj(0);
+    SdrObject* pOutline = pSlide->GetObj(1);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::TitleText, pTitle->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::OutlineText, pOutline->GetObjIdentifier());
+
+    const auto mouseAt = [&](const Point& rPoint, int nClicks) {
+        const int nX = o3tl::toTwips(rPoint.X(), o3tl::Length::mm100);
+        const int nY = o3tl::toTwips(rPoint.Y(), o3tl::Length::mm100);
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, nClicks,
+                                          MOUSE_LEFT, 0);
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, nClicks,
+                                          MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+    const auto pressKey = [&](int nKeyCode) {
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, nKeyCode);
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, nKeyCode);
+        Scheduler::ProcessEventsToIdle();
+    };
+    const auto editedObject = [&]() -> SdrObject* { return pView->GetTextEditObject(); };
+    const auto editTitle = [&]() {
+        mouseAt(pTitle->GetCurrentBoundRect().Center(), 2);
+        CPPUNIT_ASSERT(pView->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(pTitle, editedObject());
+    };
+    // The outline ends at 17.1 cm and the slide is 21 cm high.
+    const auto clickEmptySlide = [&]() {
+        mouseAt(Point(14000, 19500), 1);
+        CPPUNIT_ASSERT(!pView->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
+        // A second click makes no text either.
+        mouseAt(Point(10000, 19500), 1);
+        CPPUNIT_ASSERT(!pView->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
+    };
+
+    // Ctrl+Enter goes to the next text.
+    editTitle();
+    pressKey(KEY_MOD1 | KEY_RETURN);
+    CPPUNIT_ASSERT_EQUAL(pOutline, editedObject());
+    clickEmptySlide();
+
+    // Escape leaves the title selected, and Enter edits it again.
+    editTitle();
+    pressKey(KEY_ESCAPE);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    pressKey(KEY_RETURN);
+    CPPUNIT_ASSERT_EQUAL(pTitle, editedObject());
+    pressKey(KEY_ESCAPE);
+    clickEmptySlide();
+
+    // The insert text button, pressed while a text is edited, changes nothing in view.
+    editTitle();
+    dispatchCommand(mxComponent, u".uno:Text"_ustr,
+                    comphelper::InitPropertySequence({ { u"CreateDirectly"_ustr,
+                                                         cpo::uno::Any(true) } }));
+    CPPUNIT_ASSERT_EQUAL(pTitle, editedObject());
+    clickEmptySlide();
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReservedObjectIds)
 {
     // a client creates shapes under ids reserved for its view, which no other object takes
