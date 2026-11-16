@@ -714,6 +714,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			SelectionSection.hideThePathPoints();
 
 		const worked = this.handlesOfTheGroups();
+		this.groups().forEach((group: HandleGroup) => group.followTheObjects());
 
 		/*
 			The objects are what the handles are worked out from, and a selection can be reported

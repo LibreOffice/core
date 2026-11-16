@@ -108,16 +108,43 @@ abstract class HandleGroup {
 	private static menuAnchor: HTMLElement | null = null;
 
 	/*
+		The callback of a menu of a handle. When an entry is chosen, chosen gets its id and answers
+		whether the menu stays open. Otherwise the menu and its submenus close. A button of a grid
+		in the menu reports a click with its command, which names the entry it stands for.
+	*/
+	private static menuCallback(
+		chosen?: (id: string) => boolean | void,
+	): JSDialogMenuCallback {
+		return (
+			_objectType: string,
+			eventType: string,
+			_object: unknown,
+			data: unknown,
+			entry: JSBuilder | MenuDefinition,
+		): boolean => {
+			let id: string;
+			if (eventType === 'selected') id = (entry as MenuDefinition)?.id ?? '';
+			else if (eventType === 'click' && typeof data === 'string') id = data;
+			else return false;
+
+			// An entry of a submenu closes the submenu as well as the menu.
+			if (chosen?.(id) !== true) JSDialog.CloseAllDropdowns();
+			return true;
+		};
+	}
+
+	/*
 		Opens a menu with these entries, the given number of core pixels below the handle. When
-		an entry is chosen, the menu and its submenus close, and chosen gets the id of the entry. A
-		menu that only shows text has no entry to choose and needs no chosen.
+		an entry is chosen, chosen gets its id and answers whether the menu stays open, and the
+		menu and its submenus close where it does not. A menu that only shows text has no entry to
+		choose and needs no chosen.
 	*/
 	protected openAMenuBelow(
 		handle: SelectionHandle,
 		below: number,
 		menuId: string,
 		entries: MenuDefinition[],
-		chosen?: (id: string) => void,
+		chosen?: (id: string) => boolean | void,
 	): void {
 		const container = document.getElementById('canvas-container');
 		if (!container) return;
@@ -139,30 +166,34 @@ abstract class HandleGroup {
 			menuId,
 			anchor,
 			entries,
-			(
-				_objectType: string,
-				eventType: string,
-				_object: unknown,
-				data: unknown,
-				entry: JSBuilder | MenuDefinition,
-			): boolean => {
-				// A button of a grid in the menu reports a click with its command, which names the
-				// entry it stands for.
-				let id: string;
-				if (eventType === 'selected') id = (entry as MenuDefinition)?.id ?? '';
-				else if (eventType === 'click' && typeof data === 'string') id = data;
-				else return false;
-
-				// An entry of a submenu closes the submenu as well as the menu.
-				JSDialog.CloseAllDropdowns();
-				chosen?.(id);
-				return true;
-			},
+			HandleGroup.menuCallback(chosen),
 			'',
 			false,
 			false,
 			true,
 		);
+	}
+
+	/// Shows new entries in a menu that openAMenuBelow opened and that is still open, in their
+	/// place. The entries keep their order, and chosen is as for openAMenuBelow.
+	protected static updateTheMenu(
+		menuId: string,
+		entries: MenuDefinition[],
+		chosen: (id: string) => boolean | void,
+	): void {
+		JSDialog.UpdateDropdown(
+			menuId,
+			entries,
+			HandleGroup.menuCallback(chosen),
+			false,
+			true,
+		);
+	}
+
+	/// Follows the objects of the selection after they were worked out again, as they arrive from
+	/// the engine among other times.
+	public followTheObjects(): void {
+		// Most groups show nothing beyond their handles, which are worked out anew anyway.
 	}
 
 	/// What the group is called, which is what marks a handle as belonging to it.
@@ -1734,6 +1765,13 @@ class ShapingHandles extends HandlesMovedOneByOne {
 	}
 }
 
+/// The way out of a point to tie a connector to and what the point is anchored to, as its menu
+/// shows them: the anchor is "none", or one of the nine names of the align attribute of ODF.
+interface TiePointMenuState {
+	wayOut: cool.ObjectGluePoint['wayOut'];
+	anchor: string;
+}
+
 /*
 	The points someone added to an object for a connector to tie itself to, and, while an end of a
 	connector is dragged onto an object, every place that end could land. The points of the
@@ -1845,16 +1883,102 @@ class TiePointHandles extends HandleGroup {
 		} as any as GridWidgetJSON;
 	}
 
+	/// The way out a point names and what it is anchored to, which the menu of the point shows.
+	private static stateOf(point: cool.ObjectGluePoint): TiePointMenuState {
+		return { wayOut: point.wayOut, anchor: TiePointHandles.anchorOf(point) };
+	}
+
 	/*
-		Opens the menu of a point, below the point: the way a connector comes into the object
-		there, what the point is anchored to, and taking the point away. The ways the point names
-		are checked, both of them for a point that names two sides facing each other, and none for
-		a point that names no way.
+		The menu of a point that is open, or null while none is. It names the point by its object
+		and its place in the list, and holds the entries the menu was opened with. It holds what
+		the marks of the menu show, which is the point as the engine reported it last. And it holds
+		what the choices made in the menu lead to: the engine answers a choice after a moment, so a
+		choice made before that answer follows on from the one before it. Waiting counts the
+		choices sent that no change of the point has answered yet. The groups are made again
+		whenever the objects arrive, so this is kept with the class.
+	*/
+	private static openMenu: {
+		objectId: number;
+		at: number;
+		entries: MenuDefinition[];
+		shown: TiePointMenuState;
+		asked: TiePointMenuState;
+		waiting: number;
+	} | null = null;
+
+	/// The line above the entries of the menu of a point.
+	private static header(): MenuDefinition {
+		return { id: 'gluepoint', type: 'header', text: _('Gluepoint') };
+	}
+
+	/// The Anchor submenu for a point with that anchor: None, then the grid of the nine places.
+	private static anchorItems(anchor: string): MenuDefinition[] {
+		return [
+			{
+				id: 'anchor-none',
+				type: 'action',
+				text: _('None'),
+				img: TiePointHandles.iconOfTheAnchor('none'),
+				checked: anchor === 'none',
+			},
+			{
+				id: 'anchor-grid',
+				type: 'json',
+				content: TiePointHandles.anchorGrid(anchor),
+			},
+		];
+	}
+
+	/*
+		The entries of the menu of a point that can be edited: the way a connector comes into the
+		object there, what the point is anchored to, and taking the point away. The ways the point
+		names are checked, both of them for a point that names two sides facing each other, and
+		none for a point that names no way.
 
 		The anchor is None for a point that keeps its share of the size of the object. Otherwise
 		it is one of nine places on the box of the object, laid out as a grid: a corner, the
 		middle of a side, or the middle of the box. The point keeps its distance from that place
-		when the object changes size.
+		when the object changes size. The Anchor entry itself shows a box, and the submenu shows
+		which place it is.
+	*/
+	private static entriesOf(point: cool.ObjectGluePoint): MenuDefinition[] {
+		const ways = TiePointHandles.waysOf(point.wayOut);
+		const side = (id: string, text: string, img: string): MenuDefinition => ({
+			id,
+			type: 'action',
+			text,
+			img,
+			checked: ways.includes(id),
+		});
+
+		return [
+			TiePointHandles.header(),
+			side('left', _('Left'), 'glueescapedirectionleft'),
+			side('right', _('Right'), 'glueescapedirectionright'),
+			side('top', _('Up'), 'glueescapedirectiontop'),
+			side('bottom', _('Down'), 'glueescapedirectionbottom'),
+			{ id: 'separator', type: 'separator' },
+			{
+				id: 'anchor',
+				type: 'menu',
+				text: _('Anchor'),
+				img: TiePointHandles.iconOfTheAnchor('center'),
+				items: TiePointHandles.anchorItems(TiePointHandles.anchorOf(point)),
+			},
+			{ id: 'separator', type: 'separator' },
+			{
+				id: 'delete',
+				type: 'action',
+				text: _('Delete'),
+				img: 'delete',
+			},
+		];
+	}
+
+	/*
+		Opens the menu of a point, below the point. The menu stays open while ways and anchors are
+		chosen in it, so several of them can be set one after the other, and its marks follow the
+		point as the engine answers. Delete closes it, as do Escape and a press outside it.
 
 		A point the shape makes from its own geometry keeps all of these and stays, so its menu
 		holds a line that says it cannot be edited.
@@ -1862,21 +1986,17 @@ class TiePointHandles extends HandleGroup {
 	private openTheMenuOf(handle: SelectionHandle): void {
 		const at = Number(handle.name.split('.')[1]);
 		const point = this.held(handle);
-		if (!point || !(at >= 0)) return;
-
-		const header: MenuDefinition = {
-			id: 'gluepoint',
-			type: 'header',
-			text: _('Gluepoint'),
-		};
+		const objects = this.selection.selectedObjects();
+		if (!point || !(at >= 0) || objects.length !== 1) return;
 
 		if (point.fromTheShape === true) {
+			TiePointHandles.openMenu = null;
 			this.openAMenuBelow(
 				handle,
 				0.5 * ShapeHandlesSection.gluePointSize(),
 				TiePointHandles.menuId,
 				[
-					header,
+					TiePointHandles.header(),
 					{
 						id: 'fromtheshape',
 						type: 'json',
@@ -1891,77 +2011,136 @@ class TiePointHandles extends HandleGroup {
 			return;
 		}
 
-		const ways = TiePointHandles.waysOf(point.wayOut);
-		const side = (id: string, text: string, img: string): MenuDefinition => ({
-			id,
-			type: 'action',
-			text,
-			img,
-			checked: ways.includes(id),
-		});
-		const anchor = TiePointHandles.anchorOf(point);
-
-		const entries: MenuDefinition[] = [
-			header,
-			side('left', _('Left'), 'glueescapedirectionleft'),
-			side('right', _('Right'), 'glueescapedirectionright'),
-			side('top', _('Up'), 'glueescapedirectiontop'),
-			side('bottom', _('Down'), 'glueescapedirectionbottom'),
-			{ id: 'separator', type: 'separator' },
-			{
-				id: 'anchor',
-				type: 'menu',
-				text: _('Anchor'),
-				img: TiePointHandles.iconOfTheAnchor(anchor),
-				items: [
-					{
-						id: 'anchor-none',
-						type: 'action',
-						text: _('None'),
-						img: TiePointHandles.iconOfTheAnchor('none'),
-						checked: anchor === 'none',
-					},
-					{
-						id: 'anchor-grid',
-						type: 'json',
-						content: TiePointHandles.anchorGrid(anchor),
-					},
-				],
-			},
-			{ id: 'separator', type: 'separator' },
-			{
-				id: 'delete',
-				type: 'action',
-				text: _('Delete'),
-				img: 'delete',
-			},
-		];
+		const entries = TiePointHandles.entriesOf(point);
+		TiePointHandles.openMenu = {
+			objectId: objects[0],
+			at,
+			entries,
+			shown: TiePointHandles.stateOf(point),
+			asked: TiePointHandles.stateOf(point),
+			waiting: 0,
+		};
 
 		this.openAMenuBelow(
 			handle,
 			0.5 * ShapeHandlesSection.gluePointSize(),
 			TiePointHandles.menuId,
 			entries,
-			(chosen: string): void => {
-				const anchorPrefix = 'anchor-';
-				if (chosen === 'delete') this.deleteThePoint(handle);
-				else if (chosen.startsWith(anchorPrefix)) {
-					// The anchor the point has already changes nothing and leaves no step to undo.
-					const to = chosen.substring(anchorPrefix.length);
-					if (to !== anchor)
-						this.sendAboutThePoint(
-							'setobjectgluepointanchor',
-							at,
-							'anchor=' + to,
-						);
-				} else if (TiePointHandles.sides.some((one) => one.name === chosen))
-					this.sendAboutThePoint(
-						'setobjectgluepointwayout',
-						at,
-						'way=' + TiePointHandles.switchedWay(ways, chosen),
-					);
-			},
+			(chosen: string): boolean => this.choose(handle, chosen),
 		);
+	}
+
+	/*
+		Sends what was chosen in the menu of the point that handle stands for, and answers whether
+		the menu stays open. A way switches that side on or off from the way the choices so far
+		lead to, and an anchor is sent unless the choices so far lead to it already, since it would
+		change nothing and leave a step to undo.
+	*/
+	private choose(handle: SelectionHandle, chosen: string): boolean {
+		const open = TiePointHandles.openMenu;
+		if (chosen === 'delete') {
+			TiePointHandles.openMenu = null;
+			this.deleteThePoint(handle);
+			return false;
+		}
+		if (!open) return false;
+
+		const anchorPrefix = 'anchor-';
+		if (chosen.startsWith(anchorPrefix)) {
+			const to = chosen.substring(anchorPrefix.length);
+			if (to !== open.asked.anchor) {
+				this.sendAboutThePoint(
+					'setobjectgluepointanchor',
+					open.at,
+					'anchor=' + to,
+				);
+				open.asked.anchor = to;
+				open.waiting++;
+			}
+			return true;
+		}
+
+		if (TiePointHandles.sides.some((one) => one.name === chosen)) {
+			const way = TiePointHandles.switchedWay(
+				TiePointHandles.waysOf(open.asked.wayOut),
+				chosen,
+			);
+			this.sendAboutThePoint('setobjectgluepointwayout', open.at, 'way=' + way);
+			// The render geometry leaves out the way of a point that names none.
+			open.asked.wayOut =
+				way === 'smart' ? undefined : (way as cool.ObjectGluePoint['wayOut']);
+			open.waiting++;
+			return true;
+		}
+
+		return false;
+	}
+
+	/*
+		Shows the point in its open menu as the engine reports it now. The menu shows the way out
+		in its own entries and the anchor in the submenu, so each of the two is shown again only
+		where it changed, and a submenu that is open stays open. The entries the menu was opened
+		with take the new ones in their place, so the submenu shows the new anchor when it opens
+		later. A point that is gone closes the menu.
+
+		Once no choice waits for its answer, the choices that follow start from the point as the
+		engine reports it, which takes in a change that came from elsewhere, an undo or another
+		user.
+	*/
+	public followTheObjects(): void {
+		const open = TiePointHandles.openMenu;
+		if (!open) return;
+		if (!JSDialog.IsDropdownOpen(TiePointHandles.menuId)) {
+			TiePointHandles.openMenu = null;
+			return;
+		}
+
+		// The object may not have arrived yet, and the update that brings it comes back here.
+		const object = RenderGeometrySection.objectOf(open.objectId);
+		if (!object) return;
+
+		const point = object.gluePoints?.[open.at];
+		if (!point || point.fromTheShape === true) {
+			TiePointHandles.openMenu = null;
+			JSDialog.CloseAllDropdowns();
+			return;
+		}
+
+		const now = TiePointHandles.stateOf(point);
+		const wayChanged = now.wayOut !== open.shown.wayOut;
+		const anchorChanged = now.anchor !== open.shown.anchor;
+		if (!wayChanged && !anchorChanged) return;
+
+		open.shown = now;
+		open.waiting = Math.max(0, open.waiting - 1);
+		if (open.waiting === 0) open.asked = { ...now };
+		open.entries.splice(
+			0,
+			open.entries.length,
+			...TiePointHandles.entriesOf(point),
+		);
+
+		const handle = GluePointHandles.ownPointsOf(open.objectId)[open.at];
+		const chosen = (id: string): boolean => this.choose(handle, id);
+
+		if (wayChanged)
+			TiePointHandles.updateTheMenu(
+				TiePointHandles.menuId,
+				open.entries,
+				chosen,
+			);
+
+		// A submenu is named by its menu and the place of its entry there.
+		const anchorAt = open.entries.findIndex(
+			(entry: MenuDefinition) => entry.id === 'anchor',
+		);
+		const submenu = TiePointHandles.menuId + '-' + anchorAt;
+		if (anchorChanged && JSDialog.IsDropdownOpen(submenu))
+			TiePointHandles.updateTheMenu(
+				submenu,
+				open.entries[anchorAt].items ?? [],
+				chosen,
+			);
 	}
 
 	/// Sends a change of the point at that place in the list of the selected object, with the

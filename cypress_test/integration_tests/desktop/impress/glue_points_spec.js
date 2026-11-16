@@ -147,13 +147,14 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		cy.cGet('#tie-point-menu-entry-1, #tie-point-menu-from-the-shape').should('be.visible');
 	}
 
-	// Chooses an entry of the menu of a point and waits until the engine has answered.
+	// Chooses an entry of the menu of a point and waits until the engine has answered. The menu
+	// stays open for another choice.
 	function chooseInPointMenu(win, entry) {
 		cy.cGet('#tie-point-menu-entry-' + entry).click();
-		cy.cGet('#tie-point-menu-entry-' + entry).should('not.exist');
 		cy.then(function() {
 			return helper.processToIdle(win);
 		});
+		cy.cGet('#tie-point-menu-entry-' + entry).should('be.visible');
 	}
 
 	// The Anchor entry of the menu of a point, and the None entry of its submenu.
@@ -167,13 +168,13 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 	}
 
 	// Chooses None or a place of the grid in the Anchor submenu and waits until the engine has
-	// answered.
+	// answered. The menu and the submenu stay open for another choice.
 	function chooseAnAnchor(win, selector) {
 		cy.cGet(selector).click();
-		cy.cGet(anchorEntry).should('not.exist');
 		cy.then(function() {
 			return helper.processToIdle(win);
 		});
+		cy.cGet(noAnchor).should('be.visible');
 	}
 
 	// The one point of the selected object, once the engine reports it as the check expects.
@@ -253,33 +254,31 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 			expect(gluePoints(win), 'points after the second press').to.have.length(1);
 		});
 
-		// Left, then Right beside it makes the pair that faces each other.
+		// The menu stays open, so the ways are chosen one after the other in it, and its marks
+		// follow the point. Left, then Right beside it makes the pair that faces each other.
 		openMenuOfPoint(win, 0);
 		chooseInPointMenu(win, 1);
 		expectWayOut(win, 'left');
-
-		openMenuOfPoint(win, 0);
 		cy.cGet('#tie-point-menu-entry-1').should('have.class', 'checked');
 		cy.cGet('#tie-point-menu-entry-2').should('not.have.class', 'checked');
+
 		chooseInPointMenu(win, 2);
 		expectWayOut(win, 'horizontal');
-
-		// Up on a point that leaves left and right turns it to leave upwards only.
-		openMenuOfPoint(win, 0);
 		cy.cGet('#tie-point-menu-entry-1').should('have.class', 'checked');
 		cy.cGet('#tie-point-menu-entry-2').should('have.class', 'checked');
+
+		// Up on a point that leaves left and right turns it to leave upwards only.
 		chooseInPointMenu(win, 3);
 		expectWayOut(win, 'top');
+		cy.cGet('#tie-point-menu-entry-3').should('have.class', 'checked');
 
 		// Up again takes the last way away, and the connector chooses its own way.
-		openMenuOfPoint(win, 0);
-		cy.cGet('#tie-point-menu-entry-3').should('have.class', 'checked');
 		chooseInPointMenu(win, 3);
 		expectWayOut(win, undefined);
+		cy.cGet('#tie-point-menu-entry-3').should('not.have.class', 'checked');
 
 		// A new point keeps its share of the size, so its anchor is None. Anchored to the upper
 		// left corner, the point keeps its distance from that corner and stays where it is.
-		openMenuOfPoint(win, 0);
 		openTheAnchors();
 		cy.cGet(noAnchor).should('have.class', 'checked');
 		chooseAnAnchor(win, '#tie-point-menu-anchor-top-left');
@@ -291,10 +290,9 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 			expect(point.y, 'down the object').to.be.closeTo(0.25, 0.01);
 		});
 
-		// The grid shows the corner the point is anchored to. None makes the point keep its
-		// share of the size again, measured from the middle, and it stays where it is.
-		openMenuOfPoint(win, 0);
-		openTheAnchors();
+		// The grid that stayed open shows the corner the point is anchored to. None makes the
+		// point keep its share of the size again, measured from the middle, and it stays where
+		// it is.
 		cy.cGet(noAnchor).should('not.have.class', 'checked');
 		cy.cGet('#tie-point-menu-anchor-top-left').should('have.class', 'selected');
 		cy.cGet('#tie-point-menu-anchor-top-left > button').should('have.attr', 'aria-pressed', 'true');
@@ -308,8 +306,23 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 			expect(point.y, 'down the object').to.be.closeTo(0.25, 0.01);
 		});
 
-		openMenuOfPoint(win, 0);
-		chooseInPointMenu(win, 8);
+		cy.cGet(noAnchor).should('have.class', 'checked');
+
+		// A place of the grid is chosen with Enter as well.
+		cy.cGet('#tie-point-menu-anchor-bottom-right').focus();
+		cy.realPress('Enter');
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		expectThePoint(win, function(point) {
+			expect(point.fromAcross, 'measured across from').to.equal('right');
+			expect(point.fromDown, 'measured down from').to.equal('bottom');
+		});
+		cy.cGet('#tie-point-menu-anchor-bottom-right').should('have.class', 'selected');
+
+		// Delete takes the point away and closes the menu.
+		cy.cGet('#tie-point-menu-entry-8').click();
+		cy.cGet('#tie-point-menu-entry-8').should('not.exist');
 		cy.wrap(null).should(function() {
 			expect(gluePoints(win), 'points after Delete').to.have.length(0);
 		});

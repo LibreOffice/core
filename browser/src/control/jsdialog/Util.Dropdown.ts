@@ -75,45 +75,32 @@ JSDialog.CreateDropdownEntriesId = function (id: string) {
 	return id + '-entries';
 };
 
-JSDialog.OpenDropdown = function (
+/*
+	The grid that lists the entries of a dropdown, as JSON, with what the dropdown needs to know of
+	it: whether the arrow keys move across it as a grid, the entry the focus starts on, and the
+	entry that is shown as text above the list. A grid that has a header names it as the text that
+	describes it.
+*/
+function _createEntriesGrid(
 	id: string,
-	popupParent:
-		string | (HTMLElement & { _onDropDown: (open: boolean) => void }),
 	entries: Array<ComboBoxEntry>,
-	innerCallback: JSDialogMenuCallback,
-	popupAnchor: string,
-	isSubmenu: boolean,
-	earlyCallbackCall?: boolean,
 	noDefaultSelection?: boolean,
-) {
-	const json = {
-		id: _createDropdownId(id),
-		type: 'dropdown',
-		isSubmenu: isSubmenu,
-		jsontype: 'dialog',
-		popupParent: popupParent,
-		popupAnchor: popupAnchor,
-		gridKeyboardNavigation: false,
-		cancellable: true,
-		children: [
-			{
-				id: JSDialog.CreateDropdownEntriesId(id),
-				type: 'grid',
-				allyRole: 'listbox',
-				cols: 1,
-				rows: entries.length,
-				children: [] as Array<WidgetJSON>,
-			} as GridWidgetJSON,
-		],
-	} as JSDialogJSON;
-
-	if (
-		popupParent &&
-		typeof popupParent !== 'string' &&
-		typeof popupParent._onDropDown === 'function'
-	) {
-		popupParent._onDropDown(true);
-	}
+): {
+	grid: GridWidgetJSON;
+	gridKeyboardNavigation: boolean;
+	focusId?: string;
+	header?: ComboBoxEntry;
+} {
+	const children: Array<WidgetJSON> = [];
+	const grid = {
+		id: JSDialog.CreateDropdownEntriesId(id),
+		type: 'grid',
+		allyRole: 'listbox',
+		cols: 1,
+		rows: entries.length,
+		children: children,
+	} as GridWidgetJSON;
+	let gridKeyboardNavigation = false;
 
 	const isChecked = function (unoCommand: string) {
 		const items = window.L.Map.THIS['stateChangeHandler'];
@@ -180,14 +167,14 @@ JSDialog.OpenDropdown = function (
 						JSDialog.CloseDropdown(id);
 					},
 				} as HtmlContentJson;
-				json.gridKeyboardNavigation = true;
+				gridKeyboardNavigation = true;
 				break;
 
 			// dropdown is a colorpicker
 			case 'colorpicker':
 				entry = entries[i];
 				// for color picker we have a "KeyboardGridNavigation" function defined separately to handle custom cases
-				json.gridKeyboardNavigation = true;
+				gridKeyboardNavigation = true;
 				break;
 
 			// allows to put regular JSDialog JSON into popup
@@ -208,7 +195,7 @@ JSDialog.OpenDropdown = function (
 					entry?.type === 'grid' ||
 					(entry as NewSlideLayoutEntryWidgetJSON)?.gridContent?.type === 'grid'
 				)
-					json.gridKeyboardNavigation = true;
+					gridKeyboardNavigation = true;
 				break;
 
 			// shown as text above the entries, outside the list
@@ -265,10 +252,10 @@ JSDialog.OpenDropdown = function (
 
 		if (entries[i].hidden) entry = null;
 
-		if (entry && json?.children?.length) json.children[0].children?.push(entry);
+		if (entry) children.push(entry);
 
-		if (entries[i].separatorAfter && json?.children?.length)
-			json.children[0].children?.push({
+		if (entries[i].separatorAfter)
+			children.push({
 				id: id + '-separator-' + i,
 				type: 'separator',
 				orientation: 'horizontal',
@@ -276,151 +263,198 @@ JSDialog.OpenDropdown = function (
 	}
 
 	const focusId = initialSelectedId || checkedFocusId;
-	if (focusId && json?.children?.length) {
-		json.init_focus_id = focusId;
-		(json.children[0] as ComboBoxEntry).initialSelectedId = focusId;
+	if (focusId)
+		(grid as WidgetJSON as ComboBoxEntry).initialSelectedId = focusId;
+
+	if (header)
+		grid.aria = { label: header.aria?.label, describedBy: id + '-header' };
+
+	return { grid, gridKeyboardNavigation, focusId, header };
+}
+
+/*
+	The callback of a dropdown with these entries. An entry with items opens them as a submenu
+	beside it, and only one submenu of a dropdown is open at a time. Which one is open is asked of
+	the open dropdowns, so a callback made again for new entries knows it as well.
+*/
+function _createDropdownCallback(
+	id: string,
+	targetEntries: Array<MenuDefinition>,
+	innerCallback: JSDialogMenuCallback,
+	earlyCallbackCall?: boolean,
+	noDefaultSelection?: boolean,
+): JSDialogCallback {
+	const subMenuIdOf = (pos: number) => id + '-' + pos;
+	const closeOpenSubMenus = () => {
+		targetEntries.forEach((entry: MenuDefinition, pos: number) => {
+			if (entry.items && JSDialog.IsDropdownOpen(subMenuIdOf(pos)))
+				JSDialog.CloseDropdown(subMenuIdOf(pos));
+		});
+	};
+
+	return function (
+		objectType: string,
+		eventType: string,
+		object: any,
+		data: any,
+		builder: JSBuilder,
+	) {
+		// The entry position comes as a number or a 'pos;...' string; other
+		// payloads belong to the widget inside the dropdown and carry no
+		// entry position.
+		let pos = -1;
+		if (typeof data === 'number') pos = data;
+		else if (typeof data === 'string')
+			pos = parseInt(data.substr(0, data.indexOf(';')));
+		const entry = targetEntries && pos >= 0 ? targetEntries[pos] : null;
+		if (entry) {
+			entry.pos = pos;
+		}
+		const subMenuId = subMenuIdOf(pos);
+
+		if (eventType === 'selected' || eventType === 'showsubmenu') {
+			if (entry && entry.items) {
+				// The submenu for this entry is already open; keep it.
+				if (JSDialog.IsDropdownOpen(subMenuId)) return;
+
+				closeOpenSubMenus();
+
+				// open submenu
+				// Use the entry's known ID to find the DOM element that will become
+				// popupParent. Positional lookup via querySelectorAll('.ui-grid-cell')
+				// is unreliable because the grid renderer inserts an empty placeholder
+				// cell at position 0, shifting every real entry by one slot.
+				const dropdown = JSDialog.GetDropdown(id);
+				const entryId = id + '-entry-' + pos;
+				const targetEntry = dropdown
+					? dropdown.querySelector('[id="' + entryId + '"]')
+					: null;
+
+				JSDialog.OpenDropdown(
+					subMenuId,
+					targetEntry,
+					entry.items,
+					innerCallback,
+					'top-end',
+					true,
+					earlyCallbackCall,
+					noDefaultSelection,
+				);
+
+				app.layoutingService.appendLayoutingTask(() => {
+					const dropdown = JSDialog.GetDropdown(subMenuId);
+					if (!dropdown) {
+						console.debug('Dropdown: missing :' + subMenuId);
+						return;
+					}
+					const container = dropdown.querySelector('.ui-grid');
+					JSDialog.MakeFocusCycle(container);
+					const focusables = JSDialog.GetFocusableElements(container);
+					if (focusables && focusables.length) focusables[0].focus();
+				});
+
+				return;
+			} else if (eventType === 'selected' && entry && _isLockedEntry(entry)) {
+				JSDialog.CloseAllDropdowns();
+				window.L.Map.THIS.openUnlockPopup(entry.uno);
+				return;
+			} else if (eventType === 'selected' && entry && entry.uno) {
+				if (earlyCallbackCall && innerCallback) {
+					innerCallback(objectType, eventType, object, data, entry);
+				} else {
+					const uno =
+						entry.uno.indexOf('.uno:') === 0 ? entry.uno : '.uno:' + entry.uno;
+					window.L.Map.THIS.sendUnoCommand(uno);
+				}
+				JSDialog.CloseAllDropdowns();
+				return;
+			} else {
+				app.console.debug(
+					'Dropdown: potential unhandled action: "' + eventType + '"',
+				);
+			}
+		} else if (eventType === 'hidedropdown') {
+			closeOpenSubMenus();
+			JSDialog.CloseDropdown(id);
+			return;
+		} else if (eventType === 'hideothersubmenu') {
+			closeOpenSubMenus();
+			return;
+		}
+
+		// for multi-level menus last parameter should be used to handle event (it contains selected entry)
+		// usually last param is builder see: JSDialogCallback
+		if (
+			!earlyCallbackCall &&
+			innerCallback &&
+			innerCallback(objectType, eventType, object, data, entry || builder)
+		)
+			return;
+
+		if (eventType === 'selected') JSDialog.CloseAllDropdowns();
+
+		// we want to send render request to the default callback -> no warn
+		if (eventType === 'render_entry') return;
+
+		app.console.warn(
+			'Dropdown: unhandled action: "' +
+				eventType +
+				'" for entry: "' +
+				JSON.stringify(entry) +
+				'"',
+		);
+	};
+}
+
+JSDialog.OpenDropdown = function (
+	id: string,
+	popupParent:
+		string | (HTMLElement & { _onDropDown: (open: boolean) => void }),
+	entries: Array<ComboBoxEntry>,
+	innerCallback: JSDialogMenuCallback,
+	popupAnchor: string,
+	isSubmenu: boolean,
+	earlyCallbackCall?: boolean,
+	noDefaultSelection?: boolean,
+) {
+	const content = _createEntriesGrid(id, entries, noDefaultSelection);
+
+	const json = {
+		id: _createDropdownId(id),
+		type: 'dropdown',
+		isSubmenu: isSubmenu,
+		jsontype: 'dialog',
+		popupParent: popupParent,
+		popupAnchor: popupAnchor,
+		gridKeyboardNavigation: content.gridKeyboardNavigation,
+		cancellable: true,
+		children: [content.grid],
+	} as JSDialogJSON;
+
+	if (
+		popupParent &&
+		typeof popupParent !== 'string' &&
+		typeof popupParent._onDropDown === 'function'
+	) {
+		popupParent._onDropDown(true);
 	}
 
-	if (header && json?.children?.length) {
-		const headerId = id + '-header';
-		const grid = json.children[0];
-		grid.aria = { label: header.aria?.label, describedBy: headerId };
+	if (content.focusId) json.init_focus_id = content.focusId;
+
+	if (content.header) {
 		json.children = [
 			{
 				id: id + '-content',
 				type: 'container',
 				vertical: true,
-				children: [_createHeader(headerId, header.text || ''), grid],
+				children: [
+					_createHeader(id + '-header', content.header.text || ''),
+					content.grid,
+				],
 			} as ContainerWidgetJSON,
 		];
 	}
 
-	const generateCallback = function (
-		targetEntries: Array<MenuDefinition>,
-	): JSDialogCallback {
-		let lastSubMenuOpened: string | null = null;
-		const closeLastSubMenu = () => {
-			if (!lastSubMenuOpened) return;
-			JSDialog.CloseDropdown(lastSubMenuOpened);
-			lastSubMenuOpened = null;
-		};
-
-		return function (
-			objectType: string,
-			eventType: string,
-			object: any,
-			data: any,
-			builder: JSBuilder,
-		) {
-			// The entry position comes as a number or a 'pos;...' string; other
-			// payloads belong to the widget inside the dropdown and carry no
-			// entry position.
-			let pos = -1;
-			if (typeof data === 'number') pos = data;
-			else if (typeof data === 'string')
-				pos = parseInt(data.substr(0, data.indexOf(';')));
-			const entry = targetEntries && pos >= 0 ? targetEntries[pos] : null;
-			if (entry) {
-				entry.pos = pos;
-			}
-			const subMenuId = object.id + '-' + pos;
-
-			if (eventType === 'selected' || eventType === 'showsubmenu') {
-				if (entry && entry.items) {
-					// The submenu for this entry is already open; keep it.
-					if (lastSubMenuOpened === subMenuId) return;
-
-					closeLastSubMenu();
-
-					// open submenu
-					// Use the entry's known ID to find the DOM element that will become
-					// popupParent. Positional lookup via querySelectorAll('.ui-grid-cell')
-					// is unreliable because the grid renderer inserts an empty placeholder
-					// cell at position 0, shifting every real entry by one slot.
-					const dropdown = JSDialog.GetDropdown(object.id);
-					const entryId = object.id + '-entry-' + pos;
-					const targetEntry = dropdown
-						? dropdown.querySelector('[id="' + entryId + '"]')
-						: null;
-
-					JSDialog.OpenDropdown(
-						subMenuId,
-						targetEntry,
-						entry.items,
-						generateCallback(entry.items),
-						'top-end',
-						true,
-						earlyCallbackCall,
-						noDefaultSelection,
-					);
-					lastSubMenuOpened = subMenuId;
-
-					app.layoutingService.appendLayoutingTask(() => {
-						const dropdown = JSDialog.GetDropdown(subMenuId);
-						if (!dropdown) {
-							console.debug('Dropdown: missing :' + subMenuId);
-							return;
-						}
-						const container = dropdown.querySelector('.ui-grid');
-						JSDialog.MakeFocusCycle(container);
-						const focusables = JSDialog.GetFocusableElements(container);
-						if (focusables && focusables.length) focusables[0].focus();
-					});
-
-					return;
-				} else if (eventType === 'selected' && entry && _isLockedEntry(entry)) {
-					JSDialog.CloseAllDropdowns();
-					window.L.Map.THIS.openUnlockPopup(entry.uno);
-					return;
-				} else if (eventType === 'selected' && entry && entry.uno) {
-					if (earlyCallbackCall && innerCallback) {
-						innerCallback(objectType, eventType, object, data, entry);
-					} else {
-						const uno =
-							entry.uno.indexOf('.uno:') === 0
-								? entry.uno
-								: '.uno:' + entry.uno;
-						window.L.Map.THIS.sendUnoCommand(uno);
-					}
-					JSDialog.CloseAllDropdowns();
-					return;
-				} else {
-					app.console.debug(
-						'Dropdown: potential unhandled action: "' + eventType + '"',
-					);
-				}
-			} else if (eventType === 'hidedropdown') {
-				closeLastSubMenu();
-				JSDialog.CloseDropdown(id);
-				return;
-			} else if (eventType === 'hideothersubmenu') {
-				closeLastSubMenu();
-				return;
-			}
-
-			// for multi-level menus last parameter should be used to handle event (it contains selected entry)
-			// usually last param is builder see: JSDialogCallback
-			if (
-				!earlyCallbackCall &&
-				innerCallback &&
-				innerCallback(objectType, eventType, object, data, entry || builder)
-			)
-				return;
-
-			if (eventType === 'selected') JSDialog.CloseAllDropdowns();
-
-			// we want to send render request to the default callback -> no warn
-			if (eventType === 'render_entry') return;
-
-			app.console.warn(
-				'Dropdown: unhandled action: "' +
-					eventType +
-					'" for entry: "' +
-					JSON.stringify(entry) +
-					'"',
-			);
-		};
-	};
 	if (!isSubmenu) {
 		window.L.Map.THIS.fire('closepopups'); // close popups if a dropdown menu is opened
 		window.L.Map.THIS.fire('dropdownopen', {
@@ -430,7 +464,48 @@ JSDialog.OpenDropdown = function (
 	}
 	window.L.Map.THIS.fire('jsdialog', {
 		data: json,
-		callback: generateCallback(entries),
+		callback: _createDropdownCallback(
+			id,
+			entries,
+			innerCallback,
+			earlyCallbackCall,
+			noDefaultSelection,
+		),
+	});
+};
+
+/*
+	Shows new entries in a dropdown that is open, in their place: the dropdown stays where it is,
+	a submenu of it stays open and the focus stays on the entry it was on. The entries keep the
+	order they had, and the callback and the flags are the ones the dropdown was opened with.
+	Nothing happens for a dropdown that is not open.
+*/
+JSDialog.UpdateDropdown = function (
+	id: string,
+	entries: Array<ComboBoxEntry>,
+	innerCallback: JSDialogMenuCallback,
+	earlyCallbackCall?: boolean,
+	noDefaultSelection?: boolean,
+) {
+	if (!JSDialog.IsDropdownOpen(id)) return;
+
+	// The focus is where the user left it, so no entry is selected on its own.
+	const content = _createEntriesGrid(id, entries, true);
+
+	window.L.Map.THIS.fire('jsdialogupdate', {
+		data: {
+			id: _createDropdownId(id),
+			jsontype: 'dialog',
+			action: 'update',
+			control: content.grid,
+		},
+		callback: _createDropdownCallback(
+			id,
+			entries,
+			innerCallback,
+			earlyCallbackCall,
+			noDefaultSelection,
+		),
 	});
 };
 

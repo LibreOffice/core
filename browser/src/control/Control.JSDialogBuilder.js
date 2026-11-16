@@ -1939,6 +1939,14 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			case 'Escape':
 				builder.map.focus();
 				break;
+			// A button whose container takes the focus, as in a grid of buttons, is pressed with
+			// Enter or Space on the container. Elsewhere the focus is on the button itself, which
+			// the browser presses.
+			case 'Enter':
+			case ' ':
+				if (e.target === div)
+					clickFunction(e);
+				break;
 			}
 		});
 
