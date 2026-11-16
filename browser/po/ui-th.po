@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-06 02:10+0000\n"
-"Last-Translator: กัญญาพัชร <nene.gungaput2547@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-11-07 14:51+0000\n"
+"Last-Translator: Kanok <triplepilot@tutamail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/th/>\n"
 "Language: th\n"
@@ -22,25 +21,25 @@ msgstr ""
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
-msgstr ""
+msgstr "คอนโซลผู้ดูแลระบบ"
 
 #: admin/admin.strings.js:16
 msgid "Settings"
-msgstr ""
+msgstr "การตั้งค่า"
 
 #: admin/admin.strings.js:17 src/control/Control.StatusBar.js:307
 #: src/control/Control.StatusBar.js:308
 #: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:39
 msgid "Overview"
-msgstr ""
+msgstr "ภาพรวม"
 
 #: admin/admin.strings.js:18
 msgid "(current)"
-msgstr ""
+msgstr "(ปัจจุบัน)"
 
 #: admin/admin.strings.js:19
 msgid "Analytics"
-msgstr ""
+msgstr "การวิเคราะห์ข้อมูล"
 
 #: admin/admin.strings.js:20
 msgid "History"
@@ -48,7 +47,7 @@ msgstr "ดี"
 
 #: admin/admin.strings.js:21
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 #: admin/admin.strings.js:22 src/control/Control.Menubar.ts:469
 #: src/control/Control.Menubar.ts:687 src/control/Control.Menubar.ts:859
@@ -57,114 +56,114 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:340
 #: src/control/Control.ServerAuditDialog.ts:341
 msgid "Server audit"
-msgstr ""
+msgstr "การตรวจสอบเซิร์ฟเวอร์"
 
 #: admin/admin.strings.js:23 src/control/Control.ServerAuditDialog.ts:359
 msgid "Status"
-msgstr ""
+msgstr "สถานะ"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "รายละเอียด"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:369
 msgid "No issues found"
-msgstr ""
+msgstr "ไม่พบปัญหาใด ๆ"
 
 #: admin/admin.strings.js:26
 msgid "Dashboard"
-msgstr ""
+msgstr "แดชบอร์ด"
 
 #: admin/admin.strings.js:27
 msgid "Users online"
-msgstr ""
+msgstr "ผู้ใช้ออนไลน์"
 
 #: admin/admin.strings.js:28
 msgid "User Name"
-msgstr ""
+msgstr "ชื่อผู้ใช้"
 
 #: admin/admin.strings.js:29
 msgid "Documents open"
-msgstr ""
+msgstr "เอกสารเปิดอยู่"
 
 #: admin/admin.strings.js:30 admin/src/AdminSocketOverview.js:82
 #: admin/src/AdminSocketOverview.js:131 admin/src/AdminSocketOverview.js:360
 msgid " user(s)."
-msgstr ""
+msgstr " ผู้ใช้"
 
 #: admin/admin.strings.js:31 admin/src/AdminSocketOverview.js:216
 #: admin/src/AdminSocketOverview.js:377
 msgid " document(s) open."
-msgstr ""
+msgstr " เอกสารเปิดอยู่"
 
 #: admin/admin.strings.js:32
 msgid "Number of Documents"
-msgstr ""
+msgstr "จำนวนของเอกสาร"
 
 #: admin/admin.strings.js:33
 msgid "Memory consumed"
-msgstr ""
+msgstr "หน่วยความจำที่ใช้ไป"
 
 #: admin/admin.strings.js:34
 msgid "Bytes sent"
-msgstr ""
+msgstr "ไบต์ถูกส่ง"
 
 #: admin/admin.strings.js:35
 msgid "Bytes received"
-msgstr ""
+msgstr "ไบต์ถูกรับ"
 
 #: admin/admin.strings.js:36
 msgid "PID"
-msgstr ""
+msgstr "PID"
 
 #: admin/admin.strings.js:37 admin/src/AdminClusterOverview.js:352
 #: src/control/Control.BackstageView.ts:896
 msgid "Document"
-msgstr ""
+msgstr "เอกสาร"
 
 #: admin/admin.strings.js:38
 msgid "Views"
-msgstr ""
+msgstr "การเข้าดู"
 
 #: admin/admin.strings.js:39
 msgid "Elapsed time"
-msgstr ""
+msgstr "เวลาที่ผ่านไป"
 
 #: admin/admin.strings.js:40
 msgid "Idle time"
-msgstr ""
+msgstr "เวลาว่าง"
 
 #: admin/admin.strings.js:41
 msgid "Modified"
-msgstr ""
+msgstr "ปรับแต่งแล้ว"
 
 #: admin/admin.strings.js:42
 msgid "Uploaded"
-msgstr ""
+msgstr "อัปโหลดแล้ว"
 
 #: admin/admin.strings.js:43
 msgid "WOPI host"
-msgstr ""
+msgstr "โฮสต์ WOPI"
 
 #: admin/admin.strings.js:44
 msgid "Kill"
-msgstr ""
+msgstr "กำจัด"
 
 #: admin/admin.strings.js:45
 msgid "Graphs"
-msgstr ""
+msgstr "กราฟ"
 
 #: admin/admin.strings.js:46
 msgid "Memory Graph"
-msgstr ""
+msgstr "กราฟหน่วยความจำ"
 
 #: admin/admin.strings.js:47
 msgid "CPU Graph"
-msgstr ""
+msgstr "กราฟ CPU"
 
 #: admin/admin.strings.js:48
 msgid "Network Graph"
-msgstr ""
+msgstr "กราฟเครื่อข่าย"
 
 #: admin/admin.strings.js:49
 #: admin/src/integrator/AdminIntegratorSettings.ts:2325
@@ -187,64 +186,64 @@ msgstr "บันทึก"
 
 #: admin/admin.strings.js:50
 msgid "Cache size of memory statistics"
-msgstr ""
+msgstr "ขนาดแคชของสถิติหน่วยความจำ"
 
 #: admin/admin.strings.js:51
 msgid "Time interval of memory statistics (in ms)"
-msgstr ""
+msgstr "ช่วงเวลาของสถิติหน่วยความจำ (เป็นมิลลิวินาที)"
 
 #: admin/admin.strings.js:52
 msgid "Cache size of CPU statistics"
-msgstr ""
+msgstr "ขนาดแคชของสถิติ CPU"
 
 #: admin/admin.strings.js:53
 msgid "Time interval of CPU statistics (in ms)"
-msgstr ""
+msgstr "ช่วงเวลาของสถิติ CPU (เป็นมิลลิวินาที)"
 
 #: admin/admin.strings.js:54 admin/src/AdminSocketOverview.js:100
 msgid "Kill session."
-msgstr ""
+msgstr "กำจัดเซสชัน"
 
 #: admin/admin.strings.js:55
 msgid "Maximum Document process virtual memory (in MB) - reduce only"
-msgstr ""
+msgstr "หน่วยความจําเสมือนของกระบวนการเอกสารสูงสุด (ใน MB) - ลดเฉพาะ"
 
 #: admin/admin.strings.js:56
 msgid "Maximum Document process stack memory (in KB) - reduce only"
-msgstr ""
+msgstr "หน่วยความจําสแตกของกระบวนการเอกสารสูงสุด (เป็น KB) - ลดเฉพาะ"
 
 #: admin/admin.strings.js:57
 msgid "Maximum file size allowed to write to disk (in MB) - reduce only"
-msgstr ""
+msgstr "ขนาดไฟล์สูงสุดที่อนุญาตให้เขียนลงดิสก์ (เป็น MB) - ลดเฉพาะ"
 
 #: admin/admin.strings.js:58
 msgid "Documents:"
-msgstr ""
+msgstr "เอกสาร:"
 
 #: admin/admin.strings.js:59
 msgid "Expired:"
-msgstr ""
+msgstr "หมดอายุแล้ว:"
 
 #: admin/admin.strings.js:60 admin/src/AdminSocketBase.js:61
 #: src/control/Control.Zotero.js:211
 msgid "Refresh"
-msgstr ""
+msgstr "รีเฟรช"
 
 #: admin/admin.strings.js:61
 msgid "Shutdown Server"
-msgstr ""
+msgstr "ปิดเซิร์ฟเวอร์"
 
 #: admin/admin.strings.js:62
 msgid "Server uptime"
-msgstr ""
+msgstr "เวลาทำงานของเซิร์ฟเวอร์"
 
 #: admin/admin.strings.js:63
 msgid "Refresh Log"
-msgstr ""
+msgstr "รีเฟรช Log"
 
 #: admin/admin.strings.js:64
 msgid "Channel Filter:"
-msgstr ""
+msgstr "ตัวกรองช่อง:"
 
 #: admin/admin.strings.js:65
 #: admin/src/integrator/AdminIntegratorSettings.ts:4801
@@ -254,15 +253,15 @@ msgstr ""
 #: src/control/Control.JSDialogBuilder.js:424
 #: src/control/Control.StatusBar.js:247 src/control/Control.StatusBar.js:252
 msgid "None"
-msgstr ""
+msgstr "ไม่มี"
 
 #: admin/admin.strings.js:66
 msgid "Set Log Levels"
-msgstr ""
+msgstr "ตั้งระดับ Log"
 
 #: admin/admin.strings.js:67
 msgid "Log Levels"
-msgstr ""
+msgstr "ระดับ Log"
 
 #: admin/admin.strings.js:68 src/control/Control.AIChatSidebar.ts:745
 #: src/control/Control.AlertDialog.js:32
@@ -274,19 +273,19 @@ msgstr ""
 #: src/app/Socket.ts:2833 src/app/Socket.ts:2844
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.div.button:52-8
 msgid "Close"
-msgstr ""
+msgstr "ปิด"
 
 #: admin/admin.strings.js:69
 msgid "Update Log Levels"
-msgstr ""
+msgstr "อัปเดตระดับ Log"
 
 #: admin/admin.strings.js:70
 msgid "Version Information"
-msgstr ""
+msgstr "ข้อมูลเวอร์ชั่น"
 
 #: admin/admin.strings.js:71
 msgid "License"
-msgstr ""
+msgstr "ใบอนุญาต"
 
 #: admin/admin.strings.js:72 src/control/Control.BackstageView.ts:227
 #: src/control/Control.Menubar.ts:471 src/control/Control.Menubar.ts:689
@@ -295,36 +294,36 @@ msgstr ""
 #: src/control/Control.Menubar.ts:1353 src/control/Control.Menubar.ts:1420
 #: src/control/Control.NotebookbarWriter.js:679
 msgid "About"
-msgstr ""
+msgstr "เกี่ยวกับ"
 
 #: admin/src/AdminClusterOverview.js:105
 msgid "CPU History"
-msgstr ""
+msgstr "ประวัติ CPU"
 
 #: admin/src/AdminClusterOverview.js:116
 msgid "Memory History"
-msgstr ""
+msgstr "ประวัติหน่วยความจำ"
 
 #: admin/src/AdminClusterOverview.js:356
 msgid "Memory"
-msgstr ""
+msgstr "หน่วยความจำ"
 
 #: admin/src/AdminClusterOverview.js:540
 msgid "Please wait kubernetes cluster is scaling..."
-msgstr ""
+msgstr "กรุณารอสักครู่ kubernetes cluster กำลังขยาย..."
 
 #: admin/src/AdminClusterOverview.js:550 admin/src/AdminSocketOverview.js:423
 msgid "Failed to set jwt authentication cookie over insecure connection"
-msgstr ""
+msgstr "ตั้งค่าคุกกี้ยืนยันตัวตน jwt ไม่สําเร็จเมื่อเชื่อมต่อไม่ปลอดภัย"
 
 #: admin/src/AdminClusterOverview.js:553 admin/src/AdminSocketOverview.js:427
 msgid "Failed to authenticate this session over protocol {0}"
-msgstr ""
+msgstr "ไม่สามารถยืนยันตัวตนของเซสชันนี้ผ่านโปรโตคอล{0}"
 
 #: admin/src/AdminClusterOverview.js:558 admin/src/AdminSocketOverview.js:432
 #: admin/src/AdminSocketServerAudit.js:99
 msgid "Warning"
-msgstr ""
+msgstr "คำเตือน"
 
 #: admin/src/AdminClusterOverview.js:560 admin/src/AdminSocketBase.js:63
 #: admin/src/AdminSocketBase.js:74 admin/src/AdminSocketOverview.js:108
@@ -358,7 +357,7 @@ msgstr ""
 #: src/slideshow/SlideShowPresenter.ts:1506
 #: src/control/Control.Extension.ts:2099
 msgid "OK"
-msgstr ""
+msgstr "โอเค"
 
 #: admin/src/AdminClusterOverview.js:561 admin/src/AdminSocketOverview.js:109
 #: admin/src/AdminSocketOverview.js:435 admin/src/AdminSocketSettings.js:48
@@ -388,36 +387,36 @@ msgstr "ยกเลิก"
 
 #: admin/src/AdminSocketAnalytics.js:266
 msgid "Received"
-msgstr ""
+msgstr "รับแล้ว"
 
 #: admin/src/AdminSocketAnalytics.js:270
 msgid "Sent"
-msgstr ""
+msgstr "ส่งแล้ว"
 
 #: admin/src/AdminSocketAnalytics.js:274
 msgid "Connections"
-msgstr ""
+msgstr "การเชื่อมต่อ"
 
 #: admin/src/AdminSocketBase.js:62
 msgid "Server has been shut down; please reload the page."
-msgstr ""
+msgstr "เซิร์ฟเวอร์ถูกปิดลง กรุณาโหลดหน้าใหม่"
 
 #: admin/src/AdminSocketBase.js:72 admin/src/AdminSocketBase.js:73
 msgid "Connection error"
-msgstr ""
+msgstr "เกิดปัญหาการเชื่อมต่อ"
 
 #: admin/src/AdminSocketOverview.js:106 admin/src/AdminSocketSettings.js:45
 msgid "Confirmation"
-msgstr ""
+msgstr "การยืนยัน"
 
 #: admin/src/AdminSocketOverview.js:107
 msgid "Are you sure you want to terminate this session?"
-msgstr ""
+msgstr "คุณต้องการกำจัดเซสชันนี้หรือไม่?"
 
 #: admin/src/AdminSocketServerAudit.js:35
 #: src/control/Control.ServerAuditDialog.ts:58
 msgid "Your WOPI server is not secure: SSL verification failed"
-msgstr ""
+msgstr "เซิร์ฟเวอร์ WOPI ของคุณไม่ปลอดภัย: ยืนยันตัวตน SSL ไม่สำเร็จ"
 
 #: admin/src/AdminSocketServerAudit.js:40
 #: src/control/Control.ServerAuditDialog.ts:72
@@ -425,6 +424,7 @@ msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
+"เอกสารไม่ได้ถูกจัดเก็บอย่างมีประสิทธิภาพ: ขาดความสามารถ เนมสเปซ และแลนด์ล็อค"
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:97
@@ -432,11 +432,13 @@ msgid ""
 "BPF filtering of potentially risky system calls (seccomp) is not enabled; a "
 "security hazard."
 msgstr ""
+"การกรอง BPF สําหรับการเรียกระบบที่อาจมีความเสี่ยง (seccomp) ไม่ได้เปิดใช้งานเนื่องจากเป็นอันต"
+"รายด้านความปลอดภัย"
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
-msgstr ""
+msgstr "ไม่มีการตั้งค่าโฮสต์ WOPI ไว้วางใจโฮสต์แรกที่เชื่อมต่อแทน"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -444,16 +446,17 @@ msgid ""
 "Your server is configured with insufficient hardware resources, which may "
 "lead to poor performance."
 msgstr ""
+"เซิร์ฟเวอร์ของคุณถูกตั้งค่าด้วยทรัพยากรณ์ฮาร์ดแวร์ที่ไม่เพียงพอ ซึ่งอาจทำให้ประสิทธิภาพการทำงานต่ำได้"
 
 #: admin/src/AdminSocketServerAudit.js:59
 #: src/control/Control.ServerAuditDialog.ts:136
 msgid "Slow Kit jail setup with copying, cannot bind-mount."
-msgstr ""
+msgstr "การตั้งค่า Slow Jail Kit ด้วยการคัดลอก ไม่สามารถผูกมัดได้"
 
 #: admin/src/AdminSocketServerAudit.js:60
 #: src/control/Control.ServerAuditDialog.ts:151
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
+msgstr "Fast Kit Jail ไม่ได้ตั้งค่าการผูกมัด"
 
 #: admin/src/AdminSocketServerAudit.js:64
 msgid ""
@@ -465,119 +468,121 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:6213
 #: src/control/Control.AIChatSidebar.ts:3907 src/map/handler/Map.WOPI.js:936
 msgid "Error"
-msgstr ""
+msgstr "เกิดข้อผิดพลาด"
 
 #: admin/src/AdminSocketServerAudit.js:115
 msgid "Learn more"
-msgstr ""
+msgstr "เรียนรู้เพิ่มเติม"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
-msgstr ""
+msgstr "คุณต้องการปิดเซิร์ฟเวอร์หรือไม่?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:475
 msgid "Shared Config URL is missing in initial variables."
-msgstr ""
+msgstr "URL การกําหนดค่าที่ใช้ร่วมกันหายไปในตัวแปรเริ่มต้น"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:479
 msgid "Access token is missing in initial variables."
-msgstr ""
+msgstr "โทเคนการเข้าถึงหายไปในตัวแปรเริ่มต้น"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:572
 msgid ""
 "Something went wrong while fetching setting file. Please try to refresh the "
 "page."
-msgstr ""
+msgstr "บางอย่างผิดพลาดขณะดึงไฟล์ตั้งค่า กรุณาลองรีเฟรชหน้าใหม่อีกครั้ง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:706
 msgid "Invalid request"
-msgstr ""
+msgstr "คำขอไม่ถูกต้อง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:707
 #: src/control/Control.AIChatSidebar.ts:2248
 msgid "Invalid API key"
-msgstr ""
+msgstr "กุญแจ API ไม่ถูกต้อง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:708
 #: src/control/Control.AIChatSidebar.ts:2249
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "กุญแจ API ขาดการอนุญาต"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
+"โฮสต์ AI นี้ไม่ได้อยู่ในรายชื่อโฮสต์ AI ที่เซิร์ฟเวอร์อนุญาต (ai.allowed_hosts) สอบถามผู้ดูแลระบ"
+"บของคุณเพื่อขออนุญาต"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2253
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "ครบอัตราจํากัด - กรุณารอสักครู่แล้วลองใหม่อีกครั้ง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:714
 #: src/control/Control.AIChatSidebar.ts:2254
 msgid "API server error - try again later"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดเซิร์ฟเวอร์ API - กรุณาลองใหม่ในภายหลัง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "บริการไม่สามารถใช้งานได้ชั่วคราว"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:788
 msgid "Signature Certificate"
-msgstr ""
+msgstr "ใบรับรองลายเซ็น"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:789
 msgid "Signature Key"
-msgstr ""
+msgstr "กุญแจลายเซ็น"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:790
 msgid "Signature CA"
-msgstr ""
+msgstr "ลายเซ็น CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:791
 #: admin/src/integrator/AdminIntegratorSettings.ts:795
 #: admin/src/integrator/AdminIntegratorSettings.ts:5030
 msgid "Provider"
-msgstr ""
+msgstr "ผู้ให้บริการ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:792
 #: admin/src/integrator/AdminIntegratorSettings.ts:796
 #: admin/src/integrator/AdminIntegratorSettings.ts:4765
 #: admin/src/integrator/AdminIntegratorSettings.ts:5126
 msgid "API key"
-msgstr ""
+msgstr "กุญแจ API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:793
 #: admin/src/integrator/AdminIntegratorSettings.ts:798
 msgid "Model"
-msgstr ""
+msgstr "โมเดลล์"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:794
 #: admin/src/integrator/AdminIntegratorSettings.ts:797
 msgid "Base URL"
-msgstr ""
+msgstr "URL ฐาน"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:799
 msgid "Image size"
-msgstr ""
+msgstr "ขนาดภาพ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:800
 msgid "Request timeout"
-msgstr ""
+msgstr "คำขอหมดเวลา"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
-msgstr ""
+msgstr "ID ไคลเอนต์"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:804
 msgid "Secret"
-msgstr ""
+msgstr "ซีเคร็ท"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid "In-document Screen Reader"
-msgstr ""
+msgstr "ตัวอ่านหน้าจอในเอกสาร"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:808
 #: src/control/Control.Menubar.ts:200 src/control/Control.Menubar.ts:539
@@ -589,146 +594,146 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:798
 #: src/control/Control.NotebookbarWriter.js:1917
 msgid "Dark Mode"
-msgstr ""
+msgstr "โหมดมืด"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:809
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "การตรวจสอบการสะกดคำอัตโนมัติ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:810
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "ใช้การตั้งค่าการซูมของเซิร์ฟเวอร์นี้"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:811
 msgid "Smart Zoom"
-msgstr ""
+msgstr "การซูมอัจฉริยะ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:812
 msgid "Default Zoom"
-msgstr ""
+msgstr "การซูมค่าเริ่มต้น"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:813
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "เลื่อนหน้าจออย่างลื่นไหล"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:814
 msgid "Compact layout"
-msgstr ""
+msgstr "รูปแบบกะทัดรัด"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:815
 msgid "Show status bar"
-msgstr ""
+msgstr "แสดงแถบสถานะ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:816
 #: src/control/Control.Menubar.ts:197 src/control/Control.Menubar.ts:531
 msgid "Show Ruler"
-msgstr ""
+msgstr "แสดงไม้บรรทัด"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:817
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "แสดงเครื่องหมายการจัดรูปแบบ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:818
 #: src/control/Control.NotebookbarWriter.js:2467
 #: src/control/Control.NotebookbarWriter.js:2483
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Show Comments"
-msgstr ""
+msgstr "แสดงความคิดเห็น"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:819
 msgid "Accessibility Checker"
-msgstr ""
+msgstr "ตัวตรวจสอบการเข้าถึง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:820
 #: src/control/Control.NavigatorPanel.ts:47
 #: src/control/Control.NavigatorPanel.ts:328
 msgid "Navigator"
-msgstr ""
+msgstr "ตัวนำทาง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:821
 msgid "Show Sidebar"
-msgstr ""
+msgstr "แสดงแถบด้านข้าง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:822
 msgid "Custom Animation"
-msgstr ""
+msgstr "ท่าทางปรับแต่งเอง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:825
 msgid "Style List"
-msgstr ""
+msgstr "รายการรูปแบบ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:828
 #: src/control/Control.NotebookbarCalc.js:1231
 #: src/control/Control.NotebookbarDraw.js:560
 #: src/control/Control.NotebookbarImpress.js:767
 msgid "Grid"
-msgstr ""
+msgstr "ตาราง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:829
 #: src/control/Control.BackstageView.ts:177
 msgid "Print"
-msgstr ""
+msgstr "พิมพ์"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:830
 #: src/control/backstage/CloudProviderKinds.ts:66
 #: src/control/backstage/CloudProviderKinds.ts:85
 msgid "Other"
-msgstr ""
+msgstr "อื่น ๆ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:831
 #: src/control/Control.NotebookbarImpress.js:776
 msgid "Show Grid"
-msgstr ""
+msgstr "แสดงตาราง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:832
 msgid "Snap to grid"
-msgstr ""
+msgstr "จับกับตาราง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:833
 msgid "Synchronize axes"
-msgstr ""
+msgstr "ซิงโครไนซ์แกน"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:834
 msgid "Empty Pages"
-msgstr ""
+msgstr "หน้าเปล่า"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:835
 msgid "Force Breaks"
-msgstr ""
+msgstr "บังคับแบ่ง"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:836
 #: src/control/Control.Menubar.ts:886 src/control/Control.TopToolbar.js:181
 #: src/control/jsdialog/Definitions.Menu.ts:1605
 msgid "All Sheets"
-msgstr ""
+msgstr "ชีททั้งหมด"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:837
 msgid "Content"
-msgstr ""
+msgstr "เนื้อหา"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:838
 msgid "Display"
-msgstr ""
+msgstr "การแสดงผล"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:839
 msgid "Show Boundaries"
-msgstr ""
+msgstr "แสดงขอบ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:840
 #: src/control/Control.BackstageView.ts:892
 msgid "Drawing"
-msgstr ""
+msgstr "การวาด"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:841
 #: src/control/Control.NotebookbarDraw.js:1274
 #: src/control/Control.NotebookbarDraw.js:1555
 #: src/control/Control.NotebookbarWriter.js:1334
 msgid "Page"
-msgstr ""
+msgstr "หน้า"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:842
 msgid "Fit to page"
-msgstr ""
+msgstr "พอดีกับหน้า"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:843
 msgid "Tile pages"
@@ -6478,7 +6483,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1660
 msgid "Follow the slide, wherever it moves"
-msgstr ""
+msgstr "ติดตามไสลด์ทุกที่ที่ขยับ"
 
 #: src/control/Control.SlideImportPane.tsx:1662
 msgid "Follow the slide number"
