@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-03 20:16+0000\n"
+"PO-Revision-Date: 2026-11-08 14:55+0000\n"
 "Last-Translator: Yaron Shahrabani <yaron@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/he/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -471,7 +471,7 @@ msgstr "שגיאה"
 
 #: admin/src/AdminSocketServerAudit.js:115
 msgid "Learn more"
-msgstr ""
+msgstr "מידע נוסף"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -493,38 +493,40 @@ msgstr "משהו השתבש במהלך משיכת קובץ ההגדרות. נא 
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:706
 msgid "Invalid request"
-msgstr ""
+msgstr "בקשה שגויה"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:707
 #: src/control/Control.AIChatSidebar.ts:2248
 msgid "Invalid API key"
-msgstr ""
+msgstr "מפתח API שגוי"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:708
 #: src/control/Control.AIChatSidebar.ts:2249
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "למפתח ה־API חסרות הרשאות"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
+"מארח הבינה המלאכותי הזה אינו ברשימת מאחרי הבינה המלאכותית המורשים "
+"(ai.allowed_hosts). נא לבקש מההנהלה לאשר אותו."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2253
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "הגבלת קצב - נא להמתין רגע ולנסות שוב"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:714
 #: src/control/Control.AIChatSidebar.ts:2254
 msgid "API server error - try again later"
-msgstr ""
+msgstr "שגיאת שרת API - נא לנסות שוב מאוחר יותר"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "השירות אינו זמין זמנית"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:788
 msgid "Signature Certificate"
@@ -541,43 +543,41 @@ msgstr "רשות אישורים של חתימה"
 #: admin/src/integrator/AdminIntegratorSettings.ts:791
 #: admin/src/integrator/AdminIntegratorSettings.ts:795
 #: admin/src/integrator/AdminIntegratorSettings.ts:5030
-#, fuzzy
 msgid "Provider"
-msgstr "ספק:"
+msgstr "ספק"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:792
 #: admin/src/integrator/AdminIntegratorSettings.ts:796
 #: admin/src/integrator/AdminIntegratorSettings.ts:4765
 #: admin/src/integrator/AdminIntegratorSettings.ts:5126
 msgid "API key"
-msgstr ""
+msgstr "מפתח API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:793
 #: admin/src/integrator/AdminIntegratorSettings.ts:798
-#, fuzzy
 msgid "Model"
-msgstr "מצב"
+msgstr "מודל"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:794
 #: admin/src/integrator/AdminIntegratorSettings.ts:797
 msgid "Base URL"
-msgstr ""
+msgstr "כתובת בסיס"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:799
 msgid "Image size"
-msgstr ""
+msgstr "גודל תמונה"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:800
 msgid "Request timeout"
-msgstr ""
+msgstr "הזמן שהוקצב לבקשה תם"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
-msgstr ""
+msgstr "מזהה לקוח"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:804
 msgid "Secret"
-msgstr ""
+msgstr "סוד"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid "In-document Screen Reader"
@@ -597,23 +597,23 @@ msgstr "מצב כהה"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:809
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "בדיקת איות אוטומטית"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:810
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "להשתמש בהגדרות התקריב של השרת הזה"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:811
 msgid "Smart Zoom"
-msgstr ""
+msgstr "תקריב חכם"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:812
 msgid "Default Zoom"
-msgstr ""
+msgstr "תקריב ברירת מחדל"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:813
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "גלילה חכמה"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:814
 msgid "Compact layout"
@@ -630,7 +630,7 @@ msgstr "הצגת סרגל"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:817
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "הצגת סימוני עיצוב"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:818
 #: src/control/Control.NotebookbarWriter.js:2467
@@ -712,11 +712,11 @@ msgstr "תוכן"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:838
 msgid "Display"
-msgstr ""
+msgstr "תצוגה"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:839
 msgid "Show Boundaries"
-msgstr ""
+msgstr "הצגת גבולות"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:840
 #: src/control/Control.BackstageView.ts:892
@@ -843,19 +843,19 @@ msgstr "עלון מימין לשמאל"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:876
 msgid "English"
-msgstr ""
+msgstr "אנגלית"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:877
 msgid "Hungarian"
-msgstr ""
+msgstr "הונגרית"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:878
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "פורטוגלית ברזילאית"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:879
 msgid "Russian"
-msgstr ""
+msgstr "רוסית"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1612
 msgid "Invalid JSON file"
@@ -899,7 +899,7 @@ msgstr "העלאת מונחון"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1656
 msgid "Document themes"
-msgstr ""
+msgstr "ערכות עיצוב של מסמכים"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1658
 msgid ""
