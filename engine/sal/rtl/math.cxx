@@ -631,16 +631,6 @@ bool rtl_math_approxEqual(double a, double b) noexcept
     return true;
 }
 
-static double rtl_math_log1p(double fValue) noexcept
-{
-#ifdef __APPLE__
-    if (fValue == -0.0)
-        return fValue; // macOS 10.8 libc returns 0.0 for -0.0
-#endif
-
-    return log1p(fValue);
-}
-
 /** improved accuracy of asinh for |x| large and for x near zero
     @see #i97605#
  */
@@ -657,7 +647,7 @@ double rtl_math_asinh(double fX) noexcept
     }
 
     if (fX < 0.125)
-        return fSign * rtl_math_log1p(fX + fX * fX / (1.0 + sqrt(1.0 + fX * fX)));
+        return fSign * std::log1p(fX + fX * fX / (1.0 + sqrt(1.0 + fX * fX)));
 
     if (fX < 1.25e7)
         return fSign * log(fX + sqrt(1.0 + fX * fX));
@@ -677,7 +667,7 @@ double rtl_math_acosh(double fX) noexcept
         return 0.0;
 
     if (fX < 1.1)
-        return rtl_math_log1p(fZ + sqrt(fZ * fZ + 2.0 * fZ));
+        return std::log1p(fZ + sqrt(fZ * fZ + 2.0 * fZ));
 
     if (fX < 1.25e7)
         return log(fX + sqrt(fX * fX - 1.0));
