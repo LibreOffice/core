@@ -1,3 +1,14 @@
+--- Cbc/src/CbcHeuristic.cpp
++++ Cbc/src/CbcHeuristic.cpp
+@@ -1143,7 +1143,7 @@
+               1.0e50,
+               false);
+             model.setSolutionCount(1);
+-            maximumSolutions++;
++            if (maximumSolutions < COIN_INT_MAX) maximumSolutions++;
+             delete[] bestSolution2;
+           }
+         } else {
 --- Cbc/src/CbcModel.cpp
 +++ Cbc/src/CbcModel.cpp
 @@ -7457,7 +7457,7 @@
