@@ -54,6 +54,12 @@ DocumentData * DocumentData::getIfExists(unsigned docId)
     return it != idToDocDataMap.end() ? it->second : nullptr;
 }
 
+COKitDocument * DocumentData::loadedKitDocument(unsigned docId)
+{
+    const DocumentData* document = getIfExists(docId);
+    return document ? document->loKitDocument : nullptr;
+}
+
 void DocumentData::deallocate(unsigned docId)
 {
     if (idToDocDataMap.find(docId) == idToDocDataMap.end())
