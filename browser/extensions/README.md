@@ -377,9 +377,8 @@ file://, where such a frame could not load its scripts, so there the frames keep
 the sandbox of a native extension's frame for now.
 
 An Apps Script project keeps its server code in `.gs` files in the web editor,
-which clasp writes out as `.js` on disk. Either is picked up; where a directory
-has both, the `.gs` files are taken as the project's and a `.js` is left to the
-sidebar to load in the browser.
+which clasp writes out as `.js` on disk. All `.gs` and `.js` files of the add-on's
+directory count as its code (even when there are files of both kinds).
 
 ### Menu-driven add-ons
 
