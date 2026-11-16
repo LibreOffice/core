@@ -242,4 +242,48 @@ describe('SlideMorph', function () {
 			[50, 0],
 		);
 	});
+
+	it('moves the words that read the same from one object into another', function () {
+		// A word of one line of text in slide twips, its box 100 wide and 50 high at x, y.
+		const word = (key: number, owner: number, text: string, x: number) => ({
+			key,
+			owner,
+			piece: {
+				text,
+				paragraph: 0,
+				frame: new cool.Matrix2D(100, 0, 0, 50, x, 0),
+				clip: new cool.Matrix2D(100, 0, 0, 50, x, 0),
+			},
+		});
+		const leavingPieces = [word(-1, 10, 'Hello', 0)];
+		const enteringPieces = [
+			word(-1, 20, 'World', 0),
+			word(-2, 20, 'Hello', 1000),
+		];
+		const morph = new SlideMorph(
+			slide([[10, 'Box', [0, 0, 500, 100]]]),
+			slide([[20, 'Box', [0, 0, 1500, 100]]]),
+			undefined,
+			undefined,
+			{ leaving: leavingPieces, entering: enteringPieces, splitsText: true },
+		);
+
+		// The objects stay where they are, without their text.
+		nodeassert.deepStrictEqual(morph.pairs, []);
+		nodeassert.deepStrictEqual(Array.from(morph.leavingSplit), [10]);
+		nodeassert.deepStrictEqual(Array.from(morph.enteringSplit), [20]);
+
+		const [leaving, entering] = morph.states(0.5);
+		nodeassert.deepStrictEqual(
+			moved(leaving.get(-1).transform, 0, 0),
+			[500, 0],
+		);
+		nodeassert.deepStrictEqual(
+			moved(entering.get(-2).transform, 1000, 0),
+			[500, 0],
+		);
+		// The word on the entering slide only shows from the middle of the morph on.
+		nodeassert.strictEqual(entering.get(-1).alpha, 0);
+		nodeassert.strictEqual(morph.states(1)[1].get(-1).alpha, 1);
+	});
 });

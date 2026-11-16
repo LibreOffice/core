@@ -201,6 +201,66 @@ describe('MorphMatcher', function () {
 		});
 	});
 
+	describe('geometry', function () {
+		it('moves and scales a frame along the way', function () {
+			const from = new cool.Matrix2D(1000, 0, 0, 500, 0, 0);
+			const to = new cool.Matrix2D(3000, 0, 0, 1500, 4000, 2000);
+
+			assertFrame(MorphMatcher.interpolate(from, to, 0), from.toArray());
+			assertFrame(
+				MorphMatcher.interpolate(from, to, 0.5),
+				[2000, 0, 0, 1000, 2000, 1000],
+			);
+			assertFrame(MorphMatcher.interpolate(from, to, 1), to.toArray());
+		});
+
+		it('turns the shorter way round', function () {
+			const turned = (angle: number) =>
+				new cool.Matrix2D(
+					Math.cos(angle) * 1000,
+					Math.sin(angle) * 1000,
+					-Math.sin(angle) * 1000,
+					Math.cos(angle) * 1000,
+					0,
+					0,
+				);
+			const from = turned((170 * Math.PI) / 180);
+			const to = turned((-170 * Math.PI) / 180);
+
+			// Halfway between 170 and -170 degrees is 180, not 0.
+			assertFrame(
+				MorphMatcher.interpolate(from, to, 0.5),
+				turned(Math.PI).toArray(),
+			);
+		});
+
+		it('takes a frame apart and puts it back together', function () {
+			const frame = new cool.Matrix2D(800, 600, -300, 1400, 25, 75);
+
+			assertFrame(
+				MorphMatcher.frameOf(MorphMatcher.partsOf(frame)),
+				frame.toArray(),
+			);
+		});
+
+		it('maps a frame onto itself with the identity', function () {
+			const frame = new cool.Matrix2D(1000, 200, -100, 500, 300, 400);
+			const mapping = MorphMatcher.mapping(frame, frame);
+
+			nodeassert.ok(mapping);
+			assertFrame(mapping, [1, 0, 0, 1, 0, 0]);
+		});
+
+		it('maps a frame onto another one', function () {
+			const source = new cool.Matrix2D(1000, 0, 0, 1000, 0, 0);
+			const target = new cool.Matrix2D(2000, 0, 0, 500, 100, 200);
+			const mapping = MorphMatcher.mapping(source, target);
+
+			nodeassert.ok(mapping);
+			assertFrame(source.then(mapping), target.toArray());
+		});
+	});
+
 	describe('text pieces', function () {
 		// A text box with one upright run of the text, at a font size of 100 twips with its
 		// baseline start at 1000, 2000, and the given glyph advances.

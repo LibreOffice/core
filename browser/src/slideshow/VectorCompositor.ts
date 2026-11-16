@@ -31,13 +31,23 @@
 declare var SlideShow: any;
 
 /// What a frame of a morph draws of one of its two slides: the layers, the state of each
-/// animation target, the video frames, and the animation targets that each object directly on
-/// the slide holds.
+/// animation target and piece of text, the video frames, the animation targets that each object
+/// directly on the slide holds, and the objects drawn without their text.
 interface MorphSide {
 	layers: VectorSlideLayers;
 	states: Map<number, cool.ObjectRenderState>;
 	videos: Map<number, ContentFrame>;
 	ownersByObject: Map<number, number[]>;
+	split: ReadonlySet<number>;
+}
+
+/// The pieces that the text of a slide is taken apart into for a morph: words or characters.
+type MorphPieceMode = 'words' | 'characters';
+
+/// The pieces of the text of a slide, as the morph pairs them and as the layers draw them.
+interface SlideTextPieces {
+	entries: MorphSlidePiece[];
+	layerPieces: SlidePiece[];
 }
 
 class VectorCompositor extends SlideCompositor {
@@ -74,6 +84,11 @@ class VectorCompositor extends SlideCompositor {
 	private shownSlideHash: string | null = null;
 	// The pairs of objects of the morph that runs, null outside a morph.
 	private morph: SlideMorph | null = null;
+	// The pieces of the text of each tree, by the kind of piece.
+	private textPieces = new WeakMap<
+		cool.VectorPrimitivesData,
+		Map<MorphPieceMode, SlideTextPieces>
+	>();
 
 	constructor(slideShowPresenter: SlideShowPresenter) {
 		super(slideShowPresenter);
@@ -347,23 +362,97 @@ class VectorCompositor extends SlideCompositor {
 
 		// A slide that a morph leaves or enters draws each object directly on it on its own, so
 		// the morph can move it.
-		if (this._isInMorph(slideHash))
+		if (this._morphsOf(slideHash).length)
 			for (const id of SlideMorph.topObjects(data))
 				if (!targets.has(id)) targets.set(id, []);
 		return targets;
 	}
 
-	// True when the slide has a morph into it, or the slide after it has.
-	private _isInMorph(slideHash: string): boolean {
+	// The morphs into the slide and out of it, the one into it first.
+	private _morphsOf(slideHash: string): TransitionFilterInfo[] {
+		const morphs: TransitionFilterInfo[] = [];
 		const slideInfo = this._metaPresentation.getSlideInfo(slideHash);
-		if (!slideInfo) return false;
-		if (TransitionFilterInfo.fromSlideInfo(slideInfo)?.isMorph()) return true;
+		if (!slideInfo) return morphs;
+		const into = TransitionFilterInfo.fromSlideInfo(slideInfo);
+		if (into?.isMorph()) morphs.push(into);
 		const nextInfo = slideInfo.next
 			? this._metaPresentation.getSlideInfo(slideInfo.next)
 			: null;
-		return (
-			!!nextInfo && !!TransitionFilterInfo.fromSlideInfo(nextInfo)?.isMorph()
-		);
+		const out = nextInfo ? TransitionFilterInfo.fromSlideInfo(nextInfo) : null;
+		if (out?.isMorph()) morphs.push(out);
+		return morphs;
+	}
+
+	// The pieces that a morph takes the text of the slide apart into, null for a morph that
+	// keeps the text with its objects.
+	private static _pieceModeOf(
+		morph: TransitionFilterInfo | null | undefined,
+	): MorphPieceMode | null {
+		switch (morph?.transitionSubtype) {
+			case TransitionSubType.MORPHBYWORD:
+				return 'words';
+			case TransitionSubType.MORPHBYCHARACTER:
+				return 'characters';
+			default:
+				return null;
+		}
+	}
+
+	// The pieces of the slide's layers outside a morph: those of the morph into the slide, so
+	// the layers painted ahead for the next slide are the ones that the morph into it draws,
+	// else those of the morph out of it.
+	private _defaultPieceMode(slideHash: string): MorphPieceMode | null {
+		for (const morph of this._morphsOf(slideHash)) {
+			const mode = VectorCompositor._pieceModeOf(morph);
+			if (mode) return mode;
+		}
+		return null;
+	}
+
+	// The kind number of a table, whose cells each hold a text of their own.
+	private static readonly tableKind = 35;
+
+	// The pieces of the text of each object directly on the slide. A table keeps its text whole,
+	// and so does an object that an animation moves a paragraph of. targets are the animation
+	// targets of the slide with the paragraphs that move on their own.
+	private _slidePieces(
+		data: cool.VectorPrimitivesData,
+		mode: MorphPieceMode,
+		targets: Map<number, number[]>,
+	): SlideTextPieces {
+		let byMode = this.textPieces.get(data);
+		if (!byMode) {
+			byMode = new Map();
+			this.textPieces.set(data, byMode);
+		}
+		const known = byMode.get(mode);
+		if (known) return known;
+
+		const entries: MorphSlidePiece[] = [];
+		for (const id of SlideMorph.topObjects(data)) {
+			const object = data.objects.get(id);
+			if (
+				!object ||
+				object.emptyPlaceholder ||
+				object.objectKind === VectorCompositor.tableKind ||
+				targets.get(id)?.length
+			)
+				continue;
+			const text = MorphMatcher.textPiecesOf(object, mode === 'characters');
+			for (const piece of text?.pieces ?? [])
+				entries.push({ key: -(entries.length + 1), owner: id, piece });
+		}
+		const pieces: SlideTextPieces = {
+			entries,
+			layerPieces: entries.map((entry) => ({
+				key: entry.key,
+				owner: entry.owner,
+				paragraph: entry.piece.paragraph,
+				frame: entry.piece.clip,
+			})),
+		};
+		byMode.set(mode, pieces);
+		return pieces;
 	}
 
 	// The frame each video shows now, by the object id of its shape. The
@@ -425,20 +514,48 @@ class VectorCompositor extends SlideCompositor {
 		const enteringData = this._drawableData(enteringHash);
 		if (!leavingData || !enteringData) return false;
 
+		// Both slides are drawn with the pieces of this morph.
+		const mode = VectorCompositor._pieceModeOf(
+			TransitionFilterInfo.fromSlideInfo(
+				this._metaPresentation.getSlideInfo(enteringHash),
+			),
+		);
 		this._dropDisposedLayers();
-		const leavingLayers = this._slideLayers(context, leavingHash, leavingData);
+		const leavingLayers = this._slideLayers(
+			context,
+			leavingHash,
+			leavingData,
+			mode,
+		);
 		const enteringLayers = this._slideLayers(
 			context,
 			enteringHash,
 			enteringData,
+			mode,
 		);
 		if (!leavingLayers || !enteringLayers) return false;
-		if (!this.morph?.isBetween(leavingData, enteringData))
+		const text: MorphTextPieces | undefined = mode
+			? {
+					leaving: this._slidePieces(
+						leavingData,
+						mode,
+						this._animatedTargets(leavingHash, leavingData),
+					).entries,
+					entering: this._slidePieces(
+						enteringData,
+						mode,
+						this._animatedTargets(enteringHash, enteringData),
+					).entries,
+					splitsText: true,
+				}
+			: undefined;
+		if (!this.morph?.isBetween(leavingData, enteringData, text))
 			this.morph = new SlideMorph(
 				leavingData,
 				enteringData,
 				this._hiddenObjects(leavingHash, leavingData),
 				this._hiddenObjects(enteringHash, enteringData),
+				text,
 			);
 
 		const [leavingMoves, enteringMoves] = this.morph.states(time);
@@ -447,12 +564,16 @@ class VectorCompositor extends SlideCompositor {
 			leavingHash,
 			leavingData,
 			leavingMoves,
+			text?.leaving,
+			this.morph.leavingSplit,
 		);
 		const entering = this._morphSide(
 			enteringLayers,
 			enteringHash,
 			enteringData,
 			enteringMoves,
+			text?.entering,
+			this.morph.enteringSplit,
 		);
 
 		// Both backgrounds are drawn under the objects of both slides, so the background coming
@@ -481,7 +602,13 @@ class VectorCompositor extends SlideCompositor {
 				for (const owner of side.ownersByObject.get(steps[index].id) ?? [])
 					owners.add(owner);
 			if (!side.layers.begin(null, false)) return false;
-			side.layers.drawLayers(side.states, side.videos, owners);
+			side.layers.drawLayers(
+				side.states,
+				side.videos,
+				owners,
+				undefined,
+				side.split,
+			);
 			side.layers.end();
 		}
 		return true;
@@ -503,12 +630,15 @@ class VectorCompositor extends SlideCompositor {
 
 	// What a frame of a morph draws of one slide. Each animation target is drawn in the state
 	// its animation gives it, carried along by the move of the object directly on the slide
-	// that holds it.
+	// that holds it. A piece of text is drawn where its move takes it, in the place and the
+	// opacity that the animation gives its object.
 	private _morphSide(
 		layers: VectorSlideLayers,
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
 		moves: Map<number, cool.ObjectRenderState>,
+		pieces: MorphSlidePiece[] | undefined,
+		split: ReadonlySet<number>,
 	): MorphSide {
 		const animations = this._drawStates(slideHash, data);
 		const states = new Map<number, cool.ObjectRenderState>();
@@ -524,11 +654,29 @@ class VectorCompositor extends SlideCompositor {
 				VectorCompositor._overMove(moves.get(top), animations?.get(owner)),
 			);
 		}
+		for (const entry of pieces ?? []) {
+			const move = moves.get(entry.key);
+			if (!move) continue;
+			const animation = animations?.get(entry.owner);
+			states.set(
+				entry.key,
+				VectorCompositor._overMove(
+					move,
+					animation && {
+						hidden: animation.hidden,
+						transform: animation.transform,
+						alpha: animation.alpha,
+						clip: animation.clip,
+					},
+				),
+			);
+		}
 		return {
 			layers,
 			states,
 			videos: this._videoFrames(slideHash, data),
 			ownersByObject,
+			split,
 		};
 	}
 
@@ -594,6 +742,7 @@ class VectorCompositor extends SlideCompositor {
 		context: RenderContextGl,
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
+		pieceMode: MorphPieceMode | null = this._defaultPieceMode(slideHash),
 	): VectorSlideLayers | null {
 		// The layers are drawn at the size of the canvas of the context, so the text on a smaller
 		// canvas is drawn for its own size.
@@ -608,13 +757,18 @@ class VectorCompositor extends SlideCompositor {
 					) ?? null)
 				: null;
 
+		const targets = this._animatedTargets(slideHash, data);
+		const pieces = pieceMode
+			? this._slidePieces(data, pieceMode, targets).layerPieces
+			: null;
+
 		let sets = this.layers.get(context);
 		if (!sets) {
 			sets = [];
 			this.layers.set(context, sets);
 		}
 		const index = sets.findIndex((layers) =>
-			layers.holds(slideHash, data, master, width, height),
+			layers.holds(slideHash, data, master, width, height, pieces),
 		);
 		let layers: VectorSlideLayers;
 		if (index >= 0) {
@@ -632,11 +786,12 @@ class VectorCompositor extends SlideCompositor {
 			layers.build(
 				slideHash,
 				data,
-				this._animatedTargets(slideHash, data),
+				targets,
 				width,
 				height,
 				master,
 				masterVideoIds,
+				pieces,
 			);
 		}
 		sets.unshift(layers);

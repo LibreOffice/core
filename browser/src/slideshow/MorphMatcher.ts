@@ -55,6 +55,18 @@ interface MorphPieceMatch {
 	enteringOnly: number[];
 }
 
+/// A frame taken apart. The x axis turns by rotation and is scaled by scaleX. The y axis leans
+/// over by shear along the x axis and is scaled by scaleY, which is negative for a frame that is
+/// mirrored.
+interface MorphFrameParts {
+	x: number;
+	y: number;
+	rotation: number;
+	scaleX: number;
+	scaleY: number;
+	shear: number;
+}
+
 class MorphMatcher {
 	/// The name prefix that pairs two objects by name alone, whatever kind they are.
 	public static readonly forcedNamePrefix = '!!';
@@ -242,6 +254,72 @@ class MorphMatcher {
 			(one.height ?? 0) / 2 -
 			((other.y ?? 0) + (other.height ?? 0) / 2);
 		return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+	}
+
+	/// Take a frame apart into its position, rotation, scales and shear.
+	public static partsOf(frame: cool.Matrix2D): MorphFrameParts {
+		const scaleX = frame.lengthOfXAxis();
+		const rotation = scaleX ? frame.rotation() : 0;
+		const cosine = Math.cos(rotation);
+		const sine = Math.sin(rotation);
+		// The y axis measured along the turned x axis and across it.
+		const along = frame.c * cosine + frame.d * sine;
+		const scaleY = frame.d * cosine - frame.c * sine;
+		return {
+			x: frame.e,
+			y: frame.f,
+			rotation,
+			scaleX,
+			scaleY,
+			shear: scaleY ? along / scaleY : 0,
+		};
+	}
+
+	/// The frame that the parts make up.
+	public static frameOf(parts: MorphFrameParts): cool.Matrix2D {
+		const cosine = Math.cos(parts.rotation);
+		const sine = Math.sin(parts.rotation);
+		const along = parts.shear * parts.scaleY;
+		return new cool.Matrix2D(
+			parts.scaleX * cosine,
+			parts.scaleX * sine,
+			along * cosine - parts.scaleY * sine,
+			along * sine + parts.scaleY * cosine,
+			parts.x,
+			parts.y,
+		);
+	}
+
+	/// The frame at time t between from, at 0, and to, at 1. Each part moves on its own, and the
+	/// rotation turns the shorter way round.
+	public static interpolate(
+		from: cool.Matrix2D,
+		to: cool.Matrix2D,
+		t: number,
+	): cool.Matrix2D {
+		const start = MorphMatcher.partsOf(from);
+		const end = MorphMatcher.partsOf(to);
+		let turn = end.rotation - start.rotation;
+		while (turn > Math.PI) turn -= 2 * Math.PI;
+		while (turn <= -Math.PI) turn += 2 * Math.PI;
+		const between = (one: number, other: number) => one + (other - one) * t;
+		return MorphMatcher.frameOf({
+			x: between(start.x, end.x),
+			y: between(start.y, end.y),
+			rotation: start.rotation + turn * t,
+			scaleX: between(start.scaleX, end.scaleX),
+			scaleY: between(start.scaleY, end.scaleY),
+			shear: between(start.shear, end.shear),
+		});
+	}
+
+	/// The transform that carries what is drawn in the frame source onto the frame target, or
+	/// null when source flattens the unit square.
+	public static mapping(
+		source: cool.Matrix2D,
+		target: cool.Matrix2D,
+	): cool.Matrix2D | null {
+		return source.invert()?.then(target) ?? null;
 	}
 
 	// The box of a piece reaches this far above the baseline and below it, in units of the font

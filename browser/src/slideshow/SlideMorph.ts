@@ -15,7 +15,28 @@
  * the objects of the entering slide. Both copies of a pair move, turn and resize together from
  * where the object is on the leaving slide to where it is on the entering one, while the entering
  * copy fades in over the leaving one. An object without a pair fades out, or in.
+ *
+ * A morph by word or by character pairs no objects. The objects stay where they are and fade out
+ * or in without their text, while a word or a character that reads the same on both slides moves
+ * from its place on the leaving slide to its place on the entering one, also from one object into
+ * another. A piece on one slide only fades out or in where it is.
  */
+
+/// A piece of the text of an object on one slide of a morph, and the key that its layer takes its
+/// state by.
+interface MorphSlidePiece {
+	key: number;
+	owner: number;
+	piece: MorphPiece;
+}
+
+/// The pieces of the texts of the two slides of a morph. splitsText is true for a morph by word
+/// or by character, which moves the pieces across the slides and no objects.
+interface MorphTextPieces {
+	leaving: MorphSlidePiece[];
+	entering: MorphSlidePiece[];
+	splitsText: boolean;
+}
 
 /// The object ids of a leaving object and of the entering object it becomes.
 interface MorphPair {
@@ -48,30 +69,40 @@ class SlideMorph {
 	/// with the leaving copy of a pair right under its entering copy, and each object of the
 	/// leaving slide alone under the next leaving copy that follows it there.
 	public readonly paintOrder: MorphStep[] = [];
+	/// The objects of each slide that are drawn without their text, while their pieces draw it.
+	public readonly leavingSplit = new Set<number>();
+	public readonly enteringSplit = new Set<number>();
 
 	private readonly leaving: cool.VectorPrimitivesData;
 	private readonly entering: cool.VectorPrimitivesData;
+	private readonly text: MorphTextPieces | undefined;
 	// The place of each pair on the leaving and on the entering slide, by position in pairs.
 	private readonly places: [MorphPlace, MorphPlace][] = [];
+	// The pieces that read the same on both slides, and the pieces on one slide only.
+	private readonly piecePairs: [MorphSlidePiece, MorphSlidePiece][] = [];
+	private readonly leavingLonePieces: MorphSlidePiece[] = [];
+	private readonly enteringLonePieces: MorphSlidePiece[] = [];
 
 	/// leavingHidden and enteringHidden hold the objects that an animation holds hidden on
-	/// either slide, which take no part in the morph.
+	/// either slide, which take no part in the morph. text holds the pieces of the texts of the
+	/// objects of both slides.
 	constructor(
 		leaving: cool.VectorPrimitivesData,
 		entering: cool.VectorPrimitivesData,
 		leavingHidden?: Set<number>,
 		enteringHidden?: Set<number>,
+		text?: MorphTextPieces,
 	) {
 		this.leaving = leaving;
 		this.entering = entering;
+		this.text = text;
 		const leavingObjects = MorphMatcher.candidates(leaving, leavingHidden);
 		const enteringObjects = MorphMatcher.candidates(entering, enteringHidden);
-		const match = MorphMatcher.match(
-			leaving,
-			entering,
-			leavingHidden,
-			enteringHidden,
-		);
+		const match: MorphMatch = text?.splitsText
+			? { pairs: [], leavingOnly: [], enteringOnly: [] }
+			: MorphMatcher.match(leaving, entering, leavingHidden, enteringHidden);
+		if (text?.splitsText)
+			this._matchPieces(text, leavingObjects, enteringObjects);
 
 		// The pairs in the paint order of the leaving slide.
 		const partners = new Map<number, number>();
@@ -114,12 +145,51 @@ class SlideMorph {
 				this.paintOrder.push({ leaving: true, id: leavingObjects[next] });
 	}
 
-	/// True when the morph goes from the leaving tree to the entering tree.
+	/// True when the morph goes from the leaving tree to the entering tree, with the pieces of
+	/// text given.
 	public isBetween(
 		leaving: cool.VectorPrimitivesData,
 		entering: cool.VectorPrimitivesData,
+		text?: MorphTextPieces,
 	): boolean {
-		return this.leaving === leaving && this.entering === entering;
+		return (
+			this.leaving === leaving &&
+			this.entering === entering &&
+			this.text?.leaving === text?.leaving &&
+			this.text?.entering === text?.entering &&
+			this.text?.splitsText === text?.splitsText
+		);
+	}
+
+	// Pair the pieces of the objects that take part across the two slides. Every such object
+	// that has pieces is drawn without its text.
+	private _matchPieces(
+		text: MorphTextPieces,
+		leavingObjects: number[],
+		enteringObjects: number[],
+	): void {
+		const takingPart = (pieces: MorphSlidePiece[], objects: number[]) => {
+			const ids = new Set(objects);
+			return pieces.filter((entry) => ids.has(entry.owner));
+		};
+		const leavingPieces = takingPart(text.leaving, leavingObjects);
+		const enteringPieces = takingPart(text.entering, enteringObjects);
+		for (const entry of leavingPieces) this.leavingSplit.add(entry.owner);
+		for (const entry of enteringPieces) this.enteringSplit.add(entry.owner);
+
+		const match = MorphMatcher.matchPieces(
+			leavingPieces.map((entry) => entry.piece),
+			enteringPieces.map((entry) => entry.piece),
+		);
+		for (const [leavingIndex, enteringIndex] of match.pairs)
+			this.piecePairs.push([
+				leavingPieces[leavingIndex],
+				enteringPieces[enteringIndex],
+			]);
+		for (const index of match.leavingOnly)
+			this.leavingLonePieces.push(leavingPieces[index]);
+		for (const index of match.enteringOnly)
+			this.enteringLonePieces.push(enteringPieces[index]);
 	}
 
 	/// The ids of the objects directly on the slide, in paint order. The members of a group
@@ -132,7 +202,8 @@ class SlideMorph {
 	}
 
 	/// The draw state of each object of the leaving and of the entering slide, by object id,
-	/// at time, from 0 at the start of the morph to 1 at its end.
+	/// and of each piece of text, by its key, at time, from 0 at the start of the morph to 1 at
+	/// its end.
 	public states(
 		time: number,
 	): [
@@ -161,6 +232,28 @@ class SlideMorph {
 			leavingStates.set(id, { alpha: 1 - time });
 		for (const id of this.enteringAlone)
 			enteringStates.set(id, { alpha: time });
+
+		// A pair of pieces is drawn at the same frame on both slides.
+		for (const [leavingPiece, enteringPiece] of this.piecePairs) {
+			const from = leavingPiece.piece.frame;
+			const to = enteringPiece.piece.frame;
+			const now = MorphMatcher.interpolate(from, to, time);
+			leavingStates.set(leavingPiece.key, {
+				transform: MorphMatcher.mapping(from, now)?.toArray(),
+				alpha: leavingAlpha,
+			});
+			enteringStates.set(enteringPiece.key, {
+				transform: MorphMatcher.mapping(to, now)?.toArray(),
+				alpha: enteringAlpha,
+			});
+		}
+		// A piece on one slide only is gone by the middle of the morph on the leaving slide and
+		// shows from the middle on the entering one, so the copy of a word that moves is the
+		// only one seen in the middle.
+		for (const entry of this.leavingLonePieces)
+			leavingStates.set(entry.key, { alpha: Math.max(0, 1 - 2 * time) });
+		for (const entry of this.enteringLonePieces)
+			enteringStates.set(entry.key, { alpha: Math.max(0, 2 * time - 1) });
 		return [leavingStates, enteringStates];
 	}
 
