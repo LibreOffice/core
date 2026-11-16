@@ -192,11 +192,12 @@ its start to its end:
 
 ### Creating a polygon or a curve
 
-The grid of Lines in the Insert tab has a row "Curves and Polygons": the curve, the polygon, the
-polygon at 45 degrees, and the filled kind of each. Every one of them, chosen there or anywhere
-else - the Curve button of the Insert tab too - puts one into a mode where the object is drawn
-point by point, with the cross as pointer; the Freeform Line button of the Insert tab puts one
-into the same mode for a line drawn by hand. One object can hold several parts:
+The Curves button of the Insert tab, beside Shapes and Lines, opens a grid of the eight kinds of
+the office's Curves and Polygons: the curve, the polygon, the polygon at 45 degrees and the
+freeform line, and the filled kind of each; the button itself chooses the curve. Every one of
+them, chosen there or anywhere else, puts one into a mode where the object is drawn point by
+point, with the cross as pointer, or by hand for the freeform line. One object can hold several
+parts:
 
 | What | What happens |
 |---|---|

@@ -548,15 +548,20 @@ var shapes = {
 			{img: 'lines_measureline', uno: 'MeasureLine', text: _UNO('.uno:MeasureLine', 'presentation')},
 			{img: 'lines_line_diagonal', uno: 'Line_Diagonal', text: _UNO('.uno:Line_Diagonal', 'presentation')}
 		],
+		'Connectors': connectorKinds
+	},
+	// as the office's toolbox of curves and polygons: the unfilled kinds, then the filled ones
+	'insertcurves': {
 		'Curves and Polygons': [
 			{img: 'lines_bezier_unfilled', uno: 'Bezier_Unfilled', text: _UNO('.uno:Bezier_Unfilled', 'presentation')},
 			{img: 'lines_polygon_unfilled', uno: 'Polygon_Unfilled', text: _UNO('.uno:Polygon_Unfilled', 'presentation')},
 			{img: 'lines_polygon_diagonal_unfilled', uno: 'Polygon_Diagonal_Unfilled', text: _UNO('.uno:Polygon_Diagonal_Unfilled', 'presentation')},
+			{img: 'lines_freeline_unfilled', uno: 'Freeline_Unfilled', text: _UNO('.uno:Freeline_Unfilled', 'presentation')},
 			{img: 'lines_bezierfill', uno: 'BezierFill', text: _UNO('.uno:BezierFill', 'presentation')},
 			{img: 'lines_polygon', uno: 'Polygon', text: _UNO('.uno:Polygon', 'presentation')},
-			{img: 'lines_polygon_diagonal', uno: 'Polygon_Diagonal', text: _UNO('.uno:Polygon_Diagonal', 'presentation')}
-		],
-		'Connectors': connectorKinds
+			{img: 'lines_polygon_diagonal', uno: 'Polygon_Diagonal', text: _UNO('.uno:Polygon_Diagonal', 'presentation')},
+			{img: 'lines_freeline', uno: 'Freeline', text: _UNO('.uno:Freeline', 'presentation')}
+		]
 	}
 };
 
@@ -821,6 +826,10 @@ function getConnectorsPopupElements(closeCallback) {
 
 function getLinesPopupElements(closeCallback) {
 	return getGridPopupElements('insertlines', 5, closeCallback);
+}
+
+function getCurvesPopupElements(closeCallback) {
+	return getGridPopupElements('insertcurves', 4, closeCallback);
 }
 
 function getColorPickerData(type) {
@@ -1365,6 +1374,7 @@ global.getInsertTablePopupElements = getInsertTablePopupElements;
 global.getShapesPopupElements = getShapesPopupElements;
 global.getConnectorsPopupElements = getConnectorsPopupElements;
 global.getLinesPopupElements = getLinesPopupElements;
+global.getCurvesPopupElements = getCurvesPopupElements;
 global.createShapesPanel = createShapesPanel;
 global.getUNOCommand = getUNOCommand;
 global.unoCmdToToolbarId = unoCmdToToolbarId;

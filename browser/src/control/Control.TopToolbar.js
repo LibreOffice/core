@@ -282,6 +282,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			{type: 'menubutton',  id: 'insertshapes:InsertShapesMenu', command: '.uno:BasicShapes', noLabel: true, text: _('Insert shapes'), icon: 'compact_basicshapes.svg', accessibility: { focusBack: true, combination: 'IP' }},
 			{type: 'toolitem',  id: 'insertline', text: _UNO('.uno:Line', '', true), command: '.uno:Line', icon: 'compact_line.svg', accessibility: { focusBack: true, combination: 'IL' }},
 			{type: 'menubutton',  id: 'insertlines:InsertLinesMenu', text: _('Lines'), command: '.uno:Line', applyCallback: '.uno:Line', icon: 'compact_line.svg', noLabel: true, visible: false, accessibility: { focusBack: true, combination: 'IL' }},
+			{type: 'menubutton',  id: 'insertcurves:InsertCurvesMenu', text: _('Curves'), command: '.uno:Bezier_Unfilled', applyCallback: '.uno:Bezier_Unfilled', noLabel: true, visible: false, accessibility: { focusBack: true, combination: 'IU' }},
 			{type: 'menubutton',  id: 'insertconnectors:InsertConnectorsMenu', command: 'connector', noLabel: true, text: _('Insert connectors'), visible: false, accessibility: { focusBack: true, combination: 'IR' }},
 			{type: 'separator', orientation: 'vertical',   id: 'breakinsert', desktop: true},
 			{type: 'customtoolitem',  id: 'inserttextbox', text: _UNO('.uno:Text', '', true), command: 'inserttextbox', visible: false, icon: 'compact_text.svg', accessibility: { focusBack: true, combination: 'IB' }},
@@ -499,7 +500,7 @@ class TopToolbar extends JSDialog.Toolbar {
 					'gridvisible', 'griduse','changelayout',
 					'breakspacing', 'defaultbullet-presentation', 'defaultnumbering-presentation', 'breakbullet', 'inserttextbox', 'inserttable',  'insertannotation', 'backcolor',
 					'breaksidebar', 'modifypage', 'slidechangewindow', 'customanimation', 'masterslidespanel', 'navigator',
-					'insertlines'
+					'insertlines', 'insertcurves'
 				].forEach((id) => {
 					this.showItem(id, true);
 				});
@@ -513,7 +514,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			if (this.parentContainer) {
 				['leftpara', 'centerpara', 'rightpara', 'justifypara', 'breakpara', 'linespacing', 'gridvisible', 'griduse',
 					'breakspacing', 'defaultbullet', 'defaultnumbering', 'breakbullet', 'inserttextbox', 'inserttable', 'backcolor',
-					'breaksidebar', 'sidebar', 'insertconnectors', 'insertlines'
+					'breaksidebar', 'sidebar', 'insertconnectors', 'insertlines', 'insertcurves'
 				].forEach((id) => {
 					this.showItem(id, true);
 				});

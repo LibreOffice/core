@@ -60,11 +60,12 @@ describe(['tagdesktop'], 'Freeform line on a vector slide', function() {
 		});
 	}
 
-	// Chooses the freeform line in the Insert tab, which puts the view into the mode that draws
-	// it.
+	// Chooses the freeform line from the grid of the Curves button in the Insert tab, which puts
+	// the view into the mode that draws it.
 	function chooseTheLine(win) {
 		desktopHelper.selectNotebookbarTab('Insert');
-		cy.cGet('#insert-freeform-line-button').click();
+		cy.cGet('[id^="insert-curve"] > .arrowbackground').click();
+		cy.cGet('.col.w2ui-icon.lines_freeline_unfilled').click();
 		cy.then(function() {
 			return helper.processToIdle(win);
 		});

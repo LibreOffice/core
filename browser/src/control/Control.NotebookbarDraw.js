@@ -1688,12 +1688,13 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 							{
 								'type': 'toolbox',
 								'children': [
-
 									{
-										'id': 'bezier_unfilled',
-										'type': 'toolitem',
-										'text': _UNO('.uno:Bezier_Unfilled', 'presentation'),
+										'id': 'insert-curve:InsertCurvesMenu',
+										'type': 'menubutton',
+										'noLabel': true,
+										'text': _('Curves'),
 										'command': '.uno:Bezier_Unfilled',
+										'applyCallback': '.uno:Bezier_Unfilled',
 										'accessibility': { focusBack: true, combination: 'CR', de: null }
 									}
 								]

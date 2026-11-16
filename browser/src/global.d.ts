@@ -624,6 +624,9 @@ interface Window {
 	getLinesPopupElements: (
 		callback: EventListenerOrEventListenerObject,
 	) => HTMLElement;
+	getCurvesPopupElements: (
+		callback: EventListenerOrEventListenerObject,
+	) => HTMLElement;
 	getInsertTablePopupElements: (
 		callback: EventListenerOrEventListenerObject,
 	) => HTMLElement;

@@ -1742,29 +1742,17 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							{
 								'type': 'toolbox',
 								'children': [
-
 									{
-										'id': 'bezier_unfilled',
-										'type': 'toolitem',
-										'text': _UNO('.uno:Bezier_Unfilled', 'presentation'),
+										'id': 'insert-curve:InsertCurvesMenu',
+										'type': 'menubutton',
+										'noLabel': true,
+										'text': _('Curves'),
 										'command': '.uno:Bezier_Unfilled',
+										'applyCallback': '.uno:Bezier_Unfilled',
 										'accessibility': { focusBack: true, combination: 'CR', de: null }
 									}
 								]
-							},
-							// The freeform line is drawn on the canvas the client draws itself.
-							cool.VectorRenderingConfig.isEnabled() ? {
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'insert-freeform-line',
-										'type': 'toolitem',
-										'text': _UNO('.uno:Freeline_Unfilled', 'presentation'),
-										'command': '.uno:Freeline_Unfilled',
-										'accessibility': { focusBack: true, combination: 'FF', de: null }
-									}
-								]
-							} : {}
+							}
 						],
 						'vertical': 'true'
 					}
