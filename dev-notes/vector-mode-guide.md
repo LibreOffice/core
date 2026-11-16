@@ -186,7 +186,7 @@ its start to its end:
 | What | What happens |
 |---|---|
 | Before the press | The object under the mouse shows the places a connector can tie itself to, its own glue points and the middles of its sides. The one within reach is lit, and the press would start there. |
-| Press and drag | The connector shows as a line from its start to the mouse, with its length. The object under the mouse shows its places, and the end snaps to the one within reach. The start keeps showing the place it is tied to. |
+| Press and drag | The connector shows the run it will take from its start to the mouse, round the objects it ties as a standard connector goes, with its length; until the look of its kind is known it shows as a line. The object under the mouse shows its places, and the end snaps to the one within reach. The start keeps showing the place it is tied to. Another connector lying over an object does not hide the object's places. |
 | Let go | The connector is made, tied at each end as shown: to a glue point of its own, to the middle of a side, or to the object as a whole where an end stands on its middle. An end over none of them stays free. It is selected at once, also before the engine has answered. The mode is over. |
 | Escape, a click without a drag, a command, a press elsewhere, another slide | End the mode without a connector. |
 
@@ -203,7 +203,7 @@ its start to its end:
 | Corner radius | On a rectangle | Rounds the corners. |
 | Line ends | At both ends of a straight line | Move that end; see "Lines" below. |
 | Path points | On curves and polygons, while Edit Points is on | Move a point or one of its two weights (curve handles); the curve keeps how it runs through the point. A click opens the menu of the point, see "Editing points" below. |
-| Connector ends | At both ends of a connector | Tie the end to the object or glue point it is dropped on, or leave it free. |
+| Connector ends | At both ends of a connector | Tie the end to the object or glue point it is dropped on, or leave it free. Another connector lying over the object does not hide it. |
 | Connector lines | On the lines between the ends | Move that line, across itself only. |
 | Glue points | On the object, while Glue Points is on | Move a point someone added. A click opens the menu of the point, see "Editing points" below. The points the shape makes itself and the four at the middles of the sides stay where they are. |
 
