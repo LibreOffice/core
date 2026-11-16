@@ -1144,7 +1144,7 @@ void SlideShow::StartInPlacePresentation()
         return;
 
     bool bSuccess = false;
-    if( mxCurrentSettings && mxCurrentSettings->mbPreview )
+    if( mxCurrentSettings->mbPreview )
     {
         bSuccess = mxController->startPreview(mxCurrentSettings->mxStartPage, mxCurrentSettings->mxAnimationNode, mxCurrentSettings->mpParentWindow );
     }
