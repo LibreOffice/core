@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
 
-/** extends the functionality of com::sun::star::registry::XImplementationRegistration. It can be useful to specify a complete Url to a component but register the components name only (library or jar name).
+/** extends the functionality of cpo::registry::XImplementationRegistration. It can be useful to specify a complete Url to a component but register the components name only (library or jar name).
  */
-interface XImplementationRegistration2: com::sun::star::registry::XImplementationRegistration
+interface XImplementationRegistration2: cpo::registry::XImplementationRegistration
 {
 
     /** registers a component which provides one or more implementations.
@@ -43,12 +43,12 @@ interface XImplementationRegistration2: com::sun::star::registry::XImplementatio
      */
     void registerImplementationWithLocation( [in] string aImplementationLoader,
              [in] string aLocation, [in] string aRegisteredLocation,
-             [in] com::sun::star::registry::XSimpleRegistry xReg )
-            raises( com::sun::star::registry::CannotRegisterImplementationException );
+             [in] cpo::registry::XSimpleRegistry xReg )
+            raises( cpo::registry::CannotRegisterImplementationException );
 
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

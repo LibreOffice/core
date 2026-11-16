@@ -19,22 +19,24 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
-/** is the implementation of the interface XImplementationRegistration.
-    This service can be used to install or uninstall components (implementations).
-    Further, it is possible to check if all runtime dependencies (needed services) are
-    available to use a specified component.
+/** is thrown when an application tries to register a new component (implementation) using the
+    XImplementationRegistration::registerImplementation()
+    method, but the component cannot be registered. The reason for this exception could be:<br>
+    <br><ul>
+    <li>the component cannot be found or cannot be loaded (missing path or classpath)
+    <li>the component doesn't provide the necessary specifications (exported registration functions for a
+    C++ component (shared library) or a named registration class with the appropriate methods for
+    a Java component (normally a jar file)).
+    </ul><br>
 
-    Guarantees:
-    <ul>
-    <li>-thread safe</li>
-    </ul>
  */
-published service ImplementationRegistration
-  : com::sun::star::registry::XImplementationRegistration;
+published exception CannotRegisterImplementationException: cpo::uno::Exception
+{
+};
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,7 @@
 
 
 
-module com { module sun { module star { module registry {
+module cpo { module registry {
 
 /** allows access to a registry (a persistent data source).
     The data is stored in a hierarchical key structure beginning with a root key.
@@ -56,7 +56,7 @@ published interface XSimpleRegistry: cpo::uno::XInterface
     void open( [in] string rURL,
              [in] boolean bReadOnly,
              [in] boolean bCreate )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** checks if the registry points to a valid data-source.
     */
@@ -68,7 +68,7 @@ published interface XSimpleRegistry: cpo::uno::XInterface
         if the registry is not open.
     */
     void close()
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** destroys the registry and the data source.
 
@@ -76,7 +76,7 @@ published interface XSimpleRegistry: cpo::uno::XInterface
         if the registry is not open.
     */
     void destroy()
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** @returns
         the root key of the registry.
@@ -84,8 +84,8 @@ published interface XSimpleRegistry: cpo::uno::XInterface
         @throws InvalidRegistryException
         if no registry is open
     */
-    com::sun::star::registry::XRegistryKey getRootKey()
-            raises( com::sun::star::registry::InvalidRegistryException );
+    cpo::registry::XRegistryKey getRootKey()
+            raises( cpo::registry::InvalidRegistryException );
 
     /** checks if the registry is readonly.
 
@@ -93,7 +93,7 @@ published interface XSimpleRegistry: cpo::uno::XInterface
         if the registry is not open.
     */
     boolean isReadOnly()
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** merges a registry under the specified key.
 
@@ -102,12 +102,12 @@ published interface XSimpleRegistry: cpo::uno::XInterface
     */
     void mergeKey( [in] string aKeyName,
              [in] string aUrl )
-            raises( com::sun::star::registry::InvalidRegistryException,
-                    com::sun::star::registry::MergeConflictException );
+            raises( cpo::registry::InvalidRegistryException,
+                    cpo::registry::MergeConflictException );
 
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

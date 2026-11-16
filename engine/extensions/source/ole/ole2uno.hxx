@@ -23,7 +23,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>

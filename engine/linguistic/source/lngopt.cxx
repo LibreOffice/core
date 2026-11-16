@@ -40,7 +40,7 @@ using namespace cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using namespace com::sun::star::registry;
+using namespace ::cpo::registry;
 
 
 // static member initialization

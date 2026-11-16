@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
 /** offers a registry for implementation objects and provides information
     about the registered implementations.
@@ -41,8 +41,8 @@ published interface XImplementationRegistration: cpo::uno::XInterface
      */
     void registerImplementation( [in] string aImplementationLoader,
              [in] string aLocation,
-             [in] com::sun::star::registry::XSimpleRegistry xReg )
-            raises( com::sun::star::registry::CannotRegisterImplementationException );
+             [in] cpo::registry::XSimpleRegistry xReg )
+            raises( cpo::registry::CannotRegisterImplementationException );
 
     /** revokes a component and all their provided implementations from the registry.
 
@@ -55,7 +55,7 @@ published interface XImplementationRegistration: cpo::uno::XInterface
             from the system registry (if this feature is supported).
      */
     boolean revokeImplementation( [in] string aLocation,
-             [in] com::sun::star::registry::XSimpleRegistry xReg );
+             [in] cpo::registry::XSimpleRegistry xReg );
 
     // DOCUMENTATION CHANGED FOR XImplementationRegistration::getImplementations
     /** @returns
@@ -84,6 +84,6 @@ published interface XImplementationRegistration: cpo::uno::XInterface
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,20 +22,20 @@
 #include <sal/config.h>
 #include <sal/types.h>
 
-namespace com::sun::star::registry {
+namespace cpo::registry {
     class XRegistryKey;
 }
 namespace cpo::uno { template <typename > class Reference; }
 
 namespace stoc_impreg {
 
-// throws css::registry::InvalidRegistryException,
-// css::registry::MergeConflictException,
+// throws cpo::registry::InvalidRegistryException,
+// cpo::registry::MergeConflictException,
 // cpo::uno::RuntimeException:
 void mergeKeys(
-    cpo::uno::Reference< css::registry::XRegistryKey >
+    cpo::uno::Reference< cpo::registry::XRegistryKey >
         const & xDest,
-    cpo::uno::Reference< css::registry::XRegistryKey >
+    cpo::uno::Reference< cpo::registry::XRegistryKey >
         const & xSource);
 
 }

@@ -42,7 +42,7 @@ UNOUCROUT=$(OUT)$/inc
 
 UNOTYPES =	com.sun.star.connection.XConnector \
         com.sun.star.connection.XAcceptor  \
-        com.sun.star.registry.XImplementationRegistration \
+        cpo.registry.XImplementationRegistration \
         com.sun.star.lang.XComponent \
         com.sun.star.lang.XSingleServiceFactory \
         com.sun.star.lang.XMultiServiceFactory \

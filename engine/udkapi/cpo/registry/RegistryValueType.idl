@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
 /** represents all possible types of a key value.
 
@@ -57,6 +57,6 @@ published enum RegistryValueType
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

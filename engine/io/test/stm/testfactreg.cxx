@@ -25,7 +25,7 @@
 #include <cppuhelper/factory.hxx>
 
 using namespace ::cppu;
-using namespace ::com::sun::star::registry;
+using namespace ::cpo::registry;
 using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 

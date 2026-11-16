@@ -40,7 +40,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::test;
-using namespace ::com::sun::star::registry;
+using namespace ::cpo::registry;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 

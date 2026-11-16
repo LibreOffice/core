@@ -28,7 +28,7 @@
 #include <cppuhelper/factory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 
 #if defined __clang__
 #pragma clang diagnostic push
@@ -50,11 +50,12 @@
 
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
+using namespace ::cpo;
 
 /*
  * Class:     com_sun_star_comp_helper_SharedLibraryLoader
  * Method:    component_writeInfo
- * Signature: (Ljava/lang/String;Lcom/sun/star/lang/XMultiServiceFactory;Lcom/sun/star/registry/XRegistryKey;)Z
+ * Signature: (Ljava/lang/String;Lcom/sun/star/lang/XMultiServiceFactory;Lcpo/registry/XRegistryKey;)Z
  */
 jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jLibName, jobject jSMgr,
@@ -138,7 +139,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
 /*
  * Class:     com_sun_star_comp_helper_SharedLibraryLoader
  * Method:    component_getFactory
- * Signature: (Ljava/lang/String;Ljava/lang/String;Lcom/sun/star/lang/XMultiServiceFactory;Lcom/sun/star/registry/XRegistryKey;)Ljava/lang/Object;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Lcom/sun/star/lang/XMultiServiceFactory;Lcpo/registry/XRegistryKey;)Ljava/lang/Object;
  */
 jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jLibName, jstring jImplName,

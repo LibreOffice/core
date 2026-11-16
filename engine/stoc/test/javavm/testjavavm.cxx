@@ -29,18 +29,18 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/java/XJavaVM.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 
 using namespace cppu;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace css::java;
 
 
@@ -124,8 +124,8 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         OUString sImplReg(
-            "com.sun.star.registry.ImplementationRegistration");
-        Reference<css::registry::XImplementationRegistration> xImplReg(
+            "cpo.registry.ImplementationRegistration");
+        Reference<cpo::registry::XImplementationRegistration> xImplReg(
             xMgr->createInstance( sImplReg ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 

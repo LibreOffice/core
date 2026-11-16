@@ -26,7 +26,7 @@
 
 
 #include <stdio.h>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <com/sun/star/test/XSimpleTest.hpp>
@@ -38,7 +38,7 @@ using namespace ::cppu;
 using namespace ::cpo::uno;
 using namespace ::com::sun::star::test;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+using namespace ::cpo::registry;
 
 int main (int argc, char **argv)
 {
@@ -58,7 +58,7 @@ int main (int argc, char **argv)
     try
     {
         // Create registration service
-        Reference < XInterface > x = xSMgr->createInstance( "com.sun.star.registry.ImplementationRegistration" );
+        Reference < XInterface > x = xSMgr->createInstance( "cpo.registry.ImplementationRegistration" );
         xReg.set( x , UNO_QUERY );
     }
     catch (const cpo::uno::Exception&)

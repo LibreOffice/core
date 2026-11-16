@@ -61,7 +61,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/reflection,\
 	TypeDescriptionManager \
 	TypeDescriptionProvider \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/registry,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,cpo/registry,\
 	DefaultRegistry \
 	NestedRegistry \
 ))
@@ -98,7 +98,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/reflection,\
 	Dump \
 	ProxyFactory \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/registry,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,cpo/registry,\
 	ImplementationRegistration \
 	SimpleRegistry \
 ))
@@ -399,7 +399,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/reflection,\
 	XTypeDescriptionEnumerationAccess \
 	XUnionTypeDescription \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/registry,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/registry,\
 	CannotRegisterImplementationException \
 	InvalidRegistryException \
 	InvalidValueException \

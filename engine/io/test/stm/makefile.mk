@@ -51,8 +51,8 @@ UNOTYPES =	com.sun.star.test.XSimpleTest \
         com.sun.star.lang.XMultiComponentFactory	\
         cpo.uno.XComponentContext	\
         com.sun.star.lang.XTypeProvider	\
-        com.sun.star.registry.XImplementationRegistration	\
-        com.sun.star.registry.XRegistryKey	\
+        cpo.registry.XImplementationRegistration	\
+        cpo.registry.XRegistryKey	\
         com.sun.star.test.XSimpleTest	\
         cpo.uno.TypeClass	\
         cpo.uno.XAggregation	\

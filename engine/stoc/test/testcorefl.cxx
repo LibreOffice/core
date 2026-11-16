@@ -37,8 +37,8 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlField2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -55,7 +55,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace css::reflection;
 using namespace css::container;
 

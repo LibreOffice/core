@@ -33,7 +33,7 @@ using namespace cppu;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
-using namespace css::registry;
+using namespace cpo::registry;
 
 
 namespace stoc_namingservice

@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 
 #include <stdio.h>
 
@@ -36,7 +36,7 @@ using namespace ::osl;
 using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::cppu;
-using namespace ::com::sun::star::registry;
+using namespace ::cpo::registry;
 
 
 bool test1();

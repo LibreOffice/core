@@ -392,6 +392,99 @@ module com {
      void initialize([in] sequence< any > aArguments) raises (::cpo::uno::Exception);
     };
    };
+  };
+ };
+};
+module cpo {
+   module registry {
+    published interface XSimpleRegistry;
+    published exception CannotRegisterImplementationException: ::cpo::uno::Exception {
+    };
+    published interface XRegistryKey;
+    published exception InvalidRegistryException: ::cpo::uno::Exception {
+    };
+    /** @deprecated */ published exception MergeConflictException: ::cpo::uno::Exception {
+    };
+    published interface XSimpleRegistry {
+     interface ::cpo::uno::XInterface;
+     string getURL();
+     void open([in] string rURL, [in] boolean bReadOnly, [in] boolean bCreate) raises (::cpo::registry::InvalidRegistryException);
+     boolean isValid();
+     void close() raises (::cpo::registry::InvalidRegistryException);
+     void destroy() raises (::cpo::registry::InvalidRegistryException);
+     ::cpo::registry::XRegistryKey getRootKey() raises (::cpo::registry::InvalidRegistryException);
+     boolean isReadOnly() raises (::cpo::registry::InvalidRegistryException);
+     /** @deprecated */ void mergeKey([in] string aKeyName, [in] string aUrl) raises (::cpo::registry::InvalidRegistryException, ::cpo::registry::MergeConflictException);
+    };
+    published service DefaultRegistry {
+     interface ::cpo::registry::XSimpleRegistry;
+    };
+    published interface XImplementationRegistration {
+     interface ::cpo::uno::XInterface;
+     void registerImplementation([in] string aImplementationLoader, [in] string aLocation, [in] ::cpo::registry::XSimpleRegistry xReg) raises (::cpo::registry::CannotRegisterImplementationException);
+     boolean revokeImplementation([in] string aLocation, [in] ::cpo::registry::XSimpleRegistry xReg);
+     sequence< string > getImplementations([in] string aImplementationLoader, [in] string aLocation);
+     sequence< string > checkInstantiation([in] string implementationName);
+    };
+    published service ImplementationRegistration: ::cpo::registry::XImplementationRegistration;
+    published exception InvalidValueException: ::cpo::uno::Exception {
+    };
+    published service NestedRegistry {
+     interface ::cpo::registry::XSimpleRegistry;
+     interface ::com::sun::star::lang::XInitialization;
+    };
+    published enum RegistryKeyType {
+     KEY = 0,
+     LINK = 1
+    };
+    published enum RegistryValueType {
+     NOT_DEFINED = 0,
+     LONG = 1,
+     ASCII = 2,
+     STRING = 3,
+     BINARY = 4,
+     LONGLIST = 5,
+     ASCIILIST = 6,
+     STRINGLIST = 7
+    };
+    published service SimpleRegistry: ::cpo::registry::XSimpleRegistry;
+    published interface XRegistryKey {
+     interface ::cpo::uno::XInterface;
+     [attribute, readonly] string KeyName;
+     boolean isReadOnly() raises (::cpo::registry::InvalidRegistryException);
+     boolean isValid();
+     ::cpo::registry::RegistryKeyType getKeyType([in] string rKeyName) raises (::cpo::registry::InvalidRegistryException);
+     ::cpo::registry::RegistryValueType getValueType() raises (::cpo::registry::InvalidRegistryException);
+     long getLongValue() raises (::cpo::registry::InvalidRegistryException, ::cpo::registry::InvalidValueException);
+     void setLongValue([in] long value) raises (::cpo::registry::InvalidRegistryException);
+     sequence< long > getLongListValue() raises (::cpo::registry::InvalidRegistryException, ::cpo::registry::InvalidValueException);
+     void setLongListValue([in] sequence< long > seqValue) raises (::cpo::registry::InvalidRegistryException);
+     string getAsciiValue() raises (::cpo::registry::InvalidRegistryException, ::cpo::registry::InvalidValueException);
+     void setAsciiValue([in] string value) raises (::cpo::registry::InvalidRegistryException);
+     sequence< string > getAsciiListValue() raises (::cpo::registry::InvalidRegistryException, ::cpo::registry::InvalidValueException);
+     void setAsciiListValue([in] sequence< string > seqValue) raises (::cpo::registry::InvalidRegistryException);
+     string getStringValue() raises (::cpo::registry::InvalidRegistryException, ::cpo::registry::InvalidValueException);
+     void setStringValue([in] string value) raises (::cpo::registry::InvalidRegistryException);
+     sequence< string > getStringListValue() raises (::cpo::registry::InvalidRegistryException, ::cpo::registry::InvalidValueException);
+     void setStringListValue([in] sequence< string > seqValue) raises (::cpo::registry::InvalidRegistryException);
+     sequence< byte > getBinaryValue() raises (::cpo::registry::InvalidRegistryException, ::cpo::registry::InvalidValueException);
+     void setBinaryValue([in] sequence< byte > value) raises (::cpo::registry::InvalidRegistryException);
+     ::cpo::registry::XRegistryKey openKey([in] string aKeyName) raises (::cpo::registry::InvalidRegistryException);
+     ::cpo::registry::XRegistryKey createKey([in] string aKeyName) raises (::cpo::registry::InvalidRegistryException);
+     void closeKey() raises (::cpo::registry::InvalidRegistryException);
+     void deleteKey([in] string rKeyName) raises (::cpo::registry::InvalidRegistryException);
+     sequence< ::cpo::registry::XRegistryKey > openKeys() raises (::cpo::registry::InvalidRegistryException);
+     sequence< string > getKeyNames() raises (::cpo::registry::InvalidRegistryException);
+     boolean createLink([in] string aLinkName, [in] string aLinkTarget) raises (::cpo::registry::InvalidRegistryException);
+     void deleteLink([in] string rLinkName) raises (::cpo::registry::InvalidRegistryException);
+     string getLinkTarget([in] string rLinkName) raises (::cpo::registry::InvalidRegistryException);
+     string getResolvedName([in] string aKeyName) raises (::cpo::registry::InvalidRegistryException);
+    };
+   };
+};
+module com {
+ module sun {
+  module star {
    module bridge {
     published service Bridge {
      interface ::com::sun::star::lang::XInitialization;
@@ -1011,15 +1104,12 @@ module com {
      [property, optional] ::cpo::uno::XComponentContext DefaultContext;
     };
    };
-   module registry {
-    published interface XSimpleRegistry;
-   };
    module lang {
     published service RegistryServiceManager {
      service ::com::sun::star::lang::ServiceManager;
      interface ::com::sun::star::lang::XInitialization;
      interface ::com::sun::star::beans::XPropertySet;
-     [property, readonly] ::com::sun::star::registry::XSimpleRegistry Registry;
+     [property, readonly] ::cpo::registry::XSimpleRegistry Registry;
     };
     published exception ServiceNotRegisteredException: ::cpo::uno::Exception {
     };
@@ -1099,16 +1189,11 @@ module com {
     published exception CannotActivateFactoryException: ::cpo::uno::Exception {
     };
    };
-   module registry {
-    published exception CannotRegisterImplementationException: ::cpo::uno::Exception {
-    };
-    published interface XRegistryKey;
-   };
    module loader {
     published interface XImplementationLoader {
      interface ::cpo::uno::XInterface;
-     ::cpo::uno::XInterface activate([in] string implementationName, [in] string implementationLoaderUrl, [in] string locationUrl, [in] ::com::sun::star::registry::XRegistryKey xKey) raises (::com::sun::star::loader::CannotActivateFactoryException);
-     boolean writeRegistryInfo([in] ::com::sun::star::registry::XRegistryKey xKey, [in] string implementationLoaderUrl, [in] string locationUrl) raises (::com::sun::star::registry::CannotRegisterImplementationException);
+     ::cpo::uno::XInterface activate([in] string implementationName, [in] string implementationLoaderUrl, [in] string locationUrl, [in] ::cpo::registry::XRegistryKey xKey) raises (::com::sun::star::loader::CannotActivateFactoryException);
+     boolean writeRegistryInfo([in] ::cpo::registry::XRegistryKey xKey, [in] string implementationLoaderUrl, [in] string locationUrl) raises (::cpo::registry::CannotRegisterImplementationException);
     };
     published service Java: ::com::sun::star::loader::XImplementationLoader;
     /** @deprecated */ published service Java2 {
@@ -1339,87 +1424,6 @@ module com {
      sequence< any > getDiscriminants();
      sequence< ::com::sun::star::reflection::XTypeDescription > getMemberTypes();
      sequence< string > getMemberNames();
-    };
-   };
-   module registry {
-    published exception InvalidRegistryException: ::cpo::uno::Exception {
-    };
-    /** @deprecated */ published exception MergeConflictException: ::cpo::uno::Exception {
-    };
-    published interface XSimpleRegistry {
-     interface ::cpo::uno::XInterface;
-     string getURL();
-     void open([in] string rURL, [in] boolean bReadOnly, [in] boolean bCreate) raises (::com::sun::star::registry::InvalidRegistryException);
-     boolean isValid();
-     void close() raises (::com::sun::star::registry::InvalidRegistryException);
-     void destroy() raises (::com::sun::star::registry::InvalidRegistryException);
-     ::com::sun::star::registry::XRegistryKey getRootKey() raises (::com::sun::star::registry::InvalidRegistryException);
-     boolean isReadOnly() raises (::com::sun::star::registry::InvalidRegistryException);
-     /** @deprecated */ void mergeKey([in] string aKeyName, [in] string aUrl) raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::MergeConflictException);
-    };
-    published service DefaultRegistry {
-     interface ::com::sun::star::registry::XSimpleRegistry;
-    };
-    published interface XImplementationRegistration {
-     interface ::cpo::uno::XInterface;
-     void registerImplementation([in] string aImplementationLoader, [in] string aLocation, [in] ::com::sun::star::registry::XSimpleRegistry xReg) raises (::com::sun::star::registry::CannotRegisterImplementationException);
-     boolean revokeImplementation([in] string aLocation, [in] ::com::sun::star::registry::XSimpleRegistry xReg);
-     sequence< string > getImplementations([in] string aImplementationLoader, [in] string aLocation);
-     sequence< string > checkInstantiation([in] string implementationName);
-    };
-    published service ImplementationRegistration: ::com::sun::star::registry::XImplementationRegistration;
-    published exception InvalidValueException: ::cpo::uno::Exception {
-    };
-    published service NestedRegistry {
-     interface ::com::sun::star::registry::XSimpleRegistry;
-     interface ::com::sun::star::lang::XInitialization;
-    };
-    published enum RegistryKeyType {
-     KEY = 0,
-     LINK = 1
-    };
-    published enum RegistryValueType {
-     NOT_DEFINED = 0,
-     LONG = 1,
-     ASCII = 2,
-     STRING = 3,
-     BINARY = 4,
-     LONGLIST = 5,
-     ASCIILIST = 6,
-     STRINGLIST = 7
-    };
-    published service SimpleRegistry: ::com::sun::star::registry::XSimpleRegistry;
-    published interface XRegistryKey {
-     interface ::cpo::uno::XInterface;
-     [attribute, readonly] string KeyName;
-     boolean isReadOnly() raises (::com::sun::star::registry::InvalidRegistryException);
-     boolean isValid();
-     ::com::sun::star::registry::RegistryKeyType getKeyType([in] string rKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
-     ::com::sun::star::registry::RegistryValueType getValueType() raises (::com::sun::star::registry::InvalidRegistryException);
-     long getLongValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
-     void setLongValue([in] long value) raises (::com::sun::star::registry::InvalidRegistryException);
-     sequence< long > getLongListValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
-     void setLongListValue([in] sequence< long > seqValue) raises (::com::sun::star::registry::InvalidRegistryException);
-     string getAsciiValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
-     void setAsciiValue([in] string value) raises (::com::sun::star::registry::InvalidRegistryException);
-     sequence< string > getAsciiListValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
-     void setAsciiListValue([in] sequence< string > seqValue) raises (::com::sun::star::registry::InvalidRegistryException);
-     string getStringValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
-     void setStringValue([in] string value) raises (::com::sun::star::registry::InvalidRegistryException);
-     sequence< string > getStringListValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
-     void setStringListValue([in] sequence< string > seqValue) raises (::com::sun::star::registry::InvalidRegistryException);
-     sequence< byte > getBinaryValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
-     void setBinaryValue([in] sequence< byte > value) raises (::com::sun::star::registry::InvalidRegistryException);
-     ::com::sun::star::registry::XRegistryKey openKey([in] string aKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
-     ::com::sun::star::registry::XRegistryKey createKey([in] string aKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
-     void closeKey() raises (::com::sun::star::registry::InvalidRegistryException);
-     void deleteKey([in] string rKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
-     sequence< ::com::sun::star::registry::XRegistryKey > openKeys() raises (::com::sun::star::registry::InvalidRegistryException);
-     sequence< string > getKeyNames() raises (::com::sun::star::registry::InvalidRegistryException);
-     boolean createLink([in] string aLinkName, [in] string aLinkTarget) raises (::com::sun::star::registry::InvalidRegistryException);
-     void deleteLink([in] string rLinkName) raises (::com::sun::star::registry::InvalidRegistryException);
-     string getLinkTarget([in] string rLinkName) raises (::com::sun::star::registry::InvalidRegistryException);
-     string getResolvedName([in] string aKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
     };
    };
    module script {

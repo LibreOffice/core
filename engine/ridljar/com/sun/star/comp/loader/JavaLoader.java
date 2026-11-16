@@ -26,8 +26,8 @@ import java.net.URLDecoder;
 import com.sun.star.loader.CannotActivateFactoryException;
 import com.sun.star.loader.XImplementationLoader;
 
-import com.sun.star.registry.CannotRegisterImplementationException;
-import com.sun.star.registry.XRegistryKey;
+import cpo.registry.CannotRegisterImplementationException;
+import cpo.registry.XRegistryKey;
 
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;

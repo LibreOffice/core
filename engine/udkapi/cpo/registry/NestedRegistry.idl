@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
 /** supports a shared view on two different registries. The registry
     files will be opened in two different modes, registry1 will be opened with read/write
@@ -116,11 +116,11 @@
  */
 published service NestedRegistry
 {
-    interface com::sun::star::registry::XSimpleRegistry;
+    interface cpo::registry::XSimpleRegistry;
     interface com::sun::star::lang::XInitialization;
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

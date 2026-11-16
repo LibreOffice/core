@@ -21,7 +21,7 @@ package com.sun.star.comp.helper;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.registry.XRegistryKey;
+import cpo.registry.XRegistryKey;
 
 /**
  * @deprecated use class Bootstrap bootstrapping a native UNO installation
@@ -80,7 +80,7 @@ public class SharedLibraryLoader {
      * for the component name.
      *
      * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code> and
-     * <code>com.sun.star.registry.RegistryKey</code>.
+     * <code>cpo.registry.RegistryKey</code>.
      *
      * @return  the factory for the "com.sun.star.comp.stoc.DLLComponentLoader" component.
      * @param   smgr    the ServiceManager
@@ -102,7 +102,7 @@ public class SharedLibraryLoader {
      * Loads and returns a specific factory for a given library and implementation name.
      *
      * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code> and
-     * <code>com.sun.star.registry.RegistryKey</code>.
+     * <code>cpo.registry.RegistryKey</code>.
      *
      * @return  the factory of the component
      * @param   libName the name of the shared library
@@ -128,7 +128,7 @@ public class SharedLibraryLoader {
      * Registers the SharedLibraryLoader under a RegistryKey.
      *
      * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code> and
-     * <code>com.sun.star.registry.RegistryKey</code>.
+     * <code>cpo.registry.RegistryKey</code>.
      *
      * @return  true if the registration was successful - otherwise false
      * @param   smgr    the ServiceManager
@@ -137,7 +137,7 @@ public class SharedLibraryLoader {
      */
     public static boolean writeRegistryServiceInfo(
                 com.sun.star.lang.XMultiServiceFactory smgr,
-                com.sun.star.registry.XRegistryKey regKey )
+                cpo.registry.XRegistryKey regKey )
     {
         return component_writeInfo(
             DEFAULT_LIBRARY, smgr, regKey,
@@ -148,13 +148,13 @@ public class SharedLibraryLoader {
      * Registers the SharedLibraryLoader under a RegistryKey.
      *
      * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code> and
-     * <code>com.sun.star.registry.RegistryKey</code>.
+     * <code>cpo.registry.RegistryKey</code>.
      *
      * @return  true if the registration was successful - otherwise false
      * @param   libName name of the shared library
      * @param   smgr    the ServiceManager
      * @param   regKey  the root key under that the component should be registered
-     * @throws  com.sun.star.registry.InvalidRegistryException
+     * @throws  cpo.registry.InvalidRegistryException
      *          if the registry is not valid.
      *
      * @see     com.sun.star.loader.SharedLibrary
@@ -162,9 +162,9 @@ public class SharedLibraryLoader {
     public static boolean writeRegistryServiceInfo(
                 String libName,
                 com.sun.star.lang.XMultiServiceFactory smgr,
-                com.sun.star.registry.XRegistryKey regKey )
+                cpo.registry.XRegistryKey regKey )
 
-            throws  com.sun.star.registry.InvalidRegistryException,
+            throws  cpo.registry.InvalidRegistryException,
                     cpo.uno.RuntimeException
     {
         return component_writeInfo(

@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 
 #include <uno/dispatcher.h>
 #include <uno/mapping.hxx>

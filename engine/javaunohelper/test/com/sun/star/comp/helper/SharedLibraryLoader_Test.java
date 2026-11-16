@@ -24,7 +24,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.loader.XImplementationLoader;
 
-import com.sun.star.registry.XSimpleRegistry;
+import cpo.registry.XSimpleRegistry;
 
 @Deprecated
 public class SharedLibraryLoader_Test {
@@ -134,7 +134,7 @@ public class SharedLibraryLoader_Test {
         if ( simpleRegistry == null && ! test_loadNativeSimpleRegistry() )
             return false;
 
-        com.sun.star.registry.XRegistryKey regKey = simpleRegistry.getRootKey();
+        cpo.registry.XRegistryKey regKey = simpleRegistry.getRootKey();
         result = SharedLibraryLoader.writeRegistryServiceInfo( null,  regKey );
 
         System.out.print("Test - ");

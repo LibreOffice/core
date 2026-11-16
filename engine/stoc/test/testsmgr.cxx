@@ -24,7 +24,7 @@
 #include <registry/registry.hxx>
 #include <uno/mapping.hxx>
 
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 

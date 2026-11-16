@@ -30,8 +30,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 
@@ -253,7 +253,7 @@ SAL_IMPLEMENT_MAIN()
         try
         {
             Reference< registry::XImplementationRegistration > xImplReg(
-                xMgr->createInstance( "com.sun.star.registry.ImplementationRegistration" ),
+                xMgr->createInstance( "cpo.registry.ImplementationRegistration" ),
                 UNO_QUERY );
             OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 

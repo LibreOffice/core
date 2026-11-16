@@ -35,7 +35,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <stdio.h>
@@ -48,7 +48,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace css::reflection;
 using namespace css::container;
 using namespace css::beans::PropertyAttribute;
@@ -1165,7 +1165,7 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
+            xMgr->createInstance("cpo.registry.ImplementationRegistration"), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         // Register services

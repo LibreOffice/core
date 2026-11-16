@@ -25,11 +25,11 @@
   </implementation>
   <implementation name="com.sun.star.comp.stoc.ImplementationRegistration"
       constructor="com_sun_star_comp_stoc_ImplementationRegistration_get_implementation">
-    <service name="com.sun.star.registry.ImplementationRegistration"/>
+    <service name="cpo.registry.ImplementationRegistration"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.NestedRegistry"
       constructor="com_sun_star_comp_stoc_NestedRegistry_get_implementation">
-    <service name="com.sun.star.registry.NestedRegistry"/>
+    <service name="cpo.registry.NestedRegistry"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.ORegistryServiceManager"
       constructor="com_sun_star_comp_stoc_ORegistryServiceManager_get_implementation">
@@ -43,6 +43,6 @@
       constructor="com_sun_star_comp_stoc_OServiceManagerWrapper_get_implementation"/>
   <implementation name="com.sun.star.comp.stoc.SimpleRegistry"
       constructor="com_sun_star_comp_stoc_SimpleRegistry_get_implementation">
-    <service name="com.sun.star.registry.SimpleRegistry"/>
+    <service name="cpo.registry.SimpleRegistry"/>
   </implementation>
 </component>

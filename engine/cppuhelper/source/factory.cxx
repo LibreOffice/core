@@ -51,7 +51,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::loader;
-using namespace com::sun::star::registry;
+using namespace ::cpo::registry;
 
 namespace cppu
 {

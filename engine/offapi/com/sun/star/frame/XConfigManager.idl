@@ -79,7 +79,7 @@ published interface XConfigManager: cpo::uno::XInterface
      */
     string substituteVariables( [in] string Text );
 
-    /** was designed for additional functionality for interface com::sun::star::registry::XSimpleRegistry
+    /** was designed for additional functionality for interface cpo::registry::XSimpleRegistry
         and make no sense without that
         @deprecated
      */

@@ -24,7 +24,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.registry.XRegistryKey;
+import cpo.registry.XRegistryKey;
 import cpo.uno.Type;
 
 /* Deploy this component, and call it with the Basic program

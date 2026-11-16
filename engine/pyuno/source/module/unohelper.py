@@ -192,13 +192,13 @@ def getComponentFactoryHelper( implementationName, smgr, regKey, seqEntries ):
 def addComponentsToContext( toBeExtendedContext, contextRuntime, componentUrls, loaderName ):
     smgr = contextRuntime.ServiceManager
     loader = smgr.createInstanceWithContext( loaderName, contextRuntime )
-    implReg = smgr.createInstanceWithContext( "com.sun.star.registry.ImplementationRegistration",contextRuntime)
+    implReg = smgr.createInstanceWithContext( "cpo.registry.ImplementationRegistration",contextRuntime)
 
     isWin = os.name == 'nt' or os.name == 'dos'
     isMac = sys.platform == 'darwin'
     #   create a temporary registry
     for componentUrl in componentUrls:
-        reg = smgr.createInstanceWithContext( "com.sun.star.registry.SimpleRegistry", contextRuntime )
+        reg = smgr.createInstanceWithContext( "cpo.registry.SimpleRegistry", contextRuntime )
         reg.open( "", 0, 1 )
         if not isWin and componentUrl.endswith( ".uno" ):  # still allow platform independent naming
             if isMac:

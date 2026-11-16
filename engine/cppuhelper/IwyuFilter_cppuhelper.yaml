@@ -38,7 +38,7 @@ excludelist:
     - config_folders.h
     cppuhelper/source/shlib.cxx:
     # Needed for UnoType
-    - com/sun/star/registry/XRegistryKey.hpp
+    - cpo/registry/XRegistryKey.hpp
     # Needed for loadSharedLibComponentFactory & writeSharedLibComponentInfo
     - cppuhelper/shlib.hxx
     # Needed for cppuhelper::detail::getEnvironment

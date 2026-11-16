@@ -19,7 +19,7 @@
 
 
 
-module com { module sun { module star { module registry {
+module cpo { module registry {
 
 /** makes structural information (except regarding tree structures)
     of a single registry key accessible.
@@ -46,7 +46,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     boolean isReadOnly()
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** checks if the key points to an open valid key in the data-source.
     */
@@ -62,8 +62,8 @@ published interface XRegistryKey: cpo::uno::XInterface
         @throws InvalidRegistryException
         if the registry is not open.
     */
-    com::sun::star::registry::RegistryKeyType getKeyType( [in] string rKeyName )
-            raises( com::sun::star::registry::InvalidRegistryException );
+    cpo::registry::RegistryKeyType getKeyType( [in] string rKeyName )
+            raises( cpo::registry::InvalidRegistryException );
 
     /** @returns
         the type of the key value or NOT_DEFINED if the key has no value.
@@ -71,8 +71,8 @@ published interface XRegistryKey: cpo::uno::XInterface
         @throws InvalidRegistryException
         if the registry is not open.
     */
-    com::sun::star::registry::RegistryValueType getValueType()
-            raises( com::sun::star::registry::InvalidRegistryException );
+    cpo::registry::RegistryValueType getValueType()
+            raises( cpo::registry::InvalidRegistryException );
 
     /** @returns
         a long value if the key contains one.
@@ -84,8 +84,8 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the value is not of type long.
     */
     long getLongValue()
-            raises( com::sun::star::registry::InvalidRegistryException,
-                    com::sun::star::registry::InvalidValueException );
+            raises( cpo::registry::InvalidRegistryException,
+                    cpo::registry::InvalidValueException );
 
     /** sets a long value to the key.
 
@@ -96,7 +96,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     void setLongValue( [in] long value )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getLongListValue
     /** @returns
@@ -109,8 +109,8 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the actual value is not of type long list.
     */
     sequence<long> getLongListValue()
-            raises( com::sun::star::registry::InvalidRegistryException,
-                    com::sun::star::registry::InvalidValueException );
+            raises( cpo::registry::InvalidRegistryException,
+                    cpo::registry::InvalidValueException );
 
     /** sets a long list value to the key.
 
@@ -121,7 +121,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     void setLongListValue( [in] sequence<long> seqValue )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getAsciiValue
     /** @returns
@@ -134,8 +134,8 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the actual value is not of type ascii.
     */
     string getAsciiValue()
-            raises( com::sun::star::registry::InvalidRegistryException,
-                    com::sun::star::registry::InvalidValueException );
+            raises( cpo::registry::InvalidRegistryException,
+                    cpo::registry::InvalidValueException );
 
     /** sets an ASCII string value to the key.
 
@@ -147,7 +147,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     void setAsciiValue( [in] string value )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getAsciiListValue
     /** @returns
@@ -160,8 +160,8 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the actual value is not of type ascii list.
     */
     sequence<string> getAsciiListValue()
-            raises( com::sun::star::registry::InvalidRegistryException,
-                    com::sun::star::registry::InvalidValueException );
+            raises( cpo::registry::InvalidRegistryException,
+                    cpo::registry::InvalidValueException );
 
     /** sets an ASCII string list value to the key.
 
@@ -173,7 +173,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     void setAsciiListValue( [in] sequence<string> seqValue )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getStringValue
     /** @returns
@@ -186,8 +186,8 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the actual value is not of type string.
     */
     string getStringValue()
-            raises( com::sun::star::registry::InvalidRegistryException,
-                    com::sun::star::registry::InvalidValueException );
+            raises( cpo::registry::InvalidRegistryException,
+                    cpo::registry::InvalidValueException );
 
     /** sets a unicode string value to the key.
 
@@ -198,7 +198,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     void setStringValue( [in] string value )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getStringListValue
     /** @returns
@@ -211,8 +211,8 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the actual value is not of type string list.
     */
     sequence<string> getStringListValue()
-            raises( com::sun::star::registry::InvalidRegistryException,
-                    com::sun::star::registry::InvalidValueException );
+            raises( cpo::registry::InvalidRegistryException,
+                    cpo::registry::InvalidValueException );
 
     /** sets a unicode string value to the key.
 
@@ -222,7 +222,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     void setStringListValue( [in] sequence<string> seqValue )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getBinaryValue
     /** @returns
@@ -235,8 +235,8 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the actual value is not of type binary.
     */
     sequence<byte> getBinaryValue()
-            raises( com::sun::star::registry::InvalidRegistryException,
-                    com::sun::star::registry::InvalidValueException );
+            raises( cpo::registry::InvalidRegistryException,
+                    cpo::registry::InvalidValueException );
 
     /** sets a binary value to the key.
 
@@ -247,7 +247,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     void setBinaryValue( [in] sequence<byte> value )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** opens a sub key of the key.
 
@@ -264,8 +264,8 @@ published interface XRegistryKey: cpo::uno::XInterface
         @throws InvalidRegistryException
         if the registry is not open.
     */
-    com::sun::star::registry::XRegistryKey openKey( [in] string aKeyName )
-            raises( com::sun::star::registry::InvalidRegistryException );
+    cpo::registry::XRegistryKey openKey( [in] string aKeyName )
+            raises( cpo::registry::InvalidRegistryException );
 
     /** creates a new key in the registry.<p>
 
@@ -282,8 +282,8 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open, the registry is readonly
         or if the key exists and is of type LINK.
     */
-    com::sun::star::registry::XRegistryKey createKey( [in] string aKeyName )
-            raises( com::sun::star::registry::InvalidRegistryException );
+    cpo::registry::XRegistryKey createKey( [in] string aKeyName )
+            raises( cpo::registry::InvalidRegistryException );
 
     /** closes a key in the registry.
 
@@ -291,7 +291,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         if the registry is not open.
     */
     void closeKey()
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** deletes a key from the registry.
 
@@ -304,7 +304,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         the key does not exists or if the key is of type LINK.
     */
     void deleteKey( [in] string rKeyName )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::openKeys
     /** opens all subkeys of the key. If a subkey is a link, the link will be
@@ -316,8 +316,8 @@ published interface XRegistryKey: cpo::uno::XInterface
            @throws InvalidRegistryException
            if the registry is not open.
     */
-    sequence<com::sun::star::registry::XRegistryKey> openKeys()
-            raises( com::sun::star::registry::InvalidRegistryException );
+    sequence<cpo::registry::XRegistryKey> openKeys()
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getKeyNames
     /** @returns a sequence with the names of all subkeys of the key.
@@ -328,7 +328,7 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the registry is not open.
      */
     sequence<string> getKeyNames()
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** creates a new link in the registry.
 
@@ -352,7 +352,7 @@ published interface XRegistryKey: cpo::uno::XInterface
     */
     boolean createLink( [in] string aLinkName,
              [in] string aLinkTarget )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     /** deletes a link from the registry.
 
@@ -365,7 +365,7 @@ published interface XRegistryKey: cpo::uno::XInterface
         or if the link does not exist.
     */
     void deleteLink( [in] string rLinkName )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getLinkTarget
     /** @returns
@@ -379,7 +379,7 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the registry is not open or the link does not exists.
     */
     string getLinkTarget( [in] string rLinkName )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getResolvedName
     /** @returns
@@ -394,11 +394,11 @@ published interface XRegistryKey: cpo::uno::XInterface
          if the registry is not open or a recursion was detected.
     */
     string getResolvedName( [in] string aKeyName )
-            raises( com::sun::star::registry::InvalidRegistryException );
+            raises( cpo::registry::InvalidRegistryException );
 
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

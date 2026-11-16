@@ -47,7 +47,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
+#include <cpo/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
@@ -328,7 +328,7 @@ static PyObject* getComponentContext(
         Runtime runtime;
         ret = runtime.any2PyObject( Any( ctx ) );
     }
-    catch (const css::registry::InvalidRegistryException &e)
+    catch (const cpo::registry::InvalidRegistryException &e)
     {
         // can't use raisePyExceptionWithAny() here, because the function
         // does any conversions, which will not work with a

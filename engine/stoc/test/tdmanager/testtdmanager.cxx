@@ -28,9 +28,9 @@
 #include <com/sun/star/reflection/XPublished.hpp>
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/InvalidRegistryException.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
@@ -139,9 +139,9 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
                         arguments[argPos].pData, &url.pData ) );
         bool supposedToBeCompatible = ! url.endsWithIgnoreAsciiCase("_incomp.rdb");
 
-        cpo::uno::Reference<css::registry::XSimpleRegistry> xReg(
+        cpo::uno::Reference<cpo::registry::XSimpleRegistry> xReg(
             m_context->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.registry.SimpleRegistry",
+                "cpo.registry.SimpleRegistry",
                 m_context ), cpo::uno::UNO_QUERY_THROW );
         xReg->open( url, true /* read-only */, false /* ! create */ );
         cpo::uno::Any arg( css::uno::makeAny(xReg) );
@@ -301,11 +301,11 @@ namespace {
 bool writeInfo(void * registryKey, OUString const & implementationName,
                cpo::uno::Sequence< OUString > const & serviceNames) {
     OUString keyName = "/" + implementationName + "/UNO/SERVICES";
-    cpo::uno::Reference< css::registry::XRegistryKey > key;
+    cpo::uno::Reference< cpo::registry::XRegistryKey > key;
     try {
-        key = static_cast< css::registry::XRegistryKey * >(registryKey)->
+        key = static_cast< cpo::registry::XRegistryKey * >(registryKey)->
             createKey(keyName);
-    } catch (css::registry::InvalidRegistryException &) {}
+    } catch (cpo::registry::InvalidRegistryException &) {}
     if (!key.is()) {
         return false;
     }
@@ -313,7 +313,7 @@ bool writeInfo(void * registryKey, OUString const & implementationName,
     for (sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
         try {
             key->createKey(serviceNames[i]);
-        } catch (css::registry::InvalidRegistryException &) {
+        } catch (cpo::registry::InvalidRegistryException &) {
             success = false;
             break;
         }

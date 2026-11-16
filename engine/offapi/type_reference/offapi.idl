@@ -3831,7 +3831,7 @@ module com {
    };
    module configuration {
     published service ConfigurationRegistry {
-     interface ::com::sun::star::registry::XSimpleRegistry;
+     interface ::cpo::registry::XSimpleRegistry;
      interface ::com::sun::star::util::XFlushable;
     };
     published service GroupUpdate {

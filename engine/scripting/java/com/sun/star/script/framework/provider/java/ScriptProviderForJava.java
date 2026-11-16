@@ -27,7 +27,7 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 
-import com.sun.star.registry.XRegistryKey;
+import cpo.registry.XRegistryKey;
 
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.log.LogUtils;

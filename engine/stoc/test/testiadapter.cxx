@@ -28,8 +28,8 @@
 #include <cppuhelper/weak.hxx>
 
 #include <test/XLanguageBindingTest.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -48,7 +48,7 @@ using namespace css::script;
 using namespace css::beans;
 using namespace css::lang;
 using namespace css::reflection;
-using namespace css::registry;
+using namespace cpo::registry;
 
 
 bool equals( const test::TestElement & rData1, const test::TestElement & rData2 )
@@ -1001,7 +1001,7 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance( "com.sun.star.registry.ImplementationRegistration" ),
+            xMgr->createInstance( "cpo.registry.ImplementationRegistration" ),
             UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 

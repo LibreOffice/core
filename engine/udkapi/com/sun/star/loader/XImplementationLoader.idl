@@ -22,7 +22,7 @@
 
 
 /** handles activation (loading) of a UNO component.
-    @see        com::sun::star::registry::XImplementationRegistration
+    @see        cpo::registry::XImplementationRegistration
  */
 published interface XImplementationLoader: cpo::uno::XInterface
 {
@@ -58,7 +58,7 @@ published interface XImplementationLoader: cpo::uno::XInterface
     cpo::uno::XInterface activate( [in] string implementationName,
              [in] string implementationLoaderUrl,
              [in] string locationUrl,
-             [in] com::sun::star::registry::XRegistryKey xKey )
+             [in] cpo::registry::XRegistryKey xKey )
             raises( com::sun::star::loader::CannotActivateFactoryException );
 
     /** writes a list of all implementations hosted by this component into a registry key.
@@ -77,12 +77,12 @@ published interface XImplementationLoader: cpo::uno::XInterface
                that it is a relative file url. <p>Special loaders may define
                their own protocol (for instance an executable loader may need
                more than only one file url).
-        @see com::sun::star::registry::XImplementationRegistration
+        @see cpo::registry::XImplementationRegistration
      */
-    boolean writeRegistryInfo( [in] com::sun::star::registry::XRegistryKey xKey,
+    boolean writeRegistryInfo( [in] cpo::registry::XRegistryKey xKey,
              [in] string implementationLoaderUrl,
              [in] string locationUrl )
-            raises( com::sun::star::registry::CannotRegisterImplementationException );
+            raises( cpo::registry::CannotRegisterImplementationException );
 
 };
 

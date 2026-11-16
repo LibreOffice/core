@@ -77,7 +77,7 @@ module org.libreoffice.uno
     exports com.sun.star.qa;
     exports com.sun.star.rdf;
     exports com.sun.star.reflection;
-    exports com.sun.star.registry;
+    exports cpo.registry;
     exports com.sun.star.rendering;
     exports com.sun.star.resource;
     exports com.sun.star.scanner;

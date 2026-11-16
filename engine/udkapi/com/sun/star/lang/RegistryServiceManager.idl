@@ -39,7 +39,7 @@ published service RegistryServiceManager
     /** The first two arguments of the initialization arguments reference:
         <ol>
         <li>a simple registry
-        (com::sun::star::registry::XSimpleRegistry),
+        (cpo::registry::XSimpleRegistry),
         i.e. the registry to be read from</li>
         <li>a component context
         (cpo::uno::XComponentContext)
@@ -55,7 +55,7 @@ published service RegistryServiceManager
     interface com::sun::star::beans::XPropertySet;
     /** Specifies the current registry to be read from.
     */
-    [readonly, property] com::sun::star::registry::XSimpleRegistry Registry;
+    [readonly, property] cpo::registry::XSimpleRegistry Registry;
 };
 
 

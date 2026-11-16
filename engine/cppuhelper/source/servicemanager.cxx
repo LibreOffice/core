@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
+#include <cpo/registry/InvalidRegistryException.hpp>
 #include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
@@ -98,7 +98,7 @@ void removeFromImplementationMap(
 }
 
 // For simplicity, this code keeps throwing
-// css::registry::InvalidRegistryException for invalid XML rdbs (even though
+// cpo::registry::InvalidRegistryException for invalid XML rdbs (even though
 // that does not fit the exception's name):
 class Parser {
 public:
@@ -159,13 +159,13 @@ Parser::Parser(
                 state = STATE_COMPONENTS;
                 break;
             }
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in outer level");
         case STATE_END:
             if (res == xmlreader::XmlReader::Result::Done) {
                 return;
             }
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in outer level");
         case STATE_COMPONENTS:
             if (res == xmlreader::XmlReader::Result::End) {
@@ -179,7 +179,7 @@ Parser::Parser(
                 state = STATE_COMPONENT_INITIAL;
                 break;
             }
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <components>");
         case STATE_COMPONENT:
             if (res == xmlreader::XmlReader::Result::End) {
@@ -195,7 +195,7 @@ Parser::Parser(
                 state = STATE_IMPLEMENTATION;
                 break;
             }
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <component>");
         case STATE_IMPLEMENTATION:
             if (res == xmlreader::XmlReader::Result::End) {
@@ -216,21 +216,21 @@ Parser::Parser(
                 state = STATE_SINGLETON;
                 break;
             }
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <implementation>");
         case STATE_SERVICE:
             if (res == xmlreader::XmlReader::Result::End) {
                 state = STATE_IMPLEMENTATION;
                 break;
             }
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <service>");
         case STATE_SINGLETON:
             if (res == xmlreader::XmlReader::Result::End) {
                 state = STATE_IMPLEMENTATION;
                 break;
             }
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <service>");
         }
     }
@@ -248,13 +248,13 @@ void Parser::handleComponent() {
             && name.equals(RTL_CONSTASCII_STRINGPARAM("loader")))
         {
             if (!attrLoader_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <component> has multiple \"loader\" attributes");
             }
             attrLoader_ = reader_.getAttributeValue(false).convertFromUtf8();
             if (attrLoader_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <component> has empty \"loader\" attribute");
             }
@@ -262,13 +262,13 @@ void Parser::handleComponent() {
                    && name.equals(RTL_CONSTASCII_STRINGPARAM("uri")))
         {
             if (!attrUri_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <component> has multiple \"uri\" attributes");
             }
             attrUri_ = reader_.getAttributeValue(false).convertFromUtf8();
             if (attrUri_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <component> has empty \"uri\" attribute");
             }
@@ -276,14 +276,14 @@ void Parser::handleComponent() {
                    && name.equals(RTL_CONSTASCII_STRINGPARAM("environment")))
         {
             if (!attrEnvironment_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl() +
                      ": <component> has multiple \"environment\" attributes");
             }
             attrEnvironment_ = reader_.getAttributeValue(false)
                 .convertFromUtf8();
             if (attrEnvironment_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl() +
                      ": <component> has empty \"environment\" attribute");
             }
@@ -291,35 +291,35 @@ void Parser::handleComponent() {
                    && name.equals(RTL_CONSTASCII_STRINGPARAM("prefix")))
         {
             if (!attrPrefix_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl() +
                      ": <component> has multiple \"prefix\" attributes");
             }
             attrPrefix_ = reader_.getAttributeValue(false).convertFromUtf8();
             if (attrPrefix_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl() +
                      ": <component> has empty \"prefix\" attribute");
             }
         } else {
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected attribute \""
                  + name.convertFromUtf8() + "\" in <component>");
         }
     }
     if (attrLoader_.isEmpty()) {
-        throw css::registry::InvalidRegistryException(
+        throw cpo::registry::InvalidRegistryException(
             reader_.getUrl() + ": <component> is missing \"loader\" attribute");
     }
     if (attrUri_.isEmpty()) {
-        throw css::registry::InvalidRegistryException(
+        throw cpo::registry::InvalidRegistryException(
             reader_.getUrl() + ": <component> is missing \"uri\" attribute");
     }
 #ifndef DISABLE_DYNLOADING
     try {
         attrUri_ = rtl::Uri::convertRelToAbs(reader_.getUrl(), attrUri_);
     } catch (const rtl::MalformedUriException & e) {
-        throw css::registry::InvalidRegistryException(
+        throw cpo::registry::InvalidRegistryException(
             reader_.getUrl() + ": bad \"uri\" attribute: " + e.getMessage());
     }
 #endif
@@ -336,13 +336,13 @@ void Parser::handleImplementation() {
             && name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
             if (!attrName.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <implementation> has multiple \"name\" attributes");
             }
             attrName = reader_.getAttributeValue(false).convertFromUtf8();
             if (attrName.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                     + ": <implementation> has empty \"name\" attribute");
             }
@@ -350,7 +350,7 @@ void Parser::handleImplementation() {
                    && name.equals(RTL_CONSTASCII_STRINGPARAM("constructor")))
         {
             if (!attrConstructor.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <implementation> has multiple \"constructor\""
                         " attributes");
@@ -358,12 +358,12 @@ void Parser::handleImplementation() {
             attrConstructor = reader_.getAttributeValue(false)
                 .convertFromUtf8();
             if (attrConstructor.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": element has empty \"constructor\" attribute");
             }
             if (attrEnvironment_.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <implementation> has \"constructor\" attribute but"
                         " <component> has no \"environment\" attribute");
@@ -372,23 +372,23 @@ void Parser::handleImplementation() {
                    && name.equals(RTL_CONSTASCII_STRINGPARAM("single-instance")))
         {
             if (attrSingleInstance) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl()
                     + ": <implementation> has multiple \"single-instance\" attributes");
             }
             if (!reader_.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("true"))) {
-                throw css::registry::InvalidRegistryException(
+                throw cpo::registry::InvalidRegistryException(
                     reader_.getUrl() + ": <implementation> has bad \"single-instance\" attribute");
             }
             attrSingleInstance = true;
         } else {
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected element attribute \""
                  + name.convertFromUtf8() + "\" in <implementation>");
         }
     }
     if (attrName.isEmpty()) {
-        throw css::registry::InvalidRegistryException(
+        throw cpo::registry::InvalidRegistryException(
             reader_.getUrl()
              + ": <implementation> is missing \"name\" attribute");
     }
@@ -399,7 +399,7 @@ void Parser::handleImplementation() {
     if (!data_->namedImplementations.emplace(attrName, implementation_).
         second)
     {
-        throw css::registry::InvalidRegistryException(
+        throw cpo::registry::InvalidRegistryException(
             reader_.getUrl() + ": duplicate <implementation name=\"" + attrName
              + "\">");
     }
@@ -425,22 +425,22 @@ OUString Parser::getNameAttribute() {
         if (nsId != xmlreader::XmlReader::NAMESPACE_NONE
             || !name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": expected element attribute \"name\"");
         }
         if (!attrName.isEmpty()) {
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl()
                  + ": element has multiple \"name\" attributes");
         }
         attrName = reader_.getAttributeValue(false).convertFromUtf8();
         if (attrName.isEmpty()) {
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 reader_.getUrl() + ": element has empty \"name\" attribute");
         }
     }
     if (attrName.isEmpty()) {
-        throw css::registry::InvalidRegistryException(
+        throw cpo::registry::InvalidRegistryException(
             reader_.getUrl() + ": element is missing \"name\" attribute");
     }
     return attrName;
@@ -849,7 +849,7 @@ void cppuhelper::ServiceManager::loadImplementation(
             cpo::uno::UNO_QUERY_THROW);
         f0 = loader->activate(
             implementation->name, OUString(), uri,
-            cpo::uno::Reference< css::registry::XRegistryKey >());
+            cpo::uno::Reference< cpo::registry::XRegistryKey >());
     }
     cpo::uno::Reference<css::lang::XSingleComponentFactory> f1;
     cpo::uno::Reference<css::lang::XSingleServiceFactory> f2;
@@ -1372,7 +1372,7 @@ void cppuhelper::ServiceManager::readRdbFile(
         SAL_INFO("cppuhelper", "Ignored optional " << uri);
     }
 #if !ENABLE_FUZZERS
-    catch (css::registry::InvalidRegistryException & e) {
+    catch (cpo::registry::InvalidRegistryException & e) {
         if (!readLegacyRdbFile(uri)) {
             throw cpo::uno::DeploymentException(
                 "InvalidRegistryException: " + e.Message,
@@ -1441,7 +1441,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
                 cpo::uno::Reference< cpo::uno::XComponentContext >(), uri);
         if (!data_.namedImplementations.emplace(name, impl).second)
         {
-            throw css::registry::InvalidRegistryException(
+            throw cpo::registry::InvalidRegistryException(
                 uri + ": duplicate <implementation name=\"" + name + "\">");
         }
         readLegacyRdbStrings(
@@ -1537,7 +1537,7 @@ void cppuhelper::ServiceManager::insertRdbFiles(
             throw css::lang::IllegalArgumentException(
                 rUri + ": no such file", static_cast< cppu::OWeakObject * >(this),
                 0);
-        } catch (css::registry::InvalidRegistryException & e) {
+        } catch (cpo::registry::InvalidRegistryException & e) {
             throw css::lang::IllegalArgumentException(
                 "InvalidRegistryException: " + e.Message,
                 static_cast< cppu::OWeakObject * >(this), 0);

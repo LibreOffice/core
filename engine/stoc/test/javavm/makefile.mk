@@ -38,9 +38,9 @@ UNOTYPES= com.sun.star.lang.XMultiComponentFactory \
     cpo.uno.XWeak	\
     com.sun.star.java.XJavaVM	\
     com.sun.star.java.XJavaThreadRegister_11	\
-    com.sun.star.registry.XSimpleRegistry \
+    cpo.registry.XSimpleRegistry \
     com.sun.star.lang.XComponent \
-    com.sun.star.registry.XImplementationRegistration \
+    cpo.registry.XImplementationRegistration \
     com.sun.star.lang.XSingleServiceFactory \
     cpo.uno.TypeClass \
     com.sun.star.lang.XMultiServiceFactory

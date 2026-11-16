@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
 /** implicitly supports a local registry and a read-only
     system registry for global information.
@@ -121,11 +121,11 @@
  */
 published service DefaultRegistry
 {
-    interface com::sun::star::registry::XSimpleRegistry;
+    interface cpo::registry::XSimpleRegistry;
 
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

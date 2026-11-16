@@ -10,7 +10,7 @@ excludelist:
     javaunohelper/source/javaunohelper.cxx:
     # Needed for direct member access
     - com/sun/star/lang/XMultiServiceFactory.hpp
-    - com/sun/star/registry/XRegistryKey.hpp
+    - cpo/registry/XRegistryKey.hpp
     - jvmaccess/unovirtualmachine.hxx
     # Needed to avoid loplugin:unreffun error
     - juhx-export-functions.hxx

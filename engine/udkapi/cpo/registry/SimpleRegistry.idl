@@ -19,18 +19,19 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
-/** is thrown if entries of two registries are contradictory in the context of
-    XSimpleRegistry::mergeKey()e() method.
+/** makes it possible to create, open, or close a registry. Further, it is
+    possible to merge a registry under a specified key in the open registry.
 
-    @deprecated as XSimpleRegistry::mergeKey is deprecated as well
+    Guarantees:
+    <ul>
+    <li>-thread safe</li>
+    </ul>
  */
-published exception MergeConflictException: cpo::uno::Exception
-{
-};
+published service SimpleRegistry : cpo::registry::XSimpleRegistry;
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

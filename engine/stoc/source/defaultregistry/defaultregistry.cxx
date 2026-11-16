@@ -24,7 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -33,7 +33,7 @@ namespace cpo::uno { class XComponentContext; }
 
 using namespace ::cpo::uno;
 using namespace cpo::uno;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace css::lang;
 using namespace css::container;
 using namespace cppu;
@@ -1046,7 +1046,7 @@ bool NestedRegistryImpl::supportsService( const OUString& ServiceName )
 
 Sequence<OUString> NestedRegistryImpl::getSupportedServiceNames(  )
 {
-    Sequence< OUString > seqNames { u"com.sun.star.registry.NestedRegistry"_ustr };
+    Sequence< OUString > seqNames { u"cpo.registry.NestedRegistry"_ustr };
     return seqNames;
 }
 

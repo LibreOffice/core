@@ -19,21 +19,22 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
-/** represents all possible types of a key.
+/** is the implementation of the interface XImplementationRegistration.
+    This service can be used to install or uninstall components (implementations).
+    Further, it is possible to check if all runtime dependencies (needed services) are
+    available to use a specified component.
 
-    <p>A key can be a normal key with a value and subkeys, or it can be a
-    link which references another key.</p>
+    Guarantees:
+    <ul>
+    <li>-thread safe</li>
+    </ul>
  */
-published enum RegistryKeyType
-{
-    KEY,
-    LINK
-
-};
+published service ImplementationRegistration
+  : cpo::registry::XImplementationRegistration;
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

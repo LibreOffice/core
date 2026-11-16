@@ -13,7 +13,7 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     stoc/source/implementationregistration/mergekeys.cxx:
     # Actually used
-    - com/sun/star/registry/XRegistryKey.hpp
+    - cpo/registry/XRegistryKey.hpp
     stoc/source/corereflection/crefl.cxx:
     # Safer to keep for use in cppu::UnoType template
     - com/sun/star/reflection/XTypeDescription.hpp

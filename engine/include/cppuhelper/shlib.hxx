@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
-namespace com { namespace sun { namespace star { namespace registry { class XRegistryKey; } } } }
+namespace cpo::registry { class XRegistryKey; }
 namespace cpo::uno { class XInterface; }
 
 namespace cppu
@@ -69,7 +69,7 @@ CPPUHELPER_DLLPUBLIC void
 writeSharedLibComponentInfo(
     ::rtl::OUString const & uri,
     cpo::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr,
-    cpo::uno::Reference< css::registry::XRegistryKey > const & xKey );
+    cpo::uno::Reference< cpo::registry::XRegistryKey > const & xKey );
 
 } // end namespace cppu
 

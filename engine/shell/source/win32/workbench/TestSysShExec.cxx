@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <cppuhelper/servicefactory.hxx>

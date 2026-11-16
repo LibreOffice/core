@@ -58,7 +58,7 @@
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/test/performance/XPerformanceTest.hpp>
@@ -71,7 +71,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::loader;
-using namespace com::sun::star::registry;
+using namespace ::cpo::registry;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
 using namespace com::sun::star::test::performance;

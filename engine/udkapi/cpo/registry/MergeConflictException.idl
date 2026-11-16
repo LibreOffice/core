@@ -19,16 +19,18 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
-/** signals that the value of the key is invalid or does not have the
-    appropriate key type.
+/** is thrown if entries of two registries are contradictory in the context of
+    XSimpleRegistry::mergeKey()e() method.
+
+    @deprecated as XSimpleRegistry::mergeKey is deprecated as well
  */
-published exception InvalidValueException: cpo::uno::Exception
+published exception MergeConflictException: cpo::uno::Exception
 {
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

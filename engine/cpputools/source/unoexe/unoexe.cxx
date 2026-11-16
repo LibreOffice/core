@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 #include <com/sun/star/connection/Acceptor.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
@@ -53,7 +53,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::loader;
-using namespace com::sun::star::registry;
+using namespace ::cpo::registry;
 using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;

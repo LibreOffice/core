@@ -30,7 +30,7 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.registry.XRegistryKey;
+import cpo.registry.XRegistryKey;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.Type;
 
@@ -44,7 +44,7 @@ import cpo.uno.Type;
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
  * @see         com.sun.star.lang.XSingleServiceFactory
- * @see         com.sun.star.registry.XRegistryKey
+ * @see         cpo.registry.XRegistryKey
  */
 public class FactoryHelper {
 
@@ -486,7 +486,7 @@ public class FactoryHelper {
                 xNewKey.createKey( supported_services[ nPos ] );
             }
             return true;
-        } catch (com.sun.star.registry.InvalidRegistryException exc) {
+        } catch (cpo.registry.InvalidRegistryException exc) {
             if (DEBUG) {
                 System.err.println(
                     "##### " + Factory.class.getName() + ".writeRegistryServiceInfo -- exc: " +

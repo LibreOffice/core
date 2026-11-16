@@ -29,7 +29,7 @@
 #include <registry/registry.hxx>
 
 
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -47,7 +47,7 @@
 using namespace com::sun::star;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace css::lang;
 using namespace css::beans;
 using namespace osl;
@@ -188,7 +188,7 @@ void test_SimpleRegistry(
     OSL_ENSURE( xServInfo.is(), "test_SimpleRegistry error2");
 
     OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.SimpleRegistry", "test_SimpleRegistry error3");
-    OSL_ENSURE( xServInfo->supportsService("com.sun.star.registry.SimpleRegistry"), "test_SimpleRegistry error4");
+    OSL_ENSURE( xServInfo->supportsService("cpo.registry.SimpleRegistry"), "test_SimpleRegistry error4");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "test_SimpleRegistry error5");
     xServInfo.clear();
 
@@ -457,7 +457,7 @@ void test_DefaultRegistry(
     OSL_ENSURE( xServInfo.is(), "test_DefaultRegistry error2");
 
     OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.NestedRegistry", "test_DefaultRegistry error3");
-    OSL_ENSURE( xServInfo->supportsService("com.sun.star.registry.NestedRegistry"), "test_DefaultRegistry error4");
+    OSL_ENSURE( xServInfo->supportsService("cpo.registry.NestedRegistry"), "test_DefaultRegistry error4");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "test_DefaultRegistry error5");
     xServInfo.clear();
 
@@ -467,9 +467,9 @@ void test_DefaultRegistry(
     {
         Reference<XRegistryKey> xRootKey(xReg->getRootKey());
 
-        Reference<XRegistryKey> xKey = xRootKey->openKey("/UCR/com/sun/star/registry/XSimpleRegistry");
+        Reference<XRegistryKey> xKey = xRootKey->openKey("/UCR/cpo/registry/XSimpleRegistry");
 
-        OSL_ENSURE( xKey->getKeyName() == "/UCR/com/sun/star/registry/XSimpleRegistry",
+        OSL_ENSURE( xKey->getKeyName() == "/UCR/cpo/registry/XSimpleRegistry",
                      "test_DefaultRegistry error 7" );
 
         if (bMergeDifferently)

@@ -19,13 +19,13 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 
 #include <osl/diagnose.h>
 
 using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+using namespace ::cpo::registry;
 
 namespace cppu {
 

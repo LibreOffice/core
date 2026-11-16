@@ -20,10 +20,10 @@
 #include <cppuhelper/factory.hxx>
 #include <rtl/string.hxx>
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 
 using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
+using namespace ::cpo::registry;
 
 // declaration of external RegEntry-functions defined by the service objects
 

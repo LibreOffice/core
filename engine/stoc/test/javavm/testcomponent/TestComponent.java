@@ -19,7 +19,7 @@
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.*;
 import com.sun.star.uno.*;
-import com.sun.star.registry.XRegistryKey;
+import cpo.registry.XRegistryKey;
 import java.io.*;
 import java.net.*;
 

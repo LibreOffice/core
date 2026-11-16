@@ -24,7 +24,7 @@
 #include <atlbase.h>
 #include <stdio.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <uno/environment.h>
 #include <comphelper/processfactory.hxx>
@@ -59,7 +59,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::registry;
+using namespace ::cpo::registry;
 using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 

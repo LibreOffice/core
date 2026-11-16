@@ -25,9 +25,9 @@ import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.registry.XSimpleRegistry;
-import com.sun.star.registry.XImplementationRegistration;
+import cpo.registry.XRegistryKey;
+import cpo.registry.XSimpleRegistry;
+import cpo.registry.XImplementationRegistration;
 import com.sun.star.container.XSet;
 
 import com.sun.star.comp.helper.RegistryServiceFactory;
@@ -159,7 +159,7 @@ public class Factory_Test
                 UnoRuntime.queryInterface(
                     XImplementationRegistration.class,
                     xContext.getServiceManager().createInstanceWithContext(
-                        "com.sun.star.registry.ImplementationRegistration", xContext ) );
+                        "cpo.registry.ImplementationRegistration", xContext ) );
             xImpReg.registerImplementation( "com.sun.star.loader.Java2", jar, xRDB );
 
             // tests

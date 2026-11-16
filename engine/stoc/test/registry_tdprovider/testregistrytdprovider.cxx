@@ -32,8 +32,8 @@
 #include <com/sun/star/reflection/XSingletonTypeDescription2.hpp>
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/InvalidRegistryException.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <cpo/uno/Reference.hxx>
@@ -767,11 +767,11 @@ namespace {
 bool writeInfo(void * registryKey, OUString const & implementationName,
                cpo::uno::Sequence< OUString > const & serviceNames) {
     OUString keyName = "/" + implementationName + "/UNO/SERVICES";
-    cpo::uno::Reference< css::registry::XRegistryKey > key;
+    cpo::uno::Reference< cpo::registry::XRegistryKey > key;
     try {
-        key = static_cast< css::registry::XRegistryKey * >(registryKey)->
+        key = static_cast< cpo::registry::XRegistryKey * >(registryKey)->
             createKey(keyName);
-    } catch (css::registry::InvalidRegistryException &) {}
+    } catch (cpo::registry::InvalidRegistryException &) {}
     if (!key.is()) {
         return false;
     }
@@ -779,7 +779,7 @@ bool writeInfo(void * registryKey, OUString const & implementationName,
     for (auto const& rServiceName : serviceNames) {
         try {
             key->createKey(rServiceName);
-        } catch (css::registry::InvalidRegistryException &) {
+        } catch (cpo::registry::InvalidRegistryException &) {
             success = false;
             break;
         }

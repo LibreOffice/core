@@ -31,7 +31,7 @@
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 namespace com { namespace sun { namespace star { namespace lang { class XSingleComponentFactory; } } } }
 namespace com { namespace sun { namespace star { namespace lang { class XSingleServiceFactory; } } } }
-namespace com { namespace sun { namespace star { namespace registry { class XRegistryKey; } } } }
+namespace cpo::registry { class XRegistryKey; }
 namespace cpo::uno { class XComponentContext; }
 namespace cpo::uno { class XInterface; }
 namespace cpo::uno { template <class E> class Sequence; }
@@ -215,7 +215,7 @@ CPPUHELPER_DLLPUBLIC cpo::uno::Reference< css::lang::XSingleServiceFactory >
 createSingleRegistryFactory(
     const cpo::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
-    const cpo::uno::Reference< css::registry::XRegistryKey > & rImplementationKey );
+    const cpo::uno::Reference< cpo::registry::XRegistryKey > & rImplementationKey );
 
 }
 

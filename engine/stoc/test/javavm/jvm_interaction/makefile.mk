@@ -43,9 +43,9 @@ UNOTYPES= com.sun.star.lang.XMultiComponentFactory \
     com.sun.star.java.MissingJavaRuntimeException \
     com.sun.star.java.JavaDisabledException \
     com.sun.star.java.JavaVMCreationFailureException \
-    com.sun.star.registry.XSimpleRegistry \
+    cpo.registry.XSimpleRegistry \
     com.sun.star.lang.XComponent \
-    com.sun.star.registry.XImplementationRegistration \
+    cpo.registry.XImplementationRegistration \
     com.sun.star.lang.XSingleServiceFactory \
     cpo.uno.TypeClass \
     com.sun.star.lang.XMultiServiceFactory \

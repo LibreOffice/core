@@ -29,7 +29,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 
 #include <cppuhelper/servicefactory.hxx>
 #include <comphelper/processfactory.hxx>
@@ -49,7 +49,7 @@ using namespace ::comphelper                ;
 using namespace ::cpo::uno       ;
 using namespace ::com::sun::star::lang      ;
 using namespace ::com::sun::star::beans     ;
-using namespace ::com::sun::star::registry  ;
+using namespace ::cpo::registry  ;
 
 class TestApplication : public Application
 {

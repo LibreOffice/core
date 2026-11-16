@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
+#include <cpo/registry/InvalidRegistryException.hpp>
 #include <cppuhelper/factory.hxx>
 
 #include "xexecutor.hxx"

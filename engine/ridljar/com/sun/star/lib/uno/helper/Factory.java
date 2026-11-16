@@ -21,7 +21,7 @@ import cpo.uno.XComponentContext;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XInitialization;
-import com.sun.star.registry.XRegistryKey;
+import cpo.registry.XRegistryKey;
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -101,7 +101,7 @@ public class Factory
             }
             return true;
           }
-          catch (com.sun.star.registry.InvalidRegistryException exc)
+          catch (cpo.registry.InvalidRegistryException exc)
         {
             if (DEBUG)
             {

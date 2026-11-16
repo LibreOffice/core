@@ -39,8 +39,8 @@
 #endif
 
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/CannotRegisterImplementationException.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/shlib.hxx>
 #include <o3tl/environment.hxx>
@@ -463,22 +463,22 @@ extern "C" void writeInfo(va_list * args) {
 void cppu::writeSharedLibComponentInfo(
     OUString const & uri,
     cpo::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
-    cpo::uno::Reference<css::registry::XRegistryKey> const & xKey)
+    cpo::uno::Reference<cpo::registry::XRegistryKey> const & xKey)
 {
     if (!mayLoadLibrary(uri)) {
-        throw css::registry::CannotRegisterImplementationException(
+        throw cpo::registry::CannotRegisterImplementationException(
             "component library <" + uri + "> is not loaded and loading is closed",
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
     osl::Module mod(uri, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (!mod.is()) {
-        throw css::registry::CannotRegisterImplementationException(
+        throw cpo::registry::CannotRegisterImplementationException(
             "loading component library <" + uri + "> failed",
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
     oslGenericFunction fp = mod.getFunctionSymbol(COMPONENT_WRITEINFO);
     if (fp == nullptr) {
-        throw css::registry::CannotRegisterImplementationException(
+        throw cpo::registry::CannotRegisterImplementationException(
             ("no symbol \"" COMPONENT_WRITEINFO "\" in component library <"
              + uri + ">"),
             cpo::uno::Reference<cpo::uno::XInterface>());
@@ -486,19 +486,19 @@ void cppu::writeSharedLibComponentInfo(
     cpo::uno::Environment curEnv(cpo::uno::Environment::getCurrent());
     cpo::uno::Environment env(getEnvironmentFromModule(mod, curEnv, u"", u""_ustr));
     if (!(curEnv.is() && env.is())) {
-        throw css::registry::CannotRegisterImplementationException(
+        throw cpo::registry::CannotRegisterImplementationException(
             u"cannot get environments"_ustr,
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
     cpo::uno::Mapping map(curEnv, env);
     if (!map.is()) {
-        throw css::registry::CannotRegisterImplementationException(
+        throw cpo::registry::CannotRegisterImplementationException(
             u"cannot get mapping"_ustr, cpo::uno::Reference<cpo::uno::XInterface>());
     }
     void * smgr = map.mapInterface(
         xMgr.get(), cppu::UnoType<css::lang::XMultiServiceFactory>::get());
     void * key = map.mapInterface(
-        xKey.get(), cppu::UnoType<css::registry::XRegistryKey>::get());
+        xKey.get(), cppu::UnoType<cpo::registry::XRegistryKey>::get());
     bool ok;
     env.invoke(writeInfo, fp, smgr, key, &ok);
     (*env.get()->pExtEnv->releaseInterface)(env.get()->pExtEnv, key);
@@ -506,7 +506,7 @@ void cppu::writeSharedLibComponentInfo(
         (*env.get()->pExtEnv->releaseInterface)(env.get()->pExtEnv, smgr);
     }
     if (!ok) {
-        throw css::registry::CannotRegisterImplementationException(
+        throw cpo::registry::CannotRegisterImplementationException(
             ("calling \"" COMPONENT_WRITEINFO "\" in component library <" + uri
              + "> returned false"),
             cpo::uno::Reference<cpo::uno::XInterface>());

@@ -43,8 +43,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/container/XElementAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -62,7 +62,7 @@ using namespace com::sun::star;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::beans;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace css::lang;
 using namespace css::container;
 using namespace cppu;
@@ -1229,7 +1229,7 @@ Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
 
             m_xRegistry.set(
                 createInstanceWithContext(
-                    u"com.sun.star.registry.DefaultRegistry"_ustr,
+                    u"cpo.registry.DefaultRegistry"_ustr,
                     m_xContext ),
                 UNO_QUERY );
         }

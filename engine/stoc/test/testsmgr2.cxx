@@ -25,7 +25,7 @@
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -36,7 +36,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::container;
-using namespace css::registry;
+using namespace cpo::registry;
 
 SAL_IMPLEMENT_MAIN()
 {

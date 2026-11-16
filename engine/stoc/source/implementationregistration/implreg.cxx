@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/registry/XImplementationRegistration2.hpp>
+#include <cpo/registry/XImplementationRegistration2.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,11 +48,11 @@
 
 using namespace com::sun::star;
 using namespace ::cpo::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
 using namespace css::loader;
 using namespace css::beans;
 using namespace css::lang;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace cppu;
 
 namespace {
@@ -1127,7 +1127,7 @@ bool ImplementationRegistration::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > ImplementationRegistration::getSupportedServiceNames()
 {
-    return { u"com.sun.star.registry.ImplementationRegistration"_ustr };
+    return { u"cpo.registry.ImplementationRegistration"_ustr };
 }
 
 Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceManager() const
@@ -1557,7 +1557,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
 
     Reference < XSimpleRegistry > xReg(
         rSMgr->createInstanceWithContext(
-            u"com.sun.star.registry.SimpleRegistry"_ustr,   xCtx ),
+            u"cpo.registry.SimpleRegistry"_ustr,   xCtx ),
         UNO_QUERY);
     OSL_ASSERT( xReg.is() );
     return xReg;

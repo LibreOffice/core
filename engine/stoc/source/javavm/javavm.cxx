@@ -36,8 +36,8 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <cpo/uno/Reference.hxx>
@@ -169,21 +169,21 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
             xCtx );
     if(!xConfRegistry.is()) throw cpo::uno::RuntimeException(u"javavm.cxx: couldn't get ConfigurationRegistry"_ustr, nullptr);
 
-    cpo::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<cpo::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, cpo::uno::UNO_QUERY_THROW);
     xConfRegistry_simple->open(u"org.openoffice.Inet"_ustr, true, false);
-    cpo::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
+    cpo::uno::Reference<cpo::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
 //  if ooInetProxyType is not 0 then read the settings
-    cpo::uno::Reference<css::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey(u"Settings/ooInetProxyType"_ustr);
+    cpo::uno::Reference<cpo::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey(u"Settings/ooInetProxyType"_ustr);
     if( proxyEnable.is() && 0 != proxyEnable->getLongValue())
     {
         // read http proxy name
-        cpo::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(u"Settings/ooInetHTTPProxyName"_ustr);
+        cpo::uno::Reference<cpo::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(u"Settings/ooInetHTTPProxyName"_ustr);
         if(httpProxy_name.is() && !httpProxy_name->getStringValue().isEmpty()) {
             OUString httpHost = "http.proxyHost=" + httpProxy_name->getStringValue();
 
             // read http proxy port
-            cpo::uno::Reference<css::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(u"Settings/ooInetHTTPProxyPort"_ustr);
+            cpo::uno::Reference<cpo::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(u"Settings/ooInetHTTPProxyPort"_ustr);
             if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
                 OUString httpPort = "http.proxyPort=" + OUString::number(httpProxy_port->getLongValue());
 
@@ -193,12 +193,12 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read https proxy name
-        cpo::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey(u"Settings/ooInetHTTPSProxyName"_ustr);
+        cpo::uno::Reference<cpo::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey(u"Settings/ooInetHTTPSProxyName"_ustr);
         if(httpsProxy_name.is() && !httpsProxy_name->getStringValue().isEmpty()) {
             OUString httpsHost = "https.proxyHost=" + httpsProxy_name->getStringValue();
 
             // read https proxy port
-            cpo::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey(u"Settings/ooInetHTTPSProxyPort"_ustr);
+            cpo::uno::Reference<cpo::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey(u"Settings/ooInetHTTPSProxyPort"_ustr);
             if(httpsProxy_port.is() && httpsProxy_port->getLongValue()) {
                 OUString httpsPort = "https.proxyPort=" + OUString::number(httpsProxy_port->getLongValue());
 
@@ -208,7 +208,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read  nonProxyHosts
-        cpo::uno::Reference<css::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(u"Settings/ooInetNoProxy"_ustr);
+        cpo::uno::Reference<cpo::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(u"Settings/ooInetNoProxy"_ustr);
         if(nonProxies_name.is() && !nonProxies_name->getStringValue().isEmpty()) {
             OUString value = nonProxies_name->getStringValue();
             // replace the separator ";" by "|"
@@ -234,10 +234,10 @@ void getDefaultLocaleFromConfig(
         throw cpo::uno::RuntimeException(
             u"javavm.cxx: couldn't get ConfigurationRegistry"_ustr, nullptr);
 
-    cpo::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(
+    cpo::uno::Reference<cpo::registry::XSimpleRegistry> xConfRegistry_simple(
         xConfRegistry, cpo::uno::UNO_QUERY_THROW);
     xConfRegistry_simple->open(u"org.openoffice.Setup"_ustr, true, false);
-    cpo::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
+    cpo::uno::Reference<cpo::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
     // Since 1.7 Java knows DISPLAY and FORMAT locales, which match our UI and
     // system locale. See
@@ -246,7 +246,7 @@ void getDefaultLocaleFromConfig(
     // https://docs.oracle.com/javase/7/docs/api/java/util/Locale.html
 
     // Read UI language/locale.
-    cpo::uno::Reference<css::registry::XRegistryKey> xUILocale = xRegistryRootKey->openKey(u"L10N/ooLocale"_ustr);
+    cpo::uno::Reference<cpo::registry::XRegistryKey> xUILocale = xRegistryRootKey->openKey(u"L10N/ooLocale"_ustr);
     if(xUILocale.is() && !xUILocale->getStringValue().isEmpty()) {
         LanguageTag aLanguageTag( xUILocale->getStringValue());
         OUString language;
@@ -291,7 +291,7 @@ void getDefaultLocaleFromConfig(
     }
 
     // Read system locale.
-    cpo::uno::Reference<css::registry::XRegistryKey> xLocale = xRegistryRootKey->openKey(u"L10N/ooSetupSystemLocale"_ustr);
+    cpo::uno::Reference<cpo::registry::XRegistryKey> xLocale = xRegistryRootKey->openKey(u"L10N/ooSetupSystemLocale"_ustr);
     if(xLocale.is() && !xLocale->getStringValue().isEmpty()) {
         LanguageTag aLanguageTag( xLocale->getStringValue());
         OUString language;

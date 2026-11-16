@@ -32,10 +32,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <registry/registry.hxx>
 
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <cpo/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -55,7 +55,7 @@
 
 
 using namespace ::cpo::uno;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace css::lang;
 using namespace css::container;
 using namespace osl;
@@ -175,7 +175,7 @@ extern "C" void test_ServiceManager()
 
     Reference<XContentEnumerationAccess> xContEnum(xSMgr, UNO_QUERY);
     OSL_ENSURE( xContEnum.is() , "query on XContentEnumerationAccess failed" );
-    Reference<XEnumeration > xEnum(xContEnum->createContentEnumeration(OUString("com.sun.star.registry.SimpleRegistry")));
+    Reference<XEnumeration > xEnum(xContEnum->createContentEnumeration(OUString("cpo.registry.SimpleRegistry")));
     OSL_ENSURE( xEnum.is() , "createContentEnumeration failed" );
     sal_Int32 nLen = 0;
     while( xEnum->hasMoreElements() )
@@ -207,7 +207,7 @@ extern "C" void test_ServiceManager()
 
     {
         Reference< XImplementationRegistration >
-            xInst( xSMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
+            xInst( xSMgr->createInstance("cpo.registry.ImplementationRegistration"), UNO_QUERY );
         OSL_ENSURE( xInst.is(), "no ImplementationRegistration" );
 
         try {

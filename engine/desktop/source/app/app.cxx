@@ -881,7 +881,7 @@ private:
 
         if (xJavaComponentLoader.is())
         {
-            const cpo::uno::Reference< css::registry::XRegistryKey > xRegistryKey;
+            const cpo::uno::Reference< cpo::registry::XRegistryKey > xRegistryKey;
             try
             {
                 xJavaComponentLoader->activate(u""_ustr, u""_ustr, u""_ustr, xRegistryKey);

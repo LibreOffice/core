@@ -25,7 +25,7 @@
 // Therefore the testcode must exist in teststm and the testservice must be named test.com.sun.star.io.Pipe
 
 #include <stdio.h>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <com/sun/star/test/XSimpleTest.hpp>
@@ -36,7 +36,7 @@ using namespace ::cppu;
 using namespace ::cpo::uno;
 using namespace ::com::sun::star::test;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+using namespace ::cpo::registry;
 
 // Needed to switch on solaris threads
 
@@ -59,7 +59,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            "com.sun.star.registry.ImplementationRegistration" );
+            "cpo.registry.ImplementationRegistration" );
         xReg.set( x , UNO_QUERY );
     }
     catch( Exception & ) {

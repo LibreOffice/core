@@ -23,13 +23,13 @@
 
 #include <osl/diagnose.h>
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cpo/registry/XRegistryKey.hpp>
 
 #include "mergekeys.hxx"
 
 using namespace ::cpo::uno;
 using namespace ::com::sun::star;
-using namespace ::cpo::uno;
+using namespace ::cpo;
 
 namespace stoc_impreg
 {

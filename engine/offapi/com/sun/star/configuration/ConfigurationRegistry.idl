@@ -28,7 +28,7 @@ module com { module sun { module star { module configuration {
     com.sun.star.configuration::ConfigurationProvider should
     be used instead.</p>
 
-    <p> Using the com::sun::star::registry::XSimpleRegistry
+    <p> Using the cpo::registry::XSimpleRegistry
     interface, the service can be bound to a subtree within the
     configuration tree, as provided by an
     com.sun.star.configuration::ConfigurationProvider
@@ -54,14 +54,14 @@ module com { module sun { module star { module configuration {
 published service ConfigurationRegistry
 {
     /** controls the binding of the object to a configuration sub tree.
-        <p>com::sun::star::registry::XSimpleRegistry::open()
+        <p>cpo::registry::XSimpleRegistry::open()
         is used to open a special subtree within the configuration tree.
         </p>
         <p>The parameters of this method control the location of the root of the to-be-opened
         configuration node and the access mode (read only or updatable).
         </p>
     */
-    interface com::sun::star::registry::XSimpleRegistry;
+    interface cpo::registry::XSimpleRegistry;
 
     /** is used to commit changes to the configuration.
         <p>As specified for the

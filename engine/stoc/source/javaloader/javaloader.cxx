@@ -71,14 +71,14 @@
 #include <thread>
 #include <utility>
 
-namespace com::sun::star::registry { class XRegistryKey; }
+namespace cpo::registry { class XRegistryKey; }
 
 using namespace css::java;
 using namespace css::lang;
 using namespace css::loader;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
-using namespace css::registry;
+using namespace cpo::registry;
 
 using namespace ::cppu;
 using namespace ::osl;

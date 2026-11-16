@@ -37,14 +37,14 @@
 
 #include <cstdlib>
 
-namespace com::sun::star::registry { class XRegistryKey; }
+namespace cpo::registry { class XRegistryKey; }
 
 using namespace com::sun::star;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::loader;
 using namespace css::lang;
-using namespace css::registry;
+using namespace cpo::registry;
 using namespace cppu;
 
 namespace {

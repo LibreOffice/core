@@ -56,7 +56,7 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 
-import com.sun.star.registry.XRegistryKey;
+import cpo.registry.XRegistryKey;
 
 import com.sun.star.uno.Any;
 import cpo.uno.Type;

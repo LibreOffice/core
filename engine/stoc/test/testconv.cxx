@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/reflection/FieldAccessMode.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cpo/registry/XImplementationRegistration.hpp>
 
 #include <cmath>
 #include <float.h>
@@ -41,7 +41,7 @@ using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::script;
 using namespace css::reflection;
-using namespace css::registry;
+using namespace cpo::registry;
 
 
 const double MIN_DOUBLE     = -DBL_MAX;
@@ -661,7 +661,7 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
+            xMgr->createInstance("cpo.registry.ImplementationRegistration"), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         OUString aLibName("stocservices.uno" SAL_DLLEXTENSION );

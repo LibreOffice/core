@@ -19,19 +19,21 @@
 
 
 
- module com {  module sun {  module star {  module registry {
+ module cpo { module registry {
 
-/** makes it possible to create, open, or close a registry. Further, it is
-    possible to merge a registry under a specified key in the open registry.
+/** represents all possible types of a key.
 
-    Guarantees:
-    <ul>
-    <li>-thread safe</li>
-    </ul>
+    <p>A key can be a normal key with a value and subkeys, or it can be a
+    link which references another key.</p>
  */
-published service SimpleRegistry : com::sun::star::registry::XSimpleRegistry;
+published enum RegistryKeyType
+{
+    KEY,
+    LINK
+
+};
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
