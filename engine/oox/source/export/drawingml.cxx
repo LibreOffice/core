@@ -683,26 +683,66 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
     for (auto const& rTransform : aComplexColor.getTransformations())
     {
         sal_Int32 nElement = XML_none;
+        // Most of them state an amount. The few that do not are written as the bare element.
+        bool bStatesAnAmount = true;
         switch (rTransform.meType)
         {
-            case model::TransformationType::LumMod:
-                nElement = XML_lumMod;
+            case model::TransformationType::Red: nElement = XML_red; break;
+            case model::TransformationType::RedMod: nElement = XML_redMod; break;
+            case model::TransformationType::RedOff: nElement = XML_redOff; break;
+            case model::TransformationType::Green: nElement = XML_green; break;
+            case model::TransformationType::GreenMod: nElement = XML_greenMod; break;
+            case model::TransformationType::GreenOff: nElement = XML_greenOff; break;
+            case model::TransformationType::Blue: nElement = XML_blue; break;
+            case model::TransformationType::BlueMod: nElement = XML_blueMod; break;
+            case model::TransformationType::BlueOff: nElement = XML_blueOff; break;
+            case model::TransformationType::Hue: nElement = XML_hue; break;
+            case model::TransformationType::HueMod: nElement = XML_hueMod; break;
+            case model::TransformationType::HueOff: nElement = XML_hueOff; break;
+            case model::TransformationType::Sat: nElement = XML_sat; break;
+            case model::TransformationType::SatMod: nElement = XML_satMod; break;
+            case model::TransformationType::SatOff: nElement = XML_satOff; break;
+            case model::TransformationType::Lum: nElement = XML_lum; break;
+            case model::TransformationType::LumMod: nElement = XML_lumMod; break;
+            case model::TransformationType::LumOff: nElement = XML_lumOff; break;
+            case model::TransformationType::Shade: nElement = XML_shade; break;
+            case model::TransformationType::Tint: nElement = XML_tint; break;
+            case model::TransformationType::Gamma:
+                nElement = XML_gamma;
+                bStatesAnAmount = false;
                 break;
-            case model::TransformationType::LumOff:
-                nElement = XML_lumOff;
+            case model::TransformationType::InvGamma:
+                nElement = XML_invGamma;
+                bStatesAnAmount = false;
                 break;
-            case model::TransformationType::Tint:
-                nElement = XML_tint;
+            case model::TransformationType::Gray:
+                nElement = XML_gray;
+                bStatesAnAmount = false;
                 break;
-            case model::TransformationType::Shade:
-                nElement = XML_shade;
+            case model::TransformationType::Comp:
+                nElement = XML_comp;
+                bStatesAnAmount = false;
                 break;
-            default:
+            case model::TransformationType::Inv:
+                nElement = XML_inv;
+                bStatesAnAmount = false;
+                break;
+            // How far a colour is seen through is written below, from the property that
+            // holds it, so it is not written here as well.
+            case model::TransformationType::Alpha:
+            case model::TransformationType::AlphaMod:
+            case model::TransformationType::AlphaOff:
+            case model::TransformationType::Undefined:
                 break;
         }
 
-        if (nElement != XML_none)
+        if (nElement == XML_none)
+            continue;
+
+        if (bStatesAnAmount)
             mpFS->singleElementNS(XML_a, nElement, XML_val, OString::number(rTransform.mnValue * 10));
+        else
+            mpFS->singleElementNS(XML_a, nElement);
     }
     // Alpha is actually not contained in maTransformations although possible (as of Mar 2023).
     sal_Int16 nAPITransparency(0);

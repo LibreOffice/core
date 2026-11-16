@@ -434,6 +434,50 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidPPTX)
                          pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString());
 }
 
+// A colour stated as a theme colour with a change to it keeps that change.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testColourKeepsTheChangeItStates)
+{
+    // Given a slide with a shape filled in a theme colour turned towards another hue, holding
+    // text in a theme colour given more of its own:
+    createSdImpressDoc("pptx/colour-changed-from-the-theme.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    const OString aShape = "/p:sld/p:cSld/p:spTree/p:sp[1]"_ostr;
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. only a tint, a shade and the two changes of lightness came through, so every other
+    // change was gone and the colour fell back on the plain colour of the theme.
+    assertXPath(pXmlDoc, aShape + "/p:spPr/a:solidFill/a:schemeClr", "val", u"accent2");
+    assertXPath(pXmlDoc, aShape + "/p:spPr/a:solidFill/a:schemeClr/a:hueMod", "val", u"60000");
+
+    assertXPath(pXmlDoc, aShape + "/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
+                u"accent1");
+    assertXPath(pXmlDoc, aShape + "/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:satMod",
+                "val", u"130000");
+}
+
+// An amount larger than a short integer holds keeps its value.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testSatModAboveTheShortRange)
+{
+    // Given text in a theme colour given far more of its own hue, an amount above 327670:
+    createSdImpressDoc("pptx/satmod-350.pptx");
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 350000
+    // - Actual  : -305360
+    // i.e. the amount was held in too small a number on the way through, so it wrapped round
+    // into a negative one and a reader drew the text orange instead of blue.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr"
+                "/a:satMod",
+                "val", u"350000");
+}
+
 // A shape that takes its fill and its line from the theme keeps naming the theme, so that
 // changing the theme still recolours it.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testShapeStyleThemeColor)

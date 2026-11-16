@@ -711,6 +711,26 @@ sal_Int16 Color::getLumOff() const
     return 0;
 }
 
+namespace
+{
+/** Whether a change leaves the colour as it was. A file may state such a change and the model
+    leaves it out, so that two colours a reader cannot tell apart are held as one colour. */
+bool changeDoesNothing(model::TransformationType eType, sal_Int32 nValue)
+{
+    switch (eType)
+    {
+        case model::TransformationType::LumMod:
+            return nValue == 10'000;
+        case model::TransformationType::LumOff:
+        case model::TransformationType::Tint:
+        case model::TransformationType::Shade:
+            return nValue == 0;
+        default:
+            return false;
+    }
+}
+}
+
 model::ComplexColor Color::getComplexColor() const
 {
     // A colour read from a document names the slot of the theme it comes from, and one the
@@ -721,21 +741,18 @@ model::ComplexColor Color::getComplexColor() const
 
     auto aComplexColor = model::ComplexColor::Theme(eThemeType);
 
-    if (getTintOrShade() > 0)
+    // Every change the document asks for goes with the colour, not only the handful the save
+    // used to carry, so that a colour stated as a change of a theme colour, such as one given
+    // more of its own hue, is still that change after a round trip. The file states an amount
+    // in thousandths of a percent and a colour of the model holds it in hundredths.
+    for (const model::Transformation& rTransform : maTransforms)
     {
-        aComplexColor.addTransformation({model::TransformationType::Tint, getTintOrShade()});
-    }
-    else if (getTintOrShade() < 0)
-    {
-        sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-getTintOrShade());
-        aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
-    }
+        const sal_Int32 nValue = rTransform.mnValue / 10;
+        if (changeDoesNothing(rTransform.meType, nValue))
+            continue;
 
-    if (getLumMod() != 10000)
-        aComplexColor.addTransformation({model::TransformationType::LumMod, getLumMod()});
-
-    if (getLumOff() != 0)
-        aComplexColor.addTransformation({model::TransformationType::LumOff, getLumOff()});
+        aComplexColor.addTransformation({ rTransform.meType, nValue });
+    }
 
     return aComplexColor;
 }
