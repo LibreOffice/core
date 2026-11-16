@@ -64,6 +64,8 @@ class PathDrawing {
 	private pressedOnTheStart: boolean = false;
 	/// Whether the pull went far enough to give weights.
 	private pulledOut: boolean = false;
+	/// Where the press for a curve was, as the mouse was then, not snapped.
+	private pressedAt: cool.Point | null = null;
 	/// The places of the stroke being drawn by hand, in twips; null while none is drawn.
 	private stroke: cool.Point[] | null = null;
 	/// Whether the stroke went further than the reach from where it began, so coming back there
@@ -263,12 +265,13 @@ class PathDrawing {
 	}
 
 	/*
-		A press for a curve: sets the next point where it is placed, or takes hold of the start
-		point of the part where the press is on it, and the mouse then pulls the weights of that
-		point. On the last point again it pulls that one.
+		A press for a curve at that place, as the mouse is: sets the next point where it is placed,
+		or takes hold of the start point of the part where the press is on it, and the mouse then
+		pulls the weights of that point. On the last point again it pulls that one.
 	*/
-	public press(): void {
+	public press(at: cool.Point): void {
 		if (!this.next) return;
+		this.pressedAt = at;
 		this.pressedOnTheStart = this.onTheStart();
 		this.pulledOut = false;
 		const last = this.points[this.points.length - 1];
@@ -284,7 +287,9 @@ class PathDrawing {
 	/*
 		The mouse pulls the weights of the point pressed to that place: the one ahead goes there,
 		the one behind as far the other way, in steps of 45 degrees where turnedOver asks for
-		them. A pull shorter than the reach takes the weights away again.
+		them. The pull counts once the mouse went further than the reach from where the press was,
+		so a press that snapped the point is no pull; a pull back nearer than the reach to the
+		point takes the weights away again.
 	*/
 	public pull(to: cool.Point, turnedOver: boolean): void {
 		const point = this.pulled === null ? undefined : this.points[this.pulled];
@@ -300,7 +305,9 @@ class PathDrawing {
 			y = Math.sin(angle) * length;
 		}
 
-		this.pulledOut = this.pulledOut || length > this.reach;
+		this.pulledOut =
+			this.pulledOut ||
+			(!!this.pressedAt && to.distanceTo(this.pressedAt) > this.reach);
 		if (!this.pulledOut) return;
 		if (length <= this.reach) {
 			PathDrawing.cornerAt(point);

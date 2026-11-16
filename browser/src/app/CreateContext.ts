@@ -1823,7 +1823,7 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 				ClassicPathCreateContext.doubleClickTime &&
 			this.lastUpAt.subtract(at).length() <=
 				ClassicCreateContext.twips(ClassicPathCreateContext.doubleClickReach);
-		if (!this.secondClick && this.curves) this.drawing.press();
+		if (!this.secondClick && this.curves) this.drawing.press(at);
 	}
 
 	/// The second click of a double click makes the object; another click sets the point of a
@@ -1888,7 +1888,7 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	rightDown(at: cool.Point, modifier: number): void {
 		this.mouseAt(at, modifier, true);
 		if (Interaction.modeOn() !== this || !this.curves) return;
-		if (!this.drawing.beforeThePart()) this.drawing.press();
+		if (!this.drawing.beforeThePart()) this.drawing.press(at);
 	}
 
 	/// The right button sets the last point of a part, or lets go of it, and ends the part. For a

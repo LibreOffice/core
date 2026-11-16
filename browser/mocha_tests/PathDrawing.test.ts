@@ -157,7 +157,7 @@ describe('PathDrawing', function () {
 		to: number[],
 	): PathDrawingOutcome {
 		drawing.moveTo(new cool.Point(at[0], at[1]), false);
-		drawing.press();
+		drawing.press(new cool.Point(at[0], at[1]));
 		drawing.pull(new cool.Point(to[0], to[1]), false);
 		return drawing.release(false);
 	}
@@ -174,6 +174,18 @@ describe('PathDrawing', function () {
 				'{"x":100,"y":0,"aheadX":150,"aheadY":50,"behindX":50,"behindY":-50},' +
 				'{"x":200,"y":0}]}]',
 		);
+	});
+
+	it('a press that snapped a point of a curve away from the mouse is no pull', function () {
+		const drawing = new PathDrawing(curveFilled, 10);
+		pressAndPull(drawing, [0, 0], [0, 0]);
+		pressAndPull(drawing, [100, 0], [100, 0]);
+		pressAndPull(drawing, [100, 100], [100, 100]);
+		// pressed and let go 8 away from the start, which the start drew onto it
+		nodeassert.strictEqual(pressAndPull(drawing, [8, 0], [8, 0]), 'partEnded');
+		const start = drawing.path()[0].points[0];
+		nodeassert.strictEqual(start.aheadX, undefined);
+		nodeassert.strictEqual(start.behindX, undefined);
 	});
 
 	it('closing a curve on its start without a drag carries on through the start', function () {
