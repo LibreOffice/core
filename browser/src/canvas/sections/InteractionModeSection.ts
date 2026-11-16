@@ -23,20 +23,25 @@ class InteractionModeSection extends WholePageSection {
 	/// The mode last on, which may still draw after it is over.
 	private static lastMode: InteractionMode | null = null;
 
-	/// The release of the right button over the canvas, which the container does not hand on.
+	/// The press and the release of the right button over the canvas, which the container does
+	/// not hand on.
+	private rightPressed: (event: PointerEvent) => void;
 	private rightReleased: (event: PointerEvent) => void;
 
 	constructor() {
 		super(app.CSections.InteractionMode.name);
-		this.rightReleased = (event: PointerEvent) => this.onRightUp(event);
+		this.rightPressed = (event: PointerEvent) => this.onRight(event, true);
+		this.rightReleased = (event: PointerEvent) => this.onRight(event, false);
 	}
 
 	onInitialize(): void {
 		super.onInitialize();
+		this.context.canvas.addEventListener('pointerdown', this.rightPressed);
 		this.context.canvas.addEventListener('pointerup', this.rightReleased);
 	}
 
 	onRemove(): void {
+		this.context.canvas.removeEventListener('pointerdown', this.rightPressed);
 		this.context.canvas.removeEventListener('pointerup', this.rightReleased);
 	}
 
@@ -51,10 +56,13 @@ class InteractionModeSection extends WholePageSection {
 		);
 	}
 
-	private onRightUp(event: PointerEvent): void {
+	private onRight(event: PointerEvent, down: boolean): void {
 		const mode = Interaction.modeOn();
 		if (event.button !== 2 || !mode || !mode.takesTheRightButton()) return;
-		mode.rightUp(this.inTheDocumentAt(event), MouseControl.readModifier(event));
+		const at = this.inTheDocumentAt(event);
+		const modifier = MouseControl.readModifier(event);
+		if (down) mode.rightDown(at, modifier);
+		else mode.rightUp(at, modifier);
 		this.containerObject.requestReDraw();
 	}
 

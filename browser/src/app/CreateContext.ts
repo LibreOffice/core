@@ -257,6 +257,10 @@ abstract class ClassicCreateContext implements InteractionMode {
 		return false;
 	}
 
+	rightDown(_at: cool.Point, _modifier: number): void {
+		// The right button is not taken by most kinds.
+	}
+
 	rightUp(_at: cool.Point, _modifier: number): void {
 		// The right button is not taken by most kinds.
 	}
@@ -1650,15 +1654,22 @@ class ClassicConnectorCreateContext extends ClassicLineCreateContext {
 	being drawn, then the parts before; the mode ends once nothing is left.
 */
 class ClassicPathCreateContext extends ClassicCreateContext {
-	/// The commands that make a polygon, each with the way its path is drawn.
+	/// The commands that make a polygon or a curve, each with the way its path is drawn.
 	private static readonly kinds: { [shape: string]: PathDrawingKind } = {
 		Polygon: { multi: true, closes: true, inSteps: false },
 		Polygon_Unfilled: { multi: true, closes: false, inSteps: false },
 		Polygon_Diagonal: { multi: true, closes: true, inSteps: true },
 		Polygon_Diagonal_Unfilled: { multi: true, closes: false, inSteps: true },
+		BezierFill: { multi: true, closes: true, inSteps: false, curves: true },
+		Bezier_Unfilled: {
+			multi: true,
+			closes: false,
+			inSteps: false,
+			curves: true,
+		},
 	};
 
-	/// Whether that command makes a polygon.
+	/// Whether that command makes a polygon or a curve.
 	public static makes(shape: string): boolean {
 		return ClassicPathCreateContext.kinds[shape] !== undefined;
 	}
@@ -1672,6 +1683,11 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	private static readonly doubleClickReach: number = 4;
 
 	private drawing: PathDrawing;
+	/// Whether the kind draws curves, whose points are set when the button goes down.
+	private curves: boolean;
+	/// Whether the button that went down is the second one of a double click, which makes the
+	/// object when it comes up.
+	private secondClick: boolean = false;
 
 	/// The path sent, drawn until the engine's answer brings the object.
 	private sentPath: cool.ObjectPathPolygon[] = [];
@@ -1686,6 +1702,7 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 			ClassicPathCreateContext.kinds[shape],
 			ClassicCreateContext.twips(ClassicPathCreateContext.reach),
 		);
+		this.curves = !!ClassicPathCreateContext.kinds[shape].curves;
 	}
 
 	public started(): void {
@@ -1699,35 +1716,52 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	/*
 		The point the mouse places follows it, snapped; Shift keeps the edge to steps of 45
 		degrees, or lets it go free for a kind that keeps to them. Before the first point of a
-		part the lines across the view show where it would be set.
+		part the lines across the view show where it would be set. While a point of a curve is
+		held, the mouse pulls its weights as it is, and Shift keeps them to steps of 45 degrees.
 	*/
 	mouseAt(at: cool.Point, modifier: number, _pressed: boolean): void {
 		super.mouseAt(at, modifier, false);
 		if (Interaction.modeOn() !== this || !this.hover) return;
-		this.drawing.moveTo(this.hover, (modifier & app.UNOModifier.SHIFT) !== 0);
+		const shift = (modifier & app.UNOModifier.SHIFT) !== 0;
+		if (this.drawing.pulling()) {
+			this.drawing.pull(at, shift);
+			this.hover = null;
+			return;
+		}
+		this.drawing.moveTo(this.hover, shift);
 		if (!this.drawing.beforeThePart()) this.hover = null;
 	}
 
+	/// A press soon after a click and near it is the second click of a double click, which sets
+	/// no point; another one sets the point of a curve.
 	mouseDown(at: cool.Point, modifier: number): void {
 		this.mouseAt(at, modifier, true);
+		this.secondClick =
+			!!this.lastUpAt &&
+			Date.now() - this.lastUpTime <=
+				ClassicPathCreateContext.doubleClickTime &&
+			this.lastUpAt.subtract(at).length() <=
+				ClassicCreateContext.twips(ClassicPathCreateContext.doubleClickReach);
+		if (!this.secondClick && this.curves) this.drawing.press();
 	}
 
-	/// The second click of a double click makes the object and sets no point.
+	/// The second click of a double click makes the object; another click sets the point of a
+	/// polygon, or lets go of the point of a curve.
 	mouseUp(at: cool.Point, modifier: number, _dragged: boolean): void {
 		this.mouseAt(at, modifier, false);
 		if (Interaction.modeOn() !== this) return;
 
-		const now = Date.now();
-		const doubleClick =
-			!!this.lastUpAt &&
-			now - this.lastUpTime <= ClassicPathCreateContext.doubleClickTime &&
-			this.lastUpAt.subtract(at).length() <=
-				ClassicCreateContext.twips(ClassicPathCreateContext.doubleClickReach);
-		this.lastUpTime = doubleClick ? 0 : now;
-		this.lastUpAt = doubleClick ? null : at;
+		const secondClick = this.secondClick;
+		this.secondClick = false;
+		this.lastUpTime = secondClick ? 0 : Date.now();
+		this.lastUpAt = secondClick ? null : at;
 
 		this.went(
-			doubleClick ? this.drawing.finish() : this.drawing.setThePoint(false),
+			secondClick
+				? this.drawing.finish()
+				: this.curves
+					? this.drawing.release(false)
+					: this.drawing.setThePoint(false),
 		);
 		this.placeAgain(at, modifier);
 	}
@@ -1741,11 +1775,21 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		return true;
 	}
 
+	/// The right button sets the point of a curve as the left one does.
+	rightDown(at: cool.Point, modifier: number): void {
+		this.mouseAt(at, modifier, true);
+		if (Interaction.modeOn() !== this || !this.curves) return;
+		this.drawing.press();
+	}
+
+	/// The right button sets the last point of a part, or lets go of it, and ends the part.
 	rightUp(at: cool.Point, modifier: number): void {
 		this.mouseAt(at, modifier, false);
 		if (Interaction.modeOn() !== this) return;
 		this.lastUpAt = null;
-		this.went(this.drawing.setThePoint(true));
+		this.went(
+			this.curves ? this.drawing.release(true) : this.drawing.setThePoint(true),
+		);
 		this.placeAgain(at, modifier);
 	}
 
@@ -1806,8 +1850,8 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		return this.idArgument();
 	}
 
-	/// The path drawn so far, with the piece to the mouse, and the start point of the part where
-	/// a click would end it.
+	/// The path drawn so far, with the piece to the mouse, the point of a curve with its weights
+	/// as point editing shows them, and the start point of the part where a click would end it.
 	protected drawMore(context: CanvasRenderingContext2D): void {
 		if (this.sent) return;
 		SelectionSection.strokeOutline(
@@ -1815,6 +1859,8 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 			this.drawing.shown(),
 			HandleLook.outlineColour,
 		);
+		const held = this.drawing.pointOfTheWeights();
+		if (held) PathEditing.paintPointWithWeights(context, held);
 		const start = this.drawing.startOnTheMouse();
 		if (!start) return;
 		const at = new cool.SimplePoint(start.x, start.y);

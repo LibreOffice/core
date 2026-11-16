@@ -549,8 +549,10 @@ var shapes = {
 			{img: 'lines_line_diagonal', uno: 'Line_Diagonal', text: _UNO('.uno:Line_Diagonal', 'presentation')}
 		],
 		'Curves and Polygons': [
+			{img: 'lines_bezier_unfilled', uno: 'Bezier_Unfilled', text: _UNO('.uno:Bezier_Unfilled', 'presentation')},
 			{img: 'lines_polygon_unfilled', uno: 'Polygon_Unfilled', text: _UNO('.uno:Polygon_Unfilled', 'presentation')},
 			{img: 'lines_polygon_diagonal_unfilled', uno: 'Polygon_Diagonal_Unfilled', text: _UNO('.uno:Polygon_Diagonal_Unfilled', 'presentation')},
+			{img: 'lines_bezierfill', uno: 'BezierFill', text: _UNO('.uno:BezierFill', 'presentation')},
 			{img: 'lines_polygon', uno: 'Polygon', text: _UNO('.uno:Polygon', 'presentation')},
 			{img: 'lines_polygon_diagonal', uno: 'Polygon_Diagonal', text: _UNO('.uno:Polygon_Diagonal', 'presentation')}
 		],

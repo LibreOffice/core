@@ -10,11 +10,13 @@
  */
 
 /// How a path is drawn: whether it may hold several polygons, whether each of them closes when
-/// it ends, and whether its edges keep to steps of 45 degrees by themselves.
+/// it ends, whether its edges keep to steps of 45 degrees by themselves, and whether its points
+/// get weights, so its edges are curves.
 interface PathDrawingKind {
 	multi: boolean;
 	closes: boolean;
 	inSteps: boolean;
+	curves?: boolean;
 }
 
 /// What a step of drawing did: the path goes on, a part of it ended, the path is finished, or
@@ -26,11 +28,14 @@ type PathDrawingOutcome = 'goesOn' | 'partEnded' | 'finished' | 'nothingLeft';
 	the point that follows the mouse until it is set. It knows nothing of the mouse or of where the
 	path goes once finished; whoever draws with it tells it where the mouse is and what it did.
 
-	A point is set when the button comes up, and follows the mouse while it is pressed, so it can
-	be corrected. A part ends when the one who draws says so, or when its own start point is hit,
-	which sets no point there. The parts of one path are all closed or all open, as an object
-	holds them, and the kind says which. A part that ends with too few points is dropped. A path of one polygon is finished as
-	soon as its part ends; one of several goes on with the next part.
+	A point of a polygon is set when the button comes up, and follows the mouse while it is
+	pressed, so it can be corrected. A point of a curve is set when the button goes down, and the
+	mouse then pulls out its two weights, the one behind mirroring the one ahead; without a pull
+	the point is a corner. A part ends when the one who draws says so, or when its own start point
+	is hit, which sets no point there. The parts of one path are all closed or all open, as an
+	object holds them, and the kind says which. A part that ends with too few points is dropped.
+	A path of one polygon is finished as soon as its part ends; one of several goes on with the
+	next part.
 */
 class PathDrawing {
 	private kind: PathDrawingKind;
@@ -40,8 +45,17 @@ class PathDrawing {
 	private points: cool.ObjectPathPoint[] = [];
 	/// Where the mouse places the next point, once placed by the rules; null off the page.
 	private next: cool.Point | null = null;
-	/// How near the start point of the part the mouse is drawn onto it, in twips.
+	/// How near the start point of the part the mouse is drawn onto it, in twips; a pull shorter
+	/// than that leaves a point of a curve a corner as well.
 	private reach: number;
+	/// The point of a curve whose weights the mouse pulls, by its index in the part; null while
+	/// none is pulled.
+	private pulled: number | null = null;
+	/// Whether the press that pulls was on the start point, which ends the part when the button
+	/// comes up.
+	private pressedOnTheStart: boolean = false;
+	/// Whether the pull went far enough to give weights.
+	private pulledOut: boolean = false;
 
 	constructor(kind: PathDrawingKind, reach: number) {
 		this.kind = kind;
@@ -126,6 +140,105 @@ class PathDrawing {
 		return endsThePart ? this.endThePart(this.kind.closes) : 'goesOn';
 	}
 
+	/*
+		A press for a curve: sets the next point where it is placed, or takes hold of the start
+		point of the part where the press is on it, and the mouse then pulls the weights of that
+		point. On the last point again it pulls that one.
+	*/
+	public press(): void {
+		if (!this.next) return;
+		this.pressedOnTheStart = this.onTheStart();
+		this.pulledOut = false;
+		const last = this.points[this.points.length - 1];
+		if (this.pressedOnTheStart) this.pulled = 0;
+		else {
+			if (!last || last.x !== this.next.x || last.y !== this.next.y)
+				this.points.push({ x: this.next.x, y: this.next.y });
+			this.pulled = this.points.length - 1;
+		}
+		this.next = null;
+	}
+
+	/*
+		The mouse pulls the weights of the point pressed to that place: the one ahead goes there,
+		the one behind as far the other way, in steps of 45 degrees where turnedOver asks for
+		them. A pull shorter than the reach takes the weights away again. On the start point of a
+		part that stays open nothing is pulled, as no edge comes back to it.
+	*/
+	public pull(to: cool.Point, turnedOver: boolean): void {
+		const point = this.pulled === null ? undefined : this.points[this.pulled];
+		if (!point || (this.pressedOnTheStart && !this.kind.closes)) return;
+
+		let x = to.x - point.x;
+		let y = to.y - point.y;
+		const length = Math.hypot(x, y);
+		if (turnedOver) {
+			const step = Math.PI / 4;
+			const angle = Math.round(Math.atan2(y, x) / step) * step;
+			x = Math.cos(angle) * length;
+			y = Math.sin(angle) * length;
+		}
+
+		this.pulledOut = this.pulledOut || length > this.reach;
+		if (!this.pulledOut) return;
+		if (length <= this.reach) {
+			PathDrawing.cornerAt(point);
+			return;
+		}
+		point.aheadX = point.x + x;
+		point.aheadY = point.y + y;
+		point.behindX = point.x - x;
+		point.behindY = point.y - y;
+	}
+
+	/*
+		The button of a press for a curve came up. On the start point it ends the part; where the
+		part closes and the start point was not pulled, the edge into it carries on as the edge out
+		of it begins, its weight behind mirroring the one ahead. With endsThePart the part ends
+		after the point.
+	*/
+	public release(endsThePart: boolean): PathDrawingOutcome {
+		if (this.pulled === null) return 'goesOn';
+		const onTheStart = this.pressedOnTheStart;
+		this.pulled = null;
+		this.pressedOnTheStart = false;
+
+		if (onTheStart) {
+			const start = this.points[0];
+			if (
+				this.kind.closes &&
+				!this.pulledOut &&
+				start.aheadX !== undefined &&
+				start.aheadY !== undefined
+			) {
+				start.behindX = 2 * start.x - start.aheadX;
+				start.behindY = 2 * start.y - start.aheadY;
+			}
+			return this.endThePart(this.kind.closes);
+		}
+		return endsThePart ? this.endThePart(this.kind.closes) : 'goesOn';
+	}
+
+	/// Whether a point of a curve is held by a press, its weights following the mouse.
+	public pulling(): boolean {
+		return this.pulled !== null;
+	}
+
+	/// The point of a curve whose weights are shown: the one held by a press, else the last one
+	/// of the part being drawn, which the next edge starts from; null where there is none.
+	public pointOfTheWeights(): cool.ObjectPathPoint | null {
+		if (!this.kind.curves) return null;
+		return this.points[this.pulled ?? this.points.length - 1] ?? null;
+	}
+
+	/// Takes the weights of that point away, so the curve turns a corner there.
+	private static cornerAt(point: cool.ObjectPathPoint): void {
+		delete point.aheadX;
+		delete point.aheadY;
+		delete point.behindX;
+		delete point.behindY;
+	}
+
 	/// Finishes the path: the part being drawn ends as the kind ends its parts.
 	public finish(): PathDrawingOutcome {
 		if (this.points.length) this.endThePart(this.kind.closes);
@@ -133,13 +246,29 @@ class PathDrawing {
 	}
 
 	/*
-		Ends the part being drawn, closed or open. A part with too few points for that - one
-		point, or two where it closes - is dropped. A path of one polygon is then finished; one of
-		several goes on with a part not begun.
+		Ends the part being drawn, closed or open. A part with too few points for that is dropped:
+		one point, or two straight ones where it closes. A path of one polygon is then finished;
+		one of several goes on with a part not begun. The weights behind the first point and ahead
+		of the last belong to no edge of an open part and go.
 	*/
 	private endThePart(closed: boolean): PathDrawingOutcome {
-		const enough = this.points.length >= (closed ? 3 : 2);
-		if (enough) this.parts.push({ closed: closed, points: this.points });
+		this.pulled = null;
+		this.pressedOnTheStart = false;
+		const count = this.points.length;
+		const curved = this.points.some(
+			(point: cool.ObjectPathPoint) =>
+				point.aheadX !== undefined || point.behindX !== undefined,
+		);
+		const enough = closed ? count >= 3 || (count === 2 && curved) : count >= 2;
+		if (enough) {
+			if (!closed) {
+				delete this.points[0].behindX;
+				delete this.points[0].behindY;
+				delete this.points[count - 1].aheadX;
+				delete this.points[count - 1].aheadY;
+			}
+			this.parts.push({ closed: closed, points: this.points });
+		}
 		this.points = [];
 
 		if (!this.kind.multi) return enough ? 'finished' : 'nothingLeft';
@@ -149,6 +278,8 @@ class PathDrawing {
 	/// Takes back the last point, of the part before where the part being drawn has none, which
 	/// is then drawn on. Nothing is left once the last point of the first part goes.
 	public back(): PathDrawingOutcome {
+		this.pulled = null;
+		this.pressedOnTheStart = false;
 		if (!this.points.length) {
 			const before = this.parts.pop();
 			if (!before) return 'nothingLeft';
@@ -164,6 +295,8 @@ class PathDrawing {
 		polygon is given up with it; of several, nothing is left once no part is.
 	*/
 	public dropThePart(): PathDrawingOutcome {
+		this.pulled = null;
+		this.pressedOnTheStart = false;
 		if (!this.kind.multi) {
 			this.parts = [];
 			this.points = [];
@@ -181,11 +314,13 @@ class PathDrawing {
 	}
 
 	/// The path as it is shown while drawing: the parts ended, the part being drawn, and the piece
-	/// from its last point to where the next one would be set.
+	/// from its last point to where the next one would be set. While the start point of a part
+	/// that closes is pulled, the part shows closed.
 	public shown(): cool.ObjectPathPolygon[] {
 		const drawing = this.next ? this.points.concat([this.next]) : this.points;
+		const closing = this.pressedOnTheStart && this.kind.closes;
 		return drawing.length >= 2
-			? this.parts.concat([{ closed: false, points: drawing }])
+			? this.parts.concat([{ closed: closing, points: drawing }])
 			: this.parts;
 	}
 

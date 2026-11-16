@@ -140,6 +140,8 @@ interface InteractionMode extends InteractionContext {
 	mouseUp(at: cool.Point, modifier: number, dragged: boolean): void;
 	/// Whether the right button is the mode's, so a press of it opens no menu.
 	takesTheRightButton(): boolean;
+	/// The right button went down at that point of the page.
+	rightDown(at: cool.Point, modifier: number): void;
 	/// The right button came up at that point of the page.
 	rightUp(at: cool.Point, modifier: number): void;
 	/// The drag was called off, by the container or by a key.

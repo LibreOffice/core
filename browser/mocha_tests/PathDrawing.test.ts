@@ -108,6 +108,84 @@ describe('PathDrawing', function () {
 		);
 	});
 
+	const curveFilled: PathDrawingKind = {
+		multi: true,
+		closes: true,
+		inSteps: false,
+		curves: true,
+	};
+	const curveOpen: PathDrawingKind = {
+		multi: true,
+		closes: false,
+		inSteps: false,
+		curves: true,
+	};
+
+	// presses at a place and lets go where the mouse pulled to, as a click or a drag does
+	function pressAndPull(
+		drawing: PathDrawing,
+		at: number[],
+		to: number[],
+	): PathDrawingOutcome {
+		drawing.moveTo(new cool.Point(at[0], at[1]), false);
+		drawing.press();
+		drawing.pull(new cool.Point(to[0], to[1]), false);
+		return drawing.release(false);
+	}
+
+	it('a drag at a point of a curve pulls out mirrored weights, a click gives a corner', function () {
+		const drawing = new PathDrawing(curveOpen, 10);
+		pressAndPull(drawing, [0, 0], [0, 0]);
+		pressAndPull(drawing, [100, 0], [150, 50]);
+		pressAndPull(drawing, [200, 0], [204, 3]);
+		drawing.finish();
+		nodeassert.strictEqual(
+			JSON.stringify(drawing.path()),
+			'[{"closed":false,"points":[{"x":0,"y":0},' +
+				'{"x":100,"y":0,"aheadX":150,"aheadY":50,"behindX":50,"behindY":-50},' +
+				'{"x":200,"y":0}]}]',
+		);
+	});
+
+	it('closing a curve on its start without a drag carries on through the start', function () {
+		const drawing = new PathDrawing(curveFilled, 10);
+		pressAndPull(drawing, [0, 0], [50, -50]);
+		pressAndPull(drawing, [100, 0], [100, 0]);
+		pressAndPull(drawing, [100, 100], [100, 100]);
+		nodeassert.strictEqual(pressAndPull(drawing, [3, 2], [3, 2]), 'partEnded');
+		const start = drawing.path()[0].points[0];
+		nodeassert.deepStrictEqual(
+			[start.behindX, start.behindY, start.aheadX, start.aheadY],
+			[-50, 50, 50, -50],
+		);
+		nodeassert.strictEqual(drawing.path()[0].points.length, 3);
+	});
+
+	it('a drag on the start point of a closing curve pulls its weights', function () {
+		const drawing = new PathDrawing(curveFilled, 10);
+		pressAndPull(drawing, [0, 0], [0, 0]);
+		pressAndPull(drawing, [100, 0], [100, 0]);
+		nodeassert.strictEqual(pressAndPull(drawing, [2, 1], [0, 40]), 'partEnded');
+		const part = drawing.path()[0];
+		nodeassert.strictEqual(part.closed, true);
+		nodeassert.deepStrictEqual(
+			[part.points[0].behindX, part.points[0].behindY],
+			[0, -40],
+		);
+	});
+
+	it('an open curve keeps no weight beyond its ends', function () {
+		const drawing = new PathDrawing(curveOpen, 10);
+		pressAndPull(drawing, [0, 0], [50, 50]);
+		pressAndPull(drawing, [100, 0], [150, 50]);
+		drawing.finish();
+		const points = drawing.path()[0].points;
+		nodeassert.strictEqual(points[0].behindX, undefined);
+		nodeassert.strictEqual(points[1].aheadX, undefined);
+		nodeassert.strictEqual(points[0].aheadX, 50);
+		nodeassert.strictEqual(points[1].behindX, 50);
+	});
+
 	it('a part with too few points is dropped', function () {
 		const drawing = new PathDrawing(filled, 10);
 		click(drawing, [[0, 0]]);

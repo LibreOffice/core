@@ -319,33 +319,86 @@ class PathEditing implements HandleSource {
 		}
 		if (!weights.length) return;
 
-		section.context.save();
-		section.context.setTransform(1, 0, 0, 1, 0, 0);
-		section.context.globalAlpha = HandleLook.helperLineAlpha;
-		section.context.lineWidth = app.dpiScale;
-		section.context.beginPath();
-
+		const lines: { from: cool.Point; to: cool.Point }[] = [];
 		for (const weight of weights) {
 			const place = PathEditing.named(weight.name);
 			const point =
 				place && points.get(PathEditing.pointName(place.polygon, place.point));
-			if (!point) continue;
+			if (point) lines.push({ from: point.point, to: weight.point });
+		}
+		PathEditing.paintWeightLines(section.context, lines);
+	}
 
-			const from = new cool.SimplePoint(point.point.x, point.point.y);
-			const to = new cool.SimplePoint(weight.point.x, weight.point.y);
-			section.context.moveTo(from.vX, from.vY);
-			section.context.lineTo(to.vX, to.vY);
+	/*
+		Draws a point of a path that is no selection's, with the weights it has, in twips, as point
+		editing shows them: the point and the weights as their handles, in the size configured for
+		handles, and the dashed lines between them. Nothing for a point without a weight.
+	*/
+	public static paintPointWithWeights(
+		context: CanvasRenderingContext2D,
+		point: cool.ObjectPathPoint,
+	): void {
+		const weights: cool.Point[] = [];
+		if (point.behindX !== undefined && point.behindY !== undefined)
+			weights.push(new cool.Point(point.behindX, point.behindY));
+		if (point.aheadX !== undefined && point.aheadY !== undefined)
+			weights.push(new cool.Point(point.aheadX, point.aheadY));
+		if (!weights.length) return;
+
+		const at = new cool.Point(point.x, point.y);
+		PathEditing.paintWeightLines(
+			context,
+			weights.map((weight: cool.Point) => ({ from: at, to: weight })),
+		);
+
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
+		context.lineWidth = 1;
+		const handle = (kind: HandleKind, place: cool.Point) => {
+			context.beginPath();
+			context.strokeStyle = HandleLook.outlineColour;
+			context.fillStyle = HandleLook.lay(
+				context,
+				kind,
+				new cool.SimplePoint(place.x, place.y),
+				0,
+			);
+			context.closePath();
+			context.fill();
+			context.stroke();
+		};
+		weights.forEach((weight: cool.Point) => handle('weight', weight));
+		handle('pathPoint', at);
+		context.restore();
+	}
+
+	/// Draws the lines from points to their weights, given in twips, as dashed helper lines.
+	public static paintWeightLines(
+		context: CanvasRenderingContext2D,
+		lines: { from: cool.Point; to: cool.Point }[],
+	): void {
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
+		context.globalAlpha = HandleLook.helperLineAlpha;
+		context.lineWidth = app.dpiScale;
+		context.beginPath();
+
+		for (const line of lines) {
+			const from = new cool.SimplePoint(line.from.x, line.from.y);
+			const to = new cool.SimplePoint(line.to.x, line.to.y);
+			context.moveTo(from.vX, from.vY);
+			context.lineTo(to.vX, to.vY);
 		}
 
-		section.context.strokeStyle = HandleLook.helperLineDarkColour;
-		section.context.stroke();
+		context.strokeStyle = HandleLook.helperLineDarkColour;
+		context.stroke();
 
 		const dash = HandleLook.helperLineDash * app.dpiScale;
-		section.context.setLineDash([dash, dash]);
-		section.context.strokeStyle = HandleLook.helperLineColour;
-		section.context.stroke();
+		context.setLineDash([dash, dash]);
+		context.strokeStyle = HandleLook.helperLineColour;
+		context.stroke();
 
-		section.context.restore();
+		context.restore();
 	}
 
 	/*
