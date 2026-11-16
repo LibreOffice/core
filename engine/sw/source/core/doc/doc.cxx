@@ -1257,17 +1257,22 @@ void SwDoc::ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&
             }
         }
     }
-    const auto& aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-    const SwTableAutoFormatTable& rTableStyles = GetTableStyles();
-    for (size_t i=0; i < rTableStyles.size(); ++i)
+    // A document gets its table style catalog the first time anything asks for its table
+    // styles, so a document without a catalog has no table style overline to report.
+    if (HasTableStyles())
     {
-        const SwTableAutoFormat& rTableStyle = rTableStyles[i];
-        for (const sal_uInt32 nBoxIndex : aTableTemplateMap)
+        const auto& aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+        const SwTableAutoFormatTable& rTableStyles = GetTableStyles();
+        for (size_t i=0; i < rTableStyles.size(); ++i)
         {
-            const SwAutoFormatProps& rBoxProps = rTableStyle.GetBoxFormat(nBoxIndex).GetProps();
-            const SvxOverlineItem rOverlineItem = rBoxProps.GetOverline();
-            if (!rFunc(rOverlineItem))
-                return;
+            const SwTableAutoFormat& rTableStyle = rTableStyles[i];
+            for (const sal_uInt32 nBoxIndex : aTableTemplateMap)
+            {
+                const SwAutoFormatProps& rBoxProps = rTableStyle.GetBoxFormat(nBoxIndex).GetProps();
+                const SvxOverlineItem rOverlineItem = rBoxProps.GetOverline();
+                if (!rFunc(rOverlineItem))
+                    return;
+            }
         }
     }
     const SwCellStyleTable& rCellStyleTable = GetCellStyles();
