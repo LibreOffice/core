@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-10-08 10:49+0000\n"
-"Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
+"PO-Revision-Date: 2026-11-08 15:04+0000\n"
+"Last-Translator: Andi Chandler <andibing@users.noreply.hosted.weblate.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/en_GB/>\n"
-"Language: \n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1108,9 +1108,8 @@ msgstr "Zotero Settings"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3258
 #: admin/src/integrator/AdminIntegratorSettings.ts:3286
-#, fuzzy
 msgid "Electronic Signature"
-msgstr "Electronic signature..."
+msgstr "Electronic Signature"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3261
 msgid ""
@@ -3009,9 +3008,8 @@ msgstr "Referenced cells"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Please diagnose why this formula produces the"
+msgstr "Please diagnose why this formula produces the {0} error."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -5104,9 +5102,8 @@ msgid "Summarize"
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Summarise the key points of this text"
+msgstr "Summarize the key points of the selected text."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
@@ -8554,22 +8551,20 @@ msgid "Delete slides"
 msgstr "delete %n slide"
 
 #: src/docdispatcher.ts:1036
-#, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] "delete %n slide"
-msgstr[1] "delete %n slides"
+msgstr[0] "Delete %n slide?"
+msgstr[1] "Delete %n slides?"
 
 #: src/docdispatcher.ts:1040
 msgid "Delete pages"
 msgstr ""
 
 #: src/docdispatcher.ts:1041
-#, fuzzy
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] "delete %n slide"
-msgstr[1] "delete %n slides"
+msgstr[0] "Delete %n page?"
+msgstr[1] "Delete %n pages?"
 
 #: src/docstate.ts:174
 msgid "Standard"
