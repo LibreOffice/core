@@ -616,6 +616,46 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     }
 }
 
+namespace
+{
+/** Whether a link is drawn in the colour its run states rather than the colour of links.
+
+    A reader draws every link in the colour the theme gives links, unless the link says to
+    keep the colour of its text. A run that states a colour of its own is one that was
+    coloured by hand, and it has to say so, or that colour is gone on the next reading. A run
+    that states none is left as it is, so that a reader still draws it in the colour of links. */
+bool linkKeepsTheColourOfItsText(const uno::Reference<beans::XPropertySet>& rRun)
+{
+    if (!rRun.is() || !rRun->getPropertySetInfo()->hasPropertyByName(u"CharComplexColor"_ustr))
+        return false;
+
+    uno::Reference<util::XComplexColor> xComplexColor;
+    rRun->getPropertyValue(u"CharComplexColor"_ustr) >>= xComplexColor;
+    if (!xComplexColor.is())
+        return false;
+
+    const model::ComplexColor aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    if (!aComplexColor.isUsed())
+        return false;
+
+    const model::ThemeColorType eType = aComplexColor.getThemeColorType();
+    return eType != model::ThemeColorType::Hyperlink
+           && eType != model::ThemeColorType::FollowedHyperlink;
+}
+
+/** Writes the one extension that says a link keeps the colour of its text. */
+void writeLinkColourExtension(const sax_fastparser::FSHelperPtr& pFS)
+{
+    pFS->startElementNS(XML_a, XML_extLst);
+    pFS->startElementNS(XML_a, XML_ext, XML_uri, "{A12FA001-AC4F-418D-AE19-62706E023703}");
+    pFS->singleElementNS(XML_ahyp, XML_hlinkClr, FSNS(XML_xmlns, XML_ahyp),
+                         "http://schemas.microsoft.com/office/drawing/2018/hyperlinkcolor",
+                         XML_val, "tx");
+    pFS->endElementNS(XML_a, XML_ext);
+    pFS->endElementNS(XML_a, XML_extLst);
+}
+}
+
 bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Reference<beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors)
 {
     if (!xPropertySet->getPropertySetInfo()->hasPropertyByName(rPropertyName))
@@ -3132,13 +3172,13 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                 if (bExtURL)
                 {
                     if (isDiagaramExport())
-                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_id), sRelId, XML_tooltip, oTooltip);
+                        mpFS->startElementNS(XML_a, XML_hlinkClick, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_id), sRelId, XML_tooltip, oTooltip);
                     else
-                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_tooltip, oTooltip);
+                        mpFS->startElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_tooltip, oTooltip);
                 }
                 else
                 {
-                    mpFS->singleElementNS(
+                    mpFS->startElementNS(
                         XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
                         sURL.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump",
                         XML_tooltip, oTooltip);
@@ -3148,10 +3188,13 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
             {
                 sal_Int32 nIndex = sURL.indexOf('=');
                 std::u16string_view aDestination(sURL.subView(nIndex + 1));
-                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
-                                      OUString::Concat("ppaction://hlinkshowjump?jump=") + aDestination,
-                                      XML_tooltip, oTooltip);
+                mpFS->startElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
+                                     OUString::Concat("ppaction://hlinkshowjump?jump=") + aDestination,
+                                     XML_tooltip, oTooltip);
             }
+            if (linkKeepsTheColourOfItsText(rRun))
+                writeLinkColourExtension(mpFS);
+            mpFS->endElementNS(XML_a, XML_hlinkClick);
         }
     }
     mpFS->endElementNS( XML_a, nElement );

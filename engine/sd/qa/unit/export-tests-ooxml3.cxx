@@ -20,6 +20,9 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <test/commontesttools.hxx>
 
 #include <sdpage.hxx>
@@ -1308,6 +1311,56 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testNegativeTimeAnimateValue)
     assertXPath(pXmlDoc, sPath, 2);
     // Verify `tm` doesn't exist
     assertXPath(pXmlDoc, sPath + "[@tm]", 0);
+}
+
+// A link that was coloured by hand keeps that colour.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testLinkKeepsTheColourOfItsText)
+{
+    // Given a slide with two links, the first coloured grey by hand and the second left to the
+    // colour the theme gives links:
+    createSdImpressDoc("pptx/link-in-its-own-colour.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    const OString aFirst = "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr"_ostr;
+    assertXPath(pXmlDoc, aFirst + "/a:solidFill/a:srgbClr", "val", u"666666");
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the link said nothing about keeping the colour of its text, so a reader drew it in
+    // the colour the theme gives links and the grey was gone.
+    assertXPath(pXmlDoc, aFirst + "/a:hlinkClick/a:extLst/a:ext", 1);
+    assertXPath(pXmlDoc, aFirst + "/a:hlinkClick/a:extLst/a:ext", "uri",
+                u"{A12FA001-AC4F-418D-AE19-62706E023703}");
+
+    // The second link takes the colour of links, which is what a reader draws without being
+    // told anything, so it says nothing.
+    const OString aSecond = "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr"_ostr;
+    assertXPath(pXmlDoc, aSecond + "/a:solidFill/a:schemeClr", "val", u"hlink");
+    assertXPath(pXmlDoc, aSecond + "/a:hlinkClick/a:extLst", 0);
+}
+
+// A link that was never given a colour is left to the colour the theme gives links.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testLinkWithNoColourOfItsOwn)
+{
+    // Given a link in a document where nobody has coloured anything:
+    createSdImpressDoc();
+    uno::Reference<text::XText> xText(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextField> xField(
+        xFactory->createInstance(u"com.sun.star.text.TextField.URL"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xFieldProps(xField, uno::UNO_QUERY_THROW);
+    xFieldProps->setPropertyValue(u"URL"_ustr, uno::Any(u"https://www.collaboraoffice.com/"_ustr));
+    xFieldProps->setPropertyValue(u"Representation"_ustr, uno::Any(u"Our site"_ustr));
+    xText->insertTextContent(xText->getEnd(), xField, false);
+
+    save(TestFilter::PPTX);
+
+    // Then the file says nothing about the colour of the link, so a reader draws it in the
+    // colour the theme gives links. Saying that it keeps the colour of its text would hand it
+    // the colour of the text around it, which here is black.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:hlinkClick/a:extLst", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf168736)
