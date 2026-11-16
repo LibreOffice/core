@@ -53,7 +53,7 @@ describe('SlideImportSession', function () {
 			encodeURIComponent(source) +
 			' at=' +
 			at +
-			' keepdesign=0'
+			' keepdesign=1'
 		);
 	}
 
@@ -295,6 +295,7 @@ describe('SlideImportSession', function () {
 
 	it('inserts a pick as slides', function () {
 		sourceShown();
+		session.setLinkToSource(false);
 		session.setSelection([2, 0]);
 		session.insertSelected();
 

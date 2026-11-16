@@ -74,11 +74,11 @@ class SlideImportSession {
 	// or an insert names.
 	public slideCount: number = 0;
 	public selection: Set<number> = new Set();
-	public keepDesign: boolean = false;
+	public keepDesign: boolean = true;
 	// Whether the inserted slides stay bound to the file they came from, so
 	// that they can be updated from it later. The user's choice, kept across
 	// files.
-	public linkToSource: boolean = false;
+	public linkToSource: boolean = true;
 	// Whether the inserted slides are linked to the position their slides hold in the source
 	// rather than to the slides themselves. The user's choice, kept across files.
 	public linkByPosition: boolean = false;
@@ -87,10 +87,13 @@ class SlideImportSession {
 	// across files.
 	public insertAsSection: boolean = true;
 	// Whether the slides on show can be linked to their source.
-	public canLink: boolean = false;
+	public get canLink(): boolean {
+		return this.sourceLinkable && this.formatKeepsLinks();
+	}
 	public error: SlideImportError | null = null;
 
 	private map: any;
+	private sourceLinkable: boolean = true;
 	// Insert commands sent whose reply has not arrived yet.
 	private pendingInserts: number = 0;
 	// The insert waiting on the source to write its pages.
@@ -181,7 +184,7 @@ class SlideImportSession {
 	// to the insert of the source left behind, so they go with it.
 	public setSource(fileName: string): void {
 		this.fileName = fileName;
-		this.canLink = this.sourceName() !== '' && this.formatKeepsLinks();
+		this.sourceLinkable = this.sourceName() !== '';
 		this.setError(null);
 		this.setState('opening');
 	}
@@ -324,7 +327,7 @@ class SlideImportSession {
 
 	public close(): void {
 		this.fileName = '';
-		this.canLink = false;
+		this.sourceLinkable = true;
 		this.resetImportState();
 		this.setError(null);
 		this.setState('idle');
