@@ -35,6 +35,7 @@
 #include <xiname.hxx>
 #include <xistyle.hxx>
 #include <documentimport.hxx>
+#include <docsh.hxx>
 
 const sal_uInt16 ExcelToSc::nRowMask = 0x3FFF;
 
@@ -537,7 +538,7 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
                 if(pName)
                 {
                     if (pName->IsMacro())
-                        aStack << aPool.Store(ocMacro, pName->GetXclName());
+                        aStack << StoreMacroCall(pName->GetXclName());
                     else if (pName->GetScRangeData())
                         aStack << aPool.StoreName(nUINT16,
                                                   pName->IsGlobal() ? -1 : pName->GetScTab());
@@ -1534,6 +1535,13 @@ void ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, std::s
         rStrm.Ignore( nSeek );
     }
     rStrm.Seek( nEndPos );
+}
+
+TokenId ExcelToSc::StoreMacroCall( const OUString& rName )
+{
+    if (ScDocShell* pDocShell = GetDocShell())
+        pDocShell->SetMacroCallsSeenWhileLoading();
+    return aPool.Store(ocMacro, rName);
 }
 
 void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )

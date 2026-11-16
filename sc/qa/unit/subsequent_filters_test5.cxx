@@ -723,6 +723,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testColumnStyleToOldSheetWidth)
     CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aFont.GetWeightMaybeAskConfig());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testXLSFormulaCallingProcedureSetsLoadFlag)
+{
+    createScDoc("xls/formula_with_macros.xls");
+    CPPUNIT_ASSERT(getScDocShell()->GetMacroCallsSeenWhileLoading());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
