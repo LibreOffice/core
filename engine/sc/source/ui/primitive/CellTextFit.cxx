@@ -20,6 +20,9 @@
 #include <scitems.hxx>
 
 #include <comphelper/string.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <formula/errorcodes.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/numformat.hxx>
@@ -30,6 +33,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <vector>
 
 namespace sc
 {
@@ -130,6 +134,33 @@ std::optional<OUString> repeatToWidth(std::u16string_view rText, double fTextWid
     for (tools::Long nRepeat = 1; nRepeat < nRepeatCount; ++nRepeat)
         aRepeated.append(rText);
     return aRepeated.makeStringAndClear();
+}
+
+void scaleEditFonts(EditEngine& rEngine, tools::Long nPercent)
+{
+    const bool bUpdateLayout = rEngine.SetUpdateLayout(false);
+    const sal_Int32 nParagraphs = rEngine.GetParagraphCount();
+    for (sal_Int32 nParagraph = 0; nParagraph < nParagraphs; ++nParagraph)
+    {
+        std::vector<sal_Int32> aPortions;
+        rEngine.GetPortions(nParagraph, aPortions);
+        sal_Int32 nStart = 0;
+        for (const sal_Int32 nEnd : aPortions)
+        {
+            const ESelection aSelection(nParagraph, nStart, nParagraph, nEnd);
+            SfxItemSet aAttributes = rEngine.GetAttribs(aSelection);
+            for (const auto nWhich : { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK,
+                                       EE_CHAR_FONTHEIGHT_CTL })
+            {
+                const tools::Long nHeight = aAttributes.Get(nWhich).GetHeight();
+                aAttributes.Put(SvxFontHeightItem(nHeight * nPercent / 100, 100, nWhich));
+            }
+            rEngine.QuickSetAttribs(aAttributes, aSelection);
+            nStart = nEnd;
+        }
+    }
+    if (bUpdateLayout)
+        rEngine.SetUpdateLayout(true);
 }
 
 bool shrinkToFit(double fAvailable, const std::function<double()>& rFirstStep,

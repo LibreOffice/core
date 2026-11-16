@@ -1781,31 +1781,38 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     CellTextArea aArea
         = decideTextArea(rSource, fNeededWidth, eHorJustContext, bNoOverflow, bBreak, aSizes);
 
-    if (bShrink && (aArea.mbLeftClip || aArea.mbRightClip || fExtentY > fInnerHeight))
+    // Text that runs down the cell has to fit its height, and it may reach into the margins
+    // before it shrinks, as in ScOutputData.
+    const bool bAlongHeight = bVertical || bAsianVertical;
+    if (bShrink
+        && (bAlongHeight ? fExtentY > fInnerHeight + fTopMargin + fBottomMargin
+                         : aArea.mbLeftClip || aArea.mbRightClip || fExtentY > fInnerHeight))
     {
         // The fonts shrink until the text fits, after the first step at most 7 times by 10%.
-        // Text that runs down the cell has to fit its height.
-        const bool bAlongHeight = bVertical || bAsianVertical;
         const double fAvailable = bAlongHeight ? fInnerHeight : fInnerWidth;
         const double fNeeded = bAlongHeight ? fExtentY : fExtentX;
         if (fAvailable > 0 && fNeeded > fAvailable)
         {
-            double fScale = fAvailable / fNeeded;
-            auto applyScale = [&]()
+            auto measure = [&]()
             {
-                rEngine.setScalingParameters({ fScale, fScale, 1.0, 1.0 });
                 fEngineWidth = engineWidth();
                 fEngineHeight = engineHeight();
                 fExtentX = bVertical ? fEngineHeight : fEngineWidth;
                 fExtentY = bVertical ? fEngineWidth : fEngineHeight;
                 return bAlongHeight ? fExtentY : fExtentX;
             };
-            if (shrinkToFit(fAvailable, applyScale,
-                            [&]()
-                            {
-                                fScale *= 0.9;
-                                return applyScale();
-                            }))
+            if (shrinkToFit(
+                    fAvailable,
+                    [&]()
+                    {
+                        scaleEditFonts(rEngine, tools::Long(fAvailable * 100 / fNeeded));
+                        return measure();
+                    },
+                    [&]()
+                    {
+                        scaleEditFonts(rEngine, 90);
+                        return measure();
+                    }))
             {
                 aArea.mbLeftClip = aArea.mbRightClip = false;
                 eFlags |= CellTextFlags::Shrink;
@@ -1914,7 +1921,6 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     // The engine lays out from (0, 0) in 1/100 mm.
     TextHierarchyBreakup aHelper;
     rEngine.StripPortions(aHelper);
-    rEngine.setScalingParameters({});
     primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
     if (aContent.empty())
         return;

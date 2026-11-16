@@ -15,11 +15,13 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svl/languageoptions.hxx>
+#include <tools/long.hxx>
 
 #include <functional>
 #include <optional>
 #include <string_view>
 
+class EditEngine;
 class ScDocument;
 struct ScRefCellValue;
 
@@ -56,6 +58,9 @@ std::optional<OUString> fillWithRepeatCharacter(const OUString& rText, sal_Int32
 std::optional<OUString> repeatToWidth(std::u16string_view rText, double fTextWidth,
                                       double fAvailable, double fExtraWidth,
                                       const TextMeasure& rMeasure);
+
+/// Scale the font heights of all the text in the engine to nPercent of their size.
+void scaleEditFonts(EditEngine& rEngine, tools::Long nPercent);
 
 /// Shrink text to fit fAvailable. rFirstStep shrinks it to the scale that fits by measure, and
 /// rNextStep shrinks it by another 10%. Each returns the new size. True when the text fits.

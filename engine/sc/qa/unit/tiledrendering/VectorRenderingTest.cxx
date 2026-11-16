@@ -1700,6 +1700,31 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedTextIsClippedToItsCel
     CPPUNIT_ASSERT(oText->get_child_optional("clip"));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedTextShrinksToFit)
+{
+    // Text turned by 90 degrees in a cell that shrinks to fit shrinks until it fits the height of
+    // the cell, as in ScOutputData.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetRowHeight(1, 0, 600);
+    rDocument.SetManualHeight(1, 1, 0, true);
+    setCellString(*pDocShell, 1, 1, u"Shrink turned text"_ustr);
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(ScRotateValueItem(Degree100(9000)));
+    aPattern.ItemSetPut(ScShrinkToFitCell(true));
+    applyToCell(*pDocShell, 1, 1, aPattern);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const auto oText = cellTextAt(aResponse, 1, 1);
+    CPPUNIT_ASSERT(oText);
+    const std::set<std::string> aFlags = cellTextFlags(*oText);
+    CPPUNIT_ASSERT(aFlags.count("shrink"));
+    CPPUNIT_ASSERT(!aFlags.count("clippedBottom"));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)
 {
     // Rotated text is centered in its cell by default and takes the alignment of the cell, as in

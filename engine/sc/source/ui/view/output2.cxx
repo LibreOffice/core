@@ -2190,44 +2190,6 @@ static bool lcl_SafeIsValue( const ScRefCellValue& rCell )
     return false;
 }
 
-static void lcl_ScaleFonts( EditEngine& rEngine, tools::Long nPercent )
-{
-    bool bUpdateMode = rEngine.SetUpdateLayout( false );
-
-    sal_Int32 nParCount = rEngine.GetParagraphCount();
-    for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
-    {
-        std::vector<sal_Int32> aPortions;
-        rEngine.GetPortions( nPar, aPortions );
-
-        sal_Int32 nStart = 0;
-        for ( const sal_Int32 nEnd : aPortions )
-        {
-            ESelection aSel( nPar, nStart, nPar, nEnd );
-            SfxItemSet aAttribs = rEngine.GetAttribs( aSel );
-
-            tools::Long nWestern = aAttribs.Get(EE_CHAR_FONTHEIGHT).GetHeight();
-            tools::Long nCJK = aAttribs.Get(EE_CHAR_FONTHEIGHT_CJK).GetHeight();
-            tools::Long nCTL = aAttribs.Get(EE_CHAR_FONTHEIGHT_CTL).GetHeight();
-
-            nWestern = ( nWestern * nPercent ) / 100;
-            nCJK     = ( nCJK     * nPercent ) / 100;
-            nCTL     = ( nCTL     * nPercent ) / 100;
-
-            aAttribs.Put( SvxFontHeightItem( nWestern, 100, EE_CHAR_FONTHEIGHT ) );
-            aAttribs.Put( SvxFontHeightItem( nCJK, 100, EE_CHAR_FONTHEIGHT_CJK ) );
-            aAttribs.Put( SvxFontHeightItem( nCTL, 100, EE_CHAR_FONTHEIGHT_CTL ) );
-
-            rEngine.QuickSetAttribs( aAttribs, aSel );      //! remove paragraph attributes from aAttribs?
-
-            nStart = nEnd;
-        }
-    }
-
-    if ( bUpdateMode )
-        rEngine.SetUpdateLayout( true );
-}
-
 static tools::Long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap, Degree100 nAttrRotate )
 {
     if ( bSwap )
@@ -2281,8 +2243,8 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle
                 mpRefDevice->LogicToPixel(Size(0,rEngineHeight)).Height() : rEngineHeight );
         };
         sc::shrinkToFit( nAvailable,
-            [&]() { lcl_ScaleFonts( rEngine, nScale ); return measureHeight(); },
-            [&]() { lcl_ScaleFonts( rEngine, 90 ); return measureHeight(); } );
+            [&]() { sc::scaleEditFonts( rEngine, nScale ); return measureHeight(); },
+            [&]() { sc::scaleEditFonts( rEngine, 90 ); return measureHeight(); } );
 
         // sizes for further processing (alignment etc):
         rEngineWidth = lcl_GetEditSize( rEngine, true, bSwap, nAttrRotate );
@@ -2310,8 +2272,8 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle
             return double( nNewSize );
         };
         if ( sc::shrinkToFit( nAvailable,
-                 [&]() { lcl_ScaleFonts( rEngine, nScale ); return measureWidth(); },
-                 [&]() { lcl_ScaleFonts( rEngine, 90 ); return measureWidth(); } ) )
+                 [&]() { sc::scaleEditFonts( rEngine, nScale ); return measureWidth(); },
+                 [&]() { sc::scaleEditFonts( rEngine, 90 ); return measureWidth(); } ) )
             rLeftClip = rRightClip = false;
 
         // sizes for further processing (alignment etc):
