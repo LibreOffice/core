@@ -772,6 +772,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib,
     , mnAdditionalFirstLineOffset( 0 )
     , mnOffset( 0 )
     , mnNoHyphOffset( COMPLETE_STRING )
+    , mnNoHyphLineHash( 0 )
     , mnNoHyphEndZone( 0 )
     , mbLocked( false )
     , mbWidow( false )
