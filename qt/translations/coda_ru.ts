@@ -49,7 +49,7 @@
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Распечатать Документ</translation>
+        <translation>Печать документа</translation>
     </message>
     <message>
         <source>Select Printer:</source>
@@ -121,19 +121,19 @@
     </message>
     <message>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка экспорта</translation>
     </message>
     <message>
         <source>Failed to export the document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при экспорте документа.</translation>
     </message>
     <message>
         <source>Cannot open remote document</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно открыть удалённый документ</translation>
     </message>
     <message>
         <source>the Collabora Online server</source>
-        <translation type="unfinished"></translation>
+        <translation>сервер Collabora Online</translation>
     </message>
     <message>
         <source>Save File</source>
@@ -157,42 +157,42 @@
     </message>
     <message>
         <source>Template Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка шаблона</translation>
     </message>
     <message>
         <source>Could not create a new document from this template.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать новый документ на основе этого шаблона.</translation>
     </message>
     <message>
         <source>New Document Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка создания документа</translation>
     </message>
     <message>
         <source>Could not create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно создать новый документ.</translation>
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Поддерживаемые файлы</translation>
     </message>
 </context>
 <context>
     <name>TabManager</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <source>Close Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть остальные</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить вкладку в новое окно</translation>
     </message>
     <message>
         <source>Preview of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Предварительный просмотр %1</translation>
     </message>
 </context>
 <context>

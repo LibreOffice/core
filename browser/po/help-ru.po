@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0200\n"
-"PO-Revision-Date: 2026-11-13 09:51+0000\n"
-"Last-Translator: Dmitry <secret-rabbit@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-15 16:39+0000\n"
+"Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "help/ru/>\n"
 "Language: ru\n"
@@ -80,7 +80,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
 msgid "Open"
-msgstr ""
+msgstr "Открыть"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 #, fuzzy
@@ -101,11 +101,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Найти"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Найти и заменить"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -187,7 +187,7 @@ msgstr "Формат текста"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:38-59
 msgid "Bold"
-msgstr "Жирный"
+msgstr "Полужирный"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:39-61
 msgid "Italic"
@@ -1471,7 +1471,7 @@ msgstr "Помощь с <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
 msgid "Collaborative editing"
-msgstr "Совместное редактирование"
+msgstr "Совместная работа"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
 msgid "<span class=\"productname\">{productname}</span> user interface"
@@ -1504,7 +1504,7 @@ msgstr "Редактирование таблиц"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
 msgid "Formulas"
-msgstr "Формулы"
+msgstr "Формула"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
 msgid "Formatting spreadsheets"

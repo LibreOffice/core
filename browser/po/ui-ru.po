@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-13 09:51+0000\n"
-"Last-Translator: Hello Hi <hiiiiiii@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-15 11:10+0000\n"
+"Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
 "Language: ru\n"
@@ -447,7 +447,7 @@ msgstr ""
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
-msgstr ""
+msgstr "Хост WOPI не настроен: первый подключившийся хост будет доверенным"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -467,11 +467,8 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:60
 #: src/control/Control.ServerAuditDialog.ts:151
-#, fuzzy
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
-"Быстрое монтирование каталогов (bind-mount) в изолированной среде Kit не "
-"настроено."
+msgstr "Быстрый режим изоляции (jail) с монтированием (bind mount) не настроен"
 
 #: admin/src/AdminSocketServerAudit.js:64
 msgid ""
@@ -527,13 +524,12 @@ msgid "API key lacks permissions"
 msgstr "У API-ключа недостаточно прав доступа"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
-"Этот ИИ-хост отсутствует в списке разрешённых хостов сервера (lok_allow.host)"
-". Обратитесь к администратору, чтобы он добавил его в список разрешённых."
+"Этот AI-хост отсутствует в списке разрешённых AI-хостов сервера "
+"(ai.allowed_hosts). Попросите администратора разрешить его."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2253
@@ -586,7 +582,6 @@ msgid "Base URL"
 msgstr "Базовый URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:799
-#, fuzzy
 msgid "Image size"
 msgstr "Размер изображения"
 
@@ -734,9 +729,8 @@ msgid "Content"
 msgstr "Содержимое"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:838
-#, fuzzy
 msgid "Display"
-msgstr "Отображать"
+msgstr "Отображание"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:839
 msgid "Show Boundaries"
@@ -952,6 +946,8 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Загрузите упакованное расширение в виде .zip-файла; его содержимое "
+"(manifest.json, ...) распаковывается на сервере."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1678
 msgid "Upload Extension"
@@ -966,6 +962,8 @@ msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Загрузите политики безопасности SPIF (.xml). Они определяют классификации и "
+"категории, доступные при применении метки безопасности к документу."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1693
 msgid "Upload Security Policy"
@@ -973,7 +971,7 @@ msgstr "Загрузка политики безопасности"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1782
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Настройки доступны только авторизованным пользователям."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1791
 msgid "Something went wrong. Please try to refresh the page."
@@ -997,24 +995,29 @@ msgstr "Установить предпочтения интерфейса по 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2072
 #: admin/src/integrator/AdminIntegratorSettings.ts:5471
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Поведение масштабирования"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2217
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Если включено, текстовые документы открываются с масштабом, выбранным "
+"сервером. Отключите эту опцию, чтобы задавать масштаб самостоятельно."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2223
 msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Если включено, Writer подгоняет документ под ширину окна при открытии. Если "
+"выключено, документ открывается с уровнем масштаба по умолчанию, заданным "
+"ниже."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2276
 #: admin/src/integrator/Xcu.ts:624
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Нет доступных настроек для {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2288
 msgid "Select a tab to browser settings."
@@ -1087,15 +1090,15 @@ msgstr "Средства доступности"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3109
 msgid "User interface zoom"
-msgstr ""
+msgstr "Масштаб интерфейса"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3114
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Масштабирует всё окно, включая документ и меню."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3120
 msgid "As per system"
-msgstr ""
+msgstr "Как в системе"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3155
 msgid ""
@@ -1111,19 +1114,20 @@ msgstr "Настройки API аккаунта Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3189
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Настройки Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3258
 #: admin/src/integrator/AdminIntegratorSettings.ts:3286
-#, fuzzy
 msgid "Electronic Signature"
-msgstr "Электронная подпись..."
+msgstr "Электронная подпись"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3261
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Учётные данные для сервиса электронной подписи. Они используются всеми на "
+"этом сервере."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3313
 #: admin/src/integrator/AdminIntegratorSettings.ts:5709
@@ -1140,7 +1144,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3338
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Настройки подписания документов"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3380
 #: admin/src/integrator/AdminIntegratorSettings.ts:3412
@@ -1162,44 +1166,48 @@ msgstr "Сброс"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3393
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Использовать провайдера ИИ, указанного на сервере"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3443
-#, fuzzy
 msgid "Providers"
-msgstr "Провайдер"
+msgstr "Провайдеры"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3446
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Управляется администратором"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3452
 msgid "No providers added yet"
-msgstr ""
+msgstr "Провайдеры пока не добавлены"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3458
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Добавьте провайдера, чтобы использовать ИИ для генерации текста, изображений "
+"или обоих. Провайдер администратора подставится автоматически."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3466
 msgid "Add provider..."
-msgstr ""
+msgstr "Добавить провайдера..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3486
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Выберите провайдера ИИ для генерации текста и изображений."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3488
+#, fuzzy
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Использовать собственного ИИ-провайдера вместо настроенного администратором. "
+"Это применяется только к вам."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3643
 msgid "seconds"
-msgstr ""
+msgstr "секунд"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3652
 #, fuzzy
@@ -1221,14 +1229,18 @@ msgstr "например"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3890
 #: admin/src/integrator/AdminIntegratorSettings.ts:4108
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Оставьте поле пустым, если сервер не требует"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3725
+#, fuzzy
 msgid ""
 "To edit documents, pick a model with tool calling, e.g. gpt-4o or llama3.1. "
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Для редактирования документов выберите модель с tool calling (например, gpt-"
+"4o или llama3.1). Модели без этого (например, базовая llama3, gemma) "
+"поддерживают только чат и не могут работать с документами."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3744
 #, fuzzy
@@ -1236,16 +1248,19 @@ msgid "Image generation"
 msgstr "Генерация изображений"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3752
+#, fuzzy
 msgid "Same as text provider"
-msgstr ""
+msgstr "Тот же, что и для текста"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4107
+#, fuzzy
 msgid "Required for this provider"
-msgstr ""
+msgstr "Обязательно для этого провайдера"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4200
 msgid "Enter an API key for this provider to list its models."
 msgstr ""
+"Введите API-ключ для этого провайдера, чтобы просмотреть список его моделей."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4216
 #: admin/src/integrator/AdminIntegratorSettings.ts:4338
@@ -1262,7 +1277,7 @@ msgstr "Модели не найдены"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4288
 #: admin/src/integrator/AdminIntegratorSettings.ts:4404
 msgid "Connected"
-msgstr ""
+msgstr "Подключено"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4294
 #: admin/src/integrator/AdminIntegratorSettings.ts:4410
@@ -1271,7 +1286,7 @@ msgstr "Ошибка получения моделей"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4308
 msgid "Invalid provider configuration"
-msgstr "Неправильная настройка провайдера ИИ"
+msgstr "Неверные настройки провайдера"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4445
 msgid "None (disable image generation)"
@@ -1284,7 +1299,7 @@ msgstr "Получить модели для выбора"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4513
 #: src/control/Control.AIChatSidebar.ts:2251
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "Превышена квота API — проверьте ваш тарифный план и данные об оплате"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4518
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1293,55 +1308,61 @@ msgstr ""
 "API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4640
+#, fuzzy
 msgid "Lightproof Sentence Checker"
-msgstr ""
+msgstr "Средство проверки предложений Lightproof"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4643
 msgid "Choose what the sentence checker looks for as you type."
-msgstr ""
+msgstr "Выберите, что проверять при вводе текста."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4691
+#, fuzzy
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Внешние средства проверки предложений"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4695
+#, fuzzy
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Серверные средства проверки. Текст документа отправляется на сервер для "
+"проверки."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4730
 #: admin/src/integrator/AdminIntegratorSettings.ts:5080
 msgid "Enabled"
-msgstr ""
+msgstr "Включено"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4742
 #: admin/src/integrator/AdminIntegratorSettings.ts:5117
 #: src/control/backstage/CloudDialogs.tsx:104
+#, fuzzy
 msgid "Server URL"
-msgstr ""
+msgstr "URL-адрес сервера"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4754
-#, fuzzy
 msgid "Username"
 msgstr "Имя пользователя"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4776
 #: admin/src/integrator/AdminIntegratorSettings.ts:5136
+#, fuzzy
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Проверять сертификат сервера"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4784
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Включено на этом сервере для: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Checking level"
-msgstr ""
+msgstr "Уровень проверки"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4802
 msgid "Single words"
-msgstr ""
+msgstr "Отдельные слова"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4803
 msgid "Spelling"
@@ -1357,27 +1378,29 @@ msgstr "Немецкая орфография"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Рекомендация Duden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4817
 msgid "Conservative"
-msgstr ""
+msgstr "Консервативный"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4818
 msgid "Progressive"
-msgstr ""
+msgstr "Прогрессивный"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4819
+#, fuzzy
 msgid "Tolerant"
-msgstr ""
+msgstr "Терпимый"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4820
 msgid "Press agencies"
-msgstr ""
+msgstr "Информационные агентства"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
+#, fuzzy
 msgid "Explanations"
-msgstr ""
+msgstr "Объяснения"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4833
 #: src/control/Control.AIChatSidebar.ts:167
@@ -1390,24 +1413,25 @@ msgid "Long"
 msgstr "Журнал"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4835
+#, fuzzy
 msgid "Long, with an example"
-msgstr ""
+msgstr "Подробно, с примером"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4845
 msgid "Correction profiles"
-msgstr ""
+msgstr "Профили исправлений"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4855
 msgid "Dictionaries"
-msgstr ""
+msgstr "Словари"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Иностранные слова с немецким эквивалентом"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Archaic words"
-msgstr ""
+msgstr "Архаизмы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Regional words"
@@ -1415,7 +1439,7 @@ msgstr "Диалектные слова"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Разговорные и грубые (нецензурные) слова"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4866
 msgid "Filler words"
@@ -1423,19 +1447,19 @@ msgstr "Фильтр слов"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4867
 msgid "Offensive wording"
-msgstr ""
+msgstr "Оскорбительные выражения"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4868
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Гендерно-нейтральные формулировки"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4869
 msgid "Complex sentences"
-msgstr ""
+msgstr "Сложные предложения"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4891
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Проверка стиля (только для немецкого языка)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid "Translation"
@@ -1446,63 +1470,71 @@ msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Машинный перевод текста документа с помощью команды \"Перевести\". Текст "
+"отправляется провайдеру для перевода."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5032
 msgid "The first one that is set up"
-msgstr ""
+msgstr "Первый настроенный"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Перевод с помощью {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5055
 msgid "No provider is set up: the Translate command is not offered."
-msgstr ""
+msgstr "Провайдер не настроен: команда перевода недоступна."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5095
 msgid "API URL"
-msgstr ""
+msgstr "URL-адрес API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5104
 msgid "Authentication key"
-msgstr ""
+msgstr "Ключ аутентификации"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5146
 msgid "Set up on this server."
-msgstr ""
+msgstr "Настроено на этом сервере."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5147
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Включено на этом сервере, но не настроено."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5204
 msgid "Use the default settings"
-msgstr ""
+msgstr "Использовать настройки по умолчанию"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5205
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Использовать настройки, заданные на сервере"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5213
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Ваши собственные настройки будут сброшены при сохранении."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5267
 #: admin/src/integrator/AdminIntegratorSettings.ts:5928
+#, fuzzy
 msgid "Enter {0}"
-msgstr ""
+msgstr "Введите {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5392
 msgid ""
 "This document is using the document settings it was opened with. What you "
 "change here applies to the next document you open."
 msgstr ""
+"Этот документ использует настройки, с которыми он был открыт. Изменения "
+"здесь применятся к следующему открытому документу."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5395
+#, fuzzy
 msgid ""
 "This document is open in more than one window, so what you change here "
 "applies to the next document you open rather than this one."
 msgstr ""
+"Этот документ открыт в нескольких окнах, поэтому изменения здесь применятся "
+"не к нему, а к следующему открытому документу."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5505
 #: admin/src/integrator/Xcu.ts:580
@@ -1514,20 +1546,21 @@ msgid "Upload Xcu"
 msgstr "Загрузить Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5996
+#, fuzzy
 msgid "Delete {0}"
-msgstr ""
+msgstr "Удалить {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6059
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Сбросить {0} по умолчанию"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6063
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Вы уверены, что хотите сбросить {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6083
 msgid "Save {0}"
-msgstr ""
+msgstr "Сохранить {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -1563,6 +1596,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Этот файл — словарь проверки орфографии, а не список слов. Загрузите список "
+"слов, по одному на каждой строке."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1586,7 +1621,7 @@ msgstr "Выберите вкладку настроек."
 
 #: admin/src/Util.js:26
 msgid "kB"
-msgstr "КБ"
+msgstr "кБ"
 
 #: admin/src/Util.js:26
 msgid "MB"
@@ -1695,7 +1730,7 @@ msgstr "Файл HTML (.html)"
 
 #: src/app/ExportFormats.ts:70
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/app/ExportFormats.ts:76 src/control/Control.Menubar.ts:870
 #: src/control/Control.NotebookbarBuilder.js:435
@@ -1745,7 +1780,7 @@ msgstr "Масштабируемая векторная графика (.svg)"
 
 #: src/app/ExportFormats.ts:96
 msgid "Current slide as Bitmap (.bmp)"
-msgstr "Текущий слайд как BMP (.bmp)"
+msgstr "Текущий слайд как Bitmap (.bmp)"
 
 #: src/app/ExportFormats.ts:99
 msgid "Current slide as Graphics Interchange Format (.gif)"
@@ -1773,20 +1808,20 @@ msgstr "значок типа файла"
 
 #: src/app/TableStylesService.ts:106
 msgid "Light"
-msgstr "Светлый"
+msgstr "Светлая"
 
 #: src/app/TableStylesService.ts:108
 msgid "Medium"
-msgstr "Средний"
+msgstr "Средняя"
 
 #: src/app/TableStylesService.ts:110
 msgid "Dark"
-msgstr ""
+msgstr "Тёмная"
 
 #: src/app/TableStylesService.ts:112
 #: src/control/jsdialog/Widget.ColorPicker.ts:367
 msgid "Custom"
-msgstr ""
+msgstr "Пользовательская"
 
 #: src/app/TableStylesService.ts:251 src/app/TableStylesService.ts:262
 #: src/app/TableStylesService.ts:265 src/app/TableStyleGalleryService.ts:99
@@ -1799,43 +1834,43 @@ msgstr "Стили таблицы"
 
 #: src/app/TableStylesService.ts:354
 msgid "Set as Default"
-msgstr ""
+msgstr "Установить по умолчанию"
 
 #: src/app/TableStylesService.ts:360
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Дублировать стиль"
 
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n год"
+msgstr[1] "%n года"
+msgstr[2] "%n лет"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n день"
+msgstr[1] "%n дня"
+msgstr[2] "%n дней"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n час"
+msgstr[1] "%n часа"
+msgstr[2] "%n часов"
 
 #: src/app/Util.ts:325
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n минута"
+msgstr[1] "%n минуты"
+msgstr[2] "%n минут"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "меньше минуты"
 
 #: src/canvas/sections/CommentListSection.ts:2273
 #: src/canvas/sections/CommentListSection.ts:2286
@@ -1885,9 +1920,8 @@ msgid "Reply"
 msgstr "Ответ"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Примечание"
+msgstr "примечание"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1895,7 +1929,7 @@ msgstr "Нажмите Ctrl + Enter чтобы опубликовать"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Ответ для {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -1971,7 +2005,7 @@ msgstr "Показать в навигаторе"
 
 #: src/canvas/sections/CommentSection.ts:1806
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Нажмите Ctrl + Enter, чтобы опубликовать, или %1, чтобы отменить"
 
 #: src/canvas/sections/CommentSection.ts:1835
 #: src/canvas/sections/CommentSection.ts:1840
@@ -2001,7 +2035,7 @@ msgstr "Текущая версия"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "ещё %n"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:606
 msgid "Document contains unsupported media"
@@ -2009,11 +2043,11 @@ msgstr "Документ содержит неподдерживаемое ме�
 
 #: src/canvas/sections/SelectionSection.ts:1562
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Ожидание повтора..."
 
 #: src/canvas/sections/SelectionSection.ts:1563
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Ожидание отмены..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2032,7 +2066,7 @@ msgstr "Удалить ссылку"
 
 #: src/canvas/sections/GroupButtonSection.ts:66
 msgid "Edit Diagram"
-msgstr ""
+msgstr "Редактировать диаграмму"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
@@ -2119,23 +2153,25 @@ msgstr "адрес ячейки"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Поле имени"
 
 #: src/control/Control.AIChatSidebar.ts:148
 msgid "Make it more concise"
-msgstr ""
+msgstr "Сократить"
 
 #: src/control/Control.AIChatSidebar.ts:149
+#, fuzzy
 msgid "Summarize this text"
-msgstr ""
+msgstr "Пересказать"
 
 #: src/control/Control.AIChatSidebar.ts:150
+#, fuzzy
 msgid "Expand this text"
-msgstr ""
+msgstr "Дополнить этот текст"
 
 #: src/control/Control.AIChatSidebar.ts:151
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Проверить орфографию и грамматику"
 
 #: src/control/Control.AIChatSidebar.ts:165
 msgid "Natural"
@@ -2161,11 +2197,12 @@ msgstr "Повседневный"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} тон"
 
 #: src/control/Control.AIChatSidebar.ts:419
+#, fuzzy
 msgid "Best"
-msgstr ""
+msgstr "Оптимальный"
 
 #: src/control/Control.AIChatSidebar.ts:421
 #: src/control/Control.NotebookbarCalc.js:1075
@@ -2174,7 +2211,7 @@ msgstr "Хорошо"
 
 #: src/control/Control.AIChatSidebar.ts:423
 msgid "Poor"
-msgstr ""
+msgstr "Низкое"
 
 #: src/control/Control.AIChatSidebar.ts:425
 msgid "Unknown"
@@ -2224,48 +2261,48 @@ msgstr "Новый диалог"
 
 #: src/control/Control.AIChatSidebar.ts:754
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "Что вы хотите сделать с этой электронной таблицей?"
 
 #: src/control/Control.AIChatSidebar.ts:756
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "Что вы хотите сделать с этой презентацией?"
 
 #: src/control/Control.AIChatSidebar.ts:758
 msgid "What would you like to do with this drawing?"
-msgstr ""
+msgstr "Что вы хотите сделать с этим рисунком?"
 
 #: src/control/Control.AIChatSidebar.ts:760
 msgid "What would you like to do with this document?"
-msgstr ""
+msgstr "Что вы хотите сделать с этим документом?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Доброе утро, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Доброе утро!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Добрый день, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Добрый день!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Добрый вечер, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Добрый вечер!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
 msgid "Thinking..."
-msgstr ""
+msgstr "Думаю..."
 
 #: src/control/Control.AIChatSidebar.ts:875
 msgid "Chat messages"
@@ -2518,188 +2555,202 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Превышено время ожидания запроса. Вы можете увеличить время ожидания в "
+"разделе ИИ в настройках."
 
 #: src/control/Control.AIChatSidebar.ts:2205
 msgid "Request too large"
-msgstr ""
+msgstr "Запрос слишком велик"
 
 #: src/control/Control.AIChatSidebar.ts:2206
 msgid "Invalid request format"
-msgstr ""
+msgstr "Неверный формат запроса"
 
 #: src/control/Control.AIChatSidebar.ts:2207
 msgid "Request superseded by a newer request"
-msgstr ""
+msgstr "Запрос заменён более новым"
 
 #: src/control/Control.AIChatSidebar.ts:2208
 msgid "No messages provided"
-msgstr ""
+msgstr "Сообщения не предоставлены"
 
 #: src/control/Control.AIChatSidebar.ts:2209
 msgid "Message too long"
-msgstr ""
+msgstr "Сообщение слишком длинное"
 
 #: src/control/Control.AIChatSidebar.ts:2210
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "Функции ИИ отключены администратором"
 
 #: src/control/Control.AIChatSidebar.ts:2211
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "ИИ недоступен для гостей"
 
 #: src/control/Control.AIChatSidebar.ts:2213
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "Функции ИИ отключены для этого документа"
 
 #: src/control/Control.AIChatSidebar.ts:2214
 msgid "AI settings not configured"
-msgstr ""
+msgstr "Настройки ИИ не сконфигурированы"
 
 #: src/control/Control.AIChatSidebar.ts:2216
 msgid "The AI provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "Неверный URL-адрес провайдера ИИ, проверьте настройки"
 
 #: src/control/Control.AIChatSidebar.ts:2218
 msgid "The AI image provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "Неверный URL-адрес провайдера ИИ для изображений, проверьте настройки"
 
 #: src/control/Control.AIChatSidebar.ts:2221
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"Хост \"{0}\" отсутствует в списке разрешённых, обратитесь к администратору"
 
 #: src/control/Control.AIChatSidebar.ts:2223
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Ошибка сети — проверьте подключение"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Не удалось подключиться к провайдеру ИИ"
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "No response from AI"
-msgstr ""
+msgstr "Нет ответа от ИИ"
 
 #: src/control/Control.AIChatSidebar.ts:2227
+#, fuzzy
 msgid "AI used too many tool steps"
-msgstr ""
+msgstr "Превышено допустимое количество шагов при работе ИИ с инструментами"
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid ""
 "The model ran out of tokens before producing output. Try a shorter input or "
 "a model with a larger output budget."
 msgstr ""
+"Модели не хватило токенов для формирования ответа. Введите текст покороче "
+"или выберите модель с большим лимитом вывода."
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid ""
 "The model returned an empty response (no tokens generated). This is usually "
 "a temporary provider issue - please retry, or try a different model."
 msgstr ""
+"Модель вернула пустой ответ (токены не сгенерированы). Обычно это временная "
+"проблема провайдера — повторите попытку или выберите другую модель."
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Image generation failed: no prompt from model"
-msgstr ""
+msgstr "Ошибка генерации изображения: отсутствует запрос от модели"
 
 #: src/control/Control.AIChatSidebar.ts:2237
 msgid "Document not available"
-msgstr ""
+msgstr "Документ недоступен"
 
 #: src/control/Control.AIChatSidebar.ts:2238
+#, fuzzy
 msgid "The edited outline is not valid: {0}"
-msgstr ""
+msgstr "Изменённая структура недействительна: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2240
+#, fuzzy
 msgid "Could not build any slides from the outline. Please try again."
 msgstr ""
+"Не удалось создать ни одного слайда из структуры. Пожалуйста, попробуйте еще "
+"раз."
 
 #: src/control/Control.AIChatSidebar.ts:2241
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "Настройки ИИ для изображений не настроены"
 
 #: src/control/Control.AIChatSidebar.ts:2242
 msgid "Image model not configured"
-msgstr ""
+msgstr "Модель для работы с изображениями не настроена"
 
 #: src/control/Control.AIChatSidebar.ts:2243
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "Не удалось сгенерировать изображение: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2244
 msgid "No image generated"
-msgstr ""
+msgstr "Изображение не сгенерировано"
 
 #: src/control/Control.AIChatSidebar.ts:2245
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "Не удалось обработать ответ ИИ"
 
 #: src/control/Control.AIChatSidebar.ts:2247
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "Провайдер ИИ отклонил запрос, признав его некорректным"
 
 #: src/control/Control.AIChatSidebar.ts:2256
 msgid "API error ({0})"
-msgstr ""
+msgstr "Ошибка API ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2285
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "Извлечение адресов ссылок..."
 
 #: src/control/Control.AIChatSidebar.ts:2286
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "Расчет формулы..."
 
 #: src/control/Control.AIChatSidebar.ts:2287
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Загрузка каталога функций..."
 
 #: src/control/Control.AIChatSidebar.ts:2289
 msgid "Working..."
-msgstr ""
+msgstr "Обработка..."
 
 #: src/control/Control.AIChatSidebar.ts:2290
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Настройка формул..."
 
 #: src/control/Control.AIChatSidebar.ts:2291
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "Создание слайда {0} из {1}..."
 
 #: src/control/Control.AIChatSidebar.ts:2292
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "Пропуск слайда {0}..."
 
 #: src/control/Control.AIChatSidebar.ts:2293
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "Генерация изображения {0} из {1}..."
 
 #: src/control/Control.AIChatSidebar.ts:2313
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
-msgstr ""
+msgstr "Документ слишком большой для полного чтения. Выберите нужный раздел:"
 
 #: src/control/Control.AIChatSidebar.ts:2321
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
 msgstr ""
+"Лист слишком большой для полного чтения. Чтобы ограничить его, вы можете:"
 
 #: src/control/Control.AIChatSidebar.ts:2325
 msgid "Select a range of cells in the sheet, then ask your question again"
-msgstr ""
+msgstr "Выделите диапазон ячеек на листе и повторите вопрос"
 
 #: src/control/Control.AIChatSidebar.ts:2328
 msgid "Reply with a range to focus on, like `A1:D100`"
-msgstr ""
+msgstr "Укажите нужный диапазон, например `A1:D100`"
 
 #: src/control/Control.AIChatSidebar.ts:2333
 msgid "Your deck is ready: {0} slides built from the approved outline."
-msgstr ""
+msgstr "Ваша презентация готова: {0} слайдов создано на основе структуры."
 
 #: src/control/Control.AIChatSidebar.ts:2341
 msgid "{0} slide(s) could not be built and were skipped."
-msgstr ""
+msgstr "{0} слайд(ов) не удалось создать, они пропущены."
 
 #: src/control/Control.AIChatSidebar.ts:2349
 msgid "{0} image(s) could not be generated and show a placeholder."
 msgstr ""
+"Вместо {0} изображений (которые не удалось сгенерировать) показана заглушка."
 
 #: src/control/Control.AIChatSidebar.ts:2402
 #: src/control/Control.AIChatSidebar.ts:4089
@@ -2731,87 +2782,89 @@ msgid "The AI assistant"
 msgstr "ИИ ассистент"
 
 #: src/control/Control.AIChatSidebar.ts:2655
-#, fuzzy
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] "Вставить фигуры"
+msgstr[0] "вставить %n слайд"
+msgstr[1] "вставить %n слайда"
+msgstr[2] "вставить %n слайдов"
 
 #: src/control/Control.AIChatSidebar.ts:2658
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "удалить %n слайд"
+msgstr[1] "удалить %n слайда"
+msgstr[2] "удалить %n слайдов"
 
 #: src/control/Control.AIChatSidebar.ts:2663
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "дублировать %n слайд"
+msgstr[1] "дублировать %n слайда"
+msgstr[2] "дублировать %n слайдов"
 
 #: src/control/Control.AIChatSidebar.ts:2669
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "переместить %n слайд"
+msgstr[1] "переместить %n слайда"
+msgstr[2] "переместить %n слайдов"
 
 #: src/control/Control.AIChatSidebar.ts:2672
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "переименовать %n слайд"
+msgstr[1] "переименовать %n слайда"
+msgstr[2] "переименовать %n слайдов"
 
 #: src/control/Control.AIChatSidebar.ts:2677
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "изменить %n макет"
+msgstr[1] "изменить %n макета"
+msgstr[2] "изменить %n макетов"
 
 #: src/control/Control.AIChatSidebar.ts:2681
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "установить текст в %n место"
+msgstr[1] "установить текст в %n места"
+msgstr[2] "установить текст в %n мест"
 
 #: src/control/Control.AIChatSidebar.ts:2689
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "форматировать текст в %n месте"
+msgstr[1] "форматировать текст в %n местах"
+msgstr[2] "форматировать текст в %n местах"
 
 #: src/control/Control.AIChatSidebar.ts:2697
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Сгенерированов изображение"
+msgstr[0] "сгенерировать %n изображение"
+msgstr[1] "сгенерировать %n изображения"
+msgstr[2] "сгенерировать %n изображений"
 
 #: src/control/Control.AIChatSidebar.ts:2705
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "выполнить %n команду документа"
+msgstr[1] "выполнить %n команды документа"
+msgstr[2] "выполнить %n команд документа"
 
 #: src/control/Control.AIChatSidebar.ts:2736
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "выполнить %n команду %1"
+msgstr[1] "выполнить %n команды %1"
+msgstr[2] "выполнить %n команд %1"
 
 #: src/control/Control.AIChatSidebar.ts:2744
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "применить тему оформления '%1'"
 
 #: src/control/Control.AIChatSidebar.ts:2747
 msgid "This will: %1."
-msgstr ""
+msgstr "Будет выполнено: %1."
 
 #: src/control/Control.AIChatSidebar.ts:2761
 msgid "Do you want to proceed?"
@@ -2871,15 +2924,15 @@ msgstr "Отправлено"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Отправить эти ячейки"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Не отправлять эти ячейки"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Ничего не отправлено."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -2903,65 +2956,67 @@ msgstr "Ошибка обработки данных"
 
 #: src/control/Control.AIChatSidebar.ts:3381
 msgid "Design (optional):"
-msgstr ""
+msgstr "Дизайн (опционально):"
 
 #: src/control/Control.AIChatSidebar.ts:3398
 msgid "No design"
-msgstr ""
+msgstr "Без дизайна"
 
 #: src/control/Control.AIChatSidebar.ts:3399
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Продолжить без темы оформления"
 
 #: src/control/Control.AIChatSidebar.ts:3465
 msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Вот предлагаемая структура. Отредактируйте заголовки или описания, удалите "
+"ненужные слайды, а затем утвердите, чтобы создать презентацию:"
 
 #: src/control/Control.AIChatSidebar.ts:3526
 msgid "Reject outline"
-msgstr ""
+msgstr "Отклонить структуру"
 
 #: src/control/Control.AIChatSidebar.ts:3532
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Для утверждения задайте заголовки всем добавленным слайдам."
 
 #: src/control/Control.AIChatSidebar.ts:3560
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Заголовок слайда %1"
 
 #: src/control/Control.AIChatSidebar.ts:3566
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Описание слайда %1"
 
 #: src/control/Control.AIChatSidebar.ts:3572
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Удалить слайд %1"
 
 #: src/control/Control.AIChatSidebar.ts:3620
 msgid "Slide title"
-msgstr ""
+msgstr "Заголовок слайда"
 
 #: src/control/Control.AIChatSidebar.ts:3632
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Содержание этого слайда"
 
 #: src/control/Control.AIChatSidebar.ts:3657
 msgid "Add slide"
-msgstr ""
+msgstr "Добавить слайд"
 
 #: src/control/Control.AIChatSidebar.ts:3695
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Структура утверждена — создаётся слайдов: %1."
 
 #: src/control/Control.AIChatSidebar.ts:3704
 msgid "Outline rejected."
-msgstr ""
+msgstr "Структура отклонена."
 
 #: src/control/Control.AIChatSidebar.ts:3740
 msgid "Building slides..."
-msgstr ""
+msgstr "Формирование слайдов..."
 
 #: src/control/Control.AIChatSidebar.ts:3774
 msgid "Formula analysis timeout"
@@ -2969,7 +3024,7 @@ msgstr "Таймаут анализа формулы"
 
 #: src/control/Control.AIChatSidebar.ts:3797
 msgid "Select the content you want the assistant to work on first."
-msgstr ""
+msgstr "Сначала выберите содержимое, с которым должен работать ассистент."
 
 #: src/control/Control.AIChatSidebar.ts:3813
 msgid "Analyzing formula dependencies..."
@@ -2993,11 +3048,11 @@ msgstr "Диагностика ошибки формулы в"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "Для выявления ошибки в %1 данные ячейки будут отправлены в %2:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Вы хотите отправить их?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3007,7 +3062,7 @@ msgstr "У меня ошибка формулы в книге."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Ячейка {0} (Лист: {1}) содержит:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3024,9 +3079,8 @@ msgstr "Упоминаемые ячейки"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Пожалуйста, проверьте, почему формула производит"
+msgstr "Пожалуйста, определите причину возникновения ошибки {0} в этой формуле."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3042,11 +3096,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "только ячейки с ошибками"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "другой файл, только название"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3113,10 +3167,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Опишите изображение, которое хотите сгенерировать. Например: \"Акварельный "
+"рисунок горного озера на рассвете\"."
 
 #: src/control/Control.AIChatSidebar.ts:4145
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Создайте заметки докладчика для текущего слайда."
 
 #: src/control/Control.AIChatSidebar.ts:4178
 msgid ""
@@ -3146,12 +3202,16 @@ msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Ссылка на ячейку создается путем объединения заголовка её столбца с номером "
+"строки (например, столбец B + строка 2 = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:4200
 msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Таблица показывает содержимое каждой ячейки. Расположенный ниже список "
+"\"Формулы:\" содержит формулы для тех ячеек, где они заданы."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 #, fuzzy
@@ -3164,11 +3224,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:4209
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Проверьте следующие данные таблицы на наличие ошибок."
 
 #: src/control/Control.AIChatSidebar.ts:4210
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Проанализируйте эти данные для выявления:"
 
 #: src/control/Control.AIChatSidebar.ts:4214
 msgid ""
@@ -3176,34 +3236,45 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Нарушения закона Бенфорда — проверка того, отклоняется ли распределение "
+"первых (значащих) цифр числовых значений от ожидаемого в статистически "
+"значимой степени, что может свидетельствовать о фальсификации или "
+"манипуляции данными."
 
 #: src/control/Control.AIChatSidebar.ts:4220
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Статистические выбросы — выявление значений, которые значимо отклоняются от "
+"остальных в своём столбце или группе."
 
 #: src/control/Control.AIChatSidebar.ts:4226
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Общие аномалии — подозрительные закономерности, неожиданные дубликаты, "
+"несоответствия или проблемы с форматированием."
 
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
 msgstr ""
+"Изображения сохранены с более высоким разрешением, чем поддерживает слайд"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Изображения сохранены с разрешением выше %1 DPI, что превышает детализацию, "
+"отображаемую на слайде"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Изображения с высоким разрешением"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Кадрированные изображения"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -3216,74 +3287,77 @@ msgstr "Слайды"
 
 #: src/control/Control.CleanupSidebar.ts:241
 msgid "Hidden slides"
-msgstr ""
+msgstr "Скрытые слайды"
 
 #: src/control/Control.CleanupSidebar.ts:246
 msgid "Unused master slides"
-msgstr ""
+msgstr "Неиспользуемые слайды-образцы"
 
 #: src/control/Control.CleanupSidebar.ts:252
+#, fuzzy
 msgid "For sharing"
-msgstr ""
+msgstr "Для отправки"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Заметки докладчика"
 
 #: src/control/Control.CleanupSidebar.ts:258
 msgid "Embedded objects"
-msgstr ""
+msgstr "Встроенные объекты"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "изображения оставлены без изменений"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "%1 DPI, качество %2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
+#, fuzzy
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "%1 можно оптимизировать"
 
 #: src/control/Control.CleanupSidebar.ts:376
+#, fuzzy
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "%1 (%2%) можно оптимизировать"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
-msgstr ""
+msgstr "Исправить"
 
 #: src/control/Control.CleanupSidebar.ts:465
 msgid "%1 byte"
 msgid_plural "%1 bytes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%1 байт"
+msgstr[1] "%1 байта"
+msgstr[2] "%1 байт"
 
 #: src/control/Control.CleanupSidebar.ts:473
 msgid "%1 KB"
-msgstr ""
+msgstr "%1 КБ"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "%1 MB"
-msgstr ""
+msgstr "%1 МБ"
 
 #: src/control/Control.CleanupSidebar.ts:487
 msgid "Remove %1"
-msgstr ""
+msgstr "Убрать %1"
 
 #: src/control/Control.CleanupSidebar.ts:489
 msgid "Fix %1"
-msgstr ""
+msgstr "Исправить %1"
 
 #: src/control/Control.CleanupSidebar.ts:553
 msgid "Master slide"
-msgstr ""
+msgstr "Образец слайдов"
 
 #: src/control/Control.CleanupSidebar.ts:554
 msgid "Master slide, image %1"
-msgstr ""
+msgstr "Образец слайда, изображение %1"
 
 #: src/control/Control.CleanupSidebar.ts:557
 #: src/control/Control.PartsPreview.js:955 src/slideimport/SlideLinks.ts:998
@@ -3292,91 +3366,91 @@ msgstr "Слайд %1"
 
 #: src/control/Control.CleanupSidebar.ts:558
 msgid "Slide %1, image %2"
-msgstr ""
+msgstr "Слайд %1, изображение %2"
 
 #: src/control/Control.CleanupSidebar.ts:562
 msgid "Slide %1 is hidden and can be removed"
-msgstr ""
+msgstr "Слайд %1 скрыт и может быть удалён"
 
 #: src/control/Control.CleanupSidebar.ts:564
 msgid "Master slide '%1' is not used by any slide"
-msgstr ""
+msgstr "Слайд-образец '%1' не используется ни на одном слайде"
 
 #: src/control/Control.CleanupSidebar.ts:569
 msgid "Slide %1 has speaker notes"
-msgstr ""
+msgstr "Слайд %1 содержит заметки докладчика"
 
 #: src/control/Control.CleanupSidebar.ts:572
 msgid "Slide %1: embedded object"
-msgstr ""
+msgstr "Слайд %1: встроенный объект"
 
 #: src/control/Control.CleanupSidebar.ts:573
 msgid "Slide %1: embedded object, no image to replace it with"
-msgstr ""
+msgstr "Слайд %1: встроенный объект, нечем заменить (нет изображения)"
 
 #: src/control/Control.CleanupSidebar.ts:587
 msgid "%1 DPI"
-msgstr ""
+msgstr "%1 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:589
 msgid "%1 at %2 DPI"
-msgstr ""
+msgstr "%1 с разрешением %2 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:594
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1% обрезано"
 
 #: src/control/Control.CleanupSidebar.ts:596
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, обрезано %2%"
 
 #: src/control/Control.CleanupSidebar.ts:663
 msgid "Leave images alone"
-msgstr ""
+msgstr "Оставить изображения без изменений"
 
 #: src/control/Control.CleanupSidebar.ts:664
 msgid "96 DPI"
-msgstr ""
+msgstr "96 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:665
 msgid "150 DPI"
-msgstr ""
+msgstr "150 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:666
 msgid "220 DPI"
-msgstr ""
+msgstr "220 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:667
 msgid "300 DPI"
-msgstr ""
+msgstr "300 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:691
 msgid "Scanning..."
-msgstr ""
+msgstr "Сканирование..."
 
 #: src/control/Control.CleanupSidebar.ts:693
 msgid "Measuring images..."
-msgstr ""
+msgstr "Определение размеров изображений..."
 
 #: src/control/Control.CleanupSidebar.ts:695
 msgid "Preparing cleanup..."
-msgstr ""
+msgstr "Подготовка к очистке..."
 
 #: src/control/Control.CleanupSidebar.ts:697
 msgid "Cleaning up..."
-msgstr ""
+msgstr "Очистка..."
 
 #: src/control/Control.CleanupSidebar.ts:737
 msgid "Saved %1"
-msgstr ""
+msgstr "Сохранено %1"
 
 #: src/control/Control.CleanupSidebar.ts:744
 msgid "%1 thing to clean up"
 msgid_plural "%1 things to clean up"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%1 элемент для очистки"
+msgstr[1] "%1 элемента для очистки"
+msgstr[2] "%1 элементов для очистки"
 
 #: src/control/Control.CleanupSidebar.ts:767
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:146
@@ -3394,27 +3468,28 @@ msgstr "Опция"
 
 #: src/control/Control.CleanupSidebar.ts:791
 msgid "Image resolution"
-msgstr ""
+msgstr "Разрешение изображения"
 
 #: src/control/Control.CleanupSidebar.ts:813
 msgid "JPEG quality (%)"
-msgstr ""
+msgstr "Качество JPEG (%)"
 
 #: src/control/Control.CleanupSidebar.ts:838
+#, fuzzy
 msgid "Prepare for sharing"
-msgstr ""
+msgstr "Подготовить к отправке"
 
 #: src/control/Control.CleanupSidebar.ts:867
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1 из %2"
 
 #: src/control/Control.CleanupSidebar.ts:880
 msgid "Cleanup progress"
-msgstr ""
+msgstr "Прогресс очистки"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Остановить очистку"
 
 #: src/control/Control.CleanupSidebar.ts:934
 #, fuzzy
@@ -3423,35 +3498,37 @@ msgstr "Завершить презентацию"
 
 #: src/control/Control.CleanupSidebar.ts:970
 msgid "Fix all"
-msgstr ""
+msgstr "Исправить все"
 
 #: src/control/Control.CleanupSidebar.ts:1014
 msgid "This document cannot be changed here, so there is nothing to clean up."
 msgstr ""
+"В этом документе нельзя вносить изменения, поэтому очистка не требуется."
 
 #: src/control/Control.CleanupSidebar.ts:1021
 msgid "Find what makes this presentation large, and clean it up here."
-msgstr ""
+msgstr "Определите, что увеличивает размер этой презентации, и очистите здесь."
 
 #: src/control/Control.CleanupSidebar.ts:1085
+#, fuzzy
 msgid "saves %1"
-msgstr ""
+msgstr "экономит %1"
 
 #: src/control/Control.CleanupSidebar.ts:1177
 #: src/control/Control.SlideImportPane.tsx:727
 msgid "Not checked"
-msgstr ""
+msgstr "Не проверено"
 
 #: src/control/Control.CleanupSidebar.ts:1280
 #: src/control/Control.Menubar.ts:670
 #: src/control/Control.NotebookbarImpress.js:2188
 #: src/control/Control.NotebookbarImpress.js:2189
 msgid "Clean Up"
-msgstr ""
+msgstr "Выполнить очистку"
 
 #: src/control/Control.CleanupSidebar.ts:2447
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "Очистка не дала ответа. Пожалуйста, попробуйте еще раз."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3501,7 +3578,7 @@ msgstr "Не показывать снова"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Во время выполнения команды {1} возникла ошибка: {0}."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3526,7 +3603,7 @@ msgstr "Новый"
 #: src/control/Control.BackstageView.ts:127
 #: src/control/backstage/OpenView.tsx:42
 msgid "Open"
-msgstr ""
+msgstr "Открыть"
 
 #: src/control/Control.BackstageView.ts:145
 #: src/control/Control.Notebookbar.js:1304
@@ -3545,7 +3622,7 @@ msgstr "Поделиться"
 
 #: src/control/Control.BackstageView.ts:153
 msgid "Info"
-msgstr ""
+msgstr "Сведения"
 
 #: src/control/Control.BackstageView.ts:169
 #: src/control/Control.NotebookbarCalc.js:193
@@ -3559,7 +3636,7 @@ msgstr "Сохранить как"
 
 #: src/control/Control.BackstageView.ts:185
 msgid "Export"
-msgstr ""
+msgstr "Экспорт"
 
 #: src/control/Control.BackstageView.ts:193
 msgid "Sign"
@@ -3567,7 +3644,7 @@ msgstr "Подписать"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Выйти"
 
 #: src/control/Control.BackstageView.ts:279
 msgid "Start a new document from one of the following templates."
@@ -3580,23 +3657,23 @@ msgstr "Недавние"
 
 #: src/control/Control.BackstageView.ts:833
 msgid "Document Info"
-msgstr ""
+msgstr "Сведения о документе"
 
 #: src/control/Control.BackstageView.ts:834
 msgid "View document properties and information"
-msgstr ""
+msgstr "Просмотр свойств и сведений о документе"
 
 #: src/control/Control.BackstageView.ts:856
 msgid "Export Document"
-msgstr ""
+msgstr "Экспорт документа"
 
 #: src/control/Control.BackstageView.ts:857
 msgid "export your documents in different formats"
-msgstr ""
+msgstr "экспортируйте документы в разных форматах"
 
 #: src/control/Control.BackstageView.ts:889
 msgid "Text Document"
-msgstr ""
+msgstr "Текстовый документ"
 
 #: src/control/Control.BackstageView.ts:889
 #: src/control/Control.BackstageView.ts:892
@@ -3607,7 +3684,7 @@ msgstr "Страница"
 
 #: src/control/Control.BackstageView.ts:890
 msgid "Spreadsheet"
-msgstr ""
+msgstr "Электронная таблица"
 
 #: src/control/Control.BackstageView.ts:890 src/control/Control.Tabs.js:218
 #, fuzzy
@@ -3616,7 +3693,7 @@ msgstr "~Лист"
 
 #: src/control/Control.BackstageView.ts:897
 msgid "Parts"
-msgstr ""
+msgstr "Детали"
 
 #: src/control/Control.BackstageView.ts:901
 #: src/control/backstage/CloudDialogs.tsx:99
@@ -3631,15 +3708,15 @@ msgstr "Модель"
 
 #: src/control/Control.BackstageView.ts:908
 msgid "View Only"
-msgstr ""
+msgstr "Только просмотр"
 
 #: src/control/Control.BackstageView.ts:915
 msgid "File Name"
-msgstr ""
+msgstr "Имя файла"
 
 #: src/control/Control.BackstageView.ts:1063
 msgid "Blank Spreadsheet"
-msgstr ""
+msgstr "Пустая таблица"
 
 #: src/control/Control.BackstageView.ts:1067
 #, fuzzy
@@ -3648,11 +3725,11 @@ msgstr "Завершить презентацию"
 
 #: src/control/Control.BackstageView.ts:1071
 msgid "Blank Drawing"
-msgstr ""
+msgstr "Пустая схема"
 
 #: src/control/Control.BackstageView.ts:1076
 msgid "Blank Document"
-msgstr ""
+msgstr "Пустой документ"
 
 #: src/control/Control.BackstageView.ts:1225
 msgid "Untitled"
@@ -3660,19 +3737,19 @@ msgstr "Без имени"
 
 #: src/control/backstage/Common.tsx:48
 msgid "Loading templates…"
-msgstr ""
+msgstr "Загрузка шаблонов…"
 
 #: src/control/backstage/Common.tsx:65
 msgid "Recently opened documents will appear here"
-msgstr ""
+msgstr "Недавно открытые документы появятся здесь"
 
 #: src/control/backstage/Sidebar.tsx:87 src/control/backstage/Sidebar.tsx:88
 msgid "Close backstage"
-msgstr ""
+msgstr "Закрыть"
 
 #: src/control/backstage/Sidebar.tsx:113 src/control/backstage/Sidebar.tsx:114
 msgid "Back to document"
-msgstr ""
+msgstr "Назад к документу"
 
 #: src/control/backstage/HomeView.tsx:52 src/control/backstage/HomeView.tsx:55
 msgid "More Templates"
@@ -3689,11 +3766,11 @@ msgstr "Дата изменения"
 
 #: src/control/backstage/TemplatesView.tsx:156
 msgid "No templates match your search."
-msgstr ""
+msgstr "По вашему запросу шаблоны не найдены."
 
 #: src/control/backstage/TemplatesView.tsx:173
 msgid "Search templates"
-msgstr ""
+msgstr "Искать шаблоны"
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:421
 #: src/control/Control.Menubar.ts:1470
@@ -3711,94 +3788,96 @@ msgstr "Свойства"
 
 #: src/control/backstage/InfoView.tsx:37
 msgid "More Property Info"
-msgstr ""
+msgstr "Подробнее о свойствах"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Откройте документ с компьютера или из облачного хранилища."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Открыть файл на компьютере"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Добавить облачное хранилище +"
 
 #: src/control/backstage/OpenView.tsx:139
 #: src/control/backstage/OpenView.tsx:140
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Редактировать аккаунт"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Добавить новый аккаунт"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Введите URL-адрес сервера"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Отображаемое имя"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Введите отображаемое имя"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Имя, отображаемое в списке облачных хранилищ (макс. 40 символов)."
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Сохранить изменения"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Добавить аккаунт"
 
 #: src/control/backstage/CloudDialogs.tsx:183
 msgid "Remove account"
-msgstr ""
+msgstr "Удалить аккаунт"
 
 #: src/control/backstage/CloudDialogs.tsx:185
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Отключить это облачное хранилище"
 
 #: src/control/backstage/CloudDialogs.tsx:213
 msgid "New account successfully added"
-msgstr ""
+msgstr "Новый аккаунт успешно добавлен"
 
 #: src/control/backstage/CloudDialogs.tsx:218
 msgid "You can now access your files from this cloud."
 msgstr ""
+"Теперь вы можете получить доступ к своим файлам из этого облачного хранилища."
 
 #: src/control/backstage/CloudDialogs.tsx:241
 msgid "Open Files"
-msgstr ""
+msgstr "Открыть файлы"
 
 #: src/control/backstage/CloudDialogs.tsx:267
 msgid "Remove this account?"
-msgstr ""
+msgstr "Удалить этот аккаунт?"
 
 #: src/control/backstage/CloudDialogs.tsx:272
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Вы отключитесь от этого аккаунта в облачном хранилище."
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Перетащите файл, чтобы открыть"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
+#, fuzzy
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Это мобильное представление не обладает полной доступностью."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Заявление о доступности"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:157
@@ -3808,92 +3887,102 @@ msgstr "Закрыть"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Добро пожаловать в Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
-msgstr ""
+msgstr "Этот краткий обзор познакомит вас с основными элементами интерфейса."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "Имя документа"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Нажмите на название, чтобы переименовать документ. Все изменения сохраняются "
+"автоматически по мере работы."
 
 #: src/control/onboarding/OnboardingSteps.ts:41
 msgid "The tabs"
-msgstr ""
+msgstr "Вкладки"
 
 #: src/control/onboarding/OnboardingSteps.ts:43
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Каждая вкладка объединяет инструменты для конкретного вида работы, например "
+"для вставки или рецензирования."
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "The menus"
-msgstr ""
+msgstr "Меню"
 
 #: src/control/onboarding/OnboardingSteps.ts:51
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Все команды редактора собраны в этих меню."
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The tools"
-msgstr ""
+msgstr "Инструменты"
 
 #: src/control/onboarding/OnboardingSteps.ts:58
 msgid "The buttons of the tab you selected appear along this row."
-msgstr ""
+msgstr "В этой строке отображаются кнопки выбранной вами вкладки."
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The toolbar"
-msgstr ""
+msgstr "Панель инструментов"
 
 #: src/control/onboarding/OnboardingSteps.ts:65
 msgid "The buttons you need most often sit here, under the menus."
-msgstr ""
+msgstr "Здесь, под меню, расположены кнопки, которые нужны чаще всего."
 
 #: src/control/onboarding/OnboardingSteps.ts:71
 msgid "The formula bar"
-msgstr ""
+msgstr "Строка формул"
 
 #: src/control/onboarding/OnboardingSteps.ts:73
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Здесь отображается содержимое выбранной ячейки. Введите знак равенства, "
+"чтобы начать формулу."
 
 #: src/control/onboarding/OnboardingSteps.ts:80
 msgid "The slide panel"
-msgstr ""
+msgstr "Панель слайдов"
 
 #: src/control/onboarding/OnboardingSteps.ts:82
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Здесь отображаются все слайды или страницы документа. Выберите одну, чтобы "
+"начать работу."
 
 #: src/control/onboarding/OnboardingSteps.ts:90
 msgid "The sidebar"
-msgstr ""
+msgstr "Боковая панель"
 
 #: src/control/onboarding/OnboardingSteps.ts:92
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"На боковой панели отображаются настройки для выбранного объекта, например "
+"текста, фигуры или ячейки."
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "The people in the document"
-msgstr ""
+msgstr "Пользователи в документе"
 
 #: src/control/onboarding/OnboardingSteps.ts:100
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Узнайте, кто ещё работает с документом, и предоставьте к нему доступ."
 
 #: src/control/onboarding/OnboardingSteps.ts:110
 #, fuzzy
@@ -3904,24 +3993,24 @@ msgstr "Показать строку состояния"
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
-msgstr ""
+msgstr "Внизу отображаются состояние документа, язык текста и масштаб."
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You are ready to work"
-msgstr ""
+msgstr "Можно приступать к работе"
 
 #: src/control/onboarding/OnboardingSteps.ts:120
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Вы можете повторить этот обзор в меню \"Справка\"."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
 msgid "Skip"
-msgstr ""
+msgstr "Пропустить"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #, fuzzy
@@ -3943,19 +4032,19 @@ msgstr "Разблокировать"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "Имя документа"
 
 #: src/control/Control.DocumentNameInput.js:39
 msgid "A document name cannot contain a slash or a backslash."
-msgstr ""
+msgstr "Имя документа не может содержать косую черту или обратную косую черту."
 
 #: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2598
 msgid "Please enter a valid document name."
-msgstr ""
+msgstr "Пожалуйста, введите корректное имя документа."
 
 #: src/control/Control.DocumentNameInput.js:55
 msgid "Invalid document name"
-msgstr ""
+msgstr "Некорректное имя документа"
 
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
@@ -4458,11 +4547,11 @@ msgstr "Стиль"
 
 #: src/control/Control.JSDialogBuilder.js:1730
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Открыть выпадающее меню"
 
 #: src/control/Control.JSDialogBuilder.js:1732
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Раскрывающийся список диалогового окна"
 
 #: src/control/Control.JSDialogBuilder.js:1734
 #: src/control/Control.NotebookbarWriter.js:1721
@@ -4471,7 +4560,7 @@ msgstr "Выпадающий список"
 
 #: src/control/Control.JSDialogBuilder.js:1736
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Меню выбора действия"
 
 #: src/control/Control.JSDialogBuilder.js:1762
 #: src/control/jsdialog/Widget.Combobox.js:289
@@ -4577,11 +4666,11 @@ msgstr "Восстановить"
 #: src/control/Control.Menubar.ts:163 src/control/Control.Menubar.ts:514
 #: src/control/Control.Menubar.ts:724 src/control/Control.Menubar.ts:902
 msgid "Find"
-msgstr ""
+msgstr "Найти"
 
 #: src/control/Control.Menubar.ts:167
 msgid "Compare Changes"
-msgstr ""
+msgstr "Сравнить изменения"
 
 #: src/control/Control.Menubar.ts:186 src/control/Control.Menubar.ts:518
 #: src/control/Control.Menubar.ts:524 src/control/Control.Menubar.ts:728
@@ -4596,7 +4685,7 @@ msgstr "Сбросить масштаб"
 
 #: src/control/Control.Menubar.ts:192
 msgid "Fit to Screen"
-msgstr ""
+msgstr "По размеру экрана"
 
 #: src/control/Control.Menubar.ts:195 src/control/Control.Menubar.ts:530
 #: src/control/Control.Menubar.ts:740 src/control/Control.Menubar.ts:933
@@ -4607,7 +4696,7 @@ msgstr "Переключить режим интерфейса"
 #: src/control/Control.NotebookbarWriter.js:1853
 #: src/control/Control.StatusBar.js:301 src/control/Control.StatusBar.js:302
 msgid "Multi Page View"
-msgstr ""
+msgstr "Многостраничный вид"
 
 #: src/control/Control.Menubar.ts:198 src/control/Control.Menubar.ts:532
 #: src/control/Control.Menubar.ts:745 src/control/Control.Menubar.ts:934
@@ -4646,7 +4735,7 @@ msgstr "Локальное изображение..."
 #: src/control/Control.Menubar.ts:216 src/control/Control.Menubar.ts:558
 #: src/control/Control.Menubar.ts:754 src/control/Control.Menubar.ts:959
 msgid "Shapes ..."
-msgstr ""
+msgstr "Фигуры ..."
 
 #: src/control/Control.Menubar.ts:237 src/control/Control.Menubar.ts:239
 #: src/control/Control.Menubar.ts:1443 src/control/Control.Menubar.ts:1445
@@ -4742,7 +4831,7 @@ msgstr "Справка"
 #: src/control/Control.Menubar.ts:850 src/control/Control.Menubar.ts:1178
 #: src/control/Control.NotebookbarWriter.js:530
 msgid "Show Tour"
-msgstr ""
+msgstr "Показать обзор"
 
 #: src/control/Control.Menubar.ts:462 src/control/Control.Menubar.ts:680
 #: src/control/Control.Menubar.ts:852 src/control/Control.Menubar.ts:1180
@@ -4800,23 +4889,23 @@ msgstr "Страницы примечаний"
 #: src/control/Control.Menubar.ts:533
 #: src/control/Control.NotebookbarImpress.js:746
 msgid "View Notes"
-msgstr ""
+msgstr "Показать заметки"
 
 #: src/control/Control.Menubar.ts:534
 #: src/control/Control.NotebookbarImpress.js:748
 msgid "Bottom Panel"
-msgstr ""
+msgstr "Нижняя панель"
 
 #: src/control/Control.Menubar.ts:535
 #: src/control/Control.NotebookbarImpress.js:749
 msgid "Handout Page"
-msgstr ""
+msgstr "Раздаточный материал"
 
 #: src/control/Control.Menubar.ts:536
 #: src/control/Control.NotebookbarImpress.js:750
 #: src/control/jsdialog/Definitions.Menu.ts:1847
 msgid "Hidden"
-msgstr ""
+msgstr "Скрытый"
 
 #: src/control/Control.Menubar.ts:541
 #: src/control/Control.NotebookbarImpress.js:757
@@ -4833,15 +4922,15 @@ msgstr "Мультимедиа на локальном устройстве..."
 #: src/control/Control.NotebookbarImpress.js:2745
 #: src/control/Control.NotebookbarImpress.js:3112
 msgid "Distribute"
-msgstr ""
+msgstr "Распределить"
 
 #: src/control/Control.Menubar.ts:646
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Вставить слайды из файла..."
 
 #: src/control/Control.Menubar.ts:648
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Обновить связанные слайды..."
 
 #: src/control/Control.Menubar.ts:655 src/control/Control.Menubar.ts:1300
 #: src/control/Control.PresentationBar.js:143
@@ -4856,7 +4945,7 @@ msgstr "Показать текущий слайд"
 #: src/control/Control.NotebookbarImpress.js:561
 #: src/slideshow/PresenterConsole.js:290
 msgid "Presenter View"
-msgstr ""
+msgstr "Режим докладчика"
 
 #: src/control/Control.Menubar.ts:661
 #: src/control/Control.NotebookbarImpress.js:583
@@ -5054,98 +5143,97 @@ msgstr "Закрыть Навигацию"
 
 #: src/control/Control.NavigatorPanel.ts:242
 msgid "Results"
-msgstr ""
+msgstr "Результаты"
 
 #: src/control/Control.NavigatorPanel.ts:644
 msgid "Find and Replace"
-msgstr ""
+msgstr "Найти и заменить"
 
 #: src/control/Control.NavigatorPanel.ts:653
 #: src/control/jsdialog/Widget.Combobox.js:497
 #: src/control/jsdialog/Widget.TreeView.ts:2692
 msgid "Search..."
-msgstr ""
+msgstr "Поиск..."
 
 #: src/control/Control.QuickFindPanel.ts:122
 msgid "Type in the search box to find anything in your document"
-msgstr ""
+msgstr "Введите текст в поле поиска, чтобы найти что-либо в документе"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Инструменты текста"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Инструменты слайдов"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Инструменты формул"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Инструменты данных"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Сократить"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Сократите выделенный текст."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Сделать формальным"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Изложите выделенный текст в официальном стиле."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Сделать неформальным"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "Перепишите выделенный текст в неформальном, дружелюбном тоне."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Суммировать"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Обобщи основные моменты данного текста"
+msgstr "Обобщите основные моменты выделенного текста."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Расширить"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
-msgstr ""
+msgstr "Расширьте выделенный текст, добавив подробностей."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Проверить грамматику"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"Исправьте ошибки грамматики, орфографии и пунктуации в выделенном тексте."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Оформить как список"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "Оформите выделенный текст в виде кратких пунктов списка."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
 msgstr "Создать слайды"
 
@@ -5156,7 +5244,7 @@ msgstr "Сгенерированов изображение"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Создать заметки докладчика"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
 #, fuzzy
@@ -5165,92 +5253,92 @@ msgstr "Создать формулу"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Объяснить формулу"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "Объясните формулу в выделенной ячейке."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Исправить ошибку в формуле"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Очистить данные"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Предложить диаграмму"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Подберите диаграмму для выбранных данных."
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
 msgid "Table Design"
-msgstr ""
+msgstr "Оформление таблицы"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Инструменты"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.TableDesignTabBase.ts:91
 msgid "Table Options"
-msgstr ""
+msgstr "Параметры таблицы"
 
 #: src/control/Notebookbar.CalcTableTab.ts:204
 #: src/control/Notebookbar.TableDesignTabBase.ts:106
 msgid "Header Row"
-msgstr ""
+msgstr "Строка заголовка"
 
 #: src/control/Notebookbar.CalcTableTab.ts:219
 #: src/control/Notebookbar.TableDesignTabBase.ts:123
 msgid "Total Row"
-msgstr ""
+msgstr "Итоговая строка"
 
 #: src/control/Notebookbar.CalcTableTab.ts:241
 #: src/control/Notebookbar.TableDesignTabBase.ts:146
 msgid "Banded Rows"
-msgstr ""
+msgstr "Чередование строк"
 
 #: src/control/Notebookbar.CalcTableTab.ts:257
 #: src/control/Notebookbar.TableDesignTabBase.ts:163
 msgid "Banded Columns"
-msgstr ""
+msgstr "Чередование столбцов"
 
 #: src/control/Notebookbar.CalcTableTab.ts:279
 #: src/control/Notebookbar.TableDesignTabBase.ts:186
 msgid "First Column"
-msgstr ""
+msgstr "Первый столбец"
 
 #: src/control/Notebookbar.CalcTableTab.ts:295
 #: src/control/Notebookbar.TableDesignTabBase.ts:203
 msgid "Last Column"
-msgstr ""
+msgstr "Последний столбец"
 
 #: src/control/Notebookbar.CalcTableTab.ts:317
 msgid "Filter Buttons"
-msgstr ""
+msgstr "Кнопки фильтра"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 #: src/slideshow/engine/SlideShowHandler.ts:412
 msgid "Animation"
-msgstr ""
+msgstr "Анимация"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:41
 msgid "Applied animations"
-msgstr ""
+msgstr "Применённые анимации"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:59
 msgid "Move Up"
-msgstr ""
+msgstr "Переместить вверх"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:75
 msgid "Move Down"
-msgstr ""
+msgstr "Переместить вниз"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:105
 msgid "Category"
@@ -5258,60 +5346,60 @@ msgstr "Категория"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:120
 msgid "Start"
-msgstr ""
+msgstr "Начать"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:140
 msgid "Effect"
-msgstr ""
+msgstr "Эффект"
 
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:25
 #: src/control/Notebookbar.WriterTableDesignTab.ts:27
 #: src/control/Control.NotebookbarImpress.js:102
 msgid "Design"
-msgstr ""
+msgstr "Дизайн"
 
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:65
 #: src/control/Notebookbar.WriterTableDesignTab.ts:69
 msgid "Cell Background"
-msgstr ""
+msgstr "Заливка ячейки"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:24
 msgid "Transition"
-msgstr ""
+msgstr "Переход"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:40
 #: src/control/Sidebar.FromNotebookbarPanel.ts:137
 msgid "Transitions"
-msgstr ""
+msgstr "Переходы"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:73
 msgid "Variant"
-msgstr ""
+msgstr "Вариант"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:89
 msgid "Duration"
-msgstr ""
+msgstr "Длительность"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:117
 msgid "On mouse click"
-msgstr ""
+msgstr "По щелчку"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:125
 #: src/control/HRuler.ts:338
 msgid "After"
-msgstr ""
+msgstr "После"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:146
 msgid "Apply to All Slides"
-msgstr ""
+msgstr "Применить ко всем слайдам"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:41
 msgid "Table of content"
-msgstr ""
+msgstr "Оглавление"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:95
 msgid "Footnote/Endnote"
-msgstr ""
+msgstr "Сноска/Концевая сноска"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:313
 #: src/control/Control.NotebookbarDraw.js:1707
@@ -5333,7 +5421,7 @@ msgstr "Таблица"
 #: src/control/Notebookbar.WriterTableTab.ts:39
 #: src/control/Control.NotebookbarImpress.js:2208
 msgid "Select"
-msgstr ""
+msgstr "Выделить"
 
 #: src/control/Notebookbar.WriterTableTab.ts:209
 #: src/control/Control.NotebookbarCalc.js:1199
@@ -5344,7 +5432,7 @@ msgstr "Размер"
 #: src/control/Notebookbar.WriterTableTab.ts:307
 #: src/control/Control.NotebookbarImpress.js:2374
 msgid "Merge & Split"
-msgstr ""
+msgstr "Объединить и разделить"
 
 #: src/control/Notebookbar.WriterTableTab.ts:365
 #: src/control/Control.NotebookbarCalc.js:689
@@ -5368,26 +5456,26 @@ msgstr "Сортировка"
 
 #: src/control/Notebookbar.WriterTableTab.ts:550
 msgid "Protect"
-msgstr ""
+msgstr "Защита"
 
 #: src/control/Notebookbar.WriterTableTab.ts:602
 #: src/control/Control.NotebookbarWriter.js:3061
 #: src/control/Control.NotebookbarWriter.js:3440
 msgid "Caption"
-msgstr ""
+msgstr "Название"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
-msgstr ""
+msgstr "Анимации"
 
 #: src/control/Control.Notebookbar.js:663
 #: src/control/Control.NotebookbarWriter.js:3135
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Цвет заливки (только для прозрачных изображений)"
 
 #: src/control/Control.Notebookbar.js:673
 msgid "Area"
-msgstr ""
+msgstr "Область"
 
 #: src/control/Control.Notebookbar.js:688
 #, fuzzy
@@ -5396,24 +5484,24 @@ msgstr "Связь"
 
 #: src/control/Control.Notebookbar.js:731
 msgid "Line Width"
-msgstr ""
+msgstr "Ширина линии"
 
 #: src/control/Control.Notebookbar.js:764
 msgid "Transparency:"
-msgstr ""
+msgstr "Прозрачность:"
 
 #: src/control/Control.Notebookbar.js:783
 msgid "Thickness:"
-msgstr ""
+msgstr "Толщина:"
 
 #: src/control/Control.NotebookbarBuilder.js:204
 #: src/control/Control.NotebookbarBuilder.js:609
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Несохранённые изменения. Сохранить"
 
 #: src/control/Control.NotebookbarBuilder.js:268
 msgid "Click to expand"
-msgstr ""
+msgstr "Нажмите, чтобы развернуть"
 
 #: src/control/Control.NotebookbarBuilder.js:268
 msgid "Tap to expand"
@@ -5421,7 +5509,7 @@ msgstr "Коснитесь, чтобы развернуть"
 
 #: src/control/Control.NotebookbarBuilder.js:269
 msgid "Click to collapse"
-msgstr ""
+msgstr "Нажмите, чтобы свернуть"
 
 #: src/control/Control.NotebookbarBuilder.js:269
 #: src/control/Control.NotebookbarBuilder.js:343
@@ -5430,11 +5518,11 @@ msgstr "Коснитесь, чтобы свернуть"
 
 #: src/control/Control.NotebookbarBuilder.js:397
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Документ PDF (.pdf) с параметрами"
 
 #: src/control/Control.NotebookbarBuilder.js:606
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Есть несохранённые изменения."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:63
@@ -5449,7 +5537,6 @@ msgid "Page Layout"
 msgstr "Разметка страницы"
 
 #: src/control/Control.NotebookbarCalc.js:54
-#, fuzzy
 msgid "Formulas"
 msgstr "Формула"
 
@@ -5487,7 +5574,7 @@ msgstr "Изображение"
 #: src/control/Control.NotebookbarWriter.js:128
 #: src/layer/marker/TextInput.js:546
 msgid "Chart"
-msgstr ""
+msgstr "Диаграмма"
 
 #: src/control/Control.NotebookbarCalc.js:101
 #: src/control/Control.NotebookbarDraw.js:129
@@ -5532,7 +5619,7 @@ msgstr "Просмотр истории"
 #: src/control/Control.NotebookbarImpress.js:447
 #: src/control/Control.NotebookbarWriter.js:426
 msgid "Security label"
-msgstr ""
+msgstr "Метка безопасности"
 
 #: src/control/Control.NotebookbarCalc.js:409
 #: src/control/Control.NotebookbarDraw.js:403
@@ -5554,7 +5641,7 @@ msgstr "Переименовать"
 #: src/control/Control.NotebookbarImpress.js:859
 #: src/control/Control.NotebookbarWriter.js:717
 msgid "Clipboard"
-msgstr ""
+msgstr "Буфер обмена"
 
 #: src/control/Control.NotebookbarCalc.js:507
 #: src/control/Control.NotebookbarDraw.js:683
@@ -5562,13 +5649,15 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:744
 #: src/control/Control.TopToolbar.js:190
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Формат по образцу (дважды щелкните для многократного применения)"
 
 #: src/control/Control.NotebookbarCalc.js:508
 msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Формат по образцу включён (нажмите Enter на ячейке для применения, щёлкните "
+"ещё раз или нажмите Esc для выхода)"
 
 #: src/control/Control.NotebookbarCalc.js:544
 #: src/control/Control.NotebookbarDraw.js:720
@@ -5578,7 +5667,7 @@ msgstr "Шрифт"
 
 #: src/control/Control.NotebookbarCalc.js:828
 msgid "Merge & Center"
-msgstr ""
+msgstr "Объединить по центру"
 
 #: src/control/Control.NotebookbarCalc.js:843
 #: src/control/Control.NotebookbarCalc.js:859
@@ -5603,7 +5692,7 @@ msgstr "Научный"
 
 #: src/control/Control.NotebookbarCalc.js:865
 msgid "Fraction"
-msgstr "Дробь"
+msgstr "Дробный"
 
 #: src/control/Control.NotebookbarCalc.js:866
 msgid "Boolean Value"
@@ -5616,7 +5705,7 @@ msgstr "Логический"
 #: src/control/Control.NotebookbarImpress.js:1856
 #: src/control/Control.NotebookbarWriter.js:1606
 msgid "Text"
-msgstr "Текст"
+msgstr "Текстовый"
 
 #: src/control/Control.NotebookbarCalc.js:873
 msgid "Number Format"
@@ -5636,7 +5725,7 @@ msgstr "Заголовок 2"
 
 #: src/control/Control.NotebookbarCalc.js:1082
 msgid "Neutral"
-msgstr "Neutral"
+msgstr "Обычный"
 
 #: src/control/Control.NotebookbarCalc.js:1089
 msgid "Bad"
@@ -5702,7 +5791,7 @@ msgstr "Удалить столбцы"
 #: src/control/Control.NotebookbarWriter.js:2878
 #: src/control/Control.NotebookbarWriter.js:3248
 msgid "Align"
-msgstr ""
+msgstr "Выравнивание"
 
 #: src/control/Control.NotebookbarCalc.js:1421
 #: src/control/Control.NotebookbarCalc.js:3248
@@ -5715,35 +5804,35 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:2949
 #: src/control/Control.NotebookbarWriter.js:3319
 msgid "Arrange"
-msgstr ""
+msgstr "Упорядочить"
 
 #: src/control/Control.NotebookbarCalc.js:1483
 msgid "Sheet View"
-msgstr ""
+msgstr "Вид листа"
 
 #: src/control/Control.NotebookbarCalc.js:1497
 msgid "Default View"
-msgstr ""
+msgstr "Вид по умолчанию"
 
 #: src/control/Control.NotebookbarCalc.js:1514
 msgid "Open Views List"
-msgstr ""
+msgstr "Открыть список режимов просмотра"
 
 #: src/control/Control.NotebookbarCalc.js:1521
 msgid "New Sheet View"
-msgstr ""
+msgstr "Новый вид листа"
 
 #: src/control/Control.NotebookbarCalc.js:1528
 msgid "Remove Sheet View"
-msgstr ""
+msgstr "Удалить вид листа"
 
 #: src/control/Control.NotebookbarCalc.js:1535
 msgid "Exit Sheet View"
-msgstr ""
+msgstr "Выйти из вида листа"
 
 #: src/control/Control.NotebookbarCalc.js:1550
 msgid "Freeze"
-msgstr ""
+msgstr "Закрепить"
 
 #: src/control/Control.NotebookbarCalc.js:1604
 #: src/control/Control.NotebookbarDraw.js:453
@@ -5751,7 +5840,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:1760
 #: src/control/Control.StatusBar.js:158
 msgid "Zoom"
-msgstr ""
+msgstr "Масштаб"
 
 #: src/control/Control.NotebookbarCalc.js:1611
 #: src/control/Control.NotebookbarDraw.js:460
@@ -5783,28 +5872,28 @@ msgstr "Строка состояния"
 #: src/control/Control.NotebookbarWriter.js:3006
 #: src/control/Control.NotebookbarWriter.js:3376
 msgid "Group"
-msgstr ""
+msgstr "Группировать"
 
 #: src/control/Control.NotebookbarCalc.js:1762
 msgid "Ungroup"
-msgstr ""
+msgstr "Разгруппировать"
 
 #: src/control/Control.NotebookbarCalc.js:1784
 msgid "Pivot Table"
-msgstr ""
+msgstr "Сводная таблица"
 
 #: src/control/Control.NotebookbarCalc.js:1849
 #: src/control/Control.NotebookbarCalc.js:1852
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Стили таблиц доступны только в файлах .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1850
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Вставить таблицу со стилем"
 
 #: src/control/Control.NotebookbarCalc.js:1853
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "Выделите диапазон редактируемых ячеек для вставки оформленной таблицы"
 
 #: src/control/Control.NotebookbarCalc.js:1862
 #: src/control/Control.NotebookbarDraw.js:1062
@@ -5858,20 +5947,19 @@ msgstr "Дата и время"
 
 #: src/control/Control.NotebookbarCalc.js:2238
 msgid "Lookup & Reference"
-msgstr ""
+msgstr "Поиск и ссылки"
 
 #: src/control/Control.NotebookbarCalc.js:2256
 msgid "Math & Trig"
-msgstr ""
+msgstr "Математические и тригонометрические"
 
 #: src/control/Control.NotebookbarCalc.js:2268
 msgid "More Functions"
 msgstr "Другие функции"
 
 #: src/control/Control.NotebookbarCalc.js:2313
-#, fuzzy
 msgid "Range"
-msgstr "диапазон"
+msgstr "Диапазон"
 
 #: src/control/Control.NotebookbarCalc.js:2454
 msgid "Filter"
@@ -5879,7 +5967,7 @@ msgstr "Фильтр"
 
 #: src/control/Control.NotebookbarCalc.js:2691
 msgid "Proofing"
-msgstr ""
+msgstr "Правописание"
 
 #: src/control/Control.NotebookbarCalc.js:2719
 #: src/control/Control.NotebookbarImpress.js:2127
@@ -5890,9 +5978,8 @@ msgstr "Автоматическая проверка орфографии"
 #: src/control/Control.NotebookbarCalc.js:2758
 #: src/control/Control.NotebookbarImpress.js:2164
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
-#, fuzzy
 msgid "Comments"
-msgstr "Примечание"
+msgstr "Примечания"
 
 #: src/control/Control.NotebookbarCalc.js:2808
 #: src/control/Control.NotebookbarWriter.js:2538
@@ -5901,7 +5988,7 @@ msgstr "Запись"
 
 #: src/control/Control.NotebookbarCalc.js:2897
 msgid "Comment on Change"
-msgstr ""
+msgstr "Примечание к изменению"
 
 #: src/control/Control.NotebookbarCalc.js:2908
 msgid "Protection"
@@ -5922,13 +6009,13 @@ msgstr "Темы"
 #: src/control/Control.NotebookbarWriter.js:2811
 #: src/control/Control.NotebookbarWriter.js:3181
 msgid "Wrap"
-msgstr ""
+msgstr "Обтекание"
 
 #: src/control/Control.NotebookbarCalc.js:3362
 #: src/control/Control.NotebookbarImpress.js:2948
 #: src/control/Control.NotebookbarWriter.js:3083
 msgid "Image Controls"
-msgstr ""
+msgstr "Параметры изображения"
 
 #: src/control/Control.NotebookbarDraw.js:82
 #: src/control/Control.NotebookbarWriter.js:87
@@ -5950,13 +6037,13 @@ msgstr "Линейка"
 #: src/control/Control.NotebookbarWriter.js:745
 #: src/control/Control.TopToolbar.js:190
 msgid "Clone Formatting is active (click again or press Esc to exit)"
-msgstr ""
+msgstr "Формат по образцу активен (нажмите ещё раз или Esc для выхода)"
 
 #: src/control/Control.NotebookbarDraw.js:948
 #: src/control/Control.NotebookbarImpress.js:1118
 #: src/control/Control.NotebookbarWriter.js:927
 msgid "Paragraph"
-msgstr ""
+msgstr "Абзац"
 
 #: src/control/Control.NotebookbarImpress.js:110
 #: src/slideshow/SlideShowPresenter.ts:1200
@@ -5969,7 +6056,7 @@ msgstr "Мастер"
 
 #: src/control/Control.NotebookbarImpress.js:539
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Начать показ слайдов"
 
 #: src/control/Control.NotebookbarImpress.js:544
 msgid "From Beginning"
@@ -5977,7 +6064,7 @@ msgstr "С начала"
 
 #: src/control/Control.NotebookbarImpress.js:545
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "На весь экран, начиная с 1-го слайда"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "From Current Slide"
@@ -5985,44 +6072,44 @@ msgstr "С текущего слайда"
 
 #: src/control/Control.NotebookbarImpress.js:553
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "На весь экран, начиная с текущего слайда"
 
 #: src/control/Control.NotebookbarImpress.js:562
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Отображает заметки, следующий слайд и таймер"
 
 #: src/control/Control.NotebookbarImpress.js:577
 msgid "Present"
-msgstr ""
+msgstr "Показ"
 
 #: src/control/Control.NotebookbarImpress.js:584
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Запускается в окне документа. Начинается с 1-го слайда"
 
 #: src/control/Control.NotebookbarImpress.js:592
 msgid "Present to All"
-msgstr ""
+msgstr "Показывать всем"
 
 #: src/control/Control.NotebookbarImpress.js:593
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Запускает презентацию на экране каждого участника"
 
 #: src/control/Control.NotebookbarImpress.js:601
 #: src/slideshow/SlideShowPresenter.ts:1705
 msgid "Follow Presenter"
-msgstr ""
+msgstr "Следовать за докладчиком"
 
 #: src/control/Control.NotebookbarImpress.js:602
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Просматривать слайды по мере их переключения докладчиком"
 
 #: src/control/Control.NotebookbarImpress.js:612
 msgid "Set Up"
-msgstr ""
+msgstr "Настройки"
 
 #: src/control/Control.NotebookbarImpress.js:739
 msgid "Slide Views"
-msgstr ""
+msgstr "Виды слайдов"
 
 #: src/control/Control.NotebookbarImpress.js:783
 msgid "Snap to Grid"
@@ -6030,18 +6117,18 @@ msgstr "Привязка к сетке"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Панель фигур"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2003
 msgid "Slide Layout"
-msgstr ""
+msgstr "Макет слайда"
 
 #: src/control/Control.NotebookbarImpress.js:946
 #: src/control/Control.NotebookbarImpress.js:2013
 #: src/control/Control.TopToolbar.js:301
 msgid "Change Layout"
-msgstr "Изменить разметку"
+msgstr "Сменить макет"
 
 #: src/control/Control.NotebookbarImpress.js:954
 #: src/control/Control.NotebookbarImpress.js:2020
@@ -6050,33 +6137,31 @@ msgstr "Сбросить макет"
 
 #: src/control/Control.NotebookbarImpress.js:968
 msgid "Character"
-msgstr ""
+msgstr "Шрифт"
 
 #: src/control/Control.NotebookbarImpress.js:1234
 msgid "Spacing & Color"
-msgstr ""
+msgstr "Отступы и цвет"
 
 #: src/control/Control.NotebookbarImpress.js:1582
-#, fuzzy
 msgid "Import Slides"
-msgstr "Вставить фигуры"
+msgstr "Импорт слайдов"
 
 #: src/control/Control.NotebookbarImpress.js:1590
 msgid "Update Links"
-msgstr ""
+msgstr "Обновить ссылки"
 
 #: src/control/Control.NotebookbarImpress.js:1942
 msgid "Master Slide Templates"
-msgstr ""
+msgstr "Шаблоны образцов слайдов"
 
 #: src/control/Control.NotebookbarImpress.js:1953
-#, fuzzy
 msgid "This Presentation"
-msgstr "Закрыть презентацию"
+msgstr "Данная презентация"
 
 #: src/control/Control.NotebookbarImpress.js:1962
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Шаблоны презентаций"
 
 #: src/control/Control.NotebookbarImpress.js:2032
 msgid "Slide Size"
@@ -6084,11 +6169,11 @@ msgstr "Размер слайда"
 
 #: src/control/Control.NotebookbarImpress.js:2055
 msgid "Background Image"
-msgstr ""
+msgstr "Фоновое изображение"
 
 #: src/control/Control.NotebookbarImpress.js:2982
 msgid "Effects"
-msgstr ""
+msgstr "Эффекты"
 
 #: src/control/Control.NotebookbarWriter.js:106
 msgid "Form"
@@ -6104,15 +6189,15 @@ msgstr "Переключиться в режим офлайн"
 
 #: src/control/Control.NotebookbarWriter.js:518
 msgid "Lets a screen reader follow the cursor and read the document"
-msgstr ""
+msgstr "Позволяет экранному диктору отслеживать курсор и зачитывать документ"
 
 #: src/control/Control.NotebookbarWriter.js:655
 msgid "Validate Sidebar"
-msgstr ""
+msgstr "Панель проверки"
 
 #: src/control/Control.NotebookbarWriter.js:662
 msgid "Validate Dialog"
-msgstr ""
+msgstr "Окно проверки"
 
 #: src/control/Control.NotebookbarWriter.js:1056
 #: src/control/Control.Zotero.js:829
@@ -6121,20 +6206,20 @@ msgstr "Стили"
 
 #: src/control/Control.NotebookbarWriter.js:1210
 msgid "Lists/Bullets"
-msgstr ""
+msgstr "Списки/Маркеры"
 
 #: src/control/Control.NotebookbarWriter.js:1498
 msgid "Header & Footer"
-msgstr ""
+msgstr "Верхний и нижний колонтитулы"
 
 #: src/control/Control.NotebookbarWriter.js:1567
 msgid "Section"
-msgstr ""
+msgstr "Раздел"
 
 #: src/control/Control.NotebookbarWriter.js:1652
 #: src/control/jsdialog/Widget.EmojiPicker.ts:182
 msgid "Symbols"
-msgstr ""
+msgstr "Символы"
 
 #: src/control/Control.NotebookbarWriter.js:1705
 msgid "Rich Text"
@@ -6146,36 +6231,35 @@ msgstr "Флажок"
 
 #: src/control/Control.NotebookbarWriter.js:1774
 msgid "Page Width"
-msgstr ""
+msgstr "Ширина страницы"
 
 #: src/control/Control.NotebookbarWriter.js:2361
 msgid "Spellcheck"
-msgstr ""
+msgstr "Орфография"
 
 #: src/control/Control.NotebookbarWriter.js:2374
 msgid "Spelling Options"
-msgstr ""
+msgstr "Параметры орфографии"
 
 #: src/control/Control.NotebookbarWriter.js:2552
 msgid "View Changes"
-msgstr ""
+msgstr "Просмотр изменений"
 
 #: src/control/Control.NotebookbarWriter.js:2714
 msgid "Element categories"
-msgstr ""
+msgstr "Категории элементов"
 
 #: src/control/Control.ContextToolbar.ts:166
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Переключиться в режим редактирования"
 
 #: src/control/Control.HyperlinkWizard.ts:67
-#, fuzzy
 msgid "Link"
 msgstr "Связь"
 
 #: src/control/Control.PartsPreview.js:461
 msgid "Show everyone on this slide"
-msgstr ""
+msgstr "Показать всех участников на этом слайде"
 
 #: src/control/Control.PartsPreview.js:627
 #: src/control/Control.PartsPreview.js:702
@@ -6184,31 +6268,30 @@ msgid "Paste"
 msgstr "Вставить"
 
 #: src/control/Control.PartsPreview.js:774
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Пустой слайд"
+msgstr "Отвязать слайд"
 
 #: src/control/Control.PartsPreview.js:796
 msgid "Add Section"
-msgstr ""
+msgstr "Добавить раздел"
 
 #: src/control/Control.PartsPreview.js:916
 msgid "with 1 other"
 msgid_plural "with %n others"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "с 1 другим"
+msgstr[1] "с %n другими"
+msgstr[2] "с %n другими"
 
 #: src/control/Control.PartsPreview.js:926
 msgid "with %1"
-msgstr ""
+msgstr "с %1"
 
 #: src/control/Control.PartsPreview.js:927
 msgid "with %1 and 1 other"
 msgid_plural "with %1 and %n others"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "с %1 и ещё 1 другим"
+msgstr[1] "с %1 и ещё %n другими"
+msgstr[2] "с %1 и ещё %n другими"
 
 #: src/control/Control.PartsPreview.js:971
 msgid "preview of page %1"
@@ -6216,245 +6299,250 @@ msgstr "предпросмотр страницы %1"
 
 #: src/control/Control.PartsPreview.js:990
 msgid "preview of page %1, %3 is missing"
-msgstr ""
+msgstr "предварительный просмотр страницы %1, %3 недоступен"
 
 #: src/control/Control.PartsPreview.js:991
 msgid "%1, %3 is missing"
-msgstr ""
+msgstr "%1, %3 недоступен"
 
 #: src/control/Control.PartsPreview.js:995
 msgid "preview of page %1, not found in %3"
-msgstr ""
+msgstr "предварительный просмотр страницы %1 не найден в %3"
 
 #: src/control/Control.PartsPreview.js:996
 msgid "%1, not found in %3"
-msgstr ""
+msgstr "%1 не найден в %3"
 
 #: src/control/Control.PartsPreview.js:1000
 msgid "preview of page %1, no access to %3"
-msgstr ""
+msgstr "предварительный просмотр страницы %1, нет доступа к %3"
 
 #: src/control/Control.PartsPreview.js:1001
 msgid "%1, no access to %3"
-msgstr ""
+msgstr "%1, нет доступа к %3"
 
 #: src/control/Control.PartsPreview.js:1005
 msgid "preview of page %1, could not open %3"
-msgstr ""
+msgstr "предварительный просмотр страницы %1: не удалось открыть %3"
 
 #: src/control/Control.PartsPreview.js:1006
 msgid "%1, could not open %3"
-msgstr ""
+msgstr "%1: не удалось открыть %3"
 
 #: src/control/Control.PartsPreview.js:1011
 msgid "preview of page %1, %2 changed in %3"
-msgstr ""
+msgstr "предварительный просмотр страницы %1, %2 изменено в %3"
 
 #: src/control/Control.PartsPreview.js:1012
 msgid "%1, %2 changed in %3"
-msgstr ""
+msgstr "%1, %2 изменено в %3"
 
 #: src/control/Control.PartsPreview.js:1015
 msgid "preview of page %1, changed in %3"
-msgstr ""
+msgstr "предварительный просмотр страницы %1, изменено в %3"
 
 #: src/control/Control.PartsPreview.js:1016
 msgid "%1, changed in %3"
-msgstr ""
+msgstr "%1, изменено в %3"
 
 #: src/control/Control.PartsPreview.js:1020
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "предварительный просмотр страницы %1, %3 отключено"
 
 #: src/control/Control.PartsPreview.js:1021
 msgid "%1, %3 is disconnected"
-msgstr ""
+msgstr "%1, %3 отключено"
 
 #: src/control/Control.PartsPreview.js:1025
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "предварительный просмотр страницы %1, связанной с %2 в %3"
 
 #: src/control/Control.PartsPreview.js:1026
 msgid "%1, linked to %2 in %3"
-msgstr ""
+msgstr "%1, связанный с %2 в %3"
 
 #: src/control/Control.PartsPreview.js:1029
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "предварительный просмотр страницы %1, связанной с %2"
 
 #: src/control/Control.PartsPreview.js:1030
 msgid "%1, linked to %2"
-msgstr ""
+msgstr "%1, связанный с %2"
 
 #: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Связано с разделом в %1, который отсутствует"
 
 #: src/control/Control.PartsPreview.js:1255
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Связано с разделом в %1, который был изменён"
 
 #: src/control/Control.PartsPreview.js:1257
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Связано с разделом в %1, но связь разорвана"
 
 #: src/control/Control.PartsPreview.js:1258
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Связано с разделом в %1"
 
 #: src/control/Control.PartsPreview.js:1402
 #: src/control/Control.PartsPreview.js:1569
 msgid "Rename Section"
-msgstr ""
+msgstr "Переименовать раздел"
 
 #: src/control/Control.PartsPreview.js:1409
 msgid "Remove Section"
-msgstr ""
+msgstr "Удалить раздел"
 
 #: src/control/Control.PartsPreview.js:1417
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Удалить раздел и слайды"
 
 #: src/control/Control.PartsPreview.js:1426
 msgid "Move Section Up"
-msgstr ""
+msgstr "Переместить раздел вверх"
 
 #: src/control/Control.PartsPreview.js:1435
 msgid "Move Section Down"
-msgstr ""
+msgstr "Переместить раздел вниз"
 
 #: src/control/Control.PartsPreview.js:1446
 msgid "Update Section"
-msgstr ""
+msgstr "Обновить раздел"
 
 #: src/control/Control.PartsPreview.js:1454
 msgid "Unlink Section"
-msgstr ""
+msgstr "Отвязать раздел"
 
 #: src/control/Control.PartsPreview.js:1461
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Отвязать раздел и слайды"
 
 #: src/control/Control.PartsPreview.js:1470
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Свернуть все разделы"
 
 #: src/control/Control.PartsPreview.js:1478
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Развернуть все разделы"
 
 #: src/control/Control.PartsPreview.js:1512 src/docdispatcher.ts:1030
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Удалить раздел \"%1\" и его %n слайд?"
+msgstr[1] "Удалить раздел \"%1\" и его %n слайда?"
+msgstr[2] "Удалить раздел \"%1\" и его %n слайдов?"
 
 #: src/control/Control.PartsPreview.js:1570
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Введите новое имя раздела:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Импортируйте свои слайды"
 
 #: src/control/Control.SlideImportPane.tsx:709
 msgid "Checking..."
-msgstr ""
+msgstr "Проверка..."
 
 #: src/control/Control.SlideImportPane.tsx:711
 #: src/control/Control.SlideLinkToolbar.tsx:197
 msgid "Missing"
-msgstr ""
+msgstr "Пропущено"
 
 #: src/control/Control.SlideImportPane.tsx:713
 #: src/control/Control.SlideLinkToolbar.tsx:195
 msgid "No access"
-msgstr ""
+msgstr "Нет доступа"
 
 #: src/control/Control.SlideImportPane.tsx:715
 msgid "Could not open"
-msgstr ""
+msgstr "Не удалось открыть"
 
 #: src/control/Control.SlideImportPane.tsx:721
 msgid "{0} changed"
-msgstr ""
+msgstr "{0} изменено"
 
 #: src/control/Control.SlideImportPane.tsx:724
 msgid "Disconnected"
-msgstr ""
+msgstr "Отключен"
 
 #: src/control/Control.SlideImportPane.tsx:725
 #: src/control/Control.SlideLinkToolbar.tsx:137
 msgid "Linked"
-msgstr ""
+msgstr "Связано"
 
 #: src/control/Control.SlideImportPane.tsx:728
 #: src/control/Control.SlideImportPane.tsx:1567
 msgid "Not linked"
-msgstr ""
+msgstr "Не связано"
 
 #: src/control/Control.SlideImportPane.tsx:771
 #: src/control/Control.SlideImportPane.tsx:790
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Чтение слайдов..."
 
 #: src/control/Control.SlideImportPane.tsx:773
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Поиск файла..."
 
 #: src/control/Control.SlideImportPane.tsx:776
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Слайды присутствуют в данной презентации. У вас нет прав на открытие "
+"исходного файла."
 
 #: src/control/Control.SlideImportPane.tsx:780
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Слайды присутствуют в этой презентации, но на этот раз не удалось найти "
+"исходный файл, из которого они были взяты."
 
 #: src/control/Control.SlideImportPane.tsx:783
 msgid ""
 "The slides are in this presentation. The file they came from is no longer "
 "here."
 msgstr ""
+"Слайды присутствуют в этой презентации. Исходный файл больше недоступен."
 
 #: src/control/Control.SlideImportPane.tsx:787
 msgid "This file is here. You do not have permission to open it."
-msgstr ""
+msgstr "Файл находится здесь, однако у вас нет разрешения на его открытие."
 
 #: src/control/Control.SlideImportPane.tsx:789
 msgid "This file could not be read this time."
-msgstr ""
+msgstr "Не удалось прочитать файл."
 
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:1417
 msgid "Look again"
-msgstr ""
+msgstr "Проверить снова"
 
 #: src/control/Control.SlideImportPane.tsx:805
 #: src/control/Control.SlideImportPane.tsx:1422
 msgid "Locate file"
-msgstr ""
+msgstr "Найти файл"
 
 #: src/control/Control.SlideImportPane.tsx:814
 #: src/control/Control.SlideImportPane.tsx:1441
 msgid "Reload slides"
-msgstr ""
+msgstr "Обновить слайды"
 
 #: src/control/Control.SlideImportPane.tsx:888
 msgid "1 slide inserted"
-msgstr ""
+msgstr "1 слайд вставлен"
 
 #: src/control/Control.SlideImportPane.tsx:889
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "Вставлено слайдов: {0}"
 
 #: src/control/Control.SlideImportPane.tsx:896
 msgid "Slide {0}"
-msgstr ""
+msgstr "Слайд {0}"
 
 #: src/control/Control.SlideImportPane.tsx:901
 #, fuzzy
@@ -6463,11 +6551,11 @@ msgstr "Вставить фигуры"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Вставить раздел \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
-msgstr ""
+msgstr "Вставлено {0} из {1}"
 
 #: src/control/Control.SlideImportPane.tsx:915
 #, fuzzy
@@ -6481,44 +6569,47 @@ msgstr "Вставить фигуры"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "Как разместить раздел"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Вставить как раздел \"{0}"
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Вставить как отдельные слайды"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Связано с разделом в {0}. Чтобы загрузить последующие изменения, используйте "
+"\"Обновить связи\"."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
-msgstr ""
+msgstr "{0} из {1}"
 
 #: src/control/Control.SlideImportPane.tsx:1041
 #: src/control/Control.SlideImportPane.tsx:1815
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} слайдов"
 
 #: src/control/Control.SlideImportPane.tsx:1048
+#, fuzzy
 msgid "Inserts at the end"
-msgstr ""
+msgstr "Вставляет в конец"
 
 #: src/control/Control.SlideImportPane.tsx:1049
 msgid "Inserts after slide {0}"
-msgstr ""
+msgstr "Вставка после слайда {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1053
 msgid "Opening file..."
-msgstr ""
+msgstr "Открытие файла..."
 
 #: src/control/Control.SlideImportPane.tsx:1054
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Вставка слайдов.."
 
 #: src/control/Control.SlideImportPane.tsx:1137
 #, fuzzy
@@ -6528,181 +6619,185 @@ msgstr "Вставить фигуры"
 #: src/control/Control.SlideImportPane.tsx:1143
 #: src/control/Control.SlideImportPane.tsx:1144
 msgid "Close slide import"
-msgstr ""
+msgstr "Закрыть импорт слайдов"
 
 #: src/control/Control.SlideImportPane.tsx:1159
-#, fuzzy
 msgid "Add presentation…"
-msgstr "Завершить презентацию"
+msgstr "Добавить презентацию…"
 
 #: src/control/Control.SlideImportPane.tsx:1174
 msgid "No presentations yet"
-msgstr ""
+msgstr "Презентаций пока нет"
 
 #: src/control/Control.SlideImportPane.tsx:1178
+#, fuzzy
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
-msgstr ""
+msgstr "Добавьте презентацию, чтобы просмотреть её слайды и вставить их сюда."
 
 #: src/control/Control.SlideImportPane.tsx:1211
 msgid "Hide all slides"
-msgstr ""
+msgstr "Скрыть все слайды"
 
 #: src/control/Control.SlideImportPane.tsx:1211
 msgid "Show all slides"
-msgstr ""
+msgstr "Показать все слайды"
 
 #: src/control/Control.SlideImportPane.tsx:1243
 #: src/control/Control.SlideImportPane.tsx:1244
 msgid "Filter presentations"
-msgstr ""
+msgstr "Фильтр презентаций"
 
 #: src/control/Control.SlideImportPane.tsx:1272
 msgid "Slide sources"
-msgstr ""
+msgstr "Источники слайдов"
 
 #: src/control/Control.SlideImportPane.tsx:1280
 msgid "Presentations to import from"
-msgstr ""
+msgstr "Презентации для импорта"
 
 #: src/control/Control.SlideImportPane.tsx:1350
 msgid "{0} picked"
-msgstr ""
+msgstr "Выбрано: {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1388
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Действия для {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1432
 msgid "Hide slides"
-msgstr ""
+msgstr "Скрыть слайды"
 
 #: src/control/Control.SlideImportPane.tsx:1432
 msgid "Show slides"
-msgstr ""
+msgstr "Показать слайды"
 
 #: src/control/Control.SlideImportPane.tsx:1448
 msgid "Select all slides"
-msgstr ""
+msgstr "Выбрать все слайды"
 
 #: src/control/Control.SlideImportPane.tsx:1456
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Обновить связанные с этим файлом слайды"
 
 #: src/control/Control.SlideImportPane.tsx:1463
 msgid "Remove from list"
-msgstr ""
+msgstr "Удалить из списка"
 
 #: src/control/Control.SlideImportPane.tsx:1552
 msgid "Slides in {0}"
-msgstr ""
+msgstr "Слайды в {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1566
 msgid "Original design"
-msgstr ""
+msgstr "Исходный дизайн"
 
 #: src/control/Control.SlideImportPane.tsx:1569
 msgid "Linked, follows the slide number"
-msgstr ""
+msgstr "Связано, следует порядку слайдов"
 
 #: src/control/Control.SlideImportPane.tsx:1570
 msgid "Linked, follows the slide"
-msgstr ""
+msgstr "Связано, следует за слайдом"
 
 #: src/control/Control.SlideImportPane.tsx:1607
 msgid "Keep original design"
-msgstr ""
+msgstr "Сохранить исходный дизайн"
 
 #: src/control/Control.SlideImportPane.tsx:1622
 msgid "Stay linked to the source file"
-msgstr ""
+msgstr "Сохранить связь с исходным файлом"
 
 #: src/control/Control.SlideImportPane.tsx:1660
 msgid "Follow the slide, wherever it moves"
-msgstr ""
+msgstr "Перемещаться вместе со слайдом"
 
 #: src/control/Control.SlideImportPane.tsx:1662
 msgid "Follow the slide number"
-msgstr ""
+msgstr "Следовать номеру слайда"
 
 #: src/control/Control.SlideImportPane.tsx:1821
 msgid "Select the slides of {0}"
-msgstr ""
+msgstr "Выберите слайды из {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:119
 msgid "Linked to {0} in {1}"
-msgstr ""
+msgstr "Связано с {0} в {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:122
 msgid "Linked to {0}"
-msgstr ""
+msgstr "Связано с {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:123
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "В разделе, связанном с {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:148
 msgid "Hide the actions for this linked slide"
-msgstr ""
+msgstr "Скрыть действия для этого связанного слайда"
 
 #: src/control/Control.SlideLinkToolbar.tsx:149
 msgid "Show the actions for this linked slide"
-msgstr ""
+msgstr "Показать действия для этого связанного слайда"
 
 #: src/control/Control.SlideLinkToolbar.tsx:159
 msgid "Unlink"
-msgstr ""
+msgstr "Отвязать"
 
 #: src/control/Control.SlideLinkToolbar.tsx:179
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update section"
-msgstr ""
+msgstr "Обновить раздел"
 
 #: src/control/Control.SlideLinkToolbar.tsx:193
 msgid "Not available"
-msgstr ""
+msgstr "Недоступно"
 
 #: src/control/SlideSectionHeader.tsx:68
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Переключить раздел %1"
 
 #: src/slideimport/SlideImportSession.ts:278
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "Слайды из исходного файла не удалось прочитать."
 
 #: src/slideimport/SlideImportSession.ts:329
 #: src/slideimport/SlideImportSession.ts:338
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "Не удалось вставить слайды."
 
 #: src/slideimport/SlideImportSession.ts:347
 msgid "Importing slides failed."
-msgstr ""
+msgstr "Не удалось импортировать слайды."
 
 #: src/slideimport/SlideLinks.ts:378
 msgid "No slide of this presentation is linked to another file."
-msgstr ""
+msgstr "Ни один из слайдов данной презентации не имеет связи с другим файлом."
 
 #: src/slideimport/SlideLinks.ts:433
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Невозможно обновить раздел, поскольку его исходный файл недоступен."
 
 #: src/slideimport/SlideLinks.ts:455
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Не удаётся обновить один связанный раздел, так как его источник недоступен."
 
 #: src/slideimport/SlideLinks.ts:458
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"Не удаётся обновить связанные разделы ({0}), так как их источники недоступны."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"Раздел будет содержать слайды, которые сейчас содержит его раздел в {0}. "
+"Изменения, внесенные в эти слайды в текущей презентации, будут потеряны."
 
 #: src/slideimport/SlideLinks.ts:470
 msgid ""
@@ -6710,102 +6805,112 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"Связанные разделы {0} будут содержать слайды, которые сейчас содержат их "
+"разделы в исходных файлах. Изменения, внесённые в эти слайды в текущей "
+"презентации, будут потеряны."
 
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update sections"
-msgstr ""
+msgstr "Обновить разделы"
 
 #: src/slideimport/SlideLinks.ts:542
 msgid "This slide is not linked to another file."
-msgstr ""
+msgstr "Данный слайд не имеет связи с другим файлом."
 
 #: src/slideimport/SlideLinks.ts:720 src/slideimport/SlideLinks.ts:1181
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
+"{0} не является одним из документов, с которыми связан текущий документ, "
+"поэтому сервер не может его прочитать."
 
 #: src/slideimport/SlideLinks.ts:745 src/slideimport/SlideLinks.ts:1015
 #: src/slideimport/SlideLinks.ts:1184
 msgid "{0} could not be read."
-msgstr ""
+msgstr "{0} не удалось прочитать."
 
 #: src/slideimport/SlideLinks.ts:750
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "У вас нет доступа к {0}, поэтому раздел не может быть обновлён."
 
 #: src/slideimport/SlideLinks.ts:753
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
-msgstr ""
+msgstr "У вас нет доступа к {0}, поэтому его страницы не могут быть обновлены."
 
 #: src/slideimport/SlideLinks.ts:868
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
+"Невозможно обновить слайды {0}: в исходном файле отсутствуют соответствующие "
+"слайды"
 
 #: src/slideimport/SlideLinks.ts:871 src/slideimport/SlideLinks.ts:1187
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "Не удалось прочитать слайды из {0} в эту презентацию."
 
 #: src/slideimport/SlideLinks.ts:927
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "Раздел был обновлён из {0}."
 
 #: src/slideimport/SlideLinks.ts:1076
 msgid "Cannot update the section: {0} no longer holds its source section."
-msgstr ""
+msgstr "Невозможно обновить раздел: в {0} больше нет исходного раздела."
 
 #: src/slideimport/SlideLinks.ts:1102
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr ""
+"Невозможно обновить слайд {0}: в источнике отсутствует соответствующий слайд"
 
 #: src/slideimport/SlideLinks.ts:1117
 msgid "Unlinking the slide failed."
-msgstr ""
+msgstr "Не удалось отвязать слайд."
 
 #: src/slideimport/SlideLinks.ts:1122
 msgid "Unlinking the section failed."
-msgstr ""
+msgstr "Не удалось отвязать раздел."
 
 #: src/slideimport/SlideLinks.ts:1139
 msgid "Updating the section from {0} failed."
-msgstr ""
+msgstr "Не удалось обновить раздел из {0}."
 
 #: src/slideimport/SlideLinks.ts:1140 src/slideimport/SlideLinks.ts:1199
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "Не удалось обновить слайды {0}."
 
 #: src/slideimport/SlideLinks.ts:1153
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Ни один слайд из {0} не был обновлен."
 
 #: src/slideimport/SlideLinks.ts:1157
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "Обновлён 1 слайд из {0}."
 
 #: src/slideimport/SlideLinks.ts:1161
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "Обновлено слайдов: {0} из {1}."
 
 #: src/slideimport/SlideLinks.ts:1190
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Ни один слайд этой презентации не связан с {0}."
 
 #: src/slideimport/SlideLinks.ts:1196
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr ""
+"В данный момент выполняется другое обновление. Повторите запрос {0} чуть "
+"позже."
 
 #: src/control/Control.PaneExpander.ts:111
 #: src/control/Control.PaneExpander.ts:115
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Развернуть по сетке"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Выйти из сетки"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Изменить размер панелей"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -6821,23 +6926,23 @@ msgstr "Не обнаружено проблем верификации SSL"
 
 #: src/control/Control.ServerAuditDialog.ts:78
 msgid "Each document is securely contained (landlock)"
-msgstr ""
+msgstr "Каждый документ надежно изолирован (landlock)"
 
 #: src/control/Control.ServerAuditDialog.ts:83
 msgid "Each document is securely contained (Linux namespaces)"
-msgstr ""
+msgstr "Каждый документ надёжно изолирован (пространства имён Linux)"
 
 #: src/control/Control.ServerAuditDialog.ts:88
 msgid "Each document is securely contained (capabilities and chroot)"
-msgstr ""
+msgstr "Каждый документ надёжно изолирован (capabilities и chroot)"
 
 #: src/control/Control.ServerAuditDialog.ts:102
 msgid "System call security filtering enabled"
-msgstr ""
+msgstr "Включена фильтрация безопасности системных вызовов"
 
 #: src/control/Control.ServerAuditDialog.ts:112
 msgid "The trusted WOPI hosts are configured"
-msgstr ""
+msgstr "Доверенные WOPI-хосты настроены"
 
 #: src/control/Control.ServerAuditDialog.ts:128
 msgid "Hardware resources are sufficient for optimal performance"
@@ -6845,19 +6950,21 @@ msgstr "Аппаратные ресурсы достаточны для опти
 
 #: src/control/Control.ServerAuditDialog.ts:141
 msgid "Fast kit jail bind mounting enabled"
-msgstr ""
+msgstr "Быстрый режим изоляции (jail) с монтированием (bind mount) включён"
 
 #: src/control/Control.ServerAuditDialog.ts:146
 msgid "Fast kit jail setup with landlock, nothing to copy or mount"
 msgstr ""
+"Быстрая изоляция (jail) через Landlock: не требуется копирование или "
+"монтирование"
 
 #: src/control/Control.ServerAuditDialog.ts:159
 msgid "Poorly performing proxying of all network requests."
-msgstr ""
+msgstr "Низкая производительность при проксировании всех сетевых запросов."
 
 #: src/control/Control.ServerAuditDialog.ts:163
 msgid "Direct network connection"
-msgstr ""
+msgstr "Прямое сетевое подключение"
 
 #: src/control/Control.ServerAuditDialog.ts:169
 #, fuzzy
@@ -6871,7 +6978,7 @@ msgstr ""
 
 #: src/control/Control.ServerAuditDialog.ts:175
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Подключено через сокращённую форму URL-адреса WebSocket"
 
 #: src/control/Control.ServerAuditDialog.ts:184
 msgid "The IsAdminUser property is not set by integration"
@@ -6899,7 +7006,7 @@ msgstr "Интегратор не готов обрабатывать вызов
 
 #: src/control/Control.ServerAuditDialog.ts:289
 msgid "Document container started in {1} ms"
-msgstr ""
+msgstr "Контейнер документа запущен за {1} мс"
 
 #: src/control/Control.ServerAuditDialog.ts:374
 msgid "Alerts:"
@@ -6938,7 +7045,7 @@ msgstr "Вставить лист"
 
 #: src/control/Control.SheetsBar.js:88
 msgid "Show sheet list"
-msgstr ""
+msgstr "Показать список листов"
 
 #: src/control/Control.StatusBar.js:240
 #: src/control/jsdialog/Definitions.Menu.ts:184
@@ -6973,21 +7080,23 @@ msgstr "Выделено"
 
 #: src/control/Control.StatusBar.js:314
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "По размеру слайда"
 
 #: src/control/Control.StatusBar.js:315
 msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Подогнать страницу по ширине окна. Функцию \"Умный масштаб при открытии\" "
+"можно включить или отключить в параметрах на вкладке \"Файл\"."
 
 #: src/control/Control.StatusBar.js:315
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Подогнать страницу по ширине окна."
 
 #: src/control/Control.StatusBar.js:320
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Меню строки состояния"
 
 #: src/control/Control.StatusBar.js:618
 msgid "The document is probably locked and has been opened as view-only"
@@ -7031,7 +7140,7 @@ msgstr "Вставить лист после"
 
 #: src/control/Control.Tabs.js:109 src/control/Control.Tabs.js:116
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Сбросить цвет вкладки"
 
 #: src/control/Control.Tabs.js:136 src/control/Control.Tabs.js:140
 msgid "Move Sheet Left"
@@ -7047,7 +7156,7 @@ msgstr "Копировать лист..."
 
 #: src/control/Control.Tabs.js:377
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, защищено"
 
 #: src/control/Control.Tabs.js:722
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -7063,19 +7172,19 @@ msgstr "Введите новое имя листа"
 
 #: src/control/Control.Tabs.js:771
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Защитить лист"
 
 #: src/control/Control.Tabs.js:771
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Введите пароль для защиты листа"
 
 #: src/control/Control.Tabs.js:775
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Снять защиту с листа"
 
 #: src/control/Control.Tabs.js:775
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Введите пароль, чтобы снять защиту с листа"
 
 #: src/control/Control.Toolbar.js:1060
 msgid ""
@@ -7087,15 +7196,15 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1095
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "Лист пересчитан за %1 мс"
 
 #: src/control/Control.Toolbar.js:1096
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Документ пересчитан за %1 мс"
 
 #: src/control/Control.TopToolbar.js:121 src/control/Control.TopToolbar.js:125
 msgid "Show Menu Bar"
-msgstr ""
+msgstr "Показать строку меню"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
@@ -7125,7 +7234,7 @@ msgstr "Минимальное"
 
 #: src/control/Control.UIManager.ts:256
 msgid "You are currently in View mode, press {0} to edit"
-msgstr ""
+msgstr "Сейчас вы в режиме просмотра, нажмите {0}, чтобы редактировать"
 
 #: src/control/Control.UIManager.ts:661
 msgid "Enter new name"
@@ -7144,34 +7253,36 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Встроенный скрипт использует устаревший API UNO com.sun.star. В будущих "
+"версиях он может быть удалён."
 
 #: src/control/Control.UIManager.ts:3149
 msgid "Confirm password"
-msgstr ""
+msgstr "Подтвердите пароль"
 
 #: src/control/Control.UIManager.ts:3195
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "Введённые пароли не совпадают"
 
 #: src/control/Control.UIManager.ts:3412
 msgid "Copy error details"
-msgstr ""
+msgstr "Копировать сведения об ошибке"
 
 #: src/control/Control.UIManager.ts:3459
 msgid "Show technical details"
-msgstr ""
+msgstr "Показать технические подробности"
 
 #: src/control/Control.UIManager.ts:3473
 msgid "Technical Details:"
-msgstr ""
+msgstr "Технические подробности:"
 
 #: src/control/Control.UIManager.ts:3477
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Сведения об ошибке скопированы в буфер обмена"
 
 #: src/control/Control.UIManager.ts:3487
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Не удалось скопировать сведения об ошибке"
 
 #: src/control/Control.UserList.ts:64
 msgid "{user} has joined"
@@ -7368,15 +7479,17 @@ msgstr ""
 
 #: src/control/HRuler.ts:326
 msgid "First line"
-msgstr ""
+msgstr "Первая линия"
 
 #: src/control/HRuler.ts:332
 msgid "Before"
-msgstr ""
+msgstr "Перед"
 
 #: src/control/HRuler.ts:404
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Дважды щелкните, чтобы вставить позицию табуляции. Щелкните правой кнопкой "
+"мыши для дополнительных параметров."
 
 #: src/control/HRuler.ts:788 src/control/HRuler.ts:953
 msgid "Left Margin"
@@ -7425,75 +7538,81 @@ msgstr "Документ требует пароль для просмотра."
 
 #: src/control/Permission.js:430
 msgid "Edit locally"
-msgstr ""
+msgstr "Редактировать локально"
 
 #: src/control/Permission.js:431
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Синхронизация изменений происходит при сохранении"
 
 #: src/control/Permission.js:437
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Совместная работа"
 
 #: src/control/Permission.js:438 src/control/Permission.js:471
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Совместное редактирование в реальном времени"
 
 #: src/control/Permission.js:461
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Продолжить просмотр локальной копии"
 
 #: src/control/Permission.js:462
 msgid "Continue with your version"
-msgstr ""
+msgstr "Продолжить со своей версией"
 
 #: src/control/Permission.js:470
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Присоединиться к совместному редактированию"
 
 #: src/control/Permission.js:496
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Ожидание сохранения изменений..."
 
 #: src/control/Permission.js:588 src/control/Permission.js:638
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Как вы хотите редактировать?"
 
 #: src/control/Permission.js:589
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
 msgstr ""
+"Этот документ редактируют другие пользователи. Выберите способ продолжения "
+"работы:"
 
 #: src/control/Permission.js:598
 msgid "opened this document"
-msgstr ""
+msgstr "открыл(а) этот документ"
 
 #: src/control/Permission.js:599
 msgid "{0} opened this document"
-msgstr ""
+msgstr "{0} открыл(а) этот документ"
 
 #: src/control/Permission.js:600 src/control/Permission.js:616
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Выберите, как вы хотите продолжить:"
 
 #: src/control/Permission.js:610
 msgid "started editing"
-msgstr ""
+msgstr "начал(а) редактирование"
 
 #: src/control/Permission.js:611
 msgid "{0} started editing"
-msgstr ""
+msgstr "{0} начал(а) редактирование"
 
 #: src/control/Permission.js:621
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
 msgstr ""
+"Кто-то другой сейчас редактирует этот документ. Выберите способ продолжения "
+"работы:"
 
 #: src/control/Permission.js:639
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Этот документ просматривают другие пользователи. Выберите способ продолжения "
+"работы:"
 
 #: src/control/Permission.js:657
 msgid "Save as ODF format"
@@ -7613,23 +7732,24 @@ msgstr "Заголовок, вертикальный текст, клипарт"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Стандартный выбор"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Расширеный выбор"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Добавить выбор"
 
 #: src/control/Styles.js:46
+#, fuzzy
 msgid "Block selection"
-msgstr ""
+msgstr "Выделение блоком"
 
 #: src/control/Toolbar.js:70
 msgid "The current font is not available and will be substituted."
-msgstr ""
+msgstr "Текущий шрифт недоступен и будет заменён."
 
 #: src/control/Toolbar.js:205 src/control/Toolbar.js:218
 msgid "Downloading..."
@@ -7646,7 +7766,7 @@ msgstr "Переименование..."
 
 #: src/control/Toolbar.js:910
 msgid "Unable to share"
-msgstr ""
+msgstr "Не удалось поделиться"
 
 #: src/control/VRuler.ts:198 src/control/VRuler.ts:425
 msgid "Top Margin"
@@ -7676,7 +7796,7 @@ msgstr "Режим редактирования"
 
 #: src/control/PermissionMode.ts:274
 msgid "Review Mode"
-msgstr ""
+msgstr "Режим проверки"
 
 #: src/control/PermissionMode.ts:292 src/control/PermissionMode.ts:472
 #: src/control/PermissionMode.ts:478 src/control/PermissionMode.ts:484
@@ -7685,15 +7805,15 @@ msgstr "Просмотр"
 
 #: src/control/PermissionMode.ts:468
 msgid "Reviewing"
-msgstr ""
+msgstr "Рецензирование"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:394
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Сохранить изображение на сервер"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:413
 msgid "Fit slide to view"
-msgstr ""
+msgstr "Вписать слайд в окно"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:513
 msgid "Paste Special"
@@ -7714,11 +7834,11 @@ msgstr "Нормально"
 
 #: src/control/jsdialog/Definitions.Menu.ts:116
 msgid "Wide"
-msgstr ""
+msgstr "Широкий"
 
 #: src/control/jsdialog/Definitions.Menu.ts:121
 msgid "Narrow"
-msgstr ""
+msgstr "Узкий"
 
 #: src/control/jsdialog/Definitions.Menu.ts:185
 msgid "Min"
@@ -7730,11 +7850,11 @@ msgstr "Максимальное"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1468
 msgid "Edit Single Sparkline"
-msgstr ""
+msgstr "Изменить отдельный спарклайн"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1479
 msgid "Delete Single Sparkline"
-msgstr ""
+msgstr "Удалить отдельный спарклайн"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1517
 msgid "Portrait"
@@ -7746,123 +7866,123 @@ msgstr "Альбомная"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1533
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1534
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1535
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1536
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1537
 msgid "B6 (ISO)"
-msgstr ""
+msgstr "B6 (ISO)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1538
 msgid "B5 (ISO)"
-msgstr ""
+msgstr "B5 (ISO)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1539
 msgid "B4 (ISO)"
-msgstr ""
+msgstr "B4 (ISO)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1540
 msgid "Letter"
-msgstr ""
+msgstr "Letter"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1541
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1542
 msgid "Long Bond"
-msgstr ""
+msgstr "Long Bond"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1543
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1544
 msgid "B6 (JIS)"
-msgstr ""
+msgstr "B6 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1545
 msgid "B5 (JIS)"
-msgstr ""
+msgstr "B5 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1546
 msgid "B4 (JIS)"
-msgstr ""
+msgstr "B4 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1547
 msgid "16 Kai"
-msgstr ""
+msgstr "16 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1548
 msgid "32 Kai"
-msgstr ""
+msgstr "32 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1549
 msgid "Big 32 Kai"
-msgstr ""
+msgstr "Big 32 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1550
 msgid "User"
-msgstr ""
+msgstr "User"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1551
 msgid "DL Envelope"
-msgstr ""
+msgstr "DL Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1552
 msgid "C6 Envelope"
-msgstr ""
+msgstr "C6 Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1553
 msgid "C6/5 Envelope"
-msgstr ""
+msgstr "C6/5 Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1554
 msgid "C5 Envelope"
-msgstr ""
+msgstr "C5 Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1555
 msgid "C4 Envelope"
-msgstr ""
+msgstr "C4 Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1558
 msgid "#6¾ Envelope"
-msgstr ""
+msgstr "#6¾ Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1563
 msgid "#7¾ (Monarch) Envelope"
-msgstr ""
+msgstr "#7¾ (Monarch) Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1566
 msgid "#9 Envelope"
-msgstr ""
+msgstr "#9 Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1567
 msgid "#10 Envelope"
-msgstr ""
+msgstr "#10 Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1568
 msgid "#11 Envelope"
-msgstr ""
+msgstr "#11 Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1569
 msgid "#12 Envelope"
-msgstr ""
+msgstr "#12 Envelope"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1572
 msgid "Japanese Postcard"
-msgstr ""
+msgstr "Japanese Postcard"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1771
 msgid "Insert Local Image"
@@ -7874,7 +7994,7 @@ msgstr "Вставить мультимедиа с компьютера"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1783
 msgid "Compare Local Document"
-msgstr ""
+msgstr "Сравнить с локальным документом"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1789
 msgid "Very Tight"
@@ -7894,15 +8014,15 @@ msgstr "Очень свободно"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Копировать Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
-msgstr ""
+msgstr "Встроенный"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1841
 msgid "Side by Side"
-msgstr ""
+msgstr "Рядом"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1861
 msgid "This user"
@@ -7913,127 +8033,124 @@ msgid "All users"
 msgstr "Все пользователи"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Выделить ячейки с..."
+msgstr "Выделить ячейки с помощью"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Правила первых/последних..."
+msgstr "Правила верхних/нижних значений"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Цветовые шкалы"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Гистограммы"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Наборы значков"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
-msgstr ""
+msgstr "Без границ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2017
 msgid "Left Border"
-msgstr ""
+msgstr "Левая граница"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2023
 msgid "Right Border"
-msgstr ""
+msgstr "Правая граница"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2029
 msgid "Left And Right Borders"
-msgstr ""
+msgstr "Левая и правая границы"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2035
 msgid "Top Border"
-msgstr ""
+msgstr "Верхняя граница"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2041
 msgid "Bottom Border"
-msgstr ""
+msgstr "Нижняя граница"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2047
 msgid "Top And Bottom Border"
-msgstr ""
+msgstr "Верхняя и нижняя границы"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2053
 msgid "Outer Border"
-msgstr ""
+msgstr "Внешние границы"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2059
 msgid "All Horizontal Lines"
-msgstr ""
+msgstr "Все горизонтальные границы"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2065
 msgid "Outer Border And Horizontal Lines"
-msgstr ""
+msgstr "Внешние границы и горизонтальные линии"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2071
 msgid "Outer Border and Vertical Lines"
-msgstr ""
+msgstr "Внешние границы и вертикальные линии"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2077
 msgid "Outer Borders And All Inner lines"
-msgstr ""
+msgstr "Внешние и все внутренние границы"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2083
 msgid "Line color"
-msgstr ""
+msgstr "Цвет границ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2096
-#, fuzzy
 msgid "Line style"
-msgstr "Стиль линии:"
+msgstr "Стиль линии"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2100
 msgid "Hairline (0.05 pt)"
-msgstr ""
+msgstr "Тонкая линия (0,05 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2109
 msgid "Very thin (0.50 pt)"
-msgstr ""
+msgstr "Очень тонкая (0,50 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2118
 msgid "Thin (0.75 pt)"
-msgstr ""
+msgstr "Тонкая (0,75 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2127
 msgid "Medium (1.50 pt)"
-msgstr ""
+msgstr "Средняя (1,50 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2136
 msgid "Thick (2.25 pt)"
-msgstr ""
+msgstr "Толстая (2,25 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2145
 msgid "Extra thick (4.50 pt)"
-msgstr ""
+msgstr "Очень толстая (4,50 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2154
 msgid "Double Hairline (1.10 pt)"
-msgstr ""
+msgstr "Двойная тонкая линия (1,10 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2163
 msgid "Double Hairline (2.35 pt)"
-msgstr ""
+msgstr "Двойная тонкая линия (2,35 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2172
 msgid "Thin/Medium (3.00 pt)"
-msgstr ""
+msgstr "Тонкая/средняя (3,00 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2181
 msgid "Medium/Hairline (3.05 pt)"
-msgstr ""
+msgstr "Средняя/тонкая (3,05 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2190
 msgid "Medium/Medium (4.50 pt)"
-msgstr ""
+msgstr "Средняя/средняя (4,50 пт)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2250
 msgid "Standard (4:3)"
@@ -8045,15 +8162,15 @@ msgstr "Широкоэкранный (16:9)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2415
 msgid "Grayscale"
-msgstr ""
+msgstr "Оттенки серого"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2420
 msgid "Black/White"
-msgstr ""
+msgstr "Чёрно-белый"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2425
 msgid "Watermark"
-msgstr ""
+msgstr "Водяной знак"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2433
 #, fuzzy
@@ -8063,7 +8180,7 @@ msgstr "Вставить комментарий"
 #: src/control/jsdialog/Definitions.Menu.ts:2437
 #: src/control/jsdialog/Definitions.Menu.ts:2452
 msgid "Comments list"
-msgstr ""
+msgstr "Список примечаний"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2444
 #: src/control/jsdialog/Widget.Comment.ts:58
@@ -8077,59 +8194,59 @@ msgstr "Вставить дату"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Тёмный 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Светлый 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Тёмный 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Светлый 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Акцент 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Акцент 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Акцент 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Акцент 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Акцент 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Акцент 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Гиперссылка"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Просмотренная гиперссылка"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, светлее на %2%"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, темнее на %2%"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -8146,11 +8263,11 @@ msgstr "Автоматически"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:286
 msgid "Palette"
-msgstr ""
+msgstr "Палитра"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:301
 msgid "Color palette"
-msgstr ""
+msgstr "Палитра цветов"
 
 #: src/control/jsdialog/Widget.Combobox.js:290
 #, fuzzy
@@ -8159,89 +8276,91 @@ msgstr "Открыть ссылку"
 
 #: src/control/jsdialog/Widget.Combobox.js:498
 msgid "Filter entries"
-msgstr ""
+msgstr "Фильтр записей"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "Позиция {n}, разделенный набор"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "Позиция {n}, без разделения"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
 "Column split ruler. Use the arrow keys to move the cursor and Space to "
 "toggle a split."
 msgstr ""
+"Линейка разделения столбцов. Используйте клавиши со стрелками для "
+"перемещения курсора и пробел для переключения разделителя."
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
-msgstr ""
+msgstr "Предварительный просмотр импорта CSV"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
-msgstr ""
+msgstr "Номер строки"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:450
 msgid "Column {index}"
-msgstr ""
+msgstr "Столбец {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:632
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 редактирует"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:633
 msgid "Another user is editing"
-msgstr ""
+msgstr "Другой пользователь редактирует"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
-msgstr ""
+msgstr "Вырезать"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Строка формул"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Смайлы"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Люди и жесты"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Объекты"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Природа и еда"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Недавно использованные"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Нет эмодзи, соответствующих \"{0}\""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
-msgstr ""
+msgstr "Сверху: {top}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:144
 msgid "Left: {left}"
-msgstr ""
+msgstr "Слева: {left}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:154
 msgid "Bottom: {bottom}"
-msgstr ""
+msgstr "Снизу: {bottom}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:159
 msgid "Right: {right}"
-msgstr ""
+msgstr "Справа: {right}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:183
 msgid "Custom Margins…"
@@ -8249,11 +8368,11 @@ msgstr "Настраиваемые поля…"
 
 #: src/control/jsdialog/Widget.PageSizeEntry.ts:91
 msgid "More Paper Sizes..."
-msgstr ""
+msgstr "Другие размеры бумаги..."
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:31
 msgid "Number of Pages. Click to open the Go to Page dialog box."
-msgstr ""
+msgstr "Номер страницы. Нажмите, чтобы открыть окно перехода к странице."
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:32
 #: src/control/jsdialog/Widget.HTMLContent.ts:62
@@ -8276,7 +8395,7 @@ msgstr "Выделенные ячейки"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Выбор ячеек"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -8302,15 +8421,15 @@ msgstr "Выбор функций"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Функции ячеек таблицы"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Размер выделенной фигуры"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Размер фигуры"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 #, fuzzy
@@ -8337,7 +8456,7 @@ msgstr "Режим редактирования"
 
 #: src/control/jsdialog/Widget.LineWidthCustom.ts:77
 msgid "Last Custom Value"
-msgstr ""
+msgstr "Последнее заданное значение"
 
 #: src/control/jsdialog/Widget.MobileBorderSelector.js:111
 msgid "Cell borders"
@@ -8345,15 +8464,15 @@ msgstr "Обрамление ячеек"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:107
 msgid "New Table Style..."
-msgstr ""
+msgstr "Новый стиль таблицы..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:119
 msgid "Clear Style"
-msgstr ""
+msgstr "Очистить стиль"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:145
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Открыть панель стилей"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:265
 msgid "Scroll up"
@@ -8365,7 +8484,7 @@ msgstr "Прокрутить вниз"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:285
 msgid "More options"
-msgstr ""
+msgstr "Дополнительные параметры"
 
 #: src/control/jsdialog/Widget.OverflowGroup.ts:63
 #: src/control/jsdialog/Widget.SidebarContainers.tsx:145
@@ -8379,7 +8498,7 @@ msgstr "Выбрать диапазон"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "Шаг %1 из %2"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8391,27 +8510,27 @@ msgstr "ответы"
 
 #: src/control/jsdialog/Widget.SpinField.ts:279
 msgid "Increment value"
-msgstr ""
+msgstr "Увеличить значение"
 
 #: src/control/jsdialog/Widget.SpinField.ts:288
 msgid "Decrement value"
-msgstr ""
+msgstr "Уменьшить значение"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Добавьте заливку, чтобы отредактировать {0}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
-msgstr ""
+msgstr "Значение ячейки"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1840
 msgid "row %1"
-msgstr ""
+msgstr "строка %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1849
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2633
 msgid "Headings and objects that you add to the document will appear here"
@@ -8419,7 +8538,7 @@ msgstr "Заголовки и объекты, которые вы добавит
 
 #: src/control/jsdialog/Widget.TreeView.ts:2690
 msgid "Search items"
-msgstr ""
+msgstr "Поиск элементов"
 
 #: src/app/Socket.ts:340
 msgid "Oops, there is a problem connecting to {productname}: "
@@ -8433,7 +8552,7 @@ msgstr "Не удалось подключиться к документу. По
 
 #: src/app/Socket.ts:699
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Соединение с документом потеряно."
 
 #: src/app/Socket.ts:700
 msgid "The server has been disconnected."
@@ -8453,11 +8572,11 @@ msgstr "Успешно экспортировано: "
 
 #: src/app/Socket.ts:1234
 msgid "This document has links to external content."
-msgstr ""
+msgstr "Этот документ содержит ссылки на внешние ресурсы."
 
 #: src/app/Socket.ts:1235
 msgid "Allow"
-msgstr ""
+msgstr "Разрешить"
 
 #: src/app/Socket.ts:1918
 msgid "Discard"
@@ -8501,7 +8620,7 @@ msgstr "Неверный сервер, переподключение..."
 
 #: src/app/Socket.ts:2180
 msgid "Unsupported version."
-msgstr ""
+msgstr "Неподдерживаемая версия."
 
 #: src/app/Socket.ts:2181
 msgid "Unsupported server version."
@@ -8529,11 +8648,11 @@ msgstr "Только владелец документа может измени
 
 #: src/app/Socket.ts:2756
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "У вас нет прав на редактирование этого документа."
 
 #: src/app/Socket.ts:2757
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Не удалось сделать документ доступным для редактирования."
 
 #: src/app/Socket.ts:2830 src/app/Socket.ts:2841
 msgid "Missing Fonts"
@@ -8567,33 +8686,33 @@ msgstr "Сервер выключается"
 
 #: src/docdispatcher.ts:702
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "ИИ не настроен, обратитесь к администратору"
 
 #: src/docdispatcher.ts:1028
 msgid "Delete section"
-msgstr ""
+msgstr "Удалить раздел"
 
 #: src/docdispatcher.ts:1035
 msgid "Delete slides"
-msgstr ""
+msgstr "Удалить слайды"
 
 #: src/docdispatcher.ts:1036
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Удалить %n слайд?"
+msgstr[1] "Удалить %n слайда?"
+msgstr[2] "Удалить %n слайдов?"
 
 #: src/docdispatcher.ts:1040
 msgid "Delete pages"
-msgstr ""
+msgstr "Удалить страницы"
 
 #: src/docdispatcher.ts:1041
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Удалить %n страницу?"
+msgstr[1] "Удалить %n страницы?"
+msgstr[2] "Удалить %n страниц?"
 
 #: src/docstate.ts:174
 msgid "Standard"
@@ -8617,7 +8736,7 @@ msgstr "{0} вкладка выбрана"
 
 #: src/errormessages.ts:16
 msgid "No disk space left."
-msgstr ""
+msgstr "Недостаточно места на диске."
 
 #: src/errormessages.ts:17
 msgid "No disk space left on server."
@@ -8676,12 +8795,16 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"У вас больше нет доступа к этому документу. Его метка безопасности была "
+"изменена."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Вы больше не можете редактировать этот документ. Его метка безопасности была "
+"изменена. Пожалуйста, откройте его снова, чтобы просмотреть."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8696,12 +8819,15 @@ msgstr ""
 #: src/errormessages.ts:45
 msgid "Your session will end in {time}. Refresh the page to continue."
 msgstr ""
+"Ваша сессия завершится через {time}. Обновите страницу, чтобы продолжить."
 
 #: src/errormessages.ts:48
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Ваша сессия завершена. Дальнейшие изменения в документе могут не "
+"сохраниться. Обновите страницу, чтобы продолжить."
 
 #: src/errormessages.ts:51
 msgid ""
@@ -8813,7 +8939,7 @@ msgstr "Документ не может быть сохранён."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Хранилище отклонило сохранение документа."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -8872,11 +8998,11 @@ msgstr "Слайды"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
-msgstr ""
+msgstr "Комментарий от {0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:379
 msgid "Heading level {0}"
-msgstr ""
+msgstr "Уровень заголовка {0}"
 
 #: src/layer/marker/A11yTextInput.js:1140
 msgid "Out of table"
@@ -8885,22 +9011,22 @@ msgstr "Вне таблицы"
 #: src/layer/marker/A11yTextInput.js:1145
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n строка"
+msgstr[1] "%n строки"
+msgstr[2] "%n строк"
 
 #: src/layer/marker/A11yTextInput.js:1146
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n столбец"
+msgstr[1] "%n столбца"
+msgstr[2] "%n столбцов"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:1149
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Таблица с параметрами: {0}, {1}"
 
 #: src/layer/marker/A11yTextInput.js:1154
 msgid "Row {0} through {1}"
@@ -8945,23 +9071,23 @@ msgstr "Заглушки"
 
 #: src/layer/marker/TextInput.js:527
 msgid "Drop-down list"
-msgstr ""
+msgstr "Выпадающий список"
 
 #: src/layer/marker/TextInput.js:529
 msgid "Combo box"
-msgstr ""
+msgstr "Поле со списком"
 
 #: src/layer/marker/TextInput.js:535
 msgid "Content control"
-msgstr ""
+msgstr "Элемент управления содержимым"
 
 #: src/layer/marker/TextInput.js:548
 msgid "Object"
-msgstr ""
+msgstr "Объект"
 
 #: src/layer/marker/TextInput.js:550
 msgid "Frame"
-msgstr ""
+msgstr "Рамка"
 
 #: src/layer/marker/TextInput.js:742
 msgid "Screen reader support for text content is disabled. "
@@ -8989,19 +9115,19 @@ msgstr "меню Вид"
 
 #: src/layer/tile/CanvasTileLayer.js:333
 msgid "Online Editor"
-msgstr ""
+msgstr "Онлайн-редактор"
 
 #: src/layer/tile/CanvasTileLayer.js:1398
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "%1 начал(а) записывать изменения для всех пользователей."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Запись изменений включена для всех пользователей."
 
 #: src/layer/tile/CanvasTileLayer.js:1401
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Теперь ваши изменения отслеживаются."
 
 #: src/layer/tile/CanvasTileLayer.js:1487
 msgid "Functions"
@@ -9026,7 +9152,7 @@ msgstr "Чтобы вставить вне {productname}, сначала наж�
 
 #: src/map/Clipboard.js:209
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Копирование из документа отключено вашим администратором"
 
 #: src/map/Clipboard.js:322
 msgid "warning: copy/paste request timed out"
@@ -9039,7 +9165,7 @@ msgstr "Не удалось загрузить буфер обмена, повт
 
 #: src/map/Clipboard.js:406
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Не удалось загрузить буфер обмена"
 
 #: src/map/Clipboard.js:1549
 msgid ""
@@ -9054,6 +9180,8 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"У вашего браузера ограничен доступ к буферу обмена, поэтому используйте эти "
+"сочетания клавиш:"
 
 #: src/map/Clipboard.js:1605
 msgid ""
@@ -9135,7 +9263,7 @@ msgstr "Загрузка файла на сервер не удалась, ре�
 
 #: src/map/handler/Map.FileInserter.js:406
 msgid "Failed to read the selected file."
-msgstr ""
+msgstr "Не удалось прочитать выбранный файл."
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -9149,7 +9277,7 @@ msgstr "Пустая презентация"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1448
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Все слайды скрыты!"
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1475
@@ -9174,7 +9302,7 @@ msgstr "Презентация в окне: "
 #: src/map/handler/Map.SlideShow.js:210
 #: src/slideshow/SlideShowPresenter.ts:1283
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Показ в другом окне"
 
 #: src/map/handler/Map.SlideShow.js:211
 #: src/slideshow/SlideShowPresenter.ts:1284
@@ -9212,6 +9340,7 @@ msgstr "Режим презентации был запрещён для это�
 #: src/map/handler/Map.StateChanges.js:204
 msgid "Editing slide %1 - click outside or press Esc to finish"
 msgstr ""
+"Редактирование слайда %1 — кликните снаружи или нажмите Esc для завершения"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -9223,7 +9352,7 @@ msgstr "Создать новый файл из шаблона..."
 
 #: src/map/handler/Map.WOPI.js:338
 msgid "Compare Document..."
-msgstr ""
+msgstr "Сравнить документ..."
 
 #: src/map/handler/Map.WOPI.js:936
 msgid "File name should contain an extension."
@@ -9243,23 +9372,23 @@ msgstr "Диалог приветствия"
 
 #: src/map/handler/Map.Settings.ts:407
 msgid "Settings saved. Add an API key to use the AI assistant."
-msgstr ""
+msgstr "Настройки сохранены. Добавьте API-ключ для использования ИИ-ассистента."
 
 #: src/map/handler/Map.Settings.ts:412
 msgid "Settings saved"
-msgstr ""
+msgstr "Настройки сохранены"
 
 #: src/slideshow/engine/SlideShowHandler.ts:117
 msgid "First"
-msgstr ""
+msgstr "Первый"
 
 #: src/slideshow/engine/SlideShowHandler.ts:118
 msgid "Skip All"
-msgstr ""
+msgstr "Пропустить всё"
 
 #: src/slideshow/engine/SlideShowHandler.ts:119
 msgid "First Slide"
-msgstr ""
+msgstr "Первый слайд"
 
 #: src/slideshow/engine/SlideShowHandler.ts:120
 #: src/slideshow/PresenterConsole.js:32
@@ -9279,7 +9408,7 @@ msgstr "Вставить слайд"
 #: src/slideshow/engine/SlideShowHandler.ts:123
 #: src/slideshow/SlideShowPresenter.ts:936
 msgid "End Show"
-msgstr ""
+msgstr "Завершить показ"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
 #, fuzzy
@@ -9293,15 +9422,15 @@ msgstr "Продолжить"
 
 #: src/slideshow/engine/SlideShowHandler.ts:404
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Анимация: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:408
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Анимация: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:555
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Переход: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -9315,12 +9444,12 @@ msgstr "Текущий слайд"
 #: src/slideshow/SlideShowPresenter.ts:972
 #: src/slideshow/SlideShowPresenter.ts:985
 msgid "Disable Animations"
-msgstr ""
+msgstr "Отключить анимации"
 
 #: src/slideshow/PresenterConsole.js:38
 #: src/slideshow/SlideShowPresenter.ts:1001
 msgid "Exchange"
-msgstr ""
+msgstr "Обмен"
 
 #: src/slideshow/PresenterConsole.js:39
 msgid "Pause"
@@ -9336,7 +9465,7 @@ msgstr "Продолжить"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Present to all"
-msgstr ""
+msgstr "Показывать всем"
 
 #: src/slideshow/PresenterConsole.js:43
 #, fuzzy
@@ -9357,11 +9486,11 @@ msgstr "Отдалить"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Предварительный просмотр текущего слайда"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Предпросмотр следующего слайда"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
@@ -9369,16 +9498,16 @@ msgstr "Предварительный просмотр слайда {1}"
 
 #: src/slideshow/PresenterConsole.js:828
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Вы завершаете показ."
 
 #: src/slideshow/PresenterConsole.js:829
 msgid "The link is not valid."
-msgstr ""
+msgstr "Ссылка недействительна."
 
 #: src/slideshow/PresenterConsole.js:1202
 #: src/slideshow/SlideShowPresenter.ts:984
 msgid "Enable Animations"
-msgstr ""
+msgstr "Включить анимации"
 
 #: src/slideshow/PresenterConsole.js:1596
 msgid "Slide {0} of {1}"
@@ -9389,10 +9518,11 @@ msgid "No Notes"
 msgstr "Нет примечаний"
 
 #: src/slideshow/PresenterConsole.js:1767
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Повтор через {0} секунд"
+msgstr[0] "Повтор через %n секунду"
+msgstr[1] "Повтор через %n секунды"
+msgstr[2] "Повтор через %n секунд"
 
 #: src/slideshow/PresenterConsole.js:1774
 #: src/slideshow/SlideShowPresenter.ts:728
@@ -9401,11 +9531,11 @@ msgstr "Нажмите для выхода из презентации..."
 
 #: src/slideshow/SlideShowPresenter.ts:900
 msgid "You are on the first slide"
-msgstr ""
+msgstr "Вы на первом слайде"
 
 #: src/slideshow/SlideShowPresenter.ts:908
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Ожидание перехода докладчика к следующему слайду"
 
 #: src/slideshow/SlideShowPresenter.ts:1700
 #, fuzzy
@@ -9414,140 +9544,139 @@ msgstr "Остановить следование"
 
 #: src/control/Control.Extension.ts:657 src/control/Control.Extension.ts:745
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "Команда расширения завершилась неудачно: %1"
 
 #: src/control/Control.Extension.ts:2101
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: src/control/Control.Extension.ts:2102
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
-msgstr ""
+msgstr "Официальное письмо"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Классическое официальное письмо"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "Резюме"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "Резюме (на одну страницу)"
 
 #: templates/templates.js:56 templates/templates.js:60
 msgid "Modern Style"
-msgstr ""
+msgstr "Современный стиль"
 
 #: templates/templates.js:66 templates/templates.js:70
 msgid "Simple Style"
-msgstr ""
+msgstr "Простой стиль"
 
 #: templates/templates.js:76 templates/templates.js:80
 msgid "Beehive"
-msgstr ""
+msgstr "Пчелиные соты"
 
 #: templates/templates.js:86 templates/templates.js:90
 msgid "Blue Curve"
-msgstr ""
+msgstr "Синяя кривая"
 
 #: templates/templates.js:96 templates/templates.js:100
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "Чертежи"
 
 #: templates/templates.js:106 templates/templates.js:110
 msgid "Candy"
-msgstr ""
+msgstr "Конфеты"
 
 #: templates/templates.js:116 templates/templates.js:120
 msgid "DNA"
-msgstr ""
+msgstr "ДНК"
 
 #: templates/templates.js:126 templates/templates.js:130
 msgid "Focus"
-msgstr ""
+msgstr "Фокус"
 
 #: templates/templates.js:136 templates/templates.js:140
 msgid "Forestbird"
-msgstr ""
+msgstr "Лесная птица"
 
 #: templates/templates.js:146 templates/templates.js:150
 msgid "Freshes"
-msgstr ""
+msgstr "Свежесть"
 
 #: templates/templates.js:156 templates/templates.js:160
 msgid "Grey Elegant"
-msgstr ""
+msgstr "Элегантный серый"
 
 #: templates/templates.js:166 templates/templates.js:170
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Растущая свобода"
 
 #: templates/templates.js:176 templates/templates.js:180
 msgid "Inspiration"
-msgstr ""
+msgstr "Вдохновение"
 
 #: templates/templates.js:186 templates/templates.js:190
-#, fuzzy
 msgid "Lights"
-msgstr "Плотно"
+msgstr "Огни"
 
 #: templates/templates.js:196 templates/templates.js:200
 msgid "Metropolis"
-msgstr ""
+msgstr "Мегаполис"
 
 #: templates/templates.js:206 templates/templates.js:210
 msgid "Midnight Blue"
-msgstr ""
+msgstr "Синяя полночь"
 
 #: templates/templates.js:216 templates/templates.js:220
 msgid "Nature Illustration"
-msgstr ""
+msgstr "Иллюстрация природы"
 
 #: templates/templates.js:226 templates/templates.js:230
 msgid "Pencil"
-msgstr ""
+msgstr "Карандаш"
 
 #: templates/templates.js:236 templates/templates.js:240
 msgid "Piano"
-msgstr ""
+msgstr "Пианино"
 
 #: templates/templates.js:246 templates/templates.js:250
 msgid "Portfolio"
-msgstr ""
+msgstr "Портфолио"
 
 #: templates/templates.js:256 templates/templates.js:260
 msgid "Progress"
-msgstr ""
+msgstr "Прогресс"
 
 #: templates/templates.js:266 templates/templates.js:270
 msgid "Sunset"
-msgstr ""
+msgstr "Закат"
 
 #: templates/templates.js:276 templates/templates.js:279
 msgid "Vintage"
-msgstr ""
+msgstr "Винтаж"
 
 #: templates/templates.js:286 templates/templates.js:290
 msgid "Vivid"
-msgstr ""
+msgstr "Яркий"
 
 #: templates/templates.js:296 templates/templates.js:300
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Жёлтая идея"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Добро пожаловать в Электронные таблицы"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Добро пожаловать в Презентацию"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"

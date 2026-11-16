@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: coolwsd 25.04.7.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-06 18:17+0000\n"
-"PO-Revision-Date: 2026-09-23 21:07+0000\n"
-"Last-Translator: Cherbeki <dimamagim@gmail.com>\n"
+"PO-Revision-Date: 2026-11-15 11:52+0000\n"
+"Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
-"collabora-office-macos-app/ru/>\n"
+"desktop-apps/collabora-office-macos-app/ru/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 msgctxt "1UK-8n-QPP.title"
 msgid "Customize Toolbar…"
@@ -22,9 +22,8 @@ msgstr "Настроить панель инструментов…"
 #. Do not change the placeholder ProductName!
 msgctxt "1Xt-HY-uBw.title"
 msgid "ProductName"
-msgstr "ИмяПродукта"
+msgstr "ProductName"
 
-#, fuzzy
 msgctxt "4J7-dP-txa.title"
 msgid "Enter Full Screen"
 msgstr "Перейти в полноэкранный режим"
@@ -32,7 +31,7 @@ msgstr "Перейти в полноэкранный режим"
 #. Do not change the placeholder ProductName!
 msgctxt "4sb-4s-VLi.title"
 msgid "Quit ProductName"
-msgstr ""
+msgstr "Выйти из ProductName"
 
 msgctxt "5QF-Oa-p0T.title"
 msgid "Edit"
@@ -41,11 +40,11 @@ msgstr "Изменить"
 #. Do not change the placeholder ProductName!
 msgctxt "5kV-Vb-QxS.title"
 msgid "About ProductName"
-msgstr ""
+msgstr "О программе ProductName"
 
 msgctxt "6dh-zS-Vam.title"
 msgid "Redo"
-msgstr ""
+msgstr "Вернуть"
 
 msgctxt "AYu-sK-qS6.title"
 msgid "Main Menu"
@@ -53,7 +52,7 @@ msgstr "Главное меню"
 
 msgctxt "BOF-NM-1cW.title"
 msgid "Preferences…"
-msgstr ""
+msgstr "Настройки…"
 
 msgctxt "Bw7-FT-i3A.title"
 msgid "Save As…"
@@ -67,7 +66,6 @@ msgctxt "F2S-fz-NVQ.title"
 msgid "Help"
 msgstr "Помощь"
 
-#, fuzzy
 msgctxt "H8h-7b-M4v.title"
 msgid "View"
 msgstr "Просмотр"
@@ -83,7 +81,7 @@ msgstr "Открыть…"
 
 msgctxt "KaW-ft-85H.title"
 msgid "Revert to Saved"
-msgstr ""
+msgstr "Отменить изменения"
 
 #, fuzzy
 msgctxt "Kd2-mp-pUS.title"
@@ -92,21 +90,20 @@ msgstr "Показать всё"
 
 msgctxt "LE2-aR-0XJ.title"
 msgid "Bring All to Front"
-msgstr ""
+msgstr "Все окна на передний план"
 
 msgctxt "NMo-om-nkz.title"
 msgid "Services"
-msgstr ""
+msgstr "Сервисы"
 
-#, fuzzy
 msgctxt "OY7-WF-poV.title"
 msgid "Minimize"
-msgstr "Минимизировать"
+msgstr "Свернуть"
 
 #. Do not change the placeholder ProductName!
 msgctxt "Olw-nP-bQN.title"
 msgid "Hide ProductName"
-msgstr ""
+msgstr "Скрыть ProductName"
 
 #, fuzzy
 msgctxt "R4o-n2-Eq4.title"
@@ -127,7 +124,7 @@ msgstr "Редактировать"
 
 msgctxt "Was-JA-tGl.title"
 msgid "New"
-msgstr ""
+msgstr "Новый"
 
 msgctxt "WeT-3V-zwk.title"
 msgid "Paste and Match Style"
