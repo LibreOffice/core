@@ -122,6 +122,8 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Toolbar tests', function() 
 		cy.cGet('#toolbar-wrapper:has(#toolbar-up)').should('be.visible');
 
 		// ...and even when the keyboard is shown while on a different part of the UI, here simulated by setting our height just under the limit
+		cy.cGet('#toolbar-up #mobile_wizard button').focus();
+		cy.cGet('#toolbar-up #mobile_wizard button').should('have.focus');
 		cy.viewport(667, 149);
 		cy.cGet('#toolbar-wrapper:has(#toolbar-up)').should('be.visible');
 
