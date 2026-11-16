@@ -69,6 +69,7 @@
 #include <common/CODAConfig.hpp>
 #include <common/Common.hpp>
 #include <common/EditorFrameMessages.hpp>
+#include <common/FailurePage.hpp>
 #include <common/FileExtensions.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/LangUtil.hpp>
@@ -7112,6 +7113,32 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 pushTabsToStrip(*window);
             if (hoverCard.tabId == data.tabId && IsWindowVisible(hoverCard.hWnd))
                 showHoverCard();
+        }
+        else if (s.starts_with(L"REMOTEBOOTSTRAPFAILED "))
+        {
+            // The integrator's page stays, and only the editor frame shows the failure.
+            if (!data.editorFrame)
+            {
+                LOG_WRN("A remote bootstrap failure was not shown: there is no editor frame");
+                return;
+            }
+
+            LOG_ERR("The remote bootstrap failed in the editor frame");
+
+            std::string server = "the Collabora Online server";
+            if (!data.editorFormUrl.empty())
+                server = originOf(Poco::URI(data.editorFormUrl));
+
+            const std::string error =
+                Util::wide_string_to_string(s.substr(strlen("REMOTEBOOTSTRAPFAILED ")));
+            const std::string notOpened = "Could not open the document from " + server + ".";
+            const std::string reason = "Details: " + error;
+
+            const std::string script = FailurePage::script("Cannot open remote document",
+                                                           { notOpened, reason });
+
+            PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT, (WPARAM)_strdup(script.c_str()),
+                         (LPARAM)data.tabId);
         }
         else if (s.starts_with(L"HYPERLINK "))
         {
