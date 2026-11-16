@@ -305,6 +305,47 @@ describe(['tagdesktop'], 'Comment Scrolling',function() {
 		cy.cGet('#SlideStatus').should('contain','Slide 3 of 3');
 	});
 
+	// A duplicated slide carries a copy of the comment at the same place. The copy
+	// is the later section, so it is on top where the two overlap, and the section
+	// of a comment is a few pixels wider than its marker. A click on that gap has to
+	// open the comment of the slide on screen, next to its marker, and not the copy,
+	// which has no place on this slide and would land in the corner of the view.
+	it('Clicking beside the marker opens the comment of the shown slide', function() {
+		desktopHelper.insertComment();
+		cy.cGet('.annotation-marker').should('be.visible');
+
+		desktopHelper.getNbIcon('DuplicatePage', 'Insert').click();
+		cy.cGet('#SlideStatus').should('contain', 'Slide 2 of 2');
+		cy.cGet('.cool-annotation').should('have.length', 2);
+
+		changeSlide(1, 'previous');
+		cy.cGet('#SlideStatus').should('contain', 'Slide 1 of 2');
+		cy.cGet('.annotation-marker:visible').should('have.length', 1);
+
+		cy.cGet('.annotation-marker:visible').then(function($marker) {
+			const marker = $marker[0].getBoundingClientRect();
+			cy.cGet('#document-canvas').then(function($canvas) {
+				const canvas = $canvas[0].getBoundingClientRect();
+				// Two pixels to the right of the marker, inside the rim of the section.
+				cy.cGet('#document-canvas').click(marker.right - canvas.left + 2, marker.top - canvas.top + marker.height / 2);
+			});
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			const list = win.app.sectionContainer.getSectionWithName(win.app.CSections.CommentList.name);
+			const selected = list.sectionProperties.selectedComment;
+			expect(selected.sectionProperties.partIndex, 'slide of the opened comment').to.equal(win.app.map._docLayer._selectedPart);
+		});
+		cy.cGet('.cool-annotation.annotation-active').should('be.visible');
+		cy.cGet('.cool-annotation.annotation-active').should('have.css', 'left').and('not.equal', '0px');
+
+		// The duplicate goes away with the undo that follows; the comment of slide 1 is
+		// not an undo step, so it is removed here.
+		cy.cGet('.cool-annotation-content-wrapper:visible .cool-annotation-menu').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Remove').click();
+		cy.cGet('.annotation-marker:visible').should('not.exist');
+	});
+
 	it('switch to previous or next slide',function() {
 		addSlide(1);
 		desktopHelper.insertComment();

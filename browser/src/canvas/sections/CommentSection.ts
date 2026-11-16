@@ -1032,6 +1032,8 @@ export class Comment extends CanvasSectionObject {
 		const showMarker = app.impress.partList[app.map._docLayer._selectedPart].part === this.sectionProperties.data.part ||
 							app.file.fileBasedView;
 
+		this.setShowSection(showMarker);
+
 		// Anchor-area outline: only when the comment carries an explicit
 		// area (set by core via the hasArea JSON field for PDF /Rect or
 		// the Width/Height args of .uno:InsertAnnotation). Added before
@@ -1089,6 +1091,7 @@ export class Comment extends CanvasSectionObject {
 		if (this.sectionProperties.commentMarkerSubSection != null) {
 			this.sectionProperties.commentMarkerSubSection.showSection = true;
 			this.sectionProperties.commentMarkerSubSection.onSectionShowStatusChange();
+			this.setShowSection(true);
 		}
 		if (this.sectionProperties.commentAnchorAreaSubSection != null) {
 			this.sectionProperties.commentAnchorAreaSubSection.showSection = true;
@@ -1100,6 +1103,7 @@ export class Comment extends CanvasSectionObject {
 		if (this.sectionProperties.commentMarkerSubSection != null) {
 			this.sectionProperties.commentMarkerSubSection.showSection = false;
 			this.sectionProperties.commentMarkerSubSection.onSectionShowStatusChange();
+			this.setShowSection(false);
 		}
 		if (this.sectionProperties.commentAnchorAreaSubSection != null) {
 			this.sectionProperties.commentAnchorAreaSubSection.showSection = false;
