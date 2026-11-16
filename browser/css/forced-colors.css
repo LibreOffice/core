@@ -150,6 +150,21 @@
 		mask: url('images/closedoc.svg') no-repeat center / contain;
 	}
 
+	/* The edit icon is a background image, so keeping it keeps its own colour
+	   on the user's background. Paint it as a mask in their button colour. */
+	#mobile-edit-button {
+		outline: 2px solid ButtonText;
+		outline-offset: -2px;
+	}
+
+	#mobile-edit-button-image {
+		forced-color-adjust: none;
+		background-image: none !important;
+		background-color: ButtonText !important;
+		-webkit-mask: url('images/baseline-edit-24px.svg') no-repeat center;
+		mask: url('images/baseline-edit-24px.svg') no-repeat center;
+	}
+
 	/* An icon that published its URL can be recoloured, so it takes the palette
 	   instead of the plate above, which is for the ones that cannot. */
 	.unotoolbutton img.icon-maskable,
