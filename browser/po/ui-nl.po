@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-03 20:16+0000\n"
-"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-12 07:46+0000\n"
+"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -652,7 +652,7 @@ msgstr "Opmaakmarkeringen weergeven"
 #: src/control/Control.NotebookbarWriter.js:2483
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Show Comments"
-msgstr "Commentaar weergeven"
+msgstr "Notities weergeven"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:819
 msgid "Accessibility Checker"
@@ -3625,7 +3625,7 @@ msgstr "Ondertekenen"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr "Stopped"
+msgstr "Afsluiten"
 
 #: src/control/Control.BackstageView.ts:279
 msgid "Start a new document from one of the following templates."
@@ -5567,7 +5567,7 @@ msgstr "Sparkline"
 #: src/control/Control.NotebookbarWriter.js:149
 #: src/control/Control.ServerAuditDialog.ts:360
 msgid "Help"
-msgstr "Hulp"
+msgstr "Help"
 
 #: src/control/Control.NotebookbarCalc.js:212
 #: src/control/Control.NotebookbarDraw.js:223
