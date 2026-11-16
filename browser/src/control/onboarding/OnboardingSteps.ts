@@ -22,7 +22,9 @@ function getOnboardingSteps(): OnboardingStep[] {
 	return [
 		{
 			id: 'intro',
-			title: _('Welcome to Collabora Online'),
+			title: window.ThisIsAMobileApp
+				? _('Welcome to Collabora Office')
+				: _('Welcome to Collabora Online'),
 			text: _(
 				'This short tour points out the parts of the screen you will use most.',
 			),
