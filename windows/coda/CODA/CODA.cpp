@@ -6905,6 +6905,13 @@ static void writeRemoteDocFile(DocumentTab& data, int id, const std::string& arg
     // The engine picks its import filter by the extension, which is
     // the only part of the integrator's name that goes into the path.
     const std::string extension = FileUtil::extractFileExtension(name);
+    if (!FileUtil::isPlainExtension(extension))
+    {
+        LOG_WRN("A remote document was not written: the name has no plain extension");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
     if (docTypeFromFilename(name) == "other")
     {
         LOG_WRN("A remote document was not written: ." << extension << " is not a document type");
