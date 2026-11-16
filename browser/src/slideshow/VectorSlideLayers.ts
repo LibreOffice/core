@@ -49,6 +49,8 @@ interface SlideLayer {
 	// True for a layer of the owner drawn apart from its text: the owner without any text, or a
 	// piece of the text.
 	split?: boolean;
+	// The bytes that the texture holds, 4 for each pixel.
+	bytes: number;
 	// The key of the piece of text the layer holds. Absent for any other layer.
 	piece?: number;
 	// The pieces of one paragraph, which are cut out of one drawing of it. Absent for a layer
@@ -99,6 +101,12 @@ class VectorSlideLayers {
 	// the text of.
 	private pieces: SlidePiece[] | null = null;
 	private splitOwners = new Set<number>();
+	// The bytes that the textures of these layers and of their videos hold, and the bytes of
+	// the textures of every set of layers there is.
+	private textureBytes = 0;
+	private static allTextureBytes = 0;
+	// The bytes of the texture of each video, by the object id of its shape.
+	private videoBytes = new Map<number, number>();
 	// The slide and tree the layers are drawn from, null while there are none.
 	private slideHash: string | null = null;
 	private data: cool.VectorPrimitivesData | null = null;
@@ -293,8 +301,10 @@ class VectorSlideLayers {
 	/// to paint.
 	public paintNext(): boolean {
 		const layer = this.unpainted.shift();
-		if (layer && this.data && !this.context.isDisposed())
+		if (layer && this.data && !this.context.isDisposed()) {
 			this._paint(layer, this.data, undefined);
+			if (this.unpainted.length === 0) this._logMemory('build');
+		}
 		return this.unpainted.length > 0;
 	}
 
@@ -392,6 +402,7 @@ class VectorSlideLayers {
 	/// Free the textures and the programs.
 	public dispose(): void {
 		this.clear();
+		this._logMemory('dispose');
 		if (this.context.isDisposed()) return;
 		const gl = this.context.getGl();
 		this.quads.dispose();
@@ -406,6 +417,8 @@ class VectorSlideLayers {
 			for (const layer of this.layers) gl.deleteTexture(layer.texture);
 		}
 		this.quads.clearFrames();
+		this._count(-this.textureBytes);
+		this.videoBytes.clear();
 		this.layers = [];
 		this.unpainted = [];
 		this.pieces = null;
@@ -582,6 +595,7 @@ class VectorSlideLayers {
 			ownPixels: pixels,
 			texture: gl.createTexture(),
 			look: VectorSlideLayers._lookOf(undefined),
+			bytes: 0,
 		};
 		gl.bindTexture(gl.TEXTURE_2D, layer.texture);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -667,6 +681,9 @@ class VectorSlideLayers {
 
 	// Upload what the canvas holds into the texture of the layer.
 	private _upload(layer: SlideLayer, canvas: OffscreenCanvas): void {
+		const bytes = canvas.width * canvas.height * 4;
+		this._count(bytes - layer.bytes);
+		layer.bytes = bytes;
 		const gl = this.context.getGl();
 		gl.bindTexture(gl.TEXTURE_2D, layer.texture);
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
@@ -837,8 +854,48 @@ class VectorSlideLayers {
 		const frame = videos.get(objectId);
 		if (!frame) return;
 		const texture = this.quads.frameTexture(objectId, frame.source);
-		if (texture)
-			this._drawQuad(texture, this.quads.frameRectangle(frame), state);
+		if (!texture) return;
+		this._countVideo(objectId, frame.source);
+		this._drawQuad(texture, this.quads.frameRectangle(frame), state);
+	}
+
+	// Count the bytes of the video texture of the object, which holds a picture of source.
+	private _countVideo(objectId: number, source: TexImageSource): void {
+		const size = source as {
+			videoWidth?: number;
+			videoHeight?: number;
+			displayWidth?: number;
+			displayHeight?: number;
+			width?: number;
+			height?: number;
+		};
+		const bytes =
+			(size.videoWidth || size.displayWidth || size.width || 0) *
+			(size.videoHeight || size.displayHeight || size.height || 0) *
+			4;
+		this._count(bytes - (this.videoBytes.get(objectId) ?? 0));
+		this.videoBytes.set(objectId, bytes);
+	}
+
+	// Add the change to the bytes that the textures hold.
+	private _count(change: number): void {
+		this.textureBytes += change;
+		VectorSlideLayers.allTextureBytes += change;
+	}
+
+	/// The bytes that the textures of these layers and of their videos hold.
+	public get textureMemory(): number {
+		return this.textureBytes;
+	}
+
+	// Log the memory of the textures, after what was done to the layers.
+	private _logMemory(done: string): void {
+		const megabytes = (bytes: number) => (bytes / (1024 * 1024)).toFixed(1);
+		app.console.debug(
+			`VectorSlideLayers.${done}: ${this.layers.length} layers, ` +
+				`${megabytes(this.textureBytes)} MB of textures, ` +
+				`${megabytes(VectorSlideLayers.allTextureBytes)} MB in all layers`,
+		);
 	}
 
 	// Draw the texture over the rectangle, in canvas pixels, in the state given.

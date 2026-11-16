@@ -550,7 +550,7 @@ class VectorCompositor extends SlideCompositor {
 					splitsText: filterInfo?.transitionSubtype !== TransitionSubType.MORPH,
 				}
 			: undefined;
-		if (!this.morph?.isBetween(leavingData, enteringData, text))
+		if (!this.morph?.isBetween(leavingData, enteringData, text)) {
 			this.morph = new SlideMorph(
 				leavingData,
 				enteringData,
@@ -558,6 +558,14 @@ class VectorCompositor extends SlideCompositor {
 				this._hiddenObjects(enteringHash, enteringData),
 				text,
 			);
+			const megabytes = (layers: VectorSlideLayers) =>
+				(layers.textureMemory / (1024 * 1024)).toFixed(1);
+			app.console.debug(
+				`VectorCompositor.drawMorphFrame: ${text?.leaving.length ?? 0} and ` +
+					`${text?.entering.length ?? 0} pieces of text, layers of ` +
+					`${megabytes(leavingLayers)} and ${megabytes(enteringLayers)} MB`,
+			);
+		}
 
 		const [leavingMoves, enteringMoves] = this.morph.states(time);
 		const leaving = this._morphSide(
