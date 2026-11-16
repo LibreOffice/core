@@ -72,9 +72,9 @@ namespace BackstageTemplates {
   export interface OpenTileProps {
     label: string;
     // The tile draws either an embedded icon named in BackstageSVGIcons, or the
-    // background image of the given classes. Exactly one of the two is given.
+    // given icon element. Exactly one of the two is given.
     iconName?: string;
-    iconClass?: string;
+    icon?: HTMLElement;
     subtitle?: string;
     onClick?: () => void;
     extraClass?: string;
@@ -96,16 +96,14 @@ namespace BackstageTemplates {
         aria-hidden={props.inert ? 'true' : undefined}
         onClick={props.inert ? undefined : props.onClick}
       >
-        <span
-          class={['backstage-open-tile-icon', props.iconClass]
-            .filter(Boolean)
-            .join(' ')}
-          aria-hidden="true"
-        >
-          {props.iconName ?
-            BackstageTemplates.inlineIcon(props.iconName)
-          : null}
-        </span>
+        {props.icon ?
+          props.icon
+        : <span class="backstage-open-tile-icon" aria-hidden="true">
+            {props.iconName ?
+              BackstageTemplates.inlineIcon(props.iconName)
+            : null}
+          </span>
+        }
         <span class="backstage-open-tile-label">{props.label}</span>
         {props.subtitle ?
           <span class="backstage-open-tile-sublabel">{props.subtitle}</span>
@@ -123,13 +121,7 @@ namespace BackstageTemplates {
         aria-label={`${t.typeName} (${t.userName})`}
         onClick={t.onClick}
       >
-        <span
-          class={
-            'backstage-open-tile-icon ' +
-            BackstageCloudKinds.iconClasses(t.kind)
-          }
-          aria-hidden="true"
-        />
+        {BackstageCloudKinds.icon(t.kind, 'backstage-open-tile-icon')}
         <span class="backstage-open-tile-label">{t.typeName}</span>
         <span class="backstage-open-tile-sublabel">{t.userName}</span>
         <button

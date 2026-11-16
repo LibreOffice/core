@@ -1377,9 +1377,10 @@ body:not([data-doctype]) .backstage-view {
 	height: 100%;
 }
 
-/* Cloud service logos. These are fixed-colour artwork drawn as a background
- * image, so a branding can point them at its own logo. The bare class draws the
- * generic cloud; each service adds its own image on top of it. */
+/* Cloud service logos. The bare class draws the generic cloud as a background
+ * image, so a branding can point a branded service at its own logo. A listed
+ * service draws its logo as an image instead, with a second image for the dark
+ * theme when it has one. */
 .backstage-cloud-icon {
 	background-image: url('images/cloud-providers/generic.svg');
 	background-repeat: no-repeat;
@@ -1387,16 +1388,26 @@ body:not([data-doctype]) .backstage-view {
 	background-size: contain;
 }
 
-.backstage-cloud-icon-nextcloud {
-	background-image: url('images/cloud-providers/nextcloud.svg');
+.backstage-cloud-icon.has-logo {
+	background-image: none;
 }
 
-.backstage-cloud-icon-opencloud {
-	background-image: url('images/cloud-providers/opencloud.svg');
+.backstage-cloud-icon.has-logo img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 
-.backstage-cloud-icon-seafile {
-	background-image: url('images/cloud-providers/seafile.svg');
+.backstage-cloud-icon.has-logo img.backstage-cloud-logo-dark {
+	display: none;
+}
+
+[data-theme='dark'] .backstage-cloud-icon.has-logo img.backstage-cloud-logo-dark {
+	display: block;
+}
+
+[data-theme='dark'] .backstage-cloud-icon.has-logo img:has(+ img.backstage-cloud-logo-dark) {
+	display: none;
 }
 
 .backstage-open-tile-label {

@@ -237,12 +237,10 @@ namespace BackstageTemplates {
   }): HTMLElement {
     return (
       <div class="backstage-modal-provider-row" aria-hidden="true">
-        <span
-          class={
-            'backstage-modal-provider-row-icon ' +
-            BackstageCloudKinds.iconClasses(props.kind)
-          }
-        />
+        {BackstageCloudKinds.icon(
+          props.kind,
+          'backstage-modal-provider-row-icon',
+        )}
         <div class="backstage-modal-provider-row-text">
           <span class="backstage-modal-provider-row-type">
             {props.typeName}
@@ -299,7 +297,10 @@ namespace BackstageTemplates {
           <div class="backstage-modal-preview">
             {openTile({
               label: props.typeName,
-              iconClass: BackstageCloudKinds.iconClasses(props.kind),
+              icon: BackstageCloudKinds.icon(
+                props.kind,
+                'backstage-open-tile-icon',
+              ),
               subtitle: props.userName,
               extraClass: 'is-cloud-provider is-preview',
               inert: true,
@@ -393,9 +394,12 @@ namespace BackstageTemplates {
 
     const updateToggle = () => {
       toggleLabelEl.textContent = BackstageCloudKinds.label(currentValue);
-      toggleIconEl.className =
-        'backstage-modal-dropdown-icon ' +
-        BackstageCloudKinds.iconClasses(currentValue);
+      const icon = BackstageCloudKinds.icon(
+        currentValue,
+        'backstage-modal-dropdown-icon',
+      );
+      toggleIconEl.replaceWith(icon);
+      toggleIconEl = icon;
     };
 
     const onDocMouseDown = (e: MouseEvent) => {
@@ -495,13 +499,10 @@ namespace BackstageTemplates {
                 }
               }}
             >
-              <span
-                class={
-                  'backstage-modal-dropdown-icon ' +
-                  BackstageCloudKinds.iconClasses(k.kind)
-                }
-                aria-hidden="true"
-              />
+              {BackstageCloudKinds.icon(
+                k.kind,
+                'backstage-modal-dropdown-icon',
+              )}
               <span>{k.label}</span>
             </li>
           ))}

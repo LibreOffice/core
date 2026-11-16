@@ -35,6 +35,8 @@ namespace BackstageCloudKinds {
 		kind: CloudProviderKind;
 		label: string;
 		isBrand: boolean;
+		logo?: string;
+		logoDark?: string;
 	}
 
 	// Any server that speaks the protocol, whichever product runs it.
@@ -42,9 +44,24 @@ namespace BackstageCloudKinds {
 
 	// The services this build ships with. A branding offers its own instead.
 	const shippedKinds: CloudKindEntry[] = [
-		{ kind: 'nextcloud', label: 'Nextcloud', isBrand: false },
-		{ kind: 'opencloud', label: 'OpenCloud', isBrand: false },
-		{ kind: 'seafile', label: 'Seafile', isBrand: false },
+		{
+			kind: 'nextcloud',
+			label: 'Nextcloud',
+			isBrand: false,
+			logo: 'images/cloud-providers/nextcloud.svg',
+		},
+		{
+			kind: 'opencloud',
+			label: 'OpenCloud',
+			isBrand: false,
+			logo: 'images/cloud-providers/opencloud.svg',
+		},
+		{
+			kind: 'seafile',
+			label: 'Seafile',
+			isBrand: false,
+			logo: 'images/cloud-providers/seafile.svg',
+		},
 	];
 
 	export function isValidKind(kind: unknown): boolean {
@@ -81,18 +98,47 @@ namespace BackstageCloudKinds {
 		return entry ? entry.label : _('Other');
 	}
 
-	// The classes that draw a service's icon. The bare class alone draws the generic cloud, which
-	// is what a service that is no longer on offer gets. A per-service class always carries the
-	// backstage-cloud-icon- prefix, so it stays apart from the branded marker whatever the
-	// service is called.
-	export function iconClasses(kind: CloudProviderKind): string {
+	// Whether a branding declares its own list of services.
+	export function isBranded(): boolean {
+		return brandedKinds() !== undefined;
+	}
+
+	// The icon of a service, with className added to its classes. A listed service shows its
+	// logo, and a second logo for the dark theme when it has one. The bare backstage-cloud-icon
+	// class draws the generic cloud, which a service that is no longer listed gets. A branded
+	// service gets the classes that a branding stylesheet draws.
+	export function icon(
+		kind: CloudProviderKind,
+		className: string,
+	): HTMLElement {
+		const element = document.createElement('span');
+		element.setAttribute('aria-hidden', 'true');
+		const classes = [className, 'backstage-cloud-icon'];
 		const entry = find(kind);
-		const classes = ['backstage-cloud-icon'];
-		if (entry) {
-			classes.push('backstage-cloud-icon-' + entry.kind);
-			if (entry.isBrand) classes.push('backstage-cloud-brand-icon');
+		if (entry && entry.isBrand)
+			classes.push(
+				'backstage-cloud-icon-' + entry.kind,
+				'backstage-cloud-brand-icon',
+			);
+		if (entry && entry.logo) {
+			classes.push('has-logo');
+			element.appendChild(logoImage(entry.logo, ''));
+			if (entry.logoDark)
+				element.appendChild(
+					logoImage(entry.logoDark, 'backstage-cloud-logo-dark'),
+				);
 		}
-		return classes.join(' ');
+		element.className = classes.join(' ');
+		return element;
+	}
+
+	function logoImage(source: string, className: string): HTMLImageElement {
+		const image = document.createElement('img');
+		image.setAttribute('src', source);
+		image.setAttribute('alt', '');
+		image.draggable = false;
+		if (className) image.className = className;
+		return image;
 	}
 
 	function find(kind: CloudProviderKind): CloudKindEntry | undefined {

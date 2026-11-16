@@ -156,4 +156,5 @@
 /// <reference path="./AccountPresetSync.test.ts" />
 /// <reference path="./BackstageAccountTemplates.test.ts" />
 /// <reference path="./CloudProviderList.test.ts" />
+/// <reference path="./BackstageCloudKinds.test.ts" />
 // NOTE: reference new tests here ...
