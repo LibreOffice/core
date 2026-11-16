@@ -598,15 +598,8 @@ define run_lighthouse_tests
 	,\
 		$(eval SPEC_FILE=$(if $(1),$(LIGHTHOUSE_TEST_FOLDER)/$(1)))\
 		$(if $(1),$(call check_spec_existence,$(1),lighthouse))\
-		$(SETSID) $(CYPRESS_BINARY) run \
-			--browser $(LIGHTHOUSE_BROWSER) \
-			--headless \
-			--config-file $(CYPRESS_CONFIG) \
-			--project $(abs_srcdir) \
-			--config $(LIGHTHOUSE_CONFIG) \
-			--env $(LIGHTHOUSE_ENV) \
-			$(if $(SPEC_FILE),--spec=$(SPEC_FILE)) \
-			|| ($(KILL_COMMAND) && false)\
+		$(call run_test_headless,\
+			$(LIGHTHOUSE_CONFIG),$(LIGHTHOUSE_ENV),$(SPEC_FILE),$(LIGHTHOUSE_BROWSER))\
 	)
 endef
 
@@ -1169,15 +1162,15 @@ LOAD_STOP_CMD = $(if $(ENABLE_CPULOAD),\
 # Run one test \ tests in headless mode.
 #
 # Parameters:
-# 1 - config-file:	 cypress configuration file (e.g. cypress.config.ts).
-# 2 - config:		 cypress configuration (e.g. cypress' --config argument).
-# 3 - env:		 list of environment variables (e.g. cypress' --env argument).
-# 4 - spec (optional):   test file path (e.g. cypress' --spec argument)
+# 1 - config:		 cypress configuration (e.g. cypress' --config argument).
+# 2 - env:		 list of environment variables (e.g. cypress' --env argument).
+# 3 - spec (optional):   test file path (e.g. cypress' --spec argument)
+# 4 - browser (optional): browser to run, defaults to $(BROWSER)
 define run_test_headless
 	$(LOAD_START_CMD) \
 	$(CYPRESS_FONTCONFIG) \
 	$(SETSID) $(CYPRESS_BINARY) run \
-		--browser $(BROWSER) \
+		--browser $(if $(4),$(4),$(BROWSER)) \
 		--headless \
 		--config-file $(CYPRESS_CONFIG) \
 		--project $(abs_srcdir) \
