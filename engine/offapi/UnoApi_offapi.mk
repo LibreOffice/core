@@ -2740,7 +2740,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rdf,\
 	XURI \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
-	ARGBColor \
 	Color \
 	ColorComponent \
 	FillRule \
