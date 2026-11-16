@@ -17,6 +17,7 @@
 #include <common/Log.hpp>
 #include <common/Util.hpp>
 
+#include <Poco/Exception.h>
 #include <Poco/URI.h>
 
 
@@ -112,6 +113,42 @@ bool Uri::hasReadonlyPermission(const std::string& url)
     }
 
     return false;
+}
+
+std::string Uri::siteHost(const std::string& url)
+{
+    const std::string host = Util::toLower(Poco::URI(url).getHost());
+    return host.starts_with("www.") ? host.substr(4) : host;
+}
+
+int Uri::originPort(const std::string& url)
+{
+    const Poco::URI uri(url);
+    const bool isDefaultHttpsPort = uri.getScheme() == "https" && uri.getPort() == 443;
+    const bool isDefaultHttpPort = uri.getScheme() == "http" && uri.getPort() == 80;
+    return isDefaultHttpsPort || isDefaultHttpPort ? -1 : uri.getPort();
+}
+
+bool Uri::isWithinSite(const std::string& from, const std::string& to)
+{
+    try
+    {
+        const std::string fromScheme = Poco::URI(from).getScheme();
+        const std::string toScheme = Poco::URI(to).getScheme();
+
+        const bool isSameHost = siteHost(to) == siteHost(from);
+        const bool isSamePort = originPort(to) == originPort(from);
+        const bool isSameScheme = toScheme == fromScheme;
+        const bool isFromHttp = fromScheme == "http";
+        const bool isHttpToHttps = isFromHttp && toScheme == "https";
+        const bool isAllowedScheme = isSameScheme || isHttpToHttps;
+
+        return isSameHost && isSamePort && isAllowedScheme;
+    }
+    catch (const Poco::SyntaxException&)
+    {
+        return false;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -73,6 +73,15 @@ public:
 
     static bool hasReadonlyPermission(const std::string& url);
 
+    /// The host of url without a leading "www.".
+    static std::string siteHost(const std::string& url);
+
+    /// The port of url, or -1 for the default port of its scheme, as an origin leaves it out.
+    static int originPort(const std::string& url);
+
+    /// The account address can redirect within its site: from http to https, or to and from www.
+    static bool isWithinSite(const std::string& from, const std::string& to);
+
 private:
     std::string _uri;
 };

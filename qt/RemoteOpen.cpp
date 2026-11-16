@@ -16,6 +16,7 @@
 #include <common/EditorFrameMessages.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
+#include <common/Uri.hpp>
 #include <net/FakeSocket.hpp>
 #include <qt/CoolLocalSchemeHandler.hpp>
 #include <qt/WebView.hpp>
@@ -276,13 +277,6 @@ QUrl originOf(const QUrl& url)
     return origin;
 }
 
-/// The host of url without a leading "www.".
-QString siteHost(const QUrl& url)
-{
-    const QString host = url.host();
-    return host.startsWith("www.") ? host.mid(4) : host;
-}
-
 /// Other schemes would open other apps, so only web addresses go to the system browser.
 void openInSystemBrowser(const QUrl& url)
 {
@@ -444,18 +438,12 @@ bool CloudAccountPage::acceptNavigationRequest(const QUrl& url, NavigationType t
     if (!isMainFrame || !isOtherSite)
         return true;
 
-    // The account address can redirect within its site: from http to https, or to and from www.
     if (type == NavigationTypeRedirect && !_firstPageLoaded)
     {
         const QUrl target = originOf(url);
-        const bool isSameHost = siteHost(target) == siteHost(_integratorOrigin);
-        const bool isSamePort = target.port() == _integratorOrigin.port();
-        const bool isSameScheme = target.scheme() == _integratorOrigin.scheme();
-        const bool isFromHttp = _integratorOrigin.scheme() == "http";
-        const bool isHttpToHttps = isFromHttp && target.scheme() == "https";
-        const bool isAllowedScheme = isSameScheme || isHttpToHttps;
-
-        if (!isSameHost || !isSamePort || !isAllowedScheme)
+        const std::string from = _integratorOrigin.toString().toStdString();
+        const std::string to = target.toString().toStdString();
+        if (!Uri::isWithinSite(from, to))
         {
             LOG_WRN("account window: refused: the account address redirects to another site");
             QTimer::singleShot(0, this, [this, target]() { refuseRedirect(target); });
