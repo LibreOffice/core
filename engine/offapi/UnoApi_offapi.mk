@@ -3584,7 +3584,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	RemoteContentProviderChangeEvent \
 	ResultSetException \
 	SendInfo \
-	SendMediaTypes \
 	ServiceNotFoundException \
 	SortingInfo \
 	SynchronizePolicy \

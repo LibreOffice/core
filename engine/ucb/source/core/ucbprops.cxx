@@ -27,7 +27,6 @@
 #include <com/sun/star/ucb/DocumentStoreMode.hpp>
 #include <com/sun/star/ucb/Priority.hpp>
 #include <com/sun/star/ucb/SendInfo.hpp>
-#include <com/sun/star/ucb/SendMediaTypes.hpp>
 #include <com/sun/star/ucb/SynchronizePolicy.hpp>
 #include <com/sun/star/ucb/VerificationMode.hpp>
 #include <com/sun/star/ucb/XDataContainer.hpp>
@@ -126,9 +125,6 @@ UcbPropertiesManager::UcbPropertiesManager()
       ATTR_DEFAULT | PropertyAttribute::READONLY },
     { u"SendCopyTarget"_ustr, -1,
       cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
-      ATTR_DEFAULT },
-    { u"SendFormats"_ustr, -1,
-      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendMediaTypes>>::get(),
       ATTR_DEFAULT },
     { u"SendFroms"_ustr, -1,
       cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),

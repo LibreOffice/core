@@ -15769,10 +15769,6 @@ module com {
      string ProtocolType;
      string Value;
     };
-    published struct SendMediaTypes {
-     string ProtocolType;
-     sequence< string > Value;
-    };
     published interface XSimpleFileAccess {
      interface ::cpo::uno::XInterface;
      void copy([in] string SourceURL, [in] string DestURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
