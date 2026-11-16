@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-04 10:08+0000\n"
+"PO-Revision-Date: 2026-11-15 16:39+0000\n"
 "Last-Translator: Milo Ivir <milotype@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -561,7 +561,6 @@ msgstr "Pružatelj usluge"
 #: admin/src/integrator/AdminIntegratorSettings.ts:796
 #: admin/src/integrator/AdminIntegratorSettings.ts:4765
 #: admin/src/integrator/AdminIntegratorSettings.ts:5126
-#, fuzzy
 msgid "API key"
 msgstr "API ključ"
 
@@ -576,7 +575,6 @@ msgid "Base URL"
 msgstr "Osnovni URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:799
-#, fuzzy
 msgid "Image size"
 msgstr "Veličina slike"
 
@@ -1156,9 +1154,8 @@ msgid "Use the AI provider set on the server"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3443
-#, fuzzy
 msgid "Providers"
-msgstr "Pružatelj usluge"
+msgstr "Pružatelji usluge"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3446
 msgid "Managed by your admin"
@@ -1193,7 +1190,6 @@ msgid "seconds"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3652
-#, fuzzy
 msgid "Text generation"
 msgstr "Generiranje teksta"
 
@@ -1222,7 +1218,6 @@ msgid ""
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3744
-#, fuzzy
 msgid "Image generation"
 msgstr "Generiranje slike"
 
@@ -1311,7 +1306,6 @@ msgid "Server URL"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4754
-#, fuzzy
 msgid "Username"
 msgstr "Korisničko ime"
 
@@ -1374,13 +1368,12 @@ msgid "Short"
 msgstr "Kratko"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4834
-#, fuzzy
 msgid "Long"
-msgstr "Dnevnik"
+msgstr "Detaljno"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4835
 msgid "Long, with an example"
-msgstr ""
+msgstr "Detaljno s primjerom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4845
 msgid "Correction profiles"
@@ -1427,9 +1420,8 @@ msgid "Style checks (German only)"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
-#, fuzzy
 msgid "Translation"
-msgstr "Prijelaz"
+msgstr "Prijevod"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5019
 msgid ""
@@ -1874,9 +1866,8 @@ msgid "Reply"
 msgstr "Odgovori"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Komentar"
+msgstr "komentar"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -2847,9 +2838,8 @@ msgid "Reject action"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Poslano"
+msgstr "Pošalji"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
@@ -3037,7 +3027,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3995
 msgid "value"
-msgstr ""
+msgstr "vrijednost"
 
 #: src/control/Control.AIChatSidebar.ts:4005
 msgid "text"
@@ -3860,9 +3850,8 @@ msgid "See who else is editing and share the document."
 msgstr ""
 
 #: src/control/onboarding/OnboardingSteps.ts:110
-#, fuzzy
 msgid "The status bar"
-msgstr "Prikaži traku stanja"
+msgstr "Traka stanja"
 
 #: src/control/onboarding/OnboardingSteps.ts:112
 msgid ""
@@ -3885,7 +3874,7 @@ msgstr "Preskoči"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Natrag"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #, fuzzy
@@ -5358,7 +5347,7 @@ msgstr "Poveznica"
 
 #: src/control/Control.Notebookbar.js:731
 msgid "Line Width"
-msgstr "Debljina linije"
+msgstr "Širina linije"
 
 #: src/control/Control.Notebookbar.js:764
 msgid "Transparency:"
@@ -5550,11 +5539,11 @@ msgstr "Broj"
 
 #: src/control/Control.NotebookbarCalc.js:858
 msgid "General"
-msgstr "Opće"
+msgstr "Općenito"
 
 #: src/control/Control.NotebookbarCalc.js:860
 msgid "Percent"
-msgstr "Posto"
+msgstr "Postotak"
 
 #: src/control/Control.NotebookbarCalc.js:861
 msgid "Currency"
@@ -8322,7 +8311,7 @@ msgstr "Odaberi raspon"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "Korak %1 od %2"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8398,7 +8387,7 @@ msgstr "Uspješno izvezeno: "
 
 #: src/app/Socket.ts:1234
 msgid "This document has links to external content."
-msgstr ""
+msgstr "Ovaj dokument sadrži poveznice na eksterni sadržaj."
 
 #: src/app/Socket.ts:1235
 msgid "Allow"
@@ -9356,11 +9345,11 @@ msgstr ""
 
 #: src/control/Control.Extension.ts:2101
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #: src/control/Control.Extension.ts:2102
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
