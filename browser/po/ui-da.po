@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-10-26 07:43+0000\n"
+"PO-Revision-Date: 2026-11-06 13:20+0000\n"
 "Last-Translator: Mette Kærgaard Hansen "
 "<mkh_brain@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/da/>\n"
-"Language: \n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1464,11 +1464,12 @@ msgstr "Den første, der er konfigureret"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Oversætter med {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5055
 msgid "No provider is set up: the Translate command is not offered."
 msgstr ""
+"Ingen leverandør er sat op, så funktionen Oversættelse er ikke tilgængelig."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5095
 msgid "API URL"
@@ -1578,6 +1579,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Denne fil er en staveordbog, ikke en ordbog. Indlæs en liste af ord med et "
+"ord per linje."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
