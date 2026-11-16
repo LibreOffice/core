@@ -21,15 +21,15 @@
     </message>
     <message>
         <source>ODF spreadsheet (.ods)</source>
-        <translation>ODF-Arbeitsmappe (.ods)</translation>
+        <translation>ODF-Tabellendokument (.ods)</translation>
     </message>
     <message>
         <source>Excel Spreadsheet (.xlsx)</source>
-        <translation>Excel-Arbeitsmappe (.xlsx)</translation>
+        <translation>Excel-Tabellendokument (.xlsx)</translation>
     </message>
     <message>
         <source>Excel 2003 Spreadsheet (.xls)</source>
-        <translation>Excel 2003-Arbeitsmappe (.xls)</translation>
+        <translation>Excel 2003-Tabellendokument (.xls)</translation>
     </message>
     <message>
         <source>ODF presentation (.odp)</source>
@@ -149,7 +149,7 @@
     </message>
     <message>
         <source>Spreadsheet</source>
-        <translation>Arbeitsmappe</translation>
+        <translation>Tabellendokument</translation>
     </message>
     <message>
         <source>Drawing</source>
