@@ -811,8 +811,11 @@ static void do_hullo_handling_things(DocumentTab& data)
     // Contact the permanently (during app lifetime) listening COOLWSD server "public" socket
     assert(coolwsd_server_socket_fd != -1);
     int rc = fakeSocketConnect(data.fakeClientFd, coolwsd_server_socket_fd);
-    (void)rc;
-    assert(rc != -1);
+    if (rc == -1)
+    {
+        LOG_ERR("HULLO: failed to connect fakesocket");
+        return;
+    }
 
     createAndStartMessagePumpThread(data);
 
