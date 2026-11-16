@@ -583,7 +583,7 @@ void CppuType::dumpLightGetCppuType(FileStream & out)
 {
     dumpGetCppuTypePreamble(out);
     out << indent()
-        << "static typelib_TypeDescriptionReference * the_type = 0;\n"
+        << "static typelib_TypeDescriptionReference * the_type = nullptr;\n"
         << indent() << "if ( !the_type )\n" << indent() << "{\n";
     inc();
     out << indent() << "typelib_static_type_init( &the_type, "
@@ -1107,7 +1107,7 @@ void InterfaceType::dumpDeclaration(FileStream & out)
     dumpAttributes(out);
     dumpMethods(out);
     out << "\n" << indent()
-        << "static inline ::cpo::uno::Type const & static_type(void * = 0);\n\n";
+        << "static inline ::cpo::uno::Type const & static_type(void * = nullptr);\n\n";
     dec();
     out << "protected:\n";
     inc();
@@ -1209,7 +1209,7 @@ void InterfaceType::dumpNormalGetCppuType(FileStream & out)
 {
     dumpGetCppuTypePreamble(out);
     out << indent()
-        << "static typelib_TypeDescriptionReference * the_type = 0;\n"
+        << "static typelib_TypeDescriptionReference * the_type = nullptr;\n"
         << indent() << "if ( !the_type )\n" << indent() << "{\n";
     inc();
     std::vector< unoidl::AnnotatedReference >::size_type bases(
@@ -1231,7 +1231,7 @@ void InterfaceType::dumpNormalGetCppuType(FileStream & out)
     }
     out << indent() << "typelib_static_mi_interface_type_init( &the_type, \""
         << name_ << "\", " << bases << ", "
-        << (bases == 0 ? "0" : "aSuperTypes") << " );\n";
+        << (bases == 0 ? "nullptr" : "aSuperTypes") << " );\n";
     dec();
     out << indent() << "}\n" << indent()
         << ("return * reinterpret_cast< ::cpo::uno::Type * >("
@@ -1250,9 +1250,9 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
     out << indent() << "::cpo::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
-    out << indent() << "::rtl::OUString sTypeName( \"" << name_ << "\" );\n\n"
+    out << indent() << "::rtl::OUString sTypeName( u\"" << name_ << "\"_ustr );\n\n"
         << indent() << "// Start inline typedescription generation\n"
-        << indent() << "typelib_InterfaceTypeDescription * pTD = 0;\n\n";
+        << indent() << "typelib_InterfaceTypeDescription * pTD = nullptr;\n\n";
     out << indent() << "typelib_TypeDescriptionReference * aSuperTypes["
         << entity_->getDirectMandatoryBases().size() << "];\n";
     std::vector< unoidl::AnnotatedReference >::size_type n = 0;
@@ -1267,7 +1267,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
         out << indent() << "typelib_TypeDescriptionReference * pMembers["
             << count << "] = { ";
         for (std::size_t i = 0; i != count; ++i) {
-            out << "0";
+            out << "nullptr";
             if (i + 1 != count) {
                 out << ",";
             }
@@ -1283,17 +1283,17 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
         << "sTypeName.pData,\n" << indent()
         << entity_->getDirectMandatoryBases().size() << ", aSuperTypes,\n"
         << indent() << count << ",\n" << indent()
-        << (count == 0 ? "0" : "pMembers") << " );\n\n";
+        << (count == 0 ? "nullptr" : "pMembers") << " );\n\n";
     dec();
     out << indent()
-        << ("typelib_typedescription_register( (typelib_TypeDescription**)&pTD"
+        << ("typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pTD)"
             " );\n");
     for (std::size_t i = 0; i != count; ++i) {
         out << indent() << "typelib_typedescriptionreference_release( pMembers["
             << i << "] );\n";
     }
     out << indent()
-        << ("typelib_typedescription_release( (typelib_TypeDescription*)pTD"
+        << ("typelib_typedescription_release( reinterpret_cast<typelib_TypeDescription*>(pTD)"
             " );\n\n")
         << indent() << "return new ::cpo::uno::Type( "
         << getTypeClass(name_) << ", sTypeName ); // leaked\n";
@@ -1342,13 +1342,13 @@ void InterfaceType::dumpCppuAttributeRefs(FileStream & out, sal_uInt32 & index)
 {
     std::vector< unoidl::InterfaceTypeEntity::Attribute >::size_type n = 0;
     for (const unoidl::InterfaceTypeEntity::Attribute& attr : entity_->getDirectAttributes()) {
-        out << indent() << "::rtl::OUString sAttributeName" << n << "( \""
-            << name_ << "::" << attr.name << "\" );\n" << indent()
+        out << indent() << "::rtl::OUString sAttributeName" << n << "( u\""
+            << name_ << "::" << attr.name << "\"_ustr );\n" << indent()
             << "typelib_typedescriptionreference_new( &pMembers[" << index++
             << "],\n";
         inc(38);
         out << indent()
-            << "(typelib_TypeClass)::cpo::uno::TypeClass_INTERFACE_ATTRIBUTE,\n"
+            << "static_cast<typelib_TypeClass>(::cpo::uno::TypeClass_INTERFACE_ATTRIBUTE),\n"
             << indent() << "sAttributeName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -1359,13 +1359,13 @@ void InterfaceType::dumpCppuMethodRefs(FileStream & out, sal_uInt32 & index)
 {
     std::vector< unoidl::InterfaceTypeEntity::Method >::size_type n = 0;
     for (const unoidl::InterfaceTypeEntity::Method& method : entity_->getDirectMethods()) {
-        out << indent() << "::rtl::OUString sMethodName" << n << "( \"" << name_
-            << "::" << method.name << "\" );\n" << indent()
+        out << indent() << "::rtl::OUString sMethodName" << n << "( u\"" << name_
+            << "::" << method.name << "\"_ustr );\n" << indent()
             << "typelib_typedescriptionreference_new( &pMembers[" << index++
             << "],\n";
         inc(38);
         out << indent()
-            << "(typelib_TypeClass)::cpo::uno::TypeClass_INTERFACE_METHOD,\n"
+            << "static_cast<typelib_TypeClass>(::cpo::uno::TypeClass_INTERFACE_METHOD),\n"
             << indent() << "sMethodName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -1389,16 +1389,16 @@ void InterfaceType::dumpCppuAttributes(FileStream & out, sal_uInt32 & index)
         return;
 
     out << "\n" << indent()
-        << "typelib_InterfaceAttributeTypeDescription * pAttribute = 0;\n";
+        << "typelib_InterfaceAttributeTypeDescription * pAttribute = nullptr;\n";
     std::vector< unoidl::InterfaceTypeEntity::Attribute >::size_type n = 0;
     for (const unoidl::InterfaceTypeEntity::Attribute& attr : entity_->getDirectAttributes()) {
         OUString type(resolveAllTypedefs(attr.type));
         out << indent() << "{\n";
         inc();
-        out << indent() << "::rtl::OUString sAttributeType" << n << "( \""
-            << type << "\" );\n" << indent()
-            << "::rtl::OUString sAttributeName" << n << "( \"" << name_
-            << "::" << attr.name << "\" );\n";
+        out << indent() << "::rtl::OUString sAttributeType" << n << "( u\""
+            << type << "\"_ustr );\n" << indent()
+            << "::rtl::OUString sAttributeName" << n << "( u\"" << name_
+            << "::" << attr.name << "\"_ustr );\n";
         sal_Int32 getExcn = dumpExceptionTypeNames(
                                 out, u"get", attr.getExceptions, false);
         sal_Int32 setExcn = dumpExceptionTypeNames(
@@ -1408,24 +1408,24 @@ void InterfaceType::dumpCppuAttributes(FileStream & out, sal_uInt32 & index)
                 " &pAttribute,\n");
         inc();
         out << indent() << index++ << ", sAttributeName" << n
-            << ".pData,\n" << indent() << "(typelib_TypeClass)"
-            << getTypeClass(type) << ", sAttributeType" << n << ".pData,\n"
+            << ".pData,\n" << indent() << "static_cast<typelib_TypeClass>("
+            << getTypeClass(type) << "), sAttributeType" << n << ".pData,\n"
             << indent() << (attr.readOnly ? "true" : "false")
             << ", " << getExcn << ", "
-            << (getExcn == 0 ? "0" : "the_getExceptions") << ", " << setExcn
-            << ", " << (setExcn == 0 ? "0" : "the_setExceptions")
+            << (getExcn == 0 ? "nullptr" : "the_getExceptions") << ", " << setExcn
+            << ", " << (setExcn == 0 ? "nullptr" : "the_setExceptions")
             << " );\n";
         dec();
         out << indent()
             << ("typelib_typedescription_register("
-                " (typelib_TypeDescription**)&pAttribute );\n");
+                " reinterpret_cast<typelib_TypeDescription**>(&pAttribute) );\n");
         dec();
         out << indent() << "}\n";
         ++n;
     }
     out << indent()
         << ("typelib_typedescription_release("
-            " (typelib_TypeDescription*)pAttribute );\n");
+            " reinterpret_cast<typelib_TypeDescription*>(pAttribute) );\n");
 }
 
 void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
@@ -1434,7 +1434,7 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
         return;
 
     out << "\n" << indent()
-        << "typelib_InterfaceMethodTypeDescription * pMethod = 0;\n";
+        << "typelib_InterfaceMethodTypeDescription * pMethod = nullptr;\n";
     std::vector< unoidl::InterfaceTypeEntity::Method >::size_type n = 0;
     for (const unoidl::InterfaceTypeEntity::Method& method : entity_->getDirectMethods()) {
         OUString returnType(resolveAllTypedefs(method.returnType));
@@ -1448,14 +1448,14 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
         size_type m = 0;
         for (const unoidl::InterfaceTypeEntity::Method::Parameter& param : method.parameters) {
             OUString type(resolveAllTypedefs(param.type));
-            out << indent() << "::rtl::OUString sParamName" << m << "( \""
-                << param.name << "\" );\n" << indent()
-                << "::rtl::OUString sParamType" << m << "( \"" << type
-                << "\" );\n" << indent() << "aParameters[" << m
+            out << indent() << "::rtl::OUString sParamName" << m << "( u\""
+                << param.name << "\"_ustr );\n" << indent()
+                << "::rtl::OUString sParamType" << m << "( u\"" << type
+                << "\"_ustr );\n" << indent() << "aParameters[" << m
                 << "].pParamName = sParamName" << m << ".pData;\n"
                 << indent() << "aParameters[" << m
-                << "].eTypeClass = (typelib_TypeClass)"
-                << getTypeClass(type) << ";\n" << indent() << "aParameters["
+                << "].eTypeClass = static_cast<typelib_TypeClass>("
+                << getTypeClass(type) << ");\n" << indent() << "aParameters["
                 << m << "].pTypeName = sParamType" << m << ".pData;\n"
                 << indent() << "aParameters[" << m << "].bIn = "
                 << ((param.direction
@@ -1471,31 +1471,31 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
         sal_Int32 excn = dumpExceptionTypeNames(
                              out, u"", method.exceptions,
                              method.name != "acquire" && method.name != "release");
-        out << indent() << "::rtl::OUString sReturnType" << n << "( \""
-            << returnType << "\" );\n" << indent()
-            << "::rtl::OUString sMethodName" << n << "( \"" << name_ << "::"
-            << method.name << "\" );\n" << indent()
+        out << indent() << "::rtl::OUString sReturnType" << n << "( u\""
+            << returnType << "\"_ustr );\n" << indent()
+            << "::rtl::OUString sMethodName" << n << "( u\"" << name_ << "::"
+            << method.name << "\"_ustr );\n" << indent()
             << "typelib_typedescription_newInterfaceMethod( &pMethod,\n";
         inc();
         out << indent() << index++ << ", false,\n" << indent()
             << "sMethodName" << n << ".pData,\n" << indent()
-            << "(typelib_TypeClass)" << getTypeClass(returnType)
-            << ", sReturnType" << n << ".pData,\n" << indent()
+            << "static_cast<typelib_TypeClass>(" << getTypeClass(returnType)
+            << "), sReturnType" << n << ".pData,\n" << indent()
             << method.parameters.size() << ", "
-            << (method.parameters.empty() ? "0" : "aParameters") << ",\n"
+            << (method.parameters.empty() ? "nullptr" : "aParameters") << ",\n"
             << indent() << excn << ", "
-            << (excn == 0 ? "0" : "the_Exceptions") << " );\n";
+            << (excn == 0 ? "nullptr" : "the_Exceptions") << " );\n";
         dec();
         out << indent()
             << ("typelib_typedescription_register("
-                " (typelib_TypeDescription**)&pMethod );\n");
+                " reinterpret_cast<typelib_TypeDescription**>(&pMethod) );\n");
         dec();
         out << indent() << "}\n";
         ++n;
     }
     out << indent()
         << ("typelib_typedescription_release("
-            " (typelib_TypeDescription*)pMethod );\n");
+            " reinterpret_cast<typelib_TypeDescription*>(pMethod) );\n");
 }
 
 void InterfaceType::dumpAttributesCppuDecl(
@@ -1537,7 +1537,7 @@ void InterfaceType::dumpExceptionTypeName(
     std::u16string_view name) const
 {
     out << indent() << "::rtl::OUString the_" << prefix << "ExceptionName"
-        << index << "( \"" << name << "\" );\n";
+        << index << "( u\"" << name << "\"_ustr );\n";
 }
 
 sal_Int32 InterfaceType::dumpExceptionTypeNames(
@@ -1621,7 +1621,7 @@ void ConstantGroup::dumpHppFile(
 void ConstantGroup::dumpDeclaration(FileStream & out)
 {
     for (const unoidl::ConstantGroupEntity::Member& member : entity_->getMembers()) {
-        out << "static const ";
+        out << "const ";
         switch (member.value.type) {
         case unoidl::ConstantValue::TYPE_BOOLEAN:
             out << "bool";
@@ -1664,14 +1664,15 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
             out << (member.value.booleanValue ? "true" : "false");
             break;
         case unoidl::ConstantValue::TYPE_BYTE:
-            out << "(sal_Int8)" << OUString::number(member.value.byteValue);
+            out << "static_cast<sal_Int8>(" << OUString::number(member.value.byteValue) << ")";
             break;
         case unoidl::ConstantValue::TYPE_SHORT:
-            out << "(sal_Int16)" << OUString::number(member.value.shortValue);
+            out << "static_cast<sal_Int16>(" << OUString::number(member.value.shortValue) << ")";
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
-            out << "(sal_uInt16)"
-                << OUString::number(member.value.unsignedShortValue);
+            out << "static_cast<sal_uInt16>("
+                << OUString::number(member.value.unsignedShortValue)
+                << ")";
             break;
         case unoidl::ConstantValue::TYPE_LONG:
             // Avoid C++ compiler warnings about (un)signedness of literal
@@ -1679,12 +1680,12 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
             if (member.value.longValue == SAL_MIN_INT32) {
                 out << "SAL_MIN_INT32";
             } else {
-                out << "(sal_Int32)" << OUString::number(member.value.longValue);
+                out << "static_cast<sal_Int32>(" << OUString::number(member.value.longValue) << ")";
             }
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
-            out << "(sal_uInt32)"
-                << OUString::number(member.value.unsignedLongValue) << "U";
+            out << "static_cast<sal_uInt32>("
+                << OUString::number(member.value.unsignedLongValue) << "U)";
             break;
         case unoidl::ConstantValue::TYPE_HYPER:
             // Avoid C++ compiler warnings about (un)signedness of literal
@@ -1692,8 +1693,8 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
             if (member.value.hyperValue == SAL_MIN_INT64) {
                 out << "SAL_MIN_INT64";
             } else {
-                out << "(sal_Int64) SAL_CONST_INT64("
-                    << OUString::number(member.value.hyperValue) << ")";
+                out << "static_cast<sal_Int64>( SAL_CONST_INT64("
+                    << OUString::number(member.value.hyperValue) << ") )";
             }
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
@@ -1701,10 +1702,10 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
                 << OUString::number(member.value.unsignedHyperValue) << ")";
             break;
         case unoidl::ConstantValue::TYPE_FLOAT:
-            out << "(float)" << OUString::number(member.value.floatValue);
+            out << "static_cast<float>(" << OUString::number(member.value.floatValue) << ")";
             break;
         case unoidl::ConstantValue::TYPE_DOUBLE:
-            out << "(double)" << OUString::number(member.value.doubleValue);
+            out << "static_cast<double>(" << OUString::number(member.value.doubleValue) << ")";
             break;
         }
         out << ";\n";
@@ -1907,8 +1908,8 @@ void PlainStructType::dumpLightGetCppuType(FileStream & out)
             " following code can result in some threads observing that the_type"
             " points to garbage\n")
         << indent()
-        << "static ::typelib_TypeDescriptionReference * the_type = 0;\n"
-        << indent() << "if (the_type == 0) {\n";
+        << "static ::typelib_TypeDescriptionReference * the_type = nullptr;\n"
+        << indent() << "if (the_type == nullptr) {\n";
     inc();
     out << indent() << "::typelib_static_type_init(&the_type, "
         << getTypeClass(name_, true) << ", \"" << name_ << "\");\n";
@@ -1926,8 +1927,8 @@ void PlainStructType::dumpNormalGetCppuType(FileStream & out)
             " following code can result in some threads observing that the_type"
             " points to garbage\n")
         << indent()
-        << "static ::typelib_TypeDescriptionReference * the_type = 0;\n"
-        << indent() << "if (the_type == 0) {\n";
+        << "static ::typelib_TypeDescriptionReference * the_type = nullptr;\n"
+        << indent() << "if (the_type == nullptr) {\n";
     inc();
     out << indent()
         << "::typelib_TypeDescriptionReference * the_members[] = {\n";
@@ -1970,7 +1971,7 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out)
     out << indent() << "::cpo::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
-    out << indent() << "::rtl::OUString the_name( \"" << name_ << "\" );\n";
+    out << indent() << "::rtl::OUString the_name( u\"" << name_ << "\"_ustr );\n";
     std::map< OUString, sal_uInt32 > types;
     std::vector< unoidl::PlainStructTypeEntity::Member >::size_type n = 0;
     for (const unoidl::PlainStructTypeEntity::Member& member : entity_->getDirectMembers()) {
@@ -1984,11 +1985,11 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out)
             // resolved type); no extra #include for the resolved type is
             // needed, as the header for the typedef includes it already:
             out << indent() << "::rtl::OUString the_tname"
-                << static_cast< sal_uInt32 >(types.size() - 1) << "( \""
-                << resolveAllTypedefs(member.type) << "\" );\n";
+                << static_cast< sal_uInt32 >(types.size() - 1) << "( u\""
+                << resolveAllTypedefs(member.type) << "\"_ustr );\n";
         }
-        out << indent() << "::rtl::OUString the_name" << n++ << "( \""
-            << member.name << "\" );\n";
+        out << indent() << "::rtl::OUString the_name" << n++ << "( u\""
+            << member.name << "\"_ustr );\n";
     }
     out << indent() << "::typelib_StructMember_Init the_members[] = {\n";
     inc();
@@ -2005,11 +2006,11 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out)
         out << (i == entity_->getDirectMembers().end() ? " };" : ",") << "\n";
     }
     dec();
-    out << indent() << "::typelib_TypeDescription * the_newType = 0;\n"
+    out << indent() << "::typelib_TypeDescription * the_newType = nullptr;\n"
         << indent()
         << "::typelib_typedescription_newStruct(&the_newType, the_name.pData, ";
     if (entity_->getDirectBase().isEmpty()) {
-        out << "0";
+        out << "nullptr";
     } else {
         out << "::cppu::UnoType< ";
         dumpType(out, entity_->getDirectBase(), false, false, false, true);
@@ -2345,8 +2346,8 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out)
             " following code can result in some threads observing that the_type"
             " points to garbage\n")
         << indent()
-        << "static ::typelib_TypeDescriptionReference * the_type = 0;\n"
-        << indent() << "if (the_type == 0) {\n";
+        << "static ::typelib_TypeDescriptionReference * the_type = nullptr;\n"
+        << indent() << "if (the_type == nullptr) {\n";
     inc();
 
     out << indent() << "::rtl::OString the_buffer = \"" << name_
@@ -2358,7 +2359,7 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out)
             << ("::rtl::OUStringToOString("
                 "::cppu::getTypeFavourChar(static_cast< ");
         dumpTypeParameterName(out, *i);
-        out << " * >(0)).getTypeName(), RTL_TEXTENCODING_UTF8) +\n";
+        out << " * >(nullptr)).getTypeName(), RTL_TEXTENCODING_UTF8) +\n";
         ++i;
         if (i != entity_->getTypeParameters().end()) {
             out << indent() << "\",\" +\n";
@@ -2384,8 +2385,8 @@ void PolyStructType::dumpNormalGetCppuType(FileStream & out)
             " following code can result in some threads observing that the_type"
             " points to garbage\n")
         << indent()
-        << "static ::typelib_TypeDescriptionReference * the_type = 0;\n"
-        << indent() << "if (the_type == 0) {\n";
+        << "static ::typelib_TypeDescriptionReference * the_type = nullptr;\n"
+        << indent() << "if (the_type == nullptr) {\n";
     inc();
     out << indent() << "::rtl::OStringBuffer the_buffer(\"" << name_
         << "<\");\n";
@@ -2396,7 +2397,7 @@ void PolyStructType::dumpNormalGetCppuType(FileStream & out)
             << ("the_buffer.append(::rtl::OUStringToOString("
                 "::cppu::getTypeFavourChar(static_cast< ");
         dumpTypeParameterName(out, *i);
-        out << " * >(0)).getTypeName(), RTL_TEXTENCODING_UTF8));\n";
+        out << " * >(nullptr)).getTypeName(), RTL_TEXTENCODING_UTF8));\n";
         ++i;
         if (i != entity_->getTypeParameters().end()) {
             out << indent() << "the_buffer.append(',');\n";
@@ -2412,7 +2413,7 @@ void PolyStructType::dumpNormalGetCppuType(FileStream & out)
         if (i->parameterized) {
             out << "::cppu::getTypeFavourChar(static_cast< ";
             dumpTypeParameterName(out, i->type);
-            out << " * >(0))";
+            out << " * >(nullptr))";
         } else {
             out << "::cppu::UnoType< ";
             dumpType(out, i->type, false, false, false, true);
@@ -2468,7 +2469,7 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
         out << indent()
             << "::cppu::getTypeFavourChar(static_cast< ";
         dumpTypeParameterName(out, *i);
-        out << " * >(0)).getTypeName() +\n";
+        out << " * >(nullptr)).getTypeName() +\n";
         ++i;
         if (i != entity_->getTypeParameters().end()) {
             out << indent()
@@ -2491,10 +2492,10 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
                     << "::cpo::uno::Type const & the_ptype" << k
                     << " = ::cppu::getTypeFavourChar(static_cast< ";
                 dumpTypeParameterName(out, member.type);
-                out << " * >(0));\n" << indent()
+                out << " * >(nullptr));\n" << indent()
                     << "::typelib_TypeClass the_pclass" << k
-                    << " = (::typelib_TypeClass) the_ptype" << k
-                    << ".getTypeClass();\n" << indent()
+                    << " = static_cast<::typelib_TypeClass>( the_ptype" << k
+                    << ".getTypeClass() );\n" << indent()
                     << "::rtl::OUString the_pname" << k << "(the_ptype" << k
                     << ".getTypeName());\n";
             }
@@ -2507,11 +2508,11 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
             // resolved type); no extra #include for the resolved type is
             // needed, as the header for the typedef includes it already:
             out << indent() << "::rtl::OUString the_tname"
-                << static_cast< sal_uInt32 >(types.size() - 1) << "( \""
-                << resolveAllTypedefs(member.type) << "\" );\n";
+                << static_cast< sal_uInt32 >(types.size() - 1) << "( u\""
+                << resolveAllTypedefs(member.type) << "\"_ustr );\n";
         }
-        out << indent() << "::rtl::OUString the_name" << n++ << "( \""
-            << member.name << "\" );\n";
+        out << indent() << "::rtl::OUString the_name" << n++ << "( u\""
+            << member.name << "\"_ustr );\n";
     }
     out << indent() << "::typelib_StructMember_Init the_members[] = {\n";
     inc();
@@ -2537,10 +2538,10 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
         out << (i == entity_->getMembers().end() ? " };" : ",") << "\n";
     }
     dec();
-    out << indent() << "::typelib_TypeDescription * the_newType = 0;\n";
+    out << indent() << "::typelib_TypeDescription * the_newType = nullptr;\n";
     out << indent()
         << ("::typelib_typedescription_newStruct(&the_newType, the_name.pData,"
-            " 0, ")
+            " nullptr, ")
         << entity_->getMembers().size() << ", the_members);\n" << indent()
         << "::typelib_typedescription_register(&the_newType);\n" << indent()
         << "::typelib_typedescription_release(the_newType);\n" << indent()
@@ -2864,7 +2865,7 @@ void ExceptionType::dumpLightGetCppuType(FileStream & out)
 {
     dumpGetCppuTypePreamble(out);
     out << indent()
-        << "static typelib_TypeDescriptionReference * the_type = 0;\n"
+        << "static typelib_TypeDescriptionReference * the_type = nullptr;\n"
         << indent() << "if ( !the_type )\n" << indent() << "{\n";
     inc();
     out << indent() << "typelib_static_type_init( &the_type, "
@@ -2880,7 +2881,7 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out)
 {
     dumpGetCppuTypePreamble(out);
     out << indent()
-        << "static typelib_TypeDescriptionReference * the_type = 0;\n"
+        << "static typelib_TypeDescriptionReference * the_type = nullptr;\n"
         << indent() << "if ( !the_type )\n" << indent() << "{\n";
     inc();
     OUString base(entity_->getDirectBase());
@@ -2922,12 +2923,12 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out)
         out << ("* ::typelib_static_type_getByTypeClass("
                 " typelib_TypeClass_EXCEPTION )");
     } else if (base.isEmpty()) {
-        out << "0";
+        out << "nullptr";
     } else {
         out << "rBaseType.getTypeLibType()";
     }
     out << ", " << entity_->getDirectMembers().size() << ",  "
-        << (entity_->getDirectMembers().empty() ? "0" : "aMemberRefs")
+        << (entity_->getDirectMembers().empty() ? "nullptr" : "aMemberRefs")
         << " );\n";
     dec();
     out << indent() << "}\n" << indent()
@@ -2948,9 +2949,9 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out)
     out << indent() << "::cpo::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
-    out << indent() << "::rtl::OUString sTypeName( \"" << name_ << "\" );\n\n"
+    out << indent() << "::rtl::OUString sTypeName( u\"" << name_ << "\"_ustr );\n\n"
         << indent() << "// Start inline typedescription generation\n"
-        << indent() << "typelib_TypeDescription * pTD = 0;\n";
+        << indent() << "typelib_TypeDescription * pTD = nullptr;\n";
     OUString base(entity_->getDirectBase());
     if (!base.isEmpty()) {
         out << indent()
@@ -2971,12 +2972,12 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out)
         std::vector< unoidl::ExceptionTypeEntity::Member >::size_type n = 0;
         for (const unoidl::ExceptionTypeEntity::Member& member : entity_->getDirectMembers()) {
             OUString type(resolveAllTypedefs(member.type));
-            out << indent() << "::rtl::OUString sMemberType" << n << "( \""
-                << type << "\" );\n" << indent()
-                << "::rtl::OUString sMemberName" << n << "( \"" << member.name
-                << "\" );\n" << indent() << "aMembers[" << n
-                << "].eTypeClass = (typelib_TypeClass)" << getTypeClass(type)
-                << ";\n" << indent() << "aMembers[" << n
+            out << indent() << "::rtl::OUString sMemberType" << n << "( u\""
+                << type << "\"_ustr );\n" << indent()
+                << "::rtl::OUString sMemberName" << n << "( u\"" << member.name
+                << "\"_ustr );\n" << indent() << "aMembers[" << n
+                << "].eTypeClass = static_cast<typelib_TypeClass>(" << getTypeClass(type)
+                << ");\n" << indent() << "aMembers[" << n
                 << "].pTypeName = sMemberType" << n << ".pData;\n" << indent()
                 << "aMembers[" << n << "].pMemberName = sMemberName" << n
                 << ".pData;\n";
@@ -2985,16 +2986,15 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out)
     }
     out << "\n" << indent() << "typelib_typedescription_new(\n";
     inc();
-    out << indent() << "&pTD,\n" << indent() << "(typelib_TypeClass)"
-        << getTypeClass(name_) << ", sTypeName.pData,\n" << indent()
+    out << indent() << "&pTD,\n" << indent() << "static_cast<typelib_TypeClass>("
+        << getTypeClass(name_) << "), sTypeName.pData,\n" << indent()
         << (base.isEmpty() ? "0" : "rSuperType.getTypeLibType()") << ",\n"
         << indent() << entity_->getDirectMembers().size() << ",\n" << indent()
-        << (entity_->getDirectMembers().empty() ? "0" : "aMembers")
+        << (entity_->getDirectMembers().empty() ? "nullptr" : "aMembers")
         << " );\n\n";
     dec();
     out << indent()
-        << ("typelib_typedescription_register( (typelib_TypeDescription**)&pTD"
-            " );\n\n")
+        << "typelib_typedescription_register( &pTD );\n\n"
         << indent() << "typelib_typedescription_release( pTD );\n" << indent()
         << "// End inline typedescription generation\n\n" << indent()
         << "return new ::cpo::uno::Type( " << getTypeClass(name_)
@@ -3209,7 +3209,7 @@ void EnumType::dumpNormalGetCppuType(FileStream& o)
     dumpGetCppuTypePreamble(o);
 
     o << indent()
-      << "static typelib_TypeDescriptionReference * the_type = 0;\n";
+      << "static typelib_TypeDescriptionReference * the_type = nullptr;\n";
 
     o << indent() << "if ( !the_type )\n" << indent() << "{\n";
     inc();
@@ -3244,18 +3244,18 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "{\n";
 
     inc();
-    o << indent() << "::rtl::OUString sTypeName( \"" << name_
-      << "\" );\n\n";
+    o << indent() << "::rtl::OUString sTypeName( u\"" << name_
+      << "\"_ustr );\n\n";
 
     o << indent() << "// Start inline typedescription generation\n"
-      << indent() << "typelib_TypeDescription * pTD = 0;\n\n";
+      << indent() << "typelib_TypeDescription * pTD = nullptr;\n\n";
 
     o << indent() << "rtl_uString* enumValueNames["
       << entity_->getMembers().size() << "];\n";
     std::vector< unoidl::EnumTypeEntity::Member >::size_type n = 0;
     for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers()) {
-        o << indent() << "::rtl::OUString sEnumValue" << n << "( \""
-          << u2b(member.name) << "\" );\n";
+        o << indent() << "::rtl::OUString sEnumValue" << n << "( u\""
+          << u2b(member.name) << "\"_ustr );\n";
         o << indent() << "enumValueNames[" << n << "] = sEnumValue" << n
           << ".pData;\n";
         ++n;
@@ -3271,16 +3271,15 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << "\n" << indent() << "typelib_typedescription_newEnum( &pTD,\n";
     inc();
     o << indent() << "sTypeName.pData,\n"
-      << indent() << "(sal_Int32)"
+      << indent() << "static_cast<sal_Int32>("
       << codemaker::cpp::scopedCppName(u2b(name_), false) << "_"
-      << u2b(entity_->getMembers()[0].name) << ",\n"
+      << u2b(entity_->getMembers()[0].name) << "),\n"
       << indent() << entity_->getMembers().size()
       << ", enumValueNames, enumValues );\n\n";
     dec();
 
     o << indent()
-      << ("typelib_typedescription_register( (typelib_TypeDescription**)&pTD"
-          " );\n");
+      << "typelib_typedescription_register( &pTD );\n";
     o << indent() << "typelib_typedescription_release( pTD );\n"
       << indent() << "// End inline typedescription generation\n\n";
 
@@ -3423,8 +3422,8 @@ private:
 void failsToSupply(
     FileStream & o, std::u16string_view service, OString const & type)
 {
-    o << "::rtl::OUString(\"component context fails to supply service \") + \""
-      << service << "\" + \" of type \" + \"" << type << "\"";
+    o << "u\"component context fails to supply service "
+      << service << " of type " << type << "\"_ustr";
 }
 
 void ServiceType::dumpHppFile(
@@ -3828,15 +3827,14 @@ void SingletonType::dumpHppFile(
           " ::cpo::uno::Any >())), ::SAL_NO_ACQUIRE),"
           " ::cpo::uno::UNO_QUERY);\n#else\n")
       << indent() << ("the_context->getValueByName("
-                      "::rtl::OUString( \"/singletons/")
-      << name_ << "\" )) >>= instance;\n#endif\n"
+                      "u\"/singletons/")
+      << name_ << "\"_ustr ) >>= instance;\n#endif\n"
       << indent() << "if (!instance.is()) {\n";
     inc();
     o << indent()
-      << ("throw ::cpo::uno::DeploymentException("
-          "::rtl::OUString( \"component context"
-          " fails to supply singleton ")
-      << name_ << " of type " << baseName << "\" ), the_context);\n";
+      << "throw ::cpo::uno::DeploymentException("
+         " u\"component context fails to supply singleton "
+      << name_ << " of type " << baseName << "\"_ustr, the_context);\n";
     dec();
     o << indent() << "}\n" << indent() << "return instance;\n";
     dec();

@@ -147,7 +147,7 @@ void Includes::dump(
             }
         }
     }
-    out << "#include \"sal/config.h\"\n";
+    out << "#include <sal/config.h>\n";
     if (m_includeCassert) {
         out << "\n#include <cassert>\n";
     }
@@ -186,75 +186,75 @@ void Includes::dump(
     static char const * hxxExtension[2] = { "h", "hxx" };
     if (m_includeAny) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"cpo/uno/Any." << hxxExtension[(m_filetype == FileType::HPP)]
-            << "\"\n";
+        out << "#include <cpo/uno/Any." << hxxExtension[(m_filetype == FileType::HPP)]
+            << ">\n";
     }
     if (m_includeReference) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"cpo/uno/Reference." << hxxExtension[(m_filetype == FileType::HPP)]
-            << "\"\n";
+        out << "#include <cpo/uno/Reference." << hxxExtension[(m_filetype == FileType::HPP)]
+            << ">\n";
     }
     if (m_includeSequence) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"cpo/uno/Sequence." << hxxExtension[(m_filetype == FileType::HPP)]
-            << "\"\n";
+        out << "#include <cpo/uno/Sequence." << hxxExtension[(m_filetype == FileType::HPP)]
+            << ">\n";
     }
     if (m_includeType) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"cpo/uno/Type." << hxxExtension[(m_filetype == FileType::HPP)]
-            << "\"\n";
+        out << "#include <cpo/uno/Type." << hxxExtension[(m_filetype == FileType::HPP)]
+            << ">\n";
     }
     if (m_includeCppuMacrosHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"cppu/macros.hxx\"\n";
+        out << "#include <cppu/macros.hxx>\n";
     }
     if (m_includeCppuUnotypeHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"cppu/unotype.hxx\"\n";
+        out << "#include <cppu/unotype.hxx>\n";
     }
     if (m_includeOslMutexHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"osl/mutex.hxx\"\n";
+        out << "#include <osl/mutex.hxx>\n";
     }
     if (m_includeRtlStrbufHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"rtl/strbuf.hxx\"\n";
+        out << "#include <rtl/strbuf.hxx>\n";
     }
     if (m_includeRtlStringH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"rtl/string.h\"\n";
+        out << "#include <rtl/string.h>\n";
     }
     if (m_includeRtlTextencH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"rtl/textenc.h\"\n";
+        out << "#include <rtl/textenc.h>\n";
     }
     if (m_includeRtlUstrbufHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"rtl/ustrbuf.hxx\"\n";
+        out << "#include <rtl/ustrbuf.hxx>\n";
     }
     if (m_includeRtlUstringH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"rtl/ustring.h\"\n";
+        out << "#include <rtl/ustring.h>\n";
     }
     if (m_includeRtlUstringHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"rtl/ustring.hxx\"\n";
+        out << "#include <rtl/ustring.hxx>\n";
     }
     if (m_includeRtlInstanceHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"rtl/instance.hxx\"\n";
+        out << "#include <rtl/instance.hxx>\n";
     }
     if (m_includeSalTypesH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"sal/types.h\"\n";
+        out << "#include <sal/types.h>\n";
     }
     if (m_includeTypelibTypeclassH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"typelib/typeclass.h\"\n";
+        out << "#include <typelib/typeclass.h>\n";
     }
     if (m_includeTypelibTypedescriptionH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"typelib/typedescription.h\"\n";
+        out << "#include <typelib/typedescription.h>\n";
     }
     for (OUString const & s : m_custom)
         out << s << "\n";
@@ -263,8 +263,13 @@ void Includes::dump(
 void Includes::dumpInclude(
     FileStream & out, OString const & entityName, bool hpp)
 {
-    out << "#include \"" << entityName.replace('.', '/') << "."
-        << (hpp ? "hpp" : "hdl") << "\"\n";
+    OString tmp = entityName.replace('.', '/');
+    if (tmp.indexOf("/") != -1)
+        out << "#include <" << entityName.replace('.', '/') << "."
+            << (hpp ? "hpp" : "hdl") << ">\n";
+    else
+        out << "#include \"" << entityName.replace('.', '/') << "."
+            << (hpp ? "hpp" : "hdl") << "\"\n";
 }
 
 bool Includes::isInterfaceType(std::string_view entityName) const {
