@@ -6958,6 +6958,20 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 return;
             }
 
+            // A HULLO while the connection is up comes from a reload of the page.
+            if (data.app2js.joinable())
+            {
+                // The document stays loaded while it has no session.
+                if (auto broker = findBrokerByMobileAppDocId(data.appDocId))
+                    broker->setDetached(true);
+
+                // This wakes app2js, which closes the old socket and exits.
+                fakeSocketClose(data.closeNotificationPipeForForwardingThread[0]);
+                data.app2js.join();
+                data.fakeClientFd = fakeSocketSocket();
+                LOG_INF("HULLO: rejoining appDocId " << data.appDocId << " after a reload");
+            }
+
             do_hullo_handling_things(data);
         }
         else if (s == L"WELCOME" || s == L"WELCOME auto")
