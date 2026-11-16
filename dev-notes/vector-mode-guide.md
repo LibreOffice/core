@@ -224,7 +224,7 @@ A freeform line is drawn by hand, a stroke for every part:
 
 | What | What happens |
 |---|---|
-| Press and drag | Draws a stroke where the mouse goes. When the button comes up the stroke is fitted with curves that keep within about 3 pixels of it; a turn sharper than 60 degrees stays a corner. The next stroke is the next part. |
+| Press and drag | Draws a stroke where the mouse goes, fitted with curves that keep within about 3 pixels of it, already while it is drawn; a turn sharper than 60 degrees stays a corner. The next stroke is the next part. |
 | Back to the start | A stroke of the filled kind that comes back to where it began ends there, closed, while the button is still down. |
 | Fill | The filled kind shows its fill while it is drawn, as a filled polygon does, the stroke being drawn too; a stroke inside another one shows as a hole at once. |
 | Shift, Ctrl | Change nothing: a stroke follows the mouse as it is, not snapped and not in steps. |

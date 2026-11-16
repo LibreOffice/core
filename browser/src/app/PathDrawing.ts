@@ -69,6 +69,12 @@ class PathDrawing {
 	/// Whether the stroke went further than the reach from where it began, so coming back there
 	/// closes it.
 	private strokeLeftItsStart: boolean = false;
+	/// The stroke being drawn as fitted with curves, and how many places it had then; null while
+	/// it is not fitted.
+	private fittedStroke: {
+		places: number;
+		points: cool.ObjectPathPoint[];
+	} | null = null;
 
 	/// The least step from one place of a stroke to the next, how far the curves fitted to it may
 	/// stray from it, and over how long a run a turn is looked at for a corner, in twips.
@@ -89,6 +95,7 @@ class PathDrawing {
 
 	/// Begins a stroke drawn by hand at that place.
 	public strokeFrom(at: cool.Point): void {
+		this.fittedStroke = null;
 		this.stroke = [at];
 		this.strokeLeftItsStart = false;
 		this.next = null;
@@ -119,6 +126,25 @@ class PathDrawing {
 
 		stroke.push(at);
 		return 'goesOn';
+	}
+
+	/*
+		The stroke being drawn, fitted with curves as it will be when it ends, so it shows smooth
+		while it is drawn. It is fitted again only once it has a new place.
+	*/
+	private strokeFitted(): cool.ObjectPathPoint[] {
+		const stroke = this.stroke ?? [];
+		if (this.fittedStroke?.places !== stroke.length)
+			this.fittedStroke = {
+				places: stroke.length,
+				points: PathFit.fit(
+					stroke,
+					this.strokeTolerance,
+					this.cornerReach,
+					false,
+				),
+			};
+		return this.fittedStroke.points;
 	}
 
 	/// Whether the stroke being drawn has gone anywhere, so it is a stroke and not a click.
@@ -440,7 +466,7 @@ class PathDrawing {
 	public shown(): cool.ObjectPathPolygon[] {
 		if (this.stroke)
 			return this.stroke.length >= 2
-				? this.parts.concat([{ closed: false, points: this.stroke }])
+				? this.parts.concat([{ closed: false, points: this.strokeFitted() }])
 				: this.parts;
 		const drawing = this.next ? this.points.concat([this.next]) : this.points;
 		const closing = this.pressedOnTheStart;
