@@ -23,7 +23,7 @@ class RecentFiles {
 
     /**
      * Returns NSDocumentController's recent docs list as JSON, without the documents that are
-     * open:
+     * open and without the welcome slideshow:
      * [
      *   { "uri": "...", "name": "...", "timestamp": "..."? },
      *   ...
@@ -32,7 +32,9 @@ class RecentFiles {
     static func serialize() -> String {
         let controller = NSDocumentController.shared
         let openFiles = Set(controller.documents.compactMap { $0.fileURL.map(comparable) })
-        let urls = controller.recentDocumentURLs.filter { !openFiles.contains(comparable($0)) }
+        let urls = controller.recentDocumentURLs.filter {
+            !openFiles.contains(comparable($0)) && !DocumentController.isWelcomeSlideshow($0)
+        }
 
         let items: [RecentFile] = urls.map { url in
             RecentFile(
@@ -59,7 +61,7 @@ class RecentFiles {
      * A file URL in a form in which two URLs for the same file are equal: an absolute path, with
      * symbolic links resolved.
      */
-    private static func comparable(_ url: URL) -> URL {
+    static func comparable(_ url: URL) -> URL {
         return url.standardizedFileURL.resolvingSymlinksInPath()
     }
 

@@ -335,6 +335,27 @@ final class DocumentController: NSDocumentController {
         }
     }
 
+    /// The bundled welcome slideshow, welcome/welcome-slideshow.odp.
+    static let welcomeSlideshowURL =
+        Bundle.main.url(forResource: "welcome-slideshow", withExtension: "odp", subdirectory: "welcome")
+
+    /// True for the URL of the welcome slideshow.
+    static func isWelcomeSlideshow(_ url: URL) -> Bool {
+        guard let welcome = welcomeSlideshowURL else { return false }
+        return RecentFiles.comparable(url) == RecentFiles.comparable(welcome)
+    }
+
+    /**
+     * The welcome slideshow is part of the app rather than a document of the user, so it stays
+     * out of the recent documents.
+     */
+    override func noteNewRecentDocumentURL(_ url: URL) {
+        if DocumentController.isWelcomeSlideshow(url) {
+            return
+        }
+        super.noteNewRecentDocumentURL(url)
+    }
+
     /**
      * Opens the bundled welcome file (welcome/welcome-slideshow.odp). automatic is the first
      * start or an update, as opposed to Help > Latest Updates.
@@ -345,7 +366,7 @@ final class DocumentController: NSDocumentController {
             return
         }
 
-        guard let url = Bundle.main.url(forResource: "welcome-slideshow", withExtension: "odp", subdirectory: "welcome") else {
+        guard let url = DocumentController.welcomeSlideshowURL else {
             COWrapper.LOG_ERR("welcome/welcome-slideshow.odp not found in bundle")
             return
         }
