@@ -155,6 +155,33 @@ bool isUserVariable(sal_Int32 nType)
     return false;
 }
 
+// an elbow from the top of rBox down to fBend of its height, across and down into the bottom,
+// starting at the top right when it goes left; a bent connector turned by a quarter draws it
+void setDownwardElbow(oox::drawingml::Shape& rConnector, const awt::Point& rTopLeft,
+                      const awt::Size& rBox, bool bToLeft, double fBend)
+{
+    // turned around its middle, so the box it gets is rBox standing on its side
+    const awt::Size aTurned(rBox.Height, rBox.Width);
+    rConnector.setPosition(awt::Point(rTopLeft.X + rBox.Width / 2 - rBox.Height / 2,
+                                      rTopLeft.Y + rBox.Height / 2 - rBox.Width / 2));
+    rConnector.setSize(aTurned);
+    rConnector.setChildSize(aTurned);
+    rConnector.setRotation(90 * oox::drawingml::PER_DEGREE);
+    // own properties for each connector, the bend is kept there
+    rConnector.setSubType(oox::XML_bentConnector3);
+    rConnector.getCustomShapeProperties() = std::make_shared<oox::drawingml::CustomShapeProperties>(
+        *rConnector.getCustomShapeProperties());
+    oox::drawingml::CustomShapeProperties& rProperties(*rConnector.getCustomShapeProperties());
+    rProperties.setShapePresetType(oox::XML_bentConnector3);
+    oox::drawingml::CustomShapeGuide aBend;
+    aBend.maName = u"adj1"_ustr;
+    aBend.maFormula = OUString::number(static_cast<sal_Int32>(std::round(fBend * 100000.0)));
+    rProperties.getAdjustmentGuideList() = oox::drawingml::CustomShapeGuideContainer();
+    rProperties.getAdjustmentGuideList().push_back(aBend);
+    // mirrored along its own height, which is across once turned
+    rConnector.setFlip(false, !bToLeft);
+}
+
 /**
  * Determines if pShape is (or contains) a presentation of a data node of type
  * nType.
@@ -6416,17 +6443,12 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
             const sal_Int32 nToY(aTargetAt->Y);
             if (nToY <= nFromY)
                 continue;
-            const sal_Int32 nWidth(std::max<sal_Int32>(91440, std::abs(nToX - nFromX)));
-            const awt::Size aElbow(nWidth, nToY - nFromY);
-            pShape->setSize(aElbow);
-            pShape->setChildSize(aElbow);
-            pShape->setPosition(awt::Point(
-                std::min(nFromX, nToX) - (nWidth == 91440 ? 45720 : 0) - aParentAt->X,
-                nFromY - aParentAt->Y));
-            // own copy of the custom shape properties, the mirroring is kept there
-            pShape->getCustomShapeProperties()
-                = std::make_shared<CustomShapeProperties>(*pShape->getCustomShapeProperties());
-            pShape->setFlip(nToX < nFromX, false);
+            const awt::Size aElbow(std::max<sal_Int32>(1, std::abs(nToX - nFromX)),
+                                   nToY - nFromY);
+            setDownwardElbow(*pShape,
+                             awt::Point(std::min(nFromX, nToX) - aParentAt->X,
+                                        nFromY - aParentAt->Y),
+                             aElbow, nToX < nFromX, 0.5);
             continue;
         }
 
@@ -8417,6 +8439,26 @@ static sal_Int32 connectorRouteOf(const LayoutAtom& rAtom)
     return 0;
 }
 
+// whether the connector algorithm below the layout node draws a line, dim 1D, and not an area
+static bool connectorIsLine(const LayoutAtom& rAtom)
+{
+    for (const LayoutAtomPtr& pChild : rAtom.getChildren())
+    {
+        if (dynamic_cast<const LayoutNode*>(pChild.get()))
+            continue;
+        if (const AlgAtom* pAlg = dynamic_cast<const AlgAtom*>(pChild.get()))
+        {
+            if (pAlg->getType() != XML_conn)
+                continue;
+            const auto aDimension = pAlg->getMap().find(XML_dim);
+            return aDimension != pAlg->getMap().end() && aDimension->second == XML_1D;
+        }
+        if (connectorIsLine(*pChild))
+            return true;
+    }
+    return false;
+}
+
 // The nodes are the cells of the grid, and a transition stands in the gap between the two nodes it
 // joins. Along a line that gap is as wide as the transition states for itself, a part of the node,
 // and between two lines it is sp. Every node is one node width wide and as high as the tallest of
@@ -9455,6 +9497,9 @@ void placeUpright(SmartArtDiagram& rDgm, const UprightNode& rNode, double fMiddl
     // the cell's bottom
     const sal_Int32 nGap(static_cast<sal_Int32>(
         (fLevelGap + (1.0 - rNode.fElbowFrom) * rNode.aCell.Height) * fScale));
+    std::map<OUString, const LayoutNode*> aLayoutNodes;
+    if (rDgm.getLayout() && rDgm.getLayout()->getNode())
+        gatherLayoutNodes(*rDgm.getLayout()->getNode(), aLayoutNodes);
     size_t nChild(0);
     for (const ShapePtr& pChild : rNode.pBranch->getChildren())
     {
@@ -9463,25 +9508,40 @@ void placeUpright(SmartArtDiagram& rDgm, const UprightNode& rNode, double fMiddl
         if (nChild >= aChildMiddles.size())
             break;
         const sal_Int32 nTo(aChildMiddles[nChild++]);
-        const sal_Int32 nWidth(std::max<sal_Int32>(91440, std::abs(nTo - nCellMiddle)));
-        const awt::Size aElbow(nWidth, std::max<sal_Int32>(1, nGap));
-        pChild->setPosition(awt::Point(std::min(nCellMiddle, nTo) - (nWidth == 91440 ? 45720 : 0),
-                                       -nGap));
-        pChild->setSize(aElbow);
-        pChild->setChildSize(aElbow);
 
-        // A bent connector draws the elbow once its corner sits on its own left edge, which is
-        // where an adjustment of zero puts it: down from the top left, then across to the bottom
-        // right. Where the child stands left of the cell the connector is mirrored.
-        // Each connector needs custom shape properties of its own, the mirroring is kept there.
-        pChild->setSubType(XML_bentConnector3);
-        pChild->getCustomShapeProperties()
-            = std::make_shared<CustomShapeProperties>(*pChild->getCustomShapeProperties());
-        auto& rProperties(*pChild->getCustomShapeProperties());
-        rProperties.setShapePresetType(XML_bentConnector3);
-        if (rProperties.getAdjustmentGuideList().GetCustomShapeGuideValue(u"adj1"_ustr) < 0)
-            rProperties.getAdjustmentGuideList().push_back({ u"adj1"_ustr, u"0"_ustr });
-        pChild->setFlip(nTo < nCellMiddle, false);
+        // a straight one, connRout stra, runs from the bottom middle of the cell to the top
+        // middle of the child: a line, or an arrow as thick as its stem where it is an area
+        const auto aConnectorNode = aLayoutNodes.find(pChild->getInternalName());
+        if (aConnectorNode != aLayoutNodes.end() && aConnectorNode->second
+            && connectorRouteOf(*aConnectorNode->second) == XML_stra)
+        {
+            const bool bLine(connectorIsLine(*aConnectorNode->second));
+            const double fDx(nTo - nCellMiddle), fDy(nGap);
+            const sal_Int32 nThick(bLine ? 1 : 3600);
+            const awt::Size aLine(static_cast<sal_Int32>(std::max(1.0, std::hypot(fDx, fDy))),
+                                  nThick);
+            pChild->setPosition(awt::Point(
+                static_cast<sal_Int32>((nCellMiddle + nTo) / 2.0 - aLine.Width / 2.0),
+                static_cast<sal_Int32>(-nGap / 2.0 - aLine.Height / 2.0)));
+            pChild->setSize(aLine);
+            pChild->setChildSize(aLine);
+            pChild->setRotation(
+                static_cast<sal_Int32>(basegfx::rad2deg(atan2(fDy, fDx)) * PER_DEGREE));
+            const sal_Int32 nType(bLine ? XML_line : XML_rightArrow);
+            pChild->setSubType(nType);
+            pChild->getCustomShapeProperties()
+                = std::make_shared<CustomShapeProperties>(*pChild->getCustomShapeProperties());
+            pChild->getCustomShapeProperties()->setShapePresetType(nType);
+            rDgm.getLaidOutSideways().insert(pChild.get());
+            continue;
+        }
+
+        const awt::Size aElbow(std::max<sal_Int32>(1, std::abs(nTo - nCellMiddle)),
+                               std::max<sal_Int32>(1, nGap));
+        // across in the middle of the level gap, below the part of the cell it starts in
+        const double fBend(nGap > 0 ? (nGap - fLevelGap * fScale / 2.0) / nGap : 0.5);
+        setDownwardElbow(*pChild, awt::Point(std::min(nCellMiddle, nTo), -nGap), aElbow,
+                         nTo < nCellMiddle, fBend);
         rDgm.getLaidOutSideways().insert(pChild.get());
     }
 }
@@ -15627,6 +15687,25 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
             if( !rColor.maTextFillColors.maColors.empty() )
                 rShape->getShapeStyleRefs()[XML_fontRef].maPhClr
                     = DiagramColor::getColorByIndex(rColor.maTextFillColors, nColorIdx, nColorCnt);
+        }
+    }
+
+    // a connector of one dimension is a line, its arrows are line ends: at its end unless endSty
+    // says noArr, at its start where begSty says arr
+    if (const AlgAtom* pAlg = algorithmOf(rDgm, *this, rPresNode);
+        pAlg && pAlg->getType() == XML_conn)
+    {
+        const AlgAtom::ParamMap& rParams(pAlg->getMap());
+        const auto aDimension(rParams.find(XML_dim));
+        if (aDimension != rParams.end() && aDimension->second == XML_1D)
+        {
+            const auto aBegin(rParams.find(XML_begSty));
+            const auto aEnd(rParams.find(XML_endSty));
+            LineProperties& rLine(rShape->getLineProperties());
+            if (aEnd == rParams.end() || aEnd->second != XML_noArr)
+                rLine.maEndArrow.moArrowType = XML_arrow;
+            if (aBegin != rParams.end() && aBegin->second == XML_arr)
+                rLine.maStartArrow.moArrowType = XML_arrow;
         }
     }
 

@@ -3588,6 +3588,71 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontStatedAsPartFitsOnItsOwn)
     CPPUNIT_ASSERT_EQUAL(22.0, aFirstRunHeight(u"Thirteen"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHierarchyElbowBendsHalfWayDownTheGap)
+{
+    // each child hangs on an elbow: down from the root, across half way down the gap and down
+    // into the child, a bent connector turned by a quarter
+    createSdImpressDoc("pptx/smartart-hierarchy-elbow-bends-in-gap.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    std::vector<uno::Reference<drawing::XShape>> aElbows;
+    collectShapesWithGeometry(xDiagram, u"ooxml-bentConnector3"_ustr, aElbows);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aElbows.size());
+    for (const auto& xElbow : aElbows)
+    {
+        uno::Reference<beans::XPropertySet> xProperties(xElbow, uno::UNO_QUERY_THROW);
+        sal_Int32 nTurn(0);
+        xProperties->getPropertyValue(u"RotateAngle"_ustr) >>= nTurn;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9000), nTurn % 18000);
+        comphelper::SequenceAsHashMap aGeometry(
+            xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+        const auto aAdjustments(
+            aGeometry[u"AdjustmentValues"_ustr]
+                .get<uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>());
+        CPPUNIT_ASSERT(aAdjustments.hasElements());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(50000), aAdjustments[0].Value.get<sal_Int32>());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHierarchyStraightConnectorsRunStraight)
+{
+    // the connectors say connRout stra and go straight from the root to each child, none bends
+    createSdImpressDoc("pptx/smartart-hierarchy-straight-connectors.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    CPPUNIT_ASSERT(drawnBoxesOf(xDiagram, u"ooxml-bentConnector3"_ustr).empty());
+    const tools::Rectangle aRoot(
+        SdrObject::getSdrObjectFromXShape(findChildShapeByText(xDiagram, u"Firma"_ustr))
+            ->GetSnapRect());
+    const std::vector<tools::Rectangle> aConnectors(
+        drawnBoxesOf(xDiagram, u"ooxml-rightArrow"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aConnectors.size());
+    // all three start at the bottom middle of the root
+    for (const tools::Rectangle& rConnector : aConnectors)
+    {
+        CPPUNIT_ASSERT_LESS(tools::Long(20), std::abs(rConnector.Top() - aRoot.Bottom()));
+        CPPUNIT_ASSERT_LESSEQUAL(aRoot.Center().X() + 20, rConnector.Left());
+        CPPUNIT_ASSERT_GREATEREQUAL(aRoot.Center().X() - 20, rConnector.Right());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testLineConnectorHasItsArrowAtTheEnd)
+{
+    // the elbows are lines, dim 1D, with endSty arr: each has an arrow at its end only
+    createSdImpressDoc("pptx/smartart-line-connector-arrows.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    std::vector<uno::Reference<drawing::XShape>> aElbows;
+    collectShapesWithGeometry(xDiagram, u"ooxml-bentConnector3"_ustr, aElbows);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aElbows.size());
+    for (const auto& xElbow : aElbows)
+    {
+        uno::Reference<beans::XPropertySet> xProperties(xElbow, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(!xProperties->getPropertyValue(u"LineEndName"_ustr).get<OUString>().isEmpty());
+        CPPUNIT_ASSERT(xProperties->getPropertyValue(u"LineStartName"_ustr).get<OUString>().isEmpty());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
