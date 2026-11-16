@@ -1511,33 +1511,6 @@ class ConnectorRouter {
 		};
 	}
 
-	/// Draws a run as a hairline on a context set up in twips, curves where the run has them.
-	public static strokeRun(
-		context: CanvasRenderingContext2D,
-		points: cool.ObjectPathPoint[],
-		color: string,
-	): void {
-		if (points.length < 2) return;
-		context.save();
-		context.strokeStyle = color;
-		context.lineWidth = 1 / app.twipsToPixels;
-		context.beginPath();
-		context.moveTo(points[0].x, points[0].y);
-		for (let n = 1; n < points.length; ++n) {
-			const from = points[n - 1];
-			const to = points[n];
-			const c1x = from.aheadX ?? from.x;
-			const c1y = from.aheadY ?? from.y;
-			const c2x = to.behindX ?? to.x;
-			const c2y = to.behindY ?? to.y;
-			if (from.aheadX !== undefined || to.behindX !== undefined)
-				context.bezierCurveTo(c1x, c1y, c2x, c2y, to.x, to.y);
-			else context.lineTo(to.x, to.y);
-		}
-		context.stroke();
-		context.restore();
-	}
-
 	/// The run of a connector as the engine drew it: the first line its primitives draw, taken
 	/// from them by the line geometry extractor, so nothing here knows how the tree is built.
 	public static trackOf(

@@ -1420,23 +1420,11 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 		if (!this.start || !this.end) return false;
 		context.save();
 		context.globalAlpha = whole ? 1 : 0.5;
-		const measured = this.measured();
-		if (measured) {
-			SelectionSection.strokeOutline(
-				context,
-				measured.outline,
-				HandleLook.outlineColour,
-			);
-		} else {
-			const from = new cool.SimplePoint(this.start.x, this.start.y);
-			const to = new cool.SimplePoint(this.end.x, this.end.y);
-			context.strokeStyle = HandleLook.outlineColour;
-			context.lineWidth = Math.max(1, app.dpiScale);
-			context.beginPath();
-			context.moveTo(from.vX, from.vY);
-			context.lineTo(to.vX, to.vY);
-			context.stroke();
-		}
+		SelectionSection.strokeOutline(
+			context,
+			this.measured()?.outline ?? [{ points: [this.start, this.end] }],
+			HandleLook.outlineColour,
+		);
 		context.restore();
 		return true;
 	}

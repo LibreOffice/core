@@ -2490,7 +2490,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 				matrix,
 			);
 			if (run)
-				ConnectorRouter.strokeRun(this.context, run, HandleLook.outlineOfADrag);
+				SelectionSection.strokeOutline(
+					this.context,
+					[{ closed: false, points: run }],
+					HandleLook.outlineOfADrag,
+				);
 		}
 	}
 
