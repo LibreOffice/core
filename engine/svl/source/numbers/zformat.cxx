@@ -2041,15 +2041,6 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
     return aTmp.makeStringAndClear();
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& rOutString,
-                                          const NativeNumberWrapper& rNatNum,
-                                          const SvNFLanguageData& rCurrentLang) const
-{
-    OUString sTemp;
-    ImpGetOutputStandard(fNumber, sTemp, rNatNum, rCurrentLang);
-    rOutString = sTemp;
-}
-
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString,
                                           const NativeNumberWrapper& rNatNum,
                                           const SvNFLanguageData& rCurrentLang) const
@@ -2509,7 +2500,6 @@ bool SvNumberformat::GetOutputString(double fNumber,
                                      const SvNFLanguageData& rCurrentLang,
                                      bool bStarFlag) const
 {
-    bool bRes = false;
     OutString.clear();
     *ppColor = nullptr; // No color change
     if (eType & SvNumFormatType::LOGICAL && sFormatstring == rScan.GetKeywords()[NF_KEY_BOOLEAN])
@@ -2524,15 +2514,11 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         return false;
     }
-    // Assigned whole on the number paths; the date and time paths reserve room themselves.
-    OUStringBuffer sBuff(0);
     if (eType & SvNumFormatType::TEXT)
     {
-        ImpGetOutputStandard(fNumber, sBuff, rNatNum, rCurrentLang);
-        OutString = sBuff.makeStringAndClear();
+        ImpGetOutputStandard(fNumber, OutString, rNatNum, rCurrentLang);
         return false;
     }
-    bool bHadStandard = false;
     if (bStandard) // Individual standard formats
     {
         if (rCurrentLang.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION) // All number format InputLine
@@ -2590,116 +2576,103 @@ bool SvNumberformat::GetOutputString(double fNumber,
                                 rtl_math_DecimalPlaces_Max,
                                 rCurrentLang.GetNumDecimalSep()[0], true);
                 }
-                return false;
             }
-            ImpGetOutputStandard(fNumber, sBuff, rNatNum, rCurrentLang);
-            bHadStandard = true;
-            break;
-        case SvNumFormatType::DATE:
-            bRes |= ImpGetDateOutput(fNumber, 0, bStarFlag, rNatNum, rCurrentLang, sBuff);
-            bHadStandard = true;
-            break;
-        case SvNumFormatType::TIME:
-            bRes |= ImpGetTimeOutput(fNumber, 0, bStarFlag, rNatNum, rCurrentLang, sBuff);
-            bHadStandard = true;
-            break;
-        case SvNumFormatType::DATETIME:
-            bRes |= ImpGetDateTimeOutput(fNumber, 0, bStarFlag, rNatNum, rCurrentLang, sBuff);
-            bHadStandard = true;
-            break;
-        default: break;
-        }
-    }
-    if ( !bHadStandard )
-    {
-        sal_uInt16 nIx = GetSubformatIndex ( fNumber ); // Index of the partial format
-        if (fNumber < 0.0 &&
-                ((nIx == 0 && IsFirstSubformatRealNegative()) || // 1st, usually positive subformat
-                 (nIx == 1 && IsSecondSubformatRealNegative()))) // 2nd, usually negative subformat
-        {
-            fNumber = -fNumber; // eliminate sign
-        }
-        *ppColor = NumFor[nIx].GetColor();
-        const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-        const sal_uInt16 nCnt = NumFor[nIx].GetCount();
-        if (nCnt == 0 && rInfo.eScannedType == SvNumFormatType::EMPTY)
-        {
-            return false; // Empty => nothing
-        }
-        else if (nCnt == 0) // Else Standard Format
-        {
-            ImpGetOutputStandard(fNumber, sBuff, rNatNum, rCurrentLang);
-            OutString = sBuff.makeStringAndClear();
+            else
+                ImpGetOutputStandard(fNumber, OutString, rNatNum, rCurrentLang);
             return false;
-        }
-        switch (rInfo.eScannedType)
-        {
-        case SvNumFormatType::TEXT:
-        case SvNumFormatType::DEFINED:
-            for (sal_uInt16 i = 0; i < nCnt; i++)
-            {
-                switch (rInfo.nTypeArray[i])
-                {
-                case NF_SYMBOLTYPE_STAR:
-                    if( bStarFlag )
-                    {
-                        bRes = lcl_appendStarFillChar( sBuff, rInfo.sStrArray[i]);
-                    }
-                    break;
-                case NF_SYMBOLTYPE_BLANK:
-                    if (rInfo.sStrArray[i].getLength() >= 2)
-                        InsertBlanks(sBuff, sBuff.getLength(), rInfo.sStrArray[i][1] );
-                    break;
-                case NF_SYMBOLTYPE_STRING:
-                case NF_SYMBOLTYPE_CURRENCY:
-                    sBuff.append(rInfo.sStrArray[i]);
-                    break;
-                case NF_SYMBOLTYPE_THSEP:
-                    if (rInfo.nThousand == 0)
-                    {
-                        sBuff.append(rInfo.sStrArray[i]);
-                    }
-                    break;
-                default:
-                    break;
-                }
-            }
-            break;
         case SvNumFormatType::DATE:
-            bRes |= ImpGetDateOutput(fNumber, nIx, bStarFlag, rNatNum, rCurrentLang, sBuff);
-            break;
+            return ImpGetDateOutput(fNumber, 0, bStarFlag, rNatNum, rCurrentLang, OutString);
         case SvNumFormatType::TIME:
-            bRes |= ImpGetTimeOutput(fNumber, nIx, bStarFlag, rNatNum, rCurrentLang, sBuff);
-                break;
+            return ImpGetTimeOutput(fNumber, 0, bStarFlag, rNatNum, rCurrentLang, OutString);
         case SvNumFormatType::DATETIME:
-            bRes |= ImpGetDateTimeOutput(fNumber, nIx, bStarFlag, rNatNum, rCurrentLang, sBuff);
-            break;
-        case SvNumFormatType::NUMBER:
-        case SvNumFormatType::PERCENT:
-        case SvNumFormatType::CURRENCY:
-            bRes |= ImpGetNumberOutput(fNumber, nIx, bStarFlag, rNatNum, sBuff);
-            break;
-        case SvNumFormatType::LOGICAL:
-            bRes |= ImpGetLogicalOutput(fNumber, nIx, rNatNum, sBuff);
-            break;
-        case SvNumFormatType::FRACTION:
-            bRes |= ImpGetFractionOutput(fNumber, nIx, bStarFlag, rNatNum, sBuff);
-            break;
-        case SvNumFormatType::SCIENTIFIC:
-            bRes |= ImpGetScientificOutput(fNumber, nIx, bStarFlag, rNatNum, sBuff);
-            break;
+            return ImpGetDateTimeOutput(fNumber, 0, bStarFlag, rNatNum, rCurrentLang, OutString);
         default: break;
         }
     }
-    OutString = sBuff.makeStringAndClear();
-    return bRes;
+
+    sal_uInt16 nIx = GetSubformatIndex ( fNumber ); // Index of the partial format
+    if (fNumber < 0.0 &&
+            ((nIx == 0 && IsFirstSubformatRealNegative()) || // 1st, usually positive subformat
+             (nIx == 1 && IsSecondSubformatRealNegative()))) // 2nd, usually negative subformat
+    {
+        fNumber = -fNumber; // eliminate sign
+    }
+    *ppColor = NumFor[nIx].GetColor();
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    const sal_uInt16 nCnt = NumFor[nIx].GetCount();
+    if (nCnt == 0 && rInfo.eScannedType == SvNumFormatType::EMPTY)
+    {
+        return false; // Empty => nothing
+    }
+    else if (nCnt == 0) // Else Standard Format
+    {
+        ImpGetOutputStandard(fNumber, OutString, rNatNum, rCurrentLang);
+        return false;
+    }
+    switch (rInfo.eScannedType)
+    {
+    case SvNumFormatType::TEXT:
+    case SvNumFormatType::DEFINED:
+    {
+        OUStringBuffer sBuff(0);
+        bool bRes = false;
+        for (sal_uInt16 i = 0; i < nCnt; i++)
+        {
+            switch (rInfo.nTypeArray[i])
+            {
+            case NF_SYMBOLTYPE_STAR:
+                if( bStarFlag )
+                {
+                    bRes = lcl_appendStarFillChar( sBuff, rInfo.sStrArray[i]);
+                }
+                break;
+            case NF_SYMBOLTYPE_BLANK:
+                if (rInfo.sStrArray[i].getLength() >= 2)
+                    InsertBlanks(sBuff, sBuff.getLength(), rInfo.sStrArray[i][1] );
+                break;
+            case NF_SYMBOLTYPE_STRING:
+            case NF_SYMBOLTYPE_CURRENCY:
+                sBuff.append(rInfo.sStrArray[i]);
+                break;
+            case NF_SYMBOLTYPE_THSEP:
+                if (rInfo.nThousand == 0)
+                {
+                    sBuff.append(rInfo.sStrArray[i]);
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        OutString = sBuff.makeStringAndClear();
+        return bRes;
+    }
+    case SvNumFormatType::DATE:
+        return ImpGetDateOutput(fNumber, nIx, bStarFlag, rNatNum, rCurrentLang, OutString);
+    case SvNumFormatType::TIME:
+        return ImpGetTimeOutput(fNumber, nIx, bStarFlag, rNatNum, rCurrentLang, OutString);
+    case SvNumFormatType::DATETIME:
+        return ImpGetDateTimeOutput(fNumber, nIx, bStarFlag, rNatNum, rCurrentLang, OutString);
+    case SvNumFormatType::NUMBER:
+    case SvNumFormatType::PERCENT:
+    case SvNumFormatType::CURRENCY:
+        return ImpGetNumberOutput(fNumber, nIx, bStarFlag, rNatNum, OutString);
+    case SvNumFormatType::LOGICAL:
+        return ImpGetLogicalOutput(fNumber, nIx, rNatNum, OutString);
+    case SvNumFormatType::FRACTION:
+        return ImpGetFractionOutput(fNumber, nIx, bStarFlag, rNatNum, OutString);
+    case SvNumFormatType::SCIENTIFIC:
+        return ImpGetScientificOutput(fNumber, nIx, bStarFlag, rNatNum, OutString);
+    default:
+        return false;
+    }
 }
 
 bool SvNumberformat::ImpGetScientificOutput(double fNumber,
                                             sal_uInt16 nIx,
                                             bool bStarFlag,
                                             const NativeNumberWrapper& rNatNum,
-                                            OUStringBuffer& sStr) const
+                                            OUString& rOutString) const
 {
     bool bRes = false;
     bool bSign = false;
@@ -2716,6 +2689,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         fNumber = -fNumber;
     }
 
+    OUStringBuffer sStr(0);
     ::rtl::math::doubleToUStringBuffer( sStr, fNumber,
                                          rtl_math_StringFormat_E,
                                          rInfo.nCntPre + rInfo.nCntPost - 1, '.' );
@@ -2843,7 +2817,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         sStr.insert(0, '-');
     }
     sStr.append(ExpStr);
-
+    rOutString = sStr.makeStringAndClear();
     return bRes;
 }
 
@@ -2935,7 +2909,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
                                           const NativeNumberWrapper& rNatNum,
-                                          OUStringBuffer& sBuff) const
+                                          OUString& rOutString) const
 {
     bool bRes = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
@@ -2951,13 +2925,13 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 
     if (fNum > D_MAX_U_INT32 || rInfo.nCntExp > 9) // Too large
     {
-        sBuff = ImpSvNumberformatScan::sErrStr;
+        rOutString = ImpSvNumberformatScan::sErrStr;
         return false;
     }
     if (rInfo.nCntExp == 0)
     {
         SAL_WARN( "svl.numbers", "SvNumberformat:: Fraction, nCntExp == 0");
-        sBuff.truncate();
+        rOutString.clear();
         return false;
     }
 
@@ -2969,7 +2943,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 
         if (fNum1 > D_MAX_INTEGER)
         {
-            sBuff = ImpSvNumberformatScan::sErrStr;
+            rOutString = ImpSvNumberformatScan::sErrStr;
             return false;
         }
         nFrac = static_cast<sal_Int64>(floor(fNum1));
@@ -3080,13 +3054,9 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         bRes |= ImpNumberFillWithThousands(rNatNum, sStr, fNumber, k, j, nIx,
                                            rInfo.nCntPre, bStarFlag);
     }
-    if (bSign && (nFrac != 0 || fNum != 0.0))
-    {
-        sBuff.insert(0, '-'); // Not -0
-    }
-    sBuff.append(sStr);
-    sBuff.append(sFrac);
-    sBuff.append(sDiv);
+
+    rOutString = RepeatedUChar('-', bSign && (nFrac != 0 || fNum != 0.0) ? 1 : 0) // Not -0
+                 + sStr + sFrac + sDiv;
     return bRes;
 }
 
@@ -3127,10 +3097,9 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
                                       bool bStarFlag,
                                       const NativeNumberWrapper& rNatNum,
                                       const SvNFLanguageData& rCurrentLang,
-                                      OUStringBuffer& sBuff) const
+                                      OUString& rOutString) const
 {
     using namespace ::com::sun::star::i18n;
-    sBuff.ensureCapacity(16);
     bool bCalendarSet = false;
     const double fNumberOrig = fNumber;
     bool bRes = false;
@@ -3181,7 +3150,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         }
         if (fTime > D_MAX_U_INT32)
         {
-            sBuff = ImpSvNumberformatScan::sErrStr;
+            rOutString = ImpSvNumberformatScan::sErrStr;
             return false;
         }
         sal_uInt32 nSeconds = static_cast<sal_uInt32>(fTime);
@@ -3238,6 +3207,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         }
     }
     const sal_uInt16 nCnt = NumFor[nIx].GetCount();
+    OUStringBuffer sBuff(16);
     for (sal_uInt16 i = 0; i < nCnt; i++)
     {
         sal_Int32 nLen;
@@ -3329,6 +3299,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     {
         sBuff.insert(0, '-');
     }
+    rOutString = sBuff.makeStringAndClear();
     return bRes;
 }
 
@@ -3757,7 +3728,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                       bool bStarFlag,
                                       const NativeNumberWrapper& rNatNum,
                                       const SvNFLanguageData& rCurrentLang,
-                                      OUStringBuffer& sBuff) const
+                                      OUString& rOutString) const
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
@@ -3765,10 +3736,10 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     CalendarWrapper& rCal = *rCurrentLang.GetCalendar();
     if (!lcl_getValidDate( DateTime( rScan.GetNullDate() ), rCal.getEpochStart(), fNumber))
     {
-        sBuff = ImpSvNumberformatScan::sErrStr;
+        rOutString = ImpSvNumberformatScan::sErrStr;
         return false;
     }
-    sBuff.ensureCapacity(16);
+    OUStringBuffer sBuff(16);
     rCal.setLocalDateTime( fNumber );
     int nUseMonthCase = 0; // Not decided yet
     OUString aOrgCalendar; // empty => not changed yet
@@ -4023,6 +3994,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     {
         rCal.loadCalendar( aOrgCalendar, rLoc().getLanguageTag().getLocale() );  // restore calendar
     }
+    rOutString = sBuff.makeStringAndClear();
     return bRes;
 }
 
@@ -4031,7 +4003,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                                           bool bStarFlag,
                                           const NativeNumberWrapper& rNatNum,
                                           const SvNFLanguageData& rCurrentLang,
-                                          OUStringBuffer& sBuff) const
+                                          OUString& rOutString) const
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
@@ -4039,10 +4011,9 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     CalendarWrapper& rCal = *rCurrentLang.GetCalendar();
     if (!lcl_getValidDate( DateTime( rScan.GetNullDate() ), rCal.getEpochStart(), fNumber))
     {
-        sBuff = ImpSvNumberformatScan::sErrStr;
+        rOutString = ImpSvNumberformatScan::sErrStr;
         return false;
     }
-    sBuff.ensureCapacity(16);
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     bool bInputLine;
@@ -4154,6 +4125,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     const sal_uInt16 nCnt = NumFor[nIx].GetCount();
     sal_Int32 nLen;
     OUString aYear;
+    OUStringBuffer sBuff(16);
     for (sal_uInt16 i = 0; i < nCnt; i++)
     {
         switch (rInfo.nTypeArray[i])
@@ -4381,17 +4353,19 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     {
         rCal.loadCalendar( aOrgCalendar, rLoc().getLanguageTag().getLocale() );  // restore calendar
     }
+    rOutString = sBuff.makeStringAndClear();
     return bRes;
 }
 
 bool SvNumberformat::ImpGetLogicalOutput(double fNumber,
                                          sal_uInt16 nIx,
                                          const NativeNumberWrapper& rNatNum,
-                                         OUStringBuffer& sStr) const
+                                         OUString& rOutString) const
 {
     bool bRes = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const sal_uInt16 nCnt = NumFor[nIx].GetCount();
+    OUStringBuffer sStr(0);
     for (sal_uInt16 j = 0; j < nCnt; ++j)
     {
         switch (rInfo.nTypeArray[j])
@@ -4405,6 +4379,7 @@ bool SvNumberformat::ImpGetLogicalOutput(double fNumber,
         }
     }
     ::impTransliterate(sStr, NumFor[nIx].GetNatNum(), rNatNum);
+    rOutString = sStr.makeStringAndClear();
     return bRes;
 }
 
@@ -4412,7 +4387,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                                         sal_uInt16 nIx,
                                         bool bStarFlag,
                                         const NativeNumberWrapper& rNatNum,
-                                        OUStringBuffer& sStr) const
+                                        OUString& rOutString) const
 {
     bool bRes = false;
     bool bSign;
@@ -4438,13 +4413,14 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
         else
         {
-            sStr = ImpSvNumberformatScan::sErrStr;
+            rOutString = ImpSvNumberformatScan::sErrStr;
             return false;
         }
     }
     sal_uInt16 i, j;
     sal_Int32 nDecPos = -1;
     bool bInteger = false;
+    OUStringBuffer sStr(0);
     if ( rInfo.nThousand != FLAG_STANDARD_IN_FORMAT )
     {
         // Special formatting only if no GENERAL keyword in format code
@@ -4524,6 +4500,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         sStr.insert(0, '-');
     }
     ::impTransliterate(sStr, NumFor[nIx].GetNatNum(), rNatNum);
+    rOutString = sStr.makeStringAndClear();
     return bRes;
 }
 
@@ -4631,10 +4608,9 @@ bool SvNumberformat::ImpDecimalFill(const NativeNumberWrapper& rNatNum,
                 break;
             case NF_KEY_GENERAL: // Standard in the String
             {
-                OUStringBuffer sNum;
+                OUString sNum;
                 ImpGetOutputStandard(rNumber, sNum, rNatNum, GetCurrentLanguageData());
-                sNum.stripStart('-');
-                sStr.insert(k, sNum);
+                sStr.insert(k, sNum.subView(sNum.startsWith("-") ? 1 : 0));
                 break;
             }
             default:
@@ -4799,10 +4775,9 @@ bool SvNumberformat::ImpNumberFillWithThousands( const NativeNumberWrapper& rNat
             break;
         case NF_KEY_GENERAL: // "General" in string
         {
-            OUStringBuffer sNum;
+            OUString sNum;
             ImpGetOutputStandard(rNumber, sNum, rNatNum, GetCurrentLanguageData());
-            sNum.stripStart('-');
-            sBuff.insert(k, sNum);
+            sBuff.insert(k, sNum.subView(sNum.startsWith("-") ? 1 : 0));
             break;
         }
         default:
@@ -4936,11 +4911,10 @@ bool SvNumberformat::ImpNumberFill( const NativeNumberWrapper& rNatNum,
             break;
         case NF_KEY_GENERAL: // Standard in the String
         {
-            OUStringBuffer sNum;
+            OUString sNum;
             bFoundNumber = true;
             ImpGetOutputStandard(rNumber, sNum, rNatNum, GetCurrentLanguageData());
-            sNum.stripStart('-');
-            sBuff.insert(k, sNum);
+            sBuff.insert(k, sNum.subView(sNum.startsWith("-") ? 1 : 0));
         }
         break;
         case NF_SYMBOLTYPE_FRAC_FDIV: // Do Nothing

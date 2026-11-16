@@ -613,9 +613,6 @@ private:
     SVL_DLLPRIVATE void ImpGetOutputStandard(double& fNumber, OUString& OutString,
                                              const NativeNumberWrapper& rNatNum,
                                              const SvNFLanguageData& rCurrentLang) const;
-    SVL_DLLPRIVATE void ImpGetOutputStandard(double& fNumber, OUStringBuffer& OutString,
-                                             const NativeNumberWrapper& rNatNum,
-                                             const SvNFLanguageData& rCurrentLang) const;
     SVL_DLLPRIVATE void ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutString, sal_uInt16 nPrecision,
                                                    const NativeNumberWrapper& rNatNum,
                                                    const SvNFLanguageData& rCurrentLang) const;
@@ -690,31 +687,31 @@ private:
                                              sal_uInt16 nIx,
                                              bool bStarFlag,
                                              const NativeNumberWrapper& rNatNum,
-                                             OUStringBuffer& OutString) const;
+                                             OUString& rOutString) const;
     SVL_DLLPRIVATE bool ImpGetScientificOutput(double fNumber,
                                                sal_uInt16 nIx,
                                                bool bStarFlag,
                                                const NativeNumberWrapper& rNatNum,
-                                               OUStringBuffer& OutString) const;
+                                               OUString& rOutString) const;
 
     SVL_DLLPRIVATE bool ImpGetDateOutput( double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
                                           const NativeNumberWrapper& rNatNum,
                                           const SvNFLanguageData& rCurrentLang,
-                                          OUStringBuffer& OutString ) const;
+                                          OUString& rOutString ) const;
     SVL_DLLPRIVATE bool ImpGetTimeOutput( double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
                                           const NativeNumberWrapper& rNatNum,
                                           const SvNFLanguageData& rCurrentLang,
-                                          OUStringBuffer& OutString ) const;
+                                          OUString& rOutString ) const;
     SVL_DLLPRIVATE bool ImpGetDateTimeOutput( double fNumber,
                                               sal_uInt16 nIx,
                                               bool bStarFlag,
                                               const NativeNumberWrapper& rNatNum,
                                               const SvNFLanguageData& rCurrentLang,
-                                              OUStringBuffer& OutString ) const;
+                                              OUString& rOutString ) const;
 
     // Switches to the "gregorian" calendar if the current calendar is
     // non-"gregorian" and the era is a "Dummy" era of a calendar which doesn't
@@ -734,13 +731,13 @@ private:
     SVL_DLLPRIVATE bool ImpGetLogicalOutput( double fNumber,
                                              sal_uInt16 nIx,
                                              const NativeNumberWrapper& rNatNum,
-                                             OUStringBuffer& OutString) const;
+                                             OUString& rOutString) const;
 
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
                                             sal_uInt16 nIx,
                                             bool bStarFlag,
                                             const NativeNumberWrapper& rNatNum,
-                                            OUStringBuffer& OutString) const;
+                                            OUString& rOutString) const;
 
     SVL_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );
 
