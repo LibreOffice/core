@@ -46,6 +46,35 @@ interface SlideLayer {
 	texture: WebGLTexture | null;
 	// The stand-in colors and text look the texture is drawn with, as JSON.
 	look: string;
+	// True for a layer of the owner drawn apart from its text: the owner without any text, or a
+	// piece of the text.
+	split?: boolean;
+	// The key of the piece of text the layer holds. Absent for any other layer.
+	piece?: number;
+	// The pieces of one paragraph, which are cut out of one drawing of it. Absent for a layer
+	// that holds no piece.
+	cut?: PieceCut;
+}
+
+/// A piece of a paragraph to draw as a layer of its own: the part of the paragraph of the owner
+/// object that lies inside frame, which maps the unit square onto it in slide twips. key is the
+/// id that the piece's state is given by, which is the id of no object.
+interface SlidePiece {
+	key: number;
+	owner: number;
+	paragraph: number;
+	frame: cool.Matrix2D;
+}
+
+/// The layers of the pieces of one paragraph and the canvas rectangle that holds all of them.
+/// painted is true once the paragraph is drawn and the pieces are cut out of it.
+interface PieceCut {
+	owner: number;
+	paragraph: number;
+	area: number[];
+	layers: SlideLayer[];
+	corners: cool.Point[][];
+	painted: boolean;
 }
 
 // The margin around a layer's rectangle, in pixels, for the antialiased edge.
@@ -66,6 +95,10 @@ class VectorSlideLayers {
 	private layers: SlideLayer[] = [];
 	// The layers whose textures are not painted yet, in paint order.
 	private unpainted: SlideLayer[] = [];
+	// The pieces of text the layers hold, null where there are none, and the objects they are
+	// the text of.
+	private pieces: SlidePiece[] | null = null;
+	private splitOwners = new Set<number>();
 	// The slide and tree the layers are drawn from, null while there are none.
 	private slideHash: string | null = null;
 	private data: cool.VectorPrimitivesData | null = null;
@@ -184,13 +217,15 @@ class VectorSlideLayers {
 		master: cool.VectorPrimitivesData | null,
 		canvasWidth: number,
 		canvasHeight: number,
+		pieces: SlidePiece[] | null = null,
 	): boolean {
 		return (
 			this.slideHash === slideHash &&
 			this.data === data &&
 			this.master === master &&
 			this.canvasWidth === canvasWidth &&
-			this.canvasHeight === canvasHeight
+			this.canvasHeight === canvasHeight &&
+			this.pieces === pieces
 		);
 	}
 
@@ -198,6 +233,9 @@ class VectorSlideLayers {
 	/// that an animation moves on their own. master is the tree of the master of the slide and
 	/// masterVideoIds the ids of its objects that hold a video. The textures are painted by
 	/// paintNext, one layer at a time, and the next draw paints the ones still left.
+	/// Each owner of pieces, which must be a target without paragraphs of its own, also gets a
+	/// layer of itself without its text and a layer for each of its pieces, right after its
+	/// own layer. drawLayers draws them in place of that layer for the owners it is given.
 	public build(
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
@@ -206,11 +244,13 @@ class VectorSlideLayers {
 		canvasHeight: number,
 		master: cool.VectorPrimitivesData | null = null,
 		masterVideoIds: Set<number> = new Set(),
+		pieces: SlidePiece[] | null = null,
 	): void {
 		this.clear();
 		this.slideHash = slideHash;
 		this.data = data;
 		this.master = master;
+		this.pieces = pieces;
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 		this.scaleX = canvasWidth / data.slideWidth;
@@ -221,6 +261,12 @@ class VectorSlideLayers {
 			master,
 			masterVideoIds,
 		);
+		const piecesByOwner = new Map<number, SlidePiece[]>();
+		for (const piece of pieces ?? []) {
+			const owned = piecesByOwner.get(piece.owner);
+			if (owned) owned.push(piece);
+			else piecesByOwner.set(piece.owner, [piece]);
+		}
 		for (const run of runs) {
 			const pixels = this._runPixels(data, run);
 			if (!pixels) continue;
@@ -235,6 +281,8 @@ class VectorSlideLayers {
 					),
 				);
 			}
+			const owned = piecesByOwner.get(run.owner);
+			if (owned) this._addSplitLayers(run.owner, run, pixels, owned);
 		}
 		// A run leaves out the paragraphs with layers of their own, so every layer is made
 		// before any is painted.
@@ -280,12 +328,15 @@ class VectorSlideLayers {
 
 	/// Draw layers into the frame begin started: all of them, or those whose run owners holds,
 	/// where undefined stands for the runs that no target owns. A layer of a target is drawn in
-	/// the state states gives it, and any other layer in restState.
+	/// the state states gives it, a piece in the state of its key, and any other layer in
+	/// restState. An owner of pieces in split is drawn without its text and with its pieces,
+	/// any other owner with its text.
 	public drawLayers(
 		states: Map<number, cool.ObjectRenderState> | undefined,
 		videos?: Map<number, ContentFrame>,
 		owners?: ReadonlySet<number | undefined>,
 		restState?: cool.DrawState,
+		split?: ReadonlySet<number>,
 	): void {
 		const data = this.data;
 		if (this.context.isDisposed() || !data) return;
@@ -293,6 +344,12 @@ class VectorSlideLayers {
 		for (const layer of this.layers) {
 			const owner = layer.run.owner;
 			if (owners && !owners.has(owner)) continue;
+			if (
+				owner !== undefined &&
+				!!layer.split !== !!split?.has(owner) &&
+				(layer.split || this.splitOwners.has(owner))
+			)
+				continue;
 			const state =
 				owner === undefined ? restState : this._stateOf(layer, states);
 			if (state?.hidden) continue;
@@ -304,7 +361,7 @@ class VectorSlideLayers {
 				continue;
 
 			const look = VectorSlideLayers._lookOf(state);
-			if (look !== layer.look) {
+			if (look !== layer.look && layer.piece === undefined) {
 				layer.look = look;
 				layer.pixels = this._grownPixels(
 					layer.ownPixels,
@@ -313,7 +370,11 @@ class VectorSlideLayers {
 				this._paint(layer, data, state);
 			}
 			this._drawQuad(layer.texture, layer.pixels, state);
-			if (videos?.size && layer.paragraph === undefined)
+			if (
+				videos?.size &&
+				layer.paragraph === undefined &&
+				layer.piece === undefined
+			)
 				this._drawVideos(layer, data, videos, state);
 		}
 	}
@@ -347,6 +408,8 @@ class VectorSlideLayers {
 		this.quads.clearFrames();
 		this.layers = [];
 		this.unpainted = [];
+		this.pieces = null;
+		this.splitOwners.clear();
 		this.slideHash = null;
 		this.data = null;
 		this.master = null;
@@ -359,6 +422,7 @@ class VectorSlideLayers {
 		states: Map<number, cool.ObjectRenderState> | undefined,
 	): cool.DrawState | undefined {
 		if (layer.run.owner === undefined || !states) return undefined;
+		if (layer.piece !== undefined) return states.get(layer.piece);
 		const ownerState = states.get(layer.run.owner);
 		if (layer.paragraph === undefined) return ownerState;
 		return ownerState?.paragraphs?.get(layer.paragraph);
@@ -536,6 +600,10 @@ class VectorSlideLayers {
 		data: cool.VectorPrimitivesData,
 		state: cool.DrawState | undefined,
 	): void {
+		if (layer.cut) {
+			this._paintPieces(layer.cut, data);
+			return;
+		}
 		const colorOverride = state?.colorOverride;
 		const textOverride = state?.textOverride;
 		const [x, y, width, height] = layer.pixels;
@@ -580,6 +648,13 @@ class VectorSlideLayers {
 			for (const other of this.layers)
 				if (other.run === layer.run && other.paragraph !== undefined)
 					paragraphs.set(other.paragraph, { hidden: true });
+			if (layer.split) {
+				const count = cool.TextHierarchyParagraphPrimitive.collect(
+					data.objects.get(owner)?.primitives,
+				).length;
+				for (let paragraph = 0; paragraph < count; ++paragraph)
+					paragraphs.set(paragraph, { hidden: true });
+			}
 			RenderManager.renderInto(target, data, {
 				authoredColors: true,
 				paintRange: { start: layer.run.start, end: layer.run.end },
@@ -587,11 +662,151 @@ class VectorSlideLayers {
 			});
 		}
 
+		this._upload(layer, canvas);
+	}
+
+	// Upload what the canvas holds into the texture of the layer.
+	private _upload(layer: SlideLayer, canvas: OffscreenCanvas): void {
 		const gl = this.context.getGl();
 		gl.bindTexture(gl.TEXTURE_2D, layer.texture);
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+	}
+
+	// Add the layer of the run without its text, and a layer for each of its pieces. The pieces
+	// of one paragraph share a cut, which holds the rectangle around all of them.
+	private _addSplitLayers(
+		owner: number,
+		run: PaintRun,
+		pixels: number[],
+		pieces: SlidePiece[],
+	): void {
+		this.splitOwners.add(owner);
+		const body = this._makeLayer(run, undefined, pixels);
+		body.split = true;
+		this.layers.push(body);
+
+		const cuts = new Map<number, PieceCut>();
+		for (const piece of pieces) {
+			let cut = cuts.get(piece.paragraph);
+			if (!cut) {
+				cut = {
+					owner: piece.owner,
+					paragraph: piece.paragraph,
+					area: [],
+					layers: [],
+					corners: [],
+					painted: false,
+				};
+				cuts.set(piece.paragraph, cut);
+			}
+			const corners = this._cornerPixels(piece.frame);
+			const layer = this._makeLayer(
+				run,
+				undefined,
+				VectorSlideLayers._boundsOf(corners),
+			);
+			layer.split = true;
+			layer.piece = piece.key;
+			layer.cut = cut;
+			cut.layers.push(layer);
+			cut.corners.push(corners);
+			this.layers.push(layer);
+		}
+		cuts.forEach((cut) => {
+			cut.area =
+				this._cut(
+					VectorSlideLayers._boundsOf(
+						([] as cool.Point[]).concat(...cut.corners),
+					),
+					-this.canvasWidth,
+					-this.canvasHeight,
+					2 * this.canvasWidth,
+					2 * this.canvasHeight,
+				) ?? [];
+		});
+	}
+
+	// Draw the paragraph of the cut once, and cut every piece out of that drawing along its
+	// frame into the texture of its layer.
+	private _paintPieces(cut: PieceCut, data: cool.VectorPrimitivesData): void {
+		if (cut.painted) return;
+		cut.painted = true;
+		const area = cut.area;
+		if (area.length !== 4) return;
+		const drawing = new OffscreenCanvas(area[2], area[3]);
+		const drawingContext = drawing.getContext(
+			'2d',
+		) as OffscreenCanvasRenderingContext2D | null;
+		if (!drawingContext) return;
+		drawingContext.setTransform(
+			this.scaleX,
+			0,
+			0,
+			this.scaleY,
+			-area[0],
+			-area[1],
+		);
+		RenderManager.renderObjectParagraph(
+			drawingContext as unknown as CanvasRenderingContext2D,
+			data,
+			cut.owner,
+			cut.paragraph,
+			{ authoredColors: true },
+		);
+
+		cut.layers.forEach((layer, index) => {
+			const pixels = this._cut(
+				layer.pixels,
+				area[0],
+				area[1],
+				area[0] + area[2],
+				area[1] + area[3],
+			);
+			if (!pixels) return;
+			layer.pixels = pixels;
+			layer.ownPixels = pixels;
+			const [x, y, width, height] = pixels;
+			const canvas = new OffscreenCanvas(width, height);
+			const context = canvas.getContext(
+				'2d',
+			) as OffscreenCanvasRenderingContext2D | null;
+			if (!context) return;
+			context.beginPath();
+			cut.corners[index].forEach((point, at) => {
+				if (at === 0) context.moveTo(point.x - x, point.y - y);
+				else context.lineTo(point.x - x, point.y - y);
+			});
+			context.closePath();
+			context.clip();
+			context.drawImage(drawing, area[0] - x, area[1] - y);
+			this._upload(layer, canvas);
+		});
+	}
+
+	// The corners of the frame in canvas pixels, going round.
+	private _cornerPixels(frame: cool.Matrix2D): cool.Point[] {
+		const toPixels = frame.scale(this.scaleX, this.scaleY);
+		return [
+			toPixels.apply(0, 0),
+			toPixels.apply(1, 0),
+			toPixels.apply(1, 1),
+			toPixels.apply(0, 1),
+		];
+	}
+
+	// Whole canvas pixels around the points, with the margin around them.
+	private static _boundsOf(points: cool.Point[]): number[] {
+		const range = cool.Range2D.fromPoints(points);
+		const x = Math.floor(range.minX) - layerMargin;
+		const y = Math.floor(range.minY) - layerMargin;
+		return [
+			x,
+			y,
+			Math.ceil(range.maxX) + layerMargin - x,
+			Math.ceil(range.maxY) + layerMargin - y,
+		];
 	}
 
 	// Draw the current frame of each video whose shape is in the layer's run, or in the part of
