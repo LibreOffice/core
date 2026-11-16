@@ -1651,8 +1651,9 @@ class ClassicConnectorCreateContext extends ClassicLineCreateContext {
 	part ends it with no point set there. A filled kind closes every part, an unfilled one leaves
 	every part open.
 	The next part begins where the mouse sets its first point. A double click or Enter makes the
-	object of the parts drawn. Backspace takes back the last point, Delete and Escape the part
-	being drawn, then the parts before; the mode ends once nothing is left.
+	object of the parts drawn. Backspace takes back the last point, Delete the part being drawn,
+	then the parts before; the mode ends once nothing is left. Escape makes the object of the
+	parts ended, without the one being drawn.
 */
 class ClassicPathCreateContext extends ClassicCreateContext {
 	/// The commands that make a polygon or a curve, each with the way its path is drawn.
@@ -1927,8 +1928,9 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		return super.keyEvent(event, modifier);
 	}
 
+	/// Escape stops with what is done: the parts ended make the object, the one being drawn goes.
 	escape(): boolean {
-		return this.byKey(() => this.drawing.dropThePart());
+		return this.byKey(() => this.drawing.stopHere());
 	}
 
 	/*

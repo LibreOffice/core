@@ -263,6 +263,23 @@ describe('PathDrawing', function () {
 		nodeassert.strictEqual(drawing.stroking(), false);
 	});
 
+	it('escape makes the object of the parts ended, without the one being drawn', function () {
+		const drawing = new PathDrawing(open, 10);
+		click(drawing, [
+			[0, 0],
+			[100, 0],
+		]);
+		drawing.moveTo(new cool.Point(100, 100), false);
+		drawing.setThePoint(true);
+		click(drawing, [[300, 0]]);
+		nodeassert.strictEqual(drawing.stopHere(), 'finished');
+		nodeassert.strictEqual(
+			PathDrawing.asSvg(drawing.path()),
+			'M 0 0 L 100 0 L 100 100',
+		);
+		nodeassert.strictEqual(new PathDrawing(open, 10).stopHere(), 'nothingLeft');
+	});
+
 	it('a part with too few points is dropped', function () {
 		const drawing = new PathDrawing(filled, 10);
 		click(drawing, [[0, 0]]);

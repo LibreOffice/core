@@ -214,7 +214,9 @@ parts:
 | After a part ended | The lines across the view follow the mouse again, and the next click begins the next part of the same object. A part with too few points - one, or two where it closes - is dropped. |
 | Double click, Enter | Make the object of the parts drawn, the part being drawn ending as a right click ends it. The second click of a double click sets no point. The object is selected at once, also before the engine has answered. The mode is over. |
 | Backspace | Takes back the last point. Where the part being drawn has none, it takes back the last point of the part before, which is then drawn on. With nothing left the mode ends without an object. |
-| Delete, Escape | Take away the part being drawn, then the parts before one by one; the last one ends the mode without an object. While the button holds a point of a curve, they take it away with its part and end the press, so its release does nothing. |
+| Delete | Takes away the part being drawn, then the parts before one by one; the last one ends the mode without an object. |
+| Escape | Makes the object of the parts ended and leaves out the part being drawn; with no part ended the mode ends without an object. |
+| Delete or Escape during a press | While the button holds a point of a curve, they take it away with its part and end the press, so its release does nothing. |
 | Any other key | Ends the mode without an object and then does what it does anywhere: Ctrl+Z undoes, an arrow moves the selection. Enter, Backspace and Delete count as other keys when Shift, Ctrl or Alt is held with them. |
 | A command, a press elsewhere, another slide | End the mode without an object. |
 
@@ -227,7 +229,9 @@ A freeform line is drawn by hand, a stroke for every part:
 | Fill | The filled kind shows its fill while it is drawn, as a filled polygon does, the stroke being drawn too; a stroke inside another one shows as a hole at once. |
 | Shift, Ctrl | Change nothing: a stroke follows the mouse as it is, not snapped and not in steps. |
 | Click without a drag, Enter, right click | Make the object of the strokes drawn. Enter during a stroke ends the stroke first. A click before any stroke ends the mode with nothing made. |
-| Backspace, Delete, Escape | Take away the last stroke; the last one ends the mode with nothing made. During a stroke they take that stroke away and end the press. |
+| Backspace, Delete | Take away the last stroke; the last one ends the mode with nothing made. |
+| Escape | Makes the object of the strokes ended; with none ended the mode ends with nothing made. |
+| During a stroke | Backspace, Delete and Escape take that stroke away and end the press; Escape then makes the object of the strokes before it, where there are any. |
 | Any other key, a command, a press elsewhere, another slide | As for the polygons and curves. |
 
 

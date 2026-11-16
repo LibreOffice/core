@@ -416,6 +416,19 @@ class PathDrawing {
 		return this.parts.length ? 'goesOn' : 'nothingLeft';
 	}
 
+	/*
+		Stops with what is done: the part being drawn goes, a stroke too, and the path of the parts
+		ended is finished, or nothing is left where none is. A path of one polygon is given up.
+	*/
+	public stopHere(): PathDrawingOutcome {
+		this.pulled = null;
+		this.pressedOnTheStart = false;
+		this.stroke = null;
+		this.points = [];
+		if (!this.kind.multi) this.parts = [];
+		return this.parts.length ? 'finished' : 'nothingLeft';
+	}
+
 	/// The path as finished so far: the parts ended. Nothing where none is.
 	public path(): cool.ObjectPathPolygon[] {
 		return this.parts;
