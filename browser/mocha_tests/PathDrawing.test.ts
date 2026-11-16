@@ -43,7 +43,7 @@ describe('PathDrawing', function () {
 		);
 	});
 
-	it('a click on the start point ends an unfilled part open, with no point set there', function () {
+	it('closing the first unfilled part on its start closes the later parts too', function () {
 		const drawing = new PathDrawing(open, 10);
 		click(drawing, [
 			[0, 0],
@@ -54,21 +54,50 @@ describe('PathDrawing', function () {
 		const placed = drawing.moveTo(new cool.Point(5, 3), false);
 		nodeassert.deepStrictEqual([placed.x, placed.y], [0, 0]);
 		nodeassert.strictEqual(drawing.setThePoint(false), 'partEnded');
+		// a right click ends the next part closed as well
+		click(drawing, [
+			[300, 0],
+			[400, 0],
+		]);
+		drawing.moveTo(new cool.Point(400, 100), false);
+		drawing.setThePoint(true);
 		nodeassert.strictEqual(
 			PathDrawing.asSvg(drawing.path()),
-			'M 0 0 L 100 0 L 100 100',
+			'M 0 0 L 100 0 L 100 100 Z M 300 0 L 400 0 L 400 100 Z',
 		);
 	});
 
-	it('a click on the start point finishes a path of one polygon', function () {
-		const drawing = new PathDrawing(single, 10);
+	it('after an open first unfilled part, the start point draws no mouse onto it', function () {
+		const drawing = new PathDrawing(open, 10);
 		click(drawing, [
 			[0, 0],
 			[100, 0],
 		]);
+		drawing.moveTo(new cool.Point(100, 100), false);
+		drawing.setThePoint(true);
+		click(drawing, [
+			[300, 0],
+			[400, 0],
+			[400, 100],
+		]);
+		const placed = drawing.moveTo(new cool.Point(305, 3), false);
+		nodeassert.deepStrictEqual([placed.x, placed.y], [305, 3]);
+		nodeassert.strictEqual(drawing.startOnTheMouse(), null);
+	});
+
+	it('a click on the start point finishes a path of one polygon, closed', function () {
+		const drawing = new PathDrawing(single, 10);
+		click(drawing, [
+			[0, 0],
+			[100, 0],
+			[100, 100],
+		]);
 		drawing.moveTo(new cool.Point(3, 2), false);
 		nodeassert.strictEqual(drawing.setThePoint(false), 'finished');
-		nodeassert.strictEqual(PathDrawing.asSvg(drawing.path()), 'M 0 0 L 100 0');
+		nodeassert.strictEqual(
+			PathDrawing.asSvg(drawing.path()),
+			'M 0 0 L 100 0 L 100 100 Z',
+		);
 	});
 
 	it('a click on the start point ends a filled kind closed, with no second point there', function () {

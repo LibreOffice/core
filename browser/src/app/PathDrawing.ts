@@ -33,8 +33,11 @@ type PathDrawingOutcome = 'goesOn' | 'partEnded' | 'finished' | 'nothingLeft';
 	pressed, so it can be corrected. A point of a curve is set when the button goes down, and the
 	mouse then pulls out its two weights, the one behind mirroring the one ahead; without a pull
 	the point is a corner. A part ends when the one who draws says so, or when its own start point
-	is hit, which sets no point there. The parts of one path are all closed or all open, as an
-	object holds them, and the kind says which. A part that ends with too few points is dropped.
+	is hit, which sets no point there and closes it. The parts of one path are all closed or all
+	open, as an object holds them: a filled kind closes every part, and for an unfilled one the
+	first part decides. Where it was closed on its start point, every later part closes too;
+	where it ended open, every later part does, and its start point draws no mouse onto it. A part
+	that ends with too few points is dropped.
 	A path of one polygon is finished as soon as its part ends; one of several goes on with the
 	next part.
 
@@ -163,12 +166,19 @@ class PathDrawing {
 	private onTheStart(): boolean {
 		const start = this.points[0];
 		return (
+			this.closing() !== false &&
 			!!start &&
 			!!this.next &&
 			this.points.length >= 2 &&
 			this.next.x === start.x &&
 			this.next.y === start.y
 		);
+	}
+
+	/// Whether the parts close: every part of a filled kind; for an unfilled one as its first
+	/// part ended, and undefined while there is none, so the first one may still close.
+	private closing(): boolean | undefined {
+		return this.kind.closes ? true : this.parts[0]?.closed;
 	}
 
 	/*
@@ -183,6 +193,7 @@ class PathDrawing {
 
 		if (
 			start &&
+			this.closing() !== false &&
 			this.points.length >= 2 &&
 			new cool.Point(start.x, start.y).subtract(at).length() <= this.reach
 		)
@@ -210,19 +221,19 @@ class PathDrawing {
 
 	/*
 		Sets the next point where it is placed and, with endsThePart, ends the part after it. On
-		the start point of the part it only ends the part, with no second point there. A part ends
-		closed where the kind closes its parts.
+		the start point of the part it only ends the part, closed, with no second point there. A
+		part ended otherwise closes where the parts close.
 	*/
 	public setThePoint(endsThePart: boolean): PathDrawingOutcome {
 		if (!this.next) return 'goesOn';
 
-		if (this.onTheStart()) return this.endThePart(this.kind.closes);
+		if (this.onTheStart()) return this.endThePart(true);
 
 		const last = this.points[this.points.length - 1];
 		if (!last || last.x !== this.next.x || last.y !== this.next.y)
 			this.points.push({ x: this.next.x, y: this.next.y });
 
-		return endsThePart ? this.endThePart(this.kind.closes) : 'goesOn';
+		return endsThePart ? this.endThePart(!!this.closing()) : 'goesOn';
 	}
 
 	/*
@@ -247,12 +258,11 @@ class PathDrawing {
 	/*
 		The mouse pulls the weights of the point pressed to that place: the one ahead goes there,
 		the one behind as far the other way, in steps of 45 degrees where turnedOver asks for
-		them. A pull shorter than the reach takes the weights away again. On the start point of a
-		part that stays open nothing is pulled, as no edge comes back to it.
+		them. A pull shorter than the reach takes the weights away again.
 	*/
 	public pull(to: cool.Point, turnedOver: boolean): void {
 		const point = this.pulled === null ? undefined : this.points[this.pulled];
-		if (!point || (this.pressedOnTheStart && !this.kind.closes)) return;
+		if (!point) return;
 
 		let x = to.x - point.x;
 		let y = to.y - point.y;
@@ -291,7 +301,6 @@ class PathDrawing {
 		if (onTheStart) {
 			const start = this.points[0];
 			if (
-				this.kind.closes &&
 				!this.pulledOut &&
 				start.aheadX !== undefined &&
 				start.aheadY !== undefined
@@ -299,9 +308,9 @@ class PathDrawing {
 				start.behindX = 2 * start.x - start.aheadX;
 				start.behindY = 2 * start.y - start.aheadY;
 			}
-			return this.endThePart(this.kind.closes);
+			return this.endThePart(true);
 		}
-		return endsThePart ? this.endThePart(this.kind.closes) : 'goesOn';
+		return endsThePart ? this.endThePart(!!this.closing()) : 'goesOn';
 	}
 
 	/// Whether a point of a curve is held by a press, its weights following the mouse.
@@ -332,7 +341,7 @@ class PathDrawing {
 			if (outcome === 'finished' || outcome === 'nothingLeft') return outcome;
 		}
 		this.stroke = null;
-		if (this.points.length) this.endThePart(this.kind.closes);
+		if (this.points.length) this.endThePart(!!this.closing());
 		return this.path().length ? 'finished' : 'nothingLeft';
 	}
 
@@ -421,7 +430,7 @@ class PathDrawing {
 				? this.parts.concat([{ closed: false, points: this.stroke }])
 				: this.parts;
 		const drawing = this.next ? this.points.concat([this.next]) : this.points;
-		const closing = this.pressedOnTheStart && this.kind.closes;
+		const closing = this.pressedOnTheStart;
 		return drawing.length >= 2
 			? this.parts.concat([{ closed: closing, points: drawing }])
 			: this.parts;

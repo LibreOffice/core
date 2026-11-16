@@ -8831,6 +8831,35 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateCurveWithClosingCurve)
     CPPUNIT_ASSERT(!aClosing.isPrevControlPointUsed(0));
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateClosedUnfilledPolygon)
+{
+    // an unfilled polygon drawn closed in the client stays closed, and has no fill
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"Path"_ustr,
+          cpo::uno::Any(u"{\"path\": ["
+                        "{\"closed\": true, \"points\": [{\"x\": 1000, \"y\": 1000},"
+                        " {\"x\": 3000, \"y\": 1000}, {\"x\": 3000, \"y\": 3000}]},"
+                        "{\"closed\": true, \"points\": [{\"x\": 4000, \"y\": 1000},"
+                        " {\"x\": 6000, \"y\": 1000}, {\"x\": 5000, \"y\": 3000}]}"
+                        "]}"_ustr) },
+    }));
+    dispatchCommand(mxComponent, u".uno:Polygon_Unfilled"_ustr, aArgs);
+
+    auto pPolygon = dynamic_cast<SdrPathObj*>(pSlide->GetObj(pSlide->GetObjCount() - 1));
+    CPPUNIT_ASSERT(pPolygon);
+    CPPUNIT_ASSERT(pPolygon->IsClosed());
+    const basegfx::B2DPolyPolygon& rPath(pPolygon->GetPathPoly());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), rPath.count());
+    CPPUNIT_ASSERT(rPath.isClosed());
+    // the start point is not repeated at the end
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), rPath.getB2DPolygon(0).count());
+    CPPUNIT_ASSERT_EQUAL(css::drawing::FillStyle_NONE,
+                         pPolygon->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateConnectorBetweenPoints)
 {
     // a connector dragged out in the client from one shape to another is tied as the client says

@@ -40,6 +40,7 @@
 #include <svx/clipfmtitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdoedge.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -996,11 +997,20 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     if(!pObj)
         return;
 
-    // the default polygon or curve fills its rectangle; a requested one takes the path drawn
+    // the default polygon or curve fills its rectangle; a requested one takes the path drawn.
+    // The kind of the object says whether its polygons are closed, and an unfilled kind is open,
+    // so a closed path drawn with it makes the object closed, with no fill
     if (oRequestedPath)
     {
         if (auto pPath = dynamic_cast<SdrPathObj*>(pObj.get()))
+        {
+            if (oRequestedPath->isClosed() && !pPath->IsClosed())
+            {
+                pPath->ToggleClosed();
+                pPath->SetMergedItem(XFillStyleItem(css::drawing::FillStyle_NONE));
+            }
             pPath->SetPathPoly(*oRequestedPath);
+        }
     }
 
     // the default line lies across the middle of its rectangle; a requested one goes from its
