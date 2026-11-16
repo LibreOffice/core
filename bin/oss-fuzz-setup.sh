@@ -198,6 +198,22 @@ cp htmlfuzzer_seed_corpus.zip schtmlfuzzer_seed_corpus.zip
 cp pdffuzzer_seed_corpus.zip pdf2fodgfuzzer_seed_corpus.zip
 #packaged ODT test documents
 (cd $SRC/libreoffice && find sw/qa -name '*.odt' -size -64k -print | zip -q $SRC/odtfuzzer_seed_corpus.zip -@)
+#compressed EOT fonts embedded in the sd/qa PPTX test documents
+python3 -c '
+import os, sys, zipfile
+with zipfile.ZipFile(sys.argv[2], "a") as out:
+    for root, _, files in os.walk(sys.argv[1]):
+        for name in files:
+            if not name.endswith(".pptx"):
+                continue
+            try:
+                with zipfile.ZipFile(os.path.join(root, name)) as doc:
+                    for member in doc.namelist():
+                        if member.endswith(".fntdata"):
+                            out.writestr(name + "-" + os.path.basename(member), doc.read(member))
+            except zipfile.BadZipFile:
+                pass
+' $SRC/libreoffice/sd/qa eotfuzzer_seed_corpus.zip
 #encrypted packages, password "test"
 zip -qj zipfuzzer_seed_corpus.zip \
     $SRC/libreoffice/sc/qa/unit/data/ods/password.ods \

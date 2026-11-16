@@ -17,6 +17,7 @@
 #include <font/TTFStructure.hxx>
 #include <font/TTFReader.hxx>
 #include <config_eot.h>
+#include <o3tl/temporary.hxx>
 
 #include <memory>
 
@@ -203,6 +204,12 @@ int TestEOT(const void* data, sal_uInt32 size)
 {
     const sal_uInt8* bytes = static_cast<const sal_uInt8*>(data);
     std::vector<sal_uInt8> input(bytes, bytes + size);
+#if ENABLE_EOT
+    // An input that decodes as EOT goes on to the writer as the font it holds.
+    std::vector<char> aDecoded;
+    if (font::decodeEOT(data, size, aDecoded, o3tl::temporary(bool())))
+        input.assign(aDecoded.begin(), aDecoded.end());
+#endif
 
     std::vector<sal_uInt8> aEOT;
     font::FontDataContainer aContainer(input);
