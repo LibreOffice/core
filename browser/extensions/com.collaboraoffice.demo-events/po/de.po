@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-events\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 11:43+0000\n"
-"PO-Revision-Date: 2026-11-09 16:06+0000\n"
-"Last-Translator: alxhu <alxhu@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-10 20:51+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "extensions/demo-events/de/>\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: manifest.json:name
 msgid "Events demo"
-msgstr ""
+msgstr "Veranstaltungsdemo"
 
 #: index.html:32
 msgid "Last comment activity:"
@@ -36,7 +36,7 @@ msgstr "Letzte Kommentaraktivität:"
 
 #: index.html:20
 msgid "Live document state:"
-msgstr ""
+msgstr "Aktueller Status des Dokuments:"
 
 #: index.html:26
 msgid "Modifications:"
@@ -48,7 +48,7 @@ msgstr "Zähler zurücksetzen"
 
 #: index.html:28
 msgid "Selection changes:"
-msgstr ""
+msgstr "Änderungen bei der Auswahl:"
 
 #: index.html:56 index.html:75
 msgid "added by %1"

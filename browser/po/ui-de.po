@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-09 16:06+0000\n"
-"Last-Translator: alxhu <alxhu@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-10 20:51+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -4479,7 +4479,7 @@ msgstr "Funktion auswählen"
 #: src/control/Control.FormulaBarJSDialog.js:122
 #: src/control/Control.MobileTopBar.ts:42
 msgid "Accept"
-msgstr "Übernehmen"
+msgstr "Annehmen"
 
 #: src/control/Control.FormulaBarJSDialog.js:211
 msgid "Collapse Formula Bar"
