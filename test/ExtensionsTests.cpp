@@ -41,6 +41,7 @@ public:
 
     CPPUNIT_TEST(testRemote);
     CPPUNIT_TEST(testGas);
+    CPPUNIT_TEST(testGasSidecar);
     CPPUNIT_TEST(testDocumentEvent);
     CPPUNIT_TEST(testUnknown);
 #if ENABLE_DEBUG
@@ -114,6 +115,26 @@ public:
         LOK_ASSERT(!Extensions::makeCallScript(
             childRoot, configId, "com.example.remote", "gas", "run", error));
         LOK_ASSERT(!error.empty());
+    }
+
+    void testGasSidecar() {
+        constexpr std::string_view testname = __func__;
+
+        // The sidecar lists the scripts, and the names of the functions that they declare, each
+        // once, in the order of first occurrence:
+        auto const sidecar = Extensions::synthesizeGasSidecar(
+            {{"b.gs", "function onOpen() {}\nfunction  run$1 (x) { function inner(){} }"},
+             {"a.gs", "var f = function () {};\nfunction onOpen() {}\nfunction _helper\n()"}});
+        LOK_ASSERT(
+            sidecar.starts_with(
+                "{\"scripts\":[\"b.gs\",\"a.gs\"],"
+                "\"functions\":[\"onOpen\",\"run$1\",\"inner\",\"_helper\"]"));
+
+        // Only the keyword followed by a name counts:
+        auto const other = Extensions::synthesizeGasSidecar(
+            {{"c.gs",
+              "myfunction notMe() {}\nfunctionX() {}\nfunction 1st() {}\nfunction ok() {}"}});
+        LOK_ASSERT(other.starts_with("{\"scripts\":[\"c.gs\"],\"functions\":[\"ok\"]"));
     }
 
     void testDocumentEvent() {

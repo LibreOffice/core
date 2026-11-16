@@ -84,6 +84,67 @@ static std::string jsonQuote(std::string const & s) {
     return out;
 }
 
+namespace {
+
+bool isDigit(char c) { return c >= '0' && c <= '9'; }
+
+// The characters that \w matches in a JavaScript regular expression:
+bool isWordCharacter(char c) {
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || isDigit(c) || c == '_';
+}
+
+bool isIdentifierCharacter(char c) { return isWordCharacter(c) || c == '$'; }
+
+// The ASCII characters that \s matches in a JavaScript regular expression:
+bool isSpace(char c) {
+    return c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r';
+}
+
+// The names of the functions that the scripts declare (as "function name(", each name once, in the
+// order of first occurrence):
+std::vector<std::string> declaredFunctions(
+    std::vector<std::pair<std::string, std::string>> const & scripts)
+{
+    std::vector<std::string> functions;
+    std::set<std::string> seen;
+    for (auto const & [name, src]: scripts) {
+        std::string_view const keyword = "function";
+        for (auto i = src.find(keyword); i != std::string::npos; i = src.find(keyword, i + 1)) {
+            if (i != 0 && isWordCharacter(src[i - 1])) {
+                continue;
+            }
+            auto j = i + keyword.size();
+            auto const afterKeyword = j;
+            while (j != src.size() && isSpace(src[j])) {
+                ++j;
+            }
+            if (j == afterKeyword || j == src.size() || !isIdentifierCharacter(src[j])
+                || isDigit(src[j]))
+            {
+                continue;
+            }
+            auto const start = j;
+            while (j != src.size() && isIdentifierCharacter(src[j])) {
+                ++j;
+            }
+            auto const end = j;
+            while (j != src.size() && isSpace(src[j])) {
+                ++j;
+            }
+            if (j == src.size() || src[j] != '(') {
+                continue;
+            }
+            std::string function(src, start, end - start);
+            if (seen.insert(function).second) {
+                functions.push_back(std::move(function));
+            }
+        }
+    }
+    return functions;
+}
+
+}
+
 std::string Extensions::synthesizeGasSidecar(
     std::vector<std::pair<std::string, std::string>> const & scripts)
 {
@@ -140,6 +201,16 @@ std::string Extensions::synthesizeGasSidecar(
         }
         firstScript = false;
         body.append(jsonQuote(name));
+    }
+    body.push_back(']');
+    body.append(",\"functions\":[");
+    bool firstFunction = true;
+    for (auto const & function: declaredFunctions(scripts)) {
+        if (!firstFunction) {
+            body.push_back(',');
+        }
+        firstFunction = false;
+        body.append(jsonQuote(function));
     }
     body.push_back(']');
     if (!displayName.empty()) {
@@ -304,29 +375,33 @@ std::string jsonArray(std::vector<std::string> const & elements) {
     return out;
 }
 
-// The code files of the Apps Script project in dir with their sources, in the order in which the
-// "scripts" of its _cool-gas.json lists them (which is the order in which GAS runs them), else in
-// the order of their names:
-std::optional<std::vector<std::pair<std::string, std::string>>> gasScripts(
-    Poco::Path const & dir, std::string & error)
-{
-    auto const listing = readJsonObject(dir, "_cool-gas.json");
-    auto const names = listing ? listing->getArray("scripts") : nullptr;
-    if (!names) {
-        return Extensions::enumerateGasScripts(dir);
-    }
-    std::vector<std::pair<std::string, std::string>> scripts;
-    for (std::size_t i = 0; i != names->size(); ++i) {
-        auto const name = names->getElement<std::string>(i);
-        auto const path = entryWithin(dir, name, false);
-        if (!path) {
-            error = "Apps Script file " + name + " is missing";
-            return {};
-        }
-        scripts.emplace_back(name, readFile(*path));
-    }
-    return scripts;
 }
+
+std::pair<std::optional<std::vector<std::pair<std::string, std::string>>>, std::string>
+Extensions::gasScripts(Poco::Path const & dir)
+{
+    try {
+        auto const listing = readJsonObject(dir, "_cool-gas.json");
+        auto const names = listing ? listing->getArray("scripts") : nullptr;
+        if (!names) {
+            return {Extensions::enumerateGasScripts(dir), ""};
+        }
+        std::vector<std::pair<std::string, std::string>> scripts;
+        for (std::size_t i = 0; i != names->size(); ++i) {
+            auto const name = names->getElement<std::string>(i);
+            auto const path = entryWithin(dir, name, false);
+            if (!path) {
+                return {{}, "Apps Script file " + name + " is missing"};
+            }
+            scripts.emplace_back(name, readFile(*path));
+        }
+        return {std::move(scripts), ""};
+    } catch (Poco::Exception const & e) {
+        return {{}, e.displayText()};
+    }
+}
+
+namespace {
 
 // The JSON array of the libraries that the appsscript.json of an Apps Script add-on in root (or of
 // one of its libraries) declares, each an object with its userSymbol, dir, scripts, sources and
@@ -374,8 +449,9 @@ std::optional<std::string> gasLibraries(
         if (!nested) {
             return {};
         }
-        auto const files = gasScripts(*dir, error);
+        auto const [files, filesError] = Extensions::gasScripts(*dir);
         if (!files) {
+            error = filesError;
             return {};
         }
         std::vector<std::string> scripts;
@@ -455,8 +531,9 @@ std::optional<Extensions::CallScript> Extensions::makeCallScript(
             if (!libraries) {
                 return {};
             }
-            auto const files = gasScripts(*dir, error);
+            auto const [files, filesError] = gasScripts(*dir);
             if (!files) {
+                error = filesError;
                 return {};
             }
             std::vector<std::string> names;

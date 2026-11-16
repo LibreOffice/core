@@ -24,6 +24,12 @@ namespace Extensions {
 
 std::vector<std::pair<std::string, std::string>> enumerateGasScripts(Poco::Path const & dir);
 
+// The code files of the Apps Script project in dir with their sources, in the order in which the
+// "scripts" of its _cool-gas.json lists them (which is the order in which GAS runs them), else in
+// the order of their names, or else an empty optional together with the reason:
+std::pair<std::optional<std::vector<std::pair<std::string, std::string>>>, std::string>
+gasScripts(Poco::Path const & dir);
+
 // A script that runs an extension's installed code for a call of the client, with the source and
 // the start line for any stack frames that it reports:
 struct CallScript {
@@ -43,7 +49,8 @@ std::optional<CallScript> makeCallScript(
 
 // Assemble an Apps Script <id>/_cool-gas.json sidecar body from the extension directory contents:
 //  - `scripts` is a list of (server-side script file name, source text) pairs
-// Besides the script names, the body carries the add-on's display name and the document
+// Besides the script names, the body carries the names of the functions that the scripts declare,
+// and the add-on's display name and the document
 // types it targets, as far as sniffing the source finds
 // them.
 std::string synthesizeGasSidecar(std::vector<std::pair<std::string, std::string>> const & scripts);

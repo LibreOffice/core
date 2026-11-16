@@ -38,7 +38,7 @@ if (new URLSearchParams(location.search).get('coolRole') === 'dialog') {
 <div id="gas-loading" style="padding: 12px; font: 13px sans-serif; color: #666;">Loading...</div>
 <script>
 // Query params: base (extension directory), sidebar (an HTML file under base, absent for an
-// add-on that has none), scripts (comma-separated .gs or .js file names under base), template (for
+// add-on that has none), template (for
 // a page made through HtmlService.createTemplateFromFile, the JSON object of the properties the
 // add-on set on the template):
 (function() {
@@ -56,7 +56,6 @@ if (new URLSearchParams(location.search).get('coolRole') === 'dialog') {
     // generic menu panel next to this wrapper stands in for a sidebar:
     const sidebarName = params.get('sidebar') || '';
     if (!sidebarName) { fail('missing "sidebar" query parameter'); return; }
-    const scriptNames = (params.get('scripts') || '').split(',').filter(Boolean);
     const templateParam = params.get('template');
     const templateValues = templateParam === null ? null : JSON.parse(templateParam);
     const baseUrl = new URL(base, location.href);
@@ -657,18 +656,11 @@ if (new URLSearchParams(location.search).get('coolRole') === 'dialog') {
         return fn(values, printValue);
     }
     (async function() {
-        const sources = await Promise.all(scriptNames.map(function(s) {
-            return fetchText(new URL(s, baseUrl));
-        }));
-        // Extract top-level function names so gas-shim.js can expose them under Object.keys on
+        // The names of the add-on's functions, which gas-shim.js exposes under Object.keys on
         // google.script.run (client libraries such as gas-client enumerate that to discover the
         // callable server functions, and the enumeration would otherwise come back empty):
-        const nameRe = /\bfunction\s+([A-Za-z_$][\w$]*)\s*\(/g;
-        const names = new Set();
-        for (const src of sources) {
-            for (const m of src.matchAll(nameRe)) names.add(m[1]);
-        }
-        window.__gasFunctionNames = Array.from(names);
+        const listing = JSON.parse(await fetchText(new URL('_cool-gas.json', baseUrl)));
+        window.__gasFunctionNames = listing.functions || [];
         await window.__gasStorageReady;
         const rawHtml = await fetchText(sidebarUrl);
         const expanded = await expandScriptlets(rawHtml);

@@ -1249,17 +1249,15 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
             HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
             return true;
         }
-        std::vector<std::pair<std::string, std::string>> scripts;
-        try {
-            scripts = Extensions::enumerateGasScripts(dirPath);
-        } catch (Poco::Exception const & e) {
+        auto const [scripts, error] = Extensions::gasScripts(dirPath);
+        if (!scripts) {
             LOG_WRN(
                 "Failed to synthesize _cool-gas.json for preset extension ["
-                << configId << "/" << id << "]: " << e.displayText());
+                << configId << "/" << id << "]: " << error);
             HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
             return true;
         }
-        std::string const body = Extensions::synthesizeGasSidecar(scripts);
+        std::string const body = Extensions::synthesizeGasSidecar(*scripts);
         response.setContentType("application/json");
         response.add("X-Content-Type-Options", "nosniff");
         response.set("Content-Length", std::to_string(body.size()));

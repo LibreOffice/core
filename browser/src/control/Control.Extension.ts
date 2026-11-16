@@ -245,9 +245,8 @@ interface ExtensionManifest {
 	icon?: string;
 	supports?: string[];
 	isGasExtension?: boolean;
-	gasContext?: {
-		names: string[];
-	};
+	// Present for a GAS add-on that has scripts and commands:
+	gasContext?: Record<string, never>;
 	// On disk this is a string naming a separate JSON file (resolved the same way
 	// entry/icon are) holding the ExtensionContributes object - keeping UI wiring
 	// out of manifest.json's own metadata is mandatory, not a choice an extension
@@ -934,11 +933,7 @@ window.L.Control.Extension = window.L.Control.extend({
 	// The URL of gas-wrapper.html showing the add-on page named file, with params carrying any
 	// further query parameters:
 	_gasWrapperUrl: function (file: string, params: URLSearchParams): string {
-		const manifest: ExtensionManifest = this.options.manifest;
 		params.set('base', new URL(this.options.baseUrl, document.baseURI).href);
-		if (manifest.gasContext && manifest.gasContext.names.length) {
-			params.set('scripts', manifest.gasContext.names.join(','));
-		}
 		params.set('sidebar', file + (/\.html?$/i.test(file) ? '' : '.html'));
 		return new URL(
 			this.options.baseUrl + '../gas-wrapper.html?' + params.toString(),
@@ -989,7 +984,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		panel.dataset.extensionId = this.options.id;
 		shell.content.classList.add('extension-panel-body');
 
-		// A GAS add-on has no manifest.entry; the iframe URL comes from gasContext plus the
+		// A GAS add-on has no manifest.entry; the iframe URL comes from the
 		// ui.showSidebar argument the calling menu command captured in sidebarFile:
 		let entryUrl: string;
 		if (manifest.isGasExtension) {
@@ -1664,9 +1659,7 @@ async function tryLoadAppsScriptExtension(
 	}
 
 	if (commands.length && scriptNames.length) {
-		manifest.gasContext = {
-			names: scriptNames,
-		};
+		manifest.gasContext = {};
 		manifest.contributes = {
 			...contributes,
 			commands: commands,
