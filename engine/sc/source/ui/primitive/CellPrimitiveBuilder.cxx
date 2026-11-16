@@ -1558,7 +1558,9 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     SvxCellVerJustify eVerJust = rPattern.GetItem(ATTR_VER_JUSTIFY, pCondSet).GetValue();
     const SvxCellJustifyMethod eHorJustMethod
         = rPattern.GetItem(ATTR_HOR_JUSTIFY_METHOD, pCondSet).GetValue();
-    Degree100 nRotate = rPattern.GetItem(ATTR_ROTATE_VALUE, pCondSet).GetValue();
+    // Text turned by 90 or 270 degrees has a vertical orientation and is not rotated, as in
+    // ScOutputData.
+    Degree100 nRotate = rPattern.GetRotateVal(pCondSet);
     bool bBreak = eHorJustAttr == SvxCellHorJustify::Block
                   || rPattern.GetItem(ATTR_LINEBREAK, pCondSet).GetValue();
     if (eHorJustAttr == SvxCellHorJustify::Repeat)

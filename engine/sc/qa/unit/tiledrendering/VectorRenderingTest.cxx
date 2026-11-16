@@ -1676,6 +1676,30 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRichTextAlignedToRepeatIsRe
     CPPUNIT_ASSERT(bRepeated);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorTurnedTextIsClippedToItsCell)
+{
+    // Text turned by 90 degrees that is longer than its row is cut at the cell, as in
+    // ScOutputData, where it has a vertical orientation and no rotation. It counted as rotated
+    // text, which is never cut, so it ran over the rows above.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetRowHeight(1, 0, 600);
+    rDocument.SetManualHeight(1, 1, 0, true);
+    setCellString(*pDocShell, 1, 1, u"Turned text that does not fit"_ustr);
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(ScRotateValueItem(Degree100(9000)));
+    applyToCell(*pDocShell, 1, 1, aPattern);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const auto oText = cellTextAt(aResponse, 1, 1);
+    CPPUNIT_ASSERT(oText);
+    CPPUNIT_ASSERT(cellTextFlags(*oText).count("clippedBottom"));
+    CPPUNIT_ASSERT(oText->get_child_optional("clip"));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)
 {
     // Rotated text is centered in its cell by default and takes the alignment of the cell, as in
