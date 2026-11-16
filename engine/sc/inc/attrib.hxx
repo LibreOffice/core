@@ -346,7 +346,7 @@ public:
                                  const IntlWrapper& rIntl) const override;
 };
 
-class ScHyphenateCell final : public SfxBoolItem
+class SC_DLLPUBLIC ScHyphenateCell final : public SfxBoolItem
 {
 public:
     DECLARE_ITEM_TYPE_FUNCTION(ScHyphenateCell)

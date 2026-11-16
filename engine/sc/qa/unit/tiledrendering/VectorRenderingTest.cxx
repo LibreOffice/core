@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
 
 #include <attrib.hxx>
 #include <cellmergeoption.hxx>
@@ -51,6 +52,9 @@
 #include <editeng/editview.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
 #include <svx/rotmodit.hxx>
@@ -1590,6 +1594,46 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedTextTooHighGetsClipA
         = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
     CPPUNIT_ASSERT(hasCellMark(aResponse, "clipRight", 1, 1));
     CPPUNIT_ASSERT(!hasCellMark(aResponse, "clipRight", 1, 3));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorWrappedTextIsHyphenated)
+{
+    // Wrapped text of a cell that asks for hyphenation breaks a long word with a hyphen, as in
+    // ScOutputData. The engine of the cell builder had no hyphenator, so it broke the word
+    // anywhere.
+    cpo::uno::Reference<css::linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(css::lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    rDocument.SetColWidth(1, 0, 1000);
+    setCellString(*pDocShell, 1, 1, u"The internationalization of characteristically words"_ustr);
+    ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+    aPattern.ItemSetPut(ScLineBreakCell(true));
+    aPattern.ItemSetPut(ScHyphenateCell(true));
+    aPattern.ItemSetPut(SvxLanguageItem(LANGUAGE_ENGLISH_US, ATTR_FONT_LANGUAGE));
+    applyToCell(*pDocShell, 1, 1, aPattern);
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const auto oText = cellTextAt(aResponse, 1, 1);
+    CPPUNIT_ASSERT(oText);
+    // The engine draws the hyphen at the end of a line as a portion of its own.
+    bool bHyphen = false;
+    std::function<void(const boost::property_tree::ptree&)> aFind
+        = [&](const boost::property_tree::ptree& rNode) {
+              const std::string aType = rNode.get<std::string>("type", "");
+              if ((aType == "textSimplePortion" || aType == "textDecoratedPortion")
+                  && rNode.get<std::string>("text") == "-")
+                  bHyphen = true;
+              for (const auto& rChild : rNode)
+                  aFind(rChild.second);
+          };
+    aFind(*oText);
+    CPPUNIT_ASSERT(bHyphen);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorRotatedCellTextTakesItsAlignment)

@@ -67,6 +67,7 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/algitem.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -1523,6 +1524,9 @@ ScFieldEditEngine& CellPrimitiveBuilder::Impl::getEditEngine()
         nControl &= ~EEControlBits::ONLINESPELLING;
         mpEditEngine->SetControlWord(nControl);
         mpEditEngine->EnableAutoColor(true);
+        // Wrapped text of a cell that asks for hyphenation breaks its words as in ScOutputData.
+        // The hyphenator is a wrapper that creates the real one only when it is first used.
+        mpEditEngine->SetHyphenator(LinguMgr::GetHyphenator());
         mrDocument.ApplyAsianEditSettings(*mpEditEngine);
         mpEditEngine->SetDefaultHorizontalTextDirection(mrDocument.GetEditTextDirection(mnTab));
     }
