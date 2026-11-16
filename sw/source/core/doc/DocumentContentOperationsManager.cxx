@@ -1858,7 +1858,7 @@ namespace //local functions originally from docfmt.cxx
         }
 
         /* now if range */
-        sal_uLong nNodes = 0;
+        sal_Int32 nNodes = 0;
 
         SwNodeIndex aSt( rDoc.GetNodes() );
         SwNodeIndex aEnd( rDoc.GetNodes() );
@@ -3179,10 +3179,10 @@ void DocumentContentOperationsManager::TransliterateText(
     // to avoid freezing, if transliteration could result too many redlines
     if ( bUseRedlining )
     {
-        const sal_uLong nMaxRedlines = 500;
+        const sal_Int32 nMaxRedlines = 500;
         const bool bIsTitleCase = rTrans.getType() == TransliterationFlags::TITLE_CASE;
-        sal_uLong nAffectedNodes = 0;
-        sal_uLong nAffectedChars = nEndCnt;
+        sal_Int32 nAffectedNodes = 0;
+        sal_Int32 nAffectedChars = nEndCnt;
         SwNodeIndex aIdx( pStart->GetNode() );
         for( ; aIdx.GetIndex() <= nEndNd; ++aIdx )
         {
@@ -4185,7 +4185,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         {
             // First, determine number of anchor text node in the copied range.
             // Note: The anchor text node *have* to be inside the copied range.
-            sal_uLong nAnchorTextNdNumInRange( 0 );
+            sal_Int32 nAnchorTextNdNumInRange( 0 );
             bool bAnchorTextNdFound( false );
             // start at the first node for which flys are copied
             SwNodeIndex aIdx(pCopiedPaM ? pCopiedPaM->Start()->GetNode() : rRg.aStart.GetNode());
