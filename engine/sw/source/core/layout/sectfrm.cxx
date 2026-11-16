@@ -2071,7 +2071,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
                 if( static_cast<SwLayoutFrame*>(pCol->Lower())->Lower() )
                 {
                     if( bJump )     // Did we skip a blank page?
-                        SwFlowFrame::SetMoveBwdJump( true );
+                        SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::SkippedSectionColumns );
                     return static_cast<SwLayoutFrame*>(pCol->Lower());  // The columnm body
                 }
                 bJump = true;
@@ -2086,7 +2086,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
     }
 
     if( bJump )     // Did we skip a blank page?
-        SwFlowFrame::SetMoveBwdJump( true );
+        SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::SkippedSectionColumns );
 
     SwSectionFrame *pSect = FindSctFrame();
     if (!pCol && pSect && IsInTab() && CanContainSplitSection(this))
@@ -2174,7 +2174,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
             pPrevLeaf = pLayLeaf;
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
             if ( pLayLeaf )
-                SwFlowFrame::SetMoveBwdJump( true );
+                SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::SkippedEmptyBody );
         }
         else if ( bFly )
             break;  // Contents in Flys every layout sheet should be right. Why?
@@ -2240,7 +2240,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
             if( pLayLeaf != pTmpLay )
             {
                 pLayLeaf = pTmpLay;
-                SwFlowFrame::SetMoveBwdJump( true );
+                SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::SkippedMasterColumns );
             }
         }
     }

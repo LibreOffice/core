@@ -68,7 +68,7 @@
 
 using namespace css;
 
-bool SwFlowFrame::s_bMoveBwdJump = false;
+MoveBwdJumpReasons SwFlowFrame::s_eMoveBwdJumpReasons = MoveBwdJumpReason::NONE;
 
 SwFlowFrame::SwFlowFrame( SwFrame &rFrame ) :
     m_rThis( rFrame ),
@@ -1213,7 +1213,7 @@ SwLayoutFrame *SwFrame::GetPrevLeaf()
             pPrevLeaf = pLayLeaf;
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
             if ( pLayLeaf )
-                SwFlowFrame::SetMoveBwdJump( true );
+                SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::SkippedEmptyBody );
         }
         else if ( bFly )
             break;  //Contents in Flys should accept any layout leaf.
@@ -2332,7 +2332,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
  */
 bool SwFlowFrame::MoveBwd( bool &rbReformat )
 {
-    SwFlowFrame::SetMoveBwdJump( false );
+    SwFlowFrame::ResetMoveBwdJump();
 
     SwFootnoteFrame* pFootnote = m_rThis.FindFootnoteFrame();
     if ( pFootnote && pFootnote->IsBackMoveLocked() )
@@ -2613,7 +2613,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                 }
             } while( bGoOn );
             if( bJump )
-                SwFlowFrame::SetMoveBwdJump( true );
+                SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::ColumnBreakJump );
         }
     }
     else // No breaks - we can flow back.

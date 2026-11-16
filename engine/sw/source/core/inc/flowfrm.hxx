@@ -32,6 +32,24 @@ class SwBorderAttrs;
 class SwDoc;
 class SwNode;
 
+// Reasons why a backward move was forced.
+enum class MoveBwdJumpReason : sal_uInt8
+{
+    NONE = 0x00,
+    SkippedEmptyBody = 0x01,
+    SkippedSectionColumns = 0x02,
+    SkippedMasterColumns = 0x04,
+    FootnoteJump = 0x08,
+    ColumnBreakJump = 0x10,
+};
+
+namespace o3tl
+{
+    template<> struct typed_flags<MoveBwdJumpReason> : is_typed_flags<MoveBwdJumpReason, 0x1f> {};
+}
+
+using MoveBwdJumpReasons = MoveBwdJumpReason;
+
 /** Base class that provides the general functionalities for frames that are
     allowed at page breaks (flow) and shall continue on the next page (can be
     split), e.g. paragraphs (ContentFrame) or tables (TabFrame).
@@ -85,7 +103,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SAL_LOPLUGIN_ANNOTATE("crosscast") Sw
         pages can be skipped at the same time. In addition, it is evaluated by
         the MoveBwd() method in TabFrame.
     */
-    static bool s_bMoveBwdJump;
+    static MoveBwdJumpReasons s_eMoveBwdJumpReasons;
 
     /** helper method to determine previous frame for calculation of the
         upper space
@@ -151,8 +169,10 @@ public:
     const SwFrame& GetFrame() const { return m_rThis; }
           SwFrame& GetFrame()       { return m_rThis; }
 
-    static bool IsMoveBwdJump() { return s_bMoveBwdJump; }
-    static void SetMoveBwdJump( bool bNew ){ s_bMoveBwdJump = bNew; }
+    static bool IsMoveBwdJump() { return s_eMoveBwdJumpReasons != MoveBwdJumpReason::NONE; }
+    static MoveBwdJumpReasons GetMoveBwdJumpReasons() { return s_eMoveBwdJumpReasons; }
+    static void AddMoveBwdJumpReason( MoveBwdJumpReason eReason ) { s_eMoveBwdJumpReasons |= eReason; }
+    static void ResetMoveBwdJump() { s_eMoveBwdJumpReasons = MoveBwdJumpReason::NONE; }
 
     void SetUndersized( const bool bNew ) { m_bUndersized = bNew; }
     bool IsUndersized()  const { return m_bUndersized; }

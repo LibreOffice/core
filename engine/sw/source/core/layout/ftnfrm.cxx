@@ -940,7 +940,7 @@ SwLayoutFrame *SwFrame::GetPrevFootnoteLeaf( MakePageType eMakeFootnote )
                 bJump = true;
         }
         if( bJump )
-            SwFlowFrame::SetMoveBwdJump( true );
+            SwFlowFrame::AddMoveBwdJumpReason( MoveBwdJumpReason::FootnoteJump );
     }
     return pRet;
 }
