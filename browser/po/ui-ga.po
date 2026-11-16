@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-01 11:12+0000\n"
+"PO-Revision-Date: 2026-11-06 02:10+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin "
 "<aindriu80@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
 "6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -6331,43 +6331,39 @@ msgstr "réamhamharc ar leathanach %1, tá %3 ar iarraidh"
 
 #: src/control/Control.PartsPreview.js:991
 msgid "%1, %3 is missing"
-msgstr ""
+msgstr "%1, tá %3 ar iarraidh"
 
 #: src/control/Control.PartsPreview.js:995
 msgid "preview of page %1, not found in %3"
 msgstr "réamhamharc ar leathanach %1, nár aimsíodh i %3"
 
 #: src/control/Control.PartsPreview.js:996
-#, fuzzy
 msgid "%1, not found in %3"
-msgstr "Sleamhnán %1, gan a bheith le fáil i %3"
+msgstr "Níor aimsíodh %1 i %3"
 
 #: src/control/Control.PartsPreview.js:1000
 msgid "preview of page %1, no access to %3"
 msgstr "réamhamharc ar leathanach %1, gan rochtain ar %3"
 
 #: src/control/Control.PartsPreview.js:1001
-#, fuzzy
 msgid "%1, no access to %3"
-msgstr "Sleide %1, gan rochtain ar %3"
+msgstr "%1, gan rochtain ar %3"
 
 #: src/control/Control.PartsPreview.js:1005
 msgid "preview of page %1, could not open %3"
 msgstr "réamhamharc ar leathanach %1, níorbh fhéidir %3 a oscailt"
 
 #: src/control/Control.PartsPreview.js:1006
-#, fuzzy
 msgid "%1, could not open %3"
-msgstr "Sleide %1, níorbh fhéidir %3 a oscailt"
+msgstr "%1, níorbh fhéidir %3 a oscailt"
 
 #: src/control/Control.PartsPreview.js:1011
 msgid "preview of page %1, %2 changed in %3"
 msgstr "réamhamharc ar leathanach %1, %2 athraithe i %3"
 
 #: src/control/Control.PartsPreview.js:1012
-#, fuzzy
 msgid "%1, %2 changed in %3"
-msgstr "Sleideanna %1, %2 athraithe i %3"
+msgstr "Athraíodh %1, %2 i %3"
 
 #: src/control/Control.PartsPreview.js:1015
 msgid "preview of page %1, changed in %3"
@@ -6375,25 +6371,23 @@ msgstr "réamhamharc ar leathanach %1, athraithe i %3"
 
 #: src/control/Control.PartsPreview.js:1016
 msgid "%1, changed in %3"
-msgstr ""
+msgstr "%1, athraithe i %3"
 
 #: src/control/Control.PartsPreview.js:1020
 msgid "preview of page %1, %3 is disconnected"
 msgstr "réamhamharc ar leathanach %1, tá %3 dícheangailte"
 
 #: src/control/Control.PartsPreview.js:1021
-#, fuzzy
 msgid "%1, %3 is disconnected"
-msgstr "Sleamhnán %1, tá %3 dícheangailte"
+msgstr "Tá %1, %3 dícheangailte"
 
 #: src/control/Control.PartsPreview.js:1025
 msgid "preview of page %1, linked to %2 in %3"
 msgstr "Réamhamharc ar leathanach %1, nasctha le %2 i %3"
 
 #: src/control/Control.PartsPreview.js:1026
-#, fuzzy
 msgid "%1, linked to %2 in %3"
-msgstr "Sleamhnán %1, nasctha le %2 i %3"
+msgstr "%1, nasctha le %2 i %3"
 
 #: src/control/Control.PartsPreview.js:1029
 msgid "preview of page %1, linked to %2"
@@ -6401,7 +6395,7 @@ msgstr "Réamhamharc ar leathanach %1, nasctha le %2"
 
 #: src/control/Control.PartsPreview.js:1030
 msgid "%1, linked to %2"
-msgstr ""
+msgstr "%1, nasctha le %2"
 
 #: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
@@ -6759,7 +6753,7 @@ msgstr "Nasctha le {0} i {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:122
 msgid "Linked to {0}"
-msgstr ""
+msgstr "Nasctha le {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:123
 msgid "In a section linked to {0}"
