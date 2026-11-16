@@ -683,7 +683,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(const uno::Sequence<beans::NamedValue>& 
     uno::Reference<mail::XMailService> xInService;
 
     comphelper::ScopeGuard aCleanup([&]() {
-        // 2 try/catches so if SMTP deconnection fails, perhaps the POP/IMAP one won't
+        // 2 try/catches so if SMTP disconnection fails, perhaps the POP/IMAP one won't
         try
         {
             if (aMergeDesc.xSmtpServer.is() && aMergeDesc.xSmtpServer->isConnected())
