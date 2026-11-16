@@ -8947,7 +8947,7 @@ bool gatherUprightNodes(const SmartArtDiagram& rDgm, const ShapePtr& pBranch,
                                     rLayoutNodes, rPoints, aNode.aChildren))
                 return false;
         }
-        rNodes.push_back(aNode);
+        rNodes.push_back(std::move(aNode));
     }
     return true;
 }
