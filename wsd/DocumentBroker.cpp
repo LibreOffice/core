@@ -1930,6 +1930,13 @@ DocumentBroker::makeEditorFileInfo(WopiStorage::WOPIFileInfo& wopiFileInfo,
     return wopiInfo;
 }
 
+std::string DocumentBroker::getWatermarkText(const WOPIFileInfo& wopiFileInfo)
+{
+    if (ConfigUtil::isSupportKeyEnabled() && !COOLWSD::OverrideWatermark.empty())
+        return COOLWSD::OverrideWatermark;
+    return wopiFileInfo.getWatermarkText();
+}
+
 std::string
 DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& session,
                                           WopiStorage* wopiStorage,
@@ -1942,10 +1949,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     const std::string userExtraInfo = wopiFileInfo->getUserExtraInfo();
     const std::string userPrivateInfo = wopiFileInfo->getUserPrivateInfo();
     const std::string serverPrivateInfo = wopiFileInfo->getServerPrivateInfo();
-    const std::string watermarkText =
-        (ConfigUtil::isSupportKeyEnabled() && !COOLWSD::OverrideWatermark.empty())
-            ? COOLWSD::OverrideWatermark
-            : wopiFileInfo->getWatermarkText();
+    const std::string watermarkText = getWatermarkText(*wopiFileInfo);
     std::string templateSource = wopiFileInfo->getTemplateSource();
 
     std::optional<bool> isAdminUser = wopiFileInfo->getIsAdminUser();

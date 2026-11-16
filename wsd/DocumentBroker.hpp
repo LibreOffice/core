@@ -1011,6 +1011,9 @@ private:
                             std::chrono::milliseconds& getFileCallDurationMs);
 
 #if !MOBILEAPP
+    /// The watermark from the support key if there is one, else the integrator's.
+    static std::string getWatermarkText(const WOPIFileInfo& wopiFileInfo);
+
     /// Updates the Session with the wopiFileInfo given.
     /// Returns the templateSource, if any.
     std::string updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& session,
