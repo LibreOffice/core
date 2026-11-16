@@ -4529,6 +4529,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
     const uno::Reference < sheet::XSpreadsheetDocument > & xDocSrc,
     const OUString& srcName, const sal_Int32 nDestPosition )
 {
+    SolarMutexGuard aGuard;
     //pDocShell is the destination
     ScDocument& rDocDest = pDocShell->GetDocument();
 
