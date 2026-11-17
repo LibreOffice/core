@@ -1221,6 +1221,13 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
     return nMayBeMonthDate > 1;
 }
 
+/** If a string matches the rest of a date pattern except for the number of trailing blanks.
+ */
+static bool lcl_MatchesWithTrailingBlanks(std::u16string_view rStr, std::u16string_view rPatRest)
+{
+    using namespace comphelper::string;
+    return !rPatRest.empty() && stripEnd(rPatRest, ' ') == stripEnd(rStr, ' ');
+}
 
 /** If a string is a separator plus '-' minus sign preceding a 'Y' year in
     a date pattern at position nPat.
@@ -1400,17 +1407,11 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                     }
                     else if (nPat + nLen > rPat.getLength() && sStrArray[nNext][ nLen - 1 ] == ' ')
                     {
-                        using namespace comphelper::string;
                         // Trailing blanks in input.
-                        OUStringBuffer aBuf(sStrArray[nNext]);
-                        aBuf.stripEnd();
-                        // Expand again in case of pattern "M. D. " and
-                        // input "M. D.  ", maybe fetched far, but...
-                        padToLength(aBuf, rPat.getLength() - nPat, ' ');
-                        bOk = (rPat.indexOf( aBuf, nPat) == nPat);
+                        bOk = lcl_MatchesWithTrailingBlanks(sStrArray[nNext], rPat.subView(nPat));
                         if (bOk)
                         {
-                            nPat += aBuf.getLength() - 1;
+                            nPat = rPat.getLength() - 1;
                         }
                     }
                 }
@@ -1520,13 +1521,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
                 }
                 if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext][ nLen - 1 ] == ' '))
                 {
-                    // The same ugly trailing blanks check as in
-                    // IsAcceptedDatePattern().
-                    using namespace comphelper::string;
-                    OUStringBuffer aBuf(sStrArray[nNext]);
-                    aBuf.stripEnd();
-                    padToLength(aBuf, rPat.getLength() - nPat, ' ');
-                    bOk = (rPat.indexOf(aBuf, nPat) == nPat);
+                    bOk = lcl_MatchesWithTrailingBlanks(sStrArray[nNext], rPat.subView(nPat));
                 }
                 if (bOk)
                 {
