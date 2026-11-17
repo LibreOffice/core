@@ -234,6 +234,13 @@ bool lcl_IsPowerPoint2002Encrypted(
     return bEncrypted && bRestoreSucceeded;
 }
 
+bool lcl_ReadAt(SvStream& rStream, sal_uInt64 nOffset, sal_uInt8* pData, sal_uInt64 nLength)
+{
+    if (!checkSeek(rStream, nOffset))
+        return false;
+
+    return rStream.ReadBytes(pData, nLength) == nLength;
+}
 
 std::unique_ptr<SvMemoryStream> lcl_CopyStream(SvStream& rSource)
 {
@@ -319,15 +326,6 @@ bool lcl_DecryptPptPersistObjects(
         std::unique(aPersistOffsets.begin(), aPersistOffsets.end()),
         aPersistOffsets.end());
 
-    auto lcl_ReadAt = [&rStream](sal_uInt64 nOffset,
-                                sal_uInt8* pData,
-                                sal_uInt64 nLength) -> bool
-    {
-        if (!checkSeek(rStream, nOffset))
-            return false;
-        return rStream.ReadBytes(pData, nLength) == nLength;
-    };
-
     for (size_t nPersistId = 1;
          nPersistId < rPersistPtr.size();
          ++nPersistId)
@@ -346,7 +344,7 @@ bool lcl_DecryptPptPersistObjects(
 
         // First decrypt the encrypted RecordHeader to obtain recLen
         std::vector<sal_uInt8> aEncryptedHeader(8);
-        if (!lcl_ReadAt(nOffset, aEncryptedHeader.data(), 8))
+        if (!lcl_ReadAt(rStream, nOffset, aEncryptedHeader.data(), 8))
         {
             return false;
         }
@@ -393,7 +391,7 @@ bool lcl_DecryptPptPersistObjects(
         }
         std::vector<sal_uInt8> aEncryptedObject(static_cast<size_t>(nObjectSize));
 
-        if (!lcl_ReadAt(nOffset, aEncryptedObject.data(), nObjectSize))
+        if (!lcl_ReadAt(rStream, nOffset, aEncryptedObject.data(), nObjectSize))
         {
             return false;
         }
@@ -418,6 +416,261 @@ bool lcl_DecryptPptPersistObjects(
             return false;
         }
     }
+    return true;
+}
+
+// MS-PPT 2.3.7: Pictures Stream decryption
+//
+// Each OfficeArtBStoreContainerFileBlock is decrypted independently,
+// using block number zero. The RecordHeader is encrypted too, so we
+// first decrypt a copy of its eight bytes to determine the record size
+bool lcl_DecryptPptPicturesStream(SvStream& rStream, const OUString& rPassword, const PptCryptoApiEncryptionInfo& rInfo)
+{
+    const sal_uInt64 nStreamSize = rStream.TellEnd();
+    const sal_uInt64 nOldPos = rStream.Tell();
+
+    // for RAII sake
+    comphelper::ScopeGuard aRestorePosition(
+        [&rStream, nOldPos]()
+        {
+            rStream.Seek(nOldPos);
+        });
+
+    sal_uInt64 nOffset = 0;
+
+    while (nOffset < nStreamSize)
+    {
+        // Every OfficeArtBStoreContainerFileBlock starts with
+        // an encrypted eight byte OfficeArtRecordHeader
+        if (nStreamSize - nOffset < 8)
+        {
+            SAL_WARN("sd.filter", "Truncated PPT Pictures RecordHeader");
+            return false;
+        }
+
+        std::vector<sal_uInt8> aEncryptedHeader(8);
+        if (!lcl_ReadAt(rStream, nOffset, aEncryptedHeader.data(), 8))
+            return false;
+
+        std::vector<sal_uInt8> aDecryptedHeader;
+
+        // Pictures Stream always uses block number zero
+        if (!PptCrypt::decryptData(
+                rPassword, rInfo.aSalt, 0, rInfo.nKeySize,
+                aEncryptedHeader, aDecryptedHeader)
+            || aDecryptedHeader.size() != 8)
+        {
+            SAL_WARN("sd.filter", "Cannot decrypt PPT Pictures RecordHeader");
+            return false;
+        }
+
+        // OfficeArtRecordHeader:
+        // recVerInstance : 2 bytes
+        // recType        : 2 bytes
+        // recLen         : 4 bytes (little endian)
+        const sal_uInt16 nRecordType =
+            static_cast<sal_uInt16>(aDecryptedHeader[2])
+            | (static_cast<sal_uInt16>(aDecryptedHeader[3]) << 8);
+
+        const sal_uInt32 nRecordLength =
+            static_cast<sal_uInt32>(aDecryptedHeader[4])
+            | (static_cast<sal_uInt32>(aDecryptedHeader[5]) << 8)
+            | (static_cast<sal_uInt32>(aDecryptedHeader[6]) << 16)
+            | (static_cast<sal_uInt32>(aDecryptedHeader[7]) << 24);
+
+        // MS-ODRAW 2.2.22:
+        // 0xF007       = OfficeArtFBSE
+        // 0xF018-0xF117 = OfficeArtBlip
+        if (nRecordType != 0xF007
+            && (nRecordType < 0xF018 || nRecordType > 0xF117))
+        {
+            SAL_WARN("sd.filter", "Invalid PPT Pictures record type");
+            return false;
+        }
+
+        if (nRecordLength > nStreamSize - nOffset - 8)
+        {
+            SAL_WARN("sd.filter", "PPT Pictures record exceeds stream size");
+            return false;
+        }
+
+        const sal_uInt64 nRecordSize = 8 + sal_uInt64(nRecordLength);
+
+        if (nRecordSize > std::numeric_limits<size_t>::max())
+        {
+            SAL_WARN("sd.filter", "PPT Pictures record is too large");
+            return false;
+        }
+
+        std::vector<sal_uInt8> aEncryptedRecord(
+            static_cast<size_t>(nRecordSize));
+
+        if (!lcl_ReadAt(rStream, nOffset, aEncryptedRecord.data(), nRecordSize))
+            return false;
+
+        if (nRecordLength == 0)
+        {
+            SAL_WARN("sd.filter", "Invalid PPT BLIP record length");
+            return false;
+        }
+
+        // MS-PPT 2.3.7: Each field of an OfficeArtBStoreContainerFileBlock
+        // must be decrypted independently, using block number zero.
+        // Every call to decryptData starts a fresh RC4 state
+        switch (nRecordType)
+        {
+            case 0xF01A: // EMF
+            case 0xF01B: // WMF
+            case 0xF01C: // PICT
+            case 0xF01D: // JPEG
+            case 0xF01E: // PNG
+            case 0xF01F: // DIB
+            case 0xF029: // TIFF
+                break;
+
+            default:
+                SAL_WARN("sd.filter", "Unsupported record type: 0x" << std::hex << nRecordType);
+                return false;
+        }
+
+        // Extract recInstance from recVerInstance
+        // The low 4 bits contain recVer; the remaining 12 bits contain recInstance
+        const sal_uInt16 nRecVerInstance =
+            static_cast<sal_uInt16>(aDecryptedHeader[0])
+            | (static_cast<sal_uInt16>(aDecryptedHeader[1]) << 8);
+
+        const sal_uInt16 nRecInstance = nRecVerInstance >> 4;
+
+        sal_uInt32 nUidSize = 0;
+
+        // Office File Formats - 2.2.23
+        // See also OfficeArtBlipRecInstance enum
+        // TODO : should we add in OfficeArtBlipRecInstance the two UIDs elements ?
+        switch (nRecInstance)
+        {
+            case 0x216: // WMF, one UID
+            case 0x3D4: // EMF, one UID
+            case 0x46A: // JPEG RGB, one UID
+            case 0x542: // PICT, one UID
+            case 0x6E0: // PNG, one UID
+            case 0x6E2: // JPEG CMYK, one UID
+            case 0x6E4: // TIFF, one UID
+            case 0x7A8: // DIB, one UID
+                nUidSize = 16;
+                break;
+
+            case 0x217: // WMF, two UIDs
+            case 0x3D5: // EMF, two UIDs
+            case 0x46B: // JPEG RGB, two UIDs
+            case 0x543: // PICT, two UIDs
+            case 0x6E1: // PNG, two UIDs
+            case 0x6E3: // JPEG CMYK, two UIDs
+            case 0x6E5: // TIFF, two UIDs
+            case 0x7A9: // DIB, two UIDs
+                nUidSize = 32;
+                break;
+
+            default:
+                SAL_WARN("sd.filter", "Unsupported recInstance: 0x" << std::hex << nRecInstance);
+                return false;
+        }
+
+        constexpr sal_uInt32 nTagSize = 1;
+
+        if (nRecordLength < nUidSize + nTagSize)
+        {
+            SAL_WARN("sd.filter", "Invalid BLIP record length");
+            return false;
+        }
+
+        // Decrypt one field with a fresh RC4 state
+        auto lcl_DecryptField =
+            [&rPassword, &rInfo](
+                const sal_uInt8* pData,
+                size_t nSize,
+                std::vector<sal_uInt8>& rDecrypted) -> bool
+        {
+            std::vector<sal_uInt8> aEncrypted(pData, pData + nSize);
+
+            return PptCrypt::decryptData(
+                rPassword,
+                rInfo.aSalt,
+                0,
+                rInfo.nKeySize,
+                aEncrypted,
+                rDecrypted);
+        };
+
+        std::vector<sal_uInt8> aDecryptedData;
+        aDecryptedData.reserve(nRecordLength);
+
+        // Field 1: rgbUid (16 or 32 bytes)
+        std::vector<sal_uInt8> aDecryptedUid;
+
+        if (!lcl_DecryptField(
+                aEncryptedRecord.data() + 8,
+                nUidSize,
+                aDecryptedUid))
+        {
+            SAL_WARN("sd.filter", "Cannot decrypt UID");
+            return false;
+        }
+
+        aDecryptedData.insert(aDecryptedData.end(), aDecryptedUid.begin(), aDecryptedUid.end());
+
+        // Field 2: tag (1 byte)
+        std::vector<sal_uInt8> aDecryptedTag;
+
+        if (!lcl_DecryptField(
+                aEncryptedRecord.data() + 8 + nUidSize,
+                nTagSize,
+                aDecryptedTag))
+        {
+            SAL_WARN("sd.filter", "Cannot decrypt tag");
+            return false;
+        }
+
+        aDecryptedData.insert(aDecryptedData.end(), aDecryptedTag.begin(), aDecryptedTag.end());
+
+        // Field 3: BLIPFileData
+        const size_t nBlipDataSize = nRecordLength - nUidSize - nTagSize;
+
+        if (nBlipDataSize > 0)
+        {
+            std::vector<sal_uInt8> aDecryptedBlip;
+
+            if (!lcl_DecryptField(
+                    aEncryptedRecord.data() + 8 + nUidSize + nTagSize,
+                    nBlipDataSize,
+                    aDecryptedBlip))
+            {
+                SAL_WARN("sd.filter", "Cannot decrypt BLIPFileData");
+                return false;
+            }
+
+            aDecryptedData.insert(aDecryptedData.end(), aDecryptedBlip.begin(), aDecryptedBlip.end());
+        }
+
+        if (aDecryptedData.size() != nRecordLength)
+        {
+            SAL_WARN("sd.filter", "Invalid decrypted record size");
+            return false;
+        }
+
+        if (!checkSeek(rStream, nOffset)
+            || rStream.WriteBytes(
+                   aDecryptedHeader.data(), aDecryptedHeader.size()) != 8
+            || rStream.WriteBytes(
+                   aDecryptedData.data(), aDecryptedData.size())
+                   != nRecordLength)
+        {
+            SAL_WARN("sd.filter", "Cannot write decrypted record");
+            return false;
+        }
+
+        nOffset += nRecordSize;
+    }
+
     return true;
 }
 
@@ -501,7 +754,7 @@ SdPPTImport::SdPPTImport(SdDrawDocument& rDocument, SvStream& rDocStream, SotSto
     if (bEncrypted)
     {
         mxParam->aDecryptPersistObjects =
-            [&rMedium, bPowerPoint2002Encrypted](
+            [&rMedium, &rStorage, pImportParam = mxParam.get(), bPowerPoint2002Encrypted](
                 SvStream& rStream,
                 std::span<const sal_uInt32> rPersistPtr,
                 sal_uInt32 nCryptSessionPersistId,
@@ -567,18 +820,56 @@ SdPPTImport::SdPPTImport(SdDrawDocument& rDocument, SvStream& rDocStream, SotSto
                     aVerifiedPassword = aVerifier.getVerifiedPassword();
                 }
 
-                return lcl_DecryptPptPersistObjects(
+                if (!lcl_DecryptPptPersistObjects(
                     rStream,
                     rPersistPtr,
                     nCryptSessionPersistId,
                     nDocumentPersistId,
                     aVerifiedPassword,
-                    rInfo);
+                    rInfo))
+                {
+                    return false;
+                }
+
+                // The Pictures stream is optional
+                rtl::Reference<SotStorageStream> xPicturesStream(rStorage.OpenSotStream(u"Pictures"_ustr, StreamMode::STD_READ));
+
+                if (xPicturesStream)
+                {
+                    auto pPicturesCopy = lcl_CopyStream(*xPicturesStream);
+
+                    if (pPicturesCopy->GetError() != ERRCODE_NONE
+                        || !lcl_DecryptPptPicturesStream(
+                            *pPicturesCopy, aVerifiedPassword, rInfo))
+                    {
+                        SAL_WARN("sd.filter", "Cannot decrypt PPT Pictures stream");
+                        return false;
+                    }
+
+                    const sal_uInt64 nPicturesSize = pPicturesCopy->TellEnd();
+
+                    if (nPicturesSize > std::numeric_limits<size_t>::max())
+                        return false;
+
+                    std::vector<sal_uInt8> aDecryptedPictures(static_cast<size_t>(nPicturesSize));
+
+                    if (!checkSeek(*pPicturesCopy, 0)
+                        || pPicturesCopy->ReadBytes(
+                               aDecryptedPictures.data(), nPicturesSize)
+                               != nPicturesSize)
+                    {
+                        SAL_WARN("sd.filter", "Cannot read decrypted PPT Pictures stream");
+                        return false;
+                    }
+
+                    pImportParam->oDecryptedPicturesStream = std::move(aDecryptedPictures);
+                }
+
+                return true;
             };
     }
 
-    pFilter.reset(
-        new ImplSdPPTImport(rDocument, rStorage, rMedium, *mxParam));
+    pFilter.reset(new ImplSdPPTImport(rDocument, rStorage, rMedium, *mxParam));
 }
 
 bool SdPPTImport::Import()
@@ -613,8 +904,23 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument& rDocument, SotStorage& rStorag
     {
         sal_uInt64 nOldPos = rStCtrl.Tell();
 
-        mxPicturesStream = rStorage_.OpenSotStream( u"Pictures"_ustr, StreamMode::STD_READ );
-        pStData = mxPicturesStream.get();
+        if (rParam.oDecryptedPicturesStream)
+        {
+            mxDecryptedPicturesStream = std::make_unique<SvMemoryStream>();
+
+            const auto& rPictures = *rParam.oDecryptedPicturesStream;
+            if (!rPictures.empty())
+            {
+                mxDecryptedPicturesStream->WriteBytes(rPictures.data(), rPictures.size());
+            }
+            mxDecryptedPicturesStream->Seek(0);
+            pStData = mxDecryptedPicturesStream.get();
+        }
+        else
+        {
+            mxPicturesStream = rStorage_.OpenSotStream(u"Pictures"_ustr, StreamMode::STD_READ);
+            pStData = mxPicturesStream.get();
+        }
 
         rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
         sal_uLong nDocLen = maDocHd.GetRecEndFilePos();

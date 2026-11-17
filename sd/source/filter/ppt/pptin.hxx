@@ -45,6 +45,7 @@ typedef ::std::map < SdrObject*, Ppt97AnimationPtr > tAnimationMap;
 class ImplSdPPTImport : public SdrPowerPointImport
 {
     rtl::Reference<SotStorageStream> mxPicturesStream;
+    std::unique_ptr<SvMemoryStream> mxDecryptedPicturesStream;
     SfxMedium&      mrMed;
     SotStorage&      mrStorage;
     DffRecordHeader maDocHd;

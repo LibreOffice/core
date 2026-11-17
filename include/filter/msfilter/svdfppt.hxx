@@ -124,6 +124,8 @@ struct MSFILTER_DLLPUBLIC PowerPointImportParam
     PptCurrentUserAtom  aCurrentUserAtom;
     std::vector<sal_uInt8> aCryptSession10ContainerData;
     std::optional<PptCryptoApiEncryptionInfo> oCryptoApiEncryptionInfo;
+    // Decrypted Pictures stream used for encrypted PPT files
+    std::optional<std::vector<sal_uInt8>> oDecryptedPicturesStream;
 
     // Called after the persist directory has been reconstructed and
     // CryptSession10Container has been parsed.
