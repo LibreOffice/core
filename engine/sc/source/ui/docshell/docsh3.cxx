@@ -100,7 +100,47 @@ void ScDocShell::PostDataChanged()
     Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
     SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScAnyDataChanged ));      // Navigator
     m_pDocument->PrepareFormulaCalc();
+    notifyCellRangeInventoryChanges();
     //! notify navigator directly!
+}
+
+void ScDocShell::snapshotCellRangeInventory()
+{
+    if (!m_oCellRangeInventory)
+        m_oCellRangeInventory = sc::collectDocumentRangeInventory(*m_pDocument);
+}
+
+void ScDocShell::notifyCellRangeInventoryChanges()
+{
+    if (!m_oCellRangeInventory)
+        return;
+
+    const auto& rOld = *m_oCellRangeInventory;
+    sc::DocumentRangeInventory aNew = sc::collectDocumentRangeInventory(*m_pDocument);
+    if (aNew == rOld)
+        return;
+
+
+    // Collect the indices of sheets whose inventory has changed since the
+    // last client snapshot.
+    std::vector<SCTAB> aChangedTabs;
+    for (const auto& [nTab, rEntries] : rOld)
+    {
+        auto it = aNew.find(nTab);
+        if (it == aNew.end() || it->second != rEntries)
+            // entries either removed or changed
+            aChangedTabs.push_back(nTab);
+    }
+    for (const auto& [nTab, rEntries] : aNew)
+    {
+        if (!rOld.contains(nTab))
+            // The sheet has gained its first entry.
+            aChangedTabs.push_back(nTab);
+    }
+
+    m_oCellRangeInventory = std::move(aNew);
+    for (SCTAB nTab : aChangedTabs)
+        ScTabViewShell::notifyAllViewsCellRangeInventoryInvalidation(*this, nTab);
 }
 
 void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,

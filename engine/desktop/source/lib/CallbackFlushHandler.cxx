@@ -553,6 +553,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
         case COKitCallbackType::INVALIDATE_HEADER:
         case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
         case COKitCallbackType::VECTOR_PART_IDS:
+        case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
             SAL_INFO("kit", "Elide event in background save mode");
             return;
         default:
@@ -663,6 +664,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
         case COKitCallbackType::WINDOW:
         case COKitCallbackType::CALC_FUNCTION_LIST:
         case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
+        case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
         case COKitCallbackType::REFERENCE_MARKS:
         case COKitCallbackType::CELL_AUTO_FILL_AREA:
         case COKitCallbackType::A11Y_FOCUS_CHANGED:

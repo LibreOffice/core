@@ -4475,20 +4475,20 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommandValues)
     Scheduler::ProcessEventsToIdle();
 
     for (std::u16string_view aName :
-         { u"SecurityLabel", u"FormulaDepChain", u"CalcFunctionList",
+         { u"SecurityLabel", u"CellRangeInventory", u"FormulaDepChain", u"CalcFunctionList",
            u"EvaluateFormula", u"ExtractDocumentStructure" })
         CPPUNIT_ASSERT(pModelObj->supportsCommand(aName));
 
     // The name must match as a whole, and has no ".uno:" prefix here.
-    CPPUNIT_ASSERT(!pModelObj->supportsCommand(u"SecurityLabelX"));
-    CPPUNIT_ASSERT(!pModelObj->supportsCommand(u".uno:SecurityLabel"));
+    CPPUNIT_ASSERT(!pModelObj->supportsCommand(u"CellRangeInventoryX"));
+    CPPUNIT_ASSERT(!pModelObj->supportsCommand(u".uno:CellRangeInventory"));
     boost::property_tree::ptree aTree
-        = getCommandResponse(*pModelObj, ".uno:SecurityLabelX");
+        = getCommandResponse(*pModelObj, ".uno:CellRangeInventoryX?part=0");
     // {}
     CPPUNIT_ASSERT(aTree.empty());
 
     // The full command needs the ".uno:" prefix.
-    aTree = getCommandResponse(*pModelObj, "SecurityLabel");
+    aTree = getCommandResponse(*pModelObj, "CellRangeInventory?part=0");
     // {}
     CPPUNIT_ASSERT(aTree.empty());
 
@@ -4501,6 +4501,20 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommandValues)
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:SecurityLabel"), aTree.get<std::string>("commandName"));
     CPPUNIT_ASSERT_EQUAL(std::string(), aTree.get<std::string>("commandValues.marking"));
     CPPUNIT_ASSERT(!aTree.get<bool>("commandValues.supported"));
+
+    aTree = getCommandResponse(*pModelObj, ".uno:CellRangeInventory?part=0");
+    // {
+    //   "commandName": ".uno:CellRangeInventory",
+    //   "commandValues": {
+    //     "part": 0, "tables": [], "sparklineGroups": [], "mergedCells": []
+    //   }
+    // }
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:CellRangeInventory"),
+                         aTree.get<std::string>("commandName"));
+    CPPUNIT_ASSERT_EQUAL(0, aTree.get<int>("commandValues.part"));
+    CPPUNIT_ASSERT(aTree.get_child("commandValues.tables").empty());
+    CPPUNIT_ASSERT(aTree.get_child("commandValues.sparklineGroups").empty());
+    CPPUNIT_ASSERT(aTree.get_child("commandValues.mergedCells").empty());
 
     // The cursor is on the error in B1.
     aTree = getCommandResponse(*pModelObj, ".uno:FormulaDepChain");

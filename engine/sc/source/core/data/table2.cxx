@@ -2004,6 +2004,31 @@ sc::SparklineList& ScTable::GetSparklineList()
     return maSparklineList;
 }
 
+std::vector<std::pair<ScAddress, const sc::SparklineGroup*>> ScTable::GetSparklinePositions() const
+{
+    std::vector<std::pair<ScAddress, const sc::SparklineGroup*>> aPositions;
+    for (SCCOL nCol = 0; nCol < aCol.size(); ++nCol)
+    {
+        const ScColumn& rColumn = aCol[nCol];
+        if (!rColumn.HasSparklines())
+            continue;
+
+        // The position in the store is the real one; the one a Sparkline keeps can be stale.
+        for (const auto& rBlock : rColumn.GetSparklineStore())
+        {
+            if (rBlock.type != sc::element_type_sparkline)
+                continue;
+
+            SCROW nRow = rBlock.position;
+            auto itEnd = sc::sparkline_block::end(*rBlock.data);
+            for (auto it = sc::sparkline_block::begin(*rBlock.data); it != itEnd; ++it, ++nRow)
+                aPositions.emplace_back(ScAddress(nCol, nRow, nTab),
+                                        (*it)->getSparklineGroup().get());
+        }
+    }
+    return aPositions;
+}
+
 // Notes
 
 std::unique_ptr<ScPostIt> ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )

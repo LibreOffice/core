@@ -702,6 +702,24 @@ void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pFo
     }
 }
 
+void ScTabViewShell::notifyAllViewsCellRangeInventoryInvalidation(const ScDocShell& rDocShell,
+                                                                  SCTAB nTab)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    const OString aPayload = "part=" + OString::number(nTab);
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell && pTabViewShell->GetViewData().GetDocShell() == &rDocShell)
+            pViewShell->viewCallback(COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY,
+                                     aPayload);
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 void ScTabViewShell::invalidateAllViewsKitPositions(const SfxViewShell* pForViewShell,
                                                     bool bColumns, SCTAB nTab, SCCOLROW nStart)
 {

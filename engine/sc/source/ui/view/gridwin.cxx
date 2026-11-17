@@ -6714,19 +6714,6 @@ void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & r
         pViewShell->viewCallback(COKitCallbackType::CELL_AUTO_FILL_AREA, sRectangleString);
 }
 
-// The styled tables of the sheet, each with a drag handle on the corner of its last cell. An
-// empty list takes the handles away.
-void notifyTableRangeMarkers(const ScViewData& rViewData, std::vector<ScRange> aTableRanges,
-                             SCTAB nPart)
-{
-    sc::CellRangeMarkerOptions aOptions;
-    aOptions.aName = "TableRange"_ostr;
-    aOptions.aCellRanges = std::move(aTableRanges);
-    aOptions.nPart = nPart;
-    aOptions.aHandleCommand = ".uno:SetCalcTableRange"_ostr;
-    sc::notifyCellRangeMarker(rViewData, aOptions);
-}
-
 } //end anonymous namespace
 
 void ScGridWindow::UpdateCursorOverlay()
@@ -7063,7 +7050,8 @@ void ScGridWindow::DeleteDatabaseOverlay()
     mpOODatabase.reset();
     // Clear the client's markers, unless the window is going away with its view.
     if (comphelper::COKit::isActive() && !isDisposed())
-        notifyTableRangeMarkers(mrViewData, {}, mrViewData.GetTabNumber());
+        sc::notifyCellRangeMarker(
+            mrViewData, sc::makeTableRangeMarker(mrViewData.GetTabNumber()));
 }
 
 void ScGridWindow::UpdateDatabaseOverlay()
@@ -7085,54 +7073,26 @@ void ScGridWindow::UpdateDatabaseOverlay()
     mpOODatabase.reset();
 
     ScDocument& rDocument = mrViewData.GetDocument();
-    ScDBCollection* pDBs = rDocument.GetDBCollection();
     const SCTAB nTab = mrViewData.GetTabNumber();
-    std::vector<ScRange> aTableRanges;
 
-    if (pDBs)
-    {
-        for (const auto& rxData : pDBs->getNamedDBs())
-        {
-            const ScDBData& rData = *rxData;
-            if (!rData.GetTableStyleInfo())
-                continue;
-
-            ScRange aRange;
-            rData.GetArea(aRange);
-            if (aRange.aStart.Tab() != nTab)
-                continue;
-
-            // skip tables entirely outside the visible range. COOL places the marks
-            // from absolute positions and scrolling never reaches this overlay, so there
-            // every table of the sheet is sent and the client picks the ones on screen.
-            if (!comphelper::COKit::isActive()
-                && (aRange.aEnd.Col() < maVisibleRange.mnCol1 || aRange.aStart.Col() > maVisibleRange.mnCol2 ||
-                    aRange.aEnd.Row() < maVisibleRange.mnRow1 || aRange.aStart.Row() > maVisibleRange.mnRow2))
-                continue;
-
-            // no handle on a protected/non-editable table
-            const bool bEditable = ScEditableTester::CreateAndTestBlock(
-                rDocument, nTab, aRange.aStart.Col(), aRange.aStart.Row(),
-                aRange.aEnd.Col(), aRange.aEnd.Row()).IsEditable();
-            if (!bEditable)
-                continue;
-
-            // The rectangle on screen is what the native overlay draws and what a press on it
-            // is tested against, both of which only the desktop does.
-            if (!comphelper::COKit::isActive())
-            {
-                tools::Rectangle aFillRect
-                    = ComputeFillHandleRect(aRange.aEnd.Col(), aRange.aEnd.Row(), true);
-                maDBExpandHandles.emplace_back(aFillRect, aRange.aEnd);
-            }
-            aTableRanges.push_back(aRange);
-        }
-    }
-
+    // Send every table of the sheet; the client picks the ones on screen.
     if (comphelper::COKit::isActive())
     {
-        notifyTableRangeMarkers(mrViewData, aTableRanges, nTab);
+        sc::notifyCellRangeMarker(mrViewData, sc::getTableRangeMarker(rDocument, nTab));
         return;
+    }
+
+    for (const ScRange& rRange : sc::getTableRangeMarker(rDocument, nTab).aCellRanges)
+    {
+        // The native overlay draws the handles of the tables in the visible
+        // range only, and a press on one is tested against the same rectangles.
+        if (rRange.aEnd.Col() < maVisibleRange.mnCol1 || rRange.aStart.Col() > maVisibleRange.mnCol2 ||
+            rRange.aEnd.Row() < maVisibleRange.mnRow1 || rRange.aStart.Row() > maVisibleRange.mnRow2)
+            continue;
+
+        tools::Rectangle aFillRect
+            = ComputeFillHandleRect(rRange.aEnd.Col(), rRange.aEnd.Row(), true);
+        maDBExpandHandles.emplace_back(aFillRect, rRange.aEnd);
     }
 
     if (maDBExpandHandles.empty())
@@ -7664,31 +7624,9 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
         // The native overlay is not visible to the client, so send the cells of the sparkline
         // group and let it draw the highlight. An empty list of cell ranges clears the
         // highlight when the cursor leaves a sparkline cell.
-        sc::CellRangeMarkerOptions aOptions;
-        aOptions.aName = "SparklineGroup"_ostr;
-        aOptions.nPart = aCurrentAddress.Tab();
-        aOptions.aColor = SvtOptionsDrawinglayer::getHilightColor();
-        aOptions.fFillOpacity = 0.25;
-
-        auto pSparkline = rDocument.GetSparkline(aCurrentAddress);
-        auto* pList = pSparkline ? rDocument.GetSparklineList(aCurrentAddress.Tab()) : nullptr;
-        if (pList)
-        {
-            auto const aSparklines = pList->getSparklinesFor(pSparkline->getSparklineGroup());
-            const SCTAB nTab = aCurrentAddress.Tab();
-
-            aOptions.aCellRanges.reserve(aSparklines.size());
-            for (auto const& pCurrentSparkline : aSparklines)
-            {
-                ScRange aCellRange(pCurrentSparkline->getColumn(), pCurrentSparkline->getRow(),
-                                   nTab);
-                if (rDocument.IsMerged(aCellRange.aStart))
-                    rDocument.ExtendMerge(aCellRange);
-                aOptions.aCellRanges.push_back(aCellRange);
-            }
-        }
-
-        sc::notifyCellRangeMarker(mrViewData, aOptions);
+        sc::notifyCellRangeMarker(
+            mrViewData,
+            sc::getSparklineGroupMarker(rDocument, aCurrentAddress));
         return;
     }
 

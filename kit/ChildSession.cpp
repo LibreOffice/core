@@ -7617,6 +7617,9 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
         sendTextFrame("invalidatesheetgeometry: " + payload);
         break;
+    case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
+        sendTextFrame("invalidatecellrangeinventory: " + payload);
+        break;
     case COKitCallbackType::DOCUMENT_BACKGROUND_COLOR:
         sendTextFrame("documentbackgroundcolor: " + payload);
         break;

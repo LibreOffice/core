@@ -17,6 +17,7 @@
 
 #include <vector>
 
+class ScDocument;
 class ScViewData;
 
 namespace sc
@@ -44,6 +45,21 @@ struct CellRangeMarkerOptions
     the marker as given, or has nothing to clear.
  */
 void notifyCellRangeMarker(const ScViewData& rViewData, const CellRangeMarkerOptions& rOptions);
+
+/**
+ * Make a TableRange marker for specified sheet, with no ranges.
+ */
+CellRangeMarkerOptions makeTableRangeMarker(SCTAB nTab);
+
+/**
+ * Get a TableRange marker for the editable styled tables of sheet nTab.
+ */
+CellRangeMarkerOptions getTableRangeMarker(const ScDocument& rDoc, SCTAB nTab);
+
+/**
+ * Get a SparklineGroup marker for the sparkline group that rCell belongs to, if any.
+ */
+CellRangeMarkerOptions getSparklineGroupMarker(ScDocument& rDoc, const ScAddress& rCell);
 
 } // namespace sc
 

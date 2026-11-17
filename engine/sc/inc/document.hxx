@@ -1493,6 +1493,9 @@ public:
     bool HasSparklines(SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab) const;
     SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
     SC_DLLPUBLIC sc::SparklineList* GetSparklineList(SCTAB nTab);
+    /** Returns the position and group of every sparkline of sheet nTab, column by column */
+    SC_DLLPUBLIC std::vector<std::pair<ScAddress, const sc::SparklineGroup*>>
+    GetSparklinePositions(SCTAB nTab) const;
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rPosition);
 
     /**

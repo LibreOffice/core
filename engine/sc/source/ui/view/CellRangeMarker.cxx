@@ -11,11 +11,13 @@
 
 #include <CellRangeMarker.hxx>
 
+#include <CellRangeInventory.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 
 #include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <tools/json_writer.hxx>
 
 namespace sc
@@ -81,6 +83,39 @@ void notifyCellRangeMarker(const ScViewData& rViewData, const CellRangeMarkerOpt
         }
     }
     pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aWriter.finishAndGetAsOString());
+}
+
+CellRangeMarkerOptions makeTableRangeMarker(SCTAB nTab)
+{
+    CellRangeMarkerOptions aOptions;
+    aOptions.aName = "TableRange"_ostr;
+    aOptions.nPart = nTab;
+    aOptions.aHandleCommand = ".uno:SetCalcTableRange"_ostr;
+    return aOptions;
+}
+
+CellRangeMarkerOptions getTableRangeMarker(const ScDocument& rDoc, SCTAB nTab)
+{
+    CellRangeMarkerOptions aOptions = makeTableRangeMarker(nTab);
+    for (const TableRangeEntry& rEntry : collectTableRangeEntries(rDoc, nTab))
+    {
+        // no handle on a non-editable table
+        if (rEntry.bEditable)
+            aOptions.aCellRanges.push_back(rEntry.aRange);
+    }
+    return aOptions;
+}
+
+CellRangeMarkerOptions getSparklineGroupMarker(ScDocument& rDoc, const ScAddress& rCell)
+{
+    CellRangeMarkerOptions aOptions;
+    aOptions.aName = "SparklineGroup"_ostr;
+    aOptions.nPart = rCell.Tab();
+    aOptions.aColor = SvtOptionsDrawinglayer::getHilightColor();
+    aOptions.fFillOpacity = 0.25;
+    const SparklineGroupRangeEntry aRanges = collectSparklineGroupRangeEntry(rDoc, rCell);
+    aOptions.aCellRanges.assign(aRanges.begin(), aRanges.end());
+    return aOptions;
 }
 
 } // namespace sc

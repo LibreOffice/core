@@ -29,6 +29,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <scdllapi.h>
+#include "CellRangeInventory.hxx"
 #include <document.hxx>
 #include <shellids.hxx>
 #include <optutil.hxx>
@@ -103,6 +104,10 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
     sal_uInt16          m_nDocumentLock;
     sal_Int16           m_nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
     std::unique_ptr<ScDBData> m_pOldAutoDBRange;
+
+    // The cell range inventory of every sheet as the clients last saw it;
+    // absent until one pulls the inventory.
+    std::optional<sc::DocumentRangeInventory> m_oCellRangeInventory;
 
     std::unique_ptr<ScAutoStyleList>    m_pAutoStyleList;
     std::unique_ptr<ScPaintLockData>    m_pPaintLockData;
@@ -367,6 +372,14 @@ public:
     bool            IsPaintLocked() const { return m_pPaintLockData != nullptr; }
 
     void            PostDataChanged();
+
+    /**
+     * Call this to store a snapshot of the current cell range inventory of all sheets.
+     */
+    void snapshotCellRangeInventory();
+
+    /// Tells every view which sheets' inventory differs from the snapshot, and renews it.
+    void notifyCellRangeInventoryChanges();
 
     /// Drain pass for the per-DBData adjacency-band listener: walks every
     /// named DBData and, where Notify flagged a pending auto-expansion and

@@ -1427,7 +1427,17 @@ enum class COKitCallbackType
      *   "pagerectangles": [ [ 284, 284, 12240, 15840 ], [ 284, 16408, 12240, 15840 ] ] }.
      * The ids are the part ids that .uno:VectorPrimitives takes.
      */
-    VECTOR_PART_IDS = 82
+    VECTOR_PART_IDS = 82,
+
+    /**
+     * This is Calc specific. The cell range inventory of a sheet, its cell
+     * ranges of interest, changed. Clients that keep it must fetch it again
+     * with .uno:CellRangeInventory?part=N.
+     *
+     * Pushed to every view of the document, once per changed sheet. The
+     * payload names the sheet, for example 'part=0'.
+     */
+    INVALIDATE_CELL_RANGE_INVENTORY = 83
 };
 
 enum class COKitKeyEventType
@@ -1619,6 +1629,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_REFRESH_LINKED_FILES";
     case COKitCallbackType::VECTOR_PART_IDS:
         return "KIT_CALLBACK_VECTOR_PART_IDS";
+    case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
+        return "KIT_CALLBACK_INVALIDATE_CELL_RANGE_INVENTORY";
     }
 
     assert(!"Unknown COKitCallbackType type.");

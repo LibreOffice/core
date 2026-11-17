@@ -894,6 +894,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/unoobj/viewuno \
     sc/source/ui/unoobj/warnpassword \
     sc/source/ui/view/auditsh \
+    sc/source/ui/view/CellRangeInventory \
     sc/source/ui/view/CellRangeMarker \
     sc/source/ui/view/cellmergeoption \
     sc/source/ui/view/cellsh \

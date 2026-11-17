@@ -284,6 +284,11 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aSheetGeometryInvalidations.emplace_back(pPayload);
         }
         break;
+        case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
+        {
+            m_aCellRangeInventoryInvalidations.emplace_back(pPayload);
+        }
+        break;
         case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
             m_aInvalidateCursorResult.parseMessage(pPayload);

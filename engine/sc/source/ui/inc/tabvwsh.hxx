@@ -508,6 +508,10 @@ public:
     /// is equal to nCurrentTabIndex
     static void notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pForViewShell, bool bColumns, bool bRows, bool bSizes,
                                                     bool bHidden, bool bFiltered, bool bGroups, SCTAB nCurrentTabIndex);
+    /// Emits a COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY for sheet nTab to all views of
+    /// rDocShell
+    static void notifyAllViewsCellRangeInventoryInvalidation(const ScDocShell& rDocShell,
+                                                             SCTAB nTab);
     /// Drops the cached accumulated column or row positions of sheet nTab from index nStart on,
     /// in every view of the document of pForViewShell. The next position lookup recomputes them
     /// from the document.

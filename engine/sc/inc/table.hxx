@@ -532,6 +532,7 @@ public:
     bool DeleteSparkline(SCCOL nCol, SCROW nRow);
 
     sc::SparklineList& GetSparklineList();
+    std::vector<std::pair<ScAddress, const sc::SparklineGroup*>> GetSparklinePositions() const;
     void CopySparklinesToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab);
     void FillSparkline(bool bVertical, SCCOLROW nFixed, SCCOLROW nIteratingStart, SCCOLROW nIteratingEnd, SCCOLROW nFillStart, SCCOLROW nFillEnd);
 

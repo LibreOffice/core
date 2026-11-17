@@ -173,7 +173,7 @@ public:
     bool            RemovePageBreak( bool bColumn, const ScAddress& rPos,
                                              bool bRecord, bool bSetModified );
 
-    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
+    SC_DLLPUBLIC void ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
     bool            Protect( SCTAB nTab, const OUString& rPassword );
     bool            Unprotect( SCTAB nTab, std::u16string_view rPassword, bool bApi );

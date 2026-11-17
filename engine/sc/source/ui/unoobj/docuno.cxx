@@ -155,6 +155,7 @@
 #include <output.hxx>
 #include <stlpool.hxx>
 #include <SheetViewManager.hxx>
+#include <CellRangeInventory.hxx>
 
 #include <strings.hrc>
 
@@ -1668,6 +1669,7 @@ enum class CalcCommand
 {
     Unknown,
     SecurityLabel,
+    CellRangeInventory,
     FormulaDepChain,
     CalcFunctionList,
     EvaluateFormula,
@@ -1677,6 +1679,7 @@ enum class CalcCommand
 /** The commands that getCommandValues() handles, by name. */
 constexpr std::pair<std::string_view, CalcCommand> aCalcCommands[] = {
     { "SecurityLabel", CalcCommand::SecurityLabel },
+    { "CellRangeInventory", CalcCommand::CellRangeInventory },
     { "FormulaDepChain", CalcCommand::FormulaDepChain },
     { "CalcFunctionList", CalcCommand::CalcFunctionList },
     { "EvaluateFormula", CalcCommand::EvaluateFormula },
@@ -1776,6 +1779,26 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
             // Whether this document's format can carry a label; the browser hides the
             // command and its button when false (only OOXML supports the customXml part).
             rJsonWriter.put("supported", xModel.is() && svx::seclabel::modelSupportsLabel(xModel));
+            break;
+        }
+        case CalcCommand::CellRangeInventory:
+        {
+            // The cell ranges of interest in one sheet, ?part=N, for the client to keep.
+            rJsonWriter.put("commandName", ".uno:CellRangeInventory");
+            if (!pDocShell)
+                return;
+
+            const std::optional<std::string_view> oPart = aCommand.get("part");
+            const sal_Int32 nPart = oPart ? o3tl::toInt32(*oPart) : -1;
+
+            ScDocument& rDoc = pDocShell->GetDocument();
+            if (nPart < 0 || !rDoc.HasTable(static_cast<SCTAB>(nPart)))
+                return;
+
+            pDocShell->snapshotCellRangeInventory();
+
+            auto aValues = rJsonWriter.startNode("commandValues");
+            sc::writeCellRangeInventory(rJsonWriter, rDoc, static_cast<SCTAB>(nPart));
             break;
         }
         case CalcCommand::FormulaDepChain:

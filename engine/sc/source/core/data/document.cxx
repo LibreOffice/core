@@ -6844,6 +6844,14 @@ sc::SparklineList* ScDocument::GetSparklineList(SCTAB nTab)
     return nullptr;
 }
 
+std::vector<std::pair<ScAddress, const sc::SparklineGroup*>>
+ScDocument::GetSparklinePositions(SCTAB nTab) const
+{
+    if (const ScTable* pTable = FetchTable(nTab))
+        return pTable->GetSparklinePositions();
+    return {};
+}
+
 bool ScDocument::HasOneSparklineGroup(ScRange const& rRange)
 {
     std::shared_ptr<sc::SparklineGroup> pSparklineGroup;
