@@ -10457,7 +10457,7 @@ if test "$enable_eot" = "yes"; then
     AC_DEFINE([ENABLE_EOT])
     AC_MSG_RESULT([yes])
 
-    libo_CHECK_SYSTEM_MODULE([libeot],[LIBEOT],[libeot >= 0.01])
+    libo_CHECK_SYSTEM_MODULE([libeot],[LIBEOT],[libeot])
 else
     ENABLE_EOT=
     AC_MSG_RESULT([no])
