@@ -2344,12 +2344,22 @@ ifneq ($(ENABLE_COINMP),)
 ifneq ($(SYSTEM_COINMP),TRUE)
 
 define gb_LinkTarget__use_coinmp
-$(call gb_LinkTarget_use_package,$(1),coinmp)
+$(call gb_LinkTarget_use_package,$(1),coinmp_cbc)
+$(call gb_LinkTarget_use_package,$(1),coinmp_cgl)
+$(call gb_LinkTarget_use_package,$(1),coinmp_clp)
+$(call gb_LinkTarget_use_package,$(1),coinmp_coinutils)
+$(call gb_LinkTarget_use_package,$(1),coinmp_osi)
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(foreach lib,libCbcSolver libCbc libCgl libOsiClp libClp libOsi libCoinUtils,\
 		$(gb_UnpackedTarball_workdir)/coinmp/Cbc/MSVisualStudio/v17/$(wnt_arch_subdir_optional)$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/$(lib).lib) \
 )
+# the libraries are static here, so the SBOM records them as linked in
+$(call gb_Helper_LinkTarget_use_external,$(1),cbc)
+$(call gb_Helper_LinkTarget_use_external,$(1),cgl)
+$(call gb_Helper_LinkTarget_use_external,$(1),clp)
+$(call gb_Helper_LinkTarget_use_external,$(1),coinutils)
+$(call gb_Helper_LinkTarget_use_external,$(1),osi)
 else
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(gb_UnpackedTarball_workdir)/coinmp/Cbc/src/.libs -lCbcSolver -lCbc \
@@ -2371,8 +2381,20 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_external_packages_for_install,coinmp,ooo,\
-	coinmp \
+$(eval $(call gb_Helper_register_external_packages_for_install,cbc,ooo,\
+	coinmp_cbc \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,cgl,ooo,\
+	coinmp_cgl \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,clp,ooo,\
+	coinmp_clp \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,coinutils,ooo,\
+	coinmp_coinutils \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,osi,ooo,\
+	coinmp_osi \
 ))
 
 else # SYSTEM_COINMP

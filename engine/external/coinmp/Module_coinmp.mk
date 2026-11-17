@@ -10,7 +10,11 @@
 $(eval $(call gb_Module_Module,coinmp))
 
 $(eval $(call gb_Module_add_targets,coinmp,\
-	ExternalPackage_coinmp \
+	ExternalPackage_coinmp_cbc \
+	ExternalPackage_coinmp_cgl \
+	ExternalPackage_coinmp_clp \
+	ExternalPackage_coinmp_coinutils \
+	ExternalPackage_coinmp_osi \
 	ExternalProject_coinmp \
 	UnpackedTarball_coinmp \
 ))
