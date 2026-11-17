@@ -23,6 +23,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include <comphelper/flatpak.hxx>
 #include <comphelper/hash.hxx>
 #include <desktop/exithelper.h>
 #include <osl/process.h>
@@ -565,7 +566,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
     Args* args = args_parse();
     args->sAppPath = get_app_path(argv[0]);
 
-    if (!args->bInhibitPipe && !getenv("LIBO_FLATPAK"))
+    if (!args->bInhibitPipe && !comphelper::flatpak::isFlatpak())
     {
         int fd = 0;
         const OUString sPipePath = get_pipe_path(args->sAppPath);

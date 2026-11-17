@@ -39,6 +39,7 @@
 #include <osl/conditn.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <rtl/strbuf.hxx>
+#include <comphelper/flatpak.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
@@ -680,7 +681,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     enum class Kind { Pipe, Dbus };
     Kind kind;
 #if ENABLE_DBUS
-    kind = std::getenv("LIBO_FLATPAK") != nullptr ? Kind::Dbus : Kind::Pipe;
+    kind = comphelper::flatpak::isFlatpak() ? Kind::Dbus : Kind::Pipe;
 #else
     kind = Kind::Pipe;
 #endif
