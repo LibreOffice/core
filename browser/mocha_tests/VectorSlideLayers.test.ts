@@ -111,4 +111,33 @@ describe('VectorSlideLayers', function () {
 			runs,
 		);
 	});
+
+	// A slide with a background of its own does not list the background video of its master,
+	// so that video is left out, while a video the slide lists and an object without a video
+	// are drawn.
+	it('leaves out the master videos the slide does not show', function () {
+		const media = 34;
+		const master: any = {
+			order: [0, 5, 6, 7],
+			objects: new Map<number, any>([
+				[0, { id: 0, kind: 'page' }],
+				[5, { id: 5, objectKind: media }],
+				[6, { id: 6, objectKind: media }],
+				[7, { id: 7 }],
+			]),
+		};
+
+		nodeassert.deepStrictEqual(
+			[...VectorSlideLayers.masterVideosLeftOut(master, new Set([6]))],
+			[5],
+		);
+		nodeassert.deepStrictEqual(
+			[...VectorSlideLayers.masterVideosLeftOut(master, new Set([5, 6]))],
+			[],
+		);
+		nodeassert.deepStrictEqual(
+			[...VectorSlideLayers.masterVideosLeftOut(null, new Set())],
+			[],
+		);
+	});
 });

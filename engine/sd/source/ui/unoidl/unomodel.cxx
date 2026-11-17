@@ -7976,14 +7976,17 @@ OUString SdXImpressDocument::getOrCreateClickSoundUrl(const SdrObject& rObject,
 
 namespace
 {
-void writeVideos(::tools::JsonWriter& rJsonWriter, SdrPage& rPage, std::string_view aName)
+// The videos of rPage, without its background video when bWithBackgroundVideo is false.
+void writeVideos(::tools::JsonWriter& rJsonWriter, SdPage& rPage, std::string_view aName,
+                 bool bWithBackgroundVideo = true)
 {
     auto aVideoList = rJsonWriter.startArray(aName);
     SdrObjListIter aIterator(&rPage, SdrIterMode::DeepWithGroups);
     while (aIterator.IsMore())
     {
         auto* pObject = aIterator.Next();
-        if (pObject->GetObjIdentifier() == SdrObjKind::Media)
+        if (pObject->GetObjIdentifier() == SdrObjKind::Media
+            && (bWithBackgroundVideo || !rPage.IsBackgroundVideo(*pObject)))
         {
             auto aVideosNode = rJsonWriter.startStruct();
             auto* pMediaObject = static_cast<SdrMediaObj*>(pObject);
@@ -8173,8 +8176,11 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 }
 
                 writeVideos(aJsonWriter, *pPage, "videos");
+                // A background of the slide's own shows in place of the background video of the
+                // master page.
                 if (pVisibleMasterPage)
-                    writeVideos(aJsonWriter, *pVisibleMasterPage, "masterVideos");
+                    writeVideos(aJsonWriter, static_cast<SdPage&>(*pVisibleMasterPage),
+                                "masterVideos", !pPage->HasOwnBackground());
 
                 {
                     auto aGifList = aJsonWriter.startArray("gifs");

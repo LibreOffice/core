@@ -5407,6 +5407,32 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoLoop)
     CPPUNIT_ASSERT(!rVideo.get<bool>("mute"));
 }
 
+// A slide with a background of its own shows it in place of the background video of its master
+// page, in the editing view and in the slideshow. The other slide with that master page shows the
+// video.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOwnBackgroundInPlaceOfVideoBackground)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    dispatchCommand(mxComponent, u".uno:InsertVideoBackground"_ustr,
+                    { comphelper::makePropertyValue(
+                        u"FileName"_ustr,
+                        m_directories.getURLFromSrc(u"/sd/qa/unit/data/video-320x240.webm")) });
+    SdPage* pFirstSlide
+        = pXImpressDocument->GetDocShell()->GetDoc()->GetSdPage(0, PageKind::Standard);
+    pFirstSlide->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pFirstSlide->getSdrPageProperties().PutItem(XFillColorItem(OUString(), COL_LIGHTRED));
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), child_at(aTree, "slides", 0).get_child("masterVideos").size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), child_at(aTree, "slides", 1).get_child("masterVideos").size());
+
+    pXImpressDocument->setPart(0);
+    Scheduler::ProcessEventsToIdle();
+    assertTilePixelColor(pXImpressDocument, 100, 100, COL_LIGHTRED);
+}
+
 // A slide shows its own fill whether the master background is shown or not, and the blue master
 // fill only while it is shown.
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterBackgroundVisibility)

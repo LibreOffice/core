@@ -274,6 +274,10 @@ class VectorCompositor extends SlideCompositor {
 				authoredColors: true,
 				states,
 				drawOver: this._videosOverShapes(slideHash, data, states),
+				hiddenMasterObjects: VectorSlideLayers.masterVideosLeftOut(
+					this._masterOf(data),
+					this._shownMasterVideoIds(slideHash),
+				),
 			},
 		);
 		context.restore();
@@ -316,12 +320,40 @@ class VectorCompositor extends SlideCompositor {
 		return overShapes;
 	}
 
+	// The players of the videos of the master page that the slide shows. A player keeps playing
+	// through the slides of its master page, also through those that do not show its video.
 	private _masterVideoRenderers(
 		slideHash: string,
 	): Array<AnimatedContentRenderer> {
 		const masterHash =
 			this._metaPresentation.getSlideInfo(slideHash)?.masterPage;
-		return masterHash ? this.masterVideos.get(masterHash) : [];
+		if (!masterHash) return [];
+		const shownIds = this._shownMasterVideoIds(slideHash);
+		return this.masterVideos
+			.get(masterHash)
+			.filter((videoRenderer) => shownIds.has(videoRenderer.infoId));
+	}
+
+	// The ids of the objects of the master page that hold a video or a sound the slide shows.
+	private _shownMasterVideoIds(slideHash: string): Set<number> {
+		return new Set<number>(
+			(this._metaPresentation.getSlideInfo(slideHash)?.masterVideos ?? []).map(
+				(video) => video.id,
+			),
+		);
+	}
+
+	// The cached tree of the master the slide draws under itself, null where it names none.
+	private _masterOf(
+		data: cool.VectorPrimitivesData,
+	): cool.VectorPrimitivesData | null {
+		if (data.masterPartId === undefined) return null;
+		return (
+			RenderManager.requestPartById(
+				data.masterPartId,
+				cool.VectorMode.MasterPages,
+			) ?? null
+		);
 	}
 
 	// How the video of the shape is drawn: in the state of the shape.
@@ -814,13 +846,7 @@ class VectorCompositor extends SlideCompositor {
 		const width = context.canvas.width;
 		const height = context.canvas.height;
 		if (width <= 0 || height <= 0) return null;
-		const master =
-			data.masterPartId !== undefined ?
-				(RenderManager.requestPartById(
-					data.masterPartId,
-					cool.VectorMode.MasterPages,
-				) ?? null)
-			:	null;
+		const master = this._masterOf(data);
 
 		const targets = this._animatedTargets(slideHash, data);
 		const pieces =
@@ -844,11 +870,6 @@ class VectorCompositor extends SlideCompositor {
 				sets.length < VectorCompositor.layerSetsPerContext ?
 					new VectorSlideLayers(context)
 				:	sets.pop();
-			const masterVideoIds = new Set<number>(
-				(
-					this._metaPresentation.getSlideInfo(slideHash)?.masterVideos ?? []
-				).map((video) => video.id),
-			);
 			layers.build(
 				slideHash,
 				data,
@@ -856,7 +877,7 @@ class VectorCompositor extends SlideCompositor {
 				width,
 				height,
 				master,
-				masterVideoIds,
+				this._shownMasterVideoIds(slideHash),
 				pieces,
 			);
 		}

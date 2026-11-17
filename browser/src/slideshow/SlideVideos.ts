@@ -146,8 +146,8 @@ class SlideVideos {
 
 /*
  * The players of the master page videos, by master page hash. A video on a master page is a
- * background. It starts when the first slide with that master page is shown and keeps playing
- * through the slides after it with the same master page. During a transition the master page of the
+ * background. It starts when the first slide that shows it is shown and keeps playing through the
+ * slides after it with the same master page. During a transition the master page of the
  * slide being left keeps its players beside those of the slide coming in.
  */
 class MasterVideos {

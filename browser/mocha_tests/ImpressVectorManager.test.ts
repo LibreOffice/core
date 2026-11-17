@@ -1307,6 +1307,33 @@ describe('ImpressVectorManager', function () {
 		nodeassert.deepStrictEqual(strokedPaths(upper), ['M0 0 L3 3']);
 	});
 
+	// A slide can leave out some objects of its master, such as a background video in place of
+	// which it shows a background of its own. The other master objects are still drawn.
+	it('leaves out the master objects the options name as hidden', function () {
+		const manager = new ImpressVectorManager();
+		const slide = slideOverThreeMasterObjects(manager);
+
+		const recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, slide, {
+			hiddenMasterObjects: new Set([2]),
+			drawOver: new Map([
+				[
+					2,
+					(context: CanvasRenderingContext2D) => context.fillRect(0, 0, 1, 1),
+				],
+			]),
+		});
+		nodeassert.deepStrictEqual(strokedPaths(recorder), [
+			'M0 0 L6 6',
+			'M0 0 L1 1',
+			'M0 0 L3 3',
+		]);
+		nodeassert.strictEqual(
+			recorder.calls.some((call) => call.method === 'fillRect'),
+			false,
+		);
+	});
+
 	// What an option names to draw over a master object, such as the frame of a background
 	// video, is drawn right after that object, so the master objects above it cover it.
 	it('draws what is named over a master object before the master objects after it', function () {

@@ -314,8 +314,16 @@ class LayerDrawing {
 	}
 
 	public hasMasterVideos(slideIndex: number): boolean {
-		const slideHash = this.helper.getSlideHash(slideIndex);
-		return this.masterVideos.has(this.getSlideInfo(slideHash).masterPage);
+		const slideInfo = this.getSlideInfo(this.helper.getSlideHash(slideIndex));
+		return (
+			(slideInfo.masterVideos?.length ?? 0) > 0 &&
+			this.masterVideos.has(slideInfo.masterPage)
+		);
+	}
+
+	private showsMasterVideo(slideHash: string, videoId: number): boolean {
+		const masterVideos = this.getSlideInfo(slideHash).masterVideos ?? [];
+		return masterVideos.some((videoInfo) => videoInfo.id === videoId);
 	}
 
 	// The number of frames shown so far by all the videos on the master page of the slide.
@@ -854,6 +862,11 @@ class LayerDrawing {
 
 	private drawMasterPageLayer(layer: LayerEntry, slideHash: string) {
 		if (layer.type === 'bitmap') {
+			// The layers of a master page hold all its videos, and the slide lists the ones it
+			// shows. A slide with a background of its own shows that in place of the background
+			// video.
+			if (layer.videoId && !this.showsMasterVideo(slideHash, layer.videoId))
+				return;
 			this.drawBitmap(layer.content as ImageInfo);
 			if (layer.videoId)
 				this.drawMasterVideoWithLayer(slideHash, layer.videoId);

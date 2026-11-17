@@ -421,7 +421,8 @@ namespace cool {
 		/// for an object that moves along none.
 		motionPaths?: ObjectMotionPath[];
 		/// What kind of object it is, as the drawing layer numbers the kinds: 2 a line, 24 a
-		/// connector, 25 a caption, 29 a measurement, 33 a custom shape, 35 a table.
+		/// connector, 25 a caption, 29 a measurement, 33 a custom shape, 34 a video or a sound,
+		/// 35 a table.
 		objectKind?: number;
 		/// The geometry type of a custom shape, such as "rect", "ellipse" or
 		/// "ooxml-rightArrow". Absent for any other object.

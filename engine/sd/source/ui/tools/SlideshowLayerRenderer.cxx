@@ -410,6 +410,8 @@ class AnalyzeRenderingRedirector : public sdr::contact::ViewObjectContactRedirec
 private:
     RenderState& mrRenderState;
     bool mbRenderMasterPage;
+    // The slide being rendered, or nullptr when the page is not a slide of a presentation.
+    const SdPage* mpSlide;
 
     RenderPass* mpCurrentRenderPass;
     RenderStage mePreviousStage = RenderStage::Master;
@@ -459,9 +461,11 @@ private:
     }
 
 public:
-    AnalyzeRenderingRedirector(RenderState& rRenderState, bool bRenderMasterPage)
+    AnalyzeRenderingRedirector(RenderState& rRenderState, bool bRenderMasterPage,
+                               const SdPage* pSlide)
         : mrRenderState(rRenderState)
         , mbRenderMasterPage(bRenderMasterPage)
+        , mpSlide(pSlide)
         , mpCurrentRenderPass(newRenderPass())
     {
     }
@@ -505,8 +509,15 @@ public:
             return;
 
         // is the object visible and not hidden by any option
-        const bool bVisible
+        bool bVisible
             = pObject->getSdrPageFromSdrObject()->checkVisibility(rOriginal, rDisplayInfo, true);
+
+        // The client keeps the layers of a master page for every slide of that master page, so
+        // the background video goes into them also when this slide has a background of its own
+        // in place of the video. Each slide lists in its masterVideos the master videos it shows.
+        if (!bVisible && pPage->IsMasterPage() && mpSlide && mpSlide->HasOwnBackground()
+            && static_cast<const SdPage*>(pPage)->IsBackgroundVideo(*pObject))
+            bVisible = true;
 
         // Determine the current stage, depending on the page
         RenderStage eCurrentStage
@@ -1120,7 +1131,8 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer
     if (maRenderState.meStage == RenderStage::Background)
     {
         // Render no objects, just the background, but analyze and create rendering passes
-        AnalyzeRenderingRedirector aRedirector(maRenderState, mbRenderMasterPage);
+        AnalyzeRenderingRedirector aRedirector(maRenderState, mbRenderMasterPage,
+                                               dynamic_cast<const SdPage*>(&mrPage));
         createViewAndDraw(aRenderContext, &aRedirector);
         aRedirector.finalizeRenderPasses();
 

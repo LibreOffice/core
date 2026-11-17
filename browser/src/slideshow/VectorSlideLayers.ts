@@ -112,6 +112,9 @@ class VectorSlideLayers {
 	private data: cool.VectorPrimitivesData | null = null;
 	// The tree of the master of the slide, null where there is none.
 	private master: cool.VectorPrimitivesData | null = null;
+	// The ids of the objects of the master that hold a video or a sound the slide does not show.
+	// The layers leave them out.
+	private hiddenMasterObjects: Set<number> = new Set();
 	private canvasWidth = 0;
 	private canvasHeight = 0;
 	// Canvas pixels per twip.
@@ -200,6 +203,29 @@ class VectorSlideLayers {
 		return pieces.concat(runs.slice(1));
 	}
 
+	// The objectKind of an object that holds a video or a sound.
+	private static readonly mediaKind = 34;
+
+	/// The ids of the objects of the master that hold a video or a sound and are not in
+	/// shownVideoIds. A slide with a background of its own leaves the background video of its
+	/// master out of the master videos it shows.
+	public static masterVideosLeftOut(
+		master: cool.VectorPrimitivesData | null,
+		shownVideoIds: ReadonlySet<number>,
+	): Set<number> {
+		const leftOut = new Set<number>();
+		if (!master) return leftOut;
+		for (const id of master.order) {
+			const object = master.objects.get(id);
+			if (
+				object?.objectKind === VectorSlideLayers.mediaKind &&
+				!shownVideoIds.has(id)
+			)
+				leftOut.add(id);
+		}
+		return leftOut;
+	}
+
 	// The nearest animation target among the object and the groups above it, since an effect
 	// on a group moves every member.
 	private static ownerOf(
@@ -239,7 +265,8 @@ class VectorSlideLayers {
 
 	/// Make the layers anew. targets maps each animation target's object id to the paragraphs
 	/// that an animation moves on their own. master is the tree of the master of the slide and
-	/// masterVideoIds the ids of its objects that hold a video. The textures are painted by
+	/// masterVideoIds the ids of its objects that hold a video the slide shows. The other objects
+	/// of the master that hold a video or a sound are left out. The textures are painted by
 	/// paintNext, one layer at a time, and the next draw paints the ones still left.
 	/// Each owner of pieces, which must be a target without paragraphs of its own, also gets a
 	/// layer of itself without its text and a layer for each of its pieces, right after its
@@ -259,6 +286,10 @@ class VectorSlideLayers {
 		this.data = data;
 		this.master = master;
 		this.pieces = pieces;
+		this.hiddenMasterObjects = VectorSlideLayers.masterVideosLeftOut(
+			master,
+			masterVideoIds,
+		);
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 		this.scaleX = canvasWidth / data.slideWidth;
@@ -437,6 +468,7 @@ class VectorSlideLayers {
 		this.slideHash = null;
 		this.data = null;
 		this.master = null;
+		this.hiddenMasterObjects = new Set();
 	}
 
 	// A paragraph layer takes its paragraph's state. A run takes its owner's, which the
@@ -656,6 +688,7 @@ class VectorSlideLayers {
 				authoredColors: true,
 				paintRange: { start: layer.run.start, end: layer.run.end },
 				masterRange: layer.run.master,
+				hiddenMasterObjects: this.hiddenMasterObjects,
 			});
 		} else if (layer.paragraph !== undefined) {
 			RenderManager.renderObjectParagraph(

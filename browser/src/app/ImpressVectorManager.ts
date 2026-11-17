@@ -692,8 +692,9 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// out. The master's page entry is skipped, since the page draws its own
 	/// background. A text edit on a master object is drawn from its edit
 	/// entry, since the object hides its text during the edit. Only the
-	/// positions of the master range of the options are drawn, and what the
-	/// options give to draw over an object is drawn right after it.
+	/// positions of the master range of the options are drawn, without the
+	/// master objects the options name as hidden, and what the options give
+	/// to draw over an object is drawn right after it.
 	private _renderMaster(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
@@ -713,6 +714,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 			const id = master.order[position];
 			const obj = master.objects.get(id);
 			if (!obj || obj.hiddenBehindSlide) continue;
+			if (options?.hiddenMasterObjects?.has(id)) continue;
 			if (obj.kind !== undefined) {
 				if (obj.kind !== 'texteditoverlay' || !textEdits.has(id)) continue;
 				const parent = master.objects.get(obj.parent ?? 0);

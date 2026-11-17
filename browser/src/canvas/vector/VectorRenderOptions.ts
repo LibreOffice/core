@@ -86,6 +86,9 @@ namespace cool {
 		/// The positions in the paint order of the master that are drawn, from start up to but not
 		/// including end. Absent where the whole master is.
 		masterRange?: { start: number; end: number };
+		/// The ids of the objects of the master that are left out of the render. Absent where
+		/// every master object the page shows is drawn.
+		hiddenMasterObjects?: ReadonlySet<number>;
 		/// True when the form controls of the page are left out of the render. False or absent
 		/// when they are drawn.
 		withoutFormControls?: boolean;

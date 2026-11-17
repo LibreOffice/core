@@ -2600,6 +2600,13 @@ bool SdPage::IsBackgroundVideo(const SdrObject& rObj) const
            && rObj.GetLogicRect().Contains(::tools::Rectangle(Point(), GetSize()));
 }
 
+bool SdPage::HasOwnBackground() const
+{
+    return !IsMasterPage()
+           && getSdrPageProperties().GetItemSet().Get(XATTR_FILLSTYLE).GetValue()
+                  != drawing::FillStyle_NONE;
+}
+
 void SdPage::RemovePresObj(const SdrObject* pObj)
 {
     if( pObj && maPresentationShapeList.hasShape(const_cast<SdrObject&>(*pObj)) )
@@ -3294,6 +3301,15 @@ bool SdPage::checkVisibility(
                 return false;
             }
         }
+    }
+
+    // A slide with a background of its own shows it in place of the background video of its
+    // master page.
+    if (IsMasterPage() && pVisualizedPage != this && IsBackgroundVideo(*pObj))
+    {
+        const SdPage* pVisualizedSdPage = dynamic_cast<const SdPage*>(pVisualizedPage);
+        if (pVisualizedSdPage && pVisualizedSdPage->HasOwnBackground())
+            return false;
     }
 
     // i63977, do not print SdrpageObjs from master pages

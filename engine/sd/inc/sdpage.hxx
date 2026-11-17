@@ -196,6 +196,10 @@ public:
     /** @return true if the given SdrObject is a video or sound that covers the whole page */
     SD_DLLPUBLIC bool IsBackgroundVideo(const SdrObject& rObj) const;
 
+    /** @return true if this is a slide with a background fill of its own. It shows in place of
+        the background of the master page, both the fill and the background video. */
+    SD_DLLPUBLIC bool HasOwnBackground() const;
+
     /** removes the given SdrObject from the presentation object list */
     void            RemovePresObj(const SdrObject* pObj);
 
