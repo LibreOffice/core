@@ -5059,7 +5059,12 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             return true;
 #endif
 
-        const std::string stringJSON = payload->jsonString();
+        // Only the answers to .uno:CharFontName and .uno:StyleApply are cached, so only a frame
+        // that names one of them is parsed.
+        const std::string stringJSON =
+            payload->contains(".uno:CharFontName") || payload->contains(".uno:StyleApply")
+                ? payload->jsonString()
+                : std::string();
         if (!stringJSON.empty())
         {
             try
@@ -5069,9 +5074,9 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
                 const auto& object = result.extract<Poco::JSON::Object::Ptr>();
                 const std::string commandName =
                     object->has("commandName") ? object->get("commandName").toString() : "";
+                // Another answer can name one of them in its values.
                 if (commandName == ".uno:CharFontName" || commandName == ".uno:StyleApply")
                 {
-                    // other commands should not be cached
                     docBroker->tileCache().saveTextStream(TileCache::StreamType::CmdValues,
                                                           commandValuesCacheKey(commandName), payload->data());
                 }
