@@ -134,9 +134,15 @@ static void filePickerProviderPickSaveLocation(const char* pTitle, const char* p
         Qt::QueuedConnection);
 }
 
-// Inside flatpak the FileChooser portal gives a document-portal path, which the app may read in
-// this session only.
-static bool picksThroughPortal() { return QFile::exists(QStringLiteral("/.flatpak-info")); }
+// Inside flatpak and snap the FileChooser portal gives a document-portal path for a file the
+// sandbox does not show, which the app may read in this session only. Qt picks through the
+// portal there, unless told not to.
+static bool picksThroughPortal()
+{
+    if (qEnvironmentVariableIsSet("QT_NO_XDG_DESKTOP_PORTAL"))
+        return false;
+    return QFile::exists(QStringLiteral("/.flatpak-info")) || qEnvironmentVariableIsSet("SNAP");
+}
 
 // A file the user picks to link to, through the portal: the document links to the host path of
 // the file and reads it through the portal path.
