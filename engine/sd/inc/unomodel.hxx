@@ -196,6 +196,12 @@ public:
     /// moved. Only the entry carrying the edit is affected, so no object is recorded against.
     void notifyTextEditChanged(const SdrObject& rEdited);
 
+    /// Invalidates the tiles of the slide or notes page rPage whole on every view of the
+    /// document, whatever page the view shows and whatever mode it is in. For a slide, its notes
+    /// page is invalidated too, because the notes page shows a preview of the slide. A master page
+    /// is left alone.
+    void invalidatePageWhole(const SdPage& rPage);
+
     /// True when the part's master page last changed at a version later
     /// than nSince.
     bool isVectorMasterChangedSince(const SdrPage& rPage, sal_uInt64 nSince) const;

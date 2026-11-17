@@ -2757,6 +2757,47 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterBackgroundInvalidatesItsSli
     CPPUNIT_ASSERT_EQUAL("0 1 3 4 5 6 7 "_ostr, wholePartInvalidationsInMode(aView, 2));
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOtherMasterInvalidatesItsSlides)
+{
+    // Given a presentation of 8 slides that share one master, with a second master that no slide
+    // uses yet, shown in normal view on the first slide:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pDoc->GetSdPageCount(PageKind::Standard));
+    uno::Reference<drawing::XMasterPagesSupplier> xMastersSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    xMastersSupplier->getMasterPages()->insertNewByIndex(1);
+    SdPage* pOtherMaster = pDoc->GetMasterSdPage(1, PageKind::Standard);
+    const OUString aLayoutName = pOtherMaster->GetLayoutName();
+    const std::u16string_view aBaseLayoutName
+        = std::u16string_view(aLayoutName).substr(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    const size_t nUndoCountBefore = pUndoManager->GetUndoActionCount();
+    SdTestViewCallback aView;
+    aView.m_aWholePartInvalidations.clear();
+
+    // When the third, fourth and fifth slides are put under the second master, the way the
+    // master slide templates assign a master to the selected slides:
+    for (sal_uInt16 nPage = 2; nPage <= 4; ++nPage)
+        pDoc->SetMasterPage(nPage, aBaseLayoutName, pDoc, false, false);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pOtherMaster),
+                         &pDoc->GetSdPage(3, PageKind::Standard)->TRG_GetMasterPage());
+
+    // Then those slides and their notes pages are invalidated whole, although the view shows none
+    // of them. Without the accompanying fix in place, this test would have failed: nothing was
+    // invalidated, and the previews of the slides kept showing the first master.
+    CPPUNIT_ASSERT_EQUAL("2 3 4 "_ostr, wholePartInvalidationsInMode(aView, 0));
+    CPPUNIT_ASSERT_EQUAL("2 3 4 "_ostr, wholePartInvalidationsInMode(aView, 2));
+
+    // And when the change is undone, the slides are invalidated again.
+    aView.m_aWholePartInvalidations.clear();
+    while (pUndoManager->GetUndoActionCount() > nUndoCountBefore)
+        pUndoManager->Undo();
+    CPPUNIT_ASSERT(&pDoc->GetSdPage(3, PageKind::Standard)->TRG_GetMasterPage() != pOtherMaster);
+    CPPUNIT_ASSERT_EQUAL("2 3 4 "_ostr, wholePartInvalidationsInMode(aView, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLayoutKeepsOtherSlidesOfItsMaster)
 {
     // Given a presentation of 8 slides that share one master, shown in normal view:

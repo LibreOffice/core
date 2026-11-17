@@ -316,7 +316,7 @@ public:
                                   bool bReverseOrder = false);
     /// Puts the page under the given master. When that is another master than before, and the
     /// page is in the document, the model announces it the way it announces a change to the
-    /// page's own properties.
+    /// page's own properties, and the page is invalidated whole on every view.
     void ChangeMasterPage(SdPage& rMasterPage);
     void            EndListenOutlineText();
 

@@ -2890,11 +2890,33 @@ void bumpMasterChangeForUsers(
     }
 }
 
+/// Invalidates the pages at the indexes in rPages whole on every view of the document, whatever
+/// mode the view is in. nMode is the edit mode of the page list that holds the pages. A slide shows
+/// on its notes page too, through the slide preview there, so for slides the notes pages at the
+/// same indexes are invalidated in the notes mode as well.
+void invalidatePagesWhole(const SfxObjectShell* pDocShell, const std::vector<sal_uInt16>& rPages,
+                          int nMode)
+{
+    SfxViewShell* pShell = SfxViewShell::GetFirst(false);
+    while (pShell)
+    {
+        if (pShell->GetObjectShell() == pDocShell)
+        {
+            for (const sal_uInt16 nPage : rPages)
+            {
+                pShell->viewInvalidateTilesCallback(nullptr, nPage, nMode);
+                if (nMode == constVectorModeSlides)
+                    pShell->viewInvalidateTilesCallback(nullptr, nPage,
+                                                        constVectorModeNotesPages);
+            }
+        }
+        pShell = SfxViewShell::GetNext(*pShell, false);
+    }
+}
+
 /// The master's own properties changed, and its background shows on every page that uses it. Each
-/// such page is invalidated whole on every view of the document, in the edit mode of the page list
-/// that holds it, whatever mode the view is in. A slide master shows on the notes page of each of
-/// its slides too, through the slide preview there, so those notes pages are invalidated in the
-/// notes mode. A notes master shows on its notes pages only.
+/// such page is invalidated whole on every view of the document. A notes master shows on its notes
+/// pages only.
 void invalidateTilesOfMasterUsers(SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
                                   const SdPage* pMasterPage)
 {
@@ -2919,22 +2941,20 @@ void invalidateTilesOfMasterUsers(SdDrawDocument& rDocument, const SfxObjectShel
     if (aUserPages.empty())
         return;
 
-    SfxViewShell* pShell = SfxViewShell::GetFirst(false);
-    while (pShell)
-    {
-        if (pShell->GetObjectShell() == pDocShell)
-        {
-            for (const sal_uInt16 nPage : aUserPages)
-            {
-                pShell->viewInvalidateTilesCallback(nullptr, nPage, nMode);
-                if (nMode == constVectorModeSlides)
-                    pShell->viewInvalidateTilesCallback(nullptr, nPage,
-                                                        constVectorModeNotesPages);
-            }
-        }
-        pShell = SfxViewShell::GetNext(*pShell, false);
-    }
+    invalidatePagesWhole(pDocShell, aUserPages, nMode);
 }
+}
+
+void SdXImpressDocument::invalidatePageWhole(const SdPage& rPage)
+{
+    if (!mpDocShell)
+        return;
+
+    const auto oPart = partAndModeOfPage(&rPage);
+    if (!oPart || oPart->mnMode == constVectorModeMasterPages)
+        return;
+
+    invalidatePagesWhole(mpDocShell, { sal_uInt16(oPart->mnPart) }, oPart->mnMode);
 }
 
 void SdXImpressDocument::notifyTextEditChanged(const SdrObject& rEdited)

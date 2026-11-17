@@ -44,6 +44,7 @@
 
 #include <strings.hxx>
 #include <DrawDocShell.hxx>
+#include <unomodel.hxx>
 
 #include <svl/itemset.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
@@ -80,8 +81,20 @@ void SdPage::ChangeMasterPage(SdPage& rMasterPage)
     // as a new background is. A page that is not in the document yet is still being built.
     const bool bMasterMoved = !TRG_HasMasterPage() || &TRG_GetMasterPage() != &rMasterPage;
     TRG_SetMasterPage(rMasterPage);
-    if (bMasterMoved && IsInserted())
-        getSdrModelFromSdrPage().Broadcast(SdrHint(SdrHintKind::PageOrderChange, this));
+    if (!bMasterMoved || !IsInserted())
+        return;
+
+    getSdrModelFromSdrPage().Broadcast(SdrHint(SdrHintKind::PageOrderChange, this));
+
+    // A view paints only the page it shows, so a view on another page gets no invalidation for
+    // this one from a paint. Its client keeps the old tiles and the old preview of this page until
+    // the page is invalidated, so the page is invalidated whole on every view here. A document
+    // without a doc shell has no views.
+    SdDrawDocument& rDocument = static_cast<SdDrawDocument&>(getSdrModelFromSdrPage());
+    if (!rDocument.GetDocSh())
+        return;
+    if (SdXImpressDocument* pModel = rDocument.getUnoModel())
+        pModel->invalidatePageWhole(*this);
 }
 
 void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
