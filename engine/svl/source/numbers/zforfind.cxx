@@ -4097,8 +4097,6 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
         }   // else
     }   // if (res)
 
-    OUStringBuffer sResString;
-
     if (res)
     {                                       // we finally have a number
         switch (eScannedType)
@@ -4123,6 +4121,8 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
         case SvNumFormatType::NUMBER:
         case SvNumFormatType::SCIENTIFIC:
         case SvNumFormatType::DEFINED:          // if no category detected handle as number
+        {
+            OUStringBuffer sResString;
             if ( nDecPos == 1 )             // . at start
             {
                 sResString.append("0.");
@@ -4193,6 +4193,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 fOutNumber/= 100.0;
             }
             break;
+        }
 
         case SvNumFormatType::FRACTION:
             if (nNumericsCnt == 1)
@@ -4203,9 +4204,8 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             {
                 if (nThousand == 1)
                 {
-                    sResString = sStrArray[nNums[0]];
-                    sResString.append(sStrArray[nNums[1]]); // integer part
-                    fOutNumber = StringToDouble(sResString);
+                    fOutNumber
+                        = StringToDouble(Concat2View(sStrArray[nNums[0]] + sStrArray[nNums[1]]));
                 }
                 else
                 {
@@ -4224,7 +4224,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             else // nNumericsCnt > 2
             {
                 k = 1;
-                sResString = sStrArray[nNums[0]];
+                OUStringBuffer sResString(sStrArray[nNums[0]]);
                 if (nThousand > 0)
                 {
                     for (; k <= nThousand; k++)
