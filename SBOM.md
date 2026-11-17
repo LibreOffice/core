@@ -112,7 +112,9 @@ actually present.
 
 ## How to check the SBOMs
 
-Three checks, in increasing order of external dependencies.
+Four checks, in increasing order of external dependencies. A nightly
+Jenkins job, "Tinderbox for online main SBOM", runs all four on the tree
+the main tinderbox has just built and archives their output.
 
 ### `make sbom-check` — internal consistency
 
@@ -162,6 +164,37 @@ components (see below).
 Note that the engine document it reads must already have been generated; it
 is not a make prerequisite.
 
+### `make sbom-scan` — what does a scan report, after the VEX?
+
+    grype db update      # once, as for sbom-audit
+    make sbom-scan
+
+Lifts the component inventory of the engine and online SBOMs into a
+CycloneDX document (`sbom-scan/sbom.cdx.json`, with the same code that builds
+the container image's SBOM), scans it with grype and, if installed, trivy,
+and reads every finding against the VEX in
+`docker/from-packages/vex/cool.vex.json`:
+
+| Class | Means |
+| --- | --- |
+| `NEW` | not in the VEX: nobody has assessed it yet |
+| `OPEN` | in the VEX, but still `in_triage` (or `exploitable`) |
+| suppressed | `resolved`, `resolved_with_pedigree`, `not_affected` or `false_positive`; only counted |
+| `UNVERSIONED` | a finding on a component the SBOM gives no version: its CPE then matches every CVE of the product, so the finding means nothing until the SBOM has the version; listed once per component |
+| `STALE-VEX` | a VEX statement no finding refers to any more; expected after a bump, and a candidate for clean-up |
+
+`NEW` and `OPEN` findings are listed by severity, with the fixed versions the
+scanner knows of, which is the upgrade to look at. The report is in
+`sbom-scan/report.txt` (and `report.json`), next to the raw scanner output.
+Exit code 1 if anything is `NEW` or `OPEN`, 2 if the scan could not be done;
+`UNVERSIONED` findings alone leave it at 0.
+`SBOM_SCAN_REQUIRE_TRIVY=1` makes a missing trivy an error instead of a
+grype-only scan.
+
+The engine documents must already have been generated, as for
+`sbom-freshness`. The scan does not cover the distribution packages of the
+container image; scan the image-level SBOM for those, as below.
+
 ## How to scan for vulnerabilities
 
 **Scan the SBOM, not the image filesystem.** The container ships no dpkg
@@ -195,7 +228,8 @@ the supplier of these packages, so nobody else can make these statements.
 
 `docker/from-packages/scripts/publish.sh` scans the SBOM at publish time and
 appends new findings as `in_triage` (via `generate-vex.py`); a human then sets
-the state. Useful states, with the evidence each needs:
+the state. Between releases, `make sbom-scan` lists the findings the VEX has
+no statement for yet. Useful states, with the evidence each needs:
 
 | State | Means | Evidence to record |
 | --- | --- | --- |
@@ -318,7 +352,8 @@ Record the CVEs the bump fixes in the commit message, from upstream's
 changelog.
 
 **Checking the whole chain.** `make sbom-check`, `make sbom-audit`,
-`make sbom-freshness`, then regenerate and scan as above.
+`make sbom-freshness`, `make sbom-scan`, then regenerate the image and scan
+it as above.
 
 ## File map
 
@@ -328,6 +363,7 @@ changelog.
 | `scripts/sbom-externals.json` | online component annotations |
 | `scripts/audit-sbom-cpes.py` | CPE identifier audit (`make sbom-audit`) |
 | `scripts/check-external-freshness.py` | upstream freshness (`make sbom-freshness`) |
+| `scripts/scan-sbom.py` | scan of the engine and online SBOMs against the VEX (`make sbom-scan`) |
 | `THIRDPARTYLICENSES` | license texts of the direct dependencies |
 | `engine/solenv/bin/create-sbom.py` | engine SBOM generator |
 | `engine/readlicense_oo/license/license.xml` | engine component annotations |

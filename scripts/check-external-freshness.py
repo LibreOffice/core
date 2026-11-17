@@ -75,7 +75,9 @@ def upstream(name, homepage):
     if not items:
         return None, "not tracked by Anitya"
     if len(items) > 1 and homepage:
-        host = urllib.parse.urlparse(homepage).netloc.removeprefix("www.")
+        host = urllib.parse.urlparse(homepage).netloc
+        if host.startswith("www."):
+            host = host[len("www."):]
         preferred = [i for i in items
                      if host and host in (i.get("homepage") or "") + (i.get("ecosystem") or "")]
         if preferred:

@@ -264,6 +264,7 @@ autogen.input
 # SBOM
 collabora-online-sbom.spdx.json
 browser/sbom-shipped-js.txt
+/sbom-scan/
 
 # Visual Studio projects for CODA-W
 windows/coda/.vs

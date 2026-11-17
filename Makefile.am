@@ -704,6 +704,7 @@ clean-local:
 	rm -f .dir
 	rm -rf loolwsd loolwsd_fuzzer coolwsd_fuzzer loolstress loolsocketdump
 	rm -rf collabora-online-sbom.spdx.json
+	rm -rf sbom-scan
 	rm -rf test/data/presets
 	rm -f test/samples/calc-edit.fods test/samples/draw-edit.odg test/samples/impress-edit.fodp test/samples/writer-edit.fodt test/samples/writer-large-edit.fodt
 	rm -f test/samples/master-edit.odm test/samples/master-chapter1-edit.odt test/samples/master-chapter2-edit.odt test/samples/master-chapter3-edit.odt test/samples/master-chapter4-edit.odt
@@ -1177,4 +1178,17 @@ sbom-freshness: collabora-online-sbom.spdx.json
 		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/collaboraofficebasis-core-sbom.spdx.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
-.PHONY: cleanup setup-wsd systemplate sbom-check sbom-audit sbom-freshness
+# Scan the SBOMs with grype (and trivy, if installed) and read the findings
+# against the VEX: reports what is new or still in triage, and the fixed
+# versions where known. Needs grype's database like sbom-audit; set
+# SBOM_SCAN_REQUIRE_TRIVY=1 to fail instead of scanning without trivy.
+sbom-scan: collabora-online-sbom.spdx.json
+	$(PYTHON) $(abs_top_srcdir)/scripts/scan-sbom.py \
+		--vex $(abs_top_srcdir)/docker/from-packages/vex/cool.vex.json \
+		--out-dir $(abs_top_builddir)/sbom-scan \
+		--product-version $(PACKAGE_VERSION) \
+		$(if $(filter 1,$(SBOM_SCAN_REQUIRE_TRIVY)),--require-trivy) \
+		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*.json \
+		$(abs_top_builddir)/collabora-online-sbom.spdx.json
+
+.PHONY: cleanup setup-wsd systemplate sbom-check sbom-audit sbom-freshness sbom-scan
