@@ -26,6 +26,7 @@
 #include <tools/date.hxx>
 #include <memory>
 #include <optional>
+#include <utility>
 
 class SvNumberformat;
 class SvNFLanguageData;
@@ -88,6 +89,7 @@ private:
     std::unique_ptr<OUString[]> pUpperDayText;                 //* Array of day of week names, uppercase
     std::unique_ptr<OUString[]> pUpperAbbrevDayText;           //* Array of day of week names, abbreviated, uppercase
     OUString  aUpperCurrSymbol;                 //* Currency symbol, uppercase
+    std::optional<std::pair<OUString, OUString>> moUpperTimeAmPm; //* AM and PM strings, uppercase
     Date    maNullDate;                 //* 30Dec1899
     bool    bTextInitialized;                   //* Whether days and months are initialized
     bool    bScanGenitiveMonths;                //* Whether to scan an input for genitive months

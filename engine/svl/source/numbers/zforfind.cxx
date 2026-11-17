@@ -809,15 +809,20 @@ bool ImpSvNumberInputScan::GetTimeAmPm( const OUString& rString, sal_Int32& nPos
 
     if ( rString.getLength() > nPos )
     {
-        const CharClass* pChr = mrCurrentLanguageData.GetCharClass();
         const LocaleDataWrapper* pLoc = mrCurrentLanguageData.GetLocaleData();
-        if ( StringContains( pChr->uppercase( pLoc->getTimeAM() ), rString, nPos ) )
+        if (!moUpperTimeAmPm)
+        {
+            const CharClass* pChr = mrCurrentLanguageData.GetCharClass();
+            moUpperTimeAmPm.emplace(pChr->uppercase(pLoc->getTimeAM()),
+                                    pChr->uppercase(pLoc->getTimePM()));
+        }
+        if (StringContains(moUpperTimeAmPm->first, rString, nPos))
         {
             nAmPm = 1;
             nPos = nPos + pLoc->getTimeAM().getLength();
             return true;
         }
-        else if ( StringContains( pChr->uppercase( pLoc->getTimePM() ), rString, nPos ) )
+        else if (StringContains(moUpperTimeAmPm->second, rString, nPos))
         {
             nAmPm = -1;
             nPos = nPos + pLoc->getTimePM().getLength();
@@ -3826,6 +3831,7 @@ void ImpSvNumberInputScan::ChangeIntl()
     }
     bTextInitialized = false;
     aUpperCurrSymbol.clear();
+    moUpperTimeAmPm.reset();
     InvalidateDateAcceptancePatterns();
 }
 
