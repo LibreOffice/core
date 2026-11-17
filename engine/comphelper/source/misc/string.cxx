@@ -53,36 +53,13 @@ namespace
     template <typename T, typename C> T tmpl_stripStart(const T &rIn,
         const C cRemove)
     {
-        if (rIn.empty())
-            return rIn;
-
-        typename T::size_type i = 0;
-
-        while (i < rIn.size())
-        {
-            if (rIn[i] != cRemove)
-                break;
-            ++i;
-        }
-
-        return rIn.substr(i);
+        return rIn.substr(std::min(rIn.find_first_not_of(cRemove), rIn.size()));
     }
     template <typename T, typename C> T tmpl_stripStartString(const T &rIn,
         const C cRemove)
     {
-        if (rIn.isEmpty())
-            return rIn;
-
-        sal_Int32 i = 0;
-
-        while (i < rIn.getLength())
-        {
-            if (rIn[i] != cRemove)
-                break;
-            ++i;
-        }
-
-        return rIn.copy(i);
+        const std::basic_string_view<C> aIn(rIn);
+        return rIn.copy(aIn.size() - tmpl_stripStart(aIn, cRemove).size());
     }
 }
 
@@ -111,36 +88,12 @@ namespace
     template <typename T, typename C> T tmpl_stripEnd(const T &rIn,
         const C cRemove)
     {
-        if (rIn.empty())
-            return rIn;
-
-        typename T::size_type i = rIn.size();
-
-        while (i > 0)
-        {
-            if (rIn[i-1] != cRemove)
-                break;
-            --i;
-        }
-
-        return rIn.substr(0, i);
+        return rIn.substr(0, rIn.find_last_not_of(cRemove) + 1); // npos + 1 == 0
     }
     template <typename T, typename C> T tmpl_stripEndString(const T &rIn,
         const C cRemove)
     {
-        if (rIn.isEmpty())
-            return rIn;
-
-        sal_Int32 i = rIn.getLength();
-
-        while (i > 0)
-        {
-            if (rIn[i-1] != cRemove)
-                break;
-            --i;
-        }
-
-        return rIn.copy(0, i);
+        return rIn.copy(0, tmpl_stripEnd(std::basic_string_view<C>(rIn), cRemove).size());
     }
 }
 
@@ -169,49 +122,14 @@ namespace
     template <typename T, typename C> T tmpl_strip(const T &rIn,
         const C cRemove)
     {
-        if (rIn.empty())
-            return rIn;
-
-        typename T::size_type end = rIn.size();
-        while (end > 0)
-        {
-            if (rIn[end-1] != cRemove)
-                break;
-            --end;
-        }
-
-        typename T::size_type start = 0;
-        while (start < end)
-        {
-            if (rIn[start] != cRemove)
-                break;
-            ++start;
-        }
-
-        return rIn.substr(start, end - start);
+        return tmpl_stripStart(tmpl_stripEnd(rIn, cRemove), cRemove);
     }
     template <typename T, typename C> T tmpl_stripString(const T &rIn,
         const C cRemove)
     {
-        if (rIn.isEmpty())
-            return rIn;
-
-        sal_Int32 end = rIn.getLength();
-        while (end > 0)
-        {
-            if (rIn[end-1] != cRemove)
-                break;
-            --end;
-        }
-        sal_Int32 start = 0;
-        while (start < end)
-        {
-            if (rIn[start] != cRemove)
-                break;
-            ++start;
-        }
-
-        return rIn.copy(start, end - start);
+        const std::basic_string_view<C> aIn(rIn);
+        const std::basic_string_view<C> aOut = tmpl_strip(aIn, cRemove);
+        return rIn.copy(aOut.data() - aIn.data(), aOut.size());
     }
 }
 
