@@ -1923,7 +1923,9 @@ SfxBoolItem ConvertToNavigationBar SID_FM_CONVERTTO_NAVIGATIONBAR
 
 
 SfxBoolItem CreateControl SID_FM_CREATE_CONTROL
-()
+(SfxUInt16Item Identifier SID_FM_CONTROL_IDENTIFIER, SfxUInt32Item Inventor SID_FM_CONTROL_INVENTOR,
+ SfxInt32Item X FN_PARAM_2, SfxInt32Item Y FN_PARAM_3, SfxInt32Item Width FN_PARAM_4,
+ SfxInt32Item Height FN_PARAM_5, SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

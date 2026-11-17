@@ -497,8 +497,13 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         case SID_FM_CREATE_CONTROL:
         {
-            // Direct mode inserts the control in the middle of the slide, as for shapes.
+            // Direct mode inserts the control in the middle of the slide, as for shapes; a form
+            // control dragged out in the client comes with its rectangle and is made there
             bCreateDirectly = comphelper::COKit::isActive();
+            oRequestedRectangle = lcl_getRequestedRectangle(rReq);
+            if (oRequestedRectangle)
+                bCreateDirectly = true;
+
             SetCurrentFunction( FuConstructUnoControl::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
@@ -1011,9 +1016,17 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     {
         // The control is created as a drag over the rectangle creates it, so the control model
         // gets the starting values of its kind.
+        // A rectangle the client gave is taken as it is, unsnapped, and the control takes the id
+        // the client gave it, so it is the one the client shows already.
+        const bool bSnap = mpDrawView->IsSnapEnabled();
+        if (oRequestedRectangle)
+            mpDrawView->SetSnapEnabled(false);
+        UniqueID::giveNext(nGivenId);
         mpDrawView->BegCreateObj(aNewObjectRectangle.TopLeft());
         mpDrawView->MovCreateObj(aNewObjectRectangle.BottomRight());
         mpDrawView->EndCreateObj(SdrCreateCmd::ForceEnd);
+        UniqueID::giveNext(0);
+        mpDrawView->SetSnapEnabled(bSnap);
         if (!bPermanent)
             GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         return;

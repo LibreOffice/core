@@ -19,6 +19,8 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <svx/svdlayer.hxx>
 #include <cmath>
 #include <functional>
@@ -64,6 +66,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/svdouno.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtfsitm.hxx>
@@ -9208,6 +9211,60 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateLineBetweenPoints)
     CPPUNIT_ASSERT(pLine->GetMergedItem(XATTR_LINEEND).GetLineEndValue().count() > 0);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
                          pLine->GetMergedItem(XATTR_LINESTART).GetLineStartValue().count());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateFormControlInRectangle)
+{
+    // a form control dragged out in the client is made in its rectangle, under the id it was
+    // given, and selected
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    const size_t nObjectCount = pSlide->GetObjCount();
+
+    // the client gives the control an id reserved for its view
+    tools::JsonWriter aWriter;
+    pXImpressDocument->getCommandValues(aWriter, ".uno:ReserveObjectIds?Count=16");
+    std::stringstream aStream((std::string(aWriter.finishAndGetAsOString())));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    const sal_uInt64 nGivenId = aTree.get<sal_uInt64>("commandValues.first") + 2;
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"Identifier"_ustr, cpo::uno::Any(sal_uInt16(SdrObjKind::FormButton)) },
+        { u"Inventor"_ustr, cpo::uno::Any(sal_uInt32(SdrInventor::FmForm)) },
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(1000)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(2000)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(3000)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(800)) },
+        { u"Id"_ustr, cpo::uno::Any(sal_uInt32(nGivenId)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:CreateControl"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(nObjectCount + 1, pSlide->GetObjCount());
+    SdrObject* pControl = pSlide->GetObj(pSlide->GetObjCount() - 1);
+    CPPUNIT_ASSERT_EQUAL(SdrInventor::FmForm, pControl->GetObjInventor());
+    CPPUNIT_ASSERT_EQUAL(nGivenId, pControl->GetUniqueID());
+    // a form control is one kind of object, and its model says which control it is
+    auto pUnoControl = dynamic_cast<SdrUnoObj*>(pControl);
+    CPPUNIT_ASSERT(pUnoControl);
+    cpo::uno::Reference<css::beans::XPropertySet> xModel(pUnoControl->GetUnoControlModel(),
+                                                         cpo::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(css::form::FormComponentType::COMMANDBUTTON,
+                         xModel->getPropertyValue(u"ClassId"_ustr).get<sal_Int16>());
+    const ::tools::Rectangle aRectangle = pControl->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(1000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.Left()));
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(3000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.GetWidth()));
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    const SdrMarkList& rMarkList = pViewShell->GetView()->GetMarkedObjectList();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT_EQUAL(pControl, rMarkList.GetMark(0)->GetMarkedSdrObj());
+
+    // one undo step takes it away
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateShapeInRectangle)
