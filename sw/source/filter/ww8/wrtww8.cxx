@@ -2833,7 +2833,6 @@ void WW8AttributeOutput::TableBackgrounds(const ww8::WW8TableNodeInfoInner::Poin
  */
     sal_uInt32 const aSprmIds[] { NS_sprm::TDefTableShd::val,
                                   NS_sprm::TDefTableShdRaw::val,
-                                  NS_sprm::TDefTableShdRaw::val,
                                   NS_sprm::TDefTableShd2nd::val,
                                   NS_sprm::TDefTableShdRaw2nd::val,
                                   NS_sprm::TDefTableShd3rd::val,
