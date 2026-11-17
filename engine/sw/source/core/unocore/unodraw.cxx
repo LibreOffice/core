@@ -783,7 +783,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     UnoActionContext aAction(m_pDoc);
     m_pDoc->getIDocumentContentOperations().InsertDrawObj( *pTemp, *pObj, aSet );
 
-    if (pSvxShape->GetSdrObject()->GetName().isEmpty())
+    if (!m_pDoc->IsInXMLImport() && pSvxShape->GetSdrObject()->GetName().isEmpty())
     {
         pSvxShape->GetSdrObject()->SetName(m_pDoc->GetUniqueShapeName().toString());
     }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <style:default-style style:family="graphic"/>
+    <style:default-style style:family="paragraph"/>
+    <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="gr1" style:family="graphic"/>
+    <style:style style:name="NextPage" style:family="paragraph">
+      <style:paragraph-properties fo:break-before="page"/>
+    </style:style>
+    <style:page-layout style:name="pm1">
+      <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+          fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm"
+          fo:margin-right="2cm"/>
+      <style:header-style>
+        <style:header-footer-properties fo:min-height="1cm"/>
+      </style:header-style>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="1cm"/>
+      </style:footer-style>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="pm1">
+      <style:header>
+        <text:p>
+          <draw:rect draw:name="Shape8" draw:style-name="gr1"
+              text:anchor-type="paragraph" svg:width="1cm" svg:height="1cm">
+            <svg:title>Header</svg:title>
+          </draw:rect>
+        </text:p>
+      </style:header>
+      <style:footer>
+        <text:p>
+          <draw:rect draw:name="Footer stays" draw:style-name="gr1"
+              text:anchor-type="paragraph" svg:width="1cm" svg:height="1cm">
+            <svg:title>Footer</svg:title>
+          </draw:rect>
+        </text:p>
+      </style:footer>
+    </style:master-page>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <text:p>
+        <draw:rect text:anchor-type="paragraph" draw:style-name="gr1"
+            svg:width="1cm" svg:height="1cm"><svg:title>Unnamed before</svg:title></draw:rect>
+        <draw:rect draw:name="Shape1" text:anchor-type="paragraph"
+            draw:style-name="gr1" svg:width="1cm" svg:height="1cm">
+          <svg:title>Explicit</svg:title>
+        </draw:rect>
+        <draw:rect text:anchor-type="paragraph" draw:style-name="gr1"
+            svg:width="1cm" svg:height="1cm"><svg:title>Unnamed middle</svg:title></draw:rect>
+        <draw:g draw:name="Group" text:anchor-type="paragraph" draw:style-name="gr1">
+          <draw:rect draw:name="Shape4" draw:style-name="gr1"
+              svg:width="1cm" svg:height="1cm"/>
+          <draw:g draw:name="Nested group" draw:style-name="gr1">
+            <draw:rect draw:name="Shape6" draw:style-name="gr1"
+                svg:width="1cm" svg:height="1cm"/>
+          </draw:g>
+        </draw:g>
+        <draw:rect text:anchor-type="char" draw:style-name="gr1"
+            svg:width="1cm" svg:height="1cm"><svg:title>Unnamed after group</svg:title></draw:rect>
+        <draw:rect draw:name="Keep exactly" text:anchor-type="paragraph"
+            draw:style-name="gr1" svg:width="1cm" svg:height="1cm">
+          <svg:title>Custom</svg:title>
+        </draw:rect>
+        <draw:rect text:anchor-type="as-char" draw:style-name="gr1"
+            svg:width="1cm" svg:height="1cm"><svg:title>Unnamed inline</svg:title></draw:rect>
+        <draw:rect text:anchor-type="paragraph" draw:style-name="gr1"
+            svg:width="1cm" svg:height="1cm"><svg:title>Unnamed last</svg:title></draw:rect>
+      </text:p>
+      <text:p text:style-name="NextPage">Second page shares the header and footer.</text:p>
+    </office:text>
+  </office:body>
+</office:document>

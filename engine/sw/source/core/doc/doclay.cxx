@@ -1283,9 +1283,9 @@ static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 
     if (o3tl::starts_with(rName, rCmpName))
     {
         // Only get and set the Flag
-        const sal_Int32 nNum = o3tl::toInt32(rName.substr(nNmLen)) - 1;
-        if (nNum >= 0)
-            rSetFlags.push_back(nNum);
+        const sal_Int32 nNum = o3tl::toInt32(rName.substr(nNmLen));
+        if (nNum > 0)
+            rSetFlags.push_back(nNum - 1);
     }
 }
 
@@ -1398,6 +1398,58 @@ UIName SwDoc::GetUniqueFrameName() const
 UIName SwDoc::GetUniqueShapeName() const
 {
     return lcl_GetUniqueFlyName(*this, STR_SHAPE_DEFNAME, RES_DRAWFRMFMT);
+}
+
+void SwDoc::SetAllUniqueShapeNames()
+{
+    const UIName aPrefix(SwResId(STR_SHAPE_DEFNAME));
+    const sal_Int32 nPrefixLength = aPrefix.toString().getLength();
+    std::vector<unsigned int> aUsedNums;
+    aUsedNums.reserve(GetSpzFrameFormats()->size());
+    for (sw::SpzFrameFormat* pFormat : *GetSpzFrameFormats())
+    {
+        if (pFormat->Which() != RES_DRAWFRMFMT)
+            continue;
+
+        lcl_collectUsedNums(aUsedNums, nPrefixLength, pFormat->GetName().toString(),
+                            aPrefix.toString());
+        if (const SdrObject* pObject = pFormat->FindSdrObject())
+            lcl_collectUsedNums(aUsedNums, nPrefixLength, *pObject, aPrefix);
+    }
+    std::sort(aUsedNums.begin(), aUsedNums.end());
+    aUsedNums.erase(std::unique(aUsedNums.begin(), aUsedNums.end()), aUsedNums.end());
+
+    auto itUsed = aUsedNums.begin();
+    unsigned int nNext = 0;
+    for (sw::SpzFrameFormat* pFormat : *GetSpzFrameFormats())
+    {
+        if (pFormat->Which() != RES_DRAWFRMFMT)
+            continue;
+        SdrObject* pObject = pFormat->FindSdrObject();
+        if (!pObject)
+            continue;
+
+        if (pObject->GetName().isEmpty())
+        {
+            UIName aName(pFormat->GetName());
+            if (aName.isEmpty())
+            {
+                while (itUsed != aUsedNums.end() && *itUsed <= nNext)
+                {
+                    if (*itUsed == nNext)
+                        ++nNext;
+                    ++itUsed;
+                }
+                aName = UIName(aPrefix.toString()
+                               + OUString::number(static_cast<sal_Int64>(nNext) + 1));
+                ++nNext;
+            }
+            pObject->SetName(aName.toString());
+        }
+        // Keep the format name in sync with the object name, as SwFmDrawPage::add() does.
+        if (pFormat->GetName().isEmpty())
+            pFormat->SetFormatName(UIName(pObject->GetName()), false);
+    }
 }
 
 UIName SwDoc::GetUniqueDrawObjectName() const

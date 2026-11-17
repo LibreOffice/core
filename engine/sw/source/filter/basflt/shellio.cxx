@@ -363,6 +363,9 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
     mxDoc->UpdateNumRule();
     mxDoc->ChkCondColls();
     mxDoc->SetAllUniqueFlyNames();
+    // XML import leaves generated shape names empty until every explicit name is known.
+    if (dynamic_cast<XMLReader*>(po) != nullptr)
+        mxDoc->SetAllUniqueShapeNames();
     // Clear unassigned cell styles, because they aren't needed anymore.
     mxDoc->GetCellStyles().clear();
 

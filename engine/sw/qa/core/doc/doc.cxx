@@ -13,6 +13,8 @@
 #include <editeng/boxitem.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -102,6 +104,7 @@
 #include <txtftn.hxx>
 
 #include <map>
+#include <set>
 
 using namespace css;
 using namespace ::cpo;
@@ -136,6 +139,50 @@ public:
             + "\"><data xmlns=\"\"><name>inline</name></data></xforms:instance>"
               "</xforms:model>"
               "</office:forms><text:p/></office:text></office:body></office:document>"));
+    }
+
+    void checkImportShapeNames()
+    {
+        std::map<OUString, OUString> aNames;
+        std::set<OUString> aGeneratedNames;
+        size_t nHeaderFooterShapes = 0;
+        for (sw::SpzFrameFormat* pFormat : *getSwDoc()->GetSpzFrameFormats())
+        {
+            if (pFormat->Which() != RES_DRAWFRMFMT)
+                continue;
+            const SdrObject* pObject = pFormat->FindSdrObject();
+            CPPUNIT_ASSERT(pObject);
+            CPPUNIT_ASSERT_EQUAL(pObject->GetName(), pFormat->GetName().toString());
+            aNames.emplace(pObject->GetTitle(), pObject->GetName());
+            if (pObject->GetTitle().startsWith("Unnamed"))
+                CPPUNIT_ASSERT(aGeneratedNames.insert(pObject->GetName()).second);
+            const SwNode* pAnchorNode = pFormat->GetAnchor().GetAnchorNode();
+            if (pAnchorNode
+                && (pAnchorNode->FindHeaderStartNode() || pAnchorNode->FindFooterStartNode()))
+                ++nHeaderFooterShapes;
+        }
+
+        // Explicit names that arrive after unnamed shapes, and names in a shared header/footer,
+        // must survive. Reserve the recursively nested group children before filling gaps.
+        CPPUNIT_ASSERT_EQUAL(u"Shape1"_ustr, aNames.at(u"Explicit"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Keep exactly"_ustr, aNames.at(u"Custom"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Shape8"_ustr, aNames.at(u"Header"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Footer stays"_ustr, aNames.at(u"Footer"_ustr));
+        CPPUNIT_ASSERT_EQUAL(size_t(2), nHeaderFooterShapes);
+        CPPUNIT_ASSERT_EQUAL(u"Shape2"_ustr, aNames.at(u"Unnamed before"_ustr));
+        const std::set<OUString> aExpectedNames
+            = { u"Shape2"_ustr, u"Shape3"_ustr, u"Shape5"_ustr, u"Shape7"_ustr, u"Shape9"_ustr };
+        CPPUNIT_ASSERT(std::ranges::equal(aExpectedNames, aGeneratedNames));
+
+        const auto xGroup = getShapeByName(u"Group"_ustr);
+        uno::Reference<container::XIndexAccess> xChildren(xGroup, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNamed> xChild(xChildren->getByIndex(0), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(u"Shape4"_ustr, xChild->getName());
+        uno::Reference<container::XIndexAccess> xNested(xChildren->getByIndex(1),
+                                                      uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNamed> xNestedChild(xNested->getByIndex(0),
+                                                      uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(u"Shape6"_ustr, xNestedChild->getName());
     }
 
     /// Loads embedded-drawing-linked-image.fodt: a Writer document holding a Draw object whose page
@@ -194,6 +241,34 @@ public:
                            });
     }
 };
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTdf79721ImportShapeNamesFlat)
+{
+    createSwDoc("tdf79721-import-shape-names.fodt");
+    checkImportShapeNames();
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTdf79721ImportShapeNamesPackage)
+{
+    createSwDoc("tdf79721-import-shape-names.fodt");
+    // Save unnamed objects so the package importer must run the same end-of-import pass.
+    for (sw::SpzFrameFormat* pFormat : *getSwDoc()->GetSpzFrameFormats())
+    {
+        if (pFormat->Which() != RES_DRAWFRMFMT)
+            continue;
+        SdrObject* pObject = pFormat->FindSdrObject();
+        if (pObject && pObject->GetTitle().startsWith("Unnamed"))
+        {
+            pObject->SetName(OUString());
+            pFormat->SetFormatName(UIName());
+        }
+    }
+    saveAndReload(TestFilter::ODT);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc, "//draw:rect[svg:title='Unnamed before']", "name");
+    checkImportShapeNames();
+}
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
 {

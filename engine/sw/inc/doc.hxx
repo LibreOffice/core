@@ -739,6 +739,7 @@ public:
     UIName GetUniqueOLEName() const;
     SW_DLLPUBLIC UIName GetUniqueFrameName() const;
     UIName GetUniqueShapeName() const;
+    void SetAllUniqueShapeNames();
     SW_DLLPUBLIC UIName GetUniqueDrawObjectName() const;
 
     SW_DLLPUBLIC o3tl::sorted_vector<SwRootFrame*> GetAllLayouts();
