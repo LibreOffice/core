@@ -95,15 +95,40 @@ function isFormControl(win, objectId) {
 	return !!object && object.objectKind === formControlKind;
 }
 
-// The place of a form control on the document canvas, in CSS pixels from its top left corner.
-function onCanvas(win, name) {
-	var twipsPerCentimetre = 1440 / 2.54;
+// A place on the page in twips, in CSS pixels from the top left corner of the document canvas.
+function twipsOnCanvas(win, x, y) {
 	var visible = win.app.activeDocument.activeLayout.viewedRectangle;
 	var scale = win.app.twipsToPixels / win.app.dpiScale;
 	return {
-		x: places[name].x * twipsPerCentimetre * scale - visible.pX1 / win.app.dpiScale,
-		y: places[name].y * twipsPerCentimetre * scale - visible.pY1 / win.app.dpiScale,
+		x: x * scale - visible.pX1 / win.app.dpiScale,
+		y: y * scale - visible.pY1 / win.app.dpiScale,
 	};
+}
+
+// The place of a form control on the document canvas, in CSS pixels from its top left corner.
+function onCanvas(win, name) {
+	var twipsPerCentimetre = 1440 / 2.54;
+	return twipsOnCanvas(win, places[name].x * twipsPerCentimetre,
+		places[name].y * twipsPerCentimetre);
+}
+
+// Drags from one place to another, in twips on the page, in steps.
+function dragOnCanvas(win, from, to) {
+	cy.then(function() {
+		var start = twipsOnCanvas(win, from.x, from.y);
+		var drawing = cy.cGet('#document-canvas').trigger('mousedown', start.x, start.y,
+			{ button: 0, buttons: 1 });
+		for (var step = 1; step <= 10; ++step) {
+			var place = twipsOnCanvas(win, from.x + step / 10 * (to.x - from.x),
+				from.y + step / 10 * (to.y - from.y));
+			drawing = drawing.trigger('mousemove', place.x, place.y, { button: 0, buttons: 1 });
+		}
+		var end = twipsOnCanvas(win, to.x, to.y);
+		drawing.trigger('mouseup', end.x, end.y, { button: 0, buttons: 0 });
+	});
+	cy.then(function() {
+		return helper.processToIdle(win);
+	});
 }
 
 // The element over the page that works as that form control, or null where none lies there.
@@ -254,6 +279,7 @@ module.exports.getPart = getPart;
 module.exports.typeInto = typeInto;
 module.exports.leaveField = leaveField;
 module.exports.clickOnCanvas = clickOnCanvas;
+module.exports.dragOnCanvas = dragOnCanvas;
 module.exports.forgetSent = forgetSent;
 module.exports.expectSent = expectSent;
 module.exports.expectNoFormControlSent = expectNoFormControlSent;

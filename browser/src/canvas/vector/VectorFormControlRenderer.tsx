@@ -68,6 +68,12 @@ namespace cool {
       this._onPictureReady = onPictureReady;
     }
 
+    /// Whether the picture of that primitive is made and loaded, so a render draws it.
+    public hasPicture(primitive: FormControlPrimitive): boolean {
+      const picture = this._pictures.get(primitive);
+      return !!picture && picture.complete && !!picture.naturalWidth;
+    }
+
     render(
       context: CanvasRenderingContext2D,
       primitive: FormControlPrimitive,

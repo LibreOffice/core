@@ -192,6 +192,19 @@ its start to its end:
 | Let go | The connector is made, tied at each end as shown: to a glue point of its own, to the middle of a side, or to the object as a whole where an end stands on its middle. An end over none of them stays free. It is selected at once, also before the engine has answered. The mode is over. |
 | Escape, a click without a drag, a command, a press elsewhere, another slide | End the mode without a connector. |
 
+### Creating a form control
+
+The Form tab inserts form controls. Every control of its Controls and Fields groups puts one
+into the same mode as for a shape, so the control is dragged out where it is to go. Out of design
+mode, while form controls are live, the tab greys them out.
+
+| What | What happens |
+|---|---|
+| Before the press | The lines across the view and the place, as for a shape. |
+| Press and drag | The control shows in the dragged rectangle, half see-through, as the view draws form controls, with the values a new one of its kind has: a button, a check box, an option button, a label field and a group box show their names as their label. Shift, Alt and Ctrl work as for a shape. |
+| Let go | The control is made in the rectangle and selected at once, also before the engine has answered. The mode is over. |
+| Escape, a click without a drag, a command, a press elsewhere, another slide | End the mode without a control. |
+
 ### Creating a polygon or a curve
 
 The Curves button of the Insert tab, beside Shapes and Lines, opens a grid of the eight kinds of

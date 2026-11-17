@@ -429,7 +429,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 	}
 
 	// the objectKind of a form control
-	private static readonly formControlKind: number = 32;
+	public static readonly formControlKind: number = 32;
 
 	/// The selection being drawn by a drag on the empty page, a frame or another kind; null while
 	/// none is drawn.

@@ -75,7 +75,9 @@ abstract class ClassicCreateContext implements InteractionMode {
 				ClassicTextCreateContext.makes(shape) ||
 				ClassicLineCreateContext.makes(shape) ||
 				ClassicConnectorCreateContext.makes(shape) ||
-				ClassicPathCreateContext.makes(shape)) &&
+				ClassicPathCreateContext.makes(shape) ||
+				(ClassicFormControlCreateContext.makes(shape) &&
+					app.map.isFormControlDesignMode())) &&
 			RenderGeometrySection.answersPointer() &&
 			app.map.isEditMode()
 		);
@@ -95,7 +97,9 @@ abstract class ClassicCreateContext implements InteractionMode {
 					? new ClassicConnectorCreateContext(shape)
 					: ClassicPathCreateContext.makes(shape)
 						? new ClassicPathCreateContext(shape)
-						: new ClassicShapeCreateContext(shape);
+						: ClassicFormControlCreateContext.makes(shape)
+							? new ClassicFormControlCreateContext(shape)
+							: new ClassicShapeCreateContext(shape);
 		Interaction.enterMode(mode);
 		mode.started();
 	}
@@ -427,11 +431,17 @@ abstract class ClassicCreateContext implements InteractionMode {
 			ClassicCreateContext.longestWait,
 		);
 		Interaction.leaveMode();
-		app.map.sendUnoCommand('.uno:' + this.shape, {
+		app.map.sendUnoCommand(this.command(), {
 			...this.placeArguments(box),
 			...this.moreArguments(),
 		});
 		this.wasSent(box);
+	}
+
+	/// The command that makes the object, with the place and the arguments of its kind: the
+	/// command of the mode for most kinds.
+	protected command(): string {
+		return '.uno:' + this.shape;
 	}
 
 	/// Ends the mode where another part is shown than the one it was entered on.
@@ -2020,5 +2030,186 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 			this.sentPath,
 			this.fills() ? this.fillColour() : undefined,
 		);
+	}
+}
+
+/// A kind of form control as the engine makes it, by the number of its kind there, and as the
+/// client draws it, by the kind of its primitive.
+interface FormControlCreateKind {
+	identifier: number;
+	kind: cool.FormControlPrimitive['kind'];
+	/// Whether a control of the kind shows a label of its own, its name, as a new one does.
+	labelled?: boolean;
+}
+
+/// A control drawn while it is dragged, with the size in CSS pixels its picture is made for.
+interface ControlPicture {
+	control: cool.FormControlPrimitive;
+	width: number;
+	height: number;
+}
+
+/*
+	Creating a form control by dragging out its rectangle, in design mode, as the office does: the
+	control shows in the rectangle while dragged, drawn as the view draws form controls, with the
+	values a new one of its kind has, and is made there and selected at once when let go. There is
+	no look to ask the engine for, as the view draws every control from its kind and its values.
+*/
+class ClassicFormControlCreateContext extends ClassicCreateContext {
+	/// The commands that make a form control, each with its kind. The engine numbers a kind
+	/// 300 and the form component type, SdrObjKind there.
+	private static readonly kinds: { [shape: string]: FormControlCreateKind } = {
+		Pushbutton: { identifier: 302, kind: 'pushButton', labelled: true },
+		CheckBox: { identifier: 305, kind: 'checkBox', labelled: true },
+		RadioButton: { identifier: 303, kind: 'optionButton', labelled: true },
+		Label: { identifier: 310, kind: 'label', labelled: true },
+		GroupBox: { identifier: 308, kind: 'groupBox', labelled: true },
+		Edit: { identifier: 309, kind: 'textBox' },
+		ListBox: { identifier: 306, kind: 'listBox' },
+		ComboBox: { identifier: 307, kind: 'comboBox' },
+		Imagebutton: { identifier: 304, kind: 'imageButton' },
+		FileControl: { identifier: 312, kind: 'fileSelection' },
+		DateField: { identifier: 315, kind: 'dateField' },
+		TimeField: { identifier: 316, kind: 'timeField' },
+		NumericField: { identifier: 317, kind: 'numericField' },
+		CurrencyField: { identifier: 318, kind: 'currencyField' },
+		PatternField: { identifier: 319, kind: 'patternField' },
+		ImageControl: { identifier: 314, kind: 'imageControl' },
+		FormattedField: { identifier: 320, kind: 'formattedField' },
+		ScrollBar: { identifier: 321, kind: 'scrollBar' },
+		SpinButton: { identifier: 322, kind: 'spinButton' },
+	};
+
+	/// The number the engine gives the form controls as their maker, 'FM01' read as four bytes,
+	/// SdrInventor::FmForm there.
+	private static readonly inventor: number =
+		0x46 | (0x4d << 8) | (0x30 << 16) | (0x31 << 24);
+
+	/// Whether that command makes a form control.
+	public static makes(shape: string): boolean {
+		return ClassicFormControlCreateContext.kinds[shape] !== undefined;
+	}
+
+	public started(): void {
+		ReservedObjectIds.keepEnough();
+	}
+
+	/// The office shows the plain cross while a control is created.
+	public pointer(): string {
+		return 'crosshair';
+	}
+
+	/// The control as a new one of the kind is drawn in that rectangle, in twips.
+	private primitiveIn(box: cool.Range2D): cool.FormControlPrimitive {
+		const kind = ClassicFormControlCreateContext.kinds[this.shape];
+		return {
+			type: cool.FormControlPrimitive.type,
+			kind: kind.kind,
+			matrix: [box.width, 0, 0, box.height, box.minX, box.minY],
+			label: kind.labelled ? _UNO('.uno:' + this.shape) : undefined,
+		} as cool.FormControlPrimitive;
+	}
+
+	/// Draws the control as the view draws form controls, half see-through while it is dragged.
+	protected drawTheObject(
+		context: CanvasRenderingContext2D,
+		box: cool.Range2D,
+		whole: boolean,
+	): boolean {
+		const data = RenderGeometrySection.currentPart();
+		if (!data) return false;
+
+		context.save();
+		// the point at the very start of the document says where the part begins on the canvas,
+		// and a twip is that many pixels wide
+		const origin = new cool.SimplePoint(0, 0);
+		context.translate(origin.vX, origin.vY);
+		context.scale(app.twipsToPixels, app.twipsToPixels);
+		if (!whole) context.globalAlpha = 0.5;
+		const control = this.controlIn(context, box);
+		if (control) this.pictures.render(context, control);
+		context.restore();
+		return true;
+	}
+
+	/// Makes the pictures of the control while it is dragged, and draws the view again once one
+	/// has loaded.
+	private pictures = new cool.VectorFormControlRenderer(() =>
+		app.sectionContainer.requestReDraw(),
+	);
+
+	/// The control whose picture is loaded and the one whose picture is being made, each with the
+	/// size in CSS pixels its picture is made for.
+	private shown: ControlPicture | null = null;
+	private coming: ControlPicture | null = null;
+
+	/*
+		The control to draw in that rectangle. A picture of a control is made for its size and
+		loads a moment later, so the control whose picture is loaded is drawn stretched into the
+		rectangle, and a picture of the size the drag has reached is made meanwhile, one at a time,
+		which takes over once loaded. Null before the first picture loaded.
+	*/
+	private controlIn(
+		context: CanvasRenderingContext2D,
+		box: cool.Range2D,
+	): cool.FormControlPrimitive | null {
+		if (this.coming && this.pictures.hasPicture(this.coming.control)) {
+			this.shown = this.coming;
+			this.coming = null;
+		}
+		const wanted = this.primitiveIn(box);
+		const size = cool.VectorFormControlRenderer.sizeOf(wanted);
+		if (!size) return null;
+		const width = Math.round(size.width);
+		const height = Math.round(size.height);
+		const shownFits =
+			!!this.shown &&
+			this.shown.width === width &&
+			this.shown.height === height;
+		if (!this.coming && !shownFits) {
+			this.coming = { control: wanted, width: width, height: height };
+			// the first render of a control starts its picture and draws nothing
+			this.pictures.render(context, wanted);
+		}
+		if (!this.shown) return null;
+		this.shown.control.matrix = wanted.matrix;
+		return this.shown.control;
+	}
+
+	/// The command of a kind of control makes one in the middle of the slide; this one takes the
+	/// kind and the rectangle.
+	protected command(): string {
+		return '.uno:CreateControl';
+	}
+
+	/// The kind of the control, by the engine's numbers, and the id it is to take, the next
+	/// reserved for this view, where one is at hand.
+	protected moreArguments(): { [name: string]: { type: string; value: any } } {
+		const kind = ClassicFormControlCreateContext.kinds[this.shape];
+		return {
+			Identifier: { type: 'unsigned short', value: String(kind.identifier) },
+			Inventor: {
+				type: 'unsigned long',
+				value: String(ClassicFormControlCreateContext.inventor >>> 0),
+			},
+			...this.idArgument(),
+		};
+	}
+
+	/// The control is taken as created at once, drawn as it was dragged, until the engine's
+	/// report of it replaces it.
+	protected wasSent(box: cool.Range2D): void {
+		const id = this.givenId;
+		if (id === undefined) return;
+		this.takeAsCreated({
+			id: id,
+			x: box.minX,
+			y: box.minY,
+			width: box.width,
+			height: box.height,
+			transform: [box.width, 0, 0, box.height, box.minX, box.minY],
+			objectKind: RenderGeometrySection.formControlKind,
+			primitives: [this.primitiveIn(box)],
+		});
 	}
 }

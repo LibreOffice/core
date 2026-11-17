@@ -13,7 +13,7 @@
  * Toolbar handler
  */
 
-/* global app $ window brandProductName DocUtil GraphicSelection _ Interaction ClassicCreateContext ClassicLineCreateContext ClassicConnectorCreateContext ClassicPathCreateContext */
+/* global app $ window brandProductName DocUtil GraphicSelection _ Interaction ClassicCreateContext ClassicLineCreateContext ClassicConnectorCreateContext ClassicPathCreateContext ClassicFormControlCreateContext */
 
 window.L.Map.include({
 
@@ -322,12 +322,13 @@ window.L.Map.include({
 		// a command ends a mode one was put into, as creating a shape by a drag
 		Interaction.leaveMode();
 
-		// in a view that draws from objects a line, a connector or a polygon chosen anywhere is
-		// drawn where it goes; the command that brings its points goes out as it is
+		// in a view that draws from objects a line, a connector, a polygon or, in design mode, a
+		// form control chosen anywhere is drawn where it goes; the command that brings its points
+		// or its rectangle goes out as it is
 		var line = command.startsWith('.uno:') ? command.substring('.uno:'.length) : '';
 		if ((!json || Object.keys(json).length === 0) &&
 			(ClassicLineCreateContext.makes(line) || ClassicConnectorCreateContext.makes(line) ||
-				ClassicPathCreateContext.makes(line)) &&
+				ClassicPathCreateContext.makes(line) || ClassicFormControlCreateContext.makes(line)) &&
 			ClassicCreateContext.canCreate(line)) {
 			ClassicCreateContext.start(line);
 			return;

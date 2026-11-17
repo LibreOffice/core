@@ -182,8 +182,10 @@ describe(['tagdesktop'], 'Form controls on a vector slide', function() {
 			expect(formHelper.isFormControl(win, selected), 'a form control selected').to.equal(true);
 		});
 
-		// The Form tab inserts a control, which is selected.
+		// A control of the Form tab is dragged out in the empty part below the others, and is
+		// selected.
 		formHelper.clickFormTabButton(win, 'CheckBox');
+		formHelper.dragOnCanvas(win, { x: 1701, y: 6236 }, { x: 4535, y: 6803 });
 		cy.wrap(null).should(function() {
 			expect(formHelper.formObjects(win), 'form controls of the slide').to.have.length(15);
 			var selected = formHelper.selectedObject(win);
