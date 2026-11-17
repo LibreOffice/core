@@ -322,7 +322,10 @@ namespace sw
                     || IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
                 continue; // can't insert duplicate cross reference mark
             }
-            rDestDoc.getIDocumentMarkAccess()->renameMark(pNewMark, sRequestedName);
+            // tdf#169167 - do not rename annotation marks since it breaks the link to their comment
+            if (IDocumentMarkAccess::GetType(*pMark)
+                != IDocumentMarkAccess::MarkType::ANNOTATIONMARK)
+                rDestDoc.getIDocumentMarkAccess()->renameMark(pNewMark, sRequestedName);
 
             // copying additional attributes for bookmarks or fieldmarks
             ::sw::mark::Bookmark* const pNewBookmark =
