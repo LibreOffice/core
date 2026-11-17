@@ -44,13 +44,6 @@ struct HighlightedRange
         otherwise not well visible.
      */
     long      PreferredColor;
-
-    /** If the highlighted range is visually highlighted and this
-        member is `TRUE`, the range given in
-        #RangeRepresentation may be included in a
-        merged range rectangle spanning a bigger range.
-     */
-    boolean   AllowMerginigWithOtherRanges;
 };
 
 } ; // data
