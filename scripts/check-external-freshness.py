@@ -33,6 +33,7 @@ import argparse
 import json
 import re
 import sys
+import time
 import urllib.parse
 import urllib.request
 
@@ -47,7 +48,12 @@ def numeric(version):
 
 
 def collect(paths):
-    """(name, version, homepage) of every versioned SBOM component."""
+    """(name, version, homepage) of every versioned third-party component.
+
+    Our own packages - the document roots, the online branding - carry no
+    identifiers and are not upstream releases. Dictionaries are versioned
+    from their own description.xml, which no release tracker knows, so the
+    lookups would only add noise."""
     found = {}
     for path in paths:
         with open(path, encoding="utf-8") as f:
@@ -59,6 +65,11 @@ def collect(paths):
             version = element.get("software_packageVersion")
             if not name or not version:
                 continue
+            if not (element.get("externalIdentifier")
+                    or element.get("externalIdentifiers")):
+                continue
+            if name.startswith("dict-"):
+                continue
             found.setdefault(name, (version, element.get("software_homePage")))
     return found
 
@@ -66,11 +77,17 @@ def collect(paths):
 def upstream(name, homepage):
     """Latest upstream version per Anitya, and whether the pick was clear."""
     url = API + urllib.parse.quote(name)
-    try:
-        with urllib.request.urlopen(url, timeout=30) as response:
-            items = json.load(response).get("items", [])
-    except Exception as error:
-        return None, f"lookup failed: {error}"
+    # a full sweep is a burst of requests, and the server resets a
+    # connection now and then; retry before calling the component unchecked
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(url, timeout=30) as response:
+                items = json.load(response).get("items", [])
+            break
+        except Exception as error:
+            if attempt == 2:
+                return None, f"lookup failed: {error}"
+            time.sleep(5 * (attempt + 1))
     items = [i for i in items if i.get("name") == name and i.get("version")]
     if not items:
         return None, "not tracked by Anitya"

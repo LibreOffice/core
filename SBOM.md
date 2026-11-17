@@ -161,8 +161,10 @@ anything is behind, so it can gate a scheduled CI job — which is where it
 belongs, because this check, not scanning, is the primary defense for C
 components (see below).
 
-Note that the engine document it reads must already have been generated; it
-is not a make prerequisite.
+It reads every engine document and the online one, and looks up each
+third-party component once; our own packages and the dictionaries, which no
+release tracker knows, are left out. Note that the engine documents must
+already have been generated; they are not a make prerequisite.
 
 ### `make sbom-scan` — what does a scan report, after the VEX?
 

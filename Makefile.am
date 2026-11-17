@@ -1175,7 +1175,7 @@ sbom-audit: collabora-online-sbom.spdx.json
 # network access.
 sbom-freshness: collabora-online-sbom.spdx.json
 	$(PYTHON) $(abs_top_srcdir)/scripts/check-external-freshness.py \
-		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/collaboraofficebasis-core-sbom.spdx.json \
+		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
 # Scan the SBOMs with grype (and trivy, if installed) and read the findings
