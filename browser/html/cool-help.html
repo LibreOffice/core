@@ -653,8 +653,10 @@
     <div class="sub-section">
     <h4>Track changes</h4>
     <p>When you turn on Track Changes, <span class="productname">{productname}</span> marks up new changes made to the document. Select this option again to turn it off.</p>
-    <div class="screenshot" id="help-track-changes-comment"><img alt="Tracked change shown as a comment box beside the document with author name, date, and change description" src="images/help/en/track-changes-comment.png"/></div>
-    <p>Changes made by different people are shown in different colors and each tracked change can be accepted or rejected, using the box that appears on the right. You can also add a comment there.</p>
+    <div class="screenshot" id="help-track-changes-tooltip"><img alt="Tooltip over an inserted text showing the kind of change, the author and the date" src="images/help/en/track-changes-tooltip.png"/></div>
+    <p>Changes made by different people are shown in different colors. Point at a change to see who made it and when. To accept or reject a change, right-click it and choose <span class="ui">Accept Change</span> or <span class="ui">Reject Change</span>.</p>
+    <p class="webBasedCOOLOnly">If the administrator turned it on, the changes are also shown in boxes on the right of the document, like comments, with icons to accept or reject them. You can also add a comment there.</p>
+    <div class="screenshot webBasedCOOLOnly" id="help-track-changes-comment"><img alt="Tracked change shown as a comment box beside the document with author name, date, and change description" src="images/help/en/track-changes-comment.png"/></div>
     </div>
     <div class="sub-section">
     <h4>Other advanced features</h4>
@@ -781,13 +783,13 @@
     <ul>
       <li>Deletions are marked with colored strike-through characters.</li>
       <li>Additions are marked with colored underlined characters.</li>
-      <li>All changes are marked with a vertical bar in the right margin.</li>
-      <li>Changes are displayed as comment in the right of the document area.</li>
+      <li>All changed lines are marked with a vertical bar in the left margin.</li>
+      <li class="webBasedCOOLOnly">If the administrator turned it on, changes are also shown as boxes on the right of the document area.</li>
     </ul>
-    <div class="screenshot" id="help-track-changes-comment"><img alt="Tracked change shown as a comment box beside the document with author name, date, and change description" src="images/help/en/track-changes-comment.png"/></div>
+    <div class="screenshot" id="help-track-changes-tooltip-faq"><img alt="Tooltip over an inserted text showing the kind of change, the author and the date" src="images/help/en/track-changes-tooltip.png"/></div>
     <p>The color assigned to the changes depends on the user that changes the document.</p>
-    <p>To display or hide track changes choose <span class="ui">Review</span> → <span class="ui">View Changes</span> → <span class="ui">Show</span>. Beware that if track changes are enabled but hidden, you still record changes and may inadvertently leave unwanted text available in the document.</p>
-    <p>Changes can be accepted or rejected. To accept or reject changes, click on the corresponding icons in the comment box on the right of the document. Alternatively, choose <span class="ui">Review</span> → <span class="ui">Accept</span> or <span class="ui">Reject</span>. Furthermore, if you need to filter changes before accepting or rejecting, choose <span class="ui">Review</span> → <span class="ui">Accept</span> → <span class="ui">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog buttons accordingly.</p>
+    <p>To hide the changes choose <span class="ui">Review</span> → <span class="ui">View Changes</span> → <span class="ui">Hidden</span>, and <span class="ui">Inline</span> to show them again. Beware that if track changes are enabled but hidden, you still record changes and may inadvertently leave unwanted text available in the document.</p>
+    <p>Changes can be accepted or rejected. To accept or reject a change, right-click it and choose <span class="ui">Accept Change</span> or <span class="ui">Reject Change</span>. Alternatively, place the cursor in the change and choose <span class="ui">Review</span> → <span class="ui">Accept</span> or <span class="ui">Reject</span>. Furthermore, if you need to filter changes before accepting or rejecting, choose <span class="ui">Review</span> → <span class="ui">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog buttons accordingly.</p>
     <div class="screenshot" id="help-manage-changes"><img alt="Manage Changes dialog with a list of tracked changes showing action, author, date, and comment columns, and Accept, Reject, Accept All, Reject All buttons" src="images/help/en/manage-changes.png"/></div>
     </div>
     <div class="sub-section">
