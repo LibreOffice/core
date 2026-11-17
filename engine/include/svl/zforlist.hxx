@@ -299,10 +299,12 @@ class UNLESS_MERGELIBS(SVL_DLLPUBLIC) NfCurrencyEntry final
     sal_Unicode     cZeroChar;          /// which character is used for zeros as last decimal digits
 
 private:
-
-                        // nDecimalFormat := 0, 1, 2
-                        // #,##0 or #,##0.00 or #,##0.-- is returned
-    SVL_DLLPRIVATE OUString Impl_BuildFormatStringNumChars( const LocaleDataWrapper&, sal_uInt16 nDecimalFormat) const;
+    // nDecimalFormat := 0, 1, 2
+    // #,##0 or #,##0.00 or #,##0.-- is appended to rBuf, which is not
+    // returned because OUStringBuffer has no move constructor
+    SVL_DLLPRIVATE void Impl_BuildFormatStringNumChars(OUStringBuffer& rBuf,
+                                                       const LocaleDataWrapper&,
+                                                       sal_uInt16 nDecimalFormat) const;
 
 public:
 

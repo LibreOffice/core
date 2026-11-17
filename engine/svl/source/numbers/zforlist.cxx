@@ -4984,27 +4984,28 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
     return aBuf.makeStringAndClear();
 }
 
-OUString NfCurrencyEntry::Impl_BuildFormatStringNumChars( const LocaleDataWrapper& rLoc,
-                                                          sal_uInt16 nDecimalFormat) const
+void NfCurrencyEntry::Impl_BuildFormatStringNumChars(OUStringBuffer& rBuf,
+                                                     const LocaleDataWrapper& rLoc,
+                                                     sal_uInt16 nDecimalFormat) const
 {
-    OUStringBuffer aBuf("#" + rLoc.getNumThousandSep() + "##0");
+    rBuf.append("#" + rLoc.getNumThousandSep() + "##0");
     if (nDecimalFormat && nDigits)
     {
-        aBuf.append(rLoc.getNumDecimalSep());
+        rBuf.append(rLoc.getNumDecimalSep());
         sal_Unicode cDecimalChar = nDecimalFormat == 2 ? '-' : cZeroChar;
         for (sal_uInt16 i = 0; i < nDigits; ++i)
         {
-            aBuf.append(cDecimalChar);
+            rBuf.append(cDecimalChar);
         }
     }
-    return aBuf.makeStringAndClear();
 }
 
 
 OUString NfCurrencyEntry::BuildPositiveFormatString(bool bBank, const LocaleDataWrapper& rLoc,
                                                     sal_uInt16 nDecimalFormat) const
 {
-    OUStringBuffer sBuf(Impl_BuildFormatStringNumChars(rLoc, nDecimalFormat));
+    OUStringBuffer sBuf;
+    Impl_BuildFormatStringNumChars(sBuf, rLoc, nDecimalFormat);
     sal_uInt16 nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat( rLoc.getCurrPositiveFormat(),
                                                                         nPositiveFormat, bBank );
     CompletePositiveFormatString(sBuf, bBank, nPosiForm);
@@ -5015,7 +5016,8 @@ OUString NfCurrencyEntry::BuildPositiveFormatString(bool bBank, const LocaleData
 OUString NfCurrencyEntry::BuildNegativeFormatString(bool bBank,
             const LocaleDataWrapper& rLoc, sal_uInt16 nDecimalFormat ) const
 {
-    OUStringBuffer sBuf(Impl_BuildFormatStringNumChars(rLoc, nDecimalFormat));
+    OUStringBuffer sBuf;
+    Impl_BuildFormatStringNumChars(sBuf, rLoc, nDecimalFormat);
     sal_uInt16 nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat( rLoc.getCurrNegativeFormat(),
                                                                         nNegativeFormat, bBank );
     CompleteNegativeFormatString(sBuf, bBank, nNegaForm);
