@@ -37,6 +37,7 @@
 #include "zforscan.hxx"
 #include <svl/zformat.hxx>
 
+#include <algorithm>
 #include <memory>
 
 #include "zforfind.hxx"
@@ -3870,10 +3871,17 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
     }
     else
     {
-        // NoMoreUpperNeeded, all comparisons on UpperCase
-        OUString aString = mrCurrentLanguageData.GetCharClass()->uppercase( rString );
-        // convert native number to ASCII if necessary
-        TransformInput(rNatNum, mrCurrentLanguageData, aString);
+        OUString aString = rString;
+        // Only a-z and non-ASCII characters can change in uppercase() and TransformInput()
+        if (std::ranges::any_of(std::u16string_view(rString), [](sal_Unicode c) {
+                return !rtl::isAscii(c) || rtl::isAsciiLowerCase(c);
+            }))
+        {
+            // NoMoreUpperNeeded, all comparisons on UpperCase
+            aString = mrCurrentLanguageData.GetCharClass()->uppercase(rString);
+            // convert native number to ASCII if necessary
+            TransformInput(rNatNum, mrCurrentLanguageData, aString);
+        }
         res = IsNumberFormatMain( aString, pFormat );
     }
 
