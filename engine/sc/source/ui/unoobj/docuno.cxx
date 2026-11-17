@@ -1649,6 +1649,12 @@ void ScModelObj::setDrawnFromModel(bool bDrawnFromModel)
         pDrawLayer->SetDrawnFromModel(bDrawnFromModel);
 }
 
+std::string ScModelObj::getVectorGraphic(std::string_view rCommand)
+{
+    // The graphics are those of the vector content served so far.
+    return mpVectorContent ? mpVectorContent->getVectorGraphic(rCommand) : std::string();
+}
+
 void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
     if (answerVectorCommand(rJsonWriter, rCommand))

@@ -129,6 +129,8 @@ public:
 
     /// Answer the commands of svx::vector::PartCommand.
     void getCommandValues(tools::JsonWriter& rWriter, std::string_view rCommand);
+    /// Answer a VectorRenderingGraphics command, as svx::vector::answerGraphicCommand does.
+    std::string getVectorGraphic(std::string_view rCommand) const;
     /// The bytes of block JSON kept, over all sheets.
     SC_DLLPUBLIC size_t heldContentBytes() const;
     /// Keep at most nBytes of block JSON, instead of constHeldContentBytes.

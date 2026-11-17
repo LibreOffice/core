@@ -23,6 +23,7 @@
 #include <map>
 #include <optional>
 #include <set>
+#include <string>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -59,8 +60,13 @@ public:
     /// Let the processor store the graphics and fonts it writes into this cache.
     void attachTo(Primitive2dJsonProcessor& rProcessor);
 
-    /// Write the answer to a graphic request: type, checksum, and the image or an "error" reason.
+    /// Write a graphic: type, checksum, and the image as a base64 data URL or an "error" reason.
     void writeGraphic(tools::JsonWriter& rWriter, sal_Int64 nChecksum) const;
+
+    /// The answer to a graphic request: a line of JSON with type, checksum and the MIME type of
+    /// the image as "mime", a newline, then the bytes of the image. A graphic that is not held or
+    /// cannot be encoded is answered with the JSON alone, which has an "error" reason instead.
+    std::string graphicAnswer(sal_Int64 nChecksum) const;
 
     /// Write the answer to a font request: type, font id in hex, and the bytes in base64 if known.
     void writeFont(tools::JsonWriter& rWriter, sal_uInt64 nFontId) const;

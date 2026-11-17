@@ -4416,6 +4416,11 @@ void SdXImpressDocument::forgetVectorPart(std::string_view rPartId)
     maVectorParts.forget(aGuid);
 }
 
+std::string SdXImpressDocument::getVectorGraphic(std::string_view rCommand)
+{
+    return svx::vector::answerGraphicCommand(rCommand, maVectorResources);
+}
+
 void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                                           std::string_view rCommand)
 {

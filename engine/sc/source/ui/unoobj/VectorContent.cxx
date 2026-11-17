@@ -668,6 +668,11 @@ void VectorContent::getCommandValues(tools::JsonWriter& rWriter, std::string_vie
         [this](std::string_view rPartId) { forgetSheet(rPartId); });
 }
 
+std::string VectorContent::getVectorGraphic(std::string_view rCommand) const
+{
+    return svx::vector::answerGraphicCommand(rCommand, maResources);
+}
+
 void VectorContent::forgetSheet(std::string_view rPartId)
 {
     // A part id names a sheet in the one form the document writes it in.

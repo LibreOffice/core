@@ -74,6 +74,37 @@ void VectorResourceCache::writeGraphic(tools::JsonWriter& rWriter, sal_Int64 nCh
         rWriter.put("error", "notfound");
 }
 
+std::string VectorResourceCache::graphicAnswer(sal_Int64 nChecksum) const
+{
+    tools::JsonWriter aWriter;
+    aWriter.put("type", "vectorrenderinggraphics");
+    aWriter.put("checksum", nChecksum);
+    auto aIterator = maBitmapCache.find(nChecksum);
+    if (aIterator == maBitmapCache.end())
+    {
+        aWriter.put("error", "notfound");
+        return aWriter.finishAndGetAsStdString();
+    }
+
+    std::string aAnswer;
+    const bool bEncoded = Primitive2dJsonProcessor::withGraphicBytes(
+        aIterator->second,
+        [&aWriter, &aAnswer](std::string_view rMimeType, const void* pData, std::size_t nSize)
+        {
+            aWriter.put("mime", rMimeType);
+            aAnswer = aWriter.finishAndGetAsStdString();
+            aAnswer.reserve(aAnswer.size() + 1 + nSize);
+            aAnswer += '\n';
+            aAnswer.append(static_cast<const char*>(pData), nSize);
+        });
+    if (!bEncoded)
+    {
+        aWriter.put("error", "conversionfailed");
+        return aWriter.finishAndGetAsStdString();
+    }
+    return aAnswer;
+}
+
 void VectorResourceCache::writeFont(tools::JsonWriter& rWriter, sal_uInt64 nFontId) const
 {
     rWriter.put("type", "vectorrenderingfont");

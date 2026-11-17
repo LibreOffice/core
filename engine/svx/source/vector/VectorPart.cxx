@@ -139,6 +139,16 @@ PartRequest readPartRequest(std::string_view rCommand, sal_Int32 nEpoch)
     return aRequest;
 }
 
+std::string answerGraphicCommand(std::string_view rCommand,
+                                 const drawinglayer::VectorResourceCache& rResources)
+{
+    const PartRequest aRequest = readPartRequest(rCommand, rResources.getEpoch());
+    auto it = aRequest.maParameters.find(u"checksum"_ustr);
+    if (it == aRequest.maParameters.end())
+        return {};
+    return rResources.graphicAnswer(it->second.toInt64());
+}
+
 bool answerPartCommand(tools::JsonWriter& rWriter, std::string_view rCommand,
                        const drawinglayer::VectorResourceCache& rResources,
                        const std::function<void(const PartRequest&)>& rWritePart,

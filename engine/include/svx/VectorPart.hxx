@@ -22,6 +22,7 @@
 #include <functional>
 #include <map>
 #include <optional>
+#include <string>
 #include <string_view>
 #include <unordered_map>
 #include <utility>
@@ -342,6 +343,13 @@ answerPartCommand(tools::JsonWriter& rWriter, std::string_view rCommand,
                   const drawinglayer::VectorResourceCache& rResources,
                   const std::function<void(const PartRequest&)>& rWritePart,
                   const std::function<void(std::string_view)>& rForgetPart = {});
+
+/// The answer to rCommand, a "VectorRenderingGraphics" command with its checksum parameter, from
+/// rResources: a line of JSON, then the bytes of the image after a newline when there is one.
+/// Empty when the command names no checksum.
+SVXCORE_DLLPUBLIC std::string
+answerGraphicCommand(std::string_view rCommand,
+                     const drawinglayer::VectorResourceCache& rResources);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

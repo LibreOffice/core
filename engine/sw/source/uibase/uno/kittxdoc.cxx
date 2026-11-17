@@ -1501,6 +1501,15 @@ std::vector<OString> SwXTextDocument::getVectorPartIds()
     return pLayout ? sw::vector::partIdsOf(*pLayout) : std::vector<OString>();
 }
 
+std::string SwXTextDocument::getVectorGraphic(std::string_view rCommand)
+{
+    // The graphics are those of the pages served so far.
+    SwDoc* pDoc = m_pDocShell ? m_pDocShell->GetDoc() : nullptr;
+    sw::vector::PartStore* pParts = pDoc ? pDoc->GetVectorParts() : nullptr;
+    return pParts ? svx::vector::answerGraphicCommand(rCommand, pParts->getResources())
+                  : std::string();
+}
+
 vcl::IVectorParts* SwXTextDocument::getVectorPartsInterface() { return this; }
 
 bool SwXTextDocument::answerVectorCommand(tools::JsonWriter& rJsonWriter,

@@ -14,6 +14,7 @@
 #include <rtl/string.hxx>
 #include <vcl/dllapi.h>
 
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -39,6 +40,13 @@ public:
      * rJsonWriter. Returns false, with nothing written, for a command of any other name.
      */
     virtual bool answerVectorCommand(tools::JsonWriter& rJsonWriter, std::string_view rCommand) = 0;
+
+    /**
+     * Returns the answer to rCommand, a VectorRenderingGraphics command with its parameters: a
+     * line of JSON, then the bytes of the image after a newline when there is one. Empty when
+     * the document holds no vector content.
+     */
+    virtual std::string getVectorGraphic(std::string_view rCommand) = 0;
 
     /**
      * Writes the vector primitives delta of a part: the objects that changed since the part was
