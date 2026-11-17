@@ -592,7 +592,9 @@ def process_license_file(file_path):
                     "spdxId": pkg_spdx_id,
                     "originatedBy": ["https://collaboraoffice.com"],
                     "creationInfo": "_:creationinfo",
-                    "name": spdx_info["name"],
+                    # the Name doubles as the CPE product, so it carries CPE
+                    # escapes (zxing-c\+\+); the package is called zxing-c++
+                    "name": re.sub(r"\\(.)", r"\1", spdx_info["name"]),
                     "externalIdentifier": [{
                         "type": "ExternalIdentifier",
                         "externalIdentifierType": "cpe23",
