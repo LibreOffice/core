@@ -2319,6 +2319,7 @@ void MessageDialog::create_message_area()
     bool bHasSecondaryText = !m_sSecondaryString.isEmpty();
 
     m_pPrimaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pMessageBox, nWinStyle);
+    m_pPrimaryMessage->set_id(u"PrimaryMessage"_ustr);
     m_pPrimaryMessage->SetPaintTransparent(true);
     m_pPrimaryMessage->EnableCursor(false);
 
@@ -2327,6 +2328,7 @@ void MessageDialog::create_message_area()
     m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
 
     m_pSecondaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pMessageBox, nWinStyle);
+    m_pSecondaryMessage->set_id(u"SecondaryMessage"_ustr);
     m_pSecondaryMessage->SetPaintTransparent(true);
     m_pSecondaryMessage->EnableCursor(false);
     m_pSecondaryMessage->set_hexpand(true);
