@@ -324,7 +324,14 @@ class InitializerBase {
 
 		window.tileSize = 256;
 
-		window.ThisIsAMobileApp = false;
+		window.ThisIsAnApp = false;
+		Object.defineProperty(window, "ThisIsAMobileApp", {
+			get() {
+				return window.ThisIsAnApp;
+			},
+			configurable: false
+		}); // TODO: remove this alias. It's there temporarily to allow small amounts of drift during a rename
+
 		window.ThisIsTheiOSApp = false;
 		window.ThisIsTheAndroidApp = false;
 		window.ThisIsTheEmscriptenApp = false;
@@ -611,18 +618,18 @@ class BrowserInitializer extends InitializerBase {
 	}
 }
 
-class MobileAppInitializer extends InitializerBase {
+class AppInitializer extends InitializerBase {
 	constructor() {
 		super();
 
-		window.ThisIsAMobileApp = true;
+		window.ThisIsAnApp = true;
 		window.HelpFile = document.getElementById("init-help-file").value;
 
 		// Related to issue #5841: the mobile apps set the base text direction via the "dir" parameter
 		document.dir = window.coolParams.get('dir');
 
 		// stash this so we can use it for presenter console despite
-		// MobileAppInitializer redirection of general 'open' use
+		// AppInitializer redirection of general 'open' use
 		window.origOpen = window.open;
 		// eslint-disable-next-line
 		window.open = function (url, windowName, windowFeatures) {
@@ -656,7 +663,7 @@ class MobileAppInitializer extends InitializerBase {
 	}
 }
 
-class IOSAppInitializer extends MobileAppInitializer {
+class IOSAppInitializer extends AppInitializer {
 	constructor() {
 		super();
 
@@ -672,7 +679,7 @@ class IOSAppInitializer extends MobileAppInitializer {
 	}
 }
 
-class MacOSAppInitializer extends MobileAppInitializer {
+class MacOSAppInitializer extends AppInitializer {
 	constructor() {
 		super();
 
@@ -697,7 +704,7 @@ class MacOSAppInitializer extends MobileAppInitializer {
 	}
 }
 
-class WindowsAppInitializer extends MobileAppInitializer {
+class WindowsAppInitializer extends AppInitializer {
 	constructor() {
 		super();
 
@@ -787,7 +794,7 @@ class WindowsAppInitializer extends MobileAppInitializer {
 	}
 }
 
-class AndroidAppInitializer extends MobileAppInitializer {
+class AndroidAppInitializer extends AppInitializer {
 	constructor() {
 		super();
 
@@ -801,7 +808,7 @@ class AndroidAppInitializer extends MobileAppInitializer {
 	}
 }
 
-class EMSCRIPTENAppInitializer extends MobileAppInitializer {
+class EMSCRIPTENAppInitializer extends AppInitializer {
 	constructor() {
 		super();
 
@@ -820,7 +827,7 @@ class EMSCRIPTENAppInitializer extends MobileAppInitializer {
 	}
 }
 
-class QtAppInitializer extends MobileAppInitializer {
+class QtAppInitializer extends AppInitializer {
 	constructor() {
 		super();
 		window.ThisIsTheQtApp = true;
@@ -1019,7 +1026,7 @@ function showWelcomeSVG() {
 	};
 
 	global.logServer = function (log) {
-		if (global.ThisIsAMobileApp) {
+		if (global.ThisIsAnApp) {
 			global.postMobileError(log);
 		} else if (global.isRawSocketOpen()) {
 			global.socket.send(log);
@@ -1206,7 +1213,7 @@ function showWelcomeSVG() {
 			// WSD, so leaving useBrowserSetting=true would let stale synced
 			// values shadow per-toggle changes the View menu writes to
 			// localStorage. Keep localStorage authoritative here.
-			if (!global.ThisIsAMobileApp)
+			if (!global.ThisIsAnApp)
 				global.prefs.useBrowserSetting = true;
 
 			global.seedCypressAccessibilityState();
@@ -1462,7 +1469,7 @@ function showWelcomeSVG() {
 		// the mobile and WASM builds opt out here for now. Returns the resolved
 		// boolean.
 		seedDarkModeDefault: function() {
-			const nativeApp = global.mode.isCODesktop() || global.ThisIsAMobileApp;
+			const nativeApp = global.mode.isCODesktop() || global.ThisIsAnApp;
 			if (!nativeApp &&
 				global.prefs._localStorageCache['darkTheme'] === undefined &&
 				!global.prefs.hasExplicitDarkModePref()) {
@@ -1562,7 +1569,7 @@ function showWelcomeSVG() {
 				return false;
 			if (global.keyboard.onscreenKeyboardHint != undefined) return global.keyboard.onscreenKeyboardHint;
 			if (global.keyboard.hardwareKeyboardAttached) return false;
-			return (global.ThisIsAMobileApp && !global.ThisIsTheEmscriptenApp) || global.mode.isSmallScreenDevice() || global.mode.isTablet();
+			return (global.ThisIsAnApp && !global.ThisIsTheEmscriptenApp) || global.mode.isSmallScreenDevice() || global.mode.isTablet();
 			// It's better to guess that more devices will have an onscreen keyboard than reality,
 			// because calc becomes borderline unusable if you miss a device that pops up an onscreen keyboard which covers
 			// a sizeable portion of the screen
@@ -2449,7 +2456,7 @@ function showWelcomeSVG() {
 			uri = global.processCoolUrl({ url: uri, type: 'ws' });
 		}
 
-		if (global.ThisIsAMobileApp) {
+		if (global.ThisIsAnApp) {
 			return new MobileSocket(uri);
 		} else if (global.socketProxy) {
 			return new global.ProxySocket(uri);
@@ -2468,7 +2475,7 @@ function showWelcomeSVG() {
 		// `this` is the string being localized
 		const string = this.valueOf();
 
-		if (global.ThisIsAMobileApp) {
+		if (global.ThisIsAnApp) {
 			if (global.LOCALIZATIONS && Object.prototype.hasOwnProperty.call(global.LOCALIZATIONS, string)) {
 				let result = global.LOCALIZATIONS[string];
 				if (global.LANG === 'de-CH') {
@@ -2489,7 +2496,7 @@ function showWelcomeSVG() {
 		// `this` is the string being localized
 		const string = this.valueOf();
 
-		if (global.ThisIsAMobileApp) {
+		if (global.ThisIsAnApp) {
 			if (global.LOCALIZATIONS_HELP && Object.prototype.hasOwnProperty.call(global.LOCALIZATIONS_HELP, string)) {
 				let result = global.LOCALIZATIONS_HELP[string];
 				if (global.LANG === 'de-CH') {
@@ -2559,7 +2566,7 @@ function showWelcomeSVG() {
 
 	// Form a valid WS URL to the host with the given path.
 	global.makeWsUrl = function (path) {
-		if (!global.ThisIsAMobileApp) {
+		if (!global.ThisIsAnApp) {
 			global.app.console.assert(global.host.startsWith('ws'), 'host is not ws: ' + global.host);
 		}
 		return global.host + global.serviceRoot + path;
@@ -2662,7 +2669,7 @@ function showWelcomeSVG() {
 
 	// Create a WebSocket to the server
 	// FIXME The Android and iOS apps use the new approach, other apps should follow
-	if (global.ThisIsAMobileApp && !global.ThisIsTheAndroidApp && !global.ThisIsTheiOSApp) {
+	if (global.ThisIsAnApp && !global.ThisIsTheAndroidApp && !global.ThisIsTheiOSApp) {
 		// FIXME Remove FakeWebSocket when the mobile apps are updated to use the new approach
 		global.socket = new global.FakeWebSocket();
 		global.TheFakeWebSocket = global.socket;
@@ -2718,7 +2725,7 @@ function showWelcomeSVG() {
 	if (global.ThisIsTheEmscriptenApp)
 		// Temporary hack
 		global.LANG = 'en-US';
-	else if (global.ThisIsAMobileApp)
+	else if (global.ThisIsAnApp)
 		global.LANG = lang;
 	if (global.socket && global.socket.readyState !== 3) {
 		global.socket.onopen = function () {
@@ -2737,7 +2744,7 @@ function showWelcomeSVG() {
 				global.seedCypressAccessibilityState();
 				msg += ' accessibilityState=' + global.getAccessibilityState();
 
-				if (global.ThisIsAMobileApp) {
+				if (global.ThisIsAnApp) {
 					msg += ' lang=' + global.LANG;
 				} else {
 
@@ -2820,7 +2827,7 @@ function showWelcomeSVG() {
 		// A remote page in an integrator's editor frame has WOPISrc in its address, so docURL is
 		// set, but it has no local file yet either: main.js fires HULLO once it has one.
 		const hasLocalFile = global.docURL && !window.codaRemotePage;
-		if (global.ThisIsAMobileApp && !global.ThisIsTheEmscriptenApp && !window.starterScreen && hasLocalFile) {
+		if (global.ThisIsAnApp && !global.ThisIsTheEmscriptenApp && !window.starterScreen && hasLocalFile) {
 			// This corresponds to the initial GET request when creating a WebSocket
 			// connection and tells the app's code that it is OK to start invoking
 			// TheFakeWebSocket's onmessage handler. The app code that handles this
@@ -3177,7 +3184,7 @@ function showWelcomeSVG() {
 		// From here on the page acts as a plain browser client.
 		window.postMobileMessage = function() {};
 		window.postMobileCall = function() {};
-		window.ThisIsAMobileApp = false;
+		window.ThisIsAnApp = false;
 		window.ThisIsTheEmscriptenApp = false;
 		window.ThisIsTheQtApp = false;
 	}

@@ -1338,7 +1338,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		// copy/cut/paste is driven by the document.oncopy/oncut/onpaste
 		// handlers in Clipboard.js. Sending the UNO command here as well
 		// would run the operation twice, e.g. paste the content twice.
-		if (e.type === 'keydown' && window.ThisIsAMobileApp && !window.ThisIsTheWindowsApp && !window.ThisIsTheQtApp && !window.ThisIsTheMacOSApp) {
+		if (e.type === 'keydown' && window.ThisIsAnApp && !window.ThisIsTheWindowsApp && !window.ThisIsTheQtApp && !window.ThisIsTheMacOSApp) {
 			// The Android WebView follows the key with a DOM copy, cut or paste event, which
 			// the Clipboard.js handlers turn into the same UNO command, so the default is
 			// prevented here and the command is sent once.

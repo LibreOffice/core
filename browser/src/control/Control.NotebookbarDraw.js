@@ -339,11 +339,11 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'type': 'container',
 				'children': [
 					{
-						'id': !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf',
+						'id': !window.ThisIsAnApp ? 'exportdirectpdf' : 'downloadas-pdf',
 						'class': 'unoexportas',
 						'type': 'customtoolitem',
 						'text': _('PDF Document (.pdf)'),
-						'command': !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf',
+						'command': !window.ThisIsAnApp ? 'exportdirectpdf' : 'downloadas-pdf',
 						'inlineLabel': true,
 						'accessibility': { focusBack: true, combination: 'EP', de: null }
 					},

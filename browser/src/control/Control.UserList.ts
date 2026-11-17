@@ -236,7 +236,7 @@ class UserList extends window.L.Control {
 
 	hideUserList() {
 		return (
-			window.ThisIsAMobileApp ||
+			window.ThisIsAnApp ||
 			(this.map['wopi'].HideUserList !== null &&
 				this.map['wopi'].HideUserList !== undefined &&
 				$.inArray('true', this.map['wopi'].HideUserList) >= 0) ||

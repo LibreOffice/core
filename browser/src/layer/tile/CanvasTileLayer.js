@@ -1448,7 +1448,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	// it knows the file by its path relative to the master document.
 	_onOpenLinkedDocumentMsg: function (textMsg) {
 		const obj = JSON.parse(textMsg.substring('openlinkeddocument:'.length + 1));
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			// The path relative to the master document finds the file where the
 			// app reads it through a folder the user allowed.
 			if (obj.url)
@@ -1481,7 +1481,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	// files where they are and asks for no folder.
 	_onLinkedFilesMsg: function (textMsg) {
 		if (
-			!window.ThisIsAMobileApp ||
+			!window.ThisIsAnApp ||
 			window.ThisIsTheWindowsApp ||
 			this._linkedFilesOffered
 		)

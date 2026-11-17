@@ -27,7 +27,7 @@ L.ProgressOverlay = window.L.Layer.extend({
 		this._spinnerCanvas = window.L.DomUtil.create('canvas', 'leaflet-progress-spinner-canvas', this._spinner);
 
 		var productName;
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			productName = window.MobileAppName;
 		} else {
 			productName = (typeof brandProductName !== 'undefined') ? brandProductName : 'Collabora Online Development Edition (unbranded)';

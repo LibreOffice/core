@@ -200,7 +200,7 @@ class UIManager extends window.L.Control {
 		// has made no explicit choice. The native desktop app (CODA) owns dark
 		// mode itself (through preferences.json); the mobile and WASM builds opt
 		// out here for now.
-		if (window.matchMedia && !window.mode.isCODesktop() && !window.ThisIsAMobileApp) {
+		if (window.matchMedia && !window.mode.isCODesktop() && !window.ThisIsAnApp) {
 			this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 			this.colorSchemeQuery.addEventListener('change', () => {
 				this.followSystemDarkMode();

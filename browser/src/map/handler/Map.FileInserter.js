@@ -327,7 +327,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 
 		this._toInsertBackground = {};
 
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			// Pass the file contents as a base64-encoded parameter in an insertfile message
 			var reader = new FileReader();
 			reader.onload = function(e) {

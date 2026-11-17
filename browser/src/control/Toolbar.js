@@ -201,7 +201,7 @@ window.L.Map.include({
 		if (id == 'export' && format === 'pdf' && options === '')
 			options = '{\"ExportNotes\":{\"type\":\"boolean\",\"value\":\"false\"}}';
 
-		if (!window.ThisIsAMobileApp)
+		if (!window.ThisIsAnApp)
 			this.showBusy(_('Downloading...'), false);
 
 		app.socket.sendMessage('downloadas ' +
@@ -851,7 +851,7 @@ window.L.Map.include({
 
 	_doOpenHelpFile: function(data, id, map) {
 		let productName;
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			productName = window.MobileAppName;
 		} else {
 			productName = (typeof brandProductName !== 'undefined') ? brandProductName : 'Collabora Online Development Edition (unbranded)';
@@ -871,7 +871,7 @@ window.L.Map.include({
 
 	showHelp: function(id) {
 		var map = this;
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			map._doOpenHelpFile(window.HelpFile, id, map);
 			return;
 		}

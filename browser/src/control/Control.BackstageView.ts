@@ -1501,7 +1501,7 @@ class BackstageView extends window.L.Class {
 	}
 
 	private executePrint(): void {
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			window.postMobileMessage('PRINT');
 		} else if (this.map && this.map.print) {
 			this.map.print();

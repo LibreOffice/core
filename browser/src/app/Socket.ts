@@ -92,7 +92,7 @@ class Socket {
 		this.traceEvents = new TraceEvents(this);
 
 		const hasWorkerSupport = !!window.Worker;
-		const isMobileApp = window.ThisIsAMobileApp && !window.mode.isCODesktop();
+		const isMobileApp = window.ThisIsAnApp && !window.mode.isCODesktop();
 		const workerUrl =
 			hasWorkerSupport && !isMobileApp ? this.taskWorkerUrl() : '';
 		if (workerUrl) {
@@ -352,7 +352,7 @@ class Socket {
 		}
 		if (socket && (socket.readyState === 1 || socket.readyState === 0)) {
 			this.socket = socket;
-		} else if (window.ThisIsAMobileApp) {
+		} else if (window.ThisIsAnApp) {
 			// We have already opened the FakeWebSocket or MobileSocket over in global.js
 			// With the FakeWebSocket do we then set this.socket at all?
 			// With the MobileSocket we definitely do - this is load-bearing for opening password protected documents
@@ -438,7 +438,7 @@ class Socket {
 		this.socket.onclose = function () {};
 		// In a mobile app the socket stays open as the link to the native shell, so events like
 		// OS back button still arrive.
-		this.socket.onmessage = window.ThisIsAMobileApp
+		this.socket.onmessage = window.ThisIsAnApp
 			? this._onShellEventWhileClosed.bind(this)
 			: function () {};
 		this.socket.close(code ?? Socket.UserExitCode, reason);
@@ -1245,7 +1245,7 @@ class Socket {
 		// In an app, the app finds the files a text document links to, the
 		// chapters of a master document, where the server does it otherwise.
 		if (
-			window.ThisIsAMobileApp &&
+			window.ThisIsAnApp &&
 			command.type === 'text' &&
 			!this._linkedFilesAsked
 		) {
@@ -1471,7 +1471,7 @@ class Socket {
 			this._exportAsCallback(command);
 		} else if (textMsg.startsWith('warn:')) {
 			this._onWarnMsg(textMsg, command);
-		} else if (window.ThisIsAMobileApp && textMsg.startsWith('mobile:')) {
+		} else if (window.ThisIsAnApp && textMsg.startsWith('mobile:')) {
 			// allow passing some events easily from the mobile app
 			const mobileEvent = textMsg.substring('mobile: '.length);
 			this._map.fire(mobileEvent);
@@ -1632,7 +1632,7 @@ class Socket {
 			// Push it back via updateviewsettings so the session applies the
 			// AI credentials. The handleUpdateViewSettings echo carries
 			// aiConfigured, which is how we avoid re-sending and looping.
-			if (window.ThisIsAMobileApp && settingJSON.aiConfigured === undefined) {
+			if (window.ThisIsAnApp && settingJSON.aiConfigured === undefined) {
 				this.sendMessage('updateviewsettings ' + JSON.stringify(settingJSON));
 			}
 		}
@@ -2024,7 +2024,7 @@ class Socket {
 			if (passwordType === 'to-modify') {
 				this._map._docPassword = '';
 				this._map.loadDocument();
-			} else if (window.ThisIsAMobileApp && !window.ThisIsTheEmscriptenApp) {
+			} else if (window.ThisIsAnApp && !window.ThisIsTheEmscriptenApp) {
 				window.postMobileMessage('BYE');
 			} else {
 				this._map.fire('postMessage', { msgId: 'UI_Cancel_Password' });
@@ -2040,7 +2040,7 @@ class Socket {
 			_('OK'),
 			(data: string): void => {
 				this._map._docPassword = data;
-				if (window.ThisIsAMobileApp) {
+				if (window.ThisIsAnApp) {
 					window.postMobileMessage('loadwithpassword password=' + data);
 				}
 				this._map.loadDocument();
@@ -2337,8 +2337,7 @@ class Socket {
 	private _onWopiMsg(textMsg: string): void {
 		// Handle WOPI related messages
 		const wopiInfo = JSON.parse(textMsg.substring(textMsg.indexOf('{')));
-		if (window.ThisIsAMobileApp)
-			Object.assign(wopiInfo, window.codaRemoteFileInfo);
+		if (window.ThisIsAnApp) Object.assign(wopiInfo, window.codaRemoteFileInfo);
 
 		this._map.fire('wopiprops', wopiInfo);
 	}
@@ -3254,7 +3253,7 @@ class Socket {
 
 		if (info.id == 'find' || info.id == 'connect' || info.id == 'ready') {
 			this._map.showBusy(
-				window.ThisIsAMobileApp ? _('Loading...') : _('Connecting...'),
+				window.ThisIsAnApp ? _('Loading...') : _('Connecting...'),
 				true,
 			);
 			if (info.id == 'ready') {

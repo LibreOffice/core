@@ -614,7 +614,7 @@ class StatusBar extends JSDialog.Toolbar {
 		var isReadOnlyMode = event.detail.perm === 'readonly';
 		this.parentContainer.classList.toggle('readonly', isReadOnlyMode);
 
-		var canUserWrite = window.ThisIsAMobileApp ? !app.isReadOnly() : this.map['wopi'].UserCanWrite;
+		var canUserWrite = window.ThisIsAnApp ? !app.isReadOnly() : this.map['wopi'].UserCanWrite;
 		var NotEditDocMode = false;
 		if (app.map['stateChangeHandler'].getItemValue('EditDoc') !== undefined) {
 			NotEditDocMode = app.map['stateChangeHandler'].getItemValue('EditDoc') === "false"; // can be true, false or disabled

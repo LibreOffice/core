@@ -136,10 +136,10 @@ var initUI = function() {
 	else
 		map.uiManager.initializeBasicUI();
 
-	if (wopiSrc === '' && filePath === '' && !window.ThisIsAMobileApp) {
+	if (wopiSrc === '' && filePath === '' && !window.ThisIsAnApp) {
 		map.uiManager.showInfoModal('wrong-wopi-src-modal', '', errorMessages.wrongwopisrc, '', _('OK'), null, false);
 	}
-	if (host === '' && !window.ThisIsAMobileApp) {
+	if (host === '' && !window.ThisIsAnApp) {
 		map.uiManager.showInfoModal('empty-host-url-modal', '', errorMessages.emptyhosturl, '', _('OK'), null, false);
 	}
 };
@@ -269,7 +269,7 @@ const opensThroughBridge = window.ThisIsTheQtApp || !!window.codaRemotePage;
 
 if (window.ThisIsTheEmscriptenApp) {
 	// Ensure the access token is available on the global object
-	// for switchToServerMode (MobileAppInitializer does not set
+	// for switchToServerMode (AppInitializer does not set
 	// window.accessToken, unlike BrowserAppInitializer).
 	if (typeof accessToken !== 'undefined') {
 		global.accessToken = accessToken;
@@ -454,7 +454,7 @@ if (uaLowerCase.indexOf('msie') != -1 || uaLowerCase.indexOf('trident') != -1) {
 		'', _('OK'), null, false);
 }
 
-if (window.ThisIsAMobileApp && !window.ThisIsTheEmscriptenApp && !window.ThisIsTheiOSApp && !window.ThisIsTheAndroidApp)
+if (window.ThisIsAnApp && !window.ThisIsTheEmscriptenApp && !window.ThisIsTheiOSApp && !window.ThisIsTheAndroidApp)
 	window.postMobileMessage('SYNCSETTINGS');
 
 }(window));

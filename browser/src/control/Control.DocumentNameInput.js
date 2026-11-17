@@ -169,7 +169,7 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 			el.style.display = '';
 		}
 
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			// We can now set the document name in the menu bar
 			el.disabled = false;
 			el.classList.remove('editable');

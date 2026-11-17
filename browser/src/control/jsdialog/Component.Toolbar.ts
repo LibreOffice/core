@@ -236,7 +236,7 @@ class Toolbar extends JSDialogComponent {
 				((window.mode.isSmallScreenDevice() && item.mobile === false) ||
 					(window.mode.isTablet() && item.tablet === false) ||
 					(window.mode.isDesktop() && item.desktop === false) ||
-					(!window.ThisIsAMobileApp && item.mobilebrowser === false)) &&
+					(!window.ThisIsAnApp && item.mobilebrowser === false)) &&
 				!item.hidden
 			) {
 				toHide.push(item.id);
@@ -244,7 +244,7 @@ class Toolbar extends JSDialogComponent {
 				((window.mode.isSmallScreenDevice() && item.mobile === true) ||
 					(window.mode.isTablet() && item.tablet === true) ||
 					(window.mode.isDesktop() && item.desktop === true) ||
-					(window.ThisIsAMobileApp && item.mobilebrowser === true)) &&
+					(window.ThisIsAnApp && item.mobilebrowser === true)) &&
 				(item.hidden || item.visible === false)
 			) {
 				toShow.push(item.id);

@@ -1217,7 +1217,7 @@ window.L.Control.Extension = window.L.Control.extend({
 			return;
 		}
 		const filename = (msg.filename || 'file').replace(/^.*[\\/]/, '');
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			// Hand the bytes to the native app (see the CODA/iOS extensionsavefile
 			// handler), base64 so the message stays text.
 			let binary = '';

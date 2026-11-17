@@ -45,7 +45,7 @@ declare var DOMPurify: any;
 // cool: URLs are used by mobile/derivative apps (iOS, Android, CODA-W,
 // CODA-Q) for embedded media; DOMPurify's default allow-list rejects them.
 // A media source URL is the only content that carries the scheme.
-if (window.ThisIsAMobileApp && DOMPurify.isSupported) {
+if (window.ThisIsAnApp && DOMPurify.isSupported) {
 	DOMPurify.addHook('uponSanitizeAttribute', (_node: Node, data: any) => {
 		if (data.attrName === 'src' && data.attrValue.startsWith('cool:')) {
 			data.forceKeepAttr = true;
@@ -1337,7 +1337,7 @@ class LOUtil {
 	// installed on the map, so map.settings would be undefined.
 	public static canOpenSettings(): boolean {
 		if (!window.prefs.canPersist) return false;
-		if (window.ThisIsAMobileApp) return true;
+		if (window.ThisIsAnApp) return true;
 		return !!window.wopiSettingBaseUrl;
 	}
 

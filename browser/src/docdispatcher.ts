@@ -65,7 +65,7 @@ class Dispatcher {
 				});
 			};
 
-			if (window.ThisIsAMobileApp && !window.ThisIsTheEmscriptenApp) {
+			if (window.ThisIsAnApp && !window.ThisIsTheEmscriptenApp) {
 				if ((window as any).codaRemotePage) {
 					app.map._saveAndClose(() => {
 						(window as any).collab.leave();
@@ -1412,7 +1412,7 @@ class Dispatcher {
 				// restores it. updateviewmode persists through the WOPI host;
 				// the native app builds have no WOPI host and no handler for
 				// it, so the bridge rejects it as an unknown command.
-				if (!window.ThisIsAMobileApp)
+				if (!window.ThisIsAnApp)
 					app.socket.sendMessage(
 						'updateviewmode mode=' + (commandState ? 'multipage' : 'normal'),
 					);

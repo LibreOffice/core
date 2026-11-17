@@ -1882,7 +1882,7 @@ const trackChangesEntries = [
 	},
 ];
 
-if (!window.mode?.isCODesktop() && !window.ThisIsAMobileApp) {
+if (!window.mode?.isCODesktop() && !window.ThisIsAnApp) {
 	trackChangesEntries.push({
 		id: 'review-track-changes-all-views',
 		text: _('All users'),

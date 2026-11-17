@@ -681,7 +681,7 @@ class PresenterConsole {
 		this._proxyPresenter.document.querySelector('#exit').style.marginLeft =
 			'auto';
 
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			presentToAllBtn.style.display = 'none';
 		}
 

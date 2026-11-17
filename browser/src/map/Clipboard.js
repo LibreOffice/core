@@ -136,7 +136,7 @@ window.L.Clipboard = window.L.Class.extend({
 	},
 
 	getMetaBase: function() {
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			return 'collabora-online-mobile'; // makeHttpUrl does not work with the file:// protocol used in mobile apps...
 		}
 		return window.makeHttpUrl('');
@@ -440,7 +440,7 @@ window.L.Clipboard = window.L.Class.extend({
 	_pasteTypedBlob: function(fileType, fileBlob) {
 		var header = 'paste mimetype=' + fileType + '\n';
 		var blob;
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			// The app builds talk to the native side over a string-only bridge that
 			// cannot carry a binary payload (the qtwebchannel "Could not convert
 			// argument QJsonValue(object, QJsonObject()) to target type QString ."

@@ -380,7 +380,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 			// settings in force are whoever opened it's and pulling them out
 			// from under the others would be worse than waiting. The apps
 			// apply the file as the shell writes it and have no such command.
-			if (data.documentSettings && !window.ThisIsAMobileApp)
+			if (data.documentSettings && !window.ThisIsAnApp)
 				app.socket.sendMessage('reloadconfig');
 			// The remote checkers and the translation providers may have been
 			// set up anew: what the engine said about them is stale. It is

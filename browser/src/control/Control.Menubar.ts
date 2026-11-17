@@ -152,7 +152,7 @@ class Menubar extends window.L.Control {
 				{name: _('Rename Document'), id: 'renamedocument', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
-				{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('text')},
+				{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('text')},
 				{name: _UNO('.uno:SetDocumentProperties', 'text'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:SecurityLabel', 'text'), uno: '.uno:SecurityLabel', id: 'securitylabel'},
 				{name: _UNO('.uno:Signature', 'text'), uno: '.uno:Signature', id: 'signature'},
@@ -499,7 +499,7 @@ class Menubar extends window.L.Control {
 				{name: _('Save Comments'), id: 'savecomments', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
-				{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('presentation')},
+				{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('presentation')},
 				{name: _UNO('.uno:SetDocumentProperties', 'presentation'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:SecurityLabel', 'presentation'), uno: '.uno:SecurityLabel', id: 'securitylabel'},
 				{name: _UNO('.uno:Signature', 'presentation'), uno: '.uno:Signature', id: 'signature'},
@@ -668,7 +668,7 @@ class Menubar extends window.L.Control {
 				{type: 'separator', id: 'fullscreen-presentation-separator'},
 				{name: _('Fullscreen presentation'), id: 'fullscreen-presentation', type: 'action'},
 				{name: _('Present current slide'), id: 'presentation-currentslide', type: 'action'},
-				...((!window.ThisIsAMobileApp || window.mode.isCODesktop()) ? [
+				...((!window.ThisIsAnApp || window.mode.isCODesktop()) ? [
 					{name: _('Presenter View'), id: 'presentation-in-console', type: 'action'}
 				] : []),
 				{type: 'separator'},
@@ -716,7 +716,7 @@ class Menubar extends window.L.Control {
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _UNO('.uno:Print', 'presentation'), unoid: '.uno:Print', id: 'print', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
-				{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('drawing')},
+				{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('drawing')},
 				{name: _UNO('.uno:SetDocumentProperties', 'presentation'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:Signature', 'presentation'), uno: '.uno:Signature', id: 'signature'},
 				{name: _('Options'), id: 'settings-dialog', type: 'action', mobileapp: false},
@@ -891,7 +891,7 @@ class Menubar extends window.L.Control {
 				{name: _('Rename Document'), id: 'renamedocument', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
-				{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('spreadsheet')},
+				{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('spreadsheet')},
 				{name: _UNO('.uno:SetDocumentProperties', 'spreadsheet'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:SecurityLabel', 'spreadsheet'), uno: '.uno:SecurityLabel', id: 'securitylabel'},
 				{name: _UNO('.uno:Signature', 'spreadsheet'), uno: '.uno:Signature', id: 'signature'},
@@ -1218,7 +1218,7 @@ class Menubar extends window.L.Control {
 				{type: 'separator'},
 				{name: _UNO('.uno:Print', 'text'), unoid: '.uno:Print', id: 'print', type: 'action'},
 			]},
-			{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('text')},
+			{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('text')},
 			{name: _UNO('.uno:EditMenu', 'text'), id: 'editmenu', type: 'menu', menu: [
 				{uno: '.uno:Undo'},
 				{uno: '.uno:Redo'},
@@ -1273,7 +1273,7 @@ class Menubar extends window.L.Control {
 				{type: 'separator'},
 				{name: _UNO('.uno:Print', 'presentation'), uno: '.uno:Print', id: 'print', type: 'action'},
 			]},
-			{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('presentation')},
+			{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('presentation')},
 			{name: _UNO('.uno:EditMenu', 'presentation'), id: 'editmenu', type: 'menu', menu: [
 				{uno: '.uno:Undo'},
 				{uno: '.uno:Redo'},
@@ -1329,7 +1329,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:Print', 'presentation'), unoid: '.uno:Print', id: 'print', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
 			]},
-			{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('drawing')},
+			{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('drawing')},
 			{name: _UNO('.uno:EditMenu', 'presentation'), id: 'editmenu', type: 'menu', menu: [
 				{uno: '.uno:Undo'},
 				{uno: '.uno:Redo'},
@@ -1382,7 +1382,7 @@ class Menubar extends window.L.Control {
 				{name: _('Define print area'), uno: '.uno:DefinePrintArea' },
 				{name: _('Remove print area'), uno: '.uno:DeletePrintArea' },
 			]},
-			{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('spreadsheet')},
+			{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('spreadsheet')},
 			{name: _UNO('.uno:EditMenu', 'spreadsheet'), id: 'editmenu', type: 'menu', menu: [
 				{uno: '.uno:Undo'},
 				{uno: '.uno:Redo'},
@@ -1589,7 +1589,7 @@ class Menubar extends window.L.Control {
 			'print','print-active-sheet', 'print-all-sheets', 'print-notespages', // file menu
 			'downloadas-odm', 'downloadas-odt', 'downloadas-doc', 'downloadas-docx', 'downloadas-rtf', // file menu
 			'downloadas-odp', 'downloadas-ppt', 'downloadas-pptx', 'downloadas-odg', 'exportpdf' , // file menu
-			!window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf', !window.ThisIsAMobileApp ? 'exportepub' : 'downloadas-epub', // file menu
+			!window.ThisIsAnApp ? 'exportdirectpdf' : 'downloadas-pdf', !window.ThisIsAnApp ? 'exportepub' : 'downloadas-epub', // file menu
 			'downloadas-ods', 'downloadas-xls', 'downloadas-xlsx', 'downloadas-csv', 'closedocument', // file menu
 			() => !window.L.Browser.edge ? 'fullscreen' : undefined, 'zoomin', 'zoomout', 'zoomreset', 'fitwidthzoom', 'showruler', 'showstatusbar', 'showresolved', 'showannotations', 'toggledarktheme', 'invertbackground', // view menu
 			'insert-signatureline', // insert menu
@@ -2989,7 +2989,7 @@ class Menubar extends window.L.Control {
        * @returns True if visible; otherwise false.
        */
 	private _checkItemVisibility(menuItem: any): boolean {
-		if (window.ThisIsAMobileApp && menuItem.mobileapp === false) {
+		if (window.ThisIsAnApp && menuItem.mobileapp === false) {
 			return false;
 		}
 		// An entry hidden while its command is disabled, as the desktop menu
@@ -3506,9 +3506,9 @@ class Menubar extends window.L.Control {
 		if (mainMenu) {
 			itemType = 'mainmenu';
 		} else {
-			if (item.mobileapp == true && !window.ThisIsAMobileApp)
+			if (item.mobileapp == true && !window.ThisIsAnApp)
 				return undefined;
-			if (item.mobileapp === false && window.ThisIsAMobileApp)
+			if (item.mobileapp === false && window.ThisIsAnApp)
 				return undefined;
 			if (!item.menu) {
 				itemType = 'menuitem';

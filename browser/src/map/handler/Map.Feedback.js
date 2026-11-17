@@ -15,7 +15,7 @@
 /* global _ */
 
 window.L.Map.mergeOptions({
-	feedback: !window.ThisIsAMobileApp,
+	feedback: !window.ThisIsAnApp,
 	feedbackTimeout: 30000
 });
 

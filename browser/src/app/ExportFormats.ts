@@ -49,13 +49,13 @@ app.getExportFormats = function (docType: string): ExportFormat[] {
 		'pdf',
 		_('PDF Document (.pdf)'),
 		true,
-		window.ThisIsAMobileApp ? undefined : 'exportdirectpdf',
+		window.ThisIsAnApp ? undefined : 'exportdirectpdf',
 	);
 	const epub = makeExportFormat(
 		'epub',
 		_('EPUB (.epub)'),
 		true,
-		window.ThisIsAMobileApp ? undefined : 'exportepub',
+		window.ThisIsAnApp ? undefined : 'exportepub',
 	);
 
 	// the own format of a master document is odm

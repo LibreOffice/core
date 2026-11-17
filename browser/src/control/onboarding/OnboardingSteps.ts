@@ -22,7 +22,7 @@ function getOnboardingSteps(): OnboardingStep[] {
 	return [
 		{
 			id: 'intro',
-			title: window.ThisIsAMobileApp
+			title: window.ThisIsAnApp
 				? _('Welcome to Collabora Office')
 				: _('Welcome to Collabora Online'),
 			text: _(
@@ -36,7 +36,7 @@ function getOnboardingSteps(): OnboardingStep[] {
 				'Select the name to rename the document. Every change is saved as you work.',
 			),
 			target: '#document-titlebar .document-title',
-			isAvailable: () => !window.ThisIsAMobileApp,
+			isAvailable: () => !window.ThisIsAnApp,
 		},
 		{
 			id: 'tabs',

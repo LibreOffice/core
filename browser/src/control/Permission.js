@@ -94,7 +94,7 @@ window.L.Map.include({
 				button.on('click', function () {
 					that._requestFileCopy();
 				});
-			} else if (!window.ThisIsAMobileApp && !this['wopi'].UserCanWrite) {
+			} else if (!window.ThisIsAnApp && !this['wopi'].UserCanWrite) {
 				$('#mobile-edit-button').hide();
 			} else if (mobileLayout) {
 				// Writeable user stepped back from edit to readonly: keep the FAB
@@ -854,7 +854,7 @@ window.L.Map.include({
 		}
 
 		// This will be handled by the native mobile app instead
-		if (this._shouldStartReadOnly() && !window.ThisIsAMobileApp) {
+		if (this._shouldStartReadOnly() && !window.ThisIsAnApp) {
 			var fileName = this['wopi'].BaseFileName;
 			var extension = this._getFileExtension(fileName);
 

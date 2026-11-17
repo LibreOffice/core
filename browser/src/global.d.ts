@@ -556,7 +556,7 @@ interface Window {
 	savedUIState: boolean;
 	sidebarId: number;
 	userInterfaceMode: string;
-	ThisIsAMobileApp: boolean;
+	ThisIsAnApp: boolean;
 	ThisIsTheAndroidApp: boolean;
 	ThisIsTheEmscriptenApp: boolean;
 	ThisIsTheiOSApp: boolean;

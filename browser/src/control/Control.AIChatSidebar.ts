@@ -3755,7 +3755,7 @@ namespace cool {
 			// Same paste mechanism - pastes at current cursor position.
 			const cleaned = this.stripCodeFences(markdownText);
 			const header = 'paste mimetype=text/markdown;charset=utf-8\n';
-			if (window.ThisIsAMobileApp) {
+			if (window.ThisIsAnApp) {
 				// The app builds talk to the native side over a string-only bridge
 				// that cannot carry a binary payload, so base64-encode it. The kit's
 				// ChildSession::paste decodes it. Mirrors L.Clipboard._pasteTypedBlob
@@ -3783,7 +3783,7 @@ namespace cool {
 
 		private insertImageAtCursor(base64Data: string): void {
 			const header = 'paste mimetype=image/png\n';
-			if (window.ThisIsAMobileApp) {
+			if (window.ThisIsAnApp) {
 				// The kit base64-decodes on the app builds, and the image is already
 				// base64.
 				app.socket.sendMessage(header + base64Data);

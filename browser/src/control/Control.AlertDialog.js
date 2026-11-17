@@ -40,7 +40,7 @@ window.L.Control.AlertDialog = window.L.Control.extend({
 		}
 
 		if (e.msg) {
-			if (window.ThisIsAMobileApp && this._map._fatal) {
+			if (window.ThisIsAnApp && this._map._fatal) {
 				this._map.uiManager.showErrorModal(e.msg, e.errorDetail, _('Close'), function() {
 					window.postMobileMessage('BYE');
 					this._map.uiManager.closeAll();

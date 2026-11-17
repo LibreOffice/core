@@ -74,7 +74,7 @@ const errorMessages: ErrorMessages = {
 		notfound: _('Uploading file to server failed, file not found.'),
 		toolarge: _('Uploading file to server failed, the file is too large.'),
 	},
-	storage: window.ThisIsAMobileApp
+	storage: window.ThisIsAnApp
 		? {
 				loadfailed: _('Failed to load document.'),
 				savediskfull: _(

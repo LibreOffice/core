@@ -398,7 +398,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'command': 'downloadas',
 				'class': 'unodownloadas',
 				'type': 'exportmenubutton',
-				'text': !window.ThisIsAMobileApp ? _('Download') :
+				'text': !window.ThisIsAnApp ? _('Download') :
 					(window.ThisIsTheWindowsApp ? _('Export as') :
 					 _('Save As')),
 				'accessibility': { focusBack: true, combination: 'DA', de: null }
@@ -567,7 +567,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 					},
 				],
 			},
-			!window.ThisIsAMobileApp || window.mode.isCODesktop() ?
+			!window.ThisIsAnApp || window.mode.isCODesktop() ?
 				{
 					type: 'separator',
 					id: 'slide-show-presentation',
@@ -578,7 +578,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'id': 'slide-present',
 				'name': _('Present'),
 				'children' : [
-				!window.ThisIsAMobileApp || window.mode.isCODesktop() ?
+				!window.ThisIsAnApp || window.mode.isCODesktop() ?
 					{
 						'id': 'slide-presentation-in-window',
 						'type': 'bigcustomtoolitem',
@@ -587,7 +587,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'command': 'presentinwindow',
 						'accessibility': { focusBack: true, combination: 'PW', de: null }
 					} : {},
-				!window.ThisIsAMobileApp ?
+				!window.ThisIsAnApp ?
 					{
 						'id': 'slide-presentation-follow',
 						'type': 'bigcustomtoolitem',
@@ -617,11 +617,11 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'text': _UNO('.uno:HideSlide', 'presentation'),
 						'accessibility': { focusBack: true, combination: 'HS', de: null }
 					},
-					((!window.ThisIsAMobileApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled) || !window.ThisIsAMobileApp ?
+					((!window.ThisIsAnApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled) || !window.ThisIsAnApp ?
 					{
 						'type': 'container',
 						'children': [
-							(!window.ThisIsAMobileApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled ?
+							(!window.ThisIsAnApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled ?
 							{
 								'type': 'toolbox',
 								'children': [
@@ -635,7 +635,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 									}
 								]
 							} : {},
-							!window.ThisIsAMobileApp ?
+							!window.ThisIsAnApp ?
 							{
 								'type': 'toolbox',
 								'children': [
@@ -1669,7 +1669,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							{
 								'type': 'toolbox',
 								'children': [
-								(!window.ThisIsAMobileApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) ?
+								(!window.ThisIsAnApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) ?
 									{
 										'id': 'insert-insert-multimedia:InsertMultimediaMenu',
 										'type': 'menubutton',

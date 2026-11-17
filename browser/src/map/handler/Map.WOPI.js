@@ -103,7 +103,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 
 		this._map.on('updateviewslist', function() { this._postViewsMessage('Views_List'); }, this);
 
-		if (!window.ThisIsAMobileApp) {
+		if (!window.ThisIsAnApp) {
 			// override the window.open to issue a postMessage, so that
 			// it is possible to handle the hyperlink in the integration
 			var that = this;

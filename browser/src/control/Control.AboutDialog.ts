@@ -117,7 +117,7 @@ class AboutDialog {
 
 		// fill product-name
 		let productName;
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			productName = window.MobileAppName;
 		} else {
 			productName =
@@ -190,7 +190,7 @@ class AboutDialog {
 		elements.wopiHostId.textContent = window.wopiHostId;
 
 		// License information (apps only)
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			const licenseLink = document.createElement('a');
 			licenseLink.href = 'javascript:void(0)';
 			licenseLink.textContent = _UNO('.uno:ShowLicense');
@@ -459,7 +459,7 @@ class AboutDialog {
 		infoDiv.appendChild(coolwsdVersionContainer);
 
 		const servedBy = AboutDialog.createElement('div', { id: 'served-by' });
-		if (!window.ThisIsAMobileApp) {
+		if (!window.ThisIsAnApp) {
 			infoDiv.appendChild(servedBy);
 		}
 
@@ -475,7 +475,7 @@ class AboutDialog {
 		infoDiv.appendChild(routeToken);
 
 		const wopiHostId = AboutDialog.createElement('div', { id: 'wopi-host-id' });
-		if (!window.ThisIsAMobileApp) {
+		if (!window.ThisIsAnApp) {
 			infoDiv.appendChild(wopiHostId);
 		}
 
@@ -483,7 +483,7 @@ class AboutDialog {
 		const licenseInfo = AboutDialog.createElement('div', {
 			id: 'license-information',
 		});
-		if (window.ThisIsAMobileApp) {
+		if (window.ThisIsAnApp) {
 			infoDiv.appendChild(licenseInfo);
 		}
 
