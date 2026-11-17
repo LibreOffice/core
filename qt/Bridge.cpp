@@ -706,6 +706,12 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
 
     dialog->setAcceptMode(QFileDialog::AcceptSave);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    // setDirectory passes the folder to the portal as it is, and the portal opens it even when
+    // the sandbox cannot see it.
+    dialog->setDirectory(startFolder);
+    dialog->selectFile(suggestedName);
+
     dialog->selectNameFilter(nameFilters[formatIndex]);
 
     // Set default suffix to enforce extension in GUI
