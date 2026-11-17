@@ -422,6 +422,13 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
 
     static func handleDocumentMessage(_ body: String, document: Document) -> (Any?, String?)? {
         if body == "HULLO" {
+            // A HULLO while the connection is up comes from a reload of the page.
+            if document.closeNotificationSignalFd != -1 {
+                COWrapper.detach(document)
+                document.fakeClientFd = COWrapper.fakeSocketSocket()
+                COWrapper.LOG_DBG("HULLO: rejoining appDocId \(document.appDocId) after a reload")
+            }
+
             // Now we know that the JS has started completely
             COWrapper.handleHULLO(with: document)
             return (nil, nil)
