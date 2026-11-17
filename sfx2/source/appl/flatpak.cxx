@@ -24,11 +24,6 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 
-bool flatpak::isFlatpak() {
-    static auto const flatpak = [] { return std::getenv("LIBO_FLATPAK") != nullptr; }();
-    return flatpak;
-}
-
 namespace {
 
 // Must only be accessed with SolarMutex locked:

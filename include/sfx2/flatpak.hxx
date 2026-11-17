@@ -19,8 +19,6 @@
 
 namespace flatpak
 {
-bool isFlatpak();
-
 // Must only be called with SolarMutex locked:
 bool createTemporaryHtmlDirectory(OUString** url);
 
