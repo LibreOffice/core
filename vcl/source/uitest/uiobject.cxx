@@ -870,8 +870,7 @@ void MultiLineEditUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "SELECT")
     {
-        if (rParameters.find(u"FROM"_ustr) != rParameters.end() &&
-                rParameters.find(u"TO"_ustr) != rParameters.end())
+        if (rParameters.contains(u"FROM"_ustr) && rParameters.contains(u"TO"_ustr))
         {
             tools::Long nMin = rParameters.find(u"FROM"_ustr)->second.toInt32();
             tools::Long nMax = rParameters.find(u"TO"_ustr)->second.toInt32();
@@ -1118,14 +1117,14 @@ void ListBoxUIObject::execute(const OUString& rAction,
     if (rAction == "SELECT")
     {
         bool bSelect = true;
-        if (rParameters.find(u"POS"_ustr) != rParameters.end())
+        if (rParameters.contains(u"POS"_ustr))
         {
             auto itr = rParameters.find(u"POS"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nPos = aVal.toInt32();
             mxListBox->SelectEntryPos(nPos, bSelect);
         }
-        else if (rParameters.find(u"TEXT"_ustr) != rParameters.end())
+        else if (rParameters.contains(u"TEXT"_ustr))
         {
             auto itr = rParameters.find(u"TEXT"_ustr);
             OUString aText = itr->second;
@@ -1515,7 +1514,7 @@ void TabControlUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find(u"POS"_ustr) != rParameters.end())
+        if (rParameters.contains(u"POS"_ustr))
         {
             auto itr = rParameters.find(u"POS"_ustr);
             sal_uInt32 nPos = itr->second.toUInt32();
@@ -1585,7 +1584,7 @@ void RoadmapWizardUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find(u"POS"_ustr) != rParameters.end())
+        if (rParameters.contains(u"POS"_ustr))
         {
             auto itr = rParameters.find(u"POS"_ustr);
             sal_uInt32 nPos = itr->second.toUInt32();
@@ -1632,7 +1631,7 @@ void VerticalTabControlUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find(u"POS"_ustr) != rParameters.end())
+        if (rParameters.contains(u"POS"_ustr))
         {
             auto itr = rParameters.find(u"POS"_ustr);
             sal_uInt32 nPos = itr->second.toUInt32();
@@ -1746,8 +1745,7 @@ void DrawingAreaUIObject::execute(const OUString& rAction, const StringMap& rPar
     if (rAction == "CLICK")
     {
         // POSX and POSY are percentage of width/height dimensions
-        if (rParameters.find(u"POSX"_ustr) != rParameters.end() &&
-            rParameters.find(u"POSY"_ustr) != rParameters.end())
+        if (rParameters.contains(u"POSX"_ustr) && rParameters.contains(u"POSY"_ustr))
         {
             auto aPosX = rParameters.find(u"POSX"_ustr);
             auto aPosY = rParameters.find(u"POSY"_ustr);

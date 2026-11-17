@@ -28,7 +28,7 @@ void ToolBoxUIObject::execute(const OUString& rAction, const StringMap& rParamet
 {
     if (rAction == "CLICK")
     {
-        if (rParameters.find(u"POS"_ustr) != rParameters.end())
+        if (rParameters.contains(u"POS"_ustr))
         {
             auto itr = rParameters.find(u"POS"_ustr);
             sal_uInt16 nPos = itr->second.toUInt32();
