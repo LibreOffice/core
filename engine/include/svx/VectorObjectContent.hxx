@@ -147,6 +147,28 @@ struct ObjectContent
      */
     basegfx::B2DPolyPolygon maPath;
 
+    /// One path the object travels along in a slide show.
+    struct MotionPath
+    {
+        /** The path in twips, relative to the middle of what it moves: the middle of the
+            painted box of the object, or of the box of the paragraph when one paragraph of
+            its text moves alone. Each path starts from the place of the object on the slide,
+            never from the end of another one.
+         */
+        basegfx::B2DPolyPolygon maPath;
+        /// The paragraph that moves alone, counted from 0, or -1 when the whole object moves.
+        sal_Int32 mnParagraph = -1;
+
+        bool operator==(const MotionPath& rOther) const
+        {
+            return maPath == rOther.maPath && mnParagraph == rOther.mnParagraph;
+        }
+    };
+    /// The motion paths of the object in the order they play, the ones of the main sequence
+    /// first and those of the sequences a click on a shape starts after. Empty for an object
+    /// that moves along none.
+    std::vector<MotionPath> maMotionPaths;
+
     /// What kind of object it is, as the drawing layer numbers the kinds.
     SdrObjKind meKind = SdrObjKind::NONE;
 
@@ -499,7 +521,8 @@ struct ObjectContent
                && mbEmptyPlaceholder == rOther.mbEmptyPlaceholder && mbTextEdit == rOther.mbTextEdit
                && mnParentId == rOther.mnParentId && maDrawn == rOther.maDrawn
                && maAids == rOther.maAids && maHandles == rOther.maHandles
-               && maPath == rOther.maPath && meKind == rOther.meKind
+               && maPath == rOther.maPath && maMotionPaths == rOther.maMotionPaths
+               && meKind == rOther.meKind
                && mbIsDiagram == rOther.mbIsDiagram
                && maGraphicExtension == rOther.maGraphicExtension && mbSigning == rOther.mbSigning
                && mbIsPicture == rOther.mbIsPicture && mnGraphicChecksum == rOther.mnGraphicChecksum

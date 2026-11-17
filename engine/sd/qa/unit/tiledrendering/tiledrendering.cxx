@@ -72,7 +72,11 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnstit.hxx>
+#include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <svtools/colorcfg.hxx>
@@ -124,6 +128,7 @@
 #include <config_cairo_rgba.h>
 
 #include <chrono>
+#include <thread>
 #include <cstdlib>
 #include <string_view>
 
@@ -9049,6 +9054,123 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeGhost)
     // the document does not know of it
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(nUndoCount, pDocument->GetUndoManager()->GetUndoActionCount());
+}
+
+namespace
+{
+/// The vector content of the page as the document answers a request for it: whole, or only what
+/// changed since that version.
+boost::property_tree::ptree vectorReplyOf(SdXImpressDocument* pXImpressDocument,
+                                          const SdPage* pPage, sal_Int64 nSince = -1)
+{
+    OString aCommand = ".uno:VectorPrimitives?partid=" + pPage->GetGuid().getString();
+    if (nSince >= 0)
+        aCommand += "&since=" + OString::number(nSince)
+                    + "&epoch=" + OString::number(pXImpressDocument->getVectorEpoch());
+    tools::JsonWriter aJsonWriter;
+    pXImpressDocument->getCommandValues(aJsonWriter,
+                                        std::string_view(aCommand.getStr(), aCommand.getLength()));
+    std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    return aTree;
+}
+
+/// The motion paths of the entry with that id in the reply, or nothing when the reply has no
+/// entry for it.
+std::optional<std::vector<boost::property_tree::ptree>>
+motionPathsIn(const boost::property_tree::ptree& rReply, sal_uInt64 nId)
+{
+    const auto oObjects = rReply.get_child_optional("objects");
+    if (!oObjects)
+        return std::nullopt;
+    for (const auto& rEntry : *oObjects)
+    {
+        if (rEntry.second.get<sal_uInt64>("id") != nId)
+            continue;
+        std::vector<boost::property_tree::ptree> aPaths;
+        if (const auto oPaths = rEntry.second.get_child_optional("motionPaths"))
+            for (const auto& rPath : *oPaths)
+                aPaths.push_back(rPath.second);
+        return aPaths;
+    }
+    return std::nullopt;
+}
+
+/// Calls the function for every motion animation under the node.
+void forEachMotion(const uno::Reference<animations::XAnimationNode>& xNode,
+                   const std::function<void(const uno::Reference<animations::XAnimateMotion>&)>& rDo)
+{
+    if (uno::Reference<animations::XAnimateMotion> xMotion{ xNode, uno::UNO_QUERY })
+        rDo(xMotion);
+    uno::Reference<container::XEnumerationAccess> xContainer(xNode, uno::UNO_QUERY);
+    if (!xContainer)
+        return;
+    uno::Reference<container::XEnumeration> xChildren = xContainer->createEnumeration();
+    while (xChildren->hasMoreElements())
+        forEachMotion(
+            uno::Reference<animations::XAnimationNode>(xChildren->nextElement(), uno::UNO_QUERY),
+            rDo);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testVectorMotionPaths)
+{
+    // an object travels with its motion paths, in twips from its middle, and a changed path
+    // makes it travel again
+    SdXImpressDocument* pXImpressDocument = createDoc("motion-paths.fodp");
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    const sal_uInt64 nMovedId = svx::vector::idOf(*pSlide->GetObj(0));
+    const sal_uInt64 nStillId = svx::vector::idOf(*pSlide->GetObj(1));
+
+    // the page is 28 cm by 16 cm and the paths go a tenth of its width to the right, then a
+    // fifth of its height down, both in the order they play
+    const boost::property_tree::ptree aWhole = vectorReplyOf(pXImpressDocument, pSlide);
+    std::vector<boost::property_tree::ptree> aPaths
+        = motionPathsIn(aWhole, nMovedId).value_or(std::vector<boost::property_tree::ptree>());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPaths.size());
+    const auto aCheckLine = [](const boost::property_tree::ptree& rPath, sal_Int64 nEndX,
+                               sal_Int64 nEndY) {
+        const auto& rPoints = rPath.get_child("path").front().second.get_child("points");
+        CPPUNIT_ASSERT_EQUAL(size_t(2), rPoints.size());
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rPoints.front().second.get<sal_Int64>("x"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rPoints.front().second.get<sal_Int64>("y"));
+        CPPUNIT_ASSERT_EQUAL(nEndX, rPoints.back().second.get<sal_Int64>("x"));
+        CPPUNIT_ASSERT_EQUAL(nEndY, rPoints.back().second.get<sal_Int64>("y"));
+    };
+    aCheckLine(aPaths[0], 1587, 0);
+    aCheckLine(aPaths[1], 0, 1814);
+    CPPUNIT_ASSERT(!aPaths[0].get_child_optional("paragraph"));
+    CPPUNIT_ASSERT(motionPathsIn(aWhole, nStillId).value().empty());
+
+    // a path changed through the animation nodes sends the moved object again
+    const sal_Int64 nVersion = aWhole.get<sal_Int64>("version");
+    bool bFirst = true;
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<animations::XAnimationNodeSupplier> xSupplier(
+        xPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    forEachMotion(xSupplier->getAnimationNode(),
+                  [&bFirst](const uno::Reference<animations::XAnimateMotion>& xMotion) {
+                      if (std::exchange(bFirst, false))
+                          xMotion->setPath(uno::Any(u"M 0 0 L 0.2 0"_ustr));
+                  });
+    // the main sequence takes in a change of its nodes after a short wait
+    boost::property_tree::ptree aDelta;
+    std::optional<std::vector<boost::property_tree::ptree>> oChanged;
+    for (int nTry = 0; nTry < 100 && !oChanged; ++nTry)
+    {
+        Scheduler::ProcessEventsToIdle();
+        aDelta = vectorReplyOf(pXImpressDocument, pSlide, nVersion);
+        oChanged = motionPathsIn(aDelta, nMovedId);
+        if (!oChanged)
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    CPPUNIT_ASSERT(oChanged);
+    // the object without paths stands still, so it is not sent again
+    CPPUNIT_ASSERT(!motionPathsIn(aDelta, nStillId));
+    aPaths = *oChanged;
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPaths.size());
+    aCheckLine(aPaths[0], 3175, 0);
 }
 
 namespace

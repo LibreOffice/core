@@ -558,6 +558,61 @@ basegfx::B2DHomMatrix boxTransformation(const tools::Rectangle& rBox)
     return aTransformation;
 }
 
+/// The polygons of a path under that name, point by point, the points in whole twips.
+static void writePath(tools::JsonWriter& rWriter, std::string_view aName,
+                      const basegfx::B2DPolyPolygon& rPath)
+{
+    auto aPathArray = rWriter.startArray(aName);
+    for (const auto& rPolygon : rPath)
+    {
+        auto aPolygonNode = rWriter.startStruct();
+        if (rPolygon.isClosed())
+            rWriter.put("closed", true);
+
+        auto aPointArray = rWriter.startArray("points");
+        for (sal_uInt32 nPoint = 0; nPoint < rPolygon.count(); ++nPoint)
+        {
+            /*
+                The points travel in whole twips. A client that edits the path says which
+                point moved and where to, so nothing of what it was given comes back, and
+                a path of many thousand points stays short on the way out.
+            */
+            auto aPointNode = rWriter.startStruct();
+            const basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(nPoint));
+            rWriter.put("x", basegfx::fround<sal_Int64>(aPoint.getX()));
+            rWriter.put("y", basegfx::fround<sal_Int64>(aPoint.getY()));
+
+            // The two weights of a curve, each written only where it is in use. They are
+            // named as a handle names them: the one behind the point and the one ahead.
+            if (rPolygon.isPrevControlPointUsed(nPoint))
+            {
+                const basegfx::B2DPoint aBehind(rPolygon.getPrevControlPoint(nPoint));
+                rWriter.put("behindX", basegfx::fround<sal_Int64>(aBehind.getX()));
+                rWriter.put("behindY", basegfx::fround<sal_Int64>(aBehind.getY()));
+            }
+            if (rPolygon.isNextControlPointUsed(nPoint))
+            {
+                const basegfx::B2DPoint aAhead(rPolygon.getNextControlPoint(nPoint));
+                rWriter.put("aheadX", basegfx::fround<sal_Int64>(aAhead.getX()));
+                rWriter.put("aheadY", basegfx::fround<sal_Int64>(aAhead.getY()));
+            }
+
+            /*
+                How the curve carries on through the point: 1 where the two weights lie on
+                one line through it, 2 where they lie on one line and are the same length
+                as well. It is worked out here from the points as the model holds them,
+                which are of a finer grain than the twips that travel, and rounding them
+                first can turn either answer into the other.
+            */
+            const basegfx::B2VectorContinuity eContinuity(
+                rPolygon.getContinuityInPoint(nPoint));
+            if (eContinuity != basegfx::B2VectorContinuity::NONE)
+                rWriter.put("continuity",
+                            eContinuity == basegfx::B2VectorContinuity::C2 ? 2 : 1);
+        }
+    }
+}
+
 void writeEntryBox(tools::JsonWriter& rWriter, const tools::Rectangle& rBox,
                    const basegfx::B2DHomMatrix& rTransformation)
 {
@@ -1769,55 +1824,16 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
     }
 
     if (rContent.maPath.count())
+        writePath(rWriter, "path", rContent.maPath);
+    if (!rContent.maMotionPaths.empty())
     {
-        auto aPathArray = rWriter.startArray("path");
-        for (const auto& rPolygon : rContent.maPath)
+        auto aMotionArray = rWriter.startArray("motionPaths");
+        for (const auto& rMotionPath : rContent.maMotionPaths)
         {
-            auto aPolygonNode = rWriter.startStruct();
-            if (rPolygon.isClosed())
-                rWriter.put("closed", true);
-
-            auto aPointArray = rWriter.startArray("points");
-            for (sal_uInt32 nPoint = 0; nPoint < rPolygon.count(); ++nPoint)
-            {
-                /*
-                    The points travel in whole twips. A client that edits the path says which
-                    point moved and where to, so nothing of what it was given comes back, and
-                    a path of many thousand points stays short on the way out.
-                */
-                auto aPointNode = rWriter.startStruct();
-                const basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(nPoint));
-                rWriter.put("x", basegfx::fround<sal_Int64>(aPoint.getX()));
-                rWriter.put("y", basegfx::fround<sal_Int64>(aPoint.getY()));
-
-                // The two weights of a curve, each written only where it is in use. They are
-                // named as a handle names them: the one behind the point and the one ahead.
-                if (rPolygon.isPrevControlPointUsed(nPoint))
-                {
-                    const basegfx::B2DPoint aBehind(rPolygon.getPrevControlPoint(nPoint));
-                    rWriter.put("behindX", basegfx::fround<sal_Int64>(aBehind.getX()));
-                    rWriter.put("behindY", basegfx::fround<sal_Int64>(aBehind.getY()));
-                }
-                if (rPolygon.isNextControlPointUsed(nPoint))
-                {
-                    const basegfx::B2DPoint aAhead(rPolygon.getNextControlPoint(nPoint));
-                    rWriter.put("aheadX", basegfx::fround<sal_Int64>(aAhead.getX()));
-                    rWriter.put("aheadY", basegfx::fround<sal_Int64>(aAhead.getY()));
-                }
-
-                /*
-                    How the curve carries on through the point: 1 where the two weights lie on
-                    one line through it, 2 where they lie on one line and are the same length
-                    as well. It is worked out here from the points as the model holds them,
-                    which are of a finer grain than the twips that travel, and rounding them
-                    first can turn either answer into the other.
-                */
-                const basegfx::B2VectorContinuity eContinuity(
-                    rPolygon.getContinuityInPoint(nPoint));
-                if (eContinuity != basegfx::B2VectorContinuity::NONE)
-                    rWriter.put("continuity",
-                                eContinuity == basegfx::B2VectorContinuity::C2 ? 2 : 1);
-            }
+            auto aMotionNode = rWriter.startStruct();
+            if (rMotionPath.mnParagraph >= 0)
+                rWriter.put("paragraph", rMotionPath.mnParagraph);
+            writePath(rWriter, "path", rMotionPath.maPath);
         }
     }
     if (!rContent.maHandles.empty())

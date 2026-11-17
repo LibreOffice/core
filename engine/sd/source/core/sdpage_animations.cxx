@@ -25,6 +25,7 @@
 #include <CustomAnimationCloner.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <sdpage.hxx>
+#include <svx/svdmodel.hxx>
 #include <EffectMigration.hxx>
 
 using namespace ::sd;
@@ -36,10 +37,31 @@ using namespace ::com::sun::star::presentation;
 using ::com::sun::star::drawing::XShape;
 
 /** returns a helper class to manipulate effects inside the main sequence */
+namespace
+{
+/// Passes every change of the effects of a page on to its model.
+class AnimationsListener final : public sd::ISequenceListener
+{
+    SdPage& mrPage;
+
+public:
+    explicit AnimationsListener(SdPage& rPage)
+        : mrPage(rPage)
+    {
+    }
+
+    void notify_change() override { mrPage.notifyAnimationsChanged(); }
+};
+}
+
 std::shared_ptr< sd::MainSequence >  const & SdPage::getMainSequence()
 {
     if (nullptr == mpMainSequence)
+    {
         mpMainSequence = std::make_shared<sd::MainSequence>( getAnimationNode() );
+        mpAnimationsListener = std::make_shared<AnimationsListener>(*this);
+        mpMainSequence->addListener(mpAnimationsListener.get());
+    }
 
     return mpMainSequence;
 }
@@ -63,6 +85,16 @@ void SdPage::setAnimationNode( Reference< XAnimationNode > const & xNode )
     mxAnimationNode = xNode;
     if( mpMainSequence )
         mpMainSequence->reset( xNode );
+    // an undo can bring back effects to a page that has no main sequence yet
+    notifyAnimationsChanged();
+}
+
+SdAnimationsChangedHint::~SdAnimationsChangedHint() = default;
+
+void SdPage::notifyAnimationsChanged()
+{
+    if (IsInserted())
+        getSdrModelFromSdrPage().Broadcast(SdAnimationsChangedHint(*this));
 }
 
 /** removes all custom animations for the given shape */

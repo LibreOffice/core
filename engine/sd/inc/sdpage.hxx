@@ -25,6 +25,7 @@
 #include <com/sun/star/office/XAnnotation.hpp>
 
 #include <memory>
+#include <svl/hint.hxx>
 #include <string_view>
 #include <vector>
 #include <editeng/flditem.hxx>
@@ -57,6 +58,7 @@ class Graphic;
 namespace sd
 {
     class MainSequence;
+    class ISequenceListener;
 }
 
 namespace sd {
@@ -131,6 +133,10 @@ friend class sd::UndoAttrObject;
 
     /** holds the smil animation sequences for this page */
     cpo::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
+
+    /// Hears every change of the effects of mpMainSequence, set up with it. It is declared
+    /// first so it is still there while mpMainSequence goes away.
+    std::shared_ptr< sd::ISequenceListener > mpAnimationsListener;
 
     /** a helper class to manipulate effects inside the main sequence */
     std::shared_ptr< sd::MainSequence > mpMainSequence;
@@ -345,6 +351,10 @@ public:
     */
     bool hasAnimationNode() const;
 
+    /// Tells the listeners of the model that the effects of the page changed, by an
+    /// SdAnimationsChangedHint.
+    void notifyAnimationsChanged();
+
     /// @return the SdPage implementation for the given XDrawPage or 0 if not available
     static SdPage* getImplementation( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage );
 
@@ -461,6 +471,22 @@ private:
 
     /** called before a shape is removed or replaced from this slide */
     void onRemoveObject( SdrObject* pObject );
+};
+
+/// Says that the effects of a page changed: one was added, taken away or changed.
+class SdAnimationsChangedHint final : public SfxHint
+{
+    const SdPage& mrPage;
+
+public:
+    explicit SdAnimationsChangedHint(const SdPage& rPage)
+        : SfxHint(SfxHintId::NONE)
+        , mrPage(rPage)
+    {
+    }
+    ~SdAnimationsChangedHint() override;
+
+    const SdPage& GetPage() const { return mrPage; }
 };
 
 #endif // INCLUDED_SD_INC_SDPAGE_HXX

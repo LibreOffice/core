@@ -268,6 +268,7 @@
 #include <svx/svdoole2.hxx>
 #include <Client.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <vcl/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -2999,7 +3000,26 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     if( mpDoc )
     {
-        if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
+        const auto* pAnimationsHint = rHint.GetId() == SfxHintId::NONE
+                                          ? dynamic_cast<const SdAnimationsChangedHint*>(&rHint)
+                                          : nullptr;
+        if (pAnimationsHint)
+        {
+            // the motion paths travel with the objects they move, and an effect that came,
+            // went or changed may have been on any object of the slide, so all are looked at
+            // again and the ones whose paths stand still are found equal and not sent
+            const SdPage& rPage = pAnimationsHint->GetPage();
+            if (const auto oPart = partAndModeOfPage(&rPage);
+                oPart && oPart->mnMode == constVectorModeSlides)
+            {
+                SdXImpressDocument::VectorPartState& rState
+                    = maVectorParts[vectorPartKeyOf(rPage)];
+                for (const rtl::Reference<SdrObject>& pObject : rPage)
+                    markSubtreeDirty(rState, pObject.get());
+                notifyViewsVectorPartChanged(mpDocShell, rPage, oPart->mnMode);
+            }
+        }
+        else if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
         {
             const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
             if( hasEventListeners() )
@@ -3826,7 +3846,62 @@ private:
 
         svx::vector::describeObject(rObject, aContent, maViewInformation);
         aContent.mbSigning = isBeingSigned();
+        if (!mbThumbnail)
+            aContent.maMotionPaths = motionPathsOf(rObject);
         return aContent;
+    }
+
+    /// The motion paths of the object on a slide, see ObjectContent::maMotionPaths.
+    static std::vector<svx::vector::ObjectContent::MotionPath> motionPathsOf(SdrObject& rObject)
+    {
+        std::vector<svx::vector::ObjectContent::MotionPath> aPaths;
+        SdPage* pPage = dynamic_cast<SdPage*>(rObject.getSdrPageFromSdrObject());
+        if (!pPage || pPage->IsMasterPage() || pPage->GetPageKind() != PageKind::Standard
+            || !pPage->hasAnimationNode())
+            return aPaths;
+
+        // the engine keeps a path in shares of the page size, measured from the middle of
+        // what moves, so only the size has to come in here
+        const Size aPageSize(pPage->GetSize());
+        const basegfx::B2DHomMatrix aInTwips(basegfx::utils::createScaleB2DHomMatrix(
+            o3tl::convert(double(aPageSize.Width()), o3tl::Length::mm100, o3tl::Length::twip),
+            o3tl::convert(double(aPageSize.Height()), o3tl::Length::mm100, o3tl::Length::twip)));
+        const Reference<drawing::XShape> xShape(rObject.getUnoShape(), UNO_QUERY);
+
+        auto aAddFrom = [&](sd::EffectSequenceHelper& rSequence) {
+            for (auto aIter = rSequence.getBegin(); aIter != rSequence.getEnd(); ++aIter)
+            {
+                const sd::CustomAnimationEffectPtr& pEffect = *aIter;
+                if (pEffect->getPresetClass() != EffectPresetClass::MOTIONPATH)
+                    continue;
+
+                svx::vector::ObjectContent::MotionPath aPath;
+                presentation::ParagraphTarget aParagraph;
+                Reference<drawing::XShape> xTarget;
+                if (pEffect->getTarget() >>= aParagraph)
+                {
+                    xTarget = aParagraph.Shape;
+                    aPath.mnParagraph = aParagraph.Paragraph;
+                }
+                else
+                    pEffect->getTarget() >>= xTarget;
+                if (!xTarget.is() || xTarget != xShape)
+                    continue;
+
+                if (!basegfx::utils::importFromSvgD(aPath.maPath, pEffect->getPath(), true,
+                                                    nullptr))
+                    continue;
+                aPath.maPath.transform(aInTwips);
+                aPaths.push_back(std::move(aPath));
+            }
+        };
+
+        const std::shared_ptr<sd::MainSequence>& pMainSequence = pPage->getMainSequence();
+        aAddFrom(*pMainSequence);
+        for (const sd::InteractiveSequencePtr& pInteractive :
+             pMainSequence->getInteractiveSequenceVector())
+            aAddFrom(*pInteractive);
+        return aPaths;
     }
 
     /// Looks again at the objects a change marked and counts the part's version up only for
