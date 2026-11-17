@@ -334,7 +334,8 @@ SVXCORE_DLLPUBLIC PartCommand partCommandOf(std::string_view rCommand);
 SVXCORE_DLLPUBLIC PartRequest readPartRequest(std::string_view rCommand, sal_Int32 nEpoch);
 
 /** Answers rCommand, a command with its parameters, when it is one of the commands of
-    PartCommand, and returns false for any other command. A graphic and a font come from rResources.
+    PartCommand other than Graphic, and returns false for any other command. A font comes from
+    rResources.
     rWritePart writes the primitives of the part a request names. rForgetPart drops the state of
     a part, and the answer to it is empty. Without rForgetPart a part is kept.
  */

@@ -121,34 +121,45 @@ class VectorResourceLoader {
 	handleImage(values: cool.VectorRenderingGraphicsResponse): void {
 		window.app.console.log(
 			'vectorrenderinggraphics pulled payload: ' +
-				(values.data ? values.data.length : 0) +
-				' base64 bytes, checksum=' +
+				(values.bytes
+					? values.bytes.length + ' bytes'
+					: (values.data ? values.data.length : 0) + ' base64 bytes') +
+				', checksum=' +
 				values.checksum,
 		);
 		if (this.images.has(values.checksum)) {
 			this.images.clearInFlight(values.checksum);
 			return;
 		}
-		if (!values.data) {
+		if (!values.bytes && !values.data) {
 			this._imageUnavailable(
 				values.checksum,
 				'the engine reported: ' + (values.error || 'no image data'),
 			);
 			return;
 		}
+		// Image bytes are read through an object URL, which is released once the image settles.
+		const url: string = values.bytes
+			? URL.createObjectURL(new Blob([values.bytes], { type: values.mime }))
+			: (values.data as string);
+		const release = () => {
+			if (values.bytes) URL.revokeObjectURL(url);
+		};
 		const image = new Image();
 		image.onload = () => {
+			release();
 			this.images.setLoaded(values.checksum, image);
 			this._imageSettled?.(values.checksum);
 			this._loaded(this.images.partsFor(values.checksum));
 		};
 		image.onerror = () => {
+			release();
 			this._imageUnavailable(
 				values.checksum,
 				'its image data failed to decode',
 			);
 		};
-		image.src = values.data;
+		image.src = url;
 	}
 
 	/// Register a fetched font as a FontFace under the family "vecfont-<id>". The face goes on

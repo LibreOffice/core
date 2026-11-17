@@ -1186,6 +1186,18 @@ commandvalues command=<UNOCommand>[?param1=value1&param2=value2...]
         the rules of .uno:VectorPrimitives. A session that sends
         .uno:DrawFromTiles forgets every part it held in the same way.
 
+    .uno:VectorRenderingGraphics?checksum=<checksum>
+        Requests the image that vector primitives name by <checksum>. The
+        answer is a binary frame:
+            vectorrenderinggraphics: {"type":"vectorrenderinggraphics",
+                                      "checksum":<checksum>,"mime":"<type>"}
+            <the bytes of the image file>
+        where <type> is image/png, image/jpeg, image/svg+xml, image/gif or
+        image/webp. The JSON fills the first line, and the image file
+        follows the newline. When there is no image, the JSON has
+        "error":"notfound" or "error":"conversionfailed" instead of "mime",
+        and nothing follows the newline.
+
 completefunction name=<FunctionName>
 
     Requests the execution of a spreadsheet function in MobileWizard.Clients can request to complete a function name partially typed in the formula input box.

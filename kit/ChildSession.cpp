@@ -1848,6 +1848,7 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
     const bool isForgetPart = parts.name == ".uno:VectorForgetPart";
     const bool isPrimitives = parts.name == ".uno:VectorPrimitives";
     const bool isFont = parts.name == ".uno:VectorRenderingFont";
+    const bool isGraphic = parts.name == ".uno:VectorRenderingGraphics";
 
     // A part is named by one part id of letters, digits, braces and hyphens, which the kit and
     // the engine read alike.
@@ -1889,6 +1890,18 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         std::map<int, UserInfo> viewInfo = _docManager->getViewInfo();
         insertUserNames(viewInfo, json);
         success = sendTextFrame("commandvalues: " + json);
+    }
+    else if (isGraphic)
+    {
+        // The answer is a line of JSON, then the bytes of the image after a newline. An image
+        // file is already compressed, so the bytes go out as they are. An answer without an image
+        // ends its line too, as the first line of every binary frame does.
+        const std::string answer(getLOKitDocument()->getCommandValues(command.c_str()));
+        std::string frame =
+            "vectorrenderinggraphics: " + (answer.empty() ? std::string("{}") : answer);
+        if (frame.find('\n') == std::string::npos)
+            frame += '\n';
+        success = sendBinaryFrame(frame.data(), frame.size());
     }
     else if (isPrimitives || isFont)
     {

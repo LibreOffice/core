@@ -36,8 +36,9 @@ public:
     /**
      * Answers rCommand, a command with its parameters like
      * ".uno:VectorPrimitives?partid=...&mode=0", when its name is VectorPrimitives,
-     * VectorRenderingGraphics, VectorRenderingFont or VectorForgetPart, and writes the answer to
-     * rJsonWriter. Returns false, with nothing written, for a command of any other name.
+     * VectorRenderingFont or VectorForgetPart, and writes the answer to rJsonWriter. Returns
+     * false, with nothing written, for a command of any other name, VectorRenderingGraphics
+     * included, which getVectorGraphic() answers.
      */
     virtual bool answerVectorCommand(tools::JsonWriter& rJsonWriter, std::string_view rCommand) = 0;
 

@@ -1525,6 +1525,9 @@ class Socket {
 				textMsg.startsWith('zstdvectorprimitivesdelta:'),
 			);
 			return;
+		} else if (textMsg.startsWith('vectorrenderinggraphics:')) {
+			this._onVectorRenderingGraphicsMsg(e);
+			return;
 		} else if (textMsg.startsWith('zstdvectorthumbnail:')) {
 			this._onZstdVectorThumbnailMessage(e);
 			return;
@@ -1747,6 +1750,7 @@ class Socket {
 		'zstdvectorprimitives:',
 		'zstdvectorprimitivesdelta:',
 		'zstdvectorrenderingfont:',
+		'vectorrenderinggraphics:',
 		'zstdvectorthumbnail:',
 		'windowpaint:',
 	];
@@ -3225,6 +3229,28 @@ class Socket {
 					' ' +
 					json,
 			);
+	}
+
+	// 'vectorrenderinggraphics:' message: the answer to a .uno:VectorRenderingGraphics request.
+	// The first line holds the JSON, and the bytes of the image file follow it.
+	private _onVectorRenderingGraphicsMsg(
+		e: SlurpMessageEvent | MinimalMessageEvent,
+	): void {
+		const event = e as SlurpMessageEvent;
+		const textMsg = event.textMsg;
+		const values: cool.VectorRenderingGraphicsResponse = JSON.parse(
+			textMsg.substring(textMsg.indexOf('{')),
+		);
+		if (values.mime && event.imgBytes && event.imgIndex !== undefined)
+			values.bytes = event.imgBytes.subarray(event.imgIndex);
+		// The frame is counted whole, and its JSON is the first line.
+		this._map._debug?.vectorDataAdd(
+			'graphics',
+			event.imgBytes ? event.imgBytes.length : textMsg.length,
+			textMsg.length,
+			false,
+		);
+		RenderManager.handleVectorRenderingGraphicsResponse(values);
 	}
 
 	// 'sliderenderingcomplete: ' message.

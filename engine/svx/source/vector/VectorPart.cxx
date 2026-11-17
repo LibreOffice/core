@@ -155,17 +155,13 @@ bool answerPartCommand(tools::JsonWriter& rWriter, std::string_view rCommand,
                        const std::function<void(std::string_view)>& rForgetPart)
 {
     const PartCommand eCommand = partCommandOf(rCommand);
-    if (eCommand == PartCommand::None)
+    if (eCommand == PartCommand::None || eCommand == PartCommand::Graphic)
         return false;
 
     const PartRequest aRequest = readPartRequest(rCommand, rResources.getEpoch());
     const std::map<OUString, OUString>& rParameters = aRequest.maParameters;
     switch (eCommand)
     {
-        case PartCommand::Graphic:
-            if (auto it = rParameters.find(u"checksum"_ustr); it != rParameters.end())
-                rResources.writeGraphic(rWriter, it->second.toInt64());
-            break;
         case PartCommand::Font:
             // The id of a font is the hash of its file, in hexadecimal.
             if (auto it = rParameters.find(u"id"_ustr); it != rParameters.end())
@@ -178,6 +174,7 @@ bool answerPartCommand(tools::JsonWriter& rWriter, std::string_view rCommand,
             if (rForgetPart && !aRequest.maPartId.isEmpty())
                 rForgetPart(aRequest.maPartId);
             break;
+        case PartCommand::Graphic:
         case PartCommand::None:
             break;
     }

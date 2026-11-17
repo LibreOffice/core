@@ -203,5 +203,6 @@ describe('Integration: vector primitives of slide shapes', function () {
 		nodeassert.strictEqual(answer.type, 'vectorrenderinggraphics');
 		nodeassert.strictEqual(Number(answer.checksum), 12345);
 		nodeassert.strictEqual(answer.data, undefined);
+		nodeassert.strictEqual(answer.bytes, undefined);
 	});
 });

@@ -1738,7 +1738,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
-		// A vector-drawn sheet receives its content, fonts and images here.
+		// A vector-drawn sheet receives its content and fonts here.
 		if (values.docType === 'spreadsheet' &&
 			(values.type === 'vectorprimitives' || values.type === 'vectorprimitivesdelta')) {
 			this._readInputSequence(textMsg, values);
@@ -1748,10 +1748,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 		if (RenderManager.calcVectorManager()) {
-			if (values.type === 'vectorrenderinggraphics') {
-				RenderManager.handleVectorRenderingGraphicsResponse(values);
-				return;
-			}
 			if (values.type === 'vectorrenderingfont') {
 				RenderManager.handleVectorRenderingFontResponse(values);
 				return;

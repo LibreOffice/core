@@ -254,20 +254,22 @@ export class SocketClient {
 		return vectorJsonOf(answer);
 	}
 
-	/// Asks for the image with the given checksum and returns the JSON object of the answer.
+	/// Asks for the image with the given checksum and returns the JSON object of the answer. The
+	/// JSON is the first line of the answer, and the bytes of the image that follow it are the
+	/// bytes of the object, when there is an image.
 	async vectorGraphics(checksum: string): Promise<any> {
 		const mark = this.mark();
 		this.send(
 			'commandvalues command=.uno:VectorRenderingGraphics?checksum=' + checksum,
 		);
-		const answer = await this.waitFor(
-			(m) =>
-				m.text.startsWith('commandvalues:') &&
-				m.text.includes('vectorrenderinggraphics'),
+		const answer = await this.waitForPrefix(
+			'vectorrenderinggraphics:',
 			undefined,
 			mark,
 		);
-		return jsonOf(answer);
+		const values = jsonOf(answer);
+		if (answer.body && answer.body.length > 0) values.bytes = answer.body;
+		return values;
 	}
 
 	/// Asks for the primitive sample with the given name, such as "backgroundColor", and returns

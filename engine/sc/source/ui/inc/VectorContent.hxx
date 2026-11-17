@@ -127,7 +127,7 @@ public:
     explicit VectorContent(ScDocShell& rDocShell);
     virtual ~VectorContent() override;
 
-    /// Answer the commands of svx::vector::PartCommand.
+    /// Answer the commands of svx::vector::PartCommand, other than Graphic.
     void getCommandValues(tools::JsonWriter& rWriter, std::string_view rCommand);
     /// Answer a VectorRenderingGraphics command, as svx::vector::answerGraphicCommand does.
     std::string getVectorGraphic(std::string_view rCommand) const;

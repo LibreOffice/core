@@ -12,6 +12,7 @@
 import { strict as nodeassert } from 'assert';
 import { SocketClient } from './helper/SocketClient';
 import { BASE_URL, sampleUrl } from './helper/Environment';
+import { findValueOf } from './helper/VectorJson';
 
 describe('Integration: vector primitives of a slide', function () {
 	this.timeout(60000);
@@ -54,5 +55,28 @@ describe('Integration: vector primitives of a slide', function () {
 			'the slide should have entries',
 		);
 		nodeassert.strictEqual(answer.objects[0].id, 0);
+	});
+
+	/// The third slide shows a PNG image. The answer for it names the type, and the file itself
+	/// follows the JSON.
+	it('sends an image as the bytes of its file', async function () {
+		const status = await client.status();
+		const answer = await client.vectorPrimitives(String(status.parts[2].part));
+		const checksum = findValueOf(answer, 'checksum');
+		nodeassert.notStrictEqual(
+			checksum,
+			undefined,
+			'the slide should name an image',
+		);
+
+		const image = await client.vectorGraphics(String(checksum));
+
+		nodeassert.strictEqual(image.type, 'vectorrenderinggraphics');
+		nodeassert.strictEqual(image.mime, 'image/png');
+		nodeassert.strictEqual(image.data, undefined);
+		nodeassert.deepStrictEqual(
+			Array.from(image.bytes.subarray(0, 4)),
+			[0x89, 0x50, 0x4e, 0x47],
+		);
 	});
 });
