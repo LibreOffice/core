@@ -33,6 +33,7 @@
 #include <docary.hxx>
 #include <node.hxx>
 #include <swtable.hxx>
+#include <section.hxx>
 
 /// Covers sw/source/core/docnode/ fixes.
 class Test : public SwModelTestBase
@@ -51,6 +52,23 @@ public:
             xSupplier->getTextSections()->getByName(rName), cpo::uno::UNO_QUERY_THROW);
         return xSection->getAnchor()->getString();
     }
+
+    // Whether the section of that name shows its file, or is a broken link.
+    bool isSectionConnected(std::u16string_view rName)
+    {
+        const SwSection* pFound = nullptr;
+        for (const SwSectionFormat* pFormat : getSwDoc()->GetSections())
+        {
+            const SwSection* pSection = pFormat->GetSection();
+            if (pSection && pSection->GetSectionName() == rName)
+            {
+                pFound = pSection;
+                break;
+            }
+        }
+        CPPUNIT_ASSERT_MESSAGE("no such section", pFound);
+        return pFound->IsConnectFlag();
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testLinkUpdateKeepsSectionOfMissingFile)
@@ -68,6 +86,10 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkUpdateKeepsSectionOfMissingFile)
     CPPUNIT_ASSERT_EQUAL(u"Text of the chapter file"_ustr, getSectionText(u"Present"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Cached text of the missing chapter"_ustr,
                          getSectionText(u"Missing"_ustr));
+    // And the second section is a broken link. Without the fix in place, keeping the content
+    // also kept it connected, so the Navigator did not show the file as missing.
+    CPPUNIT_ASSERT(isSectionConnected(u"Present"));
+    CPPUNIT_ASSERT(!isSectionConnected(u"Missing"));
 }
 
 // HostFilter::setAllowedExtRefPaths takes colon-separated paths, which do not fit Windows paths.
@@ -91,6 +113,9 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkUpdateKeepsSectionOfForbiddenFile)
     CPPUNIT_ASSERT_EQUAL(u"Cached text of the missing chapter"_ustr,
                          getSectionText(u"Missing"_ustr));
     CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
+    // And both are broken links.
+    CPPUNIT_ASSERT(!isSectionConnected(u"Present"));
+    CPPUNIT_ASSERT(!isSectionConnected(u"Missing"));
 }
 #endif
 
@@ -181,6 +206,9 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkedFileReadFromCopy)
     CPPUNIT_ASSERT_EQUAL(u"Cached text of the present chapter"_ustr,
                          getSectionText(u"Present"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Text of the chapter file"_ustr, getSectionText(u"Missing"_ustr));
+    // And only the section without a copy is a broken link.
+    CPPUNIT_ASSERT(!isSectionConnected(u"Present"));
+    CPPUNIT_ASSERT(isSectionConnected(u"Missing"));
 
     // And the document is saved with the link it had, not with the copy.
     save(TestFilter::ODM_GLOBAL);

@@ -180,6 +180,10 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
         if (pTabListBox->IsSelected(pEntry))
             rJsonWriter.put("selected", true);
 
+        // The color of the text of an entry that tells something by it, as a broken link.
+        if (const std::optional<Color>& rTextColor = pEntry->GetTextColor())
+            rJsonWriter.put("textcolor", rTextColor->AsRGBHexString());
+
         rJsonWriter.put("row", pTabListBox->GetModel()->GetAbsPos(pEntry));
 
         SvTreeListEntry* pChild = pTabListBox->FirstChild(pEntry);

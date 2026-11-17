@@ -9,6 +9,10 @@
 
 #include <swtiledrenderingtest.hxx>
 
+#include <algorithm>
+#include <functional>
+#include <vector>
+
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/text/SectionFileLink.hpp>
@@ -1849,6 +1853,63 @@ std::vector<OString> openMasterDocInsertMenu(const SwView* pView, SwTestViewCall
                             && rDialog.indexOf("inserttext") >= 0;
                  });
     return aMenus;
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMasterDocNavigatorShowsBrokenLink)
+{
+    // Given a master document with its Navigator open, where the file of the second linked
+    // section is missing:
+    createSwGlobalDoc("master-cached-sections.odm");
+    getSwTextDoc()->initializeForTiledRendering({});
+    SwTestViewCallback aView;
+    SwView* pView = getSwDocShell()->GetView();
+    pView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, true);
+    Scheduler::ProcessEventsToIdle();
+    const OUString sKey
+        = OUString::number(reinterpret_cast<sal_uInt64>(static_cast<SfxViewShell*>(pView)))
+          + "navigator";
+    std::function<void()> updateAll = [&sKey]() {
+        StringMap aOpenMenu{ { u"cmd"_ustr, u"openmenu"_ustr },
+                             { u"data"_ustr, u"update"_ustr },
+                             { u"type"_ustr, u"toolbox"_ustr } };
+        CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"global"_ustr, aOpenMenu));
+        Scheduler::ProcessEventsToIdle();
+        StringMap aChoose{ { u"cmd"_ustr, u"select"_ustr },
+                           { u"data"_ustr, u"updateall"_ustr },
+                           { u"type"_ustr, u"menu"_ustr } };
+        CPPUNIT_ASSERT(jsdialog::ExecuteAction(sKey, u"__MENU__"_ustr, aChoose));
+        Scheduler::ProcessEventsToIdle();
+    };
+    // Whether the last tree sent to the client shows an entry in the color of a broken link.
+    std::function<bool()> showsBrokenLink = [&aView]() {
+        std::vector<OString>::const_reverse_iterator itTree = std::find_if(
+            aView.m_aJSDialogs.rbegin(), aView.m_aJSDialogs.rend(), [](const OString& rDialog) {
+                return rDialog.indexOf("\"globaltree\"") >= 0 && rDialog.indexOf("Missing") >= 0;
+            });
+        CPPUNIT_ASSERT_MESSAGE("no tree sent", itTree != aView.m_aJSDialogs.rend());
+        return itTree->indexOf("\"textcolor\": \"ff0000\"") >= 0;
+    };
+
+    // When the links are updated:
+    aView.m_aJSDialogs.clear();
+    updateAll();
+
+    // Then the client is shown the section of the missing file as a broken link. Without the fix
+    // in place, the section kept its content and stayed connected, and the color of an entry
+    // was not sent at all.
+    CPPUNIT_ASSERT(showsBrokenLink());
+
+    // And when the host gives a copy of the file, which the section reads at once:
+    aView.m_aJSDialogs.clear();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getSwTextDoc()->setLinkedFileSource(
+                                           u"master-missing-chapter.odt"_ustr,
+                                           createFileURL(u"master-chapter.odt")));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the section is no longer shown as a broken link, without the user doing anything in
+    // the Navigator. Without the fix in place, the list was redrawn only by a timer that runs
+    // while the document has the focus.
+    CPPUNIT_ASSERT(!showsBrokenLink());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUpdateAllLinksAllowsLinkUpdate)

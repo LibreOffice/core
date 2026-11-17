@@ -1994,6 +1994,18 @@ void JSTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int
     sendUpdate();
 }
 
+void JSTreeView::set_font_color(int pos, const Color& rColor)
+{
+    SalInstanceTreeView::set_font_color(pos, rColor);
+    sendUpdate();
+}
+
+void JSTreeView::set_font_color(const weld::TreeIter& rIter, const Color& rColor)
+{
+    SalInstanceTreeView::set_font_color(rIter, rColor);
+    sendUpdate();
+}
+
 void JSTreeView::do_remove(int pos)
 {
     SalInstanceTreeView::do_remove(pos);

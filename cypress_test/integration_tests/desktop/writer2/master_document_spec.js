@@ -45,6 +45,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Master document', { testIs
 		cy.cGet('#__MENU___updateall').click();
 		cy.cGet('#__MENU___updateall').should('not.exist');
 
+		// the update finds the file of a part missing, and the list shows it as a broken link
+		cy.cGet('#NavigatorPanel #globaltree .ui-treeview-entry.ui-treeview-entry-textcolor')
+			.should('contain.text', 'Missing');
+
 		// so it opens again
 		cy.cGet('#NavigatorPanel #global #update .arrowbackground').click();
 		cy.cGet('#__MENU___updateall').should('be.visible');

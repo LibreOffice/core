@@ -566,6 +566,7 @@ interface TreeEntryJSON {
 	selected: boolean; // is entry selected
 	collapsed: boolean; // is entry collapsed
 	ondemand: boolean; // has content to request
+	textcolor?: string; // color of the text as hex string (RRGGBB), e.g. of a broken link
 	columns: Array<TreeColumnJSON>; // entry data
 	children: Array<TreeEntryJSON>;
 }

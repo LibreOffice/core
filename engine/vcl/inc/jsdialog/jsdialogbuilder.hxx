@@ -788,6 +788,8 @@ public:
 
     virtual void set_text(int row, const OUString& rText, int col = -1) override;
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr, int col = -1) override;
+    virtual void set_font_color(int pos, const Color& rColor) override;
+    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override;
 
     virtual void expand_row(const weld::TreeIter& rIter) override;
     virtual void collapse_row(const weld::TreeIter& rIter) override;

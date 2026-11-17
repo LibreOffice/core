@@ -167,6 +167,7 @@ enum class SfxHintId {
     SwSectionFrameMoveAndDelete,
     SwNavigatorUpdateTracking,
     SwNavigatorSelectOutlinesWithSelections,
+    SwLinkedSectionConnectChanged, // a linked section was found broken, or connected again
     SwPreGraphicArrived,
     SwPostGraphicArrived,
     SwGraphicPieceArrived,
@@ -324,6 +325,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::SwNavigatorUpdateTracking: return stream << "SwNavigatorUpdateTracking";
     case SfxHintId::SwNavigatorSelectOutlinesWithSelections:
         return stream << "SwNavigatorSelectOutlinesWithSelections";
+    case SfxHintId::SwLinkedSectionConnectChanged:
+        return stream << "SwLinkedSectionConnectChanged";
     case SfxHintId::SwCollectTextMarks: return stream << "SwCollectTextMarks";
     case SfxHintId::SwCollectTextTOXMarksForLayout: return stream << "SwCollectTextTOXMarksForLayout";
     case SfxHintId::SwFormatField: return stream << "SwFormatField";

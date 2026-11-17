@@ -1105,6 +1105,25 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
     }
 }
 
+namespace
+{
+/// Tells the views of the document that a linked section was found broken, or connected again.
+void lcl_BroadcastConnectChanged(SwDoc& rDoc)
+{
+    if (SwDocShell* pDocShell = rDoc.GetDocShell())
+        pDocShell->Broadcast(SfxHint(SfxHintId::SwLinkedSectionConnectChanged));
+}
+
+/// Marks a section whose file cannot be read as a broken link; its content stays.
+void lcl_MarkBroken(SwDoc& rDoc, SwSection& rSection)
+{
+    if (!rSection.IsConnectFlag())
+        return;
+    rSection.SetConnectFlag(false);
+    lcl_BroadcastConnectChanged(rDoc);
+}
+}
+
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
     const OUString& rMimeType, const cpo::uno::Any & rValue )
 {
@@ -1150,6 +1169,8 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                 if (HostFilter::isFileUrlForbidden(sFileName))
                 {
                     SAL_WARN("sw.core", "SwIntrnlSectRefLink::DataChanged: blocked file path: \"" << sFileName << "\"");
+                    // The section keeps its content, and shows as a broken link.
+                    lcl_MarkBroken(rDoc, pSectNd->GetSection());
                     return ERROR_GENERAL;
                 }
                 sReadName = sFileName;
@@ -1158,7 +1179,10 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
             nRet = SwFindDocShell(xDocSh, xLockRef, sReadName, pSectNd->GetSection().GetLinkFilePassword(),
                                   sFilter, 0, rDoc.GetDocShell(), {});
             if (!nRet)
+            {
+                lcl_MarkBroken(rDoc, pSectNd->GetSection());
                 return ERROR_GENERAL;
+            }
 
             SwDoc* pSrcDoc = static_cast<SwDocShell*>(xDocSh.get())->GetDoc();
             eOldRedlineFlags = pSrcDoc->getIDocumentRedlineAccess().GetRedlineFlags();
@@ -1210,6 +1234,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
     }
 
     SwSection& rSection = pSectNd->GetSection();
+    const bool bWasConnected = rSection.IsConnectFlag();
     rSection.SetConnectFlag(false);
 
     Reader* pRead = nullptr;
@@ -1229,6 +1254,8 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
             if( nRet )
             {
                 rSection.SetConnectFlag();
+                if (!bWasConnected)
+                    lcl_BroadcastConnectChanged(rDoc);
 
                 SwNodeIndex aSave( pPam->GetPoint()->GetNode(), -1 );
                 std::optional<SwNodeRange> oCpyRg;

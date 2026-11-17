@@ -117,6 +117,7 @@ SwGlobalTree::SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigati
     , m_aDropTargetHelper(*this)
     , m_pDialog(pDialog)
     , m_aUpdateTimer("SwGlobalTree m_aUpdateTimer")
+    , m_aConnectChangedIdle("SwGlobalTree m_aConnectChangedIdle")
     , m_pActiveShell(nullptr)
 {
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 30,
@@ -125,6 +126,7 @@ SwGlobalTree::SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigati
     m_aUpdateTimer.SetTimeout(GLOBAL_UPDATE_TIMEOUT);
     m_aUpdateTimer.SetInvokeHandler(LINK(this, SwGlobalTree, Timeout));
     m_aUpdateTimer.Start();
+    m_aConnectChangedIdle.SetInvokeHandler(LINK(this, SwGlobalTree, ConnectChangedHdl));
     for (sal_uInt16 i = 0; i < GLOBAL_CONTEXT_COUNT; i++)
     {
         m_aContextStrings[i] = SwResId(GLOBAL_CONTEXT_ARY[i]);
@@ -145,6 +147,7 @@ SwGlobalTree::~SwGlobalTree()
     m_pSwGlblDocContents.reset();
     m_pDocInserter.reset();
     m_aUpdateTimer.Stop();
+    m_aConnectChangedIdle.Stop();
 }
 
 SwGlobalTreeDropTarget::SwGlobalTreeDropTarget(SwGlobalTree& rTreeView)
@@ -455,6 +458,13 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
 {
     size_t nCount = m_pSwGlblDocContents->size();
     size_t nChildren = m_xTreeView->n_children();
+    m_aShownBroken.assign(nCount, false);
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        const SwGlblDocContent* pCont = (*m_pSwGlblDocContents)[i].get();
+        m_aShownBroken[i]
+            = pCont->GetType() == GLBLDOC_SECTION && !pCont->GetSection()->IsConnectFlag();
+    }
     if (bOnlyUpdateUserData && nChildren == m_pSwGlblDocContents->size())
     {
         std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
@@ -759,6 +769,14 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
         Display();
 }
 
+// A linked file was found missing, or read again, while the document may still be in the middle
+// of updating its links, so the list is redrawn once that is done, wherever the focus is.
+IMPL_LINK_NOARG(SwGlobalTree, ConnectChangedHdl, Timer*, void)
+{
+    if (Update(false))
+        Display();
+}
+
 IMPL_LINK_NOARG(SwGlobalTree, Timeout, Timer *, void)
 {
     SwView* pView = GetParentWindow()->GetCreateView();
@@ -950,6 +968,11 @@ bool SwGlobalTree::Update(bool bHard)
                          (
                            eType == GLBLDOC_TOXBASE &&
                            pLeft->GetTOX()->GetTitle() != sTemp
+                         ) ||
+                         // a linked file found missing, or found again
+                         (
+                           eType == GLBLDOC_SECTION && i < m_aShownBroken.size() &&
+                           m_aShownBroken[i] == pLeft->GetSection()->IsConnectFlag()
                          )
                        )
                     {
@@ -1316,6 +1339,8 @@ void SwGlobalTree::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)
     SfxListener::Notify(rBC, rHint);
     if (rHint.GetId() == SfxHintId::SwNavigatorUpdateTracking)
         UpdateTracking();
+    else if (rHint.GetId() == SfxHintId::SwLinkedSectionConnectChanged)
+        m_aConnectChangedIdle.Start();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

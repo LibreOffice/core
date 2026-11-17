@@ -21,6 +21,7 @@
 
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 #include <ndarr.hxx>
@@ -348,10 +349,12 @@ private:
     SwGlobalTreeDropTarget  m_aDropTargetHelper;
     SwNavigationPI*         m_pDialog;
     AutoTimer               m_aUpdateTimer;
+    Idle                    m_aConnectChangedIdle; // redraws once a link was found broken or connected
     OUString                m_aContextStrings[GLOBAL_CONTEXT_COUNT];
 
     SwWrtShell*             m_pActiveShell;
     std::unique_ptr<SwGlblDocContents> m_pSwGlblDocContents; // array with sorted content
+    std::vector<bool>       m_aShownBroken; // which entries are shown as broken links
 
     std::optional<SwGlblDocContent>       m_oDocContent;
     std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
@@ -373,6 +376,7 @@ private:
     void Select();
 
     DECL_LINK(Timeout, Timer*, void);
+    DECL_LINK(ConnectChangedHdl, Timer*, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(FocusInHdl, weld::Widget&, void);

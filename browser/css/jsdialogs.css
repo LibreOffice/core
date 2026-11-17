@@ -1143,6 +1143,19 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	pointer-events: none;
 }
 
+/* An entry in the color of its text, as a broken link: its cells show that color,
+   where a panel gives all its elements a color of their own. */
+.ui-treeview-entry.ui-treeview-entry-textcolor * {
+	color: inherit;
+}
+
+/* A selected entry shows the text color of the selection, as its own color may not be readable
+   on the background of the selection. */
+.ui-treeview-entry.selected.ui-treeview-entry-textcolor,
+.ui-treeview-entry.selected.ui-treeview-entry-textcolor * {
+	color: var(--color-text-darker) !important;
+}
+
 #custom_animation_label_parent {
 	display: block;
 	width: inherit;

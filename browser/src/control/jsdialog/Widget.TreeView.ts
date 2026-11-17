@@ -938,6 +938,12 @@ class TreeViewControl {
 		if (this.isSeparator(entry))
 			window.L.DomUtil.addClass(tr, 'context-menu-separator');
 
+		// an entry that tells something by the color of its text, e.g. a broken link
+		if (entry.textcolor) {
+			tr.style.color = '#' + entry.textcolor;
+			window.L.DomUtil.addClass(tr, 'ui-treeview-entry-textcolor');
+		}
+
 		// column for expander
 		if (this._isRealTree) {
 			td = window.L.DomUtil.create('div', 'ui-treeview-expander-column', tr);
