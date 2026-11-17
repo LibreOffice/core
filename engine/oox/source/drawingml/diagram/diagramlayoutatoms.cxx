@@ -9171,7 +9171,46 @@ struct SidewaysRoot
     double fHeight = 0.0;
     double fBranchHeight = 0.0;
     double fBranchWidth = 0.0;
+    // Where the tree has no assistants: the top of the node in the box, the top of each row
+    // against the top of the box, and level by level from the node on how far the box is filled,
+    // top and bottom. Empty, the node stands in the middle and the rows are stacked as boxes.
+    double fNodeTop = -1.0;
+    std::vector<double> aRowTops;
+    std::vector<std::pair<double, double>> aContour;
 };
+}
+
+// Packs rows one below the other, each as high as the rows before it let it at every level it
+// shares with them, fGap below what stands there. Gives the top of each row against the top of
+// the first, and in rContour the levels of all of them together.
+static std::vector<double> packSidewaysContours(const std::vector<SidewaysRoot>& rRows,
+                                                double fGap,
+                                                std::vector<std::pair<double, double>>& rContour)
+{
+    std::vector<double> aTops;
+    for (const SidewaysRoot& rRow : rRows)
+    {
+        double fTop(0.0);
+        if (!aTops.empty())
+        {
+            fTop = -std::numeric_limits<double>::max();
+            for (size_t nLevel = 0; nLevel < rContour.size() && nLevel < rRow.aContour.size();
+                 ++nLevel)
+                fTop = std::max(fTop, rContour[nLevel].second + fGap - rRow.aContour[nLevel].first);
+        }
+        aTops.push_back(fTop);
+        for (size_t nLevel = 0; nLevel < rRow.aContour.size(); ++nLevel)
+        {
+            const std::pair<double, double> aLevel(fTop + rRow.aContour[nLevel].first,
+                                                   fTop + rRow.aContour[nLevel].second);
+            if (nLevel < rContour.size())
+                rContour[nLevel] = { std::min(rContour[nLevel].first, aLevel.first),
+                                     std::max(rContour[nLevel].second, aLevel.second) };
+            else
+                rContour.push_back(aLevel);
+        }
+    }
+    return aTops;
 }
 
 // A gap, sp or sibSp, as the constraints state it: a part of the size of the shape it names, w
@@ -9265,6 +9304,43 @@ static bool gatherSidewaysRows(const ShapePtr& pBranch, const std::vector<Constr
                       + (aRow.aRows.empty() ? 0.0 : aRow.fGap + aRow.fBranchWidth);
         aRow.fHeight = std::max({ static_cast<double>(aRow.aNode.Height), aRow.fBranchHeight,
                                   2.0 * std::max(fAbove, fBelow) });
+
+        // without assistants the rows are packed by their levels, and the node stands in the
+        // middle between the nodes of its first and its last row
+        const bool bContours(
+            aRow.aAssistants.empty()
+            && std::all_of(aRow.aRows.begin(), aRow.aRows.end(),
+                           [](const SidewaysRoot& rSub) { return !rSub.aContour.empty(); }));
+        if (bContours && aRow.aRows.empty())
+        {
+            aRow.fNodeTop = 0.0;
+            aRow.fHeight = aRow.aNode.Height;
+            aRow.aContour.emplace_back(0.0, aRow.aNode.Height);
+        }
+        else if (bContours)
+        {
+            std::vector<std::pair<double, double>> aBranch;
+            std::vector<double> aTops(packSidewaysContours(aRow.aRows, aRow.fRowGap, aBranch));
+            const SidewaysRoot& rFirst(aRow.aRows.front());
+            const SidewaysRoot& rLast(aRow.aRows.back());
+            const double fNodeTop((aTops.front() + rFirst.fNodeTop + aTops.back() + rLast.fNodeTop
+                                   + rLast.aNode.Height)
+                                      / 2.0
+                                  - aRow.aNode.Height / 2.0);
+            double fMin(fNodeTop), fMax(fNodeTop + aRow.aNode.Height);
+            for (const auto& rLevel : aBranch)
+            {
+                fMin = std::min(fMin, rLevel.first);
+                fMax = std::max(fMax, rLevel.second);
+            }
+            aRow.fNodeTop = fNodeTop - fMin;
+            aRow.fHeight = fMax - fMin;
+            for (double fTop : aTops)
+                aRow.aRowTops.push_back(fTop - fMin);
+            aRow.aContour.emplace_back(aRow.fNodeTop, aRow.fNodeTop + aRow.aNode.Height);
+            for (const auto& rLevel : aBranch)
+                aRow.aContour.emplace_back(rLevel.first - fMin, rLevel.second - fMin);
+        }
         rRows.push_back(aRow);
     }
     return true;
@@ -9362,7 +9438,9 @@ static void placeSidewaysRoot(SmartArtDiagram& rDgm, const SidewaysRoot& rRoot,
     const awt::Size aNode(static_cast<sal_Int32>(rRoot.aNode.Width * fScale),
                           static_cast<sal_Int32>(rRoot.aNode.Height * fScale));
     const sal_Int32 nNodeLeft(bLeft ? 0 : aBox.Width - aNode.Width);
-    const sal_Int32 nNodeTop((aBox.Height - aNode.Height) / 2);
+    const sal_Int32 nNodeTop(rRoot.fNodeTop >= 0.0
+                                 ? static_cast<sal_Int32>(rRoot.fNodeTop * fScale)
+                                 : (aBox.Height - aNode.Height) / 2);
     if (rRoot.pNode != rRoot.pRoot)
     {
         rRoot.pNode->setPosition(awt::Point(nNodeLeft, nNodeTop));
@@ -9399,15 +9477,23 @@ static void placeSidewaysRoot(SmartArtDiagram& rDgm, const SidewaysRoot& rRoot,
     fRowsHeight += fRowGap * (rRoot.aRows.size() - 1);
     double fY((aBranch.Height - fRowsHeight) / 2.0);
     std::vector<awt::Point> aRowMiddles;
-    for (const SidewaysRoot& rRow : rRoot.aRows)
+    for (size_t nRowIndex = 0; nRowIndex < rRoot.aRows.size(); ++nRowIndex)
     {
+        const SidewaysRoot& rRow(rRoot.aRows[nRowIndex]);
+        if (nRowIndex < rRoot.aRowTops.size())
+            fY = rRoot.aRowTops[nRowIndex] * fScale;
         const awt::Size aRowBox(static_cast<sal_Int32>(rRow.fWidth * fScale),
                                 static_cast<sal_Int32>(rRow.fHeight * fScale));
         const sal_Int32 nRowLeft(bLeft ? 0 : aBranch.Width - aRowBox.Width);
         placeSidewaysRoot(rDgm, rRow, awt::Point(nRowLeft, static_cast<sal_Int32>(fY)), fScale,
                           bLeft);
+        // the connector ends in the middle of the row's node
+        const sal_Int32 nRowNodeMiddle(
+            rRow.fNodeTop >= 0.0
+                ? static_cast<sal_Int32>((rRow.fNodeTop + rRow.aNode.Height / 2.0) * fScale)
+                : aRowBox.Height / 2);
         aRowMiddles.emplace_back(bLeft ? nRowLeft : nRowLeft + aRowBox.Width,
-                                 static_cast<sal_Int32>(fY) + aRowBox.Height / 2);
+                                 static_cast<sal_Int32>(fY) + nRowNodeMiddle);
         fY += aRowBox.Height + fRowGap;
     }
 
@@ -9534,7 +9620,25 @@ bool AlgAtom::layoutSidewaysBranch(const SmartArtDiagram& rDgm, const ShapePtr& 
     double fBranchesBottom(0.0);
     double fRootsBottom(0.0);
     double fHeight(0.0);
-    for (size_t nRow = 0; nRow < aRows.size(); ++nRow)
+    // without assistants the roots are packed by their levels, every level sibSp apart
+    if (std::all_of(aRows.begin(), aRows.end(),
+                    [](const SidewaysRoot& rRow) { return !rRow.aContour.empty(); }))
+    {
+        std::vector<std::pair<double, double>> aContour;
+        aTops = packSidewaysContours(aRows, fBetweenRoots, aContour);
+        double fMin(0.0), fMax(0.0);
+        for (const auto& rLevel : aContour)
+        {
+            fMin = std::min(fMin, rLevel.first);
+            fMax = std::max(fMax, rLevel.second);
+        }
+        for (double& rTop : aTops)
+            rTop -= fMin;
+        fHeight = fMax - fMin;
+        for (const SidewaysRoot& rRow : aRows)
+            fWidth = std::max(fWidth, rRow.fWidth);
+    }
+    for (size_t nRow = 0; nRow < aRows.size() && aTops.size() < aRows.size(); ++nRow)
     {
         const SidewaysRoot& rRow(aRows[nRow]);
         fWidth = std::max(fWidth, rRow.fWidth);

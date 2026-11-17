@@ -3662,6 +3662,29 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAssistantKeepsItsTextOnReLayout)
     CPPUNIT_ASSERT(findChildShapeByText(xDiagram, u"Mary"_ustr).is());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSidewaysHierarchyBranchReachesBesideTheRowAbove)
+{
+    // A Horizontal Hierarchy whose third child has children of its own: the child takes the next
+    // row, and its children reach up beside the row above where nothing stands.
+    createSdImpressDoc("pptx/smartart-sideways-hierarchy-contour.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    const auto aTop = [&](const OUString& rText) {
+        uno::Reference<drawing::XShape> xShape(findChildShapeByText(xDiagram, rText));
+        CPPUNIT_ASSERT(xShape.is());
+        return xShape->getPosition().Y;
+    };
+    const sal_Int32 nRow(aTop(u"Twelve"_ustr) - aTop(u"Eleven"_ustr));
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nRow);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(nRow), double(aTop(u"Thirteen"_ustr) - aTop(u"Twelve"_ustr)),
+                                 3.0);
+    CPPUNIT_ASSERT_LESS(aTop(u"Thirteen"_ustr), aTop(u"Level 3a"_ustr));
+    // the next root goes by what stands lowest beside it
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(nRow), double(aTop(u"Two"_ustr) - aTop(u"Level 3b"_ustr)),
+                                 3.0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSidewaysHierarchyAssistantStandsInTheGap)
 {
     // Boss stands beside Paul, John and Tim; his assistant Mary stands between them, above
