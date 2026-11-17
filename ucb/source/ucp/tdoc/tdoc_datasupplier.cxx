@@ -383,8 +383,7 @@ ResultSetDataSupplier::assembleChildURL( std::u16string_view aName )
     OUString aURL
         = m_xContent->getIdentifier()->getContentIdentifier();
 
-    sal_Int32 nUrlEnd = aURL.lastIndexOf( '/' );
-    if ( nUrlEnd != aURL.getLength() - 1 )
+    if ( !aURL.endsWith( "/" ) )
         aURL += "/";
 
     aURL += aName;

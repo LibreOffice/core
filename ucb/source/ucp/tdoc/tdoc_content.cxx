@@ -654,7 +654,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         OSL_ENSURE( !aURL.isEmpty(),
                     "Content::createNewContent - empty identifier!" );
 
-        if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
+        if ( !aURL.endsWith( "/" ) )
             aURL += "/";
 
         if ( bCreateFolder )
@@ -1873,8 +1873,7 @@ void Content::transfer(
 
     // Is source not a parent of me / not me?
     OUString aId = m_xIdentifier->getContentIdentifier();
-    sal_Int32 nPos = aId.lastIndexOf( '/' );
-    if ( nPos != ( aId.getLength() - 1 ) )
+    if ( !aId.endsWith( '/' ) )
     {
         // No trailing slash found. Append.
         aId += "/";
@@ -1977,7 +1976,7 @@ void Content::transfer(
 
 
     OUString aTargetUri = m_xIdentifier->getContentIdentifier();
-    if ( ( aTargetUri.lastIndexOf( '/' ) + 1 ) != aTargetUri.getLength() )
+    if ( !aTargetUri.endsWith( "/" ) )
         aTargetUri += "/";
 
     if ( !rInfo.NewTitle.isEmpty() )
