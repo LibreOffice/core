@@ -96,7 +96,9 @@ private:
     bool    bScanGenitiveMonths;                //* Whether to scan an input for genitive months
     bool    bScanPartitiveMonths;               //* Whether to scan an input for partitive months
     // Variables for provisional results:
-    OUString   sStrArray[SV_MAX_COUNT_INPUT_STRINGS];//* Array of scanned substrings
+    OUString maScanString; //* The scanned input; sStrArray views into it
+    OUString maThousandsString; //* The 000,000,000 string concatenated by SkipThousands()
+    std::u16string_view sStrArray[SV_MAX_COUNT_INPUT_STRINGS]; //* Array of scanned substrings
     bool       IsNum[SV_MAX_COUNT_INPUT_STRINGS];    //* Whether a substring is numeric
     sal_uInt16 nNums[SV_MAX_COUNT_INPUT_STRINGS];    //* Sequence of offsets to numeric strings
     sal_uInt16 nStringsCnt;                          //* Total count of scanned substrings
@@ -194,12 +196,12 @@ private:
     void InitText();                            // Init of months and days of week
 
     // Next number/string symbol
-    static bool NextNumberStringSymbol( const sal_Unicode*& pStr,
-                                        OUString& rSymbol );
+    static bool NextNumberStringSymbol(const sal_Unicode*& pStr, std::u16string_view& rSymbol);
 
     // Concatenate ,000,23 blocks
     // in input to 000123
-    bool SkipThousands(const sal_Unicode*& pStr, const sal_Unicode* pEnd, OUString& rSymbol) const;
+    bool SkipThousands(const sal_Unicode*& pStr, const sal_Unicode* pEnd,
+                       std::u16string_view& rSymbol);
 
     // Divide numbers/strings into
     // arrays and variables above.
@@ -211,9 +213,8 @@ private:
     /** Whether rString contains word (!) rWhat at nPos.
         rWhat will not be matched if it is a substring of a word.
      */
-    bool StringContainsWord( const OUString& rWhat,
-                             const OUString& rString,
-                             sal_Int32 nPos ) const;
+    bool StringContainsWord(std::u16string_view rWhat, std::u16string_view rString,
+                            sal_Int32 nPos) const;
 
     // Whether rString contains rWhat at nPos
     static bool StringContains(std::u16string_view rWhat, std::u16string_view rString,
@@ -229,8 +230,7 @@ private:
                                  sal_Int32& nPos );
 
     // Skip blank
-    static inline bool SkipBlanks( const OUString& rString,
-                                   sal_Int32& nPos );
+    static inline bool SkipBlanks(std::u16string_view rString, sal_Int32& nPos);
 
     // Jump over rWhat in rString at nPos
     static inline bool SkipString(std::u16string_view rWhat, std::u16string_view rString,
@@ -244,20 +244,16 @@ private:
     short GetLogical( std::u16string_view rString ) const;
 
     // Get month and advance string position
-    short GetMonth( const OUString& rString,
-                    sal_Int32& nPos );
+    short GetMonth(std::u16string_view rString, sal_Int32& nPos);
 
     // Get day of week and advance string position
-    int GetDayOfWeek( const OUString& rString,
-                      sal_Int32& nPos );
+    int GetDayOfWeek(std::u16string_view rString, sal_Int32& nPos);
 
     // Get currency symbol and advance string position
-    bool GetCurrency( const OUString& rString,
-                      sal_Int32& nPos );
+    bool GetCurrency(std::u16string_view rString, sal_Int32& nPos);
 
     // Get symbol AM or PM and advance string position
-    bool GetTimeAmPm( const OUString& rString,
-                      sal_Int32& nPos );
+    bool GetTimeAmPm(std::u16string_view rString, sal_Int32& nPos);
 
     // Get decimal separator and advance string position
     inline bool GetDecSep( std::u16string_view rString,
@@ -297,23 +293,18 @@ private:
                      sal_uInt16& nCounter );                 // Count of date substrings
 
     // Analyze start of string
-    bool ScanStartString( const OUString& rString );
+    bool ScanStartString(std::u16string_view rString);
 
     // Analyze middle substring
-    bool ScanMidString( const OUString& rString,
-                        sal_uInt16 nStringPos,
-                        sal_uInt16 nCurNumCount );
-
+    bool ScanMidString(std::u16string_view rString, sal_uInt16 nStringPos, sal_uInt16 nCurNumCount);
 
     // Analyze end of string
-    bool ScanEndString( const OUString& rString );
+    bool ScanEndString(std::u16string_view rString);
 
     // Compare rString to substring of array indexed by nString
     // nString == 0xFFFF => last substring
-    bool ScanStringNumFor( const OUString& rString,
-                           sal_Int32 nPos,
-                           sal_uInt16 nString,
-                           bool bDontDetectNegation = false );
+    bool ScanStringNumFor(std::u16string_view rString, sal_Int32 nPos, sal_uInt16 nString,
+                          bool bDontDetectNegation = false);
 
     // if nMatchedAllStrings set nMatchedUsedAsReturn and return true,
     // else do nothing and return false

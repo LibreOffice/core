@@ -194,8 +194,8 @@ enum ScanState  // States of the Turing machine
 
 }
 
-bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
-                                                   OUString& rSymbol )
+bool ImpSvNumberInputScan::NextNumberStringSymbol(const sal_Unicode*& pStr,
+                                                  std::u16string_view& rSymbol)
 {
     bool isNumber = false;
     sal_Unicode cToken;
@@ -252,11 +252,11 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 
     if ( nChars )
     {
-        rSymbol = OUString( pStr, nChars );
+        rSymbol = std::u16string_view(pStr, nChars);
     }
     else
     {
-        rSymbol.clear();
+        rSymbol = {};
     }
 
     pStr = pHere;
@@ -269,7 +269,7 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 // near SV_MAX_COUNT_INPUT_STRINGS, in NumberStringDivision().
 
 bool ImpSvNumberInputScan::SkipThousands(const sal_Unicode*& pStr, const sal_Unicode* pEnd,
-                                         OUString& rSymbol) const
+                                         std::u16string_view& rSymbol)
 {
     bool res = false;
     OUStringBuffer sBuff(rSymbol);
@@ -330,7 +330,11 @@ bool ImpSvNumberInputScan::SkipThousands(const sal_Unicode*& pStr, const sal_Uni
         }
         pHere -= nCounter + rThSep.getLength(); // put back ThSep also
     }
-    rSymbol = sBuff.makeStringAndClear();
+    if (o3tl::make_unsigned(sBuff.getLength()) != rSymbol.size()) // digits were appended
+    {
+        maThousandsString = sBuff.makeStringAndClear();
+        rSymbol = maThousandsString;
+    }
     pStr = pHere;
 
     return res;
@@ -369,13 +373,13 @@ void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
 /**
  * Whether rString contains word rWhat at nPos
  */
-bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
-                                               const OUString& rString, sal_Int32 nPos ) const
+bool ImpSvNumberInputScan::StringContainsWord(std::u16string_view rWhat,
+                                              std::u16string_view rString, sal_Int32 nPos) const
 {
     if (StringContains(rWhat, rString, nPos))
     {
-        nPos += rWhat.getLength();
-        if (nPos == rString.getLength())
+        nPos += rWhat.size();
+        if (o3tl::make_unsigned(nPos) == rString.size())
             return true;    // word at end of string
 
         /* TODO: we COULD invoke bells and whistles word break iterator to find
@@ -402,11 +406,12 @@ bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
             return false;   // Alpha or numeric is not word gap.
 
         sal_Int32 nIndex = nPos;
-        rString.iterateCodePoints( &nIndex);
+        o3tl::iterateCodePoints(rString, &nIndex);
         if (nPos+1 < nIndex)
             return true;    // Surrogate, assume these to be new words.
 
-        const sal_Int32 nType = mrCurrentLanguageData.GetCharClass()->getCharacterType( rString, nPos);
+        const sal_Int32 nType
+            = mrCurrentLanguageData.GetCharClass()->getCharacterType(OUString(rString), nPos);
         using namespace ::com::sun::star::i18n;
 
         if ((nType & (KCharacterType::UPPER | KCharacterType::LOWER | KCharacterType::DIGIT)) != 0)
@@ -440,18 +445,14 @@ inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, std::u16string_view r
 /**
  * Skips blanks
  */
-inline bool ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
-                                              sal_Int32& nPos )
+inline bool ImpSvNumberInputScan::SkipBlanks(std::u16string_view rString, sal_Int32& nPos)
 {
     sal_Int32 nHere = nPos;
-    if ( nPos < rString.getLength() )
+    while (o3tl::make_unsigned(nPos) < rString.size()
+           && (rString[nPos] == ' ' || rString[nPos] == cNoBreakSpace
+               || rString[nPos] == cNarrowNoBreakSpace))
     {
-        const sal_Unicode* p = rString.getStr() + nPos;
-        while ( *p == ' ' || *p == cNoBreakSpace || *p == cNarrowNoBreakSpace )
-        {
-            nPos++;
-            p++;
-        }
+        nPos++;
     }
     return nHere < nPos;
 }
@@ -498,7 +499,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( std::u16string_view rString,
      * currently there is no track kept where group separators occur. In {3,2}
      * #,###,### and #,##,## would be valid input, which maybe isn't even bad
      * for #,###,###. Other combinations such as #,###,## maybe not. */
-    sal_Int32 nLen = sStrArray[ nStringPos + 1 ].getLength();
+    sal_Int32 nLen = sStrArray[nStringPos + 1].size();
     if (nLen == aGrouping.get() ||                  // with 3 (or so) digits
         nLen == aGrouping.advance().get() ||        // or with 2 (or 3 or so) digits
         nPosThousandString == nStringPos + 1 )      // or concatenated
@@ -541,11 +542,11 @@ short ImpSvNumberInputScan::GetLogical( std::u16string_view rString ) const
  * Converts a string containing a month name (JAN, January) at nPos into the
  * month number (negative if abbreviated), returns 0 if nothing found
  */
-short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
+short ImpSvNumberInputScan::GetMonth(std::u16string_view rString, sal_Int32& nPos)
 {
     short res = 0; // no month found
 
-    if (rString.getLength() > nPos) // only if needed
+    if (rString.size() > o3tl::make_unsigned(nPos)) // only if needed
     {
         if ( !bTextInitialized )
         {
@@ -674,11 +675,11 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
  * Converts a string containing a DayOfWeek name (Mon, Monday) at nPos into the
  * DayOfWeek number + 1 (negative if abbreviated), returns 0 if nothing found
  */
-int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos )
+int ImpSvNumberInputScan::GetDayOfWeek(std::u16string_view rString, sal_Int32& nPos)
 {
     int res = 0; // no day found
 
-    if (rString.getLength() > nPos) // only if needed
+    if (rString.size() > o3tl::make_unsigned(nPos)) // only if needed
     {
         if ( !bTextInitialized )
         {
@@ -711,9 +712,9 @@ int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos
  * '$'   => true
  * else => false
  */
-bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos )
+bool ImpSvNumberInputScan::GetCurrency(std::u16string_view rString, sal_Int32& nPos)
 {
-    if ( rString.getLength() > nPos )
+    if (rString.size() > o3tl::make_unsigned(nPos))
     {
         if ( !aUpperCurrSymbol.getLength() )
         {   // If no format specified the currency of the currently active locale.
@@ -732,7 +733,7 @@ bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos
             OUString aSymbol, aExtension;
             if ( mpFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
             {
-                if ( aSymbol.getLength() <= rString.getLength() - nPos )
+                if (o3tl::make_unsigned(aSymbol.getLength()) <= rString.size() - nPos)
                 {
                     aSymbol = mrCurrentLanguageData.GetCharClass()->uppercase(aSymbol);
                     if ( StringContains( aSymbol, rString, nPos ) )
@@ -761,10 +762,9 @@ bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos
  *   "PM"  => -1
  *   else =>  0
 */
-bool ImpSvNumberInputScan::GetTimeAmPm( const OUString& rString, sal_Int32& nPos )
+bool ImpSvNumberInputScan::GetTimeAmPm(std::u16string_view rString, sal_Int32& nPos)
 {
-
-    if ( rString.getLength() > nPos )
+    if (rString.size() > o3tl::make_unsigned(nPos))
     {
         const LocaleDataWrapper* pLoc = mrCurrentLanguageData.GetLocaleData();
         if (!moUpperTimeAmPm)
@@ -945,9 +945,9 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     }
     else if (nIndex - nStartIndex < nCnt)
     {
-        const OUString& rValStr = sStrArray[nNums[nIndex++]];
-        nHour = rValStr.toInt32();
-        if (nHour == 0 && rValStr != "0" && rValStr != "00")
+        std::u16string_view aValStr = sStrArray[nNums[nIndex++]];
+        nHour = o3tl::toInt32(aValStr);
+        if (nHour == 0 && aValStr != u"0" && aValStr != u"00")
             bRet = false;   // overflow -> Text
     }
     else
@@ -979,9 +979,9 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     }
     else if (nIndex - nStartIndex < nCnt)
     {
-        const OUString& rValStr = sStrArray[nNums[nIndex++]];
-        nMinute = rValStr.toInt32();
-        if (nMinute == 0 && rValStr != "0" && rValStr != "00")
+        std::u16string_view aValStr = sStrArray[nNums[nIndex++]];
+        nMinute = o3tl::toInt32(aValStr);
+        if (nMinute == 0 && aValStr != u"0" && aValStr != u"00")
             bRet = false;   // overflow -> Text
         if (!(eInputOptions & SvNumInputOptions::LAX_TIME) && !bAllowDuration
                 && nIndex > 1 && nMinute > 59)
@@ -991,9 +991,9 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     }
     if (nIndex - nStartIndex < nCnt)
     {
-        const OUString& rValStr = sStrArray[nNums[nIndex++]];
-        nSecond = rValStr.toInt32();
-        if (nSecond == 0 && rValStr != "0" && rValStr != "00")
+        std::u16string_view aValStr = sStrArray[nNums[nIndex++]];
+        nSecond = o3tl::toInt32(aValStr);
+        if (nSecond == 0 && aValStr != u"0" && aValStr != u"00")
             bRet = false;   // overflow -> Text
         if (!(eInputOptions & SvNumInputOptions::LAX_TIME) && !bAllowDuration
                 && nIndex > 1 && nSecond > 59 && !(nHour == 23 && nMinute == 59 && nSecond == 60))
@@ -1001,7 +1001,7 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     }
     if (nIndex - nStartIndex < nCnt)
     {
-        fSecond100 = StringToDouble(Concat2View("." + sStrArray[nNums[nIndex]]));
+        fSecond100 = StringToDouble(Concat2View(OUString::Concat(".") + sStrArray[nNums[nIndex]]));
     }
     fOutNumber = (static_cast<double>(nHour)*3600 +
                   static_cast<double>(nMinute)*60 +
@@ -1015,9 +1015,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex ) const
 {
     sal_uInt16 nRes = 0;
 
-    if (sStrArray[nNums[nIndex]].getLength() <= 2)
+    if (sStrArray[nNums[nIndex]].size() <= 2)
     {
-        sal_uInt16 nNum = static_cast<sal_uInt16>(sStrArray[nNums[nIndex]].toInt32());
+        sal_uInt16 nNum = static_cast<sal_uInt16>(o3tl::toInt32(sStrArray[nNums[nIndex]]));
         if (nNum <= 31)
         {
             nRes = nNum;
@@ -1033,9 +1033,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex ) const
     // Preset invalid month number
     sal_uInt16 nRes = mrCurrentLanguageData.GetCalendar()->getNumberOfMonthsInYear();
 
-    if (sStrArray[nNums[nIndex]].getLength() <= 2)
+    if (sStrArray[nNums[nIndex]].size() <= 2)
     {
-        sal_uInt16 nNum = static_cast<sal_uInt16>(sStrArray[nNums[nIndex]].toInt32());
+        sal_uInt16 nNum = static_cast<sal_uInt16>(o3tl::toInt32(sStrArray[nNums[nIndex]]));
         if ( 0 < nNum && nNum <= nRes )
         {
             nRes = nNum - 1; // zero based for CalendarFieldIndex::MONTH
@@ -1053,12 +1053,12 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
 {
     sal_uInt16 nYear = 0;
 
-    sal_Int32 nLen = sStrArray[nNums[nIndex]].getLength();
+    sal_Int32 nLen = sStrArray[nNums[nIndex]].size();
     // 16-bit integer year width can have 5 digits, allow for one additional
     // leading zero as convention.
     if (nLen <= 6)
     {
-        nYear = static_cast<sal_uInt16>(sStrArray[nNums[nIndex]].toInt32());
+        nYear = static_cast<sal_uInt16>(o3tl::toInt32(sStrArray[nNums[nIndex]]));
         // A year in another, not Gregorian CE era is never expanded.
         // A year < 100 entered with at least 3 digits with leading 0 is taken
         // as is without expansion.
@@ -1077,15 +1077,16 @@ bool ImpSvNumberInputScan::MayBeIso8601()
     if (nMayBeIso8601 == 0)
     {
         nMayBeIso8601 = 1;
-        sal_Int32 nLen = ((nNumericsCnt >= 1 && nNums[0] < nStringsCnt) ? sStrArray[nNums[0]].getLength() : 0);
+        sal_Int32 nLen
+            = ((nNumericsCnt >= 1 && nNums[0] < nStringsCnt) ? sStrArray[nNums[0]].size() : 0);
         if (nLen)
         {
             sal_Int32 n;
-            if (nNumericsCnt >= 3 && nNums[2] < nStringsCnt &&
-                sStrArray[nNums[0]+1] == "-" && // separator year-month
-                (n = sStrArray[nNums[1]].toInt32()) >= 1 && n <= 12 &&  // month
-                sStrArray[nNums[1]+1] == "-" && // separator month-day
-                (n = sStrArray[nNums[2]].toInt32()) >= 1 && n <= 31)    // day
+            if (nNumericsCnt >= 3 && nNums[2] < nStringsCnt
+                && sStrArray[nNums[0] + 1] == u"-" // separator year-month
+                && (n = o3tl::toInt32(sStrArray[nNums[1]])) >= 1 && n <= 12 // month
+                && sStrArray[nNums[1] + 1] == u"-" // separator month-day
+                && (n = o3tl::toInt32(sStrArray[nNums[2]])) >= 1 && n <= 31) // day
             {
                 // Year (nNums[0]) value not checked, may be anything, but
                 // length (number of digits) is checked.
@@ -1130,14 +1131,14 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
     switch (eDateOrder)
     {
         case DateOrder::DMY:               // "day" value out of range => ISO 8601 year
-            n = sStrArray[nNums[0]].toInt32();
+            n = o3tl::toInt32(sStrArray[nNums[0]]);
             if (n < 1 || n > 31)
             {
                 nCanForceToIso8601 = 2;
             }
         break;
         case DateOrder::MDY:               // "month" value out of range => ISO 8601 year
-            n = sStrArray[nNums[0]].toInt32();
+            n = o3tl::toInt32(sStrArray[nNums[0]]);
             if (n < 1 || n > 12)
             {
                 nCanForceToIso8601 = 2;
@@ -1178,25 +1179,25 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
         if (nNumericsCnt >= 2 && nNums[1] < nStringsCnt)
         {
             // "-Jan-"
-            const OUString& rM = sStrArray[ nNums[ 0 ] + 1 ];
-            if (rM.getLength() >= 3 && rM[0] == '-' && rM[ rM.getLength() - 1] == '-')
+            std::u16string_view aM = sStrArray[nNums[0] + 1];
+            if (aM.size() >= 3 && aM.front() == '-' && aM.back() == '-')
             {
                 // Check year length assuming at least 3 digits (including
                 // leading zero). Two digit years 1..31 are out of luck here
                 // and may be taken as day of month.
-                bool bYear1 = (sStrArray[nNums[0]].getLength() >= 3);
-                bool bYear2 = (sStrArray[nNums[1]].getLength() >= 3);
+                bool bYear1 = (sStrArray[nNums[0]].size() >= 3);
+                bool bYear2 = (sStrArray[nNums[1]].size() >= 3);
                 sal_Int32 n;
                 bool bDay1 = !bYear1;
                 if (bDay1)
                 {
-                    n = sStrArray[nNums[0]].toInt32();
+                    n = o3tl::toInt32(sStrArray[nNums[0]]);
                     bDay1 = n >= 1 && n <= 31;
                 }
                 bool bDay2 = !bYear2;
                 if (bDay2)
                 {
-                    n = sStrArray[nNums[1]].toInt32();
+                    n = o3tl::toInt32(sStrArray[nNums[1]]);
                     bDay2 = n >= 1 && n <= 31;
                 }
 
@@ -1370,10 +1371,10 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                             nMaxLen = 2;
                             nMaxVal = 31;
                     }
-                    bOk = (sStrArray[nNext].getLength() <= nMaxLen);
+                    bOk = (sStrArray[nNext].size() <= o3tl::make_unsigned(nMaxLen));
                     if (bOk)
                     {
-                        sal_Int32 nNum = sStrArray[nNext].toInt32();
+                        sal_Int32 nNum = o3tl::toInt32(sStrArray[nNext]);
                         bOk = (1 <= nNum && nNum <= nMaxVal);
                     }
                 }
@@ -1387,7 +1388,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                     const sal_Int32 nSepLen = lcl_getPatternSeparatorLength( rPat, nPat);
                     // Non-numeric input must match separator exactly to be
                     // accepted as such.
-                    const sal_Int32 nLen = sStrArray[nNext].getLength();
+                    const sal_Int32 nLen = sStrArray[nNext].size();
                     bOk = (nLen == nSepLen && rPat.indexOf( sStrArray[nNext], nPat) == nPat);
                     if (bOk)
                     {
@@ -1462,7 +1463,8 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                     // Trailing (or separating if time follows) blanks are ok.
                     // No blank and a following number is not.
                     const bool bBlanks = SkipBlanks( sStrArray[nCheck], nPos);
-                    if (nPos == sStrArray[nCheck].getLength() && (bBlanks || !IsNum[nNext]))
+                    if (o3tl::make_unsigned(nPos) == sStrArray[nCheck].size()
+                        && (bBlanks || !IsNum[nNext]))
                     {
                         nAcceptedDatePattern = nPattern;
                         return true;
@@ -1508,7 +1510,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
             if (nNext == nParticle)
             {
                 const sal_Int32 nSepLen = lcl_getPatternSeparatorLength( rPat, nPat);
-                const sal_Int32 nLen = sStrArray[nNext].getLength();
+                const sal_Int32 nLen = sStrArray[nNext].size();
                 bool bOk = (nLen == nSepLen && rPat.indexOf( sStrArray[nNext], nPat) == nPat);
                 if (!bOk)
                 {
@@ -1534,7 +1536,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
                 else
                     return false;
             }
-            nPat += sStrArray[nNext].getLength() - 1;
+            nPat += static_cast<sal_Int32>(sStrArray[nNext].size()) - 1;
             break;
         }
     }
@@ -2324,7 +2326,7 @@ input for the following reasons:
  * All gone => true
  * else     => false
  */
-bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
+bool ImpSvNumberInputScan::ScanStartString(std::u16string_view rString)
 {
     sal_Int32 nPos = 0;
 
@@ -2338,7 +2340,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
         SkipBlanks(rString, nPos);
     }
     // #102371# match against format string only if start string is not a sign character
-    if ( nMatchedAllStrings && !(nSign && rString.getLength() == 1) )
+    if (nMatchedAllStrings && !(nSign && rString.size() == 1))
     {
         // Match against format in any case, so later on for a "x1-2-3" input
         // we may distinguish between a xy-m-d (or similar) date and a x0-0-0
@@ -2354,7 +2356,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
     }
 
     // Bail out early for just a sign.
-    if (nSign && nPos == rString.getLength())
+    if (nSign && o3tl::make_unsigned(nPos) == rString.size())
         return true;
 
     const sal_Int32 nStartBlanks = nPos;
@@ -2423,7 +2425,8 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
         {
             // Jan1 without separator is not a date, unless it is followed by a
             // separator and a (year) number.
-            if (nPos < rString.getLength() || (nStringsCnt >= 4 && nNumericsCnt >= 2))
+            if (o3tl::make_unsigned(nPos) < rString.size()
+                || (nStringsCnt >= 4 && nNumericsCnt >= 2))
             {
                 eScannedType = SvNumFormatType::DATE;   // !!! it IS a date !!!
                 nMonth = nTempMonth;
@@ -2446,7 +2449,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
             {
                 // day of week is just parsed away
                 eScannedType = SvNumFormatType::DATE;       // !!! it IS a date !!!
-                if ( nPos < rString.getLength() )
+                if (o3tl::make_unsigned(nPos) < rString.size())
                 {
                     if ( nTempDayOfWeek < 0 )
                     {
@@ -2468,7 +2471,8 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
                     {
                         // Jan1 without separator is not a date, unless it is followed by a
                         // separator and a (year) number.
-                        if (nPos < rString.getLength() || (nStringsCnt >= 4 && nNumericsCnt >= 2))
+                        if (o3tl::make_unsigned(nPos) < rString.size()
+                            || (nStringsCnt >= 4 && nNumericsCnt >= 2))
                         {
                             nMonth = nTempMonth;
                             nMonthPos = 1; // month at the beginning
@@ -2492,13 +2496,13 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
             }
         }
         // Skip one trailing '-' or '/' character to recognize June-2007
-        if (nMonth && nPos + 1 == rString.getLength())
+        if (nMonth && o3tl::make_unsigned(nPos + 1) == rString.size())
         {
             SkipChar('-', rString, nPos) || SkipChar('/', rString, nPos);
         }
     }
 
-    if (nPos < rString.getLength()) // not everything consumed
+    if (o3tl::make_unsigned(nPos) < rString.size()) // not everything consumed
     {
         // Does input StartString equal StartString of format?
         // This time with sign detection!
@@ -2511,18 +2515,9 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
     return true;
 }
 
-
-static bool lcl_isBlanks( const OUString& rStr )
+static bool lcl_isBlanks(std::u16string_view rStr)
 {
-    if (rStr.isEmpty())
-        return false;
-
-    for (sal_Int32 i = rStr.getLength(); i-- > 0; )
-    {
-        if (rStr[i] != ' ')
-            return false;
-    }
-    return true;
+    return !rStr.empty() && rStr.find_first_not_of(u' ') == std::u16string_view::npos;
 }
 
 
@@ -2531,7 +2526,8 @@ static bool lcl_isBlanks( const OUString& rStr )
  * All gone => true
  * else     => false
  */
-bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nStringPos, sal_uInt16 nCurNumCount )
+bool ImpSvNumberInputScan::ScanMidString(std::u16string_view rString, sal_uInt16 nStringPos,
+                                         sal_uInt16 nCurNumCount)
 {
     sal_Int32 nPos = 0;
     SvNumFormatType eOldScannedType = eScannedType;
@@ -2608,8 +2604,8 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         // If this is exactly an ISO 8601 fractional seconds separator, bail
         // out early to not get confused by later checks for group separator or
         // other.
-        if (bIso8601Tsep && nPos == rString.getLength() &&
-                eScannedType == SvNumFormatType::DATETIME && (rString == "." || rString == ","))
+        if (bIso8601Tsep && o3tl::make_unsigned(nPos) == rString.size()
+            && eScannedType == SvNumFormatType::DATETIME && (rString == u"." || rString == u","))
             return true;
 
         SkipBlanks(rString, nPos);
@@ -2632,7 +2628,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
                                                             // nor anything else than blanks after integer.
         {
             SkipBlanks(rString, nPos);
-            if (nPos == rString.getLength())
+            if (o3tl::make_unsigned(nPos) == rString.size())
             {
                 eScannedType = SvNumFormatType::FRACTION;   // !!! it IS a fraction (so far)
                 if (eSetType == SvNumFormatType::FRACTION &&
@@ -2685,8 +2681,9 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
                 && (((nExactDateOrder >> 16) & 0xff) == 'D'))
         {
             const sal_Int32 nTmpPos = nPos;
-            if (SkipChar('.', rString, nPos) && SkipBlanks(rString, nPos) && nPos + 2 < rString.getLength()
-                    && (rString.endsWith(" ") || rString.endsWith( pLoc->getLongDateMonthSep())))
+            if (SkipChar('.', rString, nPos) && SkipBlanks(rString, nPos)
+                && o3tl::make_unsigned(nPos + 2) < rString.size()
+                && (rString.ends_with(u' ') || rString.ends_with(pLoc->getLongDateMonthSep())))
                 bDate = true;
             else
                 nPos = nTmpPos;
@@ -2744,7 +2741,9 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         {
             return MatchedReturn();
         }
-        if (nMonthStart > 0 && nPos < rString.getLength())  // 10Jan or Jan94 without separator are not dates
+        if (nMonthStart > 0
+            && o3tl::make_unsigned(nPos)
+                   < rString.size()) // 10Jan or Jan94 without separator are not dates
         {
             eScannedType = SvNumFormatType::DATE;       // !!! it IS a date
             nMonth = nTempMonth;
@@ -2830,7 +2829,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         }
     }
 
-    if (nPos < rString.getLength())
+    if (o3tl::make_unsigned(nPos) < rString.size())
     {
         switch (eScannedType)
         {
@@ -2843,10 +2842,10 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
                     SkipBlanks( rString, nPos );
                 }
             }
-            else if (nPos == 0 && rString.getLength() == 1 && MayBeIso8601())
+            else if (nPos == 0 && rString.size() == 1 && MayBeIso8601())
             {
-                if (    (nStringPos == 5 && rString[0] == 'T') ||
-                        (nStringPos == 6 && rString[0] == 'T' && sStrArray[0] == "-"))
+                if ((nStringPos == 5 && rString[0] == 'T')
+                    || (nStringPos == 6 && rString[0] == 'T' && sStrArray[0] == u"-"))
                 {
                     // ISO 8601 combined date and time, yyyy-mm-ddThh:mm or -yyyy-mm-ddThh:mm
                     ++nPos;
@@ -2864,7 +2863,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
             }
             break;
         case SvNumFormatType::DATETIME:
-            if (nPos == 0 && rString.getLength() == 1 && MayBeIso8601())
+            if (nPos == 0 && rString.size() == 1 && MayBeIso8601())
             {
                 if (nStringPos == 9 && rString[0] == ':')
                 {
@@ -2873,7 +2872,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
                 }
             }
 #if NF_RECOGNIZE_ISO8601_TIMEZONES
-            else if (nPos == 0 && rString.getLength() == 1 && nStringPos >= 9 && MayBeIso8601())
+            else if (nPos == 0 && rString.size() == 1 && nStringPos >= 9 && MayBeIso8601())
             {
                 // ISO 8601 timezone offset
                 switch (rString[ 0 ])
@@ -2906,7 +2905,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         }
     }
 
-    if (nPos < rString.getLength()) // not everything consumed?
+    if (o3tl::make_unsigned(nPos) < rString.size()) // not everything consumed?
     {
         if ( nMatchedAllStrings & ~nMatchedVirgin )
         {
@@ -2927,7 +2926,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
  * All gone => true
  * else     => false
  */
-bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
+bool ImpSvNumberInputScan::ScanEndString(std::u16string_view rString)
 {
     sal_Int32 nPos = 0;
 
@@ -3190,9 +3189,8 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
         }
     }
 
-    if ( nPos < rString.getLength() &&
-         (eScannedType == SvNumFormatType::DATE ||
-          eScannedType == SvNumFormatType::DATETIME) )
+    if (o3tl::make_unsigned(nPos) < rString.size()
+        && (eScannedType == SvNumFormatType::DATE || eScannedType == SvNumFormatType::DATETIME))
     {
         // day of week is just parsed away
         sal_Int32 nOldPos = nPos;
@@ -3205,7 +3203,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
         int nTempDayOfWeek = GetDayOfWeek( rString, nPos );
         if ( nTempDayOfWeek )
         {
-            if ( nPos < rString.getLength() )
+            if (o3tl::make_unsigned(nPos) < rString.size())
             {
                 if ( nTempDayOfWeek < 0 )
                 {   // short
@@ -3224,15 +3222,15 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
     }
 
 #if NF_RECOGNIZE_ISO8601_TIMEZONES
-    if (nPos == 0 && eScannedType == SvNumFormatType::DATETIME &&
-        rString.getLength() == 1 && rString[ 0 ] == 'Z' && MayBeIso8601())
+    if (nPos == 0 && eScannedType == SvNumFormatType::DATETIME && rString.size() == 1
+        && rString[0] == 'Z' && MayBeIso8601())
     {
         // ISO 8601 timezone UTC yyyy-mm-ddThh:mmZ
         ++nPos;
     }
 #endif
 
-    if (nPos < rString.getLength()) // everything consumed?
+    if (o3tl::make_unsigned(nPos) < rString.size()) // everything consumed?
     {
         // does input EndString equal EndString in Format?
         if ( !ScanStringNumFor( rString, nPos, 0xFFFF ) )
@@ -3244,11 +3242,11 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
     return true;
 }
 
-
-bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // String to scan
-                                             sal_Int32 nPos,                // Position until which was consumed
-                                             sal_uInt16 nString,            // Substring of format, 0xFFFF => last
-                                             bool bDontDetectNegation)      // Suppress sign detection
+bool ImpSvNumberInputScan::ScanStringNumFor(
+    std::u16string_view rString, // String to scan
+    sal_Int32 nPos, // Position until which was consumed
+    sal_uInt16 nString, // Substring of format, 0xFFFF => last
+    bool bDontDetectNegation) // Suppress sign detection
 {
     if ( !mpFormat )
     {
@@ -3256,12 +3254,15 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
     }
     const OUString* pStr;
     sal_Int32 nStart = 0;
-    auto isEqualFromStart =
-        [ pTransliteration = mrCurrentLanguageData.GetTransliteration(), &rString,
-          &nStart ](const OUString& rWhat)
+    std::optional<OUString> oString; // for equals(), only when a string is compared
+    auto isEqualFromStart = [
+        pTransliteration = mrCurrentLanguageData.GetTransliteration(), &rString, &oString, &nStart
+    ](const OUString& rWhat)
     {
+        if (!oString)
+            oString.emplace(rString);
         sal_Int32 nMatch1 = 0, nMatch2 = 0;
-        return pTransliteration->equals(rString, nStart, rString.getLength() - nStart, nMatch1,
+        return pTransliteration->equals(*oString, nStart, oString->getLength() - nStart, nMatch1,
                                         rWhat, 0, rWhat.getLength(), nMatch2);
     };
     bool bFound = false;
@@ -3302,7 +3303,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
     }
     while ( bContinue );
 
-    const std::u16string_view aRest = rString.subView(nStart);
+    const std::u16string_view aRest = rString.substr(nStart);
     if ( !bFound )
     {
         if ( !bDontDetectNegation && (nString == 0) &&
@@ -3382,8 +3383,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             // Here we may change the original, we don't need it anymore.
             // This saves copies and ToUpper() in GetLogical() and is faster.
             sStrArray[0] = comphelper::string::strip(sStrArray[0], ' ');
-            OUString& rStrArray = sStrArray[0];
-            nLogical = GetLogical( rStrArray );
+            nLogical = GetLogical(sStrArray[0]);
             if ( nLogical )
             {
                 eScannedType = SvNumFormatType::LOGICAL; // !!! it's a BOOLEAN
@@ -3840,18 +3840,18 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
     }
     else
     {
-        OUString aString = rString;
+        maScanString = rString;
         // Only a-z and non-ASCII characters can change in uppercase() and TransformInput()
         if (std::ranges::any_of(std::u16string_view(rString), [](sal_Unicode c) {
                 return !rtl::isAscii(c) || rtl::isAsciiLowerCase(c);
             }))
         {
             // NoMoreUpperNeeded, all comparisons on UpperCase
-            aString = mrCurrentLanguageData.GetCharClass()->uppercase(rString);
+            maScanString = mrCurrentLanguageData.GetCharClass()->uppercase(rString);
             // convert native number to ASCII if necessary
-            TransformInput(rNatNum, mrCurrentLanguageData, aString);
+            TransformInput(rNatNum, mrCurrentLanguageData, maScanString);
         }
-        res = IsNumberFormatMain( aString, pFormat );
+        res = IsNumberFormatMain(maScanString, pFormat);
     }
 
     if (res)
@@ -3863,11 +3863,13 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
         // is year.
         // Accept only if the year immediately follows the sign character with
         // no space in between.
-        if (nSign && (eScannedType == SvNumFormatType::DATE ||
-                      eScannedType == SvNumFormatType::DATETIME) && mbEraCE == kDefaultEra &&
-                (IsDatePatternNumberOfType(0,'Y') || (MayBeIso8601() && sStrArray[nNums[0]].getLength() >= 4)))
+        if (nSign
+            && (eScannedType == SvNumFormatType::DATE || eScannedType == SvNumFormatType::DATETIME)
+            && mbEraCE == kDefaultEra
+            && (IsDatePatternNumberOfType(0, 'Y')
+                || (MayBeIso8601() && sStrArray[nNums[0]].size() >= 4)))
         {
-            const sal_Unicode c = sStrArray[0][sStrArray[0].getLength()-1];
+            const sal_Unicode c = sStrArray[0].back();
             if (c == '-' || c == '+')
             {
                 // A '+' sign doesn't change the era.
@@ -4181,8 +4183,8 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             {
                 if (nThousand == 1)
                 {
-                    fOutNumber
-                        = StringToDouble(Concat2View(sStrArray[nNums[0]] + sStrArray[nNums[1]]));
+                    fOutNumber = StringToDouble(
+                        Concat2View(OUString::Concat(sStrArray[nNums[0]]) + sStrArray[nNums[1]]));
                 }
                 else
                 {
