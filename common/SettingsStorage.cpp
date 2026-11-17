@@ -206,52 +206,40 @@ void syncSettings(
     try
     {
         Poco::Path base = getConfigPath();
-        std::string settingsConfig = fetchSettingsConfig();
-
-        Poco::JSON::Parser parser;
-        const Poco::JSON::Object::Ptr json =
-            parser.parse(settingsConfig).extract<Poco::JSON::Object::Ptr>();
 
         auto sendFile = [&](const std::string& key) {
-            if (json->has(key))
+            // The group's file named after the group (the one that the Options dialog writes, even
+            // when the group's folder holds other files):
+            Poco::Path path = base;
+            path.append("settings").append("userconfig").append(key).append(key + ".json");
+
+            if (Poco::File(path).exists())
             {
-                Poco::JSON::Array::Ptr arr = json->getArray(key);
-                if (arr->size() > 0)
+                std::ifstream in(path.toString(), std::ios::binary);
+                if (!in.is_open())
                 {
-                    Poco::JSON::Object::Ptr item = arr->getObject(0);
-                    std::string uri = item->getValue<std::string>("uri");
-                    Poco::Path path = base;
-                    path.append(uri);
-
-                    if (Poco::File(path).exists())
-                    {
-                        std::ifstream in(path.toString(), std::ios::binary);
-                        if (!in.is_open())
-                        {
-                            LOG_ERR("syncSettings failed: Could not open file for key '"
-                                    << key << "' at " << path.toString());
-                            return;
-                        }
-                        std::ostringstream ss;
-                        ss << in.rdbuf();
-                        std::string content = ss.str();
-                        if (!withSecrets) {
-                            content = SettingsSecrets::redactSettingSecrets(
-                                content, ViewSettings::SecretFields);
-                            if (content.empty()) {
-                                LOG_WRN(
-                                    "syncSettings: not sending " << key
-                                    << ", as it does not parse");
-                                return;
-                            }
-                        }
-
-                        const std::string payload = key + ": " + content;
-
-                        sendFileCallback(std::vector<char>(payload.begin(), payload.end()));
-                    }
+                    LOG_ERR("syncSettings failed: Could not open file for key '"
+                            << key << "' at " << path.toString());
                     return;
                 }
+                std::ostringstream ss;
+                ss << in.rdbuf();
+                std::string content = ss.str();
+                if (!withSecrets) {
+                    content = SettingsSecrets::redactSettingSecrets(
+                        content, ViewSettings::SecretFields);
+                    if (content.empty()) {
+                        LOG_WRN(
+                            "syncSettings: not sending " << key
+                            << ", as it does not parse");
+                        return;
+                    }
+                }
+
+                const std::string payload = key + ": " + content;
+
+                sendFileCallback(std::vector<char>(payload.begin(), payload.end()));
+                return;
             }
             LOG_TRC("syncSettings failed: no " << key << " found");
         };
