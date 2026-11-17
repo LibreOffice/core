@@ -2095,6 +2095,12 @@ OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum, cons
     return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum, rNatNum) : rStr;
 }
 
+OUString impTransliterate(OUString&& rStr, const SvNumberNatNum& rNum,
+                          const NativeNumberWrapper& rNatNum)
+{
+    return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum, rNatNum) : std::move(rStr);
+}
+
 void impTransliterate(OUStringBuffer& rStr, const SvNumberNatNum& rNum, const NativeNumberWrapper& rNatNum)
 {
     if(rNum.IsComplete())
@@ -2124,7 +2130,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
     {
         rOutString = comphelper::string::stripStart(rOutString, '-'); // not -0
     }
-    rOutString = ::impTransliterate(rOutString, NumFor[0].GetNatNum(), rNatNum);
+    rOutString = ::impTransliterate(std::move(rOutString), NumFor[0].GetNatNum(), rNatNum);
 }
 
 void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString,
@@ -4425,8 +4431,7 @@ bool SvNumberformat::ImpGetLogicalOutput(double fNumber,
             break;
         }
     }
-    ::impTransliterate(sStr, NumFor[nIx].GetNatNum(), rNatNum);
-    rOutString = sStr.makeStringAndClear();
+    rOutString = ::impTransliterate(sStr.makeStringAndClear(), NumFor[nIx].GetNatNum(), rNatNum);
     return bRes;
 }
 
@@ -4546,8 +4551,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     {
         sStr.insert(0, '-');
     }
-    ::impTransliterate(sStr, NumFor[nIx].GetNatNum(), rNatNum);
-    rOutString = sStr.makeStringAndClear();
+    rOutString = ::impTransliterate(sStr.makeStringAndClear(), NumFor[nIx].GetNatNum(), rNatNum);
     return bRes;
 }
 
