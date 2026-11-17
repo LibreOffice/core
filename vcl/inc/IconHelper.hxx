@@ -20,6 +20,9 @@ public:
 
     /** Get icon name used for app icons in LibreOffice's own icon themes. */
     static OUString GetInternalAppIconName(sal_uInt16 nIcon);
+
+private:
+    static OUString GetAppName(sal_uInt16 nIcon);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
