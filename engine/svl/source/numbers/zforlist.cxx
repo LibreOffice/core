@@ -372,20 +372,11 @@ OUString SvNFLanguageData::GetLangDecimalSep( LanguageType nLang )
     {
         return GetNumDecimalSep();
     }
-    OUString aRet;
-    LanguageType eSaveLang = xLocaleData.getCurrentLanguage();
-    if (nLang == eSaveLang)
-    {
-        aRet = xLocaleData->getNumDecimalSep();
-    }
-    else
-    {
-        LanguageTag aSaveLocale( xLocaleData->getLanguageTag() );
-        xLocaleData.changeLocale( LanguageTag( nLang));
-        aRet = xLocaleData->getNumDecimalSep();
-        xLocaleData.changeLocale( aSaveLocale );
-    }
-    return aRet;
+    if (nLang == xLocaleData.getCurrentLanguage())
+        return xLocaleData->getNumDecimalSep();
+    if (nLang == LANGUAGE_SYSTEM)
+        return SvtSysLocale().GetLocaleData().getNumDecimalSep();
+    return LocaleDataWrapper::get(LanguageTag(nLang))->getNumDecimalSep();
 }
 
 void SvNFLanguageData::ChangeIntl(LanguageType eLnge)

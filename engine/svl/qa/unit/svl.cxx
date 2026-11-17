@@ -80,6 +80,7 @@ public:
     void testROPolicyFindsCachedFormat();
     void testNewCurrencySymbolString();
     void testTimeFieldDigits();
+    void testLangDecimalSepKeepsSystemLocaleData();
     void testNfEnglishKeywordsIntegrity();
     void testStandardColorIntegrity();
     void testColorNamesConversion();
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(testROPolicyFindsCachedFormat);
     CPPUNIT_TEST(testNewCurrencySymbolString);
     CPPUNIT_TEST(testTimeFieldDigits);
+    CPPUNIT_TEST(testLangDecimalSepKeepsSystemLocaleData);
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
     CPPUNIT_TEST(testStandardColorIntegrity);
     CPPUNIT_TEST(testColorNamesConversion);
@@ -1936,6 +1938,19 @@ void Test::testTimeFieldDigits()
     check(u"YYYY-MM-DD HH:MM:SS"_ustr, fDateTime, u"2026-11-17 01:02:03"_ustr);
     check(u"YYYY WW"_ustr, fDateTime, u"2026 47"_ustr);
     check(u"YYYY WW HH:MM"_ustr, fDateTime, u"2026 47 01:02"_ustr);
+}
+
+void Test::testLangDecimalSepKeepsSystemLocaleData()
+{
+    // The system locale data carries the user's date acceptance patterns
+    const SvtSysLocale aSysLocale;
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_SYSTEM);
+    const sal_uInt32 nGerman = aFormatter.GetFormatIndex(NF_NUMBER_DEC2, LANGUAGE_GERMAN);
+    aFormatter.ChangeIntl(LANGUAGE_GERMAN);
+    aFormatter.ChangeIntl(LANGUAGE_SYSTEM);
+    CPPUNIT_ASSERT_EQUAL(&aSysLocale.GetLocaleData(), aFormatter.GetLocaleData());
+    CPPUNIT_ASSERT_EQUAL(u","_ustr, aFormatter.GetFormatDecimalSep(nGerman));
+    CPPUNIT_ASSERT_EQUAL(&aSysLocale.GetLocaleData(), aFormatter.GetLocaleData());
 }
 
 void Test::testNfEnglishKeywordsIntegrity()
