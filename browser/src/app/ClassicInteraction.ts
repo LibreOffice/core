@@ -671,6 +671,23 @@ class ClassicDiagramContext extends ClassicGroupContext {
 		return Interaction.contextAt(Interaction.placeOf([this.diagram]));
 	}
 
+	/// A frame drawn while one stands in the diagram selects as the place around it does, as one
+	/// object of the diagram is selected at a time.
+	public frameSelects(
+		frame: cool.Range2D,
+		extending: boolean,
+	): number[] | undefined {
+		return this.around().frameSelects(frame, extending);
+	}
+
+	/// A lasso as a frame.
+	public lassoSelects(
+		lasso: cool.Point[],
+		extending: boolean,
+	): number[] | undefined {
+		return this.around().lassoSelects(lasso, extending);
+	}
+
 	/// Leaves the diagram: the group holding it is selected, or nothing on the page.
 	private leave(): boolean {
 		const holder = RenderGeometrySection.parentOf(this.diagram);

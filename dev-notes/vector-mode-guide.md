@@ -548,6 +548,9 @@ its objects.
 - Tab / Shift + Tab: the next / previous object of the diagram; past the last you leave it.
 - Escape: from a node to the whole diagram, then out of it.
 - Shift + click or Ctrl + click adds the whole diagram to a selection only from outside it.
+- A frame or a lasso drawn while you stand in a diagram selects as on the level around the
+  diagram, the page or the group holding it, since one object of a diagram is selected at a
+  time.
 - Copy on a node copies that node as a plain shape.
 - Deleting a node lays the diagram out again; names and descriptions of the other nodes stay.
 
