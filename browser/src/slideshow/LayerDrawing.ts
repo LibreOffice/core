@@ -118,7 +118,7 @@ class LayerDrawing {
 	// drawn whole.
 	private slideParts: SlidePart[] | null = null;
 	// Each grows when the layers it counts change: all of them dropped, the layers of a slide by
-	// slide hash, and the layers of a master page by master page hash.
+	// slide hash, and the layers or the video players of a master page by master page hash.
 	private allLayersVersion = 0;
 	private slideLayersVersions = new Map<string, number>();
 	private masterLayersVersions = new Map<string, number>();
@@ -233,7 +233,8 @@ class LayerDrawing {
 		return slideParts;
 	}
 
-	/// A number that grows whenever a layer the slide shows changes.
+	/// A number that grows whenever a layer the slide shows changes, and whenever the videos of
+	/// its master page get new players.
 	public getLayersVersion(slideHash: string): number {
 		return (
 			this.allLayersVersion +
@@ -246,17 +247,30 @@ class LayerDrawing {
 	// A background counts for the master page, which every slide with that master shows.
 	private countLayerChange(info: LayerInfo) {
 		if (info.group === 'MasterPage' || info.group === 'Background') {
-			const masterHash = this.getSlideInfo(info.slideHash).masterPage;
-			this.masterLayersVersions.set(
-				masterHash,
-				(this.masterLayersVersions.get(masterHash) ?? 0) + 1,
-			);
+			this.countMasterPageChange(this.getSlideInfo(info.slideHash).masterPage);
 		} else {
 			this.slideLayersVersions.set(
 				info.slideHash,
 				(this.slideLayersVersions.get(info.slideHash) ?? 0) + 1,
 			);
 		}
+	}
+
+	private countMasterPageChange(masterHash: string) {
+		this.masterLayersVersions.set(
+			masterHash,
+			(this.masterLayersVersions.get(masterHash) ?? 0) + 1,
+		);
+	}
+
+	// A slide split at its master page videos holds the players it was split with. New players,
+	// as when the slideshow comes back to a master page whose players were freed, count as a
+	// change of the master page, so the slide is split again with them.
+	private startMasterVideos(slideInfo: SlideInfo) {
+		if (
+			this.masterVideos.start(slideInfo, this.layerRenderer.getRenderContext())
+		)
+			this.countMasterPageChange(slideInfo.masterPage);
 	}
 
 	public composeLayers(slideHash: string): void {
@@ -1115,10 +1129,7 @@ class LayerDrawing {
 	public notifyTransitionStart(slideHash: string) {
 		this.isTransitionActive = true;
 		this.queuedLayers = [];
-		this.masterVideos.start(
-			this.getSlideInfo(slideHash),
-			this.layerRenderer.getRenderContext(),
-		);
+		this.startMasterVideos(this.getSlideInfo(slideHash));
 	}
 
 	public notifyTransitionEnd(slideHash: string) {
@@ -1129,7 +1140,7 @@ class LayerDrawing {
 		}
 
 		const slideInfo = this.getSlideInfo(slideHash);
-		this.masterVideos.start(slideInfo, this.layerRenderer.getRenderContext());
+		this.startMasterVideos(slideInfo);
 		this.masterVideos.keepOnly(slideInfo.masterPage);
 		this.videos.enterSlide(
 			slideHash,

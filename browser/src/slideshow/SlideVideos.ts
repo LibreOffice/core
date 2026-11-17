@@ -153,32 +153,38 @@ class SlideVideos {
 class MasterVideos {
 	private renderers: Map<string, Array<AnimatedContentRenderer>> = new Map();
 
-	/// Make, load and play a player per video of the master page of the slide, unless that
-	/// master page has its players already.
-	public start(slideInfo: SlideInfo, context: RenderContext): void {
-		const masterVideos = slideInfo?.masterVideos || [];
+	/// Make, load and play a player for each video the slide shows from its master page that
+	/// has none yet. Returns true when it made a player.
+	public start(slideInfo: SlideInfo, context: RenderContext): boolean {
 		const masterHash = slideInfo?.masterPage;
-		if (masterVideos.length === 0 || this.renderers.has(masterHash)) return;
-
+		const videoRenderers = this.renderers.get(masterHash) ?? [];
 		const slideShowPresenter = app.map.slideShowPresenter;
 		const metaPresentation = slideShowPresenter._metaPresentation;
-		const videoRenderers: Array<AnimatedContentRenderer> = [];
-		for (let i = 0; i < masterVideos.length; ++i) {
+		let isStarted = false;
+		for (const videoInfo of slideInfo?.masterVideos ?? []) {
+			if (
+				videoRenderers.some(
+					(videoRenderer) => videoRenderer.infoId === videoInfo.id,
+				)
+			)
+				continue;
 			const videoRenderer = makeVideoRenderer(
-				masterHash + i,
+				masterHash + videoRenderers.length,
 				context,
 				slideShowPresenter._slideRenderer,
 			);
 			videoRenderer.prepare(
-				masterVideos[i],
+				videoInfo,
 				metaPresentation.docWidth,
 				metaPresentation.docHeight,
 			);
 			videoRenderer.load();
 			videoRenderer.play();
 			videoRenderers.push(videoRenderer);
+			isStarted = true;
 		}
-		this.renderers.set(masterHash, videoRenderers);
+		if (isStarted) this.renderers.set(masterHash, videoRenderers);
+		return isStarted;
 	}
 
 	/// Stop and free the players of every master page except masterHash.
