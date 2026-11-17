@@ -406,7 +406,24 @@
 
         // Insert > File in the Navigator of a master document: a text document of this server,
         // which the master document links to by its path relative to it.
-        function openSubdocumentPicker() {
+        // The file name patterns of the pick, e.g. ["*.odt;*.ott", "*.docx"], as one regular
+        // expression; a text document of any usual type when the pick names none.
+        function filePattern(filters) {
+          const extensions = [];
+          (filters || []).forEach(function(filter) {
+            String(filter).split(';').forEach(function(glob) {
+              const match = /^\*\.([A-Za-z0-9]+)$/.exec(glob.trim());
+              if (match)
+                extensions.push(match[1]);
+            });
+          });
+          if (extensions.length === 0)
+            return /\.(odt|fodt|ott|docx|doc|rtf)$/i;
+          return new RegExp('\\.(' + extensions.join('|') + ')$', 'i');
+        }
+
+        function openSubdocumentPicker(values) {
+          values = values || {};
           let answered = false;
           const answer = function(path) {
             if (answered)
@@ -414,17 +431,18 @@
             answered = true;
             post({'MessageId': 'Action_PickLinkedFile', 'Values': path ? {'RelativePath': path} : {}});
           };
-          const list = openPicker('Insert file - pick a text document of this server',
+          const list = openPicker((values.Title || 'Insert file') + ' - pick a document of this server',
                                   function() { answer(''); });
           const opened = openedDocumentPath();
+          const pattern = filePattern(values.Filters);
           listDocuments()
             .then(function(entries) {
               const offered = entries.filter(function(entry) {
-                return entry.path !== opened && /\.(odt|fodt|ott|docx|doc|rtf)$/i.test(entry.name);
+                return entry.path !== opened && pattern.test(entry.name);
               });
               list.textContent = '';
               if (offered.length === 0) {
-                list.textContent = 'No text document to insert. Upload one on documents.html first.';
+                list.textContent = 'No document of these types to insert. Upload one on documents.html first.';
                 return;
               }
               offered.forEach(function(entry) {
@@ -485,7 +503,7 @@
               openLinkedDocument(msg.Values);
               break;
             case 'UI_PickLinkedFile':
-              openSubdocumentPicker();
+              openSubdocumentPicker(msg.Values);
               break;
             case 'UI_Mention':
               if (!msg.Values)
