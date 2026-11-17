@@ -37,6 +37,15 @@ class SheetsBar {
 		map.on('doclayerinit', this.onDocLayerInit, this);
 		map.on('updateparts', this.onUpdateParts, this);
 		app.events.on('updatepermission', this.onUpdatePermission.bind(this));
+
+		if (this.showNavigation) {
+			document.addEventListener('scroll', (e) => {
+				if (e.target && e.target.id === 'spreadsheet-tab-scroll')
+					this.updateNavigation();
+			}, true);
+			if (window.ResizeObserver)
+				new ResizeObserver(() => this.updateNavigation()).observe(this.parentContainer);
+		}
 	}
 
 	create() {
@@ -112,6 +121,61 @@ class SheetsBar {
 		this.selectedPart = e.selectedPart;
 		this.parts = e.parts;
 		this.updateSheetListMenu();
+		this.updateNavigation();
+	}
+
+	updateNavigation() {
+		if (!this.showNavigation)
+			return;
+
+		app.layoutingService.appendLayoutingTask(() => {
+			const scroll = document.getElementById('spreadsheet-tab-scroll');
+			if (!scroll)
+				return;
+
+			const maxScroll = scroll.scrollWidth - scroll.clientWidth;
+			const position = Math.abs(scroll.scrollLeft);
+			const canGoBack = position > 1;
+			const canGoForward = position < maxScroll - 1;
+			const states = {
+				firstrecord: canGoBack,
+				prevrecord: canGoBack,
+				nextrecord: canGoForward,
+				lastrecord: canGoForward,
+			};
+
+			const focused = Object.keys(states).find((id) => {
+				const item = this.builder._getItemById(this.parentContainer, id);
+				return item && item.contains(document.activeElement);
+			});
+
+			for (const id in states) {
+				this.builder.executeActionImpl(this.parentContainer, {
+					'control_id': id,
+					'action_type': states[id] ? 'enable' : 'disable'
+				});
+			}
+
+			if (focused && !states[focused])
+				Promise.resolve().then(() => {
+					app.layoutingService.appendLayoutingTask(() => this.moveFocusFromNavigation());
+				});
+		});
+	}
+
+	moveFocusFromNavigation() {
+		const candidates = ['prevrecord', 'nextrecord', 'firstrecord', 'lastrecord',
+			'insertsheet', 'sheetlist'];
+		for (const id of candidates) {
+			const item = this.builder._getItemById(this.parentContainer, id);
+			if (!item || item.hasAttribute('disabled') || item.classList.contains('hidden'))
+				continue;
+			const button = item.querySelector('button');
+			if (button && button.disabled)
+				continue;
+			(button || item).focus();
+			return;
+		}
 	}
 
 	onUpdatePermission(e) {
