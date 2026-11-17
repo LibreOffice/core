@@ -37,6 +37,15 @@ final class LinkedFiles {
     private LinkedFiles() {
     }
 
+    /** Whether the user allowed the app to write in the tree of folders, not only to read it. */
+    static boolean canWrite(ContentResolver resolver, Uri treeUri) {
+        for (UriPermission permission : resolver.getPersistedUriPermissions()) {
+            if (permission.getUri().equals(treeUri))
+                return permission.isWritePermission();
+        }
+        return false;
+    }
+
     /** The trees of folders the user allowed the app to read. */
     static List<Uri> allowedTrees(ContentResolver resolver) {
         List<Uri> trees = new ArrayList<>();

@@ -1155,7 +1155,13 @@ public class LOActivity extends AppCompatActivity {
             mPendingLinkedFiles = null;
             if (resultCode == RESULT_OK && intent != null && intent.getData() != null && links != null) {
                 Uri tree = intent.getData();
-                getContentResolver().takePersistableUriPermission(tree, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                // Keep what the user allowed: reading the files, and writing them, so that a
+                // chapter opened with Edit can be saved where it is.
+                int granted = intent.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                if (granted == 0)
+                    granted = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                getContentResolver().takePersistableUriPermission(tree, granted);
                 final Uri document = getIntent().getData();
                 linkedFilesExecutor.execute(() -> giveLinkedFiles(document, tree, links));
             }
@@ -1726,14 +1732,21 @@ public class LOActivity extends AppCompatActivity {
         final Uri document = getIntent().getData();
         linkedFilesExecutor.execute(() -> {
             Uri target = null;
+            // A file the app may write where it is, or a file in a tree the user allowed the app
+            // to write in, opens for editing; else it opens read-only, as its edits could not be
+            // saved.
+            boolean writable = false;
             if (fileUrl != null && fileUrl.startsWith("file://") && new File(Uri.parse(fileUrl).getPath()).isFile()
-                    && !ContentResolver.SCHEME_CONTENT.equals(document != null ? document.getScheme() : null))
+                    && !ContentResolver.SCHEME_CONTENT.equals(document != null ? document.getScheme() : null)) {
                 target = Uri.parse(fileUrl);
-            else if (relativePath != null && document != null) {
+                writable = new File(target.getPath()).canWrite();
+            } else if (relativePath != null && document != null) {
                 for (Uri tree : LinkedFiles.allowedTrees(getContentResolver())) {
                     target = LinkedFiles.resolve(getContentResolver(), tree, document, relativePath);
-                    if (target != null)
+                    if (target != null) {
+                        writable = LinkedFiles.canWrite(getContentResolver(), tree);
                         break;
+                    }
                 }
             }
             if (target == null) {
@@ -1741,7 +1754,9 @@ public class LOActivity extends AppCompatActivity {
                 return;
             }
             final Intent intent = new Intent(Intent.ACTION_EDIT, target);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.addFlags(writable
+                    ? Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    : Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setClass(LOActivity.this, LOActivity.class);
             runOnUiThread(() -> startActivity(intent));
         });
