@@ -357,7 +357,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         // Only the extension is kept, because the engine picks its import filter by it.
         let fileExtension = (values[0] as NSString).pathExtension
-        if !Self.isPlainExtension(fileExtension) {
+        if !COWrapper.isPlainExtension(fileExtension) {
             COWrapper.LOG_ERR("writeRemoteDocFile has a name with no plain extension: \"\(fileExtension)\"")
             return ""
         }
@@ -419,15 +419,6 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     private static let documentExtensions = Set(Document.readableTypes.flatMap {
         UTType($0)?.tags[.filenameExtension] ?? []
     })
-
-    // Only ASCII letters and digits, like "odt" or "docx".
-    private static func isPlainExtension(_ fileExtension: String) -> Bool {
-        let isPlainCharacter = { (character: Character) in
-            character.isASCII && (character.isLetter || character.isNumber)
-        }
-
-        return !fileExtension.isEmpty && fileExtension.allSatisfy(isPlainCharacter)
-    }
 
     // The arguments are a JSON array with the path, like ["device-desktop.css"].
     private static func bundledFile(_ arguments: Substring) -> String {

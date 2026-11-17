@@ -30,6 +30,7 @@
 #include <common/Clipboard.hpp>
 #include <common/EditorFrameMessages.hpp>
 #include <common/FailurePage.hpp>
+#include <common/FileUtil.hpp>
 #include <common/LangUtil.hpp>
 #include <common/AIHttpTransport.hpp>
 #include <common/SettingsStorage.hpp>
@@ -633,6 +634,10 @@ void install_filepicker_provider(COKit &rOffice)
 
 + (bool)isAllowedFromEditorFrame:(NSString *)message {
     return EditorFrameMessages::isAllowed([message UTF8String]);
+}
+
++ (bool)isPlainExtension:(NSString *)fileExtension {
+    return FileUtil::isPlainExtension([fileExtension UTF8String]);
 }
 
 + (NSString *)failurePageScript:(NSString *)title paragraphs:(NSArray<NSString *> *)paragraphs {
