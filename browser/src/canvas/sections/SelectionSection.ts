@@ -1774,6 +1774,98 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
+		Draws the motion paths of the one object selected as ghosts: dashed and see-through, each
+		in its own colour over a white line, so it shows on any fill. Where a path starts there
+		is a full mark of its colour with a white edge. Paths that start at the same place get
+		marks of growing size, the first one innermost, so each colour stays seen as a ring. A
+		drag carries them along with the object. With more than one object selected none are
+		shown.
+	*/
+	private drawTheMotionPaths(): void {
+		const selected = GraphicSelection.selectedObjectIDs;
+		if (selected.length !== 1) return;
+		const object = RenderGeometrySection.objectOf(selected[0]);
+		if (!object?.motionPaths?.length) return;
+
+		const placed = cool.MotionPaths.placedOf(object, this.dragMatrix());
+		for (const path of placed) {
+			this.context.save();
+			this.context.globalAlpha = 0.6;
+			SelectionSection.strokeOutline(
+				this.context,
+				path.polygons,
+				'#ffffff',
+				undefined,
+				3,
+			);
+			SelectionSection.strokeOutline(
+				this.context,
+				path.polygons,
+				path.colour,
+				RenderGeometrySection.hoverDashes,
+			);
+			this.context.restore();
+		}
+
+		// the marks of the paths that start where an earlier one does lie round it as rings
+		const handle = ShapeHandlesSection.handleSize() * app.pixelsToTwips;
+		const near = handle / 4;
+		const marks: {
+			at: cool.ObjectPathPoint;
+			colour: string;
+			radius: number;
+		}[] = [];
+		for (const path of placed) {
+			const at = path.polygons[0]?.points[0];
+			if (!at) continue;
+			const below = marks.filter(
+				(mark) =>
+					Math.abs(mark.at.x - at.x) < near &&
+					Math.abs(mark.at.y - at.y) < near,
+			).length;
+			marks.push({
+				at: at,
+				colour: path.colour,
+				radius: handle / 3 + below * (handle / 4),
+			});
+		}
+		const edge = 1.5 * app.pixelsToTwips;
+		for (const mark of marks.reverse()) {
+			SelectionSection.fillOutline(
+				this.context,
+				[SelectionSection.circleAround(mark.at, mark.radius + edge)],
+				'#ffffff',
+			);
+			SelectionSection.fillOutline(
+				this.context,
+				[SelectionSection.circleAround(mark.at, mark.radius)],
+				mark.colour,
+			);
+		}
+	}
+
+	/// A circle of that radius round the point, all in twips, as one closed polygon of curves.
+	private static circleAround(
+		middle: cool.ObjectPathPoint,
+		radius: number,
+	): cool.ObjectPathPolygon {
+		// the weights of a quarter circle drawn as one curve lie this share of the radius out
+		const reach = radius * 0.5523;
+		const quarter = (x: number, y: number): cool.ObjectPathPoint => ({
+			x: middle.x + x * radius,
+			y: middle.y + y * radius,
+			behindX: middle.x + x * radius + y * reach,
+			behindY: middle.y + y * radius - x * reach,
+			aheadX: middle.x + x * radius - y * reach,
+			aheadY: middle.y + y * radius + x * reach,
+		});
+		return {
+			closed: true,
+			points: [quarter(1, 0), quarter(0, 1), quarter(-1, 0), quarter(0, -1)],
+		};
+	}
+
+	/*
 		Draws the places an end of a connector can tie itself to on that object, its own points
 		and the middles of its sides, as the drag of an end shows them; the one at that point is
 		lit.
@@ -1814,18 +1906,20 @@ abstract class SelectionSection extends CanvasSectionObject {
 		context.restore();
 	}
 
-	/// Draws those polygons, given in twips, as a thin line of that colour on the canvas, dashed
-	/// where dashes are given, as lengths in canvas pixels.
+	/// Draws those polygons, given in twips, as a line of that colour on the canvas, dashed where
+	/// dashes are given, as lengths in canvas pixels; the line is one pixel wide, or that width
+	/// in canvas pixels.
 	public static strokeOutline(
 		context: CanvasRenderingContext2D,
 		polygons: cool.ObjectPathPolygon[],
 		colour: string,
 		dashes?: number[],
+		width: number = 1,
 	): void {
 		context.save();
 		SelectionSection.layOutline(context, polygons);
 		context.strokeStyle = colour;
-		context.lineWidth = app.pixelsToTwips;
+		context.lineWidth = width * app.pixelsToTwips;
 		if (dashes)
 			context.setLineDash(
 				dashes.map((length: number) => length * app.pixelsToTwips),
@@ -1894,6 +1988,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	onDraw(): void {
+		this.drawTheMotionPaths();
 		this.drawTheInteraction();
 		this.drawTheConnectorsAwaitingAnswer();
 		this.drawTheOutline();

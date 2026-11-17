@@ -165,6 +165,18 @@ namespace cool {
 		points: ObjectPathPoint[];
 	}
 
+	/**
+	 * One path an object travels along in a slide show. The points are in twips from the middle
+	 * of what moves: the middle of the object's box, or of the box of the paragraph when one
+	 * paragraph of its text moves alone. Every path starts from the place of the object on the
+	 * slide, never from the end of another one.
+	 */
+	export interface ObjectMotionPath {
+		/// The paragraph that moves alone, counted from 0. Absent when the whole object moves.
+		paragraph?: number;
+		path: ObjectPathPolygon[];
+	}
+
 	/** What shapes a measurement beyond its two points. The lengths are in the units of the
 	 * model, which are the units across the measurement's square: its second side is one unit
 	 * long, at a right angle down from the measured line.
@@ -356,6 +368,9 @@ namespace cool {
 		/// The path the object is drawn from, as the model holds it. Absent for an object
 		/// that has no path of its own.
 		path?: ObjectPathPolygon[];
+		/// The paths the object travels along in a slide show, in the order they play. Absent
+		/// for an object that moves along none.
+		motionPaths?: ObjectMotionPath[];
 		/// What kind of object it is, as the drawing layer numbers the kinds: 2 a line, 24 a
 		/// connector, 25 a caption, 29 a measurement, 33 a custom shape, 35 a table.
 		objectKind?: number;

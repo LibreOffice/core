@@ -637,6 +637,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorHitTest.ts \
 	src/canvas/vector/VectorLineGeometryExtractor.ts \
 	src/canvas/vector/VectorOutline.ts \
+	src/canvas/vector/MotionPaths.ts \
 	src/canvas/vector/CaptionTail.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \
 	src/canvas/vector/VectorRenderingGraphicsResponse.ts \

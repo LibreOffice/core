@@ -184,6 +184,7 @@
 /// <reference path="../src/canvas/vector/VectorHitTest.ts" />
 /// <reference path="../src/canvas/vector/VectorLineGeometryExtractor.ts" />
 /// <reference path="../src/canvas/vector/VectorOutline.ts" />
+/// <reference path="../src/canvas/vector/MotionPaths.ts" />
 /// <reference path="../src/canvas/vector/CaptionTail.ts" />
 /// <reference path="../src/canvas/vector/PreviewId.ts" />
 /// <reference path="../src/canvas/vector/VectorPartGuid.ts" />
