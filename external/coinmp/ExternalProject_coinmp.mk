@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 		MSBuild.exe Cbc.sln \
 			/t:libCbc$(COMMA)libCbcSolver$(COMMA)libCgl$(COMMA)libClp$(COMMA)libOsi$(COMMA)libOsiClp$(COMMA)libCoinUtils \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),x86,x64) \
 			/p:WholeProgramOptimization=false \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
