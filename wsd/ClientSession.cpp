@@ -2970,6 +2970,9 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
                 }
                 viewSettings->remove(field + std::string(SettingsSecrets::StoredFlagSuffix));
             }
+            // The signatureKey that the page flags as kept stays blank (the stored signing key is
+            // only for local documents):
+            viewSettings->remove("signatureKey" + std::string(SettingsSecrets::StoredFlagSuffix));
         }
     }
 #endif
@@ -3458,7 +3461,14 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
                     JsonUtil::findJSONValue(viewSettings, "signatureCert", cert);
                     JsonUtil::findJSONValue(viewSettings, "signatureKey", key);
                     JsonUtil::findJSONValue(viewSettings, "signatureCa", ca);
-                    if (!cert.empty() || !key.empty() || !ca.empty())
+                    // Only a document known to be local gets the stored signing credentials (the
+                    // page of a document in an integrator's editor frame comes from the remote
+                    // server's origin, and a document without DocumentData, whose ID outlived the
+                    // document that it was created for, may have been in such a frame):
+                    DocumentData const * const data
+                        = DocumentData::getIfExists(docBroker->getMobileAppDocId());
+                    if (data != nullptr && !data->inEditorFrame
+                        && (!cert.empty() || !key.empty() || !ca.empty()))
                     {
                         Poco::JSON::Object::Ptr upi;
                         if (!getUserPrivateInfo().empty())
