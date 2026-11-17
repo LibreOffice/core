@@ -51,6 +51,7 @@ class SW_DLLPUBLIC SwSortedObjs
 {
     private:
         std::vector< SwAnchoredObject* > maSortedObjLst;
+        std::vector< SwAnchoredObject* > maObjectsNeedingAnchorFrameCheck;
 
     public:
         typedef std::vector<SwAnchoredObject*>::const_iterator const_iterator;
@@ -69,6 +70,9 @@ class SW_DLLPUBLIC SwSortedObjs
             { return maSortedObjLst.cbegin(); };
         const_iterator end() const
             { return maSortedObjLst.cend(); };
+
+        const std::vector<SwAnchoredObject*>& GetObjectsNeedingAnchorFrameCheck() const
+            { return maObjectsNeedingAnchorFrameCheck; }
 
         bool Insert( SwAnchoredObject& _rAnchoredObj );
 

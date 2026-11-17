@@ -24,6 +24,7 @@
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
 #include <fmtanchr.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <frmfmt.hxx>
@@ -248,6 +249,22 @@ struct ObjAnchorOrder
     }
 };
 
+bool lclNeedsAnchorFrameCheck(const SwAnchoredObject& rAnchoredObj)
+{
+    const SwFrameFormat* pFormat = rAnchoredObj.GetFrameFormat();
+    if (!pFormat)
+        return true;
+
+    if (pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PARA)
+        return true;
+
+    // A paragraph-anchored object that does not follow text flow and is not a splittable fly
+    // remains registered on its anchor page. The cell traversal finds it there; keep the other
+    // cases in this page-wide list because they may be registered on another page.
+    const SwFlyFrame* pFly = rAnchoredObj.DynCastFlyFrame();
+    return pFormat->GetFollowTextFlow().GetValue() || (pFly && pFly->IsFlySplitAllowed());
+}
+
 }
 
 bool SwSortedObjs::is_sorted() const
@@ -279,6 +296,9 @@ bool SwSortedObjs::Insert( SwAnchoredObject& _rAnchoredObj )
     // insert object into list
     maSortedObjLst.insert( aInsPosIter, &_rAnchoredObj );
 
+    if (lclNeedsAnchorFrameCheck(_rAnchoredObj))
+        maObjectsNeedingAnchorFrameCheck.push_back(&_rAnchoredObj);
+
     return Contains( _rAnchoredObj );
 }
 
@@ -296,6 +316,8 @@ void SwSortedObjs::Remove( SwAnchoredObject& _rAnchoredObj )
     {
         maSortedObjLst.erase( aDelPosIter );
     }
+
+    std::erase(maObjectsNeedingAnchorFrameCheck, &_rAnchoredObj);
 }
 
 bool SwSortedObjs::Contains( const SwAnchoredObject& _rAnchoredObj ) const

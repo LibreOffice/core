@@ -3151,7 +3151,7 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
         return;
 
     SwSortedObjs& rObjs = *(pPageFrame->GetSortedObjs());
-    for (SwAnchoredObject* pObj : rObjs)
+    const auto lclNotifyObj = [this, pPageFrame, _bUnlockPosOfObjs](SwAnchoredObject* pObj)
     {
         // #i26945# - check if anchored object is a lower
         // of the layout frame is changed to check, if its anchor frame
@@ -3163,10 +3163,10 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
         if ( auto pFly = pObj->DynCastFlyFrame() )
         {
             if ( pFly->getFrameArea().Left() == FAR_AWAY )
-                continue;
+                return;
 
             if ( pFly->IsAnLower( this ) )
-                continue;
+                return;
 
             // #i26945# - use <pAnchorFrame> to check, if
             // fly frame is lower of layout frame resp. if fly frame is
@@ -3219,7 +3219,44 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
                 pObj->InvalidateObjPos();
             }
         }
+    };
+
+    if (IsCellFrame())
+    {
+        // Paragraph-anchored objects that stay on their anchor page are found by walking the
+        // cell's descendants. The page list's subset covers objects that may be registered on
+        // another page.
+        SwFrame* pFrame = this;
+        while (pFrame)
+        {
+            if (const SwSortedObjs* pDrawObjs = pFrame->GetDrawObjs())
+            {
+                for (SwAnchoredObject* pObj : *pDrawObjs)
+                {
+                    // Page registration sets GetPageFrame(); as-character objects are excluded.
+                    if (pObj->GetPageFrame() == pPageFrame)
+                        lclNotifyObj(pObj);
+                }
+            }
+
+            if (pFrame->IsLayoutFrame() && static_cast<SwLayoutFrame*>(pFrame)->Lower())
+            {
+                pFrame = static_cast<SwLayoutFrame*>(pFrame)->Lower();
+                continue;
+            }
+
+            while (pFrame != this && !pFrame->GetNext())
+                pFrame = pFrame->GetUpper();
+            pFrame = pFrame == this ? nullptr : pFrame->GetNext();
+        }
+
+        for (SwAnchoredObject* pObj : rObjs.GetObjectsNeedingAnchorFrameCheck())
+            lclNotifyObj(pObj);
+        return;
     }
+
+    for (SwAnchoredObject* pObj : rObjs)
+        lclNotifyObj(pObj);
 }
 
 void SwFlyFrame::NotifyDrawObj()

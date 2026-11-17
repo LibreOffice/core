@@ -9,6 +9,12 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <anchoredobject.hxx>
+#include <frame.hxx>
+#include <flyfrms.hxx>
+#include <pagefrm.hxx>
+#include <sortedobjs.hxx>
+
 #include <com/sun/star/style/PageStyleLayout.hpp>
 
 #include <vcl/gdimtf.hxx>
@@ -30,6 +36,7 @@
 #include <rootfrm.hxx>
 #include <itabenum.hxx>
 #include <fmtanchr.hxx>
+#include <formatflysplit.hxx>
 #include <fmtsrnd.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <fmtfsize.hxx>
@@ -54,6 +61,72 @@ public:
     {
     }
 };
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testCrossPageParagraphFlyInvalidation)
+{
+    // Given an anchor near the end of page 1 and a table on page 2:
+    createSwDoc("tdf79721-page2-paragraph-fly.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GotoMark(SwMarkName(u"PageOneAnchor"_ustr));
+    pWrtShell->EndPara(/*bSelect=*/false);
+
+    // Insert a non-splittable, follow-text-flow graphic fly at that paragraph. Its height makes
+    // the positioning loop move it to page 2 even though its anchor remains on page 1.
+    SwDoc* pDoc = getSwDoc();
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    aFrameSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PARA));
+    aFrameSet.Put(SwFormatFollowTextFlow(true));
+    aFrameSet.Put(SwFormatFlySplit(false));
+    aFrameSet.Put(SwFormatSurround(text::WrapTextMode_THROUGH));
+    aFrameSet.Put(SwFormatFrameSize(SwFrameSize::Fixed, 4000, 5000));
+    Graphic aGraphic;
+    pWrtShell->SwFEShell::Insert(OUString(), OUString(), &aGraphic, &aFrameSet);
+    pWrtShell->UnSelectFrame();
+    calcLayout();
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // The fly is registered on page 2 while its paragraph anchor is still on page 1.
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    const auto findPage = [](const SwFrame* pFrame) -> const SwPageFrame* {
+        while (pFrame && !pFrame->IsPageFrame())
+            pFrame = pFrame->GetUpper();
+        return pFrame ? static_cast<const SwPageFrame*>(pFrame) : nullptr;
+    };
+
+    SwFlyFrame* pFly = nullptr;
+    for (const SwPageFrame* pPage : { pPage1, pPage2 })
+    {
+        const SwSortedObjs* pObjs = pPage->GetSortedObjs();
+        if (!pObjs)
+            continue;
+        for (SwAnchoredObject* pObj : *pObjs)
+        {
+            SwFlyFrame* pCandidate = pObj->DynCastFlyFrame();
+            if (pCandidate && pCandidate->GetFrameFormat()->GetFollowTextFlow().GetValue())
+                pFly = pCandidate;
+        }
+    }
+    CPPUNIT_ASSERT(pFly);
+    SwFrame* pAnchorFrame = pFly->GetAnchorFrameContainingAnchPos();
+    CPPUNIT_ASSERT(pAnchorFrame);
+    CPPUNIT_ASSERT_EQUAL(static_cast<const SwPageFrame*>(pPage1), findPage(pAnchorFrame));
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs()->Contains(*pFly));
+    CPPUNIT_ASSERT(pFly->isFrameAreaPositionValid());
+
+    // When typing in the page-2 table cell:
+    CPPUNIT_ASSERT(pWrtShell->GotoTable(UIName(u"PageTwoTable"_ustr)));
+    OUString aLongText;
+    for (sal_Int32 i = 0; i < 20; ++i)
+        aLongText += u"Cell edit forces this row to grow. "_ustr;
+    pWrtShell->Insert(aLongText);
+    // The fly registered on page 2 must be invalidated although its anchor remains on page 1.
+    CPPUNIT_ASSERT(!pFly->isFrameAreaPositionValid());
+}
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlap)
 {

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <style:default-style style:family="paragraph">
+      <style:text-properties fo:font-size="12pt"/>
+      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"/>
+    </style:default-style>
+    <style:style style:name="TableCell" style:family="table-cell">
+      <style:table-cell-properties fo:border="0.04cm solid #000000" fo:padding="0.15cm"/>
+    </style:style>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="PageBreak" style:family="paragraph">
+      <style:paragraph-properties fo:break-before="page" fo:margin-top="0cm" fo:margin-bottom="0cm"/>
+    </style:style>
+    <style:page-layout style:name="PageLayout">
+      <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+          fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="PageLayout"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <text:p>Page one line 01.</text:p>
+      <text:p>Page one line 02.</text:p>
+      <text:p>Page one line 03.</text:p>
+      <text:p>Page one line 04.</text:p>
+      <text:p>Page one line 05.</text:p>
+      <text:p>Page one line 06.</text:p>
+      <text:p>Page one line 07.</text:p>
+      <text:p>Page one line 08.</text:p>
+      <text:p>Page one line 09.</text:p>
+      <text:p>Page one line 10.</text:p>
+      <text:p>Page one line 11.</text:p>
+      <text:p>Page one line 12.</text:p>
+      <text:p>Page one line 13.</text:p>
+      <text:p>Page one line 14.</text:p>
+      <text:p>Page one line 15.</text:p>
+      <text:p>Page one line 16.</text:p>
+      <text:p>Page one line 17.</text:p>
+      <text:p>Page one line 18.</text:p>
+      <text:p>Page one line 19.</text:p>
+      <text:p>Page one line 20.</text:p>
+      <text:p>Page one line 21.</text:p>
+      <text:p>Page one line 22.</text:p>
+      <text:p>Page one line 23.</text:p>
+      <text:p>Page one line 24.</text:p>
+      <text:p>Page one line 25.</text:p>
+      <text:p>Page one line 26.</text:p>
+      <text:p>Page one line 27.</text:p>
+      <text:p>Page one line 28.</text:p>
+      <text:p>Page one line 29.</text:p>
+      <text:p>Page one line 30.</text:p>
+      <text:p>Page one line 31.</text:p>
+      <text:p>Page one line 32.</text:p>
+      <text:p>Page one line 33.</text:p>
+      <text:p>Page one line 34.</text:p>
+      <text:p>Page one line 35.</text:p>
+      <text:p>Page one line 36.</text:p>
+      <text:p>Page one line 37.</text:p>
+      <text:p>Page one line 38.</text:p>
+      <text:p>Page one line 39.</text:p>
+      <text:p>Page one line 40.</text:p>
+      <text:p>Page one line 41.</text:p>
+      <text:p>Page one line 42.</text:p>
+      <text:p>Page one line 43.</text:p>
+      <text:p>Page one line 44.</text:p>
+      <text:p>Page one line 45.</text:p>
+      <text:p>Page one line 46.</text:p>
+      <text:p>Page one line 47.</text:p>
+      <text:p>Page one line 48.</text:p>
+      <text:p>Page one line 49.</text:p>
+      <text:p>Page one line 50.</text:p>
+      <text:p><text:bookmark text:name="PageOneAnchor"/>Anchor paragraph near the bottom of page 1.</text:p>
+      <text:p text:style-name="PageBreak">Page two table follows.</text:p>
+      <table:table table:name="PageTwoTable">
+        <table:table-column table:number-columns-repeated="2"/>
+        <table:table-row>
+          <table:table-cell table:style-name="TableCell" office:value-type="string">
+            <text:p>Cell A1: edit this text</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="TableCell" office:value-type="string">
+            <text:p>Cell B1</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="TableCell" office:value-type="string">
+            <text:p>Cell A2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="TableCell" office:value-type="string">
+            <text:p>Cell B2</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+    </office:text>
+  </office:body>
+</office:document>
