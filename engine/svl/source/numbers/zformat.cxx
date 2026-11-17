@@ -28,6 +28,7 @@
 #include <tools/debug.hxx>
 #include <tools/long.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <rtl/character.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -45,8 +46,10 @@
 #include <unotools/digitgroupingiterator.hxx>
 #include <svl/nfsymbol.hxx>
 
+#include <algorithm>
 #include <cmath>
 #include <array>
+#include <iterator>
 
 #if defined ERA // from POSIX <langinfo.h>
 #undef ERA
@@ -2348,23 +2351,91 @@ OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 n
     return aNumeratorString.makeStringAndClear();
 }
 
-OUString lcl_GetFractionIntegerString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
+// The '?' and '0' in each part of a fraction format, and its forced denominator
+struct FractionFormat
 {
-    sal_Int32 i;
-    OUStringBuffer aIntegerString;
-    for( i = 0; i < nCnt; i++ )
+    bool mbIntegerQuestion = false;
+    bool mbIntegerZero = false;
+    bool mbNumeratorQuestion = false;
+    bool mbNumeratorZero = false;
+    bool mbDenominatorQuestion = false;
+    bool mbDenominatorZero = false;
+    sal_Int32 mnForcedDiv = 0;
+};
+
+void lcl_FindQuestionAndZero(std::u16string_view aSymbol, bool& rbQuestion, bool& rbZero)
+{
+    rbQuestion = rbQuestion || aSymbol.find('?') != std::u16string_view::npos;
+    rbZero = rbZero || aSymbol.find('0') != std::u16string_view::npos;
+}
+
+// Index of the first symbol of type nType, or the count if there is none
+sal_Int32 lcl_FindSymbol(const ImpSvNumberformatInfo& rInfo, short nType)
+{
+    return std::distance(rInfo.nTypeArray.begin(), std::ranges::find(rInfo.nTypeArray, nType));
+}
+
+// The leading digits of the denominator after the symbol at nFrac, 0 on overflow. With pFormat,
+// also sets its denominator flags
+sal_Int32 lcl_GetForcedDiv(const ImpSvNumberformatInfo& rInfo, sal_Int32 nFrac,
+                           FractionFormat* pFormat = nullptr)
+{
+    const sal_Int32 nCnt = rInfo.nTypeArray.size();
+    auto isDenominator = [&rInfo](sal_Int32 i) {
+        return rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC_FDIV
+               || rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT;
+    };
+    sal_Int32 i = nFrac + 1;
+    while (i < nCnt && !isDenominator(i))
+        ++i;
+    sal_Int64 nForcedDiv = 0;
+    bool bLeadingDigits = true;
+    for (; i < nCnt && isDenominator(i); ++i)
     {
-        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRACBLANK )
+        const OUString& rSymbol = rInfo.sStrArray[i];
+        if (pFormat)
         {
-            for( i--; i >= 0 && ( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT
-                               || rInfo.nTypeArray[i] == NF_SYMBOLTYPE_THSEP ); i-- )
+            lcl_FindQuestionAndZero(rSymbol, pFormat->mbDenominatorQuestion,
+                                    pFormat->mbDenominatorZero);
+        }
+        for (sal_Int32 k = 0; bLeadingDigits && k < rSymbol.getLength(); ++k)
+        {
+            bLeadingDigits = rtl::isAsciiDigit(rSymbol[k]);
+            if (bLeadingDigits)
             {
-                aIntegerString.insert( 0, rInfo.sStrArray[i] );
+                nForcedDiv = nForcedDiv * 10 + (rSymbol[k] - '0');
+                bLeadingDigits = nForcedDiv <= SAL_MAX_INT32;
             }
-            i = nCnt;
         }
     }
-    return aIntegerString.makeStringAndClear();
+    return nForcedDiv <= SAL_MAX_INT32 ? nForcedDiv : 0;
+}
+
+FractionFormat lcl_GetFractionFormat(const ImpSvNumberformatInfo& rInfo)
+{
+    const sal_Int32 nCnt = rInfo.nTypeArray.size();
+    FractionFormat aFormat;
+    if (const sal_Int32 nBlank = lcl_FindSymbol(rInfo, NF_SYMBOLTYPE_FRACBLANK); nBlank < nCnt)
+    {
+        for (sal_Int32 i = nBlank - 1; i >= 0
+                                       && (rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT
+                                           || rInfo.nTypeArray[i] == NF_SYMBOLTYPE_THSEP);
+             --i)
+        {
+            lcl_FindQuestionAndZero(rInfo.sStrArray[i], aFormat.mbIntegerQuestion,
+                                    aFormat.mbIntegerZero);
+        }
+    }
+    if (const sal_Int32 nFrac = lcl_FindSymbol(rInfo, NF_SYMBOLTYPE_FRAC); nFrac < nCnt)
+    {
+        for (sal_Int32 i = nFrac - 1; i >= 0 && rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT; --i)
+        {
+            lcl_FindQuestionAndZero(rInfo.sStrArray[i], aFormat.mbNumeratorQuestion,
+                                    aFormat.mbNumeratorZero);
+        }
+        aFormat.mnForcedDiv = lcl_GetForcedDiv(rInfo, nFrac, &aFormat);
+    }
+    return aFormat;
 }
 
 OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
@@ -2817,23 +2888,25 @@ double SvNumberformat::GetRoundFractionValue ( double fNumber ) const
     double fIntPart = 0.0;           // integer part of fraction
     sal_Int64 nFrac = 0, nDiv = 1;  // numerator and denominator
     double fSign = (fNumber < 0.0) ? -1.0 : 1.0;
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    const sal_Int32 nForcedDiv = lcl_GetForcedDiv(rInfo, lcl_FindSymbol(rInfo, NF_SYMBOLTYPE_FRAC));
     // fNumber is modified in ImpGetFractionElements to absolute fractional part
-    ImpGetFractionElements ( fNumber, nIx, fIntPart, nFrac, nDiv );
+    ImpGetFractionElements(fNumber, nIx, nForcedDiv, fIntPart, nFrac, nDiv);
     if ( nDiv > 0 )
         return fSign * ( fIntPart + static_cast<double>(nFrac) / static_cast<double>(nDiv) );
     else
         return fSign * fIntPart;
 }
 
-void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
-                                              double& fIntPart, sal_Int64& nFrac, sal_Int64& nDiv ) const
+void SvNumberformat::ImpGetFractionElements(double& fNumber, sal_uInt16 nIx, sal_Int32 nForcedDiv,
+                                            double& fIntPart, sal_Int64& nFrac,
+                                            sal_Int64& nDiv) const
 {
     if (fNumber < 0.0)
         fNumber = -fNumber;
     fIntPart = floor(fNumber); // Integral part
     fNumber -= fIntPart;         // Fractional part
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    sal_Int64 nForcedDiv = lcl_GetDenominatorString( rInfo, NumFor[nIx].GetCount() ).toInt32();
     if( nForcedDiv > 0 )
     {   // Forced Denominator
         nDiv = nForcedDiv;
@@ -2906,9 +2979,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     const sal_uInt16 nCnt = NumFor[nIx].GetCount();
     OUStringBuffer sStr, sFrac, sDiv; // Strings, value for Integral part Numerator and denominator
     bool bSign = ( (fNumber < 0) && (nIx == 0) ); // sign Not in the ones at the end
-    const OUString sIntegerFormat = lcl_GetFractionIntegerString(rInfo, nCnt);
-    const OUString sNumeratorFormat = lcl_GetNumeratorString(rInfo, nCnt);
-    const OUString sDenominatorFormat = lcl_GetDenominatorString(rInfo, nCnt);
+    const FractionFormat aFormat = lcl_GetFractionFormat(rInfo);
 
     sal_Int64 nFrac = 0, nDiv = 1;
     double fNum = floor(fabs(fNumber)); // Integral part
@@ -2925,7 +2996,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         return false;
     }
 
-    ImpGetFractionElements( fNumber, nIx, fNum, nFrac, nDiv);
+    ImpGetFractionElements(fNumber, nIx, aFormat.mnForcedDiv, fNum, nFrac, nDiv);
 
     if (rInfo.nCntPre == 0) // Improper fraction
     {
@@ -2946,10 +3017,8 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         sStr.append(static_cast<sal_Int64>(fNum)); // simple rounded integer
         ::impTransliterate(sStr, NumFor[nIx].GetNatNum(), rNatNum);
     }
-    bool bHideFraction = (rInfo.nCntPre > 0 && nFrac == 0
-                        && (sNumeratorFormat.indexOf('0') < 0)
-                        && (sDenominatorFormat.indexOf('0') < 0
-                        || sDenominatorFormat.toInt32() > 0) );
+    bool bHideFraction = rInfo.nCntPre > 0 && nFrac == 0 && !aFormat.mbNumeratorZero
+                         && (!aFormat.mbDenominatorZero || aFormat.mnForcedDiv > 0);
     if ( bHideFraction )
     {
         sDiv.truncate();
@@ -2970,8 +3039,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     {
         if ( bHideFraction )
         {   // do not insert blank for fraction if there is no '?'
-            if ( sNumeratorFormat.indexOf('?') >= 0
-              || sDenominatorFormat.indexOf('?') >= 0 )
+            if (aFormat.mbNumeratorQuestion || aFormat.mbDenominatorQuestion)
                 sDiv.insert(0, ' ');
         }
         else
@@ -3002,9 +3070,8 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
             {
                 if ( bHideFraction )
                 {   // '?' in any format force display of blank as delimiter
-                    if ( sIntegerFormat.indexOf('?') >= 0
-                      || sNumeratorFormat.indexOf('?') >= 0
-                      || sDenominatorFormat.indexOf('?') >= 0 )
+                    if (aFormat.mbIntegerQuestion || aFormat.mbNumeratorQuestion
+                        || aFormat.mbDenominatorQuestion)
                     {
                         for (sal_Int32 i = 0; i < rInfo.sStrArray[j].getLength(); i++)
                             sFrac.insert(0, ' ');
@@ -3012,12 +3079,11 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                 }
                 else
                 {
-                    if ( fNum != 0.0 || sIntegerFormat.indexOf('0') >= 0 )
+                    if (fNum != 0.0 || aFormat.mbIntegerZero)
                         sFrac.insert(0, rInfo.sStrArray[j]); // insert Blank string only if there are both integer and fraction
                     else
                     {
-                        if ( sIntegerFormat.indexOf('?') >= 0
-                          || sNumeratorFormat.indexOf('?') >= 0 )
+                        if (aFormat.mbIntegerQuestion || aFormat.mbNumeratorQuestion)
                         {
                             for (sal_Int32 i = 0; i < rInfo.sStrArray[j].getLength(); i++)
                                 sFrac.insert(0, ' ');

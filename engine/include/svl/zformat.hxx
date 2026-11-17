@@ -674,15 +674,14 @@ private:
      * integer part, numerator part, denominator part
      * @param fNumber value to be represented as fraction. Will contain absolute fractional part
      * @param nIx subformat number 0..3
+     * @param nForcedDiv forced denominator, or 0 if none
      * @param fIntPart integral part of fraction
      * @param nFrac numerator of fraction
      * @param nDic denominator of fraction
      */
-    SVL_DLLPRIVATE void ImpGetFractionElements( double& fNumber,
-                                                sal_uInt16 nIx,
-                                                double& fIntPart,
-                                                sal_Int64& nFrac,
-                                                sal_Int64& nDiv ) const;
+    SVL_DLLPRIVATE void ImpGetFractionElements(double& fNumber, sal_uInt16 nIx,
+                                               sal_Int32 nForcedDiv, double& fIntPart,
+                                               sal_Int64& nFrac, sal_Int64& nDiv) const;
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
                                              bool bStarFlag,
