@@ -172,6 +172,10 @@ struct DocumentTab
     // The live-view limit has asked the page to save the document since the tab was last brought
     // to the front.
     bool dropSaveAsked = false;
+    // The page sent SAVESTARTED, and its SAVECOMPLETED or SAVEFAILED has not come yet.
+    bool saveInFlight = false;
+    // The user closed the document during that save, and the close goes once the save completes.
+    bool closeWaitsForSave = false;
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
@@ -4375,6 +4379,14 @@ static void requestCloseTab(HWND hWnd, int tabId)
                                (tab->mode != DocumentMode::CLOUD_ACCOUNT || tab->editorFrame);
     if (mayHaveEdits && pageCanAnswer)
     {
+        // While a save uploads, the page finds nothing left to save and would close at once.
+        if (tab->saveInFlight)
+        {
+            LOG_DBG("Tab " << tabId << " closes once its save completes");
+            tab->closeWaitsForSave = true;
+            return;
+        }
+
         const wchar_t* script =
             L"(() => {"
             L"  try {"
@@ -4426,6 +4438,25 @@ static void requestCloseTab(HWND hWnd, int tabId)
     // Posted rather than called, so the next document's page gets its turn to answer.
     if (closingAll)
         PostMessageW(hWnd, CODA_WM_CLOSETAB, (WPARAM)window->tabIds.front(), 0);
+}
+
+static void saveEnded(DocumentTab& tab, bool saved)
+{
+    tab.saveInFlight = false;
+    if (!tab.closeWaitsForSave)
+        return;
+
+    tab.closeWaitsForSave = false;
+    if (!saved)
+    {
+        // The page prompts about the failed save, so the user decides whether to close again.
+        LOG_INF("Tab " << tab.tabId << " stays open: the save its close waited for failed");
+        if (WindowState* window = findWindow(tab.hWnd))
+            window->closingAll = false;
+        return;
+    }
+
+    PostMessageW(tab.hWnd, CODA_WM_CLOSETAB, (WPARAM)tab.tabId, 0);
 }
 
 // Take a document out of the tab order of its window. If it was the one on show, the one that
@@ -7052,8 +7083,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             // The message does not go on to wsd. The live-view limit can wait for it, and by the
             // time it comes the user can be back on this tab, so the limit is asked again rather
             // than the WebView2 going now.
-            // TODO: An account window closes without asking its page, so a close during a save
-            // can cut off the upload. Defer it from SAVESTARTED to SAVECOMPLETED, as Qt does.
+            const bool saved = s == L"SAVECOMPLETED";
+            if (s == L"SAVESTARTED")
+                data.saveInFlight = true;
+            else
+                saveEnded(data, saved);
+
             if ((s == L"SAVECOMPLETED" || s == L"SAVEFAILED") && data.dropWaitsForSave)
             {
                 data.dropWaitsForSave = false;
@@ -7065,6 +7100,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         {
             // The page is about to prompt about the failed save, and a hidden page shows no
             // prompt.
+            saveEnded(data, false);
             WindowState* window = findWindow(data.hWnd);
             if (window && window->activeTabId != data.tabId)
                 activateTab(*window, data.tabId);
@@ -7677,7 +7713,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         }
         else if (s.starts_with(L"saveCompleted "))
         {
-            // CODA-W keeps no state for a save in flight, so there is nothing to clear.
+            saveEnded(data, true);
             postReplyToCall(data.hWnd, data.tabId, id, std::string());
         }
         else if (s.starts_with(L"getAllPrefs "))
