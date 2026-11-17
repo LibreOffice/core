@@ -52,6 +52,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -2463,6 +2464,33 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testPageGuidDuplicateInFile)
     CPPUNIT_ASSERT(pSecondPage->GetGuid().getOUString() != sStoredGuid);
     CPPUNIT_ASSERT(!pSecondPage->GetGuid().isEmpty());
     CPPUNIT_ASSERT_EQUAL(pFirstPage, pDoc->GetPageByGuid(pFirstPage->GetGuid()));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testAnimateColorByRgbImport)
+{
+    // The fill color animation changes red by 100%, green by 50% and blue by 20%.
+    createSdImpressDoc("pptx/anim-color-by-rgb.pptx");
+
+    uno::Reference<animations::XAnimationNodeSupplier> xNodeSupplier(getPage(0),
+                                                                     uno::UNO_QUERY_THROW);
+    std::vector<uno::Reference<animations::XAnimationNode>> aNodes;
+    anim::create_deep_vector(xNodeSupplier->getAnimationNode(), aNodes);
+
+    bool bFound = false;
+    for (const auto& xNode : aNodes)
+    {
+        uno::Reference<animations::XAnimateColor> xColor(xNode, uno::UNO_QUERY);
+        sal_Int32 nBy = 0;
+        if (!xColor.is() || !(xColor->getBy() >>= nBy))
+            continue;
+        // Without the fix in place, this test would have failed with:
+        // - Expected: 16744499
+        // - Actual  : 0
+        // so every change was lost.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF8033), nBy);
+        bFound = true;
+    }
+    CPPUNIT_ASSERT(bFound);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
