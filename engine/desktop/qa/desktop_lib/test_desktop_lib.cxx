@@ -6689,16 +6689,36 @@ void DesktopKitTest::testObjectPathCommands()
     const unsigned long long nId = pSquare->GetUniqueID();
     const auto aPolygon = [pSquare]() { return pSquare->GetPathPoly().getB2DPolygon(0); };
 
-    // The first edge becomes a curve that still looks straight, so simplifying makes it a line
-    // again.
-    pDocument->setObjectSegmentCurved(nId, 0, 0, true);
+    // The first edge, from 1000,1000 to 5000,1000, becomes a curve when its two ends get weights,
+    // and a line again when both weights are removed. 1890, 2646 and 1134 twips are about 3334,
+    // 4667 and 2000 model units.
+    pDocument->setObjectPoints(nId, "0,0,2,1890,1134,0;0,1,1,2646,1134,0", "curve");
+    CPPUNIT_ASSERT(aPolygon().isNextControlPointUsed(0));
+    CPPUNIT_ASSERT(aPolygon().isPrevControlPointUsed(1));
+    pDocument->setObjectPoints(nId, "-0,0,2", "line");
+    CPPUNIT_ASSERT(!aPolygon().isNextControlPointUsed(0));
+    CPPUNIT_ASSERT(aPolygon().isPrevControlPointUsed(1));
+    pDocument->setObjectPoints(nId, "-0,1,1", "line");
+    CPPUNIT_ASSERT(!pSquare->GetPathPoly().areControlPointsUsed());
+
+    // Removing a weight the point does not have changes nothing, so there is nothing to undo.
+    SfxUndoManager* pUndoManager = pSquare->getSdrModelFromSdrObject().GetSdrUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+    const size_t nUndoSteps(pUndoManager->GetUndoActionCount());
+    pDocument->setObjectPoints(nId, "-0,0,2", "line");
+    CPPUNIT_ASSERT_EQUAL(nUndoSteps, pUndoManager->GetUndoActionCount());
+
+    // A curve with its weights at a third and two thirds of the edge looks straight, so
+    // simplifying makes it a line again. 567 twips are 1000 model units, give or take one, so the
+    // weights lie a little off the edge.
+    pDocument->setObjectPoints(nId, "0,0,2,1890,567,0;0,1,1,2646,567,0", "curve");
     CPPUNIT_ASSERT(aPolygon().isNextControlPointUsed(0));
     pDocument->simplifyObjectPath(nId, false);
     CPPUNIT_ASSERT(!pSquare->GetPathPoly().areControlPointsUsed());
 
     // A point added after the first point, on the top edge, takes index 1 and the square keeps
     // its shape. 1701 and 567 twips are 3000 and 1000 model units, give or take one.
-    pDocument->setObjectPoints(nId, "+0,1,1701,567");
+    pDocument->setObjectPoints(nId, "+0,1,1701,567", "add");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3000.0, aPolygon().getB2DPoint(1).getX(), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, aPolygon().getB2DPoint(1).getY(), 1.0);
@@ -6712,7 +6732,7 @@ void DesktopKitTest::testObjectPathCommands()
 
     // A point added on an edge lies on the line between its neighbours. Simplify Curves keeps it,
     // and Simplify All deletes it. The corners of the square stay.
-    pDocument->setObjectPoints(nId, "+0,1,1702,567");
+    pDocument->setObjectPoints(nId, "+0,1,1702,567", "add");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
     pDocument->simplifyObjectPath(nId, false);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
@@ -6750,7 +6770,8 @@ void DesktopKitTest::testObjectPathCommands()
     };
     const OUString aBeforeTheCurve(aPathAsText());
     const sal_uInt32 nPointsBefore(aPolygon().count());
-    pDocument->setObjectPoints(nId, "+0,1,2835,1701;0,1,1,2268,1701,1;0,1,2,3402,1701,1");
+    pDocument->setObjectPoints(nId, "+0,1,2835,1701;0,1,1,2268,1701,1;0,1,2,3402,1701,1",
+                               "add");
     CPPUNIT_ASSERT_EQUAL(nPointsBefore + 1, aPolygon().count());
     CPPUNIT_ASSERT(aPolygon().isPrevControlPointUsed(1));
     CPPUNIT_ASSERT(aPolygon().isNextControlPointUsed(1));
@@ -6760,17 +6781,34 @@ void DesktopKitTest::testObjectPathCommands()
 
     // An addition the path has no place for changes nothing, not even the moves that come with
     // it.
-    pDocument->setObjectPoints(nId, "0,0,0,0,0,0;+0,99,0,0");
+    pDocument->setObjectPoints(nId, "0,0,0,0,0,0;+0,99,0,0", "add");
     CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
-    pDocument->setObjectPoints(nId, "+5,0,0,0");
+    pDocument->setObjectPoints(nId, "+5,0,0,0", "add");
     CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
 
-    // A corner point with two weights becomes smooth: its two weights then lie on one line
-    // through the point.
-    pDocument->setObjectSegmentCurved(nId, 0, 0, true);
-    pDocument->setObjectSegmentCurved(nId, 0, 1, true);
+    // A change that names a step the undo list does not have changes nothing.
+    pDocument->setObjectPoints(nId, "0,0,0,0,0,0", "turn");
+    CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
+
+    // An addition belongs to the step that adds a point, and a removal does not belong to a
+    // move, so a change that mixes them up changes nothing.
+    pDocument->setObjectPoints(nId, "+0,1,2835,1701", "move");
+    CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
+    pDocument->setObjectPoints(nId, "0,0,0,0,0,0;-0,1,2", "move");
+    CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
+
+    // A move is six numbers with the part 0, 1 or 2 and a finite place. Any other move is left
+    // out. 1.5e308 twips are about 2.6e308 model units, more than a double holds.
+    pDocument->setObjectPoints(nId, "0,1,7,100,100,0;0,1;0,1,0,100,100,0,0;0,1,0,1.5e308,0,0",
+                               "move");
+    CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
+
+    // A corner point with two weights at a right angle becomes smooth when one weight is moved
+    // with the continuity named: the other weight turns to lie on one line through the point.
+    // Point 1 is at 1000 and 5000 model units, which are 567 and 2835 twips.
+    pDocument->setObjectPoints(nId, "0,1,1,1134,2835,0;0,1,2,567,2268,0", "curve");
     CPPUNIT_ASSERT_EQUAL(basegfx::B2VectorContinuity::NONE, aPolygon().getContinuityInPoint(1));
-    pDocument->setObjectPointContinuity(nId, 0, 1, 1);
+    pDocument->setObjectPoints(nId, "0,1,2,567,2268,1", "continuity");
     CPPUNIT_ASSERT(basegfx::B2VectorContinuity::NONE != aPolygon().getContinuityInPoint(1));
 
     // A read-only view cannot change the path.

@@ -270,12 +270,36 @@ describe('ChangeOutbox typed text', function () {
 		nodeassert.strictEqual(aChange('uno .uno:Bold'), null);
 	});
 
-	it('takes a move of the points of a path, and leaves a change that adds a point alone', function () {
+	it('takes a move of the points of a path, and leaves a change of another step alone', function () {
 		nodeassert.ok(aChange('setobjectpoints id=5 changes=0,1,0,100,200,0'));
+		nodeassert.ok(
+			aChange('setobjectpoints id=5 changes=0,1,0,100,200,0 as=move'),
+		);
 		nodeassert.strictEqual(
-			aChange('setobjectpoints id=5 changes=+0,1,100,200;0,1,1,90,200,1'),
+			aChange(
+				'setobjectpoints id=5 changes=+0,1,100,200;0,1,1,90,200,1 as=add',
+			),
 			null,
 		);
+		nodeassert.strictEqual(
+			aChange('setobjectpoints id=5 changes=-0,1,2;-0,2,1 as=line'),
+			null,
+		);
+	});
+
+	it('keeps a move of other points of a path apart, and the newest move of the same ones', function () {
+		ChangeOutbox.setMostInFlight(1);
+		ChangeOutbox.take('setobjectpoints id=5 changes=0,1,0,100,200,0');
+		ChangeOutbox.take('setobjectpoints id=5 changes=0,1,0,110,200,0');
+		ChangeOutbox.take('setobjectpoints id=5 changes=0,2,0,300,400,0');
+		ChangeOutbox.take('setobjectpoints id=5 changes=0,2,0,310,400,0');
+		const waiting = (ChangeOutbox as any).waiting.map(
+			(entry: { message: string }) => entry.message,
+		);
+		nodeassert.deepStrictEqual(waiting, [
+			'setobjectpoints id=5 changes=0,1,0,110,200,0',
+			'setobjectpoints id=5 changes=0,2,0,310,400,0',
+		]);
 	});
 
 	it('has no ticket for a change the socket let go unsent', function () {

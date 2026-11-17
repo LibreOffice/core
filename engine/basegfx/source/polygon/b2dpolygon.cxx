@@ -1261,6 +1261,22 @@ namespace basegfx
         return mpPolygon->getNextControlVector(nIndex);
     }
 
+    void B2DPolygon::setPrevControlVector(sal_uInt32 nIndex, const basegfx::B2DVector& rValue)
+    {
+        if(getPrevControlVector(nIndex) != rValue)
+        {
+            mpPolygon->setPrevControlVector(nIndex, rValue);
+        }
+    }
+
+    void B2DPolygon::setNextControlVector(sal_uInt32 nIndex, const basegfx::B2DVector& rValue)
+    {
+        if(getNextControlVector(nIndex) != rValue)
+        {
+            mpPolygon->setNextControlVector(nIndex, rValue);
+        }
+    }
+
     B2DPoint B2DPolygon::getPrevControlPoint(sal_uInt32 nIndex) const
     {
         if(areControlPointsUsed())
@@ -1287,22 +1303,12 @@ namespace basegfx
 
     void B2DPolygon::setPrevControlPoint(sal_uInt32 nIndex, const B2DPoint& rValue)
     {
-        const basegfx::B2DVector aNewVector(rValue - getB2DPoint(nIndex));
-
-        if(getPrevControlVector(nIndex) != aNewVector)
-        {
-            mpPolygon->setPrevControlVector(nIndex, aNewVector);
-        }
+        setPrevControlVector(nIndex, rValue - getB2DPoint(nIndex));
     }
 
     void B2DPolygon::setNextControlPoint(sal_uInt32 nIndex, const B2DPoint& rValue)
     {
-        const basegfx::B2DVector aNewVector(rValue - getB2DPoint(nIndex));
-
-        if(getNextControlVector(nIndex) != aNewVector)
-        {
-            mpPolygon->setNextControlVector(nIndex, aNewVector);
-        }
+        setNextControlVector(nIndex, rValue - getB2DPoint(nIndex));
     }
 
     void B2DPolygon::setControlPoints(sal_uInt32 nIndex, const basegfx::B2DPoint& rPrev, const basegfx::B2DPoint& rNext)

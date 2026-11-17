@@ -670,7 +670,10 @@ decomposeForComparison(ObjectContent& rContent,
 
     A polygon holds no continuity of its own, only numbers that happen to line up or not, so the
     one that is wanted is told rather than measured and is set here exactly. A point whose numbers
-    had drifted a little off the line comes out of this lying on it.
+    had drifted a little off the line comes out of this lying on it. The weights are read and
+    written as the vectors from the point that the polygon holds. The vector of the weight that
+    gives way is the moved vector negated, and for a smooth point scaled to the length the weight
+    had. The coordinates of the point add no rounding to it.
 */
 SVXCORE_DLLPUBLIC void makeTheCurveRunThatWay(basegfx::B2DPolygon& rPolygon, sal_uInt32 nPoint,
                                               basegfx::B2VectorContinuity eWanted,

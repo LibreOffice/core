@@ -1637,27 +1637,23 @@ void makeTheCurveRunThatWay(basegfx::B2DPolygon& rPolygon, sal_uInt32 nPoint,
     if (basegfx::B2VectorContinuity::NONE == eWanted)
         return;
 
-    const basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(nPoint));
-    const basegfx::B2DPoint aMoved(bMovedTheOneComingIn ? rPolygon.getPrevControlPoint(nPoint)
-                                                        : rPolygon.getNextControlPoint(nPoint));
-    basegfx::B2DVector aAway(aMoved - aPoint);
+    const basegfx::B2DVector aAway(bMovedTheOneComingIn ? rPolygon.getPrevControlVector(nPoint)
+                                                        : rPolygon.getNextControlVector(nPoint));
 
     if (aAway.equalZero())
         return;
 
-    const basegfx::B2DPoint aOther(bMovedTheOneComingIn ? rPolygon.getNextControlPoint(nPoint)
-                                                        : rPolygon.getPrevControlPoint(nPoint));
-    const double fLength(basegfx::B2VectorContinuity::C2 == eWanted
-                             ? aAway.getLength()
-                             : basegfx::B2DVector(aOther - aPoint).getLength());
-
+    // A symmetric point has the other weight exactly opposite. A smooth one keeps the length the
+    // other weight had.
     basegfx::B2DVector aBack(-aAway);
-    aBack.setLength(fLength);
+    if (basegfx::B2VectorContinuity::C1 == eWanted)
+        aBack.setLength(bMovedTheOneComingIn ? rPolygon.getNextControlVector(nPoint).getLength()
+                                             : rPolygon.getPrevControlVector(nPoint).getLength());
 
     if (bMovedTheOneComingIn)
-        rPolygon.setNextControlPoint(nPoint, aPoint + aBack);
+        rPolygon.setNextControlVector(nPoint, aBack);
     else
-        rPolygon.setPrevControlPoint(nPoint, aPoint + aBack);
+        rPolygon.setPrevControlVector(nPoint, aBack);
 }
 
 void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rContent,

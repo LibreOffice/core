@@ -2976,6 +2976,9 @@ class PathHandles extends HandlesMovedOneByOne {
 	else; a drag of a point or a weight sets the path itself once it is let go.
 */
 class MotionPathSink implements PathSink {
+	// The path goes out whole, as offsets from the middle of what moves, and that middle can
+	// lie between two twips.
+	public readonly wholeTwips: boolean = false;
 	private onPath: ((path: cool.ObjectPathPolygon[]) => void) | null;
 
 	constructor(
@@ -2996,10 +2999,7 @@ class MotionPathSink implements PathSink {
 	public addPoint(_addition: PathPointAddition): void {
 		// The whole path went out already.
 	}
-	public setSegmentCurved(_place: PathPlace, _curved: boolean): void {
-		// The whole path went out already.
-	}
-	public setContinuity(_place: PathPlace, _continuity: number): void {
+	public changeWeights(_change: PathWeightsChange): void {
 		// The whole path went out already.
 	}
 	public split(_place: PathPlace): void {

@@ -681,8 +681,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "selectobjects") ||
                tokens.equals(0, "setobjectpoints") ||
                tokens.equals(0, "deleteobjectpoint") ||
-               tokens.equals(0, "setobjectpointcontinuity") ||
-               tokens.equals(0, "setobjectsegmentcurved") ||
                tokens.equals(0, "splitobjectpath") ||
                tokens.equals(0, "setobjectpathclosed") ||
                tokens.equals(0, "simplifyobjectpath") ||
@@ -796,14 +794,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "deleteobjectpoint"))
         {
             return deleteObjectPoint(tokens);
-        }
-        else if (tokens.equals(0, "setobjectpointcontinuity"))
-        {
-            return setObjectPointContinuity(tokens);
-        }
-        else if (tokens.equals(0, "setobjectsegmentcurved"))
-        {
-            return setObjectSegmentCurved(tokens);
         }
         else if (tokens.equals(0, "splitobjectpath"))
         {
@@ -2083,8 +2073,13 @@ bool ChildSession::setObjectPoints(const StringVector& tokens)
     std::string objectId;
     std::string changes;
 
-    if (!hasTokens(tokens, 3) || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenString(tokens[2], "changes", changes))
+    // A change that names no step is a move.
+    std::string step = "move";
+    const std::size_t count = tokens.size() > 3 && tokens.startsWith(3, "as=") ? 4 : 3;
+
+    if (!hasTokens(tokens, count) || !getTokenString(tokens[1], "id", objectId)
+        || !getTokenString(tokens[2], "changes", changes)
+        || (count == 4 && !getTokenString(tokens[3], "as", step)))
     {
         sendTextFrameAndLogError("error: cmd=setobjectpoints kind=syntax");
         return false;
@@ -2093,7 +2088,7 @@ bool ChildSession::setObjectPoints(const StringVector& tokens)
     // The id an object is named by counts as far as an unsigned long long does.
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->setObjectPoints(std::strtoull(objectId.c_str(), nullptr, 10),
-                                        changes.c_str());
+                                        changes.c_str(), step.c_str());
     return true;
 }
 
@@ -2152,47 +2147,6 @@ bool ChildSession::deleteObjectPoint(const StringVector& tokens)
         return false;
 
     getLOKitDocument()->deleteObjectPoint(objectId, polygon, point);
-    return true;
-}
-
-bool ChildSession::setObjectPointContinuity(const StringVector& tokens)
-{
-    unsigned long long objectId = 0;
-    int polygon = 0;
-    int point = 0;
-    int continuity = 0;
-
-    if (tokens.size() != 5 || !getTokenInteger(tokens[4], "continuity", continuity))
-    {
-        sendTextFrameAndLogError("error: cmd=setobjectpointcontinuity kind=syntax");
-        return false;
-    }
-
-    if (!readPointToChange(tokens, "setobjectpointcontinuity", objectId, polygon, point))
-        return false;
-
-    getLOKitDocument()->setObjectPointContinuity(objectId, polygon, point, continuity);
-    return true;
-}
-
-bool ChildSession::setObjectSegmentCurved(const StringVector& tokens)
-{
-    unsigned long long objectId = 0;
-    int polygon = 0;
-    int point = 0;
-    std::string curved;
-
-    if (tokens.size() != 5 || !getTokenString(tokens[4], "curved", curved)
-        || (curved != "true" && curved != "false"))
-    {
-        sendTextFrameAndLogError("error: cmd=setobjectsegmentcurved kind=syntax");
-        return false;
-    }
-
-    if (!readPointToChange(tokens, "setobjectsegmentcurved", objectId, polygon, point))
-        return false;
-
-    getLOKitDocument()->setObjectSegmentCurved(objectId, polygon, point, curved == "true");
     return true;
 }
 

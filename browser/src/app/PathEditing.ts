@@ -39,22 +39,39 @@ interface PathPointAddition extends PathPlace {
 	weights: PathPointMove[];
 }
 
+/// A weight of a point removed: 1 the weight of the curve coming in, 2 the one going out.
+interface PathWeightRemoval extends PathPlace {
+	part: number;
+}
+
+/*
+	The weights of a path changed by one step: the weights that moved, those that were removed,
+	and the name of the step in the undo list.
+*/
+interface PathWeightsChange {
+	moves: PathPointMove[];
+	removals: PathWeightRemoval[];
+	step: 'continuity' | 'curve' | 'line';
+}
+
 /*
 	Where the changes of a path go. The path being edited can belong to an object, be drawn
 	anew, or be a lasso or the path an animation follows; each of them takes the changes its own
 	way.
 */
 interface PathSink {
+	/// True where the points and the weights the sink takes are in whole twips, false where
+	/// they can lie at any fraction of a twip.
+	readonly wholeTwips: boolean;
 	/// Points or weights moved, by a drag or by keys.
 	movePoints(moves: PathPointMove[]): void;
 	/// A point is deleted.
 	deletePoint(place: PathPlace): void;
 	/// A point is added, with the weights that change with it.
 	addPoint(addition: PathPointAddition): void;
-	/// The edge after a point becomes a curve or a line.
-	setSegmentCurved(place: PathPlace, curved: boolean): void;
-	/// The curve runs through a point as a corner (0), smoothly (1) or symmetrically (2).
-	setContinuity(place: PathPlace, continuity: number): void;
+	/// Weights moved or were removed, as one step: the edge after a point became a curve or a
+	/// line, or the curve runs through a point another way.
+	changeWeights(change: PathWeightsChange): void;
 	/// The path is split into two at a point.
 	split(place: PathPlace): void;
 	/// The path shown changed here before the change came back, or went back to the one given;
@@ -181,15 +198,15 @@ class PathEditing implements HandleSource {
 	}
 
 	/*
-		Changes the path here as the change will change it, so it shows at once. A change made
-		while another one has not come back goes on from that one. Nothing changes where the
-		change answers nothing.
+		Changes the path here as the change will change it, so it shows at once, and answers the
+		changed path. A change made while another one has not come back goes on from that one.
+		Nothing changes where the change answers nothing.
 	*/
 	private changeHere(
 		change: (path: cool.ObjectPathPolygon[]) => cool.ObjectPathPolygon[] | null,
-	): void {
+	): cool.ObjectPathPolygon[] | null {
 		const path = this.path();
-		if (!path) return;
+		if (!path) return null;
 
 		const changed = change(
 			path.map((polygon: cool.ObjectPathPolygon) => ({
@@ -199,7 +216,7 @@ class PathEditing implements HandleSource {
 				})),
 			})),
 		);
-		if (!changed) return;
+		if (!changed) return null;
 
 		this.sink.pathChangedHere(changed);
 		const before = PathEditing.changedHere.get(this.key);
@@ -216,6 +233,7 @@ class PathEditing implements HandleSource {
 			}, PathEditing.longestWait),
 		});
 		sink.shownPathChanged();
+		return changed;
 	}
 
 	/*
@@ -579,7 +597,7 @@ class PathEditing implements HandleSource {
 	public insertPointAt(at: cool.Point): void {
 		const made: { addition?: PathPointAddition } = {};
 		this.changeHere((path) => {
-			const added = PathEditing.withAPointAt(path, at);
+			const added = PathEditing.withAPointAt(path, at, this.sink.wholeTwips);
 			made.addition = added?.addition;
 			return added?.path ?? null;
 		});
@@ -589,21 +607,144 @@ class PathEditing implements HandleSource {
 	/// Makes the edge after the point a handle stands for a curve, or a line.
 	public setSegmentCurved(handleName: string, curved: boolean): void {
 		const place = this.pointOf(handleName);
-		if (!place) return;
-		this.changeHere((path) =>
-			PathEditing.withTheEdgeCurved(path, place, curved),
-		);
-		this.sink.setSegmentCurved(place, curved);
+		const polygon = place ? this.path()?.[place.polygon] : undefined;
+		const next =
+			place && polygon ? PathEditing.nextOf(polygon, place.point) : null;
+		if (place && next !== null) {
+			// The weights a new curve gets leave the other weights of their points as they are.
+			this.changeWeightsHere(
+				place.polygon,
+				[place.point, next],
+				curved ? 'curve' : 'line',
+				0,
+				(path) => PathEditing.withTheEdgeCurved(path, place, curved),
+			);
+		}
 	}
 
 	/// Sets how the curve runs through the point a handle stands for.
 	public setContinuity(handleName: string, continuity: number): void {
 		const place = this.pointOf(handleName);
 		if (!place) return;
-		this.changeHere((path) =>
-			PathEditing.withTheContinuity(path, place, continuity),
+		this.changeWeightsHere(
+			place.polygon,
+			[place.point],
+			'continuity',
+			continuity,
+			(path) => PathEditing.withTheContinuity(path, place, continuity),
 		);
-		this.sink.setContinuity(place, continuity);
+	}
+
+	/*
+		Changes the weights of the points that a step touches, in one polygon, here, and sends
+		the weights of those points that differ afterwards, every move with that continuity.
+		Where the sink takes whole twips, a weight the step moved is rounded here, so the path
+		shown is close to the one the model will hold. Nothing is sent when no weight differs.
+	*/
+	private changeWeightsHere(
+		polygon: number,
+		touched: number[],
+		step: PathWeightsChange['step'],
+		continuity: number,
+		change: (path: cool.ObjectPathPolygon[]) => cool.ObjectPathPolygon[] | null,
+	): void {
+		const before = this.path()?.[polygon]?.points ?? [];
+		const changed = this.changeHere((path) => {
+			const result = change(path);
+			const after = result?.[polygon]?.points ?? [];
+			if (this.sink.wholeTwips)
+				for (const at of touched)
+					PathEditing.roundWhatMoved(before[at], after[at]);
+			return result;
+		});
+		if (!changed) return;
+
+		const found = PathEditing.weightsChanged(
+			polygon,
+			touched,
+			before,
+			changed[polygon]?.points ?? [],
+			step,
+			continuity,
+		);
+		if (found.moves.length || found.removals.length)
+			this.sink.changeWeights(found);
+	}
+
+	/// The weights of the point that are not where they were, at whole twips.
+	private static roundWhatMoved(
+		was: cool.ObjectPathPoint | undefined,
+		point: cool.ObjectPathPoint | undefined,
+	): void {
+		if (!was || !point) return;
+		if (point.behindX !== was.behindX || point.behindY !== was.behindY) {
+			if (point.behindX !== undefined)
+				point.behindX = Math.round(point.behindX);
+			if (point.behindY !== undefined)
+				point.behindY = Math.round(point.behindY);
+		}
+		if (point.aheadX !== was.aheadX || point.aheadY !== was.aheadY) {
+			if (point.aheadX !== undefined) point.aheadX = Math.round(point.aheadX);
+			if (point.aheadY !== undefined) point.aheadY = Math.round(point.aheadY);
+		}
+	}
+
+	/*
+		The weights of the touched points of one polygon that differ between before and after,
+		which hold the same points: a weight that is in after at another place is a move, with
+		that continuity, and one that is only in before is a removal.
+	*/
+	private static weightsChanged(
+		polygon: number,
+		touched: number[],
+		before: cool.ObjectPathPoint[],
+		after: cool.ObjectPathPoint[],
+		step: PathWeightsChange['step'],
+		continuity: number,
+	): PathWeightsChange {
+		const change: PathWeightsChange = { moves: [], removals: [], step: step };
+		for (const at of touched) {
+			const was = before[at];
+			const point = after[at];
+			if (!was || !point) continue;
+
+			const weights = [
+				{
+					part: 1,
+					x: point.behindX,
+					y: point.behindY,
+					wasX: was.behindX,
+					wasY: was.behindY,
+				},
+				{
+					part: 2,
+					x: point.aheadX,
+					y: point.aheadY,
+					wasX: was.aheadX,
+					wasY: was.aheadY,
+				},
+			];
+			for (const weight of weights) {
+				if (weight.x === undefined || weight.y === undefined) {
+					if (weight.wasX !== undefined)
+						change.removals.push({
+							polygon: polygon,
+							point: at,
+							part: weight.part,
+						});
+				} else if (weight.x !== weight.wasX || weight.y !== weight.wasY) {
+					change.moves.push({
+						polygon: polygon,
+						point: at,
+						part: weight.part,
+						x: weight.x,
+						y: weight.y,
+						continuity: continuity,
+					});
+				}
+			}
+		}
+		return change;
 	}
 
 	/// Splits the path at the point a handle stands for.
@@ -1019,13 +1160,14 @@ class PathEditing implements HandleSource {
 		A point added on the edge nearest to that place, where the place nearest to it lies
 		inside an edge rather than on one of its ends, and the addition that names it. A curve is
 		split there into two curves, so the path keeps its shape and the new point runs smoothly
-		through. The new point and the weights travel in whole twips, so they are rounded here and
-		the path shown is the one the model will hold. A point that lands on an end of the edge
-		once rounded adds nothing.
+		through. With wholeTwips, the new point and the weights are rounded to whole twips, so the
+		path shown is close to the one the model will hold, and a point that lands on an end of
+		the edge once rounded adds nothing.
 	*/
 	private static withAPointAt(
 		path: cool.ObjectPathPolygon[],
 		at: cool.Point,
+		wholeTwips: boolean,
 	): { path: cool.ObjectPathPolygon[]; addition: PathPointAddition } | null {
 		let best: {
 			polygon: number;
@@ -1065,7 +1207,7 @@ class PathEditing implements HandleSource {
 		const between = (a: cool.Point, b: cool.Point) =>
 			a.add(b.subtract(a).multiplyBy(t));
 		const whole = (a: cool.Point) =>
-			new cool.Point(Math.round(a.x), Math.round(a.y));
+			wholeTwips ? new cool.Point(Math.round(a.x), Math.round(a.y)) : a;
 
 		// The weights of the two halves of the curve: a and ab bend the half before the new
 		// point, bc and c the half after it.
@@ -1514,6 +1656,7 @@ class PathEditing implements HandleSource {
 	change can add or remove points and weights, so the keyboard leaves the points.
 */
 class ObjectPathSink implements PathSink {
+	public readonly wholeTwips: boolean = true;
 	private objectId: number;
 	private selection: SelectionSection;
 
@@ -1558,20 +1701,21 @@ class ObjectPathSink implements PathSink {
 		const weights = addition.weights.length
 			? ';' + ObjectPathSink.itemsOf(addition.weights)
 			: '';
-		this.send('setobjectpoints', 'changes=+' + point + weights);
+		this.send('setobjectpoints', 'changes=+' + point + weights + ' as=add');
 	}
 
-	public setSegmentCurved(place: PathPlace, curved: boolean): void {
-		this.send(
-			'setobjectsegmentcurved',
-			ObjectPathSink.parametersOf(place) + ' curved=' + String(curved),
+	/// The moves go first and the removals after them, so a weight that is removed stays
+	/// removed even where a move makes the curve run smoothly through its point.
+	public changeWeights(change: PathWeightsChange): void {
+		const items = change.removals.map(
+			(removal: PathWeightRemoval) =>
+				'-' + [removal.polygon, removal.point, removal.part].join(','),
 		);
-	}
-
-	public setContinuity(place: PathPlace, continuity: number): void {
+		if (change.moves.length)
+			items.unshift(ObjectPathSink.itemsOf(change.moves));
 		this.send(
-			'setobjectpointcontinuity',
-			ObjectPathSink.parametersOf(place) + ' continuity=' + String(continuity),
+			'setobjectpoints',
+			'changes=' + items.join(';') + ' as=' + change.step,
 		);
 	}
 

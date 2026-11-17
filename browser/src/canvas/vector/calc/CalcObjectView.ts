@@ -434,7 +434,10 @@ namespace cool {
 			.join(';');
 	}
 
-	/// Each change holds polygon, point, part, x, y and continuity.
+	/*
+		A move holds polygon, point, part, x, y and continuity. An addition starts with "+" and
+		holds polygon, point, x and y. A removal starts with "-" and holds no place.
+	*/
 	function pathChangesInPrintTwips(
 		changes: string,
 		placing: CalcObjectPlacing,
@@ -443,14 +446,15 @@ namespace cool {
 			.split(';')
 			.map((change) => {
 				const fields = change.split(',');
-				if (fields.length < 5) return change;
+				const xAt = change.startsWith('+') ? 2 : 3;
+				if (change.startsWith('-') || fields.length < xAt + 2) return change;
 				const point = calcPointInPrintTwips(
 					placing,
-					Number(fields[3]),
-					Number(fields[4]),
+					Number(fields[xAt]),
+					Number(fields[xAt + 1]),
 				);
-				fields[3] = String(Math.round(point.x));
-				fields[4] = String(Math.round(point.y));
+				fields[xAt] = String(Math.round(point.x));
+				fields[xAt + 1] = String(Math.round(point.y));
 				return fields.join(',');
 			})
 			.join(';');

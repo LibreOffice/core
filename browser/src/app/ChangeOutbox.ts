@@ -406,24 +406,46 @@ class ChangeOutbox {
 			return { kind: 'transform', what, mappings, tickets: [] };
 		}
 
-		// A change of a path that adds a point renumbers the points after it, so it is not the
-		// state of the path that a later change can take the place of. The outbox leaves it alone.
-		if (
-			parser.command === 'setobjectpoints' &&
-			parser.value('changes')?.includes('+')
-		)
-			return null;
+		if (ChangeOutbox.namesAState(parser)) {
+			return {
+				kind: 'other',
+				channel: ChangeOutbox.channelOf(parser, message),
+				message,
+				tickets: [],
+			};
+		}
+		return null;
+	}
 
-		const stateBegins = ChangeOutbox.namedStates[parser.command];
-		if (stateBegins === undefined) return null;
+	/*
+		The part of the message that names the thing it changes, up to where the state begins.
+		A move of the points of a path names the points and weights it moves as well, in sorted
+		order, so a later move of the same ones takes its place and a move of other ones goes out
+		after it.
+	*/
+	private static channelOf(parser: MessageParser, message: string): string {
+		const at = message.indexOf(ChangeOutbox.namedStates[parser.command]);
+		const thing = at < 0 ? message : message.substring(0, at);
+		if (parser.command === 'setobjectpoints') {
+			const moved = (parser.value('changes') ?? '')
+				.split(';')
+				.map((move) => move.split(',', 3).join(','))
+				.sort();
+			return thing + ' ' + moved.join(';');
+		}
+		return thing;
+	}
 
-		const at = message.indexOf(stateBegins);
-		return {
-			kind: 'other',
-			channel: at < 0 ? message : message.substring(0, at),
-			message,
-			tickets: [],
-		};
+	/*
+		Whether the message names the state of one thing, which a later message for the same
+		thing can take the place of. A change of the points of a path names a state when it is a
+		move, which is what a change without a step is. Its other steps stand on their own, and
+		adding a point renumbers the points after it.
+	*/
+	private static namesAState(parser: MessageParser): boolean {
+		if (parser.command === 'setobjectpoints')
+			return (parser.value('as') ?? 'move') === 'move';
+		return ChangeOutbox.namedStates[parser.command] !== undefined;
 	}
 
 	/*

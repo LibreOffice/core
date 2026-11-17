@@ -5740,6 +5740,56 @@ static bool lcl_addPoint(basegfx::B2DPolyPolygon& rPath, std::string_view aItem,
 }
 
 /*
+    Removes one weight of a point of the path, from an item "polygon,point,part": part 1 is the
+    incoming weight and part 2 the outgoing one. The edge on that side is then bent only by the
+    weight at its other end, and it is a straight line when that end has none either. Leaves the
+    path as it is for an item that is not three numbers, for a part that is not 1 or 2, and for a
+    polygon or a point the path does not have.
+*/
+static void lcl_removeWeight(basegfx::B2DPolyPolygon& rPath, std::string_view aItem)
+{
+    sal_Int32 nField = 0;
+    const sal_uInt32 nPolygon(o3tl::toUInt32(o3tl::getToken(aItem, 0, ',', nField)));
+    if (nField < 0 || nPolygon >= rPath.count())
+        return;
+
+    const sal_uInt32 nPoint(o3tl::toUInt32(o3tl::getToken(aItem, 0, ',', nField)));
+    if (nField < 0)
+        return;
+
+    const sal_Int32 nPart(o3tl::toInt32(o3tl::getToken(aItem, 0, ',', nField)));
+    if (nField >= 0 || (1 != nPart && 2 != nPart))
+        return;
+
+    basegfx::B2DPolygon aPolygon(rPath.getB2DPolygon(nPolygon));
+    if (nPoint >= aPolygon.count())
+        return;
+
+    if (1 == nPart)
+        aPolygon.resetPrevControlPoint(nPoint);
+    else
+        aPolygon.resetNextControlPoint(nPoint);
+    rPath.setB2DPolygon(nPolygon, aPolygon);
+}
+
+/*
+    The description of the undo step for a change of the points of a path, by the name of the
+    step: "move", "add", "continuity", "curve" or "line". Answers nothing for any other name.
+*/
+static std::optional<TranslateId> lcl_stepOf(std::string_view aStep)
+{
+    if (aStep == "move")
+        return STR_DragMethMove;
+    if (aStep == "add")
+        return STR_DragInsertPoint;
+    if (aStep == "continuity")
+        return STR_EditSetPointsSmooth;
+    if (aStep == "curve" || aStep == "line")
+        return STR_EditSetSegmentsKind;
+    return std::nullopt;
+}
+
+/*
     Changes points of the path of an object. The client sends only the points that changed, so a
     large path is not sent in full, and points that were not touched cannot change.
 
@@ -5749,14 +5799,29 @@ static bool lcl_addPoint(basegfx::B2DPolyPolygon& rPath, std::string_view aItem,
     and 2 for symmetric. An addition is "+polygon,point,x,y" in twips: a new point with no weights
     at that index, so the points after it count one more in the changes that follow. If an
     addition cannot be made, nothing changes, because the indices after it would name other
-    points.
+    points. A removal is "-polygon,point,part" and removes the incoming or the outgoing weight of
+    a point. A move or a removal that is not written so, or that names a part the path does not
+    have, is left out.
+
+    The step names the change in the undo list: "move", "add", "continuity", "curve" or "line".
+    An addition belongs to the step "add" and a removal to any step but "move". A change with
+    any other step, or with an item that does not belong to its step, changes nothing.
 */
-void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char* pChanges)
+void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char* pChanges,
+                                        const char* pStep)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPoints");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
+
+    const std::string_view aStep(pStep ? pStep : "");
+    const std::optional<TranslateId> oDescription(lcl_stepOf(aStep));
+    if (!oDescription)
+    {
+        SetLastExceptionMsg(u"The change of the points names no step to undo"_ustr);
+        return;
+    }
 
     SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
     if (!pPathObject)
@@ -5765,8 +5830,6 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
     // The changes arrive in twips and the model holds the path in its own unit.
     const double fToModel(o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
     basegfx::B2DPolyPolygon aPath(pPathObject->GetPathPoly());
-    bool bMoved(false);
-    bool bAdded(false);
 
     const OString aChanges(pChanges ? pChanges : "");
     for (sal_Int32 nAt = 0; nAt >= 0;)
@@ -5775,6 +5838,13 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
         if (aChange.isEmpty())
             continue;
 
+        if ((aChange.startsWith("+") && aStep != "add")
+            || (aChange.startsWith("-") && aStep == "move"))
+        {
+            SetLastExceptionMsg(u"The change of the points has an item of another step"_ustr);
+            return;
+        }
+
         if (aChange.startsWith("+"))
         {
             if (!lcl_addPoint(aPath, aChange.subView(1), fToModel))
@@ -5782,24 +5852,32 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
                 SetLastExceptionMsg(u"The path has no place for the point to add"_ustr);
                 return;
             }
-            bAdded = true;
             continue;
         }
 
+        if (aChange.startsWith("-"))
+        {
+            lcl_removeWeight(aPath, aChange.subView(1));
+            continue;
+        }
+
+        // A move is six numbers, its part is 0, 1 or 2 and its place is finite.
         sal_Int32 nField = 0;
         const sal_uInt32 nPolygon(o3tl::toUInt32(o3tl::getToken(aChange, 0, ',', nField)));
         const sal_uInt32 nPoint(
             nField < 0 ? 0 : o3tl::toUInt32(o3tl::getToken(aChange, 0, ',', nField)));
-        const sal_Int32 nPart(nField < 0 ? 0
+        const sal_Int32 nPart(nField < 0 ? -1
                                          : o3tl::toInt32(o3tl::getToken(aChange, 0, ',', nField)));
         const double fX(
             nField < 0 ? 0.0 : o3tl::toDouble(o3tl::getToken(aChange, 0, ',', nField)) * fToModel);
         const double fY(
             nField < 0 ? 0.0 : o3tl::toDouble(o3tl::getToken(aChange, 0, ',', nField)) * fToModel);
+        const bool bSixNumbers(nField >= 0);
         const sal_Int32 nContinuity(
             nField < 0 ? 0 : o3tl::toInt32(o3tl::getToken(aChange, 0, ',', nField)));
 
-        if (nPolygon >= aPath.count())
+        if (!bSixNumbers || nField >= 0 || nPart < 0 || nPart > 2 || !std::isfinite(fX)
+            || !std::isfinite(fY) || nPolygon >= aPath.count())
             continue;
 
         basegfx::B2DPolygon aPolygon(aPath.getB2DPolygon(nPolygon));
@@ -5831,13 +5909,11 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
         }
 
         aPath.setB2DPolygon(nPolygon, aPolygon);
-        bMoved = true;
     }
 
-    if (!bMoved && !bAdded)
-        return;
-
-    lcl_changePath(*pPathObject, bAdded ? STR_DragInsertPoint : STR_DragMethMove, aPath);
+    // A change that leaves every point where it was is no step to undo.
+    if (aPath != pPathObject->GetPathPoly())
+        lcl_changePath(*pPathObject, *oDescription, aPath);
 }
 
 /*
@@ -5883,60 +5959,6 @@ void COKitDocumentImpl::deleteObjectPoint(unsigned long long nObjectId, int nPol
     rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoDeleteObject(*pPathObject));
     pList->RemoveObject(pPathObject->GetOrdNum());
     rModel.EndUndo();
-}
-
-/*
-    Sets the continuity at one point of the path of an object: 0 for a corner, 1 for smooth and
-    2 for symmetric. The weights of the point are moved to match.
-*/
-void COKitDocumentImpl::setObjectPointContinuity(unsigned long long nObjectId, int nPolygon,
-                                                 int nPoint, int nContinuity)
-{
-    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPointContinuity");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
-    sal_uInt32 nPlace = 0;
-    if (!pPathObject
-        || !lcl_placeAmongAllPoints(pPathObject->GetPathPoly(), nPolygon, nPoint, nPlace))
-        return;
-
-    const basegfx::B2VectorContinuity eContinuity(lcl_continuityOf(nContinuity));
-
-    o3tl::sorted_vector<sal_uInt16> aPoints;
-    aPoints.insert(static_cast<sal_uInt16>(nPlace));
-    sdr::PolyPolygonEditor aEditor(pPathObject->GetPathPoly());
-    if (aEditor.SetPointsSmooth(eContinuity, aPoints))
-        lcl_changePath(*pPathObject, STR_EditSetPointsSmooth, aEditor.GetPolyPolygon());
-}
-
-/*
-    Makes the edge after one point of the path of an object a curve or a straight line. A new
-    curve looks like the line at first: its weights are on the line, at one third and at two
-    thirds of its length.
-*/
-void COKitDocumentImpl::setObjectSegmentCurved(unsigned long long nObjectId, int nPolygon,
-                                               int nPoint, bool bCurved)
-{
-    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectSegmentCurved");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
-    sal_uInt32 nPlace = 0;
-    if (!pPathObject
-        || !lcl_placeAmongAllPoints(pPathObject->GetPathPoly(), nPolygon, nPoint, nPlace))
-        return;
-
-    o3tl::sorted_vector<sal_uInt16> aPoints;
-    aPoints.insert(static_cast<sal_uInt16>(nPlace));
-    sdr::PolyPolygonEditor aEditor(pPathObject->GetPathPoly());
-    if (aEditor.SetSegmentsKind(bCurved ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line,
-                                aPoints))
-        lcl_changePath(*pPathObject, STR_EditSetSegmentsKind, aEditor.GetPolyPolygon());
 }
 
 /*
@@ -6028,10 +6050,23 @@ void COKitDocumentImpl::setObjectPathClosed(unsigned long long nObjectId, bool b
 }
 
 /*
-    Whether the point nPoint lies on the straight line from nBefore to nAfter. The point has no
-    weights, nBefore has no outgoing weight and nAfter has no incoming weight. The point lies
-    between the two others, at most one model unit away from the line. One unit is allowed
-    because a point added on a line travels in whole twips, and half a twip is less than a unit.
+    Whether rPoint lies on the edge from rStart to rEnd, as far as a path given in whole twips can
+    say. Each of the three can be up to half a twip off its place on each axis, so a point placed
+    on the edge can end up as far as the diagonal of a twip away from it. The cut is where the
+    nearest place on the edge is, from 0 at rStart to 1 at rEnd.
+*/
+static bool lcl_isOnTheEdge(const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
+                            const basegfx::B2DPoint& rPoint, double& rCut)
+{
+    const double fTwipDiagonal(
+        o3tl::convert(std::sqrt(2.0), o3tl::Length::twip, o3tl::Length::mm100));
+    return basegfx::utils::getSmallestDistancePointToEdge(rStart, rEnd, rPoint, rCut)
+           <= fTwipDiagonal;
+}
+
+/*
+    Whether the point nPoint lies on the straight line from nBefore to nAfter, between them. The
+    point has no weights, nBefore has no outgoing weight and nAfter has no incoming weight.
 */
 static bool lcl_liesOnTheLine(const basegfx::B2DPolygon& rPolygon, sal_uInt32 nBefore,
                               sal_uInt32 nPoint, sal_uInt32 nAfter)
@@ -6041,10 +6076,9 @@ static bool lcl_liesOnTheLine(const basegfx::B2DPolygon& rPolygon, sal_uInt32 nB
         return false;
 
     double fCut = 0.0;
-    const double fDistance(basegfx::utils::getSmallestDistancePointToEdge(
-        rPolygon.getB2DPoint(nBefore), rPolygon.getB2DPoint(nAfter), rPolygon.getB2DPoint(nPoint),
-        fCut));
-    return fCut > 0.0 && fCut < 1.0 && fDistance <= 1.0;
+    return lcl_isOnTheEdge(rPolygon.getB2DPoint(nBefore), rPolygon.getB2DPoint(nAfter),
+                           rPolygon.getB2DPoint(nPoint), fCut)
+           && fCut > 0.0 && fCut < 1.0;
 }
 
 /*
@@ -6106,10 +6140,40 @@ static basegfx::B2DPolygon lcl_withoutPointsOnALine(const basegfx::B2DPolygon& r
 }
 
 /*
+    The polygon with every curved edge whose weights lie on the edge, between its ends, made a
+    line.
+*/
+static basegfx::B2DPolygon lcl_withStraightCurvesAsLines(const basegfx::B2DPolygon& rPolygon)
+{
+    basegfx::B2DPolygon aPolygon(rPolygon);
+    const sal_uInt32 nCount(rPolygon.count());
+    const sal_uInt32 nEdges(rPolygon.isClosed() || !nCount ? nCount : nCount - 1);
+    for (sal_uInt32 nEdge = 0; nEdge < nEdges; ++nEdge)
+    {
+        const sal_uInt32 nNext((nEdge + 1) % nCount);
+        const basegfx::B2DPoint aStart(rPolygon.getB2DPoint(nEdge));
+        const basegfx::B2DPoint aEnd(rPolygon.getB2DPoint(nNext));
+        const auto aOnTheLine = [&aStart, &aEnd](const basegfx::B2DPoint& rWeight) {
+            double fCut = 0.0;
+            return lcl_isOnTheEdge(aStart, aEnd, rWeight, fCut);
+        };
+
+        // A weight the edge does not have is its end, which lies on the line.
+        if (aOnTheLine(rPolygon.getNextControlPoint(nEdge))
+            && aOnTheLine(rPolygon.getPrevControlPoint(nNext)))
+        {
+            aPolygon.resetNextControlPoint(nEdge);
+            aPolygon.resetPrevControlPoint(nNext);
+        }
+    }
+    return aPolygon;
+}
+
+/*
     Turns every curved edge of the path of an object that runs straight into a line. A curve
-    whose weights lie on the line between its ends runs straight. Other curves stay. With
-    bPointsOnALine, it then also deletes the points that lie on a straight line between their
-    neighbours.
+    whose weights lie on the edge between its ends, as far as whole twips can say, runs straight.
+    Other curves stay. With bPointsOnALine, it then also deletes the points that lie on a
+    straight line between their neighbours.
 */
 void COKitDocumentImpl::simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine)
 {
@@ -6122,11 +6186,13 @@ void COKitDocumentImpl::simplifyObjectPath(unsigned long long nObjectId, bool bP
     if (!pPathObject)
         return;
 
-    const basegfx::B2DPolyPolygon aLines(
-        basegfx::utils::simplifyCurveSegments(pPathObject->GetPathPoly()));
     basegfx::B2DPolyPolygon aSimpler;
-    for (const basegfx::B2DPolygon& rPolygon : aLines)
-        aSimpler.append(bPointsOnALine ? lcl_withoutPointsOnALine(rPolygon) : rPolygon);
+    for (const basegfx::B2DPolygon& rPolygon : pPathObject->GetPathPoly())
+    {
+        const basegfx::B2DPolygon aLines(
+            basegfx::utils::simplifyCurveSegments(lcl_withStraightCurvesAsLines(rPolygon)));
+        aSimpler.append(bPointsOnALine ? lcl_withoutPointsOnALine(aLines) : aLines);
+    }
     if (aSimpler != pPathObject->GetPathPoly())
         lcl_changePath(*pPathObject, STR_EditSimplifyPath, aSimpler);
 }

@@ -1360,8 +1360,8 @@ struct COKitDocument
     virtual void selectObjects(const char* pObjectIds) = 0;
 
     /**
-     * Moves and adds points of the path an object is drawn along, for an object that is drawn
-     * along one.
+     * Moves, adds and removes points and weights of the path an object is drawn along, for an
+     * object that is drawn along one.
      *
      * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
      * @param pChanges the changes in twips, separated by ";", which apply in the order they come.
@@ -1370,16 +1370,23 @@ struct COKitDocument
      *        bends the one going out - the place it moved to and how the curve runs through the
      *        point - 0 a corner, 1 smooth, 2 symmetric - as "polygon,point,part,x,y,continuity". An
      *        addition is "+polygon,point,x,y": a new point with no weights that takes that index in
-     *        the polygon, so the points after it count one more in the changes that follow.
+     *        the polygon, so the points after it count one more in the changes that follow. A
+     *        removal is "-polygon,point,part" with the part 1 or 2, and removes that weight.
+     * @param pStep the name of the step in the undo list: "move", "add", "continuity", "curve"
+     *        or "line". An addition belongs to the step "add" and a removal to any step but
+     *        "move".
      *
      * Only what is named changes. The rest of the path is left as it stands, so nothing that was
      * not touched can change. Moving a point takes the weights of its curves along with it, and
      * moving a weight of a point that a curve runs smoothly or symmetrically through moves the
      * other weight of that point as much as it takes to keep it so. It is one step to undo. An
-     * addition the path has no place for changes nothing at all. An id naming nothing on the page
-     * the view shows, or naming an object that is not drawn along a path, does nothing.
+     * addition the path has no place for, a step of another name, or an item that does not
+     * belong to its step, changes nothing at all. An id naming nothing on the page the view
+     * shows, or naming an object that is not drawn along a path, does nothing.
      */
-    virtual void setObjectPoints(unsigned long long nObjectId, const char* pChanges) = 0;
+    virtual void setObjectPoints(unsigned long long nObjectId, const char* pChanges,
+                                 const char* pStep)
+        = 0;
 
     /**
      * Deletes one point of the path of a drawing object. A polygon left with fewer than two
@@ -1392,33 +1399,6 @@ struct COKitDocument
      *        geometry.
      */
     virtual void deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint) = 0;
-
-    /**
-     * Sets the continuity at one point of the path of a drawing object, and moves the weights of
-     * the point to match. It is one undo step.
-     *
-     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
-     * @param nPolygon which polygon of the path, counted from zero.
-     * @param nPoint which point of that polygon, counted from zero.
-     * @param nContinuity 0 for a corner, 1 for smooth, 2 for symmetric.
-     */
-    virtual void setObjectPointContinuity(unsigned long long nObjectId, int nPolygon, int nPoint,
-                                          int nContinuity)
-        = 0;
-
-    /**
-     * Makes the edge after one point of the path of a drawing object a curve or a straight line.
-     * A new curve looks like the line at first. It is one undo step.
-     *
-     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
-     * @param nPolygon which polygon of the path, counted from zero.
-     * @param nPoint the index of the point in that polygon, from zero. The edge goes from this
-     *        point to the next one. In a closed polygon, the last point's edge goes to the first.
-     * @param bCurved true for a curve, false for a straight line.
-     */
-    virtual void setObjectSegmentCurved(unsigned long long nObjectId, int nPolygon, int nPoint,
-                                        bool bCurved)
-        = 0;
 
     /**
      * Splits the path of a drawing object at one of its points. A closed path opens there. An

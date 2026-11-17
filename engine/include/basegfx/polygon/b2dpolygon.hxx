@@ -91,6 +91,15 @@ namespace basegfx
         void setNextControlPoint(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue);
         void setControlPoints(sal_uInt32 nIndex, const basegfx::B2DPoint& rPrev, const basegfx::B2DPoint& rNext);
 
+        /// ControlPoints as the polygon holds them: the vector from the point to the control
+        /// point. A zero vector is no control point. A vector set here is held exactly as given.
+        /// A control point set as a place is held as its difference to the point, which is
+        /// rounded at the size of the point's coordinates.
+        const basegfx::B2DVector& getPrevControlVector(sal_uInt32 nIndex) const;
+        const basegfx::B2DVector& getNextControlVector(sal_uInt32 nIndex) const;
+        void setPrevControlVector(sal_uInt32 nIndex, const basegfx::B2DVector& rValue);
+        void setNextControlVector(sal_uInt32 nIndex, const basegfx::B2DVector& rValue);
+
         /// ControlPoint resets
         void resetPrevControlPoint(sal_uInt32 nIndex);
         void resetNextControlPoint(sal_uInt32 nIndex);
@@ -255,8 +264,6 @@ namespace basegfx
     private:
         void addOrReplaceSystemDependentDataInternal(SystemDependentData_SharedPtr& rData) const;
         SystemDependentData_SharedPtr getSystemDependantDataInternal(basegfx::SDD_Type aType) const;
-        const basegfx::B2DVector& getPrevControlVector(sal_uInt32 nIndex) const;
-        const basegfx::B2DVector& getNextControlVector(sal_uInt32 nIndex) const;
     };
 
     // typedef for a vector of B2DPolygons

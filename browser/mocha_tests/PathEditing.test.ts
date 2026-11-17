@@ -12,14 +12,14 @@
 describe('Moving a polygon of a path by its line', function () {
 	// what a sink was told, the points moved among it
 	class RecordingSink implements PathSink {
+		public readonly wholeTwips: boolean = false;
 		public moves: PathPointMove[][] = [];
 		public movePoints(moves: PathPointMove[]): void {
 			this.moves.push(moves);
 		}
 		public deletePoint(): void {}
 		public addPoint(): void {}
-		public setSegmentCurved(): void {}
-		public setContinuity(): void {}
+		public changeWeights(): void {}
 		public split(): void {}
 		public shownPathChanged(): void {}
 		public setClosed(): void {}

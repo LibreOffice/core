@@ -227,18 +227,12 @@ private:
     /// Marks the objects the client names, which it worked out from the geometry it holds. An
     /// empty list marks nothing, which is how the client asks for no selection at all.
     bool selectObjects(const StringVector& tokens);
-    /// Moves the points of a drawing object's path which the client names, and leaves the rest
-    /// of the path as it stands.
+    /// Moves, adds and removes the points and weights of a drawing object's path which the client
+    /// names, and leaves the rest of the path as it stands.
     bool setObjectPoints(const StringVector& tokens);
 
     /// Deletes one point of the path of a drawing object.
     bool deleteObjectPoint(const StringVector& tokens);
-
-    /// Sets the continuity at one point of the path of a drawing object.
-    bool setObjectPointContinuity(const StringVector& tokens);
-
-    /// Makes the edge after one point of the path of a drawing object a curve or a line.
-    bool setObjectSegmentCurved(const StringVector& tokens);
 
     /// Splits the path of a drawing object at one of its points.
     bool splitObjectPath(const StringVector& tokens);

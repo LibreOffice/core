@@ -952,11 +952,11 @@ setobjectgluepointanchor id=<id> at=<at> anchor=<anchor>
     stays where it is on the page. Sets it in one step that can be undone. A point the shape makes
     from its own geometry stays as it is.
 
-setobjectpoints id=<id> changes=<changes> [sequence=<sequence>]
+setobjectpoints id=<id> changes=<changes> [as=<step>] [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by.
-    <changes> names the points of that object's path which moved or were added, and where each of
-    them is. It is a list separated by semicolons, and the items apply in the order they come. A
+    <changes> names the points and weights of that object's path which moved, were added or were
+    removed. It is a list separated by semicolons, and the items apply in the order they come. A
     move is six numbers separated by commas:
 
         <polygon>,<point>,<part>,<x>,<y>,<continuity>
@@ -977,12 +977,25 @@ setobjectpoints id=<id> changes=<changes> [sequence=<sequence>]
     one more in the items that follow. A weight of the new point is set by a move after the
     addition.
 
+    A removal is a minus sign and three numbers separated by commas:
+
+        -<polygon>,<point>,<part>
+
+    It removes the weight <part> of that point, 1 for the one coming in and 2 for the one going
+    out. The edge on that side is then bent only by the weight at its other end, and it is a
+    straight line when that end has no weight either.
+
+    <step> names the step in the undo list: "move", the default, "add", "continuity", "curve" or
+    "line". An addition belongs to the step "add" and a removal to any step but "move". A message
+    with any other step, or with an item that does not belong to its step, changes nothing.
+
     Changes those points and leaves every other point of the path untouched, in one step that can
     be undone. Moving one weight of a point that is run through smoothly or symmetrically carries
     the other weight of that point along, and the continuity that is named is then set exactly,
-    so a point whose numbers had drifted a little off comes out lying on the line. A move naming
-    a point the path does not have is left out. An addition the path has no place for changes
-    nothing at all, because the items after it would name other points.
+    so a point whose numbers had drifted a little off comes out lying on the line. A move or a
+    removal that is not written as above, or that names a point the path does not have, is left
+    out. An addition the path has no place for changes nothing at all, because the items after it
+    would name other points.
 
 deleteobjectpoint id=<id> polygon=<polygon> point=<point>
 
@@ -990,19 +1003,6 @@ deleteobjectpoint id=<id> polygon=<polygon> point=<point>
     polygon of its path and of a point in that polygon, as for setobjectpoints. Deletes that
     point, as one undo step. A polygon left with fewer than two points is deleted too, and an
     object left with no polygon is deleted.
-
-setobjectpointcontinuity id=<id> polygon=<polygon> point=<point> continuity=<continuity>
-
-    <id>, <polygon> and <point> name a point, as for deleteobjectpoint. <continuity> is 0 for a
-    corner, 1 for smooth and 2 for symmetric. Sets the continuity at the point and moves its
-    weights to match, as one undo step.
-
-setobjectsegmentcurved id=<id> polygon=<polygon> point=<point> curved=<curved>
-
-    <id>, <polygon> and <point> name a point, as for deleteobjectpoint. <curved> is 'true' or
-    'false'. Makes the edge after the point a curve or a straight line, as one undo step. In a
-    closed polygon, the edge after the last point goes to the first. A new curve looks like the
-    line at first.
 
 splitobjectpath id=<id> polygon=<polygon> point=<point>
 
