@@ -3254,9 +3254,16 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
     {
         return false;
     }
-    const ::utl::TransliterationWrapper* pTransliteration = mrCurrentLanguageData.GetTransliteration();
     const OUString* pStr;
-    OUString aString( rString );
+    sal_Int32 nStart = 0;
+    auto isEqualFromStart =
+        [ pTransliteration = mrCurrentLanguageData.GetTransliteration(), &rString,
+          &nStart ](const OUString& rWhat)
+    {
+        sal_Int32 nMatch1 = 0, nMatch2 = 0;
+        return pTransliteration->equals(rString, nStart, rString.getLength() - nStart, nMatch1,
+                                        rWhat, 0, rWhat.getLength(), nMatch2);
+    };
     bool bFound = false;
     bool bFirst = true;
     bool bContinue = true;
@@ -3270,7 +3277,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
         {   // Step through subformats, first positive, then negative, then
             // other, but not the last (text) subformat.
             pStr = mpFormat->GetNumForString( nSub, nString, true );
-            if ( pStr && pTransliteration->isEqual( aString, *pStr ) )
+            if (pStr && isEqualFromStart(*pStr))
             {
                 bFound = true;
                 bContinue = false;
@@ -3289,20 +3296,20 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
         {
             // try remaining substring
             bFirst = false;
-            aString = aString.copy(nPos);
+            nStart = nPos;
             bContinue = true;
         }
     }
     while ( bContinue );
 
+    const std::u16string_view aRest = rString.subView(nStart);
     if ( !bFound )
     {
         if ( !bDontDetectNegation && (nString == 0) &&
              !bFirst && (nSign < 0) && mpFormat->IsSecondSubformatRealNegative() )
         {
             // simply negated twice? --1
-            aString = aString.replaceAll(" ", "");
-            if ( (aString.getLength() == 1) && (aString[0] == '-') )
+            if (comphelper::string::strip(aRest, ' ') == u"-")
             {
                 bFound = true;
                 nStringScanSign = -1;
@@ -3330,8 +3337,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
             if ( nSign < 0 )
             {   // nSign and nStringScanSign will be combined later,
                 // flip sign if doubly negated
-                if ( (nString == 0) && !bFirst &&
-                     SvNumberformat::HasStringNegativeSign( aString ) )
+                if ((nString == 0) && !bFirst && SvNumberformat::HasStringNegativeSign(aRest))
                 {
                     nStringScanSign = -1; // direct double negation
                 }

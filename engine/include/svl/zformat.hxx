@@ -408,7 +408,7 @@ public:
     // of [$xxx-nnn] are returned
     bool GetNewCurrencySymbol( OUString& rSymbol, OUString& rExtension ) const;
 
-    static bool HasStringNegativeSign( const OUString& rStr );
+    static bool HasStringNegativeSign(std::u16string_view rStr);
 
     /**
         Whether a character at position nPos is somewhere between two matching

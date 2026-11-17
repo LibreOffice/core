@@ -5905,37 +5905,13 @@ OUString SvNumberformat::GetNatNumModifierString( sal_uInt16 nNumFor ) const
 }
 
 // static
-bool SvNumberformat::HasStringNegativeSign( const OUString& rStr )
+bool SvNumberformat::HasStringNegativeSign(std::u16string_view rStr)
 {
     // For Sign '-' needs to be at the start or at the end of the string (blanks ignored)
-    sal_Int32 nLen = rStr.getLength();
-    if ( !nLen )
-    {
+    const size_t nFirst = rStr.find_first_not_of(u' ');
+    if (nFirst == std::u16string_view::npos)
         return false;
-    }
-    const sal_Unicode* const pBeg = rStr.getStr();
-    const sal_Unicode* const pEnd = pBeg + nLen;
-    const sal_Unicode* p = pBeg;
-    do
-    {   // Start
-        if ( *p == '-' )
-        {
-            return true;
-        }
-    }
-    while ( *p == ' ' && ++p < pEnd );
-
-    p = pEnd - 1;
-
-    do
-    {   // End
-        if ( *p == '-' )
-        {
-            return true;
-        }
-    }
-    while ( *p == ' ' && pBeg < --p );
-    return false;
+    return rStr[nFirst] == '-' || rStr[rStr.find_last_not_of(u' ')] == '-';
 }
 
 // static
