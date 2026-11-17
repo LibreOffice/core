@@ -407,4 +407,50 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 		// Then there should be no progress indicator
 		cy.cGet('#snackbar').should('not.exist');
 	});
+
+	it('Copy publishes a pending stub before the real content.', function() {
+		// Given a Writer document with some text selected, and a test clipboard
+		// that records writes but otherwise resolves them straight away:
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.selectAllText();
+		cy.getFrameWindow().then(function(win) {
+			win._writeCalls = [];
+			win.app.map._clip._dummyClipboard = {
+				write: function(items) {
+					win._writeCalls.push(items);
+					return Promise.resolve();
+				},
+			};
+		});
+
+		// When copying:
+		cy.getFrameWindow().then(function(win) {
+			win.app.map._clip.filterExecCopyPaste('.uno:Copy');
+		});
+
+		// Then two writes happen: the marker and the real content.
+		cy.getFrameWindow().should(function(win) {
+			// Without the accompanying fix in place, this test would have failed
+			// with win._writeCalls.length equal to 1 (the real write only), and
+			// a paste back during the slow fetch of the real content would see
+			// the user's previous unrelated clipboard content.
+			expect(win._writeCalls.length, 'marker + real writes').to.equal(2);
+		});
+
+		// And the first write is our pending stub, carrying our meta-origin.
+		// dataTransferToDocument() picks that origin to short-circuit to an
+		// internal paste, so a paste back into any of our views during the slow
+		// window still lands the just-copied content.
+		cy.getFrameWindow().then(function(win) {
+			const markerItem = win._writeCalls[0][0];
+			return markerItem.getType('text/html').then(function(blob) {
+				return blob.text();
+			}).then(function(text) {
+				const clip = win.app.map._clip;
+				expect(clip._isStubHtml(text), 'marker is a stub').to.equal(true);
+				expect(clip.getMetaOrigin(text), 'marker carries our origin')
+					.to.not.equal('');
+			});
+		});
+	});
 });

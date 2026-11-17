@@ -216,6 +216,14 @@ window.L.Clipboard = window.L.Class.extend({
 		));
 	},
 
+	// Marker payload written before the real clipboard content.
+	_getCopyPendingStubHtml: function() {
+		return this._substProductName(this._originWrapBody(
+		    '    <p>' + _('Copying from {productname}, please paste again in a moment') + '</p>\n',
+		    true
+		));
+	},
+
 	getMetaOrigin: function (html) {
 		return this._getMetaOrigin(html, '<div id="meta-origin" data-coolorigin="');
 	},
@@ -1091,11 +1099,13 @@ window.L.Clipboard = window.L.Class.extend({
 			return;
 		}
 
-		const mimeTypes = this._copyAsMarkdown ? 'text/markdown;charset=utf-8' : 'text/html,text/plain;charset=utf-8';
+		const copyAsMarkdown = this._copyAsMarkdown;
+		const mimeTypes = copyAsMarkdown ? 'text/markdown;charset=utf-8' : 'text/html,text/plain;charset=utf-8';
 		const url = this.getMetaURL() + '&MimeType=' + mimeTypes;
 
 		// It's important in DisableCopy to write something to the clipboard so that future paste actions can trigger an internal paste
-		const text = (this._map['wopi'].DisableCopy ? this._getDisabledCopyStubHtml() : (async () => {
+		const disableCopy = this._map['wopi'].DisableCopy;
+		const text = (disableCopy ? this._getDisabledCopyStubHtml() : (async () => {
 			if (await check_ === null)
 				throw new Error('Failed check, either wrong command or pending event');
 				// We need to throw an error here rather than just returning so that a failure halts copying the ClipboardItem to the clipboard
@@ -1104,7 +1114,7 @@ window.L.Clipboard = window.L.Class.extend({
 			return await result.text();
 		})());
 
-		const clipboardItem = this._copyAsMarkdown
+		const clipboardItem = copyAsMarkdown
 			? new ClipboardItem({
 				'text/plain': this._parseClipboardFetchResult(text, 'text/plain', 'markdown'),
 			})
@@ -1127,10 +1137,30 @@ window.L.Clipboard = window.L.Class.extend({
 		// in progress. DisableCopy has a synchronous stub, no fetch, so no indicator there.
 		// On the mobile UI the space is limited, so no indicator there, either.
 		const mobileUI = window.mode.isSmallScreenDevice() || window.mode.isTablet();
-		const showProgress = !this._map['wopi'].DisableCopy && !mobileUI;
+		const showProgress = !disableCopy && !mobileUI;
 		const progressLabel = _('Copying to clipboard');
 		if (showProgress) {
 			this._map.uiManager.showProgressBar(progressLabel, undefined, undefined, -1, undefined, /*infinite=*/true);
+		}
+
+		// Marker write: put a synchronous stub on the clipboard before the real content.
+		// Desktop browsers only: Safari on mobile does not tolerate an await, then write().
+		if (!disableCopy && window.mode.isDesktop()) {
+			const pendingHtml = this._getCopyPendingStubHtml();
+			const pendingPlain = this._getStubMessage(pendingHtml);
+			const markerItem = copyAsMarkdown
+				? new ClipboardItem({
+					'text/plain': new Blob([pendingPlain], { type: 'text/plain' }),
+				})
+				: new ClipboardItem({
+					'text/html': new Blob([pendingHtml], { type: 'text/html' }),
+					'text/plain': new Blob([pendingPlain], { type: 'text/plain' }),
+				});
+			try {
+				await clipboard.write([markerItem]);
+			} catch (error) {
+				window.app.console.warn('navigator.clipboard.write() marker failed: ' + error.message);
+			}
 		}
 
 		try {
