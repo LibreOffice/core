@@ -133,6 +133,15 @@ void Base64::encode(OUStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int
     base64encode(aStrBuffer, aPass);
 }
 
+void Base64::encode(char* pDest, const void* pData, std::size_t nSize)
+{
+    assert(nSize <= o3tl::make_unsigned(SAL_MAX_INT32));
+    const sal_Int8* pBuffer = static_cast<const sal_Int8*>(pData);
+    const sal_Int32 nLength = static_cast<sal_Int32>(nSize);
+    for (sal_Int32 i = 0; i < nLength; i += 3, pDest += 4)
+        ThreeByteToFourByte(pBuffer, i, nLength, pDest);
+}
+
 template <class StringView_t>
 static std::size_t decodeSomeCharsImpl(cpo::uno::Sequence<sal_Int8>& rOutBuffer, StringView_t rInBuffer)
 {

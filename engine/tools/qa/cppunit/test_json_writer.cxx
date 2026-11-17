@@ -25,12 +25,14 @@ public:
     void test2();
     void testArray();
     void testEmptyDocument();
+    void testBase64();
 
     CPPUNIT_TEST_SUITE(JsonWriterTest);
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST(test2);
     CPPUNIT_TEST(testArray);
     CPPUNIT_TEST(testEmptyDocument);
+    CPPUNIT_TEST(testBase64);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -98,6 +100,22 @@ void JsonWriterTest::testEmptyDocument()
     // Finishing a writer that was given nothing yields the empty document.
     tools::JsonWriter aJson;
     CPPUNIT_ASSERT_EQUAL(tools::JsonWriter::EMPTY_DOCUMENT, aJson.finishAndGetAsOString());
+}
+
+void JsonWriterTest::testBase64()
+{
+    // The prefix comes first, and the padding of each length that is not a multiple of 3 is kept.
+    tools::JsonWriter aJson;
+    const sal_uInt8 aBytes[] = { 0xfb, 0xff, 0x00, 'a' };
+    aJson.putBase64("png", "data:image/png;base64,", aBytes, 4);
+    aJson.putBase64("three", "", aBytes, 3);
+    aJson.putBase64("two", "", aBytes, 2);
+    aJson.putBase64("none", "", aBytes, 0);
+    aJson.put("after", "x");
+
+    CPPUNIT_ASSERT_EQUAL("{ \"png\": \"data:image/png;base64,+/8AYQ==\", \"three\": \"+/8A\", "
+                         "\"two\": \"+/8=\", \"none\": \"\", \"after\": \"x\"}"_ostr,
+                         aJson.finishAndGetAsOString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JsonWriterTest);

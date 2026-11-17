@@ -86,6 +86,11 @@ public:
     /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
     void putRaw(std::string_view);
 
+    /// Put nSize bytes from pData as a base64 string, after aPrefix, such as the start of a data
+    /// URL. The prefix is written as it is, so it must need no escaping.
+    void putBase64(std::string_view pPropName, std::string_view aPrefix, const void* pData,
+                   std::size_t nSize);
+
     /** Closes the tags, and returns data.
      * After this no more document modifications may be written. */
     OString finishAndGetAsOString();

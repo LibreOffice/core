@@ -45,6 +45,12 @@ public:
 
     static void encode(OStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int8>& aPass);
 
+    /// The number of characters that encode() writes for nSize bytes.
+    static constexpr std::size_t encodedSize(std::size_t nSize) { return (nSize + 2) / 3 * 4; }
+
+    /// Encodes nSize bytes from pData into pDest, which holds encodedSize(nSize) characters.
+    static void encode(char* pDest, const void* pData, std::size_t nSize);
+
     // Decode a base 64 encoded string into a sequence of bytes. The two differ
     // only in the return value. decode() returns nothing and logs a warning if
     // any input is left unconsumed; use it for a complete value (an attribute,

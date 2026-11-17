@@ -8,6 +8,7 @@
  */
 
 #include <tools/json_writer.hxx>
+#include <comphelper/base64.hxx>
 #include <o3tl/string_view.hxx>
 #include <stdio.h>
 #include <cstddef>
@@ -272,6 +273,24 @@ void JsonWriter::putSimpleValue(std::u16string_view rPropVal)
     addCommaBeforeField();
 
     writeEscapedOUString(rPropVal);
+}
+
+void JsonWriter::putBase64(std::string_view pPropName, std::string_view aPrefix,
+                           const void* pData, std::size_t nSize)
+{
+    const std::size_t nEncodedSize = comphelper::Base64::encodedSize(nSize);
+    ensureSpaceAndWriteNameColon(pPropName, aPrefix.size() + nEncodedSize + 2);
+
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, aPrefix.data(), aPrefix.size());
+    mPos += aPrefix.size();
+    comphelper::Base64::encode(mPos, pData, nSize);
+    mPos += nEncodedSize;
+    *mPos = '"';
+    ++mPos;
+
+    validate();
 }
 
 void JsonWriter::putRaw(std::string_view rRawBuf)

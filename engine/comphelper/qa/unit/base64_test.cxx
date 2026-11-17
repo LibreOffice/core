@@ -22,11 +22,15 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cpo/uno/Sequence.hxx>
 
 #include <comphelper/base64.hxx>
+
+#include <iterator>
+#include <string>
 
 using namespace css;
 
@@ -38,11 +42,13 @@ public:
     void testBase64Encode();
     void testBase64Decode();
     void testBase64EncodeForOStringBuffer();
+    void testBase64EncodeIntoBuffer();
 
     CPPUNIT_TEST_SUITE(Base64Test);
     CPPUNIT_TEST(testBase64Encode);
     CPPUNIT_TEST(testBase64Decode);
     CPPUNIT_TEST(testBase64EncodeForOStringBuffer);
+    CPPUNIT_TEST(testBase64EncodeIntoBuffer);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -64,6 +70,26 @@ void Base64Test::testBase64Encode()
     inputSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
     CPPUNIT_ASSERT_EQUAL(u"yB9NbwABAgM="_ustr, aBuffer.makeStringAndClear());
+}
+
+void Base64Test::testBase64EncodeIntoBuffer()
+{
+    // Each length from 0 to 9 bytes encodes as the string buffer form does, and no more than
+    // encodedSize() characters are written.
+    const sal_Int8 aBytes[] = { 5, 2, 3, 0, sal_Int8(sal_uInt8(200)), 31, 77, 111, 1 };
+    for (std::size_t nSize = 0; nSize <= std::size(aBytes); ++nSize)
+    {
+        OStringBuffer aExpected;
+        comphelper::Base64::encode(aExpected,
+                                   cpo::uno::Sequence<sal_Int8>(aBytes, sal_Int32(nSize)));
+
+        const std::size_t nEncoded = comphelper::Base64::encodedSize(nSize);
+        std::string aActual(nEncoded + 1, '#');
+        comphelper::Base64::encode(aActual.data(), aBytes, nSize);
+        CPPUNIT_ASSERT_EQUAL('#', aActual[nEncoded]);
+        aActual.resize(nEncoded);
+        CPPUNIT_ASSERT_EQUAL(std::string(aExpected.getStr(), aExpected.getLength()), aActual);
+    }
 }
 
 void Base64Test::testBase64Decode()

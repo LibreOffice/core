@@ -12,10 +12,8 @@
 #include <drawinglayer/processor2d/VectorResourceCache.hxx>
 
 #include <basegfx/vector/b2dvector.hxx>
-#include <comphelper/base64.hxx>
 #include <comphelper/random.hxx>
 #include <o3tl/hash_combine.hxx>
-#include <rtl/strbuf.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
@@ -32,17 +30,6 @@ namespace drawinglayer
 {
 namespace
 {
-/// Write nSize bytes from pData under sName in base64, after aPrefix.
-void putBase64(tools::JsonWriter& rWriter, std::string_view sName, std::string_view aPrefix,
-               const void* pData, std::size_t nSize)
-{
-    const cpo::uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(pData),
-                                                 static_cast<sal_Int32>(nSize));
-    OStringBuffer aBase64(aPrefix);
-    comphelper::Base64::encode(aBase64, aSequence);
-    rWriter.put(sName, aBase64.makeStringAndClear());
-}
-
 /// The graphic scaled down to rPixelSize, or nothing when it is not a still bitmap or not larger.
 std::optional<Bitmap> fittedBitmap(const Graphic& rGraphic, const basegfx::B2DVector& rPixelSize)
 {
@@ -97,7 +84,7 @@ void VectorResourceCache::writeFont(tools::JsonWriter& rWriter, sal_uInt64 nFont
         return;
 
     const BinaryDataContainer& rBytes = aIterator->second;
-    putBase64(rWriter, "data", "", rBytes.getData(), rBytes.getSize());
+    rWriter.putBase64("data", "", rBytes.getData(), rBytes.getSize());
 }
 
 std::optional<FontSubset>
@@ -140,7 +127,7 @@ void VectorResourceCache::writeFontSubset(tools::JsonWriter& rWriter, const Font
             rWriter.putSimpleValue(sal_Int64(nLast));
         }
     }
-    putBase64(rWriter, "data", "", rSubset.maBytes.getData(), rSubset.maBytes.getSize());
+    rWriter.putBase64("data", "", rSubset.maBytes.getData(), rSubset.maBytes.getSize());
 }
 
 void VectorResourceCache::writeGraphicForPixelSize(tools::JsonWriter& rWriter,
@@ -174,7 +161,7 @@ void VectorResourceCache::writeGraphicForPixelSize(tools::JsonWriter& rWriter,
         rWriter.put("error", "conversionfailed");
         return;
     }
-    putBase64(rWriter, "data", bJpeg ? "data:image/jpeg;base64," : "data:image/png;base64,",
+    rWriter.putBase64("data", bJpeg ? "data:image/jpeg;base64," : "data:image/png;base64,",
               aStream.GetData(), aStream.Tell());
 }
 
