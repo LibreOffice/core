@@ -151,6 +151,12 @@ const features = {
 	get tabsKeybinds() {
 		return this.tabs & Platform.APP_LINUX;
 	},
+
+	/**
+	 * Environments that show the welcome slideshow
+	 */
+	welcomeSlideshow:
+		Platform.APP_LINUX | Platform.APP_MAC | Platform.APP_WINDOWS,
 } as const;
 
 interface Window {

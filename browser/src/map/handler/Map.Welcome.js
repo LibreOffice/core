@@ -37,7 +37,7 @@ window.L.Map.Welcome = window.L.Handler.extend({
 	},
 
 	addHooks: function () {
-		if (window.mode.isCODesktop())
+		if (window.detect(window.features.welcomeSlideshow))
 			return;
 		window.L.DomEvent.on(window, 'message', this.onMessage, this);
 		this.remove();
@@ -58,7 +58,7 @@ window.L.Map.Welcome = window.L.Handler.extend({
 	},
 
 	shouldWelcomeWithSlideshow: function() {
-		if (!window.mode.isCODesktop())
+		if (!window.detect(window.features.welcomeSlideshow))
 			return false;
 
 		let storedVersion = window.prefs.get('WSDWelcomeVersion');
@@ -205,6 +205,6 @@ window.L.Map.Welcome = window.L.Handler.extend({
 	}
 });
 
-if (!window.L.Browser.cypressTest && (window.enableWelcomeMessage || window.mode.isCODesktop()) && window.prefs.canPersist) {
+if (!window.L.Browser.cypressTest && (window.enableWelcomeMessage || window.detect(window.features.welcomeSlideshow)) && window.prefs.canPersist) {
 	window.L.Map.addInitHook('addHandler', 'welcome', window.L.Map.Welcome);
 }

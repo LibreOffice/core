@@ -2818,7 +2818,7 @@ class Menubar extends window.L.Control {
 		} else if (id === 'about') {
 			this._map.showLOAboutDialog();
 		} else if (id === 'latestupdates' && this._map.welcome) {
-			if (window.mode.isCODesktop()) this._map.welcome.showWelcomeSlideshow();
+			if (window.detect(window.features.welcomeSlideshow)) this._map.welcome.showWelcomeSlideshow();
 			else this._map.welcome.showWelcomeDialog();
 		} else if (id === 'feedback' && this._map.feedback) {
 			this._map.feedback.showFeedbackDialog();
@@ -3055,7 +3055,7 @@ class Menubar extends window.L.Control {
 		if (menuItem.type === 'action') {
 			if (((menuItem.id === 'rev-history' || menuItem.id === 'Rev-History') && !window.L.Params.revHistoryEnabled) ||
 				(menuItem.id === 'closedocument' && !window.L.Params.closeButtonEnabled) ||
-				(menuItem.id === 'latestupdates' && !window.enableWelcomeMessage)) {
+				(menuItem.id === 'latestupdates' && !(window.enableWelcomeMessage || window.detect(window.features.welcomeSlideshow)))) {
 				return false;
 			}
 		}

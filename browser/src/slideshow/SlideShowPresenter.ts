@@ -1096,7 +1096,10 @@ class SlideShowPresenter {
 		if (force || !settings.isEndless) {
 			this._stopFullScreen();
 			this._closeSlideShowWindow();
-			if (window.mode.isCODesktop() && this._isWelcomePresentation) {
+			if (
+				window.detect(window.features.welcomeSlideshow) &&
+				this._isWelcomePresentation
+			) {
 				this._isWelcomePresentation = false;
 				app.dispatcher.dispatch('closeapp');
 			}
