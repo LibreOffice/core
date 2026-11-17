@@ -164,7 +164,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 	// Small dashes, so the outline reads as something following the pointer rather than as part
 	// of the document.
-	private static readonly hoverDashes = [3, 3];
+	public static readonly hoverDashes = [3, 3];
 
 	// The answer of the last hit test, with the point and the content it was asked about. The
 	// pointer, the outline and the name under the pointer ask about the same point for the same
@@ -431,27 +431,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 	// the objectKind of a form control
 	private static readonly formControlKind: number = 32;
 
-	/// The selection frame being drawn, from where the press was to the pointer, in twips. Absent
-	/// while none is drawn.
-	public static frame: cool.Range2D | undefined;
-
-	// the selection frame, dashed in the colour of the outline under the pointer
-	private strokeTheFrame(xDiff: number, yDiff: number): void {
-		const frame = RenderGeometrySection.frame;
-		if (!frame) return;
-		const scale = app.twipsToPixels;
-		this.context.save();
-		this.context.strokeStyle = RenderGeometrySection.hoverColor();
-		this.context.lineWidth = 1;
-		this.context.setLineDash(RenderGeometrySection.hoverDashes);
-		this.context.strokeRect(
-			xDiff + Math.round(frame.minX * scale) + 0.5,
-			yDiff + Math.round(frame.minY * scale) + 0.5,
-			Math.round(frame.width * scale),
-			Math.round(frame.height * scale),
-		);
-		this.context.restore();
-	}
+	/// The selection being drawn by a drag on the empty page, a frame or another kind; null while
+	/// none is drawn.
+	public static dragSelect: DragSelect | null = null;
 
 	/// The ones of those objects that can be selected: out of design mode a form control works as
 	/// a control and is no object to select.
@@ -1142,9 +1124,10 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const xDiff = -viewedRectangle.pX1;
 		const yDiff = -viewedRectangle.pY1;
 
-		// while a selection frame is drawn it is what the pointer shows, not the object under it,
-		// and while a mode is on the pointer draws and marks no object
-		if (RenderGeometrySection.frame) this.strokeTheFrame(xDiff, yDiff);
+		// while a selection is drawn by a drag it is what the pointer shows, not the object under
+		// it, and while a mode is on the pointer draws and marks no object
+		const dragSelect = RenderGeometrySection.dragSelect;
+		if (dragSelect) dragSelect.draw(this.context, xDiff, yDiff);
 		else if (!Interaction.modeOn())
 			this.outlineHitUnderMouse(data, xDiff, yDiff);
 
@@ -1239,7 +1222,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		color of a border under the pointer. It is the light gray the document engine draws
 		boundaries and hit geometry in.
 	*/
-	private static hoverColor(): string {
+	public static hoverColor(): string {
 		const token = getComputedStyle(document.documentElement)
 			.getPropertyValue('--color-border-darker')
 			.trim();

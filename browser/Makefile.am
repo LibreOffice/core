@@ -451,6 +451,7 @@ COOL_JS_LST =\
 	src/app/ClassicInteraction.ts \
 	src/app/TableContext.ts \
 	src/app/CreateContext.ts \
+	src/app/DragSelect.ts \
 	src/app/HandleTravel.ts \
 	src/app/GraphicSelectionMiddleware.ts \
 	src/app/TextSelectionMiddleware.ts \

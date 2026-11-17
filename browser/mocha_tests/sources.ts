@@ -49,6 +49,7 @@
 /// <reference path="../src/app/ClassicInteraction.ts" />
 /// <reference path="../src/app/TableContext.ts" />
 /// <reference path="../src/app/CreateContext.ts" />
+/// <reference path="../src/app/DragSelect.ts" />
 /// <reference path="../src/app/HandleTravel.ts" />
 /// <reference path="../src/app/GraphicSelectionMiddleware.ts" />
 /// <reference path="../src/app/TextSelectionMiddleware.ts" />
