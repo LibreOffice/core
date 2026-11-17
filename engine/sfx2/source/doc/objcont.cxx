@@ -114,11 +114,16 @@ Bitmap SfxObjectShell::GetPreviewBitmap() const
     pDevice->SetAntialiasing(AntialiasingFlags::Enable | pDevice->GetAntialiasing());
     if(!CreatePreview_Impl(/*bFullContent*/false, false, pDevice, nullptr))
         return Bitmap();
-    Size size = pDevice->GetOutputSizePixel();
-    Bitmap aBitmap( pDevice->GetBitmap( Point(), size) );
-    // Scale down the image to the desired size from the 4*size from CreatePreview_Impl().
-    size = Size( size.Width() / 4, size.Height() / 4 );
-    aBitmap.Scale(size, BmpScaleFlag::BestQuality);
+    const Size aRenderSize = pDevice->GetOutputSizePixel();
+    // Scale down the image to the desired size from the 4*size from CreatePreview_Impl(), by
+    // drawing the render into a device of that size, which takes no copy of the render.
+    const Size size( aRenderSize.Width() / 4, aRenderSize.Height() / 4 );
+    ScopedVclPtrInstance< VirtualDevice > pScaled(DeviceFormat::WITH_ALPHA);
+    if (!pScaled->SetOutputSizePixel(size, /*bErase*/true, /*bAlphaMaskTransparent*/true))
+        return Bitmap();
+    pScaled->DrawOutDev(Point(), size, Point(), aRenderSize, *pDevice);
+    pDevice.disposeAndClear();
+    Bitmap aBitmap( pScaled->GetBitmap( Point(), size) );
     if (!aBitmap.IsEmpty())
         aBitmap.Convert(BmpConversion::N24Bit);
     return aBitmap;
