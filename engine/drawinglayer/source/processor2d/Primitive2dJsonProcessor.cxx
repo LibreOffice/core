@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <cmath>
 #include <optional>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -374,55 +375,66 @@ void Primitive2dJsonProcessor::setFontCache(
     mpFaceByKey = &rFaceByKey;
 }
 
-/// Write graphic data as base64 data URL, preferring native browser-supported formats. A graphic
-/// that cannot be encoded gets an error attribute naming the reason instead of data.
-void Primitive2dJsonProcessor::writeGraphicBase64(tools::JsonWriter& rWriter,
-                                                  const Graphic& rGraphic)
+bool Primitive2dJsonProcessor::withGraphicBytes(
+    const Graphic& rGraphic,
+    const std::function<void(std::string_view rMimeType, const void* pData, std::size_t nSize)>&
+        rUse)
 {
     if (rGraphic.IsGfxLink())
     {
         GfxLink aLink = rGraphic.GetGfxLink();
-        GfxLinkType eType = aLink.GetType();
-        const char* pMime = nullptr;
-
-        switch (eType)
+        std::string_view aMimeType;
+        switch (aLink.GetType())
         {
             case GfxLinkType::NativeJpg:
-                pMime = "data:image/jpeg;base64,";
+                aMimeType = "image/jpeg";
                 break;
             case GfxLinkType::NativePng:
-                pMime = "data:image/png;base64,";
+                aMimeType = "image/png";
                 break;
             case GfxLinkType::NativeSvg:
-                pMime = "data:image/svg+xml;base64,";
+                aMimeType = "image/svg+xml";
                 break;
             case GfxLinkType::NativeGif:
-                pMime = "data:image/gif;base64,";
+                aMimeType = "image/gif";
                 break;
             case GfxLinkType::NativeWebp:
-                pMime = "data:image/webp;base64,";
+                aMimeType = "image/webp";
                 break;
             default:
                 break;
         }
 
-        if (pMime)
+        if (!aMimeType.empty())
         {
-            rWriter.putBase64("data", pMime, aLink.GetData(), aLink.GetDataSize());
-            return;
+            rUse(aMimeType, aLink.GetData(), aLink.GetDataSize());
+            return true;
         }
     }
 
     // Fallback: convert to PNG
     // Maybe we can be smarter what to do here, probably don't need to full resolution if the image is 40MP
     SvMemoryStream aStream;
-    if (GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::PNG) == ERRCODE_NONE)
-    {
-        rWriter.putBase64("data", "data:image/png;base64,", aStream.GetData(), aStream.Tell());
-        return;
-    }
+    if (GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::PNG) != ERRCODE_NONE)
+        return false;
+    rUse("image/png", aStream.GetData(), aStream.Tell());
+    return true;
+}
 
-    rWriter.put("error", "conversionfailed");
+/// Write graphic data as base64 data URL, preferring native browser-supported formats. A graphic
+/// that cannot be encoded gets an error attribute naming the reason instead of data.
+void Primitive2dJsonProcessor::writeGraphicBase64(tools::JsonWriter& rWriter,
+                                                  const Graphic& rGraphic)
+{
+    const bool bWritten = withGraphicBytes(
+        rGraphic,
+        [&rWriter](std::string_view rMimeType, const void* pData, std::size_t nSize)
+        {
+            const std::string aPrefix = "data:" + std::string(rMimeType) + ";base64,";
+            rWriter.putBase64("data", aPrefix, pData, nSize);
+        });
+    if (!bWritten)
+        rWriter.put("error", "conversionfailed");
 }
 
 /// Write graphic: checksum + either cache or inline base64.

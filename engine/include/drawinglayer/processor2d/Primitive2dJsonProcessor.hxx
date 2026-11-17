@@ -20,10 +20,12 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 
+#include <cstddef>
 #include <functional>
 #include <map>
 #include <optional>
 #include <set>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -129,6 +131,14 @@ public:
     /// Write a Graphic as base64 data URL to a JsonWriter. A graphic that cannot be encoded gets
     /// an error attribute naming the reason instead of data.
     static void writeGraphicBase64(tools::JsonWriter& rWriter, const Graphic& rGraphic);
+
+    /// Call rUse with the MIME type of rGraphic and its bytes in that type: the file the graphic
+    /// was read from when it is a JPEG, PNG, SVG, GIF or WebP image, otherwise the graphic
+    /// converted to PNG. Returns false, and rUse is not called, when that conversion fails.
+    static bool withGraphicBytes(const Graphic& rGraphic,
+                                 const std::function<void(std::string_view rMimeType,
+                                                          const void* pData, std::size_t nSize)>&
+                                     rUse);
 
     /// Set an external bitmap cache. Graphics encountered during
     /// processing are stored here keyed by their checksum.
