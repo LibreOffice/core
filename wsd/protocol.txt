@@ -955,8 +955,9 @@ setobjectgluepointanchor id=<id> at=<at> anchor=<anchor>
 setobjectpoints id=<id> changes=<changes> [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by.
-    <changes> names the points of that object's path which moved, and where each of them went. It
-    is a list separated by semicolons, and every item of it is six numbers separated by commas:
+    <changes> names the points of that object's path which moved or were added, and where each of
+    them is. It is a list separated by semicolons, and the items apply in the order they come. A
+    move is six numbers separated by commas:
 
         <polygon>,<point>,<part>,<x>,<y>,<continuity>
 
@@ -967,11 +968,21 @@ setobjectpoints id=<id> changes=<changes> [sequence=<sequence>]
     <continuity> says how the curve is to run through that point: 0 for a corner, 1 for a point
     it runs smoothly through, 2 for one it runs symmetrically through.
 
-    Moves those points and leaves every other point of the path untouched, in one step that can
+    An addition is a plus sign and four numbers separated by commas:
+
+        +<polygon>,<point>,<x>,<y>
+
+    It adds a point with no weights at <x> and <y>, in twips, that takes the index <point> in
+    the polygon. <point> can be one past the last point of the polygon. The points after it count
+    one more in the items that follow. A weight of the new point is set by a move after the
+    addition.
+
+    Changes those points and leaves every other point of the path untouched, in one step that can
     be undone. Moving one weight of a point that is run through smoothly or symmetrically carries
     the other weight of that point along, and the continuity that is named is then set exactly,
-    so a point whose numbers had drifted a little off comes out lying on the line. A point named
-    twice, or one the path does not have, is left out.
+    so a point whose numbers had drifted a little off comes out lying on the line. A move naming
+    a point the path does not have is left out. An addition the path has no place for changes
+    nothing at all, because the items after it would name other points.
 
 deleteobjectpoint id=<id> polygon=<polygon> point=<point>
 
@@ -979,12 +990,6 @@ deleteobjectpoint id=<id> polygon=<polygon> point=<point>
     polygon of its path and of a point in that polygon, as for setobjectpoints. Deletes that
     point, as one undo step. A polygon left with fewer than two points is deleted too, and an
     object left with no polygon is deleted.
-
-insertobjectpoint id=<id> x=<x> y=<y>
-
-    <id> is a drawing object, as for setobjectpoints. <x> and <y> are a place on the page, in
-    twips. Adds a point to the path of the object on the edge nearest to that place, as one undo
-    step. The path keeps its shape. If the nearest place is an existing point, nothing is added.
 
 setobjectpointcontinuity id=<id> polygon=<polygon> point=<point> continuity=<continuity>
 

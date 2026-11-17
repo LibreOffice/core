@@ -24,7 +24,6 @@
 #include <svx/VectorPart.hxx>
 #include <cmath>
 
-#include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -5700,12 +5699,57 @@ static void lcl_changePath(SdrPathObj& rPathObject, TranslateId aDescription,
 }
 
 /*
-    Moves points of the path of an object. The client sends only the points that moved, so a
+    Adds a point with no weights to the path, from an item "polygon,point,x,y" in twips. The new
+    point takes the index point in that polygon, which can be one past its last point. Returns
+    false and leaves the path as it is for an item that is not four numbers, for a polygon or an
+    index the path does not have, for a place that is not a finite number, and for a path that
+    already has as many points as SdrPathObj can number with sal_uInt16.
+*/
+static bool lcl_addPoint(basegfx::B2DPolyPolygon& rPath, std::string_view aItem, double fToModel)
+{
+    sal_Int32 nField = 0;
+    const sal_uInt32 nPolygon(o3tl::toUInt32(o3tl::getToken(aItem, 0, ',', nField)));
+    if (nField < 0 || nPolygon >= rPath.count())
+        return false;
+
+    const sal_uInt32 nPoint(o3tl::toUInt32(o3tl::getToken(aItem, 0, ',', nField)));
+    if (nField < 0)
+        return false;
+
+    const double fX(o3tl::toDouble(o3tl::getToken(aItem, 0, ',', nField)) * fToModel);
+    if (nField < 0)
+        return false;
+
+    const double fY(o3tl::toDouble(o3tl::getToken(aItem, 0, ',', nField)) * fToModel);
+    if (nField >= 0 || !std::isfinite(fX) || !std::isfinite(fY))
+        return false;
+
+    sal_uInt32 nAllPoints = 0;
+    for (sal_uInt32 nEach = 0; nEach < rPath.count(); ++nEach)
+        nAllPoints += rPath.getB2DPolygon(nEach).count();
+    if (nAllPoints >= SAL_MAX_UINT16)
+        return false;
+
+    basegfx::B2DPolygon aPolygon(rPath.getB2DPolygon(nPolygon));
+    if (nPoint > aPolygon.count())
+        return false;
+
+    aPolygon.insert(nPoint, basegfx::B2DPoint(fX, fY));
+    rPath.setB2DPolygon(nPolygon, aPolygon);
+    return true;
+}
+
+/*
+    Changes points of the path of an object. The client sends only the points that changed, so a
     large path is not sent in full, and points that were not touched cannot change.
 
-    Each change is "polygon,point,part,x,y,continuity" in twips, and changes are separated by
-    ";". The part is 0 for the point itself, 1 for its incoming weight and 2 for its outgoing
-    weight. The continuity is 0 for a corner, 1 for smooth and 2 for symmetric.
+    Changes are separated by ";" and apply in the order they come. A move is
+    "polygon,point,part,x,y,continuity" in twips. The part is 0 for the point itself, 1 for its
+    incoming weight and 2 for its outgoing weight. The continuity is 0 for a corner, 1 for smooth
+    and 2 for symmetric. An addition is "+polygon,point,x,y" in twips: a new point with no weights
+    at that index, so the points after it count one more in the changes that follow. If an
+    addition cannot be made, nothing changes, because the indices after it would name other
+    points.
 */
 void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char* pChanges)
 {
@@ -5722,6 +5766,7 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
     const double fToModel(o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
     basegfx::B2DPolyPolygon aPath(pPathObject->GetPathPoly());
     bool bMoved(false);
+    bool bAdded(false);
 
     const OString aChanges(pChanges ? pChanges : "");
     for (sal_Int32 nAt = 0; nAt >= 0;)
@@ -5729,6 +5774,17 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
         const OString aChange(aChanges.getToken(0, ';', nAt));
         if (aChange.isEmpty())
             continue;
+
+        if (aChange.startsWith("+"))
+        {
+            if (!lcl_addPoint(aPath, aChange.subView(1), fToModel))
+            {
+                SetLastExceptionMsg(u"The path has no place for the point to add"_ustr);
+                return;
+            }
+            bAdded = true;
+            continue;
+        }
 
         sal_Int32 nField = 0;
         const sal_uInt32 nPolygon(o3tl::toUInt32(o3tl::getToken(aChange, 0, ',', nField)));
@@ -5778,10 +5834,10 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
         bMoved = true;
     }
 
-    if (!bMoved)
+    if (!bMoved && !bAdded)
         return;
 
-    lcl_changePath(*pPathObject, STR_DragMethMove, aPath);
+    lcl_changePath(*pPathObject, bAdded ? STR_DragInsertPoint : STR_DragMethMove, aPath);
 }
 
 /*
@@ -5827,71 +5883,6 @@ void COKitDocumentImpl::deleteObjectPoint(unsigned long long nObjectId, int nPol
     rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoDeleteObject(*pPathObject));
     pList->RemoveObject(pPathObject->GetOrdNum());
     rModel.EndUndo();
-}
-
-/*
-    Adds a point to the path of an object, on the edge nearest to the given place in twips. The
-    path keeps its shape: a curved edge is split there into two curves. If the nearest place is
-    an existing point, nothing is added.
-*/
-void COKitDocumentImpl::insertObjectPoint(unsigned long long nObjectId, int nX, int nY)
-{
-    comphelper::ProfileZone aZone("COKitDocumentImpl::insertObjectPoint");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
-    if (!pPathObject || !pPathObject->GetPathPoly().count())
-        return;
-
-    // Convert the place from twips to the unit of the model.
-    const basegfx::B2DPoint aGiven(o3tl::convert(nX, o3tl::Length::twip, o3tl::Length::mm100),
-                                   o3tl::convert(nY, o3tl::Length::twip, o3tl::Length::mm100));
-
-    const basegfx::B2DPolyPolygon& rPath(pPathObject->GetPathPoly());
-    sal_uInt32 nPolygon = 0;
-    sal_uInt32 nEdge = 0;
-    double fCut = 0.0;
-    basegfx::utils::getSmallestDistancePointToPolyPolygon(rPath, aGiven, nPolygon, nEdge, fCut);
-    const basegfx::B2DPolygon& rPolygon(rPath.getB2DPolygon(nPolygon));
-    if (rPolygon.count() < 2 || fCut <= 0.0 || fCut >= 1.0)
-    {
-        SetLastExceptionMsg(u"The nearest place on the path is one of its points"_ustr);
-        return;
-    }
-
-    // Find the point at the cut, on the curve or on the line. A curve whose weights lie on the
-    // line between its ends is treated as that line, as the search for the cut treats it.
-    basegfx::B2DCubicBezier aEdge;
-    rPolygon.getBezierSegment(nEdge, aEdge);
-    aEdge.testAndSolveTrivialBezier();
-    const basegfx::B2DPoint aOnTheEdge(
-        aEdge.isBezier() ? aEdge.interpolatePoint(fCut)
-                         : basegfx::B2DPoint(basegfx::interpolate(aEdge.getStartPoint(),
-                                                                  aEdge.getEndPoint(), fCut)));
-    const Point aAt(basegfx::fround<tools::Long>(aOnTheEdge.getX()),
-                    basegfx::fround<tools::Long>(aOnTheEdge.getY()));
-
-    // The new point is rounded to whole model units, so a cut very close to an end of the edge
-    // can land on that end.
-    const Point aStart(basegfx::fround<tools::Long>(aEdge.getStartPoint().getX()),
-                       basegfx::fround<tools::Long>(aEdge.getStartPoint().getY()));
-    const Point aEnd(basegfx::fround<tools::Long>(aEdge.getEndPoint().getX()),
-                     basegfx::fround<tools::Long>(aEdge.getEndPoint().getY()));
-    if (aAt == aStart || aAt == aEnd)
-    {
-        SetLastExceptionMsg(u"The nearest place on the path is one of its points"_ustr);
-        return;
-    }
-
-    // Let the object compute the path with the new point, then put the old path back and set the
-    // new one as a change. That notifies the views and records an undo step.
-    const basegfx::B2DPolyPolygon aBefore(pPathObject->GetPathPoly());
-    pPathObject->NbcInsPoint(aAt, false);
-    const basegfx::B2DPolyPolygon aAfter(pPathObject->GetPathPoly());
-    pPathObject->NbcSetPathPoly(aBefore);
-    lcl_changePath(*pPathObject, STR_DragInsertPoint, aAfter);
 }
 
 /*
@@ -6040,7 +6031,7 @@ void COKitDocumentImpl::setObjectPathClosed(unsigned long long nObjectId, bool b
     Whether the point nPoint lies on the straight line from nBefore to nAfter. The point has no
     weights, nBefore has no outgoing weight and nAfter has no incoming weight. The point lies
     between the two others, at most one model unit away from the line. One unit is allowed
-    because a point added on a line is rounded to whole units.
+    because a point added on a line travels in whole twips, and half a twip is less than a unit.
 */
 static bool lcl_liesOnTheLine(const basegfx::B2DPolygon& rPolygon, sal_uInt32 nBefore,
                               sal_uInt32 nPoint, sal_uInt32 nAfter)

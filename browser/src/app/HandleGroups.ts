@@ -2993,7 +2993,7 @@ class MotionPathSink implements PathSink {
 	public deletePoint(_place: PathPlace): void {
 		// The whole path went out already.
 	}
-	public insertPointAt(_at: cool.Point): void {
+	public addPoint(_addition: PathPointAddition): void {
 		// The whole path went out already.
 	}
 	public setSegmentCurved(_place: PathPlace, _curved: boolean): void {

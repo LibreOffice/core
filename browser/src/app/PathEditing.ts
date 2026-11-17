@@ -29,6 +29,17 @@ interface PathPointMove extends PathPlace {
 }
 
 /*
+	A point added to a path: the place it takes, where it lies, in whole twips, and the weights
+	that change with it - its own two and those of its neighbours that bend the edge it is added
+	on - named by their places in the path that has the new point.
+*/
+interface PathPointAddition extends PathPlace {
+	x: number;
+	y: number;
+	weights: PathPointMove[];
+}
+
+/*
 	Where the changes of a path go. The path being edited can belong to an object, be drawn
 	anew, or be a lasso or the path an animation follows; each of them takes the changes its own
 	way.
@@ -38,8 +49,8 @@ interface PathSink {
 	movePoints(moves: PathPointMove[]): void;
 	/// A point is deleted.
 	deletePoint(place: PathPlace): void;
-	/// A point is added on the edge nearest to that place, in twips.
-	insertPointAt(at: cool.Point): void;
+	/// A point is added, with the weights that change with it.
+	addPoint(addition: PathPointAddition): void;
 	/// The edge after a point becomes a curve or a line.
 	setSegmentCurved(place: PathPlace, curved: boolean): void;
 	/// The curve runs through a point as a corner (0), smoothly (1) or symmetrically (2).
@@ -566,8 +577,13 @@ class PathEditing implements HandleSource {
 
 	/// Adds a point on the edge nearest to that place, in twips on the page.
 	public insertPointAt(at: cool.Point): void {
-		this.changeHere((path) => PathEditing.withAPointAt(path, at));
-		this.sink.insertPointAt(at);
+		const made: { addition?: PathPointAddition } = {};
+		this.changeHere((path) => {
+			const added = PathEditing.withAPointAt(path, at);
+			made.addition = added?.addition;
+			return added?.path ?? null;
+		});
+		if (made.addition) this.sink.addPoint(made.addition);
 	}
 
 	/// Makes the edge after the point a handle stands for a curve, or a line.
@@ -1001,13 +1017,16 @@ class PathEditing implements HandleSource {
 
 	/*
 		A point added on the edge nearest to that place, where the place nearest to it lies
-		inside an edge rather than on one of its ends. A curve is split there into two curves,
-		so the path keeps its shape and the new point runs smoothly through.
+		inside an edge rather than on one of its ends, and the addition that names it. A curve is
+		split there into two curves, so the path keeps its shape and the new point runs smoothly
+		through. The new point and the weights travel in whole twips, so they are rounded here and
+		the path shown is the one the model will hold. A point that lands on an end of the edge
+		once rounded adds nothing.
 	*/
 	private static withAPointAt(
 		path: cool.ObjectPathPolygon[],
 		at: cool.Point,
-	): cool.ObjectPathPolygon[] | null {
+	): { path: cool.ObjectPathPolygon[]; addition: PathPointAddition } | null {
 		let best: {
 			polygon: number;
 			point: number;
@@ -1045,35 +1064,106 @@ class PathEditing implements HandleSource {
 		const t = found.cut;
 		const between = (a: cool.Point, b: cool.Point) =>
 			a.add(b.subtract(a).multiplyBy(t));
+		const whole = (a: cool.Point) =>
+			new cool.Point(Math.round(a.x), Math.round(a.y));
 
-		let added: cool.ObjectPathPoint;
+		// The weights of the two halves of the curve: a and ab bend the half before the new
+		// point, bc and c the half after it.
+		const outHalf = between(edge.start, edge.out);
+		const across = between(edge.out, edge.into);
+		const intoHalf = between(edge.into, edge.end);
+		const beforeMiddle = between(outHalf, across);
+		const afterMiddle = between(across, intoHalf);
+		const a = whole(outHalf);
+		const ab = whole(beforeMiddle);
+		const bc = whole(afterMiddle);
+		const c = whole(intoHalf);
+		const middle = whole(
+			edge.curved
+				? between(beforeMiddle, afterMiddle)
+				: between(edge.start, edge.end),
+		);
+		if (
+			(middle.x === from.x && middle.y === from.y) ||
+			(middle.x === to.x && middle.y === to.y)
+		)
+			return null;
+
+		// The new point comes right after the point the edge starts from. The point the edge
+		// ends at moves one place on, unless the edge closes the polygon and ends at its first
+		// point.
+		const polygon = found.polygon;
+		const place = found.point + 1;
+		const toPlace = next === 0 ? 0 : next + 1;
+		const added: cool.ObjectPathPoint = { x: middle.x, y: middle.y };
+		const weights: PathPointMove[] = [];
+
 		if (edge.curved) {
-			const a = between(edge.start, edge.out);
-			const b = between(edge.out, edge.into);
-			const c = between(edge.into, edge.end);
-			const ab = between(a, b);
-			const bc = between(b, c);
-			const middle = between(ab, bc);
-			from.aheadX = a.x;
-			from.aheadY = a.y;
-			to.behindX = c.x;
-			to.behindY = c.y;
-			added = {
-				x: middle.x,
-				y: middle.y,
-				behindX: ab.x,
-				behindY: ab.y,
-				aheadX: bc.x,
-				aheadY: bc.y,
-				continuity: 1,
-			};
-		} else {
-			const middle = between(edge.start, edge.end);
-			added = { x: middle.x, y: middle.y };
+			// The weight of a neighbour stays on the line it was on and gets shorter, so a curve
+			// that ran smoothly or symmetrically through the neighbour runs smoothly through it.
+			if (from.aheadX !== undefined) {
+				from.aheadX = a.x;
+				from.aheadY = a.y;
+				if (from.continuity) from.continuity = 1;
+				weights.push({
+					polygon: polygon,
+					point: found.point,
+					part: 2,
+					x: a.x,
+					y: a.y,
+					continuity: from.continuity ?? 0,
+				});
+			}
+			if (to.behindX !== undefined) {
+				to.behindX = c.x;
+				to.behindY = c.y;
+				if (to.continuity) to.continuity = 1;
+				weights.push({
+					polygon: polygon,
+					point: toPlace,
+					part: 1,
+					x: c.x,
+					y: c.y,
+					continuity: to.continuity ?? 0,
+				});
+			}
+
+			added.behindX = ab.x;
+			added.behindY = ab.y;
+			added.aheadX = bc.x;
+			added.aheadY = bc.y;
+			added.continuity = 1;
+			weights.push(
+				{
+					polygon: polygon,
+					point: place,
+					part: 1,
+					x: ab.x,
+					y: ab.y,
+					continuity: 1,
+				},
+				{
+					polygon: polygon,
+					point: place,
+					part: 2,
+					x: bc.x,
+					y: bc.y,
+					continuity: 1,
+				},
+			);
 		}
 
-		points.splice(found.point + 1, 0, added);
-		return path;
+		points.splice(place, 0, added);
+		return {
+			path: path,
+			addition: {
+				polygon: polygon,
+				point: place,
+				x: middle.x,
+				y: middle.y,
+				weights: weights,
+			},
+		};
 	}
 
 	/// An edge from one point to the next: its ends, its weights where it is curved, else its
@@ -1445,18 +1535,7 @@ class ObjectPathSink implements PathSink {
 			'setobjectpoints id=' +
 				String(this.objectId) +
 				' changes=' +
-				moves
-					.map((move: PathPointMove) =>
-						[
-							move.polygon,
-							move.point,
-							move.part,
-							move.x,
-							move.y,
-							move.continuity,
-						].join(','),
-					)
-					.join(';'),
+				ObjectPathSink.itemsOf(moves),
 		);
 	}
 
@@ -1464,11 +1543,22 @@ class ObjectPathSink implements PathSink {
 		this.send('deleteobjectpoint', ObjectPathSink.parametersOf(place));
 	}
 
-	public insertPointAt(at: cool.Point): void {
-		this.send(
-			'insertobjectpoint',
-			'x=' + String(Math.round(at.x)) + ' y=' + String(Math.round(at.y)),
-		);
+	/*
+		The new point goes first and the weights after it, which name their points by the places
+		they have in the path with the new point. The points that do not change are not named, as
+		for a move.
+	*/
+	public addPoint(addition: PathPointAddition): void {
+		const point = [
+			addition.polygon,
+			addition.point,
+			addition.x,
+			addition.y,
+		].join(',');
+		const weights = addition.weights.length
+			? ';' + ObjectPathSink.itemsOf(addition.weights)
+			: '';
+		this.send('setobjectpoints', 'changes=+' + point + weights);
 	}
 
 	public setSegmentCurved(place: PathPlace, curved: boolean): void {
@@ -1505,6 +1595,22 @@ class ObjectPathSink implements PathSink {
 	public shownPathChanged(): void {
 		this.selection.refresh();
 		app.sectionContainer?.requestReDraw();
+	}
+
+	/// The moves as the items of a setobjectpoints message.
+	private static itemsOf(moves: PathPointMove[]): string {
+		return moves
+			.map((move: PathPointMove) =>
+				[
+					move.polygon,
+					move.point,
+					move.part,
+					move.x,
+					move.y,
+					move.continuity,
+				].join(','),
+			)
+			.join(';');
 	}
 
 	/// The parameters that name a point of the path to the engine.

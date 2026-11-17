@@ -234,9 +234,6 @@ private:
     /// Deletes one point of the path of a drawing object.
     bool deleteObjectPoint(const StringVector& tokens);
 
-    /// Adds a point to the path of a drawing object, on the edge nearest to a place on the page.
-    bool insertObjectPoint(const StringVector& tokens);
-
     /// Sets the continuity at one point of the path of a drawing object.
     bool setObjectPointContinuity(const StringVector& tokens);
 

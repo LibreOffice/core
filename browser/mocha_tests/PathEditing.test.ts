@@ -17,7 +17,7 @@ describe('Moving a polygon of a path by its line', function () {
 			this.moves.push(moves);
 		}
 		public deletePoint(): void {}
-		public insertPointAt(): void {}
+		public addPoint(): void {}
 		public setSegmentCurved(): void {}
 		public setContinuity(): void {}
 		public split(): void {}

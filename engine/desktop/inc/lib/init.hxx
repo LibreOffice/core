@@ -265,7 +265,6 @@ namespace desktop {
         void selectObjects(const char* pObjectIds) override;
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges) override;
         void deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint) override;
-        void insertObjectPoint(unsigned long long nObjectId, int nX, int nY) override;
         void setObjectPointContinuity(unsigned long long nObjectId, int nPolygon, int nPoint,
                                       int nContinuity) override;
         void setObjectSegmentCurved(unsigned long long nObjectId, int nPolygon, int nPoint,

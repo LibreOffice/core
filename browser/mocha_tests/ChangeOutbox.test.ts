@@ -270,6 +270,14 @@ describe('ChangeOutbox typed text', function () {
 		nodeassert.strictEqual(aChange('uno .uno:Bold'), null);
 	});
 
+	it('takes a move of the points of a path, and leaves a change that adds a point alone', function () {
+		nodeassert.ok(aChange('setobjectpoints id=5 changes=0,1,0,100,200,0'));
+		nodeassert.strictEqual(
+			aChange('setobjectpoints id=5 changes=+0,1,100,200;0,1,1,90,200,1'),
+			null,
+		);
+	});
+
 	it('has no ticket for a change the socket let go unsent', function () {
 		nodeassert.ok(aChange('setobjecttransform to=5,1,0,0,1,10,20 as=move'));
 		(app as any).socket.sendMessage = () => {};

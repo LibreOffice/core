@@ -681,7 +681,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "selectobjects") ||
                tokens.equals(0, "setobjectpoints") ||
                tokens.equals(0, "deleteobjectpoint") ||
-               tokens.equals(0, "insertobjectpoint") ||
                tokens.equals(0, "setobjectpointcontinuity") ||
                tokens.equals(0, "setobjectsegmentcurved") ||
                tokens.equals(0, "splitobjectpath") ||
@@ -797,10 +796,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "deleteobjectpoint"))
         {
             return deleteObjectPoint(tokens);
-        }
-        else if (tokens.equals(0, "insertobjectpoint"))
-        {
-            return insertObjectPoint(tokens);
         }
         else if (tokens.equals(0, "setobjectpointcontinuity"))
         {
@@ -2157,27 +2152,6 @@ bool ChildSession::deleteObjectPoint(const StringVector& tokens)
         return false;
 
     getLOKitDocument()->deleteObjectPoint(objectId, polygon, point);
-    return true;
-}
-
-bool ChildSession::insertObjectPoint(const StringVector& tokens)
-{
-    unsigned long long objectId = 0;
-    int x = 0;
-    int y = 0;
-
-    if (tokens.size() != 4 || !getTokenInteger(tokens[2], "x", x)
-        || !getTokenInteger(tokens[3], "y", y))
-    {
-        sendTextFrameAndLogError("error: cmd=insertobjectpoint kind=syntax");
-        return false;
-    }
-
-    if (!readObjectToChange(tokens, "insertobjectpoint", objectId))
-        return false;
-
-    // The place is on the page, in twips.
-    getLOKitDocument()->insertObjectPoint(objectId, x, y);
     return true;
 }
 

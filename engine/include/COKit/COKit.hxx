@@ -1360,20 +1360,24 @@ struct COKitDocument
     virtual void selectObjects(const char* pObjectIds) = 0;
 
     /**
-     * Moves points of the path an object is drawn along, for an object that is drawn along one.
+     * Moves and adds points of the path an object is drawn along, for an object that is drawn
+     * along one.
      *
      * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
-     * @param pChanges what moved and where to, in twips: one change is the polygon, the point of
-     *        it, which of the three parts of that point moved - 0 the point itself, 1 the weight
-     *        that bends the curve coming in, 2 the weight that bends the one going out - and the
-     *        place it moved to, as "polygon,point,part,x,y", several of them separated by ";".
+     * @param pChanges the changes in twips, separated by ";", which apply in the order they come.
+     *        A move is the polygon, the point of it, which of the three parts of that point moved -
+     *        0 the point itself, 1 the weight that bends the curve coming in, 2 the weight that
+     *        bends the one going out - the place it moved to and how the curve runs through the
+     *        point - 0 a corner, 1 smooth, 2 symmetric - as "polygon,point,part,x,y,continuity". An
+     *        addition is "+polygon,point,x,y": a new point with no weights that takes that index in
+     *        the polygon, so the points after it count one more in the changes that follow.
      *
-     * Only what is named moves. The rest of the path is left as it stands, so nothing that was
+     * Only what is named changes. The rest of the path is left as it stands, so nothing that was
      * not touched can change. Moving a point takes the weights of its curves along with it, and
      * moving a weight of a point that a curve runs smoothly or symmetrically through moves the
      * other weight of that point as much as it takes to keep it so. It is one step to undo. An
-     * id naming nothing on the page the view shows, or naming an object that is not drawn along
-     * a path, does nothing.
+     * addition the path has no place for changes nothing at all. An id naming nothing on the page
+     * the view shows, or naming an object that is not drawn along a path, does nothing.
      */
     virtual void setObjectPoints(unsigned long long nObjectId, const char* pChanges) = 0;
 
@@ -1388,16 +1392,6 @@ struct COKitDocument
      *        geometry.
      */
     virtual void deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint) = 0;
-
-    /**
-     * Adds a point to the path of a drawing object, on the edge nearest to the given place. A
-     * curved edge keeps its shape and passes through the new point. It is one undo step.
-     *
-     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
-     * @param nX the horizontal position on the page, in twips.
-     * @param nY the vertical position on the page, in twips.
-     */
-    virtual void insertObjectPoint(unsigned long long nObjectId, int nX, int nY) = 0;
 
     /**
      * Sets the continuity at one point of the path of a drawing object, and moves the weights of

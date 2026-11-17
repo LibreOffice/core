@@ -2382,7 +2382,6 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "selectobjects") ||
              tokens.equals(0, "setobjectpoints") ||
              tokens.equals(0, "deleteobjectpoint") ||
-             tokens.equals(0, "insertobjectpoint") ||
              tokens.equals(0, "setobjectpointcontinuity") ||
              tokens.equals(0, "setobjectsegmentcurved") ||
              tokens.equals(0, "splitobjectpath") ||

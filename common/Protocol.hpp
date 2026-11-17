@@ -470,7 +470,6 @@ namespace COOLProtocol
             tokens.equals(0, "setobjectgluepointwayout") ||
             tokens.equals(0, "setobjectgluepointanchor") ||
             tokens.equals(0, "deleteobjectpoint") ||
-            tokens.equals(0, "insertobjectpoint") ||
             tokens.equals(0, "setobjectpointcontinuity") ||
             tokens.equals(0, "setobjectsegmentcurved") ||
             tokens.equals(0, "splitobjectpath") ||

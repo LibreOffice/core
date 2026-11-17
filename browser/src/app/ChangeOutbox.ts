@@ -406,6 +406,14 @@ class ChangeOutbox {
 			return { kind: 'transform', what, mappings, tickets: [] };
 		}
 
+		// A change of a path that adds a point renumbers the points after it, so it is not the
+		// state of the path that a later change can take the place of. The outbox leaves it alone.
+		if (
+			parser.command === 'setobjectpoints' &&
+			parser.value('changes')?.includes('+')
+		)
+			return null;
+
 		const stateBegins = ChangeOutbox.namedStates[parser.command];
 		if (stateBegins === undefined) return null;
 

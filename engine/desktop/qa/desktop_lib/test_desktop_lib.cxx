@@ -111,6 +111,7 @@
 #include <svx/svdview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdopath.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -6695,13 +6696,14 @@ void DesktopKitTest::testObjectPathCommands()
     pDocument->simplifyObjectPath(nId, false);
     CPPUNIT_ASSERT(!pSquare->GetPathPoly().areControlPointsUsed());
 
-    // The point is added on the nearest edge, the top one, after the first point. The square
-    // keeps its shape.
-    pDocument->insertObjectPoint(nId, o3tl::convert(3000, o3tl::Length::mm100, o3tl::Length::twip),
-                                 o3tl::convert(1200, o3tl::Length::mm100, o3tl::Length::twip));
+    // A point added after the first point, on the top edge, takes index 1 and the square keeps
+    // its shape. 1701 and 567 twips are 3000 and 1000 model units, give or take one.
+    pDocument->setObjectPoints(nId, "+0,1,1701,567");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3000.0, aPolygon().getB2DPoint(1).getX(), 2.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, aPolygon().getB2DPoint(1).getY(), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3000.0, aPolygon().getB2DPoint(1).getX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, aPolygon().getB2DPoint(1).getY(), 1.0);
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 1000), aPolygon().getB2DPoint(2));
+    CPPUNIT_ASSERT(!aPolygon().areControlPointsUsed());
 
     // Deleting that point gives back the square.
     pDocument->deleteObjectPoint(nId, 0, 1);
@@ -6710,8 +6712,7 @@ void DesktopKitTest::testObjectPathCommands()
 
     // A point added on an edge lies on the line between its neighbours. Simplify Curves keeps it,
     // and Simplify All deletes it. The corners of the square stay.
-    pDocument->insertObjectPoint(nId, o3tl::convert(3001, o3tl::Length::mm100, o3tl::Length::twip),
-                                 o3tl::convert(1200, o3tl::Length::mm100, o3tl::Length::twip));
+    pDocument->setObjectPoints(nId, "+0,1,1702,567");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
     pDocument->simplifyObjectPath(nId, false);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
@@ -6741,6 +6742,28 @@ void DesktopKitTest::testObjectPathCommands()
     pDocument->splitObjectPath(nId, 0, 2);
     CPPUNIT_ASSERT_EQUAL(nObjects + 1, pPageView->GetPage()->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aPolygon().count());
+
+    // A point added with the weights that follow it in the same change bends the edge it is
+    // added on, and one undo takes the point and the weights away together.
+    const auto aPathAsText = [pSquare]() {
+        return basegfx::utils::exportToSvgD(pSquare->GetPathPoly(), false, false, false);
+    };
+    const OUString aBeforeTheCurve(aPathAsText());
+    const sal_uInt32 nPointsBefore(aPolygon().count());
+    pDocument->setObjectPoints(nId, "+0,1,2835,1701;0,1,1,2268,1701,1;0,1,2,3402,1701,1");
+    CPPUNIT_ASSERT_EQUAL(nPointsBefore + 1, aPolygon().count());
+    CPPUNIT_ASSERT(aPolygon().isPrevControlPointUsed(1));
+    CPPUNIT_ASSERT(aPolygon().isNextControlPointUsed(1));
+    pDocument->postUnoCommand(".uno:Undo", "", false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
+
+    // An addition the path has no place for changes nothing, not even the moves that come with
+    // it.
+    pDocument->setObjectPoints(nId, "0,0,0,0,0,0;+0,99,0,0");
+    CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
+    pDocument->setObjectPoints(nId, "+5,0,0,0");
+    CPPUNIT_ASSERT_EQUAL(aBeforeTheCurve, aPathAsText());
 
     // A corner point with two weights becomes smooth: its two weights then lie on one line
     // through the point.
