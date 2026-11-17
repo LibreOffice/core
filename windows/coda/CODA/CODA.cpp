@@ -181,6 +181,8 @@ struct DocumentTab
     std::thread app2js;
     // The origin of the account window's first page, empty in any other window.
     std::string accountOrigin;
+    // The temporary copy of the remote document that the kit has open.
+    std::string remoteCopyPath;
     bool isFirstPageLoaded = false;
     std::string editorForm;
     std::string editorFormUrl;
@@ -4349,6 +4351,9 @@ static void closeTab(WindowState& window, int tabId)
             do_bye_handling_things(*tab);
             tab->app2js.join();
         }
+
+        if (!tab->remoteCopyPath.empty())
+            FileUtil::removeFile(tab->remoteCopyPath);
     }
 
     if (tab->webViewController)
@@ -6946,11 +6951,14 @@ static void writeRemoteDocFile(DocumentTab& data, int id, const std::string& arg
 
     // A reload, or another document in the same window, ends the earlier document first.
     endLocalSession(data);
+    if (!data.remoteCopyPath.empty())
+        FileUtil::removeFile(data.remoteCopyPath);
 
     data.fakeClientFd = fakeSocketSocket();
     data.appDocId = generate_new_app_doc_id();
     DocumentData::get(data.appDocId).inEditorFrame = true;
     data.filenameAndUri = { name, pathToURI(Poco::Path(path)) };
+    data.remoteCopyPath = path;
     postReplyToCall(data.hWnd, data.tabId, id, path);
 }
 
