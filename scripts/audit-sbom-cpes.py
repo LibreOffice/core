@@ -46,6 +46,13 @@ import re
 import sqlite3
 import sys
 
+# Forks NVD tracks under a vendor of their own, with a version line of their
+# own: quickjs-ng numbers its releases 0.x, while Bellard's quickjs
+# (quickjs_project, bellard) is versioned by date. The original's vendor may
+# carry more CVEs, but its ranges do not compare with the fork's versions, so
+# asserting it would not match better - the fork's own vendor is right.
+FORK_VENDORS = {("quickjs-ng", "quickjs")}
+
 
 def find_db():
     roots = [os.environ.get("GRYPE_DB_CACHE_DIR"),
@@ -137,6 +144,8 @@ def main():
             ours = vendors.get(vendor, 0)
             if vendor == "*":
                 continue  # wildcard matches every vendor of the product
+            if (vendor, product) in FORK_VENDORS:
+                continue
             best, best_count = max(vendors.items(), key=lambda kv: kv[1])
             if best_count > ours:
                 wrong.append((name, vendor, product, ours, best, best_count))
