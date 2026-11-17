@@ -238,7 +238,7 @@ class NavigatorPanel extends SidebarBase {
 			// A master document lists its chapters, which are files of their own,
 			// next to the headings. Both trees are in the same navigator, the tab
 			// chooses which one shows.
-			if (this.map.isText() && app.LOUtil.isMasterDocument(this.map)) {
+			if (this.map.isText() && app.LOUtil.isMasterDocument()) {
 				const masterTab = window.L.DomUtil.create('button', 'tab', navOptions);
 				masterTab.id = 'tab-master';
 				masterTab.textContent = _('Master View');

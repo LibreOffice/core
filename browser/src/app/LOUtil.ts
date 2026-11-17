@@ -1299,16 +1299,10 @@ class LOUtil {
 	}
 
 	/// Whether the document is a master document, which links its chapters
-	/// from other files. The mobile apps use local storage, not WOPI, so
-	/// BaseFileName is empty there and the document URL, which ends with the
-	/// file name, is used instead.
-	public static isMasterDocument(map: any): boolean {
-		const fileName: string = (
-			(map['wopi'] && map['wopi'].BaseFileName) ||
-			(map.options && map.options.doc) ||
-			''
-		).toLowerCase();
-		return fileName.endsWith('.odm') || fileName.endsWith('.otm');
+	/// from other files. The engine says so in the status, whatever the name
+	/// of the file is.
+	public static isMasterDocument(): boolean {
+		return !!app.file.masterDocument;
 	}
 
 	public static isFileODF(map: any): boolean {

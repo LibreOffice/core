@@ -1764,6 +1764,9 @@ statusupdate: type=<typeName> parts=<numberOfParts> current=<currentPartNumber> 
     back has "reattached": true. The view still has its cursor, selection,
     part and dialogs in the kit.
 
+    A master document, a text document that links its chapters, has
+    "masterdocument": true, whatever the name of its file is.
+
 vectorpartids: {"pageids": [<id>, ...], "pagerectangles": [[<x>, <y>, <width>, <height>], ...]}
 
     The list of the pages of a text document changed: a page was added or

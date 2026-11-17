@@ -1210,7 +1210,7 @@ class BackstageView extends window.L.Class {
 		if (
 			window.mode.isCODesktop() &&
 			this.map.isText() &&
-			!app.LOUtil.isMasterDocument(this.map) &&
+			!app.LOUtil.isMasterDocument() &&
 			this.map.stateChangeHandler.getItemValue('.uno:NewGlobalDoc') !==
 				'disabled'
 		)

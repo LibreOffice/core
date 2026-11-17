@@ -59,7 +59,7 @@ app.getExportFormats = function (docType: string): ExportFormat[] {
 	);
 
 	// the own format of a master document is odm
-	if (docType === 'text' && app.map && app.LOUtil.isMasterDocument(app.map))
+	if (docType === 'text' && app.map && app.LOUtil.isMasterDocument())
 		return [
 			pdf,
 			makeExportFormat('odm', _('ODF master document (.odm)')),

@@ -47,6 +47,8 @@ class ServerCommand {
 	public lastrow?: number;
 	public readonly?: number;
 	public externallinksdisabled?: boolean;
+	// True for a master document, a text document that links its chapters.
+	public masterdocument?: boolean;
 	// True in the status that follows a reconnect in which the server gave the
 	// client its old view back, with its cursor, selection and dialogs.
 	public reattached?: boolean;

@@ -2478,6 +2478,14 @@ static bool isHybridPDF(const SfxObjectShell* pObjectShell)
     return pFilter && pFilter->GetFilterName().endsWith("_pdf_addstream_import");
 }
 
+/// True when the document is a master document, a text document that links its chapters.
+static bool isMasterDocument(COKitDocument* pThis)
+{
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
+    uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY);
+    return xDocument && xDocument->supportsService(u"com.sun.star.text.GlobalDocument"_ustr);
+}
+
 /// The filter that writes this document out in the given format, empty when the document
 /// type has no filter for it.
 static OUString getFilterNameForFormat(COKitDocument* pThis, std::u16string_view rFormat)
@@ -2496,15 +2504,11 @@ static OUString getFilterNameForFormat(COKitDocument* pThis, std::u16string_view
             pMap = aDrawExtensionMap;
             break;
         case COKitDocumentType::TEXT:
-        {
-            COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
-            uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY);
-            if (xDocument && xDocument->supportsService(u"com.sun.star.text.GlobalDocument"_ustr))
+            if (isMasterDocument(pThis))
                 pMap = aWriterGlobalExtensionMap;
             else
                 pMap = aWriterExtensionMap;
             break;
-        }
         case COKitDocumentType::OTHER:
         default:
             return {};
@@ -9107,6 +9111,17 @@ static std::string getHybridPDF(COKitDocument* pThis)
     return aStream.str();
 }
 
+static std::string getMasterDocument(COKitDocument* pThis)
+{
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:MasterDocument");
+    aTree.put("masterdocument", isMasterDocument(pThis));
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
+    return aStream.str();
+}
+
 static std::string getExternalLinksDisabled(COKitDocument* pThis)
 {
     SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
@@ -9816,6 +9831,10 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
     else if (aCommand == ".uno:HybridPDF")
     {
         return getHybridPDF(this);
+    }
+    else if (aCommand == ".uno:MasterDocument")
+    {
+        return getMasterDocument(this);
     }
     else if (aCommand == ".uno:LanguageStatus")
     {

@@ -287,6 +287,7 @@ interface AppInterface {
 		permission: string;
 		viewModeExtensions: string;
 		isHybridPDF: boolean;
+		masterDocument: boolean;
 		disableSidebar: boolean;
 		inputSequence: number;
 		textCursor: {

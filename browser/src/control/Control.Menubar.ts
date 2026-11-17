@@ -3011,7 +3011,7 @@ class Menubar extends window.L.Control {
 		// Only a desktop app can ask where the made documents go, and in a sandbox
 		// it may not, which the engine says by disabling the command.
 		if (menuItem.id === 'createmasterdocument'
-			&& (!window.mode.isCODesktop() || app.LOUtil.isMasterDocument(this._map)
+			&& (!window.mode.isCODesktop() || app.LOUtil.isMasterDocument()
 				|| this._map['stateChangeHandler'].getItemValue('.uno:NewGlobalDoc') === 'disabled')) {
 			return false;
 		}
@@ -3070,7 +3070,7 @@ class Menubar extends window.L.Control {
 		if (menuItem.id && (menuItem.id === 'saveas' || menuItem.id.startsWith('saveas-')) && this._map['wopi'].UserCanNotWriteRelative)
 			return false;
 
-		if (menuItem.id === 'saveas-odm' && !app.LOUtil.isMasterDocument(this._map))
+		if (menuItem.id === 'saveas-odm' && !app.LOUtil.isMasterDocument())
 			return false;
 
 		if (menuItem.id && (menuItem.id.startsWith('exportas')) && this._map['wopi'].UserCanNotWriteRelative)

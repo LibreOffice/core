@@ -447,7 +447,7 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 				}
 			];
 			// the own format of a master document comes first
-			if (app.LOUtil.isMasterDocument(this.options.map))
+			if (app.LOUtil.isMasterDocument())
 				submenuOpts.unshift({
 					'action': 'saveas-odm',
 					'text': _('ODF master document (.odm)')

@@ -173,6 +173,16 @@ namespace LOKitHelper
         return JsonUtil::getJSONValue<std::string>(object, "hybridpdf") == "true";
     }
 
+    /// True when the document is a master document, a text document that links its chapters.
+    inline bool isMasterDocument(COKitDocument* document)
+    {
+        const std::string value(document->getCommandValues(".uno:MasterDocument"));
+        Poco::JSON::Object::Ptr object;
+        if (!JsonUtil::parseJSON(value, object))
+            return false;
+        return JsonUtil::getJSONValue<std::string>(object, "masterdocument") == "true";
+    }
+
     inline std::string documentStatus(COKitDocument *loKitDocument, bool diffSizePages = false)
     {
         assert(loKitDocument && "null loKitDocument");
@@ -209,6 +219,9 @@ namespace LOKitHelper
 
         if (isHybridPDF(loKitDocument))
             resultInfo["hybridpdf"] = "true";
+
+        if (type == COKitDocumentType::TEXT && isMasterDocument(loKitDocument))
+            resultInfo["masterdocument"] = "true";
 
         std::string values(loKitDocument->getCommandValues(".uno:AllPageSize"));
         if (!values.empty())

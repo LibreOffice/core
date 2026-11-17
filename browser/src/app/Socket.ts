@@ -1131,6 +1131,9 @@ class Socket {
 			return;
 		}
 
+		// The formats, the menus and the Navigator of a master document differ.
+		app.file.masterDocument = !!command.masterdocument;
+
 		if (!this._map._docLayer) {
 			Util.ensureValue(command.type);
 			// initialize and append text input before doc layer

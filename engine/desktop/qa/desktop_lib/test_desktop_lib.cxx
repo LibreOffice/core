@@ -247,6 +247,7 @@ public:
     void testSaveFailedReportsReason();
     void testSaveFromReadOnlyView();
     void testHybridPDFState();
+    void testMasterDocumentState();
     void testSaveAsHybridPDF();
     void testExportDirectToPdfDottedName();
     void testSaveAsJsonOptions();
@@ -391,6 +392,7 @@ public:
     CPPUNIT_TEST(testSaveFailedReportsReason);
     CPPUNIT_TEST(testSaveFromReadOnlyView);
     CPPUNIT_TEST(testHybridPDFState);
+    CPPUNIT_TEST(testMasterDocumentState);
     CPPUNIT_TEST(testSaveAsHybridPDF);
     CPPUNIT_TEST(testExportDirectToPdfDottedName);
     CPPUNIT_TEST(testSaveAsJsonOptions);
@@ -1962,6 +1964,29 @@ void DesktopKitTest::testHybridPDFState()
     aStream = std::stringstream(pDocument->getCommandValues(".uno:HybridPDF"));
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(std::string("false"), aTree.get<std::string>("hybridpdf"));
+}
+
+void DesktopKitTest::testMasterDocumentState()
+{
+    // A master document says that it is one:
+    COKitDocumentImpl* pDocument = loadDoc("master-document.odm");
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(pDocument->getCommandValues(".uno:MasterDocument"));
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), aTree.get<std::string>("masterdocument"));
+    closeDoc();
+
+    // A text document does not, also when its file is named like a master document, which the
+    // client took for a master document before.
+    utl::TempFileNamed aFile(u"", true, u".odm");
+    aFile.EnableKillingFile();
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::remove(aFile.GetURL()));
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::File::copy(createFileURL(u"blank_text.odt"), aFile.GetURL()));
+    pDocument = loadDocUrl(aFile.GetURL(), COKitDocumentType::TEXT);
+    aStream = std::stringstream(pDocument->getCommandValues(".uno:MasterDocument"));
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(std::string("false"), aTree.get<std::string>("masterdocument"));
 }
 
 void DesktopKitTest::testSaveAsHybridPDF()

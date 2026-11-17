@@ -144,6 +144,7 @@
 		// True when the file is a hybrid PDF, a PDF that carries the document it was made from.
 		// Such a file is edited as that document.
 		isHybridPDF: false,
+		masterDocument: false, // Whether the engine says the document is a master document.
 	},
 	following: {
 		// describes which cursor we follow with the view
