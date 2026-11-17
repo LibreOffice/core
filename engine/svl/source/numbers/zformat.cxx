@@ -2087,16 +2087,6 @@ OUString impTransliterateImpl(const OUString& rStr,
     return rNatNum.getNativeNumberStringParams(rStr, aLocale, rNum.GetNatNum(), rNum.GetParams());
 }
 
-void impTransliterateImpl(OUStringBuffer& rStr,
-                          const SvNumberNatNum& rNum,
-                          const NativeNumberWrapper& rNatNum)
-{
-    css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
-
-    rStr = rNatNum.getNativeNumberStringParams(
-        OUString::unacquired(rStr), aLocale, rNum.GetNatNum(), rNum.GetParams());
-}
-
 OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum, const NativeNumberWrapper& rNatNum)
 {
     return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum, rNatNum) : rStr;
@@ -2106,7 +2096,7 @@ void impTransliterate(OUStringBuffer& rStr, const SvNumberNatNum& rNum, const Na
 {
     if(rNum.IsComplete())
     {
-        impTransliterateImpl(rStr, rNum, rNatNum);
+        rStr = impTransliterateImpl(OUString::unacquired(rStr), rNum, rNatNum);
     }
 }
 
@@ -3920,15 +3910,11 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             aStr = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
             if (aStr.getLength() < 4 && !lcl_hasEra(NumFor[nIx]))
             {
-                using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
-                OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aStr.getLength(), '0');
-                ::impTransliterate(aBuf, NumFor[nIx].GetNatNum(), rNatNum);
-                aBuf.append(aStr);
-                aStr = aBuf.makeStringAndClear();
+                OUString aZeroes = OUString::Concat(RepeatedUChar('0', 4 - aStr.getLength()));
+                aStr = ::impTransliterate(aZeroes, NumFor[nIx].GetNatNum(), rNatNum) + aStr;
             }
             // NatNum12: support variants of preposition, suffixation or article
             if ( bUseSpellout )
@@ -4294,15 +4280,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             aYear = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
             if (aYear.getLength() < 4 && !lcl_hasEra(NumFor[nIx]))
             {
-                using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
-                OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aYear.getLength(), '0');
-                ::impTransliterate(aBuf, NumFor[nIx].GetNatNum(), rNatNum);
-                aBuf.append(aYear);
-                sBuff.append(aBuf);
+                OUString aZeroes = OUString::Concat(RepeatedUChar('0', 4 - aYear.getLength()));
+                sBuff.append(::impTransliterate(aZeroes, NumFor[nIx].GetNatNum(), rNatNum) + aYear);
             }
             else
             {
