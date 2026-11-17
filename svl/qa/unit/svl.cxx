@@ -74,6 +74,7 @@ public:
     void testIsNumberFormat();
     void testIsNumberFormatSpecific();
     void testUserDefinedNumberFormats();
+    void testFractionOutOfRange();
     void testNfEnglishKeywordsIntegrity();
     void testStandardColorIntegrity();
     void testColorNamesConversion();
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testIsNumberFormat);
     CPPUNIT_TEST(testIsNumberFormatSpecific);
     CPPUNIT_TEST(testUserDefinedNumberFormats);
+    CPPUNIT_TEST(testFractionOutOfRange);
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
     CPPUNIT_TEST(testStandardColorIntegrity);
     CPPUNIT_TEST(testColorNamesConversion);
@@ -1856,6 +1858,17 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "+3.142"; // without the patch is would display "3+.142"
         checkPreviewString(aFormatter, sCode, M_PI, LANGUAGE_ENGLISH_US, sExpected);
     }
+}
+
+void Test::testFractionOutOfRange()
+{
+    // cool#16420: integral part above 0xFFFFFFFF must give the error string for both signs
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    static constexpr OUString sCode = u"# ?/?"_ustr;
+    checkPreviewString(aFormatter, sCode, 5e9, LANGUAGE_ENGLISH_US, u"#FMT"_ustr);
+    checkPreviewString(aFormatter, sCode, -5e9, LANGUAGE_ENGLISH_US, u"#FMT"_ustr);
+    checkPreviewString(aFormatter, sCode, -1e300, LANGUAGE_ENGLISH_US, u"#FMT"_ustr);
+    checkPreviewString(aFormatter, u"?/?"_ustr, -5e9, LANGUAGE_ENGLISH_US, u"#FMT"_ustr);
 }
 
 void Test::testNfEnglishKeywordsIntegrity()

@@ -2945,7 +2945,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     const OUString sDenominatorFormat = lcl_GetDenominatorString(rInfo, nCnt);
 
     sal_Int64 nFrac = 0, nDiv = 1;
-    double fNum = floor(fNumber); // Integral part
+    double fNum = floor(fabs(fNumber)); // Integral part
 
     if (fNum > D_MAX_U_INT32 || rInfo.nCntExp > 9) // Too large
     {
