@@ -20,6 +20,7 @@
 #include <qt/DocumentOperations.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <net/FakeSocket.hpp>
+#include <common/FailurePage.hpp>
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
@@ -1210,47 +1211,29 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "REMOTEBOOTSTRAPFAILED"))
     {
-        auto const title = QObject::tr("Cannot open remote document");
-        auto const server = _document._remoteInfo ? _document._remoteInfo->coolServer : QString();
-        auto const serverDisplay = server.isEmpty()
-            ? QObject::tr("the Collabora Online server") : server.toHtmlEscaped();
-        auto const err = QString::fromStdString(tokens.substrFromToken(1));
-        auto const style = QStringLiteral(
-            "body{font-family:sans-serif;padding:2em;color:#333;"
-            "max-width:36em}"
-            "h1{color:#c00;font-size:1.3em}"
-            "p{line-height:1.5}");
+        const QString server = _document._remoteInfo ? _document._remoteInfo->coolServer : QString();
+        QString serverName = QObject::tr("the Collabora Online server");
+        if (!server.isEmpty())
+            serverName = server;
 
-        auto const body = QStringLiteral(
-            "<h1>%1</h1>"
-            "<p>Could not open the document from %2.</p>"
-            "<p>The server did not respond to the collaborative-"
-            "editing connection (%3).</p>"
-            "<p>It may be running a version of Collabora Online that "
-            "does not support remote editing from this app.</p>")
-            .arg(title, serverDisplay, err.toHtmlEscaped());
-
-        auto const html = QStringLiteral(
-            "<!doctype html><html><head><meta charset=\"utf-8\">"
-            "<title>%1</title><style>%2</style></head><body>%3</body></html>")
-            .arg(title, style, body);
+        const std::string error = tokens.substrFromToken(1);
+        const std::string title = QObject::tr("Cannot open remote document").toStdString();
+        const std::vector<std::string> paragraphs {
+            "Could not open the document from " + serverName.toStdString() + ".",
+            "The server did not respond to the collaborative-editing connection (" + error + ").",
+            "It may be running a version of Collabora Online that does not support remote editing "
+            "from this app."
+        };
 
         // In an editor frame the integrator's page stays, and only the frame shows the failure.
-        // The frame's policy refuses an inline style, so the rules go in as a constructed sheet.
         if (_frame)
         {
-            LOG_ERR("remote bootstrap failed in the editor frame: " << err.toStdString());
-            const QJsonArray page{ style, body };
-            const QByteArray pageJson = QJsonDocument(page).toJson(QJsonDocument::Compact);
-            evalJS("(([style, body]) => {"
-                   " const sheet = new CSSStyleSheet();"
-                   " sheet.replaceSync(style);"
-                   " document.documentElement.innerHTML = '<head></head><body>' + body + '</body>';"
-                   " document.adoptedStyleSheets = [sheet];"
-                   "})(" + pageJson.toStdString() + ");");
+            LOG_ERR("remote bootstrap failed in the editor frame: " << error);
+            evalJS(FailurePage::script(title, paragraphs));
             return {};
         }
 
+        const QString html = QString::fromStdString(FailurePage::html(title, paragraphs));
         QTimer::singleShot(0, [this, html]() {
             if (_webView) {
                 _webView->setHtml(html);

@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <common/Util.hpp>
+
 #include <Poco/JSON/Array.h>
 
 #include <sstream>
@@ -19,25 +21,60 @@
 
 namespace FailurePage
 {
+inline const std::string style =
+    "body {"
+    "    font-family: sans-serif;"
+    "    padding: 2em;"
+    "    color: #333;"
+    "    max-width: 36em;"
+    "}"
+    "h1 {"
+    "    color: #c00;"
+    "    font-size: 1.3em;"
+    "}"
+    "p {"
+    "    line-height: 1.5;"
+    "}";
+
+inline std::string escapeHtml(const std::string& text)
+{
+    std::string escaped = Util::replace(text, "&", "&amp;");
+    escaped = Util::replace(escaped, "<", "&lt;");
+    escaped = Util::replace(escaped, ">", "&gt;");
+    return Util::replace(escaped, "\"", "&quot;");
+}
+
+/// A page with a heading and paragraphs of text. Escaped text has no '<', so it never holds a
+/// placeholder.
+inline std::string html(const std::string& title, const std::vector<std::string>& paragraphs)
+{
+    static const std::string page =
+        "<!doctype html>"
+        "<html>"
+        "<head>"
+        "    <meta charset=\"utf-8\">"
+        "    <title><!--title--></title>"
+        "    <style><!--style--></style>"
+        "</head>"
+        "<body>"
+        "    <h1><!--title--></h1>"
+        "    <!--paragraphs-->"
+        "</body>"
+        "</html>";
+
+    std::string paragraphsHtml;
+    for (const std::string& paragraph : paragraphs)
+        paragraphsHtml += "<p>" + escapeHtml(paragraph) + "</p>";
+
+    std::string result = Util::replace(page, "<!--style-->", style);
+    result = Util::replace(result, "<!--title-->", escapeHtml(title));
+    return Util::replace(result, "<!--paragraphs-->", paragraphsHtml);
+}
+
 /// A script that replaces the page with a heading and paragraphs of text. The editor frame's
 /// policy refuses an inline style, so the rules go in as a constructed sheet.
 inline std::string script(const std::string& title, const std::vector<std::string>& paragraphs)
 {
-    static const std::string style =
-        "body {"
-        "    font-family: sans-serif;"
-        "    padding: 2em;"
-        "    color: #333;"
-        "    max-width: 36em;"
-        "}"
-        "h1 {"
-        "    color: #c00;"
-        "    font-size: 1.3em;"
-        "}"
-        "p {"
-        "    line-height: 1.5;"
-        "}";
-
     Poco::JSON::Array::Ptr texts = new Poco::JSON::Array();
     for (const std::string& paragraph : paragraphs)
         texts->add(paragraph);
