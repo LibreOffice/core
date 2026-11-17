@@ -88,6 +88,7 @@
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <tools/json_writer.hxx>
 #include <comphelper/flagguard.hxx>
 #include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
@@ -2389,6 +2390,9 @@ ScTabViewShell::~ScTabViewShell()
     // Notify other COKit views that we are going away.
     KitHelper::notifyOtherViews(this, COKitCallbackType::VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
     KitHelper::notifyOtherViews(this, COKitCallbackType::TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    const std::function<void(tools::JsonWriter&)> aFillNoSelection
+        = [](tools::JsonWriter& rWriter) { auto aRanges = rWriter.startArray("ranges"); };
+    KitHelper::notifyOtherViews(this, COKitCallbackType::CELL_VIEW_SELECTION, aFillNoSelection);
     KitHelper::notifyOtherViews(this, COKitCallbackType::GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
     KitHelper::notifyOtherViews(this, COKitCallbackType::CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
 

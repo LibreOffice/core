@@ -155,6 +155,7 @@ static bool lcl_isViewCallbackType(const COKitCallbackType type)
         case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
         case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
         case COKitCallbackType::TEXT_VIEW_SELECTION:
+        case COKitCallbackType::CELL_VIEW_SELECTION:
         case COKitCallbackType::VIEW_CURSOR_VISIBLE:
             return true;
 
@@ -554,6 +555,8 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
         case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
         case COKitCallbackType::VECTOR_PART_IDS:
         case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
+        case COKitCallbackType::CELL_SELECTION:
+        case COKitCallbackType::CELL_VIEW_SELECTION:
             SAL_INFO("kit", "Elide event in background save mode");
             return;
         default:
@@ -656,10 +659,12 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
         case COKitCallbackType::CELL_FORMULA:
         case COKitCallbackType::CELL_ADDRESS:
         case COKitCallbackType::CELL_SELECTION_AREA:
+        case COKitCallbackType::CELL_SELECTION:
         case COKitCallbackType::CURSOR_VISIBLE:
         case COKitCallbackType::VIEW_CURSOR_VISIBLE:
         case COKitCallbackType::SET_PART:
         case COKitCallbackType::TEXT_VIEW_SELECTION:
+        case COKitCallbackType::CELL_VIEW_SELECTION:
         case COKitCallbackType::INVALIDATE_HEADER:
         case COKitCallbackType::WINDOW:
         case COKitCallbackType::CALC_FUNCTION_LIST:
@@ -736,6 +741,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
             case COKitCallbackType::TEXT_SELECTION:
             case COKitCallbackType::MOUSE_POINTER:
             case COKitCallbackType::CELL_CURSOR:
+            case COKitCallbackType::CELL_SELECTION:
             case COKitCallbackType::CELL_FORMULA:
             case COKitCallbackType::CELL_ADDRESS:
             case COKitCallbackType::CURSOR_VISIBLE:
@@ -772,6 +778,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
             case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
             case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
             case COKitCallbackType::TEXT_VIEW_SELECTION:
+            case COKitCallbackType::CELL_VIEW_SELECTION:
             case COKitCallbackType::VIEW_CURSOR_VISIBLE:
             case COKitCallbackType::CALC_FUNCTION_LIST:
             case COKitCallbackType::FORM_FIELD_BUTTON:

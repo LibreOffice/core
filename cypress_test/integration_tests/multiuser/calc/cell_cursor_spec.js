@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require expect */
+/* global describe it cy beforeEach require expect Cypress */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -203,6 +203,21 @@ describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 		)[0];
 	}
 
+	// Get the ranges of the last cellviewselection message about a view, or
+	// null. The socket's _onMessage must be spied on.
+	function lastCellViewSelectionRanges(win, viewId) {
+		var ranges = null;
+		win.app.socket._onMessage.getCalls().forEach((call) => {
+			var textMsg = call.args[0] && call.args[0].textMsg;
+			if (typeof textMsg !== 'string' || !textMsg.startsWith('cellviewselection:'))
+				return;
+			var selection = JSON.parse(textMsg.substring('cellviewselection:'.length));
+			if (parseInt(selection.viewId) === viewId)
+				ranges = selection.ranges;
+		});
+		return ranges;
+	}
+
 	it('No username popup on zoom', function() {
 		otherViewCursorOnC5();
 
@@ -261,5 +276,34 @@ describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 		});
 
 		cy.cGet('.username-pop-up', { timeout: 1000 }).should('not.be.visible');
+	});
+
+	it('Sends the cell selection of the other view as cell ranges', function() {
+		var viewId1;
+
+		// Listen in the second view, before the first view selects.
+		cy.cSetActiveFrame('#iframe2');
+		cy.getFrameWindow().then((win2) => {
+			helper.processToIdle(win2);
+			Cypress.sinon.spy(win2.app.socket, '_onMessage');
+		});
+
+		// Select B2:D4 in the first view.
+		cy.cSetActiveFrame('#iframe1');
+		cy.getFrameWindow().then((win1) => {
+			viewId1 = win1.app.map._docLayer._viewId;
+			calcHelper.enterCellAddressAndConfirm(win1, 'B2:D4');
+		});
+
+		cy.cSetActiveFrame('#iframe2');
+		cy.getFrameWindow().then((win2) => {
+			helper.processToIdle(win2);
+
+			// Check that the second view receives B2:D4 as cell ranges.
+			cy.wrap(win2).should((win) => {
+				var ranges = lastCellViewSelectionRanges(win, viewId1);
+				expect(ranges).to.deep.equal([[1, 1, 3, 3]]);
+			});
+		});
 	});
 });

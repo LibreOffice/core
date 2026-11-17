@@ -387,6 +387,20 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetKitCellCursor)
     // A2:C6 should be selected
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 1, 0, 2, 5, 0), rViewData1.GetMarkData().GetMarkArea());
 
+    // Check that the view receives the selection as cell ranges.
+    // {"part": 0, "ranges": [[0, 1, 2, 5]]}
+    CPPUNIT_ASSERT_EQUAL(0, aView1.m_aCellSelection.get<int>("part"));
+    aSelection = toRanges(aView1.m_aCellSelection.get_child("ranges"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 1, 0, 2, 5, 0), aSelection[0]);
+
+    // Check that the other view hears of the same selection.
+    // {"viewId": "0", "part": "0", "mode": "0", "ranges": [[0, 1, 2, 5]]}
+    CPPUNIT_ASSERT_EQUAL(nView1, aView2.m_aCellViewSelection.get<int>("viewId"));
+    aSelection = toRanges(aView2.m_aCellViewSelection.get_child("ranges"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 1, 0, 2, 5, 0), aSelection[0]);
+
     // Check that the other view keeps its own cursor in A1.
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), rViewData2.GetCurX());
     CPPUNIT_ASSERT_EQUAL(SCROW(0), rViewData2.GetCurY());
@@ -411,6 +425,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetKitCellCursor)
     CPPUNIT_ASSERT_EQUAL(SCROW(6), rViewData1.GetCurY());
     CPPUNIT_ASSERT(!rViewData1.GetMarkData().IsMarked());
     CPPUNIT_ASSERT(!rViewData1.GetMarkData().IsMultiMarked());
+    // {"part": 0, "ranges": []}
+    CPPUNIT_ASSERT(aView1.m_aCellSelection.get_child("ranges").empty());
+    CPPUNIT_ASSERT(aView2.m_aCellViewSelection.get_child("ranges").empty());
     KitHelper::setView(nView1);
     aTree = getCommandResponse(*pModelObj, ".uno:CellCursorState");
     const ScAddress aExpectedCursor(3, 6, 0);

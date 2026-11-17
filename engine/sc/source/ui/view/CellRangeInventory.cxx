@@ -16,6 +16,7 @@
 #include <dociter.hxx>
 #include <document.hxx>
 #include <editable.hxx>
+#include <markdata.hxx>
 #include <patattr.hxx>
 
 #include <tools/json_writer.hxx>
@@ -77,6 +78,17 @@ void putRange(tools::JsonWriter& rWriter, const ScRange& rRange)
 {
     const auto aArray = rWriter.startAnonArray();
     putRangeIndexes(rWriter, rRange);
+}
+
+void putMarkedRanges(tools::JsonWriter& rWriter, std::string_view aName,
+                     const ScMarkData& rMarkData, SCTAB nTab)
+{
+    ScRangeList aMarkedRanges;
+    rMarkData.FillRangeListWithMarks(&aMarkedRanges, false, nTab);
+
+    const auto aArray = rWriter.startArray(aName);
+    for (const ScRange& rRange : aMarkedRanges)
+        putRange(rWriter, rRange);
 }
 
 std::vector<TableRangeEntry> collectTableRangeEntries(const ScDocument& rDoc, SCTAB nTab)

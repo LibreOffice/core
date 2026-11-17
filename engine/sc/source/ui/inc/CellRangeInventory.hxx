@@ -19,6 +19,7 @@
 #include <vector>
 
 class ScDocument;
+class ScMarkData;
 
 namespace tools
 {
@@ -69,6 +70,12 @@ void putRange(tools::JsonWriter& rWriter, std::string_view aName, const ScRange&
  * Write a range as [startCol, startRow, endCol, endRow] into an array.
  */
 void putRange(tools::JsonWriter& rWriter, const ScRange& rRange);
+
+/**
+ * Write the marked ranges of sheet nTab as an array of ranges under aName.
+ */
+void putMarkedRanges(tools::JsonWriter& rWriter, std::string_view aName,
+                     const ScMarkData& rMarkData, SCTAB nTab);
 
 /**
  * Collect the styled tables of sheet nTab.

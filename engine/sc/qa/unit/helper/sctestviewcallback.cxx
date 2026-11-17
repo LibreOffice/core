@@ -289,6 +289,20 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aCellRangeInventoryInvalidations.emplace_back(pPayload);
         }
         break;
+        case COKitCallbackType::CELL_SELECTION:
+        {
+            m_aCellSelection.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aCellSelection);
+        }
+        break;
+        case COKitCallbackType::CELL_VIEW_SELECTION:
+        {
+            m_aCellViewSelection.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aCellViewSelection);
+        }
+        break;
         case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
             m_aInvalidateCursorResult.parseMessage(pPayload);

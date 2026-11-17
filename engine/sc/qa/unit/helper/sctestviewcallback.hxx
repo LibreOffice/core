@@ -81,6 +81,8 @@ public:
     std::vector<OString> m_aSheetGeometryInvalidations;
     /// Every cell range inventory invalidation payload the view received, oldest first.
     std::vector<OString> m_aCellRangeInventoryInvalidations;
+    boost::property_tree::ptree m_aCellSelection;
+    boost::property_tree::ptree m_aCellViewSelection;
     OString m_aHyperlinkClicked;
     /// Every mouse pointer name the view sent, oldest first.
     std::vector<OString> m_aMousePointers;

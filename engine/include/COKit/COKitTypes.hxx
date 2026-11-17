@@ -1437,7 +1437,27 @@ enum class COKitCallbackType
      * Pushed to every view of the document, once per changed sheet. The
      * payload names the sheet, for example 'part=0'.
      */
-    INVALIDATE_CELL_RANGE_INVENTORY = 83
+    INVALIDATE_CELL_RANGE_INVENTORY = 83,
+
+    /**
+     * This is Calc specific. The cell selection of the view, as cell ranges
+     * of the selected sheet e.g. '{"part": 0, "ranges": [[0, 1, 2, 4]]}',
+     * each range as [startCol, startRow, endCol, endRow]. The ranges are an
+     * empty list when only the cell cursor is shown.
+     *
+     * Sent alongside COKitCallbackType::CELL_SELECTION_AREA.
+     */
+    CELL_SELECTION = 84,
+
+    /**
+     * Same as COKitCallbackType::CELL_SELECTION, but for another view, with
+     * its viewId and mode, e.g. '{"viewId": "1", "part": "0", "mode": "0",
+     * "ranges": [[0, 1, 2, 4]]}'. The ranges are also empty when the view
+     * goes away.
+     *
+     * Sent alongside COKitCallbackType::TEXT_VIEW_SELECTION.
+     */
+    CELL_VIEW_SELECTION = 85
 };
 
 enum class COKitKeyEventType
@@ -1631,6 +1651,10 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_VECTOR_PART_IDS";
     case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
         return "KIT_CALLBACK_INVALIDATE_CELL_RANGE_INVENTORY";
+    case COKitCallbackType::CELL_SELECTION:
+        return "KIT_CALLBACK_CELL_SELECTION";
+    case COKitCallbackType::CELL_VIEW_SELECTION:
+        return "KIT_CALLBACK_CELL_VIEW_SELECTION";
     }
 
     assert(!"Unknown COKitCallbackType type.");

@@ -7042,6 +7042,7 @@ void ChildSession::rememberEventsForInactiveUser(const COKitCallbackType type,
              type == COKitCallbackType::TEXT_SELECTION_END ||
              type == COKitCallbackType::CELL_FORMULA ||
              type == COKitCallbackType::CELL_CURSOR ||
+             type == COKitCallbackType::CELL_SELECTION ||
              type == COKitCallbackType::GRAPHIC_SELECTION ||
              type == COKitCallbackType::DOCUMENT_SIZE_CHANGED ||
              type == COKitCallbackType::INVALIDATE_HEADER ||
@@ -7056,6 +7057,7 @@ void ChildSession::rememberEventsForInactiveUser(const COKitCallbackType type,
     }
     else if (type == COKitCallbackType::INVALIDATE_VIEW_CURSOR ||
              type == COKitCallbackType::TEXT_VIEW_SELECTION ||
+             type == COKitCallbackType::CELL_VIEW_SELECTION ||
              type == COKitCallbackType::CELL_VIEW_CURSOR ||
              type == COKitCallbackType::GRAPHIC_VIEW_SELECTION ||
              type == COKitCallbackType::VIEW_CURSOR_VISIBLE ||
@@ -7551,6 +7553,9 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     case COKitCallbackType::TEXT_VIEW_SELECTION:
         sendTextFrame("textviewselection: " + payload);
         break;
+    case COKitCallbackType::CELL_VIEW_SELECTION:
+        sendTextFrame("cellviewselection: " + payload);
+        break;
     case COKitCallbackType::CELL_VIEW_CURSOR:
         updateCursorPositionJSON(payload);
         sendTextFrame("cellviewcursor: " + payload);
@@ -7638,6 +7643,9 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         break;
     case COKitCallbackType::CELL_SELECTION_AREA:
         sendTextFrame("cellselectionarea: " + payload + inputSequenceToken());
+        break;
+    case COKitCallbackType::CELL_SELECTION:
+        sendTextFrame("cellselection: " + withInputSequence(payload));
         break;
     case COKitCallbackType::CELL_AUTO_FILL_AREA:
         sendTextFrame("cellautofillarea: " + payload + inputSequenceToken());

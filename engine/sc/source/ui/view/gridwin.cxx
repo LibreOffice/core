@@ -6572,6 +6572,51 @@ static OString rectanglesToString(const std::vector<tools::Rectangle> &rLogicRec
 }
 
 /**
+ * Write the marked ranges of the view, on its selected sheet, under "ranges".
+ */
+static void putViewCellSelection(tools::JsonWriter& rWriter, const ScViewData& rViewData)
+{
+    sc::putMarkedRanges(rWriter, "ranges", rViewData.GetMarkData(), rViewData.GetTabNumber());
+}
+
+/**
+ * Send the marked ranges of the view as cell ranges to pToView, or to every
+ * other view when pToView is null.
+ */
+static void notifyKitCellViewSelection(const ScViewData& rViewData,
+                                       const SfxViewShell* pToView = nullptr)
+{
+    ScTabViewShell* pViewShell = rViewData.GetViewShell();
+    if (!pViewShell)
+        return;
+
+    const std::function<void(tools::JsonWriter&)> aFillSelection
+        = [&rViewData](tools::JsonWriter& rWriter) { putViewCellSelection(rWriter, rViewData); };
+
+    if (pToView)
+        KitHelper::notifyOtherView(*pViewShell, pToView, COKitCallbackType::CELL_VIEW_SELECTION,
+                                   aFillSelection);
+    else
+        KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::CELL_VIEW_SELECTION,
+                                    aFillSelection);
+}
+
+/**
+ * Send the marked ranges of the view to the view itself, as cell ranges.
+ */
+static void notifyKitCellSelection(const ScViewData& rViewData)
+{
+    ScTabViewShell* pViewShell = rViewData.GetViewShell();
+    if (!pViewShell)
+        return;
+
+    tools::JsonWriter aWriter;
+    aWriter.put("part", static_cast<sal_Int32>(rViewData.GetTabNumber()));
+    putViewCellSelection(aWriter, rViewData);
+    pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION, aWriter.finishAndGetAsOString());
+}
+
+/**
  * Turn the selection ranges rRectangles into the COKit selection, and send to other views.
  *
  * @param pLogicRects - if set then don't invoke the callback, just collect the rectangles in the pointed vector.
@@ -6610,6 +6655,8 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     OString aRectListString = rectanglesToString(rLogicRects);
     pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, sBoundingBoxString);
     pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, aRectListString);
+    notifyKitCellSelection(mrViewData);
+    notifyKitCellViewSelection(mrViewData);
 
     if (bInPrintTwips)
     {
@@ -6684,10 +6731,14 @@ void ScGridWindow::updateOtherKitSelections() const
 
             pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, sBoundingBoxString);
             pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, aRectsString);
+            notifyKitCellSelection(mrViewData);
         }
         else
+        {
             KitHelper::notifyOtherView(*it, pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION,
                                           "selection", aRectsString);
+            notifyKitCellViewSelection(pOther->GetViewData(), pViewShell);
+        }
     }
 }
 
@@ -7034,7 +7085,9 @@ void ScGridWindow::UpdateSelectionOverlay()
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
         pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, "EMPTY"_ostr);
         pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, "EMPTY"_ostr);
+        notifyKitCellSelection(mrViewData);
         KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+        notifyKitCellViewSelection(mrViewData);
 
         ScInputHandler* pViewHdl = ScModule::get()->GetInputHdl(pViewShell);
         if (!pViewHdl || !pViewHdl->IsEditMode())

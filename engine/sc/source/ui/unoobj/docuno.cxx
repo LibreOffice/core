@@ -1814,8 +1814,6 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
                 return;
 
             const SCTAB nTab = pViewData->GetTabNumber();
-            ScRangeList aMarkedRanges;
-            pViewData->GetMarkData().FillRangeListWithMarks(&aMarkedRanges, false, nTab);
 
             auto aValues = rJsonWriter.startNode("commandValues");
             rJsonWriter.put("part", static_cast<sal_Int32>(nTab));
@@ -1831,9 +1829,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
                 }
                 rJsonWriter.put("visible", bVisible);
             }
-            auto aSelection = rJsonWriter.startArray("selection");
-            for (const ScRange& rRange : aMarkedRanges)
-                sc::putRange(rJsonWriter, rRange);
+            sc::putMarkedRanges(rJsonWriter, "selection", pViewData->GetMarkData(), nTab);
             break;
         }
         case CalcCommand::FormulaDepChain:
