@@ -2943,9 +2943,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     }
     else
     {
-        char aBuf[100];
-        o3tl::sprintf( aBuf, "%.f", fNum ); // simple rounded integer
-        sStr.appendAscii( aBuf );
+        sStr.append(static_cast<sal_Int64>(fNum)); // simple rounded integer
         ::impTransliterate(sStr, NumFor[nIx].GetNatNum(), rNatNum);
     }
     bool bHideFraction = (rInfo.nCntPre > 0 && nFrac == 0
