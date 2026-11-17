@@ -1752,7 +1752,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
             {
                 static constexpr OUString aNatNum(u"NATNUM"_ustr);
                 static constexpr OUString aDBNum(u"DBNUM"_ustr);
-                const OUString aBufStr( rString.toString());
+                const OUString& aBufStr(OUString::unacquired(rString));
                 sal_Int32 nNatNumNum;
                 sal_Int32 nDBNum;
                 if ( lcl_matchKeywordAndGetNumber( aBufStr, nPos-1, aNatNum, nNatNumNum) &&
