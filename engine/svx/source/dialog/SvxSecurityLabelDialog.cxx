@@ -413,9 +413,10 @@ void SvxSecurityLabelDialog::enterForeignMode(const svx::seclabel::StanagLabel& 
 {
     m_bForeignPolicy = true;
 
-    // The 4774 label is self-describing; use its summary, since the policy that
-    // defines its exact marking is not available here.
-    setPreview(rLabel.summary());
+    // The policy that defines the exact marking is not available here, so show the
+    // marking cached with the label, as the banner does; the 4774 label's summary
+    // stands in for labels written before the marking was cached.
+    setPreview(rLabel.aMarking.isEmpty() ? rLabel.summary() : rLabel.aMarking);
 
     const OUString sPolicy = rLabel.aPolicyName.isEmpty() ? rLabel.aPolicyId : rLabel.aPolicyName;
     m_xWarning->set_label(SvxResId(RID_SVXSTR_SECLABEL_FOREIGN).replaceFirst(u"%1", sPolicy));
