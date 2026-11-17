@@ -96,8 +96,13 @@ public:
     virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-        getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
+    virtual ::cpo::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
 
     // ____ XFastPropertySet ____
     virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;

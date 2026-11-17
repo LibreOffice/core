@@ -186,7 +186,7 @@ static E3dScene* lcl_getE3dScene( const rtl::Reference<SvxShapeGroupAnyD>& xShap
 }
 
 static void lcl_setLightSources(
-    const uno::Reference< beans::XPropertySet > & xSource,
+    const rtl::Reference< Diagram > & xSource,
     const uno::Reference< beans::XPropertySet > & xDest )
 {
     xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_1,

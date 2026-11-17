@@ -167,7 +167,7 @@ bool PositionAndSizeHelper::moveObject( std::u16string_view rObjectCID
     ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
     if(eObjectType==OBJECTTYPE_DIAGRAM || eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR)
     {
-        xObjectProp = ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel );
+        xObjectProp = static_cast<property::OPropertySet*>(ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel ).get());
         if(!xObjectProp.is())
             return false;
     }

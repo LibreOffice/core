@@ -252,7 +252,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
     const std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
     for( rtl::Reference< Axis > const & axis : aAxes )
     {
-        getAutoResizeFromPropSet( axis, eResult );
+        getAutoResizeFromPropSet( static_cast<property::OPropertySet*>(axis.get()), eResult );
         impl_getAutoResizeFromTitled( axis, eResult );
         if( eResult == AUTO_RESIZE_AMBIGUOUS )
             return eResult;

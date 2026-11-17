@@ -56,7 +56,7 @@ View3DDialog::View3DDialog(weld::Window* pParent, const rtl::Reference<::chart::
         aStr = RID_L + RID_TAB_CHART_ILLUMINATION.sIconName;
         m_xTabControl->append_page(u"illumination"_ustr, TabResId(RID_TAB_CHART_ILLUMINATION.aLabel), &aStr);
         m_xIllumination.reset(new ThreeD_SceneIllumination_TabPage(m_xTabControl->get_page(u"illumination"_ustr), m_xDialog.get(),
-            xSceneProperties, xChartModel));
+            static_cast<property::OPropertySet*>(xSceneProperties.get()), xChartModel));
     }
 
     m_xTabControl->connect_enter_page(LINK(this, View3DDialog, ActivatePageHdl));

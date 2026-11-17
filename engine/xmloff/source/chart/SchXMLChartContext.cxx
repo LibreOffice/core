@@ -813,10 +813,9 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
     // Handle of-pie parameters. Is this the right place to do this?
     if (maChartTypeServiceName == "com.sun.star.chart2.PieChartType") {
         Reference< chart2::XDiagram> xDia(xNewDoc->getFirstDiagram());
-        uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
-        if( xDiaProp.is()) {
-            xDiaProp->setPropertyValue(u"SubPieType"_ustr, cpo::uno::Any(mPieSubType));
-            xDiaProp->setPropertyValue(u"SplitPos"_ustr, cpo::uno::Any(mfPieSplitPos));
+        if( xDia.is()) {
+            xDia->setPropertyValue(u"SubPieType"_ustr, cpo::uno::Any(mPieSubType));
+            xDia->setPropertyValue(u"SplitPos"_ustr, cpo::uno::Any(mfPieSplitPos));
         }
     }
 

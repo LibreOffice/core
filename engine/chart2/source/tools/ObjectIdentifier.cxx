@@ -1124,7 +1124,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     break;
             case OBJECTTYPE_DIAGRAM:
                 {
-                    xObjectProperties = xDiagram;
+                    xObjectProperties = static_cast<property::OPropertySet*>(xDiagram.get());
                 }
                 break;
             case OBJECTTYPE_DIAGRAM_WALL:

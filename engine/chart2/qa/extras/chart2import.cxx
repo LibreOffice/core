@@ -1183,7 +1183,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf100084)
     loadFromFile(u"xlsx/tdf100084.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
-    Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
+    Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram());
     CPPUNIT_ASSERT_MESSAGE("There should be a Diagram.", xDiagram.is());
 }
 
@@ -1607,7 +1607,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDispBlanksAsDefaultValue2007XLSX)
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
-    Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
+    Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram());
     CPPUNIT_ASSERT(xDiagram.is());
     cpo::uno::Any aAny = xDiagram->getPropertyValue(u"MissingValueTreatment"_ustr);
     sal_Int32 nMissingValueTreatment = -2;
@@ -1621,7 +1621,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDispBlanksAsDefaultValue2013XLSX)
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
-    Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
+    Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram());
     CPPUNIT_ASSERT(xDiagram.is());
     cpo::uno::Any aAny = xDiagram->getPropertyValue(u"MissingValueTreatment"_ustr);
     sal_Int32 nMissingValueTreatment = -2;

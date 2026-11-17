@@ -2839,18 +2839,14 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
     } else {
         pFS->startElement(FSNS(XML_c, XML_plotArea));
 
-        Reference<beans::XPropertySet> xWall(mxNewDiagram, uno::UNO_QUERY);
-        if( xWall.is() )
+        cpo::uno::Any aAny = mxNewDiagram->getPropertyValue(u"RelativePosition"_ustr);
+        if (aAny.hasValue())
         {
-            cpo::uno::Any aAny = xWall->getPropertyValue(u"RelativePosition"_ustr);
-            if (aAny.hasValue())
-            {
-                chart2::RelativePosition aPos = aAny.get<chart2::RelativePosition>();
-                aAny = xWall->getPropertyValue(u"RelativeSize"_ustr);
-                chart2::RelativeSize aSize = aAny.get<chart2::RelativeSize>();
-                uno::Reference< css::chart::XDiagramPositioning > xDiagramPositioning( xChartDoc->getDiagram(), uno::UNO_QUERY );
-                exportManualLayout(aPos, aSize, xDiagramPositioning->isExcludingDiagramPositioning() );
-            }
+            chart2::RelativePosition aPos = aAny.get<chart2::RelativePosition>();
+            aAny = mxNewDiagram->getPropertyValue(u"RelativeSize"_ustr);
+            chart2::RelativeSize aSize = aAny.get<chart2::RelativeSize>();
+            uno::Reference< css::chart::XDiagramPositioning > xDiagramPositioning( xChartDoc->getDiagram(), uno::UNO_QUERY );
+            exportManualLayout(aPos, aSize, xDiagramPositioning->isExcludingDiagramPositioning() );
         }
     }
 

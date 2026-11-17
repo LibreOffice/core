@@ -1495,7 +1495,7 @@ bool ChartModel::setIncludeHiddenCells( bool bIncludeHiddenCells )
     {
         ControllerLockGuard aLockedControllers( *this );
 
-        uno::Reference< beans::XPropertySet > xDiagramProperties( getFirstDiagram(), uno::UNO_QUERY );
+        uno::Reference< chart2::XDiagram > xDiagramProperties( getFirstDiagram() );
         if (!xDiagramProperties)
             return false;
 

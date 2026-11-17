@@ -133,7 +133,7 @@ void MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName, const c
                     else if( rPropertyName == "LineTransparence" )
                         aSeriesSeq[0]->setPropertyValue( u"Transparency"_ustr, rValue );
                     else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
-                        m_aWrappedLineJointProperty.setPropertyValue( rValue, aSeriesSeq[0] );
+                        m_aWrappedLineJointProperty.setPropertyValue( rValue, static_cast<property::OPropertySet*>(aSeriesSeq[0].get()) );
                     else
                         aSeriesSeq[0]->setPropertyValue( rPropertyName, rValue );
                     return;

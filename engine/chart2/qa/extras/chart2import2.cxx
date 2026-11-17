@@ -53,9 +53,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf114179)
     uno::Reference<css::embed::XVisualObject> xVisualObject(xChartDoc, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xVisualObject.is());
     aPage = xVisualObject->getVisualAreaSize(css::embed::Aspects::MSOLE_CONTENT);
-    Reference<beans::XPropertySet> xProp(xDiagram, uno::UNO_QUERY);
     chart2::RelativeSize aRelativeSize;
-    xProp->getPropertyValue(u"RelativeSize"_ustr) >>= aRelativeSize;
+    xDiagram->getPropertyValue(u"RelativeSize"_ustr) >>= aRelativeSize;
     double fX = aRelativeSize.Primary * aPage.Width;
     double fY = aRelativeSize.Secondary * aPage.Height;
     CPPUNIT_ASSERT(static_cast<sal_Int32>(::rtl::math::round(fX)) > 0);

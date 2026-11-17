@@ -747,6 +747,31 @@ uno::Reference< beans::XPropertySetInfo > Diagram::getPropertySetInfo()
     return StaticDiagramInfo();
 }
 
+void Diagram::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
+{
+    OPropertySet::setPropertyValue(aPropertyName, aValue);
+}
+::cpo::uno::Any Diagram::getPropertyValue( const ::rtl::OUString& PropertyName )
+{
+    return OPropertySet::getPropertyValue(PropertyName);
+}
+void Diagram::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener )
+{
+    OPropertySet::addPropertyChangeListener(aPropertyName, xListener);
+}
+void Diagram::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener )
+{
+    OPropertySet::removePropertyChangeListener(aPropertyName, aListener);
+}
+void Diagram::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::addVetoableChangeListener(PropertyName, aListener);
+}
+void Diagram::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::removeVetoableChangeListener(PropertyName, aListener);
+}
+
 // ____ XFastPropertySet ____
 void Diagram::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {

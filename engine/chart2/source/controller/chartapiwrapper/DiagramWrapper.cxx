@@ -819,7 +819,7 @@ void DiagramWrapper::setAutomaticDiagramPositioning()
         return;
     }
     ControllerLockGuardUNO aCtrlLockGuard( xModel );
-    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
+    uno::Reference< chart2::XDiagram > xDiaProps( getDiagram() );
     if( xDiaProps.is() )
     {
         xDiaProps->setPropertyValue( u"RelativeSize"_ustr, Any() );
@@ -828,7 +828,7 @@ void DiagramWrapper::setAutomaticDiagramPositioning()
 }
 bool DiagramWrapper::isAutomaticDiagramPositioning(  )
 {
-    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
+    uno::Reference< chart2::XDiagram > xDiaProps( getDiagram() );
     if( xDiaProps.is() )
     {
         Any aRelativeSize( xDiaProps->getPropertyValue( u"RelativeSize"_ustr ) );
@@ -848,13 +848,13 @@ void DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPos
     }
     ControllerLockGuardUNO aCtrlLockGuard( xModel );
     DiagramHelper::setDiagramPositioning( xModel, rPositionRect );
-    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
+    uno::Reference< chart2::XDiagram > xDiaProps( getDiagram() );
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(true) );
 }
 bool DiagramWrapper::isExcludingDiagramPositioning()
 {
-    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
+    uno::Reference< chart2::XDiagram > xDiaProps( getDiagram() );
     if( xDiaProps.is() )
     {
         Any aRelativeSize( xDiaProps->getPropertyValue( u"RelativeSize"_ustr ) );
@@ -882,7 +882,7 @@ void DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPos
     }
     ControllerLockGuardUNO aCtrlLockGuard( xModel );
     DiagramHelper::setDiagramPositioning( xModel, rPositionRect );
-    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
+    uno::Reference< chart2::XDiagram > xDiaProps( getDiagram() );
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(false) );
 }
@@ -2012,7 +2012,7 @@ void DiagramWrapper::setDiagram(
 
 Reference< beans::XPropertySet > DiagramWrapper::getInnerPropertySet()
 {
-    return m_spChart2ModelContact->getDiagram();
+    return static_cast<property::OPropertySet*>(m_spChart2ModelContact->getDiagram().get());
 }
 
 const Sequence< beans::Property >& DiagramWrapper::getPropertySequence()
