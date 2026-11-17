@@ -112,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/evtlistenerhlp \
     comphelper/source/misc/evtmethodhelper \
     comphelper/source/misc/fileurl \
+    comphelper/source/misc/flatpak \
     comphelper/source/misc/getexpandeduri \
     comphelper/source/misc/graphicmimetype \
     comphelper/source/misc/hash \

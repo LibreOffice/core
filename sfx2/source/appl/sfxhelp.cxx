@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
+#include <comphelper/flatpak.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -881,7 +882,8 @@ static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogPare
     OUString aBaseInstallPath = getHelpRootURL();
     // For the flatpak case, find the pathname outside the flatpak sandbox that corresponds to
     // aBaseInstallPath, because that is what needs to be stored in aTempFile below:
-    if (flatpak::isFlatpak() && !rewriteFlatpakHelpRootUrl(&aBaseInstallPath)) {
+    if (comphelper::flatpak::isFlatpak() && !rewriteFlatpakHelpRootUrl(&aBaseInstallPath))
+    {
         return false;
     }
 
@@ -894,7 +896,8 @@ static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogPare
     // technical reasons, so that it can be accessed by the browser running outside the sandbox):
     static constexpr OUStringLiteral aExtension(u".html");
     OUString * parent = nullptr;
-    if (flatpak::isFlatpak() && !flatpak::createTemporaryHtmlDirectory(&parent)) {
+    if (comphelper::flatpak::isFlatpak() && !flatpak::createTemporaryHtmlDirectory(&parent))
+    {
         return false;
     }
     ::utl::TempFileNamed aTempFile(u"NewHelp", true, aExtension, parent, false );
