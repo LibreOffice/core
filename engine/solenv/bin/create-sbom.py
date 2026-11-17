@@ -58,6 +58,28 @@ def extract_version_from_filename(filename):
     # It stops at .zip or whatever follows, since it doesn’t include a literal dot unless it’s part of [\w\.]
     if match:
         return match.group()
+    # SQLite encodes its version in the archive name as XYYZZWW, so
+    # sqlite-amalgamation-3520000 is 3.52.0, the version CVEs are recorded for
+    match = re.search(r'sqlite-[a-z]+-(\d)(\d\d)(\d\d)(\d\d)$', filename)
+    if match:
+        parts = [int(part) for part in match.groups()]
+        if parts[3] == 0:
+            parts = parts[:3]
+        return ".".join(str(part) for part in parts)
+    # Skia is versioned by the Chrome milestone it was branched for
+    match = re.search(r'-(m\d+)-[0-9a-f]{40}$', filename)
+    if match:
+        return match.group(1)
+    # a release date, e.g. language-subtag-registry-2025-08-25
+    match = re.search(r'-(\d{4}-\d\d-\d\d)$', filename)
+    if match:
+        return match.group(1)
+    # a single number is the release label of e.g. pdfium (Chrome branch
+    # number) or argon2 (release date): without it the CPE gets a '*' version,
+    # which matches every CVE of the product
+    match = re.search(r'-(\d+)$', filename)
+    if match:
+        return match.group(1)
     return None
 
 
