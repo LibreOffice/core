@@ -1121,7 +1121,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf105517)
     CPPUNIT_ASSERT(xChartTypeContainer.is());
     Reference<chart2::XDataSeriesContainer> xDSContainer(xChartTypeContainer->getChartTypes()[0], uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSContainer.is());
-    Reference<beans::XPropertySet> xPropSet1(xDSContainer->getDataSeries()[0], uno::UNO_QUERY);
+    Reference<chart2::XDataSeries> xPropSet1(xDSContainer->getDataSeries()[0]);
     CPPUNIT_ASSERT(xPropSet1.is());
 
     tools::Long lineColor;
@@ -1129,7 +1129,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf105517)
     // incorrect line color was 0x4a7ebb due to not handling themeOverride
     CPPUNIT_ASSERT_EQUAL(tools::Long(0xeaa700), lineColor);
 
-    Reference<beans::XPropertySet> xPropSet2(xDSContainer->getDataSeries()[1], uno::UNO_QUERY);
+    Reference<chart2::XDataSeries> xPropSet2(xDSContainer->getDataSeries()[1]);
     CPPUNIT_ASSERT(xPropSet2.is());
 
     xPropSet2->getPropertyValue(u"Color"_ustr) >>= lineColor;

@@ -68,7 +68,7 @@ public:
             xDiagram->getDataSeries();
         for (auto const& series : aSeriesVector)
         {
-            PROPERTYTYPE aCurValue = getValueFromSeries( series );
+            PROPERTYTYPE aCurValue = getValueFromSeries( static_cast<property::OPropertySet*>(series.get()) );
             if( !bHasDetectableInnerValue )
                 rValue = aCurValue;
             else
@@ -94,7 +94,7 @@ public:
                 m_spChart2ModelContact->getDiagram()->getDataSeries();
             for (auto const& series : aSeriesVector)
             {
-                setValueToSeries( series, aNewValue );
+                setValueToSeries( static_cast<property::OPropertySet*>(series.get()), aNewValue );
             }
         }
     }

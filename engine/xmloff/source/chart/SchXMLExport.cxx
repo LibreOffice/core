@@ -3111,7 +3111,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                     exportErrorBar( xPropSet,true, bExportContent );    // Y ErrorBar
 
                     exportDataPoints(
-                        uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ),
+                        aSeriesSeq[nSeriesIdx],
                         nSeriesLength, xNewDiagram, bExportContent );
 
                     const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(

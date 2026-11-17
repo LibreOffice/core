@@ -202,12 +202,11 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
         const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xDSCnt->getDataSeries());
         for (const uno::Reference<chart2::XDataSeries>& xSeries : aSeriesSeq)
         {
-            Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
-            if (!xPropSet.is())
+            if (!xSeries.is())
                 continue;
 
             sal_Int32 nAxisIndex = -1;
-            cpo::uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
+            cpo::uno::Any aAny = xSeries->getPropertyValue(u"AttachedAxisIndex"_ustr);
             aAny >>= nAxisIndex;
             size_t nVectorPos = 0;
             if (nAxisIndexOfFirstSeries == -1)
@@ -6042,14 +6041,10 @@ void ChartExport::exportDataLabels(
     if (!xSeries.is() || nSeriesLength <= 0)
         return;
 
-    uno::Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
-    if (!xPropSet.is())
-        return;
-
     FSHelperPtr pFS = GetFS();
 
     cpo::uno::Sequence<sal_Int32> aAttrLabelIndices;
-    xPropSet->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aAttrLabelIndices;
+    xSeries->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aAttrLabelIndices;
 
     // We must not export label placement property when the chart type doesn't
     // support this option in MS Office, else MS Office would think the file
@@ -6109,7 +6104,7 @@ void ChartExport::exportDataLabels(
     if (bIsChartex) {
         sal_Int32 nLabelPlacement = aParam.meDefault;
         if (aParam.mbExport
-            && (xPropSet->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement)
+            && (xSeries->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement)
             && aParam.maAllowedValues.count(nLabelPlacement))
         {
             pFS->startElement(FSNS(XML_cx, XML_dataLabels),
@@ -6124,7 +6119,7 @@ void ChartExport::exportDataLabels(
     // In CT_DataLabels the group-level label properties precede the
     // cx:dataLabel children
     if (bIsChartex)
-        writeLabelProperties(xPropSet, aParam, -1, rDLblsRange, true);
+        writeLabelProperties(xSeries, aParam, -1, rDLblsRange, true);
 
     std::vector<sal_Int32> aHiddenLabelIndices;
     for (const sal_Int32 nIdx : aAttrLabelIndices)
@@ -6208,10 +6203,10 @@ void ChartExport::exportDataLabels(
 
     if (!bIsChartex) {
         // Baseline label properties for all labels.
-        writeLabelProperties(xPropSet, aParam, -1, rDLblsRange, false);
+        writeLabelProperties(xSeries, aParam, -1, rDLblsRange, false);
 
         bool bShowLeaderLines = false;
-        xPropSet->getPropertyValue(u"ShowCustomLeaderLines"_ustr) >>= bShowLeaderLines;
+        xSeries->getPropertyValue(u"ShowCustomLeaderLines"_ustr) >>= bShowLeaderLines;
 
         bool bIsPieOrDoughnut = eChartType == chart::TYPEID_PIE
                                 || eChartType == chart::TYPEID_DOUGHNUT;
@@ -6230,7 +6225,7 @@ void ChartExport::exportDataLabels(
             {
                 pFS->startElement(FSNS(XML_c, XML_leaderLines));
                 pFS->startElement(FSNS(XML_c, XML_spPr));
-                WriteOutline(xPropSet, getModel());
+                WriteOutline(xSeries, getModel());
                 pFS->endElement(FSNS(XML_c, XML_spPr));
                 pFS->endElement(FSNS(XML_c, XML_leaderLines));
             }
@@ -6452,12 +6447,11 @@ void ChartExport::createAxes_chartex(
     // For axis-less chartex types (regionMap, sunburst, treemap) the
     // sequence is empty, so no <cx:axisId> and no <cx:axis> are emitted.
     cpo::uno::Sequence<sal_Int32> aAxisIds;
-    Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
-    if (xSeriesProp.is())
+    if (xSeries.is())
     {
         try
         {
-            xSeriesProp->getPropertyValue(u"ChartexAxisIds"_ustr) >>= aAxisIds;
+            xSeries->getPropertyValue(u"ChartexAxisIds"_ustr) >>= aAxisIds;
         }
         catch (const cpo::uno::Exception&)
         {

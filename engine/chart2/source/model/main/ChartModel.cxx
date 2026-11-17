@@ -1651,7 +1651,7 @@ void ChartModel::applyColorPaletteToDataSeries(const ChartColorPalette& rColorPa
     const auto xDataSeriesArray = xDiagram->getDataSeries();
     for (size_t i = 0; i < xDataSeriesArray.size(); ++i)
     {
-        const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
+        const auto & xPropSet = xDataSeriesArray[i];
         const size_t nPaletteIndex = i % rColorPalette.size();
         xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_SOLID));
         xPropSet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(rColorPalette[nPaletteIndex]));
@@ -1720,7 +1720,7 @@ const std::vector<Color>& ChartModel::getDataSeriesColorsForGradient(bool bIsPre
     for (size_t i = 0; i < xDataSeriesArray.size(); ++i)
     {
         Color aColor = ChartGradientPresetInvalidColor;
-        const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
+        const auto & xPropSet = xDataSeriesArray[i];
         drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
         if (xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle)
         {
@@ -1753,7 +1753,7 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
     const auto xDataSeriesArray = xDiagram->getDataSeries();
     for (size_t i = 0; i < xDataSeriesArray.size(); ++i)
     {
-        const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
+        const auto & xPropSet = xDataSeriesArray[i];
         const size_t nPaletteIndex = i % rGradientPalette.size();
         xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_GRADIENT));
 

@@ -162,7 +162,7 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
     , mpOldSeries(nullptr)
     , mnPercent(0.0)
 {
-    m_xDataSeriesProps = m_xDataSeries;
+    m_xDataSeriesProps = static_cast<property::OPropertySet*>(m_xDataSeries.get());
 
     const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aDataSequences =
             m_xDataSeries->getDataSequences2();

@@ -77,7 +77,7 @@ void lcl_InsertMeanValueLine( const rtl::Reference< ::chart::DataSeries > & xSer
     if( xSeries.is())
     {
         ::chart::RegressionCurveHelper::addMeanValueLine(
-            xSeries, xSeries);
+            xSeries, static_cast<property::OPropertySet*>(xSeries.get()));
     }
 }
 

@@ -169,7 +169,7 @@ cpo::uno::Any MinMaxLineWrapper::getPropertyValue( const OUString& rPropertyName
         else if( rPropertyName == "LineTransparence" )
             aRet = xPropSet->getPropertyValue( u"Transparency"_ustr );
         else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
-            aRet = m_aWrappedLineJointProperty.getPropertyValue( xPropSet );
+            aRet = m_aWrappedLineJointProperty.getPropertyValue( static_cast<property::OPropertySet*>(xPropSet.get()) );
         else
             aRet = xPropSet->getPropertyValue( rPropertyName );
 

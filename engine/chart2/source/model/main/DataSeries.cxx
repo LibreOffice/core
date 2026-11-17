@@ -266,6 +266,31 @@ uno::Reference< beans::XPropertySetInfo > DataSeries::getPropertySetInfo()
     return xPropSetInfo;
 }
 
+void DataSeries::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
+{
+    OPropertySet::setPropertyValue(aPropertyName, aValue);
+}
+::cpo::uno::Any DataSeries::getPropertyValue( const ::rtl::OUString& PropertyName )
+{
+    return OPropertySet::getPropertyValue(PropertyName);
+}
+void DataSeries::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener )
+{
+    OPropertySet::addPropertyChangeListener(aPropertyName, xListener);
+}
+void DataSeries::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener )
+{
+    OPropertySet::removePropertyChangeListener(aPropertyName, aListener);
+}
+void DataSeries::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::addVetoableChangeListener(PropertyName, aListener);
+}
+void DataSeries::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::removeVetoableChangeListener(PropertyName, aListener);
+}
+
 void DataSeries::getFastPropertyValue
     ( cpo::uno::Any& rValue,
       sal_Int32 nHandle ) const
@@ -341,7 +366,7 @@ Reference< beans::XPropertySet >
             rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
             {
                 MutexGuard aGuard( m_aMutex );
-                xParentProperties = this;
+                xParentProperties = static_cast<property::OPropertySet*>(this);
                 xModifyEventForwarder = m_xModifyEventForwarder;
             }
 
@@ -916,7 +941,7 @@ bool DataSeries::hasDataLabelAtPoint( sal_Int32 nPointIndex )
         if (bFound)
             xProp = getDataPointByIndex(nPointIndex);
         else
-            xProp = this;
+            xProp = static_cast<property::OPropertySet*>(this);
         if( xProp.is() )
         {
             chart2::DataPointLabel aLabel;

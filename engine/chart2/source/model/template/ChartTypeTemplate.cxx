@@ -390,7 +390,7 @@ void ChartTypeTemplate::applyStyle2(
         {
             cpo::uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                         getChartTypeForIndex( nChartTypeIndex, {} ), isSwapXAndY(), xSeries ) );
-            lcl_ensureCorrectLabelPlacement( xSeries, aAvailablePlacements );
+            lcl_ensureCorrectLabelPlacement( static_cast<property::OPropertySet*>(xSeries.get()), aAvailablePlacements );
 
             cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
             // "AttributedDataPoints"
@@ -455,7 +455,7 @@ void ChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& 
 
                 sal_Int32 nDefaultPlacement = aAvailablePlacements[0];
 
-                lcl_resetLabelPlacementIfDefault( xSeries, nDefaultPlacement );
+                lcl_resetLabelPlacementIfDefault( static_cast<property::OPropertySet*>(xSeries.get()), nDefaultPlacement );
 
                 cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
                 // "AttributedDataPoints"

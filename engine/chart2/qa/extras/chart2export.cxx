@@ -999,11 +999,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
         CPPUNIT_ASSERT(xDataSeries.is());
 
         // Check to make sure that data points 0 and 2 have local properties.
-        Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xPropSet.is());
 
         Sequence<sal_Int32> aIndices;
-        xPropSet->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aIndices;
+        xDataSeries->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aIndices;
         /*
         CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 2 data points with local properties.", sal_Int32(2), aIndices.getLength());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aIndices[0]);
@@ -1018,7 +1016,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
 
         for (size_t i = 0; i < std::size(aDataPoints); ++i)
         {
-            xPropSet = xDataSeries->getDataPointByIndex(aDataPoints[i].mnIndex);
+            Reference<beans::XPropertySet> xPropSet = xDataSeries->getDataPointByIndex(aDataPoints[i].mnIndex);
             CPPUNIT_ASSERT(xPropSet.is());
 
             css::drawing::LineStyle eLineStyle = css::drawing::LineStyle_NONE;
@@ -1178,10 +1176,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDefaultLineChartDOCX)
 
     xChartDoc.set(getChartDocFromWriter(0), uno::UNO_QUERY);
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
-    Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xPropSet.is());
+    CPPUNIT_ASSERT(xDataSeries.is());
     sal_Int32 nLabelPlacement = -1;
-    if (xPropSet->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement)
+    if (xDataSeries->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement)
         // This option may not be set.  Check its value only when it's set.
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line chart's default label placement should be 'right'.", chart::DataLabelPlacement::RIGHT, nLabelPlacement );
 }

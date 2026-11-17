@@ -754,15 +754,14 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
                 if (bHideLegend)
                 {
                     cpo::uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
-                    Reference<beans::XPropertySet> xSeriesProp(mDataPoint.m_xSeries, uno::UNO_QUERY);
-                    xSeriesProp->getPropertyValue(u"DeletedLegendEntries"_ustr) >>= deletedLegendEntriesSeq;
+                    mDataPoint.m_xSeries->getPropertyValue(u"DeletedLegendEntries"_ustr) >>= deletedLegendEntriesSeq;
                     std::vector<sal_Int32> deletedLegendEntries;
                     for (const auto& deletedLegendEntry : deletedLegendEntriesSeq)
                     {
                         deletedLegendEntries.push_back(deletedLegendEntry);
                     }
                     deletedLegendEntries.push_back(mDataPoint.m_nPointIndex);
-                    xSeriesProp->setPropertyValue(u"DeletedLegendEntries"_ustr, cpo::uno::Any(comphelper::containerToSequence(deletedLegendEntries)));
+                    mDataPoint.m_xSeries->setPropertyValue(u"DeletedLegendEntries"_ustr, cpo::uno::Any(comphelper::containerToSequence(deletedLegendEntries)));
                 }
                 break;
             }

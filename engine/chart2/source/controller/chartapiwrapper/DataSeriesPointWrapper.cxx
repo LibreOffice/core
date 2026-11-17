@@ -687,7 +687,7 @@ Any DataSeriesPointWrapper::getPropertyDefault( const OUString& rPropertyName )
             {
                 const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
                 if( pWrappedProperty )
-                    aRet = pWrappedProperty->getPropertyValue(xInnerPropertySet);
+                    aRet = pWrappedProperty->getPropertyValue(static_cast<property::OPropertySet*>(xInnerPropertySet.get()));
                 else
                     aRet = xInnerPropertySet->getPropertyValue( rPropertyName );
             }
@@ -703,7 +703,7 @@ Any DataSeriesPointWrapper::getPropertyDefault( const OUString& rPropertyName )
 Reference< beans::XPropertySet > DataSeriesPointWrapper::getInnerPropertySet()
 {
     if( m_eType == DATA_SERIES )
-        return getDataSeries();
+        return static_cast<property::OPropertySet*>(getDataSeries().get());
     return getDataPointProperties();
 }
 

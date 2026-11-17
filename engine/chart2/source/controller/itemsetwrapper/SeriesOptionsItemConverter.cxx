@@ -48,7 +48,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , uno::Reference< cpo::uno::XComponentContext > xContext
         , const rtl::Reference< ::chart::DataSeries >& xDataSeries
         , SfxItemPool& rItemPool )
-        : ItemConverter( xDataSeries, rItemPool )
+        : ItemConverter( static_cast<property::OPropertySet*>(xDataSeries.get()), rItemPool )
         , m_xChartModel(xChartModel)
         , m_xCC(std::move(xContext))
         , m_bAttachToMainAxis(true)

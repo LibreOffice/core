@@ -1172,7 +1172,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     rtl::Reference< DataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(
                         rObjectCID, xChartModel ) );
                     if( xSeries.is() )
-                        xObjectProperties = xSeries;
+                        xObjectProperties = static_cast<property::OPropertySet*>(xSeries.get());
 
                     break;
                 }

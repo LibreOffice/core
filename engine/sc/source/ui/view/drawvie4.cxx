@@ -151,13 +151,12 @@ void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument >& rChart
             const cpo::uno::Sequence< uno::Reference< chart2::XDataSeries > > xSeriesSequence( xDataSequenceContainer->getDataSeries() );
             for(const uno::Reference<chart2::XDataSeries>& xSeries : xSeriesSequence)
             {
-                uno::Reference< beans::XPropertySet > xPropSet( xSeries, uno::UNO_QUERY);
                 uno::Reference< chart2::data::XDataSource > xErrorBarY;
-                xPropSet->getPropertyValue(u"ErrorBarY"_ustr) >>= xErrorBarY;
+                xSeries->getPropertyValue(u"ErrorBarY"_ustr) >>= xErrorBarY;
                 if(xErrorBarY.is())
                     getRangeFromDataSource(xErrorBarY, rRangeRep);
                 uno::Reference< chart2::data::XDataSource > xErrorBarX;
-                xPropSet->getPropertyValue(u"ErrorBarX"_ustr) >>= xErrorBarX;
+                xSeries->getPropertyValue(u"ErrorBarX"_ustr) >>= xErrorBarX;
                 if(xErrorBarX.is())
                     getRangeFromDataSource(xErrorBarX, rRangeRep);
             }

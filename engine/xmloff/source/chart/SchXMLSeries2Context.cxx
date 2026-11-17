@@ -410,22 +410,21 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
             SchXMLImportHelper::GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
         Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( SchXMLTools::GetNewLabeledDataSequence(), uno::UNO_QUERY_THROW );
 
-        Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
-        if (xSeriesProp.is())
+        if (m_xSeries.is())
         {
             if (bHideLegend)
-                xSeriesProp->setPropertyValue(u"ShowLegendEntry"_ustr, cpo::uno::Any(false));
+                m_xSeries->setPropertyValue(u"ShowLegendEntry"_ustr, cpo::uno::Any(false));
 
             if( bIsCandleStick )
             {
                 // set default color for range-line to black (before applying styles)
-                xSeriesProp->setPropertyValue(u"Color"_ustr,
+                m_xSeries->setPropertyValue(u"Color"_ustr,
                         cpo::uno::Any( sal_Int32( 0x000000 ))); // black
             }
             else if ( maSeriesChartTypeName == "com.sun.star.chart2.PieChartType" )
             {
                 //@todo: this property should be saved
-                xSeriesProp->setPropertyValue(u"VaryColorsByPoint"_ustr,
+                m_xSeries->setPropertyValue(u"VaryColorsByPoint"_ustr,
                         cpo::uno::Any( true ));
             }
 
@@ -1045,13 +1044,11 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
         {
             if ( seriesStyle.meType == DataRowPointStyle::ERROR_INDICATOR )
             {
-                uno::Reference< beans::XPropertySet > xNewSeriesProp(seriesStyle.m_xSeries,uno::UNO_QUERY);
-
                 if (seriesStyle.m_xErrorXProperties.is())
-                    xNewSeriesProp->setPropertyValue(u"ErrorBarX"_ustr,cpo::uno::Any(seriesStyle.m_xErrorXProperties));
+                    seriesStyle.m_xSeries->setPropertyValue(u"ErrorBarX"_ustr,cpo::uno::Any(seriesStyle.m_xErrorXProperties));
 
                 if (seriesStyle.m_xErrorYProperties.is())
-                    xNewSeriesProp->setPropertyValue(u"ErrorBarY"_ustr,cpo::uno::Any(seriesStyle.m_xErrorYProperties));
+                    seriesStyle.m_xSeries->setPropertyValue(u"ErrorBarY"_ustr,cpo::uno::Any(seriesStyle.m_xErrorYProperties));
             }
 
             try

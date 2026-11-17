@@ -110,11 +110,12 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
 
         sal_Int32 nNumberFormat = series->getExplicitNumberFormatKeyForDataLabel();
         sal_Int32 nPercentNumberFormat=ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
-                series,xChartModel);
+                static_cast<property::OPropertySet*>(series.get()), xChartModel);
 
         m_aConverters.emplace_back(
             new ::chart::wrapper::DataPointItemConverter(
-                xChartModel, xContext, series, series, rItemPool, rDrawModel,
+                xChartModel, xContext, static_cast<property::OPropertySet*>(series.get()),
+                series, rItemPool, rDrawModel,
                 GraphicObjectType::FilledDataPoint,
                 std::nullopt, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
     }
@@ -169,7 +170,7 @@ AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
     for (auto const& series : aSeriesList)
     {
         m_aConverters.emplace_back( new ::chart::wrapper::StatisticsItemConverter(
-                                     xChartModel, series, rItemPool ));
+                                     xChartModel, static_cast<property::OPropertySet*>(series.get()), rItemPool ));
     }
 }
 

@@ -122,7 +122,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
         }
 
         //it is important to correct the datapoint properties first as they do reference the series properties
-        setValuesAtPropertySet( elem );
+        setValuesAtPropertySet( static_cast<property::OPropertySet*>(elem.get()) );
     }
 }
 
@@ -264,7 +264,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
 
     for (auto const& elem : aSeries)
     {
-        getAutoResizeFromPropSet( elem, eResult );
+        getAutoResizeFromPropSet( static_cast<property::OPropertySet*>(elem.get()), eResult );
         if( eResult == AUTO_RESIZE_AMBIGUOUS )
             return eResult;
 
