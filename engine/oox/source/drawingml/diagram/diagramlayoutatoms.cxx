@@ -2407,8 +2407,16 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
         aFollow = aNext;
     }
     // no link: all data nodes below a layout node that states one font for them without a name,
-    // "primFontSz for ch ptType node op equ", are one group
-    if (aFollow == rName)
+    // "primFontSz for ch ptType node op equ", are one group; a text of a transition is none of
+    // them, Name_and_Title's titleText shows the sibTrans
+    const auto aOwnNode = aNodes.find(rName);
+    const bool bShowsNodes(
+        aOwnNode == aNodes.end() || !aOwnNode->second || !aOwnNode->second->getPresentationOf()
+        || aOwnNode->second->getPresentationOf()->maPtType.empty()
+        || std::find(aOwnNode->second->getPresentationOf()->maPtType.begin(),
+                     aOwnNode->second->getPresentationOf()->maPtType.end(), XML_node)
+               != aOwnNode->second->getPresentationOf()->maPtType.end());
+    if (aFollow == rName && bShowsNodes)
         for (const Constraint& rConstraint : rConstraints)
             if (rConstraint.mnType == XML_primFontSz && rConstraint.mnOperator == XML_equ
                 && rConstraint.msForName.isEmpty() && rConstraint.mnPointType == XML_node
@@ -15600,6 +15608,47 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 }
             }
 
+            // the shape keeps its text within the margins the text is measured with, parts of
+            // the font it shows; a side stated as a part of the width is set above
+            bool bMarginsSet(false);
+            const auto aSetTextMargins = [&](double fFont, bool bOnlyFontParts) {
+                rtl::Reference<svx::diagram::Point> xMarginPoint;
+                for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                    if (rEntry.second == rShape)
+                    {
+                        xMarginPoint = rEntry.first;
+                        break;
+                    }
+                for (const sal_Int32 nSide : { XML_lMarg, XML_tMarg, XML_rMarg, XML_bMarg })
+                {
+                    const TextMargin aMargin(textMarginOf(rDgm, rConstraints, getLayoutNode(),
+                                                          xMarginPoint, rShape->getInternalName(),
+                                                          nSide));
+                    if (aMargin.mfPartOfWidth > 0.0 || aMargin.mfPartOfOwnWidth > 0.0
+                        || std::any_of(rConstraints.begin(), rConstraints.end(),
+                                       [nSide](const Constraint& rConstraint) {
+                                           return rConstraint.msForName.isEmpty()
+                                                  && rConstraint.mnType == nSide
+                                                  && rConstraint.mnRefType == XML_w;
+                                       }))
+                        continue;
+                    // for a text that took its font from a row or grows, only the parts of the
+                    // font: what is stated otherwise is set where it is stated, a part of another
+                    // shape's size, Vertical_Picture_Accent_List's lMarg as a part of the
+                    // picture's width, when the composite lays the two out
+                    if (bOnlyFontParts && aMargin.mfPartOfFont <= 0.0)
+                        continue;
+                    const double fEmu(aMargin.mfPartOfFont * fFont * 12700.0
+                                      + aMargin.mnLengthEmu
+                                      + aMargin.mfPartOfHeight * rShape->getSize().Height);
+                    rShape->getShapeProperties().setProperty(
+                        getPropertyFromConstraint(nSide),
+                        static_cast<sal_Int32>(
+                            o3tl::convert(fEmu, o3tl::Length::emu, o3tl::Length::mm100)));
+                }
+                bMarginsSet = true;
+            };
+
             // a text in a box of a given size, no rule growing it, takes the font of its group on
             // this pass; when it does not fit, a word too wide or its lines too high, the group
             // is a point smaller on the next pass
@@ -15662,33 +15711,13 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     if (oNeed && !bFitted)
                     {
                         fFontSize = fGroupFont;
-                        // the shape keeps its text within the margins we fitted with, a side
-                        // stated as a part of the width is set above
-                        for (const sal_Int32 nSide : { XML_lMarg, XML_tMarg, XML_rMarg, XML_bMarg })
-                        {
-                            const TextMargin aMargin(
-                                textMarginOf(rDgm, rConstraints, getLayoutNode(), xPoint,
-                                             rShape->getInternalName(), nSide));
-                            if (aMargin.mfPartOfWidth > 0.0 || aMargin.mfPartOfOwnWidth > 0.0
-                                || std::any_of(rConstraints.begin(), rConstraints.end(),
-                                               [nSide](const Constraint& rConstraint) {
-                                                   return rConstraint.msForName.isEmpty()
-                                                          && rConstraint.mnType == nSide
-                                                          && rConstraint.mnRefType == XML_w;
-                                               }))
-                                continue;
-                            const double fEmu(aMargin.mfPartOfFont * fGroupFont * 12700.0
-                                              + aMargin.mnLengthEmu
-                                              + aMargin.mfPartOfHeight
-                                                    * rShape->getSize().Height);
-                            rShape->getShapeProperties().setProperty(
-                                getPropertyFromConstraint(nSide),
-                                static_cast<sal_Int32>(o3tl::convert(
-                                    fEmu, o3tl::Length::emu, o3tl::Length::mm100)));
-                        }
+                        aSetTextMargins(fGroupFont, false);
                     }
                 }
             }
+            // a text a row fitted, or one whose box grows, keeps the margins of its font too
+            if (!bMarginsSet && fFontSize > 0.0 && !textParagraphsOf(rDgm, rShape).empty())
+                aSetTextMargins(fFontSize, true);
 
             // A node whose name the layout gives one font for all, "primFontSz for des forName
             // childText op equ", is in the group of that name, and the nodes of a group show

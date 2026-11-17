@@ -3860,6 +3860,41 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFlowBlockArrowBendsRound)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextMarginsOfAGrownBox)
+{
+    // the boxes grow in width with their text and state all four margins as 0.2 of the font,
+    // 26 pt, and keep them: "goose" stays one word in its box
+    createSdImpressDoc("pptx/smartart-width-grows-until-text-fits.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+    uno::Reference<beans::XPropertySet> xBox(findChildShapeByText(xDiagram, u"One"_ustr),
+                                             uno::UNO_QUERY_THROW);
+    for (const OUString& rSide : { u"TextLeftDistance"_ustr, u"TextUpperDistance"_ustr,
+                                   u"TextRightDistance"_ustr, u"TextLowerDistance"_ustr })
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rSide.toUtf8().getStr(), sal_Int32(183),
+                                     xBox->getPropertyValue(rSide).get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNameFontIsNotTheTitleFont)
+{
+    // the names and the titles each state their font, one for all nodes, and the titles show
+    // the transitions, at most as large as the names: the short title boxes keep the names
+    // no smaller than their own room asks
+    createSdImpressDoc("pptx/smartart-name-and-title-fonts.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+    auto aFirstRunHeight = [&xDiagram](const OUString& rText) {
+        uno::Reference<container::XEnumerationAccess> xParagraphs(
+            findChildShapeByText(xDiagram, rText), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumerationAccess> xParagraph(
+            xParagraphs->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xRun(xParagraph->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY_THROW);
+        return xRun->getPropertyValue(u"CharHeight"_ustr).get<double>();
+    };
+    const double fName(aFirstRunHeight(u"One"_ustr));
+    const double fTitle(aFirstRunHeight(u"Blau"_ustr));
+    CPPUNIT_ASSERT_GREATER(1.5 * fTitle, fName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
