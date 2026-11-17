@@ -37,6 +37,7 @@
 #include <common/Log.hpp>
 #include <common/ProcUtil.hpp>
 #include <common/MobileApp.hpp>
+#include <common/Uri.hpp>
 #include <common/Util.hpp>
 #include <net/FakeSocket.hpp>
 #include <wsd/Extensions.hpp>
@@ -634,6 +635,10 @@ void install_filepicker_provider(COKit &rOffice)
 
 + (bool)isAllowedFromEditorFrame:(NSString *)message {
     return EditorFrameMessages::isAllowed([message UTF8String]);
+}
+
++ (bool)isWithinSite:(NSString *)from to:(NSString *)to {
+    return Uri::isWithinSite([from UTF8String], [to UTF8String]);
 }
 
 + (bool)isPlainExtension:(NSString *)fileExtension {

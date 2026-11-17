@@ -34,7 +34,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     private let accountId: String
     private let webView: WKWebView
-    private let integratorOrigin: String?
+    private var integratorOrigin: String?
     private var blockedOrigins: Set<String> = []
     private var editorForm: Data?
     private var editorFormUrl: URL?
@@ -632,6 +632,26 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return
         }
 
+        // Before the first page shows, a navigation is a redirect of the account address.
+        if !hasShownPage {
+            var isWithinSite = false
+            if let integratorOrigin, let targetOrigin {
+                isWithinSite = COWrapper.isWithinSite(integratorOrigin, to: targetOrigin)
+            }
+
+            if isWithinSite {
+                integratorOrigin = targetOrigin
+                COWrapper.LOG_DBG("The account address redirects within its site")
+                decisionHandler(.allow)
+                return
+            }
+
+            decisionHandler(.cancel)
+            COWrapper.LOG_ERR("The account window refused: the account address redirects to another site")
+            refuseRedirect(to: targetOrigin ?? url.absoluteString)
+            return
+        }
+
         decisionHandler(.cancel)
         if navigationAction.navigationType == .linkActivated {
             Self.openInBrowser(url)
@@ -639,6 +659,25 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         }
 
         COWrapper.LOG_ERR("The account window was kept from going to \(targetOrigin ?? "a page with no origin")")
+    }
+
+    private func refuseRedirect(to targetOrigin: String) {
+        let accountOrigin = integratorOrigin ?? "The account address"
+        let text = "\(accountOrigin) redirected to \(targetOrigin), "
+            + "so the account was not opened. "
+            + "Only a redirect within the same site is followed."
+
+        guard let window else {
+            close()
+            return
+        }
+
+        let alert = NSAlert()
+        alert.messageText = "Account not opened"
+        alert.informativeText = text
+        alert.beginSheetModal(for: window) { _ in
+            self.close()
+        }
     }
 
     // window.open and target="_blank" links: only web addresses are opened, in the browser.

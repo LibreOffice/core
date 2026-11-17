@@ -32,6 +32,7 @@
 + (void)handleMessageWith:(Document *_Nonnull)document message:(NSString *_Nonnull)message;
 // Whether CODA's page in an integrator's editor frame may send this message to native code.
 + (bool)isAllowedFromEditorFrame:(NSString *_Nonnull)message NS_SWIFT_NAME(isAllowedFromEditorFrame(_:));
++ (bool)isWithinSite:(NSString *_Nonnull)from to:(NSString *_Nonnull)to NS_SWIFT_NAME(isWithinSite(_:to:));
 + (bool)isPlainExtension:(NSString *_Nonnull)fileExtension NS_SWIFT_NAME(isPlainExtension(_:));
 + (NSString *_Nonnull)failurePageScript:(NSString *_Nonnull)title paragraphs:(NSArray<NSString *> *_Nonnull)paragraphs NS_SWIFT_NAME(failurePageScript(title:paragraphs:));
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
