@@ -13,6 +13,10 @@
 #include <comphelper/sequence.hxx>
 #include <editeng/unoprnms.hxx>
 #include <unotools/saveopt.hxx>
+#include <animations/animationnodehelper.hxx>
+#include <com/sun/star/animations/AnimationColorSpace.hpp>
+#include <com/sun/star/animations/XAnimateColor.hpp>
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <test/commontesttools.hxx>
@@ -866,7 +870,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testOpenDocumentAsReadOnly)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf118835)
 {
     createSdImpressDoc("odp/tdf118835.odp");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocContent, "(//p:animClr)[1]", "clrSpc", u"rgb");
@@ -886,6 +890,34 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf118835)
     assertXPath(pXmlDocContent, "(//p:animClr)[5]//p:by/p:hsl", "h", u"10800000");
     assertXPath(pXmlDocContent, "(//p:animClr)[5]//p:by/p:hsl", "s", u"0");
     assertXPath(pXmlDocContent, "(//p:animClr)[5]//p:by/p:hsl", "l", u"0");
+
+    // The color animation with HSL interpolation changes the hue by 180 degrees, and keeps the
+    // saturation and the luminance, also after reloading the PPTX file
+    uno::Reference<animations::XAnimationNodeSupplier> xNodeSupplier(getPage(0),
+                                                                     uno::UNO_QUERY_THROW);
+    std::vector<uno::Reference<animations::XAnimationNode>> aNodes;
+    anim::create_deep_vector(xNodeSupplier->getAnimationNode(), aNodes);
+
+    bool bFound = false;
+    for (const auto& xNode : aNodes)
+    {
+        uno::Reference<animations::XAnimateColor> xColor(xNode, uno::UNO_QUERY);
+        if (!xColor.is() || xColor->getColorInterpolation() != animations::AnimationColorSpace::HSL)
+            continue;
+        uno::Sequence<double> aBy;
+        if (!(xColor->getBy() >>= aBy))
+            continue;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBy.getLength());
+        // Without the fix in place, this test would have failed with:
+        // - Expected: 180
+        // - Actual  : 108
+        // so the hue was read with the wrong unit.
+        CPPUNIT_ASSERT_EQUAL(180.0, aBy[0]);
+        CPPUNIT_ASSERT_EQUAL(0.0, aBy[1]);
+        CPPUNIT_ASSERT_EQUAL(0.0, aBy[2]);
+        bFound = true;
+    }
+    CPPUNIT_ASSERT(bFound);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf118768)

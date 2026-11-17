@@ -23,6 +23,8 @@
 #include <svx/svdotable.hxx>
 #include <o3tl/environment.hxx>
 
+#include <com/sun/star/animations/XAnimateColor.hpp>
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -37,6 +39,7 @@
 
 #include <stlpool.hxx>
 
+#include <animations/animationnodehelper.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -1189,6 +1192,33 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawImageRemoteNotFetched)
     loadFromFile(u"draw-image-link.fodp", aParams);
 
     CPPUNIT_ASSERT(mxComponent.is());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testAnimateColorByRgbImport)
+{
+    // The fill color animation changes red by 100%, green by 50% and blue by 20%.
+    createSdImpressDoc("pptx/anim-color-by-rgb.pptx");
+
+    uno::Reference<animations::XAnimationNodeSupplier> xNodeSupplier(getPage(0),
+                                                                     uno::UNO_QUERY_THROW);
+    std::vector<uno::Reference<animations::XAnimationNode>> aNodes;
+    anim::create_deep_vector(xNodeSupplier->getAnimationNode(), aNodes);
+
+    bool bFound = false;
+    for (const auto& xNode : aNodes)
+    {
+        uno::Reference<animations::XAnimateColor> xColor(xNode, uno::UNO_QUERY);
+        sal_Int32 nBy = 0;
+        if (!xColor.is() || !(xColor->getBy() >>= nBy))
+            continue;
+        // Without the fix in place, this test would have failed with:
+        // - Expected: 16744499
+        // - Actual  : 0
+        // so every change was lost.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF8033), nBy);
+        bFound = true;
+    }
+    CPPUNIT_ASSERT(bFound);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

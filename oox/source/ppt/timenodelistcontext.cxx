@@ -38,8 +38,10 @@
 #include <oox/ppt/slidetransition.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <o3tl/string_view.hxx>
 #include <sax/fastattribs.hxx>
+#include <algorithm>
 #include <utility>
 
 #include "animvariantcontext.hxx"
@@ -95,6 +97,12 @@ namespace {
         aPair.Second <<= static_cast<double>(rPoint.Y) / 100000.0;
         return Any(aPair);
     }
+
+    /** Converts a color component change from 1/1000 percent to the range 0 to 255. */
+    sal_Int32 lclPercentToRgbComponent(sal_Int32 nPercent)
+    {
+        return std::clamp<sal_Int32>(basegfx::fround(nPercent * 255.0 / MAX_PERCENT), 0, 255);
+    }
 }
 
 namespace oox::ppt {
@@ -116,12 +124,16 @@ namespace oox::ppt {
                 switch( colorSpace )
                 {
                 case AnimationColorSpace::HSL:
-                    aColor <<= Sequence< double >{ one / 100000.0, two / 100000.0, three / 100000.0 };
+                    // The hue is in 1/60000 degree and becomes degrees. Saturation and
+                    // luminance are in 1/1000 percent and become fractions of 1
+                    aColor <<= Sequence< double >{ static_cast<double>(one) / PER_DEGREE,
+                                                   static_cast<double>(two) / MAX_PERCENT,
+                                                   static_cast<double>(three) / MAX_PERCENT };
                     break;
                 case AnimationColorSpace::RGB:
-                    nColor = ( ( ( one * 128 ) / 1000 ) & 0xff ) << 16
-                        | ( ( ( two * 128 ) / 1000 ) & 0xff ) << 8
-                        | ( ( ( three * 128 ) / 1000 )  & 0xff );
+                    nColor = lclPercentToRgbComponent( one ) << 16
+                        | lclPercentToRgbComponent( two ) << 8
+                        | lclPercentToRgbComponent( three );
                     aColor <<= nColor;
                     break;
                 default:
