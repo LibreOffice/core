@@ -94,7 +94,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             SwFormatHeader aLeftHeader(pFormat);
             (void)aLeftHeader;
         }
-        if (!rNewDesc.IsFirstShared())
+        if (!rNewDesc.IsFirstShared() && !rNewDesc.IsWithoutFirstHeader())
         {
             pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFormat() );
             // The Ctor of this object will remove the duplicate!
@@ -116,7 +116,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             SwFormatFooter aLeftFooter(pFormat);
             (void)aLeftFooter;
         }
-        if (!rNewDesc.IsFirstShared())
+        if (!rNewDesc.IsFirstShared() && !rNewDesc.IsWithoutFirstFooter())
         {
             pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFormat() );
             // The Ctor of this object will remove the duplicate!
@@ -168,18 +168,16 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             pNewFormat = pNewItem->GetHeaderFormat();
             pNewFormat->SetFormatAttr( SwFormatContent() );
         }
-        if (!rDest.IsFirstShared())
+        // A page style without a first page header has no first page header content.
+        if (!rDest.IsFirstShared() && !rDest.IsWithoutFirstHeader())
         {
             // Same procedure for unshared header...
-            const SwFrameFormat & rSourceMasterHead =
-                rSource.IsWithoutFirstHeader() ? rSource.GetMaster() :
-                rSource.GetFirstMaster();
-            const SwFormatHeader& rSourceFirstMasterHead = rSourceMasterHead.GetHeader();
-            pItem = rSourceMasterHead.GetAttrSet().GetItemIfSet( RES_HEADER, false );
+            const SwFormatHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
+            pItem = rDest.GetFirstMaster().GetAttrSet().GetItemIfSet( RES_HEADER, false );
             pNewItem.reset(pItem->Clone());
             pNewFormat = pNewItem->GetHeaderFormat();
             pNewFormat->SetFormatAttr( rSourceFirstMasterHead.GetHeaderFormat()->GetContent() );
-            pItem = rSourceMasterHead.GetAttrSet().GetItemIfSet( RES_HEADER, false );
+            pItem = rSource.GetFirstMaster().GetAttrSet().GetItemIfSet( RES_HEADER, false );
             pNewItem.reset(pItem->Clone());
             pNewFormat = pNewItem->GetHeaderFormat();
             pNewFormat->SetFormatAttr( SwFormatContent() );
@@ -214,19 +212,16 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         pNewFormat = pNewItem->GetFooterFormat();
         pNewFormat->SetFormatAttr( SwFormatContent() );
     }
-    if (rDest.IsFirstShared())
+    // A page style without a first page footer has no first page footer content.
+    if (rDest.IsFirstShared() || rDest.IsWithoutFirstFooter())
         return;
 
-    const SwFrameFormat & rSourceMasterFoot =
-        rSource.IsWithoutFirstFooter() ? rSource.GetMaster() :
-        rSource.GetFirstMaster();
-
-    const SwFormatFooter& rSourceFirstMasterFoot = rSourceMasterFoot.GetFooter();
-    pItem = rSourceMasterFoot.GetAttrSet().GetItemIfSet( RES_FOOTER, false );
+    const SwFormatFooter& rSourceFirstMasterFoot = rSource.GetFirstMaster().GetFooter();
+    pItem = rDest.GetFirstMaster().GetAttrSet().GetItemIfSet( RES_FOOTER, false );
     pNewItem.reset(pItem->Clone());
     pNewFormat = pNewItem->GetFooterFormat();
     pNewFormat->SetFormatAttr( rSourceFirstMasterFoot.GetFooterFormat()->GetContent() );
-    pItem = rSourceMasterFoot.GetAttrSet().GetItemIfSet( RES_FOOTER, false );
+    pItem = rSource.GetFirstMaster().GetAttrSet().GetItemIfSet( RES_FOOTER, false );
     pNewItem.reset(pItem->Clone());
     pNewFormat = pNewItem->GetFooterFormat();
     pNewFormat->SetFormatAttr( SwFormatContent() );
