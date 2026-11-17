@@ -36,7 +36,8 @@ libraryIds = {
     "libffi": 1,
     "xz": 1,
     "zstd": 1,
-    "brotli": 1
+    "brotli": 1,
+    "cbc": 2,
 }
 
 libraryNames = {
