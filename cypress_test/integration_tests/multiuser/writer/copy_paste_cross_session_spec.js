@@ -25,10 +25,15 @@ describe(['tagmultiuser'], 'Multiuser Writer Cross-Session Paste', function() {
 		helper.setDummyClipboardForCopy('text/html');
 		helper.copy();
 
-		// The copy is async; wait for the captured html (with the meta-origin
-		// that carries User A's clipboard tag) to land.
-		cy.cGet('#copy-paste-container').should(function($el) {
-			expect($el.html()).to.contain('meta-origin');
+		// The copy is done in two steps - it first writes a placeholder stub
+		// and then the real content.  Wait for the real content to arrive
+		// before closing the tab.
+		cy.getFrameWindow().then(function(win) {
+			cy.cGet('#copy-paste-container').should(function($el) {
+				var html = $el.html();
+				expect(html).to.contain('meta-origin');
+				expect(win.app.map._clip._isStubHtml(html), 'still the pending stub').to.equal(false);
+			});
 		});
 
 		// Build a stub payload carrying User A's clipboard origin. A stub has
