@@ -1148,7 +1148,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     rtl::Reference< Axis > xAxis =
                         AxisHelper::getAxis( nDimensionIndex, nAxisIndex, xCooSys );
                     if( xAxis.is() )
-                        xObjectProperties = xAxis;
+                        xObjectProperties = static_cast<property::OPropertySet*>(xAxis.get());
                 }
                 break;
             case OBJECTTYPE_AXIS_UNITLABEL:

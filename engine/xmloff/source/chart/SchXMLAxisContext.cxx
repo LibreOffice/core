@@ -473,14 +473,8 @@ void SchXMLAxisContext::CreateAxis()
                         aScaleData.AxisType = chart2::AxisType::CATEGORY;
                         aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
                         xAxis->setScaleData( aScaleData );
-                    }
-
-                    //set line style of added x axis to invisible
-                    Reference< beans::XPropertySet > xNewAxisProp( xAxis, uno::UNO_QUERY );
-                    if( xNewAxisProp.is() )
-                    {
-                        xNewAxisProp->setPropertyValue(u"LineStyle"_ustr
-                            , cpo::uno::Any(drawing::LineStyle_NONE));
+                        //set line style of added x axis to invisible
+                        xAxis->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(drawing::LineStyle_NONE));
                     }
                 }
 
@@ -685,41 +679,36 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                 Reference< chart2::XAxis > xSecondaryXAxis = lcl_getAxis( xCooSys, 0, 1 );
                 Reference< chart2::XAxis > xSecondaryYAxis = lcl_getAxis( xCooSys, 1, 1 );
 
-                Reference< beans::XPropertySet > xMainXAxisProp( xMainXAxis, uno::UNO_QUERY );
-                Reference< beans::XPropertySet > xMainYAxisProp( xMainYAxis, uno::UNO_QUERY );
-                Reference< beans::XPropertySet > xSecondaryXAxisProp( xSecondaryXAxis, uno::UNO_QUERY );
-                Reference< beans::XPropertySet > xSecondaryYAxisProp( xSecondaryYAxis, uno::UNO_QUERY );
-
-                if( xMainXAxisProp.is() && xMainYAxisProp.is() )
+                if( xMainXAxis.is() && xMainYAxis.is() )
                 {
                     chart2::ScaleData aMainXScale = xMainXAxis->getScaleData();
                     if( rChartTypeServiceName == u"com.sun.star.chart2.ScatterChartType" )
                     {
-                        xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                        xMainYAxis->setPropertyValue(u"CrossoverPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisPosition_VALUE) );
                         double fCrossoverValue = 0.0;
                         aMainXScale.Origin >>= fCrossoverValue;
-                        xMainYAxisProp->setPropertyValue(u"CrossoverValue"_ustr
+                        xMainYAxis->setPropertyValue(u"CrossoverValue"_ustr
                                 , cpo::uno::Any( fCrossoverValue ) );
 
                         if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
-                            xMainYAxisProp->setPropertyValue(u"LabelPosition"_ustr
+                            xMainYAxis->setPropertyValue(u"LabelPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
-                            xMainYAxisProp->setPropertyValue(u"MarkPosition"_ustr
+                            xMainYAxis->setPropertyValue(u"MarkPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
-                            if( xSecondaryYAxisProp.is() )
-                                xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                            if( xSecondaryYAxis.is() )
+                                xSecondaryYAxis->setPropertyValue(u"CrossoverPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
-                            xMainYAxisProp->setPropertyValue(u"LabelPosition"_ustr
+                            xMainYAxis->setPropertyValue(u"LabelPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
-                            xMainYAxisProp->setPropertyValue(u"MarkPosition"_ustr
+                            xMainYAxis->setPropertyValue(u"MarkPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
-                            if( xSecondaryYAxisProp.is() )
-                                xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                            if( xSecondaryYAxis.is() )
+                                xSecondaryYAxis->setPropertyValue(u"CrossoverPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisPosition_END) );
                         }
                     }
@@ -727,48 +716,48 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                     {
                         if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
-                            xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                            xMainYAxis->setPropertyValue(u"CrossoverPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisPosition_END) );
-                            if( xSecondaryYAxisProp.is() )
-                                xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                            if( xSecondaryYAxis.is() )
+                                xSecondaryYAxis->setPropertyValue(u"CrossoverPosition"_ustr
                                     , cpo::uno::Any( css::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
-                            xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                            xMainYAxis->setPropertyValue(u"CrossoverPosition"_ustr
                                 , cpo::uno::Any( css::chart::ChartAxisPosition_START) );
-                            if( xSecondaryYAxisProp.is() )
-                                xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                            if( xSecondaryYAxis.is() )
+                                xSecondaryYAxis->setPropertyValue(u"CrossoverPosition"_ustr
                                     , cpo::uno::Any( css::chart::ChartAxisPosition_END) );
                         }
                     }
 
                     chart2::ScaleData aMainYScale = xMainYAxis->getScaleData();
-                    xMainXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                    xMainXAxis->setPropertyValue(u"CrossoverPosition"_ustr
                             , cpo::uno::Any( css::chart::ChartAxisPosition_VALUE) );
                     double fCrossoverValue = 0.0;
                     aMainYScale.Origin >>= fCrossoverValue;
-                    xMainXAxisProp->setPropertyValue(u"CrossoverValue"_ustr
+                    xMainXAxis->setPropertyValue(u"CrossoverValue"_ustr
                             , cpo::uno::Any( fCrossoverValue ) );
 
                     if( aMainYScale.Orientation == chart2::AxisOrientation_REVERSE )
                     {
-                        xMainXAxisProp->setPropertyValue(u"LabelPosition"_ustr
+                        xMainXAxis->setPropertyValue(u"LabelPosition"_ustr
                             , cpo::uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
-                        xMainXAxisProp->setPropertyValue(u"MarkPosition"_ustr
+                        xMainXAxis->setPropertyValue(u"MarkPosition"_ustr
                             , cpo::uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
-                        if( xSecondaryXAxisProp.is() )
-                            xSecondaryXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                        if( xSecondaryXAxis.is() )
+                            xSecondaryXAxis->setPropertyValue(u"CrossoverPosition"_ustr
                             , cpo::uno::Any( css::chart::ChartAxisPosition_START) );
                     }
                     else
                     {
-                        xMainXAxisProp->setPropertyValue(u"LabelPosition"_ustr
+                        xMainXAxis->setPropertyValue(u"LabelPosition"_ustr
                             , cpo::uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
-                        xMainXAxisProp->setPropertyValue(u"MarkPosition"_ustr
+                        xMainXAxis->setPropertyValue(u"MarkPosition"_ustr
                             , cpo::uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
-                        if( xSecondaryXAxisProp.is() )
-                            xSecondaryXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
+                        if( xSecondaryXAxis.is() )
+                            xSecondaryXAxis->setPropertyValue(u"CrossoverPosition"_ustr
                             , cpo::uno::Any( css::chart::ChartAxisPosition_END) );
                     }
                 }

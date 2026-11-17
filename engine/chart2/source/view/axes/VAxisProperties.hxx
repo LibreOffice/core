@@ -151,7 +151,7 @@ struct AxisProperties final
 
     void init(bool bCartesian=false);//init from model data (m_xAxisModel)
 
-    void initAxisPositioning( const cpo::uno::Reference< css::beans::XPropertySet >& xAxisProp );
+    void initAxisPositioning( const rtl::Reference< ::chart::Axis >& xAxisProp );
 
     static TickmarkProperties getBiggestTickmarkProperties();
     TickmarkProperties makeTickmarkPropertiesForComplexCategories( sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis ) const;

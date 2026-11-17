@@ -544,7 +544,7 @@ void AxisWrapper::removeEventListener(
 //ReferenceSizePropertyProvider
 void AxisWrapper::updateReferenceSize()
 {
-    Reference< beans::XPropertySet > xProp( getAxis(), uno::UNO_QUERY );
+    Reference< chart2::XAxis > xProp( getAxis() );
     if( xProp.is() )
     {
         if( xProp->getPropertyValue(u"ReferencePageSize"_ustr).hasValue() )
@@ -555,7 +555,7 @@ void AxisWrapper::updateReferenceSize()
 Any AxisWrapper::getReferenceSize()
 {
     Any aRet;
-    Reference< beans::XPropertySet > xProp( getAxis(), uno::UNO_QUERY );
+    Reference< chart2::XAxis > xProp( getAxis() );
     if( xProp.is() )
         aRet = xProp->getPropertyValue(u"ReferencePageSize"_ustr);
     return aRet;
@@ -593,7 +593,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
 // WrappedPropertySet
 Reference< beans::XPropertySet > AxisWrapper::getInnerPropertySet()
 {
-    return Reference< beans::XPropertySet >( getAxis(), uno::UNO_QUERY );
+    return getAxis();
 }
 
 const Sequence< beans::Property >& AxisWrapper::getPropertySequence()

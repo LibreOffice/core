@@ -146,7 +146,7 @@ private:
             = coordContainer->getCoordinateSystems();
         Reference<XCoordinateSystem> coordSystem = coordSystems[0];
         Reference<XAxis> primaryYAxis = coordSystem->getAxisByDimension(1, 0);
-        axisProperties = Reference<XPropertySet>(primaryYAxis, UNO_QUERY);
+        axisProperties = Reference<XPropertySet>(primaryYAxis);
         return axisProperties;
     }
 

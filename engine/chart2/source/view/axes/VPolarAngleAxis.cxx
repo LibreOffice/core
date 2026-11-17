@@ -59,8 +59,9 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
     tAnySequence aPropValues;
 
     rtl::Reference< ::chart::Axis > xProps( m_aAxisProperties.m_xAxisModel );
-    PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false, -1, false, false );
-    LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
+    PropertyMapper::getTextLabelMultiPropertyLists( static_cast<property::OPropertySet*>(xProps.get()), aPropNames, aPropValues, false, -1, false, false );
+    LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames
+        , static_cast<property::OPropertySet*>(xProps.get())
         , rAxisLabelProperties.m_aFontReferenceSize );
 
     cpo::uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");

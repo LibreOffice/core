@@ -52,7 +52,7 @@ AllAxisItemConverter::AllAxisItemConverter(
     for( rtl::Reference< Axis > const & axis : aElementList )
     {
         m_aConverters.emplace_back( new ::chart::wrapper::AxisItemConverter(
-            uno::Reference< beans::XPropertySet >(axis),
+            static_cast< property::OPropertySet* >(axis.get()),
             rItemPool, rDrawModel,
             xChartModel, nullptr, nullptr,
             pRefSize));

@@ -6502,13 +6502,12 @@ void ChartExport::createAxes_chartex(
                         for (sal_Int32 j = 0; j <= nMaxAxIdx && !bFound; ++j)
                         {
                             Reference<chart2::XAxis> xAxis = xCooSys->getAxisByDimension(i, j);
-                            Reference<beans::XPropertySet> xAxisProp( xAxis, uno::UNO_QUERY);
-                            if (!xAxisProp.is())
+                            if (!xAxis.is())
                                 continue;
                             sal_Int32 nStoredId = -1;
                             try
                             {
-                                xAxisProp->getPropertyValue(u"AxisId"_ustr) >>= nStoredId;
+                                xAxis->getPropertyValue(u"AxisId"_ustr) >>= nStoredId;
                             }
                             catch (const cpo::uno::Exception&)
                             {
@@ -6517,7 +6516,7 @@ void ChartExport::createAxes_chartex(
                             if (nStoredId == nAxisId)
                             {
                                 bool bCatNotVal = false;
-                                xAxisProp->getPropertyValue(u"CatNotVal"_ustr) >>= bCatNotVal;
+                                xAxis->getPropertyValue(u"CatNotVal"_ustr) >>= bCatNotVal;
                                 eAxisType = bCatNotVal ? AXIS_CATEGORY : AXIS_VALUE;
                                 bFound = true;
                             }

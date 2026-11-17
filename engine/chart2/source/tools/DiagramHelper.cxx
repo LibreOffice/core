@@ -230,36 +230,32 @@ void lcl_switchToDateCategories( const rtl::Reference< ChartModel >& xChartDoc, 
             xDataAccess->setAnyRowDescriptions( aAnyCategories );
         }
         //check the numberformat at the axis
-        Reference< beans::XPropertySet > xAxisProps( xAxis, uno::UNO_QUERY );
-        if( xAxisProps.is() )
-        {
-            sal_Int32 nNumberFormat = -1;
-            xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+        sal_Int32 nNumberFormat = -1;
+        xAxis->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
 
-            Reference< util::XNumberFormats > xNumberFormats( xChartDoc->getNumberFormats() );
-            if( xNumberFormats.is() )
+        Reference< util::XNumberFormats > xNumberFormats( xChartDoc->getNumberFormats() );
+        if( xNumberFormats.is() )
+        {
+            Reference< beans::XPropertySet > xKeyProps;
+            try
             {
-                Reference< beans::XPropertySet > xKeyProps;
-                try
+                xKeyProps = xNumberFormats->getByKey( nNumberFormat );
+            }
+            catch( const cpo::uno::Exception & )
+            {
+                DBG_UNHANDLED_EXCEPTION("chart2");
+            }
+            sal_Int32 nType = util::NumberFormat::UNDEFINED;
+            if( xKeyProps.is() )
+                xKeyProps->getPropertyValue( u"Type"_ustr ) >>= nType;
+            if( !( nType & util::NumberFormat::DATE ) )
+            {
+                //set a date format to the axis
+                const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+                Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), true/*bCreate*/ );
+                if( aKeySeq.hasElements() )
                 {
-                    xKeyProps = xNumberFormats->getByKey( nNumberFormat );
-                }
-                catch( const cpo::uno::Exception & )
-                {
-                    DBG_UNHANDLED_EXCEPTION("chart2");
-                }
-                sal_Int32 nType = util::NumberFormat::UNDEFINED;
-                if( xKeyProps.is() )
-                    xKeyProps->getPropertyValue( u"Type"_ustr ) >>= nType;
-                if( !( nType & util::NumberFormat::DATE ) )
-                {
-                    //set a date format to the axis
-                    const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
-                    Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), true/*bCreate*/ );
-                    if( aKeySeq.hasElements() )
-                    {
-                        xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, cpo::uno::Any(aKeySeq[0]));
-                    }
+                    xAxis->setPropertyValue(CHART_UNONAME_NUMFMT, cpo::uno::Any(aKeySeq[0]));
                 }
             }
         }

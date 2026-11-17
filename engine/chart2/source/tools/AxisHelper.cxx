@@ -369,7 +369,7 @@ rtl::Reference< Axis > AxisHelper::createAxis(
     {
         // set correct initial AutoScale
         if( pRefSizeProvider )
-            pRefSizeProvider->setValuesAtPropertySet( xAxis );
+            pRefSizeProvider->setValuesAtPropertySet( static_cast<property::OPropertySet*>(xAxis.get()) );
     }
     catch( const cpo::uno::Exception& )
     {
@@ -450,7 +450,7 @@ void AxisHelper::makeAxisVisible( const rtl::Reference< Axis >& xAxis )
     if( xAxis.is() )
     {
         xAxis->setPropertyValue( u"Show"_ustr, cpo::uno::Any( true ) );
-        LinePropertiesHelper::SetLineVisible( xAxis );
+        LinePropertiesHelper::SetLineVisible( static_cast<property::OPropertySet*>(xAxis.get()) );
         xAxis->setPropertyValue( u"DisplayLabels"_ustr, cpo::uno::Any( true ) );
     }
 }
@@ -651,7 +651,7 @@ bool AxisHelper::isAxisVisible( const rtl::Reference< Axis >& xAxis )
     if( xAxis.is() )
     {
         xAxis->getPropertyValue( u"Show"_ustr ) >>= bRet;
-        bRet = bRet && ( LinePropertiesHelper::IsLineVisible( xAxis )
+        bRet = bRet && ( LinePropertiesHelper::IsLineVisible( static_cast<property::OPropertySet*>(xAxis.get()) )
             || areAxisLabelsVisible( xAxis ) );
     }
 

@@ -325,7 +325,7 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     const std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
     for( rtl::Reference< Axis > const & axis : aAxes )
     {
-        setValuesAtPropertySet( axis );
+        setValuesAtPropertySet( static_cast<property::OPropertySet*>(axis.get()) );
         impl_setValuesAtTitled( axis );
     }
 

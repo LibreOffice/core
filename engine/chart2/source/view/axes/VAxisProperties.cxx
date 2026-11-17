@@ -204,7 +204,7 @@ static LabelAlignment lcl_getLabelAlignmentForXAxis( const AxisProperties& rAxis
     return aRet;
 }
 
-void AxisProperties::initAxisPositioning( const uno::Reference< beans::XPropertySet >& xAxisProp )
+void AxisProperties::initAxisPositioning( const rtl::Reference< ::chart::Axis >& xAxisProp )
 {
     if( !xAxisProp.is() )
         return;
@@ -302,7 +302,7 @@ void AxisProperties::init( bool bCartesian )
     try
     {
         //init LineProperties
-        m_aLineProperties.initFromPropertySet( m_xAxisModel );
+        m_aLineProperties.initFromPropertySet( static_cast<property::OPropertySet*>(m_xAxisModel.get()) );
 
         //init display labels
         m_xAxisModel->getPropertyValue( u"DisplayLabels"_ustr ) >>= m_bDisplayLabels;

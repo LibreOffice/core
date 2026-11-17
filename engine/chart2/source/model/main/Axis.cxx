@@ -637,6 +637,31 @@ Reference< beans::XPropertySetInfo > Axis::getPropertySetInfo()
     return xPropertySetInfo;
 }
 
+void Axis::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
+{
+    OPropertySet::setPropertyValue(aPropertyName, aValue);
+}
+::cpo::uno::Any Axis::getPropertyValue( const ::rtl::OUString& PropertyName )
+{
+    return OPropertySet::getPropertyValue(PropertyName);
+}
+void Axis::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener )
+{
+    OPropertySet::addPropertyChangeListener(aPropertyName, xListener);
+}
+void Axis::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener )
+{
+    OPropertySet::removePropertyChangeListener(aPropertyName, aListener);
+}
+void Axis::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::addVetoableChangeListener(PropertyName, aListener);
+}
+void Axis::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::removeVetoableChangeListener(PropertyName, aListener);
+}
+
 using impl::Axis_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( Axis, Axis_Base, ::property::OPropertySet )

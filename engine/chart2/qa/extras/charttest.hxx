@@ -456,10 +456,9 @@ OUString ChartTest::getTitleString( const cpo::uno::Reference<css::chart2::XTitl
 
 sal_Int32 ChartTest::getNumberFormatFromAxis( const cpo::uno::Reference<css::chart2::XAxis>& xAxis )
 {
-    cpo::uno::Reference<css::beans::XPropertySet> xPS(xAxis, cpo::uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xPS.is());
+    CPPUNIT_ASSERT(xAxis.is());
     sal_Int32 nNumberFormat = -1;
-    bool bSuccess = xPS->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+    bool bSuccess = xAxis->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT(bSuccess);
 
     return nNumberFormat;

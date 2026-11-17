@@ -432,7 +432,7 @@ static void getAxisLabelProperties(
     const AxisLabelProperties& rAxisLabelProp,
     sal_Int32 nLimitedSpaceForText, bool bLimitedHeight )
 {
-    Reference<beans::XPropertySet> xProps(rAxisProp.m_xAxisModel);
+    Reference<beans::XPropertySet> xProps(static_cast<property::OPropertySet*>(rAxisProp.m_xAxisModel.get()));
 
     PropertyMapper::getTextLabelMultiPropertyLists(
         xProps, rPropNames, rPropValues, false, nLimitedSpaceForText, bLimitedHeight, false);
