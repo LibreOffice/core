@@ -77,6 +77,7 @@ public:
     void testUserDefinedNumberFormats();
     void testFractionOutOfRange();
     void testROPolicyFindsCachedFormat();
+    void testNewCurrencySymbolString();
     void testNfEnglishKeywordsIntegrity();
     void testStandardColorIntegrity();
     void testColorNamesConversion();
@@ -98,6 +99,7 @@ public:
     CPPUNIT_TEST(testUserDefinedNumberFormats);
     CPPUNIT_TEST(testFractionOutOfRange);
     CPPUNIT_TEST(testROPolicyFindsCachedFormat);
+    CPPUNIT_TEST(testNewCurrencySymbolString);
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
     CPPUNIT_TEST(testStandardColorIntegrity);
     CPPUNIT_TEST(testColorNamesConversion);
@@ -1885,6 +1887,29 @@ void Test::testROPolicyFindsCachedFormat()
     CPPUNIT_ASSERT_EQUAL(NUMBERFORMAT_ENTRY_NOT_FOUND, aPolicy.mFindFormat(nSearch));
     aPolicy.mCacheFormat(nSearch, 42);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(42), aPolicy.mFindFormat(nSearch));
+}
+
+void Test::testNewCurrencySymbolString()
+{
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType = SvNumFormatType::DEFINED;
+    sal_uInt32 nKey;
+    OUString aCode = u"#,##0.00 [$\u20AC-407]"_ustr;
+    CPPUNIT_ASSERT(aFormatter.PutEntry(aCode, nCheckPos, nType, nKey));
+    OUString aSymbol;
+    const NfCurrencyEntry* pEntry = nullptr;
+    CPPUNIT_ASSERT(aFormatter.GetNewCurrencySymbolString(nKey, aSymbol, &pEntry));
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(u"[$\u20AC-407]"_ustr, aSymbol);
+
+    // No currency entry for this symbol; the passed string must not matter
+    aCode = u"#,##0.00 [$XYZ]"_ustr;
+    CPPUNIT_ASSERT(aFormatter.PutEntry(aCode, nCheckPos, nType, nKey));
+    aSymbol = u"junk"_ustr;
+    CPPUNIT_ASSERT(aFormatter.GetNewCurrencySymbolString(nKey, aSymbol, &pEntry));
+    CPPUNIT_ASSERT(!pEntry);
+    CPPUNIT_ASSERT_EQUAL(u"[$XYZ]"_ustr, aSymbol);
 }
 
 void Test::testNfEnglishKeywordsIntegrity()

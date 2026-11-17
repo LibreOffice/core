@@ -4408,6 +4408,7 @@ bool SvNFFormatData::GetNewCurrencySymbolString(sal_uInt32 nFormat, OUString& rS
                                                 const NfCurrencyEntry** ppEntry /* = NULL */,
                                                 bool* pBank /* = NULL */) const
 {
+    rStr.clear();
     if ( ppEntry )
         *ppEntry = nullptr;
     if ( pBank )
@@ -4419,7 +4420,6 @@ bool SvNFFormatData::GetNewCurrencySymbolString(sal_uInt32 nFormat, OUString& rS
         OUString aSymbol, aExtension;
         if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
         {
-            OUStringBuffer sBuff(128); // guess-estimate of a value that will pretty much guarantee no re-alloc
             if ( ppEntry )
             {
                 bool bFoundBank = false;
@@ -4437,27 +4437,19 @@ bool SvNFFormatData::GetNewCurrencySymbolString(sal_uInt32 nFormat, OUString& rS
             }
             if ( rStr.isEmpty() )
             {   // analog to BuildSymbolString
-                sBuff.append("[$");
                 if ( aSymbol.indexOf( '-' ) != -1 ||
                         aSymbol.indexOf( ']' ) != -1 )
                 {
-                    sBuff.append("\"" + aSymbol + "\"");
+                    rStr = "[$\"" + aSymbol + "\"" + aExtension + "]";
                 }
                 else
                 {
-                    sBuff.append(aSymbol);
+                    rStr = "[$" + aSymbol + aExtension + "]";
                 }
-                if ( !aExtension.isEmpty() )
-                {
-                    sBuff.append(aExtension);
-                }
-                sBuff.append(']');
             }
-            rStr = sBuff.makeStringAndClear();
             return true;
         }
     }
-    rStr.clear();
     return false;
 }
 
