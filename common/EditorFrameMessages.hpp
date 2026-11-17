@@ -34,10 +34,11 @@ inline constexpr std::string_view ALLOWED_APP_COMMANDS[] = {
     "TEXTCLIPBOARD",       "WELCOME",
 };
 
-/// Commands that name a local file or open another document.
+/// Commands that name a local file or open another document, or let the document read the files
+/// that it links to.
 inline constexpr std::string_view REFUSED_COMMANDS[] = {
-    "exportfile", "extensionsavefile", "insertfilelist",     "loaddocument",       "newdoc",
-    "opendoc",    "openremote",        "removecloudaccount",
+    "allowlinkupdate", "exportfile", "extensionsavefile", "insertfilelist",     "loaddocument",
+    "newdoc",          "opendoc",    "openremote",        "removecloudaccount",
 };
 
 /// Bridge calls the editor page makes, by name.
@@ -67,8 +68,9 @@ inline bool isAllowed(const std::string& message)
                                      command) != std::end(REFUSED_COMMANDS);
     if (isRefused)
     {
-        LOG_WRN("editor frame: refused: " << command
-                                          << " names a local file or opens another document");
+        LOG_WRN(
+            "editor frame: refused: " << command
+            << " names a local file, opens another document or updates the document's links");
         return false;
     }
 
