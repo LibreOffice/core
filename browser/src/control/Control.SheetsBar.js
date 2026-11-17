@@ -103,8 +103,31 @@ class SheetsBar {
 
 		this.parentContainer.replaceChildren();
 		this.builder.build(this.parentContainer, data);
-		
+
+		const toolbox = this.parentContainer.querySelector('#sheets-buttons-toolbox');
+		if (toolbox)
+			toolbox.addEventListener('keydown', this.onToolboxKeyDown.bind(this));
+
 		this.updateSheetListMenu();
+	}
+
+	onToolboxKeyDown(e) {
+		if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')
+			return;
+		if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey)
+			return;
+
+		const buttons = Array.from(e.currentTarget.querySelectorAll('button')).filter(
+			(button) => !button.disabled && button.offsetParent !== null);
+		const current = buttons.findIndex((button) => button.contains(e.target));
+		if (current === -1)
+			return;
+
+		const step = e.key === 'ArrowRight' ? 1 : -1;
+		const next = (current + step + buttons.length) % buttons.length;
+		e.preventDefault();
+		e.stopPropagation();
+		buttons[next].focus();
 	}
 
 	onDocLayerInit() {
