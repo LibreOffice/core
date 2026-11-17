@@ -2949,6 +2949,9 @@ tools::Long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, co
                 // first access.
                 std::unique_ptr<SvStream> pStream
                     = utl::UcbStreamHelper::CreateStream(rFileName, StreamMode::READ);
+                if (!pStream) {
+                    return -1;
+                }
                 pTempFile.reset(new utl::TempFileNamed());
                 pTempFile->GetStream(StreamMode::READWRITE)->WriteStream(*pStream);
                 aFileName = pTempFile->GetURL();

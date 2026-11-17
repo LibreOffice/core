@@ -751,6 +751,24 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testChangeWhileProtectedOleIsSelected) 
     CPPUNIT_ASSERT(modifiable->isModified());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testInsertDocFromUnreadableUrl) {
+    // Given a document with some text...
+    createSwDoc();
+    cpo::uno::Reference<css::text::XText> text
+        = cpo::uno::Reference<css::text::XTextDocument>(mxComponent, cpo::uno::UNO_QUERY_THROW)
+            ->getText();
+    text->setString(u"Text"_ustr);
+
+    // ...when inserting a document from a non-file URL that cannot be read (as the tests have no
+    // UCB provider for https URLs)...
+    dispatchCommand(
+        mxComponent, u".uno:InsertDoc"_ustr,
+        {comphelper::makePropertyValue(u"Name"_ustr, u"https://example.invalid/a.odt"_ustr)});
+
+    // ...then the document keeps its text:
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, text->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
