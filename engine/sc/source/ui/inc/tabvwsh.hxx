@@ -536,6 +536,8 @@ public:
     ScFormEditData* GetFormEditData() { return mpFormEditData.get(); }
 
     virtual tools::Rectangle getKitVisibleArea() const override;
+    virtual void setKitCellCursor(sal_Int32 nPart, const SfxCellPosition& rCell,
+                                  const SfxCellPosition* pAnchor) override;
 
     const ScDragData& GetDragData() const { return *m_pDragData; }
     void SetDragObject(ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj);

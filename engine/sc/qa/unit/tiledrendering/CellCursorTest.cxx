@@ -8,13 +8,18 @@
  */
 
 #include <sctiledrenderingtest.hxx>
+#include <qahelper.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
+
+#include <com/sun/star/awt/Key.hpp>
 
 #include <COKit/COKit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <cellmergeoption.hxx>
@@ -24,10 +29,14 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <global.hxx>
+#include <markdata.hxx>
 #include <sctestviewcallback.hxx>
 #include <SparklineGroup.hxx>
 #include <tabprotection.hxx>
 #include <tabvwsh.hxx>
+#include <viewdata.hxx>
+
+using namespace com::sun::star;
 
 namespace
 {
@@ -40,6 +49,16 @@ std::vector<sal_Int32> toIntegers(const boost::property_tree::ptree& rArray)
     for (const auto& rIndex : rArray)
         aIndexes.push_back(rIndex.second.get_value<sal_Int32>());
     return aIndexes;
+}
+
+/**
+ * Read a cell sent as [col, row] into an address on sheet 0.
+ */
+ScAddress toAddress(const boost::property_tree::ptree& rArray)
+{
+    std::vector<sal_Int32> aIndexes = toIntegers(rArray);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(2), aIndexes.size());
+    return ScAddress(aIndexes[0], aIndexes[1], 0);
 }
 
 /**
@@ -303,6 +322,150 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeInventory)
     CPPUNIT_ASSERT(!aTree.get_child_optional("commandValues"));
     aTree = getCommandResponse(*pModelObj, ".uno:CellRangeInventory");
     CPPUNIT_ASSERT(!aTree.get_child_optional("commandValues"));
+}
+
+// The client sets the cell cursor and the selection of one view, and the
+// other views are told.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetKitCellCursor)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    int nView1 = KitHelper::getCurrentView();
+    ScTestViewCallback aView1;
+    ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
+    KitHelper::createView();
+    ScTestViewCallback aView2;
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView2);
+    KitHelper::setView(nView1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Call the view through SfxViewShell, as the kit command does.
+    SfxViewShell& rShell1 = *pView1;
+    ScViewData& rViewData1 = pView1->GetViewData();
+    ScViewData& rViewData2 = pView2->GetViewData();
+
+    // Select A2:C5 with the anchor in A2 and the moving end in C5.  The cell
+    // cursor should stay in A2 as with Shift+arrow.
+    aView1.m_bOwnCursorInvalidated = false;
+    aView2.m_bViewCursorInvalidated = false;
+    SfxCellPosition aCell{ 2, 4 }; // C5
+    SfxCellPosition aAnchor{ 0, 1 }; // A2
+    rShell1.setKitCellCursor(0, aCell, &aAnchor);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), rViewData1.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), rViewData1.GetCurY());
+    CPPUNIT_ASSERT(rViewData1.GetMarkData().IsMarked());
+    // A2:C5 should be selected
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 1, 0, 2, 4, 0), rViewData1.GetMarkData().GetMarkArea());
+    CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
+
+    // Read the state back the way kit does after the command, which sets
+    // the view first.
+    // {"commandName": ".uno:CellCursorState",
+    //  "commandValues": {"part": 0, "cursor": {"cell": [0, 1], "visible": true},
+    //                    "selection": [[0, 1, 2, 4]]}}
+    KitHelper::setView(nView1);
+    boost::property_tree::ptree aTree = getCommandResponse(*pModelObj, ".uno:CellCursorState");
+    CPPUNIT_ASSERT_EQUAL(0, aTree.get<int>("commandValues.part"));
+    const ScAddress aExpectedAnchor(0, 1, 0);
+    CPPUNIT_ASSERT_EQUAL(aExpectedAnchor, toAddress(aTree.get_child("commandValues.cursor.cell")));
+    CPPUNIT_ASSERT(aTree.get<bool>("commandValues.cursor.visible"));
+    std::vector<ScRange> aSelection = toRanges(aTree.get_child("commandValues.selection"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aSelection.size());
+    const ScRange aExpectedSelection(0, 1, 0, 2, 4, 0);
+    CPPUNIT_ASSERT_EQUAL(aExpectedSelection, aSelection[0]);
+
+    // Press Shift+Down to extend the same selection from A2:C5 to A2:C6.
+    // Set the view first, as kit does before each input.
+    KitHelper::setView(nView1);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::DOWN | KEY_SHIFT);
+    Scheduler::ProcessEventsToIdle();
+    // A2:C6 should be selected
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 1, 0, 2, 5, 0), rViewData1.GetMarkData().GetMarkArea());
+
+    // Check that the other view keeps its own cursor in A1.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), rViewData2.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), rViewData2.GetCurY());
+
+    // Select E3 alone by putting the anchor on the cursor cell, which differs
+    // from a cell cursor with no selection.
+    aCell = { 4, 2 }; // E3
+    rShell1.setKitCellCursor(0, aCell, &aCell);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCCOL(4), rViewData1.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), rViewData1.GetCurY());
+    CPPUNIT_ASSERT(rViewData1.GetMarkData().IsMarked());
+    // E3 is selected and marked
+    CPPUNIT_ASSERT_EQUAL(ScRange(4, 2, 0, 4, 2, 0), rViewData1.GetMarkData().GetMarkArea());
+
+    // Move the cursor to D7 with no anchor, which should clear the selection.
+    aCell = { 3, 6 }; // D7
+    rShell1.setKitCellCursor(0, aCell, nullptr);
+    Scheduler::ProcessEventsToIdle();
+    // cell cursor is on D7 but no selection
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), rViewData1.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), rViewData1.GetCurY());
+    CPPUNIT_ASSERT(!rViewData1.GetMarkData().IsMarked());
+    CPPUNIT_ASSERT(!rViewData1.GetMarkData().IsMultiMarked());
+    KitHelper::setView(nView1);
+    aTree = getCommandResponse(*pModelObj, ".uno:CellCursorState");
+    const ScAddress aExpectedCursor(3, 6, 0);
+    CPPUNIT_ASSERT_EQUAL(aExpectedCursor, toAddress(aTree.get_child("commandValues.cursor.cell")));
+    CPPUNIT_ASSERT(aTree.get_child("commandValues.selection").empty());
+
+    // Attempt to set a cell cursor on a non-current sheet should be ignored.
+    aCell = { 0, 0 };
+    rShell1.setKitCellCursor(1, aCell, nullptr);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), rViewData1.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), rViewData1.GetCurY());
+    CPPUNIT_ASSERT(!rViewData1.GetMarkData().IsMarked());
+
+    // Attempt to set a cell cursor outside the sheet should be ignored.
+    aCell = { -1, 0 };
+    rShell1.setKitCellCursor(0, aCell, nullptr);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), rViewData1.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), rViewData1.GetCurY());
+    CPPUNIT_ASSERT(!rViewData1.GetMarkData().IsMarked());
+
+    // Attempt to select from an anchor outside the sheet should be ignored.
+    aCell = { 0, 0 };
+    aAnchor = { -1, 0 };
+    rShell1.setKitCellCursor(0, aCell, &aAnchor);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), rViewData1.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), rViewData1.GetCurY());
+    CPPUNIT_ASSERT(!rViewData1.GetMarkData().IsMarked());
+
+    // Read the state back after the refused moves, which the client uses to
+    // put its own cursor back.
+    KitHelper::setView(nView1);
+    aTree = getCommandResponse(*pModelObj, ".uno:CellCursorState");
+    CPPUNIT_ASSERT_EQUAL(aExpectedCursor, toAddress(aTree.get_child("commandValues.cursor.cell")));
+    CPPUNIT_ASSERT(aTree.get_child("commandValues.selection").empty());
+
+    // Merge A1:C1 and move the cursor to B1, which the merge covers.  The
+    // cursor should go to A1, where the merged cell starts.
+    ScDocument* pDoc = pModelObj->GetDocument();
+    pDoc->DoMerge(0, 0, 2, 0, 0); // A1:C1
+    aCell = { 1, 0 }; // B1
+    rShell1.setKitCellCursor(0, aCell, nullptr);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), rViewData1.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), rViewData1.GetCurY());
+
+    // Select from the anchor B1 to D3.  The anchor and the cursor should go
+    // to A1.
+    aCell = { 3, 2 }; // D3
+    aAnchor = { 1, 0 }; // B1
+    rShell1.setKitCellCursor(0, aCell, &aAnchor);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), rViewData1.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), rViewData1.GetCurY());
+    // A1:D3 should be selected
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 3, 2, 0), rViewData1.GetMarkData().GetMarkArea());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

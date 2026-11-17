@@ -412,7 +412,7 @@ namespace COOLProtocol
     }
 
     /// Whether the token at that index names a command with an optional input sequence token:
-    /// the key, mouse, text, caret and form control commands, and the object changes.
+    /// the key, mouse, text, caret, cell cursor and form control commands, and the object changes.
     inline bool carriesInputSequence(const StringVector& tokens, std::size_t command)
     {
         static constexpr auto names = std::to_array<std::string_view>({
@@ -422,6 +422,7 @@ namespace COOLProtocol
             "textinput",
             "removetextcontext",
             "textcursor",
+            "setcellcursor",
             "formcontrol",
         });
         return isObjectChange(tokens, command)

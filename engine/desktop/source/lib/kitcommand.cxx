@@ -67,6 +67,39 @@ bool setTextCursor(SfxViewShell& rViewShell, vcl::ITiledRenderable* pDocument,
     }
     return false;
 }
+
+void setCellCursor(SfxViewShell& rViewShell, std::u16string_view aCommand)
+{
+    const std::map<OUString, OUString> aParams = KitHelper::parseCommandParameters(aCommand);
+    const auto itPart = aParams.find(u"part"_ustr);
+    const auto itCol = aParams.find(u"col"_ustr);
+    const auto itRow = aParams.find(u"row"_ustr);
+    if (itPart == aParams.end() || itCol == aParams.end() || itRow == aParams.end())
+        // not all required parameters are given - bail out
+        return;
+
+    const sal_Int32 nPart = itPart->second.toInt32();
+    SfxCellPosition aCell;
+    aCell.nCol = itCol->second.toInt32();
+    aCell.nRow = itRow->second.toInt32();
+
+    // An anchor position is not given for a regular cell cursor. For a range
+    // selection, the anchor point is the start of the selection while the cell
+    // cursor is the diagonally opposed "front" of it.
+    SfxCellPosition aAnchor;
+    const SfxCellPosition* pAnchor = nullptr;
+    const auto itAnchorCol = aParams.find(u"anchorcol"_ustr);
+    const auto itAnchorRow = aParams.find(u"anchorrow"_ustr);
+    if (itAnchorCol != aParams.end() && itAnchorRow != aParams.end())
+    {
+        // This is a range selection.
+        aAnchor.nCol = itAnchorCol->second.toInt32();
+        aAnchor.nRow = itAnchorRow->second.toInt32();
+        pAnchor = &aAnchor;
+    }
+
+    rViewShell.setKitCellCursor(nPart, aCell, pAnchor);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -2640,6 +2640,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return rawRectangles;
 	},
 
+	// Removes the input sequence that kit appends to a cell report, as in
+	// "textselection: EMPTY inputSequence=5", so the rest parses as before.
+	_stripInputSequence(textMsg) {
+		return textMsg.replace(/ inputSequence=\d+$/, '');
+	},
+
 	// A textselection, textselectionstart or textselectionend message.
 	_onSelectionMessage: function (textMsg) {
 		if (textMsg.startsWith('textselectionstart:'))
@@ -2647,7 +2653,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('textselectionend:'))
 			this._onTextSelectionEndMsg(textMsg);
 		else
-			this._onTextSelectionMsg(textMsg);
+			this._onTextSelectionMsg(this._stripInputSequence(textMsg));
 	},
 
 	_onTextSelectionMsg: function (textMsg) {
@@ -3021,6 +3027,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_onCellSelectionAreaMsg: function (textMsg) {
+		textMsg = this._stripInputSequence(textMsg);
 		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 		var strTwips = textMsg.match(/\d+/g);
 		// a report of table cells asked before the newest is passed over
@@ -3057,6 +3064,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_onCellAutoFillAreaMsg: function (textMsg) {
+		textMsg = this._stripInputSequence(textMsg);
 		var strTwips = textMsg.match(/\d+/g);
 		if (strTwips != null && this._map.isEditMode()) {
 			var topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));

@@ -1169,7 +1169,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 
 		const cellRanges = state.cellRanges.map(function (cellRange) {
-			return this._parseCellRange(cellRange);
+			return this._cellRangeToBounds(cellRange);
 		}, this);
 
 		this._cellRangeMarkerSection.setMarkers(state.name, cellRanges, state.part, {

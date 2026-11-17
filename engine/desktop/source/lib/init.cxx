@@ -4889,6 +4889,12 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
         return;
     }
 
+    if (aCommand.startsWith(".uno:SetCellCursor?"))
+    {
+        kitcommand::setCellCursor(*pViewShell, aCommand);
+        return;
+    }
+
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
     {
@@ -9761,7 +9767,7 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
 
         return pDoc->getSheetGeometryData(bColumns, bRows, bSizes, bHidden, bFiltered, bGroups);
     }
-    else if (aCommand.starts_with(".uno:CellCursor"))
+    else if (aCommand == ".uno:CellCursor" || aCommand.starts_with(".uno:CellCursor?"))
     {
         // Ignore command's deprecated parameters.
         tools::JsonWriter aJsonWriter;

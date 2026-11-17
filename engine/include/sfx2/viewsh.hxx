@@ -207,6 +207,13 @@ struct SfxParagraphContentControl : SfxContentControl
     bool operator==(const SfxParagraphContentControl&) const = default;
 };
 
+/// A cell of a sheet, by its column and row index
+struct SfxCellPosition
+{
+    sal_Int32 nCol = 0;
+    sal_Int32 nRow = 0;
+};
+
 /**
  * One SfxViewShell more or less represents one edit window for a document, there can be multiple
  * ones for a single opened document (SfxObjectShell).
@@ -588,6 +595,12 @@ public:
     bool isKitMobilePhone() const { return maKitDeviceFormFactor == KitDeviceFormFactor::MOBILE; }
 
     virtual tools::Rectangle getKitVisibleArea() const { return tools::Rectangle(); }
+    /** Set the cell cursor of this view, or with an anchor, select the cells
+        from it to that cell. */
+    virtual void setKitCellCursor(sal_Int32 /*nPart*/, const SfxCellPosition& /*rCell*/,
+                                  const SfxCellPosition* /*pAnchor*/)
+    {
+    }
     /// The comments on an accessible paragraph of this view, which the accessibility API lacks
     virtual std::vector<SfxParagraphComment>
     getKitParagraphComments(const cpo::uno::Reference<css::accessibility::XAccessibleText>&) const

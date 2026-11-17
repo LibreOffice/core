@@ -6289,7 +6289,7 @@ OString ScGridWindow::getCellCursor() const
     // GridWindow stores a shown cell cursor in mpOOCursors, hence
     // we can use that to determine whether we would want to be showing
     // one (client-side) for tiled rendering too.
-    if (!mpOOCursors)
+    if (!isKitCellCursorVisible())
         return "EMPTY"_ostr;
 
     if (comphelper::COKit::isCompatFlagSet(

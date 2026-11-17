@@ -1602,6 +1602,21 @@ void DesktopKitTest::testCellCursor()
     OString aRectangle(aTree.get<std::string>("commandValues"));
     // cell cursor geometry + col + row
     CPPUNIT_ASSERT_EQUAL("0, 0, 1274, 254, 0, 0"_ostr, aRectangle);
+
+    // Make sure that '.uno:CellCursorState', which also starts with
+    // '.uno:CellCursor', is interpreted correctly.
+    aJSON = pDocument->getCommandValues(".uno:CellCursorState");
+    std::stringstream aStateStream(aJSON);
+    boost::property_tree::ptree aStateTree;
+    boost::property_tree::read_json(aStateStream, aStateTree);
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:CellCursorState"),
+                         aStateTree.get<std::string>("commandName"));
+    std::vector<sal_Int32> aCursor;
+    for (const auto& rIndex : aStateTree.get_child("commandValues.cursor.cell"))
+        aCursor.push_back(rIndex.second.get_value<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(std::size_t(2), aCursor.size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aCursor[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aCursor[1]);
 }
 
 void DesktopKitTest::testCommandResult()

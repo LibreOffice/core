@@ -553,6 +553,8 @@ public:
 
     /// get Cell cursor in this view's co-ordinate system @see ScModelObj::getCellCursor().
     OString getCellCursor() const;
+    /// Test whether the client should show the cell cursor of this view.
+    bool isKitCellCursorVisible() const { return bool(mpOOCursors); }
     void notifyKitCellCursor() const;
     void notifyKitCellViewCursor(const SfxViewShell* pForShell) const;
     void updateKitCellCursor(const SfxViewShell* pOtherShell) const;

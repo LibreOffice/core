@@ -28,6 +28,13 @@ namespace kitcommand
 // Returns true when the caret was placed.
 bool setTextCursor(SfxViewShell& rViewShell, vcl::ITiledRenderable* pDocument,
                    std::u16string_view aCommand);
+
+/**
+ * Put the cell cursor with an optional selection from the view,
+ * via .uno:SetCellCursor command.  The command requires the part, col and row
+ * parameters, and optionally use anchorcol and anchorrow parameters.
+ */
+void setCellCursor(SfxViewShell& rViewShell, std::u16string_view aCommand);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

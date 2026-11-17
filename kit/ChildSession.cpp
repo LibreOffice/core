@@ -731,6 +731,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "rendershapeselection") ||
                tokens.equals(0, "removetextcontext") ||
                tokens.equals(0, "textcursor") ||
+               tokens.equals(0, "setcellcursor") ||
                tokens.equals(0, "dialogevent") ||
                tokens.equals(0, "completefunction")||
                tokens.equals(0, "formfieldevent") ||
@@ -1120,6 +1121,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "textcursor"))
         {
             return setTextCursor(tokens);
+        }
+        else if (tokens.equals(0, "setcellcursor"))
+        {
+            return setCellCursor(tokens);
         }
         else if (tokens.equals(0, "completefunction"))
         {
@@ -6715,6 +6720,45 @@ bool ChildSession::setTextCursor(const StringVector& tokens)
     return true;
 }
 
+bool ChildSession::setCellCursor(const StringVector& tokens)
+{
+    int part;
+    int col;
+    int row;
+    if (tokens.size() < 4 || !getTokenInteger(tokens[1], "part", part) || part < 0 ||
+        !getTokenInteger(tokens[2], "col", col) || col < 0 ||
+        !getTokenInteger(tokens[3], "row", row) || row < 0)
+    {
+        sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=syntax");
+        return false;
+    }
+
+    // Translate it to the command form.
+    std::string command = ".uno:SetCellCursor?part=" + std::to_string(part) +
+                          "&col=" + std::to_string(col) + "&row=" + std::to_string(row);
+
+    // There may be an optional anchor position.
+    int anchorCol;
+    int anchorRow;
+    if (getTokenInteger(tokens, "anchorcol", anchorCol) &&
+        getTokenInteger(tokens, "anchorrow", anchorRow) && anchorCol >= 0 && anchorRow >= 0)
+    {
+        command += "&anchorcol=" + std::to_string(anchorCol) +
+                   "&anchorrow=" + std::to_string(anchorRow);
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->postUnoCommand(command.c_str(), "", false);
+
+    // Send the final cell cursor and selection state back to the client in
+    // case they differ from what the client has sent.
+    const std::string state(getLOKitDocument()->getCommandValues(".uno:CellCursorState"));
+    if (!state.empty())
+        sendTextFrame("commandvalues:" + inputSequenceToken() + ' ' + state);
+
+    return true;
+}
+
 bool ChildSession::setAccessibilityState(bool enable)
 {
     getLOKitDocument()->setAccessibilityState(_viewId, enable);
@@ -7288,7 +7332,7 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         sendTextFrame("invalidatecursor: " + withInputSequence(payload));
         break;
     case COKitCallbackType::TEXT_SELECTION:
-        sendTextFrame("textselection: " + payload);
+        sendTextFrame("textselection: " + payload + inputSequenceToken());
         break;
     case COKitCallbackType::TEXT_SELECTION_START:
         sendTextFrame("textselectionstart: " + payload);
@@ -7310,7 +7354,7 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         break;
     case COKitCallbackType::CELL_CURSOR:
         updateCursorPosition(payload);
-        sendTextFrame("cellcursor: " + payload);
+        sendTextFrame("cellcursor: " + payload + inputSequenceToken());
         break;
     case COKitCallbackType::CELL_FORMULA:
         sendTextFrame("cellformula: " + payload);
@@ -7349,6 +7393,8 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
             std::string zoomPercent = getZoomPercent(payload);
             sendTextFrame("changepagezoom:" + zoomPercent);
         }
+        else if (payload.find("\"CellRangeMarker\"") != std::string::npos)
+            sendTextFrame("statechanged: " + withInputSequence(payload));
         else
             sendTextFrame("statechanged: " + payload);
 
@@ -7591,10 +7637,10 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         // these are not handled here.
         break;
     case COKitCallbackType::CELL_SELECTION_AREA:
-        sendTextFrame("cellselectionarea: " + payload);
+        sendTextFrame("cellselectionarea: " + payload + inputSequenceToken());
         break;
     case COKitCallbackType::CELL_AUTO_FILL_AREA:
-        sendTextFrame("cellautofillarea: " + payload);
+        sendTextFrame("cellautofillarea: " + payload + inputSequenceToken());
         break;
     case COKitCallbackType::TABLE_SELECTED:
         sendTextFrame("tableselected: " + payload);

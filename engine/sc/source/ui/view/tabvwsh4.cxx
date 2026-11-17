@@ -2477,6 +2477,58 @@ tools::Rectangle ScTabViewShell::getKitVisibleArea() const
     return GetViewData().getKitVisibleArea();
 }
 
+void ScTabViewShell::setKitCellCursor(sal_Int32 nPart, const SfxCellPosition& rCell,
+                                      const SfxCellPosition* pAnchor)
+{
+    const SCTAB nTab = GetViewData().GetTabNumber();
+
+    // the client moves the cursor only on the displayed sheet.
+    if (nPart != nTab)
+        return;
+
+    const ScDocument& rDoc = GetViewData().GetDocument();
+    auto isValidCell = [&rDoc](const SfxCellPosition& rPos)
+    {
+        const bool bValidCol = rPos.nCol >= 0 && rPos.nCol <= rDoc.MaxCol();
+        const bool bValidRow = rPos.nRow >= 0 && rPos.nRow <= rDoc.MaxRow();
+        return bValidCol && bValidRow;
+    };
+
+    if (!isValidCell(rCell))
+        return;
+
+    if (pAnchor && !isValidCell(*pAnchor))
+        return;
+
+    // A cell covered by a merged cell stands for the merged cell, as with a
+    // cursor key in Calc.
+    SCCOL nCol = rCell.nCol;
+    SCROW nRow = rCell.nRow;
+    rDoc.SkipOverlapped(nCol, nRow, nTab);
+
+    if (!pAnchor)
+    {
+        // A cell cursor with no selection.
+        MoveCursorAbs(nCol, nRow, SC_FOLLOW_NONE, false, false);
+        return;
+    }
+
+    SCCOL nAnchorCol = pAnchor->nCol;
+    SCROW nAnchorRow = pAnchor->nRow;
+    rDoc.SkipOverlapped(nAnchorCol, nAnchorRow, nTab);
+
+    // A range selection - move the cursor to the anchor cell first, then mark
+    // to the indicated cell position.
+    MoveCursorAbs(nAnchorCol, nAnchorRow, SC_FOLLOW_NONE, false, false);
+
+    HideAllCursors();
+    DoneBlockMode();
+    InitBlockMode(nAnchorCol, nAnchorRow, nTab);
+    MarkCursor(nCol, nRow, nTab, false, false, true);
+    ShowAllCursors();
+    SelectionChanged();
+}
+
 void ScTabViewShell::SetDragObject(ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj)
 {
     ResetDragObject();

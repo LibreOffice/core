@@ -8,6 +8,7 @@
  */
 
 #include <sctiledrenderingtest.hxx>
+#include <qahelper.hxx>
 #include <sc.hrc>
 #include <drawview.hxx>
 
@@ -4193,6 +4194,42 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartOnOtherSheetInvalidated)
                            bChartInvalidated);
 }
 
+namespace
+{
+/**
+ * Extract the numbers of a JSON array.
+ */
+std::vector<sal_Int32> toIntegers(const boost::property_tree::ptree& rArray)
+{
+    std::vector<sal_Int32> aIndexes;
+    for (const auto& rIndex : rArray)
+        aIndexes.push_back(rIndex.second.get_value<sal_Int32>());
+    return aIndexes;
+}
+
+/**
+ * Read a range sent as [startCol, startRow, endCol, endRow] into a range on
+ * sheet 0.
+ */
+ScRange toRange(const boost::property_tree::ptree& rArray)
+{
+    std::vector<sal_Int32> aIndexes = toIntegers(rArray);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(4), aIndexes.size());
+    return ScRange(aIndexes[0], aIndexes[1], 0, aIndexes[2], aIndexes[3], 0);
+}
+
+/**
+ * Read an array of ranges.
+ */
+std::vector<ScRange> toRanges(const boost::property_tree::ptree& rRanges)
+{
+    std::vector<ScRange> aRanges;
+    for (const auto& rRange : rRanges)
+        aRanges.push_back(toRange(rRange.second));
+    return aRanges;
+}
+}
+
 // A cursor move sends a cell range marker only when it changes what the client shows.
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerSentOnChangeOnly)
 {
@@ -4238,15 +4275,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerSentOnChangeOnly)
         Scheduler::ProcessEventsToIdle();
     };
 
-    // Get the cell ranges formatted as a sequence of "startCol, startRow,
-    // endCol, endRow" strings.
-    auto getCellRanges = [](const boost::property_tree::ptree& rMarker) {
-        std::vector<std::string> aRanges;
-        for (const auto& rRange : rMarker.get_child("state.cellRanges"))
-            aRanges.push_back(rRange.second.get_value<std::string>());
-        return aRanges;
-    };
-
     // C1 -> C2: the cursor is in no marked range before or after, so there is
     // nothing to send.  The sparkline in C2 sends nothing either.
     pressKey(awt::Key::DOWN);
@@ -4260,10 +4288,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerSentOnChangeOnly)
     CPPUNIT_ASSERT_EQUAL(std::string("DynamicArray"),
                          aView.m_aCellRangeMarkers[0].get<std::string>("state.name"));
 
-    std::vector<std::string> aRanges = getCellRanges(aView.m_aCellRangeMarkers[0]);
+    std::vector<ScRange> aRanges
+        = toRanges(aView.m_aCellRangeMarkers[0].get_child("state.cellRanges"));
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), aRanges.size());
     // A1:A3 should be marked as dynamic array
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 0, 2"), aRanges[0]);
+    const ScRange aExpectedRange(0, 0, 0, 0, 2, 0);
+    CPPUNIT_ASSERT_EQUAL(aExpectedRange, aRanges[0]);
     aView.m_aCellRangeMarkers.clear();
 
     // A2 -> A3: the same range as before, so nothing to send.
@@ -4275,7 +4305,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerSentOnChangeOnly)
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), aView.m_aCellRangeMarkers.size());
     CPPUNIT_ASSERT_EQUAL(std::string("DynamicArray"),
                          aView.m_aCellRangeMarkers[0].get<std::string>("state.name"));
-    CPPUNIT_ASSERT(getCellRanges(aView.m_aCellRangeMarkers[0]).empty());
+    CPPUNIT_ASSERT(toRanges(aView.m_aCellRangeMarkers[0].get_child("state.cellRanges")).empty());
 }
 
 // A marker sent before the client registered its callback never reached it, so it
@@ -4314,11 +4344,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerResentAfterCallbac
     CPPUNIT_ASSERT_EQUAL(std::string("DynamicArray"),
                          aView.m_aCellRangeMarkers[0].get<std::string>("state.name"));
 
-    std::vector<std::string> aRanges;
-    for (const auto& rRange : aView.m_aCellRangeMarkers[0].get_child("state.cellRanges"))
-        aRanges.push_back(rRange.second.get_value<std::string>());
+    std::vector<ScRange> aRanges
+        = toRanges(aView.m_aCellRangeMarkers[0].get_child("state.cellRanges"));
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), aRanges.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 0, 2"), aRanges[0]);
+    const ScRange aExpectedRange(0, 0, 0, 0, 2, 0);
+    CPPUNIT_ASSERT_EQUAL(aExpectedRange, aRanges[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellDialogAfterReadOnlyView)
@@ -4490,8 +4520,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommandValues)
     Scheduler::ProcessEventsToIdle();
 
     for (std::u16string_view aName :
-         { u"SecurityLabel", u"CellRangeInventory", u"FormulaDepChain", u"CalcFunctionList",
-           u"EvaluateFormula", u"ExtractDocumentStructure" })
+         { u"SecurityLabel", u"CellRangeInventory", u"CellCursorState", u"FormulaDepChain",
+           u"CalcFunctionList", u"EvaluateFormula", u"ExtractDocumentStructure" })
         CPPUNIT_ASSERT(pModelObj->supportsCommand(aName));
 
     // The name must match as a whole, and has no ".uno:" prefix here.

@@ -1670,6 +1670,7 @@ enum class CalcCommand
     Unknown,
     SecurityLabel,
     CellRangeInventory,
+    CellCursorState,
     FormulaDepChain,
     CalcFunctionList,
     EvaluateFormula,
@@ -1680,6 +1681,7 @@ enum class CalcCommand
 constexpr std::pair<std::string_view, CalcCommand> aCalcCommands[] = {
     { "SecurityLabel", CalcCommand::SecurityLabel },
     { "CellRangeInventory", CalcCommand::CellRangeInventory },
+    { "CellCursorState", CalcCommand::CellCursorState },
     { "FormulaDepChain", CalcCommand::FormulaDepChain },
     { "CalcFunctionList", CalcCommand::CalcFunctionList },
     { "EvaluateFormula", CalcCommand::EvaluateFormula },
@@ -1799,6 +1801,39 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
 
             auto aValues = rJsonWriter.startNode("commandValues");
             sc::writeCellRangeInventory(rJsonWriter, rDoc, static_cast<SCTAB>(nPart));
+            break;
+        }
+        case CalcCommand::CellCursorState:
+        {
+            // The cell cursor and the marked ranges of the current view, as
+            // cell indexes.  The client compares them with its own after a
+            // move it sent.
+            rJsonWriter.put("commandName", ".uno:CellCursorState");
+            const ScViewData* pViewData = ScDocShell::GetViewData();
+            if (!pViewData)
+                return;
+
+            const SCTAB nTab = pViewData->GetTabNumber();
+            ScRangeList aMarkedRanges;
+            pViewData->GetMarkData().FillRangeListWithMarks(&aMarkedRanges, false, nTab);
+
+            auto aValues = rJsonWriter.startNode("commandValues");
+            rJsonWriter.put("part", static_cast<sal_Int32>(nTab));
+            {
+                const ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+                const bool bVisible = pGridWindow && pGridWindow->isKitCellCursorVisible();
+
+                auto aCursor = rJsonWriter.startNode("cursor");
+                {
+                    auto aCell = rJsonWriter.startArray("cell");
+                    rJsonWriter.putSimpleValue(pViewData->GetCurX());
+                    rJsonWriter.putSimpleValue(pViewData->GetCurY());
+                }
+                rJsonWriter.put("visible", bVisible);
+            }
+            auto aSelection = rJsonWriter.startArray("selection");
+            for (const ScRange& rRange : aMarkedRanges)
+                sc::putRange(rJsonWriter, rRange);
             break;
         }
         case CalcCommand::FormulaDepChain:

@@ -1443,6 +1443,27 @@ void KitQueueTests::testTextInputBlockedByTextCursor()
     queue.put("sess textinput id=0 text=b");
 
     LOK_ASSERT_EQUAL(static_cast<size_t>(3), queue.size());
+
+    // Move the cell cursor between two text inputs; they should not be
+    // combined, so "b" should stay before the move and "c" after it.
+    queue.put("sess setcellcursor part=0 col=1 row=2 sequence=3");
+    queue.put("sess textinput id=0 text=c");
+
+    LOK_ASSERT_EQUAL(static_cast<size_t>(5), queue.size());
+
+    KitQueue::Payload p;
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess textinput id=0 text=a", std::string_view(p.data(), p.size()));
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess textcursor object=5 paragraph=0 index=0 sequence=2",
+                         std::string_view(p.data(), p.size()));
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess textinput id=0 text=b", std::string_view(p.data(), p.size()));
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess setcellcursor part=0 col=1 row=2 sequence=3",
+                         std::string_view(p.data(), p.size()));
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess textinput id=0 text=c", std::string_view(p.data(), p.size()));
 }
 
 void KitQueueTests::testTextInputBlockedByObjectChange()
@@ -1547,6 +1568,30 @@ void KitQueueTests::testRemoveTextBlockedByTextCursor()
     queue.put("sess removetextcontext id=0 before=2 after=0");
 
     LOK_ASSERT_EQUAL(static_cast<size_t>(3), queue.size());
+
+    // Move the cell cursor between two text removals; they should not be
+    // combined, so each should stay on its side of the move.
+    queue.put("sess setcellcursor part=0 col=1 row=2 sequence=3");
+    queue.put("sess removetextcontext id=0 before=1 after=0");
+
+    LOK_ASSERT_EQUAL(static_cast<size_t>(5), queue.size());
+
+    KitQueue::Payload p;
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess removetextcontext id=0 before=3 after=0",
+                         std::string_view(p.data(), p.size()));
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess textcursor object=5 paragraph=0 index=0 sequence=2",
+                         std::string_view(p.data(), p.size()));
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess removetextcontext id=0 before=2 after=0",
+                         std::string_view(p.data(), p.size()));
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess setcellcursor part=0 col=1 row=2 sequence=3",
+                         std::string_view(p.data(), p.size()));
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess removetextcontext id=0 before=1 after=0",
+                         std::string_view(p.data(), p.size()));
 }
 
 void KitQueueTests::testRemoveTextBlockedByObjectChange()

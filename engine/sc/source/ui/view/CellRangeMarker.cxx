@@ -9,6 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <CellRangeInventory.hxx>
 #include <CellRangeMarker.hxx>
 
 #include <tabvwsh.hxx>
@@ -72,13 +73,7 @@ void notifyCellRangeMarker(const ScViewData& rViewData, const CellRangeMarkerOpt
             aWriter.put("handleCommand", rOptions.aHandleCommand);
         const auto aRangesArray = aWriter.startArray("cellRanges");
         for (auto const& rCellRange : rOptions.aCellRanges)
-        {
-            const OUString aCells = OUString::number(rCellRange.aStart.Col()) + ", "
-                                    + OUString::number(rCellRange.aStart.Row()) + ", "
-                                    + OUString::number(rCellRange.aEnd.Col()) + ", "
-                                    + OUString::number(rCellRange.aEnd.Row());
-            aWriter.putSimpleValue(aCells);
-        }
+            putRange(aWriter, rCellRange);
     }
     pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aWriter.finishAndGetAsOString());
 }
