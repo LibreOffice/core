@@ -410,8 +410,8 @@ LIBATOMIC_OPS_TARBALL := libatomic_ops-7.10.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBEOT_SHA256SUM := cf5091fa8e7dcdbe667335eb90a2cfdd0a3fe8f8c7c8d1ece44d9d055736a06a
-LIBEOT_TARBALL := libeot-0.01.tar.bz2
+LIBEOT_SHA256SUM := ccb7c038142d8195879ba36410a983c632d547db05e357fddc6bbf2b7f64117e
+LIBEOT_TARBALL := libeot-0.0.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
