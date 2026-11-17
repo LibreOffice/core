@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SVL_ZFORMAT_HXX
 #define INCLUDED_SVL_ZFORMAT_HXX
 
+#include <sal/config.h>
+
+#include <com/sun/star/lang/Locale.hpp>
+
 #include <svl/svldllapi.h>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
@@ -71,6 +75,7 @@ struct ImpSvNumberformatInfo            // Struct for FormatInfo
 class SvNumberNatNum
 {
     OUString sParams;               // For [NatNum12 ordinal-number]-like syntax
+    css::lang::Locale maLocale; // Of eLang, once IsComplete()
     LanguageType eLang;
     sal_uInt8            nNum;
     bool            bDBNum  :1;     // DBNum, to be converted to NatNum
@@ -88,17 +93,26 @@ public:
     sal_uInt8       GetNatNum() const   { return bDBNum ? MapDBNumToNatNum( nNum, eLang, bDate ) : nNum; }
     sal_uInt8       GetDBNum() const    { return bDBNum ? nNum : MapNatNumToDBNum( nNum, eLang, bDate ); }
     LanguageType    GetLang() const     { return eLang; }
-    void            SetLang( LanguageType e ) { eLang = e; }
+    const css::lang::Locale& GetLocale() const { return maLocale; }
+    void SetLang(LanguageType e)
+    {
+        eLang = e;
+        UpdateLocale();
+    }
     void            SetNum( sal_uInt8 nNumber, bool bDBNumber )
                         {
                             nNum = nNumber;
                             bDBNum = bDBNumber;
                             bSet = true;
+                            UpdateLocale();
                         }
     bool            IsSet() const       { return bSet; }
     void            SetDate( bool bDateP )   { bDate = bDateP; }
     void            SetParams(const OUString& s) { sParams = s; }
     OUString const & GetParams() const { return sParams; }
+
+private:
+    void UpdateLocale();
 };
 
 class CharClass;

@@ -154,6 +154,12 @@ void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt
     nCntExp      = rNumFor.nCntExp;
 }
 
+void SvNumberNatNum::UpdateLocale()
+{
+    if (IsComplete())
+        maLocale = LanguageTag(eLang).getLocale();
+}
+
 const std::map<LanguageType, std::array<sal_uInt8, 4>> tblDBNumToNatNum
     = { { primary(LANGUAGE_CHINESE),    { 4, 5, 3, 0 } },
         { primary(LANGUAGE_JAPANESE),   { 4, 5, 3, 0 } },
@@ -2086,8 +2092,8 @@ OUString impTransliterateImpl(const OUString& rStr,
                               const SvNumberNatNum& rNum,
                               const NativeNumberWrapper& rNatNum)
 {
-    css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
-    return rNatNum.getNativeNumberStringParams(rStr, aLocale, rNum.GetNatNum(), rNum.GetParams());
+    return rNatNum.getNativeNumberStringParams(rStr, rNum.GetLocale(), rNum.GetNatNum(),
+                                               rNum.GetParams());
 }
 
 OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum, const NativeNumberWrapper& rNatNum)
@@ -5830,10 +5836,8 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
     if (nFieldEnd == -1)
         nFieldEnd = rNum.GetParams().getLength();
 
-    css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
-
     return rNatNum.getNativeNumberStringParams(
-        rStr, aLocale, rNum.GetNatNum(),
+        rStr, rNum.GetLocale(), rNum.GetNatNum(),
         rNum.GetParams().copy(nField + nKeywordLen, nFieldEnd - nField - nKeywordLen));
 }
 
