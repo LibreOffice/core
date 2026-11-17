@@ -3049,6 +3049,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/script/provider,\
 	ScriptExceptionRaisedException \
 	ScriptFrameworkErrorException \
 	ScriptFrameworkErrorType \
+	ScriptMissingException \
 	XScript \
 	XScriptContext \
 	XScriptProvider \

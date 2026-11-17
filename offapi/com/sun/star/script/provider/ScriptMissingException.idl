@@ -1,0 +1,37 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module script { module provider {
+
+/**
+   A subclass of ScriptFrameworkErrorException that can be used when
+   an attempt is made to execute a non-existant script. This gives
+   some extra information about the location of the script.
+*/
+exception ScriptMissingException : ScriptFrameworkErrorException {
+    /** Location of the library, such as whether it is in user macros
+        or embedded in a document.
+     */
+    string location;
+    /** Name of the library containing the module
+     */
+    string library;
+    /** Name of the module containing the script
+     */
+    string moduleName;
+    /** Name of the script */
+    string name;
+};
+
+}; }; }; }; }; // ::com::sun::star::script::provider
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
