@@ -4012,7 +4012,7 @@ SvNFEngine::Accessor SvNFEngine::GetROPolicy(const SvNFFormatData& rFormatData, 
         {
             return SvNFEngine::CacheFormatRO(rFormatCache, nSearch, nFormat);
         },
-        [&rFormatData, rFormatCache](sal_uInt32 nSearch)
+        [&rFormatData, &rFormatCache](sal_uInt32 nSearch)
         {
             return SvNFEngine::FindFormatRO(rFormatData, rFormatCache, nSearch);
         },

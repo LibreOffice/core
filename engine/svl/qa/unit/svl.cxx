@@ -76,6 +76,7 @@ public:
     void testIsNumberFormatSpecific();
     void testUserDefinedNumberFormats();
     void testFractionOutOfRange();
+    void testROPolicyFindsCachedFormat();
     void testNfEnglishKeywordsIntegrity();
     void testStandardColorIntegrity();
     void testColorNamesConversion();
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testIsNumberFormatSpecific);
     CPPUNIT_TEST(testUserDefinedNumberFormats);
     CPPUNIT_TEST(testFractionOutOfRange);
+    CPPUNIT_TEST(testROPolicyFindsCachedFormat);
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
     CPPUNIT_TEST(testStandardColorIntegrity);
     CPPUNIT_TEST(testColorNamesConversion);
@@ -1870,6 +1872,19 @@ void Test::testFractionOutOfRange()
     checkPreviewString(aFormatter, sCode, -5e9, LANGUAGE_ENGLISH_US, u"#FMT"_ustr);
     checkPreviewString(aFormatter, sCode, -1e300, LANGUAGE_ENGLISH_US, u"#FMT"_ustr);
     checkPreviewString(aFormatter, u"?/?"_ustr, -5e9, LANGUAGE_ENGLISH_US, u"#FMT"_ustr);
+}
+
+void Test::testROPolicyFindsCachedFormat()
+{
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    aFormatter.PrepForRoMode();
+    SvNFFormatData::DefaultFormatKeysMap aFormatCache;
+    const SvNFEngine::Accessor aPolicy
+        = SvNFEngine::GetROPolicy(aFormatter.GetROFormatData(), aFormatCache);
+    constexpr sal_uInt32 nSearch = 0xFFFFFF00; // not a key of the format data
+    CPPUNIT_ASSERT_EQUAL(NUMBERFORMAT_ENTRY_NOT_FOUND, aPolicy.mFindFormat(nSearch));
+    aPolicy.mCacheFormat(nSearch, 42);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(42), aPolicy.mFindFormat(nSearch));
 }
 
 void Test::testNfEnglishKeywordsIntegrity()
