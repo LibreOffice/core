@@ -526,17 +526,11 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         else
         {
             aComplexColor.setThemeColor(model::convertToThemeColorType(aLineColor.getSchemeColorIndex()));
-            if (aLineColor.getLumMod() != 10000)
-                aComplexColor.addTransformation({model::TransformationType::LumMod, aLineColor.getLumMod()});
-            if (aLineColor.getLumOff() != 0)
-                aComplexColor.addTransformation({model::TransformationType::LumOff, aLineColor.getLumOff()});
-            if (aLineColor.getTintOrShade() > 0)
-                aComplexColor.addTransformation({model::TransformationType::Tint, aLineColor.getTintOrShade()});
-            if (aLineColor.getTintOrShade() < 0)
-            {
-                sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-aLineColor.getTintOrShade());
-                aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
-            }
+            // Every change the line states goes with it, which createComplexColor() collects.
+            model::ComplexColor aStatedColor
+                = aLineColor.createComplexColor(rGraphicHelper, nPhClrTheme);
+            for (auto const& rTransform : aStatedColor.getTransformations())
+                aComplexColor.addTransformation(rTransform);
             rPropMap.setProperty(PROP_LineComplexColor, model::color::createXComplexColor(aComplexColor));
         }
     }

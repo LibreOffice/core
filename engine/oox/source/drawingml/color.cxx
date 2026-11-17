@@ -973,32 +973,15 @@ model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHel
         return aNewComplexColor;
     }
 
-    for(auto const& aTransform : maTransforms)
+    // Every change the document asks for goes with the colour, not only a change of lightness
+    // or a tint, so that a colour such as one given more of its own hue (satMod) keeps it.
+    for (auto const& aTransform : maTransforms)
     {
-        sal_Int16 nValue = sal_Int16(aTransform.mnValue / 10);
+        const sal_Int32 nValue = aTransform.mnValue / 10;
+        if (changeDoesNothing(aTransform.meType, nValue))
+            continue;
 
-        switch (aTransform.meType)
-        {
-            case model::TransformationType::LumMod:
-                if (nValue != 10'000)
-                    aNewComplexColor.addTransformation({model::TransformationType::LumMod, nValue});
-                break;
-            case model::TransformationType::LumOff:
-                if (nValue != 0)
-                    aNewComplexColor.addTransformation({model::TransformationType::LumOff, nValue});
-                break;
-            case model::TransformationType::Tint:
-                if (nValue != 0)
-                    aNewComplexColor.addTransformation({model::TransformationType::Tint, nValue});
-                break;
-            case model::TransformationType::Shade:
-                if (nValue != 0)
-                    aNewComplexColor.addTransformation({model::TransformationType::Shade, nValue});
-                break;
-            default:
-                // nothing to do
-                break;
-        }
+        aNewComplexColor.addTransformation({ aTransform.meType, nValue });
     }
 
     return aNewComplexColor;
