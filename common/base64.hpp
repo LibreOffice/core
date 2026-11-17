@@ -100,6 +100,10 @@ class Base64 {
     };
 
     size_t in_len = input.size();
+    if (in_len == 0) {
+      out.clear();
+      return std::string();
+    }
     if (in_len % 4 != 0) return "Input data size is not a multiple of 4";
 
     size_t out_len = in_len / 4 * 3;
