@@ -1507,18 +1507,36 @@ lcl_GetLabelScope(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow)
                                        : vcl::pdf::PDFWriter::Invalid;
 }
 
-/// the element for a cell, a TH where a database range says the cell holds one of its labels
+/// the element for a cell, a TH where a database range says the cell holds one of its labels;
+/// nCellCol, nCellRow is the cell whose content is drawn there, the start of a merge that can
+/// begin before the page, and nLastCol, nLastRow where the page ends
 static sal_Int32 lcl_OpenCellElement(vcl::PDFExtOutDevData& rPDF, const ScDocument& rDoc,
-                                     SCTAB nTab, SCCOL nCol, SCROW nRow)
+                                     SCTAB nTab, SCCOL nCol, SCROW nRow, SCCOL nCellCol,
+                                     SCROW nCellRow, SCCOL nLastCol, SCROW nLastRow)
 {
     const vcl::pdf::PDFWriter::StructAttributeValue eScope(
         lcl_GetLabelScope(rDoc, nTab, nCol, nRow));
-    if (eScope == vcl::pdf::PDFWriter::Invalid)
-        return rPDF.WrapBeginStructureElement(vcl::pdf::StructElement::TableData, u"TD"_ustr);
-
     const sal_Int32 nId(
-        rPDF.WrapBeginStructureElement(vcl::pdf::StructElement::TableHeader, u"TH"_ustr));
-    rPDF.SetStructureAttribute(vcl::pdf::PDFWriter::Scope, eScope);
+        eScope == vcl::pdf::PDFWriter::Invalid
+            ? rPDF.WrapBeginStructureElement(vcl::pdf::StructElement::TableData, u"TD"_ustr)
+            : rPDF.WrapBeginStructureElement(vcl::pdf::StructElement::TableHeader, u"TH"_ustr));
+    if (eScope != vcl::pdf::PDFWriter::Invalid)
+        rPDF.SetStructureAttribute(vcl::pdf::PDFWriter::Scope, eScope);
+
+    // a merged cell spans the cells it covers on this page, which get no element of their own;
+    // a hidden row or column is not in the table
+    const ScMergeAttr& rMerge(rDoc.GetAttr(nCellCol, nCellRow, nTab, ATTR_MERGE));
+    const SCCOL nEndCol(std::min<SCCOL>(nCellCol + rMerge.GetColMerge() - 1, nLastCol));
+    const SCROW nEndRow(std::min<SCROW>(nCellRow + rMerge.GetRowMerge() - 1, nLastRow));
+    sal_Int32 nColSpan(0);
+    for (SCCOL nX = nCol; nX <= nEndCol; ++nX)
+        if (!rDoc.ColHidden(nX, nTab))
+            ++nColSpan;
+    if (nColSpan > 1)
+        rPDF.SetStructureAttributeNumerical(vcl::pdf::PDFWriter::ColSpan, nColSpan);
+    const SCROW nRowSpan(nRow < nEndRow ? rDoc.CountVisibleRows(nRow, nEndRow, nTab) : 0);
+    if (nRowSpan > 1)
+        rPDF.SetStructureAttributeNumerical(vcl::pdf::PDFWriter::RowSpan, nRowSpan);
     return nId;
 }
 
@@ -2013,7 +2031,8 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
                 bReopenRowTag = true;
             }
 
-            const sal_Int32 nId(lcl_OpenCellElement(*pPDF, *mpDoc, mnTab, nX, nY));
+            const sal_Int32 nId(
+                lcl_OpenCellElement(*pPDF, *mpDoc, mnTab, nX, nY, nCellX, nCellY, mnX2, mnY2));
             pPDF->GetScPDFState()->m_TableDataMap[{ nY, nX }] = nId;
             // the first page it is drawn on, which is the one a destination for it names
             pPDF->GetScPDFState()->m_CellIds.emplace(ScAddress(nX, nY, mnTab), nId);
@@ -2247,7 +2266,8 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
                     // what a destination naming this cell has to reach
                     pPDF->GetScPDFState()->m_CellIds.emplace(
                         ScAddress(nX, nY, mnTab),
-                        lcl_OpenCellElement(*pPDF, *mpDoc, mnTab, nX, nY));
+                        lcl_OpenCellElement(*pPDF, *mpDoc, mnTab, nX, nY, nCellX, nCellY,
+                                            mnX2, mnY2));
                     pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph,
                                                     u"P"_ustr);
                 }

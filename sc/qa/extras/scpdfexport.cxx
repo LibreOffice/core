@@ -60,6 +60,9 @@ protected:
 
     void setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int32 nEnd,
                  const OUString& rFontName);
+
+    // the cell elements of the tagged tables of the saved PDF, row by row
+    OString getTableCellTypes();
 };
 
 ScPDFExportTest::ScPDFExportTest()
@@ -1038,12 +1041,8 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testPageRangeSkipsSheetStart)
     CPPUNIT_ASSERT_EQUAL(2, nOutlineItems);
 }
 
-CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testDatabaseRangeHeader)
+OString ScPDFExportTest::getTableCellTypes()
 {
-    loadFromFile(u"db-range-header.fods");
-    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
-
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
 
@@ -1054,16 +1053,27 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testDatabaseRangeHeader)
         if (pType && pType->GetValue() == "Table")
             aTables.push_back(pObject);
     }
-    // the sheet fits one page, so every row it has is in this one table
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aTables.size());
+    CPPUNIT_ASSERT(!aTables.empty());
 
-    vcl::filter::PDFObjectElement* pTable = aTables.front();
+    // a page has a table of its own, an empty row stands between them
+    std::vector<vcl::filter::PDFElement*> aRows;
+    for (vcl::filter::PDFObjectElement* pTable : aTables)
+    {
+        auto pRows = dynamic_cast<vcl::filter::PDFArrayElement*>(pTable->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pRows);
+        if (!aRows.empty())
+            aRows.push_back(nullptr);
+        aRows.insert(aRows.end(), pRows->GetElements().begin(), pRows->GetElements().end());
+    }
 
     OStringBuffer aCells;
-    auto pRows = dynamic_cast<vcl::filter::PDFArrayElement*>(pTable->Lookup("K"_ostr));
-    CPPUNIT_ASSERT(pRows);
-    for (auto* pRowElement : pRows->GetElements())
+    for (auto* pRowElement : aRows)
     {
+        if (!pRowElement)
+        {
+            aCells.append("| ");
+            continue;
+        }
         auto pRow = dynamic_cast<vcl::filter::PDFReferenceElement*>(pRowElement);
         CPPUNIT_ASSERT(pRow);
         CPPUNIT_ASSERT(pRow->LookupObject());
@@ -1078,22 +1088,33 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testDatabaseRangeHeader)
             auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(
                 pCell->LookupObject()->Lookup("S"_ostr));
             CPPUNIT_ASSERT(pType);
-            // the scope a header cell announces, and nothing for a data cell
-            OString aScope;
+            aCells.append(pType->GetValue());
+            // the scope a header cell announces and the spans of a merged cell
             if (vcl::filter::PDFElement* pElement = pCell->LookupObject()->Lookup("A"_ostr))
             {
                 // one owner dictionary, which several attribute groups would turn into an array
                 auto pAttributes = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pElement);
                 CPPUNIT_ASSERT(pAttributes);
-                auto pValue = dynamic_cast<vcl::filter::PDFNameElement*>(
-                    pAttributes->LookupElement("Scope"_ostr));
-                CPPUNIT_ASSERT(pValue);
-                aScope = "/" + pValue->GetValue();
+                if (auto pValue = dynamic_cast<vcl::filter::PDFNameElement*>(
+                        pAttributes->LookupElement("Scope"_ostr)))
+                    aCells.append("/" + pValue->GetValue());
+                for (const OString& rSpan : { "ColSpan"_ostr, "RowSpan"_ostr })
+                    if (auto pValue = dynamic_cast<vcl::filter::PDFNumberElement*>(
+                            pAttributes->LookupElement(rSpan)))
+                        aCells.append("/" + rSpan + OString::number(pValue->GetValue()));
             }
-            aCells.append(pType->GetValue() + aScope + " ");
+            aCells.append(" ");
         }
         aCells.append("| ");
     }
+    return aCells.makeStringAndClear();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testDatabaseRangeHeader)
+{
+    loadFromFile(u"db-range-header.fods");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     // Without the fix every cell was a TD, so this read
     // "TD TD | TD TD | TD TD | TD | TD TD | TD TD | TD TD | TD TD | ".
@@ -1102,7 +1123,34 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testDatabaseRangeHeader)
     // defined without labels or outside every range
     CPPUNIT_ASSERT_EQUAL("TH/Column TH/Column | TD TD | TD TD | TD | TD TD | TD TD | "
                          "TH/Row TD | TH/Row TD | "_ostr,
-                         aCells.makeStringAndClear());
+                         getTableCellTypes());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testMergedCellSpans)
+{
+    // B2:C2 and A3:A4 are merged
+    loadFromFile(u"merged-cells.fods");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    // Without the fix the merged cells had no span, so this read
+    // "TD TD TD | TD TD | TD TD TD | TD TD | ".
+    CPPUNIT_ASSERT_EQUAL("TD TD TD | TD TD/ColSpan2 | TD/RowSpan2 TD TD | TD TD | "_ostr,
+                         getTableCellTypes());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testMergedCellSpansCut)
+{
+    // A1:C1 and A2:A5 are merged, column C and row 3 are hidden, and row 4 starts a page
+    loadFromFile(u"merged-cells-cut.fods");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    // the spans count what each page shows of a merge: spans of the whole merge would read
+    // "TD/ColSpan3 | TD/RowSpan4 TD | | TD TD | TD | ", and without the fix this read
+    // "TD | TD TD | | TD TD | TD | ".
+    CPPUNIT_ASSERT_EQUAL("TD/ColSpan2 | TD TD | | TD/RowSpan2 TD | TD | "_ostr,
+                         getTableCellTypes());
 }
 
 // just needs to not crash on export to pdf
