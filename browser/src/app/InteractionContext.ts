@@ -104,6 +104,12 @@ interface InteractionContext {
 	/// state in the selection there is. Nothing where no frame is drawn here.
 	frameSelects(frame: cool.Range2D, extending: boolean): number[] | undefined;
 
+	/// The selection a lasso drawn through those places of the page makes, in twips, closed back
+	/// to its start: the objects of the level one stands at that lie wholly inside it; with
+	/// extending those change their state in the selection there is. Nothing where no lasso is
+	/// drawn here.
+	lassoSelects(lasso: cool.Point[], extending: boolean): number[] | undefined;
+
 	/// Ctrl+Home for the first object, Ctrl+End for the last.
 	toAnEnd(first: boolean): boolean;
 

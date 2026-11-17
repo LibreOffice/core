@@ -67,7 +67,8 @@ namespace cool {
 			}
 		}
 
-		private static mapped(
+		/// The polygon put through the matrix, weights and all.
+		public static mapped(
 			polygon: ObjectPathPolygon,
 			matrix: Matrix2D,
 		): ObjectPathPolygon {

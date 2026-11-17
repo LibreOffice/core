@@ -76,8 +76,25 @@ class MouseControl extends CanvasSectionObject {
 	// Section-local position of the previous touchmove during a one-finger drag.
 	lastTouchDragPoint: cool.SimplePoint | null = null;
 
+	/// The modifier keys held, as the engine numbers them, as the last mouse move or key said.
+	private keysHeld: number = 0;
+	/// Follows the modifier keys, so the pointer shows at once what a drag would do.
+	private keyFollower: (event: KeyboardEvent) => void;
+
 	constructor(name: string) {
 		super(name);
+		this.keyFollower = (event: KeyboardEvent) => {
+			if (['Shift', 'Control', 'Alt', 'Meta'].indexOf(event.key) < 0) return;
+			this.keysHeld = Interaction.modifiersOf(event);
+			this.followTheLassoPointer();
+		};
+		window.addEventListener('keydown', this.keyFollower, true);
+		window.addEventListener('keyup', this.keyFollower, true);
+	}
+
+	onRemove(): void {
+		window.removeEventListener('keydown', this.keyFollower, true);
+		window.removeEventListener('keyup', this.keyFollower, true);
 	}
 
 	static readModifier(e: MouseEvent) {
@@ -277,6 +294,26 @@ class MouseControl extends CanvasSectionObject {
 		this.currentPosition.pY = point.pY + topLeftY;
 	}
 
+	/*
+		Shows the lasso pointer where a drag would now draw a lasso, as a modifier key went down
+		or up while the mouse stands still, and takes it away where it no longer would. Every other
+		pointer is left as the section under the mouse set it, and a mode sets its own.
+	*/
+	private followTheLassoPointer(): void {
+		const canvas = this.context.canvas;
+		if (!canvas.matches(':hover') || Interaction.modeOn()) return;
+		const at = new cool.Point(this.currentPosition.x, this.currentPosition.y);
+		const lasso =
+			LassoSelect.drawnWith(this.keysHeld) &&
+			!this.containerObject.isDraggingSomething() &&
+			LassoSelect.mayBeginAt(at) &&
+			RenderGeometrySection.pointerAt(at.x, at.y) === 'default';
+		// the page writes the pointer back in a form of its own, quotes added
+		const shown = canvas.style.cursor.indexOf(LassoSelect.pointerImage) >= 0;
+		if (lasso && !shown) canvas.style.cursor = LassoSelect.pointer();
+		else if (!lasso && shown) this.setCursorType();
+	}
+
 	private setCursorType() {
 		/*
 			The shapes the client holds can say what lies under the mouse, so while they answer for
@@ -296,7 +333,18 @@ class MouseControl extends CanvasSectionObject {
 				this.currentPosition.x,
 				this.currentPosition.y,
 			);
-			const cursor = Cursor.getCustomCursor(pointer) || pointer;
+			let cursor = Cursor.getCustomCursor(pointer) || pointer;
+			// a lasso drawn, or one a drag on the empty page would draw with the keys held
+			if (
+				RenderGeometrySection.dragSelect instanceof LassoSelect ||
+				(pointer === 'default' &&
+					!this.containerObject.isDraggingSomething() &&
+					LassoSelect.drawnWith(this.keysHeld) &&
+					LassoSelect.mayBeginAt(
+						new cool.Point(this.currentPosition.x, this.currentPosition.y),
+					))
+			)
+				cursor = LassoSelect.pointer();
 			if (this.context.canvas.style.cursor !== cursor)
 				this.context.canvas.style.cursor = cursor;
 			return;
@@ -424,6 +472,7 @@ class MouseControl extends CanvasSectionObject {
 		// Update the position first so the cursor type is computed for the
 		// current mouse location.
 		this.refreshPosition(point);
+		this.keysHeld = MouseControl.readModifier(e);
 
 		this.setCursorType();
 
@@ -647,10 +696,10 @@ class MouseControl extends CanvasSectionObject {
 		if (!this.dragSelect) {
 			const press = this.positionOnMouseDown;
 			if (this.mouseDownSent || !press || this.pressedInSelection) return false;
-			this.dragSelect = FrameSelect.begins(
-				new cool.Point(press.x, press.y),
-				this.modifierOnMouseDown,
-			);
+			const at = new cool.Point(press.x, press.y);
+			this.dragSelect =
+				FrameSelect.begins(at, this.modifierOnMouseDown) ??
+				LassoSelect.begins(at, this.modifierOnMouseDown);
 			if (!this.dragSelect) return false;
 			RenderGeometrySection.dragSelect = this.dragSelect;
 		}

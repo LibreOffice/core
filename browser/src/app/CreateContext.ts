@@ -655,6 +655,12 @@ abstract class ClassicCreateContext implements InteractionMode {
 	): number[] | undefined {
 		return undefined;
 	}
+	lassoSelects(
+		_lasso: cool.Point[],
+		_extending: boolean,
+	): number[] | undefined {
+		return undefined;
+	}
 	toAnEnd(_first: boolean): boolean {
 		return true;
 	}

@@ -1814,16 +1814,22 @@ abstract class SelectionSection extends CanvasSectionObject {
 		context.restore();
 	}
 
-	/// Draws those polygons, given in twips, as a thin line of that colour on the canvas.
+	/// Draws those polygons, given in twips, as a thin line of that colour on the canvas, dashed
+	/// where dashes are given, as lengths in canvas pixels.
 	public static strokeOutline(
 		context: CanvasRenderingContext2D,
 		polygons: cool.ObjectPathPolygon[],
 		colour: string,
+		dashes?: number[],
 	): void {
 		context.save();
 		SelectionSection.layOutline(context, polygons);
 		context.strokeStyle = colour;
 		context.lineWidth = app.pixelsToTwips;
+		if (dashes)
+			context.setLineDash(
+				dashes.map((length: number) => length * app.pixelsToTwips),
+			);
 		context.stroke();
 		context.restore();
 	}

@@ -77,6 +77,7 @@
 /// <reference path="./Point.test.ts" />
 /// <reference path="./Range2D.test.ts" />
 /// <reference path="./PathFit.test.ts" />
+/// <reference path="./DragSelect.test.ts" />
 /// <reference path="./PathDrawing.test.ts" />
 /// <reference path="./VectorGradientFrame.test.ts" />
 /// <reference path="./VectorColorModifiers.test.ts" />

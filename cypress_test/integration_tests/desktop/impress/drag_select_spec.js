@@ -56,18 +56,29 @@ describe(['tagdesktop'], 'Selecting by a drag on a vector slide', function() {
 
 	// Drags from one place to another, in twips on the page, in steps, with those keys held.
 	function dragFrom(win, from, to, keys) {
-		var held = { shiftKey: !!(keys && keys.shift) };
+		var places = [];
+		for (var step = 0; step <= 10; ++step)
+			places.push({
+				x: from.x + step / 10 * (to.x - from.x),
+				y: from.y + step / 10 * (to.y - from.y),
+			});
+		dragThrough(win, places, keys);
+	}
+
+	// Presses at the first place, in twips on the page, moves through the others and lets go at
+	// the last one, with those keys held when the button goes down.
+	function dragThrough(win, places, keys) {
+		var held = { shiftKey: !!(keys && keys.shift), ctrlKey: !!(keys && keys.ctrl) };
 		cy.then(function() {
-			var first = onCanvas(win, from.x, from.y);
+			var first = onCanvas(win, places[0].x, places[0].y);
 			var drawing = cy.cGet('#document-canvas').trigger('mousedown', first.x, first.y,
 				Object.assign({ button: 0, buttons: 1 }, held));
-			for (var step = 1; step <= 10; ++step) {
-				var place = onCanvas(win,
-					from.x + step / 10 * (to.x - from.x), from.y + step / 10 * (to.y - from.y));
+			for (var at = 1; at < places.length; ++at) {
+				var place = onCanvas(win, places[at].x, places[at].y);
 				drawing = drawing.trigger('mousemove', place.x, place.y,
 					Object.assign({ button: 0, buttons: 1 }, held));
 			}
-			var last = onCanvas(win, to.x, to.y);
+			var last = onCanvas(win, places[places.length - 1].x, places[places.length - 1].y);
 			drawing.trigger('mouseup', last.x, last.y,
 				Object.assign({ button: 0, buttons: 0 }, held));
 		});
@@ -119,6 +130,42 @@ describe(['tagdesktop'], 'Selecting by a drag on a vector slide', function() {
 		// nothing of the frame is left drawn
 		cy.wrap(null).should(function() {
 			expect(win.eval('RenderGeometrySection.dragSelect'), 'the frame drawn').to.equal(null);
+		});
+	});
+
+	// The places of a loop round a middle, in twips, beginning and ending on its right.
+	function loopRound(x, y, across, down) {
+		var places = [];
+		for (var step = 0; step <= 36; ++step) {
+			var angle = step / 36 * 2 * Math.PI;
+			places.push({ x: x + across * Math.cos(angle), y: y + down * Math.sin(angle) });
+		}
+		return places;
+	}
+
+	it('A lasso drawn with Ctrl selects the objects wholly inside it.', function() {
+		var win = this.win;
+		var rectangle, polygon;
+		cy.wrap(null).should(function() {
+			rectangle = objectAt(win, 1134, 2268);
+			polygon = objectAt(win, 9071, 2268);
+			expect(rectangle, 'the rectangle').to.not.be.undefined;
+			expect(polygon, 'the polygon').to.not.be.undefined;
+		});
+
+		// round the rectangle only
+		dragThrough(win, loopRound(3685, 3968, 3500, 2900), { ctrl: true });
+		cy.wrap(null).should(function() {
+			expect(selected(win), 'selected after a lasso round the rectangle')
+				.to.deep.equal([rectangle]);
+		});
+
+		// with Shift as well, round the polygon, which joins the selection
+		dragThrough(win, loopRound(11622, 3968, 3300, 2900), { ctrl: true, shift: true });
+		cy.wrap(null).should(function() {
+			expect(selected(win), 'selected after Ctrl, Shift and a lasso round the polygon')
+				.to.deep.equal([rectangle, polygon].sort(function(a, b) { return a - b; }));
+			expect(win.eval('RenderGeometrySection.dragSelect'), 'the lasso drawn').to.equal(null);
 		});
 	});
 });

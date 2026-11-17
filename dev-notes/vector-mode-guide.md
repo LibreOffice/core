@@ -93,6 +93,7 @@ slide can still be scrolled to.
 | Alt + Shift + click | The same, backwards. |
 | Double click | On an object of a group: enters the group one level and selects that object. On a plain object: edits its text. |
 | Drag on empty space | Draws a dashed frame and selects every object that lies wholly inside it, at the level you stand at (inside an entered group, its objects). With Shift each object in the frame changes its state: a selected one leaves the selection, the others join it. Escape while dragging drops the frame. Form controls out of design mode are left out. |
+| Ctrl + drag on empty space | Draws a lasso: a dashed line where the mouse goes, smooth as a freeform line, closed by a straight edge back to where it began. It selects every object whose drawn shape lies wholly inside it, by the outline you see, not by the rectangle the object is laid out in, at the level you stand at, as the frame does; a text frame counts by its rectangle, as clicks find it. Ctrl over an object, or a press inside the selection, draws no lasso. Ctrl can be let go once the drag runs. With Ctrl + Shift each object in the lasso changes its state, as Shift does for the frame. Escape while dragging drops the lasso. On a Mac Cmd takes the place of Ctrl. |
 | Right click | Opens the context menu for the object under the mouse. |
 
 | Keys | What they do |
@@ -111,7 +112,8 @@ While text is edited, every key goes to the text. Escape ends the text edit, and
 outside the object does too.
 
 The pointer says what a click would do: a text pointer over text, the hand where something can
-be dragged, the plain arrow elsewhere.
+be dragged, the plain arrow elsewhere. With Ctrl held over empty space it is a lasso, as a drag
+there draws one, also when Ctrl is pressed while the mouse stands still.
 
 A click a little beside a thin line still takes the object: 8 screen pixels, whatever the zoom.
 The distance can be set in the client's preferences as vectorHitTolerance, in screen pixels.

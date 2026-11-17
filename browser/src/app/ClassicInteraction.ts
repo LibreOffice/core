@@ -357,8 +357,7 @@ abstract class ClassicContext implements InteractionContext {
 		frame: cool.Range2D,
 		extending: boolean,
 	): number[] | undefined {
-		const level = this.objectsOfTheLevel();
-		const framed = level.filter((objectId: number) => {
+		return this.selectsHeld((objectId: number) => {
 			const box = RenderGeometrySection.boxOf(objectId);
 			return (
 				!!box &&
@@ -367,17 +366,70 @@ abstract class ClassicContext implements InteractionContext {
 				box.maxX <= frame.maxX &&
 				box.maxY <= frame.maxY
 			);
-		});
-		if (!extending) return framed;
+		}, extending);
+	}
+
+	/*
+		The objects of the level that lie wholly inside the lasso, by what they draw: every object
+		a group holds for a group. One that draws no geometry, a text frame alone, is taken by the
+		corners of its frame as it is turned, or of the box it takes up where it has no mapping of
+		its own. With extending they change their state as with the frame.
+	*/
+	public lassoSelects(
+		lasso: cool.Point[],
+		extending: boolean,
+	): number[] | undefined {
+		return this.selectsHeld((objectId: number) => {
+			const drawing = RenderGeometrySection.theOnesThatDraw([objectId]);
+			const inside = drawing.map((one: number) =>
+				cool.VectorOutline.liesInside(
+					RenderGeometrySection.objectOf(one)?.primitives,
+					lasso,
+				),
+			);
+			if (inside.some((each: boolean | undefined) => each === false))
+				return false;
+			if (inside.some((each: boolean | undefined) => each === true))
+				return true;
+
+			let corners = RenderGeometrySection.unitRectangleCorners(
+				RenderGeometrySection.transformOf(objectId),
+			);
+			if (!corners.length) {
+				const box = RenderGeometrySection.boxOf(objectId);
+				if (!box) return false;
+				corners = [
+					new cool.Point(box.minX, box.minY),
+					new cool.Point(box.maxX, box.minY),
+					new cool.Point(box.maxX, box.maxY),
+					new cool.Point(box.minX, box.maxY),
+				];
+			}
+			return cool.VectorOutline.holds(lasso, [
+				{ closed: true, points: corners },
+			]);
+		}, extending);
+	}
+
+	/*
+		The selection the objects of the level that held answers for make: those alone, or with
+		extending, each of them changing its state, a selected one leaving the selection and one
+		not selected joining it, while the selected ones not held stay.
+	*/
+	private selectsHeld(
+		held: (objectId: number) => boolean,
+		extending: boolean,
+	): number[] {
+		const level = this.objectsOfTheLevel();
+		const taken = level.filter(held);
+		if (!extending) return taken;
 
 		const selected = GraphicSelection.selectedObjectIDs.filter(
 			(objectId: number) => level.includes(objectId),
 		);
 		return selected
-			.filter((objectId: number) => !framed.includes(objectId))
-			.concat(
-				framed.filter((objectId: number) => !selected.includes(objectId)),
-			);
+			.filter((objectId: number) => !taken.includes(objectId))
+			.concat(taken.filter((objectId: number) => !selected.includes(objectId)));
 	}
 
 	/*
@@ -1133,6 +1185,12 @@ class ClassicInPlaceContext implements InteractionContext {
 	/// drawn.
 	public frameSelects(
 		_frame: cool.Range2D,
+		_extending: boolean,
+	): number[] | undefined {
+		return undefined;
+	}
+	public lassoSelects(
+		_lasso: cool.Point[],
 		_extending: boolean,
 	): number[] | undefined {
 		return undefined;
