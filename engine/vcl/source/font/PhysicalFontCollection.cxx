@@ -429,6 +429,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes(ImplFontA
 
     tools::Long    nBestMatch = 40000;
     ImplFontAttrs  nBestType = ImplFontAttrs::None;
+    OUString       aBestSearchName;
 
     for (auto const& family : maPhysicalFontFamilies)
     {
@@ -817,22 +818,24 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes(ImplFontA
         if ( nTestMatch > nBestMatch )
         {
             pFoundData  = pData;
+            aBestSearchName = family.first;
             nBestMatch  = nTestMatch;
             nBestType   = nMatchType;
         }
         else if( nTestMatch == nBestMatch )
         {
-            // some fonts are more suitable defaults
-            if( nMatchType & ImplFontAttrs::Default )
+            // some fonts are more suitable defaults, equal ones are ordered by search name
+            // so that every clone of the collection picks the same family
+            const int nPreference = (nMatchType & ImplFontAttrs::Default) ? 2
+                                    : (nMatchType & ImplFontAttrs::Standard) ? 1 : 0;
+            const int nBestPreference = (nBestType & ImplFontAttrs::Default) ? 2
+                                        : (nBestType & ImplFontAttrs::Standard) ? 1 : 0;
+            if( nPreference > nBestPreference
+                || (nPreference == nBestPreference && family.first < aBestSearchName) )
             {
                 pFoundData  = pData;
+                aBestSearchName = family.first;
                 nBestType   = nMatchType;
-            }
-            else if( (nMatchType & ImplFontAttrs::Standard) &&
-                    !(nBestType & ImplFontAttrs::Default) )
-            {
-                 pFoundData  = pData;
-                 nBestType   = nMatchType;
             }
         }
     }
@@ -875,23 +878,37 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
 
     ImplInitMatchData();
 
+    // the smallest search name wins among equal fonts, so every clone picks the same one
+    const OUString* pFoundName = nullptr;
+    bool bFoundPreferred = false;
     for (auto const& family : maPhysicalFontFamilies)
     {
         PhysicalFontFamily* pData = family.second.get();
         if( pData->GetMatchType() & ImplFontAttrs::Symbol )
             continue;
 
-        pFoundData = pData;
-        if( pData->GetMatchType() & (ImplFontAttrs::Default|ImplFontAttrs::Standard) )
-            break;
+        const bool bPreferred(pData->GetMatchType()
+                              & (ImplFontAttrs::Default | ImplFontAttrs::Standard));
+        if( !pFoundData || (bPreferred && !bFoundPreferred)
+            || (bPreferred == bFoundPreferred && family.first < *pFoundName) )
+        {
+            pFoundData = pData;
+            pFoundName = &family.first;
+            bFoundPreferred = bPreferred;
+        }
     }
     if( pFoundData )
         return pFoundData;
 
     // finding any font is better than finding no font at all
-    auto it = maPhysicalFontFamilies.begin();
-    if( it !=  maPhysicalFontFamilies.end() )
-        pFoundData = (*it).second.get();
+    for (auto const& family : maPhysicalFontFamilies)
+    {
+        if( !pFoundName || family.first < *pFoundName )
+        {
+            pFoundData = family.second.get();
+            pFoundName = &family.first;
+        }
+    }
 
     return pFoundData;
 }
