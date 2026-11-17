@@ -2214,12 +2214,9 @@ static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, std::u
     return false;
 }
 
-void SvNumberformat::GetOutputString(std::u16string_view sString,
-                                     OUString& OutString,
-                                     const Color** ppColor,
-                                     bool bStarFlag) const
+void SvNumberformat::GetOutputString(const OUString& sString, OUString& OutString,
+                                     const Color** ppColor, bool bStarFlag) const
 {
-    OUStringBuffer sOutBuff;
     sal_uInt16 nIx;
     if (eType & SvNumFormatType::TEXT)
     {
@@ -2239,6 +2236,13 @@ void SvNumberformat::GetOutputString(std::u16string_view sString,
     if (rInfo.eScannedType == SvNumFormatType::TEXT)
     {
         const sal_uInt16 nCnt = NumFor[nIx].GetCount();
+        if (nCnt == 1
+            && (rInfo.nTypeArray[0] == NF_KEY_GENERAL || rInfo.nTypeArray[0] == NF_SYMBOLTYPE_DEL))
+        {
+            OutString = sString; // Only "@" or "General"
+            return;
+        }
+        OUStringBuffer sOutBuff;
         for (sal_uInt16 i = 0; i < nCnt; i++)
         {
             switch (rInfo.nTypeArray[i])
@@ -2261,8 +2265,12 @@ void SvNumberformat::GetOutputString(std::u16string_view sString,
                 sOutBuff.append(rInfo.sStrArray[i]);
             }
         }
+        OutString = sOutBuff.makeStringAndClear();
     }
-    OutString = sOutBuff.makeStringAndClear();
+    else
+    {
+        OutString.clear();
+    }
 }
 
 namespace {

@@ -249,7 +249,8 @@ public:
 
     // bStarFlag: Take *n format as ESC n
     bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor, const NativeNumberWrapper& rNatNum, const SvNFLanguageData& rCurrentLang, bool bStarFlag = false) const;
-    void GetOutputString( std::u16string_view sString, OUString& OutString, const Color** ppColor, bool bStarFlag = false) const;
+    void GetOutputString(const OUString& sString, OUString& OutString, const Color** ppColor,
+                         bool bStarFlag = false) const;
 
     // True if type text
     bool IsTextFormat() const { return bool(eType & SvNumFormatType::TEXT); }
