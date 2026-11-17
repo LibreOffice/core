@@ -472,7 +472,11 @@ void install_filepicker_provider(COKit &rOffice)
     NSLog(@"CollaboraOffice: HULLO for appDocId %d, connecting client fd %d to server fd %d",
           document.appDocId, document.fakeClientFd, coolwsd_server_socket_fd);
     int rc = fakeSocketConnect(document.fakeClientFd, coolwsd_server_socket_fd);
-    assert(rc != -1);
+    if (rc == -1)
+    {
+        LOG_ERR("HULLO: failed to connect fakesocket");
+        return;
+    }
 
     // Create this document's close-notification socket pair. Each document has its
     // own pair, so closing one document leaves the other documents' forwarding
