@@ -22,11 +22,32 @@
 class EditorFrameMessagesTests: public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(EditorFrameMessagesTests);
     CPPUNIT_TEST(testLinkUpdateRefused);
+    CPPUNIT_TEST(testUnoFileArgumentRefused);
+    CPPUNIT_TEST(testUnoFileArgumentWithEscapesRefused);
+    CPPUNIT_TEST(testUnoTextWithEscapesAllowed);
     CPPUNIT_TEST_SUITE_END();
 
     void testLinkUpdateRefused() {
         constexpr std::string_view testname = __func__;
         LOK_ASSERT(!EditorFrameMessages::isAllowed("allowlinkupdate"));
+    }
+
+    void testUnoFileArgumentRefused() {
+        constexpr std::string_view testname = __func__;
+        LOK_ASSERT(!EditorFrameMessages::isAllowed(
+            R"(uno .uno:InsertDoc {"Name":{"type":"string","value":"file:///tmp/a.txt"}})"));
+    }
+
+    void testUnoFileArgumentWithEscapesRefused() {
+        constexpr std::string_view testname = __func__;
+        LOK_ASSERT(!EditorFrameMessages::isAllowed(
+            R"(uno .uno:InsertDoc {"Name":{"type":"string","value":"fil\u0065:///tmp/a.txt"}})"));
+    }
+
+    void testUnoTextWithEscapesAllowed() {
+        constexpr std::string_view testname = __func__;
+        LOK_ASSERT(EditorFrameMessages::isAllowed(
+            R"(uno .uno:InsertText {"Text":{"type":"string","value":"caf\u00e9 \u0041\u0042"}})"));
     }
 };
 

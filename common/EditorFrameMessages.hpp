@@ -17,6 +17,7 @@
 #include <common/Util.hpp>
 
 #include <algorithm>
+#include <charconv>
 #include <iterator>
 #include <string>
 #include <string_view>
@@ -52,6 +53,26 @@ inline constexpr std::string_view ALLOWED_BRIDGE_CALLS[] = {
 inline constexpr std::string_view FILE_SCHEMES[] = {
     "file:", "ftp:", "sftp:", "smb:", "vnd.sun.star.",
 };
+
+// The text with each JSON escape \uXXXX of an ASCII character replaced by that character (as a JSON
+// parser reads them, so that a URL scheme spelled with such escapes is found too):
+inline std::string decodeAsciiEscapes(std::string_view text) {
+    std::string decoded;
+    for (std::size_t i = 0; i != text.size(); ++i) {
+        if (text[i] == '\\' && text.size() - i >= 6 && text[i + 1] == 'u') {
+            unsigned value = 0;
+            char const * const digits = text.data() + i + 2;
+            auto const [end, error] = std::from_chars(digits, digits + 4, value, 16);
+            if (error == std::errc() && end == digits + 4 && value < 0x80) {
+                decoded.push_back(value);
+                i += 5;
+                continue;
+            }
+        }
+        decoded.push_back(text[i]);
+    }
+    return decoded;
+}
 
 /// Whether the editor frame may send message, a command followed by its arguments.
 inline bool isAllowed(const std::string& message)
@@ -126,7 +147,7 @@ inline bool isAllowed(const std::string& message)
         }
 
         // Without a file argument, a command that opens or saves a file shows a file dialog.
-        const std::string lowerMessage = Util::toLower(message);
+        const std::string lowerMessage = Util::toLower(decodeAsciiEscapes(message));
 
         for (std::string_view scheme : FILE_SCHEMES)
         {
