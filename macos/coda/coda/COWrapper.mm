@@ -29,6 +29,7 @@
 #include <set>
 #include <common/Clipboard.hpp>
 #include <common/EditorFrameMessages.hpp>
+#include <common/FailurePage.hpp>
 #include <common/LangUtil.hpp>
 #include <common/AIHttpTransport.hpp>
 #include <common/SettingsStorage.hpp>
@@ -632,6 +633,15 @@ void install_filepicker_provider(COKit &rOffice)
 
 + (bool)isAllowedFromEditorFrame:(NSString *)message {
     return EditorFrameMessages::isAllowed([message UTF8String]);
+}
+
++ (NSString *)failurePageScript:(NSString *)title paragraphs:(NSArray<NSString *> *)paragraphs {
+    std::vector<std::string> texts;
+    for (NSString *paragraph in paragraphs)
+        texts.push_back([paragraph UTF8String]);
+
+    const std::string script = FailurePage::script([title UTF8String], texts);
+    return [NSString stringWithUTF8String:script.c_str()];
 }
 
 + (void)saveAsWith:(Document *)document url:(NSString *)url format:(NSString *)format filterOptions:(NSString *)filterOptions {

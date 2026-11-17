@@ -209,6 +209,24 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         putCodaPageIn(frameInfo)
     }
 
+    private func showRemoteFailure(_ error: String, in frameInfo: WKFrameInfo) {
+        COWrapper.LOG_ERR("The remote bootstrap failed in the editor frame")
+
+        var server = "the Collabora Online server"
+        if let editorFormUrl, let origin = Self.origin(of: editorFormUrl) {
+            server = origin
+        }
+
+        let title = "Cannot open remote document"
+        let paragraphs = [
+            "Could not open the document from \(server).",
+            "Details: \(error)",
+        ]
+
+        let script = COWrapper.failurePageScript(title: title, paragraphs: paragraphs)
+        webView.evaluateJavaScript(script, in: frameInfo, in: Self.world)
+    }
+
     // comes from WKScriptMessageHandlerWithReply
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage,
                                replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) {
@@ -246,6 +264,11 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         if Self.unansweredBridgeCalls.contains(kind) {
             COWrapper.LOG_DBG("\(kind) is not answered yet")
+            return (nil, nil)
+        }
+
+        if kind == "REMOTEBOOTSTRAPFAILED" {
+            showRemoteFailure(String(body.dropFirst(kind.count + 1)), in: message.frameInfo)
             return (nil, nil)
         }
 
