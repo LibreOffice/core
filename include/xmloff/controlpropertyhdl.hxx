@@ -117,6 +117,7 @@ namespace xmloff
 
     public:
         OControlPropertyHandlerFactory();
+        virtual ~OControlPropertyHandlerFactory() override;
 
         virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 _nType) const override;
     };

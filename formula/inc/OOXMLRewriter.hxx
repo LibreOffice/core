@@ -30,9 +30,10 @@ class FORMULA_DLLPUBLIC OOXMLRewriter
 {
 public:
     explicit OOXMLRewriter(FormulaTokenArray const& rTokens);
+    ~OOXMLRewriter();
 
     /** The OOXML compatible token array, or nullptr. The caller takes ownership. */
-    std::unique_ptr<FormulaTokenArray> releaseTokens() { return std::move(mpRewritten); }
+    std::unique_ptr<FormulaTokenArray> releaseTokens();
 
 private:
     std::unique_ptr<FormulaTokenArray> mpRewritten;

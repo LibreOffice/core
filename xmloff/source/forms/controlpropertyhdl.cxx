@@ -46,6 +46,8 @@ namespace xmloff
     {
     }
 
+    OControlPropertyHandlerFactory::~OControlPropertyHandlerFactory() = default;
+
     const XMLPropertyHandler* OControlPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
     {
         const XMLPropertyHandler* pHandler = nullptr;

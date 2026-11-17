@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <memory>
 #include <ranges>
+#include <utility>
 #include <vector>
 
 namespace formula
@@ -543,6 +544,10 @@ OOXMLRewriter::OOXMLRewriter(const FormulaTokenArray& rTokens)
         return;
     mpRewritten = lclBuild(rTokens, aWrappers, aErrorPositions);
 }
+
+OOXMLRewriter::~OOXMLRewriter() = default;
+
+std::unique_ptr<FormulaTokenArray> OOXMLRewriter::releaseTokens() { return std::move(mpRewritten); }
 
 } // namespace formula
 

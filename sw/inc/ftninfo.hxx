@@ -71,6 +71,7 @@ public:
 
     SwEndNoteInfo();
     SwEndNoteInfo(const SwEndNoteInfo&);
+    ~SwEndNoteInfo() override;
 
     const OUString& GetPrefix() const  { return m_sPrefix; }
     const OUString& GetSuffix() const  { return m_sSuffix; }

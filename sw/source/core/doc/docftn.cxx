@@ -105,6 +105,8 @@ SwEndNoteInfo::SwEndNoteInfo() :
     m_aFormat.SetNumberingType(SVX_NUM_ROMAN_LOWER);
 }
 
+SwEndNoteInfo::~SwEndNoteInfo() = default;
+
 SwPageDesc* SwEndNoteInfo::GetPageDesc(SwDoc& rDoc) const
 {
     if(!m_pPageDesc)
