@@ -133,11 +133,12 @@ describe(['tagdesktop'], 'Selecting by a drag on a vector slide', function() {
 		});
 	});
 
-	// The places of a loop round a middle, in twips, beginning and ending on its right.
-	function loopRound(x, y, across, down) {
+	// The places of a loop round a middle, in twips, beginning and ending on its right, or a
+	// quarter turn on, at its bottom, where from is 1.
+	function loopRound(x, y, across, down, from) {
 		var places = [];
 		for (var step = 0; step <= 36; ++step) {
-			var angle = step / 36 * 2 * Math.PI;
+			var angle = (step / 36 + (from || 0) / 4) * 2 * Math.PI;
 			places.push({ x: x + across * Math.cos(angle), y: y + down * Math.sin(angle) });
 		}
 		return places;
@@ -166,6 +167,39 @@ describe(['tagdesktop'], 'Selecting by a drag on a vector slide', function() {
 			expect(selected(win), 'selected after Ctrl, Shift and a lasso round the polygon')
 				.to.deep.equal([rectangle, polygon].sort(function(a, b) { return a - b; }));
 			expect(win.eval('RenderGeometrySection.dragSelect'), 'the lasso drawn').to.equal(null);
+		});
+
+		// Escape while the lasso is drawn drops it, and the selection stays as it was; the lasso
+		// begins below the objects, as a press inside the selection would drag the selection
+		cy.cGet('div.clipboard').focus();
+		cy.then(function() {
+			var places = loopRound(3685, 3968, 3500, 2900, 1);
+			var first = onCanvas(win, places[0].x, places[0].y);
+			var drawing = cy.cGet('#document-canvas').trigger('mousedown', first.x, first.y,
+				{ button: 0, buttons: 1, ctrlKey: true });
+			for (var at = 1; at < places.length; ++at) {
+				var place = onCanvas(win, places[at].x, places[at].y);
+				drawing = drawing.trigger('mousemove', place.x, place.y, { button: 0, buttons: 1 });
+			}
+		});
+		cy.wrap(null).should(function() {
+			expect(win.eval('RenderGeometrySection.dragSelect'), 'the lasso drawn').to.not.equal(null);
+		});
+		helper.typeIntoDocument('{esc}');
+		cy.wrap(null).should(function() {
+			expect(win.eval('RenderGeometrySection.dragSelect'), 'the lasso dropped').to.equal(null);
+		});
+		cy.then(function() {
+			var last = onCanvas(win, 3685, 6868);
+			cy.cGet('#document-canvas').trigger('mouseup', last.x, last.y,
+				{ button: 0, buttons: 0 });
+		});
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		cy.wrap(null).should(function() {
+			expect(selected(win), 'selected after a lasso dropped by Escape')
+				.to.deep.equal([rectangle, polygon].sort(function(a, b) { return a - b; }));
 		});
 	});
 });

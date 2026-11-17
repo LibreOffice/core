@@ -785,8 +785,10 @@ class GraphicSelection {
 		}
 
 		// A drag by the mouse owns the selection while it runs, so a key does nothing to it then
-		// and is taken here. Escape goes on to call the drag off, and the selection stays.
-		if (this.selectionSection?.isDragged()) return event.key !== 'Escape';
+		// and is taken here, a drag of the selection or one drawing a frame or a lasso. Escape goes
+		// on to call the drag off, and the selection stays.
+		if (this.selectionSection?.isDragged() || RenderGeometrySection.dragSelect)
+			return event.key !== 'Escape';
 
 		// Escape stops adding a point, and the points stay shown.
 		if (event.key === 'Escape' && SelectionSection.stopAddingAPoint())
