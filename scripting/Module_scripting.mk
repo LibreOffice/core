@@ -51,6 +51,7 @@ $(eval $(call gb_Module_add_check_targets,scripting,\
     $(if $(ENABLE_QUICKJS),CppunitTest_scripting_jsprov) \
     $(if $(ENABLE_SCRIPTING_BEANSHELL),CppunitTest_scripting_beanshell) \
     $(if $(DISABLE_PYTHON),,CppunitTest_scripting_pythonscript) \
+    $(if $(filter SCRIPTING,$(BUILD_TYPE)),CppunitTest_scripting_basprov) \
     CppunitTest_scripting_scripthandler \
 ))
 

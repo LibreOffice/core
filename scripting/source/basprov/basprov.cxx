@@ -22,7 +22,7 @@
 #include "baslibnode.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
+#include <com/sun/star/script/provider/ScriptMissingException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -353,7 +353,7 @@ namespace basprov
 
         if ( !xScript.is() )
         {
-            throw provider::ScriptFrameworkErrorException(
+            throw provider::ScriptMissingException(
                 "The following Basic script could not be found:\n"
                 "library: '" + aLibrary + "'\n"
                 "module: '" + aModule + "'\n"
@@ -361,7 +361,11 @@ namespace basprov
                 "location: '" + aLocation + "'\n",
                 Reference< XInterface >(),
                 scriptURI, u"Basic"_ustr,
-                provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT );
+                provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT,
+                aLocation,
+                aLibrary,
+                aModule,
+                aMethod);
         }
 
         return xScript;
