@@ -545,8 +545,6 @@ void QuickFindPanel::FillSearchFindsList()
 
     m_pWrtShell->AssureStdMode();
 
-    MakeAllOutlineContentTemporarilyVisible aMAOCTV(m_pWrtShell->GetDoc());
-
     i18nutil::SearchOptions2 aSearchOptions;
     aSearchOptions.Locale = GetAppLanguageTag().getLocale();
     aSearchOptions.searchString = sFindEntry;
@@ -576,170 +574,198 @@ void QuickFindPanel::FillSearchFindsList()
         nTransliterationFlags |= TransliterationFlags::IGNORE_CASE;
     aSearchOptions.transliterateFlags = nTransliterationFlags;
 
-    m_pWrtShell->StartAllAction();
-    /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
-        aSearchOptions, m_xCommentsCheckButton->get_active(), SwDocPositions::Start,
-        SwDocPositions::End, FindRanges::InSelAll, false);
-    m_pWrtShell->EndAllAction();
-
-    if (m_pWrtShell->HasMark())
     {
-        for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
+        MakeAllOutlineContentTemporarilyVisible aMAOCTV(m_pWrtShell->GetDoc());
+
+        m_pWrtShell->StartAllAction();
+        /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
+            aSearchOptions, m_xCommentsCheckButton->get_active(), SwDocPositions::Start,
+            SwDocPositions::End, FindRanges::InSelAll, false);
+        m_pWrtShell->EndAllAction();
+
+        if (m_pWrtShell->HasMark())
         {
-            SwPosition* pMarkPosition = rPaM.GetMark();
-            SwPosition* pPointPosition = rPaM.GetPoint();
-            std::unique_ptr<SwPaM> xPaM(std::make_unique<SwPaM>(*pMarkPosition, *pPointPosition));
-            m_vPaMs.push_back(std::move(xPaM));
-        }
+            for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
+            {
+                SwPosition* pMarkPosition = rPaM.GetMark();
+                SwPosition* pPointPosition = rPaM.GetPoint();
+                std::unique_ptr<SwPaM> xPaM(
+                    std::make_unique<SwPaM>(*pMarkPosition, *pPointPosition));
+                m_vPaMs.push_back(std::move(xPaM));
+            }
 
-        // tdf#160538 sort finds in frames and footnotes in the order they occur in the document
-        const SwNodeOffset nEndOfInsertsIndex
-            = m_pWrtShell->GetNodes().GetEndOfInserts().GetIndex();
-        const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
-        std::stable_sort(m_vPaMs.begin(), m_vPaMs.end(),
-                         [&nEndOfInsertsIndex, &nEndOfExtrasIndex,
-                          this](const std::unique_ptr<SwPaM>& a, const std::unique_ptr<SwPaM>& b) {
-                             SwPosition aPos(*a->Start());
-                             SwPosition bPos(*b->Start());
-                             // use page number for footnotes and endnotes
-                             if (aPos.GetNodeIndex() >= nEndOfInsertsIndex
-                                 && bPos.GetNodeIndex() < nEndOfInsertsIndex)
-                                 return b->GetPageNum() >= a->GetPageNum();
-                             // use anchor position for finds that are located in flys
-                             if (nEndOfExtrasIndex >= aPos.GetNodeIndex())
-                                 getAnchorPos(aPos);
-                             if (nEndOfExtrasIndex >= bPos.GetNodeIndex())
-                                 getAnchorPos(bPos);
-                             if (aPos == bPos)
-                             {
-                                 // probably in same or nested fly frame
-                                 // sort using layout position
-                                 SwRect aCharRect, bCharRect;
-                                 if (SwContentFrame* pFrame
-                                     = a->GetMarkContentNode()->GetTextNode()->getLayoutFrame(
-                                         m_pWrtShell->GetLayout()))
+            // tdf#160538 sort finds in frames and footnotes in the order they occur in the document
+            const SwNodeOffset nEndOfInsertsIndex
+                = m_pWrtShell->GetNodes().GetEndOfInserts().GetIndex();
+            const SwNodeOffset nEndOfExtrasIndex
+                = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
+            std::stable_sort(m_vPaMs.begin(), m_vPaMs.end(),
+                             [&nEndOfInsertsIndex, &nEndOfExtrasIndex, this](
+                                 const std::unique_ptr<SwPaM>& a, const std::unique_ptr<SwPaM>& b) {
+                                 SwPosition aPos(*a->Start());
+                                 SwPosition bPos(*b->Start());
+                                 // use page number for footnotes and endnotes
+                                 if (aPos.GetNodeIndex() >= nEndOfInsertsIndex
+                                     && bPos.GetNodeIndex() < nEndOfInsertsIndex)
+                                     return b->GetPageNum() >= a->GetPageNum();
+                                 // use anchor position for finds that are located in flys
+                                 if (nEndOfExtrasIndex >= aPos.GetNodeIndex())
+                                     getAnchorPos(aPos);
+                                 if (nEndOfExtrasIndex >= bPos.GetNodeIndex())
+                                     getAnchorPos(bPos);
+                                 if (aPos == bPos)
                                  {
-                                     pFrame->GetCharRect(aCharRect, *a->GetMark());
+                                     // probably in same or nested fly frame
+                                     // sort using layout position
+                                     SwRect aCharRect, bCharRect;
+                                     if (SwContentFrame* pFrame
+                                         = a->GetMarkContentNode()->GetTextNode()->getLayoutFrame(
+                                             m_pWrtShell->GetLayout()))
+                                     {
+                                         pFrame->GetCharRect(aCharRect, *a->GetMark());
+                                     }
+                                     if (SwContentFrame* pFrame
+                                         = b->GetMarkContentNode()->GetTextNode()->getLayoutFrame(
+                                             m_pWrtShell->GetLayout()))
+                                     {
+                                         pFrame->GetCharRect(bCharRect, *b->GetMark());
+                                     }
+                                     return aCharRect.Top() < bCharRect.Top();
                                  }
-                                 if (SwContentFrame* pFrame
-                                     = b->GetMarkContentNode()->GetTextNode()->getLayoutFrame(
-                                         m_pWrtShell->GetLayout()))
-                                 {
-                                     pFrame->GetCharRect(bCharRect, *b->GetMark());
-                                 }
-                                 return aCharRect.Top() < bCharRect.Top();
-                             }
-                             return aPos < bPos;
-                         });
+                                 return aPos < bPos;
+                             });
 
-        // fill list
-        for (sal_uInt16 nPage = 0, i = 0; std::unique_ptr<SwPaM> & xPaM : m_vPaMs)
-        {
-            SwPosition* pMarkPosition = xPaM->GetMark();
-            SwPosition* pPointPosition = xPaM->GetPoint();
-
-            const SwContentNode* pContentNode = pMarkPosition->GetContentNode();
-            const SwTextNode* pTextNode = pContentNode->GetTextNode();
-            const OUString& sNodeText = pTextNode->GetText();
-
-            auto nMarkIndex = pMarkPosition->GetContentIndex();
-            auto nPointIndex = pPointPosition->GetContentIndex();
-
-            // determine the text node text subview start index for the list entry text
-            auto nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
-            if (nStartIndex < 0)
+            // fill list
+            for (sal_uInt16 nPage = 0, i = 0; std::unique_ptr<SwPaM> & xPaM : m_vPaMs)
             {
-                nStartIndex = 0;
-            }
-            else
-            {
-                // tdf#160539 format search finds results also to word boundaries
-                sal_Unicode ch;
-                do
-                {
-                    ch = sNodeText[nStartIndex];
-                } while (++nStartIndex < nMarkIndex && ch != ' ' && ch != '\t');
-                if (nStartIndex < nMarkIndex)
-                {
-                    // move past neighboring space and tab characters
-                    ch = sNodeText[nStartIndex];
-                    while (nStartIndex < nMarkIndex && (ch == ' ' || ch == '\t'))
-                        ch = sNodeText[++nStartIndex];
-                }
-                if (nStartIndex == nMarkIndex) // no white space found
-                    nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
-            }
+                SwPosition* pMarkPosition = xPaM->GetMark();
+                SwPosition* pPointPosition = xPaM->GetPoint();
 
-            // determine the text node text subview end index for the list entry text
-            auto nEndIndex = nPointIndex + CharactersBeforeAndAfter;
-            if (nEndIndex >= sNodeText.getLength())
-            {
-                nEndIndex = sNodeText.getLength() - 1;
-            }
-            else
-            {
-                // tdf#160539 format search finds results also to word boundaries
-                sal_Unicode ch;
-                do
-                {
-                    ch = sNodeText[nEndIndex];
-                } while (--nEndIndex > nPointIndex && ch != ' ' && ch != '\t');
-                if (nEndIndex > nPointIndex)
-                {
-                    // move past neighboring space and tab characters
-                    ch = sNodeText[nEndIndex];
-                    while (nEndIndex > nPointIndex && (ch == ' ' || ch == '\t'))
-                        ch = sNodeText[--nEndIndex];
-                }
-                if (nEndIndex == nPointIndex) // no white space found
-                {
-                    nEndIndex = nPointIndex + CharactersBeforeAndAfter;
-                    if (nEndIndex >= sNodeText.getLength())
-                        nEndIndex = sNodeText.getLength() - 1;
-                }
-            }
+                const SwContentNode* pContentNode = pMarkPosition->GetContentNode();
+                const SwTextNode* pTextNode = pContentNode->GetTextNode();
+                const OUString& sNodeText = pTextNode->GetText();
 
-            // tdf#161291 indicate page of search finds
-            if (xPaM->GetPageNum() != nPage)
-            {
-                nPage = xPaM->GetPageNum();
-                OUString sPageEntry;
-                if (comphelper::LibreOfficeKit::isActive())
+                auto nMarkIndex = pMarkPosition->GetContentIndex();
+                auto nPointIndex = pPointPosition->GetContentIndex();
+
+                // determine the text node text subview start index for the list entry text
+                auto nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
+                if (nStartIndex < 0)
                 {
-                    sPageEntry = u"-$#~"_ustr + SwResId(ST_PGE) + u" "_ustr
-                                 + OUString::number(nPage) + u"~#$-"_ustr;
+                    nStartIndex = 0;
                 }
                 else
                 {
-                    sPageEntry = u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPage);
+                    // tdf#160539 format search finds results also to word boundaries
+                    sal_Unicode ch;
+                    do
+                    {
+                        ch = sNodeText[nStartIndex];
+                    } while (++nStartIndex < nMarkIndex && ch != ' ' && ch != '\t');
+                    if (nStartIndex < nMarkIndex)
+                    {
+                        // move past neighboring space and tab characters
+                        ch = sNodeText[nStartIndex];
+                        while (nStartIndex < nMarkIndex && (ch == ' ' || ch == '\t'))
+                            ch = sNodeText[++nStartIndex];
+                    }
+                    if (nStartIndex == nMarkIndex) // no white space found
+                        nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
                 }
-                m_xSearchFindsList->append(sPageEntry, sPageEntry);
-            }
 
-            auto nCount = nMarkIndex - nStartIndex;
-            OUString sTextBeforeFind = OUString::Concat(sNodeText.subView(nStartIndex, nCount));
-            OUString sFind;
-            if (auto pField = SwWrtShell::GetFieldAtCursor(xPaM.get(), true);
-                pField && pField->GetTypeId() == SwFieldTypesEnum::Postit)
-            {
-                sFind += OUString::Concat("{") + SwResId(STR_CONTENT_TYPE_SINGLE_POSTIT) + "}";
-            }
-            else
-            {
-                auto nCount1 = std::min(nPointIndex - nMarkIndex, MaxShownSearchResultLength);
-                sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
-                if (nPointIndex - nMarkIndex > MaxShownSearchResultLength)
+                // determine the text node text subview end index for the list entry text
+                auto nEndIndex = nPointIndex + CharactersBeforeAndAfter;
+                if (nEndIndex >= sNodeText.getLength())
                 {
-                    sFind += "...";
+                    nEndIndex = sNodeText.getLength() - 1;
                 }
-            }
-            auto nCount2 = nEndIndex - nPointIndex + 1;
-            OUString sTextAfterFind = OUString::Concat(sNodeText.subView(nPointIndex, nCount2));
-            OUString sStr = sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
+                else
+                {
+                    // tdf#160539 format search finds results also to word boundaries
+                    sal_Unicode ch;
+                    do
+                    {
+                        ch = sNodeText[nEndIndex];
+                    } while (--nEndIndex > nPointIndex && ch != ' ' && ch != '\t');
+                    if (nEndIndex > nPointIndex)
+                    {
+                        // move past neighboring space and tab characters
+                        ch = sNodeText[nEndIndex];
+                        while (nEndIndex > nPointIndex && (ch == ' ' || ch == '\t'))
+                            ch = sNodeText[--nEndIndex];
+                    }
+                    if (nEndIndex == nPointIndex) // no white space found
+                    {
+                        nEndIndex = nPointIndex + CharactersBeforeAndAfter;
+                        if (nEndIndex >= sNodeText.getLength())
+                            nEndIndex = sNodeText.getLength() - 1;
+                    }
+                }
 
-            OUString sId = OUString::number(i++);
-            m_xSearchFindsList->append(sId, sStr);
+                // tdf#161291 indicate page of search finds
+                if (xPaM->GetPageNum() != nPage)
+                {
+                    nPage = xPaM->GetPageNum();
+                    OUString sPageEntry;
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        sPageEntry = u"-$#~"_ustr + SwResId(ST_PGE) + u" "_ustr
+                                     + OUString::number(nPage) + u"~#$-"_ustr;
+                    }
+                    else
+                    {
+                        sPageEntry
+                            = u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPage);
+                    }
+                    m_xSearchFindsList->append(sPageEntry, sPageEntry);
+                }
+
+                auto nCount = nMarkIndex - nStartIndex;
+                OUString sTextBeforeFind = OUString::Concat(sNodeText.subView(nStartIndex, nCount));
+                OUString sFind;
+                if (auto pField = SwWrtShell::GetFieldAtCursor(xPaM.get(), true);
+                    pField && pField->GetTypeId() == SwFieldTypesEnum::Postit)
+                {
+                    sFind += OUString::Concat("{") + SwResId(STR_CONTENT_TYPE_SINGLE_POSTIT) + "}";
+                }
+                else
+                {
+                    auto nCount1 = std::min(nPointIndex - nMarkIndex, MaxShownSearchResultLength);
+                    sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
+                    if (nPointIndex - nMarkIndex > MaxShownSearchResultLength)
+                    {
+                        sFind += "...";
+                    }
+                }
+                auto nCount2 = nEndIndex - nPointIndex + 1;
+                OUString sTextAfterFind = OUString::Concat(sNodeText.subView(nPointIndex, nCount2));
+                OUString sStr = sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
+
+                OUString sId = OUString::number(i++);
+                m_xSearchFindsList->append(sId, sStr);
+            }
         }
+    }
+
+    // selections don't survive MakeAllOutlineContentTemporarilyVisible when folding is active
+    if (m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        m_pWrtShell->StartAction();
+        m_pWrtShell->EnterAddMode();
+
+        // reselect finds
+        for (std::unique_ptr<SwPaM>& rPaM : m_vPaMs)
+        {
+            if (rPaM->GetPointNode().GetTextNode()->getLayoutFrame(m_pWrtShell->GetLayout()))
+            {
+                m_pWrtShell->SttSelect();
+                m_pWrtShell->SetSelection(*rPaM);
+                m_pWrtShell->EndSelect();
+            }
+        }
+
+        m_pWrtShell->LeaveAddMode();
+        m_pWrtShell->EndAction();
     }
 
     // Any finds?
