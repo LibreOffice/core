@@ -506,11 +506,11 @@
           "dest-filename": "edc4d741888bc0d38e32dbaa17149596-source-sans-pro-2.010R-ro-1.065R-it.tar.gz"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/boost_1_91_0.tar.xz",
-          "sha256": "2f975c10da79511c2f218189fc8a12eef1a92e3bd18206e9841d406296d065eb",
+          "url": "https://gerrit.collaboraoffice.com/src/boost_1_92_0.tar.xz",
+          "sha256": "6010caf17a5742227b54f0c3f5a045d09e8abb981faf7770d445cd705dc26214",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "boost_1_91_0.tar.xz"
+          "dest-filename": "boost_1_92_0.tar.xz"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/Cbc-releases-2.10.13.tar.gz",
@@ -569,13 +569,6 @@
           "dest-filename": "libcdr-0.1.9.tar.xz"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/libcmis-0.6.3.tar.xz",
-          "sha256": "5adb3781f374adf491103b2cb2dc290085150c9b7d097baf56d8ac35df84e792",
-          "type": "file",
-          "dest": "engine/external/tarballs",
-          "dest-filename": "libcmis-0.6.3.tar.xz"
-        },
-        {
           "url": "https://gerrit.collaboraoffice.com/src/libe-book-0.1.4.tar.xz",
           "sha256": "104b7e791b6632745898e9b6a0037b7540235771a4d8c3bde2c764466ad912f1",
           "type": "file",
@@ -590,11 +583,11 @@
           "dest-filename": "libetonyek-0.1.13.tar.xz"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/libexttextcat-3.4.8.tar.xz",
-          "sha256": "93eb89fd4fc8f565806354e100e778b3ac9a24e5fc04c24e6a83fb1e9b6c9d59",
+          "url": "https://gerrit.collaboraoffice.com/src/libexttextcat-3.4.9.tar.xz",
+          "sha256": "71e9a3cc6c4a270efd61d76281664341e1fb0412b591f1939516413a992d1e87",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "libexttextcat-3.4.8.tar.xz"
+          "dest-filename": "libexttextcat-3.4.9.tar.xz"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/libfreehand-0.1.4.tar.xz",
