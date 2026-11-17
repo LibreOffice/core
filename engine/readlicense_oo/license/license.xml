@@ -1436,7 +1436,7 @@
     </div>
     <div class="OPENSSL">
         <h2>OpenSSL</h2>
-        <!-- Name: openssl, Vendor: openssl, Source: OPENSSL_TARBALL, URL: https://www.openssl.org/, PURL: pkg:git/github.com/openssl/openssl, Declared: Apache-2.0, Concluded: MPL-2.0 -->
+        <!-- Name: openssl, Vendor: openssl, Source: OPENSSL_TARBALL, URL: https://openssl-library.org/, PURL: pkg:git/github.com/openssl/openssl, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: OpenSSL. Use of any of this software is governed by
         the terms of the license below:</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>

@@ -36,7 +36,7 @@
         "openssl": {
             "tarball_var": "OPENSSL",
             "vendor": "openssl",
-            "url": "https://www.openssl.org/",
+            "url": "https://openssl-library.org/",
             "declared": "Apache-2.0",
             "concluded": "MPL-2.0",
             "thirdparty": "OpenSSL"
