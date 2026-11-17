@@ -420,7 +420,7 @@ OUString StorageHolder::impl_st_normPath(const OUString& sPath)
         return OUString();
 
     // "bla" => "bla/"
-    if (sNormedPath.lastIndexOf(PATH_SEPARATOR_UNICODE) != (sNormedPath.getLength()-1))
+    if (!sNormedPath.endsWith(PATH_SEPARATOR_UNICODE))
         sNormedPath += PATH_SEPARATOR;
 
     return sNormedPath;
