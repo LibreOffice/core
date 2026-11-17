@@ -46,16 +46,17 @@ root_license = "MPL-2.0" if os.environ.get("MPL_SUBSET") == "TRUE" else "LGPL-3.
 
 
 def extract_version_from_filename(filename):
-    filename = re.sub(r'\.(tar\.gz|tar\.xz|tar\.bz2|zip)$', '', filename)
+    filename = re.sub(r'\.(tar\.gz|tar\.xz|tar\.bz2|tgz|zip)$', '', filename)
     if '_' in filename:
         # e.g. boost_1_87_0 -> boost-1.8.7, twaindsm_2.4.1.orig -> twaindsm-2.4.1.orig
         name, version = filename.split('_', 1)
         version = version.replace('_', '.')
         filename =  f"{name}-{version}"
-    match = re.search(r'\d+(?:\.\d+)+(?:-[\w\.]+)*', filename)
-    # d+(?:\.\d+)+ – matches a version core like 0.910.12
-    # (?:-[\w\.]+)* – matches optional trailing parts like -rc2, -2019.10.17, etc.
-    # It stops at .zip or whatever follows, since it doesn’t include a literal dot unless it’s part of [\w\.]
+    match = re.search(r'\d+(?:\.\d+)+(?:-(?:rc|alpha|beta|pre|\d)[\w\.]*)*', filename)
+    # \d+(?:\.\d+)+ matches a version core like 0.910.12, and the rest the
+    # qualifiers that belong to it, like -rc2 or -2019.10.17. Packaging words
+    # (-source, -amalgam, -all, -with-nspr-4.39) are left out: to a scanner
+    # 0.18.0-amalgam would be a pre-release of 0.18.0.
     if match:
         return match.group()
     # SQLite encodes its version in the archive name as XYYZZWW, so
