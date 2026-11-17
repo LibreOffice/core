@@ -5807,24 +5807,24 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
     if (rNum.GetParams().indexOf('=') == -1)
         return ::impTransliterateImpl( rStr, rNum, rNatNum);
 
-    const NfKeywordTable & rKeywords = rScan.GetKeywords();
+    const OUString& rKeyword = rScan.GetKeywords()[nDateKey];
 
     // Format: KEYWORD=numbertext_prefix, ..., for example:
     // [NatNum12 YYYY=title ordinal,MMMM=article, D=ordinal-number]
     sal_Int32 nField = -1;
     do
     {
-        nField = rNum.GetParams().indexOf(Concat2View(rKeywords[nDateKey] + "="), ++nField);
-    }
-    while (nField != -1 && nField != 0 &&
-            (rNum.GetParams()[nField - 1] != ',' &&
-              rNum.GetParams()[nField - 1] != ' '));
+        nField = rNum.GetParams().indexOf(rKeyword, ++nField);
+    } while (nField != -1
+             && (!rNum.GetParams().subView(nField + rKeyword.getLength()).starts_with(u'=')
+                 || (nField != 0 && rNum.GetParams()[nField - 1] != ','
+                     && rNum.GetParams()[nField - 1] != ' ')));
 
     // no format specified for actual keyword
     if (nField == -1)
         return rStr;
 
-    sal_Int32 nKeywordLen = rKeywords[nDateKey].getLength() + 1;
+    sal_Int32 nKeywordLen = rKeyword.getLength() + 1;
     sal_Int32 nFieldEnd = rNum.GetParams().indexOf(',', nField);
 
     if (nFieldEnd == -1)

@@ -1598,6 +1598,10 @@ void Test::testUserDefinedNumberFormats()
         sCode = u"[NatNum12 YYYY=title year, D=capitalize ordinal]D\" of \"MMMM\", \"YYYY"_ustr;
         sExpected = u"Second of January, Nineteen Hundred"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        // keyword without "=" at the end of the parameters
+        sCode = u"[NatNum12 YYYY=year,D]D\" of \"MMMM\", \"YYYY"_ustr;
+        sExpected = u"2 of January, nineteen hundred"_ustr;
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode = u"[NatNum12 MMMM=upper MMM=upper MMMMM=upper]MMMM MMM MMMMM"_ustr;
         sExpected = u"JANUARY JAN J"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
