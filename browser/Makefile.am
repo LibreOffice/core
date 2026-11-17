@@ -425,6 +425,7 @@ COOL_JS_LST =\
 	src/app/ServerConnectionService.ts \
 	src/app/DocEvents.ts \
 	src/app/StateMachine.ts \
+	src/featureflags.ts \
 	src/docstate.ts \
 	src/docstatefunctions.js \
 	src/app/ExportFormats.ts \
@@ -1970,6 +1971,7 @@ pot:
 		src/app/TracingEvents.ts \
 		src/app/ServerCommand.ts \
 		src/docdispatcher.ts \
+		src/featureflags.ts \
 		src/docstate.ts \
 		src/docstatefunctions.js \
 		src/dom/NotebookbarAccessibility.js \

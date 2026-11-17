@@ -239,6 +239,7 @@ const jqueryModule = require('jquery');
 
 // The browser builds window.mode in js/global.js. This one is a desktop browser.
 (globalThis.window as any).mode = {
+	isChromebook: () => false,
 	isDesktop: () => true,
 	isMobile: () => false,
 	isTablet: () => false,
