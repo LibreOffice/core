@@ -95,10 +95,12 @@ namespace basegfx::utils
                 double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition) - fShift);
 
                 // Detect arrow polygons with a concave back (e.g., notched arrowheads):
-                // the polygon's centerline along X=fCenterX may exit the polygon interior
+                // the polygon's centerline along X=fCenterX may leave the polygon for good
                 // before reaching the polygon's full Y extent. In that case, shorten the
                 // consumed line length so the line stroke meets the polygon at the centerline
-                // rather than ending in a V-cut behind the notch.
+                // rather than ending in a V-cut behind the notch. Only the final exit of the
+                // centerline counts: holes inside the polygon (unfilled arrowheads) are
+                // bridged, so the line still stops at the back of such an arrowhead.
                 {
                     B2DPolyPolygon aTransformed(rArrow);
                     aTransformed.transform(aArrowTransform);
@@ -137,18 +139,11 @@ namespace basegfx::utils
                     for (double y : aYCrossings)
                         if (y < EPS)
                             ++nBelow;
-                    if (nBelow % 2 != 0)
+                    if (nBelow % 2 != 0 && aYCrossings.back() > EPS)
                     {
-                        for (double y : aYCrossings)
-                        {
-                            if (y > EPS)
-                            {
-                                const double fAdjusted(y - fShift);
-                                if (fAdjusted < fConsumedLength)
-                                    fConsumedLength = fAdjusted;
-                                break;
-                            }
-                        }
+                        const double fAdjusted(aYCrossings.back() - fShift);
+                        if (fAdjusted < fConsumedLength)
+                            fConsumedLength = fAdjusted;
                     }
                 }
 

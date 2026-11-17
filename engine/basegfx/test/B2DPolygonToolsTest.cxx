@@ -116,6 +116,28 @@ public:
         CPPUNIT_ASSERT_DOUBLES_EQUAL(300.0, fConsumed, 0.001);
     }
 
+    // A hollow triangle (outer triangle plus an inner one as the hole, as in
+    // the "Triangle unfilled" line end) must consume the full polygon Y
+    // length: the line has to stop at the base and not run into the hole.
+    void testCreateAreaGeometryForLineStartEndHollowTriangle()
+    {
+        B2DPolygon aOuter{ { 1500, 0 }, { 3000, 3000 }, { 0, 3000 } };
+        aOuter.setClosed(true);
+        B2DPolygon aInner{ { 1500, 447 }, { 324, 2800 }, { 2677, 2800 } };
+        aInner.setClosed(true);
+        B2DPolyPolygon aArrowPP(aOuter);
+        aArrowPP.append(aInner);
+
+        B2DPolygon aLine{ { 0, 0 }, { 1000, 0 } };
+
+        const double fWidth = 300.0;
+        double fConsumed = 0.0;
+        utils::createAreaGeometryForLineStartEnd(aLine, aArrowPP, false, fWidth, 1000.0, 0.0,
+                                                 &fConsumed);
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(300.0, fConsumed, 0.001);
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -124,6 +146,7 @@ public:
     CPPUNIT_TEST(testIsRectangle);
     CPPUNIT_TEST(testCreateAreaGeometryForLineStartEndNotchedArrow);
     CPPUNIT_TEST(testCreateAreaGeometryForLineStartEndSimpleTriangle);
+    CPPUNIT_TEST(testCreateAreaGeometryForLineStartEndHollowTriangle);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygontools
 
