@@ -1226,6 +1226,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
     CPPUNIT_ASSERT_EQUAL(2, nImageFiles);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf174364_namespace_prefix)
+{
+    //Verify that a file with namespaces prefixes loads. Without the fix the load will fail
+    createSwDoc("tdf174364_namespace_prefix.docx");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf174364_prefixed_content_types)
+{
+    //Verify that a file with prefixed content types loads. Without the fix the load will fail
+    createSwDoc("tdf174364_prefixed_content_types.docx");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testWebSettingsPreserved)
 {
     // this test file has word/webSettings.xml
