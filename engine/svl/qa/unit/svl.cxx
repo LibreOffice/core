@@ -34,6 +34,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <svl/sharedstring.hxx>
 #include <tools/color.hxx>
+#include <tools/datetime.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <memory>
@@ -78,6 +79,7 @@ public:
     void testFractionOutOfRange();
     void testROPolicyFindsCachedFormat();
     void testNewCurrencySymbolString();
+    void testTimeFieldDigits();
     void testNfEnglishKeywordsIntegrity();
     void testStandardColorIntegrity();
     void testColorNamesConversion();
@@ -100,6 +102,7 @@ public:
     CPPUNIT_TEST(testFractionOutOfRange);
     CPPUNIT_TEST(testROPolicyFindsCachedFormat);
     CPPUNIT_TEST(testNewCurrencySymbolString);
+    CPPUNIT_TEST(testTimeFieldDigits);
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
     CPPUNIT_TEST(testStandardColorIntegrity);
     CPPUNIT_TEST(testColorNamesConversion);
@@ -1910,6 +1913,25 @@ void Test::testNewCurrencySymbolString()
     CPPUNIT_ASSERT(aFormatter.GetNewCurrencySymbolString(nKey, aSymbol, &pEntry));
     CPPUNIT_ASSERT(!pEntry);
     CPPUNIT_ASSERT_EQUAL(u"[$XYZ]"_ustr, aSymbol);
+}
+
+void Test::testTimeFieldDigits()
+{
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    const double fDateTime = DateTime::Sub(DateTime(Date(17, 11, 2026), tools::Time(1, 2, 3)),
+                                           DateTime(aFormatter.GetNullDate()));
+    auto check
+        = [this, &aFormatter](const OUString& rFormat, double fValue, const OUString& rExpected) {
+              checkPreviewString(aFormatter, rFormat, fValue, LANGUAGE_ENGLISH_US, rExpected);
+          };
+
+    check(u"H:M:S"_ustr, fDateTime, u"1:2:3"_ustr);
+    check(u"HH:MM:SS"_ustr, fDateTime, u"01:02:03"_ustr);
+    check(u"HH:MM:SS"_ustr, tools::Time(12, 34, 56).GetTimeInDays(), u"12:34:56"_ustr);
+    check(u"YYYY-MM-DD H:M:S"_ustr, fDateTime, u"2026-11-17 1:2:3"_ustr);
+    check(u"YYYY-MM-DD HH:MM:SS"_ustr, fDateTime, u"2026-11-17 01:02:03"_ustr);
+    check(u"YYYY WW"_ustr, fDateTime, u"2026 47"_ustr);
+    check(u"YYYY WW HH:MM"_ustr, fDateTime, u"2026 47 01:02"_ustr);
 }
 
 void Test::testNfEnglishKeywordsIntegrity()

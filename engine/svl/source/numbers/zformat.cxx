@@ -2956,8 +2956,8 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     }
     else  // if there are some '0' in format, force display of fraction
     {
-        sFrac = ImpIntToString(rNatNum, nIx, nFrac);
-        sDiv = ImpIntToString(rNatNum, nIx, nDiv);
+        ImpAppendIntToString(sFrac, rNatNum, nIx, nFrac);
+        ImpAppendIntToString(sDiv, rNatNum, nIx, nDiv);
     }
 
     sal_uInt16 j = nCnt-1; // Last symbol -> backwards
@@ -3262,22 +3262,22 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
             }
             break;
         case NF_KEY_MI:                 // M
-            sBuff.append(ImpIntToString(rNatNum, nIx, nMin ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nMin);
             break;
         case NF_KEY_MMI:                // MM
-            sBuff.append(ImpIntToString(rNatNum, nIx, nMin, 2 ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nMin, 2);
             break;
         case NF_KEY_H:                  // H
-            sBuff.append(ImpIntToString(rNatNum, nIx, nHour ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nHour);
             break;
         case NF_KEY_HH:                 // HH
-            sBuff.append(ImpIntToString(rNatNum, nIx, nHour, 2 ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nHour, 2);
             break;
         case NF_KEY_S:                  // S
-            sBuff.append(ImpIntToString(rNatNum, nIx, nSec ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nSec);
             break;
         case NF_KEY_SS:                 // SS
-            sBuff.append(ImpIntToString(rNatNum, nIx, nSec, 2 ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nSec, 2);
             break;
         default:
             break;
@@ -3957,8 +3957,8 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             sBuff.append(rLoc().getLongDateDayOfWeekSep());
             break;
         case NF_KEY_WW :                // WW
-            sBuff.append(ImpIntToString(rNatNum, nIx,
-                                         rCal.getValue( CalendarFieldIndex::WEEK_OF_YEAR )));
+            ImpAppendIntToString(sBuff, rNatNum, nIx,
+                                 rCal.getValue(CalendarFieldIndex::WEEK_OF_YEAR));
             break;
         case NF_KEY_G:                  // G
             ImpAppendEraG(sBuff, rCal, nNatNum );
@@ -4175,22 +4175,22 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
         case NF_KEY_MI:                 // M
-            sBuff.append(ImpIntToString(rNatNum, nIx, nMin ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nMin);
             break;
         case NF_KEY_MMI:                // MM
-            sBuff.append(ImpIntToString(rNatNum, nIx, nMin, 2 ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nMin, 2);
             break;
         case NF_KEY_H:                  // H
-            sBuff.append(ImpIntToString(rNatNum, nIx, nHour ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nHour);
             break;
         case NF_KEY_HH:                 // HH
-            sBuff.append(ImpIntToString(rNatNum, nIx, nHour, 2 ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nHour, 2);
             break;
         case NF_KEY_S:                  // S
-            sBuff.append(ImpIntToString(rNatNum, nIx, nSec ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nSec);
             break;
         case NF_KEY_SS:                 // SS
-            sBuff.append(ImpIntToString(rNatNum, nIx, nSec, 2 ));
+            ImpAppendIntToString(sBuff, rNatNum, nIx, nSec, 2);
             break;
         case NF_KEY_M:                  // M
             sBuff.append(rCal.getDisplayString(
@@ -4313,7 +4313,8 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             sBuff.append(rLoc().getLongDateDayOfWeekSep());
             break;
         case NF_KEY_WW :                // WW
-            sBuff.append(ImpIntToString(rNatNum, nIx, rCal.getValue( CalendarFieldIndex::WEEK_OF_YEAR )));
+            ImpAppendIntToString(sBuff, rNatNum, nIx,
+                                 rCal.getValue(CalendarFieldIndex::WEEK_OF_YEAR));
             break;
         case NF_KEY_G:                  // G
             ImpAppendEraG( sBuff, rCal, nNatNum );
@@ -5694,21 +5695,8 @@ OUString SvNumberformat::ImpGetNatNumString(const SvNumberNatNum& rNum,
         }
         else
         {
-            OUString aValStr( OUString::number( nVal ) );
-            if ( aValStr.getLength() >= nMinDigits )
-            {
-                aStr = aValStr;
-            }
-            else
-            {
-                OUStringBuffer aBuf;
-                for(sal_Int32 index = 0; index < nMinDigits - aValStr.getLength(); ++index)
-                {
-                    aBuf.append('0');
-                }
-                aBuf.append(aValStr);
-                aStr = aBuf.makeStringAndClear();
-            }
+            auto aValStr = OUString::number(nVal);
+            aStr = RepeatedUChar('0', nMinDigits - aValStr.length) + aValStr;
         }
     }
     else
@@ -5716,6 +5704,20 @@ OUString SvNumberformat::ImpGetNatNumString(const SvNumberNatNum& rNum,
         aStr = OUString::number( nVal );
     }
     return ::impTransliterate(aStr, rNum, rNatNum);
+}
+
+void SvNumberformat::ImpAppendIntToString(OUStringBuffer& rBuf, const NativeNumberWrapper& rNatNum,
+                                          sal_uInt16 nIx, sal_Int64 nVal,
+                                          sal_uInt16 nMinDigits) const
+{
+    if (const SvNumberNatNum& rNum = NumFor[nIx].GetNatNum(); rNum.IsComplete())
+    {
+        rBuf.append(ImpGetNatNumString(rNum, nVal, nMinDigits, rNatNum));
+        return;
+    }
+    // Pad as ImpGetNatNumString does
+    auto sValStr = OUString::number(nVal);
+    rBuf.append(RepeatedUChar('0', nMinDigits - sValStr.length) + sValStr);
 }
 
 OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,

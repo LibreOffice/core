@@ -746,15 +746,9 @@ private:
     SVL_DLLPRIVATE static OUString ImpGetNatNumString(const SvNumberNatNum& rNum, sal_Int64 nVal,
                                                       sal_uInt16 nMinDigits, const NativeNumberWrapper& rNatNum);
 
-    OUString ImpIntToString(const NativeNumberWrapper& rNatNum, sal_uInt16 nIx, sal_Int64 nVal, sal_uInt16 nMinDigits = 0 ) const
-    {
-        const SvNumberNatNum& rNum = NumFor[nIx].GetNatNum();
-        if ( nMinDigits || rNum.IsComplete() )
-        {
-            return ImpGetNatNumString( rNum, nVal, nMinDigits, rNatNum );
-        }
-        return OUString::number(nVal);
-    }
+    SVL_DLLPRIVATE void ImpAppendIntToString(OUStringBuffer& rBuf,
+                                             const NativeNumberWrapper& rNatNum, sal_uInt16 nIx,
+                                             sal_Int64 nVal, sal_uInt16 nMinDigits = 0) const;
 
     // Obtain the string of the fraction of second, without leading "0.",
     // rounded to nFractionDecimals (or nFractionDecimals+1 if
