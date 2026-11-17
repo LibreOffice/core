@@ -2574,7 +2574,7 @@ bool SvNumberFormatter::IsNatNum12( sal_uInt32 nFIndex ) const
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     const SvNumberformat* pFormat = m_aFormatData.GetFormatEntry( nFIndex );
 
-    return pFormat && pFormat->GetNatNumModifierString().startsWith( "[NatNum12" );
+    return pFormat && pFormat->IsNatNum12();
 }
 
 sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatString,

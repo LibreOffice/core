@@ -483,6 +483,7 @@ public:
     /** Return empty string if no NatNum modifier or invalid nNumFor
         otherwise return "[NatNum1]" or "[NatNum12 ...]" */
     OUString GetNatNumModifierString( sal_uInt16 nNumFor = 0 ) const;
+    bool IsNatNum12() const; // of the first subformat
 
     /** Switches to the first non-"gregorian" calendar, but only if the current
         calendar is "gregorian"; original calendar name and date/time returned,

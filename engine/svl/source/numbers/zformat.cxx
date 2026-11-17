@@ -5904,6 +5904,12 @@ OUString SvNumberformat::GetNatNumModifierString( sal_uInt16 nNumFor ) const
     return sNatNumModifier.makeStringAndClear();
 }
 
+bool SvNumberformat::IsNatNum12() const
+{
+    const SvNumberNatNum& rNum = NumFor[0].GetNatNum();
+    return rNum.IsSet() && rNum.GetNatNum() == 12;
+}
+
 // static
 bool SvNumberformat::HasStringNegativeSign(std::u16string_view rStr)
 {
