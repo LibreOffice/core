@@ -15,6 +15,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/helper/helper.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/theme/FormatScheme.hxx>
 #include <sax/fshelper.hxx>
@@ -405,7 +406,7 @@ void ThemeExport::writeGradientFill(model::GradientFill const& rGradientFill)
     for (auto const& rStop : rGradientFill.maGradientStops)
     {
         mpFS->startElementNS(XML_a, XML_gs, XML_pos,
-                             OString::number(sal_Int32(rStop.mfPosition * 100000.0)));
+                             OString::number(basegfx::fround(rStop.mfPosition * 100000.0)));
         writeComplexColor(rStop.maColor);
         mpFS->endElementNS(XML_a, XML_gs);
     }

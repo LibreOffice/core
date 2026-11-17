@@ -1377,6 +1377,36 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952_multiple_OLEs)
     CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"ppt/embeddings/oleObject3.bin"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testFractionalValuesRoundtrip)
+{
+    // Presentation has a superscript run of 10.1 pt, a paragraph of 8.9 pt with a line
+    // break, and a theme gradient stop at 29%
+    loadFromFile(u"pptx/fractional-sizes.pptx");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1010
+    // - Actual  : 1008
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[1]/a:r/a:rPr", "sz", u"1010");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[1]/a:r/a:rPr", "baseline", u"30000");
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 890
+    // - Actual  : 889
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[2]/a:r[1]/a:rPr", "sz", u"890");
+    // Without the fix in place, the line break got sz "889.9999", which is not an integer,
+    // and the export failed validation
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[2]/a:br/a:rPr", "sz", u"890");
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 29000
+    // - Actual  : 28999
+    xmlDocUniquePtr pThemeDoc = parseExport(u"ppt/theme/theme1.xml"_ustr);
+    assertXPath(pThemeDoc, "(//a:fmtScheme/a:fillStyleLst/a:gradFill)[1]/a:gsLst/a:gs[2]", "pos",
+                u"29000");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

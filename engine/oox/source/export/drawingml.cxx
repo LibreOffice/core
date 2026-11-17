@@ -2655,7 +2655,7 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     }
     else if (GetProperty(xCharAttrSource, u"CharHeight"_ustr))
     {
-        nSize = static_cast<sal_Int32>(100*(*o3tl::doAccess<float>(mAny)));
+        nSize = basegfx::fround(100 * *o3tl::doAccess<float>(mAny));
         if ( nElement == XML_rPr || nElement == XML_defRPr )
         {
             rRunInput.bOverridingCharHeight = true;
@@ -2843,9 +2843,8 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
 
     if (nCharEscapement && nCharEscapementHeight)
     {
-        nSize = (nSize * nCharEscapementHeight) / 100;
         // MSO uses default ~58% size
-        nSize = (nSize / 0.58);
+        nSize = basegfx::fround(nSize * nCharEscapementHeight / 100.0 / 0.58);
     }
 
     if (GetProperty(rXPropSet, u"CharCaseMap"_ustr))
@@ -4239,7 +4238,7 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
                 if( xFirstRunPropSetInfo->hasPropertyByName(u"CharHeight"_ustr) )
                 {
                     fFirstCharHeight = xFirstRunPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>();
-                    rnCharHeight = 100 * fFirstCharHeight;
+                    rnCharHeight = basegfx::fround(100 * fFirstCharHeight);
                     rbOverridingCharHeight = true;
                 }
                 WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_pPr);
