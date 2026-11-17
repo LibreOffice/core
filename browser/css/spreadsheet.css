@@ -27,7 +27,7 @@ body.qt-app .spreadsheet-cursor:not(.bucket-cursor) {
 }
 
 .spreadsheet-tab-scroll {
-	width: 100%;
+	width: auto;
 	height: 100%;
 	overflow-y: hidden;
 	overflow-x: auto;
@@ -155,7 +155,7 @@ body.qt-app .spreadsheet-cursor:not(.bucket-cursor) {
 
 #drop-zone-end-container {
 	height: 32px;
-	width: 128px;
+	width: 24px;
 	opacity: 0;
 	vertical-align: bottom;
 	display: inline-block;
