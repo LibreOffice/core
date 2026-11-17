@@ -84,6 +84,7 @@
 #include <drwlayer.hxx>
 #include <markdata.hxx>
 #include <dbdocfun.hxx>
+#include <SparklineGroup.hxx>
 #include <sctestviewcallback.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <rtl/character.hxx>
@@ -4199,6 +4200,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerSentOnChangeOnly)
     CPPUNIT_ASSERT(pModelObj);
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -4212,6 +4215,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerSentOnChangeOnly)
     ScMarkData aMark(pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     pDoc->InsertMatrixFormula(0, 0, 0, 2, aMark, u"=B1:B3"_ustr); // insert into A1:A3
+
+    // Insert a styled table in E1:F3.
+    ScDBDocFunc aFunc(*pDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(4, 0, 0, 5, 2, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+
+    // Insert a sparkline in C2 for B2 as data.
+    auto pGroup = std::make_shared<sc::SparklineGroup>();
+    CPPUNIT_ASSERT(pDocShell->GetDocFunc().InsertSparklines(ScRange(1, 1, 0, 1, 1, 0),
+                                                            ScRange(2, 1, 0, 2, 1, 0), pGroup));
 
     ScTestViewCallback aView;
     pView->SetCursor(2, 0); // C1
@@ -4234,7 +4248,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerSentOnChangeOnly)
     };
 
     // C1 -> C2: the cursor is in no marked range before or after, so there is
-    // nothing to send.
+    // nothing to send.  The sparkline in C2 sends nothing either.
     pressKey(awt::Key::DOWN);
     CPPUNIT_ASSERT(aView.m_aCellRangeMarkers.empty());
     // C2 -> B2: still nothing
@@ -4272,38 +4286,39 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeMarkerResentAfterCallbac
     CPPUNIT_ASSERT(pModelObj);
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
-    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
-    CPPUNIT_ASSERT(pDocShell);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
 
-    // A styled table in A1:C4.
-    ScDBDocFunc aFunc(*pDocShell);
-    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 2, 3, 0),
-                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
-                                    u"TableStyleMedium2"_ustr));
+    // A dynamic array in A1:A3.
+    pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    ScMarkData aMark(pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    pDoc->InsertMatrixFormula(0, 0, 0, 2, aMark, u"=B1:B3"_ustr); // insert into A1:A3
 
-    // Move the cursor with no callback registered, so the table marker goes nowhere.
-    pView->SetCursor(4, 9); // E10
+    // Move the cursor into it with no callback registered, so the marker goes nowhere.
+    pView->SetCursor(0, 0); // A1
     Scheduler::ProcessEventsToIdle();
 
     ScTestViewCallback aView;
     aView.m_aCellRangeMarkers.clear();
 
-    // E10 -> E11: the client has no table marker yet, so this must send it.
+    // A1 -> A2: the same range as before, but the client has no marker yet, so this
+    // must send it.
     pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::DOWN);
     pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::DOWN);
     Scheduler::ProcessEventsToIdle();
 
-    auto it = std::find_if(aView.m_aCellRangeMarkers.begin(), aView.m_aCellRangeMarkers.end(),
-                           [](const boost::property_tree::ptree& rMarker) {
-                               return rMarker.get<std::string>("state.name") == "TableRange";
-                           });
-    CPPUNIT_ASSERT_MESSAGE("no table marker sent", it != aView.m_aCellRangeMarkers.end());
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aView.m_aCellRangeMarkers.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("DynamicArray"),
+                         aView.m_aCellRangeMarkers[0].get<std::string>("state.name"));
 
     std::vector<std::string> aRanges;
-    for (const auto& rRange : it->get_child("state.cellRanges"))
+    for (const auto& rRange : aView.m_aCellRangeMarkers[0].get_child("state.cellRanges"))
         aRanges.push_back(rRange.second.get_value<std::string>());
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), aRanges.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 2, 3"), aRanges[0]);
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 0, 2"), aRanges[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellDialogAfterReadOnlyView)

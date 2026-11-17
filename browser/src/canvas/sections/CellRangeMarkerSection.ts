@@ -16,7 +16,8 @@
 
 	Marks out the cell ranges the engine reports, each kind under its own name so one kind
 	leaves the others alone. The pixels come from the sheet geometry on every draw, so a marker
-	follows scrolling and zoom.
+	follows scrolling and zoom. The styled tables and sparkline groups come from the cell range
+	inventory of each sheet, which the client keeps and draws by itself.
 */
 
 // A fillOpacity fills the ranges in color, otherwise they get a border in it. A handleCommand
@@ -35,6 +36,24 @@ interface CellRangeMarkers {
 	style: CellRangeMarkerStyle;
 }
 
+/**
+ * One styled table of a sheet, and whether its cells can be edited.
+ */
+interface StyledTableRange {
+	range: cool.Bounds;
+	editable: boolean;
+}
+
+/**
+ * Client-side cache of special cell ranges on a sheet that we may need to
+ * highlight when the cursor is on them.
+ */
+interface SheetCellRanges {
+	tables: StyledTableRange[];
+	sparklineGroups: cool.Bounds[][];
+	mergedCells: cool.Bounds[];
+}
+
 class CellRangeMarkerSection extends CanvasSectionObject {
 	processingOrder: number = app.CSections.CellRangeMarker.processingOrder;
 	drawingOrder: number = app.CSections.CellRangeMarker.drawingOrder;
@@ -48,7 +67,76 @@ class CellRangeMarkerSection extends CanvasSectionObject {
 
 		this.sectionProperties.markers = new Map<string, CellRangeMarkers>();
 		this.sectionProperties.handleCounts = new Map<string, number>();
+		this.sectionProperties.sheetCellRanges = new Map<number, SheetCellRanges>();
 		this.isAlwaysVisible = true;
+	}
+
+	// Store the cell ranges of a sheet, replacing the ones stored before.
+	public setSheetCellRanges(part: number, ranges: SheetCellRanges) {
+		this.sectionProperties.sheetCellRanges.set(part, ranges);
+		this.containerObject?.requestReDraw();
+	}
+
+	public hasSheetCellRanges(part: number): boolean {
+		return this.sectionProperties.sheetCellRanges.has(part);
+	}
+
+	// Drop the stored cell ranges of a sheet, or of every sheet when no part is given.
+	public clearSheetCellRanges(part?: number) {
+		if (part === undefined) this.sectionProperties.sheetCellRanges.clear();
+		else this.sectionProperties.sheetCellRanges.delete(part);
+	}
+
+	// Mark out the editable tables of a sheet from its stored cell ranges, each with a handle that
+	// resizes the table.
+	public showTableMarkers(part: number) {
+		const ranges: SheetCellRanges | undefined =
+			this.sectionProperties.sheetCellRanges.get(part);
+		const tableRanges = ranges
+			? ranges.tables
+					.filter((table) => table.editable)
+					.map((table) => table.range)
+			: [];
+
+		if (!tableRanges.length) {
+			this.clearMarkers('TableRange');
+			return;
+		}
+
+		this.setMarkers('TableRange', tableRanges, part, {
+			handleCommand: '.uno:SetCalcTableRange',
+		});
+	}
+
+	/**
+	 * Get the merged cell of a sheet that contains a cell, or null when
+	 * there is none, or when the sheet's cell ranges are not yet available.
+	 */
+	public getMergedCellAt(
+		part: number,
+		col: number,
+		row: number,
+	): cool.Bounds | null {
+		const ranges: SheetCellRanges | undefined =
+			this.sectionProperties.sheetCellRanges.get(part);
+		if (!ranges) return null;
+
+		const mergedCell = ranges.mergedCells.find((range) =>
+			range.contains([col, row]),
+		);
+		return mergedCell ?? null;
+	}
+
+	// Get the sparkline group of a sheet whose ranges contain the cell cursor, if any.
+	private getSparklineGroupAtCursor(part: number): cool.Bounds[] | undefined {
+		const ranges: SheetCellRanges | undefined =
+			this.sectionProperties.sheetCellRanges.get(part);
+		if (!ranges || !app.calc.cellCursorVisible) return undefined;
+
+		const cursor = app.calc.cellAddress.toArray();
+		return ranges.sparklineGroups.find((group) =>
+			group.some((range) => range.contains(cursor)),
+		);
 	}
 
 	// Replace the ranges drawn under name.
@@ -196,6 +284,24 @@ class CellRangeMarkerSection extends CanvasSectionObject {
 				this.positionHandles(name, markers, docLayer.sheetGeometry);
 			},
 		);
+
+		// The group under the cell cursor is filled, the others are not marked.
+		const sparklineGroup = this.getSparklineGroupAtCursor(
+			docLayer._selectedPart,
+		);
+		if (sparklineGroup) {
+			const color = getComputedStyle(document.documentElement)
+				.getPropertyValue('--color-primary')
+				.trim();
+			this.drawMarkers(
+				{
+					cellRanges: sparklineGroup,
+					part: docLayer._selectedPart,
+					style: { color: color || '#0b87e7', fillOpacity: 0.25 },
+				},
+				docLayer.sheetGeometry,
+			);
+		}
 
 		this.context.restore();
 	}

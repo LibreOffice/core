@@ -149,6 +149,7 @@
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <sfx2/kit/helper.hxx>
 
+#include <CellRangeInventory.hxx>
 #include <CellRangeMarker.hxx>
 #include <COKit/COKit.hxx>
 #include <tools/json_writer.hxx>
@@ -7048,10 +7049,6 @@ void ScGridWindow::DeleteDatabaseOverlay()
 {
     maDBExpandHandles.clear();
     mpOODatabase.reset();
-    // Clear the client's markers, unless the window is going away with its view.
-    if (comphelper::COKit::isActive() && !isDisposed())
-        sc::notifyCellRangeMarker(
-            mrViewData, sc::makeTableRangeMarker(mrViewData.GetTabNumber()));
 }
 
 void ScGridWindow::UpdateDatabaseOverlay()
@@ -7067,23 +7064,23 @@ void ScGridWindow::UpdateDatabaseOverlay()
     if (aOldMode != aDrawMode)
         SetMapMode(aDrawMode);
 
-    // Clear locally rather than via DeleteDatabaseOverlay so the client gets one
-    // marks message below, not an extra empty one first.
-    maDBExpandHandles.clear();
-    mpOODatabase.reset();
+    DeleteDatabaseOverlay();
+
+    // The client draws the table handles from the cell range inventory.
+    if (comphelper::COKit::isActive())
+        return;
 
     ScDocument& rDocument = mrViewData.GetDocument();
     const SCTAB nTab = mrViewData.GetTabNumber();
 
-    // Send every table of the sheet; the client picks the ones on screen.
-    if (comphelper::COKit::isActive())
+    for (const sc::TableRangeEntry& rEntry : sc::collectTableRangeEntries(rDocument, nTab))
     {
-        sc::notifyCellRangeMarker(mrViewData, sc::getTableRangeMarker(rDocument, nTab));
-        return;
-    }
+        // no handle on a non-editable table
+        if (!rEntry.bEditable)
+            continue;
 
-    for (const ScRange& rRange : sc::getTableRangeMarker(rDocument, nTab).aCellRanges)
-    {
+        const ScRange& rRange = rEntry.aRange;
+
         // The native overlay draws the handles of the tables in the visible
         // range only, and a press on one is tested against the same rectangles.
         if (rRange.aEnd.Col() < maVisibleRange.mnCol1 || rRange.aStart.Col() > maVisibleRange.mnCol2 ||
@@ -7619,16 +7616,10 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
 
     ScDocument& rDocument = mrViewData.GetDocument();
 
+    // The native overlay is not visible to the client, which draws the highlight from the cell
+    // range inventory.
     if (comphelper::COKit::isActive())
-    {
-        // The native overlay is not visible to the client, so send the cells of the sparkline
-        // group and let it draw the highlight. An empty list of cell ranges clears the
-        // highlight when the cursor leaves a sparkline cell.
-        sc::notifyCellRangeMarker(
-            mrViewData,
-            sc::getSparklineGroupMarker(rDocument, aCurrentAddress));
         return;
-    }
 
     if (auto pSparkline = rDocument.GetSparkline(aCurrentAddress))
     {

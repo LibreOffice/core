@@ -129,11 +129,85 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				flags[param] = true;
 			});
 			this.requestSheetGeometryData(flags);
+		} else if (textMsg.startsWith('invalidatecellrangeinventory:')) {
+			this._onInvalidateCellRangeInventoryMsg(textMsg);
 		} else if (textMsg.startsWith('printranges:')) {
 			this._onPrintRangesMsg(textMsg);
 		} else {
 			window.L.CanvasTileLayer.prototype._onMessage.call(this, textMsg, img);
 		}
+	},
+
+	// The styled tables or sparkline groups of a sheet changed. The selected sheet is fetched
+	// again, and keeps its stored cell ranges until the reply replaces them; another sheet is
+	// fetched when the view switches to it.
+	_onInvalidateCellRangeInventoryMsg: function (textMsg) {
+		var match = textMsg.match(/part=(\d+)/);
+		if (!match)
+			return;
+
+		var part = parseInt(match[1]);
+		if (part === this._selectedPart)
+			this.requestCellRangeInventory(part);
+		else
+			this._cellRangeMarkerSection.clearSheetCellRanges(part);
+	},
+
+	// Sends the .uno:CellRangeInventory command for one sheet.
+	requestCellRangeInventory: function (part) {
+		app.socket.sendMessage('commandvalues command=.uno:CellRangeInventory?part=' + part);
+	},
+
+	// Shows the markers of a sheet if its cell ranges are stored, otherwise fetches them.
+	_showSheetMarkers: function (part) {
+		if (this._cellRangeMarkerSection.hasSheetCellRanges(part))
+			this._cellRangeMarkerSection.showTableMarkers(part);
+		else
+			this.requestCellRangeInventory(part);
+	},
+
+	/** Convert a cell range sent as [col1, row1, col2, row2] into cool.Bounds. */
+	_cellRangeToBounds(cellRange) {
+		const startCell = [cellRange[0], cellRange[1]];
+		const endCell = [cellRange[2], cellRange[3]];
+		return new cool.Bounds(startCell, endCell);
+	},
+
+	/**
+	 * Callback function to handle the responses on the CellRangeInventory
+	 * requests.
+	 */
+	_onCellRangeInventoryMsg: function (values) {
+		var inventory = values.commandValues;
+		if (!inventory || typeof inventory.part !== 'number')
+			return;
+
+		const tables = [];
+		for (const table of inventory.tables) {
+			const range = this._cellRangeToBounds(table.range);
+			tables.push({ range: range, editable: table.editable });
+		}
+
+		const sparklineGroups = [];
+		for (const group of inventory.sparklineGroups) {
+			const ranges = [];
+			for (const range of group)
+				ranges.push(this._cellRangeToBounds(range));
+			sparklineGroups.push(ranges);
+		}
+
+		const mergedCells = [];
+		for (const range of inventory.mergedCells)
+			mergedCells.push(this._cellRangeToBounds(range));
+
+		this._cellRangeMarkerSection.setSheetCellRanges(inventory.part, {
+			tables: tables,
+			sparklineGroups: sparklineGroups,
+			mergedCells: mergedCells
+		});
+
+		if (inventory.part === this._selectedPart)
+			this._cellRangeMarkerSection.showTableMarkers(inventory.part);
 	},
 
 	// This is used to read and parse printranges so that the next
@@ -170,6 +244,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				section.hideAllComments();
 			}
 			this._sheetSwitch.gotSetPart(part);
+			this._showSheetMarkers(part);
 			this._syncTileContainerSize();
 		}
 	},
@@ -574,6 +649,12 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 					this.requestSheetGeometryData();
 				}
 			}
+
+			// The sheet cell ranges are kept by sheet index, and the engine tells which indices
+			// changed, but not to a view that was gone. A new server view starts afresh.
+			if (reconnecting)
+				this._cellRangeMarkerSection.clearSheetCellRanges();
+			this._showSheetMarkers(this._selectedPart);
 
 			this._viewId = statusJSON.viewid;
 			app.activeDocument.setActiveViewID(this._viewId);
@@ -1200,6 +1281,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		var comment;
 		if (values.commandName === '.uno:ViewRowColumnHeaders') {
 			this._updateHeadersGridLines(values);
+
+		} else if (values.commandName === '.uno:CellRangeInventory') {
+			this._onCellRangeInventoryMsg(values);
 
 		} else if (values.commandName === '.uno:SheetGeometryData') {
 			var selectedHash = this._selectedPartHash();

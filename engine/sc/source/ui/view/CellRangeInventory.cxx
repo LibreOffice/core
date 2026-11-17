@@ -11,7 +11,6 @@
 
 #include <CellRangeInventory.hxx>
 
-#include <Sparkline.hxx>
 #include <attrib.hxx>
 #include <dbdata.hxx>
 #include <dociter.hxx>
@@ -130,22 +129,6 @@ DocumentRangeInventory collectDocumentRangeInventory(ScDocument& rDoc)
     }
 
     return aInventory;
-}
-
-SparklineGroupRangeEntry collectSparklineGroupRangeEntry(ScDocument& rDoc, const ScAddress& rCell)
-{
-    auto pSparkline = rDoc.GetSparkline(rCell);
-    if (!pSparkline)
-        return {};
-
-    const SparklineGroup* pCellGroup = pSparkline->getSparklineGroup().get();
-    SparklineGroupRangeEntry aRanges;
-    for (const auto& [rPos, pGroup] : rDoc.GetSparklinePositions(rCell.Tab()))
-    {
-        if (pGroup == pCellGroup)
-            aRanges.Join(getMergedCellRange(rDoc, rPos));
-    }
-    return aRanges;
 }
 
 std::vector<ScRange> collectMergedCellRanges(ScDocument& rDoc, SCTAB nTab)

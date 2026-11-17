@@ -62,6 +62,57 @@ describe(['tagdesktop'], 'Calc styled table resize handle.', function() {
 			expect(handle.position[1], 'handle moved down after grow').to.be.greaterThan(startY);
 		});
 	});
+
+	// The client draws the tables from the sheet cell ranges it fetches when the engine says the
+	// sheet changed, and ignores the handles the engine sends on a cursor move. So a handle for a
+	// new table is the invalidation and the fetch at work.
+	it('shows a handle for a newly inserted table', function() {
+		calcHelper.clickOnFirstCell();
+		cy.cGet('[id="test-div-TableRange handle 1"]').should('exist');
+		cy.cGet('[id="test-div-TableRange handle 2"]').should('not.exist');
+
+		calcHelper.selectCellsInRange('I2:K4');
+		cy.getFrameWindow().then(function(win) {
+			win.app.socket.sendMessage('uno .uno:InsertCalcTable');
+		});
+		cy.cGet('#tablerangedialog').should('be.visible');
+		cy.cGet('#tablerangedialog #ok').click();
+		cy.cGet('#tablerangedialog').should('not.exist');
+
+		cy.cGet('[id="test-div-TableRange handle 2"]').should('exist');
+	});
+});
+
+describe(['tagdesktop'], 'Calc sparkline group marker.', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/sparkline_group.fods');
+	});
+
+	// One sparkline group in E1:E2. It is filled only while the cell cursor is on one of its
+	// cells, which the section works out from the sheet cell ranges and the cursor on every draw.
+	it('marks the sparkline group under the cell cursor only', function() {
+		function getMarkerSection(win) {
+			return win.app.sectionContainer.getSectionWithName(win.app.CSections.CellRangeMarker.name);
+		}
+
+		cy.getFrameWindow().should(function(win) {
+			var groups = getMarkerSection(win).sectionProperties.sheetCellRanges.get(0).sparklineGroups;
+			expect(groups, 'sparkline groups').to.have.length(1);
+			expect(groups[0][0].min.x, 'start column').to.equal(4);
+			expect(groups[0][0].max.y, 'end row').to.equal(1);
+		});
+
+		calcHelper.selectCellsInRange('E2');
+		cy.getFrameWindow().should(function(win) {
+			expect(getMarkerSection(win).getSparklineGroupAtCursor(0), 'group at E2').to.exist;
+		});
+
+		calcHelper.selectCellsInRange('A4');
+		cy.getFrameWindow().should(function(win) {
+			expect(getMarkerSection(win).getSparklineGroupAtCursor(0), 'group at A4').to.not.exist;
+		});
+	});
 });
 
 describe(['tagdesktop'], 'Calc styled table resize handle below the fold.', function() {

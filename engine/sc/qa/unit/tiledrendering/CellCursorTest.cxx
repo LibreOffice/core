@@ -32,18 +32,6 @@
 namespace
 {
 /**
- * Extract from an array of cell ranges a list of strings where each
- * string is formatted as "startCol, startRow, endCol, endRow".
- */
-std::vector<std::string> getCellRanges(const boost::property_tree::ptree& rRanges)
-{
-    std::vector<std::string> aRanges;
-    for (const auto& rRange : rRanges)
-        aRanges.push_back(rRange.second.get_value<std::string>());
-    return aRanges;
-}
-
-/**
  * Extract the numbers of a JSON array.
  */
 std::vector<sal_Int32> toIntegers(const boost::property_tree::ptree& rArray)
@@ -225,25 +213,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellRangeInventory)
     // group1: E1:E2, group2: G6, G8
     aExpectedGroups = { { ScRange(4, 0, 0, 4, 1, 0) }, { ScRange(6, 5, 0), ScRange(6, 7, 0) } };
     assertSparklineGroupsEqual(aExpectedGroups, getSparklineGroups(*pModelObj));
-
-    // The cursor-driven marker of the group under the cursor should reflect the
-    // shifting of the cells from above.
-    aView1.m_aCellRangeMarkers.clear();
-    pView->SetCursor(6, 5); // G6
-    Scheduler::ProcessEventsToIdle();
-    auto itMarker = std::find_if(
-        aView1.m_aCellRangeMarkers.begin(), aView1.m_aCellRangeMarkers.end(),
-        [](const boost::property_tree::ptree& rMarker) {
-            return rMarker.get<std::string>("state.name") == "SparklineGroup";
-        });
-    CPPUNIT_ASSERT(itMarker != aView1.m_aCellRangeMarkers.end());
-    std::vector<std::string> aMarkerRanges = getCellRanges(itMarker->get_child("state.cellRanges"));
-    std::sort(aMarkerRanges.begin(), aMarkerRanges.end());
-    CPPUNIT_ASSERT_EQUAL(std::size_t(2), aMarkerRanges.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("6, 5, 6, 5"), aMarkerRanges[0]);
-    CPPUNIT_ASSERT_EQUAL(std::string("6, 7, 6, 7"), aMarkerRanges[1]);
-    pView->SetCursor(9, 9); // J10
-    Scheduler::ProcessEventsToIdle();
 
     // Ungrouping G6:G8 gives each of its sparklines a group of its own.
     CPPUNIT_ASSERT(rDocFunc.UngroupSparklines(ScRange(6, 5, 0, 6, 7, 0)));

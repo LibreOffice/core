@@ -81,13 +81,6 @@ std::vector<TableRangeEntry> collectTableRangeEntries(const ScDocument& rDoc, SC
 DocumentRangeInventory collectDocumentRangeInventory(ScDocument& rDoc);
 
 /**
- * Collect the cells of the sparkline group that rCell belongs to, if any.
- *
- * @note One sparkline group may consist of multiple cell ranges.
- */
-SparklineGroupRangeEntry collectSparklineGroupRangeEntry(ScDocument& rDoc, const ScAddress& rCell);
-
-/**
  * Collect the cells of each sparkline group of sheet nTab.
  */
 std::vector<SparklineGroupRangeEntry> collectSparklineGroupRangeEntries(ScDocument& rDoc,

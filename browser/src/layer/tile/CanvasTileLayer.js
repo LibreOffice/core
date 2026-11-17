@@ -616,6 +616,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
+	/**
+	 * Parse a string formatted "col1, row1, col2, row2" into cool.Bounds.
+	 */
 	_parseCellRange: function(cellRange) {
 		var strTwips = cellRange.match(/\d+/g);
 		var startCellAddress = [parseInt(strTwips[0]), parseInt(strTwips[1])];

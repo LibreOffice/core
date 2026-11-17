@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0"
+ office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1">
+    <table:table-column table:number-columns-repeated="5"/>
+    <table:table-row>
+     <table:table-cell office:value-type="float" office:value="1"><text:p>1</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3"><text:p>3</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2"><text:p>2</text:p></table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="float" office:value="4"><text:p>4</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1"><text:p>1</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="5"><text:p>5</text:p></table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <calcext:sparkline-groups>
+     <calcext:sparkline-group calcext:id="{6A1D3C52-0B8E-4F1A-9C77-2E5B8D0F4A11}" calcext:type="line">
+      <calcext:sparklines>
+       <calcext:sparkline calcext:cell-address="Sheet1.E1" calcext:data-range="Sheet1.A1:Sheet1.C1"/>
+       <calcext:sparkline calcext:cell-address="Sheet1.E2" calcext:data-range="Sheet1.A2:Sheet1.C2"/>
+      </calcext:sparklines>
+     </calcext:sparkline-group>
+    </calcext:sparkline-groups>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>
