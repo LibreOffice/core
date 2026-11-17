@@ -625,7 +625,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     bool bDeep = false;
     uno::Reference< css::chart::XChartDocument > xOldDoc( static_cast<cppu::OWeakObject*>(xChartDoc.get()), uno::UNO_QUERY );
     OSL_ASSERT( xOldDoc.is());
-    uno::Reference< beans::XPropertySet > xDiaProp( xOldDoc->getDiagram(), uno::UNO_QUERY );
+    uno::Reference< css::chart::XDiagram > xDiaProp( xOldDoc->getDiagram() );
     if( xDiaProp.is())
     {
         xDiaProp->getPropertyValue(u"Stacked"_ustr) >>= bStacked;

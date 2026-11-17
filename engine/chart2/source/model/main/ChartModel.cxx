@@ -1478,8 +1478,7 @@ bool ChartModel::isDataRowSourceColumns()
     if( !xOldDoc.is() )
         return true;
 
-    uno::Reference< beans::XPropertySet > xDiagramProperties(
-        xOldDoc->getDiagram(), uno::UNO_QUERY );
+    uno::Reference< css::chart::XDiagram > xDiagramProperties( xOldDoc->getDiagram() );
     if( !xDiagramProperties.is() )
         return true;
 

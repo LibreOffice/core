@@ -48,7 +48,7 @@ class MinMaxLineWrapper;
 class UpDownBarWrapper;
 class Chart2ModelContact;
 
-class DiagramWrapper : public cppu::ImplInheritanceHelper<
+class DiagramWrapper final : public cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                      , css::chart::XDiagram
                      , css::chart::XAxisSupplier
@@ -93,6 +93,15 @@ public:
     virtual void setPosition( const css::awt::Point& aPosition ) override;
     virtual css::awt::Size getSize() override;
     virtual void setSize( const css::awt::Size& aSize ) override;
+
+    // ____ XPropertySet (base of XDiagram) ____
+    virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
+    virtual ::cpo::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
 
     // ____ XShapeDescriptor (base of XShape) ____
     virtual OUString getShapeType() override;

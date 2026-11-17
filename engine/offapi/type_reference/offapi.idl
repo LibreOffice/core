@@ -2598,6 +2598,7 @@ module com {
    module chart {
     published interface XDiagram {
      interface ::com::sun::star::drawing::XShape;
+     interface ::com::sun::star::beans::XPropertySet;
      string getDiagramType();
      ::com::sun::star::beans::XPropertySet getDataRowProperties([in] long nRow) raises (::com::sun::star::lang::IndexOutOfBoundsException);
      ::com::sun::star::beans::XPropertySet getDataPointProperties([in] long nCol, [in] long nRow) raises (::com::sun::star::lang::IndexOutOfBoundsException);

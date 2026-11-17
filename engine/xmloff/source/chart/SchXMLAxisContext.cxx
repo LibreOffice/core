@@ -146,7 +146,7 @@ static Reference< chart::XAxis > lcl_getChartAxis(const SchXMLAxis& rCurrentAxis
 Reference< drawing::XShape > SchXMLAxisContext::getTitleShape() const
 {
     Reference< drawing::XShape > xResult;
-    Reference< beans::XPropertySet > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram(), uno::UNO_QUERY );
+    Reference< css::chart::XDiagram > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram() );
     Reference< chart::XAxis > xAxis( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ) );
     if( !xDiaProp.is() || !xAxis.is() )
         return xResult;
@@ -180,7 +180,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape() const
 
 void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajor )
 {
-    Reference< beans::XPropertySet > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram(), uno::UNO_QUERY );
+    Reference< css::chart::XDiagram > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram() );
     Reference< chart::XAxis > xAxis( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ) );
     if( !xDiaProp.is() || !xAxis.is() )
         return;
@@ -340,7 +340,7 @@ void SchXMLAxisContext::CreateAxis()
 {
     m_rAxes.push_back( m_aCurrentAxis );
 
-    Reference< beans::XPropertySet > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram(), uno::UNO_QUERY );
+    Reference< css::chart::XDiagram > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram() );
     if( !xDiaProp.is() )
         return;
     OUString aPropName;

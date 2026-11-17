@@ -2099,7 +2099,7 @@ OUString ChartExport::GetExternalDataPath() const
     if (!xChartDoc.is())
         return sRet;
 
-    const Reference<beans::XPropertySet> xDocPropSet(xChartDoc->getDiagram(), uno::UNO_QUERY);
+    const Reference<css::chart::XDiagram> xDocPropSet(xChartDoc->getDiagram());
     if (!xDocPropSet.is())
         return sRet;
 
@@ -2370,13 +2370,13 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     }
 
     if (!bIsChartex) {
-        uno::Reference<beans::XPropertySet> xDiagramPropSet(xChartDoc->getDiagram(), uno::UNO_QUERY);
+        uno::Reference<css::chart::XDiagram> xDiagramPropSet(xChartDoc->getDiagram());
         cpo::uno::Any aPlotVisOnly = xDiagramPropSet->getPropertyValue(u"IncludeHiddenCells"_ustr);
         bool bIncludeHiddenCells = false;
         aPlotVisOnly >>= bIncludeHiddenCells;
         pFS->singleElement(FSNS(XML_c, XML_plotVisOnly), XML_val, ToPsz10(!bIncludeHiddenCells));
 
-        exportMissingValueTreatment(Reference<beans::XPropertySet>(mxDiagram, uno::UNO_QUERY));
+        exportMissingValueTreatment(mxDiagram);
     }
 
     pFS->endElement( FSNS( nChartNS, XML_chart ) );

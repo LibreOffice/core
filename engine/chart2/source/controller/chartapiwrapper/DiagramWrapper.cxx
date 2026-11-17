@@ -2092,6 +2092,35 @@ cpo::uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames()
     };
 }
 
+::cpo::uno::Reference< ::css::beans::XPropertySetInfo > DiagramWrapper::getPropertySetInfo()
+{
+    return WrappedPropertySet::getPropertySetInfo();
+}
+void DiagramWrapper::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
+{
+    WrappedPropertySet::setPropertyValue(aPropertyName, aValue);
+}
+::cpo::uno::Any DiagramWrapper::getPropertyValue( const ::rtl::OUString& PropertyName )
+{
+    return WrappedPropertySet::getPropertyValue(PropertyName);
+}
+void DiagramWrapper::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener )
+{
+    WrappedPropertySet::addPropertyChangeListener(aPropertyName, xListener);
+}
+void DiagramWrapper::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener )
+{
+    WrappedPropertySet::removePropertyChangeListener(aPropertyName, aListener);
+}
+void DiagramWrapper::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    WrappedPropertySet::addVetoableChangeListener(PropertyName, aListener);
+}
+void DiagramWrapper::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    WrappedPropertySet::removeVetoableChangeListener(PropertyName, aListener);
+}
+
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

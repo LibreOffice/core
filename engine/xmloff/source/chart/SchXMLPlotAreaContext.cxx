@@ -91,11 +91,10 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
 
     try
     {
-        uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
-        if( xProp.is() )
+        if( xDiagram.is() )
         {
             drawing::CameraGeometry aCamGeo;
-            xProp->getPropertyValue(u"D3DCameraGeometry"_ustr) >>= aCamGeo;
+            xDiagram->getPropertyValue(u"D3DCameraGeometry"_ustr) >>= aCamGeo;
             maVRP.setX( aCamGeo.vrp.PositionX );
             maVRP.setY( aCamGeo.vrp.PositionY );
             maVRP.setZ( aCamGeo.vrp.PositionZ );
@@ -174,28 +173,27 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     aFalseBool <<= false;
 
     uno::Reference< lang::XServiceInfo > xInfo( mxDiagram, uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
-    if( !xInfo.is() || !xProp.is() )
+    if( !xInfo.is() || !mxDiagram.is() )
         return;
 
     try
     {
-        xProp->setPropertyValue(u"HasXAxis"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasXAxisGrid"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasXAxisDescription"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasSecondaryXAxis"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasSecondaryXAxisDescription"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasXAxis"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasXAxisGrid"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasXAxisDescription"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasSecondaryXAxis"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasSecondaryXAxisDescription"_ustr, aFalseBool );
 
-        xProp->setPropertyValue(u"HasYAxis"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasYAxisGrid"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasYAxisDescription"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasSecondaryYAxis"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasSecondaryYAxisDescription"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasYAxis"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasYAxisGrid"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasYAxisDescription"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasSecondaryYAxis"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasSecondaryYAxisDescription"_ustr, aFalseBool );
 
-        xProp->setPropertyValue(u"HasZAxis"_ustr, aFalseBool );
-        xProp->setPropertyValue(u"HasZAxisDescription"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasZAxis"_ustr, aFalseBool );
+        mxDiagram->setPropertyValue(u"HasZAxisDescription"_ustr, aFalseBool );
 
-        xProp->setPropertyValue(u"DataRowSource"_ustr, cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) );
+        mxDiagram->setPropertyValue(u"DataRowSource"_ustr, cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) );
     }
     catch( const beans::UnknownPropertyException & )
     {
@@ -280,10 +278,9 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
     }
 
     // set properties
-    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
     if( !msAutoStyleName.isEmpty())
     {
-        if( xProp.is())
+        if( mxDiagram.is())
         {
             const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
             if( pStylesCtxt )
@@ -296,10 +293,10 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
                         dynamic_cast< const XMLPropStyleContext * >( pStyle ) );
                 if( pPropStyleContext )
                 {
-                    pPropStyleContext->FillPropertySet( xProp );
+                    pPropStyleContext->FillPropertySet( mxDiagram );
 
                     // get the data row source that was set without having data
-                    xProp->getPropertyValue(u"DataRowSource"_ustr)
+                    mxDiagram->getPropertyValue(u"DataRowSource"_ustr)
                         >>= mrDataRowSource;
 
                     //lines on/off
@@ -314,7 +311,7 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
                     if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_0( GetImport().GetModel() ) )
                     {
                         bool bIs3d = false;
-                        if( xProp.is() && ( xProp->getPropertyValue(u"Dim3D"_ustr) >>= bIs3d ) &&
+                        if( mxDiagram.is() && ( mxDiagram->getPropertyValue(u"Dim3D"_ustr) >>= bIs3d ) &&
                             bIs3d )
                         {
                             if( maChartTypeServiceName == "com.sun.star.chart2.PieChartType" || maChartTypeServiceName == "com.sun.star.chart2.DonutChartType" )
@@ -322,7 +319,7 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
                                 OUString aPropName( u"StartingAngle"_ustr );
                                 cpo::uno::Any aAStartingAngle( SchXMLTools::getPropertyFromContext( aPropName, pPropStyleContext, pStylesCtxt ) );
                                 if( !aAStartingAngle.hasValue() )
-                                    xProp->setPropertyValue( aPropName, cpo::uno::Any(sal_Int32(0)) ) ;
+                                    mxDiagram->setPropertyValue( aPropName, cpo::uno::Any(sal_Int32(0)) ) ;
                             }
                         }
                     }
@@ -332,32 +329,32 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
     }
 
     //remember default values for dataseries
-    if(xProp.is())
+    if(mxDiagram.is())
     {
         try
         {
-            mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(u"SymbolType"_ustr);
-            mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue(u"DataCaption"_ustr);
+            mrSeriesDefaultsAndStyles.maSymbolTypeDefault = mxDiagram->getPropertyValue(u"SymbolType"_ustr);
+            mrSeriesDefaultsAndStyles.maDataCaptionDefault = mxDiagram->getPropertyValue(u"DataCaption"_ustr);
 
-            mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue(u"MeanValue"_ustr);
-            mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue(u"RegressionCurves"_ustr);
+            mrSeriesDefaultsAndStyles.maMeanValueDefault = mxDiagram->getPropertyValue(u"MeanValue"_ustr);
+            mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = mxDiagram->getPropertyValue(u"RegressionCurves"_ustr);
 
             bool bStacked = false;
-            mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue(u"Stacked"_ustr);
+            mrSeriesDefaultsAndStyles.maStackedDefault = mxDiagram->getPropertyValue(u"Stacked"_ustr);
             mrSeriesDefaultsAndStyles.maStackedDefault >>= bStacked;
-            mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue(u"Percent"_ustr);
+            mrSeriesDefaultsAndStyles.maPercentDefault = mxDiagram->getPropertyValue(u"Percent"_ustr);
             mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
-            mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue(u"StackedBarsConnected"_ustr);
+            mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = mxDiagram->getPropertyValue(u"StackedBarsConnected"_ustr);
 
             // deep
-            cpo::uno::Any aDeepProperty( xProp->getPropertyValue(u"Deep"_ustr));
+            cpo::uno::Any aDeepProperty( mxDiagram->getPropertyValue(u"Deep"_ustr));
             // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
             if( ! (bStacked || mbPercentStacked ))
             {
                 if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
                 {
                     bool bIs3d = false;
-                    if( ( xProp->getPropertyValue(u"Dim3D"_ustr) >>= bIs3d ) &&
+                    if( ( mxDiagram->getPropertyValue(u"Dim3D"_ustr) >>= bIs3d ) &&
                         bIs3d )
                     {
                         if( maChartTypeServiceName == "com.sun.star.chart2.AreaChartType" || maChartTypeServiceName == "com.sun.star.chart2.LineChartType" )
@@ -369,8 +366,8 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
             }
             mrSeriesDefaultsAndStyles.maDeepDefault = std::move(aDeepProperty);
 
-            xProp->getPropertyValue(u"NumberOfLines"_ustr) >>= mnNumOfLinesProp;
-            xProp->getPropertyValue(u"Volume"_ustr) >>= mbStockHasVolume;
+            mxDiagram->getPropertyValue(u"NumberOfLines"_ustr) >>= mnNumOfLinesProp;
+            mxDiagram->getPropertyValue(u"Volume"_ustr) >>= mbStockHasVolume;
         }
         catch( const cpo::uno::Exception & )
         {
@@ -394,8 +391,8 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
         // provider to internal. Clone is not necessary, as we don't have any
         // data yet.
         mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
-        if( xProp.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
-            xProp->setPropertyValue(u"DataRowSource"_ustr, cpo::uno::Any(mrDataRowSource) );
+        if( mxDiagram.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
+            mxDiagram->setPropertyValue(u"DataRowSource"_ustr, cpo::uno::Any(mrDataRowSource) );
     }
 }
 
@@ -517,18 +514,17 @@ void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
             nDimension, &mrLSequencesPerIndex );
     }
 
-    uno::Reference< beans::XPropertySet > xDiaProp( mxDiagram, uno::UNO_QUERY );
-    if( xDiaProp.is())
+    if( mxDiagram.is())
     {
         bool bIsThreeDim = false;
-        cpo::uno::Any aAny = xDiaProp->getPropertyValue(u"Dim3D"_ustr);
+        cpo::uno::Any aAny = mxDiagram->getPropertyValue(u"Dim3D"_ustr);
         aAny >>= bIsThreeDim;
 
         // set 3d scene attributes
         if( bIsThreeDim )
         {
             // set scene attributes at diagram
-            maSceneImportHelper.setSceneAttributes( xDiaProp );
+            maSceneImportHelper.setSceneAttributes( mxDiagram );
         }
 
         // set correct number of lines at series
@@ -536,7 +532,7 @@ void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
         {
             try
             {
-                xDiaProp->setPropertyValue(u"NumberOfLines"_ustr,
+                mxDiagram->setPropertyValue(u"NumberOfLines"_ustr,
                                             cpo::uno::Any( mnNumOfLinesProp ));
             }
             catch( const cpo::uno::Exception & )
@@ -551,7 +547,7 @@ void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
         {
             try
             {
-                xDiaProp->setPropertyValue(u"Volume"_ustr,
+                mxDiagram->setPropertyValue(u"Volume"_ustr,
                                             cpo::uno::Any( true ));
             }
             catch( const cpo::uno::Exception & )

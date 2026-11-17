@@ -821,17 +821,16 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
 
     // set stack mode before a potential chart type detection (in case we have a rectangular range)
     uno::Reference< chart::XDiagram > xDiagram( xDoc->getDiagram() );
-    uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
-    if( xDiaProp.is())
+    if( xDiagram.is())
     {
         if( maSeriesDefaultsAndStyles.maStackedDefault.hasValue())
-            xDiaProp->setPropertyValue(u"Stacked"_ustr,maSeriesDefaultsAndStyles.maStackedDefault);
+            xDiagram->setPropertyValue(u"Stacked"_ustr,maSeriesDefaultsAndStyles.maStackedDefault);
         if( maSeriesDefaultsAndStyles.maPercentDefault.hasValue())
-            xDiaProp->setPropertyValue(u"Percent"_ustr,maSeriesDefaultsAndStyles.maPercentDefault);
+            xDiagram->setPropertyValue(u"Percent"_ustr,maSeriesDefaultsAndStyles.maPercentDefault);
         if( maSeriesDefaultsAndStyles.maDeepDefault.hasValue())
-            xDiaProp->setPropertyValue(u"Deep"_ustr,maSeriesDefaultsAndStyles.maDeepDefault);
+            xDiagram->setPropertyValue(u"Deep"_ustr,maSeriesDefaultsAndStyles.maDeepDefault);
         if( maSeriesDefaultsAndStyles.maStackedBarsConnectedDefault.hasValue())
-            xDiaProp->setPropertyValue(u"StackedBarsConnected"_ustr,maSeriesDefaultsAndStyles.maStackedBarsConnectedDefault);
+            xDiagram->setPropertyValue(u"StackedBarsConnected"_ustr,maSeriesDefaultsAndStyles.maStackedBarsConnectedDefault);
     }
 
     //the OOo 2.0 implementation and older has a bug with donuts
@@ -900,8 +899,8 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
             // create datasource from data provider with rectangular range parameters and change the diagram setDiagramData
             try
             {
-                if( bOlderThan2_3 && xDiaProp.is() )//for older charts the hidden cells were removed by calc on the fly
-                    xDiaProp->setPropertyValue(u"IncludeHiddenCells"_ustr,cpo::uno::Any(false));
+                if( bOlderThan2_3 && xDiagram.is() )//for older charts the hidden cells were removed by calc on the fly
+                    xDiagram->setPropertyValue(u"IncludeHiddenCells"_ustr,cpo::uno::Any(false));
 
                 // note: mbRowHasLabels means the first row contains labels, that means we have "column-descriptions",
                 // (analogously mbColHasLabels means we have "row-descriptions")

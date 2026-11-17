@@ -2017,7 +2017,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
     std::unique_ptr<SvXMLElementExport> xElPlotArea;
     // get property states for autostyles
-    xPropSet.set( xDiagram, uno::UNO_QUERY );
+    xPropSet = xDiagram;
     if( xPropSet.is())
     {
         if( mxExpPropMapper.is())
