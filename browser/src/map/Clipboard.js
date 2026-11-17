@@ -1383,6 +1383,10 @@ window.L.Clipboard = window.L.Class.extend({
 			unoName = 'CopySlide';
 		window.app.console.log(unoName);
 
+		if ((unoName === 'Copy' || unoName === 'Cut') &&
+			this._putCommentSelectionOnClipboard(ev, unoName === 'Cut'))
+			return false;
+
 		if (this._isAnyInputFieldSelected(unoName === 'Copy'))
 			return;
 
@@ -1423,6 +1427,42 @@ window.L.Clipboard = window.L.Class.extend({
 			ev.preventDefault();
 			return false;
 		}
+	},
+
+	// Put a selection inside a comment on the clipboard as the comment's own markup and plain text.
+	// This function fixes the problem that we had when the browser did the copy itself: the browser
+	// added the comment card's computed colors and font as inline styles, and these turned into hard
+	// character formatting when the text was pasted into the document, such as a white background
+	// that stayed white in dark mode.
+	// A cut works only in a comment that is being edited. It removes the selection with the delete
+	// command, which keeps the browser's undo history and fires the input event of the edit box.
+	_putCommentSelectionOnClipboard: function(ev, isCut) {
+		if (!ev.clipboardData)
+			return false;
+
+		const sel = window.getSelection();
+		if (!sel || sel.rangeCount === 0 || sel.isCollapsed)
+			return false;
+
+		const range = sel.getRangeAt(0);
+		let node = range.commonAncestorContainer;
+		if (node.nodeType !== Node.ELEMENT_NODE)
+			node = node.parentElement;
+		if (!node || !node.closest('.cool-annotation'))
+			return false;
+		if (isCut && !node.isContentEditable)
+			return false;
+
+		const div = document.createElement('div');
+		div.appendChild(range.cloneContents());
+		const html = div.innerHTML;
+
+		ev.clipboardData.setData('text/plain', sel.toString());
+		ev.clipboardData.setData('text/html', html);
+		ev.preventDefault();
+		if (isCut)
+			document.execCommand('delete');
+		return true;
 	},
 
 	_doInternalPaste: function(map, usePasteKeyEvent) {

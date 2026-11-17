@@ -71,6 +71,74 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#annotation-content-area-1').find('b').should('not.exist');
 	});
 
+	it('Copy from a comment carries no styles of the comment card', function() {
+		desktopHelper.insertComment();
+
+		cy.cGet('#annotation-content-area-1').should('contain', 'some text0');
+
+		cy.getFrameWindow().then(function(win) {
+			var content = win.document.getElementById('annotation-content-area-1');
+			var walker = win.document.createTreeWalker(content, win.NodeFilter.SHOW_TEXT);
+			var textNode = walker.nextNode();
+			while (textNode && textNode.data.indexOf('some text0') === -1)
+				textNode = walker.nextNode();
+
+			// select "text0", as a mouse drag over part of the comment would
+			var start = textNode.data.indexOf('text0');
+			var range = win.document.createRange();
+			range.setStart(textNode, start);
+			range.setEnd(textNode, start + 'text0'.length);
+			var selection = win.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(range);
+
+			var clipboardData = new win.DataTransfer();
+			content.dispatchEvent(new win.ClipboardEvent('copy', {
+				clipboardData: clipboardData, bubbles: true, cancelable: true
+			}));
+
+			expect(clipboardData.getData('text/plain')).to.equal('text0');
+			expect(clipboardData.getData('text/html')).to.equal('text0');
+		});
+	});
+
+	it('Cut from a comment being edited carries no styles and removes the text', function() {
+		desktopHelper.insertComment();
+
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+		cy.cGet('#annotation-modify-textarea-1').should('have.text', 'some text0');
+
+		cy.getFrameWindow().then(function(win) {
+			var editable = win.document.getElementById('annotation-modify-textarea-1');
+			editable.focus();
+
+			var walker = win.document.createTreeWalker(editable, win.NodeFilter.SHOW_TEXT);
+			var textNode = walker.nextNode();
+			while (textNode && textNode.data.indexOf('text0') === -1)
+				textNode = walker.nextNode();
+
+			var start = textNode.data.indexOf('text0');
+			var range = win.document.createRange();
+			range.setStart(textNode, start);
+			range.setEnd(textNode, start + 'text0'.length);
+			var selection = win.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(range);
+
+			var clipboardData = new win.DataTransfer();
+			editable.dispatchEvent(new win.ClipboardEvent('cut', {
+				clipboardData: clipboardData, bubbles: true, cancelable: true
+			}));
+
+			expect(clipboardData.getData('text/plain')).to.equal('text0');
+			expect(clipboardData.getData('text/html')).to.equal('text0');
+		});
+
+		// The browser keeps the trailing space visible as a no-break space, which \s matches.
+		cy.cGet('#annotation-modify-textarea-1').invoke('text').should('match', /^some\s$/);
+	});
+
 	it('Reply', function() {
 		desktopHelper.insertComment();
 
