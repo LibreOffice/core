@@ -81,6 +81,10 @@ class Bridge : public QObject
     // The temporary copy of a remote document. It is removed with this bridge.
     QString _remoteCopyPath;
 
+    // Whether the page of an editor frame has ended its local session (through BYE or
+    // switchToServerMode), so that its appDocId has no document to rejoin:
+    bool _localSessionEnded = false;
+
     // true while the document was opened from a template and has not yet been
     // saved to a real file. While set, a save is turned into a Save As so the
     // template working copy is never written back as if it were the document.

@@ -887,6 +887,12 @@ QVariant Bridge::cool(const QString& messageStr)
 
     if (tokens.equals(0, "HULLO"))
     {
+        if (_localSessionEnded) {
+            LOG_WRN(
+                "HULLO for appDocId " << _document._appDocId << " after its local session ended");
+            return {};
+        }
+
         // A HULLO while the connection is still up comes from a reload of the page, which then
         // rejoins the document as after a renderer crash:
         if (_app2js.joinable()) {
@@ -1197,6 +1203,9 @@ QVariant Bridge::cool(const QString& messageStr)
         if (!_secondaryView)
             flushClipboardOnDocClose(_document._appDocId);
 
+        if (_document._remoteInfo) {
+            _localSessionEnded = true;
+        }
         fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
         // The page-JS is already terminating, so the close below must not
         // drive another save-if-dirty round-trip through it.
@@ -1659,6 +1668,8 @@ QVariant Bridge::cool(const QString& messageStr)
         // _webView->load(coolUrl) path) is to keep the page loaded.
         if (!_document._remoteInfo)
             return {};
+
+        _localSessionEnded = true;
 
         // Stop the local FakeSocket message pump.  The in-process kit
         // will exit on its own once its socket is gone.
