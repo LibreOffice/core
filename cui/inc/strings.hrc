@@ -231,6 +231,7 @@
 #define RID_CUISTR_RENAMEFAILED_TITLE               NC_("RID_SVXSTR_RENAMEFAILED_TITLE", "Error Renaming Object")
 #define RID_CUISTR_ERROR_TITLE                      NC_("RID_SVXSTR_ERROR_TITLE", "%PRODUCTNAME Error")
 #define RID_CUISTR_ERROR_LANG_NOT_SUPPORTED         NC_("RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED", "The scripting language %LANGUAGENAME is not supported.")
+#define RID_CUISTR_ERROR_NO_SUCH_SCRIPT             NC_("RID_SVXSTR_ERROR_NO_SUCH_SCRIPT", "The %LANGUAGENAME macro %SCRIPTNAME could not be found. The macro is expected to be located at:")
 #define RID_CUISTR_ERROR_RUNNING                    NC_("RID_SVXSTR_ERROR_RUNNING", "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME.")
 #define RID_CUISTR_EXCEPTION_RUNNING                NC_("RID_SVXSTR_EXCEPTION_RUNNING", "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME.")
 #define RID_CUISTR_ERROR_AT_LINE                    NC_("RID_SVXSTR_ERROR_AT_LINE", "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.")
@@ -238,6 +239,10 @@
 #define RID_CUISTR_FRAMEWORK_ERROR_RUNNING          NC_("RID_SVXSTR_FRAMEWORK_ERROR_RUNNING", "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME.")
 #define RID_CUISTR_ERROR_TYPE_LABEL                 NC_("RID_SVXSTR_ERROR_TYPE_LABEL", "Type:")
 #define RID_CUISTR_ERROR_MESSAGE_LABEL              NC_("RID_SVXSTR_ERROR_MESSAGE_LABEL", "Message:")
+#define RID_CUISTR_ERROR_LOCATION_LABEL             NC_("RID_CUISTR_ERROR_LOCATION_LABEL", "Location:")
+#define RID_CUISTR_ERROR_LIBRARY_LABEL              NC_("RID_CUISTR_ERROR_LIBRARY_LABEL", "Library:")
+#define RID_CUISTR_ERROR_MODULE_LABEL               NC_("RID_CUISTR_ERROR_MODULE_LABEL", "Module:")
+#define RID_CUISTR_ERROR_NAME_LABEL                 NC_("RID_CUISTR_ERROR_NAME_LABEL", "Macro name:")
 
 #define RID_CUISTR_CHG_MATH                         NC_("RID_SVXSTR_CHG_MATH", "MathType to %PRODUCTNAME Math or reverse")
 #define RID_CUISTR_CHG_WRITER                       NC_("RID_SVXSTR_CHG_WRITER", "WinWord to %PRODUCTNAME Writer or reverse")

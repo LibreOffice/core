@@ -13,6 +13,10 @@ $(eval $(call gb_UITest_add_modules,cui_dialogs,$(SRCDIR)/cui/qa/uitest,\
 	dialogs/ \
 ))
 
+$(eval $(call gb_UITest_set_defs,cui_dialogs, \
+    TDOC="$(SRCDIR)/cui/qa/uitest/data" \
+))
+
 $(eval $(call gb_UITest_avoid_oneprocess,cui_dialogs))
 
 # vim: set noet sw=4 ts=4:

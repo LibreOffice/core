@@ -38,7 +38,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
-#include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
+#include <com/sun/star/script/provider/ScriptMissingException.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
@@ -1023,6 +1023,54 @@ OUString FormatErrorString(
     return result;
 }
 
+OUString GetErrorMessage(const provider::ScriptMissingException& eScriptError)
+{
+    // This error is often encountered by non-programmers if the macro installation has gone
+    // wrong, so let’s try to make it a bit more user-friendly. See tdf#146176
+
+    // This typedef is a workaround for MSVC which doesn’t seem to like namespaces in member-pointer
+    // type declarations
+    typedef provider::ScriptMissingException ScriptMissingException;
+
+    OUStringBuffer sName;
+
+    static const std::array<OUString ScriptMissingException::*, 3> aNameParts
+        = { &ScriptMissingException::library, &ScriptMissingException::moduleName,
+            &ScriptMissingException::name };
+    for (const auto sNamePart : aNameParts)
+    {
+        if ((eScriptError.*sNamePart).isEmpty())
+            continue;
+        if (!sName.isEmpty())
+            sName.append('.');
+        sName.append(eScriptError.*sNamePart);
+    }
+
+    OUStringBuffer sMessage(CuiResId(RID_CUISTR_ERROR_NO_SUCH_SCRIPT)
+                                .replaceFirst("%SCRIPTNAME", sName)
+                                .replaceFirst("%LANGUAGENAME", eScriptError.language));
+
+    sMessage.append('\n');
+
+    static const std::array<std::pair<TranslateId, OUString ScriptMissingException::*>, 4> aFields
+        = {
+              std::make_pair(RID_CUISTR_ERROR_LOCATION_LABEL, &ScriptMissingException::location),
+              std::make_pair(RID_CUISTR_ERROR_LIBRARY_LABEL, &ScriptMissingException::library),
+              std::make_pair(RID_CUISTR_ERROR_MODULE_LABEL, &ScriptMissingException::moduleName),
+              std::make_pair(RID_CUISTR_ERROR_NAME_LABEL, &ScriptMissingException::name),
+          };
+
+    for (const auto& rField : aFields)
+    {
+        const OUString& rValue = eScriptError.*rField.second;
+        if (rValue.isEmpty())
+            continue;
+        sMessage.append(OUStringChar('\n') + CuiResId(rField.first) + OUStringChar(' ') + rValue);
+    }
+
+    return sMessage.makeStringAndClear();
+}
+
 OUString GetErrorMessage(
     const provider::ScriptErrorRaisedException& eScriptError )
 {
@@ -1167,6 +1215,11 @@ OUString GetErrorMessage( const css::uno::Any& aException )
             // OSL_ASSERT(...)
         }
 
+    }
+    else if ( provider::ScriptMissingException aScriptMissingException;
+              aException >>= aScriptMissingException )
+    {
+        return GetErrorMessage( aScriptMissingException );
     }
     else if ( aException.getValueType() == cppu::UnoType<provider::ScriptFrameworkErrorException>::get())
     {
