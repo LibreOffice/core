@@ -3859,8 +3859,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (this.isWriter()) {
 			_zoom = this._writerDynamicZoom(newSize.x, documentWidth, bringCommentsIntoView);
 		} else if (this.isImpress()) {
-			const documentHeight = app.activeDocument.fileSize.pY;
-			_zoom = this._impressDynamicZoom(newSize.x, newSize.y, documentWidth, documentHeight);
+			const slideHeight = Math.round(this._partHeightTwips * app.twipsToPixels);
+			_zoom = this._impressDynamicZoom(newSize.x, newSize.y, documentWidth, slideHeight);
 		}
 
 		if (maxZoom) _zoom = Math.min(maxZoom, Math.max(0.1, _zoom));
