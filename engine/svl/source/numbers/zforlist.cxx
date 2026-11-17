@@ -3454,7 +3454,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
 namespace {
 
 // return position of a special character
-sal_Int32 ImpPosToken(const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos = 0)
+sal_Int32 ImpPosToken(const OUString& sFormat, sal_Unicode token, sal_Int32 nStartPos = 0)
 {
     sal_Int32 nLength = sFormat.getLength();
     for ( sal_Int32 i=nStartPos; i<nLength && i>=0 ; i++ )
@@ -3576,16 +3576,16 @@ OUString SvNFEngine::GenerateFormat(SvNFLanguageData& rCurrentLanguage,
     }
     else if (eType == SvNumFormatType::SCIENTIFIC)
     {
-      OUStringBuffer sOldFormatString(pFormat->GetFormatstring());
-      sal_Int32 nIndexE = ImpPosToken( sOldFormatString, 'E' );
-      if (nIndexE > -1)
-      {
-        sal_Int32 nIndexSep = ImpPosToken( sOldFormatString, ';', nIndexE );
-        if (nIndexSep > nIndexE)
-            sString.append( sOldFormatString.subView(nIndexE, nIndexSep - nIndexE) );
-        else
-            sString.append( sOldFormatString.subView(nIndexE) );
-      }
+        const OUString& rOldFormatString = pFormat->GetFormatstring();
+        sal_Int32 nIndexE = ImpPosToken(rOldFormatString, 'E');
+        if (nIndexE > -1)
+        {
+            sal_Int32 nIndexSep = ImpPosToken(rOldFormatString, ';', nIndexE);
+            if (nIndexSep > nIndexE)
+                sString.append(rOldFormatString.subView(nIndexE, nIndexSep - nIndexE));
+            else
+                sString.append(rOldFormatString.subView(nIndexE));
+        }
     }
     else if (eType == SvNumFormatType::CURRENCY)
     {
