@@ -534,8 +534,8 @@ public:
     void NotifyDynamicArrayBorder();
     void            DeleteCopySourceOverlay();
     void            UpdateCopySourceOverlay();
-    void            DeleteCursorOverlay();
-    void            UpdateCursorOverlay();
+    SC_DLLPUBLIC void DeleteCursorOverlay();
+    SC_DLLPUBLIC void UpdateCursorOverlay();
     void            DeleteSelectionOverlay();
     void            UpdateSelectionOverlay();
     void            UpdateDatabaseOverlay();

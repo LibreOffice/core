@@ -296,6 +296,13 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             boost::property_tree::read_json(aStream, m_aCellSelection);
         }
         break;
+        case COKitCallbackType::CELL_CURSOR_STATE:
+        {
+            m_aCellCursorState.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aCellCursorState);
+        }
+        break;
         case COKitCallbackType::CELL_VIEW_SELECTION:
         {
             m_aCellViewSelection.clear();
@@ -321,6 +328,17 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
         case COKitCallbackType::TEXT_SELECTION:
         {
             m_aTextSelectionResult.parseMessage(pPayload);
+            m_aTextSelections.emplace_back(pPayload);
+        }
+        break;
+        case COKitCallbackType::CELL_SELECTION_AREA:
+        {
+            m_aCellSelectionAreas.emplace_back(pPayload);
+        }
+        break;
+        case COKitCallbackType::CELL_AUTO_FILL_AREA:
+        {
+            m_aCellAutoFillAreas.emplace_back(pPayload);
         }
         break;
         case COKitCallbackType::STATE_CHANGED:

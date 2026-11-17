@@ -676,6 +676,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "clientvisiblearea") ||
                tokens.equals(0, "outlinestate") ||
                tokens.equals(0, "reportmousepointer") ||
+               tokens.equals(0, "setlocalcellcursor") ||
                tokens.equals(0, "selectobjects") ||
                tokens.equals(0, "setobjectpoints") ||
                tokens.equals(0, "deleteobjectpoint") ||
@@ -779,6 +780,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "reportmousepointer"))
         {
             return reportMousePointer(tokens);
+        }
+        else if (tokens.equals(0, "setlocalcellcursor"))
+        {
+            return setLocalCellCursor(tokens);
         }
         else if (tokens.equals(0, "selectobjects"))
         {
@@ -2009,6 +2014,22 @@ bool ChildSession::reportMousePointer(const StringVector& tokens)
 
     // A client that works out the pointer from the geometry it holds is sent none.
     getLOKitDocument()->setViewOption("mousepointer", wanted == "true" ? "on" : "off");
+    return true;
+}
+
+bool ChildSession::setLocalCellCursor(const StringVector& tokens)
+{
+    std::string enabled;
+
+    if (tokens.size() != 2 || !getTokenString(tokens[1], "enabled", enabled) ||
+        (enabled != "true" && enabled != "false"))
+    {
+        sendTextFrameAndLogError("error: cmd=setlocalcellcursor kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->setViewOption("localcellcursor", enabled.c_str());
     return true;
 }
 
@@ -7043,6 +7064,7 @@ void ChildSession::rememberEventsForInactiveUser(const COKitCallbackType type,
              type == COKitCallbackType::CELL_FORMULA ||
              type == COKitCallbackType::CELL_CURSOR ||
              type == COKitCallbackType::CELL_SELECTION ||
+             type == COKitCallbackType::CELL_CURSOR_STATE ||
              type == COKitCallbackType::GRAPHIC_SELECTION ||
              type == COKitCallbackType::DOCUMENT_SIZE_CHANGED ||
              type == COKitCallbackType::INVALIDATE_HEADER ||
@@ -7646,6 +7668,9 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         break;
     case COKitCallbackType::CELL_SELECTION:
         sendTextFrame("cellselection: " + withInputSequence(payload));
+        break;
+    case COKitCallbackType::CELL_CURSOR_STATE:
+        sendTextFrame("cellcursorstate: " + withInputSequence(payload));
         break;
     case COKitCallbackType::CELL_AUTO_FILL_AREA:
         sendTextFrame("cellautofillarea: " + payload + inputSequenceToken());

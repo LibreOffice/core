@@ -519,6 +519,12 @@ public:
     void setDrawsFromObjects(bool bDrawsFromObjects);
     /// See setDrawsFromObjects().
     bool drawsFromObjects() const;
+
+    /** Says that the client of this view moves the cell cursor and selects cells by itself.
+     */
+    void setKitLocalCellCursor(bool bLocal);
+    /// See setKitLocalCellCursor().
+    bool isKitLocalCellCursor() const;
     /// ICOKitNotifier. Emits a COKitCallbackType::INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
     /// ICOKitNotifier.

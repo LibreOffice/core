@@ -151,6 +151,7 @@
 
 #include <CellRangeInventory.hxx>
 #include <CellRangeMarker.hxx>
+#include <ViewCallback.hxx>
 #include <COKit/COKit.hxx>
 #include <tools/json_writer.hxx>
 
@@ -6299,19 +6300,73 @@ OString ScGridWindow::getCellCursor() const
     return mrViewData.describeCellCursor();
 }
 
+/**
+ * Send the cell selection of the view as rectangles, unless the client draws
+ * it from the cell ranges.
+ */
+static void notifyKitCellSelectionRectangles(SfxViewShell& rViewShell, const OString& rBoundingBox,
+                                             const OString& rRectangles)
+{
+    if (rViewShell.isKitLocalCellCursor())
+        return;
+
+    rViewShell.viewCallback(COKitCallbackType::CELL_SELECTION_AREA, rBoundingBox);
+    rViewShell.viewCallback(COKitCallbackType::TEXT_SELECTION, rRectangles);
+}
+
+/**
+ * Send the cell selection of the view as rectangles to the other views of
+ * the document, except to those that draw it from the cell ranges.
+ */
+static void notifyKitCellViewSelectionRectangles(const SfxViewShell& rViewShell,
+                                                 const OString& rRectangles)
+{
+    for (SfxViewShell* pOther = SfxViewShell::GetFirst(); pOther;
+         pOther = SfxViewShell::GetNext(*pOther))
+    {
+        if (pOther == &rViewShell || pOther->GetDocId() != rViewShell.GetDocId())
+            continue;
+        if (pOther->isKitLocalCellCursor())
+            continue;
+
+        KitHelper::notifyOtherView(rViewShell, pOther, COKitCallbackType::TEXT_VIEW_SELECTION,
+                                   "selection", rRectangles);
+    }
+}
+
+/**
+ * Send the cell cursor and the marked ranges of the view to its client-side
+ * view, as cell indexes.
+ */
+static void notifyKitCellCursorState(const ScViewData& rViewData)
+{
+    ScTabViewShell* pViewShell = rViewData.GetViewShell();
+    if (!pViewShell)
+        return;
+
+    tools::JsonWriter aWriter;
+    sc::putCellCursorState(aWriter, rViewData);
+    pViewShell->viewCallback(COKitCallbackType::CELL_CURSOR_STATE, aWriter.finishAndGetAsOString());
+}
+
 void ScGridWindow::notifyKitCellCursor() const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
-    pViewShell->viewCallback(COKitCallbackType::CELL_CURSOR, getCellCursor());
+    if (pViewShell->isKitLocalCellCursor())
+        notifyKitCellCursorState(mrViewData);
+    else
+        pViewShell->viewCallback(COKitCallbackType::CELL_CURSOR, getCellCursor());
+
     if (bListValButton && aListValPos == mrViewData.GetCurPos())
         updateKitValListButton(true, aListValPos);
     std::vector<tools::Rectangle> aRects;
     GetSelectionRects(aRects);
     if (aRects.empty() || !mrViewData.IsActive())
     {
-        pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, ""_ostr);
-        KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+        if (!pViewShell->isKitLocalCellCursor())
+            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, ""_ostr);
+        notifyKitCellViewSelectionRectangles(*pViewShell, "EMPTY"_ostr);
     }
 }
 
@@ -6456,9 +6511,17 @@ void ScGridWindow::DeleteCursorOverlay()
     if (comphelper::COKit::isActive() && mrViewData.HasEditView(eWhich))
         return;
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    pViewShell->viewCallback(COKitCallbackType::CELL_CURSOR, "EMPTY"_ostr);
+
+    const bool bLocalCellCursor = pViewShell->isKitLocalCellCursor();
+    if (!bLocalCellCursor)
+        pViewShell->viewCallback(COKitCallbackType::CELL_CURSOR, "EMPTY"_ostr);
+
     KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
     mpOOCursors.reset();
+
+    // Send the state after the reset, which hides the cursor.
+    if (bLocalCellCursor)
+        notifyKitCellCursorState(mrViewData);
 }
 
 void ScGridWindow::DeleteCopySourceOverlay()
@@ -6602,13 +6665,19 @@ static void notifyKitCellViewSelection(const ScViewData& rViewData,
 }
 
 /**
- * Send the marked ranges of the view to the view itself, as cell ranges.
+ * Send the marked ranges of the view to its client-side view, as cell ranges.
  */
 static void notifyKitCellSelection(const ScViewData& rViewData)
 {
     ScTabViewShell* pViewShell = rViewData.GetViewShell();
     if (!pViewShell)
         return;
+
+    if (pViewShell->isKitLocalCellCursor())
+    {
+        notifyKitCellCursorState(rViewData);
+        return;
+    }
 
     tools::JsonWriter aWriter;
     aWriter.put("part", static_cast<sal_Int32>(rViewData.GetTabNumber()));
@@ -6653,15 +6722,13 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     if (!aBoundingBox.IsEmpty())
         sBoundingBoxString = aBoundingBox.toString();
     OString aRectListString = rectanglesToString(rLogicRects);
-    pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, sBoundingBoxString);
-    pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, aRectListString);
+    notifyKitCellSelectionRectangles(*pViewShell, sBoundingBoxString, aRectListString);
     notifyKitCellSelection(mrViewData);
     notifyKitCellViewSelection(mrViewData);
 
     if (bInPrintTwips)
     {
-        KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION,
-                                       "selection", aRectListString);
+        notifyKitCellViewSelectionRectangles(*pViewShell, aRectListString);
         return;
     }
 
@@ -6675,6 +6742,8 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
         auto pOther = dynamic_cast<const ScTabViewShell *>(it);
         if (!pOther)
             return;
+        if (pOther->isKitLocalCellCursor())
+            continue;
 
         const ScGridWindow *pGrid = pOther->GetViewData().GetActiveWin();
         assert(pGrid);
@@ -6729,14 +6798,14 @@ void ScGridWindow::updateOtherKitSelections() const
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 
-            pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, sBoundingBoxString);
-            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, aRectsString);
+            notifyKitCellSelectionRectangles(*pViewShell, sBoundingBoxString, aRectsString);
             notifyKitCellSelection(mrViewData);
         }
         else
         {
-            KitHelper::notifyOtherView(*it, pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION,
-                                          "selection", aRectsString);
+            if (!pViewShell->isKitLocalCellCursor())
+                KitHelper::notifyOtherView(*it, pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION,
+                                           "selection", aRectsString);
             notifyKitCellViewSelection(pOther->GetViewData(), pViewShell);
         }
     }
@@ -6748,6 +6817,12 @@ namespace
 void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & rRectangle)
 {
     if (!comphelper::COKit::isActive())
+        return;
+
+    // A view that moves the cell cursor locally also places the fill handle
+    // locally.
+    ScTabViewShell* pViewShell = rViewData.GetViewShell();
+    if (pViewShell && pViewShell->isKitLocalCellCursor())
         return;
 
     const double nPPTX = rViewData.GetPPTX();
@@ -6762,7 +6837,7 @@ void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & r
         sRectangleString = aLogicRectangle.toString();
     }
 
-    if (ScTabViewShell* pViewShell = rViewData.GetViewShell())
+    if (pViewShell)
         pViewShell->viewCallback(COKitCallbackType::CELL_AUTO_FILL_AREA, sRectangleString);
 }
 
@@ -7083,10 +7158,9 @@ void ScGridWindow::UpdateSelectionOverlay()
     else
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, "EMPTY"_ostr);
-        pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, "EMPTY"_ostr);
+        notifyKitCellSelectionRectangles(*pViewShell, "EMPTY"_ostr, "EMPTY"_ostr);
         notifyKitCellSelection(mrViewData);
-        KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+        notifyKitCellViewSelectionRectangles(*pViewShell, "EMPTY"_ostr);
         notifyKitCellViewSelection(mrViewData);
 
         ScInputHandler* pViewHdl = ScModule::get()->GetInputHdl(pViewShell);

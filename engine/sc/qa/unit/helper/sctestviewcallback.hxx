@@ -81,7 +81,15 @@ public:
     std::vector<OString> m_aSheetGeometryInvalidations;
     /// Every cell range inventory invalidation payload the view received, oldest first.
     std::vector<OString> m_aCellRangeInventoryInvalidations;
+    /// Every text selection payload the view received, oldest first.
+    std::vector<OString> m_aTextSelections;
+    /// Every cell selection area payload the view received, oldest first.
+    std::vector<OString> m_aCellSelectionAreas;
+    /// Every cell auto fill area payload the view received, oldest first.
+    std::vector<OString> m_aCellAutoFillAreas;
     boost::property_tree::ptree m_aCellSelection;
+    /// The last cell cursor state payload the view received.
+    boost::property_tree::ptree m_aCellCursorState;
     boost::property_tree::ptree m_aCellViewSelection;
     OString m_aHyperlinkClicked;
     /// Every mouse pointer name the view sent, oldest first.

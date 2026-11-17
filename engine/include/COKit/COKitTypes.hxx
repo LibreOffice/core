@@ -1457,7 +1457,18 @@ enum class COKitCallbackType
      *
      * Sent alongside COKitCallbackType::TEXT_VIEW_SELECTION.
      */
-    CELL_VIEW_SELECTION = 85
+    CELL_VIEW_SELECTION = 85,
+
+    /**
+     * This is Calc specific. The cell cursor and the cell selection of the
+     * view, as cell indexes of the selected sheet, e.g. '{"part": 0,
+     * "cursor": {"cell": [0, 1], "visible": true}, "selection": [[0, 1, 2,
+     * 4]]}'. It is the commandValues of .uno:CellCursorState.
+     *
+     * Sent only to a view that moves the cell cursor locally, in place of
+     * COKitCallbackType::CELL_CURSOR and COKitCallbackType::CELL_SELECTION.
+     */
+    CELL_CURSOR_STATE = 86
 };
 
 enum class COKitKeyEventType
@@ -1655,6 +1666,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_CELL_SELECTION";
     case COKitCallbackType::CELL_VIEW_SELECTION:
         return "KIT_CALLBACK_CELL_VIEW_SELECTION";
+    case COKitCallbackType::CELL_CURSOR_STATE:
+        return "KIT_CALLBACK_CELL_CURSOR_STATE";
     }
 
     assert(!"Unknown COKitCallbackType type.");

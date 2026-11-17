@@ -557,6 +557,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
         case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
         case COKitCallbackType::CELL_SELECTION:
         case COKitCallbackType::CELL_VIEW_SELECTION:
+        case COKitCallbackType::CELL_CURSOR_STATE:
             SAL_INFO("kit", "Elide event in background save mode");
             return;
         default:
@@ -660,6 +661,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
         case COKitCallbackType::CELL_ADDRESS:
         case COKitCallbackType::CELL_SELECTION_AREA:
         case COKitCallbackType::CELL_SELECTION:
+        case COKitCallbackType::CELL_CURSOR_STATE:
         case COKitCallbackType::CURSOR_VISIBLE:
         case COKitCallbackType::VIEW_CURSOR_VISIBLE:
         case COKitCallbackType::SET_PART:
@@ -742,6 +744,7 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
             case COKitCallbackType::MOUSE_POINTER:
             case COKitCallbackType::CELL_CURSOR:
             case COKitCallbackType::CELL_SELECTION:
+            case COKitCallbackType::CELL_CURSOR_STATE:
             case COKitCallbackType::CELL_FORMULA:
             case COKitCallbackType::CELL_ADDRESS:
             case COKitCallbackType::CURSOR_VISIBLE:

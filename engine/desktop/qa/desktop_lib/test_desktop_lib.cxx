@@ -355,6 +355,7 @@ public:
     void testObjectCommandsLeaveAReadOnlyViewAlone();
     void testObjectCommandsKeepTheObjectsProtection();
     void testObjectPathCommands();
+    void testLocalCellCursorViewOption();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -493,6 +494,7 @@ public:
     CPPUNIT_TEST(testObjectCommandsLeaveAReadOnlyViewAlone);
     CPPUNIT_TEST(testObjectCommandsKeepTheObjectsProtection);
     CPPUNIT_TEST(testObjectPathCommands);
+    CPPUNIT_TEST(testLocalCellCursorViewOption);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -6672,6 +6674,36 @@ void DesktopKitTest::testObjectPathCommands()
     pDocument->deleteObjectPoint(nId, 0, 0);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aPolygon().count());
     KitHelper::setViewReadOnly(pDocument->getView(), false);
+}
+
+// The local cell cursor option belongs to the view that sets it.
+void DesktopKitTest::testLocalCellCursorViewOption()
+{
+    COKitDocumentImpl* pDocument = loadDoc("search.ods");
+    const int nView1 = pDocument->getView();
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pView1);
+    const int nView2 = pDocument->createView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pView2);
+
+    // Check that both views start with the option off.
+    CPPUNIT_ASSERT(!pView1->isKitLocalCellCursor());
+    CPPUNIT_ASSERT(!pView2->isKitLocalCellCursor());
+
+    // Turn the option on for the first view alone.
+    pDocument->setView(nView1);
+    pDocument->setViewOption("localcellcursor", "true");
+    CPPUNIT_ASSERT(pView1->isKitLocalCellCursor());
+    CPPUNIT_ASSERT(!pView2->isKitLocalCellCursor());
+
+    // Turn it on for the second view, then off for the first.
+    pDocument->setView(nView2);
+    pDocument->setViewOption("localcellcursor", "true");
+    pDocument->setView(nView1);
+    pDocument->setViewOption("localcellcursor", "false");
+    CPPUNIT_ASSERT(!pView1->isKitLocalCellCursor());
+    CPPUNIT_ASSERT(pView2->isKitLocalCellCursor());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);

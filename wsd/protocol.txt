@@ -1027,6 +1027,16 @@ reportmousepointer wanted=<wanted>
     The choice belongs to the view in the kit, so a reconnect that makes a new view is sent the
     pointer again until that view says 'false'.
 
+setlocalcellcursor enabled=<enabled>
+
+    <enabled> must be either 'true' or 'false'. Specifies whether this view
+    moves the cell cursor and selects cells locally on the client, reporting
+    each move with setcellcursor to the kit.
+
+    The kit stores this setting in the view. A new view starts with 'false'.
+    If a reconnect creates a new view, the client must send this message
+    again.
+
 useractive
 
     Sent when the user regains focus or clicks within the active area to
@@ -2169,6 +2179,17 @@ cellselection: <payload>
     {"part": 0, "ranges": [[0, 1, 2, 4]]}, each range as [startCol,
     startRow, endCol, endRow]. The ranges are an empty list when only the
     cell cursor is shown.
+
+cellcursorstate: <payload>
+
+    The cell cursor and the cell selection of the view in Calc, as cell
+    indexes of the selected sheet. Sent only to a view that turned the
+    local cell cursor on with setlocalcellcursor, in place of the
+    cellcursor and cellselection messages. JSON payload:
+    {"part": 0, "cursor": {"cell": [0, 1], "visible": true},
+    "selection": [[0, 1, 2, 4]], "inputSequence": 7}
+    with the same fields as the reply to setcellcursor. The cellcursor
+    message is still sent while a cell is edited, for the edit area.
 
 cellviewselection: <payload>
 

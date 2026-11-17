@@ -5415,6 +5415,8 @@ void SfxViewShell::dumpCOKitViewState(rtl::OStringBuffer &rState)
     rState.append(OUStringToOString(GetKitLanguageTag().getBcp47(), RTL_TEXTENCODING_UTF8));
     rState.append("\n\tA11y:\t");
     rState.append(GetKitAccessibilityState() ? "enabled" : "disabled");
+    rState.append("\n\tLocalCellCursor:\t");
+    rState.append(isKitLocalCellCursor() ? "on" : "off");
     rState.append("\n\tUnwantedCallbacks:");
     for (size_t nKind = 0; nKind < pImpl->m_aUnwantedCallbacks.size(); ++nKind)
     {
@@ -5528,6 +5530,10 @@ void SfxViewShell::setDrawsFromObjects(bool bDrawsFromObjects)
 }
 
 bool SfxViewShell::drawsFromObjects() const { return pImpl->m_bDrawsFromObjects; }
+
+void SfxViewShell::setKitLocalCellCursor(bool bLocal) { pImpl->m_bKitLocalCellCursor = bLocal; }
+
+bool SfxViewShell::isKitLocalCellCursor() const { return pImpl->m_bKitLocalCellCursor; }
 
 bool SfxViewShell::acceptsViewCallback(COKitCallbackType eType) const
 {

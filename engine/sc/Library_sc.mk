@@ -970,6 +970,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/tabvwshf \
     sc/source/ui/view/tabvwshg \
     sc/source/ui/view/tabvwshh \
+    sc/source/ui/view/ViewCallback \
     sc/source/ui/view/viewdata \
     sc/source/ui/view/viewfun2 \
     sc/source/ui/view/viewfun3 \

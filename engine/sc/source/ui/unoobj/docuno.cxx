@@ -156,6 +156,7 @@
 #include <stlpool.hxx>
 #include <SheetViewManager.hxx>
 #include <CellRangeInventory.hxx>
+#include <ViewCallback.hxx>
 
 #include <strings.hrc>
 
@@ -1813,23 +1814,8 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
             if (!pViewData)
                 return;
 
-            const SCTAB nTab = pViewData->GetTabNumber();
-
             auto aValues = rJsonWriter.startNode("commandValues");
-            rJsonWriter.put("part", static_cast<sal_Int32>(nTab));
-            {
-                const ScGridWindow* pGridWindow = pViewData->GetActiveWin();
-                const bool bVisible = pGridWindow && pGridWindow->isKitCellCursorVisible();
-
-                auto aCursor = rJsonWriter.startNode("cursor");
-                {
-                    auto aCell = rJsonWriter.startArray("cell");
-                    rJsonWriter.putSimpleValue(pViewData->GetCurX());
-                    rJsonWriter.putSimpleValue(pViewData->GetCurY());
-                }
-                rJsonWriter.put("visible", bVisible);
-            }
-            sc::putMarkedRanges(rJsonWriter, "selection", pViewData->GetMarkData(), nTab);
+            sc::putCellCursorState(rJsonWriter, *pViewData);
             break;
         }
         case CalcCommand::FormulaDepChain:

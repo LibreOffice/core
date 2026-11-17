@@ -64,6 +64,7 @@ struct SfxViewShell_Impl
     /// True when the client of this view draws the document from the objects it holds rather than
     /// from bitmap tiles.
     bool m_bDrawsFromObjects = false;
+    bool m_bKitLocalCellCursor = false;
     static sal_uInt32 m_nLastViewShellId;
     const ViewShellId m_nViewShellId;
     const ViewShellDocId m_nDocId;

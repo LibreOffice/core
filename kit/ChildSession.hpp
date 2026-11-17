@@ -221,6 +221,9 @@ private:
     /// Says whether this client wants to be told the mouse pointer the document asks for.
     bool reportMousePointer(const StringVector& tokens);
 
+    /// Says whether this client moves the cell cursor and selects cells by itself.
+    bool setLocalCellCursor(const StringVector& tokens);
+
     /// Marks the objects the client names, which it worked out from the geometry it holds. An
     /// empty list marks nothing, which is how the client asks for no selection at all.
     bool selectObjects(const StringVector& tokens);

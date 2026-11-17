@@ -29,6 +29,7 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <global.hxx>
+#include <gridwin.hxx>
 #include <markdata.hxx>
 #include <sctestviewcallback.hxx>
 #include <SparklineGroup.hxx>
@@ -81,6 +82,19 @@ std::vector<ScRange> toRanges(const boost::property_tree::ptree& rRanges)
     for (const auto& rRange : rRanges)
         aRanges.push_back(toRange(rRange.second));
     return aRanges;
+}
+
+/**
+ * Read a rectangle sent as "x, y, width, height".
+ */
+tools::Rectangle toRectangle(const OString& rPayload)
+{
+    std::stringstream aStream{ std::string(rPayload) };
+    tools::Long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+    char cComma = 0;
+    aStream >> nX >> cComma >> nY >> cComma >> nWidth >> cComma >> nHeight;
+    CPPUNIT_ASSERT(!aStream.fail());
+    return tools::Rectangle(Point(nX, nY), Size(nWidth, nHeight));
 }
 
 /**
@@ -483,6 +497,173 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetKitCellCursor)
     CPPUNIT_ASSERT_EQUAL(SCROW(0), rViewData1.GetCurY());
     // A1:D3 should be selected
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 3, 2, 0), rViewData1.GetMarkData().GetMarkArea());
+}
+
+// A view with the local cell cursor on receives its selection as cell ranges
+// only, and no area of the fill handle.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLocalCellCursorMode)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTestViewCallback aView;
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    Scheduler::ProcessEventsToIdle();
+
+    // Call the view through SfxViewShell, as the kit command does.
+    SfxViewShell& rShell = *pView;
+
+    // Start with the local cell cursor off
+    rShell.setKitLocalCellCursor(false);
+
+    // Select A1:D3.
+    SfxCellPosition aCell{ 3, 2 }; // D3
+    SfxCellPosition aAnchor{ 0, 0 }; // A1
+    rShell.setKitCellCursor(0, aCell, &aAnchor);
+    Scheduler::ProcessEventsToIdle();
+    std::vector<ScRange> aSelection = toRanges(aView.m_aCellSelection.get_child("ranges"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 3, 2, 0), aSelection[0]);
+    // For a single selection, both textselection and cellselectionarea should
+    // contain the same rectangle.
+    CPPUNIT_ASSERT(!aView.m_aTextSelections.empty());
+    CPPUNIT_ASSERT(!aView.m_aCellSelectionAreas.empty());
+    const tools::Rectangle aSelectionRect = toRectangle(aView.m_aTextSelections.back());
+    CPPUNIT_ASSERT_EQUAL(Point(0, 0), aSelectionRect.TopLeft());
+    CPPUNIT_ASSERT(!aSelectionRect.IsEmpty());
+    CPPUNIT_ASSERT_EQUAL(aSelectionRect, toRectangle(aView.m_aCellSelectionAreas.back()));
+    // The view should also receive the area of the fill handle, which sits on
+    // the bottom-right corner of the selection.
+    CPPUNIT_ASSERT(!aView.m_aCellAutoFillAreas.empty());
+    const tools::Rectangle aFillRect = toRectangle(aView.m_aCellAutoFillAreas.back());
+    CPPUNIT_ASSERT(aFillRect.Contains(aSelectionRect.BottomRight()));
+    // The cell cursor state is only for a view with the local cell cursor on.
+    CPPUNIT_ASSERT(aView.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aView.m_aCellCursorState.empty());
+
+    // Switch the view to the local cell cursor and select B5:C6.  The view
+    // should receive the cursor and the selection as one cell cursor state,
+    // and no rectangles, cellcursor, cellselection or area of the fill handle.
+    rShell.setKitLocalCellCursor(true);
+    aView.m_bOwnCursorInvalidated = false;
+    aView.m_aCellSelection.clear();
+    aView.m_aTextSelections.clear();
+    aView.m_aCellSelectionAreas.clear();
+    aView.m_aCellAutoFillAreas.clear();
+    aCell = { 2, 5 }; // C6
+    aAnchor = { 1, 4 }; // B5
+    rShell.setKitCellCursor(0, aCell, &aAnchor);
+    Scheduler::ProcessEventsToIdle();
+    // {"part": 0, "cursor": {"cell": [1, 4], "visible": true},
+    //  "selection": [[1, 4, 2, 5]]}
+    CPPUNIT_ASSERT_EQUAL(0, aView.m_aCellCursorState.get<int>("part"));
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 4, 0),
+                         toAddress(aView.m_aCellCursorState.get_child("cursor.cell")));
+    CPPUNIT_ASSERT(aView.m_aCellCursorState.get<bool>("cursor.visible"));
+    aSelection = toRanges(aView.m_aCellCursorState.get_child("selection"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 4, 0, 2, 5, 0), aSelection[0]);
+    CPPUNIT_ASSERT(!aView.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aView.m_aCellSelection.empty());
+    CPPUNIT_ASSERT(aView.m_aTextSelections.empty());
+    CPPUNIT_ASSERT(aView.m_aCellSelectionAreas.empty());
+    CPPUNIT_ASSERT(aView.m_aCellAutoFillAreas.empty());
+
+    // Move the cursor to D7 to clear the selection.
+    aCell = { 3, 6 }; // D7
+    rShell.setKitCellCursor(0, aCell, nullptr);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(ScAddress(3, 6, 0),
+                         toAddress(aView.m_aCellCursorState.get_child("cursor.cell")));
+    CPPUNIT_ASSERT(aView.m_aCellCursorState.get_child("selection").empty());
+    CPPUNIT_ASSERT(!aView.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aView.m_aCellSelection.empty());
+    CPPUNIT_ASSERT(aView.m_aTextSelections.empty());
+    CPPUNIT_ASSERT(aView.m_aCellSelectionAreas.empty());
+    CPPUNIT_ASSERT(aView.m_aCellAutoFillAreas.empty());
+
+    // Hide the cell cursor, then show it again.  The state should report
+    // each change.
+    ScGridWindow* pGridWindow = pView->GetViewData().GetActiveWin();
+    CPPUNIT_ASSERT(pGridWindow);
+    pGridWindow->DeleteCursorOverlay();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView.m_aCellCursorState.get<bool>("cursor.visible"));
+    pGridWindow->UpdateCursorOverlay();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_aCellCursorState.get<bool>("cursor.visible"));
+}
+
+// A view with the local cell cursor on receives the selections of the other
+// views as cell ranges only.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLocalCellCursorOtherViews)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    int nView1 = KitHelper::getCurrentView();
+    ScTestViewCallback aView1;
+    ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
+    ScTestViewCallback aView2;
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView2);
+    Scheduler::ProcessEventsToIdle();
+
+    // Call the views through SfxViewShell, as the kit command does.
+    SfxViewShell& rShell1 = *pView1;
+    SfxViewShell& rShell2 = *pView2;
+
+    // Start with the local cell cursor off in both views.
+    rShell1.setKitLocalCellCursor(false);
+    rShell2.setKitLocalCellCursor(false);
+
+    // Select A1:D3 in view 1.  View 2 should receive it both as rectangles
+    // and as cell ranges.
+    aView2.m_bTextViewSelectionInvalidated = false;
+    KitHelper::setView(nView1);
+    SfxCellPosition aCell{ 3, 2 }; // D3
+    SfxCellPosition aAnchor{ 0, 0 }; // A1
+    rShell1.setKitCellCursor(0, aCell, &aAnchor);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView2.m_bTextViewSelectionInvalidated);
+    std::vector<ScRange> aSelection = toRanges(aView2.m_aCellViewSelection.get_child("ranges"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 3, 2, 0), aSelection[0]);
+
+    // Switch view 2 to the local cell cursor and select B5:C6 in view 1.
+    // View 2 should receive it as cell ranges only.
+    rShell2.setKitLocalCellCursor(true);
+    aView2.m_bTextViewSelectionInvalidated = false;
+    aCell = { 2, 5 }; // C6
+    aAnchor = { 1, 4 }; // B5
+    rShell1.setKitCellCursor(0, aCell, &aAnchor);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView2.m_bTextViewSelectionInvalidated);
+    aSelection = toRanges(aView2.m_aCellViewSelection.get_child("ranges"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 4, 0, 2, 5, 0), aSelection[0]);
+
+    // Move the cursor of view 1 to D7 to clear its selection.
+    aCell = { 3, 6 }; // D7
+    rShell1.setKitCellCursor(0, aCell, nullptr);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView2.m_bTextViewSelectionInvalidated);
+    CPPUNIT_ASSERT(aView2.m_aCellViewSelection.get_child("ranges").empty());
+
+    // Select E2:F3 in view 2.  View 1, which has the local cell cursor off,
+    // should still receive it both as rectangles and as cell ranges.
+    aView1.m_bTextViewSelectionInvalidated = false;
+    KitHelper::setView(nView2);
+    aCell = { 5, 2 }; // F3
+    aAnchor = { 4, 1 }; // E2
+    rShell2.setKitCellCursor(0, aCell, &aAnchor);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
+    aSelection = toRanges(aView1.m_aCellViewSelection.get_child("ranges"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(4, 1, 0, 5, 2, 0), aSelection[0]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

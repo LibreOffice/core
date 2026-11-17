@@ -7764,6 +7764,12 @@ void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
             pViewShell->setCallbackWanted(COKitCallbackType::MOUSE_POINTER,
                                           getUString(pValue) != "off");
     }
+    else if (sOption == "localcellcursor")
+    {
+        // A client that moves the cell cursor and selects cells by itself says "true".
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+            pViewShell->setKitLocalCellCursor(getUString(pValue) == "true");
+    }
     else if (sOption == "userpersistence")
     {
         // Wire contract: "true" (the owner), "otheruser" (the user has settings,

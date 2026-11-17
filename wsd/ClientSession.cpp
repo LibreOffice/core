@@ -2377,6 +2377,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 #endif // !MOBILEAPP
     else if (tokens.equals(0, "outlinestate") ||
              tokens.equals(0, "reportmousepointer") ||
+             tokens.equals(0, "setlocalcellcursor") ||
              tokens.equals(0, "selectobjects") ||
              tokens.equals(0, "setobjectpoints") ||
              tokens.equals(0, "deleteobjectpoint") ||
