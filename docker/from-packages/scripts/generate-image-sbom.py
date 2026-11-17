@@ -158,6 +158,23 @@ def find_embedded_sboms(rootfs):
     return embedded
 
 
+def external_identifiers(element):
+    """type -> identifier of an SPDX 3.0.1 element.
+
+    The property is externalIdentifier and the purl type packageUrl. Documents
+    written by Collabora Online's generator before it followed the spec say
+    externalIdentifiers and packageURL, and released packages still carry
+    those, so both spellings are read."""
+    result = {}
+    for identifier in (element.get("externalIdentifier")
+                       or element.get("externalIdentifiers") or []):
+        kind = identifier.get("externalIdentifierType")
+        if kind == "packageURL":
+            kind = "packageUrl"
+        result.setdefault(kind, identifier.get("identifier"))
+    return result
+
+
 def lift_embedded_components(embedded):
     """Lift the component inventory (name, version, purl, CPE) out of the
     embedded SPDX 3.0.1 documents.
@@ -179,8 +196,7 @@ def lift_embedded_components(embedded):
         for element in graph:
             if element.get("type") != "software_Package":
                 continue
-            identifiers = {i.get("externalIdentifierType"): i.get("identifier")
-                           for i in element.get("externalIdentifiers", [])}
+            identifiers = external_identifiers(element)
             if not identifiers:
                 continue  # root packages and OS-supplied stubs
             name = element.get("name")
@@ -189,7 +205,7 @@ def lift_embedded_components(embedded):
             if key in components:
                 continue
             component = {
-                "bom-ref": identifiers.get("packageURL")
+                "bom-ref": identifiers.get("packageUrl")
                            or f"component:{name}@{version}",
                 "type": "library",
                 "name": name,
@@ -201,8 +217,8 @@ def lift_embedded_components(embedded):
             }
             if version:
                 component["version"] = version
-            if "packageURL" in identifiers:
-                component["purl"] = identifiers["packageURL"]
+            if "packageUrl" in identifiers:
+                component["purl"] = identifiers["packageUrl"]
             if "cpe23" in identifiers:
                 component["cpe"] = identifiers["cpe23"]
             components[key] = component
@@ -317,7 +333,7 @@ def spdx_document(image_purl, image_name, image_version, base_sbom, base_ref,
             "type": "Organization",
             "spdxId": "https://collaboraoffice.com",
             "creationInfo": "_:creationinfo",
-            "externalIdentifers": [{
+            "externalIdentifier": [{
                 "type": "ExternalIdentifier",
                 "externalIdentifierType": "email",
                 "identifier": "hello@collaboraoffice.com",
@@ -353,8 +369,9 @@ def spdx_document(image_purl, image_name, image_version, base_sbom, base_ref,
             "name": image_name,
             "software_packageVersion": image_version,
             "software_primaryPurpose": "container",
-            "externalIdentifiers": [{
-                "externalIdentifierType": "packageURL",
+            "externalIdentifier": [{
+                "type": "ExternalIdentifier",
+                "externalIdentifierType": "packageUrl",
                 "identifier": image_purl,
             }],
         },
@@ -379,8 +396,9 @@ def spdx_document(image_purl, image_name, image_version, base_sbom, base_ref,
         if version:
             element["software_packageVersion"] = version
         if purl:
-            element["externalIdentifiers"] = [{
-                "externalIdentifierType": "packageURL",
+            element["externalIdentifier"] = [{
+                "type": "ExternalIdentifier",
+                "externalIdentifierType": "packageUrl",
                 "identifier": purl,
             }]
         if comment:

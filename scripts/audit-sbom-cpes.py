@@ -62,9 +62,12 @@ def find_db():
 def collect_cpes(paths):
     """name -> set of (vendor, product) asserted for it, from SPDX 3.0.1.
 
-    Components that also carry a packageURL are skipped: scanners match those
-    by purl against the ecosystem advisory databases, so their CPE - which
-    npm packages generally do not have at all - does not gate detection."""
+    Components that also carry an ecosystem purl (npm, ...) are skipped:
+    scanners match those by purl against the ecosystem advisory databases, so
+    their CPE - which npm packages generally do not have at all - does not
+    gate detection. A pkg:git or pkg:github purl, as the engine gives every
+    external, only names the upstream repository; no advisory database is
+    keyed by it, so for those components the CPE is still all there is."""
     result = {}
     for path in paths:
         with open(path, encoding="utf-8") as f:
@@ -72,9 +75,16 @@ def collect_cpes(paths):
         for element in document.get("@graph", []):
             if element.get("type") != "software_Package":
                 continue
-            identifiers = element.get("externalIdentifiers", [])
-            types = {i.get("externalIdentifierType") for i in identifiers}
-            if "packageURL" in types:
+            # externalIdentifier is the SPDX 3.0.1 property and packageUrl
+            # the purl type; online's generator used to write
+            # externalIdentifiers and packageURL, so read both
+            identifiers = (element.get("externalIdentifier")
+                           or element.get("externalIdentifiers") or [])
+            if any(i.get("externalIdentifierType") in ("packageUrl",
+                                                        "packageURL")
+                   and not i.get("identifier", "").startswith(
+                       ("pkg:git/", "pkg:github/", "pkg:generic/"))
+                   for i in identifiers):
                 continue
             for identifier in identifiers:
                 if identifier.get("externalIdentifierType") != "cpe23":

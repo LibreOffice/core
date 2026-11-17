@@ -540,7 +540,7 @@ def sbom_skeleton(version, root_license, name="CollaboraOnline-coolwsd"):
                 "type": "Organization",
                 "spdxId": "https://collaboraoffice.com",
                 "creationInfo": "_:creationinfo",
-                "externalIdentifers": [{
+                "externalIdentifier": [{
                     "type": "ExternalIdentifier",
                     "externalIdentifierType": "email",
                     "identifier": "hello@collaboraoffice.com",
@@ -638,20 +638,22 @@ def make_component(graph, fragment, name, vendor, version, homepage, locator,
         "originatedBy": ["https://collaboraoffice.com"],
         "creationInfo": "_:creationinfo",
         "name": name,
-        "externalIdentifiers": [],
+        "externalIdentifier": [],
     }
     if with_cpe:
-        pkg_element["externalIdentifiers"].append({
+        pkg_element["externalIdentifier"].append({
+            "type": "ExternalIdentifier",
             "externalIdentifierType": "cpe23",
             "identifier": cpe23(vendor, cpe_name or name, version),
         })
     if purl:
-        pkg_element["externalIdentifiers"].append({
-            "externalIdentifierType": "packageURL",
+        pkg_element["externalIdentifier"].append({
+            "type": "ExternalIdentifier",
+            "externalIdentifierType": "packageUrl",
             "identifier": purl,
         })
-    if not pkg_element["externalIdentifiers"]:
-        del pkg_element["externalIdentifiers"]
+    if not pkg_element["externalIdentifier"]:
+        del pkg_element["externalIdentifier"]
     if homepage:
         pkg_element["software_homePage"] = homepage
     if version:
