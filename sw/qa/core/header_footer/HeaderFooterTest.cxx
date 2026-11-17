@@ -9,6 +9,17 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <editeng/sizeitem.hxx>
+#include <svx/pageitem.hxx>
+#include <svx/svxids.hrc>
+
+#include <IDocumentUndoRedo.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <docstyle.hxx>
+#include <fmthdft.hxx>
+#include <pagedesc.hxx>
+
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -41,6 +52,8 @@ public:
     void checkFirstLeftRightHeaderPageStyles();
     void checkDoubleFirstLeftRightHeaderPageStyles(OUString const& rCustomPageStyleName);
     void checkShapeInFirstPageHeader();
+    void checkOrientationChangeKeepsHeaderFooter(char const*, bool bHeaderNoFirst,
+                                                 bool bFooterNoFirst);
 
     HeaderFooterTest()
         : SwModelTestBase(u"/sw/qa/core/header_footer/data/"_ustr)
@@ -1318,6 +1331,131 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageHeaderShape_OOXML)
 {
     createSwDoc("FirstPageHeaderShape.docx");
     checkShapeInFirstPageHeader();
+}
+
+void HeaderFooterTest::checkOrientationChangeKeepsHeaderFooter(char const* const test,
+                                                               bool const bHeaderNoFirst,
+                                                               bool const bFooterNoFirst)
+{
+    createSwDoc();
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
+    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, uno::Any(true));
+    xPageStyle->setPropertyValue(u"FirstIsShared"_ustr, uno::Any(false));
+    xPageStyle->setPropertyValue(u"HeaderNoFirst"_ustr, uno::Any(bHeaderNoFirst));
+    xPageStyle->setPropertyValue(u"FooterNoFirst"_ustr, uno::Any(bFooterNoFirst));
+    getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr)
+        ->setString(u"header"_ustr);
+    getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterText"_ustr)
+        ->setString(u"footer"_ustr);
+    if (!bHeaderNoFirst)
+    {
+        getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextFirst"_ustr)
+            ->setString(u"first page header"_ustr);
+    }
+    if (!bFooterNoFirst)
+    {
+        getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr)
+            ->setString(u"first page footer"_ustr);
+    }
+
+    auto checkHeaderFooter = [this, test, bHeaderNoFirst, bFooterNoFirst]() {
+        uno::Reference<beans::XPropertySet> xStyle(
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            test, u"header"_ustr,
+            getProperty<uno::Reference<text::XText>>(xStyle, u"HeaderText"_ustr)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            test, u"footer"_ustr,
+            getProperty<uno::Reference<text::XText>>(xStyle, u"FooterText"_ustr)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test, bHeaderNoFirst,
+                                     getProperty<bool>(xStyle, u"HeaderNoFirst"_ustr));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test, bFooterNoFirst,
+                                     getProperty<bool>(xStyle, u"FooterNoFirst"_ustr));
+
+        // The first page has own header or footer with its own text (or none)
+        const SwPageDesc& rPageDesc = getSwDoc()->GetPageDesc(0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test, !bHeaderNoFirst,
+                                     rPageDesc.GetFirstMaster().GetHeader().IsActive());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test, !bFooterNoFirst,
+                                     rPageDesc.GetFirstMaster().GetFooter().IsActive());
+        if (!bHeaderNoFirst)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                test, u"first page header"_ustr,
+                getProperty<uno::Reference<text::XText>>(xStyle, u"HeaderTextFirst"_ustr)
+                    ->getString());
+        }
+        if (!bFooterNoFirst)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                test, u"first page footer"_ustr,
+                getProperty<uno::Reference<text::XText>>(xStyle, u"FooterTextFirst"_ustr)
+                    ->getString());
+        }
+    };
+    checkHeaderFooter();
+
+    // Switch the page to landscape the way the Page Style dialog does
+    SwDoc* pDoc{ getSwDoc() };
+    {
+        // block to drop items before doc is disposed
+        SfxStyleSheetBasePool* pPool{ getSwDocShell()->GetStyleSheetPool() };
+        auto pStyle = static_cast<SwDocStyleSheet*>(
+            pPool->Find(pDoc->GetPageDesc(0).GetName().toString(), SfxStyleFamily::Page));
+        CPPUNIT_ASSERT_MESSAGE(test, pStyle);
+        SfxItemSet const& rStyleSet{ pStyle->GetItemSet() };
+        SfxItemSet aSet(*rStyleSet.GetPool(), rStyleSet.GetRanges());
+        SvxPageItem aPageItem(rStyleSet.Get(SID_ATTR_PAGE));
+        aPageItem.SetLandscape(true);
+        aSet.Put(aPageItem);
+        Size aSize(rStyleSet.Get(SID_ATTR_PAGE_SIZE).GetSize());
+        aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(aSize.Height(), aSize.Width())));
+        aSet.Put(rStyleSet.Get(SID_ATTR_PAGE_HEADERSET));
+        aSet.Put(rStyleSet.Get(SID_ATTR_PAGE_FOOTERSET));
+        pStyle->SetItemSet(aSet, /*bBroadcast=*/false, /*bResetIndentAttrsAtParagraphStyle=*/true);
+    }
+
+    // This used to lose the text of the first page header/footer
+    CPPUNIT_ASSERT_MESSAGE(test, pDoc->GetPageDesc(0).GetLandscape());
+    checkHeaderFooter();
+
+    // Check Undo and redo of the orientation change keep the texts too
+    pDoc->GetIDocumentUndoRedo().Undo();
+    CPPUNIT_ASSERT_MESSAGE(test, !pDoc->GetPageDesc(0).GetLandscape());
+    checkHeaderFooter();
+    pDoc->GetIDocumentUndoRedo().Redo();
+    CPPUNIT_ASSERT_MESSAGE(test, pDoc->GetPageDesc(0).GetLandscape());
+    checkHeaderFooter();
+
+    // This used to crash on a disposed SwXParagraph
+    saveAndReload(TestFilter::ODT);
+    checkHeaderFooter();
+}
+
+CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageHeaderFooterLoss)
+{
+    checkOrientationChangeKeepsHeaderFooter("testFirstPageHeaderFooterLossBoth",
+                                            /*bHeaderNoFirst=*/false, /*bFooterNoFirst=*/false);
+}
+
+CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageNoHeaderFooterLoss)
+{
+    checkOrientationChangeKeepsHeaderFooter("testFirstPageNoHeaderFooterLoss",
+                                            /*bHeaderNoFirst=*/true, /*bFooterNoFirst=*/false);
+}
+
+CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageHeaderNoFooterLoss)
+{
+    checkOrientationChangeKeepsHeaderFooter("testFirstPageHeaderNoFooterLoss",
+                                            /*bHeaderNoFirst=*/false, /*bFooterNoFirst=*/true);
+}
+
+CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageNoHeaderNoFooterLoss)
+{
+    checkOrientationChangeKeepsHeaderFooter("testFirstPageNoHeaderNoFooterLoss",
+                                            /*bHeaderNoFirst=*/true, /*bFooterNoFirst=*/true);
 }
 
 } // end anonymous namespace

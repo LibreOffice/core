@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_header_footer, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     sfx \
     subsequenttest \
@@ -33,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_header_footer, \
     svt \
     tl \
     svl \
+    svx \
     svxcore \
 ))
 
