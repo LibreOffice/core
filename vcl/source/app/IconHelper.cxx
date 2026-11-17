@@ -10,6 +10,7 @@
 #include <IconHelper.hxx>
 #include <svdata.hxx>
 
+#include <comphelper/flatpak.hxx>
 #include <vcl/bitmaps.hlst>
 
 OUString IconHelper::GetAppName(sal_uInt16 nIcon)
@@ -35,7 +36,10 @@ OUString IconHelper::GetAppName(sal_uInt16 nIcon)
 
 OUString IconHelper::GetAppIconName(sal_uInt16 nIcon)
 {
-    return u"libreoffice-"_ustr + GetAppName(nIcon);
+    static const OUString sPrefix = comphelper::flatpak::isFlatpak()
+                                        ? u"org.libreoffice.LibreOffice."_ustr
+                                        : u"libreoffice-"_ustr;
+    return sPrefix + GetAppName(nIcon);
 }
 
 OUString IconHelper::GetInternalAppIconName(sal_uInt16 nIcon)
