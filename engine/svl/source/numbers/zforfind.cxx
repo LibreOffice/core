@@ -367,20 +367,6 @@ void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
 
 
 /**
- * Whether rString contains rWhat at nPos
- */
-bool ImpSvNumberInputScan::StringContainsImpl( const OUString& rWhat,
-                                               const OUString& rString, sal_Int32 nPos )
-{
-    if ( nPos + rWhat.getLength() <= rString.getLength() )
-    {
-        return StringPtrContainsImpl( rWhat, rString.getStr(), nPos );
-    }
-    return false;
-}
-
-
-/**
  * Whether pString contains rWhat at nPos
  */
 bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
@@ -412,10 +398,7 @@ bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
 bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
                                                const OUString& rString, sal_Int32 nPos ) const
 {
-    if (rWhat.isEmpty() || rString.getLength() < nPos + rWhat.getLength())
-        return false;
-
-    if (StringPtrContainsImpl( rWhat, rString.getStr(), nPos))
+    if (StringContains(rWhat, rString, nPos))
     {
         nPos += rWhat.getLength();
         if (nPos == rString.getLength())
@@ -503,12 +486,12 @@ inline bool ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
 /**
  * jump over rWhat in rString at nPos
  */
-inline bool ImpSvNumberInputScan::SkipString( const OUString& rWhat,
-                                              const OUString& rString, sal_Int32& nPos )
+inline bool ImpSvNumberInputScan::SkipString(std::u16string_view rWhat, std::u16string_view rString,
+                                             sal_Int32& nPos)
 {
     if ( StringContains( rWhat, rString, nPos ) )
     {
-        nPos = nPos + rWhat.getLength();
+        nPos = nPos + rWhat.size();
         return true;
     }
     return false;

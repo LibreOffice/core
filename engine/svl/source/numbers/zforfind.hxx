@@ -21,6 +21,7 @@
 #define INCLUDED_SVL_SOURCE_NUMBERS_ZFORFIND_HXX
 
 #include <cpo/uno/Sequence.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/date.hxx>
@@ -217,21 +218,12 @@ private:
     // optimized substring versions
 
     // Whether rString contains rWhat at nPos
-    static bool StringContains( const OUString& rWhat,
-                                       const OUString& rString,
-                                       sal_Int32 nPos )
-        {
-            if (rWhat.isEmpty() || rString.getLength() <= nPos)
-            {
-                return false;
-            }
-            // mostly used with one character
-            if ( rWhat[ 0 ] != rString[ nPos ] )
-            {
-                return false;
-            }
-            return StringContainsImpl( rWhat, rString, nPos );
-        }
+    static bool StringContains(std::u16string_view rWhat, std::u16string_view rString,
+                               sal_Int32 nPos)
+    {
+        return !rWhat.empty() && o3tl::make_unsigned(nPos) < rString.size()
+               && rString.substr(nPos).starts_with(rWhat);
+    }
 
     // Whether pString contains rWhat at nPos
     static bool StringPtrContains( const OUString& rWhat,
@@ -247,10 +239,6 @@ private:
         }
 
     //! DO NOT use directly
-    static bool StringContainsImpl( const OUString& rWhat,
-                                    const OUString& rString,
-                                    sal_Int32 nPos );
-    //! DO NOT use directly
     static bool StringPtrContainsImpl( const OUString& rWhat,
                                        const sal_Unicode* pString,
                                        sal_Int32 nPos );
@@ -265,9 +253,8 @@ private:
                                    sal_Int32& nPos );
 
     // Jump over rWhat in rString at nPos
-    static inline bool SkipString( const OUString& rWhat,
-                                   const OUString& rString,
-                                   sal_Int32& nPos );
+    static inline bool SkipString(std::u16string_view rWhat, std::u16string_view rString,
+                                  sal_Int32& nPos);
 
     // Recognizes exactly ,111 as group separator
     inline bool GetThousandSep( std::u16string_view rString,
