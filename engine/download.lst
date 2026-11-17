@@ -1,7 +1,10 @@
 # For the Flatpak build (which cannot execute `make fetch` from its---sandboxed---build
 # environment), there is a solenv/flatpak-external-tarballs.json.in that references these variables.
 # There is a script solenv/bin/generate-flatpak-manifest.sh to substitute the variables,
-# so upgrading to a new version only requires changes in download.lst.
+# so that file needs no change when a version here changes.
+#
+# qt/flatpak/com.collaboraoffice.Office.json is a separate manifest that names each tarball and its
+# sha256 by hand. When you add, remove or upgrade a tarball here, change its entry there too.
 
 ABW_SHA256SUM := fa2685a3440da6e03a66a778480d93cb95f6064e4541e58e37397680760fd6a0
 ABW_TARBALL := libabw-0.1.4.tar.xz
