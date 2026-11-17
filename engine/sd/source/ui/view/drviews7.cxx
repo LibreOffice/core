@@ -43,6 +43,7 @@
 #include <svl/whiter.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
@@ -768,15 +769,29 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     else if (SfxItemState::DEFAULT == rSet.GetItemState(SID_REMOVE_VIDEO_BACKGROUND))
     {
-        bool bHasVideoBackground = false;
+        // The state is the file name of the background video of the master page, and the command
+        // is disabled when the master page has none.
+        const SdrMediaObj* pVideo = nullptr;
         if (SdPage* pPage = GetActualPage())
         {
             SdPage& rMasterPage
                 = pPage->IsMasterPage() ? *pPage : static_cast<SdPage&>(pPage->TRG_GetMasterPage());
             for (const rtl::Reference<SdrObject>& pObj : rMasterPage)
-                bHasVideoBackground = bHasVideoBackground || rMasterPage.IsBackgroundVideo(*pObj);
+            {
+                if (rMasterPage.IsBackgroundVideo(*pObj))
+                {
+                    pVideo = static_cast<const SdrMediaObj*>(pObj.get());
+                    break;
+                }
+            }
         }
-        if (!bHasVideoBackground)
+        if (pVideo)
+        {
+            const OUString& rURL = pVideo->getURL();
+            rSet.Put(SfxStringItem(SID_REMOVE_VIDEO_BACKGROUND,
+                                   rURL.copy(rURL.lastIndexOf('/') + 1)));
+        }
+        else
             rSet.DisableItem(SID_REMOVE_VIDEO_BACKGROUND);
     }
 

@@ -27,6 +27,7 @@ enum class PayloadType
     Int32OrDisabledPayload,
     TransformPayload,
     StringPayload,
+    StringOrDisabledPayload,
     RowColSelCountPayload,
     StateTableCellPayload,
     BooleanPayload,

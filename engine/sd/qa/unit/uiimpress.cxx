@@ -7181,6 +7181,28 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testVideoBackground)
     CPPUNIT_ASSERT(findBackgroundVideos(rMasterPage).empty());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testVideoBackgroundStateNamesTheVideo)
+{
+    // The state of RemoveVideoBackground is the file name of the background video, and the
+    // command is disabled while the master page has no background video.
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SfxBindings& rBindings
+        = pImpressDocument->GetDocShell()->GetViewShell()->GetViewFrame()->GetBindings();
+    std::unique_ptr<SfxPoolItem> pState;
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED,
+                         rBindings.QueryState(SID_REMOVE_VIDEO_BACKGROUND, pState));
+
+    dispatchCommand(
+        mxComponent, u".uno:InsertVideoBackground"_ustr,
+        { comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"video-320x240.webm")) });
+    rBindings.QueryState(SID_REMOVE_VIDEO_BACKGROUND, pState);
+    auto pFileName = dynamic_cast<const SfxStringItem*>(pState.get());
+    CPPUNIT_ASSERT(pFileName);
+    CPPUNIT_ASSERT_EQUAL(u"video-320x240.webm"_ustr, pFileName->GetValue());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testVideoBackgroundFromAppFilePicker)
 {
     // In a COKit app the command without a file asks the app's picker, and the picked video

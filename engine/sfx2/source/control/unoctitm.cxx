@@ -1068,6 +1068,16 @@ OString StringPayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateE
     return aBuffer.makeStringAndClear();
 }
 
+// Like StringPayload, but sends "disabled" for a disabled command.
+OString StringOrDisabledPayload(sal_uInt16 nSID, SfxViewFrame* pViewFrame,
+                                const css::frame::FeatureStateEvent& aEvent,
+                                const SfxPoolItem* pState)
+{
+    if (!aEvent.IsEnabled)
+        return aEvent.FeatureURL.Complete.toUtf8() + "=disabled";
+    return StringPayload(nSID, pViewFrame, aEvent, pState);
+}
+
 OString RowColSelCountPayload(sal_uInt16, SfxViewFrame*,
                               const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem*)
 {
@@ -1233,6 +1243,7 @@ constexpr auto enumToPayload = frozen::make_unordered_map<PayloadType, PayloadGe
     { PayloadType::Int32OrDisabledPayload, Int32OrDisabledPayload },
     { PayloadType::TransformPayload, TransformPayload },
     { PayloadType::StringPayload, StringPayload },
+    { PayloadType::StringOrDisabledPayload, StringOrDisabledPayload },
     { PayloadType::RowColSelCountPayload, RowColSelCountPayload },
     { PayloadType::StateTableCellPayload, StateTableCellPayload },
     { PayloadType::BooleanPayload, BooleanPayload },
@@ -1346,7 +1357,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"DeletePage", { PayloadType::EnabledPayload, true } },
         { u"DuplicatePage", { PayloadType::EnabledPayload, true } },
         { u"InsertVideoBackground", { PayloadType::EnabledPayload, true } },
-        { u"RemoveVideoBackground", { PayloadType::EnabledPayload, true } },
+        { u"RemoveVideoBackground", { PayloadType::StringOrDisabledPayload, true } },
         { u"DeleteRows", { PayloadType::EnabledPayload, true } },
         { u"DeleteColumns", { PayloadType::EnabledPayload, true } },
         { u"DeleteCell", { PayloadType::EnabledPayload, true } },

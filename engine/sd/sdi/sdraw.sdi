@@ -3307,7 +3307,7 @@ SfxVoidItem InsertVideoBackground SID_INSERT_VIDEO_BACKGROUND
     GroupId = SfxGroupId::Options;
 ]
 
-SfxVoidItem RemoveVideoBackground SID_REMOVE_VIDEO_BACKGROUND
+SfxStringItem RemoveVideoBackground SID_REMOVE_VIDEO_BACKGROUND
 ()
 [
     AutoUpdate = FALSE,

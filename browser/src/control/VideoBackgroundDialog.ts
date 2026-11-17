@@ -27,6 +27,21 @@ class VideoBackgroundDialog {
 		];
 	}
 
+	// The index of the sample that fileName, the file name of a background video in the document,
+	// was made from, or -1. A sample goes in under its own file name. A server puts 16
+	// hexadecimal digits and a hyphen before that name, and a name the document holds already
+	// gets a number before the extension.
+	private static sampleIndexOf(
+		samples: Array<{ name: string; text: string }>,
+		fileName: string,
+	): number {
+		return samples.findIndex((sample) =>
+			new RegExp('^([0-9A-Fa-f]{16}-)?' + sample.name + '[0-9]*\\.mp4$').test(
+				fileName,
+			),
+		);
+	}
+
 	public static show(): void {
 		const uiManager = app.map.uiManager;
 		const id = VideoBackgroundDialog.id;
@@ -36,10 +51,15 @@ class VideoBackgroundDialog {
 		const removeId = id + '-remove';
 		const cancelId = id + '-cancel';
 		const samples = VideoBackgroundDialog.getSamples();
-		const canRemove =
-			app.map['stateChangeHandler'].getItemValue(
-				'.uno:RemoveVideoBackground',
-			) !== 'disabled';
+		// The state is the file name of the background video, or "disabled" when there is none.
+		const videoState = app.map['stateChangeHandler'].getItemValue(
+			'.uno:RemoveVideoBackground',
+		);
+		const canRemove = videoState !== 'disabled';
+		const selectedIndex =
+			canRemove && typeof videoState === 'string'
+				? VideoBackgroundDialog.sampleIndexOf(samples, videoState)
+				: -1;
 
 		const json = uiManager._modalDialogJSON(id, _('Background Video'), true, [
 			{
@@ -61,7 +81,7 @@ class VideoBackgroundDialog {
 					image: app.LOUtil.getURL(
 						'images/videobackgrounds/' + sample.name + '.png',
 					),
-					selected: false,
+					selected: index === selectedIndex,
 				})),
 			},
 			{
