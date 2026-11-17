@@ -5641,13 +5641,16 @@ class SettingIframe {
 				);
 			} else if (data) {
 				let viewSetting = this.getDefaultViewSettings();
-				this._viewSettingFileUrl =
-					data.viewsetting && data.viewsetting.length > 0
-						? data.viewsetting[0].uri
-						: '';
-				if (data.viewsetting && data.viewsetting.length > 0) {
+				// The listed viewsetting.json, the file that this dialog writes (or
+				// else the first listed file, for a folder without one):
+				const viewSettingItem =
+					data.viewsetting?.find(
+						(item) => this.getFilename(item.uri, false) === 'viewsetting.json',
+					) ?? data.viewsetting?.[0];
+				this._viewSettingFileUrl = viewSettingItem ? viewSettingItem.uri : '';
+				if (viewSettingItem) {
 					const fetchContent = await this.settingsStorage.fetchSettingFile(
-						data.viewsetting[0].uri,
+						viewSettingItem.uri,
 					);
 					if (fetchContent) {
 						// Merge with default values to ensure all fields are present
