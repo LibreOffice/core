@@ -156,10 +156,18 @@ cover, hence off by default.
 Asks [release-monitoring.org](https://release-monitoring.org) what upstream
 currently ships and reports what we bundle that is older. Needs network
 access and takes a couple of minutes for a full sweep; `--component NAME`
-(repeatable, script only) narrows it to specific components. Exit code 1 if
-anything is behind, so it can gate a scheduled CI job — which is where it
-belongs, because this check, not scanning, is the primary defense for C
-components (see below).
+(repeatable, script only) narrows it to specific components.
+
+`BEHIND` means a newer release in our own series, the same version but for
+its last part (openssl 3.5.9 for 3.5.8): the update to take. A newer series
+(openssl 4.1) is listed as `NEWER-SERIES`, for information, because staying
+on a maintained branch is a decision rather than an oversight. Exit code 1
+if anything is `BEHIND`, so it can gate a scheduled CI job — which is where
+it belongs, because this check, not scanning, is the primary defense for C
+components (see below). A project Anitya knows under another name than ours
+is found through the repository in the component's purl (quickjs-ng,
+zxing-cpp), and among projects of the same name the one with our homepage
+wins.
 
 It reads every engine document and the online one, and looks up each
 third-party component once; our own packages and the dictionaries, which no
