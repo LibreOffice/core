@@ -978,7 +978,7 @@ Reference< beans::XPropertySet > DiagramWrapper::getZAxis()
 {
     if( ! m_xZAxis.is())
         m_xZAxis = new AxisWrapper( AxisWrapper::Z_AXIS, m_spChart2ModelContact );
-    return m_xZAxis;
+    return static_cast<WrappedPropertySet*>(m_xZAxis.get());
 }
 
 // ____ XTwoAxisXSupplier ____
@@ -986,7 +986,7 @@ Reference< beans::XPropertySet > DiagramWrapper::getSecondaryXAxis()
 {
     if( ! m_xSecondXAxis.is())
         m_xSecondXAxis = new AxisWrapper( AxisWrapper::SECOND_X_AXIS, m_spChart2ModelContact );
-    return m_xSecondXAxis;
+    return static_cast<WrappedPropertySet*>(m_xSecondXAxis.get());
 }
 
 // ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
@@ -1003,7 +1003,7 @@ Reference< beans::XPropertySet > DiagramWrapper::getXAxis()
 {
     if( ! m_xXAxis.is())
         m_xXAxis = new AxisWrapper( AxisWrapper::X_AXIS, m_spChart2ModelContact );
-    return m_xXAxis;
+    return static_cast<WrappedPropertySet*>(m_xXAxis.get());
 }
 
 Reference< beans::XPropertySet > DiagramWrapper::getXMainGrid()
@@ -1029,7 +1029,7 @@ Reference< beans::XPropertySet > DiagramWrapper::getSecondaryYAxis()
 {
     if( ! m_xSecondYAxis.is())
         m_xSecondYAxis = new AxisWrapper( AxisWrapper::SECOND_Y_AXIS, m_spChart2ModelContact );
-    return m_xSecondYAxis;
+    return static_cast<WrappedPropertySet*>(m_xSecondYAxis.get());
 }
 
 // ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
@@ -1046,7 +1046,7 @@ Reference< beans::XPropertySet > DiagramWrapper::getYAxis()
 {
     if( ! m_xYAxis.is())
         m_xYAxis = new AxisWrapper( AxisWrapper::Y_AXIS, m_spChart2ModelContact );
-    return m_xYAxis;
+    return static_cast<WrappedPropertySet*>(m_xYAxis.get());
 }
 
 Reference< beans::XPropertySet > DiagramWrapper::getYMainGrid()

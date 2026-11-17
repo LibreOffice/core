@@ -389,7 +389,7 @@ void SchXMLAxisContext::CreateAxis()
             return;
     }
 
-    m_xAxisProps.set( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ), uno::UNO_QUERY );
+    m_xAxisProps = lcl_getChartAxis( m_aCurrentAxis, m_xDiagram );
 
     if( m_bAddMissingXAxisForNetCharts && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y && m_aCurrentAxis.nAxisIndex==0 )
     {
@@ -460,7 +460,7 @@ void SchXMLAxisContext::CreateAxis()
                     Reference< chart::XAxisSupplier > xAxisSuppl( xDiaProp, uno::UNO_QUERY );
                     if( xAxisSuppl.is() )
                     {
-                        Reference< beans::XPropertySet > xXAxisProp( xAxisSuppl->getAxis(0), uno::UNO_QUERY );
+                        Reference< css::chart::XAxis > xXAxisProp( xAxisSuppl->getAxis(0) );
                         pPropStyleContext->FillPropertySet(xXAxisProp);
                     }
 

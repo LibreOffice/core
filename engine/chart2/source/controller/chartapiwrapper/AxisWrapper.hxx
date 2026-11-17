@@ -38,7 +38,7 @@ class Chart2ModelContact;
 class TitleWrapper;
 class GridWrapper;
 
-class AxisWrapper : public ::cppu::ImplInheritanceHelper<
+class AxisWrapper final : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                     , css::chart::XAxis
                     , css::drawing::XShape
@@ -84,6 +84,15 @@ public:
     virtual cpo::uno::Reference< css::beans::XPropertySet > getAxisTitle(  ) override;
     virtual cpo::uno::Reference< css::beans::XPropertySet > getMajorGrid(  ) override;
     virtual cpo::uno::Reference< css::beans::XPropertySet > getMinorGrid(  ) override;
+
+    // ____ XPropertySet (base of XAxis) ____
+    virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
+    virtual ::cpo::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
 
     // ____ XShape ____
     virtual css::awt::Point getPosition() override;

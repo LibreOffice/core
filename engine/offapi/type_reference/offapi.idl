@@ -2869,7 +2869,7 @@ module com {
      any TimeResolution;
     };
     interface XAxis {
-     interface ::cpo::uno::XInterface;
+     interface ::com::sun::star::beans::XPropertySet;
      ::com::sun::star::beans::XPropertySet getAxisTitle();
      ::com::sun::star::beans::XPropertySet getMajorGrid();
      ::com::sun::star::beans::XPropertySet getMinorGrid();

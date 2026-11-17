@@ -2605,7 +2605,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     Reference< css::chart2::XAxis > xNewAxis = lcl_getAxis( xCooSys, XML_X );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(0) : nullptr, uno::UNO_QUERY );
+        Reference< css::chart::XAxis > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(0) : nullptr );
         if( mbHasCategoryLabels && bExportContent )
         {
             Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xNewDiagram ) );
@@ -2629,7 +2629,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_X, false );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(0) : nullptr, uno::UNO_QUERY );
+        Reference< css::chart::XAxis > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(0) : nullptr );
         exportAxis( XML_X, XML_SECONDARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryXAxisTitle, false, false, bExportContent, sChartType );
     }
 
@@ -2638,7 +2638,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Y );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(1) : nullptr, uno::UNO_QUERY );
+        Reference< css::chart::XAxis > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(1) : nullptr );
         exportAxis( XML_Y, XML_PRIMARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasYAxisTitle, bHasYAxisMajorGrid, bHasYAxisMinorGrid, bExportContent, sChartType );
     }
 
@@ -2647,7 +2647,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Y, false );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(1) : nullptr, uno::UNO_QUERY );
+        Reference< css::chart::XAxis > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(1) : nullptr );
         exportAxis( XML_Y, XML_SECONDARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryYAxisTitle, false, false, bExportContent, sChartType );
     }
 
@@ -2656,7 +2656,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Z );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(2) : nullptr, uno::UNO_QUERY );
+        Reference< css::chart::XAxis > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(2) : nullptr );
         exportAxis( XML_Z, XML_PRIMARY_Z, xAxisProps, xNewAxis, aCategoriesRange, bHasZAxisTitle, bHasZAxisMajorGrid, bHasZAxisMinorGrid, bExportContent, sChartType );
     }
 }

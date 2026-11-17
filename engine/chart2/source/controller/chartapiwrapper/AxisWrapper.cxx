@@ -661,6 +661,35 @@ cpo::uno::Sequence< OUString > AxisWrapper::getSupportedServiceNames()
     };
 }
 
+::cpo::uno::Reference< ::css::beans::XPropertySetInfo > AxisWrapper::getPropertySetInfo()
+{
+    return WrappedPropertySet::getPropertySetInfo();
+}
+void AxisWrapper::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
+{
+    WrappedPropertySet::setPropertyValue(aPropertyName, aValue);
+}
+::cpo::uno::Any AxisWrapper::getPropertyValue( const ::rtl::OUString& PropertyName )
+{
+    return WrappedPropertySet::getPropertyValue(PropertyName);
+}
+void AxisWrapper::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener )
+{
+    WrappedPropertySet::addPropertyChangeListener(aPropertyName, xListener);
+}
+void AxisWrapper::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener )
+{
+    WrappedPropertySet::removePropertyChangeListener(aPropertyName, aListener);
+}
+void AxisWrapper::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    WrappedPropertySet::addVetoableChangeListener(PropertyName, aListener);
+}
+void AxisWrapper::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    WrappedPropertySet::removeVetoableChangeListener(PropertyName, aListener);
+}
+
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
