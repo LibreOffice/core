@@ -422,7 +422,17 @@ bool SwXTextDocument::partHasComments() const
     // The comment list is filled from the comment fields as soon as the document is loaded, so it
     // is complete before the windows that present those comments have been laid out.
     const SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
-    return pPostItMgr && pPostItMgr->HasNotes();
+    if (pPostItMgr && pPostItMgr->HasNotes())
+        return true;
+
+    // Tracked changes are shown in the comment column too, unless the server turned that off (see
+    // getTrackedChanges), so the client has to make room for that column as well.
+    static const bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
+    if (bDisableRedlineComments)
+        return false;
+
+    const SwDoc* pDoc = m_pDocShell->GetDoc();
+    return pDoc && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty();
 }
 
 SdrModel& SwXTextDocument::getSdrModelFromUnoModel() const

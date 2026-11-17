@@ -7507,6 +7507,8 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         break;
     case COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED:
         sendTextFrame("redlinetablechanged: " + payload);
+        // Tracked changes count as comments in the status, the client makes room for them.
+        getStatus();
         break;
     case COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED:
         sendTextFrame("redlinetablemodified: " + payload);

@@ -654,6 +654,30 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCommentOnSecondPagePartInfo)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testTrackedChangePartInfo)
+{
+    // Given a document without comments:
+    createSwDoc();
+    auto getPartHasComments = [this]() {
+        std::stringstream aStream(getSwTextDoc()->getPartInfo(0));
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        return aTree.get<std::string>("partHasComments");
+    };
+    CPPUNIT_ASSERT_EQUAL(std::string("false"), getPartHasComments());
+
+    // When a tracked change is recorded:
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    getSwDocShell()->GetWrtShell()->Insert(u"x"_ustr);
+
+    // Then make sure the part info reports a comment column, as the tracked change is shown there:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: true
+    // - Actual  : false
+    // i.e. the client fitted the page to the window and the box of the change hung off its edge.
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), getPartHasComments());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
