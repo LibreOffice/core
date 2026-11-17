@@ -1434,6 +1434,22 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
             bool const bTaggedPDF, bool& bReopenRowTag, vcl::PDFExtOutDevData* const pPDF,
             tools::Long const nLayoutSign, KernArray& aDX)
 {
+    // the row's element, which the first cell of the row with an element opens
+    auto const openRowElement = [&]()
+    {
+        if (bReopenRowTag)
+            ReopenPDFStructureElement(vcl::pdf::StructElement::TableRow, nY);
+        else
+        {
+            sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
+            pPDF->InitStructureElement(nId, vcl::pdf::StructElement::TableRow, u"TR"_ustr);
+            pPDF->BeginStructureElement(nId);
+            pPDF->GetScPDFState()->m_TableRowMap.emplace(nY, nId);
+            bReopenRowTag = true;
+        }
+    };
+    bool bCellElement = false;
+
     const ScPatternAttr* pPattern = nullptr;
     const SfxItemSet* pCondSet = nullptr;
     const SfxItemSet* pTableSet = nullptr;
@@ -1779,18 +1795,8 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
         // Mark the tagged cell structure element to be drawn in DrawEdit
         if (bTaggedPDF)
         {
-            if (bReopenRowTag)
-                ReopenPDFStructureElement(vcl::pdf::StructElement::TableRow, nY);
-            else
-            {
-                sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-                pPDF->InitStructureElement(nId, vcl::pdf::StructElement::TableRow,
-                                           u"TR"_ustr);
-                pPDF->BeginStructureElement(nId);
-                pPDF->GetScPDFState()->m_TableRowMap.emplace(nY, nId);
-                bReopenRowTag = true;
-            }
-
+            openRowElement();
+            bCellElement = true;
             const sal_Int32 nId(
                 lcl_OpenCellElement(*pPDF, *mpDoc, mnTab, nX, nY, nCellX, nCellY, mnX2, mnY2));
             pPDF->GetScPDFState()->m_TableDataMap[{ nY, nX }] = nId;
@@ -2010,19 +2016,8 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
             {
                 if (bTaggedPDF)
                 {
-                    if (bReopenRowTag)
-                        ReopenPDFStructureElement(vcl::pdf::StructElement::TableRow,
-                                                  nY);
-                    else
-                    {
-                        sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-                        pPDF->InitStructureElement(
-                            nId, vcl::pdf::StructElement::TableRow, u"TR"_ustr);
-                        pPDF->BeginStructureElement(nId);
-                        pPDF->GetScPDFState()->m_TableRowMap.emplace(nY, nId);
-                        bReopenRowTag = true;
-                    }
-
+                    openRowElement();
+                    bCellElement = true;
                     // what a destination naming this cell has to reach
                     pPDF->GetScPDFState()->m_CellIds.emplace(
                         ScAddress(nX, nY, mnTab),
@@ -2122,6 +2117,19 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
                 lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
             }
         }
+    }
+
+    // an empty cell still takes its column of the row; a cell a merge covers is in the span of
+    // the cell that stands for the merge on this page, and a hidden column is not in the table
+    if (bTaggedPDF && !bCellElement && !bMergeEmpty && !mpDoc->ColHidden(nX, mnTab))
+    {
+        openRowElement();
+        // what a destination naming this cell has to reach
+        pPDF->GetScPDFState()->m_CellIds.emplace(
+            ScAddress(nX, nY, mnTab),
+            lcl_OpenCellElement(*pPDF, *mpDoc, mnTab, nX, nY, nCellX, nCellY, mnX2, mnY2));
+        pPDF->EndStructureElement(); // TableData
+        pPDF->EndStructureElement(); // TableRow
     }
 }
 

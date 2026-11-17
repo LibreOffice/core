@@ -99,6 +99,7 @@ public:
     void testRepeatRowsDatabaseRange();
     void testMergedCellSpans();
     void testMergedCellSpansCut();
+    void testEmptyCellElements();
     void testTableStyleCellStyleExcludedFont();
     void testTableStyleRotatedText();
     void testForcepoint97();
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testRepeatRowsDatabaseRange);
     CPPUNIT_TEST(testMergedCellSpans);
     CPPUNIT_TEST(testMergedCellSpansCut);
+    CPPUNIT_TEST(testEmptyCellElements);
     CPPUNIT_TEST(testTableStyleCellStyleExcludedFont);
     CPPUNIT_TEST(testTableStyleRotatedText);
     CPPUNIT_TEST(testForcepoint97);
@@ -1134,9 +1136,9 @@ void ScPDFExportTest::testCellLinkDestinations()
         }
     }
 
-    // the three links onto a cell with something in it, and the one onto an empty cell
-    CPPUNIT_ASSERT_EQUAL(3, nCellDests);
-    CPPUNIT_ASSERT_EQUAL(1, nSheetDests);
+    // the four links onto a cell, the empty one too, which has its own element since tdf#174191
+    CPPUNIT_ASSERT_EQUAL(4, nCellDests);
+    CPPUNIT_ASSERT_EQUAL(0, nSheetDests);
 }
 
 void ScPDFExportTest::testPageRangeSkipsSheetStart()
@@ -1256,8 +1258,8 @@ void ScPDFExportTest::testDatabaseRangeHeader()
     //
     // the labels of the first range and of the one kept by column, and nothing in the range
     // defined without labels or outside every range
-    CPPUNIT_ASSERT_EQUAL("TH/Column TH/Column | TD TD | TD TD | TD | TD TD | TD TD | "
-                         "TH/Row TD | TH/Row TD | "_ostr,
+    CPPUNIT_ASSERT_EQUAL("TH/Column TH/Column | TD TD | TD TD | TD TD | TD TD | TD TD | TD TD | "
+                         "TD TD | TD TD | TH/Row TD | TH/Row TD | "_ostr,
                          getTableCellTypes());
 }
 
@@ -1311,6 +1313,18 @@ void ScPDFExportTest::testMergedCellSpansCut()
     // "TD/ColSpan3 | TD/RowSpan4 TD | | TD TD | TD | ", and without the fix this read
     // "TD | TD TD | | TD TD | TD | ".
     CPPUNIT_ASSERT_EQUAL("TD/ColSpan2 | TD TD | | TD/RowSpan2 TD | TD | "_ostr,
+                         getTableCellTypes());
+}
+
+void ScPDFExportTest::testEmptyCellElements()
+{
+    // B2 and row 3 are empty
+    loadFromFile(u"empty-cells.fods");
+    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
+
+    // Without the fix the empty cells had no element and the empty row no TR, so this read
+    // "TD TD TD | TD TD | TD TD TD | ".
+    CPPUNIT_ASSERT_EQUAL("TD TD TD | TD TD TD | TD TD TD | TD TD TD | "_ostr,
                          getTableCellTypes());
 }
 
