@@ -20,7 +20,9 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include <svx/svxdllapi.h>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/diagram/DomMapFlag.hxx>
@@ -85,6 +87,10 @@ private:
     // flag to remember if locking of scale/translate was
     // already done
     bool mbDiagramObjectsLocked : 1;
+
+    // true from a change that made an undo action until the next layout; that action takes its
+    // state to redo to when it is undone, so the layout is a part of it
+    bool mbUndoCoversNextLayout : 1;
 
 protected:
     // helpers
@@ -161,6 +167,13 @@ public:
 
     // check if mandatory DiagramDomS exist and/or were not touched
     virtual bool checkMinimalDataDoms() const = 0;
+
+    // all parts of the file as they were loaded, the ones a change dropped are missing
+    virtual std::map<DomMapFlag, cpo::uno::Any> getOOXDomValues() const = 0;
+    virtual void setOOXDomValues(const std::map<DomMapFlag, cpo::uno::Any>& rValues) = 0;
+
+    bool undoCoversNextLayout() const { return mbUndoCoversNextLayout; }
+    void setUndoCoversNextLayout(bool bNew) { mbUndoCoversNextLayout = bNew; }
 
     // access to RootShape - the GroupObject used to host this Diagram
     cpo::uno::Reference< css::drawing::XShape >& getRootShape() { return accessRootShape(); }

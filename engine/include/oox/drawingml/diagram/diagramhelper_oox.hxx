@@ -142,6 +142,10 @@ public:
     // check if mandatory DiagramDomS exist and/or were not touched
     virtual bool checkMinimalDataDoms() const override;
 
+    virtual std::map<svx::diagram::DomMapFlag, cpo::uno::Any> getOOXDomValues() const override;
+    virtual void setOOXDomValues(
+        const std::map<svx::diagram::DomMapFlag, cpo::uno::Any>& rValues) override;
+
     // helpers to write some specific DiagramDoms
     void writeDiagramOOXData(DrawingML& rOriginalDrawingML, cpo::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
     void writeDiagramReducedOOXData(cpo::uno::Reference<css::io::XOutputStream>& xOutputStream) const;

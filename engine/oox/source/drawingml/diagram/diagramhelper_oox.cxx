@@ -241,6 +241,8 @@ void DiagramHelper_oox::reLayout()
     if (nullptr == pTarget)
         return;
 
+    setUndoCoversNextLayout(false);
+
     // Rescue/remember geometric transformation of existing Diagram
     basegfx::B2DHomMatrix aTransformation;
     basegfx::B2DPolyPolygon aPolyPolygon;
@@ -658,12 +660,12 @@ OUString DiagramHelper_oox::addDiagramNode(std::u16string_view rText, SdrModel& 
 
             if (bUndo)
             {
-                // create undo action. That will internally secure the
-                // current Diagram-defining data as end state
+                // create undo action, it takes the state to redo to when it is undone
                 SdrObject* pRootShape(SdrObject::getSdrObjectFromXShape(accessRootShape()));
                 assert(nullptr != pRootShape && "Missing RootShape in DiagramHelper_oox (!)");
                 rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(
                     *pRootShape, aStartState));
+                setUndoCoversNextLayout(true);
             }
         }
     }
@@ -705,12 +707,12 @@ bool DiagramHelper_oox::removeDiagramNode(std::u16string_view rNodeId, SdrModel&
 
             if (bUndo)
             {
-                // create undo action. That will internally secure the
-                // current Diagram-defining data as end state
+                // create undo action, it takes the state to redo to when it is undone
                 SdrObject* pRootShape(SdrObject::getSdrObjectFromXShape(accessRootShape()));
                 assert(nullptr != pRootShape && "Missing RootShape in DiagramHelper_oox (!)");
                 rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(
                     *pRootShape, aStartState));
+                setUndoCoversNextLayout(true);
             }
         }
     }
@@ -746,6 +748,23 @@ void DiagramHelper_oox::TextInformationChange()
     if (!mpDiagramPtr)
         return;
 
+    // an undo or a redo brings back or drops the parts of the file itself
+    SdrObject* pRootShape(SdrObject::getSdrObjectFromXShape(accessRootShape()));
+    if (nullptr != pRootShape)
+        if (const SfxUndoManager* pManager
+            = pRootShape->getSdrModelFromSdrObject().GetSdrUndoManager();
+            nullptr != pManager && pManager->IsDoing())
+            return;
+
+    const DiagramPRDomMap aDomValuesBefore(mpDiagramPtr->getOOXDomValues());
+    uno::Sequence<beans::PropertyValue> aGrabBagBefore;
+    uno::Reference<beans::XPropertySet> xGroupProperties(accessRootShape(), uno::UNO_QUERY);
+    const bool bHasGrabBag(xGroupProperties.is()
+                           && xGroupProperties->getPropertySetInfo()->hasPropertyByName(
+                               u"InteropGrabBag"_ustr));
+    if (bHasGrabBag)
+        xGroupProperties->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBagBefore;
+
     DomMapFlags aFlags;
     aFlags.push_back(DomMapFlag::OOXData);
     aFlags.push_back(DomMapFlag::OOXDrawing);
@@ -757,10 +776,35 @@ void DiagramHelper_oox::TextInformationChange()
 
     // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
     // entries anymore, but others like "mso-rotation-angle" and others
-    uno::Reference<beans::XPropertySet> xPropSet(accessRootShape(), uno::UNO_QUERY);
-    if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
-        xPropSet->setPropertyValue(u"InteropGrabBag"_ustr,
+    if (bHasGrabBag)
+        xGroupProperties->setPropertyValue(u"InteropGrabBag"_ustr,
                                    cpo::uno::Any(cpo::uno::Sequence<beans::PropertyValue>()));
+
+    // a change the user makes comes in an undo bracket, it gets the dropped parts back; a layout
+    // drops the parts once and copies the attributes after, those drop nothing
+    if (nullptr == pRootShape)
+        return;
+    SdrModel& rModel(pRootShape->getSdrModelFromSdrObject());
+    const bool bDropped(aDomValuesBefore.size() != mpDiagramPtr->getOOXDomValues().size()
+                        || aGrabBagBefore.hasElements());
+    if (bDropped && rModel.IsUndoEnabled() && rModel.GetUndoBracketLevel() > 0)
+        rModel.AddUndo(std::make_unique<SdrUndoDiagramDomValues>(
+            *pRootShape, aDomValuesBefore, aGrabBagBefore, mpDiagramPtr->getOOXDomValues(),
+            uno::Sequence<beans::PropertyValue>()));
+}
+
+std::map<DomMapFlag, uno::Any> DiagramHelper_oox::getOOXDomValues() const
+{
+    if (!mpDiagramPtr)
+        return std::map<DomMapFlag, uno::Any>();
+
+    return mpDiagramPtr->getOOXDomValues();
+}
+
+void DiagramHelper_oox::setOOXDomValues(const std::map<DomMapFlag, uno::Any>& rValues)
+{
+    if (mpDiagramPtr)
+        mpDiagramPtr->setOOXDomValues(rValues);
 }
 
 namespace
@@ -964,7 +1008,14 @@ DiagramDataStatePtr DiagramHelper_oox::extractDiagramDataState() const
         return DiagramDataStatePtr();
     }
 
-    return mpDiagramPtr->getData()->extractDiagramDataState();
+    DiagramDataStatePtr pState(mpDiagramPtr->getData()->extractDiagramDataState());
+    if (pState)
+    {
+        pState->setDomValues(mpDiagramPtr->getOOXDomValues());
+        pState->setFrameInGroup(maFrameInGroup);
+    }
+
+    return pState;
 }
 
 void DiagramHelper_oox::applyDiagramDataState(const DiagramDataStatePtr& rState)
@@ -974,7 +1025,17 @@ void DiagramHelper_oox::applyDiagramDataState(const DiagramDataStatePtr& rState)
         return;
     }
 
+    if (!rState)
+        return;
+
+    // the shapes come back as they were, so we need no new layout for them
     mpDiagramPtr->getData()->applyDiagramDataState(rState);
+    mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
+    maFrameInGroup = rState->getFrameInGroup();
+    setSelectedModelID(EMPTY_OUSTRING);
+
+    // last, putting the shapes back may have dropped parts of the file again
+    mpDiagramPtr->setOOXDomValues(rState->getDomValues());
 }
 
 void DiagramHelper_oox::applyTextFitToSizeToDiagramNodes(

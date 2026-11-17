@@ -294,6 +294,8 @@ public:
     void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const cpo::uno::Any& rValue);
     cpo::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
     void resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags);
+    const DiagramPRDomMap& getOOXDomValues() const { return maDiagramPRDomMap; }
+    void setOOXDomValues(const DiagramPRDomMap& rValues) { maDiagramPRDomMap = rValues; }
 
     // check if mandatory DiagramDomS exist (or can be created)
     bool checkMinimalDataDoms() const;

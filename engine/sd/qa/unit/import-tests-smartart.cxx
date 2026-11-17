@@ -18,6 +18,9 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <tools/color.hxx>
 
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
@@ -27,6 +30,8 @@
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdtagitm.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/svdundo.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/process.h>
@@ -2487,6 +2492,234 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testUndoOfAnAddedNodeBringsBackBoxesA
     assertSameHeight(aChildBefore.mnHeight, aChildAfterUndo.mnHeight);
     CPPUNIT_ASSERT_EQUAL(aParentBefore.mfCharHeight, aParentAfterUndo.mfCharHeight);
     CPPUNIT_ASSERT_EQUAL(aChildBefore.mfCharHeight, aChildAfterUndo.mfCharHeight);
+}
+
+namespace
+{
+// the shapes the Diagram holds at its top level
+std::vector<uno::Reference<drawing::XShape>> topLevelShapes(const uno::Reference<drawing::XShape>& xDiagram)
+{
+    uno::Reference<drawing::XShapes> xShapes(xDiagram, uno::UNO_QUERY_THROW);
+    std::vector<uno::Reference<drawing::XShape>> aShapes;
+    for (sal_Int32 n = 0; n < xShapes->getCount(); ++n)
+        aShapes.emplace_back(xShapes->getByIndex(n), uno::UNO_QUERY_THROW);
+    return aShapes;
+}
+
+uno::Reference<xml::dom::XDocument> domOf(const svx::diagram::DiagramHelper_svx& rHelper,
+                                          svx::diagram::DomMapFlag eFlag)
+{
+    uno::Reference<xml::dom::XDocument> xDom;
+    rHelper.getOOXDomValue(eFlag) >>= xDom;
+    return xDom;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testUndoOfAnAddedNodeBringsBackTheLoadedDiagram)
+{
+    // Going back from a node that was added gives the Diagram as it came out of the file: the
+    // same shapes, and the parts of the file that saving writes out again unchanged.
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+    SdrModel& rModel(pDiagram->getSdrModelFromSdrObject());
+    rModel.EnableUndo(true);
+
+    const std::vector<uno::Reference<drawing::XShape>> aLoaded(topLevelShapes(xDiagram));
+    const uno::Reference<xml::dom::XDocument> xData(
+        domOf(*rHelper, svx::diagram::DomMapFlag::OOXData));
+    const uno::Reference<xml::dom::XDocument> xDrawing(
+        domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing));
+    CPPUNIT_ASSERT(xData.is());
+    CPPUNIT_ASSERT(xDrawing.is());
+    std::vector<awt::Rectangle> aBoxes;
+    for (const uno::Reference<drawing::XShape>& rShape : aLoaded)
+        aBoxes.emplace_back(rShape->getPosition().X, rShape->getPosition().Y,
+                            rShape->getSize().Width, rShape->getSize().Height);
+
+    const auto aAssertLoaded = [&]() {
+        const std::vector<uno::Reference<drawing::XShape>> aNow(topLevelShapes(xDiagram));
+        CPPUNIT_ASSERT_EQUAL(aLoaded.size(), aNow.size());
+        for (size_t n = 0; n < aLoaded.size(); ++n)
+        {
+            CPPUNIT_ASSERT_EQUAL(aLoaded[n], aNow[n]);
+            CPPUNIT_ASSERT_EQUAL(aBoxes[n].X, aNow[n]->getPosition().X);
+            CPPUNIT_ASSERT_EQUAL(aBoxes[n].Y, aNow[n]->getPosition().Y);
+            CPPUNIT_ASSERT_EQUAL(aBoxes[n].Width, aNow[n]->getSize().Width);
+            CPPUNIT_ASSERT_EQUAL(aBoxes[n].Height, aNow[n]->getSize().Height);
+        }
+        CPPUNIT_ASSERT_EQUAL(xData, domOf(*rHelper, svx::diagram::DomMapFlag::OOXData));
+        CPPUNIT_ASSERT_EQUAL(xDrawing, domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing));
+    };
+
+    SdrObject* pAnchor(
+        SdrObject::getSdrObjectFromXShape(findChildShapeByText(xDiagram, u"ChildB1"_ustr)));
+    CPPUNIT_ASSERT(nullptr != pAnchor);
+    CPPUNIT_ASSERT(!rHelper->addDiagramNode(u"NEW"_ustr, rModel, pAnchor->getDiagramDataModelID(),
+                                            /*bAsChild=*/false)
+                        .isEmpty());
+    rHelper->reLayout();
+
+    // the changed Diagram has no part of the file left to write out as it was
+    CPPUNIT_ASSERT(findChildShapeByText(xDiagram, u"NEW"_ustr).is());
+    CPPUNIT_ASSERT(!domOf(*rHelper, svx::diagram::DomMapFlag::OOXData).is());
+    CPPUNIT_ASSERT(!domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing).is());
+
+    SfxUndoManager* pUndoManager(getSdDocShell()->GetUndoManager());
+    pUndoManager->Undo();
+    aAssertLoaded();
+
+    // forth and back again
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT(findChildShapeByText(xDiagram, u"NEW"_ustr).is());
+    CPPUNIT_ASSERT(!domOf(*rHelper, svx::diagram::DomMapFlag::OOXData).is());
+    pUndoManager->Undo();
+    aAssertLoaded();
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testUndoOfAColourBeforeAnAddedNodeReachesTheShape)
+{
+    // A colour given to a node before another node was added goes away again when both are undone.
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+    SdrModel& rModel(pDiagram->getSdrModelFromSdrObject());
+    rModel.EnableUndo(true);
+
+    const auto aColourOf = [&](const OUString& rText) {
+        uno::Reference<beans::XPropertySet> xShape(findChildShapeByText(xDiagram, rText),
+                                                   uno::UNO_QUERY_THROW);
+        return xShape->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>();
+    };
+    const sal_Int32 nLoaded(aColourOf(u"ChildB1"_ustr));
+    CPPUNIT_ASSERT(nLoaded != sal_Int32(COL_LIGHTRED));
+
+    // the colour as a view gives it, with its undo
+    SdrObject* pChild(
+        SdrObject::getSdrObjectFromXShape(findChildShapeByText(xDiagram, u"ChildB1"_ustr)));
+    CPPUNIT_ASSERT(nullptr != pChild);
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoAttrObject(*pChild));
+    pChild->SetMergedItem(XFillColorItem(OUString(), COL_LIGHTRED));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_LIGHTRED), aColourOf(u"ChildB1"_ustr));
+
+    CPPUNIT_ASSERT(!rHelper->addDiagramNode(u"NEW"_ustr, rModel, pChild->getDiagramDataModelID(),
+                                            /*bAsChild=*/false)
+                        .isEmpty());
+    rHelper->reLayout();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_LIGHTRED), aColourOf(u"ChildB1"_ustr));
+
+    SfxUndoManager* pUndoManager(getSdDocShell()->GetUndoManager());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT(!findChildShapeByText(xDiagram, u"NEW"_ustr).is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_LIGHTRED), aColourOf(u"ChildB1"_ustr));
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nLoaded, aColourOf(u"ChildB1"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testUndoOfAColourBringsBackTheLoadedParts)
+{
+    // A colour drops the parts of the file that saving would write out unchanged, and its undo
+    // brings them back.
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+    SdrModel& rModel(pDiagram->getSdrModelFromSdrObject());
+    rModel.EnableUndo(true);
+
+    const uno::Reference<xml::dom::XDocument> xData(
+        domOf(*rHelper, svx::diagram::DomMapFlag::OOXData));
+    const uno::Reference<xml::dom::XDocument> xDrawing(
+        domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing));
+    CPPUNIT_ASSERT(xData.is());
+    CPPUNIT_ASSERT(xDrawing.is());
+
+    // the colour as a view gives it, in a bracket with its undo
+    SdrObject* pChild(
+        SdrObject::getSdrObjectFromXShape(findChildShapeByText(xDiagram, u"ChildB1"_ustr)));
+    CPPUNIT_ASSERT(nullptr != pChild);
+    rModel.BegUndo();
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoAttrObject(*pChild));
+    pChild->SetMergedItem(XFillColorItem(OUString(), COL_LIGHTRED));
+    rModel.EndUndo();
+    CPPUNIT_ASSERT(!domOf(*rHelper, svx::diagram::DomMapFlag::OOXData).is());
+    CPPUNIT_ASSERT(!domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing).is());
+
+    SfxUndoManager* pUndoManager(getSdDocShell()->GetUndoManager());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(xData, domOf(*rHelper, svx::diagram::DomMapFlag::OOXData));
+    CPPUNIT_ASSERT_EQUAL(xDrawing, domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing));
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT(!domOf(*rHelper, svx::diagram::DomMapFlag::OOXData).is());
+    CPPUNIT_ASSERT(!domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing).is());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRegenerateIsOneUndoStep)
+{
+    // Regenerate on its own can be undone, and after a node was added it goes back together with
+    // the node.
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+    SdXImpressDocument* pDocument(dynamic_cast<SdXImpressDocument*>(mxComponent.get()));
+    CPPUNIT_ASSERT(pDocument);
+    SdrView* pView(pDocument->GetDocShell()->GetViewShell()->GetView());
+    CPPUNIT_ASSERT(pView);
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+    SdrModel& rModel(pDiagram->getSdrModelFromSdrObject());
+    SfxUndoManager* pUndoManager(getSdDocShell()->GetUndoManager());
+    const std::vector<uno::Reference<drawing::XShape>> aLoaded(topLevelShapes(xDiagram));
+    const uno::Reference<xml::dom::XDocument> xDrawing(
+        domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing));
+    CPPUNIT_ASSERT(xDrawing.is());
+
+    const auto aRegenerate = [&]() {
+        pView->UnmarkAll();
+        pView->MarkObj(pDiagram, pView->GetSdrPageView());
+        dispatchCommand(mxComponent, u".uno:RegenerateDiagram"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+    };
+    const auto aAssertLoaded = [&]() {
+        const std::vector<uno::Reference<drawing::XShape>> aNow(topLevelShapes(xDiagram));
+        CPPUNIT_ASSERT_EQUAL(aLoaded.size(), aNow.size());
+        for (size_t n = 0; n < aLoaded.size(); ++n)
+            CPPUNIT_ASSERT_EQUAL(aLoaded[n], aNow[n]);
+        CPPUNIT_ASSERT_EQUAL(xDrawing, domOf(*rHelper, svx::diagram::DomMapFlag::OOXDrawing));
+    };
+
+    const size_t nLoaded(pUndoManager->GetUndoActionCount());
+    aRegenerate();
+    CPPUNIT_ASSERT_EQUAL(nLoaded + 1, pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT(aLoaded[0] != topLevelShapes(xDiagram)[0]);
+    pUndoManager->Undo();
+    aAssertLoaded();
+
+    SdrObject* pAnchor(
+        SdrObject::getSdrObjectFromXShape(findChildShapeByText(xDiagram, u"ChildB1"_ustr)));
+    CPPUNIT_ASSERT(nullptr != pAnchor);
+    CPPUNIT_ASSERT(!rHelper->addDiagramNode(u"NEW"_ustr, rModel, pAnchor->getDiagramDataModelID(),
+                                            /*bAsChild=*/false)
+                        .isEmpty());
+    aRegenerate();
+    CPPUNIT_ASSERT(findChildShapeByText(xDiagram, u"NEW"_ustr).is());
+    CPPUNIT_ASSERT_EQUAL(nLoaded + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    aAssertLoaded();
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeTextShrinksToItsBoxOnAFreshlyLoadedDiagram)

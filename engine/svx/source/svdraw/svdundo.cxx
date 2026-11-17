@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <svx/svdundo.hxx>
 #include <svx/svdotext.hxx>
@@ -688,7 +689,6 @@ void SdrUndoDiagramModelData::Undo()
         m_aEndState = mxObj->getDiagramHelper()->extractDiagramDataState();
 
     mxObj->getDiagramHelper()->applyDiagramDataState(m_aStartState);
-    mxObj->getDiagramHelper()->reLayout();
 }
 
 void SdrUndoDiagramModelData::Redo()
@@ -703,10 +703,49 @@ void SdrUndoDiagramModelData::Redo()
         return;
 
     mxObj->getDiagramHelper()->applyDiagramDataState(m_aEndState);
-    mxObj->getDiagramHelper()->reLayout();
 }
 
 OUString SdrUndoDiagramModelData::GetComment() const
+{
+    return ImpGetDescriptionStr(STR_DiagramModelDataChange);
+}
+
+SdrUndoDiagramDomValues::SdrUndoDiagramDomValues(SdrObject& rNewObj, DomValues aDomValuesBefore,
+                                                 GrabBag aGrabBagBefore, DomValues aDomValuesAfter,
+                                                 GrabBag aGrabBagAfter)
+: SdrUndoObj(rNewObj)
+, maDomValuesBefore(std::move(aDomValuesBefore))
+, maGrabBagBefore(std::move(aGrabBagBefore))
+, maDomValuesAfter(std::move(aDomValuesAfter))
+, maGrabBagAfter(std::move(aGrabBagAfter))
+{
+}
+
+void SdrUndoDiagramDomValues::apply(const DomValues& rDomValues, const GrabBag& rGrabBag)
+{
+    if (!mxObj || !mxObj->isDiagram())
+        return;
+
+    mxObj->getDiagramHelper()->setOOXDomValues(rDomValues);
+
+    cpo::uno::Reference<css::beans::XPropertySet> xGroupProperties(mxObj->getUnoShape(),
+                                                               cpo::uno::UNO_QUERY);
+    if (xGroupProperties.is()
+        && xGroupProperties->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        xGroupProperties->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(rGrabBag));
+}
+
+void SdrUndoDiagramDomValues::Undo()
+{
+    apply(maDomValuesBefore, maGrabBagBefore);
+}
+
+void SdrUndoDiagramDomValues::Redo()
+{
+    apply(maDomValuesAfter, maGrabBagAfter);
+}
+
+OUString SdrUndoDiagramDomValues::GetComment() const
 {
     return ImpGetDescriptionStr(STR_DiagramModelDataChange);
 }

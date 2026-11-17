@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::oox;
 using namespace ::com::sun::star;
@@ -1858,6 +1859,11 @@ DiagramDataState::DiagramDataState(const Connections& aConnections, const Points
             }
         }
 
+        uno::Reference<beans::XPropertySet> xGroupProperties(rRootShape, uno::UNO_QUERY);
+        if (xGroupProperties.is()
+            && xGroupProperties->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            xGroupProperties->getPropertyValue(u"InteropGrabBag"_ustr) >>= maGrabBag;
+
         SdrObjListIter aIter(*pSource, SdrIterMode::DeepNoGroups);
         while (aIter.IsMore())
         {
@@ -1926,6 +1932,12 @@ void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
                 if (nullptr != pShape && rText)
                     pShape->NbcSetOutlinerParaObject(*rText);
             }
+
+            uno::Reference<beans::XPropertySet> xGroupProperties(xRootShape, uno::UNO_QUERY);
+            if (xGroupProperties.is()
+                && xGroupProperties->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+                xGroupProperties->setPropertyValue(u"InteropGrabBag"_ustr,
+                                                   uno::Any(rState->getGrabBag()));
         }
 
         // Reset temporary buffered ModelData association lists & rebuild them

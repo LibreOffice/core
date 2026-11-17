@@ -22,9 +22,14 @@
 #include <config_options.h>
 #include <sal/config.h>
 
+#include <map>
 #include <memory>
 #include <utility>
 #include <vector>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <cpo/uno/Any.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <editeng/outlobj.hxx>
 #include <svl/itemset.hxx>
@@ -34,6 +39,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/diagram/DomMapFlag.hxx>
 #include <unotools/resmgr.hxx>
 
 class SfxPoolItem;
@@ -239,6 +245,33 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrUndoDiagramModelData final : public
 public:
     SdrUndoDiagramModelData(SdrObject& rNewObj, const std::shared_ptr< svx::diagram::DiagramDataState >& rStartState);
     virtual ~SdrUndoDiagramModelData() override;
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+
+    virtual OUString GetComment() const override;
+};
+
+// the parts of the file a Diagram keeps and the grab bag of its group, before and after a change
+// dropped some of them
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrUndoDiagramDomValues final : public SdrUndoObj
+{
+public:
+    typedef std::map<svx::diagram::DomMapFlag, cpo::uno::Any> DomValues;
+    typedef cpo::uno::Sequence<css::beans::PropertyValue> GrabBag;
+
+private:
+    DomValues maDomValuesBefore;
+    GrabBag maGrabBagBefore;
+    DomValues maDomValuesAfter;
+    GrabBag maGrabBagAfter;
+
+    void apply(const DomValues& rDomValues, const GrabBag& rGrabBag);
+
+public:
+    SdrUndoDiagramDomValues(SdrObject& rNewObj, DomValues aDomValuesBefore,
+                            GrabBag aGrabBagBefore, DomValues aDomValuesAfter,
+                            GrabBag aGrabBagAfter);
 
     virtual void Undo() override;
     virtual void Redo() override;

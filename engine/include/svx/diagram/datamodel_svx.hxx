@@ -38,6 +38,10 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <cpo/uno/Any.hxx>
+#include <cpo/uno/Sequence.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
 
@@ -356,6 +360,14 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DiagramDataState
     std::vector<std::pair<cpo::uno::Reference<css::drawing::XShape>,
                           std::optional<OutlinerParaObject>>> maShapeTexts;
 
+    // the parts of the file as they were loaded, the ones a change already dropped are missing;
+    // the trees are never changed, only dropped, so holding them is enough
+    std::map<DomMapFlag, cpo::uno::Any> maDomValues;
+
+    // the grab bag of the group and the frame of the layout in it
+    cpo::uno::Sequence<css::beans::PropertyValue> maGrabBag;
+    basegfx::B2DRange maFrameInGroup;
+
 public:
     DiagramDataState(const Connections& aConnections, const Points& aPoints, const cpo::uno::Reference< css::drawing::XShape >& rRootShape);//, const OUString& rBackgroundShapeModelID);
 
@@ -370,6 +382,12 @@ public:
     {
         return maShapeTexts;
     }
+
+    const std::map<DomMapFlag, cpo::uno::Any>& getDomValues() const { return maDomValues; }
+    void setDomValues(const std::map<DomMapFlag, cpo::uno::Any>& rValues) { maDomValues = rValues; }
+    const cpo::uno::Sequence<css::beans::PropertyValue>& getGrabBag() const { return maGrabBag; }
+    const basegfx::B2DRange& getFrameInGroup() const { return maFrameInGroup; }
+    void setFrameInGroup(const basegfx::B2DRange& rFrame) { maFrameInGroup = rFrame; }
 };
 
 typedef std::shared_ptr< DiagramDataState > DiagramDataStatePtr;

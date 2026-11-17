@@ -418,6 +418,7 @@ DiagramHelper_svx::DiagramHelper_svx()
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
 , mbDiagramObjectsLocked(false)
+, mbUndoCoversNextLayout(false)
 {
 }
 
@@ -427,6 +428,7 @@ DiagramHelper_svx::DiagramHelper_svx(DiagramHelper_svx const& rSource)
 , mbUseDiagramModelData(rSource.mbUseDiagramModelData)
 , mbForceThemePtrRecreation(rSource.mbForceThemePtrRecreation)
 , mbDiagramObjectsLocked(false)
+, mbUndoCoversNextLayout(false)
 {
 }
 

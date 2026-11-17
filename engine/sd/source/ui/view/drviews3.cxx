@@ -54,6 +54,7 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
+#include <svx/svdundo.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -490,7 +491,22 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     if (SID_REGENERATE_DIAGRAM == nSlot)
                     {
                         mpDrawView->UnmarkAll();
-                        pObj->getDiagramHelper()->reLayout();
+                        const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(
+                            pObj->getDiagramHelper());
+                        SdrModel& rModel(pObj->getSdrModelFromSdrObject());
+
+                        // a change that just made its undo goes back over this layout as well
+                        if (rModel.IsUndoEnabled() && !rHelper->undoCoversNextLayout())
+                        {
+                            std::shared_ptr<svx::diagram::DiagramDataState> pStartState(
+                                rHelper->extractDiagramDataState());
+                            rHelper->reLayout();
+                            rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoDiagramModelData(
+                                *pObj, pStartState));
+                        }
+                        else
+                            rHelper->reLayout();
+
                         mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
                     else if (SID_EDIT_DIAGRAM == nSlot)
