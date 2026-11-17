@@ -268,8 +268,8 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 // FIXME: should be grouping; it is only used though in case nStringsCnt is
 // near SV_MAX_COUNT_INPUT_STRINGS, in NumberStringDivision().
 
-bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
-                                          OUString& rSymbol ) const
+bool ImpSvNumberInputScan::SkipThousands(const sal_Unicode*& pStr, const sal_Unicode* pEnd,
+                                         OUString& rSymbol) const
 {
     bool res = false;
     OUStringBuffer sBuff(rSymbol);
@@ -288,7 +288,7 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
         switch (eState)
         {
         case SsStart:
-            if ( StringPtrContains( rThSep, pHere-1, 0 ) )
+            if (StringContains(rThSep, std::u16string_view(pHere - 1, pEnd), 0))
             {
                 nCounter = 0;
                 eState = SsGetValue;
@@ -351,7 +351,7 @@ void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
             if (nStringsCnt >= SV_MAX_COUNT_INPUT_STRINGS - 7 &&
                 nPosThousandString == 0) // Only once
             {
-                if ( SkipThousands( pStr, sStrArray[nStringsCnt] ) )
+                if (SkipThousands(pStr, pEnd, sStrArray[nStringsCnt]))
                 {
                     nPosThousandString = nStringsCnt;
                 }
@@ -363,32 +363,6 @@ void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
         }
         nStringsCnt++;
     }
-}
-
-
-/**
- * Whether pString contains rWhat at nPos
- */
-bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
-                                                  const sal_Unicode* pString, sal_Int32 nPos )
-{
-    if ( rWhat.isEmpty() )
-    {
-        return false;
-    }
-    const sal_Unicode* pWhat = rWhat.getStr();
-    const sal_Unicode* const pEnd = pWhat + rWhat.getLength();
-    const sal_Unicode* pStr = pString + nPos;
-    while ( pWhat < pEnd )
-    {
-        if ( *pWhat != *pStr )
-        {
-            return false;
-        }
-        pWhat++;
-        pStr++;
-    }
-    return true;
 }
 
 

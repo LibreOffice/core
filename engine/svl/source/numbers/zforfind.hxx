@@ -199,7 +199,7 @@ private:
 
     // Concatenate ,000,23 blocks
     // in input to 000123
-    bool SkipThousands( const sal_Unicode*& pStr, OUString& rSymbol ) const;
+    bool SkipThousands(const sal_Unicode*& pStr, const sal_Unicode* pEnd, OUString& rSymbol) const;
 
     // Divide numbers/strings into
     // arrays and variables above.
@@ -215,8 +215,6 @@ private:
                              const OUString& rString,
                              sal_Int32 nPos ) const;
 
-    // optimized substring versions
-
     // Whether rString contains rWhat at nPos
     static bool StringContains(std::u16string_view rWhat, std::u16string_view rString,
                                sal_Int32 nPos)
@@ -224,24 +222,6 @@ private:
         return !rWhat.empty() && o3tl::make_unsigned(nPos) < rString.size()
                && rString.substr(nPos).starts_with(rWhat);
     }
-
-    // Whether pString contains rWhat at nPos
-    static bool StringPtrContains( const OUString& rWhat,
-                                          const sal_Unicode* pString,
-                                          sal_Int32 nPos ) // nPos MUST be a valid offset from pString
-        {
-            // mostly used with one character
-            if ( rWhat[ 0 ] != pString[ nPos ] )
-            {
-                return false;
-            }
-            return StringPtrContainsImpl( rWhat, pString, nPos );
-        }
-
-    //! DO NOT use directly
-    static bool StringPtrContainsImpl( const OUString& rWhat,
-                                       const sal_Unicode* pString,
-                                       sal_Int32 nPos );
 
     // Skip a special character
     static inline bool SkipChar( sal_Unicode c,
