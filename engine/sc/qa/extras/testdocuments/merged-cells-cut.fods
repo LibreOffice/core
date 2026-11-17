@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:meta>
+  <dc:title>Merged cells cut by a page break</dc:title>
+ </office:meta>
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="table-cell">
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt" fo:language="en" fo:country="US"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties fo:break-before="page"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sales">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-column table:visibility="collapse"/>
+    <table:table-row>
+     <table:table-cell table:number-columns-spanned="3" office:value-type="string"><text:p>Sales</text:p></table:table-cell>
+     <table:covered-table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:number-rows-spanned="4" office:value-type="string"><text:p>North</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="10"><text:p>10</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11"><text:p>11</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:visibility="collapse">
+     <table:covered-table-cell/>
+     <table:table-cell office:value-type="float" office:value="20"><text:p>20</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="21"><text:p>21</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:covered-table-cell/>
+     <table:table-cell office:value-type="float" office:value="30"><text:p>30</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="31"><text:p>31</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:covered-table-cell/>
+     <table:table-cell office:value-type="float" office:value="40"><text:p>40</text:p></table:table-cell>
+     <table:table-cell office:value-type="float" office:value="41"><text:p>41</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>
