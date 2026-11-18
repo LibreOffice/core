@@ -2897,14 +2897,22 @@ brokers all messages for that document.
 
 Connection:
 
-    wss://<host><service-root>/co/collab?WOPISrc=<wopi-url>
+    wss://<host><service-root>/co/collab?WOPISrc=<wopi-url>&protocol=<number>
 
-    The server refuses the upgrade with 400 when WOPISrc is missing, or when
+    "protocol" is the number of the protocol that the client speaks (see "Protocol numbers"
+    below).  The server refuses the upgrade with 400 when WOPISrc is missing, or when
     client_document_loading.enable in coolwsd.xml is off.  The first message from the client is
 
         access_token <token>
 
-    with the URI-encoded access token for <wopi-url>.  The server sends "progress: validating",
+    with the URI-encoded access token for <wopi-url>.  When the server cannot speak to a client
+    with that protocol number, or the number is missing or not readable, the server replies with
+
+        error: cmd=collab kind=badprotocolversion
+
+    and closes the WebSocket.  (A later server may add further fields to that line, so a client
+    takes a line that starts with it, followed by a space or the end of the line, as this refusal.)
+    Otherwise, the server sends "progress: validating",
     ignores further messages while it checks the WOPI host and calls CheckFileInfo, and derives
     the docKey of the document from <wopi-url>, the same as for the /cool/ws session of the
     document.  It replies with one of
@@ -2919,16 +2927,29 @@ Connection:
     on success.  From then on, every message in either direction is a single JSON object with a
     "type" field.
 
+Protocol numbers:
+
+    The client gives the number of the protocol that it speaks.  The server either refuses with
+    "kind=badprotocolversion" when it cannot speak to that client, or sends the number of the
+    protocol that it speaks with the client, which is never higher than the client's, as
+    "protocol" in {"type":"authenticated"}.  The client gives up when it cannot speak that
+    number.  Number 1 is the protocol of the first server that has protocol numbers.  Both sides
+    ignore a query parameter, a field, a server -> client message type and a stream name that they
+    do not know.  (The server answers a client -> server message type that it does not know with
+    {"type":"error"}.)  So a new optional field, a new server -> client message type or a new
+    stream name needs no new number.  A new client -> server message type, a field that the
+    receiver must understand, or a changed meaning of a message gets a new number.
+
 server -> client messages on /co/collab
 ---------------------------------------
 
-{"type":"authenticated","fileInfo":{...}}
+{"type":"authenticated","protocol":<number>,"fileInfo":{...}}
 
     Sent once the wopiSrc + access_token pair has been accepted.  "fileInfo" holds the file
     properties of the wopi: message to a /cool/ws session, such as "UserCanWrite", "EnableShare"
     and the "Hide..." and "Disable..." options.  It leaves out "FileUrl", as the document comes
     through fetch, and the values that only a /cool/ws session has: "TemplateSource" and the AI
-    settings.
+    settings.  "protocol" is the number of the protocol that the server speaks with the client.
 
 {"type":"user_list","users":[<user>,...],"editingActive":<bool>}
 

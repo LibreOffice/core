@@ -2929,6 +2929,9 @@ function showWelcomeSVG() {
 		});
 	};
 
+	// The /co/collab protocol number that this client speaks (see wsd/protocol.txt):
+	global.collab.protocol = 1;
+
 	// Open the /co/collab WebSocket and sign in with accessToken.
 	// The arguments are as for collab.fetchFile above.
 	// It resolves with the file properties that coolwsd sends with authenticated, if any.
@@ -2936,16 +2939,19 @@ function showWelcomeSVG() {
 		// Stash for collab.uploadFile so it can rebase upload_url
 		// against the same cool server.  Cleared on socket close.
 		global.collab.coolServer = coolServer || '';
+		const protocol = '&protocol=' + global.collab.protocol;
 		return new Promise(function(resolve, reject) {
 			var wsUrl;
 			if (coolServer) {
 				wsUrl = coolServer.replace(/^https?:/, function(s) {
 					return s === 'https:' ? 'wss:' : 'ws:';
-				}) + '/co/collab?WOPISrc=' + encodeURIComponent(wopiSrc);
+				}) + '/co/collab?WOPISrc=' + encodeURIComponent(wopiSrc)
+					+ protocol;
 			} else {
 				var wsProtocol = global.location.protocol === 'https:' ? 'wss:' : 'ws:';
 				wsUrl = wsProtocol + '//' + global.location.host +
-					global.serviceRoot + '/co/collab?WOPISrc=' + encodeURIComponent(wopiSrc);
+					global.serviceRoot + '/co/collab?WOPISrc='
+					+ encodeURIComponent(wopiSrc) + protocol;
 			}
 
 			global.app.console.log('Connecting to collab endpoint: ' + wsUrl);
@@ -2978,6 +2984,16 @@ function showWelcomeSVG() {
 
 					if (msg.type === 'authenticated') {
 						clearTimeout(timeoutId);
+
+						// A server that speaks another protocol than this
+						// client is the older one (a newer server speaks
+						// this client's protocol):
+						if (msg.protocol !== global.collab.protocol) {
+							global.collab.ws.close();
+							reject(new Error(
+								'Collab error: the server speaks protocol ' + msg.protocol));
+							return;
+						}
 
 						// Switch to notification handler for ongoing messages
 						global.collab.ws.onmessage = global.collab.notificationHandler;

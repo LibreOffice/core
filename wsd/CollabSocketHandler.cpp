@@ -33,7 +33,43 @@
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/URI.h>
 
+#include <charconv>
+#include <optional>
 #include <sstream>
+
+namespace {
+
+// Whether this server can speak to a client, given the client's "protocol" query parameter (the
+// number of the protocol that the client speaks, which only a broken client leaves out or garbles):
+bool acceptsProtocol(Poco::Net::HTTPRequest const & request) {
+    std::optional<std::string> parameter;
+    for (auto const & [name, value]: Poco::URI(request.getURI()).getQueryParameters()) {
+        if (name == "protocol") {
+            parameter = value;
+            break;
+        }
+    }
+    if (!parameter) {
+        LOG_WRN("Collab: the client gives no protocol number");
+        return false;
+    }
+    int number;
+    auto const [end, error]
+        = std::from_chars(parameter->data(), parameter->data() + parameter->size(), number);
+    if (error != std::errc() || end != parameter->data() + parameter->size()) {
+        LOG_WRN("Collab: the client's protocol number [" << *parameter << "] is not readable");
+        return false;
+    }
+    if (number < CollabSocketHandler::Protocol) {
+        LOG_WRN("Collab: the client's protocol number " << number << " is too old");
+        return false;
+    }
+    LOG_INF("Collab: the client's protocol number " << number << " gives protocol "
+            << CollabSocketHandler::Protocol);
+    return true;
+}
+
+}
 
 CollabSocketHandler::CollabSocketHandler(const std::shared_ptr<StreamSocket>& socket,
                                          const Poco::Net::HTTPRequest& request,
@@ -42,6 +78,7 @@ CollabSocketHandler::CollabSocketHandler(const std::shared_ptr<StreamSocket>& so
     : WebSocketHandler(socket, request, allowedOrigin)
     , _wopiSrc(wopiSrc)
     , _socketWeak(socket)
+    , _protocolAccepted(acceptsProtocol(request))
 {
 }
 
@@ -49,6 +86,7 @@ CollabSocketHandler::CollabSocketHandler(const std::string& wopiSrc, const std::
                                          const std::shared_ptr<CollabBroker>& broker)
     : WebSocketHandler(/*isClient=*/false, /*isMasking=*/false)
     , _wopiSrc(wopiSrc)
+    , _protocolAccepted(true)
     , _docKey(docKey)
     , _broker(broker)
 {
@@ -65,6 +103,14 @@ void CollabSocketHandler::handleMessage(const std::vector<char>& payload)
 
     if (!_isAuthenticated)
     {
+        // A client that the server cannot speak to gets the refusal in reply to its first message
+        // (as a page's script cannot read the status of a refused upgrade):
+        if (!_protocolAccepted) {
+            sendTextMessage("error: cmd=collab kind=badprotocolversion");
+            shutdown();
+            return;
+        }
+
         const std::string msg(payload.data(), payload.size());
         static const std::string prefix = "access_token ";
         if (msg.size() > prefix.size() &&
@@ -243,6 +289,7 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
 
             Poco::JSON::Object::Ptr authenticated = new Poco::JSON::Object();
             authenticated->set("type", "authenticated");
+            authenticated->set("protocol", Protocol);
             const std::unique_ptr<WopiStorage::WOPIFileInfo> fileInfo = cfi.wopiFileInfo(cfi.url());
             if (fileInfo)
             {

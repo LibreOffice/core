@@ -41,6 +41,9 @@ class CollabEndpointTest : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCollabBrokerFindOrCreate);
     CPPUNIT_TEST(testCollabInvalidJsonMessage);
     CPPUNIT_TEST(testCollabUnknownMessageType);
+    CPPUNIT_TEST(testCollabProtocolTooOld);
+    CPPUNIT_TEST(testCollabProtocolUnreadable);
+    CPPUNIT_TEST(testCollabProtocolMissing);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -52,6 +55,9 @@ class CollabEndpointTest : public CPPUNIT_NS::TestFixture
     void testCollabBrokerFindOrCreate();
     void testCollabInvalidJsonMessage();
     void testCollabUnknownMessageType();
+    void testCollabProtocolTooOld();
+    void testCollabProtocolUnreadable();
+    void testCollabProtocolMissing();
 
 public:
     CollabEndpointTest()
@@ -81,7 +87,7 @@ void CollabEndpointTest::testCollabWebSocketAuth()
 
     // Create WebSocket connection to /co/collab with WOPISrc parameter
     const std::string wopiSrc = "http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2F123";
-    const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
+    const std::string path = "/co/collab?WOPISrc=" + wopiSrc + "&protocol=1";
 
     auto ws = http::WebSocketSession::create(_uri.toString());
     http::Request req(path);
@@ -142,7 +148,7 @@ void CollabEndpointTest::testCollabMissingAccessToken()
 
     // Create WebSocket connection
     const std::string wopiSrc = "http%3A%2F%2Fexample.com%2Fwopi%2Ffiles%2F456";
-    const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
+    const std::string path = "/co/collab?WOPISrc=" + wopiSrc + "&protocol=1";
 
     auto ws = http::WebSocketSession::create(_uri.toString());
     http::Request req(path);
@@ -173,7 +179,7 @@ void CollabEndpointTest::testCollabInvalidFirstMessage()
 
     // Create WebSocket connection
     const std::string wopiSrc = "http%3A%2F%2Fexample.com%2Fwopi%2Ffiles%2F789";
-    const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
+    const std::string path = "/co/collab?WOPISrc=" + wopiSrc + "&protocol=1";
 
     auto ws = http::WebSocketSession::create(_uri.toString());
     http::Request req(path);
@@ -268,7 +274,7 @@ void CollabEndpointTest::testCollabInvalidJsonMessage()
 
     // Create WebSocket connection
     const std::string wopiSrc = "http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2Fjson_test";
-    const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
+    const std::string path = "/co/collab?WOPISrc=" + wopiSrc + "&protocol=1";
 
     auto ws = http::WebSocketSession::create(_uri.toString());
     http::Request req(path);
@@ -299,7 +305,7 @@ void CollabEndpointTest::testCollabUnknownMessageType()
 
     // Create WebSocket connection
     const std::string wopiSrc = "http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2Fmsg_test";
-    const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
+    const std::string path = "/co/collab?WOPISrc=" + wopiSrc + "&protocol=1";
 
     auto ws = http::WebSocketSession::create(_uri.toString());
     http::Request req(path);
@@ -321,6 +327,54 @@ void CollabEndpointTest::testCollabUnknownMessageType()
     // Note: Full JSON message testing would require a working WOPI server
     // This test verifies the initial authentication flow works correctly
     TST_LOG("Message handling test completed (WOPI server unreachable as expected)");
+}
+
+// A client whose protocol number is older than the server's is refused:
+void CollabEndpointTest::testCollabProtocolTooOld() {
+    constexpr auto testname = __func__;
+    auto ws = http::WebSocketSession::create(_uri.toString());
+    http::Request request(
+        "/co/collab?WOPISrc=http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2F1&protocol="
+        + std::to_string(CollabSocketHandler::Protocol - 1));
+    LOK_ASSERT(ws->asyncRequest(request, _socketPoll));
+    ws->sendMessage("access_token test_token");
+    std::vector<char> const response
+        = ws->waitForMessage("error:", std::chrono::seconds(10), testname);
+    LOK_ASSERT_EQUAL(
+        std::string("error: cmd=collab kind=badprotocolversion"),
+        std::string(response.data(), response.size()));
+    LOK_ASSERT(ws->waitForDisconnection(std::chrono::seconds(10)));
+}
+
+// A client whose protocol number is not readable is refused:
+void CollabEndpointTest::testCollabProtocolUnreadable() {
+    constexpr auto testname = __func__;
+    auto ws = http::WebSocketSession::create(_uri.toString());
+    http::Request request(
+        "/co/collab?WOPISrc=http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2F1&protocol=x");
+    LOK_ASSERT(ws->asyncRequest(request, _socketPoll));
+    ws->sendMessage("access_token test_token");
+    std::vector<char> const response
+        = ws->waitForMessage("error:", std::chrono::seconds(10), testname);
+    LOK_ASSERT_EQUAL(
+        std::string("error: cmd=collab kind=badprotocolversion"),
+        std::string(response.data(), response.size()));
+    LOK_ASSERT(ws->waitForDisconnection(std::chrono::seconds(10)));
+}
+
+// A client that gives no protocol number is refused:
+void CollabEndpointTest::testCollabProtocolMissing() {
+    constexpr auto testname = __func__;
+    auto ws = http::WebSocketSession::create(_uri.toString());
+    http::Request request("/co/collab?WOPISrc=http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2F1");
+    LOK_ASSERT(ws->asyncRequest(request, _socketPoll));
+    ws->sendMessage("access_token test_token");
+    std::vector<char> const response
+        = ws->waitForMessage("error:", std::chrono::seconds(10), testname);
+    LOK_ASSERT_EQUAL(
+        std::string("error: cmd=collab kind=badprotocolversion"),
+        std::string(response.data(), response.size()));
+    LOK_ASSERT(ws->waitForDisconnection(std::chrono::seconds(10)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CollabEndpointTest);

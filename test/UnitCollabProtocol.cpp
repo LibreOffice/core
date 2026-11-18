@@ -15,6 +15,7 @@
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <helpers.hpp>
+#include <wsd/CollabSocketHandler.hpp>
 
 #include <Poco/JSON/Parser.h>
 #include <Poco/Net/HTTPRequest.h>
@@ -46,7 +47,7 @@ startCollabConnection(const std::shared_ptr<SocketPoll>& socketPoll,
                       const std::string& wopiSrc,
                       const std::string& accessToken)
 {
-    const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
+    const std::string path = "/co/collab?WOPISrc=" + wopiSrc + "&protocol=1";
     auto ws = http::WebSocketSession::create(helpers::getTestServerURI());
     http::Request req(path);
     ws->asyncRequest(req, socketPoll);
@@ -962,13 +963,88 @@ private:
     std::shared_ptr<http::WebSocketSession> collabWs_;
 };
 
+// The server speaks its own protocol with a newer collab client, and ignores a query parameter
+// and a message field that it does not know:
+class UnitCollabProtocolNumber: public WopiTestServer {
+public:
+    UnitCollabProtocolNumber():
+        WopiTestServer("UnitCollabProtocolNumber"), phase_(Phase::Connect) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect: {
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything"
+                  "&testname=UnitCollabProtocolNumber");
+            ws_ = http::WebSocketSession::create(helpers::getTestServerURI());
+            http::Request request(
+                "/co/collab?WOPISrc=" + Uri::encode(wopiURL.toString()) + "&protocol="
+                + std::to_string(CollabSocketHandler::Protocol + 1) + "&unknown=x");
+            LOK_ASSERT(ws_->asyncRequest(request, socketPoll()));
+            ws_->sendMessage("access_token anything");
+            break;
+        }
+        case Phase::WaitAuth: {
+            Poco::JSON::Object::Ptr authenticated;
+            ws_->poll(
+                [&](std::vector<char> const & message) {
+                    Poco::JSON::Object::Ptr object;
+                    if (JsonUtil::parseJSON(std::string(message.data(), message.size()), object)
+                        && object->optValue<std::string>("type", "") == "authenticated")
+                    {
+                        authenticated = object;
+                        return true;
+                    }
+                    return false;
+                },
+                std::chrono::milliseconds(1), "collab");
+            if (!authenticated) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(
+                CollabSocketHandler::Protocol, authenticated->getValue<int>("protocol"));
+            TRANSITION_STATE(phase_, Phase::WaitFetchWithUnknownField);
+            ws_->sendMessage(
+                R"({"type":"fetch","stream":"contents","requestId":"f1","unknown":true})");
+            break;
+        }
+        case Phase::WaitFetchWithUnknownField: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(ws_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("f1"), msg->getValue<std::string>("requestId"));
+            TRANSITION_STATE(phase_, Phase::Done);
+            ws_->asyncShutdown();
+            passTest("The server spoke its own protocol with a newer collab client");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchWithUnknownField, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> ws_;
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [7] { new UnitCollabProtocol(),
+    return new UnitBase* [8] { new UnitCollabProtocol(),
                                new UnitCollabCheckFileInfoTransient(),
                                new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                new UnitCollabUploadConflictModified(),
-                               new UnitCollabNoCleanExport(), nullptr };
+                               new UnitCollabNoCleanExport(), new UnitCollabProtocolNumber(),
+                               nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

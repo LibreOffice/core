@@ -43,6 +43,8 @@ class CollabSocketHandler : public WebSocketHandler
     bool _isValidating = false;
     std::shared_ptr<CheckFileInfo> _checkFileInfo;
     std::weak_ptr<StreamSocket> _socketWeak;
+    // Whether the server can speak to the client, given the client's protocol number:
+    bool _protocolAccepted;
 
     // Stored from successful CheckFileInfo validation
     std::string _docKey;
@@ -68,6 +70,9 @@ class CollabSocketHandler : public WebSocketHandler
     bool _byeReceived = false;
 
 public:
+    // The /co/collab protocol number that this server speaks (see wsd/protocol.txt):
+    static constexpr int Protocol = 1;
+
     CollabSocketHandler(const std::shared_ptr<StreamSocket>& socket,
                         const Poco::Net::HTTPRequest& request,
                         bool allowedOrigin,
