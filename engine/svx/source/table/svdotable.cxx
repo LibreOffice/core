@@ -2221,6 +2221,9 @@ bool SdrTableObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
         case SdrHdlKind::User:
         {
+            // an edge inside the table is not dragged, see OverlayTableEdge
+            if (dynamic_cast<const TableEdgeHdl*>(pHdl))
+                return false;
             rDrag.SetEndDragChangesAttributes(false);
             rDrag.SetNoSnap();
             break;

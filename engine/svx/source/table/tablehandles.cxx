@@ -207,6 +207,10 @@ OverlayTableEdge::OverlayTableEdge( basegfx::B2DPolyPolygon aPolyPolygon, bool b
 ,   maPolyPolygon(std::move( aPolyPolygon ))
 ,   mbVisible(bVisible)
 {
+    // An edge inside a table is not picked by the mouse, so a click on it goes to the cell
+    // under it instead of starting a resize. The borders are moved with the markers along
+    // the outside of the table.
+    setHittable(false);
 }
 
 drawinglayer::primitive2d::Primitive2DContainer OverlayTableEdge::createOverlayObjectPrimitive2DSequence()

@@ -1080,6 +1080,11 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
     }
 
     bool bMarkHit=eHit==SdrHitKind::MarkedObject;
+    // a border inside a table whose cell is being edited is the plain arrow, as the table is not
+    // moved from there
+    if (bMarkHit && IsTextEdit() && aVEvt.mpObj == GetTextEditObject()
+        && dynamic_cast<const sdr::table::SdrTableObj*>(aVEvt.mpObj))
+        return PointerStyle::Arrow;
     SdrHdl* pHdl = aVEvt.mpHdl;
     // now check the pointers for dragging
     if (pHdl!=nullptr || bMarkHit) {

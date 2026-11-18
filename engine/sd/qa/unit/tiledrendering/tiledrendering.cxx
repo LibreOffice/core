@@ -564,9 +564,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTable)
     sal_Int32 nExpectedRow2 = xRow2->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
 
     // Resize the upper row, decrease its height by 1 cm.
-    Point aInnerRowEdge = pObject->GetSnapRect().Center();
-    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
-    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::END, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY() - 1000, o3tl::Length::mm100));
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"BorderType"_ustr, uno::Any(u"row-middle"_ustr) },
+        { u"Index"_ustr, uno::Any(sal_uInt16(0)) },
+        { u"Offset"_ustr, uno::Any(sal_Int32(o3tl::toTwips(-1000, o3tl::Length::mm100))) },
+    }));
+    dispatchCommand(mxComponent, u".uno:TableChangeCurrentBorderPosition"_ustr, aArgs);
 
     // Remember the resized row heights.
     sal_Int32 nResizedRow1 = xRow1->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
@@ -609,9 +612,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
     pXmlDoc = nullptr;
 
     // Resize the left column, decrease its width by 1 cm.
-    Point aInnerRowEdge = pObject->GetSnapRect().Center();
-    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
-    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::END, o3tl::toTwips(aInnerRowEdge.getX() - 1000, o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"BorderType"_ustr, uno::Any(u"column-middle"_ustr) },
+        { u"Index"_ustr, uno::Any(sal_uInt16(0)) },
+        { u"Offset"_ustr, uno::Any(sal_Int32(o3tl::toTwips(-1000, o3tl::Length::mm100))) },
+    }));
+    dispatchCommand(mxComponent, u".uno:TableChangeCurrentBorderPosition"_ustr, aArgs);
 
     // Remember the resized column widths.
     pXmlDoc = parseXmlDump();
@@ -632,6 +638,63 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
     sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
     pXmlDoc = nullptr;
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDragInnerTableEdgeKeepsSize)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("table.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+
+    // Select the table by marking it + starting and ending text edit.
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+    pView->SdrEndTextEdit();
+
+    uno::Reference<table::XColumnRowRange> xTable = pTableObject->getTable();
+    uno::Reference<beans::XPropertySet> xRow1(xTable->getRows()->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nExpectedRow1 = xRow1->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
+
+    // Drag the edge between the two rows up by 1 cm.
+    Point aInnerRowEdge = pObject->GetSnapRect().Center();
+    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::END, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY() - 1000, o3tl::Length::mm100));
+
+    // The rows are resized with the markers outside the table, so the upper row keeps its height.
+    sal_Int32 nActualRow1 = xRow1->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(nExpectedRow1, nActualRow1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInnerTableEdgePointerDuringTextEdit)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("table.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+
+    // Add a third row, so the edge between the second and the third row is away from the top cell.
+    uno::Reference<table::XColumnRowRange> xTable = pTableObject->getTable();
+    xTable->getRows()->insertByIndex(2, 1);
+    ::tools::Rectangle aThirdCell;
+    pTableObject->getCellBounds(sdr::table::CellPos(0, 2), aThirdCell);
+
+    // Edit the text of the top cell.
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pTableObject->setActiveCell(sdr::table::CellPos(0, 0));
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+
+    // The table is not moved from an edge inside it while a cell is being edited, so the pointer
+    // there is the plain arrow.
+    const Point aInnerRowEdge(aThirdCell.Center().X(), aThirdCell.Top());
+    CPPUNIT_ASSERT_EQUAL(PointerStyle::Arrow,
+                         pView->GetPreferredPointer(aInnerRowEdge,
+                                                    pViewShell->GetActiveWindow()->GetOutDev()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumnDuringTextEdit)
