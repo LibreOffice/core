@@ -75,7 +75,7 @@ const QSize ACCOUNT_WINDOW_SIZE(1280, 860);
 /// Builds CODA's editor page in the emptied editor iframe. It loads CODA's page, scripts and
 /// styles from coollocal:.
 const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
-(config, clientDocumentLoadingRefusal, postServerEditorForm) => {
+(config, clientDocumentLoadingRefusal) => {
     if (window.codaRemotePage)
         return;
 
@@ -97,12 +97,10 @@ const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
     const refusal = clientDocumentLoadingRefusal(config.formUrl);
 
     Promise.all([appPage, refusal]).then(([appHtml, reason]) => {
-        // Without client document loading, native code learns why, and the frame shows the server's
-        // own editor:
+        // Without client document loading, native code learns why, and shows the server's own
+        // editor in the frame:
         if (reason !== null) {
-            fetch(config.messageUrl + '&kind=serverEditor&message=' + reason).finally(() => {
-                postServerEditorForm(config.formUrl, config.formBody);
-            });
+            fetch(config.messageUrl + '&kind=serverEditor&message=' + reason);
             return;
         }
 
@@ -243,6 +241,10 @@ private:
     int _editorChecksLeft = 0;
     QString _session; ///< Names the editor frame's session in its messages.
     QUrl _frameOrigin; ///< The origin of the editor frame given the session.
+    // The kept form that the session's document came from, and where that form went (as the kept
+    // form is replaced as soon as the integrator posts the next one):
+    QUrl _sessionFormUrl;
+    QByteArray _sessionForm;
     QByteArray _parts; ///< The parts of a long message from the frame, so far.
     coda::DocumentData _document; ///< The document the editor frame shows.
     std::unique_ptr<Bridge> _bridge; ///< Takes the frame's messages. It refers to _document.
@@ -707,6 +709,8 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
     _parts.clear();
     _session = QUuid::createUuid().toString(QUuid::Id128);
     _frameOrigin = originOf(frame.url());
+    _sessionFormUrl = _formUrl;
+    _sessionForm = _form;
     PagesBySession[_session] = this;
     auto * window = dynamic_cast<CloudAccountWindow *>(QWebEngineView::forPage(this)->window());
     if (window) {
@@ -735,7 +739,6 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
 
     QJsonObject config;
     config["formUrl"] = _formUrl.toString(QUrl::FullyEncoded);
-    config["formBody"] = QString::fromLatin1(_form);
     config["accessToken"] = QString::fromStdString(editorPageAccessToken(_formUrl, _form));
     config["base"] = COOLLOCAL_BUNDLED_URL;
     config["messageUrl"] = COOLLOCAL_MESSAGE_URL + "?session=" + _session;
@@ -750,22 +753,19 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
     const QByteArray configJson = QJsonDocument(config).toJson(QJsonDocument::Compact);
     const QString putPageIn = QString::fromUtf8(PUT_CODA_PAGE_IN_SCRIPT);
     const QString script = '(' + putPageIn + ")(" + QString::fromUtf8(configJson) + ", "
-        + QString::fromStdString(EditorFrameScripts::clientDocumentLoadingRefusalScript) + ", "
-        + QString::fromStdString(EditorFrameScripts::serverEditorFormScript) + ')';
+        + QString::fromStdString(EditorFrameScripts::clientDocumentLoadingRefusalScript) + ')';
 
     frame.runJavaScript(script, QWebEngineScript::MainWorld);
     LOG_DBG("account window: putting CODA's editor page into the editor frame");
 }
 
 void CloudAccountPage::useServerEditor(QString const & reason) {
-    if (reason.toStdString() != EditorFrameScripts::disabledReason
-        && reason.toStdString() != EditorFrameScripts::unsupportedReason)
-    {
+    if (!EditorFrameScripts::isServerEditorReason(reason.toStdString())) {
         LOG_WRN("account window: refused: an unknown reason for the server's own editor");
         return;
     }
     LOG_INF(
-        "account window: the server allows no client document loading (" << reason.toStdString()
+        "account window: no client document loading (" << reason.toStdString()
         << "), so the frame shows the server's own editor");
     _serverEditorReasons[_frameOrigin.toString()] = reason;
     showServerEditorNotice(_frameOrigin, reason);
@@ -773,6 +773,17 @@ void CloudAccountPage::useServerEditor(QString const & reason) {
     _session.clear();
     releaseParkedClose();
     _bridge.reset();
+    std::optional<QWebEngineFrame> frame = findFrame(mainFrame(), _sessionFormUrl);
+    if (!frame) {
+        LOG_WRN("account window: the editor frame for the server's own editor is gone");
+        return;
+    }
+    QJsonArray const arguments{
+        _sessionFormUrl.toString(QUrl::FullyEncoded), QString::fromLatin1(_sessionForm)};
+    frame->runJavaScript(
+        "(" + QString::fromStdString(EditorFrameScripts::serverEditorFormScript) + ")(..."
+            + QString::fromUtf8(QJsonDocument(arguments).toJson(QJsonDocument::Compact)) + ')',
+        QWebEngineScript::MainWorld);
 }
 
 void CloudAccountPage::showServerEditorNotice(QUrl const & origin, QString const & reason) {
@@ -788,6 +799,12 @@ void CloudAccountPage::showServerEditorNotice(QUrl const & origin, QString const
                         "own editor. To edit documents from %1 in %2, ask the server's "
                         "administrator to allow that (client_document_loading.enable in "
                         "coolwsd.xml).")
+                .arg(server, app));
+    } else if (reason.toStdString() == EditorFrameScripts::outdatedReason) {
+        window->showNotice(
+            QObject::tr("This version of %2 is too old to edit documents from %1, so the "
+                        "document is open in the server's own editor. To edit documents from %1 "
+                        "in %2, update your copy of %2.")
                 .arg(server, app));
     } else {
         window->showNotice(

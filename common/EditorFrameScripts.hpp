@@ -17,12 +17,17 @@
 // form for coolwsd's editor page:
 namespace EditorFrameScripts {
 
-// The fragment of an editor frame that shows the server's own editor, and the reasons why a server
-// does not allow client document loading (its client_document_loading.enable is off, or it is too
-// old to say):
+// The fragment of an editor frame that shows the server's own editor, and the reasons why CODA does
+// not load a document from a server itself (the server's client_document_loading.enable is off, the
+// server is too old for CODA, or CODA is too old for the server):
 inline std::string const serverEditorFragment = "coda-server";
 inline std::string const disabledReason = "disabled";
 inline std::string const unsupportedReason = "unsupported";
+inline std::string const outdatedReason = "outdated";
+
+inline bool isServerEditorReason(std::string const & reason) {
+    return reason == disabledReason || reason == unsupportedReason || reason == outdatedReason;
+}
 
 // Replaces coolwsd's page in the editor frame with an empty document before it is parsed, unless
 // the frame shows the server's own editor:

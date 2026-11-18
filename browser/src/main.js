@@ -405,6 +405,15 @@ if (window.ThisIsTheEmscriptenApp) {
 					window.switchToServerMode();
 					return;
 				}
+				// When the server or the app is too old for the other, the frame
+				// shows the server's own editor, where the app can do that:
+				if (err && err.tooOld && window.bridge.useServerEditor) {
+					window.app.console.log(
+						'CODA: the ' + err.tooOld + ' is too old, opening the server\'s own editor');
+					window.bridge.useServerEditor(
+						err.tooOld === 'server' ? 'unsupported' : 'outdated');
+					return;
+				}
 				var msg = err && err.message ? err.message : String(err);
 				window.app.console.error(
 					'CODA: remote bootstrap failed: ' + msg);

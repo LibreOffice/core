@@ -47,7 +47,7 @@ describe('The /co/collab protocol number of a page', function () {
 		nodeassert.equal((await signIn).UserCanWrite, true);
 	});
 
-	it('gives up on a server that speaks an older protocol', async function () {
+	it('gives up on a server that speaks an older protocol, as one that is too old', async function () {
 		const pageWebSocket = page.window.WebSocket;
 		let socket: any;
 		page.window.WebSocket = function (this: any, url: string) {
@@ -69,10 +69,10 @@ describe('The /co/collab protocol number of a page', function () {
 				fileInfo: {},
 			}),
 		});
-		await nodeassert.rejects(signIn, /the server speaks protocol/);
+		await nodeassert.rejects(signIn, (error: any) => error.tooOld === 'server');
 	});
 
-	it('gives up on a server without protocol numbers', async function () {
+	it('gives up on a server without protocol numbers, as one that is too old', async function () {
 		const pageWebSocket = page.window.WebSocket;
 		let socket: any;
 		page.window.WebSocket = function (this: any, url: string) {
@@ -90,6 +90,46 @@ describe('The /co/collab protocol number of a page', function () {
 		socket.onmessage({
 			data: JSON.stringify({ type: 'authenticated', fileInfo: {} }),
 		});
-		await nodeassert.rejects(signIn, /the server speaks protocol/);
+		await nodeassert.rejects(signIn, (error: any) => error.tooOld === 'server');
+	});
+
+	it('reports a server that refuses its protocol as the client being too old', async function () {
+		const pageWebSocket = page.window.WebSocket;
+		let socket: any;
+		page.window.WebSocket = function (this: any, url: string) {
+			this.url = url;
+			this.send = () => {};
+			this.close = () => {};
+			socket = this;
+		};
+		const signIn = page.window.collab.connect(
+			'https://host/wopi/files/1',
+			'token',
+			'https://host',
+		);
+		page.window.WebSocket = pageWebSocket;
+		socket.onmessage({ data: 'error: cmd=collab kind=badprotocolversion' });
+		await nodeassert.rejects(signIn, (error: any) => error.tooOld === 'client');
+	});
+
+	it('reports a refusal with further fields as the client being too old', async function () {
+		const pageWebSocket = page.window.WebSocket;
+		let socket: any;
+		page.window.WebSocket = function (this: any, url: string) {
+			this.url = url;
+			this.send = () => {};
+			this.close = () => {};
+			socket = this;
+		};
+		const signIn = page.window.collab.connect(
+			'https://host/wopi/files/1',
+			'token',
+			'https://host',
+		);
+		page.window.WebSocket = pageWebSocket;
+		socket.onmessage({
+			data: 'error: cmd=collab kind=badprotocolversion lowest=2',
+		});
+		await nodeassert.rejects(signIn, (error: any) => error.tooOld === 'client');
 	});
 });

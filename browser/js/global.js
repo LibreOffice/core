@@ -497,7 +497,8 @@ class InitializerBase {
 	}
 
 	// send(kind, msg) sends one message to native code and returns a promise of its reply.
-	setUpRemoteBridge(send) {
+	// appMethods are the further methods of the bridge that only some apps' native code has.
+	setUpRemoteBridge(send, appMethods) {
 		// main.js and the prefs call the Bridge's methods by name, on the object the web channel
 		// gives CODA's own window. Here each method sends its arguments as a JSON array, in a
 		// message of the method's kind, and calls back with native code's reply.
@@ -528,6 +529,7 @@ class InitializerBase {
 			saveCompleted: () => call('saveCompleted', []),
 			getBundledFile: (path, callback) => call('getBundledFile', [path], callback),
 		};
+		Object.assign(window.bridge, appMethods);
 
 		window.bridge.getAllPrefs((prefsJson) => {
 			try {
@@ -951,7 +953,11 @@ class QtAppInitializer extends AppInitializer {
 		window.postMobileDebug   = (msg) => { send('debug', msg); };
 		window.userInterfaceMode = window.coolParams.get('userinterfacemode');
 
-		this.setUpRemoteBridge(send);
+		// CODA-Q can show the server's own editor in the frame instead, for one of the
+		// reasons in common/EditorFrameScripts.hpp:
+		this.setUpRemoteBridge(send, {
+			useServerEditor: (reason) => { send('serverEditor', reason); },
+		});
 	}
 }
 
@@ -2990,8 +2996,10 @@ function showWelcomeSVG() {
 						// this client's protocol):
 						if (msg.protocol !== global.collab.protocol) {
 							global.collab.ws.close();
-							reject(new Error(
-								'Collab error: the server speaks protocol ' + msg.protocol));
+							const error = new Error(
+								'Collab error: the server speaks protocol ' + msg.protocol);
+							error.tooOld = 'server';
+							reject(error);
 							return;
 						}
 
@@ -3022,7 +3030,17 @@ function showWelcomeSVG() {
 					if (data.startsWith('error:')) {
 						clearTimeout(timeoutId);
 						global.collab.ws.close();
-						reject(new Error('Collab error: ' + data));
+						const error = new Error('Collab error: ' + data);
+						// The server refuses a client whose protocol is
+						// too old for it (perhaps with further fields
+						// after the kind):
+						const refusal =
+							'error: cmd=collab kind=badprotocolversion';
+						if (data === refusal
+							|| data.startsWith(refusal + ' ')) {
+							error.tooOld = 'client';
+						}
+						reject(error);
 					}
 				}
 			};
