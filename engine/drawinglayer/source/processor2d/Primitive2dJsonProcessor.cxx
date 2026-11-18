@@ -1388,11 +1388,25 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
     if (nClassId == css::form::FormComponentType::IMAGECONTROL
         || nClassId == css::form::FormComponentType::IMAGEBUTTON)
     {
+        sal_Int16 nScaleMode(0);
+        const bool bScaleMode(aValueOf(u"ScaleMode"_ustr) >>= nScaleMode);
         cpo::uno::Reference<css::graphic::XGraphic> xGraphic;
         if ((aValueOf(u"Graphic"_ustr) >>= xGraphic) && xGraphic.is())
-            writeGraphicData(Graphic(xGraphic));
-        sal_Int16 nScaleMode(0);
-        if (aValueOf(u"ScaleMode"_ustr) >>= nScaleMode)
+        {
+            const Graphic aGraphic(xGraphic);
+            // A picture at its own size is drawn at 15 twips for each of its pixels, otherwise it
+            // is drawn inside the control.
+            basegfx::B2DHomMatrix aImageTransform(rControl.getTransform());
+            const Size aPixels(aGraphic.GetSizePixel());
+            if (nScaleMode == 0 && !aPixels.IsEmpty())
+                aImageTransform = basegfx::utils::createScaleB2DHomMatrix(
+                    o3tl::convert(aPixels.Width(), o3tl::Length::px, o3tl::Length::twip)
+                        / mfScaleFactor,
+                    o3tl::convert(aPixels.Height(), o3tl::Length::px, o3tl::Length::twip)
+                        / mfScaleFactor);
+            writeGraphicData(aGraphic, aImageTransform);
+        }
+        if (bScaleMode)
             mrWriter.put("scaleMode", sal_Int32(nScaleMode));
     }
 
