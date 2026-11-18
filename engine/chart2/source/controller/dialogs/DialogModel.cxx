@@ -199,9 +199,8 @@ void lcl_SetSequenceRole(
     const Reference< data::XDataSequence > & xSeq,
     const OUString & rRole )
 {
-    Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
-    if( xProp.is())
-        xProp->setPropertyValue( u"Role"_ustr , cpo::uno::Any( rRole ));
+    if( xSeq.is())
+        xSeq->setPropertyValue( u"Role"_ustr , cpo::uno::Any( rRole ));
 }
 
 Sequence< OUString > lcl_CopyExcludingValuesFirst(

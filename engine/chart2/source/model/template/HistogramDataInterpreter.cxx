@@ -67,10 +67,7 @@ InterpretedData HistogramDataInterpreter::interpretDataSource(
     rtl::Reference<HistogramDataSequence> xCalcSequenceImpl
         = new HistogramDataSequence(valuesYSeqData, false);
 
-    uno::Reference<chart2::data::XDataSequence> xCategoryDataSeq(xCategoryValuesSeq);
-    uno::Reference<beans::XPropertySet> xCategoryProp(xCategoryDataSeq, uno::UNO_QUERY);
-    if (xCategoryProp.is())
-        xCategoryProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any(u"categories"_ustr));
+    xCategoryValuesSeq->setPropertyValue(u"Role"_ustr, cpo::uno::Any(u"categories"_ustr));
 
     uno::Reference<chart2::data::XLabeledDataSequence> xLabeledCategorySeq
         = new LabeledDataSequence(xCategoryValuesSeq);

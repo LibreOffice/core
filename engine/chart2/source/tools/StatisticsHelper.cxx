@@ -111,9 +111,8 @@ void lcl_setRole(
     const Reference< chart2::data::XDataSequence > & xNewSequence,
     const OUString & rRole )
 {
-    Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
-    if( xSeqProp.is())
-        xSeqProp->setPropertyValue( u"Role"_ustr, cpo::uno::Any( rRole ));
+    if( xNewSequence.is())
+        xNewSequence->setPropertyValue( u"Role"_ustr, cpo::uno::Any( rRole ));
 }
 
 void lcl_addSequenceToDataSource(

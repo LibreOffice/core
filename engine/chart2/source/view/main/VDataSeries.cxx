@@ -176,45 +176,41 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
             continue;
         }
 
-        uno::Reference<beans::XPropertySet> xProp(xDataSequence, uno::UNO_QUERY );
-        if( xProp.is())
+        try
         {
-            try
-            {
-                cpo::uno::Any aARole = xProp->getPropertyValue(u"Role"_ustr);
-                OUString aRole;
-                aARole >>= aRole;
+            cpo::uno::Any aARole = xDataSequence->getPropertyValue(u"Role"_ustr);
+            OUString aRole;
+            aARole >>= aRole;
 
-                if (aRole == "values-x")
-                {
-                    m_aValues_X.init( xDataSequence );
-                    lcl_clearIfNoValuesButTextIsContained( m_aValues_X, xDataSequence );
-                }
-                else if (aRole =="values-y")
-                    m_aValues_Y.init( xDataSequence );
-                else if (aRole == "values-min")
-                    m_aValues_Y_Min.init( xDataSequence );
-                else if (aRole == "values-max")
-                    m_aValues_Y_Max.init( xDataSequence );
-                else if (aRole == "values-first")
-                    m_aValues_Y_First.init( xDataSequence );
-                else if (aRole == "values-last")
-                    m_aValues_Y_Last.init( xDataSequence );
-                else if (aRole == "values-size")
-                    m_aValues_Bubble_Size.init( xDataSequence );
-                else if (aRole == "values-feature")
-                    m_aValues_Feature.init( xDataSequence );
-                else
-                {
-                    VDataSequence aSequence;
-                    aSequence.init(xDataSequence);
-                    m_PropertyMap.insert(std::make_pair(aRole, aSequence));
-                }
-            }
-            catch( const cpo::uno::Exception& )
+            if (aRole == "values-x")
             {
-                TOOLS_WARN_EXCEPTION("chart2", "" );
+                m_aValues_X.init( xDataSequence );
+                lcl_clearIfNoValuesButTextIsContained( m_aValues_X, xDataSequence );
             }
+            else if (aRole =="values-y")
+                m_aValues_Y.init( xDataSequence );
+            else if (aRole == "values-min")
+                m_aValues_Y_Min.init( xDataSequence );
+            else if (aRole == "values-max")
+                m_aValues_Y_Max.init( xDataSequence );
+            else if (aRole == "values-first")
+                m_aValues_Y_First.init( xDataSequence );
+            else if (aRole == "values-last")
+                m_aValues_Y_Last.init( xDataSequence );
+            else if (aRole == "values-size")
+                m_aValues_Bubble_Size.init( xDataSequence );
+            else if (aRole == "values-feature")
+                m_aValues_Feature.init( xDataSequence );
+            else
+            {
+                VDataSequence aSequence;
+                aSequence.init(xDataSequence);
+                m_PropertyMap.insert(std::make_pair(aRole, aSequence));
+            }
+        }
+        catch( const cpo::uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
 

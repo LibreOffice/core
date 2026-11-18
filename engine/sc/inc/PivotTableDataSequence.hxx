@@ -74,7 +74,6 @@ typedef cppu::WeakImplHelper<css::chart2::data::XDataSequence,
                              css::chart2::data::XNumericalDataSequence,
                              css::util::XCloneable,
                              css::util::XModifyBroadcaster,
-                             css::beans::XPropertySet,
                              css::lang::XServiceInfo>
         PivotTableDataSequence_Base;
 

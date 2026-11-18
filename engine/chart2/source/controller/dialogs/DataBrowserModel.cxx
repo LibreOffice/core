@@ -61,12 +61,11 @@ OUString lcl_getRole(
     const Reference< chart2::data::XDataSequence > & xSeq )
 {
     OUString aResult;
-    Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
-    if( xProp.is())
+    if( xSeq.is())
     {
         try
         {
-            xProp->getPropertyValue( u"Role"_ustr ) >>= aResult;
+            xSeq->getPropertyValue( u"Role"_ustr ) >>= aResult;
         }
         catch( const cpo::uno::Exception & )
         {
@@ -89,8 +88,8 @@ void lcl_copyDataSequenceProperties(
     const Reference< chart2::data::XDataSequence > & xOldSequence,
     const Reference< chart2::data::XDataSequence > & xNewSequence )
 {
-    Reference< beans::XPropertySet > xOldSeqProp( xOldSequence, uno::UNO_QUERY );
-    Reference< beans::XPropertySet > xNewSeqProp( xNewSequence, uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xOldSeqProp( xOldSequence );
+    Reference< beans::XPropertySet > xNewSeqProp( xNewSequence );
     comphelper::copyProperties( xOldSeqProp, xNewSeqProp );
 }
 

@@ -125,6 +125,31 @@ uno::Reference<beans::XPropertySetInfo> HistogramDataSequence::getPropertySetInf
     return comphelper::OPropertyStateHelper::createPropertySetInfo(getInfoHelper());
 }
 
+void HistogramDataSequence::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
+{
+    OPropertyContainer::setPropertyValue(aPropertyName, aValue);
+}
+::cpo::uno::Any HistogramDataSequence::getPropertyValue( const ::rtl::OUString& PropertyName )
+{
+    return OPropertyContainer::getPropertyValue(PropertyName);
+}
+void HistogramDataSequence::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener )
+{
+    OPropertyContainer::addPropertyChangeListener(aPropertyName, xListener);
+}
+void HistogramDataSequence::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener )
+{
+    OPropertyContainer::removePropertyChangeListener(aPropertyName, aListener);
+}
+void HistogramDataSequence::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertyContainer::addVetoableChangeListener(PropertyName, aListener);
+}
+void HistogramDataSequence::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertyContainer::removeVetoableChangeListener(PropertyName, aListener);
+}
+
 ::cppu::IPropertyArrayHelper& HistogramDataSequence::getInfoHelper() { return *getArrayHelper(); }
 
 ::cppu::IPropertyArrayHelper* HistogramDataSequence::createArrayHelper() const

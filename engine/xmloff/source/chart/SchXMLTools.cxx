@@ -122,8 +122,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
     {
         xRet.set( xDataProvider->createDataSequenceByRangeRepresentation(
             lcl_ConvertRange( aRange, xDataProvider )) );
-        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
-            Reference< beans::XPropertySet >( xRet, uno::UNO_QUERY ));
+        SchXMLTools::copyProperties( xSeq, xRet);
     }
     return xRet;
 }

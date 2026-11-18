@@ -126,7 +126,7 @@ struct lcl_internalizeSeries
                     xNewValues.set( m_rProvider.createDataSequenceByRangeRepresentation( aIdentifier ));
                     comphelper::copyProperties(
                         Reference< beans::XPropertySet >( xValues, uno::UNO_QUERY ),
-                        Reference< beans::XPropertySet >( xNewValues, uno::UNO_QUERY ));
+                        xNewValues);
                 }
             }
 
@@ -142,7 +142,7 @@ struct lcl_internalizeSeries
                         m_rProvider.createDataSequenceByRangeRepresentation( lcl_aLabelRangePrefix + aIdentifier ));
                     comphelper::copyProperties(
                         Reference< beans::XPropertySet >( xLabel, uno::UNO_QUERY ),
-                        Reference< beans::XPropertySet >( xNewLabel, uno::UNO_QUERY ));
+                        xNewLabel);
                     aNewSeriesData[i].set( new LabeledDataSequence( xNewValues, xNewLabel ) );
                 }
             }

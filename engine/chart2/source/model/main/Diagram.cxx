@@ -1306,7 +1306,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > Diagram::getCategories()
             return xResult;
 
         xResult = aScaleData.Categories;
-        uno::Reference<beans::XPropertySet> xProp(xResult->getValues(), uno::UNO_QUERY );
+        uno::Reference<chart2::data::XDataSequence> xProp(xResult->getValues() );
         if( xProp.is() )
         {
             try

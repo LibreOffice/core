@@ -130,55 +130,52 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
 
             if( nPointIndex >= aData.getLength() )
                 continue;
-            uno::Reference<beans::XPropertySet> xProp(xDataSequence, uno::UNO_QUERY );
-            if( xProp.is())
-            {
-                cpo::uno::Any aARole = xProp->getPropertyValue( u"Role"_ustr );
-                OUString aRole;
-                aARole >>= aRole;
 
-                if( aRole == "values-x" )
-                {
-                    aData[nPointIndex]>>= fValue;
-                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
-                    aX = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
-                }
-                else if( aRole == "values-y")
-                {
-                    aData[nPointIndex]>>= fValue;
-                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
-                    aY = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
-                }
-                else if( aRole == "values-first" )
-                {
-                    aData[nPointIndex]>>= fValue;
-                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
-                    aY_First = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
-                }
-                else if( aRole == "values-min" )
-                {
-                    aData[nPointIndex]>>= fValue;
-                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
-                    aY_Min = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
-                }
-                else if( aRole == "values-max" )
-                {
-                    aData[nPointIndex]>>= fValue;
-                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
-                    aY_Max = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
-                }
-                else if( aRole == "values-last" )
-                {
-                    aData[nPointIndex]>>= fValue;
-                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
-                    aY_Last = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
-                }
-                else if( aRole == "values-size" )
-                {
-                    aData[nPointIndex]>>= fValue;
-                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
-                    a_Size = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
-                }
+            cpo::uno::Any aARole = xDataSequence->getPropertyValue( u"Role"_ustr );
+            OUString aRole;
+            aARole >>= aRole;
+
+            if( aRole == "values-x" )
+            {
+                aData[nPointIndex]>>= fValue;
+                sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                aX = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
+            }
+            else if( aRole == "values-y")
+            {
+                aData[nPointIndex]>>= fValue;
+                sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                aY = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
+            }
+            else if( aRole == "values-first" )
+            {
+                aData[nPointIndex]>>= fValue;
+                sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                aY_First = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
+            }
+            else if( aRole == "values-min" )
+            {
+                aData[nPointIndex]>>= fValue;
+                sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                aY_Min = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
+            }
+            else if( aRole == "values-max" )
+            {
+                aData[nPointIndex]>>= fValue;
+                sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                aY_Max = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
+            }
+            else if( aRole == "values-last" )
+            {
+                aData[nPointIndex]>>= fValue;
+                sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                aY_Last = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
+            }
+            else if( aRole == "values-size" )
+            {
+                aData[nPointIndex]>>= fValue;
+                sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                a_Size = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
             }
         }
         catch (const lang::DisposedException&)

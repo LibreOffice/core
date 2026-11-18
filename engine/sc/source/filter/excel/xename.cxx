@@ -1068,11 +1068,10 @@ void XclExpNameManagerImpl::CreateOneDataRangeName(
                         continue;
                     cpo::uno::Reference< chart2::data::XDataSequence > xValues(
                         rxLabeledSeq->getValues() );
-                    cpo::uno::Reference< beans::XPropertySet > xSeqProp( xValues, cpo::uno::UNO_QUERY );
-                    if( !xSeqProp.is() )
+                    if( !xValues.is() )
                         continue;
                     OUString aRole;
-                    xSeqProp->getPropertyValue( u"Role"_ustr ) >>= aRole;
+                    xValues->getPropertyValue( u"Role"_ustr ) >>= aRole;
                     if( aRole.startsWith( "values" ) )
                         CreateSourceRangeName( xValues, nVersion );
                 }
@@ -1084,17 +1083,16 @@ void XclExpNameManagerImpl::CreateOneDataRangeName(
 void XclExpNameManagerImpl::CreateSourceRangeName(
     const cpo::uno::Reference< chart2::data::XDataSequence >& rxSeq, sal_Int32 nVersion )
 {
-    cpo::uno::Reference< beans::XPropertySet > xSeqProp( rxSeq, cpo::uno::UNO_QUERY );
-    if( !xSeqProp.is() )
+    if( !rxSeq.is() )
         return;
-    cpo::uno::Reference< beans::XPropertySetInfo > xPropInfo( xSeqProp->getPropertySetInfo() );
+    cpo::uno::Reference< beans::XPropertySetInfo > xPropInfo( rxSeq->getPropertySetInfo() );
     if( !xPropInfo.is() || !xPropInfo->hasPropertyByName( u"ChartExFormula"_ustr ) )
         return;
 
     // If this chart was created through import (rather than in the UI), it
     // should already have a name as part of the document's defined names
     OUString sFormula;
-    xSeqProp->getPropertyValue( u"ChartExFormula"_ustr ) >>= sFormula;
+    rxSeq->getPropertyValue( u"ChartExFormula"_ustr ) >>= sFormula;
     if( !sFormula.isEmpty() )
         return;
 
@@ -1128,7 +1126,7 @@ void XclExpNameManagerImpl::CreateSourceRangeName(
     sal_uInt16 nNameIdx = Append( xName );
     maNamedExpMap[ NamedExpMap::key_type( SCTAB_GLOBAL, sName ) ] = nNameIdx;
 
-    xSeqProp->setPropertyValue( u"ChartExFormula"_ustr, cpo::uno::Any( sName ) );
+    rxSeq->setPropertyValue( u"ChartExFormula"_ustr, cpo::uno::Any( sName ) );
 }
 
 XclExpNameManager::XclExpNameManager( const XclExpRoot& rRoot ) :

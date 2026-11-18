@@ -178,7 +178,7 @@ public:
     {
         if( !xSeq.is() )
             return  false;
-        Reference< beans::XPropertySet > xProp( xSeq->getValues(), uno::UNO_QUERY );
+        Reference< chart2::data::XDataSequence > xProp( xSeq->getValues() );
         OUString aRole;
 
         return ( xProp.is() &&
@@ -1702,14 +1702,11 @@ ChartExport::ChartDimInfo ChartExport::getChartDimInfo(
     ChartDimInfo aInfo;
     if (!xSeq.is())
         return aInfo;
-    Reference<beans::XPropertySet> xProp(xSeq, uno::UNO_QUERY);
-    if (!xProp.is())
-        return aInfo;
-    Reference<beans::XPropertySetInfo> xPropInfo(xProp->getPropertySetInfo());
+    Reference<beans::XPropertySetInfo> xPropInfo(xSeq->getPropertySetInfo());
     if (!xPropInfo.is())
         return aInfo;
 
-    if (GetProperty(xProp, u"ChartExDimType"_ustr))
+    if (GetProperty(xSeq, u"ChartExDimType"_ustr))
     {
         sal_Int32 nDimType = 0;
         mAny >>= nDimType;
@@ -1718,12 +1715,12 @@ ChartExport::ChartDimInfo ChartExport::getChartDimInfo(
             aInfo.bHasInfo = true;
     }
 
-    if (GetProperty(xProp, u"ChartExFormula"_ustr))
+    if (GetProperty(xSeq, u"ChartExFormula"_ustr))
     {
         mAny >>= aInfo.sFormula;
     }
 
-    if (GetProperty(xProp, u"ChartExNFormula"_ustr))
+    if (GetProperty(xSeq, u"ChartExNFormula"_ustr))
     {
         mAny >>= aInfo.sNFormula;
     }
@@ -1787,10 +1784,9 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                         Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
                         if( nMainSequenceIndex==-1 )
                         {
-                            Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
                             OUString aRole;
-                            if( xSeqProp.is())
-                                xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
+                            if( xTempValueSeq.is())
+                                xTempValueSeq->getPropertyValue(u"Role"_ustr) >>= aRole;
                             // "main" sequence
                             if( aRole == aLabelRole )
                             {
@@ -4004,10 +4000,9 @@ void ChartExport::exportSeries_chart( const Reference<chart2::XChartType>& xChar
                     Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
                     if( nMainSequenceIndex==-1 )
                     {
-                        Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
                         OUString aRole;
-                        if( xSeqProp.is())
-                            xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
+                        if( xTempValueSeq.is())
+                            xTempValueSeq->getPropertyValue(u"Role"_ustr) >>= aRole;
                         // "main" sequence
                         if( aRole == aLabelRole )
                         {
@@ -4230,10 +4225,9 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                 Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
                 if( nMainSequenceIndex==-1 )
                 {
-                    Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
                     OUString aRole;
-                    if( xSeqProp.is())
-                        xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
+                    if( xTempValueSeq.is())
+                        xTempValueSeq->getPropertyValue(u"Role"_ustr) >>= aRole;
                     // "main" sequence
                     if( aRole == aLabelRole )
                     {

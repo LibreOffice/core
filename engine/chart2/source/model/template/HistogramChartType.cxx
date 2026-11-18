@@ -247,12 +247,7 @@ void HistogramChartType::createCalculatedDataSeries()
                 xValuesY, true, nFrequencyType, fBinWidth, nBinCount, bUseUnderflowBin,
                 fUnderflowBinValue, bUseOverflowBin, fOverflowBinValue);
 
-            uno::Reference<chart2::data::XDataSequence> xCatDataSeq(xCatSeq);
-            uno::Reference<beans::XPropertySet> xCatProp(xCatDataSeq, uno::UNO_QUERY);
-            if (xCatProp.is())
-            {
-                xCatProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any(u"categories"_ustr));
-            }
+            xCatSeq->setPropertyValue(u"Role"_ustr, cpo::uno::Any(u"categories"_ustr));
 
             return uno::Reference<chart2::data::XLabeledDataSequence>(
                 new LabeledDataSequence(xCatSeq));

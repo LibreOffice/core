@@ -235,17 +235,16 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
             if(!xLabeledSequence.is())
                 continue;
-            uno::Reference< beans::XPropertySet > xLabel( xLabeledSequence->getLabel(), uno::UNO_QUERY );
-            uno::Reference< beans::XPropertySet > xValues( xLabeledSequence->getValues(), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel() );
+            uno::Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues() );
 
             if( xLabel.is())
             {
                 uno::Reference< chart2::data::XDataSequence > xNewSeq(
                     xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
 
-                uno::Reference< beans::XPropertySet > xNewProps( xNewSeq, uno::UNO_QUERY );
-                if( xNewProps.is() )
-                    xNewProps->setPropertyValue( aPropertyNameRole, xLabel->getPropertyValue( aPropertyNameRole ) );
+                if( xNewSeq.is() )
+                    xNewSeq->setPropertyValue( aPropertyNameRole, xLabel->getPropertyValue( aPropertyNameRole ) );
 
                 xLabeledSequence->setLabel( xNewSeq );
             }
@@ -258,9 +257,8 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
                 uno::Reference< chart2::data::XDataSequence > xNewSeq(
                     xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
 
-                uno::Reference< beans::XPropertySet > xNewProps( xNewSeq, uno::UNO_QUERY );
-                if( xNewProps.is() )
-                    xNewProps->setPropertyValue( aPropertyNameRole, xValues->getPropertyValue( aPropertyNameRole ) );
+                if( xNewSeq.is() )
+                    xNewSeq->setPropertyValue( aPropertyNameRole, xValues->getPropertyValue( aPropertyNameRole ) );
 
                 xLabeledSequence->setValues( xNewSeq );
             }

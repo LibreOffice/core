@@ -187,7 +187,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                                     if( !xSeq.is() || !xSeq->getValues().is() )
                                         continue;
 
-                                    Reference< XPropertySet > xSeqProps(xSeq->getValues(), UNO_QUERY);
+                                    Reference< css::chart2::data::XDataSequence > xSeqProps(xSeq->getValues());
                                     if( !xSeqProps.is() )
                                         continue;
 

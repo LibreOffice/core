@@ -385,7 +385,7 @@ public:
     {
         if( !xSeq.is() )
             return  false;
-        Reference< beans::XPropertySet > xProp( xSeq->getValues(), uno::UNO_QUERY );
+        Reference< chart2::data::XDataSequence > xProp( xSeq->getValues() );
         OUString aRole;
 
         return ( xProp.is() &&
@@ -691,28 +691,24 @@ cpo::uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     }
 
     //special handling for x-values (if x-values do point to categories, indices are used instead )
-    Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
-    if( xProp.is() )
+    OUString aRole;
+    xSeq->getPropertyValue(u"Role"_ustr) >>= aRole;
+    if( aRole.match("values-x") )
     {
-        OUString aRole;
-        xProp->getPropertyValue(u"Role"_ustr) >>= aRole;
-        if( aRole.match("values-x") )
+        //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
+        bool bHasValue = std::any_of(std::cbegin(aValuesSequence), std::cend(aValuesSequence),
+            [](double fValue) { return !std::isnan( fValue ); });
+        if(!bHasValue)
         {
-            //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
-            bool bHasValue = std::any_of(std::cbegin(aValuesSequence), std::cend(aValuesSequence),
-                [](double fValue) { return !std::isnan( fValue ); });
-            if(!bHasValue)
+            //no double value is contained
+            //is there any text?
+            const cpo::uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
+            bool bHasText = std::any_of(aStrings.begin(), aStrings.end(),
+                [](const OUString& rString) { return !rString.isEmpty(); });
+            if( bHasText )
             {
-                //no double value is contained
-                //is there any text?
-                const cpo::uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
-                bool bHasText = std::any_of(aStrings.begin(), aStrings.end(),
-                    [](const OUString& rString) { return !rString.isEmpty(); });
-                if( bHasText )
-                {
-                    auto [begin, end] = asNonConstRange(aValuesSequence);
-                    std::iota(begin, end, 1);
-                }
+                auto [begin, end] = asNonConstRange(aValuesSequence);
+                std::iota(begin, end, 1);
             }
         }
     }
@@ -725,20 +721,16 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
 {
     if( !xDataSequence.is() )
         return false;
-    uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
-    if( xProp.is() )
+    cpo::uno::Sequence< sal_Int32 > aHiddenValues;
+    try
     {
-        cpo::uno::Sequence< sal_Int32 > aHiddenValues;
-        try
-        {
-            xProp->getPropertyValue(u"HiddenValues"_ustr) >>= aHiddenValues;
-            if( !aHiddenValues.hasElements() )
-                return true;
-        }
-        catch( const cpo::uno::Exception& )
-        {
+        xDataSequence->getPropertyValue(u"HiddenValues"_ustr) >>= aHiddenValues;
+        if( !aHiddenValues.hasElements() )
             return true;
-        }
+    }
+    catch( const cpo::uno::Exception& )
+    {
+        return true;
     }
     return xDataSequence->getData().hasElements();
 }
@@ -2836,9 +2828,8 @@ void SchXMLExportHelper_Impl::exportSeries(
 
                             // 1. Get the Role for EVERY sequence
                             OUString aRole;
-                            Reference<beans::XPropertySet> xSeqProp(xTempValueSeq, uno::UNO_QUERY);
-                            if (xSeqProp.is())
-                                xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
+                            if (xTempValueSeq.is())
+                                xTempValueSeq->getPropertyValue(u"Role"_ustr) >>= aRole;
 
                             // 2. Do not export the transient calculated-y
                             if (aRole == "calculated-y")
@@ -2951,15 +2942,11 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 {
                                     // Check if the label is direct string value rather than a reference.
                                     bool bHasString = false;
-                                    uno::Reference<beans::XPropertySet> xLSProp(xLabelSeq, uno::UNO_QUERY);
-                                    if (xLSProp.is())
+                                    try
                                     {
-                                        try
-                                        {
-                                            xLSProp->getPropertyValue(u"HasStringLabel"_ustr) >>= bHasString;
-                                        }
-                                        catch (const beans::UnknownPropertyException&) {}
+                                        xLabelSeq->getPropertyValue(u"HasStringLabel"_ustr) >>= bHasString;
                                     }
+                                    catch (const beans::UnknownPropertyException&) {}
 
                                     OUString aRange = xLabelSeq->getSourceRangeRepresentation();
 

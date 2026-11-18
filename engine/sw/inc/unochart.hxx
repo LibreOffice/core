@@ -211,7 +211,6 @@ typedef cppu::WeakImplHelper
     css::chart2::data::XTextualDataSequence,
     css::chart2::data::XNumericalDataSequence,
     css::util::XCloneable,
-    css::beans::XPropertySet,
     css::lang::XServiceInfo,
     css::util::XModifiable,
     css::lang::XEventListener,

@@ -62,7 +62,7 @@ public:
     {
         if(!xSeq.is())
             return false;
-        Reference< beans::XPropertySet > xProp( xSeq->getValues(), uno::UNO_QUERY );
+        Reference< chart2::data::XDataSequence > xProp( xSeq->getValues() );
         OUString aRole;
 
         if( m_bMatchPrefix )
@@ -116,7 +116,7 @@ OUString getRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xL
     OUString aRet;
     if( xLabeledDataSequence.is() )
     {
-        Reference< beans::XPropertySet > xProp( xLabeledDataSequence->getValues(), uno::UNO_QUERY );
+        Reference< chart2::data::XDataSequence > xProp( xLabeledDataSequence->getValues() );
         if( xProp.is() )
             xProp->getPropertyValue( u"Role"_ustr ) >>= aRet;
     }
@@ -309,11 +309,10 @@ sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Refere
 
     try
     {
-        uno::Reference<beans::XPropertySet> xProp( xDataSequence, uno::UNO_QUERY );
-        if( xProp.is())
+        if( xDataSequence.is())
         {
             Sequence<sal_Int32> aHiddenIndicesSeq;
-            xProp->getPropertyValue( u"HiddenValues"_ustr ) >>= aHiddenIndicesSeq;
+            xDataSequence->getPropertyValue( u"HiddenValues"_ustr ) >>= aHiddenIndicesSeq;
             if( aHiddenIndicesSeq.hasElements() )
             {
                 auto aHiddenIndices( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( aHiddenIndicesSeq ) );

@@ -1833,7 +1833,7 @@ cpo::uno::Sequence< beans::PropertyValue > ScChart2DataProvider::detectArguments
                 bool bThisIsCategories = false;
                 if(!bHasCategories)
                 {
-                    uno::Reference< beans::XPropertySet > xSeqProp( xLS->getValues(), uno::UNO_QUERY );
+                    uno::Reference< chart2::data::XDataSequence > xSeqProp( xLS->getValues() );
                     OUString aRole;
                     if( xSeqProp.is() && (xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole) &&
                         aRole == "categories" )

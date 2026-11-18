@@ -1527,10 +1527,10 @@ bool ChartModel::setIncludeHiddenCells( bool bIncludeHiddenCells )
                 const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
                 for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aData )
                 {
-                    xProp.set( uno::Reference< beans::XPropertySet >( labeledData->getValues(), uno::UNO_QUERY ) );
+                    xProp = labeledData->getValues();
                     if(xProp.is())
                         xProp->setPropertyValue(u"IncludeHiddenCells"_ustr, aNewValue );
-                    xProp.set( uno::Reference< beans::XPropertySet >( labeledData->getLabel(), uno::UNO_QUERY ) );
+                    xProp = labeledData->getLabel();
                     if(xProp.is())
                         xProp->setPropertyValue(u"IncludeHiddenCells"_ustr, aNewValue );
                 }

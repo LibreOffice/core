@@ -193,7 +193,6 @@ class ScChart2DataSequence final : public
                     css::chart2::XTimeBased,
                     css::util::XCloneable,
                     css::util::XModifyBroadcaster,
-                    css::beans::XPropertySet,
                     css::lang::XServiceInfo>,
                 public SfxListener
 {

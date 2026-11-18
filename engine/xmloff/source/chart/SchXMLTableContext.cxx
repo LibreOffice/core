@@ -822,8 +822,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         lcl_reassignDataSequence( xSeq, xDataProv, aRangeMap, aRange ));
                     if( xNewSeq != xSeq )
                     {
-                        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
-                                            Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
+                        SchXMLTools::copyProperties( xSeq, xNewSeq);
                         rLSeq.second->setValues( xNewSeq );
                     }
                 }
@@ -838,22 +837,20 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                     {
                         if( rLSeq.first.first == SCH_XML_CATEGORIES_INDEX )
                         {
-                            Reference< beans::XPropertySet > xOldSequenceProp( rLSeq.second->getValues(), uno::UNO_QUERY );
+                            Reference< chart2::data::XDataSequence > xOldSequenceProp( rLSeq.second->getValues() );
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation(u"categories"_ustr));
-                            SchXMLTools::copyProperties(
-                                xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
+                            SchXMLTools::copyProperties(xOldSequenceProp, xNewSequence);
                             rLSeq.second->setValues( xNewSequence );
                             bCategoriesApplied = true;
                         }
                         else
                         {
-                            Reference< beans::XPropertySet > xOldSequenceProp( rLSeq.second->getValues(), uno::UNO_QUERY );
+                            Reference< chart2::data::XDataSequence > xOldSequenceProp( rLSeq.second->getValues() );
                             OUString aRep( OUString::number( rLSeq.first.first ));
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation( aRep ));
-                            SchXMLTools::copyProperties(
-                                xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
+                            SchXMLTools::copyProperties(xOldSequenceProp, xNewSequence);
                             rLSeq.second->setValues( xNewSequence );
                         }
                     }
@@ -873,8 +870,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         lcl_reassignDataSequence( xSeq, xDataProv, aRangeMap, aRange ));
                     if( xNewSeq != xSeq )
                     {
-                        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
-                                            Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
+                        SchXMLTools::copyProperties(xSeq, xNewSeq);
                         rLSeq.second->setLabel( xNewSeq );
                     }
                 }
@@ -884,8 +880,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 
                     Reference< chart2::data::XDataSequence > xNewSeq(
                         xDataProv->createDataSequenceByRangeRepresentation( aRep ));
-                    SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
-                                        Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
+                    SchXMLTools::copyProperties(xSeq, xNewSeq);
                     rLSeq.second->setLabel( xNewSeq );
                 }
             }

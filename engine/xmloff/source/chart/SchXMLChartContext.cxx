@@ -79,9 +79,7 @@ void lcl_setRoleAtLabeledSequence(
     uno::Reference< chart2::data::XDataSequence > xValues( xLSeq->getValues());
     if( xValues.is())
     {
-        uno::Reference< beans::XPropertySet > xProp( xValues, uno::UNO_QUERY );
-        if( xProp.is())
-            xProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole ));
+        xValues->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole ));
     }
 }
 

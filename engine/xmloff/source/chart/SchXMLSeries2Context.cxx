@@ -227,9 +227,8 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
 
     // set values at the new sequence
     Reference< chart2::data::XDataSequence > xSeq = SchXMLTools::CreateDataSequence( rRange, xChartDoc );
-    Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
-    if( xSeqProp.is())
-        xSeqProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole));
+    if( xSeq.is())
+        xSeq->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole));
     xLabeledSeq->setValues( xSeq );
 
     // add new sequence to data series / push to front to have the correct sequence order if charttype is changed afterwards
@@ -445,15 +444,14 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
                 xSequenceValues = SchXMLTools::CreateDataSequence(m_aSeriesRange, mxNewDoc);
         }
 
-        Reference<beans::XPropertySet> xSeqProp(xSequenceValues, uno::UNO_QUERY);
-        if (xSeqProp.is())
+        if (xSequenceValues.is())
         {
             OUString aMainRole(u"values-y"_ustr);
             if (maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType")
                 aMainRole = u"values-size"_ustr;
             else if (maSeriesChartTypeName == "com.sun.star.chart2.CorrelationCircleChartType")
                 aMainRole = u"values-feature"_ustr;
-            xSeqProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any(aMainRole));
+            xSequenceValues->setPropertyValue(u"Role"_ustr, cpo::uno::Any(aMainRole));
         }
         xLabeledSeq->setValues(xSequenceValues);
 
@@ -481,10 +479,9 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
         }
 
         //Labels should always include hidden cells
-        Reference<beans::XPropertySet> xSeqLabelProp(xSequenceLabel, uno::UNO_QUERY);
-        if (xSeqLabelProp.is() && xSeqLabelProp->getPropertySetInfo()->hasPropertyByName(u"IncludeHiddenCells"_ustr))
+        if (xSequenceLabel.is() && xSequenceLabel->getPropertySetInfo()->hasPropertyByName(u"IncludeHiddenCells"_ustr))
         {
-            xSeqLabelProp->setPropertyValue( u"IncludeHiddenCells"_ustr, cpo::uno::Any(true));
+            xSequenceLabel->setPropertyValue( u"IncludeHiddenCells"_ustr, cpo::uno::Any(true));
         }
 
         xLabeledSeq->setLabel(xSequenceLabel);

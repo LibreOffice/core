@@ -1018,9 +1018,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 
     OUString aRole = aRoleBuffer.makeStringAndClear();
 
-    Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
-
-    xSeqProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any( aRole ));
+    xNewSequence->setPropertyValue(u"Role"_ustr, cpo::uno::Any( aRole ));
 
     const Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
 

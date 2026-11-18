@@ -115,12 +115,9 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
             Reference<chart2::data::XDataSequence> xValues = rDataSeq->getValues();
             if(!xValues.is())
                 return false;
-            Reference<beans::XPropertySet> xPropSet(xValues, uno::UNO_QUERY);
-            if (!xPropSet.is())
-                continue;
 
             OUString aRoleName;
-            xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
+            xValues->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == "values-y")
             {
                 const cpo::uno::Sequence<cpo::uno::Any> aData = xValues->getData();

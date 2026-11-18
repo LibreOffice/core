@@ -285,11 +285,10 @@ cpo::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getDataSequen
     for(auto const & lds : xDataSequences)
     {
         cpo::uno::Reference< css::chart2::data::XDataSequence> xLabelSeq = lds->getValues();
-        cpo::uno::Reference< css::beans::XPropertySet > xProps(xLabelSeq, cpo::uno::UNO_QUERY);
-        if(!xProps.is())
+        if(!xLabelSeq.is())
             continue;
 
-        OUString aRoleName = xProps->getPropertyValue(u"Role"_ustr).get<OUString>();
+        OUString aRoleName = xLabelSeq->getPropertyValue(u"Role"_ustr).get<OUString>();
 
         if(aRoleName == rRole)
             return xLabelSeq;
@@ -328,12 +327,11 @@ std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( 
         {
             cpo::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();
             CPPUNIT_ASSERT(xValues.is());
-            cpo::uno::Reference<css::beans::XPropertySet> xPropSet(xValues, cpo::uno::UNO_QUERY);
-            if (!xPropSet.is())
+            if (!xValues.is())
                 continue;
 
             OUString aRoleName;
-            xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
+            xValues->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == "values-y")
             {
                 const cpo::uno::Sequence<cpo::uno::Any> aData = xValues->getData();
@@ -371,12 +369,11 @@ std::vector<cpo::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFr
         {
             cpo::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();
             CPPUNIT_ASSERT(xValues.is());
-            cpo::uno::Reference<css::beans::XPropertySet> xPropSet(xValues, cpo::uno::UNO_QUERY);
-            if (!xPropSet.is())
+            if (!xValues.is())
                 continue;
 
             OUString aRoleName;
-            xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
+            xValues->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == aLabelRole)
             {
                 cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> xLabel = lds;

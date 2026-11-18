@@ -41,9 +41,8 @@ Reference< chart2::data::XLabeledDataSequence2 > createAndAddSequenceToSeries( c
 
     // set values at the new sequence
     Reference< chart2::data::XDataSequence > xSeq = SchXMLTools::CreateDataSequence( rRange, xChartDoc );
-    Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
-    if( xSeqProp.is())
-        xSeqProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole));
+    if( xSeq.is())
+        xSeq->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole));
     xLabeledSeq->setValues( xSeq );
 
     Reference< chart2::data::XDataSink > xSink( xSeries, uno::UNO_QUERY );

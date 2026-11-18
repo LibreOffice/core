@@ -708,20 +708,16 @@ static bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDa
 {
     if (!xDataSequence.is())
         return false;
-    uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
-    if( xProp.is() )
+    cpo::uno::Sequence< sal_Int32 > aHiddenValues;
+    try
     {
-        cpo::uno::Sequence< sal_Int32 > aHiddenValues;
-        try
-        {
-            xProp->getPropertyValue( u"HiddenValues"_ustr ) >>= aHiddenValues;
-            if( !aHiddenValues.hasElements() )
-                return true;
-        }
-        catch( const cpo::uno::Exception& )
-        {
+        xDataSequence->getPropertyValue( u"HiddenValues"_ustr ) >>= aHiddenValues;
+        if( !aHiddenValues.hasElements() )
             return true;
-        }
+    }
+    catch( const cpo::uno::Exception& )
+    {
+        return true;
     }
     return xDataSequence->getData().hasElements();
 }
