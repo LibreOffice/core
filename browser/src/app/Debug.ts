@@ -562,8 +562,8 @@ class DebugManager {
 				},
 			});
 
-		// The arrow, Tab and page keys move the cell cursor on the
-		// client, which reports it to the engine.
+		// The client moves the cell cursor locally and reports it to the
+		// engine.
 		if (docType === 'spreadsheet')
 			this._addDebugTool({
 				name: 'Local cell cursor',

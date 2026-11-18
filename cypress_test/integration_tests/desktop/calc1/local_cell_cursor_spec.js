@@ -123,6 +123,19 @@ describe(['tagdesktop'], 'Local cell cursor and selection', function() {
 		cy.wrap(null).should(function() {
 			expect(lastSetCellCursor(this.win)).to.contain('col=4 row=6 anchorcol=2 anchorrow=3');
 		}.bind(this));
+
+		// Move to B9 with an arrow key, then to D9 with Tab.  The engine
+		// should take the Tab presses and start their run from B9.
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A9');
+		helper.typeIntoDocument('{rightArrow}');
+		cy.realPress('Tab');
+		cy.realPress('Tab');
+		calcHelper.assertAddressAfterIdle(this.win, 'D9');
+
+		// Press Enter; the cursor should go below the cell that the Tab run
+		// started from.
+		helper.typeIntoDocument('{enter}');
+		calcHelper.assertAddressAfterIdle(this.win, 'B10');
 	});
 
 	it('moves and selects over a merged cell', function() {

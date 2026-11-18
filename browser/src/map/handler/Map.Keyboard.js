@@ -1034,13 +1034,17 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 	},
 
 	/**
-	 * Move the cell cursor here for a plain arrow key, Tab, Shift+Tab,
-	 * PageUp or PageDown in a spreadsheet. True when the key was taken
-	 * here.
+	 * Move the cell cursor locally for a key press in a spreadsheet.
+	 *
+	 * Some keys are still sent to the engine, when the move depends on
+	 * state that only the engine can handle.
+	 *
+	 * @returns {boolean} True when the key was handled here.
 	 */
 	_moveCellCursorHere(ev, keyCode) {
 		if (ev.type !== 'keydown' || ev.isComposing)
 			return false;
+
 		if (this._map.getDocType() !== 'spreadsheet' || this._map.getWinId() !== 0)
 			return false;
 
@@ -1055,6 +1059,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		let colSteps = 0;
 		let rowSteps = 0;
 		let page = null;
+
 		switch (keyCode) {
 		case this.keyCodes.LEFT:
 			colSteps = -1;
@@ -1068,9 +1073,6 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		case this.keyCodes.DOWN:
 			rowSteps = 1;
 			break;
-		case this.keyCodes.TAB:
-			colSteps = shift ? -1 : 1;
-			break;
 		case this.keyCodes.PAGEUP:
 			page = cool.IndexDirection.Backward;
 			break;
@@ -1079,15 +1081,6 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			break;
 		default:
 			return false;
-		}
-
-		// Tab moves the cursor within a selected range, which only the
-		// engine knows how to do.
-		if (keyCode === this.keyCodes.TAB) {
-			if (docLayer.hasCellSelection())
-				return false;
-			docLayer.moveCellCursorHere(colSteps, rowSteps);
-			return true;
 		}
 
 		// Shift extends the selection from its moving end.
