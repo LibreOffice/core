@@ -17,6 +17,7 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/ClientRequestDispatcher.hpp>
 #include <Common.hpp>
+#include <common/SettingsSecrets.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <HttpHelper.hpp>
 #include <Log.hpp>
@@ -42,8 +43,11 @@ CollabFileProxy::CollabFileProxy(std::string id, const RequestDetails& requestDe
 
 void CollabFileProxy::handleFetchRequest(const std::string& streamUrl,
                                          const std::shared_ptr<TerminatingPoll>& poll,
-                                         SocketDisposition& disposition)
+                                         SocketDisposition& disposition,
+                                         std::span<const std::string_view> secretFields)
 {
+    _secretFields = secretFields;
+
     LOG_INF("CollabFileProxy: handling fetch request for stream ["
             << Anonymizer::anonymizeUrl(streamUrl) << ']');
 
@@ -202,7 +206,11 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
         std::string contentType = httpResponse->header().get("Content-Type");
         if (contentType.empty())
             contentType = "application/octet-stream";
-        response.setBody(httpResponse->getBody(), std::move(contentType));
+        response.setBody(_secretFields.empty()
+                             ? httpResponse->getBody()
+                             : SettingsSecrets::redactSettingSecrets(httpResponse->getBody(),
+                                                                     _secretFields),
+                         std::move(contentType));
         response.set("X-Content-Type-Options", "nosniff");
         response.set("Content-Security-Policy", "sandbox");
         response.set("Content-Disposition", "attachment");

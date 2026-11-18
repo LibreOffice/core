@@ -18,7 +18,9 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/Storage.hpp>
 #include <common/Anonymizer.hpp>
+#include <common/FileUtil.hpp>
 #include <common/JsonUtil.hpp>
+#include <common/SettingsSecrets.hpp>
 #include <Protocol.hpp>
 #include <wsd/RequestDetails.hpp>
 #include <SigUtil.hpp>
@@ -39,6 +41,12 @@
 #include <sstream>
 
 namespace {
+
+/// The name of the fetch stream that gives one file of a settings list.
+const std::string SettingsFileStream = "settingsFile";
+
+/// The group of a settings list whose files that stream gives.
+const std::string TemplateGroup = "template";
 
 // Whether this server can speak to a client, given the client's "protocol" query parameter (the
 // number of the protocol that the client speaks, which only a broken client leaves out or garbles):
@@ -451,7 +459,12 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
         const std::string stream = json->optValue<std::string>("stream", "contents");
         const std::string ifNoneMatch = json->optValue<std::string>("ifNoneMatch", std::string());
         const std::string ifModifiedSince = json->optValue<std::string>("ifModifiedSince", std::string());
-        handleFetch(stream, requestId, ifNoneMatch, ifModifiedSince);
+        if (stream == SettingsFileStream)
+            handleSettingsFileFetch(requestId, json->optValue<std::string>("list", std::string()),
+                                    json->optValue<std::string>("group", std::string()),
+                                    json->optValue<std::string>("uri", std::string()));
+        else
+            handleFetch(stream, requestId, ifNoneMatch, ifModifiedSince);
     }
     else if (type == "upload")
     {
@@ -542,8 +555,9 @@ void CollabSocketHandler::sendFetchUrl(const std::string& stream, const std::str
 
     const std::string brokerTag = broker->getCurrentAccessToken();
 
-    // A settings list is fetched with the uri that CheckFileInfo gives, as it is.
-    const bool settings = stream == "userSettings" || stream == "sharedSettings";
+    // A settings list or one of its files is fetched with the uri that the host gives, as it is.
+    const bool settings = stream == "userSettings" || stream == "sharedSettings" ||
+                          stream == SettingsFileStream;
 
     // Create a fetch token that the client can use to download via HTTP
     const std::string token =
@@ -661,6 +675,195 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
     }
 
     sendFetchUrl(stream, requestId, url);
+}
+
+namespace
+{
+/// The file name that a settings uri gives: its file_name parameter, or else the last segment of
+/// its path. Empty when that is not one plain file name.
+std::string settingsFileName(const std::string& uri)
+{
+    std::string name;
+    try
+    {
+        for (const auto& param : Poco::URI(uri).getQueryParameters())
+        {
+            if (param.first == "file_name")
+                name = param.second;
+        }
+
+        if (name.empty())
+            name = Uri::getFilenameWithExtFromURL(uri);
+    }
+    catch (const std::exception&)
+    {
+        return std::string();
+    }
+
+    return FileUtil::isPlainFileName(name) ? name : std::string();
+}
+} // namespace
+
+std::span<const std::string_view>
+CollabSocketHandler::settingsSecretFields(const std::string& stream, const std::string& url)
+{
+    if (stream != SettingsFileStream)
+        return {};
+    return SettingsSecrets::fieldsFor(settingsFileName(url));
+}
+
+std::string CollabSocketHandler::settingsListEntryUri(const Poco::JSON::Object::Ptr& settings,
+                                                      const std::string& group,
+                                                      const std::string& uri)
+{
+    const std::string name = settingsFileName(uri);
+    if (name.empty() || !settings || !settings->isArray(group))
+        return std::string();
+
+    const Poco::JSON::Array::Ptr entries = settings->getArray(group);
+    for (std::size_t i = 0, count = entries->size(); i < count; ++i)
+    {
+        const Poco::JSON::Object::Ptr entry = entries->getObject(i);
+        if (!entry)
+            continue;
+        std::string entryUri = entry->optValue<std::string>("uri", std::string());
+        if (settingsFileName(entryUri) == name)
+            return entryUri;
+    }
+    return std::string();
+}
+
+void CollabSocketHandler::answerSettingsFileFetch(const Poco::JSON::Object::Ptr& settings,
+                                                  const PendingSettingsFile& request)
+{
+    // The client names the entry, and the list this server fetched gives the uri to fetch.
+    const std::string uri = settingsListEntryUri(settings, request.group, request.uri);
+    if (uri.empty())
+    {
+        LOG_WRN("Collab: refusing settingsFile fetch, the settings list has no such entry");
+        sendFetchError(SettingsFileStream, request.requestId, "Not in settings list");
+        return;
+    }
+
+    sendFetchUrl(SettingsFileStream, request.requestId, uri);
+}
+
+void CollabSocketHandler::handleSettingsFileFetch(const std::string& requestId,
+                                                  const std::string& list,
+                                                  const std::string& group,
+                                                  const std::string& uri)
+{
+    LOG_INF("Collab: handling settingsFile fetch from the " << list << " list, group: " << group
+            << ", requestId: " << requestId);
+
+    if (SigUtil::getShutdownRequestFlag())
+    {
+        LOG_WRN("Collab: shutdown in progress, rejecting fetch");
+        sendFetchError(SettingsFileStream, requestId, "Server shutting down");
+        return;
+    }
+
+    if (list != "shared" && list != "user")
+    {
+        sendFetchError(SettingsFileStream, requestId, "Unknown list");
+        return;
+    }
+
+    if (group != TemplateGroup)
+    {
+        sendFetchError(SettingsFileStream, requestId, "Unknown group");
+        return;
+    }
+
+    PendingSettingsFile request{ requestId, group, uri };
+
+    const auto it = _settingsLists.find(list);
+    if (it != _settingsLists.end())
+    {
+        answerSettingsFileFetch(it->second, request);
+        return;
+    }
+
+    const std::string listUri = settingsListUri(list);
+    if (listUri.empty())
+    {
+        sendFetchError(SettingsFileStream, requestId, "Stream not available");
+        return;
+    }
+
+    Poco::URI settingsUri;
+    try
+    {
+        settingsUri = Poco::URI(listUri);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("Collab: the uri of the " << list << " settings list is not valid: "
+                                           << exc.displayText());
+        sendFetchError(SettingsFileStream, requestId, "Settings list not available");
+        return;
+    }
+
+    // The first request for a list starts its download, and the later ones wait for it.
+    std::vector<PendingSettingsFile>& pending = _pendingSettingsFiles[list];
+    pending.push_back(std::move(request));
+    if (pending.size() > 1)
+        return;
+
+    std::shared_ptr<http::Session> httpSession =
+        StorageConnectionManager::getHttpSession(settingsUri);
+    http::Request httpRequest(settingsUri.getPathAndQuery());
+
+    std::weak_ptr<ProtocolHandlerInterface> handlerWeak = shared_from_this();
+    http::Session::FinishedCallback finishedCallback =
+        [handlerWeak, list](const std::shared_ptr<http::Session>& session)
+    {
+        if (auto handler = handlerWeak.lock())
+            static_cast<CollabSocketHandler*>(handler.get())
+                ->onSettingsListFetched(list, session->response());
+    };
+    httpSession->setFinishedHandler(std::move(finishedCallback));
+    httpSession->setConnectFailHandler(
+        [handlerWeak, list](const std::shared_ptr<http::Session>& /*session*/)
+        {
+            if (auto handler = handlerWeak.lock())
+                static_cast<CollabSocketHandler*>(handler.get())
+                    ->onSettingsListFetched(list, nullptr);
+        });
+
+    if (!httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll()))
+        onSettingsListFetched(list, nullptr);
+    else
+        httpSession->response()->setBodySizeLimit(MaxHttpFetchSizeBytes);
+}
+
+void CollabSocketHandler::onSettingsListFetched(
+    const std::string& list, const std::shared_ptr<const http::Response>& httpResponse)
+{
+    Poco::JSON::Object::Ptr settings;
+    if (!httpResponse || httpResponse->statusLine().statusCode() != http::StatusCode::OK ||
+        httpResponse->bodySizeLimitExceeded())
+        LOG_ERR("Collab: failed to get the " << list << " settings list");
+    else if (!JsonUtil::parseJSON(httpResponse->getBody(), settings))
+    {
+        LOG_ERR("Collab: the " << list << " settings list is no JSON object");
+        settings.reset();
+    }
+
+    std::vector<PendingSettingsFile> pending;
+    pending.swap(_pendingSettingsFiles[list]);
+    _pendingSettingsFiles.erase(list);
+
+    if (settings)
+        _settingsLists[list] = settings;
+
+    for (const PendingSettingsFile& request : pending)
+    {
+        if (settings)
+            answerSettingsFileFetch(settings, request);
+        else
+            sendFetchError(SettingsFileStream, request.requestId, "Settings list not available");
+    }
 }
 
 void CollabSocketHandler::handleUpload(const std::string& stream, const std::string& requestId,

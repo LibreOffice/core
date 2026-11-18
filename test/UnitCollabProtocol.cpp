@@ -29,6 +29,8 @@
 #include <Poco/Util/LayeredConfiguration.h>
 
 #include <chrono>
+#include <map>
+#include <mutex>
 #include <vector>
 
 /// Try to receive a JSON message matching the given type prefix.
@@ -1693,13 +1695,363 @@ private:
     std::shared_ptr<http::WebSocketSession> _collabWs;
 };
 
+/// A collab client gets a file that a settings list of the host names, and no other file. The
+/// client names the list, the group and the entry.
+class UnitCollabSettingsFile : public WopiTestServer
+{
+public:
+    UnitCollabSettingsFile()
+        : WopiTestServer("UnitCollabSettingsFile")
+        , _phase(Phase::ConnectCollab)
+        , _step(0)
+        , _sent(0)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr sharedSettings = new Poco::JSON::Object();
+        sharedSettings->set("uri", settingsUri("sharedconfig.json"));
+        sharedSettings->set("stamp", "sharedstamp");
+        fileInfo->set("SharedSettings", sharedSettings);
+
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        userSettings->set("uri", settingsUri("userconfig.json"));
+        userSettings->set("stamp", "userstamp");
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const std::string path = Poco::URI(request.getURI()).getPath();
+        if (!path.starts_with("/wopi/settings/"))
+            return WopiTestServer::handleHttpGetRequest(request, socket);
+
+        // The settings uris have no access token, and the host gets them as they are.
+        for (const auto& param : Poco::URI(request.getURI()).getQueryParameters())
+            LOK_ASSERT(param.first != "access_token");
+        LOK_ASSERT(!request.has("Authorization"));
+
+        const int count = countRequest(path);
+
+        const std::string json = "application/json; charset=utf-8";
+        const std::string binary = "application/octet-stream";
+        std::string body;
+        std::string contentType = binary;
+        if (path == "/wopi/settings/sharedconfig.json")
+        {
+            body = R"({"template":[{"uri":")" + settingsUri("shared/a.otp") +
+                   R"(","stamp":"1"},{"uri":")" + settingsUri("shared/viewsetting.json") +
+                   R"(","stamp":"1"}],"xcu":[{"uri":")" + settingsUri("shared/c.xcu") +
+                   R"(","stamp":"1"}]})";
+            contentType = json;
+        }
+        else if (path == "/wopi/settings/userconfig.json" && count > 1)
+        {
+            body = R"({"template":[{"uri":")" + settingsUri("user/b.otp") + R"(","stamp":"1"}]})";
+            contentType = json;
+        }
+        else if (path == "/wopi/settings/shared/a.otp")
+            body = "shared template bytes";
+        else if (path == "/wopi/settings/shared/viewsetting.json")
+            body = R"({"zoteroAPIKey":"stored value","darkTheme":"true"})";
+        else if (path == "/wopi/settings/shared/c.xcu")
+            body = "shared xcu bytes";
+        else if (path == "/wopi/settings/user/b.otp")
+            body = "user template bytes";
+
+        if (body.empty())
+        {
+            // The first request for the user list fails, and the other paths do not exist.
+            http::Response httpResponse(path == "/wopi/settings/userconfig.json"
+                                            ? http::StatusCode::InternalServerError
+                                            : http::StatusCode::NotFound);
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        http::Response httpResponse(http::StatusCode::OK);
+        httpResponse.setBody(body, contentType);
+        socket->sendAndShutdown(httpResponse);
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::ConnectCollab:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitCollabAuth);
+                const Poco::URI wopiURL(getWopiHostURI() +
+                                        "/wopi/files/0?access_token=anything"
+                                        "&testname=UnitCollabSettingsFile");
+                _collabWs = startCollabConnection(socketPoll(), Uri::encode(wopiURL.toString()),
+                                                  "anything");
+                break;
+            }
+            case Phase::WaitCollabAuth:
+            {
+                if (!pollCollabMessage(_collabWs, "user_list"))
+                    break;
+                TRANSITION_STATE(_phase, Phase::Steps);
+                // The first two requests leave together, so the second one arrives while the
+                // shared list downloads.
+                sendStep();
+                sendStep();
+                break;
+            }
+            case Phase::Steps:
+            {
+                // Matches fetch_url and fetch_error.
+                const auto response = _collabWs->waitForMessage(
+                    R"({"type":"fetch_)", std::chrono::milliseconds(1), "collab");
+                if (response.empty())
+                    break;
+                Poco::JSON::Object::Ptr msg;
+                LOK_ASSERT(
+                    JsonUtil::parseJSON(std::string(response.data(), response.size()), msg));
+
+                const Step& step = steps()[_step];
+                TST_LOG("Step " << _step << " (" << step.list << ", " << step.file << ") got "
+                                << std::string(response.data(), response.size()));
+                LOK_ASSERT_EQUAL(std::string("r") + std::to_string(_step),
+                                 msg->getValue<std::string>("requestId"));
+                LOK_ASSERT_EQUAL(std::string("settingsFile"),
+                                 msg->getValue<std::string>("stream"));
+                if (step.error.empty())
+                {
+                    LOK_ASSERT_EQUAL(std::string("fetch_url"),
+                                     msg->getValue<std::string>("type"));
+                    http::Request request(msg->getValue<std::string>("url"));
+                    const std::shared_ptr<const http::Response> httpResponse =
+                        http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+                    LOK_ASSERT_EQUAL(http::StatusCode::OK,
+                                     httpResponse->statusLine().statusCode());
+                    if (step.file.ends_with(".json"))
+                        assertSameJson(step.body, httpResponse->getBody());
+                    else
+                        LOK_ASSERT_EQUAL(step.body, httpResponse->getBody());
+                }
+                else
+                {
+                    LOK_ASSERT_EQUAL(std::string("fetch_error"),
+                                     msg->getValue<std::string>("type"));
+                    LOK_ASSERT_EQUAL(step.error, msg->getValue<std::string>("error"));
+                }
+
+                if (++_step < steps().size())
+                {
+                    if (_sent == _step)
+                        sendStep();
+                    break;
+                }
+
+                // The host got no request for a file that no list names, and coolwsd asked
+                // for the shared list once.
+                LOK_ASSERT_EQUAL(0, requestCount("/wopi/settings/shared/secret.otp"));
+                LOK_ASSERT_EQUAL(0, requestCount("/wopi/settings/shared/c.xcu"));
+                LOK_ASSERT_EQUAL(0, requestCount("/wopi/settings/shared/othertoken/a.otp"));
+                LOK_ASSERT_EQUAL(2, requestCount("/wopi/settings/shared/a.otp"));
+                LOK_ASSERT_EQUAL(1, requestCount("/wopi/settings/user/b.otp"));
+                LOK_ASSERT_EQUAL(1, requestCount("/wopi/settings/sharedconfig.json"));
+                LOK_ASSERT_EQUAL(2, requestCount("/wopi/settings/userconfig.json"));
+
+                TRANSITION_STATE(_phase, Phase::Done);
+                _collabWs->asyncShutdown();
+                passTest("The collab client got the listed files and no other");
+                break;
+            }
+            case Phase::Done:
+                break;
+        }
+    }
+
+private:
+    /// One settingsFile fetch, and the answer it must get: the body, or the error.
+    struct Step
+    {
+        std::string list;
+        std::string group;
+        std::string file;
+        std::string error;
+        std::string body;
+    };
+
+    static const std::vector<Step>& steps()
+    {
+        static const std::vector<Step> all = {
+            { "shared", "template", "shared/a.otp", "", "shared template bytes" },
+            // The same file under another path, as when each copy of a list carries its own token.
+            { "shared", "template", "shared/othertoken/a.otp", "", "shared template bytes" },
+            // In another group of the list.
+            { "shared", "template", "shared/c.xcu", "Not in settings list", "" },
+            // In no list.
+            { "shared", "template", "shared/secret.otp", "Not in settings list", "" },
+            { "other", "template", "shared/a.otp", "Unknown list", "" },
+            // A group of the list that this stream does not give.
+            { "shared", "xcu", "shared/c.xcu", "Unknown group", "" },
+            // A settings file comes without the values that the server keeps for itself.
+            { "shared", "template", "shared/viewsetting.json", "",
+              R"({"zoteroAPIKey":"","zoteroAPIKeyStored":true,"darkTheme":"true"})" },
+            // The host fails the first request for the user list, and answers the second.
+            { "user", "template", "user/b.otp", "Settings list not available", "" },
+            { "user", "template", "user/b.otp", "", "user template bytes" },
+        };
+        return all;
+    }
+
+    /// Asserts that the JSON object in actual has the members of the one in expected, with the
+    /// same values, and no other member.
+    void assertSameJson(const std::string& expected, const std::string& actual)
+    {
+        Poco::JSON::Object::Ptr expectedObject;
+        Poco::JSON::Object::Ptr actualObject;
+        LOK_ASSERT(JsonUtil::parseJSON(expected, expectedObject));
+        LOK_ASSERT(JsonUtil::parseJSON(actual, actualObject));
+        LOK_ASSERT_EQUAL(expectedObject->size(), actualObject->size());
+        for (const std::string& name : expectedObject->getNames())
+        {
+            LOK_ASSERT(actualObject->has(name));
+            LOK_ASSERT_EQUAL(expectedObject->get(name).toString(),
+                             actualObject->get(name).toString());
+        }
+    }
+
+    void sendStep()
+    {
+        const Step& step = steps()[_sent];
+        Poco::JSON::Object::Ptr message = new Poco::JSON::Object();
+        message->set("type", "fetch");
+        message->set("stream", "settingsFile");
+        message->set("list", step.list);
+        message->set("group", step.group);
+        message->set("uri", settingsUri(step.file));
+        message->set("requestId", "r" + std::to_string(_sent));
+        _collabWs->sendMessage(JsonUtil::jsonToString(message));
+        ++_sent;
+    }
+
+    static std::string settingsUri(const std::string& name)
+    {
+        return helpers::getTestServerURI() + "/wopi/settings/" + name +
+               "?testname=UnitCollabSettingsFile";
+    }
+
+    int countRequest(const std::string& path)
+    {
+        std::lock_guard<std::mutex> lock(_requestsMutex);
+        return ++_requests[path];
+    }
+
+    int requestCount(const std::string& path)
+    {
+        std::lock_guard<std::mutex> lock(_requestsMutex);
+        return _requests[path];
+    }
+
+    STATE_ENUM(Phase, ConnectCollab, WaitCollabAuth, Steps, Done) _phase;
+
+    /// The index of the step that waits for its answer.
+    std::size_t _step;
+    /// How many steps went out.
+    std::size_t _sent;
+    std::shared_ptr<http::WebSocketSession> _collabWs;
+    std::mutex _requestsMutex;
+    /// How many requests the host got, by path.
+    std::map<std::string, int> _requests;
+};
+
+/// A settings list on a host whose name does not resolve gives an error.
+class UnitCollabSettingsListUnreachable : public WopiTestServer
+{
+public:
+    UnitCollabSettingsListUnreachable()
+        : WopiTestServer("UnitCollabSettingsListUnreachable")
+        , _phase(Phase::ConnectCollab)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr sharedSettings = new Poco::JSON::Object();
+        sharedSettings->set("uri",
+                            "http://settings-list-host.invalid/wopi/settings/sharedconfig.json");
+        sharedSettings->set("stamp", "sharedstamp");
+        fileInfo->set("SharedSettings", sharedSettings);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::ConnectCollab:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitCollabAuth);
+                const Poco::URI wopiURL(getWopiHostURI() +
+                                        "/wopi/files/0?access_token=anything"
+                                        "&testname=UnitCollabSettingsListUnreachable");
+                _collabWs = startCollabConnection(socketPoll(), Uri::encode(wopiURL.toString()),
+                                                  "anything");
+                break;
+            }
+            case Phase::WaitCollabAuth:
+            {
+                if (!pollCollabMessage(_collabWs, "user_list"))
+                    break;
+                TRANSITION_STATE(_phase, Phase::WaitAnswer);
+                Poco::JSON::Object::Ptr message = new Poco::JSON::Object();
+                message->set("type", "fetch");
+                message->set("stream", "settingsFile");
+                message->set("list", "shared");
+                message->set("group", "template");
+                message->set("uri", "http://settings-list-host.invalid/wopi/settings/shared/a.otp");
+                message->set("requestId", "r0");
+                _collabWs->sendMessage(JsonUtil::jsonToString(message));
+                break;
+            }
+            case Phase::WaitAnswer:
+            {
+                const auto response = _collabWs->waitForMessage(
+                    R"({"type":"fetch_)", std::chrono::milliseconds(1), "collab");
+                if (response.empty())
+                    break;
+                Poco::JSON::Object::Ptr msg;
+                LOK_ASSERT(
+                    JsonUtil::parseJSON(std::string(response.data(), response.size()), msg));
+                LOK_ASSERT_EQUAL(std::string("r0"), msg->getValue<std::string>("requestId"));
+                LOK_ASSERT_EQUAL(std::string("fetch_error"), msg->getValue<std::string>("type"));
+                LOK_ASSERT_EQUAL(std::string("Settings list not available"),
+                                 msg->getValue<std::string>("error"));
+
+                TRANSITION_STATE(_phase, Phase::Done);
+                _collabWs->asyncShutdown();
+                passTest("The request for the list that cannot be reached got an error");
+                break;
+            }
+            case Phase::Done:
+                break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, ConnectCollab, WaitCollabAuth, WaitAnswer, Done) _phase;
+
+    std::shared_ptr<http::WebSocketSession> _collabWs;
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [15] { new UnitCollabProtocol(),
+    return new UnitBase* [17] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
                                 new UnitCollabNoCleanExport(), new UnitCollabSettingsStreams(),
+                                new UnitCollabSettingsFile(),
+                                new UnitCollabSettingsListUnreachable(),
                                 new UnitCollabAvatar(),
                                 new UnitCollabConnections(), new UnitCollabTokenRenewal(),
                                 new UnitCollabRouting(), new UnitCollabFetchRedirect(),

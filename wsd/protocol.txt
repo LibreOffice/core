@@ -3042,7 +3042,9 @@ server -> client messages on /cool/collab/ws
 {"type":"fetch_error","stream":"<name>","requestId":"<id>","error":"<text>"[,"cleanExport":false]}
 
     Reply to a client-sent {"type":"fetch"} that cannot be served ("Stream not available",
-    "Session expired", "Server shutting down").  A fetch of the document bytes ("contents") by a
+    "Session expired", "Server shutting down").  A "settingsFile" fetch can also fail with
+    "Unknown list", "Unknown group", "Settings list not available" (the server could not download
+    or read the list) and "Not in settings list".  A fetch of the document bytes ("contents") by a
     user whose integrator disallows a clean copy (DisableExport,
     DisableCopy or WatermarkText) carries "error":"Export not allowed" and "cleanExport":false; such a
     user can open the document only through /cool/ws.
@@ -3082,6 +3084,16 @@ client -> server messages on /cool/collab/ws
     replies with {"type":"fetch_url"} (success) or {"type":"fetch_error"} (failure), carrying the
     same "requestId" so the client can correlate replies with requests (and none when the request
     had none).
+
+{"type":"fetch","stream":"settingsFile","requestId":"<id>","list":"<list>","group":"<group>",
+ "uri":"<uri>"}
+
+    Request a one-shot URL for downloading one file that a settings list names.  "list" is
+    "shared" or "user", "group" is "template", and "uri" is the uri of the entry as the
+    "sharedSettings" or the "userSettings" stream gives it.  The server downloads that list
+    itself, once for the connection, and looks in the group for the entry with the same file
+    name.  The URL downloads the uri of that entry.  Server replies with {"type":"fetch_url"} or
+    {"type":"fetch_error"} as for the other streams.
 
 {"type":"upload","stream":"contents","requestId":"<id>"(,"lastModifiedTime":"<time>"|,"force":true)}
 

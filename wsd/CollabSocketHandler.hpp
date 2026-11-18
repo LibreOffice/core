@@ -20,7 +20,10 @@
 
 #include <map>
 #include <memory>
+#include <span>
 #include <string>
+#include <string_view>
+#include <vector>
 
 class CollabBroker;
 class StreamSocket;
@@ -127,6 +130,11 @@ public:
     /// Called when the connection is closed
     void onDisconnect() override;
 
+    /// The fields that hold a stored secret in the file at url, when stream is the fetch stream
+    /// of a settings file. Empty for every other stream, and for a file that holds no secret.
+    static std::span<const std::string_view> settingsSecretFields(const std::string& stream,
+                                                                  const std::string& url);
+
 private:
     void startValidation();
     void onCheckFileInfoFinished(CheckFileInfo& cfi);
@@ -147,6 +155,33 @@ private:
     /// empty when the answer names none.
     std::string settingsListUri(const std::string& list) const;
 
+    /// A settingsFile fetch that waits for this server's copy of its settings list.
+    struct PendingSettingsFile
+    {
+        std::string requestId;
+        std::string group;
+        std::string uri;
+    };
+
+    /// Handle a fetch of one file that the "shared" or the "user" settings list names in group.
+    void handleSettingsFileFetch(const std::string& requestId, const std::string& list,
+                                 const std::string& group, const std::string& uri);
+
+    /// Answers a settingsFile fetch from settings: a one-time URL when settings names the uri
+    /// in the group, an error otherwise.
+    void answerSettingsFileFetch(const Poco::JSON::Object::Ptr& settings,
+                                 const PendingSettingsFile& request);
+
+    /// Keeps the settings list that httpResponse holds and answers the fetches that wait for it.
+    /// A null httpResponse means that the request could not start.
+    void onSettingsListFetched(const std::string& list,
+                               const std::shared_ptr<const http::Response>& httpResponse);
+
+    /// The uri of the entry of group in settings that has the file name of uri. Empty when the
+    /// group has no such entry.
+    static std::string settingsListEntryUri(const Poco::JSON::Object::Ptr& settings,
+                                            const std::string& group, const std::string& uri);
+
     /// Handle upload request - returns a one-time upload URL for HTTP PUT
     /// (one that is refused if storage no longer has lastModifiedTime, unless force)
     void handleUpload(const std::string& stream, const std::string& requestId,
@@ -165,6 +200,12 @@ private:
 
     /// Active fetch sessions by requestId
     std::map<std::string, std::shared_ptr<http::Session>> _fetchSessions;
+
+    /// The settings lists this server downloaded itself, by list name ("shared" or "user").
+    std::map<std::string, Poco::JSON::Object::Ptr> _settingsLists;
+
+    /// The settingsFile fetches that wait for the download of a settings list, by list name.
+    std::map<std::string, std::vector<PendingSettingsFile>> _pendingSettingsFiles;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

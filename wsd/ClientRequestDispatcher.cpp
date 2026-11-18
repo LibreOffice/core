@@ -1583,7 +1583,10 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                 _id, requestDetails, socket, fetchRequest.wopiSrc, fetchRequest.accessToken);
 
             // Download directly from the pre-configured stream URL
-            proxy->handleFetchRequest(fetchRequest.streamUrl, COOLWSD::getWebServerPoll(), disposition);
+            proxy->handleFetchRequest(fetchRequest.streamUrl, COOLWSD::getWebServerPoll(),
+                                      disposition,
+                                      CollabSocketHandler::settingsSecretFields(
+                                          fetchRequest.stream, fetchRequest.streamUrl));
         }
         else if (isCollab && requestDetails.equals(2, "put"))
         {
