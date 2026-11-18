@@ -1820,6 +1820,11 @@ void SdrPage::onEmptyPresObjFilled(SdrObject& /*rObj*/)
 {
 }
 
+bool SdrPage::IsPlacedByTheLayout(const SdrObject& /*rObject*/) const
+{
+    return false;
+}
+
 bool SdrPage::RestoreDefaultText(SdrObject* /*pObj*/, const OUString& /*rStr*/)
 {
     assert(false);

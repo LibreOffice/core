@@ -68,6 +68,7 @@
 #include <svx/svxids.hrc>
 #include <svx/documentbullets.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/svdopath.hxx>
@@ -8056,6 +8057,61 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testConvertToEditableShape)
     }
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), nLines);
     CPPUNIT_ASSERT(nCurves > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testConvertObjectsKeepsTheirIds)
+{
+    // Given a selected rectangle, and a group that holds another rectangle:
+    createSdDrawDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrModel& rModel = pView->getSdrModelFromSdrView();
+
+    rtl::Reference<SdrRectObj> pRect
+        = new SdrRectObj(rModel, tools::Rectangle(1000, 1000, 5000, 5000));
+    pPage->NbcInsertObject(pRect.get());
+    rtl::Reference<SdrRectObj> pMember
+        = new SdrRectObj(rModel, tools::Rectangle(6000, 1000, 9000, 5000));
+    rtl::Reference<SdrObjGroup> pGroup = new SdrObjGroup(rModel);
+    pGroup->GetSubList()->NbcInsertObject(pMember.get());
+    pPage->NbcInsertObject(pGroup.get());
+    pView->MarkObj(pRect.get(), pView->GetSdrPageView());
+    const sal_uInt64 nRectId = pRect->GetUniqueID();
+    const sal_uInt64 nGroupId = pGroup->GetUniqueID();
+    const sal_uInt64 nMemberId = pMember->GetUniqueID();
+
+    // When both are converted to curves by their objects:
+    pView->ConvertObjects({ pPage->GetObj(0), pPage->GetObj(1) }, true, false, false);
+
+    // Then the rectangle is a path under its own id, and it is the object selected:
+    auto* pPath = dynamic_cast<SdrPathObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pPath);
+    CPPUNIT_ASSERT_EQUAL(nRectId, pPath->GetUniqueID());
+    const SdrMarkList& rMarks = pView->GetMarkedObjectList();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarks.GetMarkCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pPath), rMarks.GetMark(0)->GetMarkedSdrObj());
+
+    // And the group stays, and its member is a path under the member's id:
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pGroup.get()), pPage->GetObj(1));
+    CPPUNIT_ASSERT_EQUAL(nGroupId, pGroup->GetUniqueID());
+    auto* pMemberPath = dynamic_cast<SdrPathObj*>(pGroup->GetSubList()->GetObj(0));
+    CPPUNIT_ASSERT(pMemberPath);
+    CPPUNIT_ASSERT_EQUAL(nMemberId, pMemberPath->GetUniqueID());
+
+    // And one undo brings both rectangles back under their ids:
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pRect.get()), pPage->GetObj(0));
+    CPPUNIT_ASSERT_EQUAL(nRectId, pPage->GetObj(0)->GetUniqueID());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pMember.get()), pGroup->GetSubList()->GetObj(0));
+
+    // A conversion of the selected objects gives the new object an id of its own:
+    pView->UnmarkAllObj();
+    pView->MarkObj(pRect.get(), pView->GetSdrPageView());
+    pView->ConvertMarkedToPathObj(false);
+    CPPUNIT_ASSERT(dynamic_cast<SdrPathObj*>(pPage->GetObj(0)));
+    CPPUNIT_ASSERT(nRectId != pPage->GetObj(0)->GetUniqueID());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTextBoxTakesALineColor)

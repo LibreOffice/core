@@ -2587,6 +2587,13 @@ bool SdPage::IsPresObj(const SdrObject* pObj)
     return pObj && maPresentationShapeList.hasShape( const_cast<SdrObject&>(*pObj) );
 }
 
+bool SdPage::IsPlacedByTheLayout(const SdrObject& rObject) const
+{
+    // A placeholder on a slide that was moved or resized leaves the layout and loses its user call.
+    return (rObject.IsEmptyPresObj() || rObject.GetUserCall())
+           && maPresentationShapeList.hasShape(const_cast<SdrObject&>(rObject));
+}
+
 bool SdPage::IsBackgroundVideo(const SdrObject& rObj) const
 {
     return rObj.GetObjIdentifier() == SdrObjKind::Media

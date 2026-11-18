@@ -263,6 +263,7 @@ namespace desktop {
         int setLinkedFileSource(const char* pId, const char* pUrl) override;
         bool exportPages(const char* pParts, const char* pUrl) override;
         void selectObjects(const char* pObjectIds) override;
+        void convertObjects(const char* pObjectIds, const char* pTo) override;
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges,
                              const char* pStep) override;
         void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint) override;

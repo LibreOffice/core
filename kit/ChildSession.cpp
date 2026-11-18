@@ -679,6 +679,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "reportmousepointer") ||
                tokens.equals(0, "setlocalcellcursor") ||
                tokens.equals(0, "selectobjects") ||
+               tokens.equals(0, "convertobjects") ||
                tokens.equals(0, "setobjectpoints") ||
                tokens.equals(0, "splitobjectpath") ||
                tokens.equals(0, "setobjectpathclosed") ||
@@ -785,6 +786,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "selectobjects"))
         {
             return selectObjects(tokens);
+        }
+        else if (tokens.equals(0, "convertobjects"))
+        {
+            return convertObjects(tokens);
         }
         else if (tokens.equals(0, "setobjectpoints"))
         {
@@ -2499,6 +2504,30 @@ bool ChildSession::selectObjects(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->selectObjects(objectIds.c_str());
+    return true;
+}
+
+bool ChildSession::convertObjects(const StringVector& tokens)
+{
+    std::string objectIds;
+    std::string to;
+
+    if (tokens.size() != 3 || !getTokenString(tokens[1], "ids", objectIds)
+        || !getTokenString(tokens[2], "to", to))
+    {
+        sendTextFrameAndLogError("error: cmd=convertobjects kind=syntax");
+        return false;
+    }
+
+    // Converting objects changes the document, which a read-only view may not do.
+    if (isReadOnly())
+    {
+        sendTextFrameAndLogError("error: cmd=convertobjects kind=failure");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->convertObjects(objectIds.c_str(), to.c_str());
     return true;
 }
 

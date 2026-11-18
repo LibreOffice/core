@@ -2023,11 +2023,15 @@ void lcl_straightEdgesAsLines(SdrObject& rObject)
 }
 
 rtl::Reference<SdrObject> SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea,
-                                                        bool bStraightEdgesAsLines)
+                                                        bool bStraightEdgesAsLines, bool bKeepId)
 {
     rtl::Reference<SdrObject> pNewObj = pObj->ConvertToPolyObj(bPath, bLineToArea);
     if (pNewObj && bStraightEdgesAsLines)
         lcl_straightEdgesAsLines(*pNewObj);
+    // The new object takes the id before it goes on the page, so the hint of its insertion
+    // already names it by that id.
+    if (pNewObj && bKeepId)
+        pNewObj->TakeUniqueIDOf(*pObj);
     if (pNewObj)
     {
         SdrObjList* pOL = pObj->getParentSdrObjListFromSdrObject();
@@ -2042,9 +2046,19 @@ rtl::Reference<SdrObject> SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bP
 
 void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea, bool bStraightEdgesAsLines)
 {
-    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if (ImpConvertObjects(GetMarkedObjectListWriteAccess(), bPath, bLineToArea,
+                          bStraightEdgesAsLines, false))
+    {
+        AdjustMarkHdl();
+        MarkListHasChanged();
+    }
+}
+
+bool SdrEditView::ImpConvertObjects(SdrMarkList& rMarkList, bool bPath, bool bLineToArea,
+                                    bool bStraightEdgesAsLines, bool bKeepIds)
+{
     if (rMarkList.GetMarkCount() == 0)
-        return;
+        return false;
 
     bool bMrkChg = false;
     const size_t nMarkCount=rMarkList.GetMarkCount();
@@ -2085,19 +2099,53 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea, bool bStraightEdges
             SdrObjListIter aIter(*pGrp, SdrIterMode::DeepNoGroups);
             while (aIter.IsMore()) {
                 pObj=aIter.Next();
-                ImpConvertOneObj(pObj, bPath, bLineToArea, bStraightEdgesAsLines);
+                ImpConvertOneObj(pObj, bPath, bLineToArea, bStraightEdgesAsLines, bKeepIds);
             }
         } else {
             rtl::Reference<SdrObject> pNewObj
-                = ImpConvertOneObj(pObj, bPath, bLineToArea, bStraightEdgesAsLines);
+                = ImpConvertOneObj(pObj, bPath, bLineToArea, bStraightEdgesAsLines, bKeepIds);
             if (pNewObj) {
                 bMrkChg=true;
-                GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj.get(),pPV),nm);
+                rMarkList.ReplaceMark(SdrMark(pNewObj.get(),pPV),nm);
             }
         }
     }
     EndUndo();
-    if (bMrkChg)
+    return bMrkChg;
+}
+
+void SdrEditView::ConvertObjects(const std::vector<SdrObject*>& rObjects, bool bPath,
+                                 bool bLineToArea, bool bStraightEdgesAsLines)
+{
+    SdrMarkList aObjects;
+    for (SdrObject* pObject : rObjects)
+        aObjects.InsertEntry(SdrMark(pObject, GetSdrPageView()));
+
+    // The list sorts its entries in the order of the page, so they are read back from it once it
+    // is sorted.
+    aObjects.ForceSort();
+    std::vector<SdrObject*> aBefore;
+    for (size_t nAt = 0; nAt < aObjects.GetMarkCount(); ++nAt)
+        aBefore.push_back(aObjects.GetMark(nAt)->GetMarkedSdrObj());
+
+    if (!ImpConvertObjects(aObjects, bPath, bLineToArea, bStraightEdgesAsLines, true))
+        return;
+
+    // A new object is marked where the object it replaces was marked.
+    bool bMarksChanged = false;
+    SdrMarkList& rMarks = GetMarkedObjectListWriteAccess();
+    for (size_t nAt = 0; nAt < aObjects.GetMarkCount(); ++nAt)
+    {
+        SdrObject* pNew = aObjects.GetMark(nAt)->GetMarkedSdrObj();
+        const size_t nMark = rMarks.FindObject(aBefore[nAt]);
+        if (pNew == aBefore[nAt] || nMark == SAL_MAX_SIZE)
+            continue;
+
+        rMarks.ReplaceMark(SdrMark(pNew, rMarks.GetMark(nMark)->GetPageView()), nMark);
+        bMarksChanged = true;
+    }
+
+    if (bMarksChanged)
     {
         AdjustMarkHdl();
         MarkListHasChanged();

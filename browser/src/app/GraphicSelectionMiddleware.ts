@@ -219,6 +219,27 @@ class GraphicSelection {
 		return false;
 	}
 
+	/// What the selected objects become, by the command that converts them.
+	private static readonly conversions: { [command: string]: string } = {
+		'.uno:ChangeBezier': 'curve',
+		'.uno:ChangePolygon': 'polygon',
+		'.uno:convert_to_contour': 'contour',
+		'.uno:ConvertToEditableShape': 'editable',
+	};
+
+	/*
+		Converts the selected objects by their ids to "curve", "polygon", "contour" or "editable".
+		Each new object keeps the id of the object it replaces, so the selection stays as it is.
+	*/
+	private static convertTheObjects(to: string): void {
+		if (!this.selectedObjectIDs.length) return;
+
+		ChangeOutbox.sendEverythingAhead();
+		app.socket.sendMessage(
+			'convertobjects ids=' + this.selectedObjectIDs.join(',') + ' to=' + to,
+		);
+	}
+
 	/// Whether one object is selected and its path can be edited point by point, so it needs no
 	/// conversion first.
 	public static isOnePath(): boolean {
@@ -324,9 +345,9 @@ class GraphicSelection {
 
 	/*
 		Runs a command whose meaning a view that draws from the objects gives itself: entering and
-		leaving a group, which are the context's, as Enter, F3 and Ctrl+F3 are, and taking apart
-		what is selected, which in a diagram is the diagram. Answers whether it was run here; one
-		that is not goes to the engine.
+		leaving a group, which are the context's, as Enter, F3 and Ctrl+F3 are, taking apart what
+		is selected, which in a diagram is the diagram, and converting the selected objects.
+		Answers whether it was run here; one that is not goes to the engine.
 	*/
 	public static takesTheCommand(command: string): boolean {
 		if (!RenderManager.drawsFromObjects()) return false;
@@ -334,7 +355,11 @@ class GraphicSelection {
 		if (command === '.uno:LeaveGroup') return Interaction.context().leaveKey();
 		if (command === '.uno:FormatUngroup')
 			return Interaction.context().ungroup();
-		return false;
+		const to = this.conversions[command];
+		if (!to) return false;
+
+		this.convertTheObjects(to);
+		return true;
 	}
 
 	/*

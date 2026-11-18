@@ -307,6 +307,8 @@ public:
     virtual void release() noexcept override final;
 
     sal_uInt64 GetUniqueID() const { return maUniqueID.getID(); }
+    /// Takes the id of rObject, for an object that takes its place.
+    void TakeUniqueIDOf(const SdrObject& rObject) { maUniqueID.takeTheIdOf(rObject.maUniqueID); }
 
     // SdrModel/SdrPage access on SdrObject level
     SdrPage* getSdrPageFromSdrObject() const;

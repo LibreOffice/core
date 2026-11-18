@@ -518,6 +518,10 @@ public:
         a presentation learns that content reached a placeholder. */
     virtual void onEmptyPresObjFilled(SdrObject& rObj);
 
+    /** Whether the object is a placeholder whose place and size the layout of the page still
+        sets. A page without a layout has none. */
+    virtual bool IsPlacedByTheLayout(const SdrObject& rObject) const;
+
 protected:
     void TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage);
 

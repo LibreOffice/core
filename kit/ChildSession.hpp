@@ -227,6 +227,9 @@ private:
     /// Marks the objects the client names, which it worked out from the geometry it holds. An
     /// empty list marks nothing, which is how the client asks for no selection at all.
     bool selectObjects(const StringVector& tokens);
+    /// Converts the objects the client names to curves, polygons, contours or editable paths,
+    /// and each new object keeps the id of the object it replaces.
+    bool convertObjects(const StringVector& tokens);
     /// Moves, adds and removes the points and weights of a drawing object's path which the client
     /// names, and leaves the rest of the path as it stands.
     bool setObjectPoints(const StringVector& tokens);

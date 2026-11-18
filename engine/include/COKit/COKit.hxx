@@ -1360,6 +1360,24 @@ struct COKitDocument
     virtual void selectObjects(const char* pObjectIds) = 0;
 
     /**
+     * Converts drawing objects of the page the view shows, as one undo step. A group is not
+     * converted, its members are. Each new object keeps the id of the object it replaces.
+     *
+     * @param pObjectIds the objects, as a comma separated list of the ids
+     *        SdrObject::GetUniqueID() answers. They all sit at the same level: directly on the
+     *        page, or in one and the same group.
+     * @param pTo what they become: "curve" for curves, "polygon" for polygons with straight
+     *        edges, "contour" for the outline of the area that each object and its line cover,
+     *        and "editable" for paths whose straight edges are lines and whose curved edges stay
+     *        curves.
+     *
+     * Nothing changes for a read-only view, for another name, for an id that names no object on
+     * the page, for an object the view cannot mark, for a placeholder that the layout of the page
+     * places, or for objects that do not sit at the same level.
+     */
+    virtual void convertObjects(const char* pObjectIds, const char* pTo) = 0;
+
+    /**
      * Moves, adds and removes points and weights of the path an object is drawn along, for an
      * object that is drawn along one.
      *

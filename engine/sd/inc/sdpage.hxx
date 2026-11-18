@@ -188,6 +188,7 @@ public:
     void            NotifyPagePropertyChanges();
     bool            RestoreDefaultText( SdrObject* pObj, const OUString& rStr ) override;
     void            onEmptyPresObjFilled(SdrObject& rObj) override;
+    bool            IsPlacedByTheLayout(const SdrObject& rObject) const override;
 
     /** @return true if the given SdrObject is inside the presentation object list */
     bool            IsPresObj(const SdrObject* pObj);

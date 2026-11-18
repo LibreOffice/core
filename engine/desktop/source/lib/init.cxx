@@ -5613,6 +5613,102 @@ static bool lcl_viewReaches(const SdrPageView& rPageView, const SdrObject& rObje
 }
 
 /*
+    Converts the objects of those ids, on the page the view shows, as one undo step. "curve" makes
+    curves of them, "polygon" polygons with straight edges, "contour" the outline of the area that
+    each one and its line cover, and "editable" paths whose straight edges are lines and whose
+    curved edges stay curves. A group is not converted, its members are. Each new object keeps the
+    id of the object it replaces.
+
+    Nothing changes for a read-only view, for another name, for an id that names no object on the
+    page, for an object the view does not reach, for a placeholder that the layout places, and for
+    objects that do not all sit at the same level.
+*/
+void COKitDocumentImpl::convertObjects(const char* pObjectIds, const char* pTo)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::convertObjects");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
+    const std::string_view aTo(pTo ? pTo : "");
+    if (aTo != "curve" && aTo != "polygon" && aTo != "contour" && aTo != "editable")
+    {
+        SetLastExceptionMsg(u"The objects are converted to nothing of that name"_ustr);
+        return;
+    }
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
+    const SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
+
+    if (!pPage)
+    {
+        SetLastExceptionMsg(u"The view shows no page to convert objects on"_ustr);
+        return;
+    }
+
+    std::vector<sal_uInt64> aIds;
+    const OString aObjectIds(pObjectIds ? pObjectIds : "");
+    for (sal_Int32 nAt = 0; nAt >= 0;)
+    {
+        const OString aId(aObjectIds.getToken(0, ',', nAt));
+        if (!aId.isEmpty())
+            aIds.push_back(aId.toUInt64());
+    }
+
+    // A text typed into one of the objects goes into the model first, so it is converted too.
+    // Ending the edit deletes a text frame left empty, so the objects are looked up after it.
+    if (const SdrObject* pEdited = pView->GetTextEditObject())
+    {
+        bool bConverted = false;
+        for (const SdrObject* pAbove = pEdited; pAbove && !bConverted;
+             pAbove = pAbove->getParentSdrObjectFromSdrObject())
+            bConverted = std::find(aIds.begin(), aIds.end(), pAbove->GetUniqueID()) != aIds.end();
+        if (bConverted)
+            pView->SdrEndTextEdit();
+    }
+
+    std::vector<SdrObject*> aObjects;
+    for (const sal_uInt64 nId : aIds)
+    {
+        SdrObject* pObject = pPage->FindObjectByUniqueID(nId);
+        if (!pObject)
+        {
+            SetLastExceptionMsg(u"No object of that id is on the page"_ustr);
+            return;
+        }
+
+        if (!lcl_viewReaches(*pPageView, *pObject))
+            return;
+
+        if (pPage->IsPlacedByTheLayout(*pObject))
+        {
+            SetLastExceptionMsg(u"The layout of the page places the object"_ustr);
+            return;
+        }
+
+        if (!aObjects.empty()
+            && pObject->getParentSdrObjListFromSdrObject()
+                   != aObjects.front()->getParentSdrObjListFromSdrObject())
+        {
+            SetLastExceptionMsg(u"The objects do not sit at the same level"_ustr);
+            return;
+        }
+
+        aObjects.push_back(pObject);
+    }
+
+    if (aObjects.empty())
+        return;
+
+    pView->ConvertObjects(aObjects, aTo != "polygon", aTo == "contour", aTo == "editable");
+}
+
+/*
     The object of that id drawn along a path, on the page the current view shows, where this view
     may change its points. Answers nothing for a read-only view, for an id that names no such
     object, for an object the view does not reach and for one held against being resized, and sets

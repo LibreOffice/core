@@ -119,11 +119,20 @@ protected:
     SAL_DLLPRIVATE void ImpConvertTo(bool bPath, bool bLineToArea,
                                      bool bStraightEdgesAsLines = false);
 
+    // Converts the objects of rObjects as one undo step, and replaces each entry of rObjects
+    // that was converted with the new object. A group is not converted, its members are.
+    // With bKeepIds, a new object takes the id of the object it replaces. Returns whether an
+    // entry of rObjects was replaced.
+    SAL_DLLPRIVATE bool ImpConvertObjects(SdrMarkList& rObjects, bool bPath, bool bLineToArea,
+                                          bool bStraightEdgesAsLines, bool bKeepIds);
+
     // converts an object, when positive it removes the old one from its List
     // and inserts the new one instead. including Undo.
     // Nor MarkEntry nor ModelChgBroadcast is created.
+    // With bKeepId, the new object takes the id of the old one.
     SAL_DLLPRIVATE rtl::Reference<SdrObject> ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea,
-                                                              bool bStraightEdgesAsLines = false);
+                                                              bool bStraightEdgesAsLines = false,
+                                                              bool bKeepId = false);
 
     // set both flags: bToTopPossible and bToBtmPossible.
     // bToTopPossibleDirty and bToBtmPossibleDirty are reset at the same time
@@ -381,6 +390,14 @@ public:
     // Convert the marked objects to paths whose points can be edited. A curved edge stays a
     // curve, a straight edge is a line, and the line width stays an attribute of the path.
     void ConvertMarkedToEditablePathObj();
+    // Converts the objects as one undo step: with bPath to curves, without it to polygons. With
+    // bLineToArea the line of an object becomes the outline of an area, and with
+    // bStraightEdgesAsLines an edge of the result that runs straight is a line, not a curve. A
+    // group is not converted, its members are. Each new object takes the id of the object it
+    // replaces, and it is marked where that object was marked. The objects all sit at the same
+    // level, as the marked ones do: directly on the page, or in one and the same group.
+    void ConvertObjects(const std::vector<SdrObject*>& rObjects, bool bPath, bool bLineToArea,
+                        bool bStraightEdgesAsLines);
 
     // Align all marked objects vertically. Normally the SnapRect of an object is used.
     void AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert);

@@ -863,6 +863,18 @@ selectobjects ids=<ids>
     of one selection all sit at the same level, directly on the page or in one and the same group;
     an id naming an object elsewhere, or naming nothing on the page the view shows, is left out.
 
+convertobjects ids=<ids> to=<to>
+
+    <ids> is a comma separated list of the unique ids of drawing objects, as for selectobjects,
+    which all sit at the same level. <to> is what they become: 'curve' for curves, 'polygon' for
+    polygons with straight edges, 'contour' for the outline of the area that each object and its
+    line cover, and 'editable' for paths whose straight edges are lines and whose curved edges
+    stay curves. Converts them as one undo step. A group is not converted, its members are. Each
+    new object keeps the id of the object it replaces. Nothing changes for a read-only view, for
+    another <to>, for an id that names nothing on the page the view shows, for an object this
+    view cannot mark, for a placeholder that the layout of the page places, or for objects at
+    different levels.
+
 setobjecttransform to=<mappings> as=<what> [sequence=<sequence>]
 
     <mappings> holds one item per object, separated by semicolons. An item is the unique id of a

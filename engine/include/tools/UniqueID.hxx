@@ -30,6 +30,9 @@ public:
 
     sal_uInt64 getID() const { return mnID; }
 
+    /// Takes the id of rOther, for an object that takes the place of another one.
+    void takeTheIdOf(const UniqueID& rOther) { mnID = rOther.mnID; }
+
     /// Reserves that many ids, the first answered and the rest following it, which no id made
     /// afterwards in this process takes unless it is given that one.
     static sal_uInt64 reserve(sal_uInt64 nCount);

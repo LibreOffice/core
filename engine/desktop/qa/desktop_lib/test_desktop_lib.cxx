@@ -113,6 +113,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdorect.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <vcl/BitmapTools.hxx>
@@ -362,6 +363,7 @@ public:
     void testObjectCommandsKeepTheObjectsProtection();
     void testObjectPathCommands();
     void testLocalCellCursorViewOption();
+    void testConvertObjects();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -503,6 +505,7 @@ public:
     CPPUNIT_TEST(testObjectCommandsKeepTheObjectsProtection);
     CPPUNIT_TEST(testObjectPathCommands);
     CPPUNIT_TEST(testLocalCellCursorViewOption);
+    CPPUNIT_TEST(testConvertObjects);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -6868,6 +6871,50 @@ void DesktopKitTest::testLocalCellCursorViewOption()
     pDocument->setViewOption("localcellcursor", "false");
     CPPUNIT_ASSERT(!pView1->isKitLocalCellCursor());
     CPPUNIT_ASSERT(pView2->isKitLocalCellCursor());
+}
+
+void DesktopKitTest::testConvertObjects()
+{
+    // A rectangle converted by its id becomes a path that keeps the id, and a placeholder that
+    // the layout of the slide places is not converted.
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+    SdrPageView* pPageView = nullptr;
+    SdrObject* pTitle = firstObjectOfThePage(pPageView);
+    SdrPage* pPage = pPageView->GetPage();
+
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(pPage->getSdrModelFromSdrPage(),
+                                                      tools::Rectangle(1000, 1000, 5000, 5000));
+    pPage->InsertObject(pRect.get());
+    const size_t nPlace = pRect->GetOrdNum();
+    const sal_uInt64 nRectId = pRect->GetUniqueID();
+    const OString aRectId(OString::number(nRectId));
+    const OString aBoth(aRectId + "," + OString::number(pTitle->GetUniqueID()));
+
+    // The title follows the layout of the slide, as a placeholder does until someone moves it. The
+    // page of a slide is also the object that places its placeholders [-loplugin:crosscast]:
+    pTitle->SetUserCall(dynamic_cast<SdrObjUserCall*>(pPage));
+    CPPUNIT_ASSERT(pPage->IsPlacedByTheLayout(*pTitle));
+
+    // Another name, or a list that names the placeholder, leaves every object as it is.
+    pDocument->convertObjects(aRectId.getStr(), "bezier");
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pRect.get()), pPage->GetObj(nPlace));
+    pDocument->convertObjects(aBoth.getStr(), "curve");
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pRect.get()), pPage->GetObj(nPlace));
+    CPPUNIT_ASSERT_EQUAL(pTitle, pPage->GetObj(0));
+
+    // A read-only view converts nothing.
+    KitHelper::setViewReadOnly(pDocument->getView(), true);
+    pDocument->convertObjects(aRectId.getStr(), "curve");
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pRect.get()), pPage->GetObj(nPlace));
+    KitHelper::setViewReadOnly(pDocument->getView(), false);
+
+    // The rectangle becomes a path in its place, and the page knows the path by its id.
+    pDocument->convertObjects(aRectId.getStr(), "editable");
+    auto* pPath = dynamic_cast<SdrPathObj*>(pPage->GetObj(nPlace));
+    CPPUNIT_ASSERT(pPath);
+    CPPUNIT_ASSERT_EQUAL(nRectId, pPath->GetUniqueID());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pPath), pPage->FindObjectByUniqueID(nRectId));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);
