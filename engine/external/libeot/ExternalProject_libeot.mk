@@ -16,9 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libeot,\
 $(call gb_ExternalProject_get_state_target,libeot,build) :
 	$(call gb_Trace_StartRange,libeot,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter iOS MACOSX,$(OS_FOR_BUILD)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
-		autoreconf -i \
-		&& export PKG_CONFIG="" \
+		export PKG_CONFIG="" \
 		&& $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			--enable-static \
