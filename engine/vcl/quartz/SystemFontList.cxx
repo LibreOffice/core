@@ -109,6 +109,10 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
         CFNumberGetValue( pSymbolNum, kCFNumberSInt64Type, &nSymbolTrait );
         if (nSymbolTrait & kCTFontMonoSpaceTrait)
             rDFA.SetPitch(PITCH_FIXED);
+        // The italic trait marks a face italic even when the slant trait is zero, as iOS reports
+        // for a font that is not installed.
+        if (nSymbolTrait & kCTFontItalicTrait)
+            rDFA.SetItalic(ITALIC_NORMAL);
     }
 
     // get the font weight
