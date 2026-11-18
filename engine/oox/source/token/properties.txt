@@ -159,6 +159,7 @@ DefaultText
 DefaultValue
 DeletedLegendEntries
 Depth
+Description
 DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
