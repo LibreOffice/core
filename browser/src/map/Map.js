@@ -801,10 +801,11 @@ window.L.Map = window.L.Evented.extend({
 
 	// true when the form controls of this view are in design mode and are edited as objects, false
 	// when they are alive and work as controls; until the office says so they count as in design
-	// mode
+	// mode. The office reports an empty state where the view cannot switch the mode, as in a view
+	// that cannot edit, and there the controls are alive.
 	isFormControlDesignMode: function() {
 		const state = this['stateChangeHandler'].getItemValue('.uno:SwitchControlDesignMode');
-		return state !== false && state !== 'false';
+		return state === undefined || state === true || state === 'true';
 	},
 
 	// true when the switch of the design mode is offered: the office reports the mode, which it

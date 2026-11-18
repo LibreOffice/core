@@ -200,6 +200,10 @@ describe(['tagdesktop'], 'Form controls on a vector slide', function() {
 		cy.then(function() {
 			win.app.map.setPermission('readonly');
 		});
+		// The office answers the new permission with the state of the design mode.
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
 		// The controls are made anew together for the new permission, so the field is looked up
 		// again on each try.
 		cy.wrap(null).should(function() {
