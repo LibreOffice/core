@@ -1024,23 +1024,30 @@ OString KitHelper::makeVisCursorInvalidation(int nViewId, std::string_view rRect
     bool bMispelledWord, const OString& rHyperlink, int nEditorViewId, bool bDropPosition,
     const std::optional<KitCaretTextPosition>& roTextPosition)
 {
-    OString sHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
-    OString sTextPosition;
-    if (roTextPosition)
-        sTextPosition = ", \"object\": \"" + OString::number(roTextPosition->mnObject) +
-            "\", \"paragraph\": \"" + OString::number(roTextPosition->mnParagraph) +
-            "\", \"index\": \"" + OString::number(roTextPosition->mnIndex) + "\"";
-    if (roTextPosition && roTextPosition->moAnchorIndex)
-        sTextPosition += ", \"anchorParagraph\": \""
-            + OString::number(roTextPosition->mnParagraph) +
-            "\", \"anchorIndex\": \"" + OString::number(*roTextPosition->moAnchorIndex) + "\"";
+    // The numbers go out as strings.
+    tools::JsonWriter aJson;
+    aJson.put("viewId", OString::number(nViewId));
+    aJson.put("editorViewId", OString::number(nEditorViewId));
+    aJson.put("rectangle", rRectangle);
+    aJson.put("mispelledWord", OString::number(bMispelledWord ? 1 : 0));
     // The dropPosition key is present only while the cursor marks a drop position.
-    return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
-        "\", \"editorViewId\": \"" + OString::number(nEditorViewId) +
-        "\", \"rectangle\": \"" + rRectangle +
-        "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
-        (bDropPosition ? "\", \"dropPosition\": \"1" : "") +
-        "\", \"hyperlink\": " + sHyperlink + sTextPosition + " }";
+    if (bDropPosition)
+        aJson.put("dropPosition", "1");
+    // The hyperlink is a JSON object already.
+    const OString aHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
+    aJson.putRaw(Concat2View("\"hyperlink\": " + aHyperlink));
+    if (roTextPosition)
+    {
+        aJson.put("object", OString::number(roTextPosition->mnObject));
+        aJson.put("paragraph", OString::number(roTextPosition->mnParagraph));
+        aJson.put("index", OString::number(roTextPosition->mnIndex));
+        if (roTextPosition->moAnchorIndex)
+        {
+            aJson.put("anchorParagraph", OString::number(roTextPosition->mnParagraph));
+            aJson.put("anchorIndex", OString::number(*roTextPosition->moAnchorIndex));
+        }
+    }
+    return aJson.finishAndGetAsOString();
 }
 
 OString KitHelper::makeViewCursorInvalidation(const SfxViewShell* pThisView, int nViewId,
