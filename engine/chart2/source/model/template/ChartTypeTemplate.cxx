@@ -918,7 +918,7 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
         }
     }
     if( xSource.is() )
-        comphelper::copyProperties( xSource, xNewChartType );
+        comphelper::copyProperties( static_cast<property::OPropertySet*>(xSource.get()), static_cast<property::OPropertySet*>(xNewChartType.get()) );
 }
 
 cpo::uno::Reference< css::chart2::XDiagram > ChartTypeTemplate::createDiagramByDataSource(

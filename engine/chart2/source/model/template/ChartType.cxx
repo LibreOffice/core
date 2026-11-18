@@ -673,6 +673,31 @@ void ChartType::deleteSeries( const rtl::Reference< ::chart::DataSeries > & xSer
     }
 }
 
+void ChartType::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
+{
+    OPropertySet::setPropertyValue(aPropertyName, aValue);
+}
+::cpo::uno::Any ChartType::getPropertyValue( const ::rtl::OUString& PropertyName )
+{
+    return OPropertySet::getPropertyValue(PropertyName);
+}
+void ChartType::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener )
+{
+    OPropertySet::addPropertyChangeListener(aPropertyName, xListener);
+}
+void ChartType::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener )
+{
+    OPropertySet::removePropertyChangeListener(aPropertyName, aListener);
+}
+void ChartType::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::addVetoableChangeListener(PropertyName, aListener);
+}
+void ChartType::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::removeVetoableChangeListener(PropertyName, aListener);
+}
+
 
 
 } //  namespace chart

@@ -4337,23 +4337,19 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                 bool bHasOverflowBinValue = false;
                 if (aChartType == "com.sun.star.chart2.HistogramChartType")
                 {
-                    Reference<beans::XPropertySet> xChartTypePropSet(xChartType, uno::UNO_QUERY);
-                    if (xChartTypePropSet.is())
-                    {
-                        xChartTypePropSet->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType;
-                        bHasBinWidth =
-                            (xChartTypePropSet->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth);
-                        bHasBinCount =
-                            (xChartTypePropSet->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
+                    xChartType->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType;
+                    bHasBinWidth =
+                        (xChartType->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth);
+                    bHasBinCount =
+                        (xChartType->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
 
-                        xChartTypePropSet->getPropertyValue(u"UseUnderflowBin"_ustr) >>= bUseUnderflowBin;
-                        xChartTypePropSet->getPropertyValue(u"UseOverflowBin"_ustr) >>= bUseOverflowBin;
+                    xChartType->getPropertyValue(u"UseUnderflowBin"_ustr) >>= bUseUnderflowBin;
+                    xChartType->getPropertyValue(u"UseOverflowBin"_ustr) >>= bUseOverflowBin;
 
-                        bHasUnderflowBinValue
-                            = (xChartTypePropSet->getPropertyValue(u"UnderflowBinValue"_ustr) >>= fUnderflowBinValue);
-                        bHasOverflowBinValue
-                            = (xChartTypePropSet->getPropertyValue(u"OverflowBinValue"_ustr) >>= fOverflowBinValue);
-                    }
+                    bHasUnderflowBinValue
+                        = (xChartType->getPropertyValue(u"UnderflowBinValue"_ustr) >>= fUnderflowBinValue);
+                    bHasOverflowBinValue
+                        = (xChartType->getPropertyValue(u"OverflowBinValue"_ustr) >>= fOverflowBinValue);
                 }
 
                 bool bHasAny = bHasParentLL || bHasRegionLL || bHasVisibility
@@ -5506,8 +5502,7 @@ void ChartExport::exportOneAxis_chartex(
                                 auto aChartTypes = xCTCnt->getChartTypes();
                                 if (aChartTypes.hasElements())
                                 {
-                                    Reference<beans::XPropertySet> xTypeProp(aChartTypes[0], uno::UNO_QUERY);
-                                    if (xTypeProp.is() && GetProperty(xTypeProp, u"GapwidthSequence"_ustr))
+                                    if (aChartTypes[0].is() && GetProperty(aChartTypes[0], u"GapwidthSequence"_ustr))
                                     {
                                         cpo::uno::Sequence<sal_Int32> aGapSeq;
                                         mAny >>= aGapSeq;

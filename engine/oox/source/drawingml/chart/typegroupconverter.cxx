@@ -399,8 +399,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 
         if (maTypeInfo.meTypeId == TYPEID_HISTO)
         {
-            Reference<css::beans::XPropertySet> xTypePropSet(xChartType, UNO_QUERY);
-            if (xTypePropSet.is())
+            if (xChartType.is())
             {
                 for (const auto& rxSeriesModel : mrModel.maSeries)
                 {
@@ -416,35 +415,35 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                     {
                         if (std::holds_alternative<double>(*rBinning.maBinSizeOrCount))
                         {
-                            xTypePropSet->setPropertyValue(
+                            xChartType->setPropertyValue(
                                 u"BinWidth"_ustr,
                                 cpo::uno::Any(std::get<double>(*rBinning.maBinSizeOrCount)));
-                            xTypePropSet->setPropertyValue(
+                            xChartType->setPropertyValue(
                                 u"FrequencyType"_ustr,
                                 cpo::uno::Any(sal_Int32(1)));
                         }
                         else
                         {
-                            xTypePropSet->setPropertyValue(
+                            xChartType->setPropertyValue(
                                 u"BinCount"_ustr,
                                 cpo::uno::Any(static_cast<sal_Int32>(
                                     std::get<sal_uInt32>(*rBinning.maBinSizeOrCount))));
-                            xTypePropSet->setPropertyValue(
+                            xChartType->setPropertyValue(
                                 u"FrequencyType"_ustr,
                                 cpo::uno::Any(sal_Int32(2)));
                         }
                     }
                     if (rBinning.mfUnderflow)
                     {
-                        xTypePropSet->setPropertyValue(u"UseUnderflowBin"_ustr, cpo::uno::Any(true));
-                        xTypePropSet->setPropertyValue(u"UnderflowBinValue"_ustr,
+                        xChartType->setPropertyValue(u"UseUnderflowBin"_ustr, cpo::uno::Any(true));
+                        xChartType->setPropertyValue(u"UnderflowBinValue"_ustr,
                                                         cpo::uno::Any(*rBinning.mfUnderflow));
                     }
 
                     if (rBinning.mfOverflow)
                     {
-                        xTypePropSet->setPropertyValue(u"UseOverflowBin"_ustr, cpo::uno::Any(true));
-                        xTypePropSet->setPropertyValue(u"OverflowBinValue"_ustr,
+                        xChartType->setPropertyValue(u"UseOverflowBin"_ustr, cpo::uno::Any(true));
+                        xChartType->setPropertyValue(u"OverflowBinValue"_ustr,
                                                         cpo::uno::Any(*rBinning.mfOverflow));
                     }
 

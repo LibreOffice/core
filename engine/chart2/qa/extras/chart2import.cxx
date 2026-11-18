@@ -464,11 +464,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSteppedLines)
         Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChart2Doc, 0 );
         CPPUNIT_ASSERT(xChartType.is());
 
-        Reference< beans::XPropertySet > xPropSet( xChartType, UNO_QUERY );
-        CPPUNIT_ASSERT(xPropSet.is());
-
         chart2::CurveStyle eCurveStyle;
-        xPropSet->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
+        xChartType->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
         CPPUNIT_ASSERT_EQUAL(eCurveStyle, curveStyle[nSheet]);
     }
 }
@@ -1639,11 +1636,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSmoothDefaultValue2007XLSX)
     Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
     CPPUNIT_ASSERT(xChartType.is());
 
-    Reference< beans::XPropertySet > xPropSet( xChartType, UNO_QUERY );
-    CPPUNIT_ASSERT(xPropSet.is());
-
     chart2::CurveStyle eCurveStyle;
-    xPropSet->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
+    xChartType->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
     CPPUNIT_ASSERT_EQUAL(chart2::CurveStyle_LINES, eCurveStyle);
 }
 
@@ -1657,11 +1651,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSmoothDefaultValue2013XLSX)
     Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
     CPPUNIT_ASSERT(xChartType.is());
 
-    Reference< beans::XPropertySet > xPropSet( xChartType, UNO_QUERY );
-    CPPUNIT_ASSERT(xPropSet.is());
-
     chart2::CurveStyle eCurveStyle;
-    xPropSet->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
+    xChartType->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
     CPPUNIT_ASSERT(eCurveStyle != chart2::CurveStyle_LINES);
 }
 
