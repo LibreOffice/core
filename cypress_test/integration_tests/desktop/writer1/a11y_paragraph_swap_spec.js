@@ -161,7 +161,9 @@ describe(['tagdesktop'], 'Writer paragraph swap for the reader', { testIsolation
 			win.app.map._textInput.onVisibleAreaChanged();
 		});
 
-		cy.wait(500);
+		cy.wrap(null).should(function () {
+			expect(requests, 'the scroll asked core for the paragraph').to.equal(1);
+		});
 		cy.then(function () {
 			return helper.processToIdle(win);
 		});
