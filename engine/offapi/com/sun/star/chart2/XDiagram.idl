@@ -26,8 +26,11 @@ module star
 module chart2
 {
 
-interface XDiagram : ::com::sun::star::beans::XPropertySet
+interface XDiagram
 {
+    interface ::com::sun::star::beans::XPropertySet;
+    interface XCoordinateSystemContainer;
+
     /** returns the property set that determines the visual appearance
         of the wall.
 

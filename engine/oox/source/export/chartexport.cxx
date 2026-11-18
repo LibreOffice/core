@@ -1080,8 +1080,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
         return;
 
     // At minimum, a PlotArea is needed or else MS Word complains about an invalid file
-    uno::Reference<chart2::XCoordinateSystemContainer>
-        xBCooSysCnt(xChartDoc->getFirstDiagram(), uno::UNO_QUERY);
+    uno::Reference<chart2::XDiagram> xBCooSysCnt(xChartDoc->getFirstDiagram());
     if (!xBCooSysCnt.is())
         return;
 
@@ -1736,10 +1735,9 @@ ChartExport::ChartDimInfo ChartExport::getChartDimInfo(
 
 void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::chart::XChartDocument >& xChartDoc)
 {
-    Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( mxNewDiagram, uno::UNO_QUERY );
-    if( ! xBCooSysCnt.is()) return;
+    if( ! mxNewDiagram.is()) return;
     const Sequence< Reference< chart2::XCoordinateSystem > >
-        aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
+        aCooSysSeq( mxNewDiagram->getCoordinateSystems());
 
     if (!aCooSysSeq.hasElements()) return;
 
@@ -2822,10 +2820,9 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
 void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& xChartDoc,
         bool bIsChartex)
 {
-    Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( mxNewDiagram, uno::UNO_QUERY );
     // MS Word considers a chart corrupt if it doesn't have a c:plotArea
-    assert(xBCooSysCnt.is());
-    if (!xBCooSysCnt.is())
+    assert(mxNewDiagram.is());
+    if (!mxNewDiagram.is())
         return;
 
     // plot-area element
@@ -2851,7 +2848,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
 
     // chart type
     const Sequence< Reference< chart2::XCoordinateSystem > >
-        aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
+        aCooSysSeq( mxNewDiagram->getCoordinateSystems());
 
     // tdf#123647 Save empty chart as empty bar chart.
     if (!aCooSysSeq.hasElements())
@@ -5060,12 +5057,10 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair, bool bIsChartex)
         Reference<XPropertySet> xRealMinorGrid = xMinorGrid;
         try
         {
-            Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(
-                mxNewDiagram, uno::UNO_QUERY);
-            if (xCooSysCnt.is())
+            if (mxNewDiagram.is())
             {
                 bool bFound = false;
-                const auto aCooSysSeq = xCooSysCnt->getCoordinateSystems();
+                const auto aCooSysSeq = mxNewDiagram->getCoordinateSystems();
                 for (const auto& xCooSys : aCooSysSeq)
                 {
                     if (bFound)
@@ -5500,10 +5495,9 @@ void ChartExport::exportOneAxis_chartex(
                 std::optional<double> oGapWidth;
                 try
                 {
-                    Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(mxNewDiagram, uno::UNO_QUERY);
-                    if (xCooSysCnt.is())
+                    if (mxNewDiagram.is())
                     {
-                        auto aCooSysSeq = xCooSysCnt->getCoordinateSystems();
+                        auto aCooSysSeq = mxNewDiagram->getCoordinateSystems();
                         if (aCooSysSeq.hasElements())
                         {
                             Reference<chart2::XChartTypeContainer> xCTCnt(aCooSysSeq[0], uno::UNO_QUERY);
@@ -6479,12 +6473,10 @@ void ChartExport::createAxes_chartex(
         AxisType eAxisType = AXIS_CATEGORY;
         try
         {
-            Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(
-                mxNewDiagram, uno::UNO_QUERY);
-            if (xCooSysCnt.is())
+            if (mxNewDiagram.is())
             {
                 bool bFound = false;
-                const auto aCooSysSeq = xCooSysCnt->getCoordinateSystems();
+                const auto aCooSysSeq = mxNewDiagram->getCoordinateSystems();
                 for (const auto& xCooSys : aCooSysSeq)
                 {
                     if (bFound)
@@ -7016,12 +7008,11 @@ bool ChartExport::isDeep3dChart()
 // "cx2", etc.)
 bool ChartExport::isChartexNotChartNS(NamespaceAbbrev *peNS) const
 {
-    Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( mxNewDiagram, uno::UNO_QUERY );
-    if( ! xBCooSysCnt.is()) return false;
+    if( ! mxNewDiagram.is()) return false;
 
     // chart type
     const Sequence< Reference< chart2::XCoordinateSystem > >
-        aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
+        aCooSysSeq( mxNewDiagram->getCoordinateSystems());
 
     for( const auto& rCS : aCooSysSeq ) {
         Reference< chart2::XChartTypeContainer > xCTCnt( rCS, uno::UNO_QUERY );

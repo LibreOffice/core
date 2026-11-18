@@ -98,11 +98,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
     //the found parent indicates the charttype
 
     //iterate through all coordinate systems
-    uno::Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( !xCooSysContainer.is())
-        return nullptr;
-
-    const cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    const cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
     for( const auto& xCooSys : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system

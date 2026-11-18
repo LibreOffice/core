@@ -244,11 +244,7 @@ bool IsValidObject( const XclObj& rObj )
         if (!xDiagram.is())
             return false;
 
-        uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
-        if (!xCooSysContainer.is())
-            return false;
-
-        const cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSeq = xCooSysContainer->getCoordinateSystems();
+        const cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSeq = xDiagram->getCoordinateSystems();
         for (const auto& rCooSys : xCooSysSeq)
         {
             Reference<chart2::XChartTypeContainer> xChartTypeCont(rCooSys, uno::UNO_QUERY);

@@ -487,7 +487,7 @@ void SchXMLAxisContext::CreateAxis()
                         Reference< chart2::XChartDocument > xChart2Document( GetImport().GetModel(), uno::UNO_QUERY );
                         if( xChart2Document.is() )
                         {
-                            Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChart2Document->getFirstDiagram(), uno::UNO_QUERY );
+                            Reference< chart2::XDiagram > xCooSysCnt( xChart2Document->getFirstDiagram() );
                             if( xCooSysCnt.is() )
                             {
                                 cpo::uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );

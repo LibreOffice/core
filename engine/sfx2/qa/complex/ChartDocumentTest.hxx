@@ -141,9 +141,8 @@ private:
         Reference<XPropertySet> axisProperties;
         Reference<XChartDocument> chartDoc(m_chartDocument);
         Reference<css::chart2::XDiagram> diagram = chartDoc->getFirstDiagram();
-        Reference<XCoordinateSystemContainer> coordContainer(diagram, UNO_QUERY);
         Sequence<Reference<XCoordinateSystem>> coordSystems
-            = coordContainer->getCoordinateSystems();
+            = diagram->getCoordinateSystems();
         Reference<XCoordinateSystem> coordSystem = coordSystems[0];
         Reference<XAxis> primaryYAxis = coordSystem->getAxisByDimension(1, 0);
         axisProperties = Reference<XPropertySet>(primaryYAxis);

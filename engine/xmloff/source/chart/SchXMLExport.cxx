@@ -1261,11 +1261,10 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         OUString sChartType( xDiagram->getDiagramType() );
         if (sChartType == "com.sun.star.chart.BarDiagram")
         {
-            Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(xNewDiagram, uno::UNO_QUERY);
-            if (xCooSysCnt.is())
+            if (xNewDiagram.is())
             {
                 const Sequence<Reference<chart2::XCoordinateSystem>> aCooSysSeq(
-                    xCooSysCnt->getCoordinateSystems());
+                    xNewDiagram->getCoordinateSystems());
                 for (const auto& rCooSys : aCooSysSeq)
                 {
                     Reference<chart2::XChartTypeContainer> xCTCnt(rCooSys, uno::UNO_QUERY);
@@ -1352,10 +1351,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 // of-pie charts have only a single series.
                 double fSplitPos = 2.0;
 
-                Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( xNewDiagram, uno::UNO_QUERY );
-                if (xBCooSysCnt.is()) {
+                if (xNewDiagram.is()) {
                     const Sequence< Reference< chart2::XCoordinateSystem > >
-                        aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
+                        aCooSysSeq( xNewDiagram->getCoordinateSystems());
                     for (const auto& rCooSys : aCooSysSeq ) {
                         Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY );
                         if( ! xCTCnt.is())
@@ -1951,10 +1949,9 @@ namespace
 Reference< chart2::XCoordinateSystem > lcl_getCooSys( const Reference< chart2::XDiagram > & xNewDiagram )
 {
     Reference< chart2::XCoordinateSystem > xCooSys;
-    Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xNewDiagram, uno::UNO_QUERY );
-    if(xCooSysCnt.is())
+    if(xNewDiagram.is())
     {
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xNewDiagram->getCoordinateSystems() );
         if(aCooSysSeq.hasElements())
             xCooSys = aCooSysSeq[0];
     }
@@ -2772,8 +2769,7 @@ void SchXMLExportHelper_Impl::exportSeries(
     bool bExportContent,
     bool bHasTwoYAxes )
 {
-    Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( xNewDiagram, uno::UNO_QUERY );
-    if( ! xBCooSysCnt.is())
+    if( ! xNewDiagram.is())
         return;
     Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
 
@@ -2784,7 +2780,7 @@ void SchXMLExportHelper_Impl::exportSeries(
     std::vector< XMLPropertyState > aDataLabelPropertyStates;
 
     const Sequence< Reference< chart2::XCoordinateSystem > >
-        aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
+        aCooSysSeq( xNewDiagram->getCoordinateSystems());
     for( const auto& rCooSys : aCooSysSeq )
     {
         Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY );

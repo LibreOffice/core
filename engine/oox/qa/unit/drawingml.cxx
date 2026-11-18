@@ -182,8 +182,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
     uno::Reference<chart2::XChartDocument> xModel(xShape->getPropertyValue(u"Model"_ustr),
                                                   uno::UNO_QUERY);
-    uno::Reference<chart2::XCoordinateSystemContainer> xDiagram(xModel->getFirstDiagram(),
-                                                                uno::UNO_QUERY);
+    uno::Reference<chart2::XDiagram> xDiagram(xModel->getFirstDiagram());
 
     uno::Reference<chart2::XChartTypeContainer> xCoordinateSystem(
         xDiagram->getCoordinateSystems()[0], uno::UNO_QUERY);

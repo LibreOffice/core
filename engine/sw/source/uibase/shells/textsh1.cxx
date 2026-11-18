@@ -886,11 +886,8 @@ bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xC
     uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
     if (!xDiagram.is())
         return false;
-    uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
-    if (!xCooSysContainer.is())
-        return false;
     cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSequence(
-        xCooSysContainer->getCoordinateSystems());
+        xDiagram->getCoordinateSystems());
     if (xCooSysSequence.getLength() <= 0)
         return false;
     uno::Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCooSysSequence[0],

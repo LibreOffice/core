@@ -3746,10 +3746,9 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
     /*  Try to get existing coordinate system. For now, all series from primary
         and secondary axes sets are inserted into one coordinate system. Later,
         this should be changed to use one coordinate system for each axes set. */
-    Reference< XCoordinateSystemContainer > xCoordSystemCont( xDiagram, UNO_QUERY );
-    if( xCoordSystemCont.is() )
+    if( xDiagram.is() )
     {
-        Sequence< Reference< XCoordinateSystem > > aCoordSystems = xCoordSystemCont->getCoordinateSystems();
+        Sequence< Reference< XCoordinateSystem > > aCoordSystems = xDiagram->getCoordinateSystems();
         OSL_ENSURE( aCoordSystems.getLength() <= 1, "XclImpChAxesSet::CreateCoordSystem - too many existing coordinate systems" );
         if( aCoordSystems.hasElements() )
             xCoordSystem = aCoordSystems[ 0 ];

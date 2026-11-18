@@ -1005,8 +1005,7 @@ void XclExpNameManagerImpl::CreateDataRangeNames()
 void XclExpNameManagerImpl::CreateOneDataRangeName(
     const cpo::uno::Reference< chart2::XChartDocument >& rxChartDoc )
 {
-    cpo::uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
-        rxChartDoc->getFirstDiagram(), cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< chart2::XDiagram > xCooSysCnt( rxChartDoc->getFirstDiagram() );
     if( !xCooSysCnt.is() )
         return;
 

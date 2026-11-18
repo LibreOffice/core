@@ -130,11 +130,7 @@ void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument >& rChart
     if(!xDiagram.is())
         return;
 
-    uno::Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY);
-    if(!xCooSysContainer.is())
-        return;
-
-    const cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+    const cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > xCooSysSequence( xDiagram->getCoordinateSystems());
     for(const auto& rCooSys : xCooSysSequence)
     {
         uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( rCooSys, uno::UNO_QUERY);

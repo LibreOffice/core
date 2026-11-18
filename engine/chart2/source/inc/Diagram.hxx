@@ -59,7 +59,6 @@ namespace impl
 typedef ::cppu::WeakImplHelper<
     css::chart2::XDiagram,
     css::lang::XServiceInfo,
-    css::chart2::XCoordinateSystemContainer,
     css::chart2::XTitled,
     css::chart::X3DDefaultSetter,
     css::util::XModifyBroadcaster,

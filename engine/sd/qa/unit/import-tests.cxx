@@ -1342,8 +1342,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo71075)
     uno::Reference<chart2::XChartDocument> xChart2Doc(xChartDoc, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChart2Doc.is());
 
-    uno::Reference<chart2::XCoordinateSystemContainer> xBCooSysCnt(xChart2Doc->getFirstDiagram(),
-                                                                   uno::UNO_QUERY);
+    uno::Reference<chart2::XDiagram> xBCooSysCnt(xChart2Doc->getFirstDiagram());
     cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> aCooSysSeq(
         xBCooSysCnt->getCoordinateSystems());
     uno::Reference<chart2::XChartTypeContainer> xCTCnt(aCooSysSeq[0], uno::UNO_QUERY);

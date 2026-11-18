@@ -1115,7 +1115,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf105517)
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    Reference<chart2::XCoordinateSystemContainer> xCoordContainer(xChartDoc->getFirstDiagram(), uno::UNO_QUERY);
+    Reference<chart2::XDiagram> xCoordContainer(xChartDoc->getFirstDiagram());
     CPPUNIT_ASSERT(xCoordContainer.is());
     Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCoordContainer->getCoordinateSystems()[0], uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartTypeContainer.is());

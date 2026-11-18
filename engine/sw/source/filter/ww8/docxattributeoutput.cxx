@@ -6185,8 +6185,7 @@ void DocxAttributeOutput::WritePostponedChart()
         if( xChartDoc.is() )
         {
             // At minimum, a PlotArea is needed or else MS Word complains about an invalid file
-            uno::Reference<chart2::XCoordinateSystemContainer>
-                xBCooSysCnt(xChartDoc->getFirstDiagram(), uno::UNO_QUERY);
+            uno::Reference<chart2::XDiagram> xBCooSysCnt(xChartDoc->getFirstDiagram());
             if (!xBCooSysCnt.is())
                 continue;
 
