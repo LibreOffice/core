@@ -92,6 +92,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "certificates.database_path", "" },
     { "child_root_path[@relative]", "true" },
     { "child_root_path", "jails" },
+    { "client_document_loading.enable", "false" },
     { "comment_avatar", "" },
     { "deepl.allow_user_settings", "false" },
     { "deepl.api_url", "" },

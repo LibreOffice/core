@@ -129,6 +129,7 @@ public:
 #endif
 
     static bool WASMEnabled;
+    static bool ClientDocumentLoadingEnabled;
 
     /// Tracks the URIs that are switching to Disconnected (WASM) Mode.
     /// The time is when the switch request was made. We expire the request after a certain

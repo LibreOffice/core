@@ -2839,8 +2839,8 @@ Connection:
 
     wss://<host><service-root>/co/collab?WOPISrc=<wopi-url>
 
-    The server refuses the upgrade with 400 when WOPISrc is missing.  The first message from the
-    client is
+    The server refuses the upgrade with 400 when WOPISrc is missing, or when
+    client_document_loading.enable in coolwsd.xml is off.  The first message from the client is
 
         access_token <token>
 

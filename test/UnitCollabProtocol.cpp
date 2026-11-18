@@ -18,6 +18,7 @@
 
 #include <Poco/JSON/Parser.h>
 #include <Poco/Net/HTTPRequest.h>
+#include <Poco/Util/LayeredConfiguration.h>
 
 #include <chrono>
 
@@ -95,6 +96,11 @@ public:
         , _phase(Phase::T1_Connect1)
         , _checkFileInfoCount(0)
     {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
@@ -420,6 +426,11 @@ public:
     {
     }
 
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
     std::unique_ptr<http::Response>
     assertCheckFileInfoRequest(const Poco::Net::HTTPRequest& /*request*/) override
     {
@@ -487,6 +498,11 @@ class UnitCollabUploadTimestamp: public WopiTestServer {
 public:
     UnitCollabUploadTimestamp():
         WopiTestServer("UnitCollabUploadTimestamp"), _phase(Phase::ConnectCollab) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
 
     void invokeWSDTest() override {
         switch (_phase) {
@@ -610,6 +626,11 @@ public:
     UnitCollabUploadConflict():
         WopiTestServer("UnitCollabUploadConflict"), _phase(Phase::ConnectCollab) {}
 
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
     bool onDocumentLoaded(std::string const & message) override {
         TST_LOG("Loaded: " << message);
         LOK_ASSERT_MESSAGE("Expected the document to load only once", _phase == Phase::WaitLoad);
@@ -709,6 +730,11 @@ class UnitCollabUploadConflictModified: public WopiTestServer {
 public:
     UnitCollabUploadConflictModified():
         WopiTestServer("UnitCollabUploadConflictModified"), _phase(Phase::ConnectCollab) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
 
     bool onDocumentLoaded(std::string const & message) override {
         TST_LOG("Loaded: " << message);
@@ -838,6 +864,11 @@ class UnitCollabNoCleanExport: public WopiTestServer {
 public:
     UnitCollabNoCleanExport():
         WopiTestServer("UnitCollabNoCleanExport"), phase_(Phase::ConnectCollab) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
 
     void configCheckFileInfo(
         Poco::Net::HTTPRequest const &, Poco::JSON::Object::Ptr & fileInfo) override

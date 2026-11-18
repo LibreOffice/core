@@ -1038,6 +1038,7 @@ bool COOLWSD::SingleKit = false;
 bool COOLWSD::ForceCaching = false;
 #endif
 bool COOLWSD::WASMEnabled = false;
+bool COOLWSD::ClientDocumentLoadingEnabled = false;
 Util::UnorderedStringMap<std::chrono::steady_clock::time_point> COOLWSD::Uri2WasmModeMap;
 std::string COOLWSD::SysTemplate;
 std::string COOLWSD::LoTemplate = LO_PATH;
@@ -2356,6 +2357,8 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
         LOG_WRN("NOTE: Deprecated config option storage.wopi.reuse_cookies is no longer supported");
 
     COOLWSD::WASMEnabled = ConfigUtil::getConfigValue<bool>(conf, "wasm.enable", false);
+    COOLWSD::ClientDocumentLoadingEnabled
+        = ConfigUtil::getConfigValue<bool>(conf, "client_document_loading.enable", false);
 
     // Get anonymization settings.
 #if COOLWSD_ANONYMIZE_USER_DATA

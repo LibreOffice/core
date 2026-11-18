@@ -1395,6 +1395,15 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             servedSync = handleClientWsUpgrade(request, requestDetails, disposition, socket);
         }
 
+        else if (requestDetails.equals(0, "co") && requestDetails.equals(1, "collab")
+                 && !COOLWSD::ClientDocumentLoadingEnabled)
+        {
+            LOG_ERR(
+                "/co/collab request while client document loading is disabled: "
+                << requestDetails.toString());
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
+            return MessageResult::Ignore;
+        }
         else if (requestDetails.equals(0, "co") &&
                  requestDetails.equals(1, "collab") &&
                  requestDetails.equals(2, "fetch"))
@@ -3629,6 +3638,9 @@ std::string getCapabilitiesJson(bool convertToAvailable)
     // Set if this instance supports WASM.
     capabilities->set("hasWASMSupport",
                       COOLWSD::WASMEnabled);
+
+    // Set if this instance lets clients load documents through /co/collab:
+    capabilities->set("hasClientDocumentLoadingSupport", COOLWSD::ClientDocumentLoadingEnabled);
 
     // Set if this instance supports document signing.
     capabilities->set("hasDocumentSigningSupport",

@@ -52,6 +52,8 @@ public:
         UnitWSD::configure(config);
         // force HTTPS - to test harder
         config.setBool("ssl.enable", true);
+        // The client tests include those of the /co/collab endpoint:
+        config.setBool("client_document_loading.enable", true);
     }
 
     void invokeWSDTest() override

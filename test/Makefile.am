@@ -85,6 +85,7 @@ all_la_unit_tests = \
 	unit-uno-command.la \
 	unit-collab.la \
 	unit-collab-protocol.la \
+	unit-collab-disabled.la \
 	unit-quarantine.la \
 	unit-remote-document.la \
 	unit-linked-files.la \
@@ -303,6 +304,8 @@ unit_collab_la_SOURCES = UnitClient.cpp CollabEndpointTests.cpp KitPidHelpers.cp
 unit_collab_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_collab_protocol_la_SOURCES = UnitCollabProtocol.cpp
 unit_collab_protocol_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_collab_disabled_la_SOURCES = UnitCollabDisabled.cpp
+unit_collab_disabled_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_httpws_la_SOURCES = UnitClient.cpp httpwstest.cpp KitPidHelpers.cpp
 unit_httpws_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_crash_la_SOURCES = UnitClient.cpp httpcrashtest.cpp KitPidHelpers.cpp
