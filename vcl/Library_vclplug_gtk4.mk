@@ -81,6 +81,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk4,\
 	boost_headers \
 	epoxy \
 	dbus \
+	frozen \
 	graphite \
 	harfbuzz \
 ))
