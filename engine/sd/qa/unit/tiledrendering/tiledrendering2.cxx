@@ -81,6 +81,7 @@
 #include <SlideSectionManager.hxx>
 #include <View.hxx>
 #include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
@@ -471,6 +472,70 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelTypingCreatesNotesObjec
     CPPUNIT_ASSERT(pParaObject);
     CPPUNIT_ASSERT_EQUAL(OutlinerMode::TextObject, pParaObject->GetOutlinerMode());
     CPPUNIT_ASSERT_EQUAL(u"Speaker notes"_ustr, pParaObject->GetTextObject().GetText(0));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelFocusEndsSlideTextEdit)
+{
+    // Given the notes pane open, and typing in a table cell on the slide, which puts the table and
+    // the text tool bar shells on the shell stack above the main view shell.
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+    SdrView* pView = pViewShell->GetView();
+    dispatchCommand(mxComponent, u".uno:BottomPaneImpress"_ustr,
+                    { comphelper::makePropertyValue(u"BottomPaneImpress"_ustr, true) });
+    auto findNotesPanelViewShell = [&rBase]() -> sd::ViewShell* {
+        for (sal_uInt16 nIndex = 0; SfxShell* pShell = rBase.GetSubShell(nIndex); ++nIndex)
+        {
+            sd::ViewShell* pNotesShell = dynamic_cast<sd::ViewShell*>(pShell);
+            if (pNotesShell && pNotesShell->GetShellType() == sd::ViewShell::ST_NOTESPANEL)
+                return pNotesShell;
+        }
+        return nullptr;
+    };
+    // The pane opens on a later update of the view configuration, which waits on a timer.
+    for (int i = 0; i < 100 && !findNotesPanelViewShell(); ++i)
+    {
+        Scheduler::ProcessEventsToIdle();
+        if (!findNotesPanelViewShell())
+            osl::Thread::wait(std::chrono::milliseconds(50));
+    }
+    CPPUNIT_ASSERT(findNotesPanelViewShell());
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr,
+                    { comphelper::makePropertyValue(u"Rows"_ustr, sal_Int32(2)),
+                      comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(2)) });
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+
+    // When the notes pane gets the focus, which ends the text edit while the shells above the
+    // notes shell are deactivated, and the tool bar shells leave the shell stack.
+    // Without the accompanying fix in place, this crashed, because the shell stack ran out before
+    // the notes shell was found on it.
+    const OUString sNotesPanelId
+        = OUString::number(reinterpret_cast<sal_uInt64>(&rBase)) + "notespanel";
+    StringMap aFocus{ { u"type"_ustr, u"customwidget"_ustr },
+                      { u"cmd"_ustr, u"focus"_ustr },
+                      { u"data"_ustr, u"{}"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aFocus));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the text edit is over, and each shell is on the shell stack once.
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    std::set<SfxShell*> aShells;
+    sal_uInt16 nCount = 0;
+    for (; SfxShell* pShell = rBase.GetSubShell(nCount); ++nCount)
+        aShells.insert(pShell);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(nCount), aShells.size());
+    CPPUNIT_ASSERT(aShells.count(pViewShell));
+    CPPUNIT_ASSERT(aShells.count(findNotesPanelViewShell()));
+    StringMap aBlur{ { u"type"_ustr, u"customwidget"_ustr },
+                     { u"cmd"_ustr, u"blur"_ustr },
+                     { u"data"_ustr, u"{}"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aBlur));
+    Scheduler::ProcessEventsToIdle();
 }
 
 #if ENABLE_PDFIMPORT

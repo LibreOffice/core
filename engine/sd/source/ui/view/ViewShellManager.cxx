@@ -23,6 +23,7 @@
 #include <Window.hxx>
 #include <DrawDocShell.hxx>
 
+#include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -128,6 +129,9 @@ public:
         shell.
     */
     void TakeShellsFromStack (const SfxShell& rShell);
+
+    /// Whether the given shell is on the SFX stack.
+    bool IsOnSfxStack(const SfxShell& rShell) const;
 
     class UpdateLock
     {
@@ -863,38 +867,35 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell& rShe
     DumpSfxShellStack();
 #endif
 
-    // 0.Make sure that the given shell is on the stack.  This is a
-    // preparation for the following assertion.
-    for (sal_uInt16 nIndex=0; true; nIndex++)
-    {
-        SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
-        if (pShellOnStack == nullptr)
-        {
-            // the shell is not on the stack.
-            return;
-        }
-        else if (pShellOnStack == &rShell)
-            break;
-    }
+    // 0.Make sure that the given shell is on the stack.
+    if (!IsOnSfxStack(rShell))
+        return;
 
     // 1. Deactivate our shells on the stack before they are removed so
     // that during the Deactivation() calls the stack is still intact.
-    for (sal_uInt16 nIndex=0; true; nIndex++)
+    // A Deactivation() call can change the stack: a view shell that ends
+    // its text edit lets the tool bar update take the text sub shells
+    // above it from the stack in a nested call of this method.  So the
+    // stack is read again after each call, from the top, skipping the
+    // shells that are already deactivated.  When the nested call takes
+    // rShell as well, it deactivates and removes the rest itself.
+    o3tl::sorted_vector<const SfxShell*> aDeactivatedShells;
+    while (IsOnSfxStack(rShell) && !aDeactivatedShells.contains(&rShell))
     {
+        sal_uInt16 nIndex = 0;
         SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
+        while (aDeactivatedShells.contains(pShellOnStack))
+            pShellOnStack = mrBase.GetSubShell(++nIndex);
+        aDeactivatedShells.insert(pShellOnStack);
         Deactivate(pShellOnStack);
-        if (pShellOnStack == &rShell)
-            break;
     }
 
     // 2. Remove the shells from the stack.
-    while (true)
+    while (IsOnSfxStack(rShell))
     {
         SfxShell* pShellOnStack = mrBase.GetSubShell(0);
         SAL_INFO("sd.view", __func__ << "removing shell " << pShellOnStack << " from stack");
         mrBase.RemoveSubShell(pShellOnStack);
-        if (pShellOnStack == &rShell)
-            break;
     }
 
     // 3. Update the stack.
@@ -911,6 +912,16 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell& rShe
     SAL_INFO("sd.view", __func__ << "Sfx shell stack is:");
     DumpSfxShellStack();
 #endif
+}
+
+bool ViewShellManager::Implementation::IsOnSfxStack(const SfxShell& rShell) const
+{
+    for (sal_uInt16 nIndex = 0; SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex); ++nIndex)
+    {
+        if (pShellOnStack == &rShell)
+            return true;
+    }
+    return false;
 }
 
 void ViewShellManager::Implementation::CreateShells()
