@@ -204,11 +204,10 @@ void RangeHighlighter::fillRangesForDiagram( const rtl::Reference< Diagram > & x
 
 void RangeHighlighter::fillRangesForDataSeries( const uno::Reference< chart2::XDataSeries > & xSeries )
 {
-    Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-    if( xSource.is())
+    if( xSeries.is())
     {
         lcl_fillRanges( m_aSelectedRanges,
-                        ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
+                        ::chart::DataSourceHelper::getRangesFromDataSource( xSeries ),
                         defaultPreferredColor );
     }
 }

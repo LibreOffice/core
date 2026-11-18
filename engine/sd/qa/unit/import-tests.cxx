@@ -1352,9 +1352,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo71075)
     cpo::uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", static_cast<sal_Int32>(1),
                                  aSeriesSeq.getLength());
-    uno::Reference<chart2::data::XDataSource> xSource(aSeriesSeq[0], uno::UNO_QUERY);
     cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aSeqCnt(
-        xSource->getDataSequences());
+        aSeriesSeq[0]->getDataSequences());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", static_cast<sal_Int32>(1),
                                  aSeqCnt.getLength());
     uno::Reference<chart2::data::XDataSequence> xValueSeq(aSeqCnt[0]->getValues());

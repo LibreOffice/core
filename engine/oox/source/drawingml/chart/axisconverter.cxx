@@ -177,11 +177,10 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                         const Sequence< Reference< XDataSeries > > aSeries = aChartTypes[0]->getDataSeries();
                         if( aSeries.getLength() == 1 )
                         {
-                            Reference< data::XDataSource > xDataSource(aSeries[0], UNO_QUERY);
-                            if( xDataSource.is() )
+                            if( aSeries[0].is() )
                             {
                                 const Sequence< Reference< data::XLabeledDataSequence > > aDataSeqs
-                                    = xDataSource->getDataSequences();
+                                    = aSeries[0]->getDataSequences();
 
                                 for( const auto& xSeq : aDataSeqs )
                                 {

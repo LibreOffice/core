@@ -49,7 +49,6 @@ namespace impl
 typedef ::cppu::WeakImplHelper<
         css::chart2::XDataSeries,
         css::chart2::data::XDataSink,
-        css::chart2::data::XDataSource,
         css::lang::XServiceInfo,
         css::chart2::XRegressionCurveContainer,
         css::util::XCloneable,

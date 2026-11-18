@@ -217,10 +217,9 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
 {
     Reference< chart2::data::XLabeledDataSequence2 > xLabeledSeq;
 
-    Reference< chart2::data::XDataSource > xSeriesSource( xSeries,uno::UNO_QUERY );
     Reference< chart2::data::XDataSink > xSeriesSink( xSeries, uno::UNO_QUERY );
 
-    if( !(!rRange.isEmpty() && xChartDoc.is() && xSeriesSource.is() && xSeriesSink.is()) )
+    if( !(!rRange.isEmpty() && xChartDoc.is() && xSeries.is() && xSeriesSink.is()) )
         return xLabeledSeq;
 
     // create a new sequence
@@ -234,7 +233,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     xLabeledSeq->setValues( xSeq );
 
     // add new sequence to data series / push to front to have the correct sequence order if charttype is changed afterwards
-    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeq( xSeriesSource->getDataSequences());
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeq( xSeries->getDataSequences());
     sal_Int32 nOldCount = aOldSeq.getLength();
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeq( nOldCount + 1 );
     auto pNewSeq = aNewSeq.getArray();

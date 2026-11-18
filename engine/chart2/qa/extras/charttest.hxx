@@ -322,9 +322,8 @@ std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( 
     std::vector<std::vector<double> > aRet;
     for (cpo::uno::Reference<css::chart2::XDataSeries> const & ds : aDataSeriesSeq)
     {
-        cpo::uno::Reference<css::chart2::data::XDataSource> xDSrc(ds, cpo::uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xDSrc.is());
-        const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        CPPUNIT_ASSERT(ds.is());
+        const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = ds->getDataSequences();
         for (auto const & lds : aDataSeqs)
         {
             cpo::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();

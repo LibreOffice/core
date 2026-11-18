@@ -724,8 +724,7 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                         Reference< chart2::XDataSeries > xDataSeries = getPrimaryDataSeries(rChartType);
                         if (xDataSeries.is())
                         {
-                            uno::Reference< chart2::data::XDataSource > xSeriesSource(xDataSeries, uno::UNO_QUERY);
-                            const cpo::uno::Sequence< beans::PropertyValue > rArguments = xDataProvider->detectArguments(xSeriesSource);
+                            const cpo::uno::Sequence< beans::PropertyValue > rArguments = xDataProvider->detectArguments(xDataSeries);
                             for (const beans::PropertyValue& rProperty : rArguments)
                             {
                                 if (rProperty.Name == "DataRowSource")
@@ -4481,14 +4480,13 @@ void ChartExport::exportCandleStickSeries(
     {
         rPrimaryAxes = lcl_isSeriesAttachedToFirstAxis(xSeries);
 
-        Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-        if( xSource.is())
+        if( xSeries.is())
         {
             // export series in correct order (as we don't store roles)
             // with japanese candlesticks: open, low, high, close
             // otherwise: low, high, close
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
-                xSource->getDataSequences());
+                xSeries->getDataSequences());
 
             const char* sSeries[] = {"values-first","values-max","values-min","values-last"};
 

@@ -118,10 +118,9 @@ void lcl_setRoleAtFirstSequence(
     const uno::Reference< chart2::XDataSeries > & xSeries,
     const OUString & rRole )
 {
-    uno::Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-    if( xSource.is())
+    if( xSeries.is())
     {
-        cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
+        cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSeq( xSeries->getDataSequences());
         if( aSeq.hasElements())
             lcl_setRoleAtLabeledSequence( aSeq[0], rRole );
     }

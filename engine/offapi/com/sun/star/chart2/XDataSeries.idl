@@ -29,8 +29,11 @@ module chart2
 /** A data series represents the object that has all the knowledge to
     be rendered as a visual data series.
  */
-interface XDataSeries : ::com::sun::star::beans::XPropertySet
+interface XDataSeries
 {
+    interface ::com::sun::star::beans::XPropertySet;
+    interface ::com::sun::star::chart2::data::XDataSource;
+
     /** @returns
             the element at the specified index.
 

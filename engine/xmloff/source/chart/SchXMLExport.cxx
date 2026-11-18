@@ -2813,7 +2813,7 @@ void SchXMLExportHelper_Impl::exportSeries(
             for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
             {
                 // export series
-                Reference< chart2::data::XDataSource > xSource( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
+                Reference< chart2::data::XDataSource > xSource( aSeriesSeq[nSeriesIdx] );
                 if( xSource.is())
                 {
                     std::unique_ptr<SvXMLElementExport> pSeries;

@@ -33,9 +33,7 @@ Reference< chart2::data::XLabeledDataSequence2 > createAndAddSequenceToSeries( c
 {
     Reference< chart2::data::XLabeledDataSequence2 > xLabeledSeq;
 
-    Reference< chart2::data::XDataSource > xSeriesSource( xSeries,uno::UNO_QUERY );
-
-    if( !(!rRange.isEmpty() && xChartDoc.is() && xSeriesSource.is()) )
+    if( !(!rRange.isEmpty() && xChartDoc.is() && xSeries.is()) )
         return xLabeledSeq;
 
     // create a new sequence
@@ -48,10 +46,10 @@ Reference< chart2::data::XLabeledDataSequence2 > createAndAddSequenceToSeries( c
         xSeqProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole));
     xLabeledSeq->setValues( xSeq );
 
-    Reference< chart2::data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY );
+    Reference< chart2::data::XDataSink > xSink( xSeries, uno::UNO_QUERY );
     if( xSink.is())
     {
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xSeriesSource->getDataSequences());
+        Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xSeries->getDataSequences());
         aData.realloc( aData.getLength() + 1 );
         aData.getArray()[ aData.getLength() - 1 ] = xLabeledSeq;
         xSink->setData( aData );
