@@ -915,7 +915,8 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,
 {
     OUString sVal;
     OUString sType;
-    ScConditionMode eMode = ScConditionMode::EqGreater;
+    bool bGreaterEqual = true;
+    std::optional<ScConditionMode> oMode;
 
     if ( rAttrList.is() )
     {
@@ -930,8 +931,23 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,
                     sVal = aIter.toString();
                 break;
                 case XML_ELEMENT( CALC_EXT, XML_GREATER_EQUAL ):
-                    eMode = aIter.toBoolean() ? eMode : ScConditionMode::Greater;
+                    bGreaterEqual = aIter.toBoolean();
                 break;
+                case XML_ELEMENT(CALC_EXT, XML_OPERATOR):
+                    // tdf#168439 - import the exact operator of the icon set entry
+                    if (IsXMLToken(aIter, XML_EQUAL))
+                        oMode = ScConditionMode::Equal;
+                    else if (IsXMLToken(aIter, XML_NOT_EQUAL))
+                        oMode = ScConditionMode::NotEqual;
+                    else if (IsXMLToken(aIter, XML_LESS))
+                        oMode = ScConditionMode::Less;
+                    else if (IsXMLToken(aIter, XML_GREATER))
+                        oMode = ScConditionMode::Greater;
+                    else if (IsXMLToken(aIter, XML_LESS_EQUAL))
+                        oMode = ScConditionMode::EqLess;
+                    else if (IsXMLToken(aIter, XML_GREATER_EQUAL))
+                        oMode = ScConditionMode::EqGreater;
+                    break;
                 default:
                     break;
             }
@@ -944,7 +960,9 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,
 
     pColorScaleEntry = new ScColorScaleEntry(nVal, Color());
     setColorEntryType(sType, pColorScaleEntry, sVal, GetScImport());
-    pColorScaleEntry->SetMode(eMode);
+    // tdf#168439 - fall back to greater_equal for files without an operator
+    pColorScaleEntry->SetMode(
+        oMode ? *oMode : bGreaterEqual ? ScConditionMode::EqGreater : ScConditionMode::Greater);
 }
 
 namespace {

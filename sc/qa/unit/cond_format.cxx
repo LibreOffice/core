@@ -1215,4 +1215,43 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf164334CondFormatTomorrow)
     // Without the fix, this would have been "yesterday" instead of "tomorrow"
     assertXPath(pSheet, "//x:conditionalFormatting/x:cfRule", "timePeriod", u"tomorrow");
 }
+
+CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf168439IconSetOperators)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    auto pFormat = std::make_unique<ScConditionalFormat>(0, *pDoc);
+    pFormat->SetRange(ScRangeList(ScRange(0, 0, 0)));
+
+    ScIconSetFormat* pIconSet = new ScIconSetFormat(*pDoc);
+    ScIconSetFormatData* pData = new ScIconSetFormatData(IconSet_3Arrows);
+    pData->m_Entries.emplace_back(
+        new ScColorScaleEntry(0, COL_BLACK, COLORSCALE_VALUE, ScConditionMode::Less));
+    pData->m_Entries.emplace_back(
+        new ScColorScaleEntry(1, COL_BLACK, COLORSCALE_VALUE, ScConditionMode::Equal));
+    pData->m_Entries.emplace_back(
+        new ScColorScaleEntry(2, COL_BLACK, COLORSCALE_VALUE, ScConditionMode::NotEqual));
+    pIconSet->SetIconSetData(pData);
+
+    pFormat->AddEntry(pIconSet);
+    pDoc->AddCondFormat(std::move(pFormat), 0);
+
+    // FIXME: Error: tag name "calcext:icon-set" is not allowed
+    skipValidation();
+    saveAndReload(TestFilter::ODS);
+
+    const ScIconSetFormat* pReloaded
+        = static_cast<const ScIconSetFormat*>(getScDoc()->GetCondFormat(0, 0, 0)->GetEntry(0));
+    const auto& rEntries = pReloaded->GetIconSetData()->m_Entries;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1 (ScConditionMode::Less)
+    // - Actual  : 2 (ScConditionMode::Greater)
+    // i.e. the operator < of the icon set entry was reloaded as >
+    CPPUNIT_ASSERT_EQUAL(ScConditionMode::Less, rEntries[0]->GetMode());
+    CPPUNIT_ASSERT_EQUAL(ScConditionMode::Equal, rEntries[1]->GetMode());
+    CPPUNIT_ASSERT_EQUAL(ScConditionMode::NotEqual, rEntries[2]->GetMode());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
