@@ -36,6 +36,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/process.h>
+#include <o3tl/unit_conversion.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svx/svdview.hxx>
@@ -949,8 +950,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testOrgChart)
     awt::Point aEmployeePos = xEmployeeShape->getPosition();
     awt::Size aEmployeeSize = xEmployeeShape->getSize();
 
-    CPPUNIT_ASSERT_EQUAL(aManagerPos.X, aEmployeePos.X);
-
     // Without the accompanying fix in place, this test would have failed: the
     // two shapes were overlapping, i.e. "manager" was not above "employee".
     CPPUNIT_ASSERT_GREATER(aManagerPos.Y, aEmployeePos.Y);
@@ -971,6 +970,11 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testOrgChart)
     awt::Point aEmployee2Pos = xEmployee2Shape->getPosition();
     //awt::Size aEmployee2Size = xEmployee2Shape->getSize();
     CPPUNIT_ASSERT_GREATER(aEmployeePos.X, aEmployee2Pos.X);
+
+    // the manager stands in the middle above its two employees
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aManagerPos.X + aManagerSize.Width / 2.0,
+                                 (aEmployeePos.X + aEmployee2Pos.X + aEmployeeSize.Width) / 2.0,
+                                 3.0);
 
     // Make sure that assistant is above employees.
     uno::Reference<text::XText> xAssistant(
@@ -3681,6 +3685,50 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testGradientFillKeepsTheTransparencyO
         CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, rStop.StopColor.Red, 0.01);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testOrgChartAssistantsStandInRowsBesideTheLine)
+{
+    // An Organization Chart whose root has three assistants and three children: the assistants
+    // stand in two rows between the root and its children, by turns left and right of the line
+    // down from the root, half a gap off it.
+    createSdImpressDoc("pptx/smartart-org-chart-assistant-rows.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    const auto aBox = [&](const OUString& rText) {
+        uno::Reference<drawing::XShape> xShape(findChildShapeByText(xDiagram, rText));
+        CPPUNIT_ASSERT(xShape.is());
+        return awt::Rectangle(xShape->getPosition().X, xShape->getPosition().Y,
+                              xShape->getSize().Width, xShape->getSize().Height);
+    };
+    const awt::Rectangle aRoot(aBox(u"One"_ustr));
+    const awt::Rectangle aFirst(aBox(u"Assistant 1"_ustr));
+    const awt::Rectangle aSecond(aBox(u"Assistant 2"_ustr));
+    const awt::Rectangle aThird(aBox(u"Assistant 3"_ustr));
+    const awt::Rectangle aChild(aBox(u"Twelve"_ustr));
+    const awt::Rectangle aNextChild(aBox(u"Thirteen"_ustr));
+    const sal_Int32 nLine(aRoot.X + aRoot.Width / 2);
+
+    // every box is as large as the root
+    for (const awt::Rectangle& rOther : { aFirst, aSecond, aThird, aChild })
+    {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aRoot.Width), double(rOther.Width), 3.0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aRoot.Height), double(rOther.Height), 3.0);
+    }
+
+    // one row of two, the first left and the second right of the line, each off it by half the
+    // gap between two children
+    const double fHalfGap((aNextChild.X - (aChild.X + aChild.Width)) / 2.0);
+    CPPUNIT_ASSERT_GREATER(0.0, fHalfGap);
+    CPPUNIT_ASSERT_EQUAL(aFirst.Y, aSecond.Y);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fHalfGap, double(nLine - (aFirst.X + aFirst.Width)), 3.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fHalfGap, double(aSecond.X - nLine), 3.0);
+    // the third starts the next row on the left
+    CPPUNIT_ASSERT_GREATER(aFirst.Y + aFirst.Height, aThird.Y);
+    CPPUNIT_ASSERT_EQUAL(aFirst.X, aThird.X);
+    // the children come below the rows, the middle one right below the root
+    CPPUNIT_ASSERT_GREATER(aThird.Y + aThird.Height, aChild.Y);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(nLine), double(aChild.X + aChild.Width / 2), 3.0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSidewaysHierarchyBranchReachesBesideTheRowAbove)
 {
     // A Horizontal Hierarchy whose third child has children of its own: the child takes the next
@@ -3935,6 +3983,31 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNameFontIsNotTheTitleFont)
     const double fName(aFirstRunHeight(u"One"_ustr));
     const double fTitle(aFirstRunHeight(u"Blau"_ustr));
     CPPUNIT_ASSERT_GREATER(1.5 * fTitle, fName);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNameAndTitleBoxesStayInTheirFrame)
+{
+    // A Name and Title Organization Chart: the title boxes hang out of the name boxes to the
+    // right, and the chart is laid out with them, so the last one stays inside the Diagram.
+    createSdImpressDoc("pptx/smartart-name-and-title-fonts.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+    // the right of the frame the file gives the Diagram; the group itself grows over all it holds
+    const sal_Int32 nRight(o3tl::convert(sal_Int64(2032000 + 8128000), o3tl::Length::emu,
+                                         o3tl::Length::mm100));
+
+    for (const OUString& rTitle :
+         { u"Blau"_ustr, u"Orange"_ustr, u"Hellgr\u00fcn"_ustr, u"Dunkelgr\u00fcn"_ustr })
+    {
+        uno::Reference<drawing::XShape> xTitle(findChildShapeByText(xDiagram, rTitle));
+        CPPUNIT_ASSERT(xTitle.is());
+        CPPUNIT_ASSERT_LESSEQUAL(nRight + 2, xTitle->getPosition().X + xTitle->getSize().Width);
+    }
+
+    // the name box keeps its height, the narrower width makes room for the title
+    uno::Reference<drawing::XShape> xName(findChildShapeByText(xDiagram, u"One"_ustr));
+    CPPUNIT_ASSERT(xName.is());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9 * 0.5 * 1.15,
+                                 double(xName->getSize().Height) / xName->getSize().Width, 0.01);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

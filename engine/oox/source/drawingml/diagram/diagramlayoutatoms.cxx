@@ -9705,7 +9705,44 @@ struct UprightNode
     std::vector<UprightNode> aChildren;
     std::vector<double> aOffsets;
     std::vector<std::pair<double, double>> aContour;
+    // the assistants, in rows of two between the node and its children
+    ShapePtr pAssistants;
+    std::vector<UprightNode> aAssistants;
+    // how far the shapes in the cell reach, left and right, as parts of the cell's width; the
+    // middle of that is the node's middle, its line runs down from there
+    double fReachFrom = 0.0;
+    double fReachTo = 1.0;
+    double reachWidth() const { return (fReachTo - fReachFrom) * aCell.Width; }
+    double reachMiddle() const { return (fReachFrom + fReachTo) / 2.0 * aCell.Width; }
 };
+
+// rows of two assistants each
+size_t uprightAssistantRows(const UprightNode& rNode) { return (rNode.aAssistants.size() + 1) / 2; }
+
+// whether the rows of a branch show assistants, looked for in each row and its cell only, the
+// assistants further down stand in branches of their own
+bool rowsShowAssistants(const ShapePtr& pBranch)
+{
+    for (const ShapePtr& pRow : pBranch->getChildren())
+    {
+        if (pRow->getSubType() == XML_conn)
+            continue;
+        if (pRow->getDataNodeType() == XML_asst)
+            return true;
+        for (const ShapePtr& pCell : pRow->getChildren())
+        {
+            if (pCell->getSubType() == XML_conn)
+                continue;
+            if (pCell->getDataNodeType() == XML_asst)
+                return true;
+            for (const ShapePtr& pShows : pCell->getChildren())
+                if (pShows->getDataNodeType() == XML_asst)
+                    return true;
+            break;
+        }
+    }
+    return false;
+}
 
 // The nodes of a branch, each a root of its own with the cell sized from the constraints.
 bool gatherUprightNodes(const SmartArtDiagram& rDgm, const ShapePtr& pBranch,
@@ -9727,11 +9764,22 @@ bool gatherUprightNodes(const SmartArtDiagram& rDgm, const ShapePtr& pBranch,
                 continue;
             if (!aNode.pCell)
                 aNode.pCell = pInside;
+            else if (!aNode.pAssistants && rowsShowAssistants(pInside))
+                aNode.pAssistants = pInside;
             else if (!aNode.pBranch)
                 aNode.pBranch = pInside;
         }
         if (!aNode.pCell)
             aNode.pCell = pRow;
+        // the assistants come before the other nodes below, as the hierarchy root orders them
+        if (aNode.pAssistants && aNode.pBranch)
+        {
+            std::vector<ShapePtr>& rInside(pRow->getChildren());
+            const auto aAssistants = std::find(rInside.begin(), rInside.end(), aNode.pAssistants);
+            const auto aBranch = std::find(rInside.begin(), rInside.end(), aNode.pBranch);
+            if (aAssistants != rInside.end() && aBranch != rInside.end() && aBranch < aAssistants)
+                std::iter_swap(aAssistants, aBranch);
+        }
 
         const OUString& rName(aNode.pCell->getInternalName());
         double fWidth(0.0), fHeight(0.0);
@@ -9780,6 +9828,33 @@ bool gatherUprightNodes(const SmartArtDiagram& rDgm, const ShapePtr& pBranch,
                     aNode.fElbowFrom = fTop + fPart;
                 break;
             }
+
+            // the shapes in the cell that state l and w as parts of its width
+            std::map<OUString, std::pair<double, std::optional<double>>> aAcross;
+            for (const Constraint& rConstraint : aOwn)
+            {
+                if (rConstraint.mnFor != XML_ch || rConstraint.mnRefType != XML_w
+                    || !rConstraint.msRefForName.isEmpty())
+                    continue;
+                if (rConstraint.mnType == XML_l)
+                    aAcross[rConstraint.msForName].first = rConstraint.mfFactor;
+                else if (rConstraint.mnType == XML_w)
+                    aAcross[rConstraint.msForName].second = rConstraint.mfFactor;
+            }
+            for (const auto& [rShape, rAcross] : aAcross)
+            {
+                if (!rAcross.second)
+                    continue;
+                aNode.fReachFrom = std::min(aNode.fReachFrom, rAcross.first);
+                aNode.fReachTo = std::max(aNode.fReachTo, rAcross.first + *rAcross.second);
+            }
+            // The reference program draws a cell whose shapes reach past it, Name and Title's
+            // title box that hangs out to the right, 1/1.15 as wide as the cell is stated, while
+            // its height and the gaps keep the stated size; packed and fitted it is by all its
+            // shapes. We measured the 1.15 in every frame, font and text we tried, but we do
+            // not know where it comes from, so it is only taken where the shapes reach past.
+            if (aNode.fReachFrom < 0.0 || aNode.fReachTo > 1.0)
+                aNode.aCell.Width = static_cast<sal_Int32>(aNode.aCell.Width / 1.15);
         }
         bool bBranchHasNodes(false);
         if (aNode.pBranch)
@@ -9810,6 +9885,16 @@ bool gatherUprightNodes(const SmartArtDiagram& rDgm, const ShapePtr& pBranch,
             if (!gatherUprightNodes(rDgm, aNode.pBranch, rConstraints, rRoom, rKnown,
                                     rLayoutNodes, rPoints, aNode.aChildren))
                 return false;
+        }
+        // an assistant with nodes of its own below it we do not know how to place
+        if (aNode.pAssistants)
+        {
+            if (!gatherUprightNodes(rDgm, aNode.pAssistants, rConstraints, rRoom, rKnown,
+                                    rLayoutNodes, rPoints, aNode.aAssistants))
+                return false;
+            for (const UprightNode& rAssistant : aNode.aAssistants)
+                if (!rAssistant.aChildren.empty() || !rAssistant.aAssistants.empty())
+                    return false;
         }
         rNodes.push_back(aNode);
     }
@@ -9857,7 +9942,17 @@ void shapeUpright(UprightNode& rNode, double fGap)
     for (UprightNode& rChild : rNode.aChildren)
         shapeUpright(rChild, fGap);
     rNode.aContour.clear();
-    rNode.aContour.emplace_back(-rNode.aCell.Width / 2.0, rNode.aCell.Width / 2.0);
+    rNode.aContour.emplace_back(-rNode.reachWidth() / 2.0, rNode.reachWidth() / 2.0);
+    // a row of assistants is a level, the first of a row left of the line down from the node
+    // and the second right of it, each half a gap off the line
+    for (size_t nRow = 0; nRow < uprightAssistantRows(rNode); ++nRow)
+    {
+        const UprightNode& rLeft(rNode.aAssistants[2 * nRow]);
+        double fFrom(-fGap / 2.0 - rLeft.reachWidth()), fTo(-fGap / 2.0);
+        if (2 * nRow + 1 < rNode.aAssistants.size())
+            fTo = fGap / 2.0 + rNode.aAssistants[2 * nRow + 1].reachWidth();
+        rNode.aContour.emplace_back(fFrom, fTo);
+    }
     if (rNode.aChildren.empty())
         return;
     std::vector<std::pair<double, double>> aBelow;
@@ -9875,7 +9970,80 @@ size_t uprightDepth(const UprightNode& rNode)
     size_t nBelow(0);
     for (const UprightNode& rChild : rNode.aChildren)
         nBelow = std::max(nBelow, uprightDepth(rChild));
-    return nBelow + 1;
+    return nBelow + uprightAssistantRows(rNode) + 1;
+}
+
+void placeUpright(SmartArtDiagram& rDgm, const UprightNode& rNode, double fMiddle, double fTop,
+                  double fScale, double fLevelGap, double fLevelHeight);
+
+// Places the assistants of rNode in their group below its cell, nLine the line down from the node
+// against the node's box, and the connector of each from the bottom of the shape that shows the
+// node down the line and across to the middle of the assistant's side.
+void placeUprightAssistants(SmartArtDiagram& rDgm, const UprightNode& rNode, double fLine,
+                            sal_Int32 nBoxWidth, double fScale, double fLevelGap,
+                            double fLevelHeight)
+{
+    const size_t nRows(uprightAssistantRows(rNode));
+    const double fStep(fLevelHeight + fLevelGap);
+    const sal_Int32 nTop(static_cast<sal_Int32>(fStep * fScale));
+    const awt::Size aGroup(nBoxWidth,
+                           std::max<sal_Int32>(1, static_cast<sal_Int32>(
+                                                      (nRows * fStep - fLevelGap) * fScale)));
+    rNode.pAssistants->setPosition(awt::Point(0, nTop));
+    rNode.pAssistants->setSize(aGroup);
+    rNode.pAssistants->setChildSize(aGroup);
+    rDgm.getLaidOutSideways().insert(rNode.pAssistants.get());
+
+    // the gap between the two of a row, as the first row of the contour has it
+    const double fGap(std::max(
+        0.0, -2.0 * (rNode.aContour[1].first + rNode.aAssistants.front().reachWidth())));
+
+    // where each connector ends, the side of the assistant and the middle of what shows it
+    std::vector<awt::Point> aEnds;
+    for (size_t nAssistant = 0; nAssistant < rNode.aAssistants.size(); ++nAssistant)
+    {
+        const UprightNode& rAssistant(rNode.aAssistants[nAssistant]);
+        const bool bLeft(nAssistant % 2 == 0);
+        const double fWidth(rAssistant.reachWidth());
+        const double fMiddle(bLeft ? fLine - fGap / 2.0 - fWidth / 2.0
+                                   : fLine + fGap / 2.0 + fWidth / 2.0);
+        const double fTop((nAssistant / 2) * fStep);
+        placeUpright(rDgm, rAssistant, fMiddle, fTop, fScale, fLevelGap, fLevelHeight);
+        // the connector ends at the side of the cell, shapes reaching past it end lower
+        const double fCellLeft(fMiddle - rAssistant.reachMiddle());
+        aEnds.emplace_back(
+            static_cast<sal_Int32>(
+                (bLeft ? fCellLeft + rAssistant.aCell.Width : fCellLeft) * fScale),
+            static_cast<sal_Int32>(
+                (fTop + rAssistant.fElbowFrom * rAssistant.aCell.Height / 2.0) * fScale));
+    }
+
+    // the line starts at the bottom of the shape that shows the node, above the group
+    const sal_Int32 nFromX(static_cast<sal_Int32>(fLine * fScale));
+    const sal_Int32 nFromY(-static_cast<sal_Int32>(
+        (fLevelGap + (1.0 - rNode.fElbowFrom) * rNode.aCell.Height) * fScale));
+    size_t nAssistant(0);
+    for (const ShapePtr& pChild : rNode.pAssistants->getChildren())
+    {
+        if (pChild->getSubType() != XML_conn)
+            continue;
+        if (nAssistant >= aEnds.size())
+            break;
+        const awt::Point aEnd(aEnds[nAssistant++]);
+        const awt::Size aElbow(std::max<sal_Int32>(1, std::abs(aEnd.X - nFromX)),
+                               std::max<sal_Int32>(1, aEnd.Y - nFromY));
+        pChild->setPosition(awt::Point(std::min(nFromX, aEnd.X), nFromY));
+        pChild->setSize(aElbow);
+        pChild->setChildSize(aElbow);
+        // the bent connector goes across and then down; mirrored upside down it runs along the
+        // bottom and up the line, and mirrored sideways as well for an assistant on the right
+        pChild->setSubType(XML_bentConnector2);
+        pChild->getCustomShapeProperties()
+            = std::make_shared<CustomShapeProperties>(*pChild->getCustomShapeProperties());
+        pChild->getCustomShapeProperties()->setShapePresetType(XML_bentConnector2);
+        pChild->setFlip(aEnd.X > nFromX, true);
+        rDgm.getLaidOutSideways().insert(pChild.get());
+    }
 }
 
 // Places a node with everything below it. fMiddle is where the middle of its cell stands and
@@ -9905,17 +10073,23 @@ void placeUpright(SmartArtDiagram& rDgm, const UprightNode& rNode, double fMiddl
 
     const awt::Size aCell(static_cast<sal_Int32>(rNode.aCell.Width * fScale),
                           static_cast<sal_Int32>(rNode.aCell.Height * fScale));
-    const sal_Int32 nCellLeft(static_cast<sal_Int32>((fMiddle - fLeft) * fScale) - aCell.Width / 2);
+    const sal_Int32 nCellLeft(
+        static_cast<sal_Int32>((fMiddle - fLeft - rNode.reachMiddle()) * fScale));
     if (rNode.pCell != rNode.pRoot)
     {
         rNode.pCell->setPosition(awt::Point(nCellLeft, 0));
         rNode.pCell->setSize(aCell);
         rNode.pCell->setChildSize(aCell);
     }
+    const size_t nAssistantRows(uprightAssistantRows(rNode));
+    if (rNode.pAssistants && nAssistantRows > 0)
+        placeUprightAssistants(rDgm, rNode, fMiddle - fLeft, aBox.Width, fScale, fLevelGap,
+                               fLevelHeight);
     if (!rNode.pBranch || rNode.aChildren.empty())
         return;
 
-    const sal_Int32 nBranchTop(static_cast<sal_Int32>((fLevelHeight + fLevelGap) * fScale));
+    const sal_Int32 nBranchTop(
+        static_cast<sal_Int32>((nAssistantRows + 1) * (fLevelHeight + fLevelGap) * fScale));
     const awt::Size aBranch(aBox.Width, std::max<sal_Int32>(1, aBox.Height - nBranchTop));
     rNode.pBranch->setPosition(awt::Point(0, nBranchTop));
     rNode.pBranch->setSize(aBranch);
@@ -9938,7 +10112,9 @@ void placeUpright(SmartArtDiagram& rDgm, const UprightNode& rNode, double fMiddl
     // the elbow reaches up over the gap to the shape that shows the node, which may end above
     // the cell's bottom
     const sal_Int32 nGap(static_cast<sal_Int32>(
-        (fLevelGap + (1.0 - rNode.fElbowFrom) * rNode.aCell.Height) * fScale));
+        (fLevelGap + nAssistantRows * (fLevelHeight + fLevelGap)
+         + (1.0 - rNode.fElbowFrom) * rNode.aCell.Height)
+        * fScale));
     std::map<OUString, const LayoutNode*> aLayoutNodes;
     if (rDgm.getLayout() && rDgm.getLayout()->getNode())
         gatherLayoutNodes(*rDgm.getLayout()->getNode(), aLayoutNodes);
@@ -10014,8 +10190,7 @@ bool AlgAtom::layoutUprightBranch(const SmartArtDiagram& rDgm, const ShapePtr& r
         // drawn as, so the layout node is asked
         const auto aNode = aLayoutNodes.find(pChild->getInternalName());
         if (aNode == aLayoutNodes.end() || !aNode->second
-            || algorithmTypeOf(*aNode->second) != XML_hierRoot
-            || containsDataNodeType(pChild, XML_asst))
+            || algorithmTypeOf(*aNode->second) != XML_hierRoot)
             return false;
         const sal_Int32 nAlign(hierarchyAlignOf(*aNode->second));
         if (nAlign != 0 && nAlign != XML_tL && nAlign != XML_tCtrCh && nAlign != XML_tR)
