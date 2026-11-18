@@ -138,6 +138,10 @@ class DebugManager {
 	public slideOn: boolean;
 	// How long the caret and the text selection slide while the tool is on, in milliseconds.
 	private _slideMs: number = Cursor.usualSlideTime;
+	public cellCursorSlideOn: boolean;
+	// How long the cell cursor slides while the tool is on, in milliseconds. It jumps while
+	// the tool is off.
+	private _cellCursorSlideMs: number = CellCursorSection.initialSlideTime;
 	// How long typed text waits to be combined while the tool is on, in milliseconds.
 	private _textWaitMs: number = 100;
 
@@ -308,6 +312,15 @@ class DebugManager {
 			}
 			entry.checkbox.disabled = !enabled;
 		}
+	}
+
+	/// Switch the tool of that name on, if it is there and off.
+	private switchToolOn(name: string): void {
+		const entry = this._toolEntries.find((item) => item.tool.name === name);
+		if (!entry || entry.checkbox.checked) return;
+
+		entry.checkbox.checked = true;
+		entry.tool.onAdd();
 	}
 
 	/*
@@ -554,11 +567,41 @@ class DebugManager {
 				onAdd: function () {
 					self.localCellCursorOn = true;
 					LocalCellCursor.reportMode(true);
+					self.setDependentToolsEnabled('Local cell cursor', true);
+					// The cursor slides again, as it does by default.
+					self.switchToolOn('Cell cursor slide');
 				},
 				onRemove: function () {
+					self.setDependentToolsEnabled('Local cell cursor', false);
 					self.localCellCursorOn = false;
 					LocalCellCursor.report();
 					LocalCellCursor.reportMode(false);
+				},
+			});
+
+		if (docType === 'spreadsheet')
+			this._addDebugTool({
+				name: 'Cell cursor slide',
+				category: 'Functionality',
+				startsOn: true,
+				dependsOn: 'Local cell cursor',
+				onAdd: function () {
+					self.cellCursorSlideOn = true;
+					CellCursorSection.slideTime = self._cellCursorSlideMs;
+				},
+				onRemove: function () {
+					// The cell cursor jumps while the tool is off.
+					self.cellCursorSlideOn = false;
+					CellCursorSection.slideTime = 0;
+				},
+				input: {
+					value: this._cellCursorSlideMs,
+					min: 0,
+					unit: 'ms',
+					onChange: function (value: number) {
+						self._cellCursorSlideMs = value;
+						if (self.cellCursorSlideOn) CellCursorSection.slideTime = value;
+					},
 				},
 			});
 

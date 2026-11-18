@@ -64,12 +64,177 @@ class CellCursorSection extends CanvasSectionObject {
 		return defaultSizePos;
 	}
 
+	/**
+	 * How long the cursor takes to slide to another cell at the start, in
+	 * milliseconds.
+	 */
+	public static readonly initialSlideTime: number = 100;
+
+	/**
+	 * How long the cursor takes to slide to another cell, in milliseconds;
+	 * 0 makes it jump.
+	 */
+	public static slideTime: number = CellCursorSection.initialSlideTime;
+
+	/**
+	 * The rectangle that the cursor slides from, or null while the cursor is
+	 * not sliding.
+	 */
+	private slideFrom: cool.SimpleRectangle | null = null;
+
+	/** The time the slide started, as performance.now() gives it. */
+	private slideStart: number = 0;
+
+	/** The animation frame that draws the slide next, or null. */
+	private slideFrame: number | null = null;
+
+	/** The sheet that the cursor was on at its last move. */
+	private slideSheet: number = -1;
+
+	/**
+	 * Get a rectangle on the way between two. Progress runs from 0 to 1, and
+	 * the move slows down as it arrives.
+	 *
+	 * @throws Error when progress is outside 0 to 1.
+	 */
+	public static interpolate(
+		from: cool.SimpleRectangle,
+		to: cool.SimpleRectangle,
+		progress: number,
+	): cool.SimpleRectangle {
+		if (Number.isNaN(progress) || progress < 0 || progress > 1)
+			throw new Error('Slide progress out of range: ' + progress);
+
+		const eased = 1 - (1 - progress) * (1 - progress);
+		const x = from.x1 + (to.x1 - from.x1) * eased;
+		const y = from.y1 + (to.y1 - from.y1) * eased;
+		const width = from.width + (to.width - from.width) * eased;
+		const height = from.height + (to.height - from.height) * eased;
+		return new cool.SimpleRectangle(x, y, width, height);
+	}
+
+	/**
+	 * Get the rectangle that the cursor is drawn at now: on its way while
+	 * it slides, otherwise its own. Null when the cursor is not visible.
+	 */
+	public getDrawnRectangle(): cool.SimpleRectangle | null {
+		if (!app.calc.cellCursorVisible) return null;
+
+		const target =
+			app.calc.cellCursorRectangle ?? new cool.SimpleRectangle(0, 0, 0, 0);
+
+		const slideTime = CellCursorSection.slideTime;
+		if (!this.slideFrom || slideTime <= 0)
+			// No slide runs, or the slide was turned off.
+			return target.clone();
+
+		const progress = (performance.now() - this.slideStart) / slideTime;
+		if (progress >= 1)
+			// The slide has run its course.
+			return target.clone();
+
+		return CellCursorSection.interpolate(this.slideFrom, target, progress);
+	}
+
+	/**
+	 * Start a slide from the given rectangle to the rectangle that the cursor
+	 * has now, app.calc.cellCursorRectangle. The cursor jumps when the move
+	 * does not allow a slide, or for null.
+	 */
+	public startSlideFrom(from: cool.SimpleRectangle | null): void {
+		const sheet = app.map._docLayer._selectedPart;
+		const sameSheet = sheet === this.slideSheet;
+		this.slideSheet = sheet;
+
+		this.slideFrom = null;
+		this.slideStart = performance.now();
+
+		if (from === null || !sameSheet)
+			// The cursor was not visible, stays on its cell, or changed sheets.
+			return;
+
+		if (!this.canSlideFrom(from))
+			return;
+
+		this.slideFrom = from.clone();
+
+		// Keep the fill handle on the cursor from the first frame on.
+		this.placeFillHandle();
+		this.drawSlide();
+	}
+
+	/**
+	 * Test whether the cursor can actually slide from the specified rectangle
+	 * to the current cursor position.
+	 */
+	private canSlideFrom(from: cool.SimpleRectangle): boolean {
+		const target = app.calc.cellCursorRectangle;
+		if (!target || !app.calc.cellCursorVisible)
+			// There is no cursor to slide.
+			return false;
+
+		if (!LocalCellCursor.isEnabled())
+			// The cursor slides only in the local mode.
+			return false;
+
+		if (CellCursorSection.slideTime <= 0)
+			// The slide is turned off.
+			return false;
+
+		if (DomUtil.prefersReducedMotion())
+			return false;
+
+		// Both source and target must be in the same visible frame for the
+		// sliding to happen.
+		const fromInView = app.isRectangleVisibleInTheDisplayedArea(from.toArray());
+		const targetInView = app.isRectangleVisibleInTheDisplayedArea(target.toArray());
+		return fromInView && targetInView;
+	}
+
+	/** Draw the canvas again on every frame until the slide is over. */
+	private drawSlide(): void {
+		if (this.slideFrame !== null)
+			// A frame is already scheduled - bail out.
+			return;
+
+		this.slideFrame = requestAnimationFrame(() => {
+			this.slideFrame = null;
+			const running = performance.now() - this.slideStart < CellCursorSection.slideTime;
+			if (!running)
+				// The time is up - end the slide animation.
+				this.slideFrom = null;
+
+			this.placeFillHandle();
+			app.sectionContainer.requestReDraw();
+
+			if (running)
+				// Schedule the next frame.
+				this.drawSlide();
+		});
+	}
+
+	/** Put the fill handle on the corner of the cursor as it is drawn. */
+	private placeFillHandle(): void {
+		const drawn = this.getDrawnRectangle();
+		if (!drawn)
+			// The cursor is not visible - no need to draw anything.
+			return;
+
+		const name = app.CSections.CellFillMarker.name;
+		const section = app.sectionContainer.getSectionWithName(name);
+		const fillHandle = section as AutoFillBaseSection | null;
+		if (!fillHandle)
+			// This view has no fill handle.
+			return;
+
+		// The handle sits on the bottom-right corner, given in core pixels.
+		const corner = [drawn.pX2, drawn.pY2];
+		fillHandle.calculatePositionViaCellCursor(corner);
+	}
+
 	/// The rectangle of the cursor that is shown, or null when none is.
 	protected shownRectangle(): cool.SimpleRectangle | null {
-		if (!app.calc.cellCursorVisible) return null;
-		return (
-			app.calc.cellCursorRectangle ?? new cool.SimpleRectangle(0, 0, 0, 0)
-		).clone();
+		return this.getDrawnRectangle();
 	}
 
 	public onDraw() {

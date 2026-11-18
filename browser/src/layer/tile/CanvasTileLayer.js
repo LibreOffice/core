@@ -1890,6 +1890,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 
 		var oldCursorAddress = app.calc.cellAddress.clone();
+		const drawnBefore = this._cellCursorSection.getDrawnRectangle();
 
 		if (!cell) {
 			this.hideCellCursor();
@@ -1913,6 +1914,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 
 		var sameAddress = oldCursorAddress.equals(app.calc.cellAddress.toArray());
+
+		// Slide the cursor to another cell; a change on the same cell jumps.
+		let slideFrom = null;
+		if (cell && !sameAddress)
+			slideFrom = drawnBefore;
+		this._cellCursorSection.startSlideFrom(slideFrom);
 
 		var isFollowingOwnCursor = parseInt(app.getFollowedViewId()) === parseInt(this._viewId);
 		var notJump = sameAddress || !isFollowingOwnCursor;

@@ -47,6 +47,12 @@ class DomUtil {
 		return element.offsetHeight;
 	}
 
+	/** Test whether the user asked the system for less motion. */
+	public static prefersReducedMotion(): boolean {
+		if (!window.matchMedia) return false;
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
+
 	private static durationCache: Map<string, number> | null = null;
 
 	public static getDurationMs(token: string): number {

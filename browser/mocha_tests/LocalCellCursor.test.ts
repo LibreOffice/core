@@ -251,4 +251,25 @@ describe('LocalCellCursor', function () {
 		nodeassert.strictEqual(LocalCellCursor.isCorrection(state, 5), false);
 		nodeassert.strictEqual(LocalCellCursor.isStale(5), true);
 	});
+
+	it('slides the cell cursor between two rectangles', function () {
+		const from = new cool.SimpleRectangle(0, 0, 100, 50);
+		const to = new cool.SimpleRectangle(200, 100, 300, 50);
+
+		// Start at the old rectangle and end at the new one.
+		let drawn = CellCursorSection.interpolate(from, to, 0);
+		nodeassert.deepStrictEqual(drawn.toArray(), [0, 0, 100, 50]);
+		drawn = CellCursorSection.interpolate(from, to, 1);
+		nodeassert.deepStrictEqual(drawn.toArray(), [200, 100, 300, 50]);
+
+		// Slow down on arrival: half the time covers three quarters of the way.
+		// Check at 0.5, which keeps the arithmetic exact.
+		drawn = CellCursorSection.interpolate(from, to, 0.5);
+		nodeassert.deepStrictEqual(drawn.toArray(), [150, 75, 250, 50]);
+
+		// Reject a progress outside the slide.
+		nodeassert.throws(() => CellCursorSection.interpolate(from, to, -1));
+		nodeassert.throws(() => CellCursorSection.interpolate(from, to, 2));
+		nodeassert.throws(() => CellCursorSection.interpolate(from, to, NaN));
+	});
 });
