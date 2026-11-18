@@ -6,13 +6,14 @@
 $theme: 'NC-theme';
 $with-integrator-logo: true;
 $hide-desktop-marker: true;
-/// The following is overwritten by brand.sh
+/// A brand built with brand.sh --overlay sets these in _NC-brand.scss
 $hide-about: false;
 $hide-forum: false;
 $hide-report-issue: false;
 $hide-about-product-logo: false;
 $hide-about-lokit-logo: false;
 $hide-about-integrator-logo: false;
+@import 'NC-brand';
 $clr-toolbar-bezels-border: var(--color-border);
 $toolbar-down-per-doc-type: false;
 $toolbar-up-per-doc-type: false;
