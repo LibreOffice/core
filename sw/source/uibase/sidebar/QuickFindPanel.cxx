@@ -451,17 +451,14 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::It
     if (m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton()
         && !rxPaM->GetPointNode().GetTextNode()->getLayoutFrame(m_pWrtShell->GetLayout()))
     {
-        auto nPos = m_pWrtShell->GetOutlinePos(UCHAR_MAX, rxPaM.get());
-        if (nPos != SwOutlineNodes::npos)
+        auto nPaMOutlinePos = m_pWrtShell->GetOutlinePos(UCHAR_MAX, rxPaM.get());
+        if (nPaMOutlinePos != SwOutlineNodes::npos)
         {
             bool bOutlineContentMadeVisible = false;
-            if (!m_pWrtShell->IsOutlineContentVisible(nPos))
-            {
-                m_pWrtShell->MakeOutlineContentVisible(nPos);
-                bOutlineContentMadeVisible = true;
-            }
+            auto nPos = nPaMOutlinePos;
             int nLevel = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
-            while (nLevel && --nPos != SwOutlineNodes::npos)
+            while (!rxPaM->GetPointNode().GetTextNode()->getLayoutFrame(m_pWrtShell->GetLayout())
+                   && nLevel && --nPos != SwOutlineNodes::npos)
             {
                 int nCurrentPosLevel
                     = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
@@ -474,6 +471,11 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::It
                     }
                     nLevel = nCurrentPosLevel;
                 }
+            }
+            if (!rxPaM->GetPointNode().GetTextNode()->getLayoutFrame(m_pWrtShell->GetLayout()))
+            {
+                m_pWrtShell->MakeOutlineContentVisible(nPaMOutlinePos);
+                bOutlineContentMadeVisible = true;
             }
             if (bOutlineContentMadeVisible)
             {
