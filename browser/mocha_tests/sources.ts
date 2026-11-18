@@ -11,6 +11,13 @@
 
 /// <reference path="../js/plural.js" />
 /// <reference path="../src/dom/JSX.ts" />
+/// <reference path="../src/control/backstage/Types.ts" />
+/// <reference path="../src/control/backstage/CloudProviderKinds.ts" />
+/// <reference path="../src/control/backstage/Common.tsx" />
+/// <reference path="../src/control/backstage/TemplatesView.tsx" />
+/// <reference path="../src/control/backstage/MyTemplatesView.tsx" />
+/// <reference path="../src/control/backstage/OpenView.tsx" />
+/// <reference path="../src/control/backstage/CloudDialogs.tsx" />
 /// <reference path="../src/app/DocUtil.ts" />
 /// <reference path="../src/app/SlideAvatars.ts" />
 /// <reference path="../src/app/LocaleService.ts" />

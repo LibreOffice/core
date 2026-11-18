@@ -73,6 +73,19 @@ interface UserTemplate {
 	preview?: string;
 }
 
+// The stored templates of one cloud account.
+interface AccountTemplates {
+	// The id of the cloud account.
+	account: string;
+	templates: UserTemplate[];
+}
+
+// The templates of one cloud account, with the heading they stand under.
+interface AccountTemplateSection {
+	heading: string;
+	templates: TemplateData[];
+}
+
 // A file that the user picked or dropped to add as a template. The type is empty for a file that
 // is neither a template nor a document.
 interface TemplateFileInfo {

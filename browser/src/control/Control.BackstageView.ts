@@ -34,6 +34,7 @@ class BackstageView extends window.L.Class {
 	private manageFilter: TemplateFilter = 'all';
 	private manageListContainer: HTMLElement | null = null;
 	private userTemplates: UserTemplate[] = [];
+	private accountTemplates: AccountTemplates[] = [];
 	// Shows a dropped file in the open Add template dialog. Null while that dialog is closed.
 	private templateDropHandler: ((file: TemplateFileInfo) => void) | null = null;
 	private closeAddTemplateDialog: (() => void) | null = null;
@@ -812,6 +813,8 @@ class BackstageView extends window.L.Class {
 				this.hasUserTemplates() ?
 					this.getFilteredTemplates(this.getUserTemplateCards())
 				:	null,
+			accountSections:
+				this.hasUserTemplates() ? this.getAccountTemplateSections() : [],
 			builtInTemplates: this.getFilteredTemplates(builtInTemplates),
 			searchQuery: this.templateSearchQuery,
 			onClick: (t) => this.triggerNewDocument(t),
@@ -933,8 +936,24 @@ class BackstageView extends window.L.Class {
 	}
 
 	private async loadUserTemplates(): Promise<void> {
-		const list = await window.postMobileCall('GETUSERTEMPLATES');
+		const [list, accounts] = await Promise.all([
+			window.postMobileCall('GETUSERTEMPLATES'),
+			window.postMobileCall('GETACCOUNTTEMPLATES'),
+		]);
 		this.userTemplates = Array.isArray(list) ? list : [];
+		this.accountTemplates = Array.isArray(accounts) ? accounts : [];
+	}
+
+	// One section for each cloud account that still exists and has templates, with the
+	// templates that pass the search and the type filter.
+	private getAccountTemplateSections(): AccountTemplateSection[] {
+		return BackstageTemplates.accountTemplateSections(
+			this.accountTemplates,
+			this.getRegisteredCloudProviders(),
+		).map((section) => ({
+			heading: section.heading,
+			templates: this.getFilteredTemplates(section.templates),
+		}));
 	}
 
 	// Renders the view when the list arrives, if the backstage still shows the same view. When the

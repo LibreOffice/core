@@ -32,6 +32,8 @@ namespace BackstageTemplates {
   export interface TemplateSectionsProps {
     // Null where the app keeps no templates of the user.
     userTemplates: TemplateData[] | null;
+    // One section for each cloud account, in the order shown.
+    accountSections: AccountTemplateSection[];
     builtInTemplates: TemplateData[];
     searchQuery: string;
     onClick: (template: TemplateData) => void;
@@ -237,6 +239,9 @@ namespace BackstageTemplates {
             favoriteState: props.favoriteState,
           })
         : null}
+        {props.accountSections
+          .filter((section) => section.templates.length > 0)
+          .map((section) => accountTemplatesSection(section, props.onClick))}
         <div class="backstage-template-section-header">
           <h4 class="backstage-template-section-title">
             {_('Built-in templates')}
@@ -249,6 +254,50 @@ namespace BackstageTemplates {
           props.favoriteState,
         )}
       </div>
+    );
+  }
+
+  // The sections of the stored account templates: one for each account that is still registered,
+  // in the order of stored.
+  export function accountTemplateSections(
+    stored: AccountTemplates[],
+    accounts: CloudProvider[],
+  ): AccountTemplateSection[] {
+    const sections: AccountTemplateSection[] = [];
+    for (const entry of stored) {
+      const account = accounts.find((a) => a.id === entry.account);
+      if (!account) continue;
+      sections.push({
+        heading: _('From %1').replace('%1', () => account.name),
+        templates: entry.templates.map((template) => ({
+          id: 'account-template-' + entry.account + '-' + template.id,
+          name: template.name,
+          type: template.type,
+          path: template.path,
+          basename: template.name,
+          preview: template.preview,
+          searchText: [template.name, template.type, account.name]
+            .join(' ')
+            .toLowerCase(),
+        })),
+      });
+    }
+    return sections;
+  }
+
+  function accountTemplatesSection(
+    section: AccountTemplateSection,
+    onClick: (t: TemplateData) => void,
+  ): HTMLElement {
+    return (
+      <>
+        <div class="backstage-template-section-header">
+          <h4 class="backstage-template-section-title">{section.heading}</h4>
+        </div>
+        <div class="backstage-templates-grid backstage-account-templates-grid">
+          {section.templates.map((t) => templateCard(t, () => onClick(t)))}
+        </div>
+      </>
     );
   }
 

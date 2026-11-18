@@ -150,4 +150,5 @@
 /// <reference path="./AdminVersionInfo.test.ts" />
 /// <reference path="./CloudDialogs.test.ts" />
 /// <reference path="./AccountPresetSync.test.ts" />
+/// <reference path="./BackstageAccountTemplates.test.ts" />
 // NOTE: reference new tests here ...
