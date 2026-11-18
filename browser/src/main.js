@@ -13,7 +13,7 @@
 /* global globalThis UIManager */
 /* global errorMessages accessToken accessTokenTTL noAuthHeader accessHeader createOnlineModule */
 /* global app $ host idleTimeoutSecs outOfFocusTimeoutSecs _ LocaleService LayoutingService DropFileOverlay */
-/* global ServerConnectionService */
+/* global ServerConnectionService syncAccountPresets */
 /*eslint indent: [error, "tab", { "outerIIFEBody": 0 }]*/
 
 (function (global) {
@@ -181,6 +181,48 @@ var _codaUploadOnSave = function(fileBytes, tag, force) {
 		err.wasSwitching = window._switchToServerAfterSave;
 		window._switchToServerAfterSave = false;
 		throw err;
+	});
+};
+
+// Download the templates that the cloud account of this document lists. Only the Qt app stores
+// them, from its editor page in an account window.
+const _codaSyncAccountPresets = function() {
+	if (!window.ThisIsTheQtApp)
+		return;
+
+	const bridge = window.bridge;
+	if (!bridge || typeof bridge.applyAccountPresetList !== 'function')
+		return;
+
+	syncAccountPresets({
+		fetchStream: global.collab.fetchStream,
+		download: function(url, maxBytes) {
+			return fetch(url).then(function(response) {
+				if (!response.ok)
+					throw new Error('HTTP ' + response.status);
+				if (Number(response.headers.get('Content-Length')) > maxBytes) {
+					if (response.body)
+						response.body.cancel();
+					throw new Error('the file is larger than the limit');
+				}
+				return response.arrayBuffer();
+			});
+		},
+		applyList: function(list, group, entriesJson) {
+			return new Promise(function(resolve) {
+				bridge.applyAccountPresetList(list, group, entriesJson, resolve);
+			}).then(function(reply) { return JSON.parse(reply || '[]'); });
+		},
+		storePart: function(list, group, uri, offset, base64) {
+			return new Promise(function(resolve) {
+				bridge.storeAccountPresetPart(list, group, uri, offset, base64, resolve);
+			}).then(function(reply) { return reply === 'true'; });
+		},
+		finishFile: function(list, group, uri, stamp) {
+			return new Promise(function(resolve) {
+				bridge.finishAccountPresetFile(list, group, uri, stamp, resolve);
+			}).then(function(reply) { return reply === 'true'; });
+		},
 	});
 };
 
@@ -396,6 +438,7 @@ if (window.ThisIsTheEmscriptenApp) {
 					global.socket.onopen();
 					map.loadDocument(global.socket);
 					_codaWireCollabNotifications();
+					_codaSyncAccountPresets();
 				});
 			}).catch(function(err) {
 				if (err && err.cleanExport === false) {

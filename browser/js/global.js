@@ -528,6 +528,12 @@ class InitializerBase {
 			setPref: (key, value) => call('setPref', [key, value]),
 			saveCompleted: () => call('saveCompleted', []),
 			getBundledFile: (path, callback) => call('getBundledFile', [path], callback),
+			applyAccountPresetList: (list, group, entriesJson, callback) =>
+				call('applyAccountPresetList', [list, group, entriesJson], callback),
+			storeAccountPresetPart: (list, group, uri, offset, base64, callback) =>
+				call('storeAccountPresetPart', [list, group, uri, offset, base64], callback),
+			finishAccountPresetFile: (list, group, uri, stamp, callback) =>
+				call('finishAccountPresetFile', [list, group, uri, stamp], callback),
 		};
 		Object.assign(window.bridge, appMethods);
 
@@ -2947,6 +2953,46 @@ function showWelcomeSVG() {
 					requestId: 'wasm-init'
 				}));
 			});
+		});
+	};
+
+	// Ask for one fetch stream on the open /cool/collab/ws WebSocket. request is the fetch
+	// message without its type and its requestId. Returns a Promise that resolves to the
+	// download URL. The WebSocket stays open.
+	global.collab.streamRequestCount = 0;
+	global.collab.fetchStream = function(request) {
+		return new Promise(function(resolve, reject) {
+			if (!global.collab.ws || global.collab.ws.readyState !== WebSocket.OPEN) {
+				reject(new Error('Collab connection is not open'));
+				return;
+			}
+
+			const requestId = 'stream-' + (++global.collab.streamRequestCount);
+			const listener = function(msg) {
+				if (msg.requestId !== requestId ||
+				    (msg.type !== 'fetch_url' && msg.type !== 'fetch_error'))
+					return;
+
+				clearTimeout(timeoutId);
+				global.collab.removeNotificationListener(listener);
+				if (msg.type === 'fetch_url' && msg.url) {
+					let url = msg.url;
+					if (url.startsWith('/') && global.collab.coolServer)
+						url = global.collab.coolServer + url;
+					resolve(url);
+				} else {
+					reject(new Error('Collab fetch error: ' + (msg.error || 'Unknown error')));
+				}
+			};
+
+			const timeoutId = setTimeout(function() {
+				global.collab.removeNotificationListener(listener);
+				reject(new Error('Collab fetch timeout'));
+			}, 30000);
+			global.collab.addNotificationListener(listener);
+
+			global.collab.ws.send(JSON.stringify(
+				Object.assign({}, request, { type: 'fetch', requestId: requestId })));
 		});
 	};
 

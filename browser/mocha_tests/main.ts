@@ -149,4 +149,5 @@
 /// <reference path="./DocPartChanged.test.ts" />
 /// <reference path="./AdminVersionInfo.test.ts" />
 /// <reference path="./CloudDialogs.test.ts" />
+/// <reference path="./AccountPresetSync.test.ts" />
 // NOTE: reference new tests here ...

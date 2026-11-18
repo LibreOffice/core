@@ -430,6 +430,7 @@ COOL_JS_LST =\
 	src/docstate.ts \
 	src/docstatefunctions.js \
 	src/app/ExportFormats.ts \
+	src/app/AccountPresetSync.ts \
 	src/docdispatcher.ts \
 	src/app/TableStylesService.ts \
 	src/app/TableStyleGalleryService.ts \
