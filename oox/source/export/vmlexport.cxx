@@ -1463,6 +1463,10 @@ sal_Int32 VMLExport::StartShape()
         m_pShapeAttrList->add(
             XML_href, m_pSdrObject->getHyperlink());
 
+    // the alternative text, where Word keeps it
+    if (!m_pSdrObject->GetDescription().isEmpty())
+        m_pShapeAttrList->add(XML_alt, m_pSdrObject->GetDescription());
+
     m_pShapeAttrList->addNS(XML_o, XML_allowincell, m_IsFollowingTextFlow ? "t" : "f");
 
     // add style

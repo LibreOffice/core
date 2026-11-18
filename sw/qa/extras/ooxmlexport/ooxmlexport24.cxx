@@ -563,6 +563,36 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXTextfield, "activex_textbox.docx")
     CPPUNIT_ASSERT(!xFormLayerAccess->isFormDesignMode());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165362ActiveXAltText)
+{
+    // A form control with alternative text, set in design mode
+    createSwDoc("activex_textbox.docx");
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    xShape->setPropertyValue(u"Description"_ustr, uno::Any(u"Customer name"_ustr));
+
+    saveAndReload(TestFilter::DOCX);
+    // Without the fix in place, the control shape had no alt attribute and the text was lost
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "(//w:control/parent::*/v:shape)[1]", "alt", u"Customer name");
+    CPPUNIT_ASSERT_EQUAL(u"Customer name"_ustr,
+                         getProperty<OUString>(getShape(1), u"Description"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf165362GroupChildAltText)
+{
+    // Only the first shape of the group has alternative text
+    createSwDoc("dml-groupshape-capitalization.docx");
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xChild(xGroup->getByIndex(0), uno::UNO_QUERY);
+    xChild->setPropertyValue(u"Description"_ustr, uno::Any(u"First"_ustr));
+
+    save(TestFilter::DOCX);
+    // The VML fallback must not give the text of one shape to the next one
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//mc:Fallback/w:pict/v:group/*[1]", "alt", u"First");
+    assertXPathNoAttribute(pXmlDoc, "//mc:Fallback/w:pict/v:group/*[2]", "alt");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testActiveXCheckbox, "activex_checkbox.docx")
 {
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);

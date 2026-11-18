@@ -572,6 +572,7 @@ ShapeContext::ShapeContext(ContextHandler2Helper const& rParent,
 {
     // collect shape specific attributes
     mrShapeModel.maType = rAttribs.getXString( XML_type, OUString() );
+    mrShapeModel.maAlt = rAttribs.getXString(XML_alt, OUString());
     // polyline path
     setPoints( rAttribs.getStringDefaulted( XML_points) );
     // line start and end positions
@@ -774,6 +775,8 @@ GroupShapeContext::GroupShapeContext(ContextHandler2Helper const& rParent,
     : ShapeContext(rParent, pShape, rAttribs)
     , mrShapes(pShape->getChildren())
 {
+    // the export writes the name of a group as its alt, not an alternative text
+    pShape->getShapeModel().maAlt.clear();
 }
 
 ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )

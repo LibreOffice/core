@@ -210,6 +210,7 @@ struct ShapeModel
     typedef ::std::vector< css::awt::Point >   PointVector;
 
     OUString     maType;             ///< Shape template with default properties.
+    OUString     maAlt;              ///< Alternative text of the shape.
     PointVector         maPoints;           ///< Points for the polyline shape.
     std::unique_ptr<TextBox>          mxTextBox;          ///< Text contents and properties.
     std::unique_ptr<ClientData>       mxClientData;       ///< Excel specific client data.

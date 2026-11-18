@@ -376,6 +376,8 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 PropertySet aShapeProp( xShape );
                 if( aShapeProp.hasProperty( PROP_Name ) )
                     aShapeProp.setProperty( PROP_Name, getShapeName() );
+                if (!maShapeModel.maAlt.isEmpty())
+                    aShapeProp.setProperty(PROP_Description, maShapeModel.maAlt);
                 uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
 
                 OUString sLinkChainName = getTypeModel().maLegacyId;
