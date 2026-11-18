@@ -1770,6 +1770,7 @@ struct ListItemText
     OUString sText;
     tools::Rectangle aTwips;
     std::vector<ParagraphError> aErrors;
+    std::vector<SfxParagraphComment> aComments;
 };
 
 struct ListWindow
@@ -1779,7 +1780,8 @@ struct ListWindow
 };
 
 // The run of list paragraphs around the caret's one, in the flow of the text it is in.
-void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+void collectListWindow(const SfxViewShell* pViewShell,
+                       const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                        sal_Int32 nRadius, ListWindow& rList)
 {
     rList = ListWindow();
@@ -1802,8 +1804,18 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
         xParent,
         xParentComponent.is() ? xParentComponent->getLocationOnScreen() : css::awt::Point());
 
-    auto walk = [&xContext, &xParent, &aOriginOnScreen, nRadius](
-                    accessibility::AccessibleRelationType eType, ListWindow& rOut) {
+    auto item = [pViewShell,
+                 &aOriginOnScreen](sal_Int16 nLevel,
+                                   const uno::Reference<accessibility::XAccessibleContext>& xItem,
+                                   const uno::Reference<accessibility::XAccessibleText>& xText) {
+        return ListItemText{ nLevel, xText->getText(), paragraphTwips(xItem, aOriginOnScreen),
+                             collectErrors(xText),
+                             pViewShell ? pViewShell->getKitParagraphComments(xText)
+                                        : std::vector<SfxParagraphComment>() };
+    };
+
+    auto walk = [&xContext, &xParent, &item, nRadius](accessibility::AccessibleRelationType eType,
+                                                      ListWindow& rOut) {
         for (uno::Reference<accessibility::XAccessibleContext> xNext
              = flowNeighbour(xContext, eType);
              xNext.is() && static_cast<sal_Int32>(rOut.aItems.size()) < nRadius;
@@ -1815,8 +1827,7 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
             const sal_Int16 nLevel = getListLevel(xText);
             if (nLevel < 0)
                 break;
-            rOut.aItems.push_back({ nLevel, xText->getText(),
-                                    paragraphTwips(xNext, aOriginOnScreen), collectErrors(xText) });
+            rOut.aItems.push_back(item(nLevel, xNext, xText));
             rOut.aParagraphs.push_back(xNext);
         }
     };
@@ -1827,8 +1838,7 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
                         std::make_move_iterator(aBefore.aItems.rend()));
     rList.aParagraphs.assign(aBefore.aParagraphs.rbegin(), aBefore.aParagraphs.rend());
 
-    rList.aItems.push_back({ nCaretLevel, xAccText->getText(),
-                             paragraphTwips(xContext, aOriginOnScreen), collectErrors(xAccText) });
+    rList.aItems.push_back(item(nCaretLevel, xContext, xAccText));
     rList.aParagraphs.push_back(xContext);
 
     ListWindow aAfter;
@@ -2669,6 +2679,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
             aNode.put("rect", rItem.aTwips.toString());
             if (!rItem.aErrors.empty())
                 aNode.add_child("errors", makeErrorsTree(rItem.aErrors));
+            if (!rItem.aComments.empty())
+                aNode.add_child("comments", makeCommentsTree(rItem.aComments));
             aItems.push_back(std::make_pair("", aNode));
         }
         boost::property_tree::ptree aList;
@@ -2741,7 +2753,7 @@ void KitDocumentFocusListener::collectContextWindow(
             bCaretCellResized = xLastCaretCell.is() && m_aTable.xCaretCell == xLastCaretCell;
         }
         if (m_aTable.aRows.empty())
-            collectListWindow(xAccText, LIST_ITEM_WINDOW, m_aList);
+            collectListWindow(m_pViewShell, xAccText, LIST_ITEM_WINDOW, m_aList);
     }
     const tools::Rectangle aVisibleArea = visibleArea();
     const bool bSameArea = aVisibleArea == m_aContextVisibleArea;
