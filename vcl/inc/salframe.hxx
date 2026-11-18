@@ -146,7 +146,7 @@ public:
     virtual void            SetRepresentedURL( const OUString& );
     virtual void            SetMenu( SalMenu *pSalMenu ) = 0;
 
-    virtual void            SetExtendedFrameStyle( SalExtStyle nExtStyle ) = 0;
+    virtual void SetExtendedFrameStyle(SalExtStyle nExtStyle);
 
     // Before the window is visible, a resize event
     // must be sent with the correct size

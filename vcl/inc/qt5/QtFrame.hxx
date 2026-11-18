@@ -180,7 +180,6 @@ public:
     void handlePaintEvent(const QPaintEvent* pEvent, QWidget* pWidget);
     void handleResizeEvent(const QResizeEvent* pEvent);
 
-    virtual void SetExtendedFrameStyle(SalExtStyle nExtStyle) override;
     virtual void Show(bool bVisible, bool bNoActivate = false) override;
     virtual void SetMinClientSize(tools::Long nWidth, tools::Long nHeight) override;
     virtual void SetMaxClientSize(tools::Long nWidth, tools::Long nHeight) override;

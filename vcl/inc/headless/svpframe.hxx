@@ -82,7 +82,6 @@ public:
     virtual void                SetIcon( sal_uInt16 nIcon ) override;
     virtual void                SetMenu( SalMenu* pMenu ) override;
 
-    virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) override;
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
     virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) override;

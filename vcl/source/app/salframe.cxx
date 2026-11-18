@@ -74,6 +74,8 @@ OUString SalFrame::DumpSetPosSize(tools::Long nX, tools::Long nY, tools::Long nW
     return aBuffer.makeStringAndClear();
 }
 
+void SalFrame::SetExtendedFrameStyle(SalExtStyle) {}
+
 SalFrameGeometry SalFrame::GetGeometry() const
 {
     SalFrameGeometry aGeometry = GetUnmirroredGeometry();

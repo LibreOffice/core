@@ -194,10 +194,6 @@ void SvpSalFrame::SetMenu( SalMenu* )
 {
 }
 
-void SvpSalFrame::SetExtendedFrameStyle( SalExtStyle )
-{
-}
-
 void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
 {
     if (m_nStyle == SalFrameStyleFlags::NONE)

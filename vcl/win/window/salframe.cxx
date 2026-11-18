@@ -1151,10 +1151,6 @@ static void ImplSalShow( HWND hWnd, bool bVisible, bool bNoActivate )
     }
 }
 
-void WinSalFrame::SetExtendedFrameStyle( SalExtStyle )
-{
-}
-
 void WinSalFrame::Show( bool bVisible, bool bNoActivate )
 {
     // Post this Message to the window, because this only works

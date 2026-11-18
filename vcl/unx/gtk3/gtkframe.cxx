@@ -1851,10 +1851,6 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     //FIXME: Handling embedded windows, is going to be fun ...
 }
 
-void GtkSalFrame::SetExtendedFrameStyle(SalExtStyle)
-{
-}
-
 SalGraphics* GtkSalFrame::AcquireGraphics()
 {
     if( m_bGraphics )
