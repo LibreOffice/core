@@ -900,6 +900,38 @@ function processToIdleWithA11yContext(win) {
 	});
 }
 
+let delayedMessages = 0;
+
+// Messages from core that start with one of the prefixes arrive after the delay, as over a slow
+// connection. Deleting _onMessage from the document layer ends this.
+function delayMessages(win, prefixes, delay) {
+	const docLayer = win.app.map._docLayer;
+	const onMessage = docLayer._onMessage;
+	docLayer._onMessage = function (textMsg, img) {
+		if (prefixes.some(function (prefix) { return textMsg.startsWith(prefix); })) {
+			delayedMessages++;
+			setTimeout(() => {
+				delayedMessages--;
+				onMessage.call(this, textMsg, img);
+			}, delay);
+		}
+		else
+			onMessage.call(this, textMsg, img);
+	};
+}
+
+// Waits until every delayed message has arrived and the hold of the caret after the last arrow key
+// is over. A message that arrives can make core send another one, so this looks twice.
+function waitForDelayedMessages(win) {
+	for (let round = 0; round < 2; round++) {
+		helper.processToIdle(win);
+		cy.wrap(null).should(function () {
+			expect(delayedMessages, 'messages still delayed').to.equal(0);
+			expect(win.app.map._textInput._isLeftRightArrow, 'the hold after an arrow key').to.equal(0);
+		});
+	}
+}
+
 function axTreeAvailable() {
 	return Cypress.browser.family === 'chromium';
 }
@@ -1243,6 +1275,8 @@ module.exports.openSidebarPropertyDeck = openSidebarPropertyDeck;
 module.exports.sidebarKeyboard = sidebarKeyboard;
 module.exports.axTreeAvailable = axTreeAvailable;
 module.exports.processToIdleWithA11yContext = processToIdleWithA11yContext;
+module.exports.delayMessages = delayMessages;
+module.exports.waitForDelayedMessages = waitForDelayedMessages;
 /// The relative luminance WCAG defines, from a computed color string.
 function relativeLuminance(color) {
 	const parts = String(color).match(/[\d.]+/g);

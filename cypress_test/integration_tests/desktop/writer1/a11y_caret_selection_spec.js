@@ -121,15 +121,13 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 	// the reports of the caret arrive late, as over a slow connection
 	function delayCaretReports(delay) {
 		cy.then(function () {
-			const docLayer = win.app.map._docLayer;
-			const onMessage = docLayer._onMessage;
-			docLayer._onMessage = function (textMsg, img) {
-				if (textMsg.startsWith('a11ycaretchanged:')
-					|| textMsg.startsWith('a11ytextselectionchanged:'))
-					setTimeout(onMessage.bind(this, textMsg, img), delay);
-				else
-					onMessage.call(this, textMsg, img);
-			};
+			a11yHelper.delayMessages(win, ['a11ycaretchanged:', 'a11ytextselectionchanged:'], delay);
+		});
+	}
+
+	function waitForLateReports() {
+		cy.then(function () {
+			a11yHelper.waitForDelayedMessages(win);
 		});
 	}
 
@@ -155,8 +153,7 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 
 		for (let i = 0; i < 5; i++)
 			cy.realPress('ArrowRight');
-		// past the delay and the 1 s hold after the last key
-		cy.wait(5000);
+		waitForLateReports();
 		cy.then(function () {
 			win.document.removeEventListener('selectionchange', record);
 			const back = positions.findIndex((pos, i) => i > 0 && pos < positions[i - 1]);
@@ -181,7 +178,7 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 			expect(win.app.map._textInput._getSelectionEnd(), 'the caret before the reports')
 				.to.equal(STEPS - 1);
 		});
-		cy.wait(5000);
+		waitForLateReports();
 		cy.then(function () {
 			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(0);
 		});
@@ -198,7 +195,7 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 		// as for Home and Left: no report follows Shift+Left at the start of the first paragraph
 		cy.realPress(['Shift', 'Home']);
 		cy.realPress(['Shift', 'ArrowLeft']);
-		cy.wait(5000);
+		waitForLateReports();
 		cy.then(function () {
 			const sel = selection();
 			expect(sel.toString(), 'the selection').to.equal(TYPED.slice(0, STEPS));
@@ -227,7 +224,7 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 
 		for (let i = 0; i < 5; i++)
 			cy.realPress(['Shift', 'ArrowRight']);
-		cy.wait(5000);
+		waitForLateReports();
 		cy.then(function () {
 			win.document.removeEventListener('selectionchange', record);
 			const back = lengths.findIndex((length, i) => i > 0 && length < lengths[i - 1]);
@@ -245,13 +242,13 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 		delayCaretReports(2500);
 		for (let i = 0; i < STEPS; i++)
 			cy.realPress(['Shift', 'ArrowRight']);
-		cy.wait(5000);
+		waitForLateReports();
 		cy.realPress('ArrowRight');
 		cy.then(function () {
 			expect(selection().isCollapsed, 'nothing is selected').to.equal(true);
 			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(STEPS + 1);
 		});
-		cy.wait(5000);
+		waitForLateReports();
 	});
 
 	it('a caret report kept in the hold after Left gives way to the newer ones', function () {
@@ -267,7 +264,7 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 		cy.wait(500);
 		cy.realPress('ArrowLeft');
 		cy.realPress('ArrowLeft');
-		cy.wait(2000);
+		waitForLateReports();
 		cy.then(function () {
 			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(0);
 		});
@@ -295,7 +292,7 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 		delayCaretReports(2500);
 		for (let i = 0; i < 3; i++)
 			cy.realPress('ArrowLeft');
-		cy.wait(5000);
+		waitForLateReports();
 		cy.then(function () {
 			win.document.removeEventListener('selectionchange', record);
 			const back = positions.findIndex((pos, i) => i > 0 && pos > positions[i - 1]);
@@ -306,7 +303,7 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 		});
 		for (let i = 0; i < 3; i++)
 			cy.realPress('ArrowRight');
-		cy.wait(5000);
+		waitForLateReports();
 		cy.then(function () {
 			win.document.removeEventListener('selectionchange', record);
 			const back = positions.findIndex((pos, i) => i > 0 && pos < positions[i - 1]);

@@ -26,14 +26,13 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 
 	function delayCaretReports(delay) {
 		cy.then(function () {
-			const docLayer = win.app.map._docLayer;
-			const onMessage = docLayer._onMessage;
-			docLayer._onMessage = function (textMsg, img) {
-				if (textMsg.startsWith('a11ycaretchanged:'))
-					setTimeout(onMessage.bind(this, textMsg, img), delay);
-				else
-					onMessage.call(this, textMsg, img);
-			};
+			a11yHelper.delayMessages(win, ['a11ycaretchanged:'], delay);
+		});
+	}
+
+	function waitForLateReports() {
+		cy.then(function () {
+			a11yHelper.waitForDelayedMessages(win);
 		});
 	}
 
@@ -219,7 +218,7 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 		cy.then(function () {
 			expect(win.app.map._textInput._getSelectionEnd(), 'the caret after two').to.equal(8);
 		});
-		cy.wait(4000);
+		waitForLateReports();
 		cy.then(function () {
 			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(8);
 		});
@@ -241,7 +240,7 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 		cy.then(function () {
 			expect(win.app.map._textInput._getSelectionEnd(), 'the caret after Left').to.equal(6);
 		});
-		cy.wait(4000);
+		waitForLateReports();
 		cy.then(function () {
 			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(6);
 		});
