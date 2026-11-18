@@ -96,7 +96,10 @@ function setLocalCaret(
 	const prev = localCaret.get(container.id);
 	localCaret.set(container.id, {
 		sel,
-		lastEdit: typing ? Date.now() : prev ? prev.lastEdit : 0,
+		lastEdit:
+			typing ? Date.now()
+			: prev ? prev.lastEdit
+			: 0,
 	});
 }
 
@@ -172,9 +175,8 @@ function renderRuns(
 		if (run.error) span.classList.add('ui-spell-error');
 		if (run.active) {
 			span.classList.add('ui-spell-active');
-			span.style.color = run.grammar
-				? data.grammarColor || ''
-				: data.spellColor || '';
+			span.style.color =
+				run.grammar ? data.grammarColor || '' : data.spellColor || '';
 			span.style.fontWeight = 'bold';
 			span.setAttribute('aria-invalid', run.grammar ? 'grammar' : 'spelling');
 		}

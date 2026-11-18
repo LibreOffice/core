@@ -206,9 +206,9 @@ namespace BackstageTemplates {
             </span>
           </label>
 
-          {props.isEdit && props.onDelete
-            ? dangerSection(props.onDelete)
-            : null}
+          {props.isEdit && props.onDelete ?
+            dangerSection(props.onDelete)
+          : null}
 
           <div class="backstage-modal-actions">
             <button

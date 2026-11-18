@@ -57,9 +57,10 @@ class HandleScaling {
 	public static committedHandle(handleId: string, keepRatio: boolean): string {
 		if (!keepRatio) return handleId;
 
-		const sideToCorner: Record<string, string> = app.map._docLayer.isCalcRTL()
-			? { '1': '0', '3': '5', '4': '7', '6': '5' }
-			: { '1': '2', '3': '5', '4': '7', '6': '7' };
+		const sideToCorner: Record<string, string> =
+			app.map._docLayer.isCalcRTL() ?
+				{ '1': '0', '3': '5', '4': '7', '6': '5' }
+			:	{ '1': '2', '3': '5', '4': '7', '6': '7' };
 
 		return sideToCorner[handleId] ?? handleId;
 	}
@@ -118,13 +119,15 @@ class HandleScaling {
 	): void {
 		const isVerticalHandler = ['2', '7'].includes(kind);
 
-		const primaryDelta = isVerticalHandler
-			? point.pY - shape.center.pY
-			: point.pX - shape.center.pX;
+		const primaryDelta =
+			isVerticalHandler ?
+				point.pY - shape.center.pY
+			:	point.pX - shape.center.pX;
 
-		const aspectRatio = isVerticalHandler
-			? shape.width / shape.height
-			: shape.height / shape.width;
+		const aspectRatio =
+			isVerticalHandler ?
+				shape.width / shape.height
+			:	shape.height / shape.width;
 
 		// The kind-based direction table assumes LTR doc-X. In RTL, the abs in
 		// convertToTileTwipsIfNeeded mirrors the X axis (kinds 1/4/6 sit at
@@ -182,12 +185,10 @@ class HandleScaling {
 		// 1/4/6 land at doc-max-X (= pX2 side) and 3/5/8 at doc-min-X (pX1).
 		// So the edge each handle modifies is swapped relative to LTR.
 		const isRTL = app.map._docLayer.isCalcRTL();
-		const isMinXHandle = isRTL
-			? ['3', '5', '8'].includes(kind)
-			: ['1', '4', '6'].includes(kind);
-		const isMaxXHandle = isRTL
-			? ['1', '4', '6'].includes(kind)
-			: ['3', '5', '8'].includes(kind);
+		const isMinXHandle =
+			isRTL ? ['3', '5', '8'].includes(kind) : ['1', '4', '6'].includes(kind);
+		const isMaxXHandle =
+			isRTL ? ['1', '4', '6'].includes(kind) : ['3', '5', '8'].includes(kind);
 
 		if (isMinXHandle) {
 			const pX2 = rectangle.pX2;

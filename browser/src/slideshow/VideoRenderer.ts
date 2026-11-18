@@ -297,7 +297,7 @@ function makeVideoRenderer(
 	context: RenderContext,
 	slideRenderer: SlideRenderer,
 ): AnimatedContentRenderer {
-	return context.is2dGl()
-		? new VideoRenderer2d(sId, context, slideRenderer)
-		: new VideoRendererGl(sId, context, slideRenderer);
+	return context.is2dGl() ?
+			new VideoRenderer2d(sId, context, slideRenderer)
+		:	new VideoRendererGl(sId, context, slideRenderer);
 }

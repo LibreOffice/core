@@ -165,29 +165,22 @@ interface Window {
 	detect: (features: Platform, detectionPlatform?: Platform | null) => boolean;
 }
 
-window.platform = window.mode.isChromebook()
-	? Platform.APP_CHROMEOS
-	: window.ThisIsTheAndroidApp
-		? Platform.APP_ANDROID // Cannot come before window.mode.isChromebook() as all Chromebook app users are necessarily also Android app users
-		: window.ThisIsTheiOSApp
-			? Platform.APP_IOS
-			: window.ThisIsTheWindowsApp
-				? Platform.APP_WINDOWS
-				: window.ThisIsTheMacOSApp
-					? Platform.APP_MAC
-					: window.ThisIsTheQtApp
-						? Platform.APP_LINUX
-						: window.ThisIsTheEmscriptenApp && window.L.Browser.mac
-							? Platform.EMSCRIPTEN_APPLE
-							: window.ThisIsTheEmscriptenApp && window.L.Browser.win
-								? Platform.EMSCRIPTEN_WINDOWS
-								: window.ThisIsTheEmscriptenApp
-									? Platform.EMSCRIPTEN_LINUX
-									: window.L.Browser.mac
-										? Platform.ONLINE_APPLE
-										: window.L.Browser.win
-											? Platform.ONLINE_WINDOWS
-											: Platform.ONLINE_LINUX;
+window.platform =
+	window.mode.isChromebook() ? Platform.APP_CHROMEOS
+	: window.ThisIsTheAndroidApp ?
+		Platform.APP_ANDROID // Cannot come before window.mode.isChromebook() as all Chromebook app users are necessarily also Android app users
+	: window.ThisIsTheiOSApp ? Platform.APP_IOS
+	: window.ThisIsTheWindowsApp ? Platform.APP_WINDOWS
+	: window.ThisIsTheMacOSApp ? Platform.APP_MAC
+	: window.ThisIsTheQtApp ? Platform.APP_LINUX
+	: window.ThisIsTheEmscriptenApp && window.L.Browser.mac ?
+		Platform.EMSCRIPTEN_APPLE
+	: window.ThisIsTheEmscriptenApp && window.L.Browser.win ?
+		Platform.EMSCRIPTEN_WINDOWS
+	: window.ThisIsTheEmscriptenApp ? Platform.EMSCRIPTEN_LINUX
+	: window.L.Browser.mac ? Platform.ONLINE_APPLE
+	: window.L.Browser.win ? Platform.ONLINE_WINDOWS
+	: Platform.ONLINE_LINUX;
 
 window.features = features;
 

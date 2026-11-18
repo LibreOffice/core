@@ -56,13 +56,10 @@ class GroupButtonSection extends GenericButtonSection {
 	*/
 	private static tooltipFor(role: GroupButtonRole): string {
 		const command =
-			role === 'enter'
-				? '.uno:EnterGroup'
-				: role === 'leave'
-					? '.uno:LeaveGroup'
-					: role === 'ungroup'
-						? '.uno:FormatUngroup'
-						: undefined;
+			role === 'enter' ? '.uno:EnterGroup'
+			: role === 'leave' ? '.uno:LeaveGroup'
+			: role === 'ungroup' ? '.uno:FormatUngroup'
+			: undefined;
 		if (!command) return _('Edit Diagram');
 
 		return JSDialog.ShortcutsUtil.getTooltipLabel(

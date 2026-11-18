@@ -74,9 +74,9 @@ abstract class ClassicContext implements InteractionContext {
 			group holds, and only entering the group reaches that.
 		*/
 		const objectId =
-			hit === undefined
-				? undefined
-				: RenderGeometrySection.outermostOf(hit, this.groupStoodIn);
+			hit === undefined ? undefined : (
+				RenderGeometrySection.outermostOf(hit, this.groupStoodIn)
+			);
 		if (
 			objectId === undefined &&
 			(!GraphicSelection.selectedObjectIDs.length ||
@@ -258,13 +258,13 @@ abstract class ClassicContext implements InteractionContext {
 
 		// The kinds 10 and 11 are the open and the closed curve.
 		states['.uno:ChangeBezier'] =
-			objects.length === 1
-				? !objects[0].cannotBeChangedToCurves &&
-					kinds[0] !== 10 &&
-					kinds[0] !== 11
-				: objects.some(
-						(object: cool.SlideObject) => !object.cannotBeChangedToCurves,
-					);
+			objects.length === 1 ?
+				!objects[0].cannotBeChangedToCurves &&
+				kinds[0] !== 10 &&
+				kinds[0] !== 11
+			:	objects.some(
+					(object: cool.SlideObject) => !object.cannotBeChangedToCurves,
+				);
 		const curves = [10, 11];
 		states['.uno:ConvertToEditableShape'] = objects.some(
 			(object: cool.SlideObject, at: number) =>
@@ -318,9 +318,9 @@ abstract class ClassicContext implements InteractionContext {
 	*/
 	protected objectsOfTheLevel(): number[] {
 		return RenderGeometrySection.theSelectable(
-			this.groupStoodIn === undefined
-				? RenderGeometrySection.heldByThePage()
-				: RenderGeometrySection.heldBy(this.groupStoodIn),
+			this.groupStoodIn === undefined ?
+				RenderGeometrySection.heldByThePage()
+			:	RenderGeometrySection.heldBy(this.groupStoodIn),
 		);
 	}
 
@@ -329,9 +329,9 @@ abstract class ClassicContext implements InteractionContext {
 	protected objectsOfTheLevelOf(objectId: number): number[] {
 		const parent = RenderGeometrySection.parentOf(objectId);
 		return RenderGeometrySection.theSelectable(
-			parent
-				? RenderGeometrySection.heldBy(parent)
-				: RenderGeometrySection.heldByThePage(),
+			parent ?
+				RenderGeometrySection.heldBy(parent)
+			:	RenderGeometrySection.heldByThePage(),
 		);
 	}
 
@@ -487,9 +487,10 @@ abstract class ClassicContext implements InteractionContext {
 		const selected = GraphicSelection.selectedObjectIDs;
 		const isSelected = (objectId: number): boolean =>
 			selected.includes(objectId);
-		const at = backwards
-			? order.map(isSelected).lastIndexOf(true)
-			: order.findIndex(isSelected);
+		const at =
+			backwards ?
+				order.map(isSelected).lastIndexOf(true)
+			:	order.findIndex(isSelected);
 		if (at < 0) return this.selectOnlyHere(order[0], hits);
 
 		const next = (at + (backwards ? -1 : 1) + order.length) % order.length;
@@ -718,9 +719,9 @@ class ClassicDiagramContext extends ClassicGroupContext {
 				RenderGeometrySection.parentOf(objectId) ===
 				RenderGeometrySection.parentOf(this.diagram);
 			GraphicSelection.selectObjects(
-				sameLevel
-					? [this.diagram, objectId]
-					: this.enteredBy([objectId], [hit]),
+				sameLevel ?
+					[this.diagram, objectId]
+				:	this.enteredBy([objectId], [hit]),
 			);
 			return true;
 		}
@@ -808,9 +809,9 @@ class ClassicDiagramContext extends ClassicGroupContext {
 
 	/// The whole diagram, where its first object stands for it, or the object of it selected.
 	protected objectsTheCommandsGoTo(): number[] {
-		return this.wholeSelected()
-			? [this.diagram]
-			: GraphicSelection.selectedObjectIDs;
+		return this.wholeSelected() ?
+				[this.diagram]
+			:	GraphicSelection.selectedObjectIDs;
 	}
 
 	/// Ungroup takes the diagram apart, whichever of its objects is selected.
@@ -832,9 +833,10 @@ class ClassicDiagramContext extends ClassicGroupContext {
 			return this.selectOnly(objects[to], !forwards);
 
 		const holder = RenderGeometrySection.parentOf(this.diagram);
-		const outside = holder
-			? RenderGeometrySection.heldBy(holder)
-			: RenderGeometrySection.heldByThePage();
+		const outside =
+			holder ?
+				RenderGeometrySection.heldBy(holder)
+			:	RenderGeometrySection.heldByThePage();
 		const place = outside.indexOf(this.diagram);
 		if (place < 0) return false;
 
@@ -1122,9 +1124,9 @@ class ClassicInPlaceContext implements InteractionContext {
 	// its own rules. a shape added to the chart is asked as on the page
 	public theOnesThatHaveASay(objectIds: number[]): number[] {
 		return objectIds.flatMap((objectId: number) =>
-			RenderGeometrySection.objectOf(objectId)?.chartPart !== undefined
-				? [objectId]
-				: RenderGeometrySection.theOnesThatHaveASay([objectId]),
+			RenderGeometrySection.objectOf(objectId)?.chartPart !== undefined ?
+				[objectId]
+			:	RenderGeometrySection.theOnesThatHaveASay([objectId]),
 		);
 	}
 
@@ -1136,9 +1138,9 @@ class ClassicInPlaceContext implements InteractionContext {
 	*/
 	public heldToItsWay(objectIds: number[], by: cool.Point): cool.Point {
 		const along =
-			objectIds.length === 1
-				? RenderGeometrySection.objectOf(objectIds[0])?.chartPart?.dragAlong
-				: undefined;
+			objectIds.length === 1 ?
+				RenderGeometrySection.objectOf(objectIds[0])?.chartPart?.dragAlong
+			:	undefined;
 		if (!along || along.length < 3)
 			return ClassicInPlaceContext.heldInsideTheChart(objectIds, by);
 
@@ -1190,11 +1192,11 @@ class ClassicInPlaceContext implements InteractionContext {
 	// step to undo. a shape added to the chart is named as on the page
 	public theOnesAChangeNames(objectIds: number[]): number[] {
 		return objectIds.flatMap((objectId: number) =>
-			RenderGeometrySection.objectOf(objectId)?.chartPart !== undefined
-				? [objectId]
-				: RenderGeometrySection.theOnesThatDraw(
-						RenderGeometrySection.standingFor([objectId]),
-					),
+			RenderGeometrySection.objectOf(objectId)?.chartPart !== undefined ?
+				[objectId]
+			:	RenderGeometrySection.theOnesThatDraw(
+					RenderGeometrySection.standingFor([objectId]),
+				),
 		);
 	}
 
@@ -1227,9 +1229,9 @@ class ClassicInPlaceContext implements InteractionContext {
 		const first = ClassicInPlaceContext.firstPart();
 		if (first === undefined) return false;
 		return ClassicInPlaceContext.goTo(
-			forwards
-				? first
-				: RenderGeometrySection.objectOf(first)?.chartKeys?.previous,
+			forwards ? first : (
+				RenderGeometrySection.objectOf(first)?.chartKeys?.previous
+			),
 		);
 	}
 
@@ -1314,9 +1316,9 @@ class ClassicInteractionSet implements InteractionSet {
 			case 'inPlace':
 				if (GraphicSelection.inPlaceCalc)
 					return new ClassicSpreadsheetContext();
-				return GraphicSelection.inPlaceMath
-					? new ClassicFormulaContext()
-					: new ClassicInPlaceContext();
+				return GraphicSelection.inPlaceMath ?
+						new ClassicFormulaContext()
+					:	new ClassicInPlaceContext();
 			case 'group':
 				return new ClassicGroupContext(place.group);
 			case 'table':

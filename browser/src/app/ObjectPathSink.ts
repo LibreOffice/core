@@ -69,9 +69,10 @@ class ObjectPathSink implements PathSink {
 			addition.x,
 			addition.y,
 		].join(',');
-		const weights = addition.weights.length
-			? ';' + ObjectPathSink.itemsOf(addition.weights)
-			: '';
+		const weights =
+			addition.weights.length ?
+				';' + ObjectPathSink.itemsOf(addition.weights)
+			:	'';
 		this.send('setobjectpoints', 'changes=+' + point + weights + ' as=add');
 	}
 

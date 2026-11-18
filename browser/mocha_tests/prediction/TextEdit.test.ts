@@ -505,11 +505,9 @@ describe('text prediction text edits', function () {
 	function alignedLine(text: string, align: string): cool.VectorPrimitivesData {
 		const width = text.length * 100;
 		const left =
-			align === 'center'
-				? (800 - width) / 2
-				: align === 'right'
-					? 800 - width
-					: 0;
+			align === 'center' ? (800 - width) / 2
+			: align === 'right' ? 800 - width
+			: 0;
 		return makeWrapSlide([
 			wrapRun(text, left, 0, { width: 800, lineHeight: 400, align }),
 		]);

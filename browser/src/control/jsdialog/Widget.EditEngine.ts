@@ -215,9 +215,8 @@ function editEngineHighlightSelection(
 	const Highlight = (window as any).Highlight;
 	if (!highlights || !Highlight) return;
 
-	const range = selection
-		? editEngineSelectionRange(container, selection)
-		: null;
+	const range =
+		selection ? editEngineSelectionRange(container, selection) : null;
 	const marked = !!range && !range.collapsed;
 	if (marked) highlights.set(EDITENGINE_MENU_HIGHLIGHT, new Highlight(range));
 	else highlights.delete(EDITENGINE_MENU_HIGHLIGHT);
@@ -291,9 +290,8 @@ function editEngineToUNOKeyCode(
 	builder: JSBuilder,
 ): number {
 	const keyboard = builder.map ? (builder.map as any).keyboard : null;
-	let keyCode = keyboard
-		? keyboard._toUNOKeyCode(event.keyCode)
-		: event.keyCode;
+	let keyCode =
+		keyboard ? keyboard._toUNOKeyCode(event.keyCode) : event.keyCode;
 
 	if (event.shiftKey) keyCode |= app.UNOModifier.SHIFT;
 	if (event.ctrlKey || event.metaKey) keyCode |= app.UNOModifier.CTRL;
@@ -693,9 +691,10 @@ function editEngineApplyLock(
 
 	const map = container.builder.map as any;
 	const name = map && map.getViewName ? map.getViewName(lockedBy) : null;
-	const notice = name
-		? _('%1 is editing').replace('%1', name)
-		: _('Another user is editing');
+	const notice =
+		name ?
+			_('%1 is editing').replace('%1', name)
+		:	_('Another user is editing');
 	container.setAttribute('data-locked-by', notice);
 	container.style.setProperty(
 		'--editengine-locked-color',

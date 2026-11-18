@@ -60,10 +60,11 @@ abstract class AnimationBaseNode extends BaseNode {
 		}
 
 		// set up min frame count value;
-		this.nMinFrameCount = this.getDuration().isValue()
-			? this.getDuration().getValue() *
+		this.nMinFrameCount =
+			this.getDuration().isValue() ?
+				this.getDuration().getValue() *
 				SlideShowHandler.MINIMUM_FRAMES_PER_SECONDS
-			: SlideShowHandler.MINIMUM_FRAMES_PER_SECONDS;
+			:	SlideShowHandler.MINIMUM_FRAMES_PER_SECONDS;
 		if (this.nMinFrameCount < 1.0) this.nMinFrameCount = 1;
 		else if (this.nMinFrameCount > SlideShowHandler.MINIMUM_FRAMES_PER_SECONDS)
 			this.nMinFrameCount = SlideShowHandler.MINIMUM_FRAMES_PER_SECONDS;

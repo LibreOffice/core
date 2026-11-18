@@ -191,9 +191,10 @@ class OnboardingTourController {
 	private showStep(index: number): void {
 		// a card whose close task has not run yet, which may have the id of this card
 		this.closePreviousPopup();
-		const previous = this.isPopupOpen()
-			? OnboardingTourController.popupId(this.stepIndex)
-			: null;
+		const previous =
+			this.isPopupOpen() ?
+				OnboardingTourController.popupId(this.stepIndex)
+			:	null;
 
 		this.stepIndex = index;
 		const step = this.steps[index];
@@ -207,12 +208,14 @@ class OnboardingTourController {
 		// disabled here.
 		const focused = previous ? document.activeElement : null;
 		const focusId =
-			focused instanceof HTMLElement &&
-			focused.id &&
-			focused.closest('#' + previous) &&
-			!(focused.id === 'onboarding-back-button' && index === 0)
-				? focused.id
-				: 'onboarding-next-button';
+			(
+				focused instanceof HTMLElement &&
+				focused.id &&
+				focused.closest('#' + previous) &&
+				!(focused.id === 'onboarding-back-button' && index === 0)
+			) ?
+				focused.id
+			:	'onboarding-next-button';
 		const uiManager = app.map.uiManager;
 		const json = uiManager._modalDialogJSON(
 			OnboardingTourController.modalId(index),
@@ -363,9 +366,9 @@ class OnboardingTourController {
 		if (!step.target) return null;
 
 		const element =
-			typeof step.target === 'string'
-				? document.querySelector(step.target)
-				: step.target();
+			typeof step.target === 'string' ?
+				document.querySelector(step.target)
+			:	step.target();
 
 		if (!(element instanceof HTMLElement)) return null;
 		if (!OnboardingTourController.isOnScreen(element)) return null;

@@ -338,9 +338,9 @@ class Xcu {
 
 		try {
 			const parsedObj =
-				XcuFileContent === null || XcuFileContent.length === 0
-					? {}
-					: this.parse(XcuFileContent);
+				XcuFileContent === null || XcuFileContent.length === 0 ?
+					{}
+				:	this.parse(XcuFileContent);
 			this.xcuDataObj = this.mergeDefaults(defaultXcuObj, parsedObj);
 		} catch (error) {
 			window.SettingIframe.showErrorModal(
@@ -371,9 +371,8 @@ class Xcu {
 			}
 
 			const prefix = '/org.openoffice.Office.';
-			const path = rawPath.startsWith(prefix)
-				? rawPath.slice(prefix.length)
-				: rawPath;
+			const path =
+				rawPath.startsWith(prefix) ? rawPath.slice(prefix.length) : rawPath;
 
 			const keys = path.split('/').filter((key) => key.trim() !== '');
 
@@ -399,9 +398,8 @@ class Xcu {
 				}
 
 				const valueElement = prop.getElementsByTagName('value')[0];
-				let value: string | boolean = valueElement
-					? valueElement.textContent || ''
-					: '';
+				let value: string | boolean =
+					valueElement ? valueElement.textContent || '' : '';
 
 				const lowerValue = value.toLowerCase();
 				if (lowerValue === 'true') {
@@ -436,9 +434,9 @@ class Xcu {
 		overrides: XcuValue | undefined,
 	): XcuTree {
 		const overrideTree: XcuTree | undefined =
-			overrides && typeof overrides === 'object' && !Array.isArray(overrides)
-				? overrides
-				: undefined;
+			overrides && typeof overrides === 'object' && !Array.isArray(overrides) ?
+				overrides
+			:	undefined;
 
 		const result: XcuTree = {};
 		for (const key in defaults) {
@@ -494,9 +492,8 @@ class Xcu {
 						} else if (Xcu.LIST_PROPS.includes(propName)) {
 							// A list: one item per name. Typed in as text,
 							// the names are separated by commas.
-							const names = Array.isArray(value)
-								? value
-								: String(value).split(',');
+							const names =
+								Array.isArray(value) ? value : String(value).split(',');
 							valueStr = names
 								.map((item) => item.trim())
 								.filter((item) => item !== '')

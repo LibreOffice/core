@@ -95,12 +95,13 @@ class LocalCaret {
 		// next message keep waiting.
 		ChangeOutbox.sendTheTextAhead();
 		LocalCaret.sequence = cool.InputSequence.next([], false);
-		const anchor = caret.anchor
-			? ' anchorparagraph=' +
+		const anchor =
+			caret.anchor ?
+				' anchorparagraph=' +
 				caret.anchor.paragraph +
 				' anchorindex=' +
 				caret.anchor.index
-			: '';
+			:	'';
 		app.socket.sendMessage(
 			'textcursor object=' +
 				caret.objectId +
@@ -125,9 +126,9 @@ class LocalCaret {
 		// order the messages go out.
 		const unstamped = cool.InputSequence.unstamp(message);
 		LocalCaret.tell();
-		return unstamped
-			? cool.InputSequence.stamp(unstamped.message, unstamped.tickets)
-			: message;
+		return unstamped ?
+				cool.InputSequence.stamp(unstamped.message, unstamped.tickets)
+			:	message;
 	}
 
 	/// True for a message that neither reads nor moves the caret.

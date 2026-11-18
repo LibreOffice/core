@@ -227,12 +227,14 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		// commentData.size (twips, [w,h]) further pins the marker rectangle
 		// to a user-dragged area; without it the marker stays at the default
 		// 566x566 twips placeholder.
-		const anchorX = commentData.position
-			? commentData.position[0]
-			: app.activeDocument.activeLayout.viewedRectangle.x1;
-		const anchorY = commentData.position
-			? commentData.position[1]
-			: app.activeDocument.activeLayout.viewedRectangle.y1;
+		const anchorX =
+			commentData.position ?
+				commentData.position[0]
+			:	app.activeDocument.activeLayout.viewedRectangle.x1;
+		const anchorY =
+			commentData.position ?
+				commentData.position[1]
+			:	app.activeDocument.activeLayout.viewedRectangle.y1;
 		const w = commentData.size ? commentData.size[0] : 566;
 		const h = commentData.size ? commentData.size[1] : 566;
 		commentData.anchorPos = [anchorX, anchorY];
@@ -453,9 +455,10 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		}
 
 		if (values.comments && !window.mode.isInteractivePreview()) {
-			var comments = Array.isArray(values.comments)
-				? values.comments
-				: Object.values(values.comments);
+			var comments =
+				Array.isArray(values.comments) ?
+					values.comments
+				:	Object.values(values.comments);
 			comments.forEach(function (comment) {
 				comment.id = String(comment.id);
 				if (comment.parentId !== undefined)
@@ -694,12 +697,13 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 				this._documentInfo = textMsg;
 
 				const mode =
-					statusJSON.mode !== undefined
-						? statusJSON.mode
-						: statusJSON.parts.length > 0 &&
-							  statusJSON.parts[0].mode !== undefined
-							? statusJSON.parts[0].mode
-							: 0;
+					statusJSON.mode !== undefined ? statusJSON.mode
+					: (
+						statusJSON.parts.length > 0 &&
+						statusJSON.parts[0].mode !== undefined
+					) ?
+						statusJSON.parts[0].mode
+					:	0;
 				app.activeDocument.activeModes = [mode];
 				this._map.fire('impressmodechanged', { mode: mode });
 

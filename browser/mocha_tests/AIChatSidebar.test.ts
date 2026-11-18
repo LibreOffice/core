@@ -541,11 +541,9 @@ describe('AI chat sidebar', function () {
 
 			const hour = new Date().getHours();
 			const partOfDay =
-				hour >= 5 && hour < 12
-					? 'morning'
-					: hour >= 12 && hour < 18
-						? 'afternoon'
-						: 'evening';
+				hour >= 5 && hour < 12 ? 'morning'
+				: hour >= 12 && hour < 18 ? 'afternoon'
+				: 'evening';
 			nodeassert.ok(
 				one('#aichat-empty-state-greeting').textContent.includes(
 					'Good ' + partOfDay,

@@ -250,13 +250,13 @@ namespace cool {
           {(primitive.items ?? []).map((item: string, at: number) => (
             <div
               style={
-                selected.has(at)
-                  ? {
-                      padding: '0 4px',
-                      backgroundColor: 'var(--color-primary)',
-                      color: 'var(--color-primary-text)',
-                    }
-                  : { padding: '0 4px' }
+                selected.has(at) ?
+                  {
+                    padding: '0 4px',
+                    backgroundColor: 'var(--color-primary)',
+                    color: 'var(--color-primary-text)',
+                  }
+                : { padding: '0 4px' }
               }
             >
               {item}
@@ -289,19 +289,19 @@ namespace cool {
             position: 'absolute',
             backgroundColor: 'var(--color-border-input-dark)',
             borderRadius: '2px',
-            ...(vertical
-              ? {
-                  left: '2px',
-                  right: '2px',
-                  top: thumbStart + '%',
-                  height: thumbShare + '%',
-                }
-              : {
-                  top: '2px',
-                  bottom: '2px',
-                  left: thumbStart + '%',
-                  width: thumbShare + '%',
-                }),
+            ...(vertical ?
+              {
+                left: '2px',
+                right: '2px',
+                top: thumbStart + '%',
+                height: thumbShare + '%',
+              }
+            : {
+                top: '2px',
+                bottom: '2px',
+                left: thumbStart + '%',
+                width: thumbShare + '%',
+              }),
           }}
         />
       );
@@ -355,9 +355,9 @@ namespace cool {
             padding: '0 4px',
             backgroundColor: 'var(--color-background-lighter)',
             opacity: '0.5',
-            ...(compact
-              ? { flex: '0 0 auto', height: '1.5em', fontSize: '0.8em' }
-              : {}),
+            ...(compact ?
+              { flex: '0 0 auto', height: '1.5em', fontSize: '0.8em' }
+            : {}),
           }}
         >
           <span>{_('Record')}</span>
@@ -529,8 +529,8 @@ namespace cool {
             </div>
           );
         case 'listBox':
-          return primitive.dropdown
-            ? renderer._field(
+          return primitive.dropdown ?
+              renderer._field(
                 primitive,
                 (primitive.items ?? [])[(primitive.selected ?? [])[0]] ?? '',
               )
@@ -588,11 +588,10 @@ namespace cool {
       if (primitive.textColor) style.color = primitive.textColor;
       if (primitive.background) style.backgroundColor = primitive.background;
       const align =
-        primitive.align !== undefined
-          ? (['left', 'center', 'right'][primitive.align] ?? '')
-          : primitive.kind === 'pushButton'
-            ? 'center'
-            : 'left';
+        primitive.align !== undefined ?
+          (['left', 'center', 'right'][primitive.align] ?? '')
+        : primitive.kind === 'pushButton' ? 'center'
+        : 'left';
       // the box of a check box or an option button stands at the start, its label next to it,
       // and the alignment is the label's
       if (primitive.kind === 'pushButton') style.textAlign = align;

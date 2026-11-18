@@ -33,11 +33,12 @@ namespace BackstageTemplates {
     option: ExportOptionItem,
     onExport: (action: string, command?: string) => void,
   ): HTMLElement {
-    const format = option.action.startsWith('downloadas-')
-      ? option.action.substring('downloadas-'.length)
-      : option.action.startsWith('export')
-        ? option.action.substring('export'.length)
-        : '';
+    const format =
+      option.action.startsWith('downloadas-') ?
+        option.action.substring('downloadas-'.length)
+      : option.action.startsWith('export') ?
+        option.action.substring('export'.length)
+      : '';
     const extensionLabel = format ? format.toUpperCase() : '';
 
     return (

@@ -12,9 +12,10 @@
 String.locale = window.coolParams.get('lang') || 'en-US';
 
 const errorMessages: ErrorMessages = {
-	diskfull: window.mode.isCODesktop()
-		? _('No disk space left.')
-		: _('No disk space left on server.'),
+	diskfull:
+		window.mode.isCODesktop() ?
+			_('No disk space left.')
+		:	_('No disk space left on server.'),
 	emptyhosturl: _(
 		'The host URL is empty. The coolwsd server is probably misconfigured, please contact the administrator.',
 	),
@@ -74,8 +75,9 @@ const errorMessages: ErrorMessages = {
 		notfound: _('Uploading file to server failed, file not found.'),
 		toolarge: _('Uploading file to server failed, the file is too large.'),
 	},
-	storage: window.ThisIsAnApp
-		? {
+	storage:
+		window.ThisIsAnApp ?
+			{
 				loadfailed: _('Failed to load document.'),
 				savediskfull: _(
 					'Save failed due to no disk space left. Document will now be read-only.',
@@ -90,7 +92,7 @@ const errorMessages: ErrorMessages = {
 				saveprecondition: _('The storage refused to save the document.'),
 				renamefailed: _('Document cannot be renamed.'),
 			}
-		: {
+		:	{
 				loadfailed: _(
 					'Failed to read document from storage, please try to load the document again.',
 				),

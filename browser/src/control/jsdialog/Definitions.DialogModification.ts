@@ -76,9 +76,10 @@ dialogModifications.set('FindReplaceDialog', function (instance: any) {
 						`#${pushButtonWrapperId}`,
 					);
 					/* Pushbutton wrapper always has a single child: button */
-					const button = pushButtonWrapper
-						? (pushButtonWrapper.firstChild as HTMLButtonElement)
-						: null;
+					const button =
+						pushButtonWrapper ?
+							(pushButtonWrapper.firstChild as HTMLButtonElement)
+						:	null;
 					if (button && !button.disabled) {
 						button.click();
 						e.preventDefault();

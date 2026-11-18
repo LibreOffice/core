@@ -576,9 +576,10 @@ class BitmapTileManager extends RenderManagerBase {
 		}
 
 		const splitPanesContext = this._docLayer.getSplitPanesContext();
-		const splitPos = splitPanesContext
-			? splitPanesContext.getSplitPos()
-			: new cool.Point(0, 0);
+		const splitPos =
+			splitPanesContext ?
+				splitPanesContext.getSplitPos()
+			:	new cool.Point(0, 0);
 		if (!this._splitPos || !splitPos.equals(this._splitPos)) {
 			this._splitPos = splitPos;
 			updated = true;
@@ -593,9 +594,10 @@ class BitmapTileManager extends RenderManagerBase {
 		const tileRanges = this.pxBoundsToTileRanges(this._pixelBounds);
 
 		const splitPanesContext = this._docLayer.getSplitPanesContext();
-		const paneStatusList = splitPanesContext
-			? splitPanesContext.getPanesProperties()
-			: [{ xFixed: false, yFixed: false }];
+		const paneStatusList =
+			splitPanesContext ?
+				splitPanesContext.getPanesProperties()
+			:	[{ xFixed: false, yFixed: false }];
 
 		window.app.console.assert(
 			tileRanges.length === paneStatusList.length,
@@ -884,9 +886,8 @@ class BitmapTileManager extends RenderManagerBase {
 		);
 
 		const key = tile.coords.toString();
-		const imgData = keyframeImage
-			? keyframeImage
-			: this.tileImageCache.get(key);
+		const imgData =
+			keyframeImage ? keyframeImage : this.tileImageCache.get(key);
 		if (!imgData) {
 			window.app.console.error(
 				'Trying to apply delta with no image data cache',
@@ -1313,9 +1314,9 @@ class BitmapTileManager extends RenderManagerBase {
 			// Expand the 'current' area to add a small buffer around the visible area that
 			// helps us avoid visible tile updates.
 			const tileRange =
-				isCurrent && !this.shrinkCurrentId
-					? this.expandTileRange(tileRanges[rangeIdx])
-					: tileRanges[rangeIdx];
+				isCurrent && !this.shrinkCurrentId ?
+					this.expandTileRange(tileRanges[rangeIdx])
+				:	tileRanges[rangeIdx];
 
 			for (var j = tileRange.min.y; j <= tileRange.max.y; ++j) {
 				for (var i = tileRange.min.x; i <= tileRange.max.x; ++i) {

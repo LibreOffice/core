@@ -121,9 +121,9 @@ class VectorResourceLoader {
 	handleImage(values: cool.VectorRenderingGraphicsResponse): void {
 		window.app.console.log(
 			'vectorrenderinggraphics pulled payload: ' +
-				(values.bytes
-					? values.bytes.length + ' bytes'
-					: (values.data ? values.data.length : 0) + ' base64 bytes') +
+				(values.bytes ?
+					values.bytes.length + ' bytes'
+				:	(values.data ? values.data.length : 0) + ' base64 bytes') +
 				', checksum=' +
 				values.checksum,
 		);
@@ -139,9 +139,10 @@ class VectorResourceLoader {
 			return;
 		}
 		// Image bytes are read through an object URL, which is released once the image settles.
-		const url: string = values.bytes
-			? URL.createObjectURL(new Blob([values.bytes], { type: values.mime }))
-			: (values.data as string);
+		const url: string =
+			values.bytes ?
+				URL.createObjectURL(new Blob([values.bytes], { type: values.mime }))
+			:	(values.data as string);
 		const release = () => {
 			if (values.bytes) URL.revokeObjectURL(url);
 		};

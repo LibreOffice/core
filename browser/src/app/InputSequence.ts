@@ -83,9 +83,10 @@ namespace cool {
 			app.file.inputSequence += 1;
 			const sequence = app.file.inputSequence;
 
-			InputSequence.lastTickets = withTheWaiting
-				? [...tickets, ...InputSequence.forTheNextMessage]
-				: [...tickets];
+			InputSequence.lastTickets =
+				withTheWaiting ?
+					[...tickets, ...InputSequence.forTheNextMessage]
+				:	[...tickets];
 			if (withTheWaiting) InputSequence.forTheNextMessage = [];
 			for (const ticket of InputSequence.lastTickets)
 				ticket.goesOutAs(sequence);

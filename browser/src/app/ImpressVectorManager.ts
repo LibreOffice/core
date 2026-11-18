@@ -176,9 +176,9 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		objectId: number,
 	): number {
 		const entry = this._cache.get(partId)?.objects.get(objectId);
-		return entry?.kind === 'texteditoverlay' && entry.parent !== undefined
-			? entry.parent
-			: objectId;
+		return entry?.kind === 'texteditoverlay' && entry.parent !== undefined ?
+				entry.parent
+			:	objectId;
 	}
 
 	// Previews waiting for a JSON primitive tree response, keyed by page id.
@@ -245,9 +245,10 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// cached and are skipped when drawing. Anything that is not a list
 	/// hides nothing.
 	override setHiddenLayers(layers: unknown): void {
-		const ids = Array.isArray(layers)
-			? layers.filter((id): id is number => typeof id === 'number')
-			: [];
+		const ids =
+			Array.isArray(layers) ?
+				layers.filter((id): id is number => typeof id === 'number')
+			:	[];
 		const next = new Set<number>(ids);
 		const same =
 			next.size === this._hiddenLayers.size &&
@@ -279,9 +280,8 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		page: cool.SlideObject,
 	): void {
 		data.masterPartId = page.masterPartId;
-		data.masterHiddenLayers = page.masterHiddenLayers
-			? new Set(page.masterHiddenLayers)
-			: undefined;
+		data.masterHiddenLayers =
+			page.masterHiddenLayers ? new Set(page.masterHiddenLayers) : undefined;
 		if (data.masterPartId !== undefined)
 			this.requestPartById(data.masterPartId, cool.VectorMode.MasterPages);
 	}
@@ -330,21 +330,18 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		// an object active in place covers its upright window, not its own box
 		const window = options?.activeInPlace?.area;
 		const edited =
-			options?.edited !== undefined
-				? ImpressVectorManager._editedPart(
-						data,
-						options.edited.objectId,
+			options?.edited !== undefined ?
+				ImpressVectorManager._editedPart(
+					data,
+					options.edited.objectId,
+					(
 						options.activeInPlace?.objectId === options.edited.objectId &&
 							window
-							? [
-									window[0],
-									window[1],
-									window[0] + window[2],
-									window[1] + window[3],
-								]
-							: undefined,
-					)
-				: undefined;
+					) ?
+						[window[0], window[1], window[0] + window[2], window[1] + window[3]]
+					:	undefined,
+				)
+			:	undefined;
 		const range = options?.paintRange;
 		let index = -1;
 		for (const id of data.order) {
@@ -449,11 +446,12 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		object: cool.SlideObject,
 		state: cool.ObjectRenderState,
 	): void {
-		const paragraphs = state.paragraphs
-			? [...state.paragraphs.entries()].sort(
+		const paragraphs =
+			state.paragraphs ?
+				[...state.paragraphs.entries()].sort(
 					([first], [second]) => first - second,
 				)
-			: [];
+			:	[];
 		this._renderUnder(
 			context,
 			object,
@@ -571,26 +569,29 @@ class ImpressVectorManager extends VectorPartManagerBase {
 			lastAt = at;
 			const own = ImpressVectorManager._boxOf(object);
 			if (!own || given) return;
-			box = box
-				? [
+			box =
+				box ?
+					[
 						Math.min(box[0], own[0]),
 						Math.min(box[1], own[1]),
 						Math.max(box[2], own[2]),
 						Math.max(box[3], own[3]),
 					]
-				: own;
+				:	own;
 		});
 		return { objectId, lastAt, box };
 	}
 
 	// the box an object paints in, as [minX, minY, maxX, maxY] in twips, where it has one
 	private static _boxOf(object: cool.SlideObject): number[] | undefined {
-		return object.x !== undefined &&
-			object.y !== undefined &&
-			object.width !== undefined &&
-			object.height !== undefined
-			? [object.x, object.y, object.x + object.width, object.y + object.height]
-			: undefined;
+		return (
+				object.x !== undefined &&
+					object.y !== undefined &&
+					object.width !== undefined &&
+					object.height !== undefined
+			) ?
+				[object.x, object.y, object.x + object.width, object.y + object.height]
+			:	undefined;
 	}
 
 	private static _overlaps(
@@ -628,9 +629,9 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		const color = window.prefs?.get('vectorGhostColor', background);
 		return {
 			color:
-				typeof color === 'string' && /^#[0-9a-fA-F]{6}$/.test(color)
-					? color
-					: background,
+				typeof color === 'string' && /^#[0-9a-fA-F]{6}$/.test(color) ?
+					color
+				:	background,
 			amount: share('vectorGhostAmount', 0.5),
 			transparency: share('vectorGhostTransparency', 0.8),
 		};

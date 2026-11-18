@@ -215,9 +215,10 @@ JSDialog.IsToggleButton = function (
 	const toggleBtnCommands = getToggleButtons();
 
 	// fallback: if any command is not included in above list
-	const stateValue = builder.map['stateChangeHandler']
-		? builder.map['stateChangeHandler'].getItemValue(commandName)
-		: 'false';
+	const stateValue =
+		builder.map['stateChangeHandler'] ?
+			builder.map['stateChangeHandler'].getItemValue(commandName)
+		:	'false';
 
 	const isToggle = stateValue === 'false' || stateValue === 'true';
 

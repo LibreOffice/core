@@ -34,9 +34,9 @@ class TableCellsDrag extends SelectionInteraction {
 		at: cool.SimplePoint,
 	): { column: number; row: number } | null {
 		const data = ClassicTableContext.data();
-		return data
-			? ClassicTableContext.cellAt(ClassicTableContext.layout(data), at.x, at.y)
-			: null;
+		return data ?
+				ClassicTableContext.cellAt(ClassicTableContext.layout(data), at.x, at.y)
+			:	null;
 	}
 
 	public move(to: cool.SimplePoint): void {

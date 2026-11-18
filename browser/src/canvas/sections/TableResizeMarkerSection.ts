@@ -43,18 +43,20 @@ class TableResizeMarkerSection extends HTMLObjectSection {
 	private calculateLeftMostAndRightMostAvailableX() {
 		Util.ensureValue(app.activeDocument);
 		const previous =
-			this.sectionProperties.index === 0
-				? null
-				: app.activeDocument.tableMiddleware.tableResizeColumnMarkers[
-						this.sectionProperties.index - 1
-					];
+			this.sectionProperties.index === 0 ?
+				null
+			:	app.activeDocument.tableMiddleware.tableResizeColumnMarkers[
+					this.sectionProperties.index - 1
+				];
 		const next =
-			this.sectionProperties.index ===
-			app.activeDocument.tableMiddleware.tableResizeColumnMarkers.length - 1
-				? null
-				: app.activeDocument.tableMiddleware.tableResizeColumnMarkers[
-						this.sectionProperties.index + 1
-					];
+			(
+				this.sectionProperties.index ===
+				app.activeDocument.tableMiddleware.tableResizeColumnMarkers.length - 1
+			) ?
+				null
+			:	app.activeDocument.tableMiddleware.tableResizeColumnMarkers[
+					this.sectionProperties.index + 1
+				];
 
 		if (!previous) {
 			// First column marker.
@@ -78,18 +80,20 @@ class TableResizeMarkerSection extends HTMLObjectSection {
 	private calculateTopMostAndBottomMostAvailableY() {
 		Util.ensureValue(app.activeDocument);
 		const previous =
-			this.sectionProperties.index === 0
-				? null
-				: app.activeDocument.tableMiddleware.tableResizeRowMarkers[
-						this.sectionProperties.index - 1
-					];
+			this.sectionProperties.index === 0 ?
+				null
+			:	app.activeDocument.tableMiddleware.tableResizeRowMarkers[
+					this.sectionProperties.index - 1
+				];
 		const next =
-			this.sectionProperties.index ===
-			app.activeDocument.tableMiddleware.tableResizeRowMarkers.length - 1
-				? null
-				: app.activeDocument.tableMiddleware.tableResizeRowMarkers[
-						this.sectionProperties.index + 1
-					];
+			(
+				this.sectionProperties.index ===
+				app.activeDocument.tableMiddleware.tableResizeRowMarkers.length - 1
+			) ?
+				null
+			:	app.activeDocument.tableMiddleware.tableResizeRowMarkers[
+					this.sectionProperties.index + 1
+				];
 
 		if (!previous) {
 			// First row marker.

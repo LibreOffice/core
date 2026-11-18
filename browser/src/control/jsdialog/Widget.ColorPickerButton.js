@@ -118,9 +118,10 @@ JSDialog.sendColorCommand = function (builder, data, color, themeData) {
 		// goes into the current glow and its other values stay.
 		const glowItem =
 			builder.map['stateChangeHandler'].getItemValue('.uno:GlowEffect') || {};
-		glowItem.Color = themeData
-			? JSON.parse(themeData)
-			: { ThemeIndex: -1, Transformations: [] };
+		glowItem.Color =
+			themeData ?
+				JSON.parse(themeData)
+			:	{ ThemeIndex: -1, Transformations: [] };
 		glowItem.Color.RGB = color;
 		builder.map.sendUnoCommand(
 			'.uno:GlowEffect?GlowEffect.JSON:string=' + JSON.stringify(glowItem),
@@ -183,11 +184,10 @@ JSDialog.colorPickerButton = function (parentContainer, data, builder) {
 	var titleOverride = builder._getTitleForControlWithId(data.id);
 	if (titleOverride) data.text = titleOverride;
 
-	data.id = data.id
-		? data.id
-		: data.command
-			? data.command.replace('.uno:', '')
-			: undefined;
+	data.id =
+		data.id ? data.id
+		: data.command ? data.command.replace('.uno:', '')
+		: undefined;
 	data.text = builder._cleanText(data.text);
 
 	if (data.command) {
@@ -255,9 +255,9 @@ JSDialog.colorPickerButton = function (parentContainer, data, builder) {
 				if (parseInt(selectedColor) === -1) selectedColor = 'transparent';
 
 				valueNode.style.backgroundColor =
-					selectedColor[0] !== '#' && selectedColor !== 'transparent'
-						? '#' + selectedColor
-						: selectedColor;
+					selectedColor[0] !== '#' && selectedColor !== 'transparent' ?
+						'#' + selectedColor
+					:	selectedColor;
 
 				// Make sure the border around the color indicator is not too bright
 				// when the color is black so to avoid weird contrast artifacts

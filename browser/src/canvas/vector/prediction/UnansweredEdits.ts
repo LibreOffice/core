@@ -122,9 +122,9 @@ namespace cool {
 				paragraph !== undefined &&
 				index !== undefined &&
 				(paragraph !== caret.paragraph || index !== caret.index);
-			return otherObject || elsewhere
-				? CaretUpdateVerdict.Elsewhere
-				: CaretUpdateVerdict.Current;
+			return otherObject || elsewhere ?
+					CaretUpdateVerdict.Elsewhere
+				:	CaretUpdateVerdict.Current;
 		}
 	}
 

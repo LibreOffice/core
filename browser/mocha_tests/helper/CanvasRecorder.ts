@@ -238,9 +238,9 @@ class CanvasRecorder {
 		this._record('setTransform', args);
 		const first = args[0];
 		this._transform =
-			args.length >= 6
-				? args.slice(0, 6)
-				: [first.a, first.b, first.c, first.d, first.e, first.f];
+			args.length >= 6 ?
+				args.slice(0, 6)
+			:	[first.a, first.b, first.c, first.d, first.e, first.f];
 	}
 	resetTransform(): void {
 		this._record('resetTransform', []);

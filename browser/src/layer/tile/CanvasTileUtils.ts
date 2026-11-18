@@ -182,9 +182,8 @@ namespace cool {
 				}
 
 				// Row copies read the image as it was before this chunk.
-				const oldData = this.hasRowCopy(delta)
-					? this.snapshot(imageData)
-					: imageData;
+				const oldData =
+					this.hasRowCopy(delta) ? this.snapshot(imageData) : imageData;
 
 				if (debug)
 					console.debug(

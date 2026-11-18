@@ -88,17 +88,18 @@ abstract class ClassicCreateContext implements InteractionMode {
 
 	/// Enters the mode for that command, with the class of its kind.
 	public static start(shape: string): void {
-		const mode = ClassicTextCreateContext.makes(shape)
-			? new ClassicTextCreateContext(shape)
-			: ClassicLineCreateContext.makes(shape)
-				? new ClassicLineCreateContext(shape)
-				: ClassicConnectorCreateContext.makes(shape)
-					? new ClassicConnectorCreateContext(shape)
-					: ClassicPathCreateContext.makes(shape)
-						? new ClassicPathCreateContext(shape)
-						: ClassicFormControlCreateContext.makes(shape)
-							? new ClassicFormControlCreateContext(shape)
-							: new ClassicShapeCreateContext(shape);
+		const mode =
+			ClassicTextCreateContext.makes(shape) ?
+				new ClassicTextCreateContext(shape)
+			: ClassicLineCreateContext.makes(shape) ?
+				new ClassicLineCreateContext(shape)
+			: ClassicConnectorCreateContext.makes(shape) ?
+				new ClassicConnectorCreateContext(shape)
+			: ClassicPathCreateContext.makes(shape) ?
+				new ClassicPathCreateContext(shape)
+			: ClassicFormControlCreateContext.makes(shape) ?
+				new ClassicFormControlCreateContext(shape)
+			:	new ClassicShapeCreateContext(shape);
 		ClassicCreateContext.startWith(mode);
 	}
 
@@ -210,9 +211,9 @@ abstract class ClassicCreateContext implements InteractionMode {
 	/// hand.
 	protected idArgument(): { [name: string]: { type: string; value: any } } {
 		this.givenId = ReservedObjectIds.take();
-		return this.givenId === undefined
-			? {}
-			: { Id: { type: 'unsigned long', value: String(this.givenId) } };
+		return this.givenId === undefined ?
+				{}
+			:	{ Id: { type: 'unsigned long', value: String(this.givenId) } };
 	}
 
 	/*
@@ -228,15 +229,16 @@ abstract class ClassicCreateContext implements InteractionMode {
 	): void {
 		const id = this.givenId;
 		if (id === undefined) return;
-		const filled: cool.Primitive[] = fill
-			? [
+		const filled: cool.Primitive[] =
+			fill ?
+				[
 					{
 						type: cool.PolyPolygonColorPrimitive.type,
 						color: fill,
 						path: PathGeometry.asSvg(polygons),
 					} as cool.PolyPolygonColorPrimitive,
 				]
-			: [];
+			:	[];
 		this.takeAsCreated({
 			id: id,
 			x: box.minX,
@@ -478,11 +480,10 @@ abstract class ClassicCreateContext implements InteractionMode {
 			'.uno:LeftRightParaMargin',
 		);
 		const unit =
-			ruler && typeof ruler === 'object' && ruler.unit
-				? ruler.unit
-				: (window.coolParams?.get('lang') || navigator.language) === 'en-US'
-					? 'inch'
-					: 'cm';
+			ruler && typeof ruler === 'object' && ruler.unit ? ruler.unit
+			: (window.coolParams?.get('lang') || navigator.language) === 'en-US' ?
+				'inch'
+			:	'cm';
 		if (unit === 'inch') return (twips / 1440).toFixed(2) + '"';
 		if (unit === 'mm') return (twips / 56.7).toFixed(1) + ' mm';
 		return (twips / 567).toFixed(2) + ' cm';
@@ -573,9 +574,10 @@ abstract class ClassicCreateContext implements InteractionMode {
 				context.lineWidth = 3;
 				context.stroke();
 				draw();
-				context.strokeStyle = snapped
-					? HelperLineStyles.smartGuidesStyle
-					: HandleLook.outlineOfADrag;
+				context.strokeStyle =
+					snapped ?
+						HelperLineStyles.smartGuidesStyle
+					:	HandleLook.outlineOfADrag;
 				context.lineWidth = 1;
 				context.stroke();
 			};
@@ -1047,9 +1049,8 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 
 	/// The look an answer about a shape tells, where it tells one.
 	private static lookOf(values: any): ShapeLook | null {
-		const entry: cool.SlideObject | undefined = Array.isArray(values?.objects)
-			? values.objects[0]
-			: undefined;
+		const entry: cool.SlideObject | undefined =
+			Array.isArray(values?.objects) ? values.objects[0] : undefined;
 		const primitives = entry?.primitives;
 		// a dimension line or a connector has no box; it is laid out from its measurement, or
 		// its run is worked out from its routing numbers
@@ -1271,9 +1272,9 @@ class ClassicTextCreateContext extends ClassicCreateContext {
 	protected clicked(at: cool.Point, pressedAt: cool.Point): boolean {
 		const hit = RenderGeometrySection.objectIdAt(pressedAt.x, pressedAt.y);
 		const kind =
-			hit === undefined
-				? undefined
-				: RenderGeometrySection.objectOf(hit)?.objectKind;
+			hit === undefined ? undefined : (
+				RenderGeometrySection.objectOf(hit)?.objectKind
+			);
 		if (
 			hit !== undefined &&
 			(kind === undefined ||
@@ -1351,17 +1352,17 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 		// 45 degrees keeps to those by itself, and Shift lets it go free
 		const shift = (modifier & app.UNOModifier.SHIFT) !== 0;
 		const held =
-			shift !== (this.shape === 'Line_Diagonal')
-				? PathGeometry.inStepsOfFortyFiveDegrees(from, to)
-				: to;
+			shift !== (this.shape === 'Line_Diagonal') ?
+				PathGeometry.inStepsOfFortyFiveDegrees(from, to)
+			:	to;
 		const x = held.x - from.x;
 		const y = held.y - from.y;
 		this.end = new cool.Point(from.x + x, from.y + y);
 		// with Alt the drag began at the middle of the line
 		this.start =
-			(modifier & app.UNOModifier.ALT) !== 0
-				? new cool.Point(from.x - x, from.y - y)
-				: from;
+			(modifier & app.UNOModifier.ALT) !== 0 ?
+				new cool.Point(from.x - x, from.y - y)
+			:	from;
 		return cool.Range2D.fromPoints([this.start, this.end]);
 	}
 
@@ -1625,9 +1626,9 @@ class ClassicConnectorCreateContext extends ClassicLineCreateContext {
 	/// same for the end. An object of 0 leaves that end free.
 	protected moreArguments(): { [name: string]: { type: string; value: any } } {
 		const counted = (tie: ConnectorEndTie): string =>
-			tie
-				? tie.objectId + ' ' + SelectionSection.gluePointIndexOf(tie.tie)
-				: '0 -1';
+			tie ?
+				tie.objectId + ' ' + SelectionSection.gluePointIndexOf(tie.tie)
+			:	'0 -1';
 		return {
 			...super.moreArguments(),
 			Ties: {
@@ -1868,11 +1869,9 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		this.lastUpAt = secondClick ? null : at;
 
 		this.went(
-			secondClick
-				? this.drawing.finish()
-				: this.curves
-					? this.drawing.release(false)
-					: this.drawing.setThePoint(false),
+			secondClick ? this.drawing.finish()
+			: this.curves ? this.drawing.release(false)
+			: this.drawing.setThePoint(false),
 		);
 		// the double click the browser reports after this release is the one that made the object
 		if (secondClick) InteractionModeSection.passOverTheDoubleClick();
@@ -1926,11 +1925,9 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 			this.freehand ||
 			(!this.drawing.pulling() && this.drawing.beforeThePart());
 		this.went(
-			done
-				? this.drawing.finish()
-				: this.curves
-					? this.drawing.release(true)
-					: this.drawing.setThePoint(true),
+			done ? this.drawing.finish()
+			: this.curves ? this.drawing.release(true)
+			: this.drawing.setThePoint(true),
 		);
 		this.placeAgain(at, modifier);
 	}

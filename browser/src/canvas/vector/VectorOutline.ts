@@ -53,23 +53,23 @@ namespace cool {
 				},
 			];
 			const ofRange = (range: Range2D | null): ObjectPathPolygon[] =>
-				range
-					? corners([
-							new Point(range.minX, range.minY),
-							new Point(range.maxX, range.minY),
-							new Point(range.maxX, range.maxY),
-							new Point(range.minX, range.maxY),
-						])
-					: [];
+				range ?
+					corners([
+						new Point(range.minX, range.minY),
+						new Point(range.maxX, range.minY),
+						new Point(range.maxX, range.maxY),
+						new Point(range.minX, range.maxY),
+					])
+				:	[];
 			const ofUnitSquare = (matrix: Matrix2D | null): ObjectPathPolygon[] =>
-				matrix
-					? corners([
-							matrix.apply(0, 0),
-							matrix.apply(1, 0),
-							matrix.apply(1, 1),
-							matrix.apply(0, 1),
-						])
-					: [];
+				matrix ?
+					corners([
+						matrix.apply(0, 0),
+						matrix.apply(1, 0),
+						matrix.apply(1, 1),
+						matrix.apply(0, 1),
+					])
+				:	[];
 
 			const walk = (list: Primitive[] | undefined, matrix: Matrix2D): void => {
 				for (const primitive of list ?? []) {
@@ -135,9 +135,9 @@ namespace cool {
 						case 'fillGraphic': {
 							const covered = Range2D.fromArray(fields.outputRange);
 							add(
-								covered
-									? ofRange(covered)
-									: ofUnitSquare(Matrix2D.fromArray(fields.matrix)),
+								covered ?
+									ofRange(covered)
+								:	ofUnitSquare(Matrix2D.fromArray(fields.matrix)),
 								matrix,
 							);
 							break;

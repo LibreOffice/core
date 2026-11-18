@@ -102,9 +102,8 @@ namespace BackstageTemplates {
   }
 
   function favoriteButton(favorite: TemplateFavoriteState): HTMLElement {
-    const label = favorite.isFavorite
-      ? _('Remove from favorites')
-      : _('Add to favorites');
+    const label =
+      favorite.isFavorite ? _('Remove from favorites') : _('Add to favorites');
     return (
       <button
         type="button"
@@ -212,9 +211,9 @@ namespace BackstageTemplates {
           <button
             type="button"
             class={
-              filter === active
-                ? 'template-type-button active'
-                : 'template-type-button'
+              filter === active ?
+                'template-type-button active'
+              : 'template-type-button'
             }
             aria-pressed={String(filter === active)}
             onClick={(event: Event) => select(event, filter)}
@@ -229,15 +228,15 @@ namespace BackstageTemplates {
   export function templateSections(props: TemplateSectionsProps): HTMLElement {
     return (
       <div class="backstage-template-sections">
-        {props.userTemplates
-          ? myTemplatesSection({
-              templates: props.userTemplates,
-              onTemplateClick: props.onClick,
-              onAddClick: props.onAddTemplate,
-              onManageClick: props.onManageTemplates,
-              favoriteState: props.favoriteState,
-            })
-          : null}
+        {props.userTemplates ?
+          myTemplatesSection({
+            templates: props.userTemplates,
+            onTemplateClick: props.onClick,
+            onAddClick: props.onAddTemplate,
+            onManageClick: props.onManageTemplates,
+            favoriteState: props.favoriteState,
+          })
+        : null}
         <div class="backstage-template-section-header">
           <h4 class="backstage-template-section-title">
             {_('Built-in templates')}
@@ -261,12 +260,15 @@ namespace BackstageTemplates {
   ): HTMLElement {
     let emptyText: string | null = null;
     if (!templates.length)
-      emptyText = searchQuery.trim()
-        ? _('No templates match your search.')
+      emptyText =
+        searchQuery.trim() ?
+          _('No templates match your search.')
         : _('No templates of this type.');
     return (
       <div class="backstage-templates-grid">
-        {emptyText ? <div class="template-grid-empty">{emptyText}</div> : null}
+        {emptyText ?
+          <div class="template-grid-empty">{emptyText}</div>
+        : null}
         {templates.map((t) =>
           templateCard(t, () => onClick(t), { favorite: favoriteState(t) }),
         )}

@@ -301,19 +301,19 @@ namespace cool {
 
 				const held = this._placed.get(id);
 				const one: CalcPlacedEntry =
-					held && held.entry === entry && samePlacing(held.placing, placing)
-						? held
-						: {
-								entry: entry,
-								placing: placing,
-								sheetPlacing: {
-									scaleX: placing.scaleX,
-									scaleY: placing.scaleY,
-									moveX: placing.moveX - placing.scaleX * anchorX,
-									moveY: placing.moveY - placing.scaleY * anchorY,
-								},
-								object: calcPlacedObject(content, placing),
-							};
+					held && held.entry === entry && samePlacing(held.placing, placing) ?
+						held
+					:	{
+							entry: entry,
+							placing: placing,
+							sheetPlacing: {
+								scaleX: placing.scaleX,
+								scaleY: placing.scaleY,
+								moveX: placing.moveX - placing.scaleX * anchorX,
+								moveY: placing.moveY - placing.scaleY * anchorY,
+							},
+							object: calcPlacedObject(content, placing),
+						};
 				placed.set(id, one);
 				objects.set(id, one.object);
 				order.push(id);
@@ -422,9 +422,10 @@ namespace cool {
 			.map((mapping) => {
 				if (isNaN(mapping.id)) return mapping.text;
 				const corner = corners.get(placement.outermostOf(mapping.id));
-				const placing = corner
-					? placement.placingAt(mapping.id, corner)
-					: (placement.placingOf(mapping.id) ??
+				const placing =
+					corner ?
+						placement.placingAt(mapping.id, corner)
+					:	(placement.placingOf(mapping.id) ??
 						placement.placingAt(mapping.id, cornerOfMapping(mapping.matrix)));
 				const matrix = calcMatrixInPrintTwips(placing, mapping.matrix);
 				return [String(mapping.id)]
@@ -472,17 +473,16 @@ namespace cool {
 		if (tokens[0] === 'setobjecttransform') {
 			return tokens
 				.map((token) =>
-					token.startsWith('to=')
-						? 'to=' + transformInPrintTwips(token.substring(3), placement)
-						: token,
+					token.startsWith('to=') ?
+						'to=' + transformInPrintTwips(token.substring(3), placement)
+					:	token,
 				)
 				.join(' ');
 		}
 
 		const idToken = tokens.find((token) => token.startsWith('id='));
-		const placing = idToken
-			? placement.placingOf(Number(idToken.substring(3)))
-			: undefined;
+		const placing =
+			idToken ? placement.placingOf(Number(idToken.substring(3))) : undefined;
 		if (!placing) return message;
 
 		return tokens
@@ -497,9 +497,9 @@ namespace cool {
 				if (index < 0) return token;
 				// The keys come in x, y pairs.
 				const along =
-					index % 2 === 0
-						? (Number(value) - placing.moveX) / placing.scaleX
-						: (Number(value) - placing.moveY) / placing.scaleY;
+					index % 2 === 0 ?
+						(Number(value) - placing.moveX) / placing.scaleX
+					:	(Number(value) - placing.moveY) / placing.scaleY;
 				return key + '=' + String(Math.round(along));
 			})
 			.join(' ');

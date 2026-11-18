@@ -97,9 +97,10 @@ class ServerConnectionService {
 		app.writer.savedViewMode = viewSetting.presentationViewMode ?? null;
 
 		this.setAIConfigured(!!viewSetting.aiConfigured);
-		app.map.aiRequestTimeout = viewSetting.aiRequestTimeout
-			? Math.max(10, Number(viewSetting.aiRequestTimeout))
-			: 300;
+		app.map.aiRequestTimeout =
+			viewSetting.aiRequestTimeout ?
+				Math.max(10, Number(viewSetting.aiRequestTimeout))
+			:	300;
 		app.map.aiModelName = viewSetting.aiModelName || '';
 		app.map.aiEthicalRating = viewSetting.aiEthicalRating || 'U';
 

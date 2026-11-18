@@ -69,9 +69,9 @@ function buildSlideSectionHeader(
         class="slide-section-toggle ui-expander-btn"
         aria-expanded={collapsed ? 'false' : 'true'}
         aria-label={
-          options && options.toggleLabel
-            ? options.toggleLabel
-            : _('Toggle section %1').replace('%1', name)
+          options && options.toggleLabel ?
+            options.toggleLabel
+          : _('Toggle section %1').replace('%1', name)
         }
         onClick={(e: MouseEvent) => {
           e.stopPropagation();

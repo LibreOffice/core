@@ -509,11 +509,12 @@ JSDialog.iconView = function (
 	// with a different document theme at position 0), every cached image
 	// would be paired with the wrong label. Drop stale images when the
 	// entry texts or tooltips change.
-	const signature = data.entries
-		? data.entries
+	const signature =
+		data.entries ?
+			data.entries
 				.map((e: IconViewEntry) => (e.text || '') + '\t' + (e.tooltip || ''))
 				.join('|')
-		: '';
+		:	'';
 	const cache = builder.rendersCache[data.id];
 	// The cache of a view is created on its first build, so one that exists means
 	// the view was shown before.
@@ -562,9 +563,10 @@ JSDialog.iconView = function (
 	}
 
 	if (data.labelledBy) {
-		const ids = Array.isArray(data.labelledBy)
-			? data.labelledBy.join(' ')
-			: data.labelledBy;
+		const ids =
+			Array.isArray(data.labelledBy) ?
+				data.labelledBy.join(' ')
+			:	data.labelledBy;
 		iconview.setAttribute('aria-labelledby', ids);
 	} else if (data.aria?.label) {
 		JSDialog.AddAriaLabel(iconview, data, builder);
@@ -575,9 +577,10 @@ JSDialog.iconView = function (
 			if (iconview.hasAttribute('aria-labelledby')) return;
 
 			const group = iconview.closest('.ui-overflow-group');
-			const caption = group
-				? (group.querySelector('.ui-overflow-group-label') as HTMLElement)
-				: null;
+			const caption =
+				group ?
+					(group.querySelector('.ui-overflow-group-label') as HTMLElement)
+				:	null;
 
 			if (caption && caption.id && caption.innerText)
 				iconview.setAttribute('aria-labelledby', caption.id);
@@ -626,9 +629,9 @@ JSDialog.iconView = function (
 			});
 
 		const entry =
-			position >= 0 && iconview.children.length > position
-				? iconview.children[position]
-				: null;
+			position >= 0 && iconview.children.length > position ?
+				iconview.children[position]
+			:	null;
 
 		iconview.updateSelection(position);
 
@@ -761,9 +764,9 @@ JSDialog.iconView = function (
 
 	const createEntries = () => {
 		const shouldSelectFirstEntry =
-			data.entries?.length > 0
-				? !data.entries.some((entry) => entry.selected === true)
-				: false;
+			data.entries?.length > 0 ?
+				!data.entries.some((entry) => entry.selected === true)
+			:	false;
 		if (shouldSelectFirstEntry) {
 			const firstValid = data.entries.find((entry) => !entry.separator);
 			if (firstValid) firstValid.selected = true;

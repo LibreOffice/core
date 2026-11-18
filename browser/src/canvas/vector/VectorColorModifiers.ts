@@ -64,9 +64,9 @@ namespace cool {
 			if (!red && !green && !blue && !brightness && !contrast) return [];
 
 			const slope =
-				contrast >= 0
-					? 128 / (128 - contrast * 127)
-					: (128 + contrast * 127) / 128;
+				contrast >= 0 ?
+					128 / (128 - contrast * 127)
+				:	(128 + contrast * 127) / 128;
 			const shared = brightness + (128 - slope * 128) / 255;
 			return [
 				{

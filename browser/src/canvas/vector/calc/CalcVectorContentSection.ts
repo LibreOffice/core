@@ -322,9 +322,9 @@ namespace cool {
 						});
 						const block = sheet && sheet.blocks.get(key);
 						const placed =
-							sheet && block && blockRow <= lastBlockRow
-								? manager.placedBlock(sheet, block)
-								: undefined;
+							sheet && block && blockRow <= lastBlockRow ?
+								manager.placedBlock(sheet, block)
+							:	undefined;
 						if (placed) blocks.push(placed);
 						else if (sheet && block && blockRow > lastBlockRow)
 							ahead.push(block);

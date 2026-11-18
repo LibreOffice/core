@@ -230,9 +230,8 @@ globalThis.window.L = (globalThis as any).L;
 // jQuery is bound to the jsdom window, so it finds what the tests put in the page. The module
 // binds itself when a document exists at load time, and returns a factory for a window otherwise.
 const jqueryModule = require('jquery');
-(globalThis as any).$ = (globalThis as any).jQuery = jqueryModule.fn
-	? jqueryModule
-	: jqueryModule(globalThis.window);
+(globalThis as any).$ = (globalThis as any).jQuery =
+	jqueryModule.fn ? jqueryModule : jqueryModule(globalThis.window);
 (globalThis.window as any).$ = (globalThis.window as any).jQuery = (
 	globalThis as any
 ).$;

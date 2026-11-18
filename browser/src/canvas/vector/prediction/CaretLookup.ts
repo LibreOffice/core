@@ -185,7 +185,9 @@ namespace cool {
 					const left = run.x;
 					const right = run.slideX(positions[positions.length - 1]);
 					const delta =
-						caretX < left ? left - caretX : caretX > right ? caretX - right : 0;
+						caretX < left ? left - caretX
+						: caretX > right ? caretX - right
+						: 0;
 					// With a logical caret the pixels only pick the object, and
 					// after a re-wrap the caret can be far from every run.
 					// Without one, the caret must be within a font size.
@@ -204,9 +206,8 @@ namespace cool {
 			let positions = target.positions;
 			let offset: number;
 
-			const located = logical
-				? locateLogical(siblings, logical, target.run.baseline)
-				: null;
+			const located =
+				logical ? locateLogical(siblings, logical, target.run.baseline) : null;
 			if (located) {
 				run = located.run;
 				positions = run.characterPositions(this.measurer);

@@ -502,18 +502,18 @@ class ObjectHandles implements HandleSource {
 
 		const isALine = ObjectHandles.isALine(objectId);
 		const ends = (object.handles ?? []).filter((handle: cool.ObjectHandle) =>
-			isALine
-				? handle.kind === 9
-				: !!object.measurement &&
-					handle.kind === 20 &&
-					(handle.at === 2 || handle.at === 3),
+			isALine ?
+				handle.kind === 9
+			:	!!object.measurement &&
+				handle.kind === 20 &&
+				(handle.at === 2 || handle.at === 3),
 		);
 		if (ends.length !== 2) return null;
 
 		const [one, other] = ends;
-		return one.x === other.x && one.y === other.y
-			? new cool.Point(one.x, one.y)
-			: null;
+		return one.x === other.x && one.y === other.y ?
+				new cool.Point(one.x, one.y)
+			:	null;
 	}
 
 	/// Whether the object of that id is shaped by its own handles alone, without the eight.

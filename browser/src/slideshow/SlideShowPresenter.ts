@@ -261,13 +261,13 @@ class SlideShowPresenter {
 				this.setFollowing(true);
 				this._onStartInWindow({
 					startSlideNumber:
-						this._slideShowNavigator.getLeaderSlide() === -1
-							? 0
-							: this._slideShowNavigator.getLeaderSlide(),
+						this._slideShowNavigator.getLeaderSlide() === -1 ?
+							0
+						:	this._slideShowNavigator.getLeaderSlide(),
 					startEffectNumber:
-						this._slideShowNavigator.getLeaderEffect() === 0
-							? undefined
-							: this._slideShowNavigator.getLeaderEffect(),
+						this._slideShowNavigator.getLeaderEffect() === 0 ?
+							undefined
+						:	this._slideShowNavigator.getLeaderEffect(),
 				});
 				break;
 			case 'dispatcheffect':
@@ -383,9 +383,9 @@ class SlideShowPresenter {
 	}
 
 	public getSlideInfo(slideNumber: number): SlideInfo | null {
-		return this._presentationInfo
-			? this._presentationInfo.slides[slideNumber]
-			: null;
+		return this._presentationInfo ?
+				this._presentationInfo.slides[slideNumber]
+			:	null;
 	}
 
 	_getSlidesCount() {
@@ -393,9 +393,9 @@ class SlideShowPresenter {
 	}
 
 	_getRepeatDuration() {
-		return this._presentationInfo
-			? this._presentationInfo.loopAndRepeatDuration
-			: 0;
+		return this._presentationInfo ?
+				this._presentationInfo.loopAndRepeatDuration
+			:	0;
 	}
 
 	public isSlideHidden(slideNumber: number) {
@@ -461,10 +461,12 @@ class SlideShowPresenter {
 		// the full screen element. The document also goes full screen for the
 		// View menu's Full Screen entry, which the slide show takes no part in.
 		const fullscreen =
-			this._presenterContainer &&
-			document.fullscreenElement === this._presenterContainer
-				? this._presenterContainer
-				: null;
+			(
+				this._presenterContainer &&
+				document.fullscreenElement === this._presenterContainer
+			) ?
+				this._presenterContainer
+			:	null;
 
 		if (!fullscreen && !this._fullscreen) return;
 
@@ -985,9 +987,10 @@ class SlideShowPresenter {
 			function (this: SlideShowPresenter, e: Event) {
 				this._onA11yString(e.target);
 				this._navigateSkipTransition = !this._navigateSkipTransition;
-				const slideshowAnimToggleText = this._navigateSkipTransition
-					? _('Enable Animations')
-					: _('Disable Animations');
+				const slideshowAnimToggleText =
+					this._navigateSkipTransition ?
+						_('Enable Animations')
+					:	_('Disable Animations');
 				animationsImage.setAttribute('aria-label', slideshowAnimToggleText);
 				animationsImage.setAttribute('data-cooltip', slideshowAnimToggleText);
 
@@ -1111,9 +1114,8 @@ class SlideShowPresenter {
 	public handleSlideShowProgressBar(event: { isVisible: boolean }): void {
 		try {
 			if (!this._progressBarContainer) return;
-			this._progressBarContainer.style.display = event?.isVisible
-				? 'block'
-				: 'none';
+			this._progressBarContainer.style.display =
+				event?.isVisible ? 'block' : 'none';
 		} catch (error) {
 			app.console.error('Not able to Slideshow progress bar', error);
 		}
@@ -1301,9 +1303,10 @@ class SlideShowPresenter {
 		this._windowCloseInterval = app.timerRegistry.setInterval(
 			'slideshowwindowclose',
 			function () {
-				const closed = isSeparateWindow
-					? (slideShowWindow as Window).closed
-					: !(slideShowWindow as HTMLIFrameElement).isConnected;
+				const closed =
+					isSeparateWindow ?
+						(slideShowWindow as Window).closed
+					:	!(slideShowWindow as HTMLIFrameElement).isConnected;
 				if (closed) this.slideshowWindowCleanUp();
 			}.bind(this),
 			500,
@@ -1591,9 +1594,10 @@ class SlideShowPresenter {
 			// cache instead of the server-rendered bitmap layers. The compositor
 			// comes first: the animation trees of the presentation ask it for
 			// their animated elements.
-			this._slideCompositor = RenderManager.drawsSlidesFromVectors()
-				? new SlideShow.VectorCompositor(this)
-				: new SlideShow.LayersCompositor(this);
+			this._slideCompositor =
+				RenderManager.drawsSlidesFromVectors() ?
+					new SlideShow.VectorCompositor(this)
+				:	new SlideShow.LayersCompositor(this);
 		}
 
 		if (!this._metaPresentation) {

@@ -114,13 +114,10 @@ describe('calcMessageInPrintTwips', function () {
 	});
 	const placement: cool.CalcPlacement = {
 		placingOf: (id: number) =>
-			id === 1
-				? placing(10, 20)
-				: id === 2 || id === 4
-					? placing(5, 5)
-					: id === 5
-						? { scaleX: 2, scaleY: 1, moveX: 10, moveY: 20 }
-						: undefined,
+			id === 1 ? placing(10, 20)
+			: id === 2 || id === 4 ? placing(5, 5)
+			: id === 5 ? { scaleX: 2, scaleY: 1, moveX: 10, moveY: 20 }
+			: undefined,
 		outermostOf: (id: number) => (id === 2 || id === 4 ? 3 : id),
 		membersOf: (outermost: number) => (outermost === 3 ? [2, 4] : [outermost]),
 		// A corner moved keeps the scale of its object.

@@ -250,9 +250,10 @@ class CalcVectorManager extends VectorManagerBase {
 		const docLayer = app.map && app.map._docLayer;
 		if (docLayer?._isReplayingMessages && this._typing.isTyping()) {
 			const context = this._typingContext();
-			const typed = context
-				? this._typing.caretAfterTyping(context.viewId, context.origin)
-				: null;
+			const typed =
+				context ?
+					this._typing.caretAfterTyping(context.viewId, context.origin)
+				:	null;
 			if (typed) {
 				this._showTypedCaret(typed);
 				return true;
@@ -420,9 +421,8 @@ class CalcVectorManager extends VectorManagerBase {
 
 	private _objectView(part: number): cool.CalcObjectView | undefined {
 		const docLayer = app.map && app.map._docLayer;
-		const geometry: cool.SheetGeometry | undefined = docLayer
-			? docLayer.sheetGeometry
-			: undefined;
+		const geometry: cool.SheetGeometry | undefined =
+			docLayer ? docLayer.sheetGeometry : undefined;
 		if (!geometry || geometry.getPart() !== part) return undefined;
 		const sheet = this._sheetWithObjects(part);
 		if (!sheet) return undefined;
@@ -463,9 +463,8 @@ class CalcVectorManager extends VectorManagerBase {
 		block: cool.CalcBlockEntry<cool.CalcCellRect>,
 	): cool.CalcBlockEntry | undefined {
 		const docLayer = app.map && app.map._docLayer;
-		const geometry: cool.SheetGeometry | undefined = docLayer
-			? docLayer.sheetGeometry
-			: undefined;
+		const geometry: cool.SheetGeometry | undefined =
+			docLayer ? docLayer.sheetGeometry : undefined;
 		if (!geometry || geometry.getPart() !== sheet.part || !app.tile.size)
 			return undefined;
 		this._listenToGeometry();
@@ -488,14 +487,15 @@ class CalcVectorManager extends VectorManagerBase {
 			held.shifted === shifted;
 		if (held && placedAsHeld && held.edited === edited) return held.placed;
 		const whole =
-			held && placedAsHeld
-				? held.whole
-				: cool.calcPlacedBlock(block, geometry, pixel, shifts);
+			held && placedAsHeld ?
+				held.whole
+			:	cool.calcPlacedBlock(block, geometry, pixel, shifts);
 		if (!whole) return undefined;
 		// A new block is drawn again, text rasters too, so only a block with an edit changes.
-		const placed = editedCells.length
-			? cool.calcBlockWithoutCellText(whole, editedCells)
-			: whole;
+		const placed =
+			editedCells.length ?
+				cool.calcBlockWithoutCellText(whole, editedCells)
+			:	whole;
 		this._placedBlocks.set(key, {
 			source: block,
 			count: this._geometryCount,
@@ -518,9 +518,9 @@ class CalcVectorManager extends VectorManagerBase {
 		return sheet.shifts.filter((shift) => {
 			if (shift.version <= block.current) return false;
 			const [first, last] =
-				shift.axis === 'rows'
-					? [block.startColumn, block.endColumn]
-					: [block.startRow, block.endRow];
+				shift.axis === 'rows' ?
+					[block.startColumn, block.endColumn]
+				:	[block.startRow, block.endRow];
 			return shift.across[0] <= first && last <= shift.across[1];
 		});
 	}
@@ -762,9 +762,9 @@ class CalcVectorManager extends VectorManagerBase {
 			Math.max(1, Math.floor(shown / 8)),
 		);
 		const heldPerRequest =
-			shown > 16
-				? 2 * CalcVectorManager.maxHeldBlocksPerRequest
-				: CalcVectorManager.maxHeldBlocksPerRequest;
+			shown > 16 ?
+				2 * CalcVectorManager.maxHeldBlocksPerRequest
+			:	CalcVectorManager.maxHeldBlocksPerRequest;
 		while (queue.keys.length > 0) {
 			const key = queue.keys[0];
 			// The block may have arrived in a push since it was queued.
@@ -773,9 +773,10 @@ class CalcVectorManager extends VectorManagerBase {
 				continue;
 			}
 			// A refresh leaves one request free for a block the view comes to show.
-			const limit = queue.refresh
-				? CalcVectorManager.maxRequestsInFlight - 1
-				: CalcVectorManager.maxRequestsInFlight;
+			const limit =
+				queue.refresh ?
+					CalcVectorManager.maxRequestsInFlight - 1
+				:	CalcVectorManager.maxRequestsInFlight;
 			if (
 				this._requests.requestCount >= limit &&
 				!this._forgetRequestOfOtherSheet(sheetKey)
@@ -967,9 +968,9 @@ class CalcVectorManager extends VectorManagerBase {
 
 		const requestId = values.requestId;
 		const request =
-			requestId !== undefined
-				? this._requests.takeRequest(requestId)
-				: undefined;
+			requestId !== undefined ?
+				this._requests.takeRequest(requestId)
+			:	undefined;
 
 		// A new epoch makes the held versions invalid. The answer that brings it was built in the
 		// new epoch, so it is kept and the rest is asked for again.
@@ -991,9 +992,8 @@ class CalcVectorManager extends VectorManagerBase {
 		// A sheet held knows its index. An answer for a sheet that the status no longer names is
 		// dropped.
 		const heldSheet = this._sheets.get(sheetKey);
-		const part = heldSheet
-			? heldSheet.part
-			: CalcVectorManager._partOf(sheetKey);
+		const part =
+			heldSheet ? heldSheet.part : CalcVectorManager._partOf(sheetKey);
 		if (part < 0) return;
 
 		const sheet = this._ensureSheet(sheetKey, part);
@@ -1129,9 +1129,9 @@ class CalcVectorManager extends VectorManagerBase {
 				}
 				if (moved.length > 0) {
 					const queued =
-						this._queue && this._queue.sheetKey === sheetKey
-							? this._queue.keys.filter((key) => moved.indexOf(key) < 0)
-							: [];
+						this._queue && this._queue.sheetKey === sheetKey ?
+							this._queue.keys.filter((key) => moved.indexOf(key) < 0)
+						:	[];
 					this._queue = { sheetKey, keys: moved.concat(queued) };
 					this._sendQueued();
 				}

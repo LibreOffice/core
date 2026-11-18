@@ -56,11 +56,11 @@ describe('SlideLinkToolbar', function () {
 
 	function action(name: string): HTMLButtonElement | null {
 		const found = element();
-		return found
-			? (found.querySelector(
+		return found ?
+				(found.querySelector(
 					'button.slide-link-toolbar-action.' + name,
 				) as HTMLButtonElement | null)
-			: null;
+			:	null;
 	}
 
 	function slideShown(part: string): void {

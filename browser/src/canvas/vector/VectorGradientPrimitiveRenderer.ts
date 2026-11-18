@@ -132,9 +132,10 @@ namespace cool {
 					Math.hypot(unit.maxX, unit.maxY),
 				);
 				if (!(reach > 0)) return null;
-				const to = VectorGradientPrimitiveRenderer._repeats(primitive)
-					? Math.ceil(reach)
-					: Math.max(reach, 1);
+				const to =
+					VectorGradientPrimitiveRenderer._repeats(primitive) ?
+						Math.ceil(reach)
+					:	Math.max(reach, 1);
 				// The circle of radius r is centered at focalStep * (reach - r).
 				// Canvas moves the center linearly with the radius, so two circles
 				// describe it.
@@ -308,9 +309,9 @@ namespace cool {
 					const width = context.canvas.width;
 					const height = context.canvas.height;
 					const scratch =
-						width > 0 && height > 0
-							? this._scratch.slotContext(slot, width, height)
-							: null;
+						width > 0 && height > 0 ?
+							this._scratch.slotContext(slot, width, height)
+						:	null;
 					if (!scratch) {
 						plainRamp();
 						return;
@@ -608,13 +609,13 @@ namespace cool {
 				const width = span / bands;
 				for (let band = 0; band < bands; band++) {
 					const color =
-						bands === 1
-							? from
-							: VectorGradientPrimitiveRenderer._mixColor(
-									from,
-									to,
-									band / (bands - 1),
-								);
+						bands === 1 ? from : (
+							VectorGradientPrimitiveRenderer._mixColor(
+								from,
+								to,
+								band / (bands - 1),
+							)
+						);
 					banded.push({ offset: from.offset + band * width, ...color });
 					banded.push({ offset: from.offset + (band + 1) * width, ...color });
 				}

@@ -549,13 +549,13 @@ function rowTextFor(row: CleanupRow): string {
 		case 'image':
 		case 'croppedImage':
 			if (row.slide < 0)
-				return row.imageNumber <= 0
-					? _('Master slide')
-					: _('Master slide, image %1').replace('%1', String(row.imageNumber));
+				return row.imageNumber <= 0 ?
+						_('Master slide')
+					:	_('Master slide, image %1').replace('%1', String(row.imageNumber));
 
-			return row.imageNumber <= 0
-				? _('Slide %1').replace('%1', slide)
-				: _('Slide %1, image %2')
+			return row.imageNumber <= 0 ?
+					_('Slide %1').replace('%1', slide)
+				:	_('Slide %1, image %2')
 						.replace('%1', slide)
 						.replace('%2', String(row.imageNumber));
 		case 'hiddenSlide':
@@ -568,9 +568,9 @@ function rowTextFor(row: CleanupRow): string {
 		case 'notes':
 			return _('Slide %1 has speaker notes').replace('%1', slide);
 		case 'embeddedObject':
-			return row.canFix
-				? _('Slide %1: embedded object').replace('%1', slide)
-				: _('Slide %1: embedded object, no image to replace it with').replace(
+			return row.canFix ?
+					_('Slide %1: embedded object').replace('%1', slide)
+				:	_('Slide %1: embedded object, no image to replace it with').replace(
 						'%1',
 						slide,
 					);
@@ -862,9 +862,9 @@ function progressLineJSON(state: CleanupPanelState): ContainerWidgetJSON {
 	const total = state.measuredTotal;
 	const done = Math.min(state.measuredDone, total);
 	const figures =
-		total === 0
-			? ''
-			: _('%1 of %2').replace('%1', String(done)).replace('%2', String(total));
+		total === 0 ? '' : (
+			_('%1 of %2').replace('%1', String(done)).replace('%2', String(total))
+		);
 
 	return {
 		id: CleanupWidgetId.progressLine,
@@ -2113,9 +2113,9 @@ class CleanupSidebar extends SidebarBase {
 		if (this.isStaleEvent(result)) return;
 
 		const action =
-			typeof result.request === 'number'
-				? this.requestActions.get(result.request)
-				: undefined;
+			typeof result.request === 'number' ?
+				this.requestActions.get(result.request)
+			:	undefined;
 		if (typeof result.request === 'number')
 			this.requestActions.delete(result.request);
 
@@ -2209,9 +2209,8 @@ class CleanupSidebar extends SidebarBase {
 		if (!focusInStatusLine && !heldByNothing && !this.map.hasFocus())
 			return null;
 
-		const scanButton = this.state.readOnly
-			? null
-			: buttonElementId(CleanupWidgetId.scan);
+		const scanButton =
+			this.state.readOnly ? null : buttonElementId(CleanupWidgetId.scan);
 
 		if (!heldForRun) return scanButton;
 

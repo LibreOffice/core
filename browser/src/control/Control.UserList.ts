@@ -711,9 +711,12 @@ class UserList extends window.L.Control {
 	renderHeaderAvatarPopover(popoverElement: Element) {
 		// Popover rendering
 		const focusedInside =
-			document.activeElement && popoverElement.contains(document.activeElement)
-				? (document.activeElement as HTMLElement)
-				: null;
+			(
+				document.activeElement &&
+				popoverElement.contains(document.activeElement)
+			) ?
+				(document.activeElement as HTMLElement)
+			:	null;
 		const activeViewId = focusedInside?.getAttribute('data-view-id') ?? null;
 		// A row stands for a user, and the view id it carries is the one of that
 		// user's view the row was built from, which changes when the following
@@ -843,9 +846,9 @@ class UserList extends window.L.Control {
 		followEditorCheckboxLabel.setAttribute('aria-hidden', 'true');
 
 		const linkedList =
-			linkedUsers.length > 0
-				? [buildLinkedViewList(linkedUsers, users.length, this.map)]
-				: [];
+			linkedUsers.length > 0 ?
+				[buildLinkedViewList(linkedUsers, users.length, this.map)]
+			:	[];
 
 		popoverElement.replaceChildren(
 			...userElements,

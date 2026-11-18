@@ -190,9 +190,8 @@ class VectorCompositor extends SlideCompositor {
 	}
 
 	private _partIdForSlideHash(slideHash: string): cool.VectorPartGuid | null {
-		const info = slideHash
-			? this._metaPresentation.getSlideInfo(slideHash)
-			: null;
+		const info =
+			slideHash ? this._metaPresentation.getSlideInfo(slideHash) : null;
 		return info ? info.part : null;
 	}
 
@@ -387,9 +386,10 @@ class VectorCompositor extends SlideCompositor {
 		if (!slideInfo) return morphs;
 		const into = TransitionFilterInfo.fromSlideInfo(slideInfo);
 		if (into?.isMorph()) morphs.push(into);
-		const nextInfo = slideInfo.next
-			? this._metaPresentation.getSlideInfo(slideInfo.next)
-			: null;
+		const nextInfo =
+			slideInfo.next ?
+				this._metaPresentation.getSlideInfo(slideInfo.next)
+			:	null;
 		const out = nextInfo ? TransitionFilterInfo.fromSlideInfo(nextInfo) : null;
 		if (out?.isMorph()) morphs.push(out);
 		return morphs;
@@ -562,8 +562,9 @@ class VectorCompositor extends SlideCompositor {
 			mode,
 		);
 		if (!leavingLayers || !enteringLayers) return null;
-		const text: MorphTextPieces | undefined = mode
-			? {
+		const text: MorphTextPieces | undefined =
+			mode ?
+				{
 					leaving: this._slidePieces(
 						leavingData,
 						mode,
@@ -576,7 +577,7 @@ class VectorCompositor extends SlideCompositor {
 					).entries,
 					splitsText: filterInfo?.transitionSubtype !== TransitionSubType.MORPH,
 				}
-			: undefined;
+			:	undefined;
 		if (!this.morph?.isBetween(leavingData, enteringData, text)) {
 			this.morph = new SlideMorph(
 				leavingData,
@@ -814,17 +815,18 @@ class VectorCompositor extends SlideCompositor {
 		const height = context.canvas.height;
 		if (width <= 0 || height <= 0) return null;
 		const master =
-			data.masterPartId !== undefined
-				? (RenderManager.requestPartById(
-						data.masterPartId,
-						cool.VectorMode.MasterPages,
-					) ?? null)
-				: null;
+			data.masterPartId !== undefined ?
+				(RenderManager.requestPartById(
+					data.masterPartId,
+					cool.VectorMode.MasterPages,
+				) ?? null)
+			:	null;
 
 		const targets = this._animatedTargets(slideHash, data);
-		const pieces = pieceMode
-			? this._slidePieces(data, pieceMode, targets).layerPieces
-			: null;
+		const pieces =
+			pieceMode ?
+				this._slidePieces(data, pieceMode, targets).layerPieces
+			:	null;
 
 		let sets = this.layers.get(context);
 		if (!sets) {
@@ -839,9 +841,9 @@ class VectorCompositor extends SlideCompositor {
 			layers = sets.splice(index, 1)[0];
 		} else {
 			layers =
-				sets.length < VectorCompositor.layerSetsPerContext
-					? new VectorSlideLayers(context)
-					: sets.pop();
+				sets.length < VectorCompositor.layerSetsPerContext ?
+					new VectorSlideLayers(context)
+				:	sets.pop();
 			const masterVideoIds = new Set<number>(
 				(
 					this._metaPresentation.getSlideInfo(slideHash)?.masterVideos ?? []
@@ -964,9 +966,9 @@ class VectorCompositor extends SlideCompositor {
 		const ownMatrix = cool.Matrix2D.fromArray(own.transform);
 		const ownerMatrix = cool.Matrix2D.fromArray(owner.transform);
 		const matrix =
-			ownMatrix && ownerMatrix
-				? ownMatrix.then(ownerMatrix)
-				: (ownMatrix ?? ownerMatrix);
+			ownMatrix && ownerMatrix ?
+				ownMatrix.then(ownerMatrix)
+			:	(ownMatrix ?? ownerMatrix);
 		if (matrix) state.transform = matrix.toArray();
 		if (own.alpha !== undefined || owner.alpha !== undefined)
 			state.alpha = (own.alpha ?? 1) * (owner.alpha ?? 1);
@@ -1064,9 +1066,10 @@ class VectorCompositor extends SlideCompositor {
 		const target = this._findTarget(slideHash, targetElement);
 		if (!target) return null;
 
-		const text = target.paragraph
-			? [target.paragraph]
-			: cool.TextHierarchyParagraphPrimitive.collect(target.object.primitives);
+		const text =
+			target.paragraph ?
+				[target.paragraph]
+			:	cool.TextHierarchyParagraphPrimitive.collect(target.object.primitives);
 		return {
 			fillColor: target.object.properties?.fillColor,
 			lineColor: target.object.properties?.lineColor,

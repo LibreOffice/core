@@ -107,9 +107,9 @@ namespace BackstageCloudKinds {
 	// empty result means a branding declared a list that named no usable service.
 	function brandedKinds(): CloudKindEntry[] | undefined {
 		const declared =
-			typeof brandCloudProviders !== 'undefined'
-				? brandCloudProviders
-				: undefined;
+			typeof brandCloudProviders !== 'undefined' ? brandCloudProviders : (
+				undefined
+			);
 		if (!Array.isArray(declared)) return undefined;
 		const entries: CloudKindEntry[] = [];
 		declared.forEach((provider) => {

@@ -100,9 +100,8 @@ namespace cool {
 
 		private drawSeparator(y: number): void {
 			this.context.save();
-			this.context.strokeStyle = app.map.uiManager.isBackgroundDark()
-				? '#ffffff'
-				: '#000000';
+			this.context.strokeStyle =
+				app.map.uiManager.isBackgroundDark() ? '#ffffff' : '#000000';
 			this.context.lineWidth = this.getLineWidth();
 			this.context.setLineDash([
 				120 * app.twipsToPixels,

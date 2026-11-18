@@ -380,11 +380,13 @@ class VectorSlideLayers {
 				this._paint(layer, data, state);
 			}
 			const frames =
-				videos?.size &&
-				layer.paragraph === undefined &&
-				layer.piece === undefined
-					? this._frameQuads(layer, data, videos)
-					: [];
+				(
+					videos?.size &&
+					layer.paragraph === undefined &&
+					layer.piece === undefined
+				) ?
+					this._frameQuads(layer, data, videos)
+				:	[];
 			// The layer holds the still image of each video under its frame. The frame covers
 			// it fully only while drawn opaque, so a faded layer is drawn around the frames.
 			this._drawQuad(
@@ -484,9 +486,9 @@ class VectorSlideLayers {
 		const pixels = this._toPixels(left, top, right, bottom);
 		// An animation can move a target in from outside the slide, so its layer keeps one
 		// canvas size around it.
-		return run.owner === undefined
-			? this._cut(pixels, 0, 0, this.canvasWidth, this.canvasHeight)
-			: this._cut(
+		return run.owner === undefined ?
+				this._cut(pixels, 0, 0, this.canvasWidth, this.canvasHeight)
+			:	this._cut(
 					pixels,
 					-this.canvasWidth,
 					-this.canvasHeight,
@@ -505,11 +507,12 @@ class VectorSlideLayers {
 		objectPixels: number[],
 	): number[] {
 		const object = data.objects.get(owner);
-		const node = object
-			? cool.TextHierarchyParagraphPrimitive.collect(object.primitives)[
+		const node =
+			object ?
+				cool.TextHierarchyParagraphPrimitive.collect(object.primitives)[
 					paragraph
 				]
-			: undefined;
+			:	undefined;
 		const bounds = node?.bounds;
 		if (!bounds) return objectPixels;
 

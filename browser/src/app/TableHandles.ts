@@ -125,12 +125,13 @@ class TableHandles extends HandleGroup {
 				kind: kind,
 				pointer: '0',
 				point: new cool.Point(x, y).round(),
-				reach: reach
-					? new cool.Point(
+				reach:
+					reach ?
+						new cool.Point(
 							reach.x * app.twipsToPixels,
 							reach.y * app.twipsToPixels,
 						)
-					: undefined,
+					:	undefined,
 			});
 
 		const table = ClassicTableContext.layout(data);
@@ -257,9 +258,9 @@ class TableHandles extends HandleGroup {
 		at: cool.SimplePoint,
 	): SelectionInteraction | null {
 		const context = Interaction.context();
-		return context instanceof ClassicTableContext
-			? new TableCellsDrag(this.selection, at, context)
-			: null;
+		return context instanceof ClassicTableContext ?
+				new TableCellsDrag(this.selection, at, context)
+			:	null;
 	}
 
 	/// Shift and a click in the cells extend the selection of cells to the clicked one.
@@ -359,9 +360,9 @@ class TableHandles extends HandleGroup {
 			at === lines.length - 1,
 			Math.round(place - lines[at]),
 		);
-		return columns
-			? new cool.Point(place, handle.point.y)
-			: new cool.Point(handle.point.x, place);
+		return columns ?
+				new cool.Point(place, handle.point.y)
+			:	new cool.Point(handle.point.x, place);
 	}
 
 	/// The arrow keys on the anchor, a select square or a bar move the table, as they move a
@@ -396,13 +397,13 @@ class TableHandles extends HandleGroup {
 			handle.kind === TableHandles.rowBorder
 		) {
 			const data = this.data();
-			return data
-				? new TableBorderDrag(
+			return data ?
+					new TableBorderDrag(
 						this.selection,
 						handle,
 						ClassicTableContext.layout(data),
 					)
-				: null;
+				:	null;
 		}
 		if (
 			handle.kind !== TableHandles.anchor ||
@@ -479,12 +480,14 @@ class TableHandles extends HandleGroup {
 		// shows it
 		const dragged = TableBorderDrag.running;
 		if (dragged) {
-			const from = dragged.columns
-				? corner(dragged.place, table.top)
-				: corner(table.left, dragged.place);
-			const to = dragged.columns
-				? corner(dragged.place, table.bottom)
-				: corner(table.right, dragged.place);
+			const from =
+				dragged.columns ?
+					corner(dragged.place, table.top)
+				:	corner(table.left, dragged.place);
+			const to =
+				dragged.columns ?
+					corner(dragged.place, table.bottom)
+				:	corner(table.right, dragged.place);
 			context.strokeStyle = '#3388FF';
 			context.lineWidth = 2 * app.dpiScale;
 			context.beginPath();
@@ -533,18 +536,17 @@ class TableHandles extends HandleGroup {
 			],
 		] as [string, number, number, number, number][]) {
 			context.fillStyle = colour(
-				hovered === name
-					? '--color-insert-marker-background-dark'
-					: '--color-insert-marker-background',
+				hovered === name ?
+					'--color-insert-marker-background-dark'
+				:	'--color-insert-marker-background',
 			);
 			// the bar grows as a handle does under the mouse and under the keyboard, where it
 			// blinks
 			const size = ShapeHandlesSection.handleSize();
-			const grown = section.travel.showsAsActive(name)
-				? size / 3
-				: hovered === name
-					? size / 8
-					: 0;
+			const grown =
+				section.travel.showsAsActive(name) ? size / 3
+				: hovered === name ? size / 8
+				: 0;
 			const from = corner(x, y);
 			const to = corner(x + width, y + height);
 			context.beginPath();

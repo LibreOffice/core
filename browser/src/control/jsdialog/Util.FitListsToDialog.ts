@@ -64,12 +64,12 @@ JSDialog.FitListsToDialog = function (content: HTMLElement): void {
 	let fits = 0;
 	while (!fits) {
 		const cap =
-			rate > 0
-				? Math.max(
-						minimumListHeight,
-						Math.floor(tooTall - tooTallOverflow / rate),
-					)
-				: minimumListHeight;
+			rate > 0 ?
+				Math.max(
+					minimumListHeight,
+					Math.floor(tooTall - tooTallOverflow / rate),
+				)
+			:	minimumListHeight;
 		const capOverflow = overflowAt(cap);
 		if (capOverflow <= 0) {
 			fits = cap;

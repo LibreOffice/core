@@ -85,13 +85,13 @@ function _menubuttonControl(
 		}
 		// can be function or string with command identifier
 		const applyCallback =
-			typeof data.applyCallback === 'function'
-				? data.applyCallback
-				: () => {
-						const command = data.applyCallback as string;
-						if (command.indexOf('.uno:') === 0) app.map.sendUnoCommand(command);
-						else app.dispatcher.dispatch(command);
-					};
+			typeof data.applyCallback === 'function' ?
+				data.applyCallback
+			:	() => {
+					const command = data.applyCallback as string;
+					if (command.indexOf('.uno:') === 0) app.map.sendUnoCommand(command);
+					else app.dispatcher.dispatch(command);
+				};
 
 		if (menuEntries.length == 0) {
 			control.container.setAttribute('disabled', 'true');
@@ -123,9 +123,9 @@ function _menubuttonControl(
 					return true;
 				} else if (eventType === 'selected' && menuEntry && menuEntry.uno) {
 					const uno =
-						menuEntry.uno.indexOf('.uno:') === 0
-							? menuEntry.uno
-							: '.uno:' + menuEntry.uno;
+						menuEntry.uno.indexOf('.uno:') === 0 ?
+							menuEntry.uno
+						:	'.uno:' + menuEntry.uno;
 					builder.map.sendUnoCommand(uno);
 					jsdialog.CloseDropdown(dropdownId);
 					return true;

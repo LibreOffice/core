@@ -599,14 +599,15 @@ class BackstageView extends window.L.Class {
 						this.showCloudAddedDialog(added);
 					}
 				},
-				onDelete: provider
-					? () =>
+				onDelete:
+					provider ?
+						() =>
 							this.showRemoveConfirmDialog(provider, async () => {
 								if (!(await this.removeCloudProvider(provider.id))) return;
 								close();
 								this.renderOpenView();
 							})
-					: undefined,
+					:	undefined,
 			}),
 		);
 	}
@@ -803,9 +804,10 @@ class BackstageView extends window.L.Class {
 			...this.getTemplatesData(),
 		];
 		return BackstageTemplates.templateSections({
-			userTemplates: this.hasUserTemplates()
-				? this.getFilteredTemplates(this.getUserTemplateCards())
-				: null,
+			userTemplates:
+				this.hasUserTemplates() ?
+					this.getFilteredTemplates(this.getUserTemplateCards())
+				:	null,
 			builtInTemplates: this.getFilteredTemplates(builtInTemplates),
 			searchQuery: this.templateSearchQuery,
 			onClick: (t) => this.triggerNewDocument(t),
@@ -846,9 +848,9 @@ class BackstageView extends window.L.Class {
 			const ids = JSON.parse(
 				window.prefs.get(BackstageView.FAVORITES_KEY) || '[]',
 			);
-			return Array.isArray(ids)
-				? ids.filter((id) => typeof id === 'string')
-				: [];
+			return Array.isArray(ids) ?
+					ids.filter((id) => typeof id === 'string')
+				:	[];
 		} catch {
 			return [];
 		}
@@ -872,14 +874,14 @@ class BackstageView extends window.L.Class {
 		const ids = this.getFavoriteIds();
 		const wasFavorite = ids.includes(template.id);
 		this.setFavoriteIds(
-			wasFavorite
-				? ids.filter((id) => id !== template.id)
-				: [...ids, template.id],
+			wasFavorite ?
+				ids.filter((id) => id !== template.id)
+			:	[...ids, template.id],
 		);
 		this.showSnackbar(
-			wasFavorite
-				? _('Template removed from favorites')
-				: _('Template added to favorites'),
+			wasFavorite ?
+				_('Template removed from favorites')
+			:	_('Template added to favorites'),
 		);
 
 		// The refresh builds new cards. A star that the keyboard focused gives the focus to the
@@ -1470,9 +1472,10 @@ class BackstageView extends window.L.Class {
 	private getExportOptionsFromNotebookbar(): ExportSections {
 		const builder = new (window.L.Control.NotebookbarBuilder as any)();
 
-		const downloadAsOpts: ExportOptionItem[] = builder._getDownloadAsSubmenuOpts
-			? builder._getDownloadAsSubmenuOpts() || []
-			: [];
+		const downloadAsOpts: ExportOptionItem[] =
+			builder._getDownloadAsSubmenuOpts ?
+				builder._getDownloadAsSubmenuOpts() || []
+			:	[];
 
 		return {
 			exportAs: [],

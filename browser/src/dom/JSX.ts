@@ -111,9 +111,10 @@ function h(
 		return tag({ ...(props || {}), children }) as HTMLElement;
 	}
 
-	const el = JSX_SVG_TAGS.has(tag)
-		? (document.createElementNS(JSX_SVG_NS, tag) as unknown as HTMLElement)
-		: document.createElement(tag);
+	const el =
+		JSX_SVG_TAGS.has(tag) ?
+			(document.createElementNS(JSX_SVG_NS, tag) as unknown as HTMLElement)
+		:	document.createElement(tag);
 
 	jsxApplyProps(el, props);
 	jsxAppendChildren(el, children);

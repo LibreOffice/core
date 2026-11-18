@@ -44,12 +44,10 @@ namespace cool {
 		): CanvasImageSource {
 			if (!(image.naturalWidth > 0 && image.naturalHeight > 0)) return image;
 			const svg = VectorModifiedImages._isSvg(image);
-			const maxWidth = svg
-				? VectorModifiedImages._MAX_SVG_SIZE
-				: image.naturalWidth;
-			const maxHeight = svg
-				? VectorModifiedImages._MAX_SVG_SIZE
-				: image.naturalHeight;
+			const maxWidth =
+				svg ? VectorModifiedImages._MAX_SVG_SIZE : image.naturalWidth;
+			const maxHeight =
+				svg ? VectorModifiedImages._MAX_SVG_SIZE : image.naturalHeight;
 			const neededWidth = Math.min(maxWidth, Math.max(1, Math.ceil(width)));
 			const neededHeight = Math.min(maxHeight, Math.max(1, Math.ceil(height)));
 

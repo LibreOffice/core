@@ -48,11 +48,12 @@ class ShapingInteraction extends SelectionInteraction {
 			this.handle,
 			new cool.Point(this.at.x, this.at.y),
 		);
-		const kept = this.ortho
-			? (MeasurementGhost.heldWithShift(this.selection, this.handle, held) ??
+		const kept =
+			this.ortho ?
+				(MeasurementGhost.heldWithShift(this.selection, this.handle, held) ??
 				LineGhost.heldWithShift(this.selection, this.handle, held) ??
 				held)
-			: held;
+			:	held;
 		if (!this.snap) return kept;
 
 		return (
@@ -66,7 +67,10 @@ class ShapingInteraction extends SelectionInteraction {
 		this.at = this.led(to);
 		if (event) {
 			this.ortho = event.shiftKey;
-			this.snap = event.ctrlKey ? 'whole' : event.altKey ? 'tenth' : null;
+			this.snap =
+				event.ctrlKey ? 'whole'
+				: event.altKey ? 'tenth'
+				: null;
 		}
 		this.selection.redraw();
 	}
@@ -219,9 +223,8 @@ class MeasurementGhost {
 		const square = found.square;
 		const origin = square.apply(0, 0);
 		const unit = square.apply(0, 1).subtract(origin).length();
-		const length = unit
-			? square.apply(1, 0).subtract(origin).length() / unit
-			: 0;
+		const length =
+			unit ? square.apply(1, 0).subtract(origin).length() / unit : 0;
 		const value = MeasurementGhost.valueOf(found.measurement);
 		if (!length || !value) return null;
 
@@ -385,9 +388,9 @@ class MeasurementGhost {
 		value: string | null,
 	): number {
 		const written = measurement.value + ' ' + measurement.unit;
-		return value !== null && written.trim().length
-			? (measurement.textWidth * value.length) / written.trim().length
-			: measurement.textWidth;
+		return value !== null && written.trim().length ?
+				(measurement.textWidth * value.length) / written.trim().length
+			:	measurement.textWidth;
 	}
 
 	/*

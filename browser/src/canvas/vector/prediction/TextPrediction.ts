@@ -70,11 +70,13 @@ namespace cool {
 		/// when there is no selection or it ends in another paragraph.
 		static anchorInParagraph(caret: TypingCaret): LogicalCaret | null {
 			const anchor = caret.anchor;
-			return anchor &&
-				caret.logical &&
-				anchor.paragraph === caret.logical.paragraph
-				? anchor
-				: null;
+			return (
+					anchor &&
+						caret.logical &&
+						anchor.paragraph === caret.logical.paragraph
+				) ?
+					anchor
+				:	null;
 		}
 
 		/// True when a change at the caret shows here. With replacing, the change replaces a

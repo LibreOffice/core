@@ -487,14 +487,16 @@ class A11yValidator {
 		let group = element.closest(A11yValidator.GroupSelector);
 		while (group instanceof HTMLElement && container.contains(group)) {
 			const id = group.getAttribute('aria-labelledby');
-			const caption = id
-				? container.querySelector(`[id="${id}"]`)
-				: group.querySelector(':scope > legend');
+			const caption =
+				id ?
+					container.querySelector(`[id="${id}"]`)
+				:	group.querySelector(':scope > legend');
 			if (caption instanceof HTMLElement && this.isVisible(caption))
 				return true;
-			group = group.parentElement
-				? group.parentElement.closest(A11yValidator.GroupSelector)
-				: null;
+			group =
+				group.parentElement ?
+					group.parentElement.closest(A11yValidator.GroupSelector)
+				:	null;
 		}
 		return false;
 	}
@@ -794,9 +796,9 @@ class A11yValidator {
 
 		if (!isOverflow && node.accessibility && node.accessibility.combination) {
 			const combo =
-				language && node.accessibility[language]
-					? (node.accessibility[language] as string)
-					: node.accessibility.combination;
+				language && node.accessibility[language] ?
+					(node.accessibility[language] as string)
+				:	node.accessibility.combination;
 			const id = node.id || 'unknown';
 			items.push({ id: id, combination: combo });
 		}

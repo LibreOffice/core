@@ -212,14 +212,17 @@ namespace cool {
 			let kept = this._kept.get(pageId);
 			if (!kept || kept.data !== data || kept.key !== key) {
 				// An entry may draw beyond its box by half the margin and still be whole.
-				const canvas = TextPageVectorSection._staysOnPage(
-					data,
-					rectangle[2],
-					rectangle[3],
-					margin / 2 / scale,
-				)
-					? this._canvasFor(pageId, width, height, inView)
-					: null;
+				const canvas =
+					(
+						TextPageVectorSection._staysOnPage(
+							data,
+							rectangle[2],
+							rectangle[3],
+							margin / 2 / scale,
+						)
+					) ?
+						this._canvasFor(pageId, width, height, inView)
+					:	null;
 				const context = canvas?.getContext('2d') ?? null;
 				kept = { data, key, canvas: context ? canvas : null };
 				this._kept.set(pageId, kept);
@@ -257,12 +260,12 @@ namespace cool {
 			// The multi-page layout places pages apart from where the document has them and
 			// says where a given page went. The other layouts keep the document's places.
 			const onCanvas =
-				layout instanceof ViewLayoutMultiPage
-					? layout.documentPointToScreenWithIndex(corner, index)
-					: {
-							x: layout.documentToViewX(corner),
-							y: layout.documentToViewY(corner),
-						};
+				layout instanceof ViewLayoutMultiPage ?
+					layout.documentPointToScreenWithIndex(corner, index)
+				:	{
+						x: layout.documentToViewX(corner),
+						y: layout.documentToViewY(corner),
+					};
 			return [onCanvas.x - anchor[0], onCanvas.y - anchor[1]];
 		}
 

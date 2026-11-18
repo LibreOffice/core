@@ -138,20 +138,20 @@ class MorphMatcher {
 		};
 
 		pairByKey((object) =>
-			object.name && object.name.indexOf(MorphMatcher.forcedNamePrefix) === 0
-				? object.name
-				: undefined,
+			object.name && object.name.indexOf(MorphMatcher.forcedNamePrefix) === 0 ?
+				object.name
+			:	undefined,
 		);
 		pairByKey((object) =>
-			object.name
-				? MorphMatcher.kindOf(object) + '\n' + object.name
-				: undefined,
+			object.name ?
+				MorphMatcher.kindOf(object) + '\n' + object.name
+			:	undefined,
 		);
 		pairByKey((object) => {
 			const content = MorphMatcher.contentOf(object);
-			return content === undefined
-				? undefined
-				: MorphMatcher.kindOf(object) + '\n' + content;
+			return content === undefined ? undefined : (
+					MorphMatcher.kindOf(object) + '\n' + content
+				);
 		});
 
 		// The remaining objects of the same kind, nearest first.

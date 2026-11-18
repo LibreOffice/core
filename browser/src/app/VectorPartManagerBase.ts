@@ -597,11 +597,12 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		objects out, where they are named, and the oldest one otherwise.
 	*/
 	override deleteRefused(objectIds?: number[]): void {
-		const refused = objectIds
-			? this._deletedHere.find((note) =>
+		const refused =
+			objectIds ?
+				this._deletedHere.find((note) =>
 					objectIds.every((id: number) => note.objectIds.has(id)),
 				)
-			: this._deletedHere[0];
+			:	this._deletedHere[0];
 		if (refused) this._noDeleteReported(refused);
 	}
 
@@ -867,9 +868,8 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		for (let at = 0; at < count; ++at) {
 			if (now[at] === was[at] || this._bitmaps.get(now[at])) continue;
 			// the old one may itself still be stood in for
-			const standIn = this._bitmaps.get(was[at])
-				? was[at]
-				: this._standIns.get(was[at]);
+			const standIn =
+				this._bitmaps.get(was[at]) ? was[at] : this._standIns.get(was[at]);
 			if (standIn !== undefined) this._standIns.set(now[at], standIn);
 		}
 	}
@@ -1122,11 +1122,13 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 		const travel = this._travelX;
 		const x =
-			travel &&
-			travel.logical.paragraph === start.logical.paragraph &&
-			travel.logical.index === start.logical.index
-				? travel.x
-				: position.geometry().x;
+			(
+				travel &&
+				travel.logical.paragraph === start.logical.paragraph &&
+				travel.logical.index === start.logical.index
+			) ?
+				travel.x
+			:	position.geometry().x;
 		const logical =
 			this._textOf(target.tree, entryId)?.caretOnNextLine(
 				position.run,
@@ -1152,9 +1154,9 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		const pressed = this._pressedText(x, y, hitId);
 		if (!pressed || this._labelSelectsItsParagraph(pressed)) return null;
 		const logical = pressed.text.caretAtPoint(pressed.x, pressed.y);
-		return logical
-			? { target: pressed.target, entryId: pressed.entryId, logical }
-			: null;
+		return logical ?
+				{ target: pressed.target, entryId: pressed.entryId, logical }
+			:	null;
 	}
 
 	// The text where a press at (x, y) on the object hitId lands, or null when the press is for
@@ -1195,9 +1197,9 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		const pressed = this._pressedText(x, y, hitId);
 		if (!pressed) return undefined;
 		if (this._labelSelectsItsParagraph(pressed)) return 'move';
-		return pressed.text.caretInFrontAt(pressed.x, pressed.y)
-			? 'text'
-			: undefined;
+		return pressed.text.caretInFrontAt(pressed.x, pressed.y) ?
+				'text'
+			:	undefined;
 	}
 
 	/// Put the caret where a click at (x, y), in document twips, lands in the edited text, and
@@ -1280,9 +1282,8 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	override dragTextTo(x: number, y: number): void {
 		const start = this._dragStart;
 		const target = this._caretTarget();
-		const origin = target
-			? this._entryOrigin(target.tree.data, start?.entryId)
-			: null;
+		const origin =
+			target ? this._entryOrigin(target.tree.data, start?.entryId) : null;
 		if (!start || !target || !origin) return;
 		const logical = this._textOf(target.tree, start.entryId)?.caretNearPoint(
 			x - origin.x,
@@ -1304,9 +1305,8 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		anchor: cool.LogicalCaret | null,
 	): boolean {
 		const local = target.tree.caretIn(entryId, logical)?.geometry();
-		const geometry = local
-			? this._inDocument(target.tree.data, entryId, local)
-			: null;
+		const geometry =
+			local ? this._inDocument(target.tree.data, entryId, local) : null;
 		if (!geometry) return false;
 		// An anchor at the caret selects nothing.
 		if (anchor && cool.compareCarets(anchor, logical) === 0) anchor = null;
@@ -1361,22 +1361,21 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 		// The handles go at the start and the end of the selection, in reading order.
 		const [from, to] =
-			cool.compareCarets(anchor, logical) <= 0
-				? [anchor, logical]
-				: [logical, anchor];
+			cool.compareCarets(anchor, logical) <= 0 ?
+				[anchor, logical]
+			:	[logical, anchor];
 		const handle = (caret: cool.LogicalCaret): cool.SimpleRectangle | null => {
 			const local = tree.caretIn(entryId, caret)?.geometry();
-			const geometry = local
-				? this._inDocument(tree.data, entryId, local)
-				: null;
-			return geometry
-				? new cool.SimpleRectangle(
+			const geometry =
+				local ? this._inDocument(tree.data, entryId, local) : null;
+			return geometry ?
+					new cool.SimpleRectangle(
 						Math.round(geometry.x),
 						Math.round(geometry.top),
 						0,
 						Math.round(geometry.height),
 					)
-				: null;
+				:	null;
 		};
 		TextSelections.setStartRectangle(handle(from));
 		TextSelections.setEndRectangle(handle(to));
@@ -1398,13 +1397,13 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			// An edit without an object id is not recorded.
 			(place) => {
 				const objectId = place.position.objectId;
-				return objectId === undefined
-					? null
-					: {
+				return objectId === undefined ? null : (
+						{
 							ticket: cool.InputSequence.ticketForTheNextMessage(),
 							partId: place.tree.data.partId,
 							objectId,
-						};
+						}
+					);
 			},
 		);
 		if (!typed) return false;
@@ -1424,9 +1423,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	protected _placeCaret(target: EditTarget, fallbackShift: number): void {
 		if (target.logical) {
 			const local = this._caretPositionIn(target)?.geometry();
-			const geometry = local
-				? this._inDocument(target.tree.data, target.entryId, local)
-				: null;
+			const geometry =
+				local ?
+					this._inDocument(target.tree.data, target.entryId, local)
+				:	null;
 			if (geometry) {
 				this._setCaretRectangle(geometry);
 				return;
@@ -1505,9 +1505,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			}
 		}
 		const remaining = this._typedEdits.answered(inputSequence, ofPart);
-		const toReplay = replaced
-			? remaining.filter((edit) => replaced.includes(edit.objectId))
-			: remaining;
+		const toReplay =
+			replaced ?
+				remaining.filter((edit) => replaced.includes(edit.objectId))
+			:	remaining;
 		if (!toReplay.length) return;
 		const data = this._cache.get(partId);
 		if (!data) {
@@ -1526,17 +1527,18 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			const newest = remaining[remaining.length - 1];
 			const moved = LocalCaret.ahead();
 			const caret =
-				moved &&
-				moved.caret.partId === partId &&
-				moved.sequence > cool.UnansweredEdits.sentAs(newest)
-					? { entryId: moved.caret.entryId, logical: moved.caret.logical }
-					: { entryId: newest.objectId, logical: newest.caretAfter };
+				(
+					moved &&
+					moved.caret.partId === partId &&
+					moved.sequence > cool.UnansweredEdits.sentAs(newest)
+				) ?
+					{ entryId: moved.caret.entryId, logical: moved.caret.logical }
+				:	{ entryId: newest.objectId, logical: newest.caretAfter };
 			const local = this._treeOf(data)
 				.caretIn(caret.entryId, caret.logical)
 				?.geometry();
-			const geometry = local
-				? this._inDocument(data, caret.entryId, local)
-				: null;
+			const geometry =
+				local ? this._inDocument(data, caret.entryId, local) : null;
 			if (geometry) this._setCaretRectangle(geometry);
 			app.file.textCursor.logical = {
 				paragraph: caret.logical.paragraph,
@@ -1570,11 +1572,13 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			// A caret moved here after the newest edit is where the engine's caret
 			// answers from.
 			expected: (newest) =>
-				moved &&
-				moved.caret.partId === partId &&
-				moved.sequence > cool.UnansweredEdits.sentAs(newest)
-					? moved.caret.logical
-					: newest.caretAfter,
+				(
+					moved &&
+					moved.caret.partId === partId &&
+					moved.sequence > cool.UnansweredEdits.sentAs(newest)
+				) ?
+					moved.caret.logical
+				:	newest.caretAfter,
 			elsewhere: () => this._abandonEdits(partId),
 		});
 	}

@@ -83,18 +83,18 @@ class FocusCellSection extends CanvasSectionObject {
 		let cursor = app.calc.cellCursor.rectangle?.clone();
 		if (!cursor) return;
 		cursor.pX1 =
-			app.calc.splitCoordinate.pX !== 0
-				? 0
-				: app.activeDocument.activeLayout.viewedRectangle.pX1;
+			app.calc.splitCoordinate.pX !== 0 ?
+				0
+			:	app.activeDocument.activeLayout.viewedRectangle.pX1;
 		cursor.pX2 = app.activeDocument.activeLayout.viewedRectangle.pX2;
 		this.drawViewRectangle(cursor, true);
 
 		cursor = app.calc.cellCursor.rectangle?.clone();
 		if (!cursor) return;
 		cursor.pY1 =
-			app.calc.splitCoordinate.pY !== 0
-				? 0
-				: app.activeDocument.activeLayout.viewedRectangle.pY1;
+			app.calc.splitCoordinate.pY !== 0 ?
+				0
+			:	app.activeDocument.activeLayout.viewedRectangle.pY1;
 		cursor.pY2 = app.activeDocument.activeLayout.viewedRectangle.pY2;
 		this.drawViewRectangle(cursor, true);
 

@@ -25,14 +25,14 @@ namespace cool {
 			const relative = caption.escapeRelative;
 			const alongX =
 				box.minX +
-				(relative !== undefined
-					? (box.width * relative) / 10000
-					: (caption.escapeAbsolute ?? 0));
+				(relative !== undefined ?
+					(box.width * relative) / 10000
+				:	(caption.escapeAbsolute ?? 0));
 			const alongY =
 				box.minY +
-				(relative !== undefined
-					? (box.height * relative) / 10000
-					: (caption.escapeAbsolute ?? 0));
+				(relative !== undefined ?
+					(box.height * relative) / 10000
+				:	(caption.escapeAbsolute ?? 0));
 
 			// the first kind takes the sides the other way round
 			const bestFit = caption.escapeDirection === 2;
@@ -50,18 +50,18 @@ namespace cool {
 				const left = new Point(box.minX - caption.gap, alongY);
 				const right = new Point(box.maxX + caption.gap, alongY);
 				best =
-					end.x - left.x < right.x - end.x
-						? { at: left, acrossTheSide: true, side: -1 }
-						: { at: right, acrossTheSide: true, side: 1 };
+					end.x - left.x < right.x - end.x ?
+						{ at: left, acrossTheSide: true, side: -1 }
+					:	{ at: right, acrossTheSide: true, side: 1 };
 			}
 
 			if (tryTopBottom) {
 				const top = new Point(alongX, box.minY - caption.gap);
 				const bottom = new Point(alongX, box.maxY + caption.gap);
 				const other =
-					end.y - top.y < bottom.y - end.y
-						? { at: top, acrossTheSide: false, side: -1 }
-						: { at: bottom, acrossTheSide: false, side: 1 };
+					end.y - top.y < bottom.y - end.y ?
+						{ at: top, acrossTheSide: false, side: -1 }
+					:	{ at: bottom, acrossTheSide: false, side: 1 };
 
 				let takeIt = !bestFit;
 				if (!takeIt) {
@@ -86,9 +86,9 @@ namespace cool {
 			// a line bent once: the end is brought onto the line the tail leaves along
 			if (caption.type === 1)
 				return [
-					leaves.acrossTheSide
-						? new Point(leaves.at.x, end.y)
-						: new Point(end.x, leaves.at.y),
+					leaves.acrossTheSide ?
+						new Point(leaves.at.x, end.y)
+					:	new Point(end.x, leaves.at.y),
 					leaves.at,
 				];
 
@@ -97,18 +97,19 @@ namespace cool {
 			// a piece of line comes out of the box first, half the way long where fitted
 			const fitted = caption.fitLineLength === true;
 			const length = caption.lineLength ?? 0;
-			const bend = leaves.acrossTheSide
-				? new Point(
-						fitted
-							? (end.x + leaves.at.x) / 2
-							: leaves.at.x + leaves.side * length,
+			const bend =
+				leaves.acrossTheSide ?
+					new Point(
+						fitted ?
+							(end.x + leaves.at.x) / 2
+						:	leaves.at.x + leaves.side * length,
 						leaves.at.y,
 					)
-				: new Point(
+				:	new Point(
 						leaves.at.x,
-						fitted
-							? (end.y + leaves.at.y) / 2
-							: leaves.at.y + leaves.side * length,
+						fitted ?
+							(end.y + leaves.at.y) / 2
+						:	leaves.at.y + leaves.side * length,
 					);
 
 			return [end, bend, leaves.at];
@@ -152,9 +153,9 @@ namespace cool {
 		public static layAnew(object: SlideObject): void {
 			const drawn = object.primitives ?? [];
 			const wrap =
-				drawn.length === 1 && drawn[0].type === TransformPrimitive.type
-					? (drawn[0] as TransformPrimitive)
-					: undefined;
+				drawn.length === 1 && drawn[0].type === TransformPrimitive.type ?
+					(drawn[0] as TransformPrimitive)
+				:	undefined;
 			const under = Matrix2D.fromArray(wrap?.matrix);
 			const mapping = Matrix2D.fromArray(object.transform);
 			const end = CaptionTail.endOf(object);
@@ -215,18 +216,19 @@ namespace cool {
 						const hidden = children[0]?.type === HiddenGeometryPrimitive.type;
 						const stroke = CaptionTail.strokeIn(children);
 						const line: Primitive =
-							stroke && !hidden
-								? ({ ...stroke, path: path } as PolygonStrokePrimitive)
-								: ({
-										type: PolygonHairlinePrimitive.type,
-										path: path,
-									} as PolygonHairlinePrimitive);
+							stroke && !hidden ?
+								({ ...stroke, path: path } as PolygonStrokePrimitive)
+							:	({
+									type: PolygonHairlinePrimitive.type,
+									path: path,
+								} as PolygonHairlinePrimitive);
 
 						return {
 							...primitive,
-							children: hidden
-								? [{ type: HiddenGeometryPrimitive.type, children: [line] }]
-								: [line],
+							children:
+								hidden ?
+									[{ type: HiddenGeometryPrimitive.type, children: [line] }]
+								:	[line],
 						};
 					}
 

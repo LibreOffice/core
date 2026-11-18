@@ -51,9 +51,9 @@ class WriterVectorManager extends VectorPartManagerBase {
 	pageRectangles(): number[][] {
 		const rectangles: number[][] = app.file.writer.pageRectangleList;
 		const pageIds: string[] = app.file.writer.pageIds;
-		return rectangles && pageIds && pageIds.length === rectangles.length
-			? rectangles
-			: [];
+		return rectangles && pageIds && pageIds.length === rectangles.length ?
+				rectangles
+			:	[];
 	}
 
 	/// The id of the page at the index of the page list, or undefined when the list holds no
@@ -216,9 +216,9 @@ class WriterVectorManager extends VectorPartManagerBase {
 	protected override _caretPositionIn(
 		target: EditTarget,
 	): cool.CaretPosition | null {
-		return target.entryId !== undefined && target.logical
-			? target.tree.caretIn(target.entryId, target.logical)
-			: null;
+		return target.entryId !== undefined && target.logical ?
+				target.tree.caretIn(target.entryId, target.logical)
+			:	null;
 	}
 
 	/// Each paragraph is a text frame, and the frames after it stay where the server placed

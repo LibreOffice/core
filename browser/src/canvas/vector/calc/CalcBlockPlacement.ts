@@ -424,9 +424,9 @@ namespace cool {
 				mapping = {
 					start: pixels ? pixels.startpos * pixel : NaN,
 					scale:
-						pixels && print && print.size > 0
-							? (pixels.size * pixel) / print.size
-							: 0,
+						pixels && print && print.size > 0 ?
+							(pixels.size * pixel) / print.size
+						:	0,
 				};
 				known.set(cell, mapping);
 			}
@@ -503,8 +503,9 @@ namespace cool {
 		const printRow = calcCellStart(rows);
 		const shiftColumn = calcIndexShift(shifts, 'columns');
 		const shiftRow = calcIndexShift(shifts, 'rows');
-		const frame: CalcBlockFrame = shifts.length
-			? {
+		const frame: CalcBlockFrame =
+			shifts.length ?
+				{
 					mapColumn: (cell, offset) =>
 						mapColumn(shiftColumn(cell).index, offset),
 					mapRow: (cell, offset) => mapRow(shiftRow(cell).index, offset),
@@ -513,7 +514,7 @@ namespace cool {
 					tileOrigin,
 					pixel,
 				}
-			: {
+			:	{
 					mapColumn,
 					mapRow,
 					printColumn,
@@ -526,9 +527,10 @@ namespace cool {
 			version: part.version,
 			content: {
 				ink: part.content.ink ? placer.ink(part.content.ink) : undefined,
-				layers: part.content.layers
-					? placeLayers(placer, part.content.layers)
-					: undefined,
+				layers:
+					part.content.layers ?
+						placeLayers(placer, part.content.layers)
+					:	undefined,
 			},
 		});
 		const rowsInOrder = Array.from(block.rows.keys())

@@ -121,9 +121,9 @@ class AboutDialog {
 			productName = window.MobileAppName;
 		} else {
 			productName =
-				typeof brandProductName === 'string' && brandProductName.length > 0
-					? brandProductName
-					: 'Collabora Online Development Edition (unbranded)';
+				typeof brandProductName === 'string' && brandProductName.length > 0 ?
+					brandProductName
+				:	'Collabora Online Development Edition (unbranded)';
 		}
 
 		const productNameElement = content.querySelector(
@@ -328,14 +328,14 @@ class AboutDialog {
 			app.socket.threadLocalLoggingLevelToggle =
 				!app.socket.threadLocalLoggingLevelToggle;
 
-			const newLogLevel = app.socket.threadLocalLoggingLevelToggle
-				? 'verbose'
-				: 'default';
+			const newLogLevel =
+				app.socket.threadLocalLoggingLevelToggle ? 'verbose' : 'default';
 			app.socket.sendMessage('loggingleveloverride ' + newLogLevel);
 
-			const logLevelInformation = app.socket.threadLocalLoggingLevelToggle
-				? 'most verbose (from coolwsd.xml)'
-				: 'default (from coolwsd.xml)';
+			const logLevelInformation =
+				app.socket.threadLocalLoggingLevelToggle ?
+					'most verbose (from coolwsd.xml)'
+				:	'default (from coolwsd.xml)';
 			console.debug('Log level: ' + logLevelInformation);
 		}
 	}

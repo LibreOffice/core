@@ -480,10 +480,12 @@ window.L.Control.Extension = window.L.Control.extend({
 	// apps load over file://, where the iframe's origin is opaque and only '*' reaches it.  A
 	// GAS add-on frame's origin is opaque, too, through its sandbox:
 	_targetOrigin: function (): string {
-		return window.origin.startsWith('http') &&
-			!(this.options.manifest as ExtensionManifest).isGasExtension
-			? window.origin
-			: '*';
+		return (
+				window.origin.startsWith('http') &&
+					!(this.options.manifest as ExtensionManifest).isGasExtension
+			) ?
+				window.origin
+			:	'*';
 	},
 
 	_postToIframe: function (payload: object): boolean {
@@ -498,9 +500,10 @@ window.L.Control.Extension = window.L.Control.extend({
 	// A call or proxy ID that cool.js made in the dialog iframe starts with "dlg-", and every
 	// other one comes from the sidebar iframe:
 	_callerWindow: function (id: string): Window | null {
-		const frame = String(id).startsWith('dlg-')
-			? this._dialog && this._dialog.iframeDialog._iframe
-			: this._iframe;
+		const frame =
+			String(id).startsWith('dlg-') ?
+				this._dialog && this._dialog.iframeDialog._iframe
+			:	this._iframe;
 		return (frame && frame.contentWindow) || null;
 	},
 
@@ -584,9 +587,10 @@ window.L.Control.Extension = window.L.Control.extend({
 	// sidebar iframe to exist: the command runs whether or not this extension's
 	// panel has ever been opened.
 	invokeCommand: function (commandId: string): void {
-		const commands = this.options.manifest.contributes
-			? this.options.manifest.contributes.commands
-			: undefined;
+		const commands =
+			this.options.manifest.contributes ?
+				this.options.manifest.contributes.commands
+			:	undefined;
 		const command =
 			commands && commands.find((c: ExtensionCommand) => c.id === commandId);
 		if (command && command.panel) {
@@ -1552,17 +1556,17 @@ async function tryLoadAppsScriptExtension(
 	}
 	const manifest: ExtensionManifest = {
 		manifestVersion:
-			gasManifest.manifestVersion === undefined
-				? '0.2'
-				: gasManifest.manifestVersion,
+			gasManifest.manifestVersion === undefined ?
+				'0.2'
+			:	gasManifest.manifestVersion,
 		name: gasManifest.name || listing.name || id,
 		isGasExtension: true,
 	};
 	if (gasManifest.icon) manifest.icon = gasManifest.icon;
 	const supports =
-		gasManifest.supports !== undefined
-			? gasManifest.supports
-			: listing.supports;
+		gasManifest.supports !== undefined ?
+			gasManifest.supports
+		:	listing.supports;
 	if (supports && supports.length) {
 		manifest.supports = supports;
 	}
@@ -1694,9 +1698,10 @@ const nativeFrameSandbox =
 // A GAS add-on frame has an origin of its own, as an HtmlService page has in GAS, and so do its
 // popups.  The desktop apps load extensions over file://, where a frame with an origin of its own
 // cannot load its scripts, so there it keeps the sandbox of a native extension's frame:
-const gasFrameSandbox = window.location.protocol.startsWith('http')
-	? 'allow-scripts allow-forms allow-popups allow-modals allow-downloads'
-	: nativeFrameSandbox;
+const gasFrameSandbox =
+	window.location.protocol.startsWith('http') ?
+		'allow-scripts allow-forms allow-popups allow-modals allow-downloads'
+	:	nativeFrameSandbox;
 
 // The messages that GAS add-on frames need:
 const gasFrameMessageIds = new Set([
@@ -1760,9 +1765,9 @@ function answerGasProxyCall(e: {
 	// A GAS add-on frame makes its UrlFetchApp requests itself, where the
 	// Content-Security-Policy of cool.html does not apply:
 	const fn =
-		e.method === 'urlFetch' && proxy.frame !== undefined
-			? (...args: unknown[]) => fetchThroughGasFrame(proxy.frame, args)
-			: handler[e.method];
+		e.method === 'urlFetch' && proxy.frame !== undefined ?
+			(...args: unknown[]) => fetchThroughGasFrame(proxy.frame, args)
+		:	handler[e.method];
 	try {
 		// A handler may return a Promise (urlFetch does): wait for it before
 		// sending proxyreturn, so a non-void async method blocks the kit-side
@@ -2030,11 +2035,10 @@ function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
 			if (contentType) headers['Content-Type'] = contentType;
 			try {
 				const body =
-					method === 'GET' || method === 'HEAD'
-						? undefined
-						: payloadIsBase64
-							? Uint8Array.from(atob(payload), (c) => c.charCodeAt(0))
-							: payload;
+					method === 'GET' || method === 'HEAD' ? undefined
+					: payloadIsBase64 ?
+						Uint8Array.from(atob(payload), (c) => c.charCodeAt(0))
+					:	payload;
 				const resp = await fetch(url, {
 					method: method,
 					headers: headers,
@@ -2070,9 +2074,9 @@ function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
 					headerValues: [],
 					body: '',
 					error:
-						err && (err as Error).message
-							? (err as Error).message
-							: String(err),
+						err && (err as Error).message ?
+							(err as Error).message
+						:	String(err),
 				};
 			}
 		},
@@ -2223,11 +2227,13 @@ async function localizeManifest(
 	const catalog = await loadExtensionCatalog(baseRel);
 	if (!catalog) return;
 	const tr = (s: string | undefined): string | undefined =>
-		s !== undefined &&
-		Object.prototype.hasOwnProperty.call(catalog, s) &&
-		catalog[s] !== ''
-			? catalog[s]
-			: s;
+		(
+			s !== undefined &&
+			Object.prototype.hasOwnProperty.call(catalog, s) &&
+			catalog[s] !== ''
+		) ?
+			catalog[s]
+		:	s;
 	manifest.name = tr(manifest.name);
 	const c = manifest.contributes;
 	if (!c) return;

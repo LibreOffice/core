@@ -246,9 +246,9 @@ class ContextMenuControl extends JSControl {
 			const unoentry = entry as MenuDefinition;
 			Util.ensureValue(unoentry.uno);
 			const uno =
-				unoentry.uno.indexOf('.uno:') === 0
-					? unoentry.uno
-					: '.uno:' + unoentry.uno;
+				unoentry.uno.indexOf('.uno:') === 0 ?
+					unoentry.uno
+				:	'.uno:' + unoentry.uno;
 			if (
 				app.map._clip === undefined ||
 				!app.map._clip.filterExecCopyPaste(uno)

@@ -388,11 +388,13 @@ abstract class BaseNode {
 		if (this.eFillMode === FillModes.Auto) {
 			// see SMIL recommendation document
 			this.eFillMode =
-				this.aEnd ||
-				this.nRepeatCount != 1 ||
-				(this.aDuration && !this.aDuration.isIndefinite())
-					? FillModes.Remove
-					: FillModes.Freeze;
+				(
+					this.aEnd ||
+					this.nRepeatCount != 1 ||
+					(this.aDuration && !this.aDuration.isIndefinite())
+				) ?
+					FillModes.Remove
+				:	FillModes.Freeze;
 		}
 
 		// resolve restart value

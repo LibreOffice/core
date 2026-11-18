@@ -82,9 +82,8 @@ namespace BackstageTemplates {
   }
 
   export function openTile(props: OpenTileProps): HTMLElement {
-    const ariaLabel = props.subtitle
-      ? `${props.label} (${props.subtitle})`
-      : props.label;
+    const ariaLabel =
+      props.subtitle ? `${props.label} (${props.subtitle})` : props.label;
     const cls = ['backstage-open-tile', props.extraClass]
       .filter(Boolean)
       .join(' ');
@@ -103,14 +102,14 @@ namespace BackstageTemplates {
             .join(' ')}
           aria-hidden="true"
         >
-          {props.iconName
-            ? BackstageTemplates.inlineIcon(props.iconName)
-            : null}
+          {props.iconName ?
+            BackstageTemplates.inlineIcon(props.iconName)
+          : null}
         </span>
         <span class="backstage-open-tile-label">{props.label}</span>
-        {props.subtitle ? (
+        {props.subtitle ?
           <span class="backstage-open-tile-sublabel">{props.subtitle}</span>
-        ) : null}
+        : null}
       </div>
     );
   }

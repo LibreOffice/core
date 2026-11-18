@@ -207,9 +207,9 @@ class ShapeTransitionMask {
 		position: number,
 		size: number,
 	): cool.AreaPiece {
-		return across
-			? { rectangle: [position, maskLow, size, maskHigh - maskLow] }
-			: { rectangle: [maskLow, position, maskHigh - maskLow, size] };
+		return across ?
+				{ rectangle: [position, maskLow, size, maskHigh - maskLow] }
+			:	{ rectangle: [maskLow, position, maskHigh - maskLow, size] };
 	}
 
 	// Uncovered from one edge: the top, or the bottom in reverse, for top
@@ -220,18 +220,11 @@ class ShapeTransitionMask {
 		progress: number,
 	): cool.AreaPiece[] {
 		const down = subtype === TransitionSubType.TOPTOBOTTOM;
-		const fromStart = down
-			? forward
-			: subtype === TransitionSubType.LEFTTORIGHT && forward;
-		return fromStart
-			? [ShapeTransitionMask.band(!down, maskLow, progress - maskLow)]
-			: [
-					ShapeTransitionMask.band(
-						!down,
-						1 - progress,
-						maskHigh - 1 + progress,
-					),
-				];
+		const fromStart =
+			down ? forward : subtype === TransitionSubType.LEFTTORIGHT && forward;
+		return fromStart ?
+				[ShapeTransitionMask.band(!down, maskLow, progress - maskLow)]
+			:	[ShapeTransitionMask.band(!down, 1 - progress, maskHigh - 1 + progress)];
 	}
 
 	// Blades about the center, each turning clockwise from the top to the
@@ -301,9 +294,10 @@ class ShapeTransitionMask {
 				const filled = clampN(2 * progress - (first ? 0 : 1), 0, 1);
 				if (filled <= 0) continue;
 				pieces.push({
-					rectangle: across
-						? [column * edge, row * edge, filled * edge, edge]
-						: [column * edge, row * edge, edge, filled * edge],
+					rectangle:
+						across ?
+							[column * edge, row * edge, filled * edge, edge]
+						:	[column * edge, row * edge, edge, filled * edge],
 				});
 			}
 		}
@@ -481,9 +475,10 @@ class ShapeTransitionMask {
 			const reach = 2 * progress - step;
 			if (reach <= 0) continue;
 			pieces.push({
-				rectangle: fromRight
-					? [1 - reach, row / count, maskHigh - 1 + reach, 1 / count]
-					: [maskLow, row / count, reach - maskLow, 1 / count],
+				rectangle:
+					fromRight ?
+						[1 - reach, row / count, maskHigh - 1 + reach, 1 / count]
+					:	[maskLow, row / count, reach - maskLow, 1 / count],
 			});
 		}
 		return pieces;

@@ -127,9 +127,9 @@ function buildFrame(parentContainer, data, builder) {
 		const firstChild = data.children[0];
 
 		const fixedTexts =
-			firstChild.type === 'fixedtext'
-				? [firstChild]
-				: firstChild.children || [];
+			firstChild.type === 'fixedtext' ?
+				[firstChild]
+			:	firstChild.children || [];
 
 		for (const fixedText of fixedTexts) {
 			label = window.L.DomUtil.create(

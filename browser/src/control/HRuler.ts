@@ -598,9 +598,9 @@ class HRuler extends Ruler {
 	// paragraph indent has to be added for the marks to line up with the tabbed
 	// text.
 	_tabStopIndentPixel() {
-		return this.options.tabsRelativeToIndent
-			? this.options.leftParagraphIndent || 0
-			: 0;
+		return this.options.tabsRelativeToIndent ?
+				this.options.leftParagraphIndent || 0
+			:	0;
 	}
 
 	// Place each tab stop marker at the position core reported, offset by the
@@ -1166,9 +1166,9 @@ class HRuler extends Ruler {
 			const markerRect = spec.marker.getBoundingClientRect();
 			spec.tip.setPosition(
 				markerRect.left + markerRect.width / 2 - spec.tip.offsetWidth / 2,
-				above
-					? rulerRect.top - spec.tip.offsetHeight - 6
-					: rulerRect.bottom + 6,
+				above ?
+					rulerRect.top - spec.tip.offsetHeight - 6
+				:	rulerRect.bottom + 6,
 			);
 		});
 	}

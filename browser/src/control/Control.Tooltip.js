@@ -22,9 +22,10 @@ class Tooltip {
 		// cross the gap and reach it.
 		this._options = window.L.extend({ timeout: 150, hoverGrace: 600 }, options);
 		let win = this._options.window ? this._options.window : window;
-		this._container = this._options.container
-			? this._options.container
-			: window.L.DomUtil.create('div', 'cooltip-text', win.document.body);
+		this._container =
+			this._options.container ?
+				this._options.container
+			:	window.L.DomUtil.create('div', 'cooltip-text', win.document.body);
 		this._container.id = 'cooltip';
 		// The container does not take pointer events, so whether the pointer is
 		// on it is answered by its rectangle rather than by enter and leave.
@@ -103,9 +104,9 @@ class Tooltip {
 	// A hoverable tooltip stays long enough to be reached and read, and a plain one leaves
 	// with the pointer so it is not in the way of the next button.
 	hideDelay() {
-		return this.isHoverable()
-			? this._options.hoverGrace
-			: this._options.timeout / 2;
+		return this.isHoverable() ?
+				this._options.hoverGrace
+			:	this._options.timeout / 2;
 	}
 
 	// Pin the tooltip on a specific element so it stays visible while the
@@ -229,9 +230,8 @@ class Tooltip {
 			return;
 		}
 
-		const parts = textContent
-			? null
-			: JSDialog.ShortcutsUtil.splitTooltip(content || '');
+		const parts =
+			textContent ? null : JSDialog.ShortcutsUtil.splitTooltip(content || '');
 		if (parts) content = parts.label;
 
 		this._container.classList.toggle('cooltip-with-icon', !!iconUrl);
@@ -450,9 +450,8 @@ class ValueTooltip {
 				'cool-value-tooltip-text',
 				tip,
 			);
-			text.innerText = content.label
-				? content.label + ': ' + content.value
-				: content.value;
+			text.innerText =
+				content.label ? content.label + ': ' + content.value : content.value;
 		} else {
 			window.L.DomUtil.removeClass(tip, 'cool-value-tooltip--focused');
 			tip.innerText = content.value;

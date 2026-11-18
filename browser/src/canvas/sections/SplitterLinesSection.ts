@@ -123,9 +123,9 @@ class SplitterLinesSection extends CanvasSectionObject {
 		for (let i = 0; i < colorStops.length; i++) {
 			// set offset with colorcode & handle special case for horizontal line in RTL mode
 			const offset =
-				!isVertSplitter && this.isCalcRTL()
-					? colorStops[colorStops.length - i - 1].offset
-					: colorStops[i].offset;
+				!isVertSplitter && this.isCalcRTL() ?
+					colorStops[colorStops.length - i - 1].offset
+				:	colorStops[i].offset;
 			linearGradient.addColorStop(offset, colorStops[i].colorCode);
 		}
 

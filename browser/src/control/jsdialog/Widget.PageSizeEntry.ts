@@ -52,9 +52,8 @@ function createPageSizeEntryWidget(data: any, builder: any): HTMLElement {
 		item.className = 'ui-combobox-entry jsdialog ui-grid-cell';
 		item.id = opt.id;
 		item.setAttribute('role', 'option');
-		const isSelected = isCalc
-			? JSDialog.isCurrentCalcPageSize(opt.uno)
-			: index === 0;
+		const isSelected =
+			isCalc ? JSDialog.isCurrentCalcPageSize(opt.uno) : index === 0;
 		if (isSelected) item.classList.add('selected');
 		item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
 		item.tabIndex = 0;

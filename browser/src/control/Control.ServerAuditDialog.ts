@@ -276,18 +276,18 @@ class ServerAuditDialog {
 					entries.push({
 						row: 0,
 						columns: [
-							!this.isErrorEntry(entry)
-								? this.isWarnEntry(entry)
-									? warnIcon
-									: okIcon
-								: errorIcon,
+							!this.isErrorEntry(entry) ?
+								this.isWarnEntry(entry) ?
+									warnIcon
+								:	okIcon
+							:	errorIcon,
 							{ text: status[0] },
-							status[1] && status[2]
-								? {
-										text: status[1],
-										link: status[2],
-									}
-								: { text: '' },
+							status[1] && status[2] ?
+								{
+									text: status[1],
+									link: status[2],
+								}
+							:	{ text: '' },
 						],
 					} as TreeEntryJSON);
 				}
@@ -376,17 +376,17 @@ class ServerAuditDialog {
 							entries: entries,
 							enabled: entries.length > 0,
 						},
-						!hasErrors
-							? {
-									id: 'auditsuccess',
-									type: 'fixedtext',
-									text: _('No issues found'),
-								}
-							: {
-									id: 'auditerror',
-									type: 'fixedtext',
-									text: _('Alerts:') + ' ' + countErrors,
-								},
+						!hasErrors ?
+							{
+								id: 'auditsuccess',
+								type: 'fixedtext',
+								text: _('No issues found'),
+							}
+						:	{
+								id: 'auditerror',
+								type: 'fixedtext',
+								text: _('Alerts:') + ' ' + countErrors,
+							},
 						{
 							id: this.id + '-buttonbox',
 							type: 'buttonbox',

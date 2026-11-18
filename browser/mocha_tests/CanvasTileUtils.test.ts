@@ -61,9 +61,10 @@ describe('CanvasTileUtils', function () {
 				seed = (seed * 1103515245 + 12345) & 0x7fffffff;
 				const run = 1 + (seed % 13);
 				const transparent = y % 32 === 5 && x < 64;
-				const pixel = transparent
-					? [0, 0, 0, 0]
-					: [seed & 0xff, (seed >> 8) & 0xff, (seed >> 16) & 0xff, 255];
+				const pixel =
+					transparent ?
+						[0, 0, 0, 0]
+					:	[seed & 0xff, (seed >> 8) & 0xff, (seed >> 16) & 0xff, 255];
 				for (let i = 0; i < run && x < size; ++i, ++x)
 					pixels.set(pixel, (y * size + x) * 4);
 			}

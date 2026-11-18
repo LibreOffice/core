@@ -149,9 +149,9 @@ class SelectionSnap {
 							snapOffset = xList[j] - xList[0]; // 0, half width or full width.
 							// k === 1 means the other object's center was the snap target.
 							centerSnap =
-								k === 1
-									? [targets[1], rectangles[i][1] + rectangles[i][3] / 2]
-									: null;
+								k === 1 ?
+									[targets[1], rectangles[i][1] + rectangles[i][3] / 2]
+								:	null;
 							// Both centers meet when the matched point is the active object's center too.
 							centerToCenter = k === 1 && xList[j] === xList[1];
 						}
@@ -198,9 +198,9 @@ class SelectionSnap {
 							snapOffset = yList[j] - yList[0]; // 0, half height or full height.
 							// k === 1 means the other object's center was the snap target.
 							centerSnap =
-								k === 1
-									? [rectangles[i][0] + rectangles[i][2] / 2, targets[1]]
-									: null;
+								k === 1 ?
+									[rectangles[i][0] + rectangles[i][2] / 2, targets[1]]
+								:	null;
 							// Both centers meet when the matched point is the active object's center too.
 							centerToCenter = k === 1 && yList[j] === yList[1];
 						}

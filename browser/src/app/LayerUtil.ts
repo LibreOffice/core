@@ -104,14 +104,16 @@ class CSelections extends BaseClass {
 		let attributes: any;
 		if (!this._selection) {
 			if (!this._isOle) {
-				const fillColor = this._isView
-					? app.LOUtil.rgbToHex(this._map.getViewColor(this._viewId))
-					: this._styleData.getPropValue('background-color');
+				const fillColor =
+					this._isView ?
+						app.LOUtil.rgbToHex(this._map.getViewColor(this._viewId))
+					:	this._styleData.getPropValue('background-color');
 				const opacity = this._styleData.getFloatPropValue('opacity');
 				const weight =
 					this._styleData.getFloatPropWithoutUnit('border-top-width');
-				attributes = this._isText
-					? {
+				attributes =
+					this._isText ?
+						{
 							viewId: this._isView ? this._viewId : undefined,
 							groupType: PathGroupType.TextSelection,
 							name: this._name,
@@ -124,7 +126,7 @@ class CSelections extends BaseClass {
 							fill: true,
 							weight: 1.0,
 						}
-					: {
+					:	{
 							viewId: this._isView ? this._viewId : undefined,
 							name: this._name,
 							pointerEvents: 'none',

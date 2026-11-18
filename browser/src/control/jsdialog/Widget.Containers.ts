@@ -136,9 +136,9 @@ JSDialog.grid = function (
 		// group's min-width equalization relies on matching column widths across
 		// grids, so pin columns to their content width for a grid that has one.
 		(expandCols.size === 0 && hasSizeGroup ? ' justify-content: start;' : '') +
-		(hasVexpandChild
-			? ' --jsdialog-filled-rows: ' + filledRowTemplate + ';'
-			: '') +
+		(hasVexpandChild ?
+			' --jsdialog-filled-rows: ' + filledRowTemplate + ';'
+		:	'') +
 		(data.columnSpacing > 0 ? ' column-gap:' + data.columnSpacing + 'px;' : '');
 
 	table.style = gridRowColStyle;
@@ -214,9 +214,9 @@ JSDialog.toolbox = function (
 	builder: JSBuilder,
 ) {
 	const levelClass =
-		builder._currentDepth !== undefined
-			? ' level-' + builder._currentDepth
-			: '';
+		builder._currentDepth !== undefined ?
+			' level-' + builder._currentDepth
+		:	'';
 	const toolbox = window.L.DomUtil.create(
 		'div',
 		builder.options.cssClass + ' horizontal toolbox' + levelClass,

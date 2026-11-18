@@ -129,9 +129,9 @@ namespace cool {
 				return polygon;
 			};
 			const last = (): ObjectPathPoint | undefined =>
-				polygon && polygon.points.length
-					? polygon.points[polygon.points.length - 1]
-					: undefined;
+				polygon && polygon.points.length ?
+					polygon.points[polygon.points.length - 1]
+				:	undefined;
 			const point = (px: number, py: number): void => {
 				const current = polygon ?? begin();
 				current.points.push({ x: px, y: py });

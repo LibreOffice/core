@@ -101,8 +101,9 @@ class VectorThumbnail {
   ): Promise<boolean> {
     let loaded = VectorThumbnail._fonts.get(font.fontId);
     if (!loaded) {
-      loaded = font.data
-        ? VectorResourceLoader.loadFontFace(font.fontId, font.data).then(
+      loaded =
+        font.data ?
+          VectorResourceLoader.loadFontFace(font.fontId, font.data).then(
             () => true,
             () => false,
           )

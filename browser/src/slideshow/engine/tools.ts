@@ -206,9 +206,9 @@ class RGBColor {
 		let nHue = 0.0;
 		if (nDelta !== 0) {
 			nSaturation =
-				nLuminance > 0.5
-					? nDelta / (2.0 - nMax - nMin)
-					: nDelta / (nMax + nMin);
+				nLuminance > 0.5 ?
+					nDelta / (2.0 - nMax - nMin)
+				:	nDelta / (nMax + nMin);
 
 			if (nRed == nMax) nHue = (nGreen - nBlue) / nDelta;
 			else if (nGreen == nMax) nHue = 2.0 + (nBlue - nRed) / nDelta;
@@ -338,9 +338,9 @@ class HSLColor {
 		}
 
 		const nVal1 =
-			nLuminance <= 0.5
-				? nLuminance * (1.0 + nSaturation)
-				: nLuminance + nSaturation - nLuminance * nSaturation;
+			nLuminance <= 0.5 ?
+				nLuminance * (1.0 + nSaturation)
+			:	nLuminance + nSaturation - nLuminance * nSaturation;
 
 		const nVal2 = 2.0 * nLuminance - nVal1;
 

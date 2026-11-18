@@ -306,9 +306,8 @@ class PathDrawing {
 		if (!point) return;
 
 		const from = new cool.Point(point.x, point.y);
-		const held = turnedOver
-			? PathGeometry.inStepsOfFortyFiveDegrees(from, to)
-			: to;
+		const held =
+			turnedOver ? PathGeometry.inStepsOfFortyFiveDegrees(from, to) : to;
 		const x = held.x - point.x;
 		const y = held.y - point.y;
 		const length = Math.hypot(x, y);
@@ -480,13 +479,13 @@ class PathDrawing {
 	/// that closes is pulled, the part shows closed.
 	public shown(): cool.ObjectPathPolygon[] {
 		if (this.stroke)
-			return this.stroke.length >= 2
-				? this.parts.concat([{ closed: false, points: this.strokeFitted() }])
-				: this.parts;
+			return this.stroke.length >= 2 ?
+					this.parts.concat([{ closed: false, points: this.strokeFitted() }])
+				:	this.parts;
 		const drawing = this.next ? this.points.concat([this.next]) : this.points;
 		const closing = this.pressedOnTheStart;
-		return drawing.length >= 2
-			? this.parts.concat([{ closed: closing, points: drawing }])
-			: this.parts;
+		return drawing.length >= 2 ?
+				this.parts.concat([{ closed: closing, points: drawing }])
+			:	this.parts;
 	}
 }

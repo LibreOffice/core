@@ -44,8 +44,9 @@ namespace BackstageTemplates {
   }
 
   export function shell(props: ShellProps): HTMLElement {
-    const containerClass = props.isStarterMode
-      ? 'backstage-view hidden is-starter-mode'
+    const containerClass =
+      props.isStarterMode ?
+        'backstage-view hidden is-starter-mode'
       : 'backstage-view hidden';
 
     return (
@@ -73,9 +74,9 @@ namespace BackstageTemplates {
     return (
       <div class="backstage-header">
         <span class="backstage-header-title">Collabora Office</span>
-        {props.isStarterMode || !props.closeButtonEnabled
-          ? null
-          : closeButton(props.onClose)}
+        {props.isStarterMode || !props.closeButtonEnabled ? null : (
+          closeButton(props.onClose)
+        )}
       </div>
     );
   }
@@ -139,11 +140,11 @@ namespace BackstageTemplates {
         }}
         onClick={() => !isSeparator && props.onTabClick(config)}
       >
-        {config.icon ? (
+        {config.icon ?
           <span class="backstage-sidebar-icon" aria-hidden="true">
             {BackstageTemplates.inlineIcon(config.icon)}
           </span>
-        ) : null}
+        : null}
         <span>{config.label}</span>
       </div>
     );

@@ -258,30 +258,31 @@ class ColorPicker {
 		var icon = {
 			type: 'fixedtext',
 			text: '',
-			style: noColorControl
-				? 'no-color-control-icon'
-				: 'auto-color-control-icon',
+			style:
+				noColorControl ? 'no-color-control-icon' : 'auto-color-control-icon',
 		};
-		var label = noColorControl
-			? {
+		var label =
+			noColorControl ?
+				{
 					type: 'fixedtext',
 					style: 'no-color-control-label',
 					text: _('No color'),
 				}
-			: {
+			:	{
 					type: 'fixedtext',
 					style: 'auto-color-control-label',
 					text: _('Automatic color'),
 				};
 		var description = { type: 'divcontainer', children: [icon, label] };
-		var checked = noColorControl
-			? {
+		var checked =
+			noColorControl ?
+				{
 					type: 'fixedtext',
 					id: this._noColorControlId,
 					style: 'no-color-control-mark',
 					text: '',
 				}
-			: {
+			:	{
 					type: 'fixedtext',
 					id: this._autoColorControlId,
 					style: 'auto-color-control-mark',
@@ -289,9 +290,10 @@ class ColorPicker {
 				};
 		var container = {
 			type: 'divcontainer',
-			style: noColorControl
-				? 'colors-container-no-color-row'
-				: 'colors-container-auto-color-row',
+			style:
+				noColorControl ?
+					'colors-container-no-color-row'
+				:	'colors-container-auto-color-row',
 			handlers: [
 				{
 					event: 'click',

@@ -147,26 +147,24 @@ window.L.Map.Settings = window.L.Handler.extend({
 	// checkers and the translation providers are set up.
 	onCommandValues: function (e: any): void {
 		if (e.commandName === '.uno:SentenceCheckingPackages') {
-			app.sentenceCheckingPackages = Array.isArray(e.commandValues)
-				? e.commandValues
-				: [];
+			app.sentenceCheckingPackages =
+				Array.isArray(e.commandValues) ? e.commandValues : [];
 			if (this._resolveSentenceChecking) {
 				this._resolveSentenceChecking();
 				this._resolveSentenceChecking = null;
 			}
 		} else if (e.commandName === '.uno:RemoteGrammarCheckers') {
-			app.remoteGrammarCheckers = Array.isArray(e.commandValues)
-				? e.commandValues
-				: [];
+			app.remoteGrammarCheckers =
+				Array.isArray(e.commandValues) ? e.commandValues : [];
 			if (this._resolveRemoteCheckers) {
 				this._resolveRemoteCheckers();
 				this._resolveRemoteCheckers = null;
 			}
 		} else if (e.commandName === '.uno:TranslationProviders') {
 			app.translationProviders =
-				e.commandValues && typeof e.commandValues === 'object'
-					? e.commandValues
-					: null;
+				e.commandValues && typeof e.commandValues === 'object' ?
+					e.commandValues
+				:	null;
 			if (this._resolveTranslationProviders) {
 				this._resolveTranslationProviders();
 				this._resolveTranslationProviders = null;

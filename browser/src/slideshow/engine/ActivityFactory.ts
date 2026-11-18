@@ -137,9 +137,9 @@ function evalAnimFormula(expr: string, vars: Record<string, number>): number {
 		while (expr[p] === '+' || expr[p] === '-') {
 			const op = expr[p++];
 			v =
-				op === '+'
-					? v + multiplicative_expression()
-					: v - multiplicative_expression();
+				op === '+' ?
+					v + multiplicative_expression()
+				:	v - multiplicative_expression();
 			ws();
 		}
 		return v;

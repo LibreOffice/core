@@ -66,13 +66,13 @@ class DocumentViewBase {
 
 				const start = splitLine === 'x' ? rectangle[0] : rectangle[1];
 				const end =
-					splitLine === 'x'
-						? rectangle[0] + rectangle[2]
-						: rectangle[1] + rectangle[3];
+					splitLine === 'x' ?
+						rectangle[0] + rectangle[2]
+					:	rectangle[1] + rectangle[3];
 				const splitCoord =
-					splitLine === 'x'
-						? app.calc.splitCoordinate.x
-						: app.calc.splitCoordinate.y;
+					splitLine === 'x' ?
+						app.calc.splitCoordinate.x
+					:	app.calc.splitCoordinate.y;
 
 				// Check if the rectangle intersects the split line.
 				if (start < splitCoord && end > splitCoord) {
@@ -154,7 +154,11 @@ class DocumentViewBase {
 
 		// Sort the rectangles.
 		rectangles.sort((a, b) => {
-			return a[1] > b[1] ? 1 : a[1] === b[1] ? 0 : -1;
+			return (
+				a[1] > b[1] ? 1
+				: a[1] === b[1] ? 0
+				: -1
+			);
 		});
 
 		while (rectangles.length > 0) {

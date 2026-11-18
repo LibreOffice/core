@@ -142,9 +142,10 @@ function setupPriorityStatusHandler(scrollable: Element, toolItems: any[]) {
 			item.classList.remove('status-hidden');
 		});
 
-		const availableWidth = scrollable.parentElement
-			? scrollable.parentElement.clientWidth
-			: window.innerWidth;
+		const availableWidth =
+			scrollable.parentElement ?
+				scrollable.parentElement.clientWidth
+			:	window.innerWidth;
 		let contentWidth = rootContainer.scrollWidth;
 
 		if (contentWidth > availableWidth) {

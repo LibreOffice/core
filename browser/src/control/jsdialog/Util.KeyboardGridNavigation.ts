@@ -118,15 +118,15 @@ function moveFocus(
 			axis === 'vertical' ? parentContainer : currentElement;
 
 		const nextElement =
-			direction === 'next'
-				? JSDialog.FindFocusableElement(
-						potentialCurrentElement.nextElementSibling,
-						'next',
-					)
-				: JSDialog.FindFocusableElement(
-						potentialCurrentElement.previousElementSibling,
-						'previous',
-					);
+			direction === 'next' ?
+				JSDialog.FindFocusableElement(
+					potentialCurrentElement.nextElementSibling,
+					'next',
+				)
+			:	JSDialog.FindFocusableElement(
+					potentialCurrentElement.previousElementSibling,
+					'previous',
+				);
 		if (nextElement) {
 			updateAriaSelected(nextElement, 'true');
 			nextElement.focus();

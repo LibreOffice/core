@@ -84,9 +84,10 @@ class ShearingInteraction extends SelectionInteraction {
 		);
 		const single =
 			objects.length === 1 && drawing.length === 1 && drawing[0] === objects[0];
-		const mapping = single
-			? RenderGeometrySection.transformOf(objects[0])
-			: (selection.mappingTheyShare() ?? selection.squareNow());
+		const mapping =
+			single ?
+				RenderGeometrySection.transformOf(objects[0])
+			:	(selection.mappingTheyShare() ?? selection.squareNow());
 
 		let turn = turnedBy;
 		if (mapping) {
@@ -160,9 +161,8 @@ class ShearingInteraction extends SelectionInteraction {
 		let shearing = ShearingInteraction.keysStillHold(selection);
 		if (!shearing || !ShearingInteraction.keys) {
 			const objects = selection.selectedObjects();
-			const first = objects.length
-				? RenderGeometrySection.transformOf(objects[0])
-				: null;
+			const first =
+				objects.length ? RenderGeometrySection.transformOf(objects[0]) : null;
 			if (!first) return null;
 
 			shearing = new ShearingInteraction(selection, middle, middle, turnedBy);

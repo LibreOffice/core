@@ -443,9 +443,8 @@ namespace cool {
 			codes = [...new Set(codes)];
 
 			return codes.map((code) => {
-				const countryName = ESignature.countryNames
-					? ESignature.countryNames[code]
-					: null;
+				const countryName =
+					ESignature.countryNames ? ESignature.countryNames[code] : null;
 				if (countryName) {
 					return { code: code, name: countryName };
 				}

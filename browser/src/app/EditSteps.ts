@@ -106,9 +106,9 @@ class EditSteps {
 	*/
 	public static lengthSnap(steps: 'whole' | 'tenth'): number {
 		const millimetres =
-			steps === 'whole'
-				? EditSteps.setting('vectorLengthSnapControl', 10)
-				: EditSteps.setting('vectorLengthSnapAlt', 1);
+			steps === 'whole' ?
+				EditSteps.setting('vectorLengthSnapControl', 10)
+			:	EditSteps.setting('vectorLengthSnapAlt', 1);
 		return millimetres * EditSteps.millimetre * EditSteps.pageFactor();
 	}
 

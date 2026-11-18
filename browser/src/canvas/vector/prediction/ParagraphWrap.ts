@@ -111,12 +111,10 @@ namespace cool {
 			const firstIndent = template.lineIndent ?? 0;
 			const firstWidth = template.lineWidth ?? areaWidth;
 			const later = runs.find((run) => run.localBaseline !== firstBaseline);
-			const restIndent = later
-				? (later.primitive.lineIndent ?? 0)
-				: firstIndent;
-			const restWidth = later
-				? (later.primitive.lineWidth ?? areaWidth)
-				: firstWidth;
+			const restIndent =
+				later ? (later.primitive.lineIndent ?? 0) : firstIndent;
+			const restWidth =
+				later ? (later.primitive.lineWidth ?? areaWidth) : firstWidth;
 
 			// The area's left edge follows from where the aligned top line sits.
 			let areaLeft = topLeft - firstIndent;

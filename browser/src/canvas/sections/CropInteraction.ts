@@ -73,9 +73,9 @@ class CropInteraction extends ScalingInteraction {
 		const square = this.selection.squareNow();
 		const objectId = this.selection.selectedObjects()[0];
 		const picture =
-			objectId === undefined
-				? undefined
-				: RenderGeometrySection.objectOf(objectId);
+			objectId === undefined ? undefined : (
+				RenderGeometrySection.objectOf(objectId)
+			);
 		const extent = picture ? CropHandles.graphicExtentOf(picture) : undefined;
 		const mine = ObjectHandles.placeOfKind(this.ofTheEight);
 		const onTheSquare = square?.invert();

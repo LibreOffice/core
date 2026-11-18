@@ -65,9 +65,8 @@ function findLabelElements(
 ): HTMLElement[] {
 	if (!data.labelledBy) return [];
 
-	const labelledByIds: string[] = Array.isArray(data.labelledBy)
-		? data.labelledBy
-		: [data.labelledBy];
+	const labelledByIds: string[] =
+		Array.isArray(data.labelledBy) ? data.labelledBy : [data.labelledBy];
 
 	const foundElements: HTMLElement[] = [];
 	for (const labelId of labelledByIds) {
@@ -172,9 +171,10 @@ JSDialog.SetupA11yLabelForNonLabelableElement = function (
 	builder: JSBuilder,
 ) {
 	if (data.labelledBy) {
-		const ids = Array.isArray(data.labelledBy)
-			? data.labelledBy.join(' ')
-			: data.labelledBy;
+		const ids =
+			Array.isArray(data.labelledBy) ?
+				data.labelledBy.join(' ')
+			:	data.labelledBy;
 		container.setAttribute('aria-labelledby', ids);
 	} else {
 		JSDialog.AddAriaLabel(container, data, builder);

@@ -636,9 +636,8 @@ class LOUtil {
 
 		const dummyEmptyImg =
 			'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-		defaultImageURL = LOUtil.isDarkModeItem(imgName)
-			? dummyEmptyImg
-			: defaultImageURL;
+		defaultImageURL =
+			LOUtil.isDarkModeItem(imgName) ? dummyEmptyImg : defaultImageURL;
 		return defaultImageURL;
 	}
 
@@ -1173,9 +1172,8 @@ class LOUtil {
 		command: string,
 		docType: string,
 	): boolean {
-		const commandName = command.startsWith('.uno:')
-			? command.substring('.uno:'.length)
-			: command;
+		const commandName =
+			command.startsWith('.uno:') ? command.substring('.uno:'.length) : command;
 		const res = !LOUtil.commandWithoutIcon.find(function (el: string) {
 			return el.startsWith(commandName);
 		});
@@ -1277,13 +1275,13 @@ class LOUtil {
 			var x = rectangle1[0] > rectangle2[0] ? rectangle1[0] : rectangle2[0];
 			var y = rectangle1[1] > rectangle2[1] ? rectangle1[1] : rectangle2[1];
 			var w =
-				rectangle1[0] + rectangle1[2] < rectangle2[0] + rectangle2[2]
-					? rectangle1[0] + rectangle1[2] - x
-					: rectangle2[0] + rectangle2[2] - x;
+				rectangle1[0] + rectangle1[2] < rectangle2[0] + rectangle2[2] ?
+					rectangle1[0] + rectangle1[2] - x
+				:	rectangle2[0] + rectangle2[2] - x;
 			var h =
-				rectangle1[1] + rectangle1[3] < rectangle2[1] + rectangle2[3]
-					? rectangle1[1] + rectangle1[3] - y
-					: rectangle2[1] + rectangle2[3] - y;
+				rectangle1[1] + rectangle1[3] < rectangle2[1] + rectangle2[3] ?
+					rectangle1[1] + rectangle1[3] - y
+				:	rectangle2[1] + rectangle2[3] - y;
 
 			return [x, y, w, h];
 		} else return null;
@@ -1445,9 +1443,10 @@ class LOUtil {
 			const cooltip = docLogo.getAttribute('data-cooltip');
 			let label;
 			if (cooltip) {
-				label = docLogo.getAttribute('href')
-					? _('{0} website, opens in new tab').replace('{0}', cooltip)
-					: cooltip;
+				label =
+					docLogo.getAttribute('href') ?
+						_('{0} website, opens in new tab').replace('{0}', cooltip)
+					:	cooltip;
 			} else {
 				label = _('file type icon');
 			}

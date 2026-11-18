@@ -240,25 +240,19 @@ class ConnectorRouter {
 			const rect = node.snap;
 			const middle = ConnectorRouter.center(rect);
 			const at =
-				number === 0
-					? new cool.Point(middle.x, rect.minY)
-					: number === 1
-						? new cool.Point(rect.maxX, middle.y)
-						: number === 2
-							? new cool.Point(middle.x, rect.maxY)
-							: new cool.Point(rect.minX, middle.y);
+				number === 0 ? new cool.Point(middle.x, rect.minY)
+				: number === 1 ? new cool.Point(rect.maxX, middle.y)
+				: number === 2 ? new cool.Point(middle.x, rect.maxY)
+				: new cool.Point(rect.minX, middle.y);
 			return { point: at, escape: Escape.Smart };
 		}
 		if (tie.autoCorner) {
 			const rect = node.bound;
 			const at =
-				number === 0
-					? new cool.Point(rect.minX, rect.minY)
-					: number === 1
-						? new cool.Point(rect.maxX, rect.minY)
-						: number === 2
-							? new cool.Point(rect.maxX, rect.maxY)
-							: new cool.Point(rect.minX, rect.maxY);
+				number === 0 ? new cool.Point(rect.minX, rect.minY)
+				: number === 1 ? new cool.Point(rect.maxX, rect.minY)
+				: number === 2 ? new cool.Point(rect.maxX, rect.maxY)
+				: new cool.Point(rect.minX, rect.maxY);
 			return { point: at, escape: Escape.Smart };
 		}
 		const glue = node.gluePoints.find(
@@ -272,13 +266,12 @@ class ConnectorRouter {
 	}
 
 	private static directionOf(angle: number): Escape {
-		return angle === 0
-			? Escape.Right
-			: angle === 9000
-				? Escape.Top
-				: angle === 18000
-					? Escape.Left
-					: Escape.Bottom;
+		return (
+			angle === 0 ? Escape.Right
+			: angle === 9000 ? Escape.Top
+			: angle === 18000 ? Escape.Left
+			: Escape.Bottom
+		);
 	}
 
 	/*
@@ -389,9 +382,9 @@ class ConnectorRouter {
 			return at === 0 ? LineCode.Obj2Line2 : LineCode.Obj2Line3;
 		at -= atTheEnd;
 
-		return at === 0 && info.middleLineAt !== undefined
-			? LineCode.MiddleLine
-			: undefined;
+		return at === 0 && info.middleLineAt !== undefined ?
+				LineCode.MiddleLine
+			:	undefined;
 	}
 
 	/*
@@ -475,9 +468,9 @@ class ConnectorRouter {
 		data: cool.VectorPrimitivesData,
 		objectId: number | undefined,
 	): cool.RouteNode | undefined {
-		return objectId === undefined
-			? undefined
-			: ConnectorRouter.nodeOf(data.objects.get(objectId));
+		return objectId === undefined ? undefined : (
+				ConnectorRouter.nodeOf(data.objects.get(objectId))
+			);
 	}
 
 	/*
@@ -866,9 +859,9 @@ class ConnectorRouter {
 								const want2 = bndR2.minX - bewR2.minX;
 								const space = bndR2.minX - bndR1.maxX;
 								const get1 =
-									want1 + want2 === 0
-										? 0
-										: Math.round((want1 * space) / (want1 + want2));
+									want1 + want2 === 0 ?
+										0
+									:	Math.round((want1 * space) / (want1 + want2));
 								const get2 = space - get1;
 								if (rts1) {
 									aBewareRect1 = new cool.Range2D(
@@ -935,9 +928,9 @@ class ConnectorRouter {
 								const want2 = bndR2.minY - bewR2.minY;
 								const space = bndR2.minY - bndR1.maxY;
 								const get1 =
-									want1 + want2 === 0
-										? 0
-										: Math.round((want1 * space) / (want1 + want2));
+									want1 + want2 === 0 ?
+										0
+									:	Math.round((want1 * space) / (want1 + want2));
 								const get2 = space - get1;
 								if (unt1) {
 									aBewareRect1 = new cool.Range2D(
@@ -1170,15 +1163,15 @@ class ConnectorRouter {
 			}
 			if (i > 0 && before === intersections) {
 				const crosses = (r: cool.Range2D) =>
-					pt0.y === p.y
-						? pt0.y > r.minY &&
-							pt0.y < r.maxY &&
-							((pt0.x <= r.minX && p.x >= r.maxX) ||
-								(p.x <= r.minX && pt0.x >= r.maxX))
-						: pt0.x > r.minX &&
-							pt0.x < r.maxX &&
-							((pt0.y <= r.minY && p.y >= r.maxY) ||
-								(p.y <= r.minY && pt0.y >= r.maxY));
+					pt0.y === p.y ?
+						pt0.y > r.minY &&
+						pt0.y < r.maxY &&
+						((pt0.x <= r.minX && p.x >= r.maxX) ||
+							(p.x <= r.minX && pt0.x >= r.maxX))
+					:	pt0.x > r.minX &&
+						pt0.x < r.maxX &&
+						((pt0.y <= r.minY && p.y >= r.maxY) ||
+							(p.y <= r.minY && pt0.y >= r.maxY));
 				if (crosses(bewareRect1)) intersections++;
 				if (crosses(bewareRect2)) intersections++;
 			}
@@ -1320,14 +1313,14 @@ class ConnectorRouter {
 		if (!transform) return undefined;
 		const snap = new cool.Range2D(0, 0, 1, 1).transform(transform);
 		const bound =
-			object.x !== undefined && object.y !== undefined
-				? new cool.Range2D(
-						object.x,
-						object.y,
-						object.x + (object.width ?? 0),
-						object.y + (object.height ?? 0),
-					)
-				: snap;
+			object.x !== undefined && object.y !== undefined ?
+				new cool.Range2D(
+					object.x,
+					object.y,
+					object.x + (object.width ?? 0),
+					object.y + (object.height ?? 0),
+				)
+			:	snap;
 		return {
 			snap,
 			bound,
@@ -1402,9 +1395,9 @@ class ConnectorRouter {
 			connector,
 			routing,
 			(objectId: number, node: cool.RouteNode) =>
-				matrix && moved.has(objectId)
-					? ConnectorRouter.nodeThrough(node, matrix)
-					: node,
+				matrix && moved.has(objectId) ?
+					ConnectorRouter.nodeThrough(node, matrix)
+				:	node,
 		);
 	}
 
@@ -1426,15 +1419,15 @@ class ConnectorRouter {
 			connector,
 			{ ...connector.routing, trackUserDefined: false },
 			(id: number, node: cool.RouteNode) =>
-				id !== objectId
-					? node
-					: {
-							...node,
-							gluePoints: node.gluePoints.map(
-								(one: cool.ObjectGluePoint, at: number) =>
-									at === index ? { ...one, x: place.x, y: place.y } : one,
-							),
-						},
+				id !== objectId ? node : (
+					{
+						...node,
+						gluePoints: node.gluePoints.map(
+							(one: cool.ObjectGluePoint, at: number) =>
+								at === index ? { ...one, x: place.x, y: place.y } : one,
+						),
+					}
+				),
 		);
 	}
 
@@ -1483,9 +1476,9 @@ class ConnectorRouter {
 			tieAtEnd: atStart ? connector.routing.tieAtEnd : tie,
 		};
 		const nodeFor = (objectId: number | undefined) =>
-			objectId === undefined
-				? undefined
-				: ConnectorRouter.nodeOf(data.objects.get(objectId));
+			objectId === undefined ? undefined : (
+				ConnectorRouter.nodeOf(data.objects.get(objectId))
+			);
 
 		return ConnectorRouter.route(
 			routing,
@@ -1553,14 +1546,14 @@ class ConnectorRouter {
 			const routed = ConnectorRouter.route(
 				object.routing,
 				ConnectorRouter.nodeOf(
-					object.tiedToAtStart !== undefined
-						? data.objects.get(object.tiedToAtStart)
-						: undefined,
+					object.tiedToAtStart !== undefined ?
+						data.objects.get(object.tiedToAtStart)
+					:	undefined,
 				),
 				ConnectorRouter.nodeOf(
-					object.tiedToAtEnd !== undefined
-						? data.objects.get(object.tiedToAtEnd)
-						: undefined,
+					object.tiedToAtEnd !== undefined ?
+						data.objects.get(object.tiedToAtEnd)
+					:	undefined,
 				),
 			);
 

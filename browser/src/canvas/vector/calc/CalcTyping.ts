@@ -184,9 +184,12 @@ namespace cool {
 				!placed ||
 				// A change applies in the cell it was typed in only.
 				!TextPrediction.applyAgain(left, (change) =>
-					placed.edit.column === change.column && placed.edit.row === change.row
-						? { tree: placed.tree, objectId: CalcTyping.entryId }
-						: null,
+					(
+						placed.edit.column === change.column &&
+						placed.edit.row === change.row
+					) ?
+						{ tree: placed.tree, objectId: CalcTyping.entryId }
+					:	null,
 				)
 			) {
 				this.forget();
@@ -283,12 +286,12 @@ namespace cool {
 			logical: LogicalCaret,
 		): CalcTypedCaret | null {
 			const geometry = tree.caretIn(CalcTyping.entryId, logical)?.geometry();
-			return geometry
-				? {
+			return geometry ?
+					{
 						geometry,
 						logical: { paragraph: logical.paragraph, index: logical.index },
 					}
-				: null;
+				:	null;
 		}
 
 		/// A copy of the text edits that a change can go into.

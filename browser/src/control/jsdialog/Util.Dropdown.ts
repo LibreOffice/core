@@ -135,18 +135,18 @@ function _createEntriesGrid(
 	const header = entries.find((entry) => entry.type === 'header');
 	const firstEntryIndex = entries[0]?.type === 'header' ? 1 : 0;
 	const shouldSelectFirstEntry =
-		!noDefaultSelection && entries.length > 0
-			? !entries.some((entry) => entry.selected === true)
-			: false;
+		!noDefaultSelection && entries.length > 0 ?
+			!entries.some((entry) => entry.selected === true)
+		:	false;
 	let initialSelectedId;
 	let checkedFocusId;
 
 	for (let i = 0; i < entries.length; i++) {
 		const checkedValue =
-			entries[i].checked === undefined
-				? undefined
-				: (entries[i].uno ? isChecked('.uno' + entries[i].uno) : false) ||
-					(entries[i].action ? isChecked(String(entries[i].action)) : false);
+			entries[i].checked === undefined ?
+				undefined
+			:	(entries[i].uno ? isChecked('.uno' + entries[i].uno) : false) ||
+				(entries[i].action ? isChecked(String(entries[i].action)) : false);
 
 		let entry:
 			| WidgetJSON
@@ -180,12 +180,11 @@ function _createEntriesGrid(
 			// allows to put regular JSDialog JSON into popup
 			case 'json':
 				entry =
-					typeof entries[i].content !== 'undefined'
-						? (entries[i].content as ComboBoxEntry)
-						: null;
-				initialSelectedId = entry
-					? (entry as ComboBoxEntry).initialSelectedId
-					: undefined;
+					typeof entries[i].content !== 'undefined' ?
+						(entries[i].content as ComboBoxEntry)
+					:	null;
+				initialSelectedId =
+					entry ? (entry as ComboBoxEntry).initialSelectedId : undefined;
 				// A grid, or a widget that wraps a grid (the new slide layout
 				// picker wraps one so it can also show the Overview button),
 				// navigates with grid keys. Otherwise list navigation lets
@@ -232,13 +231,14 @@ function _createEntriesGrid(
 					checked: entries[i].checked || checkedValue,
 					enabled: isEnabled ? isEnabled() : entries[i].enabled,
 					selected:
-						i === firstEntryIndex && shouldSelectFirstEntry
-							? true
-							: entries[i].selected,
+						i === firstEntryIndex && shouldSelectFirstEntry ?
+							true
+						:	entries[i].selected,
 					hasSubMenu: !!entries[i].items,
-					class: locked
-						? [entries[i].class, 'locking-disabled'].filter(Boolean).join(' ')
-						: entries[i].class,
+					class:
+						locked ?
+							[entries[i].class, 'locking-disabled'].filter(Boolean).join(' ')
+						:	entries[i].class,
 				} as ComboBoxEntry;
 				if ((entry as ComboBoxEntry).selected) initialSelectedId = entry.id;
 				if (
@@ -326,9 +326,8 @@ function _createDropdownCallback(
 				// cell at position 0, shifting every real entry by one slot.
 				const dropdown = JSDialog.GetDropdown(id);
 				const entryId = id + '-entry-' + pos;
-				const targetEntry = dropdown
-					? dropdown.querySelector('[id="' + entryId + '"]')
-					: null;
+				const targetEntry =
+					dropdown ? dropdown.querySelector('[id="' + entryId + '"]') : null;
 
 				JSDialog.OpenDropdown(
 					subMenuId,

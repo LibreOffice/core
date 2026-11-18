@@ -653,9 +653,9 @@ namespace cool {
 			if (context.isPointInPath(path, position.x, position.y, 'evenodd'))
 				return 'inside';
 
-			return VectorHitTest.isAlongStrokedPath(path, position, 0)
-				? 'edge'
-				: undefined;
+			return VectorHitTest.isAlongStrokedPath(path, position, 0) ? 'edge' : (
+					undefined
+				);
 		}
 
 		private static pathOf(path: string | undefined): Path2D | undefined {
@@ -679,13 +679,13 @@ namespace cool {
 			context.save();
 			context.lineWidth = reach;
 			context.lineJoin =
-				line?.linejoin === 'round' || line?.linejoin === 'bevel'
-					? line.linejoin
-					: 'miter';
+				line?.linejoin === 'round' || line?.linejoin === 'bevel' ?
+					line.linejoin
+				:	'miter';
 			context.lineCap =
-				line?.linecap === 'round' || line?.linecap === 'square'
-					? line.linecap
-					: 'butt';
+				line?.linecap === 'round' || line?.linecap === 'square' ?
+					line.linecap
+				:	'butt';
 			const hit = context.isPointInStroke(path, position.x, position.y);
 			context.restore();
 

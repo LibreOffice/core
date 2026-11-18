@@ -76,10 +76,12 @@ class PolygonDrag extends SelectionInteraction {
 
 		return known.map((handle: SelectionHandle) => {
 			const inPath = this.held.inPath(handle.name);
-			return inPath !== null &&
-				PathEditing.belongsToPolygon(inPath, this.held.polygon)
-				? { ...handle, point: handle.point.add(by) }
-				: handle;
+			return (
+					inPath !== null &&
+						PathEditing.belongsToPolygon(inPath, this.held.polygon)
+				) ?
+					{ ...handle, point: handle.point.add(by) }
+				:	handle;
 		});
 	}
 

@@ -70,9 +70,9 @@ class ViewState {
 	// cursor update reaffirms it instead of overriding it, except in Calc.
 	private scrollTo(pixelX: number, pixelY: number): void {
 		const layout =
-			app.activeDocument && app.activeDocument.activeLayout
-				? app.activeDocument.activeLayout
-				: null;
+			app.activeDocument && app.activeDocument.activeLayout ?
+				app.activeDocument.activeLayout
+			:	null;
 		if (!layout || layout.type === 'ViewLayoutMultiPage') return;
 
 		const docLayer = this.map._docLayer;

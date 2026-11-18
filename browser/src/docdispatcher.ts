@@ -990,9 +990,9 @@ class Dispatcher {
 		// The slideshow starts at data.startSlideNumber when given, otherwise at the current slide.
 		this.actionsMap['presentation-currentslide'] = (data?: any) => {
 			const startSlideNumber =
-				data && data.startSlideNumber !== undefined
-					? data.startSlideNumber
-					: app.map.getCurrentPartNumber();
+				data && data.startSlideNumber !== undefined ?
+					data.startSlideNumber
+				:	app.map.getCurrentPartNumber();
 			if (window.canvasSlideshowEnabled) {
 				this.updatePresentationLeader(false);
 				if (app.map.uiManager.shouldShowPresenterConsole())
@@ -1054,9 +1054,9 @@ class Dispatcher {
 
 		this.actionsMap['fitslidetoview'] = (data?: any) => {
 			const part =
-				data && typeof data.part === 'number' && data.part >= 1
-					? data.part
-					: -1;
+				data && typeof data.part === 'number' && data.part >= 1 ?
+					data.part
+				:	-1;
 			if (part >= 1)
 				OverviewNavigation.centerPreviewOnViewport(
 					part,
@@ -1432,9 +1432,10 @@ class Dispatcher {
 					state: !commandState ? 'true' : 'false',
 				});
 
-				app.activeDocument.activeLayout = commandState
-					? new ViewLayoutWriter()
-					: new ViewLayoutCompareChanges();
+				app.activeDocument.activeLayout =
+					commandState ?
+						new ViewLayoutWriter()
+					:	new ViewLayoutCompareChanges();
 
 				// The tile render mode follows the layout: the normal view uses
 				// the standard mode, the side-by-side view uses the two redline

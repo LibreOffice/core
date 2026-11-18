@@ -82,9 +82,9 @@ namespace predictionTest {
 			logical,
 			objectId,
 		);
-		return position
-			? position.delete(before, after)
-			: { removed: 0, removedBefore: 0, caretShift: 0 };
+		return position ?
+				position.delete(before, after)
+			:	{ removed: 0, removedBefore: 0, caretShift: 0 };
 	}
 
 	// The caret geometry for a logical position, or null when no editable run is found.

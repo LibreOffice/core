@@ -112,14 +112,15 @@ class TableBorderDrag extends SelectionInteraction {
 		const running = TableBorderDrag.running;
 		if (!running) return known;
 		return known.map((handle: SelectionHandle) =>
-			handle.name !== this.handle.name
-				? handle
-				: {
-						...handle,
-						point: this.columns
-							? new cool.Point(running.place, handle.point.y)
-							: new cool.Point(handle.point.x, running.place),
-					},
+			handle.name !== this.handle.name ?
+				handle
+			:	{
+					...handle,
+					point:
+						this.columns ?
+							new cool.Point(running.place, handle.point.y)
+						:	new cool.Point(handle.point.x, running.place),
+				},
 		);
 	}
 }

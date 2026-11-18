@@ -593,9 +593,9 @@ class SlideImportPane {
     const source = this.activeSource();
     this.session.insertStaged(
       stagedName,
-      source && this.session.insertAsSection
-        ? this.wholeSectionOf(source, insert.slides)
-        : null,
+      source && this.session.insertAsSection ?
+        this.wholeSectionOf(source, insert.slides)
+      : null,
     );
   }
 
@@ -697,8 +697,9 @@ class SlideImportPane {
   ): void {
     try {
       const sections = JSON.parse(json);
-      source.sections = Array.isArray(sections)
-        ? sections.map((s: any) => ({
+      source.sections =
+        Array.isArray(sections) ?
+          sections.map((s: any) => ({
             name: s.name || '',
             id: s.id || '',
             startIndex: s.startIndex || 0,
@@ -1089,9 +1090,9 @@ class SlideImportPane {
   private onInserted(e: any): void {
     const count = e.detail.count;
     const label =
-      count === 1
-        ? _('1 slide inserted')
-        : _('{0} slides inserted').replace('{0}', String(count));
+      count === 1 ?
+        _('1 slide inserted')
+      : _('{0} slides inserted').replace('{0}', String(count));
     this.map.uiManager.showSnackbar(label);
   }
 
@@ -1138,9 +1139,9 @@ class SlideImportPane {
     const choice = this.panel.querySelector('.slide-import-section-choice');
     if (choice) {
       const focused =
-        choice.contains(document.activeElement) && document.activeElement
-          ? document.activeElement.id
-          : '';
+        choice.contains(document.activeElement) && document.activeElement ?
+          document.activeElement.id
+        : '';
       const redrawn = this.renderSectionChoice();
       choice.replaceWith(redrawn);
       if (focused) {
@@ -1299,15 +1300,17 @@ class SlideImportPane {
       '.slide-import-source-list',
     ) as HTMLElement | null;
     if (newList) {
-      const row = this.scrollRowToTop
-        ? (newList.querySelector(
+      const row =
+        this.scrollRowToTop ?
+          (newList.querySelector(
             '.slide-import-source[data-key="' +
               CSS.escape(this.scrollRowToTop) +
               '"]',
           ) as HTMLElement | null)
         : null;
-      const wanted = row
-        ? newList.scrollTop +
+      const wanted =
+        row ?
+          newList.scrollTop +
           (row.getBoundingClientRect().top -
             newList.getBoundingClientRect().top)
         : scrollTop;
@@ -1594,13 +1597,11 @@ class SlideImportPane {
       <span class="slide-import-source-count">
         {this.slideCountText(source)}
       </span>,
-      this.pickedCount(source) ? (
+      this.pickedCount(source) ?
         <span class="slide-import-source-picked">
           {_('{0} picked').replace('{0}', String(this.pickedCount(source)))}
         </span>
-      ) : (
-        ''
-      ),
+      : '',
       chip,
     ];
     return (
@@ -1619,9 +1620,9 @@ class SlideImportPane {
             aria-expanded={source.expanded ? 'true' : 'false'}
             aria-controls={panelId}
             aria-describedby={
-              this.degraded(source)
-                ? 'slide-import-why-' + source.id
-                : undefined
+              this.degraded(source) ?
+                'slide-import-why-' + source.id
+              : undefined
             }
             onClick={() => this.toggleSource(source)}
           >
@@ -1860,9 +1861,9 @@ class SlideImportPane {
         <label
           class="slide-import-linksource"
           data-cooltip={
-            session.formatKeepsLinks()
-              ? undefined
-              : _('Not supported in PPTX, please save as ODP to use links')
+            session.formatKeepsLinks() ? undefined : (
+              _('Not supported in PPTX, please save as ODP to use links')
+            )
           }
         >
           <input
@@ -2110,8 +2111,9 @@ class SlideImportPane {
     // The rebuild replaced the pressed chevron; keyboard focus continues on
     // its replacement.
     const list = this.slideList(source);
-    const toggle = list
-      ? (list.querySelector(
+    const toggle =
+      list ?
+        (list.querySelector(
           '.slide-section-header[data-section-index="' +
             sectionIndex +
             '"] .slide-section-toggle',
@@ -2170,8 +2172,8 @@ class SlideImportPane {
   // list keeps its layout when the thumbnail is drawn in. Before the source names its page size it
   // is 16:9.
   private blankThumbnailSize(source: SlideImportPaneSource): [number, number] {
-    return source.docWidth > 0 && source.docHeight > 0
-      ? this.thumbnailPixelSize(source)
+    return source.docWidth > 0 && source.docHeight > 0 ?
+        this.thumbnailPixelSize(source)
       : [16, 9];
   }
 
@@ -2256,8 +2258,9 @@ class SlideImportPane {
     }
 
     const session = this.session;
-    const slides = session.selection.has(index)
-      ? Array.from(session.selection).sort((a, b) => a - b)
+    const slides =
+      session.selection.has(index) ?
+        Array.from(session.selection).sort((a, b) => a - b)
       : [index];
     if (!e.dataTransfer) return;
     // The drag carries only the custom type. A drag that starts on the
@@ -2336,10 +2339,12 @@ class SlideImportPane {
 
   private onSlideMouseDown(e: MouseEvent, index: number): void {
     this.pressedCheckboxIndex =
-      e.target instanceof Element &&
-      e.target.closest('.slide-import-checkbox') !== null
-        ? index
-        : -1;
+      (
+        e.target instanceof Element &&
+        e.target.closest('.slide-import-checkbox') !== null
+      ) ?
+        index
+      : -1;
   }
 
   // Toggles one slide in and out of the selection and makes it the anchor

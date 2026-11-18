@@ -60,9 +60,9 @@ function updateRulerAria(
 ): void {
 	canvas.setAttribute('aria-valuenow', String(cursorPos));
 	const text =
-		splits.indexOf(cursorPos) >= 0
-			? _('Position {n}, split set').replace('{n}', String(cursorPos))
-			: _('Position {n}, no split').replace('{n}', String(cursorPos));
+		splits.indexOf(cursorPos) >= 0 ?
+			_('Position {n}, split set').replace('{n}', String(cursorPos))
+		:	_('Position {n}, no split').replace('{n}', String(cursorPos));
 	canvas.setAttribute('aria-valuetext', text);
 }
 

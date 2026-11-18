@@ -344,9 +344,10 @@ function updatePalette(
 	paletteContainer.replaceChildren();
 	for (let i = 0; i < palette.length - 2; i++) {
 		for (let j = 0; j < palette[i].length; j++) {
-			const themeData = detailedPalette[i][j].Data
-				? JSON.stringify(detailedPalette[i][j].Data)
-				: undefined;
+			const themeData =
+				detailedPalette[i][j].Data ?
+					JSON.stringify(detailedPalette[i][j].Data)
+				:	undefined;
 
 			createColor(
 				paletteContainer,

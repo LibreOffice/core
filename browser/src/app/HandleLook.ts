@@ -214,10 +214,11 @@ class HandleLook {
 	*/
 	public static drawnAt(handle: SelectionHandle): cool.SimplePoint {
 		const away = handle.awayFromItsPlace;
-		const distance = away
-			? (handle.awayBy ?? HandleLook.distanceTheEightMoveOut()) *
+		const distance =
+			away ?
+				(handle.awayBy ?? HandleLook.distanceTheEightMoveOut()) *
 				app.pixelsToTwips
-			: 0;
+			:	0;
 
 		return new cool.SimplePoint(
 			handle.point.x + (away ? away.x * distance : 0),
@@ -278,9 +279,9 @@ class HandleLook {
 			corners.apply(wide / 2 - slant / 2, high / 2),
 			corners.apply(-wide / 2 - slant / 2, high / 2),
 		].forEach((corner: cool.Point, index: number) =>
-			index
-				? context.lineTo(corner.x, corner.y)
-				: context.moveTo(corner.x, corner.y),
+			index ?
+				context.lineTo(corner.x, corner.y)
+			:	context.moveTo(corner.x, corner.y),
 		);
 		context.closePath();
 
@@ -351,9 +352,10 @@ class HandleLook {
 		probe.remove();
 
 		const picture = found ? found[1] : '';
-		const lit = picture.includes('select-marker')
-			? picture.replace('select-marker', 'select-marker-selected')
-			: picture.replace(/(_branding)?\.svg$/, '-hover$1.svg');
+		const lit =
+			picture.includes('select-marker') ?
+				picture.replace('select-marker', 'select-marker-selected')
+			:	picture.replace(/(_branding)?\.svg$/, '-hover$1.svg');
 		look = {
 			picture: picture,
 			lit: lit,
@@ -402,13 +404,13 @@ class HandleLook {
 		if (!look.picture) return;
 		const which = options.underMouse ?? 'lit';
 		const other =
-			(grown > 0 || options.always) && which !== 'usual'
-				? HandleLook.markerPicture(which === 'drag' ? look.drag : look.lit)
-				: undefined;
+			(grown > 0 || options.always) && which !== 'usual' ?
+				HandleLook.markerPicture(which === 'drag' ? look.drag : look.lit)
+			:	undefined;
 		const picture =
-			other && other.complete && other.naturalWidth
-				? other
-				: HandleLook.markerPicture(look.picture);
+			other && other.complete && other.naturalWidth ?
+				other
+			:	HandleLook.markerPicture(look.picture);
 		if (!picture.complete || !picture.naturalWidth) return;
 
 		const axes = options.axes;

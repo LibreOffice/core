@@ -94,15 +94,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		if (event.key === '0') {
 			const shearing = this.handleMode() === 'shear';
-			const ownIsNought = shearing
-				? !this.anglesOf('slant').any
-				: !this.anglesOf('turn').any && !this.aLineStandsAslant();
+			const ownIsNought =
+				shearing ?
+					!this.anglesOf('slant').any
+				:	!this.anglesOf('turn').any && !this.aLineStandsAslant();
 			if (ownIsNought) {
 				const other = shearing ? 'turn' : 'slant';
 				if (
-					(other === 'turn'
-						? this.anglesOf('turn').any || this.aLineStandsAslant()
-						: this.anglesOf('slant').any) &&
+					(other === 'turn' ?
+						this.anglesOf('turn').any || this.aLineStandsAslant()
+					:	this.anglesOf('slant').any) &&
 					this.takeTheAnglesAway(other)
 				)
 					this.redraw();
@@ -436,10 +437,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// The mode the handle above the selection is in. It shears only where every selected object
 	/// may be sheared; otherwise turning is the only mode.
 	public handleMode(): 'turn' | 'shear' {
-		return SelectionSection.shearing === this.keyOfTheSelection() &&
-			this.shearingIsOffered()
-			? 'shear'
-			: 'turn';
+		return (
+				SelectionSection.shearing === this.keyOfTheSelection() &&
+					this.shearingIsOffered()
+			) ?
+				'shear'
+			:	'turn';
 	}
 
 	/// Whether shearing is offered for this selection: where every object in it may be sheared.
@@ -728,9 +731,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 				new PathHandles(this),
 				new TableHandles(this),
 				new MotionPathHandles(this),
-				this.theConnector() === undefined
-					? new TheObjectItself(this)
-					: new TheConnectorItself(this),
+				this.theConnector() === undefined ?
+					new TheObjectItself(this)
+				:	new TheConnectorItself(this),
 			];
 
 		return this.groupsHeld;
@@ -775,13 +778,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 			points becomes a line, which has no path to edit.
 		*/
 		const objects = this.selectedObjects();
-		this.editor = PathEditing.editedPath(objects)
-			? new PathEditing(
+		this.editor =
+			PathEditing.editedPath(objects) ?
+				new PathEditing(
 					'object ' + String(objects[0]),
 					() => RenderGeometrySection.objectOf(objects[0])?.path,
 					new ObjectPathSink(objects[0], this),
 				)
-			: null;
+			:	null;
 		if (
 			!this.editor &&
 			this.pathPointsAreShown() &&
@@ -893,11 +897,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 	private coverTheHandles(): void {
 		// a selection without handles, a part of a chart held in place, still draws its frame
 		const shown = this.handles();
-		const handlesOrObjects = shown.length
-			? cool.Range2D.fromPoints(
+		const handlesOrObjects =
+			shown.length ?
+				cool.Range2D.fromPoints(
 					shown.map((handle: SelectionHandle) => HandleLook.drawnAt(handle)),
 				)
-			: this.boxOfTheObjects();
+			:	this.boxOfTheObjects();
 		if (!handlesOrObjects) {
 			this.size = [0, 0];
 			return;
@@ -947,9 +952,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 				continue;
 
 			const reach = this.groupOf(shown[at])?.reachOf(usual) ?? usual;
-			const half = shown[at].larger
-				? reach + HandleLook.largerBy('shaping')
-				: reach;
+			const half =
+				shown[at].larger ? reach + HandleLook.largerBy('shaping') : reach;
 			// a handle that is no square of the usual size says how far it reaches
 			const across = shown[at].reach?.x ?? half;
 			const down = shown[at].reach?.y ?? half;
@@ -1089,9 +1093,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			['9.0.0', '9.0.1'].includes(held.name);
 
 		const aimed =
-			onAnEnd && connector !== undefined
-				? SelectionSection.tieTargetAt(new cool.Point(at.x, at.y), connector)
-				: null;
+			onAnEnd && connector !== undefined ?
+				SelectionSection.tieTargetAt(new cool.Point(at.x, at.y), connector)
+			:	null;
 
 		if (aimed === this.aimingAt) return;
 
@@ -1117,9 +1121,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		tie: cool.ConnectorTie;
 		point?: cool.Point;
 	} | null {
-		return this.aimingAt === null
-			? null
-			: SelectionSection.tieOn(this.aimingAt, at);
+		return this.aimingAt === null ?
+				null
+			:	SelectionSection.tieOn(this.aimingAt, at);
 	}
 
 	/// How far from a point to tie to an end of a connector still ties to it, in twips: a handle's
@@ -1446,16 +1450,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 		// chart held in place has no eight and is framed by its box.
 		const objects = this.selectedObjects();
 		const corners =
-			objects.length === 1 && ObjectHandles.isAChartPartHeldInPlace(objects[0])
-				? this.boxInView()
-				: this.framingCorners();
+			(
+				objects.length === 1 &&
+				ObjectHandles.isAChartPartHeldInPlace(objects[0])
+			) ?
+				this.boxInView()
+			:	this.framingCorners();
 		if (corners.length !== 4) return;
 
 		this.context.save();
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
-		this.context.strokeStyle = app.map.uiManager.isBackgroundDark()
-			? 'white'
-			: 'black';
+		this.context.strokeStyle =
+			app.map.uiManager.isBackgroundDark() ? 'white' : 'black';
 		this.context.setLineDash([3, 3]);
 		this.context.beginPath();
 
@@ -1576,9 +1582,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// What kind of band that object takes.
 	private surroundKind(objectId: number): SurroundKind {
-		return RenderGeometrySection.objectOf(objectId)?.isDiagram
-			? 'diagram'
-			: 'group';
+		return RenderGeometrySection.objectOf(objectId)?.isDiagram ?
+				'diagram'
+			:	'group';
 	}
 
 	/*
@@ -1591,19 +1597,20 @@ abstract class SelectionSection extends CanvasSectionObject {
 	private surroundPlaces(objectId: number): cool.SimplePoint[] {
 		const objects = this.selectedObjects();
 		const frame =
-			objects.length === 1 && objects[0] === objectId
-				? this.squareNow()
-				: RenderGeometrySection.transformOf(objectId);
+			objects.length === 1 && objects[0] === objectId ?
+				this.squareNow()
+			:	RenderGeometrySection.transformOf(objectId);
 
 		// Without a mapping of its own the band goes round the boxes of what it holds.
-		let box = frame
-			? cool.Range2D.fromPoints([
+		let box =
+			frame ?
+				cool.Range2D.fromPoints([
 					frame.apply(0, 0),
 					frame.apply(1, 0),
 					frame.apply(1, 1),
 					frame.apply(0, 1),
 				])
-			: this.boxAround(RenderGeometrySection.theOnesThatDraw([objectId]));
+			:	this.boxAround(RenderGeometrySection.theOnesThatDraw([objectId]));
 		if (!box) return [];
 
 		// the band of a group the selection stands in takes in the handles that belong inside
@@ -1844,9 +1851,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 	*/
 	private drawTheOutline(): void {
 		// While no drag runs, a group may still show what its handles will do once answered.
-		const polygons = this.interaction
-			? this.interaction.outline()
-			: this.groups().flatMap((group: HandleGroup) => group.outline() ?? []);
+		const polygons =
+			this.interaction ?
+				this.interaction.outline()
+			:	this.groups().flatMap((group: HandleGroup) => group.outline() ?? []);
 		if (!polygons?.length) return;
 
 		SelectionSection.strokeOutline(
@@ -1968,11 +1976,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const end = points[points.length - 1];
 		const before = points[points.length - 2];
 		const from =
-			end.behindX !== undefined && end.behindY !== undefined
-				? new cool.Point(end.behindX, end.behindY)
-				: before.aheadX !== undefined && before.aheadY !== undefined
-					? new cool.Point(before.aheadX, before.aheadY)
-					: new cool.Point(before.x, before.y);
+			end.behindX !== undefined && end.behindY !== undefined ?
+				new cool.Point(end.behindX, end.behindY)
+			: before.aheadX !== undefined && before.aheadY !== undefined ?
+				new cool.Point(before.aheadX, before.aheadY)
+			:	new cool.Point(before.x, before.y);
 		const way = new cool.Point(end.x - from.x, end.y - from.y);
 		const length = way.length();
 		if (length === 0) return null;
@@ -2178,16 +2186,15 @@ abstract class SelectionSection extends CanvasSectionObject {
 				that the two cannot be taken for one another.
 			*/
 			const grown =
-				!handle.deactivated && this.travel.showsAsActive(handle.name)
-					? size / 3
-					: hovered
-						? size / 8
-						: 0;
+				!handle.deactivated && this.travel.showsAsActive(handle.name) ? size / 3
+				: hovered ? size / 8
+				: 0;
 
 			this.context.beginPath();
-			this.context.strokeStyle = handle.deactivated
-				? HandleLook.deactivatedOutlineColour
-				: HandleLook.outlineColour;
+			this.context.strokeStyle =
+				handle.deactivated ?
+					HandleLook.deactivatedOutlineColour
+				:	HandleLook.outlineColour;
 
 			/*
 				A handle that does nothing keeps its shape and its size, so that the selection
@@ -2195,9 +2202,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 				hold of it would do nothing.
 			*/
 			const color = group.shape(this.context, handle, point, grown);
-			this.context.fillStyle = handle.deactivated
-				? HandleLook.deactivatedColour
-				: color;
+			this.context.fillStyle =
+				handle.deactivated ? HandleLook.deactivatedColour : color;
 
 			this.context.closePath();
 			this.context.fill();
@@ -2274,9 +2280,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		const box = cool.Range2D.fromPoints(corners);
 		const text =
-			ChangeOutbox.waitsFor() === 'redo'
-				? _('Waiting for redo...')
-				: _('Waiting for undo...');
+			ChangeOutbox.waitsFor() === 'redo' ?
+				_('Waiting for redo...')
+			:	_('Waiting for undo...');
 
 		this.context.save();
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
@@ -2337,17 +2343,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 				.reduce((sum: cool.Point, corner: cool.Point) => sum.add(corner))
 				.divideBy(mark.corners.length);
 			const corners = mark.corners.map((corner: cool.Point) => {
-				const grown = hit
-					? middle.add(corner.subtract(middle).multiplyBy(1.25))
-					: corner;
+				const grown =
+					hit ? middle.add(corner.subtract(middle).multiplyBy(1.25)) : corner;
 				return new cool.SimplePoint(grown.x, grown.y);
 			});
 
 			this.context.beginPath();
 			corners.forEach((corner: cool.SimplePoint, at: number) =>
-				at
-					? this.context.lineTo(corner.vX, corner.vY)
-					: this.context.moveTo(corner.vX, corner.vY),
+				at ?
+					this.context.lineTo(corner.vX, corner.vY)
+				:	this.context.moveTo(corner.vX, corner.vY),
 			);
 			this.context.closePath();
 			this.context.fillStyle = HandleLook.colorOfTheKind.turning;
@@ -2431,15 +2436,17 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// counts it, or the slant.
 	private readingOfTheHandleAbove(handle: SelectionHandle): string | null {
 		const shear = this.handleMode() === 'shear';
-		const reading = shear
-			? ShearingInteraction.readingOf(
+		const reading =
+			shear ?
+				ShearingInteraction.readingOf(
 					ShearingInteraction.slantOf(this, handle.turnedBy ?? 0),
 				)
-			: TurningInteraction.readingOf(this.turnOfTheSelection());
+			:	TurningInteraction.readingOf(this.turnOfTheSelection());
 		// a selection that is not turned or slanted shows no angle beside the handle
-		const none = shear
-			? ShearingInteraction.readingOf(0)
-			: TurningInteraction.readingOf(0);
+		const none =
+			shear ?
+				ShearingInteraction.readingOf(0)
+			:	TurningInteraction.readingOf(0);
 		return reading === none ? null : reading;
 	}
 
@@ -2487,9 +2494,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			.map((objectId: number) => RenderGeometrySection.transformOf(objectId))
 			.filter((mapping) => !!mapping)
 			.map((mapping) =>
-				kind === 'turn'
-					? SelectionSection.turnOfTheMapping(mapping as cool.Matrix2D)
-					: SelectionSection.slantOfTheMapping(mapping as cool.Matrix2D),
+				kind === 'turn' ?
+					SelectionSection.turnOfTheMapping(mapping as cool.Matrix2D)
+				:	SelectionSection.slantOfTheMapping(mapping as cool.Matrix2D),
 			);
 		if (!angles.length) return { any: false, shared: null };
 
@@ -2513,9 +2520,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const first = RenderGeometrySection.theOnesThatDraw(
 			RenderGeometrySection.standingFor(this.selectedObjects()),
 		)[0];
-		return first === undefined
-			? null
-			: (RenderGeometrySection.transformOf(first) ?? null);
+		return first === undefined ? null : (
+				(RenderGeometrySection.transformOf(first) ?? null)
+			);
 	}
 
 	/*
@@ -2566,16 +2573,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 			const middle = mapping.apply(0.5, 0.5);
 			const change =
-				kind === 'slant'
-					? SelectionSection.slantTakenAway(mapping, middle)
-					: cool.Matrix2D.IDENTITY.rotateAround(
-							middle.x,
-							middle.y,
-							-(
-								SelectionSection.slopeOfALine(objectId, mapping) ??
-								SelectionSection.turnOfTheMapping(mapping)
-							),
-						);
+				kind === 'slant' ?
+					SelectionSection.slantTakenAway(mapping, middle)
+				:	cool.Matrix2D.IDENTITY.rotateAround(
+						middle.x,
+						middle.y,
+						-(
+							SelectionSection.slopeOfALine(objectId, mapping) ??
+							SelectionSection.turnOfTheMapping(mapping)
+						),
+					);
 			changes.set(objectId, change);
 			reached.set(objectId, mapping.then(change));
 		}
@@ -2656,9 +2663,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		const objectIds = this.selectedObjects();
 		const way =
-			objectIds.length === 1
-				? ObjectHandles.wayOfTheLine(objectIds[0], square)?.way
-				: undefined;
+			objectIds.length === 1 ?
+				ObjectHandles.wayOfTheLine(objectIds[0], square)?.way
+			:	undefined;
 		return way && way.length() ? Math.atan2(way.y, way.x) : square.rotation();
 	}
 
@@ -2672,11 +2679,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!way || !way.length()) return null;
 
 		const angle = Math.atan2(way.y, way.x);
-		return angle > Math.PI / 2
-			? angle - Math.PI
-			: angle <= -Math.PI / 2
-				? angle + Math.PI
-				: angle;
+		return (
+			angle > Math.PI / 2 ? angle - Math.PI
+			: angle <= -Math.PI / 2 ? angle + Math.PI
+			: angle
+		);
 	}
 
 	/// whether some line of the selection stands off the level
@@ -2685,9 +2692,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 			RenderGeometrySection.standingFor(this.selectedObjects()),
 		).some((objectId: number) => {
 			const mapping = RenderGeometrySection.transformOf(objectId);
-			const slope = mapping
-				? SelectionSection.slopeOfALine(objectId, mapping)
-				: null;
+			const slope =
+				mapping ? SelectionSection.slopeOfALine(objectId, mapping) : null;
 			return slope !== null && Math.abs(slope) > 0.0005;
 		});
 	}
@@ -2880,9 +2886,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			);
 
 		if (handle.group !== 'framing')
-			return this.groupOf(handle)?.dragsTheHandle(handle) === false
-				? 'pointer'
-				: SelectionSection.grabPointer();
+			return this.groupOf(handle)?.dragsTheHandle(handle) === false ?
+					'pointer'
+				:	SelectionSection.grabPointer();
 
 		if (!ObjectHandles.canBeResized(this.selectedObjects()))
 			return 'not-allowed';
@@ -2942,9 +2948,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			const handle = this.known.find(
 				(one: SelectionHandle) => one.kind === kind,
 			);
-			return handle
-				? new cool.SimplePoint(handle.point.x, handle.point.y)
-				: undefined;
+			return handle ?
+					new cool.SimplePoint(handle.point.x, handle.point.y)
+				:	undefined;
 		};
 
 		// The handles as the objects have them, not as a drag shows them: this says what the
@@ -3162,9 +3168,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			most: number,
 			larger: boolean,
 		): number =>
-			larger
-				? move
-				: Math.min(Math.max(move, Math.min(least, 0)), Math.max(most, 0));
+			larger ? move : (
+				Math.min(Math.max(move, Math.min(least, 0)), Math.max(most, 0))
+			);
 
 		return new cool.Point(
 			held(
@@ -3692,21 +3698,17 @@ abstract class SelectionSection extends CanvasSectionObject {
 			app.file.textCursor.visible ||
 			RenderGeometrySection.pointerAt(inTheDocument.x, inTheDocument.y) ===
 				'text';
-		this.context.canvas.style.cursor = over
-			? this.pointerOver(over)
-			: this.handleAt(onCanvas[0], onCanvas[1], true)
-				? 'not-allowed'
-				: onTheObject && (this.isAddingATiePoint() || this.isAddingAPathPoint())
-					? 'crosshair'
-					: this.partMarkedAt(inTheDocument) !== undefined
-						? 'pointer'
-						: !onTheObject
-							? 'default'
-							: overText
-								? this.textPointerAt(inTheDocument)
-								: ObjectHandles.canBeMoved(this.selectedObjects())
-									? SelectionSection.grabPointer()
-									: 'default';
+		this.context.canvas.style.cursor =
+			over ? this.pointerOver(over)
+			: this.handleAt(onCanvas[0], onCanvas[1], true) ? 'not-allowed'
+			: onTheObject && (this.isAddingATiePoint() || this.isAddingAPathPoint()) ?
+				'crosshair'
+			: this.partMarkedAt(inTheDocument) !== undefined ? 'pointer'
+			: !onTheObject ? 'default'
+			: overText ? this.textPointerAt(inTheDocument)
+			: ObjectHandles.canBeMoved(this.selectedObjects()) ?
+				SelectionSection.grabPointer()
+			:	'default';
 
 		// The handle under the mouse is marked, so that it is plain which one a press would
 		// take hold of where several lie close together.
@@ -3976,9 +3978,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 				'inPlace';
 			const another =
 				hit !== undefined &&
-				(inPlace
-					? !selected.includes(RenderGeometrySection.whatAPressTakes(hit))
-					: !own.includes(hit));
+				(inPlace ?
+					!selected.includes(RenderGeometrySection.whatAPressTakes(hit))
+				:	!own.includes(hit));
 			if (
 				hit !== undefined &&
 				another &&
@@ -4090,12 +4092,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 			app.CSections.MouseControl.name,
 		);
 		if (!control) return;
-		const at = point
-			? cool.SimplePoint.fromCorePixels([
+		const at =
+			point ?
+				cool.SimplePoint.fromCorePixels([
 					point.pX + this.myTopLeft[0] - control.myTopLeft[0],
 					point.pY + this.myTopLeft[1] - control.myTopLeft[1],
 				])
-			: new cool.SimplePoint(0, 0);
+			:	new cool.SimplePoint(0, 0);
 		deliver(control, at);
 	}
 

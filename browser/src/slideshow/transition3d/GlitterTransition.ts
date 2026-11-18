@@ -78,23 +78,23 @@ class GlitterTransitionImp extends PermTextureTransition {
 		for (let y = 0; y < rows + 2; y += 2) {
 			for (let x = 0; x < columns + 2; x += 2) {
 				const corners: vec2[] =
-					y % 4 === 0
-						? [
-								cell(x - 1, y - 1),
-								cell(x, y - 2),
-								cell(x + 1, y - 1),
-								cell(x + 1, y),
-								cell(x, y + 1),
-								cell(x - 1, y),
-							]
-						: [
-								cell(x - 2, y - 1),
-								cell(x - 1, y - 2),
-								cell(x, y - 1),
-								cell(x, y),
-								cell(x - 1, y + 1),
-								cell(x - 2, y),
-							];
+					y % 4 === 0 ?
+						[
+							cell(x - 1, y - 1),
+							cell(x, y - 2),
+							cell(x + 1, y - 1),
+							cell(x + 1, y),
+							cell(x, y + 1),
+							cell(x - 1, y),
+						]
+					:	[
+							cell(x - 2, y - 1),
+							cell(x - 1, y - 2),
+							cell(x, y - 1),
+							cell(x, y),
+							cell(x - 1, y + 1),
+							cell(x - 2, y),
+						];
 				const center = toModel(cell(x, y + 0.5));
 				for (let i = 0; i < 6; i++) {
 					const triangle = [

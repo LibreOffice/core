@@ -48,9 +48,9 @@ class TableStyleGalleryService {
 	// first, so reusing that name would silently dispatch to the wrong command. The document
 	// type is known only once the document has loaded, so it is looked up on every call.
 	private getApplyCommand(): string {
-		return app.map.getDocType() === 'text'
-			? '.uno:SetTableStyle'
-			: '.uno:TableStyle';
+		return app.map.getDocType() === 'text' ?
+				'.uno:SetTableStyle'
+			:	'.uno:TableStyle';
 	}
 
 	public onCommandState(e: any) {

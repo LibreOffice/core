@@ -1012,15 +1012,15 @@ class MouseControl extends CanvasSectionObject {
 
 		const alt = app.UNOModifier.ALT;
 		const taken =
-			modifier === alt || modifier === (alt | app.UNOModifier.SHIFT)
-				? Interaction.context().altPress(
-						RenderGeometrySection.objectIdsAt(point.x, point.y),
-						modifier !== alt,
-					)
-				: Interaction.context().press(
-						RenderGeometrySection.objectIdAt(point.x, point.y),
-						modifier,
-					);
+			modifier === alt || modifier === (alt | app.UNOModifier.SHIFT) ?
+				Interaction.context().altPress(
+					RenderGeometrySection.objectIdsAt(point.x, point.y),
+					modifier !== alt,
+				)
+			:	Interaction.context().press(
+					RenderGeometrySection.objectIdAt(point.x, point.y),
+					modifier,
+				);
 
 		// The selection the click made is drawn at once, with its handles, so it can be worked
 		// on before the engine reports it.
@@ -1062,9 +1062,9 @@ class MouseControl extends CanvasSectionObject {
 	// The text that a press at (x, y), in document twips, may put the caret in: the object of a
 	// slide, or the text frame of a text document page.
 	private static textAt(x: number, y: number): number | undefined {
-		return MouseControl.drawsTextPages()
-			? RenderManager.textFrameAt(x, y)
-			: RenderGeometrySection.objectIdAt(x, y);
+		return MouseControl.drawsTextPages() ?
+				RenderManager.textFrameAt(x, y)
+			:	RenderGeometrySection.objectIdAt(x, y);
 	}
 
 	/// Starts a drag that selects text here when a plain left press landed in the edited text.
@@ -1142,11 +1142,10 @@ class MouseControl extends CanvasSectionObject {
 		if (!data) return false;
 		const table = ClassicTableContext.layout(data);
 		const to = ClassicTableContext.cellAt(table, point.x, point.y);
-		const from = MouseControl.editsTextHere()
-			? ClassicTableContext.editedCell(table)
-			: app.map._docLayer._cellSelectionArea
-				? ClassicTableContext.anchor
-				: null;
+		const from =
+			MouseControl.editsTextHere() ? ClassicTableContext.editedCell(table)
+			: app.map._docLayer._cellSelectionArea ? ClassicTableContext.anchor
+			: null;
 		if (!from || !to) return false;
 		// within the edited cell Shift selects text, which the engine does
 		if (
@@ -1401,9 +1400,9 @@ class MouseControl extends CanvasSectionObject {
 
 			// For future: Here, we are checking the window size to determine the view mode, we can also check the event type (touch/click).
 			app.map.focus(
-				(<any>window).mode.isDesktop()
-					? undefined
-					: this.getMobileKeyboardVisibility(),
+				(<any>window).mode.isDesktop() ?
+					undefined
+				:	this.getMobileKeyboardVisibility(),
 			);
 		}
 
@@ -1436,11 +1435,12 @@ class MouseControl extends CanvasSectionObject {
 	): void {
 		this.refreshPosition(point);
 
-		const modifier = openHyperlink
-			? window.L.Browser.mac
-				? app.UNOModifier.CTRLMAC
-				: app.UNOModifier.CTRL
-			: 0;
+		const modifier =
+			openHyperlink ?
+				window.L.Browser.mac ?
+					app.UNOModifier.CTRLMAC
+				:	app.UNOModifier.CTRL
+			:	0;
 
 		this.sendClick(
 			{
@@ -1452,9 +1452,9 @@ class MouseControl extends CanvasSectionObject {
 		);
 
 		app.map.focus(
-			(<any>window).mode.isDesktop()
-				? undefined
-				: this.getMobileKeyboardVisibility(),
+			(<any>window).mode.isDesktop() ?
+				undefined
+			:	this.getMobileKeyboardVisibility(),
 		);
 	}
 

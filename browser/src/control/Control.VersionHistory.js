@@ -187,9 +187,10 @@ window.L.Control.VersionHistory = window.L.Control.extend({
 			window.mobileDialogId = dialogUpdateEvent.data.id;
 		this._map.fire('jsdialogupdate', dialogUpdateEvent);
 
-		var note = this.storeEnabled
-			? _('Versions are kept on this computer.')
-			: _('Versions are not being kept.');
+		var note =
+			this.storeEnabled ?
+				_('Versions are kept on this computer.')
+			:	_('Versions are not being kept.');
 		if (this.entries.length)
 			note +=
 				' ' +

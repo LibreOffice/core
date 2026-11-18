@@ -108,9 +108,9 @@ class Transition2d extends TransitionBase {
 
 				void main() {
 					vec4 color0 = ${
-						isSlideTransition
-							? 'texture(leavingSlideTexture, v_texCoord)'
-							: 'vec4(0, 0, 0, 0)'
+						isSlideTransition ?
+							'texture(leavingSlideTexture, v_texCoord)'
+						:	'vec4(0, 0, 0, 0)'
 					};
 					vec4 color1 = texture(enteringSlideTexture, v_texCoord);
 					${!isSlideTransition ? 'color1 *= alpha;' : ''}

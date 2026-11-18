@@ -117,18 +117,18 @@ class SlideLinkToolbar {
     const stateLabel = this.sourceStateLabel(links.getSourceState(chain[0].id));
 
     // The label describes the link the way the slide's thumbnail does.
-    const sourceSlide = link
-      ? links.getSourceSlideName(link.id) || link.name
-      : '';
-    const description = link
-      ? sourceSlide
-        ? _('Linked to {0} in {1}')
+    const sourceSlide =
+      link ? links.getSourceSlideName(link.id) || link.name : '';
+    const description =
+      link ?
+        sourceSlide ?
+          _('Linked to {0} in {1}')
             .replace('{0}', () => sourceSlide)
             .replace('{1}', () => link.source)
         : _('Linked to {0}').replace('{0}', () => link.source)
-      : (chain[0].unit === 'section'
-          ? _('In a section linked to {0}')
-          : _('In a presentation linked to {0}')
+      : (chain[0].unit === 'section' ?
+          _('In a section linked to {0}')
+        : _('In a presentation linked to {0}')
         ).replace('{0}', () => chain[0].source);
 
     const element = (
@@ -142,21 +142,21 @@ class SlideLinkToolbar {
         <span class="slide-link-toolbar-title" title={description}>
           {_('Linked')}
         </span>
-        {stateLabel ? (
+        {stateLabel ?
           <span class="slide-link-toolbar-state">{stateLabel}</span>
-        ) : null}
+        : null}
         <button
           type="button"
           class="slide-link-toolbar-expander"
           aria-expanded={this.expanded ? 'true' : 'false'}
           aria-label={
-            this.expanded
-              ? _('Hide the actions for this linked slide')
-              : _('Show the actions for this linked slide')
+            this.expanded ?
+              _('Hide the actions for this linked slide')
+            : _('Show the actions for this linked slide')
           }
           onClick={() => this.setExpanded(!this.expanded)}
         ></button>
-        {this.expanded && editable && link ? (
+        {this.expanded && editable && link ?
           <button
             type="button"
             class="button slide-link-toolbar-action unlink"
@@ -164,8 +164,8 @@ class SlideLinkToolbar {
           >
             {_('Unlink')}
           </button>
-        ) : null}
-        {(this.expanded || outdated) && editable && link ? (
+        : null}
+        {(this.expanded || outdated) && editable && link ?
           <button
             type="button"
             class="button slide-link-toolbar-action update"
@@ -174,8 +174,8 @@ class SlideLinkToolbar {
           >
             {_('Update')}
           </button>
-        ) : null}
-        {(this.expanded || sectionOutdated) && editable && section ? (
+        : null}
+        {(this.expanded || sectionOutdated) && editable && section ?
           <button
             type="button"
             class="button slide-link-toolbar-action update-section"
@@ -184,8 +184,8 @@ class SlideLinkToolbar {
           >
             {_('Update section')}
           </button>
-        ) : null}
-        {(this.expanded || presentationOutdated) && editable && presentation ? (
+        : null}
+        {(this.expanded || presentationOutdated) && editable && presentation ?
           <button
             type="button"
             class="button slide-link-toolbar-action update-presentation"
@@ -194,7 +194,7 @@ class SlideLinkToolbar {
           >
             {_('Update presentation')}
           </button>
-        ) : null}
+        : null}
       </div>
     );
 

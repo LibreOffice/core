@@ -24,9 +24,9 @@ function getOnboardingSteps(): OnboardingStep[] {
 			id: 'intro',
 			title: _('Welcome to {productname}').replace(
 				'{productname}',
-				typeof brandProductName !== 'undefined'
-					? brandProductName
-					: 'Collabora Office',
+				typeof brandProductName !== 'undefined' ? brandProductName : (
+					'Collabora Office'
+				),
 			),
 			text: _(
 				'This short tour points out the parts of the screen you will use most.',

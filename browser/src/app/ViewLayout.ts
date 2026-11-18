@@ -702,13 +702,13 @@ class ViewLayoutBase {
 		// this. scroll() places the bar at viewX / viewSize * trackLength, so the
 		// pointer-to-view factor is the inverse of that.
 		this.scrollProperties.horizontalScrollRatio =
-			this.scrollProperties.horizontalScrollLength > 0 && this.viewSize.pX > 0
-				? this.viewSize.pX / this.scrollProperties.horizontalScrollLength
-				: 1;
+			this.scrollProperties.horizontalScrollLength > 0 && this.viewSize.pX > 0 ?
+				this.viewSize.pX / this.scrollProperties.horizontalScrollLength
+			:	1;
 		this.scrollProperties.verticalScrollRatio =
-			this.scrollProperties.verticalScrollLength > 0 && this.viewSize.pY > 0
-				? this.viewSize.pY / this.scrollProperties.verticalScrollLength
-				: 1;
+			this.scrollProperties.verticalScrollLength > 0 && this.viewSize.pY > 0 ?
+				this.viewSize.pY / this.scrollProperties.verticalScrollLength
+			:	1;
 
 		// Properties for quick scrolling.
 		this.scrollProperties.verticalScrollStep = documentAnchor.size[1] / 2;

@@ -100,9 +100,8 @@ abstract class SimpleContinuousActivityBase extends ActivityBase {
 
 			// When we've autoreverse on, the repeat count doubles
 			const nRepeatCount = this.getRepeatCount();
-			const nEffectiveRepeat = this.isAutoReverse()
-				? 2.0 * nRepeatCount
-				: nRepeatCount;
+			const nEffectiveRepeat =
+				this.isAutoReverse() ? 2.0 * nRepeatCount : nRepeatCount;
 
 			// time (or frame count) elapsed?
 			if (nEffectiveRepeat <= nT) {

@@ -24,9 +24,9 @@ namespace BackstageTemplates {
     return (
       <>
         <h2 class="backstage-content-title">{title}</h2>
-        {description ? (
+        {description ?
           <p class="backstage-content-description">{description}</p>
-        ) : null}
+        : null}
       </>
     );
   }

@@ -117,9 +117,9 @@ class EditWidget {
 
 	protected onKeyUp(e: KeyboardEvent) {
 		var callbackToUse =
-			e.key === 'Enter' && this.data.changedCallback
-				? this.data.changedCallback
-				: null;
+			e.key === 'Enter' && this.data.changedCallback ?
+				this.data.changedCallback
+			:	null;
 		if (this.callback) callbackToUse = this.callback;
 		if (typeof callbackToUse === 'function')
 			callbackToUse(this.edit.input.value);

@@ -221,9 +221,9 @@ class Util {
 
 	public static getProduct(): string {
 		let brandFAQURL =
-			typeof brandProductFAQURL !== 'undefined'
-				? brandProductFAQURL
-				: 'https://www.collaboraoffice.org/post/faq/';
+			typeof brandProductFAQURL !== 'undefined' ? brandProductFAQURL : (
+				'https://www.collaboraoffice.org/post/faq/'
+			);
 		const customWindow = window as any;
 		if (customWindow.feedbackUrl && customWindow.buyProductUrl) {
 			const integratorUrl = encodeURIComponent(customWindow.buyProductUrl);

@@ -196,9 +196,10 @@ class PathGeometry {
 			// the weights stand across the line halfway between their two ways
 			const sum = inWay.add(outWay);
 			const sumLength = sum.length();
-			const across = sumLength
-				? new cool.Point(-sum.y / sumLength, sum.x / sumLength)
-				: new cool.Point(-inWay.y, inWay.x);
+			const across =
+				sumLength ?
+					new cool.Point(-sum.y / sumLength, sum.x / sumLength)
+				:	new cool.Point(-inWay.y, inWay.x);
 			const inLong = continuity === 2 ? common : inLength;
 			const outLong = continuity === 2 ? common : outLength;
 			if (cross > 0)
@@ -507,9 +508,9 @@ class PathGeometry {
 		const bc = whole(afterMiddle);
 		const c = whole(intoHalf);
 		const middle = whole(
-			edge.curved
-				? between(beforeMiddle, afterMiddle)
-				: between(edge.start, edge.end),
+			edge.curved ?
+				between(beforeMiddle, afterMiddle)
+			:	between(edge.start, edge.end),
 		);
 		if (
 			(middle.x === from.x && middle.y === from.y) ||
@@ -609,13 +610,13 @@ class PathGeometry {
 		const start = new cool.Point(from.x, from.y);
 		const end = new cool.Point(to.x, to.y);
 		const out =
-			from.aheadX !== undefined && from.aheadY !== undefined
-				? new cool.Point(from.aheadX, from.aheadY)
-				: start;
+			from.aheadX !== undefined && from.aheadY !== undefined ?
+				new cool.Point(from.aheadX, from.aheadY)
+			:	start;
 		const into =
-			to.behindX !== undefined && to.behindY !== undefined
-				? new cool.Point(to.behindX, to.behindY)
-				: end;
+			to.behindX !== undefined && to.behindY !== undefined ?
+				new cool.Point(to.behindX, to.behindY)
+			:	end;
 		return { start, out, into, end, curved: out !== start || into !== end };
 	}
 
@@ -634,8 +635,9 @@ class PathGeometry {
 		if (!edge.curved) {
 			const along = edge.end.subtract(edge.start);
 			const length2 = along.x * along.x + along.y * along.y;
-			const cut = length2
-				? Math.max(
+			const cut =
+				length2 ?
+					Math.max(
 						0,
 						Math.min(
 							1,
@@ -644,7 +646,7 @@ class PathGeometry {
 								length2,
 						),
 					)
-				: 0;
+				:	0;
 			const on = edge.start.add(along.multiplyBy(cut));
 			return { cut, distance: on.subtract(at).length() };
 		}
@@ -693,9 +695,10 @@ class PathGeometry {
 		comingIn: boolean,
 		at: cool.Point,
 	): cool.ObjectPathPoint {
-		const moved = comingIn
-			? { ...stands, behindX: at.x, behindY: at.y }
-			: { ...stands, aheadX: at.x, aheadY: at.y };
+		const moved =
+			comingIn ?
+				{ ...stands, behindX: at.x, behindY: at.y }
+			:	{ ...stands, aheadX: at.x, aheadY: at.y };
 
 		const otherX = comingIn ? stands.aheadX : stands.behindX;
 		const otherY = comingIn ? stands.aheadY : stands.behindY;
@@ -714,15 +717,15 @@ class PathGeometry {
 		// The one that gives way keeps its own length where the curve is only smooth, and takes
 		// the length of the dragged one where it is symmetric as well.
 		const length =
-			stands.continuity === 2
-				? awayLength
-				: new cool.Point(otherX, otherY).subtract(point).length();
+			stands.continuity === 2 ?
+				awayLength
+			:	new cool.Point(otherX, otherY).subtract(point).length();
 
 		const back = point.subtract(away.divideBy(awayLength).multiplyBy(length));
 
-		return comingIn
-			? { ...moved, aheadX: back.x, aheadY: back.y }
-			: { ...moved, behindX: back.x, behindY: back.y };
+		return comingIn ?
+				{ ...moved, aheadX: back.x, aheadY: back.y }
+			:	{ ...moved, behindX: back.x, behindY: back.y };
 	}
 
 	/// That point moved by that offset, its weights too where it has them, and everything

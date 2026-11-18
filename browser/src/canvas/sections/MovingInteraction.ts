@@ -115,12 +115,12 @@ class MovingInteraction extends SelectionInteraction {
 		if (!matrix) return known;
 
 		return known.map((handle: SelectionHandle) =>
-			this.selection.keepsItsPlace(handle)
-				? handle
-				: {
-						...handle,
-						point: matrix.apply(handle.point.x, handle.point.y).round(),
-					},
+			this.selection.keepsItsPlace(handle) ?
+				handle
+			:	{
+					...handle,
+					point: matrix.apply(handle.point.x, handle.point.y).round(),
+				},
 		);
 	}
 }

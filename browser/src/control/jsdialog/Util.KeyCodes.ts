@@ -24,9 +24,9 @@ JSDialog.getUNOKeyCodeWithModifiers = function (
 	const shift =
 		keyCode === map.keyboard.keyCodes.SHIFT ? app.UNOModifier.SHIFT : 0;
 	const ctrl =
-		keyCode === map.keyboard.keyCodes.CTRL || e.metaKey
-			? app.UNOModifier.CTRL
-			: 0;
+		keyCode === map.keyboard.keyCodes.CTRL || e.metaKey ?
+			app.UNOModifier.CTRL
+		:	0;
 	const alt = keyCode === map.keyboard.keyCodes.ALT ? app.UNOModifier.ALT : 0;
 
 	const modifier = shift | ctrl | alt;

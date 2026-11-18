@@ -410,7 +410,10 @@ class ContextToolbar extends JSDialogComponent {
 		this._pushAdditionalContextButton({
 			id: button.id,
 			type: 'bigtoolitem',
-			text: button.label ? button.label : button.hint ? _(button.hint) : ' ',
+			text:
+				button.label ? button.label
+				: button.hint ? _(button.hint)
+				: ' ',
 			command: button.unoCommand,
 			icon: button.imgurl,
 			postmessage: button.unoCommand ? undefined : true,
@@ -507,9 +510,9 @@ class ContextToolbar extends JSDialogComponent {
 		if (e.id === ContextMenuControl.menuID) return;
 
 		const parent =
-			typeof e.popupParent === 'string'
-				? document.getElementById(e.popupParent)
-				: e.popupParent;
+			typeof e.popupParent === 'string' ?
+				document.getElementById(e.popupParent)
+			:	e.popupParent;
 		if (parent && this.container.contains(parent)) return;
 
 		this.hideContextToolbar();

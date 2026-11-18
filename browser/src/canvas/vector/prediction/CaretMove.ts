@@ -41,9 +41,9 @@ namespace cool {
 		if (found === undefined) {
 			const Segmenter = (Intl as any).Segmenter;
 			found =
-				typeof Segmenter === 'function'
-					? (new Segmenter(undefined, { granularity }) as Segmenter)
-					: null;
+				typeof Segmenter === 'function' ?
+					(new Segmenter(undefined, { granularity }) as Segmenter)
+				:	null;
 			segmenters.set(granularity, found);
 		}
 		return found;
@@ -182,9 +182,9 @@ namespace cool {
 				const previousRuns = movableRuns(runs, logical.paragraph - 1);
 				if (!previousRuns) return null;
 				const end = previousRuns[0].text.length;
-				return isShown(previousRuns, end)
-					? { paragraph: logical.paragraph - 1, index: end }
-					: null;
+				return isShown(previousRuns, end) ?
+						{ paragraph: logical.paragraph - 1, index: end }
+					:	null;
 			}
 			const before = starts.filter((start) => start < logical.index);
 			index = before.length ? before[before.length - 1] : 0;
@@ -194,13 +194,13 @@ namespace cool {
 			const nextRuns = movableRuns(runs, logical.paragraph + 1);
 			// Only the engine knows whether a next paragraph without runs exists.
 			if (!nextRuns) return null;
-			return isShown(nextRuns, 0)
-				? { paragraph: logical.paragraph + 1, index: 0 }
-				: null;
+			return isShown(nextRuns, 0) ?
+					{ paragraph: logical.paragraph + 1, index: 0 }
+				:	null;
 		}
-		return isShown(textRuns, index)
-			? { paragraph: logical.paragraph, index }
-			: null;
+		return isShown(textRuns, index) ?
+				{ paragraph: logical.paragraph, index }
+			:	null;
 	}
 
 	/// The caret one character before (step -1) or after (step 1) logical, into the next or
@@ -217,9 +217,9 @@ namespace cool {
 
 		const next = graphemeBoundary(textRuns[0].text, logical.index, step);
 		if (next !== null)
-			return isShown(textRuns, next)
-				? { paragraph: logical.paragraph, index: next }
-				: null;
+			return isShown(textRuns, next) ?
+					{ paragraph: logical.paragraph, index: next }
+				:	null;
 
 		const paragraph = logical.paragraph + step;
 		const nextRuns = paragraph >= 0 ? movableRuns(runs, paragraph) : null;
@@ -295,7 +295,10 @@ namespace cool {
 			const positions = positionsOf(run);
 			const left = run.x;
 			const right = run.slideX(positions[positions.length - 1]);
-			const delta = x < left ? left - x : x > right ? x - right : 0;
+			const delta =
+				x < left ? left - x
+				: x > right ? x - right
+				: 0;
 			// The font size scaled to slide twips, like delta.
 			const near = delta < run.fontSize * run.scaleX;
 			if ((!nearOnly || near) && delta < bestDelta) {
@@ -444,7 +447,10 @@ namespace cool {
 			for (const run of this.shown) {
 				const top = run.baseline - run.lineAscent * run.scaleY;
 				const bottom = top + run.lineHeight * run.scaleY;
-				const distance = y < top ? top - y : y > bottom ? y - bottom : 0;
+				const distance =
+					y < top ? top - y
+					: y > bottom ? y - bottom
+					: 0;
 				if (distance < lineDistance) {
 					lineDistance = distance;
 					closest = run;
@@ -517,14 +523,14 @@ namespace cool {
 			for (const run of this.shown) {
 				if (onSameLine(run, from)) continue;
 				const ahead =
-					step > 0
-						? run.baseline > from.baseline
-						: run.baseline < from.baseline;
+					step > 0 ?
+						run.baseline > from.baseline
+					:	run.baseline < from.baseline;
 				const closer =
 					next === null ||
-					(step > 0
-						? run.baseline < next.baseline
-						: run.baseline > next.baseline);
+					(step > 0 ?
+						run.baseline < next.baseline
+					:	run.baseline > next.baseline);
 				if (ahead && closer) next = run;
 			}
 			if (next === null) return null;

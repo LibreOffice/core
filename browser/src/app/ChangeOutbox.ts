@@ -293,9 +293,9 @@ class ChangeOutbox {
 
 		const unstamped = cool.InputSequence.unstamp(message);
 		ChangeOutbox.sendTheTextAhead();
-		return unstamped
-			? cool.InputSequence.stamp(unstamped.message, unstamped.tickets)
-			: message;
+		return unstamped ?
+				cool.InputSequence.stamp(unstamped.message, unstamped.tickets)
+			:	message;
 	}
 
 	/// Sends everything waiting where typed text or a deletion is among it, however many
@@ -362,9 +362,9 @@ class ChangeOutbox {
 	/// How long the undos and redos on their way have been waited for, in milliseconds; zero
 	/// while none is on its way.
 	public static undoWaitedFor(): number {
-		return ChangeOutbox.undoOnItsWay()
-			? performance.now() - ChangeOutbox.undoAskedAt
-			: 0;
+		return ChangeOutbox.undoOnItsWay() ?
+				performance.now() - ChangeOutbox.undoAskedAt
+			:	0;
 	}
 
 	/// The undo or the redo that goes out first among those waiting or in flight, or null where
@@ -679,9 +679,9 @@ class ChangeOutbox {
 	/// long enough: the next one may go.
 	private static answered(wait?: ReturnType<typeof setTimeout>): void {
 		const at =
-			wait === undefined
-				? 0
-				: ChangeOutbox.inFlight.findIndex((one) => one.wait === wait);
+			wait === undefined ? 0 : (
+				ChangeOutbox.inFlight.findIndex((one) => one.wait === wait)
+			);
 		if (at < 0 || at >= ChangeOutbox.inFlight.length) return;
 
 		clearTimeout(ChangeOutbox.inFlight[at].wait);

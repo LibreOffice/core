@@ -336,7 +336,11 @@ class SlideLinks {
 
 	// How deep a unit sits in the chain of links over one slide.
 	private static depth(unit: SlideLinkUnit): number {
-		return unit === 'slide' ? 0 : unit === 'section' ? 1 : 2;
+		return (
+			unit === 'slide' ? 0
+			: unit === 'section' ? 1
+			: 2
+		);
 	}
 
 	// The identifier of the slide on show, or an empty string when the
@@ -355,9 +359,9 @@ class SlideLinks {
 
 	private currentSourceTime(source: string): string | null {
 		const remoteLink = this.remoteLink(source);
-		return remoteLink && remoteLink.lastModifiedTime
-			? remoteLink.lastModifiedTime
-			: null;
+		return remoteLink && remoteLink.lastModifiedTime ?
+				remoteLink.lastModifiedTime
+			:	null;
 	}
 
 	// Refreshes every link of the document from its source. The server reads
@@ -394,11 +398,11 @@ class SlideLinks {
 		}
 		if (this.isMissing(id)) {
 			this.say(
-				(link.unit === 'section'
-					? _(
-							'Cannot update the section: {0} no longer holds its source section.',
-						)
-					: _('Cannot update the slide: {0} no longer holds its source slide.')
+				(link.unit === 'section' ?
+					_(
+						'Cannot update the section: {0} no longer holds its source section.',
+					)
+				:	_('Cannot update the slide: {0} no longer holds its source slide.')
 				).replace('{0}', () => link.source),
 			);
 			return;
@@ -505,9 +509,9 @@ class SlideLinks {
 		const presentations = units.some((link) => link.unit === 'presentation');
 		if (sections && presentations) return _('Update links');
 		if (presentations)
-			return units.length === 1
-				? _('Update presentation')
-				: _('Update presentations');
+			return units.length === 1 ?
+					_('Update presentation')
+				:	_('Update presentations');
 		return units.length === 1 ? _('Update section') : _('Update sections');
 	}
 
@@ -574,9 +578,9 @@ class SlideLinks {
 
 	// Whether the document still holds what a refresh is asked for.
 	private stillHolds(request: SlideLinkRefreshRequest): boolean {
-		return request.id === undefined
-			? this.sources.indexOf(request.source) >= 0
-			: this.links.has(request.id);
+		return request.id === undefined ?
+				this.sources.indexOf(request.source) >= 0
+			:	this.links.has(request.id);
 	}
 
 	// Whether a refresh that covers the request is running or waiting for
@@ -790,17 +794,17 @@ class SlideLinks {
 			return _(
 				'{0} is not one of the documents this one is related to, so the server cannot read it.',
 			).replace('{0}', () => source);
-		return SlideLinks.isReadable(remoteLink.state)
-			? ''
-			: SlideLinks.unreadableMessage(source, remoteLink.state);
+		return SlideLinks.isReadable(remoteLink.state) ? '' : (
+				SlideLinks.unreadableMessage(source, remoteLink.state)
+			);
 	}
 
 	// Why a source in the given state cannot be read, said to the user.
 	private static unreadableMessage(source: string, state: string): string {
 		const message =
-			state === 'noaccess'
-				? _('You do not have access to {0}, so its slides cannot be updated.')
-				: _('{0} could not be read.');
+			state === 'noaccess' ?
+				_('You do not have access to {0}, so its slides cannot be updated.')
+			:	_('{0} could not be read.');
 		return message.replace('{0}', () => source);
 	}
 
@@ -958,13 +962,13 @@ class SlideLinks {
 				refresh.byIdentifier &&
 				SlideImportSession.exportFailureKind(body) === 'failed';
 			this.say(
-				missing
-					? _(
-							'Cannot update the slides of {0}: source lacks the matching slides',
-						).replace('{0}', () => refresh.source)
-					: _(
-							'The slides of {0} could not be read into this presentation.',
-						).replace('{0}', () => refresh.source),
+				missing ?
+					_(
+						'Cannot update the slides of {0}: source lacks the matching slides',
+					).replace('{0}', () => refresh.source)
+				:	_(
+						'The slides of {0} could not be read into this presentation.',
+					).replace('{0}', () => refresh.source),
 			);
 			this.sendNext();
 			return;
@@ -982,9 +986,9 @@ class SlideLinks {
 				' file=' +
 				encodeURIComponent(stagedName) +
 				(current ? ' time=' + encodeURIComponent(current) : '') +
-				(refresh.id !== undefined
-					? ' unit=' + refresh.unit + ' id=' + encodeURIComponent(refresh.id)
-					: ''),
+				(refresh.id !== undefined ?
+					' unit=' + refresh.unit + ' id=' + encodeURIComponent(refresh.id)
+				:	''),
 		);
 	}
 
@@ -1111,11 +1115,9 @@ class SlideLinks {
 			// the toolbar of a slide that lost its link has gone already.
 			if (e.kind !== 'notlinked')
 				this.say(
-					e.unit === 'slide'
-						? _('Unlinking the slide failed.')
-						: e.unit === 'section'
-							? _('Unlinking the section failed.')
-							: _('Unlinking the presentation failed.'),
+					e.unit === 'slide' ? _('Unlinking the slide failed.')
+					: e.unit === 'section' ? _('Unlinking the section failed.')
+					: _('Unlinking the presentation failed.'),
 				);
 			return;
 		}

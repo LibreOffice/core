@@ -146,9 +146,9 @@ class TurningInteraction extends SelectionInteraction {
 		selection: SelectionSection,
 	): { stands: number; middle: cool.SimplePoint } | null {
 		const keys = TurningInteraction.keys;
-		return keys && keys.objects === selection.selectedObjects().join(',')
-			? { stands: keys.stands, middle: keys.middle }
-			: null;
+		return keys && keys.objects === selection.selectedObjects().join(',') ?
+				{ stands: keys.stands, middle: keys.middle }
+			:	null;
 	}
 
 	/// Takes in that the turn keys left the selection at that angle, as the engine counts it,

@@ -517,9 +517,9 @@ JSDialog._setSpinFieldValue = function (
 ) {
 	spinfield.value = displayValue;
 	const num = parseFloat(
-		numericValue != undefined
-			? numericValue
-			: JSDialog._parseSpinFieldValue(displayValue),
+		numericValue != undefined ? numericValue : (
+			JSDialog._parseSpinFieldValue(displayValue)
+		),
 	);
 	if (!isNaN(num)) spinfield.setAttribute('aria-valuenow', num.toString());
 	if (displayValue && displayValue !== '' + num)

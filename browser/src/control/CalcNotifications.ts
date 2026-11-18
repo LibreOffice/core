@@ -51,9 +51,8 @@ class CalcNotifications {
 
 	private onCalcValidationStop(state: CalcValidationStopState): void {
 		if (!state) return;
-		const label = state.title
-			? state.title + ': ' + state.message
-			: state.message;
+		const label =
+			state.title ? state.title + ': ' + state.message : state.message;
 		this.map.uiManager.showSnackbar(label, null, null, 6000, false, true);
 	}
 

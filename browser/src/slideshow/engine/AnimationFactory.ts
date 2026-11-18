@@ -183,12 +183,10 @@ function createPropertyAnimation(
 		return null;
 	}
 
-	const aGetModifier = aFunctorSet.getmod
-		? aFunctorSet.getmod(nWidth, nHeight)
-		: null;
-	const aSetModifier = aFunctorSet.setmod
-		? aFunctorSet.setmod(nWidth, nHeight)
-		: null;
+	const aGetModifier =
+		aFunctorSet.getmod ? aFunctorSet.getmod(nWidth, nHeight) : null;
+	const aSetModifier =
+		aFunctorSet.setmod ? aFunctorSet.setmod(nWidth, nHeight) : null;
 
 	const aGetValueMethod =
 		aAnimatedElement[sGetValueMethod as keyof typeof aAnimatedElement];
@@ -459,9 +457,8 @@ function createShapeTransition(
 	if (aTransitionInfoTable[eTransitionType])
 		aTransitionInfo = aTransitionInfoTable[eTransitionType][eTransitionSubType];
 
-	const eTransitionClass: TransitionClass = aTransitionInfo
-		? aTransitionInfo['class']
-		: TransitionClass.Invalid;
+	const eTransitionClass: TransitionClass =
+		aTransitionInfo ? aTransitionInfo['class'] : TransitionClass.Invalid;
 
 	switch (eTransitionClass) {
 		default:

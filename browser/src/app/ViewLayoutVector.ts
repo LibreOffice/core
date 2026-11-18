@@ -75,9 +75,9 @@ class ViewLayoutVector extends ViewLayoutBase {
 	/// The layout a presentation or a drawing is edited in: this one while the client draws from
 	/// the objects, the tiled one otherwise.
 	public static forAPresentation(): ViewLayoutBase {
-		return ViewLayoutVector.isWanted()
-			? new ViewLayoutVector()
-			: new ViewLayoutImpress();
+		return ViewLayoutVector.isWanted() ?
+				new ViewLayoutVector()
+			:	new ViewLayoutImpress();
 	}
 
 	/*
@@ -143,9 +143,9 @@ class ViewLayoutVector extends ViewLayoutBase {
 	/// objects.
 	public static lawnOfThePageInView(): cool.Range2D | undefined {
 		const layout = app.activeDocument?.activeLayout;
-		return layout?.type === 'ViewLayoutVector'
-			? (layout as ViewLayoutVector).lawnOfThePage()
-			: undefined;
+		return layout?.type === 'ViewLayoutVector' ?
+				(layout as ViewLayoutVector).lawnOfThePage()
+			:	undefined;
 	}
 
 	/// Works the lawn out again from the objects as they stand, and the view with it where it
@@ -342,12 +342,12 @@ class ViewLayoutVector extends ViewLayoutBase {
 		this.theUserChoseTheView = anchorTwips !== undefined;
 		this.fitting = !anchorTwips;
 		this.pivotOnFrame =
-			anchorTwips && anchorOnCanvas
-				? new cool.Point(
-						anchorOnCanvas.pX - this._documentAnchorPosition[0],
-						anchorOnCanvas.pY - this._documentAnchorPosition[1],
-					)
-				: null;
+			anchorTwips && anchorOnCanvas ?
+				new cool.Point(
+					anchorOnCanvas.pX - this._documentAnchorPosition[0],
+					anchorOnCanvas.pY - this._documentAnchorPosition[1],
+				)
+			:	null;
 
 		super.applyZoom(targetZoom, anchorTwips, anchorOnCanvas);
 

@@ -38,9 +38,8 @@ JSDialog.pushButton = function (
 		data.enabled = false;
 	}
 
-	const wrapperClass = window.mode.isSmallScreenDevice()
-		? ''
-		: 'd-flex justify-content-center';
+	const wrapperClass =
+		window.mode.isSmallScreenDevice() ? '' : 'd-flex justify-content-center';
 
 	const wrapper = window.L.DomUtil.create(
 		'div',
@@ -63,9 +62,9 @@ JSDialog.pushButton = function (
 	);
 
 	const pushbuttonText =
-		_customPushButtonTextForId(data.id) !== ''
-			? _customPushButtonTextForId(data.id)
-			: builder._cleanText(data.text ? data.text : '');
+		_customPushButtonTextForId(data.id) !== '' ?
+			_customPushButtonTextForId(data.id)
+		:	builder._cleanText(data.text ? data.text : '');
 
 	// An icon name lets us use our own SVG, which is crisp at any DPI and has a
 	// dark variant; the base64 image the engine sends alongside is the fallback

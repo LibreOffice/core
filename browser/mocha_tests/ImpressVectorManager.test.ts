@@ -32,11 +32,9 @@ describe('ImpressVectorManager', function () {
 	// page of the list the mode names, each with the id of its page.
 	function pageList(mode: number, count: number): any[] {
 		const prefix =
-			mode === cool.VectorMode.MasterPages
-				? 'M'
-				: mode === cool.VectorMode.NotesPages
-					? 'N'
-					: 'S';
+			mode === cool.VectorMode.MasterPages ? 'M'
+			: mode === cool.VectorMode.NotesPages ? 'N'
+			: 'S';
 		const list: any[] = [];
 		for (let i = 0; i < count; i++)
 			list.push({ part: prefix + String(i), mode: mode });
@@ -2703,9 +2701,9 @@ describe('ImpressVectorManager', function () {
 			let savedSetStartRectangle: any;
 			let savedSetEndRectangle: any;
 			const handleOf = (rectangle: cool.SimpleRectangle | null) =>
-				rectangle
-					? [rectangle.x1, rectangle.y1, rectangle.width, rectangle.height]
-					: null;
+				rectangle ?
+					[rectangle.x1, rectangle.y1, rectangle.width, rectangle.height]
+				:	null;
 			beforeEach(function () {
 				recorder = new SocketRecorder();
 				sent = recorder.sent;

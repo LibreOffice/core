@@ -116,7 +116,7 @@ function makeGifRenderer(
 	context: RenderContext,
 	slideRenderer: SlideRenderer,
 ): AnimatedContentRenderer {
-	return context.is2dGl()
-		? new GifRenderer2d(sId, context, slideRenderer)
-		: new GifRendererGl(sId, context, slideRenderer);
+	return context.is2dGl() ?
+			new GifRenderer2d(sId, context, slideRenderer)
+		:	new GifRendererGl(sId, context, slideRenderer);
 }

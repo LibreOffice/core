@@ -171,9 +171,9 @@ class TableMiddleware {
 		const position = new cool.SimplePoint(x, y);
 
 		const index =
-			markerType === 'column'
-				? this.tableResizeColumnMarkers.length
-				: this.tableResizeRowMarkers.length;
+			markerType === 'column' ?
+				this.tableResizeColumnMarkers.length
+			:	this.tableResizeRowMarkers.length;
 		const showSection = !(
 			app.map._docLayer._docType === 'presentation' &&
 			markerType === 'column' &&
@@ -185,9 +185,9 @@ class TableMiddleware {
 			this.resizeMarkerWidth,
 			this.resizeMarkerHeight,
 			position,
-			markerType === 'column'
-				? 'table-column-resize-marker'
-				: 'table-row-resize-marker',
+			markerType === 'column' ?
+				'table-column-resize-marker'
+			:	'table-row-resize-marker',
 			markerType === 'column' ? 'column' : 'row',
 			index,
 			showSection,
@@ -282,9 +282,9 @@ class TableMiddleware {
 			height,
 			position,
 			'table-select-marker ' +
-				(markerType === 'column'
-					? 'table-select-marker--column'
-					: 'table-select-marker--row'),
+				(markerType === 'column' ?
+					'table-select-marker--column'
+				:	'table-select-marker--row'),
 			markerType,
 		);
 
@@ -445,9 +445,9 @@ class TableMiddleware {
 	/// The rows and columns of the table that is selected, as the server sends them, with numbers
 	/// in place of the strings it may send. Absent while no table is selected.
 	public tableData(): any {
-		return this.hasTableSelection() && this.currentTableData.rectangle
-			? this.currentTableData
-			: undefined;
+		return this.hasTableSelection() && this.currentTableData.rectangle ?
+				this.currentTableData
+			:	undefined;
 	}
 
 	/// The rows and columns laid on the table here that the server has not reported yet.
@@ -467,9 +467,9 @@ class TableMiddleware {
 		const borders = (lines: any) =>
 			[lines.left]
 				.concat(
-					Array.isArray(lines.entries)
-						? lines.entries.map((entry: any) => entry.position)
-						: [],
+					Array.isArray(lines.entries) ?
+						lines.entries.map((entry: any) => entry.position)
+					:	[],
 				)
 				.concat([lines.right])
 				.map((at: any) => Number(lines.tableOffset) + Number(at));

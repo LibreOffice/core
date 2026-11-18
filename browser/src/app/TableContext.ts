@@ -96,9 +96,9 @@ class TableStatesOnTheWay<State> {
 		let at = this.asked.length - 1;
 		while (
 			at >= 0 &&
-			!(this.asked[at].state === null || reported === null
-				? this.asked[at].state === reported
-				: this.same(this.asked[at].state, reported))
+			!(this.asked[at].state === null || reported === null ?
+				this.asked[at].state === reported
+			:	this.same(this.asked[at].state, reported))
 		)
 			--at;
 		if (at < 0) {
@@ -144,9 +144,9 @@ class ClassicTableContext extends ClassicContext {
 	private static shiftSinceReported(data: any): cool.Point {
 		const selected = GraphicSelection.selectedObjectIDs;
 		const transform =
-			selected.length === 1
-				? RenderGeometrySection.objectOf(selected[0])?.transform
-				: undefined;
+			selected.length === 1 ?
+				RenderGeometrySection.objectOf(selected[0])?.transform
+			:	undefined;
 		const reported = data.rectangle;
 		if (!transform || !reported) return new cool.Point(0, 0);
 		return new cool.Point(transform[4] - reported.x, transform[5] - reported.y);
@@ -191,9 +191,10 @@ class ClassicTableContext extends ClassicContext {
 		if (!area) return null;
 		// how far a border may lie from the edge of the selection, in twips
 		const near = 20;
-		const across = columns
-			? area.y1 <= table.top + near && area.y2 >= table.bottom - near
-			: area.x1 <= table.left + near && area.x2 >= table.right - near;
+		const across =
+			columns ?
+				area.y1 <= table.top + near && area.y2 >= table.bottom - near
+			:	area.x1 <= table.left + near && area.x2 >= table.right - near;
 		if (!across) return null;
 
 		const lines = columns ? table.columns : table.rows;
@@ -203,9 +204,9 @@ class ClassicTableContext extends ClassicContext {
 		for (let at = 0; at + 1 < lines.length; ++at)
 			if (lines[at] >= low - near && lines[at + 1] <= high + near)
 				covered.push(at);
-		return covered.length
-			? { from: covered[0], to: covered[covered.length - 1] }
-			: null;
+		return covered.length ?
+				{ from: covered[0], to: covered[covered.length - 1] }
+			:	null;
 	}
 
 	/*
@@ -243,9 +244,9 @@ class ClassicTableContext extends ClassicContext {
 
 		this.selectCells(
 			table,
-			columns
-				? [from, 0, to, table.rows.length - 2]
-				: [0, from, table.columns.length - 2, to],
+			columns ?
+				[from, 0, to, table.rows.length - 2]
+			:	[0, from, table.columns.length - 2, to],
 		);
 	}
 
@@ -290,14 +291,14 @@ class ClassicTableContext extends ClassicContext {
 		const table = ClassicTableContext.layout(data);
 		const standing = ClassicTableContext.selectedLines(columns, table);
 		const lines =
-			standing && at >= standing.from && at <= standing.to
-				? standing
-				: { from: at, to: at };
+			standing && at >= standing.from && at <= standing.to ?
+				standing
+			:	{ from: at, to: at };
 		this.selectCells(
 			table,
-			columns
-				? [lines.from, 0, lines.to, table.rows.length - 2]
-				: [0, lines.from, table.columns.length - 2, lines.to],
+			columns ?
+				[lines.from, 0, lines.to, table.rows.length - 2]
+			:	[0, lines.from, table.columns.length - 2, lines.to],
 		);
 		app.map.sendUnoCommand(columns ? '.uno:DeleteColumns' : '.uno:DeleteRows');
 		// the markers go at once, so a next Delete counts on the lines that are left
@@ -327,9 +328,9 @@ class ClassicTableContext extends ClassicContext {
 		const edited = ClassicTableContext.editedCell(table);
 		const from =
 			edited ??
-			(app.map._docLayer._cellSelectionArea
-				? ClassicTableContext.anchor
-				: null);
+			(app.map._docLayer._cellSelectionArea ?
+				ClassicTableContext.anchor
+			:	null);
 		if (!from || !to) return false;
 		if (edited && edited.column === to.column && edited.row === to.row)
 			return false;

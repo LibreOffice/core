@@ -47,8 +47,9 @@ class ShapeLockCalloutSection extends HTMLObjectSection {
     );
 
     const isRequest = kind === 'request';
-    const duration = isRequest
-      ? ShapeLockLabelSection.approvalTime
+    const duration =
+      isRequest ?
+        ShapeLockLabelSection.approvalTime
       : ShapeLockLabelSection.undoTime;
     // The countdown changes each second, so screen readers leave it out of the alert.
     const countdown = (

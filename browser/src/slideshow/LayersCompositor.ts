@@ -86,9 +86,9 @@ class LayersCompositor extends SlideCompositor {
 		slideHeight: number,
 		bIsTextElement: boolean,
 	): AnimatedElement {
-		return bIsTextElement
-			? new AnimatedTextElement(sId, slideHash, title, slideWidth, slideHeight)
-			: new AnimatedElementBitmap(
+		return bIsTextElement ?
+				new AnimatedTextElement(sId, slideHash, title, slideWidth, slideHeight)
+			:	new AnimatedElementBitmap(
 					sId,
 					slideHash,
 					title,

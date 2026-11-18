@@ -130,9 +130,9 @@ class SlideImportSession {
 		// A page linked by position records the place its slide holds in the source, which is
 		// the slide this insert asked the source for, counted from one.
 		const positions =
-			link && this.linkByPosition
-				? insert.slides.map((index: number) => index + 1)
-				: [];
+			link && this.linkByPosition ?
+				insert.slides.map((index: number) => index + 1)
+			:	[];
 		app.socket.sendMessage(
 			'slideimport insert file=' +
 				encodeURIComponent(stagedName) +
@@ -305,9 +305,9 @@ class SlideImportSession {
 	// at the end.
 	private insertAt(): number {
 		const docLayer = this.map._docLayer;
-		return docLayer && docLayer._selectedPart !== undefined
-			? docLayer._selectedPart + 1
-			: this.map.getNumberOfParts();
+		return docLayer && docLayer._selectedPart !== undefined ?
+				docLayer._selectedPart + 1
+			:	this.map.getNumberOfParts();
 	}
 
 	// A thumbnail dragged onto the slides list drops here. pos follows the
@@ -520,9 +520,9 @@ class SlideImportSession {
 	public static exportFailureKind(json: string): string {
 		try {
 			const written = JSON.parse(json);
-			return written && written.status === 'failed' && written.kind
-				? written.kind
-				: '';
+			return written && written.status === 'failed' && written.kind ?
+					written.kind
+				:	'';
 		} catch {
 			return '';
 		}
@@ -534,9 +534,9 @@ class SlideImportSession {
 	public static stagedExportName(json: string): string {
 		try {
 			const written = JSON.parse(json);
-			return written && written.status === 'staged' && written.name
-				? written.name
-				: '';
+			return written && written.status === 'staged' && written.name ?
+					written.name
+				:	'';
 		} catch {
 			return '';
 		}

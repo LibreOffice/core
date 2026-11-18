@@ -147,9 +147,9 @@ JSDialog.rootCommentControl = function (
 			replyCountNode.style.display = 'block';
 
 			const replyCountText =
-				numberOfReplies === 1
-					? numberOfReplies + ' ' + _('reply')
-					: numberOfReplies + ' ' + _('replies');
+				numberOfReplies === 1 ?
+					numberOfReplies + ' ' + _('reply')
+				:	numberOfReplies + ' ' + _('replies');
 
 			replyCountNode.textContent = replyCountText;
 		}

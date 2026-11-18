@@ -143,9 +143,9 @@ class ZoomControl extends CanvasSectionObject {
 	// paints as this frame is drawn.
 	public onAnimate(frameCount: number, elapsedTime: number): void {
 		const p =
-			this.zoomDurationMs > 0
-				? Math.min(1, elapsedTime / this.zoomDurationMs)
-				: 1;
+			this.zoomDurationMs > 0 ?
+				Math.min(1, elapsedTime / this.zoomDurationMs)
+			:	1;
 		this.layout.stepZoom(1 + (this.zoomEndScale - 1) * p);
 	}
 
@@ -267,9 +267,9 @@ class ZoomControl extends CanvasSectionObject {
 		if (this.pinchTargetZoom !== null && this.pinchAnchor) {
 			const delta = this.pinchTargetZoom - this.pinchStartZoom;
 			const finalZoom =
-				delta > 0
-					? Math.ceil(this.pinchTargetZoom)
-					: Math.floor(this.pinchTargetZoom);
+				delta > 0 ?
+					Math.ceil(this.pinchTargetZoom)
+				:	Math.floor(this.pinchTargetZoom);
 			this.zoomTo(
 				finalZoom,
 				this.pinchAnchor,

@@ -92,11 +92,12 @@ class CellRangeMarkerSection extends CanvasSectionObject {
 	public showTableMarkers(part: number) {
 		const ranges: SheetCellRanges | undefined =
 			this.sectionProperties.sheetCellRanges.get(part);
-		const tableRanges = ranges
-			? ranges.tables
+		const tableRanges =
+			ranges ?
+				ranges.tables
 					.filter((table) => table.editable)
 					.map((table) => table.range)
-			: [];
+			:	[];
 
 		if (!tableRanges.length) {
 			this.clearMarkers('TableRange');
@@ -200,12 +201,14 @@ class CellRangeMarkerSection extends CanvasSectionObject {
 		const markers = this.sectionProperties.markers.get(name);
 		const sheetGeometry = app.map._docLayer.sheetGeometry;
 		const wanted =
-			markers &&
-			markers.style.handleCommand &&
-			markers.part === app.map._docLayer._selectedPart &&
-			app.map.isEditMode()
-				? markers.cellRanges.length
-				: 0;
+			(
+				markers &&
+				markers.style.handleCommand &&
+				markers.part === app.map._docLayer._selectedPart &&
+				app.map.isEditMode()
+			) ?
+				markers.cellRanges.length
+			:	0;
 		const current = this.sectionProperties.handleCounts.get(name) ?? 0;
 
 		for (let i = current; i < wanted; i++)

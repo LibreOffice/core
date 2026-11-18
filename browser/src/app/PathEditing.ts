@@ -288,7 +288,10 @@ class PathEditing implements HandleSource {
 		return {
 			polygon: polygon,
 			point: point,
-			part: named[0] === '9' ? 0 : named[3] === 'in' ? 1 : 2,
+			part:
+				named[0] === '9' ? 0
+				: named[3] === 'in' ? 1
+				: 2,
 		};
 	}
 
@@ -824,13 +827,13 @@ class PathEditing implements HandleSource {
 				point.y,
 			),
 			[PathEditing.weightName(moved.polygon, moved.at, true)]:
-				point.behindX === undefined || point.behindY === undefined
-					? undefined
-					: new cool.Point(point.behindX, point.behindY),
+				point.behindX === undefined || point.behindY === undefined ?
+					undefined
+				:	new cool.Point(point.behindX, point.behindY),
 			[PathEditing.weightName(moved.polygon, moved.at, false)]:
-				point.aheadX === undefined || point.aheadY === undefined
-					? undefined
-					: new cool.Point(point.aheadX, point.aheadY),
+				point.aheadX === undefined || point.aheadY === undefined ?
+					undefined
+				:	new cool.Point(point.aheadX, point.aheadY),
 		};
 
 		return known.map((handle: SelectionHandle) => {
@@ -850,15 +853,15 @@ class PathEditing implements HandleSource {
 		if (!moved || !path) return null;
 
 		return path.map((polygon: cool.ObjectPathPolygon, which: number) =>
-			which !== moved.polygon
-				? polygon
-				: {
-						...polygon,
-						points: (polygon.points ?? []).map(
-							(point: cool.ObjectPathPoint, index: number) =>
-								index === moved.at ? moved.point : point,
-						),
-					},
+			which !== moved.polygon ?
+				polygon
+			:	{
+					...polygon,
+					points: (polygon.points ?? []).map(
+						(point: cool.ObjectPathPoint, index: number) =>
+							index === moved.at ? moved.point : point,
+					),
+				},
 		);
 	}
 
@@ -901,14 +904,14 @@ class PathEditing implements HandleSource {
 		if (!path?.[polygon]) return null;
 
 		return path.map((one: cool.ObjectPathPolygon, which: number) =>
-			which !== polygon
-				? one
-				: {
-						...one,
-						points: (one.points ?? []).map((point: cool.ObjectPathPoint) =>
-							PathGeometry.shifted(point, by),
-						),
-					},
+			which !== polygon ? one : (
+				{
+					...one,
+					points: (one.points ?? []).map((point: cool.ObjectPathPoint) =>
+						PathGeometry.shifted(point, by),
+					),
+				}
+			),
 		);
 	}
 
@@ -954,9 +957,13 @@ class PathEditing implements HandleSource {
 		const dragged = moved.at;
 
 		const before =
-			dragged > 0 ? dragged - 1 : closed ? points.length - 1 : undefined;
+			dragged > 0 ? dragged - 1
+			: closed ? points.length - 1
+			: undefined;
 		const after =
-			dragged < points.length - 1 ? dragged + 1 : closed ? 0 : undefined;
+			dragged < points.length - 1 ? dragged + 1
+			: closed ? 0
+			: undefined;
 
 		const drawn: cool.ObjectPathPoint[] = [];
 		if (before !== undefined) drawn.push(points[before]);

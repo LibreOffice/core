@@ -80,8 +80,9 @@ class GifImageDecoderPolyfill {
 			ready: ready,
 			length: this._reader ? 1 : 0,
 			selectedIndex: this._reader ? 0 : -1,
-			selectedTrack: this._reader
-				? {
+			selectedTrack:
+				this._reader ?
+					{
 						animated: frameCount > 1,
 						frameCount: frameCount,
 						repetitionCount: GifImageDecoderPolyfill.repetitions(
@@ -89,7 +90,7 @@ class GifImageDecoderPolyfill {
 						),
 						selected: true,
 					}
-				: null,
+				:	null,
 		};
 	}
 
@@ -151,9 +152,8 @@ class GifImageDecoderPolyfill {
 		const checkpoint = this._checkpoint;
 		if (checkpoint && checkpoint.index <= index) {
 			this._pixels.set(checkpoint.pixels);
-			this._savedPixels = checkpoint.savedPixels
-				? checkpoint.savedPixels.slice()
-				: null;
+			this._savedPixels =
+				checkpoint.savedPixels ? checkpoint.savedPixels.slice() : null;
 			this._nextIndex = checkpoint.index;
 		} else {
 			this._pixels.fill(0);

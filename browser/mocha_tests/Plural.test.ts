@@ -99,9 +99,9 @@ describe('Plural', function () {
 			const original = String.prototype.toLocaleString;
 			String.prototype.toLocaleString = function () {
 				const value = this.valueOf();
-				return Object.prototype.hasOwnProperty.call(table, value)
-					? table[value]
-					: value;
+				return Object.prototype.hasOwnProperty.call(table, value) ?
+						table[value]
+					:	value;
 			};
 			try {
 				body();

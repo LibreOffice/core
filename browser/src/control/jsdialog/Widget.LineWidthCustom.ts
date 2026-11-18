@@ -167,9 +167,8 @@ JSDialog.LineWidthField = function (
 	);
 
 	const container = parentContainer.querySelector('#' + data.id) as any;
-	const spinfield = container
-		? (container.querySelector('input') as HTMLInputElement)
-		: null;
+	const spinfield =
+		container ? (container.querySelector('input') as HTMLInputElement) : null;
 	if (!spinfield) return false;
 
 	sent = JSDialog.followCommandState(

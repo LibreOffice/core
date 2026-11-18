@@ -106,9 +106,10 @@ namespace cool {
 			// the view asks by, so a switch of part or mode reads as a new page.
 			const partId = cool.vectorIndexKey(part, mode);
 			// A page is drawn only once the master it names has arrived too.
-			const cached = RenderManager.isPartDrawable(part, mode)
-				? RenderManager.requestPart(part, mode)
-				: undefined;
+			const cached =
+				RenderManager.isPartDrawable(part, mode) ?
+					RenderManager.requestPart(part, mode)
+				:	undefined;
 			if (partId !== this._reportedPartId) {
 				this._reportedPartId = partId;
 				window.app.console.log(
@@ -168,22 +169,22 @@ namespace cool {
 			*/
 			const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
 			const edited =
-				place.kind === 'group' || place.kind === 'diagram'
-					? { objectId: place.group, paleOutside: true }
-					: place.kind === 'table' && place.group
-						? { objectId: place.group, paleOutside: true }
-						: place.kind === 'inPlace'
-							? { objectId: place.object, paleOutside: false }
-							: undefined;
+				place.kind === 'group' || place.kind === 'diagram' ?
+					{ objectId: place.group, paleOutside: true }
+				: place.kind === 'table' && place.group ?
+					{ objectId: place.group, paleOutside: true }
+				: place.kind === 'inPlace' ?
+					{ objectId: place.object, paleOutside: false }
+				:	undefined;
 
 			// An object active in place covers the upright window its parts are drawn into.
 			const activeInPlace =
-				place.kind === 'inPlace' && GraphicSelection.inPlaceArea
-					? {
-							objectId: place.object,
-							area: GraphicSelection.inPlaceArea.slice(),
-						}
-					: undefined;
+				place.kind === 'inPlace' && GraphicSelection.inPlaceArea ?
+					{
+						objectId: place.object,
+						area: GraphicSelection.inPlaceArea.slice(),
+					}
+				:	undefined;
 
 			// out of design mode the form controls work as controls and are not drawn into the page
 			const withoutFormControls = !app.map.isFormControlDesignMode();
@@ -254,12 +255,10 @@ namespace cool {
 
 				// The file-based view scrolls the slides, never a master page. A slide is
 				// drawn once the master it names has arrived too.
-				const cached = RenderManager.isPartDrawable(
-					part,
-					cool.VectorMode.Slides,
-				)
-					? RenderManager.requestPart(part, cool.VectorMode.Slides)
-					: undefined;
+				const cached =
+					RenderManager.isPartDrawable(part, cool.VectorMode.Slides) ?
+						RenderManager.requestPart(part, cool.VectorMode.Slides)
+					:	undefined;
 				if (!cached) continue;
 
 				this.context.save();

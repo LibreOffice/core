@@ -158,9 +158,9 @@ class LocalCellCursor {
 		// before returning it to the caller.
 		const unstamped = cool.InputSequence.unstamp(message);
 		LocalCellCursor.report();
-		return unstamped
-			? cool.InputSequence.stamp(unstamped.message, unstamped.tickets)
-			: message;
+		return unstamped ?
+				cool.InputSequence.stamp(unstamped.message, unstamped.tickets)
+			:	message;
 	}
 
 	/**

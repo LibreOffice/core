@@ -23,9 +23,10 @@ describe('Notebookbar labels', function () {
 	const controlDir = path.join(browserDir, 'src', 'control');
 
 	// The engine source tree that LO_PATH, its instdir, belongs to.
-	const engineDir = process.env.ENGINE_WORKDIR
-		? path.dirname(process.env.ENGINE_WORKDIR)
-		: path.join(browserDir, '..', 'engine');
+	const engineDir =
+		process.env.ENGINE_WORKDIR ?
+			path.dirname(process.env.ENGINE_WORKDIR)
+		:	path.join(browserDir, '..', 'engine');
 	const notebookbarSource = path.join(
 		engineDir,
 		'sfx2',

@@ -122,11 +122,9 @@ namespace cool {
       const leavingDesignMode = layer._leavingDesignMode;
       layer._leavingDesignMode = false;
       const first =
-        setting === true || setting === 'true'
-          ? layer
-              ._inTabOrder()
-              .find((id: number) => layer._takesFocus(id, false))
-          : undefined;
+        setting === true || setting === 'true' ?
+          layer._inTabOrder().find((id: number) => layer._takesFocus(id, false))
+        : undefined;
       if (first !== undefined) layer._focusControl(first);
       else if (leavingDesignMode) app.map.focus();
     }
@@ -140,7 +138,11 @@ namespace cool {
       return layer._shownOrder.slice().sort((one: number, other: number) => {
         const onePlace = placeOf(one);
         const otherPlace = placeOf(other);
-        return onePlace === otherPlace ? 0 : onePlace < otherPlace ? -1 : 1;
+        return (
+          onePlace === otherPlace ? 0
+          : onePlace < otherPlace ? -1
+          : 1
+        );
       });
     }
 
@@ -172,9 +174,8 @@ namespace cool {
     // gives that control the focus
     private static _focusControl(id: number): void {
       const entry = VectorFormControlLayer._elements.get(id);
-      const target = entry
-        ? VectorFormControlLayer._focusTarget(entry.element)
-        : null;
+      const target =
+        entry ? VectorFormControlLayer._focusTarget(entry.element) : null;
       target?.focus({ preventScroll: true });
     }
 
@@ -205,9 +206,8 @@ namespace cool {
         if (primitive.type === FormControlPrimitive.type)
           return primitive as FormControlPrimitive;
         const children = (primitive as { children?: Primitive[] }).children;
-        const found = children
-          ? VectorFormControlLayer._primitiveIn(children)
-          : undefined;
+        const found =
+          children ? VectorFormControlLayer._primitiveIn(children) : undefined;
         if (found) return found;
       }
       return undefined;
@@ -227,9 +227,8 @@ namespace cool {
       // A view that cannot edit shows every control as a read-only one. A changed control, or
       // a change of the view's permission, makes the element anew. The page sends its objects
       // again unchanged as well.
-      const shown = app.map.isEditMode()
-        ? primitive
-        : { ...primitive, readOnly: true };
+      const shown =
+        app.map.isEditMode() ? primitive : { ...primitive, readOnly: true };
       const built = JSON.stringify(shown);
       let entry = layer._elements.get(id);
       // An element that sent a change is made anew once the server sends the control again,
@@ -243,9 +242,9 @@ namespace cool {
       if (!entry || entry.built !== built || answered) {
         // the focus stays on the control when its element is made anew
         const focused =
-          entry && entry.element.contains(document.activeElement)
-            ? (document.activeElement as HTMLElement)
-            : null;
+          entry && entry.element.contains(document.activeElement) ?
+            (document.activeElement as HTMLElement)
+          : null;
         if (entry) {
           layer._closeOpenPart(entry.element);
           entry.element.remove();
@@ -570,8 +569,9 @@ namespace cool {
       // A time of day is typed and picked in the browser's time input, which shows the hours and
       // the minutes to fill in and writes the time as HH:MM or HH:MM:SS in every language.
       const isClock = primitive.kind === 'timeField' && !primitive.duration;
-      const original = isClock
-        ? (primitive.time ?? '').slice(0, primitive.seconds ? 8 : 5)
+      const original =
+        isClock ?
+          (primitive.time ?? '').slice(0, primitive.seconds ? 8 : 5)
         : (primitive.text ?? '');
       const style = {
         flex: '1',
@@ -585,18 +585,16 @@ namespace cool {
         font: 'inherit',
         color: 'inherit',
         textAlign:
-          primitive.align !== undefined
-            ? (['left', 'center', 'right'][primitive.align] ?? 'left')
-            : 'left',
+          primitive.align !== undefined ?
+            (['left', 'center', 'right'][primitive.align] ?? 'left')
+          : 'left',
         resize: 'none',
       };
       const input = (
-        primitive.multiLine ? (
+        primitive.multiLine ?
           <textarea class="vector-form-field" style={style} />
-        ) : (
-          <input type="text" class="vector-form-field" style={style} />
-        )
-      ) as HTMLInputElement | HTMLTextAreaElement;
+        : <input type="text" class="vector-form-field" style={style} />) as
+        HTMLInputElement | HTMLTextAreaElement;
       if (isClock) {
         const clock = input as HTMLInputElement;
         clock.type = 'time';
@@ -626,9 +624,10 @@ namespace cool {
           VectorFormControlLayer._send(id, 'text', '');
           return;
         }
-        const seconds = primitive.seconds
-          ? ':00'
-          : (primitive.time ?? '').slice(5, 8) || ':00';
+        const seconds =
+          primitive.seconds ? ':00' : (
+            (primitive.time ?? '').slice(5, 8) || ':00'
+          );
         VectorFormControlLayer._send(
           id,
           'time',
@@ -717,11 +716,11 @@ namespace cool {
         );
 
       const extras = Array.from(input.parentElement?.children ?? []).slice(1);
-      const dropArrow = primitive.dropdown
-        ? (extras[0] as HTMLElement | undefined)
-        : undefined;
-      const spinArrows = primitive.spin
-        ? extras[primitive.dropdown ? 1 : 0]?.children
+      const dropArrow =
+        primitive.dropdown ? (extras[0] as HTMLElement | undefined) : undefined;
+      const spinArrows =
+        primitive.spin ?
+          extras[primitive.dropdown ? 1 : 0]?.children
         : undefined;
 
       // the spin buttons step the value as the field's format says; what was typed goes first.
@@ -934,9 +933,9 @@ namespace cool {
             if (takes(character, maskCharacter)) {
               const upper = character.toLocaleUpperCase();
               text[position] =
-                /[ACX]/.test(maskCharacter) && upper.length === 1
-                  ? upper
-                  : character;
+                /[ACX]/.test(maskCharacter) && upper.length === 1 ?
+                  upper
+                : character;
               caret = position + 1;
               taken++;
               continue;
@@ -1196,13 +1195,13 @@ namespace cool {
           grid.appendChild(
             <span
               style={
-                isChosen
-                  ? {
-                      ...cell,
-                      backgroundColor: 'var(--color-primary)',
-                      color: 'var(--color-primary-text)',
-                    }
-                  : cell
+                isChosen ?
+                  {
+                    ...cell,
+                    backgroundColor: 'var(--color-primary)',
+                    color: 'var(--color-primary-text)',
+                  }
+                : cell
               }
               onClick={() =>
                 onPick(year + '-' + two(month + 1) + '-' + two(day))
@@ -1317,11 +1316,11 @@ namespace cool {
           entry.addEventListener('click', (event: MouseEvent) => {
             const toggling =
               primitive.multiSelection && (event.ctrlKey || event.metaKey);
-            const wanted = !toggling
-              ? [at]
-              : selected.includes(at)
-                ? selected.filter((place: number) => place !== at)
-                : selected.concat([at]);
+            const wanted =
+              !toggling ? [at]
+              : selected.includes(at) ?
+                selected.filter((place: number) => place !== at)
+              : selected.concat([at]);
             VectorFormControlLayer._send(id, 'select', wanted.join(','));
           });
         });
@@ -1398,9 +1397,8 @@ namespace cool {
       track.addEventListener('click', (event: MouseEvent) => {
         if (event.target === thumb) return;
         const box = thumb.getBoundingClientRect();
-        const ahead = vertical
-          ? event.clientY > box.bottom
-          : event.clientX > box.right;
+        const ahead =
+          vertical ? event.clientY > box.bottom : event.clientX > box.right;
         layer._moveTo(id, primitive, value + (ahead ? pageStep : -pageStep));
       });
 
@@ -1413,9 +1411,9 @@ namespace cool {
         const along = (e: PointerEvent) => (vertical ? e.clientY : e.clientX);
         const trackStart = vertical ? trackBox.top : trackBox.left;
         const travel =
-          (vertical
-            ? trackBox.height - thumbBox.height
-            : trackBox.width - thumbBox.width) || 1;
+          (vertical ?
+            trackBox.height - thumbBox.height
+          : trackBox.width - thumbBox.width) || 1;
         const grab = along(event) - (vertical ? thumbBox.top : thumbBox.left);
         const shareAt = (e: PointerEvent) =>
           Math.min(1, Math.max(0, (along(e) - grab - trackStart) / travel));

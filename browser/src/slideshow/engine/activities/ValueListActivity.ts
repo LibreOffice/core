@@ -163,9 +163,8 @@ function ValueListActivityTemplate<T extends AGConstructor<ActivityBase>>(
 
 		public performEnd() {
 			if (this.aAnimation) {
-				const aValue = this.aFormula
-					? this.aFormula(this.aLastValue)
-					: this.aLastValue;
+				const aValue =
+					this.aFormula ? this.aFormula(this.aLastValue) : this.aLastValue;
 				this.aAnimation.perform(aValue);
 			}
 		}

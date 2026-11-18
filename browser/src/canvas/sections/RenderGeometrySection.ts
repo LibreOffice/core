@@ -43,9 +43,9 @@ class PendingChange {
 		ticket: cool.InputTicket | null,
 	): PendingChange | null {
 		const leftAt = cool.Matrix2D.fromArray(object.transform);
-		return leftAt
-			? new PendingChange(change, leftAt, PendingChange.boxOf(object), ticket)
-			: null;
+		return leftAt ?
+				new PendingChange(change, leftAt, PendingChange.boxOf(object), ticket)
+			:	null;
 	}
 
 	/// Whether an answer naming that number as the newest applied input answers this change. A
@@ -351,11 +351,11 @@ class RenderGeometrySection extends CanvasSectionObject {
 		*/
 		const hits = this.walkObjectsAt(data, x, y, edited !== undefined);
 		const hit =
-			edited === undefined
-				? hits[0]
-				: (hits.find((one: RenderGeometryHit) =>
-						RenderGeometrySection.liesWithin(data, one.id, edited),
-					) ?? hits[0]);
+			edited === undefined ?
+				hits[0]
+			:	(hits.find((one: RenderGeometryHit) =>
+					RenderGeometrySection.liesWithin(data, one.id, edited),
+				) ?? hits[0]);
 		RenderGeometrySection._lastHit = {
 			x: x,
 			y: y,
@@ -584,16 +584,16 @@ class RenderGeometrySection extends CanvasSectionObject {
 						at.position,
 						at.range,
 					) ??
-					(RenderGeometrySection.spansADiagram(data, at.id)
-						? {
-								kind: 'fill' as const,
-								hidden: true,
-								editView: false,
-								edge: false,
-								link: false,
-								field: false,
-							}
-						: undefined);
+					(RenderGeometrySection.spansADiagram(data, at.id) ?
+						{
+							kind: 'fill' as const,
+							hidden: true,
+							editView: false,
+							edge: false,
+							link: false,
+							field: false,
+						}
+					:	undefined);
 				if (!hit) return false;
 
 				if (RenderGeometrySection.worksAsAControl(object)) return true;
@@ -820,14 +820,14 @@ class RenderGeometrySection extends CanvasSectionObject {
 			}
 
 			const { rest, foreseen } =
-				inputSequence === undefined
-					? RenderGeometrySection.heldAgainstThePlace(laid, object, answer)
-					: RenderGeometrySection.heldAgainstTheNumber(
-							laid,
-							inputSequence,
-							object,
-							answer,
-						);
+				inputSequence === undefined ?
+					RenderGeometrySection.heldAgainstThePlace(laid, object, answer)
+				:	RenderGeometrySection.heldAgainstTheNumber(
+						laid,
+						inputSequence,
+						object,
+						answer,
+					);
 			if (!foreseen) GraphicSelection.unpredictedAnswer(objectId);
 
 			for (const one of rest) {
@@ -903,9 +903,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		inside: cool.Matrix2D,
 	): void {
 		const angle =
-			change.a * change.d - change.b * change.c > 0
-				? Math.atan2(change.b - change.c, change.a + change.d)
-				: 0;
+			change.a * change.d - change.b * change.c > 0 ?
+				Math.atan2(change.b - change.c, change.a + change.d)
+			:	0;
 
 		for (const primitive of primitives) {
 			if (
@@ -924,9 +924,10 @@ class RenderGeometrySection extends CanvasSectionObject {
 					is half way along. A third of the font size above the baseline is half way up.
 				*/
 				const fontSize = run.fontSize ?? 12;
-				const length = run.advances?.length
-					? run.advances.reduce((sum: number, one: number) => sum + one, 0)
-					: (run.textLength ?? run.text?.length ?? 0) * fontSize * 0.5;
+				const length =
+					run.advances?.length ?
+						run.advances.reduce((sum: number, one: number) => sum + one, 0)
+					:	(run.textLength ?? run.text?.length ?? 0) * fontSize * 0.5;
 				const middle = drawnBy.apply(length / 2 / fontSize, -0.35);
 				const to = change.apply(middle.x, middle.y);
 				const movedAndTurned = cool.Matrix2D.IDENTITY.rotateAround(
@@ -951,9 +952,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 				change,
 				wrapBefore,
 				wrapAfter,
-				primitive.type === cool.TransformPrimitive.type && transform
-					? transform.then(inside)
-					: inside,
+				primitive.type === cool.TransformPrimitive.type && transform ?
+					transform.then(inside)
+				:	inside,
 			);
 		}
 	}
@@ -974,9 +975,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		*/
 		const drawn = object.primitives ?? [];
 		const only =
-			drawn.length === 1 && drawn[0].type === cool.TransformPrimitive.type
-				? (drawn[0] as cool.TransformPrimitive)
-				: undefined;
+			drawn.length === 1 && drawn[0].type === cool.TransformPrimitive.type ?
+				(drawn[0] as cool.TransformPrimitive)
+			:	undefined;
 
 		const under = cool.Matrix2D.fromArray(only?.matrix);
 		const wrapBefore = under ?? cool.Matrix2D.IDENTITY;
@@ -1014,14 +1015,14 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const box = RenderGeometrySection.boxOfTheObject(object);
 		if (box) {
 			const reached =
-				mapping && (Math.abs(matrix.b) > 1e-9 || Math.abs(matrix.c) > 1e-9)
-					? RenderGeometrySection.boxTurnedWith(box, mapping, matrix)
-					: cool.Range2D.fromPoints([
-							matrix.apply(box.minX, box.minY),
-							matrix.apply(box.maxX, box.minY),
-							matrix.apply(box.maxX, box.maxY),
-							matrix.apply(box.minX, box.maxY),
-						]);
+				mapping && (Math.abs(matrix.b) > 1e-9 || Math.abs(matrix.c) > 1e-9) ?
+					RenderGeometrySection.boxTurnedWith(box, mapping, matrix)
+				:	cool.Range2D.fromPoints([
+						matrix.apply(box.minX, box.minY),
+						matrix.apply(box.maxX, box.minY),
+						matrix.apply(box.maxX, box.maxY),
+						matrix.apply(box.minX, box.maxY),
+					]);
 
 			object.x = reached.minX;
 			object.y = reached.minY;
@@ -1163,12 +1164,12 @@ class RenderGeometrySection extends CanvasSectionObject {
 			under the pointer stays the slide's. The master's page entry is the slide's page.
 		*/
 		const master =
-			data.masterPartId !== undefined
-				? RenderManager.requestPartById(
-						data.masterPartId,
-						cool.VectorMode.MasterPages,
-					)
-				: undefined;
+			data.masterPartId !== undefined ?
+				RenderManager.requestPartById(
+					data.masterPartId,
+					cool.VectorMode.MasterPages,
+				)
+			:	undefined;
 		if (master) {
 			this.context.setLineDash([4, 3]);
 			this.strokeFramesOf(master, xDiff, yDiff, true);
@@ -1250,9 +1251,8 @@ class RenderGeometrySection extends CanvasSectionObject {
 	): void {
 		const mouse = this.containerObject.getMousePosition();
 		const hit = mouse ? this.hitObject(mouse) : undefined;
-		RenderGeometrySection._drawnHitKey = hit
-			? String(hit.id) + ':' + hit.hit.kind
-			: '';
+		RenderGeometrySection._drawnHitKey =
+			hit ? String(hit.id) + ':' + hit.hit.kind : '';
 		if (!hit) return;
 
 		// What is marked is what a press there would take hold of: inside a chart that is the
@@ -1585,9 +1585,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		if (!data) return objectIds;
 
 		return objectIds.map((objectId: number) =>
-			RenderGeometrySection.spansADiagram(data, objectId)
-				? (data.objects.get(objectId)?.parent ?? objectId)
-				: objectId,
+			RenderGeometrySection.spansADiagram(data, objectId) ?
+				(data.objects.get(objectId)?.parent ?? objectId)
+			:	objectId,
 		);
 	}
 

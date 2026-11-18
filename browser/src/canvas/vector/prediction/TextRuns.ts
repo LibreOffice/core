@@ -236,9 +236,9 @@ namespace cool {
 		coveringAdvances(): number[] | null {
 			const advances = this.primitive.advances;
 			const length = this.length;
-			return advances && advances.length >= length && length > 0
-				? advances
-				: null;
+			return advances && advances.length >= length && length > 0 ?
+					advances
+				:	null;
 		}
 
 		// Replaces the advances of units [cutFrom, cutTo). A run with too few advances

@@ -302,9 +302,8 @@ function setupOverflowMenu(
 										const focusables = JSDialog.GetFocusableElements(menu);
 										if (focusables && focusables.length > 0) {
 											const currentIndex = focusables.indexOf(currentElement);
-											let targetIndex = forwardDir
-												? currentIndex + 1
-												: currentIndex - 1;
+											let targetIndex =
+												forwardDir ? currentIndex + 1 : currentIndex - 1;
 
 											if (targetIndex < 0) targetIndex = focusables.length - 1;
 											else if (targetIndex >= focusables.length)
@@ -564,7 +563,10 @@ JSDialog.OverflowGroup = function (
 			{
 				type: 'menubutton',
 				id: id,
-				text: data.name ? data.name : firstItem ? (firstItem as any).text : '',
+				text:
+					data.name ? data.name
+					: firstItem ? (firstItem as any).text
+					: '',
 				icon: data.icon ? data.icon : getToolitemIcon(firstItem),
 				// The button opens the group and runs no command of its own, so it has
 				// no state, shortcut or enabled state to take from the first item.

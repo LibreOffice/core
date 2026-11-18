@@ -239,11 +239,9 @@ const initTranslationStr = () => {
 	// appends.
 	const urlLang = new URLSearchParams(window.location.search).get('lang');
 	const lang =
-		rawLang && !/^(?:%.+%|<!--%.+%-->)$/.test(rawLang)
-			? rawLang
-			: urlLang && urlLang !== 'undefined'
-				? urlLang
-				: 'en-US';
+		rawLang && !/^(?:%.+%|<!--%.+%-->)$/.test(rawLang) ? rawLang
+		: urlLang && urlLang !== 'undefined' ? urlLang
+		: 'en-US';
 	document.documentElement.lang = lang;
 
 	String.defaultLocale = 'en-US';
@@ -2181,9 +2179,9 @@ class SettingIframe {
 			// A parent of another origin is not readable; the system theme is used.
 		}
 		const dark =
-			parentPreferences && typeof parentPreferences.getBoolean === 'function'
-				? parentPreferences.getBoolean('darkTheme')
-				: !!window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+			parentPreferences && typeof parentPreferences.getBoolean === 'function' ?
+				parentPreferences.getBoolean('darkTheme')
+			:	!!window.matchMedia?.('(prefers-color-scheme: dark)').matches;
 
 		this.darkThemeInUse = dark;
 		this.browserSettingOptions.darkTheme = dark;
@@ -2755,9 +2753,9 @@ class SettingIframe {
 					'Unexpected value of type ' + typeof value + ' for setting ' + key,
 				);
 				text[key] =
-					value && typeof value.toString === 'function'
-						? value.toString()
-						: value;
+					value && typeof value.toString === 'function' ?
+						value.toString()
+					:	value;
 			}
 		}
 
@@ -3751,9 +3749,10 @@ class SettingIframe {
 
 		const description = root.querySelector('#ai-description');
 		if (description) {
-			description.textContent = empty
-				? _('Choose the AI provider to use for text and image generation.')
-				: _(
+			description.textContent =
+				empty ?
+					_('Choose the AI provider to use for text and image generation.')
+				:	_(
 						'Use your own AI provider instead of the one set up by your administrator. This applies only to you.',
 					);
 		}
@@ -3841,9 +3840,9 @@ class SettingIframe {
 		// A size saved by hand before this became a list stays on offer, so
 		// opening the dialog does not change it.
 		const sizes =
-			data.aiImageSize && !AI_IMAGE_SIZES.includes(data.aiImageSize)
-				? [...AI_IMAGE_SIZES, data.aiImageSize]
-				: AI_IMAGE_SIZES;
+			data.aiImageSize && !AI_IMAGE_SIZES.includes(data.aiImageSize) ?
+				[...AI_IMAGE_SIZES, data.aiImageSize]
+			:	AI_IMAGE_SIZES;
 		return this.createSelectField(
 			'aiImageSizecontainer',
 			this._viewSettingLabels.aiImageSize,
@@ -3948,12 +3947,8 @@ class SettingIframe {
 			'#aiProviderURLcontainer',
 		) as HTMLElement | null;
 		if (customUrlContainer) {
-			customUrlContainer.style.display = this.isCustomProviderSelected(
-				group,
-				data,
-			)
-				? 'block'
-				: 'none';
+			customUrlContainer.style.display =
+				this.isCustomProviderSelected(group, data) ? 'block' : 'none';
 		}
 		const customUrlInput = group.querySelector(
 			'#aiProviderURL',
@@ -4304,9 +4299,9 @@ class SettingIframe {
 		const checkbox = root.querySelector(
 			'#aiImageSameAsText-input',
 		) as HTMLInputElement | null;
-		return checkbox
-			? checkbox.checked
-			: !data.aiImageProviderURL &&
+		return checkbox ?
+				checkbox.checked
+			:	!data.aiImageProviderURL &&
 					!data.aiImageProviderAPIKey &&
 					!data.aiImageProviderAPIKeyStored;
 	}
@@ -4330,9 +4325,8 @@ class SettingIframe {
 			'#aiImageProviderFields',
 		) as HTMLElement | null;
 		if (providerFields) {
-			providerFields.style.display = this.isImageProviderSameAsText(data, root)
-				? 'none'
-				: 'block';
+			providerFields.style.display =
+				this.isImageProviderSameAsText(data, root) ? 'none' : 'block';
 		}
 
 		this.syncAIImageKeyRequirement(data, root);
@@ -4370,11 +4364,10 @@ class SettingIframe {
 		apiKeyInput.required = required;
 		apiKeyInput.setAttribute('aria-invalid', missing ? 'true' : 'false');
 		apiKeyInput.classList.toggle('view-input-invalid', missing);
-		apiKeyInput.placeholder = data.aiImageProviderAPIKeyStored
-			? '********'
-			: required
-				? _('Required for this provider')
-				: _('Leave empty if your server does not require one');
+		apiKeyInput.placeholder =
+			data.aiImageProviderAPIKeyStored ? '********'
+			: required ? _('Required for this provider')
+			: _('Leave empty if your server does not require one');
 	}
 
 	private applyImageProviderSameAsText(
@@ -4383,22 +4376,23 @@ class SettingIframe {
 		root: ParentNode,
 	): void {
 		const memo = this._imageProviderMemo;
-		this._imageProviderMemo = sameAsText
-			? {
+		this._imageProviderMemo =
+			sameAsText ?
+				{
 					url: data.aiImageProviderURL,
 					apiKey: data.aiImageProviderAPIKey,
 					apiKeyStored: !!data.aiImageProviderAPIKeyStored,
 				}
-			: null;
+			:	null;
 
-		const url = sameAsText
-			? ''
-			: memo?.url || data.aiProviderURL || this.getDefaultAIProviderURL();
+		const url =
+			sameAsText ? '' : (
+				memo?.url || data.aiProviderURL || this.getDefaultAIProviderURL()
+			);
 		data.aiImageProviderURL = url;
 		data.aiImageProviderAPIKey = sameAsText ? '' : memo?.apiKey || '';
-		data.aiImageProviderAPIKeyStored = sameAsText
-			? false
-			: !!memo?.apiKeyStored;
+		data.aiImageProviderAPIKeyStored =
+			sameAsText ? false : !!memo?.apiKeyStored;
 		if (url && this.getProviderIdFromUrl(url) === 'custom') {
 			this._lastCustomAIImageProviderURL = url;
 		}
@@ -4449,11 +4443,10 @@ class SettingIframe {
 		const isCustom = provider?.isCustom ?? effectiveProviderId === 'custom';
 
 		// Which saved key the server should read back: image key, else chat key.
-		const storedImageSecretField = data.aiImageProviderAPIKeyStored
-			? 'aiImageProviderAPIKey'
-			: inheritsTextProvider && data.aiProviderAPIKeyStored
-				? 'aiProviderAPIKey'
-				: '';
+		const storedImageSecretField =
+			data.aiImageProviderAPIKeyStored ? 'aiImageProviderAPIKey'
+			: inheritsTextProvider && data.aiProviderAPIKeyStored ? 'aiProviderAPIKey'
+			: '';
 		const canUseStoredKey =
 			!isCODesktop && !!storedImageSecretField && !!this._viewSettingFileUrl;
 
@@ -4546,9 +4539,8 @@ class SettingIframe {
 				return;
 			}
 
-			const selectedModel = modelIds.includes(data.aiImageModel)
-				? data.aiImageModel
-				: '';
+			const selectedModel =
+				modelIds.includes(data.aiImageModel) ? data.aiImageModel : '';
 			data.aiImageModel = selectedModel;
 			this.updateAIImageModelSelect(modelIds, selectedModel);
 
@@ -4577,9 +4569,10 @@ class SettingIframe {
 		}
 
 		const isCustom = provider.isCustom ?? false;
-		const baseUrl = isCustom
-			? this.normalizeBaseUrl(data.aiProviderURL || '')
-			: provider.baseUrl;
+		const baseUrl =
+			isCustom ?
+				this.normalizeBaseUrl(data.aiProviderURL || '')
+			:	provider.baseUrl;
 		const apiKey = data.aiProviderAPIKey || '';
 
 		// No typed key, but a saved one the server can read back.
@@ -4662,9 +4655,10 @@ class SettingIframe {
 				return;
 			}
 
-			const selectedModel = modelIds.includes(data.aiProviderModel)
-				? data.aiProviderModel
-				: modelIds[0];
+			const selectedModel =
+				modelIds.includes(data.aiProviderModel) ?
+					data.aiProviderModel
+				:	modelIds[0];
 			data.aiProviderModel = selectedModel;
 			this.updateAIModelSelect(modelIds, selectedModel);
 
@@ -5317,9 +5311,9 @@ class SettingIframe {
 		const active = infos.providers.find((p) => p.id === infos.active);
 		section.appendChild(
 			this.createParagraph(
-				active
-					? _('Translating with {0}.').replace('{0}', active.name)
-					: _('No provider is set up: the Translate command is not offered.'),
+				active ?
+					_('Translating with {0}.').replace('{0}', active.name)
+				:	_('No provider is set up: the Translate command is not offered.'),
 			),
 		);
 		for (const panel of panels) section.appendChild(panel);
@@ -5409,9 +5403,9 @@ class SettingIframe {
 			// What the server set up, which is not theirs to change.
 			details.appendChild(
 				this.createParagraph(
-					info.configured
-						? _('Set up on this server.')
-						: _('Enabled on this server, but not set up.'),
+					info.configured ?
+						_('Set up on this server.')
+					:	_('Enabled on this server, but not set up.'),
 				),
 			);
 		}
@@ -5467,9 +5461,10 @@ class SettingIframe {
 			['button-primary', 'service-reset-button'],
 			onReset,
 		);
-		button.title = isCODesktop
-			? _('Use the default settings')
-			: _('Use the settings set on the server');
+		button.title =
+			isCODesktop ?
+				_('Use the default settings')
+			:	_('Use the settings set on the server');
 		return button;
 	}
 
@@ -5529,13 +5524,15 @@ class SettingIframe {
 
 		const own = group[key] !== null && group[key] !== undefined;
 		const placeholder =
-			isSecret && !own && info.hasCredentials
-				? '********'
-				: _('Enter {0}').replace('{0}', label);
+			isSecret && !own && info.hasCredentials ?
+				'********'
+			:	_('Enter {0}').replace('{0}', label);
 		const input = this.createTextInput(
 			`${info.id}-${key}`,
 			placeholder,
-			own ? String(group[key]) : isSecret ? '' : effective,
+			own ? String(group[key])
+			: isSecret ? ''
+			: effective,
 			(inputElement) => {
 				group[key] = inputElement.value;
 			},
@@ -5578,11 +5575,12 @@ class SettingIframe {
 		available: string[],
 	): HTMLElement {
 		const own = group[key] !== null && group[key] !== undefined;
-		const current: string[] = !own
-			? effective
-			: (Array.isArray(group[key]) ? group[key] : String(group[key]).split(','))
+		const current: string[] =
+			!own ? effective : (
+				(Array.isArray(group[key]) ? group[key] : String(group[key]).split(','))
 					.map((name: string) => name.trim())
-					.filter((name: string) => name !== '');
+					.filter((name: string) => name !== '')
+			);
 		if (!available.length) {
 			// The field edits the names as one line of text.
 			if (own) group[key] = current.join(', ');
@@ -5654,13 +5652,13 @@ class SettingIframe {
 
 	private writeNextDocumentNote(note: HTMLElement): void {
 		note.textContent =
-			window.userPresetsApplied === false
-				? _(
-						'This document is using the document settings it was opened with. What you change here applies to the next document you open.',
-					)
-				: _(
-						'This document is open in more than one window, so what you change here applies to the next document you open rather than this one.',
-					);
+			window.userPresetsApplied === false ?
+				_(
+					'This document is using the document settings it was opened with. What you change here applies to the next document you open.',
+				)
+			:	_(
+					'This document is open in more than one window, so what you change here applies to the next document you open rather than this one.',
+				);
 		note.hidden = window.documentSettingsLive !== false;
 	}
 
@@ -5743,15 +5741,15 @@ class SettingIframe {
 						await this.settingsStorage.fetchSettingFile(
 							data.browsersetting[0].uri,
 						);
-					this.storedBrowserSetting = browserSettingContent
-						? JSON.parse(browserSettingContent)
-						: {};
-					this.browserSettingOptions = browserSettingContent
-						? this.mergeWithDefault(
+					this.storedBrowserSetting =
+						browserSettingContent ? JSON.parse(browserSettingContent) : {};
+					this.browserSettingOptions =
+						browserSettingContent ?
+							this.mergeWithDefault(
 								defaultBrowserSettingCopy(),
 								this.storedBrowserSetting,
 							)
-						: defaultBrowserSettingCopy();
+						:	defaultBrowserSettingCopy();
 				} else {
 					this.storedBrowserSetting = {};
 					this.browserSettingOptions = defaultBrowserSettingCopy();
@@ -5898,11 +5896,13 @@ class SettingIframe {
 				// A key or model saved without a URL is OpenAI's, as shown before.
 				this._viewSetting.aiProviderURL =
 					this.normalizeBaseUrl(viewSetting.aiProviderURL || '') ||
-					(viewSetting.aiProviderAPIKey ||
-					viewSetting.aiProviderAPIKeyStored ||
-					viewSetting.aiProviderModel
-						? this.getDefaultAIProviderURL()
-						: '');
+					((
+						viewSetting.aiProviderAPIKey ||
+						viewSetting.aiProviderAPIKeyStored ||
+						viewSetting.aiProviderModel
+					) ?
+						this.getDefaultAIProviderURL()
+					:	'');
 				// An empty image URL means "Same as text provider", so keep it empty
 				// rather than falling back to a default.
 				this._viewSetting.aiImageProviderURL = this.normalizeBaseUrl(
@@ -5921,9 +5921,9 @@ class SettingIframe {
 		if (!isUserConfig && !isCODesktop && data && this.isAdmin()) {
 			let stored: any = null;
 			this._serverPrivateSettingFileUrl =
-				data.serverprivateinfo && data.serverprivateinfo.length > 0
-					? data.serverprivateinfo[0].uri
-					: '';
+				data.serverprivateinfo && data.serverprivateinfo.length > 0 ?
+					data.serverprivateinfo[0].uri
+				:	'';
 			if (data.serverprivateinfo && data.serverprivateinfo.length > 0) {
 				const content = await this.settingsStorage.fetchSettingFile(
 					data.serverprivateinfo[0].uri,
@@ -6158,11 +6158,11 @@ class SettingIframe {
 			) {
 				// Use override directly for booleans or objects with customType (set value)
 				result[key] =
-					typeof override === 'boolean' || typeof override === 'number'
-						? typeof value === 'object'
-							? { ...value, value: override }
-							: override
-						: value;
+					typeof override === 'boolean' || typeof override === 'number' ?
+						typeof value === 'object' ?
+							{ ...value, value: override }
+						:	override
+					:	value;
 			} else if (typeof value === 'object' && value !== null) {
 				result[key] = this.mergeWithDefault(value, override);
 			} else {
@@ -6207,9 +6207,8 @@ class SettingIframe {
 		// A stored secret is never sent down. Show a masked pattern so the field
 		// reads as "a value is saved"; the field stays empty, and leaving it blank
 		// keeps that value.
-		const placeholder = hasStoredSecret
-			? '********'
-			: _('Enter {0}').replace('{0}', label);
+		const placeholder =
+			hasStoredSecret ? '********' : _('Enter {0}').replace('{0}', label);
 
 		// Once the user edits a secret field, its value is authoritative: clear
 		// the keep flag so the typed value (empty to clear, text to replace) is
@@ -6245,9 +6244,9 @@ class SettingIframe {
 				input.type = 'password';
 			}
 			container.appendChild(
-				SECRET_FIELDS_WITH_DELETE.includes(key)
-					? this.createSecretInputRow(input, key, label, data)
-					: input,
+				SECRET_FIELDS_WITH_DELETE.includes(key) ?
+					this.createSecretInputRow(input, key, label, data)
+				:	input,
 			);
 		}
 
@@ -6461,9 +6460,9 @@ class SettingIframe {
 		if (providerSelect?.value) {
 			return providerSelect.value;
 		}
-		return data.aiProviderURL
-			? this.getProviderIdFromUrl(data.aiProviderURL)
-			: DEFAULT_PROVIDER;
+		return data.aiProviderURL ?
+				this.getProviderIdFromUrl(data.aiProviderURL)
+			:	DEFAULT_PROVIDER;
 	}
 
 	private isCustomProviderSelected(

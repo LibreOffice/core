@@ -315,9 +315,8 @@ class SlideShowHandler {
 				)
 					.map((el: Element) => el.textContent.trim())
 					.filter((s: string) => s.length > 0);
-				a11yContainer.textContent = aBlocks.length
-					? aBlocks.join('. ')
-					: a11yContainer.textContent;
+				a11yContainer.textContent =
+					aBlocks.length ? aBlocks.join('. ') : a11yContainer.textContent;
 				canvas.appendChild(a11yContainer);
 			}
 		}
@@ -549,9 +548,9 @@ class SlideShowHandler {
 		// The transition of a slide is the one played to get onto it, so it is
 		// announced when we get there moving forward only
 		const bMovingForward =
-			nOldSlideIndex === undefined
-				? this.isStarting
-				: nNewSlideIndex > nOldSlideIndex;
+			nOldSlideIndex === undefined ?
+				this.isStarting
+			:	nNewSlideIndex > nOldSlideIndex;
 		const slideInfo = this.getSlideInfo(nNewSlideIndex);
 		if (bMovingForward && slideInfo.transitionLabel) {
 			this.addA11yStringDelayed(
@@ -1288,10 +1287,12 @@ class SlideShowHandler {
 			leavingSlideTexture = this.slideRenderer.createEmptyTexture();
 		} else {
 			leavingSlideTexture =
-				nOldSlide !== undefined &&
-				this.slideRenderer.lastRenderedSlideIndex === nOldSlide
-					? this.slideRenderer.getSlideTexture()
-					: this.getTexture(nOldSlide, transitionFilterInfo);
+				(
+					nOldSlide !== undefined &&
+					this.slideRenderer.lastRenderedSlideIndex === nOldSlide
+				) ?
+					this.slideRenderer.getSlideTexture()
+				:	this.getTexture(nOldSlide, transitionFilterInfo);
 		}
 		const enteringSlideTexture = this.getTexture(
 			nNewSlide,

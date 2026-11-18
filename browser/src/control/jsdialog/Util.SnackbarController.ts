@@ -173,15 +173,16 @@ class SnackbarController {
 
 		if (!snackbarData.action) this.writeLiveRegion(snackbarData.label);
 
-		const dismissButton = snackbarData.action
-			? {
+		const dismissButton =
+			snackbarData.action ?
+				{
 					id: 'snackbar-dismiss-button',
 					type: 'pushbutton',
 					text: '',
 					icon: 'lc_cancel.svg',
 					aria: { label: _('Dismiss') },
 				}
-			: {
+			:	{
 					id: 'snackbar-dismiss-button',
 					type: 'pushbutton',
 					text: _('Dismiss'),
@@ -196,40 +197,41 @@ class SnackbarController {
 				snackbarData.action && snackbarData.focusAction ? buttonId : undefined,
 			children: [
 				{
-					id: snackbarData.hasProgress
-						? 'snackbar-container-progress'
-						: 'snackbar-container',
+					id:
+						snackbarData.hasProgress ?
+							'snackbar-container-progress'
+						:	'snackbar-container',
 					type: 'container',
 					children: [
-						snackbarData.action
-							? {
-									id: labelId,
-									type: 'fixedtext',
-									text: snackbarData.label,
-									labelFor: buttonId,
-								}
-							: {
-									id: 'label-no-action',
-									type: 'fixedtext',
-									text: snackbarData.label,
-								},
-						snackbarData.hasProgress
-							? {
-									id: 'progress',
-									type: 'progressbar',
-									value: 0,
-									maxValue: 100,
-									infinite: snackbarData.infinite,
-								}
-							: {},
-						snackbarData.action
-							? {
-									id: buttonId,
-									type: 'pushbutton',
-									text: snackbarData.action,
-									labelledBy: labelId,
-								}
-							: {},
+						snackbarData.action ?
+							{
+								id: labelId,
+								type: 'fixedtext',
+								text: snackbarData.label,
+								labelFor: buttonId,
+							}
+						:	{
+								id: 'label-no-action',
+								type: 'fixedtext',
+								text: snackbarData.label,
+							},
+						snackbarData.hasProgress ?
+							{
+								id: 'progress',
+								type: 'progressbar',
+								value: 0,
+								maxValue: 100,
+								infinite: snackbarData.infinite,
+							}
+						:	{},
+						snackbarData.action ?
+							{
+								id: buttonId,
+								type: 'pushbutton',
+								text: snackbarData.action,
+								labelledBy: labelId,
+							}
+						:	{},
 						snackbarData.withDismiss ? dismissButton : {},
 					],
 				},

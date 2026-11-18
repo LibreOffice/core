@@ -31,9 +31,10 @@ namespace cool {
 		/// The document background of the view this client paints in, as
 		/// the engine last reported it for the view.
 		export function documentBackground(): string {
-			const color = app.sectionContainer
-				? app.sectionContainer.getDocumentBackgroundColor().trim()
-				: '';
+			const color =
+				app.sectionContainer ?
+					app.sectionContainer.getDocumentBackgroundColor().trim()
+				:	'';
 			return parse(color) ? color : DEFAULT_DOCUMENT_BACKGROUND;
 		}
 
@@ -85,15 +86,15 @@ namespace cool {
 		}
 
 		function srgbToLinear(value: number): number {
-			return value < 0.04045
-				? value / 12.92
-				: Math.pow((value + 0.055) / 1.055, 2.4);
+			return value < 0.04045 ?
+					value / 12.92
+				:	Math.pow((value + 0.055) / 1.055, 2.4);
 		}
 
 		function linearToSrgb(value: number): number {
-			return value <= 0.0031308
-				? value * 12.92
-				: 1.055 * Math.pow(value, 1 / 2.4) - 0.055;
+			return value <= 0.0031308 ?
+					value * 12.92
+				:	1.055 * Math.pow(value, 1 / 2.4) - 0.055;
 		}
 
 		/// Relative luminance following WCAG 2.1, in [0, 1].
@@ -210,9 +211,8 @@ namespace cool {
 			// lands on the luminance of the background.
 			const maximumOutput = 0.2;
 			const backgroundRgb = parse(background);
-			const backgroundLuminance = backgroundRgb
-				? wcagLuminance(backgroundRgb)
-				: 0;
+			const backgroundLuminance =
+				backgroundRgb ? wcagLuminance(backgroundRgb) : 0;
 			const darkest = Math.min(backgroundLuminance, maximumOutput);
 			const floor = darkest + (saturation * (maximumOutput - darkest)) / 2;
 

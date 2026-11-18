@@ -91,9 +91,8 @@ JSDialog.PageMarginEntry = function (
 	const map = builder.map;
 	const isCalc = map._docLayer.isCalc();
 	// Calc reports the margins of its page style. Elsewhere the first preset is highlighted.
-	const selectedId = isCalc
-		? JSDialog.currentCalcPageMarginId()
-		: Object.keys(options)[0];
+	const selectedId =
+		isCalc ? JSDialog.currentCalcPageMarginId() : Object.keys(options)[0];
 	data.initialSelectedId = selectedId || Object.keys(options)[0];
 
 	const lang = window.coolParams.get('lang') || 'en-US';

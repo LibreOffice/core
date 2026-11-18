@@ -727,9 +727,8 @@ class LayerDrawing {
 			const imageInfo = info.content as ImageInfo;
 			if (!this.checkAndAttachImageData(imageInfo, img)) return;
 
-			const pageHash = slideInfo.background.isCustom
-				? info.slideHash
-				: slideInfo.masterPage;
+			const pageHash =
+				slideInfo.background.isCustom ? info.slideHash : slideInfo.masterPage;
 			this.backgroundChecksums.set(pageHash, imageInfo.checksum);
 			this.cachedBackgrounds.set(imageInfo.checksum, imageInfo);
 
@@ -816,9 +815,8 @@ class LayerDrawing {
 
 		if (this.layerRenderer.fillColor(slideInfo)) return true;
 
-		const pageHash = slideInfo.background.isCustom
-			? slideHash
-			: slideInfo.masterPage;
+		const pageHash =
+			slideInfo.background.isCustom ? slideHash : slideInfo.masterPage;
 		const checksum = this.backgroundChecksums.get(pageHash);
 		if (!checksum) return false;
 
@@ -862,9 +860,8 @@ class LayerDrawing {
 		} else if (layer.type === 'placeholder') {
 			const placeholder = layer.content as PlaceholderInfo;
 			const slideTextFields = this.slideTextFieldsMap.get(slideHash);
-			const checksum = slideTextFields
-				? slideTextFields.get(placeholder.hash)
-				: null;
+			const checksum =
+				slideTextFields ? slideTextFields.get(placeholder.hash) : null;
 			if (!checksum) {
 				window.app.console.log(
 					'LayerDrawing: No content found for text field placeholder, type: ' +

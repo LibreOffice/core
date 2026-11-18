@@ -35,9 +35,9 @@ namespace cool {
 
 		constructor(side: 'right' | 'bottom') {
 			const props =
-				side === 'right'
-					? app.CSections.RightSpacer
-					: app.CSections.BottomSpacer;
+				side === 'right' ?
+					app.CSections.RightSpacer
+				:	app.CSections.BottomSpacer;
 
 			super(props.name);
 

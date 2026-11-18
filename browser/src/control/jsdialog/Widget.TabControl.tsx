@@ -129,8 +129,9 @@ JSDialog.tabControl = function (
 
     // Core sends a plain number id, so prefix it with the control id to keep
     // it distinct from the same number used by other controls.
-    const tabId = Number.isInteger(parseInt(item.id as string))
-      ? data.id + '-' + item.id
+    const tabId =
+      Number.isInteger(parseInt(item.id as string)) ?
+        data.id + '-' + item.id
       : (item.id as string);
 
     const isSelectedTab = data.selected == item.id;

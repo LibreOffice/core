@@ -507,20 +507,20 @@ class TableStylesService {
 				if (!item.style) return;
 				const element = item.style;
 				const isNone = element.Name === 'None';
-				const selected = isNone
-					? !currentStyle ||
+				const selected =
+					isNone ?
+						!currentStyle ||
 						currentStyle.TableStyleName === '' ||
 						currentStyle.TableStyleName === 'None'
-					: currentStyle && element.Name === currentStyle.TableStyleName;
+					:	currentStyle && element.Name === currentStyle.TableStyleName;
 
 				const formattedText = isNone ? _('None') : element.UIName;
 
 				iconViewEntries.push({
 					row: isNone ? -1 : i++,
 					text: formattedText,
-					image: isNone
-						? 'images/lc_table_none.svg'
-						: this.generateIcon(element),
+					image:
+						isNone ? 'images/lc_table_none.svg' : this.generateIcon(element),
 					width: 50,
 					height: 50,
 					selected: selected,

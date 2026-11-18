@@ -169,13 +169,13 @@ namespace BackstageTemplates {
           </button>
         </div>
         <p class="backstage-content-description">
-          {props.hasTemplates
-            ? _(
-                "Rename or remove the templates you added. Built-in templates can't be changed.",
-              )
-            : _('Templates you add will appear here and in New.')}
+          {props.hasTemplates ?
+            _(
+              "Rename or remove the templates you added. Built-in templates can't be changed.",
+            )
+          : _('Templates you add will appear here and in New.')}
         </p>
-        {props.hasTemplates ? (
+        {props.hasTemplates ?
           <>
             <div class="template-search-bar">
               {searchInput(
@@ -187,8 +187,7 @@ namespace BackstageTemplates {
             </div>
             {props.list}
           </>
-        ) : (
-          <div class="backstage-manage-templates-empty">
+        : <div class="backstage-manage-templates-empty">
             <h3 class="backstage-manage-templates-empty-title">
               {_('No templates yet')}
             </h3>
@@ -196,7 +195,7 @@ namespace BackstageTemplates {
               {_('Add a template to start new documents from your own layout.')}
             </p>
           </div>
-        )}
+        }
       </div>
     );
   }
@@ -208,9 +207,9 @@ namespace BackstageTemplates {
     if (!props.templates.length)
       return (
         <p class="template-grid-empty">
-          {props.searchQuery.trim()
-            ? _('No templates match your search.')
-            : _('No templates of this type.')}
+          {props.searchQuery.trim() ?
+            _('No templates match your search.')
+          : _('No templates of this type.')}
         </p>
       );
     return (

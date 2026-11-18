@@ -283,9 +283,8 @@ class EmojiPickerWidget {
 	private loadRecents(): void {
 		try {
 			const arr = JSON.parse(window.prefs.get(this.recentsKey, '[]'));
-			this.recents = Array.isArray(arr)
-				? arr.filter((s: any) => typeof s === 'string')
-				: [];
+			this.recents =
+				Array.isArray(arr) ? arr.filter((s: any) => typeof s === 'string') : [];
 		} catch {
 			this.recents = [];
 		}
@@ -365,9 +364,10 @@ class EmojiPickerWidget {
 		}
 		let anyShown = false;
 		for (const cat of EmojiPickerWidget.CATEGORIES) {
-			const filtered = this.query
-				? cat.emojis.filter((entry) => this.matchesEntry(entry))
-				: cat.emojis;
+			const filtered =
+				this.query ?
+					cat.emojis.filter((entry) => this.matchesEntry(entry))
+				:	cat.emojis;
 			if (filtered.length === 0) continue;
 			anyShown = true;
 			this.appendSection(

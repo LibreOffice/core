@@ -238,9 +238,9 @@ class PresenterConsole {
 
 	_openPresenterWindow() {
 		const windowopen =
-			window.mode.isCODesktop() && window.origOpen
-				? window.origOpen
-				: window.open;
+			window.mode.isCODesktop() && window.origOpen ?
+				window.origOpen
+			:	window.open;
 		// The fragment names the window's role to the shell. Read in
 		// qt/WebView.cpp claimChildWindow and macos ViewController.swift
 		// webView(_:createWebViewWith:). Keep these in sync.
@@ -842,9 +842,10 @@ class PresenterConsole {
 
 		const message = doc.createElement('span');
 		message.id = msgId;
-		message.textContent = isLinkValid
-			? _('You are leaving the presentation.')
-			: _('The link is not valid.');
+		message.textContent =
+			isLinkValid ?
+				_('You are leaving the presentation.')
+			:	_('The link is not valid.');
 		minimalDlg.appendChild(message);
 
 		if (isLinkValid) {
@@ -1222,9 +1223,10 @@ class PresenterConsole {
 
 		let elem = this._proxyPresenter.document.querySelector('#skip');
 		this.toggleButtonState(elem, this._navigateSkipTransition);
-		const slideshowAnimToggleText = this._navigateSkipTransition
-			? _('Enable Animations')
-			: _('Disable Animations');
+		const slideshowAnimToggleText =
+			this._navigateSkipTransition ?
+				_('Enable Animations')
+			:	_('Disable Animations');
 		elem.setAttribute('aria-label', slideshowAnimToggleText);
 		elem.setAttribute('data-cooltip', slideshowAnimToggleText);
 	}

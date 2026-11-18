@@ -355,13 +355,11 @@ class DebugManager {
 		}
 
 		const nameOf = (element: Element | null): string =>
-			element
-				? element.tagName +
-					(element.id ? '#' + element.id : '') +
-					(element.className
-						? '.' + String(element.className).split(' ')[0]
-						: '')
-				: 'none';
+			element ?
+				element.tagName +
+				(element.id ? '#' + element.id : '') +
+				(element.className ? '.' + String(element.className).split(' ')[0] : '')
+			:	'none';
 
 		this._keyWatch = (event: KeyboardEvent): void => {
 			app.console.log(
@@ -1897,9 +1895,9 @@ class DebugManager {
 			const held = this._vectorData.get(name);
 			if (!held) continue;
 			const ratio =
-				held.all.compressed > 0
-					? (held.json / held.all.compressed).toFixed(1)
-					: '-';
+				held.all.compressed > 0 ?
+					(held.json / held.all.compressed).toFixed(1)
+				:	'-';
 			lines.push(
 				label +
 					': ' +

@@ -204,11 +204,9 @@ class ShapeLockLabelSection extends HTMLObjectSection {
   private render(now: number) {
     const phase = this.getPhase(now);
     const statusText =
-      phase === 'editing'
-        ? _('is editing')
-        : phase === 'active'
-          ? _('is active')
-          : _('is inactive');
+      phase === 'editing' ? _('is editing')
+      : phase === 'active' ? _('is active')
+      : _('is inactive');
 
     const requestTime = this.sectionProperties.requestTime;
     // A user who cannot edit the document gets no Take over.

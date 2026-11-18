@@ -39,9 +39,9 @@ namespace cool {
 		/// The colour of the path at that place in the order the paths play.
 		public static colourOf(index: number): string {
 			const colours = MotionPaths.colours;
-			return index === 0
-				? colours[0]
-				: colours[1 + ((index - 1) % (colours.length - 1))];
+			return index === 0 ?
+					colours[0]
+				:	colours[1 + ((index - 1) % (colours.length - 1))];
 		}
 
 		/// The paths of that object on the slide, in twips, with the middles of what they move
@@ -76,9 +76,9 @@ namespace cool {
 				const bounds = TextHierarchyParagraphPrimitive.collect(
 					object.primitives,
 				)[paragraph]?.bounds;
-				return bounds
-					? new Point((bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2)
-					: null;
+				return bounds ?
+						new Point((bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2)
+					:	null;
 			}
 			if (object.x === undefined || object.width === undefined) return null;
 			return new Point(

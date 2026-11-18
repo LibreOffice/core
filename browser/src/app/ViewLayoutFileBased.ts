@@ -210,9 +210,8 @@ class ViewLayoutFileBased extends ViewLayoutBase {
 		point: cool.SimplePoint,
 		documentPoint = true,
 	): number {
-		const rectangleList = documentPoint
-			? this.documentRectangles
-			: this.viewRectangles;
+		const rectangleList =
+			documentPoint ? this.documentRectangles : this.viewRectangles;
 
 		for (let i = 0; i < rectangleList.length; i++) {
 			if (rectangleList[i].containsPoint(point.toArray())) return i;

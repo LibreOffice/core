@@ -120,9 +120,10 @@ class SlideMorph {
 		this.text = text;
 		const leavingObjects = MorphMatcher.candidates(leaving, leavingHidden);
 		const enteringObjects = MorphMatcher.candidates(entering, enteringHidden);
-		const match: MorphMatch = text?.splitsText
-			? { pairs: [], leavingOnly: [], enteringOnly: [] }
-			: MorphMatcher.match(leaving, entering, leavingHidden, enteringHidden);
+		const match: MorphMatch =
+			text?.splitsText ?
+				{ pairs: [], leavingOnly: [], enteringOnly: [] }
+			:	MorphMatcher.match(leaving, entering, leavingHidden, enteringHidden);
 		if (text?.splitsText)
 			this._matchPieces(text, leavingObjects, enteringObjects);
 
@@ -450,10 +451,12 @@ class SlideMorph {
 			height: -to.height,
 			angle: to.angle + Math.PI,
 		};
-		return Math.abs(SlideMorph._turn(from, flipped)) <
-			Math.abs(SlideMorph._turn(from, to))
-			? flipped
-			: to;
+		return (
+				Math.abs(SlideMorph._turn(from, flipped)) <
+					Math.abs(SlideMorph._turn(from, to))
+			) ?
+				flipped
+			:	to;
 	}
 
 	// The frame that has its origin at the middle of the place and is turned like it, at a scale

@@ -337,9 +337,9 @@ class DomUtil {
 			'MozTransition',
 			'msTransition',
 		]);
-		return transition === 'webkitTransition' || transition === 'OTransition'
-			? transition + 'End'
-			: 'transitionend';
+		return transition === 'webkitTransition' || transition === 'OTransition' ?
+				transition + 'End'
+			:	'transitionend';
 	}
 
 	public static TRANSITION_END: string = DomUtil.getTransitionEnd();

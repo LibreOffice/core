@@ -120,9 +120,9 @@ class ViewLayoutCalc extends ViewLayoutBase {
 	// correctly.
 	protected override clientVisibleAreaMessage(): string {
 		const splitPosition = app.map._docLayer._corePixelsToTwips(
-			app.map._docLayer._splitPanesContext
-				? app.map._docLayer._splitPanesContext.getSplitPos()
-				: new cool.Point(0, 0),
+			app.map._docLayer._splitPanesContext ?
+				app.map._docLayer._splitPanesContext.getSplitPos()
+			:	new cool.Point(0, 0),
 		);
 
 		return (
@@ -434,9 +434,10 @@ class ViewLayoutCalc extends ViewLayoutBase {
 			new cool.Point(r.pX1, r.pY1),
 			new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
 		);
-		const boundList = splitPanesContext
-			? splitPanesContext.getPxBoundList(viewport)
-			: [viewport];
+		const boundList =
+			splitPanesContext ?
+				splitPanesContext.getPxBoundList(viewport)
+			:	[viewport];
 
 		const added = new Set<string>();
 		for (const bounds of boundList) {

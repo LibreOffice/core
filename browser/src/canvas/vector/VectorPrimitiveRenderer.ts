@@ -615,9 +615,9 @@ namespace cool {
 			context.save();
 			context.globalAlpha = 1 - (primitive.transparency ?? 0);
 			context.fillStyle =
-				primitive.color !== undefined
-					? this._surfaceColor(primitive.color)
-					: this._documentBackground;
+				primitive.color !== undefined ?
+					this._surfaceColor(primitive.color)
+				:	this._documentBackground;
 			context.fillRect(0, 0, this._slideWidth, this._slideHeight);
 			context.restore();
 		}
@@ -672,13 +672,13 @@ namespace cool {
 			// and linecap. Canvas has no matching option, so fall back
 			// to "miter" and "butt".
 			context.lineJoin =
-				line.linejoin === 'round' || line.linejoin === 'bevel'
-					? line.linejoin
-					: 'miter';
+				line.linejoin === 'round' || line.linejoin === 'bevel' ?
+					line.linejoin
+				:	'miter';
 			context.lineCap =
-				line.linecap === 'round' || line.linecap === 'square'
-					? line.linecap
-					: 'butt';
+				line.linecap === 'round' || line.linecap === 'square' ?
+					line.linecap
+				:	'butt';
 			if (primitive.stroke?.dotDashArray?.length)
 				context.setLineDash(primitive.stroke.dotDashArray);
 			context.stroke(path);
@@ -978,9 +978,9 @@ namespace cool {
 				// the right. The step turns with the text.
 				const blackText = VectorPrimitiveRenderer._isBlack(textColor);
 				const sign =
-					blackText && relief === VectorPrimitiveRenderer._RELIEF_ENGRAVED
-						? -1
-						: 1;
+					blackText && relief === VectorPrimitiveRenderer._RELIEF_ENGRAVED ?
+						-1
+					:	1;
 				const matrix = Matrix2D.fromArray(primitive.matrix);
 				const angle = matrix ? Math.atan2(matrix.b, matrix.a) : 0;
 				const cos = Math.cos(angle);
@@ -1295,9 +1295,9 @@ namespace cool {
 			this._paragraphIndex = 0;
 			const scale = this._textOverride?.sizeScale;
 			const center =
-				scale !== undefined && scale !== 1
-					? this._drawnParagraphsCenter(primitive)
-					: null;
+				scale !== undefined && scale !== 1 ?
+					this._drawnParagraphsCenter(primitive)
+				:	null;
 			// The text keeps its lines, so a larger size grows it about the
 			// middle of its paragraphs.
 			if (center && scale !== undefined) {
@@ -1456,9 +1456,10 @@ namespace cool {
 					primitive,
 					frame.text,
 				);
-				const width = distances
-					? distances[frame.text.length - 1] * frame.advanceScale
-					: context.measureText(frame.text).width;
+				const width =
+					distances ?
+						distances[frame.text.length - 1] * frame.advanceScale
+					:	context.measureText(frame.text).width;
 				const lineWidth = Math.max(1, frame.fontSize / 20);
 				const textColor = color ?? this._textColor(primitive);
 				const lineColor = (decorationColor: string | undefined): string => {
@@ -1478,9 +1479,10 @@ namespace cool {
 				};
 
 				if (underline) {
-					const lineY = primitive.underlineAbove
-						? frame.y - frame.fontSize * 0.85
-						: frame.y + frame.fontSize * 0.15;
+					const lineY =
+						primitive.underlineAbove ?
+							frame.y - frame.fontSize * 0.85
+						:	frame.y + frame.fontSize * 0.15;
 					drawLine(lineY, lineColor(primitive.underlineColor));
 				}
 				if (overline)
@@ -1507,9 +1509,9 @@ namespace cool {
 			this._drawRaster(context, primitive.matrix, primitive.checksum, {
 				// The wire counts transparency up from 0 for opaque.
 				alpha:
-					typeof primitive.transparency === 'number'
-						? 1 - primitive.transparency
-						: undefined,
+					typeof primitive.transparency === 'number' ?
+						1 - primitive.transparency
+					:	undefined,
 			});
 		}
 
@@ -1535,9 +1537,9 @@ namespace cool {
 				rotation: primitive.rotation,
 				// The wire gives a byte, with 255 for opaque.
 				alpha:
-					typeof primitive.alpha === 'number'
-						? primitive.alpha / 255
-						: undefined,
+					typeof primitive.alpha === 'number' ?
+						primitive.alpha / 255
+					:	undefined,
 				mirror: primitive.mirror,
 				colorModifiers: primitive.colorModifiers,
 			});
@@ -1586,9 +1588,10 @@ namespace cool {
 				context.translate(-0.5, -0.5);
 			}
 
-			const source = colorModifiers?.length
-				? this._colorChangedImage(context, image, colorModifiers, imageRect)
-				: image;
+			const source =
+				colorModifiers?.length ?
+					this._colorChangedImage(context, image, colorModifiers, imageRect)
+				:	image;
 
 			if (imageRect) {
 				// The whole image maps onto this rectangle of the
@@ -1815,9 +1818,8 @@ namespace cool {
 			const width = region.width;
 			const height = region.height;
 			const color = this._scratch.slotContext(slot + 1, width, height);
-			const alpha = color
-				? this._scratch.slotContext(slot + 2, width, height)
-				: null;
+			const alpha =
+				color ? this._scratch.slotContext(slot + 2, width, height) : null;
 			if (!color || !alpha) return false;
 
 			color.save();
@@ -2364,9 +2366,9 @@ namespace cool {
 				}
 
 				const shrunk =
-					radius >= VectorPrimitiveRenderer._VISIBLE_SPREAD
-						? this._scratch.slotContext(slot + 1, region.width, region.height)
-						: null;
+					radius >= VectorPrimitiveRenderer._VISIBLE_SPREAD ?
+						this._scratch.slotContext(slot + 1, region.width, region.height)
+					:	null;
 				if (!shrunk) {
 					this._scratch.drawOnto(context, content, region);
 					return;
@@ -2438,15 +2440,15 @@ namespace cool {
 				// Without the filter the blur runs in script, on fewer pixels.
 				const filtered = deviation > 0 && VectorColorFilters.canFilter(context);
 				const scale =
-					deviation > 0 && !filtered
-						? Math.min(
-								1,
-								Math.sqrt(
-									VectorPrimitiveRenderer._MAX_BLURRED_REFLECTION_PIXELS /
-										(region.width * region.height),
-								),
-							)
-						: 1;
+					deviation > 0 && !filtered ?
+						Math.min(
+							1,
+							Math.sqrt(
+								VectorPrimitiveRenderer._MAX_BLURRED_REFLECTION_PIXELS /
+									(region.width * region.height),
+							),
+						)
+					:	1;
 				const content = this._renderToScratch(
 					context,
 					slot,
@@ -2626,9 +2628,10 @@ namespace cool {
 					primitive.children,
 					region,
 				);
-				const mask = content
-					? this._scratch.slotContext(slot + 1, region.width, region.height)
-					: null;
+				const mask =
+					content ?
+						this._scratch.slotContext(slot + 1, region.width, region.height)
+					:	null;
 				if (!content || !mask) {
 					plain();
 					return;

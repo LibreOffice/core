@@ -57,9 +57,9 @@ class VideoBackgroundDialog {
 		);
 		const canRemove = videoState !== 'disabled';
 		const selectedIndex =
-			canRemove && typeof videoState === 'string'
-				? VideoBackgroundDialog.sampleIndexOf(samples, videoState)
-				: -1;
+			canRemove && typeof videoState === 'string' ?
+				VideoBackgroundDialog.sampleIndexOf(samples, videoState)
+			:	-1;
 
 		const json = uiManager._modalDialogJSON(id, _('Background Video'), true, [
 			{

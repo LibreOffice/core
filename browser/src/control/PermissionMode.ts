@@ -284,9 +284,9 @@ class PermissionViewMode extends JSDialogComponent {
 				type: 'action',
 				selected: selected,
 				class:
-					command && isCommandLocked(this.map, command)
-						? 'locking-disabled'
-						: undefined,
+					command && isCommandLocked(this.map, command) ? 'locking-disabled' : (
+						undefined
+					),
 			});
 		};
 		addMode('view', _('Viewing Mode'), !this.map.isEditMode());
@@ -386,9 +386,10 @@ class PermissionViewMode extends JSDialogComponent {
 
 		if (mode === 'review') {
 			if (editing) {
-				const next = this.reviewMode.isRecording()
-					? ReviewModeState.On
-					: ReviewModeState.Starting;
+				const next =
+					this.reviewMode.isRecording() ?
+						ReviewModeState.On
+					:	ReviewModeState.Starting;
 				this.reviewMode.transition(state, next, ReviewModeTrigger.User);
 				return;
 			}
@@ -492,9 +493,8 @@ class PermissionViewMode extends JSDialogComponent {
 
 		// Safety check for map methods which might be missing in some contexts
 		const isEditMode = this.map.isEditMode ? this.map.isEditMode() : false;
-		const shouldStartReadOnly = this.map._shouldStartReadOnly
-			? this.map._shouldStartReadOnly()
-			: false;
+		const shouldStartReadOnly =
+			this.map._shouldStartReadOnly ? this.map._shouldStartReadOnly() : false;
 
 		let showReadonly = false;
 		let showDropdown = false;
@@ -502,9 +502,8 @@ class PermissionViewMode extends JSDialogComponent {
 
 		if (isEditMode) {
 			showDropdown = true;
-			dropdownText = this.reviewMode.isReviewing()
-				? _('Reviewing')
-				: _('Editing');
+			dropdownText =
+				this.reviewMode.isReviewing() ? _('Reviewing') : _('Editing');
 		} else if (app.file.permission === 'edit' && shouldStartReadOnly) {
 			showDropdown = true;
 			dropdownText = _('Viewing');

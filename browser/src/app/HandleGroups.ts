@@ -643,9 +643,9 @@ class CropHandles extends HandleGroup {
 		const picture = CropHandles.thePictureOf(selection);
 		const objectId = selection.selectedObjects()[0];
 		const square =
-			objectId === undefined
-				? null
-				: RenderGeometrySection.transformOf(objectId);
+			objectId === undefined ? null : (
+				RenderGeometrySection.transformOf(objectId)
+			);
 		const extent = picture ? CropHandles.graphicExtentOf(picture) : undefined;
 		if (!CropHandles.areShownFor(selection) || !square || !extent) return false;
 		if (!extent.minX && !extent.minY && extent.maxX === 1 && extent.maxY === 1)
@@ -763,8 +763,12 @@ class CropHandles extends HandleGroup {
 		const place = ObjectHandles.placeOfKind(kind) ?? new cool.Point(0.5, 0.5);
 
 		return new cool.Point(
-			place.x < 0.5 ? 1 : place.x > 0.5 ? -1 : 0,
-			place.y < 0.5 ? 1 : place.y > 0.5 ? -1 : 0,
+			place.x < 0.5 ? 1
+			: place.x > 0.5 ? -1
+			: 0,
+			place.y < 0.5 ? 1
+			: place.y > 0.5 ? -1
+			: 0,
 		);
 	}
 
@@ -1083,9 +1087,10 @@ class CropHandles extends HandleGroup {
 		} else {
 			// A side: x runs along the edge, y into the picture.
 			const along = inwardDown ? across : down;
-			const into = inwardDown
-				? down.multiplyBy(inwardDown)
-				: across.multiplyBy(inwardAcross);
+			const into =
+				inwardDown ?
+					down.multiplyBy(inwardDown)
+				:	across.multiplyBy(inwardAcross);
 			context.setTransform(along.x, along.y, into.x, into.y, at.vX, at.vY);
 			context.moveTo(-long * 0.5, -back);
 			context.lineTo(long * 0.5, -back);
@@ -1144,9 +1149,9 @@ class TurningHandle extends HandleGroup {
 				);
 
 			if (!square) return [];
-			return RenderGeometrySection.objectOf(objectIds[0])?.measurement
-				? this.placedBeyondTheLine(objectIds[0], square)
-				: this.placedBesideTheLine(objectIds[0], square);
+			return RenderGeometrySection.objectOf(objectIds[0])?.measurement ?
+					this.placedBeyondTheLine(objectIds[0], square)
+				:	this.placedBesideTheLine(objectIds[0], square);
 		}
 
 		return this.placedAbove(ObjectHandles.framingOf(objectIds, square) ?? []);
@@ -1398,9 +1403,9 @@ class TurningHandle extends HandleGroup {
 	): string {
 		const shearing = this.selection.handleMode() === 'shear';
 		const other = handle.kind === SelectionSection.otherModeKind;
-		return shearing !== other
-			? HandleLook.layShearing(context, at, grown, handle.turnedBy)
-			: HandleLook.lay(context, 'turning', at, grown);
+		return shearing !== other ?
+				HandleLook.layShearing(context, at, grown, handle.turnedBy)
+			:	HandleLook.lay(context, 'turning', at, grown);
 	}
 
 	/// A drag turns the selection in the turning mode and shears it in the shearing mode, around
@@ -1412,14 +1417,14 @@ class TurningHandle extends HandleGroup {
 		const middle = this.middle();
 		if (!middle) return null;
 
-		return this.selection.handleMode() === 'shear'
-			? new ShearingInteraction(
+		return this.selection.handleMode() === 'shear' ?
+				new ShearingInteraction(
 					this.selection,
 					middle,
 					at,
 					handle.turnedBy ?? 0,
 				)
-			: new TurningInteraction(this.selection, middle, at);
+			:	new TurningInteraction(this.selection, middle, at);
 	}
 
 	/*
@@ -1475,19 +1480,19 @@ class TurningHandle extends HandleGroup {
 
 		const against = towards.x < 0 || towards.y < 0;
 		const changed =
-			this.selection.handleMode() === 'shear'
-				? ShearingInteraction.shearObjects(
-						this.selection,
-						middle,
-						handle.turnedBy ?? 0,
-						(stands: number) =>
-							EditSteps.nextStep(
-								stands,
-								EditSteps.turnSnap(event) ?? EditSteps.keyTurnStep(),
-								against ? -1 : 1,
-							),
-					)
-				: this.turnByKey(this.keyTurn(event, against ? 1 : -1));
+			this.selection.handleMode() === 'shear' ?
+				ShearingInteraction.shearObjects(
+					this.selection,
+					middle,
+					handle.turnedBy ?? 0,
+					(stands: number) =>
+						EditSteps.nextStep(
+							stands,
+							EditSteps.turnSnap(event) ?? EditSteps.keyTurnStep(),
+							against ? -1 : 1,
+						),
+				)
+			:	this.turnByKey(this.keyTurn(event, against ? 1 : -1));
 
 		// What the key did is laid on the objects, as the end of a drag lays its own.
 		this.selection.layTheChangeOn(
@@ -1520,7 +1525,9 @@ class TurningHandle extends HandleGroup {
 			// The angle the selection stands at is turned away the shorter way.
 			const stands = this.standsNow() % 360;
 			const back =
-				stands > 180 ? 360 - stands : stands < -180 ? -360 - stands : -stands;
+				stands > 180 ? 360 - stands
+				: stands < -180 ? -360 - stands
+				: -stands;
 			changed = this.turnByKey(back);
 		}
 
@@ -1757,9 +1764,9 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		// A handle that moves a line of a connector moves across that line only.
 		const line = this.selection.howTheLineHandleMoves(handle);
 		if (line)
-			return line.movesAcross
-				? new cool.Point(at.x, handle.point.y)
-				: new cool.Point(handle.point.x, at.y);
+			return line.movesAcross ?
+					new cool.Point(at.x, handle.point.y)
+				:	new cool.Point(handle.point.x, at.y);
 
 		const rails = handle.rails;
 		if (!rails) return at;
@@ -1775,9 +1782,10 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		const asked = onTheSquare.apply(at.x, at.y);
 		const was = onTheSquare.apply(handle.point.x, handle.point.y);
 
-		const held = rails.movesAround
-			? ShapingHandles.heldAround(rails, asked, was)
-			: ShapingHandles.heldOnTheAxes(rails, asked, was);
+		const held =
+			rails.movesAround ?
+				ShapingHandles.heldAround(rails, asked, was)
+			:	ShapingHandles.heldOnTheAxes(rails, asked, was);
 
 		return transform.apply(held.x, held.y).round();
 	}
@@ -1795,18 +1803,18 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		was: cool.Point,
 	): cool.Point {
 		return new cool.Point(
-			rails.movesAcross
-				? ShapingHandles.between(asked.x, was.x, [
-						rails.leastAcross?.x,
-						rails.mostAcross?.x,
-					])
-				: was.x,
-			rails.movesDown
-				? ShapingHandles.between(asked.y, was.y, [
-						rails.leastDown?.y,
-						rails.mostDown?.y,
-					])
-				: was.y,
+			rails.movesAcross ?
+				ShapingHandles.between(asked.x, was.x, [
+					rails.leastAcross?.x,
+					rails.mostAcross?.x,
+				])
+			:	was.x,
+			rails.movesDown ?
+				ShapingHandles.between(asked.y, was.y, [
+					rails.leastDown?.y,
+					rails.mostDown?.y,
+				])
+			:	was.y,
 		);
 	}
 
@@ -1820,9 +1828,10 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		asked: cool.Point,
 		was: cool.Point,
 	): cool.Point {
-		const around = rails.around
-			? new cool.Point(rails.around.x, rails.around.y)
-			: new cool.Point(0.5, 0.5);
+		const around =
+			rails.around ?
+				new cool.Point(rails.around.x, rails.around.y)
+			:	new cool.Point(0.5, 0.5);
 		const awayFrom = (place?: cool.ObjectPlace): number | undefined =>
 			place ? new cool.Point(place.x, place.y).distanceTo(around) : undefined;
 
@@ -1952,9 +1961,9 @@ class TiePointHandles extends HandleGroup {
 	/// The name of the icon that shows that anchor: the percent sign for none, else a box with a
 	/// dot on that place.
 	private static iconOfTheAnchor(anchor: string): string {
-		return anchor === 'none'
-			? 'gluepercent'
-			: 'glueanchor' + anchor.replace('-', '');
+		return anchor === 'none' ? 'gluepercent' : (
+				'glueanchor' + anchor.replace('-', '')
+			);
 	}
 
 	/*
@@ -2303,13 +2312,12 @@ class TiePointHandles extends HandleGroup {
 
 	/// The sides a way out names: one side, the two that face each other, or none.
 	private static waysOf(wayOut: cool.ObjectGluePoint['wayOut']): string[] {
-		return wayOut === 'horizontal'
-			? ['left', 'right']
-			: wayOut === 'vertical'
-				? ['top', 'bottom']
-				: wayOut
-					? [wayOut]
-					: [];
+		return (
+			wayOut === 'horizontal' ? ['left', 'right']
+			: wayOut === 'vertical' ? ['top', 'bottom']
+			: wayOut ? [wayOut]
+			: []
+		);
 	}
 
 	/*
@@ -2324,13 +2332,13 @@ class TiePointHandles extends HandleGroup {
 		}
 
 		const across = side === 'left' || side === 'right';
-		const facing = across
-			? side === 'left'
-				? 'right'
-				: 'left'
-			: side === 'top'
-				? 'bottom'
-				: 'top';
+		const facing =
+			across ?
+				side === 'left' ?
+					'right'
+				:	'left'
+			: side === 'top' ? 'bottom'
+			: 'top';
 		if (ways.includes(facing)) return across ? 'horizontal' : 'vertical';
 		return side;
 	}
@@ -2382,10 +2390,10 @@ class TiePointHandles extends HandleGroup {
 		const runs = GluePointHandles.ownPointsOf(objects[0]).flatMap(
 			(handle: SelectionHandle) => {
 				const stepped = HeldSteps.of(this.selection, handle.name);
-				return stepped
-					? (this.selection.runsWhileAGluePointIsDragged(handle, stepped.at) ??
+				return stepped ?
+						(this.selection.runsWhileAGluePointIsDragged(handle, stepped.at) ??
 							[])
-					: [];
+					:	[];
 			},
 		);
 		return runs.length ? runs : null;
@@ -2400,9 +2408,9 @@ class TiePointHandles extends HandleGroup {
 			this.selection,
 			GluePointHandles.ownPointsOf(objects[0]),
 		);
-		return this.selection.tiePointsAreShown()
-			? own.concat(TiePointHandles.fallbacksOf(objects[0]))
-			: own;
+		return this.selection.tiePointsAreShown() ?
+				own.concat(TiePointHandles.fallbacksOf(objects[0]))
+			:	own;
 	}
 
 	/*
@@ -2434,9 +2442,10 @@ class TiePointHandles extends HandleGroup {
 
 		// The point the dragged end would tie itself to is lit, so the drag says where it lands.
 		const led = this.selection.leadingPointOfTheDrag();
-		const would = led
-			? this.selection.whereTheEndWouldTie(new cool.Point(led.x, led.y))
-			: null;
+		const would =
+			led ?
+				this.selection.whereTheEndWouldTie(new cool.Point(led.x, led.y))
+			:	null;
 		const lit = (handle: SelectionHandle): SelectionHandle =>
 			would?.point?.equals(handle.point) ? { ...handle, lit: true } : handle;
 
@@ -2532,17 +2541,13 @@ class TiePointHandles extends HandleGroup {
 		becomes: cool.Range2D,
 	): cool.Point {
 		const acrossFrom = (box: cool.Range2D): number =>
-			point.fromAcross === 'left'
-				? box.minX
-				: point.fromAcross === 'right'
-					? box.maxX
-					: box.centerX;
+			point.fromAcross === 'left' ? box.minX
+			: point.fromAcross === 'right' ? box.maxX
+			: box.centerX;
 		const downFrom = (box: cool.Range2D): number =>
-			point.fromDown === 'top'
-				? box.minY
-				: point.fromDown === 'bottom'
-					? box.maxY
-					: box.centerY;
+			point.fromDown === 'top' ? box.minY
+			: point.fromDown === 'bottom' ? box.maxY
+			: box.centerY;
 
 		// A point held as a share of the size grows with the box. One that keeps a distance of
 		// its own is left as far from its side as it was.
@@ -2585,9 +2590,9 @@ class TiePointHandles extends HandleGroup {
 		handle: SelectionHandle,
 		_at: cool.SimplePoint,
 	): SelectionInteraction | null {
-		return this.canBeMoved(handle)
-			? new ShapingInteraction(this.selection, handle)
-			: null;
+		return this.canBeMoved(handle) ?
+				new ShapingInteraction(this.selection, handle)
+			:	null;
 	}
 
 	/// A point the shape makes is only clicked, for its menu.
@@ -2747,9 +2752,9 @@ class TiePointHandles extends HandleGroup {
 		*/
 		if (handle.kind !== 'GluePoint') return HandleLook.tiePointFallenBackOn;
 
-		return held?.keepsItsDistance
-			? HandleLook.tiePointKeepingItsDistance
-			: HandleLook.colorOfTheKind.tiePoint;
+		return held?.keepsItsDistance ?
+				HandleLook.tiePointKeepingItsDistance
+			:	HandleLook.colorOfTheKind.tiePoint;
 	}
 
 	/*
@@ -2878,9 +2883,9 @@ class PathHandles extends HandlesMovedOneByOne {
 	public letGoWhereItWasPressed(handle: SelectionHandle): void {
 		const editing = this.selection.pathEditor();
 		const menu =
-			handle.kind === '9' && editing
-				? PathHandles.pointMenu(editing, handle.name, true)
-				: null;
+			handle.kind === '9' && editing ?
+				PathHandles.pointMenu(editing, handle.name, true)
+			:	null;
 		if (menu)
 			this.openAMenuBelow(
 				handle,
@@ -3262,9 +3267,9 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 					...handle,
 					name: ['motion', path, handle.name].join(' '),
 					kind:
-						handle.kind === '9'
-							? MotionPathHandles.kind
-							: MotionPathHandles.weightKind,
+						handle.kind === '9' ?
+							MotionPathHandles.kind
+						:	MotionPathHandles.weightKind,
 				})),
 		);
 	}
@@ -3315,15 +3320,15 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		(object.motionPaths ?? []).forEach((_motionPath, path: number) => {
 			const own = shown.flatMap((handle: SelectionHandle) => {
 				const place = MotionPathHandles.placeOf(handle.name);
-				return place && place.path === path
-					? [
+				return place && place.path === path ?
+						[
 							{
 								...handle,
 								name: place.inPath,
 								kind: handle.kind === MotionPathHandles.kind ? '9' : '10',
 							},
 						]
-					: [];
+					:	[];
 			});
 			MotionPathHandles.editorOf(object, path).paint(
 				section,
@@ -3373,9 +3378,9 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 			place.inPath,
 			to,
 		);
-		return moved
-			? MotionPathHandles.withPathPlaced(object, place.path, moved)
-			: null;
+		return moved ?
+				MotionPathHandles.withPathPlaced(object, place.path, moved)
+			:	null;
 	}
 
 	/// A path as the engine takes it, point by point in whole twips, with how the curve runs
@@ -3403,9 +3408,8 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 	public handOver(handle: SelectionHandle, to: cool.Point): void {
 		const object = this.object();
 		const place = MotionPathHandles.placeOf(handle.name);
-		const moved = object
-			? MotionPathHandles.withPointAt(object, handle.name, to)
-			: null;
+		const moved =
+			object ? MotionPathHandles.withPointAt(object, handle.name, to) : null;
 		if (object && place && moved) this.setPath(object, place.path, moved);
 	}
 
@@ -3457,22 +3461,22 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		return {
 			...object,
 			motionPaths: paths.map((motionPath: cool.ObjectMotionPath, at: number) =>
-				at !== path
-					? motionPath
-					: {
-							...motionPath,
-							path: motionPath.path.map(
-								(one: cool.ObjectPathPolygon, which: number) =>
-									which !== polygon
-										? one
-										: {
-												...one,
-												points: one.points.map((point: cool.ObjectPathPoint) =>
-													PathGeometry.shifted(point, by),
-												),
-											},
-							),
-						},
+				at !== path ? motionPath : (
+					{
+						...motionPath,
+						path: motionPath.path.map(
+							(one: cool.ObjectPathPolygon, which: number) =>
+								which !== polygon ? one : (
+									{
+										...one,
+										points: one.points.map((point: cool.ObjectPathPoint) =>
+											PathGeometry.shifted(point, by),
+										),
+									}
+								),
+						),
+					}
+				),
 			),
 		};
 	}

@@ -201,9 +201,8 @@ class Sidebar extends SidebarBase {
 			origin &&
 			origin.forCommand === deckCommand &&
 			origin.deckId === 'PropertyDeck';
-		firstPanel.closeCommand = openedFromProperty
-			? '.uno:SidebarDeck.PropertyDeck'
-			: deckCommand;
+		firstPanel.closeCommand =
+			openedFromProperty ? '.uno:SidebarDeck.PropertyDeck' : deckCommand;
 	}
 
 	setupTargetDeck(unoCommand: string | null) {
@@ -284,9 +283,8 @@ class Sidebar extends SidebarBase {
 					const target = this.deckState.targetDeckCommand;
 					if (target) {
 						var stateHandler = this.map['stateChangeHandler'];
-						var isCurrent = stateHandler
-							? stateHandler.getItemValue(target)
-							: false;
+						var isCurrent =
+							stateHandler ? stateHandler.getItemValue(target) : false;
 						// just to be sure check with other method
 						if (isCurrent === 'false' || !isCurrent)
 							isCurrent =

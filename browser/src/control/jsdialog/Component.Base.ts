@@ -94,9 +94,14 @@ abstract class JSDialogComponent {
 		if (!this.builder) return false;
 
 		app.console.debug(
-			'Component ' + this.name + ' handles update message: ' + JSDialog.verbose
-				? this.model.safeStringify(data.control)
-				: data.control.id,
+			(
+				'Component ' +
+					this.name +
+					' handles update message: ' +
+					JSDialog.verbose
+			) ?
+				this.model.safeStringify(data.control)
+			:	data.control.id,
 		);
 
 		if (!this.ownsContainerContent()) return false;
@@ -124,9 +129,14 @@ abstract class JSDialogComponent {
 		if (!this.container) return false;
 
 		app.console.debug(
-			'Component ' + this.name + ' handles action message: ' + JSDialog.verbose
-				? this.model.safeStringify(data.data)
-				: data.data.control_id,
+			(
+				'Component ' +
+					this.name +
+					' handles action message: ' +
+					JSDialog.verbose
+			) ?
+				this.model.safeStringify(data.data)
+			:	data.data.control_id,
 		);
 
 		if (!this.ownsContainerContent()) return false;

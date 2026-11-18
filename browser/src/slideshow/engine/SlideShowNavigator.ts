@@ -234,9 +234,10 @@ class SlideShowNavigator {
 		NAVDBG.print(
 			'SlideShowNavigator.goToLastSlide: current index: ' + this.currentSlide,
 		);
-		const lastSlide = this.presenter.isFollower()
-			? this.getLeaderSlide()
-			: this.theMetaPres.numberOfSlides - 1;
+		const lastSlide =
+			this.presenter.isFollower() ?
+				this.getLeaderSlide()
+			:	this.theMetaPres.numberOfSlides - 1;
 		if (lastSlide < 0) return;
 		this.displaySlide(lastSlide, true);
 	}

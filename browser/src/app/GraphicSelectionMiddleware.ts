@@ -102,9 +102,9 @@ class GraphicSelection {
 
 	/// The one selected object, or nothing where none or several are selected.
 	private static theOneSelected(): cool.SlideObject | undefined {
-		return this.selectedObjectIDs.length === 1
-			? RenderGeometrySection.objectOf(this.selectedObjectIDs[0])
-			: undefined;
+		return this.selectedObjectIDs.length === 1 ?
+				RenderGeometrySection.objectOf(this.selectedObjectIDs[0])
+			:	undefined;
 	}
 
 	/// The file name ending of the picture what is selected holds, or nothing where it holds
@@ -1071,9 +1071,9 @@ class GraphicSelection {
 			return ['diagram', 'ungroup'];
 
 		const roles: GroupButtonRole[] = ['enter', 'leave', 'ungroup'];
-		return GraphicSelection.holdsADiagram(objectId)
-			? ['diagram', ...roles]
-			: roles;
+		return GraphicSelection.holdsADiagram(objectId) ?
+				['diagram', ...roles]
+			:	roles;
 	}
 
 	/// Whether that group holds a diagram at any depth.
@@ -1178,14 +1178,15 @@ class GraphicSelection {
 		// a part of it selected inside it has the handles the part allows.
 		const place = Interaction.placeOf(objectIds);
 		const wanted =
-			RenderManager.drawsFromObjects() &&
-			objectIds.length &&
-			(place.kind !== 'inPlace' ||
-				(objectIds.length === 1 && objectIds[0] !== place.object))
-				? several
-					? MultiSelectionSection.sectionName
-					: ObjectSelectionSection.nameFor(objectIds[0])
-				: null;
+			(
+				RenderManager.drawsFromObjects() &&
+				objectIds.length &&
+				(place.kind !== 'inPlace' ||
+					(objectIds.length === 1 && objectIds[0] !== place.object))
+			) ?
+				several ? MultiSelectionSection.sectionName
+				:	ObjectSelectionSection.nameFor(objectIds[0])
+			:	null;
 
 		if (this.selectionSection && this.selectionSection.name !== wanted) {
 			app.sectionContainer.removeSection(this.selectionSection.name);
@@ -1199,9 +1200,10 @@ class GraphicSelection {
 		if (wanted === null) return;
 
 		if (!this.selectionSection) {
-			this.selectionSection = several
-				? new MultiSelectionSection(objectIds)
-				: new ObjectSelectionSection(objectIds[0]);
+			this.selectionSection =
+				several ?
+					new MultiSelectionSection(objectIds)
+				:	new ObjectSelectionSection(objectIds[0]);
 
 			// A section takes its place among the others only once it is in the container, so
 			// the handles are worked out after it has been added and not before.
@@ -1771,9 +1773,9 @@ class GraphicSelection {
 		// coordinate - for example a shape dragged partly off the left edge of a slide -
 		// and must be kept as-is.
 		const rectX =
-			app.map._docLayer.isCalcRTL() && messageJSON[0] < 0
-				? Math.abs(messageJSON[0]) - rawWidth
-				: messageJSON[0];
+			app.map._docLayer.isCalcRTL() && messageJSON[0] < 0 ?
+				Math.abs(messageJSON[0]) - rawWidth
+			:	messageJSON[0];
 
 		this.rectangle = new cool.SimpleRectangle(
 			rectX,
@@ -1978,12 +1980,13 @@ class GraphicSelection {
 		if (GraphicSelection.extraInfo && GraphicSelection.extraInfo.isDiagram) {
 			if (!GraphicSelection.diagramButton) {
 				// need to create DiagramButtonSection
-				const subSection = this.handlesSection
-					? app.sectionContainer.getSectionWithName(
+				const subSection =
+					this.handlesSection ?
+						app.sectionContainer.getSectionWithName(
 							this.handlesSection.sectionProperties.subSectionPrefix +
 								'diagram',
 						)
-					: null;
+					:	null;
 				var halfWidth: number = 0;
 
 				if (subSection && subSection.sectionProperties) {
@@ -2212,9 +2215,10 @@ class GraphicSelection {
 			if (!app.map._docLayer._oleCSelections.empty()) {
 				// A formula is its own frame and changes shape as it is typed, so the
 				// overlay follows the selection
-				const framed = isMathObject
-					? this.rectangle
-					: (this.darkOverlayRectangle ?? this.rectangle);
+				const framed =
+					isMathObject ?
+						this.rectangle
+					:	(this.darkOverlayRectangle ?? this.rectangle);
 				app.map._docLayer._oleCSelections.clear();
 				this.renderDarkOverlay(framed);
 			}
@@ -2281,10 +2285,11 @@ class GraphicSelection {
 				being watched. A single person editing follows their own view, and there is nobody
 				else to stay with then.
 			*/
-			const followsAnotherView = drawsFromObjects
-				? !app.isFollowingOff() &&
+			const followsAnotherView =
+				drawsFromObjects ?
+					!app.isFollowingOff() &&
 					Number(app.getFollowedViewId()) !== Number(app.map._docLayer._viewId)
-				: app.isFollowingEditor() || app.isFollowingUser();
+				:	app.isFollowingEditor() || app.isFollowingUser();
 
 			/*
 				A view that draws from objects scrolls only for a selection that is new, not for the

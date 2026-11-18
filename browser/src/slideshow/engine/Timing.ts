@@ -104,10 +104,12 @@ class Timing {
 					nFirstCharCode <= Timing.CHARCODE_9)
 			) {
 				const sClockValue =
-					nFirstCharCode == Timing.CHARCODE_PLUS ||
-					nFirstCharCode == Timing.CHARCODE_MINUS
-						? this.sTimingDescription.substring(1)
-						: this.sTimingDescription;
+					(
+						nFirstCharCode == Timing.CHARCODE_PLUS ||
+						nFirstCharCode == Timing.CHARCODE_MINUS
+					) ?
+						this.sTimingDescription.substring(1)
+					:	this.sTimingDescription;
 
 				const TimeInSec = Timing.parseClockValue(sClockValue);
 				if (TimeInSec != undefined) {

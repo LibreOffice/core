@@ -334,7 +334,9 @@ namespace cool {
 		private alignLine(delta: number): number {
 			const align = this.run.primitive.align;
 			const leftShare =
-				align === 'center' ? delta / 2 : align === 'right' ? delta : 0;
+				align === 'center' ? delta / 2
+				: align === 'right' ? delta
+				: 0;
 			if (leftShare)
 				for (const run of this.lineRuns())
 					if (!this.rightward.includes(run)) run.shift(-leftShare);
@@ -354,9 +356,9 @@ namespace cool {
 		text: string,
 		selected: SelectedAround | null,
 	): PredictedChange {
-		return selected
-			? { text, deleteBefore: selected.before, deleteAfter: selected.after }
-			: { text };
+		return selected ?
+				{ text, deleteBefore: selected.before, deleteAfter: selected.after }
+			:	{ text };
 	}
 
 	/// A deletion around the caret that takes the selection in its paragraph, like the engine.

@@ -517,12 +517,12 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		this.pendingZoomAnchor = {
 			point: anchorTwips ? anchorTwips.clone() : this.zoomAnchorPoint(),
 			pivot:
-				anchorTwips && anchorOnCanvas
-					? [
-							anchorOnCanvas.pX - this._documentAnchorPosition[0],
-							anchorOnCanvas.pY - this._documentAnchorPosition[1],
-						]
-					: [frame.pX / 2, frame.pY / 2],
+				anchorTwips && anchorOnCanvas ?
+					[
+						anchorOnCanvas.pX - this._documentAnchorPosition[0],
+						anchorOnCanvas.pY - this._documentAnchorPosition[1],
+					]
+				:	[frame.pX / 2, frame.pY / 2],
 		};
 		super.applyZoom(targetZoom, anchorTwips, anchorOnCanvas);
 		this.pendingZoomAnchor = undefined;

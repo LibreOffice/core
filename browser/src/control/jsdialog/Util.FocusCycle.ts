@@ -18,12 +18,10 @@ function isAnyInputFocused(): boolean {
 
 	if (app.map.hasFocus()) return false;
 
-	const hasTunneledDialogOpened: boolean = app.map.dialog
-		? app.map.dialog.hasOpenedDialog()
-		: false;
-	const hasJSDialogOpened: boolean = app.map.jsdialog
-		? app.map.jsdialog.hasDialogOpened()
-		: false;
+	const hasTunneledDialogOpened: boolean =
+		app.map.dialog ? app.map.dialog.hasOpenedDialog() : false;
+	const hasJSDialogOpened: boolean =
+		app.map.jsdialog ? app.map.jsdialog.hasDialogOpened() : false;
 	const hasJSDialogFocused: boolean = window.L.DomUtil.hasClass(
 		document.activeElement,
 		'jsdialog',
@@ -206,9 +204,9 @@ function findFocusableWithin(
 ): Element | null {
 	const focusableElements = Array.from(element.querySelectorAll('*'));
 	const found =
-		direction === 'next'
-			? focusableElements.find(isFocusable)
-			: focusableElements.reverse().find(isFocusable);
+		direction === 'next' ?
+			focusableElements.find(isFocusable)
+		:	focusableElements.reverse().find(isFocusable);
 	return found ?? null;
 }
 
@@ -218,9 +216,9 @@ function findNextFocusableSiblingElement(
 ): Element | null {
 	// Depending on the direction, find the next or previous sibling
 	const sibling =
-		direction === 'next'
-			? element.nextElementSibling
-			: element.previousElementSibling;
+		direction === 'next' ?
+			element.nextElementSibling
+		:	element.previousElementSibling;
 
 	// Recursively check the next or previous sibling of the current sibling is focusable
 	return findFocusableElement(sibling, direction);
@@ -362,15 +360,15 @@ function findNextElementInContainer(
 
 	if (direction === 'ArrowLeft' || direction === 'ArrowRight')
 		diffX =
-			direction === 'ArrowRight'
-				? rayCastingSensitivity
-				: rayCastingSensitivity * -1;
+			direction === 'ArrowRight' ?
+				rayCastingSensitivity
+			:	rayCastingSensitivity * -1;
 
 	if (direction === 'ArrowUp' || direction === 'ArrowDown')
 		diffY =
-			direction === 'ArrowDown'
-				? rayCastingSensitivity
-				: rayCastingSensitivity * -1;
+			direction === 'ArrowDown' ?
+				rayCastingSensitivity
+			:	rayCastingSensitivity * -1;
 
 	return rayCastToNextElement(
 		container,

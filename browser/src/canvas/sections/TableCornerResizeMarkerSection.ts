@@ -63,13 +63,13 @@ class TableCornerResizeMarkerSection extends HTMLObjectSection {
 		const rows = tableMiddleware.currentTableData.rows;
 
 		const lastColumnBorder =
-			columns.entries.length > 0
-				? columns.entries[columns.entries.length - 1].position
-				: columns.left;
+			columns.entries.length > 0 ?
+				columns.entries[columns.entries.length - 1].position
+			:	columns.left;
 		const lastRowBorder =
-			rows.entries.length > 0
-				? rows.entries[rows.entries.length - 1].position
-				: rows.left;
+			rows.entries.length > 0 ?
+				rows.entries[rows.entries.length - 1].position
+			:	rows.left;
 
 		const margin =
 			tableMiddleware.resizeMarkerMaxApproximation + this.offsetInCorePixels();

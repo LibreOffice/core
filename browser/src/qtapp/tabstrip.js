@@ -82,9 +82,8 @@
 			const tabEl = tabEls[i];
 			const rect = tabEl.getBoundingClientRect();
 			// How far X is from the edge of the tab where the tab starts.
-			const fromStart = isRightToLeft()
-				? rect.right - clientX
-				: clientX - rect.left;
+			const fromStart =
+				isRightToLeft() ? rect.right - clientX : clientX - rect.left;
 			if (fromStart < rect.width) {
 				const before = fromStart < rect.width / 2;
 				return {

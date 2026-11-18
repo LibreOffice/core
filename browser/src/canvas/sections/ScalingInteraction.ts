@@ -132,11 +132,10 @@ class ScalingInteraction extends SelectionInteraction {
 		const selected = this.selection.selectedObjects();
 		const byDefault = ObjectHandles.keepsTheRatioByDefault(selected);
 		const always = ObjectHandles.keepsTheRatioAlways(selected);
-		const asked = this.exact
-			? byDefault
-			: byDefault
-				? event?.shiftKey !== true
-				: this.ratioKept(event);
+		const asked =
+			this.exact ? byDefault
+			: byDefault ? event?.shiftKey !== true
+			: this.ratioKept(event);
 		this.keepsRatio = always || asked;
 
 		// The drag leads the handle, so it goes to where the handle stands for this mouse point
@@ -214,9 +213,9 @@ class ScalingInteraction extends SelectionInteraction {
 	public leadingPoint(): cool.SimplePoint | null {
 		const dragged = this.draggedHandle();
 
-		return dragged
-			? new cool.SimplePoint(dragged.point.x, dragged.point.y)
-			: null;
+		return dragged ?
+				new cool.SimplePoint(dragged.point.x, dragged.point.y)
+			:	null;
 	}
 
 	/*
@@ -374,12 +373,12 @@ class ScalingInteraction extends SelectionInteraction {
 		if (!matrix) return known;
 
 		const mapped = known.map((handle: SelectionHandle) =>
-			this.selection.keepsItsPlace(handle)
-				? handle
-				: {
-						...handle,
-						point: matrix.apply(handle.point.x, handle.point.y).round(),
-					},
+			this.selection.keepsItsPlace(handle) ?
+				handle
+			:	{
+					...handle,
+					point: matrix.apply(handle.point.x, handle.point.y).round(),
+				},
 		);
 
 		// A scale can turn the selection over, and the axes turn with it, so the way each of the

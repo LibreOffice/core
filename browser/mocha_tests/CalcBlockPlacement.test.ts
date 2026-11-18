@@ -355,9 +355,9 @@ describe('calcPlacedBlock', function () {
 	function dimension(print: number, pixels: number): cool.SheetDimension {
 		return {
 			getElementDataAny: (index: number, unit: string) =>
-				unit === 'printtwips'
-					? { startpos: index * print, size: print }
-					: { startpos: index * pixels, size: pixels },
+				unit === 'printtwips' ?
+					{ startpos: index * print, size: print }
+				:	{ startpos: index * pixels, size: pixels },
 		} as unknown as cool.SheetDimension;
 	}
 	const geometry = {
@@ -458,9 +458,9 @@ describe('calcCellMap', function () {
 	// wide. A pixel is 10 twips.
 	const dimension = {
 		getElementDataAny: (index: number, unit: string) =>
-			unit === 'printtwips'
-				? { startpos: index * 1000, size: 1000 }
-				: { startpos: index * 80, size: 80 },
+			unit === 'printtwips' ?
+				{ startpos: index * 1000, size: 1000 }
+			:	{ startpos: index * 80, size: 80 },
 	} as unknown as cool.SheetDimension;
 
 	it('keeps the share of the cell', function () {
@@ -476,9 +476,9 @@ describe('calcCellMap', function () {
 		// rounded down to whole twips would put it at 472, a seventh of a pixel short.
 		const rows = {
 			getElementDataAny: (index: number, unit: string) =>
-				unit === 'printtwips'
-					? { startpos: index * 256, size: 256 }
-					: { startpos: index * 42, size: 42 },
+				unit === 'printtwips' ?
+					{ startpos: index * 256, size: 256 }
+				:	{ startpos: index * 42, size: 42 },
 		} as unknown as cool.SheetDimension;
 		nodeassert.strictEqual(cool.calcCellMap(rows, 3.75)(3, 0) / 3.75, 126);
 	});

@@ -47,9 +47,9 @@ class MediaPlayerSection extends HTMLObjectSection {
     const player = (
       <video controls="controls" style="width: 100%; height: 100%">
         <source src={description.url} type={description.mimeType} />
-        {description.srt ? (
+        {description.srt ?
           <track src={description.srt} kind="subtitles" />
-        ) : null}
+        : null}
       </video>
     ) as HTMLVideoElement;
 

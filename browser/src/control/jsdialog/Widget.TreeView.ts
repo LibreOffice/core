@@ -281,9 +281,10 @@ class TreeViewControl {
 		// The headers are over the last columns when there are fewer of them
 		// (see fillHeaders).
 		const headers = treeViewData.headers;
-		const header = headers
-			? headers[parseInt(index) - (this._columns - headers.length)]
-			: undefined;
+		const header =
+			headers ?
+				headers[parseInt(index) - (this._columns - headers.length)]
+			:	undefined;
 		// The entry's own text can be the blank that stands in for a missing
 		// checkbox, so name the row after its first cell with text in it.
 		const textColumn = entry.columns.find(
@@ -385,8 +386,9 @@ class TreeViewControl {
 
 	getCellIconId(cellData: TreeColumnJSON) {
 		let iconId = (
-			cellData.collapsed ? cellData.collapsed : cellData.expanded
-		) as string;
+			cellData.collapsed ?
+				cellData.collapsed
+			:	cellData.expanded) as string;
 		const newLength = iconId.lastIndexOf('.');
 		if (newLength > 0)
 			iconId = (iconId.substr(0, newLength) as any).replaceAll('/', '');
@@ -567,11 +569,9 @@ class TreeViewControl {
 		tr.setAttribute('level', String(level));
 		(tr as any)._row = entry.row;
 		const rowRole =
-			this._containerRole === 'tree'
-				? 'treeitem'
-				: this._containerRole === 'listbox'
-					? 'option'
-					: 'row';
+			this._containerRole === 'tree' ? 'treeitem'
+			: this._containerRole === 'listbox' ? 'option'
+			: 'row';
 		tr.setAttribute('role', rowRole);
 
 		const dummyColumns = this.getLeadingColumns();
@@ -732,9 +732,9 @@ class TreeViewControl {
 		builder: JSBuilder,
 	) {
 		const text =
-			entry.columns[index].text !== undefined
-				? builder._cleanText(entry.columns[index].text)
-				: builder._cleanText(entry.text);
+			entry.columns[index].text !== undefined ?
+				builder._cleanText(entry.columns[index].text)
+			:	builder._cleanText(entry.text);
 
 		const hasRenderer =
 			entry.columns[index].customEntryRenderer ||
@@ -994,9 +994,10 @@ class TreeViewControl {
 
 			if (entry.text == '<dummy>') continue;
 
-			img = entry.columns[index].collapsedimage
-				? entry.columns[index].collapsedimage
-				: entry.columns[index].expandedimage;
+			img =
+				entry.columns[index].collapsedimage ?
+					entry.columns[index].collapsedimage
+				:	entry.columns[index].expandedimage;
 			if (img) {
 				window.L.DomUtil.addClass(td, 'ui-treeview-icon-column');
 				this.createImageColumn(text, builder, img);
@@ -1504,9 +1505,9 @@ class TreeViewControl {
 				// Only send {row, col} in grid mode;
 				// all other consumers expect a plain row number.
 				const selectData =
-					column != null && this._gridMode
-						? { row: entry.row, col: column }
-						: entry.row;
+					column != null && this._gridMode ?
+						{ row: entry.row, col: column }
+					:	entry.row;
 				builder.callback(
 					'treeview',
 					'select',
@@ -2289,11 +2290,9 @@ class TreeViewControl {
 		// at the current row so refining the text keeps the row in place when
 		// it still matches instead of jumping to the next one.
 		const startIndex =
-			search.length > 1
-				? Math.max(currIndex, 0)
-				: currIndex >= 0
-					? currIndex + 1
-					: 0;
+			search.length > 1 ? Math.max(currIndex, 0)
+			: currIndex >= 0 ? currIndex + 1
+			: 0;
 		const total = listElements.length;
 
 		// A flat list matches the text anywhere in an entry, so values with
@@ -2304,9 +2303,8 @@ class TreeViewControl {
 			const el = listElements[index];
 			if (el.clientHeight <= 0) continue;
 			const text = el.innerText.trim().toLowerCase();
-			const matches = this._isListbox
-				? text.indexOf(search) >= 0
-				: text.startsWith(search);
+			const matches =
+				this._isListbox ? text.indexOf(search) >= 0 : text.startsWith(search);
 			if (matches) {
 				this.changeFocusedRow(listElements, currIndex, index, builder, data);
 				return;
@@ -2836,9 +2834,10 @@ class TreeViewControl {
 			let existingIndex = 0;
 			while (targetIndex < columnTypes.length) {
 				const isExistingColumn = existingIndex < existingColumns.length;
-				const currentType = isExistingColumn
-					? this.getColumnType(existingColumns[existingIndex])
-					: 'unknown';
+				const currentType =
+					isExistingColumn ?
+						this.getColumnType(existingColumns[existingIndex])
+					:	'unknown';
 
 				if (currentType === 'separator') break; // don't add new columns - full width
 
@@ -2985,13 +2984,12 @@ class TreeViewControl {
 		this._singleClickActivate = TreeViewControl.isSingleClickActivate(data);
 		this._containerRole =
 			data.role ||
-			(this._isRealTree
-				? this._isNavigator
-					? 'tree'
-					: 'treegrid'
-				: this._isListbox
-					? 'listbox'
-					: 'grid');
+			(this._isRealTree ?
+				this._isNavigator ?
+					'tree'
+				:	'treegrid'
+			: this._isListbox ? 'listbox'
+			: 'grid');
 
 		this._tbody = this._container;
 		(this._container as any).onSelect = (position: number) => {
@@ -3090,9 +3088,9 @@ JSDialog.treeView = function (
 	// same id tells whether the selection moved to another row.
 	const selectedRow = TreeViewControl.findSelectedRow(data.entries);
 	const previousRow =
-		selectedRow !== undefined
-			? document.getElementById(data.id + '_' + selectedRow)
-			: null;
+		selectedRow !== undefined ?
+			document.getElementById(data.id + '_' + selectedRow)
+		:	null;
 	const selectionMoved =
 		selectedRow !== undefined &&
 		!(previousRow && previousRow.classList.contains('selected'));

@@ -365,9 +365,9 @@ class Socket {
 					msg:
 						_('Oops, there is a problem connecting to {productname}: ').replace(
 							'{productname}',
-							typeof brandProductName !== 'undefined'
-								? brandProductName
-								: 'Collabora Online Development Edition (unbranded)',
+							typeof brandProductName !== 'undefined' ? brandProductName : (
+								'Collabora Online Development Edition (unbranded)'
+							),
 						) + e,
 					cmd: 'socket',
 					kind: 'failed',
@@ -438,9 +438,10 @@ class Socket {
 		this.socket.onclose = function () {};
 		// In a mobile app the socket stays open as the link to the native shell, so events like
 		// OS back button still arrive.
-		this.socket.onmessage = window.ThisIsAnApp
-			? this._onShellEventWhileClosed.bind(this)
-			: function () {};
+		this.socket.onmessage =
+			window.ThisIsAnApp ?
+				this._onShellEventWhileClosed.bind(this)
+			:	function () {};
 		this.socket.close(code ?? Socket.UserExitCode, reason);
 
 		// Reset wopi's app loaded so that reconnecting again informs outerframe about initialization
@@ -730,9 +731,9 @@ class Socket {
 			!app.sectionContainer.testing
 		)
 			this._map.uiManager.showSnackbar(
-				window.mode.isCODesktop()
-					? _('The connection to the document has been lost.')
-					: _('The server has been disconnected.'),
+				window.mode.isCODesktop() ?
+					_('The connection to the document has been lost.')
+				:	_('The server has been disconnected.'),
 			);
 	}
 
@@ -818,9 +819,9 @@ class Socket {
 			parseInt(this._map.options.docParams.access_token_ttl as string) -
 			Date.now();
 		const expirymsg =
-			remainingMs <= 0
-				? window.errorMessages.sessionexpired
-				: window.errorMessages.sessionexpiry;
+			remainingMs <= 0 ?
+				window.errorMessages.sessionexpired
+			:	window.errorMessages.sessionexpiry;
 		const timerepr = Util.humanizeDuration(remainingMs, 1);
 		this._map.fire('warn', { msg: expirymsg.replace('{time}', timerepr) });
 
@@ -1735,9 +1736,9 @@ class Socket {
 					imgBytes.subarray(start, innerHeaderEnd),
 				);
 				innerImgIndex =
-					innerHeaderEnd < imgBytes.length
-						? innerHeaderEnd + 1
-						: imgBytes.length;
+					innerHeaderEnd < imgBytes.length ?
+						innerHeaderEnd + 1
+					:	imgBytes.length;
 			} else {
 				innerText = this._utf8ToString(imgBytes.subarray(start));
 				innerImgIndex = imgBytes.length;
@@ -2212,9 +2213,9 @@ class Socket {
 				if (this.IndirectSocketReconnectCount++ >= 3) {
 					let msg = window.errorMessages.clusterconfiguration.replace(
 						'{productname}',
-						typeof brandProductName !== 'undefined'
-							? brandProductName
-							: 'Collabora Online Development Edition (unbranded)',
+						typeof brandProductName !== 'undefined' ? brandProductName : (
+							'Collabora Online Development Edition (unbranded)'
+						),
 					);
 					msg = msg.replace('{0}', window.expectedServerId);
 					msg = msg.replace('{1}', window.routeToken);
@@ -2251,9 +2252,10 @@ class Socket {
 		// TODO: For now we expect perfect match in protocol versions
 		if (this.WSDServer.Protocol !== this.ProtocolVersionNumber) {
 			this._map.fire('error', {
-				msg: window.mode.isCODesktop()
-					? _('Unsupported version.')
-					: _('Unsupported server version.'),
+				msg:
+					window.mode.isCODesktop() ?
+						_('Unsupported version.')
+					:	_('Unsupported server version.'),
 			});
 		}
 
@@ -2772,9 +2774,9 @@ class Socket {
 			this._map.hideBusy();
 			this._map.fire('warn', {
 				msg:
-					command.errorKind === 'invalid'
-						? _('Please enter a valid document name.')
-						: errorMessages.storage.renamefailed,
+					command.errorKind === 'invalid' ?
+						_('Please enter a valid document name.')
+					:	errorMessages.storage.renamefailed,
 			});
 
 			return true; // caller should exit immediately.
@@ -2902,9 +2904,9 @@ class Socket {
 						}
 						// .5, 2, 4.5, 8, 12.5, 18, 24.5, 32, 40.5 seconds
 					},
-					waitsForConflict
-						? 3000
-						: 500 * this.ReconnectCount * this.ReconnectCount,
+					waitsForConflict ? 3000 : (
+						500 * this.ReconnectCount * this.ReconnectCount
+					),
 				); // Quadratic back-off.
 
 				if (waitsForConflict) {
@@ -2943,9 +2945,9 @@ class Socket {
 				this._map._askForPasswordToModify(true);
 			} else {
 				const msg =
-					command.errorKind === 'notallowed'
-						? _('You do not have permission to edit this document.')
-						: _('The document could not be made editable.');
+					command.errorKind === 'notallowed' ?
+						_('You do not have permission to edit this document.')
+					:	_('The document could not be made editable.');
 				this._map.uiManager.showInfoModal('cool_alert', '', msg, '', _('OK'));
 			}
 			return true; // caller should exit immediately.
@@ -3061,9 +3063,9 @@ class Socket {
 			}
 			textMsg = textMsg.replace(
 				'{productname}',
-				typeof brandProductName !== 'undefined'
-					? brandProductName
-					: 'Collabora Online Development Edition (unbranded)',
+				typeof brandProductName !== 'undefined' ? brandProductName : (
+					'Collabora Online Development Edition (unbranded)'
+				),
 			);
 			this._map.fire('infobar', {
 				msg: textMsg,
