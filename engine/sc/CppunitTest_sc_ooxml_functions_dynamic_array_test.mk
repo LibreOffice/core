@@ -9,6 +9,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call sc_functions_test_common,sc_ooxml_functions_percentof_test,PercentOfFunctionTest))
+$(eval $(call sc_ooxml_functions_test,dynamic_array))
 
 # vim: set noet sw=4 ts=4:
