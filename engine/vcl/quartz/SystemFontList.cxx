@@ -20,7 +20,12 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <tools/long.hxx>
+
+#include <unordered_set>
+#include <vector>
 
 
 #include <quartz/SystemFontList.hxx>
@@ -340,8 +345,106 @@ bool SystemFontList::Init()
     const CFRange aFullRange = CFRangeMake( 0, nFontCount );
     CFArrayApplyFunction( mpCTFontArray, aFullRange, fontEnumCallBack, this );
 
+#ifdef IOS
+    AddBundledFonts();
+#endif
+
     return true;
 }
+
+#ifdef IOS
+namespace
+{
+// The faces of the files under share/fonts/truetype, made once per process. iOS refuses to
+// register a bundled file when a hidden system font has the same name. A descriptor created
+// from the file needs no registration.
+std::vector<rtl::Reference<CoreTextFontFace>> MakeBundledFontFaces()
+{
+    std::vector<rtl::Reference<CoreTextFontFace>> aFaces;
+
+    OUString aFontDirUrl( u"$BRAND_BASE_DIR/share/fonts/truetype"_ustr );
+    rtl::Bootstrap::expandMacros( aFontDirUrl );
+
+    osl::Directory aFontDir( aFontDirUrl );
+    if( aFontDir.open() != osl::FileBase::E_None )
+        return aFaces;
+
+    osl::DirectoryItem aItem;
+    while( aFontDir.getNextItem( aItem ) == osl::FileBase::E_None )
+    {
+        osl::FileStatus aStatus( osl_FileStatus_Mask_FileURL );
+        if( aItem.getFileStatus( aStatus ) != osl::FileBase::E_None )
+            continue;
+
+        const OUString aFileUrl = aStatus.getFileURL();
+        if( !aFileUrl.endsWithIgnoreAsciiCase( ".ttf" )
+            && !aFileUrl.endsWithIgnoreAsciiCase( ".otf" )
+            && !aFileUrl.endsWithIgnoreAsciiCase( ".ttc" ) )
+            continue;
+
+        OUString aSystemPath;
+        if( osl::FileBase::getSystemPathFromFileURL( aFileUrl, aSystemPath )
+            != osl::FileBase::E_None )
+            continue;
+
+        CFStringRef pPath = CreateCFString( aSystemPath );
+        CFURLRef pUrl = CFURLCreateWithFileSystemPath( nullptr, pPath, kCFURLPOSIXPathStyle,
+                                                       false );
+        CFRelease( pPath );
+        if( !pUrl )
+            continue;
+
+        CFArrayRef pDescriptors = CTFontManagerCreateFontDescriptorsFromURL( pUrl );
+        CFRelease( pUrl );
+        if( !pDescriptors )
+        {
+            SAL_INFO( "vcl.fonts", "No font descriptor from bundled file: " << aFileUrl );
+            continue;
+        }
+
+        const CFIndex nCount = CFArrayGetCount( pDescriptors );
+        for( CFIndex i = 0; i < nCount; ++i )
+        {
+            CTFontDescriptorRef pFD
+                = static_cast<CTFontDescriptorRef>(CFArrayGetValueAtIndex( pDescriptors, i ));
+            // The descriptor of the file has no weight or slant traits. A realized font has them.
+            CTFontRef pFont = CTFontCreateWithFontDescriptor( pFD, 0.0, nullptr );
+            if( !pFont )
+                continue;
+            CTFontDescriptorRef pRealized = CTFontCopyFontDescriptor( pFont );
+            CFRelease( pFont );
+            if( !pRealized )
+                continue;
+            FontAttributes aDFA = DevFontFromCTFontDescriptor( pRealized, nullptr );
+            aFaces.emplace_back( new CoreTextFontFace( aDFA, pRealized ) );
+            CFRelease( pRealized );
+        }
+        CFRelease( pDescriptors );
+    }
+    return aFaces;
+}
+
+const std::vector<rtl::Reference<CoreTextFontFace>>& GetBundledFontFaces()
+{
+    static const std::vector<rtl::Reference<CoreTextFontFace>> aFaces = MakeBundledFontFaces();
+    return aFaces;
+}
+}
+
+void SystemFontList::AddBundledFonts()
+{
+    // Skip the faces that the system enumeration already provides.
+    std::unordered_set<OUString> aSeen;
+    for( const auto& rEntry : maFontContainer )
+        aSeen.insert( rEntry.second->GetFamilyName() + "|" + rEntry.second->GetStyleName() );
+
+    for( const auto& rFace : GetBundledFontFaces() )
+    {
+        if( aSeen.insert( rFace->GetFamilyName() + "|" + rFace->GetStyleName() ).second )
+            AddFont( rFace.get() );
+    }
+}
+#endif
 
 std::unique_ptr<SystemFontList> GetCoretextFontList()
 {

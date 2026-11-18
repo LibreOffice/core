@@ -51,6 +51,9 @@ public:
 
     bool Init();
     void AddFont(CoreTextFontFace*);
+#ifdef IOS
+    void AddBundledFonts();
+#endif
 
     void AnnounceFonts(vcl::font::PhysicalFontCollection&) const;
     CoreTextFontFace* GetFontDataFromId(sal_IntPtr nFontId) const;
