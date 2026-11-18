@@ -436,6 +436,15 @@ window.L.Clipboard = window.L.Class.extend({
 		};
 	},
 
+	// Dropped content is not on the system clipboard, so the apps cannot paste it from there.
+	// Send it to the engine directly.
+	pasteDropped: function(htmlText, plainText) {
+		var text = htmlText ? htmlText : plainText;
+		if (!text)
+			return;
+		this._pasteTypedBlob(htmlText ? 'text/html' : 'text/plain', new TextEncoder().encode(text));
+	},
+
 	// Sends a paste event with the specified mime type and content
 	_pasteTypedBlob: function(fileType, fileBlob) {
 		var header = 'paste mimetype=' + fileType + '\n';

@@ -1531,6 +1531,18 @@ class MouseControl extends CanvasSectionObject {
 			// Always capture the html content separate as we may lose it when we
 			// pass the clipboard data to a different context (async calls, f.e.).
 			const htmlText = e.dataTransfer.getData('text/html');
+			// The apps paste dropped text directly. Files and pictures still go the usual way.
+			if (
+				window.mode.hasEngineClipboardProvider() &&
+				e.dataTransfer.files.length === 0 &&
+				!app.map._clip.isHtmlImage(htmlText)
+			) {
+				app.map._clip.pasteDropped(
+					htmlText,
+					e.dataTransfer.getData('text/plain'),
+				);
+				return;
+			}
 			app.map._clip.dataTransferToDocument(
 				e.dataTransfer,
 				/* preferInternal = */ false,
