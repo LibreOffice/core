@@ -14,6 +14,7 @@
 #include <qt/RemoteOpen.hpp>
 #include <common/CODAConfig.hpp>
 #include <common/EditorFrameMessages.hpp>
+#include <common/EditorFrameScripts.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
 #include <common/Uri.hpp>
@@ -28,18 +29,23 @@
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QFile>
+#include <QHBoxLayout>
 #include <QIODevice>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QLabel>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QPointer>
 #include <QSize>
+#include <QStyle>
 #include <QTimer>
+#include <QToolButton>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QUuid>
+#include <QVBoxLayout>
 #include <QWebEngineFrame>
 #include <QWebEngineNewWindowRequest>
 #include <QWebEnginePage>
@@ -60,18 +66,10 @@ namespace
 /// In pixels.
 const QSize ACCOUNT_WINDOW_SIZE(1280, 860);
 
-/// In the editor's iframe, replaces coolwsd's page with an empty document before it is parsed.
-const char* EMPTY_COOL_PAGE_SCRIPT = R"JS(
-if (window !== window.top && location.pathname.endsWith('/cool.html')) {
-    document.open();
-    document.close();
-}
-)JS";
-
 /// Builds CODA's editor page in the emptied editor iframe. It asks coolwsd for its settings by
 /// posting the integrator's form again, then loads CODA's page, scripts and styles from coollocal:.
 const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
-(config) => {
+(config, clientDocumentLoadingRefusal, postServerEditorForm) => {
     if (window.codaRemotePage)
         return;
 
@@ -95,7 +93,18 @@ const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
 
     const appPage = fetch(config.base + 'cool-qt.html').then(text);
 
-    Promise.all([serverPage, appPage]).then(([serverHtml, appHtml]) => {
+    const refusal = clientDocumentLoadingRefusal(config.formUrl);
+
+    Promise.all([serverPage, appPage, refusal]).then(([serverHtml, appHtml, reason]) => {
+        // Without client document loading, native code learns why, and the frame shows the server's
+        // own editor:
+        if (reason !== null) {
+            fetch(config.messageUrl + '&kind=serverEditor&message=' + reason).finally(() => {
+                postServerEditorForm(config.formUrl, config.formBody);
+            });
+            return;
+        }
+
         // coolwsd writes the values for its editor into these two elements.
         const server = new DOMParser().parseFromString(serverHtml, 'text/html');
         const variables = server.getElementById('initial-variables');
@@ -117,7 +126,8 @@ const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
         scripts.forEach((script) => script.remove());
         const sources = scripts.map((script) => script.getAttribute('src')).filter(isRelative);
 
-        // Replace the frame's empty <html>, left by EMPTY_COOL_PAGE_SCRIPT, with CODA's <html>.
+        // Replace the frame's empty <html>, left by EditorFrameScripts::emptyCoolPageScript, with
+        // CODA's <html>.
         document.documentElement.replaceWith(document.adoptNode(app.documentElement));
 
         // The load event fired when the page was emptied, and CODA's start waits for it.
@@ -212,6 +222,7 @@ public:
     ~CloudAccountPage() override;
 
     const QUrl& integratorOrigin() const { return _integratorOrigin; }
+    bool opensInServerEditor(QUrl const & origin);
     void keepForm(const QUrl& url, const QByteArray& form);
     std::optional<QByteArray> receiveMessage(const QUrl& origin, const QString& kind,
                                              const QByteArray& message);
@@ -226,6 +237,8 @@ private:
     void insertEmptyCoolPageScript();
     void findEditorFrame();
     void putCodaPageIn(QWebEngineFrame& frame);
+    void useServerEditor(QString const & reason);
+    void showServerEditorNotice(QUrl const & origin, QString const & reason);
     std::optional<QByteArray> callBridge(const QString& method, const QString& argumentsJson);
     void releaseParkedClose();
 
@@ -241,20 +254,27 @@ private:
     coda::DocumentData _document; ///< The document the editor frame shows.
     std::unique_ptr<Bridge> _bridge; ///< Takes the frame's messages. It refers to _document.
     bool _closeWaitsForSave = false; ///< A close of the window waits for the save under way.
+    // The origins whose documents open in the server's own editor, with the reason of each:
+    std::map<QString, QString> _serverEditorReasons;
 };
 
 /// A cloud account window, which closes only after the editor frame's page saved its document:
 class CloudAccountWindow: public QMainWindow {
 public:
-    explicit CloudAccountWindow(QWidget * parent): QMainWindow(parent) {}
+    explicit CloudAccountWindow(QWidget * parent);
 
     void setPage(CloudAccountPage * page) { _page = page; }
+    void setView(QWebEngineView * view);
+    void showNotice(QString const & text);
+    void hideNotice() { _notice->hide(); }
 
 protected:
     void closeEvent(QCloseEvent * event) override;
 
 private:
     QPointer<CloudAccountPage> _page;
+    QWidget * _notice;
+    QLabel * _noticeText;
 };
 
 /// The pages with an editor frame, by the session of the frame.
@@ -325,6 +345,9 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
     const bool hasFrameId = info.requestUrl().fragment().startsWith(FRAME_ID_PREFIX);
     if (hasFrameId)
         return;
+    if (info.requestUrl().fragment().toStdString() == EditorFrameScripts::serverEditorFragment) {
+        return;
+    }
 
     const bool isInIntegratorWindow = originOf(info.firstPartyUrl()) == _page.integratorOrigin();
     const bool isPostedByIntegrator = originOf(info.initiator()) == _page.integratorOrigin();
@@ -332,6 +355,17 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
     {
         LOG_WRN("account window: refused: a form for an editor frame came from another page "
                 "than the integrator's");
+        return;
+    }
+
+    // A server without client document loading gets the form into its own editor:
+    if (_page.opensInServerEditor(originOf(info.requestUrl()))) {
+        LOG_INF(
+            "account window: the server allows no client document loading, so the form goes to the "
+            "server's own editor");
+        QUrl frameUrl = info.requestUrl();
+        frameUrl.setFragment(QString::fromStdString(EditorFrameScripts::serverEditorFragment));
+        info.redirect(frameUrl);
         return;
     }
 
@@ -422,6 +456,39 @@ bool CloudAccountPage::readyToClose() {
     return false;
 }
 
+CloudAccountWindow::CloudAccountWindow(QWidget * parent):
+    QMainWindow(parent), _notice(new QWidget), _noticeText(new QLabel) {}
+
+void CloudAccountWindow::setView(QWebEngineView * view) {
+    _noticeText->setTextFormat(Qt::PlainText);
+    _noticeText->setWordWrap(true);
+    _noticeText->setForegroundRole(QPalette::ToolTipText);
+    auto * close = new QToolButton;
+    close->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
+    close->setAutoRaise(true);
+    close->setToolTip(QObject::tr("Close"));
+    connect(close, &QToolButton::clicked, _notice, &QWidget::hide);
+    auto * noticeLayout = new QHBoxLayout(_notice);
+    noticeLayout->addWidget(_noticeText, 1);
+    noticeLayout->addWidget(close, 0, Qt::AlignTop);
+    _notice->setAutoFillBackground(true);
+    _notice->setBackgroundRole(QPalette::ToolTipBase);
+    _notice->hide();
+
+    auto * central = new QWidget(this);
+    auto * layout = new QVBoxLayout(central);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(_notice);
+    layout->addWidget(view, 1);
+    setCentralWidget(central);
+}
+
+void CloudAccountWindow::showNotice(QString const & text) {
+    _noticeText->setText(text);
+    _notice->show();
+}
+
 void CloudAccountWindow::closeEvent(QCloseEvent * event) {
     if (_page && !_page->readyToClose()) {
         event->ignore();
@@ -485,7 +552,7 @@ void CloudAccountPage::refuseRedirect(const QUrl& target)
 void CloudAccountPage::insertEmptyCoolPageScript()
 {
     QWebEngineScript emptyCoolPage;
-    emptyCoolPage.setSourceCode(QString::fromUtf8(EMPTY_COOL_PAGE_SCRIPT));
+    emptyCoolPage.setSourceCode(QString::fromStdString(EditorFrameScripts::emptyCoolPageScript));
     emptyCoolPage.setInjectionPoint(QWebEngineScript::DocumentCreation);
     emptyCoolPage.setWorldId(QWebEngineScript::ApplicationWorld);
     emptyCoolPage.setRunsOnSubFrames(true);
@@ -500,6 +567,16 @@ void CloudAccountPage::openNewWindow(QWebEngineNewWindowRequest& request)
 {
     LOG_INF("account window: opening in the system browser");
     openInSystemBrowser(request.requestedUrl());
+}
+
+// Whether a document from the origin opens in the server's own editor (whose notice then shows):
+bool CloudAccountPage::opensInServerEditor(QUrl const & origin) {
+    auto const reason = _serverEditorReasons.find(origin.toString());
+    if (reason == _serverEditorReasons.end()) {
+        return false;
+    }
+    showServerEditorNotice(origin, reason->second);
+    return true;
 }
 
 void CloudAccountPage::keepForm(const QUrl& url, const QByteArray& form)
@@ -575,6 +652,10 @@ std::optional<QByteArray> CloudAccountPage::receiveMessage(const QUrl& origin, c
         _bridge->debug(whole);
         return QByteArray();
     }
+    else if (kind == QStringLiteral("serverEditor")) {
+        useServerEditor(whole);
+        return QByteArray();
+    }
     else
         return callBridge(kind, whole);
 }
@@ -618,6 +699,10 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
     _session = QUuid::createUuid().toString(QUuid::Id128);
     _frameOrigin = originOf(frame.url());
     PagesBySession[_session] = this;
+    auto * window = dynamic_cast<CloudAccountWindow *>(QWebEngineView::forPage(this)->window());
+    if (window) {
+        window->hideNotice();
+    }
 
     // The page keeps the access token, because it opens /co/collab itself.
     auto remoteInfo = std::make_shared<coda::RemoteDocInfo>();
@@ -654,10 +739,52 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
 
     const QByteArray configJson = QJsonDocument(config).toJson(QJsonDocument::Compact);
     const QString putPageIn = QString::fromUtf8(PUT_CODA_PAGE_IN_SCRIPT);
-    const QString script = '(' + putPageIn + ")(" + QString::fromUtf8(configJson) + ')';
+    const QString script = '(' + putPageIn + ")(" + QString::fromUtf8(configJson) + ", "
+        + QString::fromStdString(EditorFrameScripts::clientDocumentLoadingRefusalScript) + ", "
+        + QString::fromStdString(EditorFrameScripts::serverEditorFormScript) + ')';
 
     frame.runJavaScript(script, QWebEngineScript::MainWorld);
     LOG_DBG("account window: putting CODA's editor page into the editor frame");
+}
+
+void CloudAccountPage::useServerEditor(QString const & reason) {
+    if (reason.toStdString() != EditorFrameScripts::disabledReason
+        && reason.toStdString() != EditorFrameScripts::unsupportedReason)
+    {
+        LOG_WRN("account window: refused: an unknown reason for the server's own editor");
+        return;
+    }
+    LOG_INF(
+        "account window: the server allows no client document loading (" << reason.toStdString()
+        << "), so the frame shows the server's own editor");
+    _serverEditorReasons[_frameOrigin.toString()] = reason;
+    showServerEditorNotice(_frameOrigin, reason);
+    PagesBySession.erase(_session);
+    _session.clear();
+    releaseParkedClose();
+    _bridge.reset();
+}
+
+void CloudAccountPage::showServerEditorNotice(QUrl const & origin, QString const & reason) {
+    auto * window = dynamic_cast<CloudAccountWindow *>(QWebEngineView::forPage(this)->window());
+    if (!window) {
+        return;
+    }
+    auto const server = origin.host();
+    auto const app = QStringLiteral(APP_NAME);
+    if (reason.toStdString() == EditorFrameScripts::disabledReason) {
+        window->showNotice(
+            QObject::tr("%1 does not allow editing in %2, so the document is open in the server's "
+                        "own editor. To edit documents from %1 in %2, ask the server's "
+                        "administrator to allow that (client_document_loading.enable in "
+                        "coolwsd.xml).")
+                .arg(server, app));
+    } else {
+        window->showNotice(
+            QObject::tr("%1 runs a version of Collabora Online that does not support editing in "
+                        "%2, so the document is open in the server's own editor.")
+                .arg(server, app));
+    }
 }
 }
 
@@ -693,7 +820,7 @@ void openRemoteFile(const QString& serverUrl, QWidget* /*parent*/,
     auto * page = new CloudAccountPage(QUrl(serverUrl), pickerProfile, view);
     view->setPage(page);
     window->setPage(page);
-    window->setCentralWidget(view);
+    window->setView(view);
     QObject::connect(view, &QWebEngineView::titleChanged, window, &QWidget::setWindowTitle);
 
     view->load(QUrl(serverUrl));
