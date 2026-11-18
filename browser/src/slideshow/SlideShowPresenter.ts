@@ -520,6 +520,7 @@ class SlideShowPresenter {
 		if (!this._slideShowCanvas) return;
 
 		this._stopWatchingFullscreenSize();
+		this._slideShowNavigator.endBlankScreen();
 
 		this.stopLoader();
 		if (this._slideCompositor) this._slideCompositor.deleteResources();

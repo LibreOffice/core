@@ -27,6 +27,9 @@ class SlideShowNavigator {
 	private isSlideLoading: boolean = false;
 	private isEffectPending: boolean = false;
 	private soundPlayer: HTMLAudioElement = null;
+	// Covers the slide while the screen is blanked with B or W.
+	private blankScreenOverlay: HTMLDivElement = null;
+	private pausedForBlankScreen: boolean = false;
 
 	constructor(slideShowHandler: SlideShowHandler) {
 		this.slideShowHandler = slideShowHandler;
@@ -56,6 +59,8 @@ class SlideShowNavigator {
 			Pause: this.slideShowHandler.toggleAutomaticAdvancePause.bind(
 				this.slideShowHandler,
 			),
+			KeyB: this.blankScreen.bind(this, 'black'),
+			KeyW: this.blankScreen.bind(this, 'white'),
 		};
 		this.swipeHandlerMap = {
 			[Hammer.DIRECTION_RIGHT]: this.rewindEffect.bind(this),
@@ -240,6 +245,7 @@ class SlideShowNavigator {
 			'SlideShowNavigator.quit: current index: ' + this.currentSlide,
 		);
 
+		this.endBlankScreen();
 		this.slideShowHandler.exitSlideShow();
 		this.endPresentation(true);
 		this.currentSlide = undefined;
@@ -676,13 +682,62 @@ class SlideShowNavigator {
 		}
 	}
 
+	// Hides the slide behind a black or white screen. Automatic advance waits while the screen
+	// is blank.
+	blankScreen(color: string) {
+		const canvas = this.presenter.getCanvas();
+		if (!canvas || !canvas.parentElement || this.blankScreenOverlay) return;
+
+		const overlay = canvas.ownerDocument.createElement('div');
+		overlay.className = 'slideshow-blank-screen';
+		overlay.style.position = 'absolute';
+		overlay.style.inset = '0';
+		overlay.style.backgroundColor = color;
+		// Same as the slide controls, but added later, so it covers them.
+		overlay.style.zIndex = '1000000000000';
+		overlay.addEventListener('click', (e: MouseEvent) => {
+			e.stopPropagation();
+			this.endBlankScreen();
+		});
+		canvas.parentElement.appendChild(overlay);
+		this.blankScreenOverlay = overlay;
+
+		if (!this.slideShowHandler.isAutomaticAdvancePaused()) {
+			this.slideShowHandler.toggleAutomaticAdvancePause();
+			this.pausedForBlankScreen = true;
+		}
+	}
+
+	endBlankScreen() {
+		if (!this.blankScreenOverlay) return;
+
+		this.blankScreenOverlay.remove();
+		this.blankScreenOverlay = null;
+		if (this.pausedForBlankScreen) {
+			this.pausedForBlankScreen = false;
+			if (this.slideShowHandler.isAutomaticAdvancePaused())
+				this.slideShowHandler.toggleAutomaticAdvancePause();
+		}
+	}
+
 	onKeyDown(aEvent: KeyboardEvent) {
+		if (this.blankScreenOverlay) {
+			// Any key just brings the slide back, so e.g. Space does not also advance.
+			if (['Shift', 'Control', 'Alt', 'Meta'].includes(aEvent.key)) return;
+			aEvent.preventDefault();
+			aEvent.stopPropagation();
+			this.endBlankScreen();
+			return;
+		}
 		if (!this.isEnabled && aEvent.code !== 'Escape') return;
 		const handler = this.keyHandlerMap[aEvent.code];
 		if (handler) {
 			aEvent.preventDefault();
 			aEvent.stopPropagation();
-			if (this.presenter.isFollower()) this.presenter.setFollowing(false);
+			// Blanking the screen is local, so a follower keeps following.
+			const blanks = aEvent.code === 'KeyB' || aEvent.code === 'KeyW';
+			if (this.presenter.isFollower() && !blanks)
+				this.presenter.setFollowing(false);
 			handler();
 		}
 	}

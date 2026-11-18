@@ -26,4 +26,33 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Some app', function() {
 		impressHelper.waitForSlideShowIdle(this.win);
 		getSlideShowContent().compareSnapshot('slideshow', 0.15);
 	});
+
+	it('B and W blank the screen until the next key or click', function () {
+		getSlideShowContent().should('be.visible');
+		impressHelper.waitForSlideShowIdle(this.win);
+		cy.wrap(this.win).its('app.map.slideShowPresenter._slideShowNavigator.currentSlideIndex')
+			.should('equal', 0);
+
+		// B covers the slide with a black screen.
+		impressHelper.sendSlideShowKey(this.win, 'KeyB');
+		impressHelper.getSlideShowContent().find('.slideshow-blank-screen')
+			.should('have.css', 'background-color', 'rgb(0, 0, 0)');
+
+		// Space only brings the slide back, it does not also advance.
+		impressHelper.sendSlideShowKey(this.win, 'Space');
+		impressHelper.getSlideShowContent().find('.slideshow-blank-screen').should('not.exist');
+		impressHelper.waitForSlideShowIdle(this.win);
+		cy.wrap(this.win).its('app.map.slideShowPresenter._slideShowNavigator.currentSlideIndex')
+			.should('equal', 0);
+
+		// W covers the slide with a white screen, a click brings the slide back.
+		impressHelper.sendSlideShowKey(this.win, 'KeyW');
+		impressHelper.getSlideShowContent().find('.slideshow-blank-screen')
+			.should('have.css', 'background-color', 'rgb(255, 255, 255)')
+			.click();
+		impressHelper.getSlideShowContent().find('.slideshow-blank-screen').should('not.exist');
+		impressHelper.waitForSlideShowIdle(this.win);
+		cy.wrap(this.win).its('app.map.slideShowPresenter._slideShowNavigator.currentSlideIndex')
+			.should('equal', 0);
+	});
 });

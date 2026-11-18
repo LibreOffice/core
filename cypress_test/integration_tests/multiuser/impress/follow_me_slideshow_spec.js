@@ -188,24 +188,6 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShowCanvas().compareSnapshot('slide2_effect2', 0.05);
     });
 
-    // Dispatch a keydown event on the exact document node where the
-    // SlideShowNavigator keydown handler is registered. We go through
-    // the presenter's _slideShowWindowProxy to get the same object
-    // reference that addEventListener was called on.
-    function sendSlideshowKey(win, keyCode) {
-        cy.then(function() {
-            var presenter = win.app.map.slideShowPresenter;
-            var proxyWin = presenter._slideShowWindowProxy.contentWindow;
-            var doc = proxyWin.document;
-            doc.dispatchEvent(new proxyWin.KeyboardEvent('keydown', {
-                code: keyCode,
-                key: keyCode,
-                bubbles: true,
-                cancelable: true,
-            }));
-        });
-    }
-
     it('Follower cannot advance when at leader position', function () {
         // Leader (iframe2) starts followme and advances 1 effect
         cy.cSetActiveFrame('#iframe2');
@@ -224,7 +206,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShowCanvas().compareSnapshot('effect1', 0.05);
 
         // Follower presses ArrowRight - blocked by canUserAdvanceEffect
-        sendSlideshowKey(win1, 'ArrowRight');
+        impressHelper.sendSlideShowKey(win1, 'ArrowRight');
         impressHelper.waitForSlideShowIdle(win1);
         // Still at effect1, not advanced to slide 2
         getSlideShowCanvas().compareSnapshot('effect1', 0.05);
@@ -256,11 +238,11 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         impressHelper.waitForSlideShowIdle(win1);
 
         // Follower presses PageDown a few times - should skip only to leader's 2 effects, not all 3
-        sendSlideshowKey(win1, 'PageDown');
+        impressHelper.sendSlideShowKey(win1, 'PageDown');
         impressHelper.waitForSlideShowIdle(win1);
-        sendSlideshowKey(win1, 'PageDown');
+        impressHelper.sendSlideShowKey(win1, 'PageDown');
         impressHelper.waitForSlideShowIdle(win1);
-        sendSlideshowKey(win1, 'PageDown');
+        impressHelper.sendSlideShowKey(win1, 'PageDown');
         impressHelper.waitForSlideShowIdle(win1);
         // Should be at slide2_effect2 (leader position), not slide2_effect3
         getSlideShowCanvas().compareSnapshot('slide2_effect2', 0.07);

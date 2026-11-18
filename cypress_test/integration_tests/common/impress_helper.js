@@ -304,6 +304,24 @@ function waitForSlideShowIdle(win) {
 	helper.waitForTimers(win, 'slideshowupdate');
 }
 
+// Dispatch a keydown event on the exact document node where the
+// SlideShowNavigator keydown handler is registered. We go through
+// the presenter's _slideShowWindowProxy to get the same object
+// reference that addEventListener was called on.
+function sendSlideShowKey(win, keyCode) {
+	cy.then(function() {
+		var presenter = win.app.map.slideShowPresenter;
+		var proxyWin = presenter._slideShowWindowProxy.contentWindow;
+		var doc = proxyWin.document;
+		doc.dispatchEvent(new proxyWin.KeyboardEvent('keydown', {
+			code: keyCode,
+			key: keyCode,
+			bubbles: true,
+			cancelable: true,
+		}));
+	});
+}
+
 // Click a slideshow-nav-container button. The nav container auto-hides after
 // 3s of inactivity via _showSlideControls' setTimeout. Under heavy CI load the
 // gap between cypress steps can be more than that and cypress's own retry
@@ -348,5 +366,6 @@ module.exports.getSlideShow = getSlideShow;
 module.exports.getSlideShowContent = getSlideShowContent;
 module.exports.getSlideShowCanvas = getSlideShowCanvas;
 module.exports.waitForSlideShowIdle = waitForSlideShowIdle;
+module.exports.sendSlideShowKey = sendSlideShowKey;
 module.exports.clickSlideShowNav = clickSlideShowNav;
 module.exports.startPresentToAll = startPresentToAll;

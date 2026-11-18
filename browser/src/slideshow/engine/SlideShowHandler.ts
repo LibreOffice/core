@@ -477,6 +477,10 @@ class SlideShowHandler {
 		);
 	}
 
+	isAutomaticAdvancePaused(): boolean {
+		return this.bIsAutomaticAdvancePaused;
+	}
+
 	/** toggleAutomaticAdvancePause
 	 *  Hold or release the countdown that moves the show on to the next slide
 	 *  by itself. Releasing waits out only the time that was left.
