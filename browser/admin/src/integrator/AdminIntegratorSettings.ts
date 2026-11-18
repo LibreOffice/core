@@ -657,10 +657,17 @@ try {
 	isMacOSApp = false;
 }
 
+let isWindowsApp = false;
+try {
+	isWindowsApp = !!(window as any).parent.ThisIsTheWindowsApp;
+} catch (e) {
+	isWindowsApp = false;
+}
+
 // The Accessibility section holds settings that each desktop app applies
 // natively. It is offered only where the native side handles the GETUIZOOM
 // and SETUIZOOM messages.
-const accessibilitySettingsSupported = isQtApp || isMacOSApp;
+const accessibilitySettingsSupported = isQtApp || isMacOSApp || isWindowsApp;
 
 // Keep in sync with the pre-canned provider map in wsd/FileServer.cpp
 // fetchModels. The server ignores the baseUrl from the client for non-custom
