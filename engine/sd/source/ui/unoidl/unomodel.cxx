@@ -3884,47 +3884,24 @@ private:
             || !pPage->hasAnimationNode())
             return aPaths;
 
-        // the engine keeps a path in shares of the page size, measured from the middle of
-        // what moves, so only the size has to come in here
-        const Size aPageSize(pPage->GetSize());
+        // the path is measured from the middle of what moves, which the client knows
         const basegfx::B2DHomMatrix aInTwips(basegfx::utils::createScaleB2DHomMatrix(
-            o3tl::convert(double(aPageSize.Width()), o3tl::Length::mm100, o3tl::Length::twip),
-            o3tl::convert(double(aPageSize.Height()), o3tl::Length::mm100, o3tl::Length::twip)));
+            o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip),
+            o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip)));
         const Reference<drawing::XShape> xShape(rObject.getUnoShape(), UNO_QUERY);
-
-        auto aAddFrom = [&](sd::EffectSequenceHelper& rSequence) {
-            for (auto aIter = rSequence.getBegin(); aIter != rSequence.getEnd(); ++aIter)
-            {
-                const sd::CustomAnimationEffectPtr& pEffect = *aIter;
-                if (pEffect->getPresetClass() != EffectPresetClass::MOTIONPATH)
-                    continue;
-
-                svx::vector::ObjectContent::MotionPath aPath;
-                presentation::ParagraphTarget aParagraph;
-                Reference<drawing::XShape> xTarget;
-                if (pEffect->getTarget() >>= aParagraph)
-                {
-                    xTarget = aParagraph.Shape;
-                    aPath.mnParagraph = aParagraph.Paragraph;
-                }
-                else
-                    pEffect->getTarget() >>= xTarget;
-                if (!xTarget.is() || xTarget != xShape)
-                    continue;
-
-                if (!basegfx::utils::importFromSvgD(aPath.maPath, pEffect->getPath(), true,
-                                                    nullptr))
-                    continue;
-                aPath.maPath.transform(aInTwips);
-                aPaths.push_back(std::move(aPath));
-            }
-        };
-
-        const std::shared_ptr<sd::MainSequence>& pMainSequence = pPage->getMainSequence();
-        aAddFrom(*pMainSequence);
-        for (const sd::InteractiveSequencePtr& pInteractive :
-             pMainSequence->getInteractiveSequenceVector())
-            aAddFrom(*pInteractive);
+        for (const sd::CustomAnimationEffectPtr& pEffect :
+             pPage->getMainSequence()->getMotionPathsOf(xShape))
+        {
+            svx::vector::ObjectContent::MotionPath aPath;
+            aPath.maPath = pEffect->getMotionPath();
+            if (!aPath.maPath.count())
+                continue;
+            aPath.maPath.transform(aInTwips);
+            presentation::ParagraphTarget aParagraph;
+            if (pEffect->getTarget() >>= aParagraph)
+                aPath.mnParagraph = aParagraph.Paragraph;
+            aPaths.push_back(std::move(aPath));
+        }
         return aPaths;
     }
 

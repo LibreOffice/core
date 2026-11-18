@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/timer.hxx>
 #include <tools/long.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "sddllapi.h"
 #include <list>
 #include <vector>
@@ -144,6 +145,13 @@ public:
 
     OUString getPath() const;
     void setPath( const OUString& rPath );
+
+    /// The path of a motion path effect in the model's unit, measured from the middle of what it
+    /// moves; empty where the effect has no path or its target is on no page.
+    basegfx::B2DPolyPolygon getMotionPath() const;
+    /// Sets the path of a motion path effect from that path in the model's unit, measured from
+    /// the middle of what it moves.
+    void setMotionPath( const basegfx::B2DPolyPolygon& rPath );
 
     bool checkForText( const std::vector<sal_Int32>* paragraphNumberingLevel = nullptr );
     bool calculateIterateDuration();
@@ -400,6 +408,11 @@ public:
     virtual void onTextChanged( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     const InteractiveSequenceVector& getInteractiveSequenceVector() const { return maInteractiveSequenceVector; }
+
+    /// The motion path effects of that shape and of its paragraphs, in the order they play: those
+    /// of the main sequence, then those of the sequences a click on a shape starts.
+    SAL_DLLPRIVATE std::vector<CustomAnimationEffectPtr>
+    getMotionPathsOf( const cpo::uno::Reference< css::drawing::XShape >& xShape );
 
     virtual void notify_change() override;
 

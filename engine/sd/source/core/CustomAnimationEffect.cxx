@@ -1130,6 +1130,37 @@ OUString CustomAnimationEffect::getPath() const
     return aPath;
 }
 
+basegfx::B2DPolyPolygon CustomAnimationEffect::getMotionPath() const
+{
+    basegfx::B2DPolyPolygon aPath;
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(getTargetShape());
+    SdrPage* pPage = pObj ? pObj->getSdrPageFromSdrObject() : nullptr;
+    if (!pPage || !basegfx::utils::importFromSvgD(aPath, getPath(), true, nullptr))
+        return basegfx::B2DPolyPolygon();
+
+    // the path is kept in shares of the page size
+    const Size aPageSize(pPage->GetSize());
+    aPath.transform(basegfx::utils::createScaleB2DHomMatrix(double(aPageSize.Width()),
+                                                            double(aPageSize.Height())));
+    return aPath;
+}
+
+void CustomAnimationEffect::setMotionPath(const basegfx::B2DPolyPolygon& rPath)
+{
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(getTargetShape());
+    SdrPage* pPage = pObj ? pObj->getSdrPageFromSdrObject() : nullptr;
+    if (!pPage)
+        return;
+    const Size aPageSize(pPage->GetSize());
+    if (!aPageSize.Width() || !aPageSize.Height())
+        return;
+
+    basegfx::B2DPolyPolygon aPath(rPath);
+    aPath.transform(basegfx::utils::createScaleB2DHomMatrix(1.0 / aPageSize.Width(),
+                                                            1.0 / aPageSize.Height()));
+    setPath(basegfx::utils::exportToSvgD(aPath, true, true, true));
+}
+
 void CustomAnimationEffect::setPath( const OUString& rPath )
 {
     if( !mxNode.is() )
@@ -1155,6 +1186,12 @@ void CustomAnimationEffect::setPath( const OUString& rPath )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setPath()" );
     }
+
+    // the guard keeps the change from the main sequence and its listeners, so the page tells its
+    // model of it itself
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(getTargetShape());
+    if (SdPage* pPage = pObj ? dynamic_cast<SdPage*>(pObj->getSdrPageFromSdrObject()) : nullptr)
+        pPage->notifyAnimationsChanged();
 }
 
 Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue )
@@ -3419,6 +3456,25 @@ void MainSequence::implRebuild()
 
     notify_listeners();
     mbRebuilding = false;
+}
+
+std::vector<CustomAnimationEffectPtr>
+MainSequence::getMotionPathsOf(const Reference<XShape>& xShape)
+{
+    std::vector<CustomAnimationEffectPtr> aEffects;
+    const auto aAddFrom = [&aEffects, &xShape](EffectSequenceHelper& rSequence) {
+        for (auto aIter = rSequence.getBegin(); aIter != rSequence.getEnd(); ++aIter)
+        {
+            if ((*aIter)->getPresetClass() != css::presentation::EffectPresetClass::MOTIONPATH)
+                continue;
+            if ((*aIter)->getTargetShape() == xShape)
+                aEffects.push_back(*aIter);
+        }
+    };
+    aAddFrom(*this);
+    for (const InteractiveSequencePtr& pInteractive : maInteractiveSequenceVector)
+        aAddFrom(*pInteractive);
+    return aEffects;
 }
 
 void MainSequence::notify_change()

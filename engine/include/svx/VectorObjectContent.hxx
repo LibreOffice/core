@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -661,6 +662,20 @@ decomposeForComparison(ObjectContent& rContent,
 
 /// Writes where an entry paints, how the unit rectangle maps onto it, and how it looks, into the
 /// open entry.
+/*
+    Makes the curve run through a point the way it is said to run: a point a curve goes smoothly
+    through has its two weights on one line, and one it goes symmetrically through has them the
+    same length as well. The weight that was moved stays where it was put, and the other one gives
+    way.
+
+    A polygon holds no continuity of its own, only numbers that happen to line up or not, so the
+    one that is wanted is told rather than measured and is set here exactly. A point whose numbers
+    had drifted a little off the line comes out of this lying on it.
+*/
+SVXCORE_DLLPUBLIC void makeTheCurveRunThatWay(basegfx::B2DPolygon& rPolygon, sal_uInt32 nPoint,
+                                              basegfx::B2VectorContinuity eWanted,
+                                              bool bMovedTheOneComingIn);
+
 SVXCORE_DLLPUBLIC void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rContent,
                                           drawinglayer::Primitive2dJsonProcessor& rProcessor);
 

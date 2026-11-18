@@ -2818,6 +2818,10 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_SET_MOTION_PATH
+    [
+        ExecMethod = FuSupport ;
+    ]
     SID_SAVE_BACKGROUND
     [
         ExecMethod = FuTemporary ;

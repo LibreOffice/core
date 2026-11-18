@@ -452,5 +452,6 @@
 #define SID_CONVERT_TO_EDITABLE_SHAPE       (SID_SD_START+472)
 #define SID_INSERT_VIDEO_BACKGROUND         (SID_SD_START+473)
 #define SID_REMOVE_VIDEO_BACKGROUND         (SID_SD_START+474)
+#define SID_SET_MOTION_PATH                 (SID_SD_START+475)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

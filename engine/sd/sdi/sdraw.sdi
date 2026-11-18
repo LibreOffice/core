@@ -3322,6 +3322,22 @@ SfxStringItem RemoveVideoBackground SID_REMOVE_VIDEO_BACKGROUND
     GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem SetMotionPath SID_SET_MOTION_PATH
+(SfxStringItem ObjectId FN_PARAM_1, SfxInt32Item Index FN_PARAM_2, SfxStringItem Path FN_PARAM_3,
+ SfxStringItem Was FN_PARAM_4)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Drawing;
+]
+
 SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
 ()
 [

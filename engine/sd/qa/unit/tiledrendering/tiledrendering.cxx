@@ -9417,6 +9417,64 @@ void forEachMotion(const uno::Reference<animations::XAnimationNode>& xNode,
 }
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetMotionPath)
+{
+    // a motion path the client edited is set where the path it started from is still there, and
+    // one undo step takes it back
+    SdXImpressDocument* pXImpressDocument = createDoc("motion-paths.fodp");
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    const sal_uInt64 nMovedId = svx::vector::idOf(*pSlide->GetObj(0));
+
+    const auto aLine = [](sal_Int64 nEndX, sal_Int64 nEndY) {
+        return OUString::fromUtf8(R"({"path":[{"points":[{"x":0,"y":0},{"x":)"
+                                  + std::to_string(nEndX) + R"(,"y":)" + std::to_string(nEndY)
+                                  + "}]}]}");
+    };
+    const auto aSetPath = [&](sal_Int32 nIndex, const OUString& rPath, const OUString& rWas) {
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+            { u"ObjectId"_ustr, cpo::uno::Any(OUString::number(nMovedId)) },
+            { u"Index"_ustr, cpo::uno::Any(nIndex) },
+            { u"Path"_ustr, cpo::uno::Any(rPath) },
+            { u"Was"_ustr, cpo::uno::Any(rWas) },
+        }));
+        dispatchCommand(mxComponent, u".uno:SetMotionPath"_ustr, aArgs);
+    };
+    // the end of the first path, as the client gets it: whole, or in what changed since that
+    // version, which holds the object only where a change of its paths was noticed
+    const auto aFirstEnd = [&](sal_Int64 nSince = -1) {
+        const auto aPaths
+            = motionPathsIn(vectorReplyOf(pXImpressDocument, pSlide, nSince), nMovedId);
+        CPPUNIT_ASSERT(aPaths);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aPaths->size());
+        const auto& rEnd
+            = aPaths->front().get_child("path").front().second.get_child("points").back().second;
+        return std::pair(rEnd.get<sal_Int64>("x"), rEnd.get<sal_Int64>("y"));
+    };
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1587), aFirstEnd().first);
+    // the view stands on another slide than the object, as it may while the client shows one
+    pXImpressDocument->setPart(1);
+
+    // an edit that started from another path than the one there changes nothing
+    aSetPath(0, aLine(2000, 500), aLine(900, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1587), aFirstEnd().first);
+    // nor does a place past the object's paths
+    aSetPath(2, aLine(2000, 500), aLine(1587, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1587), aFirstEnd().first);
+
+    // started from the path there, the edit is set, and the second path stays; the object goes
+    // out again with it
+    sal_Int64 nVersion = vectorReplyOf(pXImpressDocument, pSlide).get<sal_Int64>("version");
+    aSetPath(0, aLine(2000, 500), aLine(1587, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(2000), aFirstEnd(nVersion).first);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(500), aFirstEnd(nVersion).second);
+
+    // and so it does after an undo
+    nVersion = vectorReplyOf(pXImpressDocument, pSlide).get<sal_Int64>("version");
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1587), aFirstEnd(nVersion).first);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aFirstEnd(nVersion).second);
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testVectorMotionPaths)
 {
     // an object travels with its motion paths, in twips from its middle, and a changed path

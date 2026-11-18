@@ -1631,6 +1631,35 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     rContent.mnParentId = pParent ? idOf(*pParent) : 0;
 }
 
+void makeTheCurveRunThatWay(basegfx::B2DPolygon& rPolygon, sal_uInt32 nPoint,
+                            basegfx::B2VectorContinuity eWanted, bool bMovedTheOneComingIn)
+{
+    if (basegfx::B2VectorContinuity::NONE == eWanted)
+        return;
+
+    const basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(nPoint));
+    const basegfx::B2DPoint aMoved(bMovedTheOneComingIn ? rPolygon.getPrevControlPoint(nPoint)
+                                                        : rPolygon.getNextControlPoint(nPoint));
+    basegfx::B2DVector aAway(aMoved - aPoint);
+
+    if (aAway.equalZero())
+        return;
+
+    const basegfx::B2DPoint aOther(bMovedTheOneComingIn ? rPolygon.getNextControlPoint(nPoint)
+                                                        : rPolygon.getPrevControlPoint(nPoint));
+    const double fLength(basegfx::B2VectorContinuity::C2 == eWanted
+                             ? aAway.getLength()
+                             : basegfx::B2DVector(aOther - aPoint).getLength());
+
+    basegfx::B2DVector aBack(-aAway);
+    aBack.setLength(fLength);
+
+    if (bMovedTheOneComingIn)
+        rPolygon.setNextControlPoint(nPoint, aPoint + aBack);
+    else
+        rPolygon.setPrevControlPoint(nPoint, aPoint + aBack);
+}
+
 void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rContent,
                         drawinglayer::Primitive2dJsonProcessor& rProcessor)
 {

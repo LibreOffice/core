@@ -41,6 +41,7 @@
      </anim:seq>
     </anim:par>
    </draw:page>
+   <draw:page draw:name="page2" draw:master-page-name="Default"/>
   </office:presentation>
  </office:body>
 </office:document>

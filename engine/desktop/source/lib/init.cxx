@@ -5599,46 +5599,6 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
 }
 
 /*
-    Makes the curve run through a point the way it is said to run: a point a curve goes smoothly
-    through has its two weights on one line, and one it goes symmetrically through has them the
-    same length as well. The weight that was moved stays where it was put, and the other one gives
-    way.
-
-    A polygon holds no continuity of its own, only numbers that happen to line up or not, so the
-    one that is wanted is told rather than measured and is set here exactly. A point whose numbers
-    had drifted a little off the line comes out of this lying on it.
-*/
-static void lcl_makeTheCurveRunThatWay(basegfx::B2DPolygon& rPolygon, sal_uInt32 nPoint,
-                                       basegfx::B2VectorContinuity eWanted,
-                                       bool bMovedTheOneComingIn)
-{
-    if (basegfx::B2VectorContinuity::NONE == eWanted)
-        return;
-
-    const basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(nPoint));
-    const basegfx::B2DPoint aMoved(bMovedTheOneComingIn ? rPolygon.getPrevControlPoint(nPoint)
-                                                        : rPolygon.getNextControlPoint(nPoint));
-    basegfx::B2DVector aAway(aMoved - aPoint);
-
-    if (aAway.equalZero())
-        return;
-
-    const basegfx::B2DPoint aOther(bMovedTheOneComingIn ? rPolygon.getNextControlPoint(nPoint)
-                                                        : rPolygon.getPrevControlPoint(nPoint));
-    const double fLength(basegfx::B2VectorContinuity::C2 == eWanted
-                             ? aAway.getLength()
-                             : basegfx::B2DVector(aOther - aPoint).getLength());
-
-    basegfx::B2DVector aBack(-aAway);
-    aBack.setLength(fLength);
-
-    if (bMovedTheOneComingIn)
-        rPolygon.setNextControlPoint(nPoint, aPoint + aBack);
-    else
-        rPolygon.setPrevControlPoint(nPoint, aPoint + aBack);
-}
-
-/*
     Whether a command that names an object reaches it from this view, as a press on it would: the
     object is one the view can mark, so one on a locked or a hidden layer, or held against being
     marked, is left as it is. Sets the message for a command that does not reach it.
@@ -5810,7 +5770,7 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
             else
                 aPolygon.setNextControlPoint(nPoint, aWhereTo);
 
-            lcl_makeTheCurveRunThatWay(aPolygon, nPoint, eWanted, bComingIn);
+            svx::vector::makeTheCurveRunThatWay(aPolygon, nPoint, eWanted, bComingIn);
         }
 
         aPath.setB2DPolygon(nPolygon, aPolygon);

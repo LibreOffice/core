@@ -105,6 +105,11 @@
 #include <unokywds.hxx>
 #include <Outliner.hxx>
 #include <sdpage.hxx>
+#include <o3tl/safeint.hxx>
+#include <CustomAnimationEffect.hxx>
+#include <undoanim.hxx>
+#include <svx/VectorObjectContent.hxx>
+#include <svx/svditer.hxx>
 #include <FrameView.hxx>
 #include <zoomlist.hxx>
 #include <drawview.hxx>
@@ -215,28 +220,20 @@ static std::optional<std::pair<Point, Point>> lcl_getRequestedLine(SfxRequest co
 }
 
 /*
-    The path a polygon or a curve is to be created along, given with the request in twips on the
-    slide, in the form the path of an object goes out to the client: {"path": [{"closed": true,
-    "points": [{"x", "y", "behindX", "behindY", "aheadX", "aheadY"}, ...]}, ...]}, where closed
-    and the weights are there only where in use. It is point by point as the model holds it, so
-    a curved closing edge and a single point with two weights come as they are. The answer is in
-    the model's unit. FN_PARAM_1 to FN_PARAM_4 are left out, as the curve function reads them for
-    its own arguments.
+    A path given in twips in the form the path of an object goes out to the client: {"path":
+    [{"closed": true, "points": [{"x", "y", "behindX", "behindY", "aheadX", "aheadY",
+    "continuity"}, ...]}, ...]}, where closed, the weights and the continuity are there only
+    where in use. It is point by point as the model holds it, so a curved closing edge and a
+    single point with two weights come as they are. The answer is in the model's unit, nothing
+    where the text holds no such path.
 */
-static std::optional<basegfx::B2DPolyPolygon> lcl_getRequestedPath(SfxRequest const& rReq)
+static std::optional<basegfx::B2DPolyPolygon> lcl_readPath(std::u16string_view rJson)
 {
-    const SfxItemSet* pArgs = rReq.GetArgs();
-    const auto* pPath
-        = pArgs ? dynamic_cast<const SfxStringItem*>(pArgs->GetItem(FN_PARAM_5, false)) : nullptr;
-    if (!pPath)
-        return std::nullopt;
-
     basegfx::B2DPolyPolygon aPath;
     try
     {
         boost::property_tree::ptree aTree;
-        std::stringstream aStream(
-            std::string(OUStringToOString(pPath->GetValue(), RTL_TEXTENCODING_UTF8)));
+        std::stringstream aStream(std::string(OUStringToOString(rJson, RTL_TEXTENCODING_UTF8)));
         boost::property_tree::read_json(aStream, aTree);
 
         const boost::property_tree::ptree aPolygons(aTree.get_child("path"));
@@ -261,6 +258,23 @@ static std::optional<basegfx::B2DPolyPolygon> lcl_getRequestedPath(SfxRequest co
             }
             aPolygon.setClosed(rPolygonNode.second.get("closed", false));
 
+            // the numbers of a smooth or a symmetric point come rounded, so the point is made to
+            // hold the way the curve runs through it exactly, as it is said to run
+            sal_uInt32 nIndex = 0;
+            for (const auto& rPointNode : aPoints)
+            {
+                const sal_Int32 nContinuity = rPointNode.second.get("continuity", 0);
+                if ((nContinuity == 1 || nContinuity == 2)
+                    && aPolygon.isPrevControlPointUsed(nIndex)
+                    && aPolygon.isNextControlPointUsed(nIndex))
+                    svx::vector::makeTheCurveRunThatWay(aPolygon, nIndex,
+                                                        nContinuity == 2
+                                                            ? basegfx::B2VectorContinuity::C2
+                                                            : basegfx::B2VectorContinuity::C1,
+                                                        true);
+                ++nIndex;
+            }
+
             // a polygon needs an edge, between two points or by the weights of a single one
             if (aPolygon.count() > 1 || aPolygon.areControlPointsUsed())
                 aPath.append(aPolygon);
@@ -282,6 +296,50 @@ static std::optional<basegfx::B2DPolyPolygon> lcl_getRequestedPath(SfxRequest co
     const double fToModel(o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
     aPath.transform(basegfx::utils::createScaleB2DHomMatrix(fToModel, fToModel));
     return aPath;
+}
+
+// whether the two paths have the same polygons and points, the weights of curves included, to
+// within the rounding of whole twips
+static bool lcl_sameAsSent(const basegfx::B2DPolyPolygon& rOne, const basegfx::B2DPolyPolygon& rOther)
+{
+    const double fNear(o3tl::convert(2.0, o3tl::Length::twip, o3tl::Length::mm100));
+    const auto aNear = [fNear](const basegfx::B2DPoint& rA, const basegfx::B2DPoint& rB) {
+        return std::abs(rA.getX() - rB.getX()) <= fNear && std::abs(rA.getY() - rB.getY()) <= fNear;
+    };
+    if (rOne.count() != rOther.count())
+        return false;
+    for (sal_uInt32 nPolygon = 0; nPolygon < rOne.count(); ++nPolygon)
+    {
+        const basegfx::B2DPolygon aOne(rOne.getB2DPolygon(nPolygon));
+        const basegfx::B2DPolygon aOther(rOther.getB2DPolygon(nPolygon));
+        if (aOne.count() != aOther.count() || aOne.isClosed() != aOther.isClosed())
+            return false;
+        for (sal_uInt32 nPoint = 0; nPoint < aOne.count(); ++nPoint)
+        {
+            if (!aNear(aOne.getB2DPoint(nPoint), aOther.getB2DPoint(nPoint))
+                || aOne.isPrevControlPointUsed(nPoint) != aOther.isPrevControlPointUsed(nPoint)
+                || aOne.isNextControlPointUsed(nPoint) != aOther.isNextControlPointUsed(nPoint)
+                || (aOne.isPrevControlPointUsed(nPoint)
+                    && !aNear(aOne.getPrevControlPoint(nPoint), aOther.getPrevControlPoint(nPoint)))
+                || (aOne.isNextControlPointUsed(nPoint)
+                    && !aNear(aOne.getNextControlPoint(nPoint), aOther.getNextControlPoint(nPoint))))
+                return false;
+        }
+    }
+    return true;
+}
+
+// the path a polygon or a curve is to be created along, given with the request in twips on the
+// slide; FN_PARAM_1 to FN_PARAM_4 are left out, as the curve function reads them for its own
+// arguments
+static std::optional<basegfx::B2DPolyPolygon> lcl_getRequestedPath(SfxRequest const& rReq)
+{
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    const auto* pPath
+        = pArgs ? dynamic_cast<const SfxStringItem*>(pArgs->GetItem(FN_PARAM_5, false)) : nullptr;
+    if (!pPath)
+        return std::nullopt;
+    return lcl_readPath(pPath->GetValue());
 }
 
 // what the ends of a connector are to be tied to, given with the request as four numbers: the id of
@@ -1508,6 +1566,73 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_PRESENTATION_END:
             break;
+
+        case SID_SET_MOTION_PATH:
+        {
+            /*
+                A motion path the client has edited. The object is named by its id and the path
+                by its place among the object's motion paths, in the order they go out to the
+                client, with the path the edit started from: where that is no longer the path
+                there, the effects changed meanwhile and the client gets them anew, so nothing is
+                set. The paths come in twips from the middle of what moves.
+            */
+            const SfxStringItem* pObjectId = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            const SfxInt32Item* pIndex = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
+            const SfxStringItem* pPath = rReq.GetArg<SfxStringItem>(FN_PARAM_3);
+            const SfxStringItem* pWas = rReq.GetArg<SfxStringItem>(FN_PARAM_4);
+            if (!pObjectId || !pIndex || !pPath || !pWas)
+                break;
+            const std::optional<basegfx::B2DPolyPolygon> oPath(lcl_readPath(pPath->GetValue()));
+            const std::optional<basegfx::B2DPolyPolygon> oWas(lcl_readPath(pWas->GetValue()));
+            if (!oPath || !oWas)
+                break;
+
+            // the object is looked for on every slide, as the client may show another slide than
+            // the one this view stands on
+            const sal_uInt64 nObjectId = pObjectId->GetValue().toUInt64();
+            SdPage* pPage = nullptr;
+            SdrObject* pObject = nullptr;
+            const sal_uInt16 nSlides = GetDoc()->GetSdPageCount(PageKind::Standard);
+            for (sal_uInt16 nSlide = 0; nSlide < nSlides && !pObject; ++nSlide)
+            {
+                pPage = GetDoc()->GetSdPage(nSlide, PageKind::Standard);
+                SdrObjListIter aObjects(pPage, SdrIterMode::DeepWithGroups);
+                while (aObjects.IsMore() && !pObject)
+                {
+                    SdrObject* pCandidate = aObjects.Next();
+                    if (svx::vector::idOf(*pCandidate) == nObjectId)
+                        pObject = pCandidate;
+                }
+            }
+            if (!pObject || !pPage)
+                break;
+
+            // the effects whose path the client got, as it counts them
+            const cpo::uno::Reference<css::drawing::XShape> xShape(pObject->getUnoShape(),
+                                                                   cpo::uno::UNO_QUERY);
+            std::vector<CustomAnimationEffectPtr> aEffects;
+            for (const CustomAnimationEffectPtr& pEffect :
+                 pPage->getMainSequence()->getMotionPathsOf(xShape))
+                if (pEffect->getMotionPath().count())
+                    aEffects.push_back(pEffect);
+            const sal_Int32 nIndex = pIndex->GetValue();
+            if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= aEffects.size())
+                break;
+            const CustomAnimationEffectPtr& pEffect = aEffects[nIndex];
+            if (!lcl_sameAsSent(pEffect->getMotionPath(), *oWas))
+                break;
+
+            // the undo step the animation pane makes for a path it edits
+            if (SfxUndoManager* pManager = GetDocSh()->GetUndoManager())
+                pManager->AddUndoAction(
+                    std::make_unique<UndoAnimationPath>(GetDoc(), pPage, pEffect->getNode()));
+            pEffect->setMotionPath(*oPath);
+            // the step can be undone now, which undo and redo show
+            GetViewFrame()->GetBindings().Invalidate(SID_UNDO);
+            GetViewFrame()->GetBindings().Invalidate(SID_REDO);
+            rReq.Done();
+        }
+        break;
 
         case SID_TAKE_OVER_TEXT_EDIT:
         {
