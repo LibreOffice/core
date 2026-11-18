@@ -162,10 +162,11 @@ namespace FileUtil
     /// descriptor, in blocking mode, or -1 with errno undefined.
     int openFileInJail(bool usingMountNamespaces, std::string localJailRoot, std::string jailPath);
 
-    /// Opens for reading the regular file at path. A link at the name itself is refused, but links
-    /// in the directories on the way are followed. Returns the file descriptor, in blocking mode,
-    /// or -1 with errno undefined.
-    int openRegularFile(const std::string& path);
+    /// Opens for reading the regular file at localPath, a path that buildLocalPathToJail gives for
+    /// the jail under localJailRoot, reached through no link below the jail. Returns the file
+    /// descriptor, in blocking mode, or -1 with errno undefined.
+    int openLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
+                            const std::string& localPath);
 #endif
 
     // returns two strings

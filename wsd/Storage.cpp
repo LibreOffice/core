@@ -99,6 +99,12 @@ int StorageBase::openFileUploading(const std::string& thumbnailSize) const
     return FileUtil::openFileInJail(COOLWSD::EnableMountNamespaces, _localStorePath,
                                     std::move(jailPath));
 }
+
+int StorageBase::openLocalFileInJail(const std::string& localPath) const
+{
+    return FileUtil::openLocalFileInJail(COOLWSD::EnableMountNamespaces, _localStorePath,
+                                         localPath);
+}
 #endif
 
 void StorageBase::initialize()

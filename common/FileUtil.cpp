@@ -650,18 +650,11 @@ namespace FileUtil
     }
     } // namespace
 
-    int openRegularFile(const std::string& path)
+    namespace
     {
-        const int fd = ::open(path.c_str(), ReadFlags);
-        if (fd < 0)
-            logOpenFailure(path);
-        return keepIfRegularFile(fd, path);
-    }
-
-    int openFileInJail(bool usingMountNamespaces, std::string localJailRoot, std::string jailPath)
+    /// Opens for reading the regular file at localPath, reached from localDir through no link.
+    int openFileBelow(const std::string& localDir, const std::string& localPath)
     {
-        const auto [localDir, localPath] =
-            localPathToJail(usingMountNamespaces, std::move(localJailRoot), std::move(jailPath));
         std::vector<std::string> components = componentsBelow(localDir, localPath);
         if (components.empty())
         {
@@ -681,6 +674,27 @@ namespace FileUtil
             logOpenFailure(localPath);
         ::close(dirFd);
         return keepIfRegularFile(fd, localPath);
+    }
+    } // namespace
+
+    int openFileInJail(bool usingMountNamespaces, std::string localJailRoot, std::string jailPath)
+    {
+        const auto [localDir, localPath] =
+            localPathToJail(usingMountNamespaces, std::move(localJailRoot), std::move(jailPath));
+        return openFileBelow(localDir, localPath);
+    }
+
+    int openLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
+                            const std::string& localPath)
+    {
+        // With mount namespaces, the files of the jail's /tmp are below where it is mounted from.
+        if (usingMountNamespaces)
+        {
+            const std::string tmpDir = localPathToJail(true, localJailRoot, "/tmp/").first;
+            if (!componentsBelow(tmpDir, localPath).empty())
+                return openFileBelow(tmpDir, localPath);
+        }
+        return openFileBelow(localJailRoot, localPath);
     }
 
     std::string moveFileIntoJail(bool usingMountNamespaces, std::string localJailRoot,

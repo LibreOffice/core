@@ -842,9 +842,9 @@ int WopiStorage::openFileToUpload(const std::string& saveAsPath, bool isSaveAs,
     if (!isSaveAs)
         return openFileUploading(thumbnailSize);
 
-    // The save-as file is where the kit's reply named it, after it was found in the jail.
-    return FileUtil::openRegularFile(
-        thumbnailSize.empty() ? saveAsPath : Thumbnail::filePath(saveAsPath, thumbnailSize));
+    const std::string path =
+        thumbnailSize.empty() ? saveAsPath : Thumbnail::filePath(saveAsPath, thumbnailSize);
+    return openLocalFileInJail(path);
 }
 
 std::size_t WopiStorage::uploadLocalFileToStorageAsync(

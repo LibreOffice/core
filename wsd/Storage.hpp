@@ -601,6 +601,10 @@ protected:
     /// that size beside it, reached from the jail's root through no link. Returns the file
     /// descriptor, or -1.
     int openFileUploading(const std::string& thumbnailSize) const;
+
+    /// Opens for reading the regular file at localPath, a local path to a file in the jail,
+    /// reached from the jail's root through no link. Returns the file descriptor, or -1.
+    int openLocalFileInJail(const std::string& localPath) const;
 #endif
 
 private:

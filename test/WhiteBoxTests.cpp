@@ -1492,11 +1492,21 @@ void WhiteBoxTests::testOpenFileInJail()
                      openedContents(FileUtil::openFileInJail(true, jailRoot,
                                                              "/tmp/user/docs/abc/doc.odt")));
 
-    // openRegularFile follows no link at the name itself.
-    const std::string documentDir = jailRoot + "/user/docs/abc";
+    // A local path in the jail is opened from the jail root, or from where its /tmp is mounted
+    // from, and a link to a directory on the way is not followed.
     LOK_ASSERT_EQUAL(std::string("document"),
-                     openedContents(FileUtil::openRegularFile(documentDir + "/doc.odt")));
-    LOK_ASSERT_EQUAL(-1, FileUtil::openRegularFile(documentDir + "/link.odt"));
+                     openedContents(FileUtil::openLocalFileInJail(
+                         false, jailRoot, jailRoot + "/user/docs/abc/doc.odt")));
+    LOK_ASSERT_EQUAL(std::string("mounted"),
+                     openedContents(FileUtil::openLocalFileInJail(
+                         true, jailRoot, dir + "/jails/tmp/cool-jailid/user/docs/abc/doc.odt")));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openLocalFileInJail(false, jailRoot,
+                                                       jailRoot + "/user/docs/linked/secret.txt"));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openLocalFileInJail(false, jailRoot, outside + "/secret.txt"));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openLocalFileInJail(false, jailRoot,
+                                                       jailRoot + "-other/user/docs/abc/doc.odt"));
+    LOK_ASSERT_EQUAL(-1, FileUtil::openLocalFileInJail(false, jailRoot,
+                                                       jailRoot + "/../../outside/secret.txt"));
 }
 
 void WhiteBoxTests::testStringCompare()
