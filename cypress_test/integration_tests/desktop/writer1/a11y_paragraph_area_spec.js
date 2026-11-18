@@ -1,4 +1,4 @@
-/* global describe expect it cy before require Cypress */
+/* global describe expect it cy before require */
 
 const helper = require('../../common/helper');
 const a11yHelper = require('../../common/a11y_helper');
@@ -57,9 +57,8 @@ describe(['tagdesktop'], 'Writer header and footnote told to the reader', { test
 		cy.then(function () {
 			const exits = told.filter(function (text) { return text.indexOf('Out of header') !== -1; });
 			expect(exits.length, 'leaving the header told once: ' + told.join(' / ')).to.equal(1);
-			return new Cypress.Promise(function (resolve) { win.setTimeout(resolve, 1500); });
 		});
-		cy.then(function () {
+		cy.wrap(null).should(function () {
 			expect(description(), 'the description back in the body text').to.equal('');
 		});
 	});
