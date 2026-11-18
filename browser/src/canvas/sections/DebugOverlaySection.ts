@@ -1,6 +1,6 @@
 // @ts-strict-ignore
 /*
- * Copyright the Collabora Online contributors.
+ * Copyright the Collabora Office contributors.
  *
  * SPDX-License-Identifier: MPL-2.0
  *

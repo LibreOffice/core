@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright the Collabora Online contributors.
+# Copyright the Collabora Office contributors.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -103,7 +103,7 @@ NOTICE_LINE_RE = re.compile(
 # The license header of a shell or Python script here, right after the
 # shebang line.
 SCRIPT_HEADER_RE = re.compile(
-    rb"\A(#![^\n]*\n)#\n# Copyright the Collabora Online contributors\.\n#\n"
+    rb"\A(#![^\n]*\n)#\n# Copyright the Collabora Office contributors\.\n#\n"
     rb"# SPDX-License-Identifier: [^\n]*\n#\n"
 )
 

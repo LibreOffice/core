@@ -166,7 +166,7 @@ By making a contribution to this project, I certify that:
     terms of the Apache License, Version 2.0.
 
 (f) I agree that my contributions are adequately acknowledged by
-    the "Copyright the Collabora Online contributors." header, and
+    the "Copyright the Collabora Office contributors." header, and
     the public records of contribution.
 
 If you can certify the above, add this line to every git commit

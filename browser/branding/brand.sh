@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright the Collabora Online contributors.
+# Copyright the Collabora Office contributors.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -77,7 +77,7 @@ set_iconset()
     mv "$WORK/icons.scss" "$WORK/sass/def/_icons.scss"
 }
 
-HEADER="/* Copyright the Collabora Online contributors. SPDX-License-Identifier: Apache-2.0${BRAND_VERSION:+ (version $BRAND_VERSION)} */"
+HEADER="/* Copyright the Collabora Office contributors. SPDX-License-Identifier: Apache-2.0${BRAND_VERSION:+ (version $BRAND_VERSION)} */"
 
 add_header()
 {

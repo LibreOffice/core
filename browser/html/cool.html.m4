@@ -32,7 +32,7 @@ m4_ifelse(IOSAPP,[true],
 <!--
   SPDX-License-Identifier: MPL-2.0
 
-  Copyright the Collabora Online contributors.
+  Copyright the Collabora Office contributors.
   Copyright Collabora Productivity Limited.
 
   This Source Code Form is subject to the terms of the Mozilla Public
