@@ -47,6 +47,10 @@
 #if HAVE_LIBCAP
 #include <sys/capability.h>
 #endif
+#if defined(__GLIBC__)
+#include <dlfcn.h>
+#include <malloc.h>
+#endif
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sysexits.h>
@@ -91,6 +95,10 @@ std::map<pid_t, std::string> childJails;
 std::vector<std::string> cleanupJailPaths;
 /// The [subforkit pid -> subforkit id] map.
 std::map<pid_t, std::string> subForKitPids;
+#if defined(__GLIBC__)
+/// Whether the free chunks of the heap of this process are filled, see fillHeapHoles().
+bool HeapHolesFilled = false;
+#endif
 
 /// The kernel counts an OOM kill before the kit exits, so the reap can come this much later.
 constexpr std::chrono::seconds OomKillMatchWindow(2 * POLL_FORKIT_TIMEOUT_SECS);
@@ -503,6 +511,93 @@ void sleepForDebugger()
     Util::sleepFromEnvIfSet("Kit", "SLEEPKITFORDEBUGGER");
 }
 
+/// Allocate every free chunk of the main heap and keep it, so that a kit allocates from the top of
+/// the heap. A free chunk sits in a page that this process shares with its kits, and a kit that
+/// allocates there copies the whole page. The chunks are filled once, before the first fork,
+/// because preinit leaves almost all of them, and the forkit then reuses what it frees later. A
+/// subforkit fills them again before its first kit, after it loads its own settings.
+void fillHeapHoles()
+{
+#if defined(__GLIBC__)
+    if (HeapHolesFilled)
+        return;
+    HeapHolesFilled = true;
+
+    const auto start = std::chrono::steady_clock::now();
+
+    // The trim merges the small free chunks and gives the free pages back to the system, so the
+    // fill keeps fewer chunks, and the pages inside them are not resident.
+    Util::trimMalloc();
+
+    // mallinfo2 exists from glibc 2.33, which is newer than the oldest glibc that the binary
+    // builds and runs on, so it is looked up at run time, and its result has the layout of
+    // struct mallinfo2 of glibc. The fields of mallinfo are int, which is enough for the heap of
+    // the forkit, and it is looked up as well because newer headers deprecate it.
+    struct mallinfo2
+    {
+        std::size_t arena, ordblks, smblks, hblks, hblkhd, usmblks, fsmblks, uordblks, fordblks,
+            keepcost;
+    };
+    static_assert(sizeof(mallinfo2) == 10 * sizeof(std::size_t), "layout of glibc mallinfo2");
+    std::size_t freeBytes = 0;
+    std::size_t topBytes = 0;
+    using MallInfo2Fn = mallinfo2 (*)();
+    if (const auto mallInfo2 = reinterpret_cast<MallInfo2Fn>(dlsym(RTLD_DEFAULT, "mallinfo2")))
+    {
+        const mallinfo2 info = mallInfo2();
+        freeBytes = info.fordblks;
+        topBytes = info.keepcost;
+    }
+    else
+    {
+        using MallInfoFn = struct mallinfo (*)();
+        const auto mallInfo = reinterpret_cast<MallInfoFn>(dlsym(RTLD_DEFAULT, "mallinfo"));
+        if (!mallInfo)
+            return;
+        const struct mallinfo info = mallInfo();
+        freeBytes = std::max(info.fordblks, 0);
+        topBytes = std::max(info.keepcost, 0);
+    }
+    // The top chunk ends at the program break. Memory from it is not a hole.
+    const char* const topStart = static_cast<char*>(sbrk(0)) - topBytes;
+
+    // The total stays within the free space that malloc reports, which is none when another
+    // allocator replaces the one of glibc.
+    std::size_t filled = 0;
+    std::size_t count = 0;
+    const auto fillSize = [&](std::size_t size)
+    {
+        while (filled + size <= freeBytes)
+        {
+            void* chunk = malloc(size);
+            if (!chunk)
+                return;
+            if (static_cast<char*>(chunk) >= topStart)
+            {
+                free(chunk);
+                return;
+            }
+            filled += malloc_usable_size(chunk);
+            ++count;
+        }
+    };
+
+    // Large sizes first, so a large hole takes few allocations. The small sizes then empty the
+    // bins that hold one chunk size each.
+    for (std::size_t size = 64 * 1024; size > 1024; size /= 2)
+        fillSize(size);
+    for (std::size_t size = 1032; size >= 24; size -= 16)
+        fillSize(size);
+
+    LOG_DBG("Filled " << count << " heap holes, " << filled << " bytes of " << freeBytes
+                      << " free, in "
+                      << std::chrono::duration_cast<std::chrono::microseconds>(
+                             std::chrono::steady_clock::now() - start)
+                             .count()
+                      << " us");
+#endif
+}
+
 int forkKit(const std::function<void()>& childFunc, const std::string& childProcessName,
             const std::function<void(pid_t)>& parentFunc)
 {
@@ -517,6 +612,8 @@ int forkKit(const std::function<void()>& childFunc, const std::string& childProc
     const bool hasWatchDog(SocketPoll::PollWatchdog);
     if (hasWatchDog)
         SocketPoll::PollWatchdog->joinThread();
+
+    fillHeapHoles();
 
     Log::preFork();
 
@@ -676,6 +773,11 @@ int createSubForKit(const std::string& subForKitIdent, const std::string& childR
         childJails.clear();
         cleanupJailPaths.clear();
         subForKitPids.clear();
+
+#if defined(__GLIBC__)
+        // The settings that this subforkit loads next leave free chunks that its kits would fill.
+        HeapHolesFilled = false;
+#endif
 
         // Apply core configmgr xcu settings to this forkit for its coolkits to inherit
         {
