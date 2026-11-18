@@ -5063,7 +5063,31 @@ void ScXMLExport::ExportConditionalFormat(const ScDocument& rDoc, SCTAB nTab)
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it->GetValue()));
 
                     if (it->GetMode() != ScConditionMode::EqGreater)
+                    {
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_GREATER_EQUAL, OUString::boolean(false));
+                        // tdf#168439 - export the exact operator of the icon set entry
+                        XMLTokenEnum eOp = XML_TOKEN_INVALID;
+                        switch (it->GetMode())
+                        {
+                            case ScConditionMode::Equal:
+                                eOp = XML_EQUAL;
+                                break;
+                            case ScConditionMode::NotEqual:
+                                eOp = XML_NOT_EQUAL;
+                                break;
+                            case ScConditionMode::Less:
+                                eOp = XML_LESS;
+                                break;
+                            case ScConditionMode::EqLess:
+                                eOp = XML_LESS_EQUAL;
+                                break;
+                            case ScConditionMode::Greater:
+                            default:
+                                eOp = XML_GREATER;
+                                break;
+                        }
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_OPERATOR, eOp);
+                    }
 
                     AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
                     SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
