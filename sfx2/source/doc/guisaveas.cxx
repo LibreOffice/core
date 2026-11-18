@@ -341,7 +341,7 @@ public:
                                 OUString& aSuggestedName,
                                 bool bPreselectPassword,
                                 OUString& aSuggestedDir,
-                                sal_Int16 nDialog,
+                                sfx2::FileDialogType eDialog,
                                 const css::uno::Sequence<OUString>& rDenyList,
                                 SignatureState const nScriptingSignatureState
                                 );
@@ -896,7 +896,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                                             OUString& aSuggestedName,
                                             bool bPreselectPassword,
                                             OUString& aSuggestedDir,
-                                            sal_Int16 nDialog,
+                                            sfx2::FileDialogType eDialog,
                                             const css::uno::Sequence<OUString>& rDenyList,
                                             SignatureState const nScriptingSignatureState)
 {
@@ -996,7 +996,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
         else
         {
             // This is the normal dialog
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, sPreselectedDir, rDenyList, pFrameWin ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, eDialog, nMust, nDont, sPreselectedDir, rDenyList, pFrameWin ));
         }
 
         sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UnknownContext;
@@ -1025,8 +1025,9 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     else
     {
         // This is the normal save as dialog
-        pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog,
-            nMust, nDont, sPreselectedDir, rDenyList, pFrameWin ));
+        pFileDlg.reset(new sfx2::FileDialogHelper(aDialogMode, aDialogFlags, aDocServiceName,
+                                                  eDialog, nMust, nDont, sPreselectedDir, rDenyList,
+                                                  pFrameWin));
         pFileDlg->CreateMatcher( aDocServiceName );
 
         sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UnknownContext;
@@ -1626,11 +1627,11 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
 
     if ( aFileNameIter == aModelData.GetMediaDescr().end() )
     {
-        sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
+        sfx2::FileDialogType eDialog = sfx2::FileDialogType::Config;
 
         if( bRemote )
         {
-            nDialog = SFX2_IMPL_DIALOG_REMOTE;
+            eDialog = sfx2::FileDialogType::Remote;
         }
         else
         {
@@ -1642,9 +1643,9 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                 if ( aDlgIter->second >>= bUseSystemDialog )
                 {
                     if ( bUseSystemDialog )
-                        nDialog = SFX2_IMPL_DIALOG_SYSTEM;
+                        eDialog = sfx2::FileDialogType::System;
                     else
-                        nDialog = SFX2_IMPL_DIALOG_OOO;
+                        eDialog = sfx2::FileDialogType::OOo;
                 }
             }
         }
@@ -1672,7 +1673,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         for (;;)
         {
             // in case the dialog is opened a second time the folder should be the same as previously navigated to by the user, not what was handed over by initial parameters
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, aDenyList, nScriptingSignatureState );
+            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, eDialog, aDenyList, nScriptingSignatureState );
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning

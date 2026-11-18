@@ -170,7 +170,7 @@ namespace sfx2
                                     FileDialogHelper* _pAntiImpl,
                                     const sal_Int16 nDialogType,
                                     FileDialogFlags nFlags,
-                                    sal_Int16 nDialog,
+                                    FileDialogType eDialog,
                                     weld::Window* pFrameWeld,
                                     const OUString& sPreselectedDir = OUString(),
                                     const css::uno::Sequence< OUString >&   rDenyList = css::uno::Sequence< OUString >()

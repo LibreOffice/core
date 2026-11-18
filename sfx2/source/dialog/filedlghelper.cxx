@@ -929,7 +929,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     FileDialogHelper* _pAntiImpl,
     sal_Int16 nDialogType,
     FileDialogFlags nFlags,
-    sal_Int16 nDialog,
+    FileDialogType eDialog,
     weld::Window* pFrameWeld,
     const OUString& sPreselectedDir,
     const css::uno::Sequence< OUString >& rDenyList
@@ -940,13 +940,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     ,meContext              ( FileDialogHelper::UnknownContext )
 {
     OUString sServiceName;
-    switch (nDialog)
+    switch (eDialog)
     {
-        case SFX2_IMPL_DIALOG_SYSTEM:
-        case SFX2_IMPL_DIALOG_OOO:
+        case FileDialogType::System:
+        case FileDialogType::OOo:
             sServiceName = u"com.sun.star.ui.dialogs.OfficeFilePicker"_ustr;
             break;
-        case SFX2_IMPL_DIALOG_REMOTE:
+        case FileDialogType::Remote:
             sServiceName = u"com.sun.star.ui.dialogs.RemoteFilePicker"_ustr;
             break;
         default:
@@ -2411,7 +2411,7 @@ FileDialogHelper::FileDialogHelper(
     SfxFilterFlags nDont,
     weld::Window* pPreferredParent)
     :   m_nError(0),
-        mpImpl(new FileDialogHelper_Impl(this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent))
+        mpImpl(new FileDialogHelper_Impl(this, nDialogType, nFlags, FileDialogType::Config, pPreferredParent))
 {
 
     // create the list of filters
@@ -2423,14 +2423,14 @@ FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     FileDialogFlags nFlags,
     const OUString& rFact,
-    sal_Int16 nDialog,
+    FileDialogType eDialog,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
     const OUString& rPreselectedDir,
     const css::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent)
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, pPreferredParent, rPreselectedDir, rDenyList ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, eDialog, pPreferredParent, rPreselectedDir, rDenyList ) )
 {
     // create the list of filters
     mpImpl->addFilters(
@@ -2439,7 +2439,7 @@ FileDialogHelper::FileDialogHelper(
 
 FileDialogHelper::FileDialogHelper(sal_Int16 nDialogType, FileDialogFlags nFlags, weld::Window* pPreferredParent)
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, FileDialogType::Config, pPreferredParent ) )
 {
 }
 
@@ -2452,7 +2452,7 @@ FileDialogHelper::FileDialogHelper(
     const css::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent )
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, rPreselectedDir, rDenyList ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, FileDialogType::Config, pPreferredParent, rPreselectedDir, rDenyList ) )
 {
     // the wildcard here is expected in form "*.extension"
     OUString aWildcard;
@@ -2831,7 +2831,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              OUString& rFilter,
                              std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,
-                             sal_Int16 nDialog,
+                             FileDialogType eDialog,
                              const css::uno::Sequence< OUString >& rDenyList,
                              std::optional<bool>& rShowFilterDialog )
 {
@@ -2843,7 +2843,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
     if (nFlags & FileDialogFlags::SignPDF)
         pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), u"pdf", u""_ustr, rDenyList, pParent));
     else
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, u""_ustr, rDenyList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), eDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, u""_ustr, rDenyList, pParent));
 
     OUString aPath;
     if ( pPath )
