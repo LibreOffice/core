@@ -97,6 +97,9 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
         CFRelease(pFormat);
     }
 
+    if( !pAttrDict )
+        return rDFA;
+
     // get symbolic trait
     // TODO: use other traits such as MonoSpace/Condensed/Expanded or Vertical too
     SInt64 nSymbolTrait = 0;
