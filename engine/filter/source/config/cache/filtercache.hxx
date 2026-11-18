@@ -464,6 +464,14 @@ class FilterCache : public cppu::BaseMutex
         CacheItem getItem(      EItemType        eType,
                                   const OUString& sItem);
 
+        /** @short  return one property of an item, or an empty Any if the item has none.
+
+            @throw  [css::container::NoSuchElementException]
+                    if the required item does not exist.
+         */
+        cpo::uno::Any getItemProperty(EItemType eType, const OUString& sItem,
+                                      const OUString& sProperty);
+
 
         /** TODO document me ...
 

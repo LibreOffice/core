@@ -356,6 +356,17 @@ CacheItem FilterCache::getItem(      EItemType        eType,
 }
 
 
+cpo::uno::Any FilterCache::getItemProperty(EItemType eType, const OUString& sItem,
+                                           const OUString& sProperty)
+{
+    osl::MutexGuard aLock(m_aMutex);
+
+    const CacheItem& rItem = impl_getItem(eType, sItem);
+    auto pIt = rItem.find(sProperty);
+    return pIt == rItem.end() ? cpo::uno::Any() : pIt->second;
+}
+
+
 CacheItem& FilterCache::impl_getItem(      EItemType        eType,
                                const OUString& sItem)
 {

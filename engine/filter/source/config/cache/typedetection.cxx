@@ -755,35 +755,33 @@ void TypeDetection::impl_getPreselectionForDocumentService(
 
 bool TypeDetection::impl_isExoticFilter(std::unique_lock<std::mutex>& /*rGuard*/, const OUString& rFilterName)
 {
-    CacheItem aFilter;
+    sal_Int32 nFlags = 0;
     try
     {
-        aFilter = GetTheFilterCache().getItem(FilterCache::E_FILTER, rFilterName);
+        GetTheFilterCache().getItemProperty(FilterCache::E_FILTER, rFilterName, PROPNAME_FLAGS)
+            >>= nFlags;
     }
     catch (const container::NoSuchElementException&)
     {
         return false;
     }
 
-    sal_Int32 nFlags = 0;
-    aFilter[PROPNAME_FLAGS] >>= nFlags;
     return bool(static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::EXOTIC);
 }
 
 OUString TypeDetection::impl_getTypeFromFilter(std::unique_lock<std::mutex>& /*rGuard*/, const OUString& rFilterName)
 {
-    CacheItem aFilter;
+    OUString aType;
     try
     {
-        aFilter = GetTheFilterCache().getItem(FilterCache::E_FILTER, rFilterName);
+        GetTheFilterCache().getItemProperty(FilterCache::E_FILTER, rFilterName, PROPNAME_TYPE)
+            >>= aType;
     }
     catch (const container::NoSuchElementException&)
     {
         return OUString();
     }
 
-    OUString aType;
-    aFilter[PROPNAME_TYPE] >>= aType;
     return aType;
 }
 
