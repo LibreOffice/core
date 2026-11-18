@@ -3523,7 +3523,8 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
 
         std::ostringstream oss;
         oss << std::boolalpha;
-        oss << "load url=" << publicUri.toString();
+        oss << "load";
+        appendEncodedLoadToken(oss, "url", publicUri.toString());
 
         if constexpr (Util::isWopiSupported())
         {
@@ -3581,7 +3582,7 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
 
         if (getHaveDocPassword())
         {
-            oss << " password=" << getDocPassword();
+            appendEncodedLoadToken(oss, "password", getDocPassword());
         }
 
         if (!getLang().empty())
@@ -3591,37 +3592,37 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
 
         if (!getDeviceFormFactor().empty())
         {
-            oss << " deviceFormFactor=" << getDeviceFormFactor();
+            appendEncodedLoadToken(oss, "deviceFormFactor", getDeviceFormFactor());
         }
 
         if (!getTimezone().empty())
         {
-            oss << " timezone=" << getTimezone();
+            appendEncodedLoadToken(oss, "timezone", getTimezone());
         }
 
         if (!getSpellOnline().empty())
         {
-            oss << " spellOnline=" << getSpellOnline();
+            appendEncodedLoadToken(oss, "spellOnline", getSpellOnline());
         }
 
         if (!getFormattingMarks().empty())
         {
-            oss << " formattingMarks=" << getFormattingMarks();
+            appendEncodedLoadToken(oss, "formattingMarks", getFormattingMarks());
         }
 
         if (!getDarkTheme().empty())
         {
-            oss << " darkTheme=" << getDarkTheme();
+            appendEncodedLoadToken(oss, "darkTheme", getDarkTheme());
         }
 
         if (!getDarkBackground().empty())
         {
-            oss << " darkBackground=" << getDarkBackground();
+            appendEncodedLoadToken(oss, "darkBackground", getDarkBackground());
         }
 
         if (!getFocusRingColor().empty())
         {
-            oss << " focusRingColor=" << getFocusRingColor();
+            appendEncodedLoadToken(oss, "focusRingColor", getFocusRingColor());
         }
 
         if (!getWatermarkText().empty())
@@ -3645,12 +3646,12 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
 
         if (!getInitialClientVisibleArea().empty())
         {
-            oss << " clientvisiblearea=" << getInitialClientVisibleArea();
+            appendEncodedLoadToken(oss, "clientvisiblearea", getInitialClientVisibleArea());
         }
 
         if (!getOriginalDocUrl().empty())
         {
-            oss << " originaldocumenturl=" << getOriginalDocUrl();
+            appendEncodedLoadToken(oss, "originaldocumenturl", getOriginalDocUrl());
         }
 
         if (ConfigUtil::getConfigValue<bool>("accessibility.enable", Util::isMobileApp()))
@@ -3665,23 +3666,25 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
 
         if (_wopiFileInfo && !_wopiFileInfo->getTemplateSource().empty())
         {
-            oss << " template=" << _wopiFileInfo->getTemplateSource();
+            appendEncodedLoadToken(oss, "template", _wopiFileInfo->getTemplateSource());
         }
 
         if (_wopiFileInfo && !_wopiFileInfo->getThumbnailSizes().empty())
         {
-            oss << " thumbnailSizes=";
+            std::string sizes;
             const char* separator = "";
             for (const std::string& size : _wopiFileInfo->getThumbnailSizes())
             {
-                oss << separator << size;
+                sizes += separator;
+                sizes += size;
                 separator = ",";
             }
+            appendEncodedLoadToken(oss, "thumbnailSizes", sizes);
         }
 
         if (!getBatchMode().empty())
         {
-            oss << " batch=" << getBatchMode();
+            appendEncodedLoadToken(oss, "batch", getBatchMode());
         }
 
         if (!getInFilterOption().empty())

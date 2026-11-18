@@ -92,7 +92,7 @@ public:
             return false;
 
         TST_LOG("Load command: [" << message << ']');
-        if (message.find(" thumbnailSizes=1000x1000,256x256") == std::string::npos)
+        if (message.find(" thumbnailSizes=1000x1000%2C256x256") == std::string::npos)
         {
             exitTest(TestResult::Failed,
                      "The load command does not carry the thumbnail sizes the host listed");
