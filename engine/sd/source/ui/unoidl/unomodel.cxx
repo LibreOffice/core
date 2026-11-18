@@ -4392,7 +4392,7 @@ bool SdXImpressDocument::answerVectorCommand(::tools::JsonWriter& rJsonWriter,
 {
     // A page is named by its part id, the page GUID, and no mode named means the slides.
     return svx::vector::answerPartCommand(
-        rJsonWriter, rCommand, maVectorResources,
+        rCommand, maVectorResources,
         [this, &rJsonWriter](const svx::vector::PartRequest& rRequest)
         {
             writeVectorPrimitives(rJsonWriter, rRequest.maPartId,
@@ -4416,9 +4416,9 @@ void SdXImpressDocument::forgetVectorPart(std::string_view rPartId)
     maVectorParts.forget(aGuid);
 }
 
-std::string SdXImpressDocument::getVectorGraphic(std::string_view rCommand)
+std::string SdXImpressDocument::getVectorResource(std::string_view rCommand)
 {
-    return svx::vector::answerGraphicCommand(rCommand, maVectorResources);
+    return svx::vector::answerResourceCommand(rCommand, maVectorResources);
 }
 
 void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,

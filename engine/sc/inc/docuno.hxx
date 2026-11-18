@@ -427,8 +427,8 @@ public:
     /// @see vcl::IVectorParts::answerVectorCommand().
     bool answerVectorCommand(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
-    /// @see vcl::IVectorParts::getVectorGraphic().
-    std::string getVectorGraphic(std::string_view rCommand) override;
+    /// @see vcl::IVectorParts::getVectorResource().
+    std::string getVectorResource(std::string_view rCommand) override;
 
     /// @see vcl::IVectorParts::pushVectorPrimitivesDelta().
     void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter, std::string_view rPartId,

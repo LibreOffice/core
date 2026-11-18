@@ -139,45 +139,38 @@ PartRequest readPartRequest(std::string_view rCommand, sal_Int32 nEpoch)
     return aRequest;
 }
 
-std::string answerGraphicCommand(std::string_view rCommand,
-                                 const drawinglayer::VectorResourceCache& rResources)
+std::string answerResourceCommand(std::string_view rCommand,
+                                  const drawinglayer::VectorResourceCache& rResources)
 {
+    const PartCommand eCommand = partCommandOf(rCommand);
+    if (eCommand != PartCommand::Graphic && eCommand != PartCommand::Font)
+        return {};
+
     const PartRequest aRequest = readPartRequest(rCommand, rResources.getEpoch());
-    auto it = aRequest.maParameters.find(u"checksum"_ustr);
+    const bool bGraphic = eCommand == PartCommand::Graphic;
+    auto it = aRequest.maParameters.find(bGraphic ? u"checksum"_ustr : u"id"_ustr);
     if (it == aRequest.maParameters.end())
         return {};
-    return rResources.graphicAnswer(it->second.toInt64());
+    if (bGraphic)
+        return rResources.graphicAnswer(it->second.toInt64());
+    // The id of a font is the hash of its file, in hexadecimal.
+    return rResources.fontAnswer(it->second.toUInt64(16));
 }
 
-bool answerPartCommand(tools::JsonWriter& rWriter, std::string_view rCommand,
+bool answerPartCommand(std::string_view rCommand,
                        const drawinglayer::VectorResourceCache& rResources,
                        const std::function<void(const PartRequest&)>& rWritePart,
                        const std::function<void(std::string_view)>& rForgetPart)
 {
     const PartCommand eCommand = partCommandOf(rCommand);
-    if (eCommand == PartCommand::None || eCommand == PartCommand::Graphic)
+    if (eCommand != PartCommand::Primitives && eCommand != PartCommand::ForgetPart)
         return false;
 
     const PartRequest aRequest = readPartRequest(rCommand, rResources.getEpoch());
-    const std::map<OUString, OUString>& rParameters = aRequest.maParameters;
-    switch (eCommand)
-    {
-        case PartCommand::Font:
-            // The id of a font is the hash of its file, in hexadecimal.
-            if (auto it = rParameters.find(u"id"_ustr); it != rParameters.end())
-                rResources.writeFont(rWriter, it->second.toUInt64(16));
-            break;
-        case PartCommand::Primitives:
-            rWritePart(aRequest);
-            break;
-        case PartCommand::ForgetPart:
-            if (rForgetPart && !aRequest.maPartId.isEmpty())
-                rForgetPart(aRequest.maPartId);
-            break;
-        case PartCommand::Graphic:
-        case PartCommand::None:
-            break;
-    }
+    if (eCommand == PartCommand::Primitives)
+        rWritePart(aRequest);
+    else if (rForgetPart && !aRequest.maPartId.isEmpty())
+        rForgetPart(aRequest.maPartId);
     return true;
 }
 }

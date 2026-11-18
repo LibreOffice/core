@@ -118,6 +118,24 @@ void VectorResourceCache::writeFont(tools::JsonWriter& rWriter, sal_uInt64 nFont
     rWriter.putBase64("data", "", rBytes.getData(), rBytes.getSize());
 }
 
+std::string VectorResourceCache::fontAnswer(sal_uInt64 nFontId) const
+{
+    tools::JsonWriter aWriter;
+    aWriter.put("type", "vectorrenderingfont");
+    aWriter.put("fontId", OString::number(nFontId, 16));
+    std::string aAnswer = aWriter.finishAndGetAsStdString();
+
+    auto aIterator = maFontCache.find(nFontId);
+    if (aIterator == maFontCache.end())
+        return aAnswer;
+
+    const BinaryDataContainer& rBytes = aIterator->second;
+    aAnswer.reserve(aAnswer.size() + 1 + rBytes.getSize());
+    aAnswer += '\n';
+    aAnswer.append(reinterpret_cast<const char*>(rBytes.getData()), rBytes.getSize());
+    return aAnswer;
+}
+
 std::optional<FontSubset>
 VectorResourceCache::subsetFont(sal_uInt64 nFontId, const std::set<sal_UCS4>& rCharacters) const
 {

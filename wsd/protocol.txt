@@ -1198,6 +1198,16 @@ commandvalues command=<UNOCommand>[?param1=value1&param2=value2...]
         "error":"notfound" or "error":"conversionfailed" instead of "mime",
         and nothing follows the newline.
 
+    .uno:VectorRenderingFont?id=<fontId>
+        Requests the font file that text portions name by <fontId>, the
+        hash of the file in hexadecimal. The answer is a binary frame:
+            zstdvectorrenderingfont: {"type":"vectorrenderingfont",
+                                      "fontId":"<fontId>"}
+            <the bytes of the font file, compressed with zstd>
+        The JSON fills the first line, and the compressed font file follows
+        the newline. When the font is not known, nothing follows the
+        newline.
+
 completefunction name=<FunctionName>
 
     Requests the execution of a spreadsheet function in MobileWizard.Clients can request to complete a function name partially typed in the formula input box.

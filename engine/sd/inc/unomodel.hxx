@@ -563,8 +563,8 @@ public:
     SD_DLLPUBLIC bool answerVectorCommand(tools::JsonWriter& rJsonWriter,
                                           std::string_view rCommand) override;
 
-    /// @see vcl::IVectorParts::getVectorGraphic().
-    SD_DLLPUBLIC std::string getVectorGraphic(std::string_view rCommand) override;
+    /// @see vcl::IVectorParts::getVectorResource().
+    SD_DLLPUBLIC std::string getVectorResource(std::string_view rCommand) override;
 
     /// @see vcl::IVectorParts::pushVectorPrimitivesDelta().
     SD_DLLPUBLIC void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,

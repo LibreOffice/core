@@ -127,10 +127,11 @@ public:
     explicit VectorContent(ScDocShell& rDocShell);
     virtual ~VectorContent() override;
 
-    /// Answer the commands of svx::vector::PartCommand, other than Graphic.
+    /// Answer the commands of svx::vector::PartCommand, other than Graphic and Font.
     void getCommandValues(tools::JsonWriter& rWriter, std::string_view rCommand);
-    /// Answer a VectorRenderingGraphics command, as svx::vector::answerGraphicCommand does.
-    std::string getVectorGraphic(std::string_view rCommand) const;
+    /// Answer a VectorRenderingGraphics or a VectorRenderingFont command, as
+    /// svx::vector::answerResourceCommand does.
+    std::string getVectorResource(std::string_view rCommand) const;
     /// The bytes of block JSON kept, over all sheets.
     SC_DLLPUBLIC size_t heldContentBytes() const;
     /// Keep at most nBytes of block JSON, instead of constHeldContentBytes.

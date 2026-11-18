@@ -2915,13 +2915,24 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testThumbnailDrawsTheMasterAndCarriesI
                                      .value_or(""_ostr);
     CPPUNIT_ASSERT(!aWholeFontId.isEmpty());
     CPPUNIT_ASSERT(aFontId != aWholeFontId);
-    auto oWholeFont = requestVectorPrimitives(".uno:VectorRenderingFont?id=" + aWholeFontId);
-    CPPUNIT_ASSERT(oWholeFont.has_value());
-    const sal_Int32 nSubsetLength
-        = oJson->getString("/fonts/0/data").value_or(OString()).getLength();
-    CPPUNIT_ASSERT(nSubsetLength > 0);
-    CPPUNIT_ASSERT_LESS(oWholeFont->getString("/data").value_or(OString()).getLength(),
-                        nSubsetLength);
+    // The answer for the whole font is a line of JSON, then the font file.
+    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    const OString aCommand(".uno:VectorRenderingFont?id=" + aWholeFontId);
+    const std::string aWholeFont = pDocument->getVectorResource(std::string_view(aCommand));
+    const size_t nNewline = aWholeFont.find('\n');
+    CPPUNIT_ASSERT(nNewline != std::string::npos);
+    const std::optional<tools::JsonPath> oWholeFontJson
+        = tools::JsonPath::parse(std::string_view(aWholeFont).substr(0, nNewline));
+    CPPUNIT_ASSERT(oWholeFontJson.has_value());
+    assertJsonPath(*oWholeFontJson, "/fontId", aWholeFontId);
+    CPPUNIT_ASSERT(!oWholeFontJson->has("data"));
+
+    cpo::uno::Sequence<sal_Int8> aSubsetBytes;
+    const OString aSubsetData = oJson->getString("/fonts/0/data").value_or(OString());
+    comphelper::Base64::decode(aSubsetBytes, std::string_view(aSubsetData));
+    CPPUNIT_ASSERT(aSubsetBytes.hasElements());
+    CPPUNIT_ASSERT_LESS(sal_Int32(aWholeFont.size() - nNewline - 1), aSubsetBytes.getLength());
 }
 
 /// The pixel size of the one image of a thumbnail, which comes as a PNG image.

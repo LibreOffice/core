@@ -1514,16 +1514,18 @@ class Socket {
 			return;
 		} else if (
 			textMsg.startsWith('zstdvectorprimitives:') ||
-			textMsg.startsWith('zstdvectorprimitivesdelta:') ||
-			textMsg.startsWith('zstdvectorrenderingfont:')
+			textMsg.startsWith('zstdvectorprimitivesdelta:')
 		) {
-			// Primitive trees, pushed deltas and font files all carry the
-			// same kind of JSON, so they share one handler that routes by
-			// the JSON type. Only a delta arrives as a push.
+			// Primitive trees and pushed deltas carry the same kind of JSON, so
+			// they share one handler that routes by the JSON type. Only a delta
+			// arrives as a push.
 			this._onZstdVectorPrimitivesMsg(
 				e,
 				textMsg.startsWith('zstdvectorprimitivesdelta:'),
 			);
+			return;
+		} else if (textMsg.startsWith('zstdvectorrenderingfont:')) {
+			this._onZstdVectorRenderingFontMsg(e);
 			return;
 		} else if (textMsg.startsWith('vectorrenderinggraphics:')) {
 			this._onVectorRenderingGraphicsMsg(e);
@@ -3184,28 +3186,14 @@ class Socket {
 		try {
 			const parsed = JSON.parse(json);
 			type = parsed.type || 'unknown';
-			if (parsed.type === 'vectorrenderingfont') {
-				detail =
-					', fontId=' +
-					parsed.fontId +
-					', font=' +
-					(parsed.data ? parsed.data.length : 0) +
-					' base64 bytes';
-			} else {
-				detail = ', objects=' + (parsed.objects ? parsed.objects.length : 0);
-				if (parsed.order) detail += ', order=' + parsed.order.length;
-				if (parsed.version !== undefined)
-					detail += ', version=' + parsed.version;
-			}
+			detail = ', objects=' + (parsed.objects ? parsed.objects.length : 0);
+			if (parsed.order) detail += ', order=' + parsed.order.length;
+			if (parsed.version !== undefined) detail += ', version=' + parsed.version;
 		} catch (error) {
 			// Leave the detail empty.
 		}
 		this._map._debug?.vectorDataAdd(
-			type === 'vectorrenderingfont'
-				? 'font'
-				: type === 'vectorrenderinggraphics'
-					? 'graphics'
-					: 'content',
+			'content',
 			compressed.length,
 			json.length,
 			pushed,
@@ -3229,6 +3217,44 @@ class Socket {
 					' ' +
 					json,
 			);
+	}
+
+	// 'zstdvectorrenderingfont:' message: the answer to a .uno:VectorRenderingFont request. The
+	// first line holds the JSON, and the font file follows it, compressed with zstd.
+	private _onZstdVectorRenderingFontMsg(
+		e: SlurpMessageEvent | MinimalMessageEvent,
+	): void {
+		const event = e as SlurpMessageEvent;
+		const textMsg = event.textMsg;
+		const values: cool.VectorRenderingFontResponse = JSON.parse(
+			textMsg.substring(textMsg.indexOf('{')),
+		);
+		let compressedLength = 0;
+		if (
+			event.imgBytes &&
+			event.imgIndex !== undefined &&
+			event.imgIndex < event.imgBytes.length
+		) {
+			const compressed = event.imgBytes.subarray(event.imgIndex);
+			compressedLength = compressed.length;
+			values.bytes = (window as any).fzstd.decompress(compressed);
+		}
+		this._map._debug?.vectorDataAdd(
+			'font',
+			textMsg.length + compressedLength,
+			textMsg.length + (values.bytes ? values.bytes.length : 0),
+			false,
+		);
+		window.app.console.log(
+			'zstdvectorrenderingfont pulled payload: ' +
+				compressedLength +
+				' bytes compressed, fontId=' +
+				values.fontId +
+				', font=' +
+				(values.bytes ? values.bytes.length : 0) +
+				' bytes',
+		);
+		RenderManager.handleVectorRenderingFontResponse(values);
 	}
 
 	// 'vectorrenderinggraphics:' message: the answer to a .uno:VectorRenderingGraphics request.

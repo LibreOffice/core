@@ -171,12 +171,13 @@ class VectorResourceLoader {
 			this.fonts.clearInFlight(fontId);
 			return;
 		}
-		if (!values.data) {
+		const file = values.bytes ?? values.data;
+		if (!file) {
 			// The engine does not hold the id.
 			this.fonts.setUnavailable(fontId);
 			return;
 		}
-		VectorResourceLoader.loadFontFace(fontId, values.data)
+		VectorResourceLoader.loadFontFace(fontId, file)
 			.then((face) => {
 				this.fonts.setLoaded(fontId, face);
 				this._loaded(this.fonts.partsFor(fontId));
@@ -186,13 +187,22 @@ class VectorResourceLoader {
 			});
 	}
 
-	/// Load a font file given in base64 as a FontFace of the family "vecfont-<id>", and put it
-	/// on the document once it loads. The promise is rejected when the file does not decode.
-	static async loadFontFace(fontId: string, data: string): Promise<FontFace> {
-		const binary = window.atob(data);
-		const bytes = new Uint8Array(binary.length);
-		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-		const face = new FontFace('vecfont-' + fontId, bytes.buffer);
+	/// Load a font file, given as its bytes or in base64, as a FontFace of the family
+	/// "vecfont-<id>", and put it on the document once it loads. The promise is rejected when the
+	/// file does not decode.
+	static async loadFontFace(
+		fontId: string,
+		file: Uint8Array | string,
+	): Promise<FontFace> {
+		let bytes: Uint8Array;
+		if (typeof file === 'string') {
+			const binary = window.atob(file);
+			bytes = new Uint8Array(binary.length);
+			for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+		} else {
+			bytes = file;
+		}
+		const face = new FontFace('vecfont-' + fontId, bytes);
 		await face.load();
 		(document as unknown as { fonts: Set<FontFace> }).fonts.add(face);
 		return face;

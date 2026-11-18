@@ -1903,11 +1903,26 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
             frame += '\n';
         success = sendBinaryFrame(frame.data(), frame.size());
     }
-    else if (isPrimitives || isFont)
+    else if (isFont)
     {
-        // The primitive-tree JSON and font files are large, so compress
-        // them with zstd. Fall back to an uncompressed text frame if
-        // compression fails.
+        // The answer is a line of JSON, then the bytes of the font file after a newline. A font
+        // file compresses well, so the bytes go out compressed with zstd. An answer without a font,
+        // or one that fails to compress, goes out as the line alone, and the client takes the font
+        // as unavailable.
+        const std::string answer(getLOKitDocument()->getCommandValues(command.c_str()));
+        const std::size_t newline = answer.find('\n');
+        const std::string json = answer.substr(0, newline);
+        const std::string header =
+            "zstdvectorrenderingfont: " + (json.empty() ? std::string("{}") : json) + '\n';
+        success = newline != std::string::npos &&
+                  sendZstdFrame(header, answer.data() + newline + 1, answer.size() - newline - 1);
+        if (!success)
+            success = sendBinaryFrame(header.data(), header.size());
+    }
+    else if (isPrimitives)
+    {
+        // The primitive-tree JSON is large, so compress it with zstd. Fall back to an
+        // uncompressed text frame if compression fails.
         std::string json(getLOKitDocument()->getCommandValues(command.c_str()));
         if (json.empty())
             json = "{}";
@@ -1917,12 +1932,11 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         // is the header alone, a few short fields. The session holds the part from here on when
         // the document served it, and a client that holds a part draws the document from
         // primitives.
-        if (isPrimitives && !partId.empty() && json.find("\"version\"") != std::string::npos)
+        if (!partId.empty() && json.find("\"version\"") != std::string::npos)
             _vectorParts.insert(partId);
         // A primitive tree reflects every input applied so far, so it carries the input sequence.
-        const std::string sequence = isFont ? std::string() : inputSequenceToken();
-        const std::string header = isFont ? std::string("zstdvectorrenderingfont:\n")
-                                          : "zstdvectorprimitives:" + sequence + '\n';
+        const std::string sequence = inputSequenceToken();
+        const std::string header = "zstdvectorprimitives:" + sequence + '\n';
         success = sendZstdFrame(header, json.data(), json.size());
         if (!success)
             success = sendTextFrame("commandvalues:" + sequence + ' ' + json);

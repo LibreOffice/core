@@ -514,8 +514,8 @@ public:
     /// @see vcl::IVectorParts::forgetVectorPart().
     void forgetVectorPart(std::string_view rPartId) override;
 
-    /// @see vcl::IVectorParts::getVectorGraphic().
-    std::string getVectorGraphic(std::string_view rCommand) override;
+    /// @see vcl::IVectorParts::getVectorResource().
+    std::string getVectorResource(std::string_view rCommand) override;
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
     OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;

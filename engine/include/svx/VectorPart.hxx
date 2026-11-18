@@ -333,24 +333,24 @@ SVXCORE_DLLPUBLIC PartCommand partCommandOf(std::string_view rCommand);
 /// the document counts in.
 SVXCORE_DLLPUBLIC PartRequest readPartRequest(std::string_view rCommand, sal_Int32 nEpoch);
 
-/** Answers rCommand, a command with its parameters, when it is one of the commands of
-    PartCommand other than Graphic, and returns false for any other command. A font comes from
-    rResources.
+/** Answers rCommand, a command with its parameters, when it is "VectorPrimitives" or
+    "VectorForgetPart", and returns false for any other command.
     rWritePart writes the primitives of the part a request names. rForgetPart drops the state of
     a part, and the answer to it is empty. Without rForgetPart a part is kept.
  */
 SVXCORE_DLLPUBLIC bool
-answerPartCommand(tools::JsonWriter& rWriter, std::string_view rCommand,
+answerPartCommand(std::string_view rCommand,
                   const drawinglayer::VectorResourceCache& rResources,
                   const std::function<void(const PartRequest&)>& rWritePart,
                   const std::function<void(std::string_view)>& rForgetPart = {});
 
-/// The answer to rCommand, a "VectorRenderingGraphics" command with its checksum parameter, from
-/// rResources: a line of JSON, then the bytes of the image after a newline when there is one.
-/// Empty when the command names no checksum.
+/// The answer to rCommand from rResources, when rCommand is a "VectorRenderingGraphics" command
+/// with its checksum parameter or a "VectorRenderingFont" command with its id parameter: a line of
+/// JSON, then the bytes of the image or of the font file after a newline when there is one. Empty
+/// for any other command, and when the command names no checksum or no id.
 SVXCORE_DLLPUBLIC std::string
-answerGraphicCommand(std::string_view rCommand,
-                     const drawinglayer::VectorResourceCache& rResources);
+answerResourceCommand(std::string_view rCommand,
+                      const drawinglayer::VectorResourceCache& rResources);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

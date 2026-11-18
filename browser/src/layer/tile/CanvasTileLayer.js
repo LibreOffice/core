@@ -1390,8 +1390,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			values.inputSequence = sequence;
 	},
 
-	// Hands an answer that carries vector primitives or a font of them to the render manager.
-	// Returns true when the values were such an answer.
+	// Hands an answer that carries vector primitives to the render manager. Returns true when the
+	// values were such an answer.
 	_onVectorValues: function (values) {
 		switch (values.type) {
 		case 'vectorprimitives':
@@ -1399,9 +1399,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return true;
 		case 'vectorprimitivesdelta':
 			RenderManager.handleVectorPrimitivesDelta(values);
-			return true;
-		case 'vectorrenderingfont':
-			RenderManager.handleVectorRenderingFontResponse(values);
 			return true;
 		}
 		return false;

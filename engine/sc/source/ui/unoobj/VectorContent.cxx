@@ -662,15 +662,15 @@ VectorContent::~VectorContent() { mxChartListener->stop(); }
 void VectorContent::getCommandValues(tools::JsonWriter& rWriter, std::string_view rCommand)
 {
     svx::vector::answerPartCommand(
-        rWriter, rCommand, maResources,
+        rCommand, maResources,
         [this, &rWriter](const svx::vector::PartRequest& rRequest)
         { writeRequestedSheet(rWriter, rRequest); },
         [this](std::string_view rPartId) { forgetSheet(rPartId); });
 }
 
-std::string VectorContent::getVectorGraphic(std::string_view rCommand) const
+std::string VectorContent::getVectorResource(std::string_view rCommand) const
 {
-    return svx::vector::answerGraphicCommand(rCommand, maResources);
+    return svx::vector::answerResourceCommand(rCommand, maResources);
 }
 
 void VectorContent::forgetSheet(std::string_view rPartId)

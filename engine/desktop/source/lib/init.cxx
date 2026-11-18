@@ -9503,9 +9503,10 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
 
     if (pVectorParts)
     {
-        // The image bytes follow the JSON as they are.
-        if (eVectorCommand == svx::vector::PartCommand::Graphic)
-            return pVectorParts->getVectorGraphic(aCommand);
+        // The bytes of the image or of the font file follow the JSON as they are.
+        if (eVectorCommand == svx::vector::PartCommand::Graphic
+            || eVectorCommand == svx::vector::PartCommand::Font)
+            return pVectorParts->getVectorResource(aCommand);
 
         tools::JsonWriter aJsonWriter;
         pVectorParts->answerVectorCommand(aJsonWriter, aCommand);

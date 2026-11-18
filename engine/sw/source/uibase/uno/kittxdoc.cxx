@@ -1501,12 +1501,12 @@ std::vector<OString> SwXTextDocument::getVectorPartIds()
     return pLayout ? sw::vector::partIdsOf(*pLayout) : std::vector<OString>();
 }
 
-std::string SwXTextDocument::getVectorGraphic(std::string_view rCommand)
+std::string SwXTextDocument::getVectorResource(std::string_view rCommand)
 {
-    // The graphics are those of the pages served so far.
+    // The graphics and fonts are those of the pages served so far.
     SwDoc* pDoc = m_pDocShell ? m_pDocShell->GetDoc() : nullptr;
     sw::vector::PartStore* pParts = pDoc ? pDoc->GetVectorParts() : nullptr;
-    return pParts ? svx::vector::answerGraphicCommand(rCommand, pParts->getResources())
+    return pParts ? svx::vector::answerResourceCommand(rCommand, pParts->getResources())
                   : std::string();
 }
 
@@ -1549,7 +1549,7 @@ bool SwXTextDocument::answerVectorCommand(tools::JsonWriter& rJsonWriter,
         [] { comphelper::COKit::setVectorRendering(false); });
 
     svx::vector::answerPartCommand(
-        rJsonWriter, rCommand, pParts->getResources(),
+        rCommand, pParts->getResources(),
         [pParts, &rJsonWriter, pLayout](const svx::vector::PartRequest& rRequest) {
             pParts->write(rJsonWriter, *pLayout, rRequest.maPartId, rRequest.mnSinceVersion,
                           /*bPush=*/false);

@@ -68,8 +68,12 @@ public:
     /// cannot be encoded is answered with the JSON alone, which has an "error" reason instead.
     std::string graphicAnswer(sal_Int64 nChecksum) const;
 
-    /// Write the answer to a font request: type, font id in hex, and the bytes in base64 if known.
+    /// Write a font: type, font id in hex, and the bytes of the font file in base64 if known.
     void writeFont(tools::JsonWriter& rWriter, sal_uInt64 nFontId) const;
+
+    /// The answer to a font request: a line of JSON with type and font id in hex, a newline, then
+    /// the bytes of the font file. A font that is not held is answered with the JSON alone.
+    std::string fontAnswer(sal_uInt64 nFontId) const;
 
     /// The font with nFontId cut down to rCharacters, or nothing when the font is not held or
     /// cannot be cut down.

@@ -238,20 +238,20 @@ export class SocketClient {
 	}
 
 	/// Asks for the file of the font face with the given id and returns the JSON object of the
-	/// answer. It comes compressed under zstdvectorrenderingfont, or as commandvalues when it
-	/// cannot be compressed.
+	/// answer. The JSON is the first line of the answer, and the font file that follows it,
+	/// compressed with zstd, is the bytes of the object, when the font is known.
 	async vectorFont(fontId: string): Promise<any> {
 		const mark = this.mark();
 		this.send('commandvalues command=.uno:VectorRenderingFont?id=' + fontId);
-		const answer = await this.waitFor(
-			(m) =>
-				m.text.startsWith('zstdvectorrenderingfont:') ||
-				(m.text.startsWith('commandvalues:') &&
-					m.text.includes('vectorrenderingfont')),
+		const answer = await this.waitForPrefix(
+			'zstdvectorrenderingfont:',
 			undefined,
 			mark,
 		);
-		return vectorJsonOf(answer);
+		const values = jsonOf(answer);
+		if (answer.body && answer.body.length > 0)
+			values.bytes = decompress(answer.body);
+		return values;
 	}
 
 	/// Asks for the image with the given checksum and returns the JSON object of the answer. The

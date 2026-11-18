@@ -110,7 +110,9 @@ describe('Integration: vector primitives of slide text', function () {
 
 		const font = await client.vectorFont(fontId);
 		nodeassert.strictEqual(font.type, 'vectorrenderingfont');
-		// A real font file is far longer in base64. The bound catches an empty answer only.
-		nodeassert.ok(typeof font.data === 'string' && font.data.length > 1000);
+		nodeassert.strictEqual(font.fontId, fontId);
+		nodeassert.strictEqual(font.data, undefined);
+		// A real font file is far longer. The bound catches an empty answer only.
+		nodeassert.ok(font.bytes instanceof Uint8Array && font.bytes.length > 1000);
 	});
 });
