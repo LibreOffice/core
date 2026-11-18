@@ -286,7 +286,6 @@ enum class FileDialogType
 {
     Config,
     System,
-    OOo,
     Remote,
 };
 

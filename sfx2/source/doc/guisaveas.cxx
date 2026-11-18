@@ -1642,10 +1642,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                 bool bUseSystemDialog = true;
                 if ( aDlgIter->second >>= bUseSystemDialog )
                 {
-                    if ( bUseSystemDialog )
-                        eDialog = sfx2::FileDialogType::System;
-                    else
-                        eDialog = sfx2::FileDialogType::OOo;
+                    eDialog = sfx2::FileDialogType::System;
                 }
             }
         }

@@ -943,7 +943,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     switch (eDialog)
     {
         case FileDialogType::System:
-        case FileDialogType::OOo:
             sServiceName = u"com.sun.star.ui.dialogs.OfficeFilePicker"_ustr;
             break;
         case FileDialogType::Remote:

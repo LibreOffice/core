@@ -619,8 +619,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         FileDialogType eDialog = FileDialogType::Config;
         const SfxBoolItem* pSystemDialogItem = rReq.GetArg(SID_FILE_DIALOG);
         if ( pSystemDialogItem )
-            eDialog = pSystemDialogItem->GetValue() ? FileDialogType::System
-                                                    : FileDialogType::OOo;
+            eDialog = FileDialogType::System;
 
         const SfxBoolItem* pRemoteDialogItem = rReq.GetArg(SID_REMOTE_DIALOG);
         if ( pRemoteDialogItem && pRemoteDialogItem->GetValue())
