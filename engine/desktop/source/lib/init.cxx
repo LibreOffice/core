@@ -9345,32 +9345,33 @@ static std::string getFonts (const char* pCommand, const bool bBloatWithRepeated
     }
     else // FIXME: remove nonsensical legacy version
     {
-        boost::property_tree::ptree aTree;
-        aTree.put("commandName", pCommand);
-        boost::property_tree::ptree aValues;
-        if ( pList )
+        tools::JsonWriter aJson;
+        aJson.put("commandName", pCommand);
         {
-            sal_uInt16 nFontCount = pList->GetFontNameCount();
-            for (sal_uInt16 i = 0; i < nFontCount; ++i)
+            auto aValues = aJson.startNode("commandValues");
+            if (pList)
             {
-                boost::property_tree::ptree aChildren;
-                const FontMetric& rFontMetric = pList->GetFontName(i);
-                const int* pAry = FontList::GetStdSizeAry();
-                sal_uInt16 nSizeCount = 0;
-                while (pAry[nSizeCount])
+                // Each font lists the standard sizes in points as strings, such as "10" and
+                // "10.5". The sizes are given in tenths of a point.
+                std::vector<OUString> aSizes;
+                for (const int* pSize = FontList::GetStdSizeAry(); *pSize; ++pSize)
                 {
-                    boost::property_tree::ptree aChild;
-                    aChild.put("", static_cast<float>(pAry[nSizeCount]) / 10);
-                    aChildren.push_back(std::make_pair("", aChild));
-                    nSizeCount++;
+                    OUString aSize = OUString::number(*pSize / 10);
+                    if (*pSize % 10)
+                        aSize += "." + OUString::number(*pSize % 10);
+                    aSizes.push_back(aSize);
                 }
-                aValues.add_child(rFontMetric.GetFamilyName().toUtf8().getStr(), aChildren);
+
+                sal_uInt16 nFontCount = pList->GetFontNameCount();
+                for (sal_uInt16 i = 0; i < nFontCount; ++i)
+                {
+                    auto aFont = aJson.startArray(pList->GetFontName(i).GetFamilyName());
+                    for (const OUString& rSize : aSizes)
+                        aJson.putSimpleValue(rSize);
+                }
             }
         }
-        aTree.add_child("commandValues", aValues);
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-        aResult = aStream.str();
+        aResult = aJson.finishAndGetAsStdString();
     }
 
     aFontsCache.store(aCacheKey, aResult);

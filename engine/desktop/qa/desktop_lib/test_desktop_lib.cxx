@@ -857,6 +857,13 @@ void DesktopKitTest::testGetFonts()
     {
         // check that we have font sizes available for each font
         CPPUNIT_ASSERT( !rPair.second.empty());
+
+        // each font lists the standard sizes in points, half points included
+        std::vector<std::string> aSizes;
+        for (const auto& rSize : rPair.second)
+            aSizes.push_back(rSize.second.get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(std::string("6"), aSizes.front());
+        CPPUNIT_ASSERT(std::find(aSizes.begin(), aSizes.end(), "10.5") != aSizes.end());
     }
 }
 

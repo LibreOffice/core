@@ -75,6 +75,16 @@ JsonWriter::ScopedJsonWriterNode<']'> JsonWriter::startArray(std::string_view pN
     return { *this };
 }
 
+JsonWriter::ScopedJsonWriterNode<']'> JsonWriter::startArray(std::u16string_view pNodeName)
+{
+    putLiteral(pNodeName, "[ ");
+
+    mStartNodeCount++;
+    mbFirstFieldInNode = true;
+
+    return { *this };
+}
+
 JsonWriter::ScopedJsonWriterNode<']'> JsonWriter::startAnonArray()
 {
     putRaw("[ ");
@@ -354,6 +364,22 @@ void JsonWriter::ensureSpaceAndWriteNameColon(std::string_view name, int valSize
 void JsonWriter::putLiteral(std::string_view propName, std::string_view propValue)
 {
     ensureSpaceAndWriteNameColon(propName, propValue.size());
+    memcpy(mPos, propValue.data(), propValue.size());
+    mPos += propValue.size();
+
+    validate();
+}
+
+void JsonWriter::putLiteral(std::u16string_view propName, std::string_view propValue)
+{
+    // an escaped UTF-16 code unit takes at most 6 bytes, see writeEscapedSequence
+    ensureSpace(propName.size() * 6 + propValue.size() + 6);
+
+    addCommaBeforeField();
+
+    writeEscapedOUString(propName);
+    memcpy(mPos, ": ", 2);
+    mPos += 2;
     memcpy(mPos, propValue.data(), propValue.size());
     mPos += propValue.size();
 

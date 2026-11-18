@@ -24,6 +24,7 @@ public:
     void test1();
     void test2();
     void testArray();
+    void testArrayNameEscaped();
     void testEmptyDocument();
     void testBase64();
 
@@ -31,6 +32,7 @@ public:
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST(test2);
     CPPUNIT_TEST(testArray);
+    CPPUNIT_TEST(testArrayNameEscaped);
     CPPUNIT_TEST(testEmptyDocument);
     CPPUNIT_TEST(testBase64);
     CPPUNIT_TEST_SUITE_END();
@@ -93,6 +95,21 @@ void JsonWriterTest::testArray()
     OString aResult(aJson.finishAndGetAsOString());
 
     CPPUNIT_ASSERT_EQUAL("{ \"items\": [ \"foo\", \"bar\"]}"_ostr, aResult);
+}
+
+void JsonWriterTest::testArrayNameEscaped()
+{
+    // An array named by any text gets a valid JSON name, here with a quote, a slash and a
+    // character outside ASCII.
+    tools::JsonWriter aJson;
+    {
+        auto aArray = aJson.startArray(u"Font \"A\"/\u00e9");
+        aJson.putSimpleValue(u"10");
+    }
+
+    OString aResult(aJson.finishAndGetAsOString());
+
+    CPPUNIT_ASSERT_EQUAL("{ \"Font \\\"A\\\"\\/\xc3\xa9\": [ \"10\"]}"_ostr, aResult);
 }
 
 void JsonWriterTest::testEmptyDocument()

@@ -53,6 +53,8 @@ public:
 
     [[nodiscard]] ScopedJsonWriterNode<'}'> startNode(std::string_view nodeName);
     [[nodiscard]] ScopedJsonWriterNode<']'> startArray(std::string_view nodeName);
+    /// An array whose name is any text, written escaped as UTF-8.
+    [[nodiscard]] ScopedJsonWriterNode<']'> startArray(std::u16string_view nodeName);
     [[nodiscard]] ScopedJsonWriterNode<']'> startAnonArray();
     [[nodiscard]] ScopedJsonWriterNode<'}'> startStruct();
 
@@ -107,6 +109,8 @@ private:
     void ensureSpace(int noMoreBytesRequired);
     void ensureSpaceAndWriteNameColon(std::string_view name, int valSize);
     void putLiteral(std::string_view propName, std::string_view propValue);
+    /// A name that is any text, written escaped as UTF-8.
+    void putLiteral(std::u16string_view propName, std::string_view propValue);
 
     // overflow validation in debug mode
     static constexpr unsigned char JSON_WRITER_DEBUG_MARKER = 0xde;
