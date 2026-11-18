@@ -79,6 +79,26 @@ describe(['tagdesktop'], 'Spreadsheet drawn from vector primitives', function() 
 		});
 	});
 
+	it('moves the cell cursor locally', function() {
+		// A vector view starts in the local mode with no parameter of its own.
+		cy.then(function() {
+			expect(win.app.map._debug.localCellCursorOn).to.equal(true);
+			sent.length = 0;
+		});
+
+		// Move to B1; the client should report the move to the engine.
+		helper.typeIntoDocument('{rightArrow}');
+		helper.waitForTimers(win, 'localcellcursorrest');
+		calcHelper.assertAddressAfterIdle(win, 'B1');
+		cy.wrap(null).should(function() {
+			var moves = sent.filter(function(message) {
+				return message.indexOf('setcellcursor') === 0;
+			});
+			expect(moves.length).to.equal(1);
+			expect(moves[0]).to.match(/^setcellcursor part=0 col=1 row=0 sequence=\d+$/);
+		});
+	});
+
 	it('completes a typed text from its column and keeps it after the second character', function() {
 		// Every keystroke shows at once in the browser and is answered by the engine. A text
 		// completed from the column keeps the same text after the second character, which the

@@ -182,8 +182,14 @@ class DebugManager {
 		this.messageDelayOn = startingRoundTrip > 0;
 		if (this.messageDelayOn) this._messageDelayMs = startingRoundTrip / 2;
 		this.predictedCaretOn = false;
-		this.localCellCursorOn =
-			window.coolParams.get('localcellcursor') === 'true';
+
+		// The local cell cursor starts out as the vector switch does, unless
+		// the document was opened with a parameter of its own.
+		const localCellCursor = window.coolParams.get('localcellcursor');
+		if (localCellCursor === '')
+			// No parameter was given - follow the vector switch.
+			this.localCellCursorOn = this.vectorOn;
+		else this.localCellCursorOn = localCellCursor === 'true';
 	}
 
 	public toggle(): void {
