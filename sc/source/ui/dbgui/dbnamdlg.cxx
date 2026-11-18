@@ -121,6 +121,7 @@ void DBSaveData::Restore()
 }
 
 static std::unique_ptr<DBSaveData> xSaveObj;
+static bool bIsExpanded = false;
 
 ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
     ScViewData& rViewData)
@@ -157,6 +158,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     aStrAdd = m_xBtnAdd->get_label();
     aStrModify = m_xModifyPB->get_label();
     aStrInvalid = m_xInvalidFT->get_label();
+    m_xExpander->set_expanded(bIsExpanded);
 
     //  so that the strings in the resource can stay with fixed texts:
     aStrSource      = m_xFTSource->get_label();
@@ -169,6 +171,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
 
 ScDbNameDlg::~ScDbNameDlg()
 {
+    bIsExpanded = m_xExpander->get_expanded();
     xSaveObj.reset();
 }
 
