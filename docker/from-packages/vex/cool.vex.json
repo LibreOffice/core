@@ -1,9 +1,9 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "version": 5,
+  "version": 6,
   "metadata": {
-    "timestamp": "2026-11-18T21:38:24Z",
+    "timestamp": "2026-11-18T21:38:49Z",
     "supplier": {
       "name": "Collabora Productivity Ltd.",
       "url": [
@@ -404,7 +404,7 @@
       "description": "openssl: A certificate with many nameRelativeToCRLIssuer CRL distribution points causes disproportionate heap growth when OpenSSL caches X.509 extensions",
       "analysis": {
         "state": "in_triage",
-        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29; engine/download.lst still has openssl-3.5.8."
+        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29. Re-checked on 2026-11-18: 3.5.9 is still the newest 3.5 release, and engine/download.lst still has openssl-3.5.8."
       }
     },
     {
@@ -462,7 +462,7 @@
       "description": "openssl: The generic elliptic-curve scalar multiplication used for ECDSA and SM2 signature operations with curves that do not have a dedicated implementation leaks information\u2026",
       "analysis": {
         "state": "in_triage",
-        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29; engine/download.lst still has openssl-3.5.8."
+        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29. Re-checked on 2026-11-18: 3.5.9 is still the newest 3.5 release, and engine/download.lst still has openssl-3.5.8."
       }
     },
     {
@@ -479,7 +479,7 @@
       "description": "openssl: A non-constant-time optimized implementation of scalar point multiplication is used for SM2 private key operations on ARM64 and RISC-V platforms",
       "analysis": {
         "state": "in_triage",
-        "detail": "Collabora security assessment: low severity, and only the ARM and RISC-V implementations are affected. We publish an arm64 image, so this is not dismissed as inapplicable. Fixed upstream in openssl 3.5.9, released 2026-09-29; engine/download.lst still has openssl-3.5.8."
+        "detail": "Collabora security assessment: low severity, and only the ARM and RISC-V implementations are affected. We publish an arm64 image, so this is not dismissed as inapplicable. Fixed upstream in openssl 3.5.9, released 2026-09-29. Re-checked on 2026-11-18: 3.5.9 is still the newest 3.5 release, and engine/download.lst still has openssl-3.5.8."
       }
     },
     {
@@ -547,7 +547,7 @@
       "description": "openssl: SM2 signature generation uses non-constant-time arithmetic on secret values, forming a timing side-channel",
       "analysis": {
         "state": "in_triage",
-        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29; engine/download.lst still has openssl-3.5.8."
+        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29. Re-checked on 2026-11-18: 3.5.9 is still the newest 3.5 release, and engine/download.lst still has openssl-3.5.8."
       }
     },
     {
@@ -570,18 +570,92 @@
     },
     {
       "id": "GHSA-6688-9rhm-gjv2",
+      "references": [
+        {
+          "id": "CVE-2026-109345",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109345"
+          }
+        }
+      ],
       "description": "dompurify: DOMPurify: IN_PLACE returns a force-removed rawtext root whose text carries attacker markup \u2014 pure HTML reparse executes",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Re-checked on 2026-11-04: fixed in 3.4.16 (2026-09-23), and 3.4.17 (2026-10-12) is current; browser/package.json still pins 3.4.14. The flaw needs IN_PLACE, which has still to be checked against our sanitizer call sites."
+        "state": "not_affected",
+        "detail": "The flaw needs IN_PLACE mode. Every DOMPurify.sanitize call in the browser client passes a string and uses the returned string, and no call and no setConfig sets IN_PLACE. Fixed in 3.4.16. browser/package.json pins dompurify 3.4.14 (3.4.18 of 2026-11-14 is current). ",
+        "justification": "requires_configuration"
+      }
+    },
+    {
+      "id": "GHSA-c6gr-qvv4-5v3f",
+      "references": [
+        {
+          "id": "CVE-2026-116802",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-116802"
+          }
+        }
+      ],
+      "description": "dompurify: DOMPurify: SMIL attributeName=href guard is skipped when PARSER_MEDIA_TYPE is application/xhtml+xml",
+      "analysis": {
+        "state": "not_affected",
+        "justification": "requires_configuration",
+        "detail": "The flaw needs PARSER_MEDIA_TYPE set to application/xhtml+xml. No DOMPurify call or setConfig in the browser client sets PARSER_MEDIA_TYPE, so every call parses as text/html, where the attribute name is lowercased and the guard works. Fixed in 3.4.17. browser/package.json pins dompurify 3.4.14 (3.4.18 of 2026-11-14 is current). "
+      }
+    },
+    {
+      "id": "GHSA-cg2g-xh64-v4q7",
+      "references": [
+        {
+          "id": "CVE-2026-116804",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-116804"
+          }
+        }
+      ],
+      "description": "dompurify: DOMPurify SAFE_FOR_TEMPLATES bypass: split template expressions survive in attached shadow root content on DOM output modes",
+      "analysis": {
+        "state": "not_affected",
+        "justification": "requires_configuration",
+        "detail": "The flaw needs SAFE_FOR_TEMPLATES together with RETURN_DOM, RETURN_DOM_FRAGMENT or IN_PLACE. Every DOMPurify.sanitize call in the browser client passes a string and uses the returned string, and no call and no setConfig sets any of these options. Fixed in 3.4.17. browser/package.json pins dompurify 3.4.14 (3.4.18 of 2026-11-14 is current). "
+      }
+    },
+    {
+      "id": "GHSA-mrv2-3pqr-j5jr",
+      "references": [
+        {
+          "id": "CVE-2026-116803",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-116803"
+          }
+        }
+      ],
+      "description": "dompurify: DOMPurify IN_PLACE: hook that removes a parent or sibling leaves the detached subtree's event handlers armed",
+      "analysis": {
+        "state": "not_affected",
+        "justification": "requires_configuration",
+        "detail": "The flaw needs IN_PLACE mode and a hook that removes a parent or a sibling node. Every DOMPurify.sanitize call in the browser client passes a string and uses the returned string, and no call and no setConfig sets IN_PLACE. The two hooks the client registers, uponSanitizeAttribute and afterSanitizeAttributes, only set attributes and never remove a node. Fixed in 3.4.17. browser/package.json pins dompurify 3.4.14 (3.4.18 of 2026-11-14 is current). "
       }
     },
     {
       "id": "GHSA-p98j-92pf-mc4p",
+      "references": [
+        {
+          "id": "CVE-2026-109344",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109344"
+          }
+        }
+      ],
       "description": "dompurify: DOMPurify: IN_PLACE: node-removing afterSanitize hook leaves detached subtree event handlers armed, causing DOM XSS",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Re-checked on 2026-11-04: fixed in 3.4.16 (2026-09-23), and 3.4.17 (2026-10-12) is current; browser/package.json still pins 3.4.14. The flaw needs IN_PLACE and a node-removing afterSanitize hook, neither yet checked against our sanitizer call sites."
+        "state": "not_affected",
+        "detail": "The flaw needs IN_PLACE mode and a hook that removes a node. Every DOMPurify.sanitize call in the browser client passes a string and uses the returned string, and no call and no setConfig sets IN_PLACE. The two hooks the client registers, uponSanitizeAttribute and afterSanitizeAttributes, only set attributes and never remove a node. Fixed in 3.4.16. browser/package.json pins dompurify 3.4.14 (3.4.18 of 2026-11-14 is current). ",
+        "justification": "requires_configuration"
       }
     }
   ]
