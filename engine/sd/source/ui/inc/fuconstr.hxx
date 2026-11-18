@@ -23,6 +23,8 @@
 
 class SdrObject;
 class SfxItemSet;
+class SfxStyleSheet;
+class SdPage;
 
 namespace sd {
 
@@ -51,6 +53,11 @@ public:
     // is determined by the parameters bUseFillStyle and bUseNoFillStyle :
     void SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             const bool bUseFillStyle, const bool bUseNoFillStyle );
+
+    /// The style an object made on that page takes in place of the one the model gives every new
+    /// object: the style of the background objects of a slide master in a presentation, nullptr
+    /// for any other page.
+    static SfxStyleSheet* MasterStyleSheetOf(const SdPage& rPage);
 
 protected:
     FuConstruct (ViewShell& rViewSh,

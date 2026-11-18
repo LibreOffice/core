@@ -219,9 +219,14 @@ public:
     /// Makes the default dimension line or connector of that slot in the default size, as the
     /// tool for it makes it; nothing for another slot. It is not inserted anywhere.
     rtl::Reference<SdrObject> MakeDefaultLineObject(sal_uInt16 nSlotId);
-    /// A key of the attributes a new shape of this view takes, its own and those of its style, and
-    /// of the build that makes it: a hash in hexadecimal, the same as long as they are the same.
-    OString GetShapeStyleKey();
+    /// The style a new shape on the page of this view takes: the style of the background objects
+    /// on a slide master of a presentation, the default style of the model elsewhere.
+    SfxStyleSheet* GetNewShapeStyle();
+    /// A key of the attributes a new shape takes from that style, its own item set and those of
+    /// its parents, and of the build that makes it: a hash in hexadecimal, the same as long as
+    /// they are the same. The attributes a shape is given by itself are the same for every
+    /// shape of a kind in one build, so the build stands for them.
+    static OString GetShapeStyleKey(SfxStyleSheet* pStyle);
     /// Reserves that many object ids for this view, which no other object takes, and answers the
     /// first; the rest follow it. A client gives the objects it creates one of them each.
     sal_uInt64 ReserveObjectIds(sal_uInt32 nCount);

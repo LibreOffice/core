@@ -9399,6 +9399,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeStyleKey)
     // new shapes take the fill colour of the default style, so the key changes with it
     SfxStyleSheet* pStyle = pXImpressDocument->GetDoc()->GetDefaultStyleSheet();
     CPPUNIT_ASSERT(pStyle);
+    const std::unique_ptr<SfxPoolItem> pFillColor(pStyle->GetItemSet().Get(XATTR_FILLCOLOR).Clone());
     pStyle->GetItemSet().Put(XFillColorItem(OUString(), COL_LIGHTMAGENTA));
     pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
     const std::string aChangedKey = styleKey();
@@ -9407,6 +9408,18 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeStyleKey)
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(),
                              ".uno:ShapeStyleKey=" + aChangedKey)
                    != aView.m_aStateChanged.end());
+
+    // a hint that changes nothing tells the view nothing
+    aView.m_aStateChanged.clear();
+    pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
+    CPPUNIT_ASSERT(std::none_of(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(),
+                                [](const std::string& rState)
+                                { return rState.starts_with(".uno:ShapeStyleKey="); }));
+
+    // the attributes as they were give the key they had
+    pStyle->GetItemSet().Put(*pFillColor);
+    pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
+    CPPUNIT_ASSERT_EQUAL(aKey, styleKey());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShape)

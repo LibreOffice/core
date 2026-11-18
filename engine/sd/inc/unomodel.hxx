@@ -53,6 +53,7 @@
 #include <unordered_map>
 #include <optional>
 #include <unordered_set>
+#include <map>
 #include <vector>
 
 #include <vcl/BinaryDataContainer.hxx>
@@ -302,13 +303,15 @@ private:
     /// and how it is drawn.
     void writeShapeGhost(tools::JsonWriter& rJsonWriter, std::u16string_view aShape);
 
-    /// The style new shapes take, listened to once a client asked for the looks of shapes;
-    /// nullptr before that and after the style went.
-    SfxStyleSheet* mpShapeStyle = nullptr;
-    /// Starts listening to the style new shapes take, where it does not yet.
-    void listenToTheShapeStyle();
-    /// Tells every view of the document the key of the attributes its new shapes take.
-    void notifyShapeStyleKey();
+    /// The keys of the attributes new shapes take, see sd::DrawViewShell::GetShapeStyleKey(), one
+    /// for each style new shapes took so far; each style is listened to while its key is held.
+    /// Empty after dispose.
+    std::map<SfxStyleSheet*, OString> maShapeStyleKeys;
+    /// The key of the attributes new shapes of that view take.
+    OString shapeStyleKeyOf(sd::DrawViewShell& rShell);
+    /// Makes the key of that style again and tells the views whose new shapes take that style
+    /// the new key, where it changed.
+    void shapeStyleChanged(SfxStyleSheet& rStyle);
 
     /// Writes a self-contained thumbnail of the slide at index nPart, with images of nDpi pixels
     /// to the inch of their drawn size. The slide's versions stay as they are.

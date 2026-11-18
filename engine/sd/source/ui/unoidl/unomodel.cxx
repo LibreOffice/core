@@ -3009,12 +3009,16 @@ bool SdXImpressDocument::isVectorMasterChangedSince(const SdrPage& rPage, sal_uI
 
 void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (mpShapeStyle && &rBC == mpShapeStyle)
+    // a style passes the changes of its parents on, so this hears every change of the attributes
+    // new shapes take from it
+    if (const auto aStyle = std::find_if(maShapeStyleKeys.begin(), maShapeStyleKeys.end(),
+                                         [&rBC](const auto& rKnown) { return rKnown.first == &rBC; });
+        aStyle != maShapeStyleKeys.end())
     {
         if (rHint.GetId() == SfxHintId::Dying)
-            mpShapeStyle = nullptr;
+            maShapeStyleKeys.erase(aStyle);
         else if (rHint.GetId() == SfxHintId::DataChanged)
-            notifyShapeStyleKey();
+            shapeStyleChanged(*aStyle->first);
         return;
     }
 
@@ -4308,7 +4312,6 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
         { u"FlowChartShapes", SID_DRAWTBX_CS_FLOWCHART },
     };
 
-    listenToTheShapeStyle();
     rJsonWriter.put("commandName", ".uno:ShapeGhost");
     auto aValues = rJsonWriter.startNode("commandValues");
     rJsonWriter.put("shape", OUString(aShape));
@@ -4344,7 +4347,7 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
         return;
 
     // the look holds as long as the attributes of new shapes stay as they are
-    rJsonWriter.put("styleKey", pShell->GetShapeStyleKey());
+    rJsonWriter.put("styleKey", shapeStyleKeyOf(*pShell));
 
     // some shapes are always as wide as high, as the custom shape tool makes them
     rJsonWriter.put("asWideAsHigh", SdrObjCustomShape::doConstructOrthogonal(aType));
@@ -4364,22 +4367,19 @@ void SdXImpressDocument::writeShapeGhost(::tools::JsonWriter& rJsonWriter,
     aWriter.writeObjectOnNoPage(rJsonWriter, pPage, *pObject);
 }
 
-void SdXImpressDocument::listenToTheShapeStyle()
-{
-    if (mpShapeStyle || !mpDoc)
-        return;
-    mpShapeStyle = mpDoc->GetDefaultStyleSheet();
-    if (mpShapeStyle)
-        StartListening(*mpShapeStyle);
-}
-
 /*
-    A changed style makes the looks a client keeps of shapes wrong, so each view gets the new key
-    at once, as the state of .uno:ShapeStyleKey; the key is that of the view, as the page it shows
-    decides which style its new shapes take.
+    A changed style makes the looks a client keeps of shapes wrong, so each view whose new shapes
+    take that style gets the new key at once, as the state of .uno:ShapeStyleKey.
 */
-void SdXImpressDocument::notifyShapeStyleKey()
+void SdXImpressDocument::shapeStyleChanged(SfxStyleSheet& rStyle)
 {
+    OString& rKey = maShapeStyleKeys[&rStyle];
+    const OString aKey = sd::DrawViewShell::GetShapeStyleKey(&rStyle);
+    // a change of a style that leaves its attributes as they were leaves the key as well
+    if (aKey == rKey)
+        return;
+    rKey = aKey;
+
     for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell;
          pViewShell = SfxViewShell::GetNext(*pViewShell))
     {
@@ -4388,10 +4388,24 @@ void SdXImpressDocument::notifyShapeStyleKey()
         auto* pBase = dynamic_cast<sd::ViewShellBase*>(pViewShell);
         auto* pShell = pBase ? dynamic_cast<sd::DrawViewShell*>(pBase->GetMainViewShell().get())
                              : nullptr;
-        if (pShell)
+        if (pShell && pShell->GetNewShapeStyle() == &rStyle)
             pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED,
-                                     ".uno:ShapeStyleKey=" + pShell->GetShapeStyleKey());
+                                     ".uno:ShapeStyleKey=" + aKey);
     }
+}
+
+OString SdXImpressDocument::shapeStyleKeyOf(sd::DrawViewShell& rShell)
+{
+    SfxStyleSheet* pStyle = rShell.GetNewShapeStyle();
+    if (!pStyle)
+        return sd::DrawViewShell::GetShapeStyleKey(nullptr);
+    // the key holds until the style tells of a change
+    const auto aKnown = maShapeStyleKeys.find(pStyle);
+    if (aKnown != maShapeStyleKeys.end())
+        return aKnown->second;
+    StartListening(*pStyle);
+    return maShapeStyleKeys.emplace(pStyle, sd::DrawViewShell::GetShapeStyleKey(pStyle))
+        .first->second;
 }
 
 vcl::IVectorParts* SdXImpressDocument::getVectorPartsInterface() { return this; }
@@ -4442,13 +4456,12 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
 
     if (o3tl::starts_with(rCommand, ".uno:ShapeStyleKey"))
     {
-        listenToTheShapeStyle();
         // the key of the attributes new shapes of the current view take, empty without a view
         rJsonWriter.put("commandName", ".uno:ShapeStyleKey");
         auto aValues = rJsonWriter.startNode("commandValues");
         sd::DrawViewShell* pShell
             = mpDocShell ? dynamic_cast<sd::DrawViewShell*>(mpDocShell->GetViewShell()) : nullptr;
-        rJsonWriter.put("styleKey", pShell ? pShell->GetShapeStyleKey() : OString());
+        rJsonWriter.put("styleKey", pShell ? shapeStyleKeyOf(*pShell) : OString());
         return;
     }
 
@@ -7115,8 +7128,8 @@ void SdXImpressDocument::dumpState(rtl::OStringBuffer& rState)
     rState.append(sal_Int32(maVectorParts.size()));
     rState.append(" parts, new parts start at version ");
     rState.append(sal_Int64(maVectorParts.getFloor()));
-    rState.append("\nSdXImpressDocument shape style listened to:\t");
-    rState.append(mpShapeStyle ? "yes" : "no");
+    rState.append("\nSdXImpressDocument shape style keys held:\t");
+    rState.append(sal_Int32(maShapeStyleKeys.size()));
 }
 
 OUString SdXImpressDocument::getCacheName() const { return u"SdXImpressDocument"_ustr; }
@@ -8698,11 +8711,9 @@ void SdXImpressDocument::dispose()
 
     ::SolarMutexGuard aGuard;
 
-    if (mpShapeStyle)
-    {
-        EndListening(*mpShapeStyle);
-        mpShapeStyle = nullptr;
-    }
+    for (const auto& rKnown : maShapeStyleKeys)
+        EndListening(*rKnown.first);
+    maShapeStyleKeys.clear();
 
     if( mpDoc )
     {

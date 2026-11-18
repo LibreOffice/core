@@ -95,6 +95,7 @@
 #include <futext.hxx>
 #include <fuconrec.hxx>
 #include <fuconcs.hxx>
+#include <fuconstr.hxx>
 #include <fuconuno.hxx>
 #include <fuconbez.hxx>
 #include <fuediglu.hxx>
@@ -1219,25 +1220,27 @@ static const OString& lcl_getShapeBuild()
     return aBuild;
 }
 
-OString DrawViewShell::GetShapeStyleKey()
+SfxStyleSheet* DrawViewShell::GetNewShapeStyle()
 {
-    // every new shape takes the same attributes but its geometry, so we look at a rectangle
-    rtl::Reference<SdrObject> xShape(MakeDefaultShape(SID_DRAWTBX_CS_BASIC, u"rectangle"_ustr));
-    if (!xShape)
-        return OString();
+    SfxStyleSheet* pStyle
+        = GetActualPage() ? FuConstruct::MasterStyleSheetOf(*GetActualPage()) : nullptr;
+    return pStyle ? pStyle : GetDoc()->GetDefaultStyleSheet();
+}
 
+OString DrawViewShell::GetShapeStyleKey(SfxStyleSheet* pStyle)
+{
     xmlBufferPtr pBuffer = xmlBufferCreate();
     xmlTextWriterPtr pWriter = xmlNewTextWriterMemory(pBuffer, 0);
     (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
-    // the attributes the shape inherits from its style count as well
-    for (const SfxItemSet* pSet = &xShape->GetMergedItemSet(); pSet; pSet = pSet->GetParent())
+    for (const SfxItemSet* pSet = pStyle ? &pStyle->GetItemSet() : nullptr; pSet;
+         pSet = pSet->GetParent())
         pSet->dumpAsXml(pWriter);
     (void)xmlTextWriterEndDocument(pWriter);
     xmlFreeTextWriter(pWriter);
     OString aDump(reinterpret_cast<const char*>(xmlBufferContent(pBuffer)));
     xmlBufferFree(pBuffer);
 
-    // the items name their place in memory, which differs from shape to shape
+    // the items name their place in memory, which differs from run to run
     OStringBuffer aKeyed(aDump.getLength());
     for (sal_Int32 nAt = 0; nAt < aDump.getLength();)
     {

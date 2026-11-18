@@ -700,7 +700,7 @@ interface IdSet {
 	Object ids the engine reserved for this view, which no other object takes. The client gives
 	each shape it creates one of them, so the shape has its real id from the start and nothing has
 	to be told again once the engine reports it. We hold two sets, the active one the ids are taken
-	from and a reserve. Both are asked for when the document goes into edit mode; when the active
+	from and a reserve. Both are asked for when a mode that creates objects starts; when the active
 	one is used up, the reserve becomes the active one and a new reserve is asked for.
 */
 class ReservedObjectIds {
@@ -718,11 +718,6 @@ class ReservedObjectIds {
 
 	/// Whether the answers are followed, which they are once.
 	private static following: boolean = false;
-
-	/// Fills both sets once the document can be edited.
-	public static editModeChanged(edit: boolean): void {
-		if (edit) ReservedObjectIds.keepEnough();
-	}
 
 	/// Asks for as many sets as are empty and not asked for yet.
 	public static keepEnough(): void {
@@ -964,7 +959,7 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 
 	/// Asks the engine for the key of the attributes new shapes take where it is not known yet,
 	/// so the looks kept for it are there before the first drag.
-	public static learnTheKey(): void {
+	private static learnTheKey(): void {
 		ClassicShapeCreateContext.followTheGhosts();
 		if (ClassicShapeCreateContext.styleKey === '')
 			app.socket.sendMessage('commandvalues command=.uno:ShapeStyleKey');
@@ -1065,7 +1060,8 @@ class ClassicShapeCreateContext extends ClassicCreateContext {
 			ClassicShapeCreateContext.askedAhead.has(shape)
 		)
 			return;
-		ClassicShapeCreateContext.followTheGhosts();
+		// the key is asked for the first time shapes are looked at, not on loading
+		ClassicShapeCreateContext.learnTheKey();
 		ReservedObjectIds.keepEnough();
 		ClassicShapeCreateContext.ask(shape);
 	}

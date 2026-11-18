@@ -335,12 +335,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         /**********************************************
         * Objects was created on the slide master page
         ***********************************************/
-        OUString aName( pPage->GetLayoutName() );
-        sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + SD_LT_SEPARATOR.getLength();
-        aName = OUString::Concat(aName.subView(0, n)) + STR_LAYOUT_BACKGROUNDOBJECTS;
-        SfxStyleSheet* pSheet(
-            static_cast< SfxStyleSheet* >(
-                pPage->getSdrModelFromSdrPage().GetStyleSheetPool()->Find(aName, SfxStyleFamily::Page)));
+        SfxStyleSheet* pSheet(MasterStyleSheetOf(*pPage));
         DBG_ASSERT(pSheet, "StyleSheet missing");
         if (pSheet)
         {
@@ -387,6 +382,20 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             }
         }
     }
+}
+
+SfxStyleSheet* FuConstruct::MasterStyleSheetOf(const SdPage& rPage)
+{
+    const auto& rDoc = static_cast<const SdDrawDocument&>(rPage.getSdrModelFromSdrPage());
+    if (!rPage.IsMasterPage() || rPage.GetPageKind() != PageKind::Standard
+        || rDoc.GetDocumentType() != DocumentType::Impress)
+        return nullptr;
+
+    OUString aName( rPage.GetLayoutName() );
+    sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + SD_LT_SEPARATOR.getLength();
+    aName = OUString::Concat(aName.subView(0, n)) + STR_LAYOUT_BACKGROUNDOBJECTS;
+    return static_cast<SfxStyleSheet*>(
+        rDoc.GetStyleSheetPool()->Find(aName, SfxStyleFamily::Page));
 }
 
 } // end of namespace sd
