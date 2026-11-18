@@ -2868,6 +2868,267 @@ class PathHandles extends HandlesMovedOneByOne {
 }
 
 /*
+	The changes of a motion path go out whole, when a drag of one of its points or weights is let
+	go, so the editor of the path hands none of them on; it only asks for the path to be drawn
+	again.
+*/
+class MotionPathSink implements PathSink {
+	public movePoints(_moves: PathPointMove[]): void {
+		// The whole path goes out when the drag is let go.
+	}
+	public deletePoint(_place: PathPlace): void {
+		// A motion path takes no other change than a drag.
+	}
+	public insertPointAt(_at: cool.Point): void {
+		// A motion path takes no other change than a drag.
+	}
+	public setSegmentCurved(_place: PathPlace, _curved: boolean): void {
+		// A motion path takes no other change than a drag.
+	}
+	public setContinuity(_place: PathPlace, _continuity: number): void {
+		// A motion path takes no other change than a drag.
+	}
+	public split(_place: PathPlace): void {
+		// A motion path takes no other change than a drag.
+	}
+	public shownPathChanged(): void {
+		app.sectionContainer?.requestReDraw();
+	}
+	public setClosed(_closed: boolean): void {
+		// A motion path takes no other change than a drag.
+	}
+	public simplify(_pointsOnALine: boolean): void {
+		// A motion path takes no other change than a drag.
+	}
+}
+
+/*
+	The points and the weights of the motion paths of the one object selected, which a drag
+	moves: each path is edited as the path of an object is, the weights of a curve going along
+	with a point and the other weight of a smooth point swinging with a dragged one, and once the
+	drag is let go the engine is told the new path, by its place among the object's paths and with
+	the path it started from. The point a path starts at has no handle, as a path starts at its
+	object, where a press moves the object; its weight has one.
+*/
+class MotionPathHandles extends HandlesMovedOneByOne {
+	public readonly name: string = 'motionPath';
+
+	/// The kinds of the handles of the group, a point and a weight, which tell them from the
+	/// handles of the object's own path.
+	public static readonly kind: string = 'motionPoint';
+	public static readonly weightKind: string = 'motionWeight';
+
+	/// The name the editor of a path gives the point a path starts at.
+	private static readonly startName: string = '9.0.0';
+
+	/// Whether that handle belongs to the group.
+	public static isOne(handle: SelectionHandle | null | undefined): boolean {
+		return (
+			handle?.kind === MotionPathHandles.kind ||
+			handle?.kind === MotionPathHandles.weightKind
+		);
+	}
+
+	/// The object whose paths are shown, where exactly one object with paths is selected and its
+	/// own path points are not being edited.
+	private object(): cool.SlideObject | undefined {
+		const selected = this.selection.selectedObjects();
+		if (selected.length !== 1 || this.selection.pathPointsAreShown())
+			return undefined;
+		const object = RenderGeometrySection.objectOf(selected[0]);
+		return object?.motionPaths?.length ? object : undefined;
+	}
+
+	/// The editor of the path at that place among the object's paths, which reads the path where
+	/// it lies on the slide.
+	private static editorOf(object: cool.SlideObject, path: number): PathEditing {
+		return new PathEditing(
+			'motion ' + String(object.id) + ' ' + String(path),
+			() => cool.MotionPaths.placedOf(object)[path]?.polygons,
+			new MotionPathSink(),
+		);
+	}
+
+	/// The place of the path and the name the editor of that path gives the handle, by the name
+	/// of a handle of the group.
+	public static placeOf(name: string): { path: number; inPath: string } | null {
+		const parts = name.split(' ');
+		if (parts.length !== 3 || parts[0] !== 'motion' || !(+parts[1] >= 0))
+			return null;
+		return { path: +parts[1], inPath: parts[2] };
+	}
+
+	public handles(): SelectionHandle[] {
+		const object = this.object();
+		if (!object) return [];
+
+		return (object.motionPaths ?? []).flatMap((_motionPath, path: number) =>
+			MotionPathHandles.editorOf(object, path)
+				.handles()
+				.filter(
+					(handle: SelectionHandle) =>
+						handle.name !== MotionPathHandles.startName,
+				)
+				.map((handle: SelectionHandle) => ({
+					...handle,
+					name: ['motion', path, handle.name].join(' '),
+					kind:
+						handle.kind === '9'
+							? MotionPathHandles.kind
+							: MotionPathHandles.weightKind,
+				})),
+		);
+	}
+
+	/// The lines from the points to their weights, as the editor of each path draws them.
+	public paint(section: SelectionSection, shown: SelectionHandle[]): void {
+		const object = this.object();
+		if (!object) return;
+
+		(object.motionPaths ?? []).forEach((_motionPath, path: number) => {
+			const own = shown.flatMap((handle: SelectionHandle) => {
+				const place = MotionPathHandles.placeOf(handle.name);
+				return place?.path === path
+					? [
+							{
+								...handle,
+								name: place.inPath,
+								kind: handle.kind === MotionPathHandles.kind ? '9' : '10',
+							},
+						]
+					: [];
+			});
+			// the point a path starts at has no handle, but the line to its weight starts there
+			const start =
+				cool.MotionPaths.placedOf(object)[path]?.polygons[0]?.points[0];
+			if (start)
+				own.push({
+					name: MotionPathHandles.startName,
+					kind: '9',
+					pointer: '28',
+					point: new cool.Point(start.x, start.y),
+				});
+			MotionPathHandles.editorOf(object, path).paint(section, own);
+		});
+	}
+
+	/// The points and weights are drawn as those of a path, so a press reaches them from twice the
+	/// usual distance as well.
+	public reachOf(usual: number): number {
+		return 2 * usual;
+	}
+
+	/// The point the keyboard is on is drawn larger and does not blink, as a point of a path.
+	public blinksWhileActive(): boolean {
+		return false;
+	}
+
+	/// A point or a weight is filled in the colour its path is shown in.
+	public shape(
+		context: CanvasRenderingContext2D,
+		handle: SelectionHandle,
+		at: cool.SimplePoint,
+		grown: number,
+	): string {
+		HandleLook.lay(
+			context,
+			handle.kind === MotionPathHandles.kind ? 'pathPoint' : 'weight',
+			at,
+			grown,
+		);
+		const path = MotionPathHandles.placeOf(handle.name)?.path ?? 0;
+		return cool.MotionPaths.colourOf(path);
+	}
+
+	/*
+		The object with the point or the weight of that handle moved to that place on the page, in
+		twips, as a drag leaves it. The object is a copy; nothing where the handle names no point of
+		its paths.
+	*/
+	public static withPointAt(
+		object: cool.SlideObject,
+		name: string,
+		to: cool.Point,
+	): cool.SlideObject | null {
+		const place = MotionPathHandles.placeOf(name);
+		const paths = object.motionPaths;
+		const given = paths?.[place?.path ?? -1]?.path[0]?.points[0];
+		const placed =
+			cool.MotionPaths.placedOf(object)[place?.path ?? -1]?.polygons[0]
+				?.points[0];
+		if (!place || !paths || !given || !placed) return null;
+
+		const moved = MotionPathHandles.editorOf(object, place.path).pathFor(
+			place.inPath,
+			to,
+		);
+		if (!moved) return null;
+
+		// the path lies on the page from the middle of what moves, which is taken off again
+		const back = new cool.Point(given.x - placed.x, given.y - placed.y);
+		const relative = moved.map((polygon: cool.ObjectPathPolygon) => ({
+			...polygon,
+			points: polygon.points.map((point: cool.ObjectPathPoint) =>
+				cool.MotionPaths.shifted(point, back),
+			),
+		}));
+		return {
+			...object,
+			motionPaths: paths.map((motionPath: cool.ObjectMotionPath, at: number) =>
+				at === place.path ? { ...motionPath, path: relative } : motionPath,
+			),
+		};
+	}
+
+	/// A path as the engine takes it, point by point in whole twips, with how the curve runs
+	/// through each point, which the engine then makes the rounded numbers hold exactly.
+	private static written(path: cool.ObjectPathPolygon[]): string {
+		const round = (value: number | undefined) =>
+			value === undefined ? undefined : Math.round(value);
+		return JSON.stringify({
+			path: path.map((polygon: cool.ObjectPathPolygon) => ({
+				closed: !!polygon.closed,
+				points: polygon.points.map((point: cool.ObjectPathPoint) => ({
+					x: Math.round(point.x),
+					y: Math.round(point.y),
+					behindX: round(point.behindX),
+					behindY: round(point.behindY),
+					aheadX: round(point.aheadX),
+					aheadY: round(point.aheadY),
+					continuity: point.continuity,
+				})),
+			})),
+		});
+	}
+
+	/*
+		Tells the engine the path with the point or weight where it was let go, together with the
+		path it started from, and shows the new path at once; the engine's report of the object
+		replaces it, or brings the paths as they are where they changed meanwhile.
+	*/
+	public handOver(handle: SelectionHandle, to: cool.Point): void {
+		const object = this.object();
+		const place = MotionPathHandles.placeOf(handle.name);
+		const moved = object
+			? MotionPathHandles.withPointAt(object, handle.name, to)
+			: null;
+		const was = object?.motionPaths?.[place?.path ?? -1];
+		const now = moved?.motionPaths?.[place?.path ?? -1];
+		if (!object || !place || !moved || !was || !now || object.id === undefined)
+			return;
+
+		app.map.sendUnoCommand('.uno:SetMotionPath', {
+			ObjectId: { type: 'string', value: String(object.id) },
+			Index: { type: 'long', value: String(place.path) },
+			Path: { type: 'string', value: MotionPathHandles.written(now.path) },
+			Was: { type: 'string', value: MotionPathHandles.written(was.path) },
+		});
+		object.motionPaths = moved.motionPaths;
+		this.selection.redraw();
+	}
+}
+
+/*
 	The object itself rather than any handle of it: the group that takes a press anywhere on the
 	selection and carries it. It holds no handle and stands last in the list, so it is reached
 	only where no group before it answered.

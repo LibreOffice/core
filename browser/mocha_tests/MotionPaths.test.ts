@@ -88,4 +88,88 @@ describe('Motion paths laid onto the slide', function () {
 		nodeassert.strictEqual(new Set(colours).size, colours.length);
 		nodeassert.strictEqual(colours[0], '#77767b');
 	});
+
+	it('a dragged point moves with its weights, and the other paths stay', function () {
+		const curved: cool.ObjectMotionPath = {
+			path: [
+				{
+					points: [
+						{ x: 0, y: 0, aheadX: 100, aheadY: 0 },
+						{ x: 500, y: 0, behindX: 400, behindY: 50 },
+					],
+				},
+			],
+		};
+		// the second point of the first path lies at 1700, 2100 on the page
+		const moved = MotionPathHandles.withPointAt(
+			object([curved, line(0, 300)]),
+			'motion 0 9.0.1',
+			new cool.Point(1750, 2200),
+		);
+		const point = moved?.motionPaths?.[0].path[0].points[1];
+		nodeassert.deepStrictEqual(
+			[point?.x, point?.y, point?.behindX, point?.behindY],
+			[550, 100, 450, 150],
+		);
+		nodeassert.deepStrictEqual(moved?.motionPaths?.[1], line(0, 300));
+		// the start point and its weight stay where they were
+		nodeassert.deepStrictEqual(moved?.motionPaths?.[0].path[0].points[0], {
+			x: 0,
+			y: 0,
+			aheadX: 100,
+			aheadY: 0,
+		});
+	});
+
+	it('a name that is no point of the paths moves nothing', function () {
+		nodeassert.strictEqual(
+			MotionPathHandles.withPointAt(
+				object([line(500, 0)]),
+				'motion 3 9.0.0',
+				new cool.Point(0, 0),
+			),
+			null,
+		);
+		nodeassert.strictEqual(MotionPathHandles.placeOf('path 0 9.0.1'), null);
+	});
+
+	it('a dragged weight of a symmetric point swings the other weight with it', function () {
+		const symmetric: cool.ObjectMotionPath = {
+			path: [
+				{
+					points: [
+						{ x: 0, y: 0 },
+						{
+							x: 500,
+							y: 0,
+							behindX: 400,
+							behindY: 0,
+							aheadX: 600,
+							aheadY: 0,
+							continuity: 2,
+						},
+						{ x: 1000, y: 0 },
+					],
+				},
+			],
+		};
+		// the point lies at 1700, 2100 on the page; its weight coming in is dragged straight up
+		const moved = MotionPathHandles.withPointAt(
+			object([symmetric]),
+			'motion 0 10.0.1.in',
+			new cool.Point(1700, 1900),
+		);
+		const point = moved?.motionPaths?.[0].path[0].points[1];
+		nodeassert.deepStrictEqual(
+			[
+				point?.x,
+				point?.y,
+				point?.behindX,
+				point?.behindY,
+				point?.aheadX,
+				point?.aheadY,
+			],
+			[500, 0, 500, -200, 500, 200],
+		);
+	});
 });

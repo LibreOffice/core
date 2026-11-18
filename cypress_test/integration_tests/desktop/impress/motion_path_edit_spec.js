@@ -1,0 +1,179 @@
+/* -*- js-indent-level: 8 -*- */
+/* global describe it cy beforeEach require expect */
+
+var helper = require('../../common/helper');
+
+// Editing the motion paths of an object on a vector slide by their handles. The slide holds a
+// rectangle that moves along a curve whose middle point is symmetric, and a square that moves
+// along a closed triangle.
+describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
+
+	beforeEach(function() {
+		cy.viewport(1920, 1080);
+		var path = helper.setupDocument('impress/motion_path_edit.fodp');
+		helper.loadDocument(path, true, undefined, undefined, 'vector=true');
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+			// The usual load checks wait for tiles, which a vector view does not have.
+			cy.wrap(null).should(function() {
+				expect(win.app.impress.partList).to.have.length.greaterThan(0);
+			});
+			return helper.processToIdle(win);
+		}.bind(this));
+	});
+
+	// The section that keeps the geometry of the objects the client holds.
+	function geometry(win) {
+		return win.app.sectionContainer.getSectionWithName(
+			win.app.CSections.RenderGeometry.name).constructor;
+	}
+
+	// The object of the slide whose first motion path is closed, or is not.
+	function objectWithPath(win, closed) {
+		var found;
+		geometry(win).currentPart().objects.forEach(function(object) {
+			var path = object.motionPaths && object.motionPaths[0].path[0];
+			if (!found && path && !!path.closed === closed)
+				found = object.id;
+		});
+		return found;
+	}
+
+	// The points of the first motion path of that object, as the client holds them.
+	function pointsOf(win, objectId) {
+		return geometry(win).objectOf(objectId).motionPaths[0].path[0].points;
+	}
+
+	// The handles of the motion paths of the selection, by name.
+	function motionHandles(win) {
+		var section = win.app.sectionContainer.sections.find(function(one) {
+			return one.name.indexOf('selected-object-') === 0;
+		});
+		var handles = {};
+		(section ? section.handles() : []).forEach(function(handle) {
+			if (handle.name.indexOf('motion ') === 0)
+				handles[handle.name] = handle.point;
+		});
+		return handles;
+	}
+
+	// Converts a place on the page in twips to CSS pixels on the document canvas.
+	function onCanvas(win, x, y) {
+		var visible = win.app.activeDocument.activeLayout.viewedRectangle;
+		var scale = win.app.twipsToPixels / win.app.dpiScale;
+		return {
+			x: x * scale - visible.pX1 / win.app.dpiScale,
+			y: y * scale - visible.pY1 / win.app.dpiScale,
+		};
+	}
+
+	// Selects the object that answers for and waits for the handles of its motion paths. The id
+	// is asked for when the step runs, as it is found by a step before.
+	function select(win, objectId) {
+		cy.then(function() {
+			win.eval('GraphicSelection').selectObjects([objectId()]);
+		});
+		cy.wrap(null).should(function() {
+			expect(Object.keys(motionHandles(win)), 'the handles').to.have.length.greaterThan(0);
+		});
+	}
+
+	// Drags the handle of that name by that many twips across and down, in steps.
+	function dragHandle(win, name, across, down) {
+		cy.then(function() {
+			var from = motionHandles(win)[name];
+			expect(from, 'the handle ' + name).to.not.equal(undefined);
+			var start = onCanvas(win, from.x, from.y);
+			var drawing = cy.cGet('#document-canvas').trigger('mousedown', start.x, start.y,
+				{ button: 0, buttons: 1 });
+			for (var step = 1; step <= 10; ++step) {
+				var place = onCanvas(win, from.x + step / 10 * across, from.y + step / 10 * down);
+				drawing = drawing.trigger('mousemove', place.x, place.y, { button: 0, buttons: 1 });
+			}
+			var end = onCanvas(win, from.x + across, from.y + down);
+			drawing.trigger('mouseup', end.x, end.y, { button: 0, buttons: 0 });
+		});
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+	}
+
+	function undo(win) {
+		cy.then(function() {
+			win.app.map.sendUnoCommand('.uno:Undo');
+		});
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+	}
+
+	it('A point and a weight of a curve are moved, and the engine keeps what was moved.', function() {
+		var win = this.win;
+		var curved;
+		cy.wrap(null).should(function() {
+			curved = objectWithPath(win, false);
+			expect(curved, 'the rectangle on a curve').to.not.equal(undefined);
+		});
+		select(win, function() { return curved; });
+
+		// the point the path starts at lies at the object and has no handle, its weight has one
+		cy.then(function() {
+			var handles = motionHandles(win);
+			expect(handles, 'the handles').to.not.have.property('motion 0 9.0.0');
+			expect(handles, 'the handles').to.have.property('motion 0 10.0.0.out');
+			expect(handles, 'the handles').to.have.property('motion 0 9.0.2');
+		});
+
+		// the end point goes where it was dragged
+		var before;
+		cy.then(function() {
+			before = pointsOf(win, curved)[2];
+		});
+		dragHandle(win, 'motion 0 9.0.2', 600, 400);
+		cy.wrap(null).should(function() {
+			var end = pointsOf(win, curved)[2];
+			expect(Math.abs(end.x - before.x - 600), 'the end across').to.be.below(60);
+			expect(Math.abs(end.y - before.y - 400), 'the end down').to.be.below(60);
+		});
+
+		// an undo brings back what the engine had, so the engine had taken the change
+		undo(win);
+		cy.wrap(null).should(function() {
+			var end = pointsOf(win, curved)[2];
+			expect([end.x, end.y], 'the end after the undo').to.deep.equal([before.x, before.y]);
+		});
+
+		// the weight coming into the symmetric middle point swings the other one with it
+		dragHandle(win, 'motion 0 10.0.1.in', 0, -400);
+		cy.wrap(null).should(function() {
+			var middle = pointsOf(win, curved)[1];
+			expect(middle.continuity, 'how the curve runs through the point').to.equal(2);
+			expect(Math.abs(middle.aheadX - (2 * middle.x - middle.behindX)), 'mirrored across')
+				.to.be.below(3);
+			expect(Math.abs(middle.aheadY - (2 * middle.y - middle.behindY)), 'mirrored down')
+				.to.be.below(3);
+		});
+	});
+
+	it('A point of a closed path is moved and the path stays closed.', function() {
+		var win = this.win;
+		var closed;
+		cy.wrap(null).should(function() {
+			closed = objectWithPath(win, true);
+			expect(closed, 'the square on a triangle').to.not.equal(undefined);
+		});
+		select(win, function() { return closed; });
+
+		var before;
+		cy.then(function() {
+			before = pointsOf(win, closed)[1];
+		});
+		dragHandle(win, 'motion 0 9.0.1', 500, 0);
+		cy.wrap(null).should(function() {
+			var path = geometry(win).objectOf(closed).motionPaths[0].path[0];
+			expect(path.closed, 'the path closed').to.equal(true);
+			expect(path.points, 'the points').to.have.length(3);
+			expect(Math.abs(path.points[1].x - before.x - 500), 'the point across').to.be.below(60);
+		});
+	});
+});

@@ -651,6 +651,14 @@ color of their own, since they are the object's defaults and not points someone 
   place show their dots as rings round each other, the first one in the middle. They move
   with the object while it is dragged, and they are not turned or sized with it, as the
   slide show does. With more than one object selected none are shown.
+- Every point of those paths but the one it starts at, at the object, and every weight of a
+  curve has a handle in the colour of its path, with the dashed lines from the points to their
+  weights as in point editing; a press on the middle of the object still moves the object. A
+  drag moves a point with its weights, or a weight, which at a smooth or symmetric point swings
+  the other weight with it, and the path follows while it is dragged; when it is let go the path
+  is set, as one step to undo. Ctrl+Tab reaches these handles after the object's own, and the
+  arrow keys move them as a drag does. Where the effects changed meanwhile, in another view for
+  one, the change sets nothing and the paths show as they are now.
 - The toolbar and the menus change their states at once with the selection, since the client
   works them out itself.
 - Changes made by other people editing the same document arrive as they happen. When they

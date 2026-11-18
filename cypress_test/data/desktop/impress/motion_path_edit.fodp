@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+ xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
+ xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
+ xmlns:xml="http://www.w3.org/XML/1998/namespace"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PM1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:master-page-name="Default">
+    <draw:rect xml:id="curved" draw:id="curved" svg:x="2cm" svg:y="2cm" svg:width="4cm" svg:height="2cm"/>
+    <draw:rect xml:id="closed" draw:id="closed" svg:x="17cm" svg:y="2cm" svg:width="3cm" svg:height="3cm"/>
+    <anim:par presentation:node-type="timing-root">
+     <anim:seq presentation:node-type="main-sequence">
+      <anim:par smil:begin="indefinite">
+       <anim:par smil:begin="0s">
+        <anim:par smil:begin="0s" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="motion-path" presentation:preset-id="ooo-motionpath-user-defined">
+         <anim:animateMotion smil:dur="2s" smil:fill="hold" smil:targetElement="curved" smil:additive="sum" svg:path="M 0 0 C 0.05 -0.15 0.15 -0.15 0.2 0 C 0.25 0.15 0.35 0.15 0.4 0"/>
+        </anim:par>
+       </anim:par>
+      </anim:par>
+      <anim:par smil:begin="indefinite">
+       <anim:par smil:begin="0s">
+        <anim:par smil:begin="0s" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="motion-path" presentation:preset-id="ooo-motionpath-user-defined">
+         <anim:animateMotion smil:dur="2s" smil:fill="hold" smil:targetElement="closed" smil:additive="sum" svg:path="M 0 0 L 0.1 0.2 L -0.1 0.2 Z"/>
+        </anim:par>
+       </anim:par>
+      </anim:par>
+     </anim:seq>
+    </anim:par>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

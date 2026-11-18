@@ -1199,6 +1199,29 @@ class PathEditing implements HandleSource {
 		});
 	}
 
+	/// The whole path with the point or the weight a handle names where a drag leaves it, as the
+	/// handles show it while the drag runs; nothing where the name belongs to no point of the path.
+	public pathFor(
+		handleName: string,
+		at: cool.Point,
+	): cool.ObjectPathPolygon[] | null {
+		const moved = this.movedPoint(handleName, at);
+		const path = this.path();
+		if (!moved || !path) return null;
+
+		return path.map((polygon: cool.ObjectPathPolygon, which: number) =>
+			which !== moved.polygon
+				? polygon
+				: {
+						...polygon,
+						points: (polygon.points ?? []).map(
+							(point: cool.ObjectPathPoint, index: number) =>
+								index === moved.at ? moved.point : point,
+						),
+					},
+		);
+	}
+
 	/*
 		The pieces of line that meet at the point a drag has hold of, with what it moved where the
 		drag has it: the one that comes to the point and the one that leaves it. The rest of the

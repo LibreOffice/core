@@ -660,6 +660,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 				new TiePointHandles(this),
 				new PathHandles(this),
 				new TableHandles(this),
+				new MotionPathHandles(this),
 				this.theConnector() === undefined
 					? new TheObjectItself(this)
 					: new TheConnectorItself(this),
@@ -1784,8 +1785,19 @@ abstract class SelectionSection extends CanvasSectionObject {
 	private drawTheMotionPaths(): void {
 		const selected = GraphicSelection.selectedObjectIDs;
 		if (selected.length !== 1) return;
-		const object = RenderGeometrySection.objectOf(selected[0]);
+		let object = RenderGeometrySection.objectOf(selected[0]);
 		if (!object?.motionPaths?.length) return;
+
+		// a point of a path being dragged shows its path as the drag leaves it
+		const held = this.interaction?.handleHeld();
+		const at = this.interaction?.leadingPoint();
+		if (MotionPathHandles.isOne(held) && held && at)
+			object =
+				MotionPathHandles.withPointAt(
+					object,
+					held.name,
+					new cool.Point(at.x, at.y),
+				) ?? object;
 
 		const placed = cool.MotionPaths.placedOf(object, this.dragMatrix());
 		for (const path of placed) {
