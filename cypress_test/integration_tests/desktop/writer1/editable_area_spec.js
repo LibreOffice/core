@@ -230,16 +230,11 @@ describe(['taga11yenabled'], 'Editable area', { testIsolation: false }, function
 		// typing paragraph 4
 		ceHelper.type('{enter}');
 		ceHelper.type('green red');
-		// Need to wait here after typing paragraph in
-		// order for caret position to stick later.
-		// FIXME: We shouldn't need to wait.
-		cy.wait(1000);
 		ceHelper.checkPlainContent('green red');
 		ceHelper.moveCaret('left', '', 4);
 		ceHelper.checkCaretPosition(5);
 		helper.getBlinkingCursorPosition('P2');
-		// Give the same browser-side settling as above before moving again.
-		cy.wait(800);
+		helper.processToIdle(this.win);
 		// move up to paragraph 3
 		ceHelper.moveCaret('up');
 		ceHelper.checkPlainContent('');
@@ -256,9 +251,7 @@ describe(['taga11yenabled'], 'Editable area', { testIsolation: false }, function
 		ceHelper.checkPlainContent('');
 		ceHelper.checkCaretPosition(0);
 		// Two clicks within the click-merge timer become a double click.
-		cy.getFrameWindow().then(function(win) {
-			return helper.waitForTimers(win, 'clicktimer');
-		});
+		helper.waitForTimers(this.win, 'clicktimer');
 		// click on paragraph 4
 		helper.clickAt('P2');
 		ceHelper.checkPlainContent('green red');
