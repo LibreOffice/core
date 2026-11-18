@@ -939,22 +939,20 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     ,m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UnknownContext )
 {
-    const char* pServiceName=nullptr;
+    OUString sServiceName;
     switch (nDialog)
     {
         case SFX2_IMPL_DIALOG_SYSTEM:
         case SFX2_IMPL_DIALOG_OOO:
-            pServiceName = "com.sun.star.ui.dialogs.OfficeFilePicker";
+            sServiceName = u"com.sun.star.ui.dialogs.OfficeFilePicker"_ustr;
             break;
         case SFX2_IMPL_DIALOG_REMOTE:
-            pServiceName = "com.sun.star.ui.dialogs.RemoteFilePicker";
+            sServiceName = u"com.sun.star.ui.dialogs.RemoteFilePicker"_ustr;
             break;
         default:
-            pServiceName = "com.sun.star.ui.dialogs.FilePicker";
+            sServiceName = u"com.sun.star.ui.dialogs.FilePicker"_ustr;
             break;
     }
-
-    OUString aService = OUString::createFromAscii( pServiceName );
 
     uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
@@ -997,7 +995,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mpGraphicFilter = nullptr;
 
     // create the picker component
-    mxFileDlg.set(xFactory->createInstance( aService ), css::uno::UNO_QUERY);
+    mxFileDlg.set(xFactory->createInstance(sServiceName), css::uno::UNO_QUERY);
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
     mbAsyncPicker = lcl_isAsyncFilePicker(mxFileDlg);
 
