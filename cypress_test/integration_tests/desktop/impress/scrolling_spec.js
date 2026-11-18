@@ -22,9 +22,12 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 				var XPos = (items[0].getBoundingClientRect().left + items[0].getBoundingClientRect().right) / 2;
 				var YPos = (items[0].getBoundingClientRect().top + items[0].getBoundingClientRect().bottom) / 2;
 				cy.cGet('body')
-					.dblclick(XPos, YPos)
-					.wait(500);
+					.dblclick(XPos, YPos);
 			});
+		cy.getFrameWindow().then(function (win) {
+			helper.waitForTimers(win, 'clicktimer');
+			return helper.processToIdle(win);
+		});
 	}
 	it('Scrolling to bottom/top', function() {
 		//show vertical scrollbar
@@ -46,9 +49,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 			return helper.processToIdle(win);
 		});
 		clickOnTheCenter();
-		cy.getFrameWindow().then(function (win) {
-			return helper.processToIdle(win);
-		});
 		helper.typeIntoDocument('{home}');
 		desktopHelper.assertScrollbarPosition('horizontal', 0, 1);
 		helper.typeIntoDocument('{end}');
