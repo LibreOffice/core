@@ -3407,10 +3407,17 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             {
                 // A headless session names the docKeys already on its connection chain, so a
                 // subscription that would close a cycle can be refused. Naming a chain is what
-                // makes the connection a headless one. A server with remote links turned off
-                // has no headless connections, so it reads no chain.
-                if (value.empty() || !RemoteDocumentBroker::isEnabled())
+                // makes the connection a headless one.
+                if (value.empty())
                     continue;
+
+                if (!RemoteDocumentBroker::isEnabled())
+                {
+                    LOG_WRN("Refusing to load a view of [" << docBroker->getDocKey()
+                            << "] for another document: remote_links is disabled");
+                    sendTextFrameAndLogError("error: cmd=load kind=disabled");
+                    return false;
+                }
 
                 _isRemoteDocumentConnection = true;
                 docBroker->addToIncomingDocKeyChain(value);
