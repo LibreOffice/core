@@ -316,7 +316,7 @@ void GlobalSyncData::PlayGlobalActions( pdf::PDFWriter& rWriter )
         else if (std::holds_alternative<RegisterDest>(action)) {
             const vcl::RegisterDest& rRegisterDest = std::get<RegisterDest>(action);
             const sal_Int32 nDestId = rRegisterDest.mnDestId;
-            OSL_ENSURE( mFutureDestinations.find( nDestId ) != mFutureDestinations.end(),
+            OSL_ENSURE( mFutureDestinations.contains( nDestId ),
                 "GlobalSyncData::PlayGlobalActions: DescribeRegisteredRequest has not been called for that destination!" );
 
             PDFLinkDestination& rDest = mFutureDestinations[ nDestId ];

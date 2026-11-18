@@ -1472,7 +1472,7 @@ vcl::Window* Dialog::get_widget_for_response(int response)
         for (vcl::Window* pChild = mpActionArea->GetWindow(GetWindowType::FirstChild); pChild;
              pChild = pChild->GetWindow(GetWindowType::Next))
         {
-            if (aResponses.find(pChild) != aResponses.end())
+            if (aResponses.contains(pChild))
                 continue;
             switch (pChild->GetType())
             {
@@ -1511,7 +1511,7 @@ int Dialog::get_default_response() const
         for (vcl::Window* pChild = mpActionArea->GetWindow(GetWindowType::FirstChild); pChild;
              pChild = pChild->GetWindow(GetWindowType::Next))
         {
-            if (aResponses.find(pChild) != aResponses.end())
+            if (aResponses.contains(pChild))
                 continue;
             switch (pChild->GetType())
             {
@@ -1551,7 +1551,7 @@ void Dialog::set_default_response(int response)
         for (vcl::Window* pChild = mpActionArea->GetWindow(GetWindowType::FirstChild); pChild;
              pChild = pChild->GetWindow(GetWindowType::Next))
         {
-            if (aResponses.find(pChild) != aResponses.end())
+            if (aResponses.contains(pChild))
                 continue;
             switch (pChild->GetType())
             {

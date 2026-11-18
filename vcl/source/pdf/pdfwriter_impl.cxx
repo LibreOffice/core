@@ -1355,7 +1355,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             aLine.append( rEle.m_aAlias );
         else
             aLine.append( getStructureTag(*rEle.m_oType) );
-        if (m_StructElemObjsWithID.find(rEle.m_nObject) != m_StructElemObjsWithID.end())
+        if (m_StructElemObjsWithID.contains(rEle.m_nObject))
         {
             aLine.append("\n/ID ");
             aWriter.writeLiteralEncrypt(GenerateID(rEle.m_nObject), rEle.m_nObject);

@@ -497,7 +497,7 @@ static bool isVclDemo()
 
 void ImplImageTree::createStyle()
 {
-    if (maIconSets.find(maCurrentStyle) != maIconSets.end())
+    if (maIconSets.contains(maCurrentStyle))
         return;
 
     OUString sThemeUrl;
