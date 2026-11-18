@@ -97,8 +97,6 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = nullptr;
 static void do_fatal_error(const char* msg)
 {
     xxx_pGLOBAL_SQLSCAN->SQLyyerror(msg);
-    /*hack to silence -Wunused-function*/
-    if ((0)) yy_fatal_error(msg);
 }
 
 #define YY_FATAL_ERROR(msg) \
@@ -111,6 +109,9 @@ static void do_fatal_error(const char* msg)
 #pragma clang diagnostic ignored "-Wimplicit-fallthrough"
 #pragma GCC diagnostic ignored "-Wunreachable-code"
 #pragma clang diagnostic ignored "-Wunreachable-code"
+// The fatal error function of flex is unused, as YY_FATAL_ERROR is defined above.
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma clang diagnostic ignored "-Wunused-function"
 
 %}
 
