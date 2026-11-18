@@ -51,6 +51,7 @@
 #include <svl/undo.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdorect.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/ipclient.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
@@ -3188,6 +3189,89 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOtherMasterInvalidatesItsSlides)
         pUndoManager->Undo();
     CPPUNIT_ASSERT(&pDoc->GetSdPage(3, PageKind::Standard)->TRG_GetMasterPage() != pOtherMaster);
     CPPUNIT_ASSERT_EQUAL("2 3 4 "_ostr, wholePartInvalidationsInMode(aView, 0));
+}
+
+namespace
+{
+/// The parts that the view saw invalidated in the given edit mode by an invalidation that covers
+/// rArea, in twips, in ascending order and each followed by a space.
+OString partsInvalidatedOver(const SdTestViewCallback& rView, int nWantedMode,
+                             const tools::Rectangle& rArea)
+{
+    std::set<int> aParts;
+    for (const auto& [eType, rPayload] : rView.m_aCallbacks)
+    {
+        if (eType != COKitCallbackType::INVALIDATE_TILES)
+            continue;
+        // The payload is "<x>, <y>, <width>, <height>, <part>, <mode>" or "EMPTY, <part>, <mode>".
+        const cpo::uno::Sequence<OUString> aFields
+            = comphelper::string::convertCommaSeparated(OUString::fromUtf8(rPayload));
+        if (aFields.getLength() == 3 && aFields[0] == "EMPTY")
+        {
+            if (aFields[2].toInt32() == nWantedMode)
+                aParts.insert(aFields[1].toInt32());
+            continue;
+        }
+        if (aFields.getLength() < 6 || aFields[5].toInt32() != nWantedMode)
+            continue;
+        const sal_Int32 nLeft = aFields[0].toInt32();
+        const sal_Int32 nTop = aFields[1].toInt32();
+        const tools::Rectangle aInvalidated(nLeft, nTop, nLeft + aFields[2].toInt32(),
+                                            nTop + aFields[3].toInt32());
+        if (aInvalidated.Contains(rArea))
+            aParts.insert(aFields[4].toInt32());
+    }
+    OStringBuffer aBuffer;
+    for (const int nPart : aParts)
+        aBuffer.append(OString::number(nPart) + " ");
+    return aBuffer.makeStringAndClear();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterObjectInvalidatesItsSlides)
+{
+    // Given a presentation of 8 slides that share one master, shown in normal view on the first
+    // slide:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getEditMode());
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    SdTestViewCallback aView;
+
+    // When an object is added to the master, as a background video is:
+    const tools::Rectangle aObjectArea(Point(1000, 2000), Size(3000, 4000));
+    rtl::Reference<SdrRectObj> pObject = new SdrRectObj(*pDoc, aObjectArea);
+    aView.m_aCallbacks.clear();
+    pMasterPage->InsertObject(pObject.get(), 0);
+
+    // Then the area of the object is invalidated on every slide that uses the master, and the
+    // slide preview on the notes page of each, although the view shows only the first slide.
+    // Without the accompanying fix in place, this test would have failed: no slide was
+    // invalidated, so the slides showed the master without the object until the document was
+    // loaded again.
+    const tools::Rectangle aObjectAreaInTwips
+        = o3tl::convert(pObject->GetCurrentBoundRect(), o3tl::Length::mm100, o3tl::Length::twip);
+    const SdrObject* pPreview
+        = pDoc->GetSdPage(0, PageKind::Notes)->GetPresObj(PresObjKind::Page);
+    CPPUNIT_ASSERT(pPreview);
+    const tools::Rectangle aPreviewAreaInTwips
+        = o3tl::convert(pPreview->GetCurrentBoundRect(), o3tl::Length::mm100, o3tl::Length::twip);
+    CPPUNIT_ASSERT_EQUAL("0 1 2 3 4 5 6 7 "_ostr,
+                         partsInvalidatedOver(aView, 0, aObjectAreaInTwips));
+    CPPUNIT_ASSERT_EQUAL("0 1 2 3 4 5 6 7 "_ostr,
+                         partsInvalidatedOver(aView, 2, aPreviewAreaInTwips));
+
+    // And when the object is removed from the master again:
+    aView.m_aCallbacks.clear();
+    pMasterPage->RemoveObject(pObject->GetOrdNum());
+
+    // Then the slides and the previews on their notes pages are invalidated over its area again.
+    CPPUNIT_ASSERT_EQUAL("0 1 2 3 4 5 6 7 "_ostr,
+                         partsInvalidatedOver(aView, 0, aObjectAreaInTwips));
+    CPPUNIT_ASSERT_EQUAL("0 1 2 3 4 5 6 7 "_ostr,
+                         partsInvalidatedOver(aView, 2, aPreviewAreaInTwips));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLayoutKeepsOtherSlidesOfItsMaster)

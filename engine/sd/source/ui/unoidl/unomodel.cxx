@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <optional>
 #include <set>
 
 #include <com/sun/star/presentation/XPresentation.hpp>
@@ -2915,11 +2916,16 @@ void invalidatePagesWhole(const SfxObjectShell* pDocShell, const std::vector<sal
     }
 }
 
-/// The master's own properties changed, and its background shows on every page that uses it. Each
-/// such page is invalidated whole on every view of the document. A notes master shows on its notes
-/// pages only.
+/// The master changed, and it shows on every page that uses it. Each such page is invalidated on
+/// every view of the document, in the edit mode of the page list that holds it, whatever mode the
+/// view is in. pChangedArea is the area of the master that changed, in 1/100 mm, or nullptr when
+/// the master's own properties changed, such as its background, and the whole page changed. A
+/// slide master shows on the notes page of each of its slides too, through the slide preview
+/// there, so the preview on those notes pages is invalidated in the notes mode. A notes master
+/// shows on its notes pages only.
 void invalidateTilesOfMasterUsers(SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
-                                  const SdPage* pMasterPage)
+                                  const SdPage* pMasterPage,
+                                  const tools::Rectangle* pChangedArea = nullptr)
 {
     if (!comphelper::COKit::isActive() || !pDocShell)
         return;
@@ -2930,19 +2936,51 @@ void invalidateTilesOfMasterUsers(SdDrawDocument& rDocument, const SfxObjectShel
     const int nMode
         = ePageKind == PageKind::Standard ? constVectorModeSlides : constVectorModeNotesPages;
 
-    std::vector<sal_uInt16> aUserPages;
+    // The area to invalidate on a page that uses the master, in twips. It is absent when the whole
+    // page is invalidated.
+    std::optional<tools::Rectangle> oArea;
+    if (pChangedArea)
+        oArea = o3tl::convert(*pChangedArea, o3tl::Length::mm100, o3tl::Length::twip);
+
+    // Each page that uses the master, with the area of the slide preview on its notes page for a
+    // slide. The preview area is absent when the whole notes page is invalidated.
+    std::vector<std::pair<sal_uInt16, std::optional<tools::Rectangle>>> aUserPages;
     const sal_uInt16 nPageCount = rDocument.GetSdPageCount(ePageKind);
     for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
     {
         const SdPage* pUserPage = rDocument.GetSdPage(nPage, ePageKind);
-        if (pUserPage && pUserPage->TRG_HasMasterPage()
-            && &pUserPage->TRG_GetMasterPage() == pMasterPage)
-            aUserPages.push_back(nPage);
+        if (!pUserPage || !pUserPage->TRG_HasMasterPage()
+            || &pUserPage->TRG_GetMasterPage() != pMasterPage)
+            continue;
+        std::optional<tools::Rectangle> oPreviewArea;
+        if (pChangedArea && nMode == constVectorModeSlides)
+        {
+            SdPage* pNotesPage = rDocument.GetSdPage(nPage, PageKind::Notes);
+            if (SdrObject* pPreview = pNotesPage ? pNotesPage->GetPresObj(PresObjKind::Page)
+                                                 : nullptr)
+                oPreviewArea = o3tl::convert(pPreview->GetCurrentBoundRect(),
+                                             o3tl::Length::mm100, o3tl::Length::twip);
+        }
+        aUserPages.emplace_back(nPage, oPreviewArea);
     }
     if (aUserPages.empty())
         return;
 
-    invalidatePagesWhole(pDocShell, aUserPages, nMode);
+    SfxViewShell* pShell = SfxViewShell::GetFirst(false);
+    while (pShell)
+    {
+        if (pShell->GetObjectShell() == pDocShell)
+        {
+            for (const auto& [nPage, oPreviewArea] : aUserPages)
+            {
+                pShell->viewInvalidateTilesCallback(oArea ? &*oArea : nullptr, nPage, nMode);
+                if (nMode == constVectorModeSlides)
+                    pShell->viewInvalidateTilesCallback(oPreviewArea ? &*oPreviewArea : nullptr,
+                                                        nPage, constVectorModeNotesPages);
+            }
+        }
+        pShell = SfxViewShell::GetNext(*pShell, false);
+    }
 }
 }
 
@@ -3071,6 +3109,13 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         // slide master is a part of its own in master view.
                         bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage,
                                                  pObject);
+                        // An object that comes or goes also appears on, or leaves, every page
+                        // that uses the master, so its area is invalidated on those pages.
+                        if (eKind != SdrHintKind::ObjectChange)
+                        {
+                            const ::tools::Rectangle aArea = pObject->GetCurrentBoundRect();
+                            invalidateTilesOfMasterUsers(*mpDoc, mpDocShell, pPage, &aArea);
+                        }
 
                         if (pPage->GetPageKind() == PageKind::Standard)
                         {

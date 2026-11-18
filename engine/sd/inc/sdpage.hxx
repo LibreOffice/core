@@ -236,7 +236,7 @@ public:
 
     SD_DLLPUBLIC virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual rtl::Reference<SdrObject> NbcRemoveObject(size_t nObjNum) override;
-    virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
+    SD_DLLPUBLIC virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
 
     /** Also override ReplaceObject methods to realize when
     objects are removed with this mechanism instead of RemoveObject*/
