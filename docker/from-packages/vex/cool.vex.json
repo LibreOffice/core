@@ -1,9 +1,9 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "version": 4,
+  "version": 5,
   "metadata": {
-    "timestamp": "2026-11-04T11:16:13Z",
+    "timestamp": "2026-11-18T21:38:24Z",
     "supplier": {
       "name": "Collabora Productivity Ltd.",
       "url": [
@@ -370,36 +370,12 @@
       }
     },
     {
-      "id": "CVE-2026-12345",
-      "description": "python: The cleanup of tempfile.TemporaryDirectory is vulnerable to a race condition",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in Python 3.14.9. This image ships Python 3.14.10."
-      }
-    },
-    {
       "id": "CVE-2026-15310",
       "description": "Python: zipfile decompresses bzip2/LZMA/zstd members without a max_length bound",
       "analysis": {
         "state": "not_affected",
         "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
         "justification": "requires_configuration"
-      }
-    },
-    {
-      "id": "CVE-2026-15806",
-      "description": "Python: HTTPPasswordMgr can send saved HTTPS credentials over HTTP",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in Python 3.14.8. This image ships Python 3.14.10."
-      }
-    },
-    {
-      "id": "CVE-2026-17084",
-      "description": "Python: stringprep.map_table_b2() deviates from RFC 3454",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in Python 3.14.8. This image ships Python 3.14.10."
       }
     },
     {
@@ -590,70 +566,6 @@
         "state": "not_affected",
         "justification": "code_not_reachable",
         "detail": "Collabora security assessment: QUIC is not used by Collabora Online, so the vulnerable code is never reached. Rated low severity for this product. Fixed upstream in openssl 3.5.9."
-      }
-    },
-    {
-      "id": "CVE-2026-85091",
-      "description": "zlib: zlib versions 1.3.1.2 through 1.3.2 contain a heap buffer overflow vulnerability in the gz_vacate() function when processing non-blocking gzwrite() operations with\u2026",
-      "analysis": {
-        "state": "in_triage",
-        "detail": "Re-checked on 2026-11-04: an upstream fix now exists but is unreleased. madler/zlib commit df84af25dc19 (2026-09-17, 'Fix buffer overflow bug in non-blocking gzwrite') states 'This addresses CVE-2026-85091'; it resets avail_in and next_in on the ret == -1 path in gz_write(), four lines in gzwrite.c. The latest release is still 1.3.2 (2026-02-17), which is what we bundle, so the choice is to backport the commit or wait for 1.3.3."
-      }
-    },
-    {
-      "id": "CVE-2026-87910",
-      "description": "python: When tarfile extracts a link on a system that doesn't support links, it falls back to extracting a member from the archive",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in Python 3.14.9. This image ships Python 3.14.10."
-      }
-    },
-    {
-      "id": "CVE-2026-89156",
-      "description": "pcre2: PCRE2 before 10.48 has a pcre2_match out-of-bounds read after a JIT fallback when an attacker can provide invalid UTF data",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
-      }
-    },
-    {
-      "id": "CVE-2026-89157",
-      "description": "pcre2: PCRE2 before 10.48, on 32-bit platforms, has a pcre2_pattern_convert out-of-bounds write when an attacker can provide a large pattern",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
-      }
-    },
-    {
-      "id": "CVE-2026-89158",
-      "description": "pcre2: PCRE2 before 10.48, on 32-bit platforms, has a pcre2_compile_32 integer overflow and resultant out-of-bounds write",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
-      }
-    },
-    {
-      "id": "CVE-2026-89160",
-      "description": "pcre2: PCRE2 before 10.48 has a pcre2_match out-of-bounds read during the PCRE2_MATCH_INVALID_UTF matching of an invalid UTF subject",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
-      }
-    },
-    {
-      "id": "CVE-2026-89161",
-      "description": "pcre2: In PCRE2 before 10.48, pcre2_jit_match mishandles a previously copied subject being passed in as a context",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
-      }
-    },
-    {
-      "id": "CVE-2026-89162",
-      "description": "pcre2: In PCRE2 before 10.48, pcre2_serialize_encode might disclose two bytes to an adversary, typically in a situation where the access available to the adversary is\u2026",
-      "analysis": {
-        "state": "resolved",
-        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
       }
     },
     {

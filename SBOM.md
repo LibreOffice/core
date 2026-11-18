@@ -251,6 +251,17 @@ no statement for yet. Useful states, with the evidence each needs:
 Keep `in_triage` entries honest rather than tidy: an unassessed CVE that is
 marked `not_affected` is worse than one that admits it needs work.
 
+When a version bump takes the shipped version out of the affected range,
+delete the statement in the commit that makes the bump. Do not mark it
+resolved. Scanners stop reporting the CVE once the version no longer
+matches, so a resolved statement answers a question that nobody asks, and
+the version it names would need editing at every later bump. If a scan
+reports the CVE again, generate-vex.py adds it back as in_triage. Keep the
+false_positive and resolved_with_pedigree statements, because scanners
+still report those: the version we ship matches the advisory although the
+fix is in. Keep our own advisories too, because no scanner matches them,
+and the VEX is the only place that lists them against the product.
+
 ## Publishing
 
 `docker/from-packages/scripts/publish.sh` publishes an image the way ZenDiS
