@@ -105,6 +105,17 @@ describe('ShortcutsUtil per document type', function () {
 		);
 	});
 
+	it('names the first of two keys bound to one command', function () {
+		// Writer binds both Ctrl+Alt+D and Ctrl+Alt+Shift+E to Insert
+		// Endnote. Ctrl+Alt+D comes first in Accelerators.xcu, so it is the
+		// one the menu shows.
+		setContext('en-US', 'text');
+		nodeassert.strictEqual(
+			JSDialog.ShortcutsUtil.getShortcutText('.uno:InsertEndnote'),
+			'Ctrl+Alt+D',
+		);
+	});
+
 	it('takes the table of the region ahead of the base language', function () {
 		// Brazilian Portuguese gives Calc's character dialog no key, while
 		// Portuguese keeps the one it inherits.
