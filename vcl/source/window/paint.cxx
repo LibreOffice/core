@@ -1417,11 +1417,7 @@ void Window::ImplPaintToDevice(OutputDevice& rTargetOutDev, const Point& i_rPos)
                 nDeltaX = GetOutDev()->GetOutputWidthPixel() - nDeltaX - pChild->GetOutDev()->GetOutputWidthPixel();
             tools::Long nDeltaY = pChild->GetDeviceOriginY() - GetDeviceOriginY();
             Point aPos( i_rPos );
-            // tdf#165706 those delta values are in pixels, but aPos copied from
-            // i_rPos *may* be in logical coordinates if a MapMode is set at
-            // i_pTargetOutDev. To not mix values of different coordinate systems
-            // it *needs* to be converted (which does nothing if no MapMode)
-            Point aDelta(rTargetOutDev.PixelToLogic(Point(nDeltaX, nDeltaY)));
+            Point aDelta( nDeltaX, nDeltaY );
             aPos += aDelta;
             pChild->ImplPaintToDevice(rTargetOutDev, aPos);
         }
