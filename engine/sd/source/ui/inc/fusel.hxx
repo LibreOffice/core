@@ -21,8 +21,11 @@
 
 #include "fudraw.hxx"
 
+#include <optional>
+
 class SdrHdl;
 class SdrObject;
+enum class SdrHdlKind;
 
 namespace sd {
 
@@ -69,9 +72,20 @@ private:
 
     virtual ~FuSelection() override;
 
+    /// Picks the handle at the given position, and remembers what button up needs to know of it.
+    SdrHdl* PickHandle(const Point& rPos);
+    /// Remembers what button up needs to know of the handle pressed at button down.
+    SdrHdl* SetPickedHandle(SdrHdl* pHdl);
+
     bool            bTempRotation;
     bool            bSelectionChanged;
-    SdrHdl*         pHdl;
+    /// The kind of the handle pressed at button down, when one was pressed. The handle itself
+    /// is not kept: the view rebuilds its handles whenever its marks change, and that can happen
+    /// before the button is released, for example when a slide preview is painted through this
+    /// view, which shows the other slide for a moment.
+    std::optional<SdrHdlKind> moPickedHdlKind;
+    /// Whether the handle pressed at button down is the frame of a diagram.
+    bool            mbPickedDiagramFrameHdl;
     bool            bSuppressChangesOfSelection;
     bool            bMirrorSide0;
     sal_uInt16      nEditMode;

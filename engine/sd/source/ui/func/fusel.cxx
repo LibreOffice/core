@@ -77,7 +77,7 @@ FuSelection::FuSelection (
     : FuDraw(rViewSh, pWin, pView, rDoc, rReq),
       bTempRotation(false),
       bSelectionChanged(false),
-      pHdl(nullptr),
+      mbPickedDiagramFrameHdl(false),
       bSuppressChangesOfSelection(false),
       bMirrorSide0(false),
       nEditMode(SID_BEZIER_MOVE),
@@ -167,9 +167,23 @@ bool lcl_hasMarkedObjectInsideGroup(const ::sd::View& rView)
 }
 }
 
+SdrHdl* FuSelection::SetPickedHandle(SdrHdl* pHdl)
+{
+    moPickedHdlKind.reset();
+    if (pHdl)
+        moPickedHdlKind = pHdl->GetKind();
+    mbPickedDiagramFrameHdl = dynamic_cast<svx::diagram::DiagramFrameHdl*>(pHdl) != nullptr;
+    return pHdl;
+}
+
+SdrHdl* FuSelection::PickHandle(const Point& rPos)
+{
+    return SetPickedHandle(mpView->PickHandle(rPos));
+}
+
 bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    pHdl = nullptr;
+    SdrHdl* pHdl = SetPickedHandle(nullptr);
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     // While a preview is entered, a single click inside it picks a shape on the slide the
@@ -265,7 +279,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         * NO BEZIER_EDITOR
         ******************************************************************/
         mpWindow->CaptureMouse();
-        pHdl = mpView->PickHandle(aMDPos);
+        pHdl = PickHandle(aMDPos);
 
         Degree100 nAngle0  = GetAngle(aMDPos - mpView->GetRef1());
         nAngle0 -= 27000_deg100;
@@ -564,7 +578,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                              **********************************************************/
                             aDragTimer.Start();
 
-                            pHdl=mpView->PickHandle(aMDPos);
+                            pHdl = PickHandle(aMDPos);
                             if ( ! rMEvt.IsRight())
                                 mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
                         }
@@ -642,18 +656,18 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (!rMEvt.IsShift())
                 {
                     mpView->UnmarkAllPoints();
-                    pHdl = mpView->PickHandle(aMDPos);
+                    pHdl = PickHandle(aMDPos);
                 }
                 else
                 {
                     if (mpView->IsPointMarked(*aVEvt.mpHdl))
                     {
                         mpView->UnmarkPoint(*aVEvt.mpHdl);
-                        pHdl = nullptr;
+                        pHdl = SetPickedHandle(nullptr);
                     }
                     else
                     {
-                        pHdl = mpView->PickHandle(aMDPos);
+                        pHdl = PickHandle(aMDPos);
                     }
                 }
 
@@ -669,7 +683,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 // Point IS marked and NO shift is pressed. Start
                 // dragging of selected point(s)
-                pHdl = mpView->PickHandle(aMDPos);
+                pHdl = PickHandle(aMDPos);
                 if(pHdl && ! rMEvt.IsRight())
                     mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
             }
@@ -796,7 +810,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
     sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
-    svx::diagram::DiagramFrameHdl* pDiagramFrameHdl(dynamic_cast<svx::diagram::DiagramFrameHdl*>(pHdl));
+    const bool bPickedDiagramFrameHdl = mbPickedDiagramFrameHdl;
 
     bool bWasDragged = false;
     if (mpView->IsFrameDragSingles() || !mpView->HasMarkablePoints())
@@ -866,7 +880,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
             mpView->ForceMarkedToAnotherPage();
 
-            if (rMEvt.IsMod1() && !rMEvt.IsShift() && !rMEvt.IsMod2() && !bWasDragged && !pHdl
+            if (rMEvt.IsMod1() && !rMEvt.IsShift() && !rMEvt.IsMod2() && !bWasDragged && !moPickedHdlKind
                 && std::abs(aPnt.X() - aMDPos.X()) < nDrgLog
                 && std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
             {
@@ -941,15 +955,15 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else if (nSlotId == SID_CONVERT_TO_3D_LATHE)
             {
-                if (!pHdl)
+                if (!moPickedHdlKind)
                 {
                     bSuppressChangesOfSelection = true;
                     mpView->Start3DCreation();
                     bSuppressChangesOfSelection = false;
                 }
-                else if (pHdl->GetKind() != SdrHdlKind::MirrorAxis &&
-                         pHdl->GetKind() != SdrHdlKind::Ref1 &&
-                         pHdl->GetKind() != SdrHdlKind::Ref2 && mpView->Is3DRotationCreationActive())
+                else if (*moPickedHdlKind != SdrHdlKind::MirrorAxis &&
+                         *moPickedHdlKind != SdrHdlKind::Ref1 &&
+                         *moPickedHdlKind != SdrHdlKind::Ref2 && mpView->Is3DRotationCreationActive())
                 {
                     /*********************************************************
                     * If 3D-rotation bodies are about to be created,
@@ -1044,7 +1058,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         bMBDown = false;
 
         ForcePointer(&rMEvt);
-        pHdl = nullptr;
+        SetPickedHandle(nullptr);
         mpWindow->ReleaseMouse();
         SdrObject* pSingleObj = nullptr;
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
@@ -1069,7 +1083,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
         if(!bWasDragged && nullptr != pSingleObj && pSingleObj->isDiagram())
         {
-            if(nullptr != pDiagramFrameHdl)
+            if (bPickedDiagramFrameHdl)
             {
                 // Check for click on svx::diagram::DiagramFrameHdl
                 // - if we hit a SdrHdl
@@ -1108,7 +1122,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         {
             bReturn = true;
             ForcePointer(&rMEvt);
-            pHdl = nullptr;
+            SetPickedHandle(nullptr);
             mpWindow->ReleaseMouse();
             FuDraw::MouseButtonUp(rMEvt);
             mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::SYNCHRON);
@@ -1172,7 +1186,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
 
         ForcePointer(&rMEvt);
-        pHdl = nullptr;
+        SetPickedHandle(nullptr);
         mpWindow->ReleaseMouse();
 
         FuDraw::MouseButtonUp(rMEvt);

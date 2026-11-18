@@ -46,6 +46,7 @@
 #include <svl/cryptosign.hxx>
 #include <svl/style.hxx>
 #include <svl/undo.hxx>
+#include <svx/svdhdl.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/ipclient.hxx>
@@ -536,6 +537,43 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelFocusEndsSlideTextEdit)
                      { u"data"_ustr, u"{}"_ustr } };
     CPPUNIT_ASSERT(jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aBlur));
     Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testHandleDragAcrossPreviewOfOtherSlide)
+{
+    // Given a shape selected on the first slide, and its lower handle pressed and dragged.
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    SdrHdl* pLowerHdl = pView->GetHdlList().GetHdl(SdrHdlKind::Lower);
+    CPPUNIT_ASSERT(pLowerHdl);
+    const int nX = o3tl::convert(pLowerHdl->GetPos().X(), o3tl::Length::mm100, o3tl::Length::twip);
+    const int nY = o3tl::convert(pLowerHdl->GetPos().Y(), o3tl::Length::mm100, o3tl::Length::twip);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOVE, nX, nY + 300, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsDragObj());
+
+    // When a preview of the second slide is painted through this view before the button is
+    // released: the kit shows that slide in the view for the paint, and then shows the first
+    // slide again and selects the shape once more, which gives the shape new handles.
+    pXImpressDocument->setPart(1, false);
+    pXImpressDocument->setPart(0, false);
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView->IsDragObj());
+
+    // Then the button is released without a crash. Without the accompanying fix in place, the
+    // release read the handle pressed at button down, which was deleted with the old handles.
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY + 300, 1, MOUSE_LEFT,
+                                      0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView->IsDragObj());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pObject));
 }
 
 #if ENABLE_PDFIMPORT
