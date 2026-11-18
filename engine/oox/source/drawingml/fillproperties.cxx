@@ -493,6 +493,19 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 basegfx::BColorStops aTransparencyStops;
                 bool bContainsTransparency(false);
 
+                // a stop that is the placeholder takes the transparency of the color it stands
+                // for, as for a solid fill, where it has none of its own
+                const bool bPhClrTransparent(nPhClr != ::Color(ColorTransparency, 0xffffffff)
+                                             && nPhClr.IsTransparent());
+                const auto aTransparencyOf = [&](const Color& rStop) -> sal_Int16 {
+                    if (rStop.hasTransparency())
+                        return rStop.getTransparency();
+                    if (rStop.isPlaceHolder() && bPhClrTransparent)
+                        return static_cast<sal_Int16>(
+                            std::round((255 - nPhClr.GetAlpha()) * 100.0 / 255.0));
+                    return 0;
+                };
+
                 // convert to BColorStops, check for contained transparency
                 for (const auto& rCandidate : maGradientProps.maGradientStops)
                 {
@@ -500,7 +513,8 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                     // (lumMod, etc). So those get lost at this point.
                     const ::Color aColor(rCandidate.second.getColor(rGraphicHelper, nPhClr));
                     aColorStops.addStop(rCandidate.first, aColor.getBColor());
-                    bContainsTransparency = bContainsTransparency || rCandidate.second.hasTransparency();
+                    bContainsTransparency
+                        = bContainsTransparency || aTransparencyOf(rCandidate.second) != 0;
                 }
 
                 // if we have transparency, convert to BColorStops
@@ -508,7 +522,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 {
                     for (const auto& rCandidate : maGradientProps.maGradientStops)
                     {
-                        const double fTrans(rCandidate.second.getTransparency() * (1.0/100.0));
+                        const double fTrans(aTransparencyOf(rCandidate.second) * (1.0/100.0));
                         aTransparencyStops.addStop(rCandidate.first, basegfx::BColor(fTrans, fTrans, fTrans));
                     }
                 }

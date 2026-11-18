@@ -18,6 +18,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <tools/color.hxx>
@@ -3660,6 +3661,24 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAssistantKeepsItsTextOnReLayout)
     createSdImpressDoc("pptx/smartart-sideways-hierarchy-assistant.pptx");
     uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
     CPPUNIT_ASSERT(findChildShapeByText(xDiagram, u"Mary"_ustr).is());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testGradientFillKeepsTheTransparencyOfItsColor)
+{
+    // A Radial Venn whose colors are half transparent and whose style fills with a gradient: the
+    // circles stay half transparent in the gradient.
+    createSdImpressDoc("pptx/smartart-gradient-fill-transparency.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    uno::Reference<beans::XPropertySet> xCircle(findChildShapeByText(xDiagram, u"Center 49pt"_ustr),
+                                                uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                         xCircle->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>());
+    awt::Gradient2 aTransparence;
+    CPPUNIT_ASSERT(xCircle->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aTransparence);
+    CPPUNIT_ASSERT(aTransparence.ColorStops.hasElements());
+    for (const awt::ColorStop& rStop : aTransparence.ColorStops)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, rStop.StopColor.Red, 0.01);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSidewaysHierarchyBranchReachesBesideTheRowAbove)
