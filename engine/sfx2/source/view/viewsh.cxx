@@ -1848,6 +1848,12 @@ void collectListWindow(const SfxViewShell* pViewShell,
                              aAfter.aParagraphs.end());
 }
 
+struct CellMarks
+{
+    std::vector<ParagraphError> aErrors;
+    std::vector<SfxParagraphComment> aComments;
+};
+
 struct TableCellText
 {
     sal_Int32 nCol;
@@ -1860,7 +1866,7 @@ struct TableCellText
     // the rest of the cell on the next page, when its row is split across the page break
     uno::Reference<accessibility::XAccessible> xRestCell;
     tools::Rectangle aRestTwips;
-    std::vector<ParagraphError> aErrors;
+    CellMarks aMarks;
 };
 
 struct TableRowText
@@ -1878,19 +1884,26 @@ struct TableWindow
     uno::Reference<accessibility::XAccessible> xCaretCell;
 };
 
-void appendErrors(std::vector<ParagraphError>& rErrors, const std::vector<ParagraphError>& rMore,
-                  sal_Int32 nShift)
+void appendMarks(CellMarks& rMarks, const CellMarks& rMore, sal_Int32 nShift)
 {
-    for (const ParagraphError& rError : rMore)
-        rErrors.push_back({ .nStart = rError.nStart + nShift,
-                            .nEnd = rError.nEnd + nShift,
-                            .bGrammar = rError.bGrammar });
+    for (const ParagraphError& rError : rMore.aErrors)
+        rMarks.aErrors.push_back({ .nStart = rError.nStart + nShift,
+                                   .nEnd = rError.nEnd + nShift,
+                                   .bGrammar = rError.bGrammar });
+    for (const SfxParagraphComment& rComment : rMore.aComments)
+    {
+        SfxParagraphComment aComment(rComment);
+        aComment.nStart += nShift;
+        aComment.nEnd += nShift;
+        rMarks.aComments.push_back(std::move(aComment));
+    }
 }
 
 // A table in the cell is given as its cells' text, one cell per line.
-OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
+OUString getCellText(const SfxViewShell* pViewShell,
+                     const uno::Reference<accessibility::XAccessible>& xCell,
                      std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs,
-                     std::vector<ParagraphError>& rErrors)
+                     CellMarks& rMarks)
 {
     uno::Reference<accessibility::XAccessibleContext> xCellContext
         = xCell.is() ? xCell->getAccessibleContext() : nullptr;
@@ -1908,7 +1921,7 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
             continue;
 
         OUString sChildText;
-        std::vector<ParagraphError> aChildErrors;
+        CellMarks aChildMarks;
         const sal_Int16 nRole = xChildContext->getAccessibleRole();
         if (nRole == accessibility::AccessibleRole::TABLE)
         {
@@ -1916,14 +1929,14 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
             const sal_Int64 nCells = xChildContext->getAccessibleChildCount();
             for (sal_Int64 nCell = 0; nCell < nCells; ++nCell)
             {
-                std::vector<ParagraphError> aCellErrors;
-                const OUString sCell = getCellText(xChildContext->getAccessibleChild(nCell),
-                                                   rParagraphs, aCellErrors);
+                CellMarks aCellMarks;
+                const OUString sCell = getCellText(
+                    pViewShell, xChildContext->getAccessibleChild(nCell), rParagraphs, aCellMarks);
                 if (sCell.isEmpty())
                     continue;
                 if (!aNested.isEmpty())
                     aNested.append('\n');
-                appendErrors(aChildErrors, aCellErrors, aNested.getLength());
+                appendMarks(aChildMarks, aCellMarks, aNested.getLength());
                 aNested.append(sCell);
             }
             sChildText = aNested.makeStringAndClear();
@@ -1934,7 +1947,9 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
             if (!xChildText.is())
                 continue;
             sChildText = xChildText->getText();
-            aChildErrors = collectErrors(xChildText);
+            aChildMarks.aErrors = collectErrors(xChildText);
+            if (pViewShell)
+                aChildMarks.aComments = pViewShell->getKitParagraphComments(xChildText);
             rParagraphs.push_back(xChildContext);
         }
         else
@@ -1942,30 +1957,29 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
 
         if (!aText.isEmpty())
             aText.append('\n');
-        appendErrors(rErrors, aChildErrors, aText.getLength());
+        appendMarks(rMarks, aChildMarks, aText.getLength());
         aText.append(sChildText);
     }
     return aText.makeStringAndClear();
 }
 
-OUString
-getSplitCellText(const uno::Reference<accessibility::XAccessible>& xCell,
-                 const uno::Reference<accessibility::XAccessible>& xRestCell,
-                 std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs,
-                 std::vector<ParagraphError>& rErrors)
+OUString getSplitCellText(
+    const SfxViewShell* pViewShell, const uno::Reference<accessibility::XAccessible>& xCell,
+    const uno::Reference<accessibility::XAccessible>& xRestCell,
+    std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs, CellMarks& rMarks)
 {
-    OUString sText = getCellText(xCell, rParagraphs, rErrors);
-    std::vector<ParagraphError> aRestErrors;
+    OUString sText = getCellText(pViewShell, xCell, rParagraphs, rMarks);
+    CellMarks aRestMarks;
     const OUString sRest
-        = xRestCell.is() ? getCellText(xRestCell, rParagraphs, aRestErrors) : OUString();
+        = xRestCell.is() ? getCellText(pViewShell, xRestCell, rParagraphs, aRestMarks) : OUString();
     if (sRest.isEmpty())
         return sText;
     if (sText.isEmpty())
     {
-        rErrors = std::move(aRestErrors);
+        rMarks = std::move(aRestMarks);
         return sRest;
     }
-    appendErrors(rErrors, aRestErrors, sText.getLength() + 1);
+    appendMarks(rMarks, aRestMarks, sText.getLength() + 1);
     return sText + "\n" + sRest;
 }
 
@@ -2102,7 +2116,8 @@ sal_Int32 wholeTableRow(const uno::Reference<accessibility::XAccessibleTable>& x
 }
 
 // The rows around the caret's row of the innermost table holding the paragraph.
-void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+void collectTableWindow(const SfxViewShell* pViewShell,
+                        const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                         sal_Int32 nRadius, TableWindow& rTable)
 {
     rTable = TableWindow();
@@ -2170,13 +2185,14 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
                           ? pRest->xTable->getAccessibleCellAt(pRest->nRepeated, nCol)
                           : nullptr;
                 std::vector<uno::Reference<accessibility::XAccessibleContext>> aCellParagraphs;
-                std::vector<ParagraphError> aCellErrors;
-                OUString sText = getSplitCellText(xCell, xRestCell, aCellParagraphs, aCellErrors);
+                CellMarks aCellMarks;
+                OUString sText
+                    = getSplitCellText(pViewShell, xCell, xRestCell, aCellParagraphs, aCellMarks);
                 aRow.aCells.push_back(
                     { nCol, xPiece->getAccessibleRowExtentAt(nPieceRow, nCol),
                       xPiece->getAccessibleColumnExtentAt(nPieceRow, nCol), std::move(sText),
                       cellTwips(xCell, aOriginOnScreen), xCell, std::move(aCellParagraphs),
-                      xRestCell, cellTwips(xRestCell, aOriginOnScreen), std::move(aCellErrors) });
+                      xRestCell, cellTwips(xRestCell, aOriginOnScreen), std::move(aCellMarks) });
             }
             rTable.aRows.push_back(std::move(aRow));
         }
@@ -2189,7 +2205,8 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
 }
 
 // Typing in the cell collected last changes only that cell, unless it grew or gained a paragraph.
-bool refreshCaretCell(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+bool refreshCaretCell(const SfxViewShell* pViewShell,
+                      const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                       TableWindow& rTable)
 {
     uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
@@ -2215,12 +2232,13 @@ bool refreshCaretCell(const uno::Reference<css::accessibility::XAccessibleText>&
                 return false;
 
             std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
-            std::vector<ParagraphError> aErrors;
-            OUString sText = getSplitCellText(rCell.xCell, rCell.xRestCell, aParagraphs, aErrors);
+            CellMarks aMarks;
+            OUString sText
+                = getSplitCellText(pViewShell, rCell.xCell, rCell.xRestCell, aParagraphs, aMarks);
             if (aParagraphs != rCell.aParagraphs)
                 return false;
             rCell.sText = std::move(sText);
-            rCell.aErrors = std::move(aErrors);
+            rCell.aMarks = std::move(aMarks);
             return true;
         }
     }
@@ -2698,8 +2716,10 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
                 boost::property_tree::ptree aCell;
                 aCell.put("col", rCell.nCol);
                 aCell.put("text", rCell.sText.toUtf8().getStr());
-                if (!rCell.aErrors.empty())
-                    aCell.add_child("errors", makeErrorsTree(rCell.aErrors));
+                if (!rCell.aMarks.aErrors.empty())
+                    aCell.add_child("errors", makeErrorsTree(rCell.aMarks.aErrors));
+                if (!rCell.aMarks.aComments.empty())
+                    aCell.add_child("comments", makeCommentsTree(rCell.aMarks.aComments));
                 if (rCell.nRowSpan > 1)
                     aCell.put("rowSpan", rCell.nRowSpan);
                 if (rCell.nColSpan > 1)
@@ -2746,10 +2766,10 @@ void KitDocumentFocusListener::collectContextWindow(
     else
     {
         const uno::Reference<accessibility::XAccessible> xLastCaretCell = m_aTable.xCaretCell;
-        bCaretCellRefreshed = refreshCaretCell(xAccText, m_aTable);
+        bCaretCellRefreshed = refreshCaretCell(m_pViewShell, xAccText, m_aTable);
         if (!bCaretCellRefreshed)
         {
-            collectTableWindow(xAccText, TABLE_ROW_WINDOW, m_aTable);
+            collectTableWindow(m_pViewShell, xAccText, TABLE_ROW_WINDOW, m_aTable);
             bCaretCellResized = xLastCaretCell.is() && m_aTable.xCaretCell == xLastCaretCell;
         }
         if (m_aTable.aRows.empty())
