@@ -48,8 +48,8 @@
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 
-#include "../../inc/lib/init.hxx"
-#include "../../inc/lib/CallbackFlushHandler.hxx"
+#include <lib/init.hxx>
+#include <lib/CallbackFlushHandler.hxx>
 
 #include <COKit/COKit.hxx>
 #include <sfx2/kit/helper.hxx>
