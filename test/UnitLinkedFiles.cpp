@@ -38,6 +38,7 @@
 #include <chrono>
 #include <iterator>
 #include <memory>
+#include <mutex>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -67,6 +68,27 @@ class UnitLinkedFiles : public WopiTestServer
     bool _allowSent = false;
     /// The messages the client sends next, one per call of invokeWSDTest().
     std::vector<std::string> _commandsDue;
+    /// Guards _commandsDue, which more than one thread uses.
+    std::mutex _commandsDueMutex;
+
+    /// Queue a message for the client to send.
+    void queueCommand(const std::string& command)
+    {
+        std::lock_guard<std::mutex> lock(_commandsDueMutex);
+        _commandsDue.push_back(command);
+    }
+
+    /// Take the next message for the client to send, or return false if there is none.
+    bool takeCommand(std::string& command)
+    {
+        std::lock_guard<std::mutex> lock(_commandsDueMutex);
+        if (_commandsDue.empty())
+            return false;
+
+        command = _commandsDue.front();
+        _commandsDue.erase(_commandsDue.begin());
+        return true;
+    }
 
 public:
     UnitLinkedFiles()
@@ -246,12 +268,12 @@ public:
             TST_LOG("The Navigator is window [" << window << ']');
             TRANSITION_STATE(_phase, Phase::WaitLinkPicker);
             const std::string event = "dialogevent " + window + ' ';
-            _commandsDue.push_back(
-                event + R"({"id":"globaltree","cmd":"select","data":"1","type":"treeview"})");
-            _commandsDue.push_back(
-                event + R"({"id":"global","cmd":"openmenu","data":"insert","type":"toolbox"})");
-            _commandsDue.push_back(
-                event + R"({"id":"__MENU__","cmd":"select","data":"insertfile","type":"menu"})");
+            queueCommand(event +
+                         R"({"id":"globaltree","cmd":"select","data":"1","type":"treeview"})");
+            queueCommand(event +
+                         R"({"id":"global","cmd":"openmenu","data":"insert","type":"toolbox"})");
+            queueCommand(event +
+                         R"({"id":"__MENU__","cmd":"select","data":"insertfile","type":"menu"})");
             return false;
         }
 
@@ -266,7 +288,7 @@ public:
             const std::string id = request->get("id").toString();
             TST_LOG("The kit asks for a file to link to, pick [" << id << ']');
             TRANSITION_STATE(_phase, Phase::WaitPickLinkAccess);
-            _commandsDue.push_back("linkpickerresult id=" + id + " path=" + std::string(PresentPath));
+            queueCommand("linkpickerresult id=" + id + " path=" + std::string(PresentPath));
             return false;
         }
 
@@ -298,7 +320,7 @@ public:
             {
                 // The user updates the links of the master document.
                 TRANSITION_STATE(_phase, Phase::WaitRefreshLinkAccess);
-                _commandsDue.push_back("uno .uno:UpdateAllLinks");
+                queueCommand("uno .uno:UpdateAllLinks");
             }
             else
                 TRANSITION_STATE(_phase, Phase::WaitPickInserted);
@@ -319,7 +341,7 @@ public:
         {
             // The user opens the Navigator, to insert a file into the master document.
             TRANSITION_STATE(_phase, Phase::WaitNavigator);
-            _commandsDue.push_back("uno .uno:Navigator?Navigator:bool=true");
+            queueCommand("uno .uno:Navigator?Navigator:bool=true");
         }
         else
         {
@@ -336,7 +358,7 @@ public:
         LOK_ASSERT_STATE(_phase, Phase::Load);
         TRANSITION_STATE(_phase, Phase::WaitLinkAccess);
         // The user allows the links to be updated, which the storage is asked for no file before.
-        _commandsDue.push_back("allowlinkupdate");
+        queueCommand("allowlinkupdate");
         return true;
     }
 
@@ -350,10 +372,9 @@ public:
             return;
         }
 
-        if (!_commandsDue.empty())
+        std::string command;
+        if (takeCommand(command))
         {
-            const std::string command = _commandsDue.front();
-            _commandsDue.erase(_commandsDue.begin());
             if (command == "allowlinkupdate")
                 _allowSent = true;
             WSD_CMD(command);
