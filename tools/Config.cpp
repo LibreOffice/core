@@ -90,6 +90,61 @@ public:
     void setAdminPwd(const std::string& pwd) { _adminPwd = pwd; }
 };
 
+/// Asks for the admin password twice on the terminal with echo off, unless it
+/// was given with --password.
+bool readAdminPassword(AdminConfig& adminConfig, std::ostream& out)
+{
+    if (!adminConfig.getAdminPwd().empty())
+        return true;
+
+    termios oldTermios;
+    tcgetattr(STDIN_FILENO, &oldTermios);
+    termios newTermios = oldTermios;
+    // Disable user input mirroring on console for password input
+    newTermios.c_lflag &= ~ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &newTermios);
+    std::string adminPwd;
+    out << "Enter admin password: ";
+    std::getline(std::cin, adminPwd);
+    std::string reAdminPwd;
+    out << std::endl << "Confirm admin password: ";
+    std::getline(std::cin, reAdminPwd);
+    out << std::endl;
+    // Set the termios to old state
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldTermios);
+    if (adminPwd != reAdminPwd)
+    {
+        std::cerr << "Password mismatch." << std::endl;
+        return false;
+    }
+    adminConfig.setAdminPwd(adminPwd);
+    return true;
+}
+
+/// Hashes the admin password with PBKDF2 and SHA512 and a new random salt.
+/// Result has the form pbkdf2.sha512.<iterations>.<salt in hex>.<hash in hex>
+std::string hashAdminPassword(const AdminConfig& adminConfig)
+{
+    std::vector<unsigned char> pwdhash(adminConfig.getPwdHashLength());
+    std::vector<unsigned char> salt(adminConfig.getPwdSaltLength());
+    RAND_bytes(salt.data(), adminConfig.getPwdSaltLength());
+
+    PKCS5_PBKDF2_HMAC(adminConfig.getAdminPwd().c_str(), -1,
+                      salt.data(), adminConfig.getPwdSaltLength(),
+                      adminConfig.getPwdIterations(),
+                      EVP_sha512(),
+                      adminConfig.getPwdHashLength(), pwdhash.data());
+
+    std::ostringstream result;
+    result << "pbkdf2.sha512." << adminConfig.getPwdIterations() << '.';
+    for (unsigned char byte : salt)
+        result << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte);
+    result << '.';
+    for (unsigned char byte : pwdhash)
+        result << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte);
+    return result.str();
+}
+
 // Config tool to change coolwsd configuration (coolwsd.xml)
 class Config: public Application
 {
@@ -151,7 +206,10 @@ void Config::displayHelp()
               << "    migrateconfig [--old-config-file=<path>] [--config-file=<path>] [--write]" << std::endl
               << "        The migrateconfig command migrates config file of Collabora Online 6.4 or older to the new format." << std::endl
               << "    anonymize [string-1]...[string-n]" << std::endl
-              << "    set-admin-password" << std::endl;
+              << "    set-admin-password" << std::endl
+              << "    generate-admin-password" << std::endl
+              << "        Prints a hashed secure_password for the admin console"
+                 " without changing the config file." << std::endl;
     if constexpr (ConfigUtil::isSupportKeyEnabled())
     {
         std::cout << "    set-support-key" << std::endl;
@@ -177,15 +235,15 @@ void Config::defineOptions(OptionSet& optionSet)
                         .repeatable(false)
                         .argument("path"));
 
-    optionSet.addOption(Option("pwd-salt-length", "", "Length of the salt to use to hash password [set-admin-password].")
+    optionSet.addOption(Option("pwd-salt-length", "", "Length of the salt to use to hash password [set-admin-password, generate-admin-password].")
                         .required(false)
                         .repeatable(false)
                         .argument("number"));
-    optionSet.addOption(Option("pwd-iterations", "", "Number of iterations to do in PKDBF2 password hashing [set-admin-password].")
+    optionSet.addOption(Option("pwd-iterations", "", "Number of iterations to do in PKDBF2 password hashing [set-admin-password, generate-admin-password].")
                         .required(false)
                         .repeatable(false)
                         .argument("number"));
-    optionSet.addOption(Option("pwd-hash-length", "", "Length of password hash to generate [set-admin-password].")
+    optionSet.addOption(Option("pwd-hash-length", "", "Length of password hash to generate [set-admin-password, generate-admin-password].")
                         .required(false)
                         .repeatable(false)
                         .argument("number"));
@@ -193,7 +251,7 @@ void Config::defineOptions(OptionSet& optionSet)
                         .required(false)
                         .repeatable(false)
                         .argument("name"));
-    optionSet.addOption(Option("password", "", "Admin user password [set-admin-password].")
+    optionSet.addOption(Option("password", "", "Admin user password [set-admin-password, generate-admin-password].")
                         .required(false)
                         .repeatable(false)
                         .argument("password"));
@@ -238,7 +296,7 @@ void Config::handleOption(const std::string& optionName, const std::string& opti
         if (len < MIN_PWD_SALT_LENGTH)
         {
             len = MIN_PWD_SALT_LENGTH;
-            std::cout << "Password salt length adjusted to minimum " << len << std::endl;
+            std::cerr << "Password salt length adjusted to minimum " << len << std::endl;
         }
         _adminConfig.setPwdSaltLength(len);
     }
@@ -248,7 +306,7 @@ void Config::handleOption(const std::string& optionName, const std::string& opti
         if (len < MIN_PWD_ITERATIONS)
         {
             len = MIN_PWD_ITERATIONS;
-            std::cout << "Password iteration adjusted to minimum " << len << std::endl;
+            std::cerr << "Password iteration adjusted to minimum " << len << std::endl;
         }
         _adminConfig.setPwdIterations(len);
     }
@@ -258,7 +316,7 @@ void Config::handleOption(const std::string& optionName, const std::string& opti
         if (len < MIN_PWD_HASH_LENGTH)
         {
             len = MIN_PWD_HASH_LENGTH;
-            std::cout << "Password hash length adjusted to minimum " << len << std::endl;
+            std::cerr << "Password hash length adjusted to minimum " << len << std::endl;
         }
         _adminConfig.setPwdHashLength(len);
     }
@@ -299,15 +357,12 @@ int Config::main(const std::vector<std::string>& args)
 
     int retval = EX_OK;
     bool changed = false;
-    _coolConfig.load(ConfigFile);
+    // generate-admin-password works without a config file.
+    if (args[0] != "generate-admin-password")
+        _coolConfig.load(ConfigFile);
 
     if (args[0] == "set-admin-password")
     {
-        std::vector<unsigned char> pwdhash(_adminConfig.getPwdHashLength());
-        std::vector<unsigned char> salt(_adminConfig.getPwdSaltLength());
-        RAND_bytes(salt.data(), _adminConfig.getPwdSaltLength());
-        std::stringstream stream;
-
         // Ask for admin username
         if (_adminConfig.getAdminUser().empty()) {
             std::string adminUser;
@@ -320,61 +375,24 @@ int Config::main(const std::vector<std::string>& args)
             _adminConfig.setAdminUser(adminUser);
         }
 
-        // Ask for user password
-        if (_adminConfig.getAdminPwd().empty()) {
-            termios oldTermios;
-            tcgetattr(STDIN_FILENO, &oldTermios);
-            termios newTermios = oldTermios;
-            // Disable user input mirroring on console for password input
-            newTermios.c_lflag &= ~ECHO;
-            tcsetattr(STDIN_FILENO, TCSANOW, &newTermios);
-            std::string adminPwd;
-            std::cout << "Enter admin password: ";
-            std::getline(std::cin, adminPwd);
-            std::string reAdminPwd;
-            std::cout << std::endl << "Confirm admin password: ";
-            std::getline(std::cin, reAdminPwd);
-            std::cout << std::endl;
-            // Set the termios to old state
-            tcsetattr(STDIN_FILENO, TCSANOW, &oldTermios);
-            if (adminPwd != reAdminPwd)
-            {
-                std::cout << "Password mismatch." << std::endl;
-                return EX_DATAERR;
-            }
-            _adminConfig.setAdminPwd(adminPwd);
-        }
+        if (!readAdminPassword(_adminConfig, std::cout))
+            return EX_DATAERR;
 
-        // Do the magic !
-        PKCS5_PBKDF2_HMAC(_adminConfig.getAdminPwd().c_str(), -1,
-                          salt.data(), _adminConfig.getPwdSaltLength(),
-                          _adminConfig.getPwdIterations(),
-                          EVP_sha512(),
-                          _adminConfig.getPwdHashLength(), pwdhash.data());
-
-        // Make salt randomness readable
-        for (unsigned j = 0; j < _adminConfig.getPwdSaltLength(); ++j)
-            stream << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(salt[j]);
-        const std::string saltHash = stream.str();
-
-        // Clear our used hex stream to make space for password hash
-        stream.str("");
-        stream.clear();
-
-        // Make the hashed password readable
-        for (unsigned j = 0; j < _adminConfig.getPwdHashLength(); ++j)
-            stream << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(pwdhash[j]);
-        const std::string passwordHash = stream.str();
-
-        std::stringstream pwdConfigValue("pbkdf2.sha512.", std::ios_base::in | std::ios_base::out | std::ios_base::ate);
-        pwdConfigValue << std::to_string(_adminConfig.getPwdIterations()) << '.';
-        pwdConfigValue << saltHash << '.' << passwordHash;
         _coolConfig.setString("admin_console.username", _adminConfig.getAdminUser());
         _coolConfig.setString("admin_console.secure_password[@desc]",
                               "Salt and password hash combination generated using PBKDF2 with SHA512 digest.");
-        _coolConfig.setString("admin_console.secure_password", pwdConfigValue.str());
+        _coolConfig.setString("admin_console.secure_password", hashAdminPassword(_adminConfig));
 
         changed = true;
+    }
+    else if (args[0] == "generate-admin-password")
+    {
+        // Print prompts on stderr, so stdout gets only the generated value so
+        // it can be assigned to an env var.
+        if (!readAdminPassword(_adminConfig, std::cerr))
+            return EX_DATAERR;
+
+        std::cout << hashAdminPassword(_adminConfig) << std::endl;
     }
     else if (ConfigUtil::isSupportKeyEnabled() && args[0] == "set-support-key")
     {

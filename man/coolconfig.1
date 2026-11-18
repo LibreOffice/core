@@ -49,6 +49,21 @@ set\-admin\-password
 .PP
 \fB\-\-password\fR=\fIpassword\fR       Password for the admin console. If unspecified will be requested on the terminal.
 .PP
+.SS "generate\-admin\-password"
+The \fBgenerate\-admin\-password\fR command hashes an admin console password and prints the result, in the format of the admin_console.secure_password setting. It does not read or change the config file. Only the result is written to standard output, and the prompts and messages go to standard error. The result can be passed to coolwsd with \fB\-\-o:admin_console.secure_password\fR=\fIvalue\fR, or in the \fBsecure_password\fR environment variable when coolwsd runs with \fB\-\-use\-env\-vars\fR.
+.PP
+generate\-admin\-password
+.PP
+\fB\-\-pwd\-salt\-length\fR=\fInumber\fR  Length of the salt to use to hash password.
+.PP
+\fB\-\-pwd\-iterations\fR=\fInumber\fR   Number of iterations to do in PKDBF2 password hashing.
+.PP
+\fB\-\-pwd\-hash\-length\fR=\fInumber\fR  Length of password hash to generate.
+.PP
+\fB\-\-password\fR=\fIpassword\fR       Password for the admin console. If unspecified will be requested on the terminal.
+.PP
+\fBExample:\fR secure_password=$(coolconfig generate\-admin\-password)
+.PP
 .SS "update\-system\-template"
 The \fBupdate\-system\-template\fR command updates Collabora Online's system template. It is used typically when new fonts are added to the system, that need to be used with Collabora Online.
 .PP
