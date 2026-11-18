@@ -159,6 +159,11 @@ void UtilTests::testBase64Encode()
     // Simple string.
     LOK_ASSERT_EQUAL(std::string("SGVsbG8="), Util::base64Encode("Hello"));
 
+    // Inputs shorter than one group of three bytes.
+    LOK_ASSERT_EQUAL(std::string(), Util::base64Encode(""));
+    LOK_ASSERT_EQUAL(std::string("YQ=="), Util::base64Encode("a"));
+    LOK_ASSERT_EQUAL(std::string("YWI="), Util::base64Encode("ab"));
+
     // Input with newlines is encoded as-is (newlines become part of the encoding).
     std::string withNewLines = "Hello\nWorld\n";
     std::string encoded = Util::base64Encode(withNewLines);
