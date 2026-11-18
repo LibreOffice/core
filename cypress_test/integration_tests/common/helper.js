@@ -1607,6 +1607,22 @@ function waitUntilDocumentSaved() {
 	cy.log('<< waitUntilDocumentSaved - end');
 }
 
+// Waits for a view to reconnect after its socket closed. The reconnect is
+// finished when a new socket has been opened, the status has arrived, and the
+// idle handler has sent useractive, since outgoing messages are dropped until
+// it has. connectCountBefore is app.socket._connectCount as read before the
+// socket closed.
+function waitForReconnect(win, connectCountBefore) {
+	cy.log('>> waitForReconnect - start');
+	cy.wrap(null).should(function() {
+		expect(win.app.socket._connectCount, 'sockets opened').to.be.greaterThan(connectCountBefore);
+		expect(win.app.socket._reconnecting, 'reconnecting').to.equal(false);
+		expect(win.app.socket.connected(), 'connected').to.equal(true);
+		expect(win.app.idleHandler._active, 'active').to.equal(true);
+	});
+	cy.log('<< waitForReconnect - end');
+}
+
 // cy.realPress('Enter') via CDP bypasses preventDefault on keydown,
 // which causes implicit form submission and spurious button clicks
 // that don't happen with real keyboard input. This helper blocks
@@ -1716,6 +1732,7 @@ module.exports.waitForTimers = waitForTimers;
 module.exports.waitForOnDemandRenders = waitForOnDemandRenders;
 module.exports.waitForMapState = waitForMapState;
 module.exports.waitUntilDocumentSaved = waitUntilDocumentSaved;
+module.exports.waitForReconnect = waitForReconnect;
 module.exports.maxScreenshotableViewportHeight = maxScreenshotableViewportHeight;
 module.exports.getContextMenuItem = getContextMenuItem;
 module.exports.getContextMenuItemList = getContextMenuItemList;

@@ -21,19 +21,18 @@ describe(['tagdesktop'], 'WebSocket reconnection', function () {
 
 		// Close the raw WebSocket to trigger automatic reconnection
 		let preDisconnectY1;
+		let connectCountBefore;
 		cy.then(() => {
 			preDisconnectY1 = this.win.app.activeDocument.activeLayout.viewedRectangle.y1;
 			expect(preDisconnectY1).to.be.greaterThan(0);
+			connectCountBefore = this.win.app.socket._connectCount;
 			this.win.app.socket.socket.close();
 		});
 
-		// Can't use processToIdle with the socket closed
-		cy.wait(500);
-
-		// Wait for reconnection to complete
+		cy.then(() => {
+			helper.waitForReconnect(this.win, connectCountBefore);
+		});
 		cy.cGet('#document-canvas').should('be.visible');
-		cy.getFrameWindow().its('app.socket._reconnecting')
-			.should('eq', false);
 
 		// The reload after reconnection reports the document size in steps,
 		// and a size-suppression timer holds the old size until those reports
@@ -87,15 +86,11 @@ describe(['tagdesktop'], 'WebSocket reconnection', function () {
 			this.win.app.socket.sendMessage('debugdropconnection');
 		});
 
-		// No processToIdle while the socket is down. The reconnect is finished
-		// when one more socket has been opened, the status has arrived, and the
-		// idle handler has sent useractive, since outgoing messages are dropped
-		// until it has.
+		cy.then(() => {
+			helper.waitForReconnect(this.win, connectCountBefore);
+		});
 		cy.getFrameWindow().should(function (win) {
 			expect(win.app.socket._connectCount).to.equal(connectCountBefore + 1);
-			expect(win.app.socket._reconnecting).to.equal(false);
-			expect(win.app.socket.connected()).to.equal(true);
-			expect(win.app.idleHandler._active).to.equal(true);
 			expect(win.app.socket.socket.url).to.contain('ReconnectToken=' + tokenBefore);
 			// The reattached view got a new token for the next reconnect.
 			expect(win.reconnectToken).to.match(/^[0-9A-F]{64}$/);

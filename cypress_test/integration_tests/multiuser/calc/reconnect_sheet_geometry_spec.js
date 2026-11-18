@@ -12,7 +12,7 @@ describe(['tagmultiuser'], 'Sheet geometry after a reconnection', function() {
 
 	it('A column width changed while an invalidation was lost is fetched again after reconnecting', function() {
 		var NEW_WIDTH_MM100 = 5000;
-		var win1, win2, widthBefore;
+		var win1, win2, widthBefore, connectCountBefore;
 
 		// The width of column A as the sheet geometry of a view knows it, in print twips.
 		var columnWidth = function(win) {
@@ -63,14 +63,15 @@ describe(['tagmultiuser'], 'Sheet geometry after a reconnection', function() {
 			layer._onMessage = layer._onMessageBeforeTest;
 			delete layer._onMessageBeforeTest;
 			// Closing the raw WebSocket triggers the automatic reconnection.
+			connectCountBefore = win2.app.socket._connectCount;
 			win2.app.socket.socket.close();
 		});
 
-		// processToIdle cannot be used while the socket is closed.
-		cy.wait(500);
 		cy.cSetActiveFrame('#iframe2');
+		cy.then(() => {
+			helper.waitForReconnect(win2, connectCountBefore);
+		});
 		cy.cGet('#document-canvas').should('be.visible');
-		cy.getFrameWindow().its('app.socket._reconnecting').should('eq', false);
 		cy.then(() => {
 			helper.processToIdle(win2);
 		});
