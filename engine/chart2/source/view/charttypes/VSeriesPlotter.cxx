@@ -1431,7 +1431,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
         if( aRegressionPoly.SequenceX.hasElements() && aRegressionPoly.SequenceX[0].hasElements() )
         {
             VLineProperties aVLineProperties;
-            aVLineProperties.initFromPropertySet( rCurve );
+            aVLineProperties.initFromPropertySet( static_cast<property::OPropertySet*>(rCurve.get()) );
 
             //create an extra group shape for each curve for selection handling
             rtl::Reference<SvxShapeGroupAnyD> xRegressionGroupShapes =
@@ -2529,7 +2529,7 @@ bool lcl_HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLine 
     for( const rtl::Reference< RegressionCurveModel > & rCurve : xRegrCont->getRegressionCurves2() )
     {
         bHasRegressionCurves = true;
-        lcl_HasVisibleLine( rCurve, rbHasDashedLine );
+        lcl_HasVisibleLine( static_cast<property::OPropertySet*>(rCurve.get()), rbHasDashedLine );
     }
     return bHasRegressionCurves;
 }
@@ -2811,7 +2811,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 // create the symbol
                 rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
                     xSymbolGroup, LegendSymbolStyle::Line,
-                    aCurves[i],
+                    static_cast<property::OPropertySet*>(aCurves[i].get()),
                     VLegendSymbolFactory::PropertyType::Line, cpo::uno::Any() );
 
                 // set CID to symbol for selection

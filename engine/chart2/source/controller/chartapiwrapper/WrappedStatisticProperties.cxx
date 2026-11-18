@@ -904,7 +904,7 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
     {
         case PROPERTY_SET_TYPE_REGRESSION:
             if( xRegCnt.is() )
-                xResult = RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt );
+                xResult = static_cast<property::OPropertySet*>(RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ).get());
             break;
         case PROPERTY_SET_TYPE_ERROR_BAR:
             if( xSeriesPropertySet.is())
@@ -912,7 +912,7 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
             break;
         case PROPERTY_SET_TYPE_MEAN_VALUE:
             if( xRegCnt.is() )
-                xResult = RegressionCurveHelper::getMeanValueLine( xRegCnt );
+                xResult = static_cast<property::OPropertySet*>(RegressionCurveHelper::getMeanValueLine( xRegCnt ).get());
             break;
     }
 

@@ -490,7 +490,8 @@ void ChartController::executeDispatch_InsertTrendline()
         return;
 
     auto aItemConverter = std::make_shared<wrapper::RegressionCurveItemConverter>(
-        xCurve, xRegressionCurveContainer, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
+        static_cast<property::OPropertySet*>(xCurve.get()),
+        xRegressionCurveContainer, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
         m_pDrawModelWrapper->getSdrModel(),
         xChartModel );
 

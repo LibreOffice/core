@@ -151,7 +151,7 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
         rtl::Reference< ::chart::RegressionCurveModel > xCurve(
             ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
         if( xCurve.is())
-            return xCurve;
+            return static_cast<property::OPropertySet*>(xCurve.get());
     }
 
     return uno::Reference< beans::XPropertySet >();
@@ -421,7 +421,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                                                 eRegress,
                                                 xContainer,
                                                 xCurve);
-                        uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                        uno::Reference< beans::XPropertySet > xProperties( xCurve );
                         resetPropertySet( xProperties );
                         bChanged = true;
                     }

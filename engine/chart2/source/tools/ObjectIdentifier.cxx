@@ -1227,7 +1227,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                             if( eObjectType == OBJECTTYPE_DATA_CURVE_EQUATION )
                                 xObjectProperties = aCurveList[nIndex]->getEquationProperties();
                             else
-                                xObjectProperties = aCurveList[nIndex];
+                                xObjectProperties = static_cast<property::OPropertySet*>(aCurveList[nIndex].get());
                         }
                     }
                     break;

@@ -285,6 +285,31 @@ uno::Reference< beans::XPropertySetInfo > RegressionCurveModel::getPropertySetIn
     return GetStaticRegressionCurveInfo();
 }
 
+void RegressionCurveModel::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
+{
+    OPropertySet::setPropertyValue(aPropertyName, aValue);
+}
+::cpo::uno::Any RegressionCurveModel::getPropertyValue( const ::rtl::OUString& PropertyName )
+{
+    return OPropertySet::getPropertyValue(PropertyName);
+}
+void RegressionCurveModel::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener )
+{
+    OPropertySet::addPropertyChangeListener(aPropertyName, xListener);
+}
+void RegressionCurveModel::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener )
+{
+    OPropertySet::removePropertyChangeListener(aPropertyName, aListener);
+}
+void RegressionCurveModel::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::addVetoableChangeListener(PropertyName, aListener);
+}
+void RegressionCurveModel::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener )
+{
+    OPropertySet::removeVetoableChangeListener(PropertyName, aListener);
+}
+
 // needed by MSC compiler
 using impl::RegressionCurveModel_Base;
 

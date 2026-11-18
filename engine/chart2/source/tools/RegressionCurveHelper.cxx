@@ -471,7 +471,7 @@ rtl::Reference< RegressionCurveModel > RegressionCurveHelper::addRegressionCurve
             xCurve->setEquationProperties( xEquationProperties );
 
         if( xPropertySource.is())
-            comphelper::copyProperties( xPropertySource, xCurve );
+            comphelper::copyProperties( xPropertySource, static_cast<property::OPropertySet*>(xCurve.get()) );
         else
         {
             uno::Reference< XPropertySet > xSeriesProp( xRegressionCurveContainer, uno::UNO_QUERY );
@@ -514,7 +514,7 @@ rtl::Reference< RegressionCurveModel > RegressionCurveHelper::addRegressionCurve
             xCurve->setEquationProperties( xEquationProperties );
 
         if( xPropertySource.is())
-            comphelper::copyProperties( xPropertySource, xCurve );
+            comphelper::copyProperties( xPropertySource, static_cast<property::OPropertySet*>(xCurve.get()) );
         else
         {
             xCurve->setPropertyValue( u"LineColor"_ustr,
@@ -598,7 +598,7 @@ rtl::Reference< RegressionCurveModel > RegressionCurveHelper::changeRegressionCu
     return RegressionCurveHelper::addRegressionCurve(
             eType,
             xRegressionCurveContainer,
-            uno::Reference< beans::XPropertySet >( xRegressionCurve, uno::UNO_QUERY ),
+            uno::Reference< beans::XPropertySet >( xRegressionCurve ),
             xRegressionCurve->getEquationProperties());
 }
 
