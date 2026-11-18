@@ -2871,8 +2871,7 @@ void XclImpChTypeGroup::ReadChDataFormat( XclImpStream& rStrm )
 void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > const & xChartType,
         Reference< XDataSeries > const & xSeries, sal_Int32 nApiAxesSetIdx ) const
 {
-    Reference< XDataSeriesContainer > xSeriesCont( xChartType, UNO_QUERY );
-    if( !(xSeriesCont.is() && xSeries.is()) )
+    if( !(xChartType.is() && xSeries.is()) )
         return;
 
     // series stacking mode
@@ -2891,7 +2890,7 @@ void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > const & xChart
     // insert series into container
     try
     {
-        xSeriesCont->addDataSeries( xSeries );
+        xChartType->addDataSeries( xSeries );
     }
     catch( cpo::uno::Exception& )
     {

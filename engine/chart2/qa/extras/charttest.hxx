@@ -316,9 +316,8 @@ cpo::uno::Sequence < OUString > ChartTest::getWriterChartColumnDescriptions()
 
 std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( const cpo::uno::Reference<css::chart2::XChartType>& xCT )
 {
-    cpo::uno::Reference<css::chart2::XDataSeriesContainer> xDSCont(xCT, cpo::uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xDSCont.is());
-    const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    CPPUNIT_ASSERT(xCT.is());
+    const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xCT->getDataSeries();
 
     std::vector<std::vector<double> > aRet;
     for (cpo::uno::Reference<css::chart2::XDataSeries> const & ds : aDataSeriesSeq)
@@ -361,9 +360,7 @@ std::vector<cpo::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFr
 {
     OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
 
-    cpo::uno::Reference<css::chart2::XDataSeriesContainer> xDSCont(xCT, cpo::uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xDSCont.is());
-    const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xCT->getDataSeries();
 
     std::vector<cpo::uno::Sequence<cpo::uno::Any> > aRet;
     for (auto const & ds : aDataSeriesSeq)

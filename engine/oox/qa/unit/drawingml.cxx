@@ -187,8 +187,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
     uno::Reference<chart2::XChartTypeContainer> xCoordinateSystem(
         xDiagram->getCoordinateSystems()[0], uno::UNO_QUERY);
 
-    uno::Reference<chart2::XDataSeriesContainer> xChartType(xCoordinateSystem->getChartTypes()[0],
-                                                            uno::UNO_QUERY);
+    uno::Reference<chart2::XChartType> xChartType(xCoordinateSystem->getChartTypes()[0]);
 
     uno::Reference<chart2::XDataSeries> xDataSeries = xChartType->getDataSeries()[0];
 

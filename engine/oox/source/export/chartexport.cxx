@@ -195,11 +195,10 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
     std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitSeries;
     std::map<sal_Int32, size_t> aMapAxisToIndex;
 
-    Reference< chart2::XDataSeriesContainer > xDSCnt(xChartType, uno::UNO_QUERY);
-    if (xDSCnt.is())
+    if (xChartType.is())
     {
         sal_Int32 nAxisIndexOfFirstSeries = -1;
-        const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xDSCnt->getDataSeries());
+        const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xChartType->getDataSeries());
         for (const uno::Reference<chart2::XDataSeries>& xSeries : aSeriesSeq)
         {
             if (!xSeries.is())
@@ -3951,12 +3950,11 @@ void ChartExport::exportSurfaceChart( const Reference< chart2::XChartType >& xCh
 
 void ChartExport::exportAllSeries(const Reference<chart2::XChartType>& xChartType, bool& rPrimaryAxes)
 {
-    Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
-    if( ! xDSCnt.is())
+    if( ! xChartType.is())
         return;
 
     // export dataseries for current chart-type
-    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
+    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xChartType->getDataSeries());
     exportSeries_chart(xChartType, aSeriesSeq, rPrimaryAxes);
 }
 

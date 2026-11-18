@@ -52,7 +52,6 @@ namespace impl
 typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::chart2::XChartType,
-        css::chart2::XDataSeriesContainer,
         css::util::XCloneable,
         css::util::XModifyBroadcaster,
         css::util::XModifyListener >

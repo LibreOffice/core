@@ -98,12 +98,7 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
     if ( xCT->getChartType() != "com.sun.star.chart2.LineChartType" )
         return false;
 
-    Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
-
-    if (!xDSCont.is())
-        return false;
-
-    const Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xCT->getDataSeries();
 
     bool bHasNoGapBlankValue = false;
     bool bHasEmptyCell = false;

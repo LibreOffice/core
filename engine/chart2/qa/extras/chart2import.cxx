@@ -1056,9 +1056,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFlatODSStackedColumnChart)
     Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xChartType.is());
 
-    Reference<chart2::XDataSeriesContainer> xDSCont(xChartType, UNO_QUERY);
-    CPPUNIT_ASSERT(xDSCont.is());
-    Sequence<Reference<chart2::XDataSeries> > aSeriesSeq = xDSCont->getDataSeries();
+    Sequence<Reference<chart2::XDataSeries> > aSeriesSeq = xChartType->getDataSeries();
 
     // The stacked column chart should consist of 5 data series.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aSeriesSeq.getLength());
@@ -1116,7 +1114,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf105517)
     CPPUNIT_ASSERT(xCoordContainer.is());
     Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCoordContainer->getCoordinateSystems()[0], uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartTypeContainer.is());
-    Reference<chart2::XDataSeriesContainer> xDSContainer(xChartTypeContainer->getChartTypes()[0], uno::UNO_QUERY);
+    Reference<chart2::XChartType> xDSContainer(xChartTypeContainer->getChartTypes()[0]);
     CPPUNIT_ASSERT(xDSContainer.is());
     Reference<chart2::XDataSeries> xPropSet1(xDSContainer->getDataSeries()[0]);
     CPPUNIT_ASSERT(xPropSet1.is());

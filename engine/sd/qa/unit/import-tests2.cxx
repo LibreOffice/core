@@ -1369,7 +1369,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
         xBCooSysCnt->getCoordinateSystems());
     uno::Reference<chart2::XChartTypeContainer> xCTCnt(aCooSysSeq[0], uno::UNO_QUERY);
 
-    uno::Reference<chart2::XDataSeriesContainer> xDSCnt(xCTCnt->getChartTypes()[0], uno::UNO_QUERY);
+    uno::Reference<chart2::XChartType> xDSCnt(xCTCnt->getChartTypes()[0]);
     CPPUNIT_ASSERT_MESSAGE("failed to load data series", xDSCnt.is());
     cpo::uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", static_cast<sal_Int32>(1),

@@ -898,8 +898,7 @@ bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xC
         xChartTypeContainer->getChartTypes());
     if (xChartTypeSequence.getLength() <= 0)
         return false;
-    uno::Reference<chart2::XDataSeriesContainer> xDSContainer(xChartTypeSequence[0],
-                                                              uno::UNO_QUERY);
+    uno::Reference<chart2::XChartType> xDSContainer(xChartTypeSequence[0]);
     if (!xDSContainer.is())
         return false;
 
