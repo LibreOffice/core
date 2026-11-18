@@ -3013,7 +3013,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 oPart && oPart->mnMode == constVectorModeSlides)
             {
                 SdXImpressDocument::VectorPartState& rState
-                    = maVectorParts[vectorPartKeyOf(rPage)];
+                    = maVectorParts.get(vectorPartKeyOf(rPage));
                 for (const rtl::Reference<SdrObject>& pObject : rPage)
                     markSubtreeDirty(rState, pObject.get());
                 notifyViewsVectorPartChanged(mpDocShell, rPage, oPart->mnMode);
