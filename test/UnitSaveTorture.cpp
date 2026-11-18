@@ -1024,6 +1024,17 @@ public:
                "\"action\": \"close\" }";
     }
 
+    virtual void postBackgroundSaveInject() override
+    {
+        // A real dialog holds the save until the parent drops the child, so the child leaves
+        // without writing the document.
+        if (stampExists("flushdialogopen"))
+        {
+            std::cerr << "Exit bgsave process held by a dialog\n\n";
+            _exit(0);
+        }
+    }
+
     // Only the parent Kit sends pings, to its background save child.
     bool onFilterSendWebSocketMessage(std::string_view /* data */, const WSOpCode code,
                                       const bool /* flush */, int& /* unitReturn */) override

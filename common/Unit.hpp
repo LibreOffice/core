@@ -729,6 +729,9 @@ public:
     /// before saving. Empty means send nothing.
     virtual std::string getBackgroundSaveInjectMessage() { return std::string(); }
 
+    /// Called in the background save child once the injected frame has gone to the parent.
+    virtual void postBackgroundSaveInject() {}
+
     /// Kit hit drainQueue
     virtual bool filterDrainQueue()
     {

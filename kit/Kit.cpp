@@ -1904,7 +1904,10 @@ bool Document::forkToSave(const std::function<void()>& childSave, int viewId,
                 std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() << "ms");
 
         if (const std::string inject = UnitKit::get().getBackgroundSaveInjectMessage(); !inject.empty())
+        {
             sendFrame(inject, WSOpCode::Text);
+            UnitKit::get().postBackgroundSaveInject();
+        }
 
         childSave();
 
