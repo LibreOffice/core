@@ -47,9 +47,9 @@ TREE_ROOT = os.path.normpath(
 
 # (directory in online-branding, directory here, include globs, exclude globs,
 # globs of files that may exist in online-branding only)
-# The globs match paths relative to the mapped directory.  The Nextcloud and
-# the customer brands stay in online-branding only, and so does the unused
-# CODE stylesheet.  The CODA theme (themes/CODA) exists only here.
+# The globs match paths relative to the mapped directory.  The customer brands
+# stay in online-branding only, and so does the unused CODE stylesheet.  The
+# CODA theme (themes/CODA) exists only here.
 #
 # Only the images that the generated CSS references are kept here, so an image
 # that exists in online-branding only is not reported; brand.sh copies the
@@ -61,8 +61,6 @@ MAPPING = [
         ["*", ".stylelintrc"],
         [
             "def/_CODE.scss",
-            "def/_NC-theme.scss",
-            "def/_NC-icons.scss",
             "def/Magentacloud-icons.scss",
             "def/_ClaroDrive-theme-1.1.scss",
             "def/_ContentEditor-theme.scss",
@@ -83,6 +81,13 @@ MAPPING = [
         ["images/*"],
     ),
     ("themes/CODE", "browser/branding/themes/CODE", ["branding.js"], [], []),
+    (
+        "themes/nextcloud",
+        "browser/branding/themes/nextcloud",
+        ["branding.js", "images/*"],
+        ["*.bak"],
+        ["images/*"],
+    ),
     (
         ".",
         "browser/branding",
@@ -430,7 +435,7 @@ def main():
         p.add_argument("-n", "--dry-run", action="store_true")
         p.set_defaults(func=func)
     p = sub.add_parser("compare-output")
-    p.add_argument("theme", help="CO-theme, CODE or CODA")
+    p.add_argument("theme", help="CO-theme, CODE, CODA or NC-theme-community")
     p.set_defaults(func=cmd_compare_output)
     args = parser.parse_args()
     if not args.branding or not os.path.isdir(args.branding):

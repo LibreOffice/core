@@ -1,0 +1,1165 @@
+
+
+/// only one @use per theme!
+@use 'NC-icons';
+@import '_css-vars';
+$theme: 'NC-theme';
+$with-integrator-logo: true;
+$hide-desktop-marker: true;
+/// The following is overwritten by brand.sh
+$hide-about: false;
+$hide-forum: false;
+$hide-report-issue: false;
+$hide-about-product-logo: false;
+$hide-about-lokit-logo: false;
+$hide-about-integrator-logo: false;
+$clr-toolbar-bezels-border: var(--color-border);
+$toolbar-down-per-doc-type: false;
+$toolbar-up-per-doc-type: false;
+$notebookbar-separators: true;
+$color-leaflet-progress: #0082c9;
+
+:root {
+	/// Nextcloud variables
+	--nc-color-primary-element: var(--nc-light-color-primary-element, var(--co-primary-element));
+	--nc-color-primary-element-text: var(--nc-light-color-primary-element-text, var(--co-primary-light));
+	--nc-color-primary-element-light: var(--nc-light-color-primary-element-light, var(--co-primary-light));
+	--nc-color-primary-element-hover: var(--nc-light-color-primary-element-hover);
+	--nc-color-primary-element-light-hover: var(--nc-light-color-primary-element-light-hover);
+	--nc-primary-invert-if-bright: var(--nc-light-primary-invert-if-bright);
+	--nc-background-invert-if-bright: var(--nc-light-background-invert-if-bright);
+	--nc-background-invert-if-dark: var(--nc-light-background-invert-if-dark);
+	--nc-primary-invert-if-dark: var(--nc-light-primary-invert-if-dark, var(--co-primary-invert-if-dark));
+
+	/// Nextcloud branding internal variables
+	--native-font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Cantarell, Roboto, Oxygen-Sans, Ubuntu, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
+	--background-notebookbar: #fff;
+
+	/// online color-palette.css
+	--blue1-txt-primary-color: 3, 105, 163;
+	--green0-txt-primary-color: 16, 104, 2; /*green1 lacks contrast against white*/
+	--orange1-txt-primary-color: 163, 62, 3;
+	--yellow0-txt-primary-color: 135, 105, 0; /*yellow1 lacks contrast against white*/
+
+	--gray-light-txt--color: #696969;
+	--gray-light-bg-color: #EFEFEF;
+	--gray-color: #b6b6b6;
+
+	--color-main-text: #333333;
+	--color-text-dark: #333333;  /* select */
+	--color-text-darker: #000;  /* hover */
+	--color-text-lighter: #696969;
+
+	// --color-canvas: #;
+	--color-background-dark: #F7F7F7;  /* select */
+	--color-background-darker: #e4e4e4;  /* hover */
+
+	--color-primary: var(--co-primary-element);
+	--color-primary-text: var(--co-primary-text);
+	/// color-primary-dark impacts primary button hover state
+	--color-primary-dark: var(--co-color-primary-element-text-dark);
+	--color-primary-darker: var(--co-primary-element);
+	--color-primary-lighter:  var(--co-primary-element-light);
+
+	--color-border: #b6b6b6;
+	--color-border-dark: #555; /* select */
+	--color-border-lighter: #b6b6b6;
+
+	--color-error: #e9322d;
+	--color-warning: #eca700;
+	--color-success: #46ba61;
+
+	/// specific to file type
+	$doc-types: (
+		text: (24, 90, 189), // #185abd
+		spreadsheet: (16, 124, 65), // #107c41
+		presentation: (196, 62, 28), // #c43e1c
+		drawing: (142, 115, 16) // #8e7310
+	);
+
+	@each $key, $rgb in $doc-types {
+		$color: rgb(nth($rgb, 1), nth($rgb, 2), nth($rgb, 3));
+		$color-darker: darken($color, 15%);
+
+		[data-doctype='#{$key}'] {
+			--doc-type: #{red($color)}, #{green($color)}, #{blue($color)};
+			--doc-type-darker: #{red($color-darker)}, #{green($color-darker)}, #{blue($color-darker)};
+		}
+	}
+
+	/// online cool.css
+	--cool-font: var(--native-font-stack);
+	--mobile-font: var(--native-font-stack);
+	--jquery-ui-font: var(--native-font-stack);
+	--docs-font: var(--native-font-stack);
+	--docs--pre-font: 'Consolas','Menlo','Lucida Console','Courier New',monospace;
+
+	--default-font-size: 15px;
+	--header-font-size: 15px;
+
+	--border-radius: 3px;
+	--border-radius-large: 10px;
+	--header-height: 49px;
+	--sidebar-header-height: 34px;
+
+	/// Force overwrite set-cssvars
+	--co-color-background-light: var(--color-main-background) !important;
+	--co-image-logo: url('images/toolbar-bg-logo.svg');
+	--co-color-background-hover: #e4e4e4 !important;
+	--co-primary-element-light: var(--nc-color-primary-element) !important;
+	--co-primary-text: var(--nc-color-primary-element-text) !important;
+
+	/// Ruler variables
+	--ruler-height: 14px;
+	// fallback for invert icon
+	--co-primary-invert-if-dark : invert(1);
+}
+
+[data-theme="dark"] {
+	/// Nextcloud variables
+	--nc-color-primary-element: var(--nc-dark-color-primary-element, var(--co-primary-element));
+	--nc-color-primary-element-text: var(--nc-light-color-primary-element-text, var(--co-primary-light));
+	--nc-color-primary-element-light: var(--nc-dark-color-primary-element-light, var(--co-primary-element-light));
+	--nc-color-primary-element-hover: var(--nc-dark-color-primary-element-hover);
+	--nc-color-primary-element-light-hover: var(--nc-dark-color-primary-element-light-hover);
+	--nc-primary-invert-if-bright: var(--nc-dark-primary-invert-if-bright);
+	--nc-background-invert-if-bright: var(--nc-dark-background-invert-if-bright);
+	--nc-background-invert-if-dark: var(--nc-dark-background-invert-if-dark);
+	--nc-primary-invert-if-dark: var(--nc-dark-primary-invert-if-dark, var(--co-primary-invert-if-dark));
+
+	/// Nextcloud branding internal variables
+	--background-notebookbar: #101010;
+
+	/// online color-palette.css
+	--color-main-text: #fff;
+	--color-text-dark: #ddd;  /* select */
+	--color-text-darker: #ccc;  /* hover */
+	--color-text-lighter: #ddd;
+
+	--color-canvas: #171717;
+	--color-main-background: #171717;
+	--color-background-dark: #444;  /* select */
+	--color-background-darker: #555;  /* hover */
+	--color-background-lighter: #333;
+
+	--color-primary: var(--co-primary-element);
+	--color-primary-text: var(--co-primary-text);
+	/// color-primary-dark impacts primary button hover state
+	--color-primary-dark: var(--co-color-primary-element-text-dark);
+	--color-primary-darker: var(--co-primary-element);
+	--color-primary-lighter:  var(--co-primary-element-light);
+
+	--color-border: #696969;
+	--color-border-dark: #959595; /* select */
+	--color-border-lighter: #f1f1f1;
+
+	/// Force overwrite set-cssvars
+	--co-body-bg: var(--color-canvas) !important;
+	--co-color-background-light: var(--color-main-background) !important;
+	--co-color-main-text: #fff !important;
+	--co-color-background-hover: #444 !important;
+	--co-color-background-dark: #111 !important;
+}
+
+input[type='checkbox'].autofilter, .jsdialog input[type='checkbox'] {
+	border: none !important;
+}
+
+/// All modals, dialogs and dropdowns alike
+.jsdialog-window.modalpopup[role='dialog'] {
+	border-color: transparent !important;
+}
+
+/// Modal: user can’t interact with background content such as Help: keyboard shortcusts; Help: About
+[id^='modal-dialog'].jsdialog-window.modalpopup[role='dialog'] {
+	border: none !important;
+	border-radius: var(--border-radius-large) !important;
+	box-shadow: 0 0 25px var(--color-box-shadow) !important;
+	button {
+		cursor: pointer;
+		&.ui-pushbutton:not(.button-primary,[id^='modal-dialog-'][id$='yesbutton']) {
+			border: none !important;
+			background-color: var(--nc-color-primary-element-light) !important;
+		}
+		&.button-primary,  &[id^='modal-dialog-'][id$='yesbutton'] {
+			border: none !important;
+			color: var(--color-primary-text) !important;
+			background-color: var(--nc-color-primary-element) !important;
+		}
+		&.button-primary:hover,  &[id^='modal-dialog-'][id$='yesbutton']:hover {
+			background-color: var(--nc-color-primary-element-hover) !important;
+			color: var(--nc-color-primary-element-text) !important;
+		}
+	}
+}
+.jsdialog-window:not(.modalpopup) {
+	/// Nonmodal: user can interact with background content such as paragraph style
+	.jsdialog-container.ui-dialog.lokdialog_container {
+		border-radius: var(--border-radius-large) !important;
+		box-shadow: 0 0 25px var(--color-box-shadow) !important;
+		border: none !important;
+		overflow: hidden !important;
+		.ui-dialog-titlebar {
+			padding: 0;
+			min-height: 44px;
+
+			.ui-dialog-title {
+				border: none;
+				box-sizing: border-box;
+				padding: 13px;
+				background-color: var(--color-main-background);
+				background-image: none;
+				color: var(--color-main-text);
+				font-weight: bold;
+				text-transform: none;
+				font-family: var(--cool-font);
+			}
+
+			button.ui-dialog-titlebar-close {
+				width: 34px;
+				height: 34px;
+				margin: 5px;
+				top: 0;
+
+				&:hover {
+					background-image: none;
+					background-color: var(--color-background-darker);
+					border-radius: 8px !important;
+					& .ui-icon-closethick {
+						background-image: url('images/closedoc.svg');
+						width: 100%;
+						height: 100%;
+						top: 0;
+						left: 0;
+						margin: 0;
+						background-size: 24px;
+					}
+				}
+				& .ui-icon-closethick {
+					background-image: url('images/closedoc.svg');
+					width: 100%;
+					height: 100%;
+					top: 0;
+					left: 0;
+					margin: 0;
+					background-size: 24px;
+					[data-theme="dark"] & {
+						filter: invert(1) !important;
+					}
+				}
+			}
+		}
+
+		.ui-toggle.checked button,
+		.ui-tab.selected.jsdialog {
+			box-shadow: none !important;
+			background-color: var(--nc-color-primary-element) !important;
+			color: var(--nc-color-primary-element-text) !important;
+		}
+		button:not(.menubutton):not(.ui-toggle button) {
+			cursor: pointer;
+
+			&.button-primary {
+				color: var(--color-primary-text);
+				background-color: var(--nc-color-primary-element);
+			}
+			&.button-primary:hover {
+				background-color: var(--nc-color-primary-element-hover);
+				color: var(--nc-color-primary-element-text);
+			}
+
+			&.ui-pushbutton:not(.button-primary) {
+				border: none !important;
+				background-color: var(--nc-color-primary-element-light) !important;
+			}
+			&[id^='remove'].ui-pushbutton.has-img {
+				background-color: transparent !important;
+			}
+		}
+
+	}
+}
+
+.ui-toggle button {
+	border-radius: 100px !important;
+}
+
+/// General styles
+/// Covering shared branding mixins/varriables
+@mixin about-version(){
+	text-align: center;
+}
+@mixin about-id(){
+	text-align: center;
+	background-repeat: no-repeat;
+	background-position: 52% bottom;
+	background-size: 68px;
+	padding-bottom: 88px;
+}
+@mixin widgets-titlebar-bezel(){
+	border: none;
+}
+@mixin toolbar-up-dropdown($theme){
+	border-color: transparent;
+}
+@mixin toolbar-up-dropdown-content($theme) {
+	font-weight: bold;
+	font-family: var(----native-font-stack);
+	background-color: var(--color-background-dark);
+}
+@mixin toolbar-up-dropdown-hover($theme){
+	background-color: var(--color-main-background);
+}
+@mixin toolbar-up-dropdown-open($theme){
+	border: 1px solid var(--co-border);
+}
+@mixin toolbar-up-dropdown-chevron($theme){
+	border-color: var(--color-main-text) transparent transparent transparent;
+}
+@mixin toolbar-up-dropdown-txt($theme){
+	font-weight: bold;
+	color: var(--color-main-text) !important;
+}
+@mixin main-nav {
+	background-image: linear-gradient(40deg, var(--co-primary-element) 0%, var(--co-primary-element-light) 100%) !important;
+}
+
+.sidebar.ui-expander-label {
+	font-size: var(--default-font-size);
+	font-weight: normal;
+}
+
+.sidebar.ui-expander-container {
+	margin-bottom: 20px;
+}
+
+.jsdialog.ui-expander {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+#closebuttonwrapper {
+	top: 3px;
+	width: 34px;
+	height: 34px !important;
+
+	#closebutton {
+		[data-theme="dark"] & {
+			filter: invert(1) !important;
+		}
+		&:hover {
+			background-color: transparent !important;
+		}
+	}
+
+	&:hover {
+		border-radius: 8px;
+		background-color: var(--color-background-darker);
+		cursor: pointer;
+	}
+}
+
+html body {
+	background-color: var(--color-canvas) !important;
+}
+
+body #document-header {
+	margin: 0;
+	border: none;
+	display: inline-flex;
+	width: 46px;
+	padding-inline-start: 12px;
+	border: none !important;
+	background: none !important;
+	border-radius: 0;
+	//  TO DO: align should go upstream
+	align-items: center;
+
+	.document-logo {
+		background-repeat: no-repeat !important;
+		background-size: contain !important;
+		background-position: center !important;
+		width: 40px !important;
+		height: 20px !important;
+	}
+}
+
+body #document-header {
+	padding-inline: 7px 0px;
+}
+
+@mixin document-name-input {
+	#document-name-input {
+		font-size: var(--default-font-size) !important;
+	}
+}
+
+
+/// To do: remove any #document-name-input related declarations
+///        that are alredy present or can be moved to upstream.
+///        The remaining declarations (where the properties can
+///        be shared by all themes) should then moved to menu.scss.
+///        Just the nextcloud-only declarations should reside here.
+#document-name-input,
+#document-name-input.editable,
+#document-name-input.editable:not(:focus)
+#document-name-input.editable:focus {
+	text-align: center !important;
+	font-weight: bold;
+	font-size: var(--default-font-size) !important;
+	color: var(--co-color-main-text);
+	animation: none !important;
+	box-shadow: none !important;
+	background: transparent !important;
+	height: 100% !important;
+	border-radius: 10px !important; /* For older NC  */
+	border-radius: var(--vs-border-radius, var(--border-radius-large)) !important;
+	border: 1px solid transparent !important;
+}
+
+#document-name-input.editable:not(:focus) {
+	color: var(--color-text-lighter);
+	text-align: left;
+	font-size: var(--default-font-size) !important;
+}
+
+#document-name-input.editable:hover {
+	color: var(--color-text-lighter);
+	border-color: var(--color-border) !important;
+	flex: none;
+}
+
+#document-name-input.editable:focus {
+	color: var(--co-color-main-text);
+	flex: none;
+	border: 1px solid var(--color-border-darker);
+}
+
+/// Classic layout
+nav:not(.hasnotebookbar) {
+
+	&.main-nav {
+		background-color: var(--color-main-background);
+		height: 44px;
+		padding: 0;
+		align-items: center;
+
+		/** Document name input */
+		@media screen and (min-width: 1250px) {
+			#document-titlebar {
+				position: absolute;
+				width: auto;
+				left: 50%;
+				z-index: 1200;
+			}
+		}
+		@media screen and (max-width: 1045px) {
+			#document-titlebar {
+				display: none;
+			}
+		}
+	}
+
+	/** Menu */
+	.lo-menu > li > a, .lo-menu > li > a.has-submenu {
+		border-radius: 0;
+		border-bottom: 0;
+		border: none;
+	}
+
+	/// Hide last separator
+	.lo-menu li:last-child .separator {
+		display: none;
+	}
+
+	.lo-menu:not(#main-menu) a:not(.separator), .lo-menu:not(#main-menu) a:not(.separator):hover {
+		padding: 12px 22px;
+	}
+
+	#main-menu {
+		width: 100%;
+		height: auto;
+		display: flex;
+
+		.sm-nowrap {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+		& > li > a {
+			padding: 8px !important;
+		}
+	}
+
+	#main-menu-state:not(:checked) ~ #main-menu {
+		display: flex !important;
+	}
+
+
+	#menu-last-mod {
+		@media screen and (min-width: 1250px) {
+			text-align: right;
+			display: flex;
+			justify-content: end;
+			flex-grow: 1;
+		}
+		opacity: .7;
+		& > a, & > a span {
+			text-decoration: none;
+			color: var(--color-text-lighter);
+		}
+		& > a:hover,
+		& > a:hover span {
+			text-decoration: none;
+			background-color: transparent;
+			color: var(--co-color-text);
+		}
+	}
+}
+
+/** Icon toolbar */
+#toolbar-wrapper:not(.hasnotebookbar) {
+	background-color: var(--color-main-background);
+}
+
+#toolbar-up {
+	top: 0px;
+}
+
+
+@mixin box-reset() {
+	border: 0 !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+#toolbar-up .checked.over{
+	border: 0 !important;
+	box-shadow: none !important;
+}
+
+html:not([data-theme=dark]) #toolbar-down .unobutton.over * {
+	color: #444 !important;
+}
+
+#toolbar-down .ui-separator {
+	opacity: 0.2;
+}
+
+.ui-content .unobutton.selected ~ .arrowbackground .unoarrow {
+	border-top-color: var(--color-main-text) !important;
+}
+
+.arrowbackground:hover .unoarrow,
+.arrowbackground .unoarrow:hover {
+	border-top-color: (--color-text-darker) !important;
+}
+
+#toolbar-wrapper .ui-scroll-left,
+#toolbar-wrapper .ui-scroll-right {
+	/// Flipping is added by other stylesheet using transform
+	background-origin: padding-box;
+	background-clip: border-box;
+	background-image: url('images/scroll-double-dark.svg'), linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 30%, rgb(255, 255, 255) 100%);
+	background-position: 3px center, center center;
+	width: 44px;
+	background-size: 24px, cover;
+	top: 0px;
+	right: 0px;
+	margin: 0px;
+	padding: 0px;
+	border-radius: 5px;
+	overflow: hidden;
+	box-shadow: none;
+	background-color: transparent;
+	[data-theme="dark"] & {
+		background-image: url('images/scroll-double-dark.svg'), linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 30%, rgb(0,0,0) 100%);
+	}
+
+}
+
+.document-title > label[for="document-name-input"] {
+	overflow: hidden !important;
+	clip: rect(0 0 0 0) !important;
+	height: 0 !important;
+}
+
+#document-titlebar > .document-title {
+	gap: 0;
+}
+
+.unotoolbutton:hover * {
+	cursor: pointer;
+}
+
+/// Sidebar
+#document-container:not(.mobile) + #sidebar-dock-wrapper {
+	width: auto;
+	max-width: 380px;
+}
+
+#sidebar-dock-wrapper,
+#navigator-dock-wrapper,
+#navigation-sidebar,
+#navigation-sidebar.visible {
+	background: var(--color-canvas);
+}
+
+#document-container.notebookbar-active + #sidebar-dock-wrapper,
+#navigation-sidebar {
+	box-shadow: none;
+	outline: none;
+	padding: 13px;
+}
+
+#navigation-sidebar {
+	padding: 5px;
+}
+
+#navigator-dock-wrapper {
+	border: none;
+}
+
+#navigator-floating-icon {
+	background: transparent !important;
+}
+
+[data-theme='dark'] #navigator-dock-wrapper img {
+	filter: invert(1) hue-rotate(180deg) !important;
+}
+
+#document-container.notebookbar-active + #sidebar-dock-wrapper .deck:not([id='NavigatorDeck']) {
+	padding-top: 13px;
+}
+
+.jsdialog.ui-listbox {
+	border: 1px solid var(--co-border);
+	background-color: var(--color-main-background);
+}
+
+#sidebar-panel {
+	td.jsdialog .jsdialog.cell.sidebar {
+		padding: 4px 1px;
+		width: auto;
+	}
+}
+
+.arrowbackground,
+.arrowbackground:hover {
+	border: 0;
+}
+
+/** Required since regular branding overwrites those with high specifity */
+#tb_editbar_item_linespacing > div > table, #tb_editbar_item_insertshapes > div > table, #tb_editbar_item_fontcolor > div > table, #tb_editbar_item_backcolor > div > table, #tb_editbar_item_inserttable > div > table,
+#tb_editbar_item_linespacing > div > .checked, #tb_editbar_item_insertshapes > div > .checked, #tb_editbar_item_fontcolor > div > .checked, #tb_editbar_item_backcolor > div > .checked, #tb_editbar_item_inserttable > div > .checked {
+	border: 0 !important;
+}
+
+
+/** Hide the menu bar folding icon */
+#tb_editbar_item_fold {
+	display: none;
+}
+
+#clearFormatting:hover {
+	border-color: var(--co-border) !important;
+}
+
+/** Fromulabar */
+#formulabar > div > div {
+	grid-gap: 4px;
+}
+
+/** Notebook bar */
+#toolbar-wrapper.hasnotebookbar {
+	border-collapse: initial;
+	border-radius: 5px;
+	margin: 0 10px;
+	width: calc(100vw - 20px);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	background-color: var(--background-notebookbar);
+	border-color: transparent;
+
+	[data-theme="dark"] & {
+		box-shadow:  0 2px 1px black;
+	}
+
+	&.spreadsheet {
+		margin-bottom: 10px;
+
+		#formulabar {
+			padding: 2px;
+			border-radius: 5px;
+			border-color: transparent;
+		}
+	}
+
+	.ui-content.unotoolbutton:not(.formulabar) {
+
+		&:focus,
+		&:focus-visible {
+			outline: 2px solid var(--color-primary) !important;
+		}
+	}
+	.ui-content.unotoolbutton:not(.disabled):hover .unolabel {
+		color: var(--color-main-text);
+	}
+
+	.unotoolbutton.notebookbar {
+		margin-inline-end: 0 !important;
+		.unolabel {
+			font-size: var(--default-font-size);
+		}
+		&.disabled, &.disabled button {
+			cursor: not-allowed;
+		}
+		&.selected:hover {
+			border-color: rgb(var(--doc-type)) !important;
+		}
+	}
+
+	#stylesview {
+		padding: 2px;
+		padding-bottom: 0px;
+	}
+
+	#masterpageall_icons-dropdown,
+	#stylesview-dropdown,
+	#transitions_icons-dropdown,
+	#iconview_theme_colors-dropdown {
+		margin-top: 52px !important;
+	}
+}
+
+#iconview-button-separator {
+	background-color: var(--color-toolbar-border);
+}
+
+[data-theme='dark'] .hasnotebookbar .ui-content.unotoolbutton.selected:not(.has-label):not(.inline) {
+	border-color: rgb(var(--doc-type));
+}
+
+.navigator-btn-wrapper:hover {
+	background-color: var(--co-color-background-hover) !important
+}
+
+.notebookbar .ui-content.unobutton:hover, .jsdialog .ui-content.unobutton:hover {
+	background-color: transparent;
+}
+.ui-treeview-entry.selected,
+.ui-listview-entry.selected {
+	background-color: var(--nc-color-primary-element-light);
+}
+
+nav.main-nav {
+	border-top: 8px solid rgb(var(--doc-type));
+	background-color: var(--color-canvas) !important;
+
+	#save::after {
+		font-size: 12px !important;
+	}
+
+	#main-menu.readonly {
+		flex-grow: 1;
+		&.lo-menu > li > a, .lo-menu > li > a.has-submenu {
+			border-color: transparent !important;
+		}
+	}
+
+	.notebookbar-tabs-container {
+		margin-left: 5px;
+		flex-grow: 1;
+		flex-shrink: 1;
+		background-image: none;
+
+
+		&::before, &::after {
+			display: none;
+		}
+	}
+
+	.ui-tabs.notebookbar {
+		background-color: transparent;
+		border-radius: 0;
+		@include box-reset;
+	}
+
+	.ui-tab.selected {
+		display: grid !important;
+	}
+
+	& {
+		height: 47px;
+	}
+
+	& .ui-tab.notebookbar {
+		height: 47px;
+		@include box-reset;
+	}
+
+	&.main-nav.hasnotebookbar #document-header {
+		@include box-reset;
+	}
+
+	.notebookbar-options-section {
+		right: 44px !important;
+		height: auto !important;
+	}
+
+	#table-shortcutstoolbox {
+		display: none;
+	}
+
+	/// overwriting notebook bar app colors
+	&.main-nav.hasnotebookbar .ui-tab.notebookbar {
+		color: var(--color-text-lighter);
+		background-color: transparent !important;
+		text-shadow: none;
+		padding-top: 3px;
+		padding-bottom: 2px;
+		display: grid;
+		grid-auto-flow: column;
+		grid-template-columns: 1fr auto auto;
+		align-content: center;
+
+		&::after {
+			content: '';
+			height: 2px;
+			background-color: transparent;
+		}
+
+		&.selected {
+			grid-auto-flow: row;
+			@include box-reset;
+			color: var(--co-color-main-text);
+			background-color: transparent;
+			font-weight: bold;
+		}
+
+		&.selected::after {
+			content: '';
+			height: 2px;
+			background-color: rgb(var(--doc-type));
+			grid-column: 1 / 4;
+		}
+
+		&:hover {
+			color: var(--co-color-main-text);
+			background-color: transparent;
+		}
+	}
+
+  @media screen and (max-width: 1072px) {
+    #document-titlebar {
+      display: none !important;
+    }
+  }
+}
+
+.spreadsheet-tabs-container {
+	.spreadsheet-tab {
+		font: var(--default-font-size) var(--cool-font) !important;
+	}
+}
+
+.spreadsheet-header-row,
+.spreadsheet-header-column {
+	border-color: transparent;
+}
+
+/** UI Widget */
+.lokdialog_container.ui-dialog.ui-widget-content {
+	box-shadow: 0 0 3px rgba(77, 77, 77, 0.5);
+}
+
+.ui-dialog .ui-dialog-titlebar {
+	padding: 0;
+
+	.ui-dialog-title {
+		border: none;
+		box-sizing: border-box;
+		padding: 13px;
+		background-color: var(--color-main-background);
+		background-image: none;
+		color: var(--color-main-text);
+		font-weight: bold;
+		text-transform: none;
+		font-family: var(--cool-font);
+	}
+
+	button.ui-dialog-titlebar-close {
+		width: 34px;
+		height: 34px;
+		margin: 5px;
+		top: 0;
+
+		&:hover {
+			background-image: none;
+			background-color: var(--color-background-darker);
+			border-radius: 8px;
+			& .ui-icon-closethick {
+				background-image: url('images/closedoc.svg');
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				margin: 0;
+				background-size: 24px;
+			}
+		}
+		& .ui-icon-closethick {
+			background-image: url('images/closedoc.svg');
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			margin: 0;
+			background-size: 24px;
+			[data-theme="dark"] & {
+				filter: invert(1) !important;
+			}
+		}
+	}
+}
+
+/** Global menu styling */
+.sm-nowrap {
+	border-radius: 5px;
+	border: 0;
+	box-shadow: 0 0 3px rgba(77, 77, 77, 0.5);
+}
+
+.lo-menu a:hover:not(.disabled), .lo-menu a:focus, .lo-menu a:active, .lo-menu a.highlighted {
+	background-color: var(--co-color-background-hover);
+	color: var(--color-main-text);
+}
+
+.lo-menu:not(#main-menu) a:not(.separator):hover {
+	background-color: var(--co-border);
+	color: var(--color-main-text);
+	border-radius: 4px;
+}
+
+.main-nav:not(.spreadsheet-color-indicator) ~ .context-menu-list {
+	margin: 0;
+}
+.context-menu-list {
+	border-radius: 3px;
+	padding: 0;
+	.context-menu-item:not(.context-menu-separator) {
+		padding: 8px 14px;
+		font-size: var(--default-font-size);
+	}
+	.context-menu-icon::before {
+		visibility: hidden;
+	}
+
+	.context-menu-item.context-menu-icon-radio {
+		background-color: var(--co-primary-element-light);
+	}
+
+	.context-menu-item.context-menu-icon-radio a {
+		color: var(--co-primary-light);
+	}
+
+	.context-menu-item.context-menu-icon-radio.context-menu-hover {
+		background-color: var(--co-primary-element-light) !important;
+		box-shadow: inset 0 0 0 25px rgba(0, 0, 0, 0.1); /* Adjust the alpha value to control the darkness */
+	}
+}
+
+/** Cursor style */
+.leaflet-cursor-container {
+	.leaflet-cursor-header {
+		font-family: var(--cool-font);
+		font-size: 13px;
+		border-radius: 3px;
+		margin-left: -3px;
+		margin-top: -18px;
+		padding: 3px 5px;
+		height: 15px;
+	}
+}
+
+/** Inactive document modal style */
+#inactive_user_message {
+	color: var(--co-color-main-text) !important;
+	padding: 1em;
+	box-sizing: border-box;
+}
+
+/** About Dialog **/
+#integrator-logo {
+	flex-grow: 1 !important;
+	background: url('images/toolbar-bg-logo.svg') no-repeat center/128px;
+	width: 128px;
+}
+
+#product-name {
+	justify-content: left !important;
+	color: var(--color-primary) !important;
+}
+
+#product-logo, #lokit-logo {
+	background-position: center !important;
+	flex-grow: 1;
+}
+
+@if $hide-about-integrator-logo == true {
+	@debug "hide integrator-logo in the about dialog";
+	#integrator-logo {visibility:hidden !important;}
+}
+@if $hide-about-lokit-logo == true {
+	@debug "hide lokit-logo in the about dialog";
+	#lokit-logo {visibility:hidden !important;}
+}
+
+@if $hide-about-product-logo == true {
+	@debug "hide product-logo in the about dialog";
+	#product-logo { visibility: hidden !important;}
+} @else {
+	@debug "add product-logo in the about dialog";
+	#product-logo {
+		background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICB3aWR0aD0iMzkiCiAgIGhlaWdodD0iMzkiCiAgIHZpZXdCb3g9IjAgMCA4LjAgMTAuMzE4NzUiCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzY0MTciCiAgIGlua3NjYXBlOnZlcnNpb249IjAuOTIuMiAoNWMzZTgwZCwgMjAxNy0wOC0wNikiCiAgIHNvZGlwb2RpOmRvY25hbWU9InRvb2xiYXItYmctZm9udC5zdmciPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM2NDExIiAvPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0iYmFzZSIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiCiAgICAgYm9yZGVyb3BhY2l0eT0iMS4wIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwLjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp6b29tPSIxMS4yIgogICAgIGlua3NjYXBlOmN4PSIzNy4xMTYwNzIiCiAgICAgaW5rc2NhcGU6Y3k9IjM3LjExNjA3MiIKICAgICBpbmtzY2FwZTpkb2N1bWVudC11bml0cz0icHgiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIgogICAgIHNob3dncmlkPSJmYWxzZSIKICAgICB1bml0cz0icHgiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9ImZhbHNlIgogICAgIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMTk4MiIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSIxOTgyIgogICAgIGlua3NjYXBlOndpbmRvdy14PSItOCIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iLTgiCiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgLz4KICA8bWV0YWRhdGEKICAgICBpZD0ibWV0YWRhdGE2NDE0Ij4KICAgIDxyZGY6UkRGPgogICAgICA8Y2M6V29yawogICAgICAgICByZGY6YWJvdXQ9IiI+CiAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+CiAgICAgICAgPGRjOnR5cGUKICAgICAgICAgICByZGY6cmVzb3VyY2U9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS9TdGlsbEltYWdlIiAvPgogICAgICAgIDxkYzp0aXRsZT48L2RjOnRpdGxlPgogICAgICA8L2NjOldvcms+CiAgICA8L3JkZjpSREY+CiAgPC9tZXRhZGF0YT4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSIKICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLC0yODYuNjgxMjMpIj4KICAgIDxwb2x5Z29uCiAgICAgICBpZD0icG9seWdvbjE0IgogICAgICAgcG9pbnRzPSIxNy45MTQsNDQuODkzIDE3LjM1OCw0NC4zODYgMTcuMjU4LDIwLjcxOCAxNy43NzIsMjAuMTcyIDMwLjk1OCwzMi41OTkgIgogICAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZiIKICAgICAgIHRyYW5zZm9ybT0ibWF0cml4KDAuMjIxNzgzNDgsMCwwLDAuMjIxNzgzNDgsLTMuODAxODIyOSwyODQuNjI1ODEpIiAvPgogICAgPHBvbHlnb24KICAgICAgIHN0eWxlPSJmaWxsOiM1YzI5ODM7ZmlsbC1vcGFjaXR5OjEiCiAgICAgICBpZD0icG9seWdvbjE2IgogICAgICAgcG9pbnRzPSIzMC45NTgsMzIuNTk5IDMwLjM3OSwzMy4xNDUgMTcuOTE0LDQ0Ljg5MyAyOC42NTQsNTUuNjM4IDUxLjc0MiwzMi41NSAyOC41NjEsOS4zNjIgMTcuNzYzLDIwLjE2MiAxNy43NzIsMjAuMTcyIDMwLjM3OSwzMi4wNTMgIgogICAgICAgdHJhbnNmb3JtPSJtYXRyaXgoMC4yMjE3ODM0OCwwLDAsMC4yMjE3ODM0OCwtMy44MDE4MjI5LDI4NC42MjU4MSkiIC8+CiAgICA8cG9seWdvbgogICAgICAgaWQ9InBvbHlnb24xOCIKICAgICAgIHBvaW50cz0iMjkuODY0LDMyLjU5OSAxNy4zNTgsNDQuMzg2IDE3LjI1OCwyMC43MTggIgogICAgICAgc3R5bGU9ImZpbGw6I2M4YzhjOCIKICAgICAgIHRyYW5zZm9ybT0ibWF0cml4KDAuMjIxNzgzNDgsMCwwLDAuMjIxNzgzNDgsLTMuODAxODIyOSwyODQuNjI1ODEpIiAvPgogICAgPHBvbHlnb24KICAgICAgIHN0eWxlPSJmaWxsOiMyZDBiNDc7ZmlsbC1vcGFjaXR5OjEiCiAgICAgICBpZD0icG9seWdvbjIwIgogICAgICAgcG9pbnRzPSIzMS44NDcsNDEuNDgzIDI3Ljc0MywzNS42MjggMTguODA3LDQ0LjA1MiAiCiAgICAgICB0cmFuc2Zvcm09Im1hdHJpeCgwLjIyMTc4MzQ4LDAsMCwwLjIyMTc4MzQ4LC0zLjgwMTgyMjksMjg0LjYyNTgxKSIgLz4KICA8L2c+Cjwvc3ZnPg==') !important;
+	}
+}
+
+#integrator-logo, #about-dialog-logos {
+	flex-basis: 256px;
+	max-width: 256px;
+}
+
+.leaflet-progress-spinner::before {
+	background-position: center !important;
+	height: 94px !important;
+}
+
+
+/// To upstream
+#mobile-wizard.menuwizard {
+	z-index: 1003;
+}
+
+#toolbar-wrapper.mobile > tbody > tr {
+	height: 100%;
+}
+
+#toolbar-down #search-input {
+	border-color: var(--color-border) !important;
+}
+#toolbar-down #search-input:hover {
+	border-color: var(--color-border-dark) !important;
+}
+
+#shareas { & .unolabel { color: var(--color-text-lighter) } }
+
+.cool-annotation-menu:hover, .cool-annotation-menu-redline:hover, .cool-redline-accept-button:hover, .cool-redline-reject-button:hover, .cool-annotation-menu-edit:hover {
+	border: 1px solid get-cssvar(primary-element-light);
+	background-color: get-cssvar(color-background-hover) !important;
+}
+html:not([data-theme=dark]) {
+	#readonlyMode{
+		border: transparent !important;
+		background-color: rgb(var(--doc-type), 0.15) !important;
+	}
+	#readonlyMode .unolabel {
+		color: rgb(var(--doc-type)) !important;
+	}
+	#readonlyMode:hover {
+		background-color: rgb(var(--doc-type), 0.15) !important;
+	}
+	#viewModeDropdown {
+		.unolabel{
+			color: var(--color-main-text) !important;
+		}
+		.unotoolbutton, .arrowbackground {
+			border-color: var(--color-main-text) !important;
+		}
+		.unoarrow {
+			border-top-color: var(--color-main-text) !important;
+		}
+	}
+
+	#viewModeDropdown .unotoolbutton:hover {
+		background-color: var(--color-background-darker) !important;
+	}
+}
+
+/// Compact view keeps the one row header of this theme
+[data-userinterfacemode='classic'] nav:not(.hasnotebookbar).main-nav {
+	display: flex;
+	flex-wrap: nowrap;
+	column-gap: normal;
+	--header-actions-offset: 0px;
+
+	#document-header {
+		width: 46px;
+		height: auto;
+		align-self: center;
+
+		.document-logo {
+			margin: 0;
+			padding: var(--spacing-m);
+			background-size: contain !important;
+		}
+	}
+
+	#main-menu {
+		flex: 1 1 auto;
+		min-width: 0;
+		margin-inline-start: 0;
+	}
+
+	#main-menu > li > a {
+		line-height: 15px;
+	}
+
+	#closebuttonwrapper {
+		width: 34px;
+		margin-inline-end: 0;
+	}
+
+	#document-titlebar {
+		display: inline-table;
+	}
+
+	.document-title {
+		justify-content: center;
+	}
+
+	#document-name-input,
+	#document-name-input.editable {
+		font-size: var(--default-font-size) !important;
+		font-weight: bold;
+		box-sizing: content-box;
+		width: 95% !important;
+		height: auto !important;
+		min-width: 0;
+		max-width: none;
+		margin-top: 0;
+		flex: initial;
+		field-sizing: fixed;
+	}
+
+	#viewMode .unolabel,
+	#shareAsContainer .unolabel {
+		font-size: 0.88rem;
+	}
+
+	#menu-last-mod > a {
+		font-size: 12px;
+	}
+
+	#document-last-saved {
+		display: none !important;
+	}
+
+	@media (min-width: 989px) {
+		#menu-last-mod {
+			display: flex !important;
+		}
+	}
+}
+
+body[data-userinterfacemode='classic'] #toolbar-wrapper :is(input, select).jsdialog {
+	font-size: 13.3333px;
+}

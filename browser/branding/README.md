@@ -1,22 +1,23 @@
 # Branding
 
-The themes of Collabora Online, CODE (Collabora Online Development Edition) and
-Collabora Office (the desktop apps, CODA). The files in this directory are licensed
-under the Apache License, Version 2.0, see [LICENSE](LICENSE).
+The themes of Collabora Online, CODE (Collabora Online Development Edition),
+Collabora Office (the desktop apps, CODA) and the Nextcloud community theme. The files
+in this directory are licensed under the Apache License, Version 2.0, see
+[LICENSE](LICENSE).
 
-The Nextcloud themes and the customer brands are not here, they are still in the
-online-branding repository.
+The customer brands are not here, they are still in the online-branding repository.
 
 The Collabora name and logos are not to be used except in accordance with the
 [Trademark Policy](https://www.collaboraonline.com/trademark-policy/) and must
-be removed from custom builds.
+be removed from custom builds. The same applies to the Nextcloud name and logo, see
+the [Nextcloud trademark guidelines](https://nextcloud.com/trademarks/).
 
 ## Layout
 
 - `brand.sh`: generates a theme into a `browser/dist` directory
 - `sass/`: the stylesheets
   - `def/`: variables and mixins; `_base.scss` holds the defaults, `_CO-theme-1.1.scss`
-    the Collabora Online theme
+    the Collabora Online theme, `_NC-theme.scss` and `_NC-icons.scss` the Nextcloud theme
   - `desktop/`: the rules per UI component
   - `mobile/`: the phone and tablet overrides
   - `main.scss`, `device-mobile.scss`, `device-tablet.scss`: the entry points for
@@ -28,20 +29,29 @@ be removed from custom builds.
   - `styleguide/`: the document type icons, converted for the macOS app
 - `themes/CODE/branding.js`: the product name and links of CODE
 - `themes/CODA/branding.js`: the product name and link of Collabora Office
+- `themes/nextcloud/`: the script and the images of the Nextcloud theme; the images
+  override those of the Collabora Online theme
 - `generate-document-icons.sh`: the macOS document type icons, called by `brand.sh`
 - `sync-online-branding.py`: compares and synchronizes with online-branding, see below
 - `packaging/`: builds the `code-brand` and `collabora-online-brand` packages, see below
 
 ## Themes
 
-All three themes compile the same stylesheet and copy the same images; they differ in
-`branding.js`, which names the product.
+`CO-theme`, `CODE` and `CODA` compile the same stylesheet and copy the same images;
+they differ in `branding.js`, which names the product.
 
-| Theme      | Product name                                | `branding.js`             | Extra                    |
-|------------|---------------------------------------------|---------------------------|--------------------------|
-| `CO-theme` | Collabora Online                            | collabora-online-brand    | `branding-unsupported.*` |
-| `CODE`     | Collabora Online Development Edition (CODE) | CODE                      |                          |
-| `CODA`     | Collabora Office                            | CODA                      |                          |
+| Theme                | Product name                                | `branding.js`          | Extra                    |
+|----------------------|---------------------------------------------|------------------------|--------------------------|
+| `CO-theme`           | Collabora Online                            | collabora-online-brand | `branding-unsupported.*` |
+| `CODE`               | Collabora Online Development Edition (CODE) | CODE                   |                          |
+| `CODA`               | Collabora Office                            | CODA                   |                          |
+| `NC-theme-community` | Nextcloud Office                            | nextcloud              | `branding-desktop.css`   |
+
+`NC-theme-community` is a flavour: `brand.sh` generates it into the `nextcloud/`
+subdirectory of the output, next to the main theme, and coolwsd serves it when the
+integration asks for it with `theme=nextcloud` (unless `user_interface.use_integration_theme`
+is off). It compiles `_NC-theme.scss` and adds `branding-desktop.css`, the rules that
+apply to the desktop layout only.
 
 The welcome slideshow of Collabora Office is part of the product, not of the branding;
 it lives in [../welcome-slideshow](../welcome-slideshow) and every desktop app build
@@ -79,8 +89,8 @@ for example
 
     browser/branding/brand.sh browser/dist CODE
 
-`THEME` is `CO-theme`, `CODE` or `CODA`; the theme ids of online-branding's `brand.sh`
-(1, 3, 10) work too. The script needs
+`THEME` is `CO-theme`, `CODE`, `CODA` or `NC-theme-community`; the theme ids of
+online-branding's `brand.sh` (1, 3, 10, 5) work too. The script needs
 [dart-sass](https://sass-lang.com/dart-sass/) (`sass` on the `PATH`, or
 `SASS=browser/node_modules/.bin/sass`). Unlike the online-branding script, this one
 never modifies its sources.
@@ -104,9 +114,9 @@ and conflicts the online-branding packages had, so the repositories and the
 repository jobs sign the packages.
 
 The CODE package also carries the Nextcloud community theme, which integrators ask for
-with `theme=nextcloud`. That theme stays in the online-branding repository, so the job
-generates it there (`brand.sh --pure /nowhere nc NC-theme-community`) and passes the
-directory with `--overlay nc`; the script copies it into the dist directory of
+with `theme=nextcloud`. The job still generates it in the online-branding repository
+(`brand.sh --pure /nowhere nc NC-theme-community`) and passes the directory with
+`--overlay nc`; the script copies it into the dist directory of
 `code-brand` and adds its own stanza to the copyright file.
 
 The customer brands are built by online-branding as before.
