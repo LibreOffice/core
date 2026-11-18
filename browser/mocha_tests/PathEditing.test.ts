@@ -17,7 +17,8 @@ describe('Moving a polygon of a path by its line', function () {
 		public movePoints(moves: PathPointMove[]): void {
 			this.moves.push(moves);
 		}
-		public deletePoint(): void {}
+		public deletePoints(): void {}
+		public deleteObject(): void {}
 		public addPoint(): void {}
 		public changeWeights(): void {}
 		public split(): void {}

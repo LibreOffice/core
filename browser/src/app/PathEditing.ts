@@ -65,8 +65,11 @@ interface PathSink {
 	readonly wholeTwips: boolean;
 	/// Points or weights moved, by a drag or by keys.
 	movePoints(moves: PathPointMove[]): void;
-	/// A point is deleted.
-	deletePoint(place: PathPlace): void;
+	/// Points are deleted, as one step, in the order given. Each is named by its place in the
+	/// path without the points before it.
+	deletePoints(places: PathPlace[]): void;
+	/// The object the path belongs to is deleted.
+	deleteObject(): void;
 	/// A point is added, with the weights that change with it.
 	addPoint(addition: PathPointAddition): void;
 	/// Weights moved or were removed, as one step: the edge after a point became a curve or a
@@ -582,14 +585,30 @@ class PathEditing implements HandleSource {
 		};
 	}
 
-	/// Deletes the point a handle stands for. Answers whether the handle stands for a point;
-	/// for a weight nothing is done.
+	/*
+		Deletes the point a handle stands for. A polygon has two points at least, so where one
+		point would be left, that point is deleted too. A path that would be left with one point
+		or none deletes its object. Answers whether the handle stands for a point; for a weight
+		nothing is done.
+	*/
 	public deletePoint(handleName: string): boolean {
 		const place = this.pointOf(handleName);
 		if (!place) return false;
 
+		const count = place.of.points.length;
+		if (place.path.length === 1 && count <= 2) {
+			this.sink.deleteObject();
+			return true;
+		}
+
+		const places: PathPlace[] = [
+			{ polygon: place.polygon, point: place.point },
+		];
+		// the point left is the first one once the other is gone
+		if (count === 2) places.push({ polygon: place.polygon, point: 0 });
+
 		this.changeHere((path) => PathEditing.withoutThePoint(path, place));
-		this.sink.deletePoint(place);
+		this.sink.deletePoints(places);
 		return true;
 	}
 
@@ -801,8 +820,8 @@ class PathEditing implements HandleSource {
 	// The changes of a path as the engine makes them, on a copy of the path. Each answers the
 	// changed path, or nothing where the engine changes more than the path.
 
-	/// Without that point; a polygon left with fewer than two points goes. A path left with no
-	/// polygon takes the object with it, which is more than the path.
+	/// Without that point; a polygon left with fewer than two points goes. Nothing where no
+	/// polygon is left, since the path keeps one.
 	private static withoutThePoint(
 		path: cool.ObjectPathPolygon[],
 		place: PathPlace,
@@ -1682,8 +1701,17 @@ class ObjectPathSink implements PathSink {
 		);
 	}
 
-	public deletePoint(place: PathPlace): void {
-		this.send('deleteobjectpoint', ObjectPathSink.parametersOf(place));
+	/// Each point is "-polygon,point,0", where 0 names the point itself.
+	public deletePoints(places: PathPlace[]): void {
+		const items = places.map(
+			(place: PathPlace) => '-' + [place.polygon, place.point, 0].join(','),
+		);
+		this.send('setobjectpoints', 'changes=' + items.join(';') + ' as=delete');
+	}
+
+	/// The object is the one selected, so it goes the way the selected objects are deleted.
+	public deleteObject(): void {
+		if (this.readyToSend()) GraphicSelection.deleteTheObjectsHere();
 	}
 
 	/*
@@ -1762,14 +1790,25 @@ class ObjectPathSink implements PathSink {
 		return 'polygon=' + String(place.polygon) + ' point=' + String(place.point);
 	}
 
-	private send(command: string, parameters: string): void {
+	/*
+		Answers whether a change can go to the engine now. It cannot while an undo is on its way,
+		and the hold back is shown then. Otherwise the keyboard leaves the handles and the changes
+		waiting in the outbox go first.
+	*/
+	private readyToSend(): boolean {
 		if (ChangeOutbox.undoOnItsWay()) {
 			this.selection.showTheHoldBack();
-			return;
+			return false;
 		}
 
 		this.selection.travel.leave();
 		ChangeOutbox.sendEverythingAhead();
+		return true;
+	}
+
+	private send(command: string, parameters: string): void {
+		if (!this.readyToSend()) return;
+
 		app.socket.sendMessage(
 			command + ' id=' + String(this.objectId) + ' ' + parameters,
 		);

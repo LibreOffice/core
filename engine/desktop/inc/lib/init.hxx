@@ -265,7 +265,6 @@ namespace desktop {
         void selectObjects(const char* pObjectIds) override;
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges,
                              const char* pStep) override;
-        void deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint) override;
         void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint) override;
         void setObjectPathClosed(unsigned long long nObjectId, bool bClosed) override;
         void simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine) override;

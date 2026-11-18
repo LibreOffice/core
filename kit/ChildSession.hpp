@@ -231,9 +231,6 @@ private:
     /// names, and leaves the rest of the path as it stands.
     bool setObjectPoints(const StringVector& tokens);
 
-    /// Deletes one point of the path of a drawing object.
-    bool deleteObjectPoint(const StringVector& tokens);
-
     /// Splits the path of a drawing object at one of its points.
     bool splitObjectPath(const StringVector& tokens);
 

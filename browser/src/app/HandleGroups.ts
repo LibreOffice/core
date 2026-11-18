@@ -2993,8 +2993,11 @@ class MotionPathSink implements PathSink {
 	public movePoints(_moves: PathPointMove[]): void {
 		// The whole path goes out when the drag is let go.
 	}
-	public deletePoint(_place: PathPlace): void {
+	public deletePoints(_places: PathPlace[]): void {
 		// The whole path went out already.
+	}
+	public deleteObject(): void {
+		// The motion path keeps its last two points.
 	}
 	public addPoint(_addition: PathPointAddition): void {
 		// The whole path went out already.

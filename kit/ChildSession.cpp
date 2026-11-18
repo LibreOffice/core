@@ -680,7 +680,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setlocalcellcursor") ||
                tokens.equals(0, "selectobjects") ||
                tokens.equals(0, "setobjectpoints") ||
-               tokens.equals(0, "deleteobjectpoint") ||
                tokens.equals(0, "splitobjectpath") ||
                tokens.equals(0, "setobjectpathclosed") ||
                tokens.equals(0, "simplifyobjectpath") ||
@@ -790,10 +789,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "setobjectpoints"))
         {
             return setObjectPoints(tokens);
-        }
-        else if (tokens.equals(0, "deleteobjectpoint"))
-        {
-            return deleteObjectPoint(tokens);
         }
         else if (tokens.equals(0, "splitobjectpath"))
         {
@@ -2129,25 +2124,6 @@ bool ChildSession::readPointToChange(const StringVector& tokens,
     }
 
     return readObjectToChange(tokens, command, objectId);
-}
-
-bool ChildSession::deleteObjectPoint(const StringVector& tokens)
-{
-    unsigned long long objectId = 0;
-    int polygon = 0;
-    int point = 0;
-
-    if (tokens.size() != 4)
-    {
-        sendTextFrameAndLogError("error: cmd=deleteobjectpoint kind=syntax");
-        return false;
-    }
-
-    if (!readPointToChange(tokens, "deleteobjectpoint", objectId, polygon, point))
-        return false;
-
-    getLOKitDocument()->deleteObjectPoint(objectId, polygon, point);
-    return true;
 }
 
 bool ChildSession::splitObjectPath(const StringVector& tokens)

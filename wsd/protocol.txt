@@ -981,35 +981,37 @@ setobjectpoints id=<id> changes=<changes> [as=<step>] [sequence=<sequence>]
 
         -<polygon>,<point>,<part>
 
-    It removes the weight <part> of that point, 1 for the one coming in and 2 for the one going
-    out. The edge on that side is then bent only by the weight at its other end, and it is a
-    straight line when that end has no weight either.
+    With <part> 0 it removes that point with its weights, and the points after it count one less
+    in the items that follow. With <part> 1 or 2 it removes the weight of that point, 1 for the
+    one coming in and 2 for the one going out. The edge on that side is then bent only by the
+    weight at its other end, and it is a straight line when that end has no weight either.
 
-    <step> names the step in the undo list: "move", the default, "add", "continuity", "curve" or
-    "line". An addition belongs to the step "add" and a removal to any step but "move". A message
-    with any other step, or with an item that does not belong to its step, changes nothing.
+    A polygon that points were removed from keeps two points at least, and it goes when no point
+    of it is left. The path keeps one polygon at least, so deleting the last points of a path is
+    deleting its object.
+
+    <step> names the step in the undo list: "move", the default, "add", "delete", "continuity",
+    "curve" or "line". An addition belongs to the step "add", a removal of a point to the step
+    "delete", and a removal of a weight to any step but "move" and "delete". The step "delete"
+    has nothing but removals of points. A message with any other step, or with an item that does
+    not belong to its step, changes nothing.
 
     Changes those points and leaves every other point of the path untouched, in one step that can
     be undone. Moving one weight of a point that is run through smoothly or symmetrically carries
     the other weight of that point along, and the continuity that is named is then set exactly,
     so a point whose numbers had drifted a little off comes out lying on the line. A move or a
-    removal that is not written as above, or that names a point the path does not have, is left
-    out. An addition the path has no place for changes nothing at all, because the items after it
-    would name other points.
-
-deleteobjectpoint id=<id> polygon=<polygon> point=<point>
-
-    <id> is a drawing object, as for setobjectpoints. <polygon> and <point> are the index of a
-    polygon of its path and of a point in that polygon, as for setobjectpoints. Deletes that
-    point, as one undo step. A polygon left with fewer than two points is deleted too, and an
-    object left with no polygon is deleted.
+    removal of a weight that is not written as above, or that names a point the path does not
+    have, is left out. An addition the path has no place for, or a point to remove that the path
+    does not have, changes nothing at all, because the items after it would name other points.
+    So does a message that leaves a polygon with one point or the path with no polygon.
 
 splitobjectpath id=<id> polygon=<polygon> point=<point>
 
-    <id>, <polygon> and <point> name a point, as for deleteobjectpoint. Splits the path at the
-    point, as one undo step. A closed path opens there. An open path becomes two objects that
-    meet at the point, so the point cannot be one of its ends. Only a path of one polygon can be
-    split.
+    <id> is a drawing object, as for setobjectpoints. <polygon> and <point> are the index of a
+    polygon of its path and of a point in that polygon, as for setobjectpoints. Splits the path
+    at the point, as one undo step. A closed path opens there. An open path becomes two objects
+    that meet at the point, so the point cannot be one of its ends. Only a path of one polygon
+    can be split.
 
 setobjectpathclosed id=<id> closed=<closed>
 

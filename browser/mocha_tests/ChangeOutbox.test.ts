@@ -285,6 +285,10 @@ describe('ChangeOutbox typed text', function () {
 			aChange('setobjectpoints id=5 changes=-0,1,2;-0,2,1 as=line'),
 			null,
 		);
+		nodeassert.strictEqual(
+			aChange('setobjectpoints id=5 changes=-0,1,0;-0,0,0 as=delete'),
+			null,
+		);
 	});
 
 	it('keeps a move of other points of a path apart, and the newest move of the same ones', function () {

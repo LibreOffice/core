@@ -6726,9 +6726,31 @@ void DesktopKitTest::testObjectPathCommands()
     CPPUNIT_ASSERT(!aPolygon().areControlPointsUsed());
 
     // Deleting that point gives back the square.
-    pDocument->deleteObjectPoint(nId, 0, 1);
+    pDocument->setObjectPoints(nId, "-0,1,0", "delete");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 1000), aPolygon().getB2DPoint(1));
+
+    // A point is deleted only in the step "delete", and that step deletes nothing but points.
+    pDocument->setObjectPoints(nId, "-0,1,0", "line");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
+    pDocument->setObjectPoints(nId, "-0,1,0;-0,0,2", "delete");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
+
+    // A polygon keeps two points at least, and goes when all its points are deleted. A line of
+    // two points is added to the square as a second polygon.
+    basegfx::B2DPolyPolygon aWithALine(pSquare->GetPathPoly());
+    aWithALine.append(
+        basegfx::B2DPolygon{ basegfx::B2DPoint(1000, 6000), basegfx::B2DPoint(5000, 6000) });
+    pSquare->SetPathPoly(aWithALine);
+    pDocument->setObjectPoints(nId, "-1,1,0", "delete");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), pSquare->GetPathPoly().count());
+    pDocument->setObjectPoints(nId, "-1,1,0;-1,0,0", "delete");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), pSquare->GetPathPoly().count());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
+
+    // The path keeps one polygon, so deleting every point of the square changes nothing.
+    pDocument->setObjectPoints(nId, "-0,0,0;-0,0,0;-0,0,0;-0,0,0", "delete");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
 
     // A point added on an edge lies on the line between its neighbours. Simplify Curves keeps it,
     // and Simplify All deletes it. The corners of the square stay.
@@ -6813,7 +6835,7 @@ void DesktopKitTest::testObjectPathCommands()
 
     // A read-only view cannot change the path.
     KitHelper::setViewReadOnly(pDocument->getView(), true);
-    pDocument->deleteObjectPoint(nId, 0, 0);
+    pDocument->setObjectPoints(nId, "-0,0,0", "delete");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aPolygon().count());
     KitHelper::setViewReadOnly(pDocument->getView(), false);
 }

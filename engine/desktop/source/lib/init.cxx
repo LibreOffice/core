@@ -19,7 +19,6 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/polypolygoneditor.hxx>
 #include <svx/VectorObjectContent.hxx>
 #include <svx/VectorPart.hxx>
 #include <cmath>
@@ -130,6 +129,7 @@
 #include <vcl/kit.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
 #include <config_folders.h>
@@ -5740,6 +5740,47 @@ static bool lcl_addPoint(basegfx::B2DPolyPolygon& rPath, std::string_view aItem,
 }
 
 /*
+    Reads a removal "polygon,point,part" without its minus sign. Returns false for an item that is
+    not three numbers.
+*/
+static bool lcl_readRemoval(std::string_view aItem, sal_uInt32& rPolygon, sal_uInt32& rPoint,
+                            sal_Int32& rPart)
+{
+    sal_Int32 nField = 0;
+    rPolygon = o3tl::toUInt32(o3tl::getToken(aItem, 0, ',', nField));
+    if (nField < 0)
+        return false;
+
+    rPoint = o3tl::toUInt32(o3tl::getToken(aItem, 0, ',', nField));
+    if (nField < 0)
+        return false;
+
+    rPart = o3tl::toInt32(o3tl::getToken(aItem, 0, ',', nField));
+    return nField < 0;
+}
+
+/*
+    Removes a point of the path with its weights, and adds its polygon to rTouched. The points
+    after it in its polygon count one less. Returns false and leaves the path as it is for a
+    polygon or a point the path does not have.
+*/
+static bool lcl_removePoint(basegfx::B2DPolyPolygon& rPath, sal_uInt32 nPolygon,
+                            sal_uInt32 nPoint, o3tl::sorted_vector<sal_uInt32>& rTouched)
+{
+    if (nPolygon >= rPath.count())
+        return false;
+
+    basegfx::B2DPolygon aPolygon(rPath.getB2DPolygon(nPolygon));
+    if (nPoint >= aPolygon.count())
+        return false;
+
+    aPolygon.remove(nPoint);
+    rPath.setB2DPolygon(nPolygon, aPolygon);
+    rTouched.insert(nPolygon);
+    return true;
+}
+
+/*
     Removes one weight of a point of the path, from an item "polygon,point,part": part 1 is the
     incoming weight and part 2 the outgoing one. The edge on that side is then bent only by the
     weight at its other end, and it is a straight line when that end has none either. Leaves the
@@ -5748,17 +5789,11 @@ static bool lcl_addPoint(basegfx::B2DPolyPolygon& rPath, std::string_view aItem,
 */
 static void lcl_removeWeight(basegfx::B2DPolyPolygon& rPath, std::string_view aItem)
 {
-    sal_Int32 nField = 0;
-    const sal_uInt32 nPolygon(o3tl::toUInt32(o3tl::getToken(aItem, 0, ',', nField)));
-    if (nField < 0 || nPolygon >= rPath.count())
-        return;
-
-    const sal_uInt32 nPoint(o3tl::toUInt32(o3tl::getToken(aItem, 0, ',', nField)));
-    if (nField < 0)
-        return;
-
-    const sal_Int32 nPart(o3tl::toInt32(o3tl::getToken(aItem, 0, ',', nField)));
-    if (nField >= 0 || (1 != nPart && 2 != nPart))
+    sal_uInt32 nPolygon = 0;
+    sal_uInt32 nPoint = 0;
+    sal_Int32 nPart = -1;
+    if (!lcl_readRemoval(aItem, nPolygon, nPoint, nPart) || (1 != nPart && 2 != nPart)
+        || nPolygon >= rPath.count())
         return;
 
     basegfx::B2DPolygon aPolygon(rPath.getB2DPolygon(nPolygon));
@@ -5774,7 +5809,8 @@ static void lcl_removeWeight(basegfx::B2DPolyPolygon& rPath, std::string_view aI
 
 /*
     The description of the undo step for a change of the points of a path, by the name of the
-    step: "move", "add", "continuity", "curve" or "line". Answers nothing for any other name.
+    step: "move", "add", "delete", "continuity", "curve" or "line". Answers nothing for any other
+    name.
 */
 static std::optional<TranslateId> lcl_stepOf(std::string_view aStep)
 {
@@ -5782,6 +5818,8 @@ static std::optional<TranslateId> lcl_stepOf(std::string_view aStep)
         return STR_DragMethMove;
     if (aStep == "add")
         return STR_DragInsertPoint;
+    if (aStep == "delete")
+        return STR_EditDeletePoint;
     if (aStep == "continuity")
         return STR_EditSetPointsSmooth;
     if (aStep == "curve" || aStep == "line")
@@ -5799,13 +5837,20 @@ static std::optional<TranslateId> lcl_stepOf(std::string_view aStep)
     and 2 for symmetric. An addition is "+polygon,point,x,y" in twips: a new point with no weights
     at that index, so the points after it count one more in the changes that follow. If an
     addition cannot be made, nothing changes, because the indices after it would name other
-    points. A removal is "-polygon,point,part" and removes the incoming or the outgoing weight of
-    a point. A move or a removal that is not written so, or that names a part the path does not
-    have, is left out.
+    points. A removal is "-polygon,point,part". Part 0 removes the point with its weights, so the
+    points after it count one less in the changes that follow. If that point cannot be removed,
+    nothing changes. Part 1 or 2 removes the incoming or the outgoing weight of a point. A move or
+    a removal of a weight that is not written so, or that names a part the path does not have,
+    is left out.
 
-    The step names the change in the undo list: "move", "add", "continuity", "curve" or "line".
-    An addition belongs to the step "add" and a removal to any step but "move". A change with
-    any other step, or with an item that does not belong to its step, changes nothing.
+    A polygon that points were removed from keeps two points at least, and goes when it has none
+    left. The path keeps one polygon at least. A change that leaves less changes nothing.
+
+    The step names the change in the undo list: "move", "add", "delete", "continuity", "curve" or
+    "line". An addition belongs to the step "add", a removal of a point to the step "delete", and
+    a removal of a weight to any step but "move" and "delete". The step "delete" has nothing but
+    removals of points. A change with any other step, or with an item that does not belong to its
+    step, changes nothing.
 */
 void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char* pChanges,
                                         const char* pStep)
@@ -5831,6 +5876,9 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
     const double fToModel(o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
     basegfx::B2DPolyPolygon aPath(pPathObject->GetPathPoly());
 
+    // The polygons that points were removed from.
+    o3tl::sorted_vector<sal_uInt32> aTouched;
+
     const OString aChanges(pChanges ? pChanges : "");
     for (sal_Int32 nAt = 0; nAt >= 0;)
     {
@@ -5838,11 +5886,38 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
         if (aChange.isEmpty())
             continue;
 
-        if ((aChange.startsWith("+") && aStep != "add")
-            || (aChange.startsWith("-") && aStep == "move"))
+        sal_uInt32 nRemovedPolygon = 0;
+        sal_uInt32 nRemovedPoint = 0;
+        sal_Int32 nRemovedPart = -1;
+        const bool bPointRemoval(
+            aChange.startsWith("-")
+            && lcl_readRemoval(aChange.subView(1), nRemovedPolygon, nRemovedPoint, nRemovedPart)
+            && 0 == nRemovedPart);
+
+        bool bOfItsStep = true;
+        if (bPointRemoval)
+            bOfItsStep = aStep == "delete";
+        else if (aStep == "delete")
+            bOfItsStep = false;
+        else if (aChange.startsWith("+"))
+            bOfItsStep = aStep == "add";
+        else if (aChange.startsWith("-"))
+            bOfItsStep = aStep != "move";
+
+        if (!bOfItsStep)
         {
             SetLastExceptionMsg(u"The change of the points has an item of another step"_ustr);
             return;
+        }
+
+        if (bPointRemoval)
+        {
+            if (!lcl_removePoint(aPath, nRemovedPolygon, nRemovedPoint, aTouched))
+            {
+                SetLastExceptionMsg(u"The path has no such point to remove"_ustr);
+                return;
+            }
+            continue;
         }
 
         if (aChange.startsWith("+"))
@@ -5911,54 +5986,29 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
         aPath.setB2DPolygon(nPolygon, aPolygon);
     }
 
-    // A change that leaves every point where it was is no step to undo.
-    if (aPath != pPathObject->GetPathPoly())
-        lcl_changePath(*pPathObject, *oDescription, aPath);
-}
-
-/*
-    Deletes one point of the path of an object. A polygon left with fewer than two points is
-    deleted too, and an object left with no polygon is deleted.
-*/
-void COKitDocumentImpl::deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint)
-{
-    comphelper::ProfileZone aZone("COKitDocumentImpl::deleteObjectPoint");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
-    sal_uInt32 nPlace = 0;
-    if (!pPathObject
-        || !lcl_placeAmongAllPoints(pPathObject->GetPathPoly(), nPolygon, nPoint, nPlace))
-        return;
-
-    o3tl::sorted_vector<sal_uInt16> aPoints;
-    aPoints.insert(static_cast<sal_uInt16>(nPlace));
-    sdr::PolyPolygonEditor aEditor(pPathObject->GetPathPoly());
-    if (!aEditor.DeletePoints(aPoints))
-        return;
-
-    if (aEditor.GetPolyPolygon().count())
+    // The last polygon first, so the indices of the ones still to look at stay.
+    for (auto it = aTouched.rbegin(); it != aTouched.rend(); ++it)
     {
-        lcl_changePath(*pPathObject, STR_EditDeletePoint, aEditor.GetPolyPolygon());
+        const sal_uInt32 nPolygon(*it);
+        const sal_uInt32 nLeft(aPath.getB2DPolygon(nPolygon).count());
+        if (1 == nLeft)
+        {
+            SetLastExceptionMsg(u"A polygon of the path keeps two points at least"_ustr);
+            return;
+        }
+        if (0 == nLeft)
+            aPath.remove(nPolygon);
+    }
+
+    if (!aPath.count())
+    {
+        SetLastExceptionMsg(u"The path keeps one polygon at least"_ustr);
         return;
     }
 
-    SdrObjList* pList = pPathObject->getParentSdrObjListFromSdrObject();
-    if (!pList)
-        return;
-
-    // Unselect the object before removing it from the page.
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr)
-        pView->UnmarkAllObj();
-
-    SdrModel& rModel(pPathObject->getSdrModelFromSdrObject());
-    rModel.BegUndo(SvxResId(STR_EditDelete).replaceFirst("%1", pPathObject->TakeObjNameSingul()));
-    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoDeleteObject(*pPathObject));
-    pList->RemoveObject(pPathObject->GetOrdNum());
-    rModel.EndUndo();
+    // A change that leaves every point where it was is no step to undo.
+    if (aPath != pPathObject->GetPathPoly())
+        lcl_changePath(*pPathObject, *oDescription, aPath);
 }
 
 /*

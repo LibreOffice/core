@@ -506,7 +506,7 @@ class GraphicSelection {
 		table, a diagram and an object active in place, Delete does more than take the selected
 		objects away, so it is left to the engine there. Answers whether they were deleted here.
 	*/
-	private static deleteTheObjectsHere(): boolean {
+	public static deleteTheObjectsHere(): boolean {
 		const selected = this.selectedObjectIDs.slice();
 		const part = RenderGeometrySection.currentPart();
 		const kind = Interaction.placeOf(selected).kind;

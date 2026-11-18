@@ -1371,34 +1371,27 @@ struct COKitDocument
      *        point - 0 a corner, 1 smooth, 2 symmetric - as "polygon,point,part,x,y,continuity". An
      *        addition is "+polygon,point,x,y": a new point with no weights that takes that index in
      *        the polygon, so the points after it count one more in the changes that follow. A
-     *        removal is "-polygon,point,part" with the part 1 or 2, and removes that weight.
-     * @param pStep the name of the step in the undo list: "move", "add", "continuity", "curve"
-     *        or "line". An addition belongs to the step "add" and a removal to any step but
-     *        "move".
+     *        removal is "-polygon,point,part". With the part 0 it removes the point with its
+     *        weights, so the points after it count one less in the changes that follow. With the
+     *        part 1 or 2 it removes that weight. A polygon that points were removed from keeps
+     *        two points at least, and goes when none is left. The path keeps one polygon at least.
+     * @param pStep the name of the step in the undo list: "move", "add", "delete", "continuity",
+     *        "curve" or "line". An addition belongs to the step "add", a removal of a point to the
+     *        step "delete", and a removal of a weight to any step but "move" and "delete". The
+     *        step "delete" has nothing but removals of points.
      *
      * Only what is named changes. The rest of the path is left as it stands, so nothing that was
      * not touched can change. Moving a point takes the weights of its curves along with it, and
      * moving a weight of a point that a curve runs smoothly or symmetrically through moves the
      * other weight of that point as much as it takes to keep it so. It is one step to undo. An
-     * addition the path has no place for, a step of another name, or an item that does not
-     * belong to its step, changes nothing at all. An id naming nothing on the page the view
-     * shows, or naming an object that is not drawn along a path, does nothing.
+     * addition the path has no place for, a point to remove that the path does not have, a
+     * polygon left with one point, a path left with no polygon, a step of another name, or an
+     * item that does not belong to its step, changes nothing at all. An id naming nothing on the
+     * page the view shows, or naming an object that is not drawn along a path, does nothing.
      */
     virtual void setObjectPoints(unsigned long long nObjectId, const char* pChanges,
                                  const char* pStep)
         = 0;
-
-    /**
-     * Deletes one point of the path of a drawing object. A polygon left with fewer than two
-     * points is deleted too, and an object left with no polygon is deleted. It is one undo step.
-     *
-     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
-     * @param nPolygon the index of the polygon in the path, from zero, in the order of the render
-     *        geometry.
-     * @param nPoint the index of the point in that polygon, from zero, in the order of the render
-     *        geometry.
-     */
-    virtual void deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint) = 0;
 
     /**
      * Splits the path of a drawing object at one of its points. A closed path opens there. An

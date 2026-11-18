@@ -2381,7 +2381,6 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "setlocalcellcursor") ||
              tokens.equals(0, "selectobjects") ||
              tokens.equals(0, "setobjectpoints") ||
-             tokens.equals(0, "deleteobjectpoint") ||
              tokens.equals(0, "splitobjectpath") ||
              tokens.equals(0, "setobjectpathclosed") ||
              tokens.equals(0, "simplifyobjectpath") ||
