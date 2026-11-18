@@ -119,7 +119,9 @@ struct VectorSearchArguments
 namespace sc {
 
 struct CompareOptions;
+class GroupingFunction;
 class GroupByFunction;
+class PivotByFunction;
 
 struct ParamIfsResult
 {
@@ -210,7 +212,9 @@ class ScInterpreter
     friend class ScFormulaFunction;
 
     // spreadsheet functions that are implemented in a class of their own
+    friend class sc::GroupingFunction;
     friend class sc::GroupByFunction;
+    friend class sc::PivotByFunction;
 
 public:
     static void SetGlobalConfig(const ScCalcConfig& rConfig);
@@ -1026,6 +1030,7 @@ public:
     void ScReduce();
     void ScScan();
     void ScGroupBy();
+    void ScPivotBy();
     void ScSumProduct();
     void ScSumX2MY2();
     void ScSumX2DY2();

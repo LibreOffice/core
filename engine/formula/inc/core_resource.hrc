@@ -310,6 +310,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "COM.MICROSOFT.ARRAYTOTEXT" , ocArrayToText },
     { "COM.MICROSOFT.PERCENTOF" , ocPercentOf },
     { "COM.MICROSOFT.GROUPBY" , ocGroupBy },
+    { "COM.MICROSOFT.PIVOTBY" , ocPivotBy },
     { "_xlpm." , ocStringName },
     { "_xlop." , ocStringName },
     { "ORG.OPENOFFICE.MULTIRANGE" , ocMultiArea }, // legacy for range list (union)
@@ -798,6 +799,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "_xlfn.ARRAYTOTEXT" , ocArrayToText },
     { "_xlfn.PERCENTOF" , ocPercentOf },
     { "_xlfn.GROUPBY" , ocGroupBy },
+    { "_xlfn.PIVOTBY" , ocPivotBy },
     { "_xlpm." , ocStringName },
     { "_xlop." , ocStringName },
     { "_xlfn.ORG.OPENOFFICE.MULTIRANGE" , ocMultiArea }, // legacy for range list (union)
@@ -1290,6 +1292,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "ARRAYTOTEXT" , ocArrayToText },
     { "PERCENTOF" , ocPercentOf },
     { "GROUPBY" , ocGroupBy },
+    { "PIVOTBY" , ocPivotBy },
     { "MULTIRANGE" , ocMultiArea },    // legacy for range list (union)
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },
@@ -1780,6 +1783,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "ARRAYTOTEXT" , ocArrayToText },
     { "PERCENTOF" , ocPercentOf },
     { "GROUPBY" , ocGroupBy },
+    { "PIVOTBY" , ocPivotBy },
     { "MULTIRANGE" , ocMultiArea },    // legacy for range list (union)
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },  // ?? first character = I ??
@@ -2268,6 +2272,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "ARRAYTOTEXT" , ocArrayToText },
     { "PERCENTOF" , ocPercentOf },
     { "GROUPBY" , ocGroupBy },
+    { "PIVOTBY" , ocPivotBy },
     { "MULTIRANGE" , ocMultiArea },
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },
@@ -2735,6 +2740,7 @@ const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "ARRAYTOTEXT") , ocArrayToText },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "PERCENTOF") , ocPercentOf },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "GROUPBY") , ocGroupBy },
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "PIVOTBY") , ocPivotBy },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "MULTIRANGE") , ocMultiArea }, // legacy for range list (union)
     { NC_("RID_STRLIST_FUNCTION_NAMES", "OFFSET") , ocOffset },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "INDEX") , ocIndex }, // ?? first character = I ??

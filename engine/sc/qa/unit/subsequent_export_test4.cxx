@@ -1932,6 +1932,90 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testGroupByOdsRoundTrip)
     assertGroupByResult(*pDocument);
 }
 
+namespace
+{
+// Row keys in A1:A4, column keys in B1:B4 and amounts in C1:C4, cross tabulated by PIVOTBY at E1.
+void fillPivotByDocument(ScDocument& rDocument)
+{
+    rDocument.SetString(ScAddress(0, 0, 0), u"a"_ustr);
+    rDocument.SetString(ScAddress(0, 1, 0), u"a"_ustr);
+    rDocument.SetString(ScAddress(0, 2, 0), u"b"_ustr);
+    rDocument.SetString(ScAddress(0, 3, 0), u"b"_ustr);
+    rDocument.SetString(ScAddress(1, 0, 0), u"x"_ustr);
+    rDocument.SetString(ScAddress(1, 1, 0), u"y"_ustr);
+    rDocument.SetString(ScAddress(1, 2, 0), u"x"_ustr);
+    rDocument.SetString(ScAddress(1, 3, 0), u"y"_ustr);
+    rDocument.SetValue(ScAddress(2, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(2, 1, 0), 2.0);
+    rDocument.SetValue(ScAddress(2, 2, 0), 3.0);
+    rDocument.SetValue(ScAddress(2, 3, 0), 4.0);
+    ScMarkData aMark(rDocument.GetSheetLimits());
+    aMark.SelectOneTable(0);
+    rDocument.InsertMatrixFormula(4, 0, 4, 0, aMark, u"=PIVOTBY(A1:A4;B1:B4;C1:C4;SUM)"_ustr,
+                                  nullptr, formula::FormulaGrammar::GRAM_DEFAULT,
+                                  /*bDynamicArrayMaster=*/true);
+}
+
+void assertPivotByResult(ScDocument& rDocument)
+{
+    rDocument.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, rDocument.GetString(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, rDocument.GetString(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"y"_ustr, rDocument.GetString(ScAddress(6, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, rDocument.GetString(ScAddress(7, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, rDocument.GetString(ScAddress(4, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(5, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, rDocument.GetValue(ScAddress(6, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, rDocument.GetString(ScAddress(4, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDocument.GetValue(ScAddress(7, 3, 0)));
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testPivotByXlsxRoundTrip)
+{
+    // PIVOTBY is saved to XLSX under the prefix that marks a newer function and loads back as
+    // the same function with the same result.
+    createScDoc();
+    fillPivotByDocument(*getScDoc());
+    assertPivotByResult(*getScDoc());
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    const OUString aFormula
+        = getXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='E1']/x:f");
+    CPPUNIT_ASSERT_MESSAGE(aFormula.toUtf8().getStr(),
+                           aFormula.startsWith("_xlfn.PIVOTBY(A1:A4,B1:B4,C1:C4,"));
+
+    saveAndReload(TestFilter::XLSX);
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT(pDocument->GetFormula(4, 0, 0).startsWith("=PIVOTBY("));
+    assertPivotByResult(*pDocument);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testPivotByOdsRoundTrip)
+{
+    // ODF saves PIVOTBY in the namespace for functions from OOXML and loads it back as the same
+    // function with the same result.
+    createScDoc();
+    fillPivotByDocument(*getScDoc());
+    assertPivotByResult(*getScDoc());
+
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pContent);
+    const OUString aFormula = getXPath(
+        pContent, "(//table:table-cell[contains(@table:formula, 'PIVOTBY')])[1]", "formula");
+    CPPUNIT_ASSERT_MESSAGE(
+        aFormula.toUtf8().getStr(),
+        aFormula.startsWith("of:=COM.MICROSOFT.PIVOTBY([.A1:.A4];[.B1:.B4];[.C1:.C4];"));
+
+    saveAndReload(TestFilter::ODS);
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT(pDocument->GetFormula(4, 0, 0).startsWith("=PIVOTBY("));
+    assertPivotByResult(*pDocument);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

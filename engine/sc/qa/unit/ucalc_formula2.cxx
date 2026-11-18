@@ -9669,6 +9669,250 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYFunctionGivingAnArray)
     m_pDoc->DeleteTab(0);
 }
 
+namespace
+{
+// Regions in T1:T6, years in U1:U6 and amounts in V1:V6. North has no amount in 2023.
+void fillPivotByRegionsAndYears(ScDocument& rDocument)
+{
+    const std::vector<std::pair<OUString, double>> aRegionsAndYears{
+        { u"East"_ustr, 2023 }, { u"West"_ustr, 2023 }, { u"East"_ustr, 2024 },
+        { u"West"_ustr, 2024 }, { u"East"_ustr, 2023 }, { u"North"_ustr, 2024 },
+    };
+    const std::vector<double> aAmounts{ 30, 20, 50, 10, 40, 5 };
+    for (SCROW nRow = 0; nRow < 6; ++nRow)
+    {
+        rDocument.SetString(ScAddress(19, nRow, 0), aRegionsAndYears[nRow].first);
+        rDocument.SetValue(ScAddress(20, nRow, 0), aRegionsAndYears[nRow].second);
+        rDocument.SetValue(ScAddress(21, nRow, 0), aAmounts[nRow]);
+    }
+}
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPIVOTBYCrossTable)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillPivotByRegionsAndYears(*m_pDoc);
+
+    // The regions go down and the years across, with a Total column and a Total row. The corner
+    // cell is empty, and so is the cell of a region and a year without rows.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0), u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u""_ustr, u"2023"_ustr, u"2024"_ustr, u"Total"_ustr },
+                        { u"East"_ustr, u"70"_ustr, u"50"_ustr, u"120"_ustr },
+                        { u"North"_ustr, u""_ustr, u"5"_ustr, u"5"_ustr },
+                        { u"West"_ustr, u"20"_ustr, u"10"_ustr, u"30"_ustr },
+                        { u"Total"_ustr, u"90"_ustr, u"65"_ustr, u"155"_ustr } });
+
+    // Without row keys the result is one row of column totals, and without column keys it is
+    // one column of row totals.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0), u"=PIVOTBY(;U1:U6;V1:V6;SUM)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u"2023"_ustr, u"2024"_ustr, u"Total"_ustr },
+                        { u"90"_ustr, u"65"_ustr, u"155"_ustr } });
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 20, 0), u"=PIVOTBY(T1:T6;;V1:V6;SUM)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 20, 0),
+                      { { u"East"_ustr, u"120"_ustr },
+                        { u"North"_ustr, u"5"_ustr },
+                        { u"West"_ustr, u"30"_ustr },
+                        { u"Total"_ustr, u"155"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPIVOTBYTotalsAndSort)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillPivotByRegionsAndYears(*m_pDoc);
+
+    // Negative depths put the Total row at the top and the Total column on the left.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0),
+                          u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM;;-1;;-1)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u""_ustr, u"Total"_ustr, u"2023"_ustr, u"2024"_ustr },
+                        { u"Total"_ustr, u"155"_ustr, u"90"_ustr, u"65"_ustr },
+                        { u"East"_ustr, u"120"_ustr, u"70"_ustr, u"50"_ustr },
+                        { u"North"_ustr, u"5"_ustr, u""_ustr, u"5"_ustr },
+                        { u"West"_ustr, u"30"_ustr, u"20"_ustr, u"10"_ustr } });
+
+    // The rows sort by their total, largest first, also with the Total row turned off.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0),
+                          u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM;;0;-2)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u""_ustr, u"2023"_ustr, u"2024"_ustr, u"Total"_ustr },
+                        { u"East"_ustr, u"70"_ustr, u"50"_ustr, u"120"_ustr },
+                        { u"West"_ustr, u"20"_ustr, u"10"_ustr, u"30"_ustr },
+                        { u"North"_ustr, u""_ustr, u"5"_ustr, u"5"_ustr } });
+
+    // With the Total column turned off there is no total to sort by, and the rows keep the order
+    // of their keys.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 40, 0),
+                          u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM;;0;-2;0)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 40, 0),
+                      { { u""_ustr, u"2023"_ustr, u"2024"_ustr },
+                        { u"East"_ustr, u"70"_ustr, u"50"_ustr },
+                        { u"North"_ustr, u""_ustr, u"5"_ustr },
+                        { u"West"_ustr, u"20"_ustr, u"10"_ustr } });
+
+    // The column sort puts the later year first.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 20, 0),
+                          u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM;;;;;-1)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 20, 0),
+                      { { u""_ustr, u"2024"_ustr, u"2023"_ustr, u"Total"_ustr },
+                        { u"East"_ustr, u"50"_ustr, u"70"_ustr, u"120"_ustr },
+                        { u"North"_ustr, u"5"_ustr, u""_ustr, u"5"_ustr },
+                        { u"West"_ustr, u"10"_ustr, u"20"_ustr, u"30"_ustr },
+                        { u"Total"_ustr, u"65"_ustr, u"90"_ustr, u"155"_ustr } });
+
+    // With two value columns, a second header row names them and every year gets two columns.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 30, 0),
+                          u"=PIVOTBY(T1:T6;U1:U6;HSTACK(V1:V6;V1:V6*2);SUM;;;;0)"_ustr);
+    assertSpilledGrid(
+        *m_pDoc, ScAddress(0, 30, 0),
+        { { u""_ustr, u"2023"_ustr, u"2023"_ustr, u"2024"_ustr, u"2024"_ustr },
+          { u""_ustr, u"Value 1"_ustr, u"Value 2"_ustr, u"Value 1"_ustr, u"Value 2"_ustr },
+          { u"East"_ustr, u"70"_ustr, u"140"_ustr, u"50"_ustr, u"100"_ustr },
+          { u"North"_ustr, u""_ustr, u""_ustr, u"5"_ustr, u"10"_ustr },
+          { u"West"_ustr, u"20"_ustr, u"40"_ustr, u"10"_ustr, u"20"_ustr },
+          { u"Total"_ustr, u"90"_ustr, u"180"_ustr, u"65"_ustr, u"130"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPIVOTBYRelativeTo)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    // Products in T1:T4, countries in U1:U4 and amounts in V1:V4. The amounts make each share an
+    // exact decimal.
+    m_pDoc->SetString(ScAddress(19, 0, 0), u"Apples"_ustr);
+    m_pDoc->SetString(ScAddress(19, 1, 0), u"Apples"_ustr);
+    m_pDoc->SetString(ScAddress(19, 2, 0), u"Pears"_ustr);
+    m_pDoc->SetString(ScAddress(19, 3, 0), u"Pears"_ustr);
+    m_pDoc->SetString(ScAddress(20, 0, 0), u"Mexico"_ustr);
+    m_pDoc->SetString(ScAddress(20, 1, 0), u"USA"_ustr);
+    m_pDoc->SetString(ScAddress(20, 2, 0), u"Mexico"_ustr);
+    m_pDoc->SetString(ScAddress(20, 3, 0), u"USA"_ustr);
+    m_pDoc->SetValue(ScAddress(21, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(21, 1, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(21, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(21, 3, 0), 90.0);
+
+    // By default PERCENTOF gets the column total, so every column sums to 1.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0),
+                          u"=PIVOTBY(T1:T4;U1:U4;V1:V4;PERCENTOF)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u""_ustr, u"Mexico"_ustr, u"USA"_ustr, u"Total"_ustr },
+                        { u"Apples"_ustr, u"0.25"_ustr, u"0.25"_ustr, u"0.25"_ustr },
+                        { u"Pears"_ustr, u"0.75"_ustr, u"0.75"_ustr, u"0.75"_ustr },
+                        { u"Total"_ustr, u"1"_ustr, u"1"_ustr, u"1"_ustr } });
+
+    // Relative to 1 gives the row total, so every row sums to 1.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0),
+                          u"=PIVOTBY(T1:T4;U1:U4;V1:V4;PERCENTOF;;;;;;;1)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u""_ustr, u"Mexico"_ustr, u"USA"_ustr, u"Total"_ustr },
+                        { u"Apples"_ustr, u"0.25"_ustr, u"0.75"_ustr, u"1"_ustr },
+                        { u"Pears"_ustr, u"0.25"_ustr, u"0.75"_ustr, u"1"_ustr },
+                        { u"Total"_ustr, u"0.25"_ustr, u"0.75"_ustr, u"1"_ustr } });
+
+    // Relative to 2 gives the grand total. A LAMBDA with two parameters gets the same values.
+    insertSpillingFormula(
+        *m_pDoc, ScAddress(0, 20, 0),
+        u"=PIVOTBY(T1:T4;U1:U4;V1:V4;LAMBDA(part;whole;SUM(part)/SUM(whole));;;;;;;2)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 20, 0),
+                      { { u""_ustr, u"Mexico"_ustr, u"USA"_ustr, u"Total"_ustr },
+                        { u"Apples"_ustr, u"0.0625"_ustr, u"0.1875"_ustr, u"0.25"_ustr },
+                        { u"Pears"_ustr, u"0.1875"_ustr, u"0.5625"_ustr, u"0.75"_ustr },
+                        { u"Total"_ustr, u"0.25"_ustr, u"0.75"_ustr, u"1"_ustr } });
+
+    // Relative to 3 gives the total of the parent column group in the same row, and 4 the total
+    // of the parent row group in the same column. With one key level the parent is the grand
+    // total, so 3 gives the row total and 4 the column total.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 30, 0),
+                          u"=PIVOTBY(T1:T4;U1:U4;V1:V4;PERCENTOF;;;;;;;3)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 30, 0),
+                      { { u""_ustr, u"Mexico"_ustr, u"USA"_ustr, u"Total"_ustr },
+                        { u"Apples"_ustr, u"0.25"_ustr, u"0.75"_ustr, u"1"_ustr },
+                        { u"Pears"_ustr, u"0.25"_ustr, u"0.75"_ustr, u"1"_ustr },
+                        { u"Total"_ustr, u"0.25"_ustr, u"0.75"_ustr, u"1"_ustr } });
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 40, 0),
+                          u"=PIVOTBY(T1:T4;U1:U4;V1:V4;PERCENTOF;;;;;;;4)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 40, 0),
+                      { { u""_ustr, u"Mexico"_ustr, u"USA"_ustr, u"Total"_ustr },
+                        { u"Apples"_ustr, u"0.25"_ustr, u"0.25"_ustr, u"0.25"_ustr },
+                        { u"Pears"_ustr, u"0.75"_ustr, u"0.75"_ustr, u"0.75"_ustr },
+                        { u"Total"_ustr, u"1"_ustr, u"1"_ustr, u"1"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPIVOTBYInvalidArguments)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillPivotByRegionsAndYears(*m_pDoc);
+
+    const std::vector<OUString> aFormulas{
+        // Both the row keys and the column keys are left out.
+        u"=PIVOTBY(;;V1:V6;SUM)"_ustr,
+        // The column keys have a different number of rows.
+        u"=PIVOTBY(T1:T6;U1:U5;V1:V6;SUM)"_ustr,
+        // Subtotals need a second key column.
+        u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM;;2)"_ustr,
+        u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM;;;;2)"_ustr,
+        // Column sort entries count the column keys and the values.
+        u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM;;;;;3)"_ustr,
+        u"=PIVOTBY(T1:T6;U1:U6;V1:V6;PERCENTOF;;;;;;;5)"_ustr,
+    };
+    for (size_t nIndex = 0; nIndex < aFormulas.size(); ++nIndex)
+    {
+        const ScAddress aPosition(0, nIndex, 0);
+        m_pDoc->SetString(aPosition, aFormulas[nIndex]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aFormulas[nIndex].toUtf8().getStr(), u"#VALUE!"_ustr,
+                                     m_pDoc->GetString(aPosition));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPIVOTBYRecalculatesWithItsInput)
+{
+    // PIVOTBY recalculates when its input changes, not on every change in the document.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillPivotByRegionsAndYears(*m_pDoc);
+
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0), u"=PIVOTBY(T1:T6;U1:U6;V1:V6;SUM)"_ustr);
+    // East in 2023 is the first result.
+    CPPUNIT_ASSERT_EQUAL(u"70"_ustr, m_pDoc->GetString(ScAddress(1, 1, 0)));
+    const ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(!pCell->GetCode()->IsRecalcModeAlways());
+
+    m_pDoc->SetValue(ScAddress(21, 0, 0), 35.0);
+    CPPUNIT_ASSERT_EQUAL(u"75"_ustr, m_pDoc->GetString(ScAddress(1, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPIVOTBYFunctionGivingAnArray)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillPivotByRegionsAndYears(*m_pDoc);
+
+    // A function that gives an array for a cell, instead of one value, makes the whole result
+    // the #CALC! error.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=PIVOTBY(T1:T6;U1:U6;V1:V6;LAMBDA(x;x))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#CALC!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"=ERROR.TYPE(A1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(14.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

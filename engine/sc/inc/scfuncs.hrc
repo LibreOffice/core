@@ -4561,6 +4561,34 @@ const TranslateId ocGROUPBY_ARY[] =
     NC_("ocGROUPBY", "0 - the key columns form a hierarchy (default). 1 - the key columns form a table, each is sorted on its own and there are no subtotals.")
 };
 
+// -=*# Resource for function PIVOTBY #*=-
+const TranslateId ocPIVOTBY_ARY[] =
+{
+    NC_("ocPIVOTBY", "Groups rows by the values in row key columns and column key columns, and applies a function to the values that each row group and column group share."),
+    NC_("ocPIVOTBY", "Row fields"),
+    NC_("ocPIVOTBY", "The key columns that group the rows of the result. Each column is one level of the grouping. May be omitted if column fields are given."),
+    NC_("ocPIVOTBY", "Column fields"),
+    NC_("ocPIVOTBY", "The key columns that group the columns of the result. Each column is one level of the grouping. May be omitted if row fields are given."),
+    NC_("ocPIVOTBY", "Values"),
+    NC_("ocPIVOTBY", "The values to aggregate. Each column gives one result column for every column group."),
+    NC_("ocPIVOTBY", "Function"),
+    NC_("ocPIVOTBY", "The function that aggregates the values, for example SUM, AVERAGE or a LAMBDA. A function with two required parameters, like PERCENTOF, also receives the values of the total selected by Relative to."),
+    NC_("ocPIVOTBY", "Field headers"),
+    NC_("ocPIVOTBY", "0 - no header row. 1 - the data has a header row that is not shown. 2 - no header row, generated names are shown. 3 - the data has a header row that is shown. If omitted, a header row is detected from the values."),
+    NC_("ocPIVOTBY", "Row total depth"),
+    NC_("ocPIVOTBY", "0 - no row totals. 1 - grand total row. 2 - grand total and subtotals of the first row key column, and so on. A negative number shows the totals at the top. If omitted, the grand total is shown."),
+    NC_("ocPIVOTBY", "Row sort order"),
+    NC_("ocPIVOTBY", "The column to sort the rows by, counting the row key columns and then the value columns. A negative number sorts in descending order. Several numbers may be given when they all refer to row key columns."),
+    NC_("ocPIVOTBY", "Column total depth"),
+    NC_("ocPIVOTBY", "0 - no column totals. 1 - grand total column. 2 - grand total and subtotals of the first column key column, and so on. A negative number shows the totals on the left. If omitted, the grand total is shown."),
+    NC_("ocPIVOTBY", "Column sort order"),
+    NC_("ocPIVOTBY", "The column to sort the columns by, counting the column key columns and then the value columns. A negative number sorts in descending order. Several numbers may be given when they all refer to column key columns."),
+    NC_("ocPIVOTBY", "Filter array"),
+    NC_("ocPIVOTBY", "A column of TRUE or FALSE values, one per row, that selects the rows to include."),
+    NC_("ocPIVOTBY", "Relative to"),
+    NC_("ocPIVOTBY", "The total that a function with two parameters receives. 0 - column total (default). 1 - row total. 2 - grand total. 3 - column total of the parent row group. 4 - row total of the parent column group.")
+};
+
 // -=*# Resource for function LAMBDA #*=-
 const TranslateId ocLAMBDA_ARY[] =
 {

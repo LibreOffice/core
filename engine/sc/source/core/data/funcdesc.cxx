@@ -821,6 +821,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         { ocMatSvd, ENTRY(ocMSVD_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_MSVD, 2, { 0, 1 }, 0 },
         { ocPercentOf, ENTRY(ocPERCENTOF_ARY), 0, ID_FUNCTION_GRP_MATH, HID_FUNC_PERCENTOF_MS, 2, { 0, 0 }, 0 },
         { ocGroupBy, ENTRY(ocGROUPBY_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_GROUPBY_MS, 8, { 0, 0, 0, 1, 1, 1, 1, 1 }, 0 },
+        { ocPivotBy, ENTRY(ocPIVOTBY_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_PIVOTBY_MS, 11, { 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1 }, 0 },
     };
 
     ScFuncDesc* pDesc = nullptr;

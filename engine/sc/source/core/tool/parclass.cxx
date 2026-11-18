@@ -231,6 +231,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocPercentrank_Exc, {{ Reference, Value, Value                              }, 0, Value }},
     { ocPercentrank_Inc, {{ Reference, Value, Value                              }, 0, Value }},
     { ocPi,              {{ Bounds                                               }, 0, Value }},
+    { ocPivotBy,         {{ ReferenceOrForceArray, ReferenceOrForceArray, ForceArray, Value, Value, Value, ForceArray, Value, ForceArray, ForceArray, Value }, 0, ForceArrayReturn }},
     { ocPow,             {{ Array, Array                                         }, 0, Value }},
     { ocPower,           {{ Array, Array                                         }, 0, Value }},
     { ocProb,            {{ ForceArray, ForceArray, Value, Value                 }, 0, Value }},

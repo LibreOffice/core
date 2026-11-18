@@ -3317,6 +3317,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "LOOKUP",
         "MATCH",
         "OFFSET",
+        "PIVOTBY",
         "ROW",
         "ROWS",
         "SHEET",

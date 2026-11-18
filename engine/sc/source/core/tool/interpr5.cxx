@@ -31,6 +31,7 @@
 
 #include <interpre.hxx>
 #include <GroupByFunction.hxx>
+#include <PivotByFunction.hxx>
 #include <global.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
@@ -1955,6 +1956,11 @@ void ScInterpreter::ScScan()
 void ScInterpreter::ScGroupBy()
 {
     sc::GroupByFunction(*this).Execute();
+}
+
+void ScInterpreter::ScPivotBy()
+{
+    sc::PivotByFunction(*this).Execute();
 }
 
 // for DATE, TIME, DATETIME, DURATION
