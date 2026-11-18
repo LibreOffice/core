@@ -2909,27 +2909,15 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-ifeq ($(COM),MSC)
-
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	libeot \
 )
-
-else
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/libeot/.libs/libeot$(gb_StaticLibrary_PLAINEXT) \
-)
-
-endif
-
-$(call gb_LinkTarget_use_external_project,$(1),libeot)
 $(call gb_Helper_LinkTarget_use_external,$(1),libeot)
 
 endef
 
 define gb_ExternalProject__use_libeot
-$(call gb_ExternalProject_use_external_project,$(1),libeot,libeot)
+$(call gb_ExternalProject_use_static_libraries,$(1),libeot,libeot)
 
 endef
 
