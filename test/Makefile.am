@@ -196,6 +196,7 @@ endif
 AM_CPPFLAGS = -pthread -I$(top_srcdir) -DBUILDING_TESTS -DLOK_ABORT_ON_ASSERTION
 
 test_base_sources = \
+	AccountPresetsTests.cpp \
 	AIUtilTests.cpp \
 	BgSaveWhiteBoxTests.cpp \
 	CommandControlTests.cpp \
@@ -269,6 +270,8 @@ EXTRA_unithttplib_DEPENDENCIES = $(gbuild_test_libs)
 unittest_CPPFLAGS = -I$(top_srcdir) -DBUILDING_TESTS -DSTANDALONE_CPPUNIT -g
 unittest_SOURCES = \
 	$(test_base_sources) \
+	../common/AccountPresets.cpp \
+	../common/UserTemplates.cpp \
 	TestStubs.cpp \
 	test.cpp
 

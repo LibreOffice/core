@@ -127,10 +127,17 @@ std::string ooxmlThumbnailEntry(const std::string& relationships)
     return std::string();
 }
 
-// Copies the image of the first page out of the template file into the folder, and nothing when
-// the file has no such image. An ODF file carries it as Thumbnails/thumbnail.png. An OOXML file
-// can name one in _rels/.rels, and only a PNG or JPEG image is copied.
-void extractPreview(const filesystem::path& templatePath, const filesystem::path& folder)
+// The ids are made of hexadecimal digits only, so an id is always one plain folder name.
+bool isPlainId(const std::string& id)
+{
+    return !id.empty() && id.size() <= 64 &&
+           std::all_of(id.begin(), id.end(),
+                       [](unsigned char character) { return std::isxdigit(character); });
+}
+} // namespace
+
+void UserTemplates::extractPreview(const filesystem::path& templatePath,
+                                   const filesystem::path& folder)
 {
     // An image of one page is far smaller than this.
     constexpr std::size_t maxPreviewSize = 1024 * 1024;
@@ -180,15 +187,6 @@ void extractPreview(const filesystem::path& templatePath, const filesystem::path
                                                  << "': " << exception.what());
     }
 }
-
-// The ids are made of hexadecimal digits only, so an id is always one plain folder name.
-bool isPlainId(const std::string& id)
-{
-    return !id.empty() && id.size() <= 64 &&
-           std::all_of(id.begin(), id.end(),
-                       [](unsigned char character) { return std::isxdigit(character); });
-}
-} // namespace
 
 UserTemplates::UserTemplates(filesystem::path folder)
     : _folder(std::move(folder))
@@ -328,6 +326,18 @@ std::vector<std::string> UserTemplates::acceptedExtensions()
     return extensions;
 }
 
+std::string UserTemplates::previewIn(const filesystem::path& folder)
+{
+    std::error_code error;
+    for (const char* previewFileName : previewFileNames)
+    {
+        const filesystem::path preview = folder / previewFileName;
+        if (!filesystem::is_symlink(preview, error) && filesystem::is_regular_file(preview, error))
+            return preview.string<char>();
+    }
+    return std::string();
+}
+
 std::optional<UserTemplates::Entry>
 UserTemplates::entryInFolder(const filesystem::path& templateFolder) const
 {
@@ -348,16 +358,7 @@ UserTemplates::entryInFolder(const filesystem::path& templateFolder) const
                      type,
                      path.string<char>(),
                      std::string() };
-        for (const char* previewFileName : previewFileNames)
-        {
-            const filesystem::path preview = templateFolder / previewFileName;
-            if (!filesystem::is_symlink(preview, error) &&
-                filesystem::is_regular_file(preview, error))
-            {
-                entry.previewPath = preview.string<char>();
-                break;
-            }
-        }
+        entry.previewPath = previewIn(templateFolder);
         return entry;
     }
     return std::nullopt;

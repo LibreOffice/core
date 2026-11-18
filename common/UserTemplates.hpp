@@ -65,6 +65,15 @@ public:
     // case and without the dot.
     static std::vector<std::string> acceptedExtensions();
 
+    // Copies the image of the first page out of the template file into the folder, and nothing
+    // when the file has no such image. An ODF file carries it as Thumbnails/thumbnail.png. An
+    // OOXML file can name one in _rels/.rels, and only a PNG or JPEG image is copied.
+    static void extractPreview(const std::filesystem::path& templatePath,
+                               const std::filesystem::path& folder);
+
+    // The path of the image of the first page in the folder, or empty when the folder has none.
+    static std::string previewIn(const std::filesystem::path& folder);
+
 private:
     std::optional<Entry> entryInFolder(const std::filesystem::path& templateFolder) const;
 

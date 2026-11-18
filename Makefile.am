@@ -430,6 +430,7 @@ wsd_headers = \
 
 shared_headers = \
                  common/AIHttpTransport.hpp \
+                 common/AccountPresets.hpp \
                  common/Anonymizer.hpp \
                  common/Authorization.hpp \
                  common/CharacterConverter.hpp \
