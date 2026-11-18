@@ -212,7 +212,6 @@ SvxShape::~SvxShape() noexcept
     if ( mxSdrObject )
     {
         mxSdrObject->RemoveListener(*this);
-        mxSdrObject->setUnoShape(nullptr);
         mxSdrObject.clear();
     }
 
