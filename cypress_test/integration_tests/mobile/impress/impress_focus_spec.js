@@ -8,6 +8,9 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('impress/focus.odp');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	it('Select text box, no editing', function() {
@@ -77,12 +80,12 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 		cy.cGet('#document-container').dblclick();
 		helper.assertHaveKeyboardInput();
 
-		cy.getFrameWindow().then(function(win) {
-			win.app.map.setAcceptInput(false);
-			win.app.map.fire('zoomstart');
-			win.app.map.fire('zoomend');
-			helper.processToIdle(win);
+		cy.then(() => {
+			this.win.app.map.setAcceptInput(false);
+			this.win.app.map.fire('zoomstart');
+			this.win.app.map.fire('zoomend');
 		});
+		helper.processToIdle(this.win);
 
 		helper.assertNoKeyboardInput();
 	});
@@ -93,10 +96,12 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 		cy.cGet('#document-container').dblclick();
 		helper.assertHaveKeyboardInput();
 
-		cy.getFrameWindow().then(function(win) {
-			win.app.map.setAcceptInput(false);
-			helper.processToIdle(win);
+		cy.then(() => {
+			this.win.app.map.setAcceptInput(false);
 		});
+		helper.processToIdle(this.win);
+		// A tap before the double click is over counts as a third click.
+		helper.waitForTimers(this.win, 'clicktimer');
 
 		helper.assertNoKeyboardInput();
 
@@ -108,21 +113,21 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 	it('Graphic selection reply keeps the keyboard down', function() {
 		mobileHelper.enableEditingMobile();
 
-		cy.getFrameWindow().then(function(win) {
-			cy.spy(win.app.socket, '_onMessage');
+		cy.then(() => {
+			cy.spy(this.win.app.socket, '_onMessage');
 		});
 
 		cy.cGet('#document-container').dblclick();
 		helper.assertHaveKeyboardInput();
 
-		cy.getFrameWindow().then(function(win) {
-			win.app.map.setAcceptInput(false);
-			helper.processToIdle(win);
+		cy.then(() => {
+			this.win.app.map.setAcceptInput(false);
 		});
+		helper.processToIdle(this.win);
 
-		cy.getFrameWindow().then(function(win) {
+		cy.then(() => {
 			var last = null;
-			win.app.socket._onMessage.getCalls().forEach(function(call) {
+			this.win.app.socket._onMessage.getCalls().forEach(function(call) {
 				var textMsg = call.args[0] && call.args[0].textMsg;
 				if (typeof textMsg === 'string' && textMsg.startsWith('graphicselection:'))
 					last = textMsg;
@@ -131,14 +136,14 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 			expect(last).not.to.contain('EMPTY');
 
 			// The shape stays selected while its text is edited.
-			win.app.map._docLayer._onMessage(last);
-			helper.processToIdle(win);
+			this.win.app.map._docLayer._onMessage(last);
+			helper.processToIdle(this.win);
 		});
 
 		helper.assertNoKeyboardInput();
 
-		cy.getFrameWindow().then(function(win) {
-			win.app.socket._onMessage.restore();
+		cy.then(() => {
+			this.win.app.socket._onMessage.restore();
 		});
 	});
 
