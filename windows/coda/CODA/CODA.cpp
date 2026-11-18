@@ -5541,7 +5541,7 @@ constexpr const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
         const variables = server.getElementById('initial-variables');
         const cssVariables = server.getElementById('init-css-vars');
 
-        window.codaRemotePage.serverVariables = variables ? { ...variables.dataset } : {};
+        window.codaRemotePage.accessToken = variables?.dataset.accessToken;
         window.codaRemotePage.cssVariables = cssVariables ? cssVariables.value : '';
 
         const app = new DOMParser().parseFromString(appHtml, 'text/html');

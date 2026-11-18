@@ -510,7 +510,7 @@ class InitializerBase {
 		// The frame has the remote document's values itself, so this needs no native code.
 		const remoteInfo = JSON.stringify({
 			wopiSrc: new URLSearchParams(location.search).get('WOPISrc'),
-			accessToken: window.codaRemotePage.serverVariables.accessToken,
+			accessToken: window.codaRemotePage.accessToken,
 			coolServer: location.origin,
 			coolPath: location.pathname,
 		});

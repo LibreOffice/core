@@ -56,18 +56,24 @@
 #include <QWebEngineUrlRequestJob>
 #include <QWebEngineView>
 
+#include <Poco/Exception.h>
+#include <Poco/Net/HTMLForm.h>
+#include <Poco/Net/HTTPRequest.h>
+
 #include <chrono>
 #include <map>
 #include <memory>
 #include <optional>
+#include <sstream>
+#include <string>
 
 namespace
 {
 /// In pixels.
 const QSize ACCOUNT_WINDOW_SIZE(1280, 860);
 
-/// Builds CODA's editor page in the emptied editor iframe. It asks coolwsd for its settings by
-/// posting the integrator's form again, then loads CODA's page, scripts and styles from coollocal:.
+/// Builds CODA's editor page in the emptied editor iframe. It loads CODA's page, scripts and
+/// styles from coollocal:.
 const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
 (config, clientDocumentLoadingRefusal, postServerEditorForm) => {
     if (window.codaRemotePage)
@@ -77,6 +83,7 @@ const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
         base: config.base,
         messageUrl: config.messageUrl,
         settings: config.settings,
+        accessToken: config.accessToken,
     };
 
     const text = (response) => {
@@ -85,17 +92,11 @@ const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
         return response.text();
     };
 
-    const serverPage = fetch(config.formUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: config.formBody,
-    }).then(text);
-
     const appPage = fetch(config.base + 'cool-qt.html').then(text);
 
     const refusal = clientDocumentLoadingRefusal(config.formUrl);
 
-    Promise.all([serverPage, appPage, refusal]).then(([serverHtml, appHtml, reason]) => {
+    Promise.all([appPage, refusal]).then(([appHtml, reason]) => {
         // Without client document loading, native code learns why, and the frame shows the server's
         // own editor:
         if (reason !== null) {
@@ -104,14 +105,6 @@ const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
             });
             return;
         }
-
-        // coolwsd writes the values for its editor into these two elements.
-        const server = new DOMParser().parseFromString(serverHtml, 'text/html');
-        const variables = server.getElementById('initial-variables');
-        const cssVariables = server.getElementById('init-css-vars');
-
-        window.codaRemotePage.serverVariables = variables ? { ...variables.dataset } : {};
-        window.codaRemotePage.cssVariables = cssVariables ? cssVariables.value : '';
 
         const app = new DOMParser().parseFromString(appHtml, 'text/html');
         const isRelative = (address) => address && !address.includes(':');
@@ -295,6 +288,22 @@ QUrl originOf(const QUrl& url)
     if (isDefaultHttpsPort || isDefaultHttpPort)
         origin.setPort(-1);
     return origin;
+}
+
+// The access token that coolwsd puts into its editor page for the integrator's form (read from the
+// form and URI-encoded the same way coolwsd does it):
+std::string editorPageAccessToken(QUrl const & formUrl, QByteArray const & form) {
+    try {
+        Poco::Net::HTTPRequest request(
+            Poco::Net::HTTPRequest::HTTP_POST, formUrl.toString(QUrl::FullyEncoded).toStdString());
+        request.setContentType("application/x-www-form-urlencoded");
+        std::istringstream body(form.toStdString());
+        Poco::Net::HTMLForm fields(request, body);
+        return Uri::encode(fields.get("access_token", ""), "'");
+    } catch (Poco::Exception const & e) {
+        LOG_WRN("account window: cannot read the integrator's form: " << e.displayText());
+        return "";
+    }
 }
 
 /// Other schemes would open other apps, so only web addresses go to the system browser.
@@ -727,6 +736,7 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
     QJsonObject config;
     config["formUrl"] = _formUrl.toString(QUrl::FullyEncoded);
     config["formBody"] = QString::fromLatin1(_form);
+    config["accessToken"] = QString::fromStdString(editorPageAccessToken(_formUrl, _form));
     config["base"] = COOLLOCAL_BUNDLED_URL;
     config["messageUrl"] = COOLLOCAL_MESSAGE_URL + "?session=" + _session;
 
