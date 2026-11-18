@@ -421,8 +421,7 @@ function selectOptionMobileWizard(menu) {
 	};
 
 	cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected')
-		.trigger('pointerdown', eventOptions)
-		.wait(1000);
+		.trigger('pointerdown', eventOptions);
 
 	cy.cGet('body').contains('.ui-header.level-0.mobile-wizard.ui-widget', menu)
 		.click();

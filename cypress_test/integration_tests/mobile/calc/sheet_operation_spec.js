@@ -44,8 +44,10 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Sheet Operation', function 
 		};
 
 		cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected')
-			.trigger('pointerdown', eventOptions)
-			.wait(1000)
+			.trigger('pointerdown', eventOptions);
+		// The long press opened the menu while the finger is still down.
+		cy.cGet('#mobile-wizard').should('be.visible');
+		cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected')
 			.trigger('pointerup', eventOptions);
 
 		// The click the browser sends for the release.
