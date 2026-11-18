@@ -3,7 +3,15 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection InPlaceCellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret DropCaretSection ClassicTableContext */
+/* global app cool $ _ JSDialog UNOKey DocumentBase ViewState RenderManager AnimatedGifManager */
+/* global CanvasSectionContainer CanvasOverlay SplitSection RenderGeometrySection URLPopUpSection */
+/* global CursorHeaderSection CellCursorSection TextCursorSection CompareChangesLabelSection */
+/* global OtherViewCellCursorSection OtherViewGraphicSelectionSection */
+/* global Cursor GraphicSelection TextSelections CellSelectionMarkers CSelections CReferences */
+/* global LocalCaret LocalCellCursor */
+/* global CPolyUtil CPolygon CStyleData CalcValidityDropDown FormFieldButton */
+/* global ShapeLockLabelSection ShapeLockCalloutSection DropCaretSection */
+/* global ClassicTableContext InPlaceCellCursorSection */
 
 function clamp(num, min, max)
 {
@@ -400,6 +408,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	isWriter: function() {
 		return this._docType === 'text';
 	},
+
+	/**
+	 * Notify the engine of the options of this view. A new view in the engine
+	 * starts without them.
+	 */
+	reportViewOptions() {},
 
 	// Returns true if the document type is Calc.
 	isCalc: function() {
@@ -1407,7 +1421,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._onDocumentRepair(obj);
 		}
 		else if (obj.commandName === '.uno:CellCursor') {
-			this._onCellCursorMsg(obj.commandValues);
+			const cell = this._parseCellCursor(obj.commandValues);
+			this.setCellCursor(cell);
 		}
 		else if (obj.commandName === '.uno:Headings') {
 			if (this._map._textInput.setA11yHeadings)
@@ -1834,31 +1849,59 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._inPlaceCellCursorSection.setRectangle(rectangle);
 	},
 
-	_onCellCursorMsg: function (textMsg) {
+	_onCellCursorMsg(textMsg) {
 		if (!this.isCalc()) {
 			this._onInPlaceCellCursorMsg(textMsg);
 			return;
 		}
 
+		const inputSequence = this._readInputSequenceToken(textMsg);
+		if (LocalCellCursor.isStale(inputSequence))
+			return;
+
+		const cell = this._parseCellCursor(this._stripInputSequence(textMsg));
+		this.setCellCursor(cell);
+	},
+
+	/**
+	 * Read the cell of a cell cursor report, "x, y, width, height, col, row"
+	 * in print twips, as {col, row, area}; null for EMPTY.
+	 */
+	_parseCellCursor(textMsg) {
+		if (textMsg.match('EMPTY'))
+			return null;
+
+		const strTwips = textMsg.match(/\d+/g);
+		const topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));
+		const offset = new cool.Point(parseInt(strTwips[2]), parseInt(strTwips[3]));
+		const bottomRightTwips = topLeftTwips.add(offset);
+		const printTwips = new cool.Bounds(topLeftTwips, bottomRightTwips);
+		const tileTwips = this._convertToTileTwipsSheetArea(printTwips).toRectangle();
+		const area = new cool.SimpleRectangle(tileTwips[0], tileTwips[1], tileTwips[2], tileTwips[3]);
+		return { col: parseInt(strTwips[4]), row: parseInt(strTwips[5]), area: area };
+	},
+
+	/**
+	 * Put the cell cursor on a cell, as {col, row, area}, or hide it for null.
+	 * The area is the cell's rectangle in tile twips; without it the sheet
+	 * geometry gives the rectangle.
+	 */
+	setCellCursor(cell) {
 		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 
 		var oldCursorAddress = app.calc.cellAddress.clone();
 
-		if (textMsg.match('EMPTY')) {
+		if (!cell) {
 			this.hideCellCursor();
 			if (this._map._clip)
 				this._map._clip.clearSelection();
 		}
 		else {
-			var strTwips = textMsg.match(/\d+/g);
-			var topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));
-			var offset = new cool.Point(parseInt(strTwips[2]), parseInt(strTwips[3]));
-			var bottomRightTwips = topLeftTwips.add(offset);
-			let _cellCursorTwips = this._convertToTileTwipsSheetArea(new cool.Bounds(topLeftTwips, bottomRightTwips));
-
-			app.calc.cellAddress = new cool.SimplePoint(parseInt(strTwips[4]), parseInt(strTwips[5]));
-			let tempRectangle = _cellCursorTwips.toRectangle();
-			app.calc.cellCursorRectangle = new cool.SimpleRectangle(tempRectangle[0], tempRectangle[1], tempRectangle[2], tempRectangle[3]);
+			app.calc.cellAddress = new cool.SimplePoint(cell.col, cell.row);
+			if (cell.area)
+				app.calc.cellCursorRectangle = cell.area;
+			else
+				app.calc.cellCursorRectangle = this.sheetGeometry.getCellSimpleRectangle(cell.col, cell.row);
 			this._cellCursorSection.size[0] = app.calc.cellCursorRectangle.pWidth;
 			this._cellCursorSection.size[1] = app.calc.cellCursorRectangle.pHeight;
 			this._cellCursorSection.setPosition(app.calc.cellCursorRectangle.pX1, app.calc.cellCursorRectangle.pY1);
@@ -1890,7 +1933,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// after it appears. Removal on a sheet change is handled where the sheet
 		// switch happens, because switching sheets does not always produce a
 		// cellcursor with a changed address.
-		var cursorHidden = !!textMsg.match('EMPTY');
+		var cursorHidden = !cell;
 		if (!sameAddress || cursorHidden)
 			app.definitions.validityInputHelpSection.removeValidityInputHelp();
 
@@ -2646,13 +2689,19 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return textMsg.replace(/ inputSequence=\d+$/, '');
 	},
 
+	/** Read the input sequence that kit appends to a cell report, if any. */
+	_readInputSequenceToken(textMsg) {
+		const match = textMsg.match(/ inputSequence=(\d+)$/);
+		return match ? parseInt(match[1]) : undefined;
+	},
+
 	// A textselection, textselectionstart or textselectionend message.
 	_onSelectionMessage: function (textMsg) {
 		if (textMsg.startsWith('textselectionstart:'))
 			this._onTextSelectionStartMsg(textMsg);
 		else if (textMsg.startsWith('textselectionend:'))
 			this._onTextSelectionEndMsg(textMsg);
-		else
+		else if (!LocalCellCursor.isStale(this._readInputSequenceToken(textMsg)))
 			this._onTextSelectionMsg(this._stripInputSequence(textMsg));
 	},
 
@@ -3026,24 +3075,40 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			app.sectionContainer.getSectionWithName(app.CSections.ColumnHeader.name)._updateCanvas();
 	},
 
-	_onCellSelectionAreaMsg: function (textMsg) {
+	_onCellSelectionAreaMsg(textMsg) {
+		if (LocalCellCursor.isStale(this._readInputSequenceToken(textMsg)))
+			return;
+
 		textMsg = this._stripInputSequence(textMsg);
-		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 		var strTwips = textMsg.match(/\d+/g);
 		// a report of table cells asked before the newest is passed over
 		if (ClassicTableContext.outdatedCellReport(
 			strTwips ? strTwips.slice(0, 4).map(function (value) { return parseInt(value); }) : null))
 			return;
-		if (strTwips != null) {
-			var topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));
-			var offset = new cool.Point(parseInt(strTwips[2]), parseInt(strTwips[3]));
-			var bottomRightTwips = topLeftTwips.add(offset);
-			var boundsTwips = this._convertToTileTwipsSheetArea(new cool.Bounds(topLeftTwips, bottomRightTwips));
+		if (strTwips == null) {
+			this._setCellSelectionArea(null);
+			return;
+		}
 
+		var topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));
+		var offset = new cool.Point(parseInt(strTwips[2]), parseInt(strTwips[3]));
+		var bottomRightTwips = topLeftTwips.add(offset);
+		var boundsTwips = this._convertToTileTwipsSheetArea(new cool.Bounds(topLeftTwips, bottomRightTwips));
+		const adjustedTwipsWidth = boundsTwips.max.x - boundsTwips.min.x;
+		const adjustedTwipsHeight = boundsTwips.max.y - boundsTwips.min.y;
+		const area = new cool.SimpleRectangle(boundsTwips.min.x, boundsTwips.min.y, adjustedTwipsWidth, adjustedTwipsHeight);
+		this._setCellSelectionArea(area);
+	},
+
+	/**
+	 * Set the bounding box of the cell selection, in tile twips, or clear it
+	 * for null.
+	 */
+	_setCellSelectionArea(area) {
+		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
+		if (area) {
 			var oldSelection = this._cellSelectionArea ? this._cellSelectionArea.clone(): null;
-			const adjustedTwipsWidth = boundsTwips.max.x - boundsTwips.min.x;
-			const adjustedTwipsHeight = boundsTwips.max.y - boundsTwips.min.y;
-			this._cellSelectionArea = new cool.SimpleRectangle(boundsTwips.min.x, boundsTwips.min.y, adjustedTwipsWidth, adjustedTwipsHeight);
+			this._cellSelectionArea = area;
 
 			if (cellfillMarkerSection)
 				cellfillMarkerSection.calculatePositionViaCellSelection([this._cellSelectionArea.pX2, this._cellSelectionArea.pY2]);
@@ -3063,7 +3128,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	_onCellAutoFillAreaMsg: function (textMsg) {
+	_onCellAutoFillAreaMsg(textMsg) {
+		if (LocalCellCursor.isStale(this._readInputSequenceToken(textMsg)))
+			return;
+
 		textMsg = this._stripInputSequence(textMsg);
 		var strTwips = textMsg.match(/\d+/g);
 		if (strTwips != null && this._map.isEditMode()) {
@@ -4176,6 +4244,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				'textselectionstart',
 				'textselectionend',
 				'graphicselection',
+				// cellcursorstate must be replayed after cellcursor,
+				// cellselectionarea and textselection, to override them.
+				'cellcursorstate',
 			] : [
 				'invalidatecursor',
 				'textselection',
@@ -4188,6 +4259,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			var otherViewTypes = this.isCalc() ? [
 				'cellviewcursor',
 				'textviewselection',
+				'cellviewselection',
 				'invalidateviewcursor',
 				'graphicviewselection',
 			] : [

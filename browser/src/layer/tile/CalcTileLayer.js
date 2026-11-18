@@ -13,7 +13,9 @@
  * Calc tile layer is used to display a spreadsheet document
  */
 
-/* global app RenderManager cool CellRangeMarkerSection FocusCellSection SplitterLinesSection */
+/* global app cool RenderManager */
+/* global CellRangeMarkerSection FocusCellSection SplitterLinesSection */
+/* global LocalCellCursor */
 
 window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	options: {
@@ -86,6 +88,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		this._cellRangeMarkerSection = new CellRangeMarkerSection();
 		app.sectionContainer.addSection(this._cellRangeMarkerSection);
 
+		this.reportViewOptions();
+
 		this.insertMode = false;
 		this._resetInternalState();
 		this._sheetSwitch = new cool.SheetSwitchViewRestore(map);
@@ -131,6 +135,12 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this.requestSheetGeometryData(flags);
 		} else if (textMsg.startsWith('invalidatecellrangeinventory:')) {
 			this._onInvalidateCellRangeInventoryMsg(textMsg);
+		} else if (textMsg.startsWith('cellselection:')) {
+			this._onCellSelectionMsg(textMsg);
+		} else if (textMsg.startsWith('cellviewselection:')) {
+			this._onCellViewSelectionMsg(textMsg);
+		} else if (textMsg.startsWith('cellcursorstate:')) {
+			this._onCellCursorStateMsg(textMsg);
 		} else if (textMsg.startsWith('printranges:')) {
 			this._onPrintRangesMsg(textMsg);
 		} else {
@@ -153,6 +163,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._cellRangeMarkerSection.clearSheetCellRanges(part);
 	},
 
+	reportViewOptions() {
+		// Notify the engine that this view moves the cell cursor by itself.
+		const debug = this._map._debug;
+		if (debug && debug.localCellCursorOn)
+			LocalCellCursor.reportMode(true);
+	},
+
 	// Sends the .uno:CellRangeInventory command for one sheet.
 	requestCellRangeInventory: function (part) {
 		app.socket.sendMessage('commandvalues command=.uno:CellRangeInventory?part=' + part);
@@ -164,6 +181,467 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._cellRangeMarkerSection.showTableMarkers(part);
 		else
 			this.requestCellRangeInventory(part);
+	},
+
+	/**
+	 * Select the cell ranges that the engine reports, unless the client
+	 * moved since.
+	 */
+	_onCellSelectionMsg(textMsg) {
+		const selection = JSON.parse(textMsg.substring('cellselection:'.length));
+		if (LocalCellCursor.isStale(selection.inputSequence))
+			return;
+
+		// A sheet switch is on its way; its own reports will follow.
+		if (selection.part !== this._selectedPart)
+			return;
+
+		// The selection while a cell is edited is a text selection.
+		const editing = this.insertMode && app.file.textCursor.visible;
+		if (editing || !app.calc.cellCursorVisible)
+			return;
+
+		this.setCellSelection(selection.ranges);
+	},
+
+	/**
+	 * Draw the cell ranges that another view selected, when that view is on
+	 * the selected sheet.
+	 */
+	_onCellViewSelectionMsg(textMsg) {
+		const selection = JSON.parse(textMsg.substring('cellviewselection:'.length));
+		const viewId = parseInt(selection.viewId);
+		if (viewId === this._viewId || !this._map._viewInfo[viewId])
+			return;
+
+		this._saveMessageForReplay(textMsg, viewId);
+
+		// The sheet geometry covers only the selected sheet.
+		const part = this.getIndexFromPart(selection.part);
+		if (part !== this._selectedPart)
+			return;
+
+		const rawRectangles = [];
+		for (const cellRange of selection.ranges) {
+			const rectangle = this._cellRangeToRectangle(cellRange);
+			rawRectangles.push(rectangle.toArray());
+		}
+
+		const viewMode = parseInt(selection.mode);
+		const view = app.activeDocument.getView(viewId);
+		view.updateSelectionRawData(viewMode, part, rawRectangles);
+	},
+
+	/**
+	 * Adopt the cell cursor and the selection that the engine reports,
+	 * unless the client moved since.
+	 */
+	_onCellCursorStateMsg(textMsg) {
+		const state = JSON.parse(textMsg.substring('cellcursorstate:'.length));
+		if (LocalCellCursor.isStale(state.inputSequence))
+			return;
+
+		this._adoptCellCursorState(state);
+	},
+
+	/**
+	 * Adopt the cell cursor and the selection in the engine's reply to a
+	 * setcellcursor, when it put them elsewhere than the client asked.
+	 */
+	_onCellCursorStateReply(values) {
+		const inputSequence = values.inputSequence;
+		if (LocalCellCursor.isStale(inputSequence))
+			return;
+
+		const state = values.commandValues;
+		const correct = LocalCellCursor.isCorrection(state, inputSequence);
+		LocalCellCursor.forget();
+		if (!correct)
+			return;
+
+		this._adoptCellCursorState(state);
+	},
+
+	/** Put the cell cursor and the selection as specified by the engine. */
+	_adoptCellCursorState(state) {
+		// A sheet switch is on its way; its own reports will follow.
+		if (state.part !== this._selectedPart)
+			return;
+
+		if (!state.cursor.visible) {
+			this.setCellCursor(null);
+			return;
+		}
+
+		const cursorCell = state.cursor.cell;
+		this.setCellCursor({ col: cursorCell[0], row: cursorCell[1] });
+
+		// The selection while a cell is edited is a text selection.
+		const editing = this.insertMode && app.file.textCursor.visible;
+		if (!editing)
+			this.setCellSelection(state.selection);
+	},
+
+	/**
+	 * Select cell ranges, each as [startCol, startRow, endCol, endRow], drawn
+	 * from the sheet geometry; no ranges clear the selection.
+	 */
+	setCellSelection(cellRanges) {
+		const rectangles = [];
+		const rawRectangles = [];
+		for (const cellRange of cellRanges) {
+			const rectangle = this._cellRangeToRectangle(cellRange);
+			rectangles.push(rectangle);
+			rawRectangles.push(rectangle.toArray());
+		}
+
+		this.showTextSelection(rawRectangles);
+		this._cellSelections = rectangles;
+		this._refreshRowColumnHeaders();
+
+		if (!cellRanges.length) {
+			this._setCellSelectionArea(null);
+			return;
+		}
+
+		const boundingRange = this._boundingCellRange(cellRanges);
+		this._setCellSelectionArea(this._cellRangeToRectangle(boundingRange));
+	},
+
+	/** Get the smallest cell range that holds all the given ranges. */
+	_boundingCellRange(cellRanges) {
+		const boundingRange = cellRanges[0].slice();
+		for (const cellRange of cellRanges) {
+			boundingRange[0] = Math.min(boundingRange[0], cellRange[0]);
+			boundingRange[1] = Math.min(boundingRange[1], cellRange[1]);
+			boundingRange[2] = Math.max(boundingRange[2], cellRange[2]);
+			boundingRange[3] = Math.max(boundingRange[3], cellRange[3]);
+		}
+		return boundingRange;
+	},
+
+	/**
+	 * Get the rectangle of a cell range sent as [col1, row1, col2, row2], in
+	 * tile twips.
+	 */
+	_cellRangeToRectangle(cellRange) {
+		const startCell = this.sheetGeometry.getCellSimpleRectangle(cellRange[0], cellRange[1]);
+		const endCell = this.sheetGeometry.getCellSimpleRectangle(cellRange[2], cellRange[3]);
+		const width = endCell.x2 - startCell.x1;
+		const height = endCell.y2 - startCell.y1;
+		return new cool.SimpleRectangle(startCell.x1, startCell.y1, width, height);
+	},
+
+	/**
+	 * Test whether the client can move the cell cursor locally.
+	 */
+	canMoveCellCursorHere() {
+		const debug = this._map._debug;
+		if (!debug || !debug.localCellCursorOn)
+			// local cell cursor is not enabled
+			return false;
+
+		// The keys move the caret of a cell being edited.
+		if (app.file.textCursor.visible)
+			return false;
+
+		if (!app.calc.cellCursorVisible)
+			return false;
+
+		if (app.calc.isPartProtected(this._selectedPart))
+			return false;
+
+		// If the sheet ranges haven't arrived yet, we need to fall back to
+		// the engine-based handling.
+		return this._cellRangeMarkerSection.hasSheetCellRanges(this._selectedPart);
+	},
+
+	/** Test whether any cells are selected. */
+	hasCellSelection() {
+		return this._cellSelections.length > 0;
+	},
+
+	/**
+	 * Test whether the client can extend the selection itself: one range
+	 * at most, with the cell cursor at a corner of it, so that the other
+	 * corner is the end to move.
+	 */
+	canExtendCellSelectionHere() {
+		return this.canMoveCellCursorHere() && this._cellSelectionEnd() !== null;
+	},
+
+	/**
+	 * Get the range of the merged cell that covers a cell, or of the cell
+	 * alone when it is not merged.
+	 */
+	_mergedCellRangeAt(col, row) {
+		const mergedCell = this._cellRangeMarkerSection.getMergedCellAt(
+			this._selectedPart, col, row);
+		if (mergedCell === null)
+			return [col, row, col, row];
+
+		return [mergedCell.min.x, mergedCell.min.y, mergedCell.max.x, mergedCell.max.y];
+	},
+
+	/**
+	 * Move the cell cursor by numbers of visible columns and rows,
+	 * stopping at the sheet edge.
+	 */
+	moveCellCursorHere(colSteps, rowSteps) {
+		const address = app.calc.cellAddress;
+		const cell = this._stepFromCell([address.x, address.y], colSteps, rowSteps);
+		this._moveCellCursorTo(cell[0], cell[1]);
+	},
+
+	/**
+	 * Step numbers of visible columns and rows from a cell, and from the
+	 * edge of its merged cell when it has one, accounting for the hidden
+	 * and filtered rows and columns.
+	 *
+	 * @returns {number[]} The cell reached, as [col, row]
+	 */
+	_stepFromCell(cell, colSteps, rowSteps) {
+		const merged = this._mergedCellRangeAt(cell[0], cell[1]);
+		let startCol = cell[0];
+		if (colSteps)
+			startCol = colSteps > 0 ? merged[2] : merged[0];
+
+		let startRow = cell[1];
+		if (rowSteps)
+			startRow = rowSteps > 0 ? merged[3] : merged[1];
+
+		const columns = this.sheetGeometry.getColumnsGeometry();
+		const rows = this.sheetGeometry.getRowsGeometry();
+		const col = this._stepSigned(columns, startCol, colSteps);
+		const row = this._stepSigned(rows, startRow, rowSteps);
+		return [col, row];
+	},
+
+	/**
+	 * Extend the selection by numbers of visible columns and rows from its
+	 * moving end, keeping the cell cursor on the anchor.
+	 */
+	extendCellSelectionHere(colSteps, rowSteps) {
+		const end = this._cellSelectionEnd();
+		if (!end)
+			return;
+
+		const cell = this._stepFromCell(end, colSteps, rowSteps);
+		this._extendCellSelectionTo(cell[0], cell[1]);
+	},
+
+	/**
+	 * Start selecting cells from a press at a position in core pixels: the
+	 * cell cursor goes to the pressed cell, the anchor, with nothing
+	 * selected. False when the client cannot move the cursor.
+	 */
+	selectCellsFrom(position) {
+		if (!this.canMoveCellCursorHere())
+			return false;
+
+		const cell = this._cellAtPosition(position);
+		this._moveCellCursorTo(cell.x, cell.y);
+		return true;
+	},
+
+	/**
+	 * Extend the selection from the cell cursor, the anchor, to the cell
+	 * at a position in core pixels. False when the client cannot extend
+	 * it.
+	 */
+	selectCellsTo(position) {
+		if (!this.canExtendCellSelectionHere())
+			return false;
+
+		const cell = this._cellAtPosition(position);
+		this._extendCellSelectionTo(cell.x, cell.y);
+		return true;
+	},
+
+	/** Get the cell at a position in core pixels, as a cool.Point. */
+	_cellAtPosition(position) {
+		const point = new cool.Point(position.pX, position.pY);
+		return this.sheetGeometry.getCellFromPos(point, 'corepixels');
+	},
+
+	/**
+	 * Move the cell cursor a page of rows backward or forward, and scroll
+	 * the view by as much, so the cursor keeps its place on the screen.
+	 *
+	 * @param direction {cool.IndexDirection} Backward for up, Forward for down
+	 */
+	pageCellCursorHere(direction) {
+		const address = app.calc.cellAddress;
+		const fromRow = this._pageStartRow([address.x, address.y], direction);
+		const row = this._pageRowHere(fromRow, direction);
+		if (row === fromRow)
+			return;
+
+		this._moveCellCursorTo(address.x, row);
+	},
+
+	/**
+	 * Extend the selection a page of rows backward or forward from its
+	 * moving end, and scroll the view by as much.
+	 *
+	 * @param direction {cool.IndexDirection} Backward for up, Forward for down
+	 */
+	pageCellSelectionHere(direction) {
+		const end = this._cellSelectionEnd();
+		if (!end)
+			return;
+
+		const fromRow = this._pageStartRow(end, direction);
+		const row = this._pageRowHere(fromRow, direction);
+		if (row === fromRow)
+			return;
+
+		this._extendCellSelectionTo(end[0], row);
+	},
+
+	/**
+	 * Get the row to page from for a cell: the far row of its merged cell
+	 * when it has one.
+	 */
+	_pageStartRow(cell, direction) {
+		const from = this._mergedCellRangeAt(cell[0], cell[1]);
+		return direction === cool.IndexDirection.Forward ? from[3] : from[1];
+	},
+
+	/**
+	 * Step a page of visible rows from a row, and scroll the view by as
+	 * much, so the cell on the row reached keeps its place on the screen.
+	 *
+	 * @returns {number} The row reached, the same row at the sheet edge
+	 */
+	_pageRowHere(fromRow, direction) {
+		const viewRows = this.sheetGeometry.getViewRowRange();
+		const pageRows = Math.max(1, viewRows.end - viewRows.start);
+		const rows = this.sheetGeometry.getRowsGeometry();
+		const row = this._stepVisible(rows, fromRow, direction, pageRows);
+		if (row === fromRow)
+			return row;
+
+		const col = app.calc.cellAddress.x;
+		const from = this.sheetGeometry.getCellSimpleRectangle(col, fromRow);
+		const to = this.sheetGeometry.getCellSimpleRectangle(col, row);
+		const layout = app.activeDocument.activeLayout;
+		const viewed = layout.viewedRectangle;
+		const target = new cool.SimplePoint(viewed.x1, viewed.y1 + to.y1 - from.y1);
+		layout.scrollTo(target.pX, target.pY);
+		return row;
+	},
+
+	/** Step a signed number of visible columns or rows. */
+	_stepSigned(dimension, index, steps) {
+		const direction =
+			steps > 0 ? cool.IndexDirection.Forward : cool.IndexDirection.Backward;
+		return this._stepVisible(dimension, index, direction, Math.abs(steps));
+	},
+
+	/**
+	 * Step a number of visible columns or rows, stopping at the last one.
+	 *
+	 * @param dimension {SheetDimension} The columns or the rows
+	 * @param index {number} The column or row to step from
+	 * @param direction {cool.IndexDirection} Which way to step
+	 * @param count {number} How many visible columns or rows to step
+	 * @returns {number} The column or row reached
+	 */
+	_stepVisible(dimension, index, direction, count) {
+		let result = index;
+		for (let left = count; left > 0; left--) {
+			const next = dimension.getNextVisibleIndex(result, direction);
+			if (next < 0)
+				break;
+
+			result = next;
+		}
+		return result;
+	},
+
+	/**
+	 * Put the cell cursor on a cell with nothing selected, and report it at
+	 * rest.
+	 */
+	_moveCellCursorTo(col, row) {
+		// Start from the first cell of the merged cell, if any.
+		const target = this._mergedCellRangeAt(col, row);
+		col = target[0];
+		row = target[1];
+
+		const address = app.calc.cellAddress;
+		const selected = this.hasCellSelection();
+		if (col === address.x && row === address.y && !selected)
+			return;
+
+		const cell = [col, row];
+		LocalCellCursor.moved({ part: this._selectedPart, cell: cell, anchor: null });
+		this.setCellCursor({ col: col, row: row });
+		if (selected)
+			this.setCellSelection([]); // clear the selection
+	},
+
+	/**
+	 * Select the cells from the cell cursor, the anchor, to a cell, and
+	 * report it at rest.
+	 */
+	_extendCellSelectionTo(col, row) {
+		const end = this._cellSelectionEnd();
+		if (!end || (col === end[0] && row === end[1]))
+			return;
+
+		const cursor = app.calc.cellAddress;
+		const anchor = [cursor.x, cursor.y];
+		const cell = [col, row];
+		const part = this._selectedPart;
+		let range = LocalCellCursor.rangeBetween(anchor, cell);
+		range = this._cellRangeMarkerSection.coverMergedCells(part, range);
+		LocalCellCursor.moved({ part: part, cell: cell, anchor: anchor });
+		this.setCellSelection([range]);
+		this._localCellSelection = { part: part, anchor: anchor, end: cell, range: range };
+	},
+
+	/**
+	 * Get the moving end of the selection i.e. the diagonally opposite
+	 * end of the anchor cell.  It equals the cell cursor position if no
+	 * selection is present.
+	 *
+	 * @note It returns null when there is more than one selected range,
+	 *     or the cursor is not at a corner.
+	 */
+	_cellSelectionEnd() {
+		const cursor = app.calc.cellAddress;
+		const anchor = [cursor.x, cursor.y];
+		const selections = this._cellSelections;
+		if (!selections.length)
+			return anchor;
+		if (selections.length > 1)
+			return null;
+
+		const range = this._rectangleToCellRange(selections[0]);
+
+		// Use the end kept from the selection made on the client, when that
+		// selection is still the one shown.
+		const local = this._localCellSelection;
+		if (local && local.part === this._selectedPart) {
+			const sameAnchor = LocalCellCursor.equalArrays(local.anchor, anchor);
+			const sameRange = LocalCellCursor.equalArrays(local.range, range);
+			if (sameAnchor && sameRange)
+				return local.end;
+		}
+
+		const anchorRange = this._mergedCellRangeAt(cursor.x, cursor.y);
+		return LocalCellCursor.selectionEnd(range, anchorRange);
+	},
+
+	/** Get the cells that a rectangle in tile twips covers, as a range. */
+	_rectangleToCellRange(rectangle) {
+		const start = new cool.Point(rectangle.pX1, rectangle.pY1);
+		const end = new cool.Point(rectangle.pX2 - 1, rectangle.pY2 - 1);
+		const startCell = this.sheetGeometry.getCellFromPos(start, 'corepixels');
+		const endCell = this.sheetGeometry.getCellFromPos(end, 'corepixels');
+		return [startCell.x, startCell.y, endCell.x, endCell.y];
 	},
 
 	/** Convert a cell range sent as [col1, row1, col2, row2] into cool.Bounds. */
@@ -238,6 +716,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this.refreshViewData(undefined, true /* compatDataSrcOnly */, false /* sheetGeometryChanged */);
 			this._replayPrintTwipsMsgAllViews('cellviewcursor');
 			this._replayPrintTwipsMsgAllViews('textviewselection');
+			this._replayPrintTwipsMsgAllViews('cellviewselection');
 			// Hide previous tab's shown comment (if any).
 			let section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
 			if (section) {
@@ -1150,7 +1629,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			app.calc.filterPopupCell = { 'popupId': e.state.popupId, 'row': e.state.row, 'column': e.state.column };
 		}
 		else if (e.commandName === 'CellRangeMarker') {
-			this._onCellRangeMarkerMsg(e.state);
+			if (!LocalCellCursor.isStale(e.inputSequence))
+				this._onCellRangeMarkerMsg(e.state);
 		}
 		else if (e.commandName === 'CellFormulaError') {
 			this._onCellFormulaError(e.state);
@@ -1285,6 +1765,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		} else if (values.commandName === '.uno:CellRangeInventory') {
 			this._onCellRangeInventoryMsg(values);
 
+		} else if (values.commandName === '.uno:CellCursorState') {
+			this._readInputSequence(textMsg, values);
+			this._onCellCursorStateReply(values);
+
 		} else if (values.commandName === '.uno:SheetGeometryData') {
 			var selectedHash = this._selectedPartHash();
 			if (values.hash !== undefined && selectedHash !== undefined &&
@@ -1363,8 +1847,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		this._gotFirstCellCursor = true;
 	},
 
-	_onCellCursorMsg: function (textMsg) {
-		window.L.CanvasTileLayer.prototype._onCellCursorMsg.call(this, textMsg);
+	setCellCursor(cell) {
+		if (cell && !cell.area) {
+			const cellRange = this._mergedCellRangeAt(cell.col, cell.row);
+			cell.area = this._cellRangeToRectangle(cellRange);
+		}
+
+		window.L.CanvasTileLayer.prototype.setCellCursor.call(this, cell);
 		this._refreshRowColumnHeaders();
 		if (!this._gotFirstCellCursor) {
 			this.allowDrawing();

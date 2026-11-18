@@ -469,6 +469,7 @@ COOL_JS_LST =\
 	src/app/RequestTracker.ts \
 	src/app/ChangeOutbox.ts \
 	src/app/LocalCaret.ts \
+	src/app/LocalCellCursor.ts \
 	src/app/ViewLayoutWriter.ts \
 	src/app/ViewLayoutCalc.ts \
 	src/app/ViewLayoutMultiPage.ts \

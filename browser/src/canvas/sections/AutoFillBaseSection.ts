@@ -186,7 +186,17 @@ class AutoFillBaseSection extends CanvasSectionObject {
 	// Whether the fill area this marker drags is currently shown. Subclasses that
 	// drive a different fill area override this.
 	protected isFillAreaVisible(): boolean {
-		return !!this.sectionProperties.docLayer._cellAutoFillAreaPixels;
+		const docLayer = this.sectionProperties.docLayer;
+
+		// The engine reports no fill area to a view that moves the cell
+		// cursor locally.
+		if (LocalCellCursor.isEnabled()) {
+			// The marker can fill whenever it is shown and no cell is edited.
+			const editing = docLayer.insertMode && app.file.textCursor.visible;
+			return this.isSectionShown() && !editing;
+		}
+
+		return !!docLayer._cellAutoFillAreaPixels;
 	}
 
 	// MouseControl decides between panning the view and posting to the engine from
@@ -262,7 +272,7 @@ class AutoFillBaseSection extends CanvasSectionObject {
 			this.size[0] * 0.5,
 			this.size[1] * 0.5,
 		]);
-		this.getMouseControl().onMouseDown(
+		this.getMouseControl().onMouseDownForEngine(
 			this.toMouseControlPoint(center),
 			this.asMouseEvent(e),
 		);

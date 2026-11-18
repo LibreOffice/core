@@ -33,8 +33,10 @@ class MouseControl extends CanvasSectionObject {
 	localPositionOnMouseDown: cool.SimplePoint | null = null;
 	mouseDownSent: boolean = false;
 
-	/// True while a drag selects text here, without the server.
-	private selectingText: boolean = false;
+	/// What a drag selects here, without the server, if anything.
+	private selecting: MouseControl.Selecting = MouseControl.Selecting.Nothing;
+	/// Whether the press came from a section whose drag the engine handles.
+	private pressForEngine: boolean = false;
 	// the cell of a table a drag that selects cells started in, and the one it reached last;
 	// null while no such drag runs
 	private cellsFrom: { column: number; row: number } | null = null;
@@ -541,31 +543,33 @@ class MouseControl extends CanvasSectionObject {
 			}
 			// A drag in the edited cell of a table that reaches another cell selects cells.
 			else if (this.selectCellsByDrag()) {
-				point.pX += this.position[0];
-				point.pY += this.position[1];
-				app.map.fire('handleautoscroll', {
-					pos: { x: point.cX, y: point.cY },
-					map: app.map,
-				});
+				this.autoscrollNear(point);
 				app.idleHandler.notifyActive();
 				return;
 			}
 			// A drag that starts in the text being edited selects the text here, while it stays
 			// in that text.
 			else if (
-				(this.selectingText || this.startSelectingText()) &&
+				(this.selecting === MouseControl.Selecting.Text ||
+					this.startSelectingText()) &&
 				this.keepsSelectingText()
 			) {
-				point.pX += this.position[0];
-				point.pY += this.position[1];
-				app.map.fire('handleautoscroll', {
-					pos: { x: point.cX, y: point.cY },
-					map: app.map,
-				});
+				this.autoscrollNear(point);
 				RenderManager.dragTextTo(
 					this.currentPosition.x,
 					this.currentPosition.y,
 				);
+				app.idleHandler.notifyActive();
+				return;
+			}
+			// A drag that starts on a cell selects the cells here, where the client moves
+			// the cell cursor itself.
+			else if (
+				this.selecting === MouseControl.Selecting.Cells ||
+				this.startSelectingCells()
+			) {
+				this.autoscrollNear(point);
+				app.map._docLayer.selectCellsTo(this.currentPosition);
 				app.idleHandler.notifyActive();
 				return;
 			}
@@ -588,16 +592,7 @@ class MouseControl extends CanvasSectionObject {
 				this.mouseDownSent = true;
 			}
 
-			// Autoscroll toward whichever viewport edge the pointer is near,
-			// whether it is just inside that edge or already past it. The handler
-			// gives zero velocity and stops autoscroll when the pointer is not near
-			// an edge, so a pointer resting in the middle does not scroll.
-			point.pX += this.position[0];
-			point.pY += this.position[1];
-			app.map.fire('handleautoscroll', {
-				pos: { x: point.cX, y: point.cY },
-				map: app.map,
-			});
+			this.autoscrollNear(point);
 
 			this.postCoreMouseEvent(
 				'move',
@@ -768,7 +763,7 @@ class MouseControl extends CanvasSectionObject {
 		this.cellsFrom = null;
 		this.cellsTo = null;
 		this.hideShapeDragPreview();
-		this.stopSelectingText();
+		this.stopSelecting();
 		this.mouseDownSent = false;
 		this.positionOnMouseDown = null;
 		this.lastDragLocalPoint = null;
@@ -790,7 +785,10 @@ class MouseControl extends CanvasSectionObject {
 	// a different document position. Recompute that position from the unchanged
 	// screen point and re-send the drag move so the selection follows the view.
 	public onNewDocumentTopLeft(): void {
-		if (this.selectingText && this.lastDragLocalPoint) {
+		if (
+			this.selecting === MouseControl.Selecting.Text &&
+			this.lastDragLocalPoint
+		) {
 			this.refreshPosition(this.lastDragLocalPoint);
 			if (this.keepsSelectingText()) {
 				RenderManager.dragTextTo(
@@ -819,6 +817,15 @@ class MouseControl extends CanvasSectionObject {
 			return;
 		}
 
+		if (
+			this.selecting === MouseControl.Selecting.Cells &&
+			this.lastDragLocalPoint
+		) {
+			this.refreshPosition(this.lastDragLocalPoint);
+			app.map._docLayer.selectCellsTo(this.currentPosition);
+			return;
+		}
+
 		if (!this.mouseDownSent || !this.lastDragLocalPoint) return;
 
 		this.refreshPosition(this.lastDragLocalPoint);
@@ -832,7 +839,17 @@ class MouseControl extends CanvasSectionObject {
 		);
 	}
 
+	/**
+	 * Take a press from another section, such as the fill handle, and leave
+	 * its drag to the engine.
+	 */
+	public onMouseDownForEngine(point: cool.SimplePoint, e: MouseEvent): void {
+		this.onMouseDown(point, e);
+		this.pressForEngine = true;
+	}
+
 	onMouseDown(point: cool.SimplePoint, e: MouseEvent): void {
+		this.pressForEngine = false;
 		// a drag selection whose release never arrived, let go outside the window, ends unused
 		this.stopTheDragSelect(false);
 		this.refreshPosition(point);
@@ -861,7 +878,7 @@ class MouseControl extends CanvasSectionObject {
 
 		this.stopCarrying(true);
 		this.stopTheDragSelect(true);
-		this.stopSelectingText();
+		this.stopSelecting();
 		this.cellsFrom = null;
 		this.cellsTo = null;
 
@@ -1057,12 +1074,13 @@ class MouseControl extends CanvasSectionObject {
 		if (!press || this.mouseDownSent || this.modifierOnMouseDown !== 0)
 			return false;
 		if (!MouseControl.editsTextHere()) return false;
-		this.selectingText = RenderManager.startTextDrag(
+		const started = RenderManager.startTextDrag(
 			press.x,
 			press.y,
 			MouseControl.textAt(press.x, press.y),
 		);
-		return this.selectingText;
+		if (started) this.selecting = MouseControl.Selecting.Text;
+		return started;
 	}
 
 	/*
@@ -1086,11 +1104,11 @@ class MouseControl extends CanvasSectionObject {
 		);
 
 		if (!this.cellsFrom) {
-			if (!this.selectingText || !now) return false;
+			if (this.selecting !== MouseControl.Selecting.Text || !now) return false;
 			const from = ClassicTableContext.cellAt(table, press.x, press.y);
 			if (!from || (from.column === now.column && from.row === now.row))
 				return false;
-			this.stopSelectingText();
+			this.stopSelecting();
 			this.cellsFrom = from;
 		}
 
@@ -1147,16 +1165,68 @@ class MouseControl extends CanvasSectionObject {
 	private keepsSelectingText(): boolean {
 		const point = this.currentPosition;
 		if (!RenderManager.textDragLeavesItsText(point.x, point.y)) return true;
-		this.stopSelectingText();
+		this.stopSelecting();
 		return false;
 	}
 
-	private stopSelectingText(): void {
-		if (!this.selectingText) return;
-		this.selectingText = false;
+	/**
+	 * Start a range selection of cells where the pressed cell becomes the
+	 * anchor.  This is Calc only.
+	 */
+	private startSelectingCells(): boolean {
+		if (!app.map._docLayer.isCalc() || this.pressForEngine) return false;
+
+		const pressedAt = this.positionOnMouseDown;
+		if (!pressedAt || this.mouseDownSent || this.modifierOnMouseDown !== 0)
+			return false;
+
+		const started = app.map._docLayer.selectCellsFrom(pressedAt);
+		if (started) this.selecting = MouseControl.Selecting.Cells;
+
+		return started;
+	}
+
+	/// Ends a drag that selects here, if one runs.
+	private stopSelecting(): void {
+		const selecting = this.selecting;
+		if (selecting === MouseControl.Selecting.Nothing) return;
+		this.selecting = MouseControl.Selecting.Nothing;
 		// The drag was scrolling the view while it reached past the edge.
 		app.map.fire('scrollvelocity', { vx: 0, vy: 0 });
-		RenderManager.endTextDrag();
+		if (selecting === MouseControl.Selecting.Text) RenderManager.endTextDrag();
+	}
+
+	/**
+	 * Extend the range selection to the cell at point, in core pixels, when
+	 * buttons and modifier make the click a Shift+click.
+	 *
+	 * @returns True when the action is complete here so that the click is
+	 *          not to be sent to the engine, otherwise False.
+	 */
+	private selectCellsAt(
+		point: cool.SimplePoint,
+		buttons: number,
+		modifier: number,
+	): boolean {
+		if (!app.map._docLayer.isCalc()) return false;
+		if (buttons !== app.LOButtons.left || modifier !== app.UNOModifier.SHIFT)
+			return false;
+		return app.map._docLayer.selectCellsTo(point);
+	}
+
+	/**
+	 * Scroll the view toward the edge that the point, which is in the
+	 * section coordinate, is near or past. The handler stops the scroll
+	 * when the point is away from edge.
+	 */
+	private autoscrollNear(point: cool.SimplePoint): void {
+		// Translate point to the canvas coordinate.
+		point.pX += this.position[0];
+		point.pY += this.position[1];
+		app.map.fire('handleautoscroll', {
+			pos: { x: point.cX, y: point.cY },
+			map: app.map,
+		});
 	}
 
 	/// Puts the caret where a plain left click lands in the edited text, without the server.
@@ -1311,7 +1381,8 @@ class MouseControl extends CanvasSectionObject {
 			if (
 				!this.selectCellsByShiftClick(sendingPosition, buttons, modifier) &&
 				!this.selectObjectAt(sendingPosition, buttons, modifier) &&
-				!this.placeCaretAt(sendingPosition, buttons, modifier)
+				!this.placeCaretAt(sendingPosition, buttons, modifier) &&
+				!this.selectCellsAt(sendingPosition, buttons, modifier)
 			)
 				this.sendClick(clickInfo, 1);
 
@@ -1439,5 +1510,14 @@ class MouseControl extends CanvasSectionObject {
 				htmlText,
 			);
 		}
+	}
+}
+
+namespace MouseControl {
+	/// What a drag selects on the client, without the engine.
+	export enum Selecting {
+		Nothing,
+		Text,
+		Cells,
 	}
 }

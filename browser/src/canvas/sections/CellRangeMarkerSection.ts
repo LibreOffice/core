@@ -127,6 +127,37 @@ class CellRangeMarkerSection extends CanvasSectionObject {
 		return mergedCell ?? null;
 	}
 
+	/**
+	 * Extend a cell range of a sheet, as [startCol, startRow, endCol, endRow],
+	 * to account for every merged cell that it touches.
+	 */
+	public coverMergedCells(part: number, cellRange: number[]): number[] {
+		const ranges: SheetCellRanges | undefined =
+			this.sectionProperties.sheetCellRanges.get(part);
+		if (!ranges) return cellRange;
+
+		// Growing over one merged cell may reach another one.
+		const covered = new cool.Bounds(
+			new cool.Point(cellRange[0], cellRange[1]),
+			new cool.Point(cellRange[2], cellRange[3]),
+		);
+
+		// NB: This can potentially become a bottleneck when the number of
+		// merged cell areas grows.
+		for (let extended = true; extended;) {
+			extended = false;
+			for (const mergedCell of ranges.mergedCells) {
+				if (!covered.intersects(mergedCell)) continue;
+				if (covered.contains(mergedCell)) continue;
+
+				covered.extend(mergedCell.min);
+				covered.extend(mergedCell.max);
+				extended = true;
+			}
+		}
+		return [covered.min.x, covered.min.y, covered.max.x, covered.max.y];
+	}
+
 	// Get the sparkline group of a sheet whose ranges contain the cell cursor, if any.
 	private getSparklineGroupAtCursor(part: number): cool.Bounds[] | undefined {
 		const ranges: SheetCellRanges | undefined =

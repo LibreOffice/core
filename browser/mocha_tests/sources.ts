@@ -65,6 +65,7 @@
 /// <reference path="../src/app/RequestTracker.ts" />
 /// <reference path="../src/app/ChangeOutbox.ts" />
 /// <reference path="../src/app/LocalCaret.ts" />
+/// <reference path="../src/app/LocalCellCursor.ts" />
 /// <reference path="../src/app/ViewLayoutCalc.ts" />
 /// <reference path="../src/app/ViewLayoutMultiPage.ts" />
 /// <reference path="../src/app/ViewLayoutFileBased.ts" />

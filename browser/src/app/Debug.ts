@@ -94,6 +94,7 @@ class DebugManager {
 	public renderGeometryOn: boolean;
 	public vectorOn: boolean;
 	public predictedCaretOn: boolean;
+	public localCellCursorOn: boolean;
 
 	public tileInvalidationsOn: boolean;
 	private _tileInvalidationMessages: Map<number, string>;
@@ -177,6 +178,8 @@ class DebugManager {
 		this.messageDelayOn = startingRoundTrip > 0;
 		if (this.messageDelayOn) this._messageDelayMs = startingRoundTrip / 2;
 		this.predictedCaretOn = false;
+		this.localCellCursorOn =
+			window.coolParams.get('localcellcursor') === 'true';
 	}
 
 	public toggle(): void {
@@ -537,6 +540,25 @@ class DebugManager {
 				},
 				onRemove: function () {
 					self.predictedCaretOn = false;
+				},
+			});
+
+		// The arrow, Tab and page keys move the cell cursor on the
+		// client, which reports it to the engine.
+		if (docType === 'spreadsheet')
+			this._addDebugTool({
+				name: 'Local cell cursor',
+				category: 'Functionality',
+				startsOn: self.localCellCursorOn,
+				keepOnClose: true,
+				onAdd: function () {
+					self.localCellCursorOn = true;
+					LocalCellCursor.reportMode(true);
+				},
+				onRemove: function () {
+					self.localCellCursorOn = false;
+					LocalCellCursor.report();
+					LocalCellCursor.reportMode(false);
 				},
 			});
 

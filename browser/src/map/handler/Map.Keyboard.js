@@ -7,7 +7,7 @@
  * at TextInput.
  */
 
-/* global app UNOKey RenderManager GraphicSelection JSDialog URLPopUpSection Interaction */
+/* global app cool UNOKey RenderManager GraphicSelection JSDialog URLPopUpSection Interaction */
 
 window.L.Map.mergeOptions({
 	keyboard: true,
@@ -306,6 +306,10 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		this._heldKeysMoveCaretHere = new Map();
 		// The held keys whose press switched the slide here. Their release stays here too.
 		this._heldKeysSwitchPartHere = new Set();
+		// For each held key, whether every press since it was last
+		// released moved the cell cursor here. The release of such a
+		// key stays here too.
+		this._heldKeysMoveCellCursorHere = new Map();
 		window.KeyboardShortcuts.initialize(map);
 	},
 
@@ -919,6 +923,9 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				if (this._pressSwitchesPartHere(ev, keyCode)) {
 					ev.preventDefault();
 				}
+				else if (this._pressMovesCellCursorHere(ev, keyCode)) {
+					ev.preventDefault();
+				}
 				else if (this._pressMovesCaretHere(ev, keyCode)) {
 					ev.preventDefault();
 				}
@@ -960,9 +967,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			}
 			else if (ev.type === 'keyup') {
 				const releaseStaysHere = this._heldKeysMoveCaretHere.get(keyCode) === true ||
-					this._heldKeysSwitchPartHere.has(keyCode);
+					this._heldKeysSwitchPartHere.has(keyCode) ||
+					this._heldKeysMoveCellCursorHere.get(keyCode) === true;
 				this._heldKeysMoveCaretHere.delete(keyCode);
 				this._heldKeysSwitchPartHere.delete(keyCode);
+				this._heldKeysMoveCellCursorHere.delete(keyCode);
 				if (!releaseStaysHere &&
 				    ((this.handleOnKeyDownKeys[keyCode] && charCode === 0) ||
 				    (this.modifier) ||
@@ -1010,6 +1019,93 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		const held = this._heldKeysMoveCaretHere;
 		held.set(keyCode, here && held.get(keyCode) !== false);
 		return here;
+	},
+
+	/**
+	 * Move the cell cursor here for the press of a key that the client
+	 * handles, and note for the release whether the server saw a press of
+	 * the key.
+	 */
+	_pressMovesCellCursorHere(ev, keyCode) {
+		const here = this._moveCellCursorHere(ev, keyCode);
+		const held = this._heldKeysMoveCellCursorHere;
+		held.set(keyCode, here && held.get(keyCode) !== false);
+		return here;
+	},
+
+	/**
+	 * Move the cell cursor here for a plain arrow key, Tab, Shift+Tab,
+	 * PageUp or PageDown in a spreadsheet. True when the key was taken
+	 * here.
+	 */
+	_moveCellCursorHere(ev, keyCode) {
+		if (ev.type !== 'keydown' || ev.isComposing)
+			return false;
+		if (this._map.getDocType() !== 'spreadsheet' || this._map.getWinId() !== 0)
+			return false;
+
+		const shift = this.modifier === app.UNOModifier.SHIFT;
+		if (this.modifier !== 0 && !shift)
+			return false;
+
+		const docLayer = this._map._docLayer;
+		if (!docLayer.canMoveCellCursorHere())
+			return false;
+
+		let colSteps = 0;
+		let rowSteps = 0;
+		let page = null;
+		switch (keyCode) {
+		case this.keyCodes.LEFT:
+			colSteps = -1;
+			break;
+		case this.keyCodes.RIGHT:
+			colSteps = 1;
+			break;
+		case this.keyCodes.UP:
+			rowSteps = -1;
+			break;
+		case this.keyCodes.DOWN:
+			rowSteps = 1;
+			break;
+		case this.keyCodes.TAB:
+			colSteps = shift ? -1 : 1;
+			break;
+		case this.keyCodes.PAGEUP:
+			page = cool.IndexDirection.Backward;
+			break;
+		case this.keyCodes.PAGEDOWN:
+			page = cool.IndexDirection.Forward;
+			break;
+		default:
+			return false;
+		}
+
+		// Tab moves the cursor within a selected range, which only the
+		// engine knows how to do.
+		if (keyCode === this.keyCodes.TAB) {
+			if (docLayer.hasCellSelection())
+				return false;
+			docLayer.moveCellCursorHere(colSteps, rowSteps);
+			return true;
+		}
+
+		// Shift extends the selection from its moving end.
+		if (shift) {
+			if (!docLayer.canExtendCellSelectionHere())
+				return false;
+			if (page !== null)
+				docLayer.pageCellSelectionHere(page);
+			else
+				docLayer.extendCellSelectionHere(colSteps, rowSteps);
+			return true;
+		}
+
+		if (page !== null)
+			docLayer.pageCellCursorHere(page);
+		else
+			docLayer.moveCellCursorHere(colSteps, rowSteps);
+		return true;
 	},
 
 	// Switches to the slide before or after for a plain PageUp or PageDown, in a presentation or

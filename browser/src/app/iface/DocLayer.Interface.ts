@@ -44,6 +44,9 @@ interface DocLayerInterface {
 	/// Drops the tiles that are held and asks for the ones the view needs now.
 	_requestNewTiles(): void;
 
+	/// Notifies the engine of the options of this view, which a new view starts without.
+	reportViewOptions(): void;
+
 	isCalc(): boolean;
 	isWriter(): boolean;
 	isImpress(): boolean;
@@ -80,9 +83,13 @@ interface DocLayerInterface {
 		tileWidthTwips: number;
 	};
 
+	// Spreadsheet only
 	sheetGeometry?: cool.SheetGeometry;
 	_cellSelectionArea?: cool.SimpleRectangle | null;
 	showTextSelection(rawRectangles: number[][]): void;
+	selectCellsFrom(position: cool.SimplePoint): boolean;
+	selectCellsTo(position: cool.SimplePoint): boolean;
+
 	// True while the selection of the edited formula is the reference last picked into it.
 	isPickingFormulaReference(): boolean;
 	// The references of the edited formula on the shown sheet, the rectangle in tile twips. The

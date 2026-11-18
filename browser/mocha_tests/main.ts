@@ -109,6 +109,7 @@
 /// <reference path="./CalcBlockUpdate.test.ts" />
 /// <reference path="./CalcBlockPlacement.test.ts" />
 /// <reference path="./CalcVectorManager.test.ts" />
+/// <reference path="./LocalCellCursor.test.ts" />
 /// <reference path="./CellRangeMarkerSection.test.ts" />
 /// <reference path="./ChangeOutbox.test.ts" />
 /// <reference path="./RenderGeometrySection.test.ts" />

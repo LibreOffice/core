@@ -244,6 +244,9 @@ class Socket {
 		// it.
 		if (typeof msg === 'string') msg = LocalCaret.tellBefore(msg);
 
+		// So does a cell cursor moved here.
+		if (typeof msg === 'string') msg = LocalCellCursor.reportBefore(msg);
+
 		// The changes of objects, undos, redos and typed text of a view drawn from the
 		// objects go to the engine at its pace through the outbox, which sends its text
 		// ahead of a message that follows it.
@@ -673,6 +676,9 @@ class Socket {
 				cool.InputSequence.forget();
 				app.setCursorVisibility(false);
 			}
+			// The new session starts with the engine's cursor.
+			if (this._map._docLayer._docType === 'spreadsheet')
+				LocalCellCursor.forget();
 
 			this._map._docLayer._resetCanonicalIdStatus();
 			this._map._docLayer._resetViewId();
@@ -1206,6 +1212,8 @@ class Socket {
 				// A new view reports the mouse pointer until it is told not to.
 				if (RenderGeometrySection.answersPointer())
 					RenderGeometrySection.requestPointerFromServer(false);
+
+				this._map._docLayer.reportViewOptions();
 			}
 			this._map.setPermission(app.file.permission);
 			this.endMigration();
