@@ -142,28 +142,28 @@ sal_uInt64 entryIdOf(const SdrObject& rObject)
 
 sal_uInt64 tableBordersEntryIdOf(const SwFrame& rTable)
 {
-    // Above the frame ids and the ids of drawing objects, which stay far below 2^40.
-    return (sal_uInt64(1) << 40) + rTable.GetFrameId();
+    // Above the frame ids and the ids of drawing objects, which stay far below one step.
+    return constEntryIdStep + rTable.GetFrameId();
 }
 
 sal_uInt64 bordersEntryIdOf(const SwFrame& rFrame)
 {
-    // From 2 * 2^40 up, above the ids of table border entries, which stay below 2^40 + 2^32.
-    return (sal_uInt64(2) << 40) + rFrame.GetFrameId();
+    // From 2 steps up, above the ids of table border entries, which stay below 1 step + 2^32.
+    return 2 * constEntryIdStep + rFrame.GetFrameId();
 }
 
 sal_uInt64 backgroundEntryIdOf(const SwFrame& rFrame)
 {
-    // The ids start at 4 * 2^40. The ids of border entries stay below 2 * 2^40 + 2^32, and the
-    // range from 3 * 2^40 up holds the keys the page entries are recorded under.
-    return (sal_uInt64(4) << 40) + rFrame.GetFrameId();
+    // The ids start at 4 steps. The ids of border entries stay below 2 steps + 2^32, and the
+    // range from 3 steps up holds the keys the page entries are recorded under.
+    return 4 * constEntryIdStep + rFrame.GetFrameId();
 }
 
 sal_uInt64 overContentEntryIdOf(const SwFrame& rFrame)
 {
-    // The ids start at 5 * 2^40, above the ids of background entries, which stay below
-    // 4 * 2^40 + 2^32.
-    return (sal_uInt64(5) << 40) + rFrame.GetFrameId();
+    // The ids start at 5 steps, above the ids of background entries, which stay below
+    // 4 steps + 2^32.
+    return 5 * constEntryIdStep + rFrame.GetFrameId();
 }
 
 void Collector::open(const SwFrame& rFrame)

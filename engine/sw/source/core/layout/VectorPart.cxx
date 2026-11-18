@@ -48,7 +48,7 @@ bool sameDrawing(const Entry& rOne, const Entry& rOther)
 /// it is filed under the page.
 sal_uInt64 recordKeyOf(sal_uInt64 nId, const SwPageFrame& rPage)
 {
-    return nId == constPageEntryId ? (sal_uInt64(3) << 40) + rPage.GetFrameId() : nId;
+    return nId == constPageEntryId ? 3 * constEntryIdStep + rPage.GetFrameId() : nId;
 }
 
 bool samePlace(const Entry& rOne, const SwRect& rOneBox, const Entry& rOther,

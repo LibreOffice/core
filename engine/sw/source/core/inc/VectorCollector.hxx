@@ -73,6 +73,11 @@ constexpr sal_uInt64 constPageEntryId = 0;
 /// start above them.
 SW_DLLPUBLIC sal_uInt64 entryIdOf(const SdrObject& rObject);
 
+/// The step between the id ranges of the entries a frame makes besides its own. Such an id is the
+/// frame id plus a multiple of the step, so in decimal the frame id reads in its last digits. The
+/// step is above every frame id and every id of a drawing object.
+constexpr sal_uInt64 constEntryIdStep = 1'000'000'000'000;
+
 /// The id of the entry holding the border lines a table draws over its cells.
 SW_DLLPUBLIC sal_uInt64 tableBordersEntryIdOf(const SwFrame& rTable);
 
