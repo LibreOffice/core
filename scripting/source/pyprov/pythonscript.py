@@ -33,7 +33,8 @@ from com.sun.star.uri.RelativeUriExcessParentSegments import RETAIN
 from com.sun.star.uno import RuntimeException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.container import NoSuchElementException
-from com.sun.star.ucb import XCommandEnvironment, XProgressHandler, Command
+from com.sun.star.ucb import XCommandEnvironment, XProgressHandler, Command, InteractiveIOException
+from com.sun.star.ucb.IOErrorCode import NOT_EXISTING
 from com.sun.star.task import XInteractionHandler
 from com.sun.star.beans import XPropertySet, Property
 from com.sun.star.container import XNameContainer
@@ -42,6 +43,8 @@ from com.sun.star.uno import Exception as UnoException
 from com.sun.star.awt import XActionListener
 
 from com.sun.star.script.provider import XScriptProvider, XScript, ScriptFrameworkErrorException
+from com.sun.star.script.provider import ScriptMissingException
+from com.sun.star.script.provider.ScriptFrameworkErrorType import NO_SUCH_SCRIPT
 from com.sun.star.script.browse import XBrowseNode, XCreatableBrowseNode, XCopyableBrowseNode
 from com.sun.star.script.browse import XEditableBrowseNode
 from com.sun.star.script.browse.BrowseNodeTypes import SCRIPT, CONTAINER
@@ -1255,6 +1258,48 @@ class PythonScriptProvider(unohelper.Base, XBrowseNode, XScriptProvider, XNameCo
                 arguments = tuple([x.strip().strip('"') for x in arguments.split(",")])
         return function_name, arguments
 
+    def raiseScriptMissing(self, scriptUri):
+        split = scriptUri.find(':')
+        if split == -1:
+            path = scriptUri
+        else:
+            path = scriptUri[split + 1:]
+
+        split = path.find('$')
+        if split == -1:
+            funcName = ""
+        else:
+            funcName = path[split + 1:]
+            path = path[0:split]
+            split = funcName.find('?')
+            if split != -1:
+                funcName = funcName[0:split]
+
+        parts = path.split('|')
+
+        try:
+            library = parts[-1].removesuffix('.py')
+        except IndexError:
+            library = ""
+
+        try:
+            outer = parts[-2]
+        except IndexError:
+            module = ""
+        else:
+            module = library
+            library = outer
+
+        raise ScriptMissingException("An invoked script is missing",
+                                     self,
+                                     scriptUri,
+                                     LANGUAGENAME,
+                                     NO_SUCH_SCRIPT,
+                                     self.provCtx.storageType,
+                                     library,
+                                     module,
+                                     funcName)
+
     def getScript(self, scriptUri):
         try:
             log.debug("getScript " + scriptUri + " invoked")
@@ -1269,13 +1314,24 @@ class PythonScriptProvider(unohelper.Base, XBrowseNode, XScriptProvider, XNameCo
             log.debug(" getScript : parsed funcname " + str(funcName))
             log.debug(" getScript : func args " + str(funcArgs))
 
-            mod = self.provCtx.getModuleByUrl(fileUri)
+            try:
+                mod = self.provCtx.getModuleByUrl(fileUri)
+            except InteractiveIOException as e:
+                if e.Code == NOT_EXISTING:
+                    self.raiseScriptMissing(scriptUri)
+                else:
+                    raise
             log.debug(" got mod " + str(mod))
 
-            func = mod.__dict__[funcName]
+            try:
+                func = mod.__dict__[funcName]
+            except KeyError:
+                self.raiseScriptMissing(scriptUri)
 
             log.debug("got func " + str(func))
             return PythonScript(func, mod, funcArgs)
+        except ScriptMissingException:
+            raise
         except Exception:
             text = lastException2String()
             log.error(text)

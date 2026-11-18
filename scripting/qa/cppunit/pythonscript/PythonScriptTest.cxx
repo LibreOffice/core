@@ -17,7 +17,9 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/XCopyableBrowseNode.hpp>
+#include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/script/provider/ScriptURIHelper.hpp>
+#include <com/sun/star/script/provider/ScriptMissingException.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
@@ -43,9 +45,11 @@ private:
     void createDummyMacro();
 
     void testCopyable();
+    void testMissingScript();
 
     CPPUNIT_TEST_SUITE(PythonScriptTest);
     CPPUNIT_TEST(testCopyable);
+    CPPUNIT_TEST(testMissingScript);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -191,6 +195,63 @@ void PythonScriptTest::testCopyable()
     // Check that we can load the script. This should also end up checking that the contents of the
     // file contains the macro.
     CPPUNIT_ASSERT(m_xScriptProvider->getScript(sURI).is());
+}
+
+void PythonScriptTest::testMissingScript()
+{
+    static constexpr OUString sDummyMacroUri = u"vnd.sun.star.script:MyLibrary|MyScript.py$MyMacro?"
+                                               "language=Python&location=user"_ustr;
+
+    // Try opening the macro before it exists. This should throw the missing script exception
+    try
+    {
+        m_xScriptProvider->getScript(sDummyMacroUri);
+    }
+    catch (const css::script::provider::ScriptMissingException& e)
+    {
+        CPPUNIT_ASSERT_EQUAL(sDummyMacroUri, e.scriptName);
+        CPPUNIT_ASSERT_EQUAL(u"Python"_ustr, e.language);
+        CPPUNIT_ASSERT_EQUAL(css::script::provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT,
+                             e.errorType);
+        CPPUNIT_ASSERT_EQUAL(u"user"_ustr, e.location);
+        CPPUNIT_ASSERT_EQUAL(u"MyLibrary"_ustr, e.library);
+        CPPUNIT_ASSERT_EQUAL(u"MyScript"_ustr, e.moduleName);
+        CPPUNIT_ASSERT_EQUAL(u"MyMacro"_ustr, e.name);
+        goto exception_caught;
+    }
+
+    CPPUNIT_FAIL("ScriptMissingException not thrown");
+
+exception_caught:
+
+    createDummyMacro();
+
+    // After creating the macro no exception should be thrown
+    CPPUNIT_ASSERT(m_xScriptProvider->getScript(sDummyMacroUri).is());
+
+    // Try accessing a non-existant function within the script
+    OUString sBadFuncUri = sDummyMacroUri.replaceFirst("MyMacro", "MyNonExistantMacro");
+
+    try
+    {
+        m_xScriptProvider->getScript(sBadFuncUri);
+    }
+    catch (const css::script::provider::ScriptMissingException& e)
+    {
+        CPPUNIT_ASSERT_EQUAL(sBadFuncUri, e.scriptName);
+        CPPUNIT_ASSERT_EQUAL(u"Python"_ustr, e.language);
+        CPPUNIT_ASSERT_EQUAL(css::script::provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT,
+                             e.errorType);
+        CPPUNIT_ASSERT_EQUAL(u"user"_ustr, e.location);
+        CPPUNIT_ASSERT_EQUAL(u"MyLibrary"_ustr, e.library);
+        CPPUNIT_ASSERT_EQUAL(u"MyScript"_ustr, e.moduleName);
+        CPPUNIT_ASSERT_EQUAL(u"MyNonExistantMacro"_ustr, e.name);
+        goto exception_caught2;
+    }
+
+    CPPUNIT_FAIL("ScriptMissingException not thrown");
+
+exception_caught2:;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PythonScriptTest);
