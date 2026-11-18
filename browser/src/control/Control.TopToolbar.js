@@ -133,9 +133,11 @@ class TopToolbar extends JSDialog.Toolbar {
 
 	updateDocumentFileMenu() {
 		var entries = [{id: 'showmenubar', action: 'showmenubar', text: _('Show Menu Bar'), focusHandled: true}];
-		if (!window.mode.isCODesktop()) {
+		if (!window.detect(window.features.backstage)) {
 			var fileEntries = this.map.menubar ? this.map.menubar.getFileMenuEntries() : [];
 			entries = entries.concat([{type: 'separator'}], fileEntries);
+		}
+		if (!window.mode.isCODesktop()) {
 			var wopi = this.map['wopi'] || {};
 			var fileName = wopi.BreadcrumbDocName || wopi.BaseFileName;
 			if (fileName)

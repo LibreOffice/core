@@ -891,7 +891,7 @@ class UIManager extends window.L.Control {
 	}
 
 	initializeBackstageView(): void {
-		if (!window.mode.isCODesktop())
+		if (!window.detect(window.features.backstage))
 			return;
 
 		if (!this.map.backstageView) {
@@ -957,7 +957,7 @@ class UIManager extends window.L.Control {
 			// makeSpaceForNotebookbar call in onUpdatePermission
 		}
 
-		if (window.mode.isCODesktop()) {
+		if (window.detect(window.features.backstage)) {
 			if (!this.map.backstageView) {
 				this.map.backstageView = new window.L.Control.BackstageView(this.map);
 				console.log('UIManager: BackstageView created and attached to map');

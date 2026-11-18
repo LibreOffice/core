@@ -2201,7 +2201,7 @@ class Menubar extends window.L.Control {
 			$mainMenuState[0].click();
 		}
 
-		if (menu?.parentElement?.id === 'menu-file' && window.mode.isCODesktop() && app.map.backstageView)
+		if (menu?.parentElement?.id === 'menu-file' && window.detect(window.features.backstage) && app.map.backstageView)
 			app.map.backstageView.toggle();
 
 		// SmartMenus fires this handler before itemClick re-checks the submenu's
@@ -2973,11 +2973,10 @@ class Menubar extends window.L.Control {
 			}
 
 			/**!
-			 * Only the desktop applications have a backstage view.
-			 * Everywhere else the icon asks the integration to create
-			 * a file of the same type.
+			 * If there's no backstage view, we ask the integrator to create a document
+			 * of the same type...
 			 */
-			if (window.mode.isCODesktop())
+			if (window.detect(window.features.backstage))
 				app.LOUtil.openTemplatesFromDocumentLogo(aItem, this._map);
 			else
 				aItem.addEventListener('click', () => this._createDocument());
@@ -3382,8 +3381,8 @@ class Menubar extends window.L.Control {
 	 */
 	private _initializeMenu(menu: any[]): void {
 		this._isFileODF = app.LOUtil.isFileODF(this._map);
-		if (window.mode.isCODesktop()) {
-			// In the desktop apps the File entry only opens the backstage view
+		if (window.detect(window.features.backstage)) {
+			// With the backstage feature, the File entry only opens the backstage view
 			// (see _onClicked), so build it without its dropdown menu: that
 			// was otherwise still reachable with keyboard navigation between
 			// the top-level menus, where no click is involved.

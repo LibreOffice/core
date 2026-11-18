@@ -277,8 +277,8 @@ var NotebookbarAccessibility = function() {
 
 					this.removeFocusFromTab();
 					element.click();
-					var isFileTabForCoda = (element.id === 'File-tab-label' || element.id === 'File') && window.mode.isCODesktop();
-					if (isFileTabForCoda || (app.map && app.map.backstageView && app.map.backstageView.isOpen && app.map.backstageView.isOpen())) {
+					var isFileTabForBackstage = (element.id === 'File-tab-label' || element.id === 'File') && window.detect(window.features.backstage);
+					if (isFileTabForBackstage || (app.map && app.map.backstageView && app.map.backstageView.isOpen && app.map.backstageView.isOpen())) {
 						this.accessibilityInputElement.blur();
 						this.resetState();
 						this.filteredItem = null;

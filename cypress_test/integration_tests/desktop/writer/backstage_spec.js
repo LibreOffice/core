@@ -3,10 +3,10 @@
 
 var helper = require('../../common/helper');
 
-// Backstage view is normally instantiated only by UIManager when running
-// inside a CODA app (mode.isCODesktop()). In a regular browser Cypress
-// run, app.map.backstageView is undefined. We construct one explicitly so
-// the templates exercise the same code path they would in CODA.
+// Backstage view is normally instantiated only by UIManager when running inside
+// an app with the backstage (window.features.backstage). In a regular browser
+// Cypress run, app.map.backstageView is undefined. We construct one explicitly
+// so the templates exercise the same code path they would with backstage.
 function ensureBackstage(win) {
 	if (!win.app.map.backstageView) {
 		win.app.map.backstageView = new win.L.Control.BackstageView(win.app.map);

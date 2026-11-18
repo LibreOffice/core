@@ -270,8 +270,8 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 
 
 		var isFileTab = tabIds[t] === 'File-tab-label' || tabIds[t] === 'File';
-		var isFileTabForCoda = isFileTab && window.mode.isCODesktop();
-		if (!isFileTabForCoda) {
+		var isFileTabForBackstage = isFileTab && window.detect(window.features.backstage);
+		if (!isFileTabForBackstage) {
 			if ($(tabs[t]).hasClass('selected'))
 				tabs[t].setAttribute('data-cooltip', tooltipExpanded);
 			window.L.control.attachTooltipEventListener(tabs[t], builder.map);
@@ -287,7 +287,7 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		});
 
 		return function(event) {
-			if (isFileTabForCoda) {
+			if (isFileTabForBackstage) {
 				if (builder.map.backstageView) {
 					console.log('NotebookbarBuilder: Calling backstageView.toggle()');
 					builder.map.backstageView.toggle();
