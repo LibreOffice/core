@@ -354,13 +354,14 @@ describe(['tagdesktop'], 'Comment Scrolling',function() {
 		//scroll up
 		addSlide(1);
 		cy.cGet('.leaflet-control-scroll-up').should('exist');
-		cy.cGet('.leaflet-control-scroll-up').click().wait(300);
+		cy.cGet('.leaflet-control-scroll-up').click();
 		cy.cGet('#SlideStatus').should('contain','Slide 2 of 3');
 
 		//scroll down
 		changeSlide(1,'previous');
+		cy.cGet('#SlideStatus').should('contain','Slide 1 of 3');
 		cy.cGet('.leaflet-control-scroll-down').should('exist');
-		cy.cGet('.leaflet-control-scroll-down').click().wait(300);
+		cy.cGet('.leaflet-control-scroll-down').click();
 		cy.cGet('#SlideStatus').should('contain','Slide 2 of 3');
 	});
 });
