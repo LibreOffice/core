@@ -22,6 +22,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
+#include <algorithm>
 #include <climits>
 #include <limits>
 #include <memory>
@@ -427,6 +428,16 @@ const unsigned char* WPXSvInputStream::read(unsigned long numBytes, unsigned lon
 
     if (numBytes == 0 || isEnd())
         return nullptr;
+
+    // readSomeBytes sizes maData to the count asked for, so ask for no more than is left.
+    if (mxSeekable.is())
+    {
+        const sal_Int64 nLeft = mnLength - mxSeekable->getPosition();
+        if (nLeft <= 0)
+            return nullptr;
+        numBytes = std::min<sal_uInt64>(numBytes, nLeft);
+    }
+    numBytes = std::min<unsigned long>(numBytes, SAL_MAX_INT32);
 
     numBytesRead = mxStream->readSomeBytes(maData, numBytes);
     if (numBytesRead == 0)
