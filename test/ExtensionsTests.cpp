@@ -187,9 +187,11 @@ public:
             !Extensions::servableFile(gas, "_cool-gas-libraries//lib1/3/appsscript.json"));
         LOK_ASSERT(!Extensions::servableFile(remote, std::string("remote.js\0", 10)));
         LOK_ASSERT_EQUAL(
-            std::string(childRoot)
+            Poco::Path(
+                std::string(childRoot)
                 + "/tmp/sharedpresets/shared-https_example.com%3A9980%2Fsettings/extensions/"
-                  "com.example.remote/manifest.json",
+                  "com.example.remote/manifest.json")
+                .toString(),
             Extensions::servableFile(remote, "manifest.json")->toString());
 
         // A directory is no file:
