@@ -219,8 +219,8 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		cy.cGet('#optionstoolboxdown .unoModifyPage button').click();
 		cy.cGet('#sidebar-panel').should('be.visible');
 
-		//sidebar needs more time
-		cy.cGet('#sidebar-dock-wrapper').should('be.visible').wait(2000);
+		cy.cGet('#sidebar-dock-wrapper').should('be.visible');
+		helper.processToIdle(this.win);
 
 		cy.cGet('.ui-expander-label').contains('Position and Size')
 			.scrollIntoView().should('be.visible').click();
@@ -234,8 +234,8 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		helper.assertImageSize(322, 129);
 
 		//Keep ratio checked
-		//sidebar needs more time
-		cy.cGet('#sidebar-dock-wrapper').should('be.visible').wait(2000);
+		cy.cGet('#sidebar-dock-wrapper').should('be.visible');
+		helper.processToIdle(this.win);
 
 		cy.cGet('.ui-expander-label').contains('Position and Size')
 			.scrollIntoView().should('be.visible').click();
