@@ -70,7 +70,7 @@ describe(['tagdesktop'], 'Calc scrolling with a frozen row', function() {
 		// retry, rather than through .uno:ReportWhenIdle, which is
 		// unreliable here.
 		cy.viewport(500, 500);
-		cy.wait(500);
+		helper.waitForResizeObserver(win);
 
 		// Freeze column A, leaving the rest of the sheet as a free pane
 		// narrower than one more column.

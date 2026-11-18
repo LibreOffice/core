@@ -1708,6 +1708,7 @@ module.exports.containsFocusElement = containsFocusElement;
 module.exports.getMenuEntry = getMenuEntry;
 module.exports.waitUntilCoreIsIdle = waitUntilCoreIsIdle;
 module.exports.waitUntilLayoutingIsIdle = waitUntilLayoutingIsIdle;
+module.exports.waitForResizeObserver = waitForResizeObserver;
 module.exports.processToIdle = processToIdle;
 module.exports.retryUntil = retryUntil;
 module.exports.waitForCanvasAnimation = waitForCanvasAnimation;
