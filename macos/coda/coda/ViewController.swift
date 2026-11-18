@@ -260,6 +260,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         webView = CODAWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = self
         webView.uiDelegate = self
+        ViewController.applyUIZoom(to: webView)
 
 #if DEBUG
         // Enable possibility to debug the webview from Safari
@@ -676,6 +677,27 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
     }
 
     /**
+     * Zooms the whole page by the user interface zoom from the Options dialog. With no zoom picked,
+     * the page is at its normal size, which already follows the scaling of the display.
+     */
+    static func applyUIZoom(to webView: WKWebView) {
+        let percent = COWrapper.uiZoomPercent()
+        webView.pageZoom = percent > 0 ? min(max(CGFloat(percent) / 100, 0.25), 5.0) : 1.0
+    }
+
+    private static func applyUIZoom(inside view: NSView?) {
+        guard let view else {
+            return
+        }
+        if let webView = view as? CODAWebView {
+            applyUIZoom(to: webView)
+        }
+        for subview in view.subviews {
+            applyUIZoom(inside: subview)
+        }
+    }
+
+    /**
      * The macOS JavaScript routes postMobileError and postMobileDebug to the "error" and "debug"
      * message handlers. Registers both on the given content controller.
      */
@@ -837,6 +859,21 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         }
         else if body.hasPrefix("UPLOADSETTINGS ") {
             COWrapper.uploadSettings(String(body.dropFirst("UPLOADSETTINGS ".count)))
+            return (nil, nil)
+        }
+        else if body == "GETUIZOOM" {
+            return (Int(COWrapper.uiZoomPercent()), nil)
+        }
+        else if body.hasPrefix("SETUIZOOM ") {
+            guard let percent = Int32(body.dropFirst("SETUIZOOM ".count)) else {
+                COWrapper.LOG_ERR("Invalid user interface zoom: \(body)")
+                return (nil, nil)
+            }
+            COWrapper.setUIZoomPercent(percent)
+            // The zoom is a preference of the whole app, so every open window follows it at once.
+            for window in NSApp.windows {
+                applyUIZoom(inside: window.contentView)
+            }
             return (nil, nil)
         }
         // FETCHAIMODELS is handled separately (asynchronously) by the message

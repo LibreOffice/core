@@ -65,6 +65,11 @@
 + (bool)darkModeWithSystemDefault:(bool)systemDefault NS_SWIFT_NAME(darkMode(systemDefault:));
 + (void)setDarkMode:(bool)value NS_SWIFT_NAME(setDarkMode(_:));
 
+// The zoom of the whole user interface as a percentage, from the Options dialog. Zero means that
+// the user has not picked one.
++ (int)uiZoomPercent NS_SWIFT_NAME(uiZoomPercent());
++ (void)setUIZoomPercent:(int)percent NS_SWIFT_NAME(setUIZoomPercent(_:));
+
 // Options dialog (adminIntegratorSettings) native backend. These bridge to the
 // shared Desktop:: layer in common/SettingsStorage.cpp, mirroring the Windows
 // (CODA.cpp) and Qt (Bridge.cpp) apps.

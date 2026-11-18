@@ -46,6 +46,7 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
         ViewController.allowLocalCrossFrameAccess(cfg)
 
         webView = CODAWebView(frame: .zero, configuration: cfg)
+        ViewController.applyUIZoom(to: webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.setAccessibilityIdentifier("CODA.BackstageWindow.WebView")
 

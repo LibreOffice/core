@@ -879,6 +879,14 @@ static std::atomic<int> appDocIdCounter(1);
     Desktop::setDarkMode(value);
 }
 
++ (int)uiZoomPercent {
+    return Desktop::getUIZoomPercent();
+}
+
++ (void)setUIZoomPercent:(int)percent {
+    Desktop::setUIZoomPercent(percent);
+}
+
 + (NSString *)fetchSettingsConfig {
     return [NSString stringWithUTF8String:Desktop::fetchSettingsConfig().c_str()];
 }
