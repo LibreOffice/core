@@ -76,7 +76,7 @@ private:
     DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
     bool checkIgnoreLocation(SourceLocation loc);
     CompilerInstance& compiler;
-    StringRef const mainFileName;
+    StringRef mainFileName;
     std::unordered_map<SourceLocation, bool> ignored_;
     Rewriter rewriter;
     std::string scope;

@@ -70,7 +70,7 @@ StringRef initMainFileName(CompilerInstance& compiler)
         // stdin means icecream, so we can rely on -main-file-name containing the full path name
         return compiler.getCodeGenOpts().MainFileName;
     else
-        // this is always a full path name
+        // ccache with base_dir set gives a pathname relative to the working directory
         return fn;
 }
 
@@ -89,6 +89,8 @@ PluginHandler::PluginHandler( CompilerInstance& compiler, const std::vector< std
         report(DiagnosticsEngine::Fatal, "cannot determine the working directory: %0")
             << wd.getError().message();
     }
+    // The main file name is absolute, in the same form as SRCDIR, BUILDDIR and WORKDIR.
+    mainFileName = makePathnameAbsolute(mainFileName);
     std::set< std::string > rewriters;
     for( std::string const & arg : args )
         {
