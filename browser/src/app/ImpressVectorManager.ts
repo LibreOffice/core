@@ -117,7 +117,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		return { target, entryId };
 	}
 
-	// The objectKind of a table.
+	// The objectKind of a table, the value of SdrObjKind::Table in the engine.
 	private static readonly tableKind: number = 35;
 
 	// The objectKind of the outline placeholder of a slide.
