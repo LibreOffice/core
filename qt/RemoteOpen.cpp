@@ -23,6 +23,7 @@
 #include <qt/CoolLocalSchemeHandler.hpp>
 #include <qt/WebView.hpp>
 #include <qt/bridge.hpp>
+#include <qt/qt.hpp>
 
 #include <QApplication>
 #include <QBuffer>
@@ -62,6 +63,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace
 {
@@ -205,7 +207,8 @@ private:
 class CloudAccountPage : public QWebEnginePage
 {
 public:
-    CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* profile, QObject* parent);
+    CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* profile, const QString& accountId,
+                     QObject* parent);
     ~CloudAccountPage() override;
 
     const QUrl& integratorOrigin() const { return _integratorOrigin; }
@@ -230,6 +233,7 @@ private:
     void releaseParkedClose();
 
     QUrl _integratorOrigin; ///< The origin of the account's first page.
+    QString _accountId; ///< The id of the cloud account, or empty when the window has none.
     bool _firstPageLoaded = false;
     QUrl _formUrl; ///< Where the kept form went, with the frame's id as the fragment.
     QByteArray _form;
@@ -389,9 +393,10 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
 }
 
 CloudAccountPage::CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* profile,
-                                   QObject* parent)
+                                   const QString& accountId, QObject* parent)
     : QWebEnginePage(profile, parent)
     , _integratorOrigin(originOf(accountUrl))
+    , _accountId(accountId)
 {
     setUrlRequestInterceptor(new EditorFormInterceptor(*this));
     insertEmptyCoolPageScript();
@@ -646,6 +651,63 @@ std::optional<QByteArray> CloudAccountPage::receiveMessage(const QUrl& origin, c
         return callBridge(kind, whole);
 }
 
+/// Removes the stored files of the account that the group of a settings list no longer names.
+/// Answers the uris of the entries whose file the account does not hold yet, as a JSON array.
+/// entriesJson is that group: a JSON array of objects with "uri" and "stamp".
+static QByteArray applyAccountPresetList(const QString& accountId, const QString& list,
+                                     const QString& group, const QString& entriesJson)
+{
+    QJsonArray wanted;
+    if (std::optional<AccountPresets> presets = Application::getAccountPresets(accountId))
+    {
+        std::vector<AccountPresets::Listed> listed;
+        for (const QJsonValue& value : QJsonDocument::fromJson(entriesJson.toUtf8()).array())
+        {
+            const QJsonObject entry = value.toObject();
+            listed.push_back({ entry["uri"].toString().toStdString(),
+                               entry["stamp"].toVariant().toString().toStdString() });
+        }
+        presets->removeUnlisted(list.toStdString(), group.toStdString(), listed);
+        for (const std::string& uri :
+             presets->outdatedUris(list.toStdString(), group.toStdString(), listed))
+            wanted.append(QString::fromStdString(uri));
+    }
+    return QJsonDocument(wanted).toJson(QJsonDocument::Compact);
+}
+
+/// Stores the part at offset of one file of a settings list for the account. Answers "true" or
+/// "false".
+static QByteArray storeAccountPresetPart(const QString& accountId, const QString& list,
+                                         const QString& group, const QString& uri, double offset,
+                                         const QString& base64Bytes)
+{
+    // The length of the base64 text of the largest file that is stored.
+    constexpr qsizetype maxBase64Units = (AccountPresets::MaxFileBytes + 2) / 3 * 4;
+    if (base64Bytes.size() > maxBase64Units || !(offset >= 0) ||
+        offset > AccountPresets::MaxFileBytes)
+        return QByteArrayLiteral("false");
+
+    std::optional<AccountPresets> presets = Application::getAccountPresets(accountId);
+    const bool stored =
+        presets &&
+        presets->storeFilePart(list.toStdString(), group.toStdString(), uri.toStdString(),
+                               static_cast<std::size_t>(offset),
+                               QByteArray::fromBase64(base64Bytes.toLatin1()).toStdString());
+    return stored ? QByteArrayLiteral("true") : QByteArrayLiteral("false");
+}
+
+/// Stores the parts of one file of a settings list as that file, with its stamp. Answers "true"
+/// or "false".
+static QByteArray finishAccountPresetFile(const QString& accountId, const QString& list,
+                                          const QString& group, const QString& uri,
+                                          const QString& stamp)
+{
+    std::optional<AccountPresets> presets = Application::getAccountPresets(accountId);
+    const bool stored = presets && presets->finishFile(list.toStdString(), group.toStdString(),
+                                                       uri.toStdString(), stamp.toStdString());
+    return stored ? QByteArrayLiteral("true") : QByteArrayLiteral("false");
+}
+
 /// The page calls these Bridge methods by name, as the web channel gives them in CODA's own
 /// window. The kind of the message names the method, and the message is its arguments in JSON.
 std::optional<QByteArray> CloudAccountPage::callBridge(const QString& method,
@@ -673,6 +735,14 @@ std::optional<QByteArray> CloudAccountPage::callBridge(const QString& method,
         _bridge->saveCompleted();
         return QByteArray();
     }
+    else if (method == QStringLiteral("applyAccountPresetList"))
+        return applyAccountPresetList(_accountId, first, second, arguments.at(2).toString());
+    else if (method == QStringLiteral("storeAccountPresetPart"))
+        return storeAccountPresetPart(_accountId, first, second, arguments.at(2).toString(),
+                                      arguments.at(3).toDouble(-1), arguments.at(4).toString());
+    else if (method == QStringLiteral("finishAccountPresetFile"))
+        return finishAccountPresetFile(_accountId, first, second, arguments.at(2).toString(),
+                                       arguments.at(3).toString());
 
     LOG_WRN("account window: refused: a message from the editor frame has an unknown kind");
     return std::nullopt;
@@ -818,8 +888,8 @@ void receiveEditorFrameMessage(QWebEngineUrlRequestJob* job, const QString& sess
     answer(job, reply.value_or(QByteArray()));
 }
 
-void openRemoteFile(const QString& serverUrl, QWidget* /*parent*/,
-                    QWebEngineProfile* /*profile*/, QWebEngineProfile* pickerProfile)
+void openRemoteFile(const QString& serverUrl, QWidget* /*parent*/, QWebEngineProfile* /*profile*/,
+                    QWebEngineProfile* pickerProfile, const QString& accountId)
 {
     // The account window has no parent, so that it outlives the window it was opened from, and is
     // always asked before it closes:
@@ -828,7 +898,7 @@ void openRemoteFile(const QString& serverUrl, QWidget* /*parent*/,
     window->resize(ACCOUNT_WINDOW_SIZE);
 
     auto* view = new QWebEngineView(window);
-    auto * page = new CloudAccountPage(QUrl(serverUrl), pickerProfile, view);
+    auto * page = new CloudAccountPage(QUrl(serverUrl), pickerProfile, accountId, view);
     view->setPage(page);
     window->setPage(page);
     window->setView(view);

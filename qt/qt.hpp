@@ -8,9 +8,11 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 
 #include <QApplication>
 #include <QWebEngineProfile>
+#include "common/AccountPresets.hpp"
 #include "common/Prefs.hpp"
 #include "common/RecentFiles.hpp"
 #include "common/UserTemplates.hpp"
@@ -49,6 +51,11 @@ public:
     static int countAccountProfileViews(const QString& accountId);
     /// Delete the cookies and cache that an account's saved profile holds.
     static void deleteAccountProfile(const QString& accountId);
+    /// The stored files of one cloud account, or nothing when the id is not plain letters,
+    /// digits, '-' and '_'.
+    static std::optional<AccountPresets> getAccountPresets(const QString& accountId);
+    /// The ids of the cloud accounts that have stored files.
+    static QStringList accountIdsWithPresets();
     static RecentFiles& getRecentFiles();
     static Prefs& getPrefs();
     static UserTemplates& getUserTemplates();

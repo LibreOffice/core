@@ -306,13 +306,33 @@ void Application::deleteAccountProfile(const QString& accountId)
     if (it != accountProfiles().end())
     {
         LOG_DBG("Application: account '" << accountId.toStdString()
-                                        << "' is in use, so only its cookies and cache go");
+                                        << "' is in use, so its cookies, cache and stored files go");
         it.value()->cookieStore()->deleteAllCookies();
         it.value()->clearHttpCache();
+        getAccountPresets(accountId)->removeAll();
         return;
     }
 
     removeAccountFolders(accountId);
+}
+
+std::optional<AccountPresets> Application::getAccountPresets(const QString& accountId)
+{
+    if (!isPlainAccountId(accountId))
+        return std::nullopt;
+    return AccountPresets(accountStoragePath(accountId).toStdString());
+}
+
+QStringList Application::accountIdsWithPresets()
+{
+    QStringList ids;
+    const QDir accounts(accountStorageRoot());
+    for (const QString& id : accounts.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name))
+    {
+        if (isPlainAccountId(id) && QFileInfo(accounts.filePath(id + "/presets")).isDir())
+            ids.append(id);
+    }
+    return ids;
 }
 
 RecentFiles& Application::getRecentFiles() { return recentFiles; }

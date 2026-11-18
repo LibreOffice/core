@@ -1394,6 +1394,25 @@ QVariant Bridge::cool(const QString& messageStr)
             result.append(userTemplateToJson(entry));
         return result;
     }
+    else if (tokens.equals(0, "GETACCOUNTTEMPLATES"))
+    {
+        QJsonArray result;
+        for (const QString& accountId : Application::accountIdsWithPresets())
+        {
+            QJsonArray templates;
+            for (const UserTemplates::Entry& entry :
+                 Application::getAccountPresets(accountId)->templates())
+                templates.append(userTemplateToJson(entry));
+            if (templates.isEmpty())
+                continue;
+
+            QJsonObject account;
+            account["account"] = accountId;
+            account["templates"] = templates;
+            result.append(account);
+        }
+        return result;
+    }
     else if (tokens.equals(0, "PICKUSERTEMPLATE"))
     {
         QStringList patterns;
@@ -1467,8 +1486,10 @@ QVariant Bridge::cool(const QString& messageStr)
                 << (pickerProfile == Application::getProfile() ? "shared" : "account's")
                 << " profile");
         auto* webView = _webView;
-        QTimer::singleShot(0, [serverUrl, webView, pickerProfile]() {
-            coda::openRemoteFile(serverUrl, webView, Application::getProfile(), pickerProfile);
+        const QString account = QString::fromStdString(accountId);
+        QTimer::singleShot(0, [serverUrl, webView, pickerProfile, account]() {
+            coda::openRemoteFile(serverUrl, webView, Application::getProfile(), pickerProfile,
+                                 account);
         });
     }
     else if (tokens.equals(0, "removecloudaccount"))

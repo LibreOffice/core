@@ -27,9 +27,10 @@ void receiveEditorFrameMessage(QWebEngineUrlRequestJob* job, const QString& sess
                                const QString& kind, const QByteArray& message);
 
 /// Opens the integrator at serverUrl in a window on pickerProfile. A document opened there loads
-/// the COOL server's editor in the integrator's frame, as in a browser.
-void openRemoteFile(const QString& serverUrl, QWidget* parent,
-                    QWebEngineProfile* profile, QWebEngineProfile* pickerProfile);
+/// the COOL server's editor in the integrator's frame, as in a browser. accountId is the id of the
+/// cloud account, or empty for a window that belongs to no account.
+void openRemoteFile(const QString& serverUrl, QWidget* parent, QWebEngineProfile* profile,
+                    QWebEngineProfile* pickerProfile, const QString& accountId);
 
 } // namespace coda
 
