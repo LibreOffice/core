@@ -29,6 +29,7 @@
 #include <Poco/Util/LayeredConfiguration.h>
 
 #include <chrono>
+#include <vector>
 
 /// Try to receive a JSON message matching the given type prefix.
 /// Returns nullptr if no matching message is available yet.
@@ -950,6 +951,21 @@ public:
             LOK_ASSERT_EQUAL(
                 std::string("The host allows this user no writes"),
                 msg->getValue<std::string>("error"));
+            TRANSITION_STATE(phase_, Phase::WaitSharedSettingsUnavailable);
+            collabWs_->sendMessage(
+                R"({"type":"fetch","stream":"sharedSettings","requestId":"s1"})");
+            break;
+        }
+        case Phase::WaitSharedSettingsUnavailable: {
+            // The host names no settings. The answer says so, and does not blame the export rule.
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_error");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("s1"), msg->getValue<std::string>("requestId"));
+            LOK_ASSERT_EQUAL(
+                std::string("Stream not available"), msg->getValue<std::string>("error"));
+            LOK_ASSERT(!msg->has("cleanExport"));
             TRANSITION_STATE(phase_, Phase::Done);
             collabWs_->asyncShutdown();
             passTest("A user without a clean export got no document bytes and no upload URL");
@@ -962,7 +978,8 @@ public:
 
 private:
     STATE_ENUM(
-        Phase, ConnectCollab, WaitCollabAuth, WaitContentsRefused, WaitUploadRefused, Done) phase_;
+        Phase, ConnectCollab, WaitCollabAuth, WaitContentsRefused, WaitUploadRefused,
+        WaitSharedSettingsUnavailable, Done) phase_;
 
     std::shared_ptr<http::WebSocketSession> collabWs_;
 };
@@ -1538,13 +1555,152 @@ private:
     bool done_ = false;
 };
 
+/// A collab client gets the shared and the user settings list of the host. The host gets the
+/// request for each list with the uri that CheckFileInfo gave: the shared list has an access
+/// token of its own, and the user list has none.
+class UnitCollabSettingsStreams : public WopiTestServer
+{
+public:
+    UnitCollabSettingsStreams()
+        : WopiTestServer("UnitCollabSettingsStreams")
+        , _phase(Phase::ConnectCollab)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr sharedSettings = new Poco::JSON::Object();
+        sharedSettings->set("uri", settingsUri("sharedconfig.json", "access_token=settingstoken&"));
+        sharedSettings->set("stamp", "sharedstamp");
+        fileInfo->set("SharedSettings", sharedSettings);
+
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        userSettings->set("uri", settingsUri("userconfig.json", std::string()));
+        userSettings->set("stamp", "userstamp");
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const Poco::URI uriReq(request.getURI());
+        const std::string path = uriReq.getPath();
+        const bool shared = path == "/wopi/settings/sharedconfig.json";
+        if (!shared && path != "/wopi/settings/userconfig.json")
+            return WopiTestServer::handleHttpGetRequest(request, socket);
+
+        std::vector<std::string> tokens;
+        for (const auto& param : uriReq.getQueryParameters())
+        {
+            if (param.first == "access_token")
+                tokens.push_back(param.second);
+        }
+        if (shared)
+        {
+            LOK_ASSERT_EQUAL(std::size_t(1), tokens.size());
+            LOK_ASSERT_EQUAL(std::string("settingstoken"), tokens[0]);
+        }
+        else
+        {
+            LOK_ASSERT_EQUAL(std::size_t(0), tokens.size());
+            LOK_ASSERT(!request.has("Authorization"));
+        }
+
+        http::Response httpResponse(http::StatusCode::OK);
+        httpResponse.setBody(shared ? SharedList : UserList, "application/json; charset=utf-8");
+        socket->sendAndShutdown(httpResponse);
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::ConnectCollab:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitCollabAuth);
+                const Poco::URI wopiURL(getWopiHostURI() +
+                                        "/wopi/files/0?access_token=anything"
+                                        "&testname=UnitCollabSettingsStreams");
+                _collabWs = startCollabConnection(socketPoll(), Uri::encode(wopiURL.toString()),
+                                                  "anything");
+                break;
+            }
+            case Phase::WaitCollabAuth:
+            {
+                if (!pollCollabMessage(_collabWs, "user_list"))
+                    break;
+                TRANSITION_STATE(_phase, Phase::WaitSharedSettings);
+                _collabWs->sendMessage(
+                    R"({"type":"fetch","stream":"sharedSettings","requestId":"s1"})");
+                break;
+            }
+            case Phase::WaitSharedSettings:
+            {
+                const Poco::JSON::Object::Ptr msg = pollCollabMessage(_collabWs, "fetch_url");
+                if (!msg)
+                    break;
+                LOK_ASSERT_EQUAL(std::string("s1"), msg->getValue<std::string>("requestId"));
+                LOK_ASSERT_EQUAL(SharedList, download(msg->getValue<std::string>("url")));
+                TRANSITION_STATE(_phase, Phase::WaitUserSettings);
+                _collabWs->sendMessage(
+                    R"({"type":"fetch","stream":"userSettings","requestId":"u1"})");
+                break;
+            }
+            case Phase::WaitUserSettings:
+            {
+                const Poco::JSON::Object::Ptr msg = pollCollabMessage(_collabWs, "fetch_url");
+                if (!msg)
+                    break;
+                LOK_ASSERT_EQUAL(std::string("u1"), msg->getValue<std::string>("requestId"));
+                LOK_ASSERT_EQUAL(UserList, download(msg->getValue<std::string>("url")));
+                TRANSITION_STATE(_phase, Phase::Done);
+                _collabWs->asyncShutdown();
+                passTest("The collab client got both settings lists");
+                break;
+            }
+            case Phase::Done:
+                break;
+        }
+    }
+
+private:
+    static inline const std::string SharedList = R"({"kind":"shared","template":[]})";
+    static inline const std::string UserList = R"({"kind":"user","template":[]})";
+
+    /// The uri of a settings list. Its query starts with token, which is empty or one parameter
+    /// with a trailing ampersand.
+    static std::string settingsUri(const std::string& name, const std::string& token)
+    {
+        return helpers::getTestServerURI() + "/wopi/settings/" + name + '?' + token +
+               "testname=UnitCollabSettingsStreams";
+    }
+
+    /// The body that the one-time URL of a fetch_url answer gives.
+    std::string download(const std::string& url)
+    {
+        http::Request request(url);
+        const std::shared_ptr<const http::Response> response =
+            http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+        LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+        return response->getBody();
+    }
+
+    STATE_ENUM(Phase, ConnectCollab, WaitCollabAuth, WaitSharedSettings, WaitUserSettings, Done)
+    _phase;
+
+    std::shared_ptr<http::WebSocketSession> _collabWs;
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [14] { new UnitCollabProtocol(),
+    return new UnitBase* [15] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
-                                new UnitCollabNoCleanExport(), new UnitCollabAvatar(),
+                                new UnitCollabNoCleanExport(), new UnitCollabSettingsStreams(),
+                                new UnitCollabAvatar(),
                                 new UnitCollabConnections(), new UnitCollabTokenRenewal(),
                                 new UnitCollabRouting(), new UnitCollabFetchRedirect(),
                                 new UnitCollabProtocolNumber(), new UnitCollabEditorFrame(),

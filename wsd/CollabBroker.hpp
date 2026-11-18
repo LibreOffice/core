@@ -44,7 +44,7 @@ constexpr auto CollabUploadTokenExpiry = std::chrono::minutes(5);
 struct CollabFetchRequest
 {
     std::string streamUrl;       ///< URL to fetch from
-    std::string accessToken;     ///< WOPI access token
+    std::string accessToken;     ///< WOPI access token to add to streamUrl, or empty
     std::string wopiSrc;         ///< Original WOPISrc for validation
     std::string docKey;          ///< Document key to verify live CollabBroker
     std::string brokerTag;       ///< Broker access token at time of request

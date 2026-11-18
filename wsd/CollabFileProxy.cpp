@@ -56,8 +56,10 @@ void CollabFileProxy::handleFetchRequest(const std::string& streamUrl,
 
     // Parse the stream URL and add access token; the URL may already
     // contain query parameters, so use Poco::URI to add it properly.
+    // A request that has no access token fetches the URL as it is.
     Poco::URI uri(streamUrl);
-    uri.addQueryParameter("access_token", _accessToken);
+    if (!_accessToken.empty())
+        uri.addQueryParameter("access_token", _accessToken);
 
     // Transfer to poll and start download directly (bypassing CheckFileInfo)
     disposition.setTransfer(*poll,

@@ -135,6 +135,18 @@ private:
     void handleFetch(const std::string& stream, const std::string& requestId,
                      const std::string& ifNoneMatch, const std::string& ifModifiedSince);
 
+    /// Answers a fetch with fetch_error and the reason.
+    void sendFetchError(const std::string& stream, const std::string& requestId,
+                        const std::string& error);
+
+    /// Answers a fetch with a one-time URL that downloads url.
+    void sendFetchUrl(const std::string& stream, const std::string& requestId,
+                      const std::string& url);
+
+    /// The URI of the "shared" or the "user" settings list in the CheckFileInfo answer, or
+    /// empty when the answer names none.
+    std::string settingsListUri(const std::string& list) const;
+
     /// Handle upload request - returns a one-time upload URL for HTTP PUT
     /// (one that is refused if storage no longer has lastModifiedTime, unless force)
     void handleUpload(const std::string& stream, const std::string& requestId,

@@ -3076,10 +3076,12 @@ client -> server messages on /cool/collab/ws
 {"type":"fetch","stream":"<name>","requestId":"<id>"}
 
     Request a one-shot URL for downloading the bytes of a stream: "contents" (the default, the
-    current document bytes, from the integrator's FileUrl when CheckFileInfo has one, and the only
-    stream).  Server replies with {"type":"fetch_url"} (success) or
-    {"type":"fetch_error"} (failure), carrying the same "requestId" so the client can correlate
-    replies with requests (and none when the request had none).
+    current document bytes, from the integrator's FileUrl when CheckFileInfo has one),
+    "userSettings" (the settings list that UserSettings of CheckFileInfo names) or
+    "sharedSettings" (the settings list that SharedSettings of CheckFileInfo names).  Server
+    replies with {"type":"fetch_url"} (success) or {"type":"fetch_error"} (failure), carrying the
+    same "requestId" so the client can correlate replies with requests (and none when the request
+    had none).
 
 {"type":"upload","stream":"contents","requestId":"<id>"(,"lastModifiedTime":"<time>"|,"force":true)}
 
