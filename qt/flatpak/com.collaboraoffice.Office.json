@@ -611,11 +611,11 @@
           "dest-filename": "liblangtag-0.6.8.tar.bz2"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/libmspub-0.1.5.tar.xz",
-          "sha256": "3671095f5a10bee8a755052a30576952c5b16d8b0f2ba9f2fb998338c18cb119",
+          "url": "https://gerrit.collaboraoffice.com/src/libmspub-0.1.6.tar.xz",
+          "sha256": "408eb742b172a0ccbd128a0ff6402eee495839cd905198ce2b3f2607bba617f4",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "libmspub-0.1.5.tar.xz"
+          "dest-filename": "libmspub-0.1.6.tar.xz"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/libmwaw-0.3.23.tar.xz",
