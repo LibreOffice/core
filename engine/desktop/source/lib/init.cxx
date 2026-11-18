@@ -1629,14 +1629,9 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         int nMacroSecurityLevel = 1;
         const OUString aMacroSecurityLevel = extractParameter(aOptions, u"MacroSecurityLevel");
-        if (!aMacroSecurityLevel.isEmpty())
-        {
-            double nNumber;
-            sal_uInt32 nFormat = 1;
-            SvNumberFormatter aFormatter(::comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US);
-            if (aFormatter.IsNumberFormat(aMacroSecurityLevel, nFormat, nNumber))
-                nMacroSecurityLevel = static_cast<int>(nNumber);
-        }
+        if (!aMacroSecurityLevel.isEmpty()
+            && comphelper::string::isdigitAsciiString(aMacroSecurityLevel))
+            nMacroSecurityLevel = aMacroSecurityLevel.toInt32();
 
         OUString aClientVisibleArea = extractParameter(aOptions, u"ClientVisibleArea");
         if (!aClientVisibleArea.isEmpty())
