@@ -574,6 +574,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135710)
     uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr) , uno::UNO_QUERY);
     xPropertySet->setPropertyValue(u"AnchorType"_ustr,
                                        cpo::uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    calcLayout();
     pXmlDoc = parseLayoutDump();
 
     sal_Int32 nFlyLeftAfter = getXPath(pXmlDoc, "(//anchored)[1]/fly/infos/bounds", "left").toInt32();

@@ -391,6 +391,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableFollowWrongPage)
     aPageMargin.SetLower(1417);
     aStandard.GetMaster().SetFormatAttr(aPageMargin);
     pDoc->ChgPageDesc(0, aStandard);
+    calcLayout();
 
     // Then make sure the first and second page has fly frames:
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();

@@ -307,7 +307,12 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         // switch for more actions
         if( rHint.GetId() == SfxHintId::TitleChanged)
         {
-            if( GetMedium() )
+            // The end of the action measures the caret column for Up and Down again, so the action
+            // only runs when the document has a file name field to update.
+            if (GetMedium()
+                && m_xDoc->getIDocumentFieldsAccess()
+                       .GetSysFieldType(SwFieldIds::Filename)
+                       ->HasWriterListeners())
                 nAction = 2;
         }
     }

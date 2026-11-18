@@ -6452,6 +6452,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClickBibliographyHyperlinkKeepsCu
                          pWrtShell->GetCursor()->GetPoint()->GetNode().GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUpDownKeepsColumnOverSave)
+{
+    // Given a modified document with an empty paragraph above "green red", and the caret at
+    // position 5 of "green red":
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"Hello World"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"green red"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    Scheduler::ProcessEventsToIdle();
+    SwNodeOffset nLastParagraph = pWrtShell->GetCursor()->GetPoint()->GetNodeIndex();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pWrtShell->GetCursor()->GetPoint()->GetContentIndex());
+
+    // When the user presses Up, the document is saved, as a background save clears the
+    // modified flag, and the user presses Down:
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_UP);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_UP);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pWrtShell->GetCursor()->GetPoint()->GetContentIndex());
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Modified", uno::Any(false) } }));
+    dispatchCommand(mxComponent, u".uno:Modified"_ustr, aArgs);
+    CPPUNIT_ASSERT(!getSwDocShell()->IsModified());
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the caret is back at position 5 of "green red":
+    CPPUNIT_ASSERT_EQUAL(nLastParagraph, pWrtShell->GetCursor()->GetPoint()->GetNodeIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pWrtShell->GetCursor()->GetPoint()->GetContentIndex());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
