@@ -3487,6 +3487,7 @@ void COOLWSD::initializeEnvOptions()
     static constexpr std::pair<const char*, const char*> settingForVariable[] = {
         { "username", "admin_console.username" },
         { "password", "admin_console.password" },
+        { "secure_password", "admin_console.secure_password" },
         { "server_name", "server_name" },
         { "dictionaries", "allowed_languages" },
         { "remoteconfigurl", "remote_config.remote_url" },
