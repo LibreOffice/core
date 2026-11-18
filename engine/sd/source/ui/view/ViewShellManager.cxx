@@ -672,12 +672,21 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
     {
         UpdateLock aLock (*this);
 
-        ShellDescriptor aDescriptor(*iShell);
-
         TakeShellsFromStack(rShell);
-        maActiveViewShells.erase(iShell);
 
-        maActiveViewShells.insert(maActiveViewShells.begin(), aDescriptor);
+        // The deactivations in TakeShellsFromStack() run other code, which
+        // can move or deactivate this shell as well, so it is looked up
+        // again.
+        iShell = ::std::find_if(
+            maActiveViewShells.begin(),
+            maActiveViewShells.end(),
+            IsShell(&rShell));
+        if (iShell != maActiveViewShells.end())
+        {
+            ShellDescriptor aDescriptor(*iShell);
+            maActiveViewShells.erase(iShell);
+            maActiveViewShells.insert(maActiveViewShells.begin(), aDescriptor);
+        }
     }
 }
 
