@@ -2176,6 +2176,7 @@ function showWelcomeSVG() {
 			delete this.send;
 			delete this._setPollInterval;
 			delete this.close;
+			delete this._signalErrorClose;
 			// HACK: We need this to complete the override because ProxySocket messed up the prototype chain... eventually I want to convert it to a Real Class which will fix it
 		}
 
@@ -2185,6 +2186,7 @@ function showWelcomeSVG() {
 
 		close() {} // We don't support re-opening the mobile socket, so let's make sure we don't close it...
 		_setPollInterval() {} // This is a no-op on mobile since as we will be calling from the native part to notify when we get a message
+		_signalErrorClose() {} // The socket stays open when a request fails or is late, and the next request fetches the messages that still wait in the native part
 	}
 
 	global.iterateCSSImages = function(visitor) {
