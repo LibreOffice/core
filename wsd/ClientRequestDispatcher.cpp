@@ -3460,6 +3460,7 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
     const std::string uriValue = uriBaseValue
         + (COOLWSD::WASMEnabled ? "wasm/" : "")
         + "cool.html?";
+    const std::string viewUriValue = uriValue + "permission=readonly&";
     const std::string previewUriValue = uriBaseValue
         + (COOLWSD::WASMEnabled ? "wasm/" : "")
         + "cool-preview.html?";
@@ -3487,6 +3488,8 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
         {
             if (elem->getAttribute("name") == "interactivepreview") {
                 elem->setAttribute(urlsrc, previewUriValue);
+            } else if (elem->getAttribute("name") == "view") {
+                elem->setAttribute(urlsrc, viewUriValue);
             } else {
                 elem->setAttribute(urlsrc, uriValue);
             }
