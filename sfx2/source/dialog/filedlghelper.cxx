@@ -468,8 +468,7 @@ void FileDialogHelper_Impl::updateFilterOptionsBox()
     {
         if (auto xCtrlAccess = mxFileDlg.query<XFilePickerControlAccess>())
         {
-            OUString filter;
-            getRealFilter(filter);
+            OUString filter = getRealFilter();
             bool bChecked = bFilterOptionsEnabled && utl::isShowFilterOptionsDialog(filter);
             xCtrlAccess->setValue(ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0,
                                   Any(bChecked));
@@ -1529,7 +1528,7 @@ ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
     }
 
     // set the filter
-    getRealFilter( rFilter );
+    rFilter = getRealFilter();
 
     std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
 
@@ -1674,19 +1673,21 @@ OUString FileDialogHelper_Impl::getFilter() const
     return aFilter;
 }
 
-void FileDialogHelper_Impl::getRealFilter( OUString& _rFilter ) const
+OUString FileDialogHelper_Impl::getRealFilter() const
 {
-    _rFilter = getCurrentFilterUIName();
+    OUString sFilter = getCurrentFilterUIName();
 
-    if ( _rFilter.isEmpty() )
-        _rFilter = maCurFilter;
+    if (sFilter.isEmpty())
+        sFilter = maCurFilter;
 
-    if ( !_rFilter.isEmpty() && mpMatcher )
+    if (!sFilter.isEmpty() && mpMatcher)
     {
-        std::shared_ptr<const SfxFilter> pFilter =
-            mpMatcher->GetFilter4UIName( _rFilter, m_nMustFlags, m_nDontFlags );
-        _rFilter = pFilter ? pFilter->GetFilterName() : OUString();
+        std::shared_ptr<const SfxFilter> pFilter
+            = mpMatcher->GetFilter4UIName(sFilter, m_nMustFlags, m_nDontFlags);
+        sFilter = pFilter ? pFilter->GetFilterName() : OUString();
     }
+
+    return sFilter;
 }
 
 void FileDialogHelper_Impl::verifyPath()
@@ -2657,10 +2658,9 @@ bool FileDialogHelper::IsPasswordEnabled() const
 
 OUString FileDialogHelper::GetRealFilter() const
 {
-    OUString sFilter;
     if (mpImpl)
-        mpImpl->getRealFilter( sFilter );
-    return sFilter;
+        return mpImpl->getRealFilter();
+    return {};
 }
 
 bool FileDialogHelper::CheckCurrentFilterOptionsCapability() const

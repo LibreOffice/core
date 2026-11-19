@@ -195,7 +195,7 @@ namespace sfx2
 
         OUString                getPath() const;
         OUString                getFilter() const;
-        void                    getRealFilter( OUString& _rFilter ) const;
+        OUString getRealFilter() const;
 
         ErrCode                 getGraphic( Graphic& rGraphic );
         void                    createMatcher( const OUString& rFactory );
