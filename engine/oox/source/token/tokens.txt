@@ -1050,6 +1050,7 @@ byte
 c
 c15
 cBhvr
+cId
 cdr
 cGp
 cGpRule
@@ -1370,6 +1371,7 @@ commentPr
 commentRangeEnd
 commentRangeStart
 commentReference
+commentRel
 comments
 commentsEx
 commentsExtensible
@@ -1994,6 +1996,7 @@ docDefaults
 docEnd
 docGrid
 docLocation
+docMk
 docPart
 docPartBody
 docPartCategory
@@ -4069,6 +4072,7 @@ pattFill
 pattern
 patternFill
 patternType
+pc
 pcaRings
 pct
 pct10
@@ -4983,6 +4987,8 @@ sldMaster
 sldMasterId
 sldMasterIdLst
 sldMasterView
+sldMk
+sldMkLst
 sldNum
 sldRg
 sldSorterView

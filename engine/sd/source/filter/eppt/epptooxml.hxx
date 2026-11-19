@@ -105,15 +105,25 @@ private:
     virtual bool ImplCreateMainNotes() override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     void WriteNotesMaster();
-    void WritePageGuidExtLst( const FSHelperPtr& pFS,
-                              const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    /** Writes the extension list of a page.
+
+        nCreationId is the creation identifier of a slide, and 0 when there is none to write.
+        rModernCommentsRelId is the relation of a slide to its newer comment part, and empty
+        when the slide has no comments.
+     */
+    void WritePageExtLst(const FSHelperPtr& pFS,
+                         const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                         sal_uInt32 nCreationId = 0,
+                         const OUString& rModernCommentsRelId = OUString());
 
     bool WriteComments( sal_uInt32 nPageNum );
     /** Writes the comments of one slide into the newer comment part.
 
-        Returns true when the slide had any comments.
+        nSlideId and nCreationId are the identifier of the slide in the presentation and its
+        creation identifier, which together name the slide each comment is anchored to. Returns
+        true when the slide had any comments.
      */
-    bool WriteModernComments(sal_uInt32 nPageNum);
+    bool WriteModernComments(sal_uInt32 nPageNum, sal_uInt32 nSlideId, sal_uInt32 nCreationId);
     void ImplWriteBackground( const ::sax_fastparser::FSHelperPtr& pFS, const cpo::uno::Reference< css::beans::XPropertySet >& aXBackgroundPropSet );
     void WriteTransition( const ::sax_fastparser::FSHelperPtr& pFS );
 

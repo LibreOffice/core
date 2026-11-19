@@ -1533,6 +1533,48 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNotesAuthorDate)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testModernCommentAnchor)
+{
+    // Each comment names the slide it is on, the slide refers to its comment part, and each
+    // author has an account. A PPTX reader rejects the comment part without these and asks to
+    // repair the file.
+    createSdImpressDoc("pptx/pres-with-notes.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pPresentation = parseExport(u"ppt/presentation.xml"_ustr);
+    for (int nSlide : { 1, 2 })
+    {
+        const OUString aSlide = OUString::number(nSlide);
+        const OUString aSlideId = getXPath(
+            pPresentation, "/p:presentation/p:sldIdLst/p:sldId[" + OString::number(nSlide) + "]",
+            "id");
+
+        xmlDocUniquePtr pSlide = parseExport("ppt/slides/slide" + aSlide + ".xml");
+        const OUString aCreationId
+            = getXPath(pSlide, "/p:sld/p:extLst/p:ext/p14:creationId", "val");
+        const OUString aRelationId
+            = getXPath(pSlide, "/p:sld/p:extLst/p:ext/p188:commentRel", "id");
+
+        xmlDocUniquePtr pRelations = parseExport("ppt/slides/_rels/slide" + aSlide + ".xml.rels");
+        assertXPath(pRelations,
+                    "/rels:Relationships/rels:Relationship[@Id='" + aRelationId.toUtf8() + "']",
+                    "Target", Concat2View("../comments/modernComment_" + aSlide + ".xml"));
+
+        // Without the accompanying fix in place, this test would have failed: the entry had no
+        // anchor at all.
+        xmlDocUniquePtr pComments = parseExport("ppt/comments/modernComment_" + aSlide + ".xml");
+        assertXPath(pComments, "/p188:cmLst/p188:cm/pc:sldMkLst/pc:docMk", 1);
+        assertXPath(pComments, "/p188:cmLst/p188:cm/pc:sldMkLst/pc:sldMk", "cId", aCreationId);
+        assertXPath(pComments, "/p188:cmLst/p188:cm/pc:sldMkLst/pc:sldMk", "sldId", aSlideId);
+    }
+
+    xmlDocUniquePtr pAuthors = parseExport(u"ppt/authors.xml"_ustr);
+    assertXPath(pAuthors, "/p188:authorLst/p188:author[@name='Hans Wurst']", "userId",
+                u"Hans Wurst");
+    assertXPath(pAuthors, "/p188:authorLst/p188:author[@name='Hans Wurst']", "providerId",
+                u"None");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTableCellVerticalPropertyRoundtrip)
 {
     createSdImpressDoc("pptx/tcPr-vert-roundtrip.pptx");

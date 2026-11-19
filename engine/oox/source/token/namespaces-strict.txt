@@ -93,6 +93,7 @@ w16cex                  http://schemas.microsoft.com/office/word/2018/wordml/cex
 p15                     http://schemas.microsoft.com/office/powerpoint/2012/main
 p159                    http://schemas.microsoft.com/office/powerpoint/2015/09/main
 p188                    http://schemas.microsoft.com/office/powerpoint/2018/8/main
+pc                      http://schemas.microsoft.com/office/powerpoint/2013/main/command
 x12ac                   http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac
 c15                     http://schemas.microsoft.com/office/drawing/2012/chart
 x15                     http://schemas.microsoft.com/office/spreadsheetml/2010/11/main

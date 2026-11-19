@@ -69,6 +69,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -2192,10 +2193,15 @@ void PowerPointExport::WriteModernAuthors()
     {
         if (i.second.sGuid.isEmpty())
             continue; // no comment referred to this author by the newer identifier
+        // An author is named by an account with the provider that issued it. The author here has
+        // no account, so the name stands in for one and the provider is "None", which is what a
+        // local author without an account is written as.
         pFS->singleElementNS(XML_p188, XML_author,
                              XML_id, i.second.sGuid,
                              XML_name, i.first,
-                             XML_initials, i.second.sInitials);
+                             XML_initials, i.second.sInitials,
+                             XML_userId, i.first,
+                             XML_providerId, "None");
     }
 
     pFS->endElementNS(XML_p188, XML_authorLst);
@@ -2372,7 +2378,8 @@ void writeModernCommentText(const FSHelperPtr& pFS, std::u16string_view rText)
 }
 }
 
-bool PowerPointExport::WriteModernComments(sal_uInt32 nPageNum)
+bool PowerPointExport::WriteModernComments(sal_uInt32 nPageNum, sal_uInt32 nSlideId,
+                                           sal_uInt32 nCreationId)
 {
     Reference<XAnnotationAccess> xAnnotationAccess(mXDrawPage, uno::UNO_QUERY);
     if (!xAnnotationAccess.is())
@@ -2435,6 +2442,16 @@ bool PowerPointExport::WriteModernComments(sal_uInt32 nPageNum)
                             XML_authorId, GetAuthorGuid(aAuthor, getInitials(*xAnnotation)),
                             XML_created,
                             getModernCommentCreated(*xAnnotation, bRemoveCommentAuthorDates));
+
+        // The entry is anchored to the slide, which is named by both its identifier in the
+        // presentation and its creation identifier.
+        pFS->startElementNS(XML_pc, XML_sldMkLst,
+                            FSNS(XML_xmlns, XML_pc), getNamespaceURL(OOX_NS(pc)));
+        pFS->singleElementNS(XML_pc, XML_docMk);
+        pFS->singleElementNS(XML_pc, XML_sldMk,
+                             XML_cId, OString::number(nCreationId),
+                             XML_sldId, OString::number(nSlideId));
+        pFS->endElementNS(XML_pc, XML_sldMkLst);
 
         // The annotation holds its position in millimetres, and the part holds it in EMU. A reply
         // has no position of its own, as it is shown beside the entry it answers.
@@ -2729,7 +2746,19 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     WriteTransition(pFS);
     WriteAnimations(pFS, mXDrawPage, *this);
 
-    WritePageGuidExtLst(pFS, mXPagePropSet);
+    // The newer comment part goes out beside the older one: it is the only one with somewhere to
+    // put a reply and the moment a comment was written, while the older one is all a reader that
+    // predates it understands. Its entries name the slide by a creation identifier, which the
+    // slide then carries too, and the slide refers to the part from its extension list.
+    const sal_uInt32 nCreationId = comphelper::rng::uniform_uint_distribution(1, SAL_MAX_INT32);
+    OUString sModernCommentsRelId;
+    if (WriteModernComments(nPageNum, nSlideId, nCreationId))
+        sModernCommentsRelId = addRelation(
+            pFS->getOutputStream(), oox::getRelationship(Relationship::MODERNCOMMENTS),
+            Concat2View("../comments/modernComment_" + OUString::number(nPageNum + 1) + ".xml"));
+
+    WritePageExtLst(pFS, mXPagePropSet, sModernCommentsRelId.isEmpty() ? 0 : nCreationId,
+                    sModernCommentsRelId);
 
     pFS->endElementNS(XML_p, XML_sld);
 
@@ -2745,15 +2774,6 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
         addRelation(pFS->getOutputStream(),
                     oox::getRelationship(Relationship::COMMENTS),
                     Concat2View("../comments/comment" + OUString::number(nPageNum + 1) + ".xml"));
-
-    // The newer comment part goes out beside the older one: it is the only one with somewhere to
-    // put a reply and the moment a comment was written, while the older one is all a reader that
-    // predates it understands.
-    if (WriteModernComments(nPageNum))
-        addRelation(pFS->getOutputStream(),
-                    oox::getRelationship(Relationship::MODERNCOMMENTS),
-                    Concat2View("../comments/modernComment_" + OUString::number(nPageNum + 1)
-                                + ".xml"));
 
     SAL_INFO("sd.eppt", "----------------");
 }
@@ -2779,7 +2799,7 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
 
     pFS->endElementNS(XML_p, XML_cSld);
 
-    WritePageGuidExtLst(pFS, mXPagePropSet);
+    WritePageExtLst(pFS, mXPagePropSet);
 
     pFS->endElementNS(XML_p, XML_notes);
 
@@ -3208,7 +3228,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     WriteTextStyles(pFS);
 
     // p:extLst is the last child of p:sldMaster.
-    WritePageGuidExtLst(pFS, xMasterPagePropSet);
+    WritePageExtLst(pFS, xMasterPagePropSet);
 
     pFS->endElementNS(XML_p, XML_sldMaster);
 
@@ -4172,7 +4192,7 @@ void PowerPointExport::WriteNotesMaster()
 
     // mXDrawPage holds the notes master at this point, so its property set is queried
     // directly. p:extLst is the last child of p:notesMaster.
-    WritePageGuidExtLst(pFS, Reference< XPropertySet >(mXDrawPage, UNO_QUERY));
+    WritePageExtLst(pFS, Reference< XPropertySet >(mXDrawPage, UNO_QUERY));
 
     pFS->endElementNS(XML_p, XML_notesMaster);
 
@@ -4183,36 +4203,57 @@ void PowerPointExport::WriteNotesMaster()
 
 // The globally unique identifier of a page is stored in an extension list entry of its own,
 // with the coext namespace as the identifier of the extension. It is the same value ODF
-// stores in the coext:guid attribute of the page.
-void PowerPointExport::WritePageGuidExtLst(const FSHelperPtr& pFS,
-                                           const Reference< XPropertySet >& rXPropSet)
+// stores in the coext:guid attribute of the page. A slide also carries its creation identifier
+// and the relation to its comment part in entries of their own, when it has comments.
+void PowerPointExport::WritePageExtLst(const FSHelperPtr& pFS,
+                                       const Reference< XPropertySet >& rXPropSet,
+                                       sal_uInt32 nCreationId,
+                                       const OUString& rModernCommentsRelId)
 {
-    if (!rXPropSet.is())
+    OUString sGuid;
+    if (rXPropSet.is())
+    {
+        try
+        {
+            cpo::uno::Any aAny;
+            if (GetPropertyValue(aAny, rXPropSet, u"Guid"_ustr,
+                                 /*bTestPropertyAvailability*/ true))
+                aAny >>= sGuid;
+        }
+        catch (const Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sd.eppt",
+                                 "while exporting the globally unique identifier of the page");
+        }
+    }
+
+    if (sGuid.isEmpty() && nCreationId == 0 && rModernCommentsRelId.isEmpty())
         return;
 
-    try
+    pFS->startElementNS(XML_p, XML_extLst);
+    if (!sGuid.isEmpty())
     {
-        cpo::uno::Any aAny;
-        if (!GetPropertyValue(aAny, rXPropSet, u"Guid"_ustr, /*bTestPropertyAvailability*/ true))
-            return;
-
-        OUString sGuid;
-        aAny >>= sGuid;
-        if (sGuid.isEmpty())
-            return;
-
         const OUString sCoextNamespace = getNamespaceURL(OOX_NS(coext));
-        pFS->startElementNS(XML_p, XML_extLst);
         pFS->startElementNS(XML_p, XML_ext, XML_uri, sCoextNamespace);
         pFS->singleElement(FSNS(XML_coext, XML_pageGuid), FSNS(XML_xmlns, XML_coext),
                            sCoextNamespace, XML_val, sGuid);
         pFS->endElementNS(XML_p, XML_ext);
-        pFS->endElementNS(XML_p, XML_extLst);
     }
-    catch (const Exception&)
+    if (nCreationId != 0)
     {
-        TOOLS_WARN_EXCEPTION("sd.eppt", "while exporting the globally unique identifier of the page");
+        pFS->startElementNS(XML_p, XML_ext, XML_uri, "{BB962C8B-B14F-4D97-AF65-F5344CB8AC3E}");
+        pFS->singleElementNS(XML_p14, XML_creationId, XML_val, OString::number(nCreationId));
+        pFS->endElementNS(XML_p, XML_ext);
     }
+    if (!rModernCommentsRelId.isEmpty())
+    {
+        pFS->startElementNS(XML_p, XML_ext, XML_uri, "{6950BFC3-D8DA-4A85-94F7-54DA5524770B}");
+        pFS->singleElementNS(XML_p188, XML_commentRel,
+                             FSNS(XML_xmlns, XML_p188), getNamespaceURL(OOX_NS(p188)),
+                             FSNS(XML_r, XML_id), rModernCommentsRelId);
+        pFS->endElementNS(XML_p, XML_ext);
+    }
+    pFS->endElementNS(XML_p, XML_extLst);
 }
 
 void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& sUrl, OUString& sRelId, OUString& sName)
