@@ -11,11 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libeot))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libeot,$(LIBEOT_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libeot,1))
-
-$(eval $(call gb_UnpackedTarball_add_patches,libeot,\
-	external/libeot/0001-remove-unused-err.h.patch \
-	external/libeot/debug-no-werror.patch.0 \
-))
-
 # vim: set noet sw=4 ts=4:
