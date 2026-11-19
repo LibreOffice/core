@@ -13841,6 +13841,15 @@ if test -n "$UNIX_ONLY_AS_HELPER"; then
     fi
 fi
 
+# TMP is for the Windows programs the build runs, which ask Windows for the temp directory. The
+# cl.exe of MSVC 14.52 fails every /GL compile when TMP holds forward slashes, so give it
+# backslashes. TMPDIR is for the unix tools, and keeps the forward slashes.
+TMP_FOR_WINDOWS="$TEMP_DIRECTORY"
+if test "$_os" = "WINNT"; then
+    TMP_FOR_WINDOWS=`printf '%s' "$TEMP_DIRECTORY" | tr / '\\\\'`
+fi
+AC_SUBST(TMP_FOR_WINDOWS)
+
 # The command prefix that runs its arguments inside the unix helper environment, for the
 # few build steps that need a whole unix toolchain (e.g. regenerating icu's configure
 # with autoconf). Empty on platforms that need no helper, so the tools run directly.
