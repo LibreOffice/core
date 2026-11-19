@@ -36,6 +36,7 @@
 /// <reference path="./helper/rectUtil.ts" />
 /// <reference path="./helper/Events.ts"/>
 /// <reference path="./helper/util.ts"/>
+/// <reference path="./helper/titleCase.ts"/>
 /// <reference path="./helper/DocumentPage.ts"/>
 /// <reference path="./helper/CanvasRecorder.ts"/>
 /// <reference path="./helper/ScratchCanvasStub.ts"/>
@@ -141,5 +142,6 @@
 /// <reference path="./MochaHarness.test.ts" />
 /// <reference path="./AIChatSidebar.test.ts" />
 /// <reference path="./NotebookbarTabs.test.ts" />
+/// <reference path="./NotebookbarTitleCase.test.ts" />
 /// <reference path="./DocPartChanged.test.ts" />
 // NOTE: reference new tests here ...
