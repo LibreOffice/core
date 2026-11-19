@@ -43,6 +43,8 @@ class TextSelections {
 		if (!this.active) return;
 
 		this.active = false;
+		this.startRectangle = null;
+		this.endRectangle = null;
 		app.map.fire('textselectionchange', { active: this.active });
 		this.start.setShowSection(false);
 		this.end.setShowSection(false);
