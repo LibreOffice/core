@@ -163,6 +163,13 @@ protected:
     // @return a list of objects that must be deleted after the outermost EndUndo
     SAL_DLLPRIVATE std::vector<rtl::Reference<SdrObject>> DeleteMarkedList(SdrMarkList const& rMark); // DeleteMarked -> DeleteMarkedList
 
+    // Removes the objects of rObjects from their lists, with undo, and then each group or 3D
+    // scene that is left empty, until none is. The view leaves a group it has entered once that
+    // group is removed. rObjects is empty afterwards. rLazyDelete gets the objects that must be
+    // deleted after the outermost EndUndo.
+    SAL_DLLPRIVATE void ImpDeleteObjects(SdrMarkList& rObjects,
+                                         std::vector<rtl::Reference<SdrObject>>& rLazyDelete);
+
     // Check possibilities of all marked objects
     virtual void CheckPossibilities();
     void ForcePossibilities() const { if (m_bPossibilitiesDirty || mbSomeObjChgdFlag) const_cast<SdrEditView*>(this)->CheckPossibilities(); }
@@ -235,6 +242,11 @@ public:
 
     // delete all marked objects
     void DeleteMarkedObj();
+
+    // Deletes those objects as one undo step, as DeleteMarkedObj deletes the marked ones, with
+    // each group or 3D scene left empty. The objects that are deleted are no longer marked, and
+    // the other marks stay as they are.
+    void DeleteObjects(const std::vector<SdrObject*>& rObjects);
 
     // Set a logical enclosing rectangle for all marked objects.
     // It is not guaranteed if this succeeds, as a horizontal

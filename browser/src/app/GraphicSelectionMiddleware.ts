@@ -556,7 +556,12 @@ class GraphicSelection {
 		};
 		if (selected.some(ofTheLayout)) return false;
 
-		app.map.sendUnoCommand('.uno:Delete');
+		// The objects of a slide are deleted by their ids. On a sheet or a text page the engine
+		// deletes the selected ones, which can be a comment or a frame there.
+		if (RenderManager.kind() === 'slides') {
+			ChangeOutbox.sendEverythingAhead();
+			app.socket.sendMessage('deleteobjects ids=' + selected.join(','));
+		} else app.map.sendUnoCommand('.uno:Delete');
 		return RenderManager.deleteLocally(
 			part.partId,
 			selected,
@@ -579,6 +584,9 @@ class GraphicSelection {
 			if (event.commandName === '.uno:Delete' && event.success === false)
 				RenderManager.deleteRefused();
 		});
+		app.map.on('deleteobjectsrefused', (event: any) =>
+			RenderManager.deleteRefused(event.objectIds),
+		);
 	}
 
 	/// The engine was asked to enter the selected group; the context says what is selected then.

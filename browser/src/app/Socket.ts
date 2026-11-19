@@ -2938,6 +2938,18 @@ class Socket {
 			return true; // caller should exit immediately.
 		} else if (
 			textMsg.startsWith('error:') &&
+			command.errorCmd === 'deleteobjects'
+		) {
+			// The objects stay, and they show again where they were taken away at once. The answer
+			// names the objects, so the delete it refuses is known among several in flight.
+			const named = textMsg.match(/\bids=(\S+)/);
+			if (named)
+				this._map.fire('deleteobjectsrefused', {
+					objectIds: named[1].split(',').map(Number),
+				});
+			return true; // caller should exit immediately.
+		} else if (
+			textMsg.startsWith('error:') &&
 			command.errorCmd === 'slideimport'
 		) {
 			this._map.fire('slideimporterror', {

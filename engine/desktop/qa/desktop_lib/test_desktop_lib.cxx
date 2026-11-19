@@ -115,6 +115,7 @@
 #include <svx/svdopath.hxx>
 #include <tools/UniqueID.hxx>
 #include <svx/svdorect.hxx>
+#include <svx/svdogrp.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <vcl/BitmapTools.hxx>
@@ -365,6 +366,7 @@ public:
     void testObjectPathCommands();
     void testLocalCellCursorViewOption();
     void testConvertObjects();
+    void testDeleteObjects();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -507,6 +509,7 @@ public:
     CPPUNIT_TEST(testObjectPathCommands);
     CPPUNIT_TEST(testLocalCellCursorViewOption);
     CPPUNIT_TEST(testConvertObjects);
+    CPPUNIT_TEST(testDeleteObjects);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -6931,6 +6934,77 @@ void DesktopKitTest::testConvertObjects()
     CPPUNIT_ASSERT(pPath);
     CPPUNIT_ASSERT_EQUAL(nRectId, pPath->GetUniqueID());
     CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pPath), pPage->FindObjectByUniqueID(nRectId));
+}
+
+void DesktopKitTest::testDeleteObjects()
+{
+    // Objects deleted by their ids go as one undo step, whatever the view has selected, and a
+    // group goes with its last members.
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+    SdrPageView* pPageView = nullptr;
+    SdrObject* pTitle = firstObjectOfThePage(pPageView);
+    SdrPage* pPage = pPageView->GetPage();
+    SdrModel& rModel = pPage->getSdrModelFromSdrPage();
+    SdrView* pView = SfxViewShell::Current()->GetDrawView();
+    SfxUndoManager* pUndoManager = rModel.GetSdrUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    rtl::Reference<SdrRectObj> pFirst
+        = new SdrRectObj(rModel, tools::Rectangle(1000, 1000, 2000, 2000));
+    rtl::Reference<SdrRectObj> pSecond
+        = new SdrRectObj(rModel, tools::Rectangle(3000, 1000, 4000, 2000));
+    rtl::Reference<SdrRectObj> pLeftMember
+        = new SdrRectObj(rModel, tools::Rectangle(1000, 3000, 2000, 4000));
+    rtl::Reference<SdrRectObj> pRightMember
+        = new SdrRectObj(rModel, tools::Rectangle(3000, 3000, 4000, 4000));
+    rtl::Reference<SdrObjGroup> pGroup = new SdrObjGroup(rModel);
+    pGroup->GetSubList()->InsertObject(pLeftMember.get());
+    pGroup->GetSubList()->InsertObject(pRightMember.get());
+    pPage->InsertObject(pFirst.get());
+    pPage->InsertObject(pSecond.get());
+    pPage->InsertObject(pGroup.get());
+    const size_t nObjects = pPage->GetObjCount();
+    const OString aFirstId(OString::number(pFirst->GetUniqueID()));
+    const sal_uInt64 nGroupId = pGroup->GetUniqueID();
+    const OString aMembers(OString::number(pLeftMember->GetUniqueID()) + ","
+                           + OString::number(pRightMember->GetUniqueID()));
+
+    // The second rectangle is the one selected.
+    pView->UnmarkAllObj();
+    pView->MarkObj(pSecond.get(), pPageView);
+
+    // A read-only view deletes nothing, and neither does a list that names a placeholder that the
+    // layout of the slide places. The page of a slide is also the object that places its
+    // placeholders [-loplugin:crosscast]:
+    pTitle->SetUserCall(dynamic_cast<SdrObjUserCall*>(pPage));
+    KitHelper::setViewReadOnly(pDocument->getView(), true);
+    CPPUNIT_ASSERT(!pDocument->deleteObjects(aFirstId.getStr()));
+    KitHelper::setViewReadOnly(pDocument->getView(), false);
+    const OString aWithTheTitle(aFirstId + "," + OString::number(pTitle->GetUniqueID()));
+    CPPUNIT_ASSERT(!pDocument->deleteObjects(aWithTheTitle.getStr()));
+    CPPUNIT_ASSERT_EQUAL(nObjects, pPage->GetObjCount());
+
+    // The first rectangle goes, and the second one stays selected.
+    const size_t nUndoSteps(pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT(pDocument->deleteObjects(aFirstId.getStr()));
+    CPPUNIT_ASSERT_EQUAL(nObjects - 1, pPage->GetObjCount());
+    CPPUNIT_ASSERT(!pFirst->IsInserted());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pView->GetMarkedObjectList().GetMarkCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pSecond.get()),
+                         pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+
+    // Deleting both members of the group deletes the group too, in the same undo step.
+    CPPUNIT_ASSERT(pDocument->deleteObjects(aMembers.getStr()));
+    CPPUNIT_ASSERT_EQUAL(nObjects - 2, pPage->GetObjCount());
+    CPPUNIT_ASSERT(!pPage->FindObjectByUniqueID(nGroupId));
+    CPPUNIT_ASSERT_EQUAL(nUndoSteps + 2, pUndoManager->GetUndoActionCount());
+
+    // One undo brings the group back with both its members.
+    pUndoManager->Undo();
+    SdrObject* pBack = pPage->FindObjectByUniqueID(nGroupId);
+    CPPUNIT_ASSERT(pBack);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pBack->GetSubList()->GetObjCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);

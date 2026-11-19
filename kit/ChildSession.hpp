@@ -230,6 +230,8 @@ private:
     /// Converts the objects the client names to curves, polygons, contours or editable paths,
     /// and each new object keeps the id of the object it replaces.
     bool convertObjects(const StringVector& tokens);
+    /// Deletes the objects the client names. The client is told when nothing is deleted.
+    bool deleteObjects(const StringVector& tokens);
     /// Moves, adds and removes the points and weights of a drawing object's path which the client
     /// names, and leaves the rest of the path as it stands.
     bool setObjectPoints(const StringVector& tokens);

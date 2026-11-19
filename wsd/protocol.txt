@@ -875,6 +875,19 @@ convertobjects ids=<ids> to=<to>
     view cannot mark, for a placeholder that the layout of the page places, or for objects at
     different levels.
 
+deleteobjects ids=<ids>
+
+    <ids> is a comma separated list of the unique ids of drawing objects, as for selectobjects,
+    which all sit at the same level. Deletes them as one undo step, with each group or 3D scene
+    that is left empty. The selection of the view loses the objects that are deleted and keeps
+    the others, and a view that edits the text of one of them ends that edit first. Works in a
+    presentation or a drawing. When nothing is deleted, the answer is
+    'error: cmd=deleteobjects kind=failure ids=<ids>', with the <ids> of the message: for a
+    read-only view, for another kind of document, for an id that names nothing on the page the
+    view shows, for an object this view cannot mark, for a placeholder that the layout of the page
+    places, for a comment, for an object inside a diagram, or for objects at different levels. A
+    diagram as a whole is deleted.
+
 setobjecttransform to=<mappings> as=<what> [sequence=<sequence>]
 
     <mappings> holds one item per object, separated by semicolons. An item is the unique id of a

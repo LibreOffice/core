@@ -5613,6 +5613,73 @@ static bool lcl_viewReaches(const SdrPageView& rPageView, const SdrObject& rObje
     return false;
 }
 
+/// The ids of a comma separated list, leaving out the empty entries.
+static std::vector<sal_uInt64> lcl_idsOf(const char* pObjectIds)
+{
+    std::vector<sal_uInt64> aIds;
+    const OString aObjectIds(pObjectIds ? pObjectIds : "");
+    for (sal_Int32 nAt = 0; nAt >= 0;)
+    {
+        const OString aId(aObjectIds.getToken(0, ',', nAt));
+        if (!aId.isEmpty())
+            aIds.push_back(aId.toUInt64());
+    }
+    return aIds;
+}
+
+/// Whether the object has one of those ids, or sits inside a group that has one. False for none.
+static bool lcl_isOrIsInOneOf(const SdrObject* pObject, const std::vector<sal_uInt64>& rIds)
+{
+    for (const SdrObject* pAbove = pObject; pAbove;
+         pAbove = pAbove->getParentSdrObjectFromSdrObject())
+    {
+        if (std::find(rIds.begin(), rIds.end(), pAbove->GetUniqueID()) != rIds.end())
+            return true;
+    }
+    return false;
+}
+
+/*
+    The objects of those ids on the page of the view, in that order. Answers false and sets the
+    message for an id that names no object on the page, for an object the view does not reach,
+    for a placeholder that the layout places, and for objects that do not all sit at the same
+    level: directly on the page, or in one and the same group.
+*/
+static bool lcl_objectsToChange(const SdrPageView& rPageView, const std::vector<sal_uInt64>& rIds,
+                                std::vector<SdrObject*>& rObjects)
+{
+    const SdrPage* pPage = rPageView.GetPage();
+    for (const sal_uInt64 nId : rIds)
+    {
+        SdrObject* pObject = pPage->FindObjectByUniqueID(nId);
+        if (!pObject)
+        {
+            SetLastExceptionMsg(u"No object of that id is on the page"_ustr);
+            return false;
+        }
+
+        if (!lcl_viewReaches(rPageView, *pObject))
+            return false;
+
+        if (pPage->IsPlacedByTheLayout(*pObject))
+        {
+            SetLastExceptionMsg(u"The layout of the page places the object"_ustr);
+            return false;
+        }
+
+        if (!rObjects.empty()
+            && pObject->getParentSdrObjListFromSdrObject()
+                   != rObjects.front()->getParentSdrObjListFromSdrObject())
+        {
+            SetLastExceptionMsg(u"The objects do not sit at the same level"_ustr);
+            return false;
+        }
+
+        rObjects.push_back(pObject);
+    }
+    return true;
+}
+
 /*
     Converts the objects of those ids, on the page the view shows, as one undo step. "curve" makes
     curves of them, "polygon" polygons with straight edges, "contour" the outline of the area that
@@ -5652,61 +5719,107 @@ void COKitDocumentImpl::convertObjects(const char* pObjectIds, const char* pTo)
         return;
     }
 
-    std::vector<sal_uInt64> aIds;
-    const OString aObjectIds(pObjectIds ? pObjectIds : "");
-    for (sal_Int32 nAt = 0; nAt >= 0;)
-    {
-        const OString aId(aObjectIds.getToken(0, ',', nAt));
-        if (!aId.isEmpty())
-            aIds.push_back(aId.toUInt64());
-    }
+    const std::vector<sal_uInt64> aIds(lcl_idsOf(pObjectIds));
 
     // A text typed into one of the objects goes into the model first, so it is converted too.
     // Ending the edit deletes a text frame left empty, so the objects are looked up after it.
-    if (const SdrObject* pEdited = pView->GetTextEditObject())
-    {
-        bool bConverted = false;
-        for (const SdrObject* pAbove = pEdited; pAbove && !bConverted;
-             pAbove = pAbove->getParentSdrObjectFromSdrObject())
-            bConverted = std::find(aIds.begin(), aIds.end(), pAbove->GetUniqueID()) != aIds.end();
-        if (bConverted)
-            pView->SdrEndTextEdit();
-    }
+    if (lcl_isOrIsInOneOf(pView->GetTextEditObject(), aIds))
+        pView->SdrEndTextEdit();
 
     std::vector<SdrObject*> aObjects;
-    for (const sal_uInt64 nId : aIds)
-    {
-        SdrObject* pObject = pPage->FindObjectByUniqueID(nId);
-        if (!pObject)
-        {
-            SetLastExceptionMsg(u"No object of that id is on the page"_ustr);
-            return;
-        }
-
-        if (!lcl_viewReaches(*pPageView, *pObject))
-            return;
-
-        if (pPage->IsPlacedByTheLayout(*pObject))
-        {
-            SetLastExceptionMsg(u"The layout of the page places the object"_ustr);
-            return;
-        }
-
-        if (!aObjects.empty()
-            && pObject->getParentSdrObjListFromSdrObject()
-                   != aObjects.front()->getParentSdrObjListFromSdrObject())
-        {
-            SetLastExceptionMsg(u"The objects do not sit at the same level"_ustr);
-            return;
-        }
-
-        aObjects.push_back(pObject);
-    }
-
-    if (aObjects.empty())
+    if (!lcl_objectsToChange(*pPageView, aIds, aObjects) || aObjects.empty())
         return;
 
     pView->ConvertObjects(aObjects, aTo != "polygon", aTo == "contour", aTo == "editable");
+}
+
+/*
+    Deletes the objects of those ids, on the page the view shows, as one undo step, the way the
+    desktop deletes the selected objects: a group or a 3D scene that is left empty goes with them.
+    The selection of the view loses the objects that go and keeps the others. A view that edits
+    the text of one of the objects, or of an object inside one of them, ends that edit first. A
+    text frame that ending the edit deletes, because it was new and is empty, counts as deleted.
+
+    Answers false and changes nothing for a document that is not a presentation or a drawing, for
+    a read-only view, for an id that names no object on the page, for an object the view does not
+    reach, for a placeholder that the layout places, for a comment, for an object inside a
+    diagram, and for objects that do not all sit at the same level. A diagram as a whole goes.
+*/
+bool COKitDocumentImpl::deleteObjects(const char* pObjectIds)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::deleteObjects");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    const COKitDocumentType eType(getDocumentType());
+    if (eType != COKitDocumentType::PRESENTATION && eType != COKitDocumentType::DRAWING)
+    {
+        SetLastExceptionMsg(u"Objects are deleted by their ids only on a slide or a page"_ustr);
+        return false;
+    }
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return false;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
+    if (!pPageView || !pPageView->GetPage())
+    {
+        SetLastExceptionMsg(u"The view shows no page to delete objects on"_ustr);
+        return false;
+    }
+
+    const std::vector<sal_uInt64> aIds(lcl_idsOf(pObjectIds));
+
+    std::vector<SdrObject*> aObjects;
+    if (!lcl_objectsToChange(*pPageView, aIds, aObjects))
+        return false;
+
+    for (const SdrObject* pObject : aObjects)
+    {
+        // A comment goes with its annotation, and an object inside a diagram with the diagram's
+        // data.
+        if (pObject->isAnnotationObject())
+        {
+            SetLastExceptionMsg(u"A comment is not deleted as an object"_ustr);
+            return false;
+        }
+
+        for (const SdrObject* pAbove = pObject->getParentSdrObjectFromSdrObject(); pAbove;
+             pAbove = pAbove->getParentSdrObjectFromSdrObject())
+        {
+            if (pAbove->isDiagram())
+            {
+                SetLastExceptionMsg(u"An object inside a diagram is not deleted as an object"_ustr);
+                return false;
+            }
+        }
+    }
+
+    // A view that edits the text of an object that goes ends that edit. Ending it deletes a text
+    // frame that was new and is empty, so the objects are looked up again after it, and an object
+    // that is no longer on the page went then.
+    pView->GetModel().ForAllListeners(
+        [&aIds](SfxListener* pListener)
+        {
+            SdrObjEditView* pEditView = dynamic_cast<SdrObjEditView*>(pListener);
+            if (pEditView && pEditView->IsTextEdit()
+                && lcl_isOrIsInOneOf(pEditView->GetTextEditObject(), aIds))
+                pEditView->SdrEndTextEdit();
+            return false;
+        });
+
+    aObjects.clear();
+    for (const sal_uInt64 nId : aIds)
+    {
+        if (SdrObject* pObject = pPageView->GetPage()->FindObjectByUniqueID(nId))
+            aObjects.push_back(pObject);
+    }
+
+    pView->DeleteObjects(aObjects);
+    return true;
 }
 
 /*

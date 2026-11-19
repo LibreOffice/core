@@ -553,9 +553,10 @@ class RenderManager {
 		);
 	}
 
-	/// The engine refused the oldest delete made here; the objects come back as it has them.
-	static deleteRefused(): void {
-		RenderManager.ensureInstance().deleteRefused();
+	/// The engine refused a delete made here, the one of those objects where they are named, else
+	/// the oldest one; the objects come back as it has them.
+	static deleteRefused(objectIds?: number[]): void {
+		RenderManager.ensureInstance().deleteRefused(objectIds);
 	}
 
 	static renderPrimitives(

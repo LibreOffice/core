@@ -404,9 +404,10 @@ abstract class RenderManagerBase {
 		return false;
 	}
 
-	/// The engine refused the oldest delete made here.
+	/// The engine refused a delete made here: the one of those objects where they are named,
+	/// else the oldest one.
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	deleteRefused(): void {}
+	deleteRefused(_objectIds?: number[]): void {}
 
 	renderObjectsWith(
 		_context: CanvasRenderingContext2D,

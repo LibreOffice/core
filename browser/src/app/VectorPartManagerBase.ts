@@ -589,11 +589,18 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		data.order = data.order.filter((id: number) => !gone.has(id));
 	}
 
-	/// The engine refused the oldest delete made here, which changes nothing on the page, so the
-	/// part is asked for again as the engine has it.
-	deleteRefused(): void {
-		const oldest = this._deletedHere[0];
-		if (oldest) this._noDeleteReported(oldest);
+	/*
+		The engine refused a delete made here, which changes nothing on the page, so the part is
+		asked for again as the engine has it. The delete is the oldest one that took all of those
+		objects out, where they are named, and the oldest one otherwise.
+	*/
+	deleteRefused(objectIds?: number[]): void {
+		const refused = objectIds
+			? this._deletedHere.find((note) =>
+					objectIds.every((id: number) => note.objectIds.has(id)),
+				)
+			: this._deletedHere[0];
+		if (refused) this._noDeleteReported(refused);
 	}
 
 	/// No report of the engine took the objects deleted here away, as where it refused to delete

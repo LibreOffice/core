@@ -680,6 +680,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setlocalcellcursor") ||
                tokens.equals(0, "selectobjects") ||
                tokens.equals(0, "convertobjects") ||
+               tokens.equals(0, "deleteobjects") ||
                tokens.equals(0, "setobjectpoints") ||
                tokens.equals(0, "splitobjectpath") ||
                tokens.equals(0, "setobjectpathclosed") ||
@@ -789,6 +790,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "convertobjects"))
         {
             return convertObjects(tokens);
+        }
+        else if (tokens.equals(0, "deleteobjects"))
+        {
+            return deleteObjects(tokens);
         }
         else if (tokens.equals(0, "setobjectpoints"))
         {
@@ -2535,6 +2540,34 @@ bool ChildSession::convertObjects(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->convertObjects(objectIds.c_str(), to.c_str());
+    return true;
+}
+
+bool ChildSession::deleteObjects(const StringVector& tokens)
+{
+    std::string objectIds;
+
+    if (tokens.size() != 2 || !getTokenString(tokens[1], "ids", objectIds))
+    {
+        sendTextFrameAndLogError("error: cmd=deleteobjects kind=syntax");
+        return false;
+    }
+
+    // The client shows the objects as gone at once, and the error brings them back. It names
+    // the objects, since several deletes can be on their way.
+    const std::string refused = "error: cmd=deleteobjects kind=failure ids=" + objectIds;
+    if (isReadOnly())
+    {
+        sendTextFrameAndLogError(refused);
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    if (!getLOKitDocument()->deleteObjects(objectIds.c_str()))
+    {
+        sendTextFrameAndLogError(refused);
+        return false;
+    }
     return true;
 }
 

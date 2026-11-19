@@ -819,6 +819,96 @@ static void lcl_LazyDelete(std::vector<rtl::Reference<SdrObject>> & rLazyDelete)
         rLazyDelete.pop_back();
 }
 
+void SdrEditView::ImpDeleteObjects(SdrMarkList& rObjects,
+                                   std::vector<rtl::Reference<SdrObject>>& rLazyDelete)
+{
+    // remove as long as something is in the list. This allows to schedule objects for
+    // removal for a next run as needed
+    while(rObjects.GetMarkCount())
+    {
+        // vector to remember the parents which may be empty after object removal
+        std::vector< SdrObject* > aParents;
+
+        {
+            const size_t nCount(rObjects.GetMarkCount());
+
+            for(size_t a = 0; a < nCount; ++a)
+            {
+                // in the first run, add all found parents, but only once
+                SdrMark* pMark(rObjects.GetMark(a));
+                SdrObject* pObject(pMark->GetMarkedSdrObj());
+                SdrObject* pParent(pObject->getParentSdrObjectFromSdrObject());
+
+                if(pParent)
+                {
+                    if(!aParents.empty())
+                    {
+                        std::vector< SdrObject* >::iterator aFindResult =
+                            std::find(aParents.begin(), aParents.end(), pParent);
+
+                        if(aFindResult == aParents.end())
+                        {
+                            aParents.push_back(pParent);
+                        }
+                    }
+                    else
+                    {
+                        aParents.push_back(pParent);
+                    }
+                }
+            }
+
+            if(!aParents.empty())
+            {
+                // in a 2nd run, remove all objects which may already be scheduled for
+                // removal. I am not sure if this can happen, but theoretically
+                // a to-be-removed object may already be the group/3DScene itself
+                for(size_t a = 0; a < nCount; ++a)
+                {
+                    SdrMark* pMark = rObjects.GetMark(a);
+                    SdrObject* pObject = pMark->GetMarkedSdrObj();
+
+                    std::vector< SdrObject* >::iterator aFindResult =
+                        std::find(aParents.begin(), aParents.end(), pObject);
+
+                    if(aFindResult != aParents.end())
+                    {
+                        aParents.erase(aFindResult);
+                    }
+                }
+            }
+        }
+
+        // original stuff: remove selected objects. Handle clear will
+        // do something only once
+        auto temp(DeleteMarkedList(rObjects));
+        rLazyDelete.insert(rLazyDelete.end(), temp.begin(), temp.end());
+        rObjects.Clear();
+        maHdlList.Clear();
+
+        while(!aParents.empty() && !rObjects.GetMarkCount())
+        {
+            // iterate over remembered parents
+            SdrObject* pParent = aParents.back();
+            aParents.pop_back();
+
+            if(pParent->GetSubList() && 0 == pParent->GetSubList()->GetObjCount())
+            {
+                // we detected an empty parent, a candidate to leave group/3DScene
+                // if entered
+                if(GetSdrPageView()->GetCurrentGroup()
+                    && GetSdrPageView()->GetCurrentGroup() == pParent)
+                {
+                    GetSdrPageView()->LeaveOneGroup();
+                }
+
+                // schedule empty parent for removal
+                rObjects.InsertEntry(SdrMark(pParent, GetSdrPageView()));
+            }
+        }
+    }
+}
+
 void SdrEditView::DeleteMarkedObj()
 {
     const SdrMarkList& rMarkList = GetMarkedObjectList();
@@ -852,100 +942,53 @@ void SdrEditView::DeleteMarkedObj()
         }
     }
 
-    // remove as long as something is selected. This allows to schedule objects for
-    // removal for a next run as needed
     std::vector<rtl::Reference<SdrObject>> lazyDeleteObjects;
 
-    while(!bDone && rMarkList.GetMarkCount())
-    {
-        // vector to remember the parents which may be empty after object removal
-        std::vector< SdrObject* > aParents;
-
-        {
-            const size_t nCount(rMarkList.GetMarkCount());
-
-            for(size_t a = 0; a < nCount; ++a)
-            {
-                // in the first run, add all found parents, but only once
-                SdrMark* pMark(rMarkList.GetMark(a));
-                SdrObject* pObject(pMark->GetMarkedSdrObj());
-                SdrObject* pParent(pObject->getParentSdrObjectFromSdrObject());
-
-                if(pParent)
-                {
-                    if(!aParents.empty())
-                    {
-                        std::vector< SdrObject* >::iterator aFindResult =
-                            std::find(aParents.begin(), aParents.end(), pParent);
-
-                        if(aFindResult == aParents.end())
-                        {
-                            aParents.push_back(pParent);
-                        }
-                    }
-                    else
-                    {
-                        aParents.push_back(pParent);
-                    }
-                }
-            }
-
-            if(!aParents.empty())
-            {
-                // in a 2nd run, remove all objects which may already be scheduled for
-                // removal. I am not sure if this can happen, but theoretically
-                // a to-be-removed object may already be the group/3DScene itself
-                for(size_t a = 0; a < nCount; ++a)
-                {
-                    SdrMark* pMark = rMarkList.GetMark(a);
-                    SdrObject* pObject = pMark->GetMarkedSdrObj();
-
-                    std::vector< SdrObject* >::iterator aFindResult =
-                        std::find(aParents.begin(), aParents.end(), pObject);
-
-                    if(aFindResult != aParents.end())
-                    {
-                        aParents.erase(aFindResult);
-                    }
-                }
-            }
-        }
-
-        // original stuff: remove selected objects. Handle clear will
-        // do something only once
-        auto temp(DeleteMarkedList(rMarkList));
-        lazyDeleteObjects.insert(lazyDeleteObjects.end(), temp.begin(), temp.end());
-        GetMarkedObjectListWriteAccess().Clear();
-        maHdlList.Clear();
-
-        while(!aParents.empty() && !rMarkList.GetMarkCount())
-        {
-            // iterate over remembered parents
-            SdrObject* pParent = aParents.back();
-            aParents.pop_back();
-
-            if(pParent->GetSubList() && 0 == pParent->GetSubList()->GetObjCount())
-            {
-                // we detected an empty parent, a candidate to leave group/3DScene
-                // if entered
-                if(GetSdrPageView()->GetCurrentGroup()
-                    && GetSdrPageView()->GetCurrentGroup() == pParent)
-                {
-                    GetSdrPageView()->LeaveOneGroup();
-                }
-
-                // schedule empty parent for removal
-                GetMarkedObjectListWriteAccess().InsertEntry(
-                    SdrMark(pParent, GetSdrPageView()));
-            }
-        }
-    }
+    if (!bDone)
+        ImpDeleteObjects(GetMarkedObjectListWriteAccess(), lazyDeleteObjects);
 
     // end undo and change messaging moved at the end
     EndUndo();
     MarkListHasChanged();
 
     lcl_LazyDelete(lazyDeleteObjects);
+}
+
+void SdrEditView::DeleteObjects(const std::vector<SdrObject*>& rObjects)
+{
+    if (rObjects.empty())
+        return;
+
+    SdrMarkList aObjects;
+    for (SdrObject* pObject : rObjects)
+        aObjects.InsertEntry(SdrMark(pObject, GetSdrPageView()));
+
+    BrkAction();
+    BegUndo(SvxResId(STR_EditDelete), aObjects.GetMarkDescription(), SdrRepeatFunc::Delete);
+    std::vector<rtl::Reference<SdrObject>> aLazyDelete;
+    ImpDeleteObjects(aObjects, aLazyDelete);
+    EndUndo();
+
+    // An object that is no longer on a page was deleted, itself or with the group it was in.
+    SdrMarkList& rMarks = GetMarkedObjectListWriteAccess();
+    bool bMarksChanged = false;
+    for (size_t nAt = rMarks.GetMarkCount(); nAt > 0;)
+    {
+        --nAt;
+        const SdrObject* pMarked = rMarks.GetMark(nAt)->GetMarkedSdrObj();
+        if (!pMarked || !pMarked->getSdrPageFromSdrObject())
+        {
+            rMarks.DeleteMark(nAt);
+            bMarksChanged = true;
+        }
+    }
+
+    // Deleting removes the handles, so the marks that stay get theirs again.
+    if (bMarksChanged)
+        MarkListHasChanged();
+    AdjustMarkHdl();
+
+    lcl_LazyDelete(aLazyDelete);
 }
 
 void SdrEditView::CopyMarkedObj()

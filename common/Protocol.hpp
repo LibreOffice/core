@@ -472,7 +472,8 @@ namespace COOLProtocol
             tokens.equals(0, "splitobjectpath") ||
             tokens.equals(0, "setobjectpathclosed") ||
             tokens.equals(0, "setobjectpoints") ||
-            tokens.equals(0, "convertobjects"))
+            tokens.equals(0, "convertobjects") ||
+            tokens.equals(0, "deleteobjects"))
         {
             return true;
         }

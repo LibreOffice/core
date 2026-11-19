@@ -264,6 +264,7 @@ namespace desktop {
         bool exportPages(const char* pParts, const char* pUrl) override;
         void selectObjects(const char* pObjectIds) override;
         void convertObjects(const char* pObjectIds, const char* pTo) override;
+        bool deleteObjects(const char* pObjectIds) override;
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges,
                              const char* pStep) override;
         void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint,

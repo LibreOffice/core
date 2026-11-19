@@ -1378,6 +1378,23 @@ struct COKitDocument
     virtual void convertObjects(const char* pObjectIds, const char* pTo) = 0;
 
     /**
+     * Deletes drawing objects of the page the view shows, as one undo step, with each group or 3D
+     * scene that is left empty. The selection of the view loses the objects that are deleted and
+     * keeps the others. A view that edits the text of one of them ends that edit first.
+     *
+     * @param pObjectIds the objects, as a comma separated list of the ids
+     *        SdrObject::GetUniqueID() answers. They all sit at the same level: directly on the
+     *        page, or in one and the same group.
+     *
+     * @return false, and nothing changes, for a document that is not a presentation or a
+     *         drawing, for a read-only view, for an id that names no object on the page, for an
+     *         object the view cannot mark, for a placeholder that the layout of the page places,
+     *         for a comment, for an object inside a diagram, or for objects that do not sit at the
+     *         same level. A diagram as a whole is deleted.
+     */
+    virtual bool deleteObjects(const char* pObjectIds) = 0;
+
+    /**
      * Moves, adds and removes points and weights of the path an object is drawn along, for an
      * object that is drawn along one.
      *
