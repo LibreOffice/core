@@ -174,7 +174,7 @@ static OUString DecodeSpaces_Impl( const OUString& rSource );
 void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& )
 {
     SolarMutexGuard aGuard;
-    mpAntiImpl->FileSelectionChanged();
+    handleFileSelectionChanged();
 }
 
 void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& )
@@ -2792,10 +2792,6 @@ const uno::Reference < XFilePicker3 >& FileDialogHelper::GetFilePicker() const
 }
 
 // XFilePickerListener Methods
-void FileDialogHelper::FileSelectionChanged()
-{
-    mpImpl->handleFileSelectionChanged();
-}
 
 void FileDialogHelper::DirectoryChanged()
 {
