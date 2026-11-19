@@ -68,6 +68,7 @@
 #include <common/Clipboard.hpp>
 #include <common/CODAConfig.hpp>
 #include <common/Common.hpp>
+#include <common/EditorFrameForm.hpp>
 #include <common/EditorFrameMessages.hpp>
 #include <common/EditorFrameScripts.hpp>
 #include <common/FailurePage.hpp>
@@ -5656,15 +5657,15 @@ static void openStarterWindow()
 constexpr size_t MAX_FORM_BYTES = 2 * 1024 * 1024;
 constexpr ULONG FORM_CHUNK_BYTES = 4096;
 
-/// Builds CODA's editor page in the emptied editor iframe. It posts the integrator's form again to
-/// get coolwsd's settings, then loads CODA's page, scripts and styles from config.base.
+/// Builds CODA's editor page in the emptied editor iframe. It loads CODA's page, scripts and
+/// styles from config.base.
 /// TODO: Share this with Qt's copy in qt/RemoteOpen.cpp.
 constexpr const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
 (config, clientDocumentLoadingRefusal) => {
     if (window.codaRemotePage)
         return;
 
-    window.codaRemotePage = { base: config.base };
+    window.codaRemotePage = { base: config.base, accessToken: config.accessToken };
 
     const text = (response) => {
         if (!response.ok)
@@ -5672,31 +5673,17 @@ constexpr const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
         return response.text();
     };
 
-    const serverPage = fetch(config.formUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: config.formBody,
-    }).then(text);
-
     const appPage = fetch(config.base + 'cool.html').then(text);
 
     const refusal = clientDocumentLoadingRefusal(config.formUrl);
 
-    Promise.all([serverPage, appPage, refusal]).then(([serverHtml, appHtml, reason]) => {
+    Promise.all([appPage, refusal]).then(([appHtml, reason]) => {
         // Without client document loading, native code learns why (in a call whose reply nobody
         // waits for), and shows the server's own editor in the frame:
         if (reason !== null) {
             window.chrome.webview.postMessage('CALL 0 serverEditor ' + reason);
             return;
         }
-
-        // coolwsd writes the values for its editor into these two elements.
-        const server = new DOMParser().parseFromString(serverHtml, 'text/html');
-        const variables = server.getElementById('initial-variables');
-        const cssVariables = server.getElementById('init-css-vars');
-
-        window.codaRemotePage.accessToken = variables?.dataset.accessToken;
-        window.codaRemotePage.cssVariables = cssVariables ? cssVariables.value : '';
 
         const app = new DOMParser().parseFromString(appHtml, 'text/html');
         const isRelative = (address) => address && !address.includes(':');
@@ -5820,8 +5807,8 @@ static std::string posterOf(ICoreWebView2WebResourceRequest* request)
 
 // The integrator opens a document by posting a form with the token and settings into the iframe
 // that holds the editor. We save that form because we don't want the cool.html from the remote
-// coolwsd to load. Later we would inject a script with this form which can repost this from
-// the javascript world and get the cool.html and scrape the settings out of it.
+// coolwsd to load. CODA's page gets the access token from the form, and the form is posted again
+// where the frame falls back to the server's own editor.
 static void keepEditorForm(DocumentTab& account, ICoreWebView2WebResourceRequest* request,
                            const std::string& url)
 {
@@ -6193,7 +6180,8 @@ static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std
 
     Poco::JSON::Object::Ptr config = new Poco::JSON::Object();
     config->set("formUrl", account->editorFormUrl);
-    config->set("formBody", account->editorForm);
+    config->set(
+        "accessToken", EditorFrameForm::accessToken(account->editorFormUrl, account->editorForm));
     config->set("base", std::string(COOLLOCAL_BUNDLED_PATH));
     std::string const script = std::string("(") + PUT_CODA_PAGE_IN_SCRIPT + ")("
         + JsonUtil::jsonToString(config) + ", "
