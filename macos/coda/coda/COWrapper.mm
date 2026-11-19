@@ -28,6 +28,7 @@
 #include <cstring>
 #include <set>
 #include <common/Clipboard.hpp>
+#include <common/EditorFrameForm.hpp>
 #include <common/EditorFrameMessages.hpp>
 #include <common/EditorFrameScripts.hpp>
 #include <common/FailurePage.hpp>
@@ -653,6 +654,12 @@ void install_filepicker_provider(COKit &rOffice)
 
     const std::string script = FailurePage::script([title UTF8String], texts);
     return [NSString stringWithUTF8String:script.c_str()];
+}
+
++ (NSString *)editorPageAccessToken:(NSString *)formUrl form:(NSData *)form {
+    std::string const body(static_cast<char const *>(form.bytes), form.length);
+    std::string const token = EditorFrameForm::accessToken([formUrl UTF8String], body);
+    return [NSString stringWithUTF8String:token.c_str()];
 }
 
 + (NSString *)clientDocumentLoadingRefusalScript {

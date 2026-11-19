@@ -293,7 +293,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             if case .success(let value) = result, let reason = value as? String {
                 self.useServerEditor(reason: reason, editorUrl: editorFormUrl, form: editorForm, in: frameInfo)
             } else {
-                self.putCodaPageIn(frameInfo)
+                let accessToken = COWrapper.editorPageAccessToken(
+                    formUrl: editorFormUrl.absoluteString, form: editorForm)
+                self.putCodaPageIn(frameInfo, accessToken: accessToken)
             }
         }
     }
@@ -568,14 +570,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     // WebKit cannot reply to a request in place of coolwsd, as WebView2 can, and
     // coolwsd's policy refuses scripts from an app scheme. So CODA's page goes in as text.
     private static let putCodaPageInScript = """
-        window.codaRemotePage = {};
-
-        // coolwsd writes the values for its editor into these two elements.
-        const variables = document.getElementById('initial-variables');
-        const cssVariables = document.getElementById('init-css-vars');
-
-        window.codaRemotePage.accessToken = variables?.dataset.accessToken;
-        window.codaRemotePage.cssVariables = cssVariables ? cssVariables.value : '';
+        window.codaRemotePage = { accessToken };
 
         const codaPage = new DOMParser().parseFromString(codaHtml, 'text/html');
         const scripts = Array.from(codaPage.scripts, (script) => script.getAttribute('src'));
@@ -605,7 +600,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         return try? String(contentsOf: resources.appendingPathComponent(path), encoding: .utf8)
     }
 
-    private func putCodaPageIn(_ frameInfo: WKFrameInfo) {
+    private func putCodaPageIn(_ frameInfo: WKFrameInfo, accessToken: String) {
         guard let codaHtml = Self.appFile("cool.html") else {
             COWrapper.LOG_ERR("CODA's page was not put in: the app has no cool.html")
             return
@@ -613,7 +608,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         webView.callAsyncJavaScript(
             Self.putCodaPageInScript,
-            arguments: ["codaHtml": codaHtml],
+            arguments: ["codaHtml": codaHtml, "accessToken": accessToken],
             in: frameInfo,
             in: Self.world
         ) { result in

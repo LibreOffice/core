@@ -35,6 +35,7 @@
 + (bool)isWithinSite:(NSString *_Nonnull)from to:(NSString *_Nonnull)to NS_SWIFT_NAME(isWithinSite(_:to:));
 + (bool)isPlainExtension:(NSString *_Nonnull)fileExtension NS_SWIFT_NAME(isPlainExtension(_:));
 + (NSString *_Nonnull)failurePageScript:(NSString *_Nonnull)title paragraphs:(NSArray<NSString *> *_Nonnull)paragraphs NS_SWIFT_NAME(failurePageScript(title:paragraphs:));
++ (NSString *_Nonnull)editorPageAccessToken:(NSString *_Nonnull)formUrl form:(NSData *_Nonnull)form NS_SWIFT_NAME(editorPageAccessToken(formUrl:form:));
 // The scripts and names of common/EditorFrameScripts.hpp:
 + (NSString *_Nonnull)clientDocumentLoadingRefusalScript NS_SWIFT_NAME(clientDocumentLoadingRefusalScript());
 + (NSString *_Nonnull)serverEditorFormScript NS_SWIFT_NAME(serverEditorFormScript());
