@@ -1199,7 +1199,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         }
                     }
 
-                    if ( !bHasNotes )
+                    if ( !bHasNotes || pDocSh->IsReadOnly() )
                         rSet.DisableItem( nWhich );
                 }
                 break;
