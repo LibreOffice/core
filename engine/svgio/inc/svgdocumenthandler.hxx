@@ -36,6 +36,8 @@ namespace svgio::svgreader
             // current node for parsing
             SvgNode*                        mpTarget;
 
+            sal_uInt32                      mnNestingDepth;
+
             // text collector string stack for css styles
             std::vector< OUString >    maCssContents;
 

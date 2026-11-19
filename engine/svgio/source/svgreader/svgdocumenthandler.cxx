@@ -166,11 +166,14 @@ using CharacterNodeHandlerFunc
         return pLast;
     }
 
+    constexpr sal_uInt32 MaxNestingDepth = 1024;
+
 } // end anonymous namespace
 
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
-            mpTarget(nullptr)
+            mpTarget(nullptr),
+            mnNestingDepth(0)
         {
         }
 
@@ -207,6 +210,12 @@ using CharacterNodeHandlerFunc
         {
             if(aName.isEmpty())
                 return;
+
+            if (mnNestingDepth++ >= MaxNestingDepth)
+            {
+                SAL_WARN("svgio", "nested too deep, ignoring element: " << aName);
+                return;
+            }
 
             const SVGToken aSVGToken(StrToSVGToken(aName, false));
 
@@ -512,6 +521,12 @@ using CharacterNodeHandlerFunc
             if(aName.isEmpty())
                 return;
 
+            if (mnNestingDepth-- > MaxNestingDepth)
+            {
+                SAL_WARN("svgio", "nested too deep, ignoring end of element: " << aName);
+                return;
+            }
+
             if(!mpTarget)
                 return;
 
@@ -580,6 +595,12 @@ using CharacterNodeHandlerFunc
 
             if(!(mpTarget && nLength))
                 return;
+
+            if (mnNestingDepth > MaxNestingDepth)
+            {
+                SAL_WARN("svgio", "nested too deep, ignoring characters");
+                return;
+            }
 
             switch(mpTarget->getType())
             {
