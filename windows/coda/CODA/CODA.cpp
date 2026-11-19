@@ -1788,7 +1788,8 @@ static void handleDroppedFiles(HWND hWnd, HDROP drop, const POINT& dropPoint)
     // window the drop goes to the document on show.
     WindowState* window = findWindow(hWnd);
     DocumentTab* tab = window ? activeTabOf(*window) : nullptr;
-    const bool canInsert = tab && tab->mode == DocumentMode::EDIT && !tab->isConsole;
+    const bool canInsert = tab && (tab->mode == DocumentMode::EDIT || tab->mode == DocumentMode::NEW)
+                           && !tab->isConsole;
 
     // The document view starts below the tab strip, and the page places the insert relative to
     // its own top left corner. A drop on the window frame arrives negative and stays that way,
