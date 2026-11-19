@@ -76,9 +76,11 @@ private:
     std::unique_ptr<weld::Button> m_xBtnSearch;
     std::unique_ptr<weld::Button> m_xBtnSeek;
     std::unique_ptr<SdOpenSoundFileDialog> m_xSoundFileDialog;
+    std::unique_ptr<sfx2::FileDialogHelper> m_xFileDialog;
 
     DECL_LINK( ClickSearchHdl, weld::Button&, void );
     DECL_LINK( SoundFileDialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_LINK( FileDialogClosedHdl, sfx2::FileDialogHelper*, void );
     DECL_LINK( ClickActionHdl, weld::ComboBox&, void );
     DECL_LINK( SelectTreeHdl, weld::TreeView&, void );
     DECL_LINK( CheckFileHdl, weld::Widget&, void );

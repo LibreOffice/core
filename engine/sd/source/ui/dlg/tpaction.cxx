@@ -46,6 +46,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/intitem.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -362,8 +363,6 @@ void SdTPAction::OpenFileDialog()
     presentation::ClickAction eCA = GetActualClickAction();
     bool bSound = ( eCA == presentation::ClickAction_SOUND );
     bool bPage = ( eCA == presentation::ClickAction_BOOKMARK );
-    bool bDocument = ( eCA == presentation::ClickAction_DOCUMENT ||
-                       eCA == presentation::ClickAction_PROGRAM );
     bool bMacro = ( eCA == presentation::ClickAction_MACRO );
 
     if( bPage )
@@ -397,28 +396,38 @@ void SdTPAction::OpenFileDialog()
         }
         else
         {
-            sfx2::FileDialogHelper aFileDialog(
+            m_xFileDialog.reset(new sfx2::FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                FileDialogFlags::NONE, GetFrameWeld());
-            aFileDialog.SetContext(sfx2::FileDialogHelper::ImpressClickAction);
+                FileDialogFlags::NONE, GetFrameWeld()));
+            m_xFileDialog->SetContext(sfx2::FileDialogHelper::ImpressClickAction);
 
             // The following is a workaround for #i4306#:
             // The addition of the implicitly existing "all files"
             // filter makes the (Windows system) open file dialog follow
             // links on the desktop to directories.
-            aFileDialog.AddFilter (
+            m_xFileDialog->AddFilter (
                 SfxResId(STR_SFX_FILTERNAME_ALL),
                 u"*.*"_ustr);
 
-            if( aFileDialog.Execute() == ERRCODE_NONE )
-            {
-                aFile = aFileDialog.GetPath();
-                SetEditText( aFile );
-            }
-            if( bDocument )
-                CheckFileHdl( *m_xEdtDocument );
+            m_xFileDialog->StartExecuteModal(LINK(this, SdTPAction, FileDialogClosedHdl));
         }
     }
+}
+
+IMPL_LINK_NOARG(SdTPAction, FileDialogClosedHdl, sfx2::FileDialogHelper*, void)
+{
+    // Action can change while the app picker is open
+    presentation::ClickAction eCA = GetActualClickAction();
+    if (eCA != presentation::ClickAction_DOCUMENT && eCA != presentation::ClickAction_PROGRAM)
+        return;
+
+    if (m_xFileDialog->GetError() == ERRCODE_NONE)
+    {
+        OUString aFile = m_xFileDialog->GetPath();
+        SetEditText( aFile );
+    }
+    if (eCA == presentation::ClickAction_DOCUMENT)
+        CheckFileHdl( *m_xEdtDocument );
 }
 
 IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl, weld::Button&, void)
@@ -662,7 +671,9 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
                 {
                     if (xStorage->hasByName(u"content.xml"_ustr))
                     {
-                        if (SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc(aFile))
+                        // Under COKit the page shows the read error itself, with a parent
+                        const bool bKitShowsError = comphelper::COKit::isActive();
+                        if (SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc(aFile, bKitShowsError))
                         {
                             aLastFile = aFile;
 
@@ -671,6 +682,15 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
                             mpDoc->CloseBookmarkDoc();
                             m_xLbTreeDocument->show();
                             bHideTreeDocument = false;
+                        }
+                        else if (bKitShowsError)
+                        {
+                            std::shared_ptr<weld::MessageDialog> xErrorBox(
+                                Application::CreateMessageDialog(GetFrameWeld(),
+                                                                 VclMessageType::Warning,
+                                                                 VclButtonsType::Ok,
+                                                                 SdResId(STR_READ_DATA_ERROR)));
+                            xErrorBox->runAsync(xErrorBox, [](sal_Int32) {});
                         }
                     }
                 }
