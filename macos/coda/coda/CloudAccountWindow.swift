@@ -35,7 +35,16 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     private let accountId: String
     private let webView: WKWebView
     private var integratorOrigin: String?
-    private var blockedOrigins: Set<String> = []
+    private var blockedOrigins: [String: WKContentRuleList] = [:]
+    // The origins whose documents open in the server's own editor, with the reason of each:
+    private var serverEditorReasons: [String: String] = [:]
+    // The notice above the integrator's site, which says why the editor frame shows the server's
+    // own editor:
+    private let notice = NSStackView()
+    private let noticeText = NSTextField(wrappingLabelWithString: "")
+    // The space around the notice's text, in points:
+    private static let noticeInsets = NSEdgeInsets(top: 8, left: 12, bottom: 8, right: 8)
+    private static let noticeCloseWidth: CGFloat = 24
     private var editorForm: Data?
     private var editorFormUrl: URL?
     private var editorFrameInfo: WKFrameInfo?
@@ -92,9 +101,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 #if DEBUG
         webView.isInspectable = true
 #endif
-        window.contentView = webView
 
         super.init(window: window)
+        window.contentView = makeContent()
         window.delegate = self
         webView.navigationDelegate = self
         webView.uiDelegate = self
@@ -153,6 +162,57 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         return false
     }
 
+    // The integrator's site, below the notice while that shows:
+    private func makeContent() -> NSView {
+        let close = NSButton(
+            image: NSImage(systemSymbolName: "xmark", accessibilityDescription: "Close") ?? NSImage(),
+            target: self, action: #selector(hideNotice))
+        close.isBordered = false
+        close.toolTip = "Close"
+        close.widthAnchor.constraint(equalToConstant: Self.noticeCloseWidth).isActive = true
+        noticeText.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        notice.orientation = .horizontal
+        notice.alignment = .top
+        notice.edgeInsets = Self.noticeInsets
+        notice.addArrangedSubview(noticeText)
+        notice.addArrangedSubview(close)
+        notice.setHuggingPriority(.defaultHigh, for: .vertical)
+        notice.wantsLayer = true
+        notice.isHidden = true
+
+        let content = NSStackView(views: [notice, webView])
+        content.orientation = .vertical
+        content.spacing = 0
+        for view in [notice, webView] {
+            view.widthAnchor.constraint(equalTo: content.widthAnchor).isActive = true
+        }
+        webView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        return content
+    }
+
+    // Shows the text above the integrator's site, until the user closes it:
+    private func showNotice(_ text: String) {
+        noticeText.stringValue = text
+        notice.layer?.backgroundColor = NSColor.systemYellow.withAlphaComponent(0.2).cgColor
+        notice.isHidden = false
+        fitNoticeText()
+    }
+
+    @objc private func hideNotice() {
+        notice.isHidden = true
+    }
+
+    // The notice's text wraps at the width that the window leaves it:
+    private func fitNoticeText() {
+        let width = window?.contentView?.bounds.width ?? Self.defaultSize.width
+        noticeText.preferredMaxLayoutWidth = max(
+            0, width - Self.noticeInsets.left - Self.noticeInsets.right - notice.spacing - Self.noticeCloseWidth)
+    }
+
+    func windowDidResize(_ notification: Notification) {
+        fitNoticeText()
+    }
+
     func windowWillClose(_ notification: Notification) {
         let contentController = webView.configuration.userContentController
         contentController.removeScriptMessageHandler(forName: "frameLoaded", contentWorld: Self.world)
@@ -206,7 +266,76 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         // (also when that page sent no BYE):
         closeRemoteDocument()
         syncSettingsPending = false
-        putCodaPageIn(frameInfo)
+        fillEditorFrame(frameInfo)
+    }
+
+    // CODA's page goes into the editor frame, unless the server allows no client document loading:
+    private func fillEditorFrame(_ frameInfo: WKFrameInfo) {
+        guard let editorFormUrl, let editorForm else {
+            return
+        }
+
+        // A server without client document loading already shows its own editor in the frame (with
+        // the notice shown only for its first document in the window):
+        if let origin = Self.origin(of: editorFormUrl), serverEditorReasons[origin] != nil {
+            COWrapper.LOG_DBG("The server allows no client document loading, so the frame shows the server's own editor")
+            return
+        }
+
+        hideNotice()
+        let script = "return (" + COWrapper.clientDocumentLoadingRefusalScript() + ")(editorUrl)"
+        webView.callAsyncJavaScript(
+            script,
+            arguments: ["editorUrl": editorFormUrl.absoluteString],
+            in: frameInfo,
+            in: Self.world
+        ) { result in
+            if case .success(let value) = result, let reason = value as? String {
+                self.useServerEditor(reason: reason, editorUrl: editorFormUrl, form: editorForm, in: frameInfo)
+            } else {
+                self.putCodaPageIn(frameInfo)
+            }
+        }
+    }
+
+    // The editor frame's server allows no client document loading, so the frame gets the
+    // integrator's form posted again, with all of the server's files, for its own editor:
+    private func useServerEditor(reason: String, editorUrl: URL, form: Data, in frameInfo: WKFrameInfo) {
+        guard reason == COWrapper.disabledReason() || reason == COWrapper.unsupportedReason(),
+              let origin = Self.origin(of: editorUrl) else {
+            COWrapper.LOG_ERR("The server's own editor was refused: an unknown reason")
+            return
+        }
+
+        COWrapper.LOG_DBG("The server allows no client document loading (\(reason)), so the frame shows the server's own editor")
+        serverEditorReasons[origin] = reason
+        showServerEditorNotice(reason: reason, editorUrl: editorUrl)
+        unblockCoolServerFiles(of: editorUrl)
+        webView.callAsyncJavaScript(
+            "(" + COWrapper.serverEditorFormScript() + ")(editorUrl, formBody)",
+            arguments: ["editorUrl": editorUrl.absoluteString, "formBody": String(decoding: form, as: UTF8.self)],
+            in: frameInfo,
+            in: Self.world
+        ) { result in
+            if case .failure = result {
+                COWrapper.LOG_ERR("The form was not posted again for the server's own editor")
+            }
+        }
+    }
+
+    private func showServerEditorNotice(reason: String, editorUrl: URL) {
+        let server = editorUrl.host ?? "The server"
+        let app = AppDelegate.getAppName()
+        if reason == COWrapper.disabledReason() {
+            showNotice(
+                "\(server) does not allow editing in \(app), so the document is open in the server's own editor. "
+                + "To edit documents from \(server) in \(app), ask the server's administrator to allow that "
+                + "(client_document_loading.enable in coolwsd.xml).")
+        } else {
+            showNotice(
+                "\(server) runs a version of Collabora Online that does not support editing in \(app), "
+                + "so the document is open in the server's own editor.")
+        }
     }
 
     private func showRemoteFailure(_ error: String, in frameInfo: WKFrameInfo) {
@@ -753,6 +882,12 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return
         }
 
+        // The editor frame gets the integrator's form posted again for the server's own editor:
+        if url.fragment == COWrapper.serverEditorFragment() && isEditorFrame(navigationAction.sourceFrame) {
+            decisionHandler(.allow)
+            return
+        }
+
         // Only the integrator's pages open an editor.
         let posterOrigin = Self.origin(of: navigationAction.sourceFrame.securityOrigin)
         if posterOrigin == nil || posterOrigin != integratorOrigin {
@@ -761,7 +896,12 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return
         }
 
-        blockCoolServerFiles(of: url) { decisionHandler(.allow) }
+        // A server without client document loading shows its own editor, with all of its files:
+        if let origin = Self.origin(of: url), serverEditorReasons[origin] != nil {
+            decisionHandler(.allow)
+        } else {
+            blockCoolServerFiles(of: url) { decisionHandler(.allow) }
+        }
 
         guard let form = request.httpBody else {
             COWrapper.LOG_DBG("No form was kept: the form posted into an editor frame has no body")
@@ -778,18 +918,13 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     // cached copies are refused too. A worker's script counts as "other", not "script".
     // Fetches and WebSockets stay open, for /co/collab.
     private func blockCoolServerFiles(of url: URL, then proceed: @escaping () -> Void) {
-        guard let scheme = url.scheme, let host = url.host else {
+        guard let origin = Self.coolServerOrigin(of: url) else {
             COWrapper.LOG_ERR("coolwsd's files were not blocked: the editor's address has no host")
             proceed()
             return
         }
 
-        var origin = scheme + "://" + host
-        if let port = url.port {
-            origin += ":\(port)"
-        }
-
-        if blockedOrigins.contains(origin) {
+        if blockedOrigins[origin] != nil {
             proceed()
             return
         }
@@ -813,7 +948,29 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             }
 
             self.webView.configuration.userContentController.add(list)
-            self.blockedOrigins.insert(origin)
+            self.blockedOrigins[origin] = list
         }
+    }
+
+    // The origin that the rules for coolwsd's files at the address are for:
+    private static func coolServerOrigin(of url: URL) -> String? {
+        guard let scheme = url.scheme, let host = url.host else {
+            return nil
+        }
+
+        var origin = scheme + "://" + host
+        if let port = url.port {
+            origin += ":\(port)"
+        }
+        return origin
+    }
+
+    private func unblockCoolServerFiles(of url: URL) {
+        guard let origin = Self.coolServerOrigin(of: url), let list = blockedOrigins[origin] else {
+            return
+        }
+
+        webView.configuration.userContentController.remove(list)
+        blockedOrigins[origin] = nil
     }
 }

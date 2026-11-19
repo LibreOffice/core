@@ -35,6 +35,12 @@
 + (bool)isWithinSite:(NSString *_Nonnull)from to:(NSString *_Nonnull)to NS_SWIFT_NAME(isWithinSite(_:to:));
 + (bool)isPlainExtension:(NSString *_Nonnull)fileExtension NS_SWIFT_NAME(isPlainExtension(_:));
 + (NSString *_Nonnull)failurePageScript:(NSString *_Nonnull)title paragraphs:(NSArray<NSString *> *_Nonnull)paragraphs NS_SWIFT_NAME(failurePageScript(title:paragraphs:));
+// The scripts and names of common/EditorFrameScripts.hpp:
++ (NSString *_Nonnull)clientDocumentLoadingRefusalScript NS_SWIFT_NAME(clientDocumentLoadingRefusalScript());
++ (NSString *_Nonnull)serverEditorFormScript NS_SWIFT_NAME(serverEditorFormScript());
++ (NSString *_Nonnull)serverEditorFragment NS_SWIFT_NAME(serverEditorFragment());
++ (NSString *_Nonnull)disabledReason NS_SWIFT_NAME(disabledReason());
++ (NSString *_Nonnull)unsupportedReason NS_SWIFT_NAME(unsupportedReason());
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
 + (bool)isKitDocumentLoaded:(Document *_Nonnull)document NS_SWIFT_NAME(isKitDocumentLoaded(_:));
 // The path on disk of the media file that the document's server side registered under the
