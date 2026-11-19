@@ -80,6 +80,7 @@ enum class Relationship
     VBAPROJECT,
     VIDEO,
     AUDIO,
+    VIEWPROPS,
     VMLDRAWING,
     WEBSETTINGS,
     WORDVBADATA,

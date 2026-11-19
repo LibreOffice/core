@@ -267,8 +267,15 @@ private:
 
     void WritePresentationProps();
 
-    /** Writes out again what the document said about the styles its tables are drawn in. */
-    void WriteTableStyles();
+    /** Writes out again a part that the import kept word for word in the document grab bag.
+
+        @param rGrabBagKey  name of the grab bag entry that holds the part
+        @param rTarget  file name of the part, in the folder of the presentation part
+        @param rContentType  content type of the part
+        @param rRelationshipType  type of the relationship from the presentation part
+     */
+    void WriteKeptPart(std::u16string_view rGrabBagKey, std::u16string_view rTarget,
+                       const OUString& rContentType, const OUString& rRelationshipType);
 
     /// If this is PPTM, output the VBA stream.
     void WriteVBA();

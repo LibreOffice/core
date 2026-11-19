@@ -2069,6 +2069,39 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testGroupConnectorDescription)
     assertXPath(pSlide, "//p:cxnSp/p:nvCxnSpPr/p:cNvPr", "title", u"Title on the line");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testViewSettingsAreKept)
+{
+    // The view settings of a presentation are kept intact, except the slide list of the
+    // outline view, which names slides by relationships of the part, and is skipped
+    createSdImpressDoc("pptx/viewprops-slide-list.pptx");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pView = parseExport(u"ppt/viewProps.xml"_ustr);
+    assertXPath(pView, "/p:viewPr/p:normalViewPr/p:restoredLeft", "sz", u"15620");
+    assertXPath(pView, "/p:viewPr/p:outlineViewPr/p:cViewPr", 1);
+    assertXPath(pView, "/p:viewPr/p:outlineViewPr/p:sldLst", 0);
+    xmlDocUniquePtr pContentTypes = parseExport(u"[Content_Types].xml"_ustr);
+    assertXPath(pContentTypes,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/viewProps.xml']", 1);
+    xmlDocUniquePtr pRels = parseExport(u"ppt/_rels/presentation.xml.rels"_ustr);
+    assertXPath(pRels, "/rels:Relationships/rels:Relationship[@Target='viewProps.xml']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testViewSettingsAreDiscardedInStrict)
+{
+    // A strict OOXML presentation saves no view settings, because the saved package is transitional
+    createSdImpressDoc("pptx/table_strict.pptx");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pContentTypes = parseExport(u"[Content_Types].xml"_ustr);
+    assertXPath(pContentTypes,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/viewProps.xml']", 0);
+    xmlDocUniquePtr pRels = parseExport(u"ppt/_rels/presentation.xml.rels"_ustr);
+    assertXPath(pRels, "/rels:Relationships/rels:Relationship[@Target='viewProps.xml']", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

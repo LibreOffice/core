@@ -83,9 +83,15 @@ public:
 #endif
 
 private:
-    /** Keeps what the document says about the styles its tables are drawn in. The part is kept
-        when its root element is in the transitional DrawingML namespace. */
-    void keepTableStyles(const cpo::uno::Reference<css::xml::dom::XDocument>& xDocument);
+    /** Keeps a part of the document as it was read, under the given name in the document grab bag.
+        The part is kept when its root element is in the transitional namespace with the given id. */
+    void keepFragmentInGrabBag(const OUString& rGrabBagKey,
+                               const cpo::uno::Reference<css::xml::dom::XDocument>& xDocument,
+                               sal_Int32 nNamespaceId);
+
+    /** Keeps the view settings part of the document without the slide list of the outline view.
+        That list names slides by relationships of the part, which get renumbered during save. */
+    void keepViewProperties(const OUString& rFragmentPath);
 
     virtual GraphicHelper* implCreateGraphicHelper() const override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;

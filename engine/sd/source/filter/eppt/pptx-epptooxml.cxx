@@ -1087,7 +1087,15 @@ bool PowerPointExport::exportDocument()
 
     WritePresentationProps();
 
-    WriteTableStyles();
+    WriteKeptPart(
+        u"OOXTableStyles", u"tableStyles.xml",
+        u"application/vnd.openxmlformats-officedocument.presentationml.tableStyles+xml"_ustr,
+        oox::getRelationship(Relationship::TABLESTYLES));
+
+    WriteKeptPart(
+        u"OOXViewProps", u"viewProps.xml",
+        u"application/vnd.openxmlformats-officedocument.presentationml.viewProps+xml"_ustr,
+        oox::getRelationship(Relationship::VIEWPROPS));
 
     WriteAuthors();
 
@@ -2201,7 +2209,9 @@ sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor,
     return maAuthors[ sAuthor ].nId;
 }
 
-void PowerPointExport::WriteTableStyles()
+void PowerPointExport::WriteKeptPart(std::u16string_view rGrabBagKey, std::u16string_view rTarget,
+                                     const OUString& rContentType,
+                                     const OUString& rRelationshipType)
 {
     if (!mXModel.is())
         return;
@@ -2211,33 +2221,31 @@ void PowerPointExport::WriteTableStyles()
     if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(aGrabBagName))
         return;
 
-    uno::Reference<xml::dom::XDocument> xTableStyles;
+    uno::Reference<xml::dom::XDocument> xPart;
     uno::Sequence<beans::PropertyValue> aGrabBag;
     mXModel->getPropertyValue(aGrabBagName) >>= aGrabBag;
     for (const auto& rProperty : aGrabBag)
     {
-        if (rProperty.Name == "OOXTableStyles")
+        if (rProperty.Name == rGrabBagKey)
         {
-            rProperty.Value >>= xTableStyles;
+            rProperty.Value >>= xPart;
             break;
         }
     }
 
-    uno::Reference<xml::sax::XSAXSerializable> xSerializable(xTableStyles, uno::UNO_QUERY);
+    uno::Reference<xml::sax::XSAXSerializable> xSerializable(xPart, uno::UNO_QUERY);
     if (!xSerializable.is())
         return;
 
-    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(
-        u"ppt/tableStyles.xml"_ustr,
-        u"application/vnd.openxmlformats-officedocument.presentationml.tableStyles+xml"_ustr);
+    uno::Reference<io::XOutputStream> xOutputStream
+        = openFragmentStream(OUString::Concat("ppt/") + rTarget, rContentType);
 
     uno::Reference<xml::sax::XWriter> xWriter
         = xml::sax::Writer::create(comphelper::getProcessComponentContext());
     xWriter->setOutputStream(xOutputStream);
     xSerializable->serialize(xWriter, uno::Sequence<beans::StringPair>());
 
-    addRelation(mPresentationFS->getOutputStream(),
-                oox::getRelationship(Relationship::TABLESTYLES), u"tableStyles.xml");
+    addRelation(mPresentationFS->getOutputStream(), rRelationshipType, rTarget);
 }
 
 void PowerPointExport::WritePresentationProps()

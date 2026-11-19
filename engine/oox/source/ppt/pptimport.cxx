@@ -29,6 +29,8 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
+#include <com/sun/star/xml/dom/XNode.hpp>
+#include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -113,6 +115,8 @@ bool PowerPointImport::importDocument()
     maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"tableStyles" );
     const OUString sPresPropsPath
         = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc(u"presProps");
+    const OUString sViewPropsPath
+        = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc(u"viewProps");
 
     bool bRet = importFragment(xPresentationFragmentHandler);
     // Table styles can exist even without tables in the presentation
@@ -124,6 +128,8 @@ bool PowerPointImport::importDocument()
             new PresPropsFragmentHandler(*this, sPresPropsPath));
         importFragment(xPresPropsFragmentHandler);
     }
+    if (bRet && !sViewPropsPath.isEmpty())
+        keepViewProperties(sViewPropsPath);
 
     static bool bNoSmartartWarning = getenv("OOX_NO_SMARTART_WARNING");
     if (!bNoSmartartWarning && mbMissingExtDrawing)
@@ -306,14 +312,14 @@ oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
         importFragment( new oox::drawingml::table::TableStyleListFragmentHandler(
                             *this, maTableStyleListPath, *mpTableStyleList ),
                         Reference<xml::sax::XFastSAXSerializable>(xDoc, UNO_QUERY_THROW) );
-        keepTableStyles(xDoc);
+        keepFragmentInGrabBag(u"OOXTableStyles"_ustr, xDoc, OOX_NS(dml));
     }
     return mpTableStyleList;
 }
 
-/** Keeps what the document says about the styles its tables are drawn in, word for word, so that
-    a save can state the same again. */
-void PowerPointImport::keepTableStyles(const Reference<xml::dom::XDocument>& xDocument)
+void PowerPointImport::keepFragmentInGrabBag(const OUString& rGrabBagKey,
+                                    const Reference<xml::dom::XDocument>& xDocument,
+                                    sal_Int32 nNamespaceId)
 {
     if (!xDocument.is())
         return;
@@ -323,7 +329,7 @@ void PowerPointImport::keepTableStyles(const Reference<xml::dom::XDocument>& xDo
         // A save writes a transitional package, so only a part whose root is in the transitional
         // namespace is kept
         Reference<xml::dom::XElement> xRoot = xDocument->getDocumentElement();
-        if (!xRoot.is() || xRoot->getNamespaceURI() != getNamespaceURL(OOX_NS(dml)))
+        if (!xRoot.is() || xRoot->getNamespaceURI() != getNamespaceURL(nNamespaceId))
             return;
 
         Reference<beans::XPropertySet> xDocProps(getModel(), UNO_QUERY);
@@ -336,14 +342,40 @@ void PowerPointImport::keepTableStyles(const Reference<xml::dom::XDocument>& xDo
             return;
 
         comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagName));
-        aGrabBag[u"OOXTableStyles"_ustr] <<= xDocument;
+        aGrabBag[rGrabBagKey] <<= xDocument;
         xDocProps->setPropertyValue(aGrabBagName,
                                     Any(aGrabBag.getAsConstPropertyValueList()));
     }
     catch (const Exception&)
     {
-        SAL_WARN("oox.ppt", "PowerPointImport::keepTableStyles, failed to keep the table styles");
+        SAL_WARN("oox.ppt", "PowerPointImport::keepFragmentInGrabBag, failed to keep " << rGrabBagKey);
     }
+}
+
+void PowerPointImport::keepViewProperties(const OUString& rFragmentPath)
+{
+    Reference<xml::dom::XDocument> xDocument = importFragment(rFragmentPath);
+    if (!xDocument.is())
+        return;
+
+    try
+    {
+        const OUString aNamespace = getNamespaceURL(OOX_NS(ppt));
+        Reference<xml::dom::XNodeList> xSlideLists
+            = xDocument->getElementsByTagNameNS(aNamespace, u"sldLst"_ustr);
+        std::vector<Reference<xml::dom::XNode>> aSlideLists;
+        for (sal_Int32 i = 0; i < xSlideLists->getLength(); ++i)
+            aSlideLists.push_back(xSlideLists->item(i));
+        for (const auto& xSlideList : aSlideLists)
+            xSlideList->getParentNode()->removeChild(xSlideList);
+    }
+    catch (const Exception&)
+    {
+        SAL_WARN("oox.ppt", "PowerPointImport::keepViewProperties, failed to read the part");
+        return;
+    }
+
+    keepFragmentInGrabBag(u"OOXViewProps"_ustr, xDocument, OOX_NS(ppt));
 }
 
 ::oox::drawingml::chart::ChartConverter* PowerPointImport::getChartConverter()
