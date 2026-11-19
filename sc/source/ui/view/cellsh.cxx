@@ -1289,7 +1289,15 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
                 }
                 break;
-
+            case SID_OPENDLG_SOLVE:
+            case SID_OPENDLG_OPTSOLVER:
+                {
+                    if ( pDocSh->IsReadOnly())
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
             case FID_DEFINE_CURRENT_NAME:
             {
                 ScAddress aCurrentAddress( nPosX, nPosY, nTab );
