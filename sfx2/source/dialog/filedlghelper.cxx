@@ -2273,9 +2273,6 @@ void FileDialogHelper_Impl::loadConfig()
             }
             catch( const IllegalArgumentException& ){}
         }
-
-        if ( maPath.isEmpty() )
-            displayFolder( SvtPathOptions().GetWorkPath() );
     }
     else
     {
@@ -2317,10 +2314,10 @@ void FileDialogHelper_Impl::loadConfig()
             }
             catch( const IllegalArgumentException& ){}
         }
-
-        if ( maPath.isEmpty() )
-            displayFolder( SvtPathOptions().GetWorkPath() );
     }
+
+    if (maPath.isEmpty())
+        displayFolder(SvtPathOptions().GetWorkPath());
 }
 
 void FileDialogHelper_Impl::setDefaultValues()
