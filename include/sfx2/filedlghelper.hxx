@@ -244,7 +244,6 @@ public:
 
     // XFilePickerListener methods
     virtual void   ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
-    void   DialogSizeChanged();
 
     // XDialogClosedListener methods
     void   DialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent );

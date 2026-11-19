@@ -198,7 +198,7 @@ void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent&
 void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged()
 {
     SolarMutexGuard aGuard;
-    mpAntiImpl->DialogSizeChanged();
+    handleDialogSizeChanged();
 }
 
 // XDialogClosedListener Methods
@@ -2796,11 +2796,6 @@ const uno::Reference < XFilePicker3 >& FileDialogHelper::GetFilePicker() const
 void FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEvent )
 {
     mpImpl->handleControlStateChanged( aEvent );
-}
-
-void FileDialogHelper::DialogSizeChanged()
-{
-    mpImpl->handleDialogSizeChanged();
 }
 
 void FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
