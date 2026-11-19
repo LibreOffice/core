@@ -6481,25 +6481,29 @@ static SdrGluePointList* lcl_gluePointsOf(unsigned long long nObjectId, SdrObjec
 }
 
 /*
-    The point at that number in the list of the object of that id, and that object. Null where
-    there is no such point, or where the shape makes the point from its own geometry. A point the
-    shape makes is laid out again with the shape, so only a point someone added can be changed.
-    The last error then says which of these it was.
+    The point of that glue id of the object of that id, and that object. A glue id is the number a
+    point keeps on its object, the one the render geometry reports. Null where there is no such
+    point, or where the shape makes the point from its own geometry. A point the shape makes is
+    laid out again with the shape, so only a point someone added can be changed. The last error
+    then says which of these it was.
 */
-static SdrGluePoint* lcl_addedGluePointAt(unsigned long long nObjectId, int nAt,
-                                          SdrObject*& rpObject)
+static SdrGluePoint* lcl_addedGluePoint(unsigned long long nObjectId, int nGlueId,
+                                        SdrObject*& rpObject)
 {
     SdrGluePointList* pGluePoints = lcl_gluePointsOf(nObjectId, rpObject);
     if (!pGluePoints)
         return nullptr;
 
-    if (nAt < 0 || nAt >= static_cast<int>(pGluePoints->GetCount()))
+    const sal_uInt16 nPlace(nGlueId < 0 || nGlueId > SAL_MAX_UINT16
+                                ? SDRGLUEPOINT_NOTFOUND
+                                : pGluePoints->FindGluePoint(static_cast<sal_uInt16>(nGlueId)));
+    if (nPlace == SDRGLUEPOINT_NOTFOUND)
     {
-        SetLastExceptionMsg(u"No object of that id has a point of that number"_ustr);
+        SetLastExceptionMsg(u"No object of that id has a point of that glue id"_ustr);
         return nullptr;
     }
 
-    SdrGluePoint& rGluePoint = (*pGluePoints)[static_cast<sal_uInt16>(nAt)];
+    SdrGluePoint& rGluePoint = (*pGluePoints)[nPlace];
     if (!rGluePoint.IsUserDefined())
     {
         SetLastExceptionMsg(
@@ -6524,16 +6528,16 @@ static Point lcl_onThePage(const SdrObject& rObject, double fX, double fY)
 }
 
 /*
-    Changes the point at that number in the list of the object of that id, as one step to undo.
-    The description of the step names the object where it holds %1. A point the shape makes from
-    its own geometry stays as it is.
+    Changes the point of that glue id of the object of that id, as one step to undo. The
+    description of the step names the object where it holds %1. A point the shape makes from its
+    own geometry stays as it is.
 */
 static void lcl_changeAddedGluePoint(
-    unsigned long long nObjectId, int nAt, TranslateId pUndo,
+    unsigned long long nObjectId, int nGlueId, TranslateId pUndo,
     const std::function<void(SdrGluePoint& rGluePoint, const SdrObject& rObject)>& rChange)
 {
     SdrObject* pObject = nullptr;
-    SdrGluePoint* pGluePoint = lcl_addedGluePointAt(nObjectId, nAt, pObject);
+    SdrGluePoint* pGluePoint = lcl_addedGluePoint(nObjectId, nGlueId, pObject);
     if (!pGluePoint)
         return;
 
@@ -6552,7 +6556,7 @@ static void lcl_changeAddedGluePoint(
     which is how such a point travels to the client. The object holds it either as a share of its
     own size or as a distance of its own, and it keeps the way it holds it.
 */
-void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt,
+void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nGlueId,
                                            double fX, double fY)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePoint");
@@ -6560,7 +6564,7 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    lcl_changeAddedGluePoint(nObjectId, nAt, STR_DragMethMove,
+    lcl_changeAddedGluePoint(nObjectId, nGlueId, STR_DragMethMove,
                              [fX, fY](SdrGluePoint& rGluePoint, const SdrObject& rObject) {
                                  rGluePoint.SetAbsolutePos(lcl_onThePage(rObject, fX, fY),
                                                            rObject);
@@ -6568,11 +6572,15 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt
 }
 
 /*
-    Gives a drawing object a new point for a connector to tie itself to, at a place given on the
-    object as for setObjectGluePoint. The new point is held as a share of the size of the object
-    and lets a connector leave it whichever way suits the connector.
+    Gives a drawing object a new point for a connector to tie itself to, with that glue id, at a
+    place given on the object as for setObjectGluePoint. The new point is held as a share of the
+    size of the object and lets a connector leave it whichever way suits the connector. A glue id
+    from 1 to 65534 that no other point of the object has is the new point's. Any other one
+    changes nothing. The list gives a point it is not told the id of the one after its highest
+    id, so the highest one stays free for that.
 */
-void COKitDocumentImpl::insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY)
+void COKitDocumentImpl::insertObjectGluePoint(unsigned long long nObjectId, int nGlueId,
+                                              double fX, double fY)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::insertObjectGluePoint");
 
@@ -6584,19 +6592,29 @@ void COKitDocumentImpl::insertObjectGluePoint(unsigned long long nObjectId, doub
     if (!pGluePoints)
         return;
 
+    if (nGlueId < 1 || nGlueId >= SAL_MAX_UINT16
+        || pGluePoints->FindGluePoint(static_cast<sal_uInt16>(nGlueId)) != SDRGLUEPOINT_NOTFOUND)
+    {
+        SetLastExceptionMsg(u"The object cannot give a new point that glue id"_ustr);
+        return;
+    }
+
     SdrModel& rModel(pObject->getSdrModelFromSdrObject());
     rModel.BegUndo(SvxResId(STR_DragInsertGluePoint).replaceFirst("%1",
                                                                   pObject->TakeObjNameSingul()));
     rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
-    const sal_uInt16 nAt = pGluePoints->Insert(SdrGluePoint());
-    (*pGluePoints)[nAt].SetAbsolutePos(lcl_onThePage(*pObject, fX, fY), *pObject);
+    // The list keeps a glue id that no point has, and it puts the point in the order of the ids.
+    SdrGluePoint aNew;
+    aNew.SetId(static_cast<sal_uInt16>(nGlueId));
+    const sal_uInt16 nPlace = pGluePoints->Insert(aNew);
+    (*pGluePoints)[nPlace].SetAbsolutePos(lcl_onThePage(*pObject, fX, fY), *pObject);
     pObject->SetChanged();
     pObject->BroadcastObjectChange();
     rModel.EndUndo();
 }
 
-/// Takes one of the points a drawing object was given for a connector to tie itself to away.
-void COKitDocumentImpl::deleteObjectGluePoint(unsigned long long nObjectId, int nAt)
+/// Takes the point of that glue id that a drawing object was given for a connector away.
+void COKitDocumentImpl::deleteObjectGluePoint(unsigned long long nObjectId, int nGlueId)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::deleteObjectGluePoint");
 
@@ -6604,13 +6622,17 @@ void COKitDocumentImpl::deleteObjectGluePoint(unsigned long long nObjectId, int 
     SetLastExceptionMsg();
 
     SdrObject* pObject = nullptr;
-    if (!lcl_addedGluePointAt(nObjectId, nAt, pObject))
+    if (!lcl_addedGluePoint(nObjectId, nGlueId, pObject))
         return;
+    // A shape that makes points from its own geometry lays its list out again each time it is
+    // asked for it, so the point is found again in the list it is taken out of.
+    SdrGluePointList* pGluePoints = pObject->ForceGluePointList();
+    const sal_uInt16 nPlace(pGluePoints->FindGluePoint(static_cast<sal_uInt16>(nGlueId)));
 
     SdrModel& rModel(pObject->getSdrModelFromSdrObject());
     rModel.BegUndo(SvxResId(STR_EditDelete).replaceFirst("%1", pObject->TakeObjNameSingul()));
     rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
-    pObject->ForceGluePointList()->Delete(static_cast<sal_uInt16>(nAt));
+    pGluePoints->Delete(nPlace);
     pObject->SetChanged();
     pObject->BroadcastObjectChange();
     rModel.EndUndo();
@@ -6621,7 +6643,7 @@ void COKitDocumentImpl::deleteObjectGluePoint(unsigned long long nObjectId, int 
     The names are the ones the render geometry reports a way out by, and "smart" lets the
     connector leave whichever way suits it.
 */
-void COKitDocumentImpl::setObjectGluePointWayOut(unsigned long long nObjectId, int nAt,
+void COKitDocumentImpl::setObjectGluePointWayOut(unsigned long long nObjectId, int nGlueId,
                                                  const char* pWayOut)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointWayOut");
@@ -6647,7 +6669,7 @@ void COKitDocumentImpl::setObjectGluePointWayOut(unsigned long long nObjectId, i
     }
 
     const SdrEscapeDirection eWayOut = aWayOut->second;
-    lcl_changeAddedGluePoint(nObjectId, nAt, STR_EditSetGlueEscDir,
+    lcl_changeAddedGluePoint(nObjectId, nGlueId, STR_EditSetGlueEscDir,
                              [eWayOut](SdrGluePoint& rGluePoint, const SdrObject&) {
                                  rGluePoint.SetEscDir(eWayOut);
                              });
@@ -6660,7 +6682,7 @@ void COKitDocumentImpl::setObjectGluePointWayOut(unsigned long long nObjectId, i
     of the object when the object changes size. A point that keeps its share is measured from the
     middle, which is how a document holds it. The point stays where it is on the page.
 */
-void COKitDocumentImpl::setObjectGluePointAnchor(unsigned long long nObjectId, int nAt,
+void COKitDocumentImpl::setObjectGluePointAnchor(unsigned long long nObjectId, int nGlueId,
                                                  const char* pAnchor)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointAnchor");
@@ -6695,7 +6717,7 @@ void COKitDocumentImpl::setObjectGluePointAnchor(unsigned long long nObjectId, i
     }
 
     const Anchor aTo = aAnchor->second;
-    lcl_changeAddedGluePoint(nObjectId, nAt,
+    lcl_changeAddedGluePoint(nObjectId, nGlueId,
                              aTo.mbShareOfTheSize ? STR_EditSetGluePercent : STR_EditSetGlueAlign,
                              [aTo](SdrGluePoint& rGluePoint, const SdrObject& rObject) {
                                  const Point aOnThePage(rGluePoint.GetAbsolutePos(rObject));

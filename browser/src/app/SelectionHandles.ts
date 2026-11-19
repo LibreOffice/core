@@ -85,25 +85,23 @@ class GluePointHandles {
 	}
 
 	/*
-		The points someone added to that object, where the object carries them. They are named by
-		the place they have in the object's own list, so the keyboard can walk them, and the
-		mouse finds them where they lie.
+		The points someone added to that object, where the object carries them, in the order of
+		the object's own list. Each is named by its glue id, which stays with the point when
+		another point is added or taken away.
 	*/
 	public static ownPointsOf(objectId: number): SelectionHandle[] {
 		const object = RenderGeometrySection.objectOf(objectId);
 		const transform = RenderGeometrySection.transformOf(objectId);
 		if (!transform) return [];
 
-		return (object?.gluePoints ?? []).map(
-			(point: { x: number; y: number }, at: number) => {
-				const onThePage = transform.apply(point.x, point.y);
+		return (object?.gluePoints ?? []).map((point: cool.ObjectGluePoint) => {
+			const onThePage = transform.apply(point.x, point.y);
 
-				return {
-					...GluePointHandles.handleAt(onThePage.x, onThePage.y, 'GluePoint'),
-					name: 'GluePoint.' + String(at),
-				};
-			},
-		);
+			return {
+				...GluePointHandles.handleAt(onThePage.x, onThePage.y, 'GluePoint'),
+				name: 'GluePoint.' + String(point.id),
+			};
+		});
 	}
 
 	/*

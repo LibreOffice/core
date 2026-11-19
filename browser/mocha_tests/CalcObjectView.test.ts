@@ -227,7 +227,7 @@ describe('calcMessageInPrintTwips', function () {
 	});
 
 	it('leaves the glue points, which are given on the object, as they are', function () {
-		const message = 'setobjectgluepoint id=1 at=0 x=0.5 y=0.5';
+		const message = 'setobjectgluepoint id=1 glue=1 x=0.5 y=0.5';
 		nodeassert.strictEqual(
 			cool.calcMessageInPrintTwips(message, placement),
 			message,

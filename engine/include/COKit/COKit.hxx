@@ -1467,33 +1467,40 @@ struct COKitDocument
      * and 1 and 1 its lower right one, which is how the render geometry reports such a point.
      *
      * @param nObjectId the unique id of the object, as the render geometry names it
-     * @param nAt which of the points of that object, counted from zero as they are listed
+     * @param nGlueId the glue id of the point, the number the point keeps on its object, as the
+     * render geometry reports it
      * @param fX where the point goes on the object, across it
      * @param fY where the point goes on the object, down it
      */
-    virtual void setObjectGluePoint(unsigned long long nObjectId, int nAt, double fX, double fY)
+    virtual void setObjectGluePoint(unsigned long long nObjectId, int nGlueId, double fX,
+                                    double fY)
         = 0;
 
     /**
-     * Gives a drawing object a new point for a connector to tie itself to, as the last of its
-     * points. It is one step to undo.
+     * Gives a drawing object a new point for a connector to tie itself to. It is one step to
+     * undo. A glue id that another point of the object has, or one outside 1 to 65534, changes
+     * nothing.
      *
      * @param nObjectId the unique id of the object, as the render geometry names it
+     * @param nGlueId the glue id the new point keeps on the object
      * @param fX where the point goes on the object, across it, 0 at its left side and 1 at its
      * right one
      * @param fY where the point goes on the object, down it, 0 at its upper side and 1 at its
      * lower one
      */
-    virtual void insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY) = 0;
+    virtual void insertObjectGluePoint(unsigned long long nObjectId, int nGlueId, double fX,
+                                       double fY)
+        = 0;
 
     /**
      * Takes one of the points a drawing object was given for a connector to tie itself to away.
      * A point the shape makes from its own geometry stays. It is one step to undo.
      *
      * @param nObjectId the unique id of the object, as the render geometry names it
-     * @param nAt which of the points of that object, counted from zero as they are listed
+     * @param nGlueId the glue id of the point, the number the point keeps on its object, as the
+     * render geometry reports it
      */
-    virtual void deleteObjectGluePoint(unsigned long long nObjectId, int nAt) = 0;
+    virtual void deleteObjectGluePoint(unsigned long long nObjectId, int nGlueId) = 0;
 
     /**
      * Sets the way a connector leaves a drawing object at one of the points it was given for a
@@ -1501,12 +1508,13 @@ struct COKitDocument
      * It is one step to undo.
      *
      * @param nObjectId the unique id of the object, as the render geometry names it
-     * @param nAt which of the points of that object, counted from zero as they are listed
+     * @param nGlueId the glue id of the point, the number the point keeps on its object, as the
+     * render geometry reports it
      * @param pWayOut "left", "right", "top" or "bottom" for one side, "horizontal" or "vertical"
      * for the two sides that face each other across or down the object, or "smart" for whichever
      * way suits the connector
      */
-    virtual void setObjectGluePointWayOut(unsigned long long nObjectId, int nAt,
+    virtual void setObjectGluePointWayOut(unsigned long long nObjectId, int nGlueId,
                                           const char* pWayOut)
         = 0;
 
@@ -1516,13 +1524,14 @@ struct COKitDocument
      * geometry stays as it is. It is one step to undo.
      *
      * @param nObjectId the unique id of the object, as the render geometry names it
-     * @param nAt which of the points of that object, counted from zero as they are listed
+     * @param nGlueId the glue id of the point, the number the point keeps on its object, as the
+     * render geometry reports it
      * @param pAnchor "none" for a point that keeps its share of the size of the object, or one of
      * "top-left", "top", "top-right", "left", "center", "right", "bottom-left", "bottom" and
      * "bottom-right" for a point that keeps its distance from that corner, the middle of that
      * side, or the middle of the object
      */
-    virtual void setObjectGluePointAnchor(unsigned long long nObjectId, int nAt,
+    virtual void setObjectGluePointAnchor(unsigned long long nObjectId, int nGlueId,
                                           const char* pAnchor)
         = 0;
 

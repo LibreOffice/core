@@ -116,6 +116,7 @@
 #include <tools/UniqueID.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdglue.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <vcl/BitmapTools.hxx>
@@ -367,6 +368,7 @@ public:
     void testLocalCellCursorViewOption();
     void testConvertObjects();
     void testDeleteObjects();
+    void testObjectGluePointCommands();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -510,6 +512,7 @@ public:
     CPPUNIT_TEST(testLocalCellCursorViewOption);
     CPPUNIT_TEST(testConvertObjects);
     CPPUNIT_TEST(testDeleteObjects);
+    CPPUNIT_TEST(testObjectGluePointCommands);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -7005,6 +7008,66 @@ void DesktopKitTest::testDeleteObjects()
     SdrObject* pBack = pPage->FindObjectByUniqueID(nGroupId);
     CPPUNIT_ASSERT(pBack);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pBack->GetSubList()->GetObjCount());
+}
+
+void DesktopKitTest::testObjectGluePointCommands()
+{
+    // The commands for the points a connector ties to name a point by its glue id, which stays
+    // with the point whatever other points are added or taken away.
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+    SdrPageView* pPageView = nullptr;
+    firstObjectOfThePage(pPageView);
+    SdrPage* pPage = pPageView->GetPage();
+
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(pPage->getSdrModelFromSdrPage(),
+                                                      tools::Rectangle(1000, 1000, 5000, 5000));
+    pPage->InsertObject(pRect.get());
+    const unsigned long long nId = pRect->GetUniqueID();
+    const auto aPlaceOf = [&pRect](int nGlueId) {
+        const SdrGluePointList* pGluePoints = pRect->GetGluePointList();
+        return pGluePoints ? pGluePoints->FindGluePoint(static_cast<sal_uInt16>(nGlueId))
+                           : sal_uInt16(SDRGLUEPOINT_NOTFOUND);
+    };
+    const auto aCount = [&pRect]() {
+        const SdrGluePointList* pGluePoints = pRect->GetGluePointList();
+        return pGluePoints ? pGluePoints->GetCount() : sal_uInt16(0);
+    };
+
+    // A new point keeps the glue id it is given. A glue id that another point has, 0, or the
+    // highest one a list can hold adds nothing.
+    pDocument->insertObjectGluePoint(nId, 5, 0.5, 0.5);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aCount());
+    CPPUNIT_ASSERT(aPlaceOf(5) != SDRGLUEPOINT_NOTFOUND);
+    pDocument->insertObjectGluePoint(nId, 5, 0.25, 0.25);
+    pDocument->insertObjectGluePoint(nId, 0, 0.25, 0.25);
+    pDocument->insertObjectGluePoint(nId, 65535, 0.25, 0.25);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aCount());
+
+    // A point with a lower glue id comes before it in the list, and the point of glue id 5 is
+    // still the one the commands change.
+    pDocument->insertObjectGluePoint(nId, 2, 0.25, 0.25);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), aCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), aPlaceOf(2));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aPlaceOf(5));
+    pDocument->setObjectGluePointWayOut(nId, 5, "left");
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SdrEscapeDirection::LEFT),
+                         static_cast<int>((*pRect->GetGluePointList())[aPlaceOf(5)].GetEscDir()));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SdrEscapeDirection::SMART),
+                         static_cast<int>((*pRect->GetGluePointList())[aPlaceOf(2)].GetEscDir()));
+    pDocument->setObjectGluePointAnchor(nId, 5, "top-left");
+    CPPUNIT_ASSERT(!(*pRect->GetGluePointList())[aPlaceOf(5)].IsPercent());
+    CPPUNIT_ASSERT((*pRect->GetGluePointList())[aPlaceOf(2)].IsPercent());
+
+    // Taking the point of glue id 2 away leaves the one of glue id 5, and a glue id no point has
+    // takes nothing away.
+    pDocument->deleteObjectGluePoint(nId, 7);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), aCount());
+    pDocument->deleteObjectGluePoint(nId, 2);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), aPlaceOf(5));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SdrEscapeDirection::LEFT),
+                         static_cast<int>((*pRect->GetGluePointList())[aPlaceOf(5)].GetEscDir()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);

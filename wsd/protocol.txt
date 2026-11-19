@@ -934,42 +934,45 @@ setobjecthandle id=<id> kind=<kind> polygon=<polygon> point=<point> at=<at> x=<x
     which says in the command whether the shape is carried along, where this one would leave
     that to be read off the drag that is driving it.
 
-setobjectgluepoint id=<id> at=<at> x=<x> y=<y> [sequence=<sequence>]
+setobjectgluepoint id=<id> glue=<glue> x=<x> y=<y> [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by,
-    and <at> counts the points that object was given for a connector to tie itself to, from zero,
-    in the order the render geometry lists them. <x> and <y> are where that point goes on the
+    and <glue> is the glue id of one of the points that object was given for a connector to tie
+    itself to: the number the point keeps on the object, which the render geometry reports as
+    its id and a connector tied to it names it by. <x> and <y> are where that point goes on the
     object: 0 and 0 is its upper left corner and 1 and 1 its lower right one, which is how the
     render geometry reports such a point. Moves it there in one step that can be undone. The
     object holds such a point either as a share of its own size or as a distance of its own, and
     it keeps the way it holds it.
 
-insertobjectgluepoint id=<id> x=<x> y=<y>
+insertobjectgluepoint id=<id> glue=<glue> x=<x> y=<y>
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by.
-    <x> and <y> are where a new point for a connector to tie itself to goes on that object, in the
-    terms of setobjectgluepoint. The object gets the point as the last of its points, held as a
-    share of its size and with no way out named, in one step that can be undone. An object that
-    holds no such points, as a connector does not, gets none.
+    <glue> is the glue id the new point keeps on that object, from 1 to 65534. <x> and <y> are
+    where a new point for a connector to tie itself to goes on that object, in the terms of
+    setobjectgluepoint. The object gets the point, held as a share of its size and with no way
+    out named, in one step that can be undone. The render geometry lists the points of an object
+    in the order of their glue ids. An object that holds no such points, as a connector does not,
+    gets none, and neither does an object that has a point of that glue id already.
 
-deleteobjectgluepoint id=<id> at=<at>
+deleteobjectgluepoint id=<id> glue=<glue>
 
-    <id> and <at> name one of the points of a drawing object as for setobjectgluepoint. Takes that
-    point away in one step that can be undone, and the points after it move up one place. A point
-    the shape makes from its own geometry stays.
+    <id> and <glue> name one of the points of a drawing object as for setobjectgluepoint. Takes
+    that point away in one step that can be undone. A point the shape makes from its own geometry
+    stays.
 
-setobjectgluepointwayout id=<id> at=<at> way=<way>
+setobjectgluepointwayout id=<id> glue=<glue> way=<way>
 
-    <id> and <at> name one of the points of a drawing object as for setobjectgluepoint. <way> is
+    <id> and <glue> name one of the points of a drawing object as for setobjectgluepoint. <way> is
     the way a connector leaves the object at that point: left, right, top or bottom for one side,
     horizontal or vertical for the two sides that face each other across or down the object, or
     smart for whichever way suits the connector. These are the names the render geometry reports
     a way out by. Sets it in one step that can be undone. A point the shape makes from its own
     geometry keeps its way.
 
-setobjectgluepointanchor id=<id> at=<at> anchor=<anchor>
+setobjectgluepointanchor id=<id> glue=<glue> anchor=<anchor>
 
-    <id> and <at> name one of the points of a drawing object as for setobjectgluepoint. <anchor>
+    <id> and <glue> name one of the points of a drawing object as for setobjectgluepoint. <anchor>
     is none for a point that keeps its share of the size of the object. It is one of top-left,
     top, top-right, left, center, right, bottom-left, bottom and bottom-right for a point that
     keeps its distance from that corner, the middle of that side, or the middle of the object

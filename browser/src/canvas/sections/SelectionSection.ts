@@ -1245,10 +1245,15 @@ abstract class SelectionSection extends CanvasSectionObject {
 	): cool.ObjectPathPolygon[] | null {
 		if (handle.kind !== 'GluePoint') return null;
 
+		// The handle names the point by its glue id.
 		const objectId = this.selectedObjects()[0];
-		const index = Number(handle.name.split('.')[1]);
+		const glue = Number(handle.name.split('.')[1]);
 		const data = RenderGeometrySection.currentPart();
 		const object = data?.objects.get(objectId);
+		const index =
+			object?.gluePoints?.findIndex(
+				(point: cool.ObjectGluePoint) => point.id === glue,
+			) ?? -1;
 		const id = object?.gluePoints?.[index]?.id;
 		const place = RenderGeometrySection.transformOf(objectId)
 			?.invert()

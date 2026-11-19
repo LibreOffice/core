@@ -1925,9 +1925,12 @@ class TiePointHandles extends HandleGroup {
 		return { wayOut: point.wayOut, anchor: TiePointHandles.anchorOf(point) };
 	}
 
+	/// The glue id last sent for a new point, by the id of its object.
+	private static lastGlueSent: Map<number, number> = new Map();
+
 	/*
 		The menu of a point that is open, or null while none is. It names the point by its object
-		and its place in the list, and holds the entries the menu was opened with. It holds what
+		and its glue id, and holds the entries the menu was opened with. It holds what
 		the marks of the menu show, which is the point as the engine reported it last. And it holds
 		what the choices made in the menu lead to: the engine answers a choice after a moment, so a
 		choice made before that answer follows on from the one before it. Waiting counts the
@@ -1936,7 +1939,7 @@ class TiePointHandles extends HandleGroup {
 	*/
 	private static openMenu: {
 		objectId: number;
-		at: number;
+		glue: number;
 		entries: MenuDefinition[];
 		shown: TiePointMenuState;
 		asked: TiePointMenuState;
@@ -2021,10 +2024,9 @@ class TiePointHandles extends HandleGroup {
 		holds a line that says it cannot be edited.
 	*/
 	private openTheMenuOf(handle: SelectionHandle): void {
-		const at = Number(handle.name.split('.')[1]);
 		const point = this.held(handle);
 		const objects = this.selection.selectedObjects();
-		if (!point || !(at >= 0) || objects.length !== 1) return;
+		if (!point || objects.length !== 1) return;
 
 		if (point.fromTheShape === true) {
 			TiePointHandles.openMenu = null;
@@ -2048,10 +2050,11 @@ class TiePointHandles extends HandleGroup {
 			return;
 		}
 
+		if (point.id === undefined) return;
 		const entries = TiePointHandles.entriesOf(point);
 		TiePointHandles.openMenu = {
 			objectId: objects[0],
-			at,
+			glue: point.id,
 			entries,
 			shown: TiePointHandles.stateOf(point),
 			asked: TiePointHandles.stateOf(point),
@@ -2063,24 +2066,24 @@ class TiePointHandles extends HandleGroup {
 			0.5 * ShapeHandlesSection.gluePointSize(),
 			TiePointHandles.menuId,
 			entries,
-			(chosen: string): boolean => this.choose(handle, chosen),
+			(chosen: string): boolean => this.choose(chosen),
 		);
 	}
 
 	/*
-		Sends what was chosen in the menu of the point that handle stands for, and answers whether
-		the menu stays open. A way switches that side on or off from the way the choices so far
+		Sends what was chosen in the open menu of a point, and answers whether the menu stays
+		open. A way switches that side on or off from the way the choices so far
 		lead to, and an anchor is sent unless the choices so far lead to it already, since it would
 		change nothing and leave a step to undo.
 	*/
-	private choose(handle: SelectionHandle, chosen: string): boolean {
+	private choose(chosen: string): boolean {
 		const open = TiePointHandles.openMenu;
+		if (!open) return false;
 		if (chosen === 'delete') {
 			TiePointHandles.openMenu = null;
-			this.deleteThePoint(handle);
+			this.deleteTheGluePoint(open.glue);
 			return false;
 		}
-		if (!open) return false;
 
 		const anchorPrefix = 'anchor-';
 		if (chosen.startsWith(anchorPrefix)) {
@@ -2088,7 +2091,7 @@ class TiePointHandles extends HandleGroup {
 			if (to !== open.asked.anchor) {
 				this.sendAboutThePoint(
 					'setobjectgluepointanchor',
-					open.at,
+					open.glue,
 					'anchor=' + to,
 				);
 				open.asked.anchor = to;
@@ -2102,7 +2105,11 @@ class TiePointHandles extends HandleGroup {
 				TiePointHandles.waysOf(open.asked.wayOut),
 				chosen,
 			);
-			this.sendAboutThePoint('setobjectgluepointwayout', open.at, 'way=' + way);
+			this.sendAboutThePoint(
+				'setobjectgluepointwayout',
+				open.glue,
+				'way=' + way,
+			);
 			// The render geometry leaves out the way of a point that names none.
 			open.asked.wayOut =
 				way === 'smart' ? undefined : (way as cool.ObjectGluePoint['wayOut']);
@@ -2136,7 +2143,13 @@ class TiePointHandles extends HandleGroup {
 		const object = RenderGeometrySection.objectOf(open.objectId);
 		if (!object) return;
 
-		const point = object.gluePoints?.[open.at];
+		// The point is found by its glue id, so a point another user adds or takes away before it
+		// leaves the menu on the same point.
+		const at =
+			object.gluePoints?.findIndex(
+				(one: cool.ObjectGluePoint) => one.id === open.glue,
+			) ?? -1;
+		const point = object.gluePoints?.[at];
 		if (!point || point.fromTheShape === true) {
 			TiePointHandles.openMenu = null;
 			JSDialog.CloseAllDropdowns();
@@ -2157,8 +2170,7 @@ class TiePointHandles extends HandleGroup {
 			...TiePointHandles.entriesOf(point),
 		);
 
-		const handle = GluePointHandles.ownPointsOf(open.objectId)[open.at];
-		const chosen = (id: string): boolean => this.choose(handle, id);
+		const chosen = (id: string): boolean => this.choose(id);
 
 		if (wayChanged)
 			TiePointHandles.updateTheMenu(
@@ -2180,15 +2192,19 @@ class TiePointHandles extends HandleGroup {
 			);
 	}
 
-	/// Sends a change of the point at that place in the list of the selected object, with the
-	/// parameters that say what the change is, or none for a change that needs none.
-	private sendAboutThePoint(command: string, at: number, change: string): void {
+	/// Sends a change of the point of that glue id of the selected object, with the parameters
+	/// that say what the change is, or none for a change that needs none.
+	private sendAboutThePoint(
+		command: string,
+		glue: number,
+		change: string,
+	): void {
 		app.socket.sendMessage(
 			command +
 				' id=' +
 				String(this.selection.selectedObjects()[0]) +
-				' at=' +
-				String(at) +
+				' glue=' +
+				String(glue) +
 				(change ? ' ' + change : ''),
 		);
 	}
@@ -2199,14 +2215,18 @@ class TiePointHandles extends HandleGroup {
 		taken away move up one place, so the keyboard leaves the points.
 	*/
 	public deleteThePoint(handle: SelectionHandle): boolean {
-		const at = Number(handle.name.split('.')[1]);
 		const point = this.held(handle);
-		if (!point || !(at >= 0)) return false;
-		if (point.fromTheShape === true) return true;
-
-		this.selection.travel.leave();
-		this.sendAboutThePoint('deleteobjectgluepoint', at, '');
+		if (!point) return false;
+		if (point.fromTheShape !== true && point.id !== undefined)
+			this.deleteTheGluePoint(point.id);
 		return true;
+	}
+
+	/// Takes away the point of that glue id of the selected object. The points after it move up
+	/// one place, so the keyboard leaves the points.
+	private deleteTheGluePoint(glue: number): void {
+		this.selection.travel.leave();
+		this.sendAboutThePoint('deleteobjectgluepoint', glue, '');
 	}
 
 	/// The sides a way out names: one side, the two that face each other, or none.
@@ -2259,9 +2279,21 @@ class TiePointHandles extends HandleGroup {
 		const inside = (value: number) => value >= 0 && value <= 1;
 		if (!inside(onTheObject.x) || !inside(onTheObject.y)) return false;
 
+		// The new point takes the glue id after the highest one the object has or was last sent
+		// from here, so two points added before the engine answers get two ids.
+		const ids = (
+			RenderGeometrySection.objectOf(objects[0])?.gluePoints ?? []
+		).map((point: cool.ObjectGluePoint) => point.id ?? 0);
+		const glue =
+			Math.max(0, TiePointHandles.lastGlueSent.get(objects[0]) ?? 0, ...ids) +
+			1;
+		TiePointHandles.lastGlueSent.set(objects[0], glue);
+
 		app.socket.sendMessage(
 			'insertobjectgluepoint id=' +
 				String(objects[0]) +
+				' glue=' +
+				String(glue) +
 				' x=' +
 				onTheObject.x.toFixed(4) +
 				' y=' +
@@ -2472,10 +2504,10 @@ class TiePointHandles extends HandleGroup {
 	}
 
 	/*
-		A point the object was given is moved where it is put, by the number it has in the object's
-		own list. A point the shape makes from its own geometry is laid out again with the shape,
-		so it stays where the shape puts it. The four an object falls back on are not its own and
-		are shown only, so they have no name and nothing takes hold of one.
+		A point the object was given is moved where it is put, by its glue id. A point the shape
+		makes from its own geometry is laid out again with the shape, so it stays where the shape
+		puts it. The four an object falls back on are not its own and are shown only, so they have
+		no name and nothing takes hold of one.
 	*/
 	public interactionFor(
 		handle: SelectionHandle,
@@ -2497,8 +2529,8 @@ class TiePointHandles extends HandleGroup {
 	}
 
 	public handOver(handle: SelectionHandle, to: cool.Point): void {
-		const at = Number(handle.name.split('.')[1]);
-		if (!(at >= 0)) return;
+		const glue = this.held(handle)?.id;
+		if (glue === undefined) return;
 
 		const objectId = this.selection.selectedObjects()[0];
 		const transform = RenderGeometrySection.transformOf(objectId);
@@ -2512,8 +2544,8 @@ class TiePointHandles extends HandleGroup {
 		app.socket.sendMessage(
 			'setobjectgluepoint id=' +
 				String(objectId) +
-				' at=' +
-				String(at) +
+				' glue=' +
+				String(glue) +
 				' x=' +
 				onTheObject.x.toFixed(4) +
 				' y=' +
@@ -2531,16 +2563,19 @@ class TiePointHandles extends HandleGroup {
 		return this.stepAndHandOver(handle, towards, event);
 	}
 
-	/// What the object holds about the point that handle stands for, or nothing for one of the
-	/// four an object falls back on, which it holds nothing about.
+	/// What the object holds about the point that handle stands for, which the handle names by
+	/// its glue id, or nothing for one of the four an object falls back on, which it holds
+	/// nothing about.
 	private held(handle: SelectionHandle): cool.ObjectGluePoint | undefined {
 		if (handle.kind !== 'GluePoint') return undefined;
 
-		const at = Number(handle.name.split('.')[1]);
+		const glue = Number(handle.name.split('.')[1]);
 		const objects = this.selection.selectedObjects();
-		if (!(at >= 0) || objects.length !== 1) return undefined;
+		if (!(glue >= 0) || objects.length !== 1) return undefined;
 
-		return RenderGeometrySection.objectOf(objects[0])?.gluePoints?.[at];
+		return RenderGeometrySection.objectOf(objects[0])?.gluePoints?.find(
+			(point: cool.ObjectGluePoint) => point.id === glue,
+		);
 	}
 
 	/*

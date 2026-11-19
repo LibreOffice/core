@@ -2205,10 +2205,10 @@ bool ChildSession::setObjectGluePoint(const StringVector& tokens)
     std::string objectId;
     std::string across;
     std::string down;
-    int nAt = 0;
+    int glueId = 0;
 
     if (!hasTokens(tokens, 5) || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenInteger(tokens[2], "at", nAt) || !getTokenString(tokens[3], "x", across)
+        || !getTokenInteger(tokens[2], "glue", glueId) || !getTokenString(tokens[3], "x", across)
         || !getTokenString(tokens[4], "y", down))
     {
         sendTextFrameAndLogError("error: cmd=setobjectgluepoint kind=syntax");
@@ -2218,7 +2218,7 @@ bool ChildSession::setObjectGluePoint(const StringVector& tokens)
     // The id an object is named by counts as far as an unsigned long long does, and the place on
     // the object is a share of its width and of its height.
     getLOKitDocument()->setView(_viewId);
-    getLOKitDocument()->setObjectGluePoint(std::strtoull(objectId.c_str(), nullptr, 10), nAt,
+    getLOKitDocument()->setObjectGluePoint(std::strtoull(objectId.c_str(), nullptr, 10), glueId,
                                            std::strtod(across.c_str(), nullptr),
                                            std::strtod(down.c_str(), nullptr));
     return true;
@@ -2229,9 +2229,11 @@ bool ChildSession::insertObjectGluePoint(const StringVector& tokens)
     std::string objectId;
     std::string across;
     std::string down;
+    int glueId = 0;
 
-    if (tokens.size() != 4 || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenString(tokens[2], "x", across) || !getTokenString(tokens[3], "y", down))
+    if (tokens.size() != 5 || !getTokenString(tokens[1], "id", objectId)
+        || !getTokenInteger(tokens[2], "glue", glueId) || !getTokenString(tokens[3], "x", across)
+        || !getTokenString(tokens[4], "y", down))
     {
         sendTextFrameAndLogError("error: cmd=insertobjectgluepoint kind=syntax");
         return false;
@@ -2248,7 +2250,7 @@ bool ChildSession::insertObjectGluePoint(const StringVector& tokens)
     // the object is a share of its width and of its height.
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->insertObjectGluePoint(std::strtoull(objectId.c_str(), nullptr, 10),
-                                              std::strtod(across.c_str(), nullptr),
+                                              glueId, std::strtod(across.c_str(), nullptr),
                                               std::strtod(down.c_str(), nullptr));
     return true;
 }
@@ -2256,10 +2258,10 @@ bool ChildSession::insertObjectGluePoint(const StringVector& tokens)
 bool ChildSession::deleteObjectGluePoint(const StringVector& tokens)
 {
     std::string objectId;
-    int nAt = 0;
+    int glueId = 0;
 
     if (tokens.size() != 3 || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenInteger(tokens[2], "at", nAt))
+        || !getTokenInteger(tokens[2], "glue", glueId))
     {
         sendTextFrameAndLogError("error: cmd=deleteobjectgluepoint kind=syntax");
         return false;
@@ -2274,7 +2276,8 @@ bool ChildSession::deleteObjectGluePoint(const StringVector& tokens)
 
     // The id an object is named by counts as far as an unsigned long long does.
     getLOKitDocument()->setView(_viewId);
-    getLOKitDocument()->deleteObjectGluePoint(std::strtoull(objectId.c_str(), nullptr, 10), nAt);
+    getLOKitDocument()->deleteObjectGluePoint(std::strtoull(objectId.c_str(), nullptr, 10),
+                                              glueId);
     return true;
 }
 
@@ -2282,10 +2285,10 @@ bool ChildSession::setObjectGluePointWayOut(const StringVector& tokens)
 {
     std::string objectId;
     std::string way;
-    int nAt = 0;
+    int glueId = 0;
 
     if (tokens.size() != 4 || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenInteger(tokens[2], "at", nAt) || !getTokenString(tokens[3], "way", way))
+        || !getTokenInteger(tokens[2], "glue", glueId) || !getTokenString(tokens[3], "way", way))
     {
         sendTextFrameAndLogError("error: cmd=setobjectgluepointwayout kind=syntax");
         return false;
@@ -2301,7 +2304,7 @@ bool ChildSession::setObjectGluePointWayOut(const StringVector& tokens)
     // The id an object is named by counts as far as an unsigned long long does.
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->setObjectGluePointWayOut(std::strtoull(objectId.c_str(), nullptr, 10),
-                                                 nAt, way.c_str());
+                                                 glueId, way.c_str());
     return true;
 }
 
@@ -2309,10 +2312,11 @@ bool ChildSession::setObjectGluePointAnchor(const StringVector& tokens)
 {
     std::string objectId;
     std::string anchor;
-    int nAt = 0;
+    int glueId = 0;
 
     if (tokens.size() != 4 || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenInteger(tokens[2], "at", nAt) || !getTokenString(tokens[3], "anchor", anchor))
+        || !getTokenInteger(tokens[2], "glue", glueId)
+        || !getTokenString(tokens[3], "anchor", anchor))
     {
         sendTextFrameAndLogError("error: cmd=setobjectgluepointanchor kind=syntax");
         return false;
@@ -2328,8 +2332,8 @@ bool ChildSession::setObjectGluePointAnchor(const StringVector& tokens)
 
     // The id an object is named by counts as far as an unsigned long long does.
     getLOKitDocument()->setView(_viewId);
-    getLOKitDocument()->setObjectGluePointAnchor(std::strtoull(objectId.c_str(), nullptr, 10), nAt,
-                                                 anchor.c_str());
+    getLOKitDocument()->setObjectGluePointAnchor(std::strtoull(objectId.c_str(), nullptr, 10),
+                                                 glueId, anchor.c_str());
     return true;
 }
 

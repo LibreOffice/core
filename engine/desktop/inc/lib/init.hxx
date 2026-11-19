@@ -271,13 +271,14 @@ namespace desktop {
                              unsigned long long nNewId) override;
         void setObjectPathClosed(unsigned long long nObjectId, bool bClosed, int nAtPolygon,
                                  int nAtPoint) override;
-        void setObjectGluePoint(unsigned long long nObjectId, int nAt, double fX,
+        void setObjectGluePoint(unsigned long long nObjectId, int nGlueId, double fX,
                                 double fY) override;
-        void insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY) override;
-        void deleteObjectGluePoint(unsigned long long nObjectId, int nAt) override;
-        void setObjectGluePointWayOut(unsigned long long nObjectId, int nAt,
+        void insertObjectGluePoint(unsigned long long nObjectId, int nGlueId, double fX,
+                                   double fY) override;
+        void deleteObjectGluePoint(unsigned long long nObjectId, int nGlueId) override;
+        void setObjectGluePointWayOut(unsigned long long nObjectId, int nGlueId,
                                       const char* pWayOut) override;
-        void setObjectGluePointAnchor(unsigned long long nObjectId, int nAt,
+        void setObjectGluePointAnchor(unsigned long long nObjectId, int nGlueId,
                                       const char* pAnchor) override;
         void setObjectTransform(const char* pMappings, const char* pWhat) override;
         void setObjectControlPoint(unsigned long long nObjectId, int nAt, int nX, int nY,
