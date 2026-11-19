@@ -497,7 +497,7 @@ public:
     virtual void setPaintTextEdit(bool) {}
 
     /// Decides if it's OK to call getCommandValues(rCommand).
-    virtual bool supportsCommand(std::u16string_view /*rCommand*/) { return false; }
+    virtual bool supportsCommand(std::string_view /*rCommand*/) { return false; }
 
     /**
      * Puts the caret of rViewShell at the offset nIndex in paragraph nParagraph of the

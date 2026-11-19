@@ -4519,14 +4519,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommandValues)
     pView->SetCursor(1, 0); // B1
     Scheduler::ProcessEventsToIdle();
 
-    for (std::u16string_view aName :
-         { u"SecurityLabel", u"CellRangeInventory", u"CellCursorState", u"FormulaDepChain",
-           u"CalcFunctionList", u"EvaluateFormula", u"ExtractDocumentStructure" })
+    for (std::string_view aName :
+         { "SecurityLabel", "CellRangeInventory", "CellCursorState", "FormulaDepChain",
+           "CalcFunctionList", "EvaluateFormula", "ExtractDocumentStructure" })
         CPPUNIT_ASSERT(pModelObj->supportsCommand(aName));
 
     // The name must match as a whole, and has no ".uno:" prefix here.
-    CPPUNIT_ASSERT(!pModelObj->supportsCommand(u"CellRangeInventoryX"));
-    CPPUNIT_ASSERT(!pModelObj->supportsCommand(u".uno:CellRangeInventory"));
+    CPPUNIT_ASSERT(!pModelObj->supportsCommand("CellRangeInventoryX"));
+    CPPUNIT_ASSERT(!pModelObj->supportsCommand(".uno:CellRangeInventory"));
     boost::property_tree::ptree aTree
         = getCommandResponse(*pModelObj, ".uno:CellRangeInventoryX?part=0");
     // {}

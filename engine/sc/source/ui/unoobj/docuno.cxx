@@ -1599,11 +1599,9 @@ CalcCommand findCalcCommand(std::string_view aName)
 }
 }
 
-bool ScModelObj::supportsCommand(std::u16string_view rCommand)
+bool ScModelObj::supportsCommand(std::string_view rCommand)
 {
-    return std::any_of(std::begin(aCalcCommands), std::end(aCalcCommands),
-                       [rCommand](const auto& rEntry)
-                       { return o3tl::equalsAscii(rCommand, rEntry.first); });
+    return findCalcCommand(rCommand) != CalcCommand::Unknown;
 }
 
 vcl::IVectorParts* ScModelObj::getVectorPartsInterface() { return this; }

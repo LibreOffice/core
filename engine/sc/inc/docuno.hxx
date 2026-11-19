@@ -450,7 +450,7 @@ public:
     OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
-    bool supportsCommand(std::u16string_view rCommand) override;
+    bool supportsCommand(std::string_view rCommand) override;
 
     /// @see vcl::ITiledRenderable::getCommandValues().
     void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;

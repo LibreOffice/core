@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sal/types.h>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -9744,20 +9745,22 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
     {
         return getFontSubset(aCommand.substr(aFontSubset.size()));
     }
-    else if (pDoc->supportsCommand(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
-    {
-        tools::JsonWriter aJsonWriter;
-        pDoc->getCommandValues(aJsonWriter, aCommand);
-        return aJsonWriter.finishAndGetAsStdString();
-    }
-    else if (KitHelper::supportsCommand(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
-    {
-        tools::JsonWriter aJsonWriter;
-        KitHelper::getCommandValues(aJsonWriter, aCommand);
-        return aJsonWriter.finishAndGetAsStdString();
-    }
     else
     {
+        const std::string_view aCommandName = KitParsedCommand::parse(aCommand).aName;
+        if (pDoc->supportsCommand(aCommandName))
+        {
+            tools::JsonWriter aJsonWriter;
+            pDoc->getCommandValues(aJsonWriter, aCommand);
+            return aJsonWriter.finishAndGetAsStdString();
+        }
+        if (KitHelper::supportsCommand(aCommandName))
+        {
+            tools::JsonWriter aJsonWriter;
+            KitHelper::getCommandValues(aJsonWriter, aCommand);
+            return aJsonWriter.finishAndGetAsStdString();
+        }
+
         SetLastExceptionMsg(OUString::fromUtf8(aCommand) + u" : Unknown command, no values returned"_ustr);
         return {};
     }

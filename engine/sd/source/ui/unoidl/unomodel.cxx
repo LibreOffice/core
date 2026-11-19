@@ -4186,12 +4186,12 @@ private:
 
 } // anonymous namespace
 
-bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
+bool SdXImpressDocument::supportsCommand(std::string_view rCommand)
 {
-    if (rCommand == u"VectorThumbnail" || rCommand == u"ExtractDocumentStructure"
-        || rCommand == u"GetDesignTemplates" || rCommand == u"GetDesignTemplateDesigns"
-        || rCommand == u"SecurityLabel" || rCommand == u"ShapeGhost"
-        || rCommand == u"ReserveObjectIds" || rCommand == u"ShapeStyleKey")
+    if (rCommand == "VectorThumbnail" || rCommand == "ExtractDocumentStructure"
+        || rCommand == "GetDesignTemplates" || rCommand == "GetDesignTemplateDesigns"
+        || rCommand == "SecurityLabel" || rCommand == "ShapeGhost"
+        || rCommand == "ReserveObjectIds" || rCommand == "ShapeStyleKey")
         return true;
     return false;
 }

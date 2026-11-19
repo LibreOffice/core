@@ -1672,22 +1672,22 @@ bool SwXTextDocument::setKitTextCursor(SfxViewShell& rViewShell, sal_uInt64 nObj
     return *rShell.GetCursor_()->GetPoint() == *aSelection.GetPoint();
 }
 
-bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
+bool SwXTextDocument::supportsCommand(std::string_view rCommand)
 {
-    static const std::initializer_list<std::u16string_view> vForward
-        = { u"TextFormFields",
-            u"TextFormField",
-            u"SetDocumentProperties",
-            u"Bookmarks",
-            u"Fields",
-            u"Sections",
-            u"Bookmark",
-            u"Field",
-            u"Layout",
-            u"ExtractDocumentStructure",
-            u"ExtractLinkTargets",
-            u"SecurityLabel",
-            u"Headings" };
+    static const std::initializer_list<std::string_view> vForward
+        = { "TextFormFields",
+            "TextFormField",
+            "SetDocumentProperties",
+            "Bookmarks",
+            "Fields",
+            "Sections",
+            "Bookmark",
+            "Field",
+            "Layout",
+            "ExtractDocumentStructure",
+            "ExtractLinkTargets",
+            "SecurityLabel",
+            "Headings" };
 
     return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
 }

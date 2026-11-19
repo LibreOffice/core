@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperCommandValuesSignature)
     OString aJson = aWriter.finishAndGetAsOString();
 
     // Then make sure that we get a signature time and a hash:
-    CPPUNIT_ASSERT(KitHelper::supportsCommand(u"Signature"));
+    CPPUNIT_ASSERT(KitHelper::supportsCommand("Signature"));
     std::stringstream aStream{ std::string(aJson) };
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);

@@ -1297,10 +1297,10 @@ void KitHelper::ensureCommandAuthor(const SfxViewShell* pViewShell, std::u16stri
     }
 }
 
-bool KitHelper::supportsCommand(std::u16string_view rCommand)
+bool KitHelper::supportsCommand(std::string_view rCommand)
 {
-    static const std::initializer_list<std::u16string_view> vSupport
-        = { u"Signature", u"VectorPrimitiveSample" };
+    static const std::initializer_list<std::string_view> vSupport
+        = { "Signature", "VectorPrimitiveSample" };
 
     return std::find(vSupport.begin(), vSupport.end(), rCommand) != vSupport.end();
 }

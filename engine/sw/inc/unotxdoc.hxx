@@ -518,7 +518,7 @@ public:
     OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
-    bool supportsCommand(std::u16string_view rCommand) override;
+    bool supportsCommand(std::string_view rCommand) override;
 
     /// @see vcl::ITiledRenderable::setKitTextCursor(). nObject is the frame id of a text frame,
     /// which holds one paragraph, the first.
