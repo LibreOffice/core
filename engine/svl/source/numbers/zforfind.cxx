@@ -21,6 +21,7 @@
 #include <fast_float/fast_float.h>
 #include <float.h>
 #include <comphelper/string.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/date.hxx>
@@ -58,11 +59,12 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 
-const sal_uInt8 ImpSvNumberInputScan::nMatchedEndString    = 0x01;
-const sal_uInt8 ImpSvNumberInputScan::nMatchedMidString    = 0x02;
-const sal_uInt8 ImpSvNumberInputScan::nMatchedStartString  = 0x04;
-const sal_uInt8 ImpSvNumberInputScan::nMatchedVirgin       = 0x08;
-const sal_uInt8 ImpSvNumberInputScan::nMatchedUsedAsReturn = 0x10;
+// Bits of nMatchedAllStrings
+constexpr sal_uInt8 nMatchedEndString = 0x01;
+constexpr sal_uInt8 nMatchedMidString = 0x02;
+constexpr sal_uInt8 nMatchedStartString = 0x04;
+constexpr sal_uInt8 nMatchedVirgin = 0x08;
+constexpr sal_uInt8 nMatchedUsedAsReturn = 0x10;
 
 /* It is not clear how we want timezones to be handled. Convert them to local
  * time isn't wanted, as it isn't done in any other place and timezone
@@ -164,6 +166,13 @@ static double StringToDouble( std::u16string_view aStr )
     return result;
 }
 
+// Whether rString contains rWhat at nPos
+static bool StringContains(std::u16string_view rWhat, std::u16string_view rString, sal_Int32 nPos)
+{
+    return !rWhat.empty() && o3tl::make_unsigned(nPos) < rString.size()
+           && rString.substr(nPos).starts_with(rWhat);
+}
+
 namespace {
 
 /**
@@ -194,8 +203,7 @@ enum ScanState  // States of the Turing machine
 
 }
 
-bool ImpSvNumberInputScan::NextNumberStringSymbol(const sal_Unicode*& pStr,
-                                                  std::u16string_view& rSymbol)
+static bool NextNumberStringSymbol(const sal_Unicode*& pStr, std::u16string_view& rSymbol)
 {
     bool isNumber = false;
     sal_Unicode cToken;
@@ -430,8 +438,7 @@ bool ImpSvNumberInputScan::StringContainsWord(std::u16string_view rWhat,
 /**
  * Skips the supplied char
  */
-inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, std::u16string_view rString,
-                                            sal_Int32& nPos )
+static bool SkipChar(sal_Unicode c, std::u16string_view rString, sal_Int32& nPos)
 {
     if ((nPos < static_cast<sal_Int32>(rString.size())) && (rString[nPos] == c))
     {
@@ -445,7 +452,7 @@ inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, std::u16string_view r
 /**
  * Skips blanks
  */
-inline bool ImpSvNumberInputScan::SkipBlanks(std::u16string_view rString, sal_Int32& nPos)
+static bool SkipBlanks(std::u16string_view rString, sal_Int32& nPos)
 {
     sal_Int32 nHere = nPos;
     while (o3tl::make_unsigned(nPos) < rString.size()
@@ -461,8 +468,7 @@ inline bool ImpSvNumberInputScan::SkipBlanks(std::u16string_view rString, sal_In
 /**
  * jump over rWhat in rString at nPos
  */
-inline bool ImpSvNumberInputScan::SkipString(std::u16string_view rWhat, std::u16string_view rString,
-                                             sal_Int32& nPos)
+static bool SkipString(std::u16string_view rWhat, std::u16string_view rString, sal_Int32& nPos)
 {
     if ( StringContains( rWhat, rString, nPos ) )
     {
@@ -885,7 +891,7 @@ int ImpSvNumberInputScan::GetSign( std::u16string_view rString, sal_Int32& nPos 
  * '-'   => -1
  * else =>  0
  */
-short ImpSvNumberInputScan::GetESign( std::u16string_view rString, sal_Int32& nPos )
+static short GetESign(std::u16string_view rString, sal_Int32& nPos)
 {
     if (static_cast<sal_Int32>(rString.size()) > nPos)
     {

@@ -21,7 +21,6 @@
 #define INCLUDED_SVL_SOURCE_NUMBERS_ZFORFIND_HXX
 
 #include <cpo/uno/Sequence.hxx>
-#include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/date.hxx>
@@ -106,13 +105,6 @@ private:
     bool       bDecSepInDateSeps;                    //* True <=> DecSep in {.,-,/,DateSep}
     sal_uInt8  nMatchedAllStrings;                   //* Scan...String() matched all substrings,
 
-    // bit mask of nMatched... constants
-    static const sal_uInt8 nMatchedEndString;        // 0x01
-    static const sal_uInt8 nMatchedMidString;        // 0x02
-    static const sal_uInt8 nMatchedStartString;      // 0x04
-    static const sal_uInt8 nMatchedVirgin;           // 0x08
-    static const sal_uInt8 nMatchedUsedAsReturn;     // 0x10
-
     int    nSign;                               // Sign of number
     int    nMonth;                              // Month (1..x) if date
                                                 // negative => short format
@@ -195,9 +187,6 @@ private:
 
     void InitText();                            // Init of months and days of week
 
-    // Next number/string symbol
-    static bool NextNumberStringSymbol(const sal_Unicode*& pStr, std::u16string_view& rSymbol);
-
     // Concatenate ,000,23 blocks
     // in input to 000123
     bool SkipThousands(const sal_Unicode*& pStr, const sal_Unicode* pEnd,
@@ -215,26 +204,6 @@ private:
      */
     bool StringContainsWord(std::u16string_view rWhat, std::u16string_view rString,
                             sal_Int32 nPos) const;
-
-    // Whether rString contains rWhat at nPos
-    static bool StringContains(std::u16string_view rWhat, std::u16string_view rString,
-                               sal_Int32 nPos)
-    {
-        return !rWhat.empty() && o3tl::make_unsigned(nPos) < rString.size()
-               && rString.substr(nPos).starts_with(rWhat);
-    }
-
-    // Skip a special character
-    static inline bool SkipChar( sal_Unicode c,
-                                 std::u16string_view rString,
-                                 sal_Int32& nPos );
-
-    // Skip blank
-    static inline bool SkipBlanks(std::u16string_view rString, sal_Int32& nPos);
-
-    // Jump over rWhat in rString at nPos
-    static inline bool SkipString(std::u16string_view rWhat, std::u16string_view rString,
-                                  sal_Int32& nPos);
 
     // Recognizes exactly ,111 as group separator
     inline bool GetThousandSep( std::u16string_view rString,
@@ -267,10 +236,6 @@ private:
     // Including special case '('
     int GetSign( std::u16string_view rString,
                  sal_Int32& nPos );
-
-    // Get sign of exponent and advance string position
-    static short GetESign( std::u16string_view rString,
-                           sal_Int32& nPos );
 
     // Get next number as array offset
     inline bool GetNextNumber( sal_uInt16& i,
