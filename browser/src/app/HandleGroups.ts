@@ -3030,7 +3030,11 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 						]
 					: [];
 			});
-			MotionPathHandles.editorOf(object, path).paint(section, own);
+			MotionPathHandles.editorOf(object, path).paint(
+				section,
+				own,
+				cool.MotionPaths.colourOf(path),
+			);
 		});
 	}
 

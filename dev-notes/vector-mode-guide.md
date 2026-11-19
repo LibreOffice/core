@@ -263,7 +263,7 @@ A freeform line is drawn by hand, a stroke for every part:
 | Yellow handles | On custom shapes | Change the shape (an arrow's head, a corner's size); each runs only where the shape lets it. |
 | Corner radius | On a rectangle | Rounds the corners. |
 | Line ends | At both ends of a straight line | Move that end; see "Lines" below. |
-| Path points | On curves and polygons, while Edit Points is on | Move a point or one of its two weights (curve handles); the curve keeps how it runs through the point. A click opens the menu of the point, see "Editing points" below. A drag on the line of the path, off the points, moves that polygon of the path whole, its points and weights together, as one step to undo; a path of one polygon moves as a whole. |
+| Path points | On curves and polygons, while Edit Points is on | Move a point or one of its two weights (curve handles); the curve keeps how it runs through the point. A click opens the menu of the point, see "Editing points" below. A drag on the line of the path, off the points, moves that polygon of the path whole, its points and weights together, as one step to undo; a path of one polygon moves as a whole. A path of two polygons or more shows the number of each, from 1, beside the point it starts at, so their order can be seen. |
 | Connector ends | At both ends of a connector | Tie the end to the object or glue point it is dropped on, or leave it free. Another connector lying over the object does not hide it. |
 | Connector lines | On the lines between the ends | Move that line, across itself only. |
 | Glue points | On the object, while Glue Points is on | Move a point someone added. A click opens the menu of the point, see "Editing points" below. The points the shape makes itself and the four at the middles of the sides stay where they are. |
@@ -659,9 +659,10 @@ color of their own, since they are the object's defaults and not points someone 
   weights, or a weight, which at a smooth or symmetric point swings the other weight with it,
   and the path follows while it is dragged; when it is let go the path is set, as one step to
   undo. A drag on the line of a path, off its handles, moves that polygon of the path whole, and
-  the object stays where it is. Ctrl+Tab reaches these handles after the object's own, and the
-  arrow keys move them as a drag does. Where the effects changed meanwhile, in another view for
-  one, the change sets nothing and the paths show as they are now.
+  the object stays where it is. A path of two parts or more shows the number of each part, from
+  1, beside the point it starts at. Ctrl+Tab reaches these handles after the object's own, and
+  the arrow keys move them as a drag does. Where the effects changed meanwhile, in another view
+  for one, the change sets nothing and the paths show as they are now.
 - The toolbar and the menus change their states at once with the selection, since the client
   works them out itself.
 - Changes made by other people editing the same document arrive as they happen. When they

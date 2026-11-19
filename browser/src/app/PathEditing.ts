@@ -314,7 +314,11 @@ class PathEditing implements HandleSource {
 		background, light or dark, and still does not compete with the handles. The handles it is
 		given are the handles as they stand, so while a drag runs the lines follow what it moves.
 	*/
-	public paint(section: CanvasSectionObject, shown: SelectionHandle[]): void {
+	public paint(
+		section: CanvasSectionObject,
+		shown: SelectionHandle[],
+		colour: string = HandleLook.colorOfTheKind.pathPoint,
+	): void {
 		const points = new Map<string, SelectionHandle>();
 		const weights: SelectionHandle[] = [];
 
@@ -322,6 +326,7 @@ class PathEditing implements HandleSource {
 			if (handle.kind === '9') points.set(handle.name, handle);
 			else if (handle.kind === '10') weights.push(handle);
 		}
+		this.paintPartNumbers(section.context, points, colour);
 		if (!weights.length) return;
 
 		const lines: { from: cool.Point; to: cool.Point }[] = [];
@@ -332,6 +337,82 @@ class PathEditing implements HandleSource {
 			if (point) lines.push({ from: point.point, to: weight.point });
 		}
 		PathEditing.paintWeightLines(section.context, lines);
+	}
+
+	/*
+		Writes the number of each polygon beside the point it starts at, from 1, so the order of
+		the polygons can be seen; a path of one polygon gets none. The number stands off the
+		point away from the line, in the colour given with a white edge, and goes along with the
+		point while it is dragged, as it is placed from the points as they are shown.
+	*/
+	private paintPartNumbers(
+		context: CanvasRenderingContext2D,
+		points: Map<string, SelectionHandle>,
+		colour: string,
+	): void {
+		const path = this.path() ?? [];
+		if (path.length < 2) return;
+
+		const size = Math.round(11 * app.dpiScale);
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
+		context.font = 'bold ' + String(size) + 'px sans-serif';
+		context.textAlign = 'center';
+		context.textBaseline = 'middle';
+		context.lineJoin = 'round';
+		context.lineWidth = 3 * app.dpiScale;
+		context.strokeStyle = '#FFFFFF';
+		context.fillStyle = colour;
+
+		path.forEach((polygon: cool.ObjectPathPolygon, which: number) => {
+			const at = PathEditing.partNumberAt(polygon, which, points);
+			if (!at) return;
+			const written = new cool.SimplePoint(at.x, at.y);
+			const away = at.away.multiplyBy(
+				ShapeHandlesSection.handleSize() + size / 2,
+			);
+			const text = String(which + 1);
+			context.strokeText(text, written.vX + away.x, written.vY + away.y);
+			context.fillText(text, written.vX + away.x, written.vY + away.y);
+		});
+
+		context.restore();
+	}
+
+	/*
+		Where the number of a polygon goes: its first point as shown, in twips, and the way away
+		from the line there, as a vector of length one on the screen. That way points against
+		the edges that meet at the point, the one going out and, for a closed polygon, the one
+		coming in, so the number does not sit on either. Nothing where the point is not shown.
+	*/
+	private static partNumberAt(
+		polygon: cool.ObjectPathPolygon,
+		which: number,
+		points: Map<string, SelectionHandle>,
+	): { x: number; y: number; away: cool.Point } | null {
+		const count = (polygon.points ?? []).length;
+		const start = points.get(PathEditing.pointName(which, 0))?.point;
+		if (!start || count < 2) return null;
+
+		// the way along an edge from the start, by the point at its other end as shown
+		const towards = (point: number): cool.Point | null => {
+			const other = points.get(PathEditing.pointName(which, point))?.point;
+			const along = other?.subtract(start);
+			const length = along?.length() ?? 0;
+			return along && length ? along.divideBy(length) : null;
+		};
+		const out = towards(1);
+		const back = polygon.closed ? towards(count - 1) : null;
+
+		let away = new cool.Point(0, 0);
+		if (out) away = away.subtract(out);
+		if (back) away = away.subtract(back);
+		// edges going out and back in on one line leave no way away from both, so the number
+		// goes to the side of the edge going out
+		if (away.length() < 1e-6)
+			away = out ? new cool.Point(out.y, -out.x) : new cool.Point(0, -1);
+
+		return { x: start.x, y: start.y, away: away.divideBy(away.length()) };
 	}
 
 	/*

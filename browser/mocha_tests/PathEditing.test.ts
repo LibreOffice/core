@@ -114,6 +114,74 @@ describe('Moving a polygon of a path by its line', function () {
 	});
 });
 
+describe('The number of each polygon of a path', function () {
+	// where the number of that polygon goes, from the points as they are shown
+	const numberOf = (polygon: cool.ObjectPathPolygon, which: number) => {
+		const shown = new Map<string, SelectionHandle>();
+		polygon.points.forEach((point: cool.ObjectPathPoint, at: number) =>
+			shown.set('9.' + String(which) + '.' + String(at), {
+				name: '9.' + String(which) + '.' + String(at),
+				kind: '9',
+				point: new cool.Point(point.x, point.y),
+			} as SelectionHandle),
+		);
+		return (PathEditing as any).partNumberAt(polygon, which, shown);
+	};
+	const rounded = (away: cool.Point) => [
+		Math.round(away.x * 1000) / 1000,
+		Math.round(away.y * 1000) / 1000,
+	];
+
+	it('stands at the start of an open polygon, away from the edge going out', function () {
+		const at = numberOf(
+			{
+				points: [
+					{ x: 100, y: 100 },
+					{ x: 600, y: 100 },
+				],
+			},
+			1,
+		);
+		nodeassert.deepStrictEqual(
+			[at.x, at.y, ...rounded(at.away)],
+			[100, 100, -1, 0],
+		);
+	});
+
+	it('stands outside the corner a closed polygon starts at', function () {
+		const at = numberOf(
+			{
+				closed: true,
+				points: [
+					{ x: 0, y: 0 },
+					{ x: 1000, y: 0 },
+					{ x: 1000, y: 1000 },
+					{ x: 0, y: 1000 },
+				],
+			},
+			0,
+		);
+		const half = Math.round(Math.SQRT1_2 * 1000) / 1000;
+		nodeassert.deepStrictEqual(rounded(at.away), [-half, -half]);
+	});
+
+	it('stands beside a start that lies on a straight line between its two edges', function () {
+		const at = numberOf(
+			{
+				closed: true,
+				points: [
+					{ x: 0, y: 0 },
+					{ x: 1000, y: 0 },
+					{ x: 0, y: 1000 },
+					{ x: -1000, y: 0 },
+				],
+			},
+			0,
+		);
+		nodeassert.deepStrictEqual(rounded(at.away), [0, -1]);
+	});
+});
+
 describe('Moving a polygon of a motion path by its line', function () {
 	// a box from 1000, 2000 that is 400 wide and 200 high, so its middle is at 1200, 2100
 	const object = (motionPaths: cool.ObjectMotionPath[]): cool.SlideObject => ({
