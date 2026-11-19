@@ -644,16 +644,18 @@ color of their own, since they are the object's defaults and not points someone 
 - A dashed outline marks the object under the pointer. It follows the object's own shape, a
   circle round, a curve along its course, without the letters of its text.
 - When one object is selected, the motion paths it moves along in the slide show are shown
-  as dashed, see-through lines over a white line, so they show on any fill. Each path starts
-  from the middle of the object, or of the paragraph when one paragraph moves alone, and a
-  full dot with a white edge marks where it starts. The first path is gray, and each further
+  as dashed, see-through lines over a white line, so they show on any fill. Each path is
+  placed from the middle of the object, or of the paragraph when one paragraph moves alone;
+  most start there, but a path drawn by hand can start beside the object, where the slide show
+  puts the object when the effect begins. A full dot with a white edge marks where it starts. The first path is gray, and each further
   one has a colour of its own, with the dot in the same colour; paths that start at the same
   place show their dots as rings round each other, the first one in the middle. They move
   with the object while it is dragged, and they are not turned or sized with it, as the
   slide show does. With more than one object selected none are shown.
-- Every point of those paths but the one it starts at, at the object, and every weight of a
-  curve has a handle in the colour of its path, with the dashed lines from the points to their
-  weights as in point editing; a press on the middle of the object still moves the object. A
+- Every point of those paths, the one it starts at too, and every weight of a curve has a
+  handle in the colour of its path, with the dashed lines from the points to their weights as
+  in point editing; a press on the start of a path takes that handle, also at the middle of the
+  object, and a press anywhere else on the object still moves the object. A
   drag moves a point with its weights, or a weight, which at a smooth or symmetric point swings
   the other weight with it, and the path follows while it is dragged; when it is let go the path
   is set, as one step to undo. Ctrl+Tab reaches these handles after the object's own, and the

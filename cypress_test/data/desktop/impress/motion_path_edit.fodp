@@ -22,6 +22,7 @@
    <draw:page draw:name="page1" draw:master-page-name="Default">
     <draw:rect xml:id="curved" draw:id="curved" svg:x="2cm" svg:y="2cm" svg:width="4cm" svg:height="2cm"/>
     <draw:rect xml:id="closed" draw:id="closed" svg:x="17cm" svg:y="2cm" svg:width="3cm" svg:height="3cm"/>
+    <draw:rect xml:id="beside" draw:id="beside" svg:x="10cm" svg:y="10cm" svg:width="3cm" svg:height="2cm"/>
     <anim:par presentation:node-type="timing-root">
      <anim:seq presentation:node-type="main-sequence">
       <anim:par smil:begin="indefinite">
@@ -35,6 +36,13 @@
        <anim:par smil:begin="0s">
         <anim:par smil:begin="0s" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="motion-path" presentation:preset-id="ooo-motionpath-user-defined">
          <anim:animateMotion smil:dur="2s" smil:fill="hold" smil:targetElement="closed" smil:additive="sum" svg:path="M 0 0 L 0.1 0.2 L -0.1 0.2 Z"/>
+        </anim:par>
+       </anim:par>
+      </anim:par>
+      <anim:par smil:begin="indefinite">
+       <anim:par smil:begin="0s">
+        <anim:par smil:begin="0s" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="motion-path" presentation:preset-id="ooo-motionpath-user-defined">
+         <anim:animateMotion smil:dur="2s" smil:fill="hold" smil:targetElement="beside" smil:additive="sum" svg:path="M 0.1 0.1 L 0.3 0.1"/>
         </anim:par>
        </anim:par>
       </anim:par>

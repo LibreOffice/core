@@ -2907,8 +2907,8 @@ class MotionPathSink implements PathSink {
 	moves: each path is edited as the path of an object is, the weights of a curve going along
 	with a point and the other weight of a smooth point swinging with a dragged one, and once the
 	drag is let go the engine is told the new path, by its place among the object's paths and with
-	the path it started from. The point a path starts at has no handle, as a path starts at its
-	object, where a press moves the object; its weight has one.
+	the path it started from. The point a path starts at has a handle as every other point, as a
+	drawn path can start away from its object.
 */
 class MotionPathHandles extends HandlesMovedOneByOne {
 	public readonly name: string = 'motionPath';
@@ -2917,9 +2917,6 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 	/// handles of the object's own path.
 	public static readonly kind: string = 'motionPoint';
 	public static readonly weightKind: string = 'motionWeight';
-
-	/// The name the editor of a path gives the point a path starts at.
-	private static readonly startName: string = '9.0.0';
 
 	/// Whether that handle belongs to the group.
 	public static isOne(handle: SelectionHandle | null | undefined): boolean {
@@ -2965,10 +2962,6 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		return (object.motionPaths ?? []).flatMap((_motionPath, path: number) =>
 			MotionPathHandles.editorOf(object, path)
 				.handles()
-				.filter(
-					(handle: SelectionHandle) =>
-						handle.name !== MotionPathHandles.startName,
-				)
 				.map((handle: SelectionHandle) => ({
 					...handle,
 					name: ['motion', path, handle.name].join(' '),
@@ -2998,16 +2991,6 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 						]
 					: [];
 			});
-			// the point a path starts at has no handle, but the line to its weight starts there
-			const start =
-				cool.MotionPaths.placedOf(object)[path]?.polygons[0]?.points[0];
-			if (start)
-				own.push({
-					name: MotionPathHandles.startName,
-					kind: '9',
-					pointer: '28',
-					point: new cool.Point(start.x, start.y),
-				});
 			MotionPathHandles.editorOf(object, path).paint(section, own);
 		});
 	}

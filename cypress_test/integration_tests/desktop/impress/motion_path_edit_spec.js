@@ -4,8 +4,8 @@
 var helper = require('../../common/helper');
 
 // Editing the motion paths of an object on a vector slide by their handles. The slide holds a
-// rectangle that moves along a curve whose middle point is symmetric, and a square that moves
-// along a closed triangle.
+// rectangle that moves along a curve whose middle point is symmetric, a square that moves along a
+// closed triangle, and a rectangle whose path was drawn beside it.
 describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 
 	beforeEach(function() {
@@ -28,12 +28,29 @@ describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 			win.app.CSections.RenderGeometry.name).constructor;
 	}
 
-	// The object of the slide whose first motion path is closed, or is not.
+	// Whether the first motion path of that object starts at the middle of the object.
+	function startsAtTheObject(object) {
+		var start = object.motionPaths[0].path[0].points[0];
+		return Math.abs(start.x) < 10 && Math.abs(start.y) < 10;
+	}
+
+	// The object of the slide whose first motion path starts at the object and is closed, or is
+	// not.
 	function objectWithPath(win, closed) {
 		var found;
 		geometry(win).currentPart().objects.forEach(function(object) {
 			var path = object.motionPaths && object.motionPaths[0].path[0];
-			if (!found && path && !!path.closed === closed)
+			if (!found && path && !!path.closed === closed && startsAtTheObject(object))
+				found = object.id;
+		});
+		return found;
+	}
+
+	// The object of the slide whose first motion path starts away from the object.
+	function objectWithPathBeside(win) {
+		var found;
+		geometry(win).currentPart().objects.forEach(function(object) {
+			if (!found && object.motionPaths && !startsAtTheObject(object))
 				found = object.id;
 		});
 		return found;
@@ -116,10 +133,10 @@ describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 		});
 		select(win, function() { return curved; });
 
-		// the point the path starts at lies at the object and has no handle, its weight has one
+		// the point the path starts at has a handle as every other point, and so has its weight
 		cy.then(function() {
 			var handles = motionHandles(win);
-			expect(handles, 'the handles').to.not.have.property('motion 0 9.0.0');
+			expect(handles, 'the handles').to.have.property('motion 0 9.0.0');
 			expect(handles, 'the handles').to.have.property('motion 0 10.0.0.out');
 			expect(handles, 'the handles').to.have.property('motion 0 9.0.2');
 		});
@@ -174,6 +191,35 @@ describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 			expect(path.closed, 'the path closed').to.equal(true);
 			expect(path.points, 'the points').to.have.length(3);
 			expect(Math.abs(path.points[1].x - before.x - 500), 'the point across').to.be.below(60);
+		});
+	});
+
+	it('The start of a path drawn beside its object is moved, and the rest of the path stays.', function() {
+		var win = this.win;
+		var beside;
+		cy.wrap(null).should(function() {
+			beside = objectWithPathBeside(win);
+			expect(beside, 'the rectangle with a path beside it').to.not.equal(undefined);
+		});
+		select(win, function() { return beside; });
+
+		var before;
+		cy.then(function() {
+			before = pointsOf(win, beside).map(function(point) { return [point.x, point.y]; });
+		});
+		dragHandle(win, 'motion 0 9.0.0', -500, 300);
+		cy.wrap(null).should(function() {
+			var points = pointsOf(win, beside);
+			expect(Math.abs(points[0].x - before[0][0] + 500), 'the start across').to.be.below(60);
+			expect(Math.abs(points[0].y - before[0][1] - 300), 'the start down').to.be.below(60);
+			expect([points[1].x, points[1].y], 'the end').to.deep.equal(before[1]);
+		});
+
+		// an undo brings back what the engine had, so the engine had taken the change
+		undo(win);
+		cy.wrap(null).should(function() {
+			var points = pointsOf(win, beside).map(function(point) { return [point.x, point.y]; });
+			expect(points, 'the points after the undo').to.deep.equal(before);
 		});
 	});
 });

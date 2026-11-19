@@ -121,6 +121,34 @@ describe('Motion paths laid onto the slide', function () {
 		});
 	});
 
+	it('the start of a path drawn beside its object is dragged with its weight', function () {
+		const beside: cool.ObjectMotionPath = {
+			path: [
+				{
+					points: [
+						{ x: 600, y: 300, aheadX: 700, aheadY: 300 },
+						{ x: 1200, y: 300 },
+					],
+				},
+			],
+		};
+		// the start lies at 1800, 2400 on the page, away from the middle of the object
+		const moved = MotionPathHandles.withPointAt(
+			object([beside]),
+			'motion 0 9.0.0',
+			new cool.Point(1700, 2500),
+		);
+		const start = moved?.motionPaths?.[0].path[0].points[0];
+		nodeassert.deepStrictEqual(
+			[start?.x, start?.y, start?.aheadX, start?.aheadY],
+			[500, 400, 600, 400],
+		);
+		nodeassert.deepStrictEqual(moved?.motionPaths?.[0].path[0].points[1], {
+			x: 1200,
+			y: 300,
+		});
+	});
+
 	it('a name that is no point of the paths moves nothing', function () {
 		nodeassert.strictEqual(
 			MotionPathHandles.withPointAt(
