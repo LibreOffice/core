@@ -251,6 +251,68 @@ abstract class SelectionSection extends CanvasSectionObject {
 		);
 	}
 
+	/// The kind the drawing layer gives a table.
+	private static readonly tableKind: number = 35;
+
+	/*
+		What a plain click on the one selected object switches to: the next of the modes that
+		object has, in turn, coming back round to the object itself after the last one.
+		- A curve or a polygon: the object, its points, its glue points. Only a click on its line
+		  switches, so a click in its fill stays a click on the object.
+		- A picture: the object, its crop marks, its glue points.
+		- Any other object: the object and its glue points. A click on its text switches nothing,
+		  so it still edits the text; a click beside the text, where the pointer is no text
+		  pointer, switches.
+		A connector, a table, a group, a selection of more than one object and an object whose
+		text is being edited switch nothing. Nothing where the click switches nothing, and then it
+		goes on as a click on the object.
+	*/
+	private switchByAClickAt(at: cool.SimplePoint): (() => void) | null {
+		const selected = this.selectedObjects();
+		if (selected.length !== 1 || app.file.textCursor.visible) return null;
+
+		const objectId = selected[0];
+		const object = RenderGeometrySection.objectOf(objectId);
+		if (
+			!object ||
+			ObjectHandles.isAConnector(objectId) ||
+			object.objectKind === SelectionSection.tableKind ||
+			RenderGeometrySection.holdsObjects(objectId) ||
+			Interaction.placeOf(GraphicSelection.selectedObjectIDs).kind === 'inPlace'
+		)
+			return null;
+
+		const place = new cool.Point(at.x, at.y);
+		const reach = HandleGroup.lineReach();
+
+		if (this.editor) {
+			if (this.editor.polygonAt(place, reach) === null) return null;
+			if (this.pathPointsAreShown()) return () => this.switchTheTiePoints();
+			if (this.tiePointsAreShown()) return () => this.switchTheTiePoints();
+			return () => this.switchThePathPoints();
+		}
+
+		if (
+			CropHandles.thePictureOf(this) !== undefined &&
+			GraphicSelection.takesTheCropSwitch()
+		) {
+			if (GraphicSelection.cropping)
+				return () => {
+					GraphicSelection.toggleCropping();
+					this.switchTheTiePoints();
+				};
+			if (this.tiePointsAreShown()) return () => this.switchTheTiePoints();
+			return () => GraphicSelection.toggleCropping();
+		}
+
+		// the hit test says where text lies, as the pointer does: 'text' there, or 'pointer' over a
+		// link
+		const pointer = RenderGeometrySection.pointerAt(at.x, at.y);
+		if (pointer === 'text' || pointer === 'pointer') return null;
+
+		return () => this.switchTheTiePoints();
+	}
+
 	/*
 		Shows these points, or hides them again. They are shown only when allowed. Showing them
 		hides the other kind of points, because both lie on the same object and a press could not
@@ -3850,9 +3912,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 			if (hit !== undefined && inPlace) return;
 		}
 
+		// A click that switches the mode of the object waits as a click for the engine does, so
+		// the second click of a double click takes it back and edits the text instead.
+		const switchTheMode = modifier === 0 ? this.switchByAClickAt(at) : null;
+
 		this.pendingClick = app.timerRegistry.setTimeout(
 			'selectionClick',
 			() => {
+				if (switchTheMode) {
+					this.pendingClick = null;
+					switchTheMode();
+					return;
+				}
 				app.map._docLayer._postMouseEvent(
 					'buttondown',
 					at.x,

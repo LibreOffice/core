@@ -460,7 +460,7 @@ abstract class HandleGroup {
 	}
 
 	/// How far from a line of a path a press takes hold of it, in twips: half a handle.
-	protected static lineReach(): number {
+	public static lineReach(): number {
 		return 0.5 * ShapeHandlesSection.handleSize() * app.pixelsToTwips;
 	}
 
@@ -597,7 +597,7 @@ class CropHandles extends HandleGroup {
 	public readonly name: string = 'crop';
 
 	/// The picture the selection is, or nothing where it is not one picture.
-	private static thePictureOf(
+	public static thePictureOf(
 		selection: SelectionSection,
 	): cool.SlideObject | undefined {
 		const objects = selection.selectedObjects();
@@ -2264,13 +2264,31 @@ class TiePointHandles extends HandleGroup {
 	/// The points the selected object was given, which travel with it as it is dragged.
 	public handles(): SelectionHandle[] {
 		const objects = this.selection.selectedObjects();
+		if (objects.length !== 1) return [];
 
-		return objects.length === 1
-			? HeldSteps.laidOn(
-					this.selection,
-					GluePointHandles.ownPointsOf(objects[0]),
-				)
-			: [];
+		const own = HeldSteps.laidOn(
+			this.selection,
+			GluePointHandles.ownPointsOf(objects[0]),
+		);
+		return this.selection.tiePointsAreShown()
+			? own.concat(TiePointHandles.fallbacksOf(objects[0]))
+			: own;
+	}
+
+	/*
+		The four points the object falls back on, in the middle of its sides, shown grey while the
+		points are shown: they tell that the points are shown also where the object has none of
+		its own. No one can move or delete them, so a press takes them without doing anything and
+		the keyboard walks past them.
+	*/
+	private static fallbacksOf(objectId: number): SelectionHandle[] {
+		return GluePointHandles.defaultPointsOf(objectId).map(
+			(handle: SelectionHandle, at: number) => ({
+				...handle,
+				name: 'DefaultGluePoint.' + String(at),
+				deactivated: true,
+			}),
+		);
 	}
 
 	/*
@@ -3413,8 +3431,18 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 class TheObjectItself extends HandleGroup {
 	public readonly name: string = 'object';
 
+	/// A press inside the box of the selection, or on the line of a selected path, which reaches
+	/// a little outside its box.
 	public takesAPress(x: number, y: number): boolean {
-		return this.selection.within(x, y);
+		if (this.selection.within(x, y)) return true;
+
+		const at = this.selection.inDocumentFromCanvas(x, y);
+		return (
+			(this.selection
+				.pathEditor()
+				?.polygonAt(new cool.Point(at.x, at.y), HandleGroup.lineReach()) ??
+				null) !== null
+		);
 	}
 
 	public shape(): string {

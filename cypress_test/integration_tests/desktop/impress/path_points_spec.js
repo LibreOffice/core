@@ -283,4 +283,83 @@ describe(['tagdesktop'], 'Points of a polygon on a vector slide', function() {
 			expect(points, 'points after the undo').to.deep.equal(before);
 		});
 	});
+
+	// A click that switches a mode waits as long as a click for the engine does, so the second
+	// click of a double click can take it back.
+	function waitForTheClick(win) {
+		cy.then(function() {
+			return helper.waitForTimers(win, 'selectionClick');
+		});
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+	}
+
+	it('A click on the line of a polygon switches its points, then its glue points, then neither.', function() {
+		var win = this.win;
+		selectByTab(win, 2);
+		cy.wrap(null).should(function() {
+			expect(pathPoints(win), 'points of the polygon').to.have.length(4);
+		});
+
+		// the click is a quarter along the upper edge, away from the handle in its middle, the
+		// next ones too
+		var clickTheEdge = function() {
+			cy.then(function() {
+				var points = pathPoints(win);
+				clickAt(win, (3 * points[0].x + points[1].x) / 4, (3 * points[0].y + points[1].y) / 4);
+			});
+			waitForTheClick(win);
+		};
+
+		clickTheEdge();
+		helper.waitForMapState('editpathpoints', 'true');
+
+		clickTheEdge();
+		helper.waitForMapState('editpathpoints', 'false');
+		helper.waitForMapState('showgluepoints', 'true');
+
+		clickTheEdge();
+		helper.waitForMapState('editpathpoints', 'false');
+		helper.waitForMapState('showgluepoints', 'false');
+
+		// a click in the fill switches nothing
+		cy.then(function() {
+			var points = pathPoints(win);
+			clickAt(win, (points[0].x + points[2].x) / 2, (points[0].y + points[2].y) / 2);
+		});
+		waitForTheClick(win);
+		helper.waitForMapState('editpathpoints', 'false');
+		helper.waitForMapState('showgluepoints', 'false');
+	});
+
+	it('A click on a rectangle switches its glue points, the four it falls back on shown grey.', function() {
+		var win = this.win;
+		selectByTab(win, 1);
+
+		cy.then(function() {
+			var box = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.RenderGeometry.name).constructor.boxOf(selectedObject(win));
+			clickAt(win, (box.minX + box.maxX) / 2, (box.minY + box.maxY) / 2);
+		});
+		waitForTheClick(win);
+		helper.waitForMapState('showgluepoints', 'true');
+		cy.wrap(null).should(function() {
+			var fallbacks = selectionSection(win).handles().filter(function(handle) {
+				return handle.name.indexOf('DefaultGluePoint.') === 0;
+			});
+			expect(fallbacks, 'the four it falls back on').to.have.length(4);
+			fallbacks.forEach(function(handle) {
+				expect(handle.deactivated, 'shown grey').to.equal(true);
+			});
+		});
+
+		cy.then(function() {
+			var box = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.RenderGeometry.name).constructor.boxOf(selectedObject(win));
+			clickAt(win, (box.minX + box.maxX) / 2, (box.minY + box.maxY) / 2);
+		});
+		waitForTheClick(win);
+		helper.waitForMapState('showgluepoints', 'false');
+	});
 });

@@ -229,11 +229,17 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 		helper.waitForMapState('showgluepoints', 'true');
 
-		// Once adding has stopped, a press on the object adds nothing.
+		// Once adding has stopped, a press on the object adds nothing: it is a click on the
+		// object, which hides the points again.
 		clickOnTheObject(win, 0.5, 0.5);
+		cy.then(function() {
+			return helper.waitForTimers(win, 'selectionClick');
+		});
+		helper.waitForMapState('showgluepoints', 'false');
 		cy.wrap(null).should(function() {
 			expect(gluePoints(win), 'points after Escape').to.have.length(0);
 		});
+		showGluePoints(win);
 
 		// A press adds one point where it lands, and adding ends with it.
 		startAddingAPoint(win);
@@ -248,11 +254,16 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 		helper.waitForMapState('insertgluepoint', 'false');
 
-		// The next press adds nothing more.
+		// The next press adds nothing more, and hides the points again.
 		clickOnTheObject(win, 0.75, 0.75);
+		cy.then(function() {
+			return helper.waitForTimers(win, 'selectionClick');
+		});
+		helper.waitForMapState('showgluepoints', 'false');
 		cy.wrap(null).should(function() {
 			expect(gluePoints(win), 'points after the second press').to.have.length(1);
 		});
+		showGluePoints(win);
 
 		// The menu stays open, so the ways are chosen one after the other in it, and its marks
 		// follow the point. Left, then Right beside it makes the pair that faces each other.
