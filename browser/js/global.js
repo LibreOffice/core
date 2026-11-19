@@ -3339,7 +3339,8 @@ function showWelcomeSVG() {
 	}
 
 	// Switch from local (WASM or LOKit-via-Bridge) editing to traditional
-	// server-based collaborative editing without reloading cool.html:
+	// server-based collaborative editing without reloading cool.html (except in an editor frame
+	// whose app shows the server's own editor instead):
 	// tear down the local-edit plumbing, then point app.socket at a real
 	// /cool/ws on the cool server.  Covers both COWASM (page hosted on
 	// the cool server itself) and CODA (page hosted on file://, with the
@@ -3371,6 +3372,13 @@ function showWelcomeSVG() {
 
 		detachFromNativeApp();
 		dropFakeSocket();
+
+		// An editor frame shows the server's own editor for the document, where the app can
+		// do that (as CODA's page and /cool/ws can come from different versions):
+		if (window.bridge && window.bridge.useServerEditor) {
+			window.bridge.useServerEditor('switch');
+			return;
+		}
 
 		// Build the /cool/ws URL.  Two flavours depending on whether
 		// cool.html itself lives on the cool server (COWASM) or on a

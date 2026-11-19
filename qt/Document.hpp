@@ -31,9 +31,7 @@ struct RemoteDocInfo
     QString accessToken;
     QString coolServer;
     // The path component of the original COOL URL intercepted from
-    // the integrator, e.g. "/browser/abc123/cool.html".  Needed
-    // by switchToServerMode to navigate to the correct versioned
-    // URL on the remote server.
+    // the integrator, e.g. "/browser/abc123/cool.html".
     QString coolPath;
 };
 

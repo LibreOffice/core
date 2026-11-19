@@ -1657,15 +1657,9 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "switchToServerMode"))
     {
-        // Tear down the local-LOKit side of a remote document so the
-        // page can swap its underlying WebSocket from the FakeWebSocket
-        // (routed through this bridge to the in-process kit) to a real
-        // one pointing at the cool server.  The page-JS does the
-        // socket swap itself and also sends {"type":"bye"} on its
-        // collab WS before triggering this; here we only handle the
-        // FakeSocket teardown.  Do NOT navigate the webview - the
-        // whole point of this seamless switch (vs. the original
-        // _webView->load(coolUrl) path) is to keep the page loaded.
+        // Tear down the local-LOKit side of a remote document, whose page then asks for the
+        // server's own editor in its editor frame (the page-JS also sends {"type":"bye"} on its
+        // collab WS before triggering this, and here we only handle the FakeSocket teardown):
         if (!_document._remoteInfo)
             return {};
 
@@ -1679,7 +1673,7 @@ QVariant Bridge::cool(const QString& messageStr)
             _closeNotificationPipeForForwardingThread[0] = -1;
         }
 
-        // After the swap the page's JS has muted postMobileMessage, so a subsequent closeEvent has
+        // By now the page's JS has muted postMobileMessage, so a subsequent closeEvent has
         // no way to drive the JS-side _saveAndClose round-trip and would otherwise hang waiting for
         // a CLOSE_WINDOW that can never arrive; the COOL server session handles save-on-disconnect
         // like a plain-browser editor tab, so let teardown proceed straight away:

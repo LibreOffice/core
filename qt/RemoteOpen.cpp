@@ -764,11 +764,19 @@ void CloudAccountPage::useServerEditor(QString const & reason) {
         LOG_WRN("account window: refused: an unknown reason for the server's own editor");
         return;
     }
-    LOG_INF(
-        "account window: no client document loading (" << reason.toStdString()
-        << "), so the frame shows the server's own editor");
-    _serverEditorReasons[_frameOrigin.toString()] = reason;
-    showServerEditorNotice(_frameOrigin, reason);
+    // A document that the page switched to the server goes to the server's own editor without a
+    // notice, and the next document from that server goes to CODA's page again:
+    if (reason.toStdString() == EditorFrameScripts::switchReason) {
+        LOG_INF(
+            "account window: the editor frame's page switched its document to the server, so the "
+            "frame shows the server's own editor");
+    } else {
+        LOG_INF(
+            "account window: no client document loading (" << reason.toStdString()
+            << "), so the frame shows the server's own editor");
+        _serverEditorReasons[_frameOrigin.toString()] = reason;
+        showServerEditorNotice(_frameOrigin, reason);
+    }
     PagesBySession.erase(_session);
     _session.clear();
     releaseParkedClose();

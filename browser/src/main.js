@@ -338,7 +338,7 @@ if (window.ThisIsTheEmscriptenApp) {
 			var info = JSON.parse(infoJson);
 			// Cache for Permission.js's switchToServerMode override,
 			// which rebuilds the cool-server /cool/ws URL from these
-			// values.
+			// values (in an app that cannot show the server's own editor instead).
 			window._codaRemoteInfo = info;
 			window.app.console.log('CODA: remote doc, wopiSrc=' + info.wopiSrc);
 			global.collab.fetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {

@@ -25,8 +25,13 @@ inline std::string const disabledReason = "disabled";
 inline std::string const unsupportedReason = "unsupported";
 inline std::string const outdatedReason = "outdated";
 
+// The reason why the frame shows the server's own editor after CODA's page in it switched its
+// document to the server (for collaborative editing, or as the integrator allows no local copy):
+inline std::string const switchReason = "switch";
+
 inline bool isServerEditorReason(std::string const & reason) {
-    return reason == disabledReason || reason == unsupportedReason || reason == outdatedReason;
+    return reason == disabledReason || reason == unsupportedReason || reason == outdatedReason
+        || reason == switchReason;
 }
 
 // Replaces coolwsd's page in the editor frame with an empty document before it is parsed, unless
