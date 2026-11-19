@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-06 02:09+0000\n"
+"PO-Revision-Date: 2026-11-18 23:25+0000\n"
 "Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -6363,19 +6363,19 @@ msgstr "%1, liée à %2"
 
 #: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Lié à une section de %1 qui manque"
 
 #: src/control/Control.PartsPreview.js:1255
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Lié à une section de %1 qui a changé"
 
 #: src/control/Control.PartsPreview.js:1257
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Lié à une section de %1, déconnecté"
 
 #: src/control/Control.PartsPreview.js:1258
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Lié à une section de %1"
 
 #: src/control/Control.PartsPreview.js:1402
 #: src/control/Control.PartsPreview.js:1569
@@ -6400,15 +6400,15 @@ msgstr "Déplacer la section vers le bas"
 
 #: src/control/Control.PartsPreview.js:1446
 msgid "Update Section"
-msgstr ""
+msgstr "Mettre à jour la section"
 
 #: src/control/Control.PartsPreview.js:1454
 msgid "Unlink Section"
-msgstr ""
+msgstr "Détacher la section"
 
 #: src/control/Control.PartsPreview.js:1461
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Détacher sections et Diapositives"
 
 #: src/control/Control.PartsPreview.js:1470
 msgid "Collapse All Sections"
@@ -6542,7 +6542,7 @@ msgstr "Insérer des diapositives"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Insérer la section \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6562,15 +6562,17 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Insérer comme section \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Insérer comme des diapositives séparées"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Lié à sa section dans {0}. Mettre à jour les Liens apporte les nouveaux "
+"changements."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6712,11 +6714,11 @@ msgstr "Lié à {0} dans {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:122
 msgid "Linked to {0}"
-msgstr ""
+msgstr "Lien vers {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:123
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "Dans une section liée à {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:148
 msgid "Hide the actions for this linked slide"
@@ -6733,7 +6735,7 @@ msgstr "Délier"
 #: src/control/Control.SlideLinkToolbar.tsx:179
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update section"
-msgstr ""
+msgstr "Mettre à jour la section"
 
 #: src/control/Control.SlideLinkToolbar.tsx:193
 msgid "Not available"
@@ -6763,17 +6765,22 @@ msgstr "Aucune diapositive de cette présentation n'est liée à un autre fichie
 #: src/slideimport/SlideLinks.ts:433
 msgid "The section cannot be updated, because its source is not available."
 msgstr ""
+"La section ne peut être mise à jour, car sa source n'est pas disponible."
 
 #: src/slideimport/SlideLinks.ts:455
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Une section liée ne peut être mise à jour, car sa source n'est pas "
+"disponible."
 
 #: src/slideimport/SlideLinks.ts:458
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"{0} les sections liées ne peuvent être mises à jour, parce que leurs sources "
+"ne sont pas disponibles."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid ""
@@ -6787,10 +6794,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"{0} les sections liées tiendront les diapositives que leurs sections dans "
+"les fichiers sources tiennent maintenant. Les changements apportés à ces "
+"diapositives dans cette présentation seront perdus."
 
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update sections"
-msgstr ""
+msgstr "Actualiser les sections"
 
 #: src/slideimport/SlideLinks.ts:542
 msgid "This slide is not linked to another file."
@@ -6811,7 +6821,7 @@ msgstr "{0} n'a pas pu être lu."
 
 #: src/slideimport/SlideLinks.ts:750
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "Vous n'avez pas accès à {0}, la section ne peut pas être mise à jour."
 
 #: src/slideimport/SlideLinks.ts:753
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6831,11 +6841,13 @@ msgstr "Les diapositives de {0} n'ont pas pu être lues dans cette présentation
 
 #: src/slideimport/SlideLinks.ts:927
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "La section a été mise à jour à partir de {0}."
 
 #: src/slideimport/SlideLinks.ts:1076
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
+"Ne peut pas mettre à jour la section : {0} ne contient plus sa section "
+"source."
 
 #: src/slideimport/SlideLinks.ts:1102
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6848,14 +6860,12 @@ msgid "Unlinking the slide failed."
 msgstr "Le détachage des diapositives a échoué."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Le détachage des diapositives a échoué."
+msgstr "Le détachage de la section a échoué."
 
 #: src/slideimport/SlideLinks.ts:1139
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "La mise à jour des diapositives de {0} a échoué."
+msgstr "La mise à jour de la section de {0} a échoué."
 
 #: src/slideimport/SlideLinks.ts:1140 src/slideimport/SlideLinks.ts:1199
 msgid "Updating the slides of {0} failed."
@@ -8167,9 +8177,8 @@ msgid "Insert Comment"
 msgstr "Ajouter un commentaire"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2448
-#, fuzzy
 msgid "Insert Note"
-msgstr "Insérer une date"
+msgstr "Insérer une note"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
@@ -8249,9 +8258,8 @@ msgid "Color palette"
 msgstr "Palette de Couleurs"
 
 #: src/control/jsdialog/Widget.Combobox.js:290
-#, fuzzy
 msgid "Open list"
-msgstr "Ouvrir le lien"
+msgstr "Ouvrir la liste"
 
 #: src/control/jsdialog/Widget.Combobox.js:498
 msgid "Filter entries"
@@ -8287,11 +8295,11 @@ msgstr "Colonne {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:632
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 est en édition"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:633
 msgid "Another user is editing"
-msgstr ""
+msgstr "Un autre utilisateur édite le document"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8299,7 +8307,7 @@ msgstr "Couper"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Barre de formule"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8382,9 +8390,8 @@ msgid "Entering text mode"
 msgstr "Entrer en mode texte"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "Insérer une date"
+msgstr "Insérer un mode"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -8412,19 +8419,16 @@ msgid "Shape Size"
 msgstr "Taille de la forme"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Fermer la Navigation"
+msgstr "Navigation dans la feuille de calcul"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:81
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Fermer la Navigation"
+msgstr "Navigation dans la Diapositive"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:82
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Fermer la Navigation"
+msgstr "Navigation dans la Page"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:88
 msgid "Your changes have been saved"
@@ -8498,7 +8502,7 @@ msgstr "Value de décrément"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Ajouter un remplissage pour modifier le {0}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8683,11 +8687,10 @@ msgid "Delete slides"
 msgstr "Supprimer les diapositives"
 
 #: src/docdispatcher.ts:1036
-#, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] "supprimer %n Diapo"
-msgstr[1] "supprimer %n Diapos"
+msgstr[0] "Supprimer %n Diapo ?"
+msgstr[1] "Supprimer %n Diapos ?"
 
 #: src/docdispatcher.ts:1040
 msgid "Delete pages"
@@ -8780,12 +8783,15 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"Vous n'avez plus accès à ce document. Son label de sécurité a été changé."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Vous ne pouvez plus modifier ce document. Son label de sécurité a été "
+"changé. Veuillez l'ouvrir à nouveau pour le voir."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8899,7 +8905,6 @@ msgid "Failed to load document."
 msgstr "Échec au chargement du document."
 
 #: src/errormessages.ts:81
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "L'enregistrement a échoué en raison du manque d'espace disque. Le document "
@@ -8927,7 +8932,7 @@ msgstr "Le document n'a pas pu être enregistré."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Le stockage a refusé de sauvegarder le document."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -8980,9 +8985,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Le document n'a pa pu être exporté. Veuillez réessayer."
 
 #: src/layer/marker/A11yTextInput.js:94
-#, fuzzy
 msgid "Slide"
-msgstr "Diapositives"
+msgstr "Diapositive"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
@@ -9051,9 +9055,8 @@ msgid "{0} deleted"
 msgstr "{0} supprimé"
 
 #: src/layer/marker/TextInput.js:519
-#, fuzzy
 msgid "Placeholder"
-msgstr "Espaces réservés"
+msgstr "Espace réservé"
 
 #: src/layer/marker/TextInput.js:527
 msgid "Drop-down list"
@@ -9068,9 +9071,8 @@ msgid "Content control"
 msgstr "Contrôle de contenu"
 
 #: src/layer/marker/TextInput.js:548
-#, fuzzy
 msgid "Object"
-msgstr "Objets"
+msgstr "Objet"
 
 #: src/layer/marker/TextInput.js:550
 msgid "Frame"
@@ -9110,15 +9112,16 @@ msgstr "Éditeur en Ligne"
 
 #: src/layer/tile/CanvasTileLayer.js:1398
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "%1 a commencé à enregistrer des changements pour tous les utilisateurs."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Recording changes was started for all users."
 msgstr ""
+"L'enregistrement des changements a été activé pour tous les utilisateurs."
 
 #: src/layer/tile/CanvasTileLayer.js:1401
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Vos changements sont suivis maintenant."
 
 #: src/layer/tile/CanvasTileLayer.js:1487
 msgid "Functions"
@@ -9221,7 +9224,6 @@ msgid "Please send us your feedback"
 msgstr "Veuillez nous faire part de vos commentaires"
 
 #: src/map/handler/Map.FileInserter.js:298
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
 "Le fichier du type : {0} ne peut pas être téléversé sur le serveur dans la "
@@ -9237,10 +9239,9 @@ msgstr ""
 "mesure où il n'a pas de nom"
 
 #: src/map/handler/Map.FileInserter.js:302
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
 msgstr ""
-"Le fichier du type : {0} ne peut pas être téléversé sur le serveur dans la "
+"Le fichier du type : {0} ne peut pas être téléversé sur le serveur dans la "
 "mesure où il est vide"
 
 #: src/map/handler/Map.FileInserter.js:303
@@ -9390,9 +9391,8 @@ msgid "Skip All"
 msgstr "Tout ignorer"
 
 #: src/slideshow/engine/SlideShowHandler.ts:119
-#, fuzzy
 msgid "First Slide"
-msgstr "Première ligne"
+msgstr "Première Diapositive"
 
 #: src/slideshow/engine/SlideShowHandler.ts:120
 #: src/slideshow/PresenterConsole.js:32
@@ -9400,14 +9400,12 @@ msgid "Next Slide"
 msgstr "Diapositive suivante"
 
 #: src/slideshow/engine/SlideShowHandler.ts:121
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Diapositive précédente"
 
 #: src/slideshow/engine/SlideShowHandler.ts:122
-#, fuzzy
 msgid "Last Slide"
-msgstr "Coller la diapo"
+msgstr "Dernière Diapositive"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
 #: src/slideshow/SlideShowPresenter.ts:936
@@ -9415,14 +9413,12 @@ msgid "End Show"
 msgstr "Fin de Présentation"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Paused"
-msgstr "Pause"
+msgstr "En Pause"
 
 #: src/slideshow/engine/SlideShowHandler.ts:125
-#, fuzzy
 msgid "Resumed"
-msgstr "Résumer"
+msgstr "Résumé"
 
 #: src/slideshow/engine/SlideShowHandler.ts:404
 msgid "Animation: {0}, {1}"
@@ -9468,14 +9464,12 @@ msgid "Resume"
 msgstr "Résumer"
 
 #: src/slideshow/PresenterConsole.js:42
-#, fuzzy
 msgid "Present to all"
 msgstr "Présenter à Tous"
 
 #: src/slideshow/PresenterConsole.js:43
-#, fuzzy
 msgid "Exit"
-msgstr "Modifier"
+msgstr "Quitter"
 
 #: src/slideshow/PresenterConsole.js:44
 msgid "Go Back"
@@ -9523,10 +9517,10 @@ msgid "No Notes"
 msgstr "Pas de notes"
 
 #: src/slideshow/PresenterConsole.js:1767
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Répéter dans {0} secondes"
+msgstr[0] "Répéter dans {0} seconde"
+msgstr[1] "Répéter dans {0} secondes"
 
 #: src/slideshow/PresenterConsole.js:1774
 #: src/slideshow/SlideShowPresenter.ts:728
@@ -9542,7 +9536,6 @@ msgid "Waiting for presenter to advance"
 msgstr "Attendre que le présentateur avance"
 
 #: src/slideshow/SlideShowPresenter.ts:1700
-#, fuzzy
 msgid "Stop Following"
 msgstr "Ne plus suivre"
 
