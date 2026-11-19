@@ -11,6 +11,8 @@ from uitest.uihelper.common import get_url_for_data_file
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
+from com.sun.star.awt import Toolkit
+
 import uno
 
 LOCALE = '/org.openoffice.Setup/L10N/ooSetupSystemLocale'
@@ -18,7 +20,7 @@ LOCALE = '/org.openoffice.Setup/L10N/ooSetupSystemLocale'
 # Bug 160343 - Standard filter don't works with numbers with decimals
 class tdf160343(UITestCase):
     def open_table(self, sTable):
-        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit = Toolkit.create(self.xContext)
         # connects to the database
         self.xUITest.executeCommand(".uno:DBViewTables")
         xToolkit.waitUntilAllIdlesDispatched()
@@ -34,7 +36,7 @@ class tdf160343(UITestCase):
             xDialog.getChild("field1").executeAction("SELECT", mkPropertyValues({"TEXT": sField}))
             xDialog.getChild("cond1").executeAction("SELECT", mkPropertyValues({"TEXT": sCondition}))
             xDialog.getChild("value1").executeAction("SET", mkPropertyValues({"TEXT": sValue}))
-        self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit').waitUntilAllIdlesDispatched()
+        Toolkit.create(self.xContext).waitUntilAllIdlesDispatched()
 
     def standard_filter(self, sTable, sField, sCondition, sValue, nExpectedRows):
         with self.ui_test.load_file(get_url_for_data_file("tdf160343.odb")):
