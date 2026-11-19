@@ -6119,6 +6119,7 @@ static void openAccountWindow(const std::string& url)
                         }
 
                         account->webViewController = controller;
+                        applyUIZoom(controller);
                         controller->get_CoreWebView2(account->webView.put());
                         controller->put_Bounds(documentArea(*window));
                         controller->put_IsVisible(TRUE);

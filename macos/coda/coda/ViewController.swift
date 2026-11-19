@@ -689,11 +689,17 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         webView.pageZoom = percent > 0 ? min(max(CGFloat(percent) / 100, 0.25), 5.0) : 1.0
     }
 
+    /**
+     * Applies the user interface zoom to every web view in the view tree, except to those of the
+     * slideshow and the presenter console.
+     */
     private static func applyUIZoom(inside view: NSView?) {
         guard let view else {
             return
         }
-        if let webView = view as? CODAWebView {
+        if let webView = view as? WKWebView,
+           !(webView.window?.windowController is PresentationController),
+           !(webView.window?.windowController is ConsoleController) {
             applyUIZoom(to: webView)
         }
         for subview in view.subviews {

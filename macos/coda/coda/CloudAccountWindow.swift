@@ -88,6 +88,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         configuration.userContentController.addUserScript(frameLoaded)
 
         webView = WKWebView(frame: .zero, configuration: configuration)
+        ViewController.applyUIZoom(to: webView)
 #if DEBUG
         webView.isInspectable = true
 #endif
