@@ -31,7 +31,7 @@ GITHUB_ISSUES_URL = f"https://github.com/{GITHUB_REPO}/issues"
 
 JENKINS_BASE = "https://cpci.cbg.collabora.co.uk:8080"
 JENKINS_JOB_URL = f"{JENKINS_BASE}/view/Gerrit/job/Gerrit%20for%20online%20main/"
-JENKINS_RECENT_BUILD_LIMIT = 50
+JENKINS_PAGE_SIZE = 500
 
 STATS_FILE = "stats.json"
 
@@ -120,22 +120,49 @@ def top_reviewers_this_week(n=10):
     return counter.most_common(n)
 
 
-def jenkins_recent_build_stats(limit=JENKINS_RECENT_BUILD_LIMIT):
-    """Returns (green, total, median_duration_ms, median_sample_size) for the
-    last `limit` completed Jenkins builds, in a single API request.
+def fetch_jenkins_builds_since(since):
+    """Returns the Jenkins builds that started at or after `since` (a naive UTC datetime), newest
+    first, each with its result, duration and timestamp. Also returns True if the window is
+    complete, or False if Jenkins no longer keeps the oldest builds of the window.
 
-    A build counts as completed once its result is non-null (i.e. it is no
-    longer queued or running). "Green" means result == "SUCCESS".
-    The median ignores ABORTED/UNSTABLE/etc. and only considers SUCCESS and
-    FAILURE — those are the builds whose duration reflects a real turnaround
-    a contributor would have observed.
+    The "builds" field of the job API holds only the newest 100 builds, so this reads
+    "allBuilds" one page at a time, until a page reaches a build older than `since`.
     """
-    url = f"{JENKINS_JOB_URL}api/json?tree=builds%5Bresult,duration%5D"
-    req = urllib.request.Request(url, headers={"User-Agent": "cool_tc_stats"})
-    with urllib.request.urlopen(req) as resp:
-        body = resp.read().decode("utf-8")
-    builds = json.loads(body).get("builds", [])
-    completed = [b for b in builds if b.get("result") is not None][:limit]
+    since_ms = since.replace(tzinfo=datetime.timezone.utc).timestamp() * 1000
+    builds = []
+    start = 0
+    while True:
+        tree = (f"allBuilds%5Bresult,duration,timestamp%5D"
+                f"%7B{start},{start + JENKINS_PAGE_SIZE}%7D")
+        url = f"{JENKINS_JOB_URL}api/json?tree={tree}"
+        req = urllib.request.Request(url, headers={"User-Agent": "cool_tc_stats"})
+        with urllib.request.urlopen(req) as resp:
+            body = resp.read().decode("utf-8")
+        page = json.loads(body).get("allBuilds", [])
+        builds.extend(b for b in page if b["timestamp"] >= since_ms)
+        if any(b["timestamp"] < since_ms for b in page):
+            return builds, True
+        if len(page) < JENKINS_PAGE_SIZE:
+            return builds, False
+        start += JENKINS_PAGE_SIZE
+
+
+def jenkins_recent_build_stats(days=7):
+    """Returns (green, total, median_duration_ms, median_sample_size, oldest, complete) for the
+    completed Jenkins builds that started in the last `days` days.
+
+    A build counts as completed once its result is non-null, so builds still queued or running
+    are left out. "Green" means the result is SUCCESS. The median takes only SUCCESS and FAILURE
+    builds, because their duration is a real turnaround a contributor would have seen. An
+    ABORTED build is usually one cancelled by a newer patchset.
+
+    oldest is the start time of the oldest build counted, as a naive UTC datetime, or None if
+    there were no builds. complete is False when Jenkins no longer keeps the start of the window,
+    so the figures cover only the time since oldest.
+    """
+    now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+    builds, complete = fetch_jenkins_builds_since(now - datetime.timedelta(days=days))
+    completed = [b for b in builds if b.get("result") is not None]
     green = sum(1 for b in completed if b.get("result") == "SUCCESS")
     durations = [
         b["duration"]
@@ -143,7 +170,11 @@ def jenkins_recent_build_stats(limit=JENKINS_RECENT_BUILD_LIMIT):
         if b.get("result") in ("SUCCESS", "FAILURE") and b.get("duration")
     ]
     median_ms = int(statistics.median(durations)) if durations else 0
-    return green, len(completed), median_ms, len(durations)
+    oldest = None
+    if builds:
+        oldest = datetime.datetime.fromtimestamp(
+            builds[-1]["timestamp"] / 1000, datetime.timezone.utc).replace(tzinfo=None)
+    return green, len(completed), median_ms, len(durations), oldest, complete
 
 
 def parse_gerrit_time(stamp):
@@ -257,7 +288,13 @@ def main():
     gerrit_count = open_non_wip_count()
     pr_count = open_pr_count()
     regression_count = regression_issue_count()
-    jenkins_green, jenkins_total, jenkins_median_ms, jenkins_median_n = jenkins_recent_build_stats()
+    (jenkins_green, jenkins_total, jenkins_median_ms, jenkins_median_n,
+     jenkins_oldest, jenkins_complete) = jenkins_recent_build_stats()
+    if jenkins_complete or jenkins_oldest is None:
+        jenkins_window = "in the last 7 days"
+    else:
+        # Jenkins discards the oldest builds of the job, so the window starts later.
+        jenkins_window = f"since {jenkins_oldest:%Y-%m-%d %H:%M} UTC, the oldest build Jenkins keeps"
     jenkins_success_rate = (
         round(100 * jenkins_green / jenkins_total) if jenkins_total else 0
     )
@@ -289,8 +326,8 @@ def main():
     print(f"  - Week {week}: {regression_str}")
     print("# Jenkins / CI update")
     print(f"- [Gerrit for online main]({JENKINS_JOB_URL})")
-    print(f"  - Week {week}: Success rate is {jenkins_success_rate}%, failed builds are {jenkins_failed}/{jenkins_total}")
-    print(f"  - Week {week}: Turnaround time is {fmt_duration_ms(jenkins_median_ms)} (median of last {jenkins_median_n} SUCCESS/FAILURE builds)")
+    print(f"  - Week {week}: Success rate is {jenkins_success_rate}%, failed builds are {jenkins_failed}/{jenkins_total} ({jenkins_window})")
+    print(f"  - Week {week}: Turnaround time is {fmt_duration_ms(jenkins_median_ms)} (median of {jenkins_median_n} SUCCESS/FAILURE builds {jenkins_window})")
     if lone_count:
         print(f"  - Week {week}: {lone_within_hour}% of lone pushes got a CI verdict within an hour"
               f" ({lone_count} lone pushes in the last 7 days, median"
