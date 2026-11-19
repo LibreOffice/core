@@ -12,6 +12,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,desktop_lib))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,desktop_lib, \
+	desktop/qa/desktop_lib/kitclipboard \
 	desktop/qa/desktop_lib/test_desktop_lib \
 	desktop/qa/desktop_lib/test_l10ntranslate \
 ))

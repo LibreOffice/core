@@ -360,6 +360,8 @@ void KitClipboard::setContents(
         return;
 
     std::vector<OString> aMimeTypes;
+    bool bHasImagePng = false;
+    bool bHasTextHtml = false;
     try
     {
         const auto aFlavors = xTrans->getTransferDataFlavors();
@@ -370,6 +372,10 @@ void KitClipboard::setContents(
             // Match doc_getClipboard() behaviour: advertise UTF-8 not UTF-16
             if (aMime.startsWith("text/plain"))
                 aMime = "text/plain;charset=utf-8"_ostr;
+            if (aMime == "image/png")
+                bHasImagePng = true;
+            else if (aMime == "text/html")
+                bHasTextHtml = true;
             aMimeTypes.push_back(aMime);
         }
     }
@@ -380,6 +386,10 @@ void KitClipboard::setContents(
 
     if (aMimeTypes.empty())
         return;
+
+    // A shape selection advertises PNG, but not HTML: advertise a wrapper.
+    if (bHasImagePng && !bHasTextHtml)
+        aMimeTypes.push_back("text/html"_ostr);
 
     std::vector<const char*> aPtrs;
     aPtrs.reserve(aMimeTypes.size() + 1);
