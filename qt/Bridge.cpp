@@ -1220,9 +1220,7 @@ QVariant Bridge::cool(const QString& messageStr)
         const std::string title = QObject::tr("Cannot open remote document").toStdString();
         const std::vector<std::string> paragraphs {
             "Could not open the document from " + serverName.toStdString() + ".",
-            "The server did not respond to the collaborative-editing connection (" + error + ").",
-            "It may be running a version of Collabora Online that does not support remote editing "
-            "from this app."
+            "Details: " + error
         };
 
         // In an editor frame the integrator's page stays, and only the frame shows the failure.
