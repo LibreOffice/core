@@ -491,10 +491,16 @@ class FramingHandles extends HandleGroup {
 	/// The eight handles are hidden while the points to tie a connector to, the points of the
 	/// path or the crop marks are shown.
 	public isShown(): boolean {
+		return FramingHandles.areShownFor(this.selection);
+	}
+
+	/// Whether the handles of the object itself are shown in that selection: they are not while
+	/// the points to tie a connector to, the points of the path or the crop marks are.
+	public static areShownFor(selection: SelectionSection): boolean {
 		return (
-			!this.selection.tiePointsAreShown() &&
-			!this.selection.pathPointsAreShown() &&
-			!CropHandles.areShownFor(this.selection)
+			!selection.tiePointsAreShown() &&
+			!selection.pathPointsAreShown() &&
+			!CropHandles.areShownFor(selection)
 		);
 	}
 
@@ -1048,9 +1054,7 @@ class TurningHandle extends HandleGroup {
 	/// crop marks are shown, and for a selection that holds a form control.
 	public isShown(): boolean {
 		return (
-			!this.selection.tiePointsAreShown() &&
-			!this.selection.pathPointsAreShown() &&
-			!CropHandles.areShownFor(this.selection) &&
+			FramingHandles.areShownFor(this.selection) &&
 			!ObjectHandles.holdsAFormControl(this.selection.selectedObjects())
 		);
 	}
@@ -1541,6 +1545,12 @@ class HeldSteps {
 */
 class ShapingHandles extends HandlesMovedOneByOne {
 	public readonly name: string = 'shaping';
+
+	/// The points the object is shaped by are hidden while the eight are, as the points to tie a
+	/// connector to, the points of the path or the crop marks take their place.
+	public isShown(): boolean {
+		return FramingHandles.areShownFor(this.selection);
+	}
 
 	/// The kind the engine gives a point a custom shape is shaped by.
 	private static readonly shapingPointKind: string = '22';
@@ -2988,11 +2998,11 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		);
 	}
 
-	/// The object whose paths are shown, where exactly one object with paths is selected and its
-	/// own path points are not being edited.
+	/// The object whose paths are shown, where exactly one object with paths is selected and the
+	/// handles of the object itself are shown, not its points, its glue points or crop marks.
 	private object(): cool.SlideObject | undefined {
 		const selected = this.selection.selectedObjects();
-		if (selected.length !== 1 || this.selection.pathPointsAreShown())
+		if (selected.length !== 1 || !FramingHandles.areShownFor(this.selection))
 			return undefined;
 		const object = RenderGeometrySection.objectOf(selected[0]);
 		return object?.motionPaths?.length ? object : undefined;
