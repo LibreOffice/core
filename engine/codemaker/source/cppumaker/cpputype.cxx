@@ -93,7 +93,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.lang.XSingleComponentFactory",
         "com.sun.star.lang.XSingleServiceFactory",
         "com.sun.star.lang.XTypeProvider",
-        "com.sun.star.loader.XImplementationLoader",
+        "cpo.loader.XImplementationLoader",
         "com.sun.star.reflection.FieldAccessMode",
         "com.sun.star.reflection.MethodMode",
         "com.sun.star.reflection.ParamInfo",

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <components xmlns="http://openoffice.org/2010/uno-components">
-  <component loader="com.sun.star.loader.Python"
+  <component loader="cpo.loader.Python"
       uri="vnd.openoffice.pymodule:pythonscript">
     <implementation
         name="org.libreoffice.pyuno.LanguageScriptProviderForPython">

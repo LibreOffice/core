@@ -47,7 +47,7 @@ public class ComponentContext_Test {
 
         XMultiComponentFactory xSMgr = xContext.getServiceManager();
 
-        assertNotNull(xSMgr.createInstanceWithContext("com.sun.star.loader.Java", xContext));
+        assertNotNull(xSMgr.createInstanceWithContext("cpo.loader.Java", xContext));
 //        assertNotNull(xSMgr.createInstanceWithContext("com.sun.star.lang.ServiceManager", xContext));
 
         assertNotNull(xContext.getValueByName("bla1"));

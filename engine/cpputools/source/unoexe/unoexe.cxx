@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <cpo/loader/XImplementationLoader.hpp>
 #include <cpo/registry/XRegistryKey.hpp>
 #include <com/sun/star/connection/Acceptor.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
@@ -52,7 +52,7 @@ using namespace cppu;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::loader;
+using namespace ::cpo::loader;
 using namespace ::cpo::registry;
 using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
@@ -177,12 +177,12 @@ static Reference< XInterface > loadComponent(
     if (aExt == u"dll" || aExt == u"exe" || aExt == u"dylib" || aExt == u"so")
     {
         createInstance(
-            xLoader, xContext, u"com.sun.star.loader.SharedLibrary"_ustr );
+            xLoader, xContext, u"cpo.loader.SharedLibrary"_ustr );
     }
     else if (aExt == u"jar" || aExt == u"class")
     {
         createInstance(
-            xLoader, xContext, u"com.sun.star.loader.Java"_ustr );
+            xLoader, xContext, u"cpo.loader.Java"_ustr );
     }
     else
     {

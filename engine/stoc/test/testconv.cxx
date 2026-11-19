@@ -666,7 +666,7 @@ SAL_IMPLEMENT_MAIN()
 
         OUString aLibName("stocservices.uno" SAL_DLLEXTENSION );
         xImplReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("cpo.loader.SharedLibrary"),
             aLibName, Reference< XSimpleRegistry >() );
 
         test_Conversion( xMgr );

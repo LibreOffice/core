@@ -22,7 +22,7 @@ import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.loader.XImplementationLoader;
+import cpo.loader.XImplementationLoader;
 
 import cpo.registry.XSimpleRegistry;
 

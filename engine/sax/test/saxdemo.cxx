@@ -493,7 +493,7 @@ int main (int argc, char **argv)
         // Load dll for the tested component
         OUString aDllName( "sax.uno" SAL_DLLEXTENSION );
         xReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("cpo.loader.SharedLibrary"),
             aDllName,
             Reference< XSimpleRegistry > ()  );
     }

@@ -51,7 +51,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/lang,\
 	RegistryServiceManager \
 	ServiceManager \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/loader,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,cpo/loader,\
 	Java \
 	Java2 \
 	SharedLibrary \
@@ -346,7 +346,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/lang,\
 	XTypeProvider \
 	XUnoTunnel \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/loader,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/loader,\
 	CannotActivateFactoryException \
 	XImplementationLoader \
 ))

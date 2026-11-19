@@ -82,7 +82,7 @@ int main (int argc, char **argv)
             aDllName += ".so";
 #endif
             xReg->registerImplementation(
-                OUString("com.sun.star.loader.SharedLibrary"),
+                OUString("cpo.loader.SharedLibrary"),
                 aDllName,
                 xSimpleReg );
         }
@@ -111,7 +111,7 @@ int main (int argc, char **argv)
 #endif
 
         xReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary") ,
+            OUString("cpo.loader.SharedLibrary") ,
             aDllName,
             xSimpleReg );
     }

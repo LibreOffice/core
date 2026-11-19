@@ -29,7 +29,7 @@ import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.util.NativeLibraryLoader;
-import com.sun.star.loader.XImplementationLoader;
+import cpo.loader.XImplementationLoader;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.XComponentContext;
 import com.sun.star.beans.XPropertySet;

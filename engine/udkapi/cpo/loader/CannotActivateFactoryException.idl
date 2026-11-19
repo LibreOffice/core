@@ -17,26 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- module com {  module sun {  module star {  module loader {
 
- published interface XImplementationLoader;
+module cpo { module loader {
 
 
-/**
-  Allows to access a native component stored in a shared library.
+/** indicates an error during component activation
+    <p> This exception is thrown when an application tries to
+    activate a component factory using the
+    XImplementationLoader::activate()
+    method, but the component factory can not be activated.
+    <p>
+    Possible reasons for this error is a missing shared library or .jar file,
+    a badly linked library, a wrong LD_LIBRARY_PATH or PATH, an incomplete
+    classpath, or a missing java installation. The Message should
+    contain some more detailed explanations.
+ */
+published exception CannotActivateFactoryException: cpo::uno::Exception
+{
+};
 
-  Is used for writing persistent information in the registry for
-                an external implementation and for activating this
-                implementation.
-*/
-published service SharedLibrary : XImplementationLoader;
 
-}; }; }; }; //module com.sun.star.loader
-
-/*=====================================================================
-
-      Source Code Control System - Update
-
-=====================================================================*/
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -130,7 +130,7 @@ SAL_IMPLEMENT_MAIN()
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
 
-        OUString sLibLoader("com.sun.star.loader.SharedLibrary");
+        OUString sLibLoader("cpo.loader.SharedLibrary");
         OUString sJenLib( "javavm.uno" SAL_DLLEXTENSION );
         xImplReg->registerImplementation(
             sLibLoader, sJenLib, Reference< XSimpleRegistry >() );

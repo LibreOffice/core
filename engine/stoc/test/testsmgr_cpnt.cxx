@@ -212,14 +212,14 @@ extern "C" void test_ServiceManager()
 
         try {
             // register the services via writeComponentRegInfo (see at end of this file)
-            xInst->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"), atUModule2, Reference< XSimpleRegistry >() );
+            xInst->registerImplementation(OUString("cpo.loader.SharedLibrary"), atUModule2, Reference< XSimpleRegistry >() );
         }
         catch(const CannotRegisterImplementationException &) {
             OSL_ENSURE( 0, "register implementation failed" );
         }
 
         // getImplementations() check
-         Sequence<OUString> seqImpl = xInst->getImplementations(OUString("com.sun.star.loader.SharedLibrary"), atUModule2);
+         Sequence<OUString> seqImpl = xInst->getImplementations(OUString("cpo.loader.SharedLibrary"), atUModule2);
         OSL_ENSURE( seqImpl.getLength() == 1, "count of implementations is wrong" );
         OSL_ENSURE( seqImpl.getConstArray()[0] == "com.sun.star.DummyService.V10", "implementation name is not equal" );
 

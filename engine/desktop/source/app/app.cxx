@@ -68,7 +68,7 @@
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <cpo/loader/XImplementationLoader.hpp>
 
 #include <desktop/exithelper.h>
 #include <sal/log.hxx>
@@ -875,7 +875,7 @@ private:
     {
         Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
 
-        Reference< css::loader::XImplementationLoader > xJavaComponentLoader(
+        Reference< cpo::loader::XImplementationLoader > xJavaComponentLoader(
             xSMgr->createInstance(u"com.sun.star.comp.stoc.JavaComponentLoader"_ustr),
             cpo::uno::UNO_QUERY_THROW);
 

@@ -1185,22 +1185,28 @@ module com {
      hyper getSomething([in] sequence< byte > aIdentifier);
     };
    };
+  };
+ };
+};
+module cpo {
    module loader {
     published exception CannotActivateFactoryException: ::cpo::uno::Exception {
     };
-   };
-   module loader {
     published interface XImplementationLoader {
      interface ::cpo::uno::XInterface;
-     ::cpo::uno::XInterface activate([in] string implementationName, [in] string implementationLoaderUrl, [in] string locationUrl, [in] ::cpo::registry::XRegistryKey xKey) raises (::com::sun::star::loader::CannotActivateFactoryException);
+     ::cpo::uno::XInterface activate([in] string implementationName, [in] string implementationLoaderUrl, [in] string locationUrl, [in] ::cpo::registry::XRegistryKey xKey) raises (::cpo::loader::CannotActivateFactoryException);
      boolean writeRegistryInfo([in] ::cpo::registry::XRegistryKey xKey, [in] string implementationLoaderUrl, [in] string locationUrl) raises (::cpo::registry::CannotRegisterImplementationException);
     };
-    published service Java: ::com::sun::star::loader::XImplementationLoader;
+    published service Java: ::cpo::loader::XImplementationLoader;
     /** @deprecated */ published service Java2 {
-     interface ::com::sun::star::loader::XImplementationLoader;
+     interface ::cpo::loader::XImplementationLoader;
     };
-    published service SharedLibrary: ::com::sun::star::loader::XImplementationLoader;
+    published service SharedLibrary: ::cpo::loader::XImplementationLoader;
    };
+};
+module com {
+ module sun {
+  module star {
    module reflection {
     published interface XIdlClass;
     published interface XIdlReflection {

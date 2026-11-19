@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+<component loader="cpo.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.stoc.DLLComponentLoader"
       constructor="com_sun_star_comp_stoc_DLLComponentLoader_get_implementation">
-    <service name="com.sun.star.loader.SharedLibrary"/>
+    <service name="cpo.loader.SharedLibrary"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.ImplementationRegistration"
       constructor="com_sun_star_comp_stoc_ImplementationRegistration_get_implementation">

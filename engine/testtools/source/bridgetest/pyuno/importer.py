@@ -55,7 +55,7 @@ class ImporterTestCase(unittest.TestCase):
               "com.sun.star.connection.Connector" not in ctx.ServiceManager.getAvailableServiceNames(),
               "precondition for dynamic component registration test is not fulfilled" )
           unohelper.addComponentsToContext(
-              ctx , ctx, ("acceptor.uno","connector.uno"), "com.sun.star.loader.SharedLibrary" )
+              ctx , ctx, ("acceptor.uno","connector.uno"), "cpo.loader.SharedLibrary" )
           self.assertTrue(
                 ("com.sun.star.connection.Acceptor" in ctx.ServiceManager.getAvailableServiceNames()) )
           self.assertTrue(

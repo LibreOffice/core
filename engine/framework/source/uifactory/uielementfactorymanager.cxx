@@ -31,7 +31,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <cpo/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -494,7 +494,7 @@ Reference< XUIElementFactory > UIElementFactoryManager::getFactory( const OUStri
         SAL_WARN_IF(!xFactory.is(), "fwk.uielement", "could not create factory: " << aServiceSpecifier);
         return xFactory;
     }
-    catch ( const css::loader::CannotActivateFactoryException& )
+    catch ( const cpo::loader::CannotActivateFactoryException& )
     {
         SAL_WARN("fwk.uielement", aServiceSpecifier <<
                 " not available. This should happen only on mobile platforms.");

@@ -160,7 +160,7 @@ public class Factory_Test
                     XImplementationRegistration.class,
                     xContext.getServiceManager().createInstanceWithContext(
                         "cpo.registry.ImplementationRegistration", xContext ) );
-            xImpReg.registerImplementation( "com.sun.star.loader.Java2", jar, xRDB );
+            xImpReg.registerImplementation( "cpo.loader.Java2", jar, xRDB );
 
             // tests
             System.out.println( "testing instance" );

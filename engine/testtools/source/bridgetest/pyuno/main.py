@@ -26,9 +26,9 @@ import sys
 
 ctx = uno.getComponentContext()
 # needed for the tests 
-unohelper.addComponentsToContext(ctx,ctx,(os.environ["FOO"]+"/cppobj.uno",os.environ["FOO"]+"/bridgetest.uno","streams.uno","bootstrap.uno"),"com.sun.star.loader.SharedLibrary")
+unohelper.addComponentsToContext(ctx,ctx,(os.environ["FOO"]+"/cppobj.uno",os.environ["FOO"]+"/bridgetest.uno","streams.uno","bootstrap.uno"),"cpo.loader.SharedLibrary")
 
-unohelper.addComponentsToContext(ctx,ctx,("vnd.openoffice.pymodule:samplecomponent",),"com.sun.star.loader.Python")
+unohelper.addComponentsToContext(ctx,ctx,("vnd.openoffice.pymodule:samplecomponent",),"cpo.loader.Python")
 
 runner = unittest.TextTestRunner(sys.stderr,1,2)
 

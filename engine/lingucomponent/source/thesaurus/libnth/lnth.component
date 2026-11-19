@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+<component loader="cpo.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.lingu.new.Thesaurus"
     constructor="lingucomponent_Thesaurus_get_implementation" single-instance="true">

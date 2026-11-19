@@ -55,7 +55,7 @@
 #include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyName.hpp>
 #include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <cpo/loader/CannotActivateFactoryException.hpp>
 
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>

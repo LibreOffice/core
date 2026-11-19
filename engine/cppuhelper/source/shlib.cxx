@@ -38,7 +38,7 @@
 #include <postmac.h>
 #endif
 
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <cpo/loader/CannotActivateFactoryException.hpp>
 #include <cpo/registry/CannotRegisterImplementationException.hpp>
 #include <cpo/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
@@ -110,7 +110,7 @@ cpo::uno::Environment cppuhelper::detail::getEnvironment(
 #if !defined DISABLE_DYNLOADING
     // After preload the only environment is the current language binding.
     if (onlyLoadedLibraries() && name != CPPU_CURRENT_LANGUAGE_BINDING_NAME) {
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             "environment " + name + " is not available after preload",
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
@@ -189,7 +189,7 @@ cpo::uno::Reference<cpo::uno::XInterface> invokeComponentFactory(
     cpo::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager)
 {
     if (!(source.is() && target.is())) {
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             u"cannot get environments"_ustr,
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
@@ -204,7 +204,7 @@ cpo::uno::Reference<cpo::uno::XInterface> invokeComponentFactory(
     cpo::uno::Mapping mapTo(source, target);
     cpo::uno::Mapping mapFrom(target, source);
     if (!(mapTo.is() && mapFrom.is())) {
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             u"cannot get mappings"_ustr,
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
@@ -218,7 +218,7 @@ cpo::uno::Reference<cpo::uno::XInterface> invokeComponentFactory(
             target.get()->pExtEnv, smgr);
     }
     if (factory == nullptr) {
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             (OUString::Concat("calling factory function for \"") + implementation + "\" in <"
              + uri + "> returned null"),
             cpo::uno::Reference<cpo::uno::XInterface>());
@@ -252,7 +252,7 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
     cppuhelper::ImplementationConstructorFn *const constructorFunction)
 {
     if (!(source.is() && target.is())) {
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             u"cannot get environments"_ustr,
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
@@ -265,7 +265,7 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
     cpo::uno::Mapping mapTo(source, target);
     cpo::uno::Mapping mapFrom(target, source);
     if (!(mapTo.is() && mapFrom.is())) {
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             u"cannot get mappings"_ustr,
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
@@ -320,7 +320,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         cpo::uno::Environment curEnv(cpo::uno::Environment::getCurrent());
         cpo::uno::Environment env(getEnvironment(environment, implementation));
         if (!(curEnv.is() && env.is())) {
-            throw css::loader::CannotActivateFactoryException(
+            throw cpo::loader::CannotActivateFactoryException(
                 u"cannot get environments"_ustr,
                 cpo::uno::Reference<cpo::uno::XInterface>());
         }
@@ -341,7 +341,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
 #ifdef IOS
             NSLog(@"Unknown factory %s", uri.toUtf8().getStr());
 #endif
-            throw css::loader::CannotActivateFactoryException(
+            throw cpo::loader::CannotActivateFactoryException(
                 "unknown factory name \"" + uri + "\"",
                 cpo::uno::Reference<cpo::uno::XInterface>());
         }
@@ -364,7 +364,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
 #ifdef IOS
             NSLog(@"Unknown constructor %s", constructor.toUtf8().getStr());
 #endif
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             "unknown constructor name \"" + constructor + "\"",
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
@@ -381,13 +381,13 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
 #endif
 #endif
     if (!mayLoadLibrary(dllName)) {
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             "component library <" + dllName + "> is not loaded and loading is closed",
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
     osl::Module mod(dllName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (!mod.is()) {
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             "loading component library <" + dllName + "> failed",
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
@@ -401,7 +401,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         }
         oslGenericFunction fp = mod.getFunctionSymbol(sym);
         if (fp == nullptr) {
-            throw css::loader::CannotActivateFactoryException(
+            throw cpo::loader::CannotActivateFactoryException(
                 ("no factory symbol \"" + sym + "\" in component library <"
                  + uri + ">"),
                 cpo::uno::Reference<cpo::uno::XInterface>());
@@ -418,7 +418,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         SAL_INFO("cppuhelper.shlib", "constructor=" << constructor);
         oslGenericFunction fp = mod.getFunctionSymbol(constructor);
         if (fp == nullptr) {
-            throw css::loader::CannotActivateFactoryException(
+            throw cpo::loader::CannotActivateFactoryException(
                 ("no constructor symbol \"" + constructor
                  + "\" in component library <" + uri + ">"),
                 cpo::uno::Reference<cpo::uno::XInterface>());

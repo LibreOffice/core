@@ -1171,7 +1171,7 @@ SAL_IMPLEMENT_MAIN()
         // Register services
         OUString libName( "reflection.uno" SAL_DLLEXTENSION );
         fprintf(stderr, "1\n" );
-        xImplReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),
+        xImplReg->registerImplementation(OUString("cpo.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "2\n" );
         Reference< XIdlReflection > xRefl( xMgr->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY );
@@ -1180,7 +1180,7 @@ SAL_IMPLEMENT_MAIN()
         // Introspection
         libName = OUString( "introspection.uno" SAL_DLLEXTENSION);
         fprintf(stderr, "3\n" );
-        xImplReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),
+        xImplReg->registerImplementation(OUString("cpo.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "4\n" );
         Reference< XIntrospection > xIntrosp( xMgr->createInstance("com.sun.star.beans.Introspection"), UNO_QUERY );

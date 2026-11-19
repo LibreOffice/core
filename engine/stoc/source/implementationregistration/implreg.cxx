@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <cpo/loader/XImplementationLoader.hpp>
 #include <cpo/registry/XImplementationRegistration2.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription.hpp>
@@ -49,7 +49,7 @@
 using namespace com::sun::star;
 using namespace ::cpo::uno;
 using namespace ::cpo;
-using namespace css::loader;
+using namespace cpo::loader;
 using namespace css::beans;
 using namespace css::lang;
 using namespace cpo::registry;

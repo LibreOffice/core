@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+<component loader="cpo.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.filters.StorageFilterDetect"
     constructor="filter_StorageFilterDetect_get_implementation">

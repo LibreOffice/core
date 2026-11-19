@@ -1006,23 +1006,23 @@ SAL_IMPLEMENT_MAIN()
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         xImplReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("cpo.loader.SharedLibrary"),
             OUString("invocadapt.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("cpo.loader.SharedLibrary"),
             OUString("stocservices.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("cpo.loader.SharedLibrary"),
             OUString("invocation.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("cpo.loader.SharedLibrary"),
             OUString("reflection.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("cpo.loader.SharedLibrary"),
             OUString("introspection.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
 

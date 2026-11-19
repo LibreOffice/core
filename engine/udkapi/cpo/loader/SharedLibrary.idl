@@ -17,21 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com {  module sun {  module star {  module loader {
-/**the same as com::sun::star::loader::Java.
-<p>This service was introduced for UNO 3 components. The then
-com::sun::star::loader::Java service was intended for
-UNO 2 components. Since UNO 2 is not supported anymore, the service
-name is reused again.
+module cpo {  module loader {
 
-  @deprecated
+ published interface XImplementationLoader;
+
+
+/**
+  Allows to access a native component stored in a shared library.
+
+  Is used for writing persistent information in the registry for
+                an external implementation and for activating this
+                implementation.
 */
-published service Java2
-{
-    interface XImplementationLoader;
-};
+published service SharedLibrary : XImplementationLoader;
 
+}; }; //module com.sun.star.loader
 
-}; }; }; };
+/*=====================================================================
+
+      Source Code Control System - Update
+
+=====================================================================*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

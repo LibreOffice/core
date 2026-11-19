@@ -64,7 +64,7 @@ module org.libreoffice.uno
     exports com.sun.star.lib.uno.typeinfo;
     exports com.sun.star.lib.util;
     exports com.sun.star.linguistic2;
-    exports com.sun.star.loader;
+    exports cpo.loader;
     exports com.sun.star.logging;
     exports com.sun.star.mail;
     exports com.sun.star.media;

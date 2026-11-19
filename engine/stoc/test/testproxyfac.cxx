@@ -260,7 +260,7 @@ SAL_IMPLEMENT_MAIN()
             OUString aLibName(
                 "proxyfac.uno" SAL_DLLEXTENSION );
             xImplReg->registerImplementation(
-                OUString( "com.sun.star.loader.SharedLibrary" ),
+                OUString( "cpo.loader.SharedLibrary" ),
                 aLibName, Reference< registry::XSimpleRegistry >() );
 
             Reference< reflection::XProxyFactory > xProxyFac(

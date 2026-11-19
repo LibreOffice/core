@@ -10,7 +10,7 @@
 
 <component
         environment="@CPPU_ENV@"
-        loader="com.sun.star.loader.SharedLibrary"
+        loader="cpo.loader.SharedLibrary"
         xmlns="http://openoffice.org/2010/uno-components">
     <implementation
             constructor="com_sun_star_comp_testuno_BridgeTest_get_implementation"

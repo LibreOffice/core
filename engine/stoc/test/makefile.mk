@@ -171,7 +171,7 @@ FACTORYTYPES:= 	-T com.sun.star.lang.XSingleComponentFactory \
         -T cpo.registry.XSimpleRegistry \
         -T com.sun.star.lang.XInitialization \
         -T com.sun.star.lang.XMultiServiceFactory\
-        -T com.sun.star.loader.XImplementationLoader \
+        -T cpo.loader.XImplementationLoader \
         -T cpo.registry.XImplementationRegistration \
         -T com.sun.star.container.XSet \
         -T com.sun.star.lang.XSingleServiceFactory\

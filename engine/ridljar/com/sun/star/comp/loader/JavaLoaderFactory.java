@@ -27,8 +27,8 @@ import com.sun.star.lang.XServiceInfo;
 public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
 
     private static String[] supportedServices = {
-        "com.sun.star.loader.Java",
-        "com.sun.star.loader.Java2"
+        "cpo.loader.Java",
+        "cpo.loader.Java2"
     };
 
     protected XMultiServiceFactory multiServiceFactory = null;

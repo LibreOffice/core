@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <cpo/loader/XImplementationLoader.hpp>
 #include <cpo/registry/InvalidRegistryException.hpp>
 #include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Reference.hxx>
@@ -810,7 +810,7 @@ void cppuhelper::ServiceManager::loadImplementation(
     // Special handling of SharedLibrary loader, with support for environment,
     // constructor, and prefix arguments:
     if (!implementation->alienContext.is()
-        && implementation->loader == "com.sun.star.loader.SharedLibrary")
+        && implementation->loader == "cpo.loader.SharedLibrary")
     {
         cppuhelper::detail::loadSharedLibComponentFactory(
             uri, implementation->environment,
@@ -844,7 +844,7 @@ void cppuhelper::ServiceManager::loadImplementation(
             ctxt = context;
             smgr = this;
         }
-        cpo::uno::Reference< css::loader::XImplementationLoader > loader(
+        cpo::uno::Reference< cpo::loader::XImplementationLoader > loader(
             smgr->createInstanceWithContext(implementation->loader, ctxt),
             cpo::uno::UNO_QUERY_THROW);
         f0 = loader->activate(
@@ -1847,7 +1847,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     // loop all implementations
     for (const auto& rEntry : data_.namedImplementations)
     {
-        if (rEntry.second->loader != "com.sun.star.loader.SharedLibrary" ||
+        if (rEntry.second->loader != "cpo.loader.SharedLibrary" ||
             rEntry.second->status == Data::Implementation::STATUS_LOADED)
             continue;
 
@@ -1925,7 +1925,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 fpFactory = aModule.getFunctionSymbol(aSymFactory);
                 if (fpFactory == nullptr)
                 {
-                    throw css::loader::CannotActivateFactoryException(
+                    throw cpo::loader::CannotActivateFactoryException(
                         ("no factory symbol \"" + aSymFactory + "\" in component library :" + aUri),
                         cpo::uno::Reference<cpo::uno::XInterface>());
                 }

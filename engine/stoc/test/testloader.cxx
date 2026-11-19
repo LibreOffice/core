@@ -24,7 +24,7 @@
 #include <osl/module.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <cpo/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -39,7 +39,7 @@
 
 using namespace ::cpo::uno;
 using namespace cpo::uno;
-using namespace css::loader;
+using namespace cpo::loader;
 using namespace css::lang;
 using namespace osl;
 using namespace cppu;
@@ -104,7 +104,7 @@ SAL_IMPLEMENT_MAIN()
     OSL_ENSURE( xServInfo.is(), "testloader error4");
 
     OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.DLLComponentLoader", "testloader error5");
-    OSL_ENSURE( xServInfo->supportsService("com.sun.star.loader.SharedLibrary"), "testloader error6");
+    OSL_ENSURE( xServInfo->supportsService("cpo.loader.SharedLibrary"), "testloader error6");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "testloader error7");
 
     xIFace.clear();

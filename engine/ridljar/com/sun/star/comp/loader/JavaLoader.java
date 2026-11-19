@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 
-import com.sun.star.loader.CannotActivateFactoryException;
-import com.sun.star.loader.XImplementationLoader;
+import cpo.loader.CannotActivateFactoryException;
+import cpo.loader.XImplementationLoader;
 
 import cpo.registry.CannotRegisterImplementationException;
 import cpo.registry.XRegistryKey;
@@ -49,15 +49,15 @@ import com.sun.star.uno.AnyConverter;
 
 /**
  * The <code>JavaLoader</code> class provides the functionality of the
- * <code>com.sun.star.loader.Java</code> service.
+ * <code>cpo.loader.Java</code> service.
  *
  * <p>Therefore the <code>JavaLoader</code> activates external UNO components
  * which are implemented in Java.</p>
  *
  * <p>The loader is used by the <code>ServiceManager</code>.</p>
  *
- * @see         com.sun.star.loader.XImplementationLoader
- * @see         com.sun.star.loader.Java
+ * @see         cpo.loader.XImplementationLoader
+ * @see         cpo.loader.Java
  * @see         com.sun.star.comp.servicemanager.ServiceManager
  */
 public class JavaLoader implements XImplementationLoader,
@@ -71,7 +71,7 @@ public class JavaLoader implements XImplementationLoader,
     }
 
     private static String[] supportedServices = {
-        "com.sun.star.loader.Java"
+        "cpo.loader.Java"
     };
 
     protected XMultiServiceFactory multiServiceFactory = null;
@@ -238,7 +238,7 @@ public class JavaLoader implements XImplementationLoader,
      * @param       xKey                        registry key.
      * @return      the factory for the component (@see com.sun.star.lang.XSingleServiceFactory)
      *
-     * @see         com.sun.star.loader.XImplementationLoader
+     * @see         cpo.loader.XImplementationLoader
      * @see         com.sun.star.comp.loader.RegistrationClassFinder
      */
     public java.lang.Object activate( String implementationName,

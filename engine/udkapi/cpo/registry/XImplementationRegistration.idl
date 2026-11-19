@@ -63,7 +63,7 @@ published interface XImplementationRegistration: cpo::uno::XInterface
 
         @param aImplementationLoader
             specifies the name of the needed loader for this type of implementation. For
-            example, the loader "com.sun.star.loader.SharedLibrary" for implementations
+            example, the loader "cpo.loader.SharedLibrary" for implementations
             that are realized as an SharedLibrary.
 
         @param aLocation

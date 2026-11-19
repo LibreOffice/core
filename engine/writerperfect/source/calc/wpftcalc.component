@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+<component loader="cpo.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.Calc.MSWorksCalcImportFilter" 
       constructor="com_sun_star_comp_Calc_MSWorksCalcImportFilter_get_implementation">

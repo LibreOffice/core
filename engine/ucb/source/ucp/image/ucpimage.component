@@ -8,7 +8,7 @@
  *
 -->
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+<component loader="cpo.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.ucb.ImageContentProvider"
       constructor="com_sun_star_comp_ucb_ImageContentProvider_get_implementation">

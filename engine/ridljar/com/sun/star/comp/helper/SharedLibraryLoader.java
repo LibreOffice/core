@@ -27,12 +27,12 @@ import cpo.registry.XRegistryKey;
  * @deprecated use class Bootstrap bootstrapping a native UNO installation
  *             and use the shared library loader service.
  *
- * The <code>SharedLibraryLoader</code> class provides the functionality of the <code>com.sun.star.loader.SharedLibrary</code>
+ * The <code>SharedLibraryLoader</code> class provides the functionality of the <code>cpo.loader.SharedLibrary</code>
  * service.
  *
  * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code>.
  *
- * @see         com.sun.star.loader.SharedLibrary
+ * @see         cpo.loader.SharedLibrary
  */
 @Deprecated
 public class SharedLibraryLoader {
@@ -85,7 +85,7 @@ public class SharedLibraryLoader {
      * @return  the factory for the "com.sun.star.comp.stoc.DLLComponentLoader" component.
      * @param   smgr    the ServiceManager
      * @param   regKey  the root registry key
-     * @see     com.sun.star.loader.SharedLibrary
+     * @see     cpo.loader.SharedLibrary
      */
     public static XSingleServiceFactory getServiceFactory(
                 XMultiServiceFactory smgr,
@@ -109,7 +109,7 @@ public class SharedLibraryLoader {
      * @param   impName the implementation name of the component
      * @param   smgr    the ServiceManager
      * @param   regKey  the root registry key
-     * @see     com.sun.star.loader.SharedLibrary
+     * @see     cpo.loader.SharedLibrary
      */
     public static XSingleServiceFactory getServiceFactory(
                 String libName,
@@ -133,7 +133,7 @@ public class SharedLibraryLoader {
      * @return  true if the registration was successful - otherwise false
      * @param   smgr    the ServiceManager
      * @param   regKey  the root key under that the component should be registered
-     * @see     com.sun.star.loader.SharedLibrary
+     * @see     cpo.loader.SharedLibrary
      */
     public static boolean writeRegistryServiceInfo(
                 com.sun.star.lang.XMultiServiceFactory smgr,
@@ -157,7 +157,7 @@ public class SharedLibraryLoader {
      * @throws  cpo.registry.InvalidRegistryException
      *          if the registry is not valid.
      *
-     * @see     com.sun.star.loader.SharedLibrary
+     * @see     cpo.loader.SharedLibrary
      */
     public static boolean writeRegistryServiceInfo(
                 String libName,

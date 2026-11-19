@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <cpo/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cpo/uno/XUnloadingPreference.hpp>
@@ -50,7 +50,7 @@ using namespace com::sun::star;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::loader;
+using namespace ::cpo::loader;
 using namespace ::cpo::registry;
 
 namespace cppu
@@ -628,9 +628,9 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             {
                 aActivatorName = aLocation.subView( 0, nPos );
                 if( aActivatorName == u"java" )
-                    aActivatorName = u"com.sun.star.loader.Java"_ustr;
+                    aActivatorName = u"cpo.loader.Java"_ustr;
                 else if( aActivatorName == u"module" )
-                    aActivatorName = u"com.sun.star.loader.SharedLibrary"_ustr;
+                    aActivatorName = u"cpo.loader.SharedLibrary"_ustr;
                 aLocation = aLocation.copy( nPos + 3 );
             }
         }

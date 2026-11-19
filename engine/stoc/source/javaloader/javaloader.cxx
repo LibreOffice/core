@@ -55,7 +55,7 @@
 
 #include <com/sun/star/bridge/UnoUrlResolver.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <cpo/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -75,7 +75,7 @@ namespace cpo::registry { class XRegistryKey; }
 
 using namespace css::java;
 using namespace css::lang;
-using namespace css::loader;
+using namespace cpo::loader;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace cpo::registry;
@@ -322,7 +322,7 @@ const cpo::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             // create JVM service in remote uno.bin process
             Reference<XImplementationLoader> const xLoader(
                 m_xRemoteComponentContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.loader.Java2"_ustr, m_xRemoteComponentContext),
+                    u"cpo.loader.Java2"_ustr, m_xRemoteComponentContext),
                 UNO_QUERY_THROW);
             assert(xLoader.is());
             m_javaLoader = xLoader;
@@ -510,7 +510,7 @@ bool JavaComponentLoader::supportsService(const OUString & ServiceName)
 
 Sequence<OUString> JavaComponentLoader::getSupportedServiceNames()
 {
-    return { u"com.sun.star.loader.Java"_ustr, u"com.sun.star.loader.Java2"_ustr };
+    return { u"cpo.loader.Java"_ustr, u"cpo.loader.Java2"_ustr };
 }
 
 

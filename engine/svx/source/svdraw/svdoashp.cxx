@@ -20,7 +20,7 @@
 #include <vcl/bitmap/BitmapShadowFilter.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/unoapi.hxx>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <cpo/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>

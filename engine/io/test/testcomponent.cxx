@@ -76,7 +76,7 @@ int main (int argc, char **argv)
         for( int n = 2 ; n <argc ; n ++ ) {
             OUString aDllName = OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
             xReg->registerImplementation(
-                OUString("com.sun.star.loader.SharedLibrary"),
+                OUString("cpo.loader.SharedLibrary"),
                 aDllName,
                 xSimpleReg );
         }
@@ -103,7 +103,7 @@ int main (int argc, char **argv)
 #endif
 
         xReg->registerImplementation(
-            OUString("com.sun.star.loader.SharedLibrary") ,
+            OUString("cpo.loader.SharedLibrary") ,
             aDllName,
             xSimpleReg );
     }

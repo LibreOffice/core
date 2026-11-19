@@ -10,7 +10,7 @@
  *
 -->
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+<component loader="cpo.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="scriptinterop.Cool"
       constructor="scriptinterop_Cool_get_implementation"

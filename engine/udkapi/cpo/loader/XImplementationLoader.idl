@@ -18,7 +18,7 @@
  */
 
 
- module com {  module sun {  module star {  module loader {
+module cpo {  module loader {
 
 
 /** handles activation (loading) of a UNO component.
@@ -59,7 +59,7 @@ published interface XImplementationLoader: cpo::uno::XInterface
              [in] string implementationLoaderUrl,
              [in] string locationUrl,
              [in] cpo::registry::XRegistryKey xKey )
-            raises( com::sun::star::loader::CannotActivateFactoryException );
+            raises( cpo::loader::CannotActivateFactoryException );
 
     /** writes a list of all implementations hosted by this component into a registry key.
         <p>This method is called during registering a component.
@@ -87,6 +87,6 @@ published interface XImplementationLoader: cpo::uno::XInterface
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

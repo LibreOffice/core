@@ -28,8 +28,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <cpo/loader/CannotActivateFactoryException.hpp>
+#include <cpo/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -42,7 +42,7 @@ namespace cpo::registry { class XRegistryKey; }
 using namespace com::sun::star;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
-using namespace css::loader;
+using namespace cpo::loader;
 using namespace css::lang;
 using namespace cpo::registry;
 using namespace cppu;
@@ -103,7 +103,7 @@ bool DllComponentLoader::supportsService( const OUString& ServiceName )
 
 Sequence<OUString> DllComponentLoader::getSupportedServiceNames(  )
 {
-    return { u"com.sun.star.loader.SharedLibrary"_ustr };
+    return { u"cpo.loader.SharedLibrary"_ustr };
 }
 
 
@@ -136,7 +136,7 @@ Reference<XInterface> DllComponentLoader::activate(
     const Reference< XRegistryKey > & )
 {
     if (isSharedLibraryLoaderDisabled())
-        throw css::loader::CannotActivateFactoryException(
+        throw cpo::loader::CannotActivateFactoryException(
             u"the shared library loader is disabled"_ustr,
             static_cast<cppu::OWeakObject*>(this));
 
