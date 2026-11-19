@@ -277,7 +277,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 							'id': 'Rev-History',
 							'class': 'unoRev-History',
 							'type': 'customtoolitem',
-							'text': _('See history'),
+							'text': _('See History'),
 							'command': 'rev-history',
 							'inlineLabel': true,
 							'accessibility': { focusBack: true, combination: 'RH' }
@@ -326,7 +326,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 							'id': 'Rev-History',
 							'class': 'unoRev-History',
 							'type': 'bigcustomtoolitem',
-							'text': _('See history'),
+							'text': _('See History'),
 							'command': 'rev-history',
 							'accessibility': { focusBack: true, combination: 'RH' }
 						}
@@ -423,7 +423,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 							{
 								'id': 'securitylabel',
 								'type': 'toolitem',
-								'text': _('Security label'),
+								'text': _('Security Label'),
 								'command': '.uno:SecurityLabel',
 								'accessibility': { focusBack: true, combination: 'SL', de: null }
 							}
@@ -553,7 +553,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 						{
 							'id': 'keyboard-shortcuts',
 							'type': 'bigtoolitem',
-							'text': _('Keyboard shortcuts'),
+							'text': _('Keyboard Shortcuts'),
 							'command': '.uno:KeyboardShortcuts',
 							'accessibility': { focusBack: false, combination: 'SH', de: null }
 						}
@@ -578,7 +578,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 						{
 							'id': 'report-an-issue',
 							'type': 'bigtoolitem',
-							'text': _('Report an issue'),
+							'text': _('Report an Issue'),
 							'command': '.uno:ReportIssue',
 							'accessibility': { focusBack: true, combination: 'K', de: null }
 						},
@@ -621,7 +621,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					{
 						'id': 'server-audit',
 						'type': 'bigcustomtoolitem',
-						'text': _('Server audit'),
+						'text': _('Server Audit'),
 						'command': 'serveraudit',
 						'accessibility': { focusBack: false, combination: 'SA', de: null }
 					} : {},
@@ -1209,7 +1209,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					{
 						'id': 'format-style-dialog',
 						'type': 'bigtoolitem',
-						'text': _('Style list'),
+						'text': _('Style List'),
 						'command': '.uno:SidebarDeck.StyleListDeck',
 						'accessibility': { focusBack: false, combination: 'SD', de: null }
 					},
@@ -1831,7 +1831,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				{
 					'id': 'closemobile',
 					'type': 'bigcustomtoolitem',
-					'text': _('Read mode'),
+					'text': _('Read Mode'),
 					'command': 'closetablet',
 				} : {},
 			{
@@ -1871,7 +1871,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'id': 'toggleuimode',
 				'class': 'unotoggleuimode',
 				'type': 'bigcustomtoolitem',
-				'text': _('Compact view'),
+				'text': _('Compact View'),
 				'accessibility': { focusBack: false, combination: 'UI', de: null }
 			},
 			{
@@ -2746,7 +2746,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					{
 						'id': 'categorylistlabel',
 						'type': 'fixedtext',
-						'text': _('Element categories')
+						'text': _('Element Categories')
 					},
 					{
 						'id': 'categorylist',

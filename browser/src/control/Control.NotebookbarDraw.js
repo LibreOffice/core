@@ -247,7 +247,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 							'id': 'Rev-History',
 							'class': 'unoRev-History',
 							'type': 'customtoolitem',
-							'text': _('See history'),
+							'text': _('See History'),
 							'command': 'rev-history',
 							'inlineLabel': true,
 							'accessibility': { focusBack: true, combination: 'RH' }
@@ -297,7 +297,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 						'id': 'Rev-History',
 						'class': 'unoRev-History',
 						'type': 'bigcustomtoolitem',
-						'text': _('See history'),
+						'text': _('See History'),
 						'command': 'rev-history',
 						'accessibility': { focusBack: true, combination: 'RH' }
 					}
@@ -457,7 +457,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 						{
 							'id': 'closemobile',
 							'type': 'bigcustomtoolitem',
-							'text': _('Read mode'),
+							'text': _('Read Mode'),
 							'command': 'closetablet',
 						} : {},
 					{
@@ -471,7 +471,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 						'id': 'zoomreset',
 						'class': 'unozoomreset',
 						'type': 'bigcustomtoolitem',
-						'text': _('Reset zoom'),
+						'text': _('Reset Zoom'),
 						'accessibility': { focusBack: true, combination: 'RZ', de: null }
 					},
 					{
@@ -511,7 +511,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'id': 'toggleuimode',
 				'class': 'unotoggleuimode',
 				'type': 'bigcustomtoolitem',
-				'text': _('Compact view'),
+				'text': _('Compact View'),
 				'accessibility': { focusBack: true, combination: 'UI', de: null }
 			},
 			{

@@ -302,7 +302,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							'id': 'Rev-History',
 							'class': 'unoRev-History',
 							'type': 'customtoolitem',
-							'text': _('See history'),
+							'text': _('See History'),
 							'command': 'rev-history',
 							'inlineLabel': true,
 							'accessibility': { focusBack: true, combination: 'RH' }
@@ -351,7 +351,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							'id': 'Rev-History',
 							'class': 'unoRev-History',
 							'type': 'bigcustomtoolitem',
-							'text': _('See history'),
+							'text': _('See History'),
 							'command': 'rev-history',
 							'accessibility': { focusBack: true, combination: 'RH' }
 						}
@@ -448,7 +448,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							{
 								'id': 'securitylabel',
 								'type': 'toolitem',
-								'text': _('Security label'),
+								'text': _('Security Label'),
 								'command': '.uno:SecurityLabel',
 								'accessibility': { focusBack: true, combination: 'SL', de: null }
 							}
@@ -541,7 +541,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				{
 					'id': 'closemobile',
 					'type': 'bigcustomtoolitem',
-					'text': _('Read mode'),
+					'text': _('Read Mode'),
 					'command': 'closetablet'
 				} : {},
 			{
@@ -678,7 +678,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'id': 'zoomreset',
 						'class': 'unozoomreset',
 						'type': 'bigcustomtoolitem',
-						'text': _('Reset zoom'),
+						'text': _('Reset Zoom'),
 						'accessibility': { focusBack: true, combination: 'ZR', de: null }
 					},
 					{
@@ -718,7 +718,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'id': 'toggleuimode',
 				'class': 'unotoggleuimode',
 				'type': 'bigcustomtoolitem',
-				'text': _('Compact view'),
+				'text': _('Compact View'),
 				'accessibility': { focusBack: true, combination: 'TU', de: null }
 			},
 			{

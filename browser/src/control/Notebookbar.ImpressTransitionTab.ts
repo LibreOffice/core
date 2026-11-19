@@ -114,7 +114,7 @@ class ImpressTransitionTab implements NotebookbarTab {
 					{
 						id: 'rb_mouse_click',
 						type: 'radiobutton',
-						text: _('On mouse click'),
+						text: _('On Mouse Click'),
 						top: '0',
 						left: '0',
 						width: '2',

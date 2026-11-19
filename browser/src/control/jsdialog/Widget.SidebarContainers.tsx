@@ -142,7 +142,7 @@ function buildPanelWithHeaderAction(
     );
     header.insertBefore(icon, closeWrapper);
     const moreOptionsText = data.text
-      ? _('More options for {1}').replace('{1}', data.text)
+      ? _('More Options for {1}').replace('{1}', data.text)
       : '';
     builder._controlHandlers['toolitem'](
       icon,
@@ -202,7 +202,7 @@ JSDialog.panel = function (
       iconParent,
     );
     const moreOptionsText = expanderData.children[0].text
-      ? _('More options for {1}').replace('{1}', expanderData.children[0].text)
+      ? _('More Options for {1}').replace('{1}', expanderData.children[0].text)
       : '';
     builder._controlHandlers['toolitem'](
       icon,

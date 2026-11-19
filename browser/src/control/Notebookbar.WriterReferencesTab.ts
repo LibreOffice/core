@@ -38,7 +38,7 @@ class WriterReferencesTab implements NotebookbarTab {
 			{
 				type: 'overflowgroup',
 				id: 'Reference-TOC',
-				name: _('Table of content'),
+				name: _('Table of Contents'),
 				accessibility: { focusBack: false, combination: 'T', de: 'LA' },
 				children: [
 					{

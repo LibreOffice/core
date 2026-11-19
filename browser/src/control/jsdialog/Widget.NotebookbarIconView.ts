@@ -262,7 +262,7 @@ JSDialog.notebookbarIconViewList = function (
 		data.id + '-scroll-up',
 		'ui-iconview-scroll-up-button',
 		horizontal ? 'lc_prevrecord.svg' : 'lc_searchprev.svg',
-		horizontal ? _('Scroll left') : _('Scroll up'),
+		horizontal ? _('Scroll Left') : _('Scroll Up'),
 		builder,
 		scrollUpCallback,
 	);
@@ -272,7 +272,7 @@ JSDialog.notebookbarIconViewList = function (
 		data.id + '-scroll-down',
 		'ui-iconview-scroll-down-button',
 		horizontal ? 'lc_nextrecord.svg' : 'lc_searchnext.svg',
-		horizontal ? _('Scroll right') : _('Scroll down'),
+		horizontal ? _('Scroll Right') : _('Scroll Down'),
 		builder,
 		scrollDownCallback,
 	);
@@ -282,7 +282,7 @@ JSDialog.notebookbarIconViewList = function (
 		data.id + '-expand',
 		'ui-iconview-expander-button',
 		'lc_iconviewexpander.svg',
-		_('More options'),
+		_('More Options'),
 		builder,
 		expanderCallback,
 		{

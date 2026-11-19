@@ -180,7 +180,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		helper.setDummyClipboardForCopy();
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'More Fields...').click();
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Date (fixed)').click();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Date (Fixed)').click();
 		// Check that the shape is there
 		selectionShouldBeTextShape(false);
 		// Check the text
@@ -195,7 +195,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		helper.setDummyClipboardForCopy();
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'More Fields...').click();
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Date (variable)').click();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Date (Variable)').click();
 		// Check that the shape is there
 		selectionShouldBeTextShape(false);
 		// Check the text
@@ -210,7 +210,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		helper.setDummyClipboardForCopy();
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'More Fields...').click();
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Time (fixed)').click();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Time (Fixed)').click();
 		// Check that the shape is there
 		selectionShouldBeTextShape(false);
 		// Check the text
@@ -225,7 +225,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		helper.setDummyClipboardForCopy();
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'More Fields...').click();
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Time (variable)').click();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Time (Variable)').click();
 		// Check that the shape is there
 		selectionShouldBeTextShape(false);
 		// Check the text
@@ -306,7 +306,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		stepIntoTextShapeEditing();
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'More Fields...').click();
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Date (fixed)').click();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Date (Fixed)').click();
 		cy.cGet('body').type('{esc}');
 		// Check the text
 		impressHelper.selectTextOfShape();
@@ -321,7 +321,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		stepIntoTextShapeEditing();
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'More Fields...').click();
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Date (variable)').click();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Date (Variable)').click();
 		cy.cGet('body').type('{esc}');
 		// Check the text
 		impressHelper.selectTextOfShape();
@@ -336,7 +336,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		stepIntoTextShapeEditing();
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'More Fields...').click();
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Time (fixed)').click();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Time (Fixed)').click();
 		cy.cGet('body').type('{esc}');
 		// Check the text
 		impressHelper.selectTextOfShape();
@@ -351,7 +351,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		stepIntoTextShapeEditing();
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'More Fields...').click();
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Time (variable)').click();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Time (Variable)').click();
 		cy.cGet('body').type('{esc}');
 		// Check the text
 		impressHelper.selectTextOfShape();

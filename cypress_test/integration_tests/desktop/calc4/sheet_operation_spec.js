@@ -172,7 +172,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet Operations.', { test
 
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Insert Columns Before')
 			.should('be.visible');
-		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Delete selected columns')
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Delete Selected Columns')
 			.should('exist');
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Column Width')
 			.should('exist');

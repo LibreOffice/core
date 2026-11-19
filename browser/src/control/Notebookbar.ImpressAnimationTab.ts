@@ -38,7 +38,7 @@ class ImpressAnimationTab implements NotebookbarTab {
 				id: 'animations-group',
 				type: 'overflowgroup',
 				nofold: true,
-				name: _('Applied animations'),
+				name: _('Applied Animations'),
 				children: [
 					{
 						id: 'custom_animation_list',

@@ -64,7 +64,7 @@ class SheetsBar {
 					{
 						id: 'prevrecord',
 						type: 'customtoolitem',
-						text: _('Scroll left'),
+						text: _('Scroll Left'),
 						command: 'prevrecord',
 						visible: this.showNavigation,
 						pressAndHold: true
@@ -72,7 +72,7 @@ class SheetsBar {
 					{
 						id: 'nextrecord',
 						type: 'customtoolitem',
-						text: _('Scroll right'),
+						text: _('Scroll Right'),
 						command: 'nextrecord',
 						visible: this.showNavigation,
 						pressAndHold: true

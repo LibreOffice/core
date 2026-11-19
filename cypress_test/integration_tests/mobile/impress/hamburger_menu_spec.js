@@ -253,7 +253,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 		cy.cGet('iframe.leaflet-slideshow')
 			.should('not.exist');
 
-		mobileHelper.selectHamburgerMenuItem(['Fullscreen presentation']);
+		mobileHelper.selectHamburgerMenuItem(['Fullscreen Presentation']);
 
 		cy.cGet('iframe.leaflet-slideshow')
 			.should('exist');

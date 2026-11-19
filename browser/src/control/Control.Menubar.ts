@@ -151,7 +151,7 @@ class Menubar extends window.L.Control {
 				{name: _('Create Master Document...'), id: 'createmasterdocument', type: 'action'},
 				{name: _('Rename Document'), id: 'renamedocument', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
-				{name: _('See revision history'), id: 'rev-history', type: 'action'},
+				{name: _('See Revision History'), id: 'rev-history', type: 'action'},
 				{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('text')},
 				{name: _UNO('.uno:SetDocumentProperties', 'text'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:SecurityLabel', 'text'), uno: '.uno:SecurityLabel', id: 'securitylabel'},
@@ -159,7 +159,7 @@ class Menubar extends window.L.Control {
 				{name: _('Options'), id: 'settings-dialog', type: 'action', mobileapp: false},
 				{type: 'separator'},
 				{name: _UNO('.uno:Print', 'text'), unoid: '.uno:Print', id: 'print', type: 'action'},
-				{name: _('Close document'), id: 'closedocument', type: 'action'}
+				{name: _('Close Document'), id: 'closedocument', type: 'action'}
 			]},
 			{name: _UNO('.uno:EditMenu', 'text'), id: 'editmenu', type: 'menu', accessibility: {combination: 'ME'}, menu: [
 				{name: _UNO('.uno:Undo', 'text'), uno: '.uno:Undo'},
@@ -196,7 +196,7 @@ class Menubar extends window.L.Control {
 			]},
 			{name: _UNO('.uno:ViewMenu', 'text'), id: 'view', type: 'menu', accessibility: {combination: 'MV'},
 			 menu: (window.mode.isTablet() ? [
-					{name: _('Reset zoom'), id: 'zoomreset', type: 'action'},
+					{name: _('Reset Zoom'), id: 'zoomreset', type: 'action'},
 				] as MenuItem[] : [
 					{name: _UNO('.uno:FullScreen', 'text'), unoid: '.uno:FullScreen', id: 'fullscreen', type: 'action'},
 					{type: 'separator'},
@@ -213,7 +213,7 @@ class Menubar extends window.L.Control {
 					{name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 					{name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 					{uno: '.uno:SidebarDeck.PropertyDeck', id: 'view-sidebar-property-deck', name: _UNO('.uno:Sidebar')},
-					{uno: '.uno:SidebarDeck.StyleListDeck', name: _('Style list')},
+					{uno: '.uno:SidebarDeck.StyleListDeck', name: _('Style List')},
 					{uno: '.uno:Navigator', id: 'navigator'},
 					{type: 'separator'},
 					{name: _UNO('.uno:ShowAnnotations', 'text'), unoid: '.uno:ShowAnnotations', id: 'showannotations', type: 'action'},
@@ -301,7 +301,7 @@ class Menubar extends window.L.Control {
 					{uno: '.uno:ChangeCaseToToggleCase'},
 					{type: 'separator'},
 					{uno: '.uno:SmallCaps'}]},
-				{name: _('Text orientation'), type: 'menu', menu: [
+				{name: _('Text Orientation'), type: 'menu', menu: [
 					{uno: '.uno:ParaLeftToRight'},
 					{uno: '.uno:ParaRightToLeft'}]},
 				{name: _UNO('.uno:FormatSpacingMenu', 'text'), type: 'menu', menu: [
@@ -472,18 +472,18 @@ class Menubar extends window.L.Control {
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{name: _('Show Tour'), id: 'onboardingtour', type: 'action'},
 				{type: 'separator', iosapp: false},
-				{name: _('Keyboard shortcuts'), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
+				{name: _('Keyboard Shortcuts'), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
 				{type: 'separator'},
 				{name: _('Forum'), id: 'forum', type: 'action'},
-				{name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
+				{name: _('Report an Issue'), id: 'report-an-issue', type: 'action', iosapp: false},
 				{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
 				{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 				{type: 'separator'},
-				{name: _('Server audit'), id: 'serveraudit', type: 'action', mobileapp: false},
+				{name: _('Server Audit'), id: 'serveraudit', type: 'action', mobileapp: false},
 				{type: 'separator'},
 				{name: _('About'), id: 'about', type: 'action'}]
 			},
-			{name: _('Last modification'), id: 'last-mod', type: 'action', tablet: false}
+			{name: _('Last Modification'), id: 'last-mod', type: 'action', tablet: false}
 		],
 
 		presentation: [
@@ -498,7 +498,7 @@ class Menubar extends window.L.Control {
 				{name: _('Rename Document'), id: 'renamedocument', type: 'action'},
 				{name: _('Save Comments'), id: 'savecomments', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
-				{name: _('See revision history'), id: 'rev-history', type: 'action'},
+				{name: _('See Revision History'), id: 'rev-history', type: 'action'},
 				{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('presentation')},
 				{name: _UNO('.uno:SetDocumentProperties', 'presentation'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:SecurityLabel', 'presentation'), uno: '.uno:SecurityLabel', id: 'securitylabel'},
@@ -509,7 +509,7 @@ class Menubar extends window.L.Control {
 					{name: _('Full Page Slides'), id: 'print', type: 'action'},
 					{name: _('Notes Pages'), id: 'print-notespages' , type: 'action'},
 				]},
-				{name: _('Close document'), id: 'closedocument', type: 'action'}
+				{name: _('Close Document'), id: 'closedocument', type: 'action'}
 			]},
 			{name: _UNO('.uno:EditMenu', 'presentation'), id: 'editmenu', type: 'menu', accessibility: {combination: 'ME'}, menu: [
 				{name: _UNO('.uno:Undo', 'presentation'), uno: '.uno:Undo'},
@@ -528,13 +528,13 @@ class Menubar extends window.L.Control {
 			]},
 			{name: _UNO('.uno:ViewMenu', 'presentation'), id: 'view', type: 'menu', accessibility: {combination: 'MV'},
 			 menu: (window.mode.isTablet() ? [
-					{name: _('Reset zoom'), id: 'zoomreset', type: 'action'},
+					{name: _('Reset Zoom'), id: 'zoomreset', type: 'action'},
 				] as MenuItem[] : [
 					{name: _UNO('.uno:FullScreen', 'presentation'), unoid: '.uno:FullScreen', id: 'fullscreen', type: 'action'},
 				   {type: 'separator'},
 					{name: _UNO('.uno:ZoomPlus', 'presentation'), unoid: '.uno:ZoomPlus', id: 'zoomin', type: 'action'},
 					{name: _UNO('.uno:ZoomMinus', 'presentation'), unoid: '.uno:ZoomMinus', id: 'zoomout', type: 'action'},
-				   {name: _('Reset zoom'), id: 'zoomreset', type: 'action'},
+				   {name: _('Reset Zoom'), id: 'zoomreset', type: 'action'},
 				] as MenuItem[]).concat([
 				   {type: 'separator'},
 				   {uno: '.uno:GridVisible', name: _UNO('.uno:GridVisible')},
@@ -666,8 +666,8 @@ class Menubar extends window.L.Control {
 				{type: 'separator'},
 				{name: _UNO('.uno:GotoSlide', 'presentation'), uno: '.uno:GotoPage'},
 				{type: 'separator', id: 'fullscreen-presentation-separator'},
-				{name: _('Fullscreen presentation'), id: 'fullscreen-presentation', type: 'action'},
-				{name: _('Present current slide'), id: 'presentation-currentslide', type: 'action'},
+				{name: _('Fullscreen Presentation'), id: 'fullscreen-presentation', type: 'action'},
+				{name: _('Present Current Slide'), id: 'presentation-currentslide', type: 'action'},
 				...((!window.ThisIsAnApp || window.mode.isCODesktop()) ? [
 					{name: _('Presenter View'), id: 'presentation-in-console', type: 'action'}
 				] : []),
@@ -692,18 +692,18 @@ class Menubar extends window.L.Control {
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{name: _('Show Tour'), id: 'onboardingtour', type: 'action'},
 				{type: 'separator', iosapp: false},
-				{name: _('Keyboard shortcuts'), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
+				{name: _('Keyboard Shortcuts'), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
 				{type: 'separator'},
 				{name: _('Forum'), id: 'forum', type: 'action'},
-				{name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
+				{name: _('Report an Issue'), id: 'report-an-issue', type: 'action', iosapp: false},
 				{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
 				{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 				{type: 'separator'},
-				{name: _('Server audit'), id: 'serveraudit', type: 'action', mobileapp: false},
+				{name: _('Server Audit'), id: 'serveraudit', type: 'action', mobileapp: false},
 				{type: 'separator'},
 				{name: _('About'), id: 'about', type: 'action'}]
 			},
-			{name: _('Last modification'), id: 'last-mod', type: 'action', tablet: false}
+			{name: _('Last Modification'), id: 'last-mod', type: 'action', tablet: false}
 		],
 
 		drawing: [
@@ -715,13 +715,13 @@ class Menubar extends window.L.Control {
 				{name: _('Save Comments'), id: 'savecomments', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _UNO('.uno:Print', 'presentation'), unoid: '.uno:Print', id: 'print', type: 'action'},
-				{name: _('See revision history'), id: 'rev-history', type: 'action'},
+				{name: _('See Revision History'), id: 'rev-history', type: 'action'},
 				{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('drawing')},
 				{name: _UNO('.uno:SetDocumentProperties', 'presentation'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:Signature', 'presentation'), uno: '.uno:Signature', id: 'signature'},
 				{name: _('Options'), id: 'settings-dialog', type: 'action', mobileapp: false},
 				{type: 'separator'},
-				{name: _('Close document'), id: 'closedocument', type: 'action'}
+				{name: _('Close Document'), id: 'closedocument', type: 'action'}
 			]},
 			{name: _UNO('.uno:EditMenu', 'presentation'), id: 'editmenu', type: 'menu', accessibility: {combination: 'ME'}, menu: [
 				{name: _UNO('.uno:Undo', 'presentation'), uno: '.uno:Undo'},
@@ -740,13 +740,13 @@ class Menubar extends window.L.Control {
 			]},
 			{name: _UNO('.uno:ViewMenu', 'presentation'), id: 'view', type: 'menu', accessibility: {combination: 'MV'},
 			 menu: (window.mode.isTablet() ? [
-					{name: _('Reset zoom'), id: 'zoomreset', type: 'action'},
+					{name: _('Reset Zoom'), id: 'zoomreset', type: 'action'},
 				] as MenuItem[] : [
 					{name: _UNO('.uno:FullScreen', 'presentation'), unoid: '.uno:FullScreen', id: 'fullscreen', type: 'action'},
 					{type: 'separator'},
 					{name: _UNO('.uno:ZoomPlus', 'presentation'), unoid: '.uno:ZoomPlus', id: 'zoomin', type: 'action'},
 					{name: _UNO('.uno:ZoomMinus', 'presentation'), unoid: '.uno:ZoomMinus', id: 'zoomout', type: 'action'},
-					{name: _('Reset zoom'), id: 'zoomreset', type: 'action'},
+					{name: _('Reset Zoom'), id: 'zoomreset', type: 'action'},
 				] as MenuItem[]).concat([
 					{type: 'separator'},
 					{uno: '.uno:GridVisible', name: _UNO('.uno:GridVisible')},
@@ -865,18 +865,18 @@ class Menubar extends window.L.Control {
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{name: _('Show Tour'), id: 'onboardingtour', type: 'action'},
 				{type: 'separator', iosapp: false},
-				{name: _('Keyboard shortcuts'), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
+				{name: _('Keyboard Shortcuts'), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
 				{type: 'separator'},
 				{name: _('Forum'), id: 'forum', type: 'action'},
-				{name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
+				{name: _('Report an Issue'), id: 'report-an-issue', type: 'action', iosapp: false},
 				{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
 				{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 				{type: 'separator'},
-				{name: _('Server audit'), id: 'serveraudit', type: 'action', mobileapp: false},
+				{name: _('Server Audit'), id: 'serveraudit', type: 'action', mobileapp: false},
 				{type: 'separator'},
 				{name: _('About'), id: 'about', type: 'action'}]
 			},
-			{name: _('Last modification'), id: 'last-mod', type: 'action', tablet: false}
+			{name: _('Last Modification'), id: 'last-mod', type: 'action', tablet: false}
 		],
 
 		spreadsheet: [
@@ -890,7 +890,7 @@ class Menubar extends window.L.Control {
 				{name: _('Export as'), id: 'exportas', type: 'menu', menu: exportAsMenu('spreadsheet')},
 				{name: _('Rename Document'), id: 'renamedocument', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
-				{name: _('See revision history'), id: 'rev-history', type: 'action'},
+				{name: _('See Revision History'), id: 'rev-history', type: 'action'},
 				{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('spreadsheet')},
 				{name: _UNO('.uno:SetDocumentProperties', 'spreadsheet'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:SecurityLabel', 'spreadsheet'), uno: '.uno:SecurityLabel', id: 'securitylabel'},
@@ -898,10 +898,10 @@ class Menubar extends window.L.Control {
 				{name: _('Options'), id: 'settings-dialog', type: 'action', mobileapp: false},
 				{type: 'separator'},
 				{name: _UNO('.uno:Print', 'spreadsheet'), id: 'print', type: 'menu', menu: [
-					{name: _('Active sheet'), id: 'print-active-sheet', type: 'action'},
+					{name: _('Active Sheet'), id: 'print-active-sheet', type: 'action'},
 					{name: _('All Sheets'), id: 'print-all-sheets', type: 'action'},
 				]},
-				{name: _('Close document'), id: 'closedocument', type: 'action'}
+				{name: _('Close Document'), id: 'closedocument', type: 'action'}
 			]},
 			{name: _UNO('.uno:EditMenu', 'spreadsheet'), id: 'editmenu', type: 'menu', accessibility: {combination: 'ME'}, menu: [
 				{name: _UNO('.uno:Undo', 'text'), uno: '.uno:Undo'},
@@ -937,13 +937,13 @@ class Menubar extends window.L.Control {
 			]},
 			{name: _UNO('.uno:ViewMenu', 'spreadsheet'), id: 'view', type: 'menu', accessibility: {combination: 'MV'},
 			 menu: (window.mode.isTablet() ? [
-					{name: _('Reset zoom'), id: 'zoomreset', type: 'action'},
+					{name: _('Reset Zoom'), id: 'zoomreset', type: 'action'},
 				] as MenuItem[] : [
 					{name: _UNO('.uno:FullScreen', 'spreadsheet'), unoid: '.uno:FullScreen', id: 'fullscreen', type: 'action'},
 				   {type: 'separator'},
 				   {name: _UNO('.uno:ZoomPlus', 'text'), unoid: '.uno:ZoomPlus', id: 'zoomin', type: 'action'},
 				   {name: _UNO('.uno:ZoomMinus', 'text'), unoid: '.uno:ZoomMinus', id: 'zoomout', type: 'action',},
-				   {name: _('Reset zoom'), id: 'zoomreset', type: 'action'},
+				   {name: _('Reset Zoom'), id: 'zoomreset', type: 'action'},
 				] as MenuItem[]).concat([
 				   {type: 'separator'},
 				   {name: _('Toggle UI Mode'), id: 'toggleuimode', type: 'action'},
@@ -953,7 +953,7 @@ class Menubar extends window.L.Control {
 				   {name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 				   {uno: '.uno:SidebarDeck.PropertyDeck', name: _UNO('.uno:Sidebar')},
 				   {uno: '.uno:Navigator', id: 'navigator'},
-				   {uno: '.uno:SidebarDeck.StyleListDeck', name: _('Style list')},
+				   {uno: '.uno:SidebarDeck.StyleListDeck', name: _('Style List')},
 				   {type: 'separator'},
 				   {name: _UNO('.uno:ToggleSheetGrid', 'spreadsheet', true), uno: '.uno:ToggleSheetGrid', id: 'sheetgrid'},
 				   {name: _('Focus Cell'), type:'action', id: 'columnrowhighlight'},
@@ -1193,18 +1193,18 @@ class Menubar extends window.L.Control {
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{name: _('Show Tour'), id: 'onboardingtour', type: 'action'},
 				{type: 'separator', iosapp: false},
-				{name: _('Keyboard shortcuts'), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
+				{name: _('Keyboard Shortcuts'), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
 				{type: 'separator'},
 				{name: _('Forum'), id: 'forum', type: 'action'},
-				{name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
+				{name: _('Report an Issue'), id: 'report-an-issue', type: 'action', iosapp: false},
 				{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
 				{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 				{type: 'separator'},
-				{name: _('Server audit'), id: 'serveraudit', type: 'action', mobileapp: false},
+				{name: _('Server Audit'), id: 'serveraudit', type: 'action', mobileapp: false},
 				{type: 'separator'},
 				{name: _('About'), id: 'about', type: 'action'}]
 			},
-			{name: _('Last modification'), id: 'last-mod', type: 'action', tablet: false}
+			{name: _('Last Modification'), id: 'last-mod', type: 'action', tablet: false}
 		],
 
 		mobiletext:  [
@@ -1214,7 +1214,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:SaveAs', 'text'), unoid: '.uno:SaveAs', id: 'saveas', type: 'action'},
 				{name: _('Export as'), id: 'exportas', type: 'menu', menu: exportAsMenu('text')},
 				{name: _('Share...'), id:'shareas', type: 'action'},
-				{name: _('See revision history'), id: 'rev-history', type: 'action'},
+				{name: _('See Revision History'), id: 'rev-history', type: 'action'},
 				{type: 'separator'},
 				{name: _UNO('.uno:Print', 'text'), unoid: '.uno:Print', id: 'print', type: 'action'},
 			]},
@@ -1269,7 +1269,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:SaveAs', 'presentation'), unoid: '.uno:SaveAs', id: 'saveas', type: 'action'},
 				{name: _('Export as'), id: 'exportas', type: 'menu', menu: exportAsMenu('presentation')},
 				{name: _('Share...'), id:'shareas', type: 'action'},
-				{name: _('See revision history'), id: 'rev-history', type: 'action'},
+				{name: _('See Revision History'), id: 'rev-history', type: 'action'},
 				{type: 'separator'},
 				{name: _UNO('.uno:Print', 'presentation'), uno: '.uno:Print', id: 'print', type: 'action'},
 			]},
@@ -1313,7 +1313,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:DeleteSlide', 'presentation'), unoid: '.uno:DeleteSlide', id: 'deletepage', type: 'action'}]
 			},
 			{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'},
-			{name: _('Fullscreen presentation'), id: 'fullscreen-presentation', type: 'action'},
+			{name: _('Fullscreen Presentation'), id: 'fullscreen-presentation', type: 'action'},
 			{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
 			{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 			{name: _('About'), id: 'about', type: 'action'},
@@ -1327,7 +1327,7 @@ class Menubar extends window.L.Control {
 				{name: _('Export as'), id: 'exportas', type: 'menu', menu: exportAsMenu('drawing')},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _UNO('.uno:Print', 'presentation'), unoid: '.uno:Print', id: 'print', type: 'action'},
-				{name: _('See revision history'), id: 'rev-history', type: 'action'},
+				{name: _('See Revision History'), id: 'rev-history', type: 'action'},
 			]},
 			{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('drawing')},
 			{name: _UNO('.uno:EditMenu', 'presentation'), id: 'editmenu', type: 'menu', menu: [
@@ -1376,11 +1376,11 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:SaveAs', 'spreadsheet'), unoid: '.uno:SaveAs', id: 'saveas', type: 'action'},
 				{name: _('Export as'), id: 'exportas', type: 'menu', menu: exportAsMenu('spreadsheet')},
 				{name: _('Share...'), id:'shareas', type: 'action'},
-				{name: _('See revision history'), id: 'rev-history', type: 'action'},
+				{name: _('See Revision History'), id: 'rev-history', type: 'action'},
 				{type: 'separator'},
 				{name: _UNO('.uno:Print', 'spreadsheet'), unoid: '.uno:Print', id: 'print', type: 'action'},
-				{name: _('Define print area'), uno: '.uno:DefinePrintArea' },
-				{name: _('Remove print area'), uno: '.uno:DeletePrintArea' },
+				{name: _('Define Print Area'), uno: '.uno:DefinePrintArea' },
+				{name: _('Remove Print Area'), uno: '.uno:DeletePrintArea' },
 			]},
 			{name: !window.ThisIsAnApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: downloadAsMenu('spreadsheet')},
 			{name: _UNO('.uno:EditMenu', 'spreadsheet'), id: 'editmenu', type: 'menu', menu: [
@@ -2357,9 +2357,9 @@ class Menubar extends window.L.Control {
 							$(aItem).removeClass(constChecked);
 					} else if (id === 'toggleuimode') {
 						if (this._map.uiManager.shouldUseNotebookbarMode()) {
-							$(aItem).text(_('Use Compact view'));
+							$(aItem).text(_('Use Compact View'));
 						} else {
-							$(aItem).text(_('Use Tabbed view'));
+							$(aItem).text(_('Use Tabbed View'));
 						}
 					} else if (id === 'showslide') {
 						if (!app.impress.isSlideHidden(this._map.getCurrentPartNumber())) {

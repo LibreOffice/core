@@ -2891,14 +2891,14 @@ class SettingIframe {
 		const notebookOption = this.createCompactToggleOption(
 			'Notebookbar.svg',
 			'Notebookbar',
-			_('Notebookbar view'),
+			_('Notebookbar View'),
 			!setting.value,
 			() => select(false),
 		);
 		const compactOption = this.createCompactToggleOption(
 			'Compact.svg',
 			'Compact',
-			_('Compact view'),
+			_('Compact View'),
 			setting.value,
 			() => select(true),
 		);

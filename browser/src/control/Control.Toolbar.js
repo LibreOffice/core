@@ -1344,7 +1344,7 @@ function setupToolbar(e) {
 		if (closebuttonwrapper) closebuttonwrapper.style.display = 'flex';
 		var button = window.L.DomUtil.get('closebutton');
 		if (button) {
-			const closeButtonText = _('Close document');
+			const closeButtonText = _('Close Document');
 			button.setAttribute('aria-label', closeButtonText);
 			button.setAttribute('data-cooltip', closeButtonText);
 			window.L.control.attachTooltipEventListener(button, map);

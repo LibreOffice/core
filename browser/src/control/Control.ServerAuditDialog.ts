@@ -344,8 +344,8 @@ class ServerAuditDialog {
 			id: this.id,
 			dialogid: this.id,
 			type: 'dialog',
-			text: _('Server audit'),
-			title: _('Server audit'),
+			text: _('Server Audit'),
+			title: _('Server Audit'),
 			jsontype: 'dialog',
 			responses: [
 				{

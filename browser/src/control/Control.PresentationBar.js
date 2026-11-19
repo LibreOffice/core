@@ -141,7 +141,7 @@ class PresentationBar {
 		var docType = this.map.getDocType();
 		switch (id) {
 		case 'presentation':
-			return docType === 'presentation' ? _('Fullscreen presentation') : '';
+			return docType === 'presentation' ? _('Fullscreen Presentation') : '';
 		case 'insertpage':
 			return docType === 'presentation' ? _UNO('.uno:TaskPaneInsertPage', 'presentation') : _UNO('.uno:InsertPage', 'presentation');
 		case 'duplicatepage':
