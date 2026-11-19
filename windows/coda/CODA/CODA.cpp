@@ -69,6 +69,7 @@
 #include <common/CODAConfig.hpp>
 #include <common/Common.hpp>
 #include <common/EditorFrameMessages.hpp>
+#include <common/EditorFrameScripts.hpp>
 #include <common/FailurePage.hpp>
 #include <common/FileExtensions.hpp>
 #include <common/JsonUtil.hpp>
@@ -193,6 +194,14 @@ struct DocumentTab
     // The frame of an account window that shows CODA's editor
     // page, null in any other window.
     wil::com_ptr<ICoreWebView2Frame2> editorFrame;
+    // The kept form that the editor frame's page came from, and where that form went (as the kept
+    // form is replaced as soon as the integrator posts the next one):
+    std::string frameForm;
+    std::string frameFormUrl;
+    // The origins whose documents open in the server's own editor, with the reason of each:
+    std::map<std::string, std::string> serverEditorReasons;
+    // The notice at the top of an account window, null until it first shows:
+    HWND noticeWindow = nullptr;
 };
 
 // One top-level window. It holds its documents in the order the tab strip shows
@@ -301,6 +310,9 @@ static const wchar_t overlayWindowClass[] = L"CODADropOverlayWindow";
 
 // The class name of the card that shows a background document below its tab.
 static const wchar_t hoverCardWindowClass[] = L"CODATabHoverCard";
+
+// The class name of the notice at the top of an account window:
+static wchar_t const noticeWindowClass[] = L"CODAAccountNotice";
 
 // The hidden file open dialog and clipboard owner window class name.
 static const wchar_t hiddenOwnerWindowClass[] = L"CODAHiddenOwnerWindow";
@@ -3477,6 +3489,147 @@ static POINT stripPointToScreen(const WindowState& window, double x, double y)
              strip.top + MulDiv(static_cast<int>(std::lround(y)), dpi, USER_DEFAULT_SCREEN_DPI) };
 }
 
+// The space around the text and the close button of an account window's notice, and the size of
+// that button, in pixels at 96 DPI:
+constexpr int NOTICE_PADDING = 8;
+constexpr int NOTICE_BUTTON_WIDTH = 64;
+constexpr int NOTICE_BUTTON_HEIGHT = 24;
+
+static HFONT noticeFontOf(HWND notice) {
+    auto const font = reinterpret_cast<HFONT>(GetWindowLongPtrW(notice, GWLP_USERDATA));
+    return font ? font : static_cast<HFONT>(GetStockObject(DEFAULT_GUI_FONT));
+}
+
+// The text of a notice of the given size wraps to the left of its close button:
+static RECT noticeTextRect(HWND notice, int width, int height) {
+    UINT const dpi = GetDpiForWindow(notice);
+    int const padding = MulDiv(NOTICE_PADDING, dpi, USER_DEFAULT_SCREEN_DPI);
+    int const buttonWidth = MulDiv(NOTICE_BUTTON_WIDTH, dpi, USER_DEFAULT_SCREEN_DPI);
+    return {
+        padding, padding, std::max(padding, width - 2 * padding - buttonWidth),
+        std::max(padding, height - padding)};
+}
+
+static std::wstring noticeText(HWND notice) {
+    std::wstring text(GetWindowTextLengthW(notice) + 1, L'\0');
+    text.resize(GetWindowTextW(notice, text.data(), static_cast<int>(text.size())));
+    return text;
+}
+
+// Puts the notice at the top of the bounds, as high as its wrapped text needs, with the message
+// font at the notice's DPI, and gives the height it takes:
+static int placeNotice(HWND notice, RECT const & bounds) {
+    UINT const dpi = GetDpiForWindow(notice);
+    NONCLIENTMETRICSW metrics = {sizeof(NONCLIENTMETRICSW)};
+    HFONT font = nullptr;
+    if (SystemParametersInfoForDpi(SPI_GETNONCLIENTMETRICS, sizeof(metrics), &metrics, 0, dpi)) {
+        font = CreateFontIndirectW(&metrics.lfMessageFont);
+    }
+    auto const oldFont = reinterpret_cast<HFONT>(
+        SetWindowLongPtrW(notice, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(font)));
+    HWND const close = GetWindow(notice, GW_CHILD);
+    SendMessageW(close, WM_SETFONT, reinterpret_cast<WPARAM>(noticeFontOf(notice)), FALSE);
+    if (oldFont) {
+        DeleteObject(oldFont);
+    }
+
+    int const width = bounds.right - bounds.left;
+    int const padding = MulDiv(NOTICE_PADDING, dpi, USER_DEFAULT_SCREEN_DPI);
+    int const buttonWidth = MulDiv(NOTICE_BUTTON_WIDTH, dpi, USER_DEFAULT_SCREEN_DPI);
+    int const buttonHeight = MulDiv(NOTICE_BUTTON_HEIGHT, dpi, USER_DEFAULT_SCREEN_DPI);
+    RECT text = noticeTextRect(notice, width, 0);
+    HDC const dc = GetDC(notice);
+    HGDIOBJ const oldDcFont = SelectObject(dc, noticeFontOf(notice));
+    DrawTextW(dc, noticeText(notice).c_str(), -1, &text, DT_CALCRECT | DT_WORDBREAK | DT_NOPREFIX);
+    SelectObject(dc, oldDcFont);
+    ReleaseDC(notice, dc);
+    int const height = std::max<int>(text.bottom - text.top, buttonHeight) + 2 * padding;
+
+    SetWindowPos(
+        notice, nullptr, bounds.left, bounds.top, width, height, SWP_NOZORDER | SWP_NOACTIVATE);
+    SetWindowPos(
+        close, nullptr, width - padding - buttonWidth, padding, buttonWidth, buttonHeight,
+        SWP_NOZORDER | SWP_NOACTIVATE);
+    InvalidateRect(notice, nullptr, FALSE);
+    return height;
+}
+
+// The bounds of the tab's web view, below the tab's notice while that shows:
+static RECT belowNotice(DocumentTab const & tab, RECT bounds) {
+    bool const showsNotice
+        = tab.noticeWindow && (GetWindowLongW(tab.noticeWindow, GWL_STYLE) & WS_VISIBLE) != 0;
+    if (showsNotice) {
+        bounds.top = std::min(bounds.bottom, bounds.top + placeNotice(tab.noticeWindow, bounds));
+    }
+    return bounds;
+}
+
+static LRESULT CALLBACK NoticeWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message) {
+    case WM_COMMAND:
+        // The close button hides the notice, and the web view takes its place:
+        ShowWindow(hWnd, SW_HIDE);
+        if (WindowState * window = findWindow(GetParent(hWnd))) {
+            layoutTabs(*window);
+        }
+        return 0;
+    case WM_ERASEBKGND:
+        return 1;
+    case WM_PAINT: {
+        PAINTSTRUCT paint;
+        HDC const dc = BeginPaint(hWnd, &paint);
+        RECT client;
+        GetClientRect(hWnd, &client);
+        FillRect(dc, &client, GetSysColorBrush(COLOR_INFOBK));
+        HGDIOBJ const oldFont = SelectObject(dc, noticeFontOf(hWnd));
+        SetBkMode(dc, TRANSPARENT);
+        SetTextColor(dc, GetSysColor(COLOR_INFOTEXT));
+        RECT text = noticeTextRect(hWnd, client.right, client.bottom);
+        DrawTextW(dc, noticeText(hWnd).c_str(), -1, &text, DT_WORDBREAK | DT_NOPREFIX);
+        SelectObject(dc, oldFont);
+        EndPaint(hWnd, &paint);
+        return 0;
+    }
+    case WM_DESTROY:
+        if (auto const font = reinterpret_cast<HFONT>(GetWindowLongPtrW(hWnd, GWLP_USERDATA))) {
+            DeleteObject(font);
+        }
+        break;
+    }
+    return DefWindowProcW(hWnd, message, wParam, lParam);
+}
+
+// Shows the text at the top of the account window, above its web view, until the user closes it:
+static void showNotice(DocumentTab & account, std::string const & text) {
+    if (!account.noticeWindow) {
+        account.noticeWindow = CreateWindowExW(
+            0, noticeWindowClass, L"", WS_CHILD | WS_CLIPCHILDREN, 0, 0, 0, 0, account.hWnd,
+            nullptr, appInstance, nullptr);
+        if (!account.noticeWindow) {
+            LOG_ERR("CreateWindowExW() for the notice of an account window failed");
+            return;
+        }
+        CreateWindowExW(
+            0, L"BUTTON", L"Close", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON, 0, 0, 0, 0,
+            account.noticeWindow, nullptr, appInstance, nullptr);
+    }
+    SetWindowTextW(account.noticeWindow, Util::string_to_wide_string(text).c_str());
+    ShowWindow(account.noticeWindow, SW_SHOWNA);
+    if (WindowState * window = findWindow(account.hWnd)) {
+        layoutTabs(*window);
+    }
+}
+
+static void hideNotice(DocumentTab & account) {
+    if (!account.noticeWindow) {
+        return;
+    }
+    ShowWindow(account.noticeWindow, SW_HIDE);
+    if (WindowState * window = findWindow(account.hWnd)) {
+        layoutTabs(*window);
+    }
+}
+
 static void layoutTabs(WindowState& window)
 {
     updateTitleBarFrame(window);
@@ -3491,7 +3644,7 @@ static void layoutTabs(WindowState& window)
     {
         DocumentTab* tab = findTab(tabId);
         if (tab && tab->webViewController)
-            tab->webViewController->put_Bounds(bounds);
+            tab->webViewController->put_Bounds(belowNotice(*tab, bounds));
     }
 }
 
@@ -5503,19 +5656,11 @@ static void openStarterWindow()
 constexpr size_t MAX_FORM_BYTES = 2 * 1024 * 1024;
 constexpr ULONG FORM_CHUNK_BYTES = 4096;
 
-/// In the editor's iframe, replaces coolwsd's page with an empty document before it is parsed.
-constexpr const char* EMPTY_COOL_PAGE_SCRIPT = R"JS(
-if (window !== window.top && location.pathname.endsWith('/cool.html')) {
-    document.open();
-    document.close();
-}
-)JS";
-
 /// Builds CODA's editor page in the emptied editor iframe. It posts the integrator's form again to
 /// get coolwsd's settings, then loads CODA's page, scripts and styles from config.base.
-/// TODO: Share this and EMPTY_COOL_PAGE_SCRIPT with Qt's copies in qt/RemoteOpen.cpp.
+/// TODO: Share this with Qt's copy in qt/RemoteOpen.cpp.
 constexpr const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
-(config) => {
+(config, clientDocumentLoadingRefusal) => {
     if (window.codaRemotePage)
         return;
 
@@ -5535,7 +5680,16 @@ constexpr const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
 
     const appPage = fetch(config.base + 'cool.html').then(text);
 
-    Promise.all([serverPage, appPage]).then(([serverHtml, appHtml]) => {
+    const refusal = clientDocumentLoadingRefusal(config.formUrl);
+
+    Promise.all([serverPage, appPage, refusal]).then(([serverHtml, appHtml, reason]) => {
+        // Without client document loading, native code learns why (in a call whose reply nobody
+        // waits for), and shows the server's own editor in the frame:
+        if (reason !== null) {
+            window.chrome.webview.postMessage('CALL 0 serverEditor ' + reason);
+            return;
+        }
+
         // coolwsd writes the values for its editor into these two elements.
         const server = new DOMParser().parseFromString(serverHtml, 'text/html');
         const variables = server.getElementById('initial-variables');
@@ -5557,7 +5711,8 @@ constexpr const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
         scripts.forEach((script) => script.remove());
         const sources = scripts.map((script) => script.getAttribute('src')).filter(isRelative);
 
-        // Replace the frame's empty <html>, left by EMPTY_COOL_PAGE_SCRIPT, with CODA's <html>.
+        // Replace the frame's empty <html>, left by EditorFrameScripts::emptyCoolPageScript, with
+        // CODA's <html>.
         document.documentElement.replaceWith(document.adoptNode(app.documentElement));
 
         // The load event fired when the page was emptied, and CODA's start waits for it.
@@ -5831,6 +5986,10 @@ static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceReque
 
     if (isDocument && isEditorPage && isPost)
     {
+        if (uri.getFragment() == EditorFrameScripts::serverEditorFragment) {
+            return;
+        }
+
         if (!isPostedByIntegrator(*account, request.get()))
             return;
 
@@ -5930,6 +6089,60 @@ static void handleEditorFrameMessage(int accountTabId, ICoreWebView2Frame* sende
     processMessage(*account, message);
 }
 
+// Says at the top of the account window why its editor frame shows the server's own editor:
+static void showServerEditorNotice(
+    DocumentTab & account, std::string const & editorUrl, std::string const & reason)
+{
+    std::string const server = Poco::URI(editorUrl).getHost();
+    if (reason == EditorFrameScripts::disabledReason) {
+        showNotice(
+            account,
+            server + " does not allow editing in " APP_NAME ", so the document is open in the "
+            "server's own editor. To edit documents from " + server + " in " APP_NAME ", ask the "
+            "server's administrator to allow that (client_document_loading.enable in "
+            "coolwsd.xml).");
+    } else {
+        showNotice(
+            account,
+            server + " runs a version of Collabora Online that does not support editing in "
+            APP_NAME ", so the document is open in the server's own editor.");
+    }
+}
+
+// Posts the integrator's form into the frame again, for the server's own editor:
+static void postServerEditorForm(
+    ICoreWebView2Frame2 * frame, std::string const & formUrl, std::string const & form)
+{
+    Poco::JSON::Array arguments;
+    arguments.add(formUrl);
+    arguments.add(form);
+    std::ostringstream argumentsJson;
+    arguments.stringify(argumentsJson);
+    std::string const script
+        = "(" + EditorFrameScripts::serverEditorFormScript + ")(..." + argumentsJson.str() + ")";
+    frame->ExecuteScript(Util::string_to_wide_string(script).c_str(), nullptr);
+}
+
+// The editor frame's page found that the server allows no client document loading:
+static void useServerEditor(DocumentTab & account, std::string const & reason) {
+    if (reason != EditorFrameScripts::disabledReason
+        && reason != EditorFrameScripts::unsupportedReason)
+    {
+        LOG_WRN("The server's own editor was refused: an unknown reason");
+        return;
+    }
+    if (!account.editorFrame) {
+        LOG_WRN("The server's own editor was not shown: there is no editor frame");
+        return;
+    }
+    LOG_INF(
+        "The server allows no client document loading (" << reason
+        << "), so the editor frame shows the server's own editor");
+    account.serverEditorReasons[originOf(Poco::URI(account.frameFormUrl))] = reason;
+    showServerEditorNotice(account, account.frameFormUrl, reason);
+    postServerEditorForm(account.editorFrame.get(), account.frameFormUrl, account.frameForm);
+}
+
 static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std::string& address,
                           bool isFreshFrame)
 {
@@ -5961,14 +6174,30 @@ static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std
         return;
     }
 
+    // A server without client document loading gets the form again, into its own editor (with the
+    // notice shown only for its first document in the window):
+    auto const reason
+        = account->serverEditorReasons.find(originOf(Poco::URI(account->editorFormUrl)));
+    if (reason != account->serverEditorReasons.end()) {
+        LOG_INF(
+            "The server allows no client document loading, so the form goes to the server's own "
+            "editor");
+        postServerEditorForm(frame2.get(), account->editorFormUrl, account->editorForm);
+        return;
+    }
+
     account->editorFrame = frame2;
+    account->frameForm = account->editorForm;
+    account->frameFormUrl = account->editorFormUrl;
+    hideNotice(*account);
 
     Poco::JSON::Object::Ptr config = new Poco::JSON::Object();
     config->set("formUrl", account->editorFormUrl);
     config->set("formBody", account->editorForm);
     config->set("base", std::string(COOLLOCAL_BUNDLED_PATH));
-    const std::string script =
-        std::string("(") + PUT_CODA_PAGE_IN_SCRIPT + ")(" + JsonUtil::jsonToString(config) + ")";
+    std::string const script = std::string("(") + PUT_CODA_PAGE_IN_SCRIPT + ")("
+        + JsonUtil::jsonToString(config) + ", "
+        + EditorFrameScripts::clientDocumentLoadingRefusalScript + ")";
 
     frame2->ExecuteScript(Util::string_to_wide_string(script).c_str(), nullptr);
     LOG_DBG("Putting CODA's editor page into the editor frame");
@@ -6265,7 +6494,8 @@ static void openAccountWindow(const std::string& url)
                             &token);
 
                         account->webView->AddScriptToExecuteOnDocumentCreated(
-                            Util::string_to_wide_string(EMPTY_COOL_PAGE_SCRIPT).c_str(),
+                            Util::string_to_wide_string(EditorFrameScripts::emptyCoolPageScript)
+                                .c_str(),
                             Microsoft::WRL::Callback<
                                 ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler>(
                                 [](HRESULT result, LPCWSTR) -> HRESULT
@@ -7714,6 +7944,11 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         {
             readLocalDocBytes(data, id);
         }
+        else if (s.starts_with(L"serverEditor "))
+        {
+            useServerEditor(data, Util::wide_string_to_string(s.substr(strlen("serverEditor "))));
+            postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        }
         else if (s.starts_with(L"getBundledFile "))
         {
             const std::string arguments =
@@ -8037,6 +8272,19 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
 
         if (!RegisterClassExW(&wcex))
             fatal("RegisterClassExW() for the tab hover card failed");
+    }
+
+    {
+        WNDCLASSEXW wcex = { sizeof(WNDCLASSEXW) };
+
+        wcex.lpfnWndProc = NoticeWndProc;
+        wcex.hInstance = hInstance;
+        wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wcex.lpszClassName = noticeWindowClass;
+
+        if (!RegisterClassExW(&wcex)) {
+            fatal("RegisterClassExW() for the notice of an account window failed");
+        }
     }
 
     // Open the first document here, then open the rest one by one once the previous has loaded.
