@@ -803,6 +803,31 @@ static void lcl_SetEditColor( EditEngine& rEngine, const Color& rColor )
     // function is called with update mode set to FALSE
 }
 
+// Resolve an automatic font color in rEditSet the same way the plain string
+// output does (ScPatternAttr::fillColor), instead of leaving it to the
+// EditEngine. The EditEngine decides its automatic color with Color::IsDark(),
+// which marks saturated mid-tone fills such as pure red as dark, so cells drawn
+// through the EditEngine (e.g. misspelled, multi-line or rich text) would get
+// white text where the same cell drawn as a plain string gets black.
+static void lcl_ResolveAutoEditColor( SfxItemSet& rEditSet, const ScPatternAttr& rPattern,
+                                      const SfxItemSet* pCondSet, const SfxItemSet* pTableSet,
+                                      bool bCellContrast )
+{
+    // ScPatternAttr::FillEditItemSet() leaves EE_CHAR_COLOR unset for automatic color
+    if (rEditSet.GetItemState(EE_CHAR_COLOR, false) == SfxItemState::SET)
+        return;
+
+    const svtools::ColorConfig& rColorConfig = ScModule::get()->GetColorConfig();
+    const Color aBackConfigColor = rColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    const Color aTextConfigColor = rColorConfig.GetColorValue(svtools::FONTCOLOR).nColor;
+
+    model::ComplexColor aComplexColor;
+    rPattern.fillColor(aComplexColor,
+                       bCellContrast ? ScAutoFontColorMode::IgnoreBack : ScAutoFontColorMode::Display,
+                       pCondSet, pTableSet, &aBackConfigColor, &aTextConfigColor);
+    rEditSet.Put(SvxColorItem(aComplexColor.getFinalColor(), EE_CHAR_COLOR));
+}
+
 void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, const ScRefCellValue& rCell )
 {
     Color aColor;
@@ -2408,6 +2433,8 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
 
     SfxItemSet aSet( mpEngine->GetEmptyItemSet() );
     mpPattern->FillEditItemSet( &aSet, mpCondSet, mpTableSet );
+    if ( bUseStyleColor )
+        lcl_ResolveAutoEditColor( aSet, *mpPattern, mpCondSet, mpTableSet, bCellContrast );
     if ( mpPreviewFontSet )
     {
         if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_FONT ) )
@@ -4602,6 +4629,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             {
                                 SfxItemSet aSet( mxOutputEditEngine->GetEmptyItemSet() );
                                 pPattern->FillEditItemSet( &aSet, pCondSet, pTableSet );
+                                if ( mbUseStyleColor )
+                                    lcl_ResolveAutoEditColor( aSet, *pPattern, pCondSet, pTableSet, bCellContrast );
 
                                                                     // adjustment for EditEngine
                                 SvxAdjust eSvxAdjust = SvxAdjust::Left;

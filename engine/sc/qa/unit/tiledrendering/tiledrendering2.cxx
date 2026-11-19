@@ -321,6 +321,48 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBreakPageView)
     CPPUNIT_ASSERT_EQUAL(Color(255, 255, 255), aColor);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoFontColorRedBackgroundEditCell)
+{
+    // A1 has an opaque pure-red fill, automatic font color and rich text, so it is drawn
+    // through the EditEngine rather than as a plain string (as misspelled text is, too).
+    ScModelObj* pModelObj = createDoc("auto-font-color-red-bg-edit.fods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(ScAddress(0, 0, 0)));
+
+    size_t nCanvasSize = 256;
+    std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
+    xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    xDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasSize, nCanvasSize), 1.0, Point(),
+                                                       aPixmap.data());
+    pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, 0, 0, 3840, 3840);
+    xDevice->EnableMapMode(false);
+    Bitmap aBitmap = xDevice->GetBitmap(Point(0, 0), Size(nCanvasSize, nCanvasSize));
+
+    // A1 is 2in x 0.6in, i.e. 192 x 57 pixels at 100% zoom: count the text pixels inside it.
+    BitmapScopedReadAccess pAccess(aBitmap);
+    int nWhite = 0;
+    int nDark = 0;
+    for (tools::Long nY = 2; nY < 54; ++nY)
+    {
+        for (tools::Long nX = 2; nX < 188; ++nX)
+        {
+            Color aColor(pAccess->GetPixel(nY, nX));
+            if (aColor.GetRed() > 200 && aColor.GetGreen() > 200 && aColor.GetBlue() > 200)
+                ++nWhite;
+            else if (aColor.GetRed() < 100 && aColor.GetGreen() < 100 && aColor.GetBlue() < 100)
+                ++nDark;
+        }
+    }
+
+    // The automatic text color on red must be black, as for a plain string cell.
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 567
+    CPPUNIT_ASSERT_EQUAL(0, nWhite);
+    CPPUNIT_ASSERT(nDark > 0);
+}
+
 static void lcl_drag(ScModelObj* pModelObj, Point aFrom, Point aTo, int nModifier)
 {
     // No modifiers in button down to start a drag
