@@ -2109,8 +2109,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (URLPopUpSection.isOpen() && !(obj.hyperlink && obj.hyperlink.link))
 			URLPopUpSection.closeURLPopUp();
 
-		// a small screen opens the link from the tap, not from the cursor
+		// a small screen opens the link from the tap, not from the cursor, and a mouse that
+		// selects text over a link gets the context toolbar when the button comes up
 		if (obj.hyperlink && obj.hyperlink.link && !window.mode.isSmallScreenDevice() &&
+			!this._isSelectingWithMouse() &&
 			( !URLPopUpSection.isOpen() || updateCursor || isHyperlinkChanged))
 			URLPopUpSection.showURLPopUP(obj.hyperlink.link, new cool.SimplePoint(app.file.textCursor.rectangle.x1, app.file.textCursor.rectangle.y1));
 
@@ -2737,6 +2739,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (rawRectangles.length > 0) {
 			TextSelections.activate();
 
+			// the click that starts a selection can open the popup of a link before the
+			// selection arrives
+			if (this._isSelectingWithMouse())
+				URLPopUpSection.closeURLPopUp();
+
 			if (app.file.fileBasedView && this._lastSearchResult) {
 				// We rely on that _lastSearchResult has been updated before this function is called.
 				const additionPerPart = this._partHeightTwips + this._spaceBetweenParts;
@@ -3260,6 +3267,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._updateReferenceMarks();
 		CellSelectionMarkers.update();
 		TextSelections.refreshHandles();
+	},
+
+	// A mouse drag is under way in the document, and it has selected text.
+	_isSelectingWithMouse: function () {
+		const mouseControl = app.activeDocument && app.activeDocument.mouseControl;
+		return !!mouseControl && mouseControl.startedDocumentDrag() && TextSelections.isActive();
 	},
 
 	_postMouseEvent: function(type, x, y, count, buttons, modifier) {
