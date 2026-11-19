@@ -42,6 +42,9 @@
 + (NSString *_Nonnull)serverEditorFragment NS_SWIFT_NAME(serverEditorFragment());
 + (NSString *_Nonnull)disabledReason NS_SWIFT_NAME(disabledReason());
 + (NSString *_Nonnull)unsupportedReason NS_SWIFT_NAME(unsupportedReason());
++ (NSString *_Nonnull)outdatedReason NS_SWIFT_NAME(outdatedReason());
++ (NSString *_Nonnull)switchReason NS_SWIFT_NAME(switchReason());
++ (bool)isServerEditorReason:(NSString *_Nonnull)reason NS_SWIFT_NAME(isServerEditorReason(_:));
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
 + (bool)isKitDocumentLoaded:(Document *_Nonnull)document NS_SWIFT_NAME(isKitDocumentLoaded(_:));
 // The path on disk of the media file that the document's server side registered under the

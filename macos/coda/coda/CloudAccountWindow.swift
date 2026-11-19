@@ -300,18 +300,23 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         }
     }
 
-    // The editor frame's server allows no client document loading, so the frame gets the
-    // integrator's form posted again, with all of the server's files, for its own editor:
+    // The frame gets the integrator's form posted again, with all of the server's files, for the
+    // server's own editor, for one of the reasons in common/EditorFrameScripts.hpp:
     private func useServerEditor(reason: String, editorUrl: URL, form: Data, in frameInfo: WKFrameInfo) {
-        guard reason == COWrapper.disabledReason() || reason == COWrapper.unsupportedReason(),
-              let origin = Self.origin(of: editorUrl) else {
+        guard COWrapper.isServerEditorReason(reason), let origin = Self.origin(of: editorUrl) else {
             COWrapper.LOG_ERR("The server's own editor was refused: an unknown reason")
             return
         }
 
-        COWrapper.LOG_DBG("The server allows no client document loading (\(reason)), so the frame shows the server's own editor")
-        serverEditorReasons[origin] = reason
-        showServerEditorNotice(reason: reason, editorUrl: editorUrl)
+        // A document that the page switched to the server goes to the server's own editor without a
+        // notice, and the next document from that server goes to CODA's page again:
+        if reason == COWrapper.switchReason() {
+            COWrapper.LOG_DBG("The editor frame's page switched its document to the server, so the frame shows the server's own editor")
+        } else {
+            COWrapper.LOG_DBG("No client document loading (\(reason)), so the frame shows the server's own editor")
+            serverEditorReasons[origin] = reason
+            showServerEditorNotice(reason: reason, editorUrl: editorUrl)
+        }
         unblockCoolServerFiles(of: editorUrl)
         webView.callAsyncJavaScript(
             "(" + COWrapper.serverEditorFormScript() + ")(editorUrl, formBody)",
@@ -333,6 +338,10 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
                 "\(server) does not allow editing in \(app), so the document is open in the server's own editor. "
                 + "To edit documents from \(server) in \(app), ask the server's administrator to allow that "
                 + "(client_document_loading.enable in coolwsd.xml).")
+        } else if reason == COWrapper.outdatedReason() {
+            showNotice(
+                "This version of \(app) is too old to edit documents from \(server), so the document is open in the "
+                + "server's own editor. To edit documents from \(server) in \(app), update your copy of \(app).")
         } else {
             showNotice(
                 "\(server) runs a version of Collabora Online that does not support editing in \(app), "
@@ -395,6 +404,17 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         if Self.unansweredBridgeCalls.contains(kind) {
             COWrapper.LOG_DBG("\(kind) is not answered yet")
+            return (nil, nil)
+        }
+
+        // The page asks for the server's own editor in the frame, also after it switched its
+        // document to the server and so ended the local document:
+        if kind == "serverEditor" {
+            if let editorFormUrl, let editorForm {
+                useServerEditor(
+                    reason: String(body.dropFirst(kind.count + 1)), editorUrl: editorFormUrl, form: editorForm,
+                    in: message.frameInfo)
+            }
             return (nil, nil)
         }
 

@@ -682,6 +682,18 @@ void install_filepicker_provider(COKit &rOffice)
     return [NSString stringWithUTF8String:EditorFrameScripts::unsupportedReason.c_str()];
 }
 
++ (NSString *)outdatedReason {
+    return [NSString stringWithUTF8String:EditorFrameScripts::outdatedReason.c_str()];
+}
+
++ (NSString *)switchReason {
+    return [NSString stringWithUTF8String:EditorFrameScripts::switchReason.c_str()];
+}
+
++ (bool)isServerEditorReason:(NSString *)reason {
+    return EditorFrameScripts::isServerEditorReason([reason UTF8String]);
+}
+
 + (void)saveAsWith:(Document *)document url:(NSString *)url format:(NSString *)format filterOptions:(NSString *)filterOptions {
     DocumentData::get(document.appDocId).loKitDocument->saveAs([url UTF8String], [format UTF8String], [filterOptions UTF8String]);
 }
