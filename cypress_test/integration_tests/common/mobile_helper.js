@@ -434,6 +434,20 @@ function tapNextToCursor(horizontalOffset, verticalOffset = 0) {
 	cy.log('<< tapNextToCursor - end');
 }
 
+// Double tap the centre of the document. The first tap goes to core at once, but the client holds
+// the second tap back for 250 ms and then sends both as one double click. The reply to the first
+// tap can already place the caret and raise the keyboard, so wait for the double click to reach
+// core, and a tap that follows is counted on its own, not as a triple click.
+function doubleTapOnDocument(win) {
+	cy.log('>> doubleTapOnDocument - start');
+
+	cy.cGet('#document-container').dblclick();
+	helper.waitForTimers(win, 'clicktimer');
+	helper.processToIdle(win);
+
+	cy.log('<< doubleTapOnDocument - end');
+}
+
 function getCompactIcon(unoCommand) {
 	return cy.cGet('#toolbar-down .uno' + unoCommand + ':visible');
 }
@@ -495,5 +509,6 @@ module.exports.insertComment = insertComment;
 module.exports.pressPushButtonOfDialog = pressPushButtonOfDialog;
 module.exports.getCompactIcon = getCompactIcon;
 module.exports.tapNextToCursor = tapNextToCursor;
+module.exports.doubleTapOnDocument = doubleTapOnDocument;
 module.exports.watchKeyboardClosing = watchKeyboardClosing;
 module.exports.relayoutForKeyboard = relayoutForKeyboard;

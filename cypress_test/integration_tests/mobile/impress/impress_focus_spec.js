@@ -56,7 +56,7 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 		impressHelper.assertNotInTextEditMode();
 
 		// Enter edit mode by double-clicking.
-		cy.cGet('#document-container').dblclick();
+		mobileHelper.doubleTapOnDocument(this.win);
 
 		impressHelper.typeTextAndVerify('Hello Impress', undefined, true);
 
@@ -66,7 +66,7 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 		impressHelper.assertNotInTextEditMode();
 
 		// Enter edit mode by double-clicking again.
-		cy.cGet('#document-container').dblclick();
+		mobileHelper.doubleTapOnDocument(this.win);
 
 		// Clear the text.
 		helper.clearAllText();
@@ -77,7 +77,7 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 	it('Zoom while editing shape text does not raise the keyboard', function() {
 		mobileHelper.enableEditingMobile();
 
-		cy.cGet('#document-container').dblclick();
+		mobileHelper.doubleTapOnDocument(this.win);
 		helper.assertHaveKeyboardInput();
 
 		cy.then(() => {
@@ -93,15 +93,13 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 	it('Tap into edited text raises the keyboard', function() {
 		mobileHelper.enableEditingMobile();
 
-		cy.cGet('#document-container').dblclick();
+		mobileHelper.doubleTapOnDocument(this.win);
 		helper.assertHaveKeyboardInput();
 
 		cy.then(() => {
 			this.win.app.map.setAcceptInput(false);
 		});
 		helper.processToIdle(this.win);
-		// A tap before the double click is over counts as a third click.
-		helper.waitForTimers(this.win, 'clicktimer');
 
 		helper.assertNoKeyboardInput();
 
@@ -117,7 +115,7 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 			cy.spy(this.win.app.socket, '_onMessage');
 		});
 
-		cy.cGet('#document-container').dblclick();
+		mobileHelper.doubleTapOnDocument(this.win);
 		helper.assertHaveKeyboardInput();
 
 		cy.then(() => {
