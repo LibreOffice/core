@@ -51,6 +51,7 @@
 		cellAddress: null, // To be assigned SimplePoint.
 		cellCursorVisible: false,
 		cellCursorRectangle: null, // To be assigned SimpleRectangle.
+		cellCursorSheet: -1, // The sheet that the cell cursor was last set on.
 		decimalSeparator: null, // Current cell's decimal separator.
 		otherCellCursors: {},
 		splitCoordinate: null, // SimplePoint.

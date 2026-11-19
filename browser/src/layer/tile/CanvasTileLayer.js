@@ -1915,11 +1915,18 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		var sameAddress = oldCursorAddress.equals(app.calc.cellAddress.toArray());
 
-		// Slide the cursor to another cell; a change on the same cell jumps.
-		let slideFrom = null;
-		if (cell && !sameAddress)
-			slideFrom = drawnBefore;
-		this._cellCursorSection.startSlideFrom(slideFrom);
+		const sheet = this._selectedPart;
+		const sameSheet = sheet === app.calc.cellCursorSheet;
+		app.calc.cellCursorSheet = sheet;
+
+		// Slide the cursor to another cell.  Keep the slide running if an
+		// updated cell cursor position is the same as the current cell
+		// position.
+		if (!cell || !drawnBefore || !sameSheet)
+			// The cursor is or was not visible, or it changed sheets.
+			this._cellCursorSection.endSlide();
+		else if (!sameAddress)
+			this._cellCursorSection.startSlideFrom(drawnBefore);
 
 		var isFollowingOwnCursor = parseInt(app.getFollowedViewId()) === parseInt(this._viewId);
 		var notJump = sameAddress || !isFollowingOwnCursor;

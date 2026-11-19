@@ -88,9 +88,6 @@ class CellCursorSection extends CanvasSectionObject {
 	/** The animation frame that draws the slide next, or null. */
 	private slideFrame: number | null = null;
 
-	/** The sheet that the cursor was on at its last move. */
-	private slideSheet: number = -1;
-
 	/**
 	 * Get a rectangle on the way between two. Progress runs from 0 to 1, and
 	 * the move slows down as it arrives.
@@ -139,19 +136,11 @@ class CellCursorSection extends CanvasSectionObject {
 	/**
 	 * Start a slide from the given rectangle to the rectangle that the cursor
 	 * has now, app.calc.cellCursorRectangle. The cursor jumps when the move
-	 * does not allow a slide, or for null.
+	 * does not allow a slide.
 	 */
-	public startSlideFrom(from: cool.SimpleRectangle | null): void {
-		const sheet = app.map._docLayer._selectedPart;
-		const sameSheet = sheet === this.slideSheet;
-		this.slideSheet = sheet;
-
+	public startSlideFrom(from: cool.SimpleRectangle): void {
 		this.slideFrom = null;
 		this.slideStart = performance.now();
-
-		if (from === null || !sameSheet)
-			// The cursor was not visible, stays on its cell, or changed sheets.
-			return;
 
 		if (!this.canSlideFrom(from))
 			return;
@@ -161,6 +150,11 @@ class CellCursorSection extends CanvasSectionObject {
 		// Keep the fill handle on the cursor from the first frame on.
 		this.placeFillHandle();
 		this.drawSlide();
+	}
+
+	/** End the slide, if one runs; the cursor is drawn on its cell. */
+	public endSlide(): void {
+		this.slideFrom = null;
 	}
 
 	/**

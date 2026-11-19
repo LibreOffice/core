@@ -199,6 +199,7 @@ interface AppInterface {
 		cellAddress: null | cool.SimplePoint;
 		cellCursorVisible: boolean;
 		cellCursorRectangle: null | cool.SimpleRectangle;
+		cellCursorSheet: number;
 		decimalSeparator: null | string; // Current cell's decimal separator.
 		otherCellCursors: any;
 		splitCoordinate: null | cool.SimplePoint;

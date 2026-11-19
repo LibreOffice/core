@@ -297,4 +297,35 @@ describe(['tagdesktop'], 'Local cell cursor and selection', function() {
 			expect(receivedMessages(this.win, 'cellautofillarea:')).to.have.lengthOf(0);
 		}.bind(this));
 	});
+
+	it('keeps the cell cursor sliding when its cell is reported again', function() {
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A1');
+
+		cy.then(function() {
+			var docLayer = this.win.app.map._docLayer;
+			var section = docLayer._cellCursorSection;
+			var sectionClass = section.constructor;
+			var slideTime = sectionClass.slideTime;
+
+			// Make the slide long enough to still run at the checks below.
+			sectionClass.slideTime = 60000; // 60 seconds
+
+			// Move to C3; the cursor should be drawn on its way there.
+			docLayer.setCellCursor({ col: 2, row: 2 });
+			var target = this.win.app.calc.cellCursorRectangle;
+			expect(section.getDrawnRectangle().x1).to.be.lessThan(target.x1);
+
+			// Set the cursor on C3 again, as a second report of the same
+			// move from the engine does; the slide should continue.
+			docLayer.setCellCursor({ col: 2, row: 2 });
+			expect(section.getDrawnRectangle().x1).to.be.lessThan(target.x1);
+
+			// End the slide; the cursor should be drawn on C3.  Hiding the
+			// cursor first prevents the cursor from sliding.
+			sectionClass.slideTime = slideTime;
+			docLayer.setCellCursor(null); // hide the cursor
+			docLayer.setCellCursor({ col: 2, row: 2 });
+			expect(section.getDrawnRectangle().x1).to.equal(target.x1);
+		}.bind(this));
+	});
 });
