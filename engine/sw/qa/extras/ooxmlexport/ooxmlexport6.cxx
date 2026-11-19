@@ -882,10 +882,10 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr",
             "val", u"accent6");
-    // check whether theme color has been converted into native color
-    assertXPathInsensitive(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr",
-            "val", u"9bbb59");
+    // the line names the theme colour it was given, as the fill above does
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:schemeClr",
+            "val", u"accent3");
 
     // check color transformations applied to theme colors have been preserved
     assertXPath(pXmlDocument,
@@ -895,7 +895,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
             "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr/a:lumOff",
             "val", u"60000");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr/a:lumMod",
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:schemeClr/a:lumMod",
             "val", u"50000");
 
     // check direct color assignments have been preserved

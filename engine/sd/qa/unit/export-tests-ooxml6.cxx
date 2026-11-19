@@ -478,6 +478,27 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testSatModAboveTheShortRange)
                 "val", u"350000");
 }
 
+// A line coloured from the theme keeps naming the theme, not the colour it resolves to.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testLineColourKeepsNamingTheTheme)
+{
+    // The master holds a shape whose fill and line are both accent2 with changes applied.
+    createSdImpressDoc("pptx/line-colour-from-the-theme.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    const OString aLine
+        = "/p:sldMaster/p:cSld/p:spTree/p:sp[1]/p:spPr/a:ln/a:solidFill/a:schemeClr"_ostr;
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. export wrote the colour the theme reference resolves to (a:srgbClr), so the line
+    // kept its shade but no longer followed the theme.
+    assertXPath(pXmlDoc, aLine, "val", u"accent2");
+    assertXPath(pXmlDoc, aLine + "/a:shade", "val", u"70000");
+    assertXPath(pXmlDoc, aLine + "/a:satMod", "val", u"200000");
+}
+
 // A shape that takes its fill and its line from the theme keeps naming the theme, so that
 // changing the theme still recolours it.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testShapeStyleThemeColor)

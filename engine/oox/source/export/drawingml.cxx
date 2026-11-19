@@ -1133,7 +1133,6 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
 
     // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
-    ::Color aResolvedColorFillScheme;
 
     ::Color nOriginalColor;
     ::Color nStyleColor;
@@ -1154,8 +1153,6 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         {
             if( rProp.Name == "SpPrLnSolidFillSchemeClr" )
                 rProp.Value >>= sColorFillScheme;
-            if( rProp.Name == "SpPrLnSolidFillResolvedSchemeClr" )
-                rProp.Value >>= aResolvedColorFillScheme;
             else if( rProp.Name == "OriginalLnSolidFillClr" )
                 rProp.Value >>= nOriginalColor;
             else if( rProp.Name == "StyleLnRef" )
@@ -1259,8 +1256,10 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         }
         else if( !sColorFillScheme.isEmpty() )
         {
-            // the line had a scheme color and the user didn't change it
-            WriteSolidFill( aResolvedColorFillScheme, aTransformations );
+            // The line had a theme color and the user didn't change it, so name the theme
+            // color again. Writing the color it resolves to would keep the line the shade it
+            // is now but cut it off from the theme, so a later theme change would miss it.
+            WriteSolidFill( sColorFillScheme, aTransformations, nColorAlpha );
         }
         else
         {
