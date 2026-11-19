@@ -186,7 +186,7 @@ void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& )
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent )
 {
     SolarMutexGuard aGuard;
-    return sfx2::FileDialogHelper::HelpRequested( aEvent );
+    return handleHelpRequested(aEvent);
 }
 
 void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent )
@@ -2800,11 +2800,6 @@ void FileDialogHelper::FileSelectionChanged()
 void FileDialogHelper::DirectoryChanged()
 {
     mpImpl->handleDirectoryChanged();
-}
-
-OUString FileDialogHelper::HelpRequested( const FilePickerEvent& aEvent )
-{
-    return sfx2::FileDialogHelper_Impl::handleHelpRequested( aEvent );
 }
 
 void FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEvent )
