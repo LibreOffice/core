@@ -16,6 +16,7 @@ class SlideShowNavigator {
 	private slideShowHandler: SlideShowHandler;
 	private presenter: SlideShowPresenter;
 	private keyHandlerMap: Record<string, () => void>;
+	private altKeyHandlerMap: Record<string, () => void>;
 	private swipeHandlerMap: Record<string, () => void>;
 	private _canvasClickHandler: MouseClickHandler;
 	private currentSlide: number;
@@ -61,6 +62,11 @@ class SlideShowNavigator {
 			),
 			KeyB: this.blankScreen.bind(this, 'black'),
 			KeyW: this.blankScreen.bind(this, 'white'),
+		};
+		// With Alt held, PageDown and PageUp change the slide in one press.
+		this.altKeyHandlerMap = {
+			PageDown: this.goToNextSlide.bind(this),
+			PageUp: this.goToPreviousSlide.bind(this),
 		};
 		this.swipeHandlerMap = {
 			[Hammer.DIRECTION_RIGHT]: this.rewindEffect.bind(this),
@@ -157,6 +163,38 @@ class SlideShowNavigator {
 		if (!bRet) {
 			this.switchSlide(1, true);
 		}
+	}
+
+	// Go to the next slide at once, with its transition. The effects that are playing and the ones
+	// still waiting on the current slide are dropped.
+	goToNextSlide() {
+		if (!this.canUserAdvanceEffect()) return;
+		NAVDBG.print(
+			'SlideShowNavigator.goToNextSlide: current index: ' + this.currentSlide,
+		);
+		// A follower goes only as far as the leader.
+		if (this.presenter.isFollower()) {
+			this.skipAllEffects();
+			return;
+		}
+		// The slide index moves when the slide being fetched is shown. A press while it loads is
+		// replayed as a step to the slide after it.
+		if (this.isSlideLoading) {
+			this.isEffectPending = true;
+			return;
+		}
+		this.switchSlide(1, false);
+	}
+
+	// Go to the previous slide at once, without its transition. It starts before its first effect.
+	goToPreviousSlide() {
+		NAVDBG.print(
+			'SlideShowNavigator.goToPreviousSlide: current index: ' +
+				this.currentSlide,
+		);
+		if (this.backToLastSlide()) return;
+		if (this.isSlideLoading || !this.currentSlide) return;
+		this.switchSlide(-1, true);
 	}
 
 	rewindEffect() {
@@ -730,7 +768,9 @@ class SlideShowNavigator {
 			return;
 		}
 		if (!this.isEnabled && aEvent.code !== 'Escape') return;
-		const handler = this.keyHandlerMap[aEvent.code];
+		const handler =
+			(aEvent.altKey && this.altKeyHandlerMap[aEvent.code]) ||
+			this.keyHandlerMap[aEvent.code];
 		if (handler) {
 			aEvent.preventDefault();
 			aEvent.stopPropagation();

@@ -308,17 +308,18 @@ function waitForSlideShowIdle(win) {
 // SlideShowNavigator keydown handler is registered. We go through
 // the presenter's _slideShowWindowProxy to get the same object
 // reference that addEventListener was called on.
-function sendSlideShowKey(win, keyCode) {
+// The optional modifiers object takes the KeyboardEvent flags, such as { altKey: true }.
+function sendSlideShowKey(win, keyCode, modifiers) {
 	cy.then(function() {
 		var presenter = win.app.map.slideShowPresenter;
 		var proxyWin = presenter._slideShowWindowProxy.contentWindow;
 		var doc = proxyWin.document;
-		doc.dispatchEvent(new proxyWin.KeyboardEvent('keydown', {
+		doc.dispatchEvent(new proxyWin.KeyboardEvent('keydown', Object.assign({
 			code: keyCode,
 			key: keyCode,
 			bubbles: true,
 			cancelable: true,
-		}));
+		}, modifiers)));
 	});
 }
 
