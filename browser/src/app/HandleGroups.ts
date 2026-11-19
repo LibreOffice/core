@@ -1794,11 +1794,6 @@ class TiePointHandles extends HandleGroup {
 		);
 	}
 
-	/// The point the keyboard is on is shown larger and holds still.
-	public blinksWhileActive(): boolean {
-		return false;
-	}
-
 	/// A point is small and sits on the edge of the object, so a press takes it from twice as far.
 	public reachOf(usual: number): number {
 		return 2 * usual;
@@ -2712,11 +2707,6 @@ class PathHandles extends HandlesMovedOneByOne {
 		return this.selection.pathEditor()?.canBeClosedOrOpened() ?? false;
 	}
 
-	/// The point the keyboard is on is drawn larger and does not blink.
-	public blinksWhileActive(): boolean {
-		return false;
-	}
-
 	/// Points and weights are drawn smaller than the eight handles, so a press reaches them from
 	/// twice the usual distance.
 	public reachOf(usual: number): number {
@@ -3042,11 +3032,6 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 	/// usual distance as well.
 	public reachOf(usual: number): number {
 		return 2 * usual;
-	}
-
-	/// The point the keyboard is on is drawn larger and does not blink, as a point of a path.
-	public blinksWhileActive(): boolean {
-		return false;
 	}
 
 	/// A point or a weight is filled in the colour its path is shown in.
