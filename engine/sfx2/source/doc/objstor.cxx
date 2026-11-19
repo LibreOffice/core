@@ -580,6 +580,11 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
             if ( pImpl->m_bIsInit )
                 pImpl->m_bIsInit = false;
 
+            // ImportFrom creates the object container on a temporary storage before it runs the
+            // filter. The embedded objects of the generated document are in its own storage.
+            if (pImpl->mxObjectContainer)
+                pImpl->mxObjectContainer->SwitchPersistence(xStorage);
+
             if ( LoadOwnFormat( *pMedium ) )
             {
                 bHasName = true;

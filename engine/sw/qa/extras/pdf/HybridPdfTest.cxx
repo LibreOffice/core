@@ -12,6 +12,9 @@
 #include <unotxdoc.hxx>
 #include <config_pdfimport.h>
 
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <comphelper/processfactory.hxx>
+
 using namespace css;
 using namespace ::cpo;
 using namespace ::cpo::uno;
@@ -30,12 +33,14 @@ public:
     void testHybridWithAdditionalStreams();
     void testHybridWithAdditionalStreamsAndAttachedFile();
     void testHybridWithAttachedFileAndPass();
+    void testHybridWithEmbeddedObject();
 
     CPPUNIT_TEST_SUITE(HybridPdfTest);
     CPPUNIT_TEST(testNoHybridDataInPDF);
     CPPUNIT_TEST(testHybridWithAdditionalStreams);
     CPPUNIT_TEST(testHybridWithAdditionalStreamsAndAttachedFile);
     CPPUNIT_TEST(testHybridWithAttachedFileAndPass);
+    CPPUNIT_TEST(testHybridWithEmbeddedObject);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -92,6 +97,21 @@ void HybridPdfTest::testHybridWithAttachedFileAndPass()
     // This wouldn't be possible with a PDF, so the opened document has to be ODT
     CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. \nThat didn't bode well."_ustr,
                          getParagraph(1)->getString());
+#endif
+}
+
+void HybridPdfTest::testHybridWithEmbeddedObject()
+{
+#if ENABLE_PDFIMPORT
+    // Load PDF document with an embedded ODT document that has a chart, an embedded object
+    createSwDoc("Hybrid_EmbeddedObject.pdf");
+
+    // The chart is read from the storage of the embedded ODT document, so saving keeps it
+    save(TestFilter::ODT);
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"Object 1/content.xml"_ustr));
 #endif
 }
 
