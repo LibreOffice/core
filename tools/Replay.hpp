@@ -525,7 +525,7 @@ public:
             out = "save dontTerminateEdit=0 dontSaveIfUnmodified=1"; // .uno:Save will crash in debug
 
         else if (tokens.equals(0, "load")) {
-            std::string url = tokens[1];
+            [[maybe_unused]] std::string url = tokens[1];
             assert(!strncmp(url.c_str(), "url=", 4));
 
             // load url=file%3A%2F%2F%2Ftmp%2Fhello-world.odt deviceFormFactor=desktop

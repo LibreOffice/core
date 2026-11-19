@@ -1398,9 +1398,9 @@ Session::Session(std::string hostname, Protocol protocolType, int portNumber)
 
     if constexpr (Util::isDebugEnabled())
     {
-        std::string scheme;
-        std::string hostString;
-        std::string portString;
+        [[maybe_unused]] std::string scheme;
+        [[maybe_unused]] std::string hostString;
+        [[maybe_unused]] std::string portString;
         assert(net::parseUri(_host, scheme, hostString, portString) && scheme.empty() &&
                portString.empty() && hostString == _host &&
                "http::Session expects a hostname and not a URI");
