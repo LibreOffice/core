@@ -6712,13 +6712,16 @@ void DesktopKitTest::testObjectPathCommands()
     pDocument->setObjectPoints(nId, "-0,0,2", "line");
     CPPUNIT_ASSERT_EQUAL(nUndoSteps, pUndoManager->GetUndoActionCount());
 
-    // A curve with its weights at a third and two thirds of the edge looks straight, so
-    // simplifying makes it a line again. 567 twips are 1000 model units, give or take one, so the
-    // weights lie a little off the edge.
+    // Simplifying removes the weights of a curve as one step to undo. A move does not belong to
+    // that step, so a change with one changes nothing.
     pDocument->setObjectPoints(nId, "0,0,2,1890,567,0;0,1,1,2646,567,0", "curve");
     CPPUNIT_ASSERT(aPolygon().isNextControlPointUsed(0));
-    pDocument->simplifyObjectPath(nId, false);
+    const size_t nCurveSteps(pUndoManager->GetUndoActionCount());
+    pDocument->setObjectPoints(nId, "-0,0,2;0,1,1,2646,600,0", "simplify");
+    CPPUNIT_ASSERT(aPolygon().isNextControlPointUsed(0));
+    pDocument->setObjectPoints(nId, "-0,0,2;-0,1,1", "simplify");
     CPPUNIT_ASSERT(!pSquare->GetPathPoly().areControlPointsUsed());
+    CPPUNIT_ASSERT_EQUAL(nCurveSteps + 1, pUndoManager->GetUndoActionCount());
 
     // A point added after the first point, on the top edge, takes index 1 and the square keeps
     // its shape. 1701 and 567 twips are 3000 and 1000 model units, give or take one.
@@ -6756,13 +6759,11 @@ void DesktopKitTest::testObjectPathCommands()
     pDocument->setObjectPoints(nId, "-0,0,0;-0,0,0;-0,0,0;-0,0,0", "delete");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
 
-    // A point added on an edge lies on the line between its neighbours. Simplify Curves keeps it,
-    // and Simplify All deletes it. The corners of the square stay.
+    // Simplifying removes points too. A point added on the top edge goes again, and the corners
+    // of the square stay.
     pDocument->setObjectPoints(nId, "+0,1,1702,567", "add");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
-    pDocument->simplifyObjectPath(nId, false);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
-    pDocument->simplifyObjectPath(nId, true);
+    pDocument->setObjectPoints(nId, "-0,1,0", "simplify");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 1000), aPolygon().getB2DPoint(1));
 

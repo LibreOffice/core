@@ -1003,10 +1003,11 @@ setobjectpoints id=<id> changes=<changes> [as=<step>] [sequence=<sequence>]
     deleting its object.
 
     <step> names the step in the undo list: "move", the default, "add", "delete", "continuity",
-    "curve" or "line". An addition belongs to the step "add", a removal of a point to the step
-    "delete", and a removal of a weight to any step but "move" and "delete". The step "delete"
-    has nothing but removals of points. A message with any other step, or with an item that does
-    not belong to its step, changes nothing.
+    "curve", "line" or "simplify". An addition belongs to the step "add", a removal of a point to
+    the steps "delete" and "simplify", and a removal of a weight to any step but "move" and
+    "delete". The step "delete" has nothing but removals of points, and the step "simplify" has
+    nothing but removals. A message with any other step, or with an item that does not belong to
+    its step, changes nothing.
 
     Changes those points and leaves every other point of the path untouched, in one step that can
     be undone. Moving one weight of a point that is run through smoothly or symmetrically carries
@@ -1035,13 +1036,6 @@ setobjectpathclosed id=<id> closed=<closed> [at=<at>]
     points. With <at>, which is "<polygon>,<point>" as for setobjectpoints, a closed path of one
     polygon with three points or more is opened at that point instead, and the point becomes
     both of its ends, so no edge is lost. <at> goes only with 'false'.
-
-simplifyobjectpath id=<id> points=<points>
-
-    <id> is a drawing object, as for setobjectpoints. <points> is 'true' or 'false'. Turns every
-    curved edge of the path that runs straight into a line, as one undo step. A curve runs
-    straight when its weights lie on the line between its ends. With 'true', the same step also
-    deletes the points that lie on a straight line between their neighbours.
 
 reportmousepointer wanted=<wanted>
 

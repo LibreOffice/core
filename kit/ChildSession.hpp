@@ -240,9 +240,6 @@ private:
     /// Closes the path of a drawing object, or opens it, at one of its points where it names one.
     bool setObjectPathClosed(const StringVector& tokens);
 
-    /// Turns every curved edge of the path of a drawing object that runs straight into a line.
-    bool simplifyObjectPath(const StringVector& tokens);
-
     /// Reads the object id from the token after the command name, and makes this view the
     /// current one. Returns false and sends an error when the id is missing or the view is
     /// read-only.

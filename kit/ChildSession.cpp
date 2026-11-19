@@ -683,7 +683,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setobjectpoints") ||
                tokens.equals(0, "splitobjectpath") ||
                tokens.equals(0, "setobjectpathclosed") ||
-               tokens.equals(0, "simplifyobjectpath") ||
                tokens.equals(0, "setobjectgluepoint") ||
                tokens.equals(0, "insertobjectgluepoint") ||
                tokens.equals(0, "deleteobjectgluepoint") ||
@@ -802,10 +801,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "setobjectpathclosed"))
         {
             return setObjectPathClosed(tokens);
-        }
-        else if (tokens.equals(0, "simplifyobjectpath"))
-        {
-            return simplifyObjectPath(tokens);
         }
         else if (tokens.equals(0, "setobjectgluepoint"))
         {
@@ -2197,25 +2192,6 @@ bool ChildSession::setObjectPathClosed(const StringVector& tokens)
         return false;
 
     getLOKitDocument()->setObjectPathClosed(objectId, closed == "true", atPolygon, atPoint);
-    return true;
-}
-
-bool ChildSession::simplifyObjectPath(const StringVector& tokens)
-{
-    unsigned long long objectId = 0;
-    std::string points;
-
-    if (tokens.size() != 3 || !getTokenString(tokens[2], "points", points)
-        || (points != "true" && points != "false"))
-    {
-        sendTextFrameAndLogError("error: cmd=simplifyobjectpath kind=syntax");
-        return false;
-    }
-
-    if (!readObjectToChange(tokens, "simplifyobjectpath", objectId))
-        return false;
-
-    getLOKitDocument()->simplifyObjectPath(objectId, points == "true");
     return true;
 }
 

@@ -270,7 +270,6 @@ namespace desktop {
                              unsigned long long nNewId) override;
         void setObjectPathClosed(unsigned long long nObjectId, bool bClosed, int nAtPolygon,
                                  int nAtPoint) override;
-        void simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine) override;
         void setObjectGluePoint(unsigned long long nObjectId, int nAt, double fX,
                                 double fY) override;
         void insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY) override;

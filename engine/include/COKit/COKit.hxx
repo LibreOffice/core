@@ -1394,9 +1394,10 @@ struct COKitDocument
      *        part 1 or 2 it removes that weight. A polygon that points were removed from keeps
      *        two points at least, and goes when none is left. The path keeps one polygon at least.
      * @param pStep the name of the step in the undo list: "move", "add", "delete", "continuity",
-     *        "curve" or "line". An addition belongs to the step "add", a removal of a point to the
-     *        step "delete", and a removal of a weight to any step but "move" and "delete". The
-     *        step "delete" has nothing but removals of points.
+     *        "curve", "line" or "simplify". An addition belongs to the step "add", a removal of a
+     *        point to the steps "delete" and "simplify", and a removal of a weight to any step but
+     *        "move" and "delete". The step "delete" has nothing but removals of points, and the
+     *        step "simplify" has nothing but removals.
      *
      * Only what is named changes. The rest of the path is left as it stands, so nothing that was
      * not touched can change. Moving a point takes the weights of its curves along with it, and
@@ -1441,17 +1442,6 @@ struct COKitDocument
     virtual void setObjectPathClosed(unsigned long long nObjectId, bool bClosed, int nAtPolygon,
                                      int nAtPoint)
         = 0;
-
-    /**
-     * Turns every curved edge of the path of a drawing object that runs straight into a line. A
-     * curve runs straight when its weights lie on the line between its ends. It is one undo step,
-     * and none when nothing changes.
-     *
-     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
-     * @param bPointsOnALine true to also delete the points that lie on a straight line between
-     *        their neighbours.
-     */
-    virtual void simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine) = 0;
 
     /**
      * Moves one of the points a drawing object was given for a connector to tie itself to.

@@ -2384,7 +2384,6 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "setobjectpoints") ||
              tokens.equals(0, "splitobjectpath") ||
              tokens.equals(0, "setobjectpathclosed") ||
-             tokens.equals(0, "simplifyobjectpath") ||
              tokens.equals(0, "setobjectgluepoint") ||
              tokens.equals(0, "insertobjectgluepoint") ||
              tokens.equals(0, "deleteobjectgluepoint") ||

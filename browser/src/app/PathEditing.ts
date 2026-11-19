@@ -45,6 +45,17 @@ interface PathWeightRemoval extends PathPlace {
 }
 
 /*
+	What simplifying a path removes, as one step: the weights of the curved edges that run
+	straight, named by their places in the path as it is, and then the points that lie on a
+	straight line between their neighbours. Each point is named by its place in the path without
+	the points before it.
+*/
+interface PathSimplification {
+	weights: PathWeightRemoval[];
+	points: PathPlace[];
+}
+
+/*
 	The weights of a path changed by one step: the weights that moved, those that were removed,
 	and the name of the step in the undo list.
 */
@@ -87,9 +98,8 @@ interface PathSink {
 	/// The path is closed, or opened. A closed path opened at a point has that point at both
 	/// of its ends.
 	setClosed(closed: boolean, at?: PathPlace): void;
-	/// Every curved edge that runs straight becomes a line; with pointsOnALine, the points
-	/// that lie on a straight line between their neighbours go as well.
-	simplify(pointsOnALine: boolean): void;
+	/// Weights and points are removed, as one step, in the order given.
+	simplify(simplification: PathSimplification): void;
 }
 
 /*
@@ -802,8 +812,16 @@ class PathEditing implements HandleSource {
 	/// Turns every curved edge that runs straight into a line. With pointsOnALine, it also
 	/// deletes the points that lie on a straight line between their neighbours.
 	public simplify(pointsOnALine: boolean): void {
-		this.changeHere((path) => PathEditing.simplified(path, pointsOnALine));
-		this.sink.simplify(pointsOnALine);
+		const path = this.path();
+		if (!path) return;
+
+		const simplification = PathEditing.simplification(path, pointsOnALine);
+		if (!simplification.weights.length && !simplification.points.length) return;
+
+		this.changeHere((changed) =>
+			PathEditing.withTheSimplification(changed, simplification),
+		);
+		this.sink.simplify(simplification);
 	}
 
 	/// A closed path can always be opened. An open path can be closed when one of its polygons
@@ -1065,40 +1083,73 @@ class PathEditing implements HandleSource {
 	}
 
 	/*
-		Every curved edge that runs straight made a line: one whose weights lie on the line
-		between its ends. With pointsOnALine the points that lie on a straight line between their
-		neighbours go too, walking each polygon once as the engine does: a point goes when it and
-		every point gone since the last one kept lie on the line from that one to the next. An
-		open polygon keeps its ends, a closed one at least three points.
+		What simplifying the path removes. A curved edge runs straight when its weights lie on
+		the line between its ends, and its weights go. With pointsOnALine the points that lie on a
+		straight line between their neighbours go too, from the last to the first in each
+		polygon, so the place of each one stays as it is until it goes.
 	*/
-	private static simplified(
+	private static simplification(
 		path: cool.ObjectPathPolygon[],
 		pointsOnALine: boolean,
-	): cool.ObjectPathPolygon[] | null {
-		// the engine allows one of its units, a hundredth of a millimetre, in twips
-		const reach = 1440 / 2540;
+	): PathSimplification {
+		// The path is in whole twips, so a point placed on a line can be as far as the diagonal of
+		// a twip away from it.
+		const reach = Math.SQRT2;
+		const simplification: PathSimplification = { weights: [], points: [] };
 
-		for (const polygon of path) {
-			const points = polygon.points ?? [];
+		path.forEach((given: cool.ObjectPathPolygon, polygon: number) => {
+			// The points are looked at without the weights that go.
+			const points = (given.points ?? []).map(
+				(point: cool.ObjectPathPoint) => ({ ...point }),
+			);
+			const flattened = { ...given, points: points };
 			points.forEach((point: cool.ObjectPathPoint, at: number) => {
-				const next = PathEditing.nextOf(polygon, at);
+				const next = PathEditing.nextOf(flattened, at);
 				if (next === null) return;
 				const edge = PathEditing.edgeOf(point, points[next]);
 				if (
-					edge.curved &&
-					PathEditing.onTheLine(edge.start, edge.end, edge.out, reach) &&
-					PathEditing.onTheLine(edge.start, edge.end, edge.into, reach)
-				) {
-					delete point.aheadX;
-					delete point.aheadY;
-					delete points[next].behindX;
-					delete points[next].behindY;
-				}
+					!edge.curved ||
+					!PathEditing.onTheLine(edge.start, edge.end, edge.out, reach) ||
+					!PathEditing.onTheLine(edge.start, edge.end, edge.into, reach)
+				)
+					return;
+
+				if (point.aheadX !== undefined)
+					simplification.weights.push({ polygon, point: at, part: 2 });
+				if (points[next].behindX !== undefined)
+					simplification.weights.push({ polygon, point: next, part: 1 });
+				delete point.aheadX;
+				delete point.aheadY;
+				delete points[next].behindX;
+				delete points[next].behindY;
 			});
 
-			if (pointsOnALine)
-				polygon.points = PathEditing.withoutPointsOnALine(polygon, reach);
+			if (!pointsOnALine) return;
+			const kept = new Set(PathEditing.keptOffALine(flattened, reach));
+			for (let at = points.length - 1; at >= 0; --at)
+				if (!kept.has(at)) simplification.points.push({ polygon, point: at });
+		});
+		return simplification;
+	}
+
+	/// The path without the weights and the points that the simplification removes.
+	private static withTheSimplification(
+		path: cool.ObjectPathPolygon[],
+		simplification: PathSimplification,
+	): cool.ObjectPathPolygon[] | null {
+		for (const weight of simplification.weights) {
+			const point = path[weight.polygon]?.points?.[weight.point];
+			if (!point) return null;
+			if (weight.part === 1) {
+				delete point.behindX;
+				delete point.behindY;
+			} else {
+				delete point.aheadX;
+				delete point.aheadY;
+			}
 		}
+		for (const place of simplification.points)
+			if (!PathEditing.withoutThePoint(path, place)) return null;
 		return path;
 	}
 
@@ -1119,17 +1170,25 @@ class PathEditing implements HandleSource {
 		return from.add(along.multiplyBy(cut)).subtract(at).length() <= reach;
 	}
 
-	/// The points of a polygon without those on a straight line between their neighbours, by the
-	/// engine's walk.
-	private static withoutPointsOnALine(
+	/*
+		The places of the points of a polygon that do not lie on a straight line between their
+		neighbours. An open polygon keeps its ends, and a closed one at least three points.
+
+		It walks the polygon once. A point goes when it, and every point gone since the last one
+		kept, lie on the line from that one to the next point. So each line left stays close to
+		all the points it takes the place of. A closed polygon keeps its first point during the
+		walk and looks at it at the end, against the points kept on each side of it.
+	*/
+	private static keptOffALine(
 		polygon: cool.ObjectPathPolygon,
 		reach: number,
-	): cool.ObjectPathPoint[] {
+	): number[] {
 		const points = polygon.points ?? [];
 		const count = points.length;
 		const closed = polygon.closed === true;
 		const least = closed ? 3 : 2;
-		if (count <= least) return points;
+		if (count <= least)
+			return points.map((_point: cool.ObjectPathPoint, at: number) => at);
 
 		const straight = (point: cool.ObjectPathPoint) =>
 			point.aheadX === undefined && point.behindX === undefined;
@@ -1168,7 +1227,7 @@ class PathEditing implements HandleSource {
 		)
 			kept.shift();
 
-		return kept.map((at: number) => points[at]);
+		return kept;
 	}
 
 	/// Every polygon closed, without points at its end that repeat its first, or every one open.
@@ -1829,8 +1888,20 @@ class ObjectPathSink implements PathSink {
 		);
 	}
 
-	public simplify(pointsOnALine: boolean): void {
-		this.send('simplifyobjectpath', 'points=' + String(pointsOnALine));
+	/// The weights go first, named by their places in the path as it is, and the points after
+	/// them.
+	public simplify(simplification: PathSimplification): void {
+		const items = simplification.weights
+			.map(
+				(weight: PathWeightRemoval) =>
+					'-' + [weight.polygon, weight.point, weight.part].join(','),
+			)
+			.concat(
+				simplification.points.map(
+					(place: PathPlace) => '-' + [place.polygon, place.point, 0].join(','),
+				),
+			);
+		this.send('setobjectpoints', 'changes=' + items.join(';') + ' as=simplify');
 	}
 
 	public pathChangedHere(_path: cool.ObjectPathPolygon[]): void {

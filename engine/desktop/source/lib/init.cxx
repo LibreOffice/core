@@ -27,7 +27,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdouno.hxx>
@@ -5906,8 +5906,8 @@ static void lcl_removeWeight(basegfx::B2DPolyPolygon& rPath, std::string_view aI
 
 /*
     The description of the undo step for a change of the points of a path, by the name of the
-    step: "move", "add", "delete", "continuity", "curve" or "line". Answers nothing for any other
-    name.
+    step: "move", "add", "delete", "continuity", "curve", "line" or "simplify". Answers nothing for
+    any other name.
 */
 static std::optional<TranslateId> lcl_stepOf(std::string_view aStep)
 {
@@ -5921,6 +5921,8 @@ static std::optional<TranslateId> lcl_stepOf(std::string_view aStep)
         return STR_EditSetPointsSmooth;
     if (aStep == "curve" || aStep == "line")
         return STR_EditSetSegmentsKind;
+    if (aStep == "simplify")
+        return STR_EditSimplifyPath;
     return std::nullopt;
 }
 
@@ -5943,11 +5945,12 @@ static std::optional<TranslateId> lcl_stepOf(std::string_view aStep)
     A polygon that points were removed from keeps two points at least, and goes when it has none
     left. The path keeps one polygon at least. A change that leaves less changes nothing.
 
-    The step names the change in the undo list: "move", "add", "delete", "continuity", "curve" or
-    "line". An addition belongs to the step "add", a removal of a point to the step "delete", and
-    a removal of a weight to any step but "move" and "delete". The step "delete" has nothing but
-    removals of points. A change with any other step, or with an item that does not belong to its
-    step, changes nothing.
+    The step names the change in the undo list: "move", "add", "delete", "continuity", "curve",
+    "line" or "simplify". An addition belongs to the step "add", a removal of a point to the steps
+    "delete" and "simplify", and a removal of a weight to any step but "move" and "delete". The
+    step "delete" has nothing but removals of points, and the step "simplify" has nothing but
+    removals. A change with any other step, or with an item that does not belong to its step,
+    changes nothing.
 */
 void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char* pChanges,
                                         const char* pStep)
@@ -5993,13 +5996,15 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
 
         bool bOfItsStep = true;
         if (bPointRemoval)
-            bOfItsStep = aStep == "delete";
+            bOfItsStep = aStep == "delete" || aStep == "simplify";
         else if (aStep == "delete")
             bOfItsStep = false;
         else if (aChange.startsWith("+"))
             bOfItsStep = aStep == "add";
         else if (aChange.startsWith("-"))
             bOfItsStep = aStep != "move";
+        else
+            bOfItsStep = aStep != "simplify";
 
         if (!bOfItsStep)
         {
@@ -6234,154 +6239,6 @@ void COKitDocumentImpl::setObjectPathClosed(unsigned long long nObjectId, bool b
     rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pPathObject));
     pPathObject->ToggleClosed();
     rModel.EndUndo();
-}
-
-/*
-    Whether rPoint lies on the edge from rStart to rEnd, as far as a path given in whole twips can
-    say. Each of the three can be up to half a twip off its place on each axis, so a point placed
-    on the edge can end up as far as the diagonal of a twip away from it. The cut is where the
-    nearest place on the edge is, from 0 at rStart to 1 at rEnd.
-*/
-static bool lcl_isOnTheEdge(const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
-                            const basegfx::B2DPoint& rPoint, double& rCut)
-{
-    const double fTwipDiagonal(
-        o3tl::convert(std::sqrt(2.0), o3tl::Length::twip, o3tl::Length::mm100));
-    return basegfx::utils::getSmallestDistancePointToEdge(rStart, rEnd, rPoint, rCut)
-           <= fTwipDiagonal;
-}
-
-/*
-    Whether the point nPoint lies on the straight line from nBefore to nAfter, between them. The
-    point has no weights, nBefore has no outgoing weight and nAfter has no incoming weight.
-*/
-static bool lcl_liesOnTheLine(const basegfx::B2DPolygon& rPolygon, sal_uInt32 nBefore,
-                              sal_uInt32 nPoint, sal_uInt32 nAfter)
-{
-    if (rPolygon.isNextControlPointUsed(nBefore) || rPolygon.isPrevControlPointUsed(nPoint)
-        || rPolygon.isNextControlPointUsed(nPoint) || rPolygon.isPrevControlPointUsed(nAfter))
-        return false;
-
-    double fCut = 0.0;
-    return lcl_isOnTheEdge(rPolygon.getB2DPoint(nBefore), rPolygon.getB2DPoint(nAfter),
-                           rPolygon.getB2DPoint(nPoint), fCut)
-           && fCut > 0.0 && fCut < 1.0;
-}
-
-/*
-    Whether every point between nFrom and nTo lies on the straight line from nFrom to nTo. The
-    count wraps around the end of the polygon. If true, one line from nFrom to nTo can replace
-    those points without changing the shape.
-*/
-static bool lcl_runsStraight(const basegfx::B2DPolygon& rPolygon, sal_uInt32 nFrom, sal_uInt32 nTo)
-{
-    const sal_uInt32 nCount(rPolygon.count());
-    for (sal_uInt32 nPoint = (nFrom + 1) % nCount; nPoint != nTo; nPoint = (nPoint + 1) % nCount)
-    {
-        if (!lcl_liesOnTheLine(rPolygon, nFrom, nPoint, nTo))
-            return false;
-    }
-    return true;
-}
-
-/*
-    The polygon without the points that lie on a straight line between their neighbours. An open
-    polygon keeps its two ends, and a closed polygon keeps at least three points.
-
-    It walks the polygon once. A point is removed when it, and every point removed since the last
-    kept point, lie on the line from the last kept point to the next point. So each remaining line
-    stays close to all the points it replaces. A closed polygon keeps its first point during the
-    walk and tests it at the end, against the kept points on each side of it.
-*/
-static basegfx::B2DPolygon lcl_withoutPointsOnALine(const basegfx::B2DPolygon& rPolygon)
-{
-    const sal_uInt32 nCount(rPolygon.count());
-    const bool bClosed(rPolygon.isClosed());
-    const sal_uInt32 nLeast(bClosed ? 3 : 2);
-    if (nCount <= nLeast)
-        return rPolygon;
-
-    std::vector<sal_uInt32> aKept{ 0 };
-    sal_uInt32 nLeft = nCount;
-    const sal_uInt32 nEnd(bClosed ? nCount : nCount - 1);
-    for (sal_uInt32 nPoint = 1; nPoint < nEnd; ++nPoint)
-    {
-        if (nLeft > nLeast && lcl_runsStraight(rPolygon, aKept.back(), (nPoint + 1) % nCount))
-            --nLeft;
-        else
-            aKept.push_back(nPoint);
-    }
-    if (!bClosed)
-        aKept.push_back(nCount - 1);
-    else if (aKept.size() > nLeast && lcl_runsStraight(rPolygon, aKept.back(), aKept[1]))
-        aKept.erase(aKept.begin());
-
-    if (aKept.size() == nCount)
-        return rPolygon;
-
-    basegfx::B2DPolygon aPolygon;
-    for (const sal_uInt32 nPoint : aKept)
-        aPolygon.append(rPolygon, nPoint, 1);
-    aPolygon.setClosed(bClosed);
-    return aPolygon;
-}
-
-/*
-    The polygon with every curved edge whose weights lie on the edge, between its ends, made a
-    line.
-*/
-static basegfx::B2DPolygon lcl_withStraightCurvesAsLines(const basegfx::B2DPolygon& rPolygon)
-{
-    basegfx::B2DPolygon aPolygon(rPolygon);
-    const sal_uInt32 nCount(rPolygon.count());
-    const sal_uInt32 nEdges(rPolygon.isClosed() || !nCount ? nCount : nCount - 1);
-    for (sal_uInt32 nEdge = 0; nEdge < nEdges; ++nEdge)
-    {
-        const sal_uInt32 nNext((nEdge + 1) % nCount);
-        const basegfx::B2DPoint aStart(rPolygon.getB2DPoint(nEdge));
-        const basegfx::B2DPoint aEnd(rPolygon.getB2DPoint(nNext));
-        const auto aOnTheLine = [&aStart, &aEnd](const basegfx::B2DPoint& rWeight) {
-            double fCut = 0.0;
-            return lcl_isOnTheEdge(aStart, aEnd, rWeight, fCut);
-        };
-
-        // A weight the edge does not have is its end, which lies on the line.
-        if (aOnTheLine(rPolygon.getNextControlPoint(nEdge))
-            && aOnTheLine(rPolygon.getPrevControlPoint(nNext)))
-        {
-            aPolygon.resetNextControlPoint(nEdge);
-            aPolygon.resetPrevControlPoint(nNext);
-        }
-    }
-    return aPolygon;
-}
-
-/*
-    Turns every curved edge of the path of an object that runs straight into a line. A curve
-    whose weights lie on the edge between its ends, as far as whole twips can say, runs straight.
-    Other curves stay. With bPointsOnALine, it then also deletes the points that lie on a
-    straight line between their neighbours.
-*/
-void COKitDocumentImpl::simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine)
-{
-    comphelper::ProfileZone aZone("COKitDocumentImpl::simplifyObjectPath");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
-    if (!pPathObject)
-        return;
-
-    basegfx::B2DPolyPolygon aSimpler;
-    for (const basegfx::B2DPolygon& rPolygon : pPathObject->GetPathPoly())
-    {
-        const basegfx::B2DPolygon aLines(
-            basegfx::utils::simplifyCurveSegments(lcl_withStraightCurvesAsLines(rPolygon)));
-        aSimpler.append(bPointsOnALine ? lcl_withoutPointsOnALine(aLines) : aLines);
-    }
-    if (aSimpler != pPathObject->GetPathPoly())
-        lcl_changePath(*pPathObject, STR_EditSimplifyPath, aSimpler);
 }
 
 /*

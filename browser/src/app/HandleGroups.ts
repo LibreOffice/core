@@ -3014,7 +3014,7 @@ class MotionPathSink implements PathSink {
 	public setClosed(_closed: boolean, _at?: PathPlace): void {
 		// The whole path went out already.
 	}
-	public simplify(_pointsOnALine: boolean): void {
+	public simplify(_simplification: PathSimplification): void {
 		// The whole path went out already.
 	}
 }
