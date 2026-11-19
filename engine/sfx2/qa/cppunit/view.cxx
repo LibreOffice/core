@@ -22,6 +22,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/json_writer.hxx>
@@ -227,6 +228,46 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testScheduler)
     CPPUNIT_ASSERT(nRet != -1);
 }
 #endif
+
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitParsedCommand)
+{
+    // Parse a command with two parameters.
+    KitParsedCommand aCommand
+        = KitParsedCommand::parse(".uno:CellRangeInventory?part=2&english=true");
+    CPPUNIT_ASSERT_EQUAL(std::string_view("CellRangeInventory"), aCommand.aName);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(2), aCommand.aParams.size());
+    CPPUNIT_ASSERT_EQUAL(std::string_view("2"), aCommand.get("part").value());
+    CPPUNIT_ASSERT_EQUAL(std::string_view("true"), aCommand.get("english").value());
+    CPPUNIT_ASSERT(!aCommand.get("formula"));
+
+    // Parse a command with no query; it should have a name and no parameters.
+    aCommand = KitParsedCommand::parse(".uno:CellCursorState");
+    CPPUNIT_ASSERT_EQUAL(std::string_view("CellCursorState"), aCommand.aName);
+    CPPUNIT_ASSERT(aCommand.aParams.empty());
+
+    // Parse a value that starts with '='; only the first '=' should split.
+    aCommand = KitParsedCommand::parse(".uno:EvaluateFormula?cell=A1&formula==SUM(A1:A5)");
+    CPPUNIT_ASSERT_EQUAL(std::string_view("A1"), aCommand.get("cell").value());
+    CPPUNIT_ASSERT_EQUAL(std::string_view("=SUM(A1:A5)"), aCommand.get("formula").value());
+
+    // Parse a key without a value, an empty parameter and an empty value.
+    aCommand = KitParsedCommand::parse(".uno:CalcFunctionList?english&&filter=");
+    CPPUNIT_ASSERT_EQUAL(std::size_t(2), aCommand.aParams.size());
+    CPPUNIT_ASSERT_EQUAL(std::string_view(), aCommand.get("english").value());
+    CPPUNIT_ASSERT_EQUAL(std::string_view(), aCommand.get("filter").value());
+
+    // Decode a URL-encoded value; the raw value should stay encoded.
+    aCommand = KitParsedCommand::parse(".uno:EvaluateFormula?formula=%3DSUM%28A1%3AA5%29");
+    CPPUNIT_ASSERT_EQUAL(std::string_view("%3DSUM%28A1%3AA5%29"),
+                         aCommand.get("formula").value());
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1:A5)"_ustr, aCommand.getDecoded("formula"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), aCommand.getDecoded("cell"));
+
+    // Parse a command without the ".uno:" prefix; nothing should be parsed.
+    aCommand = KitParsedCommand::parse("CellCursorState?part=0");
+    CPPUNIT_ASSERT(aCommand.aName.empty());
+    CPPUNIT_ASSERT(aCommand.aParams.empty());
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -92,6 +92,7 @@
 #if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
 #endif
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/kit/ControlHandler.hxx>
@@ -1558,114 +1559,6 @@ OString ScModelObj::getViewRenderState(const SfxViewShell* pViewShell)
 
 namespace
 {
-/**
- * One command, split into its name and its query parameters.
- *
- * Make sure that it does not outlive the original command string since
- * ParsedCommand references it directly without making copies.
- */
-struct ParsedCommand
-{
-    /** The name, without the ".uno:" prefix and the query. */
-    std::string_view aName;
-    /** The query parameters, still URL-encoded. */
-    std::map<std::string_view, std::string_view> aParams;
-
-    /**
-     * Parse a command of the form ".uno:Name?key1=value1&key2=value2".
-     * Without the ".uno:" prefix.
-     */
-    static ParsedCommand parse(std::string_view aCommand)
-    {
-        ParsedCommand aParsed;
-
-        static constexpr std::string_view aPrefix = ".uno:";
-        if (!aCommand.starts_with(aPrefix))
-            return aParsed;
-
-        aCommand.remove_prefix(aPrefix.size());
-
-        enum class State
-        {
-            Name,
-            Key,
-            Value
-        };
-
-        State eState = State::Name;
-        std::string_view aKey;
-        size_t nStart = 0; // start of the current name, key or value
-
-        for (size_t i = 0; i <= aCommand.size(); ++i)
-        {
-            const bool bEnd = i == aCommand.size();
-            const char c = bEnd ? '\0' : aCommand[i];
-
-            switch (eState)
-            {
-                case State::Name:
-                    if (bEnd || c == '?')
-                    {
-                        aParsed.aName = aCommand.substr(0, i);
-                        eState = State::Key;
-                        nStart = i + 1;
-                    }
-                    break;
-                case State::Key:
-                    if (c == '=')
-                    {
-                        aKey = aCommand.substr(nStart, i - nStart);
-                        eState = State::Value;
-                        nStart = i + 1;
-                    }
-                    else if (bEnd || c == '&')
-                    {
-                        // A key without a value, or an empty parameter to skip.
-                        if (i > nStart)
-                            aParsed.aParams[aCommand.substr(nStart, i - nStart)]
-                                = std::string_view();
-                        nStart = i + 1;
-                    }
-                    break;
-                case State::Value:
-                    // A value may itself contain '=', as in formula==SUM(A1:A5).
-                    if (bEnd || c == '&')
-                    {
-                        aParsed.aParams[aKey] = aCommand.substr(nStart, i - nStart);
-                        eState = State::Key;
-                        nStart = i + 1;
-                    }
-                    break;
-            }
-        }
-
-        return aParsed;
-    }
-
-    /**
-     * Get the raw value of the parameter, if present.
-     */
-    std::optional<std::string_view> get(std::string_view aKey) const
-    {
-        auto it = aParams.find(aKey);
-        if (it == aParams.end())
-            return std::nullopt;
-        return it->second;
-    }
-
-    /**
-     * Get the URL-decoded value of the parameter, or an empty string if not present.
-     */
-    OUString getDecoded(std::string_view aKey) const
-    {
-        const std::optional<std::string_view> oValue = get(aKey);
-        if (!oValue)
-            return OUString();
-        return INetURLObject::decode(OUString::fromUtf8(*oValue),
-                                     INetURLObject::DecodeMechanism::WithCharset);
-    }
-};
-
 enum class CalcCommand
 {
     Unknown,
@@ -1763,7 +1656,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
     if (answerVectorCommand(rJsonWriter, rCommand))
         return;
 
-    const ParsedCommand aCommand = ParsedCommand::parse(rCommand);
+    const KitParsedCommand aCommand = KitParsedCommand::parse(rCommand);
 
     switch (findCalcCommand(aCommand.aName))
     {
