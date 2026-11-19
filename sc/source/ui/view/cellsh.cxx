@@ -1255,7 +1255,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_OPENDLG_CONSOLIDATE:
             case SCITEM_CONSOLIDATEDATA:
                 {
-                    if (rDoc.GetChangeTrack()!=nullptr)
+                    if (rDoc.GetChangeTrack() != nullptr || pDocSh->IsReadOnly())
                         rSet.DisableItem( nWhich);
                 }
                 break;

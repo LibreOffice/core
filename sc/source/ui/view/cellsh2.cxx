@@ -1411,7 +1411,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
             case SID_DEFINE_DBNAME:
                 {
-                    if ( pDocSh->IsDocShared() )
+                    if ( pDocSh->IsDocShared() || pDocSh->IsReadOnly())
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -1491,13 +1491,19 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_TEXT_TO_COLUMNS:
                 {
                     ScRange aRange;
-                    if ( !lcl_GetTextToColumnsRange( rData, aRange, true ) )
+                    if (!lcl_GetTextToColumnsRange(rData, aRange, true) || pDocSh->IsReadOnly())
                     {
                         rSet.DisableItem( nWhich );
                     }
                 }
                 break;
             case SID_MANAGE_XML_SOURCE:
+                break;
+            case SID_SHUFFLE:
+                {
+                    if (pDocSh->IsReadOnly())
+                        rSet.DisableItem( nWhich );
+                }
                 break;
         }
         nWhich = aIter.NextWhich();

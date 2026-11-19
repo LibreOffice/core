@@ -575,10 +575,17 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                         rSet.DisableItem( nWhich );  // disabled if all sheets are already selected
                 }
                 break;
-
             case FID_TOGGLEHIDDENCOLROW:
-                const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
-                rSet.Put( SfxBoolItem( nWhich, rColorCfg.GetColorValue(svtools::CALCHIDDENROWCOL).bIsVisible) );
+                {
+                    const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
+                    rSet.Put( SfxBoolItem( nWhich, rColorCfg.GetColorValue(svtools::CALCHIDDENROWCOL).bIsVisible) );
+                }
+                break;
+            case FID_HANDLEDUPLICATERECORDS:
+                {
+                    if (pDocShell->IsReadOnly())
+                        rSet.DisableItem( nWhich );
+                }
                 break;
 
         } // switch ( nWitch )
