@@ -116,6 +116,25 @@ describe(['tagdesktop'], 'Points of a polygon on a vector slide', function() {
 		helper.waitForMapState('editpathpoints', shown ? 'true' : 'false');
 	}
 
+	// Drags from one place to another on the page, in twips, in steps.
+	function dragFrom(win, from, to) {
+		cy.then(function() {
+			var start = onCanvas(win, from.x, from.y);
+			var drawing = cy.cGet('#document-canvas').trigger('mousedown', start.x, start.y,
+				{ button: 0, buttons: 1 });
+			for (var step = 1; step <= 10; ++step) {
+				var place = onCanvas(win, from.x + step / 10 * (to.x - from.x),
+					from.y + step / 10 * (to.y - from.y));
+				drawing = drawing.trigger('mousemove', place.x, place.y, { button: 0, buttons: 1 });
+			}
+			var end = onCanvas(win, to.x, to.y);
+			drawing.trigger('mouseup', end.x, end.y, { button: 0, buttons: 0 });
+		});
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+	}
+
 	/*
 		Opens the menu of the point with that index. The entries are: Delete at 1, To Curve or To
 		Line at 3, Corner Point, Smooth Transition and Symmetric Transition at 5 to 7, and Split
@@ -222,5 +241,46 @@ describe(['tagdesktop'], 'Points of a polygon on a vector slide', function() {
 			expect(pathPoints(win), 'points after Add Point').to.have.length(4);
 		});
 		helper.waitForMapState('insertpathpoint', 'false');
+	});
+
+	it('A drag on the line of the polygon moves all its points, as one step to undo.', function() {
+		var win = this.win;
+		selectByTab(win, 2);
+		cy.wrap(null).should(function() {
+			expect(pathPoints(win), 'points of the polygon').to.have.length(4);
+		});
+		switchThePoints(win, true);
+
+		// the press is in the middle of the upper edge, away from every point
+		var before;
+		cy.then(function() {
+			before = pathPoints(win).map(function(point) { return [point.x, point.y]; });
+			var middle = {
+				x: (before[0][0] + before[1][0]) / 2,
+				y: (before[0][1] + before[1][1]) / 2,
+			};
+			dragFrom(win, middle, { x: middle.x + 600, y: middle.y + 400 });
+		});
+		cy.wrap(null).should(function() {
+			var points = pathPoints(win);
+			expect(points, 'points after the drag').to.have.length(4);
+			points.forEach(function(point, at) {
+				expect(Math.abs(point.x - before[at][0] - 600), 'point ' + at + ' across')
+					.to.be.below(60);
+				expect(Math.abs(point.y - before[at][1] - 400), 'point ' + at + ' down')
+					.to.be.below(60);
+			});
+		});
+
+		cy.then(function() {
+			win.app.map.sendUnoCommand('.uno:Undo');
+		});
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		cy.wrap(null).should(function() {
+			var points = pathPoints(win).map(function(point) { return [point.x, point.y]; });
+			expect(points, 'points after the undo').to.deep.equal(before);
+		});
 	});
 });

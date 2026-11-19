@@ -459,6 +459,11 @@ abstract class HandleGroup {
 		return to;
 	}
 
+	/// How far from a line of a path a press takes hold of it, in twips: half a handle.
+	protected static lineReach(): number {
+		return 0.5 * ShapeHandlesSection.handleSize() * app.pixelsToTwips;
+	}
+
 	/// Where a key takes the handle it is on, in twips.
 	protected static steppedBy(
 		handle: SelectionHandle,
@@ -2654,17 +2659,50 @@ class PathHandles extends HandlesMovedOneByOne {
 	/*
 		While a point is being added, a press counts when it is inside the box of the object or on
 		its line. The box of a straight path has no height or no width, and a thick line reaches
-		outside its box, so the box alone is not enough.
+		outside its box, so the box alone is not enough. Else, while the points are shown, a press
+		on the line of a polygon counts, which moves that polygon.
 	*/
 	public takesAPress(x: number, y: number): boolean {
-		if (!this.selection.isAddingAPathPoint()) return false;
+		const at = this.selection.inDocumentFromCanvas(x, y);
+		if (!this.selection.isAddingAPathPoint())
+			return this.isShown() && this.polygonAt(at) !== null;
+
 		if (this.selection.within(x, y)) return true;
 
-		const at = this.selection.inDocumentFromCanvas(x, y);
 		return RenderGeometrySection.objectHitAt(
 			this.selection.selectedObjects()[0],
 			at.x,
 			at.y,
+		);
+	}
+
+	/// The polygon of the path whose line runs at that place in the document, or nothing.
+	private polygonAt(at: cool.SimplePoint): number | null {
+		return (
+			this.selection
+				.pathEditor()
+				?.polygonAt(new cool.Point(at.x, at.y), HandleGroup.lineReach()) ?? null
+		);
+	}
+
+	/// A press on the line of a polygon drags that polygon, its points and weights together.
+	public interactionForThePlace(
+		at: cool.SimplePoint,
+	): SelectionInteraction | null {
+		const editing = this.selection.pathEditor();
+		const polygon = this.polygonAt(at);
+		if (!editing || polygon === null || this.selection.isAddingAPathPoint())
+			return null;
+
+		return new PolygonDrag(
+			this.selection,
+			{
+				editing: editing,
+				polygon: polygon,
+				inPath: (handleName: string) => handleName,
+				handOver: (by: cool.Point) => editing.movePolygon(polygon, by),
+			},
+			at,
 		);
 	}
 
@@ -2908,7 +2946,8 @@ class MotionPathSink implements PathSink {
 	with a point and the other weight of a smooth point swinging with a dragged one, and once the
 	drag is let go the engine is told the new path, by its place among the object's paths and with
 	the path it started from. The point a path starts at has a handle as every other point, as a
-	drawn path can start away from its object.
+	drawn path can start away from its object. A press on the line of a path, off its handles,
+	takes hold of that polygon of the path, and a drag moves it whole.
 */
 class MotionPathHandles extends HandlesMovedOneByOne {
 	public readonly name: string = 'motionPath';
@@ -3084,30 +3123,132 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		});
 	}
 
-	/*
-		Tells the engine the path with the point or weight where it was let go, together with the
-		path it started from, and shows the new path at once; the engine's report of the object
-		replaces it, or brings the paths as they are where they changed meanwhile.
-	*/
+	/// Tells the engine the path with the point or weight where it was let go.
 	public handOver(handle: SelectionHandle, to: cool.Point): void {
 		const object = this.object();
 		const place = MotionPathHandles.placeOf(handle.name);
 		const moved = object
 			? MotionPathHandles.withPointAt(object, handle.name, to)
 			: null;
-		const was = object?.motionPaths?.[place?.path ?? -1];
-		const now = moved?.motionPaths?.[place?.path ?? -1];
-		if (!object || !place || !moved || !was || !now || object.id === undefined)
-			return;
+		if (object && place && moved) this.setPath(object, place.path, moved);
+	}
+
+	/*
+		Tells the engine the path at that place among the object's paths as the object moved
+		has it, together with the path it started from, and shows the new path at once; the
+		engine's report of the object replaces it, or brings the paths as they are where they
+		changed meanwhile.
+	*/
+	private setPath(
+		object: cool.SlideObject,
+		path: number,
+		moved: cool.SlideObject,
+	): void {
+		const was = object.motionPaths?.[path];
+		const now = moved.motionPaths?.[path];
+		if (!was || !now || object.id === undefined) return;
 
 		app.map.sendUnoCommand('.uno:SetMotionPath', {
 			ObjectId: { type: 'string', value: String(object.id) },
-			Index: { type: 'long', value: String(place.path) },
+			Index: { type: 'long', value: String(path) },
 			Path: { type: 'string', value: MotionPathHandles.written(now.path) },
 			Was: { type: 'string', value: MotionPathHandles.written(was.path) },
 		});
 		object.motionPaths = moved.motionPaths;
 		this.selection.redraw();
+	}
+
+	/*
+		The object with that polygon of the path at that place among its paths moved by that
+		offset, in twips, its points and their weights together. The object is a copy; nothing
+		where it has no such polygon.
+	*/
+	public static withPolygonMovedBy(
+		object: cool.SlideObject,
+		path: number,
+		polygon: number,
+		by: cool.Point,
+	): cool.SlideObject | null {
+		const paths = object.motionPaths;
+		if (!paths?.[path]?.path[polygon]) return null;
+
+		return {
+			...object,
+			motionPaths: paths.map((motionPath: cool.ObjectMotionPath, at: number) =>
+				at !== path
+					? motionPath
+					: {
+							...motionPath,
+							path: motionPath.path.map(
+								(one: cool.ObjectPathPolygon, which: number) =>
+									which !== polygon
+										? one
+										: {
+												...one,
+												points: one.points.map((point: cool.ObjectPathPoint) =>
+													cool.MotionPaths.shifted(point, by),
+												),
+											},
+							),
+						},
+			),
+		};
+	}
+
+	/// The path among the object's paths and the polygon of it whose line runs at that place in
+	/// the document; nothing where none does, and while text is edited.
+	private lineAt(
+		at: cool.SimplePoint,
+	): { path: number; polygon: number } | null {
+		const object = this.object();
+		if (!object || app.file.textCursor.visible) return null;
+
+		const place = new cool.Point(at.x, at.y);
+		const paths = object.motionPaths ?? [];
+		for (let path = 0; path < paths.length; ++path) {
+			const polygon = MotionPathHandles.editorOf(object, path).polygonAt(
+				place,
+				HandleGroup.lineReach(),
+			);
+			if (polygon !== null) return { path: path, polygon: polygon };
+		}
+		return null;
+	}
+
+	/// A press on the line of a path, off its handles, takes hold of that polygon of the path.
+	public takesAPress(x: number, y: number): boolean {
+		return this.lineAt(this.selection.inDocumentFromCanvas(x, y)) !== null;
+	}
+
+	/// A drag of the line of a path moves that polygon of it, and the path is set once let go.
+	public interactionForThePlace(
+		at: cool.SimplePoint,
+	): SelectionInteraction | null {
+		const object = this.object();
+		const line = this.lineAt(at);
+		if (!object || !line) return null;
+
+		return new PolygonDrag(
+			this.selection,
+			{
+				editing: MotionPathHandles.editorOf(object, line.path),
+				polygon: line.polygon,
+				inPath: (handleName: string) => {
+					const place = MotionPathHandles.placeOf(handleName);
+					return place?.path === line.path ? place.inPath : null;
+				},
+				handOver: (by: cool.Point) => {
+					const moved = MotionPathHandles.withPolygonMovedBy(
+						object,
+						line.path,
+						line.polygon,
+						by,
+					);
+					if (moved) this.setPath(object, line.path, moved);
+				},
+			},
+			at,
+		);
 	}
 }
 

@@ -80,6 +80,7 @@
 /// <reference path="./PathFit.test.ts" />
 /// <reference path="./DragSelect.test.ts" />
 /// <reference path="./MotionPaths.test.ts" />
+/// <reference path="./PathEditing.test.ts" />
 /// <reference path="./PathDrawing.test.ts" />
 /// <reference path="./VectorGradientFrame.test.ts" />
 /// <reference path="./VectorColorModifiers.test.ts" />

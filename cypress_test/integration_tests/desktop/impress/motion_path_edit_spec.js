@@ -100,6 +100,13 @@ describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 		cy.then(function() {
 			var from = motionHandles(win)[name];
 			expect(from, 'the handle ' + name).to.not.equal(undefined);
+			dragFrom(win, from, across, down);
+		});
+	}
+
+	// Drags from that place on the page, in twips, by that many twips across and down, in steps.
+	function dragFrom(win, from, across, down) {
+		cy.then(function() {
 			var start = onCanvas(win, from.x, from.y);
 			var drawing = cy.cGet('#document-canvas').trigger('mousedown', start.x, start.y,
 				{ button: 0, buttons: 1 });
@@ -216,6 +223,44 @@ describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 		});
 
 		// an undo brings back what the engine had, so the engine had taken the change
+		undo(win);
+		cy.wrap(null).should(function() {
+			var points = pointsOf(win, beside).map(function(point) { return [point.x, point.y]; });
+			expect(points, 'the points after the undo').to.deep.equal(before);
+		});
+	});
+
+	it('A drag on the line of a path moves the whole path, and the object stays.', function() {
+		var win = this.win;
+		var beside;
+		cy.wrap(null).should(function() {
+			beside = objectWithPathBeside(win);
+			expect(beside, 'the rectangle with a path beside it').to.not.equal(undefined);
+		});
+		select(win, function() { return beside; });
+
+		// the press is in the middle of the straight first edge, away from every handle
+		var before;
+		var box;
+		cy.then(function() {
+			before = pointsOf(win, beside).map(function(point) { return [point.x, point.y]; });
+			box = geometry(win).boxOf(beside);
+			var handles = motionHandles(win);
+			var first = handles['motion 0 9.0.0'];
+			var second = handles['motion 0 9.0.1'];
+			dragFrom(win, { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 }, -400, -300);
+		});
+		cy.wrap(null).should(function() {
+			var points = pointsOf(win, beside);
+			points.forEach(function(point, at) {
+				expect(Math.abs(point.x - before[at][0] + 400), 'point ' + at + ' across')
+					.to.be.below(60);
+				expect(Math.abs(point.y - before[at][1] + 300), 'point ' + at + ' down')
+					.to.be.below(60);
+			});
+			expect(geometry(win).boxOf(beside), 'the box of the object').to.deep.equal(box);
+		});
+
 		undo(win);
 		cy.wrap(null).should(function() {
 			var points = pointsOf(win, beside).map(function(point) { return [point.x, point.y]; });

@@ -3435,7 +3435,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			follows goes nowhere else.
 		*/
 		const addsAPathPoint =
-			!handle && this.pathGroup()?.takesAPress(onCanvas[0], onCanvas[1]);
+			!handle &&
+			this.isAddingAPathPoint() &&
+			this.pathGroup()?.takesAPress(onCanvas[0], onCanvas[1]);
 		if (addsAPathPoint) this.pathGroup()?.addAt(at);
 		if (
 			addsAPathPoint ||

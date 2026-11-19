@@ -680,6 +680,7 @@ COOL_JS_LST =\
 	src/canvas/sections/ShearingInteraction.ts \
 	src/canvas/sections/MovingInteraction.ts \
 	src/canvas/sections/ShapingInteraction.ts \
+	src/canvas/sections/PolygonDrag.ts \
 	src/canvas/sections/SelectionSection.ts \
 	src/canvas/sections/ObjectSelectionSection.ts \
 	src/canvas/sections/MultiSelectionSection.ts \

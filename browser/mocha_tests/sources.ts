@@ -246,6 +246,7 @@
 /// <reference path="../src/canvas/sections/ShearingInteraction.ts" />
 /// <reference path="../src/canvas/sections/MovingInteraction.ts" />
 /// <reference path="../src/canvas/sections/ShapingInteraction.ts" />
+/// <reference path="../src/canvas/sections/PolygonDrag.ts" />
 /// <reference path="../src/canvas/sections/SelectionSection.ts" />
 /// <reference path="../src/canvas/sections/ObjectSelectionSection.ts" />
 /// <reference path="../src/canvas/sections/MultiSelectionSection.ts" />

@@ -248,6 +248,11 @@ class PathEditing implements HandleSource {
 		};
 	}
 
+	/// Whether the handle of that name is a point or a weight of that polygon.
+	public static belongsToPolygon(handleName: string, polygon: number): boolean {
+		return PathEditing.named(handleName)?.polygon === polygon;
+	}
+
 	/// The point that a handle stands for, with its polygon and the whole path. It is null for a
 	/// weight, and for a point that the path no longer has.
 	public pointOf(handleName: string): {
@@ -1219,6 +1224,77 @@ class PathEditing implements HandleSource {
 								index === moved.at ? moved.point : point,
 						),
 					},
+		);
+	}
+
+	/*
+		The polygon whose line runs nearest to that place, in twips, where it runs no farther away
+		than reach; nothing where no line comes that near. The line of a closed polygon runs back
+		to its first point too.
+	*/
+	public polygonAt(at: cool.Point, reach: number): number | null {
+		let found: { polygon: number; distance: number } | null = null;
+		const path = this.path() ?? [];
+
+		for (let which = 0; which < path.length; ++which) {
+			const points = path[which].points ?? [];
+			for (let point = 0; point < points.length; ++point) {
+				const next = PathEditing.nextOf(path[which], point);
+				if (next === null) continue;
+				const near = PathEditing.nearestOnEdge(
+					PathEditing.edgeOf(points[point], points[next]),
+					at,
+				);
+				if (
+					near.distance <= reach &&
+					(!found || near.distance < found.distance)
+				)
+					found = { polygon: which, distance: near.distance };
+			}
+		}
+
+		return found ? found.polygon : null;
+	}
+
+	/// The whole path with that polygon moved by that offset, its points and their weights
+	/// together; nothing where the path has no such polygon.
+	public pathWithPolygonMoved(
+		polygon: number,
+		by: cool.Point,
+	): cool.ObjectPathPolygon[] | null {
+		const path = this.path();
+		if (!path?.[polygon]) return null;
+
+		return path.map((one: cool.ObjectPathPolygon, which: number) =>
+			which !== polygon
+				? one
+				: {
+						...one,
+						points: (one.points ?? []).map((point: cool.ObjectPathPoint) =>
+							cool.MotionPaths.shifted(point, by),
+						),
+					},
+		);
+	}
+
+	/*
+		Moves that polygon by that offset, as one change: every point of it goes to the sink, and
+		the weights go along with their points. The path shows the move at once.
+	*/
+	public movePolygon(polygon: number, by: cool.Point): void {
+		const moved = this.pathWithPolygonMoved(polygon, by);
+		if (!moved) return;
+
+		this.changeHere(() => moved);
+		this.sink.movePoints(
+			moved[polygon].points.map((point: cool.ObjectPathPoint, at: number) => ({
+				polygon: polygon,
+				point: at,
+				part: 0,
+				x: Math.round(point.x),
+				y: Math.round(point.y),
+				continuity: point.continuity ?? 0,
+			})),
 		);
 	}
 
