@@ -1330,7 +1330,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 {
                     const ScCondFormatItem& rCondFormatItem = rDoc.GetAttr(nPosX, nPosY, nTab, ATTR_CONDITIONAL);
 
-                    if ( rCondFormatItem.GetCondFormatData().empty() )
+                    if ( rCondFormatItem.GetCondFormatData().empty() || pDocSh->IsReadOnly())
                         rSet.DisableItem( nWhich );
                     else if ( rCondFormatItem.GetCondFormatData().size() == 1 )
                         rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT_MANAGER );
@@ -1338,12 +1338,20 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT );
                 }
                 break;
+            case SID_OPENDLG_CONDFRMT:
+            case SID_OPENDLG_COLORSCALE:
+            case SID_OPENDLG_DATABAR:
+            case SID_OPENDLG_ICONSET:
+            case SID_OPENDLG_CONDDATE:
+            case SID_OPENDLG_CONDFRMT_MANAGER:
+            case SID_EASY_CONDITIONAL_FORMAT_DIALOG:
             case SID_SETINPUTMODE:
                 {
                     if (pDocSh->IsReadOnly())
-                        rSet.DisableItem(SID_SETINPUTMODE);
+                        rSet.DisableItem(nWhich);
                 }
                 break;
+
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();
     } // while ( nWitch )
