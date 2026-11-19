@@ -1533,6 +1533,10 @@ callback (gpointer pData)
     case COKitCallbackType::OPEN_LINKED_DOCUMENT:
     case COKitCallbackType::REFRESH_LINKED_FILES:
     case COKitCallbackType::VECTOR_PART_IDS:
+    case COKitCallbackType::INVALIDATE_CELL_RANGE_INVENTORY:
+    case COKitCallbackType::CELL_SELECTION:
+    case COKitCallbackType::CELL_VIEW_SELECTION:
+    case COKitCallbackType::CELL_CURSOR_STATE:
     {
         // TODO: Implement me
         break;
