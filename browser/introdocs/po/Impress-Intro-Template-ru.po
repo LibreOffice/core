@@ -3,19 +3,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-11-18 23:26+0000\n"
+"Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
+"desktop-apps/impress-intro-template/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #. content.xml (slide 'page1')
 msgid "👋 Introduction"
-msgstr ""
+msgstr "👋 Введение"
 
 #. content.xml (slide 'page1')
 msgid ""
@@ -25,49 +27,56 @@ msgid ""
 "introduction template will help you get started and explore some of the main"
 " features of the product.</5>"
 msgstr ""
+"<1>Collabora Office </1><2>для презентаций</2><3> — это </3><4>инструмент</4>"
+"<5>, который позволяет легко создавать, редактировать и демонстрировать "
+"презентации. Вы можете работать над документом в одиночку или совместно в "
+"составе команды. Этот вводный шаблон поможет вам начать работу и изучить "
+"основные возможности продукта"
 
 #. content.xml (slide 'page1'); styles.xml (master page
 #. 'Introduction_20_slide')
 msgid "Next Chapter: 🖼 Slides & Layouts"
-msgstr ""
+msgstr "Следующая глава: 🖼 Слайды и макеты"
 
 #. content.xml (slide 'page1')
 msgid "Here's what you'll discover"
-msgstr ""
+msgstr "Здесь вы узнаете"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page2')
 msgid "🖼 Slides & Layouts"
-msgstr ""
+msgstr "🖼 Слайды и макеты"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page3')
 msgid "🎨 Design & Master Slides"
-msgstr ""
+msgstr "🎨 Дизайн и образцы слайдов"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page4')
 msgid "✏️ Style & Visual"
-msgstr ""
+msgstr "✏️ Стили и визуальное оформление"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page5')
 msgid "🎬 Slide Transitions"
-msgstr ""
+msgstr "🎬 Эффекты перехода"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page6')
 msgid "🎤 Presenting"
-msgstr ""
+msgstr "🎤 Показ слайдов"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page7')
 msgid "🤝 Productivity & Collaboration"
-msgstr ""
+msgstr "🤝 Эффективность и совместная работа"
 
 #. content.xml (slide 'page2')
 msgid "Every presentation is a sequence of slides."
-msgstr ""
+msgstr "Любая презентация состоит из последовательности слайдов."
 
 #. content.xml (slide 'page2')
 msgid ""
 "<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
 "dragging, or remove ones you don’t need.</3>"
 msgstr ""
+"<1>Используйте </1><2>Навигатор слайдов</2><3> слева, чтобы изменить их "
+"порядок перетаскиванием или удалить ненужные.</3>"
 
 #. content.xml (slide 'page2')
 msgid ""
@@ -75,41 +84,46 @@ msgid ""
 "arrangement of placeholders for titles, text, and images. Pick the layout "
 "that fits the slide’s purpose.</3>"
 msgstr ""
+"<1>Каждый слайд может использовать </1><2>разный макет </2><3>— "
+"предопределенное расположение заполнителей для заголовков, текста и "
+"изображений. Выберите макет, который соответствует назначению слайда.</3>"
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "<1>➜</1><2>Try it:</2>"
-msgstr ""
+msgstr "<1>➜</1><2>Попробуйте:</2>"
 
 #. content.xml (slide 'page2')
 msgid "Add a new slide clicking “New” in Notebook bar."
-msgstr ""
+msgstr "Добавьте новый слайд, нажав \"Создать\" на панели вкладок."
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
-msgstr ""
+msgstr "Выберите для него макет в окне выбора макета."
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
-msgstr ""
+msgstr "Начните редактировать слайд."
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
 #. 'Content_20_slide'); styles.xml (master page 'Default')
 msgid "Useful tip"
-msgstr ""
+msgstr "Полезный совет"
 
 #. content.xml (slide 'page2')
 msgid ""
 "When you’re unsure which layout to pick, start with “Title, Content” – it "
 "works for almost any slide."
 msgstr ""
+"Если вы не уверены, какой макет выбрать, начните с \"Заголовок, содержимое\" "
+"— он подходит почти для любого слайда."
 
 #. content.xml (slide 'page2')
 msgid "Next Chapter: 🎨 Design & Master Slides"
-msgstr ""
+msgstr "Следующая глава: 🎨 Дизайн и образцы слайдов"
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -121,22 +135,31 @@ msgid ""
 "it up automatically. When you need to rebrand or tweak the design later, you"
 " change the master, not 30 slides.</7>"
 msgstr ""
+"<1>Образец слайда — </1><2>это шаблон</2><3>, лежащий в основе каждого "
+"слайда. Он определяет цвета, шрифты, фон, а также расположение заголовков и "
+"нижних колонтитулов. </3><4>Измените</4><5> </5><6>образец, и все слайды "
+"обновятся одновременно. </6><7>Именно поэтому образцы слайдов — самый "
+"быстрый способ сохранить единообразие презентации. Настройте внешний вид "
+"один раз (шрифты, цвета, логотип, нижний колонтитул), и каждый новый слайд "
+"будет автоматически его подхватывать. Когда вам понадобится изменить "
+"брендинг или доработать дизайн позже, вы измените образец, а не 30 слайдов.</"
+"7>"
 
 #. content.xml (slide 'page3')
 msgid "Open the View tab in the Notebook bar."
-msgstr ""
+msgstr "Откройте вкладку Вид на панели вкладок."
 
 #. content.xml (slide 'page3')
 msgid "Click “Master View” and edit your master design."
-msgstr ""
+msgstr "Нажмите \"Образец слайдов\" и отредактируйте дизайн."
 
 #. content.xml (slide 'page3')
 msgid "Once your master design is ready, click \"Close Master View\"."
-msgstr ""
+msgstr "Когда дизайн образца будет готов, нажмите \"Закрыть режим образца\"."
 
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
-msgstr ""
+msgstr "Теперь ваш образец настроен и готов к использованию на всех слайдах."
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -144,10 +167,13 @@ msgid ""
 "apply it just to that slide. The rest of your deck stays on the original "
 "master."
 msgstr ""
+"Если одному слайду нужен другой внешний вид, создайте второй образец слайда "
+"и примените его только к этому слайду. Остальная часть презентации останется "
+"на исходном образце."
 
 #. content.xml (slide 'page3')
 msgid "Next Chapter: ✏️ Style & Visual"
-msgstr ""
+msgstr "Следующая глава: ✏️ Стили и визуальное оформление"
 
 #. content.xml (slide 'page4')
 msgid ""
@@ -156,33 +182,47 @@ msgid ""
 "colours guide the reader through your message. Second, </3><4>add visual "
 "elements</4><5> – images, shapes, icons, charts – to support your story.</5>"
 msgstr ""
+"<1>Есть два способа сделать слайд выразительным. Во-первых, </1><2>"
+"отформатируйте текст</2><3>, чтобы придать ему структуру и акценты — шрифты, "
+"размеры, начертания и цвета помогут читателю следить за вашей мыслью. Во-"
+"вторых, </3><4>добавьте визуальные элементы</4><5> — изображения, фигуры, "
+"значки, диаграммы — чтобы подкрепить вашу историю.</5>"
 
 #. content.xml (slide 'page4')
 msgid ""
 "In the Notebook bar, open the Insert tab and add an object, image, table, or"
 " any other element that supports your content."
 msgstr ""
+"На панели вкладок откройте вкладку Вставка и добавьте объект, изображение, "
+"таблицу или любой другой элемент, который дополняет ваш контент."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Click on it to select it, then resize and reposition it to fit your layout."
 msgstr ""
+"Кликните по нему для выделения, затем измените размер и перетащите, чтобы он "
+"вписался в макет."
 
 #. content.xml (slide 'page4')
 msgid ""
 "For editable objects like shapes or images, a contextual tab appears in the "
 "Notebook bar with all the available actions."
 msgstr ""
+"Для редактируемых объектов, таких как фигуры или изображения, на панели "
+"вкладок появляется контекстная вкладка со всеми доступными действиями."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Less is more. One strong visual, a clear headline, and a few well-formatted "
 "lines will always beat a slide packed with text and decorations."
 msgstr ""
+"Лучше меньше, да лучше. Один выразительный визуальный элемент, ясный "
+"заголовок и пара аккуратно оформленных строк всегда выглядят выигрышнее, чем "
+"слайд, забитый текстом и декором."
 
 #. content.xml (slide 'page4')
 msgid "Next Chapter: 🎬 Slide Transitions"
-msgstr ""
+msgstr "Следующая глава: 🎬 Переходы слайдов"
 
 #. content.xml (slide 'page5')
 msgid ""
@@ -190,34 +230,44 @@ msgid ""
 "during your slide show. The right transition makes your deck feel polished "
 "and professional, while the wrong one distracts from your message.</3>"
 msgstr ""
+"<1><2>Переход</2><3> определяет, как один слайд сменяется другим во время "
+"показа. Правильно подобранный переход делает презентацию более отточенной и "
+"профессиональной, а неудачный — отвлекает от вашего сообщения.</3>"
 
 #. content.xml (slide 'page5')
 msgid "Click Transition tab in Notebook bar."
-msgstr ""
+msgstr "Нажмите вкладку Переходы на панели вкладок."
 
 #. content.xml (slide 'page5')
 msgid "Pick a transition style you would like to use."
-msgstr ""
+msgstr "Выберите понравившийся стиль перехода."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Adjust other properties – set the duration, pick a variant, or choose "
 "timing."
 msgstr ""
+"Настройте другие параметры — установите длительность, выберите вариант или "
+"задайте время срабатывания."
 
 #. content.xml (slide 'page5')
 msgid "Click \"Apply to All Slides\" to use the same transition across your deck."
 msgstr ""
+"Нажмите \"Применить ко всем слайдам\", чтобы сделать переход общим для всей "
+"презентации."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Use one transition across your whole deck to keep things consistent. Save a "
 "different transition for the slides you really want to stand out."
 msgstr ""
+"Используйте один переход для всей презентации, чтобы сохранить единообразие. "
+"Приберегите другой переход для слайдов, которые действительно должны "
+"выделяться."
 
 #. content.xml (slide 'page5')
 msgid "Next Chapter: 🎤 Presenting"
-msgstr ""
+msgstr "Следующая глава: 🎤 Показ слайдов"
 
 #. content.xml (slide 'page6')
 msgid ""
@@ -226,26 +276,29 @@ msgid ""
 "next one coming up, a timer, and your speaker notes, while your audience "
 "sees only the slide.</3>"
 msgstr ""
+"<1>Когда придет время презентации, запустите показ слайдов, и откроется </1>"
+"<2>Консоль докладчика</2><3>. Вы увидите текущий слайд, следующий за ним, "
+"таймер и свои заметки, а зрители — только сам слайд.</3>"
 
 #. content.xml (slide 'page6')
 msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
-msgstr ""
+msgstr "Перейдите на вкладку Вид на панели вкладок и откройте “Режим заметок”."
 
 #. content.xml (slide 'page6')
 msgid "Add a speaker note to your slides."
-msgstr ""
+msgstr "Добавьте заметку для докладчика к слайдам."
 
 #. content.xml (slide 'page6')
 msgid "When you're ready to present, open the Slide Show tab."
-msgstr ""
+msgstr "Когда будете готовы к показу, откройте вкладку Показ слайдов."
 
 #. content.xml (slide 'page6')
 msgid "Pick a slide show option to start presenting."
-msgstr ""
+msgstr "Выберите режим показа слайдов, чтобы начать выступление."
 
 #. content.xml (slide 'page6')
 msgid "Next Chapter: 🤝 Productivity & Collaboration"
-msgstr ""
+msgstr "Следующая глава: 🤝 Эффективность и совместная работа"
 
 #. content.xml (slide 'page7')
 msgid ""
@@ -253,10 +306,13 @@ msgid ""
 "</3><4>collaborate with others</4><5>, making it easier to work together and"
 " share your decks.</5>"
 msgstr ""
+"<1>Ряд функций поможет вам </1><2>оставаться эффективным</2><3> и </3><4>"
+"работать вместе с другими</4><5>, упрощая совместную работу и обмен "
+"презентациями.</5>"
 
 #. content.xml (slide 'page7')
 msgid "📤 Document sharing"
-msgstr ""
+msgstr "📤 Совместное использование документа"
 
 #. content.xml (slide 'page7')
 msgid ""
@@ -264,50 +320,58 @@ msgid ""
 "presentation at once. Click the </1><2>Share button</2><3> in the top right "
 "to share your document with your colleagues.</3>"
 msgstr ""
+"<1>Работайте вместе в реальном времени. Несколько человек могут одновременно "
+"редактировать одну и ту же презентацию. Нажмите </1><2>кнопку Поделиться</2>"
+"<3> в правом верхнем углу, чтобы предоставить коллегам доступ к документу.</"
+"3>"
 
 #. content.xml (slide 'page7')
 msgid "⌨️ Shortcuts"
-msgstr ""
+msgstr "⌨️ Горячие клавиши"
 
 #. content.xml (slide 'page7')
 msgid ""
 "<1>Keyboard shortcuts speed up your workflow. Find the full list under Help "
 "tab in </1><2>Keyboard shortcuts</2>"
 msgstr ""
+"<1>Горячие клавиши ускоряют работу. Полный список можно найти на вкладке "
+"Справка в разделе </1><2>Сочетания клавиш</2>"
 
 #. content.xml (slide 'page7')
 msgid "▶️ Video tutorials"
-msgstr ""
+msgstr "▶️ Обучающие видео"
 
 #. content.xml (slide 'page7')
 msgid ""
 "Want to keep learning? Short video introductions cover additional features "
 "and help you build on what you’ve learned."
 msgstr ""
+"Хотите узнать больше? Короткие обучающие видео охватывают дополнительные "
+"возможности и помогают углубить знания."
 
 #. content.xml (slide 'page7')
 msgid "Check out video tutorials."
-msgstr ""
+msgstr "Посмотрите обучающие видео."
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "Title"
-msgstr ""
+msgstr "Название"
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default'); styles.xml (master page 'Introduction_20_slide')
 msgid "Text"
-msgstr ""
+msgstr "Текст"
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default'); styles.xml (master page 'Introduction_20_slide')
 msgid "Next Chapter: name of next chapter"
-msgstr ""
+msgstr "Следующая глава: name of next chapter"
 
 #. styles.xml (master page 'Introduction_20_slide')
 msgid "👋Introduction"
-msgstr ""
+msgstr "👋 Введение"
 
 #. styles.xml (master page 'Introduction_20_slide')
 msgid "Text title"
-msgstr ""
+msgstr "Заголовок текста"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0200\n"
-"PO-Revision-Date: 2026-11-15 22:45+0000\n"
+"PO-Revision-Date: 2026-11-17 09:31+0000\n"
 "Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "help/ru/>\n"
@@ -1374,12 +1374,12 @@ msgid "Insert date"
 msgstr "Вставить дату"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>;"
 "</kbd> or <kbd>,</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Стрелка вверх</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> или <kbd>,</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
 msgid "Demote list item (list item has to be selected)"
@@ -1596,17 +1596,16 @@ msgstr ""
 "пользователь уходит."
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
-#, fuzzy
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}"
 "</span> uses modern browser resources to adapt the user interface to the "
 "size of the viewing area, including small screens found in mobile devices.</"
 "span> The interface is composed of:"
 msgstr ""
-"<span class=\"productname\">{productname}</span> использует возможности "
-"современных браузеров для адаптации пользовательского интерфейса к размерам "
-"области просмотра, включая небольшие экраны мобильных устройств. Интерфейс "
-"состоит из:"
+"<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
+"span> использует современные ресурсы браузера для адаптации "
+"пользовательского интерфейса к размеру области просмотра, включая небольшие "
+"экраны мобильных устройств.</span> Интерфейс состоит из:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
@@ -1824,6 +1823,14 @@ msgid ""
 "On Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
+"Поддерживается копирование, вырезание и вставка форматированного "
+"содержимого, включая изображения и смешанный контент, с помощью сочетаний "
+"клавиш (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+"hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). На Android или iOS "
+"необходимо выделять текст двойным нажатием, а для доступа к копированию/"
+"вырезанию/вставке через контекстное меню использовать долгое нажатие."
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
@@ -1832,6 +1839,10 @@ msgid ""
 "content that comes from outside the document, but context menus can be used "
 "for cut and copy."
 msgstr ""
+"По соображениям безопасности для вставки содержимого, полученного извне "
+"документа, необходимо использовать <kbd>Ctrl</kbd><span class=\"kbd--plus\" "
+"aria-hidden=\"true\">+</span><kbd>V</kbd>, однако контекстные меню можно "
+"использовать для вырезания и копирования."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2399,7 +2410,6 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span "
 "class=\"productname\">{productname}</span> adds symbols to each cell of a "
@@ -2408,10 +2418,11 @@ msgid ""
 "Select the symbol set to apply on the range."
 msgstr ""
 "<span class=\"def\">Условное форматирование:</span> <span "
-"class=\"productname\">{productname}</span> может показывать значок в каждой "
-"ячейке диапазона в зависимости от условий. Выберите диапазон ячеек и нажмите "
-"значок <span class=\"ui\">Условное форматирование</span> на панели "
-"инструментов. Выберите набор значков для использования в выбранном диапазоне."
+"class=\"productname\">{productname}</span> добавляет символы в каждую ячейку "
+"диапазона на основе заданных условий. Выберите диапазон ячеек и нажмите "
+"<span class=\"ui\">Условное форматирование</span> на вкладке <span "
+"class=\"ui\">Главная</span>. Выберите набор символов для применения к "
+"диапазону."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2765,10 +2776,13 @@ msgid ""
 "class=\"ui\">Spelling</span> and uncheck <span class=\"ui\">Auto Spell "
 "Check</span>."
 msgstr ""
+"На вкладке <span class=\"ui\">Рецензирование</span> откройте <span "
+"class=\"ui\">Правописание</span> и снимите флажок <span class=\"ui\">"
+"Автопроверка орфографии</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
-msgstr ""
+msgstr "Что означает синяя волнистая линия под некоторыми словами в тексте?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:730-5
 msgid ""

@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-commands\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 11:43+0000\n"
-"PO-Revision-Date: 2026-11-15 16:39+0000\n"
+"PO-Revision-Date: 2026-11-17 09:31+0000\n"
 "Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "extensions/demo-commands/ru/>\n"
@@ -46,31 +46,31 @@ msgstr ""
 
 #: ui.json:notebookbar.menu
 msgid "Heading"
-msgstr ""
+msgstr "Заголовок"
 
 #: ui.json:commands.heading1
 msgid "Heading 1"
-msgstr ""
+msgstr "Заголовок 1"
 
 #: ui.json:commands.heading2
 msgid "Heading 2"
-msgstr ""
+msgstr "Заголовок 2"
 
 #: ui.json:commands.heading3
 msgid "Heading 3"
-msgstr ""
+msgstr "Заголовок 3"
 
 #: ui.json:commands.insertIsoDate
 msgid "ISO 8601"
-msgstr ""
+msgstr "ISO 8601"
 
 #: ui.json:notebookbar.group.infoGroup
 msgid "Info"
-msgstr ""
+msgstr "Сведения"
 
 #: ui.json:commands.insertDate
 msgid "Insert Date"
-msgstr ""
+msgstr "Вставить дату"
 
 #: ui.json:commands.insertTime
 msgid "Insert Time"
@@ -78,7 +78,7 @@ msgstr ""
 
 #: ui.json:commands.makeItalic
 msgid "Italic"
-msgstr ""
+msgstr "Курсив"
 
 #: ui.json:commands.insertLocaleDate
 msgid "Long Format"

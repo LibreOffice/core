@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-15 22:45+0000\n"
+"PO-Revision-Date: 2026-11-18 23:26+0000\n"
 "Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
@@ -2145,14 +2145,12 @@ msgid "Make it more concise"
 msgstr "Сократить"
 
 #: src/control/Control.AIChatSidebar.ts:149
-#, fuzzy
 msgid "Summarize this text"
-msgstr "Пересказать"
+msgstr "Сократить текст"
 
 #: src/control/Control.AIChatSidebar.ts:150
-#, fuzzy
 msgid "Expand this text"
-msgstr "Дополнить этот текст"
+msgstr "Дополнить текст"
 
 #: src/control/Control.AIChatSidebar.ts:151
 msgid "Fix grammar & spelling"
@@ -3704,9 +3702,8 @@ msgid "Blank Spreadsheet"
 msgstr "Пустая таблица"
 
 #: src/control/Control.BackstageView.ts:1067
-#, fuzzy
 msgid "Blank Presentation"
-msgstr "Завершить презентацию"
+msgstr "Пустая презентация"
 
 #: src/control/Control.BackstageView.ts:1071
 msgid "Blank Drawing"
@@ -4009,7 +4006,7 @@ msgstr "Нет"
 #: src/slideshow/SlideShowPresenter.ts:906
 #: src/slideshow/SlideShowPresenter.ts:957
 msgid "Next"
-msgstr "Далее"
+msgstr "Дальше"
 
 #: src/control/Control.Command.js:73
 msgid "Unlock"
@@ -4799,7 +4796,7 @@ msgstr "Вставить изображение"
 
 #: src/control/Control.Menubar.ts:420 src/control/Control.Menubar.ts:1469
 msgid "Insert Date"
-msgstr "Вставить Дату"
+msgstr "Вставить дату"
 
 #: src/control/Control.Menubar.ts:441 src/control/Control.Menubar.ts:1235
 #: src/control/Control.NotebookbarWriter.js:638
@@ -5690,7 +5687,7 @@ msgstr "Логический"
 #: src/control/Control.NotebookbarImpress.js:1856
 #: src/control/Control.NotebookbarWriter.js:1606
 msgid "Text"
-msgstr "Текстовый"
+msgstr "Текст"
 
 #: src/control/Control.NotebookbarCalc.js:873
 msgid "Number Format"
@@ -7400,7 +7397,7 @@ msgstr "Не удалось загрузить стили"
 
 #: src/control/Control.Zotero.js:1154 src/control/Control.Zotero.js:1615
 msgid "Title"
-msgstr "Заголовок"
+msgstr "Название"
 
 #: src/control/Control.Zotero.js:1154 src/control/Control.Zotero.js:1615
 msgid "Creator(s)"
@@ -9257,7 +9254,7 @@ msgstr "Окно печати"
 #: src/map/handler/Map.SlideShow.js:59
 #: src/slideshow/SlideShowPresenter.ts:1447
 msgid "Empty Slide Show"
-msgstr "Пустая презентация"
+msgstr "Пустой показ слайдов"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1448
