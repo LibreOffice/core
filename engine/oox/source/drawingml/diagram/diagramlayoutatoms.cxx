@@ -14082,9 +14082,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             }
 
             awt::Size aChildSize = rShape->getSize();
-            if (nDir == XML_fromL || nDir == XML_fromR)
+            if (fCount > 0 && (nDir == XML_fromL || nDir == XML_fromR))
                 aChildSize.Width /= fCount;
-            else if (nDir == XML_fromT || nDir == XML_fromB)
+            else if (fCount > 0 && (nDir == XML_fromT || nDir == XML_fromB))
                 aChildSize.Height /= fCount;
 
             awt::Point aCurrPos(0, 0);
