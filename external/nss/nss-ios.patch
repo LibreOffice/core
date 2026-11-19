@@ -178,7 +178,7 @@
  }
 --- a/a/nspr/build/autoconf/config.sub	2017-09-07 15:29:45.031246453 +0200
 +++ a/a/nspr/build/autoconf/config.sub	2017-09-07 15:32:13.087235423 +0200
-@@ -110,6 +110,9 @@
+@@ -119,6 +119,9 @@
      exit 1;;
  esac
  
@@ -186,7 +186,7 @@
 +if test $1 = "aarch64-apple-darwin"; then echo $1; exit; fi
 +
  # Split fields of configuration type
- # shellcheck disable=SC2162
+ saved_IFS=$IFS
  IFS="-" read field1 field2 field3 field4 <<EOF
 --- a/a/nspr/config/autoconf.mk.in
 +++ a/a/nspr/config/autoconf.mk.in

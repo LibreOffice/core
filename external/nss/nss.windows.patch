@@ -22,12 +22,12 @@
  ifdef USE_NT_C_SYNTAX
 --- a/a/nspr/pr/include/md/_win95.h
 +++ b/b/nspr/pr/include/md/_win95.h
-@@ -317,7 +317,7 @@
- #define _MD_ATOMIC_ADD(ptr,val)    (InterlockedExchangeAdd((PLONG)ptr, (LONG)val) + val)
- #define _MD_ATOMIC_DECREMENT(x)       InterlockedDecrement((PLONG)x)
+@@ -315,7 +315,7 @@
+     (InterlockedExchangeAdd((PLONG)ptr, (LONG)val) + val)
+ #define _MD_ATOMIC_DECREMENT(x) InterlockedDecrement((PLONG)x)
  #endif /* x86 */
--#define _MD_ATOMIC_SET(x,y)           InterlockedExchange((PLONG)x, (LONG)y)
+-#define _MD_ATOMIC_SET(x, y) InterlockedExchange((PLONG)x, (LONG)y)
 +#define _MD_ATOMIC_SET(x,y)           _InterlockedExchange((PLONG)x, (LONG)y)
  
- #define _MD_INIT_IO                   _PR_MD_INIT_IO
+ #define _MD_INIT_IO _PR_MD_INIT_IO
  

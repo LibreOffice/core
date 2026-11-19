@@ -14,30 +14,30 @@
  #pragma intrinsic(_InterlockedExchange)
 --- nspr/pr/include/prbit.h
 +++ nspr/pr/include/prbit.h
-@@ -15,7 +15,7 @@
+@@ -14,7 +14,7 @@
  */
- #if defined(_WIN32) && (_MSC_VER >= 1300) && \
+ #if defined(_WIN32) && (_MSC_VER >= 1300) &&                   \
      (defined(_M_IX86) || defined(_M_X64) || defined(_M_ARM) || \
 -     defined(_M_ARM64))
 +     defined(_M_ARM64)) && !defined __clang__
- # include <intrin.h>
- # pragma  intrinsic(_BitScanForward,_BitScanReverse)
- __forceinline static int __prBitScanForward32(unsigned int val)
-@@ -33,7 +33,7 @@
- # define pr_bitscan_ctz32(val)  __prBitScanForward32(val)
- # define pr_bitscan_clz32(val)  __prBitScanReverse32(val)
- # define  PR_HAVE_BUILTIN_BITSCAN32
+ #include <intrin.h>
+ #pragma intrinsic(_BitScanForward, _BitScanReverse)
+ __forceinline static int
+@@ -34,7 +34,7 @@
+ #define pr_bitscan_ctz32(val) __prBitScanForward32(val)
+ #define pr_bitscan_clz32(val) __prBitScanReverse32(val)
+ #define PR_HAVE_BUILTIN_BITSCAN32
 -#elif ((__GNUC__ >= 4) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)) && \
 +#elif defined __GNUC__ && ((__GNUC__ >= 4) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)) && \
-        (defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \
-         defined(__aarch64__))
- # define pr_bitscan_ctz32(val)  __builtin_ctz(val)
-@@ -138,7 +138,7 @@
- */
+     (defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \
+      defined(__aarch64__))
+ #define pr_bitscan_ctz32(val) __builtin_ctz(val)
+@@ -145,7 +145,7 @@
  
- #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64) || \
--    defined(_M_X64) || defined(_M_ARM) || defined(_M_ARM64))
-+    defined(_M_X64) || defined(_M_ARM) || defined(_M_ARM64)) && !defined __clang__
+ #if defined(_MSC_VER) &&                                         \
+     (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || \
+-     defined(_M_ARM) || defined(_M_ARM64))
++     defined(_M_ARM) || defined(_M_ARM64)) && !defined __clang__
  #include <stdlib.h>
  #pragma intrinsic(_rotl, _rotr)
  #define PR_ROTATE_LEFT32(a, bits) _rotl(a, bits)

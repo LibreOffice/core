@@ -11,11 +11,11 @@ diff -ru a/nspr/configure b/nspr/configure
          arm*)
              CPU_ARCH=arm
              ;;
-@@ -7221,7 +7221,7 @@
+@@ -5998,7 +5998,7 @@
  fi
  
      DSO_CFLAGS=-fPIC
--    DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @executable_path/$@ -headerpad_max_install_names'
+-    DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name $(libdir)/$(notdir $@) -headerpad_max_install_names'
 +    DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @__________________________________________________OOO/$@ -headerpad_max_install_names'
      _OPTIMIZE_FLAGS=-O2
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
