@@ -139,6 +139,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		45  : true, // insert
 		93  : true, // context menu
 		113 : true, // f2
+		116 : true, // f5
 		120 : true  // f9
 	},
 
@@ -530,7 +531,21 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		}
 	},
 
+	// _isBrowserReloadKey - whether the browser would reload the page on this
+	// key: F5 with any modifier, and Ctrl+R or Ctrl+Shift+R (Cmd on a Mac).
+	_isBrowserReloadKey: function(ev) {
+		if (ev.keyCode === this.keyCodes.F5)
+			return true;
+		return ev.keyCode === this.keyCodes.R && this._isCtrlKey(ev) && !ev.altKey;
+	},
+
 	_globalKeyEvent: function(ev) {
+		// These keys have a meaning in the document, so the page must not reload
+		// on them, wherever the focus is. Once the connection is lost, though,
+		// reloading is how the user gets back in.
+		if (this._isBrowserReloadKey(ev) && app.socket && app.socket.connected())
+			ev.preventDefault();
+
 		if (this._map.uiManager.isUIBlocked())
 			return;
 
@@ -1000,6 +1015,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			}
 			else if ((ev.code === 'PageUp' || ev.code === 'PageDown') &&
 					this._isShiftOnly(ev) && map.getDocType() === 'spreadsheet') {
+				keyEventFn('input', charCode, unoKeyCode);
+				ev.preventDefault();
+			}
+			else if (key === this.keyCodes.F5) {
+				// F5 opens the navigator, which is for reading too.
 				keyEventFn('input', charCode, unoKeyCode);
 				ev.preventDefault();
 			}
