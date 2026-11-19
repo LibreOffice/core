@@ -391,6 +391,8 @@ Select one picture and press Crop in the toolbar. Crop marks appear on the pictu
 - A mark snaps to the graphic's edge when it comes close; Alt lets it go closer.
 - The handle in the middle moves the window over the picture.
 - Crop marks also move by key, like other handles.
+- The 0 key takes the crop away: the whole graphic shows again in the size it has now, and the
+  picture grows round it.
 - Press Crop again to end.
 - While cropping, the eight handles and the turn handle are hidden, so only the crop marks act.
 

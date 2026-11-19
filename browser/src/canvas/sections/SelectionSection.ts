@@ -2446,13 +2446,15 @@ abstract class SelectionSection extends CanvasSectionObject {
 		Takes the angles away by the 0 key, the 0 of the row of digits or of the number pad, while
 		the keyboard is not on the handle above the selection: every slant where some object is
 		slanted first, since a slant is the one more often made by mistake, and with the next 0
-		every turn. A 0 that finds neither is left alone and goes on as any other key. Answers
-		whether the key was used.
+		every turn. A 0 that finds neither is left alone and goes on as any other key. While the
+		crop marks of a picture are shown, the 0 takes its crop away instead. Answers whether the
+		key was used.
 	*/
 	public resetByKey(event: KeyboardEvent): boolean {
 		if (event.code !== 'Digit0' && event.code !== 'Numpad0') return false;
 		if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)
 			return false;
+		if (CropHandles.areShownFor(this)) return CropHandles.takeTheCropAway(this);
 
 		const turned = () =>
 			(this.anglesOf('turn').any || this.aLineStandsAslant()) &&

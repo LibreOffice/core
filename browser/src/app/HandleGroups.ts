@@ -607,6 +607,32 @@ class CropHandles extends HandleGroup {
 		return object?.graphicWidth !== undefined ? object : undefined;
 	}
 
+	/*
+		Takes the crop away from the picture of that selection while its crop marks are shown, so
+		the whole graphic shows again in the size it has now; the object grows round it. Answers
+		whether there was a crop to take away.
+	*/
+	public static takeTheCropAway(selection: SelectionSection): boolean {
+		const picture = CropHandles.thePictureOf(selection);
+		const objectId = selection.selectedObjects()[0];
+		const square =
+			objectId === undefined
+				? null
+				: RenderGeometrySection.transformOf(objectId);
+		const extent = picture ? CropHandles.graphicExtentOf(picture) : undefined;
+		if (!CropHandles.areShownFor(selection) || !square || !extent) return false;
+		if (!extent.minX && !extent.minY && extent.maxX === 1 && extent.maxY === 1)
+			return false;
+
+		CropHandles.cropTo(objectId, cool.Matrix2D.fromRange(extent).then(square));
+		return true;
+	}
+
+	/// The 0 key on a crop mark takes the crop away, as it does with no handle in use.
+	public pressByKey(_handle: SelectionHandle, event: KeyboardEvent): boolean {
+		return event.key === '0' && CropHandles.takeTheCropAway(this.selection);
+	}
+
 	/// Whether the marks are shown at all: the crop switch is on and one picture is selected.
 	public static areShownFor(selection: SelectionSection): boolean {
 		return (
