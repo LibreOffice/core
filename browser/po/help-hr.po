@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0200\n"
-"PO-Revision-Date: 2026-11-08 14:55+0000\n"
+"PO-Revision-Date: 2026-11-17 22:22+0000\n"
 "Last-Translator: Milo Ivir <milotype@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
 "online/help/hr/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1862,13 +1862,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
-#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">OK</span>."
 msgstr ""
 "Za skok natrag u odabrano stanje odaberi ga mišem i pritisni <span "
-"class=\"ui\">Skoči na stanje</span>."
+"class=\"ui\">U redu</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""

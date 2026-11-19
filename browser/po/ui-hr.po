@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-15 16:39+0000\n"
+"PO-Revision-Date: 2026-11-19 14:54+0000\n"
 "Last-Translator: Milo Ivir <milotype@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hr/>\n"
@@ -759,7 +759,7 @@ msgstr "Prednja strana knjižice"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:846
 msgid "Booklet back"
-msgstr "Stržnja strana knjižice"
+msgstr "Stražnja strana knjižice"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:847
 msgid "Page name"
@@ -3375,9 +3375,8 @@ msgid "Stop Cleanup"
 msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:934
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Prazna prezentacija"
+msgstr "Pregledaj prezentaciju"
 
 #: src/control/Control.CleanupSidebar.ts:970
 msgid "Fix all"
@@ -3525,7 +3524,7 @@ msgstr "Potpiši"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Zatvori aplikaciju"
 
 #: src/control/Control.BackstageView.ts:279
 msgid "Start a new document from one of the following templates."
@@ -3602,7 +3601,7 @@ msgstr "Prazna prezentacija"
 
 #: src/control/Control.BackstageView.ts:1071
 msgid "Blank Drawing"
-msgstr ""
+msgstr "Prazan crtež"
 
 #: src/control/Control.BackstageView.ts:1076
 msgid "Blank Document"
@@ -3762,92 +3761,102 @@ msgstr "Odbaci"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Dobro došao, dobro došla u Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
-msgstr ""
+msgstr "Ovaj kratki vodič pokazuje dijelove ekrana koje ćeš najčešće koristiti."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "Ime dokumenta"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Odaberi ime za preimenovanje dokumenta. Svaka promjena se sprema tijekom "
+"rada."
 
 #: src/control/onboarding/OnboardingSteps.ts:41
 msgid "The tabs"
-msgstr ""
+msgstr "Kartice"
 
 #: src/control/onboarding/OnboardingSteps.ts:43
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Svaka kartica sakuplja alate za jednu vrstu rada, kao što su umetanje ili "
+"pregledavanje."
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "The menus"
-msgstr ""
+msgstr "Izbornici"
 
 #: src/control/onboarding/OnboardingSteps.ts:51
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Svaka naredba uređivača se nalazi u jednom od ovih izbornika."
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The tools"
-msgstr ""
+msgstr "Alati"
 
 #: src/control/onboarding/OnboardingSteps.ts:58
 msgid "The buttons of the tab you selected appear along this row."
-msgstr ""
+msgstr "Gumbi odabrane kartice se prikazuju u ovom retku."
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The toolbar"
-msgstr ""
+msgstr "Traka alata"
 
 #: src/control/onboarding/OnboardingSteps.ts:65
 msgid "The buttons you need most often sit here, under the menus."
-msgstr ""
+msgstr "Gumbi koji su najčešće potrebni se nalaze ovdje, ispod izbornika."
 
 #: src/control/onboarding/OnboardingSteps.ts:71
 msgid "The formula bar"
-msgstr ""
+msgstr "Traka formula"
 
 #: src/control/onboarding/OnboardingSteps.ts:73
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Ovdje se prikazuje sadržaj odabrane ćelije. Upiši znak jednakosti za početak "
+"formule."
 
 #: src/control/onboarding/OnboardingSteps.ts:80
 msgid "The slide panel"
-msgstr ""
+msgstr "Ploča slajdova"
 
 #: src/control/onboarding/OnboardingSteps.ts:82
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Ovdje je naveden svaki slajd ili stranica dokumenta. Odaberi jedan i počni "
+"na njemu raditi."
 
 #: src/control/onboarding/OnboardingSteps.ts:90
 msgid "The sidebar"
-msgstr ""
+msgstr "Bočna traka"
 
 #: src/control/onboarding/OnboardingSteps.ts:92
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"Bočna traka sadrži postavke za sve što odabereš, kao što su tekst, oblik ili "
+"ćelija."
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "The people in the document"
-msgstr ""
+msgstr "Osobe u dokumentu"
 
 #: src/control/onboarding/OnboardingSteps.ts:100
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Pogledaj tko još uređuje i dijeli dokument."
 
 #: src/control/onboarding/OnboardingSteps.ts:110
 msgid "The status bar"
@@ -3857,15 +3866,15 @@ msgstr "Traka stanja"
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
-msgstr ""
+msgstr "Stanje dokumenta, jezik teksta i razina zumiranja nalaze se na dnu."
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You are ready to work"
-msgstr ""
+msgstr "Spreman/na si za rad"
 
 #: src/control/onboarding/OnboardingSteps.ts:120
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Ovaj vodič može ponovo proći putem izbornika „Pomoć”."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
@@ -3877,9 +3886,8 @@ msgid "Back"
 msgstr "Natrag"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Bez"
+msgstr "Gotovo"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -3888,7 +3896,7 @@ msgstr "Bez"
 #: src/slideshow/SlideShowPresenter.ts:906
 #: src/slideshow/SlideShowPresenter.ts:957
 msgid "Next"
-msgstr "Sljedeće"
+msgstr "Dalje"
 
 #: src/control/Control.Command.js:73
 msgid "Unlock"
@@ -3900,20 +3908,20 @@ msgstr "Ime dokumenta"
 
 #: src/control/Control.DocumentNameInput.js:39
 msgid "A document name cannot contain a slash or a backslash."
-msgstr ""
+msgstr "Ime dokumenta ne smije sadržavati kosu crtu ili obrnutu kosu crtu."
 
 #: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2598
 msgid "Please enter a valid document name."
-msgstr ""
+msgstr "Upiši valjano ime dokumenta."
 
 #: src/control/Control.DocumentNameInput.js:55
 msgid "Invalid document name"
-msgstr ""
+msgstr "Nevaljano ime dokumenta"
 
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
 msgid "Repair Document"
-msgstr "Popravljanje dokumenta"
+msgstr "Popravi dokumenta"
 
 #: src/control/Control.DocumentRepair.js:124
 #: src/control/Control.UserList.ts:469
@@ -3934,7 +3942,7 @@ msgstr "Kada?"
 
 #: src/control/Control.DocumentRepair.js:160
 msgid "You have not done anything to rollback yet..."
-msgstr "Ništa još nije učinjeno da za poništavanje …"
+msgstr "Još nisi ništa uradio/la za vraćanje na prethodno stanje …"
 
 #: src/control/Control.DocumentRepair.js:170
 msgid "Redo"
@@ -5103,9 +5111,8 @@ msgid "Create Slides"
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Generirana slika"
+msgstr "Generiraj sliku"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
@@ -5325,7 +5332,7 @@ msgstr "Zaštiti"
 #: src/control/Control.NotebookbarWriter.js:3061
 #: src/control/Control.NotebookbarWriter.js:3440
 msgid "Caption"
-msgstr ""
+msgstr "Opis elementa"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
@@ -5334,16 +5341,15 @@ msgstr "Animacije"
 #: src/control/Control.Notebookbar.js:663
 #: src/control/Control.NotebookbarWriter.js:3135
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Boja ispune (samo prozirne slike)"
 
 #: src/control/Control.Notebookbar.js:673
 msgid "Area"
-msgstr ""
+msgstr "Područje"
 
 #: src/control/Control.Notebookbar.js:688
-#, fuzzy
 msgid "Line"
-msgstr "Poveznica"
+msgstr "Linija"
 
 #: src/control/Control.Notebookbar.js:731
 msgid "Line Width"
@@ -5351,11 +5357,11 @@ msgstr "Širina linije"
 
 #: src/control/Control.Notebookbar.js:764
 msgid "Transparency:"
-msgstr ""
+msgstr "Prozirnost:"
 
 #: src/control/Control.Notebookbar.js:783
 msgid "Thickness:"
-msgstr ""
+msgstr "Debljina:"
 
 #: src/control/Control.NotebookbarBuilder.js:204
 #: src/control/Control.NotebookbarBuilder.js:609
@@ -5520,7 +5526,7 @@ msgid ""
 "press Esc to exit)"
 msgstr ""
 "Kloniranje formatiranja je aktivno (pritisni tipku Enter na polje kako bi se "
-"primijenilo, klikni ponovo ili pritisni tipku Esc za neprimjenjivanje"
+"primijenilo, klikni ponovo ili pritisni tipku Esc za prekid)"
 
 #: src/control/Control.NotebookbarCalc.js:544
 #: src/control/Control.NotebookbarDraw.js:720
@@ -5604,7 +5610,7 @@ msgstr "Uređivanje"
 #: src/control/Control.NotebookbarImpress.js:1417
 #: src/control/Control.NotebookbarWriter.js:1152
 msgid "Replace"
-msgstr "Zamijeni položaj"
+msgstr "Zamijeni"
 
 #: src/control/Control.NotebookbarCalc.js:1192
 #: src/control/Control.NotebookbarWriter.js:1948
@@ -5900,7 +5906,7 @@ msgstr "Ravnalo"
 #: src/control/Control.TopToolbar.js:190
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
-"Kloniranje formatiranja je aktivno (klikni ponovo ili pritisni Esc za izlaz)"
+"Kloniranje formatiranja je aktivno (klikni ponovo ili pritisni Esc za prekid)"
 
 #: src/control/Control.NotebookbarDraw.js:948
 #: src/control/Control.NotebookbarImpress.js:1118
@@ -6007,9 +6013,8 @@ msgid "Spacing & Color"
 msgstr "Razmak i boja"
 
 #: src/control/Control.NotebookbarImpress.js:1582
-#, fuzzy
 msgid "Import Slides"
-msgstr "Umetni slajdove"
+msgstr "Uvezi slajdove"
 
 #: src/control/Control.NotebookbarImpress.js:1590
 msgid "Update Links"
@@ -6111,20 +6116,19 @@ msgstr "Prikaži promjene"
 
 #: src/control/Control.NotebookbarWriter.js:2714
 msgid "Element categories"
-msgstr ""
+msgstr "Kategorije elemenata"
 
 #: src/control/Control.ContextToolbar.ts:166
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Prebaci se na uređivanje"
 
 #: src/control/Control.HyperlinkWizard.ts:67
-#, fuzzy
 msgid "Link"
 msgstr "Poveznica"
 
 #: src/control/Control.PartsPreview.js:461
 msgid "Show everyone on this slide"
-msgstr ""
+msgstr "Prikaži sve na ovom slajdu"
 
 #: src/control/Control.PartsPreview.js:627
 #: src/control/Control.PartsPreview.js:702
@@ -6143,20 +6147,20 @@ msgstr "Dodaj odjeljak"
 #: src/control/Control.PartsPreview.js:916
 msgid "with 1 other"
 msgid_plural "with %n others"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "s 1 drugim"
+msgstr[1] "s %n druga"
+msgstr[2] "s %n drugih"
 
 #: src/control/Control.PartsPreview.js:926
 msgid "with %1"
-msgstr ""
+msgstr "s %1"
 
 #: src/control/Control.PartsPreview.js:927
 msgid "with %1 and 1 other"
 msgid_plural "with %1 and %n others"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "s %1 i 1 drugi"
+msgstr[1] "s %1 i %n druga"
+msgstr[2] "s %1 i %n drugih"
 
 #: src/control/Control.PartsPreview.js:971
 msgid "preview of page %1"
@@ -6164,91 +6168,91 @@ msgstr "pregled stranice %1"
 
 #: src/control/Control.PartsPreview.js:990
 msgid "preview of page %1, %3 is missing"
-msgstr ""
+msgstr "pregled stranice %1, %3 nedostaje"
 
 #: src/control/Control.PartsPreview.js:991
 msgid "%1, %3 is missing"
-msgstr ""
+msgstr "%1, %3 nedostaje"
 
 #: src/control/Control.PartsPreview.js:995
 msgid "preview of page %1, not found in %3"
-msgstr ""
+msgstr "pregled stranice %1, nije pronađeno u %3"
 
 #: src/control/Control.PartsPreview.js:996
 msgid "%1, not found in %3"
-msgstr ""
+msgstr "%1, nije pronađeno u %3"
 
 #: src/control/Control.PartsPreview.js:1000
 msgid "preview of page %1, no access to %3"
-msgstr ""
+msgstr "pregled stranice %1, nema pristup na %3"
 
 #: src/control/Control.PartsPreview.js:1001
 msgid "%1, no access to %3"
-msgstr ""
+msgstr "%1, nema pristup na %3"
 
 #: src/control/Control.PartsPreview.js:1005
 msgid "preview of page %1, could not open %3"
-msgstr ""
+msgstr "pregled stranice %1, nije bilo moguće otvoriti %3"
 
 #: src/control/Control.PartsPreview.js:1006
 msgid "%1, could not open %3"
-msgstr ""
+msgstr "%1, nije bilo moguće otvoriti %3"
 
 #: src/control/Control.PartsPreview.js:1011
 msgid "preview of page %1, %2 changed in %3"
-msgstr ""
+msgstr "pregled stranice %1, %2 promijenjeno u %3"
 
 #: src/control/Control.PartsPreview.js:1012
 msgid "%1, %2 changed in %3"
-msgstr ""
+msgstr "%1, %2 promijenjeno u %3"
 
 #: src/control/Control.PartsPreview.js:1015
 msgid "preview of page %1, changed in %3"
-msgstr ""
+msgstr "pregled stranice %1, promijenjeno u %3"
 
 #: src/control/Control.PartsPreview.js:1016
 msgid "%1, changed in %3"
-msgstr ""
+msgstr "%1, promijenjeno u %3"
 
 #: src/control/Control.PartsPreview.js:1020
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "pregled stranice %1, %3 je odspojeno"
 
 #: src/control/Control.PartsPreview.js:1021
 msgid "%1, %3 is disconnected"
-msgstr ""
+msgstr "%1, %3 je odspojeno"
 
 #: src/control/Control.PartsPreview.js:1025
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "pregled stranice %1, povezano s %2 u %3"
 
 #: src/control/Control.PartsPreview.js:1026
 msgid "%1, linked to %2 in %3"
-msgstr ""
+msgstr "%1, povezano s %2 u %3"
 
 #: src/control/Control.PartsPreview.js:1029
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "pregled stranice %1, povezano s %2"
 
 #: src/control/Control.PartsPreview.js:1030
 msgid "%1, linked to %2"
-msgstr ""
+msgstr "%1, povezano s %2"
 
 #: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Povezano s odjeljkom od %1 koji nedostaje"
 
 #: src/control/Control.PartsPreview.js:1255
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Povezano s odjeljkom od %1 koji je promijenjen"
 
 #: src/control/Control.PartsPreview.js:1257
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Povezano s odjeljkom od %1, odspojeno"
 
 #: src/control/Control.PartsPreview.js:1258
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Povezano s odjeljkom od %1"
 
 #: src/control/Control.PartsPreview.js:1402
 #: src/control/Control.PartsPreview.js:1569
@@ -6261,7 +6265,7 @@ msgstr "Ukloni odjeljak"
 
 #: src/control/Control.PartsPreview.js:1417
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Ukloni odjeljak i slajdove"
 
 #: src/control/Control.PartsPreview.js:1426
 msgid "Move Section Up"
@@ -6273,30 +6277,30 @@ msgstr "Pomakni odjeljak prema dolje"
 
 #: src/control/Control.PartsPreview.js:1446
 msgid "Update Section"
-msgstr ""
+msgstr "Aktualiziraj odjeljak"
 
 #: src/control/Control.PartsPreview.js:1454
 msgid "Unlink Section"
-msgstr ""
+msgstr "Odspoji odjeljak"
 
 #: src/control/Control.PartsPreview.js:1461
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Odspoji odjeljak i slajdove"
 
 #: src/control/Control.PartsPreview.js:1470
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Sklopi sve odjeljke"
 
 #: src/control/Control.PartsPreview.js:1478
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Rasklopi sve odjeljke"
 
 #: src/control/Control.PartsPreview.js:1512 src/docdispatcher.ts:1030
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Izbrisati odjeljak „%1” i njegov %n slajd?"
+msgstr[1] "Izbrisati odjeljak „%1” i njegova %n slajda?"
+msgstr[2] "Izbrisati odjeljak „%1” i njegovih %n slajdova?"
 
 #: src/control/Control.PartsPreview.js:1570
 msgid "Enter new section name:"
@@ -6304,52 +6308,52 @@ msgstr "Upiši ime novog odjeljka:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Uvezi svoje slajdove"
 
 #: src/control/Control.SlideImportPane.tsx:709
 msgid "Checking..."
-msgstr ""
+msgstr "Provjeravanje …"
 
 #: src/control/Control.SlideImportPane.tsx:711
 #: src/control/Control.SlideLinkToolbar.tsx:197
 msgid "Missing"
-msgstr ""
+msgstr "Nedostaje"
 
 #: src/control/Control.SlideImportPane.tsx:713
 #: src/control/Control.SlideLinkToolbar.tsx:195
 msgid "No access"
-msgstr ""
+msgstr "Nema pristupa"
 
 #: src/control/Control.SlideImportPane.tsx:715
 msgid "Could not open"
-msgstr ""
+msgstr "Nije bilo moguće otvoriti"
 
 #: src/control/Control.SlideImportPane.tsx:721
 msgid "{0} changed"
-msgstr ""
+msgstr "Promijenjeno: {0}"
 
 #: src/control/Control.SlideImportPane.tsx:724
 msgid "Disconnected"
-msgstr ""
+msgstr "Odspojeno"
 
 #: src/control/Control.SlideImportPane.tsx:725
 #: src/control/Control.SlideLinkToolbar.tsx:137
 msgid "Linked"
-msgstr ""
+msgstr "Povezano"
 
 #: src/control/Control.SlideImportPane.tsx:728
 #: src/control/Control.SlideImportPane.tsx:1567
 msgid "Not linked"
-msgstr ""
+msgstr "Nije povezano"
 
 #: src/control/Control.SlideImportPane.tsx:771
 #: src/control/Control.SlideImportPane.tsx:790
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Čitanje slajdova …"
 
 #: src/control/Control.SlideImportPane.tsx:773
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Traženje datoteke …"
 
 #: src/control/Control.SlideImportPane.tsx:776
 msgid ""
@@ -6390,7 +6394,7 @@ msgstr ""
 #: src/control/Control.SlideImportPane.tsx:814
 #: src/control/Control.SlideImportPane.tsx:1441
 msgid "Reload slides"
-msgstr ""
+msgstr "Ponovo učitaj slajdove"
 
 #: src/control/Control.SlideImportPane.tsx:888
 msgid "1 slide inserted"
@@ -6402,7 +6406,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:896
 msgid "Slide {0}"
-msgstr ""
+msgstr "Slajd {0}"
 
 #: src/control/Control.SlideImportPane.tsx:901
 msgid "Insert slides"
@@ -6410,16 +6414,15 @@ msgstr "Umetni slajdove"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Umetni odjeljak „{0}”"
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:915
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "Umetni slajdove"
+msgstr "Umetni 1 slajd"
 
 #: src/control/Control.SlideImportPane.tsx:916
 #, fuzzy
@@ -6468,9 +6471,8 @@ msgid "Inserting slides..."
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1137
-#, fuzzy
 msgid "Import slides"
-msgstr "Umetni slajdove"
+msgstr "Uvezi slajdove"
 
 #: src/control/Control.SlideImportPane.tsx:1143
 #: src/control/Control.SlideImportPane.tsx:1144
@@ -6602,7 +6604,7 @@ msgstr ""
 #: src/control/Control.SlideLinkToolbar.tsx:179
 #: src/slideimport/SlideLinks.ts:475
 msgid "Update section"
-msgstr ""
+msgstr "Aktualiziraj odjeljak"
 
 #: src/control/Control.SlideLinkToolbar.tsx:193
 msgid "Not available"
@@ -7024,8 +7026,8 @@ msgid ""
 "Conflict Undo/Redo with multiple users. Please use document repair to "
 "resolve"
 msgstr ""
-"Problem funkcija Poništi/Ponovi s višestrukim korisnicima. Koristi "
-"popravljanje dokumenata za rješavanje problema"
+"Problem funkcija Poništi/Ponovi s više korisnika. Koristi popravljanje "
+"dokumenta za rješavanje problema"
 
 #: src/control/Control.Toolbar.js:1095
 msgid "Sheet recalculated in %1 ms"
@@ -8095,15 +8097,15 @@ msgstr "Otvori popis"
 
 #: src/control/jsdialog/Widget.Combobox.js:498
 msgid "Filter entries"
-msgstr ""
+msgstr "Filtriraj unose"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "Pozicija {n}, rastavi skup"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "Pozicija {n}, bez rastavljanja"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
@@ -8113,23 +8115,23 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
-msgstr ""
+msgstr "Pregled uvoza CSV-a"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
-msgstr ""
+msgstr "Broj retka"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:450
 msgid "Column {index}"
-msgstr ""
+msgstr "Stupac {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:632
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 uređuje"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:633
 msgid "Another user is editing"
-msgstr ""
+msgstr "Jedan drugi korisnik uređuje"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8137,31 +8139,31 @@ msgstr "Izreži"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Traka formula"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Smajlići"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Ljudi i geste"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Objekti"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Priroda i hrana"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Nedavno korišteno"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Nijedan emoji ne odgovara na „{0}”"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -9175,11 +9177,11 @@ msgstr "Dijalog dobrodošlice"
 
 #: src/map/handler/Map.Settings.ts:407
 msgid "Settings saved. Add an API key to use the AI assistant."
-msgstr ""
+msgstr "Postavke su spremljene. Dodaj API ključ za korištenje UI asistenta."
 
 #: src/map/handler/Map.Settings.ts:412
 msgid "Settings saved"
-msgstr ""
+msgstr "Postavke su spremljene"
 
 #: src/slideshow/engine/SlideShowHandler.ts:117
 msgid "First"
@@ -9284,15 +9286,15 @@ msgstr "Umanji prikaz"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr "Pregledaj trenutačni slajd"
+msgstr "Pregled trenutačnog slajda"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr "Pregledaj sljedeći slajd"
+msgstr "Pregled sljedećeg slajda"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
-msgstr "Pregled slajd {1}"
+msgstr "Pregled slajda {1}"
 
 #: src/slideshow/PresenterConsole.js:828
 msgid "You are leaving the presentation."
@@ -9357,7 +9359,7 @@ msgstr "Poslovno pismo"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Klasično poslovno pismo"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
