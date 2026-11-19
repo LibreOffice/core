@@ -187,7 +187,8 @@ public:
                 InsertDeleteFlags nNewFlags,
                 std::unique_ptr<ScRefUndoData> pRefData,
                 bool bRedoIsFilled = true,
-                const ScUndoPasteOptions* pOptions = nullptr);
+                const ScUndoPasteOptions* pOptions = nullptr,
+                SCROW nRepeatPeriod = 0);
     virtual ~ScUndoPaste() override;
 
     virtual void Undo() override;
@@ -208,6 +209,8 @@ private:
     sal_uLong       nEndChangeAction;
     bool            bRedoFilled;
     ScUndoPasteOptions aPasteOptions;
+    /// The number of rows after which the pasted rows repeat, or 0 when they do not repeat.
+    SCROW           mnRepeatPeriod;
 
     void DoChange(bool bUndo);
     void SetChangeTrack();

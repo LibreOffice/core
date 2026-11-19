@@ -873,9 +873,14 @@ public:
                                     double fZoomX, double fZoomY,
                                     bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam );
+    /** Sets the rows nStartRow to nEndRow to their optimal height. When nRepeatPeriod is
+        positive, the content of the rows may repeat every nRepeatPeriod rows: a row with the
+        same cells and attributes as the row nRepeatPeriod above it takes the height measured
+        for that row. */
     bool SetOptimalHeight(
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, bool bApi,
-        ScProgress* pOuterProgress = nullptr, sal_uInt64 nProgressStart = 0 );
+        ScProgress* pOuterProgress = nullptr, sal_uInt64 nProgressStart = 0,
+        SCROW nRepeatPeriod = 0 );
 
     void SetOptimalHeightOnly(
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
@@ -1251,6 +1256,13 @@ public:
 private:
 
     void ImplDestroy();
+
+    /** Fills the height array of rCxt for the rows nStartRow to nEndRow. The rows of the first
+        period are measured. A later row is measured when its cells or its attributes differ
+        from the row nPeriod above it, or when that row has a manual height. Otherwise it takes
+        the height of that row. */
+    void GetOptimalHeightsPeriodic(
+        sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCROW nPeriod );
 
     void FillFormulaVertical(
         const ScFormulaCell& rSrcCell,

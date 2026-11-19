@@ -2260,8 +2260,13 @@ public:
                                                     const ScMarkData* pMarkData = nullptr,
                                                     const ScColWidthParam* pParam = nullptr );
 
+    /** Sets the rows nStartRow to nEndRow of sheet nTab to their optimal height. When
+        nRepeatPeriod is positive, the content of the rows may repeat every nRepeatPeriod rows: a
+        row with the same cells and attributes as the row nRepeatPeriod above it takes the height
+        measured for that row. */
     SC_DLLPUBLIC bool           SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow,
-                                                  SCROW nEndRow, SCTAB nTab, bool bApi );
+                                                  SCROW nEndRow, SCTAB nTab, bool bApi,
+                                                  SCROW nRepeatPeriod = 0 );
 
     void                        UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark );
 

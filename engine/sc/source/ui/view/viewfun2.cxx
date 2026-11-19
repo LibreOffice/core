@@ -116,7 +116,8 @@ void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUSt
 }
 }
 
-bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRangeWidthChanged )
+bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRangeWidthChanged,
+                                    SCROW nRepeatPeriod )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     if (!pMarkData)
@@ -160,9 +161,13 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRa
         {
             SCROW nStartNo = rRow.mnStart;
             SCROW nEndNo = rRow.mnEnd;
+            // With a repeat period, only the cells of the first period get their script types in
+            // advance. The other cells get them when they are measured or painted.
+            const SCROW nScriptEndNo
+                = nRepeatPeriod > 0 ? std::min(nEndNo, nStartNo + nRepeatPeriod - 1) : nEndNo;
             ScAddress aTopLeft(0, nStartNo, nTab);
-            rDoc.UpdateScriptTypes(aTopLeft, rDoc.GetSheetLimits().GetMaxColCount(), nEndNo-nStartNo+1);
-            if (rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true))
+            rDoc.UpdateScriptTypes(aTopLeft, rDoc.GetSheetLimits().GetMaxColCount(), nScriptEndNo-nStartNo+1);
+            if (rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true, nRepeatPeriod))
             {
                 if (!bChanged)
                     nPaintY = nStartNo;

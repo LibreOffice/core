@@ -1661,8 +1661,12 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     pMixDoc.reset();
 
     bool IsRangeWidthChanged = nRangeWidth != GetViewData().GetDocShell()->GetDocument().GetColWidth(nStartCol,nEndCol,nStartTab);
+    // A range taller than the clipboard holds the clipboard repeated, so its rows repeat every
+    // nDestSizeY + 1 rows.
+    const SCROW nRepeatPeriod = nEndRow - nStartRow > nDestSizeY ? nDestSizeY + 1 : 0;
     // update row heights before pasting objects, on the tab the paste wrote to
-    AdjustBlockHeight(true, bOnSheetView ? &aFilteredMark : nullptr, IsRangeWidthChanged );
+    AdjustBlockHeight(true, bOnSheetView ? &aFilteredMark : nullptr, IsRangeWidthChanged,
+                      nRepeatPeriod);
 
     ::std::vector< OUString > aExcludedChartNames;
     SdrPage* pPage = nullptr;
@@ -1738,7 +1742,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         std::unique_ptr<SfxUndoAction> pUndo(new ScUndoPaste(
             *pDocSh, ScRange(nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
             aFilteredMark, std::move(pUndoDoc), std::move(pRedoDoc), nFlags | nUndoFlags, std::move(pUndoData),
-            false, &aOptions ));     // false = Redo data not yet copied
+            false, &aOptions,     // false = Redo data not yet copied
+            nRepeatPeriod ));
 
         if ( bInsertCells )
         {

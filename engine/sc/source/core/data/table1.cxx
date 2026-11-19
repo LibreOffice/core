@@ -27,6 +27,10 @@
 #include <osl/diagnose.h>
 
 #include <patattr.hxx>
+#include <attarray.hxx>
+#include <attrib.hxx>
+#include <columniterator.hxx>
+#include <editeng/editobj.hxx>
 #include <table.hxx>
 #include <document.hxx>
 #include <MatrixResizeGuard.hxx>
@@ -103,18 +107,22 @@ void GetOptimalHeightsInColumn(
 
     RowHeightsArray& rHeights = rCxt.getHeightArray();
     sal_uInt16 nMinHeight = rHeights.GetValue(nEndRow);
-    SCSIZE nPos = nEndRow - 1;
-    while ( nPos )
+    //  the search starts with the row above nEndRow and ends at nStartRow, because
+    //  the rows above it hold the heights of other measurements
+    SCSIZE nPos = nEndRow;
+    while ( nPos > o3tl::make_unsigned(nStartRow) )
     {
         auto aRangeData = rHeights.GetRangeData(nPos-1);
         if (aRangeData.maValue < nMinHeight)
             break;
-        nPos = std::max<SCSIZE>(0, aRangeData.mnRow1);
+        nPos = std::max<SCSIZE>(nStartRow, aRangeData.mnRow1);
     }
 
     const SCROW nMinStart = nPos;
 
-    sal_uInt64 nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
+    //  the count walks every cell block of the column, so it is taken only for a progress bar
+    sal_uInt64 nWeightedCount
+        = pProgress ? nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow) : 0;
     const SCCOL maxCol = rCol.size() - 1; // last col done already above
     for (SCCOL nCol=0; nCol<maxCol; nCol++)
     {
@@ -464,9 +472,133 @@ tools::Long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
         ( nRow, pDev, nPPTX, nPPTY, fZoomX, fZoomY, bWidth, aOptions, nullptr, bInPrintTwips );
 }
 
+namespace {
+
+// Whether two cells with the same attributes need the same row height. Two copies of one formula
+// can have different results, so formula cells never count as the same.
+bool lcl_SameHeightContent(const ScRefCellValue& rCell, const ScRefCellValue& rOther)
+{
+    if (rCell.getType() != rOther.getType())
+        return false;
+
+    switch (rCell.getType())
+    {
+        case CELLTYPE_NONE:
+            return true;
+        case CELLTYPE_VALUE:
+            return rCell.getDouble() == rOther.getDouble();
+        case CELLTYPE_STRING:
+            return *rCell.getSharedString() == *rOther.getSharedString();
+        case CELLTYPE_EDIT:
+            return *rCell.getEditText() == *rOther.getEditText();
+        default:
+            return false;
+    }
+}
+
+}
+
+void ScTable::GetOptimalHeightsPeriodic(
+    sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCROW nPeriod )
+{
+    const SCROW nFirstRepeatedRow = nStartRow + nPeriod;
+    std::vector<bool> aMeasured(nEndRow - nStartRow + 1, false);
+    auto aSetMeasured = [&aMeasured, nStartRow](SCROW nRow1, SCROW nRow2)
+    {
+        std::fill(aMeasured.begin() + (nRow1 - nStartRow),
+                  aMeasured.begin() + (nRow2 - nStartRow + 1), true);
+    };
+    aSetMeasured(nStartRow, nFirstRepeatedRow - 1);
+
+    // The height array holds no cell heights for a measured row with a manual height, so a row that
+    // repeats it is measured.
+    for (SCROW nRow = nFirstRepeatedRow; nRow <= nEndRow;)
+    {
+        size_t nIndex;
+        SCROW nFlagsEnd;
+        const CRFlags nFlags = pRowFlags->GetValue(nRow - nPeriod, nIndex, nFlagsEnd);
+        const SCROW nSpanEnd = std::min(nEndRow, nFlagsEnd + nPeriod);
+        if (nFlags & CRFlags::ManualSize)
+            aSetMeasured(nRow, nSpanEnd);
+        nRow = nSpanEnd + 1;
+    }
+
+    const ScPatternAttr* pDefaultPattern
+        = &rDocument.getCellAttributeHelper().getDefaultCellAttribute();
+    for (SCCOL nCol = 0; nCol < aCol.size(); ++nCol)
+    {
+        ScColumn& rColumn = aCol[nCol];
+
+        // The attribute runs, walked in step with the runs nPeriod rows above them. A conditional
+        // format can depend on other cells than its own, so its rows are measured.
+        ScAttrIterator aIter(rColumn.pAttrArray.get(), nFirstRepeatedRow, nEndRow, pDefaultPattern);
+        ScAttrIterator aAboveIter(rColumn.pAttrArray.get(), nStartRow, nEndRow - nPeriod,
+                                  pDefaultPattern);
+        SCROW nTop;
+        SCROW nBottom;
+        SCROW nAboveTop;
+        SCROW nAboveBottom;
+        const ScPatternAttr* pPattern = aIter.Next(nTop, nBottom);
+        const ScPatternAttr* pAbovePattern = aAboveIter.Next(nAboveTop, nAboveBottom);
+        while (pPattern && pAbovePattern)
+        {
+            const SCROW nSpanStart = std::max(nTop, nAboveTop + nPeriod);
+            const SCROW nSpanEnd = std::min(nBottom, nAboveBottom + nPeriod);
+            if (!ScPatternAttr::areSame(pPattern, pAbovePattern)
+                || !pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
+                aSetMeasured(nSpanStart, nSpanEnd);
+            if (nSpanEnd == nBottom)
+                pPattern = aIter.Next(nTop, nBottom);
+            if (nSpanEnd == nAboveBottom + nPeriod)
+                pAbovePattern = aAboveIter.Next(nAboveTop, nAboveBottom);
+        }
+
+        if (rColumn.IsEmptyData(nStartRow, nEndRow))
+            continue;
+
+        // The cells, walked row by row in step with the cells nPeriod rows above them.
+        sc::ColumnIterator aCellIter(rColumn.maCells, nFirstRepeatedRow, nEndRow);
+        sc::ColumnIterator aAboveCellIter(rColumn.maCells, nStartRow, nEndRow - nPeriod);
+        for (; aCellIter.hasCell(); aCellIter.next(), aAboveCellIter.next())
+        {
+            if (!lcl_SameHeightContent(aCellIter.getCell(), aAboveCellIter.getCell()))
+                aMeasured[aCellIter.getRow() - nStartRow] = true;
+        }
+    }
+
+    // The rows are filled from the top, so the row that a height is copied from is already final,
+    // and every write goes to the end of the runs that are filled.
+    RowHeightsArray& rHeights = rCxt.getHeightArray();
+    rHeights.SetValue(nStartRow, nEndRow, 0);
+    for (SCROW nRow = nStartRow; nRow <= nEndRow;)
+    {
+        const bool bMeasured = aMeasured[nRow - nStartRow];
+        SCROW nRunEnd = nRow;
+        while (nRunEnd < nEndRow && aMeasured[nRunEnd + 1 - nStartRow] == bMeasured)
+            ++nRunEnd;
+
+        if (bMeasured)
+            GetOptimalHeightsInColumn(rCxt, aCol, nRow, nRunEnd, nullptr, 0);
+        else
+        {
+            for (SCROW nCopyRow = nRow; nCopyRow <= nRunEnd;)
+            {
+                size_t nIndex;
+                SCROW nValueEnd;
+                const sal_uInt16 nHeight = rHeights.GetValue(nCopyRow - nPeriod, nIndex, nValueEnd);
+                const SCROW nCopyEnd
+                    = std::min(nRunEnd, std::min(nValueEnd, nCopyRow - 1) + nPeriod);
+                rHeights.SetValue(nCopyRow, nCopyEnd, nHeight);
+                nCopyRow = nCopyEnd + 1;
+            }
+        }
+        nRow = nRunEnd + 1;
+    }
+}
+
 bool ScTable::SetOptimalHeight(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, bool bApi,
-    ScProgress* pOuterProgress, sal_uInt64 nProgressStart )
+    ScProgress* pOuterProgress, sal_uInt64 nProgressStart, SCROW nRepeatPeriod )
 {
     assert(nStartRow <= nEndRow);
 
@@ -512,7 +644,10 @@ bool ScTable::SetOptimalHeight(
         // walk forces formula results, which can resize a dynamic-array
         // formula and delete cells from the store being walked over.
         sc::MatrixResizeGuard aMatrixResizeGuard(rDocument);
-        GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
+        if (nRepeatPeriod > 0 && nEndRow - nStartRow >= nRepeatPeriod)
+            GetOptimalHeightsPeriodic(rCxt, nStartRow, nEndRow, nRepeatPeriod);
+        else
+            GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
     }
 
     SetRowHeightRangeFunc aFunc(this, rCxt.getPPTY());

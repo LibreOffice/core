@@ -218,7 +218,11 @@ public:
 
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips );
 
-    bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr, bool bRangeWidthChanged = false );
+    /** Sets the marked rows to their optimal height. When nRepeatPeriod is positive, the content
+        of the marked rows may repeat every nRepeatPeriod rows, and a repeated row takes the height
+        of the row it repeats. */
+    bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr, bool bRangeWidthChanged = false,
+                                       SCROW nRepeatPeriod = 0 );
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi );
 
     void            ModifyCellSize( ScDirection eDir, bool bOptimal );

@@ -1001,14 +1001,16 @@ ScUndoPaste::ScUndoPaste( ScDocShell& rNewDocShell, const ScRangeList& rRanges,
                 ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                 InsertDeleteFlags nNewFlags,
                 std::unique_ptr<ScRefUndoData> pRefData,
-                bool bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
+                bool bRedoIsFilled, const ScUndoPasteOptions* pOptions,
+                SCROW nRepeatPeriod ) :
     ScMultiBlockUndo( rNewDocShell, rRanges ),
     aMarkData( rMark ),
     pUndoDoc( std::move(pNewUndoDoc) ),
     pRedoDoc( std::move(pNewRedoDoc) ),
     nFlags( nNewFlags ),
     pRefUndoData( std::move(pRefData) ),
-    bRedoFilled( bRedoIsFilled )
+    bRedoFilled( bRedoIsFilled ),
+    mnRepeatPeriod( nRepeatPeriod )
 {
     if ( pRefUndoData )
         pRefUndoData->DeleteUnchanged( rDocShell.GetDocument() );
@@ -1199,8 +1201,10 @@ void ScUndoPaste::DoChange(bool bUndo)
             rDrawRange.aEnd.SetCol(rDoc.MaxCol());
             rDrawRange.aEnd.SetRow(rDoc.MaxRow());
             nPaint |= PaintPartFlags::Top | PaintPartFlags::Left;
+            // Each row is compared with the row a period above it, so the period is right for the
+            // content of the undo as well.
             if (pViewShell)
-                pViewShell->AdjustBlockHeight(false, &aData);
+                pViewShell->AdjustBlockHeight(false, &aData, false, mnRepeatPeriod);
         }
         else
         {
@@ -1216,7 +1220,7 @@ void ScUndoPaste::DoChange(bool bUndo)
                 rDrawRange.aEnd.SetRow(rDoc.MaxRow());
                 bRowsAffected = true;
             }
-            if (pViewShell && pViewShell->AdjustBlockHeight(false, &aData))
+            if (pViewShell && pViewShell->AdjustBlockHeight(false, &aData, false, mnRepeatPeriod))
             {
                 rDrawRange.aStart.SetCol(0);
                 rDrawRange.aStart.SetRow(0);

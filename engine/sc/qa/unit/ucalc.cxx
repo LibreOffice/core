@@ -49,6 +49,8 @@
 #include <stlsheet.hxx>
 
 #include <columniterator.hxx>
+#include <rowheightcontext.hxx>
+#include <sizedev.hxx>
 #include <scopetools.hxx>
 #include <dociter.hxx>
 #include <edittextiterator.hxx>
@@ -72,6 +74,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/lineitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include <o3tl/nonstaticstring.hxx>
 #include <svx/svdpage.hxx>
@@ -8807,6 +8810,78 @@ CPPUNIT_TEST_FIXTURE(Test, testWrappedNumberRowHeight)
     for (SCROW nCheckRow = 1; nCheckRow < nRow; ++nCheckRow)
         CPPUNIT_ASSERT_EQUAL(nOneLine, m_pDoc->GetRowHeight(nCheckRow, 0));
 
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRepeatedRowsOptimalHeight)
+{
+    // Rows whose content repeats every three rows get the same optimal heights when a repeated
+    // row takes the height of the row it repeats as when every row is measured. Rows that break
+    // the repetition still get their own height: other text, formulas with results of different
+    // heights, and a row that repeats a row with a manual height. Sheet 0 is set with the repeat
+    // period, sheet 1 without it.
+    m_pDoc->InsertTab(0, u"Repeated"_ustr);
+    m_pDoc->InsertTab(1, u"Measured"_ustr);
+
+    constexpr SCROW nPeriod = 3;
+    constexpr SCROW nLastRow = 299;
+    ScPatternAttr aBigFont(m_pDoc->getCellAttributeHelper());
+    aBigFont.ItemSetPut(SvxFontHeightItem(800, 100, ATTR_FONT_HEIGHT));
+    ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
+    for (SCTAB nTab = 0; nTab <= 1; ++nTab)
+    {
+        for (SCROW nRow = 0; nRow <= nLastRow; ++nRow)
+        {
+            if (nRow % nPeriod == 0)
+                m_pDoc->SetString(ScAddress(0, nRow, nTab), u"one line"_ustr);
+            else if (nRow % nPeriod == 1)
+            {
+                rEE.SetTextCurrentDefaults(u"line 1\nline 2\nline 3"_ustr);
+                m_pDoc->SetEditText(ScAddress(0, nRow, nTab), rEE.CreateTextObject());
+            }
+            else
+            {
+                m_pDoc->SetValue(ScAddress(0, nRow, nTab), 42.0);
+                m_pDoc->ApplyPatternAreaTab(1, nRow, 1, nRow, nTab, aBigFont);
+            }
+        }
+
+        for (SCROW nRow : { 150, 250, 253 })
+        {
+            rEE.SetTextCurrentDefaults(u"1\n2\n3\n4\n5"_ustr);
+            m_pDoc->SetEditText(ScAddress(0, nRow, nTab), rEE.CreateTextObject());
+        }
+        m_pDoc->SetString(ScAddress(0, 202, nTab), u"=A1"_ustr);
+        m_pDoc->SetString(ScAddress(0, 205, nTab), u"=A2"_ustr);
+        m_pDoc->SetRowHeight(250, nTab, 2000);
+        m_pDoc->SetManualHeight(250, 250, nTab, true);
+    }
+
+    ScSizeDeviceProvider aProv(*m_xDocShell);
+    sc::RowHeightContext aRepeatedCxt(m_pDoc->MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), 1.0, 1.0,
+                                      aProv.GetDevice());
+    m_pDoc->SetOptimalHeight(aRepeatedCxt, 0, nLastRow, 0, true, nPeriod);
+    sc::RowHeightContext aMeasuredCxt(m_pDoc->MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), 1.0, 1.0,
+                                      aProv.GetDevice());
+    m_pDoc->SetOptimalHeight(aMeasuredCxt, 0, nLastRow, 1, true);
+
+    // The rows of one period have three different heights.
+    const sal_uInt16 nOneLine = m_pDoc->GetRowHeight(0, 1);
+    CPPUNIT_ASSERT_GREATER(nOneLine, m_pDoc->GetRowHeight(1, 1));
+    CPPUNIT_ASSERT_GREATER(nOneLine, m_pDoc->GetRowHeight(2, 1));
+    CPPUNIT_ASSERT(m_pDoc->GetRowHeight(1, 1) != m_pDoc->GetRowHeight(2, 1));
+    CPPUNIT_ASSERT_GREATER(m_pDoc->GetRowHeight(1, 1), m_pDoc->GetRowHeight(150, 1));
+    CPPUNIT_ASSERT_GREATER(m_pDoc->GetRowHeight(202, 1), m_pDoc->GetRowHeight(205, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2000), m_pDoc->GetRowHeight(250, 1));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetRowHeight(150, 1), m_pDoc->GetRowHeight(253, 1));
+
+    for (SCROW nRow = 0; nRow <= nLastRow; ++nRow)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("row " + OString::number(nRow)).getStr(),
+                                     m_pDoc->GetRowHeight(nRow, 1), m_pDoc->GetRowHeight(nRow, 0));
+    }
+
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 

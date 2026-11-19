@@ -4647,10 +4647,11 @@ tools::Long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
     return 0;
 }
 
-bool ScDocument::SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bApi )
+bool ScDocument::SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bApi,
+                                   SCROW nRepeatPeriod )
 {
     if (ScTable* pTable = FetchTable(nTab))
-        return pTable->SetOptimalHeight(rCxt, nStartRow, nEndRow, bApi);
+        return pTable->SetOptimalHeight(rCxt, nStartRow, nEndRow, bApi, nullptr, 0, nRepeatPeriod);
     return false;
 }
 
