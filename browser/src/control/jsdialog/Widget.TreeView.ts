@@ -2932,6 +2932,42 @@ class TreeViewControl {
 		selected.scrollIntoView({ block: blockOption, inline: 'nearest' });
 	}
 
+	// Scrolls the list itself, and no element around it, by the least amount that shows the
+	// selected row below the sticky search field. A row that is already in view stays where it is.
+	scrollSelectedRowIntoView() {
+		const selected = this._container.querySelector(
+			'.ui-treeview-entry.selected',
+		) as HTMLElement | null;
+		if (!selected) return;
+
+		const row = selected.getBoundingClientRect();
+		if (row.height === 0) return;
+
+		const list = this._container.getBoundingClientRect();
+		const search = this._container.querySelector(
+			':scope > .ui-treeview-search-container',
+		) as HTMLElement | null;
+		const viewTop =
+			list.top + this._container.clientTop + (search ? search.offsetHeight : 0);
+		const viewBottom =
+			list.top + this._container.clientTop + this._container.clientHeight;
+
+		if (row.top < viewTop) this._container.scrollTop -= viewTop - row.top;
+		else if (row.bottom > viewBottom)
+			this._container.scrollTop += row.bottom - viewBottom;
+	}
+
+	static findSelectedRow(
+		entries: Array<TreeEntryJSON>,
+	): number | string | undefined {
+		for (const entry of entries || []) {
+			if (entry.selected === true) return entry.row;
+			const row = TreeViewControl.findSelectedRow(entry.children);
+			if (row !== undefined) return row;
+		}
+		return undefined;
+	}
+
 	build(
 		data: TreeWidgetJSON,
 		builder: JSBuilder,
@@ -2960,6 +2996,9 @@ class TreeViewControl {
 		this._tbody = this._container;
 		(this._container as any).onSelect = (position: number) => {
 			this.selectEntryByRow(position, false);
+			app.layoutingService.appendLayoutingTask(() =>
+				this.scrollSelectedRowIntoView(),
+			);
 		};
 		(this._container as any).onReeditCell = (row: number, col: number) => {
 			this.reeditCell(row, col, builder, data);
@@ -3047,9 +3086,26 @@ JSDialog.treeView = function (
 		}
 	}
 
+	// A rebuilt treeview is built while the old one is still on the page, so the old row with the
+	// same id tells whether the selection moved to another row.
+	const selectedRow = TreeViewControl.findSelectedRow(data.entries);
+	const previousRow =
+		selectedRow !== undefined
+			? document.getElementById(data.id + '_' + selectedRow)
+			: null;
+	const selectionMoved =
+		selectedRow !== undefined &&
+		!(previousRow && previousRow.classList.contains('selected'));
+
 	var treeView = new TreeViewControl(data, builder);
 	treeView.build(data, builder, parentContainer);
 	parentContainer.appendChild(treeView._container);
+
+	// The task runs after a rebuild has put back the scroll position of the old list.
+	if (selectionMoved)
+		app.layoutingService.appendLayoutingTask(() =>
+			treeView.scrollSelectedRowIntoView(),
+		);
 
 	// Set up the initial active-cell tab stop on the selected row so Tab
 	// from outside lands directly on a cell instead of the (invisible)
