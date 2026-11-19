@@ -1338,7 +1338,12 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT );
                 }
                 break;
-
+            case SID_SETINPUTMODE:
+                {
+                    if (pDocSh->IsReadOnly())
+                        rSet.DisableItem(SID_SETINPUTMODE);
+                }
+                break;
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();
     } // while ( nWitch )
