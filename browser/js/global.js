@@ -2940,7 +2940,7 @@ function showWelcomeSVG() {
 
 	// Open the /co/collab WebSocket and sign in with accessToken.
 	// The arguments are as for collab.fetchFile above.
-	// It resolves with the file properties that coolwsd sends with authenticated, if any.
+	// It resolves with the file properties that coolwsd sends with authenticated.
 	global.collab.connect = function(wopiSrc, accessToken, coolServer) {
 		// Stash for collab.uploadFile so it can rebase upload_url
 		// against the same cool server.  Cleared on socket close.

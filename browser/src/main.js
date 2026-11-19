@@ -346,20 +346,10 @@ if (window.ThisIsTheEmscriptenApp) {
 					throw new Error('CheckFileInfo returned an empty BaseFileName');
 
 				// The file properties come before initUI, so controls such as Share follow them.
-				if (result.fileInfo) {
-					window.codaRemoteFileInfo = result.fileInfo;
-					if (!result.fileInfo.UserCanWrite)
-						app.setPermission('readonly');
-					map.fire('wopiprops', result.fileInfo);
-				} else {
-					// coolwsd sends the file properties since I8848669273ed6b50d8869b25fa32f9ef654c1b8f.
-					map.once('docloaded', function() {
-						const text = _('This server is too old for %APP, so some features may not work.');
-						const advice = _('Please ask the administrator to update it.');
-						const message = text.replace('%APP', window.brandProductName) + ' ' + advice;
-						map.uiManager.showSnackbar(message, null, null, -1, false, true);
-					});
-				}
+				window.codaRemoteFileInfo = result.fileInfo;
+				if (!result.fileInfo.UserCanWrite)
+					app.setPermission('readonly');
+				map.fire('wopiprops', result.fileInfo);
 				initUI();
 				window.app.console.log('CODA: fetch URL: ' + result.url);
 				map['wopi'].BaseFileName = result.filename;
