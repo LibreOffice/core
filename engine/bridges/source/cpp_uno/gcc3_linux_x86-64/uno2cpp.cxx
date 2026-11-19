@@ -74,22 +74,19 @@ void INSERT_INT32(
         *pDS++ = *static_cast<sal_uInt32 const *>( pSV );
 }
 
-void INSERT_INT16(
+// Integer arguments narrower than 32 bits are extended by the caller according
+// to their own signedness, as gcc and clang callers do. Code compiled by clang
+// relies on that: with optimization it compares a short argument as the whole
+// 32-bit register, so -1234 must arrive as 0xFFFFFB2E.
+template< typename T >
+void INSERT_NARROW_INT(
     void const * pSV, sal_uInt32 & nr, sal_uInt64 * pGPR, sal_uInt64 *& pDS)
 {
+    sal_uInt64 const nValue = static_cast<sal_Int64>( *static_cast<T const *>( pSV ) );
     if ( nr < x86_64::MAX_GPR_REGS )
-        pGPR[nr++] = *static_cast<sal_uInt16 const *>( pSV );
+        pGPR[nr++] = nValue;
     else
-        *pDS++ = *static_cast<sal_uInt16 const *>( pSV );
-}
-
-void INSERT_INT8(
-    void const * pSV, sal_uInt32 & nr, sal_uInt64 * pGPR, sal_uInt64 *& pDS)
-{
-    if ( nr < x86_64::MAX_GPR_REGS )
-        pGPR[nr++] = *static_cast<sal_uInt8 const *>( pSV );
-    else
-        *pDS++ = *static_cast<sal_uInt8 const *>( pSV );
+        *pDS++ = nValue;
 }
 
 }
@@ -174,13 +171,17 @@ static void cpp_call(
                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_SHORT:
+                INSERT_NARROW_INT<sal_Int16>( pCppArgs[nPos], nGPR, pGPR, pStack );
+                break;
             case typelib_TypeClass_CHAR:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                INSERT_INT16( pCppArgs[nPos], nGPR, pGPR, pStack );
+                INSERT_NARROW_INT<sal_uInt16>( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_BOOLEAN:
+                INSERT_NARROW_INT<sal_uInt8>( pCppArgs[nPos], nGPR, pGPR, pStack );
+                break;
             case typelib_TypeClass_BYTE:
-                INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack );
+                INSERT_NARROW_INT<sal_Int8>( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_FLOAT:
             case typelib_TypeClass_DOUBLE:
