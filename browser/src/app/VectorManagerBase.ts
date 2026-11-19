@@ -40,6 +40,14 @@ abstract class VectorManagerBase extends RenderManagerBase {
 	/// tells a drawing kept from before apart from one that matches them.
 	protected _drawnElsewhere = new cool.DrawnElsewhere();
 
+	/**
+	 * Send the client zoom to the engine, which needs it to find the cell
+	 * under a click. No tiles are asked for here.
+	 */
+	update(): void {
+		app.map._docLayer._sendClientZoom();
+	}
+
 	/*
 		Register a callback fired whenever the content changes. It is handed the ids of the
 		objects an answer from the engine replaced, an empty list where the change was made here

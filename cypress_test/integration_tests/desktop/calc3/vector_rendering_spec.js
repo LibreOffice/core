@@ -239,6 +239,24 @@ describe(['tagdesktop'], 'Spreadsheet drawn from vector primitives', function() 
 		assertCellTexts('E1:E3', ['1', '2', '3']);
 	});
 
+	it('puts the cell cursor on a cell clicked far down the sheet', function() {
+		// Go to B1000 - far enough away from the top-left corner.
+		calcHelper.selectCellsInRange('B1000');
+		calcHelper.assertAddressAfterIdle(win, 'B1000');
+
+		// Click the cell one column right and two rows up.  The cursor is
+		// on the last row in view, so the rows below it are out of reach.
+		cursorCellBox(function(box) {
+			var x = box.centerX + box.width;
+			var y = box.centerY - box.height * 2;
+			cy.cGet('body').realClick({ x: x, y: y });
+		});
+		helper.waitForTimers(win, 'clicktimer');
+
+		// Without the correct zoom factor this cell address may be off.
+		calcHelper.assertAddressAfterIdle(win, 'C998');
+	});
+
 	it('zooms from the content it holds', function() {
 		cy.then(function() { sent.length = 0; });
 		desktopHelper.zoomIn();
