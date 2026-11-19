@@ -1615,6 +1615,18 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'accessibility': { focusBack: true,	combination: 'HL', de: null }
 							}
 						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
+							{
+								'id': 'view-toggleformula',
+								'type': 'checkbox',
+								'text': _UNO('.uno:ToggleFormula', 'spreadsheet'),
+								'command': '.uno:ToggleFormula',
+								'accessibility': { focusBack: true,	combination: 'SF', de: null }
+							}
+						]
 					}
 				],
 				'vertical': 'true'

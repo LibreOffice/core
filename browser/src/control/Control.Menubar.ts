@@ -956,6 +956,7 @@ class Menubar extends window.L.Control {
 				   {uno: '.uno:SidebarDeck.StyleListDeck', name: _('Style List')},
 				   {type: 'separator'},
 				   {name: _UNO('.uno:ToggleSheetGrid', 'spreadsheet', true), uno: '.uno:ToggleSheetGrid', id: 'sheetgrid'},
+				   {name: _UNO('.uno:ToggleFormula', 'spreadsheet', true), uno: '.uno:ToggleFormula', id: 'toggleformula'},
 				   {name: _('Focus Cell'), type:'action', id: 'columnrowhighlight'},
 				   {name: _UNO('.uno:FreezePanes', 'spreadsheet', true), id: 'FreezePanes', uno: '.uno:FreezePanes'},
 				   {name: _UNO('.uno:FreezeCellsMenu', 'spreadsheet', true), id: 'FreezeCellsMenu', type: 'menu', uno: '.uno:FreezeCellsMenu', menu: [
