@@ -2715,27 +2715,45 @@ class PathHandles extends HandlesMovedOneByOne {
 
 	/// A click on a point opens the menu of the point below it. A click on a weight does not.
 	public letGoWhereItWasPressed(handle: SelectionHandle): void {
-		if (handle.kind === '9') this.openTheMenuOf(handle);
+		const editing = this.selection.pathEditor();
+		const menu =
+			handle.kind === '9' && editing
+				? PathHandles.pointMenu(editing, handle.name, true)
+				: null;
+		if (menu)
+			this.openAMenuBelow(
+				handle,
+				0.5 * PathEditing.pointSize(),
+				PathHandles.menuId,
+				menu.entries,
+				menu.chosen,
+			);
 	}
 
 	/// The id of the menu a click on a point opens.
 	private static readonly menuId: string = 'path-point-menu';
 
 	/*
-		Opens the menu of a point below the point. The entries delete the point, make the edge
-		after it a curve or a line, set how the curve runs through the point, and split the path
-		there. An entry is disabled when it does not apply to this point:
+		The menu of a point of the path that editor edits, by the name the editor gives the
+		point, and what a choice in it does. The entries delete the point, make the edge after it
+		a curve or a line, set how the curve runs through the point, and split the path there.
+		An entry is disabled when it does not apply to this point:
+		- Delete, where canBeDeleted says no.
 		- The last point of an open polygon has no edge after it.
 		- The edge is a curve when a weight bends it at either end.
 		- Smooth and symmetric need a point with both weights. The current choice is checked and
 		  disabled.
 		- A path of one polygon can be split at any point of a closed polygon, and at any point
 		  of an open polygon except its two ends.
+		Nothing where the name names no point of the path.
 	*/
-	private openTheMenuOf(handle: SelectionHandle): void {
-		const editing = this.selection.pathEditor();
-		const facts = editing?.factsAt(handle.name);
-		if (!editing || !facts) return;
+	public static pointMenu(
+		editing: PathEditing,
+		name: string,
+		canBeDeleted: boolean,
+	): { entries: MenuDefinition[]; chosen: (id: string) => void } | null {
+		const facts = editing.factsAt(name);
+		if (!facts) return null;
 
 		const way = (
 			id: string,
@@ -2754,7 +2772,13 @@ class PathHandles extends HandlesMovedOneByOne {
 
 		const entries: MenuDefinition[] = [
 			{ id: 'point', type: 'header', text: _('Point') },
-			{ id: 'delete', type: 'action', text: _('Delete'), img: 'bezierdelete' },
+			{
+				id: 'delete',
+				type: 'action',
+				text: _('Delete'),
+				img: 'bezierdelete',
+				isEnabled: () => canBeDeleted,
+			},
 			{ id: 'separator', type: 'separator' },
 			{
 				id: facts.curved ? 'line' : 'curve',
@@ -2795,21 +2819,18 @@ class PathHandles extends HandlesMovedOneByOne {
 			},
 		];
 
-		this.openAMenuBelow(
-			handle,
-			0.5 * PathEditing.pointSize(),
-			PathHandles.menuId,
-			entries,
-			(chosen: string): void => {
-				if (chosen === 'delete') editing.deletePoint(handle.name);
+		return {
+			entries: entries,
+			chosen: (chosen: string): void => {
+				if (chosen === 'delete') editing.deletePoint(name);
 				else if (chosen === 'curve' || chosen === 'line')
-					editing.setSegmentCurved(handle.name, chosen === 'curve');
-				else if (chosen === 'corner') editing.setContinuity(handle.name, 0);
-				else if (chosen === 'smooth') editing.setContinuity(handle.name, 1);
-				else if (chosen === 'symmetric') editing.setContinuity(handle.name, 2);
-				else if (chosen === 'split') editing.split(handle.name);
+					editing.setSegmentCurved(name, chosen === 'curve');
+				else if (chosen === 'corner') editing.setContinuity(name, 0);
+				else if (chosen === 'smooth') editing.setContinuity(name, 1);
+				else if (chosen === 'symmetric') editing.setContinuity(name, 2);
+				else if (chosen === 'split') editing.split(name);
 			},
-		);
+		};
 	}
 
 	/*
@@ -2896,37 +2917,48 @@ class PathHandles extends HandlesMovedOneByOne {
 }
 
 /*
-	The changes of a motion path go out whole, when a drag of one of its points or weights is let
-	go, so the editor of the path hands none of them on; it only asks for the path to be drawn
-	again.
+	The changes of a motion path go out whole: a change made by its editor, as a point added or
+	deleted, hands on the whole path as it leaves it, where it lies on the slide, and nothing
+	else; a drag of a point or a weight sets the path itself once it is let go.
 */
 class MotionPathSink implements PathSink {
+	private onPath: ((path: cool.ObjectPathPolygon[]) => void) | null;
+
+	constructor(
+		onPath: ((path: cool.ObjectPathPolygon[]) => void) | null = null,
+	) {
+		this.onPath = onPath;
+	}
+
+	public pathChangedHere(path: cool.ObjectPathPolygon[]): void {
+		this.onPath?.(path);
+	}
 	public movePoints(_moves: PathPointMove[]): void {
 		// The whole path goes out when the drag is let go.
 	}
 	public deletePoint(_place: PathPlace): void {
-		// A motion path takes no other change than a drag.
+		// The whole path went out already.
 	}
 	public insertPointAt(_at: cool.Point): void {
-		// A motion path takes no other change than a drag.
+		// The whole path went out already.
 	}
 	public setSegmentCurved(_place: PathPlace, _curved: boolean): void {
-		// A motion path takes no other change than a drag.
+		// The whole path went out already.
 	}
 	public setContinuity(_place: PathPlace, _continuity: number): void {
-		// A motion path takes no other change than a drag.
+		// The whole path went out already.
 	}
 	public split(_place: PathPlace): void {
-		// A motion path takes no other change than a drag.
+		// The whole path went out already.
 	}
 	public shownPathChanged(): void {
 		app.sectionContainer?.requestReDraw();
 	}
 	public setClosed(_closed: boolean): void {
-		// A motion path takes no other change than a drag.
+		// The whole path went out already.
 	}
 	public simplify(_pointsOnALine: boolean): void {
-		// A motion path takes no other change than a drag.
+		// The whole path went out already.
 	}
 }
 
@@ -2937,7 +2969,8 @@ class MotionPathSink implements PathSink {
 	drag is let go the engine is told the new path, by its place among the object's paths and with
 	the path it started from. The point a path starts at has a handle as every other point, as a
 	drawn path can start away from its object. A press on the line of a path, off its handles,
-	takes hold of that polygon of the path, and a drag moves it whole.
+	takes hold of that polygon of the path, and a drag moves it whole. A click on a point opens
+	the menu of that point, as in point editing, and a click on the line the menu of the path.
 */
 class MotionPathHandles extends HandlesMovedOneByOne {
 	public readonly name: string = 'motionPath';
@@ -2967,12 +3000,60 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 
 	/// The editor of the path at that place among the object's paths, which reads the path where
 	/// it lies on the slide.
-	private static editorOf(object: cool.SlideObject, path: number): PathEditing {
+	private static editorOf(
+		object: cool.SlideObject,
+		path: number,
+		onPath: ((placed: cool.ObjectPathPolygon[]) => void) | null = null,
+	): PathEditing {
 		return new PathEditing(
 			'motion ' + String(object.id) + ' ' + String(path),
 			() => cool.MotionPaths.placedOf(object)[path]?.polygons,
-			new MotionPathSink(),
+			new MotionPathSink(onPath),
 		);
+	}
+
+	/// The editor of the path at that place among the object's paths, whose every change sets
+	/// the path.
+	private editorThatSets(object: cool.SlideObject, path: number): PathEditing {
+		return MotionPathHandles.editorOf(
+			object,
+			path,
+			(placed: cool.ObjectPathPolygon[]) => {
+				const moved = MotionPathHandles.withPathPlaced(object, path, placed);
+				if (moved) this.setPath(object, path, moved);
+			},
+		);
+	}
+
+	/*
+		The object with the path at that place among its paths as given, laid on the slide in
+		twips. The path is held as offsets from the middle of what moves, which is taken off
+		again. The object is a copy; nothing where it has no such path.
+	*/
+	public static withPathPlaced(
+		object: cool.SlideObject,
+		path: number,
+		placed: cool.ObjectPathPolygon[],
+	): cool.SlideObject | null {
+		const paths = object.motionPaths;
+		const given = paths?.[path]?.path[0]?.points[0];
+		const laid =
+			cool.MotionPaths.placedOf(object)[path]?.polygons[0]?.points[0];
+		if (!paths || !given || !laid) return null;
+
+		const back = new cool.Point(given.x - laid.x, given.y - laid.y);
+		const relative = placed.map((polygon: cool.ObjectPathPolygon) => ({
+			...polygon,
+			points: polygon.points.map((point: cool.ObjectPathPoint) =>
+				cool.MotionPaths.shifted(point, back),
+			),
+		}));
+		return {
+			...object,
+			motionPaths: paths.map((motionPath: cool.ObjectMotionPath, at: number) =>
+				at === path ? { ...motionPath, path: relative } : motionPath,
+			),
+		};
 	}
 
 	/// The place of the path and the name the editor of that path gives the handle, by the name
@@ -3062,33 +3143,15 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		to: cool.Point,
 	): cool.SlideObject | null {
 		const place = MotionPathHandles.placeOf(name);
-		const paths = object.motionPaths;
-		const given = paths?.[place?.path ?? -1]?.path[0]?.points[0];
-		const placed =
-			cool.MotionPaths.placedOf(object)[place?.path ?? -1]?.polygons[0]
-				?.points[0];
-		if (!place || !paths || !given || !placed) return null;
+		if (!place) return null;
 
 		const moved = MotionPathHandles.editorOf(object, place.path).pathFor(
 			place.inPath,
 			to,
 		);
-		if (!moved) return null;
-
-		// the path lies on the page from the middle of what moves, which is taken off again
-		const back = new cool.Point(given.x - placed.x, given.y - placed.y);
-		const relative = moved.map((polygon: cool.ObjectPathPolygon) => ({
-			...polygon,
-			points: polygon.points.map((point: cool.ObjectPathPoint) =>
-				cool.MotionPaths.shifted(point, back),
-			),
-		}));
-		return {
-			...object,
-			motionPaths: paths.map((motionPath: cool.ObjectMotionPath, at: number) =>
-				at === place.path ? { ...motionPath, path: relative } : motionPath,
-			),
-		};
+		return moved
+			? MotionPathHandles.withPathPlaced(object, place.path, moved)
+			: null;
 	}
 
 	/// A path as the engine takes it, point by point in whole twips, with how the curve runs
@@ -3137,11 +3200,17 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		const now = moved.motionPaths?.[path];
 		if (!was || !now || object.id === undefined) return;
 
+		// a change that leaves the path as it was, as Simplify on curves that run curved, sets
+		// nothing, so it leaves no step to undo
+		const written = MotionPathHandles.written(now.path);
+		const wasWritten = MotionPathHandles.written(was.path);
+		if (written === wasWritten) return;
+
 		app.map.sendUnoCommand('.uno:SetMotionPath', {
 			ObjectId: { type: 'string', value: String(object.id) },
 			Index: { type: 'long', value: String(path) },
-			Path: { type: 'string', value: MotionPathHandles.written(now.path) },
-			Was: { type: 'string', value: MotionPathHandles.written(was.path) },
+			Path: { type: 'string', value: written },
+			Was: { type: 'string', value: wasWritten },
 		});
 		object.motionPaths = moved.motionPaths;
 		this.selection.redraw();
@@ -3202,6 +3271,91 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 			if (polygon !== null) return { path: path, polygon: polygon };
 		}
 		return null;
+	}
+
+	/// The id of the menu a click on a point of a motion path opens.
+	private static readonly pointMenuId: string = 'motion-path-point-menu';
+
+	/// The id of the menu a click on the line of a motion path opens.
+	private static readonly pathMenuId: string = 'motion-path-menu';
+
+	/*
+		A click on a point opens the menu of the point below it, as in point editing; a click on
+		a weight does not. A point is not deleted where its polygon would be left with fewer than
+		two points, as a motion path keeps every part it has.
+	*/
+	public letGoWhereItWasPressed(handle: SelectionHandle): void {
+		const object = this.object();
+		const place = MotionPathHandles.placeOf(handle.name);
+		if (!object || !place || handle.kind !== MotionPathHandles.kind) return;
+
+		const editing = this.editorThatSets(object, place.path);
+		const polygon = editing.pointOf(place.inPath)?.of;
+		const menu = PathHandles.pointMenu(
+			editing,
+			place.inPath,
+			(polygon?.points.length ?? 0) > 2,
+		);
+		if (menu)
+			this.openAMenuBelow(
+				handle,
+				0.5 * PathEditing.pointSize(),
+				MotionPathHandles.pointMenuId,
+				menu.entries,
+				menu.chosen,
+			);
+	}
+
+	/*
+		A click on the line of a path opens the menu of that path below the place clicked: a
+		point added there, the path closed or opened, and its curves simplified.
+	*/
+	public answersTheClick(at: cool.SimplePoint, _modifier: number): boolean {
+		const object = this.object();
+		const line = this.lineAt(at);
+		if (!object || !line) return false;
+
+		const editing = this.editorThatSets(object, line.path);
+		const place = new cool.Point(at.x, at.y);
+		const closed = PathEditing.isClosed(editing.path());
+		const entries: MenuDefinition[] = [
+			{ id: 'path', type: 'header', text: _('Motion Path') },
+			{ id: 'add', type: 'action', text: _('Add Point'), img: 'bezierinsert' },
+			{ id: 'separator', type: 'separator' },
+			{
+				id: 'close',
+				type: 'action',
+				text: closed ? _('Open Path') : _('Close Path'),
+				img: 'bezierclose',
+				isEnabled: () => editing.canBeClosedOrOpened(),
+			},
+			{
+				id: 'curves',
+				type: 'action',
+				text: _('Simplify Curves'),
+				img: 'beziereliminatepoints',
+			},
+			{
+				id: 'all',
+				type: 'action',
+				text: _('Simplify All'),
+				img: 'beziersimplifyall',
+			},
+		];
+
+		this.openAMenuBelow(
+			{ name: '', kind: '', point: place } as SelectionHandle,
+			0,
+			MotionPathHandles.pathMenuId,
+			entries,
+			(chosen: string): void => {
+				if (chosen === 'add') editing.insertPointAt(place);
+				else if (chosen === 'close') editing.switchClosed();
+				else if (chosen === 'curves') editing.simplify(false);
+				else if (chosen === 'all') editing.simplify(true);
+			},
+		);
+		return true;
 	}
 
 	/// A press on the line of a path, off its handles, takes hold of that polygon of the path.

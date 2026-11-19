@@ -122,6 +122,27 @@ describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 		});
 	}
 
+	// Clicks a place on the page, in twips. It first waits for the click before to expire, so
+	// the two are not taken as a double click.
+	function clickAt(win, x, y) {
+		cy.then(function() {
+			return helper.waitForTimers(win, 'clicktimer');
+		});
+		cy.then(function() {
+			var place = onCanvas(win, x, y);
+			cy.cGet('#document-canvas').click(place.x, place.y);
+		});
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+	}
+
+	// Chooses an entry of an open menu and waits for the engine to answer.
+	function choose(menuId, entry) {
+		cy.cGet('#' + menuId + '-entry-' + entry).click();
+		cy.cGet('#' + menuId + '-entry-' + entry).should('not.exist');
+	}
+
 	function undo(win) {
 		cy.then(function() {
 			win.app.map.sendUnoCommand('.uno:Undo');
@@ -265,6 +286,88 @@ describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 		cy.wrap(null).should(function() {
 			var points = pointsOf(win, beside).map(function(point) { return [point.x, point.y]; });
 			expect(points, 'the points after the undo').to.deep.equal(before);
+		});
+	});
+
+	it('A click on a point opens its menu, whose Corner Point lays the weights on the edges.', function() {
+		var win = this.win;
+		var curved;
+		cy.wrap(null).should(function() {
+			curved = objectWithPath(win, false);
+			expect(curved, 'the rectangle on a curve').to.not.equal(undefined);
+		});
+		select(win, function() { return curved; });
+
+		// the entries are Delete at 1, To Curve or To Line at 3, Corner Point, Smooth Transition
+		// and Symmetric Transition at 5 to 7, and Split Path at 9
+		cy.then(function() {
+			var middle = motionHandles(win)['motion 0 9.0.1'];
+			clickAt(win, middle.x, middle.y);
+		});
+		cy.cGet('#motion-path-point-menu-entry-7').should('have.attr', 'disabled');
+		choose('motion-path-point-menu', 5);
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		// the neighbours of the point lie on one line with it, so the weights come to lie on it too
+		cy.wrap(null).should(function() {
+			var middle = pointsOf(win, curved)[1];
+			expect([middle.behindY, middle.aheadY], 'the weights on the line').to.deep.equal([0, 0]);
+		});
+
+		undo(win);
+		cy.wrap(null).should(function() {
+			var middle = pointsOf(win, curved)[1];
+			expect(middle.behindY, 'the weight coming in after the undo').to.be.below(-100);
+			expect(middle.continuity, 'symmetric as before').to.equal(2);
+		});
+	});
+
+	it('A click on the line of a path opens its menu, which adds a point there.', function() {
+		var win = this.win;
+		var beside;
+		cy.wrap(null).should(function() {
+			beside = objectWithPathBeside(win);
+			expect(beside, 'the rectangle with a path beside it').to.not.equal(undefined);
+		});
+		select(win, function() { return beside; });
+
+		cy.then(function() {
+			var handles = motionHandles(win);
+			var first = handles['motion 0 9.0.0'];
+			var second = handles['motion 0 9.0.1'];
+			clickAt(win, (first.x + second.x) / 2, (first.y + second.y) / 2);
+		});
+		choose('motion-path-menu', 1);
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		cy.wrap(null).should(function() {
+			expect(pointsOf(win, beside), 'the points with the one added').to.have.length(3);
+		});
+
+		undo(win);
+		cy.wrap(null).should(function() {
+			expect(pointsOf(win, beside), 'the points after the undo').to.have.length(2);
+			expect(win.app.map.stateChangeHandler.getItemValue('.uno:Undo'), 'undo')
+				.to.equal('disabled');
+		});
+
+		// Simplify Curves leaves a straight path as it is, so it leaves no step to undo either
+		cy.then(function() {
+			var handles = motionHandles(win);
+			var first = handles['motion 0 9.0.0'];
+			var second = handles['motion 0 9.0.1'];
+			clickAt(win, (first.x + second.x) / 2, (first.y + second.y) / 2);
+		});
+		choose('motion-path-menu', 4);
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		cy.wrap(null).should(function() {
+			expect(pointsOf(win, beside), 'the points after Simplify Curves').to.have.length(2);
+			expect(win.app.map.stateChangeHandler.getItemValue('.uno:Undo'), 'undo')
+				.to.equal('disabled');
 		});
 	});
 });

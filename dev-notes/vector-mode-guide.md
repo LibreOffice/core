@@ -659,10 +659,14 @@ color of their own, since they are the object's defaults and not points someone 
   weights, or a weight, which at a smooth or symmetric point swings the other weight with it,
   and the path follows while it is dragged; when it is let go the path is set, as one step to
   undo. A drag on the line of a path, off its handles, moves that polygon of the path whole, and
-  the object stays where it is. A path of two parts or more shows the number of each part, from
-  1, beside the point it starts at. Ctrl+Tab reaches these handles after the object's own, and
-  the arrow keys move them as a drag does. Where the effects changed meanwhile, in another view
-  for one, the change sets nothing and the paths show as they are now.
+  the object stays where it is. A click on a point of a path opens the menu of the point, as in
+  point editing; Delete is offered where the part keeps two points at least. A click on the line
+  opens the menu of the path: Add Point (where it was clicked), Close Path or Open Path,
+  Simplify Curves and Simplify All. Each change sets the path, as one step to undo. A path of
+  two parts or more shows the number of each part, from 1, beside the point it starts at.
+  Ctrl+Tab reaches these handles after the object's own, and the arrow keys move them as a drag
+  does. Where the effects changed meanwhile, in another view for one, the change sets nothing
+  and the paths show as they are now.
 - The toolbar and the menus change their states at once with the selection, since the client
   works them out itself.
 - Changes made by other people editing the same document arrive as they happen. When they

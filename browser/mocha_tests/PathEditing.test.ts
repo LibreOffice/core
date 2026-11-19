@@ -24,6 +24,7 @@ describe('Moving a polygon of a path by its line', function () {
 		public shownPathChanged(): void {}
 		public setClosed(): void {}
 		public simplify(): void {}
+		public pathChangedHere(): void {}
 	}
 
 	// a curve from 0, 0 to 1000, 0 bent up, and a closed square from 2000, 0 to 3000, 1000

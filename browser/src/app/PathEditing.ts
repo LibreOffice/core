@@ -49,6 +49,9 @@ interface PathSink {
 	/// The path shown changed here before the change came back, or went back to the one given;
 	/// what shows it is to be drawn again.
 	shownPathChanged(): void;
+	/// The whole path as a change made here leaves it, where it is edited, handed over before
+	/// that change itself.
+	pathChangedHere(path: cool.ObjectPathPolygon[]): void;
 	/// The path is closed, or opened.
 	setClosed(closed: boolean): void;
 	/// Every curved edge that runs straight becomes a line; with pointsOnALine, the points
@@ -187,6 +190,7 @@ class PathEditing implements HandleSource {
 		);
 		if (!changed) return;
 
+		this.sink.pathChangedHere(changed);
 		const before = PathEditing.changedHere.get(this.key);
 		const from = before ? before.from : this.source();
 		PathEditing.forget(this.key);
@@ -1491,6 +1495,10 @@ class ObjectPathSink implements PathSink {
 
 	public simplify(pointsOnALine: boolean): void {
 		this.send('simplifyobjectpath', 'points=' + String(pointsOnALine));
+	}
+
+	public pathChangedHere(_path: cool.ObjectPathPolygon[]): void {
+		// Every change goes to the engine by itself, as the change it is.
 	}
 
 	/// The handles stand on the path as shown, so they are worked out again.
