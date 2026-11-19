@@ -3005,13 +3005,13 @@ class MotionPathSink implements PathSink {
 	public changeWeights(_change: PathWeightsChange): void {
 		// The whole path went out already.
 	}
-	public split(_place: PathPlace): void {
+	public split(_place: PathPlace, _after: cool.ObjectPathPolygon[]): void {
 		// The whole path went out already.
 	}
 	public shownPathChanged(): void {
 		app.sectionContainer?.requestReDraw();
 	}
-	public setClosed(_closed: boolean): void {
+	public setClosed(_closed: boolean, _at?: PathPlace): void {
 		// The whole path went out already.
 	}
 	public simplify(_pointsOnALine: boolean): void {

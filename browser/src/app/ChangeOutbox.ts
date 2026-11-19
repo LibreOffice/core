@@ -137,6 +137,7 @@ class ChangeOutbox {
 		setobjectgluepoint: ' x=',
 		cropobject: ' x1=',
 		setobjectpoints: ' changes=',
+		setobjectpathclosed: ' closed=',
 	};
 
 	private static waiting: OutboxEntry[] = [];
@@ -440,11 +441,14 @@ class ChangeOutbox {
 		Whether the message names the state of one thing, which a later message for the same
 		thing can take the place of. A change of the points of a path names a state when it is a
 		move, which is what a change without a step is. Its other steps stand on their own, and
-		adding a point renumbers the points after it.
+		adding a point renumbers the points after it. Opening a path at a point moves its points
+		around, so it stands on its own too.
 	*/
 	private static namesAState(parser: MessageParser): boolean {
 		if (parser.command === 'setobjectpoints')
 			return (parser.value('as') ?? 'move') === 'move';
+		if (parser.command === 'setobjectpathclosed')
+			return parser.value('at') === undefined;
 		return ChangeOutbox.namedStates[parser.command] !== undefined;
 	}
 

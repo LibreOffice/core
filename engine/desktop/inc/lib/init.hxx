@@ -266,8 +266,10 @@ namespace desktop {
         void convertObjects(const char* pObjectIds, const char* pTo) override;
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges,
                              const char* pStep) override;
-        void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint) override;
-        void setObjectPathClosed(unsigned long long nObjectId, bool bClosed) override;
+        void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint,
+                             unsigned long long nNewId) override;
+        void setObjectPathClosed(unsigned long long nObjectId, bool bClosed, int nAtPolygon,
+                                 int nAtPoint) override;
         void simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine) override;
         void setObjectGluePoint(unsigned long long nObjectId, int nAt, double fX,
                                 double fY) override;

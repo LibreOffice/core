@@ -291,6 +291,23 @@ describe('ChangeOutbox typed text', function () {
 		);
 	});
 
+	it('keeps the newest closing or opening of a path, and leaves opening at a point alone', function () {
+		nodeassert.strictEqual(
+			aChange('setobjectpathclosed id=5 closed=false at=0,2'),
+			null,
+		);
+
+		ChangeOutbox.setMostInFlight(1);
+		ChangeOutbox.take('setobjectpathclosed id=5 closed=false');
+		ChangeOutbox.take('setobjectpathclosed id=5 closed=true');
+		const waiting = (ChangeOutbox as any).waiting.map(
+			(entry: { message: string }) => entry.message,
+		);
+		nodeassert.deepStrictEqual(waiting, [
+			'setobjectpathclosed id=5 closed=true',
+		]);
+	});
+
 	it('keeps a move of other points of a path apart, and the newest move of the same ones', function () {
 		ChangeOutbox.setMostInFlight(1);
 		ChangeOutbox.take('setobjectpoints id=5 changes=0,1,0,100,200,0');

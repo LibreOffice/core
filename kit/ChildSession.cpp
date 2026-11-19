@@ -2136,8 +2136,11 @@ bool ChildSession::splitObjectPath(const StringVector& tokens)
     unsigned long long objectId = 0;
     int polygon = 0;
     int point = 0;
+    // Without newid the second object takes an id of its own.
+    uint64_t newId = 0;
 
-    if (tokens.size() != 4)
+    if ((tokens.size() != 4 && tokens.size() != 5)
+        || (tokens.size() == 5 && !getTokenUInt64(tokens[4], "newid", newId)))
     {
         sendTextFrameAndLogError("error: cmd=splitobjectpath kind=syntax");
         return false;
@@ -2146,17 +2149,45 @@ bool ChildSession::splitObjectPath(const StringVector& tokens)
     if (!readPointToChange(tokens, "splitobjectpath", objectId, polygon, point))
         return false;
 
-    getLOKitDocument()->splitObjectPath(objectId, polygon, point);
+    getLOKitDocument()->splitObjectPath(objectId, polygon, point, newId);
     return true;
+}
+
+namespace
+{
+/// Reads "polygon,point", two numbers from zero. Returns false for anything else.
+bool readPlace(const std::string& place, int& polygon, int& point)
+{
+    char* end = nullptr;
+    const long first = std::strtol(place.c_str(), &end, 10);
+    if (end == place.c_str() || *end != ',')
+        return false;
+
+    const char* const rest = end + 1;
+    const long second = std::strtol(rest, &end, 10);
+    if (end == rest || *end != '\0' || first < 0 || second < 0 || first > INT_MAX
+        || second > INT_MAX)
+        return false;
+
+    polygon = static_cast<int>(first);
+    point = static_cast<int>(second);
+    return true;
+}
 }
 
 bool ChildSession::setObjectPathClosed(const StringVector& tokens)
 {
     unsigned long long objectId = 0;
     std::string closed;
+    // Without at a closed path opens by the edge from its last point to its first.
+    std::string at;
+    int atPolygon = -1;
+    int atPoint = -1;
 
-    if (tokens.size() != 3 || !getTokenString(tokens[2], "closed", closed)
-        || (closed != "true" && closed != "false"))
+    if ((tokens.size() != 3 && tokens.size() != 4) || !getTokenString(tokens[2], "closed", closed)
+        || (closed != "true" && closed != "false")
+        || (tokens.size() == 4
+            && (!getTokenString(tokens[3], "at", at) || !readPlace(at, atPolygon, atPoint))))
     {
         sendTextFrameAndLogError("error: cmd=setobjectpathclosed kind=syntax");
         return false;
@@ -2165,7 +2196,7 @@ bool ChildSession::setObjectPathClosed(const StringVector& tokens)
     if (!readObjectToChange(tokens, "setobjectpathclosed", objectId))
         return false;
 
-    getLOKitDocument()->setObjectPathClosed(objectId, closed == "true");
+    getLOKitDocument()->setObjectPathClosed(objectId, closed == "true", atPolygon, atPoint);
     return true;
 }
 

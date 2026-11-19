@@ -75,16 +75,18 @@ interface PathSink {
 	/// Weights moved or were removed, as one step: the edge after a point became a curve or a
 	/// line, or the curve runs through a point another way.
 	changeWeights(change: PathWeightsChange): void;
-	/// The path is split into two at a point.
-	split(place: PathPlace): void;
+	/// The open path is split into two objects at a point. The second object has the path
+	/// after, the part after the point.
+	split(place: PathPlace, after: cool.ObjectPathPolygon[]): void;
 	/// The path shown changed here before the change came back, or went back to the one given;
 	/// what shows it is to be drawn again.
 	shownPathChanged(): void;
 	/// The whole path as a change made here leaves it, where it is edited, handed over before
 	/// that change itself.
 	pathChangedHere(path: cool.ObjectPathPolygon[]): void;
-	/// The path is closed, or opened.
-	setClosed(closed: boolean): void;
+	/// The path is closed, or opened. A closed path opened at a point has that point at both
+	/// of its ends.
+	setClosed(closed: boolean, at?: PathPlace): void;
 	/// Every curved edge that runs straight becomes a line; with pointsOnALine, the points
 	/// that lie on a straight line between their neighbours go as well.
 	simplify(pointsOnALine: boolean): void;
@@ -135,7 +137,7 @@ class PathEditing implements HandleSource {
 	>();
 
 	/// How long a path changed here is shown without an answer, in milliseconds.
-	private static readonly longestWait: number = 5000;
+	public static readonly longestWait: number = 5000;
 
 	constructor(
 		key: string,
@@ -766,12 +768,26 @@ class PathEditing implements HandleSource {
 		return change;
 	}
 
-	/// Splits the path at the point a handle stands for.
+	/// Splits the path at the point a handle stands for. A closed path is opened there, and an
+	/// open one becomes two objects.
 	public split(handleName: string): void {
 		const place = this.pointOf(handleName);
 		if (!place) return;
-		this.changeHere((path) => PathEditing.splitAt(path, place));
-		this.sink.split(place);
+		const at = { polygon: place.polygon, point: place.point };
+		if (place.of.closed === true) {
+			if (this.changeHere((path) => PathEditing.splitAt(path, place)))
+				this.sink.setClosed(false, at);
+			return;
+		}
+
+		// This path keeps the part before the point, and the second object has the rest.
+		let after = undefined as cool.ObjectPathPolygon | undefined;
+		const before = this.changeHere((path) => {
+			const pieces = PathEditing.splitAt(path, place);
+			after = pieces?.[1];
+			return pieces ? pieces.slice(0, 1) : null;
+		});
+		if (before && after) this.sink.split(at, [after]);
 	}
 
 	/// Closes the path, or opens it again where it is closed.
@@ -995,9 +1011,8 @@ class PathEditing implements HandleSource {
 
 	/*
 		Split at a point. A closed polygon opens there, and the point becomes both of its ends.
-		An open polygon becomes two that meet at the point, which the engine makes two objects
-		of; until its answer both show here as parts of this path. Only a path of one polygon is
-		split, and an open one not at its ends.
+		An open polygon becomes two that meet at the point, the part before it and the part
+		after it. Only a path of one polygon is split, and an open one not at its ends.
 	*/
 	private static splitAt(
 		path: cool.ObjectPathPolygon[],
@@ -1747,12 +1762,71 @@ class ObjectPathSink implements PathSink {
 		);
 	}
 
-	public split(place: PathPlace): void {
-		this.send('splitobjectpath', ObjectPathSink.parametersOf(place));
+	/*
+		The second object takes an id reserved for this view, where one is at hand. It then shows
+		at once as its own object, drawn as its path in hairlines, and it is selected, so it can
+		be moved away. The engine's report of it replaces it. Without a reserved id the second
+		object shows when the engine reports it.
+	*/
+	public split(place: PathPlace, after: cool.ObjectPathPolygon[]): void {
+		const newId = ReservedObjectIds.take();
+		const sent = this.send(
+			'splitobjectpath',
+			ObjectPathSink.parametersOf(place) +
+				(newId === undefined ? '' : ' newid=' + String(newId)),
+		);
+		if (sent && newId !== undefined) this.standInAsSplitOff(newId, after);
 	}
 
-	public setClosed(closed: boolean): void {
-		this.send('setobjectpathclosed', 'closed=' + String(closed));
+	/// The second object of a split stands as created, under its id and selected, in the place
+	/// of the first object among its group and layer.
+	private standInAsSplitOff(
+		newId: number,
+		path: cool.ObjectPathPolygon[],
+	): void {
+		const part = RenderGeometrySection.currentPart();
+		const first = RenderGeometrySection.objectOf(this.objectId);
+		if (!part) return;
+
+		const box = PathDrawing.rangeOf(path);
+		const created: cool.SlideObject = {
+			id: newId,
+			parent: first?.parent,
+			layer: first?.layer,
+			objectKind: first?.objectKind,
+			x: box.minX,
+			y: box.minY,
+			width: box.width,
+			height: box.height,
+			path: path,
+			primitives: [
+				{
+					type: cool.PolygonHairlinePrimitive.type,
+					color: HandleLook.outlineColour,
+					path: PathDrawing.asSvg(path),
+				} as cool.PolygonHairlinePrimitive,
+			],
+		};
+		if (
+			RenderManager.addProvisionalObject(
+				part.partId,
+				created,
+				PathEditing.longestWait,
+			)
+		)
+			GraphicSelection.selectAndShow([newId]);
+	}
+
+	/// Closing or opening names a state, so the outbox takes it. Opening at a point moves the
+	/// points around, so the changes before it go first.
+	public setClosed(closed: boolean, at?: PathPlace): void {
+		this.send(
+			'setobjectpathclosed',
+			'closed=' +
+				String(closed) +
+				(at ? ' at=' + String(at.polygon) + ',' + String(at.point) : ''),
+			at !== undefined,
+		);
 	}
 
 	public simplify(pointsOnALine: boolean): void {
@@ -1792,25 +1866,33 @@ class ObjectPathSink implements PathSink {
 
 	/*
 		Answers whether a change can go to the engine now. It cannot while an undo is on its way,
-		and the hold back is shown then. Otherwise the keyboard leaves the handles and the changes
-		waiting in the outbox go first.
+		and the hold back is shown then. Otherwise the keyboard leaves the handles, and with
+		sendAhead the changes waiting in the outbox go first. A change that names a state goes
+		into the outbox behind them, which keeps the order and lets a later state of the same
+		thing take its place.
 	*/
-	private readyToSend(): boolean {
+	private readyToSend(sendAhead: boolean = true): boolean {
 		if (ChangeOutbox.undoOnItsWay()) {
 			this.selection.showTheHoldBack();
 			return false;
 		}
 
 		this.selection.travel.leave();
-		ChangeOutbox.sendEverythingAhead();
+		if (sendAhead) ChangeOutbox.sendEverythingAhead();
 		return true;
 	}
 
-	private send(command: string, parameters: string): void {
-		if (!this.readyToSend()) return;
+	/// Answers whether the message went out.
+	private send(
+		command: string,
+		parameters: string,
+		sendAhead: boolean = true,
+	): boolean {
+		if (!this.readyToSend(sendAhead)) return false;
 
 		app.socket.sendMessage(
 			command + ' id=' + String(this.objectId) + ' ' + parameters,
 		);
+		return true;
 	}
 }

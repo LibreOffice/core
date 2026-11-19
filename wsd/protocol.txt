@@ -1017,20 +1017,24 @@ setobjectpoints id=<id> changes=<changes> [as=<step>] [sequence=<sequence>]
     does not have, changes nothing at all, because the items after it would name other points.
     So does a message that leaves a polygon with one point or the path with no polygon.
 
-splitobjectpath id=<id> polygon=<polygon> point=<point>
+splitobjectpath id=<id> polygon=<polygon> point=<point> [newid=<newid>]
 
     <id> is a drawing object, as for setobjectpoints. <polygon> and <point> are the index of a
-    polygon of its path and of a point in that polygon, as for setobjectpoints. Splits the path
-    at the point, as one undo step. A closed path opens there. An open path becomes two objects
-    that meet at the point, so the point cannot be one of its ends. Only a path of one polygon
-    can be split.
+    polygon of its path and of a point in that polygon, as for setobjectpoints. Splits the open
+    path into two objects that meet at the point, as one undo step, so the point cannot be one
+    of its ends. Only a path of one polygon with three points or more can be split. The second
+    object holds the part after the point and takes the id <newid>, which is one of the ids
+    reserved for this view. Without <newid> it takes an id of its own. A <newid> that another
+    object on the page has changes nothing.
 
-setobjectpathclosed id=<id> closed=<closed>
+setobjectpathclosed id=<id> closed=<closed> [at=<at>]
 
     <id> is a drawing object, as for setobjectpoints. <closed> is 'true' or 'false'. Closes the
     path by adding an edge from its last point to its first, or opens it by removing that edge,
     as one undo step. A path can be closed only when one of its polygons has at least three
-    points.
+    points. With <at>, which is "<polygon>,<point>" as for setobjectpoints, a closed path of one
+    polygon with three points or more is opened at that point instead, and the point becomes
+    both of its ends, so no edge is lost. <at> goes only with 'false'.
 
 simplifyobjectpath id=<id> points=<points>
 

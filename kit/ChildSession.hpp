@@ -234,10 +234,10 @@ private:
     /// names, and leaves the rest of the path as it stands.
     bool setObjectPoints(const StringVector& tokens);
 
-    /// Splits the path of a drawing object at one of its points.
+    /// Splits the open path of a drawing object into two objects at one of its points.
     bool splitObjectPath(const StringVector& tokens);
 
-    /// Closes the path of a drawing object, or opens it.
+    /// Closes the path of a drawing object, or opens it, at one of its points where it names one.
     bool setObjectPathClosed(const StringVector& tokens);
 
     /// Turns every curved edge of the path of a drawing object that runs straight into a line.

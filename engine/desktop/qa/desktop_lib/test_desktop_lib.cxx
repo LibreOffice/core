@@ -113,6 +113,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdopath.hxx>
+#include <tools/UniqueID.hxx>
 #include <svx/svdorect.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -6767,26 +6768,40 @@ void DesktopKitTest::testObjectPathCommands()
 
     // Opening the path keeps its points and removes the edge from the last point to the first.
     // Closing it adds that edge again.
-    pDocument->setObjectPathClosed(nId, false);
+    pDocument->setObjectPathClosed(nId, false, -1, -1);
     CPPUNIT_ASSERT(!pSquare->IsClosed());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
     CPPUNIT_ASSERT(aPolygon().getB2DPoint(0) != aPolygon().getB2DPoint(3));
-    pDocument->setObjectPathClosed(nId, true);
+    pDocument->setObjectPathClosed(nId, true, -1, -1);
     CPPUNIT_ASSERT(pSquare->IsClosed());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
 
-    // Splitting a closed path opens it at the point, which becomes both of its ends.
-    pDocument->splitObjectPath(nId, 0, 2);
+    // A closed path is not split into two objects, and it is not closed at a point.
+    const size_t nObjects = pPageView->GetPage()->GetObjCount();
+    pDocument->splitObjectPath(nId, 0, 2, 0);
+    pDocument->setObjectPathClosed(nId, true, 0, 2);
+    CPPUNIT_ASSERT(pSquare->IsClosed());
+    CPPUNIT_ASSERT_EQUAL(nObjects, pPageView->GetPage()->GetObjCount());
+
+    // Opening a closed path at a point makes that point both of its ends.
+    pDocument->setObjectPathClosed(nId, false, 0, 2);
     CPPUNIT_ASSERT(!pSquare->IsClosed());
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 5000), aPolygon().getB2DPoint(0));
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 5000),
                          aPolygon().getB2DPoint(aPolygon().count() - 1));
 
-    // Splitting an open path at a point between its ends gives two objects that meet there.
-    const size_t nObjects = pPageView->GetPage()->GetObjCount();
-    pDocument->splitObjectPath(nId, 0, 2);
+    // Splitting an open path at a point between its ends gives two objects that meet there. The
+    // second one takes the id given for it, where no other object has that id.
+    const unsigned long long nTaken = pPageView->GetPage()->GetObj(0)->GetUniqueID();
+    pDocument->splitObjectPath(nId, 0, 2, nTaken);
+    CPPUNIT_ASSERT_EQUAL(nObjects, pPageView->GetPage()->GetObjCount());
+    const unsigned long long nNewId = UniqueID::reserve(1);
+    pDocument->splitObjectPath(nId, 0, 2, nNewId);
     CPPUNIT_ASSERT_EQUAL(nObjects + 1, pPageView->GetPage()->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aPolygon().count());
+    SdrObject* pSecond = pPageView->GetPage()->FindObjectByUniqueID(nNewId);
+    CPPUNIT_ASSERT(pSecond);
+    CPPUNIT_ASSERT_EQUAL(pSquare->GetOrdNum() + 1, pSecond->GetOrdNum());
 
     // A point added with the weights that follow it in the same change bends the edge it is
     // added on, and one undo takes the point and the weights away together.

@@ -1412,25 +1412,35 @@ struct COKitDocument
         = 0;
 
     /**
-     * Splits the path of a drawing object at one of its points. A closed path opens there. An
-     * open path becomes two objects that meet at the point, so the point cannot be one of its
-     * ends. Only a path of one polygon can be split. It is one undo step.
+     * Splits the open path of a drawing object into two objects that meet at one of its points,
+     * so the point cannot be one of its ends. Only a path of one polygon with three points or
+     * more can be split. The second object holds the part after the point. It is one undo step.
      *
      * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
      * @param nPolygon which polygon of the path, counted from zero.
      * @param nPoint which point of that polygon, counted from zero.
+     * @param nNewId the id of the second object, or 0 for an id of its own. An id that another
+     *        object on the page has changes nothing.
      */
-    virtual void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint) = 0;
+    virtual void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint,
+                                 unsigned long long nNewId)
+        = 0;
 
     /**
      * Closes the path of a drawing object by adding an edge from its last point to its first, or
      * opens it by removing that edge. A path can be closed only when one of its polygons has at
-     * least three points. It is one undo step.
+     * least three points. A closed path of one polygon with three points or more can also be
+     * opened at one of its points instead, which becomes both of its ends. It is one undo step.
      *
      * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
      * @param bClosed true to close the path, false to open it.
+     * @param nAtPolygon with nAtPoint, the point a closed path is opened at, counted from zero,
+     *        or -1 to open it by the edge from its last point to its first.
+     * @param nAtPoint which point of that polygon, counted from zero, or -1.
      */
-    virtual void setObjectPathClosed(unsigned long long nObjectId, bool bClosed) = 0;
+    virtual void setObjectPathClosed(unsigned long long nObjectId, bool bClosed, int nAtPolygon,
+                                     int nAtPoint)
+        = 0;
 
     /**
      * Turns every curved edge of the path of a drawing object that runs straight into a line. A

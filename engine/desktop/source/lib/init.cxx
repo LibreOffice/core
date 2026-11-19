@@ -19,6 +19,7 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdopath.hxx>
+#include <tools/UniqueID.hxx>
 #include <svx/VectorObjectContent.hxx>
 #include <svx/VectorPart.hxx>
 #include <cmath>
@@ -6108,11 +6109,12 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
 }
 
 /*
-    Splits the path of an object at one of its points. A closed path opens there, and the point
-    becomes both of its ends. An open path becomes two objects that meet at the point, so the
-    point cannot be one of its ends. Only a path of one polygon can be split.
+    Splits the open path of an object into two objects that meet at one of its points, so the
+    point cannot be one of its ends. Only a path of one polygon with three points or more can be
+    split. The second object takes nNewId, where it is not 0, and an id of its own otherwise.
 */
-void COKitDocumentImpl::splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint)
+void COKitDocumentImpl::splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint,
+                                        unsigned long long nNewId)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::splitObjectPath");
 
@@ -6127,10 +6129,17 @@ void COKitDocumentImpl::splitObjectPath(unsigned long long nObjectId, int nPolyg
 
     const basegfx::B2DPolyPolygon& rPath(pPathObject->GetPathPoly());
     const sal_uInt32 nCount(rPath.getB2DPolygon(0).count());
-    const bool bClosed(pPathObject->IsClosed());
-    if (rPath.count() != 1 || nCount < 3 || (!bClosed && (nPlace == 0 || nPlace + 1 >= nCount)))
+    if (rPath.count() != 1 || nCount < 3 || pPathObject->IsClosed() || nPlace == 0
+        || nPlace + 1 >= nCount)
     {
         SetLastExceptionMsg(u"The path is not split at that point"_ustr);
+        return;
+    }
+
+    const SdrPage* pPage = pPathObject->getSdrPageFromSdrObject();
+    if (nNewId && pPage && pPage->FindObjectByUniqueID(nNewId))
+    {
+        SetLastExceptionMsg(u"Another object has the id the new one is to take"_ustr);
         return;
     }
 
@@ -6142,8 +6151,11 @@ void COKitDocumentImpl::splitObjectPath(unsigned long long nObjectId, int nPolyg
     rModel.BegUndo(SvxResId(STR_EditRipUp).replaceFirst("%1", pPathObject->TakeObjNameSingul()));
     rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pPathObject));
 
+    // The second object is the one object that splitting makes, so it takes the id given next.
     sal_uInt32 nNewStart = 0;
+    UniqueID::giveNext(nNewId);
     rtl::Reference<SdrPathObj> pSecond = pPathObject->RipPoint(nPlace, nNewStart);
+    UniqueID::giveNext(0);
     if (pSecond)
     {
         pList->InsertObject(pSecond.get(), pPathObject->GetOrdNum() + 1);
@@ -6156,9 +6168,12 @@ void COKitDocumentImpl::splitObjectPath(unsigned long long nObjectId, int nPolyg
 /*
     Closes the path of an object by adding an edge from its last point to its first, or opens it
     by removing that edge. A path can be closed only when one of its polygons has at least three
-    points. Any closed path can be opened.
+    points. Any closed path can be opened. A closed path of one polygon with three points or more
+    can also be opened at the point nAtPoint of the polygon nAtPolygon, which becomes both of its
+    ends, so no edge is lost.
 */
-void COKitDocumentImpl::setObjectPathClosed(unsigned long long nObjectId, bool bClosed)
+void COKitDocumentImpl::setObjectPathClosed(unsigned long long nObjectId, bool bClosed,
+                                            int nAtPolygon, int nAtPoint)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPathClosed");
 
@@ -6166,7 +6181,33 @@ void COKitDocumentImpl::setObjectPathClosed(unsigned long long nObjectId, bool b
     SetLastExceptionMsg();
 
     SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
-    if (!pPathObject || pPathObject->IsClosed() == bClosed)
+    if (!pPathObject)
+        return;
+
+    if (nAtPolygon >= 0 || nAtPoint >= 0)
+    {
+        const basegfx::B2DPolyPolygon& rPath(pPathObject->GetPathPoly());
+        sal_uInt32 nPlace = 0;
+        if (bClosed || !pPathObject->IsClosed() || rPath.count() != 1
+            || rPath.getB2DPolygon(0).count() < 3
+            || !lcl_placeAmongAllPoints(rPath, nAtPolygon, nAtPoint, nPlace))
+        {
+            SetLastExceptionMsg(u"The path is not opened at that point"_ustr);
+            return;
+        }
+
+        SdrModel& rModel(pPathObject->getSdrModelFromSdrObject());
+        rModel.BegUndo(
+            SvxResId(STR_EditRipUp).replaceFirst("%1", pPathObject->TakeObjNameSingul()));
+        rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pPathObject));
+        // A closed path is opened at the point and makes no second object.
+        sal_uInt32 nNewStart = 0;
+        pPathObject->RipPoint(nPlace, nNewStart);
+        rModel.EndUndo();
+        return;
+    }
+
+    if (pPathObject->IsClosed() == bClosed)
         return;
 
     const basegfx::B2DPolyPolygon& rPath(pPathObject->GetPathPoly());
