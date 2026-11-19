@@ -1465,7 +1465,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                         }
                     }
 
-                    if (bDisable)
+                    if (bDisable || pDocSh->IsReadOnly())
                         rSet.DisableItem( nWhich );
                 }
                 break;
