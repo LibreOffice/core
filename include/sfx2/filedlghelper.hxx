@@ -243,7 +243,6 @@ public:
     const css::uno::Reference < css::ui::dialogs::XFilePicker3 >& GetFilePicker() const;
 
     // XFilePickerListener methods
-    void   DirectoryChanged();
     virtual void   ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
     void   DialogSizeChanged();
 

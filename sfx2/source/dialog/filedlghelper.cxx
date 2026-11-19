@@ -180,7 +180,7 @@ void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent
 void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& )
 {
     SolarMutexGuard aGuard;
-    mpAntiImpl->DirectoryChanged();
+    handleDirectoryChanged();
 }
 
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent )
@@ -2792,11 +2792,6 @@ const uno::Reference < XFilePicker3 >& FileDialogHelper::GetFilePicker() const
 }
 
 // XFilePickerListener Methods
-
-void FileDialogHelper::DirectoryChanged()
-{
-    mpImpl->handleDirectoryChanged();
-}
 
 void FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEvent )
 {
