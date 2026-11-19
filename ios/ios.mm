@@ -326,4 +326,190 @@ void install_clipboard_provider(COKit &rOffice)
     rOffice.installClipboardProvider(&provider);
 }
 
+@class FilePickerDelegate;
+
+// The pick the engine is waiting on, nil when none is open. Only the main queue touches
+// these.
+static FilePickerDelegate *sOpenPick = nil;
+
+// The copy of the last picked file, handed to the engine and removed when the next pick
+// starts.
+static NSURL *sPreviousPickedCopy = nil;
+
+static void removePreviousPickedCopy()
+{
+    if (sPreviousPickedCopy == nil)
+        return;
+    [NSFileManager.defaultManager removeItemAtURL:sPreviousPickedCopy error:nil];
+    sPreviousPickedCopy = nil;
+}
+
+// Carries one pick's completion while the document picker is on screen and runs it once,
+// with the picked file or with none.
+@interface FilePickerDelegate : NSObject <UIDocumentPickerDelegate>
+{
+@public
+    void (*pfnPicked)(void *pContext, const char *pUrl);
+    void *pContext;
+    UIDocumentPickerViewController *picker;
+}
+- (void)answerWithURL:(NSURL *)url;
+@end
+
+@implementation FilePickerDelegate
+
+- (void)answerWithURL:(NSURL *)url
+{
+    if (pfnPicked == nullptr)
+        return;
+    void (*deliver)(void *, const char *) = pfnPicked;
+    pfnPicked = nullptr;
+    picker = nil;
+    if (sOpenPick == self)
+        sOpenPick = nil;
+    if (url != nil) {
+        sPreviousPickedCopy = url;
+        deliver(pContext, url.absoluteString.UTF8String);
+    } else {
+        deliver(pContext, nullptr);
+    }
+}
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller
+    didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    [self answerWithURL:urls.firstObject];
+}
+
+- (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller
+{
+    [self answerWithURL:nil];
+}
+
+@end
+
+// The top of the presentation chain in the foreground scene's key window, or nil when no
+// scene is in the foreground.
+static UIViewController *_Nullable presentationViewController()
+{
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+        if (scene.activationState != UISceneActivationStateForegroundActive
+            || ![scene isKindOfClass:[UIWindowScene class]])
+            continue;
+        UIWindowScene *windowScene = (UIWindowScene *)scene;
+        UIWindow *window = windowScene.keyWindow;
+        if (window == nil)
+            window = windowScene.windows.firstObject;
+        UIViewController *controller = window.rootViewController;
+        while (controller.presentedViewController != nil
+               && !controller.presentedViewController.isBeingDismissed)
+            controller = controller.presentedViewController;
+        if (controller != nil)
+            return controller;
+    }
+    return nil;
+}
+
+// The engine asks the user for a file. The filters are converted on the calling thread, the
+// picker is shown on the main queue, and the delegate answers.
+static void filePickerProviderPick(const char *pTitle, const COKitFilePickerFilter *pFilters,
+                                   size_t nFilters,
+                                   void (*pfnPicked)(void *pContext, const char *pUrl),
+                                   void *pContext)
+{
+    @autoreleasepool {
+        // The system document picker has no title line.
+        (void)pTitle;
+
+        NSMutableArray<UTType *> *types = [NSMutableArray array];
+        for (size_t i = 0; i < nFilters; ++i) {
+            NSString *wildcards = [NSString stringWithUTF8String:pFilters[i].pWildcards];
+            for (NSString *wildcard in [wildcards componentsSeparatedByString:@";"]) {
+                // "*.png": the extension follows the last dot. "*.*" names no type and is
+                // skipped, so a list of only those stays empty and allows any file.
+                NSRange dot = [wildcard rangeOfString:@"." options:NSBackwardsSearch];
+                if (dot.location == NSNotFound)
+                    continue;
+                NSString *extension = [wildcard substringFromIndex:dot.location + 1];
+                if (extension.length == 0
+                    || [extension rangeOfCharacterFromSet:
+                        [NSCharacterSet characterSetWithCharactersInString:@"*?"]].location
+                        != NSNotFound)
+                    continue;
+                UTType *type = [UTType typeWithFilenameExtension:extension];
+                if (type != nil && ![types containsObject:type])
+                    [types addObject:type];
+            }
+        }
+        if (types.count == 0)
+            [types addObject:UTTypeData];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // One pick at a time; an earlier one still on screen is cancelled first.
+            if (sOpenPick != nil) {
+                UIDocumentPickerViewController *stale = sOpenPick->picker;
+                [sOpenPick answerWithURL:nil];
+                [stale.presentingViewController dismissViewControllerAnimated:NO
+                                                                   completion:nil];
+            }
+
+            removePreviousPickedCopy();
+
+            UIViewController *presenter = presentationViewController();
+            if (presenter == nil) {
+                LOG_WRN("No foreground scene to present the document picker from; "
+                        "the pick is cancelled");
+                pfnPicked(pContext, nullptr);
+                return;
+            }
+
+            // asCopy gives a copy inside the app sandbox, readable without security-scoped
+            // access.
+            UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc]
+                initForOpeningContentTypes:types asCopy:YES];
+            picker.allowsMultipleSelection = NO;
+
+            // The picker holds its delegate weakly; sOpenPick keeps it alive.
+            FilePickerDelegate *delegate = [[FilePickerDelegate alloc] init];
+            delegate->pfnPicked = pfnPicked;
+            delegate->pContext = pContext;
+            delegate->picker = picker;
+            picker.delegate = delegate;
+            sOpenPick = delegate;
+
+            [presenter presentViewController:picker animated:YES completion:nil];
+        });
+    }
+}
+
+// Answer the open pick, if any, as cancelled and dismiss its picker (declared in ios.h). On
+// the main thread this is done before the call returns; elsewhere it goes through the main
+// queue.
+void cancel_filepicker_pick()
+{
+    void (^cancel)(void) = ^{
+        if (sOpenPick == nil)
+            return;
+        UIDocumentPickerViewController *picker = sOpenPick->picker;
+        [sOpenPick answerWithURL:nil];
+        removePreviousPickedCopy();
+        if (picker.presentingViewController != nil)
+            [picker.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    };
+    if (NSThread.isMainThread)
+        cancel();
+    else
+        dispatch_async(dispatch_get_main_queue(), cancel);
+}
+
+// Install the process-global file picker provider (declared in ios.h). After this a command
+// that needs the user to pick a file shows the system document picker instead of the engine's
+// own file dialog.
+void install_filepicker_provider(COKit &rOffice)
+{
+    static COKitFilePickerProvider provider{};
+    provider.pick = filePickerProviderPick;
+    rOffice.installFilePickerProvider(&provider);
+}
+
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

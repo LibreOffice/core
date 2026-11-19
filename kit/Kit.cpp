@@ -861,7 +861,7 @@ std::mutex GlobalCallbackMutex;
 Document* GlobalCallbackDocument = nullptr;
 } // namespace
 
-#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS)
 namespace
 {
 /// The file picker the kit gives the engine: the browser, or the integrator through it.
@@ -916,8 +916,9 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
 #endif
 
     // The browser is this document's file picker: a dialog that needs a file asks the browser
-    // of the view that is current, and the uploaded file comes back as a URL in the jail.
-#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
+    // of the view that is current, and the uploaded file comes back as a URL in the jail. The
+    // engine keeps one provider for the process, and the iOS app installs its own once.
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS)
     COKitFilePickerProvider& filePickerProvider = kitFilePickerProvider();
     filePickerProvider.pick = pickFile;
     _loKit->installFilePickerProvider(&filePickerProvider);
@@ -2217,7 +2218,7 @@ std::shared_ptr<ChildSession> Document::findSessionByViewId(int viewId)
     return nullptr;
 }
 
-#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS)
 /// The document and session of the engine's current view. View ids are unique across the
 /// documents of a process, so all of them are searched.
 static std::pair<Document*, std::shared_ptr<ChildSession>> findDocumentOfCurrentView()
@@ -2339,7 +2340,7 @@ void Document::enableLinkPicks()
     filePickerProvider.pickLinkTarget = pickLinkTarget;
     _loKit->installFilePickerProvider(&filePickerProvider);
 }
-#endif // !MACOSAPP && !QTAPP && !_WIN32
+#endif // !MACOSAPP && !QTAPP && !_WIN32 && !IOS
 
 bool Document::completeLinkPick(unsigned id, int viewId, const std::string& relativePath,
                                 const std::string& readUrl)
@@ -5399,6 +5400,10 @@ void runKitLoopInAThread()
                     // One process-shared clipboard for every open document; the provider does
                     // the raw system-pasteboard input and output.
                     install_clipboard_provider(*loKit);
+
+                    // A native document picker where the engine would open its own file
+                    // dialog. It is installed once for the process, like in the desktop apps.
+                    install_filepicker_provider(*loKit);
 
                     int dummy;
                     loKit->runLoop(pollCallback, wakeCallback, &dummy);

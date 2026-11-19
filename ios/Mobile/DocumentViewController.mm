@@ -328,6 +328,10 @@ static UIColor *mainBackgroundColor(BOOL dark)
 }
 
 - (IBAction)dismissDocumentViewController {
+    // An open pick is answered and its picker dismissed first, so the dismiss below applies to
+    // this controller.
+    cancel_filepicker_pick();
+
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [self dismissViewControllerAnimated:YES completion:^ {
             [self.document closeWithCompletionHandler:^(BOOL success){

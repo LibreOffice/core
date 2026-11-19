@@ -21,4 +21,11 @@ extern COKit *lo_kit;
    the system pasteboard on paste through it, one shared clipboard for every open document. */
 void install_clipboard_provider(COKit &rOffice);
 
+/* Install the engine-driven file picker provider: the system document picker stands in for the
+   engine's own file dialog. */
+void install_filepicker_provider(COKit &rOffice);
+
+/* Answer the open file pick, if any, as cancelled and dismiss its picker. */
+void cancel_filepicker_pick();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
