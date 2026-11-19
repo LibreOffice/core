@@ -5594,8 +5594,12 @@ static bool isValidURI(const std::string& address)
 // The port is always written, so two addresses of one origin give the same text.
 static std::string originOf(const Poco::URI& uri)
 {
-    return uri.getScheme() + "://" + Util::toLower(uri.getHost()) + ':' +
-           std::to_string(uri.getPort());
+    // Poco::URI::getHost returns an IPv6 host without its brackets.
+    std::string host = Util::toLower(uri.getHost());
+
+    if (host.find(':') != std::string::npos)
+        host = '[' + host + ']';
+    return uri.getScheme() + "://" + host + ':' + std::to_string(uri.getPort());
 }
 
 static std::string originOf(const wchar_t* address)
