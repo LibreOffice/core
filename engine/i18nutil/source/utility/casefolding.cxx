@@ -26,6 +26,8 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <rtl/character.hxx>
 
+#include <algorithm>
+
 #include <unicode/uchar.h>
 
 using namespace com::sun::star::lang;
@@ -193,6 +195,8 @@ static bool isAscii(const sal_Unicode *unistr, sal_Int32 nCount)
 #define NOT_END_OF_STR1 (nMatch1 < nCount1 || e1.current < e1.element.nmap)
 #define NOT_END_OF_STR2 (nMatch2 < nCount2 || e2.current < e2.element.nmap)
 
+static sal_Int32 toSign(sal_Int32 n) { return std::clamp(n, sal_Int32(-1), sal_Int32(1)); }
+
 sal_Int32
 casefolding::compare(
     const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
@@ -204,11 +208,18 @@ casefolding::compare(
 
     // First check if we can do an ascii comparison. The check is cheap and
     // the optimised compare is much faster.
-    // We avoid turkish because of https://en.wikipedia.org/wiki/Dotted_and_dotless_I_in_computing
-    const bool bTurkic = aLocale.Language == "tr" || aLocale.Language == "az";
-    if (!bTurkic && isAscii(unistr1, nCount1) && isAscii(unistr2, nCount2))
+    // Width folding does not keep the ASCII order
+    if (!(moduleLoaded & TransliterationFlags::IGNORE_WIDTH) && isAscii(unistr1, nCount1)
+        && isAscii(unistr2, nCount2))
     {
-        return rtl_ustr_compareIgnoreAsciiCase_WithLength(unistr1, nCount1, unistr2, nCount2);
+        // The full comparison returns -1, 0 or 1
+        if (!(moduleLoaded & TransliterationFlags::IGNORE_CASE))
+            return toSign(rtl_ustr_compare_WithLength(unistr1, nCount1, unistr2, nCount2));
+        // We avoid turkish because of https://en.wikipedia.org/wiki/Dotted_and_dotless_I_in_computing
+        const bool bTurkic = aLocale.Language == "tr" || aLocale.Language == "az";
+        if (!bTurkic)
+            return toSign(
+                rtl_ustr_compareIgnoreAsciiCase_WithLength(unistr1, nCount1, unistr2, nCount2));
     }
 
     sal_Unicode c1, c2;

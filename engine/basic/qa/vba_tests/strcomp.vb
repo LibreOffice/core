@@ -27,6 +27,7 @@ Sub verify_testSTRcomp()
     TestUtil.AssertEqual(StrComp("text",   "text", vbTextCompare),    0, "StrComp(""text"", ""text"", vbTextCompare)")
     TestUtil.AssertEqual(StrComp("text  ", "text", vbTextCompare),    1, "StrComp(""text  "", ""text"", vbTextCompare)")
     TestUtil.AssertEqual(StrComp("Text",   "text", vbTextCompare),    0, "StrComp(""Text"", ""text"", vbTextCompare)")
+    TestUtil.AssertEqual(StrComp("a",      "c",    vbTextCompare),   -1, "StrComp(""a"", ""c"", vbTextCompare)")
 
     Exit Sub
 errorHandler:

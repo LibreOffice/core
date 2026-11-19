@@ -174,8 +174,54 @@ public:
         transliteration_->loadModuleByImplName(u"TextToPinyin_zh_CN"_ustr, {});
     }
 
+    void testCompareStringIgnoreWidth()
+    {
+        const css::lang::Locale aEnglish(u"en"_ustr, u"US"_ustr, {});
+        transliteration_->loadModuleNew({ css::i18n::TransliterationModulesNew_IGNORE_WIDTH },
+                                        aEnglish);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             transliteration_->compareString(u"a"_ustr, u"\uFF41"_ustr));
+        // Case still matters, and upper case sorts first
+        CPPUNIT_ASSERT(transliteration_->compareString(u"a"_ustr, u"A"_ustr) != 0);
+        CPPUNIT_ASSERT(transliteration_->compareString(u"a"_ustr, u"B"_ustr) > 0);
+    }
+
+    void testCompareStringIgnoreCaseAndWidth()
+    {
+        const css::lang::Locale aEnglish(u"en"_ustr, u"US"_ustr, {});
+        transliteration_->loadModuleNew({ css::i18n::TransliterationModulesNew_IGNORE_CASE,
+                                          css::i18n::TransliterationModulesNew_IGNORE_WIDTH },
+                                        aEnglish);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), transliteration_->compareString(u"a"_ustr, u"A"_ustr));
+        // Width folding maps an exclamation mark to fullwidth, but not DEL
+        CPPUNIT_ASSERT(transliteration_->compareString(u"\x7f"_ustr, u"!"_ustr) < 0);
+    }
+
+    void testCompareStringIgnoreKana()
+    {
+        const css::lang::Locale aEnglish(u"en"_ustr, u"US"_ustr, {});
+        transliteration_->loadModuleNew({ css::i18n::TransliterationModulesNew_IGNORE_KANA },
+                                        aEnglish);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             transliteration_->compareString(u"\u3042"_ustr, u"\u30A2"_ustr));
+        CPPUNIT_ASSERT(transliteration_->compareString(u"a"_ustr, u"B"_ustr) > 0);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), transliteration_->compareString(u"abc"_ustr, u"a"_ustr));
+    }
+
+    void testCompareStringIgnoreCase()
+    {
+        const css::lang::Locale aEnglish(u"en"_ustr, u"US"_ustr, {});
+        transliteration_->loadModuleNew({ css::i18n::TransliterationModulesNew_IGNORE_CASE },
+                                        aEnglish);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), transliteration_->compareString(u"a"_ustr, u"C"_ustr));
+    }
+
     CPPUNIT_TEST_SUITE(Transliteration);
     CPPUNIT_TEST(testLoadModuleNew);
+    CPPUNIT_TEST(testCompareStringIgnoreWidth);
+    CPPUNIT_TEST(testCompareStringIgnoreCaseAndWidth);
+    CPPUNIT_TEST(testCompareStringIgnoreKana);
+    CPPUNIT_TEST(testCompareStringIgnoreCase);
     CPPUNIT_TEST(testTextToChuyin_zh_TW);
     CPPUNIT_TEST(testTextToPinyin_zh_CN);
     CPPUNIT_TEST_SUITE_END();
