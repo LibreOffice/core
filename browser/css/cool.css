@@ -2117,6 +2117,7 @@ body.slideshow-presenting-in-window .jsdialog-window.modalpopup {
 #debug-panel input[type='checkbox'] { margin-right: 5px; }
 #debug-panel input[type='checkbox']:disabled + span { color: #888; }
 #debug-panel .debug-panel-number { width: 5.5em; margin-left: 5px; font: inherit; }
+#debug-panel .debug-panel-action { display: block; margin: 2px 0; font: inherit; }
 
 /* the debug tile preload map, drawn above the document canvas it is a
    sibling of, and transparent to input */

@@ -280,6 +280,10 @@ public:
     }
     bool isWelcome() const { return _isWelcome; }
 
+    /// Open one more view of this document in a window of its own, as one more user would have
+    /// it. For the debug tools.
+    void openSecondaryView();
+
     /// Apply the stored user interface zoom to this window's web view. An
     /// explicit zoom percentage becomes the web view's zoom factor; with no
     /// explicit zoom the system text scaling is queried and applied instead.
@@ -294,6 +298,9 @@ private:
     // Make the webview and its page, and wire up the page signals.
     void createWebEngineView();
 
+    // Join the document of `first` as one more session, under the same appDocId.
+    void loadAsSecondaryView(const WebView& first);
+
     QMainWindow* _mainWindow;
     QWebEngineProfile* _profile;
     std::unique_ptr<CODAWebEngineView> _webView;
@@ -306,6 +313,13 @@ private:
     QString _docTitle;
     QString _docType;
     bool _isWelcome;
+    // This is one more view of a document that another WebView has open.
+    bool _isSecondaryView = false;
+    // The windows of the secondary views of this document. A window that has closed leaves a null
+    // entry.
+    QList<QPointer<QMainWindow>> _secondaryViewWindows;
+    // The number in the window title of the next secondary view. The first view is view 1.
+    int _nextViewNumber = 2;
     QImage _thumbnail;
     Bridge* _bridge;
     // Holds the temporary copy of a template while it is open as a new document,

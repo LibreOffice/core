@@ -568,6 +568,13 @@ void install_filepicker_provider(COKit &rOffice)
     NSLog(@"CollaboraOffice: BYE for appDocId %d, %d documents open",
           document.appDocId, DocumentData::count());
 
+    // The document stays open after a secondary view of it closes, so only the connection of that
+    // view ends.
+    if (document.isSecondaryView) {
+        fakeSocketClose(document.closeNotificationSignalFd);
+        return;
+    }
+
     // A document with no view of its own is kept loaded on purpose, so closing its
     // last session is not what ends it. Ask for it directly.
     closeDetachedDocument(document.appDocId);
@@ -596,9 +603,11 @@ void install_filepicker_provider(COKit &rOffice)
           document.appDocId, document.fakeClientFd);
 
     // Mark the document before the socket goes, so the broker never sees an empty
-    // session list that it would read as the document having ended.
-    if (auto broker = findBrokerByMobileAppDocId(document.appDocId))
-        broker->setDetached(true);
+    // session list that it would read as the document having ended. A secondary view leaves
+    // the first view's session, which keeps the document.
+    if (!document.isSecondaryView)
+        if (auto broker = findBrokerByMobileAppDocId(document.appDocId))
+            broker->setDetached(true);
 
     if (document.closeNotificationSignalFd == -1)
         return;

@@ -46,9 +46,27 @@ class Document: NSDocument {
 
     // The page of a remote document saves and uploads it, so AppKit must not
     // ask about its changes. The account window asks the page when it closes.
+    // The changes of a secondary view are the first view's to save.
     override var isDocumentEdited: Bool {
-        return editorFrame == nil && super.isDocumentEdited
+        return editorFrame == nil && !isSecondaryView && super.isDocumentEdited
     }
+
+    /// This is one more view of a document that another Document has open, from the debug
+    /// tools. It shares the appDocId and the temporary file of the first.
+    @objc
+    var isSecondaryView = false
+
+    /// The secondary views of this document that are open.
+    private var secondaryViews: [Document] = []
+
+    /// The number in the window title of the next secondary view. The first view is view 1.
+    private var nextViewNumber = 2
+
+    /// The number in the window title of this secondary view.
+    private var viewNumber = 0
+
+    /// The document that this secondary view shows.
+    private weak var firstView: Document?
 
     /// True from the moment the connection to the in-process server is released until a
     /// new one is established. The document stays loaded in the engine throughout.
@@ -600,6 +618,16 @@ class Document: NSDocument {
 
         NSLog("CollaboraOffice: Closing document")
 
+        // The secondary views go with the first, which owns the document.
+        let views = secondaryViews
+        secondaryViews = []
+        for view in views {
+            view.firstView = nil
+            view.close()
+        }
+
+        firstView?.secondaryViews.removeAll { $0 === self }
+
         // The webview goes with the document, so stop offering it to the
         // WebDriver clients now. Waiting for it to be deallocated would keep it
         // on offer for as long as anything still holds the document.
@@ -640,6 +668,80 @@ class Document: NSDocument {
 
         webView = nil
         COWrapper.detach(self)
+    }
+
+    /**
+     * Open one more view of this document in a window of its own, as one more user would have it.
+     * For the debug tools.
+     */
+    func openSecondaryView() {
+        // A remote document is driven by the page's own collab connection, which another page
+        // would not share.
+        guard !isSecondaryView, !isWelcome, editorFrame == nil, appDocId != -1, tempFileURL != nil else {
+            COWrapper.LOG_ERR("No secondary view for appDocId \(appDocId)")
+            return
+        }
+
+        // The same file and appDocId reach the document broker that is already open. It adds a
+        // session for this view, as for one more user.
+        let second = Document()
+        second.isSecondaryView = true
+        second.firstView = self
+        second.viewNumber = nextViewNumber
+        nextViewNumber += 1
+        second.appDocId = appDocId
+        second.tempFileURL = tempFileURL
+        second.documentType = documentType
+
+        // Each new window steps down from the one opened last.
+        let previousWindow = secondaryViews.last?.webView?.window ?? webView?.window
+        secondaryViews.append(second)
+
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let identifier = NSStoryboard.SceneIdentifier("DocumentWindowController")
+        guard let windowController = storyboard.instantiateController(withIdentifier: identifier) as? WindowController else {
+            fatalError("Unable to find DocumentWindowController in storyboard.")
+        }
+        windowController.shouldCascadeWindows = true
+        second.addWindowController(windowController)
+
+        if let win = windowController.window {
+            // A secondary view is a window of its own, not a tab of the first.
+            win.tabbingMode = .disallowed
+            win.minSize = NSSize(width: 800, height: 480)
+            if let previousWindow {
+                win.setFrame(previousWindow.frame, display: false)
+                win.setFrameTopLeftPoint(win.cascadeTopLeft(from: NSPoint(x: previousWindow.frame.minX,
+                                                                          y: previousWindow.frame.maxY)))
+            }
+        }
+
+        if let viewController = windowController.contentViewController as? ViewController {
+            viewController.loadDocument(second)
+        }
+        windowController.showWindow(nil)
+    }
+
+    // The window title tells the views apart.
+    override var displayName: String! {
+        get {
+            if isSecondaryView, let firstView {
+                return firstView.displayName + " (view \(viewNumber))"
+            }
+            return super.displayName
+        }
+        set {
+            super.displayName = newValue
+        }
+    }
+
+    // A save goes to the first view, which has the file.
+    override func save(_ sender: Any?) {
+        if isSecondaryView {
+            firstView?.save(sender)
+            return
+        }
+        super.save(sender)
     }
 
     func connect(webView: WKWebView) {
@@ -686,6 +788,10 @@ class Document: NSDocument {
 
         if isWelcome {
             components.queryItems?.append(URLQueryItem(name: "welcome", value: "true"))
+        }
+
+        if isSecondaryView {
+            components.queryItems?.append(URLQueryItem(name: "secondaryview", value: "true"))
         }
 
         let finalURL = components.url!

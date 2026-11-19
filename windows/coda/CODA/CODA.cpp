@@ -146,6 +146,15 @@ struct DocumentTab
     bool hasContent = false;
     // The page agreed to the close, so the tab can go without asking it again.
     bool readyToClose = false;
+    // For a secondary view of a document, from the debug tools, the tab of the first view. A
+    // secondary view shares the appDocId of the first, and the document is the first view's.
+    int firstViewTabId = 0;
+    // The number in the window title of a secondary view. The first view is view 1.
+    int viewNumber = 0;
+    // The tabs of the secondary views of this document that are open.
+    std::vector<int> secondaryViewTabIds;
+    // The number in the window title of the next secondary view of this document.
+    int nextViewNumber = 2;
     int docUnloadingRetries = 0;
     // The tab has no WebView2 of its own. The document stays loaded in the engine under appDocId,
     // with no session, until the tab gets a new WebView2.
@@ -184,6 +193,8 @@ struct WindowState
     // The window shows documents as tabs, rather than being the welcome slideshow, the starter
     // backstage or a presenter console.
     bool isTabbed = false;
+    // The window holds a secondary view of a document, and newly opened documents do not go there.
+    bool holdsSecondaryView = false;
     std::vector<int> tabIds;
     int activeTabId = 0;
     // The tab strip. It is created with the window and shown while the window holds a document.
@@ -2386,7 +2397,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                     tabbedWindow = 0;
                     for (const auto& i : windows)
                     {
-                        if (i.second.isTabbed)
+                        if (i.second.isTabbed && !i.second.holdsSecondaryView)
                         {
                             tabbedWindow = i.first;
                             break;
@@ -2523,7 +2534,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                                MOD_CONTROL | MOD_SHIFT | MOD_NOREPEAT, 'I');
                 // The tabbed window the user worked in last takes the next document opened.
                 const WindowState* window = findWindow(hWnd);
-                if (window && window->isTabbed)
+                if (window && window->isTabbed && !window->holdsSecondaryView)
                     tabbedWindow = hWnd;
             }
             break;
@@ -3308,6 +3319,10 @@ static std::wstring windowTitleForTab(const DocumentTab& tab)
 {
     if (tab.filenameAndUri.filename.empty())
         return Util::string_to_wide_string(APP_NAME);
+    // The window title tells the two views of a document apart.
+    if (tab.firstViewTabId)
+        return Util::string_to_wide_string(tab.filenameAndUri.filename + " (view " +
+                                           std::to_string(tab.viewNumber) + ") - " APP_NAME);
     return Util::string_to_wide_string(tab.filenameAndUri.filename + " - " APP_NAME);
 }
 
@@ -4006,6 +4021,9 @@ static bool mayDiscardView(const DocumentTab& tab)
     // anyway.
     if (tab.viewDiscarded || tab.isConsole || tab.readyToClose || !tab.app2js.joinable())
         return false;
+    // Two views of one document keep their sessions while both are open.
+    if (tab.firstViewTabId || !tab.secondaryViewTabIds.empty())
+        return false;
     if (tab.mode != DocumentMode::EDIT && tab.mode != DocumentMode::NEW)
         return false;
     if (!tab.filenameAndUri.uri.starts_with("file:"))
@@ -4262,6 +4280,13 @@ static void closeTab(WindowState& window, int tabId)
     if (hoverCard.tabId == tabId)
         hideHoverCard();
 
+    // The secondary views of the document go with the first, which owns the document.
+    const std::vector<int> secondaryViewTabIds = std::move(tab->secondaryViewTabIds);
+    tab->secondaryViewTabIds.clear();
+    for (const int secondaryViewTabId : secondaryViewTabIds)
+        if (DocumentTab* secondary = findTab(secondaryViewTabId))
+            requestCloseTab(secondary->hWnd, secondaryViewTabId);
+
     if (tab->isConsole)
     {
         // The presentation ends with its console: the document comes out of
@@ -4301,12 +4326,21 @@ static void closeTab(WindowState& window, int tabId)
             // is on its way out and joins straight away.
             tab->app2js.join();
         }
-        else if (!findBrokerByMobileAppDocId(tab->appDocId))
+        else if (!tab->firstViewTabId && !findBrokerByMobileAppDocId(tab->appDocId))
             DocumentData::deallocate(tab->appDocId);
 
-        // A document whose tab lost its WebView2 stays loaded with no session until it is ended
-        // here. A document that has a session of its own is left as it is.
-        closeDetachedDocument(tab->appDocId);
+        if (tab->firstViewTabId)
+        {
+            // The document stays open after a secondary view of it closes.
+            if (DocumentTab* first = findTab(tab->firstViewTabId))
+                std::erase(first->secondaryViewTabIds, tabId);
+        }
+        else
+        {
+            // A document whose tab lost its WebView2 stays loaded with no session until it is
+            // ended here. A document that has a session of its own is left as it is.
+            closeDetachedDocument(tab->appDocId);
+        }
     }
     else if (tab->mode == DocumentMode::CLOUD_ACCOUNT)
     {
@@ -4338,7 +4372,8 @@ static void requestCloseTab(HWND hWnd, int tabId)
     if (!window || !tab)
         return;
 
-    const bool mayHaveEdits = !tab->readyToClose && !tab->isConsole &&
+    // The changes made in a secondary view are the first view's to save.
+    const bool mayHaveEdits = !tab->readyToClose && !tab->isConsole && !tab->firstViewTabId &&
                               tab->mode != DocumentMode::STARTER &&
                               tab->mode != DocumentMode::WELCOME;
     const bool pageCanAnswer = tab->app2js.joinable() && tab->webView && tab->hasContent &&
@@ -5129,6 +5164,9 @@ static void createDocumentView(int tabId)
                                 std::string((data->mode != DocumentMode::NEW ? "&startreadonly=true" : "")) +
                                 std::string((data->mode == DocumentMode::WELCOME ? "&welcome=true" : ""));
 
+                        if (data->firstViewTabId)
+                            coolURL += "&secondaryview=true";
+
                         webView->Navigate(Util::string_to_wide_string(coolURL).c_str());
 
                         return S_OK;
@@ -5333,7 +5371,7 @@ static DocumentTab* findOpenDocumentTab(const std::string& uri)
     const std::string path = fileUriToWindowsPath(uri);
     for (auto& i : documentTabs)
     {
-        if (fileUriToWindowsPath(i.second.filenameAndUri.uri) == path)
+        if (!i.second.firstViewTabId && fileUriToWindowsPath(i.second.filenameAndUri.uri) == path)
             return &i.second;
     }
     return nullptr;
@@ -5389,6 +5427,40 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
 
     activateTab(*window, tab.tabId);
     createDocumentView(tab.tabId);
+}
+
+// Open one more view of the document in a window of its own, as one more user would have it. For
+// the debug tools.
+static void openSecondaryView(DocumentTab& first)
+{
+    // A remote document is driven by the page's own collab connection, which another page would
+    // not share.
+    if (first.firstViewTabId || first.isConsole || first.editorFrame || first.appDocId == 0 ||
+        (first.mode != DocumentMode::EDIT && first.mode != DocumentMode::NEW))
+    {
+        LOG_WRN("No secondary view for appDocId " << first.appDocId);
+        return;
+    }
+
+    // Newly opened documents keep going to the window they went to before.
+    const HWND documentWindow = tabbedWindow;
+    WindowState& window = createTabbedWindow();
+    window.holdsSecondaryView = true;
+    tabbedWindow = documentWindow;
+
+    // The same file and appDocId reach the document broker that is already open. It adds a
+    // session for this view, as for one more user.
+    DocumentTab& secondary = createTab(window, first.filenameAndUri, DocumentMode::EDIT);
+    secondary.fakeClientFd = fakeSocketSocket();
+    secondary.appDocId = first.appDocId;
+    secondary.firstViewTabId = first.tabId;
+    secondary.viewNumber = first.nextViewNumber++;
+    first.secondaryViewTabIds.push_back(secondary.tabId);
+    LOG_INF("Opening a secondary view of appDocId " << secondary.appDocId << " in tab "
+                                                    << secondary.tabId);
+
+    activateTab(window, secondary.tabId);
+    createDocumentView(secondary.tabId);
 }
 
 static void openStarterWindow()
@@ -7053,6 +7125,10 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             for (auto& i : documentTabs)
                 if (i.second.webViewController)
                     applyUIZoom(i.second.webViewController.get());
+        }
+        else if (s == L"OPENSECONDARYVIEW")
+        {
+            openSecondaryView(data);
         }
         else if (s.starts_with(L"SETDARKMODE "))
         {

@@ -196,14 +196,18 @@ bool coda::invokeOnBridge(unsigned appDocId, std::function<void(Bridge&)> fn)
 }
 
 Bridge::Bridge(QObject* parent, WebView* owner, coda::DocumentData& document,
-               QWebEngineView* webView)
+               QWebEngineView* webView, bool secondaryView)
     : QObject(parent)
     , _document(document)
     , _owner(owner)
     , _webView(webView)
     , _closeNotificationPipeForForwardingThread{ -1, -1 }
+    , _secondaryView(secondaryView)
 {
-    coda::registerBridge(_document._appDocId, this);
+    if (_secondaryView)
+        _keepDocumentLoaded = true;
+    else
+        coda::registerBridge(_document._appDocId, this);
 }
 
 Bridge::~Bridge() {
@@ -395,9 +399,11 @@ void Bridge::detachFromView()
                                   << _document._fakeClientFd);
 
     // Mark the document before the socket goes, so the broker never sees an empty
-    // session list that it would read as the document having ended.
-    if (auto broker = findBrokerByMobileAppDocId(_document._appDocId))
-        broker->setDetached(true);
+    // session list that it would read as the document having ended. A secondary view leaves
+    // the first view's session, which keeps the document.
+    if (!_secondaryView)
+        if (auto broker = findBrokerByMobileAppDocId(_document._appDocId))
+            broker->setDetached(true);
 
     if (!_app2js.joinable())
         return;
@@ -1127,6 +1133,12 @@ QVariant Bridge::cool(const QString& messageStr)
             tw->manager()->applyTheme(theme);
         return {};
     }
+    else if (tokens.equals(0, "OPENSECONDARYVIEW"))
+    {
+        if (WebView* owner = _owner.data())
+            owner->openSecondaryView();
+        return {};
+    }
     else if (tokens.equals(0, "SETUIZOOM"))
     {
         int percent = 0;
@@ -1176,8 +1188,10 @@ QVariant Bridge::cool(const QString& messageStr)
                 << (quitApp ? " and quitting" : ""));
         // Render the shared clipboard's lazy transferable into engine-held
         // bytes before destroying the document, so a paste after the
-        // document closes still works.
-        flushClipboardOnDocClose(_document._appDocId);
+        // document closes still works. The document stays open after a
+        // secondary view of it closes.
+        if (!_secondaryView)
+            flushClipboardOnDocClose(_document._appDocId);
 
         fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
         // The page-JS is already terminating, so the close below must not

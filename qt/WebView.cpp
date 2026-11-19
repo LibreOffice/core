@@ -63,6 +63,7 @@
 #include <QTemporaryDir>
 #include <QTimer>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QVariant>
 #include <common/SettingsStorage.hpp>
 #include <QWebChannel>
@@ -956,6 +957,11 @@ void WebView::createWebEngineView()
 WebView::~WebView() {
     std::erase(s_instances, this);
 
+    // The secondary views of the document go with the first, which owns the document.
+    for (const QPointer<QMainWindow>& window : _secondaryViewWindows)
+        if (window)
+            window->close();
+
     // A discarded view has no bridge, and the document it left loaded is nobody else's
     // to end.
     if (_viewDiscarded)
@@ -1292,6 +1298,60 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     _webView->load(QUrl(QString::fromStdString(urlAndQueryStr)));
 }
 
+void WebView::openSecondaryView()
+{
+    // A remote document is driven by the page's own collab connection, which another page
+    // would not share.
+    if (_isSecondaryView || _viewDiscarded || !showsLocalDocument())
+    {
+        LOG_WRN("No secondary view for appDocId " << _document._appDocId);
+        return;
+    }
+
+    auto* view = new WebView(_profile);
+    view->_isSecondaryView = true;
+    StandaloneWindow* window = StandaloneWindow::wrap(view);
+    _secondaryViewWindows.removeAll(nullptr);
+    _secondaryViewWindows.append(window);
+
+    // The window title tells the views apart.
+    const QString suffix = QStringLiteral(" (view %1)").arg(_nextViewNumber++);
+    view->setOnTitleChange([window, suffix](const QString& title)
+                           { window->setWindowTitle(title + suffix); });
+
+    view->loadAsSecondaryView(*this);
+}
+
+void WebView::loadAsSecondaryView(const WebView& first)
+{
+    // The same file and appDocId reach the document broker that is already open. It adds a
+    // session for this view, as for one more user.
+    _document = {
+        ._fileURL = first._document._fileURL,
+        ._fakeClientFd = fakeSocketSocket(),
+        ._appDocId = first._document._appDocId,
+        ._remoteInfo = {},
+    };
+    _docType = first._docType;
+    LOG_INF("load a secondary view of appDocId " << _document._appDocId << " with client fd "
+                                              << _document._fakeClientFd);
+
+    QWebChannel* channel = new QWebChannel(_webView->page());
+    assert(_bridge == nullptr);
+    _bridge = new Bridge(channel, this, _document, _webView.get(), /*secondaryView*/ true);
+    channel->registerObject("bridge", _bridge);
+    _webView->page()->setWebChannel(channel);
+
+    QUrl url(first._loadedUrl);
+    QUrlQuery query(url);
+    query.addQueryItem(QStringLiteral("secondaryview"), QStringLiteral("true"));
+    url.setQuery(query);
+    _loadedUrl = url.toString();
+
+    updateTitle(first._docTitle);
+    _webView->load(url);
+}
+
 Poco::URI::QueryParameters coda::pageSettings(bool forDocument)
 {
     const std::string uiLanguage = getUILanguage();
@@ -1412,7 +1472,8 @@ WebView* WebView::findOpenDocument(const Poco::URI& documentURI)
 
     for (WebView* instance : s_instances)
     {
-        if (instance->_document._fileURL.getPath() == documentURI.getPath())
+        if (!instance->_isSecondaryView
+            && instance->_document._fileURL.getPath() == documentURI.getPath())
         {
             return instance;
         }

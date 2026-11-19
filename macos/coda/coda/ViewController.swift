@@ -509,6 +509,10 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             COWrapper.syncSettings(with: document, withSecrets: document.editorFrame == nil)
             return (nil, nil)
         }
+        else if body == "OPENSECONDARYVIEW" {
+            document.openSecondaryView()
+            return (nil, nil)
+        }
         else if body.hasPrefix("SETDARKMODE ") {
             COWrapper.setDarkMode(body == "SETDARKMODE true")
             return (nil, nil)

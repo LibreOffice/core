@@ -369,20 +369,25 @@ class DebugManager {
 		document.addEventListener('keyup', this._keyWatch, true);
 	}
 
-	private _addDebugTool(tool: DebugTool) {
-		// Create category fieldset if it doesn't exist
+	/// The group of the panel that holds the entries of a category, made when it is first needed.
+	private _categoryFieldset(category: string): HTMLFieldSetElement {
 		let fieldset = this._panel.querySelector(
-			'fieldset[data-category="' + tool.category + '"]',
+			'fieldset[data-category="' + category + '"]',
 		) as HTMLFieldSetElement | null;
 		if (!fieldset) {
 			fieldset = document.createElement('fieldset');
 			fieldset.className = 'debug-panel-group';
-			fieldset.dataset.category = tool.category;
+			fieldset.dataset.category = category;
 			const legend = document.createElement('legend');
-			legend.textContent = tool.category;
+			legend.textContent = category;
 			fieldset.appendChild(legend);
 			this._panel.appendChild(fieldset);
 		}
+		return fieldset;
+	}
+
+	private _addDebugTool(tool: DebugTool) {
+		const fieldset = this._categoryFieldset(tool.category);
 
 		// Create checkbox + label
 		const label = document.createElement('label');
@@ -439,6 +444,17 @@ class DebugManager {
 			checkbox.checked = true;
 			tool.onAdd();
 		}
+	}
+
+	/// A button rather than a switch, for something that is done once each time it is pressed.
+	private _addDebugAction(name: string, category: string, onClick: () => void) {
+		const fieldset = this._categoryFieldset(category);
+		const button = document.createElement('button');
+		button.type = 'button';
+		button.className = 'debug-panel-action';
+		button.textContent = name;
+		button.addEventListener('click', onClick);
+		fieldset.appendChild(button);
 	}
 
 	private _addDebugTools(): void {
@@ -791,6 +807,25 @@ class DebugManager {
 				clearTimeout(self._pingTimeoutId);
 			},
 		});
+
+		// A desktop app can open one more view of the same document, as one more user would have,
+		// in a window of its own, each time the button is pressed. The views in those windows do
+		// not offer it again.
+		const secondaryViewsSupported =
+			(window.ThisIsTheQtApp ||
+				window.ThisIsTheMacOSApp ||
+				window.ThisIsTheWindowsApp) &&
+			!window.codaRemotePage &&
+			window.coolParams.get('secondaryview') !== 'true';
+		if (secondaryViewsSupported) {
+			this._addDebugAction(
+				'Open one more view in a window',
+				'Functionality',
+				function () {
+					window.postMobileMessage('OPENSECONDARYVIEW');
+				},
+			);
+		}
 
 		if (this._docLayer.isCalc()) {
 			this._addDebugTool({

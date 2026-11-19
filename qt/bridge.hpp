@@ -73,6 +73,11 @@ class Bridge : public QObject
     // true when this bridge goes away while the document stays loaded under its appDocId.
     bool _keepDocumentLoaded = false;
 
+    // The bridge of a secondary view of a document, which shares the appDocId of the first view.
+    // The callbacks of the document go to the first view's bridge, and the document is the
+    // first view's to end.
+    const bool _secondaryView;
+
     // The temporary copy of a remote document. It is removed with this bridge.
     QString _remoteCopyPath;
 
@@ -100,7 +105,7 @@ class Bridge : public QObject
 
 public:
     explicit Bridge(QObject* parent, WebView* owner, coda::DocumentData& document,
-                    QWebEngineView* webView);
+                    QWebEngineView* webView, bool secondaryView = false);
 
     ~Bridge() override;
 
