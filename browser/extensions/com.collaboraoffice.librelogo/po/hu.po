@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.librelogo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"POT-Creation-Date: 2026-11-19 15:23+0000\n"
 "PO-Revision-Date: 2026-11-02 11:55+0000\n"
 "Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
@@ -69,7 +69,7 @@ msgstr "A(z) %1 nem olvasható: %2"
 msgid "Could not save %1: %2"
 msgstr "%1 mentése nem sikerült: %2"
 
-#: panel.js:485
+#: panel.js:480
 msgid "Could not start LibreLogo: %1"
 msgstr "A LibreLogo indítása nem sikerült: %1"
 
@@ -169,7 +169,7 @@ msgstr "Elhelyezés"
 msgid "Program"
 msgstr "Program"
 
-#: panel.js:477
+#: panel.js:472
 msgid "Program written to the document."
 msgstr "A program beírva a dokumentumba."
 

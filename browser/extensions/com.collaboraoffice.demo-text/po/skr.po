@@ -3,17 +3,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-text\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"POT-Creation-Date: 2026-11-19 15:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
+"Language: skr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: skr\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Translate Toolkit 3.18.1\n"
 
-#: index.html:95
+#: index.html:73
 msgid "%1 (%2) applied"
 msgstr ""
 
@@ -33,7 +34,7 @@ msgstr ""
 msgid "Paragraph number (1-based):"
 msgstr ""
 
-#: index.html:69
+#: index.html:55
 msgid "Pick a color"
 msgstr ""
 
@@ -49,7 +50,7 @@ msgstr ""
 msgid "Text demo"
 msgstr ""
 
-#: index.html:84
+#: index.html:70
 msgid "applying %1 (%2)..."
 msgstr ""
 
@@ -61,7 +62,7 @@ msgstr ""
 msgid "blue"
 msgstr ""
 
-#: index.html:74
+#: index.html:60
 msgid "cancelled"
 msgstr ""
 

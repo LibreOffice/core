@@ -3,19 +3,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-text\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"POT-Creation-Date: 2026-11-19 15:23+0000\n"
 "PO-Revision-Date: 2026-11-02 12:24+0000\n"
 "Last-Translator: Besnik Bleta <besnik_b@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/collabora-"
 "online/extensions/demo-text/sq/>\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2026.11.dev0\n"
 
-#: index.html:95
+#: index.html:73
 msgid "%1 (%2) applied"
 msgstr "U aplikua %1 (%2)"
 
@@ -35,7 +35,7 @@ msgstr "Përshëndetje:"
 msgid "Paragraph number (1-based):"
 msgstr "Numër paragrafi (me bazë 1):"
 
-#: index.html:69
+#: index.html:55
 msgid "Pick a color"
 msgstr "Zgjidhni një ngjyrë"
 
@@ -51,7 +51,7 @@ msgstr "Lexoni paragrafin e n-të"
 msgid "Text demo"
 msgstr "Demonstrim teksti"
 
-#: index.html:84
+#: index.html:70
 msgid "applying %1 (%2)..."
 msgstr "po aplikohet %1 (%2)…"
 
@@ -63,7 +63,7 @@ msgstr "e zezë"
 msgid "blue"
 msgstr "blu"
 
-#: index.html:74
+#: index.html:60
 msgid "cancelled"
 msgstr "u anulua"
 

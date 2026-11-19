@@ -112,10 +112,6 @@
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx)</source>
-        <translation>Všechny soubory (*);;Textové dokumenty (*.odt *.ott *.doc *.docx *.rtf *.txt);;Tabulky (*.ods *.ots *.xls *.xlsx *.csv);;Prezentace (*.odp *.otp *.ppt *.pptx)</translation>
-    </message>
-    <message>
         <source>Export As</source>
         <translation>Exportovat jako</translation>
     </message>
@@ -136,8 +132,24 @@
         <translation>server Collabora Online</translation>
     </message>
     <message>
+        <source>Add Template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Templates and documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx);;PDF Documents (*.pdf)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
+    </message>
+    <message>
+        <source>Choose the folder that holds the files this document links to</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Presentation</source>
@@ -175,9 +187,32 @@
         <source>Supported files</source>
         <translation>Podporované soubory</translation>
     </message>
+    <message>
+        <source>Account not opened</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 redirected to %2, so the account was not opened. Only a redirect within the same site is followed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TabManager</name>
+    <message>
+        <source>Close tab</source>
+        <extracomment>Tooltip of the button that closes a tab</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <extracomment>Tooltip of the + button at the end of the tab strip</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(untitled)</source>
+        <extracomment>The name in a tab whose document has no name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Close</source>
         <translation>Zavřít</translation>

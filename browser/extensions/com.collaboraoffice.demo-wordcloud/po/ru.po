@@ -3,16 +3,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-wordcloud\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"POT-Creation-Date: 2026-11-19 15:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Translate Toolkit 3.18.1\n"
 
 #: index.html:36
 msgid "Generate & insert"
@@ -42,7 +43,7 @@ msgstr ""
 msgid "Word cloud"
 msgstr ""
 
-#: index.html:173
+#: index.html:167
 msgid "document is empty"
 msgstr ""
 
@@ -50,13 +51,14 @@ msgstr ""
 msgid "gathering text..."
 msgstr ""
 
-#: index.html:225
+#: index.html:197
 msgid "inserted %1 word"
 msgid_plural "inserted %1 words"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
-#: index.html:193
+#: index.html:187
 msgid "inserting %1 / %2 words..."
 msgstr ""
 
@@ -64,14 +66,14 @@ msgstr ""
 msgid "no cloud yet"
 msgstr ""
 
-#: index.html:172
+#: index.html:166
 msgid "no text selected"
 msgstr ""
 
-#: index.html:180
+#: index.html:174
 msgid "no words left after filtering"
 msgstr ""
 
-#: index.html:187
+#: index.html:181
 msgid "nothing fit on the canvas"
 msgstr ""

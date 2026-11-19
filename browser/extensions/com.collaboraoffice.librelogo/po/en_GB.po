@@ -3,15 +3,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.librelogo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"POT-Creation-Date: 2026-11-19 15:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Translate Toolkit 3.18.1\n"
 
 #: panel.js:443
 msgid "%1 has no embedded LibreLogo program."
@@ -65,7 +66,7 @@ msgstr ""
 msgid "Could not save %1: %2"
 msgstr ""
 
-#: panel.js:485
+#: panel.js:480
 msgid "Could not start LibreLogo: %1"
 msgstr ""
 
@@ -165,7 +166,7 @@ msgstr ""
 msgid "Program"
 msgstr ""
 
-#: panel.js:477
+#: panel.js:472
 msgid "Program written to the document."
 msgstr ""
 

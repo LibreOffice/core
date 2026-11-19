@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.librelogo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"POT-Creation-Date: 2026-11-19 15:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Could not save %1: %2"
 msgstr ""
 
-#: panel.js:485
+#: panel.js:480
 msgid "Could not start LibreLogo: %1"
 msgstr ""
 
@@ -163,7 +163,7 @@ msgstr ""
 msgid "Program"
 msgstr ""
 
-#: panel.js:477
+#: panel.js:472
 msgid "Program written to the document."
 msgstr ""
 

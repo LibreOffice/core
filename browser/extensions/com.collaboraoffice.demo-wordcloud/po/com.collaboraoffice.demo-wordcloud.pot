@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-wordcloud\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"POT-Creation-Date: 2026-11-19 15:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid "Word cloud"
 msgstr ""
 
-#: index.html:173
+#: index.html:167
 msgid "document is empty"
 msgstr ""
 
@@ -47,13 +47,13 @@ msgstr ""
 msgid "gathering text..."
 msgstr ""
 
-#: index.html:225
+#: index.html:197
 msgid "inserted %1 word"
 msgid_plural "inserted %1 words"
 msgstr[0] ""
 msgstr[1] ""
 
-#: index.html:193
+#: index.html:187
 msgid "inserting %1 / %2 words..."
 msgstr ""
 
@@ -61,14 +61,14 @@ msgstr ""
 msgid "no cloud yet"
 msgstr ""
 
-#: index.html:172
+#: index.html:166
 msgid "no text selected"
 msgstr ""
 
-#: index.html:180
+#: index.html:174
 msgid "no words left after filtering"
 msgstr ""
 
-#: index.html:187
+#: index.html:181
 msgid "nothing fit on the canvas"
 msgstr ""

@@ -3,20 +3,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-text\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"POT-Creation-Date: 2026-11-19 15:23+0000\n"
 "PO-Revision-Date: 2026-11-17 09:56+0000\n"
 "Last-Translator: bittin1ddc447d824349b2 "
 "<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "extensions/demo-text/sv/>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2026.12.dev0\n"
 
-#: index.html:95
+#: index.html:73
 msgid "%1 (%2) applied"
 msgstr "%1 (%2) tillämpad"
 
@@ -36,7 +36,7 @@ msgstr "Hälsning:"
 msgid "Paragraph number (1-based):"
 msgstr "Paragraf nummer (1-baserad):"
 
-#: index.html:69
+#: index.html:55
 msgid "Pick a color"
 msgstr "Välj en färg"
 
@@ -52,7 +52,7 @@ msgstr "Läs N:te paragraf"
 msgid "Text demo"
 msgstr "Text demo"
 
-#: index.html:84
+#: index.html:70
 msgid "applying %1 (%2)..."
 msgstr "tillämpar %1 (%2)..."
 
@@ -64,7 +64,7 @@ msgstr "svart"
 msgid "blue"
 msgstr "blå"
 
-#: index.html:74
+#: index.html:60
 msgid "cancelled"
 msgstr "avbruten"
 
