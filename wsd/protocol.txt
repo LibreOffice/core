@@ -2940,6 +2940,26 @@ Protocol numbers:
     stream name needs no new number.  A new client -> server message type, a field that the
     receiver must understand, or a changed meaning of a message gets a new number.
 
+The editor frame:
+
+    A CODA client opens a document from an integrator in the editor frame, the frame into which the
+    integrator posts its form for the editor page (the urlsrc of the discovery).  The client
+    replaces the contents of that page with its own page, which keeps the address of the editor
+    page and so runs under the Content-Security-Policy of the editor page.  A server whose
+    /hosting/capabilities says "hasClientDocumentLoadingSupport": true keeps
+
+    - the editor page at <service-root>/browser/<hash>/cool.html, and /hosting/capabilities,
+      /co/collab and /cool/ws under the same <service-root>;
+    - 'self' in connect-src, script-src, style-src, font-src and img-src of the
+      Content-Security-Policy of the editor page, and data: in its img-src;
+    - no form-action there, or one that allows 'self' (the client posts the integrator's form into
+      the frame again for the server's own editor).
+
+    A server that has to change one of these gets a new protocol number, so that older clients
+    fall back to the server's own editor.  (That needs the pages of older clients to still reach
+    /co/collab.  Where they cannot, the server also stops saying "hasClientDocumentLoadingSupport",
+    so that older clients fall back before they load their page.)
+
 server -> client messages on /co/collab
 ---------------------------------------
 

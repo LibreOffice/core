@@ -16,7 +16,14 @@
 #include <common/Log.hpp>
 #include <helpers.hpp>
 #include <wsd/CollabSocketHandler.hpp>
+#include <wsd/ContentSecurityPolicy.hpp>
 
+#include <Poco/AutoPtr.h>
+#include <Poco/DOM/DOMParser.h>
+#include <Poco/DOM/Document.h>
+#include <Poco/DOM/Element.h>
+#include <Poco/DOM/NodeList.h>
+#include <Poco/JSON/Object.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Util/LayeredConfiguration.h>
@@ -1037,14 +1044,102 @@ private:
     std::shared_ptr<http::WebSocketSession> ws_;
 };
 
+// A server with client document loading keeps the paths of its editor page and the directives of
+// that page's content security policy that "The editor frame" in wsd/protocol.txt lists:
+class UnitCollabEditorFrame: public WopiTestServer {
+public:
+    UnitCollabEditorFrame(): WopiTestServer("UnitCollabEditorFrame") {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void invokeWSDTest() override {
+        if (done_) {
+            return;
+        }
+        done_ = true;
+
+        // The editor page of the discovery is at <service-root>/browser/.../cool.html:
+        std::shared_ptr<http::Response const> const discovery
+            = http::get(
+                helpers::getTestServerURI(), "/hosting/discovery?testname=UnitCollabEditorFrame");
+        LOK_ASSERT_EQUAL(http::StatusCode::OK, discovery->statusLine().statusCode());
+        Poco::XML::DOMParser parser;
+        Poco::AutoPtr<Poco::XML::Document> const xml = parser.parseString(discovery->getBody());
+        Poco::AutoPtr<Poco::XML::NodeList> const actions = xml->getElementsByTagName("action");
+        std::string editorUrl;
+        for (unsigned long i = 0; i != actions->length(); ++i) {
+            auto const action = static_cast<Poco::XML::Element *>(actions->item(i));
+            if (action->getAttribute("name") == "edit") {
+                editorUrl = action->getAttribute("urlsrc");
+                break;
+            }
+        }
+        std::string const editorPath = Poco::URI(editorUrl).getPath();
+        LOK_ASSERT_MESSAGE(
+            "The editor page is at " + editorPath, editorPath.ends_with("/cool.html"));
+        std::size_t const browser = editorPath.find("/browser/");
+        LOK_ASSERT_MESSAGE("The editor page is at " + editorPath, browser != std::string::npos);
+        std::string const serviceRoot = editorPath.substr(0, browser);
+
+        // The capabilities are at <service-root>/hosting/capabilities:
+        std::shared_ptr<http::Response const> const capabilities
+            = http::get(
+                helpers::getTestServerURI(),
+                serviceRoot + "/hosting/capabilities?testname=UnitCollabEditorFrame");
+        LOK_ASSERT_EQUAL(http::StatusCode::OK, capabilities->statusLine().statusCode());
+        LOK_ASSERT_EQUAL(
+            true,
+            Poco::JSON::Parser()
+                .parse(capabilities->getBody())
+                .extract<Poco::JSON::Object::Ptr>()
+                ->getValue<bool>("hasClientDocumentLoadingSupport"));
+
+        // The editor page, posted to as an integrator does, answers with the directives:
+        http::Request request(
+            editorPath + "?WOPISrc="
+                + Uri::encode(getWopiHostURI() + "/wopi/files/0?testname=UnitCollabEditorFrame")
+                + "&testname=UnitCollabEditorFrame",
+            http::Request::VERB_POST);
+        request.setBody(
+            "access_token=anything&access_token_ttl=0", "application/x-www-form-urlencoded");
+        std::shared_ptr<http::Response const> const editor
+            = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+        LOK_ASSERT_EQUAL(http::StatusCode::OK, editor->statusLine().statusCode());
+        ContentSecurityPolicy const csp(
+            editor->header().get("Content-Security-Policy", std::string()));
+        std::string const connect = csp.getDirective("connect-src");
+        LOK_ASSERT_MESSAGE("connect-src is" + connect, connect.find("'self'") != std::string::npos);
+        std::string const script = csp.getDirective("script-src");
+        LOK_ASSERT_MESSAGE("script-src is" + script, script.find("'self'") != std::string::npos);
+        std::string const style = csp.getDirective("style-src");
+        LOK_ASSERT_MESSAGE("style-src is" + style, style.find("'self'") != std::string::npos);
+        std::string const font = csp.getDirective("font-src");
+        LOK_ASSERT_MESSAGE("font-src is" + font, font.find("'self'") != std::string::npos);
+        std::string const image = csp.getDirective("img-src");
+        LOK_ASSERT_MESSAGE("img-src is" + image, image.find("'self'") != std::string::npos);
+        LOK_ASSERT_MESSAGE("img-src is" + image, image.find("data:") != std::string::npos);
+        std::string const form = csp.getDirective("form-action");
+        LOK_ASSERT_MESSAGE(
+            "form-action is" + form, form.empty() || form.find("'self'") != std::string::npos);
+
+        passTest("The editor page keeps what an editor frame depends on");
+    }
+
+private:
+    bool done_ = false;
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [8] { new UnitCollabProtocol(),
+    return new UnitBase* [9] { new UnitCollabProtocol(),
                                new UnitCollabCheckFileInfoTransient(),
                                new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                new UnitCollabUploadConflictModified(),
                                new UnitCollabNoCleanExport(), new UnitCollabProtocolNumber(),
-                               nullptr };
+                               new UnitCollabEditorFrame(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

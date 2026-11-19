@@ -1838,6 +1838,8 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
         extraExportFormats += " impress_tiff";
     Poco::replaceInPlace(preprocess, std::string("%EXTRA_EXPORT_FORMATS%"), extraExportFormats);
 
+    // Part of this policy is a promise to the clients that load documents themselves (see "The
+    // editor frame" in wsd/protocol.txt):
     ContentSecurityPolicy csp;
     csp.appendDirective("default-src", "'none'");
     csp.appendDirective("frame-src", "'self'");
