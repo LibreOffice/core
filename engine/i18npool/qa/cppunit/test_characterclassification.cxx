@@ -9,6 +9,7 @@
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 
 using namespace ::com::sun::star;
@@ -271,6 +272,35 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testAdlam)
         OUString sLowerRes = m_xCC->toLower(sTitle, 0, sTitle.getLength(), {});
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", sLower, sLowerRes);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testAsciiCase)
+{
+    const lang::Locale aEnglish(u"en"_ustr, u"US"_ustr, u""_ustr);
+    static constexpr OUString aTest = u"Mix 1-z!"_ustr;
+    CPPUNIT_ASSERT_EQUAL(u"MIX 1-Z!"_ustr, m_xCC->toUpper(aTest, 0, aTest.getLength(), aEnglish));
+    CPPUNIT_ASSERT_EQUAL(u"mix 1-z!"_ustr, m_xCC->toLower(aTest, 0, aTest.getLength(), aEnglish));
+    CPPUNIT_ASSERT_EQUAL(u"IX 1"_ustr, m_xCC->toUpper(aTest, 1, 4, aEnglish));
+    CPPUNIT_ASSERT_EQUAL(u"m"_ustr, m_xCC->toLower(aTest, 0, 1, aEnglish));
+    CPPUNIT_ASSERT_EQUAL(u"1-Z!"_ustr, m_xCC->toUpper(aTest, 4, 100, aEnglish));
+
+    OUStringBuffer aAll;
+    for (sal_Unicode c = 0; c < 0x80; ++c)
+        aAll.append(c);
+    const OUString aAscii = aAll.makeStringAndClear();
+    // A non-ASCII character uses the Unicode tables
+    const OUString aTable = aAscii + u"\u00E9";
+    CPPUNIT_ASSERT_EQUAL(m_xCC->toUpper(aTable, 0, aTable.getLength(), aEnglish).copy(0, 0x80),
+                         m_xCC->toUpper(aAscii, 0, aAscii.getLength(), aEnglish));
+    CPPUNIT_ASSERT_EQUAL(m_xCC->toLower(aTable, 0, aTable.getLength(), aEnglish).copy(0, 0x80),
+                         m_xCC->toLower(aAscii, 0, aAscii.getLength(), aEnglish));
+
+    // Turkic i and I are not cased by the ASCII rules
+    const lang::Locale aTurkish(u"tr"_ustr, u"TR"_ustr, u""_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"\u0130Z"_ustr, m_xCC->toUpper(u"iz"_ustr, 0, 2, aTurkish));
+    CPPUNIT_ASSERT_EQUAL(u"\u0131z"_ustr, m_xCC->toLower(u"IZ"_ustr, 0, 2, aTurkish));
+    const lang::Locale aAzerbaijani(u"az"_ustr, u"AZ"_ustr, u""_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"\u0130"_ustr, m_xCC->toUpper(u"i"_ustr, 0, 1, aAzerbaijani));
 }
 
 void TestCharacterClassification::setUp()

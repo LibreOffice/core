@@ -28,6 +28,10 @@
 #include <transliteration_body.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/string_view.hxx>
+#include <i18nutil/casefolding.hxx>
+#include <rtl/character.hxx>
+
+#include <algorithm>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -61,6 +65,22 @@ cclass_Unicode::~cclass_Unicode() {
     destroyParserTable();
 }
 
+// Allocates at most once
+template <bool bUpper>
+static OUString lcl_toAsciiCase(const OUString& rText, sal_Int32 nPos, sal_Int32 nCount)
+{
+    if (nCount == rText.getLength()) // unchanged text is shared
+    {
+        assert(nPos == 0);
+        return bUpper ? rText.toAsciiUpperCase() : rText.toAsciiLowerCase();
+    }
+
+    rtl_uString* pNew = rtl_uString_alloc(nCount);
+    std::ranges::transform(rText.subView(nPos, nCount), pNew->buffer, [](sal_Unicode c) {
+        return bUpper ? rtl::toAsciiUpperCase(c) : rtl::toAsciiLowerCase(c);
+    });
+    return OUString(pNew, SAL_NO_ACQUIRE);
+}
 
 OUString
 cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) {
@@ -69,6 +89,9 @@ cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         return OUString();
     if (nCount + nPos > len)
         nCount = len - nPos;
+
+    if (i18nutil::casefolding::hasAsciiCaseMapping(Text.subView(nPos, nCount), rLocale))
+        return lcl_toAsciiCase<true>(Text, nPos, nCount);
 
     transToUpper->setLocale(rLocale);
     return transToUpper->transliterateString2String(Text, nPos, nCount);
@@ -81,6 +104,9 @@ cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         return OUString();
     if (nCount + nPos > len)
         nCount = len - nPos;
+
+    if (i18nutil::casefolding::hasAsciiCaseMapping(Text.subView(nPos, nCount), rLocale))
+        return lcl_toAsciiCase<false>(Text, nPos, nCount);
 
     transToLower->setLocale(rLocale);
     return transToLower->transliterateString2String(Text, nPos, nCount);
