@@ -1283,7 +1283,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case FID_ADD_NAME:
             case SID_DEFINE_COLROWNAMERANGES:
                 {
-                    if ( pDocSh->IsDocShared() )
+                    if ( pDocSh->IsDocShared() || pDocSh->IsReadOnly())
                     {
                         rSet.DisableItem( nWhich );
                     }
