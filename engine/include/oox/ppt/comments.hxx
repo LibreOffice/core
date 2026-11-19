@@ -36,7 +36,9 @@ struct ModernCommentAuthor
 
     maCreated holds the time the entry was written, as an ISO 8601 date-time in
     UTC written without a marker. mnParentIndex is the position of the thread
-    root in the list the entry belongs to, and is -1 for a root.
+    root in the list the entry belongs to, and is -1 for a root. mbHasPosition
+    is true when the entry gives the point it is shown at on the slide, and then
+    mnPositionX and mnPositionY hold that point in EMU. Only a root can give one.
  */
 struct ModernComment
 {
@@ -44,6 +46,9 @@ struct ModernComment
     OUString maCreated;
     OUString maText;
     sal_Int32 mnParentIndex = -1;
+    bool mbHasPosition = false;
+    sal_Int64 mnPositionX = 0;
+    sal_Int64 mnPositionY = 0;
 };
 
 /** The authors of the threaded comments of one presentation. */

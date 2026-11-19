@@ -85,6 +85,7 @@
 #include <sax/tools/converter.hxx>
 #include <svx/annotation/Annotation.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
@@ -202,7 +203,8 @@ std::vector<OUString> getLayoutFragmentPaths(XmlFilterBase& rFilter,
 /** Turns the threaded comments of one slide into annotations on that slide.
 
     Each entry becomes one annotation, and a reply is linked to the root it
-    hangs off. The time an entry carries is stored as the file has it.
+    hangs off. The time an entry carries is stored as the file has it, and so is
+    the position a root gives.
  */
 void lcl_insertModernComments(const std::vector<ModernComment>& rComments,
                               const ModernCommentAuthorList& rAuthors,
@@ -228,6 +230,19 @@ void lcl_insertModernComments(const std::vector<ModernComment>& rComments,
             // no zone for its author.
             xAnnotation->setDateTime(aDateTime);
             xAnnotation->setDateTimeUTC(aDateTime);
+        }
+        // A reply has no position of its own in the file, and it is shown beside the root it
+        // answers, so it takes the position of that root. The annotation holds millimetres.
+        const ModernComment& rPositioned
+            = rComment.mnParentIndex >= 0
+                      && o3tl::make_unsigned(rComment.mnParentIndex) < rComments.size()
+                  ? rComments[rComment.mnParentIndex]
+                  : rComment;
+        if (rPositioned.mbHasPosition)
+        {
+            xAnnotation->setPosition(geometry::RealPoint2D(
+                o3tl::convert(double(rPositioned.mnPositionX), o3tl::Length::emu, o3tl::Length::mm),
+                o3tl::convert(double(rPositioned.mnPositionY), o3tl::Length::emu, o3tl::Length::mm)));
         }
         uno::Reference<text::XText> xText(xAnnotation->getTextRange());
         xText->setString(rComment.maText);

@@ -69,6 +69,15 @@ ModernCommentsFragmentHandler::onCreateContext(sal_Int32 nElement, const Attribu
                 mnRootIndex = mnCurrentIndex;
             break;
         }
+        case P188_TOKEN(pos):
+            if (mnRootIndex >= 0 && mnCurrentIndex == mnRootIndex)
+            {
+                ModernComment& rComment = maComments[mnRootIndex];
+                rComment.mbHasPosition = true;
+                rComment.mnPositionX = rAttribs.getHyper(XML_x, 0);
+                rComment.mnPositionY = rAttribs.getHyper(XML_y, 0);
+            }
+            break;
         case P188_TOKEN(txBody):
             mbInTextBody = true;
             break;

@@ -799,6 +799,33 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDateUtcPptxRoundtrip)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(12), xReloaded->getDateTime().Hours);
 }
 
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testCommentPositionPptxRoundtrip)
+{
+    // A comment stays where it was placed on the slide through a PPTX round trip.
+    createSdImpressDoc();
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
+    pPage->getAnnotations()[0]->setPosition(geometry::RealPoint2D(50.0, 75.5));
+
+    saveAndReload(TestFilter::PPTX);
+
+    auto pReloaded = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pReloaded);
+    SdPage* pReloadedPage = pReloaded->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pReloadedPage->getAnnotations().size());
+
+    // Without the accompanying fix in place, this test would have failed with an expected 50 and
+    // an actual 0: the newer comment part had no position, and on load it is read in place of
+    // the older part, which had one.
+    geometry::RealPoint2D aPosition = pReloadedPage->getAnnotations()[0]->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(50.0, aPosition.X, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(75.5, aPosition.Y, 0.01);
+}
+
 CPPUNIT_TEST_FIXTURE(AnnotationTest, testModernCommentPptxRoundtrip)
 {
     // A thread of comments keeps its shape through a PPTX round trip, because the newer comment

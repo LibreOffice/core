@@ -49,6 +49,7 @@
 
 #include <map>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/token/tokenmap.hxx>
 #include <map>
@@ -2434,6 +2435,16 @@ bool PowerPointExport::WriteModernComments(sal_uInt32 nPageNum)
                             XML_authorId, GetAuthorGuid(aAuthor, getInitials(*xAnnotation)),
                             XML_created,
                             getModernCommentCreated(*xAnnotation, bRemoveCommentAuthorDates));
+
+        // The annotation holds its position in millimetres, and the part holds it in EMU. A reply
+        // has no position of its own, as it is shown beside the entry it answers.
+        const RealPoint2D aPosition = xAnnotation->getPosition();
+        pFS->singleElementNS(
+            XML_p188, XML_pos,
+            XML_x, OString::number(sal_Int64(std::round(
+                       o3tl::convert(aPosition.X, o3tl::Length::mm, o3tl::Length::emu)))),
+            XML_y, OString::number(sal_Int64(std::round(
+                       o3tl::convert(aPosition.Y, o3tl::Length::mm, o3tl::Length::emu)))));
 
         const sal_uInt64 nRootId = xAnnotation->GetId();
         bool bAnyReply = false;
