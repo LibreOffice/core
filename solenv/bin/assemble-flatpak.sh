@@ -31,8 +31,6 @@ do
  mkdir -p \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"
  cp -a "$i" \
-  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"$(basename "$i")"
- cp -a "$i" \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"$(echo ${1?}"."${i##*/apps/libreoffice-} | sed -e "s/\.startcenter//")"
 done
 
